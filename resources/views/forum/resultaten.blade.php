@@ -8,6 +8,14 @@
 	@endif
 @endsection
 
+@section('breadcrumbs')
+	{!! csr_breadcrumbs([
+  '/' => 'main',
+  '/forum' => 'Forum',
+  '' => 'Zoeken',
+	]) !!}
+@endsection
+
 @section('content')
 	{!! getMelding() !!}
 
@@ -24,7 +32,7 @@
 					<div>
 						<a id="{{$draad->draad_id}}"
 							 href="/forum/onderwerp/{{$draad->draad_id}}"
-							 @if($draad->isOngelezen())class="{{CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}}" @endif>
+							 @if($draad->isOngelezen())class="{{lid_instelling('forum', 'ongelezenWeergave')}}" @endif>
 							{!! highlight_zoekterm($draad->titel, $query) !!}
 						</a>
 						@if($draad->belangrijk)
@@ -35,7 +43,7 @@
 						<span>[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->getForumDeel()->titel}}</a>]</span>
 					</div>
 					<div class="niet-dik">
-						@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
+						@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 							{!! reldate($draad->datum_tijd) !!}
 						@else
 							{{$draad->datum_tijd}}
@@ -55,7 +63,7 @@
 									{!! CsrDelft\model\ProfielModel::getLink($post->uid, 'user') !!}
 								</div>
 								<span class="moment">
-									@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
+									@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 										{!! reldate($post->datum_tijd) !!}
 									@else
 										{{$post->datum_tijd}}

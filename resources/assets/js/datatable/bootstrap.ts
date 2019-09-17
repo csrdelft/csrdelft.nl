@@ -17,8 +17,10 @@ import 'datatables.net-scroller';
 import 'datatables.net-select';
 import $ from 'jquery';
 import JSZip from 'jszip';
-import '../lib/dataTables.childRow';
-import '../lib/dataTables.columnGroup';
+
+import './dataTables.childRow';
+import './dataTables.columnGroup';
+import './dataTables.rowButtons';
 
 import './buttons';
 import defaults from './defaults';

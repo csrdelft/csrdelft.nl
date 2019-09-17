@@ -2,9 +2,14 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
+use CsrDelft\bb\BbTag;
+use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
-use CsrDelft\view\bbcode\CsrBbException;
+use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Fotoalbum
@@ -42,7 +47,7 @@ class BbFotoalbum extends BbTag {
 		$album = $this->getAlbum($url);
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
 		$cover = CSR_ROOT . $album->getCoverUrl();
-		return $this->lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
+		return BbHelper::lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
 	}
 
 	public function parse($arguments = []) {
@@ -80,28 +85,27 @@ class BbFotoalbum extends BbTag {
 
 	/**
 	 * @param string $url
-	 * @return bool|\CsrDelft\model\entity\fotoalbum\FotoAlbum|\CsrDelft\model\entity\fotoalbum\FotoTagAlbum|null
+	 * @return bool|FotoAlbum|FotoTagAlbum|null
+	 * @throws BbException
 	 */
 	private function getAlbum(string $url) {
-		if ($url === 'laatste') {
-			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
-		} else {
-			//vervang url met pad
-			$url = str_ireplace(CSR_ROOT, '', $url);
-			$path = PHOTOALBUM_PATH;
-			//check fotoalbum in url
-			$url = str_ireplace('fotoalbum/', '', $url);
-			$path .= 'fotoalbum/';
-			//check slash voor pad
-			if (startsWith($url, '/')) {
-				$url = substr($url, 1);
+		try {
+			if ($url === 'laatste') {
+				$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
+			} else {
+				//vervang url met pad
+				$url = str_ireplace(CSR_ROOT, '', $url);
+				//check fotoalbum in url
+				$url = str_ireplace('fotoalbum/', '', $url);
+				//check slash voor pad
+				if (startsWith($url, '/')) {
+					$url = substr($url, 1);
+				}
+				$album = FotoAlbumModel::instance()->getFotoAlbum($url);
 			}
-			$path .= $url;
-			$album = FotoAlbumModel::instance()->getFotoAlbum($path);
+			return $album;
+		} catch (ResourceNotFoundException $ex) {
+			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>');
 		}
-		if (!$album) {
-			throw new CsrBbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>');
-		}
-		return $album;
 	}
 }

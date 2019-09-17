@@ -4,7 +4,7 @@
 <p>
 Op deze pagina kunt u alle abonnementen beheren en zoeken.
 </p>
-<form action="{$smarty.const.maalcieUrl}/novieten" method="post" class="Formulier ModalForm SubmitReset float-right">
+<form action="/maaltijden/abonnementen/beheer/novieten" method="post" class="Formulier ModalForm SubmitReset float-right">
 	{printCsrfField()}
 	Abonneer novieten op:
 	<select name="mrid" origvalue="kies" class="FormElement SubmitChange">
@@ -15,7 +15,7 @@ Op deze pagina kunt u alle abonnementen beheren en zoeken.
 	</select>
 </form>
 <div class="inline" style="width: 30%;"><label for="toon">Toon abonnementen:</label>
-</div><select name="toon" onchange="location.href='{$smarty.const.maalcieUrl}/'+this.value;">
+</div><select name="toon" onchange="location.href='/maaltijden/abonnementen/beheer/'+this.value;">
 	<option value="waarschuwingen" class="arrow"{if $toon === 'waarschuwing'} selected="selected"{/if}>waarschuwingen</option>
 	<option value="ingeschakeld" class="arrow"{if $toon === 'in'} selected="selected"{/if}>ingeschakeld</option>
 	<option value="abonneerbaar" class="arrow"{if $toon === 'abo'} selected="selected"{/if}>abonneerbaar</option>

@@ -4,6 +4,7 @@ namespace CsrDelft\model;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
+use CsrDelft\model\entity\groepen\GroepStatistiek;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
@@ -67,12 +68,12 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 	 * Bereken statistieken van de groepleden.
 	 *
 	 * @param AbstractGroep $groep
-	 * @return array
+	 * @return GroepStatistiek
 	 */
 	public function getStatistieken(AbstractGroep $groep) {
 		$leden = group_by_distinct('uid', $groep->getLeden());
 		if (empty($leden)) {
-			return [];
+			return new GroepStatistiek(0, [], [], [], []);
 		}
 		$uids = array_keys($leden);
 		$count = count($uids);
@@ -94,13 +95,15 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 				$totaal .= ' van ' . $groep->getAanmeldLimiet();
 			}
 		}
-		return [
-			'totaal' => $totaal,
-			'verticale' => Database::instance()->sqlSelect(['naam', 'count(*)'], 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $sqlIn . ')', $uids, 'verticale', null)->fetchAll(),
-			'geslacht' => Database::instance()->sqlSelect(['geslacht', 'count(*)'], ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'geslacht', null)->fetchAll(),
-			'lichting' => Database::instance()->sqlSelect(['lidjaar', 'count(*)'], ProfielModel::instance()->getTableName(), 'uid IN (' . $sqlIn . ')', $uids, 'lidjaar', null)->fetchAll(),
-			'tijd' => $tijd,
-		];
+		$db = Database::instance();
+		$profielTable = ProfielModel::instance()->getTableName();
+		return new GroepStatistiek(
+			$totaal,
+			$db->sqlSelect(['naam', 'count(*)'], 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $sqlIn . ')', $uids, 'verticale', null)->fetchAll(),
+			$db->sqlSelect(['geslacht', 'count(*)'], $profielTable, 'uid IN (' . $sqlIn . ')', $uids, 'geslacht', null)->fetchAll(),
+			$db->sqlSelect(['lidjaar', 'count(*)'], $profielTable, 'uid IN (' . $sqlIn . ')', $uids, 'lidjaar', null)->fetchAll(),
+			$tijd
+		);
 	}
 
 }

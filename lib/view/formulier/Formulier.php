@@ -237,7 +237,7 @@ JS;
 	protected function getScriptTag() {
 		return <<<HTML
 <script type="text/javascript">
-$(document).ready(function () {
+docReady(function() {
 	var form = document.getElementById('{$this->formId}');
 	{$this->getJavascript()}
 });

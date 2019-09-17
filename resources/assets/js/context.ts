@@ -51,8 +51,10 @@ export function domUpdate(this: HTMLElement | void, htmlString: string|object) {
 
 		const $element = $(element);
 		const id = $(element).attr('id');
+		const parentId = $(element).attr('parentid');
 
 		const target = $('#' + id);
+		const targetParent = $('#' + parentId);
 		if (target.length === 1) {
 			if ($element.hasClass('remove')) {
 				target.effect('fade', {}, 400, () => {
@@ -61,6 +63,8 @@ export function domUpdate(this: HTMLElement | void, htmlString: string|object) {
 			} else {
 				target.replaceWith($element.show().get()).effect('highlight');
 			}
+		} else if (targetParent.length === 1) {
+			targetParent.append($element.show());
 		} else {
 			const parentid = $(this).attr('parentid');
 			if (parentid) {

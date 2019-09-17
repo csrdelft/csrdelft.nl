@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\view\bbcode\CsrBbException;
+use CsrDelft\bb\BbException;
+use CsrDelft\bb\BbTag;
+use CsrDelft\view\bbcode\BbHelper;
 
 /**
  * Laat de embedded spotify player zien
@@ -32,7 +34,7 @@ class BbSpotify extends BbTag {
 		} else {
 			$beschrijving = '';
 		}
-		return $this->lightLinkBlock('spotify', $url, 'Spotify', $beschrijving);
+		return BbHelper::lightLinkBlock('spotify', $url, 'Spotify', $beschrijving);
 	}
 
 	public function parse($arguments = []) {
@@ -55,10 +57,11 @@ class BbSpotify extends BbTag {
 
 	/**
 	 * @param string|null $uri
+	 * @throws BbException
 	 */
 	private function assertUri($uri) {
 		if (!startsWith($uri, 'spotify') && !filter_var($uri, FILTER_VALIDATE_URL)) {
-			throw new CsrBbException('[spotify] Geen geldige url (' . $uri . ')');
+			throw new BbException('[spotify] Geen geldige url (' . $uri . ')');
 		}
 	}
 }

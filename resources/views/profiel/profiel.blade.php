@@ -29,29 +29,38 @@
 @section('titel', 'Het profiel van '. $profiel->getNaam('volledig'))
 
 @section('breadcrumbs')
-	<div class="breadcrumbs"><a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> »
-		<span class="active">{{$profiel->getNaam('civitas')}}</span></div>
+	{!! csr_breadcrumbs([
+	'/' => 'main',
+	'/ledenlijst' => 'Leden',
+	'' => $profiel->getNaam('civitas'),
+	]) !!}
 @endsection
 
 @section('content')
-	<div id="profiel" @if($profiel->isJarig())class="jarig" @endif >
+	<div id="profiel" class="{{$profiel->getProfielClasses()}}">
 		<div id="profielregel">
 			<div class="naam">
-				<div class="float-right">
-					<div class="pasfoto float-left">{!! $profiel->getPasfotoTag(false) !!}</div>
-					<div class="knopjes">
+				<div class="float-right d-flex align-items-center">
+					<div class="btn-toolbar flex-column">
+						<div class="btn-group-vertical mb-2">
 						{{--{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}--}}
 						@if($profiel->isInGoogleContacts())
-							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts/" class="btn btn-light"
+							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts" class="btn btn-light"
 								 title="Dit profiel opdateren in mijn google adresboek">
 								<img src="/images/google.ico" width="16" height="16" alt="opdateren in Google contacts"/>
 							</a>
 						@else
-							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts/" class="btn btn-light"
+							<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts" class="btn btn-light"
 								 title="Dit profiel toevoegen aan mijn google adresboek">
 								<img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts"/>
 							</a>
 						@endif
+							<a href="/profiel/{{$profiel->uid}}.vcf" class="btn btn-light"
+								 title="Dit profiel opslaan in lokaal adresboek">
+								@icon('vcard_add')
+							</a>
+						</div>
+						<div class="btn-group-vertical">
 						@if($profiel->magBewerken())
 							<a href="/profiel/{{$profiel->uid}}/bewerken" class="btn btn-light"
 								 title="Bewerk dit profiel">@icon('pencil')</a>
@@ -73,8 +82,13 @@
 								<a href="/tools/stats?uid={{$profiel->uid}}" class="btn btn-light"
 									 title="Toon bezoeklog">@icon('server_chart')</a>
 							@endcan
+						</div>
 						@endif
 					</div>
+					<div class="pasfoto float-left">{!! $profiel->getPasfotoTag('') !!}</div>
+					@if(in_array('banaan', $profiel->getProfielOpties()))
+						<img src="/dist/images/banaan.gif" alt="Dansende banaan" class="banaan clear">
+					@endif
 				</div>
 				{!! getMelding() !!}
 				<h1 title="Lid-status: {{CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}}">
@@ -95,7 +109,7 @@
 				<div class="label">Lidnummer:</div>
 				<div class="data">
 					@if(\CsrDelft\model\security\AccountModel::existsUid($profiel->uid) && \CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount()))
-						<a href="/su/{{$profiel->uid}}/" title="Su naar dit lid">{{$profiel->uid}}</a>
+						<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 					@else
 						{{$profiel->uid}}
 					@endif
@@ -220,7 +234,7 @@
 				<div class="col-md-6">
 					@php($patroon = \CsrDelft\model\ProfielModel::get($profiel->patroon))
 					@if($patroon || $profiel->hasKinderen())
-						<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/leden/stamboom/{{$profiel->uid}}"
+						<a class="float-right lichtgrijs fa fa-tree fa-3x" href="/profiel/{{$profiel->uid}}/stamboom"
 							 title="Stamboom van {{$profiel->getNaam()}}"></a>
 					@endif
 					@if($patroon)
@@ -410,7 +424,7 @@
 						-
 					@endif
 					@if(is_ingelogd_account($profiel->uid))
-						<div class="inline" style="position: absolute;"><a href="/corveevoorkeuren" title="Bewerk voorkeuren"
+						<div class="inline" style="position: absolute;"><a href="/corvee/voorkeuren" title="Bewerk voorkeuren"
 																															 class="btn">@icon('pencil')</a></div>
 					@endif
 				</div>
@@ -521,14 +535,14 @@
 										<td><a href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}"
 													 title="{{$post->tekst}}"
 													 @if($post->getForumDraad()->isOngelezen())
-													 class="{{\CsrDelft\model\LidInstellingenModel::get('forum', 'ongelezenWeergave')}}"
+													 class="{{lid_instelling('forum', 'ongelezenWeergave')}}"
 												@endif
 											>
 												{{truncate($post->getForumDraad()->titel, 75)}}
 											</a>
 										</td>
 										<td>
-											@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
+											@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 												{!! reldate($post->datum_tijd) !!}
 											@else
 												{{$post->datum_tijd}}

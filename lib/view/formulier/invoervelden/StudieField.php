@@ -15,7 +15,9 @@ class StudieField extends TextField {
 		parent::__construct($name, $value, $description, 100);
 		$tustudies = array('BK', 'CT', 'ET', 'IO', 'LST', 'LR', 'MT', 'MST', 'TA', 'TB', 'TI', 'TN', 'TW', 'WB');
 		// de studies aan de TU, even prefixen met 'TU Delft - '
-		$this->suggestions['TU Delft'] = array_map(create_function('$value', 'return "TU Delft - ".$value;'), $tustudies);
+		$this->suggestions['TU Delft'] = array_map(function ($value) {
+			return "TU Delft - " . $value;
+		}, $tustudies);
 		$this->suggestions[] = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
 	}
 

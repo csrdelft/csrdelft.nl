@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\view\bbcode\BbHelper;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -26,10 +28,10 @@ class BbCitaat extends BbTag {
 		}
 		$profiel = ProfielModel::get($van);
 		if ($profiel) {
-			$text .= ' van ' . $this->lightLinkInline('lid', '/profiel/' . $profiel->uid, $profiel->getNaam('user'));
+			$text .= ' van ' . BbHelper::lightLinkInline($this->env, 'lid', '/profiel/' . $profiel->uid, $profiel->getNaam('user'));
 		} elseif ($van != '') {
 			if (isset($arguments['url']) && url_like($arguments['url'])) {
-				$text .= ' van ' . $this->lightLinkInline('url', $arguments['url'], $van);
+				$text .= ' van ' . BbHelper::lightLinkInline($this->env,'url', $arguments['url'], $van);
 			} else {
 				$text .= ' van ' . $van;
 			}

@@ -1,7 +1,10 @@
 <?php
 
+use CsrDelft\common\CRLFView;
+use CsrDelft\model\MenuModel;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
+use CsrDelft\view\View;
 
 /**
  * Hulpmethodes die gebruikt worden in views.
@@ -27,6 +30,16 @@ function view(string $template, array $variables = []) {
  */
 function display(string $template, array $variables = []) {
 	(new TemplateView($template, $variables))->view();
+}
+
+/**
+ * Zorgt dat line endings CRLF zijn voor ical en vcard.
+ *
+ * @param View $view
+ * @return CRLFView
+ */
+function crlf_endings(View $view) {
+	return new CRLFView($view);
 }
 
 /**
@@ -385,4 +398,37 @@ function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) 
 	$before = $before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
 	$after = $after ?: '</span>';
 	return preg_replace('/' . preg_quote($zoekterm, '/') . '/i', $before . '$0' . $after, $bericht);
+}
+
+function csr_breadcrumbs($breadcrumbs) {
+	return MenuModel::instance()->renderBreadcrumbs($breadcrumbs);
+}
+
+/**
+ * Ical escape modifier plugin
+ * Type:     modifier<br>
+ * Name:     escape_ical<br>
+ * Purpose:  escape string for ical output
+ *
+ * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @param string $string
+ * @param int $prefix_length
+ *
+ * @return string
+ */
+function escape_ical($string, $prefix_length) {
+	$string = str_replace('\\', '\\\\', $string);
+	$string = str_replace("\r", '', $string);
+	$string = str_replace("\n", '\n', $string);
+	$string = str_replace(';', '\;', $string);
+	$string = str_replace(',', '\,', $string);
+
+	$length = 60 - (int)$prefix_length;
+	$wrap = mb_substr($string, 0, $length);
+	$rest = mb_substr($string, $length);
+	if (!empty($rest)) {
+		$wrap .= "\r\n " . wordwrap($rest, 59, "\r\n ", true);
+	}
+	return $wrap;
 }

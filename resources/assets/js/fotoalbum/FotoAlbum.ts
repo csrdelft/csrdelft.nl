@@ -1,6 +1,6 @@
 import {EventEmitter} from 'events';
 
-import 'jgallery/dist/js/jgallery';
+require('jgallery/dist/js/jgallery');
 import $ from 'jquery';
 import {basename, dirname, redirect, reload, selectText} from '../util';
 
@@ -249,7 +249,7 @@ export class FotoAlbum extends EventEmitter {
 
 		// knopje downloaden
 		const btnDown = this.createCMBtn('btnDown', 'Downloaden', 'download');
-		btnDown.on('click', () => window.location.href = `/fotoalbum/download${this.getUrl()}`);
+		btnDown.on('click', () => window.location.href = `${this.getFullUrl()}?download`);
 		addCMI(btnDown);
 
 		// knopje taggen

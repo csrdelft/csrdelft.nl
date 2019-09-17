@@ -2,12 +2,15 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
+use CsrDelft\view\bbcode\BbHelper;
+
 /**
  * URL
  *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @since 27/03/2019
  * @param String $arguments ['url'] URL waarnaar gelinkt wordt
+ * @since 27/03/2019
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @example [url]https://csrdelft.nl[/url]
  * @example [url=https://csrdelft.nl]Stek[/url]
  */
@@ -20,7 +23,7 @@ class BbUrl extends BbTag {
 	public function parseLight($arguments = []) {
 		$content = $this->getContent();
 		$url = $this->getUrl($arguments, $content);
-		return $this->lightLinkInline('url', $url, $content);
+		return BbHelper::lightLinkInline($this->env, 'url', $url, $content);
 	}
 
 	public function parse($arguments = []) {

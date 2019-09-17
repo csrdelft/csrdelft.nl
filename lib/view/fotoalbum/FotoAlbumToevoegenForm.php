@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\ModalForm;
 class FotoAlbumToevoegenForm extends ModalForm {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, '/fotoalbum/toevoegen/' . $album->subdir);
+		parent::__construct($album, join_paths('/fotoalbum/toevoegen', $album->subdir));
 		$this->titel = 'Fotoalbum toevoegen in: ' . $album->dirname;
 		$this->css_classes[] = 'redirect';
 

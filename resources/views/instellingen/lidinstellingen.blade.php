@@ -26,12 +26,18 @@
 				<h2 id="instelling-{{$module}}">{{ucfirst($module)}}</h2>
 
 				@foreach($moduleInstellingen as $id => $instelling)
-					@php(list($titel, $type, $opties, $default, $beschrijving) = $instelling)
+					@php
+						$titel = $instelling['titel'];
+						$type = $instelling['type'];
+						$opties = $instelling['opties'];
+					 	$default = $instelling['default'];
+						$beschrijving = $instelling['beschrijving']
+					@endphp
 					@php($keuze = isset($instellingen[$module][$id]) ? $instellingen[$module][$id] : $default)
 					<div class="form-group row">
 						<label class="col-md-3 col-form-label" for="inst_{{$module}}_{{$id}}">{!! $titel !!}</label>
 
-						@if($type === CsrDelft\Orm\Entity\T::Enumeration)
+						@if($type === \CsrDelft\model\instellingen\InstellingType::Enumeration)
 							@if(count($opties) > 8)
 								<div class="col-md-9">
 									<select name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" class="form-control change-opslaan"
@@ -43,33 +49,29 @@
 								</div>
 							@else
 								{{-- Verticaal op xs --}}
-								<div class="d-block d-sm-none w-100">
-									<div class="btn-group-vertical btn-group-toggle col-md-9" data-buttons="radio">
-										@foreach($opties as $optieId => $optie)
-											@php($optieId = is_int($optieId) ? $optie : $optieId)
-											<a class="post noanim instellingKnop btn btn-secondary @if($optie === $keuze) active @endif"
-												 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
-										@endforeach
-									</div>
+								<div class="btn-group-vertical btn-group-toggle col d-inline-flex d-sm-none" data-buttons="radio">
+									@foreach($opties as $optieId => $optie)
+										@php($optieId = is_int($optieId) ? $optie : $optieId)
+										<a class="post noanim instellingKnop btn btn-secondary @if($optie === $keuze) active @endif"
+											 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
+									@endforeach
 								</div>
 								{{-- Horizontaal op alle andere --}}
-								<div class="d-none d-sm-block">
-									<div class="btn-group btn-group-toggle col-md-9" data-buttons="radio">
-										@foreach($opties as $optieId => $optie)
-											@php($optieId = is_int($optieId) ? $optie : $optieId)
-											<a class="post noanim instellingKnop btn btn-secondary @if($optieId === $keuze) active @endif"
-												 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
-										@endforeach
-									</div>
+								<div class="d-none d-sm-inline-flex btn-group btn-group-toggle col-auto" data-buttons="radio">
+									@foreach($opties as $optieId => $optie)
+										@php($optieId = is_int($optieId) ? $optie : $optieId)
+										<a class="post noanim instellingKnop btn btn-secondary @if($optieId === $keuze) active @endif"
+											 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
+									@endforeach
 								</div>
 							@endif
-						@elseif($type === CsrDelft\Orm\Entity\T::String)
+						@elseif($type === \CsrDelft\model\instellingen\InstellingType::String)
 							<div class="col-md-9">
 								<input type="text" name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" value="{{$keuze}}"
 											 data-href="/instellingen/update/{{$module}}/{{$id}}"
 											 class="form-control change-opslaan" minlength="{{$opties[0]}}" maxlength="{{$opties[1]}}"/>
 							</div>
-						@elseif($type === CsrDelft\Orm\Entity\T::Integer)
+						@elseif($type === \CsrDelft\model\instellingen\InstellingType::Integer)
 							<div class="col-md-9">
 								<input type="number" name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" value="{{$keuze}}"
 											 data-href="/instellingen/update/{{$module}}/{{$id}}"

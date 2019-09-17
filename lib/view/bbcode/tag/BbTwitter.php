@@ -2,15 +2,18 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
+use CsrDelft\view\bbcode\BbHelper;
+
 /**
  * Twitter widget
  *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @since 27/03/2019
  * @param optional Integer $arguments['lines']
  * @param optional Integer $arguments['width'] Breedte
  * @param optional Integer $arguments['height'] Hoogte
  *
+ * @since 27/03/2019
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @example [twitter][/twitter]
  */
 class BbTwitter extends BbTag {
@@ -22,7 +25,7 @@ class BbTwitter extends BbTag {
 	public function parseLight($arguments = []) {
 		$content = $this->getContent();
 
-		return $this->lightLinkBlock('twitter', 'https://twitter.com/' . $content, 'Twitter', 'Tweets van @' . $content);
+		return BbHelper::lightLinkBlock('twitter', 'https://twitter.com/' . $content, 'Twitter', 'Tweets van @' . $content);
 	}
 
 	public function parse($arguments = []) {

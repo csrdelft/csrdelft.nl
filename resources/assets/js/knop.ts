@@ -47,9 +47,31 @@ function knopAjax(knop: JQuery, type: string) {
 		data = encodeURIComponent(data[0]) + '=' + encodeURIComponent(val);
 	}
 	if (knop.hasClass('addfav')) {
+		// @ts-ignore
 		data = {
 			tekst: document.title.replace('C.S.R. Delft - ', ''),
 			link: window.location.href,
+		};
+	}
+	if (knop.hasClass('DataTableRowKnop')) {
+		const dataTableId = knop.parents('table').attr('id');
+		data = {
+			'DataTableId': dataTableId,
+			'DataTableSelection[]': [knop.parents('tr').attr('data-uuid')],
+		};
+
+		done = (response: any) => {
+			if (typeof response === 'object') { // JSON
+				fnUpdateDataTable('#' + dataTableId, response);
+				if (response.modal) {
+					modalOpen(response.modal);
+					init(document.querySelector('#modal')!);
+				} else {
+					modalClose();
+				}
+			} else { // HTML
+				domUpdate(response);
+			}
 		};
 	}
 	if (knop.hasClass('DataTableResponse')) {
@@ -115,8 +137,8 @@ function knopGet(event: Event) {
 	return false;
 }
 
-function knopVergroot(event: Event) {
-	const knop = $(event.target!);
+function knopVergroot(this: HTMLElement, event: Event) {
+	const knop = $(this);
 	const id = knop.attr('data-vergroot')!;
 	const oud = knop.attr('data-vergroot-oud')!;
 

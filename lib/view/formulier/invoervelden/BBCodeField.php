@@ -27,9 +27,13 @@ class BBCodeField extends TextareaField {
 	public function getHtml() {
 		return parent::getHtml() . <<<HTML
 
-<div class="float-right">
-	<a href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
-	<a class="btn preview{$this->getId()}" title="Toon voorbeeld met opmaak">Voorbeeld</a>
+<div class="row justify-content-end">
+	<div class="col-auto">
+		<a class="btn btn-light" href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
+	</div>
+	<div class="col-auto">
+		<a class="btn btn-secondary preview{$this->getId()}" href="#" title="Toon voorbeeld met opmaak">Voorbeeld</a>
+	</div>
 </div>
 HTML;
 	}

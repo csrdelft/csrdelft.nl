@@ -13,8 +13,6 @@ require('./lib/jquery.markitup');
 require('jquery-ui/ui/widgets/tooltip');
 require('jquery-hoverintent');
 
-$.widget.bridge('uitooltip', $.ui.tooltip);
-
 require('timeago');
 
 declare global {
@@ -110,28 +108,31 @@ $window.trigger('scroll');
 init(document.body);
 
 const contactForm = document.querySelector('#contact-form') as HTMLFormElement;
-const errorContainer = document.querySelector('#melding') as HTMLElement;
-const submitButton = contactForm.submitButton as HTMLButtonElement;
 
-contactForm.addEventListener('submit', (event) => {
-	event.preventDefault();
-	errorContainer.innerHTML = '';
-	submitButton.disabled = true;
-	const formData = new FormData(contactForm);
-	axios.post('/contactformulier/interesse', formData)
-		.then((response) => {
-			contactForm.reset();
-			submitButton.disabled = false;
-			errorContainer.innerHTML = '<div class="alert alert-success">' +
-				'<span class="ico accept"></span>' + response.data +
-				'</div>';
-		})
-		.catch((error) => {
-			submitButton.disabled = false;
-			errorContainer.innerHTML = '<div class="alert alert-danger">' +
-				'<span class="ico exclamation"></span>' + error.response.data +
-				'</div>';
-		});
+if (contactForm) {
+	const errorContainer = document.querySelector('#melding') as HTMLElement;
+	const submitButton = contactForm.submitButton as HTMLButtonElement;
 
-	return false;
-});
+	contactForm.addEventListener('submit', (event) => {
+		event.preventDefault();
+		errorContainer.innerHTML = '';
+		submitButton.disabled = true;
+		const formData = new FormData(contactForm);
+		axios.post('/contactformulier/interesse', formData)
+			.then((response) => {
+				contactForm.reset();
+				submitButton.disabled = false;
+				errorContainer.innerHTML = '<div class="alert alert-success">' +
+					'<span class="ico accept"></span>' + response.data +
+					'</div>';
+			})
+			.catch((error) => {
+				submitButton.disabled = false;
+				errorContainer.innerHTML = '<div class="alert alert-danger">' +
+					'<span class="ico exclamation"></span>' + error.response.data +
+					'</div>';
+			});
+
+		return false;
+	});
+}

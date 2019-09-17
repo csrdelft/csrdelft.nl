@@ -15,7 +15,7 @@ use CsrDelft\view\datatable\DataTable;
 class LoginSessionsTable extends DataTable {
 
 	public function __construct() {
-		parent::__construct(LoginModel::ORM, '/loginsessionsdata', 'Sessiebeheer', 'ip');
+		parent::__construct(LoginModel::ORM, '/session/sessionsdata', 'Sessiebeheer', 'ip');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->hideColumn('uid');
 		$this->searchColumn('login_moment');

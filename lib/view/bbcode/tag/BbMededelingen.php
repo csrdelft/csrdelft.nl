@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\view\bbcode\CsrBbException;
+use CsrDelft\bb\BbException;
+use CsrDelft\bb\BbTag;
+use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\mededelingen\MededelingenView;
 
 /**
@@ -22,7 +24,7 @@ class BbMededelingen extends BbTag {
 	public function parseLight($arguments = []) {
 		$type = $this->getArgument($arguments);
 		$this->assertType($type);
-		return $this->lightLinkBlock('mededelingen', '/mededelingen', 'Mededelingen', 'Bekijk de laatste mededelingen');
+		return BbHelper::lightLinkBlock('mededelingen', '/mededelingen', 'Mededelingen', 'Bekijk de laatste mededelingen');
 	}
 
 	public function parse($arguments = []) {
@@ -42,10 +44,11 @@ class BbMededelingen extends BbTag {
 
 	/**
 	 * @param string|null $type
+	 * @throws BbException
 	 */
 	private function assertType($type) {
 		if ($type == '') {
-			throw new CsrBbException('[mededelingen] Geen geldig mededelingenblok.');
+			throw new BbException('[mededelingen] Geen geldig mededelingenblok.');
 		}
 	}
 }

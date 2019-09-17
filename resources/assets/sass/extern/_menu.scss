@@ -27,7 +27,7 @@
     padding: 1em;
     transform: translateY(0.5em);
     -webkit-overflow-scrolling: touch;
-    background: $basiskleur;
+    background: $menu-bg;
     border-radius: 5px;
     display: block;
     max-width: 100%;
@@ -115,9 +115,6 @@
       max-height: 100%;
       overflow-y: auto;
       overflow-x: hidden;
-      .close {
-        background-size: 1.5em 1.5em;
-      }
     }
   }
 

@@ -65,7 +65,7 @@ class Boek extends PersistentEntity {
 	}
 
 	public function getRubriek() {
-		return $this->categorie_id != null ? BiebRubriekModel::get($this->categorie_id) : null;
+		return $this->categorie_id != null ? BiebRubriekModel::instance()->get($this->categorie_id) : null;
 
 	}
 	public function getStatus() {
@@ -146,7 +146,7 @@ class Boek extends PersistentEntity {
 	 * @return BoekExemplaar[]
 	 */
 	public function getExemplaren() : array {
-		return BoekExemplaarModel::getExemplaren($this)->fetchAll();
+		return BoekExemplaarModel::instance()->getExemplaren($this)->fetchAll();
 	}
 
 
@@ -158,7 +158,7 @@ class Boek extends PersistentEntity {
 	 * @return array Beschrijving[]
 	 */
 	public function getBeschrijvingen() {
-		return BoekRecensieModel::getVoorBoek($this->id);
+		return BoekRecensieModel::instance()->getVoorBoek($this->id);
 	}
 
 	/**

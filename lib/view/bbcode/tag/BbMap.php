@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
 use CsrDelft\common\Ini;
+use CsrDelft\view\bbcode\BbHelper;
 use function trim;
 use function urlencode;
 
@@ -19,7 +21,7 @@ class BbMap extends BbTag {
 	public function parseLight($arguments = []) {
 		$address = $this->getContent();
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
-		return $this->lightLinkBlock('map', $url, $address, 'Google Maps');
+		return BbHelper::lightLinkBlock('map', $url, $address, 'Google Maps');
 	}
 
 	public function parse($arguments = []) {

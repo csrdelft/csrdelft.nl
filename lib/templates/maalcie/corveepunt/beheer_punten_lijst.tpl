@@ -2,7 +2,7 @@
 	beheer_punten_lijst.tpl	|	P.W.G. Brussee (brussee@live.nl)
 *}
 <tr id="punten-row-{$puntenlijst.lid->uid}">
-	<td>{$puntenlijst.lid->getNaam(CsrDelft\model\InstellingenModel::get('corvee', 'weergave_ledennamen_beheer'))}</td>
+	<td>{$puntenlijst.lid->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}</td>
 {foreach from=$puntenlijst.aantal key=fid item=aantal}
 	<td>{strip}
 	{if $aantal !== 0}
@@ -22,7 +22,7 @@
 	<td>
 		<div class="InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.puntenTotaal}</div>
-			<form action="{$smarty.const.maalcieUrl}/wijzigpunten/{$puntenlijst.lid->uid}" method="post" class="Formulier InlineForm ToggleForm">
+			<form action="/corvee/punten/wijzigpunten/{$puntenlijst.lid->uid}" method="post" class="Formulier InlineForm ToggleForm">
 				{printCsrfField()}
 				<input type="text" name="totaal_punten" value="{$puntenlijst.puntenTotaal}" origvalue="{$puntenlijst.puntenTotaal}" class="FormElement" maxlength="4" size="4" />
 				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
@@ -33,7 +33,7 @@
 	<td>
 		<div class="InlineForm">
 			<div class="InlineFormToggle">{$puntenlijst.bonusTotaal}</div>
-			<form action="{$smarty.const.maalcieUrl}/wijzigbonus/{$puntenlijst.lid->uid}" method="post" class="Formulier InlineForm ToggleForm">
+			<form action="/corvee/punten/wijzigbonus/{$puntenlijst.lid->uid}" method="post" class="Formulier InlineForm ToggleForm">
 				{printCsrfField()}
 				<input type="text" name="totaal_bonus" value="{$puntenlijst.bonusTotaal}" origvalue="{$puntenlijst.bonusTotaal}" class="FormElement" maxlength="4" size="4" />
 				<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>

@@ -26,7 +26,7 @@ tmp/*
 bin/ldap/*
 
 # Dev bestanden
-conf/*
+docker/*
 bin/dev/*
 bin/ci/*
 sql/*

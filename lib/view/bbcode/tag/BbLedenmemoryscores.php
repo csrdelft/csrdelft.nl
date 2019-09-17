@@ -2,9 +2,11 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 
 /**
@@ -19,7 +21,7 @@ class BbLedenmemoryscores extends BbTag {
 
 	public function parseLight($arguments = []) {
 		list($groep, $titel) = $this->getGroepAndTitel($arguments);
-		return $this->lightLinkBlock('ledenmemoryscores', '/forum/onderwerp/8017', 'Ledenmemory Scores', $titel);
+		return BbHelper::lightLinkBlock('ledenmemoryscores', '/forum/onderwerp/8017', 'Ledenmemory Scores', $titel);
 	}
 
 	/**

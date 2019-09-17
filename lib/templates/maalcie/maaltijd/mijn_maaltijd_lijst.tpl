@@ -31,7 +31,7 @@
 			{$maaltijd->getAantalAanmeldingen()} ({$maaltijd->aanmeld_limiet})
 			{if $maaltijd->magSluiten(CsrDelft\model\security\LoginModel::getUid())}
 				<div class="float-right">
-					<a href="/maaltijdenlijst/{$maaltijd->maaltijd_id}" title="Toon maaltijdlijst" class="btn">{icon get="table"}</a>
+					<a href="/maaltijden/lijst/{$maaltijd->maaltijd_id}" title="Toon maaltijdlijst" class="btn">{icon get="table"}</a>
 				</div>
 			{/if}
 		</td>
@@ -46,7 +46,7 @@
 					</div>
 				{else}
 				<td class="maaltijd-aangemeld">
-					<a href="{$smarty.const.maalcieUrl}/afmelden/{$maaltijd->maaltijd_id}" class="btn post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
+					<a href="/maaltijden/ketzer/afmelden/{$maaltijd->maaltijd_id}" class="btn post maaltijd-aangemeld"><input type="checkbox" checked="checked" /> Ja</a>
 					{if $aanmelding->door_abonnement} (abo){/if}
 				{/if}
 			</td>
@@ -56,7 +56,7 @@
 				{else}
 					<div class="InlineForm">
 						<div class="InlineFormToggle maaltijd-gasten">{$aanmelding->aantal_gasten}</div>
-						<form action="{$smarty.const.maalcieUrl}/gasten/{$maaltijd->maaltijd_id}" method="post" class="Formulier InlineForm ToggleForm">
+						<form action="/maaltijden/ketzer/gasten/{$maaltijd->maaltijd_id}" method="post" class="Formulier InlineForm ToggleForm">
 							{printCsrfField()}
 							<input type="text" name="aantal_gasten" value="{$aanmelding->aantal_gasten}" origvalue="{$aanmelding->aantal_gasten}" class="FormElement" maxlength="4" size="4" />
 							<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
@@ -80,8 +80,8 @@
 									<a class="btn">{icon get="comment_add" title="Gasten allergie/diëet"}</a>
 								{/if}
 							</div>
-							<form action="{$smarty.const.maalcieUrl}/opmerking/{$maaltijd->maaltijd_id}" method="post" class="Formulier InlineForm ToggleForm">
-								{printCsrfField("{$smarty.const.maalcieUrl}/opmerking/{$maaltijd->maaltijd_id}")}
+							<form action="/maaltijden/ketzer/opmerking/{$maaltijd->maaltijd_id}" method="post" class="Formulier InlineForm ToggleForm">
+								{printCsrfField("/maaltijden/ketzer/opmerking/{$maaltijd->maaltijd_id}")}
 								<input type="text" name="gasten_eetwens" value="{$aanmelding->gasten_eetwens}" origvalue="{$aanmelding->gasten_eetwens}" class="FormElement" maxlength="255" size="20" />
 								<a class="btn submit" title="Wijzigingen opslaan">{icon get="accept"}</a>
 								<a class="btn reset cancel" title="Annuleren">{icon get="delete"}</a>
@@ -105,7 +105,7 @@
 					{/if}
 				{else}
 				<td class="maaltijd-afgemeld">
-					<a href="{$smarty.const.maalcieUrl}/aanmelden/{$maaltijd->maaltijd_id}" class="btn post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
+					<a href="/maaltijden/ketzer/aanmelden/{$maaltijd->maaltijd_id}" class="btn post maaltijd-afgemeld"><input type="checkbox" /> Nee</a>
 					{/if}
 			</td>
 			<td>-</td>

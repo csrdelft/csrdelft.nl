@@ -211,7 +211,7 @@ function initSaldoGrafiek(el: HTMLElement) {
 	const chart = new Chart(createCanvas(el), {data: {}, type: 'NegativeTransparentLine', options});
 
 	function load() {
-		axios.post(`/leden/saldo/${uid}/${timespan}`)
+		axios.post(`/profiel/${uid}/saldo/${timespan}`)
 			.then((response) => {
 				chart.data = response.data;
 				chart.update();

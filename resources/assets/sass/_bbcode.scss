@@ -37,17 +37,27 @@ $bb-hover-bg: #DDEEFF !default;
 .bbcodePreview {
   display: none;
   margin: 7px 0;
-	color: black;
-  background-color: #ffffc1;
   border: 1px solid #ccc;
   padding: .2em .6em 10px;
   text-align: justify;
+	margin-top: 2em;
 
   &::after {
     content: "";
     display: block;
     clear: both;
   }
+
+	&::before {
+		content: "Voorbeeld";
+		display: block;
+		clear: both;
+		position: absolute;
+		margin-top: -2em;
+		color: $text-muted;
+		font-size: $small-font-size;
+		margin-left: -5px;
+	}
 }
 
 .bbcodePreview, .bbcodePreview div, .Formulier .bbcodePreview {
@@ -499,6 +509,7 @@ a.responsive {
 
 .bb-video-preview img {
   max-height: 150px;
+	width: auto;
 }
 
 .bb-video-preview .play-button {

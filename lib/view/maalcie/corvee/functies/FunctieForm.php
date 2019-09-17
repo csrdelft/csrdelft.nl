@@ -19,7 +19,7 @@ class FunctieForm extends ModalForm {
 		CorveeFunctie $functie,
 		$actie
 	) {
-		parent::__construct($functie, maalcieUrl . '/' . $actie . '/' . $functie->functie_id);
+		parent::__construct($functie, '/corvee/functies/' . $actie . '/' . $functie->functie_id);
 		$this->titel = 'Corveefunctie ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';

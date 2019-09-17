@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbTag;
 use CsrDelft\model\documenten\DocumentModel;
+use CsrDelft\view\bbcode\BbHelper;
 
 /**
  * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
@@ -29,7 +31,7 @@ class BbDocument extends BbTag {
 
 		if ($document) {
 			$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int)$document->filesize) . ')';
-			return $this->lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
+			return BbHelper::lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
 		} else {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $id . ')</div>';
 		}

@@ -19,9 +19,9 @@ use CsrDelft\view\formulier\ModalForm;
 class ToewijzenForm extends ModalForm {
 
 	public function __construct(CorveeTaak $taak, array $suggesties) {
-		parent::__construct(null, maalcieUrl . '/toewijzen/' . $taak->taak_id);
+		parent::__construct(null, '/corvee/beheer/toewijzen/' . $taak->taak_id);
 
-		if (!is_int($taak->taak_id) || $taak->taak_id <= 0) {
+		if (!is_numeric($taak->taak_id) || $taak->taak_id <= 0) {
 			throw new CsrGebruikerException(sprintf('Ongeldig taak id "%s".', $taak->taak_id));
 		}
 		$this->titel = 'Taak toewijzen aan lid';

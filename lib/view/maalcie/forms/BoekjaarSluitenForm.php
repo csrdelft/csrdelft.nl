@@ -18,7 +18,7 @@ use CsrDelft\view\formulier\ModalForm;
 class BoekjaarSluitenForm extends ModalForm {
 
 	public function __construct($beginDatum = null, $eindDatum = null) {
-		parent::__construct(null, maalcieUrl . '/sluitboekjaar');
+		parent::__construct(null, '/maaltijden/boekjaar/sluitboekjaar');
 		$this->titel = 'Boekjaar sluiten';
 
 		$fields = [];

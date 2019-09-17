@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\model\LidInstellingenModel;
+use CsrDelft\bb\BbTag;
+use CsrDelft\model\instellingen\LidInstellingenModel;
+use CsrDelft\view\bbcode\BbHelper;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -16,7 +18,7 @@ class BbBijbel extends BbTag {
 
 	public function parseLight($arguments = []) {
 		list($stukje, $link) = $this->getLink($arguments);
-		return $this->lightLinkInline('bijbel', $link, $stukje);
+		return BbHelper::lightLinkInline($this->env, 'bijbel', $link, $stukje);
 	}
 
 	public function parse($arguments = []) {
@@ -45,7 +47,7 @@ class BbBijbel extends BbTag {
 			$vertaling1 = null;
 		}
 		if ($vertaling1 === null) {
-			$vertaling1 = LidInstellingenModel::get('algemeen', 'bijbel');
+			$vertaling1 = lid_instelling('algemeen', 'bijbel');
 		}
 		$link = 'https://www.debijbel.nl/bijbel/' . urlencode($vertaling1) . '/' . urlencode($stukje);
 		return array($stukje, $link);

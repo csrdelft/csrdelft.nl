@@ -1,10 +1,21 @@
 html {
-	font-size: 12px;
+	//font-size: 12px;
+	font-size: 0.8rem;
 }
 
 .dropdown-menu {
   cursor: default;
   z-index: 9999999;
+}
+
+.breadcrumb {
+	max-width: 800px;
+}
+
+.breadcrumb .form-control {
+	display: inline;
+	width: auto;
+	margin: -0.5em 0;
 }
 
 .clippy {

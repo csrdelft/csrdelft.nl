@@ -15,13 +15,12 @@ use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
-use CsrDelft\view\formulier\getalvelden\required\RequiredTelefoonField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
+use CsrDelft\view\formulier\invoervelden\IBANField;
 use CsrDelft\view\formulier\invoervelden\LandField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredIBANField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLandField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\StudieField;
@@ -43,7 +42,9 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
 class ProfielForm extends Formulier {
 
 	public function getBreadcrumbs() {
-		return '<a href="/ledenlijst" title="Ledenlijst"><span class="fa fa-user module-icon"></span></a> » ' . $this->model->getLink('civitas');
+		return '<ol class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
+			. '<li class="breadcrumb-item"><a href="/ledenlijst">Leden</a></li>'
+			. '<li class="breadcrumb-item">'. $this->model->getLink('civitas') . '</li></ol>';
 	}
 
 	public function __construct(Profiel $profiel) {
@@ -178,12 +179,18 @@ class ProfielForm extends Formulier {
 			$fields[] = new UrlField('linkedin', $profiel->linkedin, 'Publiek LinkedIn-profiel');
 			$fields[] = new UrlField('website', $profiel->website, 'Website');
 		}
-		$fields[] = new RequiredTelefoonField('mobiel', $profiel->mobiel, 'Mobiel', 20);
+		// Mobiel & telefoon, mobiel verplicht voor (nieuwe) leden
+		$fields['mobiel'] = new TelefoonField('mobiel', $profiel->mobiel, 'Mobiel', 20);
+		$fields['mobiel']->required = $inschrijven || $profiel->isLid();
 		$fields[] = new TelefoonField('telefoon', $profiel->telefoon, 'Telefoonnummer (vast)', 20);
 
 		$fields[] = new Subkopje('Boekhouding');
-		$fields[] = new RequiredIBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 34);
-		if ($admin) {
+
+		// Bankrekeningnummer: verplicht voor (nieuwe) leden
+		$fields['bankrekening'] = new IBANField('bankrekening', $profiel->bankrekening, 'Bankrekening', 34);
+		$fields['bankrekening']->required = $inschrijven || $profiel->isLid();
+
+		if ($admin && !$inschrijven) {
 			$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 		}
 
@@ -205,6 +212,7 @@ class ProfielForm extends Formulier {
 				$fields[] = new JaNeeField('kringcoach', $profiel->kringcoach, 'Kringcoach');
 			}
 			$fields[] = new LidField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
+			$fields[] = new TextField('profielOpties', $profiel->profielOpties, 'Profielopties');
 		}
 
 		$fields[] = new Subkopje('Persoonlijk');
@@ -230,6 +238,11 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
 		if (($admin OR LoginModel::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
+
+			if ($inschrijven) {
+				// Alleen als inschrijven, anders bovenin voor admin
+				$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
+			}
 
 			$fields['novitiaat'] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
 			$fields['novitiaat']->required = $inschrijven;

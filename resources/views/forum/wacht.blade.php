@@ -2,6 +2,14 @@
 
 @section('titel', 'Wacht op goedkeuring')
 
+@section('breadcrumbs')
+	{!! csr_breadcrumbs([
+  '/' => 'main',
+  '/forum' => 'Forum',
+  '' => 'Wacht',
+	]) !!}
+@endsection
+
 @section('content')
 	{!! getMelding() !!}
 
@@ -20,7 +28,7 @@
 							</span>
 					</div>
 					<div class="niet-dik">
-						@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
+						@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 							{!! reldate($draad->datum_tijd) !!}
 						@else
 							{{$draad->datum_tijd}}
@@ -36,7 +44,6 @@
 			@endforeach
 		</div>
 		<h1>Wacht op goedkeuring</h1>
-		@yield('breadcrumbs')
 	@else
 		Geen berichten die op goedkeuring wachten.
 	@endif

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\LidToestemmingModel;
+use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 
@@ -49,8 +49,8 @@ class CsrLayoutPage extends CompressedLayout {
 		}
 
 		$breadcrumbs = $this->getBody()->getBreadcrumbs();
-		if (!$breadcrumbs) {
-			$breadcrumbs = $this->getBreadcrumbs();
+		if ($breadcrumbs) {
+			$breadcrumbs = '<ol class="breadcrumb">' .$breadcrumbs . '</ol>';
 		}
 
 		view('pagina', [

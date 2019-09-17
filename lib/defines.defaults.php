@@ -38,12 +38,14 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('LIB_PATH', BASE_PATH . 'lib/');
 @define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
 @define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
-@define('PHOTOALBUM_PATH', DATA_PATH . 'foto/');
+@define('PHOTOALBUM_PATH', DATA_PATH . 'foto/fotoalbum/');
 @define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 @define('ROUTES_CACHE_PATH', DATA_PATH . 'routes/');
+@define('CONFIG_CACHE_PATH', DATA_PATH . 'config_cache/');
 @define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 @define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
 @define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
+@define('CONFIG_PATH', LIB_PATH . 'config');
 # smarty template engine
 @define('SMARTY_PLUGIN_DIR', LIB_PATH. 'smarty_plugins');
 @define('SMARTY_TEMPLATE_DIR', LIB_PATH . 'templates/');

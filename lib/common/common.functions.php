@@ -5,16 +5,17 @@
 # common.functions.php
 # -------------------------------------------------------------------
 use CsrDelft\common\MijnSqli;
-use CsrDelft\service\CsrfService;
+use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\InstellingenModel;
-use CsrDelft\model\LidToestemmingModel;
+use CsrDelft\model\instellingen\InstellingenModel;
+use CsrDelft\model\instellingen\LidInstellingenModel;
+use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
-use Symfony\Component\Security\Csrf\CsrfToken;
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
@@ -24,7 +25,7 @@ use Symfony\Component\Security\Csrf\CsrfToken;
  * @return boolean
  */
 function startsWith($haystack, $needle) {
-	return $needle === "" || strpos($haystack, $needle) === 0;
+	return strval($needle) === "" || strpos($haystack, strval($needle)) === 0;
 }
 
 /**
@@ -117,7 +118,7 @@ function setRememberCookie($token) {
 		unset($_COOKIE['remember']);
 		setcookie('remember', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	} else {
-		setcookie('remember', $token, time() + (int)InstellingenModel::get('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		setcookie('remember', $token, time() + (int)instelling('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
 	}
 }
 
@@ -125,7 +126,7 @@ function setRememberCookie($token) {
  * @return int
  */
 function getSessionMaxLifeTime() {
-	$lifetime = (int)InstellingenModel::get('beveiliging', 'session_lifetime_seconds');
+	$lifetime = (int)instelling('beveiliging', 'session_lifetime_seconds');
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
 	$gc = (int)ini_get('session.gc_maxlifetime');
 	if ($gc > 0 AND $gc < $lifetime) {
@@ -891,6 +892,7 @@ function checkMimetype($filename, $mime) {
 		'audio/midi' => ['mid', 'midi'],
 		'video/quicktime' => ['mov', 'qt'],
 		'audio/mpeg' => 'mp3',
+		'audio/mp3' => 'mp3',
 		'video/mpeg' => ['mpe', 'mpeg', 'mpg'],
 		'audio/ogg' => ['oga', 'ogg', 'ogv'],
 		'application/ogg' => 'ogx',
@@ -986,6 +988,14 @@ function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_
 	return LidToestemmingModel::instance()->toestemming($profiel, $key, $cat, $uitzondering);
 }
 
+function lid_instelling($module, $key) {
+	return LidInstellingenModel::instance()->getValue($module, $key);
+}
+
+function instelling($module, $key) {
+	return InstellingenModel::instance()->getValue($module, $key);
+}
+
 function to_unix_path($path) {
 	return str_replace(DIRECTORY_SEPARATOR, "/", $path);
 }
@@ -1065,7 +1075,7 @@ if (!function_exists('array_key_first')) {
 	 * @param array $array
 	 * @return mixed
 	 */
-	function array_key_first(array $array) {
+	function array_key_first($array) {
 		return $array ? array_keys($array)[0] : null;
 	}
 }
@@ -1079,7 +1089,7 @@ if (!function_exists('array_key_last')) {
 	 * @param array $array
 	 * @return mixed
 	 */
-	function array_key_last(array $array) {
+	function array_key_last($array) {
 		$key = NULL;
 
 		if ( is_array( $array ) ) {
@@ -1102,4 +1112,29 @@ function delTree($dir) {
 
 function vue_encode($object) {
 	return htmlspecialchars(json_encode($object));
+}
+
+function join_paths(...$args) {
+	$paths = [];
+
+	foreach ($args as $arg) {
+		if ($arg !== '') { $paths[] = $arg; }
+	}
+
+	return preg_replace('#/+#','/',join('/', $paths));
+}
+
+/**
+ * Checks if $path exists in $prefix and if it is still inside $prefix.
+ *
+ * @param $prefix
+ * @param $path
+ * @return bool
+ */
+function path_valid($prefix, $path) {
+	return startsWith(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
+}
+
+function triggerExceptionAsWarning(Exception $e) {
+	ShutdownHandler::triggerSlackMessage($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), true);
 }

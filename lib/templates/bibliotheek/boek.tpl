@@ -5,7 +5,7 @@
 <div class="foutje">{getMelding()}</div>
 <ul class="horizontal">
 	<li>
-		<a href="/bibliotheek/" title="Naar de catalogus">Catalogus</a>
+		<a href="/bibliotheek" title="Naar de catalogus">Catalogus</a>
 	</li>
 	<li>
 		<a href="/bibliotheek/wenslijst" title="Wenslijst van bibliothecaris">Wenslijst</a>
@@ -256,7 +256,7 @@
 
 							{* knopjes bij elke post *}
 							{if $beschrijving->magVerwijderen()}
-								{knop url="/bibliotheek/verwijderbeschrijving/`$boek->getId()`/{CsrDelft\model\security\LoginModel::getUid()}" class='post ReloadPage' type=verwijderen confirm='Weet u zeker dat u deze beschrijving wilt verwijderen?'}
+								<a href="/bibliotheek/verwijderbeschrijving/{$boek->getId()}/{CsrDelft\model\security\LoginModel::getUid()}" class="post ReloadPage" onclick="return confirm('Weet u zeker dat u deze beschrijving wilt verwijderen?')"><span class="ico cross  " title="Verwijderen"></span> Verwijderen</a>
 							{/if}
 						</td>
 						<td class="beschrijving b{cycle values="0,1"}" id="beschrijving{$beschrijving->id}">

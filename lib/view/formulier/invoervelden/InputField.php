@@ -208,13 +208,13 @@ abstract class InputField implements FormElement, Validator, PostedValue {
 		if (!is_writable($directory)) {
 			throw new CsrException('Doelmap is niet beschrijfbaar: ' . htmlspecialchars($directory));
 		}
-		if (file_exists($directory . $filename)) {
+		if (file_exists(join_paths($directory, $filename))) {
 			if ($overwrite) {
-				if (!unlink($directory . $filename)) {
-					throw new CsrException('Overschrijven mislukt: ' . htmlspecialchars($directory . $filename));
+				if (!unlink(join_paths($directory, $filename))) {
+					throw new CsrException('Overschrijven mislukt: ' . htmlspecialchars(join_paths($directory, $filename)));
 				}
 			} elseif (!$this instanceof BestandBehouden) {
-				throw new CsrGebruikerException('Bestandsnaam al in gebruik: ' . htmlspecialchars($directory . $filename));
+				throw new CsrGebruikerException('Bestandsnaam al in gebruik: ' . htmlspecialchars(join_paths($directory, $filename)));
 			}
 		}
 	}
@@ -454,7 +454,7 @@ JS;
 		if ($this->onchange !== null) {
 			$js .= <<<JS
 
-$('#{$this->getId()}').change(function(event) {
+document.getElementById('{$this->getId()}').addEventListener('change', function(event) {
 	{$this->onchange}
 });
 JS;
@@ -462,7 +462,7 @@ JS;
 		if ($this->onclick !== null) {
 			$js .= <<<JS
 
-$('#{$this->getId()}').click(function(event) {
+document.getElementById('{$this->getId()}').addEventListener('click', function(event) {
 	{$this->onclick}
 });
 JS;
@@ -470,7 +470,7 @@ JS;
 		if ($this->onkeydown !== null) {
 			$js .= <<<JS
 
-$('#{$this->getId()}').keydown(function(event) {
+document.getElementById('{$this->getId()}').addEventListener('keydown', function(event) {
 	{$this->onkeydown}
 });
 JS;
@@ -478,7 +478,7 @@ JS;
 		if ($this->onkeyup !== null) {
 			$js .= <<<JS
 
-$('#{$this->getId()}').keyup(function(event) {
+document.getElementById('{$this->getId()}').addEventListener('keyup', function(event) {
 	{$this->onkeyup}
 });
 JS;

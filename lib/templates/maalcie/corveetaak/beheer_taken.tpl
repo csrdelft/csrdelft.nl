@@ -33,19 +33,19 @@
 	<p>N.B. U kunt ingedeelde corveeërs eenvoudig ruilen door het icoontje voor de naam te verslepen.</p>
 	<br />
 	{*
-	<a href="/corveebeheer/indelen" title="Leden automatisch indelen voor taken" class="btn">{icon get="date"} Automatisch indelen</a>
-	<a href="/corveebeheer/herinneren" title="Verstuur herinneringen" class="btn">{icon get="clock"} Herinneringen versturen</a>
+	<a href="/corvee/beheer/indelen" title="Leden automatisch indelen voor taken" class="btn">{icon get="date"} Automatisch indelen</a>
+	<a href="/corvee/beheer/herinneren" title="Verstuur herinneringen" class="btn">{icon get="clock"} Herinneringen versturen</a>
 	*}
 	<div class="float-right">
 		{if !isset($maaltijd) OR !$maaltijd->verwijderd}
 			<a class="btn" onclick="$(this).hide(); window.maalcie.takenShowOld();">{icon get="eye"} Toon verleden</a>
-			<a href="{$smarty.const.maalcieUrl}/prullenbak" class="btn">{icon get="bin_closed"} Open prullenbak</a>
-			<a href="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->maaltijd_id}{/if}" class="btn post popup">{icon get="add"} Nieuwe taak</a>
+			<a href="/corvee/beheer/prullenbak" class="btn">{icon get="bin_closed"} Open prullenbak</a>
+			<a href="/corvee/beheer/nieuw{if isset($maaltijd)}/{$maaltijd->maaltijd_id}{/if}" class="btn post popup">{icon get="add"} Nieuwe taak</a>
 		{/if}
 	</div>
 {/if}
 {if isset($repetities) and (!isset($maaltijd) or !$maaltijd->verwijderd)}
-	<form action="{$smarty.const.maalcieUrl}/nieuw{if isset($maaltijd)}/{$maaltijd->maaltijd_id}{/if}" method="post" class="Formulier ModalForm SubmitReset">
+	<form action="/corvee/beheer/nieuw{if isset($maaltijd)}/{$maaltijd->maaltijd_id}{/if}" method="post" class="Formulier ModalForm SubmitReset">
 		{printCsrfField()}
 		<label for="crid" style="width: auto;">{icon get="calendar_add"} Periodieke taken aanmaken:</label>&nbsp;
 		<select id="crid" name="crv_repetitie_id" value="kies" origvalue="kies" class="FormElement SubmitChange">
@@ -54,7 +54,7 @@
 				<option value="{$repetitie->crv_repetitie_id}">{$repetitie->getCorveeFunctie()->naam} op {$repetitie->getDagVanDeWeekText()}</option>
 			{/foreach}
 		</select>
-		<a href="/corveerepetities" class="btn" title="Periodiek corvee beheren">{icon get="calendar_edit"}</a>
+		<a href="/corvee/repetities" class="btn" title="Periodiek corvee beheren">{icon get="calendar_edit"}</a>
 	</form>
 {/if}
 <br />

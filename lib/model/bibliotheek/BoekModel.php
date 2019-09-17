@@ -17,7 +17,7 @@ class BoekModel extends PersistenceModel {
 
 	const ORM = Boek::class;
 
-	public static function existsTitel($value) {
+	public function existsTitel($value) {
 		return self::instance()->find('titel = ?', [$value])->rowCount() > 0;
 	}
 
@@ -27,12 +27,12 @@ class BoekModel extends PersistenceModel {
 	 * @return Boek[]
 	 * @throws CsrGebruikerException
 	 */
-	public static function autocompleteProperty(string $zoekveld, string $zoekterm) {
+	public function autocompleteProperty(string $zoekveld, string $zoekterm) {
 		$allowedFields = ['titel', 'auteur', 'taal'];
 		if (!in_array($zoekveld, $allowedFields)) {
 			throw new CsrGebruikerException("Autocomplete niet toegestaan voor dit veld");
 		}
-		return static::instance()->find("$zoekveld like CONCAT('%', ?, '%')", [$zoekterm]);
+		return $this->find("$zoekveld like CONCAT('%', ?, '%')", [$zoekterm]);
 	}
 
 	/**
@@ -40,11 +40,15 @@ class BoekModel extends PersistenceModel {
 	 * @return Boek[]
 	 * @throws CsrGebruikerException
 	 */
-	public static function autocompleteBoek(string $zoekterm) {
-		return self::instance()->find("titel like CONCAT('%',?,'%')", [$zoekterm])->fetchAll();
+	public function autocompleteBoek(string $zoekterm) {
+		return $this->find("titel like CONCAT('%',?,'%')", [$zoekterm])->fetchAll();
 	}
 
+	/**
+	 * @param $id
+	 * @return \CsrDelft\Orm\Entity\PersistentEntity|false|Boek
+	 */
 	public function get($id) {
-		return self::instance()->retrieveByPrimaryKey([$id]);
+		return $this->retrieveByPrimaryKey([$id]);
 	}
 }

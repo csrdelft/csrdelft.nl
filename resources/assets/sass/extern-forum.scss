@@ -28,19 +28,28 @@
 .breadcrumbs {
   display: flex;
   align-items: baseline;
-  justify-content: flex-end;
 
-  >* {
-    margin: 1ex;
-  }
+	.breadcrumb {
+		margin: 0.5rem;
+		display: flex;
+		list-style: none;
+		padding: 0;
+		align-items: center;
+
+		.breadcrumb-item {
+			margin-right: 1em;
+		}
+	}
 
   select {
     width: auto;
+		margin: 0;
   }
 }
 
 .forumdeel {
   background-color: $basiskleur;
+	color: black;
   box-shadow: none;
 }
 
@@ -76,6 +85,7 @@
   }
 
   #berichtPreview {
+		background-color: white;
     color: black;
     strong {
       color: black;
@@ -343,9 +353,6 @@ span.curpage {
 
 	h3 {
 
-		a {
-			color: #000;
-		}
 		a:hover {
 			text-decoration: none;
 			cursor: default;

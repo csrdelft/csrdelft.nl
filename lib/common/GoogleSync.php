@@ -5,7 +5,6 @@ namespace CsrDelft\common;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\GoogleTokenModel;
-use CsrDelft\model\LidInstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use DOMDocument;
@@ -92,8 +91,8 @@ class GoogleSync {
 			throw new CsrException('Authsub token not available, use doRequestToken.');
 		}
 
-		if (LidInstellingenModel::get('googleContacts', 'groepnaam') != '') {
-			$this->groupname = trim(LidInstellingenModel::get('googleContacts', 'groepnaam'));
+		if (lid_instelling('googleContacts', 'groepnaam') != '') {
+			$this->groupname = trim(lid_instelling('googleContacts', 'groepnaam'));
 			if ($this->groupname == '') {
 				$this->groupname = 'C.S.R.-import';
 			}
@@ -111,9 +110,10 @@ class GoogleSync {
 
 			//then load the contacts for this group.
 			$this->loadContactsForGroup($this->groupid);
-		} catch (CsrException $ex) {
-			setMelding("Verbinding met Google verbroken." . $ex->getMessage(), 2);
+		} catch (CsrException $e) {
+			triggerExceptionAsWarning($e);
 			GoogleTokenModel::instance()->delete($google_token);
+			throw new CsrGebruikerException("Google synchronisatie mislukt");
 		}
 	}
 
@@ -124,9 +124,9 @@ class GoogleSync {
 		$httpClient = $this->client->authorize();
 		$response = $httpClient->request('GET', GOOGLE_GROUPS_URL);
 		if ($response->getStatusCode() === 401) {
-			throw new CsrException();
+			throw new CsrException("Code 401 response on GOOGLE_GROUPS_URL");
 		}
-		$this->groupFeed = simplexml_load_string($response->getBody())->entry;
+		$this->groupFeed = GoogleSync::loadXmlString($response->getBody())->entry;
 	}
 
 	/**
@@ -139,7 +139,7 @@ class GoogleSync {
 		if ($response->getStatusCode() === 401) {
 			throw new CsrException();
 		}
-		$this->contactFeed = simplexml_load_string($response->getBody())->entry;
+		$this->contactFeed = GoogleSync::loadXmlString($response->getBody())->entry;
 	}
 
 	/**
@@ -325,7 +325,7 @@ class GoogleSync {
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
 		$this->loadGroupFeed();
 
-		return (string)simplexml_load_string($response->getBody())->id;
+		return (string)GoogleSync::loadXmlString($response->getBody())->id;
 	}
 
 	/**
@@ -403,7 +403,7 @@ class GoogleSync {
 				'body' => $doc->saveXML()
 			]);
 
-			$newContacts = simplexml_load_string($response->getBody());
+			$newContacts = GoogleSync::loadXmlString($response->getBody());
 
 			foreach ($newContacts->entry as $contact) {
 				$this->fixSimpleXMLNameSpace($contact);
@@ -454,7 +454,7 @@ class GoogleSync {
 					'body' => $doc->saveXML()
 				]);
 
-				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getBody()));
+				$contact = $this->unpackGoogleContact(GoogleSync::loadXmlString($response->getBody()));
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
@@ -470,7 +470,7 @@ class GoogleSync {
 					'body' => $doc->saveXML()
 				]);
 
-				$contact = $this->unpackGoogleContact(simplexml_load_string($response->getBody()));
+				$contact = $this->unpackGoogleContact(GoogleSync::loadXmlString($response->getBody()));
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
@@ -490,7 +490,10 @@ class GoogleSync {
 
 		$url = $contact['photo']['href'];
 
-		$path = PASFOTO_PATH . $profiel->getPasfotoPath(true);
+		$path = $profiel->getPasfotoInternalPath(true);
+
+		if ($path === null)
+			return;
 
 		$headers = array('GData-Version' => '3.0', 'Content-Type' => "image/*");
 
@@ -693,5 +696,16 @@ class GoogleSync {
 		$client->setScopes(['https://www.google.com/m8/feeds']);
 
 		return $client;
+	}
+
+	public static function loadXmlString($xml) {
+
+		$prev = libxml_use_internal_errors(false);
+		$data = simplexml_load_string($xml);
+		if ($data === false) {
+			throw new CsrException("Error parsing xml. Content was: ".substr ( $xml, 0, 100)."...");
+		}
+		libxml_use_internal_errors($prev);
+		return $data;
 	}
 }

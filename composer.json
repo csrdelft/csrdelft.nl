@@ -13,7 +13,8 @@
 		"jacwright/restserver": "dev-master",
 		"globalcitizen/php-iban": "^2.6",
 		"robmorgan/phinx": "^0.10.0",
-		"csrdelft/orm": "1.8.1",
+		"csrdelft/orm": "1.8.4",
+		"csrdelft/bb": "1.0",
 		"maknz/slack": "^1.7",
 		"jakeasmith/http_build_url": "^1",
 		"ferno/loco": "dev-master",
@@ -30,13 +31,20 @@
 		"ext-json": "*",
 		"ext-curl": "*",
 		"ext-dom": "*",
+		"ext-iconv": "*",
 		"symfony/routing": "^3.4",
 		"symfony/http-foundation": "^3.4",
-		"php-di/invoker": "^2.0"
+		"php-di/invoker": "^2.0",
+		"symfony/config": "^3.4"
 	},
 	"config": {
 		"platform": {
 			"php": "7.0.33"
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"CsrDelft\\": "lib/"
 		}
 	},
 	"include-path": ["lib/"],

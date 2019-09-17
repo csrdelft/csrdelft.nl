@@ -8,7 +8,7 @@ services:
   stek:
     build:
       context: .
-      dockerfile: "conf/Dockerfile-stek"
+      dockerfile: "docker/Dockerfile-stek"
     image: csrdelft/stek
     ports:
       - "8080:80" # Expose stek op poort 8080
@@ -16,20 +16,20 @@ services:
       XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9000 remote_enable=1
     volumes:
       - ./:/app
-      - ./conf/dev/defines.include.php:/app/lib/defines.include.php
-      - ./conf/dev/mysql.ini:/app/etc/mysql.ini
+      - ./docker/dev/defines.include.php:/app/lib/defines.include.php
+      - ./docker/dev/mysql.ini:/app/etc/mysql.ini
       - ./vendor:/app/vendor
 
   composer:
     build:
       context: .
-      dockerfile: "conf/Dockerfile-composer"
+      dockerfile: "docker/Dockerfile-composer"
     image: csrdelft/composer
     command: install --ignore-platform-reqs # Doe initieel een install
     volumes:
       - ./:/app
-      - ./conf/dev/defines.include.php:/app/lib/defines.include.php
-      - ./conf/dev/mysql.ini:/app/etc/mysql.ini
+      - ./docker/dev/defines.include.php:/app/lib/defines.include.php
+      - ./docker/dev/mysql.ini:/app/etc/mysql.ini
       - ./vendor:/app/vendor
 
   stekdb:
@@ -48,7 +48,7 @@ services:
   yarn:
     build:
       context: .
-      dockerfile: "conf/Dockerfile-yarn"
+      dockerfile: "docker/Dockerfile-yarn"
     image: csrdelft/yarn
     volumes:
       - ./package.json:/app/package.json

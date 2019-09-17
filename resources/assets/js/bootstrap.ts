@@ -13,6 +13,7 @@ import ctx, {init} from './ctx';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
+import {docReady} from './util';
 
 declare global {
 	interface JQueryStatic {
@@ -22,7 +23,6 @@ declare global {
 	interface JQuery {
 		timeago: () => void;
 		markItUp: (arg: any) => any;
-		uitooltip: (arg: any) => any;
 		hoverIntent: (arg: any, arg1?: any) => any;
 		autosize: () => void;
 		scrollTo: (arg: any) => void;
@@ -44,8 +44,6 @@ require('jquery-ui/ui/effects/effect-highlight');
 require('jquery-ui/ui/effects/effect-fade');
 require('jquery-ui/ui/widgets/datepicker');
 require('jquery-ui/ui/widgets/slider');
-require('jquery-ui/ui/widgets/tooltip');
-require('jquery-ui/ui/widgets/tabs');
 require('./lib/jquery.markitup');
 require('./lib/jquery.contextMenu');
 require('timeago');
@@ -65,6 +63,7 @@ require('corejs-typeahead/dist/typeahead.jquery.js');
 $.extend(window, {
 	Bloodhound,
 	Dropzone,
+	docReady,
 	bbcode: {
 		// See view/formulier/invoervelden/BBCodeField.class.php
 		// See templates/mededelingen/mededeling.tpl
@@ -116,8 +115,6 @@ $.extend(window, {
 });
 
 Dropzone.autoDiscover = false;
-
-$.widget.bridge('uitooltip', $.ui.tooltip);
 
 $.timeago.settings.strings = {
 	day: '1 dag',

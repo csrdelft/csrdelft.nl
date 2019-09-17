@@ -20,7 +20,7 @@
 
 
 		<span class="moment">
-			@if(\CsrDelft\model\LidInstellingenModel::get('forum', 'datumWeergave') === 'relatief')
+			@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 				{!! reldate($post->datum_tijd) !!}
 			@else
 				{{$post->datum_tijd}}

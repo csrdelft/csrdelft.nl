@@ -10,9 +10,9 @@ class LedenMemoryScoreTable extends DataTable {
 
 	public function __construct(
 		AbstractGroep $groep = null,
-		$titel
+		$titel = null
 	) {
-		parent::__construct(LedenMemoryScoresModel::ORM, '/leden/memoryscores/' . ($groep ? $groep->getUUID() : null), 'Topscores Ledenmemory' . $titel, 'groep');
+		parent::__construct(LedenMemoryScoresModel::ORM, '/leden/memoryscores' . ($groep ? '/' . $groep->getUUID() : null), 'Topscores Ledenmemory' . $titel, 'groep');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->settings['dom'] = 'rtpli';
 

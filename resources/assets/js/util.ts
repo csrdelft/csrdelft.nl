@@ -7,7 +7,7 @@ import {domUpdate} from './context';
  * @see templates/fotoalbum/album.tpl
  */
 export function selectText(elmnt: HTMLElement) {
-	const selection = window.getSelection();
+	const selection = window.getSelection()!;
 	const range = document.createRange();
 	range.selectNodeContents(elmnt);
 	selection.removeAllRanges();
@@ -144,7 +144,7 @@ export function singleLineString(strings: TemplateStringsArray, ...values: strin
 	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
 }
 
-export function html(strings: TemplateStringsArray, ...values: string[]): HTMLElement {
+export function html(strings: TemplateStringsArray, ...values: Array<string | undefined>): HTMLElement {
 	let output = '';
 	for (let i = 0; i < values.length; i++) {
 		output += strings[i] + values[i];
@@ -191,4 +191,32 @@ export function htmlEncode(str: string) {
 		.replace(/'/g, '&#39;')
 		.replace(/</g, '&lt;')
 		.replace(/>/g, '&gt;');
+}
+
+export function ontstuiter(func: any, wait: number, immediate: boolean) {
+	let timeout: number | undefined;
+	return function (this: any) {
+		const context = this;
+		const args = arguments;
+		const later = () => {
+			timeout = undefined;
+			if (!immediate) {
+				func.apply(context, args);
+			}
+		};
+		const callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = window.setTimeout(later, wait);
+		if (callNow) {
+			func.apply(context, args);
+		}
+	};
+}
+
+export function docReady(fn: () => void): void {
+	if (document.readyState === 'complete') {
+		fn();
+	} else {
+		document.addEventListener('DOMContentLoaded', fn);
+	}
 }
