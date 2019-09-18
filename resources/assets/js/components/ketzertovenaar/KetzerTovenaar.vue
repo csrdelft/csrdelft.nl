@@ -256,11 +256,11 @@
 </template>
 
 <script>
-	import SelectButtons from './velden/SelectButtons';
-	import TextInput from './velden/TextInput';
-	import Toggle from './velden/Toggle';
+	import SelectButtons from '../velden/SelectButtons';
+	import TextInput from '../velden/TextInput';
+	import Toggle from '../velden/Toggle';
 	import Stap from './onderdelen/Stap';
-	import DateInput from './velden/DateInput';
+	import DateInput from '../velden/DateInput';
 
 	export default {
 		name: 'KetzerTovenaar',
