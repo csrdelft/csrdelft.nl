@@ -49,11 +49,17 @@ class CourantController {
 
 	public function toevoegen() {
 		$bericht = new CourantBericht();
-		$bericht->volgorde = 0;
 		$bericht->datumTijd = getDateTime();
 		$bericht->uid = LoginModel::getUid();
 		$form = new CourantBerichtFormulier($bericht, '/courant');
 		if ($form->isPosted() && $form->validate()) {
+			$bericht->volgorde = [
+				'voorwoord' => 0,
+				'bestuur' => 1,
+				'csr' => 2,
+				'overig' => 3,
+				'sponsor' => 4,
+			][$bericht->cat];
 			$this->courantBerichtModel->create($bericht);
 			setMelding('Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
 			redirect("/courant");

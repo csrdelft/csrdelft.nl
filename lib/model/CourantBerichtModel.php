@@ -16,7 +16,7 @@ class CourantBerichtModel extends PersistenceModel {
 	 * @return PDOStatement|CourantBericht[]
 	 */
 	public function getNieuweBerichten() {
-		return $this->find('courantID IS NULL');
+		return $this->find('courantID IS NULL', [], null, 'volgorde ASC');
 	}
 
 	/**
@@ -32,7 +32,7 @@ class CourantBerichtModel extends PersistenceModel {
 		if ($this->magBeheren() || LoginModel::mag('bestuur')) {
 			return $this->getNieuweBerichten();
 		} else {
-			return $this->find('courantID IS NULL AND uid = ?', [LoginModel::getUid()]);
+			return $this->find('courantID IS NULL AND uid = ?', [LoginModel::getUid()], null, 'volgorde ASC');
 		}
 	}
 
