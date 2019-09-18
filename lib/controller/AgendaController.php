@@ -265,6 +265,12 @@ class AgendaController {
 	}
 
 	public function details($uuid) {
+		$jaar = filter_input(INPUT_GET, 'jaar', FILTER_SANITIZE_NUMBER_INT);
+
+		if ($jaar) {
+			$GLOBALS['agenda_jaar'] = $jaar;
+		}
+
 		return view('agenda.details', ['item' => $this->getAgendaItemByUuid($uuid)]);
 	}
 

@@ -348,7 +348,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getBeginMoment() {
 		$jaar = date('Y');
-		if (isset($GLOBALS['agenda_jaar'], $GLOBALS['agenda_maand'])) { //FIEES, Patrick.
+		if (isset($GLOBALS['agenda_jaar'])) { //FIEES, Patrick.
 			/*
 			 * Punt is dat we het goede (opgevraagde) jaar erbij moeten zetten,
 			 * anders gaat het mis op randen van weken en jaren.
@@ -356,9 +356,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			 * alles doordat het jaar nog op het restje van de vorige maand staat.
 			 */
 			$jaar = $GLOBALS['agenda_jaar'];
-			if ($GLOBALS['agenda_maand'] == 1 AND substr($this->gebdatum, 5, 2) == $GLOBALS['agenda_maand']) {
-				$jaar += 1;
-			}
 		}
 		$datum = $jaar . '-' . substr($this->gebdatum, 5, 5) . ' 00:00:00'; // 1 b'vo
 		return strtotime($datum);

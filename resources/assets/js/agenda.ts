@@ -102,7 +102,7 @@ const options: OptionsInput = {
 		}, false, domUpdate);
 	},
 	eventClick: (info) => {
-		axios.get(`/agenda/details/${info.event.id}`).then((response) => {
+		axios.get(`/agenda/details/${info.event.id}?jaar=${(info.event.start!.getFullYear())}`).then((response) => {
 			const card = htmlParse(response.data)[0] as HTMLElement;
 			card.style.zIndex = '100';
 			card.style.position = 'absolute';
