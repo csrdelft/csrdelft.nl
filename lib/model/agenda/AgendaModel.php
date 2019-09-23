@@ -136,7 +136,6 @@ class AgendaModel extends PersistenceModel {
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
 			$GLOBALS['agenda_jaar'] = date('Y', $van);
-			$GLOBALS['agenda_maand'] = date('m', ($van + $tot) / 2);
 
 			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0)->fetchAll());
 		}

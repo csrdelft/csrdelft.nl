@@ -18,8 +18,6 @@
 	<dd>Mag alles wat R_FISCAAT mag en maaltijden modereren.</dd>
 	<dt>R_FORUM_MOD</dt>
 	<dd>Mag het forum modereren.</dd>
-	<dt>R_VLIEGER</dt>
-	<dd>Mag alles wat R_MAALCIE mag en alles wat R_BASF mag.</dd>
 	<dt>R_BESTUUR</dt>
 	<dd>Mag alles wat R_MAALCIE mag, alles wat R_BASF mag en het forum modereren, de agenda modereren, de courant
 		beheren, peilingen beheren en in forum belangrijk posten.
