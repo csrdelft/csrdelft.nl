@@ -2,28 +2,33 @@
 	<div class="rechtenbouwer">
 		<div class="manual" v-if="manual">
 			<input type="text" :name="fieldName" v-model="string" @input="update()" autocomplete="off">
-			<div class="actions">
-				<span @click="gotoAutomatic()" class="pull-right">simpel</span>
+			<div class="actions clearfix">
+				<span @click="gotoAutomatic()" class="pull-right"><i class="fa fa-cog"></i> simpel</span>
 			</div>
 		</div>
 		<div class="automatic" v-else>
 			<input type="hidden" :name="fieldName" v-model="string">
-			<div class="criterium" v-for="(criterium, cIndex) in structure">
-				<div class="rule" v-for="(rule, rIndex) in criterium">
-					<div v-if="rIndex > 0" class="divider" :class="{'divider-en': rule.type === 'en'}">
-						<span>{{ rule.type }}</span>
-					</div>
-					<input type="text" v-model="rule.value" @input="update()" autocomplete="off">
-					<div class="buttons">
-						<span v-if="structure[cIndex].length > 1 || structure.length > 1" @click="removeRule(cIndex, rIndex)">x</span>
-						<span @click="addRule(cIndex, rIndex, 'of')">OF</span>
-						<span @click="addRule(cIndex, rIndex, 'en')">EN</span>
+			<template v-for="(criterium, cIndex) in structure">
+				<div v-if="cIndex > 0" class="main-divider">
+					<span>of</span>
+				</div>
+				<div class="criterium">
+					<div class="rule" v-for="(rule, rIndex) in criterium">
+						<div v-if="rIndex > 0" class="divider" :class="{'divider-en': rule.type === 'en'}">
+							<span>{{ rule.type }}</span>
+						</div>
+						<input type="text" v-model="rule.value" @input="update()" autocomplete="off">
+						<div class="buttons">
+							<span v-if="structure[cIndex].length > 1 || structure.length > 1" @click="removeRule(cIndex, rIndex)"><i class="fa fa-times"></i></span>
+							<span @click="addRule(cIndex, rIndex, 'of')">OF</span>
+							<span @click="addRule(cIndex, rIndex, 'en')">EN</span>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="actions">
-				<span @click="addCriterium()">criterium toevoegen</span>
-				<span @click="gotoManual()" class="pull-right">geavanceerd</span>
+			</template>
+			<div class="actions clearfix">
+				<span @click="addCriterium()"><i class="fa fa-plus"></i> criterium toevoegen</span>
+				<span @click="gotoManual()" class="pull-right"><i class="fa fa-cog"></i> geavanceerd</span>
 			</div>
 		</div>
 	</div>
@@ -141,6 +146,148 @@
 
 <style lang="scss">
 	.rechtenbouwer {
-		font-size: 16px;
+		font-family: 'Source Sans Pro', sans-serif;
+
+		input {
+			font-size: 18px;
+			border: 1px solid #cccccc;
+			border-radius: 5px;
+			display: block;
+			padding: 7px 15px;
+			font-weight: 300;
+			width: 100%;
+		}
+
+		.automatic {
+			.criterium {
+				border: 1px solid #cccccc;
+				border-radius: 5px;
+				padding: 26px 20px;
+
+				.rule {
+					.divider {
+						margin: 0 0 15px;
+						position: relative;
+
+						span {
+							position: relative;
+							display: inline-block;
+							background: white;
+							padding-right: 12px;
+							z-index: 1;
+							font-weight: 400;
+							text-transform: uppercase;
+							color: #999999;
+							font-size: 16px;
+						}
+
+						&:after {
+							content: '';
+							position: absolute;
+							top: 12px;
+							width: 100%;
+							height: 0;
+							border-bottom: 1px solid #cccccc;
+							z-index: 0;
+							left: 0;
+						}
+
+						&.divider-en {
+							&:after {
+								border-bottom-width: 3px;
+								top: 10px;
+							}
+
+							span {
+								font-weight: 600;
+							}
+						}
+					}
+
+					.buttons {
+						text-align: right;
+						margin-top: 7px;
+
+						span {
+							display: inline-block;
+							background: #e6e6e6;
+							padding: 4px 9px;
+							font-size: 15px;
+							color: #666666;
+							cursor: pointer;
+							width: 45px;
+							text-align: center;
+							font-weight: 600;
+
+							&:hover {
+								background: #cecece;
+							}
+
+							&:first-child {
+								border-top-left-radius: 5px;
+								border-bottom-left-radius: 5px;
+							}
+
+							&:last-child {
+								border-top-right-radius: 5px;
+								border-bottom-right-radius: 5px;
+							}
+
+							& + span {
+								margin-left: 2px;
+							}
+						}
+					}
+				}
+			}
+
+			.main-divider {
+				margin: 15px 0;
+				position: relative;
+				text-align: center;
+
+				span {
+					position: relative;
+					display: inline-block;
+					background: white;
+					padding: 0 12px;
+					z-index: 1;
+					font-weight: 600;
+					text-transform: uppercase;
+					color: #999999;
+					font-size: 16px;
+				}
+
+				&:after {
+					content: '';
+					position: absolute;
+					top: 12px;
+					width: 100%;
+					height: 0;
+					border-bottom: 1px solid #cccccc;
+					z-index: 0;
+					left: 0;
+				}
+			}
+		}
+
+
+		.actions {
+			margin-top: 7px;
+
+			span {
+				cursor: pointer;
+				font-size: 16px;
+				color: #b3b3b3;
+
+				&:hover {
+					color: #777777;
+				}
+
+				i {
+					margin-right: 3px;
+				}
+			}
+		}
 	}
 </style>
