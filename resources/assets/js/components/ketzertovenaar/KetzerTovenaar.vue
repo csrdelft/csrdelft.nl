@@ -248,7 +248,33 @@
 			:step="8"
 			:show-done="true"
 			v-on:done="gotoStep(9)">
-			<RechtenBouwer v-model="event.permission"></RechtenBouwer>
+
+			<IcoonKiezer
+				name="hasPermission"
+				:options="{
+					'iedereen': {
+						title: 'Iedereen',
+						description: 'Geen beperking stellen op wie er mag komen. Iedereen kan zich inketzen.',
+						image: icons.IedereenIcoon,
+						imageSelected: icons.IedereenSelectIcoon,
+					},
+					'groep': {
+						title: 'Geselecteerde groep',
+						description: 'Alleen leden die aan geselecteerde criteria voldoen, mogen zichzelf inketzen.',
+						image: icons.GroepIcoon,
+						imageSelected: icons.GroepSelectIcoon,
+					},
+				}"
+				v-model="event.hasPermission">
+			</IcoonKiezer>
+
+			<template v-if="event.hasPermission === 'groep'">
+				<div class="explain">
+					<div class="heading">Selecteer de groepen die mogen komen</div>
+					<p>Ieder lid dat aan &eacute;&eacute;n van deze criteria voldoet, zal zichzelf kunnen inketzen.</p>
+				</div>
+				<RechtenBouwer v-model="event.permission"></RechtenBouwer>
+			</template>
 		</Stap>
 
 		<Stap
@@ -256,6 +282,38 @@
 			:step="9"
 			:show-done="true"
 			v-on:done="gotoStep(10)">
+
+			<IcoonKiezer
+				name="hasChoice"
+				:options="{
+					'invulveld': {
+						title: 'Vrije opmerking',
+						description: 'Leden die zich inketzen kunnen zelf een opmerking in een tekstvak invullen.',
+						image: icons.InvulIcoon,
+						imageSelected: icons.InvulSelectIcoon,
+					},
+					'keuzelijst': {
+						title: 'Keuzelijst(en)',
+						description: 'Leden die zich inketzen moeten een keuze maken uit de vooraf gedefinieerde opties.',
+						image: icons.KeuzeIcoon,
+						imageSelected: icons.KeuzeSelectIcoon,
+					},
+				}"
+				v-model="event.hasChoice">
+			</IcoonKiezer>
+
+			<template v-if="event.hasChoice === 'keuzelijst'">
+				<div class="explain">
+					<div class="heading">Maak &eacute;&eacute;n of meerdere keuzelijsten</div>
+					<p>Iedereen die zich inketzt, moet voor elke keuzelijst een keuze maken. Zet | tussen de opties en gebruik && voor meerdere keuzelijsten.</p>
+				</div>
+
+				<TextInput
+					name="choices"
+					hint="Keuzelijst(en)"
+					v-model="event.choices">
+				</TextInput>
+			</template>
 		</Stap>
 
 		<Stap
@@ -273,10 +331,20 @@
 	import Stap from './onderdelen/Stap';
 	import DateInput from '../velden/DateInput';
 	import RechtenBouwer from '../velden/RechtenBouwer';
+	import IcoonKiezer from "../velden/IcoonKiezer";
+
+	import GroepIcoon from '../../../images/ketzertovenaar/groep.svg';
+	import GroepSelectIcoon from '../../../images/ketzertovenaar/groep-select.svg';
+	import IedereenIcoon from '../../../images/ketzertovenaar/iedereen.svg';
+	import IedereenSelectIcoon from '../../../images/ketzertovenaar/iedereen-select.svg';
+	import InvulIcoon from '../../../images/ketzertovenaar/invul.svg';
+	import InvulSelectIcoon from '../../../images/ketzertovenaar/invul-select.svg';
+	import KeuzeIcoon from '../../../images/ketzertovenaar/keuze.svg';
+	import KeuzeSelectIcoon from '../../../images/ketzertovenaar/keuze-select.svg';
 
 	export default {
 		name: 'KetzerTovenaar',
-		components: {SelectButtons, TextInput, Toggle, Stap, DateInput, RechtenBouwer},
+		components: {IcoonKiezer, SelectButtons, TextInput, Toggle, Stap, DateInput, RechtenBouwer},
 		props: {},
 		data: () => ({
 			types: {
@@ -292,6 +360,9 @@
 				'ondervereniging': 'Onderverenigings-activiteit',
 				'ifes': 'Activiteit van IFES',
 				'extern': 'Externe activiteit'
+			},
+			icons: {
+				GroepIcoon, GroepSelectIcoon, IedereenIcoon, IedereenSelectIcoon, InvulIcoon, InvulSelectIcoon, KeuzeIcoon, KeuzeSelectIcoon
 			},
 			event: {
 				type: null,
@@ -317,9 +388,9 @@
 				exitEndMomentTime: '',
 				hasLimit: false,
 				limit: null,
-				hasPermission: false,
+				hasPermission: 'iedereen',
 				permission: '',
-				hasChoice: false,
+				hasChoice: 'invulveld',
 				choices: '',
 			},
 			step: 1,
@@ -418,6 +489,23 @@
 		max-width: 600px;
 		margin: 0 auto;
 		font-size: 0;
+	}
+
+	.explain {
+		font-size: 17px;
+		margin: 30px 0;
+
+		.heading {
+			font-weight: 600;
+		}
+
+		p {
+			font-weight: 300;
+		}
+	}
+
+	.rechtenbouwer {
+		margin-bottom: 30px;
 	}
 
 	.vfc-styles-conditional-class .vfc-main-container {
