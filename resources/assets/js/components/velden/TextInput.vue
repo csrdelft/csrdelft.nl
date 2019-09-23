@@ -5,7 +5,8 @@
 			<label :for="name" v-if="hint">{{ hint }}</label>
 
 			<input
-				type="text"
+				:type="number ? 'number' : 'text'"
+				min="0"
 				:name="name"
 				:id="name"
 				:maxlength="maxLength ? maxLength : ''"
@@ -14,7 +15,8 @@
 				v-on:input="update"
 				v-on:blur="validate"
 				@keyup.enter="$emit('next')"
-				ref="inputField" />
+				ref="inputField"
+				autocomplete="off" />
 
 			<textarea
 				:name="name"
@@ -47,6 +49,7 @@
 			error: String,
 			mask: String,
 			maskPlaceholder: String,
+			number: {type: Boolean, required: false}
 		},
 		data: () => ({
 			enteredText: '',

@@ -231,6 +231,16 @@
 				question="Er mag maar een beperkt aantal leden inketzen"
 				v-model="event.hasLimit">
 			</Toggle>
+
+			<div v-if="event.hasLimit">
+				<TextInput
+					name="limit"
+					hint="Maximum"
+					v-model="event.limit"
+					:number="true"
+					:error="validLimit(event.limit) ? null : 'Vul een geldig aantal in'">
+				</TextInput>
+			</div>
 		</Stap>
 
 		<Stap
@@ -238,6 +248,7 @@
 			:step="8"
 			:show-done="true"
 			v-on:done="gotoStep(9)">
+			<RechtenBouwer v-model="event.permission"></RechtenBouwer>
 		</Stap>
 
 		<Stap
@@ -261,10 +272,11 @@
 	import Toggle from '../velden/Toggle';
 	import Stap from './onderdelen/Stap';
 	import DateInput from '../velden/DateInput';
+	import RechtenBouwer from '../velden/RechtenBouwer';
 
 	export default {
 		name: 'KetzerTovenaar',
-		components: {SelectButtons, TextInput, Toggle, Stap, DateInput},
+		components: {SelectButtons, TextInput, Toggle, Stap, DateInput, RechtenBouwer},
 		props: {},
 		data: () => ({
 			types: {
@@ -373,6 +385,9 @@
 				}
 
 				if (returning === true) return true;
+			},
+			validLimit(limit) {
+				return limit > 0;
 			},
 			prepareEnterEnd() {
 				if (this.event.enterEnd) {
