@@ -17,13 +17,13 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
 
-$blue: #224baf !default;
+$blue: #11273A !default;
 $indigo: #6610f2 !default;
 $purple: #6f42c1 !default;
 $pink: #e83e8c !default;
 $red: #dc3545 !default;
 $orange: #fd7e14 !default;
-$yellow: #ffc107 !default;
+$yellow: #E59200 !default;
 $green: #28a745 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
@@ -63,7 +63,7 @@ $bb-block-bg: #f5f5f5 !default;
 /* forum */
 $forum-bericht0-bg: $body-bg !default;
 $forum-bericht1-bg: darken($body-bg, 4%) !default;
-$ongelezen-lijn: #e8cf2a !default;
+$ongelezen-lijn: $yellow !default;
 
 /* main menu */
 $menu-primary-hover: #0a338d !default;

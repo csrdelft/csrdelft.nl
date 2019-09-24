@@ -20,7 +20,7 @@
 <div id="search" class="cd-search">
 	@php((new \CsrDelft\view\formulier\InstantSearchForm())->view())
 </div>
-<main class="container mt-3 flex-shrink-0">
+<main class="container my-3 flex-shrink-0">
 	<nav aria-label="breadcrumb">
 		@section('breadcrumbs')
 			{!! csr_breadcrumbs(\CsrDelft\model\MenuModel::instance()->getBreadcrumbs($_SERVER['REQUEST_URI'])) !!}
@@ -34,7 +34,8 @@
 		@php(printDebug())
 	</footer>
 </main>
-<footer class="container footer mt-auto py-3">
+<footer class="footer mt-auto py-3">
+	<div class="container-fluid p-3 p-md-5">
 	<div class="row">
 		<div class="col-12 col-md-auto">
 			<img src="/dist/images/beeldmerk.png" width="80" class="d-block mb-2"/>
@@ -54,6 +55,7 @@
 				</ul>
 			</div>
 		@endforeach
+	</div>
 
 		{{--		<div class="col-6 col-md">--}}
 		{{--			<h5>Resources</h5>--}}
