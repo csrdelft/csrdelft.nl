@@ -19,6 +19,10 @@ class CourantBerichtModel extends PersistenceModel {
 		return $this->find('courantID IS NULL', [], null, 'volgorde ASC');
 	}
 
+	public function getBerichten($id) {
+		return $this->find('courantID = ?', [$id], null, 'volgorde ASC');
+	}
+
 	/**
 	 * @param $id
 	 * @return CourantBericht|false
