@@ -299,11 +299,10 @@ class BibliotheekController {
 	 */
 	public function exemplaarlenen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
-		if ($this->boekExemplaarModel->leen($exemplaar, LoginModel::getUid())) {
-			redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
-		} else {
+		if (!$this->boekExemplaarModel->leen($exemplaar, LoginModel::getUid())) {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
+		redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
 	}
 
 
