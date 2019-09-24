@@ -123,7 +123,7 @@
 	};
 
 	const uniq: <T>(arr: T[]) => T[] = (arr) => {
-		return [...(new Set(arr) as any)];
+		return Array.from(new Set(arr));
 	};
 
 	interface Lid {
@@ -138,7 +138,7 @@
 	@Component
 	export default class NamenLeren extends Vue {
 		@Prop()
-		protected leden: Lid[] = [];
+		protected leden: Lid[];
 
 		// Config
 		protected alleLichtingen = false;
