@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -45,7 +45,7 @@ class TaakForm extends ModalForm {
 		}
 
 		$fields = [];
-		$fields['fid'] = new SelectField('functie_id', $taak->functie_id, 'Functie', $functieNamen);
+		$fields['fid'] = new RequiredSelectField('functie_id', $taak->functie_id, 'Functie', $functieNamen);
 		$fields['fid']->onchange = $functiePunten . "$('.punten_field').val(punten[this.value]);";
 		$fields['lid'] = new LidField('uid', $taak->uid, 'Naam of lidnummer');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
