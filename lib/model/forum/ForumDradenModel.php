@@ -243,7 +243,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	 */
 	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0, $getLatestPosts = false) {
 		if (!is_int($aantal)) {
-			$aantal = (int)lid_instelling('forum', 'draden_per_pagina');
+			$aantal = $this->per_pagina;
 			$pagina = $this->pagina;
 			$offset = ($pagina - 1) * $aantal;
 		}
