@@ -98,7 +98,7 @@ $.extend(window, {
 		// See blade_templates/forum/partial/post_forum.blade.php
 		saveConceptForumBericht,
 	},
-	// See templates/maalcie/maaltijd/maaltijd_ketzer.tpl
+	// See resources/views/maaltijden/bb.blade.php
 	ketzerAjax,
 	maalcie: {
 		// See view/maalcie/forms/SuggestieLijst.php
