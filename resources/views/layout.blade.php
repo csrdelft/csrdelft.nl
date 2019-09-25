@@ -50,11 +50,6 @@
 	</div>
 </footer>
 <div id="cd-main-overlay">
-	@if(lid_instelling('layout', 'fx') == 'onontdekt')
-		@include('effect.onontdekt')
-	@elseif(lid_instelling('layout', 'fx') == 'civisaldo')
-		@include('effect.civisaldo')
-	@endif
 </div>
 <div id="modal-background" @if(isset($modal)) style="display: block;"@endif></div>
 @if(isset($modal))
@@ -67,7 +62,11 @@
 @if(lid_instelling('layout', 'minion') == 'ja')
 	@include('effect.minion')
 @endif
-@if(lid_instelling('layout', 'fx') == 'wolken')
+@if(lid_instelling('layout', 'fx') == 'onontdekt')
+	@include('effect.onontdekt')
+@elseif(lid_instelling('layout', 'fx') == 'civisaldo')
+	@include('effect.civisaldo')
+@elseif(lid_instelling('layout', 'fx') == 'wolken')
 	@script('fxclouds.js')
 @endif
 @if(lid_instelling('layout', 'trein') !== 'nee')

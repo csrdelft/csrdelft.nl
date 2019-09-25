@@ -4,6 +4,7 @@ import {
 	Mesh,
 	PerspectiveCamera,
 	PlaneGeometry,
+	Renderer,
 	Scene,
 	ShaderMaterial,
 	TextureLoader,
@@ -50,7 +51,18 @@ void main() {
 }
 `;
 
-const container = document.getElementById('cd-main-overlay')!;
+(document.querySelector('.container') as HTMLElement).style.background = 'white';
+
+const container = document.createElement('div');
+Object.assign(container.style, {
+	position: 'fixed',
+	left: '0',
+	right: '0',
+	bottom: '0',
+	top: '0',
+	zIndex: '-1',
+});
+document.body.appendChild(container);
 container.style.background = 'linear-gradient(#1e4877, #4584b4, #4584b4)';
 
 const canvas = document.createElement('canvas');

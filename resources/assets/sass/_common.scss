@@ -3,6 +3,10 @@ html {
 	font-size: 0.8rem;
 }
 
+.container {
+	background: $body-bg;
+}
+
 .dropdown-menu {
   cursor: default;
   z-index: 9999999;
