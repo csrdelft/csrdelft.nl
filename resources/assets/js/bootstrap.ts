@@ -1,9 +1,11 @@
 /**
  * Laad alle externe libs en knoop de goede dingen aan elkaar.
  */
+import axios from 'axios';
 import Bloodhound from 'corejs-typeahead';
 import Dropzone from 'dropzone';
 import $ from 'jquery';
+import Popper from 'popper.js';
 import Vue from 'vue';
 import {ketzerAjax} from './ajax';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
@@ -13,7 +15,7 @@ import ctx, {init} from './ctx';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
-import {docReady} from './util';
+import {docReady, htmlParse} from './util';
 
 declare global {
 	interface JQueryStatic {
@@ -146,5 +148,29 @@ ctx.addHandlers({
 		},
 		timeout: 250,
 	}),
+	'[data-visite]': (el: HTMLElement) => {
+		let kaartjeEl: HTMLElement | null = null;
+		let loading = false;
+		el.addEventListener('mouseenter', async () => {
+			if (loading) {
+				return;
+			}
+
+			loading = true;
+			if (!kaartjeEl) {
+				const kaartje = await axios.get(`/profiel/${el.dataset!.visite}/kaartje`);
+				kaartjeEl = htmlParse(kaartje.data)[0] as HTMLElement;
+			}
+			el.append(kaartjeEl);
+			// tslint:disable-next-line:no-unused-expression
+			new Popper(el, kaartjeEl, {placement: 'bottom-start'});
+			loading = false;
+		});
+		el.addEventListener('mouseleave', () => {
+			if (kaartjeEl) {
+				kaartjeEl.remove();
+			}
+		});
+	},
 	'.vue-context': (el) => new Vue({el}),
 });

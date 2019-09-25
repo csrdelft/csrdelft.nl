@@ -406,62 +406,12 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '"';
 		}
 		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
-		if ($vorm !== 'pasfoto' AND ($vorm === 'leeg' OR lid_instelling('layout', 'visitekaartjes') == 'ja')) {
-			$k = '<span';
-			if ($vorm !== 'leeg') {
-				$k .= ' class="hoverIntent"';
-			}
-			$k .= '><div style="margin-top: -15px; margin-left: -15px;" class="';
-			if ($vorm !== 'leeg') {
-				$k .= 'hoverIntentContent ';
-			}
-			$k .= 'visitekaartje';
-			if ($this->isJarig()) {
-				$k .= ' jarig';
-			}
-			if ($vorm === 'leeg') {
-				$k .= '" style="display: block; position: static;';
-			} else {
-				$k .= ' init';
-			}
-			$k .= '">';
-			$k .= $this->getPasfotoTag('');
-			if (AccountModel::existsUid($this->uid) AND LoginModel::instance()->maySuTo($this->getAccount())) {
-				$k .= '<div class="uid uitgebreid">';
-				$k .= '<a href="/su/' . $this->uid . '" title="Su naar dit lid">' . $this->uid . '</a>';
-				$k .= '</div>';
-			}
-			$k .= '<p class="naam">' . $l . $this->getNaam('volledig') . '&nbsp;' . LidStatus::getChar($this->status);
-			$k .= '</a></p>';
-			$k .= '<p>' . $this->lidjaar;
-			$verticale = $this->getVerticale();
-			if ($verticale) {
-				$k .= ' ' . $verticale->naam;
-			}
-			$k .= '</p>';
-			$bestuurslid = BestuursLedenModel::instance()->find('uid = ?', array($this->uid), null, null, 1)->fetch();
-			if ($bestuurslid) {
-				$bestuur = BesturenModel::get($bestuurslid->groep_id);
-				$k .= '<p><a href="' . $bestuur->getUrl() . '">' . GroepStatus::getChar($bestuur->status) . ' ' . $bestuurslid->opmerking . '</a></p>';
-			}
-			foreach (CommissieLedenModel::instance()->find('uid = ?', array($this->uid), null, 'lid_sinds DESC') as $commissielid) {
-				$commissie = CommissiesModel::get($commissielid->groep_id);
-				if ($commissie->status === GroepStatus::HT) {
-					$k .= '<p>';
-					if (!empty($commissielid->opmerking)) {
-						$k .= $commissielid->opmerking . '<br />';
-					}
-					$k .= '<a href="' . $commissie->getUrl() . '">' . $commissie->naam . '</a></p>';
-				}
-			}
-			$k .= '</div>';
-			if ($vorm === 'leeg') {
-				$naam = $k . $naam;
-			} else {
-				$naam = $k . $l . $naam . '</a>';
-			}
-			return '<div class="inline">' . $naam . '</span></div>';
+		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
+			return '<span data-visite="'.$this->uid.'"><a href="/profiel/' . $this->uid . '" class="lidLink ' . htmlspecialchars($this->status) . '">' . $naam . '</a></span>';
+		} else if ($vorm === 'leeg') {
+			return view('profiel.kaartje', ['profiel' => $this])->getHtml();
 		}
+
 		return $l . $naam . '</a>';
 	}
 
