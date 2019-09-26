@@ -354,7 +354,8 @@ div.hoverIntentContent {
 
 	img {
 		width: 100px;
-		object-fit: cover;
+		object-fit: contain;
+		object-position: top;
 	}
 
   p.naam a {
