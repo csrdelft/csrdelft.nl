@@ -3,6 +3,7 @@
 namespace CsrDelft\model\eetplan;
 
 use CsrDelft\model\entity\eetplan\Eetplan;
+use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\PersistenceModel;
@@ -106,7 +107,7 @@ class EetplanModel extends PersistenceModel {
 		$novieten = ProfielModel::instance()->find("uid LIKE ? AND status = 'S_NOVIET'", array($lichting . "%"))->fetchAll();
 		$factory->setNovieten($novieten);
 
-		$huizen = WoonoordenModel::instance()->find("eetplan = true")->fetchAll();
+		$huizen = WoonoordenModel::instance()->find("eetplan = true AND status = 'ht'")->fetchAll();
 		$factory->setHuizen($huizen);
 
 		return $factory->genereer($avond, true);
