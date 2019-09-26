@@ -60,7 +60,7 @@
 								 data-url="/forum/concept/{{$deel->forum_id}}@if(isset($draad))/{{$draad->draad_id}}@endif"/>
 					<div class="float-right">
 						<a
-							href="/fotoalbum/uploaden/fotoalbum/{{CsrDelft\model\groepen\LichtingenModel::getHuidigeJaargang()}}/Posters"
+							href="/fotoalbum/uploaden/{{CsrDelft\model\groepen\LichtingenModel::getHuidigeJaargang()}}/Posters"
 							target="_blank">Poster opladen</a>
 						<a href="/groepen/activiteiten/nieuw" class="post popup">Ketzer maken</a>
 						<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
