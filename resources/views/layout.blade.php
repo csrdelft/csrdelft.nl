@@ -8,9 +8,6 @@
   'root' => \CsrDelft\model\MenuModel::instance()->getMenu('main'),
   'favorieten' => \CsrDelft\model\MenuModel::instance()->getMenu(\CsrDelft\model\security\LoginModel::getUid()),
 ])->view())
-<div id="search" class="cd-search">
-	@php((new \CsrDelft\view\formulier\InstantSearchForm())->view())
-</div>
 <main class="container my-3 flex-shrink-0">
 	<nav aria-label="breadcrumb">
 		@section('breadcrumbs')

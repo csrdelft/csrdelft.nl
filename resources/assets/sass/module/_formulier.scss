@@ -150,6 +150,14 @@ h1.Titel {
   }
 }
 
+.twitter-typeahead > .form-control {
+	width: 100%;
+}
+
+.twitter-typeahead:focus-within {
+		width: 400px;
+}
+
 .form-control.loading {
 	background-image: url(../../images/loading-fb.gif);
 	background-repeat: no-repeat;
