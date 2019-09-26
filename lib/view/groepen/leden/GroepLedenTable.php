@@ -4,6 +4,7 @@ namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
@@ -29,6 +30,9 @@ class GroepLedenTable extends DataTable {
 			$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $groep->getUrl() . 'aanmelden', 'Aanmelden', 'Lid toevoegen', 'user_add'));
 			$this->addRowKnop(new DataTableRowKnop($groep->getUrl() . 'bewerken', 'Lidmaatschap bewerken', 'user_edit'));
 			$this->addRowKnop(new DataTableRowKnop($groep->getUrl() . 'afmelden', 'Leden verwijderen', 'user_delete', 'confirm'));
+			if ($groep->status == GroepStatus::HT) {
+				$this->addRowKnop(new DataTableRowKnop($groep->getUrl() . 'naar_ot', 'Naar o.t. groep verplaatsen', 'user_go', 'confirm'));
+			}
 		}
 	}
 
