@@ -12,7 +12,7 @@
 				:maxlength="maxLength ? maxLength : ''"
 				v-model="enteredText"
 				v-if="!multipleLines"
-				v-on:input="update"
+				v-on:keyup="update"
 				v-on:blur="validate"
 				@keyup.enter="$emit('next')"
 				ref="inputField"
@@ -25,7 +25,7 @@
 				:maxlength="maxLength ? maxLength : ''"
 				v-if="multipleLines"
 				v-model="enteredText"
-				v-on:input="update"
+				v-on:keyup="update"
 				v-on:blur="validate">
 			</textarea>
 
