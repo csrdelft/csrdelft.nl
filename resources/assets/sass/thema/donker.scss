@@ -2,9 +2,15 @@ $dark-grey: #1E1F23;
 $darker-grey: #101011;
 
 $white: #000;
-$gray-100: #f8f9fa;
-$gray-600: #6c757d;
-$gray-800: #343a40;
+$gray-900: #f8f9fa !default;
+$gray-800: #e9ecef !default;
+$gray-700: #dee2e6 !default;
+$gray-600: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-400: #6c757d !default;
+$gray-300: #495057 !default;
+$gray-200: #343a40 !default;
+$gray-100: #212529 !default;
 $black: #fff;
 
 $body-bg: $dark-grey;
@@ -12,9 +18,11 @@ $body-color: darken($black, 7%);
 $headings-color: inherit;
 
 $primary: #006699;
-$secondary: lighten($body-bg, 10%);
+$secondary: lighten($body-bg, 20%);
 $light: $gray-100;
 $dark: $gray-800;
+$yiq-text-dark:             $white;
+$yiq-text-light:            $gray-900;
 
 @font-face {
 	font-family: 'Ubuntu-Light';
