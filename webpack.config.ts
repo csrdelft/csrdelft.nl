@@ -10,12 +10,17 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const contextPath = path.resolve(__dirname, 'resources/assets');
 
-// De Webpack configuratie.
-const config: (env: string, argv: any) => webpack.Configuration = (env, argv) => ({
-	mode: 'development',
-	context: contextPath,
-	entry: {
-		'app': './js/app.ts',
+const getEntry = (env: any) => {
+	let entries: string[];
+	if (!env.entry) {
+		entries = [];
+	} else if (typeof env.entry === 'string') {
+		entries = [env.entry];
+	} else {
+		entries = env.entry;
+	}
+
+	const ext = {
 		'ledenmemory': './js/ledenmemory.ts',
 		'fxclouds': './js/effect/fxclouds.ts',
 		'fxonontdekt': './js/effect/fxonontdekt.ts',
@@ -23,17 +28,11 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'fxraket': './js/effect/fxraket.ts',
 		'fxminion': './js/effect/minion.ts',
 		'fxclippy': './js/effect/fxclippy.ts',
-		'extern': ['./js/extern.ts', './sass/extern.scss'],
 		'bredeletters': './sass/bredeletters.scss',
-		'common': './sass/common.scss',
-		'extern-forum': './sass/extern-forum.scss',
-		'extern-fotoalbum': './sass/extern-fotoalbum.scss',
-		'maaltijdlijst': './sass/maaltijdlijst.scss',
 		'thema-civitasia': './sass/thema/civitasia.scss',
 		'thema-dies': './sass/thema/dies.scss',
 		'thema-donker': './sass/thema/donker.scss',
 		'thema-lustrum': './sass/thema/lustrum.scss',
-		'thema-normaal': './sass/thema/normaal.scss',
 		'thema-owee': './sass/thema/owee.scss',
 		'thema-roze': './sass/thema/roze.scss',
 		'thema-koevoet': './sass/thema/Koevoet.scss',
@@ -41,7 +40,31 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'effect-civisaldo': './sass/effect/civisaldo.scss',
 		'effect-snow': './sass/effect/snow.scss',
 		'effect-space': './sass/effect/space.scss',
-	},
+	};
+
+	const splitObject = (obj: object, keys: string[]) => {
+		const holder = {};
+		keys.forEach((d) => { holder[d] = obj[d]; });
+		return holder;
+	};
+
+	return {
+		'app': './js/app.ts',
+		'extern': ['./js/extern.ts', './sass/extern.scss'],
+		'common': './sass/common.scss',
+		'extern-forum': './sass/extern-forum.scss',
+		'extern-fotoalbum': './sass/extern-fotoalbum.scss',
+		'maaltijdlijst': './sass/maaltijdlijst.scss',
+		'thema-normaal': './sass/thema/normaal.scss',
+		...splitObject(ext, entries),
+	};
+};
+
+// De Webpack configuratie.
+const config: (env: string, argv: any) => webpack.Configuration = (env, argv) => ({
+	mode: 'development',
+	context: contextPath,
+	entry: getEntry(env),
 	output: {
 		// De map waarin alle bestanden geplaatst worden.
 		path: path.resolve(__dirname, 'htdocs/dist'),
