@@ -351,6 +351,7 @@ div.hoverIntentContent {
 .visitekaartje {
 	z-index: 1000;
   width: 330px;
+	color: $body-color;
 
 	img {
 		width: 100px;
@@ -358,9 +359,12 @@ div.hoverIntentContent {
 		object-position: top;
 	}
 
+	p a {
+		color: $body-color;
+	}
+
   p.naam a {
     font-weight: bold;
-    color: #000 !important;
   }
 
   .uid {
