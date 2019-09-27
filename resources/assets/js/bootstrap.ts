@@ -15,7 +15,7 @@ import ctx, {init} from './ctx';
 import {formCancel, formInlineToggle, formSubmit} from './formulier';
 import {forumBewerken, saveConceptForumBericht} from './forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
-import {docReady, htmlParse} from './util';
+import {docReady} from './util';
 
 declare global {
 	interface JQueryStatic {
@@ -138,6 +138,8 @@ $.timeago.settings.strings = {
 	years: '%d jaar',
 };
 
+const kaartjes = {};
+
 ctx.addHandlers({
 	'.hoverIntent': (el) => $(el).hoverIntent({
 		over() {
@@ -149,27 +151,33 @@ ctx.addHandlers({
 		timeout: 250,
 	}),
 	'[data-visite]': (el: HTMLElement) => {
-		let kaartjeEl: HTMLElement | null = null;
+
+		const uid = el.dataset!.visite as string;
+		if (!kaartjes.hasOwnProperty(uid)) {
+			kaartjes[uid] = document.createElement('div');
+			kaartjes[uid].style.zIndex = '1000';
+		}
 		let loading = false;
+		let loaded = false;
 		el.addEventListener('mouseenter', async () => {
 			if (loading) {
 				return;
 			}
 
-			loading = true;
-			if (!kaartjeEl) {
-				const kaartje = await axios.get(`/profiel/${el.dataset!.visite}/kaartje`);
-				kaartjeEl = htmlParse(kaartje.data)[0] as HTMLElement;
-			}
-			el.append(kaartjeEl);
+			el.append(kaartjes[uid]);
 			// tslint:disable-next-line:no-unused-expression
-			new Popper(el, kaartjeEl, {placement: 'bottom-start'});
+			new Popper(el, kaartjes[uid], {placement: 'bottom-start'});
+
+			loading = true;
+			if (!loaded) {
+				const kaartje = await axios.get(`/profiel/${el.dataset!.visite}/kaartje`);
+				kaartjes[uid].innerHTML = kaartje.data;
+				loaded = true;
+			}
 			loading = false;
 		});
 		el.addEventListener('mouseleave', () => {
-			if (kaartjeEl) {
-				kaartjeEl.remove();
-			}
+			kaartjes[uid].remove();
 		});
 	},
 	'.vue-context': (el) => new Vue({el}),
