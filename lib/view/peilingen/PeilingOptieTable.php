@@ -5,6 +5,7 @@ use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
 /**
@@ -22,8 +23,8 @@ class PeilingOptieTable extends DataTable
 		$this->searchColumn('titel');
 		$this->searchColumn('beschrijving');
 
-		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), '/peilingen/opties/' . $id . '/toevoegen', 'Toevoegen', 'Optie toevoegen', 'add'));
-		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/peilingen/opties/verwijderen', 'Verwijderen', 'Optie verwijderen', 'delete'));
+		$this->addKnop(new DataTableKnop(Multiplicity::None(), '/peilingen/opties/' . $id . '/toevoegen', 'Toevoegen', 'Optie toevoegen', 'add'));
+		$this->addRowKnop(new DataTableRowKnop('/peilingen/opties/verwijderen', 'Optie Verwijderen', 'verwijderen'));
 	}
 
 }
