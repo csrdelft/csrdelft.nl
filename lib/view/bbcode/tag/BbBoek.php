@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\bibliotheek\BoekModel;
@@ -20,32 +21,40 @@ use CsrDelft\view\bibliotheek\BoekBBView;
  */
 class BbBoek extends BbTag {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'boek';
 	}
 
-	public function parseLight($arguments = []) {
-		$boekid = $this->getArgument($arguments);
-
+	public function renderLight() {
 		try {
 			/** @var Boek $boek */
-			$boek = BoekModel::instance()->get((int)$boekid);
+			$boek = BoekModel::instance()->get((int)$this->content);
 			return BbHelper::lightLinkBlock('boek', $boek->getUrl(), $boek->getTitel(), 'Auteur: ' . $boek->getAuteur());
 		} catch (CsrException $e) {
-			return '[boek] Boek [boekid:' . (int)$boekid . '] bestaat niet.';
+			return '[boek] Boek [boekid:' . (int)$this->content . '] bestaat niet.';
 		}
 	}
 
-	public function parse($arguments = []) {
-		$boekid = $this->getArgument($arguments);
+	public function render() {
+		if (!mag("P_BIEB_READ")) return null;
 
 		try {
 			/** @var Boek $boek */
-			$boek = BoekModel::instance()->get((int)$boekid);
+			$boek = BoekModel::instance()->get((int)$this->content);
 			$content = new BoekBBView($boek);
 			return $content->view();
 		} catch (CsrException $e) {
-			return '[boek] Boek [boekid:' . (int)$boekid . '] bestaat niet.';
+			return '[boek] Boek [boekid:' . (int)$this->content . '] bestaat niet.';
 		}
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
 	}
 }

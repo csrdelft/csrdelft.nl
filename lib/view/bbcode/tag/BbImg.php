@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 
 /**
@@ -18,12 +19,17 @@ use CsrDelft\bb\BbTag;
  */
 class BbImg extends BbTag {
 
-	public function getTagName() {
+	/**
+	 * @var array
+	 */
+	private $arguments;
+
+	public static function getTagName() {
 		return 'img';
 	}
 
-	public function parseLight($arguments = []) {
-		$url = $this->getContent();
+	public function renderLight() {
+		$url = $this->content;
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		if (!$url || (!url_like($url) && !startsWith($url, '/plaetjes/'))) {
 			return $url;
@@ -34,8 +40,9 @@ class BbImg extends BbTag {
 HTML;
 	}
 
-	public function parse($arguments = []) {
-		$url = $this->getContent();
+	public function render() {
+		$url = $this->content;
+		$arguments = $this->arguments;
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		if (!$url || (!url_like($url) && !startsWith($url, '/plaetjes/'))) {
 			return $url;
@@ -75,5 +82,16 @@ HTML;
 			return '<img class="' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
 		}
 		return '<div class="bb-img-loading" src="' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
+		$this->arguments = $arguments;
 	}
 }

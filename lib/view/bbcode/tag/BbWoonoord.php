@@ -10,7 +10,7 @@ use CsrDelft\model\groepen\WoonoordenModel;
  */
 class BbWoonoord extends BbTagGroep {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'woonoord';
 	}
 

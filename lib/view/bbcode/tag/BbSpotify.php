@@ -16,52 +16,57 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbSpotify extends BbTag {
 
-	public function getTagName() {
+	private $formaat;
+
+	public static function getTagName() {
 		return 'spotify';
 	}
 
-	public function parseLight($arguments = []) {
-		$uri = $this->getArgument($arguments);
-		$this->assertUri($uri);
-
-		$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $uri));
-		if (strstr($uri, 'playlist')) {
-			$beschrijving = 'Afspeellijst';
-		} elseif (strstr($uri, 'album')) {
-			$beschrijving = 'Album';
-		} elseif (strstr($uri, 'track')) {
-			$beschrijving = 'Nummer';
-		} else {
-			$beschrijving = '';
-		}
-		return BbHelper::lightLinkBlock('spotify', $url, 'Spotify', $beschrijving);
+	public function renderLight() {
+		$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $this->content));
+		return BbHelper::lightLinkBlock('spotify', $url, 'Spotify', $this->getBeschrijving());
 	}
 
-	public function parse($arguments = []) {
-		$uri = $this->getArgument($arguments);
-		$this->assertUri($uri);
+	public function render() {
+		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->>content\" frameborder=\"0\" allowtransparency=\"true\"";
 
-		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$uri\" frameborder=\"0\" allowtransparency=\"true\"";
-
-		if (isset($arguments['formaat'])) {
-			$formaat = $arguments['formaat'];
-			if ($formaat == "hoog") {
+		switch($this->formaat) {
+			case "hoog":
 				return "<iframe class=\"w-100\" height=\"380\" $commonAttributen></iframe>";
-			} elseif ($formaat == "blok") {
+			case "blok":
 				return "<iframe width=\"80\" height=\"80\" class=\"float-left\" $commonAttributen></iframe>";
-			}
+			default:
+				return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
 		}
-
-		return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
 	}
+
 
 	/**
-	 * @param string|null $uri
+	 * @param array $arguments
+	 * @return mixed
 	 * @throws BbException
 	 */
-	private function assertUri($uri) {
-		if (!startsWith($uri, 'spotify') && !filter_var($uri, FILTER_VALIDATE_URL)) {
-			throw new BbException('[spotify] Geen geldige url (' . $uri . ')');
+	public function parse($arguments = [])
+	{
+		$this->formaat = $arguments['formaat'] ?? null;
+		$this->readMainArgument($arguments);
+		if (!startsWith($this->content, 'spotify') && !filter_var($this->content, FILTER_VALIDATE_URL)) {
+			throw new BbException('[spotify] Geen geldige url (' . $this->content . ')');
+		}
+		$this->content = urlencode($this->content);
+	}
+
+	private function getBeschrijving()
+	{
+		$uri = $this->content;
+		if (strstr($uri, 'playlist')) {
+			return'Afspeellijst';
+		} elseif (strstr($uri, 'album')) {
+			return 'Album';
+		} elseif (strstr($uri, 'track')) {
+			return 'Nummer';
+		} else {
+			return '';
 		}
 	}
 }

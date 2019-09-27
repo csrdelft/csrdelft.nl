@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 
 /**
@@ -10,26 +11,33 @@ use CsrDelft\bb\BbTag;
  */
 class BbVerklapper extends BbTag {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return ['spoiler', 'verklapper'];
 	}
 
-	public function parseLight($arguments = []) {
-		$content = $this->getContent();
-		$content = str_replace('[br]', '<br />', $content);
+	public function renderLight() {
+		$content = str_replace('[br]', '<br />', $this->content);
 		return '<a class="bb-tag-spoiler" href="#/verklapper/' . urlencode($content) . '">Toon verklapper</a>';
 	}
 
-	public function parse($arguments = []) {
-		$content = $this->getContent();
-
+	public function render() {
 		$id = uniqid_safe('verklapper_');
 
 		return <<<HTML
 <div class="card">
 	<a class="btn btn-secondary btn-sm" data-toggle="collapse" href="#$id">Verklapper</a>
-	<div id="$id" class="collapse"><div class="card-body">$content</div></div>
+	<div id="$id" class="collapse"><div class="card-body">$this->content</div></div>
 </div>
 HTML;
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readContent();
 	}
 }

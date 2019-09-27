@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 
 /**
@@ -14,12 +15,21 @@ use CsrDelft\bb\BbTag;
  * @example [reldate]20-01-2012 18:00[/reldate]
  */
 class BbReldate extends BbTag {
-	public function getTagName() {
+	public static function getTagName() {
 		return 'reldate';
 	}
 
-	public function parse($arguments = []) {
-		$content = $this->getContent();
-		return '<span class="bb-tag-reldate" title="' . htmlspecialchars($content) . '">' . reldate($content) . '</span>';
+	public function render() {
+		return '<span class="bb-tag-reldate" title="' . htmlspecialchars($this->content) . '">' . reldate($this->content) . '</span>';
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readContent([], false);
 	}
 }

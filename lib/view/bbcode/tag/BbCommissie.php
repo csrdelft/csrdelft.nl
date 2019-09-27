@@ -10,7 +10,7 @@ use CsrDelft\model\groepen\CommissiesModel;
  */
 class BbCommissie extends BbTagGroep {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'commissie';
 	}
 

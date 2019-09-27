@@ -18,15 +18,14 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbYoutube extends BbTag {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'youtube';
 	}
 
-	public function parseLight($arguments = []) {
-		$id = $this->getArgument($arguments);
-		$this->assertId($id);
+	public function renderLight() {
+		$this->assertId($this->content);
 
-		return BbHelper::lightLinkBlock('youtube', 'https://youtu.be/' . $id, 'YouTube video', '', 'https://img.youtube.com/vi/' . $id . '/0.jpg');
+		return BbHelper::lightLinkBlock('youtube', 'https://youtu.be/' . $this->content, 'YouTube video', '', 'https://img.youtube.com/vi/' . $this->content . '/0.jpg');
 	}
 
 	/**
@@ -35,20 +34,19 @@ class BbYoutube extends BbTag {
 	 */
 	private function assertId($id) {
 		if (!preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
-			throw new BbException('[youtube] Geen geldig youtube-id (' . htmlspecialchars($id) . ')');
+			throw new BbException('[youtube] Geen geldig youtube-id (' . htmlspecialchars($this->content) . ')');
 		}
 	}
 
-	public function parse($arguments = []) {
-		$id = $this->getArgument($arguments);
-		$this->assertId($id);
-
+	public function render() {
+		$this->assertId($this->content);
+		$attributes = [];
 		$attributes['width'] = 570;
 		$attributes['height'] = 360;
 		$attributes['iframe'] = true;
 
-		$attributes['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
-		$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
+		$attributes['src'] = '//www.youtube.com/embed/' . $this->content . '?autoplay=1';
+		$previewthumb = 'https://img.youtube.com/vi/' . $this->content . '/0.jpg';
 
 		$params = json_encode($attributes);
 
@@ -60,5 +58,15 @@ class BbYoutube extends BbTag {
 	</div>
 </div>
 HTML;
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
 	}
 }

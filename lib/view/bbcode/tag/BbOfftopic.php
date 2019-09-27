@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 
 /**
@@ -10,11 +11,21 @@ use CsrDelft\bb\BbTag;
  */
 class BbOfftopic extends BbTag {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return ['ot', 'offtopic', 'vanonderwerp'];
 	}
 
-	public function parse($arguments = []) {
-		return '<span class="offtopic bb-tag-offtopic">' . $this->getContent() . '</span>';
+	public function render() {
+		return '<span class="offtopic bb-tag-offtopic">' . $this->content . '</span>';
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readContent();
 	}
 }

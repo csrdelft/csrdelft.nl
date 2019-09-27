@@ -11,8 +11,8 @@ use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\security\LoginModel;
 
 class BbForum extends BbTag {
-
-	public function getTagName() {
+	public $num = 3;
+	public static function getTagName() {
 		return 'forum';
 	}
 
@@ -21,19 +21,12 @@ class BbForum extends BbTag {
 	 * @return mixed
 	 * @throws BbException
 	 */
-	public function parse($arguments = []) {
+	public function render() {
 		if (!LoginModel::mag(P_LOGGED_IN)) {
 			return '';
 		}
-
-		$deel = $this->getArgument($arguments);
-		$num = 3;
-
-		if (isset($arguments['num'])) {
-			$num = (int) $arguments['num'];
-		}
-
-		ForumDradenModel::instance()->setAantalPerPagina($num);
+		$deel = $this->content;
+		ForumDradenModel::instance()->setAantalPerPagina($this->num);
 
 		if ($deel == 'recent') {
 			$forumDeel = ForumDelenModel::instance()->getRecent();
@@ -49,5 +42,18 @@ class BbForum extends BbTag {
 		return view('forum.bb', [
 			'deel' => $forumDeel,
 		])->getHtml();
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
+		if (isset($arguments['num'])) {
+			$this->num = (int) $arguments['num'];
+		}
 	}
 }

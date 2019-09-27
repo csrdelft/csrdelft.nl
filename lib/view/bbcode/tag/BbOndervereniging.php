@@ -10,7 +10,7 @@ use CsrDelft\model\groepen\OnderverenigingenModel;
  */
 class BbOndervereniging extends BbTagGroep {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'ondervereniging';
 	}
 

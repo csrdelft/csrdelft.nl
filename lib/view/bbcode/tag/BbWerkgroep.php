@@ -10,7 +10,7 @@ use CsrDelft\model\groepen\WerkgroepenModel;
  */
 class BbWerkgroep extends BbTagGroep {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'werkgroep';
 	}
 

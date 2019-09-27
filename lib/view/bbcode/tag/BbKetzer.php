@@ -10,7 +10,7 @@ use CsrDelft\model\groepen\KetzersModel;
  */
 class BbKetzer extends BbTagGroep {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'ketzer';
 	}
 

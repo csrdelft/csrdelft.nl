@@ -47,7 +47,6 @@ use CsrDelft\view\bbcode\tag\BbLedenmemoryscores;
 use CsrDelft\view\bbcode\tag\BbLid;
 use CsrDelft\view\bbcode\tag\BbLocatie;
 use CsrDelft\view\bbcode\tag\BbMaaltijd;
-use CsrDelft\view\bbcode\tag\BbMap;
 use CsrDelft\view\bbcode\tag\BbMededelingen;
 use CsrDelft\view\bbcode\tag\BbNeuzen;
 use CsrDelft\view\bbcode\tag\BbOfftopic;
@@ -121,7 +120,6 @@ class CsrBB extends Parser {
 		BbLid::class,
 		BbLocatie::class,
 		BbMaaltijd::class,
-		BbMap::class,
 		BbMededelingen::class,
 		BbNeuzen::class,
 		BbOfftopic::class,

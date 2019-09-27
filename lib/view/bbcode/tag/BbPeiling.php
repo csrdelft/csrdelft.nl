@@ -20,24 +20,22 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbPeiling extends BbTag {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'peiling';
 	}
 
-	public function parseLight($arguments = []) {
-		$peiling_id = $this->getArgument($arguments);
-		$peiling = $this->getPeiling($peiling_id);
+	public function renderLight() {
+		$peiling = $this->getPeiling($this->content);
 
-		$url = '#/peiling/' . urlencode($peiling_id);
+		$url = '#/peiling/' . urlencode($this->content);
 		return BbHelper::lightLinkBlock('peiling', $url, $peiling->titel, $peiling->beschrijving);
 	}
 
-	public function parse($arguments = []) {
-		$peiling_id = $this->getArgument($arguments);
-		$peiling = $this->getPeiling($peiling_id);
+	public function render() {
+		$peiling = $this->getPeiling($this->content);
 		return view('peilingen.peiling', [
 			'peiling' => $peiling,
-			'opties' => PeilingenLogic::instance()->getOptionsAsJson($peiling_id, LoginModel::getUid()),
+			'opties' => PeilingenLogic::instance()->getOptionsAsJson($peiling->id, LoginModel::getUid()),
 		])->getHtml();
 	}
 
@@ -56,5 +54,15 @@ class BbPeiling extends BbTag {
 		}
 
 		return $peiling;
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
 	}
 }

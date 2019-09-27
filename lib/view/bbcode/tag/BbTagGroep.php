@@ -18,18 +18,19 @@ use CsrDelft\view\groepen\GroepView;
  * @since 27/03/2019
  */
 abstract class BbTagGroep extends BbTag {
-	public function parseLight($arguments = []) {
-		if (isset($arguments[$this->getTagName()])) {
-			$id = $arguments[$this->getTagName()];
-		} else {
-			$id = $this->getContent();
-		}
-		$groep = $this->getModel()::get($id);
+
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
+	}
+
+	public function renderLight() {
+		$groep = $this->getModel()::get($this->content);
 		if ($groep) {
 			return $this->groepLight($groep, 'ketzer', $this->getLidNaam());
 		} else {
 			$url = $this->getModel()::getUrl();
-			return ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="' . $url . 'beheren">Zoeken</a>';
+			return ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="' . $url . 'beheren">Zoeken</a>';
 		}
 	}
 
@@ -47,12 +48,11 @@ abstract class BbTagGroep extends BbTag {
 
 	abstract public function getLidNaam();
 
-	public function parse($arguments = []) {
-		$id = $this->getArgument($arguments);
-		$groep = $this->getModel()::get($id);
+	public function render() {
+		$groep = $this->getModel()::get($this->content);
 		if (!$groep) {
 			$url = $this->getModel()::getUrl();
-			throw new BbException(ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($id) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>');
+			throw new BbException(ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>');
 		}
 		return $this->groep($groep);
 	}

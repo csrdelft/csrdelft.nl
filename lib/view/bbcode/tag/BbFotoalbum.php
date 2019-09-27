@@ -38,21 +38,27 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  */
 class BbFotoalbum extends BbTag {
 
-	public function getTagName() {
+	/**
+	 * @var array
+	 */
+	private $arguments;
+
+	public static function getTagName() {
 		return 'fotoalbum';
 	}
 
-	public function parseLight($arguments = []) {
-		$url = urldecode($this->getContent());
+	public function renderLight() {
+		$url = $this->content;
 		$album = $this->getAlbum($url);
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
 		$cover = CSR_ROOT . $album->getCoverUrl();
 		return BbHelper::lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
 	}
 
-	public function parse($arguments = []) {
-		$url = urldecode($this->getContent());
+	public function render() {
+		$url = $this->content;
 		$album = $this->getAlbum($url);
+		$arguments = $this->arguments;
 		if (isset($arguments['slider'])) {
 			$view = view('fotoalbum.slider', [
 				'fotos' => array_shuffle($album->getFotos())
@@ -107,5 +113,16 @@ class BbFotoalbum extends BbTag {
 		} catch (ResourceNotFoundException $ex) {
 			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>');
 		}
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
+		$this->arguments = $arguments;
 	}
 }
