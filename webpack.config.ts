@@ -11,15 +11,6 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const contextPath = path.resolve(__dirname, 'resources/assets');
 
 const getEntry = (env: any) => {
-	let entries: string[];
-	if (!env.entry) {
-		entries = [];
-	} else if (typeof env.entry === 'string') {
-		entries = [env.entry];
-	} else {
-		entries = env.entry;
-	}
-
 	const ext = {
 		'ledenmemory': './js/ledenmemory.ts',
 		'fxclouds': './js/effect/fxclouds.ts',
@@ -41,6 +32,17 @@ const getEntry = (env: any) => {
 		'effect-snow': './sass/effect/snow.scss',
 		'effect-space': './sass/effect/space.scss',
 	};
+
+	let entries: string[];
+	if (!env || !env.entry) {
+		entries = [];
+	} else if (env.entry === 'all') {
+		entries = Object.keys(ext);
+	} else if (typeof env.entry === 'string') {
+		entries = [env.entry];
+	} else {
+		entries = env.entry;
+	}
 
 	const splitObject = (obj: object, keys: string[]) => {
 		const holder = {};

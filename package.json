@@ -7,7 +7,7 @@
 		"watch-poll": "yarn run watch -- --watch-poll",
 		"hot": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack-dev-server --inline --hot",
 		"prod": "yarn run production",
-		"production": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --no-progress --hide-modules --mode=production",
+		"production": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --no-progress --hide-modules --mode=production --env.entry=all",
 		"docker": "yarn && yarn run watch-poll"
 	},
 	"devDependencies": {
