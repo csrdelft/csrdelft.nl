@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52b1dadcb047f7c1f2eaefc308a7bb23",
+    "content-hash": "72bd145d29845b60bb4e29aceff02b1a",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -344,16 +344,16 @@
         },
         {
             "name": "csrdelft/bb",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/bb.git",
-                "reference": "0300b0fe766df88ac02459fe5a6e9bb9dcb571e8"
+                "reference": "7443c26d74690fda00949ad342ecb0b38d37802e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/bb/zipball/0300b0fe766df88ac02459fe5a6e9bb9dcb571e8",
-                "reference": "0300b0fe766df88ac02459fe5a6e9bb9dcb571e8",
+                "url": "https://api.github.com/repos/csrdelft/bb/zipball/7443c26d74690fda00949ad342ecb0b38d37802e",
+                "reference": "7443c26d74690fda00949ad342ecb0b38d37802e",
                 "shasum": ""
             },
             "require": {
@@ -381,7 +381,7 @@
             ],
             "description": "C.S.R. BB Parser",
             "homepage": "https://csrdelft.github.io/bb",
-            "time": "2019-09-28T13:06:51+00:00"
+            "time": "2019-09-28T13:47:23+00:00"
         },
         {
             "name": "csrdelft/orm",
