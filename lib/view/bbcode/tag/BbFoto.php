@@ -25,20 +25,27 @@ class BbFoto extends BbTag {
 	 * @var bool
 	 */
 	private $responsive;
+	/**
+	 * @var Foto
+	 */
+	private $foto;
+	public function isAllowed()
+	{
+		return $this->foto->magBekijken();
+	}
 
 	public static function getTagName() {
 		return 'foto';
 	}
 
 	public function renderLight() {
-		$foto = $this->getFoto(explode('/', $this->content), $this->content);
-		return BbHelper::lightLinkThumbnail('foto', $foto->getAlbumUrl() . '#' . $foto->getResizedUrl(), CSR_ROOT . $foto->getThumbUrl());
+		return BbHelper::lightLinkThumbnail('foto', $this->foto->getAlbumUrl() . '#' . $this->foto->getResizedUrl(), CSR_ROOT . $this->foto->getThumbUrl());
 	}
 
 	public function render() {
 		$url = $this->content;
 		$parts = explode('/', $url);
-		$fototag = new FotoBBView($this->getFoto($parts, $url), in_array('Posters', $parts), $this->responsive);
+		$fototag = new FotoBBView($this->foto, in_array('Posters', $parts), $this->responsive);
 		return $fototag->getHtml();
 	}
 
@@ -73,5 +80,6 @@ class BbFoto extends BbTag {
 	{
 		$this->responsive = isset($arguments['responsive']);
 		$this->readMainArgument($arguments);
+		$this->foto =  $this->getFoto(explode('/', $this->content), $this->content);
 	}
 }

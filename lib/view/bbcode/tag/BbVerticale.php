@@ -6,6 +6,7 @@ use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\model\security\LoginModel;
 
 /**
  * Geeft een link naar de verticale.
@@ -19,6 +20,10 @@ class BbVerticale extends BbTag {
 
 	public static function getTagName() {
 		return 'verticale';
+	}
+	public function isAllowed()
+	{
+		return LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function render() {

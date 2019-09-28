@@ -7,6 +7,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -42,22 +43,31 @@ class BbFotoalbum extends BbTag {
 	 * @var array
 	 */
 	private $arguments;
+	/**
+	 * @var bool|FotoAlbum|FotoTagAlbum|null
+	 */
+	private $album;
 
 	public static function getTagName() {
 		return 'fotoalbum';
 	}
+	public function isAllowed()
+	{
+		return ($this->album != null && $this->album->magBekijken()) || ($this->album == null && LoginModel::mag(P_LOGGED_IN));
+	}
 
 	public function renderLight() {
-		$url = $this->content;
-		$album = $this->getAlbum($url);
+		$album = $this->album;
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
 		$cover = CSR_ROOT . $album->getCoverUrl();
 		return BbHelper::lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
 	}
 
 	public function render() {
-		$url = $this->content;
-		$album = $this->getAlbum($url);
+		$album = $this->album;
+		if ($album == null) {
+			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($this->content) . '</div>');
+		}
 		$arguments = $this->arguments;
 		if (isset($arguments['slider'])) {
 			$view = view('fotoalbum.slider', [
@@ -111,7 +121,7 @@ class BbFotoalbum extends BbTag {
 			}
 			return $album;
 		} catch (ResourceNotFoundException $ex) {
-			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>');
+			return null;
 		}
 	}
 
@@ -124,5 +134,6 @@ class BbFotoalbum extends BbTag {
 	{
 		$this->readMainArgument($arguments);
 		$this->arguments = $arguments;
+		$this->album = $this->getAlbum($this->content);
 	}
 }

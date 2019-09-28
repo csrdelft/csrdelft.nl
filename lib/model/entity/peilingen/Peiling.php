@@ -84,6 +84,11 @@ class Peiling extends PersistentEntity {
 		'opties' => []
 	];
 
+	public function magBekijken()
+	{
+		return LoginModel::mag(P_LOGGED_IN);
+	}
+
 }
 
 

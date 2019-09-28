@@ -5,6 +5,8 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\documenten\DocumentModel;
+use CsrDelft\model\entity\documenten\Document;
+use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -16,27 +18,31 @@ use CsrDelft\view\bbcode\BbHelper;
  * @example [document=1234]
  */
 class BbDocument extends BbTag {
-
+	/**
+	 * @var Document
+	 */
+	private $document;
 	public static function getTagName() {
 		return 'document';
 	}
 
-	public function renderLight() {
-		$document = DocumentModel::instance()->get($this->content);
+	public function isAllowed()
+	{
+		return $this->document->magBekijken();
+	}
 
-		if ($document) {
-			$beschrijving = $document->getFriendlyMimetype() . ' (' . format_filesize((int)$document->filesize) . ')';
-			return BbHelper::lightLinkBlock('document', $document->getDownloadUrl(), $document->naam, $beschrijving);
+	public function renderLight() {
+		if ($this->document) {
+			$beschrijving = $this->document->getFriendlyMimetype() . ' (' . format_filesize((int)$this->document->filesize) . ')';
+			return BbHelper::lightLinkBlock('document', $this->document->getDownloadUrl(), $this->document->naam, $beschrijving);
 		} else {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->content . ')</div>';
 		}
 	}
 
 	public function render() {
-		$document = DocumentModel::instance()->get($this->content);
-
-		if ($document) {
-			return view('documenten.document_bb', ['document' => $document])->getHtml();
+		if ($this->document) {
+			return view('documenten.document_bb', ['document' => $this->document])->getHtml();
 		} else {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->content . ')</div>';
 		}
@@ -50,5 +56,6 @@ class BbDocument extends BbTag {
 	public function parse($arguments = [])
 	{
 		$this->readMainArgument($arguments);
+		$this->document = DocumentModel::instance()->get($this->content);
 	}
 }

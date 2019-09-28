@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -18,6 +19,11 @@ use CsrDelft\view\bbcode\BbHelper;
 class BbLid extends BbTag {
 	public static function getTagName() {
 		return 'lid';
+	}
+
+	public function isAllowed()
+	{
+		LoginModel::mag(P_LEDEN_READ . "," . P_OUDLEDEN_READ);
 	}
 
 	public function renderLight() {

@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\mededelingen\MededelingenView;
 
@@ -19,6 +20,10 @@ class BbMededelingen extends BbTag {
 
 	public static function getTagName() {
 		return 'mededelingen';
+	}
+	public function isAllowed()
+	{
+		LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function renderLight() {

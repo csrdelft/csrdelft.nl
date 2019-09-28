@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
+use CsrDelft\model\security\LoginModel;
 
 /**
  * Toont content als instelling een bepaalde waarde heeft, standaard 'ja';
@@ -18,6 +19,11 @@ class BbInstelling extends BbTag {
 	private $module;
 	private $testwaarde;
 	private $instelling;
+
+	public function isAllowed()
+	{
+		LoginModel::mag(P_LOGGED_IN);
+	}
 
 	public static function getTagName() {
 		return 'instelling';

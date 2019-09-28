@@ -19,13 +19,22 @@ use CsrDelft\view\SavedQueryContent;
  */
 class BbQuery extends BbTag {
 
+	/**
+	 * @var SavedQuery
+	 */
+	private $query;
+
 	public static function getTagName() {
 		return 'query';
 	}
 
+	public function isAllowed()
+	{
+		return $this->query->magBekijken();
+	}
+
 	public function renderLight() {
-		$this->assertId($this->content);
-		$sqc = new SavedQueryContent(new SavedQuery($this->content));
+		$sqc = new SavedQueryContent($this->query);
 		$url = '/tools/query?id=' . urlencode($this->content);
 		return BbHelper::lightLinkBlock('query', $url, $sqc->getModel()->getBeschrijving(), $sqc->getModel()->count() . ' regels');
 	}
@@ -41,8 +50,7 @@ class BbQuery extends BbTag {
 	}
 
 	public function render() {
-		$this->assertId($this->content);
-		$sqc = new SavedQueryContent(new SavedQuery($this->content));
+		$sqc = new SavedQueryContent($this->query);
 		return $sqc->render_queryResult();
 	}
 
@@ -55,5 +63,7 @@ class BbQuery extends BbTag {
 	{
 		$this->readMainArgument($arguments);
 		$this->content = (int)$this->content;
+		$this->assertId($this->content);
+		$this->query = new SavedQuery($this->content);
 	}
 }

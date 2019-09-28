@@ -7,6 +7,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\bibliotheek\BoekBBView;
 
@@ -23,6 +24,10 @@ class BbBoek extends BbTag {
 
 	public static function getTagName() {
 		return 'boek';
+	}
+	public function isAllowed()
+	{
+		LoginModel::mag(P_BIEB_READ);
 	}
 
 	public function renderLight() {

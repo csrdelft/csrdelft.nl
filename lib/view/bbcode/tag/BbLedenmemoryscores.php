@@ -6,6 +6,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 
@@ -20,6 +21,11 @@ class BbLedenmemoryscores extends BbTag {
 	 */
 	private $groep;
 	private $titel;
+
+	public function isAllowed()
+	{
+		LoginModel::mag(P_LOGGED_IN);
+	}
 
 	public static function getTagName() {
 		return 'ledenmemoryscores';

@@ -19,13 +19,18 @@ use CsrDelft\view\groepen\GroepView;
  */
 abstract class BbTagGroep extends BbTag {
 
+	public function isAllowed()
+	{
+		return $this->getGroep()->mag(AccessAction::Bekijken);
+	}
+
 	public function parse($arguments = [])
 	{
 		$this->readMainArgument($arguments);
 	}
 
 	public function renderLight() {
-		$groep = $this->getModel()::get($this->content);
+		$groep = $this->getGroep();
 		if ($groep) {
 			return $this->groepLight($groep, 'ketzer', $this->getLidNaam());
 		} else {
@@ -40,16 +45,13 @@ abstract class BbTagGroep extends BbTag {
 	abstract public function getModel();
 
 	protected function groepLight(AbstractGroep $groep, $tag, $leden) {
-		if (!$groep->mag(AccessAction::Bekijken)) {
-			return '';
-		}
 		return BbHelper::lightLinkBlock($tag, $groep->getUrl(), $groep->naam, $groep->aantalLeden() . ' ' . $leden);
 	}
 
 	abstract public function getLidNaam();
 
 	public function render() {
-		$groep = $this->getModel()::get($this->content);
+		$groep = $this->getGroep();
 		if (!$groep) {
 			$url = $this->getModel()::getUrl();
 			throw new BbException(ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>');
@@ -58,10 +60,6 @@ abstract class BbTagGroep extends BbTag {
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		// Controleer rechten
-		if (!$groep->mag(AccessAction::Bekijken)) {
-			return '';
-		}
 		if ($groep->versie == GroepVersie::V2) {
 			$uid = LoginModel::getUid();
 			$settings = [
@@ -77,5 +75,15 @@ abstract class BbTagGroep extends BbTag {
 		}
 		$view = new GroepView($groep, null, false, true);
 		return $view->getHtml();
+	}
+
+	private function getGroep()
+	{
+		$this->content = (int)$this->content;
+		$groep = $this->getModel()::get($this->content);
+		if (!$groep) {
+			throw new BbException("Groep met id $this->content does not exist");
+		}
+		return $groep;
 	}
 }

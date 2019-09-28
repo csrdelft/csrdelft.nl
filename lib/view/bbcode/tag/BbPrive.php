@@ -22,16 +22,16 @@ class BbPrive extends BbTag {
 	 */
 	private $permissie;
 
+	public function isAllowed()
+	{
+		return LoginModel::mag($this->permissie);
+	}
+
 	public static function getTagName() {
 		return 'prive';
 	}
 
 	public function render() {
-
-		if (!LoginModel::mag($this->permissie)) {
-			return '';
-		}
-		// content moet altijd geparsed worden, anders blijft de inhoud van de tag gewoon staan
 		$content = '<span class="bb-prive bb-tag-prive">' . $this->content . '</span>';
 
 		return $content;

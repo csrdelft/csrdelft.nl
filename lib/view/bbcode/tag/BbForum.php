@@ -12,8 +12,17 @@ use CsrDelft\model\security\LoginModel;
 
 class BbForum extends BbTag {
 	public $num = 3;
+	/**
+	 * @var \CsrDelft\model\entity\forum\ForumDeel
+	 */
+	private $deel;
+
 	public static function getTagName() {
 		return 'forum';
+	}
+	public function isAllowed()
+	{
+		return $this->deel->magLezen();
 	}
 
 	/**
@@ -28,19 +37,8 @@ class BbForum extends BbTag {
 		$deel = $this->content;
 		ForumDradenModel::instance()->setAantalPerPagina($this->num);
 
-		if ($deel == 'recent') {
-			$forumDeel = ForumDelenModel::instance()->getRecent();
-		} else if ($deel == 'belangrijk') {
-			$forumDeel = ForumDelenModel::instance()->getRecent(true);
-		} else {
-			$forumDeel = ForumDelenModel::instance()->get($deel);
-			if (!$forumDeel->magLezen()) {
-				throw new BbException('<div class="alert alert-warning">Mag dit forumdeel niet lezen</div>');
-			}
-		}
-
 		return view('forum.bb', [
-			'deel' => $forumDeel,
+			'deel' => $this->deel,
 		])->getHtml();
 	}
 
@@ -54,6 +52,17 @@ class BbForum extends BbTag {
 		$this->readMainArgument($arguments);
 		if (isset($arguments['num'])) {
 			$this->num = (int) $arguments['num'];
+		}
+		switch($this->content) {
+			case 'recent':
+				$this->deel = ForumDelenModel::instance()->getRecent();
+				break;
+			case 'belangrijk':
+				$this->deel = ForumDelenModel::instance()->getRecent(true);
+				break;
+			default:
+				$this->deel = ForumDelenModel::instance()->get($this->content);
+				break;
 		}
 	}
 }

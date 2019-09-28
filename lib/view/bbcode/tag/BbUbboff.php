@@ -31,7 +31,7 @@ class BbUbboff extends BbTag {
 	public function parse($arguments = [])
 	{
 		$this->parser->bb_mode = false;
-		$content = $this->readContent();
+		$this->readContent();
 		$this->parser->bb_mode = true;
 	}
 }

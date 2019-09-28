@@ -34,7 +34,7 @@ class Document extends Bestand {
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag($this->leesrechten);
+		return LoginModel::mag($this->leesrechten) && LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function magBewerken() {
