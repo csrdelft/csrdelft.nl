@@ -47,6 +47,15 @@ class BbCitaat extends BbTag {
 		}
 		$text = '<div class="citaatContainer bb-tag-citaat">Citaat';
 
+		if ($this->bron_profiel != null) {
+			$text .= ' van ' . $this->bron_profiel->getLink('user');
+		} elseif ($this->bron_text != null) {
+			if ($this->bron_url != null) {
+				$text .= ' van ' . external_url($this->bron_url, $this->bron_text);
+			} else {
+				$text .= ' van ' . $this->bron_text;
+			}
+		}
 
 		return $text . ':<div class="citaat">' . trim($content) . '</div></div>';
 	}
