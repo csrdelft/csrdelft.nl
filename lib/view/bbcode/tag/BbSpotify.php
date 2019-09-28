@@ -28,7 +28,7 @@ class BbSpotify extends BbTag {
 	}
 
 	public function render() {
-		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->>content\" frameborder=\"0\" allowtransparency=\"true\"";
+		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->content\" frameborder=\"0\" allowtransparency=\"true\"";
 
 		switch($this->formaat) {
 			case "hoog":
