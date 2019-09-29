@@ -76,7 +76,7 @@ class BbCitaat extends BbTag {
 			if ($profiel) {
 				$this->bron_profiel = $profiel;
 			} else {
-				$this->bron_text = $bron;
+				$this->bron_text = str_replace('_', ' ', $bron);
 			}
 		}
 		if (isset($arguments['url']) && url_like($arguments['url'])) {
