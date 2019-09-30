@@ -28,7 +28,7 @@ class BbDocument extends BbTag {
 
 	public function isAllowed()
 	{
-		return $this->document->magBekijken();
+		return $this->document == false || $this->document->magBekijken();
 	}
 
 	public function renderLight() {
