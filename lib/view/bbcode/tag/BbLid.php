@@ -23,7 +23,7 @@ class BbLid extends BbTag {
 
 	public function isAllowed()
 	{
-		LoginModel::mag(P_LEDEN_READ . "," . P_OUDLEDEN_READ);
+		return LoginModel::mag(P_LEDEN_READ . "," . P_OUDLEDEN_READ);
 	}
 
 	public function renderLight() {
