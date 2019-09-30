@@ -55,7 +55,7 @@ maalcie-beheer-maaltijden-beoordelingen-data:
   options: { mag: P_MAAL_MOD }
 
 maalcie-beheer-maaltijden-toggle:
-  path: /maaltijden/beheer/toggle
+  path: /maaltijden/beheer/toggle/{mid}
   controller: CsrDelft\controller\maalcie\BeheerMaaltijdenController::toggle
   methods: POST
   options: { mag: P_MAAL_MOD }
