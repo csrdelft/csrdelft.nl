@@ -82,8 +82,8 @@
 								<a href="/tools/stats?uid={{$profiel->uid}}" class="btn btn-light"
 									 title="Toon bezoeklog">@icon('server_chart')</a>
 							@endcan
-						</div>
 						@endif
+						</div>
 					</div>
 					<div class="pasfoto float-left">{!! $profiel->getPasfotoTag('') !!}</div>
 					@if(in_array('banaan', $profiel->getProfielOpties()))
