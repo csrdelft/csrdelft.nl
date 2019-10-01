@@ -3,12 +3,17 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\IsHetAlView;
 
 class BbIsHetAl extends BbTag {
 
 	public static function getTagName() {
 		return 'ishetal';
+	}
+
+	public function isAllowed() {
+		return LoginModel::mag(P_LOGGED_IN);
 	}
 
 	/**
