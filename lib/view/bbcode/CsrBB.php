@@ -42,6 +42,7 @@ use CsrDelft\view\bbcode\tag\BbFotoalbum;
 use CsrDelft\view\bbcode\tag\BbGroep;
 use CsrDelft\view\bbcode\tag\BbImg;
 use CsrDelft\view\bbcode\tag\BbInstelling;
+use CsrDelft\view\bbcode\tag\BbIsHetAl;
 use CsrDelft\view\bbcode\tag\BbKetzer;
 use CsrDelft\view\bbcode\tag\BbLedenmemoryscores;
 use CsrDelft\view\bbcode\tag\BbLid;
@@ -115,6 +116,7 @@ class CsrBB extends Parser {
 		BbGroep::class,
 		BbImg::class,
 		BbInstelling::class,
+		BbIsHetAl::class,
 		BbKetzer::class,
 		BbLedenmemoryscores::class,
 		BbLid::class,

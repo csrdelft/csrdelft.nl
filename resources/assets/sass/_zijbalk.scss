@@ -1,5 +1,21 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 
+.ishetal {
+	text-align: center;
+	width: 100%;
+	margin: 1em;
+
+	.ja, .nee {
+		font-size: 1.4em;
+		font-weight: bold;
+		color: $zijbalk-ishetal-nee;
+		text-align: center;
+	}
+	.ja {
+		color: $zijbalk-ishetal-ja;
+	}
+}
+
 #zijbalk {
 	position: absolute;
 	top: 0;
@@ -52,21 +68,6 @@
 		text-align: right;
 	}
 
-	.ishetal {
-		text-align: center;
-		width: 180px;
-		margin: 15px 20px 20px 0;
-
-		.ja, .nee {
-			font-size: 1.4em;
-			font-weight: bold;
-			color: $zijbalk-ishetal-nee;
-			text-align: center;
-		}
-		.ja {
-			color: $zijbalk-ishetal-ja;
-		}
-	}
 
 	/* Verjaardag in de zijbalk */
 	#komende_pasfotos .verjaardag {
