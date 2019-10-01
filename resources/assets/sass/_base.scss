@@ -28,6 +28,22 @@
 @import '~@fullcalendar/timegrid/main.css';
 @import '~@fullcalendar/list/main.css';
 
+.ishetal {
+	text-align: center;
+	width: 100%;
+	margin: 1em;
+
+	.ja, .nee {
+		font-size: 1.4em;
+		font-weight: bold;
+		color: $zijbalk-ishetal-nee;
+		text-align: center;
+	}
+	.ja {
+		color: $zijbalk-ishetal-ja;
+	}
+}
+
 /* Standaard Kleuren */
 .overflow-x-hidden {
 	overflow-x: hidden;

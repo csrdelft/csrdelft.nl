@@ -51,8 +51,6 @@ void main() {
 }
 `;
 
-(document.querySelector('.container') as HTMLElement).style.background = 'white';
-
 const container = document.createElement('div');
 Object.assign(container.style, {
 	position: 'fixed',
