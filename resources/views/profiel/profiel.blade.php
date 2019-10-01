@@ -20,7 +20,7 @@
  * @var \CsrDelft\model\entity\maalcie\MaaltijdAanmelding[] $recenteAanmeldingen
  * @var \CsrDelft\model\entity\maalcie\MaaltijdAbonnement[] $abos
  * @var \CsrDelft\model\entity\bibliotheek\BoekRecensie[] $gerecenseerdeboeken
- * @var \CsrDelft\view\View $fotos
+ * @var \CsrDelft\view\fotoalbum\FotoBBView[] $fotos
  */
 ?>
 
@@ -135,7 +135,7 @@
 					<dd>{{$profiel->voorletters}}</dd>
 				@endif
 				@if($profiel->gebdatum != '0000-00-00' && is_zichtbaar($profiel, 'gebdatum'))
-					<dt>Geb.datum</dt>
+					<dt>Geboortedatum</dt>
 					<dd>{{strftime('%d-%m-%Y', strtotime($profiel->gebdatum))}}</dd>
 				@endif
 				@if($profiel->status === \CsrDelft\model\entity\LidStatus::Overleden && $profiel->sterfdatum !== '0000-00-00')
@@ -164,15 +164,24 @@
 								 title="Open kaart" class="lichtgrijs fa fa-map-marked fa-5x"></a>
 						</dt>
 						<dd>
-							@if($profiel->getWoonoord())
-								<a href="{{$profiel->getWoonoord()->getUrl()}}" class="dikgedrukt">{{$profiel->getWoonoord()->naam}}</a>
-								<br/>
-							@endif
-							{{$profiel->adres}}<br/>
-							{{$profiel->postcode}} {{$profiel->woonplaats}}<br/>
-							{{$profiel->land}}<br/>
-							@if($profiel->telefoon){{$profiel->telefoon}}<br/>@endif
-							@if($profiel->mobiel){{$profiel->mobiel}}<br/>@endif
+							<ul class="list-unstyled">
+								@if($profiel->getWoonoord())
+									<li>
+										<a href="{{$profiel->getWoonoord()->getUrl()}}" class="dikgedrukt">
+											{{$profiel->getWoonoord()->naam}}
+										</a>
+									</li>
+								@endif
+								<li>{{$profiel->adres}}</li>
+								<li>{{$profiel->postcode}} {{$profiel->woonplaats}}</li>
+								<li>{{$profiel->land}}</li>
+								@if($profiel->telefoon)
+									<li>{{$profiel->telefoon}}</li>
+								@endif
+								@if($profiel->mobiel)
+									<li>{{$profiel->mobiel}}</li>
+								@endif
+							</ul>
 						</dd>
 					@endif
 				</dl>
@@ -184,11 +193,13 @@
 								 title="Open kaart" class="lichtgrijs fa fa-map-marked fa-5x"></a>
 						</dt>
 						<dd>
-							<strong>Ouders</strong><br/>
-							{{$profiel->o_adres}}<br/>
-							{{$profiel->o_postcode}} {{$profiel->o_woonplaats}}<br/>
-							{{$profiel->o_land}}<br/>
-							{{$profiel->o_telefoon}}
+							<ul class="list-unstyled">
+								<li><strong>Ouders</strong></li>
+								<li>{{$profiel->o_adres}}</li>
+								<li>{{$profiel->o_postcode}} {{$profiel->o_woonplaats}}</li>
+								<li>{{$profiel->o_land}}</li>
+								<li>{{$profiel->o_telefoon}}</li>
+							</ul>
 						</dd>
 					</dl>
 				@endif
@@ -256,9 +267,11 @@
 					@if($profiel->hasKinderen())
 						<dt>Kinderen</dt>
 						<dd>
-							@foreach($profiel->getKinderen() as $kind)
-								{!! $kind->getLink('civitas') !!}<br/>
-							@endforeach
+							<ul class="list-unstyled">
+								@foreach($profiel->getKinderen() as $kind)
+									<li>{!! $kind->getLink('civitas') !!}</li>
+								@endforeach
+							</ul>
 						</dd>
 					@endif
 					@if($patroon || $profiel->hasKinderen())
@@ -314,33 +327,41 @@
 				@if($besturen)
 					<dt>Bestuur</dt>
 					<dd>
-						@foreach($besturen as $bestuur)
-							<a href="{{$bestuur->getUrl()}}">{{$bestuur->naam}}</a><br/>
-						@endforeach
+						<ul class="list-unstyled">
+							@foreach($besturen as $bestuur)
+								<li><a href="{{$bestuur->getUrl()}}">{{$bestuur->naam}}</a></li>
+							@endforeach
+						</ul>
 					</dd>
 				@endif
 				@if($commissies && is_zichtbaar($profiel, 'commissies', 'intern'))
 					<dt>Commissies</dt>
 					<dd>
-						@foreach($commissies as $commissie)
-							<a href="{{$commissie->getUrl()}}">{{$commissie->naam}}</a><br/>
-						@endforeach
+						<ul class="list-unstyled">
+							@foreach($commissies as $commissie)
+								<li><a href="{{$commissie->getUrl()}}">{{$commissie->naam}}</a></li>
+							@endforeach
+						</ul>
 					</dd>
 				@endif
 				@if($onderverenigingen && is_zichtbaar($profiel, 'ondervereniging', 'intern'))
-					<dt>Onder-<br/>verenigingen</dt>
+					<dt>Onderverenigingen</dt>
 					<dd>
-						@foreach($onderverenigingen as $ondervereniging)
-							<a href="{{$ondervereniging->getUrl()}}">{{$ondervereniging->naam}}</a><br/>
-						@endforeach
+						<ul class="list-unstyled">
+							@foreach($onderverenigingen as $ondervereniging)
+								<li><a href="{{$ondervereniging->getUrl()}}">{{$ondervereniging->naam}}</a></li>
+							@endforeach
+						</ul>
 					</dd>
 				@endif
 				@if($groepen && is_zichtbaar($profiel, 'groepen', 'intern'))
-					<dt>Overige<br/>groepen</dt>
+					<dt>Overigegroepen</dt>
 					<dd>
-						@foreach($groepen as $groep)
-							<a href="{{$groep->getUrl()}}">{{$groep->naam}}</a><br/>
-						@endforeach
+						<ul class="list-unstyled">
+							@foreach($groepen as $groep)
+								<li><a href="{{$groep->getUrl()}}">{{$groep->naam}}</a></li>
+							@endforeach
+						</ul>
 					</dd>
 				@endif
 			</dl>
@@ -348,9 +369,11 @@
 				@if($werkgroepen && is_zichtbaar($profiel, 'werkgroepen', 'intern'))
 					<dt>Werkgroepen</dt>
 					<dd>
-						@foreach($werkgroepen as $werkgroep)
-							<a href="{{$werkgroep->getUrl()}}">{{$werkgroep->naam}}</a><br/>
-						@endforeach
+						<ul class="list-unstyled">
+							@foreach($werkgroepen as $werkgroep)
+								<li><a href="{{$werkgroep->getUrl()}}">{{$werkgroep->naam}}</a></li>
+							@endforeach
+						</ul>
 					</dd>
 				@endif
 			</dl>
@@ -363,11 +386,13 @@
 				</div>
 				<dl class="col-md-6 meer-groepen" style="display: none">
 					@if($ketzers)
-						<dt>Aanschaf-<br/>ketzers</dt>
+						<dt>Aanschafketzers</dt>
 						<dd>
-							@foreach($ketzers as $ketzer)
-								<a href="{{$ketzer->getUrl()}}">{{$ketzer->naam}}</a><br/>
-							@endforeach
+							<ul class="list-unstyled">
+								@foreach($ketzers as $ketzer)
+									<li><a href="{{$ketzer->getUrl()}}">{{$ketzer->naam}}</a></li>
+								@endforeach
+							</ul>
 						</dd>
 					@endif
 				</dl>
@@ -375,9 +400,11 @@
 					@if($activiteiten)
 						<dt>Activiteiten</dt>
 						<dd>
-							@foreach($activiteiten as $activiteit)
-								<a href="{{$activiteit->getUrl()}}">{{$activiteit->naam}}</a><br/>
-							@endforeach
+							<ul class="list-unstyled">
+								@foreach($activiteiten as $activiteit)
+									<li><a href="{{$activiteit->getUrl()}}">{{$activiteit->naam}}</a></li>
+								@endforeach
+							</ul>
 						</dd>
 					@endif
 				</dl>
@@ -385,51 +412,49 @@
 		</div>
 
 		@if(($profiel->isLid() OR (mag(P_LEDEN_MOD) AND $profiel->getCiviSaldo())) AND $profiel->bankrekening)
-			<div class="row">
-				<dl class="col-12">
-					@if($profiel->bankrekening && is_zichtbaar($profiel, 'bankrekening', 'profiel_lid'))
-						<dt>Bankrekening</dt>
-						<dd>
-							{{ $profiel->bankrekening }}
-							@can(P_MAAL_MOD)
-								<span class="lichtgrijs">(@if(!$profiel->machtiging)geen @endif machtiging getekend)</span>
-							@endcan
-						</dd>
-					@endif
-					@if(mag(P_FISCAAT_MOD) || is_ingelogd_account($profiel->uid))
-						<a id="CiviSaldo"></a>
-						<dt>Saldohistorie</dt>
-						<dd>
-							<a class="btn btn-primary" href="#" onclick="$('#saldoTabel').show();$(this).hide();return false;">Toon
-								recente bestellingen</a>
-							<div id="saldoTabel" style="display: none;">
-								<table class="table table-sm table-striped">
-									@foreach($bestellinglog as $bestelling)
-										<tr>
-											<td>{{implode(", ", $bestelling->inhoud)}}</td>
-											<td>{{format_bedrag($bestelling->totaal)}}</td>
-											<td>({{strftime('%D', strtotime($bestelling->moment))}})</td>
-										</tr>
-									@endforeach
-								</table>
-								<div class="text-right">
-									<a href="{{$bestellingenlink}}">Meer &#187;</a>
-								</div>
-							</div>
-						</dd>
-				</dl>
+			<dl>
+				@if($profiel->bankrekening && is_zichtbaar($profiel, 'bankrekening', 'profiel_lid'))
+					<dt>Bankrekening</dt>
+					<dd>
+						{{ $profiel->bankrekening }}
+						@can(P_MAAL_MOD)
+							<span class="lichtgrijs">(@if(!$profiel->machtiging)geen @endif machtiging getekend)</span>
+						@endcan
+					</dd>
 				@endif
 				@if(mag(P_FISCAAT_MOD) || is_ingelogd_account($profiel->uid))
-					<dl class="col-12">
-						<dt>Saldografiek</dt>
-						<dd>
-							<div class="ctx-saldografiek verborgen" data-uid="{{$profiel->uid}}"
-									 data-closed="{{json_encode(!is_ingelogd_account($profiel->uid))}}"
-									 style="width: 670px;"></div>
-						</dd>
-					</dl>
-				@endif
-			</div>
+					<a id="CiviSaldo"></a>
+					<dt>Saldohistorie</dt>
+					<dd>
+						<a class="btn btn-primary" href="#" onclick="$('#saldoTabel').show();$(this).hide();return false;">Toon
+							recente bestellingen</a>
+						<div id="saldoTabel" style="display: none;">
+							<table class="table table-sm table-striped">
+								@foreach($bestellinglog as $bestelling)
+									<tr>
+										<td>{{implode(", ", $bestelling->inhoud)}}</td>
+										<td>{{format_bedrag($bestelling->totaal)}}</td>
+										<td>({{strftime('%D', strtotime($bestelling->moment))}})</td>
+									</tr>
+								@endforeach
+							</table>
+							<div class="text-right">
+								<a href="{{$bestellingenlink}}">Meer &#187;</a>
+							</div>
+						</div>
+					</dd>
+			</dl>
+		@endif
+		@if(mag(P_FISCAAT_MOD) || is_ingelogd_account($profiel->uid))
+			<dl>
+				<dt>Saldografiek</dt>
+				<dd>
+					<div class="ctx-saldografiek verborgen" data-uid="{{$profiel->uid}}"
+							 data-closed="{{json_encode(!is_ingelogd_account($profiel->uid))}}"
+							 style="width: 670px;"></div>
+				</dd>
+			</dl>
+		@endif
 		@endif
 
 		<div class="row" id="maaltijden">
@@ -461,7 +486,7 @@
 					@endif
 				</dl>
 				<dl class="col-md-6">
-					<dt>Corvee-<br/>voorkeuren</dt>
+					<dt>Corveevoorkeuren</dt>
 					<dd>
 						<ul class="list-unstyled">
 							@foreach($corveevoorkeuren as $vrk)
@@ -514,150 +539,140 @@
 		</div>
 
 		@if(is_ingelogd_account($profiel->uid))
-			<div class="row" id="agenda">
-				<dl class="col" id="agenda_gegevens">
-					<dt>Persoonlijke ICal-feed</dt>
-					<dd>
-						@if($profiel->getAccount()->hasPrivateToken())
-							<input title="ICal-feed" class="form-control" type="text"
-										 value="{{$profiel->getAccount()->getICalLink()}}"
-										 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
-						@endif
-						&nbsp;
-						<small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
-					</dd>
-					<br/>
-				</dl>
-			</div>
+			<dl id="agenda">
+				<dt>Persoonlijke ICal-feed</dt>
+				<dd>
+					@if($profiel->getAccount()->hasPrivateToken())
+						<input title="ICal-feed" class="form-control" type="text"
+									 value="{{$profiel->getAccount()->getICalLink()}}"
+									 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
+					@endif
+					&nbsp;
+					<small>Gebruikt dezelfde private token als het forum (zie hieronder)</small>
+				</dd>
+			</dl>
 		@endif
 
 		@if($forumpostcount || is_ingelogd_account($profiel->uid))
-			<div class="row" id="forum">
-				<dl class="col" id="forum_gegevens">
-					@if(is_ingelogd_account($profiel->uid))
-						<dt>Persoonlijk RSS-feed</dt>
-						<dd>
-							@if($profiel->getAccount()->hasPrivateToken())
-								<input title="RSS-feed" class="form-control" type="text"
-											 value="{{$profiel->getAccount()->getRssLink()}}"
-											 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
-							@endif
-							&nbsp; <a name="tokenaanvragen" class="btn" href="/profiel/{{$profiel->uid}}/resetPrivateToken">Nieuwe
-								aanvragen</a>
-						</dd>
-						<br/>
-					@endif
-					@if($forumpostcount && is_zichtbaar($profiel, 'forum_posts', 'intern'))
-						<dt># bijdragen</dt>
-						<dd>
-							{{$forumpostcount}} @if($forumpostcount > 1)berichten. @else bericht. @endif
-						</dd>
-						<dt>Recent</dt>
-						<dd>
-							<table class="table table-sm table-striped">
-								@forelse($forumrecent as $post)
-									<tr>
-										<td><a href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}"
-													 title="{{$post->tekst}}"
-													 @if($post->getForumDraad()->isOngelezen())
-													 class="{{lid_instelling('forum', 'ongelezenWeergave')}}"
-												@endif
-											>
-												{{truncate($post->getForumDraad()->titel, 75)}}
-											</a>
-										</td>
-										<td>
-											@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
-												{!! reldate($post->datum_tijd) !!}
-											@else
-												{{$post->datum_tijd}}
+			<dl id="forum">
+				@if(is_ingelogd_account($profiel->uid))
+					<dt>Persoonlijk RSS-feed</dt>
+					<dd>
+						@if($profiel->getAccount()->hasPrivateToken())
+							<input title="RSS-feed" class="form-control" type="text"
+										 value="{{$profiel->getAccount()->getRssLink()}}"
+										 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
+						@endif
+						<a id="tokenaanvragen" class="btn btn-primary" href="/profiel/{{$profiel->uid}}/resetPrivateToken">
+							Nieuwe aanvragen
+						</a>
+					</dd>
+				@endif
+				@if($forumpostcount && is_zichtbaar($profiel, 'forum_posts', 'intern'))
+					<dt># bijdragen</dt>
+					<dd>
+						{{$forumpostcount}} @if($forumpostcount > 1)berichten. @else bericht. @endif
+					</dd>
+					<dt>Recent</dt>
+					<dd>
+						<table class="table table-sm table-striped">
+							@forelse($forumrecent as $post)
+								<tr>
+									<td><a href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}"
+												 title="{{$post->tekst}}"
+												 @if($post->getForumDraad()->isOngelezen())
+												 class="{{lid_instelling('forum', 'ongelezenWeergave')}}"
 											@endif
-										</td>
-									</tr>
-								@empty
-									<tr>
-										<td>Geen bijdragen</td>
-									</tr>
-								@endforelse
-							</table>
-						</dd>
-					@endif
-				</dl>
-			</div>
+										>
+											{{truncate($post->getForumDraad()->titel, 75)}}
+										</a>
+									</td>
+									<td>
+										@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
+											{!! reldate($post->datum_tijd) !!}
+										@else
+											{{$post->datum_tijd}}
+										@endif
+									</td>
+								</tr>
+							@empty
+								<tr>
+									<td>Geen bijdragen</td>
+								</tr>
+							@endforelse
+						</table>
+					</dd>
+				@endif
+			</dl>
 		@endif
 
 		@if(!empty($boeken) || is_ingelogd_account($profiel->uid) || !empty($gerecenseerdeboeken))
-			<div class="boeken row" id="boeken">
-				<dl class="col">
-					@if($boeken)
-						<dt>Boeken</dt>
-						<dd>
-							<ul class="list-unstyled">
-								@forelse($boeken as $exemplaar)
-									@php($boek = $exemplaar->getBoek())
-									<li>
-										<a href="/bibliotheek/boek/{{$boek->id}}" title="Boek: {$boek->titel}}">
-											<span title="boek" class="boekindicator">•</span><span
-												class="titel">{{$boek->titel}}</span><span
-												class="auteur">{{$boek->auteur}}</span>
-										</a>
-									</li>
-								@empty
-									<li>Geen boeken</li>
-								@endforelse
-							</ul>
-						</dd>
-					@endif
-					@if(is_ingelogd_account($profiel->uid))
-						<dt></dt>
-						<dd>
-							<a class="btn" href="/bibliotheek/boek">@icon('book_add') Nieuw boek</a>
-						</dd>
-					@endif
-					@if($gerecenseerdeboeken)
-						<dt>Boekrecensies</dt>
-						<dd>
-							<ul class="list-unstyled">
-								@forelse($gerecenseerdeboeken as $exemplaar)
-									@php($boek = $exemplaar->getBoek())
-									<li>
-										<a href="/bibliotheek/boek/{{$boek->id}}" title="Boek: {{$boek->titel}}">
-											<span title="boek" class="boekindicator">•</span><span
-												class="titel">{{$boek->titel}}</span><span
-												class="auteur">{{$boek->auteur}}</span>
-										</a>
-									</li>
-								@empty
-									<li>Geen boeken</li>
-								@endforelse
-							</ul>
-						</dd>
-					@endif
-				</dl>
-			</div>
+			<dl id="boeken" class="boeken">
+				@if($boeken)
+					<dt>Boeken</dt>
+					<dd>
+						<ul class="list-unstyled">
+							@forelse($boeken as $exemplaar)
+								@php($boek = $exemplaar->getBoek())
+								<li>
+									<a href="/bibliotheek/boek/{{$boek->id}}" title="Boek: {{$boek->titel}}">
+										<span title="boek" class="boekindicator">•</span>
+										<span class="titel">{{$boek->titel}}</span>
+										<span class="auteur">{{$boek->auteur}}</span>
+									</a>
+								</li>
+							@empty
+								<li>Geen boeken</li>
+							@endforelse
+						</ul>
+					</dd>
+				@endif
+				@if(is_ingelogd_account($profiel->uid))
+					<dt></dt>
+					<dd>
+						<a class="btn btn-primary" href="/bibliotheek/boek">@icon('book_add') Nieuw boek</a>
+					</dd>
+				@endif
+				@if($gerecenseerdeboeken)
+					<dt>Boekrecensies</dt>
+					<dd>
+						<ul class="list-unstyled">
+							@forelse($gerecenseerdeboeken as $exemplaar)
+								@php($boek = $exemplaar->getBoek())
+								<li>
+									<a href="/bibliotheek/boek/{{$boek->id}}" title="Boek: {{$boek->titel}}">
+										<span title="boek" class="boekindicator">•</span>
+										<span class="titel">{{$boek->titel}}</span>
+										<span class="auteur">{{$boek->auteur}}</span>
+									</a>
+								</li>
+							@empty
+								<li>Geen boeken</li>
+							@endforelse
+						</ul>
+					</dd>
+				@endif
+			</dl>
 		@endif
 
 		@if(is_zichtbaar($profiel, 'fotos', 'intern'))
-			<div class="fotos row" id="fotos">
-				<dl class="col">
-					<dt>Fotoalbum</dt>
-					<dd>
-						@if(empty($fotos))
-							Er zijn geen foto's gevonden met {{$profiel->getNaam('civitas')}} erop.
-						@else
-							<div class="row">
-								@foreach($fotos as $foto)
-									<div class="col-md-2">
-										@php($foto->view())
-									</div>
-								@endforeach
-								<div class="w-100"></div>
-								<a class="btn" href="/fotoalbum/{{$profiel->uid}}">Toon alle foto's</a>
-							</div>
-						@endif
-					</dd>
-				</dl>
-			</div>
+			<dl>
+				<dt>Fotoalbum</dt>
+				<dd>
+					@if(empty($fotos))
+						Er zijn geen foto's gevonden met {{$profiel->getNaam('civitas')}} erop.
+					@else
+						<div class="row">
+							@foreach($fotos as $foto)
+								<div class="col-md-2">
+									@php($foto->view())
+								</div>
+							@endforeach
+						</div>
+						<a class="btn btn-primary" href="/fotoalbum/{{$profiel->uid}}">Toon alle foto's</a>
+					@endif
+				</dd>
+			</dl>
 		@endif
 
 		@can(P_ADMIN . ',bestuur,commissie:NovCie')

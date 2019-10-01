@@ -99,10 +99,6 @@
         color: #0a338d;
         text-decoration: underline;
       }
-
-      &.btn {
-        margin-left: 75px;
-      }
     }
 
     li {
@@ -157,18 +153,6 @@ img.banaan {
 	padding: 0;
 	left: 10px;
 	bottom: 0;
-}
-
-@media screen and (max-width: 960px) {
-	#profiel {
-		.gegevens {
-			margin-left: 0;
-			padding-right: 0;
-			padding-left: 0;
-			border-left: 0;
-			max-width: unset;
-		}
-	}
 }
 
 .ProfielLogEntry {
