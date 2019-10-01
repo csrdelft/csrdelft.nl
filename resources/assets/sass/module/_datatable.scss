@@ -78,26 +78,30 @@ button, a, div {
 
 			td.toggle-childrow::before {
 				font-size: 1.1em;
-				font-family: FontAwesome;
-				content: "\f196"; // fa-plus-square-o
+				font-weight: 400;
+				font-family: 'Font Awesome 5 Free';
+				content: "\f0fe"; // fa-plus-square-o
 			}
 		}
 		tr:hover {
 			cursor: default;
 
 			td.toggle-childrow::before {
+				font-weight: 900;
 				content: "\f0fe"; // fa-plus-square
 			}
 		}
 		tr.expanded {
 
 			td.toggle-childrow::before {
-				content: "\f147"; // fa-minus-square-o
+				font-weight: 400;
+				content: "\f146"; // fa-minus-square-o
 			}
 		}
 		tr.expanded:hover {
 
 			td.toggle-childrow::before {
+				font-weight: 900;
 				content: "\f146"; // fa-minus-square
 			}
 		}
