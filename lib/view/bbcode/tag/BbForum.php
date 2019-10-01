@@ -38,10 +38,10 @@ class BbForum extends BbTag {
 		if (!LoginModel::mag(P_LOGGED_IN)) {
 			return 'Geen toegang';
 		}
-		ForumDradenModel::instance()->setAantalPerPagina($this->num);
 
 		return view('forum.bb', [
 			'deel' => $this->deel,
+			'id' => $this->content,
 		])->getHtml();
 	}
 
@@ -53,6 +53,8 @@ class BbForum extends BbTag {
 		if (isset($arguments['num'])) {
 			$this->num = (int)$arguments['num'];
 		}
+
+		ForumDradenModel::instance()->setAantalPerPagina($this->num);
 		switch ($this->content) {
 			case 'recent':
 				$this->deel = ForumDelenModel::instance()->getRecent();

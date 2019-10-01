@@ -29,7 +29,11 @@
 		</a>
 	</div>
 @endforeach
-	<small class="d-block text-right mt-3">
-		<a href="/forum/deel/{{$deel->forum_id}}">Meer lezen...</a>
-	</small>
+	<div class="d-block text-right mt-3">
+		@if($id == 'recent' || $id == 'belangrijk')
+			<a href="/forum/{{$id}}">Meer lezen...</a>
+		@else
+			<a href="/forum/deel/{{$deel->forum_id}}">Meer lezen...</a>
+		@endif
+	</div>
 </div>
