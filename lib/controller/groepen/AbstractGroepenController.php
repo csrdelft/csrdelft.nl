@@ -696,6 +696,9 @@ abstract class AbstractGroepenController extends Controller {
 		$ot_groep = $ot_groep_statement->fetch();
 
 		if ($uid) {
+			if ($ot_groep->getLid($uid)) {
+				throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
+			}
 			if (!$groep->mag(AccessAction::Afmelden) AND !$groep->mag(AccessAction::Beheren) AND !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
 				throw new CsrGebruikerException();
 			}
@@ -715,23 +718,26 @@ abstract class AbstractGroepenController extends Controller {
 				throw new CsrGebruikerException();
 			}
 
-			$response = [];
-			foreach ($selection as $UUID) {
-				if (!$groep->mag(AccessAction::Beheren)) {
-					continue;
-				}
-				$lid = Database::transaction(function () use ($UUID, $groep, $ot_groep, $model) {
+			$response = Database::transaction(function () use ($selection, $groep, $ot_groep, $model) {
+				$response = [];
+				foreach ($selection as $UUID) {
+					if (!$groep->mag(AccessAction::Beheren)) {
+						throw new CsrGebruikerException();
+					}
 					$lid = $model->retrieveByUUID($UUID);
+					if ($ot_groep->getLid($lid->uid)) {
+						throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
+					}
 					ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
 					ChangeLogModel::instance()->log($ot_groep, 'aanmelden', $lid->uid, null);
 					$model->delete($lid);
 					$lid->groep_id = $ot_groep->id;
 					$model->create($lid);
 					$lid->groep_id = $groep->id;
-					return $lid;
-				});
-				$response[] = $lid;
-			}
+
+					$response[] = $lid;
+				}
+			});
 			$this->view = new RemoveRowsResponse($response);
 		}
 
