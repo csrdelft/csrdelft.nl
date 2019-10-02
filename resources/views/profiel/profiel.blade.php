@@ -450,8 +450,7 @@
 				<dt>Saldografiek</dt>
 				<dd>
 					<div class="ctx-saldografiek verborgen" data-uid="{{$profiel->uid}}"
-							 data-closed="{{json_encode(!is_ingelogd_account($profiel->uid))}}"
-							 style="width: 670px;"></div>
+							 data-closed="{{json_encode(!is_ingelogd_account($profiel->uid))}}"></div>
 				</dd>
 			</dl>
 		@endif

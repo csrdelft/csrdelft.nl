@@ -137,6 +137,7 @@ Main components
 
 .cd-primary-nav .has-children > a::after {
 	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
 	content: $fa-var-angle-right;
 
 	right: 20px;
@@ -155,6 +156,7 @@ Main components
 
 .cd-primary-nav .go-back a::before {
 	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
 	content: $fa-var-angle-left;
 
 	right: 20px;

@@ -2,7 +2,6 @@
 
 .ishetal {
 	text-align: center;
-	width: 100%;
 	margin: 1em;
 
 	.ja, .nee {
@@ -103,8 +102,7 @@
 	}
 
 	.sponsorkliks-zijbalk {
-		margin-left: -10px;
-		width: 177px;
+		width: 100%;
 		height: 80px;
 	}
 }
@@ -119,10 +117,6 @@ Overrides voor bredere schermen
 		width: 200px;
 		padding-left: 10px;
 		border-left: 7px solid $zijbalk-border;
-
-		.sponsorkliks-zijbalk {
-			width: 193px;
-		}
 	}
 }
 
