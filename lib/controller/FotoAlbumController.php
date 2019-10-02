@@ -18,6 +18,7 @@ use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
 use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
+use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -265,19 +266,24 @@ class FotoAlbumController {
 		return new JsonResponse(true);
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
+	public function zoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			throw new CsrToegangException();
 		}
-		$query = iconv('utf-8', 'ascii//TRANSLIT', $this->getParam('q')); // convert accented characters to regular
+
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
+		$query = iconv('utf-8', 'ascii//TRANSLIT', $zoekterm); // convert accented characters to regular
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int)$this->getParam('limit');
 		}
 		$result = array();
-		foreach ($this->model->find('replace(subdir, "é", "e") REGEXP ?', array($query . '[^/]*[/]{1}$'), null, 'subdir DESC', $limit) as $album) {
+		foreach ($this->model->find('subdir LIKE ?', array('%'. $query . '%'), null, 'subdir DESC', $limit) as $album) {
 			/** @var FotoAlbum $album */
 			$result[] = array(
+				'icon' => Icon::getTag('fotoalbum', null, 'Fotoalbum', 'mr-2'),
 				'url' => $album->getUrl(),
 				'label' => $album->getParentName(),
 				'value' => ucfirst($album->dirname)

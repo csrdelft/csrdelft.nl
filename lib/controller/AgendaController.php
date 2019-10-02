@@ -20,6 +20,7 @@ use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\agenda\AgendaItemForm;
+use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
 
@@ -77,11 +78,16 @@ class AgendaController {
 		]));
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
+	public function zoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			throw new CsrToegangException();
 		}
-		$query = '%' . $this->getParam('q') . '%';
+
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
+
+		$query = '%' . $zoekterm . '%';
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int)$this->getParam('limit');
@@ -99,9 +105,10 @@ class AgendaController {
 			if ($item->getUrl()) {
 				$url = $item->getUrl();
 			} else {
-				$url = '/agenda/maand/' . $y . '/' . $m . '/' . $d . '#dag-' . $y . '-' . $m . '-' . $d;
+				$url = '/agenda/maand/' . $y . '/' . $m . '#dag-' . $y . '-' . $m . '-' . $d;
 			}
 			$result[] = array(
+				'icon' => Icon::getTag('calendar'),
 				'url' => $url,
 				'label' => $d . ' ' . strftime('%b', $begin) . ' ' . $y,
 				'value' => $item->getTitel()

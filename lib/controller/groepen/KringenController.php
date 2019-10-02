@@ -4,6 +4,7 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 
 /**
@@ -21,11 +22,14 @@ class KringenController extends AbstractGroepenController {
 		parent::__construct($query, KringenModel::instance());
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
+	public function zoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			$this->exit_http(403);
 		}
-		$zoekterm = '%' . $this->getParam('q') . '%';
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
+		$zoekterm = '%' . $zoekterm . '%';
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int)$this->getParam('limit');
@@ -36,6 +40,7 @@ class KringenController extends AbstractGroepenController {
 			$result[] = array(
 				'url' => $kring->getUrl() . '#' . $kring->id,
 				'label' => $kring->familie,
+				'icon' => Icon::getTag('Kring'),
 				'value' => 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer
 			);
 		}

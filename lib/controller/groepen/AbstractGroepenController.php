@@ -40,6 +40,7 @@ use CsrDelft\view\groepen\leden\GroepLijstView;
 use CsrDelft\view\groepen\leden\GroepOmschrijvingView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
+use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 
 /**
@@ -240,22 +241,27 @@ abstract class AbstractGroepenController extends Controller {
 		$this->view = new GroepEetwensView($groep);
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
+	public function zoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			$this->exit_http(403);
 		}
-		$zoekterm = '%' . $this->getParam('q') . '%';
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
+		$zoekterm = '%' . $zoekterm . '%';
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int)$this->getParam('limit');
 		}
 		$result = [];
-		foreach ($this->model->find('familie LIKE ?', [$zoekterm], null, null, $limit) as $groep) {
+		foreach ($this->model->find('familie LIKE ? AND (status = ? OR status = ?)', [$zoekterm, GroepStatus::HT, GroepStatus::FT], null, null, $limit) as $groep) {
 			if (!isset($result[$groep->familie])) {
+				$type = classNameZonderNamespace(get_class($groep));
 				$result[$groep->familie] = [
 					'url' => $groep->getUrl() . '#' . $groep->id,
 					'label' => 'Groepen',
-					'value' => classNameZonderNamespace(get_class($groep)) . ':' . $groep->familie
+					'value' => $type . ': ' . $groep->familie,
+					'icon' => Icon::getTag($type),
 				];
 			}
 		}

@@ -226,8 +226,8 @@ instellingen:
     verjaardagen: {titel: 'Aantal verjaardagen weergeven', type: 'Integer', opties: [0, 50], default: 9, beschrijving: ''}
     verjaardagen_pasfotos: {titel: "Pasfoto's bij verjaardagen", type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
   zoeken:
-    favorieten: {titel: 'Favorieten<span class="offtopic"> (telt niet mee voor max.)</span>', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
-    menu: {titel: 'Menu<span class="offtopic"> (telt niet mee voor max.)</span>', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    favorieten: {titel: 'Favorieten', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
+    menu: {titel: 'Menu', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
     leden:
       titel: 'Leden'
       type: Enumeration

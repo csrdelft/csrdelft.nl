@@ -66,6 +66,20 @@ class Icon {
 		'log' => 'report'
 	);
 
+	public static $fa = [
+		'calendar' => 'fa fa-calendar',
+		'forum' => 'fa fa-comments',
+		'profiel' => 'fa fa-user',
+		'fotoalbum' => 'fa fa-camera',
+		'document' => 'fa fa-file',
+		'Woonoord' => 'fa fa-home',
+		'Commissie' => 'fa fa-users',
+		'Ondervereniging' => 'fa fa-users',
+		'Kring' => 'fa fa-circle-notch',
+		'note' => 'fa fa-sticky-note',
+		'boek' => 'fa fa-book',
+	];
+
 	public static function get($key) {
 		if (array_key_exists($key, self::$alias)) {
 			return self::$alias[$key];
@@ -85,6 +99,11 @@ class Icon {
 	 */
 	public static function getTag($key, $hover = null, $title = null, $class = null, $content = null) {
 		$icon = self::get($key);
+
+		if (isset(static::$fa[$icon])) {
+			return sprintf('<span class="%s %s" title="%s">%s</span>', static::$fa[$icon], htmlspecialchars($class), htmlspecialchars($title), htmlspecialchars($content));
+		}
+
 		if ($hover !== null) {
 			$hover = 'hover-' . self::get($hover);
 		}

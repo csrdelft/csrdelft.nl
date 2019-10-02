@@ -38,6 +38,12 @@ maaltijden-fiscaat: { resource: routes/maaltijden_fiscaat.yaml }
 maaltijden-ketzer: { resource: routes/maaltijden_ketzer.yaml }
 maaltijden-repetities: { resource: routes/maaltijden_repetities.yaml }
 
+zoeken:
+  path: /zoeken
+  controller: CsrDelft\controller\ZoekController::zoeken
+  methods: [GET,POST]
+  options: { mag: P_LOGGED_IN }
+
 logger:
   path: /logger/log
   controller: CsrDelft\controller\LoggerController::log

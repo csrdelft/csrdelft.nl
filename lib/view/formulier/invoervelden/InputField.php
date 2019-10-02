@@ -548,6 +548,7 @@ JS;
 	name: "{$dataset[$name]}",
 	display: "value",
 	source: {$dataset[$name]}.ttAdapter(),
+	limit: 20,
 	templates: {
 		{$header}
 		suggestion: function (suggestion) {

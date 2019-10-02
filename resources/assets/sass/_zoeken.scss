@@ -27,6 +27,10 @@ span.twitter-typeahead {
 
 	}
 
+	.fa, .ico {
+		margin-right: $spacer * .5;
+	}
+
 	.tt-suggestion {
 		display: block;
 		overflow: hidden;

@@ -1,3 +1,9 @@
+agenda-zoeken:
+  path: /agenda/zoeken
+  controller: CsrDelft\controller\AgendaController::zoeken
+  methods: GET
+  options: { mag: P_AGENDA_READ }
+
 agenda-details:
   path: /agenda/details/{uuid}
   controller: CsrDelft\controller\AgendaController::details
@@ -42,12 +48,6 @@ agenda-ics:
   controller: CsrDelft\controller\AgendaController::ical
   methods: GET
   options: { mag: P_PUBLIC }
-
-agenda-zoeken:
-  path: /agenda/zoeken
-  controller: CsrDelft\controller\AgendaController::zoeken
-  methods: GET
-  options: { mag: P_AGENDA_READ }
 
 agenda-courant:
   path: /agenda/courant

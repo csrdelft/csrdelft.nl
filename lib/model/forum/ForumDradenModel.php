@@ -181,8 +181,14 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	}
 
 	public function zoeken(ForumZoeken $forumZoeken) {
-		$attributes = ['*', 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
-		$where_params = [$forumZoeken->zoekterm, $forumZoeken->van, $forumZoeken->tot];
+		// Als er geen spatie in de zoekterm zit, doe dan keyword search met '<zoekterm>*'
+		if (strstr($forumZoeken->zoekterm, ' ') == false) {
+			$attributes = ['*', 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score'];
+			$where_params = [$forumZoeken->zoekterm . '*', $forumZoeken->van, $forumZoeken->tot];
+		} else {
+			$attributes = ['*', 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
+			$where_params = [$forumZoeken->zoekterm, $forumZoeken->van, $forumZoeken->tot];
+		}
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND laatst_gewijzigd >= ? AND laatst_gewijzigd <= ?';
 		if (!LoginModel::mag(P_LOGGED_IN)) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';

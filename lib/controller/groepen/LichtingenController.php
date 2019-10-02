@@ -20,11 +20,13 @@ class LichtingenController extends AbstractGroepenController {
 		parent::__construct($query, LichtingenModel::instance());
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
+	public function zoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			$this->exit_http(403);
 		}
-		$zoekterm = $this->getParam('q');
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
 		$result = array();
 		if (is_numeric($zoekterm)) {
 

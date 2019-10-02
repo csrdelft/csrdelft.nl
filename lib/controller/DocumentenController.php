@@ -14,6 +14,7 @@ use CsrDelft\view\documenten\DocumentBewerkenForm;
 use CsrDelft\view\documenten\DocumentContent;
 use CsrDelft\view\documenten\DocumentDownloadContent;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
+use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
 
@@ -158,11 +159,13 @@ class DocumentenController {
 		}
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
+	public function zoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			throw new CsrToegangException();
 		}
-		$zoekterm = $this->getParam('q');
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
 
 		if ($this->hasParam('limit')) {
 			$limit = (int)$this->getParam('limit');
@@ -177,6 +180,7 @@ class DocumentenController {
 					'url' => '/documenten/bekijken/' . $doc->id . '/' . $doc->filename,
 					'label' => $this->documentModel->getCategorieModel()->find('id = ?', [$doc->categorie_id])->fetch()->naam,
 					'value' => $doc->naam,
+					'icon' => Icon::getTag('document'),
 					'id' => $doc->id
 				);
 			}
