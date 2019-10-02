@@ -175,6 +175,10 @@ ul.contact {
       width: 2.5em;
     }
 
+		&.fa-facebook:before {
+			font-family: 'Font Awesome 5 Brands';
+		}
+
     &:first-child {
       margin-top: 0;
     }

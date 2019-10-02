@@ -1,3 +1,4 @@
+@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "variables";
 
 #header {
@@ -67,7 +68,7 @@
           font-style: normal;
           font-weight: 900;
           text-transform: none !important;
-          content: '\f0c9';
+          content: fa-content($fa-var-bars);
         }
 
         &:hover {
