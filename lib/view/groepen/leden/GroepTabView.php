@@ -29,7 +29,7 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Lijst . '" title="' . GroepTab::getDescription(GroepTab::Lijst) . ' tonen"><span class="fa fa-align-justify"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="' . GroepTab::getDescription(GroepTab::Statistiek) . ' tonen"><span class="fa fa-pie-chart"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="' . GroepTab::getDescription(GroepTab::Statistiek) . ' tonen"><span class="fa fa-chart-pie"></span></a></li>';
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="' . GroepTab::getDescription(GroepTab::Emails) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
 
