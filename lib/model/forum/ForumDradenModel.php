@@ -196,15 +196,21 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		}
 		$order = 'score DESC, plakkerig DESC';
 		$where .= ' HAVING score > 0';
-		$results = Database::instance()->sqlSelect(
-			$attributes,
-			$this->getTableName(),
-			$where,
-			$where_params,
-			null,
-			$order,
-			$forumZoeken->limit
-		);
+		try {
+			$results = Database::instance()->sqlSelect(
+				$attributes,
+				$this->getTableName(),
+				$where,
+				$where_params,
+				null,
+				$order,
+				$forumZoeken->limit
+			);
+		} catch (\PDOException $ex) {
+			setMelding('Op deze term kan niet gezocht worden', -1);
+			// Syntax error in de MATCH in BOOLEAN MODE
+			return [];
+		}
 		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 		return $results;
 	}
