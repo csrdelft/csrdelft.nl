@@ -453,21 +453,21 @@ pre.bbcode {
   cursor: pointer;
 }
 
-.citaatContainer {
-  margin: 5px 5px 5px 20px;
-}
-
-.citaat {
-  background-color: darken($bb-block-bg, 5%);
-  padding: 5px 10px 5px 10px;
-}
-
-.citaatContainer .citaat .citaatContainer .citaat {
-  background-color: $bb-block-bg;
-}
-
-.citaatContainer .citaat .citaatContainer .citaat .citaatContainer .citaat {
-  background-color: darken($bb-block-bg, 5%);
+.citaat, blockquote {
+	padding-left: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	position: relative;
+	&::before {
+		background: #d3d3d3;
+		top: 0;
+		width: 4px;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		border-radius: 4px;
+		content: '';
+	}
 }
 
 .bb-img-loading {

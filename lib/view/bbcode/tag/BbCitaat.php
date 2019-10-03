@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\bbcode\BbHelper;
 
@@ -12,7 +13,9 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbCitaat extends BbTag {
 	private $bron_text = null;
+	/** @var Profiel */
 	private $bron_profiel = null;
+	/** @var string */
 	private $bron_url = null;
 	private $hidden = false;
 	public function renderLight() {
@@ -35,9 +38,10 @@ class BbCitaat extends BbTag {
 	 * @param optional String $arguments['citaat'] Naam of lidnummer van wie geciteerd wordt
 	 * @param optional String $arguments['url'] Link naar bron van het citaat
 	 *
-	 * @example [citaat=1234]Citaat[/citaat]
+	 * @return string
 	 * @example [citaat=Jan_Lid url=https://csrdelft.nl]Citaat[/citaat]
 	 * @example [citaat]Citaat[/citaat]
+	 * @example [citaat=1234]Citaat[/citaat]
 	 */
 	public function render($arguments = array()) {
 		if (!$this->hidden) {
@@ -45,7 +49,7 @@ class BbCitaat extends BbTag {
 		} else {
 			$content = '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();"><div class="meercitaat verborgen">' . $this->content . '</div><div class="citaatpuntjes" title="Toon citaat">...</div></div>';
 		}
-		$text = '<div class="citaatContainer bb-tag-citaat">Citaat';
+		$text = '<div class="citaatContainer bb-tag-citaat"><em>Citaat';
 
 		if ($this->bron_profiel != null) {
 			$text .= ' van ' . $this->bron_profiel->getLink('user');
@@ -57,7 +61,7 @@ class BbCitaat extends BbTag {
 			}
 		}
 
-		return $text . ':<div class="citaat">' . trim($content) . '</div></div>';
+		return $text . ':</em><blockquote>' . trim($content) . '</blockquote></div>';
 	}
 
 	public static function getTagName() {
@@ -69,7 +73,7 @@ class BbCitaat extends BbTag {
 		$this->env->quote_level++;
 		$this->readContent();
 		$this->env->quote_level--;
-		$this->hidden = $this->env->quote_level != 0;
+		$this->hidden = $this->env->quote_level > 1;
 		if (isset($arguments['citaat'])) {
 			$bron = $arguments['citaat'];
 			$profiel = mag("P_LEDEN_READ,P_OUDLEDEN_READ") ? ProfielModel::get($bron) : null;
