@@ -20,7 +20,7 @@ use CsrDelft\view\formulier\ModalForm;
 class RepetitieCorveeForm extends ModalForm {
 
 	public function __construct(CorveeRepetitie $repetitie, $beginDatum = null, $eindDatum = null, $mid = null) {
-		parent::__construct(null, '/corvee/repetities/nieuw/' . $repetitie->crv_repetitie_id);
+		parent::__construct(null, '/corvee/beheer/aanmaken/' . $repetitie->crv_repetitie_id);
 		$this->titel = 'Periodiek corvee aanmaken';
 
 		$fields = [];
