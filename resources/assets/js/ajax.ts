@@ -61,6 +61,9 @@ export function ajaxRequest(
 			modalClose();
 		}
 		if (onerror) {
+			if (response.responseText.startsWith('<!DOC')) {
+				onerror('Er ging iets fout, code is: ' + response.status);
+			}
 			onerror(response.responseText);
 		}
 	}).always(() => {
