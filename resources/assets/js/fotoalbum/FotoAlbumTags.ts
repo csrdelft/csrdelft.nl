@@ -74,7 +74,7 @@ export class FotoAlbumTags {
 		$('<li></li>').append(btnDelTag).appendTo('#tagMenu');
 
 		// knopje taggen
-		const btnTag = $('<span class="fa fa-smile-o jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>');
+		const btnTag = $('<span class="fa fa-smile jgallery-btn jgallery-btn-small" tooltip="Leden etiketteren"></span>');
 		btnTag.on('click', () => {
 			if (this.tagMode) {
 				this.tagMode = false;
