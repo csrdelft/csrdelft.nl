@@ -149,15 +149,20 @@ class ForumController {
 	/**
 	 * Draden zoeken op titel voor auto-aanvullen.
 	 *
+	 * @param null $zoekterm
 	 * @return View
 	 */
-	public function titelzoeken() {
-		if (!$this->hasParam('q')) {
+	public function titelzoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			return new JsonResponse([]);
 		}
 
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
+
 		$result = [];
-		$query = $this->getParam('q');
+		$query = $zoekterm;
 		$limit = $this->hasParam('limit') ? (int)$this->getParam('limit') : 5;
 
 		$forumZoeken = ForumZoeken::nieuw($query, $limit, ['titel']);
@@ -855,7 +860,7 @@ class ForumController {
 			$icon = Icon::getTag('note');
 			$title = 'Dit onderwerp is plakkerig, het blijft bovenaan';
 		} else {
-			$icon = false;
+			$icon = Icon::getTag('forum');
 			$title = false;
 		}
 

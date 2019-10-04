@@ -81,11 +81,12 @@ class CmsPaginaController {
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
 			$pagina->laatst_gewijzigd = getDateTime();
-			$rowCount = $this->cmsPaginaModel->update($pagina);
-			if ($rowCount > 0) {
-				setMelding('Bijgewerkt', 1);
-			} else {
-				setMelding('Geen wijzigingen', 0);
+			if ($this->cmsPaginaModel->exists($pagina)) {
+				$this->cmsPaginaModel->update($pagina);
+				setMelding('Bijgewerkt: ' . $pagina->naam, 1);
+	 		} else {
+				$this->cmsPaginaModel->create($pagina);
+				setMelding('Ingevoegd: ' . $pagina->naam, 1);
 			}
 			redirect('/pagina/' . $pagina->naam);
 		} else {

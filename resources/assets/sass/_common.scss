@@ -349,25 +349,22 @@ div.hoverIntentContent {
 }
 
 .visitekaartje {
+	z-index: 1000;
   width: 330px;
+	color: $body-color;
 
-  img {
-    float: right;
-    height: auto !important;
-    max-width: 100px;
-  }
+	img {
+		width: 100px;
+		object-fit: contain;
+		object-position: top;
+	}
 
-  p {
-    margin: 8px 0 0 10px;
-    color: #000 !important;
+	p a {
+		color: $body-color;
+	}
 
-    a {
-      color: #0a338d !important;
-    }
-  }
   p.naam a {
     font-weight: bold;
-    color: #000 !important;
   }
 
   .uid {

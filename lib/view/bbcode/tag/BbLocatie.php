@@ -15,33 +15,42 @@ use function urlencode;
  */
 class BbLocatie extends BbTag {
 
-	public function getTagName() {
-		return 'locatie';
+	/**
+	 * @var int
+	 */
+	private $height;
+
+	public static function getTagName() {
+		return ['map', 'kaart', 'locatie'];
 	}
 
-	public function parseLight($arguments = []) {
-		$address = $this->getContent();
+	public function renderLight() {
+		$address = $this->content;
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
 		return BbHelper::lightLinkInline($this->env, 'locatie', $url, $address);
 	}
 
-	public function parse($arguments = []) {
-		$address = $this->getContent();
+	public function render() {
+		$address = $this->content;
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
 		if (trim(htmlspecialchars($address)) == '') {
 			$maps = 'Geen adres opgegeven';
 		} else {
-			// Hoogte maakt niet veel uit
-			if (isset($arguments['h']) && $arguments['h'] <= 900) {
-				$height = (int)$arguments['h'];
-			} else {
-				$height = 450;
-			}
-
-			$maps = '<iframe height="' . $height . '" frameborder="0" style="border:0;width:100%" src="https://www.google.com/maps/embed/v1/place?q=' . urlencode(htmlspecialchars($address)) . '&key=' . Ini::lees(Ini::GOOGLE, 'embed_key') . '"></iframe>';
+			$maps = '<iframe height="' . $this->height . '" frameborder="0" style="border:0;width:100%" src="https://www.google.com/maps/embed/v1/place?q=' . urlencode(htmlspecialchars($address)) . '&key=' . Ini::lees(Ini::GOOGLE, 'embed_key') . '"></iframe>';
 		}
 		$map = $maps;
 		return '<span class="hoverIntent"><a href="' . $url . '">' . $address . Icon::getTag('map', null, 'Kaart', 'text') . '</a><div class="hoverIntentContent">' . $map . '</div></span>';
+	}
+
+	public function parse($arguments = [])
+	{
+		// Hoogte maakt niet veel uit
+		if (isset($arguments['h']) && $arguments['h'] <= 900) {
+			$this->height = (int)$arguments['h'];
+		} else {
+			$this->height = 450;
+		}
+		$this->readContent([], false);
 	}
 
 }

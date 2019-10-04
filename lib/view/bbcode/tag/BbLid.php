@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -16,12 +17,17 @@ use CsrDelft\view\bbcode\BbHelper;
  * @example [lid]0436[/lid]
  */
 class BbLid extends BbTag {
-	public function getTagName() {
+	public static function getTagName() {
 		return 'lid';
 	}
 
-	public function parseLight($arguments = []) {
-		$profiel = $this->getProfiel($arguments);
+	public function isAllowed()
+	{
+		return LoginModel::mag(P_LEDEN_READ . "," . P_OUDLEDEN_READ);
+	}
+
+	public function renderLight() {
+		$profiel = $this->getProfiel();
 		return BbHelper::lightLinkInline($this->env, 'lid', '/profiel/' . $profiel->uid, $profiel->getNaam('user'));
 	}
 
@@ -30,20 +36,28 @@ class BbLid extends BbTag {
 	 * @return \CsrDelft\model\entity\profiel\Profiel|false
 	 * @throws BbException
 	 */
-	private function getProfiel($arguments) {
-		$uid = $this->getArgument($arguments);
-		$profiel = ProfielModel::get($uid);
+	private function getProfiel() {
+		$profiel = ProfielModel::get($this->content);
 
 		if (!$profiel) {
-			throw new BbException('[lid] ' . htmlspecialchars($uid) . '] &notin; db.');
+			throw new BbException('[lid] ' . htmlspecialchars($this->content) . '] &notin; db.');
 		}
 
 		return $profiel;
 	}
 
-	public function parse($arguments = []) {
-		$profiel = $this->getProfiel($arguments);
-		return $profiel->getLink('user');
+	public function render() {
+			$profiel = $this->getProfiel();
+			return $profiel->getLink('user');
 	}
 
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
+	}
 }

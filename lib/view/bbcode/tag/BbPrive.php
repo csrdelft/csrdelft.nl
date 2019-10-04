@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\security\LoginModel;
 
@@ -16,29 +17,34 @@ use CsrDelft\model\security\LoginModel;
  * @example [prive=commissie:PubCie]Tekst[/prive]
  */
 class BbPrive extends BbTag {
-	public function getTagName() {
+	/**
+	 * @var string
+	 */
+	private $permissie;
+
+	public function isAllowed()
+	{
+		return LoginModel::mag($this->permissie);
+	}
+
+	public static function getTagName() {
 		return 'prive';
 	}
 
-	public function parse($arguments = []) {
-		if (isset($arguments['prive'])) {
-			$permissie = $arguments['prive'];
-		} else {
-			$permissie = P_LOGGED_IN;
-		}
-		if (!LoginModel::mag($permissie)) {
-			$this->parser->bb_mode = false;
-			$forbidden = ['prive'];
-		} else {
-			$forbidden = [];
-		}
-		// content moet altijd geparsed worden, anders blijft de inhoud van de tag gewoon staan
-		$content = '<span class="bb-prive bb-tag-prive">' . $this->getContent($forbidden) . '</span>';
-		if (!LoginModel::mag($permissie)) {
-			$content = '';
-			$this->parser->bb_mode = true;
-		}
+	public function render() {
+		$content = '<span class="bb-prive bb-tag-prive">' . $this->content . '</span>';
 
 		return $content;
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readContent();
+		$this->permissie = $arguments['prive'] ?? 'P_LOGGED_IN';
 	}
 }

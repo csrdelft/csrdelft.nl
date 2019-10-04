@@ -10,7 +10,7 @@ use CsrDelft\model\groepen\RechtenGroepenModel;
  */
 class BbGroep extends BbTagGroep {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'groep';
 	}
 

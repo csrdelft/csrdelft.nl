@@ -20,6 +20,7 @@ use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
 use CsrDelft\view\bibliotheek\BoekFormulier;
 use CsrDelft\view\bibliotheek\RecensieFormulier;
 use CsrDelft\view\cms\CmsPaginaView;
+use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\renderer\TemplateView;
 
@@ -299,11 +300,10 @@ class BibliotheekController {
 	 */
 	public function exemplaarlenen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
-		if ($this->boekExemplaarModel->leen($exemplaar, LoginModel::getUid())) {
-			redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
-		} else {
+		if (!$this->boekExemplaarModel->leen($exemplaar, LoginModel::getUid())) {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
+		redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
 	}
 
 
@@ -374,15 +374,18 @@ class BibliotheekController {
 		}
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
+	public function zoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			throw new CsrToegangException();
 		}
-		$zoekterm = $this->getParam('q');
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
 		$result = array();
 		foreach ($this->model->autocompleteBoek($zoekterm) as $boek) {
 			$result[] = array(
 				'url' => '/bibliotheek/boek/' . $boek->id,
+				'icon' => Icon::getTag('boek'),
 				'label' => $boek->auteur,
 				'value' => $boek->titel
 			);

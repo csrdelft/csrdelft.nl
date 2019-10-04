@@ -6,6 +6,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 
@@ -15,20 +16,30 @@ use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
  */
 class BbLedenmemoryscores extends BbTag {
 
-	public function getTagName() {
+	/**
+	 * @var \CsrDelft\model\entity\groepen\AbstractGroep|\CsrDelft\model\entity\groepen\Lichting|false|null
+	 */
+	private $groep;
+	private $titel;
+
+	public function isAllowed()
+	{
+		LoginModel::mag(P_LOGGED_IN);
+	}
+
+	public static function getTagName() {
 		return 'ledenmemoryscores';
 	}
 
-	public function parseLight($arguments = []) {
-		list($groep, $titel) = $this->getGroepAndTitel($arguments);
-		return BbHelper::lightLinkBlock('ledenmemoryscores', '/forum/onderwerp/8017', 'Ledenmemory Scores', $titel);
+	public function renderLight() {
+		return BbHelper::lightLinkBlock('ledenmemoryscores', '/forum/onderwerp/8017', 'Ledenmemory Scores', $this->titel);
 	}
 
 	/**
 	 * @param $arguments
 	 * @return array
 	 */
-	private function getGroepAndTitel($arguments): array {
+	function parse($arguments = []) {
 		LedenMemoryScoresModel::instance();
 		$groep = null;
 		$titel = null;
@@ -54,12 +65,12 @@ class BbLedenmemoryscores extends BbTag {
 				$groep = $lichting;
 			}
 		}
-		return array($groep, $titel);
+		$this->groep = $groep;
+		$this->titel = $titel;
 	}
 
-	public function parse($arguments = []) {
-		list($groep, $titel) = $this->getGroepAndTitel($arguments);
-		$table = new LedenMemoryScoreTable($groep, $titel);
+	public function render() {
+		$table = new LedenMemoryScoreTable($this->groep, $this->titel);
 		return $table->getHtml();
 	}
 }

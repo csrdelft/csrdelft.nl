@@ -2,8 +2,10 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
+use CsrDelft\model\security\LoginModel;
 
 /**
  * Toont content als instelling een bepaalde waarde heeft, standaard 'ja';
@@ -14,32 +16,53 @@ use CsrDelft\common\CsrException;
  */
 class BbInstelling extends BbTag {
 
-	public function getTagName() {
+	private $module;
+	private $testwaarde;
+	private $instelling;
+
+	public function isAllowed()
+	{
+		LoginModel::mag(P_LOGGED_IN);
+	}
+
+	public static function getTagName() {
 		return 'instelling';
 	}
 
-	public function parse($arguments = []) {
-		$content = $this->getContent();
-		if (!array_key_exists('instelling', $arguments) || !isset($arguments['instelling'])) {
-			return 'Geen of een niet bestaande instelling opgegeven: ' . htmlspecialchars($arguments['instelling']);
-		}
-		if (!array_key_exists('module', $arguments) || !isset($arguments['module'])) { // backwards compatibility
-			$key = explode('_', $arguments['instelling'], 2);
-			$arguments['module'] = $key[0];
-			$arguments['instelling'] = $key[1];
-		}
-		$testwaarde = 'ja';
-		if (isset($arguments['waarde'])) {
-			$testwaarde = $arguments['waarde'];
+	public function render() {
+		if ($this->instelling == null) {
+			return 'Geen instelling opgegeven';
 		}
 		try {
-			if (lid_instelling($arguments['module'], $arguments['instelling']) == $testwaarde) {
-				return $content;
+			if (lid_instelling($this->module, $this->instelling) == $this->testwaarde) {
+				return $this->content;
 			}
 		} catch (CsrException $e) {
 			return '[instelling]: ' . $e->getMessage();
 		}
 
 		return '';
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readContent();
+		if (!array_key_exists('instelling', $arguments) || !isset($arguments['instelling'])) {
+			return;
+		}
+		if (!array_key_exists('module', $arguments) || !isset($arguments['module'])) { // backwards compatibility
+			$key = explode('_', $arguments['instelling'], 2);
+			$this->module = $key[0];
+			$this->instelling = $key[1];
+		} else {
+			$this->instelling = $arguments['instelling'];
+			$this->module = $arguments['module'];
+		}
+		$this->testwaarde = $arguments['waarde'] ?? "ja";
 	}
 }

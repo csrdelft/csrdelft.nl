@@ -1,9 +1,11 @@
 /**
  * Laad alle externe libs en knoop de goede dingen aan elkaar.
  */
+import axios from 'axios';
 import Bloodhound from 'corejs-typeahead';
 import Dropzone from 'dropzone';
 import $ from 'jquery';
+import Popper from 'popper.js';
 import Vue from 'vue';
 import {ketzerAjax} from './ajax';
 import {bbvideoDisplay, CsrBBPreview} from './bbcode';
@@ -98,7 +100,7 @@ $.extend(window, {
 		// See blade_templates/forum/partial/post_forum.blade.php
 		saveConceptForumBericht,
 	},
-	// See templates/maalcie/maaltijd/maaltijd_ketzer.tpl
+	// See resources/views/maaltijden/bb.blade.php
 	ketzerAjax,
 	maalcie: {
 		// See view/maalcie/forms/SuggestieLijst.php
@@ -136,6 +138,8 @@ $.timeago.settings.strings = {
 	years: '%d jaar',
 };
 
+const kaartjes = {};
+
 ctx.addHandlers({
 	'.hoverIntent': (el) => $(el).hoverIntent({
 		over() {
@@ -146,5 +150,35 @@ ctx.addHandlers({
 		},
 		timeout: 250,
 	}),
+	'[data-visite]': (el: HTMLElement) => {
+
+		const uid = el.dataset!.visite as string;
+		if (!kaartjes.hasOwnProperty(uid)) {
+			kaartjes[uid] = document.createElement('div');
+			kaartjes[uid].style.zIndex = '1000';
+		}
+		let loading = false;
+		let loaded = false;
+		el.addEventListener('mouseenter', async () => {
+			if (loading) {
+				return;
+			}
+
+			el.append(kaartjes[uid]);
+			// tslint:disable-next-line:no-unused-expression
+			new Popper(el, kaartjes[uid], {placement: 'bottom-start'});
+
+			loading = true;
+			if (!loaded) {
+				const kaartje = await axios.get(`/profiel/${el.dataset!.visite}/kaartje`);
+				kaartjes[uid].innerHTML = kaartje.data;
+				loaded = true;
+			}
+			loading = false;
+		});
+		el.addEventListener('mouseleave', () => {
+			kaartjes[uid].remove();
+		});
+	},
 	'.vue-context': (el) => new Vue({el}),
 });

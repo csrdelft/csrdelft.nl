@@ -33,6 +33,7 @@ class PeilingForm extends ModalForm
 		$fields = [];
 
 		$fields[] = new HiddenField('id', $model->id);
+		$fields[] = new HiddenField('eigenaar', $model->eigenaar);
 		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
 		$fields[] = new RequiredBBCodeField('beschrijving', $model->beschrijving, 'Beschrijving');
 		$fields[] = new JaNeeField('resultaat_zichtbaar', $model->resultaat_zichtbaar, 'Resultaat zichtbaar');

@@ -1,3 +1,4 @@
+@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "variables";
 
 .float-left {
@@ -167,9 +168,9 @@ input[type="radio"] {
     &:before {
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
-      font-family: FontAwesome;
+      font-family: 'Font Awesome 5 Free';
       font-style: normal;
-      font-weight: normal;
+      font-weight: 900;
       text-transform: none !important;
       background: rgba(255, 255, 255, 0.025);
       border-radius: 5px;
@@ -189,7 +190,7 @@ input[type="radio"] {
   &:checked + label:before {
     background: #ffffff;
     border-color: #ffffff;
-    content: '\f00c';
+    content: fa-content($fa-var-check);
     color: #2e3141;
   }
 }

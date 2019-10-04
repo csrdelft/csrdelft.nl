@@ -10,7 +10,7 @@ use CsrDelft\model\groepen\ActiviteitenModel;
  */
 class BbActiviteit extends BbTagGroep {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'activiteit';
 	}
 

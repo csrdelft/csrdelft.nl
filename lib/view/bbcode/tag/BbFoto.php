@@ -21,20 +21,31 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  */
 class BbFoto extends BbTag {
 
-	public function getTagName() {
+	/**
+	 * @var bool
+	 */
+	private $responsive;
+	/**
+	 * @var Foto
+	 */
+	private $foto;
+	public function isAllowed()
+	{
+		return $this->foto->magBekijken();
+	}
+
+	public static function getTagName() {
 		return 'foto';
 	}
 
-	public function parseLight($arguments = []) {
-		$url = urldecode($this->getContent());
-		$foto = $this->getFoto(explode('/', $url), $url);
-		return BbHelper::lightLinkThumbnail('foto', $foto->getAlbumUrl() . '#' . $foto->getResizedUrl(), CSR_ROOT . $foto->getThumbUrl());
+	public function renderLight() {
+		return BbHelper::lightLinkThumbnail('foto', $this->foto->getAlbumUrl() . '#' . $this->foto->getResizedUrl(), CSR_ROOT . $this->foto->getThumbUrl());
 	}
 
-	public function parse($arguments = []) {
-		$url = urldecode($this->getContent());
+	public function render() {
+		$url = $this->content;
 		$parts = explode('/', $url);
-		$fototag = new FotoBBView($this->getFoto($parts, $url), in_array('Posters', $parts), isset($arguments['responsive']));
+		$fototag = new FotoBBView($this->foto, in_array('Posters', $parts), $this->responsive);
 		return $fototag->getHtml();
 	}
 
@@ -58,5 +69,17 @@ class BbFoto extends BbTag {
 		} catch (ResourceNotFoundException $ex) {
 			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>');
 		}
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->responsive = isset($arguments['responsive']);
+		$this->readMainArgument($arguments);
+		$this->foto =  $this->getFoto(explode('/', $this->content), $this->content);
 	}
 }

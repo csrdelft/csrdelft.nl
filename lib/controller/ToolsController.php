@@ -19,6 +19,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
@@ -214,19 +215,20 @@ class ToolsController {
 		}
 	}
 
-	public function naamsuggesties() {
+	public function naamsuggesties($zoekin = null, $status = null, $query = '') {
 		//welke subset van leden?
-		$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
+		if (empty($zoekin)) {
+			$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
+		}
 		$toegestanezoekfilters = array('leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies');
-		if (isset($_GET['zoekin']) && in_array($_GET['zoekin'], $toegestanezoekfilters)) {
+		if (empty($zoekin) && isset($_GET['zoekin']) && in_array($_GET['zoekin'], $toegestanezoekfilters)) {
 			$zoekin = $_GET['zoekin'];
 		}
-		if (isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
+		if (empty($zoekin) && isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
 			$zoekin = lid_instelling('forum', 'lidSuggesties');
 		}
 
-		$query = '';
-		if (isset($_GET['q'])) {
+		if (empty($query) && isset($_GET['q'])) {
 			$query = $_GET['q'];
 		}
 		$limiet = 20;
@@ -270,6 +272,7 @@ class ToolsController {
 			$profiel = $scoredProfiel['profiel'];
 
 			$result[] = array(
+				'icon' => Icon::getTag('profiel', null, 'Profiel', 'mr-2'),
 				'url' => '/profiel/' . $profiel->uid,
 				'label' => $profiel->uid,
 				'value' => $profiel->getNaam($vorm),

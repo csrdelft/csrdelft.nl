@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 
 /**
@@ -14,14 +15,23 @@ use CsrDelft\bb\BbTag;
  */
 class BbUbboff extends BbTag {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return ['ubboff', 'tekst'];
 	}
 
-	public function parse($arguments = []) {
+	public function render() {
+		return $this->content;
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
 		$this->parser->bb_mode = false;
-		$content = $this->getContent();
+		$this->readContent();
 		$this->parser->bb_mode = true;
-		return $content;
 	}
 }

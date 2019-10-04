@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\mededelingen\MededelingenView;
 
@@ -17,18 +18,22 @@ use CsrDelft\view\mededelingen\MededelingenView;
  */
 class BbMededelingen extends BbTag {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'mededelingen';
 	}
+	public function isAllowed()
+	{
+		LoginModel::mag(P_LOGGED_IN);
+	}
 
-	public function parseLight($arguments = []) {
-		$type = $this->getArgument($arguments);
+	public function renderLight() {
+		$type = $this->content;
 		$this->assertType($type);
 		return BbHelper::lightLinkBlock('mededelingen', '/mededelingen', 'Mededelingen', 'Bekijk de laatste mededelingen');
 	}
 
-	public function parse($arguments = []) {
-		$type = $this->getArgument($arguments);
+	public function render() {
+		$type = $this->content;
 		$this->assertType($type);
 		$MededelingenView = new MededelingenView(0);
 		switch ($type) {
@@ -50,5 +55,15 @@ class BbMededelingen extends BbTag {
 		if ($type == '') {
 			throw new BbException('[mededelingen] Geen geldig mededelingenblok.');
 		}
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
 	}
 }

@@ -1,5 +1,8 @@
 @import "~lightbox2/dist/css/lightbox.css";
-@import "~font-awesome/css/font-awesome.css";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
 @import "~jquery-ui/themes/base/tooltip.css";
 
 @import "extern/fonts";
@@ -116,14 +119,14 @@ a {
 			&:before {
 				-moz-osx-font-smoothing: grayscale;
 				-webkit-font-smoothing: antialiased;
-				font-family: FontAwesome;
+				font-family: 'Font Awesome 5 Free';
 				font-style: normal;
-				font-weight: normal;
+				font-weight: 900;
 				text-transform: none !important;
 				transition: background-color 0.2s ease-in-out;
 				border-radius: 100%;
 				border: solid 2px rgba(255, 255, 255, 0.5);
-				content: '\f105';
+				content: fa-content($fa-var-angle-right);
 				display: inline-block;
 				font-size: 1.25em;
 				height: 2em;

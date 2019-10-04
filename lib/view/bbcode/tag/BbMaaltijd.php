@@ -23,42 +23,44 @@ use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
  */
 class BbMaaltijd extends BbTag {
 
-	public function getTagName() {
+	/**
+	 * @var Maaltijd[]
+	 */
+	private $maaltijden;
+
+	public static function getTagName() {
 		return 'maaltijd';
 	}
 
-	public function parseLight($arguments = []) {
-		$mid = $this->getArgument($arguments);
-		list($maaltijd2, $maaltijd) = $this->getMaaltijd($mid);
+	public function isAllowed()
+	{
+		return LoginModel::mag(P_LOGGED_IN);
+	}
+
+	public function renderLight() {
+		$maaltijd = $this->maaltijden[0];
 		$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
 		return BbHelper::lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->datum . ' ' . $maaltijd->tijd);
 	}
 
-	public function parse($arguments = []) {
-		$mid = $this->getArgument($arguments);
-		list($maaltijd2, $maaltijd) = $this->getMaaltijd($mid);
-
-		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
-		if (empty($aanmeldingen)) {
-			$aanmelding = null;
-		} else {
-			$aanmelding = $aanmeldingen[$maaltijd->maaltijd_id];
-		}
-		$ketzer = new MaaltijdKetzerView($maaltijd, $aanmelding);
-		$result = $ketzer->getHtml();
-
-		if ($maaltijd2 !== null) {
-			$aanmeldingen2 = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd2->maaltijd_id => $maaltijd2), LoginModel::getUid());
-			if (empty($aanmeldingen2)) {
-				$aanmelding2 = null;
-			} else {
-				$aanmelding2 = $aanmeldingen2[$maaltijd2->maaltijd_id];
+	public function render() {
+		$result = '<div class="my-3 p-3 bg-white rounded shadow-sm">';
+		foreach ($this->maaltijden as $maaltijd) {
+				$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
+				if (empty($aanmeldingen)) {
+					$aanmelding = null;
+				} else {
+					$aanmelding = $aanmeldingen[$maaltijd->maaltijd_id];
+				}
+				$result .= view('maaltijden.bb', [
+					'maaltijd' => $maaltijd,
+					'aanmelding' => $aanmelding,
+				])->getHtml();
 			}
-			$ketzer2 = new MaaltijdKetzerView($maaltijd2, $aanmelding2);
-			$result .= $ketzer2->getHtml();
+			return $result . '<div class="d-block mt-3 text-right"><a href="/maaltijden/ketzer">Alle maaltijden</a></div></div>';
 		}
-		return $result;
-	}
+
+
 
 	/**
 	 * @param string|null $mid
@@ -66,6 +68,7 @@ class BbMaaltijd extends BbTag {
 	 * @throws BbException
 	 */
 	private function getMaaltijd($mid): array {
+		// @TODO clean up this ugly code
 		$maaltijd2 = null;
 
 		try {
@@ -95,6 +98,23 @@ class BbMaaltijd extends BbTag {
 		if (!isset($maaltijd)) {
 			throw new BbException('<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>');
 		}
-		return array($maaltijd2, $maaltijd);
+		return array($maaltijd, $maaltijd2);
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
+		$this->maaltijden = [];
+		foreach ($this->getMaaltijd($this->content) as $maaltijd) {
+			if ($maaltijd != null) {
+				$this->maaltijden[] = $maaltijd;
+			}
+		}
+
 	}
 }

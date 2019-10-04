@@ -22,18 +22,18 @@ use CsrDelft\view\formulier\UrlDownloader;
  */
 class BbVideo extends BbTag {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'video';
 	}
 
-	public function parseLight($arguments = []) {
+	public function renderLight() {
 		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
 		$this->assertId($type, $id, $content);
 
 		return BbHelper::lightLinkBlock('video', $content, $type . ' video', '', $previewthumb);
 	}
 
-	public function parse($arguments = []) {
+	public function render() {
 		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
 		$this->assertId($type, $id, $content);
 
@@ -42,7 +42,7 @@ class BbVideo extends BbTag {
 		return <<<HTML
 <div class="bb-video">
 	<div class="bb-video-preview" onclick="event.preventDefault();window.bbcode.bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
-		<div class="play-button fa fa-play-circle-o fa-5x"></div>
+		<div class="play-button fa fa-play-circle fa-5x"></div>
 		<div class="bb-img-loading" src="{$previewthumb}"></div>
 	</div>
 </div>
@@ -53,7 +53,7 @@ HTML;
 	 * @return array
 	 */
 	private function processVideo(): array {
-		$content = $this->getContent();
+		$content = $this->content;
 
 		$params = [];
 		$params['width'] = 570;
@@ -121,5 +121,15 @@ HTML;
 		if (empty($type) || empty($id)) {
 			throw new BbException('[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')');
 		}
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
 	}
 }

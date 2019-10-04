@@ -11,13 +11,12 @@ use CsrDelft\view\Icon;
  * @example [neuzen]2o13[/neuzen]
  */
 class BbNeuzen extends BbTag {
-	public function getTagName() {
+	public static function getTagName() {
 		return 'neuzen';
 	}
 
-	public function parse($arguments = []) {
-		$content = $this->getContent();
-
+	public function render() {
+		$content = $this->content;
 		if (lid_instelling('layout', 'neuzen') != 'nee') {
 			$neus = Icon::getTag('bullet_red', null, null, 'neus2013', 'o');
 			$content = str_replace('o', $neus, $content);
@@ -26,7 +25,7 @@ class BbNeuzen extends BbTag {
 		return $content;
 	}
 
-	public function parseLight($arguments = []) {
-		return $this->getContent();
+	public function parse($arguments = []) {
+		return $this->readContent([], false);
 	}
 }

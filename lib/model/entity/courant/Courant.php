@@ -31,9 +31,9 @@ class Courant extends PersistentEntity {
 
 	public function getBerichten() {
 		if (!$this->id) {
-			return CourantBerichtModel::instance()->find('courantID IS NULL');
+			return CourantBerichtModel::instance()->getNieuweBerichten();
 		}
-		return CourantBerichtModel::instance()->find('courantID = ?', [$this->id]);
+		return CourantBerichtModel::instance()->getBerichten($this->id);
 	}
 
 }

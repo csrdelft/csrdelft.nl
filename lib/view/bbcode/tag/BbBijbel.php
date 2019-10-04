@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
+use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\view\bbcode\BbHelper;
@@ -12,17 +13,19 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbBijbel extends BbTag {
 
-	public function getTagName() {
+	private $bijbel;
+	private $vertaling;
+	public static function getTagName() {
 		return 'bijbel';
 	}
 
-	public function parseLight($arguments = []) {
-		list($stukje, $link) = $this->getLink($arguments);
+	public function renderLight() {
+		list($stukje, $link) = $this->getLink();
 		return BbHelper::lightLinkInline($this->env, 'bijbel', $link, $stukje);
 	}
 
-	public function parse($arguments = []) {
-		list($stukje, $link) = $this->getLink($arguments);
+	public function render() {
+		list($stukje, $link) = $this->getLink();
 		return '<a href="' . $link . '" target="_blank">' . $stukje . '</a>';
 	}
 
@@ -30,19 +33,15 @@ class BbBijbel extends BbTag {
 	 * @param $arguments
 	 * @return array
 	 */
-	private function getLink($arguments): array {
-		$content = $this->getContent();
-		if (isset($arguments['bijbel'])) { // [bijbel=
-			$stukje = str_replace('_', ' ', $arguments['bijbel']);
+	private function getLink(): array {
+		$content = $this->content;
+		if ($this->bijbel != null) { // [bijbel=
+			$stukje = str_replace('_', ' ', $this->bijbel);
 		} else { // [bijbel][/bijbel]
 			$stukje = $content;
 		}
-		if (isset($arguments['vertaling'])) {
-			$vertaling = $arguments['vertaling'];
-		} else {
-			$vertaling = null;
-		}
-		$vertaling1 = $vertaling;
+
+		$vertaling1 = $this->vertaling;
 		if (!LidInstellingenModel::instance()->isValidValue('algemeen', 'bijbel', $vertaling1)) {
 			$vertaling1 = null;
 		}
@@ -51,5 +50,17 @@ class BbBijbel extends BbTag {
 		}
 		$link = 'https://www.debijbel.nl/bijbel/' . urlencode($vertaling1) . '/' . urlencode($stukje);
 		return array($stukje, $link);
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readContent();
+		$this->bijbel = $arguments['bijbel'] ?? null;
+		$this->vertaling = $arguments['vertaling'] ?? null;
 	}
 }

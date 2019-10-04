@@ -181,8 +181,14 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	}
 
 	public function zoeken(ForumZoeken $forumZoeken) {
-		$attributes = ['*', 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
-		$where_params = [$forumZoeken->zoekterm, $forumZoeken->van, $forumZoeken->tot];
+		// Als er geen spatie in de zoekterm zit, doe dan keyword search met '<zoekterm>*'
+		if (strstr($forumZoeken->zoekterm, ' ') == false) {
+			$attributes = ['*', 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score'];
+			$where_params = [$forumZoeken->zoekterm . '*', $forumZoeken->van, $forumZoeken->tot];
+		} else {
+			$attributes = ['*', 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
+			$where_params = [$forumZoeken->zoekterm, $forumZoeken->van, $forumZoeken->tot];
+		}
 		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND laatst_gewijzigd >= ? AND laatst_gewijzigd <= ?';
 		if (!LoginModel::mag(P_LOGGED_IN)) {
 			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
@@ -190,15 +196,21 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		}
 		$order = 'score DESC, plakkerig DESC';
 		$where .= ' HAVING score > 0';
-		$results = Database::instance()->sqlSelect(
-			$attributes,
-			$this->getTableName(),
-			$where,
-			$where_params,
-			null,
-			$order,
-			$forumZoeken->limit
-		);
+		try {
+			$results = Database::instance()->sqlSelect(
+				$attributes,
+				$this->getTableName(),
+				$where,
+				$where_params,
+				null,
+				$order,
+				$forumZoeken->limit
+			);
+		} catch (\PDOException $ex) {
+			setMelding('Op deze term kan niet gezocht worden', -1);
+			// Syntax error in de MATCH in BOOLEAN MODE
+			return [];
+		}
 		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 		return $results;
 	}
@@ -243,7 +255,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	 */
 	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0, $getLatestPosts = false) {
 		if (!is_int($aantal)) {
-			$aantal = (int)lid_instelling('forum', 'draden_per_pagina');
+			$aantal = $this->per_pagina;
 			$pagina = $this->pagina;
 			$offset = ($pagina - 1) * $aantal;
 		}

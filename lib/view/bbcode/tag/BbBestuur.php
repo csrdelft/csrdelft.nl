@@ -10,7 +10,7 @@ use CsrDelft\model\groepen\BesturenModel;
  */
 class BbBestuur extends BbTagGroep {
 
-	public function getTagName() {
+	public static function getTagName() {
 		return 'bestuur';
 	}
 

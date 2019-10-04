@@ -16,10 +16,18 @@
 }
 
 #profiel {
-  .profielregel {
-    margin-bottom: 20px;
-    clear: left;
-  }
+
+	dl {
+		@extend .row;
+	}
+
+	dt {
+		@extend .col-md-4;
+	}
+
+	dd {
+		@extend .col-md-8;
+	}
 
   .left {
     display: none;
@@ -73,20 +81,8 @@
     }
   }
 
-  #recenteForumberichten {
-    width: 600px;
-
-    td {
-      text-align: left;
-    }
-  }
-
   .donker {
     background-color: $tabel-regel-donker;
-  }
-
-  .bestelling-moment {
-    margin-left: 5px;
   }
 
   .boeken {
@@ -102,10 +98,6 @@
       .titel:hover {
         color: #0a338d;
         text-decoration: underline;
-      }
-
-      &.btn {
-        margin-left: 75px;
       }
     }
 
@@ -161,26 +153,6 @@ img.banaan {
 	padding: 0;
 	left: 10px;
 	bottom: 0;
-}
-
-@media screen and (max-width: 960px) {
-	#profiel {
-		.saldografiek {
-			display: none !important;
-		}
-
-		#recenteForumberichten {
-			width: auto;
-		}
-
-		.gegevens {
-			margin-left: 0;
-			padding-right: 0;
-			padding-left: 0;
-			border-left: 0;
-			max-width: unset;
-		}
-	}
 }
 
 .ProfielLogEntry {

@@ -140,7 +140,12 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$where_params = [$forumZoeken->zoekterm, $forumZoeken->van, $forumZoeken->tot];
 		$order = 'score DESC';
 		$where .= ' HAVING score > 0';
-		$results = Database::instance()->sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $forumZoeken->limit);
+		try {
+			$results = Database::instance()->sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $forumZoeken->limit);
+		} catch (\PDOException $ex) {
+			// Syntax error in SQL MATCH op user input
+			return [];
+		}
 		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 
 		if ($alleen_eerste_post) {

@@ -204,11 +204,8 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 					{
 						loader: 'sass-loader',
 						options: {
-							precision: 8,
-							outputStyle: 'expanded',
 							// Source maps moeten aan staan om `resolve-url-loader` te laten werken.
 							sourceMap: true,
-							sourceMapContents: false,
 						},
 					},
 				],

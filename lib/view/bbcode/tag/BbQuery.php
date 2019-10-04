@@ -19,15 +19,23 @@ use CsrDelft\view\SavedQueryContent;
  */
 class BbQuery extends BbTag {
 
-	public function getTagName() {
+	/**
+	 * @var SavedQuery
+	 */
+	private $query;
+
+	public static function getTagName() {
 		return 'query';
 	}
 
-	public function parseLight($arguments = []) {
-		$queryID = (int)$this->getArgument($arguments);
-		$this->assertId($queryID);
-		$sqc = new SavedQueryContent(new SavedQuery($queryID));
-		$url = '/tools/query?id=' . urlencode($queryID);
+	public function isAllowed()
+	{
+		return $this->query->magBekijken();
+	}
+
+	public function renderLight() {
+		$sqc = new SavedQueryContent($this->query);
+		$url = '/tools/query?id=' . urlencode($this->content);
 		return BbHelper::lightLinkBlock('query', $url, $sqc->getModel()->getBeschrijving(), $sqc->getModel()->count() . ' regels');
 	}
 
@@ -41,10 +49,21 @@ class BbQuery extends BbTag {
 		}
 	}
 
-	public function parse($arguments = []) {
-		$queryID = (int)$this->getArgument($arguments);
-		$this->assertId($queryID);
-		$sqc = new SavedQueryContent(new SavedQuery($queryID));
+	public function render() {
+		$sqc = new SavedQueryContent($this->query);
 		return $sqc->render_queryResult();
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
+		$this->content = (int)$this->content;
+		$this->assertId($this->content);
+		$this->query = new SavedQuery($this->content);
 	}
 }

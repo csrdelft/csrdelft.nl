@@ -1,4 +1,4 @@
-@import "~font-awesome/scss/variables";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "~bootstrap/scss/functions";
 @import "defaults";
 @import "~bootstrap/scss/variables";
@@ -136,8 +136,9 @@ Main components
 }
 
 .cd-primary-nav .has-children > a::after {
-	font-family: FontAwesome;
-	content: $fa-var-angle-right;
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+	content: fa-content($fa-var-angle-right);
 
 	right: 20px;
 	position: absolute;
@@ -154,8 +155,9 @@ Main components
 }
 
 .cd-primary-nav .go-back a::before {
-	font-family: FontAwesome;
-	content: $fa-var-angle-left;
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+	content: fa-content($fa-var-angle-left);
 
 	right: 20px;
 	position: absolute;
@@ -229,6 +231,7 @@ Main components
 		}
 
 		& > li {
+			list-style: none;
 			float: left;
 			margin-left: 3em;
 

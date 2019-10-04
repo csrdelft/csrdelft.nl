@@ -61,6 +61,9 @@ export function ajaxRequest(
 			modalClose();
 		}
 		if (onerror) {
+			if (response.responseText.startsWith('<!DOC')) {
+				onerror('Er ging iets fout, code is: ' + response.status);
+			}
 			onerror(response.responseText);
 		}
 	}).always(() => {
@@ -76,7 +79,7 @@ export function ajaxRequest(
  * @returns {boolean}
  */
 export function ketzerAjax(url: string, ketzer: string) {
-	$(ketzer + ' .aanmelddata').html('Aangemeld:<br /><img alt="Laden" src="/images/loading-arrows.gif" />');
+	$(ketzer + ' .aanmeldbtn').addClass('loading');
 	$.ajax({
 		cache: false,
 		data: '',
@@ -85,7 +88,8 @@ export function ketzerAjax(url: string, ketzer: string) {
 	}).done((data) => {
 		$(ketzer).replaceWith(data);
 	}).fail((jqXHR, textStatus, errorThrown) => {
-		$(ketzer + ' .aanmelddata').html('<span class="error">Error: </span>' + errorThrown);
+		$(ketzer + ' .aanmeldbtn')
+			.replaceWith($(`<div class="alert alert-danger"><strong>Actie mislukt!</strong> ${errorThrown}</div>`));
 		alert(jqXHR.responseText);
 	});
 	return true;

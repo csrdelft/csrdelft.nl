@@ -236,7 +236,8 @@ function initSaldoGrafiek(el: HTMLElement) {
 	if (closed) {
 		const button = html`<a href="#" class="btn btn-primary">Toon saldografiek</a>`;
 
-		button.addEventListener('click', () => {
+		button.addEventListener('click', (e) => {
+			e.preventDefault();
 			el.classList.remove('verborgen');
 			button.remove();
 			load();

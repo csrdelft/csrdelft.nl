@@ -14,7 +14,6 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\maalcie\beheer\MaaltijdLijstView;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
-use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 use CsrDelft\view\maalcie\persoonlijk\MijnMaaltijdenView;
 use CsrDelft\view\maalcie\persoonlijk\MijnMaaltijdView;
 
@@ -65,7 +64,7 @@ class MijnMaaltijdenController {
 		if ($this->getMethod() == 'POST') {
 			return new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 		} else {
-			return new MaaltijdKetzerView($aanmelding->maaltijd, $aanmelding);
+			return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 		}
 	}
 
@@ -75,20 +74,20 @@ class MijnMaaltijdenController {
 		if ($this->getMethod() == 'POST') {
 			return new MijnMaaltijdView($maaltijd);
 		} else {
-			return new MaaltijdKetzerView($maaltijd);
+			return view('maaltijden.bb', ['maaltijd' => $maaltijd]);
 		}
 	}
 
 	public function gasten($mid) {
 		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = MaaltijdAanmeldingenModel::instance()->saveGasten($mid, LoginModel::getUid(), $gasten);
-		return new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
+		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
 	public function opmerking($mid) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
 		$aanmelding = MaaltijdAanmeldingenModel::instance()->saveGastenEetwens($mid, LoginModel::getUid(), $opmerking);
-		return new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
+		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
 	public function beoordeling($mid) {

@@ -280,4 +280,8 @@ class ProfielController {
 			'profiel' => $profiel,
 		]));
 	}
+
+	public function kaartje($uid) {
+		return view('profiel.kaartje', ['profiel' => ProfielModel::get($uid)]);
+	}
 }

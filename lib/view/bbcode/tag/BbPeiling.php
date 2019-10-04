@@ -20,24 +20,28 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbPeiling extends BbTag {
 
-	public function getTagName() {
+	/**
+	 * @var Peiling
+	 */
+	private $peiling;
+
+	public static function getTagName() {
 		return 'peiling';
 	}
-
-	public function parseLight($arguments = []) {
-		$peiling_id = $this->getArgument($arguments);
-		$peiling = $this->getPeiling($peiling_id);
-
-		$url = '#/peiling/' . urlencode($peiling_id);
-		return BbHelper::lightLinkBlock('peiling', $url, $peiling->titel, $peiling->beschrijving);
+	public function isAllowed()
+	{
+		return $this->peiling->magBekijken();
 	}
 
-	public function parse($arguments = []) {
-		$peiling_id = $this->getArgument($arguments);
-		$peiling = $this->getPeiling($peiling_id);
+	public function renderLight() {
+		$url = '#/peiling/' . urlencode($this->content);
+		return BbHelper::lightLinkBlock('peiling', $url, $this->peiling->titel, $this->peiling->beschrijving);
+	}
+
+	public function render() {
 		return view('peilingen.peiling', [
-			'peiling' => $peiling,
-			'opties' => PeilingenLogic::instance()->getOptionsAsJson($peiling_id, LoginModel::getUid()),
+			'peiling' => $this->peiling,
+			'opties' => PeilingenLogic::instance()->getOptionsAsJson($this->peiling->id, LoginModel::getUid()),
 		])->getHtml();
 	}
 
@@ -47,14 +51,22 @@ class BbPeiling extends BbTag {
 	 * @throws BbException
 	 */
 	private function getPeiling($peiling_id): Peiling {
-		if (!LoginModel::mag(P_LOGGED_IN)) {
-			throw new BbException('');
-		}
 		$peiling = PeilingenModel::instance()->getPeilingById($peiling_id);
 		if ($peiling === false) {
 			throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
 		}
 
 		return $peiling;
+	}
+
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = [])
+	{
+		$this->readMainArgument($arguments);
+		$this->peiling = $this->getPeiling($this->content);
 	}
 }

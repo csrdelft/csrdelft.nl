@@ -36,17 +36,18 @@ use CsrDelft\view\bbcode\tag\BbBoek;
 use CsrDelft\view\bbcode\tag\BbCitaat;
 use CsrDelft\view\bbcode\tag\BbCommissie;
 use CsrDelft\view\bbcode\tag\BbDocument;
+use CsrDelft\view\bbcode\tag\BbForum;
 use CsrDelft\view\bbcode\tag\BbFoto;
 use CsrDelft\view\bbcode\tag\BbFotoalbum;
 use CsrDelft\view\bbcode\tag\BbGroep;
 use CsrDelft\view\bbcode\tag\BbImg;
 use CsrDelft\view\bbcode\tag\BbInstelling;
+use CsrDelft\view\bbcode\tag\BbIsHetAl;
 use CsrDelft\view\bbcode\tag\BbKetzer;
 use CsrDelft\view\bbcode\tag\BbLedenmemoryscores;
 use CsrDelft\view\bbcode\tag\BbLid;
 use CsrDelft\view\bbcode\tag\BbLocatie;
 use CsrDelft\view\bbcode\tag\BbMaaltijd;
-use CsrDelft\view\bbcode\tag\BbMap;
 use CsrDelft\view\bbcode\tag\BbMededelingen;
 use CsrDelft\view\bbcode\tag\BbNeuzen;
 use CsrDelft\view\bbcode\tag\BbOfftopic;
@@ -109,17 +110,18 @@ class CsrBB extends Parser {
 		BbCitaat::class,
 		BbCommissie::class,
 		BbDocument::class,
+		BbForum::class,
 		BbFoto::class,
 		BbFotoalbum::class,
 		BbGroep::class,
 		BbImg::class,
 		BbInstelling::class,
+		BbIsHetAl::class,
 		BbKetzer::class,
 		BbLedenmemoryscores::class,
 		BbLid::class,
 		BbLocatie::class,
 		BbMaaltijd::class,
-		BbMap::class,
 		BbMededelingen::class,
 		BbNeuzen::class,
 		BbOfftopic::class,

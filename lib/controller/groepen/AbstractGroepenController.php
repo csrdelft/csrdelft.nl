@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\AbstractGroepenModel;
@@ -14,6 +15,7 @@ use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
@@ -38,6 +40,7 @@ use CsrDelft\view\groepen\leden\GroepLijstView;
 use CsrDelft\view\groepen\leden\GroepOmschrijvingView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
+use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 
 /**
@@ -160,6 +163,7 @@ abstract class AbstractGroepenController extends Controller {
 			case 'verwijderen':
 			case 'aanmelden':
 			case 'aanmelden2':
+			case 'naar_ot':
 			case 'bewerken':
 			case 'afmelden':
 				return $this->getMethod() == 'POST';
@@ -237,22 +241,27 @@ abstract class AbstractGroepenController extends Controller {
 		$this->view = new GroepEetwensView($groep);
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
+	public function zoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			$this->exit_http(403);
 		}
-		$zoekterm = '%' . $this->getParam('q') . '%';
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
+		$zoekterm = '%' . $zoekterm . '%';
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int)$this->getParam('limit');
 		}
 		$result = [];
-		foreach ($this->model->find('familie LIKE ?', [$zoekterm], null, null, $limit) as $groep) {
+		foreach ($this->model->find('familie LIKE ? AND (status = ? OR status = ?)', [$zoekterm, GroepStatus::HT, GroepStatus::FT], null, null, $limit) as $groep) {
 			if (!isset($result[$groep->familie])) {
+				$type = classNameZonderNamespace(get_class($groep));
 				$result[$groep->familie] = [
 					'url' => $groep->getUrl() . '#' . $groep->id,
 					'label' => 'Groepen',
-					'value' => classNameZonderNamespace(get_class($groep)) . ':' . $groep->familie
+					'value' => $type . ': ' . $groep->familie,
+					'icon' => Icon::getTag($type),
 				];
 			}
 		}
@@ -671,6 +680,67 @@ abstract class AbstractGroepenController extends Controller {
 			}
 			$this->view = new RemoveRowsResponse($response);
 		}
+	}
+
+	public function naar_ot(AbstractGroep $groep, $uid = null) {
+		$model = $groep::getLedenModel();
+
+		// Vind de groep uit deze familie met het laatste eind_moment
+		$ot_groep_statement = $this->model->find("familie = ? and status = 'ot'", [$groep->familie], null, 'eind_moment DESC');
+
+		if ($ot_groep_statement->rowCount() === 0) {
+			throw new CsrGebruikerException('Geen o.t. groep gevonden');
+		}
+
+		/** @var AbstractGroep $ot_groep */
+		$ot_groep = $ot_groep_statement->fetch();
+
+		if ($uid) {
+			if ($ot_groep->getLid($uid)) {
+				throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
+			}
+			if (!$groep->mag(AccessAction::Afmelden) AND !$groep->mag(AccessAction::Beheren) AND !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
+				throw new CsrGebruikerException();
+			}
+			Database::transaction(function () use ($groep, $ot_groep, $uid, $model) {
+				$lid = $model->get($groep, $uid);
+				ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
+				ChangeLogModel::instance()->log($ot_groep, 'aanmelden', $lid->uid, null);
+				$model->delete($lid);
+				$lid->groep_id = $ot_groep->id;
+				$model->create($lid);
+				$lid->groep_id = $groep->id; // Terugspelen naar gebruiker dat dit lid is verwijderd
+			});
+			$this->view = new GroepView($groep);
+		} else {
+			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			if (empty($selection)) {
+				throw new CsrGebruikerException();
+			}
+
+			$response = Database::transaction(function () use ($selection, $groep, $ot_groep, $model) {
+				$response = [];
+				foreach ($selection as $UUID) {
+					if (!$groep->mag(AccessAction::Beheren)) {
+						throw new CsrGebruikerException();
+					}
+					$lid = $model->retrieveByUUID($UUID);
+					if ($ot_groep->getLid($lid->uid)) {
+						throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
+					}
+					ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
+					ChangeLogModel::instance()->log($ot_groep, 'aanmelden', $lid->uid, null);
+					$model->delete($lid);
+					$lid->groep_id = $ot_groep->id;
+					$model->create($lid);
+					$lid->groep_id = $groep->id;
+
+					$response[] = $lid;
+				}
+			});
+			$this->view = new RemoveRowsResponse($response);
+		}
+
 	}
 
 }

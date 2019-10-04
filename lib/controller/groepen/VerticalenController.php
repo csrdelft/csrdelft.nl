@@ -19,11 +19,14 @@ class VerticalenController extends AbstractGroepenController {
 		parent::__construct($query, VerticalenModel::instance());
 	}
 
-	public function zoeken() {
-		if (!$this->hasParam('q')) {
+	public function zoeken($zoekterm = null) {
+		if (!$zoekterm && !$this->hasParam('q')) {
 			$this->exit_http(403);
 		}
-		$zoekterm = '%' . $this->getParam('q') . '%';
+		if (!$zoekterm) {
+			$zoekterm = $this->getParam('q');
+		}
+		$zoekterm = '%' . $zoekterm . '%';
 		$limit = 5;
 		if ($this->hasParam('limit')) {
 			$limit = (int)$this->getParam('limit');

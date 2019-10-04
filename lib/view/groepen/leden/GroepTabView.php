@@ -22,14 +22,14 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
 		if (!$this->groep instanceof Verticale) {
-			$html .= '<li class="geschiedenis float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock-o"></span></a></li>';
+			$html .= '<li class="geschiedenis float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock"></span></a></li>';
 		}
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Pasfotos . '" title="' . GroepTab::getDescription(GroepTab::Pasfotos) . ' tonen"><span class="fa fa-user"></span></a></li>';
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Lijst . '" title="' . GroepTab::getDescription(GroepTab::Lijst) . ' tonen"><span class="fa fa-align-justify"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="' . GroepTab::getDescription(GroepTab::Statistiek) . ' tonen"><span class="fa fa-pie-chart"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Statistiek . '" title="' . GroepTab::getDescription(GroepTab::Statistiek) . ' tonen"><span class="fa fa-chart-pie"></span></a></li>';
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . GroepTab::Emails . '" title="' . GroepTab::getDescription(GroepTab::Emails) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
 
