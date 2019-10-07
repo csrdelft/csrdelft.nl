@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleSync;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
@@ -283,5 +284,10 @@ class ProfielController {
 
 	public function kaartje($uid) {
 		return view('profiel.kaartje', ['profiel' => ProfielModel::get($uid)]);
+	}
+
+	public function redirect($target) {
+		$uid = LoginModel::getUid();
+		redirect("/profiel/$uid/$target");
 	}
 }

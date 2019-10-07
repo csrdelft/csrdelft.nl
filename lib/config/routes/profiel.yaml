@@ -20,6 +20,14 @@ profiel-voorkeuren:
   requirements: { uid: '.{4}' }
   options: { mag: P_PROFIEL_EDIT }
 
+profiel-voorkeuren-redirect:
+  path: /profiel/voorkeuren
+  controller: CsrDelft\controller\ProfielController::redirect
+  methods: [GET]
+  options: { mag: P_PROFIEL_EDIT }
+  defaults:
+    target: voorkeuren
+
 profiel-reset-private-token:
   path: /profiel/{uid}/resetPrivateToken
   controller: CsrDelft\controller\ProfielController::resetPrivateToken
