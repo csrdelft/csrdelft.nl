@@ -52,9 +52,7 @@ function asset(string $asset) {
 	$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/manifest.json'), true);
 
 	if (isset($manifest[$asset])) {
-		return CSR_ROOT . $manifest[$asset];
-	} elseif (file_exists(HTDOCS_PATH . $asset)) {
-		return CSR_ROOT . $asset . "?" . filemtime(HTDOCS_PATH . $asset);
+		return $manifest[$asset];
 	} else {
 		return '';
 	}
