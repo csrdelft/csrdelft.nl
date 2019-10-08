@@ -222,6 +222,8 @@ Main components
 			width: auto;
 			background: transparent;
 			overflow-x: hidden;
+			list-style: none;
+			padding-left: 0;
 
 			&.moves-out > li > a {
 				/* reset mobile style */
