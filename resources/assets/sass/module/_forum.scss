@@ -112,6 +112,7 @@
 
 		.forum-bericht {
 			flex: 1; /* grow */
+			overflow: hidden;
 
 			margin: 0;
 			padding: .2em .6em 10px;
@@ -374,7 +375,6 @@ span.curpage {
 
 		.forum-post, .forum-posten {
 			flex-direction: column;
-			overflow: hidden;
 
 			.auteur {
 				flex: 1 0 ;
