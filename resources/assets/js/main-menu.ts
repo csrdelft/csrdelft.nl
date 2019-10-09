@@ -15,31 +15,33 @@ docReady(() => {
 
 		return false;
 	});
-});
 
-docReady(() => {
-	const searchfield = document.querySelector<HTMLInputElement>('#menu input[type=search]');
+	const searchfield = document.querySelector<HTMLInputElement>('input[type=search].ZoekField');
 
-	if (!searchfield) { return; }
+	if (!searchfield) {
+		return;
+	}
 
-	$(document).on('keydown', (event: JQuery.KeyDownEvent) => {
+	document.addEventListener('keydown', (event: KeyboardEvent) => {
 		// Geen instantsearch met modifiers
 		if (event.ctrlKey || event.altKey || event.metaKey) {
 			return;
 		}
 
 		// Geen instantsearch als we in een input-element of text-area zitten.
-		const element = event.target.tagName.toUpperCase();
-		if (element === 'INPUT' || element === 'TEXTAREA' || element === 'SELECT') {
-			return;
+		const element = event.target as HTMLElement;
+		if (element) {
+			const tagName = element.tagName.toUpperCase();
+
+			if (tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT') {
+				return;
+			}
 		}
 
 		// a-z en 0-9 incl. numpad
-		if ((event.keyCode > 64 && event.keyCode < 91)
-			|| (event.keyCode > 47 && event.keyCode < 58)
-			|| (event.keyCode > 95 && event.keyCode < 106)) {
+		if (/\w/.test(event.key)) {
 			searchfield.value = '';
-			searchfield.dispatchEvent(new Event('focus'));
+			searchfield.focus();
 		}
 	});
 });

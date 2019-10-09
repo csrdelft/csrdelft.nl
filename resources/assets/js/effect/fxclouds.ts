@@ -4,7 +4,6 @@ import {
 	Mesh,
 	PerspectiveCamera,
 	PlaneGeometry,
-	Renderer,
 	Scene,
 	ShaderMaterial,
 	TextureLoader,
@@ -59,9 +58,9 @@ Object.assign(container.style, {
 	bottom: '0',
 	top: '0',
 	zIndex: '-1',
+	background: 'linear-gradient(#1e4877, #4584b4, #4584b4)',
 });
 document.body.appendChild(container);
-container.style.background = 'linear-gradient(#1e4877, #4584b4, #4584b4)';
 
 const canvas = document.createElement('canvas');
 canvas.width = 32;
@@ -132,11 +131,9 @@ window.addEventListener('resize', () => {
 function animateClouds() {
 	requestAnimationFrame(animateClouds);
 
-	if (container.style.visibility !== 'hidden') {
-		const position = ((Date.now() - startTime) * 0.03) % 8000;
-		camera.position.x += (mouseX - camera.position.x) * 0.005;
-		camera.position.y += (-mouseY - 70 - camera.position.y) * 0.01;
-		camera.position.z = -position + 8000;
-		renderer.render(scene, camera);
-	}
+	const position = ((Date.now() - startTime) * 0.03) % 8000;
+	camera.position.x += (mouseX - camera.position.x) * 0.005;
+	camera.position.y += (-mouseY - 70 - camera.position.y) * 0.01;
+	camera.position.z = -position + 8000;
+	renderer.render(scene, camera);
 }

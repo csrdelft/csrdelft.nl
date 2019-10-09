@@ -90,7 +90,7 @@ JS;
 		<div class="form-inline">
             <?= parent::getHtml() ?>
             <div class="dropdown">
-                <button id="cd-zoek-engines" class="btn btn-outline-light dropdown-toggle" data-toggle="dropdown"
+                <button id="cd-zoek-engines" class="btn btn-outline-light dropdown-toggle ZoekFieldDropdown" data-toggle="dropdown"
                         aria-expanded="false">
                     <span class="fa fa-search"></span>
                     <span class="caret"></span>
