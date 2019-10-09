@@ -374,6 +374,7 @@ span.curpage {
 
 		.forum-post, .forum-posten {
 			flex-direction: column;
+			overflow: hidden;
 
 			.auteur {
 				flex: 1 0 ;
