@@ -67,6 +67,13 @@ class DocumentenController {
 			throw new CsrToegangException();
 		}
 
+		//We do not allow serving html files because they can be used for XSS.
+		//We do not allow serving javascript files because they can increase the impact of XSS by registering a service worker.
+		if ($document->mimetype == "text/html" || $document->mimetype == "text/javascript" || !checkMimetype($document->filename, $document->mimetype)) {
+			setMelding('Dit type bestand kan niet worden getoond', -1);
+			redirect('/documenten');
+		}
+		
 		if ($document->hasFile()) {
 			return new DocumentContent($document);
 		} else {
