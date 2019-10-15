@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\controller;
+namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
