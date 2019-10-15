@@ -53,7 +53,7 @@ use CsrDelft\view\JsonResponse;
 abstract class AbstractGroepenController extends Controller {
 
 	/** @var DataTable */
-	private $table;
+	protected $table;
 
 	public function __construct($query, AbstractGroepenModel $model) {
 		parent::__construct($query, $model);
