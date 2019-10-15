@@ -17,6 +17,13 @@ class TemplateView implements View {
 	}
 
 	/**
+	 * @return BladeRenderer
+	 */
+	public function getRenderer() {
+		return $this->template;
+	}
+
+	/**
 	 * @throws \Exception
 	 */
 	public function view() {
