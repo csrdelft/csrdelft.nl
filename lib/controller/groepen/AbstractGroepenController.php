@@ -359,7 +359,7 @@ abstract class AbstractGroepenController extends Controller {
 			$this->view = new GroepenBeheerData($response);
 			setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
 			$form = new GroepPreviewForm($groep);
-			$this->view->getRenderer()->assign('modal', $form);
+			$this->view->modal = $form;
 		} else {
 			$this->view = $form;
 		}
