@@ -314,6 +314,39 @@
 					v-model="event.choices">
 				</TextInput>
 			</template>
+
+			<Toggle
+				name="canEdit"
+				:question="'Leden mogen ' + (event.hasChoice === 'keuzelijst' ? 'keuze' : 'opmerking') + ' bewerken'"
+				v-model="event.canEdit">
+			</Toggle>
+
+			<div v-if="event.canEdit" class="subOptions">
+				<Toggle
+					name="editEnd"
+					question="Bewerken niet toestaan na een bepaald moment"
+					@input="prepareEditEnd()"
+					v-model="event.editEnd">
+				</Toggle>
+
+				<div class="moment" v-if="event.editEnd">
+					<div class="input-half">
+						<label>Bewerken toestaan tot</label>
+						<DateInput ref="editEndMoment" name="editEnd" v-model="event.editEndMoment"></DateInput>
+					</div>
+
+					<div class="input-half">
+						<TextInput
+							name="editEndMomentTime"
+							mask="HH:MM[:ss]"
+							mask-placeholder="__:__[:__]"
+							hint="Tijd"
+							v-model="event.editEndMomentTime"
+							:error="validTime(event.editEndMomentTime) ? null : 'Ongeldige tijd'">
+						</TextInput>
+					</div>
+				</div>
+			</div>
 		</Stap>
 
 		<Stap
@@ -386,6 +419,10 @@
 				exitEnd: false,
 				exitEndMoment: null,
 				exitEndMomentTime: '',
+				canEdit: true,
+				editEnd: false,
+				editEndMoment: null,
+				editEndMomentTime: '',
 				hasLimit: false,
 				limit: null,
 				hasPermission: 'iedereen',
@@ -466,7 +503,7 @@
 					if (start) {
 						this.event.enterEndMoment = start;
 					}
-					this.event.enterEndMomentTime = this.event.startTime;
+					this.event.enterEndMomentTime = this.event.entireDay ? '00:00' : this.event.startTime;
 				}
 			},
 			prepareExitEnd() {
@@ -475,9 +512,18 @@
 					if (start) {
 						this.event.exitEndMoment = start;
 					}
-					this.event.exitEndMomentTime = this.event.startTime;
+					this.event.exitEndMomentTime = this.event.entireDay ? '00:00' : this.event.startTime;
 				}
-			}
+			},
+			prepareEditEnd() {
+				if (this.event.editEnd) {
+					const start = this.event.multipleDays ? this.event.calendarData.start : this.event.calendarData;
+					if (start) {
+						this.event.editEndMoment = start;
+					}
+					this.event.editEndMomentTime = this.event.entireDay ? '00:00' : this.event.startTime;
+				}
+			},
 		}
 	}
 </script>

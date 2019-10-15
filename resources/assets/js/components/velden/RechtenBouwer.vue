@@ -3,7 +3,7 @@
 		<div class="manual" v-if="manual">
 			<input type="text" :name="fieldName" v-model="string" @input="update()" autocomplete="off">
 			<div class="actions clearfix">
-				<span @click="gotoAutomatic()" class="pull-right"><i class="fa fa-cog"></i> simpel</span>
+				<span @click="gotoAutomatic()" class="float-right"><i class="fa fa-cog"></i> simpel</span>
 			</div>
 		</div>
 		<div class="automatic" v-else>
@@ -28,7 +28,7 @@
 			</template>
 			<div class="actions clearfix">
 				<span @click="addCriterium()"><i class="fa fa-plus"></i> criterium toevoegen</span>
-				<span @click="gotoManual()" class="pull-right"><i class="fa fa-cog"></i> geavanceerd</span>
+				<span @click="gotoManual()" class="float-right"><i class="fa fa-cog"></i> geavanceerd</span>
 			</div>
 		</div>
 	</div>
@@ -286,6 +286,7 @@
 
 				i {
 					margin-right: 3px;
+					font-size: 13px;
 				}
 			}
 		}
