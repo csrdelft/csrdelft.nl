@@ -33,6 +33,10 @@ class BbVideo extends BbTag {
 		return BbHelper::lightLinkBlock('video', $content, $type . ' video', '', $previewthumb);
 	}
 
+	/**
+	 * @return string
+	 * @throws BbException
+	 */
 	public function render() {
 		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
 		$this->assertId($type, $id, $content);
@@ -125,8 +129,6 @@ HTML;
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
-	 * @throws BbException
 	 */
 	public function parse($arguments = [])
 	{

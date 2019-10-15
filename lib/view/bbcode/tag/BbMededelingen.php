@@ -32,6 +32,10 @@ class BbMededelingen extends BbTag {
 		return BbHelper::lightLinkBlock('mededelingen', '/mededelingen', 'Mededelingen', 'Bekijk de laatste mededelingen');
 	}
 
+	/**
+	 * @return string
+	 * @throws BbException
+	 */
 	public function render() {
 		$type = $this->content;
 		$this->assertType($type);
@@ -59,8 +63,6 @@ class BbMededelingen extends BbTag {
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
-	 * @throws BbException
 	 */
 	public function parse($arguments = [])
 	{

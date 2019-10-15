@@ -7,7 +7,7 @@ use CsrDelft\view\fiscaat\producten\CiviProductTable;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
 use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
 
-class FiscaatRouterController {
+class FiscaatController {
 	/** @var CiviSaldoModel */
 	private $civiSaldoModel;
 

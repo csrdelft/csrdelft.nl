@@ -43,7 +43,6 @@ class BbUrl extends BbTag {
 
 	/**
 	 * @param $arguments
-	 * @param string|null $arguments
 	 * @return string|null
 	 */
 	private function getUrl($arguments) {

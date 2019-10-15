@@ -56,7 +56,6 @@ class BbQuery extends BbTag {
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
 	 * @throws BbException
 	 */
 	public function parse($arguments = [])
