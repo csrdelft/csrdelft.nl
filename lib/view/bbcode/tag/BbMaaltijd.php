@@ -5,11 +5,11 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
+use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
-use CsrDelft\view\maalcie\persoonlijk\MaaltijdKetzerView;
 
 /**
  * Geeft een maaltijdketzer weer met maaltijdgegevens, aantal aanmeldingen en een aanmeldknopje.
@@ -32,8 +32,7 @@ class BbMaaltijd extends BbTag {
 		return 'maaltijd';
 	}
 
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return LoginModel::mag(P_LOGGED_IN);
 	}
 
@@ -46,21 +45,38 @@ class BbMaaltijd extends BbTag {
 	public function render() {
 		$result = '<div class="my-3 p-3 bg-white rounded shadow-sm">';
 		foreach ($this->maaltijden as $maaltijd) {
-				$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
-				if (empty($aanmeldingen)) {
-					$aanmelding = null;
-				} else {
-					$aanmelding = $aanmeldingen[$maaltijd->maaltijd_id];
-				}
-				$result .= view('maaltijden.bb', [
-					'maaltijd' => $maaltijd,
-					'aanmelding' => $aanmelding,
-				])->getHtml();
+			$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
+			if (empty($aanmeldingen)) {
+				$aanmelding = null;
+			} else {
+				$aanmelding = $aanmeldingen[$maaltijd->maaltijd_id];
 			}
-			return $result . '<div class="d-block mt-3 text-right"><a href="/maaltijden/ketzer">Alle maaltijden</a></div></div>';
+			$result .= view('maaltijden.bb', [
+				'maaltijd' => $maaltijd,
+				'aanmelding' => $aanmelding,
+				'border' => count($this->maaltijden) > 1
+			])->getHtml();
 		}
+		if (count($this->maaltijden) > 1) {
+			$result .= '<div class="d-block mt-3 text-right"><a href="/maaltijden/ketzer">Alle maaltijden</a></div>';
+		}
+		return $result . '</div>';
+	}
 
-
+	/**
+	 * @param array $arguments
+	 * @return mixed
+	 * @throws BbException
+	 */
+	public function parse($arguments = []) {
+		$this->readMainArgument($arguments);
+		$this->maaltijden = [];
+		foreach ($this->getMaaltijd($this->content) as $maaltijd) {
+			if ($maaltijd != null) {
+				$this->maaltijden[] = $maaltijd;
+			}
+		}
+	}
 
 	/**
 	 * @param string|null $mid
@@ -99,22 +115,5 @@ class BbMaaltijd extends BbTag {
 			throw new BbException('<div class="bb-block bb-maaltijd">Maaltijd niet gevonden: ' . htmlspecialchars($mid) . '</div>');
 		}
 		return array($maaltijd, $maaltijd2);
-	}
-
-	/**
-	 * @param array $arguments
-	 * @return mixed
-	 * @throws BbException
-	 */
-	public function parse($arguments = [])
-	{
-		$this->readMainArgument($arguments);
-		$this->maaltijden = [];
-		foreach ($this->getMaaltijd($this->content) as $maaltijd) {
-			if ($maaltijd != null) {
-				$this->maaltijden[] = $maaltijd;
-			}
-		}
-
 	}
 }
