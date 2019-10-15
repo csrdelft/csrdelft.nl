@@ -1,6 +1,6 @@
 fiscaat-overzicht:
   path: /fiscaat
-  controller: CsrDelft\controller\FiscaatRouterController::overzicht
+  controller: CsrDelft\controller\fiscaat\FiscaatController::overzicht
   methods: GET
   options: { mag: P_FISCAAT_READ }
 
