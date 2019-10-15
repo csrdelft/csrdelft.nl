@@ -16,6 +16,7 @@ use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
@@ -51,6 +52,7 @@ use CsrDelft\view\JsonResponse;
  */
 abstract class AbstractGroepenController extends Controller {
 
+	/** @var DataTable */
 	private $table;
 
 	public function __construct($query, AbstractGroepenModel $model) {
@@ -371,7 +373,7 @@ abstract class AbstractGroepenController extends Controller {
 			$form = new GroepForm($groep, $groep->getUrl() . $this->action, AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($this->getMethod() == 'GET') {
 				$this->beheren();
-				$this->view->getBody()->filter = $groep->naam;
+				$this->table->filter = $groep->naam;
 				$form->setDataTableId($this->table->getDataTableId());
 				$this->view->modal = $form;
 			} elseif ($form->validate()) {
