@@ -9,7 +9,6 @@ use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\maalcie\beheer\MaaltijdLijstView;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
@@ -35,7 +34,7 @@ class MijnMaaltijdenController {
 		$timestamp = strtotime(instelling('maaltijden', 'beoordeling_periode'));
 		$recent = MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
 		$view = new MijnMaaltijdenView($maaltijden, $aanmeldingen, $recent);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function lijst($mid) {

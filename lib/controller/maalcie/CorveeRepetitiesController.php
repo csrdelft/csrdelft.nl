@@ -5,7 +5,6 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\repetities\CorveeRepetitiesView;
 use CsrDelft\view\maalcie\corvee\repetities\CorveeRepetitieView;
 use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
@@ -33,7 +32,7 @@ class CorveeRepetitiesController {
 			$repetities = $this->model->getAlleRepetities();
 		}
 		$view = new CorveeRepetitiesView($repetities, $maaltijdrepetitie);
-		return new CsrLayoutPage($view, [], $modal);
+		return view('default', ['content' => $view, 'modal' => $modal]);
 	}
 
 	public function maaltijd($mrid) {

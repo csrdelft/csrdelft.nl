@@ -9,7 +9,6 @@ use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
 
@@ -74,7 +73,7 @@ class AccountController {
 			AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
-		return new CsrLayoutPage($form);
+		return view('default', ['content' => $form]);
 	}
 
 	public function verwijderen($uid = null) {

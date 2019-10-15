@@ -6,7 +6,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\maalcie\CorveePuntenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenLidView;
 use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenView;
 
@@ -21,7 +20,7 @@ class BeheerPuntenController {
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$matrix = CorveePuntenModel::loadPuntenVoorAlleLeden($functies);
 		$view = new BeheerPuntenView($matrix, $functies);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function wijzigpunten($uid) {

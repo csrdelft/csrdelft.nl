@@ -10,7 +10,6 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\OneTimeTokensModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
 
@@ -32,7 +31,7 @@ class WachtwoordController {
 			AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Wachtwoord instellen geslaagd', 1);
 		}
-		return new CsrLayoutPage($form);
+		return view('default', ['content' => $form]);
 	}
 
 	public function reset() {

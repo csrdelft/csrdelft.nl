@@ -13,7 +13,6 @@ use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\fotoalbum\FotoTagsModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
 use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
@@ -142,7 +141,7 @@ class FotoAlbumController {
 				}
 			}
 		}
-		return new CsrLayoutPage($formulier);
+		return view('default', ['content' => $formulier]);
 	}
 
 	public function bestaande($dir) {

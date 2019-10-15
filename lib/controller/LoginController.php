@@ -7,7 +7,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\RememberLoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\login\RememberAfterLoginForm;
 
@@ -39,7 +38,7 @@ class LoginController {
 				$form->css_classes[] = 'redirect';
 
 				$body = new CmsPaginaView(CmsPaginaModel::get(instelling('stek', 'homepage')));
-				return new CsrLayoutPage($body, [], $form);
+				return view('default', ['content' => $body, 'modal' => $form]);
 			}
 			if ($values['redirect']) {
 				redirect($values['redirect']);

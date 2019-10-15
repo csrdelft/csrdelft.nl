@@ -6,7 +6,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenLijstView;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenView;
 use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementView;
@@ -26,19 +25,19 @@ class BeheerAbonnementenController {
 	public function waarschuwingen() {
 		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenWaarschuwingenMatrix();
 		$view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], true, null);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function ingeschakeld() {
 		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenMatrix();
 		$view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], false, true);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function abonneerbaar() {
 		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenAbonneerbaarMatrix();
 		$view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], true, null);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function novieten() {

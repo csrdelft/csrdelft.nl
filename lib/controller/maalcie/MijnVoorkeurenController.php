@@ -5,7 +5,6 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\forms\EetwensForm;
 use CsrDelft\view\maalcie\persoonlijk\voorkeuren\MijnVoorkeurenView;
 use CsrDelft\view\maalcie\persoonlijk\voorkeuren\MijnVoorkeurView;
@@ -24,7 +23,7 @@ class MijnVoorkeurenController {
 	public function mijn() {
 		$voorkeuren = $this->model->getVoorkeurenVoorLid(LoginModel::getUid(), true);
 		$view = new MijnVoorkeurenView($voorkeuren);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function inschakelen($crid) {

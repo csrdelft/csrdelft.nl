@@ -10,7 +10,6 @@ use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\toestemming\ToestemmingLijstResponse;
 use CsrDelft\view\toestemming\ToestemmingLijstTable;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
@@ -48,7 +47,7 @@ class ToestemmingController {
 	 * @throws \SmartyException
 	 */
 	public function GET_overzicht() {
-		return new CsrLayoutPage(new CmsPaginaView(CmsPaginaModel::get('thuis')), [], new ToestemmingModalForm());
+		return view('default', ['content' => new CmsPaginaView(CmsPaginaModel::get('thuis')), 'modal' => new ToestemmingModalForm()]);
 	}
 
 	public function POST_annuleren() {

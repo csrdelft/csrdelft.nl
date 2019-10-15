@@ -9,7 +9,6 @@ use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeToewijzenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\maalcie\corvee\taken\BeheerTaakView;
 use CsrDelft\view\maalcie\corvee\taken\BeheerTakenLijstView;
@@ -40,7 +39,7 @@ class BeheerTakenController {
 			$maaltijd = null;
 		}
 		$view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::instance()->getAlleRepetities());
-		return new CsrLayoutPage($view, [], $modal);
+		return view('default', ['content' => $view, [], $modal]);
 	}
 
 	public function maaltijd($mid) {
@@ -49,7 +48,7 @@ class BeheerTakenController {
 
 	public function prullenbak() {
 		$view = new BeheerTakenView($this->model->getVerwijderdeTaken(), null, true);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function herinneren() {

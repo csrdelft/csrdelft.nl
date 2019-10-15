@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\security\AccessModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\RechtenData;
 use CsrDelft\view\RechtenForm;
@@ -52,7 +51,7 @@ class RechtenController extends AclController {
 			$this->view = new RechtenData($acl);
 		} else {
 			$table = new RechtenTable($this->model, $environment, $resource);
-			$this->view = new CsrLayoutPage($table);
+			$this->view = view('default', ['content' => $table]);
 		}
 	}
 

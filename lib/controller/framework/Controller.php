@@ -11,7 +11,6 @@ use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\bbcode\CsrBB;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\View;
 
 /**
@@ -183,7 +182,7 @@ abstract class Controller {
 		}
 		// GUI 403
 		$body = new CmsPaginaView(CmsPaginaModel::get($response_code));
-		$this->view = new CsrLayoutPage($body);
+		$this->view = view('default', ['content' => $body]);
 		$this->view->view();
 		exit;
 	}

@@ -6,7 +6,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\voorkeuren\BeheerVoorkeurenView;
 use CsrDelft\view\maalcie\corvee\voorkeuren\BeheerVoorkeurView;
 
@@ -23,7 +22,7 @@ class BeheerVoorkeurenController {
 	public function beheer() {
 		$matrix_repetities = $this->model->getVoorkeurenMatrix();
 		$view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function inschakelen($crid, $uid) {

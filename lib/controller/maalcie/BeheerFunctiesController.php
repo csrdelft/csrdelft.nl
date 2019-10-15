@@ -4,7 +4,6 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\functies\BeheerFunctiesView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
@@ -29,7 +28,7 @@ class BeheerFunctiesController {
 		}
 		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
 		$view = new BeheerFunctiesView($functies);
-		return new CsrLayoutPage($view, array(), $modal);
+		return view('default', ['content' => $view, 'modal' => $modal]);
 	}
 
 	public function toevoegen() {

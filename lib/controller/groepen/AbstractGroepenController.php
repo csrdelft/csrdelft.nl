@@ -16,7 +16,6 @@ use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
@@ -180,7 +179,7 @@ abstract class AbstractGroepenController extends Controller {
 			$groepen = $this->model->find('status = ?', [GroepStatus::HT]);
 		}
 		$body = new GroepenView($this->model, $groepen, $soort); // controleert rechten bekijken per groep
-		$this->view = new CsrLayoutPage($body);
+		$this->view = view('default', ['content' => $body]);
 	}
 
 	public function bekijken(AbstractGroep $groep) {
@@ -191,7 +190,7 @@ abstract class AbstractGroepenController extends Controller {
 			$soort = null;
 		}
 		$body = new GroepenView($this->model, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
-		$this->view = new CsrLayoutPage($body);
+		$this->view = view('default', ['content' => $body]);
 	}
 
 	public function deelnamegrafiek(AbstractGroep $groep) {
@@ -278,7 +277,7 @@ abstract class AbstractGroepenController extends Controller {
 			$this->view = new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
 		} else {
 			$table = new GroepenBeheerTable($this->model);
-			$this->view = new CsrLayoutPage($table);
+			$this->view = view('default', ['content' => $table]);
 		}
 	}
 

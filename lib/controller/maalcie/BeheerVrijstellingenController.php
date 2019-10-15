@@ -6,7 +6,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\vrijstellingen\BeheerVrijstellingenView;
 use CsrDelft\view\maalcie\corvee\vrijstellingen\BeheerVrijstellingView;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
@@ -27,7 +26,7 @@ class BeheerVrijstellingenController {
 		/** @var CorveeVrijstelling[] $vrijstellingen */
 		$vrijstellingen = $this->model->find();
 		$view = new BeheerVrijstellingenView($vrijstellingen);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function nieuw() {

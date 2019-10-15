@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\beheer\MaalCieBoekjaarSluitenView;
 use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
 
@@ -13,7 +12,7 @@ use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
 class MaalCieBoekjaarController {
 	public function beheer() {
 		$view = new MaalCieBoekjaarSluitenView();
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function sluitboekjaar() {

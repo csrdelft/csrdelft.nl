@@ -2,11 +2,9 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementenView;
 use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementView;
 
@@ -25,7 +23,7 @@ class MijnAbonnementenController {
 	public function mijn() {
 		$abonnementen = $this->model->getAbonnementenVoorLid(LoginModel::getUid(), true, true);
 		$view = new MijnAbonnementenView($abonnementen);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function inschakelen($mrid) {

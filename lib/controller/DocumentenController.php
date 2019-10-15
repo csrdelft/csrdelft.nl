@@ -3,13 +3,11 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\AclController;
 use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\documenten\Document;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
 use CsrDelft\view\documenten\DocumentContent;
 use CsrDelft\view\documenten\DocumentDownloadContent;
@@ -73,7 +71,7 @@ class DocumentenController {
 			setMelding('Dit type bestand kan niet worden getoond', -1);
 			redirect('/documenten');
 		}
-		
+
 		if ($document->hasFile()) {
 			return new DocumentContent($document);
 		} else {

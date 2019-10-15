@@ -39,7 +39,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
@@ -174,7 +173,7 @@ class ProfielController {
 		if ($alleenFormulier) {
 			return view('plain', ['titel' => 'Noviet toevoegen', 'content' => $form]);
 		}
-		return new CsrLayoutPage($form);
+		return view('default', ['content' => $form]);
 	}
 
 	public function bewerken($uid) {
@@ -207,7 +206,7 @@ class ProfielController {
 			setMelding('Voorkeuren opgeslagen', 1);
 			redirect();
 		}
-		return new CsrLayoutPage($form);
+		return view('default', ['content' => $form]);
 	}
 
 	public function addToGoogleContacts($uid) {

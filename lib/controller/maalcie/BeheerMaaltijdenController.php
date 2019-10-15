@@ -11,7 +11,6 @@ use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
@@ -44,7 +43,7 @@ class BeheerMaaltijdenController {
 
 	public function GET_prullenbak() {
 		$body = new BeheerMaaltijdenView(new PrullenbakMaaltijdenTable(), 'Prullenbak maaltijdenbeheer');
-		return new CsrLayoutPage($body);
+		return view('default', ['content' => $body]);
 	}
 
 	public function POST_prullenbak() {
@@ -83,12 +82,12 @@ class BeheerMaaltijdenController {
 		/** @var MaaltijdRepetitie[] $repetities */
 		$repetities = MaaltijdRepetitiesModel::instance()->find();
 		$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
-		return new CsrLayoutPage($body, array(), $modal);
+		return view('default', ['content' => $body, 'modal' => $modal]);
 	}
 
 	public function GET_archief() {
 		$body = new BeheerMaaltijdenView(new ArchiefMaaltijdenTable(), 'Archief maaltijdenbeheer');
-		return new CsrLayoutPage($body);
+		return view('default', ['content' => $body]);
 	}
 
 	public function POST_archief() {
@@ -226,7 +225,7 @@ class BeheerMaaltijdenController {
         $body = new BeheerMaaltijdenBeoordelingenView(
             new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
         );
-        return new CsrLayoutPage($body);
+        return view('default', ['content' => $body]);
 	}
 
 	public function POST_beoordelingen() {
@@ -255,6 +254,6 @@ class BeheerMaaltijdenController {
 
 	public function onverwerkt() {
 		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
-		return new CsrLayoutPage($body);
+		return view('default', ['content' => $body]);
 	}
 }

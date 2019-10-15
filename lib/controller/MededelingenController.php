@@ -6,7 +6,6 @@ use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\entity\mededelingen\Mededeling;
 use CsrDelft\model\mededelingen\MededelingenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\mededelingen\MededelingenOverzichtView;
 use CsrDelft\view\mededelingen\MededelingenView;
 use CsrDelft\view\mededelingen\MededelingView;
@@ -66,7 +65,7 @@ class MededelingenController extends AclController {
 			}
 		}
 		$body = parent::performAction($args);
-		$this->view = new CsrLayoutPage($body);
+		$this->view = view('default', ['content' => $body]);
 	}
 
 	public function top3overzicht() {

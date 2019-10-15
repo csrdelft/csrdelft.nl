@@ -2,13 +2,11 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\controller\framework\AclController;
 use CsrDelft\model\maalcie\CorveePuntenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\corvee\CorveeRoosterView;
 use CsrDelft\view\maalcie\persoonlijk\MijnCorveeView;
 
@@ -30,7 +28,7 @@ class MijnCorveeController {
 		$punten = CorveePuntenModel::loadPuntenVoorLid(LoginModel::getProfiel(), $functies);
 		$vrijstelling = CorveeVrijstellingenModel::instance()->getVrijstelling(LoginModel::getUid());
 		$view = new MijnCorveeView($rooster, $punten, $functies, $vrijstelling);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function rooster($toonverleden = false) {
@@ -43,7 +41,7 @@ class MijnCorveeController {
 		}
 		$rooster = $this->model->getRoosterMatrix($taken->fetchAll());
 		$view = new CorveeRoosterView($rooster, $toonverleden);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 }

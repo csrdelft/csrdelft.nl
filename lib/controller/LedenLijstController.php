@@ -10,16 +10,14 @@ use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\LidZoeker;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\lid\LedenlijstContent;
-use Exception;
 
 class LedenLijstController {
 	public function lijst() {
 		if (!LoginModel::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView(CmsPaginaModel::get('403'));
-			return new CsrLayoutPage($body);
+			return view('default', ['content' => $body]);
 		}
 
 		$message = '';
@@ -85,6 +83,6 @@ class LedenLijstController {
 			setMelding($message, 0);
 		}
 
-		return new CsrLayoutPage($ledenlijstcontent);
+		return view('default', ['content' => $ledenlijstcontent]);
 	}
 }
