@@ -18,7 +18,7 @@ use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementView;
 class BeheerAbonnementenController {
 	private $model;
 
-	public function __construct($query) {
+	public function __construct() {
 		$this->model = MaaltijdAbonnementenModel::instance();
 	}
 

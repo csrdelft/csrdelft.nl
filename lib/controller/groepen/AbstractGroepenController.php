@@ -345,7 +345,7 @@ abstract class AbstractGroepenController extends Controller {
 		if ($this->getMethod() == 'GET') {
 			$this->beheren();
 			$form->setDataTableId($this->table->getDataTableId());
-			$this->view->getRenderer()->assign('modal', $form);
+			$this->view = view('default', ['content' => $this->table, 'modal' => $form]);
 			return;
 		} elseif ($form->validate()) {
 			ChangeLogModel::instance()->log($groep, 'create', null, print_r($groep, true));
@@ -375,7 +375,7 @@ abstract class AbstractGroepenController extends Controller {
 				$this->beheren();
 				$this->table->filter = $groep->naam;
 				$form->setDataTableId($this->table->getDataTableId());
-				$this->view->getRenderer()->assign('modal', $form);
+				$this->view = view('default', ['content' => $this->table, 'modal' => $form]);
 			} elseif ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);

@@ -2,8 +2,6 @@
 
 namespace CsrDelft\common;
 
-use Couchbase\Exception;
-
 /**
  * Helper klasse om ini bestanden in de `etc` map uit te lezen.
  *

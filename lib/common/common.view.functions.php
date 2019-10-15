@@ -430,3 +430,9 @@ function escape_ical($string, $prefix_length) {
 	}
 	return $wrap;
 }
+
+function view_to_string(View $view) {
+	ob_start();
+	$view->view();
+	return ob_get_clean();
+}
