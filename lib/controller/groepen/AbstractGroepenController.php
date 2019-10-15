@@ -51,6 +51,8 @@ use CsrDelft\view\JsonResponse;
  */
 abstract class AbstractGroepenController extends Controller {
 
+	private $table;
+
 	public function __construct($query, AbstractGroepenModel $model) {
 		parent::__construct($query, $model);
 	}
@@ -278,6 +280,7 @@ abstract class AbstractGroepenController extends Controller {
 		} else {
 			$table = new GroepenBeheerTable($this->model);
 			$this->view = view('default', ['content' => $table]);
+			$this->table = $table;
 		}
 	}
 
@@ -339,7 +342,7 @@ abstract class AbstractGroepenController extends Controller {
 		$form = new GroepForm($groep, $this->model->getUrl() . $this->action, AccessAction::Aanmaken); // checks rechten aanmaken
 		if ($this->getMethod() == 'GET') {
 			$this->beheren();
-			$form->setDataTableId($this->view->getBody()->getDataTableId());
+			$form->setDataTableId($this->table->getDataTableId());
 			$this->view->modal = $form;
 			return;
 		} elseif ($form->validate()) {
@@ -369,7 +372,7 @@ abstract class AbstractGroepenController extends Controller {
 			if ($this->getMethod() == 'GET') {
 				$this->beheren();
 				$this->view->getBody()->filter = $groep->naam;
-				$form->setDataTableId($this->view->getBody()->getDataTableId());
+				$form->setDataTableId($this->table->getDataTableId());
 				$this->view->modal = $form;
 			} elseif ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
