@@ -148,8 +148,9 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return Maaltijd[]
 	 */
 	public function getKomendeMaaltijdenVoorLid($uid) {
+		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime(instelling('maaltijden', 'toon_ketzer_vooraf')))));
-		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, $uid);
+		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, $uid, true);
 		return $maaltijden;
 	}
 
@@ -159,9 +160,12 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return Maaltijd[]
 	 */
 	public function getRecenteMaaltijden($timestamp, $limit = null) {
+		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $timestamp), date('Y-m-d')), null, null, $limit);
 		$maaltijdenById = array();
 		foreach ($maaltijden as $maaltijd) {
+			// Sla over als maaltijd nog niet voorbij is
+			if ($maaltijd->getEindMoment() > time()) continue;
 			$maaltijdenById[$maaltijd->maaltijd_id] = $maaltijd;
 		}
 		return $maaltijdenById;
@@ -273,12 +277,16 @@ class MaaltijdenModel extends PersistenceModel {
 	 *
 	 * @param Maaltijd[] $maaltijden
 	 * @param string $uid
+	 * @param bool $verbergVerleden
 	 *
 	 * @return Maaltijd[]
 	 */
-	private function filterMaaltijdenVoorLid($maaltijden, $uid) {
+	private function filterMaaltijdenVoorLid($maaltijden, $uid, $verbergVerleden = false) {
 		$result = array();
 		foreach ($maaltijden as $maaltijd) {
+			// Verberg afgelopen maaltijd
+			if ($verbergVerleden && $maaltijd->getEindMoment() < time()) continue;
+
 			// Kan en mag aanmelden of mag maaltijdlijst zien en sluiten? Dan maaltijd ook zien.
 			if (($maaltijd->aanmeld_limiet > 0 AND $this->maaltijdAanmeldingenModel->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) OR $maaltijd->magBekijken($uid)) {
 				$result[$maaltijd->maaltijd_id] = $maaltijd;

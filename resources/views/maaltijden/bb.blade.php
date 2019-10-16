@@ -55,7 +55,14 @@
 
 						@else
 							@if (isset($aanmelding))
-								<span class="maaltijd-aangemeld">Aangemeld @if($aanmelding->door_abonnement) (abo) @endif</span>
+								@if ($maaltijd->getEindMoment() > time())
+									<span class="maaltijd-aangemeld">Aangemeld @if($aanmelding->door_abonnement) (abo) @endif</span>
+								@else
+									<span class="beoordeling-label">Kwaliteit:</span>
+									{!! $kwaliteit !!}
+									<span class="beoordeling-label">Kwantiteit:</span>
+									{!! $kwantiteit !!}
+								@endif
 							@else
 								<span class="maaltijd-afgemeld">Niet aangemeld</span>
 							@endif
@@ -69,7 +76,7 @@
 							@icon("comment", null, $aanmelding->gasten_eetwens)
 						@endif
 
-						@if($maaltijd->gesloten)
+						@if($maaltijd->gesloten && $maaltijd->getEindMoment() > time())
 							@php($date = strftime("%H:%M", strtotime($maaltijd->laatst_gesloten)))
 							@icon("lock", null, "Maaltijd is gesloten om " . $date)
 						@endif
