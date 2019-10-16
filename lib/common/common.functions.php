@@ -4,7 +4,6 @@
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
-use CsrDelft\common\MijnSqli;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\instellingen\InstellingenModel;
@@ -552,7 +551,7 @@ function getDebug(
 		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
 	}
 	if ($sql) {
-		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::instance()->getQueries(), "PDO" => Database::instance()->getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
+		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::instance()->getQueries(), "PDO" => Database::instance()->getQueries()), true));
 	}
 	if ($sqltrace) {
 		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(Database::instance()->getTrace(), true));

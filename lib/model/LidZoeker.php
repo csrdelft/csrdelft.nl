@@ -2,12 +2,12 @@
 
 namespace CsrDelft\model;
 
-use CsrDelft\common\MijnSqli;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
@@ -176,7 +176,7 @@ class LidZoeker {
 		$query = '';
 		$defaults = array();
 
-		$zoekterm = MijnSqli::instance()->escape($zoekterm);
+		$zoekterm = Database::instance()->getDatabase()->quote($zoekterm);
 
 		if ($zoekterm == '*' OR trim($zoekterm) == '') {
 			$query = '1 ';
@@ -263,32 +263,20 @@ class LidZoeker {
 
 	/**
 	 * Doe de zoektocht.
-	 *
-	 * @return Profiel[]
 	 */
 	public function search() {
-		$db = MijnSqli::instance();
-
-		$query = "SELECT uid FROM profielen WHERE ";
+		$query = '';
 
 		if ($this->query != '') {
 			$query .= $this->defaultSearch($this->query);
 		}
 		$query .= $this->getFilterSQL();
-		$query .= ' ORDER BY ' . implode($this->sort) . ';';
 
+		$result = ProfielModel::instance()->find($query, [], null, implode($this->sort));
 
-		$result = $db->query2array($query);
-
-		//De uid's omzetten naar Lid-objectjes
-		$this->result = array();
-		if (is_array($result)) {
-			foreach ($result as $uid) {
-				$profiel = ProfielModel::get($uid['uid']);
-				if ($profiel) {
-					$profiel = $this->zoekMag($profiel, $this->query);
-					if ($profiel !== null) $this->result[] = $profiel;
-				}
+		foreach ($result as $profiel) {
+			if ($this->zoekMag($profiel, $this->query)) {
+				$this->result[] = $profiel;
 			}
 		}
 	}
@@ -336,13 +324,13 @@ class LidZoeker {
 	 */
 
 	public function getFilterSQL() {
-		$db = MijnSqli::instance();
+		$db = Database::instance()->getDatabase();
 		$filters = array();
 		foreach ($this->filters as $key => $value) {
 			if (is_array($value)) {
-				$filters[] = $key . " IN ('" . implode("', '", $db->escape($value)) . "')";
+				$filters[] = $key . " IN ('" . implode("', '", array_map([$db, 'quote'], $value)) . "')";
 			} else {
-				$filters[] = $key . "='" . $db->escape($value) . "'";
+				$filters[] = $key . "='" . $db->quote($value) . "'";
 			}
 		}
 		$return = implode(' AND ', $filters);
