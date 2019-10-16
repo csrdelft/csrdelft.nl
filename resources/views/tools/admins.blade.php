@@ -30,9 +30,9 @@
 <table class="table">
 	<thead>
 	<tr>
-		<th>UID</th>
-		<th>Naam</th>
-		<th>Rechten</th>
+		<th scope="col">UID</th>
+		<th scope="col">Naam</th>
+		<th scope="col">Rechten</th>
 	</tr>
 	</thead>
 	<tbody>

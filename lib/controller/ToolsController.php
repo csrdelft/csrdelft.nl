@@ -13,7 +13,7 @@ use CsrDelft\model\LogModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\ProfielService;
 use CsrDelft\model\Roodschopper;
-use CsrDelft\model\SavedQuery;
+use CsrDelft\model\SavedQueryModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
@@ -299,13 +299,13 @@ class ToolsController {
 	public function query() {
 		if (isset($_GET['id']) && (int)$_GET['id'] == $_GET['id']) {
 			$id = (int)$_GET['id'];
-			$savedquery = new SavedQuery($id);
+			$result = SavedQueryModel::instance()->loadQuery($id);
 		} else {
-			$savedquery = null;
+			$result = null;
 		}
 
 		return view('default', [
-			'content' => new SavedQueryContent($savedquery),
+			'content' => new SavedQueryContent($result),
 		]);
 	}
 

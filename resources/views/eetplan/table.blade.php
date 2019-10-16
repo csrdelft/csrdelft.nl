@@ -3,7 +3,7 @@
 		<table class="table table-striped">
 			<thead>
 			<tr>
-				<th>Novieten</th>
+				<th scope="col">Novieten</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -20,7 +20,7 @@
 			<thead>
 			<tr>
 				@foreach($eetplan['avonden'] as $avond)
-					<th>{{$avond}}</th>
+					<th scope="col">{{$avond}}</th>
 				@endforeach
 			</tr>
 			</thead>

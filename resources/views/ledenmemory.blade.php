@@ -6,7 +6,7 @@
 	@script('ledenmemory.js')
 </head>
 <body data-groep="{{$groep->getUUID()}}">
-<table>
+<table role="presentation">
 	<tbody>
 	<tr>
 		<td class="pasfotos">

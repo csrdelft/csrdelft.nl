@@ -4,7 +4,8 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\SavedQuery;
+use CsrDelft\model\entity\SavedQueryResult;
+use CsrDelft\model\SavedQueryModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\SavedQueryContent;
 
@@ -20,7 +21,7 @@ use CsrDelft\view\SavedQueryContent;
 class BbQuery extends BbTag {
 
 	/**
-	 * @var SavedQuery
+	 * @var SavedQueryResult
 	 */
 	private $query;
 
@@ -30,13 +31,12 @@ class BbQuery extends BbTag {
 
 	public function isAllowed()
 	{
-		return $this->query->magBekijken();
+		return $this->query->query->magBekijken();
 	}
 
 	public function renderLight() {
-		$sqc = new SavedQueryContent($this->query);
 		$url = '/tools/query?id=' . urlencode($this->content);
-		return BbHelper::lightLinkBlock('query', $url, $sqc->getModel()->getBeschrijving(), $sqc->getModel()->count() . ' regels');
+		return BbHelper::lightLinkBlock('query', $url, $this->query->query->beschrijving, count($this->query->rows) . ' regels');
 	}
 
 	/**
@@ -63,6 +63,6 @@ class BbQuery extends BbTag {
 		$this->readMainArgument($arguments);
 		$this->content = (int)$this->content;
 		$this->assertId($this->content);
-		$this->query = new SavedQuery($this->content);
+		$this->query = SavedQueryModel::instance()->loadQuery($this->content);
 	}
 }

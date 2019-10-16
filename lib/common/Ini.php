@@ -56,7 +56,7 @@ class Ini {
 
 		$config = static::$configCache[$iniFile];
 
-		if ($config == false) {
+		if (!$config) {
 			throw new CsrException('Configuratie bestand "' . $iniFile . '" bestaat niet of is leeg');
 		}
 

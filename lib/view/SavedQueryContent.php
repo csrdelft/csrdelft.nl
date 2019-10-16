@@ -2,18 +2,19 @@
 
 namespace CsrDelft\view;
 
+use CsrDelft\model\entity\SavedQueryResult;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\model\SavedQuery;
+use CsrDelft\model\SavedQueryModel;
 
 class SavedQueryContent implements View {
 
 	/**
 	 * Saved query
-	 * @var SavedQuery
+	 * @var SavedQueryResult
 	 */
 	private $sq;
 
-	public function __construct(SavedQuery $sq = null) {
+	public function __construct(SavedQueryResult $sq = null) {
 		$this->sq = $sq;
 	}
 
@@ -69,58 +70,64 @@ class SavedQueryContent implements View {
 	}
 
 	public function render_queryResult() {
-		if ($this->sq->hasResult()) {
+		if ($this->sq && !$this->sq->error) {
+
 			$sq = $this->sq;
 			$id = 'query-' . time();
-			$return = $sq->getBeschrijving() . ' (' . $sq->count() . ' regels)<br /><table class="query_table" id="' . $id . '">';
+			$return = $sq->query->beschrijving . ' (' . count($sq->rows) . ' regels)<br /><table class="table table-sm table-striped" id="' . $id . '">';
 
 			$return .= '<thead><tr>';
-			foreach ($sq->getHeaders() as $kopje) {
+			foreach ($sq->cols as $kopje) {
 				$return .= '<th>' . self::render_header($kopje) . '</th>';
 			}
 			$return .= '</tr></thead><tbody>';
 
-			foreach ($sq->getResult() as $rij) {
+			foreach ($sq->rows as $rij) {
 				$return .= '<tr>';
 				foreach ($rij as $key => $veld) {
 					$return .= '<td>' . self::render_field($key, $veld) . '</td>';
 				}
 				$return .= '</tr>';
 			}
-			$return .= '</tbody></table><a class="btn clear-right vergroot" data-vergroot="#' . $id . ' tbody" title="Uitklappen"><span class="fa fa-expand"></span></a>';
+			$return .= '</tbody></table>';
+		} elseif ($this->sq->error) {
+			$return = $this->sq->error;
 		} else {
 			//foutmelding in geval van geen resultaat, dus of geen query die bestaat, of niet
 			//voldoende rechten.
-			$return = 'Query (' . $this->sq->getID() . ') bestaat niet, geeft een fout, of u heeft niet voldoende rechten.';
+			$return = 'Query (' . $this->sq->query->ID . ') bestaat niet, geeft een fout, of u heeft niet voldoende rechten.';
 		}
 		return $return;
 	}
 
 	public function getQueryselector() {
 		//als er een query ingeladen is, die highlighten
-		$id = $this->sq instanceof SavedQuery ? $this->sq->getID() : 0;
+		$id = $this->sq instanceof SavedQueryResult ? $this->sq->query->ID : 0;
 
-		$return = '<a class="btn" href="#" onclick="$(\'#sqSelector\').toggle();">Laat queryselector zien.</a>';
+		$return = '<a class="btn btn-primary" href="#" onclick="$(\'#sqSelector\').toggle();">Laat queryselector zien.</a>';
 		$return .= '<div id="sqSelector" ';
 		if ($id != 0) {
 			$return .= 'class="verborgen"';
 		}
 		$return .= '>';
 		$current = '';
-		foreach (SavedQuery::getQueries() as $query) {
-			if ($current != $query['categorie']) {
+		foreach (SavedQueryModel::getQueries() as $query) {
+			if (!$query->magBekijken()) {
+				continue;
+			}
+			if ($current != $query->categorie) {
 				if ($current != '') {
 					$return .= '</ul></div>';
 				}
-				$return .= '<div class="sqCategorie "><span class="dikgedrukt">' . $query['categorie'] . '</span><ul>';
-				$current = $query['categorie'];
+				$return .= '<div class="sqCategorie "><span class="dikgedrukt">' . $query->categorie . '</span><ul>';
+				$current = $query->categorie;
 			}
-			$return .= '<li><a href="query?id=' . $query['ID'] . '">';
-			if ($id == $query['ID']) {
+			$return .= '<li><a href="query?id=' . $query->ID . '">';
+			if ($id == $query->ID) {
 				$return .= '<span class="cursief">';
 			}
-			$return .= htmlspecialchars($query['beschrijving']);
-			if ($id == $query['ID']) {
+			$return .= htmlspecialchars($query->beschrijving);
+			if ($id == $query->ID) {
 				$return .= '</span>';
 			}
 			$return .= '</a></li>';
@@ -134,7 +141,7 @@ class SavedQueryContent implements View {
 		echo $this->getQueryselector();
 
 		//render query if selected and allowed
-		if ($this->sq != null && $this->sq->magBekijken()) {
+		if ($this->sq != null && $this->sq->query->magBekijken()) {
 			echo $this->render_queryResult();
 		}
 	}

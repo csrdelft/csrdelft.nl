@@ -15,6 +15,8 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\bbcode\CsrBB;
 use PDO;
+use PDOException;
+use PDOStatement;
 
 /**
  * ForumPostsModel.class.php
@@ -22,6 +24,9 @@ use PDO;
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 30/03/2017
+ *
+ * @method PDOStatement|ForumPost[] find($criteria = null, array $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
+ * @method ForumPost retrieveByPrimaryKey(array $primary_key_values)
  */
 class ForumPostsModel extends CachedPersistenceModel implements Paging {
 
@@ -142,7 +147,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$where .= ' HAVING score > 0';
 		try {
 			$results = Database::instance()->sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $forumZoeken->limit);
-		} catch (\PDOException $ex) {
+		} catch (PDOException $ex) {
 			// Syntax error in SQL MATCH op user input
 			return [];
 		}
