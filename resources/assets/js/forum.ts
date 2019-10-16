@@ -76,7 +76,7 @@ export function forumBewerken(postId: string) {
 		bewerkContainer = $('#post' + postId);
 		bewerkContainerInnerHTML = bewerkContainer.html();
 		const bewerkForm = `<form id="forumEditForm" class="Formulier" action="/forum/bewerken/${postId}" method="post">` +
-			'<div id="bewerkPreview" class="preview forumBericht"></div>' +
+			'<div id="bewerkPreview" class="bbcodePreview forumBericht"></div>' +
 			'<textarea name="forumBericht" id="forumBewerkBericht" class="FormElement BBCodeField" rows="8"></textarea>' +
 			'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />' +
 			'<div class="float-right"><a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>' +
@@ -86,7 +86,8 @@ export function forumBewerken(postId: string) {
 			'</form>';
 		bewerkContainer.html(bewerkForm);
 		bewerkContainer.find('form').on('submit', submitPost);
-		bewerkContainer.find('input.voorbeeld').on('click', CsrBBPreview.bind(null, 'forumBewerkBericht', 'bewerkPreview'));
+		bewerkContainer.find('input.voorbeeld')
+			.on('click', CsrBBPreview.bind(null, 'forumBewerkBericht', 'bewerkPreview', {}));
 		bewerkContainer.find('input.annuleren').on('click', restorePost);
 
 		const $forumBewerkBericht = $('#forumBewerkBericht');
