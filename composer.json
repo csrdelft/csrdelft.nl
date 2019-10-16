@@ -50,7 +50,8 @@
 	"autoload": {
 		"psr-4": {
 			"CsrDelft\\": "lib/"
-		}
+		},
+		"files": ["lib/common/common.functions.php", "lib/common/common.view.functions.php"]
 	},
 	"include-path": ["lib/"],
 	"require-dev": {
