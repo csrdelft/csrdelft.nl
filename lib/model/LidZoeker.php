@@ -174,9 +174,8 @@ class LidZoeker {
 	 */
 	private function defaultSearch($zoekterm) {
 		$query = '';
-		$defaults = array();
-
-		$zoekterm = Database::instance()->getDatabase()->quote($zoekterm);
+		$defaults = [];
+		$params = [];
 
 		if ($zoekterm == '*' OR trim($zoekterm) == '') {
 			$query = '1 ';
@@ -195,13 +194,15 @@ class LidZoeker {
 				$result = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'));
 				$query = array();
 				foreach ($result as $v) {
-					$query[] = 'verticale="' . $v->letter . '" ';
+					$query[] = 'verticale = ? ';
+					$params[] = $v->letter;
 				}
 				$query = '(' . implode(' OR ', $query) . ') ';
 			} else {
 				$verticale = VerticalenModel::get($v);
 				if ($verticale) {
-					$query = 'verticale="' . $verticale->letter . '" ';
+					$query = 'verticale= ? ';
+					$params[] = $verticale->letter;
 				} else {
 					$query = 'verticale="" ';
 				}
@@ -228,37 +229,55 @@ class LidZoeker {
 			$parts = explode(':', $zoekterm);
 
 			if ($parts[1][0] == '=') {
-				$query = $parts[0] . "='" . substr($parts[1], 1) . "'";
+				$query = $parts[0] . "= ?";
+				$params[] = substr($parts[1], 1);
 			} else {
-				$query = $parts[0] . " LIKE '%" . $parts[1] . "%'";
+				$query = $parts[0] . " LIKE ?";
+				$params[] = sql_contains($parts[1]);
 			}
 		} else { //als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
-			$defaults[] = "voornaam LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "achternaam LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "CONCAT_WS(' ', voornaam, tussenvoegsel, achternaam) LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "CONCAT_WS(' ', voornaam, achternaam) LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "nickname LIKE '%" . $zoekterm . "%' ";
+			$defaults[] = "voornaam LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "achternaam LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "CONCAT_WS(' ', voornaam, tussenvoegsel, achternaam) LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "CONCAT_WS(' ', voornaam, achternaam) LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "nickname LIKE ? ";
+			$params[] = sql_contains($zoekterm);
 			if (LoginModel::mag(P_LEDEN_MOD)) {
-				$defaults[] = "eetwens LIKE '%" . $zoekterm . "%' ";
+				$defaults[] = "eetwens LIKE ? ";
+				$params[] = sql_contains($zoekterm);
 			}
 
-			$defaults[] = "CONCAT_WS(' ', adres, postcode, woonplaats) LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "adres LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "postcode LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "woonplaats LIKE '%" . $zoekterm . "%' ";
+			$defaults[] = "CONCAT_WS(' ', adres, postcode, woonplaats) LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "adres LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "postcode LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "woonplaats LIKE ? ";
+			$params[] = sql_contains($zoekterm);
 
-			$defaults[] = "mobiel LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "telefoon LIKE '%" . $zoekterm . "%' ";
+			$defaults[] = "mobiel LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "telefoon LIKE ? ";
+			$params[] = sql_contains($zoekterm);
 
-			$defaults[] = "studie LIKE '%" . $zoekterm . "%' ";
-			$defaults[] = "email LIKE '%" . $zoekterm . "%' ";
+			$defaults[] = "studie LIKE ? ";
+			$params[] = sql_contains($zoekterm);
+			$defaults[] = "email LIKE ? ";
+			$params[] = sql_contains($zoekterm);
 
 			$query .= '( ' . implode(' OR ', $defaults) . ' )';
 		}
 
-		return $query . ' AND ';
+		return array($params, $query . ' AND ');
 	}
 
 	/**
@@ -266,13 +285,18 @@ class LidZoeker {
 	 */
 	public function search() {
 		$query = '';
+		$params = [];
 
 		if ($this->query != '') {
-			$query .= $this->defaultSearch($this->query);
+			list($paramsPart, $queryPart) = $this->defaultSearch($this->query);
+			$query .= $queryPart;
+			$params = array_merge($params, $paramsPart);
 		}
-		$query .= $this->getFilterSQL();
+		list($paramsPart, $queryPart) = $this->getFilterSQL();
+		$query .= $queryPart;
+		$params = array_merge($params, $paramsPart);
 
-		$result = ProfielModel::instance()->find($query, [], null, implode($this->sort));
+		$result = ProfielModel::instance()->find($query, $params, null, implode($this->sort));
 
 		foreach ($result as $profiel) {
 			if ($this->zoekMag($profiel, $this->query)) {
@@ -324,20 +348,22 @@ class LidZoeker {
 	 */
 
 	public function getFilterSQL() {
-		$db = Database::instance()->getDatabase();
+		$params = [];
 		$filters = array();
 		foreach ($this->filters as $key => $value) {
 			if (is_array($value)) {
-				$filters[] = $key . " IN ('" . implode("', '", array_map([$db, 'quote'], $value)) . "')";
+				$filters[] = $key . " IN ('" . implode("', '", array_map(function ($val) { return '?';}, $value)) . "')";
+				$params = array_merge($params, $value);
 			} else {
-				$filters[] = $key . "='" . $db->quote($value) . "'";
+				$filters[] = $key . "=?";
+				$params[] = $value;
 			}
 		}
 		$return = implode(' AND ', $filters);
 		if (strlen(trim($return)) == 0) {
-			return '1';
+			return [[], '1'];
 		} else {
-			return $return;
+			return [$params, $return];
 		}
 	}
 
