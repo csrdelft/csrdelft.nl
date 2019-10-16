@@ -7,7 +7,6 @@ use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
@@ -17,8 +16,6 @@ use CsrDelft\view\lid\LLLijst;
  * LidZoeker
  *
  * de array's die in deze class staan bepalen wat er in het formulier te zien is.
- *
- * @deprecated
  */
 class LidZoeker {
 	//velden die door gewone leden geselecteerd mogen worden.
@@ -187,11 +184,11 @@ class LidZoeker {
 			} catch (\Exception $e) {
 				//care.
 			}*/
-			$query = "uid IN('" . implode("','", $uids) . "') ";
+			$query = "uid IN(" . implode(",", $uids) . ") ";
 		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) { //verticale, id, letter
 			$v = substr($zoekterm, 10);
 			if (strlen($v) > 1) {
-				$result = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'));
+				$result = VerticalenModel::instance()->find('naam LIKE ?', [sql_contains($v)]);
 				$query = array();
 				foreach ($result as $v) {
 					$query[] = 'verticale = ? ';
@@ -352,10 +349,10 @@ class LidZoeker {
 		$filters = array();
 		foreach ($this->filters as $key => $value) {
 			if (is_array($value)) {
-				$filters[] = $key . " IN ('" . implode("', '", array_map(function ($val) { return '?';}, $value)) . "')";
+				$filters[] = $key . " IN (" . implode(", ", array_map(function ($val) { return '?';}, $value)) . ")";
 				$params = array_merge($params, $value);
 			} else {
-				$filters[] = $key . "=?";
+				$filters[] = $key . "= ?";
 				$params[] = $value;
 			}
 		}
