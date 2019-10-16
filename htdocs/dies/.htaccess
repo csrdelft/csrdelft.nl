@@ -1,6 +1,3 @@
 RewriteEngine on
-#RewriteCond %{REQUEST_URI} !^/dies/
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d [OR]
 RewriteCond %{REQUEST_URI} !^/dies/20
 RewriteRule ^(.*)$ 2019/$1 [L]
