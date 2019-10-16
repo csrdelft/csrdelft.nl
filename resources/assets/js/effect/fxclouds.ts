@@ -3,7 +3,7 @@ import {
 	Geometry,
 	Mesh,
 	PerspectiveCamera,
-	PlaneGeometry, Renderer,
+	PlaneGeometry,
 	Scene,
 	ShaderMaterial,
 	TextureLoader,
@@ -15,14 +15,6 @@ if (!Detector.webgl) {
 	Detector.addGetWebGLMessage();
 }
 
-let container: HTMLElement;
-let camera: PerspectiveCamera;
-let scene: Scene;
-let renderer: Renderer;
-let mesh;
-let geometry;
-let material;
-
 let mouseX = 0;
 let mouseY = 0;
 const startTime = Date.now();
@@ -30,118 +22,104 @@ const startTime = Date.now();
 const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
 
-initClouds();
+const vertexShader = `
+varying vec2 vUv;
 
-function initClouds() {
+void main() {
+	vUv = uv;
+	gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+`;
 
-	container = document.getElementById('cd-main-overlay')!;
+const fragmentShader = `
+uniform sampler2D map;
 
-	// Bg gradient
+uniform vec3 fogColor;
+uniform float fogNear;
+uniform float fogFar;
 
-	const canvas = document.createElement('canvas');
-	canvas.width = 32;
-	canvas.height = window.innerHeight;
+varying vec2 vUv;
 
-	const context = canvas.getContext('2d')!;
+void main() {
+	float depth = gl_FragCoord.z / gl_FragCoord.w;
+	float fogFactor = smoothstep( fogNear, fogFar, depth );
 
-	const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
-	gradient.addColorStop(0, '#1e4877');
-	gradient.addColorStop(0.5, '#4584b4');
+	gl_FragColor = texture2D( map, vUv );
+	gl_FragColor.w *= pow( abs(gl_FragCoord.z), 20.0 );
+	gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+}
+`;
 
-	context.fillStyle = gradient;
-	context.fillRect(0, 0, canvas.width, canvas.height);
+const container = document.getElementById('cd-main-overlay')!;
+container.style.background = 'linear-gradient(#1e4877, #4584b4, #4584b4)';
 
-	container.style.background = `url("${canvas.toDataURL('image/png')}")`;
+const canvas = document.createElement('canvas');
+canvas.width = 32;
+canvas.height = window.innerHeight;
 
-	//
+const camera = new PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 3000);
+camera.position.z = 3000;
 
-	camera = new PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 3000);
-	camera.position.z = 3000;
+const scene = new Scene();
+const geometry = new Geometry();
 
-	scene = new Scene();
+const texture = new TextureLoader().load('/images/cloud10.png', animateClouds);
 
-	geometry = new Geometry();
+const fog = new Fog(0x4584b4, -100, 3000);
 
-	const texture = new TextureLoader().load('/images/cloud10.png', animateClouds);
+const material = new ShaderMaterial({
+	depthTest: false,
+	depthWrite: false,
+	transparent: true,
+	uniforms: {
+		fogColor: {type: 'c', value: fog.color},
+		fogFar: {type: 'f', value: fog.far},
+		fogNear: {type: 'f', value: fog.near},
+		map: {type: 't', value: texture},
+	},
+	fragmentShader,
+	vertexShader,
+});
 
-	const fog = new Fog(0x4584b4, -100, 3000);
+const plane = new Mesh(new PlaneGeometry(64, 64));
 
-	const vs = document.getElementById('vs');
-	const fs = document.getElementById('fs');
-	const vertexShader = vs!.textContent!;
-	const fragmentShader = fs!.textContent!;
+for (let i = 0; i < 8000; i++) {
+	plane.position.x = Math.random() * 1000 - 500;
+	plane.position.y = -Math.random() * Math.random() * 200 - 15;
+	plane.position.z = i;
+	plane.rotation.z = Math.random() * Math.PI;
+	plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
 
-	material = new ShaderMaterial({
-		depthTest: false,
-		depthWrite: false,
-		fragmentShader,
-		transparent: true,
-		uniforms: {
-			fogColor: {
-				type: 'c',
-				value: fog.color,
-			},
-			fogFar: {
-				type: 'f',
-				value: fog.far,
-			},
-			fogNear: {
-				type: 'f',
-				value: fog.near,
-			},
-			map: {
-				type: 't',
-				value: texture,
-			},
-		},
-		vertexShader,
-	});
-
-	const plane = new Mesh(new PlaneGeometry(64, 64));
-
-	for (let i = 0; i < 8000; i++) {
-
-		plane.position.x = Math.random() * 1000 - 500;
-		plane.position.y = -Math.random() * Math.random() * 200 - 15;
-		plane.position.z = i;
-		plane.rotation.z = Math.random() * Math.PI;
-		plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
-
-		plane.updateMatrix();
-		geometry.merge(plane.geometry as Geometry, plane.matrix);
-	}
-
-	mesh = new Mesh(geometry, material);
-	scene.add(mesh);
-
-	mesh = new Mesh(geometry, material);
-	mesh.position.z = -8000;
-	scene.add(mesh);
-
-	renderer = new WebGLRenderer({
-		alpha: true,
-		antialias: false,
-	});
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	container.append(renderer.domElement);
-
-	document.addEventListener('mousemove', onDocumentMouseMoveClouds, false);
-	window.addEventListener('resize', onWindowResizeClouds, false);
+	plane.updateMatrix();
+	geometry.merge(plane.geometry as Geometry, plane.matrix);
 }
 
-function onDocumentMouseMoveClouds(event: MouseEvent) {
+const mesh1 = new Mesh(geometry, material);
+scene.add(mesh1);
+
+const mesh2 = new Mesh(geometry, material);
+mesh2.position.z = -8000;
+scene.add(mesh2);
+
+const renderer = new WebGLRenderer({
+	alpha: true,
+	antialias: false,
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+container.append(renderer.domElement);
+
+document.addEventListener('mousemove', (event) => {
 	mouseX = (event.clientX - windowHalfX) * 0.25;
 	mouseY = (event.clientY - windowHalfY) * 0.15;
-}
+});
 
-function onWindowResizeClouds() {
+window.addEventListener('resize', () => {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize(window.innerWidth, window.innerHeight);
-}
+});
 
 function animateClouds() {
-
 	requestAnimationFrame(animateClouds);
 
 	if (container.style.visibility !== 'hidden') {
