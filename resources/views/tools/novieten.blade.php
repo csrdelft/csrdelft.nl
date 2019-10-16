@@ -5,13 +5,13 @@
 @section('content')
 	<table class="table">
 		<tr>
-			<th>UID</th>
-			<th>Voornaam</th>
-			<th>Tussenvoegsel</th>
-			<th>Achternaam</th>
-			<th>Mobiel</th>
-			<th>Studie</th>
-			<th>Nanoviet</th>
+			<th scope="col">UID</th>
+			<th scope="col">Voornaam</th>
+			<th scope="col">Tussenvoegsel</th>
+			<th scope="col">Achternaam</th>
+			<th scope="col">Mobiel</th>
+			<th scope="col">Studie</th>
+			<th scope="col">Nanoviet</th>
 		</tr>
 		@foreach($novieten as $noviet)
 			<tr>

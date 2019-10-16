@@ -279,7 +279,7 @@
 						<dd>
 							<a class="btn btn-light" href="/profiel/{{$profiel->uid}}/stamboom"
 								 title="Stamboom van {{$profiel->getNaam()}}">
-								<i class="fa fa-tree"></i>
+								<span class="fa fa-tree"></span>
 								Stamboom bekijken
 							</a>
 						</dd>

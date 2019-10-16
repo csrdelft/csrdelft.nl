@@ -218,8 +218,8 @@ class GoogleSync {
 		foreach ($this->getGoogleContacts() as $contact) {
 
 			if (
-				$contact['csruid'] == $profiel->uid OR
-				strtolower($contact['name']) == $name OR
+				$contact['csruid'] == $profiel->uid ||
+				strtolower($contact['name']) == $name ||
 				str_replace(' ', '', strtolower($contact['name'])) == str_replace(' ', '', $name)
 			) {
 				return $contact;

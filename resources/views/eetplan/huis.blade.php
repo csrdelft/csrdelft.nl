@@ -12,11 +12,11 @@
 	<table class="table table-striped">
 		<thead>
 		<tr>
-			<th>Avond</th>
-			<th>&Uuml;bersjaarsch</th>
-			<th>Mobiel</th>
-			<th>E-mail</th>
-			<th>Allergie</th>
+			<th scope="col">Avond</th>
+			<th scope="col">&Uuml;bersjaarsch</th>
+			<th scope="col">Mobiel</th>
+			<th scope="col">E-mail</th>
+			<th scope="col">Allergie</th>
 		</tr>
 		</thead>
 		@php($oudeDatum = '')
