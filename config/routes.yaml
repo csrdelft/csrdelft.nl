@@ -1,0 +1,23 @@
+zoeken:
+  path: /zoeken
+  controller: CsrDelft\controller\ZoekController::zoeken
+  methods: [GET,POST]
+  options: { mag: P_LOGGED_IN }
+
+logger:
+  path: /logger/log
+  controller: CsrDelft\controller\LoggerController::log
+  methods: POST
+  options: { mag: P_LOGGED_IN } # Voorkom spam
+
+contact-interesse:
+  path: /contactformulier/interesse
+  controller: CsrDelft\controller\ContactFormulierController::interesse
+  methods: POST
+  options: { mag: P_PUBLIC }
+
+default:
+  path: /{naam}/{subnaam}
+  controller: CsrDelft\controller\CmsPaginaController::bekijken
+  defaults: { naam: thuis, subnaam: "" }
+  options: { mag: P_PUBLIC }

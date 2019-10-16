@@ -45,7 +45,7 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 @define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
 @define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
-@define('CONFIG_PATH', LIB_PATH . 'config');
+@define('CONFIG_PATH', BASE_PATH . 'config');
 # smarty template engine
 @define('SMARTY_PLUGIN_DIR', LIB_PATH. 'smarty_plugins');
 @define('SMARTY_TEMPLATE_DIR', LIB_PATH . 'templates/');

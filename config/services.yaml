@@ -15,14 +15,14 @@ services:
     # The best practice is to be explicit about your dependencies anyway.
 
   CsrDelft\:
-    resource: '../../lib/*'
-    exclude: '../../lib/{view,config,model,common,Kernel.php}'
+    resource: '../lib'
+    exclude: '../lib/{view,config,model,common,Kernel.php}'
 
   # controllers are imported separately to make sure services can be injected
   # as action arguments even if you don't extend any base controller class
   CsrDelft\controller\:
-    resource: '../../lib/controller'
-    exclude: '../../lib/controller/{{GeoLocation,GroepenRouter,Mededelingen,Rechten,Toestemming}Controller.php,groepen,framework,api}'
+    resource: '../lib/controller'
+    exclude: '../lib/controller/{{GeoLocation,GroepenRouter,Mededelingen,Rechten,Toestemming}Controller.php,groepen,framework,api}'
     tags: ['controller.service_arguments']
 
   # add more service definitions when explicit configuration is needed

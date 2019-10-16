@@ -71,8 +71,9 @@
 		"update-prod": [
 			"@onderhoud true",
 			"git pull",
-			"@composer install --no-dev",
+			"@composer install --no-dev --optimize-autoloader",
 			"@migrate",
+			"@php bin/console cache:clear",
 			"@onderhoud false",
 			"@flushcache"
 		],
