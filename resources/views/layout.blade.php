@@ -63,7 +63,7 @@
 	@include('effect.minion')
 @endif
 @if(lid_instelling('layout', 'fx') == 'wolken')
-	@include('effect.clouds')
+	@script('fxclouds.js')
 @endif
 @if(lid_instelling('layout', 'trein') !== 'nee')
 	@include('effect.trein')
