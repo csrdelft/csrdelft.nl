@@ -58,9 +58,9 @@
 								@if ($maaltijd->getEindMoment() > time())
 									<span class="maaltijd-aangemeld">Aangemeld @if($aanmelding->door_abonnement) (abo) @endif</span>
 								@else
-									<span class="beoordeling-label">Kwaliteit:</span>
+									<span class="beoordeling-label bg-white">Kwaliteit:</span>
 									{!! $kwaliteit !!}
-									<span class="beoordeling-label">Kwantiteit:</span>
+									<span class="beoordeling-label bg-white">Kwantiteit:</span>
 									{!! $kwantiteit !!}
 								@endif
 							@else
