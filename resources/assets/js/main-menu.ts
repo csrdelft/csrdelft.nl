@@ -28,6 +28,11 @@ docReady(() => {
 			return;
 		}
 
+		if (event.key === 'Escape') {
+			searchfield.blur();
+			return;
+		}
+
 		// Geen instantsearch als we in een input-element of text-area zitten.
 		const element = event.target as HTMLElement;
 		if (element) {
@@ -39,7 +44,7 @@ docReady(() => {
 		}
 
 		// a-z en 0-9 incl. numpad
-		if (/\w/.test(event.key)) {
+		if (/^\w$/.test(event.key)) {
 			searchfield.value = '';
 			searchfield.focus();
 		}
