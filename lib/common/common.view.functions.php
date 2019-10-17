@@ -113,18 +113,11 @@ function sliding_pager($params) {
 	$baseurl = '';
 	$linknum = 5;
 	$urlAppend = '';
-	$txtPre = '';
-	$txtFirst = '<<';
 	$txtPrev = '<';
 	$separator = ' ';
 	$txtNext = '>';
-	$txtLast = '>>';
-	$txtPost = '';
 	$txtSkip = '…';
 	$cssClass = '';
-	$linkCurrent = false;
-	$showAlways = false;
-	$showFirstLast = false;
 	$showPrevNext = false;
 
 	/* Import parameters */
@@ -150,7 +143,7 @@ function sliding_pager($params) {
 	$intCurpage = $curpage - 1;
 
 	/* Paging needed? */
-	if (!$showAlways && $pagecount <= 1) {
+	if ($pagecount <= 1) {
 		// No paging needed for one page
 		return '';
 	}
@@ -180,13 +173,9 @@ function sliding_pager($params) {
 	}
 
 	/* Build link bar */
-	$retval = $txtPre;
+	$retval = '';
 	$cssClass = $cssClass ? 'class="' . $cssClass . '"' : '';
 	if ($curpage > 1) {
-		if ($showFirstLast) {
-			$retval .= '<a href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>' . $txtFirst . '</a>';
-			$retval .= $separator;
-		}
 		if ($showPrevNext) {
 			$retval .= '<a href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a>';
 			$retval .= $separator;
@@ -201,7 +190,7 @@ function sliding_pager($params) {
 		}
 	}
 	for ($i = 0; $i < sizeof($links); $i++) {
-		if ($links[$i] != $curpage or $linkCurrent) {
+		if (($links[$i] != $curpage)) {
 			$retval .= '<a href="' . $baseurl . $links[$i] . $urlAppend . '" ' . $cssClass . '>' . $links[$i] . '</a>';
 		} else {
 			$retval .= '<span class="curpage">' . $links[$i] . '</span>';
@@ -224,12 +213,7 @@ function sliding_pager($params) {
 			$retval .= $separator;
 			$retval .= '<a href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a>';
 		}
-		if ($showFirstLast) {
-			$retval .= $separator;
-			$retval .= '<a href="' . $baseurl . $pagecount . $urlAppend . '" ' . $cssClass . '>' . $txtLast . '</a>';
-		}
 	}
-	$retval .= $txtPost;
 	return $retval;
 }
 
@@ -241,7 +225,7 @@ function bbcode(string $string, string $mode = 'normal') {
 	}
 }
 
-function bbcode_light(string $string, string $mode = 'normal') {
+function bbcode_light(string $string) {
 	return CsrBB::parseLight($string);
 }
 
@@ -353,8 +337,7 @@ function split_on_keyword(string $string, string $keyword, int $space_around = 1
 	$prevPos = $lastPos = 0;
 	$firstPos = mb_stripos($string, $keyword);
 
-	if ($firstPos === false) {
-		if (mb_strlen($string) )
+	if ($firstPos === false && mb_strlen($string)) {
 		return mb_substr($string, 0, $space_around * 2) . $ellipsis;
 	}
 

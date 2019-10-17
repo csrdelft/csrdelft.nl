@@ -128,7 +128,7 @@ function getSessionMaxLifeTime() {
 	$lifetime = (int)instelling('beveiliging', 'session_lifetime_seconds');
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
 	$gc = (int)ini_get('session.gc_maxlifetime');
-	if ($gc > 0 AND $gc < $lifetime) {
+	if ($gc > 0 && $gc < $lifetime) {
 		$lifetime = $gc;
 	}
 	return $lifetime;
@@ -144,7 +144,7 @@ function redirect($url = null, $refresh = true) {
 	if (empty($url) || $url === null) {
 		$url = REQUEST_URI;
 	}
-	if (!$refresh AND $url == REQUEST_URI) {
+	if (!$refresh && $url == REQUEST_URI) {
 		$url = CSR_ROOT;
 	}
 	if (!startsWith($url, CSR_ROOT)) {
@@ -272,8 +272,8 @@ function url_like($url) {
 
 function external_url($url, $label) {
 	$url = filter_var($url, FILTER_SANITIZE_URL);
-	if ($url AND (url_like($url) OR url_like(CSR_ROOT . $url))) {
-		if (startsWith($url, 'http://') OR startsWith($url, 'https://')) {
+	if ($url && (url_like($url) || url_like(CSR_ROOT . $url))) {
+		if (startsWith($url, 'http://') || startsWith($url, 'https://')) {
 			$extern = ' target="_blank"';
 		} else {
 			$extern = '';
@@ -331,15 +331,15 @@ function isGeldigeDatum($datum) {
 	}
 	// Checken of we geldige strings hebben, voordat we ze casten naar ints.
 	$jaar = $delen[0];
-	if (!is_numeric($jaar) OR strlen($jaar) != 4) {
+	if (!is_numeric($jaar) || strlen($jaar) != 4) {
 		return false;
 	}
 	$maand = $delen[1];
-	if (!is_numeric($maand) OR strlen($maand) != 2) {
+	if (!is_numeric($maand) || strlen($maand) != 2) {
 		return false;
 	}
 	$dag = substr($delen[2], 0, 2); // Alleen de eerste twee karakters pakken.
-	if (!is_numeric($dag) OR strlen($dag) != 2) {
+	if (!is_numeric($dag) || strlen($dag) != 2) {
 		return false;
 	}
 	// De strings casten naar ints en de datum laten checken.
@@ -353,7 +353,7 @@ function isGeldigeDatum($datum) {
  * @param string $cssID
  */
 function debugprint($sString, $cssID = 'pubcie_debug') {
-	if (DEBUG OR LoginModel::mag(P_ADMIN) OR LoginModel::instance()->isSued()) {
+	if (DEBUG || LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued()) {
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
 }
@@ -521,7 +521,7 @@ function getMaximumFileUploadSize() {
 
 function printDebug() {
 	$debugOverride = filter_input(INPUT_GET, 'debug') !== null;
-	if (DEBUG OR ((LoginModel::mag(P_ADMIN) OR LoginModel::instance()->isSued()) AND $debugOverride)) {
+	if (DEBUG || ((LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued()) && $debugOverride)) {
 		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
 		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
@@ -580,7 +580,7 @@ function setMelding(string $msg, int $lvl) {
 	$levels[1] = 'success';
 	$levels[2] = 'warning';
 	$msg = trim($msg);
-	if (!empty($msg) AND ($lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2)) {
+	if (!empty($msg) && ($lvl === -1 || $lvl === 0 || $lvl === 1 || $lvl === 2)) {
 		if (!isset($_SESSION['melding'])) {
 			$_SESSION['melding'] = array();
 		}
@@ -598,7 +598,7 @@ function setMelding(string $msg, int $lvl) {
  * @return string html van melding(en) of lege string
  */
 function getMelding() {
-	if (isset($_SESSION['melding']) AND is_array($_SESSION['melding'])) {
+	if (isset($_SESSION['melding']) && is_array($_SESSION['melding'])) {
 		$melding = '';
 		foreach ($_SESSION['melding'] as $msg) {
 			$melding .= formatMelding($msg['msg'], $msg['lvl']);
@@ -1006,11 +1006,13 @@ function to_unix_path($path) {
  * @param $subpath
  */
 function safe_combine_path($folder, $subpath) {
-	if ($folder == null || $subpath == null)
+	if ($folder == null || $subpath == null) {
 		return null;
+	}
 	$combined = $folder;
-	if (!endsWith($combined, '/'))
+	if (!endsWith($combined, '/')) {
 		$combined .= '/';
+	}
 	$combined .= $subpath;
 	if (!startsWith(realpath($combined), realpath($folder))) {
 		return null;
