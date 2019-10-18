@@ -11,6 +11,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
+/**
+ * Configureer waar configuratie bestanden te vinden zijn.
+ */
 class Kernel extends BaseKernel {
 	use MicroKernelTrait;
 
@@ -24,15 +27,19 @@ class Kernel extends BaseKernel {
 			}
 		}
 	}
+
 	public function getProjectDir(): string {
 		return dirname(__DIR__);
 	}
+
 	public function getCacheDir() {
 		return $this->getProjectDir() . '/data/var/cache/' . $this->environment;
 	}
+
 	public function getLogDir() {
 		return $this->getProjectDir() . '/data/var/log';
 	}
+
 	/**
 	 * @param ContainerBuilder $container
 	 * @param LoaderInterface $loader

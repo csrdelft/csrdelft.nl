@@ -9,6 +9,12 @@ use CsrDelft\model\security\LoginModel;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
+/**
+ * De LegacyRouter kiest een controller op basis van $_GET['c'], in htdocs/.htaccess
+ * wordt de waarde van deze variabele gezet op basis van de REQUEST_URI.
+ *
+ * @deprecated Vervangen door de Symfony router
+ */
 class LegacyRouter {
 	public static function route() {
 		// Alle legacy routes zijn intern
