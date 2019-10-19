@@ -12,9 +12,9 @@ use CsrDelft\model\groepen\WoonoordenModel;
  * Controller voor woonoorden en huizen.
  */
 class WoonoordenController extends AbstractGroepenController {
+	const NAAM = 'woonoorden';
 
-	public function __construct($query) {
-		parent::__construct($query, WoonoordenModel::instance());
+	public function __construct() {
+		parent::__construct(WoonoordenModel::instance());
 	}
-
 }

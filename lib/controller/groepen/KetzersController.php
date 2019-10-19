@@ -16,9 +16,10 @@ use CsrDelft\view\JsonResponse;
  * @property KetzersModel $model
  */
 class KetzersController extends AbstractGroepenController {
+	const NAAM = 'ketzers';
 
-	public function __construct($query) {
-		parent::__construct($query, KetzersModel::instance());
+	public function __construct() {
+		parent::__construct(KetzersModel::instance());
 	}
 
 	public function nieuw($soort = null) {

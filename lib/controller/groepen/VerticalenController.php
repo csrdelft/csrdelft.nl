@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\view\JsonResponse;
@@ -14,14 +15,15 @@ use CsrDelft\view\JsonResponse;
  * Controller voor verticalen.
  */
 class VerticalenController extends AbstractGroepenController {
+	const NAAM = 'verticalen';
 
-	public function __construct($query) {
-		parent::__construct($query, VerticalenModel::instance());
+	public function __construct() {
+		parent::__construct(VerticalenModel::instance());
 	}
 
 	public function zoeken($zoekterm = null) {
 		if (!$zoekterm && !$this->hasParam('q')) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $this->getParam('q');

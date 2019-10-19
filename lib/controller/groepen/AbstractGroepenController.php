@@ -4,7 +4,7 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\Controller;
+use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
@@ -13,7 +13,6 @@ use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\groepen\GroepStatus;
-use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
@@ -43,138 +42,66 @@ use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * AbstractGroepenController.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
- * @property AbstractGroepenModel $model
  */
-abstract class AbstractGroepenController extends Controller {
+abstract class AbstractGroepenController {
+	use QueryParamTrait;
 
 	/** @var DataTable */
 	protected $table;
+	/** @var AbstractGroepenModel */
+	protected $model;
+	protected $view;
 
-	public function __construct($query, AbstractGroepenModel $model) {
-		parent::__construct($query, $model);
+	public function __construct($model = null) {
+		$this->model = $model;
 	}
 
-	public function performAction(array $args = []) {
-		$this->action = 'overzicht'; // default
+	public function loadRoutes() {
+		$routes = new RouteCollection();
+		$prefix = 'groep-' . classNameZonderNamespace($this);
 
-		if ($this->hasParam(3)) { // id or action
-			$this->action = $this->getParam(3);
-		}
-		switch ($this->action) {
+		$className = get_class($this);
 
-			// Selectie vereist
-			case 'verwijderen':
-			case 'opvolging':
-			case 'converteren':
-			case 'sluiten':
-			case 'voorbeeld':
-				$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-				if (empty($selection)) {
-					$this->exit_http(403);
-				} else {
-					$args['selection'] = $selection;
-				}
-				break;
+		$route = function ($route, $func, $methods, $defaults = []) use ($routes, $prefix, $className) {
+			$routes->add($prefix . '-' . $func, new Route($route, ['_controller' => $className . '::'. $func] + $defaults, [], ['mag' => P_LOGGED_IN], '', [], $methods));
+		};
 
-			// Geen argumenten vereist
-			case 'overzicht':
-			case 'beheren':
-			case 'zoeken':
-			case 'nieuw':
-			case 'aanmaken':
-				// Soort in param 4?
-				if ($this->hasParam(4)) {
-					$args['soort'] = $this->getParam(4);
-				}
-				break;
-
-			// Groep id of selectie vereist
-			case 'wijzigen':
-			case 'logboek':
-				/**
-				 * In case url param 3
-				 * contains the ID this
-				 * switch case is skipped.
-				 */
-				break;
-
-			// Groep id vereist
-			default:
-				// Groep id in param 3?
-				$id = $this->action;
-				$groep = $this->model->get($id);
-				if (!$groep) {
-					$this->exit_http(403);
-				}
-				$args['groep'] = $groep;
-				$this->action = 'bekijken'; // default
-				$uid = null;
-
-				// Actie in param 4?
-				if ($this->hasParam(4)) {
-					$this->action = $this->getParam(4);
-
-					// Lidnummer in param 5?
-					if ($this->hasParam(5)) {
-						$uid = $this->getParam(5);
-						$args['uid'] = $uid;
-					}
-				}
-		}
-		return parent::performAction($args);
-	}
-
-	/**
-	 * Check permissions & valid params in actions.
-	 *
-	 * @param string $action
-	 * @param array $args
-	 * @return boolean
-	 */
-	protected function mag($action, array $args) {
-		switch ($action) {
-
-			case 'leden':
-			case 'beheren':
-			case 'wijzigen':
-			case 'nieuw':
-			case 'aanmaken':
-				return true;
-
-			case 'overzicht':
-			case 'bekijken':
-			case 'zoeken':
-				return $this->getMethod() == 'GET';
-
-			case 'voorbeeld':
-			case 'opvolging':
-			case 'converteren':
-			case 'sluiten':
-			case 'logboek':
-			case 'omschrijving':
-			case 'deelnamegrafiek':
-			case GroepTab::Pasfotos:
-			case GroepTab::Lijst:
-			case GroepTab::Statistiek:
-			case GroepTab::Emails:
-			case GroepTab::Eetwens:
-			case 'verwijderen':
-			case 'aanmelden':
-			case 'aanmelden2':
-			case 'naar_ot':
-			case 'bewerken':
-			case 'afmelden':
-				return $this->getMethod() == 'POST';
-
-			default:
-				return false;
-		}
+		$route('/', 'overzicht', ['GET']);
+		$route('/{id}', 'bekijken', ['GET']);
+		$route('/{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
+		$route('/{id}/omschrijving', 'omschrijving', ['POST']);
+	  $route('/{id}/pasfotos', 'pasfotos', ['POST']);
+	  $route('/{id}/lijst', 'lijst', ['POST']);
+	  $route('/{id}/stats', 'stats', ['POST']);
+	  $route('/{id}/emails', 'emails', ['POST']);
+	  $route('/{id}/eetwens', 'eetwens', ['POST']);
+		$route('/{id}/aanmelden/{uid}', 'aanmelden', ['POST'],  ['uid' => null]);
+		$route('/{id}/aanmelden2/{uid}', 'aanmelden2', ['POST']);
+		$route('/{id}/naar_ot/{uid}', 'naar_ot', ['POST'], ['uid' => null]);
+		$route('/{id}/bewerken/{uid}', 'bewerken', ['POST'], ['uid' => null]);
+		$route('/{id}/afmelden/{uid}', 'afmelden', ['POST'], ['uid' => null]);
+		$route('/zoeken', 'zoeken', ['GET']);
+		$route('/{id}/leden', 'leden', ['GET','POST']);
+		$route('/beheren/{soort}', 'beheren', ['GET','POST'], ['soort' => null]);
+		$route('/wijzigen/{id}', 'wijzigen', ['GET','POST'], ['id' => null]);
+		$route('/logboek/{id}', 'logboek', ['POST'], ['id' => null]);
+		$route('/nieuw/{soort}', 'nieuw', ['GET','POST'], ['soort' => null]);
+		$route('/aanmaken/{soort}', 'aanmaken', ['GET','POST'], ['soort' => null]);
+		$route('/verwijderen', 'verwijderen', ['POST']);
+		$route('/opvolging', 'opvolging', ['POST']);
+		$route('/converteren', 'converteren', ['POST']);
+		$route('/sluiten', 'sluiten', ['POST']);
+		$route('/voorbeeld', 'voorbeeld', ['POST']);
+		$route('/zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
+		$routes->addPrefix('/groepen/' . static::NAAM);
+		return $routes;
 	}
 
 	public function overzicht($soort = null) {
@@ -184,10 +111,11 @@ abstract class AbstractGroepenController extends Controller {
 			$groepen = $this->model->find('status = ?', [GroepStatus::HT]);
 		}
 		$body = new GroepenView($this->model, $groepen, $soort); // controleert rechten bekijken per groep
-		$this->view = view('default', ['content' => $body]);
+		return view('default', ['content' => $body]);
 	}
 
-	public function bekijken(AbstractGroep $groep) {
+	public function bekijken($id) {
+		$groep = $this->model->get($id);
 		$groepen = $this->model->find('familie = ?', [$groep->familie]);
 		if (property_exists($groep, 'soort')) {
 			$soort = $groep->soort;
@@ -195,59 +123,67 @@ abstract class AbstractGroepenController extends Controller {
 			$soort = null;
 		}
 		$body = new GroepenView($this->model, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
-		$this->view = view('default', ['content' => $body]);
+		return view('default', ['content' => $body]);
 	}
 
-	public function deelnamegrafiek(AbstractGroep $groep) {
+	public function deelnamegrafiek($id) {
+		$groep = $this->model->get($id);
+		/** @var AbstractGroep[] $groepen */
 		$groepen = $this->model->find('familie = ?', [$groep->familie]);
-		$this->view = new GroepenDeelnameGrafiek($groepen); // controleert GEEN rechten bekijken
+		return new GroepenDeelnameGrafiek($groepen); // controleert GEEN rechten bekijken
 	}
 
-	public function omschrijving(AbstractGroep $groep) {
+	public function omschrijving($id) {
+		$groep = $this->model->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$this->view = new GroepOmschrijvingView($groep);
+		return new GroepOmschrijvingView($groep);
 	}
 
-	public function pasfotos(AbstractGroep $groep) {
+	public function pasfotos($id) {
+		$groep = $this->model->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$this->view = new GroepPasfotosView($groep);
+		return new GroepPasfotosView($groep);
 	}
 
-	public function lijst(AbstractGroep $groep) {
+	public function lijst($id) {
+		$groep = $this->model->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$this->view = new GroepLijstView($groep);
+		return new GroepLijstView($groep);
 	}
 
-	public function stats(AbstractGroep $groep) {
+	public function stats($id) {
+		$groep = $this->model->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$this->view = new GroepStatistiekView($groep);
+		return new GroepStatistiekView($groep);
 	}
 
-	public function emails(AbstractGroep $groep) {
+	public function emails($id) {
+		$groep = $this->model->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$this->view = new GroepEmailsView($groep);
+		return new GroepEmailsView($groep);
 	}
 
-	public function eetwens(AbstractGroep $groep) {
+	public function eetwens($id) {
+		$groep = $this->model->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$this->view = new GroepEetwensView($groep);
+		return new GroepEetwensView($groep);
 	}
 
 	public function zoeken($zoekterm = null) {
 		if (!$zoekterm && !$this->hasParam('q')) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $this->getParam('q');
@@ -259,6 +195,7 @@ abstract class AbstractGroepenController extends Controller {
 		}
 		$result = [];
 		foreach ($this->model->find('familie LIKE ? AND (status = ? OR status = ?)', [$zoekterm, GroepStatus::HT, GroepStatus::FT], null, null, $limit) as $groep) {
+			/** @var AbstractGroep $groep */
 			if (!isset($result[$groep->familie])) {
 				$type = classNameZonderNamespace(get_class($groep));
 				$result[$groep->familie] = [
@@ -269,7 +206,7 @@ abstract class AbstractGroepenController extends Controller {
 				];
 			}
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 
 	public function beheren($soort = null) {
@@ -279,11 +216,11 @@ abstract class AbstractGroepenController extends Controller {
 			} else {
 				$groepen = $this->model->find();
 			}
-			$this->view = new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
+			return new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
 		} else {
 			$table = new GroepenBeheerTable($this->model);
-			$this->view = view('default', ['content' => $table]);
 			$this->table = $table;
+			return view('default', ['content' => $table]);
 		}
 	}
 
@@ -328,7 +265,7 @@ abstract class AbstractGroepenController extends Controller {
 			/** @var AbstractGroep $old */
 			$old = $this->model->retrieveByUUID($selection[0]);
 			if (!$old) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 			if (property_exists($old, 'soort')) {
 				$soort = $old->soort;
@@ -342,12 +279,11 @@ abstract class AbstractGroepenController extends Controller {
 				$groep->rechten_aanmelden = $old->rechten_aanmelden;
 			}
 		}
-		$form = new GroepForm($groep, $this->model->getUrl() . $this->action, AccessAction::Aanmaken); // checks rechten aanmaken
+		$form = new GroepForm($groep, $this->model->getUrl() . 'aanmaken', AccessAction::Aanmaken); // checks rechten aanmaken
 		if ($this->getMethod() == 'GET') {
 			$this->beheren();
 			$form->setDataTableId($this->table->getDataTableId());
-			$this->view = view('default', ['content' => $this->table, 'modal' => $form]);
-			return;
+			return view('default', ['content' => $this->table, 'modal' => $form]);
 		} elseif ($form->validate()) {
 			ChangeLogModel::instance()->log($groep, 'create', null, print_r($groep, true));
 			$this->model->create($groep);
@@ -357,56 +293,58 @@ abstract class AbstractGroepenController extends Controller {
 				$this->model->update($old);
 				$response[] = $old;
 			}
-			$this->view = new GroepenBeheerData($response);
+			$view = new GroepenBeheerData($response);
 			setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
 			$form = new GroepPreviewForm($groep);
-			$this->view->modal = $form->getHtml();
+			$view->modal = $form->getHtml();
+			return $view;
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
 	public function wijzigen(AbstractGroep $groep = null) {
 		if ($groep) {
 			if (!$groep->mag(AccessAction::Wijzigen)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
-			$form = new GroepForm($groep, $groep->getUrl() . $this->action, AccessAction::Wijzigen); // checks rechten wijzigen
+			$form = new GroepForm($groep, $groep->getUrl() . 'wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($this->getMethod() == 'GET') {
 				$this->beheren();
 				$this->table->filter = $groep->naam;
 				$form->setDataTableId($this->table->getDataTableId());
-				$this->view = view('default', ['content' => $this->table, 'modal' => $form]);
+				return view('default', ['content' => $this->table, 'modal' => $form]);
 			} elseif ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);
-				$this->view = new GroepenBeheerData([$groep]);
+				return new GroepenBeheerData([$groep]);
 			} else {
-				$this->view = $form;
+				return $form;
 			}
 		} // beheren
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			if (empty($selection)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($selection[0]);
 			if (!$groep OR !$groep->mag(AccessAction::Wijzigen)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
-			$form = new GroepForm($groep, $groep->getUrl() . $this->action, AccessAction::Wijzigen); // checks rechten wijzigen
+			$form = new GroepForm($groep, $groep->getUrl() . 'wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);
-				$this->view = new GroepenBeheerData([$groep]);
+				return new GroepenBeheerData([$groep]);
 			} else {
-				$this->view = $form;
+				return $form;
 			}
 		}
 	}
 
-	public function verwijderen(array $selection) {
+	public function verwijderen() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = [];
 		foreach ($selection as $UUID) {
 			/** @var AbstractGroep $groep */
@@ -424,13 +362,14 @@ abstract class AbstractGroepenController extends Controller {
 			$this->model->delete($groep);
 			$response[] = $groep;
 		}
-		$this->view = new RemoveRowsResponse($response);
+		return new RemoveRowsResponse($response);
 	}
 
-	public function opvolging(array $selection) {
+	public function opvolging() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($selection[0]);
-		$form = new GroepOpvolgingForm($groep, $this->model->getUrl() . $this->action);
+		$form = new GroepOpvolgingForm($groep, $this->model->getUrl() . 'opvolging');
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$response = [];
@@ -447,13 +386,14 @@ abstract class AbstractGroepenController extends Controller {
 				$this->model->update($groep);
 				$response[] = $groep;
 			}
-			$this->view = new GroepenBeheerData($response);
+			return new GroepenBeheerData($response);
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
-	public function converteren(array $selection) {
+	public function converteren() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($selection[0]);
 		$form = new GroepConverteerForm($groep, $this->model);
@@ -484,16 +424,17 @@ abstract class AbstractGroepenController extends Controller {
 				}
 			}
 			if ($converteer) {
-				$this->view = new RemoveRowsResponse($response);
+				return new RemoveRowsResponse($response);
 			} else {
-				$this->view = new GroepenBeheerData($response);
+				return new GroepenBeheerData($response);
 			}
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 
-	public function sluiten(array $selection) {
+	public function sluiten() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		$response = [];
 		foreach ($selection as $UUID) {
 			/** @var AbstractGroep $groep */
@@ -506,33 +447,34 @@ abstract class AbstractGroepenController extends Controller {
 			$this->model->update($groep);
 			$response[] = $groep;
 		}
-		$this->view = new GroepenBeheerData($response);
+		return new GroepenBeheerData($response);
 	}
 
-	public function voorbeeld(array $selection) {
+	public function voorbeeld() {
+		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (empty($selection)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($selection[0]);
 		if (!$groep OR !$groep->mag(AccessAction::Bekijken)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
-		$this->view = new GroepPreviewForm($groep);
+		return new GroepPreviewForm($groep);
 	}
 
 	/**
-	 * @param AbstractGroep|null $groep
-	 * @throws CsrToegangException
+	 * @param $id
 	 */
-	public function logboek(AbstractGroep $groep = null) {
+	public function logboek($id) {
+		$groep = $this->model->get($id);
 		// data request
 		if ($groep) {
 			if (!$groep->mag(AccessAction::Bekijken)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 			$data = ChangeLogModel::instance()->find('subject = ?', [$groep->getUUID()]);
-			$this->view = new GroepLogboekData($data);
+			return new GroepLogboekData($data);
 		} // popup request
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -541,18 +483,19 @@ abstract class AbstractGroepenController extends Controller {
 			if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
 				throw new CsrToegangException('Kan logboek niet vinden', 403);
 			}
-			$this->view = new GroepLogboekForm($groep);
+			return new GroepLogboekForm($groep);
 		}
 	}
 
-	public function leden(AbstractGroep $groep) {
+	public function leden($id) {
+		$groep = $this->model->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if ($this->getMethod() == 'POST') {
-			$this->view = new GroepLedenData($groep::getLedenModel()->getLedenVoorGroep($groep));
+			return new GroepLedenData($groep::getLedenModel()->getLedenVoorGroep($groep));
 		} else {
-			$this->view = new GroepLedenTable($groep::getLedenModel(), $groep);
+			return new GroepLedenTable($groep::getLedenModel(), $groep);
 		}
 	}
 
@@ -560,7 +503,7 @@ abstract class AbstractGroepenController extends Controller {
 		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		$lid = $model->nieuw($groep, $uid);
 
@@ -572,7 +515,7 @@ abstract class AbstractGroepenController extends Controller {
 		}
 
 		if (!$groep->valideerOpmerking($keuzes)) {
-			$this->exit_http(400);
+			throw new CsrToegangException('', 400);
 		}
 
 		$lid->opmerking2 = $keuzes;
@@ -580,47 +523,48 @@ abstract class AbstractGroepenController extends Controller {
 		ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
 		$model->create($lid);
 
-		$this->view = new JsonResponse(['success' => true]);
+		return new JsonResponse(['success' => true]);
 	}
 
 	public function aanmelden(AbstractGroep $groep, $uid = null) {
 		$model = $groep::getLedenModel();
 		if ($uid) {
 			if (!$groep->mag(AccessAction::Aanmelden)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 			$lid = $model->nieuw($groep, $uid);
 			$form = new GroepAanmeldenForm($lid, $groep);
 			if ($form->validate()) {
 				ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
 				$model->create($lid);
-				$this->view = new GroepPasfotosView($groep);
+				return new GroepPasfotosView($groep);
 			} else {
-				$this->view = $form;
+				return $form;
 			}
 		} // beheren
 		else {
 			if (!$groep->mag(AccessAction::Beheren)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 			$lid = $model->nieuw($groep, null);
 			$leden = group_by_distinct('uid', $groep->getLeden());
-			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action, array_keys($leden));
+			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . 'aanmelden', array_keys($leden));
 			if ($form->validate()) {
 				ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
 				$model->create($lid);
-				$this->view = new GroepLedenData([$lid]);
+				return new GroepLedenData([$lid]);
 			} else {
-				$this->view = $form;
+				return $form;
 			}
 		}
 	}
 
-	public function bewerken(AbstractGroep $groep, $uid = null) {
+	public function bewerken($id, $uid = null) {
+		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
 		if ($uid) {
 			if (!$groep->mag(AccessAction::Bewerken)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 			$lid = $model->get($groep, $uid);
 			$form = new GroepBewerkenForm($lid, $groep);
@@ -628,7 +572,7 @@ abstract class AbstractGroepenController extends Controller {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$model->update($lid);
 			}
-			$this->view = $form;
+			return $form;
 		} // beheren
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -642,37 +586,38 @@ abstract class AbstractGroepenController extends Controller {
 			}
 
 			if (!$lid) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 			if (!$groep->mag(AccessAction::Beheren)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
-			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . $this->action);
+			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . 'bewerken');
 			if ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$model->update($lid);
-				$this->view = new GroepLedenData([$lid]);
+				return new GroepLedenData([$lid]);
 			} else {
-				$this->view = $form;
+				return $form;
 			}
 		}
 	}
 
-	public function afmelden(AbstractGroep $groep, $uid = null) {
+	public function afmelden($id, $uid = null) {
+		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
 		if ($uid) {
 			if (!$groep->mag(AccessAction::Afmelden) AND !$groep->mag(AccessAction::Beheren)) { // A::Beheren voor afmelden via context-menu
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 			$lid = $model->get($groep, $uid);
 			ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
 			$model->delete($lid);
-			$this->view = new GroepView($groep);
+			return new GroepView($groep);
 		} // beheren
 		else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			if (empty($selection)) {
-				$this->exit_http(403);
+				throw new CsrToegangException();
 			}
 			$response = [];
 			foreach ($selection as $UUID) {
@@ -684,11 +629,12 @@ abstract class AbstractGroepenController extends Controller {
 				$model->delete($lid);
 				$response[] = $lid;
 			}
-			$this->view = new RemoveRowsResponse($response);
+			return new RemoveRowsResponse($response);
 		}
 	}
 
-	public function naar_ot(AbstractGroep $groep, $uid = null) {
+	public function naar_ot($id, $uid = null) {
+		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
 
 		// Vind de groep uit deze familie met het laatste eind_moment
@@ -717,7 +663,7 @@ abstract class AbstractGroepenController extends Controller {
 				$model->create($lid);
 				$lid->groep_id = $groep->id; // Terugspelen naar gebruiker dat dit lid is verwijderd
 			});
-			$this->view = new GroepView($groep);
+			return new GroepView($groep);
 		} else {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 			if (empty($selection)) {
@@ -744,7 +690,7 @@ abstract class AbstractGroepenController extends Controller {
 					$response[] = $lid;
 				}
 			});
-			$this->view = new RemoveRowsResponse($response);
+			return new RemoveRowsResponse($response);
 		}
 
 	}

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\view\JsonResponse;
 
@@ -15,14 +16,15 @@ use CsrDelft\view\JsonResponse;
  * @property LichtingenModel $model
  */
 class LichtingenController extends AbstractGroepenController {
+	const NAAM = 'lichtingen';
 
-	public function __construct($query) {
-		parent::__construct($query, LichtingenModel::instance());
+	public function __construct() {
+		parent::__construct(LichtingenModel::instance());
 	}
 
 	public function zoeken($zoekterm = null) {
 		if (!$zoekterm && !$this->hasParam('q')) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $this->getParam('q');

@@ -13,10 +13,10 @@ use CsrDelft\model\groepen\ActiviteitenModel;
  * Controller voor activiteiten.
  */
 class ActiviteitenController extends KetzersController {
+	const NAAM = 'activiteiten';
 
-	public function __construct($query) {
-		parent::__construct($query);
+	public function __construct() {
+		parent::__construct();
 		$this->model = ActiviteitenModel::instance();
 	}
-
 }

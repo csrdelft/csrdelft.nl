@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\groepen\KringenModel;
 use CsrDelft\view\Icon;
@@ -17,14 +18,15 @@ use CsrDelft\view\JsonResponse;
  * @property KringenModel $model
  */
 class KringenController extends AbstractGroepenController {
+	const NAAM = 'kringen';
 
-	public function __construct($query) {
-		parent::__construct($query, KringenModel::instance());
+	public function __construct() {
+		parent::__construct(KringenModel::instance());
 	}
 
 	public function zoeken($zoekterm = null) {
 		if (!$zoekterm && !$this->hasParam('q')) {
-			$this->exit_http(403);
+			throw new CsrToegangException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $this->getParam('q');
