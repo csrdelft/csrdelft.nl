@@ -1,6 +1,6 @@
 @php($uniqid = uniqid_safe('slider_'))
 
-<div id="{{$uniqid}}" class="carousel slide bb-slider" data-ride="carousel">
+<div id="{{$uniqid}}" class="carousel slide bb-slider disable-swipe" data-ride="carousel">
 	<ol class="carousel-indicators">
 		@foreach($fotos as $foto)
 			<li data-target="#{{$uniqid}}" data-slide-to="{{$loop->index-1}}"

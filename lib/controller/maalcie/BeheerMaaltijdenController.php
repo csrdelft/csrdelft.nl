@@ -230,6 +230,13 @@ class BeheerMaaltijdenController {
 
 	public function POST_beoordelingen() {
         $maaltijden = $this->model->getMaaltijden('datum <= CURDATE()');
+        if (!LoginModel::mag(P_MAAL_MOD)) {
+        	// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
+					$maaltijden = array_filter($maaltijden->fetchAll(), function ($maaltijd) {
+						/** @var Maaltijd $maaltijd */
+						return $maaltijd->magSluiten(LoginModel::getUid());
+					});
+				}
         return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 	}
 

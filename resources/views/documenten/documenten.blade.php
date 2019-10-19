@@ -54,11 +54,11 @@
 		@endforelse
 		<tfoot>
 		<tr>
-			<th>Document</th>
-			<th>Grootte</th>
-			<th>Type</th>
-			<th>Toegevoegd</th>
-			<th>Eigenaar</th>
+			<th scope="col">Document</th>
+			<th scope="col">Grootte</th>
+			<th scope="col">Type</th>
+			<th scope="col">Toegevoegd</th>
+			<th scope="col">Eigenaar</th>
 		</tr>
 		</tfoot>
 	</table>

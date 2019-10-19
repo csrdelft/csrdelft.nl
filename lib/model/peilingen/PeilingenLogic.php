@@ -58,7 +58,7 @@ class PeilingenLogic extends DependencyManager {
 			return false;
 		}
 
-		if ($peiling->getMagStemmen()) {
+		if (!$peiling->getMagStemmen()) {
 			return false;
 		}
 

@@ -21,6 +21,9 @@
 							Inschrijvingen: <em>{{$maaltijd->getAantalAanmeldingen()}}</em> van <em>{{$maaltijd->aanmeld_limiet}}</em>
 							@if($maaltijd->magSluiten(CsrDelft\model\security\LoginModel::getUid()))
 						</a>
+						@if ($maaltijd->getEindMoment() < time())
+							<br><a href="/maaltijden/beheer/beoordelingen" title="Toon beoordelingen">Bekijk beoordelingen</a>
+						@endif
 					@endif
 				</div>
 			</div>
@@ -58,9 +61,9 @@
 								@if ($maaltijd->getEindMoment() > time())
 									<span class="maaltijd-aangemeld">Aangemeld @if($aanmelding->door_abonnement) (abo) @endif</span>
 								@else
-									<span class="beoordeling-label">Kwaliteit:</span>
+									<span class="beoordeling-label bg-white">Kwaliteit:</span>
 									{!! $kwaliteit !!}
-									<span class="beoordeling-label">Kwantiteit:</span>
+									<span class="beoordeling-label bg-white">Kwantiteit:</span>
 									{!! $kwantiteit !!}
 								@endif
 							@else

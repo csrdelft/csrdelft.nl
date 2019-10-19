@@ -583,7 +583,7 @@ class ForumController {
 		// spam controle
 		$filter = new SimpleSpamfilter();
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
-		if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || ($titel && $filter->isSpam($titel))) {
+		if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || (isset($titel) && $titel && $filter->isSpam($titel))) {
 			$this->debugLogModel->log(static::class, 'posten', [$forum_id, $draad_id], 'SPAM ' . $tekst);
 			setMelding('SPAM', -1);
 			throw new CsrToegangException("", 403);

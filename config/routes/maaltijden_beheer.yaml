@@ -46,13 +46,13 @@ maalcie-beheer-maaltijden-beoordelingen:
   path: /maaltijden/beheer/beoordelingen
   controller: CsrDelft\controller\maalcie\BeheerMaaltijdenController::GET_beoordelingen
   methods: GET
-  options: { mag: P_MAAL_MOD }
+  options: { mag: P_LOGGED_IN }
 
 maalcie-beheer-maaltijden-beoordelingen-data:
   path: /maaltijden/beheer/beoordelingen
   controller: CsrDelft\controller\maalcie\BeheerMaaltijdenController::POST_beoordelingen
   methods: POST
-  options: { mag: P_MAAL_MOD }
+  options: { mag: P_LOGGED_IN }
 
 maalcie-beheer-maaltijden-toggle:
   path: /maaltijden/beheer/toggle/{mid}
