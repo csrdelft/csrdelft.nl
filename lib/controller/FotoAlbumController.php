@@ -19,6 +19,7 @@ use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
@@ -369,7 +370,7 @@ class FotoAlbumController {
 
 	public function raw_image_thumb($dir, $foto, $ext) {
 		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
-			throw new ResourceNotFoundException();
+			throw new NotFoundHttpException();
 		}
 		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
 		$afbeelding = new Afbeelding($foto->getThumbPath());
@@ -378,7 +379,7 @@ class FotoAlbumController {
 
 	public function raw_image_resized($dir, $foto, $ext) {
 		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
-			throw new ResourceNotFoundException();
+			throw new NotFoundHttpException();
 		}
 		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
 		$afbeelding = new Afbeelding($foto->getResizedPath());

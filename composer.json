@@ -35,7 +35,12 @@
 		"symfony/routing": "^3.4",
 		"symfony/http-foundation": "^3.4",
 		"php-di/invoker": "^2.0",
-		"symfony/config": "^3.4"
+		"symfony/config": "^3.4",
+		"symfony/framework-bundle": "^3.4",
+		"symfony/dotenv": "^3.4",
+		"symfony/templating": "^3.4",
+		"symfony/flex": "^1.4",
+		"symfony/twig-bundle": "^3.4"
 	},
 	"config": {
 		"platform": {
@@ -45,13 +50,15 @@
 	"autoload": {
 		"psr-4": {
 			"CsrDelft\\": "lib/"
-		}
+		},
+		"files": ["lib/common/common.functions.php", "lib/common/common.view.functions.php"]
 	},
 	"include-path": ["lib/"],
 	"require-dev": {
 		"phpstan/phpstan": "^0.9.2",
 		"phpunit/phpunit": "^6.5",
-		"spatie/phpunit-snapshot-assertions": "^1.4"
+		"spatie/phpunit-snapshot-assertions": "^1.4",
+		"symfony/profiler-pack": "*"
 	},
 	"scripts": {
 		"phinx": "vendor/bin/phinx",
@@ -65,10 +72,15 @@
 		"update-prod": [
 			"@onderhoud true",
 			"git pull",
-			"@composer install --no-dev",
+			"@composer install --no-dev --optimize-autoloader",
 			"@migrate",
+			"@php bin/console cache:clear",
 			"@onderhoud false",
 			"@flushcache"
-		]
+		],
+		"auto-scripts": {
+			"cache:clear": "symfony-cmd",
+			"assets:install %PUBLIC_DIR%": "symfony-cmd"
+		}
 	}
 }

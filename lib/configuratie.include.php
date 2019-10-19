@@ -38,10 +38,8 @@ use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 
-require __DIR__ . '/../vendor/autoload.php';
-require_once 'common/common.functions.php';
-require_once 'common/common.view.functions.php';
-
+// Zet omgeving klaar.
+require_once __DIR__ . '/../config/bootstrap.php';
 
 // Registreer foutmelding handlers
 if (DEBUG) {
