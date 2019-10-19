@@ -19,6 +19,8 @@ use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -361,11 +363,14 @@ class FotoAlbumController {
 		} else if (!$image->exists()) {
 			throw new CsrToegangException();
 		}
+		$response = new BinaryFileResponse($image->getFullPath());
 		if (isset($_GET['download'])) {
-			$image->download();
+			$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $image->filename);
 		} else {
-			$image->serve();
+			$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $image->filename);
 		}
+
+		return $response;
 	}
 
 	public function raw_image_thumb($dir, $foto, $ext) {
@@ -374,7 +379,8 @@ class FotoAlbumController {
 		}
 		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
 		$afbeelding = new Afbeelding($foto->getThumbPath());
-		$afbeelding->serve();
+
+		return new BinaryFileResponse($afbeelding->getFullPath());
 	}
 
 	public function raw_image_resized($dir, $foto, $ext) {
@@ -383,6 +389,6 @@ class FotoAlbumController {
 		}
 		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
 		$afbeelding = new Afbeelding($foto->getResizedPath());
-		$afbeelding->serve();
+		return new BinaryFileResponse($afbeelding->getFullPath());
 	}
 }

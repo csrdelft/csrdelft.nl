@@ -9,12 +9,12 @@ use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\documenten\Document;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
-use CsrDelft\view\documenten\DocumentContent;
-use CsrDelft\view\documenten\DocumentDownloadContent;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -73,7 +73,7 @@ class DocumentenController {
 		}
 
 		if ($document->hasFile()) {
-			return new DocumentContent($document);
+			return new BinaryFileResponse($document->getFullPath());
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
 			redirect('/documenten');
@@ -87,7 +87,9 @@ class DocumentenController {
 			throw new CsrToegangException();
 		}
 		if ($document->hasFile()) {
-			return new DocumentDownloadContent($document);
+			$response = new BinaryFileResponse($document->getFullPath());
+			$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $document->filename);
+			return $response;
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
 			redirect('/documenten');

@@ -43,6 +43,7 @@ use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ProfielController {
@@ -264,8 +265,7 @@ class ProfielController {
 			redirect('/images/geen-foto.jpg');
 		}
 		$image = new Afbeelding($path);
-		$image->serve();
-		exit;
+		return new BinaryFileResponse($image->getFullPath());
 	}
 
 	public function vcard($uid) {
