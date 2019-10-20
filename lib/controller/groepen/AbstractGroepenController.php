@@ -63,43 +63,56 @@ abstract class AbstractGroepenController {
 		$this->model = $model;
 	}
 
+	/**
+	 * Alle routes die groepen controllers aan gaan @return RouteCollection
+	 * @see config/routes/groepen.yaml
+	 */
 	public function loadRoutes() {
 		$routes = new RouteCollection();
 		$prefix = 'groep-' . classNameZonderNamespace($this);
 
 		$className = get_class($this);
 
-		$route = function ($route, $func, $methods, $defaults = []) use ($routes, $prefix, $className) {
-			$routes->add($prefix . '-' . $func, new Route($route, ['_controller' => $className . '::'. $func] + $defaults, [], ['mag' => P_LOGGED_IN], '', [], $methods));
+		$route = function ($path, $func, $methods, $defaults = [], $requirements = []) use ($routes, $prefix, $className) {
+			$defaults['_controller'] = $className . '::' . $func;
+			$routes->add(
+				$prefix . '-' . $func,
+				(new Route($path))
+					->setDefaults($defaults)
+					->setRequirements($requirements)
+					->setOptions(['mag' => P_LOGGED_IN])
+					->setMethods($methods)
+			);
 		};
 
 		$route('/', 'overzicht', ['GET']);
-		$route('/{id}', 'bekijken', ['GET']);
-		$route('/{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
-		$route('/{id}/omschrijving', 'omschrijving', ['POST']);
-	  $route('/{id}/pasfotos', 'pasfotos', ['POST']);
-	  $route('/{id}/lijst', 'lijst', ['POST']);
-	  $route('/{id}/stats', 'stats', ['POST']);
-	  $route('/{id}/emails', 'emails', ['POST']);
-	  $route('/{id}/eetwens', 'eetwens', ['POST']);
-		$route('/{id}/aanmelden/{uid}', 'aanmelden', ['POST'],  ['uid' => null]);
-		$route('/{id}/aanmelden2/{uid}', 'aanmelden2', ['POST']);
-		$route('/{id}/naar_ot/{uid}', 'naar_ot', ['POST'], ['uid' => null]);
-		$route('/{id}/bewerken/{uid}', 'bewerken', ['POST'], ['uid' => null]);
-		$route('/{id}/afmelden/{uid}', 'afmelden', ['POST'], ['uid' => null]);
+		$route('/{id}', 'bekijken', ['GET'], [], ['id' => '\d+']);
+		$route('/{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST'], [], ['id' => '\d+']);
+		$route('/{id}/omschrijving', 'omschrijving', ['POST'], [], ['id' => '\d+']);
+		$route('/{id}/pasfotos', 'pasfotos', ['POST'], [], ['id' => '\d+']);
+		$route('/{id}/lijst', 'lijst', ['POST'], [], ['id' => '\d+']);
+		$route('/{id}/stats', 'stats', ['POST'], [], ['id' => '\d+']);
+		$route('/{id}/emails', 'emails', ['POST'], [], ['id' => '\d+']);
+		$route('/{id}/eetwens', 'eetwens', ['POST'], [], ['id' => '\d+']);
+		$route('/{id}/aanmelden/{uid}', 'aanmelden', ['POST'], ['uid' => null], ['id' => '\d+', 'uid' => '.{4}']);
+		$route('/{id}/aanmelden2/{uid}', 'aanmelden2', ['POST'], [], ['id' => '\d+', 'uid' => '.{4}']);
+		$route('/{id}/naar_ot/{uid}', 'naar_ot', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route('/{id}/bewerken/{uid}', 'bewerken', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route('/{id}/afmelden/{uid}', 'afmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
 		$route('/zoeken', 'zoeken', ['GET']);
-		$route('/{id}/leden', 'leden', ['GET','POST']);
-		$route('/beheren/{soort}', 'beheren', ['GET','POST'], ['soort' => null]);
-		$route('/wijzigen/{id}', 'wijzigen', ['GET','POST'], ['id' => null]);
-		$route('/logboek/{id}', 'logboek', ['POST'], ['id' => null]);
-		$route('/nieuw/{soort}', 'nieuw', ['GET','POST'], ['soort' => null]);
-		$route('/aanmaken/{soort}', 'aanmaken', ['GET','POST'], ['soort' => null]);
+		$route('/{id}/leden', 'leden', ['GET', 'POST'], [], ['id' => '\d+']);
+		$route('/beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
+		$route('/wijzigen/{id}', 'wijzigen', ['GET', 'POST'], ['id' => null]);
+		$route('/logboek/{id}', 'logboek', ['POST'], ['id' => null], ['id' => '\d+']);
+		$route('/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
+		$route('/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null]);
 		$route('/verwijderen', 'verwijderen', ['POST']);
 		$route('/opvolging', 'opvolging', ['POST']);
 		$route('/converteren', 'converteren', ['POST']);
 		$route('/sluiten', 'sluiten', ['POST']);
 		$route('/voorbeeld', 'voorbeeld', ['POST']);
 		$route('/zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
+
 		$routes->addPrefix('/groepen/' . static::NAAM);
 		return $routes;
 	}
@@ -209,21 +222,6 @@ abstract class AbstractGroepenController {
 		return new JsonResponse($result);
 	}
 
-	public function beheren($soort = null) {
-		if ($this->getMethod() == 'POST') {
-			if ($soort) {
-				$groepen = $this->model->find('soort = ?', [$soort]);
-			} else {
-				$groepen = $this->model->find();
-			}
-			return new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
-		} else {
-			$table = new GroepenBeheerTable($this->model);
-			$this->table = $table;
-			return view('default', ['content' => $table]);
-		}
-	}
-
 	public function nieuw($soort = null) {
 		return $this->aanmaken($soort);
 	}
@@ -300,6 +298,21 @@ abstract class AbstractGroepenController {
 			return $view;
 		} else {
 			return $form;
+		}
+	}
+
+	public function beheren($soort = null) {
+		if ($this->getMethod() == 'POST') {
+			if ($soort) {
+				$groepen = $this->model->find('soort = ?', [$soort]);
+			} else {
+				$groepen = $this->model->find();
+			}
+			return new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
+		} else {
+			$table = new GroepenBeheerTable($this->model);
+			$this->table = $table;
+			return view('default', ['content' => $table]);
 		}
 	}
 
