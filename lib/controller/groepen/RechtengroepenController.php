@@ -12,7 +12,7 @@ use CsrDelft\model\groepen\RechtenGroepenModel;
  * Controller voor rechten-groepen. Kleine letter g vanwege groepen-router.
  */
 class RechtengroepenController extends AbstractGroepenController {
-	const NAAM = 'rechtengroepen';
+	const NAAM = 'overig';
 
 	public function __construct() {
 		parent::__construct(RechtenGroepenModel::instance());

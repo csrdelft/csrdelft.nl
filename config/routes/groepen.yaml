@@ -1,3 +1,9 @@
+groep-overzicht:
+  path: /groepen
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+  defaults:
+    route: groep-commissies-overzicht
+
 groep-activiteiten:
   resource: CsrDelft\controller\groepen\ActiviteitenController:loadRoutes
   type: service

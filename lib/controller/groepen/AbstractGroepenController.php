@@ -69,7 +69,7 @@ abstract class AbstractGroepenController {
 	 */
 	public function loadRoutes() {
 		$routes = new RouteCollection();
-		$prefix = 'groep-' . classNameZonderNamespace($this);
+		$prefix = 'groep-' . static::NAAM;
 
 		$className = get_class($this);
 
