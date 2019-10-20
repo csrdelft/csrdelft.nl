@@ -83,7 +83,7 @@ class GroepView implements FormElement {
 		}
 		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
 		if ($this->groep->mag(AccessAction::Wijzigen)) {
-			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-pencil"></span></a></div>';
+			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-edit"></span></a></div>';
 		}
 		$html .= '<h3>' . $this->getTitel();
 		if (property_exists($this->groep, 'locatie') AND !empty($this->groep->locatie)) {
