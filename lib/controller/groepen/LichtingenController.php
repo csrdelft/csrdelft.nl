@@ -16,8 +16,6 @@ use CsrDelft\view\JsonResponse;
  * @property LichtingenModel $model
  */
 class LichtingenController extends AbstractGroepenController {
-	const NAAM = 'lichtingen';
-
 	public function __construct() {
 		parent::__construct(LichtingenModel::instance());
 	}

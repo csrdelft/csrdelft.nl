@@ -12,8 +12,6 @@ use CsrDelft\model\groepen\CommissiesModel;
  * Controller voor commissies.
  */
 class CommissiesController extends AbstractGroepenController {
-	const NAAM = 'commissies';
-
 	public function __construct() {
 		parent::__construct(CommissiesModel::instance());
 	}

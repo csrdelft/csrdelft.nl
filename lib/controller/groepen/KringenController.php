@@ -18,8 +18,6 @@ use CsrDelft\view\JsonResponse;
  * @property KringenModel $model
  */
 class KringenController extends AbstractGroepenController {
-	const NAAM = 'kringen';
-
 	public function __construct() {
 		parent::__construct(KringenModel::instance());
 	}

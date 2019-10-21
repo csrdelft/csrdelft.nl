@@ -69,7 +69,7 @@ abstract class AbstractGroepenController {
 	 */
 	public function loadRoutes() {
 		$routes = new RouteCollection();
-		$prefix = 'groep-' . static::NAAM;
+		$prefix = 'groep-' . $this->model::getNaam();
 
 		$className = get_class($this);
 
@@ -86,24 +86,23 @@ abstract class AbstractGroepenController {
 		};
 
 		$route('/', 'overzicht', ['GET']);
-		$route('/{id}', 'bekijken', ['GET'], [], ['id' => '\d+']);
-		$route('/{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST'], [], ['id' => '\d+']);
-		$route('/{id}/omschrijving', 'omschrijving', ['POST'], [], ['id' => '\d+']);
-		$route('/{id}/pasfotos', 'pasfotos', ['POST'], [], ['id' => '\d+']);
-		$route('/{id}/lijst', 'lijst', ['POST'], [], ['id' => '\d+']);
-		$route('/{id}/stats', 'stats', ['POST'], [], ['id' => '\d+']);
-		$route('/{id}/emails', 'emails', ['POST'], [], ['id' => '\d+']);
-		$route('/{id}/eetwens', 'eetwens', ['POST'], [], ['id' => '\d+']);
-		$route('/{id}/aanmelden/{uid}', 'aanmelden', ['POST'], ['uid' => null], ['id' => '\d+', 'uid' => '.{4}']);
-		$route('/{id}/aanmelden2/{uid}', 'aanmelden2', ['POST'], [], ['id' => '\d+', 'uid' => '.{4}']);
+		$route('/{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
+		$route('/{id}/omschrijving', 'omschrijving', ['POST']);
+		$route('/{id}/pasfotos', 'pasfotos', ['POST']);
+		$route('/{id}/lijst', 'lijst', ['POST']);
+		$route('/{id}/stats', 'stats', ['POST']);
+		$route('/{id}/emails', 'emails', ['POST']);
+		$route('/{id}/eetwens', 'eetwens', ['POST']);
+		$route('/{id}/aanmelden/{uid}', 'aanmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route('/{id}/aanmelden2/{uid}', 'aanmelden2', ['POST'], [], ['uid' => '.{4}']);
 		$route('/{id}/naar_ot/{uid}', 'naar_ot', ['POST'], ['uid' => null], ['uid' => '.{4}']);
 		$route('/{id}/bewerken/{uid}', 'bewerken', ['POST'], ['uid' => null], ['uid' => '.{4}']);
 		$route('/{id}/afmelden/{uid}', 'afmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
 		$route('/zoeken', 'zoeken', ['GET']);
-		$route('/{id}/leden', 'leden', ['GET', 'POST'], [], ['id' => '\d+']);
+		$route('/{id}/leden', 'leden', ['GET', 'POST']);
 		$route('/beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
-		$route('/wijzigen/{id}', 'wijzigen', ['GET', 'POST'], ['id' => null]);
-		$route('/logboek/{id}', 'logboek', ['POST'], ['id' => null], ['id' => '\d+']);
+		$route('/{id}/wijzigen', 'wijzigen', ['GET', 'POST'], ['id' => null]);
+		$route('/{id}/logboek', 'logboek', ['POST'], ['id' => null]);
 		$route('/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
 		$route('/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null]);
 		$route('/verwijderen', 'verwijderen', ['POST']);
@@ -112,6 +111,7 @@ abstract class AbstractGroepenController {
 		$route('/sluiten', 'sluiten', ['POST']);
 		$route('/voorbeeld', 'voorbeeld', ['POST']);
 		$route('/zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
+		$route('/{id}', 'bekijken', ['GET']);
 
 		$routes->addPrefix('/groepen/' . static::NAAM);
 		return $routes;
@@ -316,8 +316,9 @@ abstract class AbstractGroepenController {
 		}
 	}
 
-	public function wijzigen(AbstractGroep $groep = null) {
-		if ($groep) {
+	public function wijzigen($id = null) {
+		if ($id) {
+			$groep = $this->model->get($id);
 			if (!$groep->mag(AccessAction::Wijzigen)) {
 				throw new CsrToegangException();
 			}

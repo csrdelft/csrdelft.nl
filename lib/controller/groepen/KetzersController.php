@@ -16,8 +16,6 @@ use CsrDelft\view\JsonResponse;
  * @property KetzersModel $model
  */
 class KetzersController extends AbstractGroepenController {
-	const NAAM = 'ketzers';
-
 	public function __construct() {
 		parent::__construct(KetzersModel::instance());
 	}

@@ -12,8 +12,6 @@ use CsrDelft\model\groepen\BesturenModel;
  * Controller voor besturen.
  */
 class BesturenController extends AbstractGroepenController {
-	const NAAM = 'besturen';
-
 	public function __construct() {
 		parent::__construct(BesturenModel::instance());
 	}

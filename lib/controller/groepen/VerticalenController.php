@@ -15,8 +15,6 @@ use CsrDelft\view\JsonResponse;
  * Controller voor verticalen.
  */
 class VerticalenController extends AbstractGroepenController {
-	const NAAM = 'verticalen';
-
 	public function __construct() {
 		parent::__construct(VerticalenModel::instance());
 	}
