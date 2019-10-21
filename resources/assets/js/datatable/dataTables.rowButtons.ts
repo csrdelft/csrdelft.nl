@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import {knopPost} from '../knop';
 import {html} from '../util';
+import {replacePlaceholders} from './api';
 
 interface RowButtonsConfig {
 	icon?: string;
@@ -13,12 +14,14 @@ class RowButtons {
 	public static version = '1.0.0';
 	public static defaults: RowButtonsConfig = {};
 
-	private static createButtonGroup(config: RowButtonsConfig[]) {
+	private static createButtonGroup(config: RowButtonsConfig[], row: object) {
 		const btnGroup = html`<div class="btn-group"></div>`;
 
 		for (const btn of Object.values(config)) {
+			const action = replacePlaceholders(btn.action!, row);
+
 			const newButton = html`
-<a href="${btn.action}"
+<a href="${action}"
 	class="btn btn-light noanim btn-sm post DataTableRowKnop ${btn.css}"
 	title="${btn.title}">
 		<i class="${btn.icon}"></i>
@@ -56,9 +59,9 @@ class RowButtons {
 		dtSettings._rowButtons = this;
 
 		dt.on('draw.dt', () => {
-			dt.column('actionButtons:name').nodes().each((cell: HTMLTableCellElement) => {
+			dt.column('actionButtons:name').nodes().each((cell: HTMLTableCellElement, index, api) => {
 				cell.innerHTML = '';
-				cell.append(RowButtons.createButtonGroup(config));
+				cell.append(RowButtons.createButtonGroup(config, api.row(cell).data()));
 			});
 		});
 	}

@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import {knopPost} from '../knop';
 import {evaluateMultiplicity} from '../util';
+import {replacePlaceholders} from './api';
 import ButtonApi = DataTables.ButtonApi;
 import ButtonsSettings = DataTables.ButtonsSettings;
 
@@ -63,17 +64,10 @@ $.fn.dataTable.ext.buttons.default = {
 		// Vervang :col door de waarde te vinden in de geselecteerde row
 		// Dit wordt alleen geprobeerd als dit voorkomt
 		if (config.href.indexOf(':') !== -1) {
-			const replacements = /:(\w+)/g.exec(config.href)!;
 			dt.on('select.dt.DT', (e, dt2, type, indexes) => {
 				if (indexes.length === 1) {
-					let newHref = config.href;
 					const row = dt2.row(indexes).data();
-					// skipt match, start met groepen
-					for (let i = 1; i < replacements.length; i++) {
-						newHref = newHref.replace(':' + replacements[i], row[replacements[i]]);
-					}
-
-					node.attr('href', newHref);
+					node.attr('href', replacePlaceholders(config.href, row));
 				}
 			});
 		}
