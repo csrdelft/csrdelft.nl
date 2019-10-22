@@ -31,3 +31,7 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.view }
 
+  CsrDelft\events\AccessControlEventListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.controller }
+

@@ -2,22 +2,22 @@ maalcie-maaltijden-fiscaat:
   path: /maaltijden/fiscaat
   controller: CsrDelft\controller\maalcie\MaaltijdenFiscaatController::GET_overzicht
   methods: GET
-  options: { mag: P_MAAL_MOD }
+  defaults: { _mag: P_MAAL_MOD }
 
 maalcie-maaltijden-fiscaat-data:
   path: /maaltijden/fiscaat
   controller: CsrDelft\controller\maalcie\MaaltijdenFiscaatController::POST_overzicht
   methods: POST
-  options: { mag: P_MAAL_MOD }
+  defaults: { _mag: P_MAAL_MOD }
 
 maalcie-maaltijden-fiscaat-onverwerkt:
   path: /maaltijden/fiscaat/onverwerkt
   controller: CsrDelft\controller\maalcie\MaaltijdenFiscaatController::GET_onverwerkt
   methods: GET
-  options: { mag: P_MAAL_MOD }
+  defaults: { _mag: P_MAAL_MOD }
 
 maalcie-maaltijden-fiscaat-verwerk:
   path: /maaltijden/fiscaat/verwerk
   controller: CsrDelft\controller\maalcie\MaaltijdenFiscaatController::POST_verwerk
   methods: POST
-  options: { mag: P_MAAL_MOD }
+  defaults: { _mag: P_MAAL_MOD }

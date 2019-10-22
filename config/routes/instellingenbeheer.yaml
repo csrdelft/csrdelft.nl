@@ -2,22 +2,22 @@ instellingenbeheer-overzicht:
   path: /instellingenbeheer
   controller: CsrDelft\controller\InstellingenBeheerController::module
   methods: GET
-  options: { mag: P_LOGGED_IN }
+  defaults: { _mag: P_LOGGED_IN }
 
 instellingenbeheer-module:
   path: /instellingenbeheer/module/{module}
   controller: CsrDelft\controller\InstellingenBeheerController::module
   methods: GET
-  options: { mag: P_LOGGED_IN } # Nadere authenticatie in controller
+  defaults: { _mag: P_LOGGED_IN } # Nadere authenticatie in controller
 
 instellingenbeheer-opslaan:
   path: /instellingenbeheer/opslaan/{module}/{id}
   controller: CsrDelft\controller\InstellingenBeheerController::opslaan
   methods: POST
-  options: { mag: P_LOGGED_IN } # Nadere authenticatie in controller
+  defaults: { _mag: P_LOGGED_IN } # Nadere authenticatie in controller
 
 instellingenbeheer-reset:
   path: /instellingenbeheer/reset/{module}/{id}
   controller: CsrDelft\controller\InstellingenBeheerController::reset
   methods: POST
-  options: { mag: P_LOGGED_IN } # Nadere authenticatie in controller
+  defaults: { _mag: P_LOGGED_IN } # Nadere authenticatie in controller

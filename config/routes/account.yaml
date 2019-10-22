@@ -3,27 +3,27 @@ account-aanvragen:
   controller: CsrDelft\controller\AccountController::aanvragen
   methods: GET
   requirements: { uid: '.{4}' }
-  options: { mag: P_PUBLIC }
+  defaults: { _mag: P_PUBLIC }
 
 account-aanmaken:
   path: /account/{uid}/aanmaken
   controller: CsrDelft\controller\AccountController::aanmaken
   methods: [GET,POST]
   requirements: { uid: '.{4}' }
-  options: { mag: P_ADMIN }
+  defaults: { _mag: P_ADMIN }
 
 account-bewerken:
   path: /account/{uid}/bewerken
   controller: CsrDelft\controller\AccountController::bewerken
   methods: [GET,POST]
   requirements: { uid: '.{4}' }
-  options: { mag: P_LOGGED_IN }
+  defaults: { _mag: P_LOGGED_IN }
 
 account-verwijderen:
   path: /account/{uid}/verwijderen
   controller: CsrDelft\controller\AccountController::verwijderen
   methods: [GET,POST]
   requirements: { uid: '.{4}' }
-  options: { mag: P_LOGGED_IN }
+  defaults: { _mag: P_LOGGED_IN }
 
 
