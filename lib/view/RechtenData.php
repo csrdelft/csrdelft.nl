@@ -16,10 +16,9 @@ class RechtenData extends DataTableResponse {
 
 	/**
 	 * @param AccessControl $ac
-	 * @return string
 	 * @throws \Exception
 	 */
-	public function getJson($ac) {
+	public function renderElement($ac) {
 		$array = $ac->jsonSerialize();
 
 		$array['action'] = AccessAction::getDescription($ac->action);
@@ -30,7 +29,7 @@ class RechtenData extends DataTableResponse {
 			$array['resource'] = 'Deze ' . lcfirst($ac->environment);
 		}
 
-		return parent::getJson($array);
+		return $array;
 	}
 
 }

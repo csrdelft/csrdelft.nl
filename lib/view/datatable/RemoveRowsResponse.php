@@ -12,13 +12,12 @@ class RemoveRowsResponse extends DataTableResponse {
 
 	/**
 	 * @param PersistentEntity $entity
-	 * @return string
 	 */
-	public function getJson($entity) {
-		return parent::getJson(array(
+	public function renderElement($entity) {
+		return array(
 			'UUID' => $entity->getUUID(),
 			'remove' => true
-		));
+		);
 	}
 
 }

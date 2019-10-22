@@ -12,8 +12,9 @@ namespace CsrDelft\view;
  * display the template.
  *
  */
-abstract class SmartyTemplateView implements View {
+abstract class SmartyTemplateView implements View, ToResponse {
 
+	use ToHtmlResponse;
 	/**
 	 * Data model
 	 * @var mixed

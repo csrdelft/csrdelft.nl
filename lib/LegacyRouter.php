@@ -6,6 +6,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\framework\Controller;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\ToResponse;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -16,7 +17,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  * @deprecated Vervangen door de Symfony router
  */
 class LegacyRouter {
-	public static function route() {
+	public static function route(): ToResponse {
 		// Alle legacy routes zijn intern
 		if (!LoginModel::mag(P_LOGGED_IN)) {
 			redirect_via_login(REQUEST_URI);

@@ -15,8 +15,8 @@ class CiviSaldoTableResponse extends DataTableResponse {
 	 * @param CiviSaldo $entity
 	 * @return string
 	 */
-	public function getJson($entity) {
-		return parent::getJson(array(
+	public function renderElement($entity) {
+		return array(
 			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,
 			'uid' => $entity->uid,
@@ -25,6 +25,6 @@ class CiviSaldoTableResponse extends DataTableResponse {
 			'saldo' => $entity->saldo,
 			'laatst_veranderd' => $entity->laatst_veranderd,
 			'deleted' => $entity->deleted
-		));
+		);
 	}
 }

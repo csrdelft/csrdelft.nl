@@ -15,8 +15,8 @@ class CiviProductTableResponse extends DataTableResponse {
 	 * @param CiviProduct $entity
 	 * @return string
 	 */
-	public function getJson($entity) {
-		return parent::getJson([
+	public function renderElement($entity) {
+		return [
 			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,
 			'status' => $entity->status,
@@ -25,6 +25,6 @@ class CiviProductTableResponse extends DataTableResponse {
 			'categorie' => CiviCategorieModel::get($entity->categorie_id)->getBeschrijving(),
 			'prijs' => $entity->prijs,
 			'prioriteit' => $entity->prioriteit,
-		]);
+		];
 	}
 }

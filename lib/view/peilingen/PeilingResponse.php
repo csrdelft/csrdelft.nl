@@ -16,9 +16,8 @@ class PeilingResponse extends DataTableResponse
 
 	/**
 	 * @param Peiling $entity
-	 * @return string
 	 */
-	public function getJson($entity)
+	public function renderElement($entity)
 	{
 		$arr = $entity->jsonSerialize();
 
@@ -31,6 +30,6 @@ class PeilingResponse extends DataTableResponse
 			$eigenaar->getNaam('volledig')
 		) : '';
 
-		return parent::getJson($arr);
+		return $arr;
 	}
 }

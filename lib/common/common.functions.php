@@ -4,6 +4,7 @@
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
+use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\instellingen\InstellingenModel;
@@ -1138,4 +1139,17 @@ function path_valid($prefix, $path) {
 
 function triggerExceptionAsWarning(Exception $e) {
 	ShutdownHandler::triggerSlackMessage($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), true);
+}
+
+/**
+ * @param \Traversable|array
+ * @return array
+ */
+function as_array($value) {
+	if (is_array($value)) {
+		return $value;
+	} else if ($value instanceof \Traversable) {
+		return iterator_to_array($value);
+	}
+	throw new CsrException("Geen array of iterable");
 }

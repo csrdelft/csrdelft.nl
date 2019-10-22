@@ -10,7 +10,7 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 
 	private $titles = array();
 
-	public function getJson($score) {
+	public function renderElement($score) {
 		$array = $score->jsonSerialize();
 
 		$minutes = floor($score->tijd / 60);
@@ -40,7 +40,7 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 		}
 		$array['groep'] = $this->titles[$score->groep];
 
-		return parent::getJson($array);
+		return $array;
 	}
 
 }

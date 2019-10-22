@@ -12,6 +12,8 @@ use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\ToResponse;
 use CsrDelft\view\Validator;
 use CsrDelft\view\View;
 
@@ -24,8 +26,8 @@ use CsrDelft\view\View;
  *
  * @see FormElement
  */
-class Formulier implements View, Validator {
-
+class Formulier implements View, Validator, ToResponse {
+	use ToHtmlResponse;
 	protected $model;
 	protected $formId;
 	protected $dataTableId;

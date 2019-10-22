@@ -2,6 +2,7 @@
 
 namespace CsrDelft\events;
 
+use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
@@ -16,8 +17,8 @@ class ViewEventListener {
 	public function onKernelView(GetResponseForControllerResultEvent $event) {
 		$value = $event->getControllerResult();
 
-		if ($value instanceof View) {
-			$event->setResponse(new Response(view_to_string($value)));
+		if ($value instanceof ToResponse) {
+			$event->setResponse($value->toResponse());
 		}
 	}
 }

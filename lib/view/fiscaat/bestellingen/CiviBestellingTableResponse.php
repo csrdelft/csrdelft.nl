@@ -9,4 +9,8 @@ use CsrDelft\view\datatable\DataTableResponse;
  * @date 26/04/2017
  */
 class CiviBestellingTableResponse extends DataTableResponse {
+	public function renderElement($element)
+	{
+		return $element;
+	}
 }

@@ -21,9 +21,8 @@ class ToestemmingLijstResponse extends DataTableResponse {
 
     /**
      * @param LidToestemming[] $entity
-     * @return false|string
      */
-    public function getJson($entity) {
+    public function renderElement($entity) {
         $profiel = ProfielModel::get($entity[0]->uid);
 
         $arr = [
@@ -43,7 +42,7 @@ class ToestemmingLijstResponse extends DataTableResponse {
             }
         }
 
-        return parent::getJson($arr);
+        return $arr;
 
     }
 }

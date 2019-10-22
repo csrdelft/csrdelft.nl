@@ -7,7 +7,7 @@ use CsrDelft\view\Icon;
 
 class RememberLoginData extends DataTableResponse {
 
-	public function getJson($remember) {
+	public function renderElement($remember) {
 		$array = $remember->jsonSerialize();
 
 		$array['token'] = null; // keep it private
@@ -20,7 +20,7 @@ class RememberLoginData extends DataTableResponse {
 			$array['lock_ip'] = '';
 		}
 
-		return parent::getJson($array);
+		return $array;
 	}
 
 }

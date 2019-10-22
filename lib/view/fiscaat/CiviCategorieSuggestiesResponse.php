@@ -4,6 +4,7 @@ namespace CsrDelft\view\fiscaat;
 
 use CsrDelft\model\entity\fiscaat\CiviCategorie;
 use CsrDelft\view\JsonLijstResponse;
+use CsrDelft\view\JsonResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -14,12 +15,12 @@ class CiviCategorieSuggestiesResponse extends JsonLijstResponse {
 	 * @param CiviCategorie $entity
 	 * @return string
 	 */
-	public function getJson($entity) {
-		return json_encode(array(
+	public function renderElement($entity) {
+		return array(
 			'url' => '/fiscaat/categorien',
 			'value' => $entity->type,
 			'label' => $entity->type,
 			'id' => $entity->id
-		));
+		);
 	}
 }
