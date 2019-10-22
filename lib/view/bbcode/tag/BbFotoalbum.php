@@ -65,9 +65,6 @@ class BbFotoalbum extends BbTag {
 
 	public function render() {
 		$album = $this->album;
-		if ($album == null) {
-			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($this->content) . '</div>');
-		}
 		$arguments = $this->arguments;
 		if (isset($arguments['slider'])) {
 			$view = view('fotoalbum.slider', [
@@ -133,5 +130,8 @@ class BbFotoalbum extends BbTag {
 		$this->readMainArgument($arguments);
 		$this->arguments = $arguments;
 		$this->album = $this->getAlbum($this->content);
+		if ($this->album == null) {
+			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($this->content) . '</div>');
+		}
 	}
 }
