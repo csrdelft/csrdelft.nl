@@ -4,6 +4,7 @@ namespace CsrDelft\events;
 
 use CsrDelft\controller\GeenToegangController;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\CsrfService;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
@@ -18,6 +19,9 @@ class AccessControlEventListener {
 	 * @param FilterControllerEvent $event
 	 */
 	public function onKernelController(FilterControllerEvent $event) {
+		if (!$event->getRequest()->get('_csrfUnsafe')) {
+			CsrfService::preventCsrf();
+		}
 		$mag = $event->getRequest()->get('_mag');
 		if (!$mag || !LoginModel::mag($mag)) {
 			$event->setController([GeenToegangController::class, 'fout_403']);
