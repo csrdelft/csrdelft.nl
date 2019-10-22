@@ -378,6 +378,11 @@ class FotoAlbumController {
 			throw new NotFoundHttpException();
 		}
 		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
+		if ($foto === false || !$foto->magBekijken()) {
+			throw new CsrToegangException();
+		} else if (!$foto->exists()) {
+			throw new CsrToegangException();
+		}
 		$afbeelding = new Afbeelding($foto->getThumbPath());
 
 		return new BinaryFileResponse($afbeelding->getFullPath());
@@ -388,6 +393,11 @@ class FotoAlbumController {
 			throw new NotFoundHttpException();
 		}
 		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
+		if ($foto === false || !$foto->magBekijken()) {
+			throw new CsrToegangException();
+		} else if (!$foto->exists()) {
+			throw new CsrToegangException();
+		}
 		$afbeelding = new Afbeelding($foto->getResizedPath());
 		return new BinaryFileResponse($afbeelding->getFullPath());
 	}
