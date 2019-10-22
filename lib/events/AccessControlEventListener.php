@@ -24,7 +24,7 @@ class AccessControlEventListener {
 		}
 		$mag = $event->getRequest()->get('_mag');
 		if (!$mag || !LoginModel::mag($mag)) {
-			$event->setController([GeenToegangController::class, 'fout_403']);
+			$event->setController([new GeenToegangController(), 'fout_403']);
 		}
 	}
 }
