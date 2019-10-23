@@ -18,7 +18,7 @@ use CsrDelft\view\JsonResponse;
  *
  * Controller van cms paginas.
  */
-class CmsPaginaController {
+class CmsPaginaController extends AbstractController {
 	use QueryParamTrait;
 
 	/**
@@ -88,7 +88,7 @@ class CmsPaginaController {
 				$this->cmsPaginaModel->create($pagina);
 				setMelding('Ingevoegd: ' . $pagina->naam, 1);
 			}
-			redirect('/pagina/' . $pagina->naam);
+			return $this->redirectToRoute('cms-bekijken', ['naam' => $pagina->naam]);
 		} else {
 			return view('default', ['content' => $form]);
 		}

@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
@@ -20,7 +21,7 @@ use CsrDelft\view\maalcie\forms\ToewijzenForm;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class BeheerTakenController {
+class BeheerTakenController extends AbstractController {
 	private $model;
 
 	public function __construct() {
@@ -71,7 +72,7 @@ class BeheerTakenController {
 		} else {
 			setMelding('Geen herinneringen verstuurd.', 0);
 		}
-		redirect('/corvee/beheer');
+		return $this->redirectToRoute('corvee-beheer');
 	}
 
 	public function nieuw($mid = null) {
@@ -171,7 +172,7 @@ class BeheerTakenController {
 	public function leegmaken() {
 		$aantal = $this->model->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' taak' : ' taken') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
-		redirect('/corvee/beheer/prullenbak');
+		return $this->redirectToRoute('corvee-beheer-prullenbak');
 	}
 
 	// Repetitie-Taken ############################################################

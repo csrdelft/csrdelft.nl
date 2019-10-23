@@ -22,7 +22,6 @@ use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbumController.class.php
@@ -32,7 +31,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  *
  * Controller van het fotoalbum.
  */
-class FotoAlbumController {
+class FotoAlbumController extends AbstractController {
 	use QueryParamTrait;
 
 	private $model;
@@ -66,10 +65,10 @@ class FotoAlbumController {
 		}
 		if ($album->dirname === 'fotoalbum') {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
-			redirect($album->getUrl());
+			return $this->redirect($album->getUrl());
 		}
 		$this->model->verwerkFotos($album);
-		redirect($album->getUrl());
+		return $this->redirect($album->getUrl());
 	}
 
 	public function toevoegen($dir) {
@@ -123,7 +122,7 @@ class FotoAlbumController {
 						// verwerken gelukt?
 						if ($foto->isComplete()) {
 							if ($poster) {
-								redirect($album->getUrl() . '#' . $foto->getResizedUrl());
+								return $this->redirect($album->getUrl() . '#' . $foto->getResizedUrl());
 							} else {
 								return new JsonResponse(true);
 							}

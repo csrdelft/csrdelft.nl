@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
@@ -34,7 +35,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  * @property MaaltijdenModel $model
  *
  */
-class BeheerMaaltijdenController {
+class BeheerMaaltijdenController extends AbstractController {
 	use QueryParamTrait;
 
 	public function __construct() {
@@ -218,7 +219,7 @@ class BeheerMaaltijdenController {
 	public function leegmaken() {
 		$aantal = $this->model->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
-		redirect('/maaltijden/beheer/prullenbak');
+		return $this->redirectToRoute('maalcie-beheer-maaltijden-prullenbak');
 	}
 
 	public function GET_beoordelingen() {

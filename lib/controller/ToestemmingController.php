@@ -20,7 +20,7 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
  *
  * @property LidToestemmingModel $model
  */
-class ToestemmingController {
+class ToestemmingController extends AbstractController {
 	use QueryParamTrait;
 
 	public function __construct() {
@@ -59,7 +59,7 @@ class ToestemmingController {
 	public function GET_annuleren() {
 		$_SESSION['stop_nag'] = time();
 
-		redirect('/');
+		return $this->redirectToRoute('default');
 	}
 
 	public function lijst() {

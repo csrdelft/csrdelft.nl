@@ -14,7 +14,7 @@ use CsrDelft\model\security\LoginModel;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class GoogleController {
+class GoogleController extends AbstractController {
 	use QueryParamTrait;
 
 	private $model;
@@ -41,14 +41,14 @@ class GoogleController {
 				$this->model->create($googleToken);
 			}
 
-			redirect(urldecode($state));
+			return $this->redirect(urldecode($state));
 		}
 
 		if ($error) {
 			setMelding('Verbinding met Google niet geaccepteerd', 2);
 			$state = substr(strstr($state, 'addToGoogleContacts', true), 0, -1);
 
-			redirect($state);
+			return $this->redirect($state);
 		}
 
 		throw new CsrException('Geen error en geen code van Google gekregen.');
