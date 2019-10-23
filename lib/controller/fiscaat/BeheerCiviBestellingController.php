@@ -3,19 +3,18 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingInhoudTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTableResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class BeheerCiviBestellingController {
-	use QueryParamTrait;
 	/** @var CiviBestellingModel */
 	private $model;
 
@@ -32,10 +31,10 @@ class BeheerCiviBestellingController {
 		]);
 	}
 
-	public function lijst($uid = null) {
+	public function lijst(Request $request, $uid = null) {
 		$this->checkToegang($uid);
 		$uid = $uid == null ? LoginModel::getUid() : $uid;
-		if ($this->hasParam("deleted") && $this->getParam("deleted") == "true") {
+		if ($request->query->get("deleted") == "true") {
 			$data = $this->model->find('uid = ?', array($uid));
 		} else {
 			$data = $this->model->find('uid = ? and deleted = false', array($uid));

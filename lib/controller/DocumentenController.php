@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\documenten\Document;
@@ -14,14 +13,13 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class DocumentenController extends AbstractController {
-	use QueryParamTrait;
-
 	/** @var DocumentModel */
 	private $documentModel;
 	/** @var DocumentCategorieModel */
@@ -166,19 +164,15 @@ class DocumentenController extends AbstractController {
 		}
 	}
 
-	public function zoeken($zoekterm = null) {
-		if (!$zoekterm && !$this->hasParam('q')) {
+	public function zoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
 			throw new CsrToegangException();
 		}
 		if (!$zoekterm) {
-			$zoekterm = $this->getParam('q');
+			$zoekterm = $request->query->get('q');
 		}
 
-		if ($this->hasParam('limit')) {
-			$limit = (int)$this->getParam('limit');
-		} else {
-			$limit = 5;
-		}
+		$limit = $request->query->getInt('limit', 5);
 
 		$result = array();
 		foreach ($this->documentModel->zoek($zoekterm, $limit) as $doc) {

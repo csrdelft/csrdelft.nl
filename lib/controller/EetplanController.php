@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\eetplan\EetplanBekendenModel;
 use CsrDelft\model\eetplan\EetplanModel;
 use CsrDelft\model\entity\eetplan\Eetplan;
@@ -34,8 +33,6 @@ use CsrDelft\view\View;
  * Controller voor eetplan.
  */
 class EetplanController {
-	use QueryParamTrait;
-
 	/** @var string */
 	private $lichting;
 	/** @var EetplanModel */

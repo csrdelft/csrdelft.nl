@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
@@ -20,6 +19,7 @@ use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -32,8 +32,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Controller van het fotoalbum.
  */
 class FotoAlbumController extends AbstractController {
-	use QueryParamTrait;
-
 	private $model;
 
 	public function __construct() {
@@ -71,13 +69,13 @@ class FotoAlbumController extends AbstractController {
 		return $this->redirect($album->getUrl());
 	}
 
-	public function toevoegen($dir) {
+	public function toevoegen(Request $request, $dir) {
 		$album = new FotoAlbum($dir);
 		if (!$album->magToevoegen()) {
 			throw new CsrToegangException();
 		}
 		$formulier = new FotoAlbumToevoegenForm($album);
-		if ($this->getMethod() == 'POST' AND $formulier->validate()) {
+		if ($request->getMethod() == 'POST' AND $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
 			$album->path = join_paths($album->path, $subalbum);
 			$album->subdir = join_paths($album->subdir, $subalbum);
@@ -89,7 +87,7 @@ class FotoAlbumController extends AbstractController {
 		return $formulier;
 	}
 
-	public function uploaden($dir) {
+	public function uploaden(Request $request, $dir) {
 		$album = $this->model->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
@@ -103,7 +101,7 @@ class FotoAlbumController extends AbstractController {
 			$formulier = new FotosDropzone($album);
 			$uploader = $formulier->getPostedUploader();
 		}
-		if ($this->getMethod() == 'POST') {
+		if ($request->getMethod() == 'POST') {
 			if ($formulier->validate()) {
 				try {
 					if ($poster) {
@@ -267,19 +265,16 @@ class FotoAlbumController extends AbstractController {
 		return new JsonResponse(true);
 	}
 
-	public function zoeken($zoekterm = null) {
-		if (!$zoekterm && !$this->hasParam('q')) {
+	public function zoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
 			throw new CsrToegangException();
 		}
 
 		if (!$zoekterm) {
-			$zoekterm = $this->getParam('q');
+			$zoekterm = $request->query->get('q');
 		}
 		$query = iconv('utf-8', 'ascii//TRANSLIT', $zoekterm); // convert accented characters to regular
-		$limit = 5;
-		if ($this->hasParam('limit')) {
-			$limit = (int)$this->getParam('limit');
-		}
+		$limit = $request->query->getInt('limit', 5);
 		$result = array();
 		foreach ($this->model->find('subdir LIKE ?', array('%'. $query . '%'), null, 'subdir DESC', $limit) as $album) {
 			/** @var FotoAlbum $album */
@@ -306,7 +301,7 @@ class FotoAlbumController extends AbstractController {
 		return new JsonResponse($tags->fetchAll());
 	}
 
-	public function addtag($dir) {
+	public function addtag(Request $request, $dir) {
 		$album = $this->model->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
@@ -318,7 +313,7 @@ class FotoAlbumController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		$formulier = new FotoTagToevoegenForm($foto);
-		if ($this->getMethod() == 'POST' AND $formulier->validate()) {
+		if ($request->getMethod() == 'POST' AND $formulier->validate()) {
 			$uid = $formulier->findByName('uid')->getValue();
 			$x = $formulier->findByName('x')->getValue();
 			$y = $formulier->findByName('y')->getValue();

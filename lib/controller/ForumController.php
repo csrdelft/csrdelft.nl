@@ -6,7 +6,6 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
@@ -30,6 +29,7 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -38,7 +38,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * Controller van het forum.
  */
 class ForumController extends AbstractController {
-	use QueryParamTrait;
 	/** @var DebugLogModel */
 	private $debugLogModel;
 	/** @var ForumDelenMeldingModel */
@@ -150,21 +149,22 @@ class ForumController extends AbstractController {
 	/**
 	 * Draden zoeken op titel voor auto-aanvullen.
 	 *
+	 * @param Request $request
 	 * @param null $zoekterm
 	 * @return View
 	 */
-	public function titelzoeken($zoekterm = null) {
-		if (!$zoekterm && !$this->hasParam('q')) {
+	public function titelzoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
 			return new JsonResponse([]);
 		}
 
 		if (!$zoekterm) {
-			$zoekterm = $this->getParam('q');
+			$zoekterm = $request->query->get('q');
 		}
 
 		$result = [];
 		$query = $zoekterm;
-		$limit = $this->hasParam('limit') ? (int)$this->getParam('limit') : 5;
+		$limit = $request->query->getInt('limit', 5);
 
 		$forumZoeken = ForumZoeken::nieuw($query, $limit, ['titel']);
 
