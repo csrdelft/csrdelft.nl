@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused wordt gebruikt in templates*/
 
 use CsrDelft\common\CRLFView;
 use CsrDelft\model\MenuModel;

@@ -5,6 +5,7 @@ namespace CsrDelft\common;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
+use Exception;
 use Maknz\Slack\Client as SlackClient;
 
 /**
@@ -90,6 +91,10 @@ final class ShutdownHandler {
 	 * Is een `error_handler` en wordt niet uitgevoerd bij E_ERROR.
 	 *
 	 * Runt in Productie mode.
+	 * @param $errno
+	 * @param $errstr
+	 * @param $errfile
+	 * @param $errline
 	 */
 	public static function slackHandler($errno, $errstr, $errfile, $errline) {
 		ShutdownHandler::triggerSlackMessage($errno, $errstr, $errfile, $errline, false);
@@ -97,6 +102,11 @@ final class ShutdownHandler {
 
 	/**
 	 * Stuur een schop naar de PubCie Slack.
+	 * @param $errno
+	 * @param $errstr
+	 * @param $errfile
+	 * @param $errline
+	 * @param bool $force
 	 */
 	public static function triggerSlackMessage($errno, $errstr, $errfile, $errline, $force=false) {
 		if (!$force && !(error_reporting() & $errno)) {
@@ -153,7 +163,7 @@ MD
 	 * @param null $exception
 	 */
 	public static function stacktraceHandler($exception = null) {
-		if ($exception instanceof \Exception) {
+		if ($exception instanceof Exception) {
 			if ((defined('DEBUG') && DEBUG) || LoginModel::mag(P_LOGGED_IN)) {
 				echo str_replace('#', '<br />#', $exception); // stacktrace
 				printDebug();

@@ -9,6 +9,7 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use DOMDocument;
 use DOMText;
+use Exception;
 use Google_Client;
 use SimpleXMLElement;
 
@@ -458,7 +459,7 @@ class GoogleSync {
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				throw new CsrException(sprintf($error_message, 'update', $profiel->getNaam(), $e->getMessage()));
 			}
 		} else {
@@ -474,7 +475,7 @@ class GoogleSync {
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				throw new CsrException(sprintf($error_message, 'insert', $profiel->getNaam(), $e->getMessage()));
 			}
 		}
@@ -687,8 +688,8 @@ class GoogleSync {
 		$redirect_uri = CSR_ROOT . '/google/callback';
 		$client = new Google_Client();
 		$client->setApplicationName('Stek');
-		$client->setClientId(Ini::lees(Ini::GOOGLE, 'client_id', ''));
-		$client->setClientSecret(Ini::lees(Ini::GOOGLE, 'client_secret', ''));
+		$client->setClientId(Ini::leesOfStandaard(Ini::GOOGLE, 'client_id', ''));
+		$client->setClientSecret(Ini::leesOfStandaard(Ini::GOOGLE, 'client_secret', ''));
 		$client->setRedirectUri($redirect_uri);
 		$client->setAccessType('offline');
 		// Zonder force kunnen we nog een oude sessie krijgen (zonder refresh token)
