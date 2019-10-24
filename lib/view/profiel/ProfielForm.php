@@ -137,7 +137,7 @@ class ProfielForm extends Formulier {
 					$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
 				}
 			}
-			$fields[] = new RequiredDateField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15);
+			$fields[] = new RequiredDateField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15, 1900);
 			if ($admin AND $profiel->status === LidStatus::Overleden) {
 				$fields[] = new DateField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
