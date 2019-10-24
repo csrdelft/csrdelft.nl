@@ -77,8 +77,8 @@
 			"git pull",
 			"@composer install --no-dev --optimize-autoloader",
 			"@migrate",
-			"@php bin/console cache:clear",
 			"@onderhoud false",
+			"@php bin/console cache:clear",
 			"@flushcache"
 		],
 		"auto-scripts": {
