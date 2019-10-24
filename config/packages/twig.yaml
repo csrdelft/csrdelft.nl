@@ -1,0 +1,2 @@
+twig:
+  exception_controller: CsrDelft\controller\ErrorController::handleException
