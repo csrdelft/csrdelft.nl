@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Ini;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\CourantBerichtModel;
 use CsrDelft\model\CourantModel;
 use CsrDelft\model\entity\courant\CourantBericht;
@@ -20,8 +19,7 @@ use CsrDelft\view\PlainView;
  *
  * Controller van de courant.
  */
-class CourantController {
-	use QueryParamTrait;
+class CourantController extends AbstractController {
 
 	private $courantModel;
 	private $courantBerichtModel;
@@ -62,7 +60,7 @@ class CourantController {
 			][$bericht->cat];
 			$this->courantBerichtModel->create($bericht);
 			setMelding('Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
-			redirect("/courant");
+			return $this->redirectToRoute('courant-toevoegen');
 		}
 		return view('courant.beheer', [
 			'courant' => $this->courantModel,
@@ -78,7 +76,7 @@ class CourantController {
 		if ($form->isPosted() && $form->validate()) {
 			$this->courantBerichtModel->update($bericht);
 			setMelding('Bericht is bewerkt', 1);
-			redirect('/courant');
+			return $this->redirectToRoute('courant-toevoegen');
 		}
 
 		return view('courant.beheer', [
@@ -98,13 +96,13 @@ class CourantController {
 		} else {
 			setMelding('Uw bericht is niet verwijderd.', -1);
 		}
-		redirect("/courant");
+		return $this->redirectToRoute('courant-toevoegen');
 	}
 
 	public function verzenden($iedereen = null) {
 		if ($this->courantBerichtModel->getNieuweBerichten()->rowCount() < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
-			redirect('/courant');
+			return $this->redirectToRoute('courant-toevoegen');
 		}
 
 		$courant = $this->courantModel->nieuwCourant();

@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\ActiviteitenModel;
@@ -26,6 +25,8 @@ use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
 use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Deze controller bevat een aantal beheertools die niet direct onder een andere controller geschaard kunnen worden.
@@ -33,8 +34,7 @@ use CsrDelft\view\View;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 11/04/2019
  */
-class ToolsController {
-	use QueryParamTrait;
+class ToolsController extends AbstractController {
 
 	public function streeplijst() {
 		$body = new Streeplijstcontent();
@@ -47,15 +47,15 @@ class ToolsController {
 		}
 	}
 
-	public function stats() {
+	public function stats(Request $request) {
 		$criteria = null;
 		$params = [];
-		if ($this->hasParam('uid')) {
+		if ($request->query->has('uid')) {
 			$criteria = "uid = ?";
-			$params[] = $this->getParam('uid');
-		} elseif ($this->hasParam('ip')) {
+			$params[] = $request->query->get('uid');
+		} elseif ($request->query->has('ip')) {
 			$criteria = "ip = ?";
-			$params[] = $this->getParam('ip');
+			$params[] = $request->query->get('ip');
 		}
 
 		$log = LogModel::instance()->find($criteria, $params, null, 'ID DESC', 30)->fetchAll();
@@ -78,11 +78,11 @@ class ToolsController {
 		]);
 	}
 
-	public function roodschopper() {
-		if ($this->hasParam('verzenden')) {
+	public function roodschopper(Request $request) {
+		if ($request->query->has('verzenden')) {
 			return view('roodschopper.roodschopper', [
 				'verzenden' => true,
-				'aantal' => $this->getParam('aantal'),
+				'aantal' => $request->query->get('aantal'),
 			]);
 		}
 
@@ -92,7 +92,7 @@ class ToolsController {
 		if ($roodschopperForm->isPosted() && $roodschopperForm->validate() && $roodschopper->verzenden) {
 			$roodschopper->sendMails();
 			// Voorkom dubbele submit
-			redirect('/tools/roodschopper?verzenden=true&aantal=' . count($roodschopper->getSaldi()));
+			return $this->redirect('/tools/roodschopper?verzenden=true&aantal=' . count($roodschopper->getSaldi()));
 		} else {
 			$roodschopper->generateMails();
 		}
@@ -213,6 +213,8 @@ class ToolsController {
 		} elseif ($given == 'naam') {
 			return new PlainView(zoekNaam($string, $zoekin));
 		}
+
+		throw new ResourceNotFoundException();
 	}
 
 	public function naamsuggesties($zoekin = null, $status = null, $query = '') {

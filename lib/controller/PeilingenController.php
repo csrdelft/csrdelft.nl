@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingenModel;
@@ -14,13 +13,12 @@ use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingResponse;
 use CsrDelft\view\peilingen\PeilingTable;
 use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class PeilingenController {
-	use QueryParamTrait;
-
+class PeilingenController extends AbstractController {
 	/** @var PeilingenModel */
 	private $peilingenModel;
 	/** @var PeilingenLogic */
@@ -120,11 +118,12 @@ class PeilingenController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @param int $id
 	 * @return View
 	 */
-	public function stem($id) {
-		$ids = filter_var_array($this->getPost('opties'), FILTER_VALIDATE_INT);
+	public function stem(Request $request, $id) {
+		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);
 
 		if($this->peilingenLogic->stem($id, $ids, LoginModel::getUid())) {
 			return new JsonResponse(true);

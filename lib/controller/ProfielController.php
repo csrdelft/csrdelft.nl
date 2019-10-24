@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleSync;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
@@ -46,7 +45,7 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-class ProfielController {
+class ProfielController extends AbstractController {
 	private $model;
 
 	public function __construct() {
@@ -169,7 +168,7 @@ class ProfielController {
 					setMelding('Opslaan van ' . count($diff) . ' wijziging(en) mislukt', -1);
 				}
 			}
-			redirect('/profiel/' . $profiel->uid);
+			return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
 		}
 		if ($alleenFormulier) {
 			return view('plain', ['titel' => 'Noviet toevoegen', 'content' => $form]);
@@ -205,7 +204,8 @@ class ProfielController {
 			}
 			VoorkeurOpmerkingModel::instance()->updateOrCreate($opmerking);
 			setMelding('Voorkeuren opgeslagen', 1);
-			redirect();
+			$this->redirectToRoute('profiel-voorkeuren');
+
 		}
 		return view('default', ['content' => $form]);
 	}
@@ -224,7 +224,7 @@ class ProfielController {
 		} catch (CsrException $e) {
 			setMelding("Opslaan in Google Contacts mislukt: " . $e->getMessage(), -1);
 		}
-		redirect(CSR_ROOT . '/profiel/' . $profiel->uid);
+		return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
 	}
 
 
@@ -255,14 +255,14 @@ class ProfielController {
 	public function pasfoto($uid, $vorm = 'civitas') {
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
-			redirect('/images/geen-foto.jpg');
+			return $this->redirect('/images/geen-foto.jpg');
 		}
 		if (!is_zichtbaar($profiel, 'profielfoto', 'intern')) {
-			redirect('/images/geen-foto.jpg');
+			return $this->redirect('/images/geen-foto.jpg');
 		}
 		$path = $profiel->getPasfotoInternalPath(false, $vorm);
 		if ($path === null) {
-			redirect('/images/geen-foto.jpg');
+			return $this->redirect('/images/geen-foto.jpg');
 		}
 		$image = new Afbeelding($path);
 		return new BinaryFileResponse($image->getFullPath());
@@ -285,8 +285,7 @@ class ProfielController {
 		return view('profiel.kaartje', ['profiel' => ProfielModel::get($uid)]);
 	}
 
-	public function redirect($target) {
-		$uid = LoginModel::getUid();
-		redirect("/profiel/$uid/$target");
+	public function redirectWithUid($route) {
+		return $this->redirectToRoute($route, ['uid' => LoginModel::getUid()]);
 	}
 }

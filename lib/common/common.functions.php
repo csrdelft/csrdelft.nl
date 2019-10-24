@@ -148,7 +148,7 @@ function redirect($url = null, $refresh = true) {
 		$url = CSR_ROOT;
 	}
 	if (!startsWith($url, CSR_ROOT)) {
-		if (preg_match("/^[\?#\/]/", $url) === 1) {
+		if (preg_match("/^[?#\/]/", $url) === 1) {
 			$url = CSR_ROOT . $url;
 		} else {
 			$url = CSR_ROOT;
@@ -190,6 +190,8 @@ function checkEncoding($string, $string_encoding) {
 
 /**
  * @source http://stackoverflow.com/a/13733588
+ * @param $length
+ * @return string
  */
 function crypto_rand_token($length) {
 	$token = '';
@@ -241,7 +243,7 @@ function valid_date($date, $format = 'Y-m-d H:i:s') {
  * @return bool
  */
 function valid_filename($name) {
-	return preg_match('/^(?:[a-z0-9 \-_\(\)éê]|\.(?!\.))+$/iD', $name);
+	return preg_match('/^(?:[a-z0-9 \-_()éê]|\.(?!\.))+$/iD', $name);
 }
 
 /**
@@ -254,7 +256,7 @@ function email_like($email) {
 	if (empty($email)) {
 		return false;
 	}
-	return preg_match("/^[a-zA-Z0-9!#$%&'\*\+=\?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'\*\+=\?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,})\b$/", $email);
+	return preg_match("/^[a-zA-Z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,})\b$/", $email);
 }
 
 /**
@@ -274,11 +276,11 @@ function external_url($url, $label) {
 	$url = filter_var($url, FILTER_SANITIZE_URL);
 	if ($url && (url_like($url) || url_like(CSR_ROOT . $url))) {
 		if (startsWith($url, 'http://') || startsWith($url, 'https://')) {
-			$extern = ' target="_blank"';
+			$extern = 'target="_blank"';
 		} else {
 			$extern = '';
 		}
-		$result = '<a href="' . $url . '" title="' . $url . '"' . $extern . '>' . $label . '</a>';
+		$result = '<a href="' . $url . '" title="' . $url . '" ' . $extern . '>' . $label . '</a>';
 	} else {
 		$result = $url;
 	}
@@ -394,6 +396,11 @@ function internationalizePhonenumber($phonenumber, $prefix = '+31') {
 /**
  * Plaatje vierkant croppen.
  * @source http://abeautifulsite.net/blog/2009/08/cropping-an-image-to-make-square-thumbnails-in-php/
+ * @param $src_image
+ * @param $dest_image
+ * @param int $thumb_size
+ * @param int $jpg_quality
+ * @return bool
  */
 function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 90) {
 
@@ -486,6 +493,8 @@ function format_filesize($size) {
  * This function transforms the php.ini notation for numbers (like '2M') to an integer (2*1024*1024 in this case)
  *
  * @source http://stackoverflow.com/a/22500394
+ * @param $sSize
+ * @return false|int|string
  */
 function convertPHPSizeToBytes($sSize) {
 	if (is_numeric($sSize)) {
@@ -648,7 +657,7 @@ function className($className) {
  */
 function classNameZonderNamespace($className) {
 	try {
-		return (new \ReflectionClass($className))->getShortName();
+		return (new ReflectionClass($className))->getShortName();
 	} catch (ReflectionException $e) {
 		return '';
 	}
@@ -831,12 +840,12 @@ function curl_follow_location($url, $options = []) {
  * Create an xpath object from an HTML string.
  *
  * @param $html String the HTML string to create the xpath object from
- * @return \DOMXPath The xpath object
+ * @return DOMXPath The xpath object
  */
 function init_xpath($html) {
-	$xml = new \DOMDocument();
+	$xml = new DOMDocument();
 	$xml->loadHTML($html);
-	return new \DOMXPath($xml);
+	return new DOMXPath($xml);
 }
 
 /**
@@ -970,6 +979,7 @@ function is_ingelogd_account($uid) {
 /**
  * @param Profiel $profiel
  * @param string|string[] $key
+ * @param string $cat
  * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
  * @return bool
  */
@@ -1004,6 +1014,7 @@ function to_unix_path($path) {
  * If directory traversal is applied using ../ et cetera, making the path no longer be inside $folder, null is returned;
  * @param $folder
  * @param $subpath
+ * @return string|null
  */
 function safe_combine_path($folder, $subpath) {
 	if ($folder == null || $subpath == null) {

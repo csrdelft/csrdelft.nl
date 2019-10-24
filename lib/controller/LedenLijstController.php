@@ -12,7 +12,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
 
-class LedenLijstController {
+class LedenLijstController extends AbstractController {
 	public function lijst() {
 		if (!LoginModel::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
@@ -75,7 +75,7 @@ class LedenLijstController {
 			if ($zoeker->count() == 1) {
 				$leden = $zoeker->getLeden();
 				$profiel = $leden[0];
-				redirect('/profiel/' . $profiel->uid);
+				return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
 			}
 		}
 

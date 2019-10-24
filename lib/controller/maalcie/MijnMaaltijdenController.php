@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
@@ -15,13 +14,13 @@ use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
 use CsrDelft\view\maalcie\persoonlijk\MijnMaaltijdenView;
 use CsrDelft\view\maalcie\persoonlijk\MijnMaaltijdView;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class MijnMaaltijdenController {
-	use QueryParamTrait;
 	private $model;
 
 	public function __construct() {
@@ -57,20 +56,20 @@ class MijnMaaltijdenController {
 		exit;
 	}
 
-	public function aanmelden($mid) {
+	public function aanmelden(Request $request, $mid) {
 		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 		$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($maaltijd, LoginModel::getUid(), LoginModel::getUid());
-		if ($this->getMethod() == 'POST') {
+		if ($request->getMethod() == 'POST') {
 			return new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
 		} else {
 			return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 		}
 	}
 
-	public function afmelden($mid) {
+	public function afmelden(Request $request, $mid) {
 		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 		MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($maaltijd, LoginModel::getUid());
-		if ($this->getMethod() == 'POST') {
+		if ($request->getMethod() == 'POST') {
 			return new MijnMaaltijdView($maaltijd);
 		} else {
 			return view('maaltijden.bb', ['maaltijd' => $maaltijd]);

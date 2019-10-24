@@ -21,10 +21,10 @@ profiel-voorkeuren:
 
 profiel-voorkeuren-redirect:
   path: /profiel/voorkeuren
-  controller: CsrDelft\controller\ProfielController::redirect
+  controller: CsrDelft\controller\ProfielController::redirectWithUid
   methods: [GET]
   defaults:
-    target: voorkeuren
+    route: profiel-voorkeuren
     _mag: P_PROFIEL_EDIT
 
 profiel-reset-private-token:

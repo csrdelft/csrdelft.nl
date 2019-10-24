@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
@@ -19,9 +18,7 @@ use CsrDelft\view\peilingen\PeilingOptieTable;
  *
  * Voor routes in /peilingen/opties
  */
-class PeilingOptiesController {
-	use QueryParamTrait;
-
+class PeilingOptiesController extends AbstractController {
 	/** @var PeilingenLogic */
 	private $peilingenLogic;
 	/** @var PeilingOptiesModel */

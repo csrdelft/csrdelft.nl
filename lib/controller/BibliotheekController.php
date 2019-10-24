@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekImporter;
 use CsrDelft\model\bibliotheek\BoekModel;
@@ -23,14 +22,14 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * BibliotheekController.class.php  |  Gerrit Uitslag (klapinklapin@gmail.com)
  *
  */
-class BibliotheekController {
-	use QueryParamTrait;
-
+class BibliotheekController extends AbstractController {
 	private $model;
 	private $boekRecensieModel;
 	private $boekExemplaarModel;
@@ -53,7 +52,7 @@ class BibliotheekController {
 				setMelding("Recensie opgeslagen", 0);
 			}
 		}
-		redirect("/bibliotheek/boek/$boek_id");
+		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek_id]);
 	}
 
 	public function rubrieken() {
@@ -93,7 +92,7 @@ class BibliotheekController {
 	/**
 	 * Boek weergeven
 	 * @param $boek_id
-	 * @return TemplateView
+	 * @return TemplateView|RedirectResponse
 	 */
 	public function boek($boek_id = null) {
 		if ($boek_id == null) {
@@ -109,7 +108,7 @@ class BibliotheekController {
 			} else {
 				$boekid = BoekModel::instance()->updateOrCreate($boek);
 				if ($boekid !== false) {
-					redirect("/bibliotheek/boek/$boekid");
+					return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek_id]);
 				}
 			}
 		}
@@ -143,7 +142,7 @@ class BibliotheekController {
 			$importer = new BoekImporter();
 			$importer->import($boek);
 			$this->model->update($boek);
-			redirect("/bibliotheek/boek/$boek->id");
+			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
 		}
 	}
 
@@ -166,17 +165,18 @@ class BibliotheekController {
 	 *
 	 * /verwijderboek/id
 	 * @param $boek_id
+	 * @return RedirectResponse
 	 */
 	public function verwijderboek($boek_id) {
 		$boek = $this->model->get($boek_id);
 
 		if (!$boek->magVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving', -1);
-			redirect('/bibliotheek/');
+			return $this->redirectToRoute('bibliotheek-overzicht');
 		} else {
 			$this->model->delete($boek);
 			setMelding('Boek met succes verwijderd.', 1);
-			redirect('/bibliotheek/');
+			return $this->redirectToRoute('bibliotheek-overzicht');
 		}
 	}
 
@@ -189,7 +189,7 @@ class BibliotheekController {
 		if ($form->validate()) {
 			$this->boekExemplaarModel->update($exemplaar);
 		}
-		redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->id);
+		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 	/**
@@ -202,7 +202,7 @@ class BibliotheekController {
 		$boek = $this->model->get($boek_id);
 		if (!$boek->magBekijken()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()', -1);
-			redirect('/bibliotheek/boek/' . $boek->id);
+			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
 		}
 		if ($uid == null) {
 			$uid = LoginModel::getUid();
@@ -213,13 +213,14 @@ class BibliotheekController {
 		$this->boekExemplaarModel->addExemplaar($boek, $uid);
 
 		setMelding('Exemplaar met succes toegevoegd.', 1);
-		redirect('/bibliotheek/boek/' . $boek->id);
+		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
 	}
 
 	/**
 	 * Exemplaar verwijderen
 	 * /deleteexemplaar/$exemplaarid
 	 * @param $exemplaar_id
+	 * @return RedirectResponse
 	 */
 	public function verwijderexemplaar($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
@@ -232,13 +233,14 @@ class BibliotheekController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->id);
+		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 	/**
 	 * Exemplaar als vermist markeren
 	 * /exemplaarvermist/[id]
 	 * @param $exemplaar_id
+	 * @return RedirectResponse
 	 */
 	public function exemplaarvermist($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
@@ -252,7 +254,7 @@ class BibliotheekController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->id);
+		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 	/**
@@ -278,6 +280,7 @@ class BibliotheekController {
 	/**
 	 * /exemplaaruitlenen/[exemplaarid]
 	 * @param $exemplaar_id
+	 * @return RedirectResponse
 	 */
 	public function exemplaaruitlenen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
@@ -287,23 +290,26 @@ class BibliotheekController {
 		} else if (!ProfielModel::existsUid($uid)) {
 			setMelding('Incorrecte lener', -1);
 		} else if ($this->boekExemplaarModel->leen($exemplaar, $uid)) {
-			redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
+			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
 		} else {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
+
+		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 
 	/**
 	 * /exemplaarlenen/[exemplaarid]
 	 * @param $exemplaar_id
+	 * @return RedirectResponse
 	 */
 	public function exemplaarlenen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
 		if (!$this->boekExemplaarModel->leen($exemplaar, LoginModel::getUid())) {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
-		redirect('/bibliotheek/boek/' . $exemplaar->getBoek()->getId() . '#exemplaren');
+		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
 	}
 
 
@@ -374,12 +380,12 @@ class BibliotheekController {
 		}
 	}
 
-	public function zoeken($zoekterm = null) {
-		if (!$zoekterm && !$this->hasParam('q')) {
+	public function zoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
 			throw new CsrToegangException();
 		}
 		if (!$zoekterm) {
-			$zoekterm = $this->getParam('q');
+			$zoekterm = $request->query->get('q');
 		}
 		$result = array();
 		foreach ($this->model->autocompleteBoek($zoekterm) as $boek) {
