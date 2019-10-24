@@ -75,7 +75,7 @@ class FotoAlbumController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		$formulier = new FotoAlbumToevoegenForm($album);
-		if ($request->getMethod() == 'POST' AND $formulier->validate()) {
+		if ($request->getMethod() == 'POST' && $formulier->validate()) {
 			$subalbum = $formulier->findByName('subalbum')->getValue();
 			$album->path = join_paths($album->path, $subalbum);
 			$album->subdir = join_paths($album->subdir, $subalbum);
@@ -220,7 +220,7 @@ class FotoAlbumController extends AbstractController {
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$cover = new Foto($filename, $album);
-		if ($cover->exists() AND $this->model->setAlbumCover($album, $cover)) {
+		if ($cover->exists() && $this->model->setAlbumCover($album, $cover)) {
 			return new JsonResponse($album->getUrl() . '#' . $cover->getResizedUrl());
 		} else {
 			return new JsonResponse('Fotoalbum-cover instellen mislukt', 500);
@@ -313,7 +313,7 @@ class FotoAlbumController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		$formulier = new FotoTagToevoegenForm($foto);
-		if ($request->getMethod() == 'POST' AND $formulier->validate()) {
+		if ($request->getMethod() == 'POST' && $formulier->validate()) {
 			$uid = $formulier->findByName('uid')->getValue();
 			$x = $formulier->findByName('x')->getValue();
 			$y = $formulier->findByName('y')->getValue();
@@ -330,7 +330,7 @@ class FotoAlbumController extends AbstractController {
 	public function removetag() {
 		$refuuid = filter_input(INPUT_POST, 'refuuid', FILTER_SANITIZE_STRING);
 		$keyword = filter_input(INPUT_POST, 'keyword', FILTER_SANITIZE_STRING);
-		if (!LoginModel::mag(P_ALBUM_MOD) AND !LoginModel::mag($keyword)) {
+		if (!LoginModel::mag(P_ALBUM_MOD) && !LoginModel::mag($keyword)) {
 			throw new CsrToegangException();
 		}
 		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
