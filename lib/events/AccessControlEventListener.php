@@ -2,7 +2,7 @@
 
 namespace CsrDelft\events;
 
-use CsrDelft\controller\GeenToegangController;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\service\CsrfService;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -13,6 +13,9 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
  * @package CsrDelft\events
  */
 class AccessControlEventListener {
+	const EXCLUDED_CONTROLLERS = [
+		'CsrDelft\controller\ErrorController::handleException' => true,
+	];
 	/**
 	 * Controleer of gebruiker deze pagina mag zien.
 	 *
@@ -22,9 +25,14 @@ class AccessControlEventListener {
 		if (!$event->getRequest()->get('_csrfUnsafe')) {
 			CsrfService::preventCsrf();
 		}
+
+		if (isset(self::EXCLUDED_CONTROLLERS[$event->getRequest()->get('_controller')])){
+			return;
+		}
+
 		$mag = $event->getRequest()->get('_mag');
 		if (!$mag || !LoginModel::mag($mag)) {
-			$event->setController([new GeenToegangController(), 'fout_403']);
+			throw new CsrToegangException("Geen toegang");
 		}
 	}
 }

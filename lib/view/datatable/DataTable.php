@@ -19,6 +19,7 @@ use CsrDelft\view\View;
  *
  */
 class DataTable implements View, FormElement {
+	const POST_SELECTION = 'DataTableSelection';
 
 	/** @var PersistenceModel */
 	public $model;

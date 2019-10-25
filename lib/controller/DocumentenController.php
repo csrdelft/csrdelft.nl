@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\documenten\DocumentCategorieModel;
 use CsrDelft\model\documenten\DocumentModel;
 use CsrDelft\model\entity\documenten\Document;
@@ -14,14 +13,13 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class DocumentenController {
-	use QueryParamTrait;
-
+class DocumentenController extends AbstractController {
 	/** @var DocumentModel */
 	private $documentModel;
 	/** @var DocumentCategorieModel */
@@ -47,7 +45,7 @@ class DocumentenController {
 
 		if ($document === false) {
 			setMelding('Document bestaat niet!', -1);
-			redirect('/documenten');
+			return $this->redirectToRoute('documenten');
 		} elseif ($document->magVerwijderen()) {
 			$this->documentModel->delete($document);
 		} else {
@@ -69,14 +67,14 @@ class DocumentenController {
 		//We do not allow serving javascript files because they can increase the impact of XSS by registering a service worker.
 		if ($document->mimetype == "text/html" || $document->mimetype == "text/javascript" || !checkMimetype($document->filename, $document->mimetype)) {
 			setMelding('Dit type bestand kan niet worden getoond', -1);
-			redirect('/documenten');
+			return $this->redirectToRoute('documenten');
 		}
 
 		if ($document->hasFile()) {
 			return new BinaryFileResponse($document->getFullPath());
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
-			redirect('/documenten');
+			return $this->redirectToRoute('documenten');
 		}
 	}
 
@@ -92,7 +90,7 @@ class DocumentenController {
 			return $response;
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
-			redirect('/documenten');
+			return $this->redirectToRoute('documenten');
 		}
 	}
 
@@ -100,7 +98,7 @@ class DocumentenController {
 		$categorie = $this->documentModel->getCategorieModel()->get($id);
 		if ($categorie === false) {
 			setMelding('Categorie bestaat niet!', -1);
-			redirect('/documenten');
+			return $this->redirectToRoute('documenten');
 		} elseif (!$categorie->magBekijken()) {
 			throw new CsrToegangException('Mag deze categorie niet bekijken');
 		} else {
@@ -116,14 +114,14 @@ class DocumentenController {
 
 		if ($document === false) {
 			setMelding('Document niet gevonden', 2);
-			redirect('/documenten');
+			return $this->redirectToRoute('documenten');
 		}
 
 		$form = new DocumentBewerkenForm($document);
 		if ($form->isPosted() && $form->validate()) {
 			$this->documentModel->update($document);
 
-			redirect('/documenten/categorie/' . $document->categorie_id);
+			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie_id]);
 		} else {
 			return view('default', [
 				'titel' => 'Document bewerken',
@@ -157,7 +155,7 @@ class DocumentenController {
 
 			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
 
-			redirect('/documenten/categorie/' . $document->categorie_id);
+			return $this->redirectToRoute('documenten-categorie', ['id', $document->categorie_id]);
 		} else {
 			return view('default', [
 				'titel' => 'Document toevoegen',
@@ -166,19 +164,15 @@ class DocumentenController {
 		}
 	}
 
-	public function zoeken($zoekterm = null) {
-		if (!$zoekterm && !$this->hasParam('q')) {
+	public function zoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
 			throw new CsrToegangException();
 		}
 		if (!$zoekterm) {
-			$zoekterm = $this->getParam('q');
+			$zoekterm = $request->query->get('q');
 		}
 
-		if ($this->hasParam('limit')) {
-			$limit = (int)$this->getParam('limit');
-		} else {
-			$limit = 5;
-		}
+		$limit = $request->query->getInt('limit', 5);
 
 		$result = array();
 		foreach ($this->documentModel->zoek($zoekterm, $limit) as $doc) {

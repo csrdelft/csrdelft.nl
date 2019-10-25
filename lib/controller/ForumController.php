@@ -6,7 +6,6 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
@@ -29,6 +28,8 @@ use CsrDelft\view\forum\ForumZoekenForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -36,8 +37,7 @@ use CsrDelft\view\View;
  *
  * Controller van het forum.
  */
-class ForumController {
-	use QueryParamTrait;
+class ForumController extends AbstractController {
 	/** @var DebugLogModel */
 	private $debugLogModel;
 	/** @var ForumDelenMeldingModel */
@@ -149,21 +149,22 @@ class ForumController {
 	/**
 	 * Draden zoeken op titel voor auto-aanvullen.
 	 *
+	 * @param Request $request
 	 * @param null $zoekterm
 	 * @return View
 	 */
-	public function titelzoeken($zoekterm = null) {
-		if (!$zoekterm && !$this->hasParam('q')) {
+	public function titelzoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
 			return new JsonResponse([]);
 		}
 
 		if (!$zoekterm) {
-			$zoekterm = $this->getParam('q');
+			$zoekterm = $request->query->get('q');
 		}
 
 		$result = [];
 		$query = $zoekterm;
-		$limit = $this->hasParam('limit') ? (int)$this->getParam('limit') : 5;
+		$limit = $request->query->getInt('limit', 5);
 
 		$forumZoeken = ForumZoeken::nieuw($query, $limit, ['titel']);
 
@@ -497,7 +498,7 @@ class ForumController {
 	 *
 	 * @param int $draad_id
 	 * @param string $property
-	 * @return View|null
+	 * @return View|RedirectResponse|null
 	 * @throws CsrException
 	 * @throws CsrGebruikerException
 	 * @throws CsrToegangException
@@ -539,8 +540,7 @@ class ForumController {
 		}
 		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		if ($property === 'belangrijk' || $property === 'forum_id' || $property === 'titel' || $property === 'gedeeld_met') {
-			redirect('/forum/onderwerp/' . $draad_id);
-			return null;
+			return $this->redirectToRoute('forum-onderwerp', ['draad_id' => $draad_id]);
 		} else {
 			return new JsonResponse(true);
 		}
@@ -567,13 +567,13 @@ class ForumController {
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
 				throw new CsrToegangException('Draad bestaat niet', 403);
 			}
-			$url = '/forum/onderwerp/' . $draad->draad_id;
+			$redirect = $this->redirectToRoute('forum-onderwerp', ['draad_id' => $draad->draad_id]);
 			$nieuw = false;
 		} else {
 			if (!$deel->magPosten()) {
 				throw new CsrToegangException('Mag niet posten', 403);
 			}
-			$url = '/forum/deel/' . $deel->forum_id;
+			$redirect = $this->redirectToRoute('forum-deel', ['forum_id' => $deel->forum_id]);
 			$nieuw = true;
 
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
@@ -600,7 +600,7 @@ class ForumController {
 				$this->forumDradenReagerenModel->setConcept($deel, $draad->draad_id);
 			}
 
-			redirect($url);
+			return $redirect;
 		}
 
 		// concept opslaan
@@ -619,7 +619,7 @@ class ForumController {
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
 				setMelding('U moet een geldig e-mailadres opgeven!', -1);
-				redirect($url);
+				return $redirect;
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
 				setMelding('SPAM', -1);
@@ -631,7 +631,7 @@ class ForumController {
 		if ($nieuw) {
 			if (empty($titel)) {
 				setMelding('U moet een titel opgeven!', -1);
-				redirect($url);
+				return $redirect;
 			}
 			// maak draad
 			$draad = $this->forumDradenModel->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
@@ -658,7 +658,7 @@ class ForumController {
 				$this->forumDradenMeldingModel->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD);
 			}
 
-			$url = '/forum/reactie/' . $post->post_id . '#' . $post->post_id;
+			$redirect = $this->redirectToRoute('forum-reactie', ['post_id' => $post->post_id, '_fragment' => $post->post_id]);
 		}
 
 		// concept wissen
@@ -677,7 +677,7 @@ class ForumController {
 		$_SESSION['forum_laatste_post_tekst'] = $tekst;
 
 		// redirect naar post
-		redirect($url);
+		return $redirect;
 	}
 
 	/**

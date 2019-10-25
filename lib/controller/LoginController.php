@@ -17,7 +17,7 @@ use CsrDelft\view\login\RememberAfterLoginForm;
  *
  * Controller van de agenda.
  */
-class LoginController {
+class LoginController extends AbstractController {
 	private $loginModel;
 	private $rememberLoginModel;
 
@@ -41,23 +41,23 @@ class LoginController {
 				return view('default', ['content' => $body, 'modal' => $form]);
 			}
 			if ($values['redirect']) {
-				redirect($values['redirect']);
+				return $this->redirect($values['redirect']);
 			}
-			redirect(CSR_ROOT);
+			return $this->redirectToRoute('default');
 		} else {
-			redirect(CSR_ROOT . "#login");
+			return $this->redirectToRoute('default', ['_fragment', 'login']);
 		}
 	}
 
 	public function logout() {
 		$this->loginModel->logout();
-		redirect(CSR_ROOT);
+		return $this->redirectToRoute('default');
 	}
 
 	public function su($uid = null) {
 		$this->loginModel->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . ProfielModel::getNaam($uid, 'volledig') . '!', 1);
-		redirect(HTTP_REFERER, false);
+		return $this->redirect(HTTP_REFERER);
 	}
 
 	public function endsu() {
@@ -67,6 +67,6 @@ class LoginController {
 			$this->loginModel->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		redirect(HTTP_REFERER, false);
+		return $this->redirect(HTTP_REFERER);
 	}
 }

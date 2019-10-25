@@ -5,10 +5,8 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenLijstView;
-use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementenView;
-use CsrDelft\view\maalcie\abonnementen\BeheerAbonnementView;
 
 /**
  * BeheerMaaltijdenController.class.php
@@ -24,20 +22,35 @@ class BeheerAbonnementenController {
 
 	public function waarschuwingen() {
 		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenWaarschuwingenMatrix();
-		$view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], true, null);
-		return view('default', ['content' => $view]);
+
+		return view('maaltijden.abonnement.beheer_abonnementen', [
+			'toon' => 'waarschuwing',
+			'aborepetities' => MaaltijdRepetitiesModel::instance()->find('abonneerbaar = true'),
+			'repetities' => $matrix_repetities[1],
+			'matrix' => $matrix_repetities[0],
+		]);
 	}
 
 	public function ingeschakeld() {
 		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenMatrix();
-		$view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], false, true);
-		return view('default', ['content' => $view]);
+
+		return view('maaltijden.abonnement.beheer_abonnementen', [
+			'toon' => 'in',
+			'aborepetities' => MaaltijdRepetitiesModel::instance()->find('abonneerbaar = true'),
+			'repetities' => $matrix_repetities[1],
+			'matrix' => $matrix_repetities[0],
+		]);
 	}
 
 	public function abonneerbaar() {
 		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenAbonneerbaarMatrix();
-		$view = new BeheerAbonnementenView($matrix_repetities[0], $matrix_repetities[1], true, null);
-		return view('default', ['content' => $view]);
+
+		return view('maaltijden.abonnement.beheer_abonnementen', [
+			'toon' => 'waarschuwing',
+			'aborepetities' => MaaltijdRepetitiesModel::instance()->find('abonneerbaar = true'),
+			'repetities' => $matrix_repetities[1],
+			'matrix' => $matrix_repetities[0],
+		]);
 	}
 
 	public function novieten() {
@@ -48,7 +61,7 @@ class BeheerAbonnementenController {
 		setMelding(
 			$aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' aangemaakt voor ' .
 			$novieten . ' noviet' . ($novieten !== 1 ? 'en' : '') . '.', 1);
-		return new BeheerAbonnementenLijstView($matrix);
+		return view('maaltijden.abonnement.beheer_abonnementen_lijst', ['matrix' => $matrix]);
 	}
 
 	public function inschakelen($mrid, $uid) {
@@ -63,7 +76,7 @@ class BeheerAbonnementenController {
 			$melding = 'Automatisch aangemeld voor ' . $aantal . ' maaltijd' . ($aantal === 1 ? '' : 'en');
 			setMelding($melding, 2);
 		}
-		return new BeheerAbonnementView($abo);
+		return view('maaltijden.abonnement.beheer_abonnement', ['abonnement' => $abo]);
 	}
 
 	public function uitschakelen($mrid, $uid) {
@@ -75,7 +88,7 @@ class BeheerAbonnementenController {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);
 		}
-		return new BeheerAbonnementView($abo_aantal[0]);
+		return view('maaltijden.abonnement.beheer_abonnement', ['abonnement' => $abo_aantal[0]]);
 	}
 
 }

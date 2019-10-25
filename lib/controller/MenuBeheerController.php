@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\JsonResponse;
@@ -16,8 +15,6 @@ use CsrDelft\view\menubeheer\MenuItemForm;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class MenuBeheerController {
-	use QueryParamTrait;
-
 	private $model;
 
 	public function __construct() {

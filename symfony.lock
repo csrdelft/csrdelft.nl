@@ -1,4 +1,7 @@
 {
+    "paragonie/random_compat": {
+        "version": "v9.99.99"
+    },
     "symfony/cache": {
         "version": "v3.4.32"
     },
@@ -49,6 +52,15 @@
         "version": "v3.4.32"
     },
     "symfony/polyfill-apcu": {
+        "version": "v1.12.0"
+    },
+    "symfony/polyfill-php56": {
+        "version": "v1.12.0"
+    },
+    "symfony/polyfill-php70": {
+        "version": "v1.12.0"
+    },
+    "symfony/polyfill-util": {
         "version": "v1.12.0"
     },
     "symfony/profiler-pack": {

@@ -17,7 +17,7 @@ use CsrDelft\view\login\WachtwoordWijzigenForm;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 28/07/2019
  */
-class WachtwoordController {
+class WachtwoordController extends AbstractController {
 	public function wijzigen() {
 		$account = LoginModel::getAccount();
 		// mag inloggen?
@@ -63,7 +63,7 @@ class WachtwoordController {
 			$emailNaam = $profiel->getNaam('volledig');
 			$mail = new Mail(array($account->email => $emailNaam), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
 			$mail->send();
-			redirect(CSR_ROOT);
+			return $this->redirectToRoute('default');
 		}
 		return view('default', ['content' => $form]);
 	}

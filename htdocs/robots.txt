@@ -7,5 +7,5 @@ Disallow: /tools/
 Disallow: /forum/posten/
 Disallow: /fotoalbum/
 Disallow: /groepen/
-Disallow: /profiel
-Disallow: /leden
+Disallow: /profiel/
+Disallow: /leden/

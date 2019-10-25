@@ -7,6 +7,7 @@ namespace CsrDelft\controller\framework;
  * Hulpdingen om query params uit te lezen.
  *
  * @package CsrDelft\controller\framework
+ * @deprecated Gebruik het Request object van Symfony
  */
 trait QueryParamTrait {
 	/**
@@ -25,13 +26,6 @@ trait QueryParamTrait {
 
 	public function getMethod() {
 		return $_SERVER['REQUEST_METHOD'];
-	}
-
-	/**
-	 * @return string[]
-	 */
-	protected function getDataTableSelection() {
-		return filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 	}
 
 	protected function getPost($key) {

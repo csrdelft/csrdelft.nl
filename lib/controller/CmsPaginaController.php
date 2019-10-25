@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\CmsPagina;
 use CsrDelft\model\security\LoginModel;
@@ -18,8 +17,7 @@ use CsrDelft\view\JsonResponse;
  *
  * Controller van cms paginas.
  */
-class CmsPaginaController {
-	use QueryParamTrait;
+class CmsPaginaController extends AbstractController {
 
 	/**
 	 * Lijst van pagina's om te bewerken in de zijbalk
@@ -57,7 +55,7 @@ class CmsPaginaController {
 			$menu = false;
 			if ($pagina->naam === 'thuis') {
 				$tmpl = 'index';
-			} elseif ($this->hasParam(1) AND $this->getParam(1) === 'vereniging') {
+			} elseif ($naam === 'vereniging') {
 				$menu = true;
 			}
 			return view('layout-extern.' . $tmpl, [
@@ -88,7 +86,7 @@ class CmsPaginaController {
 				$this->cmsPaginaModel->create($pagina);
 				setMelding('Ingevoegd: ' . $pagina->naam, 1);
 			}
-			redirect('/pagina/' . $pagina->naam);
+			return $this->redirectToRoute('cms-bekijken', ['naam' => $pagina->naam]);
 		} else {
 			return view('default', ['content' => $form]);
 		}

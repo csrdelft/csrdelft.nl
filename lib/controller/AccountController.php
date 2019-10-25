@@ -16,7 +16,7 @@ use CsrDelft\view\login\AccountForm;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 28/07/2019
  */
-class AccountController {
+class AccountController extends AbstractController {
 	public function aanvragen() {
 		return view('default', ['content' => CmsPaginaModel::get('accountaanvragen')]);
 	}
@@ -38,7 +38,7 @@ class AccountController {
 				throw new CsrGebruikerException('Account aanmaken gefaald');
 			}
 		}
-		redirect('/account/' . $uid . '/bewerken');
+		return $this->redirectToRoute('account-bewerken', ['uid' => $uid]);
 	}
 
 	public function bewerken($uid = null) {
