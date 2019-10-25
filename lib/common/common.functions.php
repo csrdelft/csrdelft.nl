@@ -1164,3 +1164,16 @@ function as_array($value) {
 	}
 	throw new CsrException("Geen array of iterable");
 }
+
+/**
+ * @param \\Symfony\Component\HttpFoundation\Response|\CsrDelft\view\ToResponse
+ * @return \Symfony\Component\HttpFoundation\Response
+ */
+function as_response($value) {
+	if ($value instanceof \Symfony\Component\HttpFoundation\Response) {
+		return $value;
+	} else if ($value instanceof \CsrDelft\view\ToResponse) {
+		return $value->toResponse();
+	}
+	throw new CsrException("Value not convertible to Response");
+}

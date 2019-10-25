@@ -6,6 +6,8 @@ use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\formulier\FormElement;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 
 /**
@@ -18,7 +20,8 @@ use CsrDelft\view\View;
  * @see http://www.datatables.net/
  *
  */
-class DataTable implements View, FormElement {
+class DataTable implements View, FormElement, ToResponse {
+	use ToHtmlResponse;
 	const POST_SELECTION = 'DataTableSelection';
 
 	/** @var PersistenceModel */

@@ -37,7 +37,7 @@ class GroepenBeheerData extends DataTableResponse {
 			$array['in_agenda'] = $groep->in_agenda ? 'ja' : 'nee';
 		}
 
-		return array;
+		return $array;
 	}
 
 }

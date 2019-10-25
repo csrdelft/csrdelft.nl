@@ -16,9 +16,6 @@ class ViewEventListener {
 	 */
 	public function onKernelView(GetResponseForControllerResultEvent $event) {
 		$value = $event->getControllerResult();
-
-		if ($value instanceof ToResponse) {
-			$event->setResponse($value->toResponse());
-		}
+		$event->setResponse(as_response($value->toResponse()));
 	}
 }
