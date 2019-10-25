@@ -41,6 +41,7 @@ use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
+use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -275,10 +276,9 @@ class ProfielController extends AbstractController {
 			throw new ResourceNotFoundException();
 		}
 
-		header('Content-Type: text/x-vcard; charset=UTF-8');
-		return crlf_endings(view('profiel.vcard', [
+		return new VcardResponse(view('profiel.vcard', [
 			'profiel' => $profiel,
-		]));
+		])->toString());
 	}
 
 	public function kaartje($uid) {

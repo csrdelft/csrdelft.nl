@@ -35,11 +35,11 @@ function display(string $template, array $variables = []) {
 /**
  * Zorgt dat line endings CRLF zijn voor ical en vcard.
  *
- * @param View $view
- * @return CRLFView
+ * @param string input
+ * @return string
  */
-function crlf_endings(View $view) {
-	return new CRLFView($view);
+function crlf_endings(string $input) {
+	return str_replace("\n", "\r\n", $input);
 }
 
 /**
