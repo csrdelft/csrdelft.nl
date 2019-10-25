@@ -3,6 +3,7 @@
 @section('titel', 'Beheer abonnementen')
 
 @section('content')
+	@include('maaltijden.menu_pagina')
 	<p>
 		Op deze pagina kunt u alle abonnementen beheren en zoeken.
 	</p>
