@@ -55,6 +55,11 @@ class MaaltijdenFiscaatController {
 			throw new CsrGebruikerException("Maaltijd nog niet geweest");
 		}
 
+		# Controleer of maaltijd niet al verwerkt is
+		if ($maaltijd->verwerkt) {
+			throw new CsrGebruikerException("Maaltijd is al verwerkt");
+		}
+
 		$maaltijden = Database::transaction(function () use ($maaltijd) {
 			$aanmeldingen_model = MaaltijdAanmeldingenModel::instance();
 			$bestelling_model = CiviBestellingModel::instance();
