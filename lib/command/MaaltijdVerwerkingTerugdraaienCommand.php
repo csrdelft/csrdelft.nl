@@ -19,7 +19,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
 	protected function configure() {
 		$this
 			->setName('maalcie:fiscaat:terugdraaien')
-			->setDescription('Draai verwerking van maaltijden op bepaalde datum terug. Let op: hiermee wordt ook civi-saldo teruggestord naar oud-leden.');
+			->setDescription('Draai verwerking van maaltijden op bepaalde datum terug. Let op: hiermee wordt ook civi-saldo teruggestort naar oud-leden.');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
