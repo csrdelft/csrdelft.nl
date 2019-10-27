@@ -2,6 +2,7 @@
 
 namespace CsrDelft\events;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,12 @@ class ViewEventListener {
 	 */
 	public function onKernelView(GetResponseForControllerResultEvent $event) {
 		$value = $event->getControllerResult();
-		$event->setResponse(as_response($value->toResponse()));
+
+		if ($value instanceof ToResponse) {
+			$value = $value->toResponse();
+		} else if (!($value instanceof Response)) {
+			throw new CsrException("Value not convertible to Response");
+		}
+		$event->setResponse($value);
 	}
 }

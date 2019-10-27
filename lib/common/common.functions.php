@@ -16,6 +16,8 @@ use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
+use CsrDelft\view\ToResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
@@ -1163,17 +1165,4 @@ function as_array($value) {
 		return iterator_to_array($value);
 	}
 	throw new CsrException("Geen array of iterable");
-}
-
-/**
- * @param \\Symfony\Component\HttpFoundation\Response|\CsrDelft\view\ToResponse
- * @return \Symfony\Component\HttpFoundation\Response
- */
-function as_response($value) {
-	if ($value instanceof \Symfony\Component\HttpFoundation\Response) {
-		return $value;
-	} else if ($value instanceof \CsrDelft\view\ToResponse) {
-		return $value->toResponse();
-	}
-	throw new CsrException("Value not convertible to Response");
 }
