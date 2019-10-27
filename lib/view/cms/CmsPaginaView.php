@@ -5,6 +5,8 @@ namespace CsrDelft\view\cms;
 use CsrDelft\model\entity\CmsPagina;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\Icon;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 
 /**
@@ -15,8 +17,8 @@ use CsrDelft\view\View;
  *
  * Bekijken van een CmsPagina.
  */
-class CmsPaginaView implements View {
-
+class CmsPaginaView implements View, ToResponse {
+	use ToHtmlResponse;
 	private $pagina;
 
 	public function __construct(CmsPagina $pagina) {

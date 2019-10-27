@@ -7,12 +7,12 @@ use CsrDelft\view\datatable\DataTableResponse;
 
 class GroepLogboekData extends DataTableResponse {
 
-	public function getJson($log) {
+	public function renderElement($log) {
 		$array = $log->jsonSerialize();
 
 		$array['uid'] = ProfielModel::getLink($log->uid, 'civitas');
 
-		return parent::getJson($array);
+		return $array;
 	}
 
 }

@@ -34,7 +34,7 @@ $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 
 if (isset($_GET['c'])) { // Dit is een legacy route, zie .htaccess
-	$response = new Response(view_to_string(LegacyRouter::route()));
+	$response = LegacyRouter::route()->toResponse();
 } else {
 	$response = $kernel->handle($request);
 }

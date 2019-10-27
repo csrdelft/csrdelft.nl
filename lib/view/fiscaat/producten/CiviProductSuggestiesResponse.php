@@ -4,6 +4,7 @@ namespace CsrDelft\view\fiscaat\producten;
 
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\view\JsonLijstResponse;
+use CsrDelft\view\JsonResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -14,7 +15,7 @@ class CiviProductSuggestiesResponse extends JsonLijstResponse {
 	 * @param CiviProduct $entity
 	 * @return string
 	 */
-	public function getJson($entity) {
+	public function renderElement($entity) {
 		return json_encode(array(
 			'url' => '/fiscaat/producten',
 			'value' => $entity->getBeschrijvingFormatted(),

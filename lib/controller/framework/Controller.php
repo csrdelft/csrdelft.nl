@@ -11,6 +11,7 @@ use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 
 /**
@@ -34,7 +35,7 @@ abstract class Controller {
 	protected $model;
 	/**
 	 * The view to be shown
-	 * @var View
+	 * @var ToResponse
 	 */
 	protected $view;
 	/**

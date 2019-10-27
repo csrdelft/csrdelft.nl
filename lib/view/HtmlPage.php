@@ -10,8 +10,9 @@ namespace CsrDelft\view;
  * Een HTML pagina met stylesheets en scripts.
  *
  */
-abstract class HtmlPage implements View {
+abstract class HtmlPage implements View, ToResponse {
 
+	use ToHtmlResponse;
 	/**
 	 * <BODY>
 	 * @var View

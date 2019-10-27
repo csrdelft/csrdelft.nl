@@ -10,4 +10,8 @@ use CsrDelft\view\datatable\DataTableResponse;
  */
 class PeilingOptieResponse extends DataTableResponse
 {
+	public function renderElement($element)
+	{
+		return $element;
+	}
 }

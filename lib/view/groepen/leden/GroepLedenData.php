@@ -7,13 +7,13 @@ use CsrDelft\view\datatable\DataTableResponse;
 
 class GroepLedenData extends DataTableResponse {
 
-	public function getJson($lid) {
+	public function renderElement($lid) {
 		$array = $lid->jsonSerialize();
 
 		$array['uid'] = ProfielModel::getLink($array['uid'], 'civitas');
 		$array['door_uid'] = ProfielModel::getLink($array['door_uid'], 'civitas');
 
-		return parent::getJson($array);
+		return $array;
 	}
 
 }

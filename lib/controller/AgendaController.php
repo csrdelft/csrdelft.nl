@@ -21,8 +21,10 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\agenda\AgendaItemForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\response\IcalResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -61,19 +63,17 @@ class AgendaController {
 	}
 
 	public function ical() {
-		header('Content-Type: text/calendar; charset=UTF-8');
-		return crlf_endings(view('agenda.icalendar', [
+		return new IcalResponse(view('agenda.icalendar', [
 			'items' => $this->model->getICalendarItems(),
 			'published' => $this->icalDate(),
-		]));
+		])->toString());
 	}
 
 	public function export($uuid) {
-		header('Content-Type: text/calendar; charset=UTF-8');
-		return crlf_endings(view('agenda.icalendar_export', [
-			'item' => $this->getAgendaItemByUuid($uuid),
+		return new IcalResponse(view('agenda.icalendar', [
+			'items' => $this->getAgendaItemByUuid($uuid),
 			'published' => $this->icalDate(),
-		]));
+		])->toString());
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {

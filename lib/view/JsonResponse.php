@@ -3,13 +3,15 @@
 namespace CsrDelft\view;
 
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * JsonResponse.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class JsonResponse implements View {
+class JsonResponse implements View, ToResponse {
 
 	protected $model;
 	protected $code;
@@ -41,4 +43,8 @@ class JsonResponse implements View {
 		return null;
 	}
 
+	public function toResponse(): Response
+	{
+		return new \Symfony\Component\HttpFoundation\JsonResponse($this->getModel(), $this->code);
+	}
 }

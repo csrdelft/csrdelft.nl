@@ -3,13 +3,16 @@
 namespace CsrDelft\view\renderer;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 25/08/2018
  */
-class TemplateView implements View {
+class TemplateView implements View, ToResponse {
+	use ToHtmlResponse;
 	protected $template;
 
 	public function __construct(string $template, array $variables = []) {

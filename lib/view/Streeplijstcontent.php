@@ -12,8 +12,8 @@ use CsrDelft\model\ProfielService;
  *
  * @deprecated
  */
-class Streeplijstcontent implements View {
-
+class Streeplijstcontent implements View, ToResponse {
+	use ToHtmlResponse;
 	private $sVerticale = 'alle';
 	private $sLidjaar = '';
 	private $aGoederen;

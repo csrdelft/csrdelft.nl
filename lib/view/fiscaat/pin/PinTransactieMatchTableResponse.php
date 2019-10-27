@@ -16,10 +16,9 @@ use CsrDelft\view\datatable\DataTableResponse;
 class PinTransactieMatchTableResponse extends DataTableResponse {
 	/**
 	 * @param PinTransactieMatch|array $entity
-	 * @return string
 	 * @throws \Exception
 	 */
-	public function getJson($entity) {
+	public function renderElement($entity) {
 		if ($entity instanceof PinTransactieMatch) {
 			if ($entity->bestelling_id !== null) {
 				$bestelling = CiviBestellingModel::get($entity->bestelling_id);
@@ -37,7 +36,7 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 
 			$moment = PinTransactieMatchModel::instance()->getMoment($entity);
 
-			return parent::getJson([
+			return [
 				'UUID' => $entity->getUUID(),
 				'id' => $entity->id,
 				'status' => PinTransactieMatchStatusEnum::getDescription($entity->status),
@@ -46,9 +45,9 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 				'transactie' => $transactieBeschrijving,
 				'bestelling_id' => $entity->bestelling_id,
 				'bestelling' => $bestellingBeschrijving,
-			]);
+			];
 		} else {
-			return parent::getJson($entity);
+			return $entity;
 		}
 	}
 }

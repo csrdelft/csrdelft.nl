@@ -11,9 +11,11 @@ namespace CsrDelft\view\groepen\leden;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\ToResponse;
 
-class GroepOmschrijvingView implements FormElement {
-
+class GroepOmschrijvingView implements FormElement, ToResponse {
+	use ToHtmlResponse;
 	protected $groep;
 	protected $javascript;
 
