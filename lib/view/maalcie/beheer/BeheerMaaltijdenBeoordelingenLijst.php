@@ -14,7 +14,7 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 	 *
 	 * @return string
 	 */
-	public function getJson($maaltijd) {
+	public function renderElement($maaltijd) {
 		$data = $maaltijd->jsonSerialize();
 
 		// Haal beoordelingsamenvatting op
@@ -33,7 +33,7 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 			if ($i < count($kokTaken) - 1) $data['koks'] .= '<br>';
 		}
 
-		return parent::getJson($data);
+		return $data;
 	}
 
 	private function getalWeergave($number, $placeholder, $precision, $showPlus = false) {
