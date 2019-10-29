@@ -13,6 +13,7 @@ use CsrDelft\view\datatable\DataTableResponse;
 class EetplanBekendeHuizenResponse extends DataTableResponse {
 	/**
 	 * @param Eetplan $entity
+	 * @return string[]
 	 */
 	public function renderElement($entity) {
 		$array = $entity->jsonSerialize();
