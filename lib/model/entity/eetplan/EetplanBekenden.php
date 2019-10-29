@@ -3,12 +3,30 @@
 namespace CsrDelft\model\entity\eetplan;
 
 use CsrDelft\model\ProfielModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
-class EetplanBekenden extends PersistentEntity {
+/**
+ * Class EetplanBekenden
+ * @package CsrDelft\model\entity\eetplan
+ * @ORM\Entity(repositoryClass="CsrDelft\model\eetplan\EetplanBekendenRepository")
+ */
+class EetplanBekenden {
+	/**
+	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Id()
+	 * @var string
+	 */
 	public $uid1;
+	/**
+	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Id()
+	 * @var string
+	 */
 	public $uid2;
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string
+	 */
 	public $opmerking;
 
 	public function getNoviet1() {
@@ -18,12 +36,4 @@ class EetplanBekenden extends PersistentEntity {
 	public function getNoviet2() {
 		return ProfielModel::instance()->find('uid = ?', array($this->uid2))->fetch();
 	}
-
-	protected static $table_name = 'eetplan_bekenden';
-	protected static $persistent_attributes = array(
-		'uid1' => array(T::UID, false),
-		'uid2' => array(T::UID, false),
-		'opmerking' => [T::String, true],
-	);
-	protected static $primary_key = array('uid1', 'uid2');
 }

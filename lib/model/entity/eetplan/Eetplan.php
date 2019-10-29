@@ -6,28 +6,36 @@ use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
-class Eetplan extends PersistentEntity {
+/**
+ * @ORM\Entity(repositoryClass="CsrDelft\model\eetplan\EetplanRepository")
+ */
+class Eetplan {
 	/**
+	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Id()
 	 * @var string
 	 */
 	public $uid;
 
 	/**
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
 	 * @var int
 	 */
 	public $woonoord_id;
 
 	/**
-	 * @var string
+	 * @ORM\Column(type="date")
+	 * @var \DateTime
 	 */
 	public $avond;
 
 	/**
 	 * Specifiek bedoelt voor bekende huizen.
 	 *
+	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
 	 */
 	public $opmerking;
@@ -45,24 +53,4 @@ class Eetplan extends PersistentEntity {
 	public function getNoviet() {
 		return ProfielModel::get($this->uid);
 	}
-
-	/**
-	 * @var string
-	 */
-	protected static $table_name = 'eetplan';
-
-	/**
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'uid' => [T::UID, false],
-		'woonoord_id' => [T::Integer, false],
-		'avond' => [T::Date, false],
-		'opmerking' => [T::String, true],
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $primary_key = ['uid', 'woonoord_id'];
 }

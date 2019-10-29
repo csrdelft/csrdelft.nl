@@ -3,18 +3,23 @@
 namespace CsrDelft\model\eetplan;
 
 use CsrDelft\model\entity\eetplan\EetplanBekenden;
+use CsrDelft\model\OrmTrait;
 use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\PersistenceModel;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * EetplanBekendenModel.class.php
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 30/03/2017
  */
-class EetplanBekendenModel extends PersistenceModel {
+class EetplanBekendenRepository extends ServiceEntityRepository {
+	use OrmTrait {
+		exists as ormExists;
+	}
 
-	const ORM = EetplanBekenden::class;
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, EetplanBekenden::class);
+	}
 
 	/**
 	 * @param string $lichting
@@ -22,7 +27,7 @@ class EetplanBekendenModel extends PersistenceModel {
 	 * @return EetplanBekenden[]
 	 */
 	public function getBekenden($lichting) {
-		return $this->find('uid1 LIKE ?', array($lichting . "%"))->fetchAll();
+		return $this->find('uid1 LIKE ?', array($lichting . "%"));
 	}
 
 	/**
@@ -31,7 +36,7 @@ class EetplanBekendenModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public function exists(PersistentEntity $entity) {
-		if (parent::exists($entity)) {
+		if ($this->ormExists($entity)) {
 			return true;
 		}
 
@@ -39,6 +44,6 @@ class EetplanBekendenModel extends PersistenceModel {
 		$omgekeerd->uid1 = $entity->uid2;
 		$omgekeerd->uid2 = $entity->uid1;
 
-		return parent::exists($omgekeerd);
+		return $this->ormExists($omgekeerd);
 	}
 }

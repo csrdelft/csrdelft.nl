@@ -3,36 +3,35 @@
 namespace CsrDelft\model\eetplan;
 
 use CsrDelft\model\entity\eetplan\Eetplan;
-use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\model\OrmTrait;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\Orm\PersistenceModel;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  * Verzorgt het opvragen van eetplangegevens
+ *
+ * @method Eetplan[]    find($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
+ * @method Eetplan|null doctrineFind($id, $lockMode = null, $lockVersion = null)
+ * @method Eetplan|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Eetplan[]    findAll()
+ * @method Eetplan[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EetplanModel extends PersistenceModel {
-	const ORM = Eetplan::class;
-
+class EetplanRepository extends ServiceEntityRepository {
+	use OrmTrait;
 	/**
-	 * @param string $avond
-	 *
-	 * @return \PDOStatement|Eetplan[]
+	 * @var EetplanBekendenRepository
 	 */
-	public function getEetplanVoorAvond($avond, $lichting) {
-		return $this->find('avond = ? AND uid LIKE ?', array($avond, $lichting . "%"));
-	}
+	private $eetplanBekendenRepository;
 
-	/**
-	 * @param string $lichting
-	 *
-	 * @return \PDOStatement|Eetplan[]
-	 */
-	public function getNovieten($lichting) {
-		return $this->find('uid LIKE ?', array($lichting . "%"), 'uid');
+	public function __construct(EetplanBekendenRepository $eetplanBekendenRepository, ManagerRegistry $registry) {
+		parent::__construct($registry, Eetplan::class);
+
+		$this->eetplanBekendenRepository = $eetplanBekendenRepository;
 	}
 
 	/**
@@ -43,7 +42,7 @@ class EetplanModel extends PersistenceModel {
 	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
 	public function getAvonden($lichting) {
-		return $this->find('uid LIKE ? AND avond <> "0000-00-00"', array($lichting . "%"), 'avond')->fetchAll();
+		return $this->find('uid LIKE ? AND avond <> "0000-00-00"', array($lichting . "%"), 'avond');
 	}
 
 	/**
@@ -77,8 +76,8 @@ class EetplanModel extends PersistenceModel {
 				'woonoord' => $sessie->getWoonoord()->naam
 			);
 
-			if (!isset($avonden[$sessie->avond])) {
-				$avonden[$sessie->avond] = $sessie->avond;
+			if (!isset($avonden[$sessie->avond->format("d-m-Y")])) {
+				$avonden[$sessie->avond->format("d-m-Y")] = $sessie->avond;
 			}
 		}
 
@@ -97,11 +96,10 @@ class EetplanModel extends PersistenceModel {
 	public function maakEetplan($avond, $lichting) {
 		$factory = new EetplanFactory();
 
-		$bekenden = EetplanBekendenModel::instance()->getBekenden($lichting);
+		$bekenden = $this->eetplanBekendenRepository->getBekenden($lichting);
 		$factory->setBekenden($bekenden);
 
-		/** @var Eetplan[] $bezocht */
-		$bezocht = $this->find("uid LIKE ?", array($lichting . "%"));
+		$bezocht = $this->find("uid like ?", array($lichting . "%"));
 		$factory->setBezocht($bezocht);
 
 		$novieten = ProfielModel::instance()->find("uid LIKE ? AND status = 'S_NOVIET'", array($lichting . "%"))->fetchAll();
@@ -119,23 +117,23 @@ class EetplanModel extends PersistenceModel {
 	 * @return Eetplan[] lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
 	 */
 	public function getEetplanVoorNoviet($uid) {
-		return $this->find('uid = ? AND avond <> "0000-00-00"', array($uid), null, 'avond')->fetchAll();
+		return $this->find('uid = ? AND avond <> "0000-00-00"', array($uid), null, 'avond');
 	}
 
 	/**
-	 * @param int $id Id van het huis
+	 * @param int $woonoord_id Id van het huis
 	 * @param string $lichting
 	 *
 	 * @return Eetplan[] lijst van eetplansessies voor dit huis, gegroepeerd op avond (oplopend)
 	 */
 	public function getEetplanVoorHuis($id, $lichting) {
-		 $sessies = $this->find('uid LIKE ? AND woonoord_id = ? AND avond <> "0000-00-00"', array($lichting . "%", $id), null, 'avond')->fetchAll();
+		$sessies = $this->find('uid LIKE ? AND woonoord_id = ? AND avond <> "0000-00-00"', array($lichting . "%", $id), null, 'avond');
 
-		 return array_reduce($sessies, function (array $accumulator, Eetplan $eetplan) {
-		 	$accumulator[$eetplan->avond][] = $eetplan;
+		return array_reduce($sessies, function (array $accumulator, Eetplan $eetplan) {
+			$accumulator[$eetplan->avond->format('d-m-Y')][] = $eetplan;
 
-		 	return $accumulator;
-		 }, []);
+			return $accumulator;
+		}, []);
 	}
 
 	/**
@@ -144,7 +142,7 @@ class EetplanModel extends PersistenceModel {
 	 * @return Eetplan[]
 	 */
 	public function getBekendeHuizen($lichting) {
-		return $this->find('uid LIKE ? AND avond = "0000-00-00"', array($lichting . "%"))->fetchAll();
+		return $this->find('uid LIKE ? AND avond = "0000-00-00"', array($lichting . "%"));
 	}
 
 	/**
@@ -157,5 +155,14 @@ class EetplanModel extends PersistenceModel {
 		foreach ($alleEetplan as $eetplan) {
 			$this->delete($eetplan);
 		}
+	}
+
+	/**
+	 * @param string $avond
+	 *
+	 * @return Eetplan[]
+	 */
+	public function getEetplanVoorAvond($avond, $lichting) {
+		return $this->find('avond = ? AND uid LIKE ?', array($avond, $lichting . "%"));
 	}
 }
