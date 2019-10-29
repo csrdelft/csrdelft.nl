@@ -8,7 +8,7 @@ import $ from 'jquery';
 import Popper from 'popper.js';
 import Vue from 'vue';
 import {ketzerAjax} from './ajax';
-import {bbvideoDisplay, CsrBBPreview} from './bbcode';
+import {bbvideoDisplay} from './bbcode';
 import {domUpdate} from './context';
 import {importAgenda} from './courant';
 import ctx, {init} from './ctx';
@@ -67,11 +67,6 @@ $.extend(window, {
 	Dropzone,
 	docReady,
 	bbcode: {
-		// See view/formulier/invoervelden/BBCodeField.class.php
-		// See templates/mededelingen/mededeling.tpl
-		// See templates/courant/courantbeheer.tpl
-		// See blade_templates/forum/partial/post_form.blade.php
-		CsrBBPreview,
 		// See view/bbcode/CsrBB.class.php
 		bbvideoDisplay,
 	},

@@ -10,9 +10,9 @@
 	<input type="text" name="titel" value="{$mededeling->titel|escape:'html'}" class="titel" /><br />
 	<label>Tekst:</label>
 	<div class="indent">
-		<div id="bewerkPreview" class="bbcodePreview"></div>
+		<div id="preview_tekst" class="bbcodePreview"></div>
 		<textarea id="tekst" name="tekst" class="BBCodeField breed" rows="12" style="resize:vertical;">{$mededeling->tekst|escape:'html'}</textarea><br />
-		<a id="voorbeeld" class="btn" onclick="return window.bbcode.CsrBBPreview('tekst', 'bewerkPreview')">Voorbeeld</a>
+		<a id="voorbeeld" class="btn" data-bbpreview-btn="tekst">Voorbeeld</a>
 		<a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a>
 	</div>
 

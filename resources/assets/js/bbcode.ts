@@ -1,33 +1,56 @@
 import axios from 'axios';
 import $ from 'jquery';
-import {init} from './ctx';
+import ctx, {init} from './ctx';
 import {singleLineString} from './util';
 
 /**
- * @see templates/courant/courantbeheer.tpl
- * @see blade_templates/forum/partial/post_forum.blade.php
- * @see templates/mededelingen/mededeling.tpl
- * @see view/formulier/invoervelden/BBCodeField.class.php
+ * Preview button, update bbcode als op de knop geklikt wordt.
  */
-export const CsrBBPreview = (sourceId: string, targetId: string, params: object = {}) => {
-	if (sourceId.charAt(0) !== '#') {
-		sourceId = `#${sourceId}`;
+ctx.addHandler('[data-bbpreview-btn]', (el: HTMLElement) => {
+	const previewId = el.dataset!.bbpreviewBtn!;
+	const source = document.querySelector<HTMLTextAreaElement>('#' + previewId);
+	const target = document.querySelector<HTMLElement>('#preview_' + previewId);
+
+	if (!source || !target) {
+		throw new Error('Bbpreview van niet bestaande elementen');
 	}
-	if (targetId.charAt(0) !== '#') {
-		targetId = `#${targetId}`;
+
+	el.addEventListener('click', () => CsrBBPreviewEl(source, target));
+});
+/**
+ * Preview element, update bbcode als er op enter gedrukt wordt.
+ */
+ctx.addHandler('[data-bbpreview]', (el: HTMLTextAreaElement) => {
+	const previewId = el.dataset!.bbpreview!;
+	const target = document.querySelector<HTMLElement>('#preview_' + previewId);
+
+	if (!target) {
+		throw new Error('Geen target gevonden voor bbpreview');
 	}
-	const bbcode = $(sourceId).val();
-	if (typeof bbcode !== 'string' || bbcode.trim() === '') {
-		$(targetId).html('').hide();
+
+	el.addEventListener('keyup', (event) => {
+		if (event.key === 'Enter') { // enter
+			CsrBBPreviewEl(el, target);
+		}
+	});
+});
+
+export const CsrBBPreviewEl = (source: HTMLTextAreaElement, target: HTMLElement, params: object = {}) => {
+	const bbcode = source.value;
+
+	if (bbcode.trim() === '') {
+		target.innerHTML = '';
+		target.style.display = 'none';
 		return;
 	}
+
 	axios.post('/tools/bbcode', {
 		data: encodeURIComponent(bbcode),
 		...params,
 	}).then((response) => {
-		$(targetId).html(response.data);
-		init(document.querySelector(targetId)!);
-		$(targetId).show();
+		target.innerHTML = response.data;
+		init(target);
+		target.style.display = 'block';
 	}).catch((error) => {
 		alert(error);
 	});

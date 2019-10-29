@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 import $ from 'jquery';
-import {bbvideoDisplay, CsrBBPreview} from './bbcode';
+import {bbvideoDisplay} from './bbcode';
 import {init} from './ctx';
 import './formulier';
 import './fotoalbum/FotoAlbum';
@@ -28,7 +28,6 @@ declare global {
 }
 
 window.bbcode = {
-	CsrBBPreview,
 	bbvideoDisplay,
 };
 
