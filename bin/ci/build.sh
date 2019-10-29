@@ -23,5 +23,7 @@ yarn run production
 composer install
 # Compileer blade
 composer run-script production
+# Verwijder dev dependencies en optimize autoloader
+composer install --no-dev --optimize-autoloader
 
 fi;
