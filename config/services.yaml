@@ -34,3 +34,7 @@ services:
   CsrDelft\events\AccessControlEventListener:
     tags:
       - { name: kernel.event_listener, event: kernel.controller }
+
+  CsrDelft\events\JsonBodyEventListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
