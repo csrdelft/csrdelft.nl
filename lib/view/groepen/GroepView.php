@@ -18,9 +18,11 @@ use CsrDelft\view\groepen\leden\GroepEmailsView;
 use CsrDelft\view\groepen\leden\GroepLijstView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\ToResponse;
 
-class GroepView implements FormElement {
-
+class GroepView implements FormElement, ToResponse {
+	use ToHtmlResponse;
 	private $groep;
 	private $leden;
 	private $geschiedenis;
