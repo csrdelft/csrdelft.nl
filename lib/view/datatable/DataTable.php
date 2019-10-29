@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\datatable;
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
@@ -9,6 +11,8 @@ use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
+use Doctrine\Common\Persistence\Mapping\MappingException;
+use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl
@@ -69,6 +73,16 @@ class DataTable implements View, FormElement, ToResponse {
 	private $groupByColumn;
 
 	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
+		$metadata = null;
+		if (!is_subclass_of($orm, PersistentEntity::class)) {
+			/** @var ObjectManager $manager */
+			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
+			try {
+				$metadata = $manager->getClassMetaData($orm);
+			} catch (MappingException $ex) {
+				// ignore deze klasse is niet in doctrine
+			}
+		}
 		$this->model = new $orm();
 		$this->titel = $titel;
 
@@ -87,14 +101,27 @@ class DataTable implements View, FormElement, ToResponse {
 			'defaultContent' => ''
 		);
 
-		// generate columns from entity attributes
-		foreach ($this->model->getAttributes() as $attribute) {
-			$this->addColumn($attribute);
-		}
+		if ($metadata) { // Deze klasse is in doctrine.
+			// generate columns from entity attributes
+			foreach ($metadata->getFieldNames() as $attribute) {
+				$this->addColumn($attribute);
+			}
 
-		// hide primary key columns
-		foreach ($this->model->getPrimaryKey() as $attribute) {
-			$this->hideColumn($attribute);
+			// hide primary key columns
+			foreach ($metadata->getIdentifierFieldNames() as $attribute) {
+				$this->hideColumn($attribute);
+			}
+		} else {
+			// generate columns from entity attributes
+			foreach ($this->model->getAttributes() as $attribute) {
+				$this->addColumn($attribute);
+			}
+
+			// hide primary key columns
+			foreach ($this->model->getPrimaryKey() as $attribute) {
+				$this->hideColumn($attribute);
+			}
+
 		}
 	}
 
