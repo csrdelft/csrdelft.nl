@@ -8,7 +8,7 @@
 		<div v-if="!started">
 			<div class="row">
 				<div class="col-sm-6">
-					<b class="mb-1 block">Lichting(en)</b>
+					<strong class="mb-1 block">Lichting(en)</strong>
 					<div>
 						<input type="checkbox" id="alleLichtingen" v-model="alleLichtingen">
 						<label for="alleLichtingen">Alle lichtingen</label>
@@ -21,7 +21,7 @@
 					</div>
 				</div>
 				<div class="col-sm-6">
-					<b class="mb-1 block">Verticale(n)</b>
+					<strong class="mb-1 block">Verticale(n)</strong>
 					<div>
 						<input type="checkbox" id="alleVerticalen" v-model="alleVerticalen">
 						<label for="alleVerticalen">Alle verticalen</label>
@@ -35,13 +35,13 @@
 				</div>
 			</div>
 			<div>
-				<b class="mb-1 block">Onderkant verbergen</b>
+				<strong class="mb-1 block">Onderkant verbergen</strong>
 				<div>
 					<input type="checkbox" id="verbergOnderkant" v-model="verbergOnderkant">
 					<label for="verbergOnderkant">Voorkom leesbare namen op foto's</label>
 				</div>
 			</div>
-			<b class="mt-3 mb-1 block">Antwoordmethode</b>
+			<strong class="mt-3 mb-1 block">Antwoordmethode</strong>
 			<select v-model="antwoordMethode" class="form-control">
 				<option value="voornaam">Voornaam</option>
 				<option value="achternaam">Achternaam</option>
@@ -69,15 +69,15 @@
 						<span>{{ laatste.studie }}</span>
 					</div>
 				</div>
-				<i class="fa fa-check" v-if="laatsteGoed"></i>
-				<i class="fa fa-times" v-else></i>
+				<span class="fa fa-check" v-if="laatsteGoed"></span>
+				<span class="fa fa-times" v-else></span>
 			</div>
 			<div class="pasfotoContainer" :class="{'onderkantVerbergen': verbergOnderkant}">
 				<div :style="{'background-image': 'url(/profiel/pasfoto/' + huidig.uid + '.jpg)'}" class="pasfoto"></div>
 			</div>
-			<b v-if="antwoordMethode === 'voornaam'" class="mb-1 block">Voornaam:</b>
-			<b v-if="antwoordMethode === 'achternaam'" class="mb-1 block">Achternaam:</b>
-			<b v-if="antwoordMethode === 'combi'" class="mb-1 block">Voor- en achtenraam:</b>
+			<strong v-if="antwoordMethode === 'voornaam'" class="mb-1 block">Voornaam:</strong>
+			<strong v-if="antwoordMethode === 'achternaam'" class="mb-1 block">Achternaam:</strong>
+			<strong v-if="antwoordMethode === 'combi'" class="mb-1 block">Voor- en achtenraam:</strong>
 			<input type="text" class="form-control"
 						 v-bind:value="ingevuld"
 						 v-on:input="ingevuld = $event.target.value"
@@ -368,7 +368,7 @@
 		background: #2ecc71;
 	}
 
-	.laatste i {
+	.laatste .fa {
 		display: inline-block;
 		font-size: 26px;
 		line-height: 90px;
