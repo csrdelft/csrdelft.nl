@@ -9,7 +9,7 @@ import {singleLineString} from './util';
 ctx.addHandler('[data-bbpreview-btn]', (el: HTMLElement) => {
 	const previewId = el.dataset!.bbpreviewBtn!;
 	const source = document.querySelector<HTMLTextAreaElement>('#' + previewId);
-	const target = document.querySelector<HTMLElement>('#preview_' + previewId);
+	const target = document.querySelector<HTMLElement>('[data-bbpreview=' + previewId + ']');
 
 	if (!source || !target) {
 		throw new Error('Bbpreview van niet bestaande elementen');
@@ -22,7 +22,7 @@ ctx.addHandler('[data-bbpreview-btn]', (el: HTMLElement) => {
  */
 ctx.addHandler('[data-bbpreview]', (el: HTMLTextAreaElement) => {
 	const previewId = el.dataset!.bbpreview!;
-	const target = document.querySelector<HTMLElement>('#preview_' + previewId);
+	const target = document.querySelector<HTMLElement>('[data-bbpreview=' + previewId + ']');
 
 	if (!target) {
 		throw new Error('Geen target gevonden voor bbpreview');

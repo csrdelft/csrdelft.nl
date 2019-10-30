@@ -29,9 +29,13 @@ class BBCodeField extends TextareaField {
 	<div class="col-auto">
 		<a class="btn btn-light" href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
 	</div>
+HTML
+		. ($this->preview ? <<<HTML
 	<div class="col-auto">
 		<a class="btn btn-secondary" data-bbpreview-btn="{$this->getId()}" href="#" title="Toon voorbeeld met opmaak">Voorbeeld</a>
 	</div>
+HTML
+				: ''). <<<HTML
 </div>
 HTML;
 	}
