@@ -1,3 +1,9 @@
+login-form:
+  path: /login
+  controller: CsrDelft\controller\LoginController::loginForm
+  methods: GET
+  defaults: { _mag: P_PUBLIC }
+
 login-login:
   path: /login
   controller: CsrDelft\controller\LoginController::login
