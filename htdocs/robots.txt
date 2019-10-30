@@ -2,6 +2,15 @@
 # Niet-relevante pagina's uitsluiten van indexering
 # mailto:pubcie@csrdelft.nl
 
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: magpie-crawler
+Disallow: /
+
 User-agent: *
 Disallow: /tools/
 Disallow: /forum/posten/
