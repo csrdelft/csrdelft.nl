@@ -83,6 +83,8 @@ export function forumBewerken(postId: string) {
 			'<input type="button" class="annuleren" value="Annuleren" /> ' +
 			'</form>';
 		bewerkContainer.html(bewerkForm);
+		bewerkContainer.find('form').on('submit', submitPost);
+		bewerkContainer.find('input.annuleren').on('click', restorePost);
 
 		init(bewerkContainer.get(0));
 
