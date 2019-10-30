@@ -73,16 +73,18 @@ export function forumBewerken(postId: string) {
 		}
 		bewerkContainer = $('#post' + postId);
 		bewerkContainerInnerHTML = bewerkContainer.html();
-		const bewerkForm = `<form id="forumEditForm" class="Formulier" action="/forum/bewerken/${postId}" method="post">` +
-			'<div id="preview_forumBewerkBericht" class="bbcodePreview forumBericht"></div>' +
-			'<textarea name="forumBericht" id="forumBewerkBericht" data-bbpreview="forumBewerkBericht" class="FormElement BBCodeField" rows="8"></textarea>' +
-			'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />' +
-			'<div class="float-right"><a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>' +
-			'<input type="submit" class="opslaan" value="Opslaan" /> ' +
-			'<input type="button" class="voorbeeld" value="Voorbeeld" data-bbpreview-btn="forumBewerkBericht" /> ' +
-			'<input type="button" class="annuleren" value="Annuleren" /> ' +
-			'</form>';
-		bewerkContainer.html(bewerkForm);
+		bewerkContainer.html(`
+<form id="forumEditForm" class="ForumFormulier" action="/forum/bewerken/${postId}" method="post">
+	<div id="preview_forumBewerkBericht" class="bbcodePreview forumBericht"></div>
+	<textarea name="forumBericht" id="forumBewerkBericht" data-bbpreview="forumBewerkBericht" class="FormElement BBCodeField" rows="8"></textarea>
+	Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/>
+	<br />
+	<br />
+	<div class="float-right"><a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>
+	<input type="submit" class="opslaan btn btn-primary" value="Opslaan" />
+	<input type="button" class="voorbeeld btn btn-secondary" value="Voorbeeld" data-bbpreview-btn="forumBewerkBericht" />
+	<input type="button" class="annuleren btn btn-secondary" value="Annuleren" />
+</form>`);
 		bewerkContainer.find('form').on('submit', submitPost);
 		bewerkContainer.find('input.annuleren').on('click', restorePost);
 
