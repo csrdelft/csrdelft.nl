@@ -10,6 +10,7 @@ use CsrDelft\view\cms\CmsPaginaForm;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\cms\CmsPaginaZijbalkView;
 use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -44,7 +45,7 @@ class CmsPaginaController extends AbstractController {
 		/** @var CmsPagina $pagina */
 		$pagina = $this->cmsPaginaModel->get($naam);
 		if (!$pagina) { // 404
-			$pagina = $this->cmsPaginaModel->get('thuis');
+			throw new NotFoundHttpException();
 		}
 		if (!$pagina->magBekijken()) { // 403
 			throw new CsrToegangException();
