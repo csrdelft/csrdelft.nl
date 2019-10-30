@@ -199,13 +199,6 @@ instellingen:
       opties: [1, 100]
       default: 'C.S.R.-leden'
       beschrijving: ''
-  mededelingen:
-    aantalPerPagina:
-      titel: 'Aantal mededelingen per pagina'
-      type: Integer
-      opties: [5, 50]
-      default: 10
-      beschrijving: ''
   zijbalk:
     ishetal:
       titel: 'Is het al… weergeven'
@@ -216,7 +209,6 @@ instellingen:
     favorieten: {titel: 'Favorieten menu weergeven', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
     agendaweken: {titel: 'Aantal weken in agenda weergeven', type: 'Integer', opties: [0, 10], default: 2, beschrijving: ''}
     agenda_max: {titel: 'Maximaal aantal agenda-items', type: 'Integer', opties: [0, 50], default: 15, beschrijving: ''}
-    mededelingen: {titel: 'Aantal mededelingen', type: 'Integer', opties: [0, 50], default: 5, beschrijving: ''}
     forum_belangrijk: {titel: 'Aantal belangrijke forumberichten', type: 'Integer', opties: [0, 50], default: 5, beschrijving: ''}
     forum: {titel: 'Aantal forumberichten', type: 'Integer', opties: [0, 50], default: 10, beschrijving: ''}
     forum_zelf: {titel: 'Aantal zelf geposte forumberichten', type: 'Integer', opties: [0, 50], default: 0, beschrijving: ''}
