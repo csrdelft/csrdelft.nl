@@ -41,6 +41,10 @@ class TemplateView implements View, ToResponse {
 		return $this->template->render();
 	}
 
+	public function __toString() {
+		return $this->getHtml();
+	}
+
 	/**
 	 * @throws \Exception
 	 */

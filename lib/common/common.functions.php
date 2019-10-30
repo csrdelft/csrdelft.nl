@@ -162,7 +162,7 @@ function redirect($url = null, $refresh = true) {
 }
 
 function redirect_via_login($url) {
-	redirect(CSR_ROOT . "?redirect=" . urlencode($url) . "#login");
+	redirect(CSR_ROOT . "/login?redirect=" . urlencode($url));
 }
 
 /**

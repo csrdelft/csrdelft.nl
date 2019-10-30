@@ -9,6 +9,8 @@ use CsrDelft\model\security\RememberLoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\login\RememberAfterLoginForm;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * LoginController.class.php
@@ -26,6 +28,17 @@ class LoginController extends AbstractController {
 		$this->loginModel = LoginModel::instance();
 	}
 
+	public function loginForm (Request $request) {
+		$response = new Response(view('layout-extern.login', ['loginForm' => new LoginForm()]));
+
+		// Als er geredirect wordt, stuur dan een forbidden status
+		if ($request->query->has('redirect')) {
+			$response->setStatusCode(Response::HTTP_FORBIDDEN);
+		}
+
+		return $response;
+	}
+
 	public function login() {
 		$form = new LoginForm(); // fetches POST values itself
 		$values = $form->getValues();
@@ -41,11 +54,15 @@ class LoginController extends AbstractController {
 				return view('default', ['content' => $body, 'modal' => $form]);
 			}
 			if ($values['redirect']) {
-				return $this->redirect($values['redirect']);
+				return $this->redirect(urldecode($values['redirect']));
 			}
 			return $this->redirectToRoute('default');
 		} else {
-			return $this->redirectToRoute('default', ['_fragment', 'login']);
+			if ($values['redirect']) {
+				return $this->redirectToRoute('login-form', ['redirect' => $values['redirect']]);
+			}
+
+			return $this->redirectToRoute('login-form');
 		}
 	}
 
