@@ -5,9 +5,12 @@ namespace CsrDelft\view\groepen;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
-class GroepenDeelnameGrafiek implements View {
+class GroepenDeelnameGrafiek implements View, ToResponse {
 
 	private $series = array();
 	private $step = array();
@@ -81,16 +84,23 @@ class GroepenDeelnameGrafiek implements View {
 		return null;
 	}
 
-	public function view() {
+	public function getHtml() {
 		$step = htmlspecialchars(json_encode($this->step));
 
 		$series = htmlspecialchars(json_encode($this->series));
 
-		echo <<<HTML
+		return <<<HTML
 <div id="deelnamegrafiek">
 	<div class="ctx-deelnamegrafiek" style="height: 360px;width:100%;" data-data="{$series}" data-step="{$step}"></svg>
 </div>
 HTML;
 	}
 
+	public function view() {
+		echo $this->getHtml();
+	}
+
+	public function toResponse(): Response {
+		return new Response($this->getHtml());
+	}
 }
