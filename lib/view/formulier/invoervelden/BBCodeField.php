@@ -19,7 +19,7 @@ class BBCodeField extends TextareaField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="bbcodePreview_' . $this->getId() . '" class="previewDiv bbcodePreview"></div>';
+		return '<div id="preview_' . $this->getId() . '" class="previewDiv bbcodePreview"></div>';
 	}
 
 	public function getHtml() {
