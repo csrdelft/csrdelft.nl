@@ -5,8 +5,6 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementenView;
-use CsrDelft\view\maalcie\persoonlijk\abonnementen\MijnAbonnementView;
 
 /**
  * MijnAbonnementenController.class.php
@@ -22,8 +20,7 @@ class MijnAbonnementenController {
 
 	public function mijn() {
 		$abonnementen = $this->model->getAbonnementenVoorLid(LoginModel::getUid(), true, true);
-		$view = new MijnAbonnementenView($abonnementen);
-		return view('default', ['content' => $view]);
+		return view('maaltijden.abonnement.mijn_abonnementen', ['titel' => 'Mijn abonnementen', 'abonnementen' => $abonnementen]);
 	}
 
 	public function inschakelen($mrid) {
@@ -35,7 +32,7 @@ class MijnAbonnementenController {
 			$melding = 'Automatisch aangemeld voor ' . $aantal . ' maaltijd' . ($aantal === 1 ? '' : 'en');
 			setMelding($melding, 2);
 		}
-		return new MijnAbonnementView($abo);
+		return view('maaltijden.abonnement.mijn_abonnement', ['uid' => $abo->uid, 'mrid' => $abo->mlt_repetitie_id]);
 	}
 
 	public function uitschakelen($mrid) {
@@ -44,7 +41,8 @@ class MijnAbonnementenController {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);
 		}
-		return new MijnAbonnementView($abo_aantal[0]);
+		$abo = $abo_aantal[0];
+		return view('maaltijden.abonnement.mijn_abonnement', ['uid' => $abo->uid, 'mrid' => $abo->mlt_repetitie_id]);
 	}
 
 }
