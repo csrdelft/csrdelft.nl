@@ -19,12 +19,13 @@ class BBCodeField extends TextareaField {
 	}
 
 	public function getPreviewDiv() {
-		return '<div id="bbcodePreview_' . $this->getId() . '" data-bbpreview="'. $this->getId() . '" class="previewDiv bbcodePreview"></div>';
+		return '<div id="bbcodePreview_' . $this->getId() . '" class="previewDiv bbcodePreview"></div>';
 	}
 
 	public function getHtml() {
-		return parent::getHtml() . <<<HTML
-
+		$inputAttribute = $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete'));
+		return  <<<HTML
+<textarea data-bbpreview="{$this->getId()}" $inputAttribute>{$this->value}</textarea>
 <div class="row justify-content-end">
 	<div class="col-auto">
 		<a class="btn btn-light" href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
