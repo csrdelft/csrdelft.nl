@@ -39,6 +39,14 @@ class BbVideo extends BbTag {
 	 */
 	public function render() {
 		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
+
+		// Als er geen type is, laat dan het bestand zien.
+		if ($type == null) {
+			return <<<HTML
+<video class="w-100" controls preload="metadata" src="$content"></video>
+HTML;
+		}
+
 		$this->assertId($type, $id, $content);
 
 		$params = json_encode($params);

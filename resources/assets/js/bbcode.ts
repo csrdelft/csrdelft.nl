@@ -36,7 +36,6 @@ ctx.addHandler('[data-bbpreview]', (el: HTMLTextAreaElement) => {
 });
 
 export const CsrBBPreviewEl = (source: HTMLTextAreaElement, target: HTMLElement, params: object = {}) => {
-	console.log(source, target);
 	const bbcode = source.value;
 
 	if (bbcode.trim() === '') {
