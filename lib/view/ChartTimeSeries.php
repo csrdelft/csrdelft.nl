@@ -7,10 +7,10 @@ namespace CsrDelft\view;
  */
 class ChartTimeSeries extends JsonResponse {
 
-	public function getJson($model) {
+	public function getModel() {
 		$array = [];
 		$minimum = time();
-		foreach ($model as $label => $data) {
+		foreach ($this->model as $label => $data) {
 			$entry = [];
 			foreach ($data as $row) {
 				if ($row['timestamp'] < $minimum) $minimum = (int)$row['timestamp'];
@@ -26,10 +26,10 @@ class ChartTimeSeries extends JsonResponse {
 				'pointHitRadius' => 2,
 			];
 		}
-		return parent::getJson([
+		return [
 			'labels' => [date('Y-m-d', $minimum), date('Y-m-d')],
 			'datasets' => $array,
-		]);
+		];
 	}
 
 }

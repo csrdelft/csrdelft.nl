@@ -11,7 +11,7 @@ use CsrDelft\view\JsonResponse;
  *
  * Class EetplanHuizenResponse
  */
-class EetplanHuizenZoekenResponse extends JsonResponse {
+class EetplanHuizenZoekenResponse extends JsonLijstResponse {
 
 	/**
 	 * @param Woonoord $entity
