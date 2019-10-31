@@ -11,6 +11,9 @@ Disallow: /
 User-agent: magpie-crawler
 Disallow: /
 
+User-agent: olbicobot
+Disallow: /
+
 User-agent: *
 Disallow: /tools/
 Disallow: /forum/posten/
