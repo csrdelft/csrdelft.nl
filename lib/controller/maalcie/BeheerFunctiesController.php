@@ -4,10 +4,8 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
-use CsrDelft\view\maalcie\corvee\functies\BeheerFunctiesView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
-use CsrDelft\view\maalcie\corvee\functies\FunctieView;
 use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
 
 /**
@@ -27,8 +25,7 @@ class BeheerFunctiesController {
 			$modal = $this->bewerken($fid);
 		}
 		$functies = $this->model->getAlleFuncties(); // grouped by functie_id
-		$view = new BeheerFunctiesView($functies);
-		return view('default', ['content' => $view, 'modal' => $modal]);
+		return view('maaltijden.functie.beheer_functies', ['functies' => $functies, 'modal' => $modal]);
 	}
 
 	public function toevoegen() {
@@ -38,7 +35,7 @@ class BeheerFunctiesController {
 			$id = $this->model->create($functie);
 			$functie->functie_id = (int)$id;
 			setMelding('Toegevoegd', 1);
-			return new FunctieView($functie);
+			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 		} else {
 			return $form;
 		}
@@ -54,7 +51,7 @@ class BeheerFunctiesController {
 			} else {
 				setMelding('Geen wijzigingen', 0);
 			}
-			return new FunctieView($functie);
+			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 		} else {
 			return $form;
 		}
@@ -73,7 +70,7 @@ class BeheerFunctiesController {
 		$form = new KwalificatieForm($kwalificatie); // fetches POST values itself
 		if ($form->validate()) {
 			KwalificatiesModel::instance()->kwalificatieToewijzen($kwalificatie);
-			return new FunctieView($functie);
+			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 		} else {
 			return $form;
 		}
@@ -82,7 +79,7 @@ class BeheerFunctiesController {
 	public function dekwalificeer($fid, $uid) {
 		$functie = $this->model->get((int)$fid);
 		KwalificatiesModel::instance()->kwalificatieIntrekken($uid, $functie->functie_id);
-		return new FunctieView($functie);
+		return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 	}
 
 }
