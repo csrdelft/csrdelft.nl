@@ -42,8 +42,9 @@
 								</a>
 
 							@elseif ($maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet)
-								@icon("stop", null, "Maaltijd is vol")&nbsp;
-								<span class="maaltijd-afgemeld">Niet aangemeld</span>
+								<div class="btn btn-danger disabled">
+								@icon("stop", null, "Maaltijd is vol")&nbsp; Niet aangemeld
+								</div>
 
 							@else
 								<a
@@ -59,7 +60,7 @@
 						@else
 							@if (isset($aanmelding))
 								@if ($maaltijd->getEindMoment() > time())
-									<span class="maaltijd-aangemeld">Aangemeld @if($aanmelding->door_abonnement) (abo) @endif</span>
+									<div class="btn btn-success disabled">Aangemeld @if($aanmelding->door_abonnement) (abo) @endif</div>
 								@else
 									<span class="beoordeling-label bg-white">Kwaliteit:</span>
 									{!! $kwaliteit !!}
@@ -67,7 +68,7 @@
 									{!! $kwantiteit !!}
 								@endif
 							@else
-								<span class="maaltijd-afgemeld">Niet aangemeld</span>
+								<div class="btn btn-danger disabled">Niet aangemeld</div>
 							@endif
 						@endif
 
