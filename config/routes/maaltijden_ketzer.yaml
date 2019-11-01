@@ -1,3 +1,9 @@
+maalcie-maaltijden:
+  path: /maaltijden
+  controller: CsrDelft\controller\maalcie\MijnMaaltijdenController::ketzer
+  methods: GET
+  defaults: { _mag: P_MAAL_IK }
+
 maalcie-maaltijden-ketzer:
   path: /maaltijden/ketzer
   controller: CsrDelft\controller\maalcie\MijnMaaltijdenController::ketzer

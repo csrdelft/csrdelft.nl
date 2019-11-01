@@ -321,7 +321,7 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new CsrException('Invalid timestamp: archiveerOudeMaaltijden()');
 		}
 		$errors = array();
-		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
+		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)))->fetchAll();
 		foreach ($maaltijden as $maaltijd) {
 			try {
 				$archief = $this->archiefMaaltijdModel->vanMaaltijd($maaltijd);
@@ -334,7 +334,7 @@ class MaaltijdenModel extends PersistenceModel {
 				setMelding($e->getMessage(), -1);
 			}
 		}
-		return array($errors, sizeof($maaltijden));
+		return array($errors, count($maaltijden));
 	}
 
 	// Repetitie-Maaltijden ############################################################
