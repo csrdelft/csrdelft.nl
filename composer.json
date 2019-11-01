@@ -73,8 +73,9 @@
 		"analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",
 		"test": "@php vendor/phpunit/phpunit/phpunit --bootstrap ./phpunit.init.php tests",
 		"update-prod": [
+			"git fetch",
 			"@onderhoud true",
-			"git pull",
+			"git merge FETCH_HEAD",
 			"@migrate",
 			"@onderhoud false",
 			"@php bin/console cache:clear",
