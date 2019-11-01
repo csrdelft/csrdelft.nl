@@ -6,9 +6,6 @@ use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\maalcie\forms\EetwensForm;
-use CsrDelft\view\maalcie\persoonlijk\voorkeuren\MijnVoorkeurenView;
-use CsrDelft\view\maalcie\persoonlijk\voorkeuren\MijnVoorkeurView;
-
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -22,8 +19,10 @@ class MijnVoorkeurenController {
 
 	public function mijn() {
 		$voorkeuren = $this->model->getVoorkeurenVoorLid(LoginModel::getUid(), true);
-		$view = new MijnVoorkeurenView($voorkeuren);
-		return view('default', ['content' => $view]);
+		return view('maaltijden.voorkeuren.mijn_voorkeuren', [
+			'voorkeuren' => $voorkeuren,
+			'eetwens' => new EetwensForm(),
+		]);
 	}
 
 	public function inschakelen($crid) {
@@ -31,7 +30,10 @@ class MijnVoorkeurenController {
 		$voorkeur->crv_repetitie_id = $crid;
 		$voorkeur->uid = LoginModel::getUid();
 		$voorkeur = $this->model->inschakelenVoorkeur($voorkeur);
-		return new MijnVoorkeurView($voorkeur);
+		return view('maaltijden.voorkeuren.mijn_voorkeur_veld', [
+			'uid' => $voorkeur->uid,
+			'crid' => $voorkeur->crv_repetitie_id,
+		]);
 	}
 
 	public function uitschakelen($crid) {
@@ -39,7 +41,10 @@ class MijnVoorkeurenController {
 		$voorkeur->crv_repetitie_id = $crid;
 		$voorkeur->uid = LoginModel::getUid();
 		$voorkeur = $this->model->uitschakelenVoorkeur($voorkeur);
-		return new MijnVoorkeurView($voorkeur);
+		return view('maaltijden.voorkeuren.mijn_voorkeur_veld', [
+			'uid' => $voorkeur->uid,
+			'crid' => $voorkeur->crv_repetitie_id,
+		]);
 	}
 
 	public function eetwens() {
