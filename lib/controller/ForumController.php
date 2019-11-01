@@ -589,6 +589,11 @@ class ForumController extends AbstractController {
 			throw new CsrToegangException("", 403);
 		}
 
+		if (empty($tekst)) {
+			setMelding('Bericht mag niet leeg zijn', -1);
+			return $redirect;
+		}
+
 		// voorkom dubbelposts
 		if (isset($_SESSION['forum_laatste_post_tekst']) && $_SESSION['forum_laatste_post_tekst'] === $tekst) {
 			setMelding('Uw reactie is al geplaatst', 0);
