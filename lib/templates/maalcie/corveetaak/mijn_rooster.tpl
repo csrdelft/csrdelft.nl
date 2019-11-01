@@ -12,7 +12,7 @@ De onderstaande tabel toont de aankomende corveetaken waarvoor u bent ingedeeld.
 Als u niet kunt op de betreffende datum bent u zelf verantwoordelijk voor het regelen van een vervanger en dit te melden aan de <a href="mailto:corvee@csrdelft.nl">CorveeCaesar</a>.
 </p>
 <p>
-Tip: zoek in het <a href="/corveerooster" title="Corveerooster">corveerooster</a> iemand met dezelfde taak wanneer u zelf wel kunt om te ruilen.
+Tip: zoek in het <a href="/corvee/rooster" title="Corveerooster">corveerooster</a> iemand met dezelfde taak wanneer u zelf wel kunt om te ruilen.
 </p>
 {include file='maalcie/corveetaak/corvee_rooster.tpl' mijn=true}
 {/if}

@@ -184,7 +184,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getUrl() {
-		return '/corveerooster';
+		return '/corvee/rooster';
 	}
 
 	public function isHeledag() {
