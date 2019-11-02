@@ -6,8 +6,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\maalcie\corvee\vrijstellingen\BeheerVrijstellingenView;
-use CsrDelft\view\maalcie\corvee\vrijstellingen\BeheerVrijstellingView;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
 use CsrDelft\view\PlainView;
 
@@ -23,23 +21,18 @@ class BeheerVrijstellingenController {
 	}
 
 	public function beheer() {
-		/** @var CorveeVrijstelling[] $vrijstellingen */
-		$vrijstellingen = $this->model->find();
-		$view = new BeheerVrijstellingenView($vrijstellingen);
-		return view('default', ['content' => $view]);
+		return view('maaltijden.vrijstelling.beheer_vrijstellingen', ['vrijstellingen' => $this->model->find()]);
 	}
 
 	public function nieuw() {
-		$vrijstelling = $this->model->nieuw();
-		return new VrijstellingForm($vrijstelling); // fetches POST values itself
+		return new VrijstellingForm($this->model->nieuw()); // fetches POST values itself
 	}
 
 	public function bewerk($uid) {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
-		$vrijstelling = $this->model->getVrijstelling($uid);
-		return new VrijstellingForm($vrijstelling); // fetches POST values itself
+		return new VrijstellingForm($this->model->getVrijstelling($uid)); // fetches POST values itself
 	}
 
 	public function opslaan($uid = null) {
@@ -50,8 +43,9 @@ class BeheerVrijstellingenController {
 		}
 		if ($view->validate()) {
 			$values = $view->getValues();
-			$vrijstelling = $this->model->saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage']);
-			return new BeheerVrijstellingView($vrijstelling);
+			return view('maaltijden.vrijstelling.beheer_vrijstelling_lijst', [
+				'vrijstelling' => $this->model->saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage'])
+			]);
 		}
 
 		return $view;
