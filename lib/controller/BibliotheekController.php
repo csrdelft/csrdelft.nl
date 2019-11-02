@@ -12,7 +12,6 @@ use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\entity\bibliotheek\BoekRecensie;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\bibliotheek\BibliotheekBoekView;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatable;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableResponse;
 use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
@@ -131,7 +130,13 @@ class BibliotheekController extends AbstractController {
 
 		}
 		$recensieForm = new RecensieFormulier($mijnRecensie);
-		return view('default', ['content' => new BibliotheekBoekView($boek, $boekForm, $andereRecensies, $recensieForm, $exemplaarFormulieren)]);
+		return view('bibliotheek.boek', [
+			'boek' => $boek,
+			'recensies' => $andereRecensies,
+			'boekFormulier' => $boekForm,
+			'recensieFormulier' => $recensieForm,
+			'exemplaarFormulieren' => $exemplaarFormulieren,
+		]);
 	}
 
 	public function import($boek_id) {
