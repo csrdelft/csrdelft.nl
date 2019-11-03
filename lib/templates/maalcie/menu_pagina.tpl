@@ -29,7 +29,7 @@
 					<option value="/corvee/beheer">Beheer</option>
 					<option value="/corvee/functies">Functies & kwalificaties</option>
 					<option value="/instellingenbeheer/module/corvee">Instellingen</option>
-					<option value="/corvee/punten/beheer">Punten</option>
+					<option value="/corvee/punten">Punten</option>
 					<option value="/corvee/voorkeuren/beheer">Voorkeuren</option>
 					<option value="/corvee/vrijstellingen">Vrijstellingen</option>
 				</optgroup>

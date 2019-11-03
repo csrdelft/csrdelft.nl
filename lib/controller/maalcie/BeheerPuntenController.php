@@ -6,8 +6,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\maalcie\CorveePuntenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenLidView;
-use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenView;
 
 /**
  * BeheerPuntenController.class.php
@@ -19,8 +17,7 @@ class BeheerPuntenController {
 	public function beheer() {
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$matrix = CorveePuntenModel::loadPuntenVoorAlleLeden($functies);
-		$view = new BeheerPuntenView($matrix, $functies);
-		return view('default', ['content' => $view]);
+		return view('maaltijden.corveepunt.beheer_punten', ['matrix' => $matrix, 'functies' => $functies]);
 	}
 
 	public function wijzigpunten($uid) {
@@ -32,7 +29,7 @@ class BeheerPuntenController {
 		CorveePuntenModel::savePuntenVoorLid($profiel, $punten, null);
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$lijst = CorveePuntenModel::loadPuntenVoorLid($profiel, $functies);
-		return new BeheerPuntenLidView($lijst);
+		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $lijst]);
 	}
 
 	public function wijzigbonus($uid) {
@@ -44,7 +41,7 @@ class BeheerPuntenController {
 		CorveePuntenModel::savePuntenVoorLid($profiel, null, $bonus);
 		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$lijst = CorveePuntenModel::loadPuntenVoorLid($profiel, $functies);
-		return new BeheerPuntenLidView($lijst);
+		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $lijst]);
 	}
 
 	public function resetjaar() {
