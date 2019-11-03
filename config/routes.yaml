@@ -5,7 +5,7 @@ zoeken:
   defaults: { _mag: P_LOGGED_IN }
 
 logger:
-  path: /logger/log
+  path: /logger
   controller: CsrDelft\controller\LoggerController::log
   methods: POST
   defaults: { _mag: P_LOGGED_IN } # Voorkom spam
