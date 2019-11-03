@@ -13,7 +13,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
 use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
-use CsrDelft\view\mededelingen\MededelingenZijbalkView;
 
 /**
  * Zijbalk.static.php
@@ -53,10 +52,6 @@ abstract class Zijbalk {
 				$items = array_slice($items, 0, lid_instelling('zijbalk', 'agenda_max'));
 			}
 			$zijbalk[] = view('agenda.zijbalk', ['items' => $items]);
-		}
-		// Laatste mededelingen
-		if (lid_instelling('zijbalk', 'mededelingen') > 0) {
-			$zijbalk[] = new MededelingenZijbalkView((int)lid_instelling('zijbalk', 'mededelingen'));
 		}
 		// Nieuwste belangrijke forumberichten
 		if (lid_instelling('zijbalk', 'forum_belangrijk') > 0) {

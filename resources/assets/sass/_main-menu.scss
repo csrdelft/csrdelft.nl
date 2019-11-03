@@ -192,6 +192,11 @@ Main components
 		transition: visibility 0s 0.3s, transform 0.3s;
 		top: 42px;
 		transform: translateX(260px);
+
+		ul {
+			list-style: none;
+			padding-left: 0;
+		}
 	}
 	.cd-primary-nav.nav-is-visible,
 	#menu:target .cd-primary-nav,
@@ -222,6 +227,8 @@ Main components
 			width: auto;
 			background: transparent;
 			overflow-x: hidden;
+			list-style: none;
+			padding-left: 0;
 
 			&.moves-out > li > a {
 				/* reset mobile style */

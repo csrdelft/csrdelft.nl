@@ -1,5 +1,5 @@
 <div class="media pt-3 maaltijdketzer-{{$maaltijd->maaltijd_id}}" data-maaltijdnaam="{{$maaltijd->titel}}">
-	<div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+	<div class="media-body pb-3 mb-0 lh-125 @if(isset($border) && $border) border-bottom border-gray @endif ">
 		<div class="row">
 			<div class="col">
 				<h6>
@@ -21,6 +21,9 @@
 							Inschrijvingen: <em>{{$maaltijd->getAantalAanmeldingen()}}</em> van <em>{{$maaltijd->aanmeld_limiet}}</em>
 							@if($maaltijd->magSluiten(CsrDelft\model\security\LoginModel::getUid()))
 						</a>
+						@if ($maaltijd->getEindMoment() < time())
+							<br><a href="/maaltijden/beheer/beoordelingen" title="Toon beoordelingen">Bekijk beoordelingen</a>
+						@endif
 					@endif
 				</div>
 			</div>
@@ -39,8 +42,9 @@
 								</a>
 
 							@elseif ($maaltijd->getAantalAanmeldingen() >= $maaltijd->aanmeld_limiet)
-								@icon("stop", null, "Maaltijd is vol")&nbsp;
-								<span class="maaltijd-afgemeld">Niet aangemeld</span>
+								<div class="btn btn-danger disabled">
+								@icon("stop", null, "Maaltijd is vol")&nbsp; Niet aangemeld
+								</div>
 
 							@else
 								<a
@@ -55,9 +59,16 @@
 
 						@else
 							@if (isset($aanmelding))
-								<span class="maaltijd-aangemeld">Aangemeld @if($aanmelding->door_abonnement) (abo) @endif</span>
+								@if ($maaltijd->getEindMoment() > time())
+									<div class="btn btn-success disabled">Aangemeld @if($aanmelding->door_abonnement) (abo) @endif</div>
+								@else
+									<span class="beoordeling-label bg-white">Kwaliteit:</span>
+									{!! $kwaliteit !!}
+									<span class="beoordeling-label bg-white">Kwantiteit:</span>
+									{!! $kwantiteit !!}
+								@endif
 							@else
-								<span class="maaltijd-afgemeld">Niet aangemeld</span>
+								<div class="btn btn-danger disabled">Niet aangemeld</div>
 							@endif
 						@endif
 
@@ -69,7 +80,7 @@
 							@icon("comment", null, $aanmelding->gasten_eetwens)
 						@endif
 
-						@if($maaltijd->gesloten)
+						@if($maaltijd->gesloten && $maaltijd->getEindMoment() > time())
 							@php($date = strftime("%H:%M", strtotime($maaltijd->laatst_gesloten)))
 							@icon("lock", null, "Maaltijd is gesloten om " . $date)
 						@endif

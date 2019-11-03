@@ -3,8 +3,7 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\AclController;
-use CsrDelft\controller\framework\QueryParamTrait;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviPrijsModel;
@@ -15,21 +14,20 @@ use CsrDelft\view\fiscaat\producten\CiviProductForm;
 use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
 use CsrDelft\view\fiscaat\producten\CiviProductTableResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  *
  * @property CiviProductModel $model
  */
-class BeheerCiviProductenController {
-	use QueryParamTrait;
-
+class BeheerCiviProductenController extends AbstractController {
 	public function __construct() {
 		$this->model = CiviProductModel::instance();
 	}
 
-	public function suggesties() {
-		$query = sql_contains($this->getParam('q'));
+	public function suggesties(Request $request) {
+		$query = sql_contains($request->query->get('q'));
 		return new CiviProductSuggestiesResponse($this->model->find('beschrijving LIKE ?', [$query]));
 	}
 
@@ -58,7 +56,7 @@ class BeheerCiviProductenController {
 	}
 
 	public function verwijderen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 
 		list($removed, $existingOrders) = Database::transaction(function () use ($selection) {
 			$removed = array();

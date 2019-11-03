@@ -4,6 +4,7 @@ namespace CsrDelft\view\eetplan;
 
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\view\JsonLijstResponse;
+use CsrDelft\view\JsonResponse;
 
 /**
  * Typeahead response voor EetplanBekendeHuizenForm op /eetplan/bekendehuizen/zoeken
@@ -15,14 +16,13 @@ class EetplanHuizenZoekenResponse extends JsonLijstResponse {
 	/**
 	 * @param Woonoord $entity
 	 *
-	 * @return string
 	 */
-	public function getJson($entity) {
-		return parent::getJson(array(
+	public function renderElement($entity) {
+		return array(
 			'url' => $entity->getUrl(),
 			'label' => $entity->id,
 			'value' => $entity->naam,
 			'id' => $entity->id,
-		));
+		);
 	}
 }

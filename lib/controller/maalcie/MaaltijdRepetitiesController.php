@@ -5,7 +5,6 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 use CsrDelft\view\maalcie\repetities\MaaltijdRepetitiesView;
 use CsrDelft\view\maalcie\repetities\MaaltijdRepetitieView;
@@ -28,7 +27,7 @@ class MaaltijdRepetitiesController {
 			$modal = $this->bewerk($mrid);
 		}
 		$view = new MaaltijdRepetitiesView($this->model->getAlleRepetities());
-		return new CsrLayoutPage($view, [], $modal);
+		return view('default', ['content' => $view, [], $modal]);
 	}
 
 	public function nieuw() {

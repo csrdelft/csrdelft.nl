@@ -3,17 +3,16 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\toestemming\ToestemmingLijstResponse;
 use CsrDelft\view\toestemming\ToestemmingLijstTable;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -21,9 +20,7 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
  *
  * @property LidToestemmingModel $model
  */
-class ToestemmingController {
-	use QueryParamTrait;
-
+class ToestemmingController extends AbstractController {
 	public function __construct() {
 		$this->model = LidToestemmingModel::instance();
 	}
@@ -48,7 +45,7 @@ class ToestemmingController {
 	 * @throws \SmartyException
 	 */
 	public function GET_overzicht() {
-		return new CsrLayoutPage(new CmsPaginaView(CmsPaginaModel::get('thuis')), [], new ToestemmingModalForm());
+		return view('default', ['content' => new CmsPaginaView(CmsPaginaModel::get('thuis')), 'modal' => new ToestemmingModalForm()]);
 	}
 
 	public function POST_annuleren() {
@@ -60,10 +57,10 @@ class ToestemmingController {
 	public function GET_annuleren() {
 		$_SESSION['stop_nag'] = time();
 
-		redirect('/');
+		return $this->redirectToRoute('default');
 	}
 
-	public function lijst() {
+	public function lijst(Request $request) {
 		if (LoginModel::mag('P_LEDEN_MOD')) {
 			$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];
 		} else if (LoginModel::mag(P_ALBUM_MOD)) {
@@ -72,8 +69,8 @@ class ToestemmingController {
 			throw new CsrToegangException('Geen toegang');
 		}
 
-		if ($this->getMethod() === 'POST') {
-		    $filter = $this->hasParam('filter') ? $this->getParam('filter') : 'leden';
+		if ($request->getMethod() === 'POST') {
+			$filter = $request->query->get('filter', 'leden');
 
 		    $filterStatus = [
 		        'leden' => LidStatus::getLidLike(),

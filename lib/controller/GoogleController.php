@@ -4,29 +4,27 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\GoogleSync;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\GoogleToken;
 use CsrDelft\model\GoogleTokenModel;
 use CsrDelft\model\security\LoginModel;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class GoogleController.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class GoogleController {
-	use QueryParamTrait;
-
+class GoogleController extends AbstractController {
 	private $model;
 
 	public function __construct() {
 		$this->model = GoogleTokenModel::instance();
 	}
 
-	public function callback() {
-		$state = $this->hasParam('state') ? $this->getParam('state') : null;
-		$code = $this->hasParam('code') ? $this->getParam('code') : null;
-		$error = $this->hasParam('error') ? $this->getParam('error') : null;
+	public function callback(Request $request) {
+		$state = $request->query->get('state', null);
+		$code = $request->query->get('code', null);
+		$error = $request->query->get('error',null);
 		if ($code) {
 			$client = GoogleSync::createGoogleCLient();
 			$client->fetchAccessTokenWithAuthCode($code);
@@ -41,14 +39,14 @@ class GoogleController {
 				$this->model->create($googleToken);
 			}
 
-			redirect(urldecode($state));
+			return $this->redirect(urldecode($state));
 		}
 
 		if ($error) {
 			setMelding('Verbinding met Google niet geaccepteerd', 2);
 			$state = substr(strstr($state, 'addToGoogleContacts', true), 0, -1);
 
-			redirect($state);
+			return $this->redirect($state);
 		}
 
 		throw new CsrException('Geen error en geen code van Google gekregen.');

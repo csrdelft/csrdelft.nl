@@ -37,7 +37,6 @@ class BbLedenmemoryscores extends BbTag {
 
 	/**
 	 * @param $arguments
-	 * @return array
 	 */
 	function parse($arguments = []) {
 		LedenMemoryScoresModel::instance();

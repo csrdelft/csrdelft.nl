@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\agenda\AgendaVerbergenModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
@@ -22,7 +21,10 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\agenda\AgendaItemForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\response\IcalResponse;
 use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -31,8 +33,6 @@ use CsrDelft\view\View;
  * Controller van de agenda.
  */
 class AgendaController {
-	use QueryParamTrait;
-
 	private $model;
 
 	public function __construct() {
@@ -63,34 +63,32 @@ class AgendaController {
 	}
 
 	public function ical() {
-		header('Content-Type: text/calendar; charset=UTF-8');
-		return crlf_endings(view('agenda.icalendar', [
+		return new IcalResponse(view('agenda.icalendar', [
 			'items' => $this->model->getICalendarItems(),
 			'published' => $this->icalDate(),
-		]));
+		])->toString());
 	}
 
 	public function export($uuid) {
-		header('Content-Type: text/calendar; charset=UTF-8');
-		return crlf_endings(view('agenda.icalendar_export', [
-			'item' => $this->getAgendaItemByUuid($uuid),
+		return new IcalResponse(view('agenda.icalendar', [
+			'items' => $this->getAgendaItemByUuid($uuid),
 			'published' => $this->icalDate(),
-		]));
+		])->toString());
 	}
 
-	public function zoeken($zoekterm = null) {
-		if (!$zoekterm && !$this->hasParam('q')) {
+	public function zoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
 			throw new CsrToegangException();
 		}
 
 		if (!$zoekterm) {
-			$zoekterm = $this->getParam('q');
+			$zoekterm = $request->query->get('q');
 		}
 
 		$query = '%' . $zoekterm . '%';
 		$limit = 5;
-		if ($this->hasParam('limit')) {
-			$limit = (int)$this->getParam('limit');
+		if ($request->query->has('limit')) {
+			$limit = $request->query->getInt('limit');
 		}
 		$van = date('Y-m-d');
 		$tot = date('Y-m-d', strtotime('+6 months'));
@@ -166,15 +164,15 @@ class AgendaController {
 		}
 	}
 
-	public function verplaatsen($uuid) {
+	public function verplaatsen(Request $request, $uuid) {
 		$item = $this->getAgendaItemByUuid($uuid);
 
 		if (!$item || !$item instanceof AgendaItem) throw new CsrGebruikerException('Kan alleen AgendaItem verplaatsen');
 
 		if (!$item->magBeheren()) throw new CsrToegangException();
 
-		$item->begin_moment = $this->getPost('begin_moment');
-		$item->eind_moment = $this->getPost('eind_moment');
+		$item->begin_moment = $request->request->get('begin_moment');
+		$item->eind_moment = $request->request->get('eind_moment');
 
 		$this->model->update($item);
 

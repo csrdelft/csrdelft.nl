@@ -4,7 +4,6 @@ namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
@@ -23,14 +22,13 @@ use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVerwijderenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 19/09/2017
  */
 class PinTransactieController {
-	use QueryParamTrait;
-
 	/** @var CiviBestellingInhoudModel */
 	private $civiBestellingInhoudModel;
 	/** @var CiviBestellingModel */
@@ -57,8 +55,8 @@ class PinTransactieController {
 		]);
 	}
 
-	public function lijst() {
-		$filter = $this->hasParam('filter') ? $this->getParam('filter') : '';
+	public function lijst(Request $request) {
+		$filter = $request->query->get('filter', '');
 
 		switch ($filter) {
 			case 'metFout':

@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\controller\framework\QueryParamTrait;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\ArchiefMaaltijdModel;
@@ -11,7 +11,6 @@ use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
@@ -25,6 +24,7 @@ use CsrDelft\view\maalcie\beheer\PrullenbakMaaltijdenTable;
 use CsrDelft\view\maalcie\forms\AanmeldingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdForm;
 use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
@@ -35,16 +35,14 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  * @property MaaltijdenModel $model
  *
  */
-class BeheerMaaltijdenController {
-	use QueryParamTrait;
-
+class BeheerMaaltijdenController extends AbstractController {
 	public function __construct() {
 		$this->model = MaaltijdenModel::instance();
 	}
 
 	public function GET_prullenbak() {
 		$body = new BeheerMaaltijdenView(new PrullenbakMaaltijdenTable(), 'Prullenbak maaltijdenbeheer');
-		return new CsrLayoutPage($body);
+		return view('default', ['content' => $body]);
 	}
 
 	public function POST_prullenbak() {
@@ -52,8 +50,8 @@ class BeheerMaaltijdenController {
 		return new BeheerMaaltijdenLijst($data);
 	}
 
-	public function POST_beheer() {
-		$filter = $this->hasParam('filter') ? $this->getParam('filter') : '';
+	public function POST_beheer(Request $request) {
+		$filter = $request->query->get('filter', '');
 		switch ($filter) {
 			case 'prullenbak':
 				$data = $this->model->find('verwijderd = true');
@@ -73,22 +71,22 @@ class BeheerMaaltijdenController {
 		return new BeheerMaaltijdenLijst($data);
 	}
 
-	public function GET_beheer($mid = null) {
+	public function GET_beheer(Request $request, $mid = null) {
 		$modal = null;
 		if ($mid !== null) {
 			$modal = $this->bewerk($mid);
 		} elseif ($mid === 0) {
-			$modal = $this->nieuw();
+			$modal = $this->nieuw($request);
 		}
 		/** @var MaaltijdRepetitie[] $repetities */
 		$repetities = MaaltijdRepetitiesModel::instance()->find();
 		$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
-		return new CsrLayoutPage($body, array(), $modal);
+		return view('default', ['content' => $body, 'modal' => $modal]);
 	}
 
 	public function GET_archief() {
 		$body = new BeheerMaaltijdenView(new ArchiefMaaltijdenTable(), 'Archief maaltijdenbeheer');
-		return new CsrLayoutPage($body);
+		return view('default', ['content' => $body]);
 	}
 
 	public function POST_archief() {
@@ -112,7 +110,7 @@ class BeheerMaaltijdenController {
 		return new BeheerMaaltijdenLijst(array($maaltijd));
 	}
 
-	public function nieuw() {
+	public function nieuw(Request $request) {
 		$maaltijd = new Maaltijd();
 		$form = new MaaltijdForm($maaltijd, 'nieuw');
 
@@ -122,8 +120,8 @@ class BeheerMaaltijdenController {
 				setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->aanmeld_filter, 2);
 			}
 			return new BeheerMaaltijdenLijst(array($maaltijd_aanmeldingen[0]));
-		} elseif ($this->hasParam('mrid')) {
-			$mrid = $this->getParam('mrid');
+		} elseif ($request->query->has('mrid')) {
+			$mrid = $request->query->get('mrid');
 			$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
 			$beginDatum = $repetitie->getFirstOccurrence();
 			if ($repetitie->periode_in_dagen > 0) {
@@ -219,18 +217,25 @@ class BeheerMaaltijdenController {
 	public function leegmaken() {
 		$aantal = $this->model->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
-		redirect('/maaltijden/beheer/prullenbak');
+		return $this->redirectToRoute('maalcie-beheer-maaltijden-prullenbak');
 	}
 
 	public function GET_beoordelingen() {
         $body = new BeheerMaaltijdenBeoordelingenView(
             new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
         );
-        return new CsrLayoutPage($body);
+        return view('default', ['content' => $body]);
 	}
 
 	public function POST_beoordelingen() {
         $maaltijden = $this->model->getMaaltijden('datum <= CURDATE()');
+        if (!LoginModel::mag(P_MAAL_MOD)) {
+        	// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
+					$maaltijden = array_filter($maaltijden->fetchAll(), function ($maaltijd) {
+						/** @var Maaltijd $maaltijd */
+						return $maaltijd->magSluiten(LoginModel::getUid());
+					});
+				}
         return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 	}
 
@@ -255,6 +260,6 @@ class BeheerMaaltijdenController {
 
 	public function onverwerkt() {
 		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
-		return new CsrLayoutPage($body);
+		return view('default', ['content' => $body]);
 	}
 }

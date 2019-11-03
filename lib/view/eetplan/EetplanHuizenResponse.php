@@ -13,16 +13,14 @@ use CsrDelft\view\datatable\DataTableResponse;
 class EetplanHuizenResponse extends DataTableResponse {
 	/**
 	 * @param Woonoord $entity
-	 *
-	 * @return string
 	 */
-	public function getJson($entity) {
-		return parent::getJson(array(
+	public function renderElement($entity) {
+		return array(
 			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,
 			'naam' => '<a href="' . $entity->getUrl() . '">' . $entity->naam . '</a>',
 			'soort' => $entity->soort,
 			'eetplan' => $entity->eetplan
-		));
+		);
 	}
 }

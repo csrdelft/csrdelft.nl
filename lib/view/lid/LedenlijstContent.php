@@ -35,8 +35,8 @@ class LedenlijstContent implements View {
 	}
 
 	public function getBreadcrumbs() {
-		return '<li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
-			. '<li class="breadcrumb-item active">Ledenlijst der Civitas</li>';
+		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
+			. '<li class="breadcrumb-item active">Ledenlijst der Civitas</li></ul>';
 	}
 
 	public function getTitel() {
@@ -95,9 +95,13 @@ class LedenlijstContent implements View {
 		echo '<label for="status">Status:</label>';
 		$this->viewSelect('status', array(
 			'LEDEN' => 'Leden',
-			'NOVIET' => 'Novieten', 'GASTLID' => 'Gastlid',
+			'NOVIET' => 'Novieten',
+			'GASTLID' => 'Gastlid',
 			'OUDLEDEN' => 'Oudleden',
-			'LEDEN|OUDLEDEN' => 'Leden & oudleden', 'ALL' => 'Alles'));
+			'LEDEN|OUDLEDEN' => 'Leden & oudleden',
+			'KRINGEL' => 'Kringel',
+			'ALL' => 'Alles'
+		));
 		echo '</div>';
 		echo '<div class="form-group">';
 		echo '<label for="weergave">Weergave:</label>';

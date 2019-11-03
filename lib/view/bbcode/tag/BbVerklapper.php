@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 
 /**
@@ -33,8 +32,6 @@ HTML;
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
-	 * @throws BbException
 	 */
 	public function parse($arguments = [])
 	{

@@ -8,6 +8,13 @@ a[href^="http://"], a[href^="https://"] {
   padding-right: 16px;
   background: url("../images/external-link-blue.png") no-repeat center right;
 }
+
+.sf-toolbar {
+	a[href^="http://"], a[href^="https://"] {
+		padding-right: inherit;
+		background: none;
+	}
+}
 a[href^="mailto:"] {
   padding-right: 16px;
   background: url("../images/email-link-blue.png") no-repeat center right;

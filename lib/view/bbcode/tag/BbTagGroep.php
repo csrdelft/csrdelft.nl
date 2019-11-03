@@ -19,6 +19,10 @@ use CsrDelft\view\groepen\GroepView;
  */
 abstract class BbTagGroep extends BbTag {
 
+	/**
+	 * @return bool
+	 * @throws BbException
+	 */
 	public function isAllowed()
 	{
 		return $this->getGroep()->mag(AccessAction::Bekijken);
@@ -50,6 +54,10 @@ abstract class BbTagGroep extends BbTag {
 
 	abstract public function getLidNaam();
 
+	/**
+	 * @return string
+	 * @throws BbException
+	 */
 	public function render() {
 		$groep = $this->getGroep();
 		if (!$groep) {
@@ -77,6 +85,10 @@ abstract class BbTagGroep extends BbTag {
 		return $view->getHtml();
 	}
 
+	/**
+	 * @return AbstractGroep
+	 * @throws BbException
+	 */
 	private function getGroep()
 	{
 		$this->content = (int)$this->content;

@@ -1,7 +1,7 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import path from 'path';
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 import {VueLoaderPlugin} from 'vue-loader';
 import webpack from 'webpack';
 import ManifestPlugin from 'webpack-manifest-plugin';
@@ -61,7 +61,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 	optimization: {
 		minimizer: [
 			new OptimizeCSSAssetsPlugin({}),
-			new UglifyJsPlugin(),
+			new TerserPlugin(),
 		],
 	},
 	plugins: [

@@ -130,6 +130,17 @@ div.maaltijd-afgemeld {
   font-weight: bold;
 }
 
+span.beoordeling-label {
+	font-size: 11px;
+	display: block;
+	margin-bottom: -7px;
+	z-index: 1;
+	position: relative;
+	width: 66px;
+	margin-left: 5px;
+	padding-left: 5px;
+}
+
 a.maaltijd-aangemeld, span.maaltijd-aangemeld {
   font-weight: bold;
   color: green;

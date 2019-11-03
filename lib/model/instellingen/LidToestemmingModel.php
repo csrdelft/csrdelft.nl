@@ -90,6 +90,9 @@ class LidToestemmingModel extends CachedPersistenceModel {
 	}
 
 	public function toestemming($profiel, $id, $cat = 'profiel', $except = P_LEDEN_MOD) {
+		if (!LoginModel::mag(P_LEDEN_READ))
+			return false;
+
 		if ($profiel->uid == LoginModel::getUid())
 			return true;
 

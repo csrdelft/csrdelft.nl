@@ -163,8 +163,12 @@ $(() => {
 
 	const hammertime = new Hammer(document, {inputClass: Hammer.TouchInput});
 
+	function swipeDisabled(e: HammerInput) {
+		return $(e.target).closest('.disable-swipe, table').length > 0;
+	}
+
 	hammertime.on('swiperight', (e) => {
-		if ($(e.target).closest('.disable-swipe').length > 0) {
+		if (swipeDisabled(e)) {
 			return;
 		}
 
@@ -176,7 +180,7 @@ $(() => {
 	});
 
 	hammertime.on('swipeleft', (e) => {
-		if ($(e.target).closest('.disable-swipe').length > 0) {
+		if (swipeDisabled(e)) {
 			return;
 		}
 

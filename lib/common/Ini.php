@@ -2,8 +2,6 @@
 
 namespace CsrDelft\common;
 
-use Couchbase\Exception;
-
 /**
  * Helper klasse om ini bestanden in de `etc` map uit te lezen.
  *
@@ -58,8 +56,8 @@ class Ini {
 
 		$config = static::$configCache[$iniFile];
 
-		if ($config == false) {
-			throw new CsrException('Configuratie bestand "' . $iniFile . '" bestaat niet');
+		if (!$config) {
+			throw new CsrException('Configuratie bestand "' . $iniFile . '" bestaat niet of is leeg');
 		}
 
 		if ($key === null) {

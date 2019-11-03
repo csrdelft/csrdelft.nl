@@ -19,11 +19,23 @@ RewriteRule ^feuten				https://github.com/csrdelft/csrdelft.nl [R,L]
 RewriteRule ^forum/rss/([0-9a-zA-Z]*)/csrdelft.xml		index.php?private_token=$1 [L]
 RewriteRule ^agenda/ical/([0-9a-zA-Z]*)/csrdelft.ics	index.php?private_token=$1 [L]
 
-RewriteRule ^mededelingen       index.php?c=Mededelingen [QSA,L]
 RewriteRule ^groepen			index.php?c=GroepenRouter [L]
 RewriteRule ^geolocation		index.php?c=GeoLocation [L]
 RewriteRule ^rechten			index.php?c=Rechten [L]
 
+# Symfony config
+RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
+RewriteRule ^(.*) - [E=BASE:%1]
+
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
+
+RewriteRule ^index\.php - [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^                   index.php
+RewriteRule ^ %{ENV:BASE}/index.php [L]
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^                   index.php

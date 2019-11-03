@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
@@ -32,8 +33,7 @@ class BbLid extends BbTag {
 	}
 
 	/**
-	 * @param $arguments
-	 * @return \CsrDelft\model\entity\profiel\Profiel|false
+	 * @return Profiel
 	 * @throws BbException
 	 */
 	private function getProfiel() {
@@ -46,6 +46,10 @@ class BbLid extends BbTag {
 		return $profiel;
 	}
 
+	/**
+	 * @return string
+	 * @throws BbException
+	 */
 	public function render() {
 			$profiel = $this->getProfiel();
 			return $profiel->getLink('user');
@@ -53,8 +57,6 @@ class BbLid extends BbTag {
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
-	 * @throws BbException
 	 */
 	public function parse($arguments = [])
 	{

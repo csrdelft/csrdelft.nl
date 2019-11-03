@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\groepen\VerticalenModel;
@@ -37,8 +36,6 @@ class BbVerticale extends BbTag {
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
-	 * @throws BbException
 	 */
 	public function parse($arguments = [])
 	{

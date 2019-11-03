@@ -8,7 +8,7 @@ use CsrDelft\view\Icon;
 
 class LoginSessionsData extends DataTableResponse {
 
-	public function getJson($session) {
+	public function renderElement($session) {
 		$array = $session->jsonSerialize();
 
 		$array['details'] = '<a href="/session/endsession/' . $session->session_hash . '" class="post DataTableResponse SingleRow" title="Log uit">' . Icon::getTag('door_in') . '</a>';
@@ -23,7 +23,7 @@ class LoginSessionsData extends DataTableResponse {
 			$array['lock_ip'] = null;
 		}
 
-		return parent::getJson($array);
+		return $array;
 	}
 
 }

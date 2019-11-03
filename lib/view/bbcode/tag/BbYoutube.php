@@ -38,6 +38,10 @@ class BbYoutube extends BbTag {
 		}
 	}
 
+	/**
+	 * @return string
+	 * @throws BbException
+	 */
 	public function render() {
 		$this->assertId($this->content);
 		$attributes = [];
@@ -62,8 +66,6 @@ HTML;
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
-	 * @throws BbException
 	 */
 	public function parse($arguments = [])
 	{

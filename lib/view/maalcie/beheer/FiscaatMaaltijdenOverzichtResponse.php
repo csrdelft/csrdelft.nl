@@ -9,11 +9,10 @@ class FiscaatMaaltijdenOverzichtResponse extends DataTableResponse {
 	/**
 	 * @param Maaltijd $entity
 	 *
-	 * @return string
 	 */
-	public function getJson($entity) {
+	public function renderElement($entity) {
 		$data = $entity->jsonSerialize();
 		$data['totaal'] = $entity->getPrijs() * $entity->getAantalAanmeldingen();
-		return parent::getJson($data);
+		return $data;
 	}
 }

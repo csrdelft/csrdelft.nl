@@ -9,9 +9,9 @@ use CsrDelft\view\bbcode\BbHelper;
 /**
  * Twitter widget
  *
- * @param optional Integer $arguments['lines']
- * @param optional Integer $arguments['width'] Breedte
- * @param optional Integer $arguments['height'] Hoogte
+ * @param int optional $arguments['lines']
+ * @param int optional $arguments['width'] Breedte
+ * @param int optional $arguments['height'] Hoogte
  *
  * @since 27/03/2019
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -59,7 +59,6 @@ HTML;
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
 	 * @throws BbException
 	 */
 	public function parse($arguments = [])

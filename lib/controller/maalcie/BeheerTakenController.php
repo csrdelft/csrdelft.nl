@@ -3,13 +3,13 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeToewijzenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\maalcie\corvee\taken\BeheerTaakView;
 use CsrDelft\view\maalcie\corvee\taken\BeheerTakenLijstView;
@@ -21,7 +21,7 @@ use CsrDelft\view\maalcie\forms\ToewijzenForm;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class BeheerTakenController {
+class BeheerTakenController extends AbstractController {
 	private $model;
 
 	public function __construct() {
@@ -40,7 +40,7 @@ class BeheerTakenController {
 			$maaltijd = null;
 		}
 		$view = new BeheerTakenView($taken, $maaltijd, false, CorveeRepetitiesModel::instance()->getAlleRepetities());
-		return new CsrLayoutPage($view, [], $modal);
+		return view('default', ['content' => $view, [], $modal]);
 	}
 
 	public function maaltijd($mid) {
@@ -49,7 +49,7 @@ class BeheerTakenController {
 
 	public function prullenbak() {
 		$view = new BeheerTakenView($this->model->getVerwijderdeTaken(), null, true);
-		return new CsrLayoutPage($view);
+		return view('default', ['content' => $view]);
 	}
 
 	public function herinneren() {
@@ -72,7 +72,7 @@ class BeheerTakenController {
 		} else {
 			setMelding('Geen herinneringen verstuurd.', 0);
 		}
-		redirect('/corvee/beheer');
+		return $this->redirectToRoute('corvee-beheer');
 	}
 
 	public function nieuw($mid = null) {
@@ -172,7 +172,7 @@ class BeheerTakenController {
 	public function leegmaken() {
 		$aantal = $this->model->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' taak' : ' taken') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
-		redirect('/corvee/beheer/prullenbak');
+		return $this->redirectToRoute('corvee-beheer-prullenbak');
 	}
 
 	// Repetitie-Taken ############################################################

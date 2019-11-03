@@ -22,10 +22,10 @@
 		<table class="table table-striped">
 			<thead>
 			<tr>
-				<th>Wijzig</th>
-				<th>Id</th>
-				<th>Waarde</th>
-				<th>Reset</th>
+				<th scope="col">Wijzig</th>
+				<th scope="col">Id</th>
+				<th scope="col">Waarde</th>
+				<th scope="col">Reset</th>
 			</tr>
 			</thead>
 			<tbody>

@@ -84,7 +84,7 @@ JS;
 			} else {
 				$html .= '<span class="fa fa-fw mr-2"></span> ';
 			}
-			$html .= ucfirst($option) . '</a></li>';
+			$html .= ucfirst($option) . '</a>';
 		}
 		?>
 		<div class="input-group">

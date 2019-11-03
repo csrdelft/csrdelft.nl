@@ -12,9 +12,10 @@ use CsrDelft\controller\groepen\RechtengroepenController;
 use CsrDelft\controller\groepen\WerkgroepenController;
 use CsrDelft\controller\groepen\WoonoordenController;
 use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class ZoekController {
-	public function zoeken() {
+	public function zoeken(Request $request) {
 		$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 		$resultaat = [];
 
@@ -46,27 +47,27 @@ class ZoekController {
 
 		if (lid_instelling('zoeken', 'forum') === 'ja') {
 			$bronnen['Forum'] = '/forum/titelzoeken?q=';
-			$resultaat['Forum'] = (new ForumController())->titelzoeken($zoekterm)->getModel();
+			$resultaat['Forum'] = (new ForumController())->titelzoeken($request, $zoekterm)->getModel();
 		}
 
 		if (lid_instelling('zoeken', 'fotoalbum') === 'ja') {
 			$bronnen['Fotoalbum'] = '/fotoalbum/zoeken?q=';
-			$resultaat['Fotoalbum'] = (new FotoAlbumController())->zoeken($zoekterm)->getModel();
+			$resultaat['Fotoalbum'] = (new FotoAlbumController())->zoeken($request, $zoekterm)->getModel();
 		}
 
 		if (lid_instelling('zoeken', 'agenda') === 'ja') {
 			$bronnen['Agenda'] = '/agenda/zoeken?q=';
-			$resultaat['Agenda'] = (new AgendaController())->zoeken($zoekterm)->getModel();
+			$resultaat['Agenda'] = (new AgendaController())->zoeken($request, $zoekterm)->getModel();
 		}
 
 		if (lid_instelling('zoeken', 'documenten') === 'ja') {
 			$bronnen['Documenten'] = '/documenten/zoeken?q=';
-			$resultaat['Documenten'] = (new DocumentenController())->zoeken($zoekterm)->getModel();
+			$resultaat['Documenten'] = (new DocumentenController())->zoeken($request, $zoekterm)->getModel();
 		}
 
 		if (lid_instelling('zoeken', 'boeken') === 'ja') {
 			$bronnen['Boeken'] = '/bibliotheek/zoeken?q=';
-			$resultaat['Boeken'] = (new BibliotheekController())->zoeken($zoekterm)->getModel();
+			$resultaat['Boeken'] = (new BibliotheekController())->zoeken($request, $zoekterm)->getModel();
 		}
 
 		return new JsonResponse(array_merge(...array_values($resultaat)));

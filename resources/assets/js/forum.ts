@@ -1,8 +1,6 @@
 import $ from 'jquery';
-import {CsrBBPreview} from './bbcode';
-import {activeerLidHints} from './bbcode-hints';
-import {bbCodeSet} from './bbcode-set';
 import {domUpdate} from './context';
+import {init} from './ctx';
 
 function toggleForumConceptBtn(enable: boolean) {
 	const $concept = $('#forumConcept');
@@ -75,25 +73,24 @@ export function forumBewerken(postId: string) {
 		}
 		bewerkContainer = $('#post' + postId);
 		bewerkContainerInnerHTML = bewerkContainer.html();
-		const bewerkForm = `<form id="forumEditForm" class="Formulier" action="/forum/bewerken/${postId}" method="post">` +
-			'<div id="bewerkPreview" class="preview forumBericht"></div>' +
-			'<textarea name="forumBericht" id="forumBewerkBericht" class="FormElement BBCodeField" rows="8"></textarea>' +
-			'Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/><br /><br />' +
-			'<div class="float-right"><a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>' +
-			'<input type="submit" class="opslaan" value="Opslaan" /> ' +
-			'<input type="button" class="voorbeeld" value="Voorbeeld" /> ' +
-			'<input type="button" class="annuleren" value="Annuleren" /> ' +
-			'</form>';
-		bewerkContainer.html(bewerkForm);
+		bewerkContainer.html(`
+<form id="forumEditForm" class="ForumFormulier" action="/forum/bewerken/${postId}" method="post">
+	<div id="preview_forumBewerkBericht" class="bbcodePreview forumBericht"></div>
+	<textarea name="forumBericht" id="forumBewerkBericht" data-bbpreview="forumBewerkBericht" class="FormElement BBCodeField" rows="8"></textarea>
+	Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/>
+	<br />
+	<br />
+	<div class="float-right"><a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>
+	<input type="submit" class="opslaan btn btn-primary" value="Opslaan" />
+	<input type="button" class="voorbeeld btn btn-secondary" value="Voorbeeld" data-bbpreview-btn="forumBewerkBericht" />
+	<input type="button" class="annuleren btn btn-secondary" value="Annuleren" />
+</form>`);
 		bewerkContainer.find('form').on('submit', submitPost);
-		bewerkContainer.find('input.voorbeeld').on('click', CsrBBPreview.bind(null, 'forumBewerkBericht', 'bewerkPreview'));
 		bewerkContainer.find('input.annuleren').on('click', restorePost);
 
-		const $forumBewerkBericht = $('#forumBewerkBericht');
-		$forumBewerkBericht.val(data);
-		$forumBewerkBericht.autosize();
-		$forumBewerkBericht.markItUp(bbCodeSet);
-		activeerLidHints($forumBewerkBericht.get(0));
+		init(bewerkContainer.get(0));
+
+		$('#forumBewerkBericht').val(data);
 		$(bewerkContainer).parent().children('.auteur:first')
 			.append(`<div id="bewerk-melding" class="alert alert-warning">
 Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]
@@ -151,12 +148,6 @@ $(() => {
 		const reactieid = parseInt(window.location.pathname.substr(15), 10);
 		window.location.hash = '#' + reactieid;
 	}
-
-	$textarea.on('keyup', (event) => {
-		if (event.keyCode === 13) { // enter
-			CsrBBPreview('forumBericht', 'berichtPreview');
-		}
-	});
 
 	$('#nieuweTitel').on('focusin', () => $('#draad-melding').slideDown(200));
 

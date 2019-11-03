@@ -11,7 +11,6 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenView;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
@@ -32,7 +31,7 @@ class MaaltijdenFiscaatController {
 
 	public function GET_overzicht() {
 		$body = new BeheerMaaltijdenView(new FiscaatMaaltijdenOverzichtTable(), 'Overzicht verwerkte maaltijden');
-		return new CsrLayoutPage($body);
+		return view('default', ['content' => $body]);
 	}
 
 	public function POST_overzicht() {
@@ -42,7 +41,7 @@ class MaaltijdenFiscaatController {
 
 	public function GET_onverwerkt() {
 		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
-		return new CsrLayoutPage($body);
+		return view('default', ['content' => $body]);
 	}
 
 	public function POST_verwerk() {
@@ -54,6 +53,11 @@ class MaaltijdenFiscaatController {
 		# Controleer of de maaltijd gesloten is en geweest is
 		if ($maaltijd->gesloten == false OR date_create(sprintf("%s %s", $maaltijd->datum, $maaltijd->tijd)) >= date_create("now")) {
 			throw new CsrGebruikerException("Maaltijd nog niet geweest");
+		}
+
+		# Controleer of maaltijd niet al verwerkt is
+		if ($maaltijd->verwerkt) {
+			throw new CsrGebruikerException("Maaltijd is al verwerkt");
 		}
 
 		$maaltijden = Database::transaction(function () use ($maaltijd) {

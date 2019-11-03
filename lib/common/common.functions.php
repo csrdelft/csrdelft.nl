@@ -4,7 +4,7 @@
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
-use CsrDelft\common\MijnSqli;
+use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\instellingen\InstellingenModel;
@@ -16,6 +16,8 @@ use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
+use CsrDelft\view\ToResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
@@ -129,7 +131,7 @@ function getSessionMaxLifeTime() {
 	$lifetime = (int)instelling('beveiliging', 'session_lifetime_seconds');
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
 	$gc = (int)ini_get('session.gc_maxlifetime');
-	if ($gc > 0 AND $gc < $lifetime) {
+	if ($gc > 0 && $gc < $lifetime) {
 		$lifetime = $gc;
 	}
 	return $lifetime;
@@ -145,11 +147,11 @@ function redirect($url = null, $refresh = true) {
 	if (empty($url) || $url === null) {
 		$url = REQUEST_URI;
 	}
-	if (!$refresh AND $url == REQUEST_URI) {
+	if (!$refresh && $url == REQUEST_URI) {
 		$url = CSR_ROOT;
 	}
 	if (!startsWith($url, CSR_ROOT)) {
-		if (preg_match("/^[\?#\/]/", $url) === 1) {
+		if (preg_match("/^[?#\/]/", $url) === 1) {
 			$url = CSR_ROOT . $url;
 		} else {
 			$url = CSR_ROOT;
@@ -160,7 +162,7 @@ function redirect($url = null, $refresh = true) {
 }
 
 function redirect_via_login($url) {
-	redirect(CSR_ROOT . "?redirect=" . urlencode($url) . "#login");
+	redirect(CSR_ROOT . "/login?redirect=" . urlencode($url));
 }
 
 /**
@@ -191,6 +193,8 @@ function checkEncoding($string, $string_encoding) {
 
 /**
  * @source http://stackoverflow.com/a/13733588
+ * @param $length
+ * @return string
  */
 function crypto_rand_token($length) {
 	$token = '';
@@ -242,7 +246,7 @@ function valid_date($date, $format = 'Y-m-d H:i:s') {
  * @return bool
  */
 function valid_filename($name) {
-	return preg_match('/^(?:[a-z0-9 \-_\(\)éê]|\.(?!\.))+$/iD', $name);
+	return preg_match('/^(?:[a-z0-9 \-_()éê]|\.(?!\.))+$/iD', $name);
 }
 
 /**
@@ -255,7 +259,7 @@ function email_like($email) {
 	if (empty($email)) {
 		return false;
 	}
-	return preg_match("/^[a-zA-Z0-9!#$%&'\*\+=\?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'\*\+=\?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,})\b$/", $email);
+	return preg_match("/^[a-zA-Z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,})\b$/", $email);
 }
 
 /**
@@ -273,13 +277,13 @@ function url_like($url) {
 
 function external_url($url, $label) {
 	$url = filter_var($url, FILTER_SANITIZE_URL);
-	if ($url AND (url_like($url) OR url_like(CSR_ROOT . $url))) {
-		if (startsWith($url, 'http://') OR startsWith($url, 'https://')) {
-			$extern = ' target="_blank"';
+	if ($url && (url_like($url) || url_like(CSR_ROOT . $url))) {
+		if (startsWith($url, 'http://') || startsWith($url, 'https://')) {
+			$extern = 'target="_blank"';
 		} else {
 			$extern = '';
 		}
-		$result = '<a href="' . $url . '" title="' . $url . '"' . $extern . '>' . $label . '</a>';
+		$result = '<a href="' . $url . '" title="' . $url . '" ' . $extern . '>' . $label . '</a>';
 	} else {
 		$result = $url;
 	}
@@ -332,15 +336,15 @@ function isGeldigeDatum($datum) {
 	}
 	// Checken of we geldige strings hebben, voordat we ze casten naar ints.
 	$jaar = $delen[0];
-	if (!is_numeric($jaar) OR strlen($jaar) != 4) {
+	if (!is_numeric($jaar) || strlen($jaar) != 4) {
 		return false;
 	}
 	$maand = $delen[1];
-	if (!is_numeric($maand) OR strlen($maand) != 2) {
+	if (!is_numeric($maand) || strlen($maand) != 2) {
 		return false;
 	}
 	$dag = substr($delen[2], 0, 2); // Alleen de eerste twee karakters pakken.
-	if (!is_numeric($dag) OR strlen($dag) != 2) {
+	if (!is_numeric($dag) || strlen($dag) != 2) {
 		return false;
 	}
 	// De strings casten naar ints en de datum laten checken.
@@ -354,7 +358,7 @@ function isGeldigeDatum($datum) {
  * @param string $cssID
  */
 function debugprint($sString, $cssID = 'pubcie_debug') {
-	if (DEBUG OR LoginModel::mag(P_ADMIN) OR LoginModel::instance()->isSued()) {
+	if (DEBUG || LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued()) {
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
 }
@@ -395,6 +399,11 @@ function internationalizePhonenumber($phonenumber, $prefix = '+31') {
 /**
  * Plaatje vierkant croppen.
  * @source http://abeautifulsite.net/blog/2009/08/cropping-an-image-to-make-square-thumbnails-in-php/
+ * @param $src_image
+ * @param $dest_image
+ * @param int $thumb_size
+ * @param int $jpg_quality
+ * @return bool
  */
 function square_crop($src_image, $dest_image, $thumb_size = 64, $jpg_quality = 90) {
 
@@ -487,6 +496,8 @@ function format_filesize($size) {
  * This function transforms the php.ini notation for numbers (like '2M') to an integer (2*1024*1024 in this case)
  *
  * @source http://stackoverflow.com/a/22500394
+ * @param $sSize
+ * @return false|int|string
  */
 function convertPHPSizeToBytes($sSize) {
 	if (is_numeric($sSize)) {
@@ -521,8 +532,8 @@ function getMaximumFileUploadSize() {
 }
 
 function printDebug() {
-	$debugOverride = filter_input(INPUT_GET, 'debug') !== null;
-	if (DEBUG OR ((LoginModel::mag(P_ADMIN) OR LoginModel::instance()->isSued()) AND $debugOverride)) {
+	$enableDebug = filter_input(INPUT_GET, 'debug') !== null;
+	if ($enableDebug && (DEBUG || (LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued()))) {
 		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
 		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
@@ -552,7 +563,7 @@ function getDebug(
 		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
 	}
 	if ($sql) {
-		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::instance()->getQueries(), "PDO" => Database::instance()->getQueries(), "MySql" => MijnSqli::instance()->getQueries()), true));
+		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::instance()->getQueries(), "PDO" => Database::instance()->getQueries()), true));
 	}
 	if ($sqltrace) {
 		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(Database::instance()->getTrace(), true));
@@ -581,7 +592,7 @@ function setMelding(string $msg, int $lvl) {
 	$levels[1] = 'success';
 	$levels[2] = 'warning';
 	$msg = trim($msg);
-	if (!empty($msg) AND ($lvl === -1 OR $lvl === 0 OR $lvl === 1 OR $lvl === 2)) {
+	if (!empty($msg) && ($lvl === -1 || $lvl === 0 || $lvl === 1 || $lvl === 2)) {
 		if (!isset($_SESSION['melding'])) {
 			$_SESSION['melding'] = array();
 		}
@@ -599,7 +610,7 @@ function setMelding(string $msg, int $lvl) {
  * @return string html van melding(en) of lege string
  */
 function getMelding() {
-	if (isset($_SESSION['melding']) AND is_array($_SESSION['melding'])) {
+	if (isset($_SESSION['melding']) && is_array($_SESSION['melding'])) {
 		$melding = '';
 		foreach ($_SESSION['melding'] as $msg) {
 			$melding .= formatMelding($msg['msg'], $msg['lvl']);
@@ -649,7 +660,7 @@ function className($className) {
  */
 function classNameZonderNamespace($className) {
 	try {
-		return (new \ReflectionClass($className))->getShortName();
+		return (new ReflectionClass($className))->getShortName();
 	} catch (ReflectionException $e) {
 		return '';
 	}
@@ -832,12 +843,12 @@ function curl_follow_location($url, $options = []) {
  * Create an xpath object from an HTML string.
  *
  * @param $html String the HTML string to create the xpath object from
- * @return \DOMXPath The xpath object
+ * @return DOMXPath The xpath object
  */
 function init_xpath($html) {
-	$xml = new \DOMDocument();
+	$xml = new DOMDocument();
 	$xml->loadHTML($html);
-	return new \DOMXPath($xml);
+	return new DOMXPath($xml);
 }
 
 /**
@@ -971,6 +982,7 @@ function is_ingelogd_account($uid) {
 /**
  * @param Profiel $profiel
  * @param string|string[] $key
+ * @param string $cat
  * @param string $uitzondering Sommige commissie mogen wel dit veld zien.
  * @return bool
  */
@@ -1005,13 +1017,16 @@ function to_unix_path($path) {
  * If directory traversal is applied using ../ et cetera, making the path no longer be inside $folder, null is returned;
  * @param $folder
  * @param $subpath
+ * @return string|null
  */
 function safe_combine_path($folder, $subpath) {
-	if ($folder == null || $subpath == null)
+	if ($folder == null || $subpath == null) {
 		return null;
+	}
 	$combined = $folder;
-	if (!endsWith($combined, '/'))
+	if (!endsWith($combined, '/')) {
 		$combined .= '/';
+	}
 	$combined .= $subpath;
 	if (!startsWith(realpath($combined), realpath($folder))) {
 		return null;
@@ -1137,4 +1152,17 @@ function path_valid($prefix, $path) {
 
 function triggerExceptionAsWarning(Exception $e) {
 	ShutdownHandler::triggerSlackMessage($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), true);
+}
+
+/**
+ * @param \Traversable|array
+ * @return array
+ */
+function as_array($value) {
+	if (is_array($value)) {
+		return $value;
+	} else if ($value instanceof \Traversable) {
+		return iterator_to_array($value);
+	}
+	throw new CsrException("Geen array of iterable");
 }

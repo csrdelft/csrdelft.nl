@@ -27,7 +27,7 @@ class SterrenField extends FloatField {
 	}
 
 	public function getHtml() {
-		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . ' />';
+		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . '></div>';
 	}
 
 	public function getJavascript() {

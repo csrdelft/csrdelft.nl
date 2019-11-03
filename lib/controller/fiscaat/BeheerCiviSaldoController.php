@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\controller\framework\QueryParamTrait;
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
@@ -18,6 +17,7 @@ use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
 use CsrDelft\view\JsonResponse;
 use DateTime;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * BeheerCiviSaldoController.class.php
@@ -26,7 +26,6 @@ use DateTime;
  * @date 07/04/2017
  */
 class BeheerCiviSaldoController {
-	use QueryParamTrait;
 	/** @var CiviSaldoModel */
 	private $model;
 
@@ -141,8 +140,8 @@ class BeheerCiviSaldoController {
 		]);
 	}
 
-	public function zoek() {
-		$zoekterm = $this->getParam('q');
+	public function zoek(Request $request) {
+		$zoekterm = $request->query->get('q');
 
 		$pdo = Database::instance()->getDatabase();
 

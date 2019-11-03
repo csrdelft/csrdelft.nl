@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\JsonResponse;
 use Exception;
 
@@ -14,7 +13,7 @@ use Exception;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class LidInstellingenController {
+class LidInstellingenController extends AbstractController {
 	private $model;
 
 	public function __construct() {
@@ -47,8 +46,7 @@ class LidInstellingenController {
 	public function opslaan() {
 		$this->model->save(); // fetches $_POST values itself
 		setMelding('Instellingen opgeslagen', 1);
-		$from = new UrlField('referer', HTTP_REFERER, null);
-		redirect($from->getValue());
+		return $this->redirectToRoute('lidinstellingen-beheer');
 	}
 
 	public function reset($module, $key) {

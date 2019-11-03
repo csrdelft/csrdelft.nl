@@ -13,7 +13,7 @@ class GroepenBeheerData extends DataTableResponse {
 	 * @return string
 	 * @throws \Exception
 	 */
-	public function getJson($groep) {
+	public function renderElement($groep) {
 		$array = $groep->jsonSerialize();
 
 		$array['detailSource'] = $groep->getUrl() . 'leden';
@@ -37,7 +37,7 @@ class GroepenBeheerData extends DataTableResponse {
 			$array['in_agenda'] = $groep->in_agenda ? 'ja' : 'nee';
 		}
 
-		return parent::getJson($array);
+		return $array;
 	}
 
 }

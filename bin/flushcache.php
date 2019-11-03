@@ -15,13 +15,6 @@ if (OrmMemcache::instance()->getCache()->flush()) {
 	echo error_get_last()["message"];
 }
 
-if (delTree(ROUTES_CACHE_PATH)) {
-	echo 'Routes succesvol verwijderd' . PHP_EOL;
-} else {
-	echo 'Routes verwijderen mislukt' . PHP_EOL;
-	echo error_get_last()["message"];
-}
-
 if (delTree(CONFIG_CACHE_PATH)) {
 	echo 'Instelling cache succesvol verwijderd' . PHP_EOL;
 } else {

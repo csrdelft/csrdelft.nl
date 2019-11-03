@@ -16,7 +16,7 @@ use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\CsrLayoutPage;
+use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
@@ -51,6 +51,9 @@ use CsrDelft\view\JsonResponse;
  * @property AbstractGroepenModel $model
  */
 abstract class AbstractGroepenController extends Controller {
+
+	/** @var DataTable */
+	protected $table;
 
 	public function __construct($query, AbstractGroepenModel $model) {
 		parent::__construct($query, $model);
@@ -180,7 +183,7 @@ abstract class AbstractGroepenController extends Controller {
 			$groepen = $this->model->find('status = ?', [GroepStatus::HT]);
 		}
 		$body = new GroepenView($this->model, $groepen, $soort); // controleert rechten bekijken per groep
-		$this->view = new CsrLayoutPage($body);
+		$this->view = view('default', ['content' => $body]);
 	}
 
 	public function bekijken(AbstractGroep $groep) {
@@ -191,7 +194,7 @@ abstract class AbstractGroepenController extends Controller {
 			$soort = null;
 		}
 		$body = new GroepenView($this->model, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
-		$this->view = new CsrLayoutPage($body);
+		$this->view = view('default', ['content' => $body]);
 	}
 
 	public function deelnamegrafiek(AbstractGroep $groep) {
@@ -278,7 +281,8 @@ abstract class AbstractGroepenController extends Controller {
 			$this->view = new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
 		} else {
 			$table = new GroepenBeheerTable($this->model);
-			$this->view = new CsrLayoutPage($table);
+			$this->view = view('default', ['content' => $table]);
+			$this->table = $table;
 		}
 	}
 
@@ -340,8 +344,8 @@ abstract class AbstractGroepenController extends Controller {
 		$form = new GroepForm($groep, $this->model->getUrl() . $this->action, AccessAction::Aanmaken); // checks rechten aanmaken
 		if ($this->getMethod() == 'GET') {
 			$this->beheren();
-			$form->setDataTableId($this->view->getBody()->getDataTableId());
-			$this->view->modal = $form;
+			$form->setDataTableId($this->table->getDataTableId());
+			$this->view = view('default', ['content' => $this->table, 'modal' => $form]);
 			return;
 		} elseif ($form->validate()) {
 			ChangeLogModel::instance()->log($groep, 'create', null, print_r($groep, true));
@@ -369,9 +373,9 @@ abstract class AbstractGroepenController extends Controller {
 			$form = new GroepForm($groep, $groep->getUrl() . $this->action, AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($this->getMethod() == 'GET') {
 				$this->beheren();
-				$this->view->getBody()->filter = $groep->naam;
-				$form->setDataTableId($this->view->getBody()->getDataTableId());
-				$this->view->modal = $form;
+				$this->table->filter = $groep->naam;
+				$form->setDataTableId($this->table->getDataTableId());
+				$this->view = view('default', ['content' => $this->table, 'modal' => $form]);
 			} elseif ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);

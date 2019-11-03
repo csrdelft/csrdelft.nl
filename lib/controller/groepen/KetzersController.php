@@ -25,7 +25,7 @@ class KetzersController extends AbstractGroepenController {
 		$form = new GroepAanmakenForm($this->model, $soort);
 		if ($this->getMethod() == 'GET') {
 			$this->beheren();
-			$form->setDataTableId($this->view->getBody()->getDataTableId());
+			$form->setDataTableId($this->table->getDataTableId());
 			$this->view->modal = $form;
 		} elseif ($form->validate()) {
 			$values = $form->getValues();

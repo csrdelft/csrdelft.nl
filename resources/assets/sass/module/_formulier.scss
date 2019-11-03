@@ -26,7 +26,7 @@ h1.Titel {
 
 /** FORMULIER **************************************************************/
 
-.Formulier {
+.Formulier, .ForumFormulier {
   .field-required {
     color: red;
   }
@@ -115,11 +115,6 @@ h1.Titel {
   .CheckboxFieldLabel, .KeuzeRondjeLabel {
     float: none;
     width: auto;
-  }
-  .CsrBBPreview {
-    float: left;
-    clear: both;
-    width: 100%;
   }
   input.UidField {
     width: 4em;

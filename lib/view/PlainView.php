@@ -8,7 +8,8 @@ namespace CsrDelft\view;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 11/04/2019
  */
-class PlainView implements View {
+class PlainView implements View, ToResponse {
+	use ToHtmlResponse;
 	private $body;
 
 	public function __construct($body) {

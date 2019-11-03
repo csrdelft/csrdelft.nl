@@ -3,8 +3,6 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\view\CsrLayoutPage;
-use CsrDelft\view\maalcie\beheer\MaalCieBoekjaarSluitenView;
 use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
 
 /**
@@ -12,8 +10,7 @@ use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
  */
 class MaalCieBoekjaarController {
 	public function beheer() {
-		$view = new MaalCieBoekjaarSluitenView();
-		return new CsrLayoutPage($view);
+		return view('maaltijden.boekjaar_sluiten');
 	}
 
 	public function sluitboekjaar() {
@@ -21,10 +18,10 @@ class MaalCieBoekjaarController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$errors_aantal = MaaltijdenModel::instance()->archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
-			if (sizeof($errors_aantal[0]) === 0) {
+			if (count($errors_aantal[0]) === 0) {
 				setMelding('Boekjaar succesvol gesloten: ' . $errors_aantal[1] . ' maaltijden naar het archief verplaatst.', 1);
 			}
-			return new MaalCieBoekjaarSluitenView();
+			return view('maaltijden.boekjaar_sluiten');
 		} else {
 			return $form;
 		}

@@ -24,7 +24,7 @@ use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
  *
  * Controller voor commissie voorkeuren.
  */
-class CommissieVoorkeurenController {
+class CommissieVoorkeurenController extends AbstractController {
 	public function overzicht() {
 		return view('commissievoorkeuren.overzicht', [
 			'categorien' => VoorkeurCommissieModel::instance()->getByCategorie(),
@@ -51,7 +51,7 @@ class CommissieVoorkeurenController {
 			VoorkeurCommissieModel::instance()->update($commissie);
 			setMelding('Aanpassingen commissie opgeslagen', 1);
 		}
-		redirect();
+		return $this->redirectToRoute('commissievoorkeuren-updatecommissie');
 	}
 
 	public function nieuwecommissie() {
@@ -60,7 +60,7 @@ class CommissieVoorkeurenController {
 
 		if ($form->validate()) {
 			$id = VoorkeurCommissieModel::instance()->create($model);
-			redirect('/commissievoorkeuren/overzicht/' . $id);
+			return $this->redirectToRoute('commissievoorkeuren-commissie', ['commissieId' => $id]);
 		}
 
 		return view('commissievoorkeuren.overzicht', [
@@ -75,7 +75,7 @@ class CommissieVoorkeurenController {
 		$form = new AddCategorieFormulier($model);
 		if ($form->validate()) {
 			VoorkeurCommissieCategorieModel::instance()->create($model);
-			redirect('/commissievoorkeuren'); // Prevent resubmit
+			return $this->redirectToRoute('commissievoorkeuren'); // Prevent resubmit
 		}
 
 		return view('commissievoorkeuren.overzicht', [
@@ -96,7 +96,7 @@ class CommissieVoorkeurenController {
 			setMelding('Kan categorie niet verwijderen: is niet leeg', 2);
 		}
 
-		redirect("/commissievoorkeuren");
+		return $this->redirectToRoute('commissievoorkeuren');
 	}
 
 	public function lidpagina($uid) {
@@ -132,7 +132,8 @@ class CommissieVoorkeurenController {
 		$form = (new CommissieVoorkeurPraesesOpmerkingForm($opmerking));
 		if ($form->validate()) {
 			VoorkeurOpmerkingModel::instance()->updateOrCreate($opmerking);
-			redirect();
 		}
+
+		return $this->redirectToRoute('commissievoorkeuren-lidpagina-lijst');
 	}
 }

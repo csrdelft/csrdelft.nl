@@ -38,14 +38,15 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
+use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-class ProfielController {
+class ProfielController extends AbstractController {
 	private $model;
 
 	public function __construct() {
@@ -168,12 +169,12 @@ class ProfielController {
 					setMelding('Opslaan van ' . count($diff) . ' wijziging(en) mislukt', -1);
 				}
 			}
-			redirect('/profiel/' . $profiel->uid);
+			return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
 		}
 		if ($alleenFormulier) {
 			return view('plain', ['titel' => 'Noviet toevoegen', 'content' => $form]);
 		}
-		return new CsrLayoutPage($form);
+		return view('default', ['content' => $form]);
 	}
 
 	public function bewerken($uid) {
@@ -204,9 +205,10 @@ class ProfielController {
 			}
 			VoorkeurOpmerkingModel::instance()->updateOrCreate($opmerking);
 			setMelding('Voorkeuren opgeslagen', 1);
-			redirect();
+			$this->redirectToRoute('profiel-voorkeuren');
+
 		}
-		return new CsrLayoutPage($form);
+		return view('default', ['content' => $form]);
 	}
 
 	public function addToGoogleContacts($uid) {
@@ -223,7 +225,7 @@ class ProfielController {
 		} catch (CsrException $e) {
 			setMelding("Opslaan in Google Contacts mislukt: " . $e->getMessage(), -1);
 		}
-		redirect(CSR_ROOT . '/profiel/' . $profiel->uid);
+		return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
 	}
 
 
@@ -254,18 +256,17 @@ class ProfielController {
 	public function pasfoto($uid, $vorm = 'civitas') {
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
-			redirect('/images/geen-foto.jpg');
+			return $this->redirect('/images/geen-foto.jpg');
 		}
 		if (!is_zichtbaar($profiel, 'profielfoto', 'intern')) {
-			redirect('/images/geen-foto.jpg');
+			return $this->redirect('/images/geen-foto.jpg');
 		}
 		$path = $profiel->getPasfotoInternalPath(false, $vorm);
 		if ($path === null) {
-			redirect('/images/geen-foto.jpg');
+			return $this->redirect('/images/geen-foto.jpg');
 		}
 		$image = new Afbeelding($path);
-		$image->serve();
-		exit;
+		return new BinaryFileResponse($image->getFullPath());
 	}
 
 	public function vcard($uid) {
@@ -275,13 +276,16 @@ class ProfielController {
 			throw new ResourceNotFoundException();
 		}
 
-		header('Content-Type: text/x-vcard; charset=UTF-8');
-		return crlf_endings(view('profiel.vcard', [
+		return new VcardResponse(view('profiel.vcard', [
 			'profiel' => $profiel,
-		]));
+		])->toString());
 	}
 
 	public function kaartje($uid) {
 		return view('profiel.kaartje', ['profiel' => ProfielModel::get($uid)]);
+	}
+
+	public function redirectWithUid($route) {
+		return $this->redirectToRoute($route, ['uid' => LoginModel::getUid()]);
 	}
 }

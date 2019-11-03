@@ -7,9 +7,10 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\RememberLoginModel;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\CsrLayoutPage;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\login\RememberAfterLoginForm;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * LoginController.class.php
@@ -18,13 +19,24 @@ use CsrDelft\view\login\RememberAfterLoginForm;
  *
  * Controller van de agenda.
  */
-class LoginController {
+class LoginController extends AbstractController {
 	private $loginModel;
 	private $rememberLoginModel;
 
 	public function __construct() {
 		$this->rememberLoginModel = RememberLoginModel::instance();
 		$this->loginModel = LoginModel::instance();
+	}
+
+	public function loginForm (Request $request) {
+		$response = new Response(view('layout-extern.login', ['loginForm' => new LoginForm()]));
+
+		// Als er geredirect wordt, stuur dan een forbidden status
+		if ($request->query->has('redirect')) {
+			$response->setStatusCode(Response::HTTP_FORBIDDEN);
+		}
+
+		return $response;
 	}
 
 	public function login() {
@@ -39,26 +51,30 @@ class LoginController {
 				$form->css_classes[] = 'redirect';
 
 				$body = new CmsPaginaView(CmsPaginaModel::get(instelling('stek', 'homepage')));
-				return new CsrLayoutPage($body, [], $form);
+				return view('default', ['content' => $body, 'modal' => $form]);
 			}
 			if ($values['redirect']) {
-				redirect($values['redirect']);
+				return $this->redirect(urldecode($values['redirect']));
 			}
-			redirect(CSR_ROOT);
+			return $this->redirectToRoute('default');
 		} else {
-			redirect(CSR_ROOT . "#login");
+			if ($values['redirect']) {
+				return $this->redirectToRoute('login-form', ['redirect' => $values['redirect']]);
+			}
+
+			return $this->redirectToRoute('login-form');
 		}
 	}
 
 	public function logout() {
 		$this->loginModel->logout();
-		redirect(CSR_ROOT);
+		return $this->redirectToRoute('default');
 	}
 
 	public function su($uid = null) {
 		$this->loginModel->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . ProfielModel::getNaam($uid, 'volledig') . '!', 1);
-		redirect(HTTP_REFERER, false);
+		return $this->redirect(HTTP_REFERER);
 	}
 
 	public function endsu() {
@@ -68,6 +84,6 @@ class LoginController {
 			$this->loginModel->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		redirect(HTTP_REFERER, false);
+		return $this->redirect(HTTP_REFERER);
 	}
 }
