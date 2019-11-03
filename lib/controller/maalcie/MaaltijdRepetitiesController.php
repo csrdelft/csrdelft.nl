@@ -6,8 +6,6 @@ use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
-use CsrDelft\view\maalcie\repetities\MaaltijdRepetitiesView;
-use CsrDelft\view\maalcie\repetities\MaaltijdRepetitieView;
 
 /**
  * MaaltijdRepetitiesController.class.php
@@ -15,6 +13,7 @@ use CsrDelft\view\maalcie\repetities\MaaltijdRepetitieView;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class MaaltijdRepetitiesController {
+	private $repetitie = null;
 	private $model;
 
 	public function __construct() {
@@ -26,8 +25,10 @@ class MaaltijdRepetitiesController {
 		if (is_numeric($mrid) && $mrid > 0) {
 			$modal = $this->bewerk($mrid);
 		}
-		$view = new MaaltijdRepetitiesView($this->model->getAlleRepetities());
-		return view('default', ['content' => $view, [], $modal]);
+		return view('maaltijden.maaltijdrepetitie.beheer_maaltijd_repetities', [
+			'repetities' => $this->model->getAlleRepetities(),
+			'modal' => $modal
+		]);
 	}
 
 	public function nieuw() {
@@ -51,7 +52,8 @@ class MaaltijdRepetitiesController {
 			if ($aantal > 0) {
 				setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 			}
-			return new MaaltijdRepetitieView($repetitie);
+			$this->repetitie = $repetitie;
+			return view('maaltijden.maaltijdrepetitie.beheer_maaltijd_repetitie', ['repetitie' => $repetitie]);
 		}
 
 		return $view;
@@ -69,9 +71,9 @@ class MaaltijdRepetitiesController {
 
 	public function bijwerken($mrid) {
 		$view = $this->opslaan($mrid);
-		if ($view instanceof MaaltijdRepetitieView) { // opslaan succesvol
+		if ($this->repetitie) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
-			$updated_aanmeldingen = MaaltijdenModel::instance()->updateRepetitieMaaltijden($view->getModel(), $verplaats);
+			$updated_aanmeldingen = MaaltijdenModel::instance()->updateRepetitieMaaltijden($this->repetitie, $verplaats);
 			setMelding($updated_aanmeldingen[0] . ' maaltijd' . ($updated_aanmeldingen[0] !== 1 ? 'en' : '') . ' bijgewerkt' . ($verplaats ? ' en eventueel verplaatst.' : '.'), 1);
 			if ($updated_aanmeldingen[1] > 0) {
 				setMelding($updated_aanmeldingen[1] . ' aanmelding' . ($updated_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $view->getModel()->abonnement_filter, 2);

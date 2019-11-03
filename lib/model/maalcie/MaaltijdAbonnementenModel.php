@@ -296,7 +296,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	public function verwijderAbonnementen($mrid) {
 		return Database::transaction(function () use ($mrid) {
 			/** @var MaaltijdAbonnement[] $abos */
-			$abos = $this->find('mlt_repetitie_id = ?', array($mrid));
+			$abos = $this->find('mlt_repetitie_id = ?', array($mrid))->fetchAll();
 			$aantal = count($abos);
 			foreach ($abos as $abo) {
 				MaaltijdAanmeldingenModel::instance()->afmeldenDoorAbonnement($mrid, $abo->uid);
