@@ -4,6 +4,7 @@
 namespace CsrDelft\common;
 
 
+use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,8 @@ class SuDataCollector extends DataCollector {
 	 */
 	public function collect(Request $request, Response $response, \Exception $exception = null) {
 		$this->data = [
-			'sued_from' => LoginModel::getSuedFrom(),
+			'can_su' => LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued(),
+			'is_sued' => LoginModel::instance()->isSued(),
 			'profiel' => LoginModel::getProfiel(),
 		];
 	}
@@ -37,11 +39,15 @@ class SuDataCollector extends DataCollector {
 		$this->data = [];
 	}
 
-	public function getSuedFrom() {
-		return $this->data['sued_from'];
-	}
-
 	public function getProfiel() {
 		return $this->data['profiel'];
+	}
+
+	public function getIsSued() {
+		return $this->data['is_sued'];
+	}
+
+	public function getCanSu() {
+		return $this->data['can_su'];
 	}
 }
