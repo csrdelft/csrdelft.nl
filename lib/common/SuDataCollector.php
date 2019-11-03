@@ -39,16 +39,12 @@ class SuDataCollector extends DataCollector {
 		$this->data = [];
 	}
 
-	public function getSuedFrom() {
-		return $this->data['sued_from'];
-	}
-
 	public function getProfiel() {
 		return $this->data['profiel'];
 	}
 
-	public function getVisible() {
-		return $this->data['visible'];
+	public function getIsSued() {
+		return $this->data['is_sued'];
 	}
 
 	public function getCanSu() {
