@@ -6,8 +6,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\maalcie\corvee\voorkeuren\BeheerVoorkeurenView;
-use CsrDelft\view\maalcie\corvee\voorkeuren\BeheerVoorkeurView;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -20,9 +18,8 @@ class BeheerVoorkeurenController {
 	}
 
 	public function beheer() {
-		$matrix_repetities = $this->model->getVoorkeurenMatrix();
-		$view = new BeheerVoorkeurenView($matrix_repetities[0], $matrix_repetities[1]);
-		return view('default', ['content' => $view]);
+		list($matrix, $repetities) = $this->model->getVoorkeurenMatrix();
+		return view('maaltijden.voorkeur.beheer_voorkeuren', ['matrix' => $matrix, 'repetities' => $repetities]);
 	}
 
 	public function inschakelen($crid, $uid) {
@@ -35,7 +32,7 @@ class BeheerVoorkeurenController {
 
 		$voorkeur = $this->model->inschakelenVoorkeur($voorkeur);
 		$voorkeur->setVanUid($voorkeur->getUid());
-		return new BeheerVoorkeurView($voorkeur);
+		return view('maaltijden.voorkeur.beheer_voorkeur_veld', ['voorkeur' => $voorkeur, 'crid' => $crid, 'uid' => $uid]);
 	}
 
 	public function uitschakelen($crid, $uid) {
@@ -50,7 +47,7 @@ class BeheerVoorkeurenController {
 		$this->model->uitschakelenVoorkeur($voorkeur);
 
 		$voorkeur->uid = null;
-		return new BeheerVoorkeurView($voorkeur);
+		return view('maaltijden.voorkeur.beheer_voorkeur_veld', ['voorkeur' => $voorkeur, 'crid' => $voorkeur->crv_repetitie_id, 'uid' => $voorkeur->uid]);
 	}
 
 }
