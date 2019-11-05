@@ -15,7 +15,6 @@ use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenTable;
-use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenView;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenView;
@@ -221,10 +220,9 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	public function GET_beoordelingen() {
-        $body = new BeheerMaaltijdenBeoordelingenView(
-            new BeheerMaaltijdenBeoordelingenTable(), 'Maaltijdbeoordelingen'
-        );
-        return view('default', ['content' => $body]);
+		return view('maaltijden.maaltijd.maaltijd_beoordelingen', [
+			'table' => new BeheerMaaltijdenBeoordelingenTable(),
+		]);
 	}
 
 	public function POST_beoordelingen() {
