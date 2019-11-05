@@ -85,7 +85,7 @@ class SessionController {
 			}
 			if (isset($_POST['DataTableId'])) {
 				return new RememberLoginData(array($remember));
-			} else if (isset($_POST['redirect'])) {
+			} else if (!empty($_POST['redirect'])) {
 				return new JsonResponse($_POST['redirect']);
 			}
 			else {
