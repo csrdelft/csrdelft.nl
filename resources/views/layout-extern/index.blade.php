@@ -193,8 +193,8 @@
 							</a>
 						</li>
 						<li>
-							<a href="https://dosign.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/dosign.gif' alt='Dosign advertentie'>
+							<a href="https://www.dosign.com/nl-nl/carriere/download-dosign-students-app/?utm_source=Banner%20Students&utm_medium=sv%20C.S.R.&utm_campaign=Promotie%20app ">
+								<img src='https://csrdelft.nl/plaetjes/banners/dosign.jpg' alt='Dosign advertentie'>
 							</a>
 						</li>
 						<li>
