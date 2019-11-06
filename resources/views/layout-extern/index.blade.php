@@ -168,6 +168,11 @@
 				<noscript class="lazy-load">
 					<ul class="sponsors">
 						<li>
+							<a href="https://www.dosign.com/nl-nl/carriere/download-dosign-students-app/?utm_source=Banner%20Students&utm_medium=sv%20C.S.R.&utm_campaign=Promotie%20app ">
+								<img src='https://csrdelft.nl/plaetjes/banners/dosign.jpg' alt='Dosign advertentie'>
+							</a>
+						</li>
+						<li>
 							<a href="https://www.allekabels.nl/">
 								<img src='https://csrdelft.nl/plaetjes/banners/allekabels.png' alt='Alle kabels'>
 							</a>
@@ -190,11 +195,6 @@
 						<li>
 							<a href="https://overstappen.nl/autoverzekering">
 								<img src='https://csrdelft.nl/plaetjes/banners/logo-OS.png' alt='Goedkope autoverzekering'>
-							</a>
-						</li>
-						<li>
-							<a href="https://www.dosign.com/nl-nl/carriere/download-dosign-students-app/?utm_source=Banner%20Students&utm_medium=sv%20C.S.R.&utm_campaign=Promotie%20app ">
-								<img src='https://csrdelft.nl/plaetjes/banners/dosign.jpg' alt='Dosign advertentie'>
 							</a>
 						</li>
 						<li>
