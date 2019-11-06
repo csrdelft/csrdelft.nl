@@ -3,13 +3,13 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\maalcie\beheer\MaaltijdLijstView;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
 use CsrDelft\view\maalcie\persoonlijk\MijnMaaltijdenView;
@@ -42,8 +42,18 @@ class MijnMaaltijdenController {
 			throw new CsrToegangException();
 		}
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd);
-		$taken = CorveeTakenModel::instance()->getTakenVoorMaaltijd($mid)->fetchAll();
-		return new MaaltijdLijstView($maaltijd, $aanmeldingen, $taken);
+		for ($i = $maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
+			$aanmeldingen[] = new MaaltijdAanmelding();
+		}
+
+		return view('maaltijden.maaltijd.maaltijd_lijst', [
+			'titel' => $maaltijd->getTitel(),
+			'aanmeldingen' => $aanmeldingen,
+			'eterstotaal' => $maaltijd->getAantalAanmeldingen() + $maaltijd->getMarge(),
+			'corveetaken' => CorveeTakenModel::instance()->getTakenVoorMaaltijd($mid)->fetchAll(),
+			'maaltijd' => $maaltijd,
+			'prijs' => sprintf("%.2f", $maaltijd->getPrijsFloat()),
+		]);
 	}
 
 	public function sluit($mid) {
