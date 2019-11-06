@@ -109,7 +109,7 @@ class CorveeRepetitiesModel extends PersistenceModel {
 	}
 
 	public function verwijderRepetitie($crid) {
-		if (is_numeric($crid) || $crid <= 0) {
+		if (!is_numeric($crid) || $crid <= 0) {
 			throw new CsrGebruikerException('Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid);
 		}
 		if (CorveeTakenModel::instance()->existRepetitieTaken($crid)) {

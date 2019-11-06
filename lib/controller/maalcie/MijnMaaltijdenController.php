@@ -12,8 +12,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
-use CsrDelft\view\maalcie\persoonlijk\MijnMaaltijdenView;
-use CsrDelft\view\maalcie\persoonlijk\MijnMaaltijdView;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -32,8 +30,34 @@ class MijnMaaltijdenController {
 		$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
 		$timestamp = strtotime(instelling('maaltijden', 'beoordeling_periode'));
 		$recent = MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
-		$view = new MijnMaaltijdenView($maaltijden, $aanmeldingen, $recent);
-		return view('default', ['content' => $view]);
+		$beoordelen = [];
+		$kwantiteit_forms = [];
+		$kwaliteit_forms = [];
+		foreach ($maaltijden as $maaltijd) {
+			$mid = $maaltijd->maaltijd_id;
+			if (!array_key_exists($mid, $aanmeldingen)) {
+				$aanmeldingen[$mid] = false;
+			}
+		}
+		foreach ($recent as $aanmelding) {
+			$maaltijd = $aanmelding->maaltijd;
+			$mid = $aanmelding->maaltijd_id;
+			$beoordelen[$mid] = $maaltijd;
+			$beoordeling = MaaltijdBeoordelingenModel::instance()->find('maaltijd_id = ? AND uid = ?', array($mid, LoginModel::getUid()))->fetch();
+			if (!$beoordeling) {
+				$beoordeling = MaaltijdBeoordelingenModel::instance()->nieuw($maaltijd);
+			}
+			$kwantiteit_forms[$mid] = new MaaltijdKwantiteitBeoordelingForm($maaltijd, $beoordeling);
+			$kwaliteit_forms[$mid] = new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling);
+		}
+		return view('maaltijden.maaltijd.mijn_maaltijden', [
+			'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs')),
+			'maaltijden' => $maaltijden,
+			'aanmeldingen' => $aanmeldingen,
+			'beoordelen' => $beoordelen,
+			'kwantiteit' => $kwantiteit_forms,
+			'kwaliteit' => $kwaliteit_forms,
+		]);
 	}
 
 	public function lijst($mid) {
@@ -70,7 +94,11 @@ class MijnMaaltijdenController {
 		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 		$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($maaltijd, LoginModel::getUid(), LoginModel::getUid());
 		if ($request->getMethod() == 'POST') {
-			return new MijnMaaltijdView($aanmelding->maaltijd, $aanmelding);
+			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
+				'maaltijd' => $aanmelding->maaltijd,
+				'aanmelding' => $aanmelding,
+				'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs'))
+			]);
 		} else {
 			return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 		}
@@ -80,7 +108,10 @@ class MijnMaaltijdenController {
 		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 		MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($maaltijd, LoginModel::getUid());
 		if ($request->getMethod() == 'POST') {
-			return new MijnMaaltijdView($maaltijd);
+			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
+				'maaltijd' => $maaltijd,
+				'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs'))
+			]);
 		} else {
 			return view('maaltijden.bb', ['maaltijd' => $maaltijd]);
 		}

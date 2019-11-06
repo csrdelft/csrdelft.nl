@@ -162,7 +162,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 	}
 
 	public function saveGastenEetwens($mid, $uid, $opmerking) {
-		if (is_numeric($mid) || $mid <= 0) {
+		if (!is_numeric($mid) || $mid <= 0) {
 			throw new CsrGebruikerException('Save gasten eetwens faalt: Invalid $mid =' . $mid);
 		}
 		if (!$this->getIsAangemeld($mid, $uid)) {
