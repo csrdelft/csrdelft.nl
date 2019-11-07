@@ -338,7 +338,7 @@ abstract class AbstractGroepenController extends Controller {
 			$groep->familie = $old->familie;
 			$groep->samenvatting = $old->samenvatting;
 			$groep->omschrijving = $old->omschrijving;
-			if (Groep) {
+			if (property_exists($old, 'rechten_aanmelden')) {
 				$groep->rechten_aanmelden = $old->rechten_aanmelden;
 			}
 		}
