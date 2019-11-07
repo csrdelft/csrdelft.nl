@@ -560,6 +560,7 @@ class ForumController extends AbstractController {
 		$deel = $this->forumDelenModel::get($forum_id);
 		$draad = null;
 		// post in bestaand draadje?
+		$titel = null;
 		if ($draad_id !== null) {
 			$draad = $this->forumDradenModel::get($draad_id);
 

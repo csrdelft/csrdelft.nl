@@ -35,7 +35,7 @@ class CsrfService {
 	 * @param $token
 	 * @param string $path
 	 * @param string $method
-	 * @return CsrfToken|null
+	 * @return bool
 	 */
 	public function isValid ($token, string $path, string $method) : bool {
 		if (session_status() == PHP_SESSION_NONE || $token == null) {

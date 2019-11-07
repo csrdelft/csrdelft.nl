@@ -9,6 +9,7 @@ use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
+use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\groepen\GroepStatus;
@@ -299,7 +300,7 @@ abstract class AbstractGroepenController extends Controller {
 			 * @var \CsrDelft\model\entity\profiel\Profiel $profiel
 			 */
 			$profiel = LoginModel::getProfiel();
-			if (property_exists($groep, 'rechten_aanmelden') AND empty($groep->rechten_aanmelden)) {
+			if ($groep instanceof Activiteit AND empty($groep->rechten_aanmelden)) {
 				switch ($groep->soort) {
 
 					case ActiviteitSoort::Lichting:
@@ -337,7 +338,7 @@ abstract class AbstractGroepenController extends Controller {
 			$groep->familie = $old->familie;
 			$groep->samenvatting = $old->samenvatting;
 			$groep->omschrijving = $old->omschrijving;
-			if (property_exists($old, 'rechten_aanmelden')) {
+			if (Groep) {
 				$groep->rechten_aanmelden = $old->rechten_aanmelden;
 			}
 		}
@@ -434,6 +435,7 @@ abstract class AbstractGroepenController extends Controller {
 			$values = $form->getValues();
 			$response = [];
 			foreach ($selection as $UUID) {
+				/** @var AbstractGroep $groep */
 				$groep = $this->model->retrieveByUUID($UUID);
 				if (!$groep OR !$groep->mag(AccessAction::Opvolging)) {
 					continue;

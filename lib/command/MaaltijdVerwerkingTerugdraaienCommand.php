@@ -27,6 +27,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
 		$maaltijdenModel = MaaltijdenModel::instance();
 
 		// Bepaal datum
+		$datum = null;
 		do {
 			$question = new Question("Van welke maaltijd wil je de verwerking terugdraaien? ");
 			$mid = $helper->ask($input, $output, $question);
@@ -42,7 +43,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
 					$output->writeln($exception->getMessage());
 				}
 			}
-		} while (!isset($datum));
+		} while ($datum != null);
 
 		$output->writeln("");
 

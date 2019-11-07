@@ -156,6 +156,7 @@ class FotoAlbumController extends AbstractController {
 			foreach ($files as $filename) {
 				$afbeelding = new Afbeelding($filename->getThumbPath());
 				if (endsWith($afbeelding->filename, '.jpg')) {
+					$obj = [];
 					$obj['name'] = $afbeelding->filename;
 					$obj['size'] = $afbeelding->filesize;
 					$obj['type'] = $afbeelding->mimetype;
@@ -352,7 +353,7 @@ class FotoAlbumController extends AbstractController {
 		}
 
 		$image = new Foto($foto . '.' . $ext, new FotoAlbum($dir), true);
-		if ($image === false || !$image->magBekijken()) {
+		if (!$image->magBekijken()) {
 			throw new CsrToegangException();
 		} else if (!$image->exists()) {
 			throw new CsrToegangException();
@@ -372,7 +373,7 @@ class FotoAlbumController extends AbstractController {
 			throw new NotFoundHttpException();
 		}
 		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
-		if ($foto === false || !$foto->magBekijken()) {
+		if (!$foto->magBekijken()) {
 			throw new CsrToegangException();
 		} else if (!$foto->exists()) {
 			throw new CsrToegangException();
@@ -387,7 +388,7 @@ class FotoAlbumController extends AbstractController {
 			throw new NotFoundHttpException();
 		}
 		$foto = new Foto($foto . "." . $ext, new FotoAlbum($dir));
-		if ($foto === false || !$foto->magBekijken()) {
+		if (!$foto->magBekijken()) {
 			throw new CsrToegangException();
 		} else if (!$foto->exists()) {
 			throw new CsrToegangException();

@@ -54,7 +54,7 @@ class PeilingOptiesController extends AbstractController {
 			$optie = $form->getModel();
 			$optie->ingebracht_door = LoginModel::getUid();
 			$optie->peiling_id = $id;
-			$optie->id = $this->peilingOptiesModel->create($optie);
+			$optie->id = (int)$this->peilingOptiesModel->create($optie);
 			return new PeilingOptieResponse([$optie]);
 		}
 
@@ -68,7 +68,7 @@ class PeilingOptiesController extends AbstractController {
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
 
-		/** @var PeilingOptie $peilingOptie */
+		/** @var PeilingOptie|false $peilingOptie */
 		$peilingOptie = $this->peilingOptiesModel->retrieveByUUID($selection[0]);
 
 		if ($peilingOptie !== false && $peilingOptie->stemmen == 0) {

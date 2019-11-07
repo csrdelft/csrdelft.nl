@@ -51,7 +51,7 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	 *
 	 * @param int $bestelling_id
 	 * @param int $product_id
-	 * @return CiviBestellingInhoud
+	 * @return CiviBestellingInhoud|false
 	 */
 	public function getVoorBestellingEnProduct($bestelling_id, $product_id) {
 		return $this->find('bestelling_id = ? AND product_id = ?', [$bestelling_id, $product_id])->fetch();
