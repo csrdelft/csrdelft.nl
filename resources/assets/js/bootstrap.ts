@@ -100,12 +100,12 @@ $.extend(window, {
 	maalcie: {
 		// See view/maalcie/forms/SuggestieLijst.php
 		takenColorSuggesties,
-		// See templates/maalcie/corveetaak/beheer_taken.tpl
+		// See assets/view/maaltijden/corveetaak/beheer_taken.blade.php
 		takenShowOld,
-		// See templates/maalcie/corveetaak/beheer_taak_datum.tpl
-		// See templates/maalcie/corveetaak/beheer_taak_head.tpl
+		// See assets/view/maaltijden/corveetaak/beheer_taak_datum.blade.php
+		// See assets/view/maaltijden/corveetaak/beheer_taak_head.blade.php
 		takenToggleDatum,
-		// See templates/maalcie/corveetaak/suggesties_lijst.tpl
+		// See assets/view/maaltijden/corveetaak/suggesties_lijst.blade.php
 		// See view/maalcie/forms/SuggestieLijst.php
 		takenToggleSuggestie,
 	},
