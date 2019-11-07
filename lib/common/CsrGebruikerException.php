@@ -7,7 +7,7 @@ namespace CsrDelft\common;
  * @since 20170824
  */
 class CsrGebruikerException extends CsrException {
-	public function __construct($message, $statusCode = 200, \Exception $previous = null, array $headers = [], $code = 0)
+	public function __construct($message = "", $statusCode = 200, \Exception $previous = null, array $headers = [], $code = 0)
 	{
 		parent::__construct($message, $statusCode, $previous, $headers, $code);
 	}

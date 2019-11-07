@@ -3,6 +3,8 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\view\datatable\DataTable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 
@@ -39,7 +41,7 @@ class AbstractController extends BaseController {
 				if (preg_match("/^[?#\/]/", $url) === 1) {
 					$url = CSR_ROOT . $url;
 				} else {
-					$url = CSR_ROOT;
+					throw new CsrToegangException();
 				}
 			}
 			return parent::redirect($url, $status);
