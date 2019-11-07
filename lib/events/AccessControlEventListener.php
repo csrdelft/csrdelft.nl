@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 class AccessControlEventListener {
 	const EXCLUDED_CONTROLLERS = [
 		'CsrDelft\controller\ErrorController::handleException' => true,
+		'twig.controller.exception:showAction' => true,
 	];
 	/**
 	 * Controleer of gebruiker deze pagina mag zien.
@@ -32,6 +33,7 @@ class AccessControlEventListener {
 
 		$mag = $event->getRequest()->get('_mag');
 		if (!$mag || !LoginModel::mag($mag)) {
+			var_dump($event->getRequest()->get('_controller'));
 			throw new CsrToegangException("Geen toegang");
 		}
 	}

@@ -19,10 +19,7 @@ class ViewEventListener {
 		$value = $event->getControllerResult();
 
 		if ($value instanceof ToResponse) {
-			$value = $value->toResponse();
-		} else if (!($value instanceof Response)) {
-			throw new CsrException("Value not convertible to Response");
+			$event->setResponse($value->toResponse());
 		}
-		$event->setResponse($value);
 	}
 }
