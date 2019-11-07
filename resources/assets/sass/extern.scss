@@ -5,7 +5,7 @@
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 @import "~jquery-ui/themes/base/tooltip.css";
 
-@import "extern/fonts";
+@import "fonts";
 @import "extern/variables";
 
 // common
@@ -109,9 +109,8 @@ a {
 			text-decoration: none;
 			border-bottom: 0;
 			display: block;
-			font-family: Raleway, Helvetica, sans-serif;
 			font-size: 0.8em;
-			font-weight: 700;
+			font-weight: 600;
 			letter-spacing: 0.1em;
 			margin: 0 0 2em 0;
 			text-transform: uppercase;
@@ -167,8 +166,7 @@ p {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: Raleway, Helvetica, sans-serif;
-	font-weight: 700;
+	font-weight: 600;
 	letter-spacing: 0.1em;
 	margin: 0 0 1em 0;
 	text-transform: uppercase;
