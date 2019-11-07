@@ -33,7 +33,6 @@ class AccessControlEventListener {
 
 		$mag = $event->getRequest()->get('_mag');
 		if (!$mag || !LoginModel::mag($mag)) {
-			var_dump($event->getRequest()->get('_controller'));
 			throw new CsrToegangException("Geen toegang");
 		}
 	}
