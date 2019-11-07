@@ -4,28 +4,23 @@
 namespace CsrDelft\controller;
 
 
-use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\security\LoginModel;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 
 class ErrorController {
 	public function handleException(RequestStack $requestStack, FlattenException $exception, ContainerInterface $container) {
 		$request = $requestStack->getMasterRequest();
 
 		if ($request->getMethod() == 'POST') {
-			return new Response($exception->getMessage(), $this->getCode($exception));
+			return new Response($exception->getMessage(), $exception->getStatusCode());
 		}
 
-		switch ($this->getCode($exception->getClass())) {
+		switch ($exception->getStatusCode()) {
 			case Response::HTTP_BAD_REQUEST:
 			{
 				return new Response(view('fout.400', ['bericht' => $exception->getMessage()]), Response::HTTP_BAD_REQUEST);
@@ -53,28 +48,6 @@ class ErrorController {
 			{
 				return new Response(view('fout.500'), Response::HTTP_INTERNAL_SERVER_ERROR);
 			}
-		}
-	}
-
-	/**
-	 * Map een Exception class naar een error code.
-	 * @param string $exception
-	 * @return int
-	 */
-	private function getCode($exception) {
-		switch ($exception) {
-			case CsrGebruikerException::class:
-				return Response::HTTP_BAD_REQUEST;
-			case NotFoundHttpException::class:
-			case ResourceNotFoundException::class:
-				return Response::HTTP_NOT_FOUND;
-			case AccessDeniedException::class:
-			case CsrToegangException::class:
-				return Response::HTTP_FORBIDDEN;
-			case MethodNotAllowedHttpException::class:
-				return Response::HTTP_METHOD_NOT_ALLOWED;
-			default:
-				return Response::HTTP_INTERNAL_SERVER_ERROR;
 		}
 	}
 }
