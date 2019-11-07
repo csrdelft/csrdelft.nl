@@ -58,7 +58,7 @@
 		<tbody>
 		@foreach($beoordelen as $mid => $maaltijd)
 			<tr>
-				<td>{{strftime("%a %e %b", $maaltijd->datum)}}</td>
+				<td>{{strftime("%a %e %b", strtotime($maaltijd->datum))}}</td>
 				<td>{{$maaltijd->titel}}</td>
 				<td>{{$kwantiteit[$mid]->view()}}</td>
 				<td>{{$kwaliteit[$mid]->view()}}</td>
