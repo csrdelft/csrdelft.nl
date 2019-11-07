@@ -22,4 +22,27 @@ class AbstractController extends BaseController {
 			->getCurrentRequest()
 			->request->filter(DataTable::POST_SELECTION, [], FILTER_SANITIZE_STRING);
 	}
+
+	/**
+	 * Redirect only to external urls if explicitly allowed
+	 * @param string $url
+	 * @param int $status
+	 * @param bool $external
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
+	protected function redirect($url, $status = 302, $allowExternal = false)
+	{
+			if (empty($url) || $url === null) {
+				$url = REQUEST_URI;
+			}
+			if (!startsWith($url, CSR_ROOT) && !$allowExternal) {
+				if (preg_match("/^[?#\/]/", $url) === 1) {
+					$url = CSR_ROOT . $url;
+				} else {
+					$url = CSR_ROOT;
+				}
+			}
+			return parent::redirect($url, $status);
+
+	}
 }
