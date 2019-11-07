@@ -6,10 +6,12 @@ use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\view\formulier\FormElement;
-use CsrDelft\view\SmartyTemplateView;
+use CsrDelft\view\ToResponse;
+use Symfony\Component\HttpFoundation\Response;
 
-class SuggestieLijst extends SmartyTemplateView implements FormElement {
+class SuggestieLijst implements ToResponse, FormElement {
 
+	private $suggesties;
 	private $taak;
 	private $voorkeurbaar;
 	private $voorkeur;
@@ -19,7 +21,7 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 		array $suggesties,
 		CorveeTaak $taak
 	) {
-		parent::__construct($suggesties);
+		$this->suggesties = $suggesties;
 		$this->taak = $taak;
 
 		$crid = $taak->crv_repetitie_id;
@@ -37,16 +39,14 @@ class SuggestieLijst extends SmartyTemplateView implements FormElement {
 	}
 
 	public function getHtml() {
-		$this->smarty->assign('suggesties', $this->model);
-		$this->smarty->assign('jongsteLichting', LichtingenModel::getJongsteLidjaar());
-		$this->smarty->assign('voorkeur', $this->voorkeur);
-		$this->smarty->assign('recent', $this->recent);
-		if (isset($this->voorkeurbaar)) {
-			$this->smarty->assign('voorkeurbaar', $this->voorkeurbaar);
-		}
-		$this->smarty->assign('kwalificatie_benodigd', $this->taak->getCorveeFunctie()->kwalificatie_benodigd);
-
-		return $this->smarty->fetch('maalcie/corveetaak/suggesties_lijst.tpl');
+		return view('maaltijden.corveetaak.suggesties_lijst', [
+			'suggesties' => $this->suggesties,
+			'jongsteLichting' => LichtingenModel::getJongsteLidjaar(),
+			'voorkeur' => $this->voorkeur,
+			'recent' => $this->recent,
+			'voorkeurbaar' => $this->voorkeurbaar,
+			'kwalificatie_benodigd' => $this->taak->getCorveeFunctie()->kwalificatie_benodigd,
+		])->getHtml();
 	}
 
 	public function view() {
@@ -77,4 +77,15 @@ JS;
 		return $js;
 	}
 
+	public function getModel() {
+		return $this->suggesties;
+	}
+
+	public function toResponse(): Response {
+		return new Response($this->getHtml());
+	}
+
+	public function getBreadcrumbs() {
+		return '';
+	}
 }
