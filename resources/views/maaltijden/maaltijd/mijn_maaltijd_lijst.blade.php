@@ -35,7 +35,7 @@
 			</div>
 		@endif
 	</td>
-	@if($aanmelding)
+	@if(!empty($aanmelding))
 		@if($maaltijd->gesloten)
 			<td class="maaltijd-aangemeld">
 				Ja
