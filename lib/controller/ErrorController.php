@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ErrorController {
@@ -65,6 +66,7 @@ class ErrorController {
 			case CsrGebruikerException::class:
 				return Response::HTTP_BAD_REQUEST;
 			case NotFoundHttpException::class:
+			case ResourceNotFoundException::class:
 				return Response::HTTP_NOT_FOUND;
 			case AccessDeniedException::class:
 			case CsrToegangException::class:
