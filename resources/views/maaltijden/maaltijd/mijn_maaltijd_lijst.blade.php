@@ -14,9 +14,9 @@
 						class="maaltijd-id"> (#{{$maaltijd->maaltijd_id}})</span>
 			<div class="float-right">
 				@php($prijs = sprintf("%.2f", $maaltijd->getPrijsFloat()))
-				@if(isset($aanmelding) and $aanmelding->getSaldoStatus() < 0)
+				@if(!empty($aanmelding) && $aanmelding->getSaldoStatus() < 0)
 					@icon("money_delete", null, "U hebt een negatief CiviSaldo!&#013;Maaltijdprijs: &euro; " . $prijs)
-				@elseif(isset($aanmelding) and $aanmelding->getSaldoStatus() < 2)
+				@elseif(!empty($aanmelding) && $aanmelding->getSaldoStatus() < 2)
 					@icon("money_delete", null, "Uw CiviSaldo is te laag!&#013;Maaltijdprijs: &euro; " . $prijs)
 				@elseif($maaltijd->getPrijs() != $standaardprijs)
 					@icon("money", null, "Afwijkende maaltijdprijs: &euro; " . $prijs)
