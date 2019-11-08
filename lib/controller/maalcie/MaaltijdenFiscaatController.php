@@ -12,7 +12,6 @@ use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\datatable\RemoveRowsResponse;
-use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenView;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
@@ -30,8 +29,10 @@ class MaaltijdenFiscaatController {
 	}
 
 	public function GET_overzicht() {
-		$body = new BeheerMaaltijdenView(new FiscaatMaaltijdenOverzichtTable(), 'Overzicht verwerkte maaltijden');
-		return view('default', ['content' => $body]);
+		return view('maaltijden.pagina', [
+			'titel' => 'Overzicht verwerkte maaltijden',
+			'content' => new FiscaatMaaltijdenOverzichtTable(),
+		]);
 	}
 
 	public function POST_overzicht() {
@@ -40,8 +41,10 @@ class MaaltijdenFiscaatController {
 	}
 
 	public function GET_onverwerkt() {
-		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
-		return view('default', ['content' => $body]);
+		return view('maaltijden.pagina', [
+			'titel' => 'Onverwerkte Maaltijden',
+			'content' => new OnverwerkteMaaltijdenTable(),
+		]);
 	}
 
 	public function POST_verwerk() {

@@ -17,7 +17,6 @@ use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenTable;
-use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenView;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\PrullenbakMaaltijdenTable;
 use CsrDelft\view\maalcie\forms\AanmeldingForm;
@@ -40,8 +39,10 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	public function GET_prullenbak() {
-		$body = new BeheerMaaltijdenView(new PrullenbakMaaltijdenTable(), 'Prullenbak maaltijdenbeheer');
-		return view('default', ['content' => $body]);
+		return view('maaltijden.pagina', [
+			'titel' => 'Prullenbak maaltijdenbeheer',
+			'content' => new PrullenbakMaaltijdenTable(),
+		]);
 	}
 
 	public function POST_prullenbak() {
@@ -79,13 +80,18 @@ class BeheerMaaltijdenController extends AbstractController {
 		}
 		/** @var MaaltijdRepetitie[] $repetities */
 		$repetities = MaaltijdRepetitiesModel::instance()->find();
-		$body = new BeheerMaaltijdenView(new BeheerMaaltijdenTable($repetities), 'Maaltijdenbeheer');
-		return view('default', ['content' => $body, 'modal' => $modal]);
+		return view('maaltijden.pagina', [
+			'titel' => 'Maaltijdenbeheer',
+			'content' => new BeheerMaaltijdenTable($repetities),
+			'modal' => $modal,
+		]);
 	}
 
 	public function GET_archief() {
-		$body = new BeheerMaaltijdenView(new ArchiefMaaltijdenTable(), 'Archief maaltijdenbeheer');
-		return view('default', ['content' => $body]);
+		return view('maaltijden.pagina', [
+			'titel' => 'Archief maaltijdenbeheer',
+			'content' => new ArchiefMaaltijdenTable(),
+		]);
 	}
 
 	public function POST_archief() {
@@ -257,7 +263,9 @@ class BeheerMaaltijdenController extends AbstractController {
 	// Maalcie-fiscaat
 
 	public function onverwerkt() {
-		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
-		return view('default', ['content' => $body]);
+		return view('maaltijden.pagina', [
+			'titel' => 'Onverwerkte Maaltijden',
+			'content' => new OnverwerkteMaaltijdenTable(),
+		]);
 	}
 }
