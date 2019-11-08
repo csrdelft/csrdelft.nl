@@ -5,7 +5,6 @@ namespace CsrDelft\model\entity;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\view\bbcode\CsrBB;
-use CsrDelft\view\MailTemplateView;
 
 /**
  * Mail.class.php
@@ -26,7 +25,6 @@ class Mail {
 	private $bcc = array();
 	private $type = 'html'; // plain or html
 	private $charset = 'UTF-8';
-	private $layout = 'letter';
 	private $placeholders = array();
 	private $lightBB = false;
 
@@ -34,14 +32,6 @@ class Mail {
 		$this->onderwerp = $onderwerp;
 		$this->bericht = $bericht;
 		$this->addTo($to);
-	}
-
-	public function getLayout() {
-		return $this->layout;
-	}
-
-	public function setLayout($template) {
-		$this->layout = $template;
 	}
 
 	public function setLightBB($lightBB = true) {
@@ -202,8 +192,7 @@ class Mail {
 	public function send($debug = false) {
 		switch ($this->type) {
 			case 'html':
-				$template = new MailTemplateView($this);
-				$body = $template->getHtml();
+				$body = view('mail.letter', ['body' => $this->getBody()]);
 				break;
 
 			case 'plain':
