@@ -25,7 +25,7 @@
 			&nbsp;
 		</td>
 		<td>
-			{{$body}}
+			{!! $body !!}
 		</td>
 		<td>
 			&nbsp;
