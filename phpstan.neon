@@ -13,6 +13,7 @@ parameters:
         - lib/model
         - lib/common
         - lib/smarty_plugins
+        - lib/controller/groepen/AbstractGroepenController.php
     autoload_files:
         - phpstan.autoload.php
     ignoreErrors:

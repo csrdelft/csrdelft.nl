@@ -33,7 +33,8 @@ class BeheerTakenController extends AbstractController {
 		$modal = null;
 		if (is_numeric($tid) && $tid > 0) {
 			$modal = $this->bewerk($tid);
-		} elseif (is_numeric($mid) && $mid > 0) {
+		}
+		if (is_numeric($mid) && $mid > 0) {
 			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid, true);
 			$taken = $this->model->getTakenVoorMaaltijd($mid, true);
 		} else {
@@ -132,6 +133,7 @@ class BeheerTakenController extends AbstractController {
 	}
 
 	public function nieuw($mid = null) {
+		$beginDatum = null;
 		if ($mid !== null) {
 			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
 			$beginDatum = $maaltijd->datum;

@@ -6,6 +6,8 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\Lichting;
+use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\LichtingenModel;
@@ -24,36 +26,14 @@ class LedenMemoryController {
 		$leden = null;
 		$cheat = isset($_GET['rosebud']);
 		$learnmode = isset($_GET['oefenen']);
-		switch (isset($_GET['verticale'])) {
-
-			case true:
-				$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
-				$verticale = false;
-				if (strlen($v) == 1) {
-					$verticale = VerticalenModel::get($v);
-				}
-				if (!$verticale) {
-					$verticale = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
-				}
-				if ($verticale) {
-					$titel = $verticale->naam . ' verticale ledenmemory' . ($learnmode ? ' (oefenen)' : '');
-					$groep = $verticale;
-					break;
-				}
-			// fall through
-
-			case false:
-				$l = (int)filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
-				$min = LichtingenModel::getOudsteLidjaar();
-				$max = LichtingenModel::getJongsteLidjaar();
-				if ($l < $min OR $l > $max) {
-					$l = $max;
-				}
-				$lichting = LichtingenModel::get($l);
-				if ($lichting) {
-					$titel = $lichting->lidjaar . ' lichting ledenmemory' . ($learnmode ? ' (oefenen)' : '');
-					$groep = $lichting;
-				}
+		$groep = $this->getVerticale() ?? $this->getLichting();
+		if ($groep instanceof Verticale) {
+			$titel = $groep->naam . ' verticale ledenmemory' . ($learnmode ? ' (oefenen)' : '');
+		} else if ($groep instanceof Lichting) {
+			$titel = $groep->lidjaar . ' lichting ledenmemory' . ($learnmode ? ' (oefenen)' : '');
+		}
+		else {
+			throw new CsrGebruikerException("Geen geldige groep");
 		}
 		if ($groep instanceof AbstractGroep) {
 			foreach ($groep->getLeden() as $lid) {
@@ -64,9 +44,7 @@ class LedenMemoryController {
 			}
 		}
 
-		if ($leden == null) {
-			throw new CsrGebruikerException("Geen geldige groep");
-		}
+
 
 		return view('ledenmemory', [
 			'titel' => $titel,
@@ -128,7 +106,7 @@ class LedenMemoryController {
 				'studie' => $profiel->studie,
 			];
 		}, array_filter($profielen, function($profiel) {
-			/** @var $profiel Profiel */
+			/** @var Profiel $profiel */
 			$path = $profiel->getPasfotoInternalPath();
 			return
 				is_zichtbaar($profiel, 'profielfoto', 'intern') &&
@@ -139,5 +117,38 @@ class LedenMemoryController {
 		return view('namenleren', [
 			'leden' => json_encode($leden),
 		]);
+	}
+	/**
+	 * @return AbstractGroep|null
+	 */
+	private function getLichting()
+	{
+		$l = (int)filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
+		$min = LichtingenModel::getOudsteLidjaar();
+		$max = LichtingenModel::getJongsteLidjaar();
+		if ($l < $min OR $l > $max) {
+			$l = $max;
+		}
+		$lichting = LichtingenModel::get($l);
+		return $lichting ? $lichting : null;
+	}
+
+	/**
+	 * @return AbstractGroep|null
+	 */
+	private function getVerticale()
+	{
+		$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
+		if (!$v) {
+			return null;
+		}
+		$verticale = false;
+		if (strlen($v) == 1) {
+			$verticale = VerticalenModel::get($v);
+		}
+		if (!$verticale) {
+			$verticale = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+		}
+		return $verticale ? $verticale : null;
 	}
 }

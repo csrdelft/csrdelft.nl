@@ -75,8 +75,6 @@ class BeheerMaaltijdenController extends AbstractController {
 		$modal = null;
 		if ($mid !== null) {
 			$modal = $this->bewerk($mid);
-		} elseif ($mid === 0) {
-			$modal = $this->nieuw($request);
 		}
 		/** @var MaaltijdRepetitie[] $repetities */
 		$repetities = MaaltijdRepetitiesModel::instance()->find();
