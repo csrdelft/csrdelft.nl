@@ -44,7 +44,7 @@ class KringenController extends AbstractGroepenController {
 				'value' => 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer
 			);
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 
 }

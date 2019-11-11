@@ -277,7 +277,7 @@ abstract class AbstractGroepenController {
 				$groep->rechten_aanmelden = $old->rechten_aanmelden;
 			}
 		}
-		$form = new GroepForm($groep, $this->model->getUrl() . 'aanmaken', AccessAction::Aanmaken); // checks rechten aanmaken
+		$form = new GroepForm($groep, $this->model->getUrl() . '/aanmaken', AccessAction::Aanmaken); // checks rechten aanmaken
 		if ($this->getMethod() == 'GET') {
 			$this->beheren();
 			$form->setDataTableId($this->table->getDataTableId());
@@ -383,7 +383,7 @@ abstract class AbstractGroepenController {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($selection[0]);
-		$form = new GroepOpvolgingForm($groep, $this->model->getUrl() . 'opvolging');
+		$form = new GroepOpvolgingForm($groep, $this->model->getUrl() . '/opvolging');
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$response = [];
@@ -686,6 +686,7 @@ abstract class AbstractGroepenController {
 					if (!$groep->mag(AccessAction::Beheren)) {
 						throw new CsrGebruikerException();
 					}
+					/** @var AbstractGroepLid $lid */
 					$lid = $model->retrieveByUUID($UUID);
 					if ($ot_groep->getLid($lid->uid)) {
 						throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
@@ -694,11 +695,15 @@ abstract class AbstractGroepenController {
 					ChangeLogModel::instance()->log($ot_groep, 'aanmelden', $lid->uid, null);
 					$model->delete($lid);
 					$lid->groep_id = $ot_groep->id;
+					$lid->lid_sinds = getDateTime();
+					$lid->door_uid = LoginModel::getUid();
 					$model->create($lid);
 					$lid->groep_id = $groep->id;
 
 					$response[] = $lid;
 				}
+
+				return $response;
 			});
 			return new RemoveRowsResponse($response);
 		}

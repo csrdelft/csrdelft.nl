@@ -40,8 +40,7 @@ class ZoekController {
 				$bronnen[ucfirst($option)] = '/groepen/' . $option . '/zoeken?q=';
 				/** @var AbstractGroepenController $groepController */
 				$groepController = new $controller('');
-				$groepController->zoeken($zoekterm);
-				$resultaat[ucfirst($option)] = $groepController->getView()->getModel();
+				$resultaat[ucfirst($option)] = $groepController->zoeken($zoekterm)->getModel();
 			}
 		}
 
