@@ -26,7 +26,7 @@
 	<div class="container-fluid p-3 p-md-5">
 		<div class="row">
 			<div class="col-12 col-md-auto">
-				<img src="/dist/images/beeldmerk.png" width="80" class="d-block mb-2"/>
+				<img src="/dist/images/beeldmerk.png" width="80" class="d-block mb-2" alt="C.S.R. Logo"/>
 				<small class="d-block mb-3 text-muted">© 2006-2019</small>
 			</div>
 			@php($menu = \CsrDelft\model\MenuModel::instance()->getMenu('main'))
