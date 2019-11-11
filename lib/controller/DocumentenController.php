@@ -155,7 +155,7 @@ class DocumentenController extends AbstractController {
 
 			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
 
-			return $this->redirectToRoute('documenten-categorie', ['id', $document->categorie_id]);
+			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie_id]);
 		} else {
 			return view('default', [
 				'titel' => 'Document toevoegen',
