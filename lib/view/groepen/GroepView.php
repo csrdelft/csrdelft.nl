@@ -95,7 +95,7 @@ class GroepView implements FormElement, ToResponse {
 		$html .= '</h3>';
 		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {
-			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post noanim" href="' . $this->groep->getUrl() . 'omschrijving">Meer lezen »</a>';
+			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post noanim" href="' . $this->groep->getUrl() . '/omschrijving">Meer lezen »</a>';
 		}
 		$html .= '</div>';
 		$html .= $this->leden->getHtml();

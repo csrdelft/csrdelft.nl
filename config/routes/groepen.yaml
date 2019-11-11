@@ -2,6 +2,7 @@ groep-overzicht:
   path: /groepen
   controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
   defaults:
+    _mag: P_LOGGED_IN
     route: groep-commissies-overzicht
 
 groep-activiteiten:

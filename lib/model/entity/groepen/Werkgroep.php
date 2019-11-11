@@ -24,7 +24,7 @@ class Werkgroep extends Ketzer {
 	protected static $table_name = 'werkgroepen';
 
 	public function getUrl() {
-		return '/groepen/werkgroepen/' . $this->id . '/';
+		return '/groepen/werkgroepen/' . $this->id;
 	}
 
 	/**

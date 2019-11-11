@@ -74,13 +74,13 @@ abstract class AbstractGroepenController {
 		$className = get_class($this);
 
 		$route = function ($path, $func, $methods, $defaults = [], $requirements = []) use ($routes, $prefix, $className) {
+			$defaults['_mag'] = P_LOGGED_IN;
 			$defaults['_controller'] = $className . '::' . $func;
 			$routes->add(
 				$prefix . '-' . $func,
 				(new Route($path))
 					->setDefaults($defaults)
 					->setRequirements($requirements)
-					->setOptions(['mag' => P_LOGGED_IN])
 					->setMethods($methods)
 			);
 		};
@@ -109,11 +109,11 @@ abstract class AbstractGroepenController {
 		$route('/opvolging', 'opvolging', ['POST']);
 		$route('/converteren', 'converteren', ['POST']);
 		$route('/sluiten', 'sluiten', ['POST']);
-		$route('/voorbeeld', 'voorbeeld', ['POST']);
+		$route('/{id}/voorbeeld', 'voorbeeld', ['POST']);
 		$route('/zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
 		$route('/{id}', 'bekijken', ['GET']);
 
-		$routes->addPrefix('/groepen/' . static::NAAM);
+		$routes->addPrefix('/groepen/' . $this->model::getNaam());
 		return $routes;
 	}
 
@@ -322,7 +322,7 @@ abstract class AbstractGroepenController {
 			if (!$groep->mag(AccessAction::Wijzigen)) {
 				throw new CsrToegangException();
 			}
-			$form = new GroepForm($groep, $groep->getUrl() . 'wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
+			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($this->getMethod() == 'GET') {
 				$this->beheren();
 				$this->table->filter = $groep->naam;
@@ -346,7 +346,7 @@ abstract class AbstractGroepenController {
 			if (!$groep OR !$groep->mag(AccessAction::Wijzigen)) {
 				throw new CsrToegangException();
 			}
-			$form = new GroepForm($groep, $groep->getUrl() . 'wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
+			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$this->model->update($groep);
@@ -464,13 +464,9 @@ abstract class AbstractGroepenController {
 		return new GroepenBeheerData($response);
 	}
 
-	public function voorbeeld() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (empty($selection)) {
-			throw new CsrToegangException();
-		}
+	public function voorbeeld($id) {
 		/** @var AbstractGroep $groep */
-		$groep = $this->model->retrieveByUUID($selection[0]);
+		$groep = $this->model->retrieveByUUID($id);
 		if (!$groep OR !$groep->mag(AccessAction::Bekijken)) {
 			throw new CsrToegangException();
 		}
@@ -562,7 +558,7 @@ abstract class AbstractGroepenController {
 			}
 			$lid = $model->nieuw($groep, null);
 			$leden = group_by_distinct('uid', $groep->getLeden());
-			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . 'aanmelden', array_keys($leden));
+			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
 			if ($form->validate()) {
 				ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
 				$model->create($lid);
@@ -605,7 +601,7 @@ abstract class AbstractGroepenController {
 			if (!$groep->mag(AccessAction::Beheren)) {
 				throw new CsrToegangException();
 			}
-			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . 'bewerken');
+			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken');
 			if ($form->validate()) {
 				ChangeLogModel::instance()->logChanges($form->diff());
 				$model->update($lid);

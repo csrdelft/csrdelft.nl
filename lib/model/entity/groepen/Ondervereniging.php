@@ -35,7 +35,7 @@ class Ondervereniging extends AbstractGroep {
 	protected static $table_name = 'onderverenigingen';
 
 	public function getUrl() {
-		return '/groepen/onderverenigingen/' . $this->id . '/';
+		return '/groepen/onderverenigingen/' . $this->id;
 	}
 
 }
