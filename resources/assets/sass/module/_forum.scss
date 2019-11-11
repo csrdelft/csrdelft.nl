@@ -26,8 +26,6 @@
 }
 
 .forum-header, .forum-footer {
-	//max-width: 800px;
-
 	.form-group {
 		margin-bottom: 0;
 	}
@@ -71,8 +69,6 @@
 .forum-draad, .forum-zoeken {
 	display: flex;
 	flex-direction: column;
-
-	//max-width: 800px;
 
 	.tussenschot {
 		height: 2px;
@@ -212,7 +208,6 @@ span.curpage {
 /* Forum deel */
 .forum-deel {
 	display: grid;
-	//max-width: 800px;
 	width: 100%;
 	// CSS grid ondersteund niet echt gekleurde rows.
 	// Dit is second-best. Er zijn 3 divs per row,
@@ -320,10 +315,6 @@ span.curpage {
 			color: white;
 		}
 	}
-}
-
-.rss-link {
-	//max-width: 800px;
 }
 
 /**************************** GRAFIEK *******************************/
