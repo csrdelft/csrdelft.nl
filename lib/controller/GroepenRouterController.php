@@ -28,7 +28,7 @@ use CsrDelft\model\security\LoginModel;
 class GroepenRouterController extends Controller {
 
 	/**
-	 * @var AbstractGroepenController[]
+	 * @var array<string, string>
 	 */
 	protected static $groepSoorten = [
 		'activiteiten' => ActiviteitenController::class,

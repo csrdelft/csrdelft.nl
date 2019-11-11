@@ -29,7 +29,7 @@ class AbstractController extends BaseController {
 	 * Redirect only to external urls if explicitly allowed
 	 * @param string $url
 	 * @param int $status
-	 * @param bool $external
+	 * @param bool $allowExternal
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
 	protected function redirect($url, $status = 302, $allowExternal = false)
