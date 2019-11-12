@@ -91,7 +91,7 @@ trait OrmTrait {
 	}
 
 	/**
-	 * De find methode wordt ook gebruikt door Symfony. Hier wordt deze overriden, houdt hier rekening mee.
+	 * De oude find methode uit csrdelft/orm
 	 *
 	 * @param null $criteria
 	 * @param array $criteria_params
@@ -101,7 +101,7 @@ trait OrmTrait {
 	 * @param int $start
 	 * @return array
 	 */
-	public function find(
+	public function ormFind(
 		$criteria = null,
 		$criteria_params = [],
 		$group_by = null,

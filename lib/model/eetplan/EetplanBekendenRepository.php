@@ -27,15 +27,15 @@ class EetplanBekendenRepository extends ServiceEntityRepository {
 	 * @return EetplanBekenden[]
 	 */
 	public function getBekenden($lichting) {
-		return $this->find('uid1 LIKE ?', array($lichting . "%"));
+		return $this->ormFind('uid1 LIKE ?', [$lichting . "%"]);
 	}
 
 	/**
-	 * @param PersistentEntity|EetplanBekenden $entity
+	 * @param EetplanBekenden|object $entity
 	 *
 	 * @return bool
 	 */
-	public function exists(PersistentEntity $entity) {
+	public function exists($entity) {
 		if ($this->ormExists($entity)) {
 			return true;
 		}
