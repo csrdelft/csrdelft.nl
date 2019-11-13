@@ -44,7 +44,7 @@ HTML;
 		$url = $this->content;
 		$arguments = $this->arguments;
 		$url = filter_var($url, FILTER_SANITIZE_URL);
-		if (!$url || (!url_like($url) && !startsWith($url, '/plaetjes/'))) {
+		if (!$url || (!url_like($url) && !startsWith($url, '/plaetjes/') && !startsWith($url, '/plaatjes/'))) {
 			return $url;
 		}
 

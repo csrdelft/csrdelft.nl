@@ -40,6 +40,7 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
 @define('PHOTOALBUM_PATH', DATA_PATH . 'foto/fotoalbum/');
 @define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
+@define('PLAATJES_PATH', DATA_PATH . 'plaatjes/');
 @define('ROUTES_CACHE_PATH', DATA_PATH . 'routes/');
 @define('CONFIG_CACHE_PATH', DATA_PATH . 'config_cache/');
 @define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');

@@ -65,6 +65,8 @@ export function domUpdate(this: HTMLElement | void, htmlString: string|object) {
 			}
 		} else if (targetParent.length === 1) {
 			targetParent.append($element.show());
+		} else if (element instanceof HTMLScriptElement) {
+			$('head').append($element);
 		} else {
 			const parentid = $(this).attr('parentid');
 			if (parentid) {

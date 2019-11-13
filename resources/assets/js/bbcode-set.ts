@@ -1,3 +1,7 @@
+import axios from 'axios';
+import {domUpdate} from './context';
+import {modalOpen} from './modal';
+
 // ----------------------------------------------------------------------------
 // markItUp!
 // ----------------------------------------------------------------------------
@@ -72,7 +76,17 @@ export const bbCodeSet = {
 				return markitup.selection;
 			},
 		},
-		{className: 'ico picture', name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'},
+		{
+			className: 'ico picture', name: 'Plaatje',
+			closeWith: (markitup: any) => {
+				axios.get('/plaatjes/upload').then((response) => {
+					domUpdate(response.data);
+				});
+				return '';
+			},
+		},
+		// Hide this (maybe temporarily) to encourage uploading images to de stek
+		/*{className: 'ico picture', name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'},*/
 		{className: 'ico film', name: 'Video', replaceWith: '[video][![Url]!][/video]'},
 		{separator: '|'},
 		{className: 'ico map', name: 'Kaart', openWith: '[locatie]', closeWith: '[/locatie]', placeHolder: 'C.S.R. Delft'},

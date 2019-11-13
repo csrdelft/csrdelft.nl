@@ -220,3 +220,7 @@ export function formCancel(event: Event) {
 	}
 	return true;
 }
+
+(window as any).insertPlaatje = (id: string) => {
+	$.markItUp({ replaceWith: '[plaatje]' + id + '[/plaatje]' });
+};
