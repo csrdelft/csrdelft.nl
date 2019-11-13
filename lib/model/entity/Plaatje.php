@@ -17,7 +17,7 @@ class Plaatje
 	 */
 	public function __construct($uid)
 	{
-		if (!Plaatje::isValidId($uid)) {
+		if (!static::isValidId($uid)) {
 			throw new CsrException("Wrong uid for plaatje: ".$uid);
 		}
 		$this->uid = $uid;
