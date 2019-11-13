@@ -19,7 +19,7 @@ class PlaatjesController {
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
 			$plaatje = Plaatje::create($form->uploader);
-			return view('forum/insert_plaatje', ['plaatje' => $plaatje]);
+			return view('forum.insert_plaatje', ['plaatje' => $plaatje]);
 		} else {
 			return $form;
 		}
