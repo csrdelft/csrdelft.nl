@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\model\entity\eetplan\EetplanBekenden;
+use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\view\datatable\DataTableColumn;
 use CsrDelft\view\datatable\DataTableResponse;
 

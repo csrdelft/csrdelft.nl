@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity\eetplan;
+namespace CsrDelft\entity\eetplan;
 
 use CsrDelft\model\ProfielModel;
 use Doctrine\ORM\Mapping as ORM;
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class EetplanBekenden
  * @package CsrDelft\model\entity\eetplan
- * @ORM\Entity(repositoryClass="CsrDelft\model\eetplan\EetplanBekendenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\eetplan\EetplanBekendenRepository")
  */
 class EetplanBekenden {
 	/**

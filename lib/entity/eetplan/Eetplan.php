@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity\eetplan;
+namespace CsrDelft\entity\eetplan;
 
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\entity\profiel\Profiel;
@@ -9,7 +9,7 @@ use CsrDelft\model\ProfielModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="CsrDelft\model\eetplan\EetplanRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\eetplan\EetplanRepository")
  */
 class Eetplan {
 	/**

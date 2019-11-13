@@ -1,8 +1,9 @@
 <?php
 
-namespace CsrDelft\model\eetplan;
+namespace CsrDelft\repository\eetplan;
 
-use CsrDelft\model\entity\eetplan\Eetplan;
+use CsrDelft\entity\eetplan\Eetplan;
+use CsrDelft\model\eetplan\EetplanFactory;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\ProfielModel;

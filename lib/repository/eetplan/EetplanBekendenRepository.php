@@ -1,10 +1,9 @@
 <?php
 
-namespace CsrDelft\model\eetplan;
+namespace CsrDelft\repository\eetplan;
 
-use CsrDelft\model\entity\eetplan\EetplanBekenden;
+use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\model\OrmTrait;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
