@@ -423,5 +423,5 @@ function commitHash($full = false) {
 }
 
 function commitLink() {
-	return 'https://github.com/csrdelft/productie/commits/' . commitHash(true);
+	return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
 }
