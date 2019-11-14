@@ -266,7 +266,7 @@ class ProfielController extends AbstractController {
 			return $this->redirect('/images/geen-foto.jpg');
 		}
 		$image = new Afbeelding($path);
-		return new BinaryFileResponse($image->getFullPath());
+		return new BinaryFileResponse($image->getFullPath(), 200, [], false);
 	}
 
 	public function vcard($uid) {

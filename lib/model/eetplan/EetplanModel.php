@@ -116,7 +116,7 @@ class EetplanModel extends PersistenceModel {
 	/**
 	 * @param string $uid Uid van de feut
 	 *
-	 * @return Eetplan[] lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
+	 * @return Eetplan[]|false lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
 	 */
 	public function getEetplanVoorNoviet($uid) {
 		return $this->find('uid = ? AND avond <> "0000-00-00"', array($uid), null, 'avond')->fetchAll();
