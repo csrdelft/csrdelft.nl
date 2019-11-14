@@ -155,8 +155,6 @@ export const fnAjaxUpdateCallback = ($table: JQuery) => (json: DatatableResponse
 };
 
 export function replacePlaceholders(action: string, row: object) {
-	console.log(action, row);
-
 	const replacements = /:(\w+)/g.exec(action)!;
 	if (!replacements) { return action; }
 

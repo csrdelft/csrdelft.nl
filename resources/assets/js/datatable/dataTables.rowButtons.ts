@@ -27,7 +27,6 @@ class RowButtons {
 	title="${btn.title}">
 		<i class="${btn.icon}"></i>
 </a>`;
-			// newButton.addEventListener('click', knopPost);
 			btnGroup.append(newButton);
 		}
 		btnGroup.style.marginTop = '-10px';
