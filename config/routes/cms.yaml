@@ -16,4 +16,5 @@ cms-bewerken:
 cms-verwijderen:
   path: /pagina/verwijderen/{naam}
   controller: CsrDelft\controller\CmsPaginaController::verwijderen
+  methods: POST
   defaults: { _mag: P_ADMIN }
