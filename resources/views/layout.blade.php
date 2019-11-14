@@ -24,7 +24,7 @@
 	@endforeach
 	@if(!DEBUG) @can(P_ADMIN)
 		<div class="commit-hash">
-			<a href="https://github.com/csrdelft/productie/{{ commitHash(true) }}" target="_blank" class="not-external">{{ commitHash() }}</a>
+			<a href="{{ commitLink() }}" target="_blank" class="not-external">{{ commitHash() }}</a>
 		</div>
 	@endcan @endif
 </nav>

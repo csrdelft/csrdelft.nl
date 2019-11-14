@@ -126,6 +126,7 @@ final class ShutdownHandler {
 			$errorName = errorName($errno);
 			$moment = date('r');
 			$commit = commitHash();
+			$commitLink = commitLink();
 
 			$foutmelding->setText(<<<MD
 *Foutmelding*
@@ -136,9 +137,9 @@ final class ShutdownHandler {
 • Regel `{$errline}`
 • Url `{$_SERVER['REQUEST_URI']}`
 • Method `{$_SERVER['REQUEST_METHOD']}`
-• Veroorzaakt door `{$_SESSION['_uid']}`
+• Veroorzaakt door <https://csrdelft.nl/profiel/{$_SESSION['_uid']}|`{$_SESSION['_uid']}`>
 • Browser `{$_SERVER['HTTP_USER_AGENT']}`
-• Commit `$commit`
+• Commit <$commitLink|`$commit`>
 MD
 			);
 

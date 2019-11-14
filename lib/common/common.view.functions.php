@@ -421,3 +421,7 @@ function commitHash($full = false) {
 		return `git rev-parse --short HEAD`;
 	}
 }
+
+function commitLink() {
+	return 'https://github.com/csrdelft/productie/commits/' . commitHash(true);
+}
