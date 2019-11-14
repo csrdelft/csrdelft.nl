@@ -21,7 +21,7 @@ class KetzersController extends AbstractGroepenController {
 		parent::__construct(KetzersModel::instance());
 	}
 
-	public function nieuw(Request $request, $soort = null) {
+	public function nieuw(Request $request, $id = null, $soort = null) {
 		$form = new GroepAanmakenForm($this->model, $soort);
 		if ($request->getMethod() == 'GET') {
 			$this->beheren($request);

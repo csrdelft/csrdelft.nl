@@ -72,48 +72,50 @@ abstract class AbstractGroepenController {
 
 		$className = get_class($this);
 
-		$route = function ($path, $func, $methods, $defaults = [], $requirements = []) use ($routes, $prefix, $className) {
-			$defaults['_mag'] = P_LOGGED_IN;
-			$defaults['_controller'] = $className . '::' . $func;
+		$route = function ($path, $func, $methods, $defaults = [], $requirements = [], $overrideName = null) use ($routes, $prefix, $className) {
 			$routes->add(
-				$prefix . '-' . $func,
+				$prefix . '-' . ($overrideName ?? $func),
 				(new Route($path))
-					->setDefaults($defaults)
+					->setDefaults($defaults + [
+						'_mag' => P_LOGGED_IN,
+						'_controller' => $className . '::' . $func,
+					])
 					->setRequirements($requirements)
 					->setMethods($methods)
 			);
 		};
 
-		$route('/', 'overzicht', ['GET']);
-		$route('/beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
-		$route('/overzicht/{soort}', 'overzicht', ['GET']);
-		$route('/verwijderen', 'verwijderen', ['POST']);
-		$route('/zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
-		$route('/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
-		$route('/{id}/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
-		$route('/{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
-		$route('/{id}/omschrijving', 'omschrijving', ['POST']);
-		$route('/{id}/pasfotos', 'pasfotos', ['POST']);
-		$route('/{id}/lijst', 'lijst', ['POST']);
-		$route('/{id}/stats', 'stats', ['POST']);
-		$route('/{id}/emails', 'emails', ['POST']);
-		$route('/{id}/eetwens', 'eetwens', ['POST']);
-		$route('/{id}/aanmelden/{uid}', 'aanmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
-		$route('/{id}/aanmelden2/{uid}', 'aanmelden2', ['POST'], [], ['uid' => '.{4}']);
-		$route('/{id}/naar_ot/{uid}', 'naar_ot', ['POST'], ['uid' => null], ['uid' => '.{4}']);
-		$route('/{id}/bewerken/{uid}', 'bewerken', ['POST'], ['uid' => null], ['uid' => '.{4}']);
-		$route('/{id}/afmelden/{uid}', 'afmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
-		$route('/{id}/leden', 'leden', ['GET', 'POST']);
-		$route('/{id}/wijzigen', 'wijzigen', ['GET', 'POST'], ['id' => null]);
-		$route('/{id}/logboek', 'logboek', ['GET', 'POST'], ['id' => null]);
-		$route('/{id}/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null]);
-		$route('/{id}/opvolging', 'opvolging', ['POST']);
-		$route('/{id}/converteren', 'converteren', ['POST']);
-		$route('/{id}/sluiten', 'sluiten', ['POST']);
-		$route('/{id}/voorbeeld', 'voorbeeld', ['POST']);
-		$route('/{id}', 'bekijken', ['GET']);
+		// Let op, als je meerdere routes naar dezelfde functie hebt, gebruik dan overrideName om de naam van de route goed te zetten.
+		$route('', 'overzicht', ['GET'], [], [], 'main');
+		$route('beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
+		$route('overzicht/{soort}', 'overzicht', ['GET']);
+		$route('verwijderen', 'verwijderen', ['POST']);
+		$route('zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
+		$route('nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
+		$route('{id}/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null], [], 'nieuw-met-id');
+		$route('{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
+		$route('{id}/omschrijving', 'omschrijving', ['POST']);
+		$route('{id}/pasfotos', 'pasfotos', ['POST']);
+		$route('{id}/lijst', 'lijst', ['POST']);
+		$route('{id}/stats', 'stats', ['POST']);
+		$route('{id}/emails', 'emails', ['POST']);
+		$route('{id}/eetwens', 'eetwens', ['POST']);
+		$route('{id}/aanmelden/{uid}', 'aanmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route('{id}/aanmelden2/{uid}', 'aanmelden2', ['POST'], [], ['uid' => '.{4}']);
+		$route('{id}/naar_ot/{uid}', 'naar_ot', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route('{id}/bewerken/{uid}', 'bewerken', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route('{id}/afmelden/{uid}', 'afmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route('{id}/leden', 'leden', ['GET', 'POST']);
+		$route('{id}/wijzigen', 'wijzigen', ['GET', 'POST'], ['id' => null]);
+		$route('{id}/logboek', 'logboek', ['GET', 'POST'], ['id' => null]);
+		$route('{id}/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null]);
+		$route('{id}/opvolging', 'opvolging', ['POST']);
+		$route('{id}/converteren', 'converteren', ['POST']);
+		$route('{id}/sluiten', 'sluiten', ['POST']);
+		$route('{id}/voorbeeld', 'voorbeeld', ['POST']);
+		$route('{id}', 'bekijken', ['GET']);
 
-		$routes->addPrefix('/groepen/' . $this->model::getNaam());
+		$routes->addPrefix('groepen/' . $this->model::getNaam());
 		return $routes;
 	}
 
