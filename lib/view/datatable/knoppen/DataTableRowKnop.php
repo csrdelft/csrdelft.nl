@@ -13,11 +13,13 @@ class DataTableRowKnop implements \JsonSerializable {
 	private $icon;
 	private $action;
 	private $css;
+	private $method;
 
-	public function __construct($action, $title, $icon, $css = '') {
+	public function __construct($action, $title, $icon, $css = '', $method = 'post') {
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->action = $action;
+		$this->method = $method;
 		$this->css = $css;
 	}
 
@@ -27,6 +29,7 @@ class DataTableRowKnop implements \JsonSerializable {
 			'title' => $this->title,
 			'icon' => 'ico ' . Icon::get($this->icon),
 			'css' => $this->css,
+			'method' => $this->method,
 		];
 	}
 }

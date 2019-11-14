@@ -131,9 +131,9 @@ export function knopPost(this: HTMLElement, event: Event) {
 	return false;
 }
 
-function knopGet(event: Event) {
+function knopGet(this: HTMLElement, event: Event) {
 	event.preventDefault();
-	knopAjax($(event.target as HTMLElement), 'GET');
+	knopAjax($(this), 'GET');
 	return false;
 }
 

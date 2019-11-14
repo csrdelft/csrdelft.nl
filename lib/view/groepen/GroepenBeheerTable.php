@@ -69,7 +69,7 @@ class GroepenBeheerTable extends DataTable {
 
 		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/verwijderen', 'Definitief verwijderen (groep moet hier voor leeg zijn)', 'delete', 'confirm'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/logboek', 'Logboek bekijken', 'log'));
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/logboek', 'Logboek bekijken', 'log', '', 'get'));
 	}
 
 	public function getBreadcrumbs() {
