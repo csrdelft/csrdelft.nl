@@ -85,7 +85,12 @@ abstract class AbstractGroepenController {
 		};
 
 		$route('/', 'overzicht', ['GET']);
+		$route('/beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
 		$route('/overzicht/{soort}', 'overzicht', ['GET']);
+		$route('/verwijderen', 'verwijderen', ['POST']);
+		$route('/zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
+		$route('/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
+		$route('/{id}/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
 		$route('/{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
 		$route('/{id}/omschrijving', 'omschrijving', ['POST']);
 		$route('/{id}/pasfotos', 'pasfotos', ['POST']);
@@ -98,19 +103,14 @@ abstract class AbstractGroepenController {
 		$route('/{id}/naar_ot/{uid}', 'naar_ot', ['POST'], ['uid' => null], ['uid' => '.{4}']);
 		$route('/{id}/bewerken/{uid}', 'bewerken', ['POST'], ['uid' => null], ['uid' => '.{4}']);
 		$route('/{id}/afmelden/{uid}', 'afmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
-		$route('/zoeken', 'zoeken', ['GET']);
 		$route('/{id}/leden', 'leden', ['GET', 'POST']);
-		$route('/beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
 		$route('/{id}/wijzigen', 'wijzigen', ['GET', 'POST'], ['id' => null]);
 		$route('/{id}/logboek', 'logboek', ['GET', 'POST'], ['id' => null]);
-		$route('/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
 		$route('/{id}/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null]);
-		$route('/verwijderen', 'verwijderen', ['POST']);
 		$route('/{id}/opvolging', 'opvolging', ['POST']);
 		$route('/{id}/converteren', 'converteren', ['POST']);
 		$route('/{id}/sluiten', 'sluiten', ['POST']);
 		$route('/{id}/voorbeeld', 'voorbeeld', ['POST']);
-		$route('/zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
 		$route('/{id}', 'bekijken', ['GET']);
 
 		$routes->addPrefix('/groepen/' . $this->model::getNaam());
@@ -222,13 +222,12 @@ abstract class AbstractGroepenController {
 		return new JsonResponse($result);
 	}
 
-	public function nieuw(Request $request, $id, $soort = null) {
+	public function nieuw(Request $request, $id = null, $soort = null) {
 		return $this->aanmaken($request, $id, $soort);
 	}
 
-	public function aanmaken(Request $request, $id, $soort = null) {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (empty($selection)) {
+	public function aanmaken(Request $request, $id = null, $soort = null) {
+		if (empty($id)) {
 			$old = null;
 			$groep = $this->model->nieuw($soort);
 			/**
@@ -257,7 +256,7 @@ abstract class AbstractGroepenController {
 		} // opvolger
 		else {
 			/** @var AbstractGroep $old */
-			$old = $this->model->retrieveByUUID($selection[0]);
+			$old = $this->model->retrieveByUUID($id);
 			if (!$old) {
 				throw new CsrToegangException();
 			}
