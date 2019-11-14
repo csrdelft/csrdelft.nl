@@ -125,6 +125,7 @@ final class ShutdownHandler {
 
 			$errorName = errorName($errno);
 			$moment = date('r');
+			$commit = commitHash();
 
 			$foutmelding->setText(<<<MD
 *Foutmelding*
@@ -137,6 +138,7 @@ final class ShutdownHandler {
 • Method `{$_SERVER['REQUEST_METHOD']}`
 • Veroorzaakt door `{$_SESSION['_uid']}`
 • Browser `{$_SERVER['HTTP_USER_AGENT']}`
+• Commit `$commit`
 MD
 			);
 

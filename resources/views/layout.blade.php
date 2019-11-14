@@ -22,6 +22,11 @@
 	@foreach($zijbalk as $block)
 		<div class="blok">@php($block->view())</div>
 	@endforeach
+	@if(!DEBUG) @can(P_ADMIN)
+		<div class="commit-hash">
+			<a href="https://github.com/csrdelft/productie/{{ commitHash(true) }}" target="_blank" class="not-external">{{ commitHash() }}</a>
+		</div>
+	@endcan @endif
 </nav>
 @php(view('menu.main', [
   'root' => \CsrDelft\model\MenuModel::instance()->getMenu('main'),
