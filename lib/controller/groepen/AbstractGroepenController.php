@@ -85,6 +85,7 @@ abstract class AbstractGroepenController {
 		};
 
 		$route('/', 'overzicht', ['GET']);
+		$route('/overzicht/{soort}', 'overzicht', ['GET']);
 		$route('/{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
 		$route('/{id}/omschrijving', 'omschrijving', ['POST']);
 		$route('/{id}/pasfotos', 'pasfotos', ['POST']);
