@@ -22,7 +22,7 @@ account-bewerken:
 account-verwijderen:
   path: /account/{uid}/verwijderen
   controller: CsrDelft\controller\AccountController::verwijderen
-  methods: [GET,POST]
+  methods: [POST]
   requirements: { uid: '.{4}' }
   defaults: { _mag: P_LOGGED_IN }
 
