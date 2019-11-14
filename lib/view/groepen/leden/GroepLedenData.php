@@ -10,7 +10,7 @@ class GroepLedenData extends DataTableResponse {
 	public function renderElement($lid) {
 		$array = $lid->jsonSerialize();
 
-		$array['uid'] = ProfielModel::getLink($array['uid'], 'civitas');
+		$array['lid'] = ProfielModel::getLink($array['uid'], 'civitas');
 		$array['door_uid'] = ProfielModel::getLink($array['door_uid'], 'civitas');
 
 		return $array;

@@ -68,8 +68,7 @@ $('#groep-leden-content-{$this->groep->id} a.lidLink').contextMenu({
 	menuSelected: function (invokedOn, selectedMenu) {
 		var a = $(invokedOn).closest('a.lidLink');
 		if (confirm('Weet u zeker dat u ' + a.attr('title') + ' uit de ketzer wilt halen?')) {
-			var url = a.attr('href').replace('/profiel/', 'afmelden/');
-			$.post('{$this->groep->getUrl()}' + url, {}, window.context.domUpdate);
+			$.post('{$this->groep->getUrl()}' + '/ketzer/afmelden', {}, window.context.domUpdate);
 		}
 	}
 });

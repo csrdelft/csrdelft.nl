@@ -77,9 +77,9 @@ abstract class AbstractGroepenController {
 				$prefix . '-' . ($overrideName ?? $func),
 				(new Route($path))
 					->setDefaults($defaults + [
-						'_mag' => P_LOGGED_IN,
-						'_controller' => $className . '::' . $func,
-					])
+							'_mag' => P_LOGGED_IN,
+							'_controller' => $className . '::' . $func,
+						])
 					->setRequirements($requirements)
 					->setMethods($methods)
 			);
@@ -89,9 +89,12 @@ abstract class AbstractGroepenController {
 		$route('', 'overzicht', ['GET'], [], [], 'main');
 		$route('beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
 		$route('overzicht/{soort}', 'overzicht', ['GET']);
-		$route('verwijderen', 'verwijderen', ['POST']);
+		$route('{id}/verwijderen', 'verwijderen', ['POST']);
 		$route('zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
 		$route('nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
+		$route('{id}/ketzer/afmelden', 'ketzer_afmelden', ['POST']);
+		$route('{id}/ketzer/aanmelden', 'ketzer_aanmelden', ['POST']);
+		$route('{id}/ketzer/bewerken', 'ketzer_bewerken', ['POST']);
 		$route('{id}/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null], [], 'nieuw-met-id');
 		$route('{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
 		$route('{id}/omschrijving', 'omschrijving', ['POST']);
@@ -100,11 +103,11 @@ abstract class AbstractGroepenController {
 		$route('{id}/stats', 'stats', ['POST']);
 		$route('{id}/emails', 'emails', ['POST']);
 		$route('{id}/eetwens', 'eetwens', ['POST']);
-		$route('{id}/aanmelden/{uid}', 'aanmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route('{id}/aanmelden', 'aanmelden', ['POST'], [], ['uid' => '.{4}']);
 		$route('{id}/aanmelden2/{uid}', 'aanmelden2', ['POST'], [], ['uid' => '.{4}']);
 		$route('{id}/naar_ot/{uid}', 'naar_ot', ['POST'], ['uid' => null], ['uid' => '.{4}']);
 		$route('{id}/bewerken/{uid}', 'bewerken', ['POST'], ['uid' => null], ['uid' => '.{4}']);
-		$route('{id}/afmelden/{uid}', 'afmelden', ['POST'], ['uid' => null], ['uid' => '.{4}']);
+		$route('{id}/afmelden/{uid}', 'afmelden', ['POST'], [], ['uid' => '.{4}']);
 		$route('{id}/leden', 'leden', ['GET', 'POST']);
 		$route('{id}/wijzigen', 'wijzigen', ['GET', 'POST'], ['id' => null]);
 		$route('{id}/logboek', 'logboek', ['GET', 'POST'], ['id' => null]);
@@ -354,21 +357,11 @@ abstract class AbstractGroepenController {
 		}
 	}
 
-	public function verwijderen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+	public function verwijderen($id) {
 		$response = [];
-		foreach ($selection as $UUID) {
-			/** @var AbstractGroep $groep */
-			$groep = $this->model->retrieveByUUID($UUID);
-			if (!$groep OR !$groep->mag(AccessAction::Verwijderen)) {
-				continue;
-			}
-
-			if (count($groep->getLeden()) !== 0) {
-				// TODO: Laat gebruiker weten dat de groep niet is verwijderd omdat er nog leden in zitten.
-				continue;
-			}
-
+		/** @var AbstractGroep $groep */
+		$groep = $this->model->retrieveByUUID($id);
+		if ($groep && $groep->mag(AccessAction::Verwijderen) && count($groep->getLeden()) === 0) {
 			ChangeLogModel::instance()->log($groep, 'delete', print_r($groep, true), null);
 			$this->model->delete($groep);
 			$response[] = $groep;
@@ -524,112 +517,130 @@ abstract class AbstractGroepenController {
 		return new JsonResponse(['success' => true]);
 	}
 
-	public function aanmelden($id, $uid = null) {
+	public function ketzer_aanmelden($id) {
+		$uid = LoginModel::getUid();
 		$groep = $this->model::get($id);
 		$model = $groep::getLedenModel();
-		if ($uid) {
-			if (!$groep->mag(AccessAction::Aanmelden)) {
-				throw new CsrToegangException();
-			}
-			$lid = $model->nieuw($groep, $uid);
-			$form = new GroepAanmeldenForm($lid, $groep);
-			if ($form->validate()) {
-				ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
-				$model->create($lid);
-				return new GroepPasfotosView($groep);
-			} else {
-				return $form;
-			}
-		} // beheren
-		else {
-			if (!$groep->mag(AccessAction::Beheren)) {
-				throw new CsrToegangException();
-			}
-			$lid = $model->nieuw($groep, null);
-			$leden = group_by_distinct('uid', $groep->getLeden());
-			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
-			if ($form->validate()) {
-				ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
-				$model->create($lid);
-				return new GroepLedenData([$lid]);
-			} else {
-				return $form;
-			}
+
+		if (!$groep->mag(AccessAction::Aanmelden)) {
+			throw new CsrToegangException();
 		}
+
+		$lid = $model->nieuw($groep, $uid);
+		$form = new GroepAanmeldenForm($lid, $groep);
+
+		if ($form->validate()) {
+			ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
+			$model->create($lid);
+			return new GroepPasfotosView($groep);
+		} else {
+			return $form;
+		}
+	}
+
+	public function aanmelden($id) {
+		$groep = $this->model::get($id);
+		$model = $groep::getLedenModel();
+
+		if (!$groep->mag(AccessAction::Beheren)) {
+			throw new CsrToegangException();
+		}
+
+		$lid = $model->nieuw($groep, null);
+		$leden = group_by_distinct('uid', $groep->getLeden());
+		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
+
+		if ($form->validate()) {
+			ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
+			$model->create($lid);
+			return new GroepLedenData([$lid]);
+		} else {
+			return $form;
+		}
+	}
+
+	public function ketzer_bewerken($id) {
+		$uid = LoginModel::getUid();
+		$groep = $this->model->get($id);
+		$model = $groep::getLedenModel();
+
+		if (!$groep->mag(AccessAction::Bewerken)) {
+			throw new CsrToegangException();
+		}
+		$lid = $model->get($groep, $uid);
+		$form = new GroepBewerkenForm($lid, $groep);
+
+		if ($form->validate()) {
+			ChangeLogModel::instance()->logChanges($form->diff());
+			$model->update($lid);
+		}
+
+		return $form;
 	}
 
 	public function bewerken($id, $uid = null) {
 		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
-		if ($uid) {
-			if (!$groep->mag(AccessAction::Bewerken)) {
-				throw new CsrToegangException();
-			}
-			$lid = $model->get($groep, $uid);
-			$form = new GroepBewerkenForm($lid, $groep);
-			if ($form->validate()) {
-				ChangeLogModel::instance()->logChanges($form->diff());
-				$model->update($lid);
-			}
-			return $form;
-		} // beheren
-		else {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			if ($selection) {
-				/** @var AbstractGroepLid $lid */
-				$lid = $model->retrieveByUUID($selection[0]);
-			} else {
-				$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
-				$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
-				$lid = $model->get($id, $uid);
-			}
 
-			if (!$lid) {
-				throw new CsrToegangException();
-			}
-			if (!$groep->mag(AccessAction::Beheren)) {
-				throw new CsrToegangException();
-			}
-			$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken');
-			if ($form->validate()) {
-				ChangeLogModel::instance()->logChanges($form->diff());
-				$model->update($lid);
-				return new GroepLedenData([$lid]);
-			} else {
-				return $form;
-			}
+		if (!$uid) {
+			$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
+		}
+
+		/** @var AbstractGroepLid $lid */
+		$lid = $model->get($groep, $uid);
+
+		if (!$lid) {
+			throw new CsrToegangException();
+		}
+
+		if (!$groep->mag(AccessAction::Beheren)) {
+			throw new CsrToegangException();
+		}
+
+		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken');
+
+		if ($form->validate()) {
+			ChangeLogModel::instance()->logChanges($form->diff());
+			$model->update($lid);
+			return new GroepLedenData([$lid]);
+		} else {
+			return $form;
 		}
 	}
 
-	public function afmelden($id, $uid = null) {
+	public function ketzer_afmelden($id) {
+		$uid = LoginModel::getUid();
 		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
-		if ($uid) {
-			if (!$groep->mag(AccessAction::Afmelden) AND !$groep->mag(AccessAction::Beheren)) { // A::Beheren voor afmelden via context-menu
-				throw new CsrToegangException();
-			}
-			$lid = $model->get($groep, $uid);
-			ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
-			$model->delete($lid);
-			return new GroepView($groep);
-		} // beheren
-		else {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			if (empty($selection)) {
-				throw new CsrToegangException();
-			}
-			$response = [];
-			foreach ($selection as $UUID) {
-				$lid = $model->retrieveByUUID($UUID);
-				if (!$groep->mag(AccessAction::Beheren)) {
-					continue;
-				}
-				ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
-				$model->delete($lid);
-				$response[] = $lid;
-			}
-			return new RemoveRowsResponse($response);
+
+		if (!$groep->mag(AccessAction::Afmelden) && !$groep->mag(AccessAction::Beheren)) { // A::Beheren voor afmelden via context-menu
+			throw new CsrToegangException();
 		}
+
+		$lid = $model->get($groep, $uid);
+
+		if (!$lid) {
+			throw new CsrToegangException('Niet aangemeld');
+		}
+
+		ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
+		$model->delete($lid);
+
+		return new GroepView($groep);
+	}
+
+	public function afmelden($id, $uid) {
+		$groep = $this->model->get($id);
+		$model = $groep::getLedenModel();
+
+		if (!$groep->mag(AccessAction::Beheren)) {
+			throw new CsrToegangException();
+		}
+
+		$lid = $model->get($groep, $uid);
+		ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
+		$model->delete($lid);
+		return new RemoveRowsResponse([$lid]);
 	}
 
 	public function naar_ot($id, $uid = null) {
