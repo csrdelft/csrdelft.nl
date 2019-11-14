@@ -221,11 +221,11 @@ abstract class AbstractGroepenController {
 		return new JsonResponse($result);
 	}
 
-	public function nieuw($soort = null) {
-		return $this->aanmaken($soort);
+	public function nieuw(Request $request, $id, $soort = null) {
+		return $this->aanmaken($request, $id, $soort);
 	}
 
-	public function aanmaken(Request $request, $soort = null) {
+	public function aanmaken(Request $request, $id, $soort = null) {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (empty($selection)) {
 			$old = null;
@@ -250,10 +250,6 @@ abstract class AbstractGroepenController {
 						if ($kring) {
 							$groep->rechten_aanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer;
 						}
-						break;
-
-					case ActiviteitSoort::Ondervereniging:
-						$groep->rechten_aanmelden = 'Lichting:' . $profiel->lidjaar;
 						break;
 				}
 			}

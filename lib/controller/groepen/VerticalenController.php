@@ -6,6 +6,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * VerticalenController.class.php
@@ -19,17 +20,17 @@ class VerticalenController extends AbstractGroepenController {
 		parent::__construct(VerticalenModel::instance());
 	}
 
-	public function zoeken($zoekterm = null) {
-		if (!$zoekterm && !$this->hasParam('q')) {
+	public function zoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
 			throw new CsrToegangException();
 		}
 		if (!$zoekterm) {
-			$zoekterm = $this->getParam('q');
+			$zoekterm = $request->query->get('q');
 		}
 		$zoekterm = '%' . $zoekterm . '%';
 		$limit = 5;
-		if ($this->hasParam('limit')) {
-			$limit = (int)$this->getParam('limit');
+		if ($request->query->has('limit')) {
+			$limit = $request->query->getInt('limit');
 		}
 		$result = [];
 		foreach ($this->model->find('naam LIKE ?', [$zoekterm], null, null, $limit) as $verticale) {
