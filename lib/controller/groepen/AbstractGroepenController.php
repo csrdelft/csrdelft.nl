@@ -489,6 +489,9 @@ abstract class AbstractGroepenController {
 		}
 	}
 
+	/*
+	 * Voor groepen V2
+	 */
 	public function aanmelden2(Request $request, $id, $uid) {
 		$groep = $this->model::get($id);
 		$model = $groep::getLedenModel();
