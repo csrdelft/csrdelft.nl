@@ -5,7 +5,8 @@ namespace CsrDelft\view\bbcode\tag;
 
 
 use CsrDelft\bb\BbException;
-use CsrDelft\model\entity\Plaatje;
+use CsrDelft\model\entity\ForumPlaatje;
+use CsrDelft\model\ForumPlaatjeModel;
 
 class BbPlaatje extends BbImg {
 
@@ -26,8 +27,8 @@ class BbPlaatje extends BbImg {
 	public function parse($arguments = [])
 	{
 		parent::parse($arguments);
-		$plaatje = new Plaatje($this->content);
-		if (!$plaatje->exists()) {
+		$plaatje = ForumPlaatjeModel::getByKey($this->content);
+		if (!$plaatje) {
 			throw new BbException("Plaatje bestaat niet");
 		}
 		$this->content = $plaatje->getUrl();

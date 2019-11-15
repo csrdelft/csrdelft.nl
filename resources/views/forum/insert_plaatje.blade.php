@@ -1,3 +1,3 @@
 <script>
-insertPlaatje("{{$plaatje->uid}}");
+insertPlaatje("{{$plaatje->access_key}}");
 </script>

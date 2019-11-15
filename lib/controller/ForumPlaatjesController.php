@@ -8,17 +8,19 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\entity\Plaatje;
+use CsrDelft\model\entity\ForumPlaatje;
+use CsrDelft\model\ForumPlaatjeModel;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\plaatjes\PlaatjesUploadModalForm;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class PlaatjesController {
+class ForumPlaatjesController {
 	public function upload() {
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
-			$plaatje = Plaatje::create($form->uploader);
+			$plaatje = ForumPlaatjeModel::fromUploader($form->uploader, LoginModel::getUid());
 			return view('forum.insert_plaatje', ['plaatje' => $plaatje]);
 		} else {
 			return $form;
@@ -26,7 +28,10 @@ class PlaatjesController {
 	}
 
 	public function bekijken($id) {
-		$plaatje = new Plaatje($id);
+		$plaatje = ForumPlaatjeModel::instance()->getByKey($id);
+		if (!$plaatje) {
+			throw new NotFoundHttpException();
+		}
 		$image = $plaatje->getAfbeelding();
 		if (!$image->exists()) {
 			throw new NotFoundHttpException();
