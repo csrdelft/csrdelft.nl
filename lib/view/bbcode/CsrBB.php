@@ -36,7 +36,7 @@ use CsrDelft\view\bbcode\tag\BbBoek;
 use CsrDelft\view\bbcode\tag\BbCitaat;
 use CsrDelft\view\bbcode\tag\BbCommissie;
 use CsrDelft\view\bbcode\tag\BbDocument;
-use CsrDelft\view\bbcode\tag\BbPlaatje;
+use CsrDelft\view\bbcode\tag\BbForumPlaatje;
 use CsrDelft\view\bbcode\tag\BbForum;
 use CsrDelft\view\bbcode\tag\BbFoto;
 use CsrDelft\view\bbcode\tag\BbFotoalbum;
@@ -111,7 +111,7 @@ class CsrBB extends Parser {
 		BbCommissie::class,
 		BbDocument::class,
 		BbForum::class,
-		BbPlaatje::class,
+		BbForumPlaatje::class,
 		BbFoto::class,
 		BbFotoalbum::class,
 		BbGroep::class,

@@ -27,12 +27,12 @@ class ForumPlaatjesController {
 		}
 	}
 
-	public function bekijken($id) {
+	public function bekijken($id, $resized=false) {
 		$plaatje = ForumPlaatjeModel::instance()->getByKey($id);
 		if (!$plaatje) {
 			throw new NotFoundHttpException();
 		}
-		$image = $plaatje->getAfbeelding();
+		$image = $plaatje->getAfbeelding($resized);
 		if (!$image->exists()) {
 			throw new NotFoundHttpException();
 		}

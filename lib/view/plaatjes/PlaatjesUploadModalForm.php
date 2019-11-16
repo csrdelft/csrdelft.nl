@@ -19,7 +19,7 @@ class PlaatjesUploadModalForm extends ModalForm
 	 */
 	public function __construct()
 	{
-		parent::__construct(null, '/plaatjes/upload', 'Plaatje uploaden');
+		parent::__construct(null, '/forum/plaatjes/upload', 'Plaatje uploaden');
 		$this->uploader = new ImageField('image', 'Afbeelding');
 		$this->addFields([$this->uploader]);
 		$this->formKnoppen = new FormDefaultKnoppen();

@@ -19,20 +19,25 @@ class ForumPlaatjeModel extends PersistenceModel
 		$plaatje->access_key = bin2hex(random_bytes(16));
 		return $plaatje;
 	}
+
 	public static function fromUploader(ImageField $uploader, $uid) {
 		$plaatje = static::generate();
 		$plaatje->maker = $uid;
 		$plaatje->id = static::instance()->create($plaatje);
 		$uploader->opslaan(PLAATJES_PATH, strval($plaatje->id));
+		$plaatje->createResized();
 		return $plaatje;
 	}
-	public static function isValidKey($key)
-	{
+
+	public static function isValidKey($key) {
 		return preg_match('/^[a-zA-Z0-9]{32}$/', $key);
 	}
 
-	public static function getByKey($key)
-	{
+	/**
+	 * @param $key
+	 * @return ForumPlaatje|false
+	 */
+	public static function getByKey($key) {
 		return static::instance()->find("access_key = ?", [$key])->fetch();
 	}
 

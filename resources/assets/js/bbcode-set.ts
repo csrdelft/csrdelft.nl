@@ -79,7 +79,7 @@ export const bbCodeSet = {
 		{
 			className: 'ico picture', name: 'Plaatje',
 			closeWith: (markitup: any) => {
-				axios.get('/plaatjes/upload').then((response) => {
+				axios.get('/forum/plaatjes/upload').then((response) => {
 					domUpdate(response.data);
 				});
 				return '';
