@@ -25,7 +25,8 @@ ctx.addHandler('div.bb-img-loading', (el: HTMLElement) => {
 		if (foto || video || hasAnchor) {
 			parent.replaceChild(content, el);
 		} else {
-			const link = html`<a class="lightbox-link" href="${el.getAttribute('src')!}" data-lightbox="page-lightbox"></a>`;
+			const targetUrl = el.getAttribute('bb-href') == null ? el.getAttribute('src') : el.getAttribute('bb-href');
+			const link = html`<a class="lightbox-link" href="${targetUrl!}" data-lightbox="page-lightbox"></a>`;
 			link.appendChild(content);
 			parent.replaceChild(link, el);
 		}
@@ -65,6 +66,8 @@ export function domUpdate(this: HTMLElement | void, htmlString: string|object) {
 			}
 		} else if (targetParent.length === 1) {
 			targetParent.append($element.show());
+		} else if (element instanceof HTMLScriptElement) {
+			$('head').append($element);
 		} else {
 			const parentid = $(this).attr('parentid');
 			if (parentid) {
