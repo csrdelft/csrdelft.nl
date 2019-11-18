@@ -226,5 +226,5 @@ export function isLoggedIn(): boolean {
 	if (!elem) {
 		return false;
 	}
-	return elem.getAttribute('value') === 'true';
+	return elem.getAttribute('content') === 'true';
 }
