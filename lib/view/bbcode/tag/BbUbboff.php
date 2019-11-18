@@ -31,4 +31,10 @@ class BbUbboff extends BbTag {
 		$this->readContent();
 		$this->parser->bb_mode = true;
 	}
+
+	protected function getStoppers()
+	{
+		// De [/] tag werkt niet hier
+		return ["[/tekst]", "[/uboff]"];
+	}
 }
