@@ -6,11 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 require dirname(__DIR__) . '/lib/configuratie.include.php';
 
-/*
- * Als je Symfony op een plek wil gebruiken waar dat nog niet kan.
- */
-global $kernel;
-
 if ($_SERVER['APP_DEBUG']) {
 	umask(0000);
 
