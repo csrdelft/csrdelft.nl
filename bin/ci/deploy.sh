@@ -38,7 +38,7 @@ git add -A
 git diff-index --quiet HEAD || git commit -m "
 Travis deploy $TRAVIS_BUILD_NUMBER
 
-csrdelft/csrdelf.nl@$TRAVIS_COMMIT
+csrdelft/csrdelft.nl@$TRAVIS_COMMIT
 
 $TRAVIS_COMMIT_MESSAGE
 
