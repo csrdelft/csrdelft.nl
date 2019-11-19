@@ -30,7 +30,7 @@ $mode = DEBUG ? 'debug' : 'production';
 $server = new RestServer($mode);
 
 $server->root = '/API/2.0';
-$server->cacheDir = DATA_PATH . 'restserver/';
+$server->cacheDir = VAR_PATH . 'restserver/';
 
 $server->addClass(ApiActiviteitenController::class, '/activiteiten');
 $server->addClass(ApiAgendaController::class, '/agenda');

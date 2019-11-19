@@ -118,7 +118,7 @@ if ($cred === false) {
 }
 
 CsrDelft\Orm\Configuration::load(array(
-	'cache_path' => DATA_PATH,
+	'cache_path' => VAR_PATH,
 	'db' => $cred
 ));
 

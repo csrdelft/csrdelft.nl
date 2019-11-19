@@ -141,7 +141,7 @@ class IsHetAlView implements View {
 				break;
 
 			case 'foutmelding':
-				echo '<div class="ja">' . reldate(date('c', filemtime(DATA_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
+				echo '<div class="ja">' . reldate(date('c', filemtime(VAR_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
 				break;
 
 			case 'wist u dat':
