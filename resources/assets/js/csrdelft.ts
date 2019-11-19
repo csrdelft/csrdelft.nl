@@ -6,39 +6,6 @@ import $ from 'jquery';
 
 import {init} from './ctx';
 
-function initGeolocation() { // eslint-disable-line
-
-	let previousPos: Position;
-
-	function positionSave(position: Position) {
-		if (!previousPos || previousPos.coords === position.coords) {
-			previousPos = position;
-			$.post('/geolocation/save', {
-				coords: position.coords,
-				timestamp: Math.round(position.timestamp / 1000),
-			});
-		}
-	}
-
-	/**
-	 * @param {PositionError} error
-	 */
-	function positionError(error: PositionError) {
-		switch (error.code) {
-			case error.PERMISSION_DENIED:
-				break;
-			case error.POSITION_UNAVAILABLE:
-				break;
-			case error.TIMEOUT:
-				break;
-		}
-	}
-
-	if (navigator.geolocation) {
-		navigator.geolocation.watchPosition(positionSave, positionError);
-	}
-}
-
 function initSluitMeldingen() {
 	$('#melding').on('click', '.alert', function () {
 		$(this).slideUp(400, function () {
@@ -123,5 +90,4 @@ $(() => {
 	if (modal.html() !== '') {
 		modal.modal();
 	}
-	// initGeolocation();
 });

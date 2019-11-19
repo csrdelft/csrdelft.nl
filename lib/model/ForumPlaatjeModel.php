@@ -3,7 +3,6 @@
 namespace CsrDelft\model;
 
 use CsrDelft\model\entity\ForumPlaatje;
-use CsrDelft\model\entity\GeoLocation;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\formulier\uploadvelden\ImageField;
 

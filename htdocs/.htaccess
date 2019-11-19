@@ -19,8 +19,6 @@ RewriteRule ^feuten				https://github.com/csrdelft/csrdelft.nl [R,L]
 RewriteRule ^forum/rss/([0-9a-zA-Z]*)/csrdelft.xml		index.php?private_token=$1 [L]
 RewriteRule ^agenda/ical/([0-9a-zA-Z]*)/csrdelft.ics	index.php?private_token=$1 [L]
 
-RewriteRule ^geolocation		index.php?c=GeoLocation [L]
-
 # Symfony config
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
 RewriteRule ^(.*) - [E=BASE:%1]

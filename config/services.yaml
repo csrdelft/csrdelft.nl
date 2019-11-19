@@ -22,7 +22,7 @@ services:
   # as action arguments even if you don't extend any base controller class
   CsrDelft\controller\:
     resource: '../lib/controller'
-    exclude: '../lib/controller/{{GeoLocation,Rechten}Controller.php,framework,api}'
+    exclude: '../lib/controller/{framework,api}'
     tags: ['controller.service_arguments']
 
   # add more service definitions when explicit configuration is needed
