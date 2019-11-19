@@ -63,7 +63,7 @@ final class ShutdownHandler {
 	public static function touchHandler() {
 		$debug = self::getDebug();
 		if ($debug !== null && self::isError($debug)) {
-			touch(DATA_PATH . 'foutmelding.last');
+			touch(VAR_PATH . 'foutmelding.last');
 		}
 	}
 

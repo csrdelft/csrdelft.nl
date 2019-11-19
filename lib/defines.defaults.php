@@ -34,15 +34,15 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('ETC_PATH', BASE_PATH . 'etc/');
 @define('DATA_PATH', BASE_PATH . 'data/');
 @define('SESSION_PATH', BASE_PATH . 'sessie/');
-@define('TMP_PATH', BASE_PATH . 'tmp/');
 @define('LIB_PATH', BASE_PATH . 'lib/');
 @define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
+@define('VAR_PATH', BASE_PATH . 'var/');
+@define('TMP_PATH', VAR_PATH . 'tmp/');
 @define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
 @define('PHOTOALBUM_PATH', DATA_PATH . 'foto/fotoalbum/');
 @define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 @define('PLAATJES_PATH', DATA_PATH . 'plaatjes/');
-@define('ROUTES_CACHE_PATH', DATA_PATH . 'routes/');
-@define('CONFIG_CACHE_PATH', DATA_PATH . 'config_cache/');
+@define('CONFIG_CACHE_PATH', VAR_PATH . 'config_cache/');
 @define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 @define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
 @define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
@@ -50,8 +50,8 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 # smarty template engine
 @define('SMARTY_PLUGIN_DIR', LIB_PATH. 'smarty_plugins');
 @define('SMARTY_TEMPLATE_DIR', LIB_PATH . 'templates/');
-@define('SMARTY_COMPILE_DIR', DATA_PATH . 'smarty/compiled/');
-@define('SMARTY_CACHE_DIR', DATA_PATH . 'smarty/cache/');
+@define('SMARTY_COMPILE_DIR', VAR_PATH . 'smarty/compiled/');
+@define('SMARTY_CACHE_DIR', VAR_PATH . 'smarty/cache/');
 # ImageMagick ('magick' voor v7, 'convert' voor v6)
 @define('IMAGEMAGICK', 'magick');
 # BladeOne

@@ -103,15 +103,6 @@ $ yarn run watch
 $ yarn run watch-poll
 ```
 
-#### Plaetjes
-
-Om jouw development versie goed te laten functioneren zijn er een aantal plaatjes nodig.
-Probeer om ten minste deze te verkrijgen.
-
-* /htdocs/plaetjes/famfamfam/
-* /htdocs/plaetjes/geen-foto.jpg
-* /htdocs/pleatjes/layout/
-
 ### Docker
 
 Installeer [Docker](http://docker.com).
