@@ -21,6 +21,7 @@ htdocs/owee/*
 htdocs/tools/alphabanner/*
 tmp/*
 bin/ldap/*
+var/*
 
 # Dev bestanden
 docker/*
