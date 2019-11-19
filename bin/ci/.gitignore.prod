@@ -54,5 +54,6 @@ phpunit.init.php
 # Build bestanden
 .cache-loader
 .scannerwork
+.sonar-project.properties
 package.json
 yarn.lock
