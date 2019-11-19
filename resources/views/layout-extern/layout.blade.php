@@ -27,11 +27,14 @@
 	<header id="header" class="alt">
 		<h1><a href="/">C.S.R. Delft</a></h1>
 		<nav>
+			@section('loginbutton')
 			<a class="inloggen" href="#login">Inloggen</a>
+			@show
 			<a href="#menu">Menu</a>
 		</nav>
 	</header>
 
+	@section('loginpopup')
 	<!-- Loginform -->
 	<nav id="login">
 		<a href="#_" class="overlay"></a>
@@ -42,6 +45,7 @@
 			<a href="#_" class="close">Close</a>
 		</div>
 	</nav>
+	@show
 
 	<!-- Menu -->
 	<nav id="menu">
