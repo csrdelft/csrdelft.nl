@@ -41,7 +41,7 @@ class VerticalenController extends AbstractGroepenController {
 				'value' => 'Verticale:' . $verticale->letter
 			];
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 
 }
