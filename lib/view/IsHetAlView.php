@@ -4,7 +4,6 @@ namespace CsrDelft\view;
 
 use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\entity\agenda\AgendaItem;
-use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 
@@ -141,7 +140,11 @@ class IsHetAlView implements View {
 				break;
 
 			case 'foutmelding':
-				echo '<div class="ja">' . reldate(date('c', filemtime(VAR_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
+				if (file_exists(VAR_PATH . 'foutmelding.last')) {
+					echo '<div class="ja">' . reldate(date('c', filemtime(VAR_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
+				} else {
+					echo '<div class="nee">Geen foutmelding in het systeem.</div>';
+				}
 				break;
 
 			case 'wist u dat':
