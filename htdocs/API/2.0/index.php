@@ -32,6 +32,8 @@ $server = new RestServer($mode);
 $server->root = '/API/2.0';
 $server->cacheDir = VAR_PATH . 'restserver/';
 
+is_dir($server->cacheDir) || mkdir($server->cacheDir, 0777, true);
+
 $server->addClass(ApiActiviteitenController::class, '/activiteiten');
 $server->addClass(ApiAgendaController::class, '/agenda');
 $server->addClass(ApiAuthController::class, '/auth');
