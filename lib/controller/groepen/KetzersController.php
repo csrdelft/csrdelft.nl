@@ -28,9 +28,9 @@ class KetzersController extends AbstractGroepenController {
 		} elseif ($form->validate()) {
 			$values = $form->getValues();
 			$redirect = $values['model']::instance()->getUrl() . 'aanmaken/' . $values['soort'];
-			$this->view = new JsonResponse($redirect);
+			return new JsonResponse($redirect);
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 

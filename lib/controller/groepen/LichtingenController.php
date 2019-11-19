@@ -42,7 +42,7 @@ class LichtingenController extends AbstractGroepenController {
 				);
 			}
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 
 }

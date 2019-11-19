@@ -56,7 +56,6 @@ abstract class AbstractGroepenController {
 	protected $table;
 	/** @var AbstractGroepenModel */
 	protected $model;
-	protected $view;
 
 	public function __construct($model = null) {
 		$this->model = $model;
