@@ -30,8 +30,25 @@ $ git submodule update
 
 ## Stap 4: Installatie
 
-Er zijn twee mogelijke manieren om te installeren, met Docker of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
+Er zijn drie mogelijke manieren om te installeren, met Docker, Symfony of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
 
+### Symfony
+
+Dit is nieuw en werkt nog niet 100% (je kan geen groepen bekijken). Waarschijnlijk wordt dit de manier om de boel te draaien.
+
+Installeer Symfony CLI https://symfony.com/doc/master/cloud/getting-started#installing-the-cli-tool
+
+Installeer een MySQL server zoals bij handmatig beschreven en zorg dat deze draait.
+
+Zet `CSR_DOMAIN` naar `127.0.0.1` en `SERVER_PORT` naar `8000` in `lib/defines.include.php` (van `lib/defines.include.php.development.sample`)
+
+Voer het volgende commando uit.
+
+```
+$ symfony server:start --document-root=htdocs
+```
+
+De boel draait nu op `127.0.0.1:8000`
 
 ### Met de hand
 
