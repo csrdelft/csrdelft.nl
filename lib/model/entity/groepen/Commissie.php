@@ -39,7 +39,7 @@ class Commissie extends AbstractGroep {
 	protected static $table_name = 'commissies';
 
 	public function getUrl() {
-		return '/groepen/commissies/' . $this->id . '/';
+		return '/groepen/commissies/' . $this->id;
 	}
 
 	/**

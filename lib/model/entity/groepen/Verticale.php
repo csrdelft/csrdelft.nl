@@ -36,7 +36,7 @@ class Verticale extends AbstractGroep {
 	protected static $table_name = 'verticalen';
 
 	public function getUrl() {
-		return '/groepen/verticalen/' . $this->letter . '/';
+		return '/groepen/verticalen/' . $this->letter;
 	}
 
 	public function getKringen() {

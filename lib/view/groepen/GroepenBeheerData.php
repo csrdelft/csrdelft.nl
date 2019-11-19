@@ -16,7 +16,7 @@ class GroepenBeheerData extends DataTableResponse {
 	public function renderElement($groep) {
 		$array = $groep->jsonSerialize();
 
-		$array['detailSource'] = $groep->getUrl() . 'leden';
+		$array['detailSource'] = $groep->getUrl() . '/leden';
 
 		$title = $groep->naam;
 		if (!empty($groep->samenvatting)) {

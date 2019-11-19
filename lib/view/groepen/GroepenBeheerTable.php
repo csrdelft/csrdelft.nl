@@ -24,7 +24,7 @@ class GroepenBeheerTable extends DataTable {
 	private $pagina;
 
 	public function __construct(AbstractGroepenModel $model) {
-		parent::__construct($model::ORM, $model->getUrl() . 'beheren', null);
+		parent::__construct($model::ORM, $model->getUrl() . '/beheren', null);
 
 		$this->selectEnabled = false;
 
@@ -51,25 +51,25 @@ class GroepenBeheerTable extends DataTable {
 
 		$this->setOrder(['id' => 'desc']);
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'voorbeeld', 'Voorbeeldweergave van de ketzer', 'show'));
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/voorbeeld', 'Voorbeeldweergave van de ketzer', 'show'));
 
-		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $model->getUrl() . 'nieuw', 'Nieuw', 'Nieuwe toevoegen', 'toevoegen'));
+		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $model->getUrl() . '/:id/nieuw', 'Nieuw', 'Nieuwe toevoegen', 'toevoegen'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'aanmaken', 'Nieuwe toevoegen die de huidige opvolgt', 'toevoegen'));
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/aanmaken', 'Nieuwe toevoegen die de huidige opvolgt', 'toevoegen'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'wijzigen', 'Wijzig eigenschappen', 'bewerken'));
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/wijzigen', 'Wijzig eigenschappen', 'bewerken'));
 
 		if (property_exists($model::ORM, 'aanmelden_vanaf')) {
-			$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'sluiten', 'Inschrijvingen nu sluiten', 'lock'));
+			$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/sluiten', 'Inschrijvingen nu sluiten', 'lock'));
 		}
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'opvolging', 'Familienaam en groepstatus instellen', 'timeline_marker'));
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/opvolging', 'Familienaam en groepstatus instellen', 'timeline_marker'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'converteren', 'Converteer naar ander soort groep', 'lightning'));
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/converteren', 'Converteer naar ander soort groep', 'lightning'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'verwijderen', 'Definitief verwijderen (groep moet hier voor leeg zijn)', 'delete', 'confirm'));
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/verwijderen', 'Definitief verwijderen (groep moet hier voor leeg zijn)', 'delete', 'confirm'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . 'logboek', 'Logboek bekijken', 'log'));
+		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/logboek', 'Logboek bekijken', 'log', '', 'get'));
 	}
 
 	public function getBreadcrumbs() {

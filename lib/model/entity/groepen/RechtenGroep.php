@@ -37,7 +37,7 @@ class RechtenGroep extends AbstractGroep {
 	protected static $table_name = 'groepen';
 
 	public function getUrl() {
-		return '/groepen/overig/' . $this->id . '/';
+		return '/groepen/overig/' . $this->id;
 	}
 
 	/**

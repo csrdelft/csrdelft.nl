@@ -25,7 +25,7 @@ class GroepBewerkenForm extends InlineForm {
 			$field->suggestions[] = $groep->getOpmerkingSuggesties();
 		}
 
-		parent::__construct($lid, $groep->getUrl() . 'bewerken/' . $lid->uid, $field, $toggle, $buttons);
+		parent::__construct($lid, $groep->getUrl() . '/ketzer/bewerken', $field, $toggle, $buttons);
 	}
 
 }
