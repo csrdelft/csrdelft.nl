@@ -1,0 +1,46 @@
+groep-overzicht:
+  path: /groepen
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+  defaults:
+    _mag: P_LOGGED_IN
+    route: groep-commissies-overzicht
+
+groep-activiteiten:
+  resource: CsrDelft\controller\groepen\ActiviteitenController:loadRoutes
+  type: service
+
+groep-besturen:
+  resource: CsrDelft\controller\groepen\BesturenController:loadRoutes
+  type: service
+
+groep-commissies:
+  resource: CsrDelft\controller\groepen\CommissiesController:loadRoutes
+  type: service
+
+groep-ketzers:
+  resource: CsrDelft\controller\groepen\KetzersController:loadRoutes
+  type: service
+
+groep-lichtingen:
+  resource: CsrDelft\controller\groepen\LichtingenController:loadRoutes
+  type: service
+
+groep-onderverenigingen:
+  resource: CsrDelft\controller\groepen\OnderverenigingenController:loadRoutes
+  type: service
+
+groep-rechtengroepen:
+  resource: CsrDelft\controller\groepen\RechtengroepenController:loadRoutes
+  type: service
+
+groep-verticalen:
+  resource: CsrDelft\controller\groepen\VerticalenController:loadRoutes
+  type: service
+
+groep-werkgroepen:
+  resource: CsrDelft\controller\groepen\WerkgroepenController:loadRoutes
+  type: service
+
+groep-woonoorden:
+  resource: CsrDelft\controller\groepen\WoonoordenController:loadRoutes
+  type: service

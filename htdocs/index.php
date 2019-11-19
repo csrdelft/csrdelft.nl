@@ -2,17 +2,10 @@
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\Kernel;
-use CsrDelft\LegacyRouter;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 require dirname(__DIR__) . '/lib/configuratie.include.php';
-
-/*
- * Als je Symfony op een plek wil gebruiken waar dat nog niet kan.
- */
-global $kernel;
 
 if ($_SERVER['APP_DEBUG']) {
 	umask(0000);
@@ -33,17 +26,8 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false
 
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
-
 $kernel->boot();
-
 ContainerFacade::init($kernel->getContainer());
-
-if (isset($_GET['c'])) { // Dit is een legacy route, zie .htaccess
-	$response = LegacyRouter::route()->toResponse();
-} else {
-	$response = $kernel->handle($request);
-}
-
+$response = $kernel->handle($request);
 $response->send();
-
 $kernel->terminate($request, $response);

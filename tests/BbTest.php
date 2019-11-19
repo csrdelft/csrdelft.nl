@@ -21,6 +21,10 @@ final class BbTest extends TestCase
 	{
 		$this->assertBbCodeMatchSnapshot("[spotify]spotify:track:4uLU6hMCjMI75M1A2tKUQC[/spotify]");
 	}
+	public function testBbImage(): void
+	{
+		$this->assertBbCodeMatchSnapshot("[img]http://www.csrdelft.nl/plaetjes/test.jpg[/] en tekst");
+	}
 
 	public function testCitaat(): void {
 		$this->assertBbCodeMatchSnapshot("[citaat=Albert_Einstein]Why is it that nobody understands me, yet everybody likes me?[/citaat]");

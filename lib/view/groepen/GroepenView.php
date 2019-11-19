@@ -65,11 +65,11 @@ class GroepenView implements View {
 		$model = $this->model;
 		$orm = $model::ORM;
 		if ($orm::magAlgemeen(AccessAction::Aanmaken, null, $this->soort)) {
-			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
+			echo '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
-		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren">' . Icon::getTag('table') . ' Beheren</a>';
+		echo '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
 		if ($this->geschiedenis) {
-			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . $this->geschiedenis . '/deelnamegrafiek">' . Icon::getTag('chart_bar') . ' Deelnamegrafiek</a>';
+			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . "/" . $this->geschiedenis . '/deelnamegrafiek">' . Icon::getTag('chart_bar') . ' Deelnamegrafiek</a>';
 		}
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();

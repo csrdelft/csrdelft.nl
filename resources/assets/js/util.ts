@@ -220,3 +220,11 @@ export function docReady(fn: () => void): void {
 		document.addEventListener('DOMContentLoaded', fn);
 	}
 }
+
+export function isLoggedIn(): boolean {
+	const elem = document.querySelector('meta[property=\'X-CSR-LOGGEDIN\']');
+	if (!elem) {
+		return false;
+	}
+	return elem.getAttribute('content') === 'true';
+}

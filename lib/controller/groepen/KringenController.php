@@ -2,10 +2,12 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\groepen\KringenModel;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * KringenController.class.php
@@ -17,22 +19,21 @@ use CsrDelft\view\JsonResponse;
  * @property KringenModel $model
  */
 class KringenController extends AbstractGroepenController {
-
-	public function __construct($query) {
-		parent::__construct($query, KringenModel::instance());
+	public function __construct() {
+		parent::__construct(KringenModel::instance());
 	}
 
-	public function zoeken($zoekterm = null) {
-		if (!$zoekterm && !$this->hasParam('q')) {
-			$this->exit_http(403);
+	public function zoeken(Request $request, $zoekterm = null) {
+		if (!$zoekterm && !$request->query->has('q')) {
+			throw new CsrToegangException();
 		}
 		if (!$zoekterm) {
-			$zoekterm = $this->getParam('q');
+			$zoekterm = $request->query->get('q');
 		}
 		$zoekterm = '%' . $zoekterm . '%';
 		$limit = 5;
-		if ($this->hasParam('limit')) {
-			$limit = (int)$this->getParam('limit');
+		if ($request->query->has('limit')) {
+			$limit = $request->query->getInt('limit');
 		}
 		$result = array();
 		foreach ($this->model->find('naam LIKE ?', array($zoekterm), null, null, $limit) as $kring) {
@@ -44,7 +45,7 @@ class KringenController extends AbstractGroepenController {
 				'value' => 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer
 			);
 		}
-		$this->view = new JsonResponse($result);
+		return new JsonResponse($result);
 	}
 
 }

@@ -44,7 +44,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	}
 
 	public static function getUrl() {
-		return '/groepen/' . static::getNaam() . '/';
+		return '/groepen/' . static::getNaam();
 	}
 
 	/**

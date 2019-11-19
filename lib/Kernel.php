@@ -33,11 +33,11 @@ class Kernel extends BaseKernel {
 	}
 
 	public function getCacheDir() {
-		return $this->getProjectDir() . '/data/var/cache/' . $this->environment;
+		return $this->getProjectDir() . '/var/cache/' . $this->environment;
 	}
 
 	public function getLogDir() {
-		return $this->getProjectDir() . '/data/var/log';
+		return $this->getProjectDir() . '/var/log';
 	}
 
 	/**

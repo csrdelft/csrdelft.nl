@@ -22,7 +22,12 @@ class VerticalenModel extends AbstractGroepenModel {
 
 	public static function get($letter) {
 		$verticalen = static::instance()->prefetch('letter = ?', array($letter), null, null, 1);
-		return reset($verticalen);
+		$verticale = reset($verticalen);
+		if (!empty($verticale)) {
+			return $verticale;
+		}
+
+		return parent::get($letter);
 	}
 
 	public function nieuw($soort = null) {

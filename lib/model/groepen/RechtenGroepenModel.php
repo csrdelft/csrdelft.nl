@@ -16,4 +16,8 @@ class RechtenGroepenModel extends AbstractGroepenModel {
 		return $groep;
 	}
 
+	public static function getNaam() {
+		return 'overig';
+	}
+
 }

@@ -229,6 +229,7 @@ class AgendaController {
 			default:
 				throw new CsrException('invalid UUID');
 		}
+		/** @var Agendeerbaar|false $item **/
 		return $item;
 	}
 

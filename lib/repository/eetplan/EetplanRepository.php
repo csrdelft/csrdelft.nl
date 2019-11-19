@@ -117,7 +117,7 @@ class EetplanRepository extends ServiceEntityRepository {
 	/**
 	 * @param string $uid Uid van de feut
 	 *
-	 * @return Eetplan[] lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
+	 * @return Eetplan[]|false lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
 	 */
 	public function getEetplanVoorNoviet($uid) {
 		return $this->ormFind('uid = ? AND avond <> "0000-00-00"', [$uid], null, 'avond');
