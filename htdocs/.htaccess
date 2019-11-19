@@ -20,7 +20,6 @@ RewriteRule ^forum/rss/([0-9a-zA-Z]*)/csrdelft.xml		index.php?private_token=$1 [
 RewriteRule ^agenda/ical/([0-9a-zA-Z]*)/csrdelft.ics	index.php?private_token=$1 [L]
 
 RewriteRule ^geolocation		index.php?c=GeoLocation [L]
-RewriteRule ^rechten			index.php?c=Rechten [L]
 
 # Symfony config
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
