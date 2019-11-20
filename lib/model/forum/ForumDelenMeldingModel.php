@@ -151,7 +151,7 @@ class ForumDelenMeldingModel extends CachedPersistenceModel {
 		$deel = $draad->getForumDeel();
 
 		// Laad meldingsbericht in
-		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/forumdeelmelding.mail');
+		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumdeelmelding.mail');
 		foreach ($this->getMeldingenVoorDeel($deel) as $volger) {
 			$volger = ProfielModel::get($volger->uid);
 

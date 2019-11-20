@@ -48,7 +48,6 @@ class CourantModel extends PersistenceModel {
 
 	public function nieuwCourant() {
 		$courant = new Courant();
-		$courant->template = 'courant.tpl';
 		$courant->verzendMoment = getDateTime();
 		$courant->verzender = LoginModel::getUid();
 

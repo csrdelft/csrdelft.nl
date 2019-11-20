@@ -47,11 +47,7 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
 @define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
 @define('CONFIG_PATH', BASE_PATH . 'config');
-# smarty template engine
-@define('SMARTY_PLUGIN_DIR', LIB_PATH. 'smarty_plugins');
-@define('SMARTY_TEMPLATE_DIR', LIB_PATH . 'templates/');
-@define('SMARTY_COMPILE_DIR', VAR_PATH . 'smarty/compiled/');
-@define('SMARTY_CACHE_DIR', VAR_PATH . 'smarty/cache/');
+@define('TEMPLATE_DIR', LIB_PATH . 'templates/');
 # ImageMagick ('magick' voor v7, 'convert' voor v6)
 @define('IMAGEMAGICK', 'magick');
 # BladeOne

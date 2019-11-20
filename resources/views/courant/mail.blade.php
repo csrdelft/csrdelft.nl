@@ -1,4 +1,14 @@
-{if $headers}{include file='courant/mail/c_header.tpl'}{/if}
+@if($headers)
+From: PubCie <pubcie@csrdelft.nl>
+To: leden@csrdelft.nl
+Organization: C.S.R. Delft
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+User-Agent: telnet localhost 25
+X-Complaints-To: pubcie@csrdelft.nl
+Approved: {{$instellingen['password']}}
+Subject: C.S.R.-courant {{strftime("%e %B %Y")}}
+@endif
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 <head>
@@ -6,7 +16,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta name="author" content="PubCie der C.S.R. Delft"/>
 	<meta name="robots" content="index, follow"/>
-	<style type="text/css">{literal}
+	<style type="text/css">
 		<!--
 		body {
 			font-face: verdana, arial, sans-serif;
@@ -92,10 +102,6 @@
 
 		}
 
-		.onderlijn {
-			text-decoration: underline;
-		}
-
 		li {
 			margin: 0 0 0 00px;
 			color: #020883;
@@ -107,44 +113,43 @@
 		}
 
 		-->
-		{/literal}
 	</style>
 </head>
 <body>
 <table>
 	<tr>
 		<td class="Zijbalk" valign="top">
-			<img src="{$smarty.const.CSR_ROOT}/plaetjes/courant/logo.jpg" width="150px" height="197px" alt="Logo van C.S.R."/>
-			<img src="{$smarty.const.CSR_ROOT}/plaetjes/courant/balk.gif" width="150px" height="100%"/>
+			<img src="{{CSR_ROOT}}/plaetjes/courant/logo.jpg" width="150px" height="197px" alt="Logo van C.S.R."/>
+			<img src="{{CSR_ROOT}}/plaetjes/courant/balk.gif" width="150px" height="100%"/>
 		</td>
 		<td class="hoofdKolom">
 			<h4><font size="-3" face="verdana">Inhoud</font></h4>
 			<table class="inhoud">
 				<tr>
-            {foreach from=$catNames item=catName key=categorie}
-                {if $categorie!='voorwoord' AND $categorie!='sponsor'}
-									<td class="inhoudKolom" valign="top">
-										<font face="verdana" size="-1">
-											<div class="inhoudKop"><b>{$catName}</b></div>
-											<ul>
-                          {foreach from=$courant->getBerichten() item=bericht}
-                              {if $bericht->cat==$categorie}
-																<li><a href="#{$bericht->id}"
-																			 style="text-decoration: none;">{$bericht->titel|bbcode:"mail"}</a></li>
-                              {/if}
-                          {/foreach}
-											</ul>
-										</font>
-									</td>
-                {/if}
-            {/foreach}
+					@foreach($catNames as $categorie => $catName)
+						@if($categorie != 'voorwoord' && $categorie != 'sponsor')
+							<td class="inhoudKolom" valign="top">
+								<font face="verdana" size="-1">
+									<div class="inhoudKop"><b>{{$catName}}</b></div>
+									<ul>
+										@foreach($berichten as $bericht)
+											@if($bericht->cat == $categorie)
+												<li><a href="#{{$bericht->id}}"
+															 style="text-decoration: none;">{!! bbcode($bericht->titel, "mail") !!}</a></li>
+											@endif
+										@endforeach
+									</ul>
+								</font>
+							</td>
+						@endif
+					@endforeach
 				</tr>
 			</table>
 			<font face="verdana" size="-1">
-          {foreach from=$courant->getBerichten() item=bericht}
-						<h4><a name="{$bericht->id}"></a>{$bericht->titel|bbcode:"mail"}</h4>
-						<div class="p">{$bericht->bericht|bbcode:"mail"}</div>
-          {/foreach}
+				@foreach($berichten as $bericht)
+					<h4><a id="{{$bericht->id}}"></a>{!! bbcode($bericht->titel, "mail") !!}</h4>
+					<div class="p">{!! bbcode($bericht->bericht, "mail") !!}</div>
+				@endforeach
 			</font>
 		</td>
 	</tr>

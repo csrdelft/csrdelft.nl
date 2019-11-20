@@ -2,14 +2,10 @@
 
 namespace CsrDelft\view\courant;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\Ini;
-use CsrDelft\model\CourantModel;
 use CsrDelft\model\entity\courant\Courant;
 use CsrDelft\model\entity\courant\CourantCategorie;
-use CsrDelft\view\SmartyTemplateView;
-use Exception;
-use SmartyException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * CourantView.class.php
@@ -18,19 +14,23 @@ use SmartyException;
  * @property Courant $model
  *
  */
-class CourantView extends SmartyTemplateView {
+class CourantView extends Response {
 
+	private $model;
+	private $berichten;
 	private $instellingen;
 
 	/**
 	 * CourantView constructor.
 	 * @param Courant $courant
-	 * @throws CsrException
+	 * @param $berichten
 	 */
-	public function __construct(Courant $courant) {
-		parent::__construct($courant);
+	public function __construct(Courant $courant, $berichten) {
+		parent::__construct();
+		$this->model = $courant;
 		setlocale(LC_ALL, 'nl_NL@euro');
 		$this->instellingen = Ini::lees(Ini::CSRMAIL);
+		$this->berichten = $berichten;
 	}
 
 	public function getTitel() {
@@ -42,16 +42,17 @@ class CourantView extends SmartyTemplateView {
 	}
 
 	public function getHtml($headers = false) {
-		$this->smarty->assign('instellingen', $this->instellingen);
-		$this->smarty->assign('courant', $this->model);
-		$this->smarty->assign('catNames', CourantCategorie::getSelectOptions());
-		$this->smarty->assign('headers', $headers);
+		return view('courant.mail', [
+			'headers' => $headers,
+			'instellingen' => $this->instellingen,
+			'courant' => $this->model,
+			'berichten' => $this->berichten,
+			'catNames' => CourantCategorie::getSelectOptions(),
+		])->getHtml();
+	}
 
-		if (!file_exists(SMARTY_TEMPLATE_DIR . 'courant/mail/' . $this->model->template)) {
-			$this->model->template = 'courant.tpl';
-		}
-
-		return $this->smarty->fetch('courant/mail/' . $this->model->template);
+	public function getContent() {
+		return $this->getHtml(false);
 	}
 
 	public function view() {

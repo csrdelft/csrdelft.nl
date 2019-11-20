@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\T;
 class Courant extends PersistentEntity {
 	public $id;
 	public $verzendMoment;
-	public $template;
+	public $inhoud;
 	public $verzender;
 
 	protected static $table_name = 'courant';
@@ -19,7 +19,7 @@ class Courant extends PersistentEntity {
 	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, 'auto_increment'],
 		'verzendMoment' => [T::DateTime],
-		'template' => [T::String],
+		'inhoud' => [T::Text],
 		'verzender' => [T::UID],
 	];
 
@@ -28,12 +28,4 @@ class Courant extends PersistentEntity {
 	public function getJaar() {
 		return date('Y', strtotime($this->verzendMoment));
 	}
-
-	public function getBerichten() {
-		if (!$this->id) {
-			return CourantBerichtModel::instance()->getNieuweBerichten();
-		}
-		return CourantBerichtModel::instance()->getBerichten($this->id);
-	}
-
 }
