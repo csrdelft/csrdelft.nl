@@ -33,7 +33,7 @@ class CourantBerichtModel extends PersistenceModel {
 		if ($this->magBeheren() || LoginModel::mag('bestuur')) {
 			return $this->getBerichten();
 		} else {
-			return $this->find('uid = ?', [LoginModel::getUid()]);
+			return $this->find('uid = ?', [LoginModel::getUid()])->fetchAll();
 		}
 	}
 

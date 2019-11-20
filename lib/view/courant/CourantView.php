@@ -5,6 +5,7 @@ namespace CsrDelft\view\courant;
 use CsrDelft\common\Ini;
 use CsrDelft\model\entity\courant\Courant;
 use CsrDelft\model\entity\courant\CourantCategorie;
+use CsrDelft\view\ToResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @property Courant $model
  *
  */
-class CourantView extends Response {
+class CourantView implements ToResponse {
 
 	private $model;
 	private $berichten;
@@ -26,7 +27,6 @@ class CourantView extends Response {
 	 * @param $berichten
 	 */
 	public function __construct(Courant $courant, $berichten) {
-		parent::__construct();
 		$this->model = $courant;
 		setlocale(LC_ALL, 'nl_NL@euro');
 		$this->instellingen = Ini::lees(Ini::CSRMAIL);
@@ -51,11 +51,7 @@ class CourantView extends Response {
 		])->getHtml();
 	}
 
-	public function getContent() {
-		return $this->getHtml(false);
-	}
-
-	public function view() {
-		echo $this->getHtml();
+	public function toResponse(): Response {
+		return new Response($this->getHtml());
 	}
 }
