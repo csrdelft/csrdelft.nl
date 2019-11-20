@@ -20,6 +20,7 @@ use SmartyException;
  */
 class CourantView extends SmartyTemplateView {
 
+	private $berichten;
 	private $instellingen;
 
 	/**
@@ -27,10 +28,11 @@ class CourantView extends SmartyTemplateView {
 	 * @param Courant $courant
 	 * @throws CsrException
 	 */
-	public function __construct(Courant $courant) {
+	public function __construct(Courant $courant, $berichten) {
 		parent::__construct($courant);
 		setlocale(LC_ALL, 'nl_NL@euro');
 		$this->instellingen = Ini::lees(Ini::CSRMAIL);
+		$this->berichten = $berichten;
 	}
 
 	public function getTitel() {
@@ -44,14 +46,11 @@ class CourantView extends SmartyTemplateView {
 	public function getHtml($headers = false) {
 		$this->smarty->assign('instellingen', $this->instellingen);
 		$this->smarty->assign('courant', $this->model);
+		$this->smarty->assign('berichten', $this->berichten);
 		$this->smarty->assign('catNames', CourantCategorie::getSelectOptions());
 		$this->smarty->assign('headers', $headers);
 
-		if (!file_exists(SMARTY_TEMPLATE_DIR . 'courant/mail/' . $this->model->template)) {
-			$this->model->template = 'courant.tpl';
-		}
-
-		return $this->smarty->fetch('courant/mail/' . $this->model->template);
+		return $this->smarty->fetch('courant/mail/courant.tpl');
 	}
 
 	public function view() {

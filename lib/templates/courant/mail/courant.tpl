@@ -127,7 +127,7 @@
 										<font face="verdana" size="-1">
 											<div class="inhoudKop"><b>{$catName}</b></div>
 											<ul>
-                          {foreach from=$courant->getBerichten() item=bericht}
+                          {foreach from=$berichten item=bericht}
                               {if $bericht->cat==$categorie}
 																<li><a href="#{$bericht->id}"
 																			 style="text-decoration: none;">{$bericht->titel|bbcode:"mail"}</a></li>
@@ -141,7 +141,7 @@
 				</tr>
 			</table>
 			<font face="verdana" size="-1">
-          {foreach from=$courant->getBerichten() item=bericht}
+          {foreach from=$berichten item=bericht}
 						<h4><a name="{$bericht->id}"></a>{$bericht->titel|bbcode:"mail"}</h4>
 						<div class="p">{$bericht->bericht|bbcode:"mail"}</div>
           {/foreach}

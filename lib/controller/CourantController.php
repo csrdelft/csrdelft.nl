@@ -31,9 +31,7 @@ class CourantController extends AbstractController {
 	}
 
 	public function archief() {
-		return view('courant.archief', [
-			'couranten' => $this->courantModel->find(),
-		]);
+		return view('courant.archief', ['couranten' => $this->courantModel->find()]);
 	}
 
 	public function bekijken($id) {
@@ -42,29 +40,26 @@ class CourantController extends AbstractController {
 	}
 
 	public function voorbeeld() {
-		$courant = $this->courantModel->nieuwCourant();
-		return new CourantView($courant);
+		return new CourantView($this->courantModel->nieuwCourant(), $this->courantBerichtModel->getBerichten());
 	}
 
 	public function toevoegen() {
 		$bericht = new CourantBericht();
 		$bericht->datumTijd = getDateTime();
 		$bericht->uid = LoginModel::getUid();
+
 		$form = new CourantBerichtFormulier($bericht, '/courant');
+
 		if ($form->isPosted() && $form->validate()) {
-			$bericht->volgorde = [
-				'voorwoord' => 0,
-				'bestuur' => 1,
-				'csr' => 2,
-				'overig' => 3,
-				'sponsor' => 4,
-			][$bericht->cat];
+			$bericht->setVolgorde();
 			$this->courantBerichtModel->create($bericht);
 			setMelding('Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
+
 			return $this->redirectToRoute('courant-toevoegen');
 		}
+
 		return view('courant.beheer', [
-			'courant' => $this->courantModel,
+			'courantModel' => $this->courantModel,
 			'berichten' => $this->courantBerichtModel->getBerichtenVoorGebruiker(),
 			'form' => $form,
 		]);
@@ -81,7 +76,7 @@ class CourantController extends AbstractController {
 		}
 
 		return view('courant.beheer', [
-			'courant' => $this->courantModel,
+			'courantModel' => $this->courantModel,
 			'berichten' => $this->courantBerichtModel->getBerichtenVoorGebruiker(),
 			'form' => $form,
 		]);
@@ -101,24 +96,26 @@ class CourantController extends AbstractController {
 	}
 
 	public function verzenden($iedereen = null) {
-		if ($this->courantBerichtModel->getNieuweBerichten()->rowCount() < 1) {
+		if ($this->courantBerichtModel->getBerichten()->rowCount() < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
 			return $this->redirectToRoute('courant-toevoegen');
 		}
 
 		$courant = $this->courantModel->nieuwCourant();
 
-		$courantView = new CourantView($courant);
+		$courantView = new CourantView($courant, $this->courantBerichtModel->getBerichten());
 		$courant->inhoud = $courantView->getHtml(false);
 		if ($iedereen === 'iedereen') {
 			$this->courantModel->verzenden(Ini::lees(Ini::EMAILS, 'leden'), $courantView);
 
 			Database::transaction(function () use ($courant) {
 				$this->courantModel->create($courant);
-				$berichten = $this->courantBerichtModel->getNieuweBerichten();
+				$berichten = $this->courantBerichtModel->getBerichten();
+
 				foreach ($berichten as $bericht) {
 					$this->courantBerichtModel->delete($bericht);
 				}
+
 				setMelding('De courant is verzonden naar iedereen', 1);
 			});
 

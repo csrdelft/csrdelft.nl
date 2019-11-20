@@ -31,9 +31,9 @@
 		Als u uw bericht voor 22:00 invoert, kunt u tamelijk zeker zijn van plaatsing in de courant.
 		De PubCie streeft ernaar de courant rond 23:00/24:00 bij u in uw postvak te krijgen.
 	</p>
-	@if($berichten->rowCount() > 0)
+	@if(count($berichten) > 0)
 		<div id="courantKnoppenContainer">
-			@if($courant->magVerzenden())
+			@if($courantModel->magVerzenden())
 				<a href="/courant/verzenden" title="De C.S.R.-courant wilt versturen?" class="btn btn-primary post confirm">Verzenden</a>
 				<a href="/courant/voorbeeld" class="btn btn-primary" target="_blank">Laat voorbeeld zien</a>
 			@endif
@@ -45,18 +45,18 @@
 				<dt>
 					<span
 						class="onderstreept">{{$bericht->cat ? CsrDelft\model\entity\courant\CourantCategorie::getDescription($bericht->cat) : 'Geen categorie'}}</span>
-					@if($courant->magBeheren())
+					@if($courantModel->magBeheren())
 						{!! CsrDelft\model\ProfielModel::getLink($bericht->uid, 'civitas') !!}
 					@endif
 					<span class="dikgedrukt">{{$bericht->titel}}</span>
-					@if($courant->magBeheren($bericht->uid))
+					@if($courantModel->magBeheren($bericht->uid))
 						<a class="btn btn-primary" href="/courant/bewerken/{{$bericht->id}}">bewerken</a>
 						<a class="btn btn-primary post confirm ReloadPage" href="/courant/verwijderen/{{$bericht->id}}"
 							 title="Bericht verwijderen">verwijderen</a>
 					@endif
 				</dt>
 				<dd id="courantbericht{$bericht->id}"></dd>
-				@if(!$courant->magBeheren($bericht->uid))
+				@if(!$courantModel->magBeheren($bericht->uid))
 					<dd>{!! bbcode($bericht->bericht, "mail") !!}</dd>
 				@endif
 			@endforeach
