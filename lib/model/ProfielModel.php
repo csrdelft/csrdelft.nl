@@ -272,7 +272,7 @@ class ProfielModel extends CachedPersistenceModel {
 			}
 			$changes[] = $change;
 			// Corveeceasar mailen over vrijvallende corveetaken.
-			$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
+			$bericht = file_get_contents(TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
 				'NAAM' => ProfielModel::getNaam($profiel->uid, 'volledig'),
@@ -302,7 +302,7 @@ class ProfielModel extends CachedPersistenceModel {
 		$saldi = '';
 		$saldi .= 'CiviSaldo: ' . $profiel->getCiviSaldo() . "\n";
 
-		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/lidafmeldingfisci.mail');
+		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafmeldingfisci.mail');
 		$values = array(
 			'NAAM' => ProfielModel::getNaam($profiel->uid, 'volledig'),
 			'UID' => $profiel->uid,
@@ -374,7 +374,7 @@ class ProfielModel extends CachedPersistenceModel {
 			'bibliothecaris@csrdelft.nl' => 'Bibliothecaris C.S.R.',
 			$profiel->getPrimaryEmail() => $profiel->getNaam('civitas')
 		);
-		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
+		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
 		$values = array(
 			'NAAM' => ProfielModel::getNaam($profiel->uid, 'volledig'),
 			'UID' => $profiel->uid,

@@ -12,9 +12,6 @@ bin/ldap/settings.py
 data/*
 data/documenten/*
 data/log/*
-data/smarty/*
-data/smarty/cache/*
-data/smarty/compiled/*
 etc/*.ini
 etc/*.crt
 etc/*.kdbx
