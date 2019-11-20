@@ -73,16 +73,6 @@ class DataTable implements View, FormElement, ToResponse {
 	private $groupByColumn;
 
 	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
-		$metadata = null;
-		if (!is_subclass_of($orm, PersistentEntity::class)) {
-			/** @var ObjectManager $manager */
-			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
-			try {
-				$metadata = $manager->getClassMetaData($orm);
-			} catch (MappingException $ex) {
-				// ignore deze klasse is niet in doctrine
-			}
-		}
 		$this->model = new $orm();
 		$this->titel = $titel;
 
@@ -101,7 +91,17 @@ class DataTable implements View, FormElement, ToResponse {
 			'defaultContent' => ''
 		);
 
-		if ($metadata) { // Deze klasse is in doctrine.
+		$metadata = null;
+		if (!is_subclass_of($orm, PersistentEntity::class)) { // Deze klasse is in doctrine.
+			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
+			try {
+				$metadata = $manager->getClassMetaData($orm);
+			} catch (MappingException $ex) {
+				// ignore deze klasse is niet in doctrine
+			}
+		}
+
+		if ($metadata) {
 			// generate columns from entity attributes
 			foreach ($metadata->getFieldNames() as $attribute) {
 				$this->addColumn($attribute);
