@@ -96,7 +96,7 @@ class CourantController extends AbstractController {
 	}
 
 	public function verzenden($iedereen = null) {
-		if ($this->courantBerichtModel->getBerichten()->rowCount() < 1) {
+		if (count($this->courantBerichtModel->getBerichten()) < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
 			return $this->redirectToRoute('courant-toevoegen');
 		}
