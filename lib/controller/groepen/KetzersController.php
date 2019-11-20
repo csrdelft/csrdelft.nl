@@ -24,10 +24,10 @@ class KetzersController extends AbstractGroepenController {
 	public function nieuw(Request $request, $id = null, $soort = null) {
 		$form = new GroepAanmakenForm($this->model, $soort);
 		if ($request->getMethod() == 'GET') {
-			$this->beheren($request);
+			return $this->beheren($request);
 		} elseif ($form->validate()) {
 			$values = $form->getValues();
-			$redirect = $values['model']::instance()->getUrl() . 'aanmaken/' . $values['soort'];
+			$redirect = $values['model']::instance()->getUrl() . '/aanmaken/' . $values['soort'];
 			return new JsonResponse($redirect);
 		} else {
 			return $form;

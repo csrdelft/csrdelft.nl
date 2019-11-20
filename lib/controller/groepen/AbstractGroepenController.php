@@ -110,7 +110,8 @@ abstract class AbstractGroepenController {
 		$route('{id}/leden', 'leden', ['GET', 'POST']);
 		$route('{id}/wijzigen', 'wijzigen', ['GET', 'POST'], ['id' => null]);
 		$route('{id}/logboek', 'logboek', ['GET', 'POST'], ['id' => null]);
-		$route('{id}/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null]);
+		$route('aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['id' => null, 'soort' => null]);
+		$route('{id}/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null], [], 'aanmaken-met-id');
 		$route('{id}/opvolging', 'opvolging', ['POST']);
 		$route('{id}/converteren', 'converteren', ['POST']);
 		$route('{id}/sluiten', 'sluiten', ['POST']);
