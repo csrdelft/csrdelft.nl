@@ -32,7 +32,7 @@ td{
     background-repeat: repeat-y;
 }
 .hoofdKolom{
-    margin: 0; 
+    margin: 0;
     padding: 23px 20px 0 0;
     vertical-align: top;
 }
@@ -73,7 +73,7 @@ div.p{
 }
 ul{
     margin: 0 0 0 10px; padding: 0 0 0 5px;
-    
+
 }
 .onderlijn{
     text-decoration: underline;
@@ -113,15 +113,15 @@ li{
 <h4><font size="-3" face="verdana">Inhoud</font></h4>
 <table class="inhoud">
 <tr>
-{foreach from=$indexCats item=categorie key=catKey}
+{foreach from=$catNames item=catName key=categorie}
     {if $categorie!='voorwoord' AND $categorie!='sponsor'}
         <td class="inhoudKolom" valign="top">
         <font face="verdana" size="-1">
-        <div class="inhoudKop"><b>{$catNames[$catKey]}</b></div>
+        <div class="inhoudKop"><b>{$catName}</b></div>
         <ul>
         {foreach from=$courant->getBerichten() item=bericht}
-            {if $bericht.categorie==$categorie}
-                <li><a href="#{$bericht.ID}" style="text-decoration: none;">{$bericht.titel|bbcode:"mail"}</a></li>
+            {if $bericht->categorie==$categorie}
+                <li><a href="#{$bericht->id}" style="text-decoration: none;">{$bericht->titel|bbcode:"mail"}</a></li>
             {/if}
         {/foreach}
         </ul>
@@ -133,8 +133,8 @@ li{
 </table>
 <font face="verdana" size="-1">
 {foreach from=$courant->getBerichten() item=bericht}
-    <h4><a name="{$bericht.ID}"></a>{$bericht.titel|bbcode:"mail"}</h4>
-    <div class="p">{$bericht.bericht|bbcode:"mail"}</div>
+    <h4><a name="{$bericht->id}"></a>{$bericht->titel|bbcode:"mail"}</h4>
+    <div class="p">{$bericht->bericht|bbcode:"mail"}</div>
 {/foreach}
 </font>
 </td>
