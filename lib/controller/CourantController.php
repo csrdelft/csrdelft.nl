@@ -12,6 +12,7 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\courant\CourantBerichtFormulier;
 use CsrDelft\view\courant\CourantView;
 use CsrDelft\view\PlainView;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -37,7 +38,7 @@ class CourantController extends AbstractController {
 
 	public function bekijken($id) {
 		$courant = $this->courantModel->get($id);
-		return new CourantView($courant);
+		return new Response($courant->inhoud);
 	}
 
 	public function voorbeeld() {
@@ -108,15 +109,15 @@ class CourantController extends AbstractController {
 		$courant = $this->courantModel->nieuwCourant();
 
 		$courantView = new CourantView($courant);
+		$courant->inhoud = $courantView->getHtml(false);
 		if ($iedereen === 'iedereen') {
 			$this->courantModel->verzenden(Ini::lees(Ini::EMAILS, 'leden'), $courantView);
 
 			Database::transaction(function () use ($courant) {
-				$courant->id = $this->courantModel->create($courant);
+				$this->courantModel->create($courant);
 				$berichten = $this->courantBerichtModel->getNieuweBerichten();
 				foreach ($berichten as $bericht) {
-					$bericht->courantId = $courant->id;
-					$this->courantBerichtModel->update($bericht);
+					$this->courantBerichtModel->delete($bericht);
 				}
 				setMelding('De courant is verzonden naar iedereen', 1);
 			});
