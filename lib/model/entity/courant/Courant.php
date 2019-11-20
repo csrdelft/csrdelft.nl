@@ -12,6 +12,7 @@ class Courant extends PersistentEntity {
 	public $id;
 	public $verzendMoment;
 	public $template;
+	public $inhoud;
 	public $verzender;
 
 	protected static $table_name = 'courant';
@@ -20,6 +21,7 @@ class Courant extends PersistentEntity {
 		'id' => [T::Integer, false, 'auto_increment'],
 		'verzendMoment' => [T::DateTime],
 		'template' => [T::String],
+		'inhoud' => [T::Text],
 		'verzender' => [T::UID],
 	];
 

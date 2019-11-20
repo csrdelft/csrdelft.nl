@@ -29,7 +29,7 @@ td{
 	background-repeat: repeat-y;
 }
 .hoofdKolom{
-	margin: 0; 
+	margin: 0;
 	padding: 23px 20px 0 0;
 	vertical-align: top;
 }
@@ -69,7 +69,7 @@ p{
 }
 ul{
 	margin: 0 0 0 10px; padding: 0 0 0 5px;
-	
+
 }
 .onderlijn{
 	text-decoration: underline;
@@ -78,7 +78,7 @@ li{
 	margin: 0 0 0 00px;
 	color: #000;
 	font-size: 11px;
-} 
+}
 a{
 	color: black;
 }
@@ -89,7 +89,7 @@ a{
 <table>
 <tr>
 <td class="Zijbalk" valign="top">
-<img src="/plaetjes/csrmail/logo_owee2007.jpg" width="150" 
+<img src="/plaetjes/csrmail/logo_owee2007.jpg" width="150"
 height="187" alt="OWee-courant" />
 </td>
 <td class="hoofdKolom">
@@ -115,9 +115,9 @@ height="187" alt="OWee-courant" />
 </tr>
 </table>
 <font face="verdana" size="-1">
-	{foreach from=$courant.getBerichten() item=bericht}
-		<h4><a name={$bericht.ID}</a>{$bericht.titel|bbcode:"mail"}</h4>
-		<p>{$bericht.bericht|bbcode:"mail"}</p>
+	{foreach from=$courant->getBerichten() item=bericht}
+		<h4><a name={$bericht->id}</a>{$bericht->titel|bbcode:"mail"}</h4>
+		<p>{$bericht->bericht|bbcode:"mail"}</p>
 	{/foreach}
 </font>
 </td>

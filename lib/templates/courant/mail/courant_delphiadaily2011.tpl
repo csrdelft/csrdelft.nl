@@ -24,7 +24,7 @@ td{
 	font-face: "Adobe Garamond Pro", "Garamond", "Times", serif;
 }
 .hoofdKolom{
-	margin: 10px; 
+	margin: 10px;
 	padding: 23px 20px 0 0;
 	vertical-align: top;
 }
@@ -40,7 +40,7 @@ p{
 	color: #151515;
 	margin: 0 0 0 0;
 	padding: 10px 5px 5px 10px;
-	font-size: 16px; 
+	font-size: 16px;
 	font-face: "Adobe Garamond Pro", "Garamond", "Times", serif;
 	line-height: 1.4em;
 }
@@ -62,7 +62,7 @@ p{
 }
 ul{
 	margin: 0 0 0 10px; padding: 0 0 0 5px;
-	
+
 }
 .onderlijn{
 	text-decoration: underline;
@@ -95,15 +95,15 @@ div.citaatContainer{
 <font size="2" face="garamond"><h4>Inhoud</h4></font>
 <table class="inhoud" width="800">
 <tr>
-{foreach from=$indexCats item=categorie key=catKey}
+{foreach from=$catNames item=catName key=categorie}
 	{if $categorie!='voorwoord' AND $categorie!='sponsor'}
 		<td class="inhoudKolom" valign="top">
 		<font face="garamond" size="2">
-		<div class="inhoudKop"><b>{$catNames[$catKey]}</b></div>
+		<div class="inhoudKop"><b>{$catName}</b></div>
 		<ul>
 		{foreach from=$courant->getBerichten() item=bericht}
-			{if $bericht.categorie==$categorie}
-				<li><a href="#{$bericht.ID}" style="text-decoration: none;">{$bericht.titel|bbcode:"mail"}</a></li>
+			{if $bericht->categorie==$categorie}
+				<li><a href="#{$bericht->id}" style="text-decoration: none;">{$bericht->titel|bbcode:"mail"}</a></li>
 			{/if}
 		{/foreach}
 		</ul>
@@ -113,10 +113,10 @@ div.citaatContainer{
 {/foreach}
 </tr>
 </table>
-<font face="garamond" size="2">	
+<font face="garamond" size="2">
 {foreach from=$courant->getBerichten() item=bericht}
-	<h4><a name="{$bericht.ID}"></a>{$bericht.titel|bbcode:"mail"}</h4>
-	<p>{$bericht.bericht|bbcode:"mail"}</p>
+	<h4><a name="{$bericht->id}"></a>{$bericht->titel|bbcode:"mail"}</h4>
+	<p>{$bericht->bericht|bbcode:"mail"}</p>
 {/foreach}
 </font>
 </td>
