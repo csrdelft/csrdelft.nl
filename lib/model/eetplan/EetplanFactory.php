@@ -2,8 +2,8 @@
 
 namespace CsrDelft\model\eetplan;
 
-use CsrDelft\model\entity\eetplan\Eetplan;
-use CsrDelft\model\entity\eetplan\EetplanBekenden;
+use CsrDelft\entity\eetplan\Eetplan;
+use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\entity\profiel\Profiel;
 
@@ -217,7 +217,7 @@ class EetplanFactory {
 
 			# Maak een entity voor deze sessie
 			$nieuweetplan = new Eetplan();
-			$nieuweetplan->avond = $avond;
+			$nieuweetplan->avond = date_create($avond);
 			$nieuweetplan->uid = $uid;
 			$nieuweetplan->woonoord_id = $huis_id;
 

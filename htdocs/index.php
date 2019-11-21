@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,8 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false
 
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
+$kernel->boot();
+ContainerFacade::init($kernel->getContainer());
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

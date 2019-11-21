@@ -42,7 +42,8 @@
 		"symfony/dotenv": "^3.4",
 		"symfony/templating": "^3.4",
 		"symfony/flex": "^1.4",
-		"symfony/twig-bundle": "^3.4"
+		"symfony/twig-bundle": "^3.4",
+		"symfony/orm-pack": "^1.0"
 	},
 	"config": {
 		"platform": {
