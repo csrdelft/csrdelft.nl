@@ -21,6 +21,6 @@ doctrine:
             CsrDelft:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/lib/model/entity'
-                prefix: 'CsrDelft\model\entity'
+                dir: '%kernel.project_dir%/lib/entity'
+                prefix: 'CsrDelft\entity'
                 alias: App

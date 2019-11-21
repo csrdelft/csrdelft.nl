@@ -25,8 +25,8 @@ services:
     exclude: '../lib/controller/api'
     tags: ['controller.service_arguments']
 
-  CsrDelft\model\eetplan\EetplanRepository:
-  CsrDelft\model\eetplan\EetplanBekendenRepository:
+  CsrDelft\repository\eetplan\EetplanRepository:
+  CsrDelft\repository\eetplan\EetplanBekendenRepository:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
