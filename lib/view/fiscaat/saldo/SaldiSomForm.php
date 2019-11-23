@@ -4,7 +4,7 @@ namespace CsrDelft\view\fiscaat\saldo;
 
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\view\formulier\InlineForm;
-use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeField;
 use DateTime;
 
 /**
@@ -15,7 +15,7 @@ use DateTime;
  */
 class SaldiSomForm extends InlineForm {
 	public function __construct(CiviSaldoModel $model, DateTime $date = null) {
-		$field = new DateTimeObjectField("moment", $date ? $date->format("Y-m-d H:i:s") : date("Y-m-d H:i:s"), "Saldi som op", (int)date("Y"));
+		$field = new DateTimeField("moment", $date ? $date->format("Y-m-d H:i:s") : date("Y-m-d H:i:s"), "Saldi som op", (int)date("Y"));
 
 		parent::__construct($model, '/fiscaat/saldo/som', $field, true, true);
 	}
