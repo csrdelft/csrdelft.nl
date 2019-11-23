@@ -21,7 +21,7 @@ class TextField extends InputField {
 		if (is_int($min_len)) {
 			$this->min_len = $min_len;
 		}
-		if ($this->isPosted()) {
+		if ($this->isPosted() && is_string($this->value)) {
 			// reverse InputField constructor $this->getValue()
 			$this->value = htmlspecialchars_decode($this->value);
 		}

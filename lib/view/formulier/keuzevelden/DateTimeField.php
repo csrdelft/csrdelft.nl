@@ -20,6 +20,9 @@ class DateTimeField extends TextField {
 	protected $min_jaar;
 
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
+		if ($value instanceof \DateTime) {
+			$value = $value->format(DATETIME_FORMAT);
+		}
 		parent::__construct($name, $value, $description);
 		if (is_int($maxyear)) {
 			$this->max_jaar = $maxyear;

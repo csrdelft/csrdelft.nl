@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\model\agenda\AgendaModel;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
@@ -10,6 +9,7 @@ use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\agenda\AgendaRepository;
 use Jacwright\RestServer\RestException;
 
 class ApiAgendaController {
@@ -43,7 +43,7 @@ class ApiAgendaController {
 		$find = array($fromDate, $toDate);
 
 		// AgendaItems
-		$items = AgendaModel::instance()->find($query, $find);
+		$items = AgendaRepository::instance()->find($query, $find);
 		foreach ($items as $item) {
 			if ($item->magBekijken()) {
 				$result[] = $item;
@@ -86,7 +86,7 @@ class ApiAgendaController {
 		$maaltijdAanmeldingen = array_keys(MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
 
 		// Sorteren
-		usort($result, array(AgendaModel::class, 'vergelijkAgendeerbaars'));
+		usort($result, array(AgendaRepository::class, 'vergelijkAgendeerbaars'));
 
 		$agenda = array(
 			'events' => $result,

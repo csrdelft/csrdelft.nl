@@ -14,7 +14,7 @@ use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\DateField;
-use CsrDelft\view\formulier\keuzevelden\DateTimeField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\TimeField;
@@ -90,7 +90,7 @@ class FormFieldFactory {
 			case T::Time:
 				return new TimeField($fieldName, $value, $desc);
 			case T::DateTime:
-				return new DateTimeField($fieldName, $value, $desc);
+				return new DateTimeObjectField($fieldName, $value, $desc);
 			case T::Text:
 			case T::LongText:
 				return new TextareaField($fieldName, $value, $desc);

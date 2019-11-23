@@ -2,10 +2,11 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\agenda\AgendaModel;
-use CsrDelft\model\entity\agenda\AgendaItem;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\agenda\AgendaRepository;
 
 class IsHetAlView implements View {
 	/**
@@ -85,7 +86,8 @@ class IsHetAlView implements View {
 				break;
 
 			default:
-				$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
+				$agendaRepository = ContainerFacade::getContainer()->get(AgendaRepository::class);
+				$vandaag = $agendaRepository->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					$this->ja = true;
 					/*

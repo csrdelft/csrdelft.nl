@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden\required;
 
-use CsrDelft\view\formulier\keuzevelden\DateTimeField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -10,9 +10,9 @@ use CsrDelft\view\formulier\keuzevelden\DateTimeField;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 30/03/2017
  *
- * @see DateTimeField
+ * @see DateTimeObjectField
  */
-class RequiredDateTimeField extends DateTimeField {
+class RequiredDateTimeField extends DateTimeObjectField {
 
 	public $required = true;
 

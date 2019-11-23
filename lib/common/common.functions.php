@@ -19,6 +19,9 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\ToResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+define('DATE_FORMAT', 'Y-m-d');
+define('DATETIME_FORMAT', 'Y-m-d H:i:s');
+
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
  * @param string $haystack
