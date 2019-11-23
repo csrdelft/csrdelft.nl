@@ -23,6 +23,10 @@ use Symfony\Bridge\Doctrine\ManagerRegistry;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * De Agenda bevat alle Agendeerbare objecten die voorkomen in de webstek.
+ *
+ * @method AgendaItem find($id, $lockMode = null, $lockVersion = null)
+ * @method AgendaItem[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AgendaItem[]|\PDOStatement ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
  */
 class AgendaRepository extends ServiceEntityRepository {
 	use OrmTrait;

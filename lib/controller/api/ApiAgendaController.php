@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\api;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
@@ -43,7 +44,8 @@ class ApiAgendaController {
 		$find = array($fromDate, $toDate);
 
 		// AgendaItems
-		$items = AgendaRepository::instance()->find($query, $find);
+		$agendaRepository = ContainerFacade::getContainer()->get(AgendaRepository::class);
+		$items = $agendaRepository->ormFind($query, $find);
 		foreach ($items as $item) {
 			if ($item->magBekijken()) {
 				$result[] = $item;
