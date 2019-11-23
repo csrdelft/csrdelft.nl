@@ -124,8 +124,8 @@
 			</thead>
 			<tbody>
 			<tr>
-				<td>{{strftime("%e %b %Y", $vrijstelling->begin_datum)}}</td>
-				<td>{{strftime("%e %b %Y", $vrijstelling->eind_datum)}}</td>
+				<td>{{strftime("%e %b %Y", strtotime($vrijstelling->begin_datum))}}</td>
+				<td>{{strftime("%e %b %Y", strtotime($vrijstelling->eind_datum))}}</td>
 				<td>{{$vrijstelling->percentage}}%</td>
 				<td>{{$vrijstelling->getPunten()}}</td>
 			</tr>
