@@ -71,7 +71,7 @@ class AgendaController {
 
 	public function export($uuid) {
 		return new IcalResponse(view('agenda.icalendar', [
-			'items' => $this->getAgendaItemByUuid($uuid),
+			'items' => [$this->getAgendaItemByUuid($uuid)],
 			'published' => $this->icalDate(),
 		])->toString());
 	}
