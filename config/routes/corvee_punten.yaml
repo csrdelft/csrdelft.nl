@@ -7,7 +7,7 @@ corvee-punten-beheer:
 corvee-punten-beheer-resetjaar:
   path: /corvee/punten/resetjaar
   controller: CsrDelft\controller\maalcie\BeheerPuntenController::resetjaar
-  methods: GET
+  methods: POST
   defaults: { _mag: P_CORVEE_MOD }
 
 corvee-punten-beheer-wijzigpunten:

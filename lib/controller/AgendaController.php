@@ -71,7 +71,7 @@ class AgendaController {
 
 	public function export($uuid) {
 		return new IcalResponse(view('agenda.icalendar', [
-			'items' => $this->getAgendaItemByUuid($uuid),
+			'items' => [$this->getAgendaItemByUuid($uuid)],
 			'published' => $this->icalDate(),
 		])->toString());
 	}
@@ -229,6 +229,7 @@ class AgendaController {
 			default:
 				throw new CsrException('invalid UUID');
 		}
+		/** @var Agendeerbaar|false $item **/
 		return $item;
 	}
 

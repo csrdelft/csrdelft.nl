@@ -2,9 +2,8 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\model\entity\eetplan\Eetplan;
+use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLidField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;

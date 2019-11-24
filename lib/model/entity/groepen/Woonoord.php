@@ -46,7 +46,7 @@ class Woonoord extends AbstractGroep {
 	protected static $table_name = 'woonoorden';
 
 	public function getUrl() {
-		return '/groepen/woonoorden/' . $this->id . '/';
+		return '/groepen/woonoorden/' . $this->id;
 	}
 
 	/**

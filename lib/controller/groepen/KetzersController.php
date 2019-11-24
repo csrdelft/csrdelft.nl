@@ -5,6 +5,7 @@ namespace CsrDelft\controller\groepen;
 use CsrDelft\model\groepen\KetzersModel;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
 use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * KetzersController.class.php
@@ -16,21 +17,20 @@ use CsrDelft\view\JsonResponse;
  * @property KetzersModel $model
  */
 class KetzersController extends AbstractGroepenController {
-
-	public function __construct($query) {
-		parent::__construct($query, KetzersModel::instance());
+	public function __construct() {
+		parent::__construct(KetzersModel::instance());
 	}
 
-	public function nieuw($soort = null) {
+	public function nieuw(Request $request, $id = null, $soort = null) {
 		$form = new GroepAanmakenForm($this->model, $soort);
-		if ($this->getMethod() == 'GET') {
-			$this->beheren();
+		if ($request->getMethod() == 'GET') {
+			return $this->beheren($request);
 		} elseif ($form->validate()) {
 			$values = $form->getValues();
-			$redirect = $values['model']::instance()->getUrl() . 'aanmaken/' . $values['soort'];
-			$this->view = new JsonResponse($redirect);
+			$redirect = $values['model']::instance()->getUrl() . '/aanmaken/' . $values['soort'];
+			return new JsonResponse($redirect);
 		} else {
-			$this->view = $form;
+			return $form;
 		}
 	}
 

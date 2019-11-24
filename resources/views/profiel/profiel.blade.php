@@ -52,7 +52,6 @@
 				<div class="col-auto">
 					<div class="btn-toolbar">
 						<div class="btn-group">
-							{{--{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}--}}
 							@if($profiel->isInGoogleContacts())
 								<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts" class="btn btn-light"
 									 title="Dit profiel opdateren in mijn google adresboek">

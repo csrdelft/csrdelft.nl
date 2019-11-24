@@ -118,7 +118,7 @@ class LLLijst extends LLWeergave {
 				case 'woonoord':
 					$woonoord = $profiel->getWoonoord();
 					if ($woonoord) {
-						echo $woonoord;
+						echo '<a href="' . $woonoord->getUrl() . '">' . htmlspecialchars($woonoord->naam) . '</a>';
 					}
 					break;
 

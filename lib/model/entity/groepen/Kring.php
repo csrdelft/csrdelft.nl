@@ -40,7 +40,7 @@ class Kring extends AbstractGroep {
 	protected static $table_name = 'kringen';
 
 	public function getUrl() {
-		return '/groepen/kringen/' . $this->verticale . '.' . $this->kring_nummer . '/';
+		return '/groepen/kringen/' . $this->verticale . '.' . $this->kring_nummer;
 	}
 
 }

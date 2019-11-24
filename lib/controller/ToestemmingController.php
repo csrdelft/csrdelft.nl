@@ -41,9 +41,6 @@ class ToestemmingController extends AbstractController {
 		}
 	}
 
-	/**
-	 * @throws \SmartyException
-	 */
 	public function GET_overzicht() {
 		return view('default', ['content' => new CmsPaginaView(CmsPaginaModel::get('thuis')), 'modal' => new ToestemmingModalForm()]);
 	}

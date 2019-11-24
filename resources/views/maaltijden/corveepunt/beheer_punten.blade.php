@@ -29,7 +29,7 @@
 		vrijstellingen worden definitief verwijderd!
 	</p>
 	<div class="float-right">
-		<a href="/corvee/punten/resetjaar" title="Reset corveejaar" class="btn confirm">@icon("lightning") Corveejaar
+		<a href="/corvee/punten/resetjaar" title="Reset corveejaar" class="btn post confirm">@icon("lightning") Corveejaar
 			resetten</a>
 	</div>
 	<table id="maalcie-tabel" class="maalcie-tabel">

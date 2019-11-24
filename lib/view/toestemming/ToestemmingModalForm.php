@@ -6,7 +6,6 @@ use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\LidToestemming;
 use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\CsrSmarty;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -24,7 +23,6 @@ class ToestemmingModalForm extends ModalForm {
 	/**
 	 * @param bool $nieuw
 	 * @throws CsrException
-	 * @throws \SmartyException
 	 */
 	public function __construct($nieuw = false) {
 		parent::__construct(new LidToestemming(), '/toestemming', 'Toestemming geven');
@@ -32,7 +30,6 @@ class ToestemmingModalForm extends ModalForm {
 		$this->modalBreedte = 'modal-lg';
 		$this->nieuw = $nieuw;
 
-		$smarty = CsrSmarty::instance();
 		$fields = [];
 
 		$akkoord = '';
@@ -76,7 +73,7 @@ class ToestemmingModalForm extends ModalForm {
 	 * @param string $module
 	 * @param string $id
 	 * @return string
-	 * @throws \SmartyException|CsrException
+	 * @throws CsrException
 	 */
 	private function maakToestemmingLine($module, $id) {
 		$model = LidToestemmingModel::instance();

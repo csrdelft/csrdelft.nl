@@ -31,8 +31,6 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 			$mannen = 0;
 			$vrouwen = 0;
 
-			var_dump($groep->getLeden());
-
 			foreach ($groep->getLeden() as $lid) {
 				$profiel = ProfielModel::get($lid->uid);
 				if ($profiel->geslacht === Geslacht::Man) {

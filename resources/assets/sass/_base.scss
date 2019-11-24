@@ -245,6 +245,11 @@ form#streeplijst input, form#streeplijst label { text-align: left; margin: 3px; 
 #nieuwePeiling textarea { width: 400px; }
 #peilingOpties input { width: 400px; }
 
+.instelling:target {
+	padding: 3em 0;
+	border: 3px solid $success;
+}
+
 @include media-breakpoint-down(md) {
 	.cd-main-content {
 		/* Compenseer voor navbar */

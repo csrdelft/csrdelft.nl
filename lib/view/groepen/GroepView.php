@@ -85,7 +85,7 @@ class GroepView implements FormElement, ToResponse {
 		}
 		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
 		if ($this->groep->mag(AccessAction::Wijzigen)) {
-			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . 'wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-edit"></span></a></div>';
+			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . '/wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-edit"></span></a></div>';
 		}
 		$html .= '<h3>' . $this->getTitel();
 		if (property_exists($this->groep, 'locatie') AND !empty($this->groep->locatie)) {
@@ -95,7 +95,7 @@ class GroepView implements FormElement, ToResponse {
 		$html .= '</h3>';
 		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {
-			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post noanim" href="' . $this->groep->getUrl() . 'omschrijving">Meer lezen »</a>';
+			$html .= '<div class="clear">&nbsp;</div><a id="groep-omschrijving-' . $this->groep->id . '" class="post noanim" href="' . $this->groep->getUrl() . '/omschrijving">Meer lezen »</a>';
 		}
 		$html .= '</div>';
 		$html .= $this->leden->getHtml();

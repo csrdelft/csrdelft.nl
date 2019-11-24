@@ -22,8 +22,11 @@ services:
   # as action arguments even if you don't extend any base controller class
   CsrDelft\controller\:
     resource: '../lib/controller'
-    exclude: '../lib/controller/{{GeoLocation,GroepenRouter,Mededelingen,Rechten,Toestemming}Controller.php,groepen,framework,api}'
+    exclude: '../lib/controller/api'
     tags: ['controller.service_arguments']
+
+  CsrDelft\repository\eetplan\EetplanRepository:
+  CsrDelft\repository\eetplan\EetplanBekendenRepository:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones

@@ -63,7 +63,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	protected static $table_name = 'ketzers';
 
 	public function getUrl() {
-		return '/groepen/ketzers/' . $this->id . '/';
+		return '/groepen/ketzers/' . $this->id;
 	}
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\model\entity\eetplan\Eetplan;
+use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\view\datatable\DataTableResponse;
 
 /**
@@ -16,10 +16,10 @@ class EetplanBekendeHuizenResponse extends DataTableResponse {
 	 * @return string[]
 	 */
 	public function renderElement($entity) {
-		$array = $entity->jsonSerialize();
-		$array['woonoord'] = $entity->getWoonoord()->naam;
-		$array['naam'] = $entity->getNoviet()->getNaam();
-
-		return $array;
+		return [
+			'woonoord' => $entity->getWoonoord()->naam,
+			'naam' => $entity->getNoviet()->getNaam(),
+			'avond' => $entity->avond->format('d-m-Y'),
+		] + (array)$entity;
 	}
 }
