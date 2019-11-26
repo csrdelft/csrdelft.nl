@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\agenda\AgendaModel;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
@@ -11,6 +11,7 @@ use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
+use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
 use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
 
@@ -47,7 +48,8 @@ abstract class Zijbalk {
 			$beginMoment = strtotime(date('Y-m-d'));
 			$eindMoment = strtotime('+' . $aantalWeken . ' weeks', $beginMoment);
 			$eindMoment = strtotime('next saturday', $eindMoment);
-			$items = AgendaModel::instance()->getAllAgendeerbaar($beginMoment, $eindMoment, false, true);
+			$agendaRepository = ContainerFacade::getContainer()->get(AgendaRepository::class);
+			$items = $agendaRepository->getAllAgendeerbaar($beginMoment, $eindMoment, false, true);
 			if (count($items) > lid_instelling('zijbalk', 'agenda_max')) {
 				$items = array_slice($items, 0, lid_instelling('zijbalk', 'agenda_max'));
 			}

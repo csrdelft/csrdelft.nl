@@ -140,6 +140,13 @@ abstract class InputField implements FormElement, Validator {
 	}
 
 	/**
+	 * Value returned from this field
+	 */
+	public function getFormattedValue() {
+		return $this->getValue();
+	}
+
+	/**
 	 * Is de invoer voor het veld correct?
 	 * standaard krijgt deze functie de huidige waarde mee als argument
 	 *
