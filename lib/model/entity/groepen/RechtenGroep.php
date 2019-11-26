@@ -49,8 +49,8 @@ class RechtenGroep extends AbstractGroep {
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
 		switch ($action) {
-
 			case AccessAction::Bekijken:
+				break;
 			case AccessAction::Aanmelden:
 			case AccessAction::Bewerken:
 			case AccessAction::Afmelden:
@@ -60,6 +60,24 @@ class RechtenGroep extends AbstractGroep {
 				break;
 		}
 		return parent::mag($action, $allowedAuthenticationMethods);
+	}
+
+	/**
+	 * Rechten voor de gehele klasse of soort groep?
+	 *
+	 * @param string $action
+	 * @param null $allowedAuthenticationMethods
+	 * @return boolean
+	 */
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
+		switch ($action) {
+			case AccessAction::Aanmaken:
+			case AccessAction::Aanmelden:
+			case AccessAction::Bewerken:
+			case AccessAction::Afmelden:
+				return true;
+		}
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
 	}
 
 }

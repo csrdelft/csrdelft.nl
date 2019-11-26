@@ -12,7 +12,7 @@ class RechtenGroepenModel extends AbstractGroepenModel {
 	public function nieuw($soort = null) {
 		/** @var RechtenGroep $groep */
 		$groep = parent::nieuw();
-		$groep->rechten_aanmelden = P_LOGGED_IN;
+		$groep->rechten_aanmelden = P_LEDEN_MOD;
 		return $groep;
 	}
 
