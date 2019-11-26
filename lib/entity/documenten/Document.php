@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Document extends Bestand {
 	/**
 	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
