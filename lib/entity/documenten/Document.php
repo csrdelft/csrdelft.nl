@@ -69,7 +69,6 @@ class Document extends Bestand {
 	/**
 	 * Locatie van bestand
 	 * @var string
-	 * @ORM\Column(type="string")
 	 */
 	public $directory;
 
