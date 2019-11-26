@@ -2,8 +2,7 @@
 
 namespace CsrDelft\view\documenten;
 
-use CsrDelft\model\documenten\DocumentCategorieModel;
-use CsrDelft\model\entity\documenten\Document;
+use CsrDelft\entity\documenten\Document;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
@@ -17,10 +16,10 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
  */
 class DocumentBewerkenForm extends Formulier {
 
-	public function __construct(Document $document) {
+	public function __construct(Document $document, $categorieNamen) {
 		parent::__construct($document, '/documenten/bewerken/' . $document->id, 'Document bewerken');
 		$fields = [];
-		$fields[] = new SelectField('categorie_id', $document->categorie_id, 'Categorie', DocumentCategorieModel::instance()->getCategorieNamen());
+		$fields[] = new SelectField('categorie_id', $document->categorie_id, 'Categorie', $categorieNamen);
 		$fields[] = new RequiredTextField('naam', $document->naam, 'Documentnaam');
 		$fields['rechten'] = new RechtenField('leesrechten', $document->leesrechten, 'Leesrechten');
 		$fields['rechten']->readonly = true;
