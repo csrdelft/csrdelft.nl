@@ -33,11 +33,12 @@ class CmsPaginaController extends AbstractController {
 	}
 
 	public function bekijken($naam, $subnaam = "") {
+		$paginaNaam = $naam;
 		if ($subnaam) {
-			$naam = $subnaam;
+			$paginaNaam = $subnaam;
 		}
 		/** @var CmsPagina $pagina */
-		$pagina = $this->cmsPaginaRepository->find($naam);
+		$pagina = $this->cmsPaginaRepository->find($paginaNaam);
 		if (!$pagina) { // 404
 			throw new NotFoundHttpException();
 		}
