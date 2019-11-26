@@ -73,7 +73,7 @@ class CmsPaginaController extends AbstractController {
 		}
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
-			$pagina->laatst_gewijzigd = getDateTime();
+			$pagina->laatst_gewijzigd = date_create();
 			if ($this->cmsPaginaRepository->exists($pagina)) {
 				$this->cmsPaginaRepository->update($pagina);
 				setMelding('Bijgewerkt: ' . $pagina->naam, 1);

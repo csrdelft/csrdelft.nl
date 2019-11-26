@@ -38,7 +38,7 @@ class CmsPagina {
 	/**
 	 * DateTime
 	 * @ORM\Column(type="datetime")
-	 * @var string
+	 * @var \DateTime
 	 */
 	public $laatst_gewijzigd;
 	/**
