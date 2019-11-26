@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\cms;
 
-use CsrDelft\model\entity\CmsPagina;
+use CsrDelft\entity\CmsPagina;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\Icon;
 use CsrDelft\view\ToHtmlResponse;

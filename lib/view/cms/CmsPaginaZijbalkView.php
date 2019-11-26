@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\cms;
 
-use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\View;
 
 /**
@@ -17,7 +17,7 @@ class CmsPaginaZijbalkView implements View {
 
 	private $paginas;
 
-	public function __construct(CmsPaginaModel $model) {
+	public function __construct(CmsPaginaRepository $model) {
 		$this->paginas = $model->getAllePaginas();
 	}
 

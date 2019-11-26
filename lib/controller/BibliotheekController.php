@@ -7,11 +7,11 @@ use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekImporter;
 use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
-use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\entity\bibliotheek\BoekRecensie;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatable;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableResponse;
 use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
@@ -32,11 +32,16 @@ class BibliotheekController extends AbstractController {
 	private $model;
 	private $boekRecensieModel;
 	private $boekExemplaarModel;
+	/**
+	 * @var CmsPaginaRepository
+	 */
+	private $cmsPaginaRepository;
 
-	public function __construct() {
+	public function __construct(CmsPaginaRepository $cmsPaginaRepository) {
 		$this->model = BoekModel::instance();
 		$this->boekRecensieModel = BoekRecensieModel::instance();
 		$this->boekExemplaarModel = BoekExemplaarModel::instance();
+		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
 	public function recensie($boek_id) {
@@ -55,11 +60,11 @@ class BibliotheekController extends AbstractController {
 	}
 
 	public function rubrieken() {
-		return view('default', ['content' => new CmsPaginaView(CmsPaginaModel::get('rubrieken'))]);
+		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('rubrieken'))]);
 	}
 
 	public function wenslijst() {
-		return view('default', ['content' => new CmsPaginaView(CmsPaginaModel::get('wenslijst'))]);
+		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('wenslijst'))]);
 	}
 
 	public function catalogustonen() {

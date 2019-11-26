@@ -2,10 +2,11 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
@@ -44,7 +45,7 @@ class RechtenTable extends DataTable {
 	}
 
 	public function view() {
-		$view = new CmsPaginaView(CmsPaginaModel::get('UitlegACL'));
+		$view = new CmsPaginaView(ContainerFacade::getContainer()->get(CmsPaginaRepository::class)->find('UitlegACL'));
 		$view->view();
 		parent::view();
 	}
