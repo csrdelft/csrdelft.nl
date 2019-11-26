@@ -139,7 +139,7 @@ class DocumentenController extends AbstractController {
 			$document = $form->getModel();
 
 			$document->eigenaar = LoginModel::getUid();
-			$document->toegevoegd = getDateTime();
+			$document->toegevoegd = date_create();
 
 			$bestand = $form->getUploader()->getModel();
 
