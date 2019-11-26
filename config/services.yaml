@@ -25,13 +25,6 @@ services:
     exclude: '../lib/controller/api'
     tags: ['controller.service_arguments']
 
-  CsrDelft\repository\eetplan\EetplanRepository:
-  CsrDelft\repository\eetplan\EetplanBekendenRepository:
-  CsrDelft\repository\agenda\AgendaRepository:
-  CsrDelft\repository\agenda\AgendaVerbergenRepository:
-  CsrDelft\repository\documenten\DocumentRepository:
-  CsrDelft\repository\documenten\DocumentCategorieRepository:
-
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
   CsrDelft\events\ViewEventListener:
