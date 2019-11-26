@@ -367,7 +367,12 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
 }
 
 function reldate($datum) {
-	$moment = strtotime($datum);
+	if ($datum instanceof DateTime) {
+		$moment = $datum->getTimestamp();
+	} else {
+		$moment = strtotime($datum);
+	}
+
 	if (date('Y-m-d') == date('Y-m-d', $moment)) {
 		$return = 'vandaag om ' . strftime('%H:%M', $moment);
 	} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
