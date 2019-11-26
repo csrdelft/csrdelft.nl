@@ -3,9 +3,9 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\CmsPaginaModel;
-use CsrDelft\model\entity\CmsPagina;
+use CsrDelft\entity\CmsPagina;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaForm;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\cms\CmsPaginaZijbalkView;
@@ -19,31 +19,26 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Controller van cms paginas.
  */
 class CmsPaginaController extends AbstractController {
+	/** @var CmsPaginaRepository */
+	private $cmsPaginaRepository;
 
-	/**
-	 * Lijst van pagina's om te bewerken in de zijbalk
-	 * @var CmsPaginaZijbalkView[]
-	 */
-	private $zijbalk = array();
-	/** @var CmsPaginaModel */
-	private $cmsPaginaModel;
-
-	public function __construct() {
-		$this->cmsPaginaModel = CmsPaginaModel::instance();
+	public function __construct(CmsPaginaRepository $cmsPaginaRepository) {
+		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
 	public function overzicht() {
 		return view('cms.overzicht', [
-			'paginas' => CmsPaginaModel::instance()->getAllePaginas(),
+			'paginas' => $this->cmsPaginaRepository->getAllePaginas(),
 		]);
 	}
 
 	public function bekijken($naam, $subnaam = "") {
+		$paginaNaam = $naam;
 		if ($subnaam) {
-			$naam = $subnaam;
+			$paginaNaam = $subnaam;
 		}
 		/** @var CmsPagina $pagina */
-		$pagina = $this->cmsPaginaModel->get($naam);
+		$pagina = $this->cmsPaginaRepository->find($paginaNaam);
 		if (!$pagina) { // 404
 			throw new NotFoundHttpException();
 		}
@@ -70,21 +65,21 @@ class CmsPaginaController extends AbstractController {
 	}
 
 	public function bewerken($naam) {
-		$pagina = $this->cmsPaginaModel->get($naam);
+		$pagina = $this->cmsPaginaRepository->find($naam);
 		if (!$pagina) {
-			$pagina = $this->cmsPaginaModel->nieuw($naam);
+			$pagina = $this->cmsPaginaRepository->nieuw($naam);
 		}
 		if (!$pagina->magBewerken()) {
 			throw new CsrToegangException();
 		}
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
-			$pagina->laatst_gewijzigd = getDateTime();
-			if ($this->cmsPaginaModel->exists($pagina)) {
-				$this->cmsPaginaModel->update($pagina);
+			$pagina->laatst_gewijzigd = date_create();
+			if ($this->cmsPaginaRepository->exists($pagina)) {
+				$this->cmsPaginaRepository->update($pagina);
 				setMelding('Bijgewerkt: ' . $pagina->naam, 1);
 	 		} else {
-				$this->cmsPaginaModel->create($pagina);
+				$this->cmsPaginaRepository->create($pagina);
 				setMelding('Ingevoegd: ' . $pagina->naam, 1);
 			}
 			return $this->redirectToRoute('cms-bekijken', ['naam' => $pagina->naam]);
@@ -95,15 +90,13 @@ class CmsPaginaController extends AbstractController {
 
 	public function verwijderen($naam) {
 		/** @var CmsPagina $pagina */
-		$pagina = $this->cmsPaginaModel->get($naam);
+		$pagina = $this->cmsPaginaRepository->find($naam);
 		if (!$pagina OR !$pagina->magVerwijderen()) {
 			throw new CsrToegangException();
 		}
-		if ($this->cmsPaginaModel->delete($pagina)) {
-			setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
-		} else {
-			setMelding('Verwijderen mislukt', -1);
-		}
+		$this->cmsPaginaRepository->delete($pagina);
+		setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
+
 		return new JsonResponse(CSR_ROOT); // redirect
 	}
 

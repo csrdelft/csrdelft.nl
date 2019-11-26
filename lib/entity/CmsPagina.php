@@ -1,79 +1,64 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\entity;
 
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CmsPagina.class.php
- *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Content Management System Paginas zijn statische pagina's die via de front-end kunnen worden gewijzigd.
+ *
+ * @ORM\Table("cms_paginas")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\CmsPaginaRepository")
  */
-class CmsPagina extends PersistentEntity {
+class CmsPagina {
 
 	/**
 	 * Primary key
+	 * @ORM\Id()
+	 * @ORM\Column(type="string", length=191)
 	 * @var string
 	 */
 	public $naam;
 	/**
 	 * Titel
+	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	public $titel;
 	/**
 	 * Inhoud
+	 * @ORM\Column(type="text", length=16777216)
 	 * @var string
 	 */
 	public $inhoud;
 	/**
 	 * DateTime
-	 * @var string
+	 * @ORM\Column(type="datetime")
+	 * @var \DateTime
 	 */
 	public $laatst_gewijzigd;
 	/**
 	 * Permissie voor tonen
+	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	public $rechten_bekijken;
 	/**
 	 * Link
+	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	public $rechten_bewerken;
 	/**
 	 * Inline HTML
+	 * @ORM\Column(type="boolean")
 	 * @var boolean
 	 */
 	public $inline_html;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'naam' => array(T::StringKey),
-		'titel' => array(T::String),
-		'inhoud' => array(T::LongText),
-		'laatst_gewijzigd' => array(T::DateTime),
-		'rechten_bekijken' => array(T::String),
-		'rechten_bewerken' => array(T::String),
-		'inline_html' => array(T::Boolean)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('naam');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'cms_paginas';
 
 	/**
 	 * @return bool

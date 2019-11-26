@@ -4,11 +4,11 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
 
@@ -17,8 +17,8 @@ use CsrDelft\view\login\AccountForm;
  * @since 28/07/2019
  */
 class AccountController extends AbstractController {
-	public function aanvragen() {
-		return view('default', ['content' => CmsPaginaModel::get('accountaanvragen')]);
+	public function aanvragen(CmsPaginaRepository $cmsPaginaRepository) {
+		return view('default', ['content' => $cmsPaginaRepository->find('accountaanvragen')]);
 	}
 
 	public function aanmaken($uid = null) {
