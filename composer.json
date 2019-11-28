@@ -64,7 +64,10 @@
 		"symfony/profiler-pack": "*"
 	},
 	"scripts": {
-		"serve": "symfony serve --document-root htdocs",
+		"serve": [
+			"Composer\\Config::disableProcessTimeout",
+			"symfony serve --document-root htdocs"
+		],
 		"phinx": "vendor/bin/phinx",
 		"migrate": "vendor/bin/phinx migrate",
 		"generator": "@php bin/dev/generate.php",
