@@ -17,8 +17,27 @@ use CsrDelft\view\login\AccountForm;
  * @since 28/07/2019
  */
 class AccountController extends AbstractController {
-	public function aanvragen(CmsPaginaRepository $cmsPaginaRepository) {
-		return view('default', ['content' => $cmsPaginaRepository->find('accountaanvragen')]);
+	/**
+	 * @var CmsPaginaRepository
+	 */
+	private $cmsPaginaRepository;
+	/**
+	 * @var AccountModel
+	 */
+	private $accountModel;
+	/**
+	 * @var LoginModel
+	 */
+	private $loginModel;
+
+	public function __construct(AccountModel $accountModel, LoginModel $loginModel, CmsPaginaRepository $cmsPaginaRepository) {
+		$this->cmsPaginaRepository = $cmsPaginaRepository;
+		$this->accountModel = $accountModel;
+		$this->loginModel = $loginModel;
+	}
+
+	public function aanvragen() {
+		return view('default', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
 	}
 
 	public function aanmaken($uid = null) {
@@ -26,12 +45,12 @@ class AccountController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		if ($uid == null) {
-			$uid = LoginModel::instance()->getUid();
+			$uid = $this->loginModel->getUid();
 		}
 		if (AccountModel::get($uid)) {
 			setMelding('Account bestaat al', 0);
 		} else {
-			$account = AccountModel::instance()->maakAccount($uid);
+			$account = $this->accountModel->maakAccount($uid);
 			if ($account) {
 				setMelding('Account succesvol aangemaakt', 1);
 			} else {
@@ -43,15 +62,15 @@ class AccountController extends AbstractController {
 
 	public function bewerken($uid = null) {
 		if ($uid == null) {
-			$uid = LoginModel::instance()->getUid();
+			$uid = $this->loginModel->getUid();
 		}
 		if ($uid === 'x999') {
 			return $this->aanvragen();
 		}
-		if ($uid !== LoginModel::instance()->getUid() && !LoginModel::mag(P_ADMIN)) {
+		if ($uid !== $this->loginModel->getUid() && !LoginModel::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
-		if (LoginModel::instance()->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
+		if ($this->loginModel->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
 			setMelding('U mag geen account wijzigen want u bent niet recent met wachtwoord ingelogd', 2);
 			throw new CsrToegangException();
 		}
@@ -70,7 +89,7 @@ class AccountController extends AbstractController {
 			}
 			// username, email & wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
-			AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
+			$this->accountModel->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
 		return view('default', ['content' => $form]);
@@ -78,16 +97,16 @@ class AccountController extends AbstractController {
 
 	public function verwijderen($uid = null) {
 		if ($uid == null) {
-			$uid = LoginModel::instance()->getUid();
+			$uid = $this->loginModel->getUid();
 		}
-		if ($uid !== LoginModel::instance()->getUid() && !LoginModel::mag(P_ADMIN)) {
+		if ($uid !== $this->loginModel->getUid() && !LoginModel::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
 		$account = AccountModel::get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 		} else {
-			$result = AccountModel::instance()->delete($account);
+			$result = $this->accountModel->delete($account);
 			if ($result === 1) {
 				setMelding('Account succesvol verwijderd', 1);
 			} else {

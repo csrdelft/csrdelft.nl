@@ -40,10 +40,37 @@ class AgendaController {
 	 * @var AgendaVerbergenRepository
 	 */
 	private $agendaVerbergenRepository;
+	/**
+	 * @var ActiviteitenModel
+	 */
+	private $activiteitenModel;
+	/**
+	 * @var CorveeTakenModel
+	 */
+	private $corveeTakenModel;
+	/**
+	 * @var MaaltijdenModel
+	 */
+	private $maaltijdenModel;
+	/**
+	 * @var ProfielModel
+	 */
+	private $profielModel;
 
-	public function __construct(AgendaRepository $agendaRepository, AgendaVerbergenRepository $agendaVerbergenRepository) {
+	public function __construct(
+		AgendaRepository $agendaRepository,
+		AgendaVerbergenRepository $agendaVerbergenRepository,
+		ActiviteitenModel $activiteitenModel,
+		CorveeTakenModel $corveeTakenModel,
+		MaaltijdenModel $maaltijdenModel,
+		ProfielModel $profielModel
+	) {
 		$this->agendaRepository = $agendaRepository;
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
+		$this->activiteitenModel = $activiteitenModel;
+		$this->corveeTakenModel = $corveeTakenModel;
+		$this->maaltijdenModel = $maaltijdenModel;
+		$this->profielModel = $profielModel;
 	}
 
 	/**
@@ -146,7 +173,7 @@ class AgendaController {
 			$item->item_id = (int)$this->agendaRepository->create($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input
-				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment . ')', 1);
+				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment->format(DATETIME_FORMAT) . ')', 1);
 				$item->item_id = null;
 				return new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 			} else {
@@ -214,19 +241,19 @@ class AgendaController {
 		switch ($module[0]) {
 
 			case 'csrdelft':
-				$item = ProfielModel::instance()->retrieveByUUID($refuuid);
+				$item = $this->profielModel->retrieveByUUID($refuuid);
 				break;
 
 			case 'maaltijd':
-				$item = MaaltijdenModel::instance()->retrieveByUUID($refuuid);
+				$item = $this->maaltijdenModel->retrieveByUUID($refuuid);
 				break;
 
 			case 'corveetaak':
-				$item = CorveeTakenModel::instance()->retrieveByUUID($refuuid);
+				$item = $this->corveeTakenModel->retrieveByUUID($refuuid);
 				break;
 
 			case 'activiteit':
-				$item = ActiviteitenModel::instance()->retrieveByUUID($refuuid);
+				$item = $this->activiteitenModel->retrieveByUUID($refuuid);
 				break;
 
 			case 'agendaitem':

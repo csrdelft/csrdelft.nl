@@ -38,38 +38,69 @@ use Symfony\Component\HttpFoundation\Request;
  * Controller van het forum.
  */
 class ForumController extends AbstractController {
-	/** @var DebugLogModel */
+	/**
+	 * @var DebugLogModel
+	 */
 	private $debugLogModel;
-	/** @var ForumDelenMeldingModel */
+	/**
+	 * @var ForumDelenMeldingModel
+	 */
 	private $forumDelenMeldingModel;
-	/** @var ForumDelenModel */
+	/**
+	 * @var ForumDelenModel
+	 */
 	private $forumDelenModel;
-	/** @var ForumDradenGelezenModel */
+	/**
+	 * @var ForumDradenGelezenModel
+	 */
 	private $forumDradenGelezenModel;
-	/** @var ForumDradenMeldingModel */
+	/**
+	 * @var ForumDradenMeldingModel
+	 */
 	private $forumDradenMeldingModel;
-	/** @var ForumDradenModel */
+	/**
+	 * @var ForumDradenModel
+	 */
 	private $forumDradenModel;
-	/** @var ForumDradenReagerenModel */
+	/**
+	 * @var ForumDradenReagerenModel
+	 */
 	private $forumDradenReagerenModel;
-	/** @var ForumDradenVerbergenModel */
+	/**
+	 * @var ForumDradenVerbergenModel
+	 */
 	private $forumDradenVerbergenModel;
-	/** @var ForumModel */
+	/**
+	 * @var ForumModel
+	 */
 	private $forumModel;
-	/** @var ForumPostsModel */
+	/**
+	 * @var ForumPostsModel
+	 */
 	private $forumPostsModel;
 
-	public function __construct() {
-		$this->debugLogModel = DebugLogModel::instance();
-		$this->forumDelenMeldingModel = ForumDelenMeldingModel::instance();
-		$this->forumDelenModel = ForumDelenModel::instance();
-		$this->forumDradenGelezenModel = ForumDradenGelezenModel::instance();
-		$this->forumDradenMeldingModel = ForumDradenMeldingModel::instance();
-		$this->forumDradenModel = ForumDradenModel::instance();
-		$this->forumDradenReagerenModel = ForumDradenReagerenModel::instance();
-		$this->forumDradenVerbergenModel = ForumDradenVerbergenModel::instance();
-		$this->forumModel = ForumModel::instance();
-		$this->forumPostsModel = ForumPostsModel::instance();
+	public function __construct(
+		DebugLogModel $debugLogModel,
+		ForumDelenMeldingModel $forumDelenMeldingModel,
+		ForumDelenModel $forumDelenModel,
+		ForumDradenGelezenModel $forumDradenGelezenModel,
+		ForumDradenMeldingModel $forumDradenMeldingModel,
+		ForumDradenModel $forumDradenModel,
+		ForumDradenReagerenModel $forumDradenReagerenModel,
+		ForumDradenVerbergenModel $forumDradenVerbergenModel,
+		ForumModel $forumModel,
+		ForumPostsModel $forumPostsModel
+	) {
+		$this->debugLogModel = $debugLogModel;
+		$this->forumDelenMeldingModel = $forumDelenMeldingModel;
+		$this->forumDelenModel = $forumDelenModel;
+		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
+		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
+		$this->forumDradenModel = $forumDradenModel;
+		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
+		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
+		$this->forumModel = $forumModel;
+		$this->forumPostsModel = $forumPostsModel;
 	}
 
 	/**
