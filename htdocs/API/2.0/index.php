@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\controller\api\ApiActiviteitenController;
 use CsrDelft\controller\api\ApiAgendaController;
 use CsrDelft\controller\api\ApiAuthController;
@@ -7,7 +8,9 @@ use CsrDelft\controller\api\ApiForumController;
 use CsrDelft\controller\api\ApiLedenController;
 use CsrDelft\controller\api\ApiMaaltijdenController;
 use CsrDelft\controller\api\ApiSponsorlinksController;
+use CsrDelft\Kernel;
 use Jacwright\RestServer\RestServer;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once 'configuratie.include.php';
 
@@ -25,6 +28,11 @@ if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], explode(
 		exit;
 	}
 }
+
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+$request = Request::createFromGlobals();
+$kernel->boot();
+ContainerFacade::init($kernel->getContainer());
 
 $mode = DEBUG ? 'debug' : 'production';
 $server = new RestServer($mode);
