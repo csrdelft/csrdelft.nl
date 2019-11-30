@@ -75,7 +75,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		return $post;
 	}
 
-	protected function __construct(
+	public function __construct(
 		ForumDradenGelezenModel $forumDradenGelezenModel
 	) {
 		parent::__construct();

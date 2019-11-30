@@ -33,7 +33,7 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws FileLoaderLoadException
 	 */
-	protected function __construct() {
+	public function __construct() {
 		parent::__construct();
 
 		$this->load('instellingen/lid_instelling.yaml', new InstellingConfiguration());

@@ -30,7 +30,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws FileLoaderLoadException
 	 */
-	protected function __construct() {
+	public function __construct() {
 		parent::__construct();
 
 		$this->load('instellingen/toestemming.yaml', new InstellingConfiguration());

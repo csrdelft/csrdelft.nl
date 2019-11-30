@@ -8,6 +8,10 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Persistence\Database;
 
 class LichtingenModel extends AbstractGroepenModel {
+	public function __construct() {
+		parent::__static();
+		parent::__construct();
+	}
 
 	const ORM = Lichting::class;
 

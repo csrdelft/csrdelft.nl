@@ -8,6 +8,10 @@ use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\security\LoginModel;
 
 class WoonoordenModel extends AbstractGroepenModel {
+	public function __construct() {
+		parent::__static();
+		parent::__construct();
+	}
 
 	const ORM = Woonoord::class;
 

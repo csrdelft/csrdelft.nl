@@ -12,7 +12,7 @@ use CsrDelft\model\groepen\OnderverenigingenModel;
  * Controller voor onderverenigingen.
  */
 class OnderverenigingenController extends AbstractGroepenController {
-	public function __construct() {
-		parent::__construct(OnderverenigingenModel::instance());
+	public function __construct(OnderverenigingenModel $onderverenigingenModel) {
+		parent::__construct($onderverenigingenModel);
 	}
 }

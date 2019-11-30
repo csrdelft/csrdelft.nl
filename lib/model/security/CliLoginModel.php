@@ -40,7 +40,7 @@ class CliLoginModel extends LoginModel {
 	/**
 	 * CliLoginModel constructor.
 	 */
-	protected function __construct() {
+	public function __construct() {
 		parent::__static();
 		parent::__construct();
 		if (!$this->validate()) {

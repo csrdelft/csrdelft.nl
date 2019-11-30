@@ -37,6 +37,29 @@ use CsrDelft\Orm\Persistence\Database;
 class ProfielModel extends CachedPersistenceModel {
 
 	const ORM = Profiel::class;
+	/**
+	 * @var MaaltijdAbonnementenModel
+	 */
+	private $maaltijdAbonnementenModel;
+	/**
+	 * @var CorveeTakenModel
+	 */
+	private $corveeTakenModel;
+	/**
+	 * @var BoekExemplaarModel
+	 */
+	private $boekExemplaarModel;
+
+	public function __construct(
+		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
+		CorveeTakenModel $corveeTakenModel,
+		BoekExemplaarModel $boekExemplaarModel
+	) {
+		parent::__construct();
+		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
+		$this->corveeTakenModel = $corveeTakenModel;
+		$this->boekExemplaarModel = $boekExemplaarModel;
+	}
 
 	public static function changelog(array $diff, $uid) {
 		if (empty($diff)) {
@@ -244,7 +267,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
-		$aantal = MaaltijdAbonnementenModel::instance()->verwijderAbonnementenVoorLid($profiel->uid);
+		$aantal = $this->maaltijdAbonnementenModel->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
 			return [new ProfielLogTextEntry('Afmelden abo\'s: ' . $aantal . ' uitgezet.')];
 		}
@@ -259,8 +282,8 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
-		$taken = CorveeTakenModel::instance()->getKomendeTakenVoorLid($profiel->uid);
-		$aantal = CorveeTakenModel::instance()->verwijderTakenVoorLid($profiel->uid);
+		$taken = $this->corveeTakenModel->getKomendeTakenVoorLid($profiel->uid);
+		$aantal = $this->corveeTakenModel->verwijderTakenVoorLid($profiel->uid);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}
@@ -332,7 +355,7 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return bool mailen is wel/niet verzonden
 	 */
 	private function notifyBibliothecaris(Profiel $profiel, $oudestatus) {
-		$geleend = BoekExemplaarModel::instance()->getGeleend($profiel);
+		$geleend = $this->boekExemplaarModel->getGeleend($profiel);
 		if (!is_array($geleend)) {
 			$geleend = array();
 		}

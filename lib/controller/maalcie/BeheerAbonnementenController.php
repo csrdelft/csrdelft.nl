@@ -14,40 +14,48 @@ use CsrDelft\model\ProfielModel;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class BeheerAbonnementenController {
-	private $model;
+	/**
+	 * @var MaaltijdAbonnementenModel
+	 */
+	private $maaltijdAbonnementenModel;
+	/**
+	 * @var MaaltijdRepetitiesModel
+	 */
+	private $maaltijdRepetitiesModel;
 
-	public function __construct() {
-		$this->model = MaaltijdAbonnementenModel::instance();
+	public function __construct(MaaltijdAbonnementenModel $maaltijdAbonnementenModel, MaaltijdRepetitiesModel $maaltijdRepetitiesModel) {
+		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
+		$this->maaltijdRepetitiesModel = $maaltijdRepetitiesModel;
 	}
 
 	public function waarschuwingen() {
-		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenWaarschuwingenMatrix();
+		$matrix_repetities = $this->maaltijdAbonnementenModel->getAbonnementenWaarschuwingenMatrix();
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'waarschuwing',
-			'aborepetities' => MaaltijdRepetitiesModel::instance()->find('abonneerbaar = true'),
+			'aborepetities' => $this->maaltijdRepetitiesModel->find('abonneerbaar = true'),
 			'repetities' => $matrix_repetities[1],
 			'matrix' => $matrix_repetities[0],
 		]);
 	}
 
 	public function ingeschakeld() {
-		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenMatrix();
+		$matrix_repetities = $this->maaltijdAbonnementenModel->getAbonnementenMatrix();
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'in',
-			'aborepetities' => MaaltijdRepetitiesModel::instance()->find('abonneerbaar = true'),
+			'aborepetities' => $this->maaltijdRepetitiesModel->find('abonneerbaar = true'),
 			'repetities' => $matrix_repetities[1],
 			'matrix' => $matrix_repetities[0],
 		]);
 	}
 
 	public function abonneerbaar() {
-		$matrix_repetities = MaaltijdAbonnementenModel::instance()->getAbonnementenAbonneerbaarMatrix();
+		$matrix_repetities = $this->maaltijdAbonnementenModel->getAbonnementenAbonneerbaarMatrix();
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'waarschuwing',
-			'aborepetities' => MaaltijdRepetitiesModel::instance()->find('abonneerbaar = true'),
+			'aborepetities' => $this->maaltijdRepetitiesModel->find('abonneerbaar = true'),
 			'repetities' => $matrix_repetities[1],
 			'matrix' => $matrix_repetities[0],
 		]);
@@ -55,8 +63,8 @@ class BeheerAbonnementenController {
 
 	public function novieten() {
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
-		$aantal = $this->model->inschakelenAbonnementVoorNovieten((int)$mrid);
-		$matrix = $this->model->getAbonnementenVanNovieten();
+		$aantal = $this->maaltijdAbonnementenModel->inschakelenAbonnementVoorNovieten((int)$mrid);
+		$matrix = $this->maaltijdAbonnementenModel->getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
 		setMelding(
 			$aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' aangemaakt voor ' .
@@ -71,7 +79,7 @@ class BeheerAbonnementenController {
 		$abo = new MaaltijdAbonnement();
 		$abo->mlt_repetitie_id = $mrid;
 		$abo->uid = $uid;
-		$aantal = $this->model->inschakelenAbonnement($abo);
+		$aantal = $this->maaltijdAbonnementenModel->inschakelenAbonnement($abo);
 		if ($aantal > 0) {
 			$melding = 'Automatisch aangemeld voor ' . $aantal . ' maaltijd' . ($aantal === 1 ? '' : 'en');
 			setMelding($melding, 2);
@@ -83,7 +91,7 @@ class BeheerAbonnementenController {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
-		$abo_aantal = $this->model->uitschakelenAbonnement((int)$mrid, $uid);
+		$abo_aantal = $this->maaltijdAbonnementenModel->uitschakelenAbonnement((int)$mrid, $uid);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);

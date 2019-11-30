@@ -6,6 +6,10 @@ use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\RechtenGroep;
 
 class RechtenGroepenModel extends AbstractGroepenModel {
+	public function __construct() {
+		parent::__static();
+		parent::__construct();
+	}
 
 	const ORM = RechtenGroep::class;
 

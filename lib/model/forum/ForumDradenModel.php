@@ -108,7 +108,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		return $draad;
 	}
 
-	protected function __construct(
+	public function __construct(
 		ForumDradenGelezenModel $forumDradenGelezenModel,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,

@@ -30,7 +30,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 */
 	private $forumPostsModel;
 
-	protected function __construct(ForumDradenModel $forumDradenModel, ForumPostsModel $forumPostsModel) {
+	public function __construct(ForumDradenModel $forumDradenModel, ForumPostsModel $forumPostsModel) {
 		parent::__construct();
 
 		$this->forumDradenModel = $forumDradenModel;

@@ -68,7 +68,7 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	private $forumPostsModel;
 
-	protected function __construct(
+	public function __construct(
 		ForumDelenModel $forumDelenModel,
 		ForumDradenModel $forumDradenModel,
 		ForumDradenGelezenModel $forumDradenGelezenModel,

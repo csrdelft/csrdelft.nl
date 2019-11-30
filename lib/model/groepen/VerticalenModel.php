@@ -6,6 +6,10 @@ use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\Verticale;
 
 class VerticalenModel extends AbstractGroepenModel {
+	public function __construct() {
+		parent::__static();
+		parent::__construct();
+	}
 
 	const ORM = Verticale::class;
 

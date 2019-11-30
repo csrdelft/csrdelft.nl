@@ -7,6 +7,10 @@ use CsrDelft\model\entity\groepen\Commissie;
 use CsrDelft\model\entity\groepen\CommissieSoort;
 
 class CommissiesModel extends AbstractGroepenModel {
+	public function __construct() {
+		parent::__static();
+		parent::__construct();
+	}
 
 	const ORM = Commissie::class;
 

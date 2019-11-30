@@ -8,6 +8,10 @@ use CsrDelft\model\entity\groepen\OnderverenigingStatus;
 use CsrDelft\model\security\LoginModel;
 
 class OnderverenigingenModel extends AbstractGroepenModel {
+	public function __construct() {
+		parent::__static();
+		parent::__construct();
+	}
 
 	const ORM = Ondervereniging::class;
 

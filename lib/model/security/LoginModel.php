@@ -93,7 +93,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	/**
 	 * LoginModel constructor.
 	 */
-	protected function __construct() {
+	public function __construct() {
 		parent::__construct();
 		/**
 		 * CliLoginModel doet zijn eigen ding.

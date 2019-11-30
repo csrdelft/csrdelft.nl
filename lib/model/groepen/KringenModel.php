@@ -7,6 +7,10 @@ use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\entity\groepen\Verticale;
 
 class KringenModel extends AbstractGroepenModel {
+	public function __construct() {
+		parent::__static();
+		parent::__construct();
+	}
 
 	const ORM = Kring::class;
 

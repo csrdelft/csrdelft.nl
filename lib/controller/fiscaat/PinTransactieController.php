@@ -40,12 +40,18 @@ class PinTransactieController {
 	/** @var PinTransactieModel */
 	private $pinTransactieModel;
 
-	public function __construct() {
-		$this->civiBestellingInhoudModel = CiviBestellingInhoudModel::instance();
-		$this->civiBestellingModel = CiviBestellingModel::instance();
-		$this->civiSaldoModel = CiviSaldoModel::instance();
-		$this->pinTransactieMatchModel = PinTransactieMatchModel::instance();
-		$this->pinTransactieModel = PinTransactieModel::instance();
+	public function __construct(
+		CiviBestellingInhoudModel $civiBestellingInhoudModel,
+		CiviBestellingModel $civiBestellingModel,
+		CiviSaldoModel $civiSaldoModel,
+		PinTransactieMatchModel $pinTransactieMatchModel,
+		PinTransactieModel $pinTransactieModel
+	) {
+		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
+		$this->civiBestellingModel = $civiBestellingModel;
+		$this->civiSaldoModel = $civiSaldoModel;
+		$this->pinTransactieMatchModel = $pinTransactieMatchModel;
+		$this->pinTransactieModel = $pinTransactieModel;
 	}
 
 	public function overzicht() {
