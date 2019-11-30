@@ -135,52 +135,64 @@ class ProfielController extends AbstractController {
 	 * @var WerkgroepenModel
 	 */
 	private $werkgroepenModel;
+	/**
+	 * @var LidToestemmingModel
+	 */
+	private $lidToestemmingModel;
+	/**
+	 * @var AccountModel
+	 */
+	private $accountModel;
 
 	public function __construct(
 		ProfielModel $profielModel,
-		VoorkeurOpmerkingModel $voorkeurOpmerkingModel,
-		CommissieVoorkeurModel $commissieVoorkeurModel,
-		FotoTagsModel $fotoTagsModel,
-		FotoModel $fotoModel,
-		BesturenModel $besturenModel,
-		CommissiesModel $commissiesModel,
-		BoekRecensieModel $boekRecensieModel,
-		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
-		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
-		BoekExemplaarModel $boekExemplaarModel,
-		ForumPostsModel $forumPostsModel,
-		KwalificatiesModel $kwalificatiesModel,
-		CorveeVrijstellingenModel $corveeVrijstellingenModel,
-		CommissieVoorkeurModel $corveeVoorkeurenModel,
-		CorveeTakenModel $corveeTakenModel,
-		CiviBestellingModel $civiBestellingModel,
+		AccountModel $accountModel,
 		ActiviteitenModel $activiteitenModel,
+		BesturenModel $besturenModel,
+		BoekExemplaarModel $boekExemplaarModel,
+		BoekRecensieModel $boekRecensieModel,
+		CiviBestellingModel $civiBestellingModel,
+		CommissieVoorkeurModel $commissieVoorkeurModel,
+		CommissieVoorkeurModel $corveeVoorkeurenModel,
+		CommissiesModel $commissiesModel,
+		CorveeTakenModel $corveeTakenModel,
+		CorveeVrijstellingenModel $corveeVrijstellingenModel,
+		ForumPostsModel $forumPostsModel,
+		FotoModel $fotoModel,
+		FotoTagsModel $fotoTagsModel,
 		KetzersModel $ketzersModel,
-		RechtenGroepenModel $rechtenGroepenModel,
+		KwalificatiesModel $kwalificatiesModel,
+		LidToestemmingModel $lidToestemmingModel,
+		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
+		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
 		OnderverenigingenModel $onderverenigingenModel,
+		RechtenGroepenModel $rechtenGroepenModel,
+		VoorkeurOpmerkingModel $voorkeurOpmerkingModel,
 		WerkgroepenModel $werkgroepenModel
 	) {
 		$this->profielModel = $profielModel;
-		$this->voorkeurOpmerkingModel = $voorkeurOpmerkingModel;
-		$this->commissieVoorkeurModel = $commissieVoorkeurModel;
-		$this->fotoTagsModel = $fotoTagsModel;
-		$this->fotoModel = $fotoModel;
-		$this->besturenModel = $besturenModel;
-		$this->commissiesModel = $commissiesModel;
-		$this->boekRecensieModel = $boekRecensieModel;
-		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
-		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
-		$this->boekExemplaarModel = $boekExemplaarModel;
-		$this->forumPostsModel = $forumPostsModel;
-		$this->kwalificatiesModel = $kwalificatiesModel;
-		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
-		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
-		$this->corveeTakenModel = $corveeTakenModel;
-		$this->civiBestellingModel = $civiBestellingModel;
+		$this->accountModel = $accountModel;
 		$this->activiteitenModel = $activiteitenModel;
+		$this->besturenModel = $besturenModel;
+		$this->boekExemplaarModel = $boekExemplaarModel;
+		$this->boekRecensieModel = $boekRecensieModel;
+		$this->civiBestellingModel = $civiBestellingModel;
+		$this->commissieVoorkeurModel = $commissieVoorkeurModel;
+		$this->commissiesModel = $commissiesModel;
+		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
+		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
+		$this->forumPostsModel = $forumPostsModel;
+		$this->fotoModel = $fotoModel;
+		$this->fotoTagsModel = $fotoTagsModel;
 		$this->ketzersModel = $ketzersModel;
-		$this->rechtenGroepenModel = $rechtenGroepenModel;
+		$this->kwalificatiesModel = $kwalificatiesModel;
+		$this->lidToestemmingModel = $lidToestemmingModel;
+		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
+		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
 		$this->onderverenigingenModel = $onderverenigingenModel;
+		$this->rechtenGroepenModel = $rechtenGroepenModel;
+		$this->voorkeurOpmerkingModel = $voorkeurOpmerkingModel;
 		$this->werkgroepenModel = $werkgroepenModel;
 	}
 
@@ -190,7 +202,7 @@ class ProfielController extends AbstractController {
 		if ($profiel === false) {
 			throw new ResourceNotFoundException();
 		}
-		AccountModel::instance()->resetPrivateToken($profiel->getAccount());
+		$this->accountModel->resetPrivateToken($profiel->getAccount());
 		return $this->profiel($uid);
 	}
 
@@ -283,7 +295,7 @@ class ProfielController extends AbstractController {
 								// Sla toesteming op.
 								$toestemmingForm = new ToestemmingModalForm(true);
 								if ($toestemmingForm->validate()) {
-									LidToestemmingModel::instance()->save($profiel->uid);
+									$this->lidToestemmingModel->save($profiel->uid);
 								} else {
 									throw new CsrException('Opslaan van toestemming mislukt');
 								}

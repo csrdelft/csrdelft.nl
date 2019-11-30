@@ -20,16 +20,22 @@ use Symfony\Component\HttpFoundation\Response;
  * Controller van de agenda.
  */
 class LoginController extends AbstractController {
+	/**
+	 * @var LoginModel
+	 */
 	private $loginModel;
+	/**
+	 * @var RememberLoginModel
+	 */
 	private $rememberLoginModel;
 	/**
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
 
-	public function __construct(CmsPaginaRepository $cmsPaginaRepository) {
-		$this->rememberLoginModel = RememberLoginModel::instance();
-		$this->loginModel = LoginModel::instance();
+	public function __construct(LoginModel $loginModel, RememberLoginModel $rememberLoginModel, CmsPaginaRepository $cmsPaginaRepository) {
+		$this->rememberLoginModel = $rememberLoginModel;
+		$this->loginModel = $loginModel;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 

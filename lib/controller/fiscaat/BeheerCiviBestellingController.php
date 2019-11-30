@@ -16,10 +16,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class BeheerCiviBestellingController {
 	/** @var CiviBestellingModel */
-	private $model;
+	private $civiBestellingModel;
+	/** @var CiviBestellingInhoudModel  */
+	private $civiBestellingInhoudModel;
 
-	public function __construct() {
-		$this->model = CiviBestellingModel::instance();
+	public function __construct(CiviBestellingModel $civiBestellingModel, CiviBestellingInhoudModel $civiBestellingInhoudModel) {
+		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
+		$this->civiBestellingModel = $civiBestellingModel;
 	}
 
 	public function overzicht($uid = null) {
@@ -35,15 +38,15 @@ class BeheerCiviBestellingController {
 		$this->checkToegang($uid);
 		$uid = $uid == null ? LoginModel::getUid() : $uid;
 		if ($request->query->get("deleted") == "true") {
-			$data = $this->model->find('uid = ?', array($uid));
+			$data = $this->civiBestellingModel->find('uid = ?', array($uid));
 		} else {
-			$data = $this->model->find('uid = ? and deleted = false', array($uid));
+			$data = $this->civiBestellingModel->find('uid = ? and deleted = false', array($uid));
 		}
 		return new CiviBestellingTableResponse($data);
 	}
 
 	public function inhoud($bestelling_id) {
-		$data = CiviBestellingInhoudModel::instance()->find('bestelling_id = ?', [$bestelling_id]);
+		$data = $this->civiBestellingInhoudModel->find('bestelling_id = ?', [$bestelling_id]);
 
 		return new CiviBestellingInhoudTableResponse($data);
 	}

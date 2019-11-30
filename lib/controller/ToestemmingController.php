@@ -19,14 +19,17 @@ use Symfony\Component\HttpFoundation\Request;
  * @since 27/04/2018
  */
 class ToestemmingController extends AbstractController {
+	/**
+	 * @var LidToestemmingModel
+	 */
 	private $lidToestemmingModel;
 	/**
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
 
-	public function __construct(CmsPaginaRepository $cmsPaginaRepository) {
-		$this->lidToestemmingModel = LidToestemmingModel::instance();
+	public function __construct(LidToestemmingModel $lidToestemmingModel, CmsPaginaRepository $cmsPaginaRepository) {
+		$this->lidToestemmingModel = $lidToestemmingModel;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
@@ -81,7 +84,7 @@ class ToestemmingController extends AbstractController {
                 'iedereen' => LidStatus::getTypeOptions(),
             ];
 
-            $toestemming = group_by('uid', LidToestemmingModel::instance()->getToestemmingForIds($ids));
+            $toestemming = group_by('uid', $this->lidToestemmingModel->getToestemmingForIds($ids));
 
             $toestemmingFiltered = [];
             foreach ($toestemming as $uid => $toestemmingen) {

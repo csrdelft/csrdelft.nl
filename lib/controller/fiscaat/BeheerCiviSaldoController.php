@@ -26,11 +26,23 @@ use Symfony\Component\HttpFoundation\Request;
  * @date 07/04/2017
  */
 class BeheerCiviSaldoController {
-	/** @var CiviSaldoModel */
-	private $model;
+	/**
+	 * @var CiviSaldoModel
+	 */
+	private $civiSaldoModel;
+	/**
+	 * @var CiviBestellingModel
+	 */
+	private $civiBestellingModel;
+	/**
+	 * @var ProfielService
+	 */
+	private $profielService;
 
-	public function __construct() {
-		$this->model = CiviSaldoModel::instance();
+	public function __construct(CiviSaldoModel $civiSaldoModel, CiviBestellingModel $civiBestellingModel, ProfielService $profielService) {
+		$this->profielService = $profielService;
+		$this->civiSaldoModel = $civiSaldoModel;
+		$this->civiBestellingModel = $civiBestellingModel;
 	}
 
 	public function overzicht() {
@@ -41,14 +53,14 @@ class BeheerCiviSaldoController {
 	}
 
 	public function lijst() {
-		return new CiviSaldoTableResponse($this->model->find('deleted = false'));
+		return new CiviSaldoTableResponse($this->civiSaldoModel->find('deleted = false'));
 	}
 
 	public function inleggen() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
 		/** @var CiviSaldo $civisaldo */
-		$civisaldo = $this->model->retrieveByUUID($selection[0]);
+		$civisaldo = $this->civiSaldoModel->retrieveByUUID($selection[0]);
 
 		if ($civisaldo) {
 			$form = new InleggenForm($civisaldo);
@@ -56,12 +68,10 @@ class BeheerCiviSaldoController {
 			if ($form->validate() AND $values['inleg'] !== 0 AND $values['saldo'] == $civisaldo->saldo) {
 				$inleg = $values['inleg'];
 				Database::transaction(function () use ($inleg, $civisaldo) {
-					$bestelling_model = CiviBestellingModel::instance();
+					$bestelling = $this->civiBestellingModel->vanBedragInCenten($inleg, $civisaldo->uid);
+					$this->civiBestellingModel->create($bestelling);
 
-					$bestelling = $bestelling_model->vanBedragInCenten($inleg, $civisaldo->uid);
-					$bestelling_model->create($bestelling);
-
-					$this->model->ophogen($civisaldo->uid, $inleg);
+					$this->civiSaldoModel->ophogen($civisaldo->uid, $inleg);
 					$civisaldo->saldo += $inleg;
 					$civisaldo->laatst_veranderd = getDateTime();
 				});
@@ -81,11 +91,11 @@ class BeheerCiviSaldoController {
 		$removed = array();
 		foreach ($selection as $uuid) {
 			/** @var CiviSaldo $civisaldo */
-			$civisaldo = $this->model->retrieveByUUID($uuid);
+			$civisaldo = $this->civiSaldoModel->retrieveByUUID($uuid);
 
 			if ($civisaldo) {
 				$civisaldo->deleted = true;
-				$this->model->update($civisaldo);
+				$this->civiSaldoModel->update($civisaldo);
 				$removed[] = $civisaldo;
 			}
 		}
@@ -106,7 +116,7 @@ class BeheerCiviSaldoController {
 			$saldo->laatst_veranderd = date_create()->format(DATE_ISO8601);
 
 			if (is_null($saldo->uid)) {
-				$laatsteSaldo = $this->model->find("uid LIKE 'c%'", [], null, 'uid DESC', 1)->fetch();
+				$laatsteSaldo = $this->civiSaldoModel->find("uid LIKE 'c%'", [], null, 'uid DESC', 1)->fetch();
 				$saldo->uid = ++$laatsteSaldo->uid;
 			}
 
@@ -114,10 +124,10 @@ class BeheerCiviSaldoController {
 				$saldo->naam = '';
 			}
 
-			if ($this->model->find('uid = ?', [$saldo->uid])->rowCount() === 1) {
+			if ($this->civiSaldoModel->find('uid = ?', [$saldo->uid])->rowCount() === 1) {
 				throw new CsrToegangException();
 			} else {
-				$saldo->id = $this->model->create($saldo);
+				$saldo->id = $this->civiSaldoModel->create($saldo);
 			}
 
 			return new CiviSaldoTableResponse(array($saldo));
@@ -134,9 +144,9 @@ class BeheerCiviSaldoController {
 		}
 
 		return view('fiscaat.saldisom', [
-			'saldisomform' => new SaldiSomForm($this->model, $moment),
-			'saldisom' => $this->model->getSomSaldiOp($moment),
-			'saldisomleden' => $this->model->getSomSaldiOp($moment, true),
+			'saldisomform' => new SaldiSomForm($this->civiSaldoModel, $moment),
+			'saldisom' => $this->civiSaldoModel->getSomSaldiOp($moment),
+			'saldisomleden' => $this->civiSaldoModel->getSomSaldiOp($moment, true),
 		]);
 	}
 
@@ -145,7 +155,7 @@ class BeheerCiviSaldoController {
 
 		$pdo = Database::instance()->getDatabase();
 
-		$leden = ProfielService::instance()->zoekLeden($zoekterm, 'naam', 'alle', 'achternaam');
+		$leden = $this->profielService->zoekLeden($zoekterm, 'naam', 'alle', 'achternaam');
 		$uids = array_map(function ($profiel) use ($pdo) { return $pdo->quote($profiel->uid); }, $leden);
 
 		if (count($uids) > 0) {
@@ -154,7 +164,7 @@ class BeheerCiviSaldoController {
 			$whereUids = '';
 		}
 
-		$civiSaldi = $this->model->find('deleted <> 1 AND (uid LIKE :zoekTerm OR naam LIKE :zoekTerm' . $whereUids . ')', [':zoekTerm' => sql_contains($zoekterm)])->fetchAll();
+		$civiSaldi = $this->civiSaldoModel->find('deleted <> 1 AND (uid LIKE :zoekTerm OR naam LIKE :zoekTerm' . $whereUids . ')', [':zoekTerm' => sql_contains($zoekterm)])->fetchAll();
 
 
 		$resp = [];

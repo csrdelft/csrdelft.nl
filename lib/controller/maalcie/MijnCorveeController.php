@@ -13,18 +13,31 @@ use CsrDelft\model\security\LoginModel;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class MijnCorveeController {
-	private $model;
+	/**
+	 * @var CorveeTakenModel
+	 */
+	private $corveeTakenModel;
+	/**
+	 * @var FunctiesModel
+	 */
+	private $functiesModel;
+	/**
+	 * @var CorveeVrijstellingenModel
+	 */
+	private $corveeVrijstellingenModel;
 
-	public function __construct() {
-		$this->model = CorveeTakenModel::instance();
+	public function __construct(CorveeTakenModel $corveeTakenModel, CorveeVrijstellingenModel $corveeVrijstellingenModel, FunctiesModel $functiesModel) {
+		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
+		$this->functiesModel = $functiesModel;
+		$this->corveeTakenModel = $corveeTakenModel;
 	}
 
 	public function mijn() {
-		$taken = $this->model->getKomendeTakenVoorLid(LoginModel::getUid());
-		$rooster = $this->model->getRoosterMatrix($taken->fetchAll());
-		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$taken = $this->corveeTakenModel->getKomendeTakenVoorLid(LoginModel::getUid());
+		$rooster = $this->corveeTakenModel->getRoosterMatrix($taken->fetchAll());
+		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
 		$punten = CorveePuntenModel::loadPuntenVoorLid(LoginModel::getProfiel(), $functies);
-		$vrijstelling = CorveeVrijstellingenModel::instance()->getVrijstelling(LoginModel::getUid());
+		$vrijstelling = $this->corveeVrijstellingenModel->getVrijstelling(LoginModel::getUid());
 		return view('maaltijden.corveetaak.mijn', [
 			'rooster' => $rooster,
 			'functies' => $functies,
@@ -35,13 +48,13 @@ class MijnCorveeController {
 
 	public function rooster($toonverleden = false) {
 		if ($toonverleden === 'verleden' && LoginModel::mag(P_CORVEE_MOD)) {
-			$taken = $this->model->getVerledenTaken();
+			$taken = $this->corveeTakenModel->getVerledenTaken();
 			$toonverleden = false; // hide button
 		} else {
-			$taken = $this->model->getKomendeTaken();
+			$taken = $this->corveeTakenModel->getKomendeTaken();
 			$toonverleden = LoginModel::mag(P_CORVEE_MOD);
 		}
-		$rooster = $this->model->getRoosterMatrix($taken->fetchAll());
+		$rooster = $this->corveeTakenModel->getRoosterMatrix($taken->fetchAll());
 		return view('maaltijden.corveetaak.corvee_rooster', ['rooster' => $rooster, 'toonverleden' => $toonverleden]);
 	}
 

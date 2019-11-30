@@ -14,25 +14,28 @@ use CsrDelft\view\PlainView;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class BeheerVrijstellingenController {
-	private $model;
+	/**
+	 * @var CorveeVrijstellingenModel
+	 */
+	private $corveeVrijstellingenModel;
 
-	public function __construct() {
-		$this->model = CorveeVrijstellingenModel::instance();
+	public function __construct(CorveeVrijstellingenModel $corveeVrijstellingenModel) {
+		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
 	}
 
 	public function beheer() {
-		return view('maaltijden.vrijstelling.beheer_vrijstellingen', ['vrijstellingen' => $this->model->find()]);
+		return view('maaltijden.vrijstelling.beheer_vrijstellingen', ['vrijstellingen' => $this->corveeVrijstellingenModel->find()]);
 	}
 
 	public function nieuw() {
-		return new VrijstellingForm($this->model->nieuw()); // fetches POST values itself
+		return new VrijstellingForm($this->corveeVrijstellingenModel->nieuw()); // fetches POST values itself
 	}
 
 	public function bewerk($uid) {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
-		return new VrijstellingForm($this->model->getVrijstelling($uid)); // fetches POST values itself
+		return new VrijstellingForm($this->corveeVrijstellingenModel->getVrijstelling($uid)); // fetches POST values itself
 	}
 
 	public function opslaan($uid = null) {
@@ -44,7 +47,7 @@ class BeheerVrijstellingenController {
 		if ($view->validate()) {
 			$values = $view->getValues();
 			return view('maaltijden.vrijstelling.beheer_vrijstelling_lijst', [
-				'vrijstelling' => $this->model->saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage'])
+				'vrijstelling' => $this->corveeVrijstellingenModel->saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage'])
 			]);
 		}
 
@@ -55,7 +58,7 @@ class BeheerVrijstellingenController {
 		if (!ProfielModel::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
-		$this->model->verwijderVrijstelling($uid);
+		$this->corveeVrijstellingenModel->verwijderVrijstelling($uid);
 		return new PlainView('<tr id="vrijstelling-row-' . $uid . '" class="remove"></tr>');
 	}
 

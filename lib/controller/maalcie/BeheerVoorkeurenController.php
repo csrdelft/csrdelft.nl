@@ -11,14 +11,17 @@ use CsrDelft\model\ProfielModel;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class BeheerVoorkeurenController {
-	private $model;
+	/**
+	 * @var CorveeVoorkeurenModel
+	 */
+	private $corveeVoorkeurenModel;
 
-	public function __construct() {
-		$this->model = CorveeVoorkeurenModel::instance();
+	public function __construct(CorveeVoorkeurenModel $corveeVoorkeurenModel) {
+		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
 	}
 
 	public function beheer() {
-		list($matrix, $repetities) = $this->model->getVoorkeurenMatrix();
+		list($matrix, $repetities) = $this->corveeVoorkeurenModel->getVoorkeurenMatrix();
 		return view('maaltijden.voorkeur.beheer_voorkeuren', ['matrix' => $matrix, 'repetities' => $repetities]);
 	}
 
@@ -30,7 +33,7 @@ class BeheerVoorkeurenController {
 		$voorkeur->crv_repetitie_id = $crid;
 		$voorkeur->uid = $uid;
 
-		$voorkeur = $this->model->inschakelenVoorkeur($voorkeur);
+		$voorkeur = $this->corveeVoorkeurenModel->inschakelenVoorkeur($voorkeur);
 		$voorkeur->setVanUid($voorkeur->getUid());
 		return view('maaltijden.voorkeur.beheer_voorkeur_veld', ['voorkeur' => $voorkeur, 'crid' => $crid, 'uid' => $uid]);
 	}
@@ -44,7 +47,7 @@ class BeheerVoorkeurenController {
 		$voorkeur->uid = $uid;
 		$voorkeur->setVanUid($uid);
 
-		$this->model->uitschakelenVoorkeur($voorkeur);
+		$this->corveeVoorkeurenModel->uitschakelenVoorkeur($voorkeur);
 
 		$voorkeur->uid = null;
 		return view('maaltijden.voorkeur.beheer_voorkeur_veld', ['voorkeur' => $voorkeur, 'crid' => $voorkeur->crv_repetitie_id, 'uid' => $voorkeur->uid]);
