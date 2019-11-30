@@ -29,18 +29,32 @@ use Symfony\Component\HttpFoundation\Request;
  *
  */
 class BibliotheekController extends AbstractController {
-	private $model;
-	private $boekRecensieModel;
+	/**
+	 * @var BoekExemplaarModel
+	 */
 	private $boekExemplaarModel;
+	/**
+	 * @var BoekModel
+	 */
+	private $boekModel;
+	/**
+	 * @var BoekRecensieModel
+	 */
+	private $boekRecensieModel;
 	/**
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
 
-	public function __construct(CmsPaginaRepository $cmsPaginaRepository) {
-		$this->model = BoekModel::instance();
-		$this->boekRecensieModel = BoekRecensieModel::instance();
-		$this->boekExemplaarModel = BoekExemplaarModel::instance();
+	public function __construct(
+		BoekExemplaarModel $boekExemplaarModel,
+		BoekModel $boekModel,
+		BoekRecensieModel $boekRecensieModel,
+		CmsPaginaRepository $cmsPaginaRepository
+	) {
+		$this->boekExemplaarModel = $boekExemplaarModel;
+		$this->boekModel = $boekModel;
+		$this->boekRecensieModel = $boekRecensieModel;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
@@ -78,7 +92,7 @@ class BibliotheekController extends AbstractController {
 		/**
 		 * @var Boek[] $data
 		 */
-		$data = $this->model->find()->fetchAll();
+		$data = $this->boekModel->find()->fetchAll();
 		$uid = filter_input(INPUT_GET, "eigenaar", FILTER_SANITIZE_STRING);
 		$results = [];
 		if ($uid !== null) {
@@ -102,7 +116,7 @@ class BibliotheekController extends AbstractController {
 		if ($boek_id == null) {
 			$boek = new Boek();
 		} else {
-			$boek = BoekModel::instance()->get($boek_id);
+			$boek = $this->boekModel->get($boek_id);
 		}
 		$boekForm = new BoekFormulier($boek);
 
@@ -110,7 +124,7 @@ class BibliotheekController extends AbstractController {
 			if (!$boek->magBewerken()) {
 				throw new CsrToegangException('U mag dit boek niet bewerken');
 			} else {
-				$boekid = BoekModel::instance()->updateOrCreate($boek);
+				$boekid = $this->boekModel->updateOrCreate($boek);
 				if ($boekid !== false) {
 					return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek_id]);
 				}
@@ -145,13 +159,13 @@ class BibliotheekController extends AbstractController {
 	}
 
 	public function import($boek_id) {
-		$boek = $this->model->get($boek_id);
+		$boek = $this->boekModel->get($boek_id);
 		if (!$boek->isEigenaar()) {
 			throw new CsrToegangException();
 		} else {
 			$importer = new BoekImporter();
 			$importer->import($boek);
-			$this->model->update($boek);
+			$this->boekModel->update($boek);
 			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
 		}
 	}
@@ -178,13 +192,13 @@ class BibliotheekController extends AbstractController {
 	 * @return RedirectResponse
 	 */
 	public function verwijderboek($boek_id) {
-		$boek = $this->model->get($boek_id);
+		$boek = $this->boekModel->get($boek_id);
 
 		if (!$boek->magVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving', -1);
 			return $this->redirectToRoute('bibliotheek-overzicht');
 		} else {
-			$this->model->delete($boek);
+			$this->boekModel->delete($boek);
 			setMelding('Boek met succes verwijderd.', 1);
 			return $this->redirectToRoute('bibliotheek-overzicht');
 		}
@@ -209,7 +223,7 @@ class BibliotheekController extends AbstractController {
 	 * @param string|null $uid
 	 */
 	public function addexemplaar($boek_id, $uid = null) {
-		$boek = $this->model->get($boek_id);
+		$boek = $this->boekModel->get($boek_id);
 		if (!$boek->magBekijken()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()', -1);
 			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
@@ -379,7 +393,7 @@ class BibliotheekController extends AbstractController {
 		if (isset($_GET['q'])) {
 			$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 
-			$results = $this->model->autocompleteProperty($zoekveld, $zoekterm);
+			$results = $this->boekModel->autocompleteProperty($zoekveld, $zoekterm);
 			$data = [];
 			foreach ($results as $result) {
 				$data[] = ['data' => [$result], 'value' => $result->{$zoekveld}, 'id' => $result->id];
@@ -398,7 +412,7 @@ class BibliotheekController extends AbstractController {
 			$zoekterm = $request->query->get('q');
 		}
 		$result = array();
-		foreach ($this->model->autocompleteBoek($zoekterm) as $boek) {
+		foreach ($this->boekModel->autocompleteBoek($zoekterm) as $boek) {
 			$result[] = array(
 				'url' => '/bibliotheek/boek/' . $boek->id,
 				'icon' => Icon::getTag('boek'),

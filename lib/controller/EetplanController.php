@@ -42,10 +42,14 @@ class EetplanController {
 	/** @var WoonoordenModel */
 	private $woonoordenModel;
 
-	public function __construct(EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenModel) {
+	public function __construct(
+		EetplanRepository $eetplanRepository,
+		EetplanBekendenRepository $eetplanBekendenModel,
+		WoonoordenModel $woonoordenModel
+	) {
 		$this->eetplanModel = $eetplanRepository;
 		$this->eetplanBekendenModel = $eetplanBekendenModel;
-		$this->woonoordenModel = WoonoordenModel::instance();
+		$this->woonoordenModel = $woonoordenModel;
 		$this->lichting = substr((string)LichtingenModel::getJongsteLidjaar(), 2, 2);
 	}
 

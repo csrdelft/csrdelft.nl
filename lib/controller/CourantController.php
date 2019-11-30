@@ -21,13 +21,18 @@ use Symfony\Component\HttpFoundation\Response;
  * Controller van de courant.
  */
 class CourantController extends AbstractController {
-
+	/**
+	 * @var CourantModel
+	 */
 	private $courantModel;
+	/**
+	 * @var CourantBerichtModel
+	 */
 	private $courantBerichtModel;
 
-	public function __construct() {
-		$this->courantModel = CourantModel::instance();
-		$this->courantBerichtModel = CourantBerichtModel::instance();
+	public function __construct(CourantModel $courantModel, CourantBerichtModel $courantBerichtModel) {
+		$this->courantModel = $courantModel;
+		$this->courantBerichtModel = $courantBerichtModel;
 	}
 
 	public function archief() {

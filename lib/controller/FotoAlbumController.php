@@ -32,10 +32,20 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Controller van het fotoalbum.
  */
 class FotoAlbumController extends AbstractController {
-	private $model;
+	private $fotoAlbumModel;
+	/**
+	 * @var FotoTagsModel
+	 */
+	private $fotoTagsModel;
+	/**
+	 * @var FotoModel
+	 */
+	private $fotoModel;
 
-	public function __construct() {
-		$this->model = FotoAlbumModel::instance();
+	public function __construct(FotoTagsModel $fotoTagsModel, FotoAlbumModel $fotoAlbumModel, FotoModel $fotoModel) {
+		$this->fotoTagsModel = $fotoTagsModel;
+		$this->fotoAlbumModel = $fotoAlbumModel;
+		$this->fotoModel = $fotoModel;
 	}
 
 	public function bekijken($dir) {
@@ -43,7 +53,7 @@ class FotoAlbumController extends AbstractController {
 			$dir = 'Publiek';
 		}
 
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magBekijken()) {
 			throw new CsrToegangException();
@@ -56,7 +66,7 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function verwerken($dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
 			throw new CsrToegangException();
@@ -65,7 +75,7 @@ class FotoAlbumController extends AbstractController {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
 			return $this->redirect($album->getUrl());
 		}
-		$this->model->verwerkFotos($album);
+		$this->fotoAlbumModel->verwerkFotos($album);
 		return $this->redirect($album->getUrl());
 	}
 
@@ -80,7 +90,7 @@ class FotoAlbumController extends AbstractController {
 			$album->path = join_paths($album->path, $subalbum);
 			$album->subdir = join_paths($album->subdir, $subalbum);
 			if (!$album->exists()) {
-				$this->model->create($album);
+				$this->fotoAlbumModel->create($album);
 			}
 			return new JsonResponse($album->getUrl());
 		}
@@ -88,7 +98,7 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function uploaden(Request $request, $dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
 			throw new CsrToegangException();
@@ -116,7 +126,7 @@ class FotoAlbumController extends AbstractController {
 					$foto = new Foto($filename, $album);
 					// opslaan gelukt?
 					if ($foto->exists()) {
-						FotoModel::instance()->verwerkFoto($foto);
+						$this->fotoModel->verwerkFoto($foto);
 						// verwerken gelukt?
 						if ($foto->isComplete()) {
 							if ($poster) {
@@ -145,7 +155,7 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function bestaande($dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
 			throw new CsrToegangException();
@@ -169,7 +179,7 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function downloaden($dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magDownloaden()) {
 			throw new CsrToegangException();
@@ -195,7 +205,7 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function hernoemen($dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
 			throw new CsrToegangException();
@@ -203,7 +213,7 @@ class FotoAlbumController extends AbstractController {
 		$naam = trim(filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING));
 		if ($album !== null) {
 			try {
-				$this->model->hernoemAlbum($album, $naam);
+				$this->fotoAlbumModel->hernoemAlbum($album, $naam);
 			} catch (CsrException $exception) {
 				return new JsonResponse($exception->getMessage(), 400);
 			}
@@ -214,14 +224,14 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function albumcover($dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
 			throw new CsrToegangException();
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$cover = new Foto($filename, $album);
-		if ($cover->exists() && $this->model->setAlbumCover($album, $cover)) {
+		if ($cover->exists() && $this->fotoAlbumModel->setAlbumCover($album, $cover)) {
 			return new JsonResponse($album->getUrl() . '#' . $cover->getResizedUrl());
 		} else {
 			return new JsonResponse('Fotoalbum-cover instellen mislukt', 500);
@@ -229,13 +239,13 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function verwijderen($dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magVerwijderen()) {
 			throw new CsrToegangException();
 		}
 		if ($album->isEmpty()) {
-			if (1 === FotoAlbumModel::instance()->delete($album)) {
+			if (1 === $this->fotoAlbumModel->delete($album)) {
 				setMelding('Fotoalbum verwijderen geslaagd', 1);
 				return new JsonResponse(dirname($album->getUrl()));
 			} else {
@@ -245,7 +255,7 @@ class FotoAlbumController extends AbstractController {
 		}
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
-		if (FotoModel::instance()->verwijderFoto($foto)) {
+		if ($this->fotoModel->verwijderFoto($foto)) {
 			echo '<div id="' . md5($filename) . '" class="remove"></div>';
 			exit;
 		} else {
@@ -254,7 +264,7 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function roteren($dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
 			throw new CsrToegangException();
@@ -277,7 +287,7 @@ class FotoAlbumController extends AbstractController {
 		$query = iconv('utf-8', 'ascii//TRANSLIT', $zoekterm); // convert accented characters to regular
 		$limit = $request->query->getInt('limit', 5);
 		$result = array();
-		foreach ($this->model->find('subdir LIKE ?', array('%'. $query . '%'), null, 'subdir DESC', $limit) as $album) {
+		foreach ($this->fotoAlbumModel->find('subdir LIKE ?', array('%'. $query . '%'), null, 'subdir DESC', $limit) as $album) {
 			/** @var FotoAlbum $album */
 			$result[] = array(
 				'icon' => Icon::getTag('fotoalbum', null, 'Fotoalbum', 'mr-2'),
@@ -290,7 +300,7 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function gettags($dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
 		$foto = new Foto($filename, $album);
@@ -298,12 +308,12 @@ class FotoAlbumController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		// return all tags
-		$tags = FotoTagsModel::instance()->getTags($foto);
+		$tags = $this->fotoTagsModel->getTags($foto);
 		return new JsonResponse($tags->fetchAll());
 	}
 
 	public function addtag(Request $request, $dir) {
-		$album = $this->model->getFotoAlbum($dir);
+		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
 			throw new CsrToegangException();
@@ -319,9 +329,9 @@ class FotoAlbumController extends AbstractController {
 			$x = $formulier->findByName('x')->getValue();
 			$y = $formulier->findByName('y')->getValue();
 			$size = $formulier->findByName('size')->getValue();
-			FotoTagsModel::instance()->addTag($foto, $uid, $x, $y, $size);
+			$this->fotoTagsModel->addTag($foto, $uid, $x, $y, $size);
 			// return all tags
-			$tags = FotoTagsModel::instance()->getTags($foto);
+			$tags = $this->fotoTagsModel->getTags($foto);
 			return new JsonResponse($tags->fetchAll());
 		} else {
 			return $formulier;
@@ -334,12 +344,12 @@ class FotoAlbumController extends AbstractController {
 		if (!LoginModel::mag(P_ALBUM_MOD) && !LoginModel::mag($keyword)) {
 			throw new CsrToegangException();
 		}
-		FotoTagsModel::instance()->removeTag($refuuid, $keyword);
+		$this->fotoTagsModel->removeTag($refuuid, $keyword);
 		/** @var Foto $foto */
-		$foto = FotoModel::instance()->retrieveByUUID($refuuid);
+		$foto = $this->fotoModel->retrieveByUUID($refuuid);
 		if ($foto) {
 			// return all tags
-			$tags = FotoTagsModel::instance()->getTags($foto);
+			$tags = $this->fotoTagsModel->getTags($foto);
 			return new JsonResponse($tags->fetchAll());
 		} else {
 			return new JsonResponse(array());

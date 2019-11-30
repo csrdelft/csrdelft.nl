@@ -17,14 +17,18 @@ use CsrDelft\view\login\RememberLoginForm;
  * @since 28/07/2019
  */
 class SessionController {
-
-
+	/**
+	 * @var LoginModel
+	 */
 	private $loginModel;
+	/**
+	 * @var RememberLoginModel
+	 */
 	private $rememberLoginModel;
 
-	public function __construct() {
-		$this->loginModel = LoginModel::instance();
-		$this->rememberLoginModel = RememberLoginModel::instance();
+	public function __construct(LoginModel $loginModel, RememberLoginModel $rememberLoginModel) {
+		$this->loginModel = $loginModel;
+		$this->rememberLoginModel = $rememberLoginModel;
 	}
 
 	public function sessionsdata() {
