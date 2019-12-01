@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f6a9d100cbe24ede4585433686bc1ed",
+    "content-hash": "6838d016f8ee339a41e5679cf3654e63",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -389,18 +389,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
-                "reference": "8a28b99112584f206bce909a95c4461b7c8337d2"
+                "reference": "31e3cf528c261cb2f40bf774143a899a8b795a76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/orm/zipball/8a28b99112584f206bce909a95c4461b7c8337d2",
-                "reference": "8a28b99112584f206bce909a95c4461b7c8337d2",
+                "url": "https://api.github.com/repos/csrdelft/orm/zipball/31e3cf528c261cb2f40bf774143a899a8b795a76",
+                "reference": "31e3cf528c261cb2f40bf774143a899a8b795a76",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-pdo": "*",
                 "php": ">=7.0.27",
+                "psr/container": "^1.0",
                 "zumba/json-serializer": "^2.2"
             },
             "require-dev": {
@@ -440,7 +441,7 @@
             ],
             "description": "The creatively named object-relational mapping library for csrdelft.nl",
             "homepage": "https://csrdelft.github.io/orm",
-            "time": "2019-11-30T12:09:57+00:00"
+            "time": "2019-12-01T13:02:58+00:00"
         },
         {
             "name": "doctrine/annotations",
