@@ -79,17 +79,26 @@ class ForumController extends AbstractController {
 	 */
 	private $forumPostsModel;
 
-	public function __construct() {
-		$this->debugLogModel = DebugLogModel::instance();
-		$this->forumDelenMeldingModel = ForumDradenMeldingModel::instance();
-		$this->forumDelenModel = ForumDelenModel::instance();
-		$this->forumDradenGelezenModel = ForumDradenGelezenModel::instance();
-		$this->forumDradenMeldingModel = ForumDradenMeldingModel::instance();
-		$this->forumDradenModel = ForumDradenModel::instance();
-		$this->forumDradenReagerenModel = ForumDradenReagerenModel::instance();
-		$this->forumDradenVerbergenModel = ForumDradenVerbergenModel::instance();
-		$this->forumModel = ForumModel::instance();
-		$this->forumPostsModel = ForumPostsModel::instance();
+	public function __construct(
+		ForumModel $forumModel,
+		DebugLogModel $debugLogModel,
+		ForumDradenMeldingModel $forumDradenMeldingModel,
+		ForumDelenModel $forumDelenModel,
+		ForumDradenGelezenModel $forumDradenGelezenModel,
+		ForumDradenModel $forumDradenModel,
+		ForumDradenReagerenModel $forumDradenReagerenModel,
+		ForumDradenVerbergenModel $forumDradenVerbergenModel,
+		ForumPostsModel $forumPostsModel
+	) {
+		$this->debugLogModel = $debugLogModel;
+		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
+		$this->forumDelenModel = $forumDelenModel;
+		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
+		$this->forumDradenModel = $forumDradenModel;
+		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
+		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
+		$this->forumModel = $forumModel;
+		$this->forumPostsModel = $forumPostsModel;
 	}
 
 	/**
