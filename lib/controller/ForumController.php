@@ -83,6 +83,7 @@ class ForumController extends AbstractController {
 		ForumModel $forumModel,
 		DebugLogModel $debugLogModel,
 		ForumDradenMeldingModel $forumDradenMeldingModel,
+		ForumDelenMeldingModel $forumDelenMeldingModel,
 		ForumDelenModel $forumDelenModel,
 		ForumDradenGelezenModel $forumDradenGelezenModel,
 		ForumDradenModel $forumDradenModel,
@@ -99,6 +100,7 @@ class ForumController extends AbstractController {
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
 		$this->forumModel = $forumModel;
 		$this->forumPostsModel = $forumPostsModel;
+		$this->forumDelenMeldingModel = $forumDelenMeldingModel;
 	}
 
 	/**
