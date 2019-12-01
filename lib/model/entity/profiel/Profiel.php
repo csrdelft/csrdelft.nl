@@ -432,7 +432,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		if ($vorm === 'user') {
 			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
-		if (!$force AND !LoginModel::mag(P_LOGGED_IN)) {
+		if ($vorm != 'civitas' AND !$force AND !LoginModel::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
