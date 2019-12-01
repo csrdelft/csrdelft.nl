@@ -25,6 +25,11 @@ services:
     exclude: '../lib/controller/api'
     tags: ['controller.service_arguments']
 
+  CsrDelft\model\:
+    resource: '../lib/model'
+    exclude: '../lib/model/{entity,fiscaat/pin/PinTransactieMatcher.php}'
+    public: true
+
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
   CsrDelft\events\ViewEventListener:

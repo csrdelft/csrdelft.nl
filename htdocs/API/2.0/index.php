@@ -29,11 +29,6 @@ if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], explode(
 	}
 }
 
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
-$request = Request::createFromGlobals();
-$kernel->boot();
-ContainerFacade::init($kernel->getContainer());
-
 $mode = DEBUG ? 'debug' : 'production';
 $server = new RestServer($mode);
 

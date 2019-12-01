@@ -28,18 +28,27 @@ HTML;
 	exit;
 }
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Ini;
 use CsrDelft\common\ShutdownHandler;
+use CsrDelft\Kernel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\instellingen\InstellingenModel;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
+use CsrDelft\model\security\CliLoginModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\Orm\DependencyManager;
+use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\Orm\Persistence\OrmMemcache;
+use Symfony\Component\Debug\Debug;
+use Symfony\Component\HttpFoundation\Request;
 
 // Zet omgeving klaar.
-require_once __DIR__ . '/../config/bootstrap.php';
+require __DIR__ . '/../config/bootstrap.php';
 
 // Registreer foutmelding handlers
 if (DEBUG) {
@@ -107,6 +116,27 @@ if (FORCE_HTTPS) {
 	}
 }
 
+if ($_SERVER['APP_DEBUG']) {
+	umask(0000);
+
+	Debug::enable();
+}
+
+if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
+	Request::setTrustedProxies(
+		explode(',', $trustedProxies),
+		Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST
+	);
+}
+
+if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false) {
+	Request::setTrustedHosts([$trustedHosts]);
+}
+
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+$kernel->boot();
+$container = $kernel->getContainer();
+
 $cred = Ini::lees(Ini::MYSQL);
 if ($cred === false) {
 	$cred = array(
@@ -117,10 +147,18 @@ if ($cred === false) {
 	);
 }
 
-CsrDelft\Orm\Configuration::load(array(
-	'cache_path' => DATA_PATH,
-	'db' => $cred
-));
+$pdo = new PDO('mysql:host=' . $cred['host'] . ';dbname=' . $cred['db'], $cred['user'], $cred['pass'], [
+	PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8MB4'",
+	PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+]);
+
+// Set csrdelft/orm parts of the container
+$container->set(OrmMemcache::class, new OrmMemcache(DATA_PATH));
+$container->set(Database::class, new Database($pdo));
+$container->set(DatabaseAdmin::class, new DatabaseAdmin($pdo));
+
+DependencyManager::setContainer($kernel->getContainer());
+ContainerFacade::init($kernel->getContainer());
 
 // Router
 switch (constant('MODE')) {
@@ -128,10 +166,8 @@ switch (constant('MODE')) {
 		if (isSyrinx()) die("Syrinx is geen Travis!");
 		break;
 	case 'CLI':
-		//require_once 'model/security/CliLoginModel.class.php';
-		// Late static binding requires explicitly
-		// calling instance() before any static method!
-		LoginModel::instance();
+		// Override LoginModel in container to use the Cli version
+		$container->set(LoginModel::class, new CliLoginModel());
 		if (!LoginModel::mag(P_ADMIN)) {
 			die('access denied');
 		}
@@ -196,3 +232,5 @@ switch (constant('MODE')) {
 	default:
 		die('configuratie.include.php unsupported MODE: ' . MODE);
 }
+
+return $kernel;

@@ -27,7 +27,7 @@ if ($input->hasParameterOption('--no-debug', true)) {
     putenv('APP_DEBUG='.$_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '0');
 }
 
-require dirname(__DIR__).'/lib/configuratie.include.php';
+$kernel = require dirname(__DIR__).'/lib/configuratie.include.php';
 
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
@@ -37,6 +37,5 @@ if ($_SERVER['APP_DEBUG']) {
     }
 }
 
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $application = new Application($kernel);
 $application->run($input);

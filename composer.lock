@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9af9d878c369be5706af45e08d4a0aaf",
+    "content-hash": "5f6a9d100cbe24ede4585433686bc1ed",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -385,7 +385,7 @@
         },
         {
             "name": "csrdelft/orm",
-            "version": "v1.8.5",
+            "version": "v1.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/orm.git",
@@ -3618,16 +3618,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.5.0",
+            "version": "v1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "97d4d94bff1b6bd9e9c5750ddbe248185ecb588b"
+                "reference": "45ec0287c13fb8383d61bc8486ee5da5c43556fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/97d4d94bff1b6bd9e9c5750ddbe248185ecb588b",
-                "reference": "97d4d94bff1b6bd9e9c5750ddbe248185ecb588b",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/45ec0287c13fb8383d61bc8486ee5da5c43556fe",
+                "reference": "45ec0287c13fb8383d61bc8486ee5da5c43556fe",
                 "shasum": ""
             },
             "require": {
@@ -3663,7 +3663,7 @@
                 }
             ],
             "description": "Composer plugin for Symfony",
-            "time": "2019-11-30T11:43:11+00:00"
+            "time": "2019-12-01T09:24:34+00:00"
         },
         {
             "name": "symfony/framework-bundle",
