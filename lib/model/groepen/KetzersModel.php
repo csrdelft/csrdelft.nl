@@ -4,11 +4,12 @@ namespace CsrDelft\model\groepen;
 
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\Ketzer;
+use CsrDelft\model\security\AccessModel;
 
 class KetzersModel extends AbstractGroepenModel {
-	public function __construct() {
+	public function __construct(AccessModel $accessModel) {
 		parent::__static();
-		parent::__construct();
+		parent::__construct($accessModel);
 	}
 
 	const ORM = Ketzer::class;

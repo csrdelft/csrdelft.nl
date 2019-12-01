@@ -4,9 +4,6 @@ namespace CsrDelft\model;
 
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepStatus;
-use CsrDelft\model\groepen\BesturenModel;
-use CsrDelft\model\groepen\CommissiesModel;
-use CsrDelft\model\groepen\leden\CommissieLedenModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
@@ -21,11 +18,26 @@ use PDO;
  */
 abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
+
 	/**
 	 * Default ORDER BY
 	 * @var string
 	 */
 	protected $default_order = 'begin_moment DESC';
+	/**
+	 * @var AccessModel
+	 */
+	private $accessModel;
+
+	/**
+	 * AbstractGroepenModel constructor.
+	 * @param AccessModel $accessModel
+	 */
+	public function __construct(AccessModel $accessModel) {
+		parent::__construct();
+
+		$this->accessModel = $accessModel;
+	}
 
 	/**
 	 * @param $id
@@ -45,37 +57,6 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 
 	public static function getUrl() {
 		return '/groepen/' . static::getNaam();
-	}
-
-	/**
-	 * Groepen waarvan de gevraagde gebruiker de wikipagina's mag lezen en bewerken.
-	 *
-	 * @param string $uid
-	 * @return array
-	 */
-	public static function getWikiToegang($uid) {
-		$result = [];
-		$profiel = ProfielModel::get($uid);
-		if (!$profiel) {
-			return $result;
-		}
-		if ($profiel->isLid() OR $profiel->isOudlid()) {
-			$result[] = 'htleden-oudleden';
-		}
-		// 1 generatie vooruit en 1 achteruit (default order by)
-		$ft = BesturenModel::instance()->find('status = ?', [GroepStatus::FT], null, null, 1)->fetch();
-		$ht = BesturenModel::instance()->find('status = ?', [GroepStatus::HT], null, null, 1)->fetch();
-		$ot = BesturenModel::instance()->find('status = ?', [GroepStatus::OT], null, null, 1)->fetch();
-		if (($ft AND $ft->getLid($uid)) OR ($ht AND $ht->getLid($uid)) OR ($ot AND $ot->getLid($uid))) {
-			$result[] = 'bestuur';
-		}
-		foreach (CommissieLedenModel::instance()->prefetch('uid = ?', array($uid)) as $commissielid) {
-			$commissie = CommissiesModel::get($commissielid->groep_id);
-			if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
-				$result[] = $commissie->familie;
-			}
-		}
-		return $result;
 	}
 
 	/**
@@ -114,7 +95,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * @return int number of rows affected
 	 */
 	protected function deleteByPrimaryKey(array $primary_key_values) {
-		AccessModel::instance()->setAcl(static::ORM, reset($primary_key_values), array());
+		$this->accessModel->setAcl(static::ORM, reset($primary_key_values), array());
 		return parent::deleteByPrimaryKey($primary_key_values);
 	}
 
@@ -128,7 +109,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 */
 	public function converteer(AbstractGroep $oldgroep, AbstractGroepenModel $oldmodel, $soort = null) {
 		try {
-			return Database::transaction(function () use ($oldgroep, $oldmodel, $soort) {
+			return $this->database->_transaction(function () use ($oldgroep, $oldmodel, $soort) {
 				// groep converteren
 				$newgroep = $this->nieuw($soort);
 				foreach ($oldgroep->getValues() as $attribute => $value) {
@@ -178,7 +159,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	public function getGroepenVoorLid($uid, $status = null) {
 		/** @var AbstractGroep $orm */
 		$orm = static::ORM;
-		$ids = Database::instance()->sqlSelect(['DISTINCT groep_id'], $orm::getLedenModel()->getTableName(), 'uid = ?', [$uid])->fetchAll(PDO::FETCH_COLUMN);
+		$ids = $this->database->sqlSelect(['DISTINCT groep_id'], $orm::getLedenModel()->getTableName(), 'uid = ?', [$uid])->fetchAll(PDO::FETCH_COLUMN);
 		if (empty($ids)) {
 			return [];
 		}

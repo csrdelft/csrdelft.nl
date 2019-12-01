@@ -5,12 +5,13 @@ namespace CsrDelft\model\groepen;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\Lichting;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\model\security\AccessModel;
 use CsrDelft\Orm\Persistence\Database;
 
 class LichtingenModel extends AbstractGroepenModel {
-	public function __construct() {
+	public function __construct(AccessModel $accessModel) {
 		parent::__static();
-		parent::__construct();
+		parent::__construct($accessModel);
 	}
 
 	const ORM = Lichting::class;

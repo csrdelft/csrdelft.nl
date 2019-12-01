@@ -5,11 +5,12 @@ namespace CsrDelft\model\groepen;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\entity\groepen\Verticale;
+use CsrDelft\model\security\AccessModel;
 
 class KringenModel extends AbstractGroepenModel {
-	public function __construct() {
+	public function __construct(AccessModel $accessModel) {
 		parent::__static();
-		parent::__construct();
+		parent::__construct($accessModel);
 	}
 
 	const ORM = Kring::class;
