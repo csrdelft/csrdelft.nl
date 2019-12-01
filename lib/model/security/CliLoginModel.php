@@ -45,6 +45,9 @@ class CliLoginModel extends LoginModel {
 	public function __construct(AccountModel $accountModel, RememberLoginModel $rememberLoginModel) {
 		parent::__static();
 		parent::__construct($accountModel, $rememberLoginModel);
+	}
+
+	public function authenticate() {
 		if (!$this->validate()) {
 			die('access denied');
 		}

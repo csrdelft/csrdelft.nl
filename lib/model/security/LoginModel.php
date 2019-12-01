@@ -93,13 +93,9 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		$this->accountModel = $accountModel;
 		$this->rememberLoginModel = $rememberLoginModel;
+	}
 
-		/**
-		 * CliLoginModel doet zijn eigen ding.
-		 */
-		if ($this instanceof CliLoginModel) {
-			return;
-		}
+	public function authenticate() {
 		/**
 		 * Sessie valideren: is er iemand ingelogd en is alles OK?
 		 * Zo ja, sessie verlengen.
