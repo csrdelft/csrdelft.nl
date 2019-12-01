@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\api;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
@@ -9,6 +10,15 @@ use Exception;
 use \Jacwright\RestServer\RestException;
 
 class ApiMaaltijdenController {
+	private $maaltijdenModel;
+	private $maaltijdAanmeldingenModel;
+
+	public function __construct() {
+		$container = ContainerFacade::getContainer();
+
+		$this->maaltijdAanmeldingenModel = $container->get(MaaltijdAanmeldingenModel::class);
+		$this->maaltijdenModel = $container->get(MaaltijdenModel::class);
+	}
 
 	/**
 	 * @return boolean
@@ -23,8 +33,8 @@ class ApiMaaltijdenController {
 	public function maaltijdAanmelden($id) {
 
 		try {
-			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($id);
-			$aanmelding = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorMaaltijd($maaltijd, $_SESSION['_uid'], $_SESSION['_uid']);
+			$maaltijd = $this->maaltijdenModel->getMaaltijd($id);
+			$aanmelding = $this->maaltijdAanmeldingenModel->aanmeldenVoorMaaltijd($maaltijd, $_SESSION['_uid'], $_SESSION['_uid']);
 			return array('data' => $aanmelding->maaltijd);
 		} catch (Exception $e) {
 			throw new RestException(403, $e->getMessage());
@@ -37,8 +47,8 @@ class ApiMaaltijdenController {
 	public function maaltijdAfmelden($id) {
 
 		try {
-			$maaltijd = MaaltijdenModel::instance()->getMaaltijd($id);
-			MaaltijdAanmeldingenModel::instance()->afmeldenDoorLid($maaltijd, $_SESSION['_uid']);
+			$maaltijd = $this->maaltijdenModel->getMaaltijd($id);
+			$this->maaltijdAanmeldingenModel->afmeldenDoorLid($maaltijd, $_SESSION['_uid']);
 			return array('data' => $maaltijd);
 		} catch (Exception $e) {
 			throw new RestException(403, $e->getMessage());

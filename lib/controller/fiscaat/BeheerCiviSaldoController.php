@@ -150,10 +150,10 @@ class BeheerCiviSaldoController {
 		]);
 	}
 
-	public function zoek(Request $request) {
+	public function zoek(Request $request, Database $database) {
 		$zoekterm = $request->query->get('q');
 
-		$pdo = Database::instance()->getDatabase();
+		$pdo = $database->getDatabase();
 
 		$leden = $this->profielService->zoekLeden($zoekterm, 'naam', 'alle', 'achternaam');
 		$uids = array_map(function ($profiel) use ($pdo) { return $pdo->quote($profiel->uid); }, $leden);

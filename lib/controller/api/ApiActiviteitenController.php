@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\api;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
@@ -9,6 +10,17 @@ use CsrDelft\model\security\LoginModel;
 use \Jacwright\RestServer\RestException;
 
 class ApiActiviteitenController {
+	/** @var ChangeLogModel  */
+	private $changeLogModel;
+	/** @var ActiviteitenModel  */
+	private $activiteitenModel;
+
+	public function __construct() {
+		$container = ContainerFacade::getContainer();
+
+		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
+		$this->changeLogModel = $container->get(ChangeLogModel::class);
+	}
 
 	/**
 	 * @return boolean
@@ -22,7 +34,7 @@ class ApiActiviteitenController {
 	 */
 	public function activiteitAanmelden($id) {
 
-		$activiteit = ActiviteitenModel::instance()->get($id);
+		$activiteit = $this->activiteitenModel->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
@@ -35,7 +47,7 @@ class ApiActiviteitenController {
 		$model = $activiteit::getLedenModel();
 		$lid = $model->nieuw($activiteit, $_SESSION['_uid']);
 
-		ChangeLogModel::instance()->log($activiteit, 'aanmelden', null, $lid->uid);
+		$this->changeLogModel->log($activiteit, 'aanmelden', null, $lid->uid);
 		$model->create($lid);
 
 		return array('data' => $activiteit);
@@ -46,7 +58,7 @@ class ApiActiviteitenController {
 	 */
 	public function activiteitAfmelden($id) {
 
-		$activiteit = ActiviteitenModel::instance()->get($id);
+		$activiteit = $this->activiteitenModel->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
@@ -58,7 +70,7 @@ class ApiActiviteitenController {
 
 		$model = $activiteit::getLedenModel();
 		$lid = $model->get($activiteit, $_SESSION['_uid']);
-		ChangeLogModel::instance()->log($activiteit, 'afmelden', $lid->uid, null);
+		$this->changeLogModel->log($activiteit, 'afmelden', $lid->uid, null);
 		$model->delete($lid);
 
 		return array('data' => $activiteit);

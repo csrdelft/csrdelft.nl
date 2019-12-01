@@ -15,6 +15,25 @@ use CsrDelft\repository\agenda\AgendaRepository;
 use Jacwright\RestServer\RestException;
 
 class ApiAgendaController {
+	/** @var ActiviteitenModel */
+	private $activiteitenModel;
+	/** @var AgendaRepository */
+	private $agendaRepository;
+	/** @var ActiviteitDeelnemersModel */
+	private $activiteitDeelnemersModel;
+	/** @var MaaltijdenModel */
+	private $maaltijdenModel;
+	/** @var MaaltijdAanmeldingenModel */
+	private $maaltijdAanmeldingenModel;
+
+	public function __construct() {
+		$container = ContainerFacade::getContainer();
+		$this->agendaRepository = $container->get(AgendaRepository::class);
+		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
+		$this->maaltijdAanmeldingenModel = $container->get(MaaltijdAanmeldingenModel::class);
+		$this->maaltijdenModel = $container->get(MaaltijdenModel::class);
+		$this->activiteitDeelnemersModel = $container->get(ActiviteitDeelnemersModel::class);
+	}
 
 	/**
 	 * @return boolean
@@ -47,8 +66,7 @@ class ApiAgendaController {
 		$find = array($fromDate, $toDate);
 
 		// AgendaItems
-		$agendaRepository = ContainerFacade::getContainer()->get(AgendaRepository::class);
-		$items = $agendaRepository->ormFind($query, $find);
+		$items = $this->agendaRepository->ormFind($query, $find);
 		foreach ($items as $item) {
 			if ($item->magBekijken()) {
 				$result[] = $item;
@@ -57,7 +75,7 @@ class ApiAgendaController {
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND (' . $query . ')', $find);
+		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (' . $query . ')', $find);
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
 			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
@@ -69,14 +87,14 @@ class ApiAgendaController {
 		// Activiteit aanmeldingen
 		$activiteitAanmeldingen = array();
 		foreach ($activiteitenFiltered as $activiteit) {
-			$deelnemer = ActiviteitDeelnemersModel::instance()->get($activiteit, $_SESSION['_uid']);
+			$deelnemer = $this->activiteitDeelnemersModel->get($activiteit, $_SESSION['_uid']);
 			if ($deelnemer) {
 				$activiteitAanmeldingen[] = $deelnemer->groep_id;
 			}
 		}
 
 		// Maaltijden
-		$maaltijden = MaaltijdenModel::instance()->getMaaltijdenVoorAgenda($from, $to);
+		$maaltijden = $this->maaltijdenModel->getMaaltijdenVoorAgenda($from, $to);
 
 
 		// Maaltijd aanmeldingen
@@ -89,7 +107,7 @@ class ApiAgendaController {
 			$result[] = $maaltijd;
 
 		}
-		$maaltijdAanmeldingen = array_keys(MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
+		$maaltijdAanmeldingen = array_keys($this->maaltijdAanmeldingenModel->getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
 
 		// Sorteren
 		usort($result, array(AgendaRepository::class, 'vergelijkAgendeerbaars'));

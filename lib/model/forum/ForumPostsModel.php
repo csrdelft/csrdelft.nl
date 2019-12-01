@@ -146,7 +146,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$order = 'score DESC';
 		$where .= ' HAVING score > 0';
 		try {
-			$results = Database::instance()->sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $forumZoeken->limit);
+			$results = $this->database->sqlSelect($attributes, $this->getTableName(), $where, $where_params, null, $order, $forumZoeken->limit);
 		} catch (PDOException $ex) {
 			// Syntax error in SQL MATCH op user input
 			return [];

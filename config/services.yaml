@@ -22,7 +22,6 @@ services:
   # as action arguments even if you don't extend any base controller class
   CsrDelft\controller\:
     resource: '../lib/controller'
-    exclude: '../lib/controller/api'
     tags: ['controller.service_arguments']
 
   CsrDelft\model\:

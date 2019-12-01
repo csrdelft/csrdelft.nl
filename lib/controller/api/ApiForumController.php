@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\api;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
@@ -14,6 +15,17 @@ use Exception;
 use Jacwright\RestServer\RestException;
 
 class ApiForumController {
+	private $forumDradenModel;
+	private $forumPostsModel;
+	private $forumDradenGelezenModel;
+
+	public function __construct() {
+		$container = ContainerFacade::getContainer();
+
+		$this->forumDradenGelezenModel = $container->get(ForumDradenGelezenModel::class);
+		$this->forumPostsModel = $container->get(ForumPostsModel::class);
+		$this->forumDradenModel = $container->get(ForumDradenModel::class);
+	}
 
 	/**
 	 * @return boolean
@@ -32,11 +44,11 @@ class ApiForumController {
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
-		$draden = ForumDradenModel::instance()->getRecenteForumDraden($limit, null, false, $offset, true);
+		$draden = $this->forumDradenModel->getRecenteForumDraden($limit, null, false, $offset, true);
 
 		foreach ($draden as $draad) {
 			$draad->ongelezen = $draad->getAantalOngelezenPosts();
-			$draad->laatste_post = ForumPostsModel::instance()->get($draad->laatste_post_id);
+			$draad->laatste_post = $this->forumPostsModel->get($draad->laatste_post_id);
 			$draad->laatste_wijziging_naam = ProfielModel::getNaam($draad->laatste_wijziging_uid, 'civitas');
 		}
 
@@ -54,7 +66,7 @@ class ApiForumController {
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
 		try {
-			$draad = ForumDradenModel::instance()->get((int)$id);
+			$draad = $this->forumDradenModel->get((int)$id);
 		} catch (Exception $e) {
 			throw new RestException(404);
 		}
@@ -63,9 +75,9 @@ class ApiForumController {
 			throw new RestException(403);
 		}
 
-		ForumDradenGelezenModel::instance()->setWanneerGelezenDoorLid($draad, time());
+		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, time());
 
-		$posts = ForumPostsModel::instance()->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($id), null, 'datum_tijd DESC', $limit, $offset);
+		$posts = $this->forumPostsModel->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($id), null, 'datum_tijd DESC', $limit, $offset);
 
 		// Most recent first
 		$posts = array_reverse($posts);

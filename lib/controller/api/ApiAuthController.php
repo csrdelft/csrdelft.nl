@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\api;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Ini;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccountModel;
@@ -11,6 +12,15 @@ use Firebase\JWT\JWT;
 use \Jacwright\RestServer\RestException;
 
 class ApiAuthController {
+	private $accountModel;
+	private $rememberLoginModel;
+
+	public function __construct() {
+		$container = ContainerFacade::getContainer();
+
+		$this->rememberLoginModel = $container->get(RememberLoginModel::class);
+		$this->accountModel = $container->get(AccountModel::class);
+	}
 
 	/**
 	 * @return boolean
@@ -64,19 +74,19 @@ class ApiAuthController {
 			if ($account) {
 
 				// Check timeout
-				$timeout = AccountModel::instance()->moetWachten($account);
+				$timeout = $this->accountModel->moetWachten($account);
 
 				if ($timeout === 0) {
 
 					// Check password
-					$validPassword = AccountModel::instance()->controleerWachtwoord($account, $pass);
+					$validPassword = $this->accountModel->controleerWachtwoord($account, $pass);
 
 					if ($validPassword) {
-						AccountModel::instance()->successfulLoginAttempt($account);
+						$this->accountModel->successfulLoginAttempt($account);
 						$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
 						$credentialsAreValid = true;
 					} else {
-						AccountModel::instance()->failedLoginAttempt($account);
+						$this->accountModel->failedLoginAttempt($account);
 					}
 
 				}
@@ -111,11 +121,11 @@ class ApiAuthController {
 		$rand = crypto_rand_token(255);
 
 		// Save the refresh token
-		$remember = RememberLoginModel::instance()->nieuw();
+		$remember = $this->rememberLoginModel->nieuw();
 		$remember->lock_ip = false;
 		$remember->device_name = 'API 2.0: ' . filter_var(strval($_SERVER['HTTP_USER_AGENT']), FILTER_SANITIZE_STRING);
 		$remember->token = hash('sha512', $rand);
-		RememberLoginModel::instance()->create($remember);
+		$this->rememberLoginModel->create($remember);
 
 		// Respond with both tokens
 		return [
@@ -138,7 +148,7 @@ class ApiAuthController {
 		$refresh_token = filter_var(strval($_POST['refresh_token']), FILTER_SANITIZE_STRING);
 
 		// Check refresh token
-		$remember = RememberLoginModel::instance()->find('token = ?', array(hash('sha512', $refresh_token)), null, null, 1)->fetch();
+		$remember = $this->rememberLoginModel->find('token = ?', array(hash('sha512', $refresh_token)), null, null, 1)->fetch();
 
 		if (!$remember) {
 			throw new RestException(401);
