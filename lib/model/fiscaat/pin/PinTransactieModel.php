@@ -40,7 +40,7 @@ class PinTransactieModel extends PersistenceModel {
 	 * @param int $id
 	 * @return PinTransactie
 	 */
-	public static function get($id) {
-		return static::instance()->find('id = ?', [$id])->fetch();
+	public function get($id) {
+		return $this->find('id = ?', [$id])->fetch();
 	}
 }

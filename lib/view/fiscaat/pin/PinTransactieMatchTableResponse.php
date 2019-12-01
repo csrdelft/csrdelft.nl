@@ -21,14 +21,14 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 	public function renderElement($entity) {
 		if ($entity instanceof PinTransactieMatch) {
 			if ($entity->bestelling_id !== null) {
-				$bestelling = CiviBestellingModel::get($entity->bestelling_id);
+				$bestelling = CiviBestellingModel::instance()->get($entity->bestelling_id);
 				$bestellingBeschrijving = CiviBestellingModel::instance()->getPinBeschrijving($bestelling);
 			} else {
 				$bestellingBeschrijving = '-';
 			}
 
 			if ($entity->transactie_id !== null) {
-				$pinTransactie = PinTransactieModel::get($entity->transactie_id);
+				$pinTransactie = PinTransactieModel::instance()->get($entity->transactie_id);
 				$transactieBeschrijving = PinTransactieModel::instance()->getKorteBeschrijving($pinTransactie);
 			} else {
 				$transactieBeschrijving = '-';

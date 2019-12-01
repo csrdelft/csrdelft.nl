@@ -37,7 +37,7 @@ class SavedQueryModel extends PersistenceModel {
 		$resultObject->query = $query;
 
 		try {
-			$result = Database::instance()->getDatabase()->query($query->savedquery);
+			$result = $this->database->getDatabase()->query($query->savedquery);
 			$numCols = $result->columnCount();
 			$cols = [];
 			for ($i = 0; $i < $numCols; $i++) {

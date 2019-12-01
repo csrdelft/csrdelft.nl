@@ -39,13 +39,35 @@ class PinTransactieMatcher {
 	 * @var PinTransactieMatch[]
 	 */
 	private $matches;
-
 	/**
-	 * @param PinTransactie[] $pinTransacties
-	 * @param CiviBestellingInhoud[] $pinBestellingen
+	 * @var PinTransactieMatchModel
 	 */
-	public function __construct(array $pinTransacties, array $pinBestellingen) {
+	private $pinTransactieMatchModel;
+	/**
+	 * @var CiviBestellingModel
+	 */
+	private $civiBestellingModel;
+	/**
+	 * @var CiviBestellingInhoudModel
+	 */
+	private $civiBestellingInhoudModel;
+	/**
+	 * @var PinTransactieModel
+	 */
+	private $pinTransactieModel;
+
+	public function __construct(PinTransactieMatchModel $pinTransactieMatchModel, CiviBestellingModel $civiBestellingModel, CiviBestellingInhoudModel $civiBestellingInhoudModel, PinTransactieModel $pinTransactieModel) {
+		$this->pinTransactieMatchModel = $pinTransactieMatchModel;
+		$this->civiBestellingModel = $civiBestellingModel;
+		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
+		$this->pinTransactieModel = $pinTransactieModel;
+	}
+
+	public function setPinTransacties(array $pinTransacties) {
 		$this->pinTransacties = $pinTransacties;
+	}
+
+	public function setPinBestellingen(array $pinBestellingen) {
 		$this->pinBestellingen = $pinBestellingen;
 	}
 
@@ -53,10 +75,10 @@ class PinTransactieMatcher {
 	 */
 	public function clean() {
 		foreach ($this->pinBestellingen as $pinBestelling) {
-			$matches = PinTransactieMatchModel::instance()->find('bestelling_id = ?', [$pinBestelling->bestelling_id])->fetchAll();
+			$matches = $this->pinTransactieMatchModel->find('bestelling_id = ?', [$pinBestelling->bestelling_id])->fetchAll();
 
 			foreach ($matches as $match) {
-				PinTransactieMatchModel::instance()->delete($match);
+				$this->pinTransactieMatchModel->delete($match);
 			}
 		}
 	}
@@ -183,25 +205,25 @@ class PinTransactieMatcher {
 
 			switch ($match->status) {
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
-					$pinTransactie = PinTransactieModel::get($match->transactie_id);
+					$pinTransactie = $this->pinTransactieModel->get($match->transactie_id);
 					$verschil += $pinTransactie->getBedragInCenten();
 					$moment = date(self::TIME_FORMAT, strtotime($pinTransactie->datetime));
 
 					printf("%s - Missende bestelling voor pintransactie %d om %s van %s.\n", $moment, $pinTransactie->STAN, $pinTransactie->datetime, $pinTransactie->amount);
 					break;
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE:
-					$pinBestelling = CiviBestellingModel::get($match->bestelling_id);
-					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
+					$pinBestelling = $this->civiBestellingModel->get($match->bestelling_id);
+					$pinBestellingInhoud = $this->civiBestellingInhoudModel->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
 					$verschil -= $pinBestellingInhoud->aantal;
 					$moment = date(self::TIME_FORMAT, strtotime($pinBestelling->moment));
 
 					printf("%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n", $moment, $pinBestelling->id, $pinBestelling->moment, $pinBestellingInhoud->aantal / 100, $pinBestelling->uid);
 					break;
 				case PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG:
-					$pinTransactie = PinTransactieModel::get($match->transactie_id);
-					$pinBestelling = CiviBestellingModel::get($match->bestelling_id);
+					$pinTransactie = $this->pinTransactieModel->get($match->transactie_id);
+					$pinBestelling = $this->civiBestellingModel->get($match->bestelling_id);
 
-					$pinBestellingInhoud = CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
+					$pinBestellingInhoud = $this->civiBestellingInhoudModel->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
 
 					$verschil += $pinTransactie->getBedragInCenten() - $pinBestellingInhoud->aantal;
 					$moment = date(self::TIME_FORMAT, strtotime($pinTransactie->datetime));
@@ -229,7 +251,7 @@ class PinTransactieMatcher {
 	 */
 	public function save() {
 		foreach ($this->matches as $match) {
-			PinTransactieMatchModel::instance()->create($match);
+			$this->pinTransactieMatchModel->create($match);
 		}
 	}
 

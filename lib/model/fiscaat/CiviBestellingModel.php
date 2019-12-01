@@ -30,28 +30,35 @@ class CiviBestellingModel extends PersistenceModel {
 	 * @var CiviProductModel
 	 */
 	private $civiProductModel;
+	/**
+	 * @var CiviSaldoModel
+	 */
+	private $civiSaldoModel;
 
 	/**
 	 * CiviBestellingModel constructor.
 	 * @param CiviBestellingInhoudModel $civiBestellingInhoudModel
 	 * @param CiviProductModel $civiProductModel
+	 * @param CiviSaldoModel $civiSaldoModel
 	 */
 	public function __construct(
 		CiviBestellingInhoudModel $civiBestellingInhoudModel,
-		CiviProductModel $civiProductModel
+		CiviProductModel $civiProductModel,
+		CiviSaldoModel $civiSaldoModel
 	) {
 		parent::__construct();
 
 		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
 		$this->civiProductModel = $civiProductModel;
+		$this->civiSaldoModel = $civiSaldoModel;
 	}
 
 	/**
 	 * @param int $id
 	 * @return CiviBestelling
 	 */
-	public static function get($id) {
-		return static::instance()->find('id = ?', [$id])->fetch();
+	public function get($id) {
+		return $this->find('id = ?', [$id])->fetch();
 	}
 
 	/**
@@ -81,7 +88,7 @@ class CiviBestellingModel extends PersistenceModel {
 	 * @param CiviBestelling $bestelling
 	 */
 	public function revert(CiviBestelling $bestelling) {
-		return Database::transaction(function () use ($bestelling) {
+		return $this->database->_transaction(function () use ($bestelling) {
 			/**
 			 * @var CiviBestelling|false $bestelling
 			 */
@@ -89,12 +96,13 @@ class CiviBestellingModel extends PersistenceModel {
 			if ($bestelling === false || $bestelling->deleted) {
 				throw new Exception("Bestelling bestaat niet, kan niet worden teruggedraaid.");
 			}
-			CiviSaldoModel::instance()->ophogen($bestelling->uid, $bestelling->totaal);
+			$this->civiSaldoModel->ophogen($bestelling->uid, $bestelling->totaal);
 			$bestelling->deleted = true;
-			CiviBestellingModel::instance()->update($bestelling);
+			$this->civiSaldoModel->update($bestelling);
 
 		});
 	}
+
 	/**
 	 * @param string $uid
 	 * @param int $limit

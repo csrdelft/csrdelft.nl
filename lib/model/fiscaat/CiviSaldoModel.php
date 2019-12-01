@@ -27,16 +27,13 @@ class CiviSaldoModel extends PersistenceModel {
 	/**
 	 * CiviSaldoModel constructor.
 	 * @param CiviSaldoLogModel $civiSaldoLogModel
-	 * @param CiviBestellingModel $civiBestellingModel
 	 */
 	public function __construct(
-		CiviSaldoLogModel $civiSaldoLogModel,
-		CiviBestellingModel $civiBestellingModel
+		CiviSaldoLogModel $civiSaldoLogModel
 	) {
 		parent::__construct();
 
 		$this->civiSaldoLogModel = $civiSaldoLogModel;
-		$this->civiBestellingModel = $civiBestellingModel;
 	}
 
 	/**
@@ -83,7 +80,7 @@ class CiviSaldoModel extends PersistenceModel {
 	 */
 	public function getSomSaldiOp(DateTime $date, $profielOnly = false) {
 		$currentSum = $this->getSomSaldi($profielOnly);
-		return $currentSum + $this->civiBestellingModel->getSomBestellingenVanaf($date, $profielOnly);
+		return $currentSum + CiviBestellingModel::instance()->getSomBestellingenVanaf($date, $profielOnly);
 	}
 
 	/**

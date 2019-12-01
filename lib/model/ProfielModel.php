@@ -129,7 +129,7 @@ class ProfielModel extends CachedPersistenceModel {
 		/** @var Profiel $profiel */
 		// Lichting zijn de laatste 2 cijfers van lidjaar
 		$jj = substr($profiel->lidjaar, 2, 2);
-		$laatste_uid = Database::instance()->sqlSelect(array('MAX(uid)'), $this->getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
+		$laatste_uid = $this->database->sqlSelect(array('MAX(uid)'), $this->getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
 		if ($laatste_uid) {
 			// Volgnummer zijn de laatste 2 cijfers van uid
 			$volgnummer = intval(substr($laatste_uid, 2, 2)) + 1;

@@ -30,21 +30,6 @@ class LoginModel extends PersistenceModel implements Validator {
 	private $tempSwitchUid;
 
 	/**
-	 * @param mixed[] $arguments
-	 * @return LoginModel|PersistenceModel
-	 */
-	public static function init(...$arguments) {
-		/**
-		 * Dispatch the login proces to a separate class based on MODE.
-		 */
-		if (MODE === 'CLI') {
-			return new CliLoginModel();
-		} else {
-			return parent::init(...$arguments);
-		}
-	}
-
-	/**
 	 * @return string
 	 */
 	public static function getUid() {

@@ -10,6 +10,15 @@ use CsrDelft\model\fiscaat\pin\PinTransactieMatcher;
 use PHPUnit\Framework\TestCase;
 
 final class PinTransactieMatcherTest extends TestCase {
+	private function createMatcher() {
+		return new PinTransactieMatcher(
+			$this->createMock(\CsrDelft\model\fiscaat\pin\PinTransactieMatchModel::class),
+			$this->createMock(\CsrDelft\model\fiscaat\CiviBestellingModel::class),
+			$this->createMock(\CsrDelft\model\fiscaat\CiviBestellingInhoudModel::class),
+			$this->createMock(\CsrDelft\model\fiscaat\pin\PinTransactieModel::class)
+		);
+	}
+
 	public function testMatch() {
 		$transacties = [
 			$this->trans(0, 100),
@@ -27,7 +36,9 @@ final class PinTransactieMatcherTest extends TestCase {
 			$this->best(105, 20) #verkeerd bedrag
 		];
 
-		$matcher = new PinTransactieMatcher($transacties, $bestellingen);
+		$matcher = $this->createMatcher();
+		$matcher->setPinTransacties($transacties);
+		$matcher->setPinBestellingen($bestellingen);
 		$matcher->match();
 		$matches = $matcher->getMatches();
 		$this->assertTrue($this->hasMatch($matches, 0, 100, PinTransactieMatchStatusEnum::STATUS_MATCH));
@@ -51,7 +62,9 @@ final class PinTransactieMatcherTest extends TestCase {
 			$this->best(105, 20) #missende transactie
 		];
 
-		$matcher = new PinTransactieMatcher($transacties, $bestellingen);
+		$matcher = $this->createMatcher();
+		$matcher->setPinTransacties($transacties);
+		$matcher->setPinBestellingen($bestellingen);
 		$matcher->match();
 		$matches = $matcher->getMatches();
 		$this->assertTrue($this->hasMatch($matches, 1, 101, PinTransactieMatchStatusEnum::STATUS_MATCH));
@@ -71,7 +84,9 @@ final class PinTransactieMatcherTest extends TestCase {
 			$this->best(101, 100)
 		];
 
-		$matcher = new PinTransactieMatcher($transacties, $bestellingen);
+		$matcher = $this->createMatcher();
+		$matcher->setPinTransacties($transacties);
+		$matcher->setPinBestellingen($bestellingen);
 		$matcher->match();
 		$matches = $matcher->getMatches();
 		$this->assertTrue($this->hasMatch($matches, 1, 101, PinTransactieMatchStatusEnum::STATUS_MATCH));
