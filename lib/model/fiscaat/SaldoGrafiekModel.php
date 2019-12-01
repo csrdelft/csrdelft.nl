@@ -6,27 +6,37 @@ use CsrDelft\model\entity\fiscaat\Saldo;
 use CsrDelft\model\security\LoginModel;
 
 class SaldoGrafiekModel {
-	const ORM = Saldo::class;
+	/**
+	 * @var CiviSaldoModel
+	 */
+	private $civiSaldoModel;
+	/**
+	 * @var CiviBestellingModel
+	 */
+	private $civiBestellingModel;
+
+	public function __construct(CiviSaldoModel $civiSaldoModel, CiviBestellingModel $civiBestellingModel) {
+		$this->civiSaldoModel = $civiSaldoModel;
+		$this->civiBestellingModel = $civiBestellingModel;
+	}
 
 	/**
 	 * @param string $uid
 	 * @param int $timespan
 	 * @return array|null
 	 */
-	public static function getDataPoints($uid, $timespan) {
-		if (!static::magGrafiekZien($uid)) {
+	public function getDataPoints($uid, $timespan) {
+		if (!$this->magGrafiekZien($uid)) {
 			return null;
 		}
-		$model = CiviSaldoModel::instance();
-		$klant = $model->find('uid = ?', array($uid), null, null, 1)->fetch();
+		$klant = $this->civiSaldoModel->find('uid = ?', array($uid), null, null, 1)->fetch();
 		if (!$klant) {
 			return null;
 		}
 		$saldo = $klant->saldo;
 		// Teken het huidige saldo
 		$data = [['t' => date(\DateTime::RFC2822), 'y' => $saldo]];
-		$model = CiviBestellingModel::instance();
-		$bestellingen = $model->find(
+		$bestellingen = $this->civiBestellingModel->find(
 			'uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)',
 			[$klant->uid, $timespan],
 			null,
@@ -65,7 +75,7 @@ class SaldoGrafiekModel {
 	 * @param string $uid
 	 * @return bool
 	 */
-	public static function magGrafiekZien($uid) {
+	public function magGrafiekZien($uid) {
 		//mogen we uberhaupt een grafiek zien?
 		return LoginModel::getUid() === $uid OR LoginModel::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
 	}

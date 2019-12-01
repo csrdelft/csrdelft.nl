@@ -10,9 +10,20 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccessModel;
 
 class RechtenGroepenModel extends AbstractGroepenModel {
-	public function __construct(AccessModel $accessModel) {
+	/** @var BesturenModel */
+	private $besturenModel;
+	/** @var CommissieLedenModel */
+	private $commissieLedenModel;
+	/** @var CommissiesModel */
+	private $commissiesModel;
+
+	public function __construct(BesturenModel $besturenModel, CommissiesModel $commissiesModel, CommissieLedenModel $commissieLedenModel, AccessModel $accessModel) {
 		parent::__static();
 		parent::__construct($accessModel);
+
+		$this->besturenModel = $besturenModel;
+		$this->commissiesModel = $commissiesModel;
+		$this->commissieLedenModel = $commissieLedenModel;
 	}
 
 	const ORM = RechtenGroep::class;
@@ -34,7 +45,7 @@ class RechtenGroepenModel extends AbstractGroepenModel {
 	 * @param string $uid
 	 * @return array
 	 */
-	public static function getWikiToegang($uid) {
+	public function getWikiToegang($uid) {
 		$result = [];
 		$profiel = ProfielModel::get($uid);
 		if (!$profiel) {
@@ -44,14 +55,14 @@ class RechtenGroepenModel extends AbstractGroepenModel {
 			$result[] = 'htleden-oudleden';
 		}
 		// 1 generatie vooruit en 1 achteruit (default order by)
-		$ft = BesturenModel::instance()->find('status = ?', [GroepStatus::FT], null, null, 1)->fetch();
-		$ht = BesturenModel::instance()->find('status = ?', [GroepStatus::HT], null, null, 1)->fetch();
-		$ot = BesturenModel::instance()->find('status = ?', [GroepStatus::OT], null, null, 1)->fetch();
+		$ft = $this->besturenModel->find('status = ?', [GroepStatus::FT], null, null, 1)->fetch();
+		$ht = $this->besturenModel->find('status = ?', [GroepStatus::HT], null, null, 1)->fetch();
+		$ot = $this->besturenModel->find('status = ?', [GroepStatus::OT], null, null, 1)->fetch();
 		if (($ft AND $ft->getLid($uid)) OR ($ht AND $ht->getLid($uid)) OR ($ot AND $ot->getLid($uid))) {
 			$result[] = 'bestuur';
 		}
-		foreach (CommissieLedenModel::instance()->prefetch('uid = ?', array($uid)) as $commissielid) {
-			$commissie = CommissiesModel::instance()->get($commissielid->groep_id);
+		foreach ($this->commissieLedenModel->prefetch('uid = ?', array($uid)) as $commissielid) {
+			$commissie = $this->commissiesModel->get($commissielid->groep_id);
 			if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
 				$result[] = $commissie->familie;
 			}

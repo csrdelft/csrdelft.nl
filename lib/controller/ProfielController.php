@@ -141,6 +141,10 @@ class ProfielController extends AbstractController {
 	 * @var AccountModel
 	 */
 	private $accountModel;
+	/**
+	 * @var SaldoGrafiekModel
+	 */
+	private $saldoGrafiekModel;
 
 	public function __construct(
 		ProfielModel $profielModel,
@@ -166,7 +170,8 @@ class ProfielController extends AbstractController {
 		OnderverenigingenModel $onderverenigingenModel,
 		RechtenGroepenModel $rechtenGroepenModel,
 		VoorkeurOpmerkingModel $voorkeurOpmerkingModel,
-		WerkgroepenModel $werkgroepenModel
+		WerkgroepenModel $werkgroepenModel,
+		SaldoGrafiekModel $saldoGrafiekModel
 	) {
 		$this->profielModel = $profielModel;
 		$this->accountModel = $accountModel;
@@ -192,6 +197,7 @@ class ProfielController extends AbstractController {
 		$this->rechtenGroepenModel = $rechtenGroepenModel;
 		$this->voorkeurOpmerkingModel = $voorkeurOpmerkingModel;
 		$this->werkgroepenModel = $werkgroepenModel;
+		$this->saldoGrafiekModel = $saldoGrafiekModel;
 	}
 
 	public function resetPrivateToken($uid) {
@@ -386,9 +392,8 @@ class ProfielController extends AbstractController {
 	}
 
 	public function saldo($uid, $timespan) {
-		if (SaldoGrafiekModel::magGrafiekZien($uid)) {
-			$data = SaldoGrafiekModel::getDataPoints($uid, $timespan);
-			return new JsonResponse($data);
+		if ($this->saldoGrafiekModel->magGrafiekZien($uid)) {
+			return new JsonResponse($this->saldoGrafiekModel->getDataPoints($uid, $timespan));
 		} else {
 			throw new CsrToegangException();
 		}
