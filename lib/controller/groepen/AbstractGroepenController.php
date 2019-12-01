@@ -92,7 +92,7 @@ abstract class AbstractGroepenController {
 		// Let op, als je meerdere routes naar dezelfde functie hebt, gebruik dan overrideName om de naam van de route goed te zetten.
 		$route('', 'overzicht', ['GET'], [], [], 'main');
 		$route('beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
-		$route('overzicht/{soort}', 'overzicht', ['GET']);
+		$route('overzicht/{soort}', 'overzicht', ['GET'], ['soort' => null]);
 		$route('{id}/verwijderen', 'verwijderen', ['POST']);
 		$route('zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
 		$route('nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
