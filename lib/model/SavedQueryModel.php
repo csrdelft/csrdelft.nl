@@ -21,8 +21,8 @@ class SavedQueryModel extends PersistenceModel {
 	/**
 	 * @return SavedQuery[]|\PDOStatement
 	 */
-	static public function getQueries() {
-		return static::instance()->find();
+	public function getQueries() {
+		return $this->find();
 	}
 
 	public function loadQuery($queryId) {

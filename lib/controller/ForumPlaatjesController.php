@@ -27,7 +27,7 @@ class ForumPlaatjesController {
 	public function upload() {
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
-			$plaatje = $this->forumPlaatjeModel::fromUploader($form->uploader, LoginModel::getUid());
+			$plaatje = $this->forumPlaatjeModel->fromUploader($form->uploader, LoginModel::getUid());
 			return view('forum.insert_plaatje', ['plaatje' => $plaatje]);
 		} else {
 			return $form;

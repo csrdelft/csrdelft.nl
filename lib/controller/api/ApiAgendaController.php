@@ -65,7 +65,7 @@ class ApiAgendaController {
 		// Activiteit aanmeldingen
 		$activiteitAanmeldingen = array();
 		foreach ($activiteitenFiltered as $activiteit) {
-			$deelnemer = ActiviteitDeelnemersModel::get($activiteit, $_SESSION['_uid']);
+			$deelnemer = ActiviteitDeelnemersModel::instance()->get($activiteit, $_SESSION['_uid']);
 			if ($deelnemer) {
 				$activiteitAanmeldingen[] = $deelnemer->groep_id;
 			}

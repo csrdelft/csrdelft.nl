@@ -160,11 +160,11 @@ class ForumDraad extends PersistentEntity {
 	protected static $table_name = 'forum_draden';
 
 	public function getForumDeel() {
-		return ForumDelenModel::get($this->forum_id);
+		return ForumDelenModel::instance()->get($this->forum_id);
 	}
 
 	public function getGedeeldMet() {
-		return ForumDelenModel::get($this->gedeeld_met);
+		return ForumDelenModel::instance()->get($this->gedeeld_met);
 	}
 
 	public function isGedeeld() {

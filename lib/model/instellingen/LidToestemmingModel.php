@@ -4,11 +4,9 @@ namespace CsrDelft\model\instellingen;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\yaml\YamlInstellingen;
-use CsrDelft\model\entity\instellingen\LidInstelling;
 use CsrDelft\model\entity\LidToestemming;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Persistence\Database;
 use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\FileLoaderLoadException;
@@ -65,7 +63,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 		return $instelling;
 	}
 
-	public static function toestemmingGegeven() {
+	public function toestemmingGegeven() {
 		if ($_SERVER['REQUEST_URI'] == '/privacy') // Doe niet naggen op de privacy info pagina.
 			return true;
 
@@ -80,10 +78,10 @@ class LidToestemmingModel extends CachedPersistenceModel {
 		$modules = ['algemeen', 'intern', 'profiel'];
 		$placeholdersModule = implode(', ', array_fill(0, count($modules), '?'));
 
-		if (static::instance()->count('uid = ? AND waarde = \'\' AND module IN (' . $placeholdersModule . ')', array_merge([$uid], $modules)) != 0) // Er zijn nog opties
+		if ($this->count('uid = ? AND waarde = \'\' AND module IN (' . $placeholdersModule . ')', array_merge([$uid], $modules)) != 0) // Er zijn nog opties
 			return false;
 
-		if (static::instance()->count('uid = ?', [$uid]) == 0) // Er is geen enkele selectie gemaakt
+		if ($this->count('uid = ?', [$uid]) == 0) // Er is geen enkele selectie gemaakt
 			return false;
 
 		return true;
@@ -210,7 +208,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 				$properties[] = array($module, $id, $waarde, $uid ?? LoginModel::getUid());
 			}
 		}
-		Database::instance()->sqlInsertMultiple($this->getTableName(), $properties, true);
+		$this->database->sqlInsertMultiple($this->getTableName(), $properties, true);
 		$this->flushCache(true);
 	}
 }

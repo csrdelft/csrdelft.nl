@@ -23,10 +23,10 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 	 * @param string $uid
 	 * @return LichtingsLid|false
 	 */
-	public static function get(AbstractGroep $lichting, $uid) {
+	public function get(AbstractGroep $lichting, $uid) {
 		$profiel = ProfielModel::get($uid);
 		if ($profiel AND $profiel->lidjaar === $lichting->lidjaar) {
-			$lid = static::instance()->nieuw($lichting, $uid);
+			$lid = $this->nieuw($lichting, $uid);
 			$lid->door_uid = null;
 			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
 			return $lid;
@@ -43,7 +43,7 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 	public function getLedenVoorGroep(AbstractGroep $lichting) {
 		$leden = array();
 		foreach (ProfielModel::instance()->prefetch('lidjaar = ?', array($lichting->lidjaar)) as $profiel) {
-			$lid = static::get($lichting, $profiel->uid);
+			$lid = $this->get($lichting, $profiel->uid);
 			if ($lid) {
 				$leden[] = $lid;
 			}

@@ -260,7 +260,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function deel(int $forum_id, $pagina = 1) {
-		$deel = $this->forumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel->get($forum_id);
 		if (!$deel->magLezen()) {
 			throw new CsrToegangException();
 		}
@@ -383,7 +383,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function beheren(int $forum_id) {
-		$deel = $this->forumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel->get($forum_id);
 		$form = new ForumDeelForm($deel); // fetches POST values itself
 		if ($form->validate()) {
 			$rowCount = $this->forumDelenModel->update($deel);
@@ -405,7 +405,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function opheffen(int $forum_id) {
-		$deel = $this->forumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel->get($forum_id);
 		$count = $this->forumDradenModel->count('forum_id = ?', array($deel->forum_id));
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
@@ -498,7 +498,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function deelmelding(int $forum_id, $niveau) {
-		$deel = $this->forumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel->get($forum_id);
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
 			throw new CsrToegangException('Deel mag geen melding voor ontvangen worden');
 		}
@@ -548,7 +548,7 @@ class ForumController extends AbstractController {
 		} elseif ($property === 'forum_id' || $property === 'gedeeld_met') {
 			$value = (int)filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			if ($property === 'forum_id') {
-				$deel = ForumDelenModel::get($value);
+				$deel = $this->forumDelenModel->get($value);
 				if (!$deel->magModereren()) {
 					throw new CsrToegangException();
 				}
@@ -588,7 +588,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrToegangException
 	 */
 	public function posten(int $forum_id, $draad_id = null) {
-		$deel = $this->forumDelenModel::get($forum_id);
+		$deel = $this->forumDelenModel->get($forum_id);
 		$draad = null;
 		// post in bestaand draadje?
 		$titel = null;
@@ -843,7 +843,7 @@ class ForumController extends AbstractController {
 		$concept = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$ping = filter_input(INPUT_POST, 'ping', FILTER_SANITIZE_STRING);
 
-		$deel = $this->forumDelenModel::get((int)$forum_id);
+		$deel = $this->forumDelenModel->get((int)$forum_id);
 		// bestaand draadje?
 		if ($draad_id !== null) {
 			$draad = $this->forumDradenModel::get((int)$draad_id);

@@ -128,7 +128,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @return AbstractGroepLid
 	 */
 	public function getLid($uid) {
-		return (static::LEDEN)::get($this, $uid);
+		return (static::LEDEN)::instance()->get($this, $uid);
 	}
 
 	/**

@@ -111,7 +111,7 @@ class SavedQueryContent implements View {
 		}
 		$return .= '>';
 		$current = '';
-		foreach (SavedQueryModel::getQueries() as $query) {
+		foreach (SavedQueryModel::instance()->getQueries() as $query) {
 			if (!$query->magBekijken()) {
 				continue;
 			}

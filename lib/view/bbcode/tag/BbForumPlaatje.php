@@ -42,7 +42,7 @@ class BbForumPlaatje extends BbImg {
 	public function parse($arguments = [])
 	{
 		$this->readMainArgument($arguments);
-		$plaatje = ForumPlaatjeModel::getByKey($this->content);
+		$plaatje = ForumPlaatjeModel::instance()->getByKey($this->content);
 		if (!$plaatje) {
 			throw new BbException("Plaatje bestaat niet");
 		}

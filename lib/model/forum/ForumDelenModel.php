@@ -53,9 +53,9 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 * @return ForumDeel
 	 * @throws CsrGebruikerException
 	 */
-	public static function get($id) {
+	public function get($id) {
 		/** @var ForumDeel $deel */
-		$deel = static::instance()->retrieveByPrimaryKey(array($id));
+		$deel = $this->retrieveByPrimaryKey(array($id));
 		if (!$deel) {
 			throw new CsrGebruikerException('Forum bestaat niet!');
 		}
