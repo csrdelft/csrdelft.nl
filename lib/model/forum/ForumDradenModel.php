@@ -100,8 +100,8 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	 * @return ForumDraad
 	 * @throws CsrGebruikerException
 	 */
-	public static function get($id) {
-		$draad = static::instance()->retrieveByPrimaryKey(array($id));
+	public function get($id) {
+		$draad = $this->retrieveByPrimaryKey(array($id));
 		if (!$draad) {
 			throw new CsrGebruikerException('Forum-onderwerp bestaat niet!');
 		}

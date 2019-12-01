@@ -643,7 +643,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getVerticale() {
-		return VerticalenModel::get($this->verticale);
+		return VerticalenModel::instance()->get($this->verticale);
 	}
 
 	public function getKring() {

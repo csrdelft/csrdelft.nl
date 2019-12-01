@@ -53,7 +53,7 @@ class ApiForumController {
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
 		try {
-			$draad = ForumDradenModel::get((int)$id);
+			$draad = ForumDradenModel::instance()->get((int)$id);
 		} catch (\Exception $e) {
 			throw new RestException(404);
 		}

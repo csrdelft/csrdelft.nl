@@ -296,7 +296,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function reactie(int $post_id) {
-		$post = $this->forumPostsModel::get($post_id);
+		$post = $this->forumPostsModel->get($post_id);
 		if ($post->verwijderd) {
 			setMelding('Deze reactie is verwijderd', 0);
 		}
@@ -313,7 +313,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function onderwerp(int $draad_id, $pagina = null, $statistiek = null) {
-		$draad = $this->forumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel->get($draad_id);
 		if (!$draad->magLezen()) {
 			throw new CsrToegangException();
 		}
@@ -426,7 +426,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function verbergen(int $draad_id) {
-		$draad = $this->forumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel->get($draad_id);
 		if (!$draad->magVerbergen()) {
 			throw new CsrGebruikerException('Onderwerp mag niet verborgen worden');
 		}
@@ -447,7 +447,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function tonen(int $draad_id) {
-		$draad = $this->forumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel->get($draad_id);
 		if (!$draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is niet verborgen');
 		}
@@ -476,7 +476,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function meldingsniveau(int $draad_id, $niveau) {
-		$draad = $this->forumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel->get($draad_id);
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
 			throw new CsrToegangException('Onderwerp mag geen melding voor ontvangen worden');
 		}
@@ -516,7 +516,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function bladwijzer(int $draad_id) {
-		$draad = $this->forumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel->get($draad_id);
 		$timestamp = (int)filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
 		if ($this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, $timestamp - 1)) {
 			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
@@ -535,7 +535,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrToegangException
 	 */
 	public function wijzigen(int $draad_id, $property) {
-		$draad = $this->forumDradenModel::get($draad_id);
+		$draad = $this->forumDradenModel->get($draad_id);
 		// gedeelde moderators mogen dit niet
 		if (!$draad->getForumDeel()->magModereren()) {
 			throw new CsrToegangException();
@@ -593,7 +593,7 @@ class ForumController extends AbstractController {
 		// post in bestaand draadje?
 		$titel = null;
 		if ($draad_id !== null) {
-			$draad = $this->forumDradenModel::get($draad_id);
+			$draad = $this->forumDradenModel->get($draad_id);
 
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
@@ -723,7 +723,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrToegangException
 	 */
 	public function citeren($post_id) {
-		$post = $this->forumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->magCiteren()) {
 			throw new CsrToegangException("Mag niet citeren", 403);
 		}
@@ -737,7 +737,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrToegangException
 	 */
 	public function tekst($post_id) {
-		$post = $this->forumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->magBewerken()) {
 			throw new CsrToegangException("Mag niet berwerken", 403);
 		}
@@ -752,7 +752,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function bewerken($post_id) {
-		$post = $this->forumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->magBewerken()) {
 			throw new CsrToegangException("Mag niet bewerken", 403);
 		}
@@ -770,13 +770,13 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function verplaatsen($post_id) {
-		$post = $this->forumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel->get((int)$post_id);
 		$oudDraad = $post->getForumDraad();
 		if (!$oudDraad->magModereren()) {
 			throw new CsrToegangException("Geen moderator", 403);
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
-		$nieuwDraad = ForumDradenModel::get((int)$nieuw);
+		$nieuwDraad = $this->forumDradenModel->get((int)$nieuw);
 		if (!$nieuwDraad->magModereren()) {
 			throw new CsrToegangException("Geen moderator", 403);
 		}
@@ -792,7 +792,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function verwijderen($post_id) {
-		$post = $this->forumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
 			throw new CsrToegangException("Geen moderator", 403);
 		}
@@ -807,7 +807,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function offtopic($post_id) {
-		$post = $this->forumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
 			throw new CsrToegangException("Geen moderator", 403);
 		}
@@ -822,7 +822,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function goedkeuren($post_id) {
-		$post = $this->forumPostsModel::get((int)$post_id);
+		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
 			throw new CsrToegangException("Geen moderator", 403);
 		}
@@ -846,7 +846,7 @@ class ForumController extends AbstractController {
 		$deel = $this->forumDelenModel->get((int)$forum_id);
 		// bestaand draadje?
 		if ($draad_id !== null) {
-			$draad = $this->forumDradenModel::get((int)$draad_id);
+			$draad = $this->forumDradenModel->get((int)$draad_id);
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {

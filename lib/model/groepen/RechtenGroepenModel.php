@@ -51,7 +51,7 @@ class RechtenGroepenModel extends AbstractGroepenModel {
 			$result[] = 'bestuur';
 		}
 		foreach (CommissieLedenModel::instance()->prefetch('uid = ?', array($uid)) as $commissielid) {
-			$commissie = CommissiesModel::get($commissielid->groep_id);
+			$commissie = CommissiesModel::instance()->get($commissielid->groep_id);
 			if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
 				$result[] = $commissie->familie;
 			}

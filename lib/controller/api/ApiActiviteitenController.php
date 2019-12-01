@@ -23,7 +23,7 @@ class ApiActiviteitenController {
 	 */
 	public function activiteitAanmelden($id) {
 
-		$activiteit = ActiviteitenModel::get($id);
+		$activiteit = ActiviteitenModel::instance()->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
@@ -47,7 +47,7 @@ class ApiActiviteitenController {
 	 */
 	public function activiteitAfmelden($id) {
 
-		$activiteit = ActiviteitenModel::get($id);
+		$activiteit = ActiviteitenModel::instance()->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');

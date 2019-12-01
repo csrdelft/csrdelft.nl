@@ -90,8 +90,8 @@ class ForumModel extends CachedPersistenceModel {
 		$this->forumDelenMeldingModel = $forumDelenMeldingModel;
 	}
 
-	public static function get($id) {
-		$categorie = static::instance()->retrieveByPrimaryKey(array($id));
+	public function get($id) {
+		$categorie = $this->retrieveByPrimaryKey(array($id));
 		if (!$categorie) {
 			throw new CsrGebruikerException('Forum-categorie bestaat niet!');
 		}

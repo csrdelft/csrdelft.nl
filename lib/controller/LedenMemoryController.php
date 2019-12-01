@@ -91,7 +91,7 @@ class LedenMemoryController {
 					$groep = $this->verticalenModel->retrieveByUUID($groep);
 					break;
 				case 'lichting.csrdelft.nl':
-					$groep = LichtingenModel::get($parts[0]);
+					$groep = LichtingenModel::instance()->get($parts[0]);
 					break;
 			}
 		}
@@ -148,7 +148,7 @@ class LedenMemoryController {
 		if ($l < $min OR $l > $max) {
 			$l = $max;
 		}
-		$lichting = LichtingenModel::get($l);
+		$lichting = LichtingenModel::instance()->get($l);
 		return $lichting ? $lichting : null;
 	}
 
@@ -163,7 +163,7 @@ class LedenMemoryController {
 		}
 		$verticale = false;
 		if (strlen($v) == 1) {
-			$verticale = VerticalenModel::get($v);
+			$verticale = $this->verticalenModel->get($v);
 		}
 		if (!$verticale) {
 			$verticale = $this->verticalenModel->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();

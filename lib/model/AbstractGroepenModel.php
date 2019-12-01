@@ -43,11 +43,11 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 	 * @param $id
 	 * @return AbstractGroep|false
 	 */
-	public static function get($id) {
+	public function get($id) {
 		if (is_numeric($id)) {
-			return static::instance()->retrieveByPrimaryKey([$id]);
+			return $this->retrieveByPrimaryKey([$id]);
 		}
-		$groepen = static::instance()->prefetch('familie = ? AND status = ?', [$id, GroepStatus::HT], null, null, 1);
+		$groepen = $this->prefetch('familie = ? AND status = ?', [$id, GroepStatus::HT], null, null, 1);
 		return reset($groepen);
 	}
 

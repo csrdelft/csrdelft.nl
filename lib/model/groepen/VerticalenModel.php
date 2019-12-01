@@ -25,8 +25,8 @@ class VerticalenModel extends AbstractGroepenModel {
 	 */
 	protected $default_order = 'letter ASC';
 
-	public static function get($letter) {
-		$verticalen = static::instance()->prefetch('letter = ?', array($letter), null, null, 1);
+	public function get($letter) {
+		$verticalen = $this->prefetch('letter = ?', array($letter), null, null, 1);
 		$verticale = reset($verticalen);
 		if (!empty($verticale)) {
 			return $verticale;

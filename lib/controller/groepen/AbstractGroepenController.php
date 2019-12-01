@@ -498,7 +498,7 @@ abstract class AbstractGroepenController {
 	 * Voor groepen V2
 	 */
 	public function aanmelden2(Request $request, $id, $uid) {
-		$groep = $this->model::get($id);
+		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
@@ -527,7 +527,7 @@ abstract class AbstractGroepenController {
 
 	public function ketzer_aanmelden($id) {
 		$uid = LoginModel::getUid();
-		$groep = $this->model::get($id);
+		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
@@ -547,7 +547,7 @@ abstract class AbstractGroepenController {
 	}
 
 	public function aanmelden($id) {
-		$groep = $this->model::get($id);
+		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Beheren)) {

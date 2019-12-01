@@ -83,7 +83,7 @@ class EetplanController {
 		}
 
 		return view('eetplan.huis', [
-			'woonoord' => WoonoordenModel::get($id),
+			'woonoord' => WoonoordenModel::instance()->get($id),
 			'eetplan' => $eetplan,
 		]);
 	}

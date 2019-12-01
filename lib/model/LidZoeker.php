@@ -196,7 +196,7 @@ class LidZoeker {
 				}
 				$query = '(' . implode(' OR ', $query) . ') ';
 			} else {
-				$verticale = VerticalenModel::get($v);
+				$verticale = VerticalenModel::instance()->get($v);
 				if ($verticale) {
 					$query = 'verticale= ? ';
 					$params[] = $verticale->letter;

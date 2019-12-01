@@ -368,6 +368,6 @@ class ToolsController extends AbstractController {
 	 * @return View
 	 */
 	public function patronaat() {
-		return view('patronaat', ['groep' => ActiviteitenModel::get(1754)]);
+		return view('patronaat', ['groep' => ActiviteitenModel::instance()->get(1754)]);
 	}
 }

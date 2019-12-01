@@ -180,12 +180,12 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	public function getTree($environment, $resource) {
 		if ($environment === ActiviteitenModel::ORM) {
-			$activiteit = ActiviteitenModel::get($resource);
+			$activiteit = ActiviteitenModel::instance()->get($resource);
 			if ($activiteit) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $activiteit->soort, '*'));
 			}
 		} elseif ($environment === CommissiesModel::ORM) {
-			$commissie = CommissiesModel::get($resource);
+			$commissie = CommissiesModel::instance()->get($resource);
 			if ($commissie) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $commissie->soort, '*'));
 			}
@@ -761,43 +761,43 @@ class AccessModel extends CachedPersistenceModel {
 							$role = $gevraagd;
 						}
 						if ($gevraagd) {
-							$groep = BesturenModel::get($gevraagd);
+							$groep = BesturenModel::instance()->get($gevraagd);
 						} else {
-							$groep = BesturenModel::get('bestuur'); // h.t.
+							$groep = BesturenModel::instance()->get('bestuur'); // h.t.
 						}
 						break;
 
 					case 'COMMISSIE':
-						$groep = CommissiesModel::get($gevraagd);
+						$groep = CommissiesModel::instance()->get($gevraagd);
 						break;
 
 					case 'KRING':
-						$groep = KringenModel::get($gevraagd);
+						$groep = KringenModel::instance()->get($gevraagd);
 						break;
 
 					case 'ONDERVERENIGING':
-						$groep = OnderverenigingenModel::get($gevraagd);
+						$groep = OnderverenigingenModel::instance()->get($gevraagd);
 						break;
 
 					case 'WOONOORD':
-						$groep = WoonoordenModel::get($gevraagd);
+						$groep = WoonoordenModel::instance()->get($gevraagd);
 						break;
 
 					case 'ACTIVITEIT':
-						$groep = ActiviteitenModel::get($gevraagd);
+						$groep = ActiviteitenModel::instance()->get($gevraagd);
 						break;
 
 					case 'KETZER':
-						$groep = KetzersModel::get($gevraagd);
+						$groep = KetzersModel::instance()->get($gevraagd);
 						break;
 
 					case 'WERKGROEP':
-						$groep = WerkgroepenModel::get($gevraagd);
+						$groep = WerkgroepenModel::instance()->get($gevraagd);
 						break;
 
 					case 'GROEP':
 					default:
-						$groep = RechtenGroepenModel::get($gevraagd);
+						$groep = RechtenGroepenModel::instance()->get($gevraagd);
 						break;
 				}
 

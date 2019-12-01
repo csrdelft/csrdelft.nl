@@ -67,8 +67,8 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	 * @return ForumPost
 	 * @throws CsrGebruikerException
 	 */
-	public static function get($id) {
-		$post = static::instance()->retrieveByPrimaryKey(array($id));
+	public function get($id) {
+		$post = $this->retrieveByPrimaryKey(array($id));
 		if (!$post) {
 			throw new CsrGebruikerException('Forum-reactie bestaat niet!');
 		}
@@ -112,7 +112,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 
 	public function getAantalPaginas($draad_id) {
 		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
-			$draad = ForumDradenModel::get($draad_id);
+			$draad = ForumDradenModel::instance()->get($draad_id);
 			if ($draad->pagina_per_post) {
 				$this->per_pagina = 1;
 			} else {
