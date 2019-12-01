@@ -47,7 +47,7 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	private $uid;
 
 	private function getUid() {
-		return $this->uid ? $this->uid : LoginModel::getUid();
+		return LoginModel::getUid();
 	}
 	/**
 	 * Geeft een array terug van dezelfde vorm als de instellingen, maar gevuld met gekozen instellingen.
@@ -73,14 +73,18 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	 *
 	 * @param string $module
 	 * @param string $id
+	 * @param string|null $uid
 	 * @return LidInstelling
 	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
-	protected function getInstelling($module, $id) {
-		$instelling = $this->retrieveByPrimaryKey([$module, $id, $this->getUid()]);
+	protected function getInstelling($module, $id, $uid = null) {
+		if (!$uid) {
+			$uid = $this->getUid();
+		}
+		$instelling = $this->retrieveByPrimaryKey([$module, $id, $uid]);
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
-				$instelling = $this->newInstelling($module, $id);
+				$instelling = $this->newInstelling($module, $id, $uid);
 			}
 			return $instelling;
 		} else {
@@ -92,12 +96,12 @@ class LidInstellingenModel extends CachedPersistenceModel {
 		}
 	}
 
-	protected function newInstelling($module, $id) {
+	protected function newInstelling($module, $id, $uid) {
 		$instelling = new LidInstelling();
 		$instelling->module = $module;
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
-		$instelling->uid = $this->getUid();
+		$instelling->uid = $uid;
 		$this->create($instelling);
 		return $instelling;
 	}
@@ -239,10 +243,8 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	 * @param int $uid
 	 * @return string
 	 */
-	public static function getInstellingVoorLid($module, $id, $uid) {
-		$instellingen = static::instance();
-		$instellingen->uid = $uid;
-		return $instellingen->getInstelling($module, $id)->waarde;
+	public function getInstellingVoorLid($module, $id, $uid) {
+		return $this->getInstelling($module, $id, $uid)->waarde;
 	}
 
 	/**

@@ -167,7 +167,7 @@ switch (constant('MODE')) {
 		break;
 	case 'CLI':
 		// Override LoginModel in container to use the Cli version
-		$container->set(LoginModel::class, new CliLoginModel());
+		$container->set(LoginModel::class, $container->get(CliLoginModel::class));
 		if (!LoginModel::mag(P_ADMIN)) {
 			die('access denied');
 		}

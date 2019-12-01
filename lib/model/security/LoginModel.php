@@ -22,12 +22,20 @@ use CsrDelft\view\Validator;
  *
  * Model van het huidige ingeloggede account voor inloggen, uitloggen, su'en etc.
  *
- * @see AccountModel.class.php
+ * @see AccountModel
  */
 class LoginModel extends PersistenceModel implements Validator {
 
 	const ORM = LoginSession::class;
 	private $tempSwitchUid;
+	/**
+	 * @var AccountModel
+	 */
+	private $accountModel;
+	/**
+	 * @var RememberLoginModel
+	 */
+	private $rememberLoginModel;
 
 	/**
 	 * @return string
@@ -77,9 +85,15 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	/**
 	 * LoginModel constructor.
+	 * @param AccountModel $accountModel
+	 * @param RememberLoginModel $rememberLoginModel
 	 */
-	public function __construct() {
+	public function __construct(AccountModel $accountModel, RememberLoginModel $rememberLoginModel) {
 		parent::__construct();
+
+		$this->accountModel = $accountModel;
+		$this->rememberLoginModel = $rememberLoginModel;
+
 		/**
 		 * CliLoginModel doet zijn eigen ding.
 		 */
@@ -105,7 +119,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			// Remember login
 			if (isset($_COOKIE['remember'])) {
-				$remember = RememberLoginModel::instance()->verifyToken($_COOKIE['remember']);
+				$remember = $this->rememberLoginModel->verifyToken($_COOKIE['remember']);
 				if ($remember) {
 					$this->login($remember->uid, null, false, $remember, $remember->lock_ip);
 				}
@@ -118,7 +132,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			 */
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-				$account = AccountModel::instance()->find('private_token = ?', array($token), null, null, 1)->fetch();
+				$account = $this->accountModel->find('private_token = ?', array($token), null, null, 1)->fetch();
 				if ($account) {
 					$this->login($account->uid, null, false, null, true, true, getDateTime());
 				}
@@ -255,10 +269,10 @@ class LoginModel extends PersistenceModel implements Validator {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 
 		// Inloggen met lidnummer of gebruikersnaam
-		if (AccountModel::isValidUid($user)) {
-			$account = AccountModel::get($user);
+		if ($this->accountModel::isValidUid($user)) {
+			$account = $this->accountModel::get($user);
 		} else {
-			$account = AccountModel::instance()->find('username = ?', array($user), null, null, 1)->fetch();
+			$account = $this->accountModel->find('username = ?', array($user), null, null, 1)->fetch();
 		}
 
 		// Onbekende gebruiker
@@ -280,7 +294,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Moet eventueel wachten?
 			if ($evtWachten) {
 				// Check timeout
-				$timeout = AccountModel::instance()->moetWachten($account);
+				$timeout = $this->accountModel->moetWachten($account);
 				if ($timeout > 0) {
 					$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 					return false;
@@ -288,8 +302,8 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 
 			// Check password
-			if (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
-				AccountModel::instance()->successfulLoginAttempt($account);
+			if ($this->accountModel->controleerWachtwoord($account, $pass_plain)) {
+				$this->accountModel->successfulLoginAttempt($account);
 				$_SESSION['_authenticationMethod'] = AuthenticationMethod::password_login;
 			} // Wrong password
 			else {
@@ -299,7 +313,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				} // Regular failed username+password
 				else {
 					$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
-					AccountModel::instance()->failedLoginAttempt($account);
+					$this->accountModel->failedLoginAttempt($account);
 				}
 				return false;
 			}
@@ -365,9 +379,9 @@ class LoginModel extends PersistenceModel implements Validator {
 	public function logout() {
 		// Forget autologin
 		if (isset($_COOKIE['remember'])) {
-			$remember = RememberLoginModel::instance()->find('token = ?', array(hash('sha512', $_COOKIE['remember'])), null, null, 1)->fetch();
+			$remember = $this->rememberLoginModel->find('token = ?', array(hash('sha512', $_COOKIE['remember'])), null, null, 1)->fetch();
 			if ($remember) {
-				RememberLoginModel::instance()->delete($remember);
+				$this->rememberLoginModel->delete($remember);
 			}
 			setRememberCookie(null);
 		}
@@ -385,7 +399,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($this->isSued()) {
 			throw new CsrGebruikerException('Geneste su niet mogelijk!');
 		}
-		$suNaar = AccountModel::get($uid);
+		$suNaar = $this->accountModel::get($uid);
 		if (!$this->maySuTo($suNaar)) {
 			throw new CsrGebruikerException('Deze gebruiker mag niet inloggen!');
 		}
