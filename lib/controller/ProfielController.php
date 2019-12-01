@@ -104,7 +104,7 @@ class ProfielController extends AbstractController {
 	 */
 	private $corveeVrijstellingenModel;
 	/**
-	 * @var CommissieVoorkeurModel
+	 * @var CorveeVoorkeurenModel
 	 */
 	private $corveeVoorkeurenModel;
 	/**
@@ -153,7 +153,7 @@ class ProfielController extends AbstractController {
 		BoekRecensieModel $boekRecensieModel,
 		CiviBestellingModel $civiBestellingModel,
 		CommissieVoorkeurModel $commissieVoorkeurModel,
-		CommissieVoorkeurModel $corveeVoorkeurenModel,
+		CorveeVoorkeurenModel $corveeVoorkeurenModel,
 		CommissiesModel $commissiesModel,
 		CorveeTakenModel $corveeTakenModel,
 		CorveeVrijstellingenModel $corveeVrijstellingenModel,

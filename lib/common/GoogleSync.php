@@ -702,7 +702,7 @@ class GoogleSync {
 	public static function loadXmlString($xml) {
 
 		$prev = libxml_use_internal_errors(false);
-		$data = simplexml_load_string($xml);
+		$data = @simplexml_load_string($xml);
 		if ($data === false) {
 			throw new CsrException("Error parsing xml. Content was: ".substr ( $xml, 0, 100)."...");
 		}
