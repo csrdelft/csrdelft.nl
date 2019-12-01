@@ -4,7 +4,6 @@ namespace CsrDelft\model;
 
 use CsrDelft\common\LDAP;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
-use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
@@ -24,7 +23,6 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Persistence\Database;
 
 
 /**

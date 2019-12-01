@@ -15,7 +15,6 @@ use CsrDelft\Orm\PersistenceModel;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbumModel.php

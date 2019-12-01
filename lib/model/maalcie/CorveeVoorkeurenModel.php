@@ -120,8 +120,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		$values = array();
 		$query = $db->prepare($sql);
 		$query->execute($values);
-		$result = $query->fetchAll();
-		return $result;
+		return $query->fetchAll();
 	}
 
 	public function getVoorkeurenVoorRepetitie($crid) {

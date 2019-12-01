@@ -8,7 +8,7 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Persistence\Database;
+use Exception;
 use PDO;
 
 /**
@@ -143,7 +143,7 @@ abstract class AbstractGroepenModel extends CachedPersistenceModel {
 				$oldmodel->delete($oldgroep);
 				return $newgroep;
 			});
-		} catch (\Exception $ex) {
+		} catch (Exception $ex) {
 			setMelding($ex->getMessage(), -1);
 			return false;
 		}

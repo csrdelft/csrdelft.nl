@@ -5,12 +5,13 @@ namespace CsrDelft\model\fiscaat;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
-use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use DateTime;
 use Exception;
+use Generator;
+use PDO;
+use PDOStatement;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -107,7 +108,7 @@ class CiviBestellingModel extends PersistenceModel {
 	 * @param string $uid
 	 * @param int $limit
 	 *
-	 * @return \PDOStatement
+	 * @return PDOStatement
 	 */
 	public function getAlleBestellingenVoorLid($uid, $limit = null) {
 		return $this->find('uid = ?', [$uid], null, 'moment DESC', $limit);
@@ -117,7 +118,7 @@ class CiviBestellingModel extends PersistenceModel {
 	 * @param string $uid
 	 * @param int $limit
 	 *
-	 * @return \PDOStatement
+	 * @return PDOStatement
 	 */
 	public function getBestellingenVoorLid($uid, $limit = null) {
 		return $this->find('uid = ? AND deleted = FALSE', array($uid), null, 'moment DESC', $limit);
@@ -132,7 +133,7 @@ class CiviBestellingModel extends PersistenceModel {
 	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false) {
 		$after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
 		$moment = $date->format("Y-m-d G:i:s");
-		return $this->select(['SUM(totaal)'], "deleted = 0 AND moment > ? $after", [$moment])->fetch(\PDO::FETCH_COLUMN);
+		return $this->select(['SUM(totaal)'], "deleted = 0 AND moment > ? $after", [$moment])->fetch(PDO::FETCH_COLUMN);
 	}
 
 	/**
@@ -162,7 +163,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 	/**
 	 * @param CiviBestelling[] $bestellingen
-	 * @return \Generator|object[]
+	 * @return Generator|object[]
 	 */
 	public function getBeschrijving($bestellingen) {
 		foreach ($bestellingen as $bestelling) {

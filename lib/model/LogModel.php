@@ -3,7 +3,6 @@
 namespace CsrDelft\model;
 
 use CsrDelft\model\entity\LogEntry;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
 /**

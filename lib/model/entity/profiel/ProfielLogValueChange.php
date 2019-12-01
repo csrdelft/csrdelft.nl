@@ -26,7 +26,7 @@ class ProfielLogValueChange extends AbstractProfielLogValueChangeEntry {
 	public $newValue;
 
 	public function __construct($property, $oldValue, $newValue) {
-		$this->field = $property;
+		parent::__construct($property);
 		$this->oldValue = $oldValue;
 		$this->newValue = $newValue;
 	}

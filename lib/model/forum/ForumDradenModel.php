@@ -12,6 +12,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use PDO;
+use PDOException;
 
 /**
  * ForumDradenModel.class.php
@@ -206,7 +207,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 				$order,
 				$forumZoeken->limit
 			);
-		} catch (\PDOException $ex) {
+		} catch (PDOException $ex) {
 			setMelding('Op deze term kan niet gezocht worden', -1);
 			// Syntax error in de MATCH in BOOLEAN MODE
 			return [];

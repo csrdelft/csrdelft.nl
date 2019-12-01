@@ -19,10 +19,6 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @var CiviSaldoLogModel
 	 */
 	private $civiSaldoLogModel;
-	/**
-	 * @var CiviBestellingModel
-	 */
-	private $civiBestellingModel;
 
 	/**
 	 * CiviSaldoModel constructor.

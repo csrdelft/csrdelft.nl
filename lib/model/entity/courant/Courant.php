@@ -4,7 +4,6 @@
 namespace CsrDelft\model\entity\courant;
 
 
-use CsrDelft\model\CourantBerichtModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

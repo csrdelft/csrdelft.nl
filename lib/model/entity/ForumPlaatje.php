@@ -5,11 +5,8 @@ namespace CsrDelft\model\entity;
 
 
 use CsrDelft\common\CsrException;
-use CsrDelft\model\ForumPlaatjeModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use CsrDelft\view\formulier\uploadvelden\ImageField;
-use CsrDelft\view\formulier\uploadvelden\UploadFileField;
 
 class ForumPlaatje extends PersistentEntity
 {
@@ -29,12 +26,6 @@ class ForumPlaatje extends PersistentEntity
 	public $maker;
 
 	public $source_url;
-	/**
-	 * Plaatje constructor.
-	 * @param string $id
-	 */
-	public function __construct() {
-	}
 
 	public function getAfbeelding($resize = false) {
 		return new Afbeelding($this->getPath($resize));

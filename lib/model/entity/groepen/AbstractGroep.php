@@ -184,11 +184,6 @@ abstract class AbstractGroep extends PersistentEntity {
 				break;
 
 			case AccessAction::Bewerken:
-				if (!$aangemeld) {
-					return false;
-				}
-				break;
-
 			case AccessAction::Afmelden:
 				if (!$aangemeld) {
 					return false;

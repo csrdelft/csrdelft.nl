@@ -4,8 +4,8 @@ namespace CsrDelft\model;
 
 use CsrDelft\model\entity\DebugLogEntry;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
 
 /**
  * DebugLogModel.class.php
@@ -47,7 +47,7 @@ class DebugLogModel extends PersistenceModel {
 		$entry = new DebugLogEntry();
 		$entry->class_function = $class . '->' . $function . '(' . implode(', ', $args) . ')';
 		$entry->dump = $dump;
-		$exception = new \Exception();
+		$exception = new Exception();
 		$entry->call_trace = $exception->getTraceAsString();
 		$entry->moment = getDateTime();
 		$entry->uid = LoginModel::getUid();

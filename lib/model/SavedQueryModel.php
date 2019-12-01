@@ -8,7 +8,6 @@ namespace CsrDelft\model;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\SavedQuery;
 use CsrDelft\model\entity\SavedQueryResult;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
 class SavedQueryModel extends PersistenceModel {

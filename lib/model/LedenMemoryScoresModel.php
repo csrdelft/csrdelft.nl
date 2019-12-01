@@ -5,7 +5,6 @@ namespace CsrDelft\model;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\LedenMemoryScore;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use PDO;
 

@@ -4,7 +4,7 @@ namespace CsrDelft\model\bibliotheek;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\bibliotheek\Boek;
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 
 /**
@@ -46,7 +46,7 @@ class BoekModel extends PersistenceModel {
 
 	/**
 	 * @param $id
-	 * @return \CsrDelft\Orm\Entity\PersistentEntity|false|Boek
+	 * @return PersistentEntity|false|Boek
 	 */
 	public function get($id) {
 		return $this->retrieveByPrimaryKey([$id]);
