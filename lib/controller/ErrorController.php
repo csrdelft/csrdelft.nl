@@ -4,6 +4,7 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\security\LoginModel;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -46,6 +47,9 @@ class ErrorController {
 			}
 			default:
 			{
+				ShutdownHandler::emailException($exception);
+				ShutdownHandler::slackException($exception);
+				ShutdownHandler::touchHandler();
 				return new Response(view('fout.500'), Response::HTTP_INTERNAL_SERVER_ERROR);
 			}
 		}
