@@ -18,7 +18,7 @@ class BoekModel extends PersistenceModel {
 	const ORM = Boek::class;
 
 	public function existsTitel($value) {
-		return self::instance()->find('titel = ?', [$value])->rowCount() > 0;
+		return $this->find('titel = ?', [$value])->rowCount() > 0;
 	}
 
 	/**

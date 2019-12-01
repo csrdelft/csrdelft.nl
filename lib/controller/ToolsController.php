@@ -55,13 +55,18 @@ class ToolsController extends AbstractController {
 	 * @var SavedQueryModel
 	 */
 	private $savedQueryModel;
+	/**
+	 * @var ProfielService
+	 */
+	private $profielService;
 
-	public function __construct(AccountModel $accountModel, ProfielModel $profielModel, LoginModel $loginModel, LogModel $logModel, SavedQueryModel $savedQueryModel) {
+	public function __construct(AccountModel $accountModel, ProfielModel $profielModel, ProfielService $profielService, LoginModel $loginModel, LogModel $logModel, SavedQueryModel $savedQueryModel) {
 		$this->savedQueryModel = $savedQueryModel;
 		$this->accountModel = $accountModel;
 		$this->profielModel = $profielModel;
 		$this->loginModel = $loginModel;
 		$this->logModel = $logModel;
+		$this->profielService = $profielService;
 	}
 
 	public function streeplijst() {
@@ -218,7 +223,7 @@ class ToolsController extends AbstractController {
 
 //zoekt uid op en returnt met uid2naam weer de naam
 		function zoekNaam($naam, $zoekin) {
-			$namen = ProfielService::instance()->zoekLeden($naam, 'naam', 'alle', 'achternaam', $zoekin);
+			$namen = $this->profielService->zoekLeden($naam, 'naam', 'alle', 'achternaam', $zoekin);
 			if (!empty($namen)) {
 				if (count($namen) === 1) {
 					return $namen[0]->getLink('civitas');
@@ -272,7 +277,7 @@ class ToolsController extends AbstractController {
 			$vorm = $_GET['vorm'];
 		}
 
-		$profielen = ProfielService::instance()->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
+		$profielen = $this->profielService->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
 
 		$scoredProfielen = [];
  		foreach ($profielen as $profiel) {
@@ -365,9 +370,10 @@ class ToolsController extends AbstractController {
 	/**
 	 * Voor patronaat 2019 kan september 2019 verwijderd worden.
 	 *
+	 * @param ActiviteitenModel $activiteitenModel
 	 * @return View
 	 */
-	public function patronaat() {
-		return view('patronaat', ['groep' => ActiviteitenModel::instance()->get(1754)]);
+	public function patronaat(ActiviteitenModel $activiteitenModel) {
+		return view('patronaat', ['groep' => $activiteitenModel->get(1754)]);
 	}
 }
