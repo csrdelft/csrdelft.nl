@@ -10,6 +10,7 @@ use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
@@ -117,7 +118,7 @@ class BbFotoalbum extends BbTag {
 				$album = FotoAlbumModel::instance()->getFotoAlbum($url);
 			}
 			return $album;
-		} catch (ResourceNotFoundException $ex) {
+		} catch (NotFoundHttpException $ex) {
 			return null;
 		}
 	}
