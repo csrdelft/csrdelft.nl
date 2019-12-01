@@ -163,7 +163,7 @@ HTML;
 		try {
 			$album = $this->getFotoAlbum('');
 			return $album->getMostRecentSubAlbum();
-		} catch (ResourceNotFoundException $ex) {
+		} catch (NotFoundHttpException $ex) {
 			return null;
 		}
 	}
