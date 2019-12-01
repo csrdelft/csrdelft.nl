@@ -83,7 +83,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		return new BeheerMaaltijdenLijst($data);
 	}
 
-	public function GET_beheer(Request $request, $mid = null) {
+	public function GET_beheer($mid = null) {
 		$modal = null;
 		if ($mid !== null) {
 			$modal = $this->bewerk($mid);

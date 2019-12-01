@@ -12,6 +12,7 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\toestemming\ToestemmingLijstResponse;
 use CsrDelft\view\toestemming\ToestemmingLijstTable;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -34,7 +35,7 @@ class ToestemmingController extends AbstractController {
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function POST_overzicht() {
 		$form = new ToestemmingModalForm();

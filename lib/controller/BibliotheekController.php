@@ -221,6 +221,7 @@ class BibliotheekController extends AbstractController {
 	 * /addexemplaar/$boekid[/$eigenaarid]
 	 * @param string $boek_id
 	 * @param string|null $uid
+	 * @return RedirectResponse
 	 */
 	public function addexemplaar($boek_id, $uid = null) {
 		$boek = $this->boekModel->get($boek_id);

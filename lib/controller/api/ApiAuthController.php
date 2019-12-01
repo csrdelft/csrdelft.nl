@@ -6,6 +6,7 @@ use CsrDelft\common\Ini;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\RememberLoginModel;
+use Exception;
 use Firebase\JWT\JWT;
 use \Jacwright\RestServer\RestException;
 
@@ -29,7 +30,7 @@ class ApiAuthController {
 
 		try {
 			$token = JWT::decode($jwt, Ini::lees(Ini::JWT, 'secret'), array('HS512'));
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			throw new RestException(401);
 		}
 
@@ -117,12 +118,10 @@ class ApiAuthController {
 		RememberLoginModel::instance()->create($remember);
 
 		// Respond with both tokens
-		$unencodedArray = [
+		return [
 			'token' => $token,
 			'refreshToken' => $rand
 		];
-
-		return $unencodedArray;
 	}
 
 	/**
@@ -162,11 +161,9 @@ class ApiAuthController {
 		$token = JWT::encode($data, Ini::lees(Ini::JWT, 'secret'), 'HS512');
 
 		// Respond
-		$unencodedArray = [
+		return [
 			'token' => $token
 		];
-
-		return $unencodedArray;
 	}
 
 }

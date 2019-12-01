@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
@@ -26,6 +27,8 @@ class ApiAgendaController {
 	 * @url GET /
 	 * @param string from
 	 * @param string to
+	 * @return array
+	 * @throws RestException
 	 */
 	public function getAgenda() {
 		if (!isset($_GET['from']) || !isset($_GET['to'])) {
@@ -53,6 +56,7 @@ class ApiAgendaController {
 		}
 
 		// Activiteiten
+		/** @var Activiteit[] $activiteiten */
 		$activiteiten = ActiviteitenModel::instance()->find('in_agenda = TRUE AND (' . $query . ')', $find);
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {

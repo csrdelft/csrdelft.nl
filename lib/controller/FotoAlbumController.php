@@ -144,9 +144,7 @@ class FotoAlbumController extends AbstractController {
 					return new JsonResponse(array('error' => $e->getMessage()), 500);
 				}
 			} else {
-				if ($poster) {
-					// fall through
-				} elseif ($uploader !== null) {
+				if (!$poster && $uploader !== null) {
 					return new JsonResponse(array('error' => $uploader->getError()), 500);
 				}
 			}

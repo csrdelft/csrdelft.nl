@@ -3,10 +3,10 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\view\datatable\DataTable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Voor eventuele generieke controller methodes.
@@ -30,7 +30,7 @@ class AbstractController extends BaseController {
 	 * @param string $url
 	 * @param int $status
 	 * @param bool $allowExternal
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @return RedirectResponse
 	 */
 	protected function redirect($url, $status = 302, $allowExternal = false)
 	{

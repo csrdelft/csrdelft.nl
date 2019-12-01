@@ -16,7 +16,7 @@
 				Recent gewijzigd
 			</option>
 
-			@foreach(\CsrDelft\model\forum\ForumModel::instance()->getForumIndelingVoorLid() as $categorie)
+			@foreach($categorien as $categorie)
 				<optgroup label="{{$categorie->titel}}">;
 					@foreach ($categorie->getForumDelen() as $newDeel) {
 					<option value="/forum/deel/{{$newDeel->forum_id}}"

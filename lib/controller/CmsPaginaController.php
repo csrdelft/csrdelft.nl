@@ -8,7 +8,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaForm;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\cms\CmsPaginaZijbalkView;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

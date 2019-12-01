@@ -242,6 +242,7 @@ class ForumController extends AbstractController {
 
 		return view('forum.deel', [
 			'zoekform' => new ForumSnelZoekenForm(),
+			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
 			'deel' => $deel,
 			'paging' => $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
@@ -278,6 +279,7 @@ class ForumController extends AbstractController {
 		}
 		return view('forum.deel', [
 			'zoekform' => new ForumSnelZoekenForm(),
+			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
 			'deel' => $deel,
 			'paging' => $paging && $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
@@ -583,6 +585,7 @@ class ForumController extends AbstractController {
 	 *
 	 * @param int $forum_id
 	 * @param int|null $draad_id
+	 * @return RedirectResponse
 	 * @throws CsrException
 	 * @throws CsrGebruikerException
 	 * @throws CsrToegangException

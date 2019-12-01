@@ -4,11 +4,6 @@
 namespace CsrDelft\controller;
 
 
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\Afbeelding;
-use CsrDelft\model\entity\fotoalbum\Foto;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\entity\ForumPlaatje;
 use CsrDelft\model\ForumPlaatjeModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\plaatjes\PlaatjesUploadModalForm;

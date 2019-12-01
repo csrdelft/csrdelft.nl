@@ -404,7 +404,6 @@ abstract class AbstractGroepenController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			/** @var AbstractGroepenModel $model */
-			/** @noinspection PhpUndefinedMethodInspection */
 			$model = $values['model']::instance();
 			$converteer = get_class($model) !== get_class($this->model);
 			$response = [];

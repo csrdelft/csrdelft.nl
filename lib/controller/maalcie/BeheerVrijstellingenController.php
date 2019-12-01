@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;

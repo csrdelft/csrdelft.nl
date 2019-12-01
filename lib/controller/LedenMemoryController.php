@@ -41,7 +41,6 @@ class LedenMemoryController {
 	public function memory() {
 		$lidstatus = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$lidstatus[] = LidStatus::Overleden;
-		$groep = array();
 		$leden = null;
 		$cheat = isset($_GET['rosebud']);
 		$learnmode = isset($_GET['oefenen']);

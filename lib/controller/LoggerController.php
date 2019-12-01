@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Ini;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\HttpFoundation\Request;

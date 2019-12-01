@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;

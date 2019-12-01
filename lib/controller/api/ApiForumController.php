@@ -10,6 +10,7 @@ use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\CsrBB;
+use Exception;
 use Jacwright\RestServer\RestException;
 
 class ApiForumController {
@@ -54,7 +55,7 @@ class ApiForumController {
 
 		try {
 			$draad = ForumDradenModel::instance()->get((int)$id);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			throw new RestException(404);
 		}
 

@@ -9,7 +9,6 @@ use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
-use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
@@ -43,7 +42,6 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ProfielController extends AbstractController {
@@ -301,7 +299,7 @@ class ProfielController extends AbstractController {
 								}
 							}
 						});
-					} /** @noinspection PhpRedundantCatchClauseInspection */ catch (CsrException $ex) {
+					} catch (CsrException $ex) {
 						setMelding($ex->getMessage(), -1);
 					}
 

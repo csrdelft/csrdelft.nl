@@ -62,7 +62,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	/**
 	 * Has permission for action?
 	 *
-	 * @param AccessAction $action
+	 * @param string $action
 	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */

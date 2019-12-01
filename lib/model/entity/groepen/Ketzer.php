@@ -78,7 +78,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	/**
 	 * Has permission for action?
 	 *
-	 * @param AccessAction $action
+	 * @param string $action
 	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */

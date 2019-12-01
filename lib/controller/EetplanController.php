@@ -165,7 +165,7 @@ class EetplanController {
 		return new EetplanHuizenZoekenResponse($woonoorden);
 	}
 
-	public function novietrelatie($actie = null) {
+	public function novietrelatie() {
 		return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
 	}
 
