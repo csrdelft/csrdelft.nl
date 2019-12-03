@@ -28,7 +28,7 @@ class ErrorController {
 			}
 			case Response::HTTP_NOT_FOUND:
 			{
-				return new Response(view('fout.404'), Response::HTTP_NOT_FOUND);
+				return new Response(view('fout.404', ['bericht' => $exception->getMessage()]), Response::HTTP_NOT_FOUND);
 			}
 			case Response::HTTP_FORBIDDEN:
 			{
