@@ -2,7 +2,9 @@
 
 namespace CsrDelft\model;
 
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * VerjaardagenModel.class.php
@@ -22,19 +24,21 @@ class VerjaardagenModel {
 	/**
 	 * @param $maand
 	 *
-	 * @return \PDOStatement|Profiel[]
+	 * @return Profiel[]
 	 */
 	public static function get($maand) {
-		return ProfielModel::instance()->find("status in ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND EXTRACT(MONTH FROM gebdatum) = ? ", array($maand), null, 'EXTRACT(DAY FROM gebdatum)');
+		$container = ContainerFacade::getContainer();
+		return $container->get(ProfielRepository::class)->ormFind("status in ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND EXTRACT(MONTH FROM gebdatum) = ? ", array($maand), null, 'EXTRACT(DAY FROM gebdatum)');
 	}
 
 	/**
 	 * @param int $aantal
 	 *
-	 * @return \PDOStatement|Profiel[]
+	 * @return Profiel[]
 	 */
 	public static function getKomende($aantal = 10) {
-		return ProfielModel::instance()->find("status IN ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND NOT gebdatum = '0000-00-00'", array(), null, "DATE_ADD(
+		$container = ContainerFacade::getContainer();
+		return $container->get(ProfielRepository::class)->ormFind("status IN ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND NOT gebdatum = '0000-00-00'", array(), null, "DATE_ADD(
 					gebdatum,
 					INTERVAL TIMESTAMPDIFF(
 						year,
@@ -49,7 +53,7 @@ class VerjaardagenModel {
 	 * @param int $tot
 	 * @param int $limiet
 	 *
-	 * @return \PDOStatement|Profiel
+	 * @return Profiel[]
 	 */
 	public static function getTussen($van, $tot, $limiet = null) {
 		$vanjaar = date('Y', $van);
@@ -57,7 +61,9 @@ class VerjaardagenModel {
 		$van = date('Y-m-d', $van);
 		$tot = date('Y-m-d', $tot);
 
-		return ProfielModel::instance()->find("status IN ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND NOT gebdatum = '0000-00-00' AND (
+		$container = ContainerFacade::getContainer();
+
+		return $container->get(ProfielRepository::class)->ormFind("status IN ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND NOT gebdatum = '0000-00-00' AND (
             (CONCAT(?, SUBSTRING(gebdatum, 5)) >= ? AND CONCAT(?, SUBSTRING(gebdatum, 5)) < ?)
             OR
             (CONCAT(?, SUBSTRING(gebdatum, 5)) >= ? AND CONCAT(?, SUBSTRING(gebdatum, 5)) < ?)

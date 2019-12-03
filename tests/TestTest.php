@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use PHPUnit\Framework\TestCase;
 
 final class ExampleTest extends TestCase

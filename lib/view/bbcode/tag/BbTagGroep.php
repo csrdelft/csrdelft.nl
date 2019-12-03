@@ -8,7 +8,7 @@ use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepVersie;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\groepen\GroepView;
@@ -72,7 +72,7 @@ abstract class BbTagGroep extends BbTag {
 			$uid = LoginModel::getUid();
 			$settings = [
 				'mijn_uid' => $uid,
-				'mijn_link' => ProfielModel::getLink($uid),
+				'mijn_link' => ProfielRepository::getLink($uid),
 				'aanmeld_url' => $groep->getUrl() . '/aanmelden2/' . $uid,
 			];
 

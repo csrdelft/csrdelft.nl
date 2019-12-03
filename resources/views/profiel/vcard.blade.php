@@ -1,5 +1,5 @@
 <?php
-/** @var CsrDelft\model\entity\profiel\Profiel $profiel */
+/** @var \CsrDelft\entity\profiel\Profiel $profiel */
 ?>
 BEGIN:VCARD
 VERSION:3.0
@@ -13,7 +13,7 @@ GENDER:{!!escape_ical(['m' => 'M', 'v' => 'F'][$profiel->geslacht], 0)!!}
 @endif
 UID;CHARSET=UTF-8:{!!escape_ical($profiel->uid, 0)!!}
 @if(is_zichtbaar($profiel, 'gebdatum'))
-BDAY:{!!escape_ical(date('Ymd', strtotime($profiel->gebdatum)), 0)!!}
+BDAY:{!!escape_ical(date('Ymd', $profiel->gebdatum->getTimestamp()), 0)!!}
 @endif
 @if(is_zichtbaar($profiel, 'email'))
 EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{!!escape_ical($profiel->email, 0)!!}

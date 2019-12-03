@@ -2,7 +2,7 @@
 /**
  * @var \CsrDelft\model\entity\agenda\Agendeerbaar $item
  * @var \CsrDelft\entity\agenda\AgendaItem $item
- * @var \CsrDelft\model\entity\profiel\Profiel $item
+ * @var \CsrDelft\entity\profiel\Profiel $item
  * @var \CsrDelft\model\entity\maalcie\CorveeTaak $item
  */
 ?>
@@ -11,7 +11,7 @@
 		<div class="row no-gutters align-items-center">
 			<div class="col">
 				<h5 class="card-title mb-0">
-					@if($item instanceof \CsrDelft\model\entity\profiel\Profiel)
+					@if($item instanceof \CsrDelft\entity\profiel\Profiel)
 						@icon('verjaardag') {!! $item->getLink() !!}
 					@elseif($item instanceof \CsrDelft\model\entity\maalcie\Maaltijd)
 						<img src="/images/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon"/>

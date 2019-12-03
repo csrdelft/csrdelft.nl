@@ -5,7 +5,7 @@ namespace CsrDelft\view\maalcie\beheer;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
 class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
@@ -29,7 +29,7 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 		$kokTaken = $maaltijd->getCorveeTaken(CorveeFunctie::KWALIKOK_FUNCTIE_ID);
 		$data['koks'] = "";
 		for ($i = 0; $i < count($kokTaken); $i++) {
-			$data['koks'] .= ProfielModel::getLink($kokTaken[$i]->uid);
+			$data['koks'] .= ProfielRepository::getLink($kokTaken[$i]->uid);
 			if ($i < count($kokTaken) - 1) $data['koks'] .= '<br>';
 		}
 

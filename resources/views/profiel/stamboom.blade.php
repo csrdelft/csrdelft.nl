@@ -1,4 +1,4 @@
-<?php /** @var \CsrDelft\model\entity\profiel\Profiel $profiel */ ?>
+<?php /** @var \CsrDelft\entity\profiel\Profiel $profiel */ ?>
 @extends('layout')
 
 @section('titel')
@@ -20,7 +20,7 @@
 	<div class="tree">
 		<ul>
 			<li>
-				@php($patroonNaam = \CsrDelft\model\ProfielModel::getNaam($profiel->patroon))
+				@php($patroonNaam = \CsrDelft\repository\ProfielRepository::getNaam($profiel->patroon))
 				<a href="/profiel/{{$profiel->patroon}}/stamboom"
 					 title="Bekijk het nageslacht van {{$patroonNaam}}">&uArr; {{$patroonNaam}}</a>
 				@include('profiel.stamboom_node', ['profielen' => [$profiel]])

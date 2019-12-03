@@ -3,7 +3,7 @@
 namespace CsrDelft\view\ledenmemory;
 
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
 class LedenMemoryScoreResponse extends DataTableResponse {
@@ -17,7 +17,7 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 		$seconds = $score->tijd % 60;
 		$array['tijd'] = ($minutes < 10 ? '0' : '') . $minutes . ':' . ($seconds < 10 ? '0' : '') . $seconds;
 
-		$array['door_uid'] = ProfielModel::getLink($score->door_uid, 'civitas');
+		$array['door_uid'] = ProfielRepository::getLink($score->door_uid, 'civitas');
 
 		if (!isset($this->titles[$score->groep])) {
 			$this->titles[$score->groep] = '';

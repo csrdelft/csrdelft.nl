@@ -1,7 +1,7 @@
 <?php
 
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Persistence\Database;
 
 class Barsysteem {
@@ -74,7 +74,7 @@ SQL
 			$persoon["naam"] = $row["naam"];
 			$persoon["status"] = LidStatus::Nobody;
 			if ($row["uid"]) {
-				$profiel = ProfielModel::get($row["uid"]);
+				$profiel = ProfielRepository::get($row["uid"]);
 				if ($profiel) {
 					$persoon["naam"] = $this->getNaam($profiel);
 					$persoon["status"] = $profiel->status;
@@ -450,10 +450,10 @@ ORDER BY yearweek DESC
 		while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
 			$result[] = array(
-				'naam' => $this->getNaam(ProfielModel::get($r['uid'])),
-				'email' => ProfielModel::get($r['uid'])->getPrimaryEmail(),
+				'naam' => $this->getNaam(ProfielRepository::get($r['uid'])),
+				'email' => ProfielRepository::get($r['uid'])->getPrimaryEmail(),
 				'saldo' => $r['saldo'],
-				'status' => ProfielModel::get($r['uid'])->status
+				'status' => ProfielRepository::get($r['uid'])->status
 			);
 		}
 

@@ -2,12 +2,13 @@
 
 namespace CsrDelft\model\groepen\leden;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\entity\groepen\VerticaleLid;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -25,7 +26,7 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 	 * @return VerticaleLid|false
 	 */
 	public function get(AbstractGroep $verticale, $uid) {
-		$profiel = ProfielModel::get($uid);
+		$profiel = ProfielRepository::get($uid);
 		if ($profiel AND $profiel->verticale === $verticale->letter) {
 			$lid = $this->nieuw($verticale, $uid);
 			if ($profiel->verticaleleider) {
@@ -51,7 +52,8 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 		$status = LidStatus::getLidLike();
 		$where = 'verticale = ? AND status IN (' . implode(', ', array_fill(0, count($status), '?')) . ')';
 		array_unshift($status, $verticale->letter);
-		foreach (ProfielModel::instance()->prefetch($where, $status) as $profiel) {
+		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
+		foreach ($profielRepository->ormFind($where, $status) as $profiel) {
 			$lid = $this->get($verticale, $profiel->uid);
 			if ($lid) {
 				$leden[] = $lid;

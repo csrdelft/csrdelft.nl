@@ -7,8 +7,8 @@ use CsrDelft\model\entity\forum\ForumDeelMelding;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 
@@ -146,14 +146,14 @@ class ForumDelenMeldingModel extends CachedPersistenceModel {
 	 * @param ForumPost $post
 	 */
 	public function stuurMeldingenNaarVolgers(ForumPost $post) {
-		$auteur = ProfielModel::get($post->uid);
+		$auteur = ProfielRepository::get($post->uid);
 		$draad = $post->getForumDraad();
 		$deel = $draad->getForumDeel();
 
 		// Laad meldingsbericht in
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumdeelmelding.mail');
 		foreach ($this->getMeldingenVoorDeel($deel) as $volger) {
-			$volger = ProfielModel::get($volger->uid);
+			$volger = ProfielRepository::get($volger->uid);
 
 			// Stuur geen meldingen als lid niet gevonden is of lid de auteur
 			if (!$volger || $volger->uid === $post->uid) {

@@ -22,13 +22,13 @@
 				<div class="row no-gutters py-1" style="border-bottom: 1px solid #999;">
 					@if($aanmelding->uid)
 						<div class="col">
-							{!! CsrDelft\model\ProfielModel::getLink($aanmelding->uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
+							{!! \CsrDelft\repository\ProfielRepository::getLink($aanmelding->uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
 							<br/>
-							@php($eetwens = CsrDelft\model\ProfielModel::get($aanmelding->uid)->eetwens)
+							@php($eetwens = \CsrDelft\repository\ProfielRepository::get($aanmelding->uid)->eetwens)
 							@if($eetwens !== '')
 								<strong class="eetwens">{{$eetwens}}</strong>
 							@endif
-							@if(! CsrDelft\model\ProfielModel::get($aanmelding->uid)->propertyMogelijk("eetwens") )
+							@if(! \CsrDelft\repository\ProfielRepository::get($aanmelding->uid)->propertyMogelijk("eetwens") )
 								<strong class="geeneetwens">Let op!</strong> Van deze gast is geen eetwens of allergie bekend (vanwege
 								de
 								lidstatus). Neem contact met deze persoon op voor informatie.
@@ -44,7 +44,7 @@
 						<div class="col-auto">{{$aanmelding->getSaldoMelding()}}</div>
 					@elseif($aanmelding->door_uid)
 						<div class="col">Gast
-							van {!! CsrDelft\model\ProfielModel::getLink($aanmelding->door_uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}</div>
+							van {!! \CsrDelft\repository\ProfielRepository::getLink($aanmelding->door_uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}</div>
 						<div class="col-auto">-</div>
 					@else
 						<div class="col" style="line-height: 2.2em;">&nbsp;</div>
@@ -86,7 +86,7 @@
 						@foreach($corveetaken as $taak)
 							<div>
 								@if($taak->uid)
-									{!! CsrDelft\model\ProfielModel::getLink($taak->uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
+									{!! \CsrDelft\repository\ProfielRepository::getLink($taak->uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
 								@else
 									<span class="cursief">vacature</span>
 								@endif

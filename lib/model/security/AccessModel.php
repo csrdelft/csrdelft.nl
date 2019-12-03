@@ -27,7 +27,7 @@ use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 
@@ -626,7 +626,7 @@ class AccessModel extends CachedPersistenceModel {
 	private function discretionaryAccessControl(Account $subject, $permission) {
 
 		// haal het profiel van de gebruiker op
-		$profiel = ProfielModel::get($subject->uid);
+		$profiel = ProfielRepository::get($subject->uid);
 
 		// ga alleen verder als er een geldig profiel wordt teruggegeven
 		if (!$profiel) {

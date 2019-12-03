@@ -5,7 +5,7 @@ namespace CsrDelft\model\fotoalbum;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoTag;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;
 
@@ -28,7 +28,7 @@ class FotoTagsModel extends PersistenceModel {
 	}
 
 	public function addTag(Foto $foto, $uid, $x, $y, $size) {
-		if (!ProfielModel::existsUid($uid)) {
+		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
 		$tag = new FotoTag();

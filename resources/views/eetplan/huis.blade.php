@@ -29,7 +29,7 @@
 					@if($loop->index == 1)
 						<th rowspan="{{count($avond)}}" class="table-light">{{$sessie->avond->format("d-m-Y")}}</th>
 					@endif
-					<td>{!! CsrDelft\model\ProfielModel::getLink($noviet->uid, 'civitas') !!}</td>
+					<td>{!! \CsrDelft\repository\ProfielRepository::getLink($noviet->uid, 'civitas') !!}</td>
 					<td>{{$noviet->mobiel}}</td>
 					<td>{{$noviet->email}}</td>
 					<td>{{$noviet->eetwens}}</td>

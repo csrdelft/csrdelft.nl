@@ -41,5 +41,5 @@
 	@endif
 </div>
 <div class="alternate-row draad-laatste-post">
-	{!! CsrDelft\model\ProfielModel::getLink($draad->laatste_wijziging_uid, 'user') !!}
+	{!! \CsrDelft\repository\ProfielRepository::getLink($draad->laatste_wijziging_uid, 'user') !!}
 </div>

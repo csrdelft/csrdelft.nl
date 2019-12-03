@@ -3,9 +3,9 @@
 namespace CsrDelft\entity\eetplan;
 
 use CsrDelft\model\entity\groepen\Woonoord;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,6 +51,6 @@ class Eetplan {
 	 * @return Profiel|false
 	 */
 	public function getNoviet() {
-		return ProfielModel::get($this->uid);
+		return ProfielRepository::get($this->uid);
 	}
 }

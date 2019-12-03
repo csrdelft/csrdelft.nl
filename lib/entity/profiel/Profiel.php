@@ -1,27 +1,25 @@
 <?php
 
-namespace CsrDelft\model\entity\profiel;
+namespace CsrDelft\entity\profiel;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\GroepStatus;
-use CsrDelft\model\entity\groepen\Kring;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\OntvangtContactueel;
-use CsrDelft\model\entity\security\Account;
+use CsrDelft\model\entity\profiel\ProfielLogGroup;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\groepen\KringenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\view\bbcode\CsrBB;
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 use GuzzleHttp\Exception\RequestException;
 
 
@@ -32,174 +30,324 @@ use GuzzleHttp\Exception\RequestException;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Profiel van een lid. Agendeerbaar vanwege verjaardag in agenda.
- *
- * @property-read Account $account
- * @property-read Kring $kring
- * @property-read string $primary_email
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\ProfielRepository")
+ * @ORM\Table("profielen")
  */
-class Profiel extends PersistentEntity implements Agendeerbaar {
-
-	// account
+class Profiel implements Agendeerbaar {
+	/**
+	 * @ORM\Id()
+	 * @ORM\Column(type="string", length=4)
+	 * @var string
+	 */
 	public $uid;
 	/**
-	 * @var ProfielLogGroup[] changelog
+	 * @ORM\Column(type="changelog")
+	 * @var ProfielLogGroup[]
 	 */
 	public $changelog;
 	// naam
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $voornamen;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $voorletters;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $voornaam;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $tussenvoegsel;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $achternaam;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $postfix;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $nickname;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $duckname;
 	// fysiek
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $geslacht;
+	/**
+	 * @ORM\Column(type="date")
+	 * @var DateTime
+	 */
 	public $gebdatum;
+	/**
+	 * @ORM\Column(type="date")
+	 * @var DateTime
+	 */
 	public $sterfdatum;
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
 	public $lengte;
 	// getrouwd
+	/**
+	 * @ORM\Column(type="string", length=4)
+	 * @var string
+	 */
 	public $echtgenoot;
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string
+	 */
 	public $adresseringechtpaar;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $ontvangtcontactueel;
 	// adres
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $adres;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $postcode;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $woonplaats;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $land;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $telefoon;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $o_adres;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $o_postcode;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $o_woonplaats;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $o_land;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $o_telefoon;
 	// contact
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $email;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $mobiel;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $linkedin;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $website;
 	// studie
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $studie;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $studiejaar;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $beroep;
 	// lidmaatschap
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
 	public $lidjaar;
+	/**
+	 * @ORM\Column(type="date")
+	 * @var DateTime
+	 */
 	public $lidafdatum;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $status;
 	// geld
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $bankrekening;
+	/**
+	 * @ORM\Column(type="boolean")
+	 * @var boolean
+	 */
 	public $machtiging;
 	// verticale
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $moot;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $verticale;
+	/**
+	 * @ORM\Column(type="boolean")
+	 * @var boolean
+	 */
 	public $verticaleleider;
+	/**
+	 * @ORM\Column(type="boolean")
+	 * @var boolean
+	 */
 	public $kringcoach;
 	// civi-gegevens
+	/**
+	 * @ORM\Column(type="string", length=4)
+	 * @var string
+	 */
 	public $patroon;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
 	public $eetwens;
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
 	public $corvee_punten;
+	/**
+	 * @ORM\Column(type="integer")
+	 * @var integer
+	 */
 	public $corvee_punten_bonus;
 	// novitiaat
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 * @var string
+	 */
 	public $novitiaat;
+	/**
+	 * @ORM\Column(type="text", nullable=true, name="novitiaatBijz")
+	 * @var string
+	 */
 	public $novitiaatBijz;
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 * @var string
+	 */
 	public $medisch;
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string
+	 */
 	public $startkamp;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="matrixPlek")
+	 * @var string
+	 */
 	public $matrixPlek;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="novietSoort")
+	 * @var string
+	 */
 	public $novietSoort;
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 * @var string
+	 */
 	public $kgb;
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 * @var string
+	 */
 	public $vrienden;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="middelbareSchool")
+	 * @var string
+	 */
 	public $middelbareSchool;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="profielOpties")
+	 * @var string
+	 */
 	public $profielOpties;
 	// overig
-	public $kerk;
-	public $muziek;
-	public $zingen;
 	/**
-	 * Database table columns
-	 * @var array
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string
 	 */
-	protected static $persistent_attributes = array(
-		// account
-		'uid' => array(T::UID),
-		'changelog' => array(T::JSON, false, [ProfielLogGroup::class, ProfielCreateLogGroup::class, ProfielLogVeldenVerwijderChange::class, ProfielLogCoveeTakenVerwijderChange::class, ProfielLogTextEntry::class, ProfielLogValueChangeCensuur::class, ProfielLogValueChange::class, ProfielUpdateLogGroup::class, UnparsedProfielLogGroup::class, DateTime::class]),
-		// naam
-		'voornamen' => array(T::String, true),
-		'voorletters' => array(T::String),
-		'voornaam' => array(T::String),
-		'tussenvoegsel' => array(T::String, true),
-		'achternaam' => array(T::String),
-		'postfix' => array(T::String, true),
-		'nickname' => array(T::String, true),
-		'duckname' => array(T::String, true),
-		// fysiek
-		'geslacht' => array(T::Enumeration, false, Geslacht::class),
-		'gebdatum' => array(T::Date),
-		'sterfdatum' => array(T::Date, true),
-		// getrouwd
-		'echtgenoot' => array(T::UID, true),
-		'adresseringechtpaar' => array(T::String, true),
-		'ontvangtcontactueel' => array(T::Enumeration, false, OntvangtContactueel::class),
-		// adres
-		'adres' => array(T::String),
-		'postcode' => array(T::String),
-		'woonplaats' => array(T::String),
-		'land' => array(T::String),
-		'mobiel' => array(T::String, true),
-		'telefoon' => array(T::String, true),
-		'o_adres' => array(T::String, true),
-		'o_postcode' => array(T::String, true),
-		'o_woonplaats' => array(T::String, true),
-		'o_land' => array(T::String, true),
-		'o_telefoon' => array(T::String, true),
-		// contact
-		'email' => array(T::String),
-		'linkedin' => array(T::String, true),
-		'website' => array(T::String, true),
-		// studie
-		'studie' => array(T::String, true),
-		'studiejaar' => array(T::Integer, true),
-		'beroep' => array(T::String, true),
-		// lidmaatschap
-		'lidjaar' => array(T::Integer),
-		'lidafdatum' => array(T::Date, true),
-		'status' => array(T::Enumeration, false, LidStatus::class),
-		// geld
-		'bankrekening' => array(T::String, true),
-		'machtiging' => array(T::Boolean, true),
-		// verticale
-		'moot' => array(T::Char, true),
-		'verticale' => array(T::Char, true),
-		'verticaleleider' => array(T::Boolean, true),
-		'kringcoach' => array(T::Boolean, true),
-		// civi-gegevens
-		'patroon' => array(T::UID, true),
-		'corvee_punten' => array(T::Integer, true),
-		'corvee_punten_bonus' => array(T::Integer, true),
-		// Persoonlijk
-		'eetwens' => array(T::String, true),
-		'lengte' => array(T::Integer),
-		'kerk' => array(T::String, true),
-		'muziek' => array(T::String, true),
-		'zingen' => array(T::String, true),
-		'vrienden' => array(T::Text, true),
-		'middelbareSchool' => array(T::String, true),
-		'profielOpties' => array(T::String, true),
-		// novitiaat
-		'novitiaat' => array(T::Text, true),
-		'novitiaatBijz' => array(T::Text, true),
-		'medisch' => array(T::Text, true),
-		'startkamp' => array(T::String, true),
-		'matrixPlek' => array(T::String, true),
-		'novietSoort' => array(T::String, true),
-		'kgb' => array(T::Text, true)
-	);
+	public $kerk;
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string
+	 */
+	public $muziek;
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string
+	 */
+	public $zingen;
 
-	protected static $computed_attributes = [
-		'primary_email' => [T::String],
-		'account' => [Account::class],
-		'kring' => [Kring::class],
-	];
 	/**
 	 * In $properties_lidstatus kan per property worden aangegeven voor welke lidstatusen deze nodig. Bij wijziging van
 	 * lidstatus wordt een property verwijderd als deze niet langer nodig is.
@@ -221,16 +369,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		'novietSoort' => [LidStatus::Noviet],
 		'kgb' => [LidStatus::Noviet]
 	];
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('uid');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'profielen';
 
 	public function getUUID() {
 		return $this->uid . '@csrdelft.nl';
@@ -293,7 +431,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function isJarig() {
-		return substr($this->gebdatum, 5, 5) === date('m-d');
+		return substr($this->gebdatum->format(DATE_FORMAT), 5, 5) === date('m-d');
 	}
 
 	/**
@@ -319,7 +457,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getJarigOver() {
-		$verjaardag = strtotime(date('Y') . '-' . date('m-d', strtotime($this->gebdatum)));
+		$verjaardag = strtotime(date('Y') . '-' . date('m-d', $this->gebdatum->getTimestamp()));
 		$nu = strtotime(date('Y-m-d'));
 		if ($verjaardag < $nu) {
 			$verjaardag = strtotime('+1 year', $verjaardag);
@@ -616,7 +754,8 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getKinderen() {
 		if ($this->kinderen == null) {
-			$this->kinderen = ProfielModel::instance()->find('patroon = ?', array($this->uid))->fetchAll();
+			$container = ContainerFacade::getContainer();
+			$this->kinderen = $container->get(ProfielRepository::class)->ormFind('patroon = ?', array($this->uid));
 		}
 
 		return $this->kinderen;

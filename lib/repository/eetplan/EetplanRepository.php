@@ -6,7 +6,7 @@ use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\model\eetplan\EetplanFactory;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\OrmTrait;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -30,11 +30,16 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @var EetplanBekendenRepository
 	 */
 	private $eetplanBekendenRepository;
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
 
-	public function __construct(EetplanBekendenRepository $eetplanBekendenRepository, ManagerRegistry $registry) {
+	public function __construct(EetplanBekendenRepository $eetplanBekendenRepository, ProfielRepository $profielRepository, ManagerRegistry $registry) {
 		parent::__construct($registry, Eetplan::class);
 
 		$this->eetplanBekendenRepository = $eetplanBekendenRepository;
+		$this->profielRepository = $profielRepository;
 	}
 
 	/**
@@ -105,7 +110,7 @@ class EetplanRepository extends ServiceEntityRepository {
 		$bezocht = $this->ormFind("uid like ?", [$lichting . "%"]);
 		$factory->setBezocht($bezocht);
 
-		$novieten = ProfielModel::instance()->find("uid LIKE ? AND status = 'S_NOVIET'", [$lichting . "%"])->fetchAll();
+		$novieten = $this->profielRepository->ormFind("uid LIKE ? AND status = 'S_NOVIET'", [$lichting . "%"]);
 		$factory->setNovieten($novieten);
 
 		$huizen = WoonoordenModel::instance()->find("eetplan = true AND status = 'ht'")->fetchAll();

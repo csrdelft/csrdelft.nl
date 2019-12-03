@@ -9,7 +9,7 @@ use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\PersistenceModel;
@@ -191,7 +191,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->maaltijd = $maaltijd;
-			$naam = ProfielModel::getNaam($aanmelding->uid, 'streeplijst');
+			$naam = ProfielRepository::getNaam($aanmelding->uid, 'streeplijst');
 			$lijst[$naam] = $aanmelding;
 			for ($i = $aanmelding->aantal_gasten; $i > 0; $i--) {
 				$gast = new MaaltijdAanmelding();

@@ -3,9 +3,9 @@
 namespace CsrDelft\common;
 
 use CsrDelft\model\entity\GoogleToken;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\GoogleTokenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use DOMDocument;
 use DOMText;
@@ -346,7 +346,7 @@ class GoogleSync {
 			if ($profiel instanceof Profiel) {
 				$profielBatch[] = $profiel;
 			} else {
-				$profiel = ProfielModel::get($profiel);
+				$profiel = ProfielRepository::get($profiel);
 				if ($profiel !== false) {
 					$profielBatch[] = $profiel;
 				}
@@ -410,7 +410,7 @@ class GoogleSync {
 				$this->fixSimpleXMLNameSpace($contact);
 
 				$contact = $this->unpackGoogleContact($contact);
-				$profiel = ProfielModel::get($contact['csruid']);
+				$profiel = ProfielRepository::get($contact['csruid']);
 				if ($profiel !== false) {
 					$this->updatePhoto($contact, $profiel);
 				}
@@ -430,7 +430,7 @@ class GoogleSync {
 	 */
 	public function syncLid(Profiel $profiel) {
 		if (!$profiel instanceof Profiel) {
-			$profiel = ProfielModel::get($profiel);
+			$profiel = ProfielRepository::get($profiel);
 		}
 
 		//kijk of het lid al bestaat in de googlecontacs-feed.

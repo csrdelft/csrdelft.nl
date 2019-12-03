@@ -176,7 +176,7 @@ class AgendaRepository extends ServiceEntityRepository {
 			$GLOBALS['agenda_van'] = $van;
 			$GLOBALS['agenda_tot'] = $tot;
 
-			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0)->fetchAll());
+			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0));
 		}
 
 		// Sorteren

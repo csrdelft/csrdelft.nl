@@ -34,7 +34,7 @@
 			{{--@foreach($draad->getForumPosts() as $post)<description><![CDATA[ {{bbcode($post->tekst)}} ]]></description>
 			<pubDate>{{rfc2822($post->datum_tijd)}}</pubDate>
 			@endforeach--}}
-			<dc:creator>{{CsrDelft\model\ProfielModel::getNaam($draad->laatste_wijziging_uid, 'user')}}</dc:creator>
+			<dc:creator>{{\CsrDelft\repository\ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'user')}}</dc:creator>
 			<category>{{$draad->getForumDeel()->getForumCategorie()->titel}} » {{$draad->getForumDeel()->titel}}</category>
 			<comments>{{CSR_ROOT}}/forum/onderwerp/{{$draad->draad_id}}</comments>
 			<guid isPermaLink="true">{{CSR_ROOT}}/forum/reactie/{{$draad->laatste_post_id}}#{{$draad->laatste_post_id}}</guid>

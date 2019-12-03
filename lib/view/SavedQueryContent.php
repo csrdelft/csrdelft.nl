@@ -3,7 +3,7 @@
 namespace CsrDelft\view;
 
 use CsrDelft\model\entity\SavedQueryResult;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\SavedQueryModel;
 
 class SavedQueryContent implements View {
@@ -57,7 +57,7 @@ class SavedQueryContent implements View {
 		$contents
 	) {
 		if ($name == 'uid_naam') {
-			return ProfielModel::getLink($contents, 'volledig');
+			return ProfielRepository::getLink($contents, 'volledig');
 		} elseif ($name == 'onderwerp_link') { //link naar het forum.
 			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
 		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {

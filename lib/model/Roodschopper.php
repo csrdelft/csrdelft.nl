@@ -16,9 +16,10 @@ namespace CsrDelft\model;
 use CsrDelft\common\Ini;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\ProfielRepository;
 
 class Roodschopper {
 
@@ -43,7 +44,7 @@ class Roodschopper {
 		$return->saldogrens = -520;
 		$return->onderwerp = 'U staat rood';
 		$return->bericht = 'Beste LID,
-		
+
 Uw CiviSaldo is SALDO, dat is negatief. Inleggen met je hoofd.
 
 Bij voorbaat dank,
@@ -64,7 +65,7 @@ h.t. Fiscus.';
 		$leden = array();
 		if (is_array($this->teschoppen)) {
 			foreach ($this->teschoppen as $uid => $bericht) {
-				$leden[] = ProfielModel::get($uid);
+				$leden[] = ProfielRepository::get($uid);
 			}
 		}
 		return $leden;
@@ -81,7 +82,7 @@ h.t. Fiscus.';
 
 		$return = [];
 		foreach ($saldi as $saldo) {
-			$profiel = ProfielModel::get($saldo->uid);
+			$profiel = ProfielRepository::get($saldo->uid);
 
 			if (!$profiel) {
 				continue;
@@ -107,7 +108,7 @@ h.t. Fiscus.';
 	public function generateMails() {
 		$this->teschoppen = [];
 		foreach ($this->getSaldi() as $saldo) {
-			$profiel = ProfielModel::get($saldo->uid);
+			$profiel = ProfielRepository::get($saldo->uid);
 
 			$this->teschoppen[$saldo->uid] = [
 				'onderwerp' => $this->replace($this->onderwerp, $profiel, $saldo->saldo),
@@ -150,7 +151,7 @@ h.t. Fiscus.';
 		}
 
 		foreach ($this->teschoppen as $uid => $bericht) {
-			$profiel = ProfielModel::get($uid);
+			$profiel = ProfielRepository::get($uid);
 			if (!$profiel) {
 				continue;
 			}

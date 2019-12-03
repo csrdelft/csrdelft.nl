@@ -6,8 +6,8 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Ini;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
@@ -29,9 +29,9 @@ use CsrDelft\view\formulier\invoervelden\StudieField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\UrlField;
-use CsrDelft\view\formulier\keuzevelden\DateField;
+use CsrDelft\view\formulier\keuzevelden\DateObjectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredDateField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredGeslachtField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
@@ -39,7 +39,7 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 
 /**
- * @property ProfielModel $model
+ * @property ProfielRepository $model
  */
 class ProfielForm extends Formulier {
 
@@ -139,9 +139,9 @@ class ProfielForm extends Formulier {
 					$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
 				}
 			}
-			$fields[] = new RequiredDateField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15, 1900);
+			$fields[] = new RequiredDateObjectField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15, 1900);
 			if ($admin AND $profiel->status === LidStatus::Overleden) {
-				$fields[] = new DateField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
+				$fields[] = new DateObjectField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
 			if (($admin OR $profiel->isOudlid() OR $profiel->status === LidStatus::Overleden) AND !$inschrijven) {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
@@ -204,7 +204,7 @@ class ProfielForm extends Formulier {
 		if (!$inschrijven AND ($admin OR $profiel->isOudlid())) {
 			$fields[] = new TextField('beroep', $profiel->beroep, 'Beroep/werk', 4096);
 			$fields[] = new IntField('lidjaar', (int)$profiel->lidjaar, 'Lid sinds', 1950, date('Y'));
-			$fields[] = new DateField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
+			$fields[] = new DateObjectField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
 		}
 
 		if ($admin AND !$inschrijven) {

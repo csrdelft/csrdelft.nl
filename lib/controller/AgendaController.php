@@ -10,11 +10,11 @@ use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\Ketzer;
 use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\agenda\AgendaVerbergenRepository;
@@ -54,9 +54,9 @@ class AgendaController {
 	 */
 	private $maaltijdenModel;
 	/**
-	 * @var ProfielModel
+	 * @var ProfielRepository
 	 */
-	private $profielModel;
+	private $profielRepository;
 
 	public function __construct(
 		AgendaRepository $agendaRepository,
@@ -64,14 +64,14 @@ class AgendaController {
 		ActiviteitenModel $activiteitenModel,
 		CorveeTakenModel $corveeTakenModel,
 		MaaltijdenModel $maaltijdenModel,
-		ProfielModel $profielModel
+		ProfielRepository $profielRepository
 	) {
 		$this->agendaRepository = $agendaRepository;
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenModel = $activiteitenModel;
 		$this->corveeTakenModel = $corveeTakenModel;
 		$this->maaltijdenModel = $maaltijdenModel;
-		$this->profielModel = $profielModel;
+		$this->profielRepository = $profielRepository;
 	}
 
 	/**
@@ -242,7 +242,7 @@ class AgendaController {
 		switch ($module[0]) {
 
 			case 'csrdelft':
-				$item = $this->profielModel->retrieveByUUID($refuuid);
+				$item = $this->profielRepository->retrieveByUUID($refuuid);
 				break;
 
 			case 'maaltijd':

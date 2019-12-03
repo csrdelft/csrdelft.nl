@@ -24,7 +24,7 @@
 				</td>
 				<td>
 					<a href="?uid={{ $logRegel->uid }}">+</a>
-					{!! \CsrDelft\model\ProfielModel::getLink($logRegel->uid, 'volledig') !!}
+					{!! \CsrDelft\repository\ProfielRepository::getLink($logRegel->uid, 'volledig') !!}
 				</td>
 				<td>
 					<a href="?ip={{ $logRegel->ip }}">+</a> {{ gethostbyaddr($logRegel->ip) }}
