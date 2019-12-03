@@ -221,19 +221,6 @@ class ToolsController extends AbstractController {
 			}
 		}
 
-//zoekt uid op en returnt met uid2naam weer de naam
-		function zoekNaam($naam, $zoekin) {
-			$namen = $this->profielService->zoekLeden($naam, 'naam', 'alle', 'achternaam', $zoekin);
-			if (!empty($namen)) {
-				if (count($namen) === 1) {
-					return $namen[0]->getLink('civitas');
-				} else {
-					return 'Meerdere leden mogelijk';
-				}
-			}
-			return 'Geen lid gevonden';
-		}
-
 		if ($given == 'uid') {
 			if (AccountModel::isValidUid($string)) {
 				return new PlainView(uid2naam($string));
@@ -244,7 +231,15 @@ class ToolsController extends AbstractController {
 				}
 			}
 		} elseif ($given == 'naam') {
-			return new PlainView(zoekNaam($string, $zoekin));
+			$namen = $this->profielService->zoekLeden($string, 'naam', 'alle', 'achternaam', $zoekin);
+			if (!empty($namen)) {
+				if (count($namen) === 1) {
+					return new PlainView($namen[0]->getLink('civitas'));
+				} else {
+					return new PlainView('Meerdere leden mogelijk');
+				}
+			}
+			return new PlainView('Geen lid gevonden');
 		}
 
 		throw new ResourceNotFoundException();
