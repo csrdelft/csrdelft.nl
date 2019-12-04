@@ -26,8 +26,12 @@ services:
 
   CsrDelft\model\:
     resource: '../lib/model'
-    exclude: '../lib/model/{entity,fiscaat/pin/PinTransactieMatcher.php}'
-    public: true
+    exclude: '../lib/model/entity'
+    public: true # Alle modellen zijn uit de container te trekken.
+
+  CsrDelft\repository\:
+    resource: '../lib/repository'
+    public: true # Alle repositories zijn (voor nu) uit de container te trekken.
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
