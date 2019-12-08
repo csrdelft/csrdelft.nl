@@ -188,7 +188,7 @@ Groepen
 
   .groep-tab-content {
 		height: 200px;
-    overflow-y: auto;
+    overflow: hidden auto;
   }
   .groep-tab-content.GroepPasfotosView {
     min-height: 74px;
