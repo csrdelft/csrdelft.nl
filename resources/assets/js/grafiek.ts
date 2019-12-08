@@ -47,11 +47,9 @@ async function initLine(el: HTMLElement) {
 			scales: {
 				xAxes: [{
 					barPercentage: 1.0,
-					distribution: 'series',
 					stacked: true,
 					time: {
-						round: 'day',
-						tooltipFormat: 'MMM D',
+						tooltipFormat: 'D MMM H:mm ',
 					},
 					type: 'time',
 				}],
@@ -67,7 +65,7 @@ async function initLine(el: HTMLElement) {
 				mode: 'index',
 			},
 		},
-		type: 'bar',
+		type: 'line',
 	});
 }
 
