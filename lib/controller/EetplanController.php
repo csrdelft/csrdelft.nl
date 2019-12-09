@@ -250,7 +250,7 @@ class EetplanController {
 		if (!$form->validate()) {
 			return $form;
 		} else {
-			$avond = $form->getValues()['avond'];
+			$avond = date_create($form->getValues()['avond']);
 			$this->eetplanModel->verwijderEetplan($avond, $this->lichting);
 
 			return view('eetplan.table', ['eetplan' => $this->eetplanModel->getEetplan($this->lichting)]);
