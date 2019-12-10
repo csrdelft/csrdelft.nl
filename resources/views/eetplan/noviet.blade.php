@@ -20,7 +20,7 @@
 	@foreach($eetplan as $sessie)
 		@php($huis = $sessie->getWoonoord())
 		<tr class="@cycle('donker','licht')">
-			<td>{{$sessie->avond}}</td>
+			<td>{{$sessie->avond->format("d-m-Y")}}</td>
 			<td><a href="/groepen/woonoorden/{{$huis->id}}">{{$huis->naam}}</a></td>
 		</tr>
 	@endforeach
