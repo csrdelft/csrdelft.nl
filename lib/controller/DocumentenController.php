@@ -15,6 +15,7 @@ use CsrDelft\view\PlainView;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -43,7 +44,7 @@ class DocumentenController extends AbstractController {
 	public function verwijderen($id) {
 		$document = $this->documentRepository->get($id);
 
-		if ($document === false) {
+		if (!$document) {
 			setMelding('Document bestaat niet!', -1);
 			return $this->redirectToRoute('documenten');
 		} elseif ($document->magVerwijderen()) {
@@ -58,6 +59,10 @@ class DocumentenController extends AbstractController {
 
 	public function bekijken($id) {
 		$document = $this->documentRepository->get($id);
+
+		if (!$document) {
+			throw new NotFoundHttpException();
+		}
 
 		if (!$document->magBekijken()) {
 			throw new CsrToegangException();
@@ -81,6 +86,10 @@ class DocumentenController extends AbstractController {
 	public function download($id) {
 		$document = $this->documentRepository->get($id);
 
+		if (!$document) {
+			throw new NotFoundHttpException();
+		}
+
 		if (!$document->magBekijken()) {
 			throw new CsrToegangException();
 		}
@@ -96,7 +105,7 @@ class DocumentenController extends AbstractController {
 
 	public function categorie($id) {
 		$categorie = $this->documentCategorieRepository->find($id);
-		if ($categorie === false) {
+		if (!$categorie) {
 			setMelding('Categorie bestaat niet!', -1);
 			return $this->redirectToRoute('documenten');
 		} elseif (!$categorie->magBekijken()) {
@@ -112,7 +121,7 @@ class DocumentenController extends AbstractController {
 	public function bewerken($id) {
 		$document = $this->documentRepository->get($id);
 
-		if ($document === false) {
+		if (!$document) {
 			setMelding('Document niet gevonden', 2);
 			return $this->redirectToRoute('documenten');
 		}
