@@ -19,7 +19,7 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	 */
 	private $civiProductModel;
 
-	protected function __construct(CiviProductModel $civiProductModel) {
+	public function __construct(CiviProductModel $civiProductModel) {
 		parent::__construct();
 
 		$this->civiProductModel = $civiProductModel;

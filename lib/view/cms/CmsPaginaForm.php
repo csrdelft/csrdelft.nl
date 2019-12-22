@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\cms;
 
-use CsrDelft\model\entity\CmsPagina;
+use CsrDelft\entity\CmsPagina;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;

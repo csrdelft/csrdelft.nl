@@ -19,10 +19,28 @@ use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
 
 class LedenMemoryController {
+	/**
+	 * @var LedenMemoryScoresModel
+	 */
+	private $ledenMemoryScoresModel;
+	/**
+	 * @var ProfielModel
+	 */
+	private $profielModel;
+	/**
+	 * @var VerticalenModel
+	 */
+	private $verticalenModel;
+
+	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielModel $profielModel, VerticalenModel $verticalenModel) {
+		$this->ledenMemoryScoresModel = $ledenMemoryScoresModel;
+		$this->profielModel = $profielModel;
+		$this->verticalenModel = $verticalenModel;
+	}
+
 	public function memory() {
 		$lidstatus = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$lidstatus[] = LidStatus::Overleden;
-		$groep = array();
 		$leden = null;
 		$cheat = isset($_GET['rosebud']);
 		$learnmode = isset($_GET['oefenen']);
@@ -56,10 +74,10 @@ class LedenMemoryController {
 	}
 
 	public function memoryscore() {
-		$score = LedenMemoryScoresModel::instance()->nieuw();
+		$score = $this->ledenMemoryScoresModel->nieuw();
 		$form = new LedenMemoryScoreForm($score);
 		if ($form->validate()) {
-			LedenMemoryScoresModel::instance()->create($score);
+			$this->ledenMemoryScoresModel->create($score);
 		}
 		return new JsonResponse($score);
 	}
@@ -69,24 +87,24 @@ class LedenMemoryController {
 		if (isset($parts[0], $parts[1])) {
 			switch ($parts[1]) {
 				case 'verticale.csrdelft.nl':
-					$groep = VerticalenModel::instance()->retrieveByUUID($groep);
+					$groep = $this->verticalenModel->retrieveByUUID($groep);
 					break;
 				case 'lichting.csrdelft.nl':
-					$groep = LichtingenModel::get($parts[0]);
+					$groep = LichtingenModel::instance()->get($parts[0]);
 					break;
 			}
 		}
 		if ($groep) {
-			$data = LedenMemoryScoresModel::instance()->getGroepTopScores($groep);
+			$data = $this->ledenMemoryScoresModel->getGroepTopScores($groep);
 		} else {
-			$data = LedenMemoryScoresModel::instance()->getAllTopScores();
+			$data = $this->ledenMemoryScoresModel->getAllTopScores();
 		}
 		return new LedenMemoryScoreResponse($data);
 	}
 
 	public function namenleren() {
 		// Haal alle (adspirant-/gast-)leden op.
-		$profielmodel = ProfielModel::instance();
+		$profielmodel = $this->profielModel;
 		$toegestaan = implode(', ', array_map(function ($status) {
 			return "'{$status}'";
 		}, LidStatus::getLidLike()));
@@ -129,7 +147,7 @@ class LedenMemoryController {
 		if ($l < $min OR $l > $max) {
 			$l = $max;
 		}
-		$lichting = LichtingenModel::get($l);
+		$lichting = LichtingenModel::instance()->get($l);
 		return $lichting ? $lichting : null;
 	}
 
@@ -144,10 +162,10 @@ class LedenMemoryController {
 		}
 		$verticale = false;
 		if (strlen($v) == 1) {
-			$verticale = VerticalenModel::get($v);
+			$verticale = $this->verticalenModel->get($v);
 		}
 		if (!$verticale) {
-			$verticale = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+			$verticale = $this->verticalenModel->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
 		}
 		return $verticale ? $verticale : null;
 	}

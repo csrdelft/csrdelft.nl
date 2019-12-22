@@ -14,16 +14,17 @@ use Exception;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class LidInstellingenController extends AbstractController {
-	private $model;
+	/** @var LidInstellingenModel  */
+	private $lidInstellingenModel;
 
-	public function __construct() {
-		$this->model = LidInstellingenModel::instance();
+	public function __construct(LidInstellingenModel $lidInstellingenModel) {
+		$this->lidInstellingenModel = $lidInstellingenModel;
 	}
 
 	public function beheer() {
 		return view('instellingen.lidinstellingen', [
-			'defaultInstellingen' => $this->model->getAll(),
-			'instellingen' => $this->model->getAllForLid(LoginModel::getUid())
+			'defaultInstellingen' => $this->lidInstellingenModel->getAll(),
+			'instellingen' => $this->lidInstellingenModel->getAllForLid(LoginModel::getUid())
 		]);
 	}
 
@@ -32,8 +33,8 @@ class LidInstellingenController extends AbstractController {
 			$waarde = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_STRING);
 		}
 
-		if ($this->model->isValidValue($module, $instelling, urldecode($waarde))) {
-			$this->model->wijzigInstelling($module, $instelling, urldecode($waarde));
+		if ($this->lidInstellingenModel->isValidValue($module, $instelling, urldecode($waarde))) {
+			$this->lidInstellingenModel->wijzigInstelling($module, $instelling, urldecode($waarde));
 			return new JsonResponse(['success' => true]);
 		} else {
 			return new JsonResponse(['success' => false], 400);
@@ -44,13 +45,13 @@ class LidInstellingenController extends AbstractController {
 	 * @throws Exception
 	 */
 	public function opslaan() {
-		$this->model->save(); // fetches $_POST values itself
+		$this->lidInstellingenModel->save(); // fetches $_POST values itself
 		setMelding('Instellingen opgeslagen', 1);
 		return $this->redirectToRoute('lidinstellingen-beheer');
 	}
 
 	public function reset($module, $key) {
-		$this->model->resetForAll($module, $key);
+		$this->lidInstellingenModel->resetForAll($module, $key);
 		setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
 		return new JsonResponse(true);
 	}

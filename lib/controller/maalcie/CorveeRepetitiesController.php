@@ -33,6 +33,7 @@ class CorveeRepetitiesController {
 		return view('maaltijden.corveerepetitie.beheer_corvee_repetities', [
 			'repetities' => $repetities,
 			'maaltijdrepetitie' => $maaltijdrepetitie,
+			'modal' => $modal,
 		]);
 	}
 

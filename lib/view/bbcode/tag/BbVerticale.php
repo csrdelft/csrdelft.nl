@@ -27,7 +27,7 @@ class BbVerticale extends BbTag {
 
 	public function render() {
 		try {
-			$verticale = VerticalenModel::get($this->content);
+			$verticale = VerticalenModel::instance()->get($this->content);
 			return '<a href="/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
 		} catch (CsrException $e) {
 			return 'Verticale met letter=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="/verticalen">Zoeken</a>';

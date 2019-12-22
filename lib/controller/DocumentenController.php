@@ -3,10 +3,10 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\documenten\DocumentCategorieModel;
-use CsrDelft\model\documenten\DocumentModel;
-use CsrDelft\model\entity\documenten\Document;
+use CsrDelft\entity\documenten\Document;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\documenten\DocumentCategorieRepository;
+use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
@@ -15,19 +15,20 @@ use CsrDelft\view\PlainView;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class DocumentenController extends AbstractController {
-	/** @var DocumentModel */
-	private $documentModel;
-	/** @var DocumentCategorieModel */
-	private $documentCategorieModel;
+	/** @var DocumentRepository */
+	private $documentRepository;
+	/** @var DocumentCategorieRepository */
+	private $documentCategorieRepository;
 
-	public function __construct() {
-		$this->documentModel = DocumentModel::instance();
-		$this->documentCategorieModel = DocumentCategorieModel::instance();
+	public function __construct(DocumentRepository $documentRepository, DocumentCategorieRepository $documentCategorieRepository) {
+		$this->documentRepository = $documentRepository;
+		$this->documentCategorieRepository = $documentCategorieRepository;
 	}
 
 	/**
@@ -35,19 +36,19 @@ class DocumentenController extends AbstractController {
 	 */
 	public function recenttonen() {
 		return view('documenten.documenten', [
-			'categorieen' => $this->documentCategorieModel->find(),
-			'model' => $this->documentCategorieModel
+			'categorieen' => $this->documentCategorieRepository->findAll(),
+			'model' => $this->documentCategorieRepository
 		]);
 	}
 
 	public function verwijderen($id) {
-		$document = $this->documentModel->get($id);
+		$document = $this->documentRepository->get($id);
 
-		if ($document === false) {
+		if (!$document) {
 			setMelding('Document bestaat niet!', -1);
 			return $this->redirectToRoute('documenten');
 		} elseif ($document->magVerwijderen()) {
-			$this->documentModel->delete($document);
+			$this->documentRepository->delete($document);
 		} else {
 			setMelding('Mag document niet verwijderen', -1);
 			return new JsonResponse(false);
@@ -57,7 +58,11 @@ class DocumentenController extends AbstractController {
 	}
 
 	public function bekijken($id) {
-		$document = $this->documentModel->get($id);
+		$document = $this->documentRepository->get($id);
+
+		if (!$document) {
+			throw new NotFoundHttpException();
+		}
 
 		if (!$document->magBekijken()) {
 			throw new CsrToegangException();
@@ -79,7 +84,11 @@ class DocumentenController extends AbstractController {
 	}
 
 	public function download($id) {
-		$document = $this->documentModel->get($id);
+		$document = $this->documentRepository->get($id);
+
+		if (!$document) {
+			throw new NotFoundHttpException();
+		}
 
 		if (!$document->magBekijken()) {
 			throw new CsrToegangException();
@@ -95,31 +104,31 @@ class DocumentenController extends AbstractController {
 	}
 
 	public function categorie($id) {
-		$categorie = $this->documentModel->getCategorieModel()->get($id);
-		if ($categorie === false) {
+		$categorie = $this->documentCategorieRepository->find($id);
+		if (!$categorie) {
 			setMelding('Categorie bestaat niet!', -1);
 			return $this->redirectToRoute('documenten');
 		} elseif (!$categorie->magBekijken()) {
 			throw new CsrToegangException('Mag deze categorie niet bekijken');
 		} else {
 			return view('documenten.categorie', [
-				'documenten' => $this->documentModel->getCategorieModel()->getRecent($categorie, 0),
+				'documenten' => $this->documentCategorieRepository->getRecent($categorie, 0),
 				'categorie' => $categorie,
 			]);
 		}
 	}
 
 	public function bewerken($id) {
-		$document = $this->documentModel->get($id);
+		$document = $this->documentRepository->get($id);
 
-		if ($document === false) {
+		if (!$document) {
 			setMelding('Document niet gevonden', 2);
 			return $this->redirectToRoute('documenten');
 		}
 
-		$form = new DocumentBewerkenForm($document);
+		$form = new DocumentBewerkenForm($document, $this->documentCategorieRepository->getCategorieNamen());
 		if ($form->isPosted() && $form->validate()) {
-			$this->documentModel->update($document);
+			$this->documentRepository->update($document);
 
 			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie_id]);
 		} else {
@@ -132,14 +141,14 @@ class DocumentenController extends AbstractController {
 	}
 
 	public function toevoegen() {
-		$form = new DocumentToevoegenForm();
+		$form = new DocumentToevoegenForm($this->documentCategorieRepository->getCategorieNamen());
 
 		if ($form->isPosted() && $form->validate()) {
 			/** @var Document $document */
 			$document = $form->getModel();
 
 			$document->eigenaar = LoginModel::getUid();
-			$document->toegevoegd = getDateTime();
+			$document->toegevoegd = date_create();
 
 			$bestand = $form->getUploader()->getModel();
 
@@ -147,7 +156,7 @@ class DocumentenController extends AbstractController {
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
 
-			$document->id = $this->documentModel->create($document);
+			$document->id = $this->documentRepository->create($document);
 
 			if ($document->hasFile()) {
 				$document->deleteFile();
@@ -175,11 +184,11 @@ class DocumentenController extends AbstractController {
 		$limit = $request->query->getInt('limit', 5);
 
 		$result = array();
-		foreach ($this->documentModel->zoek($zoekterm, $limit) as $doc) {
+		foreach ($this->documentRepository->zoek($zoekterm, $limit) as $doc) {
 			if ($doc->magBekijken()) {
 				$result[] = array(
 					'url' => '/documenten/bekijken/' . $doc->id . '/' . $doc->filename,
-					'label' => $this->documentModel->getCategorieModel()->find('id = ?', [$doc->categorie_id])->fetch()->naam,
+					'label' => $this->documentCategorieRepository->find($doc->categorie_id)->naam,
 					'value' => $doc->naam,
 					'icon' => Icon::getTag('document'),
 					'id' => $doc->id

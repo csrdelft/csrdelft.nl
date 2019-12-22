@@ -12,6 +12,26 @@ use CsrDelft\Orm\PersistenceModel;
  */
 class PinTransactieMatchModel extends PersistenceModel {
 	const ORM = PinTransactieMatch::class;
+	/**
+	 * @var PinTransactieModel
+	 */
+	private $pinTransactieModel;
+	/**
+	 * @var CiviBestellingModel
+	 */
+	private $civiBestellingModel;
+
+	/**
+	 * PinTransactieMatchModel constructor.
+	 * @param PinTransactieModel $pinTransactieModel
+	 * @param CiviBestellingModel $civiBestellingModel
+	 */
+	public function __construct(PinTransactieModel $pinTransactieModel, CiviBestellingModel $civiBestellingModel) {
+		parent::__construct();
+		$this->pinTransactieModel = $pinTransactieModel;
+		$this->civiBestellingModel = $civiBestellingModel;
+	}
+
 
 	/**
 	 * @param PinTransactieMatch $pinTransactieMatch
@@ -19,9 +39,9 @@ class PinTransactieMatchModel extends PersistenceModel {
 	 */
 	public function getMoment($pinTransactieMatch) {
 		if ($pinTransactieMatch->transactie_id !== null) {
-			return PinTransactieModel::get($pinTransactieMatch->transactie_id)->datetime;
+			return $this->pinTransactieModel->get($pinTransactieMatch->transactie_id)->datetime;
 		} elseif ($pinTransactieMatch->bestelling_id !== null) {
-			return CiviBestellingModel::get($pinTransactieMatch->bestelling_id)->moment;
+			return $this->civiBestellingModel->get($pinTransactieMatch->bestelling_id)->moment;
 		} else {
 			throw new CsrException('Pin Transactie Match heeft geen bestelling en transactie.');
 		}

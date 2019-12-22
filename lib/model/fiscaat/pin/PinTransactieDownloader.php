@@ -136,8 +136,7 @@ class PinTransactieDownloader
 			$cookies = array_merge($cookies, $cookie);
 		}
 
-		$sessionCookie = 'JSESSIONID=' . $cookies['JSESSIONID'];
-		return $sessionCookie;
+		return 'JSESSIONID=' . $cookies['JSESSIONID'];
 	}
 
 	/**
@@ -152,9 +151,7 @@ class PinTransactieDownloader
 		curl_setopt($curl_handle, CURLOPT_COOKIE, $sessionCookie);
 		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
-		$result = curl_exec($curl_handle);
-
-		return $result;
+		return curl_exec($curl_handle);
 	}
 
 	/**
@@ -175,8 +172,6 @@ class PinTransactieDownloader
 		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($curl_handle, CURLOPT_HEADER, $returnHeader);
-		$result = curl_exec($curl_handle);
-
-		return $result;
+		return curl_exec($curl_handle);
 	}
 }

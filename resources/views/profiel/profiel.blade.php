@@ -313,7 +313,7 @@
 								(leider)
 							@elseif($profiel->kringcoach)
 								<span
-									title="Kringcoach van verticale {{\CsrDelft\model\groepen\VerticalenModel::get($profiel->verticale)->naam}}">(kringcoach)</span>
+									title="Kringcoach van verticale {{\CsrDelft\model\groepen\VerticalenModel::instance()->get($profiel->verticale)->naam}}">(kringcoach)</span>
 							@endif
 						</a>
 					</dd>

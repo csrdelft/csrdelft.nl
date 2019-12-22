@@ -39,7 +39,7 @@ class CourantBerichtFormulier extends Formulier {
 
 		if (LoginModel::mag(P_MAIL_COMPOSE)) {
 			$fields[] = new HtmlComment(<<<HTML
-<div class="btn-group">
+<div>
 	<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda('${bbId}');" class="btn btn-primary" />
 	<input type="button" value="Importeer sponsor" onclick="document.getElementById('${bbId}').value += '[img]${sponsorlink}[/img]'" class="btn btn-primary" />
 </div>

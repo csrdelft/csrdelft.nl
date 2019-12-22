@@ -13,7 +13,6 @@ use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\PersistenceModel;
-use MongoDB\BSON\Type;
 
 /**
  * MaaltijdAanmeldingenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -96,7 +95,7 @@ class MaaltijdAanmeldingenModel extends PersistenceModel {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
 		$maaltijden = MaaltijdenModel::instance()->getKomendeOpenRepetitieMaaltijden($mrid);
 		if (empty($maaltijden)) {
-			return;
+			return 0;
 		}
 		$byMid = array();
 		foreach ($maaltijden as $maaltijd) {

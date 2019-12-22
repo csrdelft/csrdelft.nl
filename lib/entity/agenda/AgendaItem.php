@@ -1,11 +1,13 @@
 <?php
 
-namespace CsrDelft\model\entity\agenda;
+namespace CsrDelft\entity\agenda;
 
+use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use DateTime;
+use Doctrine\ORM\Mapping as ORM;
+use function common\short_class;
 
 /**
  * AgendaItem.class.php
@@ -14,81 +16,70 @@ use CsrDelft\Orm\Entity\T;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * AgendaItems worden door de agenda getoont samen met andere Agendeerbare dingen.
+ *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\agenda\AgendaRepository")
+ * @ORM\Table("agenda")
  */
-class AgendaItem extends PersistentEntity implements Agendeerbaar {
+class AgendaItem implements Agendeerbaar {
 
 	/**
 	 * Primary key
+	 * @ORM\Id()
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue()
 	 * @var int
 	 */
 	public $item_id;
 	/**
 	 * Titel
+	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	public $titel;
 	/**
 	 * Beschrijving
+	 * @ORM\Column(type="text", nullable=true)
 	 * @var string
 	 */
 	public $beschrijving;
 	/**
 	 * DateTime begin
-	 * @var string
+	 * @ORM\Column(type="datetime")
+	 * @var DateTime
 	 */
 	public $begin_moment;
 	/**
 	 * DateTime eind
-	 * @var string
+	 * @ORM\Column(type="datetime")
+	 * @var DateTime
 	 */
 	public $eind_moment;
 	/**
 	 * Permissie voor tonen
+	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	public $rechten_bekijken;
 	/**
 	 * Locatie
+	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
 	 */
 	public $locatie;
 	/**
 	 * Link
+	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
 	 */
 	public $link;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'item_id' => array(T::Integer, false, 'auto_increment'),
-		'titel' => array(T::String),
-		'beschrijving' => array(T::Text, true),
-		'begin_moment' => array(T::DateTime),
-		'eind_moment' => array(T::DateTime),
-		'rechten_bekijken' => array(T::String),
-		'locatie' => array(T::String, true),
-		'link' => array(T::String, true)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('item_id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'agenda';
 
 	public function getBeginMoment() {
-		return strtotime($this->begin_moment);
+		return $this->begin_moment->getTimestamp();
 	}
 
 	public function getEindMoment() {
 		if ($this->eind_moment AND $this->eind_moment !== $this->begin_moment) {
-			return strtotime($this->eind_moment);
+			return $this->eind_moment->getTimestamp();
 		}
 		return $this->getBeginMoment() + 1800;
 	}
@@ -135,5 +126,13 @@ class AgendaItem extends PersistentEntity implements Agendeerbaar {
 	public function isTransparant() {
 		// Toon als transparant (vrij) als lid dat wil of activiteit hele dag(en) duurt
 		return lid_instelling('agenda', 'transparantICal') === 'ja' || $this->isHeledag();
+	}
+
+	public function getUUID() {
+		return strtolower(sprintf(
+			'%s@%s.csrdelft.nl',
+			implode('.', [$this->item_id]),
+			short_class($this)
+		));
 	}
 }

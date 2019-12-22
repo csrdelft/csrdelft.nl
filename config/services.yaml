@@ -16,17 +16,22 @@ services:
 
   CsrDelft\:
     resource: '../lib'
-    exclude: '../lib/{view,config,model,common,Kernel.php}'
+    exclude: '../lib/{view,config,common,Kernel.php}'
 
   # controllers are imported separately to make sure services can be injected
   # as action arguments even if you don't extend any base controller class
   CsrDelft\controller\:
     resource: '../lib/controller'
-    exclude: '../lib/controller/api'
     tags: ['controller.service_arguments']
 
-  CsrDelft\repository\eetplan\EetplanRepository:
-  CsrDelft\repository\eetplan\EetplanBekendenRepository:
+  CsrDelft\model\:
+    resource: '../lib/model'
+    exclude: '../lib/model/entity'
+    public: true # Alle modellen zijn uit de container te trekken.
+
+  CsrDelft\repository\:
+    resource: '../lib/repository'
+    public: true # Alle repositories zijn (voor nu) uit de container te trekken.
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones

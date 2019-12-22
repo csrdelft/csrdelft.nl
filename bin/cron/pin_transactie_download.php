@@ -57,7 +57,9 @@ $pintransacties = PinTransactieDownloader::download($settings, $from);
 $pinbestellingen = CiviBestellingModel::instance()->getPinBestellingInMoment($from, $to);
 
 try {
-	$matcher = new PinTransactieMatcher($pintransacties, $pinbestellingen);
+	$matcher = \CsrDelft\common\ContainerFacade::getContainer()->get(PinTransactieMatcher::class);
+	$matcher->setPinTransacties($pintransacties);
+	$matcher->setPinBestellingen($pinbestellingen);
 
 	$matcher->clean();
 	$matcher->match();

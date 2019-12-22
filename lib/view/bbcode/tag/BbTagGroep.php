@@ -92,7 +92,7 @@ abstract class BbTagGroep extends BbTag {
 	private function getGroep()
 	{
 		$this->content = (int)$this->content;
-		$groep = $this->getModel()::get($this->content);
+		$groep = $this->getModel()::instance()->get($this->content);
 		if (!$groep) {
 			throw new BbException("Groep met id $this->content does not exist");
 		}

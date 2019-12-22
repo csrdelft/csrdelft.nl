@@ -9,7 +9,6 @@ use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
-use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
@@ -43,23 +42,171 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ProfielController extends AbstractController {
-	private $model;
+	/**
+	 * @var ProfielModel
+	 */
+	private $profielModel;
+	/**
+	 * @var VoorkeurOpmerkingModel
+	 */
+	private $voorkeurOpmerkingModel;
+	/**
+	 * @var CommissieVoorkeurModel
+	 */
+	private $commissieVoorkeurModel;
+	/**
+	 * @var FotoTagsModel
+	 */
+	private $fotoTagsModel;
+	/**
+	 * @var FotoModel
+	 */
+	private $fotoModel;
+	/**
+	 * @var BesturenModel
+	 */
+	private $besturenModel;
+	/**
+	 * @var CommissiesModel
+	 */
+	private $commissiesModel;
+	/**
+	 * @var BoekRecensieModel
+	 */
+	private $boekRecensieModel;
+	/**
+	 * @var MaaltijdAbonnementenModel
+	 */
+	private $maaltijdAbonnementenModel;
+	/**
+	 * @var MaaltijdAanmeldingenModel
+	 */
+	private $maaltijdAanmeldingenModel;
+	/**
+	 * @var BoekExemplaarModel
+	 */
+	private $boekExemplaarModel;
+	/**
+	 * @var ForumPostsModel
+	 */
+	private $forumPostsModel;
+	/**
+	 * @var KwalificatiesModel
+	 */
+	private $kwalificatiesModel;
+	/**
+	 * @var CorveeVrijstellingenModel
+	 */
+	private $corveeVrijstellingenModel;
+	/**
+	 * @var CorveeVoorkeurenModel
+	 */
+	private $corveeVoorkeurenModel;
+	/**
+	 * @var CorveeTakenModel
+	 */
+	private $corveeTakenModel;
+	/**
+	 * @var CiviBestellingModel
+	 */
+	private $civiBestellingModel;
+	/**
+	 * @var ActiviteitenModel
+	 */
+	private $activiteitenModel;
+	/**
+	 * @var KetzersModel
+	 */
+	private $ketzersModel;
+	/**
+	 * @var RechtenGroepenModel
+	 */
+	private $rechtenGroepenModel;
+	/**
+	 * @var OnderverenigingenModel
+	 */
+	private $onderverenigingenModel;
+	/**
+	 * @var WerkgroepenModel
+	 */
+	private $werkgroepenModel;
+	/**
+	 * @var LidToestemmingModel
+	 */
+	private $lidToestemmingModel;
+	/**
+	 * @var AccountModel
+	 */
+	private $accountModel;
+	/**
+	 * @var SaldoGrafiekModel
+	 */
+	private $saldoGrafiekModel;
 
-	public function __construct() {
-		$this->model = ProfielModel::instance();
+	public function __construct(
+		ProfielModel $profielModel,
+		AccountModel $accountModel,
+		ActiviteitenModel $activiteitenModel,
+		BesturenModel $besturenModel,
+		BoekExemplaarModel $boekExemplaarModel,
+		BoekRecensieModel $boekRecensieModel,
+		CiviBestellingModel $civiBestellingModel,
+		CommissieVoorkeurModel $commissieVoorkeurModel,
+		CorveeVoorkeurenModel $corveeVoorkeurenModel,
+		CommissiesModel $commissiesModel,
+		CorveeTakenModel $corveeTakenModel,
+		CorveeVrijstellingenModel $corveeVrijstellingenModel,
+		ForumPostsModel $forumPostsModel,
+		FotoModel $fotoModel,
+		FotoTagsModel $fotoTagsModel,
+		KetzersModel $ketzersModel,
+		KwalificatiesModel $kwalificatiesModel,
+		LidToestemmingModel $lidToestemmingModel,
+		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
+		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
+		OnderverenigingenModel $onderverenigingenModel,
+		RechtenGroepenModel $rechtenGroepenModel,
+		VoorkeurOpmerkingModel $voorkeurOpmerkingModel,
+		WerkgroepenModel $werkgroepenModel,
+		SaldoGrafiekModel $saldoGrafiekModel
+	) {
+		$this->profielModel = $profielModel;
+		$this->accountModel = $accountModel;
+		$this->activiteitenModel = $activiteitenModel;
+		$this->besturenModel = $besturenModel;
+		$this->boekExemplaarModel = $boekExemplaarModel;
+		$this->boekRecensieModel = $boekRecensieModel;
+		$this->civiBestellingModel = $civiBestellingModel;
+		$this->commissieVoorkeurModel = $commissieVoorkeurModel;
+		$this->commissiesModel = $commissiesModel;
+		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
+		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
+		$this->forumPostsModel = $forumPostsModel;
+		$this->fotoModel = $fotoModel;
+		$this->fotoTagsModel = $fotoTagsModel;
+		$this->ketzersModel = $ketzersModel;
+		$this->kwalificatiesModel = $kwalificatiesModel;
+		$this->lidToestemmingModel = $lidToestemmingModel;
+		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
+		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
+		$this->onderverenigingenModel = $onderverenigingenModel;
+		$this->rechtenGroepenModel = $rechtenGroepenModel;
+		$this->voorkeurOpmerkingModel = $voorkeurOpmerkingModel;
+		$this->werkgroepenModel = $werkgroepenModel;
+		$this->saldoGrafiekModel = $saldoGrafiekModel;
 	}
 
 	public function resetPrivateToken($uid) {
-		$profiel = ProfielModel::instance()->get($uid);
+		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
 			throw new ResourceNotFoundException();
 		}
-		AccountModel::instance()->resetPrivateToken($profiel->getAccount());
+		$this->accountModel->resetPrivateToken($profiel->getAccount());
 		return $this->profiel($uid);
 	}
 
@@ -68,16 +215,16 @@ class ProfielController extends AbstractController {
 			$uid = LoginModel::getUid();
 		}
 
-		$profiel = ProfielModel::instance()->get($uid);
+		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
 			throw new ResourceNotFoundException();
 		}
 
 		$fotos = [];
-		foreach (FotoTagsModel::instance()->find('keyword = ?', [$uid], null, null, 3) as $tag) {
+		foreach ($this->fotoTagsModel->find('keyword = ?', [$uid], null, null, 3) as $tag) {
 			/** @var Foto $foto */
-			$foto = FotoModel::instance()->retrieveByUUID($tag->refuuid);
+			$foto = $this->fotoModel->retrieveByUUID($tag->refuuid);
 			if ($foto) {
 				$fotos[] = new FotoBBView($foto);
 			}
@@ -85,25 +232,25 @@ class ProfielController extends AbstractController {
 
 		return view('profiel.profiel', [
 			'profiel' => $profiel,
-			'besturen' => BesturenModel::instance()->getGroepenVoorLid($uid),
-			'commissies' => CommissiesModel::instance()->getGroepenVoorLid($uid),
-			'werkgroepen' => WerkgroepenModel::instance()->getGroepenVoorLid($uid),
-			'onderverenigingen' => OnderverenigingenModel::instance()->getGroepenVoorLid($uid),
-			'groepen' => RechtenGroepenModel::instance()->getGroepenVoorLid($uid),
-			'ketzers' => KetzersModel::instance()->getGroepenVoorLid($uid),
-			'activiteiten' => ActiviteitenModel::instance()->getGroepenVoorLid($uid),
-			'bestellinglog' => CiviBestellingModel::instance()->getBeschrijving(CiviBestellingModel::instance()->getBestellingenVoorLid($uid, 10)->fetchAll()),
+			'besturen' => $this->besturenModel->getGroepenVoorLid($uid),
+			'commissies' => $this->commissiesModel->getGroepenVoorLid($uid),
+			'werkgroepen' => $this->werkgroepenModel->getGroepenVoorLid($uid),
+			'onderverenigingen' => $this->onderverenigingenModel->getGroepenVoorLid($uid),
+			'groepen' => $this->rechtenGroepenModel->getGroepenVoorLid($uid),
+			'ketzers' => $this->ketzersModel->getGroepenVoorLid($uid),
+			'activiteiten' => $this->activiteitenModel->getGroepenVoorLid($uid),
+			'bestellinglog' => $this->civiBestellingModel->getBeschrijving($this->civiBestellingModel->getBestellingenVoorLid($uid, 10)->fetchAll()),
 			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginModel::getUid() === $uid ? '' : '/' . $uid),
-			'corveetaken' => CorveeTakenModel::instance()->getTakenVoorLid($uid),
-			'corveevoorkeuren' => CorveeVoorkeurenModel::instance()->getVoorkeurenVoorLid($uid),
-			'corveevrijstelling' => CorveeVrijstellingenModel::instance()->getVrijstelling($uid),
-			'corveekwalificaties' => KwalificatiesModel::instance()->getKwalificatiesVanLid($uid),
-			'forumpostcount' => ForumPostsModel::instance()->getAantalForumPostsVoorLid($uid),
-			'forumrecent' => ForumPostsModel::instance()->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
-			'boeken' => BoekExemplaarModel::instance()->getEigendom($uid),
-			'recenteAanmeldingen' => MaaltijdAanmeldingenModel::instance()->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
-			'abos' => MaaltijdAbonnementenModel::instance()->getAbonnementenVoorLid($uid),
-			'gerecenseerdeboeken' => BoekRecensieModel::instance()->getVoorLid($uid),
+			'corveetaken' => $this->corveeTakenModel->getTakenVoorLid($uid),
+			'corveevoorkeuren' => $this->corveeVoorkeurenModel->getVoorkeurenVoorLid($uid),
+			'corveevrijstelling' => $this->corveeVrijstellingenModel->getVrijstelling($uid),
+			'corveekwalificaties' => $this->kwalificatiesModel->getKwalificatiesVanLid($uid),
+			'forumpostcount' => $this->forumPostsModel->getAantalForumPostsVoorLid($uid),
+			'forumrecent' => $this->forumPostsModel->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
+			'boeken' => $this->boekExemplaarModel->getEigendom($uid),
+			'recenteAanmeldingen' => $this->maaltijdAanmeldingenModel->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
+			'abos' => $this->maaltijdAbonnementenModel->getAbonnementenVoorLid($uid),
+			'gerecenseerdeboeken' => $this->boekRecensieModel->getVoorLid($uid),
 			'fotos' => $fotos
 		]);
 	}
@@ -119,7 +266,7 @@ class ProfielController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		// Maak nieuw profiel zonder op te slaan
-		$profiel = ProfielModel::instance()->nieuw((int)$lidjaar, $lidstatus);
+		$profiel = $this->profielModel->nieuw((int)$lidjaar, $lidstatus);
 
 		return $this->profielBewerken($profiel, true);
 	}
@@ -135,35 +282,35 @@ class ProfielController extends AbstractController {
 			if (empty($diff)) {
 				setMelding('Geen wijzigingen', 0);
 			} else {
-				$nieuw = !$this->model->exists($profiel);
+				$nieuw = !$this->profielModel->exists($profiel);
 				$changeEntry = ProfielModel::changelog($diff, LoginModel::getUid());
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
-						array_push($changeEntry->entries, ...$this->model->wijzig_lidstatus($profiel, $change->old_value));
+						array_push($changeEntry->entries, ...$this->profielModel->wijzig_lidstatus($profiel, $change->old_value));
 					}
 				}
 				$profiel->changelog[] = $changeEntry;
 				if ($nieuw) {
 					try {
 						Database::transaction(function () use ($profiel) {
-							$this->model->create($profiel);
+							$this->profielModel->create($profiel);
 
 							if (filter_input(INPUT_POST, 'toestemming_geven') === 'true') {
 								// Sla toesteming op.
 								$toestemmingForm = new ToestemmingModalForm(true);
 								if ($toestemmingForm->validate()) {
-									LidToestemmingModel::instance()->save($profiel->uid);
+									$this->lidToestemmingModel->save($profiel->uid);
 								} else {
 									throw new CsrException('Opslaan van toestemming mislukt');
 								}
 							}
 						});
-					} /** @noinspection PhpRedundantCatchClauseInspection */ catch (CsrException $ex) {
+					} catch (CsrException $ex) {
 						setMelding($ex->getMessage(), -1);
 					}
 
 					setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);
-				} elseif (1 === $this->model->update($profiel)) {
+				} elseif (1 === $this->profielModel->update($profiel)) {
 					setMelding(count($diff) . ' wijziging(en) succesvol opgeslagen', 1);
 				} else {
 					setMelding('Opslaan van ' . count($diff) . ' wijziging(en) mislukt', -1);
@@ -178,7 +325,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function bewerken($uid) {
-		$profiel = ProfielModel::instance()->get($uid);
+		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
 			throw new ResourceNotFoundException();
@@ -188,7 +335,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function voorkeuren($uid) {
-		$profiel = ProfielModel::instance()->get($uid);
+		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
 			throw new ResourceNotFoundException();
@@ -201,9 +348,9 @@ class ProfielController extends AbstractController {
 			$voorkeuren = $form->getVoorkeuren();
 			$opmerking = $form->getOpmerking();
 			foreach ($voorkeuren as $voorkeur) {
-				CommissieVoorkeurModel::instance()->updateOrCreate($voorkeur);
+				$this->commissieVoorkeurModel->updateOrCreate($voorkeur);
 			}
-			VoorkeurOpmerkingModel::instance()->updateOrCreate($opmerking);
+			$this->voorkeurOpmerkingModel->updateOrCreate($opmerking);
 			setMelding('Voorkeuren opgeslagen', 1);
 			$this->redirectToRoute('profiel-voorkeuren');
 
@@ -212,7 +359,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function addToGoogleContacts($uid) {
-		$profiel = ProfielModel::instance()->get($uid);
+		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
 			throw new ResourceNotFoundException();
@@ -245,28 +392,11 @@ class ProfielController extends AbstractController {
 	}
 
 	public function saldo($uid, $timespan) {
-		if (SaldoGrafiekModel::magGrafiekZien($uid)) {
-			$data = SaldoGrafiekModel::getDataPoints($uid, $timespan);
-			return new JsonResponse($data);
+		if ($this->saldoGrafiekModel->magGrafiekZien($uid)) {
+			return new JsonResponse($this->saldoGrafiekModel->getDataPoints($uid, $timespan));
 		} else {
 			throw new CsrToegangException();
 		}
-	}
-
-	public function pasfoto($uid, $vorm = 'civitas') {
-		$profiel = ProfielModel::get($uid);
-		if (!$profiel) {
-			return $this->redirect('/images/geen-foto.jpg');
-		}
-		if (!is_zichtbaar($profiel, 'profielfoto', 'intern')) {
-			return $this->redirect('/images/geen-foto.jpg');
-		}
-		$path = $profiel->getPasfotoInternalPath(false, $vorm);
-		if ($path === null) {
-			return $this->redirect('/images/geen-foto.jpg');
-		}
-		$image = new Afbeelding($path);
-		return new BinaryFileResponse($image->getFullPath(), 200, [], false);
 	}
 
 	public function vcard($uid) {

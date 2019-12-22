@@ -19,27 +19,30 @@ use CsrDelft\view\RechtenTable;
  * Controller van de ACL.
  */
 class RechtenController {
-	private $model;
+	/**
+	 * @var AccessModel
+	 */
+	private $accessModel;
 
-	public function __construct() {
-		$this->model = AccessModel::instance();
+	public function __construct(AccessModel $accessModel) {
+		$this->accessModel = $accessModel;
 	}
 
 	public function bekijken($environment = null, $resource = null) {
 		return view('default', [
-			'content' => new RechtenTable($this->model, $environment, $resource)
+			'content' => new RechtenTable($this->accessModel, $environment, $resource)
 		]);
 	}
 
 	public function data($environment = null, $resource = null) {
-		return new RechtenData($this->model->getTree($environment, $resource));
+		return new RechtenData($this->accessModel->getTree($environment, $resource));
 	}
 
 	public function aanmaken($environment = null, $resource = null) {
-		$ac = $this->model->nieuw($environment, $resource);
+		$ac = $this->accessModel->nieuw($environment, $resource);
 		$form = new RechtenForm($ac, 'aanmaken');
 		if ($form->validate()) {
-			$this->model->setAcl($ac->environment, $ac->resource, array(
+			$this->accessModel->setAcl($ac->environment, $ac->resource, array(
 				$ac->action => $ac->subject
 			));
 			return new RechtenData(array($ac));
@@ -54,10 +57,10 @@ class RechtenController {
 			throw new CsrToegangException();
 		}
 		/** @var AccessControl $ac */
-		$ac = $this->model->retrieveByUUID($selection[0]);
+		$ac = $this->accessModel->retrieveByUUID($selection[0]);
 		$form = new RechtenForm($ac, 'wijzigen');
 		if ($form->validate()) {
-			$this->model->setAcl($ac->environment, $ac->resource, array(
+			$this->accessModel->setAcl($ac->environment, $ac->resource, array(
 				$ac->action => $ac->subject
 			));
 			return new RechtenData(array($ac));
@@ -71,8 +74,8 @@ class RechtenController {
 		$response = array();
 		foreach ($selection as $UUID) {
 			/** @var AccessControl $ac */
-			$ac = $this->model->retrieveByUUID($UUID);
-			$this->model->setAcl($ac->environment, $ac->resource, array(
+			$ac = $this->accessModel->retrieveByUUID($UUID);
+			$this->accessModel->setAcl($ac->environment, $ac->resource, array(
 				$ac->action => null
 			));
 			$response[] = $ac;

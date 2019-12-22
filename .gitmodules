@@ -29,3 +29,7 @@
 	path = htdocs/dies/2019
 	url = https://github.com/csrdelft/dies2019
 	branch = gh-pages
+[submodule "htdocs/dies/2020"]
+	path = htdocs/dies/2020
+	url = https://github.com/csrdelft/dies2020.git
+	branch = gh-pages

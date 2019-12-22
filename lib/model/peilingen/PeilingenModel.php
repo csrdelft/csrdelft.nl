@@ -20,6 +20,21 @@ use CsrDelft\Orm\PersistenceModel;
 class PeilingenModel extends PersistenceModel {
 
 	const ORM = Peiling::class;
+	/**
+	 * @var PeilingOptiesModel
+	 */
+	private $peilingOptiesModel;
+	/**
+	 * @var PeilingStemmenModel
+	 */
+	private $peilingStemmenModel;
+
+	public function __construct(PeilingOptiesModel $peilingOptiesModel, PeilingStemmenModel $peilingStemmenModel) {
+		parent::__construct();
+
+		$this->peilingOptiesModel = $peilingOptiesModel;
+		$this->peilingStemmenModel = $peilingStemmenModel;
+	}
 
 	/**
 	 * @param PersistentEntity|Peiling $entity
@@ -27,7 +42,7 @@ class PeilingenModel extends PersistenceModel {
 	 */
 	public function update(PersistentEntity $entity) {
 		foreach ($entity->opties as $optie) {
-			PeilingOptiesModel::instance()->update($optie);
+			$this->peilingOptiesModel->update($optie);
 		}
 
 		return parent::update($entity);
@@ -39,12 +54,12 @@ class PeilingenModel extends PersistenceModel {
 	 */
 	public function delete(PersistentEntity $entity) {
 		foreach ($entity->opties as $optie) {
-			PeilingOptiesModel::instance()->delete($optie);
+			$this->peilingOptiesModel->delete($optie);
 		}
 
-		$stemmen = PeilingStemmenModel::instance()->find('peiling_id = ?', array($entity->id))->fetchAll();
+		$stemmen = $this->peilingStemmenModel->find('peiling_id = ?', array($entity->id))->fetchAll();
 		foreach ($stemmen as $stem) {
-			echo PeilingStemmenModel::instance()->delete($stem);
+			echo $this->peilingStemmenModel->delete($stem);
 		}
 
 		return parent::delete($entity);
@@ -59,7 +74,7 @@ class PeilingenModel extends PersistenceModel {
 
 		foreach ($entity->opties as $optie) {
 			$optie->peiling_id = $peiling_id;
-			PeilingOptiesModel::instance()->create($optie);
+			$this->peilingOptiesModel->create($optie);
 		}
 
 		return $peiling_id;
@@ -72,7 +87,7 @@ class PeilingenModel extends PersistenceModel {
 	public function stem($peiling_id, $optie_id) {
 		$peiling = $this->getPeilingById((int)$peiling_id);
 		if ($peiling->getMagStemmen() && !$peiling->getHeeftGestemd()) {
-			$optie = PeilingOptiesModel::instance()->find('peiling_id = ? AND id = ?', array($peiling_id, $optie_id))->fetch();
+			$optie = $this->peilingOptiesModel->find('peiling_id = ? AND id = ?', array($peiling_id, $optie_id))->fetch();
 			$optie->stemmen += 1;
 
 			$stem = new PeilingStem();
@@ -80,8 +95,8 @@ class PeilingenModel extends PersistenceModel {
 			$stem->uid = LoginModel::getUid();
 
 			try {
-				PeilingStemmenModel::instance()->create($stem);
-				PeilingOptiesModel::instance()->update($optie);
+				$this->peilingStemmenModel->create($stem);
+				$this->peilingOptiesModel->update($optie);
 			} catch (CsrGebruikerException $e) {
 				setMelding($e->getMessage(), -1);
 			}

@@ -16,6 +16,18 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
+	/** @var MaaltijdenModel */
+	private $maaltijdenModel;
+	/** @var CiviBestellingModel */
+	private $civiBestellingModel;
+
+	public function __construct(MaaltijdenModel $maaltijdenModel, CiviBestellingModel $civiBestellingModel) {
+		$this->maaltijdenModel = $maaltijdenModel;
+		$this->civiBestellingModel = $civiBestellingModel;
+
+		parent::__construct();
+	}
+
 	protected function configure() {
 		$this
 			->setName('maalcie:fiscaat:terugdraaien')
@@ -24,7 +36,6 @@ class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$helper = $this->getHelper('question');
-		$maaltijdenModel = MaaltijdenModel::instance();
 
 		// Bepaal datum
 		$datum = null;
@@ -33,7 +44,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
 			$mid = $helper->ask($input, $output, $question);
 			if (is_numeric($mid)) {
 				try {
-					$maaltijd = $maaltijdenModel->getMaaltijd($mid);
+					$maaltijd = $this->maaltijdenModel->getMaaltijd($mid);
 						if (!$maaltijd->verwerkt) {
 						$output->writeln("Maaltijd is nog niet verwerkt");
 					} else {
@@ -48,7 +59,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
 		$output->writeln("");
 
 		// Haal maaltijden op deze datum op
-		$maaltijden = $maaltijdenModel->find('datum = ? AND verwerkt = 1', [$datum])->fetchAll();
+		$maaltijden = $this->maaltijdenModel->find('datum = ? AND verwerkt = 1', [$datum])->fetchAll();
 		$maaltijdTekst = count($maaltijden) > 1 ? count($maaltijden) . ' maaltijden' : 'maaltijd';
 		$output->writeln("De verwerking van de volgende {$maaltijdTekst} wordt hiermee ongedaan gemaakt:");
 		foreach ($maaltijden as $maaltijd) {
@@ -56,9 +67,8 @@ class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
 		}
 
 		// Haal bestellingen op
-		$bestellingenModel = CiviBestellingModel::instance();
 		$comment = sprintf('Datum maaltijd: %s', date('Y-M-d', strtotime($datum)));
-		$bestellingen = $bestellingenModel->find('cie = "maalcie" AND comment = ? AND deleted = 0', [$comment])->fetchAll();
+		$bestellingen = $this->civiBestellingModel->find('cie = "maalcie" AND comment = ? AND deleted = 0', [$comment])->fetchAll();
 		$leden = [];
 		$som = 0;
 		foreach ($bestellingen as $bestelling) {
@@ -87,17 +97,17 @@ class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
 		// Terugdraaien
 		$progress = new ProgressBar($output, count($bestellingen));
 		try {
-			Database::transaction(function () use ($bestellingen, $bestellingenModel, $progress, $maaltijden, $maaltijdenModel) {
+			Database::transaction(function () use ($bestellingen, $progress, $maaltijden) {
 				reset($bestellingen);
 				foreach ($bestellingen as $bestelling) {
-					$bestellingenModel->revert($bestelling);
+					$this->civiBestellingModel->revert($bestelling);
 					$progress->advance();
 				}
 
 				reset($maaltijden);
 				foreach ($maaltijden as $maaltijd) {
 					$maaltijd->verwerkt = false;
-					$maaltijdenModel->update($maaltijd);
+					$this->maaltijdenModel->update($maaltijd);
 				}
 			});
 		} catch (Exception $e) {

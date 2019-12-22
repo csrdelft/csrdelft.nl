@@ -77,7 +77,7 @@ class CorveeRepetitie extends PersistentEntity {
 	 * @return CorveeFunctie
 	 */
 	public function getCorveeFunctie() {
-		return FunctiesModel::get($this->functie_id);
+		return FunctiesModel::instance()->get($this->functie_id);
 	}
 
 	protected static $table_name = 'crv_repetities';

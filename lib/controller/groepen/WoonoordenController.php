@@ -12,7 +12,7 @@ use CsrDelft\model\groepen\WoonoordenModel;
  * Controller voor woonoorden en huizen.
  */
 class WoonoordenController extends AbstractGroepenController {
-	public function __construct() {
-		parent::__construct(WoonoordenModel::instance());
+	public function __construct(WoonoordenModel $woonoordenModel) {
+		parent::__construct($woonoordenModel);
 	}
 }

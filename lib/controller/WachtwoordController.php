@@ -18,6 +18,25 @@ use CsrDelft\view\login\WachtwoordWijzigenForm;
  * @since 28/07/2019
  */
 class WachtwoordController extends AbstractController {
+	/**
+	 * @var LoginModel
+	 */
+	private $loginModel;
+	/**
+	 * @var AccountModel
+	 */
+	private $accountModel;
+	/**
+	 * @var OneTimeTokensModel
+	 */
+	private $oneTimeTokensModel;
+
+	public function __construct(LoginModel $loginModel, AccountModel $accountModel, OneTimeTokensModel $oneTimeTokensModel) {
+		$this->loginModel = $loginModel;
+		$this->accountModel = $accountModel;
+		$this->oneTimeTokensModel = $oneTimeTokensModel;
+	}
+
 	public function wijzigen() {
 		$account = LoginModel::getAccount();
 		// mag inloggen?
@@ -28,7 +47,7 @@ class WachtwoordController extends AbstractController {
 		if ($form->validate()) {
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
-			AccountModel::instance()->wijzigWachtwoord($account, $pass_plain);
+			$this->accountModel->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Wachtwoord instellen geslaagd', 1);
 		}
 		return view('default', ['content' => $form]);
@@ -36,7 +55,7 @@ class WachtwoordController extends AbstractController {
 
 	public function reset() {
 		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
-		$account = OneTimeTokensModel::instance()->verifyToken('/wachtwoord/reset', $token);
+		$account = $this->oneTimeTokensModel->verifyToken('/wachtwoord/reset', $token);
 
 		if ($account == null) {
 			throw new CsrToegangException();
@@ -45,14 +64,14 @@ class WachtwoordController extends AbstractController {
 		if ($form->validate()) {
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
-			if (AccountModel::instance()->wijzigWachtwoord($account, $pass_plain)) {
+			if ($this->accountModel->wijzigWachtwoord($account, $pass_plain)) {
 				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
 			// token verbruikt
 			// (pas na wachtwoord opslaan om meedere pogingen toe te staan als wachtwoord niet aan eisen voldoet)
-			OneTimeTokensModel::instance()->discardToken($account->uid, '/wachtwoord/reset');
+			$this->oneTimeTokensModel->discardToken($account->uid, '/wachtwoord/reset');
 			// inloggen alsof gebruiker wachtwoord heeft ingevoerd
-			$loggedin = LoginModel::instance()->login($account->uid, $pass_plain, false);
+			$loggedin = $this->loginModel->login($account->uid, $pass_plain, false);
 			if (!$loggedin) {
 				throw new CsrGebruikerException('Inloggen met nieuw wachtwoord mislukt');
 			}
@@ -78,7 +97,7 @@ class WachtwoordController extends AbstractController {
 			if (!$account OR !AccessModel::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions()) OR mb_strtolower($account->email) !== mb_strtolower($values['mail'])) {
 				setMelding('Lidnummer en/of e-mailadres onjuist', -1);
 			} else {
-				$token = OneTimeTokensModel::instance()->createToken($account->uid, '/wachtwoord/reset');
+				$token = $this->oneTimeTokensModel->createToken($account->uid, '/wachtwoord/reset');
 				// stuur resetmail
 				$profiel = $account->getProfiel();
 				$url =  CSR_ROOT ."/wachtwoord/reset?token=". rawurlencode($token[0]);

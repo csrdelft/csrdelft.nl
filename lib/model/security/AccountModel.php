@@ -7,7 +7,6 @@ use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Persistence\Database;
 
 /**
  * AccountModel.class.php
@@ -51,8 +50,8 @@ class AccountModel extends CachedPersistenceModel {
 	 *
 	 * @return bool
 	 */
-	public static function existsUsername($name) {
-		return Database::instance()->sqlExists(static::instance()->getTableName(), 'username = ?', array($name));
+	public function existsUsername($name) {
+		return $this->database->sqlExists($this->getTableName(), 'username = ?', array($name));
 	}
 
 	/**
@@ -91,7 +90,6 @@ class AccountModel extends CachedPersistenceModel {
 	 * @return boolean
 	 */
 	public function controleerWachtwoord(Account $account, $passPlain) {
-		$valid = false;
 		// Controleer of het wachtwoord klopt
 		$hash = $account->pass_hash;
 		if (startsWith($hash, "{SSHA}")) {

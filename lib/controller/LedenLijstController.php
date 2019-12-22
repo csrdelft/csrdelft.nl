@@ -6,17 +6,17 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
-use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\LidZoeker;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
 
 class LedenLijstController extends AbstractController {
-	public function lijst() {
+	public function lijst(CmsPaginaRepository $cmsPaginaRepository) {
 		if (!LoginModel::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
-			$body = new CmsPaginaView(CmsPaginaModel::get('403'));
+			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
 			return view('default', ['content' => $body]);
 		}
 

@@ -2,8 +2,8 @@
 
 namespace CsrDelft\model;
 
-use CsrDelft\model\documenten\DocumentCategorieModel;
-use CsrDelft\model\entity\documenten\DocumentCategorie;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\model\entity\forum\ForumCategorie;
 use CsrDelft\model\entity\MenuItem;
 use CsrDelft\model\forum\ForumModel;
@@ -11,6 +11,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\documenten\DocumentCategorieRepository;
 
 /**
  * MenuModel.class.php
@@ -109,7 +110,9 @@ class MenuModel extends CachedPersistenceModel {
 
 			case 'Documenten':
 				$overig = false;
-				foreach (DocumentCategorieModel::instance()->find() as $categorie) {
+				$documentCategorieRepository = ContainerFacade::getContainer()->get(DocumentCategorieRepository::class);
+				$categorien = $documentCategorieRepository->findAll();
+				foreach ($categorien as $categorie) {
 					/** @var DocumentCategorie $categorie */
 					$item = $this->nieuw($parent->item_id);
 					$item->rechten_bekijken = $categorie->leesrechten;

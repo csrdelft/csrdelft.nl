@@ -42,10 +42,14 @@ class EetplanController {
 	/** @var WoonoordenModel */
 	private $woonoordenModel;
 
-	public function __construct(EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenModel) {
+	public function __construct(
+		EetplanRepository $eetplanRepository,
+		EetplanBekendenRepository $eetplanBekendenModel,
+		WoonoordenModel $woonoordenModel
+	) {
 		$this->eetplanModel = $eetplanRepository;
 		$this->eetplanBekendenModel = $eetplanBekendenModel;
-		$this->woonoordenModel = WoonoordenModel::instance();
+		$this->woonoordenModel = $woonoordenModel;
 		$this->lichting = substr((string)LichtingenModel::getJongsteLidjaar(), 2, 2);
 	}
 
@@ -79,7 +83,7 @@ class EetplanController {
 		}
 
 		return view('eetplan.huis', [
-			'woonoord' => WoonoordenModel::get($id),
+			'woonoord' => WoonoordenModel::instance()->get($id),
 			'eetplan' => $eetplan,
 		]);
 	}
@@ -161,7 +165,7 @@ class EetplanController {
 		return new EetplanHuizenZoekenResponse($woonoorden);
 	}
 
-	public function novietrelatie($actie = null) {
+	public function novietrelatie() {
 		return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
 	}
 
@@ -246,7 +250,7 @@ class EetplanController {
 		if (!$form->validate()) {
 			return $form;
 		} else {
-			$avond = $form->getValues()['avond'];
+			$avond = date_create($form->getValues()['avond']);
 			$this->eetplanModel->verwijderEetplan($avond, $this->lichting);
 
 			return view('eetplan.table', ['eetplan' => $this->eetplanModel->getEetplan($this->lichting)]);

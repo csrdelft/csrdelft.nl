@@ -12,6 +12,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use PDO;
+use PDOException;
 
 /**
  * ForumDradenModel.class.php
@@ -100,15 +101,15 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	 * @return ForumDraad
 	 * @throws CsrGebruikerException
 	 */
-	public static function get($id) {
-		$draad = static::instance()->retrieveByPrimaryKey(array($id));
+	public function get($id) {
+		$draad = $this->retrieveByPrimaryKey(array($id));
 		if (!$draad) {
 			throw new CsrGebruikerException('Forum-onderwerp bestaat niet!');
 		}
 		return $draad;
 	}
 
-	protected function __construct(
+	public function __construct(
 		ForumDradenGelezenModel $forumDradenGelezenModel,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
@@ -206,7 +207,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 				$order,
 				$forumZoeken->limit
 			);
-		} catch (\PDOException $ex) {
+		} catch (PDOException $ex) {
 			setMelding('Op deze term kan niet gezocht worden', -1);
 			// Syntax error in de MATCH in BOOLEAN MODE
 			return [];

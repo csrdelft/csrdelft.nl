@@ -16,6 +16,20 @@ use CsrDelft\Orm\PersistenceModel;
 class ChangeLogModel extends PersistenceModel {
 
 	const ORM = ChangeLogEntry::class;
+	/**
+	 * @var LoginModel
+	 */
+	private $loginModel;
+
+	/**
+	 * ChangeLogModel constructor.
+	 * @param LoginModel $loginModel
+	 */
+	public function __construct(LoginModel $loginModel) {
+		parent::__construct();
+
+		$this->loginModel = $loginModel;
+	}
 
 	/**
 	 * @param string $subject
@@ -36,10 +50,10 @@ class ChangeLogModel extends PersistenceModel {
 		$change->property = $property;
 		$change->old_value = $old;
 		$change->new_value = $new;
-		if (LoginModel::instance()->isSued()) {
-			$change->uid = LoginModel::getSuedFrom()->uid;
+		if ($this->loginModel->isSued()) {
+			$change->uid = $this->loginModel::getSuedFrom()->uid;
 		} else {
-			$change->uid = LoginModel::getUid();
+			$change->uid = $this->loginModel::getUid();
 		}
 		return $change;
 	}

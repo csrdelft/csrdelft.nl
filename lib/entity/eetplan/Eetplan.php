@@ -44,7 +44,7 @@ class Eetplan {
 	 * @return Woonoord|false|mixed
 	 */
 	public function getWoonoord() {
-		return WoonoordenModel::get($this->woonoord_id);
+		return WoonoordenModel::instance()->get($this->woonoord_id);
 	}
 
 	/**

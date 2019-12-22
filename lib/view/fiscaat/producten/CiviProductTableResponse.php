@@ -13,7 +13,7 @@ use CsrDelft\view\datatable\DataTableResponse;
 class CiviProductTableResponse extends DataTableResponse {
 	/**
 	 * @param CiviProduct $entity
-	 * @return string
+	 * @return array
 	 */
 	public function renderElement($entity) {
 		return [
@@ -22,7 +22,7 @@ class CiviProductTableResponse extends DataTableResponse {
 			'status' => $entity->status,
 			'beschrijving' => $entity->beschrijving,
 			'beheer' => $entity->beheer,
-			'categorie' => CiviCategorieModel::get($entity->categorie_id)->getBeschrijving(),
+			'categorie' => CiviCategorieModel::instance()->get($entity->categorie_id)->getBeschrijving(),
 			'prijs' => $entity->prijs,
 			'prioriteit' => $entity->prioriteit,
 		];

@@ -220,6 +220,8 @@ function sliding_pager($params) {
 function bbcode(string $string, string $mode = 'normal') {
 	if ($mode === 'html') {
 		return CsrBB::parseHtml($string);
+	} else if ($mode == 'mail') {
+		return CsrBB::parseMail($string);
 	} else {
 		return CsrBB::parse($string);
 	}

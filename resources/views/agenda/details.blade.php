@@ -1,12 +1,11 @@
 <?php
 /**
  * @var \CsrDelft\model\entity\agenda\Agendeerbaar $item
- * @var \CsrDelft\model\entity\agenda\AgendaItem $item
+ * @var \CsrDelft\entity\agenda\AgendaItem $item
  * @var \CsrDelft\model\entity\profiel\Profiel $item
  * @var \CsrDelft\model\entity\maalcie\CorveeTaak $item
  */
 ?>
-@php($verborgen = \CsrDelft\model\agenda\AgendaVerbergenModel::instance()->isVerborgen($item))
 <div class="card agenda-card">
 	<div class="card-header">
 		<div class="row no-gutters align-items-center">
@@ -50,10 +49,10 @@
 					</a>
 
 					@if($item instanceof \CsrDelft\model\entity\groepen\AbstractGroep && $item->mag(\CsrDelft\model\entity\security\AccessAction::Wijzigen))
-						<a href="{{$item->getUrl()}}wijzigen" class="beheren btn" title="Wijzig {{$item->naam}}">
+						<a href="{{$item->getUrl()}}/wijzigen" class="beheren btn" title="Wijzig {{$item->naam}}">
 							@icon('bewerken')
 						</a>
-					@elseif($item instanceof \CsrDelft\model\entity\agenda\AgendaItem && $item->magBeheren())
+					@elseif($item instanceof \CsrDelft\entity\agenda\AgendaItem && $item->magBeheren())
 						<a href="/agenda/bewerken/{{$item->item_id}}" class="btn beheren post popup"
 							 title="Dit agenda-item bewerken">
 							@icon('bewerken')
@@ -79,7 +78,7 @@
 			@if(!$item->isHeledag())
 				<p>
 					{{strftime("%R", $item->getBeginMoment())}}
-					@if(!preg_match('/(00:00|23:59):[0-9]{2}$/', $item->eind_moment))
+					@if(!preg_match('/(00:00|23:59)/', strftime("%R", $item->getEindMoment())))
 						- {{strftime("%R", $item->getEindMoment())}}
 					@endif
 				</p>
@@ -91,7 +90,7 @@
 		@if($item->getLocatie())
 			<p>{!! bbcode('[kaart h=200]' . $item->getLocatie() . '[/kaart]') !!}</p>
 		@endif
-		@if($item instanceof CsrDelft\model\entity\agenda\AgendaItem && $item->rechten_bekijken != P_LOGGED_IN)
+		@if($item instanceof \CsrDelft\entity\agenda\AgendaItem && $item->rechten_bekijken != P_LOGGED_IN)
 			<span class="text-muted small">Zichtbaar voor: {{$item->rechten_bekijken}}</span>
 		@endif
 	</div>

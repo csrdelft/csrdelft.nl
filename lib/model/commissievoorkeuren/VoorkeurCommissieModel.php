@@ -2,19 +2,25 @@
 
 namespace CsrDelft\model\commissievoorkeuren;
 
-use CsrDelft\model\entity\commissievoorkeuren\VoorkeurVoorkeur;
-use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
-use SplObjectStorage;
 
 class VoorkeurCommissieModel extends PersistenceModel {
 
 	const ORM = VoorkeurCommissie::class;
+	/**
+	 * @var VoorkeurCommissieCategorieModel
+	 */
+	private $voorkeurCommissieCategorieModel;
+
+	public function __construct(VoorkeurCommissieCategorieModel $voorkeurCommissieCategorieModel) {
+		parent::__construct();
+		$this->voorkeurCommissieCategorieModel = $voorkeurCommissieCategorieModel;
+	}
 
 	public function getByCategorie() {
 
-		$categorien = VoorkeurCommissieCategorieModel::instance()->find();
+		$categorien = $this->voorkeurCommissieCategorieModel->find();
 		$cat2commissie = [];
 		foreach ($categorien as $cat) {
 			$cat2commissie[$cat->id] = ['categorie' => $cat, 'commissies' => []];

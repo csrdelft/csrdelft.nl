@@ -15,49 +15,62 @@ use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class ZoekController {
-	public function zoeken(Request $request) {
+	public function zoeken(
+		Request $request,
+		DocumentenController $documentenController,
+		AgendaController $agendaController,
+		ToolsController $toolsController,
+		ForumController $forumController,
+		FotoAlbumController $fotoAlbumController,
+		BibliotheekController $bibliotheekController,
+		CommissiesController $commissiesController,
+		KringenController $kringenController,
+		OnderverenigingenController $onderverenigingenController,
+		WerkgroepenController $werkgroepenController,
+		WoonoordenController $woonoordenController,
+		RechtengroepenController $rechtengroepenController
+	) {
 		$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 		$resultaat = [];
 
 		$instelling = lid_instelling('zoeken', 'leden');
 		if ($instelling !== 'nee') {
-			$resultaat['Leden'] = (new ToolsController())->naamsuggesties('leden', 'instelling', $zoekterm)->getModel();
+			$resultaat['Leden'] = $toolsController->naamsuggesties('leden', 'instelling', $zoekterm)->getModel();
 		}
 
+		/** @var AbstractGroepenController[] $groepen */
 		$groepen = [
-			'commissies' => CommissiesController::class,
-			'kringen' => KringenController::class,
-			'onderverenigingen' => OnderverenigingenController::class,
-			'werkgroepen' => WerkgroepenController::class,
-			'woonoorden' => WoonoordenController::class,
-			'groepen' => RechtengroepenController::class,
+			'commissies' => $commissiesController,
+			'kringen' => $kringenController,
+			'onderverenigingen' => $onderverenigingenController,
+			'werkgroepen' => $werkgroepenController,
+			'woonoorden' => $woonoordenController,
+			'groepen' => $rechtengroepenController,
 		];
 		foreach ($groepen as $option => $controller) {
 			if (lid_instelling('zoeken', $option) === 'ja') {
-				/** @var AbstractGroepenController $groepController */
-				$groepController = new $controller('');
-				$resultaat[ucfirst($option)] = $groepController->zoeken($request, $zoekterm)->getModel();
+				$resultaat[ucfirst($option)] = $controller->zoeken($request, $zoekterm)->getModel();
 			}
 		}
 
 		if (lid_instelling('zoeken', 'forum') === 'ja') {
-			$resultaat['Forum'] = (new ForumController())->titelzoeken($request, $zoekterm)->getModel();
+			$resultaat['Forum'] = $forumController->titelzoeken($request, $zoekterm)->getModel();
 		}
 
 		if (lid_instelling('zoeken', 'fotoalbum') === 'ja') {
-			$resultaat['Fotoalbum'] = (new FotoAlbumController())->zoeken($request, $zoekterm)->getModel();
+			$resultaat['Fotoalbum'] = $fotoAlbumController->zoeken($request, $zoekterm)->getModel();
 		}
 
 		if (lid_instelling('zoeken', 'agenda') === 'ja') {
-			$resultaat['Agenda'] = (new AgendaController())->zoeken($request, $zoekterm)->getModel();
+			$resultaat['Agenda'] = $agendaController->zoeken($request, $zoekterm)->getModel();
 		}
 
 		if (lid_instelling('zoeken', 'documenten') === 'ja') {
-			$resultaat['Documenten'] = (new DocumentenController())->zoeken($request, $zoekterm)->getModel();
+			$resultaat['Documenten'] = $documentenController->zoeken($request, $zoekterm)->getModel();
 		}
 
 		if (lid_instelling('zoeken', 'boeken') === 'ja') {
-			$resultaat['Boeken'] = (new BibliotheekController())->zoeken($request, $zoekterm)->getModel();
+			$resultaat['Boeken'] = $bibliotheekController->zoeken($request, $zoekterm)->getModel();
 		}
 
 		return new JsonResponse(array_merge(...array_values($resultaat)));

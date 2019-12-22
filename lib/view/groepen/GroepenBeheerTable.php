@@ -2,11 +2,11 @@
 
 namespace CsrDelft\view\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\AbstractGroepenModel;
-use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\datatable\DataTable;
-use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
@@ -31,9 +31,10 @@ class GroepenBeheerTable extends DataTable {
 		$this->naam = $model->getNaam();
 		$this->titel = 'Beheer ' . $this->naam;
 
-		$this->pagina = CmsPaginaModel::get($this->naam);
+		$cmsPaginaRepository = ContainerFacade::getContainer()->get(CmsPaginaRepository::class);
+		$this->pagina = $cmsPaginaRepository->find($this->naam);
 		if (!$this->pagina) {
-			$this->pagina = CmsPaginaModel::get('');
+			$this->pagina = $cmsPaginaRepository->find('');
 		}
 
 		$this->hideColumn('id', false);
@@ -75,7 +76,7 @@ class GroepenBeheerTable extends DataTable {
 	public function getBreadcrumbs() {
 		return '<ul class="breadcrumb"><li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>'
 			. '<li class="breadcrumb-item"><a href="/groepen">Groepen</a></li>'
-			. '<li class="breadcrumb-item"><a href="' . $this->dataUrl . '">' . ucfirst($this->naam) . '</a></li>'
+			. '<li class="breadcrumb-item"><a href="' . $this->model->getUrl() . '">' . ucfirst($this->naam) . '</a></li>'
 			. '<li class="breadcrumb-item active">Beheren</li></ul>';
 	}
 

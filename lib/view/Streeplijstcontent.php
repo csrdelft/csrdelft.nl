@@ -181,7 +181,7 @@ class Streeplijstcontent implements View, ToResponse {
 			if ($letter == 'alle') {
 				echo $letter;
 			} else {
-				echo VerticalenModel::get($letter)->naam;
+				echo VerticalenModel::instance()->get($letter)->naam;
 			}
 			echo '</label>';
 		}

@@ -1,26 +1,86 @@
 <?php
 
-namespace CsrDelft\model\entity\documenten;
+namespace CsrDelft\entity\documenten;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\view\Icon;
+use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Document.
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @ORM\Table("Document")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentRepository")
  */
 class Document extends Bestand {
+	/**
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 * @var int
+	 */
 	public $id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
 	public $naam;
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
 	public $categorie_id;
+	/**
+	 * @var DateTime
+	 * @ORM\Column(type="datetime")
+	 */
 	public $toegevoegd;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
 	public $eigenaar;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
 	public $leesrechten = P_LOGGED_IN;
+
+	/**
+	 * Bestandsnaam
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $filename;
+	/**
+	 * Bestandsgrootte in bytes
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $filesize;
+	/**
+	 * Mime-type van het bestand
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $mimetype;
+	/**
+	 * Locatie van bestand
+	 * @var string
+	 */
+	public $directory;
+
+	/**
+	 * Bestaat er een bestand met de naam in de map.
+	 *
+	 * @return bool
+	 */
+	public function exists() {
+		return @is_readable($this->directory . '/' . $this->filename) AND is_file($this->directory . '/' . $this->filename);
+	}
 
 	public function hasFile() {
 		if (!$this->magBekijken()) {
@@ -143,18 +203,4 @@ class Document extends Bestand {
 			}
 		}
 	}
-
-	protected static $persistent_attributes = [
-		'id' => [T::Integer, false, 'auto_increment'],
-		'naam' => [T::String],
-		'categorie_id' => [T::Integer],
-		'filename' => [T::String],
-		'filesize' => [T::Integer],
-		'mimetype' => [T::String],
-		'toegevoegd' => [T::DateTime],
-		'eigenaar' => [T::UID],
-		'leesrechten' => [T::String],
-	];
-	protected static $table_name = 'Document';
-	protected static $primary_key = ['id'];
 }

@@ -90,7 +90,7 @@ class ForumDeel extends PersistentEntity {
 	protected static $table_name = 'forum_delen';
 
 	public function getForumCategorie() {
-		return ForumModel::get($this->categorie_id);
+		return ForumModel::instance()->get($this->categorie_id);
 	}
 
 	public function magLezen($rss = false) {

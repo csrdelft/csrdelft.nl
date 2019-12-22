@@ -56,7 +56,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 		if ($voorkeur) {
 			return $voorkeur->niveau;
 		} else {
-			$wilMeldingBijVermelding = LidInstellingenModel::getInstellingVoorLid('forum', 'meldingStandaard', $uid);
+			$wilMeldingBijVermelding = LidInstellingenModel::instance()->getInstellingVoorLid('forum', 'meldingStandaard', $uid);
 			return $wilMeldingBijVermelding === 'ja' ? ForumDraadMeldingNiveau::VERMELDING : ForumDraadMeldingNiveau::NOOIT;
 		}
 	}

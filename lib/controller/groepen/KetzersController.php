@@ -17,8 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
  * @property KetzersModel $model
  */
 class KetzersController extends AbstractGroepenController {
-	public function __construct() {
-		parent::__construct(KetzersModel::instance());
+	public function __construct(KetzersModel $ketzersModel) {
+		parent::__construct($ketzersModel);
 	}
 
 	public function nieuw(Request $request, $id = null, $soort = null) {

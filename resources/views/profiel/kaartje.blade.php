@@ -18,14 +18,14 @@
 		</p>
 		@php($bestuurslid = CsrDelft\model\groepen\leden\BestuursLedenModel::instance()->find('uid = ?', array($profiel->uid), null, null, 1)->fetch())
 		@if($bestuurslid)
-			@php($bestuur = CsrDelft\model\groepen\BesturenModel::get($bestuurslid->groep_id))
+			@php($bestuur = CsrDelft\model\groepen\BesturenModel::instance()->get($bestuurslid->groep_id))
 			<p><a
 					href="{{$bestuur->getUrl()}}">{{CsrDelft\model\entity\groepen\GroepStatus::getChar($bestuur->status)}} {{$bestuurslid->opmerking}}</a>
 			</p>
 		@endif
 
 		@foreach (CsrDelft\model\groepen\leden\CommissieLedenModel::instance()->find('uid = ?', array($profiel->uid), null, 'lid_sinds DESC') as $commissielid)
-			@php($commissie = CsrDelft\model\groepen\CommissiesModel::get($commissielid->groep_id))
+			@php($commissie = CsrDelft\model\groepen\CommissiesModel::instance()->get($commissielid->groep_id))
 			@if ($commissie->status === CsrDelft\model\entity\groepen\GroepStatus::HT)
 				<p>
 					@if (!empty($commissielid->opmerking))

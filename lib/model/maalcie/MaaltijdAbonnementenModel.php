@@ -235,10 +235,9 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 
 			$abo->van_uid = $abo->uid;
 			$abo->wanneer_ingeschakeld = date('Y-m-d H:i');
-			static::instance()->create($abo);
+			$this->create($abo);
 
-			$aantal = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
-			return $aantal;
+			return MaaltijdAanmeldingenModel::instance()->aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
 		});
 	}
 

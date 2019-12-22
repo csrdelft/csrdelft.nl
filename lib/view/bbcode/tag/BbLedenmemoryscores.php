@@ -47,7 +47,7 @@ class BbLedenmemoryscores extends BbTag {
 			if (strlen($v) > 1) {
 				$verticale = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
 			} else {
-				$verticale = VerticalenModel::get($v);
+				$verticale = VerticalenModel::instance()->get($v);
 			}
 			if ($verticale) {
 				$titel = ' Verticale ' . $verticale->naam;
@@ -58,7 +58,7 @@ class BbLedenmemoryscores extends BbTag {
 			if ($l < 1950) {
 				$l = LichtingenModel::getJongsteLidjaar();
 			}
-			$lichting = LichtingenModel::get($l);
+			$lichting = LichtingenModel::instance()->get($l);
 			if ($lichting) {
 				$titel = ' Lichting ' . $lichting->lidjaar;
 				$groep = $lichting;

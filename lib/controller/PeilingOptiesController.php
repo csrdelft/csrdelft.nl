@@ -24,9 +24,9 @@ class PeilingOptiesController extends AbstractController {
 	/** @var PeilingOptiesModel */
 	private $peilingOptiesModel;
 
-	public function __construct() {
-		$this->peilingOptiesModel = PeilingOptiesModel::instance();
-		$this->peilingenLogic = PeilingenLogic::instance();
+	public function __construct(PeilingOptiesModel $peilingOptiesModel, PeilingenLogic $peilingenLogic) {
+		$this->peilingOptiesModel = $peilingOptiesModel;
+		$this->peilingenLogic = $peilingenLogic;
 	}
 
 	public function table($id) {

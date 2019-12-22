@@ -56,9 +56,14 @@ abstract class AbstractGroepenController {
 	protected $table;
 	/** @var AbstractGroepenModel */
 	protected $model;
+	/**
+	 * @var ChangeLogModel
+	 */
+	private $changeLogModel;
 
 	public function __construct($model = null) {
 		$this->model = $model;
+		$this->changeLogModel = ChangeLogModel::instance();
 	}
 
 	/**
@@ -87,7 +92,7 @@ abstract class AbstractGroepenController {
 		// Let op, als je meerdere routes naar dezelfde functie hebt, gebruik dan overrideName om de naam van de route goed te zetten.
 		$route('', 'overzicht', ['GET'], [], [], 'main');
 		$route('beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
-		$route('overzicht/{soort}', 'overzicht', ['GET']);
+		$route('overzicht/{soort}', 'overzicht', ['GET'], ['soort' => null]);
 		$route('{id}/verwijderen', 'verwijderen', ['POST']);
 		$route('zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
 		$route('nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
@@ -283,7 +288,7 @@ abstract class AbstractGroepenController {
 			$form->setDataTableId($this->table->getDataTableId());
 			return view('default', ['content' => $this->table, 'modal' => $form]);
 		} elseif ($form->validate()) {
-			ChangeLogModel::instance()->log($groep, 'create', null, print_r($groep, true));
+			$this->changeLogModel->log($groep, 'create', null, print_r($groep, true));
 			$this->model->create($groep);
 			$response[] = $groep;
 			if ($old) {
@@ -329,7 +334,7 @@ abstract class AbstractGroepenController {
 				$form->setDataTableId($this->table->getDataTableId());
 				return view('default', ['content' => $this->table, 'modal' => $form]);
 			} elseif ($form->validate()) {
-				ChangeLogModel::instance()->logChanges($form->diff());
+				$this->changeLogModel->logChanges($form->diff());
 				$this->model->update($groep);
 				return new GroepenBeheerData([$groep]);
 			} else {
@@ -348,7 +353,7 @@ abstract class AbstractGroepenController {
 			}
 			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($form->validate()) {
-				ChangeLogModel::instance()->logChanges($form->diff());
+				$this->changeLogModel->logChanges($form->diff());
 				$this->model->update($groep);
 				return new GroepenBeheerData([$groep]);
 			} else {
@@ -362,7 +367,7 @@ abstract class AbstractGroepenController {
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($id);
 		if ($groep && $groep->mag(AccessAction::Verwijderen) && count($groep->getLeden()) === 0) {
-			ChangeLogModel::instance()->log($groep, 'delete', print_r($groep, true), null);
+			$this->changeLogModel->log($groep, 'delete', print_r($groep, true), null);
 			$this->model->delete($groep);
 			$response[] = $groep;
 		}
@@ -379,8 +384,8 @@ abstract class AbstractGroepenController {
 			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($id);
 			if ($groep and $groep->mag(AccessAction::Opvolging)) {
-				ChangeLogModel::instance()->log($groep, 'familie', $groep->familie, $values['familie']);
-				ChangeLogModel::instance()->log($groep, 'status', $groep->status, $values['status']);
+				$this->changeLogModel->log($groep, 'familie', $groep->familie, $values['familie']);
+				$this->changeLogModel->log($groep, 'status', $groep->status, $values['status']);
 				$groep->familie = $values['familie'];
 				$groep->status = $values['status'];
 				$this->model->update($groep);
@@ -399,20 +404,19 @@ abstract class AbstractGroepenController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			/** @var AbstractGroepenModel $model */
-			/** @noinspection PhpUndefinedMethodInspection */
 			$model = $values['model']::instance();
 			$converteer = get_class($model) !== get_class($this->model);
 			$response = [];
 			$groep = $this->model->retrieveByUUID($id);
 			if ($groep and $groep->mag(AccessAction::Wijzigen)) {
 				if ($converteer) {
-					ChangeLogModel::instance()->log($groep, 'class', get_class($groep), $model::ORM);
+					$this->changeLogModel->log($groep, 'class', get_class($groep), $model::ORM);
 					$nieuw = $model->converteer($groep, $this->model, $values['soort']);
 					if ($nieuw) {
 						$response[] = $groep;
 					}
 				} elseif (property_exists($groep, 'soort')) {
-					ChangeLogModel::instance()->log($groep, 'soort', $groep->soort, $values['soort']);
+					$this->changeLogModel->log($groep, 'soort', $groep->soort, $values['soort']);
 					$groep->soort = $values['soort'];
 					$rowCount = $this->model->update($groep);
 					if ($rowCount > 0) {
@@ -435,7 +439,7 @@ abstract class AbstractGroepenController {
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($id);
 		if ($groep and property_exists($groep, 'aanmelden_tot') and time() <= strtotime($groep->aanmelden_tot) and $groep->mag(AccessAction::Wijzigen)) {
-			ChangeLogModel::instance()->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, getDateTime());
+			$this->changeLogModel->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, getDateTime());
 			$groep->aanmelden_tot = getDateTime();
 			$this->model->update($groep);
 			$response[] = $groep;
@@ -464,7 +468,7 @@ abstract class AbstractGroepenController {
 			if (!$groep->mag(AccessAction::Bekijken)) {
 				throw new CsrToegangException();
 			}
-			$data = ChangeLogModel::instance()->find('subject = ?', [$groep->getUUID()]);
+			$data = $this->changeLogModel->find('subject = ?', [$groep->getUUID()]);
 			return new GroepLogboekData($data);
 		} // popup request
 		else {
@@ -493,7 +497,7 @@ abstract class AbstractGroepenController {
 	 * Voor groepen V2
 	 */
 	public function aanmelden2(Request $request, $id, $uid) {
-		$groep = $this->model::get($id);
+		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
@@ -514,7 +518,7 @@ abstract class AbstractGroepenController {
 
 		$lid->opmerking2 = $keuzes;
 
-		ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
+		$this->changeLogModel->log($groep, 'aanmelden', null, $lid->uid);
 		$model->create($lid);
 
 		return new JsonResponse(['success' => true]);
@@ -522,7 +526,7 @@ abstract class AbstractGroepenController {
 
 	public function ketzer_aanmelden($id) {
 		$uid = LoginModel::getUid();
-		$groep = $this->model::get($id);
+		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
@@ -533,7 +537,7 @@ abstract class AbstractGroepenController {
 		$form = new GroepAanmeldenForm($lid, $groep);
 
 		if ($form->validate()) {
-			ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
+			$this->changeLogModel->log($groep, 'aanmelden', null, $lid->uid);
 			$model->create($lid);
 			return new GroepPasfotosView($groep);
 		} else {
@@ -542,7 +546,7 @@ abstract class AbstractGroepenController {
 	}
 
 	public function aanmelden($id) {
-		$groep = $this->model::get($id);
+		$groep = $this->model->get($id);
 		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Beheren)) {
@@ -554,7 +558,7 @@ abstract class AbstractGroepenController {
 		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
 
 		if ($form->validate()) {
-			ChangeLogModel::instance()->log($groep, 'aanmelden', null, $lid->uid);
+			$this->changeLogModel->log($groep, 'aanmelden', null, $lid->uid);
 			$model->create($lid);
 			return new GroepLedenData([$lid]);
 		} else {
@@ -574,7 +578,7 @@ abstract class AbstractGroepenController {
 		$form = new GroepBewerkenForm($lid, $groep);
 
 		if ($form->validate()) {
-			ChangeLogModel::instance()->logChanges($form->diff());
+			$this->changeLogModel->logChanges($form->diff());
 			$model->update($lid);
 		}
 
@@ -603,7 +607,7 @@ abstract class AbstractGroepenController {
 		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken');
 
 		if ($form->validate()) {
-			ChangeLogModel::instance()->logChanges($form->diff());
+			$this->changeLogModel->logChanges($form->diff());
 			$model->update($lid);
 			return new GroepLedenData([$lid]);
 		} else {
@@ -626,7 +630,7 @@ abstract class AbstractGroepenController {
 			throw new CsrToegangException('Niet aangemeld');
 		}
 
-		ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
+		$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
 		$model->delete($lid);
 
 		return new GroepView($groep);
@@ -641,7 +645,7 @@ abstract class AbstractGroepenController {
 		}
 
 		$lid = $model->get($groep, $uid);
-		ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
+		$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
 		$model->delete($lid);
 		return new RemoveRowsResponse([$lid]);
 	}
@@ -669,8 +673,8 @@ abstract class AbstractGroepenController {
 			}
 			Database::transaction(function () use ($groep, $ot_groep, $uid, $model) {
 				$lid = $model->get($groep, $uid);
-				ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
-				ChangeLogModel::instance()->log($ot_groep, 'aanmelden', $lid->uid, null);
+				$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
+				$this->changeLogModel->log($ot_groep, 'aanmelden', $lid->uid, null);
 				$model->delete($lid);
 				$lid->groep_id = $ot_groep->id;
 				$model->create($lid);
@@ -694,8 +698,8 @@ abstract class AbstractGroepenController {
 					if ($ot_groep->getLid($lid->uid)) {
 						throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
 					}
-					ChangeLogModel::instance()->log($groep, 'afmelden', $lid->uid, null);
-					ChangeLogModel::instance()->log($ot_groep, 'aanmelden', $lid->uid, null);
+					$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
+					$this->changeLogModel->log($ot_groep, 'aanmelden', $lid->uid, null);
 					$model->delete($lid);
 					$lid->groep_id = $ot_groep->id;
 					$lid->lid_sinds = getDateTime();

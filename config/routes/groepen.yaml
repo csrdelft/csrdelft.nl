@@ -44,3 +44,7 @@ groep-werkgroepen:
 groep-woonoorden:
   resource: CsrDelft\controller\groepen\WoonoordenController:loadRoutes
   type: service
+
+groep-kringen:
+  resource: CsrDelft\controller\groepen\KringenController:loadRoutes
+  type: service

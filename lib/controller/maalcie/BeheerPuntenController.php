@@ -14,8 +14,17 @@ use CsrDelft\model\ProfielModel;
  *
  */
 class BeheerPuntenController {
+	/**
+	 * @var FunctiesModel
+	 */
+	private $functiesModel;
+
+	public function __construct(FunctiesModel $functiesModel) {
+		$this->functiesModel = $functiesModel;
+	}
+
 	public function beheer() {
-		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
 		$matrix = CorveePuntenModel::loadPuntenVoorAlleLeden($functies);
 		return view('maaltijden.corveepunt.beheer_punten', ['matrix' => $matrix, 'functies' => $functies]);
 	}
@@ -27,7 +36,7 @@ class BeheerPuntenController {
 		}
 		$punten = (int)filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		CorveePuntenModel::savePuntenVoorLid($profiel, $punten, null);
-		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
 		$lijst = CorveePuntenModel::loadPuntenVoorLid($profiel, $functies);
 		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $lijst]);
 	}
@@ -39,7 +48,7 @@ class BeheerPuntenController {
 		}
 		$bonus = (int)filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		CorveePuntenModel::savePuntenVoorLid($profiel, null, $bonus);
-		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
 		$lijst = CorveePuntenModel::loadPuntenVoorLid($profiel, $functies);
 		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $lijst]);
 	}

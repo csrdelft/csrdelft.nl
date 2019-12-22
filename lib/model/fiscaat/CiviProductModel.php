@@ -8,7 +8,7 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use DateTime;
-use PDOStatement;
+use Generator;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -67,7 +67,7 @@ class CiviProductModel extends PersistenceModel {
 	 * @param string $order_by ORDER BY
 	 * @param int $limit max amount of results
 	 * @param int $start results from index
-	 * @return \Generator|CiviProduct[] implements Traversable using foreach does NOT require ->fetchAll()
+	 * @return Generator|CiviProduct[] implements Traversable using foreach does NOT require ->fetchAll()
 	 */
 	public function find($criteria = null, array $criteria_params = array(), $group_by = null, $order_by = null, $limit = null, $start = 0) {
 		/** @var CiviProduct[] $entries */

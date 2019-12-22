@@ -16,8 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Controller voor verticalen.
  */
 class VerticalenController extends AbstractGroepenController {
-	public function __construct() {
-		parent::__construct(VerticalenModel::instance());
+	public function __construct(VerticalenModel $verticalenModel) {
+		parent::__construct($verticalenModel);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {
