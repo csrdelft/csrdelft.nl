@@ -15,6 +15,7 @@ use CsrDelft\Orm\PersistenceModel;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbumModel.php
@@ -87,10 +88,10 @@ class FotoAlbumModel extends PersistenceModel {
 			$album = new FotoAlbum($path);
 		}
 		if (!$album->exists()) {
-			throw new NotFoundHttpException("Fotoalbum $path bestaat niet");
+			throw new ResourceNotFoundException("Fotoalbum $path bestaat niet");
 		}
 		if (!$album->magBekijken()) {
-			throw new NotFoundHttpException();
+			throw new ResourceNotFoundException();
 		}
 		return $album;
 	}
