@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model;
 
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\courant\Courant;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -40,7 +41,7 @@ class CourantModel extends PersistenceModel {
 	public function get($id) {
 		$courant = $this->retrieveByPrimaryKey([$id]);
 		if (!$courant) {
-			throw new ResourceNotFoundException();
+			throw new CsrNotFoundException();
 		}
 
 		return $courant;

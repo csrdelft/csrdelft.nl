@@ -4,6 +4,7 @@ namespace CsrDelft\model\fotoalbum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
@@ -88,10 +89,10 @@ class FotoAlbumModel extends PersistenceModel {
 			$album = new FotoAlbum($path);
 		}
 		if (!$album->exists()) {
-			throw new ResourceNotFoundException("Fotoalbum $path bestaat niet");
+			throw new CsrNotFoundException("Fotoalbum $path bestaat niet");
 		}
 		if (!$album->magBekijken()) {
-			throw new ResourceNotFoundException();
+			throw new CsrNotFoundException();
 		}
 		return $album;
 	}
@@ -163,7 +164,7 @@ HTML;
 		try {
 			$album = $this->getFotoAlbum('');
 			return $album->getMostRecentSubAlbum();
-		} catch (NotFoundHttpException $ex) {
+		} catch (CsrNotFoundException $ex) {
 			return null;
 		}
 	}

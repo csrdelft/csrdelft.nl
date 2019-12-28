@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\model\entity\LidStatus;
@@ -242,7 +243,7 @@ class ToolsController extends AbstractController {
 			return new PlainView('Geen lid gevonden');
 		}
 
-		throw new ResourceNotFoundException();
+		throw new CsrNotFoundException();
 	}
 
 	public function naamsuggesties($zoekin = null, $status = null, $query = '') {

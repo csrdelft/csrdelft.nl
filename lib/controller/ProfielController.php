@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
@@ -204,7 +205,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
-			throw new ResourceNotFoundException();
+			throw new CsrNotFoundException();
 		}
 		$this->accountModel->resetPrivateToken($profiel->getAccount());
 		return $this->profiel($uid);
@@ -218,7 +219,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
-			throw new ResourceNotFoundException();
+			throw new CsrNotFoundException();
 		}
 
 		$fotos = [];
@@ -328,7 +329,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
-			throw new ResourceNotFoundException();
+			throw new CsrNotFoundException();
 		}
 
 		return $this->profielBewerken($profiel);
@@ -338,7 +339,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
-			throw new ResourceNotFoundException();
+			throw new CsrNotFoundException();
 		}
 		if (!$profiel->magBewerken()) {
 			throw new CsrToegangException();
@@ -362,7 +363,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielModel->get($uid);
 
 		if ($profiel === false) {
-			throw new ResourceNotFoundException();
+			throw new CsrNotFoundException();
 		}
 		try {
 			GoogleSync::doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
@@ -403,7 +404,7 @@ class ProfielController extends AbstractController {
 		$profiel = ProfielModel::get($uid);
 
 		if (!$profiel) {
-			throw new ResourceNotFoundException();
+			throw new CsrNotFoundException();
 		}
 
 		return new VcardResponse(view('profiel.vcard', [

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\fotoalbum;
 
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\Map;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\security\LoginModel;
@@ -74,7 +75,7 @@ class FotoAlbum extends Map {
 			//We verwijderen het beginstuk van de string
 			$this->subdir = $path;
 		} else {
-			throw new ResourceNotFoundException("Fotoalbum niet gevonden");
+			throw new CsrNotFoundException("Fotoalbum niet gevonden");
 		}
 		$this->dirname = basename($this->path);
 	}
