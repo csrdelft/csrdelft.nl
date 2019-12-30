@@ -475,7 +475,7 @@ abstract class AbstractGroepenController {
 			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($id);
 			if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
-				throw new CsrToegangException('Kan logboek niet vinden', 403);
+				throw new CsrToegangException('Kan logboek niet vinden');
 			}
 			return new GroepLogboekForm($groep);
 		}
@@ -513,7 +513,7 @@ abstract class AbstractGroepenController {
 		}
 
 		if (!$groep->valideerOpmerking($keuzes)) {
-			throw new CsrToegangException('', 400);
+			throw new CsrGebruikerException('');
 		}
 
 		$lid->opmerking2 = $keuzes;

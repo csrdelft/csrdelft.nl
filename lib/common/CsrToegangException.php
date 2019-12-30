@@ -9,8 +9,8 @@ use Throwable;
  * @since 25/08/2018
  */
 class CsrToegangException extends CsrException {
-	public function __construct($message = "", $statusCode = 403, \Exception $previous = null, array $headers = [], $code = 0)
+	public function __construct($message = "")
 	{
-		parent::__construct($message, $statusCode, $previous, $headers, $code);
+		parent::__construct($message, 403);
 	}
 }

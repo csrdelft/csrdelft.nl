@@ -37,7 +37,7 @@ class ContactFormulierController {
 		foreach ($interesses as $interesse) $interessestring .= " * " . $interesse . "\n";
 
 		if ($this->bevatUrl($opmerking) || $this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
-			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.', 400);
+			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
 		}
 
 		$bericht = "
