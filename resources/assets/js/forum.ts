@@ -1,9 +1,17 @@
 import $ from 'jquery';
 import {domUpdate} from './context';
-import {init} from './ctx';
+import ctx, {init} from './ctx';
+
+ctx.addHandler('.set-concept', (el: HTMLAnchorElement) => {
+	el.addEventListener('click', (e) => {
+		e.preventDefault();
+		saveConceptForumBericht();
+		return false;
+	});
+});
 
 function toggleForumConceptBtn(enable: boolean) {
-	const $concept = $('#forumConcept');
+	const $concept = $('.set-concept');
 	if (typeof enable === 'undefined') {
 		$concept.attr('disabled', String(!Boolean($concept.prop('disabled'))));
 	} else {
@@ -13,11 +21,11 @@ function toggleForumConceptBtn(enable: boolean) {
 
 export function saveConceptForumBericht() {
 	toggleForumConceptBtn(false);
-	const $concept = $('#forumConcept');
-	const $textarea = $('#forumBericht');
-	const $titel = $('#nieuweTitel');
+	const $concept = $('.set-concept');
+	const $textarea = $('[name=forumBericht]');
+	const $titel = $('[name=titel]');
 	if ($textarea.val() !== $textarea.attr('origvalue')) {
-		$.post($concept.attr('data-url')!, {
+		$.post($concept.attr('href')!, {
 			forumBericht: $textarea.val(),
 			titel: ($titel.length === 1 ? $titel.val() : ''),
 		}).done(() => {
@@ -27,6 +35,7 @@ export function saveConceptForumBericht() {
 		});
 	}
 	setTimeout(toggleForumConceptBtn, 3000);
+	return false;
 }
 
 let bewerkContainer: JQuery | null = null;

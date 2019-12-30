@@ -6,6 +6,7 @@ namespace CsrDelft\view\forum;
 
 use CsrDelft\model\entity\forum\ForumCategorie;
 use CsrDelft\model\entity\forum\ForumDeel;
+use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
@@ -27,7 +28,7 @@ class ForumPostForm extends Formulier {
 	 * @param string $action
 	 * @param ForumCategorie[] $delen
 	 * @param ForumDeel|null $deel
-	 * @param null $draad
+	 * @param ForumDraad|null $draad
 	 */
 	public function __construct($model, $action, $delen, $deel = null, $draad = null) {
 		parent::__construct($model, $action, false, false);
@@ -70,6 +71,16 @@ class ForumPostForm extends Formulier {
 		if (LoginModel::mag(P_LOGGED_IN)) {
 			$this->formKnoppen->addKnop(new FormulierKnop("/fotoalbum/uploaden/$jaar/Posters", "btn-secondary", "Poster opladen", "Nieuwe poster opladen", "", "_blank"));
 			$this->formKnoppen->addKnop(new FormulierKnop("/groepen/activiteiten/nieuw", "post popup btn-secondary", "Ketzer maken", "Nieuwe ketzer maken", ""));
+
+			if ($deel) {
+				$url = "/forum/concept/$deel->forum_id";
+
+				if ($draad) {
+					$url .= "/$draad->draad_id";
+				}
+
+				$this->formKnoppen->addKnop(new FormulierKnop($url, "set-concept", "Concept opslaan", "Concept opslaan", ""));
+			}
 		}
 		$this->formKnoppen->addKnop(new SubmitKnop());
 		$this->deel = $deel;

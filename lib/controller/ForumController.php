@@ -263,8 +263,6 @@ class ForumController extends AbstractController {
 			'deel' => $deel,
 			'paging' => $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
-			'post_form_titel' => $this->forumDradenReagerenModel->getConceptTitel($deel),
-			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($deel),
 			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDeel($deel)
 		]);
 	}
@@ -283,7 +281,10 @@ class ForumController extends AbstractController {
 			throw new CsrToegangException();
 		}
 
-		$forumPostForm = new ForumPostForm(new NieuwForumPost(), $this->generateUrl('forum-deel', ['forum_id' => $forum_id, 'pagina' => $pagina]), $this->forumModel->getForumIndelingVoorLid(), $deel);
+		$nieuwForumPost = new NieuwForumPost();
+		$nieuwForumPost->forumBericht = $this->forumDradenReagerenModel->getConcept($deel);
+		$nieuwForumPost->titel = $this->forumDradenReagerenModel->getConceptTitel($deel);
+		$forumPostForm = new ForumPostForm($nieuwForumPost, $this->generateUrl('forum-deel', ['forum_id' => $forum_id, 'pagina' => $pagina]), $this->forumModel->getForumIndelingVoorLid(), $deel);
 
 		if ($forumPostForm->isPosted() && $forumPostForm->validate()) {
 			return $this->posten($forum_id, null);
@@ -309,8 +310,6 @@ class ForumController extends AbstractController {
 			'paging' => $paging && $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
 			'postform' => $forumPostForm,
-			'post_form_titel' => $this->forumDradenReagerenModel->getConceptTitel($deel),
-			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($deel),
 			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDeel($deel),
 			'deelmelding' => $this->forumDelenMeldingModel->lidWilMeldingVoorDeel($deel)
 		]);
@@ -365,7 +364,9 @@ class ForumController extends AbstractController {
 			$this->forumPostsModel->setHuidigePagina((int)$pagina, $draad->draad_id);
 		}
 
-		$forumPostForm = new ForumPostForm(new NieuwForumPost(), $this->generateUrl('forum-posten', ['forum_id' => $draad->forum_id, 'draad_id' => $draad_id]), $this->forumModel->getForumIndelingVoorLid(), $draad->getForumDeel(), $draad);
+		$model = new NieuwForumPost();
+		$model->forumBericht = $this->forumDradenReagerenModel->getConcept($draad->getForumDeel(), $draad->draad_id);
+		$forumPostForm = new ForumPostForm($model, $this->generateUrl('forum-posten', ['forum_id' => $draad->forum_id, 'draad_id' => $draad_id]), $this->forumModel->getForumIndelingVoorLid(), $draad->getForumDeel(), $draad);
 
 		if ($forumPostForm->isPosted() && $forumPostForm->validate()) {
 			return $this->posten($draad->getForumDeel()->forum_id, $draad_id);
@@ -376,7 +377,6 @@ class ForumController extends AbstractController {
 			'draad' => $draad,
 			'paging' => $paging && $this->forumPostsModel->getAantalPaginas($draad->draad_id) > 1,
 			'postform' => $forumPostForm,
-			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($draad->getForumDeel(), $draad->draad_id),
 			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDraad($draad),
 			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
 			'gedeeld_met_opties' => $this->forumDelenModel->getForumDelenOptiesOmTeDelen($draad->getForumDeel()),
