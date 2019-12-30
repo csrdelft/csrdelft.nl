@@ -63,7 +63,7 @@ class BibliotheekController extends AbstractController {
 		$formulier = new RecensieFormulier($recensie);
 		if ($formulier->validate()) {
 			if (!$recensie->magBewerken()) {
-				throw new CsrToegangException("Mag recensie niet bewerken", 403);
+				throw new CsrToegangException("Mag recensie niet bewerken");
 			} else {
 				$recensie->bewerkdatum = getDateTime();
 				$this->boekRecensieModel->updateOrCreate($recensie);
@@ -207,7 +207,7 @@ class BibliotheekController extends AbstractController {
 	public function exemplaar($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
 		if (!$exemplaar->magBewerken()) {
-			throw new CsrToegangException("Mag exemplaar niet bewerken", 403);
+			throw new CsrToegangException("Mag exemplaar niet bewerken");
 		}
 		$form = new BoekExemplaarFormulier($exemplaar);
 		if ($form->validate()) {

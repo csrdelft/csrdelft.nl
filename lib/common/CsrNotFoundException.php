@@ -8,9 +8,9 @@ use Throwable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 25/08/2018
  */
-class CsrToegangException extends CsrException {
+class CsrNotFoundException extends CsrException {
 	public function __construct($message = "")
 	{
-		parent::__construct($message, 403);
+		parent::__construct($message, 404);
 	}
 }

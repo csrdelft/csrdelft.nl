@@ -596,7 +596,7 @@ class ForumController extends AbstractController {
 				$value = null;
 			}
 		} else {
-			throw new CsrToegangException("Kan draad niet wijzigen", 403);
+			throw new CsrToegangException("Kan draad niet wijzigen");
 		}
 		$this->forumDradenModel->wijzigForumDraad($draad, $property, $value);
 		if (is_bool($value)) {
@@ -633,13 +633,13 @@ class ForumController extends AbstractController {
 
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
-				throw new CsrToegangException('Draad bestaat niet', 403);
+				throw new CsrToegangException('Draad bestaat niet');
 			}
 			$redirect = $this->redirectToRoute('forum-onderwerp', ['draad_id' => $draad->draad_id]);
 			$nieuw = false;
 		} else {
 			if (!$deel->magPosten()) {
-				throw new CsrToegangException('Mag niet posten', 403);
+				throw new CsrToegangException('Mag niet posten');
 			}
 			$redirect = $this->redirectToRoute('forum-deel', ['forum_id' => $deel->forum_id]);
 			$nieuw = true;
@@ -654,7 +654,7 @@ class ForumController extends AbstractController {
 		if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || (isset($titel) && $titel && $filter->isSpam($titel))) {
 			$this->debugLogModel->log(static::class, 'posten', [$forum_id, $draad_id], 'SPAM ' . $tekst);
 			setMelding('SPAM', -1);
-			throw new CsrToegangException("", 403);
+			throw new CsrToegangException("");
 		}
 
 		if (empty($tekst)) {
@@ -696,7 +696,7 @@ class ForumController extends AbstractController {
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
 				setMelding('SPAM', -1);
-				throw new CsrToegangException('SPAM', 403);
+				throw new CsrToegangException('SPAM');
 			}
 		}
 
@@ -761,7 +761,7 @@ class ForumController extends AbstractController {
 	public function citeren($post_id) {
 		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->magCiteren()) {
-			throw new CsrToegangException("Mag niet citeren", 403);
+			throw new CsrToegangException("Mag niet citeren");
 		}
 		echo $this->forumPostsModel->citeerForumPost($post);
 		exit; //TODO: JsonResponse
@@ -775,7 +775,7 @@ class ForumController extends AbstractController {
 	public function tekst($post_id) {
 		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->magBewerken()) {
-			throw new CsrToegangException("Mag niet berwerken", 403);
+			throw new CsrToegangException("Mag niet berwerken");
 		}
 		echo $post->tekst;
 		exit; //TODO: JsonResponse
@@ -790,7 +790,7 @@ class ForumController extends AbstractController {
 	public function bewerken($post_id) {
 		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->magBewerken()) {
-			throw new CsrToegangException("Mag niet bewerken", 403);
+			throw new CsrToegangException("Mag niet bewerken");
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
@@ -809,12 +809,12 @@ class ForumController extends AbstractController {
 		$post = $this->forumPostsModel->get((int)$post_id);
 		$oudDraad = $post->getForumDraad();
 		if (!$oudDraad->magModereren()) {
-			throw new CsrToegangException("Geen moderator", 403);
+			throw new CsrToegangException("Geen moderator");
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
 		$nieuwDraad = $this->forumDradenModel->get((int)$nieuw);
 		if (!$nieuwDraad->magModereren()) {
-			throw new CsrToegangException("Geen moderator", 403);
+			throw new CsrToegangException("Geen moderator");
 		}
 		$this->forumPostsModel->verplaatsForumPost($nieuwDraad, $post);
 		$this->forumPostsModel->goedkeurenForumPost($post);
@@ -830,7 +830,7 @@ class ForumController extends AbstractController {
 	public function verwijderen($post_id) {
 		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
-			throw new CsrToegangException("Geen moderator", 403);
+			throw new CsrToegangException("Geen moderator");
 		}
 		$this->forumPostsModel->verwijderForumPost($post);
 		return view('forum.partial.post_delete', ['post' => $post]);
@@ -845,7 +845,7 @@ class ForumController extends AbstractController {
 	public function offtopic($post_id) {
 		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
-			throw new CsrToegangException("Geen moderator", 403);
+			throw new CsrToegangException("Geen moderator");
 		}
 		$this->forumPostsModel->offtopicForumPost($post);
 		return view('forum.partial.post_lijst', ['post' => $post]);
@@ -860,7 +860,7 @@ class ForumController extends AbstractController {
 	public function goedkeuren($post_id) {
 		$post = $this->forumPostsModel->get((int)$post_id);
 		if (!$post->getForumDraad()->magModereren()) {
-			throw new CsrToegangException("Geen moderator", 403);
+			throw new CsrToegangException("Geen moderator");
 		}
 		$this->forumPostsModel->goedkeurenForumPost($post);
 		return view('forum.partial.post_lijst', ['post' => $post]);
@@ -886,7 +886,7 @@ class ForumController extends AbstractController {
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
-				throw new CsrToegangException("Draad bevindt zich niet in deel", 403);
+				throw new CsrToegangException("Draad bevindt zich niet in deel");
 			}
 			if (empty($ping)) {
 				$this->forumDradenReagerenModel->setConcept($deel, $draad_id, $concept);
@@ -896,7 +896,7 @@ class ForumController extends AbstractController {
 			$reageren = $this->forumDradenReagerenModel->getReagerenVoorDraad($draad);
 		} else {
 			if (!$deel->magPosten()) {
-				throw new CsrToegangException("Mag niet posten", 403);
+				throw new CsrToegangException("Mag niet posten");
 			}
 			if (empty($ping)) {
 				$this->forumDradenReagerenModel->setConcept($deel, null, $concept, $titel);

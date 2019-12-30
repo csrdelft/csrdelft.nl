@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
@@ -67,7 +68,7 @@ class EetplanController {
 	public function noviet($uid = null) {
 		$eetplan = $this->eetplanModel->getEetplanVoorNoviet($uid);
 		if ($eetplan === false) {
-			throw new CsrToegangException("Geen eetplan gevonden voor deze noviet", 404);
+			throw new CsrNotFoundException("Geen eetplan gevonden voor deze noviet");
 		}
 
 		return view('eetplan.noviet', [
@@ -79,7 +80,7 @@ class EetplanController {
 	public function huis($id = null) {
 		$eetplan = $this->eetplanModel->getEetplanVoorHuis($id, $this->lichting);
 		if ($eetplan == []) {
-			throw new CsrGebruikerException('Huis niet gevonden', 404);
+			throw new CsrGebruikerException('Huis niet gevonden');
 		}
 
 		return view('eetplan.huis', [
