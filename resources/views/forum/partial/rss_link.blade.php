@@ -1,4 +1,4 @@
-<div class="rss-link input-group mt-4" title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel">
+<div class="rss-link input-group mt-4" @auth title="Houd deze url privé!&#013;Nieuwe aanvragen: zie je profiel" @endauth >
 	<div class="input-group-prepend">
 		<span class="input-group-text">@icon('feed')</span>
 	</div>

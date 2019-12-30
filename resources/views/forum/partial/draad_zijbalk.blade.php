@@ -1,17 +1,24 @@
 <div class="zijbalk_forum">
-	<div class="zijbalk-kopje">
+	<div class="zijbalk-kopje d-flex justify-content-between">
 		@if($belangrijk)
 			<a href="/forum/belangrijk">Forum belangrijk</a>
 		@else
 			<a href="/forum/recent">Forum</a>
 		@endif
 
-		@can(P_FORUM_MOD)
-			@if ($aantalWacht > 0)
-				&nbsp;<a href="/forum/wacht" class="badge"
-								 title="{{$aantalWacht}} forumbericht{{($aantalWacht === 1 ? '' : 'en')}} wacht{{($aantalWacht === 1 ? '' : 'en')}} op goedkeuring">{{$aantalWacht}}</a>
+		<div>
+			@can(P_FORUM_MOD)
+				@if ($aantalWacht > 0)
+					&nbsp;<a href="/forum/wacht" class="badge"
+									 title="{{$aantalWacht}} forumbericht{{($aantalWacht === 1 ? '' : 'en')}} wacht{{($aantalWacht === 1 ? '' : 'en')}} op goedkeuring">{{$aantalWacht}}</a>
+				@endif
+			@endcan
+			@if(!$belangrijk)
+				<a href="/forum/nieuw" class="badge" title="Nieuw bericht maken">
+					<i class="fa fa-plus-circle"></i>
+				</a>
 			@endif
-		@endcan
+		</div>
 	</div>
 
 	@foreach($draden as $draad)

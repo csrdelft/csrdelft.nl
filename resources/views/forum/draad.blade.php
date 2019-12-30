@@ -169,7 +169,8 @@
 
 	@if($draad->magPosten())
 		@include('forum.partial.draad_reageren')
-		@include('forum.partial.post_form', ['deel' => $draad->getForumDeel()])
+		@php($postform->view())
+{{--		@include('forum.partial.post_form', ['deel' => $draad->getForumDeel()])--}}
 	@endif
 </div>
 

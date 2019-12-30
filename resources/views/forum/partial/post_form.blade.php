@@ -1,5 +1,5 @@
 
-@if($deel->isOpenbaar())
+@if(isset($deel) && $deel->isOpenbaar())
 	<div class="meldingen">
 		<div id="public-melding" class="alert alert-danger">
 			<strong>Openbaar forum</strong>

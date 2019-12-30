@@ -23,8 +23,10 @@ use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
+use CsrDelft\view\forum\ForumPostForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
 use CsrDelft\view\forum\ForumZoekenForm;
+use CsrDelft\view\forum\NieuwForumPost;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
@@ -110,6 +112,21 @@ class ForumController extends AbstractController {
 		return view('forum.overzicht', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => $this->forumModel->getForumIndelingVoorLid()
+		]);
+	}
+
+	public function nieuw() {
+		$forumDraad = new NieuwForumPost();
+		$postForm = new ForumPostForm($forumDraad, '/forum/nieuw', $this->forumModel->getForumIndelingVoorLid(), null);
+
+		if ($postForm->isPosted() && $postForm->validate()) {
+				return $this->posten($forumDraad->forum_id, null);
+		}
+
+		return view('forum.nieuw', [
+			'zoekform' => new ForumSnelZoekenForm(),
+			'postform' => $postForm,
+			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
 		]);
 	}
 
@@ -257,7 +274,7 @@ class ForumController extends AbstractController {
 	 *
 	 * @param int $forum_id
 	 * @param int|string $pagina or 'laatste' or 'prullenbak'
-	 * @return View
+	 * @return View|RedirectResponse
 	 * @throws CsrGebruikerException
 	 */
 	public function deel(int $forum_id, $pagina = 1) {
@@ -265,6 +282,13 @@ class ForumController extends AbstractController {
 		if (!$deel->magLezen()) {
 			throw new CsrToegangException();
 		}
+
+		$forumPostForm = new ForumPostForm(new NieuwForumPost(), $this->generateUrl('forum-deel', ['forum_id' => $forum_id, 'pagina' => $pagina]), $this->forumModel->getForumIndelingVoorLid(), $deel);
+
+		if ($forumPostForm->isPosted() && $forumPostForm->validate()) {
+			return $this->posten($forum_id, null);
+		}
+
 		$paging = true;
 		if ($pagina === 'laatste') {
 			$this->forumDradenModel->setLaatstePagina($deel->forum_id);
@@ -277,12 +301,14 @@ class ForumController extends AbstractController {
 		} else {
 			$this->forumDradenModel->setHuidigePagina((int)$pagina, $deel->forum_id);
 		}
+
 		return view('forum.deel', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
 			'deel' => $deel,
 			'paging' => $paging && $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
+			'postform' => $forumPostForm,
 			'post_form_titel' => $this->forumDradenReagerenModel->getConceptTitel($deel),
 			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($deel),
 			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDeel($deel),
@@ -311,7 +337,7 @@ class ForumController extends AbstractController {
 	 * @param int $draad_id
 	 * @param int $pagina or 'laatste' or 'ongelezen'
 	 * @param string|null $statistiek
-	 * @return View
+	 * @return View|RedirectResponse
 	 * @throws CsrGebruikerException
 	 */
 	public function onderwerp(int $draad_id, $pagina = null, $statistiek = null) {
@@ -339,10 +365,17 @@ class ForumController extends AbstractController {
 			$this->forumPostsModel->setHuidigePagina((int)$pagina, $draad->draad_id);
 		}
 
+		$forumPostForm = new ForumPostForm(new NieuwForumPost(), $this->generateUrl('forum-posten', ['forum_id' => $draad->forum_id, 'draad_id' => $draad_id]), $this->forumModel->getForumIndelingVoorLid(), $draad->getForumDeel(), $draad);
+
+		if ($forumPostForm->isPosted() && $forumPostForm->validate()) {
+			return $this->posten($draad->getForumDeel()->forum_id, $draad_id);
+		}
+
 		$view = view('forum.draad', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
 			'paging' => $paging && $this->forumPostsModel->getAantalPaginas($draad->draad_id) > 1,
+			'postform' => $forumPostForm,
 			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($draad->getForumDeel(), $draad->draad_id),
 			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDraad($draad),
 			'categorien' => $this->forumModel->getForumIndelingVoorLid(),

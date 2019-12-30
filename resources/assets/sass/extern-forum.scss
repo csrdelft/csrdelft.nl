@@ -2,6 +2,12 @@
 @import "lib/markitup";
 @import "icons";
 
+.verborgen {
+	visibility: hidden;
+	pointer-events: none;
+	position: absolute;
+}
+
 
 #forumZoekenForm {
 

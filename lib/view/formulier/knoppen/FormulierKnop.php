@@ -20,8 +20,9 @@ class FormulierKnop implements FormElement {
 	public $label;
 	public $title;
 	public $css_classes = array('FormulierKnop');
+	private $target;
 
-	public function __construct($url, $action, $label, $title, $icon) {
+	public function __construct($url, $action, $label, $title, $icon, $target = null) {
 		$this->id = uniqid_safe('knop_');
 		$this->url = $url;
 		$this->action = $action;
@@ -30,6 +31,7 @@ class FormulierKnop implements FormElement {
 		$this->icon = $icon;
 		$this->css_classes[] = $this->getType();
 		$this->css_classes[] = 'btn btn-primary';
+		$this->target = $target;
 	}
 
 	public function getId() {
@@ -57,6 +59,9 @@ class FormulierKnop implements FormElement {
 		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '" tabindex="0"';
 		if (isset($this->data)) {
 			$html .= ' data="' . $this->data . '"';
+		}
+		if ($this->target) {
+			$html .= ' target="' . $this->target . '"';
 		}
 		if (strpos($this->action, 'cancel') !== false) {
 			$html .= ' data-dismiss="modal"';

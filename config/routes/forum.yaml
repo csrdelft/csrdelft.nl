@@ -4,6 +4,12 @@ forum:
   methods: GET
   defaults: { _mag: P_PUBLIC }
 
+forum-nieuw:
+  path: /forum/nieuw
+  controller: CsrDelft\controller\ForumController::nieuw
+  methods: [GET,POST]
+  defaults: { _mag: P_PUBLIC }
+
 forum-deel:
   path: /forum/deel/{forum_id}/{pagina}
   controller: CsrDelft\controller\ForumController::deel

@@ -119,6 +119,7 @@ $(() => {
 
 	const $textarea = $('#forumBericht');
 	const $concept = $('#forumConcept');
+	const $deelSelectie = $('.ForumDeelSelectieField');
 
 	// The last value that we pinged
 	let lastPing = false;
@@ -168,4 +169,17 @@ $(() => {
 		const postid = $(this).attr('data-citeren')!;
 		forumCiteren(postid);
 	});
+
+	if ($deelSelectie.length) {
+		const $publicMelding = $('#public-melding');
+		$deelSelectie.on('change', (e) => {
+			const selectie = (e.target as HTMLSelectElement).selectedOptions[0];
+
+			if (selectie.dataset.isPublic === 'true') {
+				$publicMelding.removeClass('verborgen');
+			} else {
+				$publicMelding.addClass('verborgen');
+			}
+		});
+	}
 });

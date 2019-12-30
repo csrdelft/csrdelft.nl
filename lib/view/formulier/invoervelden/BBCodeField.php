@@ -24,20 +24,33 @@ class BBCodeField extends TextareaField {
 
 	public function getHtml() {
 		$inputAttribute = $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete'));
-		return  <<<HTML
+		return <<<HTML
 <textarea data-bbpreview="{$this->getId()}" $inputAttribute>{$this->value}</textarea>
-<div class="row justify-content-end">
-	<div class="col-auto">
-		<a class="btn btn-light" href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
-	</div>
+<div class="btn-toolbar justify-content-end">
+	<a class="btn btn-light mr-2" href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
 HTML
-		. ($this->preview ? <<<HTML
-	<div class="col-auto">
-		<a class="btn btn-secondary" data-bbpreview-btn="{$this->getId()}" href="#" title="Toon voorbeeld met opmaak">Voorbeeld</a>
-	</div>
+			. ($this->preview ? <<<HTML
+	<a class="btn btn-secondary" data-bbpreview-btn="{$this->getId()}" href="#" title="Toon voorbeeld met opmaak">Voorbeeld</a>
 HTML
-				: ''). <<<HTML
+				: '') . <<<HTML
 </div>
 HTML;
+	}
+
+	/**
+	 * View die zou moeten werken voor veel velden.
+	 */
+	public function view() {
+		echo $this->getDiv();
+		echo $this->getLabel();
+		echo '<div class="' . $this->fieldClassName . '">';
+		if ($this->preview) {
+			echo $this->getPreviewDiv();
+		}
+		echo $this->getHtml();
+		echo $this->getErrorDiv();
+		echo '</div>';
+		echo $this->getHelpDiv();
+		echo '</div>';
 	}
 }
