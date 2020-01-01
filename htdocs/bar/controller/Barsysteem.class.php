@@ -175,7 +175,7 @@ SQL
 		$q->bindValue(":totaal", $totaal, PDO::PARAM_INT);
 		$q->bindValue(":laatstVeranderd", getDateTime());
 
-		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
+		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_STR);
 		$q->execute();
 		$q = $this->db->prepare("UPDATE CiviBestelling  SET totaal = :totaal WHERE id = :bestelId;");
 		$q->bindValue(":totaal", $totaal, PDO::PARAM_INT);
