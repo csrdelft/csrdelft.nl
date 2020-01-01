@@ -191,7 +191,7 @@ SQL
 
 	function getBestellingPersoon($socCieId) {
 		$q = $this->db->prepare("SELECT *, B.deleted AS d, 0 AS oud FROM CiviBestelling AS B JOIN CiviBestellingInhoud AS I ON B.id=I.bestelling_id WHERE uid=:socCieId AND B.cie = 'soccie' OR B.cie = 'oweecie'");
-		$q->bindValue(":socCieId", $socCieId, PDO::PARAM_INT);
+		$q->bindValue(":socCieId", $socCieId, PDO::PARAM_STR);
 		$q->execute();
 		return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
 	}
@@ -226,7 +226,7 @@ WHERE (B.cie = 'soccie' OR B.cie = 'oweecie') AND $qa (moment BETWEEN :begin AND
 SQL
 		);
 		if ($persoon != "alles")
-			$q->bindValue(":socCieId", $persoon, PDO::PARAM_INT);
+			$q->bindValue(":socCieId", $persoon, PDO::PARAM_STR);
 		$q->bindValue(":begin", $begin);
 		$q->bindValue(":eind", $eind);
 		$q->execute();
@@ -240,7 +240,7 @@ SQL
 		// Add old order to saldo
 		$q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo + :bestelTotaal WHERE uid=:socCieId;");
 		$q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
-		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
+		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_STR);
 		$q->execute();
 
 		// Remove old contents of the order
@@ -261,7 +261,7 @@ SQL
 		$q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo - :bestelTotaal, laatst_veranderd = :laatstVeranderd WHERE uid=:socCieId;");
 		$q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
 		$q->bindValue(":laatstVeranderd", getDateTime());
-		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
+		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_STR);
 		$q->execute();
 
 		// Update old order
@@ -289,7 +289,7 @@ SQL
 		$this->db->beginTransaction();
 		$q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo + :bestelTotaal WHERE uid=:socCieId;");
 		$q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
-		$q->bindValue(":socCieId", $data->persoon, PDO::PARAM_INT);
+		$q->bindValue(":socCieId", $data->persoon, PDO::PARAM_STR);
 		$q->execute();
 		$q = $this->db->prepare("UPDATE CiviBestelling SET deleted = 1 WHERE id = :bestelId AND deleted = 0");
 		$q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
@@ -305,7 +305,7 @@ SQL
 		$this->db->beginTransaction();
 		$q = $this->db->prepare("UPDATE CiviSaldo SET saldo = saldo - :bestelTotaal WHERE uid=:socCieId;");
 		$q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
-		$q->bindValue(":socCieId", $data->persoon, PDO::PARAM_INT);
+		$q->bindValue(":socCieId", $data->persoon, PDO::PARAM_STR);
 		$q->execute();
 		$q = $this->db->prepare("UPDATE CiviBestelling SET deleted = 0 WHERE id = :bestelId AND deleted = 1");
 		$q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
