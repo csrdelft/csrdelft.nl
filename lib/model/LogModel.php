@@ -52,7 +52,7 @@ class LogModel extends PersistenceModel {
 		} else {
 			$entry->useragent = '';
 		}
-
+		$entry->removeOverflow();
 		$this->create($entry);
 	}
 
