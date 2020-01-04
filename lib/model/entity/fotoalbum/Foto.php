@@ -3,6 +3,7 @@
 namespace CsrDelft\model\entity\fotoalbum;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\security\LoginModel;
@@ -66,7 +67,7 @@ class Foto extends Afbeelding {
 			$this->subdir = $album->subdir;
 
 			if (!path_valid(PHOTOALBUM_PATH, join_paths($album->subdir, $filename))) {
-				throw new ResourceNotFoundException(); // Voorkom traversal door filename
+				throw new CsrNotFoundException(); // Voorkom traversal door filename
 			}
 		}
 		parent::__construct(null, $parse);

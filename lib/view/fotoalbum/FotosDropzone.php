@@ -2,8 +2,9 @@
 
 namespace CsrDelft\view\fotoalbum;
 
-use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\Dropzone;
 use CsrDelft\view\formulier\uploadvelden\ImageField;
@@ -27,7 +28,7 @@ class FotosDropzone extends Dropzone {
 		echo '<div class="float-right"><a href="#" onclick="showExisting_' . $this->formId . '();$(this).remove();">' . Icon::getTag('photos') . ' Toon bestaande foto\'s in dit album</a></div>';
 		echo '</div></div>';
 		// Uitleg foto's toevoegen
-		$body = new CmsPaginaView(CmsPaginaModel::get('fotostoevoegen'));
+		$body = new CmsPaginaView(ContainerFacade::getContainer()->get(CmsPaginaRepository::class)->find('fotostoevoegen'));
 		$body->view();
 	}
 

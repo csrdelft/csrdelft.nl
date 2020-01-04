@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\model\entity\LidStatus;
@@ -35,6 +36,39 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  * @since 11/04/2019
  */
 class ToolsController extends AbstractController {
+	/**
+	 * @var AccountModel
+	 */
+	private $accountModel;
+	/**
+	 * @var ProfielModel
+	 */
+	private $profielModel;
+	/**
+	 * @var LoginModel
+	 */
+	private $loginModel;
+	/**
+	 * @var LogModel
+	 */
+	private $logModel;
+	/**
+	 * @var SavedQueryModel
+	 */
+	private $savedQueryModel;
+	/**
+	 * @var ProfielService
+	 */
+	private $profielService;
+
+	public function __construct(AccountModel $accountModel, ProfielModel $profielModel, ProfielService $profielService, LoginModel $loginModel, LogModel $logModel, SavedQueryModel $savedQueryModel) {
+		$this->savedQueryModel = $savedQueryModel;
+		$this->accountModel = $accountModel;
+		$this->profielModel = $profielModel;
+		$this->loginModel = $loginModel;
+		$this->logModel = $logModel;
+		$this->profielService = $profielService;
+	}
 
 	public function streeplijst() {
 		$body = new Streeplijstcontent();
@@ -58,7 +92,7 @@ class ToolsController extends AbstractController {
 			$params[] = $request->query->get('ip');
 		}
 
-		$log = LogModel::instance()->find($criteria, $params, null, 'ID DESC', 30)->fetchAll();
+		$log = $this->logModel->find($criteria, $params, null, 'ID DESC', 30)->fetchAll();
 
 		return view('stats.stats', [
 			'log' => $log
@@ -70,7 +104,7 @@ class ToolsController extends AbstractController {
 			'verticalen' => array_reduce(
 				['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
 				function ($carry, $letter) {
-					$carry[$letter] = ProfielModel::instance()->find('verticale = ? AND (status="S_LID" OR status="S_NOVIET" OR status="S_GASTLID" OR status="S_KRINGEL")', [$letter]);
+					$carry[$letter] = $this->profielModel->find('verticale = ? AND (status="S_LID" OR status="S_NOVIET" OR status="S_GASTLID" OR status="S_KRINGEL")', [$letter]);
 					return $carry;
 				},
 				[]
@@ -105,9 +139,9 @@ class ToolsController extends AbstractController {
 	}
 
 	public function syncldap() {
-		if (DEBUG OR LoginModel::mag(P_ADMIN) OR LoginModel::instance()->isSued()) {
+		if (DEBUG OR LoginModel::mag(P_ADMIN) OR $this->loginModel->isSued()) {
 			$ldap = new LDAP();
-			$model = ProfielModel::instance();
+			$model = $this->profielModel;
 
 			foreach ($model->find() as $profiel) {
 				$model->save_ldap($profiel, $ldap);
@@ -129,7 +163,7 @@ class ToolsController extends AbstractController {
 
 	public function admins() {
 		return view('tools.admins', [
-			'accounts' => AccountModel::instance()->find('perm_role NOT IN (?,?,?,?)', ['R_LID', 'R_NOBODY', 'R_ETER', 'R_OUDLID'], null, 'perm_role'),
+			'accounts' => $this->accountModel->find('perm_role NOT IN (?,?,?,?)', ['R_LID', 'R_NOBODY', 'R_ETER', 'R_OUDLID'], null, 'perm_role'),
 		]);
 	}
 
@@ -188,19 +222,6 @@ class ToolsController extends AbstractController {
 			}
 		}
 
-//zoekt uid op en returnt met uid2naam weer de naam
-		function zoekNaam($naam, $zoekin) {
-			$namen = ProfielService::instance()->zoekLeden($naam, 'naam', 'alle', 'achternaam', $zoekin);
-			if (!empty($namen)) {
-				if (count($namen) === 1) {
-					return $namen[0]->getLink('civitas');
-				} else {
-					return 'Meerdere leden mogelijk';
-				}
-			}
-			return 'Geen lid gevonden';
-		}
-
 		if ($given == 'uid') {
 			if (AccountModel::isValidUid($string)) {
 				return new PlainView(uid2naam($string));
@@ -211,10 +232,18 @@ class ToolsController extends AbstractController {
 				}
 			}
 		} elseif ($given == 'naam') {
-			return new PlainView(zoekNaam($string, $zoekin));
+			$namen = $this->profielService->zoekLeden($string, 'naam', 'alle', 'achternaam', $zoekin);
+			if (!empty($namen)) {
+				if (count($namen) === 1) {
+					return new PlainView($namen[0]->getLink('civitas'));
+				} else {
+					return new PlainView('Meerdere leden mogelijk');
+				}
+			}
+			return new PlainView('Geen lid gevonden');
 		}
 
-		throw new ResourceNotFoundException();
+		throw new CsrNotFoundException();
 	}
 
 	public function naamsuggesties($zoekin = null, $status = null, $query = '') {
@@ -244,7 +273,7 @@ class ToolsController extends AbstractController {
 			$vorm = $_GET['vorm'];
 		}
 
-		$profielen = ProfielService::instance()->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
+		$profielen = $this->profielService->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
 
 		$scoredProfielen = [];
  		foreach ($profielen as $profiel) {
@@ -285,7 +314,7 @@ class ToolsController extends AbstractController {
 	}
 
 	public function memcachestats() {
-		if (DEBUG || LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued()) {
+		if (DEBUG || LoginModel::mag(P_ADMIN) || $this->loginModel->isSued()) {
 			ob_start();
 
 			echo getMelding();
@@ -301,7 +330,7 @@ class ToolsController extends AbstractController {
 	public function query() {
 		if (isset($_GET['id']) && (int)$_GET['id'] == $_GET['id']) {
 			$id = (int)$_GET['id'];
-			$result = SavedQueryModel::instance()->loadQuery($id);
+			$result = $this->savedQueryModel->loadQuery($id);
 		} else {
 			$result = null;
 		}
@@ -337,9 +366,10 @@ class ToolsController extends AbstractController {
 	/**
 	 * Voor patronaat 2019 kan september 2019 verwijderd worden.
 	 *
+	 * @param ActiviteitenModel $activiteitenModel
 	 * @return View
 	 */
-	public function patronaat() {
-		return view('patronaat', ['groep' => ActiviteitenModel::get(1754)]);
+	public function patronaat(ActiviteitenModel $activiteitenModel) {
+		return view('patronaat', ['groep' => $activiteitenModel->get(1754)]);
 	}
 }

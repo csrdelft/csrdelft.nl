@@ -8,7 +8,6 @@ namespace CsrDelft\model;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\SavedQuery;
 use CsrDelft\model\entity\SavedQueryResult;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
 class SavedQueryModel extends PersistenceModel {
@@ -21,8 +20,8 @@ class SavedQueryModel extends PersistenceModel {
 	/**
 	 * @return SavedQuery[]|\PDOStatement
 	 */
-	static public function getQueries() {
-		return static::instance()->find();
+	public function getQueries() {
+		return $this->find();
 	}
 
 	public function loadQuery($queryId) {
@@ -37,7 +36,7 @@ class SavedQueryModel extends PersistenceModel {
 		$resultObject->query = $query;
 
 		try {
-			$result = Database::instance()->getDatabase()->query($query->savedquery);
+			$result = $this->database->getDatabase()->query($query->savedquery);
 			$numCols = $result->columnCount();
 			$cols = [];
 			for ($i = 0; $i < $numCols; $i++) {

@@ -3,26 +3,32 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\model\entity\fotoalbum\Foto;
-use CsrDelft\view\SmartyTemplateView;
+use CsrDelft\view\ToResponse;
+use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class FotoBBView
  * @package CsrDelft\view\fotoalbum
- * @property Foto $model
  */
-class FotoBBView extends SmartyTemplateView {
+class FotoBBView implements ToResponse, View {
 
 	private $groot;
 	private $responsive;
+	private $model;
 
 	public function __construct(
 		Foto $foto,
 		$groot = false,
 		$responsive = false
 	) {
-		parent::__construct($foto);
+		$this->model = $foto;
 		$this->groot = $groot;
 		$this->responsive = $responsive;
+	}
+
+	public function view() {
+		echo $this->getHtml();
 	}
 
 	public function getHtml() {
@@ -49,8 +55,19 @@ class FotoBBView extends SmartyTemplateView {
 		return $html;
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function toResponse(): Response {
+		return new Response($this->getHtml());
 	}
 
+	public function getTitel() {
+		return '';
+	}
+
+	public function getBreadcrumbs() {
+		return '';
+	}
+
+	public function getModel() {
+		return null;
+	}
 }

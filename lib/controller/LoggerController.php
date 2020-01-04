@@ -2,10 +2,10 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Ini;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -55,6 +55,6 @@ MD
 
 		$_SESSION[self::LAATSTE_LOG_MELDING] = time();
 
-		throw new CsrToegangException("", 204);
+		return new Response("", 204);
 	}
 }

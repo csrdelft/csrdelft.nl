@@ -24,9 +24,9 @@ class PeilingenController extends AbstractController {
 	/** @var PeilingenLogic */
 	private $peilingenLogic;
 
-	public function __construct() {
-		$this->peilingenModel = PeilingenModel::instance();
-		$this->peilingenLogic = PeilingenLogic::instance();
+	public function __construct(PeilingenModel $peilingenModel, PeilingenLogic $peilingenLogic) {
+		$this->peilingenModel = $peilingenModel;
+		$this->peilingenLogic = $peilingenLogic;
 	}
 
 	/**

@@ -20,7 +20,7 @@
 	@else
 		@foreach($verjaardagen as $profiel)
 			<div class="item">{{date('d-m', strtotime($profiel->gebdatum))}}
-				<span @if($profiel->isJarig()) class="cursief" @endif >{{$profiel->getLink('civitas')}}</span>
+				<span @if($profiel->isJarig()) class="cursief" @endif >{!! $profiel->getLink('civitas') !!}</span>
 			</div>
 		@endforeach
 	@endif

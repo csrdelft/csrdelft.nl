@@ -56,13 +56,13 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	protected static $table_name = 'activiteiten';
 
 	public function getUrl() {
-		return '/groepen/activiteiten/' . $this->id . '/';
+		return '/groepen/activiteiten/' . $this->id;
 	}
 
 	/**
 	 * Has permission for action?
 	 *
-	 * @param AccessAction $action
+	 * @param string $action
 	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */

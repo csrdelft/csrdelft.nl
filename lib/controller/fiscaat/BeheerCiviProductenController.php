@@ -18,21 +18,34 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
- * @property CiviProductModel $model
  */
 class BeheerCiviProductenController extends AbstractController {
-	public function __construct() {
-		$this->model = CiviProductModel::instance();
+	/**
+	 * @var CiviProductModel
+	 */
+	private $civiProductModel;
+	/**
+	 * @var CiviBestellingInhoudModel
+	 */
+	private $civiBestellingInhoudModel;
+	/**
+	 * @var CiviPrijsModel
+	 */
+	private $civiPrijsModel;
+
+	public function __construct(CiviProductModel $civiProductModel, CiviBestellingInhoudModel $civiBestellingInhoudModel, CiviPrijsModel $civiPrijsModel) {
+		$this->civiProductModel = $civiProductModel;
+		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
+		$this->civiPrijsModel = $civiPrijsModel;
 	}
 
 	public function suggesties(Request $request) {
 		$query = sql_contains($request->query->get('q'));
-		return new CiviProductSuggestiesResponse($this->model->find('beschrijving LIKE ?', [$query]));
+		return new CiviProductSuggestiesResponse($this->civiProductModel->find('beschrijving LIKE ?', [$query]));
 	}
 
 	public function lijst() {
-		return new CiviProductTableResponse($this->model->find());
+		return new CiviProductTableResponse($this->civiProductModel->find());
 	}
 
 	public function overzicht() {
@@ -50,8 +63,8 @@ class BeheerCiviProductenController extends AbstractController {
 		}
 
 		/** @var CiviProduct $product */
-		$product = $this->model->retrieveByUUID($selection[0]);
-		$product->prijs = $this->model->getPrijs($product)->prijs;
+		$product = $this->civiProductModel->retrieveByUUID($selection[0]);
+		$product->prijs = $this->civiProductModel->getPrijs($product)->prijs;
 		return new CiviProductForm($product);
 	}
 
@@ -63,12 +76,12 @@ class BeheerCiviProductenController extends AbstractController {
 			$existingOrders = array();
 			foreach ($selection as $uuid) {
 				/** @var CiviProduct $product */
-				$product = $this->model->retrieveByUUID($uuid);
+				$product = $this->civiProductModel->retrieveByUUID($uuid);
 
 				if ($product) {
-					if (CiviBestellingInhoudModel::instance()->count('product_id = ?', array($product->id)) == 0) {
-						CiviPrijsModel::instance()->verwijderVoorProduct($product);
-						$this->model->delete($product);
+					if ($this->civiBestellingInhoudModel->count('product_id = ?', array($product->id)) == 0) {
+						$this->civiPrijsModel->verwijderVoorProduct($product);
+						$this->civiProductModel->delete($product);
 						$removed[] = $product;
 					} else {
 						$existingOrders[] = $product;
@@ -94,9 +107,9 @@ class BeheerCiviProductenController extends AbstractController {
 
 		if ($form->isPosted() && $form->validate()) {
 			if ($product->id) {
-				$this->model->update($product);
+				$this->civiProductModel->update($product);
 			} else {
-				$this->model->create($product);
+				$this->civiProductModel->create($product);
 			}
 
 			return new CiviProductTableResponse([$product]);

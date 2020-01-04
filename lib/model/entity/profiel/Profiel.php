@@ -12,11 +12,7 @@ use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\groepen\BesturenModel;
-use CsrDelft\model\groepen\CommissiesModel;
 use CsrDelft\model\groepen\KringenModel;
-use CsrDelft\model\groepen\leden\BestuursLedenModel;
-use CsrDelft\model\groepen\leden\CommissieLedenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\ProfielModel;
@@ -399,7 +395,6 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		} elseif ($this->lidjaar === 2013) {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
-		$k = '';
 		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
 			$title = '';
 		} else {
@@ -432,7 +427,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 		if ($vorm === 'user') {
 			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
-		if (!$force AND !LoginModel::mag(P_LOGGED_IN)) {
+		if ($vorm != 'civitas' AND !$force AND !LoginModel::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
@@ -643,7 +638,7 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getVerticale() {
-		return VerticalenModel::get($this->verticale);
+		return VerticalenModel::instance()->get($this->verticale);
 	}
 
 	public function getKring() {

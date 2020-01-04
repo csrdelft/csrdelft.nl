@@ -53,7 +53,7 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @param CorveeTakenModel $corveeTakenModel
 	 * @param CorveeRepetitiesModel $corveeRepetitiesModel
 	 */
-	protected function __construct(
+	public function __construct(
 		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
 		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
 		ArchiefMaaltijdModel $archiefMaaltijdModel,

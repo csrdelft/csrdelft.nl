@@ -35,7 +35,7 @@ class Lichting extends AbstractGroep {
 	protected static $table_name = 'lichtingen';
 
 	public function getUrl() {
-		return '/groepen/lichtingen/' . $this->lidjaar . '/';
+		return '/groepen/lichtingen/' . $this->lidjaar;
 	}
 
 	/**

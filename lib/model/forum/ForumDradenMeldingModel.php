@@ -56,7 +56,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 		if ($voorkeur) {
 			return $voorkeur->niveau;
 		} else {
-			$wilMeldingBijVermelding = LidInstellingenModel::getInstellingVoorLid('forum', 'meldingStandaard', $uid);
+			$wilMeldingBijVermelding = LidInstellingenModel::instance()->getInstellingVoorLid('forum', 'meldingStandaard', $uid);
 			return $wilMeldingBijVermelding === 'ja' ? ForumDraadMeldingNiveau::VERMELDING : ForumDraadMeldingNiveau::NOOIT;
 		}
 	}
@@ -133,7 +133,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 		$draad = $post->getForumDraad();
 
 		// Laad meldingsbericht in
-		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/forumaltijdmelding.mail');
+		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumaltijdmelding.mail');
 		foreach ($this->getAltijdMeldingVoorDraad($draad) as $volger) {
 			$volger = ProfielModel::get($volger->uid);
 
@@ -168,7 +168,7 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 		$draad = $post->getForumDraad();
 
 		// Laad meldingsbericht in
-		$bericht = file_get_contents(SMARTY_TEMPLATE_DIR . 'mail/forumvermeldingmelding.mail');
+		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumvermeldingmelding.mail');
 		$genoemden = $this->zoekGenoemdeLeden($post->tekst);
 		foreach ($genoemden as $uid) {
 			$genoemde = ProfielModel::get($uid);

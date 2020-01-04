@@ -6,6 +6,12 @@
 	@stylesheet('extern.css')
 @endsection
 
+{{--Verberg login popup--}}
+@section('loginpopup')
+@endsection
+
+@section('loginbutton')
+@endsection
 
 @section('content')
 

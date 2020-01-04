@@ -220,6 +220,8 @@ function sliding_pager($params) {
 function bbcode(string $string, string $mode = 'normal') {
 	if ($mode === 'html') {
 		return CsrBB::parseHtml($string);
+	} else if ($mode == 'mail') {
+		return CsrBB::parseMail($string);
 	} else {
 		return CsrBB::parse($string);
 	}
@@ -412,4 +414,16 @@ function escape_ical($string, $prefix_length) {
 		$wrap .= "\r\n " . wordwrap($rest, 59, "\r\n ", true);
 	}
 	return $wrap;
+}
+
+function commitHash($full = false) {
+	if ($full) {
+		return trim(`git rev-parse HEAD`);
+	} else {
+		return trim(`git rev-parse --short HEAD`);
+	}
+}
+
+function commitLink() {
+	return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
 }

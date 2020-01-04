@@ -3,55 +3,61 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\toestemming\ToestemmingLijstResponse;
 use CsrDelft\view\toestemming\ToestemmingLijstTable;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 27/04/2018
- *
- * @property LidToestemmingModel $model
  */
 class ToestemmingController extends AbstractController {
-	public function __construct() {
-		$this->model = LidToestemmingModel::instance();
+	/**
+	 * @var LidToestemmingModel
+	 */
+	private $lidToestemmingModel;
+	/**
+	 * @var CmsPaginaRepository
+	 */
+	private $cmsPaginaRepository;
+
+	public function __construct(LidToestemmingModel $lidToestemmingModel, CmsPaginaRepository $cmsPaginaRepository) {
+		$this->lidToestemmingModel = $lidToestemmingModel;
+		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function POST_overzicht() {
 		$form = new ToestemmingModalForm();
 
 		if ($form->isPosted() && $form->validate()) {
 
-			$this->model->save();
+			$this->lidToestemmingModel->save();
 			setMelding('Toestemming opgeslagen', 1);
-			return new CmsPaginaView(CmsPaginaModel::get('thuis'));
+			return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
 		} else {
 			return $form;
 		}
 	}
 
-	/**
-	 * @throws \SmartyException
-	 */
 	public function GET_overzicht() {
-		return view('default', ['content' => new CmsPaginaView(CmsPaginaModel::get('thuis')), 'modal' => new ToestemmingModalForm()]);
+		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')), 'modal' => new ToestemmingModalForm()]);
 	}
 
 	public function POST_annuleren() {
 		$_SESSION['stop_nag'] = time();
 
-		return new CmsPaginaView(CmsPaginaModel::get('thuis'));
+		return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
 	}
 
 	public function GET_annuleren() {
@@ -79,7 +85,7 @@ class ToestemmingController extends AbstractController {
                 'iedereen' => LidStatus::getTypeOptions(),
             ];
 
-            $toestemming = group_by('uid', LidToestemmingModel::instance()->getToestemmingForIds($ids));
+            $toestemming = group_by('uid', $this->lidToestemmingModel->getToestemmingForIds($ids));
 
             $toestemmingFiltered = [];
             foreach ($toestemming as $uid => $toestemmingen) {

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\maalcie;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -107,6 +108,8 @@ class MaaltijdAanmelding extends PersistentEntity {
 			case -1:
 				return '&lt; 0';
 		}
+
+		throw new CsrException("Ongeldige saldo status: " . $status);
 	}
 
 	protected static $table_name = 'mlt_aanmeldingen';

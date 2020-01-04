@@ -64,14 +64,14 @@ profiel-saldo:
 
 profiel-pasfoto-default:
   path: /profiel/pasfoto/{uid}.jpg
-  controller: CsrDelft\controller\ProfielController::pasfoto
+  controller: CsrDelft\controller\PasfotoController::pasfoto
   methods: GET
   requirements: { uid: '.{4}' }
   defaults: { _mag: P_LEDEN_READ }
 
 profiel-pasfoto:
   path: /profiel/pasfoto/{uid}.{vorm}.jpg
-  controller: CsrDelft\controller\ProfielController::pasfoto
+  controller: CsrDelft\controller\PasfotoController::pasfoto
   methods: GET
   requirements: { uid: '.{4}' }
   defaults: { type: 'civitas', _mag: P_LEDEN_READ }

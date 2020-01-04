@@ -7,6 +7,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
 use Exception;
 use Maknz\Slack\Client as SlackClient;
+use Symfony\Component\Debug\Exception\FlattenException;
 
 /**
  * Class ShutdownHandler.
@@ -43,6 +44,23 @@ final class ShutdownHandler {
 		}
 	}
 
+	public static function emailException(FlattenException $exception) {
+		$error['message'] = $exception->getMessage();
+		$debug['trace'] = $exception->getTrace();
+		$debug['POST'] = $_POST;
+		$debug['GET'] = $_GET;
+		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
+		$debug['SERVER'] = $_SERVER;
+		unset($debug['SERVER']['HTTP_COOKIE']); // Voorkom dat sessie en remember cookies gemaild worden
+		unset($debug['SERVER']['DATABASE_URL']);
+
+		$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
+		$headers[] = 'Content-Type: text/plain; charset=UTF-8';
+		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
+		$subject = 'Fatal error: ' . $debug['error']['message'];
+		mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
+	}
+
 	/**
 	 * Schrijf naar de debug log in de database.
 	 *
@@ -63,8 +81,12 @@ final class ShutdownHandler {
 	public static function touchHandler() {
 		$debug = self::getDebug();
 		if ($debug !== null && self::isError($debug)) {
-			touch(DATA_PATH . 'foutmelding.last');
+			touch(VAR_PATH . 'foutmelding.last');
 		}
+	}
+
+	public static function slackException(FlattenException $exception) {
+		static::slackHandler(1, $exception->getMessage(), $exception->getFile(), $exception->getLine());
 	}
 
 	/**
@@ -125,6 +147,8 @@ final class ShutdownHandler {
 
 			$errorName = errorName($errno);
 			$moment = date('r');
+			$commit = commitHash();
+			$commitLink = commitLink();
 
 			$foutmelding->setText(<<<MD
 *Foutmelding*
@@ -135,8 +159,9 @@ final class ShutdownHandler {
 • Regel `{$errline}`
 • Url `{$_SERVER['REQUEST_URI']}`
 • Method `{$_SERVER['REQUEST_METHOD']}`
-• Veroorzaakt door `{$_SESSION['_uid']}`
+• Veroorzaakt door <https://csrdelft.nl/profiel/{$_SESSION['_uid']}|`{$_SESSION['_uid']}`>
 • Browser `{$_SERVER['HTTP_USER_AGENT']}`
+• Commit <$commitLink|`$commit`>
 MD
 			);
 

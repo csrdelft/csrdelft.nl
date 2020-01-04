@@ -1,1 +1,1 @@
-<?php return '<div class="citaatContainer bb-tag-citaat">Citaat van Albert Einstein:<div class="citaat">Why is it that nobody understands me, yet everybody likes me?</div></div>';
+<?php return '<div class="citaatContainer bb-tag-citaat"><em>Citaat van Albert Einstein:</em><blockquote>Why is it that nobody understands me, yet everybody likes me?</blockquote></div>';

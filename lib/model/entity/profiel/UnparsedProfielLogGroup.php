@@ -16,7 +16,7 @@ class UnparsedProfielLogGroup extends ProfielLogGroup {
 
 	/**
 	 * BB-code uit het oude log.
-	 * @var content
+	 * @var string content
 	 */
 	public $content;
 	/**

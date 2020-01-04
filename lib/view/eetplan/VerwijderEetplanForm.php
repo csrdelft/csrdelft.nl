@@ -3,7 +3,7 @@
 namespace CsrDelft\view\eetplan;
 
 
-use CsrDelft\model\entity\eetplan\Eetplan;
+use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -21,7 +21,7 @@ class VerwijderEetplanForm extends ModalForm {
 
 		$avondenLijst = [];
 		foreach ($avonden as $eetplan) {
-			$avondenLijst[$eetplan->avond] = $eetplan->avond;
+			$avondenLijst[$eetplan->avond->format(DATE_FORMAT)] = $eetplan->avond->format(DATE_FORMAT);
 		}
 
 		$fields[] = new RequiredSelectField('avond', null, 'Avond', $avondenLijst);

@@ -39,7 +39,7 @@ abstract class BbTagGroep extends BbTag {
 			return $this->groepLight($groep, 'ketzer', $this->getLidNaam());
 		} else {
 			$url = $this->getModel()::getUrl();
-			return ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="' . $url . 'beheren">Zoeken</a>';
+			return ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>';
 		}
 	}
 
@@ -73,7 +73,7 @@ abstract class BbTagGroep extends BbTag {
 			$settings = [
 				'mijn_uid' => $uid,
 				'mijn_link' => ProfielModel::getLink($uid),
-				'aanmeld_url' => $groep->getUrl() . 'aanmelden2/' . $uid,
+				'aanmeld_url' => $groep->getUrl() . '/aanmelden2/' . $uid,
 			];
 
 			return vsprintf('<groep class="vue-context" :groep="%s" :settings="%s"></groep>', [
@@ -92,7 +92,7 @@ abstract class BbTagGroep extends BbTag {
 	private function getGroep()
 	{
 		$this->content = (int)$this->content;
-		$groep = $this->getModel()::get($this->content);
+		$groep = $this->getModel()::instance()->get($this->content);
 		if (!$groep) {
 			throw new BbException("Groep met id $this->content does not exist");
 		}

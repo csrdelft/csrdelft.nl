@@ -52,7 +52,6 @@
 				<div class="col-auto">
 					<div class="btn-toolbar">
 						<div class="btn-group">
-							{{--{*<a href="/geolocation/map/{$profiel->uid}" class="btn" title="Huidige locatie op kaart tonen">{icon get="map"}</a>*}--}}
 							@if($profiel->isInGoogleContacts())
 								<a href="/profiel/{{$profiel->uid}}/addToGoogleContacts" class="btn btn-light"
 									 title="Dit profiel opdateren in mijn google adresboek">
@@ -314,7 +313,7 @@
 								(leider)
 							@elseif($profiel->kringcoach)
 								<span
-									title="Kringcoach van verticale {{\CsrDelft\model\groepen\VerticalenModel::get($profiel->verticale)->naam}}">(kringcoach)</span>
+									title="Kringcoach van verticale {{\CsrDelft\model\groepen\VerticalenModel::instance()->get($profiel->verticale)->naam}}">(kringcoach)</span>
 							@endif
 						</a>
 					</dd>

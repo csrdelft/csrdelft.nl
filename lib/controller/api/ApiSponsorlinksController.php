@@ -20,7 +20,6 @@ class ApiSponsorlinksController {
      * @url GET /timestamp
      */
 	public function getTimestamp() {
-	    $timestamp = filemtime(DATA_PATH . 'sponsorlinks.json');
-	    return $timestamp;
+		return filemtime(DATA_PATH . 'sponsorlinks.json');
     }
 }

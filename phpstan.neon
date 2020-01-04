@@ -7,6 +7,12 @@ parameters:
         - htdocs/wiki
         - htdocs/bar
         - htdocs/tools
+				# The files below still have to be made error-free
+        - lib/view
+        - lib/templates
+        - lib/model
+        - lib/common
+        - lib/controller/groepen/AbstractGroepenController.php
     autoload_files:
         - phpstan.autoload.php
     ignoreErrors:

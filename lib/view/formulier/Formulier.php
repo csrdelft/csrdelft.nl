@@ -100,7 +100,7 @@ class Formulier implements View, Validator, ToResponse {
 	private function loadProperty(InputField $field) {
 		$fieldName = $field->getName();
 		if ($this->model && property_exists($this->model, $fieldName)) {
-			$this->model->$fieldName = $field->getValue();
+			$this->model->$fieldName = $field->getFormattedValue();
 		}
 	}
 

@@ -31,7 +31,7 @@
 
 #cd-main-overlay {
   background-image:  url('../../images/bg/stars.jpg');
-  background-size: cover;
+  background-repeat: repeat;
 }
 #cd-main-overlay.is-visible,
 #menu.target ~ #cd-main-overlay,

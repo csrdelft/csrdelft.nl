@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\controller\api\ApiActiviteitenController;
 use CsrDelft\controller\api\ApiAgendaController;
 use CsrDelft\controller\api\ApiAuthController;
@@ -7,7 +8,9 @@ use CsrDelft\controller\api\ApiForumController;
 use CsrDelft\controller\api\ApiLedenController;
 use CsrDelft\controller\api\ApiMaaltijdenController;
 use CsrDelft\controller\api\ApiSponsorlinksController;
+use CsrDelft\Kernel;
 use Jacwright\RestServer\RestServer;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once 'configuratie.include.php';
 
@@ -30,7 +33,9 @@ $mode = DEBUG ? 'debug' : 'production';
 $server = new RestServer($mode);
 
 $server->root = '/API/2.0';
-$server->cacheDir = DATA_PATH . 'restserver/';
+$server->cacheDir = VAR_PATH . 'restserver/';
+
+is_dir($server->cacheDir) || mkdir($server->cacheDir, 0777, true);
 
 $server->addClass(ApiActiviteitenController::class, '/activiteiten');
 $server->addClass(ApiAgendaController::class, '/agenda');

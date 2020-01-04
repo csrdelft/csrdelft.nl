@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\model\eetplan\EetplanModel;
+use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
@@ -10,7 +10,7 @@ use CsrDelft\view\datatable\Multiplicity;
 
 class EetplanBekendeHuizenTable extends DataTable {
 	public function __construct() {
-		parent::__construct(EetplanModel::ORM, '/eetplan/bekendehuizen', 'Novieten die huizen kennen');
+		parent::__construct(Eetplan::class, '/eetplan/bekendehuizen', 'Novieten die huizen kennen');
 
 		$this->selectEnabled = false;
 

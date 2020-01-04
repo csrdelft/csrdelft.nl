@@ -12,7 +12,6 @@ use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\datatable\RemoveRowsResponse;
-use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenView;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
@@ -23,32 +22,65 @@ use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class MaaltijdenFiscaatController {
-	private $model;
+	/**
+	 * @var CiviProductModel
+	 */
+	private $civiProductModel;
+	/**
+	 * @var MaaltijdenModel
+	 */
+	private $maaltijdenModel;
+	/**
+	 * @var MaaltijdAanmeldingenModel
+	 */
+	private $maaltijdAanmeldingenModel;
+	/**
+	 * @var CiviBestellingModel
+	 */
+	private $civiBestellingModel;
+	/**
+	 * @var CiviSaldoModel
+	 */
+	private $civiSaldoModel;
 
-	public function __construct() {
-		$this->model = CiviProductModel::instance();
+	public function __construct(
+		CiviProductModel $civiProductModel,
+		MaaltijdenModel $maaltijdenModel,
+		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
+		CiviBestellingModel $civiBestellingModel,
+		CiviSaldoModel $civiSaldoModel
+	) {
+		$this->civiProductModel = $civiProductModel;
+		$this->maaltijdenModel = $maaltijdenModel;
+		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
+		$this->civiBestellingModel = $civiBestellingModel;
+		$this->civiSaldoModel = $civiSaldoModel;
 	}
 
 	public function GET_overzicht() {
-		$body = new BeheerMaaltijdenView(new FiscaatMaaltijdenOverzichtTable(), 'Overzicht verwerkte maaltijden');
-		return view('default', ['content' => $body]);
+		return view('maaltijden.pagina', [
+			'titel' => 'Overzicht verwerkte maaltijden',
+			'content' => new FiscaatMaaltijdenOverzichtTable(),
+		]);
 	}
 
 	public function POST_overzicht() {
-		$data = MaaltijdenModel::instance()->find('verwerkt = true');
+		$data = $this->maaltijdenModel->find('verwerkt = true');
 		return new FiscaatMaaltijdenOverzichtResponse($data);
 	}
 
 	public function GET_onverwerkt() {
-		$body = new BeheerMaaltijdenView(new OnverwerkteMaaltijdenTable(), 'Onverwerkte Maaltijden');
-		return view('default', ['content' => $body]);
+		return view('maaltijden.pagina', [
+			'titel' => 'Onverwerkte Maaltijden',
+			'content' => new OnverwerkteMaaltijdenTable(),
+		]);
 	}
 
 	public function POST_verwerk() {
 		# Haal maaltijd op
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var Maaltijd $maaltijd */
-		$maaltijd = MaaltijdenModel::instance()->retrieveByUUID($selection[0]);
+		$maaltijd = $this->maaltijdenModel->retrieveByUUID($selection[0]);
 
 		# Controleer of de maaltijd gesloten is en geweest is
 		if ($maaltijd->gesloten == false OR date_create(sprintf("%s %s", $maaltijd->datum, $maaltijd->tijd)) >= date_create("now")) {
@@ -61,30 +93,26 @@ class MaaltijdenFiscaatController {
 		}
 
 		$maaltijden = Database::transaction(function () use ($maaltijd) {
-			$aanmeldingen_model = MaaltijdAanmeldingenModel::instance();
-			$bestelling_model = CiviBestellingModel::instance();
-			$civisaldo_model = CiviSaldoModel::instance();
-
 			# Ga alle personen in de maaltijd af
-			$aanmeldingen = $aanmeldingen_model->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
+			$aanmeldingen = $this->maaltijdAanmeldingenModel->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
 
 			/** @var Civibestelling[] $bestellingen */
 			$bestellingen = array();
 			# Maak een bestelling voor deze persoon
 			foreach ($aanmeldingen as $aanmelding) {
-				$bestellingen[] = $aanmeldingen_model->maakCiviBestelling($aanmelding);
+				$bestellingen[] = $this->maaltijdAanmeldingenModel->maakCiviBestelling($aanmelding);
 			}
 
 			# Reken de bestelling af
 			foreach ($bestellingen as $bestelling) {
-				$bestelling_model->create($bestelling);
-				$civisaldo_model->verlagen($bestelling->uid, $bestelling->totaal);
+				$this->civiBestellingModel->create($bestelling);
+				$this->civiSaldoModel->verlagen($bestelling->uid, $bestelling->totaal);
 			}
 
 			# Zet de maaltijd op verwerkt
 			$maaltijd->verwerkt = true;
 
-			MaaltijdenModel::instance()->update($maaltijd);
+			$this->maaltijdenModel->update($maaltijd);
 
 			return array($maaltijd);
 		});

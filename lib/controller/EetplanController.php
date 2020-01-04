@@ -3,16 +3,17 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\eetplan\EetplanBekendenModel;
-use CsrDelft\model\eetplan\EetplanModel;
-use CsrDelft\model\entity\eetplan\Eetplan;
-use CsrDelft\model\entity\eetplan\EetplanBekenden;
+use CsrDelft\entity\eetplan\Eetplan;
+use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\eetplan\EetplanBekendenRepository;
+use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenForm;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenResponse;
@@ -35,17 +36,21 @@ use CsrDelft\view\View;
 class EetplanController {
 	/** @var string */
 	private $lichting;
-	/** @var EetplanModel */
+	/** @var EetplanRepository */
 	private $eetplanModel;
-	/** @var EetplanBekendenModel */
+	/** @var EetplanBekendenRepository */
 	private $eetplanBekendenModel;
 	/** @var WoonoordenModel */
 	private $woonoordenModel;
 
-	public function __construct() {
-		$this->eetplanModel = EetplanModel::instance();
-		$this->eetplanBekendenModel = EetplanBekendenModel::instance();
-		$this->woonoordenModel = WoonoordenModel::instance();
+	public function __construct(
+		EetplanRepository $eetplanRepository,
+		EetplanBekendenRepository $eetplanBekendenModel,
+		WoonoordenModel $woonoordenModel
+	) {
+		$this->eetplanModel = $eetplanRepository;
+		$this->eetplanBekendenModel = $eetplanBekendenModel;
+		$this->woonoordenModel = $woonoordenModel;
 		$this->lichting = substr((string)LichtingenModel::getJongsteLidjaar(), 2, 2);
 	}
 
@@ -63,7 +68,7 @@ class EetplanController {
 	public function noviet($uid = null) {
 		$eetplan = $this->eetplanModel->getEetplanVoorNoviet($uid);
 		if ($eetplan === false) {
-			throw new CsrToegangException("Geen eetplan gevonden voor deze noviet", 404);
+			throw new CsrNotFoundException("Geen eetplan gevonden voor deze noviet");
 		}
 
 		return view('eetplan.noviet', [
@@ -75,11 +80,11 @@ class EetplanController {
 	public function huis($id = null) {
 		$eetplan = $this->eetplanModel->getEetplanVoorHuis($id, $this->lichting);
 		if ($eetplan == []) {
-			throw new CsrGebruikerException('Huis niet gevonden', 404);
+			throw new CsrGebruikerException('Huis niet gevonden');
 		}
 
 		return view('eetplan.huis', [
-			'woonoord' => WoonoordenModel::get($id),
+			'woonoord' => WoonoordenModel::instance()->get($id),
 			'eetplan' => $eetplan,
 		]);
 	}
@@ -161,7 +166,7 @@ class EetplanController {
 		return new EetplanHuizenZoekenResponse($woonoorden);
 	}
 
-	public function novietrelatie($actie = null) {
+	public function novietrelatie() {
 		return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
 	}
 
@@ -246,7 +251,7 @@ class EetplanController {
 		if (!$form->validate()) {
 			return $form;
 		} else {
-			$avond = $form->getValues()['avond'];
+			$avond = date_create($form->getValues()['avond']);
 			$this->eetplanModel->verwijderEetplan($avond, $this->lichting);
 
 			return view('eetplan.table', ['eetplan' => $this->eetplanModel->getEetplan($this->lichting)]);

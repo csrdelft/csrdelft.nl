@@ -2,8 +2,7 @@
 
 namespace CsrDelft\view\documenten;
 
-use CsrDelft\model\documenten\DocumentCategorieModel;
-use CsrDelft\model\entity\documenten\Document;
+use CsrDelft\entity\documenten\Document;
 use CsrDelft\model\entity\Map;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
@@ -23,7 +22,7 @@ class DocumentToevoegenForm extends Formulier {
 
 	private $uploader;
 
-	public function __construct() {
+	public function __construct($categorieNamen) {
 		parent::__construct(new Document(), '/documenten/toevoegen', 'Document toevoegen');
 
 		$map = new Map();
@@ -34,7 +33,7 @@ class DocumentToevoegenForm extends Formulier {
 			$this->model->categorie_id = filter_input(INPUT_GET, 'catID', FILTER_VALIDATE_INT);
 		}
 
-		$fields[] = new SelectField('categorie_id', $this->model->categorie_id, 'Categorie', DocumentCategorieModel::instance()->getCategorieNamen());
+		$fields[] = new SelectField('categorie_id', $this->model->categorie_id, 'Categorie', $categorieNamen);
 		$fields[] = new RequiredTextField('naam', $this->model->naam, 'Documentnaam');
 		$fields[] = $this->uploader = new RequiredFileField('document', 'Document', $this->model, $map);
 		$fields['rechten'] = new RechtenField('leesrechten', $this->model->leesrechten, 'Leesrechten');

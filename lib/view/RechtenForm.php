@@ -24,7 +24,6 @@ class RechtenForm extends ModalForm {
 	 * RechtenForm constructor.
 	 * @param AccessControl $ac
 	 * @param $action
-	 * @throws \Exception
 	 */
 	public function __construct(AccessControl $ac, $action) {
 		parent::__construct($ac, '/rechten/' . $action . '/' . $ac->environment . '/' . $ac->resource, 'Rechten aanpassen voor ', true);

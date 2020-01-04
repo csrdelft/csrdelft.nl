@@ -11,8 +11,8 @@ class FiscaatController {
 	/** @var CiviSaldoModel */
 	private $civiSaldoModel;
 
-	public function __construct() {
-		$this->civiSaldoModel = CiviSaldoModel::instance();
+	public function __construct(CiviSaldoModel $civiSaldoModel) {
+		$this->civiSaldoModel = $civiSaldoModel;
 	}
 
 	public function overzicht() {

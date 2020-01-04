@@ -15,42 +15,45 @@ use CsrDelft\view\menubeheer\MenuItemForm;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class MenuBeheerController {
-	private $model;
+	/**
+	 * @var MenuModel
+	 */
+	private $menuModel;
 
-	public function __construct() {
-		$this->model = MenuModel::instance();
+	public function __construct(MenuModel $menuModel) {
+		$this->menuModel = $menuModel;
 	}
 
 	public function beheer($menu_name = 'main') {
 		if ($menu_name != LoginModel::getUid() AND !LoginModel::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
-		$root = $this->model->getMenu($menu_name);
+		$root = $this->menuModel->getMenu($menu_name);
 		if (!$root OR !$root->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		return view('menubeheer.tree', [
 			'root' => $root,
-			'menus' => MenuModel::instance()->getMenuBeheerLijst(),
+			'menus' => $this->menuModel->getMenuBeheerLijst(),
 		]);
 	}
 
 	public function toevoegen($parent_id) {
 		if ($parent_id == 'favoriet') {
-			$parent = $this->model->getMenuRoot(LoginModel::getUid());
+			$parent = $this->menuModel->getMenuRoot(LoginModel::getUid());
 		} else {
-			$parent = $this->model->getMenuItem((int)$parent_id);
+			$parent = $this->menuModel->getMenuItem((int)$parent_id);
 		}
 		if (!$parent OR !$parent->magBeheren()) {
 			throw new CsrToegangException();
 		}
-		$item = $this->model->nieuw($parent->item_id);
+		$item = $this->menuModel->nieuw($parent->item_id);
 		if (!$item OR !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$form = new MenuItemForm($item, 'toevoegen', $parent_id); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
-			$this->model->create($item);
+			$this->menuModel->create($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
 			return new MeldingResponse();
 		} else {
@@ -59,13 +62,13 @@ class MenuBeheerController {
 	}
 
 	public function bewerken($item_id) {
-		$item = $this->model->getMenuItem((int)$item_id);
+		$item = $this->menuModel->getMenuItem((int)$item_id);
 		if (!$item OR !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$form = new MenuItemForm($item, 'bewerken', $item->item_id); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
-			$rowCount = $this->model->update($item);
+			$rowCount = $this->menuModel->update($item);
 			if ($rowCount > 0) {
 				setMelding($item->tekst . ' bijgewerkt', 1);
 			} else {
@@ -78,11 +81,11 @@ class MenuBeheerController {
 	}
 
 	public function verwijderen($item_id) {
-		$item = $this->model->getMenuItem((int)$item_id);
+		$item = $this->menuModel->getMenuItem((int)$item_id);
 		if (!$item OR !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
-		$rowCount = $this->model->removeMenuItem($item);
+		$rowCount = $this->menuModel->removeMenuItem($item);
 		setMelding($item->tekst . ' verwijderd', 1);
 		if ($rowCount > 0) {
 			setMelding($rowCount . ' menu-items niveau omhoog verplaatst.', 2);
@@ -91,12 +94,12 @@ class MenuBeheerController {
 	}
 
 	public function zichtbaar($item_id) {
-		$item = $this->model->getMenuItem((int)$item_id);
+		$item = $this->menuModel->getMenuItem((int)$item_id);
 		if (!$item OR !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$item->zichtbaar = !$item->zichtbaar;
-		$rowCount = $this->model->update($item);
+		$rowCount = $this->menuModel->update($item);
 		if ($rowCount > 0) {
 			setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
 		} else {

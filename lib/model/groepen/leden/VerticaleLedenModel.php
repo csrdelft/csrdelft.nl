@@ -24,10 +24,10 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 	 * @param string $uid
 	 * @return VerticaleLid|false
 	 */
-	public static function get(AbstractGroep $verticale, $uid) {
+	public function get(AbstractGroep $verticale, $uid) {
 		$profiel = ProfielModel::get($uid);
 		if ($profiel AND $profiel->verticale === $verticale->letter) {
-			$lid = static::instance()->nieuw($verticale, $uid);
+			$lid = $this->nieuw($verticale, $uid);
 			if ($profiel->verticaleleider) {
 				$lid->opmerking = 'Leider';
 			} elseif ($profiel->kringcoach) {
@@ -52,7 +52,7 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 		$where = 'verticale = ? AND status IN (' . implode(', ', array_fill(0, count($status), '?')) . ')';
 		array_unshift($status, $verticale->letter);
 		foreach (ProfielModel::instance()->prefetch($where, $status) as $profiel) {
-			$lid = static::get($verticale, $profiel->uid);
+			$lid = $this->get($verticale, $profiel->uid);
 			if ($lid) {
 				$leden[] = $lid;
 			}

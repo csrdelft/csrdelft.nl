@@ -2,10 +2,10 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\RememberLoginModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\login\RememberAfterLoginForm;
@@ -20,12 +20,23 @@ use Symfony\Component\HttpFoundation\Response;
  * Controller van de agenda.
  */
 class LoginController extends AbstractController {
+	/**
+	 * @var LoginModel
+	 */
 	private $loginModel;
+	/**
+	 * @var RememberLoginModel
+	 */
 	private $rememberLoginModel;
+	/**
+	 * @var CmsPaginaRepository
+	 */
+	private $cmsPaginaRepository;
 
-	public function __construct() {
-		$this->rememberLoginModel = RememberLoginModel::instance();
-		$this->loginModel = LoginModel::instance();
+	public function __construct(LoginModel $loginModel, RememberLoginModel $rememberLoginModel, CmsPaginaRepository $cmsPaginaRepository) {
+		$this->rememberLoginModel = $rememberLoginModel;
+		$this->loginModel = $loginModel;
+		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
 	public function loginForm (Request $request) {
@@ -50,7 +61,7 @@ class LoginController extends AbstractController {
 				$form = new RememberAfterLoginForm($remember, $values['redirect']);
 				$form->css_classes[] = 'redirect';
 
-				$body = new CmsPaginaView(CmsPaginaModel::get(instelling('stek', 'homepage')));
+				$body = new CmsPaginaView($this->cmsPaginaRepository->find(instelling('stek', 'homepage')));
 				return view('default', ['content' => $body, 'modal' => $form]);
 			}
 			if ($values['redirect']) {

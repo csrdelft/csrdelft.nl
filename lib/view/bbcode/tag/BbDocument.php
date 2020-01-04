@@ -2,11 +2,10 @@
 
 namespace CsrDelft\view\bbcode\tag;
 
-use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\documenten\DocumentModel;
-use CsrDelft\model\entity\documenten\Document;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\documenten\Document;
+use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -54,6 +53,7 @@ class BbDocument extends BbTag {
 	public function parse($arguments = [])
 	{
 		$this->readMainArgument($arguments);
-		$this->document = DocumentModel::instance()->get($this->content);
+		$documentRepository = ContainerFacade::getContainer()->get(DocumentRepository::class);
+		$this->document = $documentRepository->get($this->content);
 	}
 }

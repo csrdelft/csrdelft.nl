@@ -4,8 +4,13 @@ namespace CsrDelft\model\groepen;
 
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\Verticale;
+use CsrDelft\model\security\AccessModel;
 
 class VerticalenModel extends AbstractGroepenModel {
+	public function __construct(AccessModel $accessModel) {
+		parent::__static();
+		parent::__construct($accessModel);
+	}
 
 	const ORM = Verticale::class;
 
@@ -20,9 +25,14 @@ class VerticalenModel extends AbstractGroepenModel {
 	 */
 	protected $default_order = 'letter ASC';
 
-	public static function get($letter) {
-		$verticalen = static::instance()->prefetch('letter = ?', array($letter), null, null, 1);
-		return reset($verticalen);
+	public function get($letter) {
+		$verticalen = $this->prefetch('letter = ?', array($letter), null, null, 1);
+		$verticale = reset($verticalen);
+		if (!empty($verticale)) {
+			return $verticale;
+		}
+
+		return parent::get($letter);
 	}
 
 	public function nieuw($soort = null) {

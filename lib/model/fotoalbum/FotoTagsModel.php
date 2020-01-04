@@ -12,6 +12,10 @@ use CsrDelft\Orm\PersistenceModel;
 class FotoTagsModel extends PersistenceModel {
 
 	const ORM = FotoTag::class;
+	public function __construct() {
+		parent::__static();
+		parent::__construct();
+	}
 
 	/**
 	 * Default ORDER BY

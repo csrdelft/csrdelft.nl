@@ -2,11 +2,11 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\agenda\AgendaModel;
-use CsrDelft\model\entity\agenda\AgendaItem;
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\agenda\AgendaRepository;
 
 class IsHetAlView implements View {
 	/**
@@ -86,7 +86,8 @@ class IsHetAlView implements View {
 				break;
 
 			default:
-				$vandaag = AgendaModel::instance()->zoekWoordAgenda($this->model);
+				$agendaRepository = ContainerFacade::getContainer()->get(AgendaRepository::class);
+				$vandaag = $agendaRepository->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					$this->ja = true;
 					/*
@@ -141,7 +142,11 @@ class IsHetAlView implements View {
 				break;
 
 			case 'foutmelding':
-				echo '<div class="ja">' . reldate(date('c', filemtime(DATA_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
+				if (file_exists(VAR_PATH . 'foutmelding.last')) {
+					echo '<div class="ja">' . reldate(date('c', filemtime(VAR_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
+				} else {
+					echo '<div class="nee">Geen foutmelding in het systeem.</div>';
+				}
 				break;
 
 			case 'wist u dat':

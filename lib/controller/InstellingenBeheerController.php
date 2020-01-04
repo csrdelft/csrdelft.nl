@@ -13,10 +13,13 @@ use CsrDelft\model\security\LoginModel;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class InstellingenBeheerController {
-	private $model;
+	/**
+	 * @var InstellingenModel
+	 */
+	private $instellingenModel;
 
-	public function __construct() {
-		$this->model = InstellingenModel::instance();
+	public function __construct(InstellingenModel $instellingenModel) {
+		$this->instellingenModel = $instellingenModel;
 	}
 
 	protected function assertToegang($module = null) {
@@ -44,8 +47,8 @@ class InstellingenBeheerController {
 	public function module($module = null) {
 		$this->assertToegang($module);
 
-		if (in_array($module, $this->model->getModules())) {
-			$instellingen = $this->model->getModuleKeys($module);
+		if (in_array($module, $this->instellingenModel->getModules())) {
+			$instellingen = $this->instellingenModel->getModuleKeys($module);
 		} else {
 			$instellingen = null;
 			$module = null;
@@ -53,7 +56,7 @@ class InstellingenBeheerController {
 
 		return view('instellingenbeheer.beheer', [
 			'module' => $module,
-			'modules' => $this->model->getModules(),
+			'modules' => $this->instellingenModel->getModules(),
 			'instellingen' => $instellingen,
 		]);
 	}
@@ -62,7 +65,7 @@ class InstellingenBeheerController {
 		$this->assertToegang($module);
 
 		$waarde = filter_input(INPUT_POST, 'waarde', FILTER_UNSAFE_RAW);
-		$instelling = $this->model->wijzigInstelling($module, $id, $waarde);
+		$instelling = $this->instellingenModel->wijzigInstelling($module, $id, $waarde);
 
 		return view('instellingenbeheer.regel', [
 			'waarde' => $instelling->waarde,
@@ -74,7 +77,7 @@ class InstellingenBeheerController {
 	public function reset($module, $id) {
 		$this->assertToegang($module);
 
-		$instelling = $this->model->wijzigInstelling($module, $id, $this->model->getDefault($module, $id));
+		$instelling = $this->instellingenModel->wijzigInstelling($module, $id, $this->instellingenModel->getDefault($module, $id));
 
 		return view('instellingenbeheer.regel', [
 			'waarde' => $instelling->waarde,

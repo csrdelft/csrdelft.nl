@@ -5,9 +5,14 @@ namespace CsrDelft\model\groepen;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\HuisStatus;
 use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 
 class WoonoordenModel extends AbstractGroepenModel {
+	public function __construct(AccessModel $accessModel) {
+		parent::__static();
+		parent::__construct($accessModel);
+	}
 
 	const ORM = Woonoord::class;
 

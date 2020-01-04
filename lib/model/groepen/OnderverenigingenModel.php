@@ -5,9 +5,14 @@ namespace CsrDelft\model\groepen;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\Ondervereniging;
 use CsrDelft\model\entity\groepen\OnderverenigingStatus;
+use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 
 class OnderverenigingenModel extends AbstractGroepenModel {
+	public function __construct(AccessModel $accessModel) {
+		parent::__static();
+		parent::__construct($accessModel);
+	}
 
 	const ORM = Ondervereniging::class;
 

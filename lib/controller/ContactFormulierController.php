@@ -37,7 +37,7 @@ class ContactFormulierController {
 		foreach ($interesses as $interesse) $interessestring .= " * " . $interesse . "\n";
 
 		if ($this->bevatUrl($opmerking) || $this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
-			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.', 400);
+			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
 		}
 
 		$bericht = "
@@ -62,11 +62,11 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-		$mail = new Mail([Ini::lees(Ini::EMAILS, 'oweecie') => "OweeCie", $email => $naam], "Interesseformulier", $bericht);
+		$mail = new Mail([Ini::lees(Ini::EMAILS, 'oweecie') => "OweeCie"], "Interesseformulier", $bericht);
 		$mail->setFrom($email);
 		$mail->send();
 
-		return new PlainView('Bericht verzonden');
+		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
 	}
 
 	private function isSpam(...$input) {

@@ -27,7 +27,7 @@
 				@php($noviet = $sessie->getNoviet())
 				<tr>
 					@if($loop->index == 1)
-						<th rowspan="{{count($avond)}}" class="table-light">{{$sessie->avond}}</th>
+						<th rowspan="{{count($avond)}}" class="table-light">{{$sessie->avond->format("d-m-Y")}}</th>
 					@endif
 					<td>{!! CsrDelft\model\ProfielModel::getLink($noviet->uid, 'civitas') !!}</td>
 					<td>{{$noviet->mobiel}}</td>

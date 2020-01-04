@@ -4,12 +4,14 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
@@ -117,7 +119,7 @@ class BbFotoalbum extends BbTag {
 				$album = FotoAlbumModel::instance()->getFotoAlbum($url);
 			}
 			return $album;
-		} catch (ResourceNotFoundException $ex) {
+		} catch (CsrNotFoundException $ex) {
 			return null;
 		}
 	}

@@ -12,9 +12,6 @@ bin/ldap/settings.py
 data/*
 data/documenten/*
 data/log/*
-data/smarty/*
-data/smarty/cache/*
-data/smarty/compiled/*
 etc/*.ini
 etc/*.crt
 etc/*.kdbx
@@ -33,7 +30,6 @@ htdocs/plaetjes/*
 htdocs/tools/alphabanner/alphabanner.cache.*
 lib/defines.include.php
 sessie/*
-!sessie/_dummy
 /tmp
 tmp/*
 /wiki

@@ -2,13 +2,13 @@
 
 namespace CsrDelft\view\agenda;
 
-use CsrDelft\model\entity\agenda\AgendaItem;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateTimeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormulierKnop;
@@ -30,8 +30,10 @@ class AgendaItemForm extends ModalForm {
 		$fields['titel'] = new RequiredTextField('titel', $item->titel, 'Titel');
 		$fields['titel']->suggestions[] = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
 
-		$fields['begin_moment'] = new RequiredDateTimeField('begin_moment', $item->begin_moment, 'Begin moment');
-		$fields['eind_moment'] = new RequiredDateTimeField('eind_moment', $item->eind_moment, 'Eind moment');
+		$fields['begin_moment'] = new DateTimeObjectField('begin_moment', $item->begin_moment, 'Begin moment');
+		$fields['begin_moment']->required = true;
+		$fields['eind_moment'] = new DateTimeObjectField('eind_moment', $item->eind_moment, 'Eind moment');
+		$fields['eind_moment']->required = true;
 
 		$fields['eind_moment']->from_datetime = $fields['begin_moment'];
 		$fields['begin_moment']->to_datetime = $fields['eind_moment'];
@@ -61,7 +63,7 @@ class AgendaItemForm extends ModalForm {
 
 	public function validate() {
 		$fields = $this->getFields();
-		if ($fields['eind_moment']->getValue() !== null AND strtotime($fields['eind_moment']->getValue()) < strtotime($fields['begin_moment']->getValue())) {
+		if ($fields['eind_moment']->getValue() !== null AND $fields['eind_moment']->getValue() < $fields['begin_moment']->getValue()) {
 			$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
 		return parent::validate();

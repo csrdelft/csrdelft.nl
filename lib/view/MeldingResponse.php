@@ -2,7 +2,9 @@
 
 namespace CsrDelft\view;
 
-class MeldingResponse implements View {
+use Symfony\Component\HttpFoundation\Response;
+
+class MeldingResponse implements ToResponse, View {
 	public function view() {
 		echo getMelding();
 	}
@@ -20,5 +22,9 @@ class MeldingResponse implements View {
 	 */
 	public function getModel() {
 		return null;
+	}
+
+	public function toResponse(): Response {
+		return new Response(getMelding());
 	}
 }

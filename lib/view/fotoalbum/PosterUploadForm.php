@@ -2,8 +2,9 @@
 
 namespace CsrDelft\view\fotoalbum;
 
-use CsrDelft\model\CmsPaginaModel;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
@@ -33,7 +34,7 @@ class PosterUploadForm extends Formulier {
 	public function view() {
 		parent::view();
 		// Uitleg foto's toevoegen
-		$body = new CmsPaginaView(CmsPaginaModel::get('fotostoevoegen'));
+		$body = new CmsPaginaView(ContainerFacade::getContainer()->get(CmsPaginaRepository::class)->find('fotostoevoegen'));
 		$body->view();
 	}
 

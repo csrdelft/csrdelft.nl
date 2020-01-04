@@ -5,7 +5,6 @@ namespace CsrDelft\model;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\LedenMemoryScore;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use PDO;
 
@@ -39,7 +38,7 @@ class LedenMemoryScoresModel extends PersistenceModel {
 	public function getAllTopScores() {
 		$fields = $this->getAttributes();
 		$fields[1] = 'MIN(tijd) as tijd';
-		$results = Database::instance()->sqlSelect($fields, $this->getTableName(), 'eerlijk = 1', array(), 'groep, door_uid');
+		$results = $this->database->sqlSelect($fields, $this->getTableName(), 'eerlijk = 1', array(), 'groep, door_uid');
 		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 		return $results;
 	}

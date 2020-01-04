@@ -35,5 +35,12 @@ git checkout -- data/blade htdocs/dist
 fi;
 
 git add -A
-git diff-index --quiet HEAD || git commit -m "Travis deploy $TRAVIS_BUILD_NUMBER"
+git diff-index --quiet HEAD || git commit -m "
+Travis deploy $TRAVIS_BUILD_NUMBER
+
+csrdelft/csrdelft.nl@$TRAVIS_COMMIT
+
+$TRAVIS_COMMIT_MESSAGE
+
+$TRAVIS_BUILD_WEB_URL"
 git push --force --quiet --set-upstream origin master

@@ -33,8 +33,8 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 	 *
 	 * @return AbstractGroepLid|false
 	 */
-	public static function get(AbstractGroep $groep, $uid) {
-		return static::instance()->retrieveByPrimaryKey([$groep->id, $uid]);
+	public function get(AbstractGroep $groep, $uid) {
+		return $this->retrieveByPrimaryKey([$groep->id, $uid]);
 	}
 
 	/**

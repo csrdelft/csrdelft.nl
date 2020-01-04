@@ -20,7 +20,7 @@
 			<thead>
 			<tr>
 				@foreach($eetplan['avonden'] as $avond)
-					<th scope="col">{{$avond}}</th>
+					<th scope="col">{{$avond->format("d-m-Y")}}</th>
 				@endforeach
 			</tr>
 			</thead>

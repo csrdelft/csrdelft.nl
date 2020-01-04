@@ -131,7 +131,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	 * @return CorveeFunctie
 	 */
 	public function getCorveeFunctie() {
-		return FunctiesModel::get($this->functie_id);
+		return FunctiesModel::instance()->get($this->functie_id);
 	}
 
 	public function setUid($uid) {

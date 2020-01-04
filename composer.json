@@ -7,14 +7,12 @@
 		}
 	],
 	"require": {
-		"smarty/smarty": "~3.1",
 		"google/apiclient": "^2.0",
 		"firebase/php-jwt": "^5.0",
 		"jacwright/restserver": "dev-master",
 		"globalcitizen/php-iban": "^2.6",
 		"robmorgan/phinx": "^0.11.1",
-		"csrdelft/orm": "1.8.4",
-		"csrdelft/bb": "1.1.3",
+		"csrdelft/bb": "1.1.6",
 		"maknz/slack": "^1.7",
 		"jakeasmith/http_build_url": "^1",
 		"ferno/loco": "dev-master",
@@ -43,7 +41,9 @@
 		"symfony/dotenv": "^3.4",
 		"symfony/templating": "^3.4",
 		"symfony/flex": "^1.4",
-		"symfony/twig-bundle": "^3.4"
+		"symfony/twig-bundle": "^3.4",
+		"symfony/orm-pack": "^1.0",
+		"csrdelft/orm": "^1.8"
 	},
 	"config": {
 		"platform": {
@@ -64,6 +64,10 @@
 		"symfony/profiler-pack": "*"
 	},
 	"scripts": {
+		"serve": [
+			"Composer\\Config::disableProcessTimeout",
+			"symfony serve --document-root htdocs"
+		],
 		"phinx": "vendor/bin/phinx",
 		"migrate": "vendor/bin/phinx migrate",
 		"generator": "@php bin/dev/generate.php",

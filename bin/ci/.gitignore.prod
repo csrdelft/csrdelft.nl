@@ -4,7 +4,6 @@
 data/*
 !data/blade
 sessie/*
-!sessie/_dummy
 htdocs/plaetjes/*
 
 # Configuratie bestanden
@@ -21,6 +20,7 @@ htdocs/owee/*
 htdocs/tools/alphabanner/*
 tmp/*
 bin/ldap/*
+var/*
 
 # Dev bestanden
 docker/*
@@ -53,5 +53,6 @@ phpunit.init.php
 # Build bestanden
 .cache-loader
 .scannerwork
+.sonar-project.properties
 package.json
 yarn.lock

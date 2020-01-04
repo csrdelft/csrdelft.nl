@@ -13,14 +13,14 @@ use CsrDelft\view\JsonResponse;
 class CiviProductSuggestiesResponse extends JsonLijstResponse {
 	/**
 	 * @param CiviProduct $entity
-	 * @return string
+	 * @return array
 	 */
 	public function renderElement($entity) {
-		return json_encode(array(
+		return array(
 			'url' => '/fiscaat/producten',
 			'value' => $entity->getBeschrijvingFormatted(),
 			'label' => $entity->id,
 			'id' => $entity->id
-		));
+		);
 	}
 }

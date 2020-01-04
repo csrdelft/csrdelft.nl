@@ -16,7 +16,6 @@
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
 				href="{{CSR_ROOT}}/forum/rss.xml"/>
 	@yield('styles')
-	@script('extern.js')
 </head>
 
 <body>
@@ -28,21 +27,24 @@
 	<header id="header" class="alt">
 		<h1><a href="/">C.S.R. Delft</a></h1>
 		<nav>
+			@section('loginbutton')
 			<a class="inloggen" href="#login">Inloggen</a>
+			@show
 			<a href="#menu">Menu</a>
 		</nav>
 	</header>
 
+	@section('loginpopup')
 	<!-- Loginform -->
 	<nav id="login">
 		<a href="#_" class="overlay"></a>
 		<div class="inner">
 			<h2>Inloggen</h2>
-			@inject('loginform', 'CsrDelft\view\login\LoginForm')
-			@php($loginform->view())
+			@php((new \CsrDelft\view\login\LoginForm())->view())
 			<a href="#_" class="close">Close</a>
 		</div>
 	</nav>
+	@show
 
 	<!-- Menu -->
 	<nav id="menu">
@@ -91,5 +93,6 @@
 		</section>
 	@show
 </div>
+@script('extern.js')
 </body>
 </html>

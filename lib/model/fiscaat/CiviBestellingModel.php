@@ -5,12 +5,13 @@ namespace CsrDelft\model\fiscaat;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
-use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use DateTime;
 use Exception;
+use Generator;
+use PDO;
+use PDOStatement;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -30,28 +31,35 @@ class CiviBestellingModel extends PersistenceModel {
 	 * @var CiviProductModel
 	 */
 	private $civiProductModel;
+	/**
+	 * @var CiviSaldoModel
+	 */
+	private $civiSaldoModel;
 
 	/**
 	 * CiviBestellingModel constructor.
 	 * @param CiviBestellingInhoudModel $civiBestellingInhoudModel
 	 * @param CiviProductModel $civiProductModel
+	 * @param CiviSaldoModel $civiSaldoModel
 	 */
 	public function __construct(
 		CiviBestellingInhoudModel $civiBestellingInhoudModel,
-		CiviProductModel $civiProductModel
+		CiviProductModel $civiProductModel,
+		CiviSaldoModel $civiSaldoModel
 	) {
 		parent::__construct();
 
 		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
 		$this->civiProductModel = $civiProductModel;
+		$this->civiSaldoModel = $civiSaldoModel;
 	}
 
 	/**
 	 * @param int $id
 	 * @return CiviBestelling
 	 */
-	public static function get($id) {
-		return static::instance()->find('id = ?', [$id])->fetch();
+	public function get($id) {
+		return $this->find('id = ?', [$id])->fetch();
 	}
 
 	/**
@@ -81,7 +89,7 @@ class CiviBestellingModel extends PersistenceModel {
 	 * @param CiviBestelling $bestelling
 	 */
 	public function revert(CiviBestelling $bestelling) {
-		return Database::transaction(function () use ($bestelling) {
+		return $this->database->_transaction(function () use ($bestelling) {
 			/**
 			 * @var CiviBestelling|false $bestelling
 			 */
@@ -89,17 +97,18 @@ class CiviBestellingModel extends PersistenceModel {
 			if ($bestelling === false || $bestelling->deleted) {
 				throw new Exception("Bestelling bestaat niet, kan niet worden teruggedraaid.");
 			}
-			CiviSaldoModel::instance()->ophogen($bestelling->uid, $bestelling->totaal);
+			$this->civiSaldoModel->ophogen($bestelling->uid, $bestelling->totaal);
 			$bestelling->deleted = true;
-			CiviBestellingModel::instance()->update($bestelling);
+			$this->civiSaldoModel->update($bestelling);
 
 		});
 	}
+
 	/**
 	 * @param string $uid
 	 * @param int $limit
 	 *
-	 * @return \PDOStatement
+	 * @return PDOStatement
 	 */
 	public function getAlleBestellingenVoorLid($uid, $limit = null) {
 		return $this->find('uid = ?', [$uid], null, 'moment DESC', $limit);
@@ -109,7 +118,7 @@ class CiviBestellingModel extends PersistenceModel {
 	 * @param string $uid
 	 * @param int $limit
 	 *
-	 * @return \PDOStatement
+	 * @return PDOStatement
 	 */
 	public function getBestellingenVoorLid($uid, $limit = null) {
 		return $this->find('uid = ? AND deleted = FALSE', array($uid), null, 'moment DESC', $limit);
@@ -124,7 +133,7 @@ class CiviBestellingModel extends PersistenceModel {
 	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false) {
 		$after = $profielOnly ? "AND uid NOT LIKE 'c%'" : "";
 		$moment = $date->format("Y-m-d G:i:s");
-		return $this->select(['SUM(totaal)'], "deleted = 0 AND moment > ? $after", [$moment])->fetch(\PDO::FETCH_COLUMN);
+		return $this->select(['SUM(totaal)'], "deleted = 0 AND moment > ? $after", [$moment])->fetch(PDO::FETCH_COLUMN);
 	}
 
 	/**
@@ -154,7 +163,7 @@ class CiviBestellingModel extends PersistenceModel {
 
 	/**
 	 * @param CiviBestelling[] $bestellingen
-	 * @return \Generator|object[]
+	 * @return Generator|object[]
 	 */
 	public function getBeschrijving($bestellingen) {
 		foreach ($bestellingen as $bestelling) {

@@ -40,12 +40,18 @@ class PinTransactieController {
 	/** @var PinTransactieModel */
 	private $pinTransactieModel;
 
-	public function __construct() {
-		$this->civiBestellingInhoudModel = CiviBestellingInhoudModel::instance();
-		$this->civiBestellingModel = CiviBestellingModel::instance();
-		$this->civiSaldoModel = CiviSaldoModel::instance();
-		$this->pinTransactieMatchModel = PinTransactieMatchModel::instance();
-		$this->pinTransactieModel = PinTransactieModel::instance();
+	public function __construct(
+		CiviBestellingInhoudModel $civiBestellingInhoudModel,
+		CiviBestellingModel $civiBestellingModel,
+		CiviSaldoModel $civiSaldoModel,
+		PinTransactieMatchModel $pinTransactieMatchModel,
+		PinTransactieModel $pinTransactieModel
+	) {
+		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
+		$this->civiBestellingModel = $civiBestellingModel;
+		$this->civiSaldoModel = $civiSaldoModel;
+		$this->pinTransactieMatchModel = $pinTransactieMatchModel;
+		$this->pinTransactieModel = $pinTransactieModel;
 	}
 
 	public function overzicht() {
@@ -127,7 +133,7 @@ class PinTransactieController {
 			}
 
 			$nieuwePinTransactieMatch = Database::transaction(function () use ($pinTransactieMatch, $values) {
-				$pinTransactie = $this->pinTransactieModel::get($pinTransactieMatch->transactie_id);
+				$pinTransactie = $this->pinTransactieModel->get($pinTransactieMatch->transactie_id);
 
 				$bestelling = new CiviBestelling();
 				$bestelling->moment = $pinTransactie->datetime;
@@ -187,8 +193,8 @@ class PinTransactieController {
 			} else {
 
 				$nieuweMatches = Database::transaction(function () use ($pinTransactieMatch) {
-					$missendeBestelling = PinTransactieMatch::missendeBestelling(PinTransactieModel::get($pinTransactieMatch->transactie_id));
-					$missendeTransactie = PinTransactieMatch::missendeTransactie(CiviBestellingInhoudModel::instance()->getVoorBestellingEnProduct($pinTransactieMatch->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE));
+					$missendeBestelling = PinTransactieMatch::missendeBestelling($this->pinTransactieModel->get($pinTransactieMatch->transactie_id));
+					$missendeTransactie = PinTransactieMatch::missendeTransactie($this->civiBestellingInhoudModel->getVoorBestellingEnProduct($pinTransactieMatch->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE));
 
 					$this->pinTransactieMatchModel->delete($pinTransactieMatch);
 					$missendeTransactie->id = $this->pinTransactieMatchModel->create($missendeTransactie);
@@ -262,7 +268,7 @@ class PinTransactieController {
 				/** @var PinTransactieMatch $pinTransactieMatch */
 				$pinTransactieMatch = $this->pinTransactieMatchModel->retrieve($pinTransactieMatch);
 
-				$oudeBestelling = $this->civiBestellingModel::get($pinTransactieMatch->bestelling_id);
+				$oudeBestelling = $this->civiBestellingModel->get($pinTransactieMatch->bestelling_id);
 				$oudeBestelling->deleted = true;
 				$this->civiBestellingModel->update($oudeBestelling);
 
@@ -326,9 +332,9 @@ class PinTransactieController {
 				/** @var PinTransactieMatch $pinTransactieMatch */
 				$pinTransactieMatch = $this->pinTransactieMatchModel->retrieve($pinTransactieMatch);
 
-				$transactie = $this->pinTransactieModel::get($pinTransactieMatch->transactie_id);
+				$transactie = $this->pinTransactieModel->get($pinTransactieMatch->transactie_id);
 
-				$bestelling = $this->civiBestellingModel::get($pinTransactieMatch->bestelling_id);
+				$bestelling = $this->civiBestellingModel->get($pinTransactieMatch->bestelling_id);
 				$bestellingInhoud = $this->civiBestellingInhoudModel->getVoorBestellingEnProduct($bestelling->id, CiviProductTypeEnum::PINTRANSACTIE);
 
 				$oudAantal = $bestellingInhoud->aantal;
@@ -377,7 +383,7 @@ class PinTransactieController {
 			if ($pinTransactieMatch->bestelling_id === null) {
 				throw new CsrGebruikerException('Geen bestelling gevonden');
 			} else {
-				$pinBestelling = CiviBestellingModel::get($pinTransactieMatch->bestelling_id);
+				$pinBestelling = $this->civiBestellingModel->get($pinTransactieMatch->bestelling_id);
 				return new PinBestellingInfoForm($pinBestelling);
 			}
 		}
@@ -457,7 +463,7 @@ class PinTransactieController {
 		return Database::transaction(function () use ($missendeTransactie, $missendeBestelling) {
 			/** @var CiviBestellingInhoud $bestelling */
 			$bestelling = $this->civiBestellingInhoudModel->getVoorBestellingEnProduct($missendeTransactie->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
-			$transactie = $this->pinTransactieModel::get($missendeBestelling->transactie_id);
+			$transactie = $this->pinTransactieModel->get($missendeBestelling->transactie_id);
 
 			if ($bestelling->aantal === $transactie->getBedragInCenten()) {
 				$pinTransactieMatch = PinTransactieMatch::match($transactie, $bestelling);

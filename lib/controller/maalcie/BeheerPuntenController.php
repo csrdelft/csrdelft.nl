@@ -6,8 +6,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\maalcie\CorveePuntenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\ProfielModel;
-use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenLidView;
-use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenView;
 
 /**
  * BeheerPuntenController.class.php
@@ -16,11 +14,19 @@ use CsrDelft\view\maalcie\corvee\punten\BeheerPuntenView;
  *
  */
 class BeheerPuntenController {
+	/**
+	 * @var FunctiesModel
+	 */
+	private $functiesModel;
+
+	public function __construct(FunctiesModel $functiesModel) {
+		$this->functiesModel = $functiesModel;
+	}
+
 	public function beheer() {
-		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
 		$matrix = CorveePuntenModel::loadPuntenVoorAlleLeden($functies);
-		$view = new BeheerPuntenView($matrix, $functies);
-		return view('default', ['content' => $view]);
+		return view('maaltijden.corveepunt.beheer_punten', ['matrix' => $matrix, 'functies' => $functies]);
 	}
 
 	public function wijzigpunten($uid) {
@@ -30,9 +36,9 @@ class BeheerPuntenController {
 		}
 		$punten = (int)filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		CorveePuntenModel::savePuntenVoorLid($profiel, $punten, null);
-		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
 		$lijst = CorveePuntenModel::loadPuntenVoorLid($profiel, $functies);
-		return new BeheerPuntenLidView($lijst);
+		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $lijst]);
 	}
 
 	public function wijzigbonus($uid) {
@@ -42,9 +48,9 @@ class BeheerPuntenController {
 		}
 		$bonus = (int)filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		CorveePuntenModel::savePuntenVoorLid($profiel, null, $bonus);
-		$functies = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
 		$lijst = CorveePuntenModel::loadPuntenVoorLid($profiel, $functies);
-		return new BeheerPuntenLidView($lijst);
+		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $lijst]);
 	}
 
 	public function resetjaar() {

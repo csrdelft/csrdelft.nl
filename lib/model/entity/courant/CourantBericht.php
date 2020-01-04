@@ -9,7 +9,6 @@ use CsrDelft\Orm\Entity\T;
 
 class CourantBericht extends PersistentEntity {
 	public $id;
-	public $courantId;
 	public $titel;
 	public $cat;
 	public $bericht;
@@ -17,10 +16,19 @@ class CourantBericht extends PersistentEntity {
 	public $uid;
 	public $datumTijd;
 
+	public function setVolgorde() {
+		$this->volgorde = [
+			'voorwoord' => 0,
+			'bestuur' => 1,
+			'csr' => 2,
+			'overig' => 3,
+			'sponsor' => 4,
+		][$this->cat];
+	}
+
 	protected static $table_name = 'courantbericht';
 	protected static $persistent_attributes = [
 		'id' => [T::Integer, false, 'auto_increment'],
-		'courantId' => [T::Integer, true],
 		'titel' => [T::String],
 		'cat' => [T::Enumeration, false, CourantCategorie::class],
 		'bericht' => [T::Text],

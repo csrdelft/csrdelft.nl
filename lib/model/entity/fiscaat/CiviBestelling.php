@@ -4,9 +4,9 @@ namespace CsrDelft\model\entity\fiscaat;
 
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use PDOStatement;
 
 /**
  * Class CiviBestelling
@@ -30,7 +30,7 @@ class CiviBestelling extends PersistentEntity {
 	public $inhoud = array();
 
 	/**
-	 * @return \PDOStatement|CiviBestellingInhoud[]
+	 * @return PDOStatement|CiviBestellingInhoud[]
 	 */
 	public function getInhoud() {
 		return CiviBestellingInhoudModel::instance()->find('bestelling_id = ?', array($this->id));

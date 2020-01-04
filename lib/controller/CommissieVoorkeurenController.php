@@ -25,9 +25,38 @@ use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
  * Controller voor commissie voorkeuren.
  */
 class CommissieVoorkeurenController extends AbstractController {
+	/**
+	 * @var CommissieVoorkeurModel
+	 */
+	private $commissieVoorkeurModel;
+	/**
+	 * @var VoorkeurCommissieModel
+	 */
+	private $voorkeurCommissieModel;
+	/**
+	 * @var VoorkeurCommissieCategorieModel
+	 */
+	private $voorkeurCommissieCategorieModel;
+	/**
+	 * @var VoorkeurOpmerkingModel
+	 */
+	private $voorkeurOpmerkingModel;
+
+	public function __construct(
+		CommissieVoorkeurModel $commissieVoorkeurModel,
+		VoorkeurCommissieModel $voorkeurCommissieModel,
+		VoorkeurCommissieCategorieModel $voorkeurCommissieCategorieModel,
+		VoorkeurOpmerkingModel $voorkeurOpmerkingModel
+	) {
+		$this->commissieVoorkeurModel = $commissieVoorkeurModel;
+		$this->voorkeurCommissieModel = $voorkeurCommissieModel;
+		$this->voorkeurCommissieCategorieModel = $voorkeurCommissieCategorieModel;
+		$this->voorkeurOpmerkingModel = $voorkeurOpmerkingModel;
+	}
+
 	public function overzicht() {
 		return view('commissievoorkeuren.overzicht', [
-			'categorien' => VoorkeurCommissieModel::instance()->getByCategorie(),
+			'categorien' => $this->voorkeurCommissieModel->getByCategorie(),
 			'commissieFormulier' => new AddCommissieFormulier(new VoorkeurCommissie()),
 			'categorieFormulier' => new AddCategorieFormulier(new VoorkeurCommissieCategorie()),
 		]);
@@ -35,20 +64,20 @@ class CommissieVoorkeurenController extends AbstractController {
 
 	public function commissie($commissieId) {
 		/** @var VoorkeurCommissie $commissie */
-		$commissie = VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId);
+		$commissie = $this->voorkeurCommissieModel->retrieveByUUID($commissieId);
 
 		return view('commissievoorkeuren.commissie', [
-			'voorkeuren' => CommissieVoorkeurModel::instance()->getVoorkeurenVoorCommissie($commissie),
+			'voorkeuren' => $this->commissieVoorkeurModel->getVoorkeurenVoorCommissie($commissie),
 			'commissie' => $commissie,
 			'commissieFormulier' => new CommissieFormulier($commissie),
 		]);
 	}
 
 	public function updatecommissie($commissieId) {
-		$commissie = VoorkeurCommissieModel::instance()->retrieveByUUID($commissieId);
+		$commissie = $this->voorkeurCommissieModel->retrieveByUUID($commissieId);
 		$body = new CommissieFormulier($commissie);
 		if ($body->validate()) {
-			VoorkeurCommissieModel::instance()->update($commissie);
+			$this->voorkeurCommissieModel->update($commissie);
 			setMelding('Aanpassingen commissie opgeslagen', 1);
 		}
 		return $this->redirectToRoute('commissievoorkeuren-updatecommissie');
@@ -59,12 +88,12 @@ class CommissieVoorkeurenController extends AbstractController {
 		$form = new AddCommissieFormulier($model);
 
 		if ($form->validate()) {
-			$id = VoorkeurCommissieModel::instance()->create($model);
+			$id = $this->voorkeurCommissieModel->create($model);
 			return $this->redirectToRoute('commissievoorkeuren-commissie', ['commissieId' => $id]);
 		}
 
 		return view('commissievoorkeuren.overzicht', [
-			'categorien' => VoorkeurCommissieModel::instance()->getByCategorie(),
+			'categorien' => $this->voorkeurCommissieModel->getByCategorie(),
 			'commissieFormulier' => $form,
 			'categorieFormulier' => new AddCategorieFormulier(new VoorkeurCommissieCategorie()),
 		]);
@@ -74,12 +103,12 @@ class CommissieVoorkeurenController extends AbstractController {
 		$model = new VoorkeurCommissieCategorie();
 		$form = new AddCategorieFormulier($model);
 		if ($form->validate()) {
-			VoorkeurCommissieCategorieModel::instance()->create($model);
+			$this->voorkeurCommissieCategorieModel->create($model);
 			return $this->redirectToRoute('commissievoorkeuren'); // Prevent resubmit
 		}
 
 		return view('commissievoorkeuren.overzicht', [
-			'categorien' => VoorkeurCommissieModel::instance()->getByCategorie(),
+			'categorien' => $this->voorkeurCommissieModel->getByCategorie(),
 			'commissieFormulier' => new AddCommissieFormulier(new VoorkeurCommissie()),
 			'categorieFormulier' => $form,
 		]);
@@ -87,9 +116,9 @@ class CommissieVoorkeurenController extends AbstractController {
 
 	public function verwijdercategorie($categorieId) {
 		/** @var VoorkeurCommissieCategorie $model */
-		$model = VoorkeurCommissieCategorieModel::instance()->retrieveByUUID($categorieId);
+		$model = $this->voorkeurCommissieCategorieModel->retrieveByUUID($categorieId);
 		if (count($model->getCommissies()) == 0) {
-			VoorkeurCommissieCategorieModel::instance()->delete($model);
+			$this->voorkeurCommissieCategorieModel->delete($model);
 			setMelding("Categorie '{$model->naam}' succesvol verwijderd", 1);
 
 		} else {
@@ -106,9 +135,9 @@ class CommissieVoorkeurenController extends AbstractController {
 
 		$profiel = ProfielModel::get($uid);
 
-		$voorkeuren = CommissieVoorkeurModel::instance()->getVoorkeurenVoorLid($profiel);
+		$voorkeuren = $this->commissieVoorkeurModel->getVoorkeurenVoorLid($profiel);
 		$voorkeurenMap = [];
-		$commissies = VoorkeurCommissieModel::instance()->find('zichtbaar = 1')->fetchAll();
+		$commissies = $this->voorkeurCommissieModel->find('zichtbaar = 1')->fetchAll();
 		foreach ($commissies as $commissie) {
 			$voorkeurenMap[$commissie->id] = null;
 		}
@@ -116,7 +145,7 @@ class CommissieVoorkeurenController extends AbstractController {
 			$voorkeurenMap[$voorkeur->cid] = $voorkeur;
 		}
 
-		$opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid($profiel);
+		$opmerking = $this->voorkeurOpmerkingModel->getOpmerkingVoorLid($profiel);
 
 		return view('commissievoorkeuren.profiel', [
 			'profiel' => $profiel,
@@ -128,10 +157,10 @@ class CommissieVoorkeurenController extends AbstractController {
 	}
 
 	public function lidpaginaopmerking($uid) {
-		$opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid(ProfielModel::get($uid));
+		$opmerking = $this->voorkeurOpmerkingModel->getOpmerkingVoorLid(ProfielModel::get($uid));
 		$form = (new CommissieVoorkeurPraesesOpmerkingForm($opmerking));
 		if ($form->validate()) {
-			VoorkeurOpmerkingModel::instance()->updateOrCreate($opmerking);
+			$this->voorkeurOpmerkingModel->updateOrCreate($opmerking);
 		}
 
 		return $this->redirectToRoute('commissievoorkeuren-lidpagina-lijst');

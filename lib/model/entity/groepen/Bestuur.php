@@ -34,7 +34,7 @@ class Bestuur extends AbstractGroep {
 	protected static $table_name = 'besturen';
 
 	public function getUrl() {
-		return '/groepen/besturen/' . $this->id . '/';
+		return '/groepen/besturen/' . $this->id;
 	}
 
 }

@@ -25,7 +25,7 @@ class DuckField extends TextField {
 		}
 		// check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
 		// doordat duckExists case-insensitive zoekt
-		if (ProfielModel::existsDuck($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
+		if (ProfielModel::instance()->existsDuck($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
 			$this->error = 'Deze Duckstad-naam is al in gebruik';
 		}
 		return $this->error === '';

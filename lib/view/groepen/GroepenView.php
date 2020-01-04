@@ -2,15 +2,14 @@
 
 namespace CsrDelft\view\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\AbstractGroepenModel;
-use CsrDelft\model\CmsPaginaModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\groepen;
-use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\Icon;
 use CsrDelft\view\View;
 
@@ -41,9 +40,10 @@ class GroepenView implements View {
 		} else {
 			$this->tab = GroepTab::Pasfotos;
 		}
-		$this->pagina = CmsPaginaModel::get($model->getNaam());
+		$cmsPaginaRepository = ContainerFacade::getContainer()->get(CmsPaginaRepository::class);
+		$this->pagina = $cmsPaginaRepository->find($model->getNaam());
 		if (!$this->pagina) {
-			$this->pagina = CmsPaginaModel::get('');
+			$this->pagina = $cmsPaginaRepository->find('');
 		}
 	}
 
@@ -65,11 +65,11 @@ class GroepenView implements View {
 		$model = $this->model;
 		$orm = $model::ORM;
 		if ($orm::magAlgemeen(AccessAction::Aanmaken, null, $this->soort)) {
-			echo '<a class="btn" href="' . $this->model->getUrl() . 'nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
+			echo '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
-		echo '<a class="btn" href="' . $this->model->getUrl() . 'beheren">' . Icon::getTag('table') . ' Beheren</a>';
+		echo '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
 		if ($this->geschiedenis) {
-			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . $this->geschiedenis . '/deelnamegrafiek">' . Icon::getTag('chart_bar') . ' Deelnamegrafiek</a>';
+			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . "/" . $this->geschiedenis . '/deelnamegrafiek">' . Icon::getTag('chart_bar') . ' Deelnamegrafiek</a>';
 		}
 		$view = new CmsPaginaView($this->pagina);
 		$view->view();

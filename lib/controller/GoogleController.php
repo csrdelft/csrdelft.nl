@@ -15,10 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class GoogleController extends AbstractController {
-	private $model;
+	/**
+	 * @var GoogleTokenModel
+	 */
+	private $googleTokenModel;
 
-	public function __construct() {
-		$this->model = GoogleTokenModel::instance();
+	public function __construct(GoogleTokenModel $googleTokenModel) {
+		$this->googleTokenModel = $googleTokenModel;
 	}
 
 	public function callback(Request $request) {
@@ -33,10 +36,10 @@ class GoogleController extends AbstractController {
 			$googleToken->uid = LoginModel::getUid();
 			$googleToken->token = $client->getRefreshToken();
 
-			if ($this->model->exists($googleToken)) {
-				$this->model->update($googleToken);
+			if ($this->googleTokenModel->exists($googleToken)) {
+				$this->googleTokenModel->update($googleToken);
 			} else {
-				$this->model->create($googleToken);
+				$this->googleTokenModel->create($googleToken);
 			}
 
 			return $this->redirect(urldecode($state));

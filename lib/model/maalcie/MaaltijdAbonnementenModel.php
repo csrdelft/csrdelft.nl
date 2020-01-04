@@ -235,10 +235,9 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 
 			$abo->van_uid = $abo->uid;
 			$abo->wanneer_ingeschakeld = date('Y-m-d H:i');
-			static::instance()->create($abo);
+			$this->create($abo);
 
-			$aantal = MaaltijdAanmeldingenModel::instance()->aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
-			return $aantal;
+			return MaaltijdAanmeldingenModel::instance()->aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
 		});
 	}
 
@@ -296,7 +295,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	public function verwijderAbonnementen($mrid) {
 		return Database::transaction(function () use ($mrid) {
 			/** @var MaaltijdAbonnement[] $abos */
-			$abos = $this->find('mlt_repetitie_id = ?', array($mrid));
+			$abos = $this->find('mlt_repetitie_id = ?', array($mrid))->fetchAll();
 			$aantal = count($abos);
 			foreach ($abos as $abo) {
 				MaaltijdAanmeldingenModel::instance()->afmeldenDoorAbonnement($mrid, $abo->uid);

@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 class AccessControlEventListener {
 	const EXCLUDED_CONTROLLERS = [
 		'CsrDelft\controller\ErrorController::handleException' => true,
+		'twig.controller.exception:showAction' => true,
 	];
 	/**
 	 * Controleer of gebruiker deze pagina mag zien.

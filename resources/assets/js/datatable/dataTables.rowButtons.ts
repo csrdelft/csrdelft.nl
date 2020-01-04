@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {knopPost} from '../knop';
+import {init} from '../ctx';
 import {html} from '../util';
 import {replacePlaceholders} from './api';
 
@@ -8,6 +8,7 @@ interface RowButtonsConfig {
 	title?: string;
 	action?: string;
 	css?: string;
+	method?: string;
 }
 
 class RowButtons {
@@ -22,17 +23,17 @@ class RowButtons {
 
 			const newButton = html`
 <a href="${action}"
-	class="btn btn-light noanim btn-sm post DataTableRowKnop ${btn.css}"
+	class="btn btn-light noanim btn-sm DataTableRowKnop ${btn.method} ${btn.css}"
 	title="${btn.title}">
 		<i class="${btn.icon}"></i>
 </a>`;
-			newButton.addEventListener('click', knopPost);
 			btnGroup.append(newButton);
 		}
 		btnGroup.style.marginTop = '-10px';
 		btnGroup.style.marginBottom = '-10px';
 		const wrapper = html`<div class="d-inline-flex"></div>`;
 		wrapper.append(btnGroup);
+		init(wrapper);
 		return wrapper;
 	}
 
@@ -91,13 +92,13 @@ $(document).on('preInit.dt.rowButtons', (e, settings) => {
 		return;
 	}
 
-	const init = settings.oInit.rowButtons;
+	const buttonInit = settings.oInit.rowButtons;
 	const defaults = $.fn.dataTable.defaults.rowButtons;
 
-	if (init || defaults) {
-		const opts = $.extend({}, init, defaults);
+	if (buttonInit || defaults) {
+		const opts = $.extend({}, buttonInit, defaults);
 
-		if (init !== false) {
+		if (buttonInit !== false) {
 			// tslint:disable-next-line:no-unused-expression
 			new RowButtons(settings, opts);
 		}
