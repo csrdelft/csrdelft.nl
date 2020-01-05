@@ -352,12 +352,75 @@
 		<Stap
 			title="Laatste check"
 			:step="10"
+			:show-done="true"
 			v-on:done="alert('Joepie')">
+
+			<p>Controleer de gegevens van je ketzer. Scroll omhoog als er iets niet klopt.</p>
+			<div class="category-title">Activiteit</div>
+			<div class="info-grid">
+				<div>Type</div>
+				<div>{{ types[event.type] }}</div>
+				<div>Titel</div>
+				<div>{{ event.title }}</div>
+				<div>Beschrijving</div>
+				<div>{{ event.shortDescription }}</div>
+				<div>Lees meer</div>
+				<div>{{ event.readMore }}</div>
+				<div>Moment</div>
+				<div v-if="event.multipleDays">
+					{{ moment(event.calendarData.start).format("dddd D MMMM Y") | capitalize }} {{ event.entireDay ? '' : event.startTime + ' uur' }} tot<br>
+					{{ moment(event.calendarData.end).format("dddd D MMMM Y") | capitalize }} {{ event.entireDay ? '' : event.endTime + ' uur' }}
+				</div>
+				<div v-else>{{ moment(event.calendarData).format("dddd D MMMM Y") | capitalize }} {{ event.entireDay ? '' : event.startTime + ' - ' + event.endTime + ' uur' }}</div>
+				<div>Locatie</div>
+				<div>{{ event.location }}</div>
+			</div>
+
+			<div class="category-title">Aanmelden</div>
+			<div class="info-grid">
+				<div>Inketzen</div>
+				<div v-if="event.canEnter">
+					<i class="fas fa-check"></i> Toegestaan
+					<div v-if="event.enterStart">Van {{ moment(event.enterStartMoment).format("dddd D MMMM Y") | capitalize }} {{ event.enterStartMomentTime }}</div>
+					<div v-if="event.enterEnd">Tot {{ moment(event.enterEndMoment).format("dddd D MMMM Y") | capitalize }} {{ event.enterEndMomentTime }}</div>
+				</div>
+				<div v-else><i class="fas fa-times"></i> Niet toegestaan</div>
+				<div>Uitketzen</div>
+				<div v-if="event.canExit">
+					<i class="fas fa-check"></i> Toegestaan
+					<div v-if="event.exitEnd">Tot {{ moment(event.exitEndMoment).format("dddd D MMMM Y") }} {{ event.exitEndMomentTime }}</div>
+				</div>
+				<div v-else><i class="fas fa-times"></i> Niet toegestaan</div>
+				<div>Limiet</div>
+				<div v-if="event.hasLimit">Maximaal {{event.limit}}</div>
+				<div v-else>Geen maximum</div>
+				<div>Doelgroep</div>
+				<div v-if="event.hasPermission === 'iedereen'">Iedereen</div>
+				<div v-else>
+					Geselecteerde groep
+					<div>{{ event.permission }}</div>
+				</div>
+				<div>Vraag</div>
+				<div v-if="event.hasChoice === 'invulveld'">Vrije opmerking</div>
+				<div v-else>
+					Keuzelijst(en)
+					<div>{{ event.choices }}</div>
+				</div>
+				<div v-if="event.hasChoice === 'invulveld'">Opmerking aanpassen</div>
+				<div v-else>Keuze(s) aanpassen</div>
+				<div v-if="event.canEdit">
+					<i class="fas fa-check"></i> Toegestaan
+					<div v-if="event.editEnd">Tot {{ moment(event.editEndMoment).format("dddd D MMMM Y") }} {{ event.editEndMomentTime }}</div>
+				</div>
+				<div v-else><i class="fas fa-times"></i> Niet toegestaan</div>
+			</div>
 		</Stap>
 	</div>
 </template>
 
 <script>
+	import moment from 'moment';
+
 	import SelectButtons from '../velden/SelectButtons';
 	import TextInput from '../velden/TextInput';
 	import Toggle from '../velden/Toggle';
@@ -380,6 +443,7 @@
 		components: {IcoonKiezer, SelectButtons, TextInput, Toggle, Stap, DateInput, RechtenBouwer},
 		props: {},
 		data: () => ({
+			moment: moment,
 			types: {
 				'vereniging': 'Verenigings-activiteit',
 				'lustrum': 'Lustrum-activiteit',
@@ -524,6 +588,13 @@
 					this.event.editEndMomentTime = this.event.entireDay ? '00:00' : this.event.startTime;
 				}
 			},
+		},
+		filters: {
+			capitalize(value) {
+				if (!value) return ''
+				value = value.toString()
+				return value.charAt(0).toUpperCase() + value.slice(1)
+			}
 		}
 	}
 </script>
@@ -607,6 +678,47 @@
 			line-height: 18px;
 			top: -9px;
 			z-index: 1;
+		}
+	}
+
+	.category-title {
+		font-weight: 300;
+		font-size: 22px;
+		margin-bottom: 10px;
+	}
+
+	.info-grid {
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		margin-bottom: 22px;
+
+		& > div {
+			font-size: 17px;
+			padding: 2px 0;
+
+			&:nth-child(2n + 1) {
+				font-weight: 600;
+				padding-right: 20px;
+			}
+
+			&:nth-child(2n) {
+				font-weight: 300;
+			}
+
+			div {
+				font-size: 13px;
+				color: #444444;
+			}
+
+			.fa-check {
+				color: #2ECC71;
+				margin-right: 10px;
+			}
+
+			.fa-times {
+				color: #CC0000;
+				margin-right: 15px;
+			}
 		}
 	}
 </style>
