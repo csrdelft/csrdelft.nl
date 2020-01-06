@@ -117,7 +117,7 @@
 		<Stap
 			title="Waar?"
 			:step="6"
-			:show-done="true"
+			:show-done="this.event.location.length > 0"
 			v-on:done="gotoStep(7)">
 
 			<TextInput
@@ -355,25 +355,34 @@
 			:show-done="true"
 			v-on:done="alert('Joepie')">
 
-			<p>Controleer de gegevens van je ketzer. Scroll omhoog als er iets niet klopt.</p>
+			<p class="helptext">Controleer de gegevens van je ketzer. Scroll omhoog als er iets niet klopt.</p>
 			<div class="category-title">Activiteit</div>
 			<div class="info-grid">
 				<div>Type</div>
 				<div>{{ types[event.type] }}</div>
+
 				<div>Titel</div>
-				<div>{{ event.title }}</div>
+				<div v-if="!event.title" class="missing">niet ingevuld</div>
+				<div v-else>{{ event.title }}</div>
+
 				<div>Beschrijving</div>
-				<div>{{ event.shortDescription }}</div>
+				<div v-if="!event.shortDescription" class="missing">niet ingevuld</div>
+				<div v-else class="whitespace">{{ event.shortDescription }}</div>
+
 				<div>Lees meer</div>
-				<div>{{ event.readMore }}</div>
+				<div class="whitespace">{{ event.readMore }}</div>
+
 				<div>Moment</div>
-				<div v-if="event.multipleDays">
+				<div v-if="!event.calendarData" class="missing">niet ingevuld</div>
+				<div v-else-if="event.multipleDays">
 					{{ moment(event.calendarData.start).format("dddd D MMMM Y") | capitalize }} {{ event.entireDay ? '' : event.startTime + ' uur' }} tot<br>
 					{{ moment(event.calendarData.end).format("dddd D MMMM Y") | capitalize }} {{ event.entireDay ? '' : event.endTime + ' uur' }}
 				</div>
 				<div v-else>{{ moment(event.calendarData).format("dddd D MMMM Y") | capitalize }} {{ event.entireDay ? '' : event.startTime + ' - ' + event.endTime + ' uur' }}</div>
+
 				<div>Locatie</div>
-				<div>{{ event.location }}</div>
+				<div v-if="!event.location" class="missing">niet ingevuld</div>
+				<div v-else>{{ event.location }}</div>
 			</div>
 
 			<div class="category-title">Aanmelden</div>
@@ -381,38 +390,44 @@
 				<div>Inketzen</div>
 				<div v-if="event.canEnter">
 					<i class="fas fa-check"></i> Toegestaan
-					<div v-if="event.enterStart">Van {{ moment(event.enterStartMoment).format("dddd D MMMM Y") | capitalize }} {{ event.enterStartMomentTime }}</div>
-					<div v-if="event.enterEnd">Tot {{ moment(event.enterEndMoment).format("dddd D MMMM Y") | capitalize }} {{ event.enterEndMomentTime }}</div>
+					<div v-if="event.enterStart && event.enterStartMoment && event.enterStartMomentTime">Van {{ moment(event.enterStartMoment).format("dddd D MMMM Y") | capitalize }} {{ event.enterStartMomentTime }}</div>
+					<div v-if="event.enterEnd && event.enterEndMoment && event.enterEndMomentTime">Tot {{ moment(event.enterEndMoment).format("dddd D MMMM Y") | capitalize }} {{ event.enterEndMomentTime }}</div>
 				</div>
 				<div v-else><i class="fas fa-times"></i> Niet toegestaan</div>
+
 				<div>Uitketzen</div>
 				<div v-if="event.canExit">
 					<i class="fas fa-check"></i> Toegestaan
-					<div v-if="event.exitEnd">Tot {{ moment(event.exitEndMoment).format("dddd D MMMM Y") }} {{ event.exitEndMomentTime }}</div>
+					<div v-if="event.exitEnd && event.exitEndMoment && event.exitEndMomentTime">Tot {{ moment(event.exitEndMoment).format("dddd D MMMM Y") }} {{ event.exitEndMomentTime }}</div>
 				</div>
 				<div v-else><i class="fas fa-times"></i> Niet toegestaan</div>
+
 				<div>Limiet</div>
 				<div v-if="event.hasLimit">Maximaal {{event.limit}}</div>
 				<div v-else>Geen maximum</div>
+
 				<div>Doelgroep</div>
 				<div v-if="event.hasPermission === 'iedereen'">Iedereen</div>
 				<div v-else>
 					Geselecteerde groep
 					<div>{{ event.permission }}</div>
 				</div>
+
 				<div>Vraag</div>
 				<div v-if="event.hasChoice === 'invulveld'">Vrije opmerking</div>
 				<div v-else>
 					Keuzelijst(en)
 					<div>{{ event.choices }}</div>
 				</div>
+
 				<div v-if="event.hasChoice === 'invulveld'">Opmerking aanpassen</div>
 				<div v-else>Keuze(s) aanpassen</div>
 				<div v-if="event.canEdit">
 					<i class="fas fa-check"></i> Toegestaan
-					<div v-if="event.editEnd">Tot {{ moment(event.editEndMoment).format("dddd D MMMM Y") }} {{ event.editEndMomentTime }}</div>
+					<div v-if="event.editEnd && event.editEndMoment && event.editEndMomentTime">Tot {{ moment(event.editEndMoment).format("dddd D MMMM Y") }} {{ event.editEndMomentTime }}</div>
 				</div>
 				<div v-else><i class="fas fa-times"></i> Niet toegestaan</div>
+
 			</div>
 		</Stap>
 	</div>
@@ -501,8 +516,20 @@
 				let stored = JSON.parse(sessionStorage.getItem('ketzerTovenaar'));
 				this.event = stored.event;
 				this.step = stored.step;
-				if (typeof this.event.calendarData === 'string') {
+				if (typeof this.event.calendarData === 'string' && this.event.calendarData) {
 					this.event.calendarData = new Date(this.event.calendarData);
+				}
+				if (typeof this.event.enterStartMoment === 'string' && this.event.enterStartMoment) {
+					this.event.enterStartMoment = new Date(this.event.enterStartMoment);
+				}
+				if (typeof this.event.enterEndMoment === 'string' && this.event.enterEndMoment) {
+					this.event.enterEndMoment = new Date(this.event.enterEndMoment);
+				}
+				if (typeof this.event.exitEndMoment === 'string' && this.event.exitEndMoment) {
+					this.event.exitEndMoment = new Date(this.event.exitEndMoment);
+				}
+				if (typeof this.event.editEndMoment === 'string' && this.event.editEndMoment) {
+					this.event.editEndMoment = new Date(this.event.editEndMoment);
 				}
 			}
 		},
@@ -687,6 +714,10 @@
 		margin-bottom: 10px;
 	}
 
+	.helptext {
+		font-size: 17px;
+	}
+
 	.info-grid {
 		display: grid;
 		grid-template-columns: max-content 1fr;
@@ -703,6 +734,15 @@
 
 			&:nth-child(2n) {
 				font-weight: 300;
+			}
+
+			&.whitespace {
+				white-space: pre-wrap;
+			}
+
+			&.missing {
+				color: #cc0000;
+				font-weight: 600;
 			}
 
 			div {
