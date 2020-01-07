@@ -62,7 +62,7 @@ trait OrmTrait {
 		$entityManager->flush();
 	}
 
-	public function count($criteria, $criteria_params) {
+	public function ormCount($criteria, $criteria_params) {
 		/** @var EntityManager $entityManager */
 		$entityManager = $this->getEntityManager();
 		/** @var ClassMetadata $metadata */

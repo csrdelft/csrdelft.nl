@@ -229,7 +229,7 @@ class EetplanController {
 
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanModel->count("avond = ?", array($form->getValues()['avond'])) > 0) {
+		} elseif ($this->eetplanModel->ormCount("avond = ?", array($form->getValues()['avond'])) > 0) {
 			setMelding('Er bestaat al een eetplan met deze datum', -1);
 			return $form;
 		} else {
