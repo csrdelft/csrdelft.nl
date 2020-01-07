@@ -5,7 +5,7 @@ namespace CsrDelft\repository\documenten;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\model\OrmTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

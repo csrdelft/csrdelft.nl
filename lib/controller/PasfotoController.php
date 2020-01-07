@@ -21,14 +21,14 @@ class PasfotoController extends AbstractController {
 	public function pasfoto($uid, $vorm = 'civitas') {
 		$profiel = $this->profielModel::get($uid);
 		if (!$profiel) {
-			return $this->redirect('/images/geen-foto.jpg');
+			return $this->csrRedirect('/images/geen-foto.jpg');
 		}
 		if (!is_zichtbaar($profiel, 'profielfoto', 'intern')) {
-			return $this->redirect('/images/geen-foto.jpg');
+			return $this->csrRedirect('/images/geen-foto.jpg');
 		}
 		$path = $profiel->getPasfotoInternalPath(false, $vorm);
 		if ($path === null) {
-			return $this->redirect('/images/geen-foto.jpg');
+			return $this->csrRedirect('/images/geen-foto.jpg');
 		}
 		$image = new Afbeelding($path);
 		return new BinaryFileResponse($image->getFullPath(), 200, [], false);

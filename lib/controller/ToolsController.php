@@ -126,7 +126,7 @@ class ToolsController extends AbstractController {
 		if ($roodschopperForm->isPosted() && $roodschopperForm->validate() && $roodschopper->verzenden) {
 			$roodschopper->sendMails();
 			// Voorkom dubbele submit
-			return $this->redirect('/tools/roodschopper?verzenden=true&aantal=' . count($roodschopper->getSaldi()));
+			return $this->csrRedirect('/tools/roodschopper?verzenden=true&aantal=' . count($roodschopper->getSaldi()));
 		} else {
 			$roodschopper->generateMails();
 		}

@@ -2,11 +2,10 @@
 
 namespace CsrDelft\repository;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\CmsPagina;
 use CsrDelft\model\OrmTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
