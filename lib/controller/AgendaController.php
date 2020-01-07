@@ -32,6 +32,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Controller van de agenda.
  */
 class AgendaController {
+	const SECONDEN_IN_JAAR = 31557600;
 	/**
 	 * @var AgendaRepository
 	 */
@@ -270,6 +271,12 @@ class AgendaController {
 	public function feed() {
 		$startMoment = strtotime(filter_input(INPUT_GET, 'start'));
 		$eindMoment = strtotime(filter_input(INPUT_GET, 'end'));
+
+		if (abs($startMoment - $eindMoment) > self::SECONDEN_IN_JAAR) {
+			// Om de gare logica omtrent verjaardagen te laten werken
+			throw new CsrGebruikerException("Verschil tussen start en eind mag niet groter zijn dan een jaar.");
+		}
+
 		$events = $this->agendaRepository->getAllAgendeerbaar($startMoment, $eindMoment);
 
 		$eventsJson = [];

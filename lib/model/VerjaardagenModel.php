@@ -61,7 +61,7 @@ class VerjaardagenModel {
             (CONCAT(?, SUBSTRING(gebdatum, 5)) >= ? AND CONCAT(?, SUBSTRING(gebdatum, 5)) < ?)
             OR
             (CONCAT(?, SUBSTRING(gebdatum, 5)) >= ? AND CONCAT(?, SUBSTRING(gebdatum, 5)) < ?)
-        )", array($vanjaar, $van, $vanjaar, $tot, $totjaar, $van, $totjaar, $tot), null, "DATE_ADD(
+        ) AND gebdatum <= ?", array($vanjaar, $van, $vanjaar, $tot, $totjaar, $van, $totjaar, $tot, $tot), null, "DATE_ADD(
 					gebdatum,
 					INTERVAL TIMESTAMPDIFF(
 						year,
