@@ -14,7 +14,7 @@
 				@endif
 			@endcan
 			@if(!$belangrijk)
-				<a href="/forum/nieuw" class="badge" title="Nieuw bericht maken">
+				<a href="/forum/nieuw" class="badge" title="Nieuw draad maken">
 					<i class="fa fa-plus-circle"></i>
 				</a>
 			@endif

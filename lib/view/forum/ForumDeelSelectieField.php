@@ -39,7 +39,6 @@ class ForumDeelSelectieField extends InputField {
 			$html .= "</optgroup>";
 		}
 
-		$html .= "</select>";
-		return $html;
+		return $html . "</select>";
 	}
 }

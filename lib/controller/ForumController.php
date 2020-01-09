@@ -5,11 +5,13 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\Ini;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumZoeken;
+use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\forum\ForumDelenMeldingModel;
 use CsrDelft\model\forum\ForumDelenModel;
@@ -717,7 +719,13 @@ class ForumController extends AbstractController {
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 
-			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', CSR_ROOT . "/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT", "From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres);
+			$mail = new Mail(
+				[Ini::lees(Ini::EMAILS, 'pubcie') => 'PubCie'],
+				'Nieuw bericht wacht op goedkeuring',
+				CSR_ROOT . "/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT"
+			);
+			$mail->setReplyTo($mailadres);
+			$mail->send();
 		} else {
 
 			// direct goedkeuren voor ingelogd

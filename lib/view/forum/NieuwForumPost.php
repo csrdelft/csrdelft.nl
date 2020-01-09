@@ -21,6 +21,11 @@ class NieuwForumPost {
 	 * @var string
 	 */
 	public $titel;
+	/**
+	 * Email, voor externe berichten
+	 * @var string
+	 */
+	public $email;
 
 	/**
 	 * Inhoud van het draad

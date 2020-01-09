@@ -7,6 +7,7 @@
 				 title="Meldingen ontvangen voor nieuwe berichten in forumdeel">@icon('email_add', 'email_add')</a>
 		</div>
 	@endif
+	<a href="/forum/nieuw" class="btn btn-light mr-2" title="Nieuw draad maken">@icon('add')</a>
 	<div class="btn-group mr-2">
 		<a href="/forum/toonalles" class="btn btn-light post confirm ReloadPage"
 			 title="Verborgen onderwerpen weer laten zien">@icon('eye') {{CsrDelft\model\forum\ForumDradenVerbergenModel::instance()->getAantalVerborgenVoorLid()}}</a>

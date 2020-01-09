@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\model\security\LoginModel;
+
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -27,8 +29,11 @@ class BBCodeField extends TextareaField {
 		return <<<HTML
 <textarea data-bbpreview="{$this->getId()}" $inputAttribute>{$this->value}</textarea>
 <div class="btn-toolbar justify-content-end">
+HTML
+			. (LoginModel::mag(P_LOGGED_IN) ? <<<HTML
 	<a class="btn btn-light mr-2" href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
 HTML
+				: '')
 			. ($this->preview ? <<<HTML
 	<a class="btn btn-secondary" data-bbpreview-btn="{$this->getId()}" href="#" title="Toon voorbeeld met opmaak">Voorbeeld</a>
 HTML

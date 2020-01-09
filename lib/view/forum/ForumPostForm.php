@@ -13,6 +13,7 @@ use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\SpamTrapField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
@@ -59,6 +60,9 @@ class ForumPostForm extends Formulier {
 		}
 		if (!$deel) {
 			$fields[] = new ForumDeelSelectieField('forum_id', $model->forum_id, 'Forum deel', $delen);
+		}
+		if (!LoginModel::mag(P_LOGGED_IN)) {
+			$fields[] = new RequiredEmailField('email', $model->email, 'Emailadres');
 		}
 		if (!$draad) {
 			$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
