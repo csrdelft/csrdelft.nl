@@ -40,7 +40,7 @@ class BeheerTakenController extends AbstractController {
 	}
 
 	public function maaltijd($mid) {
-		$this->beheer(null, $mid);
+		return $this->beheer(null, $mid);
 	}
 
 	public function beheer($tid = null, $mid = null) {
