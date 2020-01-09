@@ -5,7 +5,7 @@ namespace CsrDelft\repository\eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\model\OrmTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

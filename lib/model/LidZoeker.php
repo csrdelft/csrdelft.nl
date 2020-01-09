@@ -283,6 +283,7 @@ class LidZoeker {
 	public function search() {
 		$query = '';
 		$params = [];
+		$this->result = [];
 
 		if ($this->query != '') {
 			list($paramsPart, $queryPart) = $this->defaultSearch($this->query);

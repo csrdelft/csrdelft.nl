@@ -32,7 +32,7 @@ class AbstractController extends BaseController {
 	 * @param bool $allowExternal
 	 * @return RedirectResponse
 	 */
-	protected function redirect($url, $status = 302, $allowExternal = false)
+	protected function csrRedirect($url, $status = 302, $allowExternal = false)
 	{
 			if (empty($url) || $url === null) {
 				$url = REQUEST_URI;

@@ -37,7 +37,7 @@ class MijnAbonnementenController {
 	}
 
 	public function uitschakelen($mrid) {
-		$abo_aantal = $this->maaltijdAbonnementenModel->uitschakelenAbonnement($mrid, LoginModel::getUid());
+		$abo_aantal = $this->maaltijdAbonnementenModel->uitschakelenAbonnement((int)$mrid, LoginModel::getUid());
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);

@@ -91,4 +91,11 @@ class LogEntry extends PersistentEntity {
 			}
 		}
 	}
+
+	public function removeOverflow()
+	{
+		$this->url = substr($this->url, 0, min(strlen($this->url), 255));
+		$this->referer = substr($this->referer, 0, min(strlen($this->referer), 255));
+		$this->useragent = substr($this->useragent, 0, min(strlen($this->useragent), 255));
+	}
 }

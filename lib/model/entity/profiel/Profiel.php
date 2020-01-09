@@ -343,17 +343,27 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	 * @return int timestamp
 	 */
 	public function getBeginMoment() {
-		$jaar = date('Y');
-		if (isset($GLOBALS['agenda_jaar'])) { //FIEES, Patrick.
+		$dag = substr($this->gebdatum, 5, 5);
+		if (isset($GLOBALS['agenda_van'], $GLOBALS['agenda_tot'])) { //FIEES, Patrick.
 			/*
 			 * Punt is dat we het goede (opgevraagde) jaar erbij moeten zetten,
 			 * anders gaat het mis op randen van weken en jaren.
 			 * De maand is ook nodig, anders gaat het weer mis met de weken in januari, want dan schuift
 			 * alles doordat het jaar nog op het restje van de vorige maand staat.
 			 */
-			$jaar = $GLOBALS['agenda_jaar'];
+			$van = $GLOBALS['agenda_van'];
+			$tot = $GLOBALS['agenda_tot'];
+
+			$datum = date('Y', $van) . '-' . $dag . ' 00:00:00';
+
+			if (strtotime($datum) < strtotime($van) || strtotime($datum) > strtotime($tot)) {
+				$datum = date('Y', $tot) . '-' . $dag . ' 00:00:00';
+			}
+		} else if (isset($GLOBALS['agenda_jaar'])) {
+			$datum = $GLOBALS['agenda_jaar'] . '-' . $dag . ' 00:00:00';
+		} else {
+			$datum = date('Y') . '-' . $dag . ' 00:00:00'; // 1 b'vo
 		}
-		$datum = $jaar . '-' . substr($this->gebdatum, 5, 5) . ' 00:00:00'; // 1 b'vo
 		return strtotime($datum);
 	}
 
@@ -370,8 +380,13 @@ class Profiel extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getBeschrijving() {
-		$jaar = isset($GLOBALS['agenda_jaar']) ? $GLOBALS['agenda_jaar'] : date('Y');
-		return $this->getTitel() . ' wordt ' . ($jaar - date('Y', strtotime($this->gebdatum))) . ' jaar';
+		$leeftijd = date('Y', $this->getBeginMoment()) - date('Y', strtotime($this->gebdatum));
+
+		if ($leeftijd == 0) {
+			return $this->getTitel() . ' wordt geboren';
+		}
+
+		return $this->getTitel() . ' wordt ' . $leeftijd . ' jaar';
 	}
 
 	public function getLocatie() {

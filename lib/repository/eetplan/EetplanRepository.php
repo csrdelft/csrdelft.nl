@@ -8,7 +8,7 @@ use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\ProfielModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>

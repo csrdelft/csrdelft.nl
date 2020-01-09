@@ -16,7 +16,7 @@ use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -173,7 +173,8 @@ class AgendaRepository extends ServiceEntityRepository {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
-			$GLOBALS['agenda_jaar'] = date('Y', $van);
+			$GLOBALS['agenda_van'] = $van;
+			$GLOBALS['agenda_tot'] = $tot;
 
 			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0)->fetchAll());
 		}
