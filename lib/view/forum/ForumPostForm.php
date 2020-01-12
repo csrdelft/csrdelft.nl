@@ -40,7 +40,7 @@ class ForumPostForm extends Formulier {
 
 		$fields = [];
 
-		$publiekNoticeClass = $deel && !$deel->isOpenbaar() ? "" : "verborgen";
+		$publiekNoticeClass = $deel && $deel->isOpenbaar() ? "" : "verborgen";
 
 		$fields[] = new HtmlComment("
 			<div id=\"public-melding\" class=\"alert alert-danger $publiekNoticeClass\">
