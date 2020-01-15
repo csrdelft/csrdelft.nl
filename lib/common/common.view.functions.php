@@ -411,7 +411,7 @@ function escape_ical($string, $prefix_length) {
 	$wrap = mb_substr($string, 0, $length);
 	$rest = mb_substr($string, $length);
 	if (!empty($rest)) {
-		$wrap .= "\r\n " . wordwrap($rest, 59, "\r\n ", true);
+		$wrap .= "\n " . wordwrap($rest, 59, "\n ", true);
 	}
 	return $wrap;
 }
