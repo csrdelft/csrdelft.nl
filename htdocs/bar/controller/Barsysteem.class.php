@@ -159,7 +159,7 @@ SQL
 		$this->db->beginTransaction();
 
 		$q = $this->db->prepare("INSERT INTO CiviBestelling (uid, cie, totaal) VALUES (:socCieId, :commissie, 0);");
-		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
+		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_STR);
 		$q->bindValue(":commissie", $cie, PDO::PARAM_STR);
 		$q->execute();
 		$bestelId = $this->db->lastInsertId();
