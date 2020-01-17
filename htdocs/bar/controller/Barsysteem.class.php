@@ -488,7 +488,7 @@ ORDER BY yearweek DESC
 	public function updatePerson($id, $name) {
 
 		$q = $this->db->prepare("UPDATE CiviSaldo SET naam = :naam WHERE uid = :id");
-		$q->bindValue(':id', $id, PDO::PARAM_INT);
+		$q->bindValue(':id', $id, PDO::PARAM_STR);
 		$q->bindValue(':naam', $name, PDO::PARAM_STR);
 		return $q->execute();
 	}
@@ -496,7 +496,7 @@ ORDER BY yearweek DESC
 	public function removePerson($id) {
 
 		$q = $this->db->prepare("UPDATE CiviSaldo SET deleted = 1 WHERE uid = :id AND saldo = 0");
-		$q->bindValue(':id', $id, PDO::PARAM_INT);
+		$q->bindValue(':id', $id, PDO::PARAM_STR);
 		$q->execute();
 		return $q->rowCount();
 	}
@@ -510,7 +510,7 @@ ORDER BY yearweek DESC
 			$q->bindValue(':uid', $uid, PDO::PARAM_STR);
 		} else {
 			$latest = $this->db->query("SELECT uid FROM CiviSaldo WHERE uid LIKE 'c%' ORDER BY uid DESC LIMIT 1")->fetchColumn();
-			$q->bindValue(':uid', ++$latest, PDO::PARAM_INT);
+			$q->bindValue(':uid', ++$latest, PDO::PARAM_STR);
 		}
 
 		return $q->execute();
