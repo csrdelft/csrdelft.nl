@@ -14,12 +14,17 @@ use CsrDelft\view\PlainView;
 class ContactFormulierController {
 	public function interesse() {
 		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
+		$achternaam = filter_input(INPUT_POST, "achternaam", FILTER_SANITIZE_STRING);
 		$email = filter_input(INPUT_POST, "submit_by", FILTER_SANITIZE_STRING);
 		$adres = filter_input(INPUT_POST, "straat", FILTER_SANITIZE_STRING);
 		$postcode = filter_input(INPUT_POST, "postcode", FILTER_SANITIZE_STRING);
 		$woonplaats = filter_input(INPUT_POST, "plaats", FILTER_SANITIZE_STRING);
 		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
 		$opmerking = filter_input(INPUT_POST, "opmerking", FILTER_SANITIZE_STRING);
+
+		if ($achternaam) { // Achternaam is niet zichtbaar
+			return new PlainView("Niet verzonden");
+		}
 
 		$interesses = [];
 

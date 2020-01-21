@@ -5,6 +5,7 @@
 		<label for="naam">Naam</label>
 		<input type="text" name="naam" id="naam" required/>
 	</div>
+	<input type="text" name="achternaam" class="verborgen"/>
 	<div class="field">
 		<label for="submit_by">Email</label>
 		<input type="email" name="submit_by" id="submit_by" required/>
