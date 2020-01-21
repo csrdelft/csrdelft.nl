@@ -22,10 +22,6 @@ class ContactFormulierController {
 		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
 		$opmerking = filter_input(INPUT_POST, "opmerking", FILTER_SANITIZE_STRING);
 
-		if ($achternaam) { // Achternaam is niet zichtbaar
-			return new PlainView("Niet verzonden");
-		}
-
 		$interesses = [];
 
 		$interesse1 = filter_input(INPUT_POST, "interesse1", FILTER_SANITIZE_STRING);
@@ -41,7 +37,7 @@ class ContactFormulierController {
 		$interessestring = '';
 		foreach ($interesses as $interesse) $interessestring .= " * " . $interesse . "\n";
 
-		if ($this->bevatUrl($opmerking) || $this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
+		if ($achternaam || $this->bevatUrl($opmerking) || $this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
 			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
 		}
 
