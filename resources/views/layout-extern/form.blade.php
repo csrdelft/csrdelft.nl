@@ -1,3 +1,24 @@
+<script type="text/javascript">
+	var captchaLoaded = false;
+
+	function checkVisible(elm) {
+		var rect = elm.getBoundingClientRect();
+		var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+		return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+	}
+
+	var onloadCallback = function() {
+		window.addEventListener('scroll', function () {
+
+			if (checkVisible(document.getElementById('captcha')) && !captchaLoaded) {
+				captchaLoaded = true
+				grecaptcha.render('captcha', {
+					'sitekey': '6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX'
+				});
+			}
+		})
+	};
+</script>
 <form method="post" id="contact-form" action="/contactformulier/interesse">
   {!! getMelding() !!}
 	@csrf
@@ -53,6 +74,7 @@
 		<label for="opmerking">Opmerking</label>
 		<textarea name="opmerking" id="opmerking" rows="4"></textarea>
 	</div>
+	<div class="field" id="captcha"></div>
 	<div class="field">
 		Met het verzenden van dit formulier ga je akkoord met de <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">privacyverklaring</a> van C.S.R. Delft.
 	</div>
@@ -60,3 +82,4 @@
 		<li><button type="submit" name="submitButton">Verzenden</button></li>
 	</ul>
 </form>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>

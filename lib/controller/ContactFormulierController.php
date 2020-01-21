@@ -1,7 +1,9 @@
 <?php
 
 namespace CsrDelft\controller;
+
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Ini;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\model\entity\Mail;
@@ -13,6 +15,12 @@ use CsrDelft\view\PlainView;
  */
 class ContactFormulierController {
 	public function interesse() {
+		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
+
+		if (!$resp['success']) {
+			throw new CsrToegangException("Geen toegang");
+		}
+
 		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
 		$achternaam = filter_input(INPUT_POST, "achternaam", FILTER_SANITIZE_STRING);
 		$email = filter_input(INPUT_POST, "submit_by", FILTER_SANITIZE_STRING);
@@ -82,5 +90,20 @@ De PubCie.
 
 	private function bevatUrl($opmerking) {
 		return preg_match('/https?:|\.(com|ru|pw|pro|nl)\/?($|\W)/', $opmerking) == true;
+	}
+
+	/**
+	 * @param $response
+	 * @return mixed
+	 */
+	public function checkCaptcha($response) {
+		$secret = Ini::lees(Ini::GOOGLE, 'captcha_secret');
+
+		$ch = curl_init("https://www.google.com/recaptcha/api/siteverify");
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, "secret=$secret&response=$response");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		return json_decode(curl_exec($ch), true);
 	}
 }
