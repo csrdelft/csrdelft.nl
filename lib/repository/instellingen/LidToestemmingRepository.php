@@ -236,5 +236,6 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 				$this->getEntityManager()->persist($instelling);
 			}
 		}
+		$this->getEntityManager()->flush();
 	}
 }

@@ -15,8 +15,8 @@ use Symfony\Component\Console\Question\Question;
 class StudieOpDatumCommand extends Command {
 	private $profielRepository;
 
-	public function __construct(ProfielRepository $profielModel) {
-		$this->profielRepository = $profielModel;
+	public function __construct(ProfielRepository $profielRepository) {
+		$this->profielRepository = $profielRepository;
 
 		parent::__construct();
 	}
