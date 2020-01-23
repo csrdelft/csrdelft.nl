@@ -24,9 +24,8 @@ use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\NoResultException;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 
 /**
