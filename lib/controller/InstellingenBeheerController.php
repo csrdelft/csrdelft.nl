@@ -3,7 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\instellingen\InstellingenModel;
+use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\model\security\LoginModel;
 
 
@@ -14,11 +14,11 @@ use CsrDelft\model\security\LoginModel;
  */
 class InstellingenBeheerController {
 	/**
-	 * @var InstellingenModel
+	 * @var InstellingenRepository
 	 */
 	private $instellingenModel;
 
-	public function __construct(InstellingenModel $instellingenModel) {
+	public function __construct(InstellingenRepository $instellingenModel) {
 		$this->instellingenModel = $instellingenModel;
 	}
 

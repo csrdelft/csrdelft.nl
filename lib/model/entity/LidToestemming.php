@@ -2,6 +2,8 @@
 
 namespace CsrDelft\model\entity;
 
+use CsrDelft\entity\Instelling;
+use CsrDelft\model\entity\instellingen\LidInstelling;
 use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\T;
@@ -11,7 +13,7 @@ use CsrDelft\Orm\Entity\T;
  *
  * Een LidToestemming beschrijft een Instelling per Lid.
  */
-class LidToestemming extends Instelling {
+class LidToestemming extends LidInstelling {
 	/**
 	 * Database table columns
 	 * @var array

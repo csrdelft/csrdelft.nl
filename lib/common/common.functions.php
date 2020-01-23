@@ -4,10 +4,11 @@
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\instellingen\InstellingenModel;
+use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
@@ -1013,7 +1014,7 @@ function lid_instelling($module, $key) {
 }
 
 function instelling($module, $key) {
-	return InstellingenModel::instance()->getValue($module, $key);
+	return ContainerFacade::getContainer()->get(InstellingenRepository::class)->getValue($module, $key);
 }
 
 function to_unix_path($path) {

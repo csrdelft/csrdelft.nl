@@ -1,9 +1,10 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\entity;
 
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Instelling.class.php
@@ -22,22 +23,29 @@ use CsrDelft\Orm\Entity\T;
  * Voor corvee-module:
  *  - Corveepunten per jaar
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\instellingen\InstellingenRepository")
+ * @ORM\Table("instellingen")
  */
 class Instelling extends PersistentEntity {
 
 	/**
 	 * Shared primary key
 	 * @var string
+	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Id()
 	 */
 	public $module;
 	/**
 	 * Shared primary key
 	 * @var string
+	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Id()
 	 */
 	public $instelling_id;
 	/**
 	 * Value
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $waarde;
 	/**
