@@ -60,7 +60,7 @@
 @if(isset($modal))
 	@php($modal->view())
 @elseif(!isset($modal) && !toestemming_gegeven())
-	@php((new \CsrDelft\view\toestemming\ToestemmingModalForm())->view())
+	@php(toestemming_form()->view())
 @else
 	<div id="modal" tabindex="-1"></div>
 @endif

@@ -33,6 +33,7 @@ class ToestemmingModalForm extends ModalForm {
 		parent::__construct(new LidToestemming(), '/toestemming', 'Toestemming geven');
 
 		$this->modalBreedte = 'modal-lg';
+		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->nieuw = $nieuw;
 
 		$fields = [];
@@ -72,7 +73,6 @@ class ToestemmingModalForm extends ModalForm {
 
 
 		$this->formKnoppen = new FormDefaultKnoppen('/toestemming/annuleren', false);
-		$this->lidToestemmingRepository = $lidToestemmingRepository;
 	}
 
 	/**

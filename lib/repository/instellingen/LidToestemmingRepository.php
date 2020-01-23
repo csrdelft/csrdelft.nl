@@ -71,12 +71,12 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 		return $instellingen;
 	}
 
-	protected function newInstelling($module, $id, $uid = null) {
+	protected function newInstelling($module, $id, $uid) {
 		$instelling = new LidToestemming();
 		$instelling->module = $module;
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
-		$instelling->uid = $uid ?? LoginModel::getUid();
+		$instelling->uid = $uid;
 		return $instelling;
 	}
 
@@ -191,11 +191,14 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 		return $this->getInstelling($module, $id)->waarde;
 	}
 
-	protected function getInstelling($module, $id) {
-		$instelling = $this->find([self::FIELD_MODULE => $module, self::FIELD_INSTELLING_ID => $id, self::FIELD_UID => LoginModel::getUid()]);
+	protected function getInstelling($module, $id, $uid = null) {
+		if ($uid == null) {
+			$uid = LoginModel::getUid();
+		}
+		$instelling = $this->find([self::FIELD_MODULE => $module, self::FIELD_INSTELLING_ID => $id, self::FIELD_UID => $uid]);
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
-				$instelling = $this->newInstelling($module, $id);
+				$instelling = $this->newInstelling($module, $id, $uid);
 			}
 			return $instelling;
 		} else {
@@ -230,11 +233,10 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 				if (!$this->isValidValue($module, $id, $waarde)) {
 					continue;
 				}
-				$instelling = $this->newInstelling($module, $id, $uid);
-				$instelling->waarde = $waarde;
+				$instelling = $this->getInstelling($module, $id, $uid);
+				$instelling->waarde = (string)$waarde;
 				$this->getEntityManager()->persist($instelling);
 			}
 		}
-		$this->getEntityManager()->flush();
 	}
 }

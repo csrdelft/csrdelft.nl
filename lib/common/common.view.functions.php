@@ -6,6 +6,7 @@ use CsrDelft\model\MenuModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
+use CsrDelft\view\toestemming\ToestemmingModalForm;
 use CsrDelft\view\View;
 
 /**
@@ -432,4 +433,8 @@ function commitLink() {
 
 function toestemming_gegeven() {
 	return ContainerFacade::getContainer()->get(LidToestemmingRepository::class)->toestemmingGegeven();
+}
+
+function toestemming_form() {
+	return new ToestemmingModalForm(ContainerFacade::getContainer()->get(LidToestemmingRepository::class));
 }

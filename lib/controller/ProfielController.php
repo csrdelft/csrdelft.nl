@@ -306,6 +306,7 @@ class ProfielController extends AbstractController {
 								}
 							}
 						});
+						$this->getDoctrine()->getManager()->flush();
 					} catch (CsrException $ex) {
 						setMelding($ex->getMessage(), -1);
 					}
