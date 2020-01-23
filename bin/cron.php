@@ -20,7 +20,7 @@
 use CsrDelft\Kernel;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\forum\ForumModel;
-use CsrDelft\model\instellingen\InstellingenModel;
+use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
@@ -39,7 +39,7 @@ $debugLogModel = $container->get(DebugLogModel::class);
 $logModel = $container->get(LogModel::class);
 $loginModel = $container->get(LoginModel::class);
 $oneTimeTokensModel = $container->get(OneTimeTokensModel::class);
-$instellingenModel = $container->get(InstellingenModel::class);
+$instellingenModel = $container->get(InstellingenRepository::class);
 $lidInstellingenModel = $container->get(LidInstellingenModel::class);
 $corveeHerinneringenModel = $container->get(CorveeHerinneringenModel::class);
 $forumModel = $container->get(ForumModel::class);

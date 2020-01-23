@@ -34,7 +34,6 @@ use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\instellingen\InstellingenModel;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
@@ -181,8 +180,6 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
-		$container->get(InstellingenModel::class)->prefetch();
-
 		// Terugvinden van temp upload files
 		ini_set('upload_tmp_dir', TMP_PATH);
 
