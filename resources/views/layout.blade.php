@@ -59,7 +59,7 @@
 <div id="modal-background" @if(isset($modal)) style="display: block;"@endif></div>
 @if(isset($modal))
 	@php($modal->view())
-@elseif(!isset($modal) && !CsrDelft\model\instellingen\LidToestemmingModel::instance()->toestemmingGegeven())
+@elseif(!isset($modal) && !toestemming_gegeven())
 	@php((new \CsrDelft\view\toestemming\ToestemmingModalForm())->view())
 @else
 	<div id="modal" tabindex="-1"></div>

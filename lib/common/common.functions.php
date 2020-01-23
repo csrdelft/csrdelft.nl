@@ -10,10 +10,10 @@ use CsrDelft\common\ShutdownHandler;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\model\instellingen\LidInstellingenModel;
-use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
@@ -996,9 +996,10 @@ function is_ingelogd_account($uid) {
  * @return bool
  */
 function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_MOD) {
+	$lidToestemmingRepository = ContainerFacade::getContainer()->get(LidToestemmingRepository::class);
 	if (is_array($key)) {
 		foreach ($key as $item) {
-			if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $cat, $uitzondering)) {
+			if (!$lidToestemmingRepository->toestemming($profiel, $item, $cat, $uitzondering)) {
 				return false;
 			}
 		}
@@ -1006,7 +1007,7 @@ function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_
 		return true;
 	}
 
-	return LidToestemmingModel::instance()->toestemming($profiel, $key, $cat, $uitzondering);
+	return $lidToestemmingRepository->toestemming($profiel, $key, $cat, $uitzondering);
 }
 
 function lid_instelling($module, $key) {

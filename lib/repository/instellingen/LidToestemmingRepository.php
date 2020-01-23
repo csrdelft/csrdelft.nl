@@ -1,15 +1,18 @@
 <?php
 
-namespace CsrDelft\model\instellingen;
+namespace CsrDelft\repository\instellingen;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\yaml\YamlInstellingen;
-use CsrDelft\model\entity\LidToestemming;
+use CsrDelft\entity\LidToestemming;
+use CsrDelft\model\instellingen\InstellingConfiguration;
+use CsrDelft\model\instellingen\InstellingType;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\CachedPersistenceModel;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
-use Symfony\Component\Config\Exception\FileLoaderLoadException;
+use Symfony\Component\Config\Exception\LoaderLoadException;
 
 
 /**
@@ -17,19 +20,22 @@ use Symfony\Component\Config\Exception\FileLoaderLoadException;
  *
  * Deze class houdt de toestemming bij voor een gebruiker.
  * In de sessie en in het profiel van leden.
+ *
+ * @method LidToestemming|null find($id, $lockMode = null, $lockVersion = null)
+ * @method LidToestemming|null findOneBy(array $criteria, array $orderBy = null)
+ * @method LidToestemming[]    findAll()
+ * @method LidToestemming[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LidToestemmingModel extends CachedPersistenceModel {
+class LidToestemmingRepository extends ServiceEntityRepository {
 	use YamlInstellingen;
 
-	const ORM = LidToestemming::class;
-	protected $memcache_prefetch = true;
 	/**
-	 * LidToestemmingModel constructor.
+	 * @param ManagerRegistry $registry
 	 * @throws FileLoaderImportCircularReferenceException
-	 * @throws FileLoaderLoadException
+	 * @throws LoaderLoadException
 	 */
-	public function __construct() {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, LidToestemming::class);
 
 		$this->load('instellingen/toestemming.yaml', new InstellingConfiguration());
 	}
@@ -76,12 +82,11 @@ class LidToestemmingModel extends CachedPersistenceModel {
 		$uid = LoginModel::getUid();
 
 		$modules = ['algemeen', 'intern', 'profiel'];
-		$placeholdersModule = implode(', ', array_fill(0, count($modules), '?'));
 
-		if ($this->count('uid = ? AND waarde = \'\' AND module IN (' . $placeholdersModule . ')', array_merge([$uid], $modules)) != 0) // Er zijn nog opties
+		if ($this->count(['module' => $modules, 'uid' => $uid, 'waarde' => '']) != 0)
 			return false;
 
-		if ($this->count('uid = ?', [$uid]) == 0) // Er is geen enkele selectie gemaakt
+		if ($this->count(['uid' => $uid]) == 0) // Er is geen enkele selectie gemaakt
 			return false;
 
 		return true;
@@ -97,8 +102,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 		if (LoginModel::mag($except))
 			return true;
 
-		/** @var LidToestemming $toestemming */
-		$toestemming = parent::retrieveByPrimaryKey([$cat, $id, $profiel->uid]);
+		$toestemming = $this->find(['module' => $cat, 'instelling_id' => $id, 'uid' => $profiel->uid]);
 
 		if (!$toestemming)
 			return false;
@@ -113,8 +117,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 		if (LoginModel::mag($except))
 			return true;
 
-		/** @var LidToestemming $toestemming */
-		$toestemming = parent::retrieveByPrimaryKey(['toestemming', $id, $uid]);
+		$toestemming = $this->find(['module' => 'toestemming', 'instelling_id' => $id, 'uid' => $uid]);
 
 		if (!$toestemming)
 			return false;
@@ -165,7 +168,7 @@ class LidToestemmingModel extends CachedPersistenceModel {
 	}
 
 	protected function getInstelling($module, $id) {
-		$instelling = $this->retrieveByPrimaryKey(array($module, $id, LoginModel::getUid()));
+		$instelling = $this->find(['module' => $module, 'instelling_id' => $id, 'uid' => LoginModel::getUid()]);
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
 				$instelling = $this->newInstelling($module, $id);
@@ -174,17 +177,16 @@ class LidToestemmingModel extends CachedPersistenceModel {
 		} else {
 			if ($instelling) {
 				// Haal niet-bestaande instelling uit de database
-				$this->delete($instelling);
+				$entityManager = $this->getEntityManager();
+				$entityManager->remove($instelling);
+				$entityManager->flush();
 			}
 			throw new CsrException(sprintf('Toestemming bestaat niet: "%s" module: "%s".', $id, $module));
 		}
 	}
 
 	public function getToestemmingForIds($ids, $waardes = ['ja', 'nee']) {
-		$placeholdersModule = implode(', ', array_fill(0, count($ids), '?'));
-		$placeholdersWaarde = implode(', ', array_fill(0, count($waardes), '?'));
-
-		return $this->find('instelling_id IN (' . $placeholdersModule . ') AND waarde IN (' . $placeholdersWaarde . ')', array_merge($ids, $waardes), null, 'uid');
+		return $this->findBy(['instelling_id' => $ids, 'waarde' => $waardes], ['uid' => 'ASC']);
 	}
 
 	/**
@@ -193,7 +195,6 @@ class LidToestemmingModel extends CachedPersistenceModel {
 	 */
 	public function save($uid = null) {
 		// create matrix for sqlInsertMultiple
-		$properties[] = $this->getAttributes();
 		foreach ($this->defaults as $module => $instellingen) {
 			foreach ($instellingen as $id => $waarde) {
 				if ($this->getType($module, $id) === InstellingType::Integer) {
@@ -205,10 +206,11 @@ class LidToestemmingModel extends CachedPersistenceModel {
 				if (!$this->isValidValue($module, $id, $waarde)) {
 					continue;
 				}
-				$properties[] = array($module, $id, $waarde, $uid ?? LoginModel::getUid());
+				$instelling = $this->newInstelling($module, $id, $uid);
+				$instelling->waarde = $waarde;
+				$this->getEntityManager()->persist($instelling);
 			}
 		}
-		$this->database->sqlInsertMultiple($this->getTableName(), $properties, true);
-		$this->flushCache(true);
+		$this->getEntityManager()->flush();
 	}
 }

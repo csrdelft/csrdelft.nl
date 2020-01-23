@@ -4,7 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\instellingen\LidToestemmingModel;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
@@ -21,16 +21,16 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ToestemmingController extends AbstractController {
 	/**
-	 * @var LidToestemmingModel
+	 * @var LidToestemmingRepository
 	 */
-	private $lidToestemmingModel;
+	private $lidToestemmingRepository;
 	/**
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
 
-	public function __construct(LidToestemmingModel $lidToestemmingModel, CmsPaginaRepository $cmsPaginaRepository) {
-		$this->lidToestemmingModel = $lidToestemmingModel;
+	public function __construct(LidToestemmingRepository $lidToestemmingRepository, CmsPaginaRepository $cmsPaginaRepository) {
+		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
@@ -38,11 +38,11 @@ class ToestemmingController extends AbstractController {
 	 * @throws Exception
 	 */
 	public function POST_overzicht() {
-		$form = new ToestemmingModalForm();
+		$form = new ToestemmingModalForm($this->lidToestemmingRepository);
 
 		if ($form->isPosted() && $form->validate()) {
 
-			$this->lidToestemmingModel->save();
+			$this->lidToestemmingRepository->save();
 			setMelding('Toestemming opgeslagen', 1);
 			return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
 		} else {
@@ -51,7 +51,7 @@ class ToestemmingController extends AbstractController {
 	}
 
 	public function GET_overzicht() {
-		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')), 'modal' => new ToestemmingModalForm()]);
+		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')), 'modal' => new ToestemmingModalForm($this->lidToestemmingRepository)]);
 	}
 
 	public function POST_annuleren() {
@@ -85,7 +85,7 @@ class ToestemmingController extends AbstractController {
                 'iedereen' => LidStatus::getTypeOptions(),
             ];
 
-            $toestemming = group_by('uid', $this->lidToestemmingModel->getToestemmingForIds($ids));
+            $toestemming = group_by('uid', $this->lidToestemmingRepository->getToestemmingForIds($ids));
 
             $toestemmingFiltered = [];
             foreach ($toestemming as $uid => $toestemmingen) {

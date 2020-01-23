@@ -2,10 +2,11 @@
 
 namespace CsrDelft\model;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\instellingen\LidToestemmingModel;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
@@ -412,7 +413,8 @@ class LidZoeker {
 	 */
 	private function zoekMag(Profiel $profiel, string $query) {
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
-		$zoekvelden = LidToestemmingModel::instance()->getModuleKeys('profiel');
+		$lidToestemmingRepository = ContainerFacade::getContainer()->get(LidToestemmingRepository::class);
+		$zoekvelden = $lidToestemmingRepository->getModuleKeys('profiel');
 		foreach ($zoekvelden as $veld) {
 			if ($veld === 'status') {
 				continue;
