@@ -39,7 +39,7 @@ $debugLogModel = $container->get(DebugLogModel::class);
 $logModel = $container->get(LogModel::class);
 $loginModel = $container->get(LoginModel::class);
 $oneTimeTokensModel = $container->get(OneTimeTokensModel::class);
-$instellingenModel = $container->get(InstellingenRepository::class);
+$instellingenRepository = $container->get(InstellingenRepository::class);
 $lidInstellingenModel = $container->get(LidInstellingenModel::class);
 $corveeHerinneringenModel = $container->get(CorveeHerinneringenModel::class);
 $forumModel = $container->get(ForumModel::class);
@@ -74,7 +74,7 @@ try {
 
 // Instellingen
 try {
-	$instellingenModel->opschonen();
+	$instellingenRepository->opschonen();
 	$lidInstellingenModel->opschonen();
 } catch (Exception $e) {
 	$debugLogModel->log('cron.php', '(Lid)InstellingenModel::instance()->opschonen()', array(), $e);
