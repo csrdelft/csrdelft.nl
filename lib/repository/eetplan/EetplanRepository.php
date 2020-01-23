@@ -74,7 +74,7 @@ class EetplanRepository extends ServiceEntityRepository {
 				$eetplanFeut[$sessie->uid] = [
 					'avonden' => [],
 					'uid' => $sessie->uid,
-					'naam' => $sessie->getNoviet()->getNaam()
+					'naam' => $sessie->noviet->getNaam()
 				];
 			}
 

@@ -18,7 +18,7 @@ class EetplanBekendeHuizenResponse extends DataTableResponse {
 	public function renderElement($entity) {
 		return [
 			'woonoord' => $entity->getWoonoord()->naam,
-			'naam' => $entity->getNoviet()->getNaam(),
+			'naam' => $entity->noviet->getNaam(),
 			'avond' => $entity->avond->format('d-m-Y'),
 		] + (array)$entity;
 	}
