@@ -4,15 +4,15 @@
 namespace CsrDelft\events;
 
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class JsonBodyEventListener {
 	/**
 	 * Lees een application/json request body in de request parameter bag.
 	 *
-	 * @param GetResponseEvent $event
+	 * @param RequestEvent $event
 	 */
-	public function onKernelRequest(GetResponseEvent $event) {
+	public function onKernelRequest(RequestEvent $event) {
 		$request = $event->getRequest();
 		if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
 			$data = json_decode($request->getContent(), true);

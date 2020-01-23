@@ -16,7 +16,7 @@
 .verborgen {
 	visibility: hidden;
 	position:absolute;
-	width: 0;
+	width: 0 !important;
 }
 
 form {
