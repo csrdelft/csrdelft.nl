@@ -6,27 +6,22 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\Instelling;
 use CsrDelft\model\instellingen\InstellingConfiguration;
-use CsrDelft\model\OrmTrait;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
-use Symfony\Component\Config\Exception\FileLoaderLoadException;
+use Symfony\Component\Config\Exception\LoaderLoadException;
 
 /**
  * InstellingenModel.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @method Instelling[]    ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
- * @method Instelling|null doctrineFind($id, $lockMode = null, $lockVersion = null)
  * @method Instelling|null findOneBy(array $criteria, array $orderBy = null)
  * @method Instelling[]    findAll()
  * @method Instelling|null find($id, $lockMode = null, $lockVersion = null)
  * @method Instelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class InstellingenRepository extends ServiceEntityRepository {
-	use OrmTrait;
 	use YamlInstellingen;
 
 	const ORM = Instelling::class;
@@ -35,7 +30,7 @@ class InstellingenRepository extends ServiceEntityRepository {
 	 * InstellingenModel constructor.
 	 * @param ManagerRegistry $manager
 	 * @throws FileLoaderImportCircularReferenceException
-	 * @throws FileLoaderLoadException
+	 * @throws LoaderLoadException
 	 */
 	public function __construct(ManagerRegistry $manager) {
 		parent::__construct($manager, Instelling::class);
@@ -59,18 +54,20 @@ class InstellingenRepository extends ServiceEntityRepository {
 	 *
 	 * @param string $module
 	 * @param string $id
-	 * @return Instelling|PersistentEntity
+	 * @return Instelling
 	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
 	protected function getInstelling($module, $id) {
-		if ($this->hasKey($module, $id) && $this->find(['module' => $module, 'instelling_id' => $id]) != null) {
-			return $this->find(['module' => $module, 'instelling_id' => $id]);
+		$entity = $this->find(['module' => $module, 'instelling_id' => $id]);
+		if ($this->hasKey($module, $id) && $entity != null) {
+			return $entity;
 		} else if ($this->hasKey($module, $id)) {
 			return $this->newInstelling($module, $id);
 		} else {
-			$entity = $this->find(['module' => $module, 'instelling_id' => $id]);
 			if ($entity != null) {
-				$this->delete($entity);
+				$entityManager = $this->getEntityManager();
+				$entityManager->remove($entity);
+				$entityManager->flush();
 			}
 			throw new CsrException(sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module));
 		}
@@ -87,7 +84,9 @@ class InstellingenRepository extends ServiceEntityRepository {
 		$instelling->module = $module;
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
-		$this->create($instelling);
+		$entityManager = $this->getEntityManager();
+		$entityManager->persist($instelling);
+		$entityManager->flush();
 		return $instelling;
 	}
 
@@ -111,17 +110,21 @@ class InstellingenRepository extends ServiceEntityRepository {
 	public function wijzigInstelling($module, $id, $waarde) {
 		$instelling = $this->getInstelling($module, $id);
 		$instelling->waarde = $waarde;
-		$this->update($instelling);
+		$entityManager = $this->getEntityManager();
+		$entityManager->persist($instelling);
+		$entityManager->flush();
 		return $instelling;
 	}
 
 	/**
 	 */
 	public function opschonen() {
+		$entityManager = $this->getEntityManager();
 		foreach ($this->findAll() as $instelling) {
 			if (!$this->hasKey($instelling->module, $instelling->instelling_id)) {
-				$this->delete($instelling);
+				$entityManager->remove($instelling);
 			}
 		}
+		$entityManager->flush();
 	}
 }
