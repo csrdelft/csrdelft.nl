@@ -29,6 +29,17 @@ use Symfony\Component\Config\Exception\LoaderLoadException;
 class LidToestemmingRepository extends ServiceEntityRepository {
 	use YamlInstellingen;
 
+	const FIELD_MODULE = 'module';
+	const FIELD_INSTELLING_ID = 'instelling_id';
+	const FIELD_UID = 'uid';
+	const MODULE_PROFIEL_LID = 'profiel_lid';
+	const MODULE_PROFIEL_OUDLID = 'profiel_oudlid';
+	const MODULE_PROFIEL = 'profiel';
+	const MODULE_INTERN = 'intern';
+	const MODULE_ALGEMEEN = 'algemeen';
+	const FIELD_WAARDE = 'waarde';
+	const MODULE_TOESTEMMING = 'toestemming';
+
 	/**
 	 * @param ManagerRegistry $registry
 	 * @throws FileLoaderImportCircularReferenceException
@@ -50,12 +61,12 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 		$instellingen = [];
 
 		if ($islid) {
-			$instellingen['profiel_lid'] = $this->getModuleKeys('profiel_lid');
+			$instellingen[self::MODULE_PROFIEL_LID] = $this->getModuleKeys(self::MODULE_PROFIEL_LID);
 		}
 
-		$instellingen['profiel_oudlid'] = $this->getModuleKeys('profiel_oudlid');
-		$instellingen['profiel'] = $this->getModuleKeys('profiel');
-		$instellingen['intern'] = $this->getModuleKeys('intern');
+		$instellingen[self::MODULE_PROFIEL_OUDLID] = $this->getModuleKeys(self::MODULE_PROFIEL_OUDLID);
+		$instellingen[self::MODULE_PROFIEL] = $this->getModuleKeys(self::MODULE_PROFIEL);
+		$instellingen[self::MODULE_INTERN] = $this->getModuleKeys(self::MODULE_INTERN);
 
 		return $instellingen;
 	}
@@ -70,57 +81,70 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 	}
 
 	public function toestemmingGegeven() {
-		if ($_SERVER['REQUEST_URI'] == '/privacy') // Doe niet naggen op de privacy info pagina.
+		// Doe niet naggen op de privacy info pagina.
+		if ($_SERVER['REQUEST_URI'] == '/privacy') {
 			return true;
-
-		if (startsWith($_SERVER['REQUEST_URI'], '/wachtwoord')) // Voorkom problemen tijdens opnieuw instellen wachtwoord
+		}
+		// Voorkom problemen tijdens opnieuw instellen wachtwoord
+		if (startsWith($_SERVER['REQUEST_URI'], '/wachtwoord')) {
 			return true;
-
-		if (isset($_SESSION['stop_nag']) && $_SESSION['stop_nag'] > time() - 3600) // Doe niet naggen voor een uur als een lid op annuleren heeft geklikt.
+		}
+		// Doe niet naggen voor een uur als een lid op annuleren heeft geklikt.
+		if (isset($_SESSION['stop_nag']) && $_SESSION['stop_nag'] > time() - 3600) {
 			return true;
+		}
 
 		$uid = LoginModel::getUid();
 
-		$modules = ['algemeen', 'intern', 'profiel'];
+		$modules = [self::MODULE_ALGEMEEN, self::MODULE_INTERN, self::MODULE_PROFIEL];
 
-		if ($this->count(['module' => $modules, 'uid' => $uid, 'waarde' => '']) != 0)
+		if ($this->count([self::FIELD_MODULE => $modules, self::FIELD_UID => $uid, self::FIELD_WAARDE => '']) != 0) {
 			return false;
-
-		if ($this->count(['uid' => $uid]) == 0) // Er is geen enkele selectie gemaakt
+		}
+		// Er is geen enkele selectie gemaakt
+		if ($this->count([self::FIELD_UID => $uid]) == 0) {
 			return false;
+		}
 
 		return true;
 	}
 
 	public function toestemming($profiel, $id, $cat = 'profiel', $except = P_LEDEN_MOD) {
-		if (!LoginModel::mag(P_LEDEN_READ))
+		if (!LoginModel::mag(P_LEDEN_READ)) {
 			return false;
+		}
 
-		if ($profiel->uid == LoginModel::getUid())
+		if ($profiel->uid == LoginModel::getUid()) {
 			return true;
+		}
 
-		if (LoginModel::mag($except))
+		if (LoginModel::mag($except)) {
 			return true;
+		}
 
-		$toestemming = $this->find(['module' => $cat, 'instelling_id' => $id, 'uid' => $profiel->uid]);
+		$toestemming = $this->find([self::FIELD_MODULE => $cat, self::FIELD_INSTELLING_ID => $id, self::FIELD_UID => $profiel->uid]);
 
-		if (!$toestemming)
+		if (!$toestemming) {
 			return false;
+		}
 
 		return $toestemming->waarde == "ja";
 	}
 
 	public function toestemmingUid($uid, $id, $except = P_LEDEN_MOD) {
-		if ($uid == LoginModel::getUid())
+		if ($uid == LoginModel::getUid()) {
 			return true;
+		}
 
-		if (LoginModel::mag($except))
+		if (LoginModel::mag($except)) {
 			return true;
+		}
 
-		$toestemming = $this->find(['module' => 'toestemming', 'instelling_id' => $id, 'uid' => $uid]);
+		$toestemming = $this->find([self::FIELD_MODULE => self::MODULE_TOESTEMMING, self::FIELD_INSTELLING_ID => $id, self::FIELD_UID => $uid]);
 
-		if (!$toestemming)
+		if (!$toestemming) {
 			return false;
+		}
 
 		return $toestemming->waarde == "ja";
 	}
@@ -168,7 +192,7 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 	}
 
 	protected function getInstelling($module, $id) {
-		$instelling = $this->find(['module' => $module, 'instelling_id' => $id, 'uid' => LoginModel::getUid()]);
+		$instelling = $this->find([self::FIELD_MODULE => $module, self::FIELD_INSTELLING_ID => $id, self::FIELD_UID => LoginModel::getUid()]);
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
 				$instelling = $this->newInstelling($module, $id);
@@ -186,7 +210,7 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 	}
 
 	public function getToestemmingForIds($ids, $waardes = ['ja', 'nee']) {
-		return $this->findBy(['instelling_id' => $ids, 'waarde' => $waardes], ['uid' => 'ASC']);
+		return $this->findBy([self::FIELD_INSTELLING_ID => $ids, self::FIELD_WAARDE => $waardes], [self::FIELD_UID => 'ASC']);
 	}
 
 	/**
