@@ -41,16 +41,16 @@ class Eetplan {
 	public $opmerking;
 
 	/**
+	 * @var Profiel
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $noviet;
+
+	/**
 	 * @return Woonoord|false|mixed
 	 */
 	public function getWoonoord() {
 		return WoonoordenModel::instance()->get($this->woonoord_id);
-	}
-
-	/**
-	 * @return Profiel|false
-	 */
-	public function getNoviet() {
-		return ProfielRepository::get($this->uid);
 	}
 }

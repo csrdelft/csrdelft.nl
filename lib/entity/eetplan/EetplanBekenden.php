@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\eetplan;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,16 +26,20 @@ class EetplanBekenden {
 	 */
 	public $uid2;
 	/**
+	 * @var Profiel
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid1", referencedColumnName="uid")
+	 */
+	public $noviet1;
+	/**
+	 * @var Profiel
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid2", referencedColumnName="uid")
+	 */
+	public $noviet2;
+	/**
 	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
 	 */
 	public $opmerking;
-
-	public function getNoviet1() {
-		return ContainerFacade::getContainer()->get(ProfielRepository::class)->find($this->uid1);
-	}
-
-	public function getNoviet2() {
-		return ContainerFacade::getContainer()->get(ProfielRepository::class)->find($this->uid2);
-	}
 }
