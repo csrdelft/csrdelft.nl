@@ -79,11 +79,11 @@
 		"update-prod": [
 			"git fetch",
 			"@onderhoud true",
+			"@php bin/console cache:clear",
+			"@flushcache",
 			"git merge FETCH_HEAD",
 			"@migrate",
-			"@onderhoud false",
-			"@php bin/console cache:clear",
-			"@flushcache"
+			"@onderhoud false"
 		],
 		"auto-scripts": {
 			"cache:clear": "symfony-cmd",
