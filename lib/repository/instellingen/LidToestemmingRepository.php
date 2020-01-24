@@ -171,12 +171,10 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 
 	public function isValidValue($module, $id, $waarde) {
 		$options = $this->getTypeOptions($module, $id);
-		switch ($this->getType($module, $id)) {
-			case InstellingType::Enumeration:
-				if (in_array($waarde, $options)) {
-					return true;
-				}
-				break;
+		if ($this->getType($module, $id) == InstellingType::Enumeration) {
+			if (in_array($waarde, $options)) {
+				return true;
+			}
 		}
 		return false;
 	}
