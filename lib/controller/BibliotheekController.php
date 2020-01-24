@@ -9,7 +9,7 @@ use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\entity\bibliotheek\BoekRecensie;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatable;
@@ -63,7 +63,7 @@ class BibliotheekController extends AbstractController {
 		$formulier = new RecensieFormulier($recensie);
 		if ($formulier->validate()) {
 			if (!$recensie->magBewerken()) {
-				throw new CsrToegangException("Mag recensie niet bewerken", 403);
+				throw new CsrToegangException("Mag recensie niet bewerken");
 			} else {
 				$recensie->bewerkdatum = getDateTime();
 				$this->boekRecensieModel->updateOrCreate($recensie);
@@ -207,7 +207,7 @@ class BibliotheekController extends AbstractController {
 	public function exemplaar($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarModel->get($exemplaar_id);
 		if (!$exemplaar->magBewerken()) {
-			throw new CsrToegangException("Mag exemplaar niet bewerken", 403);
+			throw new CsrToegangException("Mag exemplaar niet bewerken");
 		}
 		$form = new BoekExemplaarFormulier($exemplaar);
 		if ($form->validate()) {
@@ -312,7 +312,7 @@ class BibliotheekController extends AbstractController {
 		$uid = filter_input(INPUT_POST, 'lener_uid', FILTER_SANITIZE_STRING);
 		if (!$exemplaar->isEigenaar()) {
 			setMelding('Alleen de eigenaar mag boeken uitlenen', -1);
-		} else if (!ProfielModel::existsUid($uid)) {
+		} else if (!ProfielRepository::existsUid($uid)) {
 			setMelding('Incorrecte lener', -1);
 		} else if ($this->boekExemplaarModel->leen($exemplaar, $uid)) {
 			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);

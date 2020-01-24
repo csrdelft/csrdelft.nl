@@ -1,39 +1,39 @@
 <?php
 
-namespace CsrDelft\model\instellingen;
+namespace CsrDelft\repository\instellingen;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\yaml\YamlInstellingen;
-use CsrDelft\model\entity\Instelling;
-use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\entity\Instelling;
+use CsrDelft\model\instellingen\InstellingConfiguration;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
-use Symfony\Component\Config\Exception\FileLoaderLoadException;
+use Symfony\Component\Config\Exception\LoaderLoadException;
 
 /**
  * InstellingenModel.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @method Instelling|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Instelling[]    findAll()
+ * @method Instelling|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Instelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class InstellingenModel extends CachedPersistenceModel {
+class InstellingenRepository extends ServiceEntityRepository {
 	use YamlInstellingen;
 
 	const ORM = Instelling::class;
 
 	/**
-	 * Store instellingen array as a whole in memcache
-	 * @var boolean
-	 */
-	protected $memcache_prefetch = true;
-
-	/**
 	 * InstellingenModel constructor.
+	 * @param ManagerRegistry $manager
 	 * @throws FileLoaderImportCircularReferenceException
-	 * @throws FileLoaderLoadException
+	 * @throws LoaderLoadException
 	 */
-	public function __construct() {
-		parent::__construct();
+	public function __construct(ManagerRegistry $manager) {
+		parent::__construct($manager, Instelling::class);
 
 		$this->load('instellingen/stek_instelling.yaml', new InstellingConfiguration());
 	}
@@ -54,17 +54,20 @@ class InstellingenModel extends CachedPersistenceModel {
 	 *
 	 * @param string $module
 	 * @param string $id
-	 * @return Instelling|PersistentEntity
+	 * @return Instelling
 	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
 	protected function getInstelling($module, $id) {
-		if ($this->hasKey($module, $id) && $this->existsByPrimaryKey([$module, $id])) {
-			return $this->retrieveByPrimaryKey([$module, $id]);
+		$entity = $this->find(['module' => $module, 'instelling_id' => $id]);
+		if ($this->hasKey($module, $id) && $entity != null) {
+			return $entity;
 		} else if ($this->hasKey($module, $id)) {
 			return $this->newInstelling($module, $id);
 		} else {
-			if ($this->existsByPrimaryKey([$module, $id])) {
-				$this->deleteByPrimaryKey([$module, $id]);
+			if ($entity != null) {
+				$entityManager = $this->getEntityManager();
+				$entityManager->remove($entity);
+				$entityManager->flush();
 			}
 			throw new CsrException(sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module));
 		}
@@ -81,7 +84,9 @@ class InstellingenModel extends CachedPersistenceModel {
 		$instelling->module = $module;
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
-		$this->create($instelling);
+		$entityManager = $this->getEntityManager();
+		$entityManager->persist($instelling);
+		$entityManager->flush();
 		return $instelling;
 	}
 
@@ -105,17 +110,21 @@ class InstellingenModel extends CachedPersistenceModel {
 	public function wijzigInstelling($module, $id, $waarde) {
 		$instelling = $this->getInstelling($module, $id);
 		$instelling->waarde = $waarde;
-		$this->update($instelling);
+		$entityManager = $this->getEntityManager();
+		$entityManager->persist($instelling);
+		$entityManager->flush();
 		return $instelling;
 	}
 
 	/**
 	 */
 	public function opschonen() {
-		foreach ($this->find() as $instelling) {
+		$entityManager = $this->getEntityManager();
+		foreach ($this->findAll() as $instelling) {
 			if (!$this->hasKey($instelling->module, $instelling->instelling_id)) {
-				$this->delete($instelling);
+				$entityManager->remove($instelling);
 			}
 		}
+		$entityManager->flush();
 	}
 }

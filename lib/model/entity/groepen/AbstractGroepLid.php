@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -51,7 +51,7 @@ abstract class AbstractGroepLid extends PersistentEntity {
 	public $door_uid;
 
 	public function getLink() {
-		return ProfielModel::getLink($this->uid);
+		return ProfielRepository::getLink($this->uid);
 	}
 
 	/**

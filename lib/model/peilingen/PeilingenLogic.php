@@ -5,7 +5,7 @@ namespace CsrDelft\model\peilingen;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\peilingen\PeilingOptie;
 use CsrDelft\model\entity\peilingen\PeilingStem;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
@@ -166,7 +166,7 @@ class PeilingenLogic extends DependencyManager {
 
 			$arr['beschrijving'] = CsrBB::parse($arr['beschrijving']);
 
-			$ingebrachtDoor = ProfielModel::get($optie->ingebracht_door);
+			$ingebrachtDoor = ProfielRepository::get($optie->ingebracht_door);
 
 			$arr['ingebracht_door'] = $ingebrachtDoor
 				? new DataTableColumn($ingebrachtDoor->getLink('volledig'), $ingebrachtDoor->achternaam, $ingebrachtDoor->getNaam('volledig'))

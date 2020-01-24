@@ -15,9 +15,9 @@
 		<div class="kwali verborgen"><a title="Toon leden" class="btn" onclick="$('div.kwali').toggle();">@icon("eye") Toon leden</a></div>
 		@endif
 		@foreach($functie->getKwalificaties() as $kwali)
-		<div class="kwali @if(CsrDelft\model\ProfielModel::get($kwali->uid)->isOudlid()) verborgen @endif ">
+		<div class="kwali @if(\CsrDelft\repository\ProfielRepository::get($kwali->uid)->isOudlid()) verborgen @endif ">
 			<a href="/corvee/functies/dekwalificeer/{{$functie->functie_id}}/{{$kwali->uid}}" title="Kwalificatie intrekken" class="btn post">@icon("vcard_delete")</a>
-			&nbsp;{{CsrDelft\model\ProfielModel::get($kwali->uid)->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}}
+			&nbsp;{{\CsrDelft\repository\ProfielRepository::get($kwali->uid)->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}}
 			<span class="lichtgrijs"> (sinds {{$kwali->wanneer_toegewezen}})</span>
 		</div>
 		@endforeach

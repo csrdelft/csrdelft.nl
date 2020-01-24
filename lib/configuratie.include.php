@@ -10,23 +10,6 @@
  * Configure sessions.
  * Boot framework.
  */
-require_once 'defines.defaults.php';
-if (ONDERHOUD) {
-	http_response_code(503);
-	echo <<<'HTML'
-<!doctype html>
-<html lang=nl>
-<title>C.S.R. Delft - Onderhoud</title>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width, initial-scale=1.0">
-
-<body style="font-family: sans-serif; text-align: center;">
-<h1>Onderhoud</h1>
-<p>De website is momenteel in onderhoud. Dit duurt meestal niet lang.</p>
-<img alt="Beeldmerk van de Vereniging" src="/dist/images/beeldmerk.png">
-HTML;
-	exit;
-}
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Ini;
@@ -34,7 +17,6 @@ use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\instellingen\InstellingenModel;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
@@ -47,6 +29,7 @@ use CsrDelft\Orm\Persistence\OrmMemcache;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
+require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 // Zet omgeving klaar.
 require __DIR__ . '/../config/bootstrap.php';
 
@@ -181,8 +164,6 @@ switch (constant('MODE')) {
 		break;
 
 	case 'WEB':
-		$container->get(InstellingenModel::class)->prefetch();
-
 		// Terugvinden van temp upload files
 		ini_set('upload_tmp_dir', TMP_PATH);
 

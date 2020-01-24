@@ -2,8 +2,8 @@
 
 namespace CsrDelft\model\entity\fiscaat;
 
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -43,6 +43,6 @@ class CiviSaldo extends PersistentEntity {
 	];
 
 	public function getProfiel() {
-		return ProfielModel::get($this->uid);
+		return ProfielRepository::get($this->uid);
 	}
 }

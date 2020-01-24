@@ -1,8 +1,8 @@
 <?php
 
 namespace CsrDelft\view\lid;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * CSV in een textarea met clientside downloadknop
@@ -79,14 +79,14 @@ class LLCSV extends LLWeergave {
 					break;
 
 				case 'patroon':
-					$patroon = ProfielModel::get($profiel->patroon);
+					$patroon = ProfielRepository::get($profiel->patroon);
 					if ($patroon) {
 						$return .= $patroon->getNaam('volledig');
 					}
 					break;
 
 				case 'echtgenoot':
-					$echtgenoot = ProfielModel::get($profiel->echtgenoot);
+					$echtgenoot = ProfielRepository::get($profiel->echtgenoot);
 					if ($echtgenoot) {
 						$return .= $echtgenoot->getNaam('volledig');
 					}

@@ -7,7 +7,7 @@
 		@if(\CsrDelft\model\security\LoginModel::instance()->isSued())
 			<li>
 				<a href="/endsu" class="dropdown-item error"
-					 title="Switch user actie beeindingen">SU {{CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getSuedFrom()->uid, 'civitas')}}</a>
+					 title="Switch user actie beeindingen">SU {{\CsrDelft\repository\ProfielRepository::getNaam(CsrDelft\model\security\LoginModel::getSuedFrom()->uid, 'civitas')}}</a>
 			</li>
 		@endif
 		<li>

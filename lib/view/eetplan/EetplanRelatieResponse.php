@@ -18,8 +18,8 @@ class EetplanRelatieResponse extends DataTableResponse {
 	 * @return array
 	 */
 	public function renderElement($entity) {
-		$noviet1 = $entity->getNoviet1();
-		$noviet2 = $entity->getNoviet2();
+		$noviet1 = $entity->noviet1;
+		$noviet2 = $entity->noviet2;
 		return [
 				'noviet1' => new DataTableColumn($noviet1->getLink('volledig'), $noviet1->achternaam, $noviet1->getNaam('volledig')),
 				'noviet2' => new DataTableColumn($noviet2->getLink('volledig'), $noviet2->achternaam, $noviet2->getNaam('volledig')),

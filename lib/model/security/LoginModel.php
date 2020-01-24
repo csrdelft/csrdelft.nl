@@ -4,12 +4,12 @@ namespace CsrDelft\model\security;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\model\entity\security\RememberLogin;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\Validator;
@@ -65,7 +65,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return Profiel|false
 	 */
 	public static function getProfiel() {
-		return ProfielModel::get(static::getUid());
+		return ProfielRepository::get(static::getUid());
 	}
 
 	/**
@@ -350,7 +350,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 
 			if ($remember) {
-				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
+				setMelding('Welkom ' . ProfielRepository::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
 			} elseif (!$alreadyAuthenticatedByUrlToken) {
 
 				// Controleer actief wachtwoordbeleid
@@ -364,7 +364,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 
 				// Welcome message
-				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">' . $this->count('uid = ? AND expire > NOW()', array($account->uid)) . 'x ingelogd</a>.', 0);
+				setMelding('Welkom ' . ProfielRepository::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">' . $this->count('uid = ? AND expire > NOW()', array($account->uid)) . 'x ingelogd</a>.', 0);
 			}
 		}
 		return true;

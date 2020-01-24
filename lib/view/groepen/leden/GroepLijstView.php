@@ -8,9 +8,10 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
@@ -34,7 +35,7 @@ class GroepLijstView extends GroepTabView {
 		// sorteren op achernaam
 		$uids = array_keys($leden);
 		/** @var Profiel[] $profielen */
-		$profielen = ProfielModel::instance()->prefetch('uid IN (' . implode(', ', array_fill(0, count($uids), '?')) . ')', $uids, null, 'achternaam ASC');
+		$profielen = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('uid IN (' . implode(', ', array_fill(0, count($uids), '?')) . ')', $uids, null, 'achternaam ASC');
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
 			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::Afmelden)) {

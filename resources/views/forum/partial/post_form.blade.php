@@ -23,12 +23,12 @@
 			<a class="postlink">&rarr;</a>
 		</div>
 		<div class="naam">
-			{{CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getUid(), 'user')}}
+			{{\CsrDelft\repository\ProfielRepository::getNaam(CsrDelft\model\security\LoginModel::getUid(), 'user')}}
 		</div>
 
 		@auth
 			<div
-				class="forumpasfoto">{!! CsrDelft\model\ProfielModel::getLink(CsrDelft\model\security\LoginModel::getUid(), 'pasfoto') !!}</div>
+				class="forumpasfoto">{!! \CsrDelft\repository\ProfielRepository::getLink(CsrDelft\model\security\LoginModel::getUid(), 'pasfoto') !!}</div>
 		@endauth
 	</div>
 

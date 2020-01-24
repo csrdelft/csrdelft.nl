@@ -3,13 +3,14 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\LogModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\ProfielService;
 use CsrDelft\model\Roodschopper;
 use CsrDelft\model\SavedQueryModel;
@@ -40,9 +41,9 @@ class ToolsController extends AbstractController {
 	 */
 	private $accountModel;
 	/**
-	 * @var ProfielModel
+	 * @var ProfielRepository
 	 */
-	private $profielModel;
+	private $profielRepository;
 	/**
 	 * @var LoginModel
 	 */
@@ -60,10 +61,10 @@ class ToolsController extends AbstractController {
 	 */
 	private $profielService;
 
-	public function __construct(AccountModel $accountModel, ProfielModel $profielModel, ProfielService $profielService, LoginModel $loginModel, LogModel $logModel, SavedQueryModel $savedQueryModel) {
+	public function __construct(AccountModel $accountModel, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogModel $logModel, SavedQueryModel $savedQueryModel) {
 		$this->savedQueryModel = $savedQueryModel;
 		$this->accountModel = $accountModel;
-		$this->profielModel = $profielModel;
+		$this->profielRepository = $profielRepository;
 		$this->loginModel = $loginModel;
 		$this->logModel = $logModel;
 		$this->profielService = $profielService;
@@ -103,7 +104,7 @@ class ToolsController extends AbstractController {
 			'verticalen' => array_reduce(
 				['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
 				function ($carry, $letter) {
-					$carry[$letter] = $this->profielModel->find('verticale = ? AND (status="S_LID" OR status="S_NOVIET" OR status="S_GASTLID" OR status="S_KRINGEL")', [$letter]);
+					$carry[$letter] = $this->profielRepository->ormFind('verticale = ? AND (status="S_LID" OR status="S_NOVIET" OR status="S_GASTLID" OR status="S_KRINGEL")', [$letter]);
 					return $carry;
 				},
 				[]
@@ -125,7 +126,7 @@ class ToolsController extends AbstractController {
 		if ($roodschopperForm->isPosted() && $roodschopperForm->validate() && $roodschopper->verzenden) {
 			$roodschopper->sendMails();
 			// Voorkom dubbele submit
-			return $this->redirect('/tools/roodschopper?verzenden=true&aantal=' . count($roodschopper->getSaldi()));
+			return $this->csrRedirect('/tools/roodschopper?verzenden=true&aantal=' . count($roodschopper->getSaldi()));
 		} else {
 			$roodschopper->generateMails();
 		}
@@ -140,10 +141,8 @@ class ToolsController extends AbstractController {
 	public function syncldap() {
 		if (DEBUG OR LoginModel::mag(P_ADMIN) OR $this->loginModel->isSued()) {
 			$ldap = new LDAP();
-			$model = $this->profielModel;
-
-			foreach ($model->find() as $profiel) {
-				$model->save_ldap($profiel, $ldap);
+			foreach ($this->profielRepository->findAll() as $profiel) {
+				$this->profielRepository->save_ldap($profiel, $ldap);
 			}
 
 			$ldap->disconnect();
@@ -213,7 +212,7 @@ class ToolsController extends AbstractController {
 		}
 
 		function uid2naam($uid) {
-			$naam = ProfielModel::getLink($uid, 'civitas');
+			$naam = ProfielRepository::getLink($uid, 'civitas');
 			if ($naam !== false) {
 				return $naam;
 			} else {
@@ -242,7 +241,7 @@ class ToolsController extends AbstractController {
 			return new PlainView('Geen lid gevonden');
 		}
 
-		throw new ResourceNotFoundException();
+		throw new CsrNotFoundException();
 	}
 
 	public function naamsuggesties($zoekin = null, $status = null, $query = '') {

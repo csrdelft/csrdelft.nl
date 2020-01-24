@@ -3,7 +3,7 @@
 namespace CsrDelft\view\fiscaat\bestellingen;
 
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
@@ -15,7 +15,7 @@ use CsrDelft\view\datatable\DataTable;
 class CiviBestellingTable extends DataTable {
 	public function __construct($uid = null) {
 		$dataUrl = '/fiscaat/bestellingen' . ($uid == null ? '' : '/' . $uid);
-		$titel = $uid == null ? 'Eigen overzicht' : 'Overzicht voor ' . ProfielModel::getNaam($uid, 'volledig');
+		$titel = $uid == null ? 'Eigen overzicht' : 'Overzicht voor ' . ProfielRepository::getNaam($uid, 'volledig');
 		parent::__construct(CiviBestelling::class, $dataUrl, $titel);
 
 		$this->addColumn('inhoud');

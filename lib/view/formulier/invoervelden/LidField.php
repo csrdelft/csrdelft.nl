@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\AccountModel;
 
@@ -52,7 +52,7 @@ class LidField extends TextField {
 		}
 		$value = parent::getValue();
 		// geldig uid?
-		if (AccountModel::isValidUid($value) AND ProfielModel::existsUid($value)) {
+		if (AccountModel::isValidUid($value) AND ProfielRepository::existsUid($value)) {
 			return true;
 		}
 		$profielen = ProfielService::instance()->zoekLeden($value, 'naam', 'alle', 'achternaam', $this->zoekin);
@@ -87,7 +87,7 @@ var preview{$this->getId()} = function() {
 	}).done(function(response) {
 		$('#lidPreview_{$this->getId()}').html(response);
 		var el = document.getElementById('lidPreview_{$this->getId()}');
-		
+
 		if (el) { // el kan op dit moment niet meer bestaan.
 				window.context.init(el);
 		}

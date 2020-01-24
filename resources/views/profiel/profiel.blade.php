@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \CsrDelft\model\entity\profiel\Profiel $profiel
+ * @var \CsrDelft\entity\profiel\Profiel $profiel
  * @var \CsrDelft\model\entity\groepen\Bestuur[] $besturen
  * @var \CsrDelft\model\entity\groepen\Commissie[] $commissies
  * @var \CsrDelft\model\entity\groepen\Werkgroep[] $werkgroepen
@@ -133,15 +133,15 @@
 					<dt>Voorletters</dt>
 					<dd>{{$profiel->voorletters}}</dd>
 				@endif
-				@if($profiel->gebdatum != '0000-00-00' && is_zichtbaar($profiel, 'gebdatum'))
+				@if($profiel->gebdatum->format(DATE_FORMAT) != '0000-00-00' && is_zichtbaar($profiel, 'gebdatum'))
 					<dt>Geboortedatum</dt>
-					<dd>{{strftime('%d-%m-%Y', strtotime($profiel->gebdatum))}}</dd>
+					<dd>{{strftime('%d-%m-%Y', $profiel->gebdatum->getTimestamp())}}</dd>
 				@endif
-				@if($profiel->status === \CsrDelft\model\entity\LidStatus::Overleden && $profiel->sterfdatum !== '0000-00-00')
+				@if($profiel->status === \CsrDelft\model\entity\LidStatus::Overleden && $profiel->sterfdatum->format(DATE_FORMAT) !== '0000-00-00')
 					<dt>Overleden op</dt>
-					<dd>{{strftime('%d-%m-%y', strtotime($profiel->sterfdatum))}}</dd>
+					<dd>{{strftime('%d-%m-%y', $profiel->sterfdatum->getTimestamp())}}</dd>
 				@endif
-				@php($echtgenoot = \CsrDelft\model\ProfielModel::get($profiel->echtgenoot))
+				@php($echtgenoot = \CsrDelft\repository\ProfielRepository::get($profiel->echtgenoot))
 				@if($echtgenoot)
 					<dt>
 						@if($echtgenoot->geslacht === \CsrDelft\model\entity\Geslacht::Vrouw)
@@ -209,7 +209,7 @@
 			<dl class="col-md-6">
 				@if(is_zichtbaar($profiel, 'email'))
 					<dt>Email</dt>
-					<dd>{{$profiel->primary_email}}</dd>
+					<dd>{{$profiel->getPrimaryEmail()}}</dd>
 				@endif
 				@if($profiel->linkedin)
 					<dt>LinkedIn</dt>
@@ -237,8 +237,8 @@
 						<a href="/ledenlijst?q=lichting:{{$profiel->lidjaar}}&amp;status=ALL"
 							 title="Bekijk de leden van lichting {{$profiel->lidjaar}}">{{$profiel->lidjaar}}</a>
 					@endif
-					@if(!$profiel->isLid() && $profiel->lidafdatum != '0000-00-00')
-						tot {{substr($profiel->lidafdatum,0,4)}}
+					@if(!$profiel->isLid() && $profiel->lidafdatum->format(DATE_FORMAT) != '0000-00-00')
+						tot {{$profiel->lidafdatum->format('Y')}}
 					@endif
 				</dd>
 				<dt>Status</dt>
@@ -250,7 +250,7 @@
 			</dl>
 			@if(is_zichtbaar($profiel, ['kinderen'], 'intern') && is_zichtbaar($profiel, ['patroon'], 'profiel'))
 				<dl class="col-md-6">
-					@php($patroon = \CsrDelft\model\ProfielModel::get($profiel->patroon))
+					@php($patroon = \CsrDelft\repository\ProfielRepository::get($profiel->patroon))
 					@if($patroon)
 						<dt>
 							@if($patroon->geslacht === \CsrDelft\model\entity\Geslacht::Vrouw)
@@ -304,10 +304,10 @@
 				@if($profiel->getKring() && is_zichtbaar($profiel, 'kring', 'intern'))
 					<dt>Kring</dt>
 					<dd>
-						<a href="{{$profiel->kring->getUrl()}}">{{$profiel->kring->naam}}
+						<a href="{{$profiel->getKring()->getUrl()}}">{{$profiel->getKring()->naam}}
 							@if($profiel->status === \CsrDelft\model\entity\LidStatus::Kringel)
 								(kringel)
-							@elseif($profiel->kring->getLid($profiel->uid)->opmerking === 'leider')
+							@elseif($profiel->getKring()->getLid($profiel->uid)->opmerking === 'leider')
 								(kringleider)
 							@elseif($profiel->verticaleleider)
 								(leider)

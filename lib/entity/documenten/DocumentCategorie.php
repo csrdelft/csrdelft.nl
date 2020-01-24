@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\documenten;
 
 use CsrDelft\model\security\LoginModel;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,6 +34,13 @@ class DocumentCategorie  {
 	 * @var string
 	 */
 	public $leesrechten;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\documenten\Document", mappedBy="categorie")
+	 * @ORM\OrderBy({"toegevoegd" = "DESC"})
+	 * @var Document[]|ArrayCollection
+	 */
+	public $documenten;
 
 	public function magBekijken() {
 		return LoginModel::mag($this->leesrechten);

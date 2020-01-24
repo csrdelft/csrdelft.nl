@@ -3,7 +3,7 @@
 namespace CsrDelft\model\entity\fotoalbum;
 
 use CsrDelft\model\entity\KeywordTag;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Entity\T;
 
 
@@ -47,7 +47,7 @@ class FotoTag extends KeywordTag {
 
 	public function jsonSerialize() {
 		$array = parent::jsonSerialize();
-		$array['name'] = ProfielModel::getNaam($this->keyword, 'user');
+		$array['name'] = ProfielRepository::getNaam($this->keyword, 'user');
 		return $array;
 	}
 

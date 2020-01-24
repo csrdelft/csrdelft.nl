@@ -8,7 +8,7 @@ use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\forum\ForumDradenGelezenModel;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
@@ -49,7 +49,7 @@ class ApiForumController {
 		foreach ($draden as $draad) {
 			$draad->ongelezen = $draad->getAantalOngelezenPosts();
 			$draad->laatste_post = $this->forumPostsModel->get($draad->laatste_post_id);
-			$draad->laatste_wijziging_naam = ProfielModel::getNaam($draad->laatste_wijziging_uid, 'civitas');
+			$draad->laatste_wijziging_naam = ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'civitas');
 		}
 
 		return array('data' => array_values($draden));
@@ -83,7 +83,7 @@ class ApiForumController {
 		$posts = array_reverse($posts);
 
 		foreach ($posts as $post) {
-			$post->uid_naam = ProfielModel::getNaam($post->uid, 'civitas');
+			$post->uid_naam = ProfielRepository::getNaam($post->uid, 'civitas');
 			$post->tekst = CsrBB::parseLight($post->tekst);
 		}
 

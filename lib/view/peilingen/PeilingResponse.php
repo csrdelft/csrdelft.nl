@@ -3,7 +3,7 @@
 namespace CsrDelft\view\peilingen;
 
 use CsrDelft\model\entity\peilingen\Peiling;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableColumn;
 use CsrDelft\view\datatable\DataTableResponse;
 
@@ -23,7 +23,7 @@ class PeilingResponse extends DataTableResponse
 
 		$arr['detailSource'] = '/peilingen/opties/' . $entity->id;
 
-		$eigenaar = ProfielModel::get($entity->eigenaar);
+		$eigenaar = ProfielRepository::get($entity->eigenaar);
 		$arr['eigenaar'] = $eigenaar ? new DataTableColumn(
 			$eigenaar->getLink('volledig'),
 			$eigenaar->achternaam,

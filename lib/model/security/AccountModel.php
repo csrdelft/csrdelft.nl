@@ -2,10 +2,11 @@
 
 namespace CsrDelft\model\security;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\CachedPersistenceModel;
 
 /**
@@ -61,7 +62,7 @@ class AccountModel extends CachedPersistenceModel {
 	 * @throws CsrGebruikerException
 	 */
 	public function maakAccount($uid) {
-		$profiel = ProfielModel::get($uid);
+		$profiel = ProfielRepository::get($uid);
 		if (!$profiel) {
 			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
@@ -147,7 +148,7 @@ class AccountModel extends CachedPersistenceModel {
 			$profiel = $account->getProfiel();
 			if ($profiel) {
 				$profiel->email = $account->email;
-				ProfielModel::instance()->update($profiel);
+				ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel);
 			}
 		}
 		return true;

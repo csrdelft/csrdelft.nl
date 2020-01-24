@@ -3,8 +3,8 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -76,7 +76,7 @@ class BbCitaat extends BbTag {
 		$this->hidden = $this->env->quote_level > 1;
 		if (isset($arguments['citaat'])) {
 			$bron = $arguments['citaat'];
-			$profiel = mag("P_LEDEN_READ,P_OUDLEDEN_READ") ? ProfielModel::get($bron) : null;
+			$profiel = mag("P_LEDEN_READ,P_OUDLEDEN_READ") ? ProfielRepository::get($bron) : null;
 			if ($profiel) {
 				$this->bron_profiel = $profiel;
 			} else {

@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
@@ -118,7 +119,7 @@ class BbFotoalbum extends BbTag {
 				$album = FotoAlbumModel::instance()->getFotoAlbum($url);
 			}
 			return $album;
-		} catch (NotFoundHttpException $ex) {
+		} catch (CsrNotFoundException $ex) {
 			return null;
 		}
 	}

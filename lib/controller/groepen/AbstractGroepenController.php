@@ -12,7 +12,7 @@ use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\groepen\GroepStatus;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
@@ -475,7 +475,7 @@ abstract class AbstractGroepenController {
 			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($id);
 			if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
-				throw new CsrToegangException('Kan logboek niet vinden', 403);
+				throw new CsrToegangException('Kan logboek niet vinden');
 			}
 			return new GroepLogboekForm($groep);
 		}
@@ -513,7 +513,7 @@ abstract class AbstractGroepenController {
 		}
 
 		if (!$groep->valideerOpmerking($keuzes)) {
-			throw new CsrToegangException('', 400);
+			throw new CsrGebruikerException('');
 		}
 
 		$lid->opmerking2 = $keuzes;

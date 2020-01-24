@@ -39,7 +39,7 @@
 					@endcan
 				</td>
 			</tr>
-			@forelse($model->getRecent($categorie, 5) as $document)
+			@forelse($categorie->documenten->slice(0, 5) as $document)
 				@include('documenten.documentregel', ['document' => $document])
 			@empty
 				<tr>

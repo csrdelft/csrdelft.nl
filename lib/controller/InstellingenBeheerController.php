@@ -3,7 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\instellingen\InstellingenModel;
+use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\model\security\LoginModel;
 
 
@@ -14,12 +14,12 @@ use CsrDelft\model\security\LoginModel;
  */
 class InstellingenBeheerController {
 	/**
-	 * @var InstellingenModel
+	 * @var InstellingenRepository
 	 */
-	private $instellingenModel;
+	private $instellingenRepository;
 
-	public function __construct(InstellingenModel $instellingenModel) {
-		$this->instellingenModel = $instellingenModel;
+	public function __construct(InstellingenRepository $instellingenRepository) {
+		$this->instellingenRepository = $instellingenRepository;
 	}
 
 	protected function assertToegang($module = null) {
@@ -47,8 +47,8 @@ class InstellingenBeheerController {
 	public function module($module = null) {
 		$this->assertToegang($module);
 
-		if (in_array($module, $this->instellingenModel->getModules())) {
-			$instellingen = $this->instellingenModel->getModuleKeys($module);
+		if (in_array($module, $this->instellingenRepository->getModules())) {
+			$instellingen = $this->instellingenRepository->getModuleKeys($module);
 		} else {
 			$instellingen = null;
 			$module = null;
@@ -56,7 +56,7 @@ class InstellingenBeheerController {
 
 		return view('instellingenbeheer.beheer', [
 			'module' => $module,
-			'modules' => $this->instellingenModel->getModules(),
+			'modules' => $this->instellingenRepository->getModules(),
 			'instellingen' => $instellingen,
 		]);
 	}
@@ -65,7 +65,7 @@ class InstellingenBeheerController {
 		$this->assertToegang($module);
 
 		$waarde = filter_input(INPUT_POST, 'waarde', FILTER_UNSAFE_RAW);
-		$instelling = $this->instellingenModel->wijzigInstelling($module, $id, $waarde);
+		$instelling = $this->instellingenRepository->wijzigInstelling($module, $id, $waarde);
 
 		return view('instellingenbeheer.regel', [
 			'waarde' => $instelling->waarde,
@@ -77,7 +77,7 @@ class InstellingenBeheerController {
 	public function reset($module, $id) {
 		$this->assertToegang($module);
 
-		$instelling = $this->instellingenModel->wijzigInstelling($module, $id, $this->instellingenModel->getDefault($module, $id));
+		$instelling = $this->instellingenRepository->wijzigInstelling($module, $id, $this->instellingenRepository->getDefault($module, $id));
 
 		return view('instellingenbeheer.regel', [
 			'waarde' => $instelling->waarde,

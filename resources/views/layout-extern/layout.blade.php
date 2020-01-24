@@ -16,6 +16,7 @@
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
 				href="{{CSR_ROOT}}/forum/rss.xml"/>
 	@yield('styles')
+	@script('extern.js')
 </head>
 
 <body>
@@ -93,6 +94,5 @@
 		</section>
 	@show
 </div>
-@script('extern.js')
 </body>
 </html>

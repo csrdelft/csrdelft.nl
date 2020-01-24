@@ -9,7 +9,7 @@ use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\commissievoorkeuren\AddCategorieFormulier;
 use CsrDelft\view\commissievoorkeuren\AddCommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\CommissieFormulier;
@@ -129,11 +129,11 @@ class CommissieVoorkeurenController extends AbstractController {
 	}
 
 	public function lidpagina($uid) {
-		if (!ProfielModel::existsUid($uid)) {
+		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrToegangException();
 		}
 
-		$profiel = ProfielModel::get($uid);
+		$profiel = ProfielRepository::get($uid);
 
 		$voorkeuren = $this->commissieVoorkeurModel->getVoorkeurenVoorLid($profiel);
 		$voorkeurenMap = [];
@@ -157,7 +157,7 @@ class CommissieVoorkeurenController extends AbstractController {
 	}
 
 	public function lidpaginaopmerking($uid) {
-		$opmerking = $this->voorkeurOpmerkingModel->getOpmerkingVoorLid(ProfielModel::get($uid));
+		$opmerking = $this->voorkeurOpmerkingModel->getOpmerkingVoorLid(ProfielRepository::get($uid));
 		$form = (new CommissieVoorkeurPraesesOpmerkingForm($opmerking));
 		if ($form->validate()) {
 			$this->voorkeurOpmerkingModel->updateOrCreate($opmerking);

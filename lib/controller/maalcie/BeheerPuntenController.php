@@ -5,7 +5,7 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\maalcie\CorveePuntenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * BeheerPuntenController.class.php
@@ -30,7 +30,7 @@ class BeheerPuntenController {
 	}
 
 	public function wijzigpunten($uid) {
-		$profiel = ProfielModel::get($uid); // false if lid does not exist
+		$profiel = ProfielRepository::get($uid); // false if lid does not exist
 		if (!$profiel) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
@@ -42,7 +42,7 @@ class BeheerPuntenController {
 	}
 
 	public function wijzigbonus($uid) {
-		$profiel = ProfielModel::get($uid); // false if lid does not exist
+		$profiel = ProfielRepository::get($uid); // false if lid does not exist
 		if (!$profiel) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}

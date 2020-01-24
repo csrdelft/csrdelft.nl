@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\toestemming;
 
-use CsrDelft\model\entity\LidToestemming;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\LidToestemming;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
 /**
@@ -23,7 +23,7 @@ class ToestemmingLijstResponse extends DataTableResponse {
      * @param LidToestemming[] $entity
      */
     public function renderElement($entity) {
-        $profiel = ProfielModel::get($entity[0]->uid);
+        $profiel = ProfielRepository::get($entity[0]->uid);
 
         $arr = [
             'uid' => $entity[0]->uid,

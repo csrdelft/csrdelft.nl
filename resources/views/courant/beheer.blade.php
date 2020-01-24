@@ -46,7 +46,7 @@
 					<span
 						class="onderstreept">{{$bericht->cat ? CsrDelft\model\entity\courant\CourantCategorie::getDescription($bericht->cat) : 'Geen categorie'}}</span>
 					@if($courantModel->magBeheren())
-						{!! CsrDelft\model\ProfielModel::getLink($bericht->uid, 'civitas') !!}
+						{!! \CsrDelft\repository\ProfielRepository::getLink($bericht->uid, 'civitas') !!}
 					@endif
 					<span class="dikgedrukt">{{$bericht->titel}}</span>
 					@if($courantModel->magBeheren($bericht->uid))

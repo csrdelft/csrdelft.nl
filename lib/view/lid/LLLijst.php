@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\lid;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * De 'normale' ledenlijst, zoals het is zoals het was.
@@ -89,7 +89,7 @@ class LLLijst extends LLWeergave {
 					break;
 
 				case 'patroon':
-					$patroon = ProfielModel::get($profiel->patroon);
+					$patroon = ProfielRepository::get($profiel->patroon);
 					if ($patroon) {
 						echo $patroon->getLink('volledig');
 					} else {
@@ -98,7 +98,7 @@ class LLLijst extends LLWeergave {
 					break;
 
 				case 'echtgenoot':
-					$echtgenoot = ProfielModel::get($profiel->echtgenoot);
+					$echtgenoot = ProfielRepository::get($profiel->echtgenoot);
 					if ($echtgenoot) {
 						echo $echtgenoot->getLink('volledig');
 					} else {

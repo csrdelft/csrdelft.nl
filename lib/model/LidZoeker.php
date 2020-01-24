@@ -2,11 +2,13 @@
 
 namespace CsrDelft\model;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\instellingen\LidToestemmingModel;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
@@ -283,6 +285,7 @@ class LidZoeker {
 	public function search() {
 		$query = '';
 		$params = [];
+		$this->result = [];
 
 		if ($this->query != '') {
 			list($paramsPart, $queryPart) = $this->defaultSearch($this->query);
@@ -293,7 +296,7 @@ class LidZoeker {
 		$query .= $queryPart;
 		$params = array_merge($params, $paramsPart);
 
-		$result = ProfielModel::instance()->find($query, $params, null, implode($this->sort));
+		$result = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind($query, $params, null, implode($this->sort));
 
 		foreach ($result as $profiel) {
 			if ($this->zoekMag($profiel, $this->query)) {
@@ -411,7 +414,8 @@ class LidZoeker {
 	 */
 	private function zoekMag(Profiel $profiel, string $query) {
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
-		$zoekvelden = LidToestemmingModel::instance()->getModuleKeys('profiel');
+		$lidToestemmingRepository = ContainerFacade::getContainer()->get(LidToestemmingRepository::class);
+		$zoekvelden = $lidToestemmingRepository->getModuleKeys('profiel');
 		foreach ($zoekvelden as $veld) {
 			if ($veld === 'status') {
 				continue;

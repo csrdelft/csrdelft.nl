@@ -4,7 +4,7 @@ namespace CsrDelft\model\entity\maalcie;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -49,7 +49,7 @@ class MaaltijdAanmelding extends PersistentEntity {
 	 * @return float if lid exists, false otherwise
 	 */
 	public function getSaldo() {
-		return ProfielModel::get($this->uid)->getCiviSaldo();
+		return ProfielRepository::get($this->uid)->getCiviSaldo();
 	}
 
 	public function getMaaltijd() {

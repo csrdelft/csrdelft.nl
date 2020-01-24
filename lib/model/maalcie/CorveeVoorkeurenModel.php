@@ -2,11 +2,12 @@
 
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
@@ -24,7 +25,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	public function setEetwens(Profiel $profiel, $eetwens) {
 		if ($profiel->eetwens === $eetwens) return;
 		$profiel->eetwens = $eetwens;
-		if (ProfielModel::instance()->update($profiel) !== 1) {
+		if (ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel) !== 1) {
 			throw new CsrException('Eetwens opslaan mislukt');
 		}
 	}

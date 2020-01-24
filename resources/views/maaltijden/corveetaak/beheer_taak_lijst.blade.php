@@ -76,7 +76,7 @@
 			</a>
 		@endif
 		@if($taak->uid)
-			&nbsp;{!! CsrDelft\model\ProfielModel::getLink($taak->uid,instelling('corvee', 'weergave_ledennamen_beheer')) !!}
+			&nbsp;{!! \CsrDelft\repository\ProfielRepository::getLink($taak->uid,instelling('corvee', 'weergave_ledennamen_beheer')) !!}
 		@endif
 	</td>
 	<td

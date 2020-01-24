@@ -1,12 +1,16 @@
 <?php
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 chdir(dirname(__FILE__) . '/../lib/');
 
-require_once 'configuratie.include.php';
+/** @var \CsrDelft\Kernel $kernel */
+$kernel = require_once 'configuratie.include.php';
 
-foreach (ProfielModel::instance()->find() as $profiel) {
-    if(ProfielModel::instance()->verwijderVeldenUpdate($profiel)) {
+$container = $kernel->getContainer();
+$profielRepository = $container->get(ProfielRepository::class);
+
+foreach ($profielRepository->findAll() as $profiel) {
+    if($profielRepository->verwijderVeldenUpdate($profiel)) {
         echo "Verwijder data van " . $profiel->uid . "\n";
 	}
 }

@@ -9,6 +9,7 @@ use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * AbstractGroepLedenModel.php
@@ -96,7 +97,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 			}
 		}
 		$db = Database::instance();
-		$profielTable = ProfielModel::instance()->getTableName();
+		$profielTable = 'profielen';
 		return new GroepStatistiek(
 			$totaal,
 			$db->sqlSelect(['naam', 'count(*)'], 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $sqlIn . ')', $uids, 'verticale', null)->fetchAll(),

@@ -73,10 +73,10 @@ class FotoAlbumController extends AbstractController {
 		}
 		if ($album->dirname === 'fotoalbum') {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
-			return $this->redirect($album->getUrl());
+			return $this->csrRedirect($album->getUrl());
 		}
 		$this->fotoAlbumModel->verwerkFotos($album);
-		return $this->redirect($album->getUrl());
+		return $this->csrRedirect($album->getUrl());
 	}
 
 	public function toevoegen(Request $request, $dir) {
@@ -130,7 +130,7 @@ class FotoAlbumController extends AbstractController {
 						// verwerken gelukt?
 						if ($foto->isComplete()) {
 							if ($poster) {
-								return $this->redirect($album->getUrl() . '#' . $foto->getResizedUrl());
+								return $this->csrRedirect($album->getUrl() . '#' . $foto->getResizedUrl());
 							} else {
 								return new JsonResponse(true);
 							}

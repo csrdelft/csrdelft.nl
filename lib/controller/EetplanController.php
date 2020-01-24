@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
@@ -10,7 +11,7 @@ use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
@@ -67,11 +68,11 @@ class EetplanController {
 	public function noviet($uid = null) {
 		$eetplan = $this->eetplanModel->getEetplanVoorNoviet($uid);
 		if ($eetplan === false) {
-			throw new CsrToegangException("Geen eetplan gevonden voor deze noviet", 404);
+			throw new CsrNotFoundException("Geen eetplan gevonden voor deze noviet");
 		}
 
 		return view('eetplan.noviet', [
-			'noviet' => ProfielModel::get($uid),
+			'noviet' => ProfielRepository::get($uid),
 			'eetplan' => $this->eetplanModel->getEetplanVoorNoviet($uid)
 		]);
 	}
@@ -79,7 +80,7 @@ class EetplanController {
 	public function huis($id = null) {
 		$eetplan = $this->eetplanModel->getEetplanVoorHuis($id, $this->lichting);
 		if ($eetplan == []) {
-			throw new CsrGebruikerException('Huis niet gevonden', 404);
+			throw new CsrGebruikerException('Huis niet gevonden');
 		}
 
 		return view('eetplan.huis', [
@@ -228,7 +229,7 @@ class EetplanController {
 
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanModel->count("avond = ?", array($form->getValues()['avond'])) > 0) {
+		} elseif ($this->eetplanModel->ormCount("avond = ?", array($form->getValues()['avond'])) > 0) {
 			setMelding('Er bestaat al een eetplan met deze datum', -1);
 			return $form;
 		} else {

@@ -4,10 +4,11 @@ namespace CsrDelft\model\fotoalbum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -15,6 +16,7 @@ use CsrDelft\Orm\PersistenceModel;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbumModel.php
@@ -81,16 +83,16 @@ class FotoAlbumModel extends PersistenceModel {
 	}
 
 	public function getFotoAlbum($path) {
-		if (AccountModel::isValidUid($path) AND ProfielModel::existsUid($path)) {
+		if (AccountModel::isValidUid($path) AND ProfielRepository::existsUid($path)) {
 			$album = new FotoTagAlbum($path);
 		} else {
 			$album = new FotoAlbum($path);
 		}
 		if (!$album->exists()) {
-			throw new NotFoundHttpException("Fotoalbum $path bestaat niet");
+			throw new CsrNotFoundException("Fotoalbum $path bestaat niet");
 		}
 		if (!$album->magBekijken()) {
-			throw new NotFoundHttpException();
+			throw new CsrNotFoundException();
 		}
 		return $album;
 	}
@@ -162,7 +164,7 @@ HTML;
 		try {
 			$album = $this->getFotoAlbum('');
 			return $album->getMostRecentSubAlbum();
-		} catch (NotFoundHttpException $ex) {
+		} catch (CsrNotFoundException $ex) {
 			return null;
 		}
 	}

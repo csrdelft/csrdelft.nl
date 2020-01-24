@@ -2,10 +2,11 @@
 
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 
@@ -83,7 +84,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 				} elseif (!$repetitie->abonneerbaar) {
 					$abo->foutmelding = 'Niet abonneerbaar';
 					$waarschuwingen[$abo->uid][$abo->mlt_repetitie_id] = $abo;
-				} elseif (!LidStatus::isLidLike(ProfielModel::get($abo->uid)->status)) {
+				} elseif (!LidStatus::isLidLike(ProfielRepository::get($abo->uid)->status)) {
 					$abo->waarschuwing = 'Geen huidig lid';
 					$waarschuwingen[$abo->uid][$abo->mlt_repetitie_id] = $abo;
 				}
@@ -110,7 +111,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 			$query = $db->prepare($sql);
 			$query->execute($values);
 
-			$leden = ProfielModel::instance()->find("status = ? OR status = ? OR status = ?", LidStatus::getLidLike());
+			$leden = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind("status = ? OR status = ? OR status = ?", LidStatus::getLidLike());
 
 			$matrix = array();
 			foreach ($leden as $lid) {
@@ -206,7 +207,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 
 	public function getAbonnementenVanNovieten() {
 		return Database::transaction(function () {
-			$novieten = ProfielModel::instance()->find('status = "S_NOVIET"');
+			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('status = "S_NOVIET"');
 			$matrix = array();
 			foreach ($novieten as $noviet) {
 				$matrix[$noviet->uid] = $this->find('uid = ?', array($noviet->uid), null, 'mlt_repetitie_id')->fetchAll();
@@ -243,7 +244,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 
 	public function inschakelenAbonnementVoorNovieten($mrid) {
 		return Database::transaction(function () use ($mrid) {
-			$novieten = ProfielModel::instance()->find('status = "S_NOVIET"');
+			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('status = "S_NOVIET"');
 
 			$aantal = 0;
 			foreach ($novieten as $noviet) {

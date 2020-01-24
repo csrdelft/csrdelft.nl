@@ -1,7 +1,8 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\repository;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\LDAP;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\entity\Geslacht;
@@ -9,7 +10,7 @@ use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\profiel\AbstractProfielLogEntry;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
 use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
@@ -19,22 +20,30 @@ use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NoResultException;
+use Doctrine\Persistence\ManagerRegistry;
 
 
 /**
- * ProfielModel.class.php
- *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @method Profiel[]    ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
+ * @method Profiel|null doctrineFind($id, $lockMode = null, $lockVersion = null)
+ * @method Profiel|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Profiel|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Profiel[]    findAll()
+ * @method Profiel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProfielModel extends CachedPersistenceModel {
-
-	const ORM = Profiel::class;
+class ProfielRepository extends ServiceEntityRepository {
+	use OrmTrait {
+		create as ormCreate;
+		update as ormUpdate;
+	}
 	/**
 	 * @var MaaltijdAbonnementenModel
 	 */
@@ -49,11 +58,13 @@ class ProfielModel extends CachedPersistenceModel {
 	private $boekExemplaarModel;
 
 	public function __construct(
+		ManagerRegistry $registry,
 		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
 		CorveeTakenModel $corveeTakenModel,
 		BoekExemplaarModel $boekExemplaarModel
 	) {
-		parent::__construct();
+		parent::__construct($registry, Profiel::class);
+
 		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
 		$this->corveeTakenModel = $corveeTakenModel;
 		$this->boekExemplaarModel = $boekExemplaarModel;
@@ -75,11 +86,15 @@ class ProfielModel extends CachedPersistenceModel {
 	 * @return Profiel|false
 	 */
 	public static function get($uid) {
-		$profiel = static::instance()->retrieveByPrimaryKey(array($uid));
+		if ($uid == null) {
+			return false;
+		}
+		$model = ContainerFacade::getContainer()->get(ProfielRepository::class);
+		$profiel = $model->find($uid);
 		if (!$profiel) {
 			return false;
 		}
-		return static::instance()->cache($profiel, true);
+		return $profiel;
 	}
 
 	public static function getNaam($uid, $vorm='civitas') {
@@ -99,11 +114,12 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	public static function existsUid($uid) {
-		return static::instance()->existsByPrimaryKey(array($uid));
+		$model = ContainerFacade::getContainer()->get(ProfielRepository::class);
+		return $model->find($uid) !== null;
 	}
 
 	public function existsDuck($duck) {
-		return $this->database->sqlExists($this->getTableName(), 'duckname = ?', array($duck));
+		return count($this->findBy(['duckname' => $duck])) !== 0;
 	}
 
 	public function nieuw($lidjaar, $lidstatus) {
@@ -116,36 +132,38 @@ class ProfielModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * @param PersistentEntity $profiel
+	 * @param Profiel $profiel
 	 * @return string
 	 */
-	public function create(PersistentEntity $profiel) {
-		/** @var Profiel $profiel */
+	public function create(Profiel $profiel) {
 		// Lichting zijn de laatste 2 cijfers van lidjaar
 		$jj = substr($profiel->lidjaar, 2, 2);
-		$laatste_uid = $this->database->sqlSelect(array('MAX(uid)'), $this->getTableName(), 'LEFT(uid, 2) = ?', array($jj), null, null, 1)->fetchColumn();
-		if ($laatste_uid) {
-			// Volgnummer zijn de laatste 2 cijfers van uid
+		try {
+			$laatste_uid = $this->createQueryBuilder('p')
+				->select('MAX(p.uid)')
+				->where('p.uid LIKE :jj')
+				->setParameter('jj', $jj . "__")
+				->getQuery()
+				->getSingleScalarResult();
 			$volgnummer = intval(substr($laatste_uid, 2, 2)) + 1;
-		} else {
+		} catch (NoResultException $exception) {
 			$volgnummer = 1;
 		}
 		$profiel->uid = $jj . sprintf('%02d', $volgnummer);
-		return parent::create($profiel);
+
+		return $this->ormCreate($profiel);
 	}
 
 	/**
-	 * @param PersistentEntity|Profiel $profiel
-	 * @return int
+	 * @param Profiel $profiel
 	 */
-	public function update(PersistentEntity $profiel) {
+	public function update(Profiel $profiel) {
 		try {
 			$this->save_ldap($profiel);
 		} catch (\Exception $e) {
 			setMelding($e->getMessage(), -1); //TODO: logging
 		}
-		$this->cache($profiel, true, true);
-		return parent::update($profiel);
+		$this->ormUpdate($profiel);
 	}
 
 	/**
@@ -292,7 +310,7 @@ class ProfielModel extends CachedPersistenceModel {
 			$bericht = file_get_contents(TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
-				'NAAM' => ProfielModel::getNaam($profiel->uid, 'volledig'),
+				'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
 				'UID' => $profiel->uid,
 				'OUD' => $oudestatus,
 				'NIEUW' => $profiel->status,
@@ -321,7 +339,7 @@ class ProfielModel extends CachedPersistenceModel {
 
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafmeldingfisci.mail');
 		$values = array(
-			'NAAM' => ProfielModel::getNaam($profiel->uid, 'volledig'),
+			'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
 			'UID' => $profiel->uid,
 			'OUD' => $oudestatus,
 			'NIEUW' => $profiel->status,
@@ -369,7 +387,7 @@ class ProfielModel extends CachedPersistenceModel {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
 				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
-				$naam = ProfielModel::getNaam($exemplaar->eigenaar_uid, 'volledig');
+				$naam = ProfielRepository::getNaam($exemplaar->eigenaar_uid, 'volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
 		}
@@ -393,7 +411,7 @@ class ProfielModel extends CachedPersistenceModel {
 		);
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
 		$values = array(
-			'NAAM' => ProfielModel::getNaam($profiel->uid, 'volledig'),
+			'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
 			'UID' => $profiel->uid,
 			'OUD' => substr($oudestatus, 2),
 			'NIEUW' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),

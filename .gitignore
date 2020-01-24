@@ -30,7 +30,6 @@ htdocs/plaetjes/*
 htdocs/tools/alphabanner/alphabanner.cache.*
 lib/defines.include.php
 sessie/*
-!sessie/_dummy
 /tmp
 tmp/*
 /wiki

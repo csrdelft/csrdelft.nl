@@ -5,7 +5,7 @@ namespace CsrDelft\model\maalcie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * CorveeHerinneringenModel.class.php
@@ -18,11 +18,11 @@ class CorveeHerinneringenModel {
 	public static function stuurHerinnering(CorveeTaak $taak) {
 		$datum = date('d-m-Y', strtotime($taak->datum));
 		$uid = $taak->uid;
-		$profiel = ProfielModel::get($uid);
+		$profiel = ProfielRepository::get($uid);
 		if (!$profiel) {
 			throw new CsrGebruikerException($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}
-		$lidnaam = ProfielModel::getNaam($uid, 'civitas');
+		$lidnaam = ProfielRepository::getNaam($uid, 'civitas');
 		$to = array($profiel->getPrimaryEmail() => $lidnaam);
 		$from = 'corvee@csrdelft.nl';
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;

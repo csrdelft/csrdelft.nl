@@ -3,7 +3,7 @@
 namespace CsrDelft\model\bibliotheek;
 
 use CsrDelft\model\entity\bibliotheek\Boek;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\model\entity\bibliotheek\BoekExemplaar;

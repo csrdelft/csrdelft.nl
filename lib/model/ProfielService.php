@@ -1,10 +1,12 @@
 <?php
 
 namespace CsrDelft\model;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -140,9 +142,9 @@ class ProfielService extends DependencyManager {
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
-			$result = ProfielModel::instance()->find("($zoekfilter) AND ($statusfilter) $mootfilter", $zoekfilterparams, null, $sort, $limit);
-
-			return $result->fetchAll();
+			return ContainerFacade::getContainer()
+				->get(ProfielRepository::class)
+				->ormFind("($zoekfilter) AND ($statusfilter) $mootfilter", $zoekfilterparams, null, $sort, $limit);
 		}
 
 		return [];

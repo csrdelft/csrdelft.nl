@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\fotoalbum;
 
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -62,7 +63,7 @@ class FotoAlbumBreadcrumbs {
 			}
 			$dropdown .= '</select>';
 			return '<li class="breadcrumb-item">' . $dropdown . '</li>';
-		} catch (ResourceNotFoundException $ex) {
+		} catch (CsrNotFoundException $ex) {
 			return '';
 		}
 	}

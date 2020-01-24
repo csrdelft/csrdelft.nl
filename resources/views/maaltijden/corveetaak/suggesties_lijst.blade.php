@@ -26,7 +26,7 @@
 				<tr class="
 							@if(!$suggestie["voorkeur"])  geenvoorkeur @endif
 				@if($suggestie["recent"])  recent @endif
-				@if($jongsteLichting === CsrDelft\model\ProfielModel::get($uid)->lidjaar)  jongste @else oudere @endif
+				@if($jongsteLichting === \CsrDelft\repository\ProfielRepository::get($uid)->lidjaar)  jongste @else oudere @endif
 					">
 					<td style="width: 15px;">
 						<a class="btn submit" style="padding: 0 2px;"
@@ -49,7 +49,7 @@
 						@endif
 					</td>
 					<td style="width: 140px;">
-						{{CsrDelft\model\ProfielModel::get($uid)->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}}
+						{{\CsrDelft\repository\ProfielRepository::get($uid)->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}}
 					</td>
 					@if($suggestie["laatste"])
 						<td>{{strftime("%d %b %Y", $suggestie["laatste"]->getBeginMoment())}}</td>
