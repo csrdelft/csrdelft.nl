@@ -481,7 +481,7 @@ class Profiel implements Agendeerbaar {
 	 * @return int timestamp
 	 */
 	public function getBeginMoment() {
-		$dag = substr($this->gebdatum, 5, 5);
+		$dag = $this->gebdatum->format('m-d');
 		if (isset($GLOBALS['agenda_van'], $GLOBALS['agenda_tot'])) { //FIEES, Patrick.
 			/*
 			 * Punt is dat we het goede (opgevraagde) jaar erbij moeten zetten,
