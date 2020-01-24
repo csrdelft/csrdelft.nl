@@ -29,6 +29,11 @@ class Document extends Bestand {
 	 */
 	public $naam;
 	/**
+	 * @var DocumentCategorie
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\documenten\DocumentCategorie", inversedBy="documenten")
+	 */
+	public $categorie;
+	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 */
