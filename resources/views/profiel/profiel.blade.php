@@ -237,8 +237,8 @@
 						<a href="/ledenlijst?q=lichting:{{$profiel->lidjaar}}&amp;status=ALL"
 							 title="Bekijk de leden van lichting {{$profiel->lidjaar}}">{{$profiel->lidjaar}}</a>
 					@endif
-					@if(!$profiel->isLid() && $profiel->lidafdatum != '0000-00-00')
-						tot {{substr($profiel->lidafdatum,0,4)}}
+					@if(!$profiel->isLid() && $profiel->lidafdatum->format(DATE_FORMAT) != '0000-00-00')
+						tot {{$profiel->lidafdatum->format('Y')}}
 					@endif
 				</dd>
 				<dt>Status</dt>
