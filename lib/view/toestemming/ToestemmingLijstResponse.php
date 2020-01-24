@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\toestemming;
 
-use CsrDelft\model\entity\LidToestemming;
+use CsrDelft\entity\LidToestemming;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\view\datatable\DataTableResponse;
 

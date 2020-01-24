@@ -3,8 +3,8 @@
 namespace CsrDelft\view\toestemming;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\model\entity\LidToestemming;
-use CsrDelft\model\instellingen\LidToestemmingModel;
+use CsrDelft\entity\LidToestemming;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -19,28 +19,34 @@ class ToestemmingModalForm extends ModalForm {
 	 * @var bool
 	 */
 	private $nieuw;
+	/**
+	 * @var LidToestemmingRepository
+	 */
+	private $lidToestemmingRepository;
 
 	/**
+	 * @param LidToestemmingRepository $lidToestemmingRepository
 	 * @param bool $nieuw
-	 * @throws CsrException
+	 * @throws \Exception
 	 */
-	public function __construct($nieuw = false) {
+	public function __construct(LidToestemmingRepository $lidToestemmingRepository, $nieuw = false) {
 		parent::__construct(new LidToestemming(), '/toestemming', 'Toestemming geven');
 
 		$this->modalBreedte = 'modal-lg';
+		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->nieuw = $nieuw;
 
 		$fields = [];
 
 		$akkoord = '';
 
-		$instellingen = LidToestemmingModel::instance()->getRelevantToestemmingCategories(LoginModel::getProfiel()->isLid());
+		$instellingen = $lidToestemmingRepository->getRelevantToestemmingCategories(LoginModel::getProfiel()->isLid());
 
 		foreach ($instellingen as $module => $instelling) {
 			foreach ($instelling as $id) {
-				if (LidToestemmingModel::instance()->getValue($module, $id) == 'ja' && $akkoord == null) {
+				if ($lidToestemmingRepository->getValue($module, $id) == 'ja' && $akkoord == null) {
 					$akkoord = 'ja';
-				} elseif (LidToestemmingModel::instance()->getValue($module, $id) == 'nee') {
+				} elseif ($lidToestemmingRepository->getValue($module, $id) == 'nee') {
 					$akkoord = 'nee';
 				}
 
@@ -76,18 +82,17 @@ class ToestemmingModalForm extends ModalForm {
 	 * @throws CsrException
 	 */
 	private function maakToestemmingLine($module, $id) {
-		$model = LidToestemmingModel::instance();
 
 		$eerdereWaarde = filter_input(INPUT_POST, $module . '_' . $id, FILTER_SANITIZE_STRING) ?? 'ja';
 
 		return new ToestemmingRegel(
 			$module,
 			$id,
-			$model->getType($module, $id),
-			$model->getTypeOptions($module, $id),
-			$model->getDescription($module, $id),
-			$this->nieuw ? $eerdereWaarde : $model->getValue($module, $id),
-			$model->getDefault($module, $id)
+			$this->lidToestemmingRepository->getType($module, $id),
+			$this->lidToestemmingRepository->getTypeOptions($module, $id),
+			$this->lidToestemmingRepository->getDescription($module, $id),
+			$this->nieuw ? $eerdereWaarde : $this->lidToestemmingRepository->getValue($module, $id),
+			$this->lidToestemmingRepository->getDefault($module, $id)
 		);
 	}
 

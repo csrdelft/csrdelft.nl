@@ -25,7 +25,7 @@ use CsrDelft\model\groepen\KetzersModel;
 use CsrDelft\model\groepen\OnderverenigingenModel;
 use CsrDelft\model\groepen\RechtenGroepenModel;
 use CsrDelft\model\groepen\WerkgroepenModel;
-use CsrDelft\model\instellingen\LidToestemmingModel;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
@@ -135,9 +135,9 @@ class ProfielController extends AbstractController {
 	 */
 	private $werkgroepenModel;
 	/**
-	 * @var LidToestemmingModel
+	 * @var LidToestemmingRepository
 	 */
-	private $lidToestemmingModel;
+	private $lidToestemmingRepository;
 	/**
 	 * @var AccountModel
 	 */
@@ -165,7 +165,7 @@ class ProfielController extends AbstractController {
 		FotoTagsModel $fotoTagsModel,
 		KetzersModel $ketzersModel,
 		KwalificatiesModel $kwalificatiesModel,
-		LidToestemmingModel $lidToestemmingModel,
+		LidToestemmingRepository $lidToestemmingRepository,
 		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
 		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
 		OnderverenigingenModel $onderverenigingenModel,
@@ -191,7 +191,7 @@ class ProfielController extends AbstractController {
 		$this->fotoTagsModel = $fotoTagsModel;
 		$this->ketzersModel = $ketzersModel;
 		$this->kwalificatiesModel = $kwalificatiesModel;
-		$this->lidToestemmingModel = $lidToestemmingModel;
+		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
 		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
 		$this->onderverenigingenModel = $onderverenigingenModel;
@@ -298,14 +298,15 @@ class ProfielController extends AbstractController {
 
 							if (filter_input(INPUT_POST, 'toestemming_geven') === 'true') {
 								// Sla toesteming op.
-								$toestemmingForm = new ToestemmingModalForm(true);
+								$toestemmingForm = new ToestemmingModalForm($this->lidToestemmingRepository, true);
 								if ($toestemmingForm->validate()) {
-									$this->lidToestemmingModel->save($profiel->uid);
+									$this->lidToestemmingRepository->save($profiel->uid);
 								} else {
 									throw new CsrException('Opslaan van toestemming mislukt');
 								}
 							}
 						});
+						$this->getDoctrine()->getManager()->flush();
 					} catch (CsrException $ex) {
 						setMelding($ex->getMessage(), -1);
 					}

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\profiel;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Ini;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
@@ -9,6 +10,7 @@ use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\ProfielModel;
 use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
@@ -232,7 +234,8 @@ class ProfielForm extends Formulier {
 			// Zorg ervoor dat toestemming bij inschrijven wordt opgegeven.
 			$fields[] = new Subkopje('Privacy');
 			$fields[] = new HiddenField('toestemming_geven', 'true');
-			$fields = array_merge($fields, (new ToestemmingModalForm(true))->getFields());
+			$lidToestemmingRepository = ContainerFacade::getContainer()->get(LidToestemmingRepository::class);
+			$fields = array_merge($fields, (new ToestemmingModalForm($lidToestemmingRepository, true))->getFields());
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');

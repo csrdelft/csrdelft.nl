@@ -1,9 +1,12 @@
 <?php /** @noinspection PhpUnused wordt gebruikt in templates*/
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CRLFView;
 use CsrDelft\model\MenuModel;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
+use CsrDelft\view\toestemming\ToestemmingModalForm;
 use CsrDelft\view\View;
 
 /**
@@ -426,4 +429,12 @@ function commitHash($full = false) {
 
 function commitLink() {
 	return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
+}
+
+function toestemming_gegeven() {
+	return ContainerFacade::getContainer()->get(LidToestemmingRepository::class)->toestemmingGegeven();
+}
+
+function toestemming_form() {
+	return new ToestemmingModalForm(ContainerFacade::getContainer()->get(LidToestemmingRepository::class));
 }
