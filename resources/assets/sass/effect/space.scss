@@ -29,14 +29,8 @@
   100% { background-position: 0 0 }
 }
 
-#cd-main-overlay {
+body {
   background-image:  url('../../images/bg/stars.jpg');
   background-repeat: repeat;
-}
-#cd-main-overlay.is-visible,
-#menu.target ~ #cd-main-overlay,
-#menu:target ~ #cd-main-overlay,
-#search:target ~ #cd-main-overlay,
-#search.target ~ #cd-main-overlay {
   animation: space 360s linear infinite;
 }

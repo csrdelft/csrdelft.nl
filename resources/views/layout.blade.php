@@ -3,16 +3,16 @@
 <head>
 	@include('head')
 </head>
-<body class="nav-is-fixed" @yield('bodyArgs')>
-<nav class="navbar navbar-dark bg-primary fixed-top">
-	<a class="nav-option trigger text-white" href="#zijbalk"><span class="sr-only">Zijbalk openen</span><i
-			class="fa fa-lg fa-fw fa-bookmark"></i></a>
-	<a class="navbar-brand trigger" href="/">C.S.R. Delft</a>
-	<a class="nav-option trigger text-white" href="#search"><span class="sr-only">Zoeken</span><i
-			class="fa fa-lg fa-fw fa-search"></i></a>
-	<a class="nav-option trigger text-white" href="#menu"><span class="sr-only">Menu</span><i
-			class="fa fa-lg fa-fw fa-bars"></i></a>
-</nav>
+<body class="nav-is-fixed h-100" @yield('bodyArgs')>
+{{--<nav class="navbar navbar-dark bg-primary fixed-top">--}}
+{{--	<a class="nav-option trigger text-white" href="#zijbalk"><span class="sr-only">Zijbalk openen</span><i--}}
+{{--			class="fa fa-lg fa-fw fa-bookmark"></i></a>--}}
+{{--	<a class="navbar-brand trigger" href="/">C.S.R. Delft</a>--}}
+{{--	<a class="nav-option trigger text-white" href="#search"><span class="sr-only">Zoeken</span><i--}}
+{{--			class="fa fa-lg fa-fw fa-search"></i></a>--}}
+{{--	<a class="nav-option trigger text-white" href="#menu"><span class="sr-only">Menu</span><i--}}
+{{--			class="fa fa-lg fa-fw fa-bars"></i></a>--}}
+{{--</nav>--}}
 
 <nav id="zijbalk">
 	<a href="/">
@@ -32,10 +32,7 @@
   'root' => \CsrDelft\model\MenuModel::instance()->getMenu('main'),
   'favorieten' => \CsrDelft\model\MenuModel::instance()->getMenu(\CsrDelft\model\security\LoginModel::getUid()),
 ])->view())
-<div id="search" class="cd-search">
-	@php((new \CsrDelft\view\formulier\InstantSearchForm())->view())
-</div>
-<main class="cd-main-content">
+<main class="container bg-white my-3 flex-shrink-0">
 	<nav aria-label="breadcrumb">
 		@section('breadcrumbs')
 			{!! csr_breadcrumbs(\CsrDelft\model\MenuModel::instance()->getBreadcrumbs($_SERVER['REQUEST_URI'])) !!}
@@ -49,13 +46,35 @@
 		@php(printDebug())
 	</footer>
 </main>
-<div id="cd-main-overlay">
-	@if(lid_instelling('layout', 'fx') == 'onontdekt')
-		@include('effect.onontdekt')
-	@elseif(lid_instelling('layout', 'fx') == 'civisaldo')
-		@include('effect.civisaldo')
-	@endif
-</div>
+<footer class="footer mt-auto py-3">
+	<div class="container-fluid p-3 p-md-5">
+		<div class="row">
+			<div class="col-12 col-md-auto">
+				<img src="/dist/images/beeldmerk.png" width="80" class="d-block mb-2" alt="C.S.R. Logo"/>
+				<small class="d-block mb-3 text-muted">© 2006-2019</small>
+				@if(!DEBUG) @can(P_ADMIN)
+					<small class="cd-block mb-3">
+						<a href="{{ commitLink() }}" target="_blank" class="not-external text-muted">{{ commitHash() }}</a>
+					</small>
+				@endcan @endif
+			</div>
+			@php($menu = \CsrDelft\model\MenuModel::instance()->getMenu('main'))
+
+			@foreach($menu->getChildren() as $item)
+				<div class="col-6 col-md">
+					<h5>{{$item->tekst}}</h5>
+					<ul class="list-unstyled text-small">
+						@foreach($item->getChildren() as $subItem)
+							@if($subItem->magBekijken())
+								<li><a class="text-muted" href="{{$subItem->link}}">{{$subItem->tekst}}</a></li>
+							@endif
+						@endforeach
+					</ul>
+				</div>
+			@endforeach
+		</div>
+	</div>
+</footer>
 <div id="modal-background" @if(isset($modal)) style="display: block;"@endif></div>
 @if(isset($modal))
 	@php($modal->view())
@@ -67,7 +86,11 @@
 @if(lid_instelling('layout', 'minion') == 'ja')
 	@include('effect.minion')
 @endif
-@if(lid_instelling('layout', 'fx') == 'wolken')
+@if(lid_instelling('layout', 'fx') == 'onontdekt')
+	@include('effect.onontdekt')
+@elseif(lid_instelling('layout', 'fx') == 'civisaldo')
+	@include('effect.civisaldo')
+@elseif(lid_instelling('layout', 'fx') == 'wolken')
 	@script('fxclouds.js')
 @endif
 @if(lid_instelling('layout', 'trein') !== 'nee')
@@ -79,8 +102,8 @@
 @if(lid_instelling('layout', 'assistent') !== 'nee')
 	<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css">
 	<script type="application/javascript">
-		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
-		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden')}}';
+      const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
+      const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden')}}';
 	</script>
 	@script('fxclippy.js')
 @endif

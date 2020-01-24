@@ -28,6 +28,13 @@
 @import '~@fullcalendar/timegrid/main.css';
 @import '~@fullcalendar/list/main.css';
 
+body {
+	height: auto;
+	position: relative;
+	margin-left: 200px;
+}
+
+
 /* Standaard Kleuren */
 .overflow-x-hidden {
 	overflow-x: hidden;
@@ -155,10 +162,6 @@ ul.insidebullets li { list-style: disc inside }
 
 /**** OVERIG ******************************************************************/
 
-.cd-page-content {
-	margin-top: 30px;
-}
-
 #mysql_debug_toggle {
   cursor: pointer;
 }
@@ -243,6 +246,10 @@ form#streeplijst input, form#streeplijst label { text-align: left; margin: 3px; 
 	.cd-main-content {
 		/* Compenseer voor navbar */
 		margin-top: 42px;
+	}
+
+	body {
+		margin-left: 0;
 	}
 
 	.mobiel-hidden {
