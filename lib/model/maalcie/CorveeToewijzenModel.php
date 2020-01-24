@@ -4,7 +4,7 @@ namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * CorveeToewijzenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -29,7 +29,7 @@ class CorveeToewijzenModel {
 			$avg = 0;
 			foreach ($functie->getKwalificaties() as $kwali) {
 				$uid = $kwali->uid;
-				$profiel = ProfielModel::get($uid); // false if lid does not exist
+				$profiel = ProfielRepository::get($uid); // false if lid does not exist
 				if (!$profiel) {
 					throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 				}

@@ -5,7 +5,7 @@ namespace CsrDelft\model\entity\maalcie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -135,7 +135,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function setUid($uid) {
-		if ($uid !== null && !ProfielModel::existsUid($uid)) {
+		if ($uid !== null && !ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException('Geen lid: set lid id');
 		}
 		$this->uid = $uid;
@@ -167,7 +167,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 
 	public function getTitel() {
 		if ($this->uid) {
-			return $this->getCorveeFunctie()->naam . ' ' . ProfielModel::getNaam($this->uid, 'civitas');
+			return $this->getCorveeFunctie()->naam . ' ' . ProfielRepository::getNaam($this->uid, 'civitas');
 		}
 		return 'Corvee vacature (' . $this->getCorveeFunctie()->naam . ')';
 	}

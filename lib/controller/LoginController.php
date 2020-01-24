@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\RememberLoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
@@ -84,7 +84,7 @@ class LoginController extends AbstractController {
 
 	public function su($uid = null) {
 		$this->loginModel->switchUser($uid);
-		setMelding('U bekijkt de webstek nu als ' . ProfielModel::getNaam($uid, 'volledig') . '!', 1);
+		setMelding('U bekijkt de webstek nu als ' . ProfielRepository::getNaam($uid, 'volledig') . '!', 1);
 		return $this->csrRedirect(HTTP_REFERER);
 	}
 

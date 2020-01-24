@@ -3,18 +3,21 @@
 use CsrDelft\common\Ini;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccountModel;
 
 chdir(dirname(__FILE__) . '/../lib/');
 
-require_once 'configuratie.include.php';
+/** @var \CsrDelft\Kernel $kernel */
+$kernel = require_once 'configuratie.include.php';
 
 # Scriptje om voor sjaars een wachtwoord te genereren en dat toe te mailen.
 # Vergeet niet voor gebruik hieronder het jaar aan te passen.
 $jaar = '19';
 
-foreach (ProfielModel::instance()->find('status = ? AND uid LIKE ?', array(LidStatus::Noviet, sprintf("%s%%", $jaar))) as $profiel) {
+$profielRepository = $kernel->getContainer()->get(ProfielRepository::class);
+
+foreach ($profielRepository->ormFind('status = ? AND uid LIKE ?', array(LidStatus::Noviet, sprintf("%s%%", $jaar))) as $profiel) {
     $url = CSR_ROOT . '/wachtwoord/aanvragen';
     $tekst = <<<TEXT
 Beste noviet {$profiel->voornaam},

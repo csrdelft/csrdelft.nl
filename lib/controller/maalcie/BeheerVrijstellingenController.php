@@ -4,7 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
 use CsrDelft\view\PlainView;
 
@@ -31,7 +31,7 @@ class BeheerVrijstellingenController {
 	}
 
 	public function bewerk($uid) {
-		if (!ProfielModel::existsUid($uid)) {
+		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		return new VrijstellingForm($this->corveeVrijstellingenModel->getVrijstelling($uid)); // fetches POST values itself
@@ -54,7 +54,7 @@ class BeheerVrijstellingenController {
 	}
 
 	public function verwijder($uid) {
-		if (!ProfielModel::existsUid($uid)) {
+		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$this->corveeVrijstellingenModel->verwijderVrijstelling($uid);

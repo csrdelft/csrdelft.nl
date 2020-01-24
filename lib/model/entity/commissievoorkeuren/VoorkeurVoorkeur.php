@@ -2,9 +2,10 @@
 
 namespace CsrDelft\model\entity\commissievoorkeuren;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
@@ -40,7 +41,7 @@ class VoorkeurVoorkeur extends PersistentEntity {
 	 * @return Profiel
 	 */
 	public function getProfiel() {
-		return ProfielModel::instance()->retrieveByUUID($this->uid);
+		return ContainerFacade::getContainer()->get(ProfielRepository::class)->retrieveByUUID($this->uid);
 	}
 
 	/**

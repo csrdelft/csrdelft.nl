@@ -3,7 +3,7 @@
 	<ul class="is-hidden">
 		<li class="go-back"><a class="trigger" href="#menu">{{CsrDelft\model\security\LoginModel::getProfiel()->getNaam('volledig')}}</a></li>
 		@if(\CsrDelft\model\security\LoginModel::instance()->isSued())
-		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {{CsrDelft\model\ProfielModel::getNaam(CsrDelft\model\security\LoginModel::getSuedFrom()->uid, 'civitas')}}</a></li>
+		<li><a href="/endsu" class="error" title="Switch user actie beeindingen">SU {{\CsrDelft\repository\ProfielRepository::getNaam(CsrDelft\model\security\LoginModel::getSuedFrom()->uid, 'civitas')}}</a></li>
 		@endif
 		<li>
 			<a href="/profiel/{{CsrDelft\model\security\LoginModel::getUid()}}#CiviSaldo" title="Bekijk CiviSaldo historie">

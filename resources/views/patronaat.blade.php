@@ -17,7 +17,7 @@
 					@if($deelnemer->opmerking2)
 						@foreach($deelnemer->opmerking2 as $opmerking)
 							@if($opmerking->naam == $cat && $opmerking->selectie != "Nee")
-								@php($lid = \CsrDelft\model\ProfielModel::get($deelnemer->uid))
+								@php($lid = \CsrDelft\repository\ProfielRepository::get($deelnemer->uid))
 								<div class="" style="width: 33%; padding: 1em; display: inline-block;">
 									<div class="card d-block m-2" style="height: 200px;">
 										@if (is_zichtbaar($lid, 'profielfoto', 'intern', null)) {{-- geen override, wordt geprint --}}

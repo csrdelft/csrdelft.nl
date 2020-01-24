@@ -9,7 +9,7 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 
@@ -24,7 +24,7 @@ class GroepPasfotosView extends GroepTabView {
 			$html .= $form->getHtml();
 		}
 		foreach ($this->groep->getLeden() as $lid) {
-			$html .= ProfielModel::getLink($lid->uid, 'pasfoto');
+			$html .= ProfielRepository::getLink($lid->uid, 'pasfoto');
 		}
 		return $html;
 	}

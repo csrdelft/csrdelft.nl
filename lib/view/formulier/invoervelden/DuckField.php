@@ -2,7 +2,8 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -25,7 +26,8 @@ class DuckField extends TextField {
 		}
 		// check met strtolower is toegevoegd omdat je anders je eigen nick niet van case kan veranderen
 		// doordat duckExists case-insensitive zoekt
-		if (ProfielModel::instance()->existsDuck($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
+		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
+		if ($profielRepository->existsDuck($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
 			$this->error = 'Deze Duckstad-naam is al in gebruik';
 		}
 		return $this->error === '';

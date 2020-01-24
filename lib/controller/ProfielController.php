@@ -12,7 +12,7 @@ use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
 use CsrDelft\model\forum\ForumPostsModel;
@@ -32,7 +32,7 @@ use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
@@ -43,13 +43,15 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Doctrine\DBAL\Driver\Connection;
+use splitbrain\phpcli\Exception;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ProfielController extends AbstractController {
 	/**
-	 * @var ProfielModel
+	 * @var ProfielRepository
 	 */
-	private $profielModel;
+	private $profielRepository;
 	/**
 	 * @var VoorkeurOpmerkingModel
 	 */
@@ -148,7 +150,7 @@ class ProfielController extends AbstractController {
 	private $saldoGrafiekModel;
 
 	public function __construct(
-		ProfielModel $profielModel,
+		ProfielRepository $profielRepository,
 		AccountModel $accountModel,
 		ActiviteitenModel $activiteitenModel,
 		BesturenModel $besturenModel,
@@ -174,7 +176,7 @@ class ProfielController extends AbstractController {
 		WerkgroepenModel $werkgroepenModel,
 		SaldoGrafiekModel $saldoGrafiekModel
 	) {
-		$this->profielModel = $profielModel;
+		$this->profielRepository = $profielRepository;
 		$this->accountModel = $accountModel;
 		$this->activiteitenModel = $activiteitenModel;
 		$this->besturenModel = $besturenModel;
@@ -202,7 +204,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function resetPrivateToken($uid) {
-		$profiel = $this->profielModel->get($uid);
+		$profiel = $this->profielRepository->get($uid);
 
 		if ($profiel === false) {
 			throw new CsrNotFoundException();
@@ -216,7 +218,7 @@ class ProfielController extends AbstractController {
 			$uid = LoginModel::getUid();
 		}
 
-		$profiel = $this->profielModel->get($uid);
+		$profiel = $this->profielRepository->get($uid);
 
 		if ($profiel === false) {
 			throw new CsrNotFoundException();
@@ -267,7 +269,7 @@ class ProfielController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		// Maak nieuw profiel zonder op te slaan
-		$profiel = $this->profielModel->nieuw((int)$lidjaar, $lidstatus);
+		$profiel = $this->profielRepository->nieuw((int)$lidjaar, $lidstatus);
 
 		return $this->profielBewerken($profiel, true);
 	}
@@ -283,18 +285,22 @@ class ProfielController extends AbstractController {
 			if (empty($diff)) {
 				setMelding('Geen wijzigingen', 0);
 			} else {
-				$nieuw = !$this->profielModel->exists($profiel);
-				$changeEntry = ProfielModel::changelog($diff, LoginModel::getUid());
+				$nieuw = !$this->profielRepository->exists($profiel);
+				$changeEntry = ProfielRepository::changelog($diff, LoginModel::getUid());
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
-						array_push($changeEntry->entries, ...$this->profielModel->wijzig_lidstatus($profiel, $change->old_value));
+						array_push($changeEntry->entries, ...$this->profielRepository->wijzig_lidstatus($profiel, $change->old_value));
 					}
 				}
 				$profiel->changelog[] = $changeEntry;
 				if ($nieuw) {
 					try {
-						Database::transaction(function () use ($profiel) {
-							$this->profielModel->create($profiel);
+						/** @var \Doctrine\DBAL\Connection $conn */
+						$conn = $this->getDoctrine()->getConnection();
+						$conn->setAutoCommit(false);
+						$conn->connect();
+						try {
+							$this->profielRepository->create($profiel);
 
 							if (filter_input(INPUT_POST, 'toestemming_geven') === 'true') {
 								// Sla toesteming op.
@@ -305,14 +311,19 @@ class ProfielController extends AbstractController {
 									throw new CsrException('Opslaan van toestemming mislukt');
 								}
 							}
-						});
-						$this->getDoctrine()->getManager()->flush();
+							$conn->commit();
+						} catch (\Exception $e) {
+							setMelding($e->getMessage(), -1);
+							$conn->rollBack();
+						} finally {
+							$conn->setAutoCommit(true);
+						}
 					} catch (CsrException $ex) {
 						setMelding($ex->getMessage(), -1);
 					}
 
 					setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);
-				} elseif (1 === $this->profielModel->update($profiel)) {
+				} elseif (1 === $this->profielRepository->update($profiel)) {
 					setMelding(count($diff) . ' wijziging(en) succesvol opgeslagen', 1);
 				} else {
 					setMelding('Opslaan van ' . count($diff) . ' wijziging(en) mislukt', -1);
@@ -327,7 +338,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function bewerken($uid) {
-		$profiel = $this->profielModel->get($uid);
+		$profiel = $this->profielRepository->get($uid);
 
 		if ($profiel === false) {
 			throw new CsrNotFoundException();
@@ -337,7 +348,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function voorkeuren($uid) {
-		$profiel = $this->profielModel->get($uid);
+		$profiel = $this->profielRepository->get($uid);
 
 		if ($profiel === false) {
 			throw new CsrNotFoundException();
@@ -361,7 +372,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function addToGoogleContacts($uid) {
-		$profiel = $this->profielModel->get($uid);
+		$profiel = $this->profielRepository->get($uid);
 
 		if ($profiel === false) {
 			throw new CsrNotFoundException();
@@ -380,7 +391,7 @@ class ProfielController extends AbstractController {
 
 	public function stamboom($uid = null) {
 		return view('profiel.stamboom', [
-			'profiel' => ProfielModel::get($uid) ?? LoginModel::getProfiel(),
+			'profiel' => ProfielRepository::get($uid) ?? LoginModel::getProfiel(),
 		]);
 	}
 
@@ -402,7 +413,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function vcard($uid) {
-		$profiel = ProfielModel::get($uid);
+		$profiel = ProfielRepository::get($uid);
 
 		if (!$profiel) {
 			throw new CsrNotFoundException();
@@ -414,7 +425,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function kaartje($uid) {
-		return view('profiel.kaartje', ['profiel' => ProfielModel::get($uid)]);
+		return view('profiel.kaartje', ['profiel' => ProfielRepository::get($uid)]);
 	}
 
 	public function redirectWithUid($route) {

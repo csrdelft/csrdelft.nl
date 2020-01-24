@@ -5,7 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
@@ -89,7 +89,7 @@ class ToestemmingController extends AbstractController {
 
             $toestemmingFiltered = [];
             foreach ($toestemming as $uid => $toestemmingen) {
-                $profiel = ProfielModel::get($uid);
+                $profiel = ProfielRepository::get($uid);
 
                 if (in_array($profiel->status, $filterStatus[$filter])) {
                     $toestemmingFiltered[] = $toestemmingen;

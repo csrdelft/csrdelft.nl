@@ -5,21 +5,21 @@ namespace CsrDelft\controller;
 
 
 use CsrDelft\model\entity\Afbeelding;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PasfotoController extends AbstractController {
 	/**
-	 * @var ProfielModel
+	 * @var ProfielRepository
 	 */
-	private $profielModel;
+	private $profielRepository;
 
-	public function __construct(ProfielModel $profielModel) {
-		$this->profielModel = $profielModel;
+	public function __construct(ProfielRepository $profielRepository) {
+		$this->profielRepository = $profielRepository;
 	}
 
 	public function pasfoto($uid, $vorm = 'civitas') {
-		$profiel = $this->profielModel::get($uid);
+		$profiel = $this->profielRepository::get($uid);
 		if (!$profiel) {
 			return $this->csrRedirect('/images/geen-foto.jpg');
 		}

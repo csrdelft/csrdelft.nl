@@ -87,7 +87,13 @@ trait OrmTrait {
 		/** @var ClassMetadata $metadata */
 		$metadata = $this->getClassMetadata();
 
-		return parent::find($metadata->getIdentifierValues($entity)) !== null;
+		$identifierValues = $metadata->getIdentifierValues($entity);
+
+		if ($identifierValues == null) {
+			return false;
+		}
+
+		return parent::find($identifierValues) !== null;
 	}
 
 	/**

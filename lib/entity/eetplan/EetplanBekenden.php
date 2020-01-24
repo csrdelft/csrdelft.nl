@@ -2,7 +2,8 @@
 
 namespace CsrDelft\entity\eetplan;
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,10 +31,10 @@ class EetplanBekenden {
 	public $opmerking;
 
 	public function getNoviet1() {
-		return ProfielModel::instance()->find('uid = ?', array($this->uid1))->fetch();
+		return ContainerFacade::getContainer()->get(ProfielRepository::class)->find($this->uid1);
 	}
 
 	public function getNoviet2() {
-		return ProfielModel::instance()->find('uid = ?', array($this->uid2))->fetch();
+		return ContainerFacade::getContainer()->get(ProfielRepository::class)->find($this->uid2);
 	}
 }

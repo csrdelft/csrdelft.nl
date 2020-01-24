@@ -4,7 +4,7 @@ namespace CsrDelft\view\groepen;
 
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,7 +32,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 			$vrouwen = 0;
 
 			foreach ($groep->getLeden() as $lid) {
-				$profiel = ProfielModel::get($lid->uid);
+				$profiel = ProfielRepository::get($lid->uid);
 				if ($profiel->geslacht === Geslacht::Man) {
 					$mannen += 1;
 				} else {

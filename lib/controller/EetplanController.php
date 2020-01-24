@@ -11,7 +11,7 @@ use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
@@ -72,7 +72,7 @@ class EetplanController {
 		}
 
 		return view('eetplan.noviet', [
-			'noviet' => ProfielModel::get($uid),
+			'noviet' => ProfielRepository::get($uid),
 			'eetplan' => $this->eetplanModel->getEetplanVoorNoviet($uid)
 		]);
 	}

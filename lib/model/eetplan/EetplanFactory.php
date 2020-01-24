@@ -5,7 +5,7 @@ namespace CsrDelft\model\eetplan;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\model\entity\groepen\Woonoord;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 
 /**
  * EetplanFactory.class.php

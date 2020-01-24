@@ -2,7 +2,7 @@
 	<td>
 		<a href="/corvee/vrijstellingen/bewerk/{{$vrijstelling->uid}}" title="Vrijstelling wijzigen" class="btn post popup">@icon("pencil")</a>
 	</td>
-	<td>{!! CsrDelft\model\ProfielModel::getLink($vrijstelling->uid,instelling('corvee', 'weergave_ledennamen_beheer')) !!}</td>
+	<td>{!! \CsrDelft\repository\ProfielRepository::getLink($vrijstelling->uid,instelling('corvee', 'weergave_ledennamen_beheer')) !!}</td>
 	<td>{{strftime("%e %b %Y", strtotime($vrijstelling->begin_datum))}}</td>
 	<td>{{strftime("%e %b %Y", strtotime($vrijstelling->eind_datum))}}</td>
 	<td>{{$vrijstelling->percentage}}%</td>

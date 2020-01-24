@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\ledenmemory;
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\View;
 
 class LedenMemoryZijbalkView implements View {
@@ -44,7 +44,7 @@ class LedenMemoryZijbalkView implements View {
 			if ($first) {
 				echo '<span class="cursief">';
 			}
-			echo ProfielModel::getLink($score->door_uid, 'civitas');
+			echo ProfielRepository::getLink($score->door_uid, 'civitas');
 			echo ' (';
 			echo $score->beurten;
 			echo ')';

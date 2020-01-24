@@ -9,11 +9,11 @@ use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\Lichting;
 use CsrDelft\model\entity\groepen\Verticale;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
@@ -24,17 +24,17 @@ class LedenMemoryController {
 	 */
 	private $ledenMemoryScoresModel;
 	/**
-	 * @var ProfielModel
+	 * @var ProfielRepository
 	 */
-	private $profielModel;
+	private $profielRepository;
 	/**
 	 * @var VerticalenModel
 	 */
 	private $verticalenModel;
 
-	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielModel $profielModel, VerticalenModel $verticalenModel) {
+	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielRepository $profielRepository, VerticalenModel $verticalenModel) {
 		$this->ledenMemoryScoresModel = $ledenMemoryScoresModel;
-		$this->profielModel = $profielModel;
+		$this->profielRepository = $profielRepository;
 		$this->verticalenModel = $verticalenModel;
 	}
 
@@ -55,7 +55,7 @@ class LedenMemoryController {
 		}
 		if ($groep instanceof AbstractGroep) {
 			foreach ($groep->getLeden() as $lid) {
-				$profiel = ProfielModel::get($lid->uid);
+				$profiel = ProfielRepository::get($lid->uid);
 				if (in_array($profiel->status, $lidstatus)) {
 					$leden[] = $profiel;
 				}
@@ -104,11 +104,10 @@ class LedenMemoryController {
 
 	public function namenleren() {
 		// Haal alle (adspirant-/gast-)leden op.
-		$profielmodel = $this->profielModel;
 		$toegestaan = implode(', ', array_map(function ($status) {
 			return "'{$status}'";
 		}, LidStatus::getLidLike()));
-		$profielen = $profielmodel->find("status IN ({$toegestaan})")->fetchAll();
+		$profielen = $this->profielRepository->ormFind("status IN ({$toegestaan})");
 
 		// Bouw infostructuur.
 		$leden = array_map(function($profiel) {

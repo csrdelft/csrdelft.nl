@@ -3,7 +3,7 @@
 namespace CsrDelft\model\entity\profiel;
 
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * ProfielUpdateLogGroup.class.php
@@ -38,7 +38,7 @@ class ProfielUpdateLogGroup extends ProfielLogGroup {
 			$changesHtml[] = "<div class='change'>{$change->toHtml()}</div>";
 		}
 		return "<div class='ProfielLogEntry'>
-			<div class='metadata'>Gewijzigd door ".ProfielModel::getLink($this->editor, 'civitas')." ".($this->timestamp === null ? "?" : reldate($this->timestamp->format('Y-m-d H:i:s')))."</div>
+			<div class='metadata'>Gewijzigd door ".ProfielRepository::getLink($this->editor, 'civitas')." ".($this->timestamp === null ? "?" : reldate($this->timestamp->format('Y-m-d H:i:s')))."</div>
 			".implode($changesHtml)."
 			</div>";
 	}

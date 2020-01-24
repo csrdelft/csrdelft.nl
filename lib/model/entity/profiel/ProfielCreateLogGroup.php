@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\profiel;
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * ProfielCreateLogGroup.class.php
@@ -18,7 +18,7 @@ class ProfielCreateLogGroup extends ProfielLogGroup {
 		parent::__construct($editor, $timestamp);
 	}
 	public  function toHtml() {
-		return "<div class='ProfielLogEntry'>Aangemaakt door ".ProfielModel::getLink($this->editor).($this->timestamp === null ? "?" : reldate($this->timestamp->format('Y-m-d H:i:s')))."</div>";
+		return "<div class='ProfielLogEntry'>Aangemaakt door ".ProfielRepository::getLink($this->editor).($this->timestamp === null ? "?" : reldate($this->timestamp->format('Y-m-d H:i:s')))."</div>";
 	}
 
 }

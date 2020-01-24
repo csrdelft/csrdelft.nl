@@ -2,21 +2,21 @@
 
 namespace CsrDelft\command;
 
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
 use CsrDelft\model\entity\profiel\ProfielLogValueChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
-use CsrDelft\model\ProfielModel;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use CsrDelft\repository\ProfielRepository;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
-class StudieOpDatumCommand extends ContainerAwareCommand {
-	private $profielModel;
+class StudieOpDatumCommand extends Command {
+	private $profielRepository;
 
-	public function __construct(ProfielModel $profielModel) {
-		$this->profielModel = $profielModel;
+	public function __construct(ProfielRepository $profielRepository) {
+		$this->profielRepository = $profielRepository;
 
 		parent::__construct();
 	}
@@ -44,7 +44,7 @@ class StudieOpDatumCommand extends ContainerAwareCommand {
 
 		// Haal leden op
 		/** @var Profiel $lid */
-		foreach ($this->profielModel->find() as $lid) {
+		foreach ($this->profielRepository->findAll() as $lid) {
 
 			// Check of lid al lid was
 			$lidVanaf = \DateTime::createFromFormat('d-m-Y', '01-09-' . $lid->lidjaar);

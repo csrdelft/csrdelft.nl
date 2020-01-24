@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\ProfielService;
 

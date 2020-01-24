@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\model\LidZoeker;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use Jacwright\RestServer\RestException;
 
@@ -40,7 +40,7 @@ class ApiLedenController {
 	 * @url GET /$id
 	 */
 	public function getLid($id) {
-		$profiel = ProfielModel::get($id);
+		$profiel = ProfielRepository::get($id);
 
 		if (!$profiel) {
 			throw new RestException(404);
