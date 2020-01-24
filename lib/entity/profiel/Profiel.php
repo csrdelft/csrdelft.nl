@@ -518,7 +518,7 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getBeschrijving() {
-		$leeftijd = date('Y', $this->getBeginMoment()) - date('Y', strtotime($this->gebdatum));
+		$leeftijd = date('Y', $this->getBeginMoment()) - date('Y', $this->gebdatum->getTimestamp());
 
 		if ($leeftijd == 0) {
 			return $this->getTitel() . ' wordt geboren';

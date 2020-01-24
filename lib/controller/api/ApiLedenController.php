@@ -56,7 +56,7 @@ class ApiLedenController {
 				'formeel' => $profiel->getNaam('civitas')
 			),
 			'pasfoto' => $profiel->getPasfotoPath('vierkant'),
-			'geboortedatum' => $profiel->gebdatum,
+			'geboortedatum' => $profiel->gebdatum->format(DATE_FORMAT),
 			'email' => $profiel->email,
 			'mobiel' => $profiel->mobiel,
 			'huis' => array(
