@@ -41,7 +41,7 @@ $body-bg: $white !default;
 $body-color: $black !default;
 $headings-color: inherit !default;
 
-//$headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif !default;
+$link-color: lighten($primary, 20%);
 
 /** Stek specifieke variabelen. */
 
