@@ -59,7 +59,6 @@ instellingen:
     o_telefoon: {titel: 'Telefoonnummer ouders', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
     # studie
     studie: {titel: 'Studie', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
-    studienr: {titel: 'Studie nummer', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
     studiejaar: {titel: 'Studiejaar', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
     # contact
     email: {titel: 'Email', type: 'Enumeration', opties: ['', 'ja', 'nee'], default: ''}
