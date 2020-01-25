@@ -15,7 +15,7 @@
 					@foreach($verjaardagen[$maand - 1] as $verjaardag)
 						<tr>
 							<td class="text-right @if($verjaardag->isJarig()) dikgedrukt cursief @endif ">
-								{{date('j', strtotime($verjaardag->gebdatum))}}
+								{{$verjaardag->gebdatum->format('j')}}
 							</td>
 							<td @if($verjaardag->isJarig()) class="dikgedrukt cursief" @endif >
 								&nbsp;
