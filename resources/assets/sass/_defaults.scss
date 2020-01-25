@@ -17,13 +17,13 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
 
-$blue: #11273A !default;
+$blue: #0a3292 !default;
 $indigo: #6610f2 !default;
 $purple: #6f42c1 !default;
 $pink: #e83e8c !default;
 $red: #dc3545 !default;
 $orange: #fd7e14 !default;
-$yellow: #E59200 !default;
+$yellow: #ffc107 !default;
 $green: #28a745 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
@@ -40,8 +40,6 @@ $dark: $gray-800 !default;
 $body-bg: $white !default;
 $body-color: $black !default;
 $headings-color: inherit !default;
-
-$link-color: lighten($primary, 20%);
 
 /** Stek specifieke variabelen. */
 

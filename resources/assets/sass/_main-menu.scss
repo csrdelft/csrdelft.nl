@@ -9,7 +9,6 @@
 Primary style
 
 -------------------------------- */
-
 .cd-user-avatar {
 	width: 32px;
 	height: 32px;
@@ -373,6 +372,12 @@ support for no js
 	width: 100%;
 	overflow: visible;
 	visibility: visible;
+}
+
+@include media-breakpoint-up(lg) {
+	#menu {
+		margin-left: -200px;
+	}
 }
 
 @include media-breakpoint-up(md) {

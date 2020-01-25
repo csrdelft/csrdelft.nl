@@ -1,5 +1,5 @@
-<nav id="menu" class="navbar navbar-expand-lg navbar-dark bg-primary">
-	<a class="nav-option trigger text-white d-block d-md-none" href="#zijbalk"><span class="sr-only">Zijbalk openen</span><i
+<nav id="menu" class="navbar navbar-expand-md navbar-dark bg-primary">
+	<a class="nav-option trigger text-white d-block d-lg-none" href="#zijbalk"><span class="sr-only">Zijbalk openen</span><i
 			class="fa fa-lg fa-fw fa-bookmark"></i></a>
 	<a class="navbar-brand d-block d-md-none" href="/">C.S.R. Delft</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
