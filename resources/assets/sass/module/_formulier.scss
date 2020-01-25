@@ -165,8 +165,10 @@ h1.Titel {
 	width: 100%;
 }
 
-.twitter-typeahead:focus-within {
+@include media-breakpoint-up(md) {
+	.twitter-typeahead:focus-within {
 		width: 400px;
+	}
 }
 
 .form-control.loading {
