@@ -65,6 +65,7 @@ docReady(() => {
 		return (event?: Event) => {
 			if (event) {
 				event.preventDefault();
+				event.stopImmediatePropagation();
 			}
 			if (active === id) {
 				reset();
@@ -80,7 +81,7 @@ docReady(() => {
 	}
 
 	$('.trigger[href="#zijbalk"]').on('click', toggle('#zijbalk'));
-	$('main').on('click', reset);
+	$('main,nav,footer').on('click', reset);
 
 	const searchfield = document.querySelector<HTMLInputElement>('input[type=search].ZoekField');
 
