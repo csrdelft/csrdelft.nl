@@ -37,7 +37,7 @@
 	</footer>
 </main>
 <footer class="footer mt-auto py-3">
-	<div class="container-fluid p-3 p-md-5">
+	<div class="container-fluid p-md-5">
 		<div class="row">
 			<div class="col-12 col-md-auto">
 				<img src="/dist/images/beeldmerk.png" width="80" class="d-block mb-2" alt="C.S.R. Logo"/>

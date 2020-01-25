@@ -138,7 +138,7 @@ Initieel verbergen, weergeven als :target of .target op #zijbalk
 @include media-breakpoint-down(sm) {
 	#zijbalk {
 		transform: translateX(-179px);
-		transition: transform 0.3s;
+		transition: transform 0.1s;
 		top: auto;
 	}
 

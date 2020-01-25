@@ -21,8 +21,7 @@ docReady(() => {
 	 */
 	function toggleScroll() {
 		if (active === '#zijbalk') {
-			$('body')
-				.addClass('overflow-x-hidden');
+			$('body').addClass('overflow-x-hidden');
 		} else {
 			// Sta toe om te scrollen _nadat_ de animatie klaar is.
 			setTimeout(() => $('body').removeClass('overflow-x-hidden'), 300);
@@ -63,8 +62,10 @@ docReady(() => {
 	 * @param id
 	 */
 	function toggle(id: string) {
-		return (event: Event) => {
-			event.preventDefault();
+		return (event?: Event) => {
+			if (event) {
+				event.preventDefault();
+			}
 			if (active === id) {
 				reset();
 			} else {
@@ -135,7 +136,7 @@ docReady(() => {
 			return;
 		}
 
-		toggle('#zijbalk');
+		toggle('#zijbalk')();
 	});
 
 	hammertime.on('swipeleft', (e) => {
