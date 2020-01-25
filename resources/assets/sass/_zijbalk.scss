@@ -24,7 +24,7 @@
 	background-color: $zijbalk-bg;
 	z-index: $zindex-zijbalk;
 	height: 100%;
-	transform: -200px;
+	transform: translateX(-200px);
 
 	.cd-beeldmerk {
 		height: 200px;

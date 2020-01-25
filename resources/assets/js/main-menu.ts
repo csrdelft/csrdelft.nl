@@ -16,25 +16,16 @@ docReady(() => {
 
 	let active: string | null = null;
 
-	function isVisible(id: string) {
-		return active === id;
-	}
-
 	/**
 	 * Zorg ervoor dat de body niet kan scrollen als de overlay zichtbaar is.
 	 */
 	function toggleScroll() {
-		if (active === '#search' || active === '#menu') {
+		if (active === '#zijbalk') {
 			$('body')
-				.removeClass('overflow-x-hidden')
-				.addClass('overflow-hidden');
-		} else if (active === '#zijbalk') {
-			$('body')
-				.removeClass('overflow-hidden')
 				.addClass('overflow-x-hidden');
 		} else {
 			// Sta toe om te scrollen _nadat_ de animatie klaar is.
-			setTimeout(() => $('body').removeClass('overflow-hidden overflow-x-hidden'), 300);
+			setTimeout(() => $('body').removeClass('overflow-x-hidden'), 300);
 		}
 	}
 
@@ -49,15 +40,6 @@ docReady(() => {
 		active = null;
 
 		$('.target').removeClass('target');
-
-		toggleScroll();
-	}
-
-	function view(id: string) {
-		active = id;
-
-		$('.target').not(id).removeClass('target');
-		$(id).addClass('target');
 
 		toggleScroll();
 	}
@@ -96,9 +78,8 @@ docReady(() => {
 		};
 	}
 
-	$('.trigger[href="#menu"]').on('click', toggle('#menu'));
 	$('.trigger[href="#zijbalk"]').on('click', toggle('#zijbalk'));
-	$('.trigger[href="#search"]').on('click', toggle('#search'));
+	$('main').on('click', reset);
 
 	const searchfield = document.querySelector<HTMLInputElement>('input[type=search].ZoekField');
 
@@ -154,11 +135,7 @@ docReady(() => {
 			return;
 		}
 
-		if (isVisible('#zijbalk') || isVisible('#menu')) {
-			reset();
-		} else {
-			view('#zijbalk');
-		}
+		toggle('#zijbalk');
 	});
 
 	hammertime.on('swipeleft', (e) => {
@@ -166,10 +143,6 @@ docReady(() => {
 			return;
 		}
 
-		if (isVisible('#zijbalk') || isVisible('#menu')) {
-			reset();
-		} else {
-			view('#menu');
-		}
+		reset();
 	});
 });

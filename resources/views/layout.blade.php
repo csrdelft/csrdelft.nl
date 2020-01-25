@@ -3,7 +3,7 @@
 <head>
 	@include('head')
 </head>
-<body class="nav-is-fixed h-100" @yield('bodyArgs')>
+<body class="nav-is-fixed" @yield('bodyArgs')>
 {{--<nav class="navbar navbar-dark bg-primary fixed-top">--}}
 {{--	<a class="nav-option trigger text-white" href="#zijbalk"><span class="sr-only">Zijbalk openen</span><i--}}
 {{--			class="fa fa-lg fa-fw fa-bookmark"></i></a>--}}
