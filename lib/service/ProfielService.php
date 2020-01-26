@@ -2,7 +2,6 @@
 
 namespace CsrDelft\service;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\security\LoginModel;
@@ -35,7 +34,7 @@ class ProfielService {
 		$containsZonderSpatiesZoekterm = sql_contains(str_replace(' ', '', $zoekterm));
 		$zoekfilterparams = [];
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
-		if ($zoekveld == 'naam' AND !preg_match('/^\d{2}$/', $zoekterm)) {
+		if ($zoekveld == 'naam' && !preg_match('/^\d{2}$/', $zoekterm)) {
 			if (preg_match('/ /', trim($zoekterm))) {
 				$zoekdelen = explode(' ', $zoekterm);
 				$iZoekdelen = count($zoekdelen);
@@ -108,7 +107,7 @@ class ProfielService {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-				(LoginModel::mag(P_LEDEN_READ) and !LoginModel::mag(P_OUDLEDEN_READ)) or (LoginModel::mag(P_LEDEN_READ) and LoginModel::mag(P_OUDLEDEN_READ) and $zoekstatus != 'oudleden')
+				(LoginModel::mag(P_LEDEN_READ) && !LoginModel::mag(P_OUDLEDEN_READ)) || (LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ) && $zoekstatus != 'oudleden')
 			) {
 				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
 			}
@@ -116,26 +115,27 @@ class ProfielService {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-				(!LoginModel::mag(P_LEDEN_READ) and LoginModel::mag(P_OUDLEDEN_READ)) or (LoginModel::mag(P_LEDEN_READ) and LoginModel::mag(P_OUDLEDEN_READ) and $zoekstatus != 'leden')
+				(!LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ)) || (LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ) && $zoekstatus != 'leden')
 			) {
-				if ($statusfilter != '')
+				if ($statusfilter != '') {
 					$statusfilter .= " OR ";
+				}
 				$statusfilter .= "status='S_OUDLID' OR status='S_ERELID'";
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if ($zoekstatus === 'nobodies' and LoginModel::mag(P_LEDEN_MOD)) {
+			if ($zoekstatus === 'nobodies' && LoginModel::mag(P_LEDEN_MOD)) {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}
 
-			if (LoginModel::mag(P_LEDEN_READ) and $zoekstatus === 'novieten') {
+			if (LoginModel::mag(P_LEDEN_READ) && $zoekstatus === 'novieten') {
 				$statusfilter = "status='S_NOVIET'";
 			}
 		}
 
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
-		if (($verticale != 'alle')) {
+		if ($verticale != 'alle') {
 			$mootfilter = 'AND verticale = :verticale ';
 			$zoekfilterparams[':verticale'] = $verticale;
 		} else {
