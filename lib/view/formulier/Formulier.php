@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\ChangeLogModel;
 use CsrDelft\service\CsrfService;
 use CsrDelft\model\entity\ChangeLogEntry;
@@ -278,7 +279,8 @@ HTML;
 		if (!$this->preventCsrf) {
 			return null;
 		}
-		$token = CsrfService::instance()->generateToken($this->action, $this->getMethod());
+		$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
+		$token = $csrfService->generateToken($this->action, $this->getMethod());
 		return new CsrfField($token);
 	}
 

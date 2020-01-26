@@ -4,17 +4,12 @@
 namespace CsrDelft\service;
 
 
+use CsrDelft\common\ContainerFacade;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class CsrfService {
-	private static $instance;
-	static function instance() : CsrfService {
-		if (static::$instance === null)
-			static::$instance = static::init();
-		return static::$instance;
-	}
 	/**
 	 * CsrfService constructor.
 	 * @param $manager CsrfTokenManagerInterface
@@ -56,7 +51,7 @@ class CsrfService {
 		return $this->manager->getToken("global");
 	}
 
-	public static function preventCsrf() {
+	public function preventCsrf() {
 		$method = filter_input(INPUT_SERVER,'REQUEST_METHOD', FILTER_SANITIZE_STRING);
 		if (strtolower($method) == 'get') {
 			return null;
@@ -70,7 +65,7 @@ class CsrfService {
 		if ($id != null && $value != null) {
 			$token = new CsrfToken($id, $value);
 			$url = filter_input(INPUT_SERVER,'REQUEST_URI', FILTER_SANITIZE_STRING);
-			if (CsrfService::instance()->isValid($token, $url, $method)) {
+			if ($this->isValid($token, $url, $method)) {
 				return null;
 			}
 		}

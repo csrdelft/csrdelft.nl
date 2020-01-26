@@ -18,15 +18,24 @@ class AccessControlEventListener {
 		'CsrDelft\controller\ErrorController::handleException' => true,
 		'twig.controller.exception::showAction' => true,
 	];
+	/**
+	 * @var CsrfService
+	 */
+	private $csrfService;
+
+	public function __construct(CsrfService $csrfService) {
+		$this->csrfService = $csrfService;
+	}
 
 	/**
 	 * Controleer of gebruiker deze pagina mag zien.
 	 *
 	 * @param ControllerEvent $event
+	 * @param CsrfService $csrfService
 	 */
 	public function onKernelController(ControllerEvent $event) {
 		if (!$event->getRequest()->get('_csrfUnsafe')) {
-			CsrfService::preventCsrf();
+			$this->csrfService->preventCsrf();
 		}
 
 		$controller = $event->getRequest()->get('_controller');
