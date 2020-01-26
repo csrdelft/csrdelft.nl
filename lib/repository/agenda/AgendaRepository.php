@@ -17,6 +17,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use PDOStatement;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -26,7 +27,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method AgendaItem find($id, $lockMode = null, $lockVersion = null)
  * @method AgendaItem[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method AgendaItem[]|\PDOStatement ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
+ * @method AgendaItem[]|PDOStatement ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
  */
 class AgendaRepository extends ServiceEntityRepository {
 	use OrmTrait;

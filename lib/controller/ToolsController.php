@@ -27,7 +27,6 @@ use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Deze controller bevat een aantal beheertools die niet direct onder een andere controller geschaard kunnen worden.

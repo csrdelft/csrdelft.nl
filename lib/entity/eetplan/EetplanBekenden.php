@@ -2,9 +2,7 @@
 
 namespace CsrDelft\entity\eetplan;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

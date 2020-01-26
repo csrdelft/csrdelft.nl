@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier;
 
+use HTTPClient;
+
 /**
  * UrlDownloader.class.php
  *
@@ -64,7 +66,7 @@ class UrlDownloader {
 	 */
 	protected function dokuhttpclient_get_contents($url) {
 		require_once HTDOCS_PATH . 'wiki/inc/HTTPClient.php';
-		$http = new \HTTPClient();
+		$http = new HTTPClient();
 		$http->timeout = 12;
 		return $http->get($url);
 	}

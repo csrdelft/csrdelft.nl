@@ -2,6 +2,8 @@
 
 namespace CsrDelft\model\entity\profiel;
 
+use DateTime;
+
 /**
  * ProfielLogGroup.class.php
  *
@@ -19,7 +21,7 @@ abstract class ProfielLogGroup {
 	public $editor;
 
 	/**
-	 * @var \DateTime
+	 * @var DateTime
 	 */
 	public $timestamp;
 

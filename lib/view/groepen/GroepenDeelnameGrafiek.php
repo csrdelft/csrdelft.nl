@@ -7,16 +7,12 @@ use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class GroepenDeelnameGrafiek implements View, ToResponse {
 
 	private $series = array();
 	private $step = array();
-
-	private $mannen = [];
-	private $vrouwen = [];
 
 	/**
 	 * GroepenDeelnameGrafiek constructor.

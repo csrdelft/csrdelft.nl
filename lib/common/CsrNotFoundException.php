@@ -2,8 +2,6 @@
 
 namespace CsrDelft\common;
 
-use Throwable;
-
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 25/08/2018

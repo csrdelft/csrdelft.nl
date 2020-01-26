@@ -90,7 +90,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 		if (!$confirmed) {
 			$output->writeln("Geannuleerd.");
 			return;
-		};
+		}
 
 		$output->writeln("");
 

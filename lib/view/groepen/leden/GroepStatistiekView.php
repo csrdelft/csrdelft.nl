@@ -3,6 +3,9 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\CsrException;
+use DateTime;
+use function array_key_first;
+use function array_key_last;
 
 class GroepStatistiekView extends GroepTabView {
 
@@ -74,11 +77,11 @@ class GroepStatistiekView extends GroepTabView {
 		$series = [];
 		foreach ($data as $tijd => $aantal) {
 			$totaal += $aantal;
-			$series[] = ["t" => date(\DateTime::RFC2822, $tijd), "y" => $totaal];
+			$series[] = ["t" => date(DateTime::RFC2822, $tijd), "y" => $totaal];
 		}
 
-		$begin = date(\DateTime::RFC2822, \array_key_first($data));
-		$eind = date(\DateTime::RFC2822, \array_key_last($data));
+		$begin = date(DateTime::RFC2822, array_key_first($data));
+		$eind = date(DateTime::RFC2822, array_key_last($data));
 
 		return htmlentities(json_encode([
 			'labels' => [$begin, $eind],

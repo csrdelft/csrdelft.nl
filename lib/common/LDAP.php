@@ -110,8 +110,7 @@ class LDAP {
 		else
 			$filter = sprintf("(uid=%s)", $this->ldap_escape_filter($uid));
 		$result = ldap_search($this->_conn, $base, $filter);
-		$leden = ldap_get_entries($this->_conn, $result);
-		return $leden;
+		return ldap_get_entries($this->_conn, $result);
 	}
 
 	# Voeg een nieuw record toe
@@ -171,8 +170,7 @@ class LDAP {
 		else
 			$filter = sprintf("(cn=%s)", $this->ldap_escape_filter($cn));
 		$result = ldap_search($this->_conn, $base, $filter);
-		$groepen = ldap_get_entries($this->_conn, $result);
-		return $groepen;
+		return ldap_get_entries($this->_conn, $result);
 	}
 
 	/**

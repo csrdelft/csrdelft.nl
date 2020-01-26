@@ -8,6 +8,7 @@ use CsrDelft\model\entity\peilingen\PeilingStem;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
+use PDOStatement;
 
 /**
  * PeilingenModel.php
@@ -165,7 +166,7 @@ class PeilingenModel extends PersistenceModel {
 	}
 
 	/**
-	 * @return \PDOStatement|Peiling[]
+	 * @return PDOStatement|Peiling[]
 	 */
 	public function getLijst() {
 		return $this->find(null, array(), null, 'id DESC');

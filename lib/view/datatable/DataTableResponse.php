@@ -3,7 +3,6 @@
 namespace CsrDelft\view\datatable;
 
 use CsrDelft\view\JsonLijstResponse;
-use CsrDelft\view\JsonResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

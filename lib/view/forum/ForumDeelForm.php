@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\forum;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
@@ -18,7 +19,7 @@ class ForumDeelForm extends ModalForm {
 	/**
 	 * @param ForumDeel $deel
 	 * @param bool $aanmaken
-	 * @throws \CsrDelft\common\CsrGebruikerException
+	 * @throws CsrGebruikerException
 	 */
 	public function __construct(ForumDeel $deel, bool $aanmaken = false) {
 		$action = $aanmaken ? 'aanmaken' : 'beheren';

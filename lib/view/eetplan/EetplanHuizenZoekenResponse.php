@@ -4,7 +4,6 @@ namespace CsrDelft\view\eetplan;
 
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\view\JsonLijstResponse;
-use CsrDelft\view\JsonResponse;
 
 /**
  * Typeahead response voor EetplanBekendeHuizenForm op /eetplan/bekendehuizen/zoeken

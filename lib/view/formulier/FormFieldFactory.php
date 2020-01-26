@@ -19,6 +19,7 @@ use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\TimeField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
+use Exception;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -28,7 +29,7 @@ class FormFieldFactory {
 	/**
 	 * @param PersistentEntity $model
 	 * @return InputField[]
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public static function generateFields(PersistentEntity $model) {
 		$fields = array();
@@ -60,7 +61,7 @@ class FormFieldFactory {
 	 * @param string $type
 	 * @param array|string|null $additional
 	 * @return InputField
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private static function getFieldByType(string $fieldName, $value, string $type, $additional = null) {
 		$desc = ucfirst(str_replace('_', ' ', $fieldName));

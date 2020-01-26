@@ -9,6 +9,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
+use Exception;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -27,7 +28,7 @@ class ToestemmingModalForm extends ModalForm {
 	/**
 	 * @param LidToestemmingRepository $lidToestemmingRepository
 	 * @param bool $nieuw
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function __construct(LidToestemmingRepository $lidToestemmingRepository, $nieuw = false) {
 		parent::__construct(new LidToestemming(), '/toestemming', 'Toestemming geven');

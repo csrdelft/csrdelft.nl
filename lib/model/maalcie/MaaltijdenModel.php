@@ -9,6 +9,7 @@ use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
 
 /**
  * MaaltijdenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -395,7 +396,7 @@ class MaaltijdenModel extends PersistenceModel {
 				try {
 					$this->update($maaltijd);
 					$updated++;
-				} catch (\Exception $e) {
+				} catch (Exception $e) {
 
 				}
 			}

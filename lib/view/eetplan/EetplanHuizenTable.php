@@ -4,9 +4,7 @@ namespace CsrDelft\view\eetplan;
 
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\DataTable;
-use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
-use CsrDelft\view\datatable\Multiplicity;
 
 class EetplanHuizenTable extends DataTable {
 	public function __construct() {

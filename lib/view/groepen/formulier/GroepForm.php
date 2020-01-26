@@ -141,7 +141,7 @@ class GroepForm extends ModalForm {
 		// GROEPEN_V2
 		if ($fields['keuzelijst2']->getValue() !== null && $fields['versie']->getValue() === GroepVersie::V2) {
 			$this->model->keuzelijst2 = $this->parseKeuzelijst($fields['keuzelijst2']->getValue());
-		};
+		}
 
 		return parent::validate();
 	}

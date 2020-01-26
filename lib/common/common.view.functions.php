@@ -1,13 +1,11 @@
 <?php /** @noinspection PhpUnused wordt gebruikt in templates*/
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CRLFView;
 use CsrDelft\model\MenuModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
-use CsrDelft\view\View;
 
 /**
  * Hulpmethodes die gebruikt worden in views.

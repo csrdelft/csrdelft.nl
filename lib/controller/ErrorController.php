@@ -10,10 +10,11 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 
 class ErrorController {
-	public function handleException(RequestStack $requestStack, \Throwable $exception, ContainerInterface $container) {
+	public function handleException(RequestStack $requestStack, Throwable $exception, ContainerInterface $container) {
 		$request = $requestStack->getMasterRequest();
 
 		if ($request->getMethod() == 'POST') {

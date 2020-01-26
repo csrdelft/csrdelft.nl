@@ -7,6 +7,7 @@ use CsrDelft\model\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use stdClass;
 
 /**
  * MaaltijdBeoordelingenModel.class.php
@@ -61,7 +62,7 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 		}
 
 		// Geef resultaat terug in object, null als er geen beoordelingen zijn
-		$object = new \stdClass();
+		$object = new stdClass();
 		$object->kwantiteit = $kwantiteitAantal === 0 ? null : $kwantiteit / $kwantiteitAantal;
 		$object->kwantiteitAfwijking = $kwantiteitAantal === 0 ? null : $kwantiteitAfwijking / $kwantiteitAantal;
 		$object->kwantiteitAantal = $kwantiteitAantal;

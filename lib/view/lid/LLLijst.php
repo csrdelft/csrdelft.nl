@@ -4,6 +4,7 @@ namespace CsrDelft\view\lid;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
+use Exception;
 
 /**
  * De 'normale' ledenlijst, zoals het is zoals het was.
@@ -43,8 +44,6 @@ class LLLijst extends LLWeergave {
 				case 'kring':
 				case 'patroon':
 				case 'verticale':
-					$aoColumns[] = '{"sType": \'html\'}';
-					break;
 				case 'woonoord':
 					$aoColumns[] = '{"sType": \'html\'}';
 					break;
@@ -130,7 +129,7 @@ class LLLijst extends LLWeergave {
 				default:
 					try {
 						echo htmlspecialchars($profiel->$veld);
-					} catch (\Exception $e) {
+					} catch (Exception $e) {
 						echo ' - ';
 					}
 			}

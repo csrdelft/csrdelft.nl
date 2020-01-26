@@ -2,8 +2,8 @@
 
 namespace CsrDelft\model\fiscaat;
 
-use CsrDelft\model\entity\fiscaat\Saldo;
 use CsrDelft\model\security\LoginModel;
+use DateTime;
 
 class SaldoGrafiekModel {
 	/**
@@ -35,7 +35,7 @@ class SaldoGrafiekModel {
 		}
 		$saldo = $klant->saldo;
 		// Teken het huidige saldo
-		$data = [['t' => date(\DateTime::RFC2822), 'y' => $saldo]];
+		$data = [['t' => date(DateTime::RFC2822), 'y' => $saldo]];
 		$bestellingen = $this->civiBestellingModel->find(
 			'uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)',
 			[$klant->uid, $timespan],
@@ -44,18 +44,18 @@ class SaldoGrafiekModel {
 		);
 
 		foreach ($bestellingen as $bestelling) {
-			$data[] = ['t' => date(\DateTime::RFC2822, strtotime($bestelling->moment)), 'y' => $saldo];
+			$data[] = ['t' => date(DateTime::RFC2822, strtotime($bestelling->moment)), 'y' => $saldo];
 			$saldo += $bestelling->totaal;
 		}
 
 		if (!empty($data)) {
 			$row = end($data);
-			$time = date(\DateTime::RFC2822, strtotime($timespan - 1 . ' days 23 hours ago'));
+			$time = date(DateTime::RFC2822, strtotime($timespan - 1 . ' days 23 hours ago'));
 			array_push($data, ["t" => $time, 'y' => $row['y']]);
 		}
 
 		return [
-			"labels" => [$time, date(\DateTime::RFC2822)],
+			"labels" => [$time, date(DateTime::RFC2822)],
 			"datasets" => [
 				[
 					'label' => 'Civisaldo',
