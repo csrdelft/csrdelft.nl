@@ -33,6 +33,10 @@ services:
     resource: '../lib/repository'
     public: true # Alle repositories zijn (voor nu) uit de container te trekken.
 
+  CsrDelft\service\:
+    resource: '../lib/service'
+    public: true
+
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
   CsrDelft\events\ViewEventListener:

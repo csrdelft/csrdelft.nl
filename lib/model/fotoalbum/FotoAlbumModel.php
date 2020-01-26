@@ -13,10 +13,9 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
+use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbumModel.php
@@ -140,7 +139,7 @@ class FotoAlbumModel extends PersistenceModel {
 						throw new CsrException('Geen eigenaar van foto: ' . $path);
 					}
 				}
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				$errors++;
 				if (defined('RESIZE_OUTPUT')) {
 					debugprint($e->getMessage());

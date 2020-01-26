@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
+use DateTime;
+
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 30/03/2017
@@ -13,7 +15,7 @@ namespace CsrDelft\view\formulier\keuzevelden;
  */
 class DateObjectField extends DateField {
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
-		if ($value instanceof \DateTime) {
+		if ($value instanceof DateTime) {
 			$value = $value->format(DATE_FORMAT);
 		}
 		parent::__construct($name, $value, $description);

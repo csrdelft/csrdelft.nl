@@ -5,7 +5,7 @@ namespace CsrDelft\entity\eetplan;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\repository\ProfielRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,7 +28,7 @@ class Eetplan {
 
 	/**
 	 * @ORM\Column(type="date")
-	 * @var \DateTime
+	 * @var DateTime
 	 */
 	public $avond;
 

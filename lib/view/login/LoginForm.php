@@ -6,7 +6,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
-use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;

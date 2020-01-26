@@ -36,16 +36,12 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\VerjaardagenModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
-use Doctrine\DBAL\Driver\Connection;
-use splitbrain\phpcli\Exception;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ProfielController extends AbstractController {
 	/**

@@ -3,6 +3,7 @@
 namespace CsrDelft\view\lid;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
+use Exception;
 
 /**
  * CSV in een textarea met clientside downloadknop
@@ -114,7 +115,7 @@ class LLCSV extends LLWeergave {
 				default:
 					try {
 						$return .= $profiel->$veld;
-					} catch (\Exception $e) {
+					} catch (Exception $e) {
 						//omit non-existant fields
 					}
 			}

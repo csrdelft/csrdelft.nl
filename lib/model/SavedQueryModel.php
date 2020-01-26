@@ -9,6 +9,9 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\SavedQuery;
 use CsrDelft\model\entity\SavedQueryResult;
 use CsrDelft\Orm\PersistenceModel;
+use PDO;
+use PDOException;
+use PDOStatement;
 
 class SavedQueryModel extends PersistenceModel {
 	const ORM = SavedQuery::class;
@@ -18,7 +21,7 @@ class SavedQueryModel extends PersistenceModel {
 	}
 
 	/**
-	 * @return SavedQuery[]|\PDOStatement
+	 * @return SavedQuery[]|PDOStatement
 	 */
 	public function getQueries() {
 		return $this->find();
@@ -46,8 +49,8 @@ class SavedQueryModel extends PersistenceModel {
 			}
 
 			$resultObject->cols = $cols;
-			$resultObject->rows = $result->fetchAll(\PDO::FETCH_ASSOC);
-		} catch (\PDOException $ex) {
+			$resultObject->rows = $result->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $ex) {
 			$resultObject->cols = [];
 			$resultObject->rows = [];
 			$resultObject->error = $ex->getMessage();

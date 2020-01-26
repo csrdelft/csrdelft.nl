@@ -9,7 +9,6 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredDateTimeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormulierKnop;
 use CsrDelft\view\formulier\ModalForm;

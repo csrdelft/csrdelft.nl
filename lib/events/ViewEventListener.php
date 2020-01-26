@@ -2,11 +2,7 @@
 
 namespace CsrDelft\events;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\view\ToResponse;
-use CsrDelft\view\View;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
 class ViewEventListener {

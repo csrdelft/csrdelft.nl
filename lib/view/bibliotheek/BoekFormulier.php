@@ -3,7 +3,6 @@
 namespace CsrDelft\view\bibliotheek;
 
 use CsrDelft\model\bibliotheek\BiebRubriekModel;
-use CsrDelft\model\entity\bibliotheek\BiebRubriek;
 use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;

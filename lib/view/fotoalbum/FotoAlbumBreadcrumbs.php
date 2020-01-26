@@ -5,7 +5,6 @@ namespace CsrDelft\view\fotoalbum;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

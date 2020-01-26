@@ -3,6 +3,7 @@
 
 namespace CsrDelft;
 
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Exception\FileLoaderLoadException;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -43,7 +44,7 @@ class Kernel extends BaseKernel {
 	/**
 	 * @param ContainerBuilder $container
 	 * @param LoaderInterface $loader
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader) {
 		$container->addResource(new FileResource($this->getProjectDir() . '/config/bundles.php'));

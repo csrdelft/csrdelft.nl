@@ -11,12 +11,12 @@ use Symfony\Component\Yaml\Yaml;
  */
 class YamlFileLoader extends FileLoader
 {
-	public function load($resource, $type = null)
+	public function load($resource, string $type = null)
 	{
 		return Yaml::parse(file_get_contents($resource));
 	}
 
-	public function supports($resource, $type = null)
+	public function supports($resource, string $type = null)
 	{
 		return is_string($resource) && 'yaml' === pathinfo(
 				$resource,

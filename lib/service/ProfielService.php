@@ -1,18 +1,26 @@
 <?php
 
-namespace CsrDelft\model;
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\LidStatus;
+namespace CsrDelft\service;
+
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\DependencyManager;
 use CsrDelft\repository\ProfielRepository;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/09/2018
  */
-class ProfielService extends DependencyManager {
+class ProfielService {
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
+
+	public function __construct(ProfielRepository $profielRepository) {
+		$this->profielRepository = $profielRepository;
+	}
+
 	/**
 	 * @param string $zoekterm
 	 * @param string $zoekveld
@@ -26,7 +34,7 @@ class ProfielService extends DependencyManager {
 		$containsZonderSpatiesZoekterm = sql_contains(str_replace(' ', '', $zoekterm));
 		$zoekfilterparams = [];
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
-		if ($zoekveld == 'naam' AND !preg_match('/^\d{2}$/', $zoekterm)) {
+		if ($zoekveld == 'naam' && !preg_match('/^\d{2}$/', $zoekterm)) {
 			if (preg_match('/ /', trim($zoekterm))) {
 				$zoekdelen = explode(' ', $zoekterm);
 				$iZoekdelen = count($zoekdelen);
@@ -36,8 +44,8 @@ class ProfielService extends DependencyManager {
 					$zoekfilter = "( voornaam LIKE :voornaam AND achternaam LIKE :achternaam ) OR";
 					$zoekfilter .= "( voornaam LIKE :zoekterm OR achternaam LIKE :containsZoekterm OR
                                     nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm )";
-					$zoekfilterparams[':zoekterm']=  $zoekterm;
-					$zoekfilterparams[':containsZoekterm']=  sql_contains($zoekterm);
+					$zoekfilterparams[':zoekterm'] = $zoekterm;
+					$zoekfilterparams[':containsZoekterm'] = sql_contains($zoekterm);
 				} else {
 					$zoekfilterparams[':voornaam'] = sql_contains($zoekdelen[0]);
 					$zoekfilterparams[':achternaam'] = sql_contains($zoekdelen[$iZoekdelen - 1]);
@@ -48,7 +56,7 @@ class ProfielService extends DependencyManager {
 				$zoekfilter = "
 					voornaam LIKE :containsZoekterm OR achternaam LIKE :containsZoekterm OR
 					nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm";
-				$zoekfilterparams[':containsZoekterm']= sql_contains($zoekterm);
+				$zoekfilterparams[':containsZoekterm'] = sql_contains($zoekterm);
 			}
 
 			$zoekfilterparams[':naam'] = sql_contains($zoekterm);
@@ -57,17 +65,17 @@ class ProfielService extends DependencyManager {
 		} elseif ($zoekveld == 'adres') {
 			$zoekfilter = "adres LIKE :containsZoekterm OR woonplaats LIKE :containsZoekterm OR
 				postcode LIKE :containsZoekterm OR REPLACE(postcode, ' ', '') LIKE :containsZonderSpatiesZoekterm";
-			$zoekfilterparams[':containsZoekterm']=  $zoekterm;
-			$zoekfilterparams[':containsZonderSpatiesZoekterm']=  $containsZonderSpatiesZoekterm;
+			$zoekfilterparams[':containsZoekterm'] = $zoekterm;
+			$zoekfilterparams[':containsZonderSpatiesZoekterm'] = $containsZonderSpatiesZoekterm;
 		} else {
 			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
 				//zoeken op lichtingen...
 				$zoekfilter = "SUBSTRING(uid, 1, 2)=:zoekterm";
-				$zoekfilterparams[':zoekterm']=  $zoekterm;
+				$zoekfilterparams[':zoekterm'] = $zoekterm;
 
 			} else {
 				$zoekfilter = "{$zoekveld} LIKE :containsZoekterm";
-				$zoekfilterparams[':containsZoekterm']=  $zoekterm;
+				$zoekfilterparams[':containsZoekterm'] = $zoekterm;
 			}
 		}
 
@@ -99,7 +107,7 @@ class ProfielService extends DependencyManager {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-				(LoginModel::mag(P_LEDEN_READ) and !LoginModel::mag(P_OUDLEDEN_READ)) or (LoginModel::mag(P_LEDEN_READ) and LoginModel::mag(P_OUDLEDEN_READ) and $zoekstatus != 'oudleden')
+				(LoginModel::mag(P_LEDEN_READ) && !LoginModel::mag(P_OUDLEDEN_READ)) || (LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ) && $zoekstatus != 'oudleden')
 			) {
 				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
 			}
@@ -107,26 +115,27 @@ class ProfielService extends DependencyManager {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-				(!LoginModel::mag(P_LEDEN_READ) and LoginModel::mag(P_OUDLEDEN_READ)) or (LoginModel::mag(P_LEDEN_READ) and LoginModel::mag(P_OUDLEDEN_READ) and $zoekstatus != 'leden')
+				(!LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ)) || (LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ) && $zoekstatus != 'leden')
 			) {
-				if ($statusfilter != '')
+				if ($statusfilter != '') {
 					$statusfilter .= " OR ";
+				}
 				$statusfilter .= "status='S_OUDLID' OR status='S_ERELID'";
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if ($zoekstatus === 'nobodies' and LoginModel::mag(P_LEDEN_MOD)) {
+			if ($zoekstatus === 'nobodies' && LoginModel::mag(P_LEDEN_MOD)) {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
 			}
 
-			if (LoginModel::mag(P_LEDEN_READ) and $zoekstatus === 'novieten') {
+			if (LoginModel::mag(P_LEDEN_READ) && $zoekstatus === 'novieten') {
 				$statusfilter = "status='S_NOVIET'";
 			}
 		}
 
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
-		if (($verticale != 'alle')) {
+		if ($verticale != 'alle') {
 			$mootfilter = 'AND verticale = :verticale ';
 			$zoekfilterparams[':verticale'] = $verticale;
 		} else {
@@ -142,8 +151,7 @@ class ProfielService extends DependencyManager {
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
-			return ContainerFacade::getContainer()
-				->get(ProfielRepository::class)
+			return $this->profielRepository
 				->ormFind("($zoekfilter) AND ($statusfilter) $mootfilter", $zoekfilterparams, null, $sort, $limit);
 		}
 

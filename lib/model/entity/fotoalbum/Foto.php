@@ -8,7 +8,6 @@ use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Foto.class.php

@@ -4,6 +4,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
 use CsrDelft\view\Icon;
 use eftec\bladeone\BladeOne;
+use Exception;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -87,21 +88,21 @@ class BladeRenderer implements Renderer {
 
 	/**
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function render() {
 		return $this->bladeOne->run($this->template, $this->data);
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function display() {
 		echo $this->render();
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function compile() {
 		$this->bladeOne->compile($this->template, true);

@@ -8,7 +8,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\courant\CourantView;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * CourantModel.class.php

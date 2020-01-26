@@ -7,6 +7,7 @@ use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\ProfielLogValueChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\repository\ProfielRepository;
+use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,7 +37,7 @@ class StudieOpDatumCommand extends Command {
 			$question = new Question("Per welke datum? [dd-mm-jjjj] ");
 			$antwoord = $helper->ask($input, $output, $question);
 			if ($antwoord) {
-				$datum = \DateTime::createFromFormat('d-m-Y', $antwoord);
+				$datum = DateTime::createFromFormat('d-m-Y', $antwoord);
 			}
 		} while (!$datum);
 
@@ -47,7 +48,7 @@ class StudieOpDatumCommand extends Command {
 		foreach ($this->profielRepository->findAll() as $lid) {
 
 			// Check of lid al lid was
-			$lidVanaf = \DateTime::createFromFormat('d-m-Y', '01-09-' . $lid->lidjaar);
+			$lidVanaf = DateTime::createFromFormat('d-m-Y', '01-09-' . $lid->lidjaar);
 			if ($lidVanaf > $datum) continue;
 
 			$watch = ['status', 'studie'];

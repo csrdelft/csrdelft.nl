@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\peilingen;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\peilingen\Peiling;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
@@ -22,7 +23,7 @@ class PeilingForm extends ModalForm
 	/**
 	 * @param Peiling $model
 	 * @param boolean $nieuw
-	 * @throws \CsrDelft\common\CsrGebruikerException
+	 * @throws CsrGebruikerException
 	 */
 	public function __construct($model, $nieuw)
 	{
