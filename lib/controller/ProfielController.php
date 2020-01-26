@@ -6,13 +6,13 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleSync;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\bibliotheek\BoekExemplaarModel;
 use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
 use CsrDelft\model\forum\ForumPostsModel;
@@ -25,17 +25,17 @@ use CsrDelft\model\groepen\KetzersModel;
 use CsrDelft\model\groepen\OnderverenigingenModel;
 use CsrDelft\model\groepen\RechtenGroepenModel;
 use CsrDelft\model\groepen\WerkgroepenModel;
-use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\VerjaardagenModel;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
@@ -144,6 +144,10 @@ class ProfielController extends AbstractController {
 	 * @var SaldoGrafiekModel
 	 */
 	private $saldoGrafiekModel;
+	/**
+	 * @var VerjaardagenService
+	 */
+	private $verjaardagenService;
 
 	public function __construct(
 		ProfielRepository $profielRepository,
@@ -170,7 +174,8 @@ class ProfielController extends AbstractController {
 		RechtenGroepenModel $rechtenGroepenModel,
 		VoorkeurOpmerkingModel $voorkeurOpmerkingModel,
 		WerkgroepenModel $werkgroepenModel,
-		SaldoGrafiekModel $saldoGrafiekModel
+		SaldoGrafiekModel $saldoGrafiekModel,
+		VerjaardagenService $verjaardagenService
 	) {
 		$this->profielRepository = $profielRepository;
 		$this->accountModel = $accountModel;
@@ -197,6 +202,7 @@ class ProfielController extends AbstractController {
 		$this->voorkeurOpmerkingModel = $voorkeurOpmerkingModel;
 		$this->werkgroepenModel = $werkgroepenModel;
 		$this->saldoGrafiekModel = $saldoGrafiekModel;
+		$this->verjaardagenService = $verjaardagenService;
 	}
 
 	public function resetPrivateToken($uid) {
@@ -396,7 +402,7 @@ class ProfielController extends AbstractController {
 		return view('verjaardagen.alle', [
 			'dezemaand' => date('n', $nu),
 			'dezedag' => date('d', $nu),
-			'verjaardagen' => VerjaardagenModel::getJaar(),
+			'verjaardagen' => $this->verjaardagenService->getJaar(),
 		]);
 	}
 

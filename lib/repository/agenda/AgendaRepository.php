@@ -14,7 +14,7 @@ use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\VerjaardagenModel;
+use CsrDelft\service\VerjaardagenService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use PDOStatement;
@@ -54,14 +54,23 @@ class AgendaRepository extends ServiceEntityRepository {
 	 * @var MaaltijdenModel
 	 */
 	private $maaltijdenModel;
+	/**
+	 * @var VerjaardagenService
+	 */
+	private $verjaardagenService;
 
-	public function __construct(ManagerRegistry $registry, AgendaVerbergenRepository $agendaVerbergenRepository) {
+	public function __construct(
+		ManagerRegistry $registry,
+		AgendaVerbergenRepository $agendaVerbergenRepository,
+		VerjaardagenService $verjaardagenService
+	) {
 		parent::__construct($registry, AgendaItem::class);
 
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenModel = ActiviteitenModel::instance();
 		$this->corveeTakenModel = CorveeTakenModel::instance();
 		$this->maaltijdenModel = MaaltijdenModel::instance();
+		$this->verjaardagenService = $verjaardagenService;
 	}
 
 	/**
@@ -177,7 +186,7 @@ class AgendaRepository extends ServiceEntityRepository {
 			$GLOBALS['agenda_van'] = $van;
 			$GLOBALS['agenda_tot'] = $tot;
 
-			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0));
+			$result = array_merge($result, $this->verjaardagenService->getTussen($van, $tot, 0));
 		}
 
 		// Sorteren

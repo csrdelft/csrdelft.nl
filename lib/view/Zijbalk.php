@@ -10,8 +10,8 @@ use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\VerjaardagenModel;
 use CsrDelft\repository\agenda\AgendaRepository;
+use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
 use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
 
@@ -93,8 +93,9 @@ abstract class Zijbalk {
 		}
 		// Komende verjaardagen
 		if (LoginModel::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'verjaardagen') > 0) {
+			$verjaardagenService = ContainerFacade::getContainer()->get(VerjaardagenService::class);
 			$zijbalk[] = view('verjaardagen.komende', [
-				'verjaardagen' => VerjaardagenModel::getKomende((int)lid_instelling('zijbalk', 'verjaardagen')),
+				'verjaardagen' => $verjaardagenService->getKomende((int)lid_instelling('zijbalk', 'verjaardagen')),
 				'toonpasfotos' => lid_instelling('zijbalk', 'verjaardagen_pasfotos') == 'ja',
 			]);
 		}
