@@ -1,18 +1,27 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\service;
+
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\LidStatus;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\DependencyManager;
 use CsrDelft\repository\ProfielRepository;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/09/2018
  */
-class ProfielService extends DependencyManager {
+class ProfielService {
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
+
+	public function __construct(ProfielRepository $profielRepository) {
+		$this->profielRepository = $profielRepository;
+	}
+
 	/**
 	 * @param string $zoekterm
 	 * @param string $zoekveld
@@ -36,8 +45,8 @@ class ProfielService extends DependencyManager {
 					$zoekfilter = "( voornaam LIKE :voornaam AND achternaam LIKE :achternaam ) OR";
 					$zoekfilter .= "( voornaam LIKE :zoekterm OR achternaam LIKE :containsZoekterm OR
                                     nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm )";
-					$zoekfilterparams[':zoekterm']=  $zoekterm;
-					$zoekfilterparams[':containsZoekterm']=  sql_contains($zoekterm);
+					$zoekfilterparams[':zoekterm'] = $zoekterm;
+					$zoekfilterparams[':containsZoekterm'] = sql_contains($zoekterm);
 				} else {
 					$zoekfilterparams[':voornaam'] = sql_contains($zoekdelen[0]);
 					$zoekfilterparams[':achternaam'] = sql_contains($zoekdelen[$iZoekdelen - 1]);
@@ -48,7 +57,7 @@ class ProfielService extends DependencyManager {
 				$zoekfilter = "
 					voornaam LIKE :containsZoekterm OR achternaam LIKE :containsZoekterm OR
 					nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm";
-				$zoekfilterparams[':containsZoekterm']= sql_contains($zoekterm);
+				$zoekfilterparams[':containsZoekterm'] = sql_contains($zoekterm);
 			}
 
 			$zoekfilterparams[':naam'] = sql_contains($zoekterm);
@@ -57,17 +66,17 @@ class ProfielService extends DependencyManager {
 		} elseif ($zoekveld == 'adres') {
 			$zoekfilter = "adres LIKE :containsZoekterm OR woonplaats LIKE :containsZoekterm OR
 				postcode LIKE :containsZoekterm OR REPLACE(postcode, ' ', '') LIKE :containsZonderSpatiesZoekterm";
-			$zoekfilterparams[':containsZoekterm']=  $zoekterm;
-			$zoekfilterparams[':containsZonderSpatiesZoekterm']=  $containsZonderSpatiesZoekterm;
+			$zoekfilterparams[':containsZoekterm'] = $zoekterm;
+			$zoekfilterparams[':containsZonderSpatiesZoekterm'] = $containsZonderSpatiesZoekterm;
 		} else {
 			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
 				//zoeken op lichtingen...
 				$zoekfilter = "SUBSTRING(uid, 1, 2)=:zoekterm";
-				$zoekfilterparams[':zoekterm']=  $zoekterm;
+				$zoekfilterparams[':zoekterm'] = $zoekterm;
 
 			} else {
 				$zoekfilter = "{$zoekveld} LIKE :containsZoekterm";
-				$zoekfilterparams[':containsZoekterm']=  $zoekterm;
+				$zoekfilterparams[':containsZoekterm'] = $zoekterm;
 			}
 		}
 
@@ -142,8 +151,7 @@ class ProfielService extends DependencyManager {
 
 		# controleer of we ueberhaupt wel wat te zoeken hebben hier
 		if ($statusfilter != '') {
-			return ContainerFacade::getContainer()
-				->get(ProfielRepository::class)
+			return $this->profielRepository
 				->ormFind("($zoekfilter) AND ($statusfilter) $mootfilter", $zoekfilterparams, null, $sort, $limit);
 		}
 

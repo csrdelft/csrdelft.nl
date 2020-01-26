@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\ProfielService;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\AccountModel;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\ProfielService;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -34,7 +35,8 @@ class LidField extends TextField {
 			return null;
 		}
 		if (!AccountModel::isValidUid($this->value)) {
-			$profielen = ProfielService::instance()->zoekLeden($this->value, 'naam', 'alle', 'achternaam', $this->zoekin);
+			$profielService = ContainerFacade::getContainer()->get(ProfielService::class);
+			$profielen = $profielService->zoekLeden($this->value, 'naam', 'alle', 'achternaam', $this->zoekin);
 			if (!empty($profielen)) {
 				$this->value = $profielen[0]->uid;
 			}
@@ -55,7 +57,8 @@ class LidField extends TextField {
 		if (AccountModel::isValidUid($value) AND ProfielRepository::existsUid($value)) {
 			return true;
 		}
-		$profielen = ProfielService::instance()->zoekLeden($value, 'naam', 'alle', 'achternaam', $this->zoekin);
+		$profielService = ContainerFacade::getContainer()->get(ProfielService::class);
+		$profielen = $profielService->zoekLeden($value, 'naam', 'alle', 'achternaam', $this->zoekin);
 		if (!empty($profielen)) {
 			if (count($profielen) == 1) {
 				return true;

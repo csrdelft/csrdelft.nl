@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\ProfielService;
+use CsrDelft\service\ProfielService;
 
 /**
  * C.S.R. Delft | pubcie@csrdelft.nl
@@ -51,7 +52,8 @@ class Streeplijstcontent implements View, ToResponse {
 			$this->sLidjaar = $_GET['lichting'];
 		}
 		//leden welke in de lijst moeten laden.
-		$this->aLeden = ProfielService::instance()->zoekLeden(empty($this->sLidjaar) ? '%' : $this->sLidjaar, 'uid', $this->sVerticale, 'achternaam', 'leden');
+		$profielService = ContainerFacade::getContainer()->get(ProfielService::class);
+		$this->aLeden = $profielService->zoekLeden(empty($this->sLidjaar) ? '%' : $this->sLidjaar, 'uid', $this->sVerticale, 'achternaam', 'leden');
 	}
 
 	function parseGoederen($sGoederen) {

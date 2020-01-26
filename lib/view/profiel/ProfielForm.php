@@ -4,13 +4,13 @@ namespace CsrDelft\view\profiel;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Ini;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\OntvangtContactueel;
-use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\ProfielService;
 use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
@@ -89,15 +89,17 @@ class ProfielForm extends Formulier {
 			$fields[] = new SelectField('status', $profiel->status, 'Lidstatus', $statussen);
 			$fields[] = new HtmlComment('<p>Bij het wijzigen van de lidstatus worden overbodige <span class="waarschuwing">gegevens verwijderd</span>, onomkeerbaar, opletten dus!</p>');
 
+			$profielService = ContainerFacade::getContainer()->get(ProfielService::class);
+
 			if ($profiel->voornaam == '') {
 				$gelijknamigenovieten = array();
 			} else {
-				$gelijknamigenovieten = ProfielService::instance()->zoekLeden($profiel->voornaam, 'voornaam', 'alle', 'achternaam', array(LidStatus::Noviet));
+				$gelijknamigenovieten = $profielService->zoekLeden($profiel->voornaam, 'voornaam', 'alle', 'achternaam', array(LidStatus::Noviet));
 			}
 			if ($profiel->achternaam == '') {
 				$gelijknamigeleden = array();
 			} else {
-				$gelijknamigeleden = ProfielService::instance()->zoekLeden($profiel->achternaam, 'achternaam', 'alle', 'lidjaar', array(LidStatus::Lid, LidStatus::Gastlid));
+				$gelijknamigeleden = $profielService->zoekLeden($profiel->achternaam, 'achternaam', 'alle', 'lidjaar', array(LidStatus::Lid, LidStatus::Gastlid));
 			}
 
 			$html = '<div class="novieten">';
