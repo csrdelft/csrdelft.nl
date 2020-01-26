@@ -26,7 +26,6 @@ use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
-use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once dirname(__DIR__) . '/lib/defines.defaults.php';
@@ -79,12 +78,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$ref = null;
 }
 define('HTTP_REFERER', $ref);
-
-if ($_SERVER['APP_DEBUG']) {
-	umask(0000);
-
-	Debug::enable();
-}
 
 if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
 	Request::setTrustedProxies(

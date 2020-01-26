@@ -42,6 +42,7 @@ use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -51,7 +52,7 @@ use Symfony\Component\Routing\RouteCollection;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-abstract class AbstractGroepenController {
+abstract class AbstractGroepenController implements RouteLoaderInterface {
 	/** @var DataTable */
 	protected $table;
 	/** @var AbstractGroepenModel */

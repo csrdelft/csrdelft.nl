@@ -22,8 +22,8 @@ class InstellingConfiguration implements ConfigurationInterface {
 	 * @return TreeBuilder The tree builder
 	 */
 	public function getConfigTreeBuilder() {
-		$treeBuilder = new TreeBuilder();
-		$rootNode = $treeBuilder->root('instellingen');
+		$treeBuilder = new TreeBuilder('instellingen');
+		$rootNode = $treeBuilder->getRootNode();
 		$rootNode
 			->useAttributeAsKey('')
 			->arrayPrototype()

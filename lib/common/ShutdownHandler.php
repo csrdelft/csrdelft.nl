@@ -44,7 +44,7 @@ final class ShutdownHandler {
 		}
 	}
 
-	public static function emailException(FlattenException $exception) {
+	public static function emailException(\Throwable $exception) {
 		$error['message'] = $exception->getMessage();
 		$debug['trace'] = $exception->getTrace();
 		$debug['POST'] = $_POST;
@@ -85,7 +85,7 @@ final class ShutdownHandler {
 		}
 	}
 
-	public static function slackException(FlattenException $exception) {
+	public static function slackException(\Throwable $exception) {
 		static::slackHandler(1, $exception->getMessage(), $exception->getFile(), $exception->getLine());
 	}
 

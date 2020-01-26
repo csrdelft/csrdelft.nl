@@ -8,14 +8,14 @@ use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\Persistence\Database;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
-class MaaltijdVerwerkingTerugdraaienCommand extends ContainerAwareCommand {
+class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 	/** @var MaaltijdenModel */
 	private $maaltijdenModel;
 	/** @var CiviBestellingModel */

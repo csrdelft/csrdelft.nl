@@ -19,7 +19,7 @@ class CsrfService {
 	 * CsrfService constructor.
 	 * @param $manager CsrfTokenManagerInterface
 	 */
-	public function __construct($manager) {
+	public function __construct(CsrfTokenManagerInterface $manager) {
 		$this->manager = $manager;
 	}
 	/**
