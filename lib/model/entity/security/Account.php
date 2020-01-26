@@ -2,9 +2,9 @@
 
 namespace CsrDelft\model\entity\security;
 
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * Account.class.php

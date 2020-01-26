@@ -32,7 +32,7 @@ class ErrorController {
 			}
 			case Response::HTTP_FORBIDDEN:
 			{
-				if (LoginModel::getUid() == 'x999') {
+				if (LoginModel::getUid() == LoginModel::UID_EXTERN) {
 					$requestUri = $request->getRequestUri();
 					$router = $container->get('router');
 

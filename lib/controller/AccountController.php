@@ -64,7 +64,7 @@ class AccountController extends AbstractController {
 		if ($uid == null) {
 			$uid = $this->loginModel->getUid();
 		}
-		if ($uid === 'x999') {
+		if ($uid === LoginModel::UID_EXTERN) {
 			return $this->aanvragen();
 		}
 		if ($uid !== $this->loginModel->getUid() && !LoginModel::mag(P_ADMIN)) {

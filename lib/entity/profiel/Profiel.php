@@ -14,9 +14,9 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\groepen\KringenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -378,7 +378,7 @@ class Profiel implements Agendeerbaar {
 		if (LoginModel::mag(P_LEDEN_MOD)) {
 			return true;
 		}
-		if ($this->uid == 'x999') {
+		if ($this->uid == LoginModel::UID_EXTERN) {
 			return false;
 		}
 		if ($this->uid === LoginModel::getUid()) {
@@ -536,7 +536,7 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getLink($vorm = 'civitas') {
-		if (!LoginModel::mag(P_LEDEN_READ) OR in_array($this->uid, array('x999', 'x101', 'x027', 'x222', '4444'))) {
+		if (!LoginModel::mag(P_LEDEN_READ) OR in_array($this->uid, array(LoginModel::UID_EXTERN, 'x101', 'x027', 'x222', '4444'))) {
 			if ($vorm === 'pasfoto' AND LoginModel::mag(P_LEDEN_READ)) {
 				return $this->getPasfotoTag();
 			}

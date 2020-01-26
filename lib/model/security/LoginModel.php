@@ -9,8 +9,8 @@ use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\model\entity\security\RememberLogin;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\Validator;
 
@@ -27,6 +27,7 @@ use CsrDelft\view\Validator;
 class LoginModel extends PersistenceModel implements Validator {
 
 	const ORM = LoginSession::class;
+	public const UID_EXTERN = 'x999';
 	private $tempSwitchUid;
 	/**
 	 * @var AccountModel
@@ -104,13 +105,13 @@ class LoginModel extends PersistenceModel implements Validator {
 		$this->current_session = $this->getCurrentSession();
 		if ($this->validate()) {
 			// Public gebruiker heeft geen DB sessie
-			if ($_SESSION['_uid'] != 'x999') {
+			if ($_SESSION['_uid'] != self::UID_EXTERN) {
 				$this->current_session->expire = getDateTime(time() + getSessionMaxLifeTime());
 				$this->update($this->current_session);
 			}
 		} else {
 			// Subject assignment:
-			$_SESSION['_uid'] = 'x999';
+			$_SESSION['_uid'] = self::UID_EXTERN;
 			$_SESSION['_authenticationMethod'] = null;
 
 			// Remember login
@@ -121,7 +122,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 			}
 		}
-		if ($_SESSION['_uid'] == 'x999')  {
+		if ($_SESSION['_uid'] == self::UID_EXTERN)  {
 			/**
 			 * Als we x999 zijn checken we of er misschien een private token in de $_GET staat.
 			 * Deze staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
@@ -153,7 +154,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		// Public gebruiker vereist geen authenticatie
-		if ($_SESSION['_uid'] === 'x999') {
+		if ($_SESSION['_uid'] === self::UID_EXTERN) {
 			return true;
 		}
 		// Controleer of sessie niet gesloten is door gebruiker
@@ -318,7 +319,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		// Subject assignment:
 		$_SESSION['_uid'] = $account->uid;
 
-		if ($account->uid !== 'x999') {
+		if ($account->uid !== self::UID_EXTERN) {
 			// Permissions change: delete old session
 			session_regenerate_id(true);
 

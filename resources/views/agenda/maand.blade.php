@@ -18,7 +18,7 @@
 		<div class="input-group-prepend">
 			<label class="input-group-text" for="ical-link"><img src="/images/ical.gif" alt="ICAL"/></label>
 		</div>
-		@if(CsrDelft\model\security\LoginModel::getUid() == 'x999' OR CsrDelft\model\security\LoginModel::getAccount()->hasPrivateToken())
+		@if(CsrDelft\model\security\LoginModel::getUid() == \CsrDelft\model\security\LoginModel::UID_EXTERN OR CsrDelft\model\security\LoginModel::getAccount()->hasPrivateToken())
 			<input class="form-control" type="text" id="ical-link"
 						 value="{{CsrDelft\model\security\LoginModel::getAccount()->getICalLink()}}"
 						 size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly/>
