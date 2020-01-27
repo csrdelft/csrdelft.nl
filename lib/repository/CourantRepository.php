@@ -1,13 +1,13 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\repository;
 
-use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\model\entity\courant\Courant;
+use CsrDelft\entity\courant\Courant;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\courant\CourantView;
+use DateTime;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * CourantModel.class.php
@@ -17,38 +17,27 @@ use CsrDelft\view\courant\CourantView;
  *
  * Verzorgt het opvragen van courantgegevens.
  *
+ * @method Courant|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Courant|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Courant[]    findAll()
+ * @method Courant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CourantModel extends PersistenceModel {
-	const ORM = Courant::class;
-
-	public function magToevoegen() {
-		return LoginModel::mag(P_MAIL_POST);
+class CourantRepository extends ServiceEntityRepository {
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Courant::class);
 	}
 
-	public function magBeheren($uid = null) {
-		return LoginModel::mag(P_MAIL_COMPOSE) OR LoginModel::mag($uid);
+	public function magBeheren() {
+		return LoginModel::mag(P_MAIL_COMPOSE);
 	}
 
 	public function magVerzenden() {
 		return LoginModel::mag(P_MAIL_SEND);
 	}
 
-	/**
-	 * @param $id
-	 * @return Courant|PersistentEntity
-	 */
-	public function get($id) {
-		$courant = $this->retrieveByPrimaryKey([$id]);
-		if (!$courant) {
-			throw new CsrNotFoundException();
-		}
-
-		return $courant;
-	}
-
 	public function nieuwCourant() {
 		$courant = new Courant();
-		$courant->verzendMoment = getDateTime();
+		$courant->verzendMoment = new DateTime();
 		$courant->verzender = LoginModel::getUid();
 
 		return $courant;

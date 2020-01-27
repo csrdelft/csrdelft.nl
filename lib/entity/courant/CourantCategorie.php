@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\model\entity\courant;
+namespace CsrDelft\entity\courant;
 
 
 use CsrDelft\Orm\Entity\PersistentEnum;
