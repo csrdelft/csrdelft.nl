@@ -165,12 +165,6 @@ h1.Titel {
 	width: 100%;
 }
 
-@include media-breakpoint-up(md) {
-	.twitter-typeahead:focus-within {
-		width: 400px;
-	}
-}
-
 .form-control.loading {
 	background-image: url(../../images/loading-fb.gif);
 	background-repeat: no-repeat;

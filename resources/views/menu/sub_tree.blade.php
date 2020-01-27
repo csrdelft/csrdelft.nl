@@ -1,7 +1,7 @@
 @foreach($parent->getChildren() as $item)
 	@if($item->magBekijken())
 		@if($item->hasChildren())
-			<li class="dropdown-submenu">
+			<li class="dropdown-submenu @if(isset($dropleft)) dropleft @endif ">
 				<a class="dropdown-item dropdown-toggle" href="#" id="menu-{{$item->item_id}}">
 					{{$item->tekst}}
 				</a>

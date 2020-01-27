@@ -5,9 +5,6 @@
 </head>
 <body class="nav-is-fixed" @yield('bodyArgs')>
 <nav id="zijbalk">
-	<a href="/">
-		<div class="cd-beeldmerk"></div>
-	</a>
 	@php($zijbalk = \CsrDelft\view\Zijbalk::addStandaardZijbalk(isset($zijbalk) ? $zijbalk : []))
 	@foreach($zijbalk as $block)
 		<div class="blok">@php($block->view())</div>
@@ -20,6 +17,7 @@
 </nav>
 @php(view('menu.main', [
   'root' => \CsrDelft\model\MenuModel::instance()->getMenu('main'),
+  'personal' => \CsrDelft\model\MenuModel::instance()->getMenu('Personal'),
   'favorieten' => \CsrDelft\model\MenuModel::instance()->getMenu(\CsrDelft\model\security\LoginModel::getUid()),
 ])->view())
 <main class="container bg-white my-3 flex-shrink-0">

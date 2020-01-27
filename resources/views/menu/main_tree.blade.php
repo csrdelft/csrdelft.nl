@@ -1,6 +1,5 @@
 @foreach($parent->getChildren() as $item)
 	@if($item->tekst == 'Personal')
-		@include('menu.personal', ['parent' => $item])
 	@elseif($item->magBekijken())
 		@if($item->hasChildren())
 			<li class="nav-item dropdown">

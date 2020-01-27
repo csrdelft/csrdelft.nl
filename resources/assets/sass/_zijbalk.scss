@@ -17,7 +17,7 @@
 
 #zijbalk {
 	position: absolute;
-	top: 45px;
+	top: 54px;
 	left: 0;
 	width: 179px;
 	padding: 0 5px 40px 5px;
@@ -125,7 +125,6 @@ Overrides voor bredere schermen
 	#zijbalk {
 		width: 200px;
 		padding-left: 10px;
-		border-left: 7px solid $zijbalk-border;
 	}
 }
 
@@ -139,7 +138,6 @@ Initieel verbergen, weergeven als :target of .target op #zijbalk
 	#zijbalk {
 		transform: translateX(-179px);
 		transition: transform 0.1s;
-		top: auto;
 	}
 
 	.cd-main-content {
