@@ -30,7 +30,7 @@
 	@php($jaar = $courant->getJaar())
 	<div class="CourantArchiefJaar"><h3>{{$jaar}}</h3>
 		@endif
-		<a href="/courant/bekijken/{{$courant->id}}">{{strftime('%d %B', strtotime($courant->verzendMoment))}}</a><br/>
+		<a href="/courant/bekijken/{{$courant->id}}">{{$courant->verzendMoment->format("d F")}}</a><br/>
 		@endforeach
 	</div>
 @endsection

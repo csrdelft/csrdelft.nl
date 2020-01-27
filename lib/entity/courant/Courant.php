@@ -38,6 +38,6 @@ class Courant {
 	public $verzender;
 
 	public function getJaar() {
-		return date('Y', strtotime($this->verzendMoment));
+		return $this->verzendMoment->format('Y');
 	}
 }
