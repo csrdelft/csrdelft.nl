@@ -4,8 +4,6 @@
 namespace CsrDelft\view\plaatjes;
 
 
-use CsrDelft\entity\LidToestemming;
-use CsrDelft\model\entity\ForumPlaatje;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\formulier\uploadvelden\ImageField;

@@ -6,18 +6,18 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
-use CsrDelft\model\entity\LidStatus;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\LogModel;
-use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\ProfielService;
 use CsrDelft\model\Roodschopper;
 use CsrDelft\model\SavedQueryModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\OrmMemcache;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\ProfielService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
@@ -27,7 +27,6 @@ use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Deze controller bevat een aantal beheertools die niet direct onder een andere controller geschaard kunnen worden.

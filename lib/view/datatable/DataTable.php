@@ -12,7 +12,6 @@ use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Doctrine\Common\Persistence\Mapping\MappingException;
-use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl

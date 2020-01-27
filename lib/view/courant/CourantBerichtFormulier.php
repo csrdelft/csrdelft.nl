@@ -4,8 +4,8 @@
 namespace CsrDelft\view\courant;
 
 
-use CsrDelft\model\entity\courant\CourantBericht;
-use CsrDelft\model\entity\courant\CourantCategorie;
+use CsrDelft\entity\courant\CourantBericht;
+use CsrDelft\entity\courant\CourantCategorie;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;

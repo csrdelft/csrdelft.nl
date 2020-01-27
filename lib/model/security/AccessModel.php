@@ -27,9 +27,9 @@ use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
 use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * AccessModel.class.php
@@ -46,11 +46,49 @@ class AccessModel extends CachedPersistenceModel {
 
 	const ORM = AccessControl::class;
 
+	const PREFIX_ACTIVITEIT = 'ACTIVITEIT';
+	const PREFIX_BESTUUR = 'BESTUUR';
+	const PREFIX_COMMISSIE = 'COMMISSIE';
+	const PREFIX_GROEP = 'GROEP';
+	const PREFIX_KETZER = 'KETZER';
+	const PREFIX_ONDERVERENIGING = 'ONDERVERENIGING';
+	const PREFIX_WERKGROEP = 'WERKGROEP';
+	const PREFIX_WOONOORD = 'WOONOORD';
+	const PREFIX_VERTICALE = 'VERTICALE';
+	const PREFIX_KRING = 'KRING';
+	const PREFIX_GESLACHT = 'GESLACHT';
+	const PREFIX_STATUS = 'STATUS';
+	const PREFIX_LICHTING = 'LICHTING';
+	const PREFIX_LIDJAAR = 'LIDJAAR';
+	const PREFIX_OUDEREJAARS = 'OUDEREJAARS';
+	const PREFIX_EERSTEJAARS = 'EERSTEJAARS';
+	const PREFIX_MAALTIJD = 'MAALTIJD';
+	const PREFIX_KWALIFICATIE = 'KWALIFICATIE';
+
 	/**
 	 * Geldige prefixes voor rechten
 	 * @var array
 	 */
-	private static $prefix = array('ACTIVITEIT', 'BESTUUR', 'COMMISSIE', 'GROEP', 'KETZER', 'ONDERVERENIGING', 'WERKGROEP', 'WOONOORD', 'VERTICALE', 'KRING', 'GESLACHT', 'STATUS', 'LICHTING', 'LIDJAAR', 'OUDEREJAARS', 'EERSTEJAARS', 'MAALTIJD', 'KWALIFICATIE');
+	private static $prefix = [
+		self::PREFIX_ACTIVITEIT,
+		self::PREFIX_BESTUUR,
+		self::PREFIX_COMMISSIE,
+		self::PREFIX_GROEP,
+		self::PREFIX_KETZER,
+		self::PREFIX_ONDERVERENIGING,
+		self::PREFIX_WERKGROEP,
+		self::PREFIX_WOONOORD,
+		self::PREFIX_VERTICALE,
+		self::PREFIX_KRING,
+		self::PREFIX_GESLACHT,
+		self::PREFIX_STATUS,
+		self::PREFIX_LICHTING,
+		self::PREFIX_LIDJAAR,
+		self::PREFIX_OUDEREJAARS,
+		self::PREFIX_EERSTEJAARS,
+		self::PREFIX_MAALTIJD,
+		self::PREFIX_KWALIFICATIE
+	];
 	/**
 	 * Gebruikt om ledengegevens te raadplegen
 	 * @var array
@@ -65,7 +103,12 @@ class AccessModel extends CachedPersistenceModel {
 	 * Standaard toegestane authenticatie methoden
 	 * @var array
 	 */
-	private static $defaultAllowedAuthenticationMethods = array(AuthenticationMethod::cookie_token, AuthenticationMethod::password_login, AuthenticationMethod::recent_password_login, AuthenticationMethod::password_login_and_one_time_token);
+	private static $defaultAllowedAuthenticationMethods = [
+		AuthenticationMethod::cookie_token,
+		AuthenticationMethod::password_login,
+		AuthenticationMethod::recent_password_login,
+		AuthenticationMethod::password_login_and_one_time_token
+	];
 
 	/**
 	 * @param string $environment
@@ -76,7 +119,7 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	public static function getSubject($environment, $action, $resource) {
 		/** @var AccessControl $ac */
-		$ac = self::instance()->retrieveByPrimaryKey(array($environment, $action, $resource));
+		$ac = self::instance()->retrieveByPrimaryKey([$environment, $action, $resource]);
 		if ($ac) {
 			return $ac->subject;
 		}
@@ -125,7 +168,7 @@ class AccessModel extends CachedPersistenceModel {
 			}
 			// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
 			if (!in_array($method, $allowedAuthenticationMethods)) {
-				$subject = AccountModel::get('x999');
+				$subject = AccountModel::get(LoginModel::UID_EXTERN);
 			}
 		}
 
@@ -143,11 +186,11 @@ class AccessModel extends CachedPersistenceModel {
 	 * An operation can be assigned many permissions.
 	 * A permission can be assigned to many operations.
 	 */
-	private $roles = array();
+	private $roles = [];
 	/**
 	 * Permissies die we gebruiken om te vergelijken met de permissies van een gebruiker.
 	 */
-	private $permissions = array();
+	private $permissions = [];
 
 	/**
 	 * AccessModel constructor.
@@ -182,15 +225,15 @@ class AccessModel extends CachedPersistenceModel {
 		if ($environment === ActiviteitenModel::ORM) {
 			$activiteit = ActiviteitenModel::instance()->get($resource);
 			if ($activiteit) {
-				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $activiteit->soort, '*'));
+				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', [$environment, $resource, $activiteit->soort, '*']);
 			}
 		} elseif ($environment === CommissiesModel::ORM) {
 			$commissie = CommissiesModel::instance()->get($resource);
 			if ($commissie) {
-				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', array($environment, $resource, $commissie->soort, '*'));
+				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', [$environment, $resource, $commissie->soort, '*']);
 			}
 		}
-		return $this->prefetch('environment = ? AND (resource = ? OR resource = ?)', array($environment, $resource, '*'));
+		return $this->prefetch('environment = ? AND (resource = ? OR resource = ?)', [$environment, $resource, '*']);
 	}
 
 	/**
@@ -220,7 +263,7 @@ class AccessModel extends CachedPersistenceModel {
 		}
 		// Delete entire ACL for object
 		if (empty($acl)) {
-			foreach ($this->find('environment = ? AND resource = ?', array($environment, $resource)) as $ac) {
+			foreach ($this->find('environment = ? AND resource = ?', [$environment, $resource]) as $ac) {
 				$this->delete($ac);
 			}
 			return true;
@@ -229,7 +272,7 @@ class AccessModel extends CachedPersistenceModel {
 		foreach ($acl as $action => $subject) {
 			// Retrieve AC
 			/** @var AccessControl $ac */
-			$ac = $this->retrieveByPrimaryKey(array($environment, $action, $resource));
+			$ac = $this->retrieveByPrimaryKey([$environment, $action, $resource]);
 			// Delete AC
 			if (empty($subject)) {
 				if ($ac) {
@@ -296,7 +339,7 @@ class AccessModel extends CachedPersistenceModel {
 	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
 	 */
 	public function getPermissionStringErrors($permissions) {
-		$errors = array();
+		$errors = [];
 		// OR
 		$or = explode(',', $permissions);
 		foreach ($or as $and) {
@@ -444,7 +487,7 @@ class AccessModel extends CachedPersistenceModel {
 		$p = $this->permissions;
 
 		// Permission Assignment:
-		$this->roles = array();
+		$this->roles = [];
 
 		// use | $p[] for hierarchical RBAC (inheritance between roles)
 		// use & ~$p[] for constrained RBAC (separation of duties)
@@ -490,7 +533,7 @@ class AccessModel extends CachedPersistenceModel {
 		}
 
 		// Try cache
-		$key = 'hasPermission' . crc32(implode('-', array($subject->uid, $permission)));
+		$key = 'hasPermission' . crc32(implode('-', [$subject->uid, $permission]));
 		if ($this->isCached($key)) {
 			return $this->getCached($key);
 		}
@@ -656,7 +699,7 @@ class AccessModel extends CachedPersistenceModel {
 			/**
 			 * Is lid man of vrouw?
 			 */
-			case 'GESLACHT':
+			case self::PREFIX_GESLACHT:
 				if ($gevraagd == strtoupper($profiel->geslacht)) {
 					// Niet ingelogd heeft geslacht m dus check of ingelogd
 					if ($this->hasPermission($subject, P_LOGGED_IN)) {
@@ -669,7 +712,7 @@ class AccessModel extends CachedPersistenceModel {
 			/**
 			 * Heeft lid status?
 			 */
-			case 'STATUS':
+			case self::PREFIX_STATUS:
 				$gevraagd = 'S_' . $gevraagd;
 				if ($gevraagd == $profiel->status) {
 					return true;
@@ -684,17 +727,17 @@ class AccessModel extends CachedPersistenceModel {
 			/**
 			 *  Behoort een lid tot een bepaalde lichting?
 			 */
-			case 'LICHTING':
-			case 'LIDJAAR':
+			case self::PREFIX_LICHTING:
+			case self::PREFIX_LIDJAAR:
 				return (string)$profiel->lidjaar === $gevraagd;
 
-			case 'EERSTEJAARS':
+			case self::PREFIX_EERSTEJAARS:
 				if ($profiel->lidjaar === LichtingenModel::getJongsteLidjaar()) {
 					return true;
 				}
 				return false;
 
-			case 'OUDEREJAARS':
+			case self::PREFIX_OUDEREJAARS:
 				if ($profiel->lidjaar === LichtingenModel::getJongsteLidjaar()) {
 					return false;
 				}
@@ -703,7 +746,7 @@ class AccessModel extends CachedPersistenceModel {
 			/**
 			 *  Behoort een lid tot een bepaalde verticale?
 			 */
-			case 'VERTICALE':
+			case self::PREFIX_VERTICALE:
 				if (!$profiel->verticale) {
 					return false;
 				} elseif ($profiel->verticale === $gevraagd || $gevraagd == strtoupper($profiel->getVerticale()->naam)) {
@@ -718,24 +761,24 @@ class AccessModel extends CachedPersistenceModel {
 			/**
 			 * Behoort een lid tot een f.t. / h.t. / o.t. bestuur of commissie?
 			 */
-			case 'BESTUUR':
-			case 'COMMISSIE':
+			case self::PREFIX_BESTUUR:
+			case self::PREFIX_COMMISSIE:
 				$role = strtolower($role);
 				// Alleen als GroepStatus is opgegeven, anders: fall through
 				if (in_array($role, GroepStatus::getTypeOptions())) {
 					switch ($prefix) {
 
-						case 'BESTUUR':
+						case self::PREFIX_BESTUUR:
 							$l = BestuursLedenModel::instance()->getTableName();
 							$g = BesturenModel::instance()->getTableName();
 							break;
 
-						case 'COMMISSIE':
+						case self::PREFIX_COMMISSIE:
 							$l = CommissieLedenModel::instance()->getTableName();
 							$g = CommissiesModel::instance()->getTableName();
 							break;
 					}
-					return Database::instance()->sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', array($role, $gevraagd, $profiel->uid));
+					return Database::instance()->sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', [$role, $gevraagd, $profiel->uid]);
 				}
 			// fall through
 
@@ -746,16 +789,16 @@ class AccessModel extends CachedPersistenceModel {
 			 * groep met die korte naam erbij, als het getal is uiteraard de groep met dat id.
 			 * Met de toevoeging ':Fiscus' kan ook specifieke functie geëist worden binnen een groep.
 			 */
-			case 'KRING':
-			case 'ONDERVERENIGING':
-			case 'WOONOORD':
-			case 'ACTIVITEIT':
-			case 'KETZER':
-			case 'WERKGROEP':
-			case 'GROEP':
+			case self::PREFIX_KRING:
+			case self::PREFIX_ONDERVERENIGING:
+			case self::PREFIX_WOONOORD:
+			case self::PREFIX_ACTIVITEIT:
+			case self::PREFIX_KETZER:
+			case self::PREFIX_WERKGROEP:
+			case self::PREFIX_GROEP:
 				switch ($prefix) {
 
-					case 'BESTUUR':
+					case self::PREFIX_BESTUUR:
 						if (in_array($gevraagd, CommissieFunctie::getTypeOptions())) {
 							$gevraagd = false;
 							$role = $gevraagd;
@@ -767,35 +810,35 @@ class AccessModel extends CachedPersistenceModel {
 						}
 						break;
 
-					case 'COMMISSIE':
+					case self::PREFIX_COMMISSIE:
 						$groep = CommissiesModel::instance()->get($gevraagd);
 						break;
 
-					case 'KRING':
+					case self::PREFIX_KRING:
 						$groep = KringenModel::instance()->get($gevraagd);
 						break;
 
-					case 'ONDERVERENIGING':
+					case self::PREFIX_ONDERVERENIGING:
 						$groep = OnderverenigingenModel::instance()->get($gevraagd);
 						break;
 
-					case 'WOONOORD':
+					case self::PREFIX_WOONOORD:
 						$groep = WoonoordenModel::instance()->get($gevraagd);
 						break;
 
-					case 'ACTIVITEIT':
+					case self::PREFIX_ACTIVITEIT:
 						$groep = ActiviteitenModel::instance()->get($gevraagd);
 						break;
 
-					case 'KETZER':
+					case self::PREFIX_KETZER:
 						$groep = KetzersModel::instance()->get($gevraagd);
 						break;
 
-					case 'WERKGROEP':
+					case self::PREFIX_WERKGROEP:
 						$groep = WerkgroepenModel::instance()->get($gevraagd);
 						break;
 
-					case 'GROEP':
+					case self::PREFIX_GROEP:
 					default:
 						$groep = RechtenGroepenModel::instance()->get($gevraagd);
 						break;
@@ -821,7 +864,7 @@ class AccessModel extends CachedPersistenceModel {
 			/**
 			 * Is een lid aangemeld voor een bepaalde maaltijd?
 			 */
-			case 'MAALTIJD':
+			case self::PREFIX_MAALTIJD:
 				// Geldig maaltijd id?
 				if (!is_numeric($gevraagd)) {
 					return false;
@@ -849,12 +892,12 @@ class AccessModel extends CachedPersistenceModel {
 			/**
 			 * Heeft een lid een kwalficatie voor een functie in het covee-systeem?
 			 */
-			case 'KWALIFICATIE':
+			case self::PREFIX_KWALIFICATIE:
 
 				if (is_numeric($gevraagd)) {
 					$functie_id = (int)$gevraagd;
 				} else {
-					$functie = FunctiesModel::instance()->prefetch('afkorting = ? OR naam = ?', array($gevraagd, $gevraagd), null, null, 1);
+					$functie = FunctiesModel::instance()->prefetch('afkorting = ? OR naam = ?', [$gevraagd, $gevraagd], null, null, 1);
 					if (isset($functie[0])) {
 						$functie_id = $functie[0]->functie_id;
 					} else {

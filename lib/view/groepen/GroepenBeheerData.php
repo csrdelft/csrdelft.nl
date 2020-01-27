@@ -5,13 +5,14 @@ namespace CsrDelft\view\groepen;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\view\datatable\DataTableResponse;
+use Exception;
 
 class GroepenBeheerData extends DataTableResponse {
 
 	/**
 	 * @param AbstractGroep $groep
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function renderElement($groep) {
 		$array = $groep->jsonSerialize();

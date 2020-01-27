@@ -4,7 +4,6 @@
 namespace CsrDelft\view\formulier;
 
 
-use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\View;
 use Symfony\Component\Security\Csrf\CsrfToken;
 

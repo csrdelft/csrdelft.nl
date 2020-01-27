@@ -2,13 +2,9 @@
 
 namespace CsrDelft\view\bibliotheek;
 
-use CsrDelft\model\entity\bibliotheek\Boek;
 use CsrDelft\model\entity\bibliotheek\BoekRecensie;
 use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
-use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 
 /**

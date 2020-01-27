@@ -4,7 +4,6 @@ namespace CsrDelft\view\fiscaat\producten;
 
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\view\JsonLijstResponse;
-use CsrDelft\view\JsonResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

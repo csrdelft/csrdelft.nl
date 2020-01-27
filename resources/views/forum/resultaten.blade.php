@@ -70,7 +70,7 @@
 									@endif
 								</span>
 								@auth
-									@if($post->uid !== 'x999')
+									@if($post->uid !== \CsrDelft\model\security\LoginModel::UID_EXTERN)
 										<div class="forumpasfoto">{!! \CsrDelft\repository\ProfielRepository::getLink($post->uid, 'pasfoto') !!}</div>
 									@endif
 								@endauth

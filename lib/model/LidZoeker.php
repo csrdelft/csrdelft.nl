@@ -422,8 +422,8 @@ class LidZoeker {
 			}
 
 			if (!is_zichtbaar($profiel, $veld)) {
-				$queryNietInNaam = $query !== '' && strpos($profiel->getNaam(), $query) === false;
-				$queryInVeld = $query !== '' && strpos($profiel->$veld, $query) !== false;
+				$queryNietInNaam = is_string($profiel->$veld) && $query !== '' && strpos($profiel->getNaam(), $query) === false;
+				$queryInVeld = is_string($profiel->$veld) && $query !== '' && strpos($profiel->$veld, $query) !== false;
 
 				if ($queryNietInNaam && $queryInVeld) {
 					return null;

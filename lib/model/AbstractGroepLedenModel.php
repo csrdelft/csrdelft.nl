@@ -9,7 +9,6 @@ use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\repository\ProfielRepository;
 
 /**
  * AbstractGroepLedenModel.php

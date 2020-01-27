@@ -4,9 +4,9 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\GoogleSync;
-use CsrDelft\model\entity\GoogleToken;
-use CsrDelft\model\GoogleTokenModel;
+use CsrDelft\entity\GoogleToken;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\GoogleTokenRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,11 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class GoogleController extends AbstractController {
 	/**
-	 * @var GoogleTokenModel
+	 * @var GoogleTokenRepository
 	 */
 	private $googleTokenModel;
 
-	public function __construct(GoogleTokenModel $googleTokenModel) {
+	public function __construct(GoogleTokenRepository $googleTokenModel) {
 		$this->googleTokenModel = $googleTokenModel;
 	}
 

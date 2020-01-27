@@ -14,9 +14,10 @@ use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\VerjaardagenModel;
+use CsrDelft\service\VerjaardagenService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use PDOStatement;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -26,7 +27,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method AgendaItem find($id, $lockMode = null, $lockVersion = null)
  * @method AgendaItem[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method AgendaItem[]|\PDOStatement ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
+ * @method AgendaItem[]|PDOStatement ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
  */
 class AgendaRepository extends ServiceEntityRepository {
 	use OrmTrait;
@@ -53,14 +54,23 @@ class AgendaRepository extends ServiceEntityRepository {
 	 * @var MaaltijdenModel
 	 */
 	private $maaltijdenModel;
+	/**
+	 * @var VerjaardagenService
+	 */
+	private $verjaardagenService;
 
-	public function __construct(ManagerRegistry $registry, AgendaVerbergenRepository $agendaVerbergenRepository) {
+	public function __construct(
+		ManagerRegistry $registry,
+		AgendaVerbergenRepository $agendaVerbergenRepository,
+		VerjaardagenService $verjaardagenService
+	) {
 		parent::__construct($registry, AgendaItem::class);
 
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenModel = ActiviteitenModel::instance();
 		$this->corveeTakenModel = CorveeTakenModel::instance();
 		$this->maaltijdenModel = MaaltijdenModel::instance();
+		$this->verjaardagenService = $verjaardagenService;
 	}
 
 	/**
@@ -176,7 +186,7 @@ class AgendaRepository extends ServiceEntityRepository {
 			$GLOBALS['agenda_van'] = $van;
 			$GLOBALS['agenda_tot'] = $tot;
 
-			$result = array_merge($result, VerjaardagenModel::getTussen($van, $tot, 0));
+			$result = array_merge($result, $this->verjaardagenService->getTussen($van, $tot, 0));
 		}
 
 		// Sorteren

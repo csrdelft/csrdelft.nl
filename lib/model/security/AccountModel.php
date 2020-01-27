@@ -20,6 +20,7 @@ class AccountModel extends CachedPersistenceModel {
 
 	const ORM = Account::class;
 	const PASSWORD_HASH_ALGORITHM = PASSWORD_DEFAULT;
+
 	/**
 	 * @param $uid
 	 * @return Account|false

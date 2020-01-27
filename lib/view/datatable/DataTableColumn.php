@@ -2,13 +2,15 @@
 
 namespace CsrDelft\view\datatable;
 
+use JsonSerializable;
+
 /**
  * Een kolom in een datatable met optionele extra render waarde.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 07/11/2018
  */
-class DataTableColumn implements \JsonSerializable {
+class DataTableColumn implements JsonSerializable {
 	/**
 	 * Waarde die wordt weergegeven, kan HTML bevatten.
 	 * @var string

@@ -8,6 +8,7 @@ use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieModel;
 use CsrDelft\view\datatable\DataTableResponse;
+use Exception;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -16,7 +17,7 @@ use CsrDelft\view\datatable\DataTableResponse;
 class PinTransactieMatchTableResponse extends DataTableResponse {
 	/**
 	 * @param PinTransactieMatch|array $entity
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function renderElement($entity) {
 		if ($entity instanceof PinTransactieMatch) {

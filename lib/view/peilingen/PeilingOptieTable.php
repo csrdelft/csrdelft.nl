@@ -3,7 +3,6 @@
 namespace CsrDelft\view\peilingen;
 use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\view\datatable\DataTable;
-use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;

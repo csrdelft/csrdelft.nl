@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\ProfielService;
 use CsrDelft\model\security\AccountModel;
+use CsrDelft\service\ProfielService;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -28,7 +29,8 @@ class CivisaldoField extends TextField {
 			return null;
 		}
 		if (!AccountModel::isValidUid($this->value)) {
-			$profielen = ProfielService::instance()->zoekLeden($this->value, 'naam', 'alle', 'achternaam', $this->zoekin);
+			$profielService = ContainerFacade::getContainer()->get(ProfielService::class);
+			$profielen = $profielService->zoekLeden($this->value, 'naam', 'alle', 'achternaam', $this->zoekin);
 			if (!empty($profielen)) {
 				$this->value = $profielen[0]->uid;
 			}

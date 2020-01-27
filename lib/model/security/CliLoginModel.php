@@ -21,7 +21,7 @@ class CliLoginModel extends LoginModel {
 	/**
 	 * @var string
 	 */
-	protected static $uid = 'x999';
+	protected static $uid = LoginModel::UID_EXTERN;
 
 	/**
 	 * @return string
@@ -145,7 +145,7 @@ class CliLoginModel extends LoginModel {
 	/**
 	 */
 	public function logout() {
-		self::$uid = 'x999';
+		self::$uid = LoginModel::UID_EXTERN;
 	}
 
 	/**

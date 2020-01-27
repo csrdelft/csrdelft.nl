@@ -2,16 +2,19 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Ini;
-use CsrDelft\model\CourantBerichtModel;
-use CsrDelft\model\CourantModel;
-use CsrDelft\model\entity\courant\CourantBericht;
+use CsrDelft\entity\courant\CourantBericht;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\CourantBerichtRepository;
+use CsrDelft\repository\CourantRepository;
 use CsrDelft\view\courant\CourantBerichtFormulier;
 use CsrDelft\view\courant\CourantView;
 use CsrDelft\view\PlainView;
+use DateTime;
+use Doctrine\DBAL\Connection;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -22,113 +25,135 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CourantController extends AbstractController {
 	/**
-	 * @var CourantModel
+	 * @var CourantRepository
 	 */
-	private $courantModel;
+	private $courantRepository;
 	/**
-	 * @var CourantBerichtModel
+	 * @var CourantBerichtRepository
 	 */
-	private $courantBerichtModel;
+	private $courantBerichtRepository;
 
-	public function __construct(CourantModel $courantModel, CourantBerichtModel $courantBerichtModel) {
-		$this->courantModel = $courantModel;
-		$this->courantBerichtModel = $courantBerichtModel;
+	public function __construct(CourantRepository $courantRepository, CourantBerichtRepository $courantBerichtRepository) {
+		$this->courantRepository = $courantRepository;
+		$this->courantBerichtRepository = $courantBerichtRepository;
 	}
 
 	public function archief() {
-		return view('courant.archief', ['couranten' => $this->courantModel->find()]);
+		return view('courant.archief', ['couranten' => $this->courantRepository->findAll()]);
 	}
 
 	public function bekijken($id) {
-		$courant = $this->courantModel->get($id);
+		$courant = $this->courantRepository->find($id);
+		if (!$courant) {
+			throw new CsrNotFoundException("Courant niet gevonden");
+		}
 		return new Response($courant->inhoud);
 	}
 
 	public function voorbeeld() {
-		return new CourantView($this->courantModel->nieuwCourant(), $this->courantBerichtModel->getBerichten());
+		return new CourantView($this->courantRepository->nieuwCourant(), $this->courantBerichtRepository->findAll());
 	}
 
 	public function toevoegen() {
 		$bericht = new CourantBericht();
-		$bericht->datumTijd = getDateTime();
+		$bericht->datumTijd = new DateTime();
 		$bericht->uid = LoginModel::getUid();
 
 		$form = new CourantBerichtFormulier($bericht, '/courant');
 
 		if ($form->isPosted() && $form->validate()) {
 			$bericht->setVolgorde();
-			$this->courantBerichtModel->create($bericht);
+			$manager = $this->getDoctrine()->getManager();
+			$manager->persist($bericht);
+			$manager->flush();
 			setMelding('Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
 
 			return $this->redirectToRoute('courant-toevoegen');
 		}
 
 		return view('courant.beheer', [
-			'courantModel' => $this->courantModel,
-			'berichten' => $this->courantBerichtModel->getBerichtenVoorGebruiker(),
+			'magVerzenden' => $this->courantRepository->magVerzenden(),
+			'magBeheren' => $this->courantRepository->magBeheren(),
+			'berichten' => $this->courantBerichtRepository->getBerichtenVoorGebruiker(),
 			'form' => $form,
 		]);
 	}
 
 	public function bewerken($id) {
-		$bericht = $this->courantBerichtModel->get($id);
+		$bericht = $this->courantBerichtRepository->find($id);
 		$form = new CourantBerichtFormulier($bericht, '/courant/bewerken/' . $id);
 
 		if ($form->isPosted() && $form->validate()) {
-			$this->courantBerichtModel->update($bericht);
+			$this->getDoctrine()->getManager()->flush();
 			setMelding('Bericht is bewerkt', 1);
 			return $this->redirectToRoute('courant-toevoegen');
 		}
 
 		return view('courant.beheer', [
-			'courantModel' => $this->courantModel,
-			'berichten' => $this->courantBerichtModel->getBerichtenVoorGebruiker(),
+			'magVerzenden' => $this->courantRepository->magVerzenden(),
+			'magBeheren' => $this->courantRepository->magBeheren(),
+			'berichten' => $this->courantBerichtRepository->getBerichtenVoorGebruiker(),
 			'form' => $form,
 		]);
 	}
 
 	public function verwijderen($id) {
-		$bericht = $this->courantBerichtModel->get($id);
-		if (!$bericht || !$this->courantModel->magBeheren($bericht->uid)) {
+		$bericht = $this->courantBerichtRepository->find($id);
+		if (!$bericht || !$bericht->magBeheren()) {
 			throw new CsrToegangException();
 		}
-		if ($this->courantBerichtModel->delete($bericht)) {
+		try {
+			$manager = $this->getDoctrine()->getManager();
+			$manager->remove($bericht);
+			$manager->flush();
+
 			setMelding('Uw bericht is verwijderd.', 1);
-		} else {
+		} catch (Exception $exception) {
 			setMelding('Uw bericht is niet verwijderd.', -1);
 		}
 		return $this->redirectToRoute('courant-toevoegen');
 	}
 
 	public function verzenden($iedereen = null) {
-		if (count($this->courantBerichtModel->getBerichten()) < 1) {
+		if (count($this->courantBerichtRepository->findAll()) < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
 			return $this->redirectToRoute('courant-toevoegen');
 		}
 
-		$courant = $this->courantModel->nieuwCourant();
+		$courant = $this->courantRepository->nieuwCourant();
 
-		$courantView = new CourantView($courant, $this->courantBerichtModel->getBerichten());
+		$courantView = new CourantView($courant, $this->courantBerichtRepository->findAll());
 		$courant->inhoud = $courantView->getHtml(false);
 		if ($iedereen === 'iedereen') {
-			$this->courantModel->verzenden(Ini::lees(Ini::EMAILS, 'leden'), $courantView);
+			$this->courantRepository->verzenden(Ini::lees(Ini::EMAILS, 'leden'), $courantView);
+			/** @var Connection $conn */
+			$conn = $this->getDoctrine()->getConnection();
+			$conn->beginTransaction();
 
-			Database::transaction(function () use ($courant) {
-				$this->courantModel->create($courant);
-				$berichten = $this->courantBerichtModel->getBerichten();
+			try {
+				$manager = $this->getDoctrine()->getManager();
+				$manager->persist($courant);
+
+				$berichten = $this->courantBerichtRepository->findAll();
 
 				foreach ($berichten as $bericht) {
-					$this->courantBerichtModel->delete($bericht);
+					$manager->remove($bericht);
 				}
 
+				$manager->flush();
+				$conn->commit();
+
 				setMelding('De courant is verzonden naar iedereen', 1);
-			});
+			} catch (Exception $exception) {
+				$conn->rollBack();
+				setMelding('Courant niet verzonden', -1);
+			}
 
 			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<strong>Aan iedereen verzonden</strong></div>');
 		} else {
-			$this->courantModel->verzenden(Ini::lees(Ini::EMAILS, 'pubcie'), $courantView);
+			$this->courantRepository->verzenden(Ini::lees(Ini::EMAILS, 'pubcie'), $courantView);
 			setMelding('Verzonden naar de PubCie', 1);
-			return new PlainView('<div id="courantKnoppenContainer">'. getMelding() . '<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>');
+			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>');
 		}
 	}
 }

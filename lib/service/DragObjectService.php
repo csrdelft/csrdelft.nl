@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\service;
 
 /**
  * DragObjectModel.class.php
@@ -10,7 +10,7 @@ namespace CsrDelft\model;
  * Stores the screen coordinates of a dragable object in the session variable.
  * @see ToolsController
  */
-class DragObjectModel {
+class DragObjectService {
 
 	public static function getCoords($id, $top, $left) {
 		if (isset($_SESSION['dragobject'][$id])) {

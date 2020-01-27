@@ -3,12 +3,13 @@
 namespace CsrDelft\view\datatable\knoppen;
 
 use CsrDelft\view\Icon;
+use JsonSerializable;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 03/08/2019
  */
-class DataTableRowKnop implements \JsonSerializable {
+class DataTableRowKnop implements JsonSerializable {
 	private $title;
 	private $icon;
 	private $action;

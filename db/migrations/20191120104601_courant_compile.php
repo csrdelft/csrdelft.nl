@@ -1,7 +1,7 @@
 <?php
 
-use CsrDelft\model\CourantBerichtModel;
-use CsrDelft\model\CourantModel;
+use CsrDelft\repository\CourantBerichtRepository;
+use CsrDelft\repository\CourantRepository;
 use CsrDelft\view\courant\CourantView;
 use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
@@ -14,8 +14,8 @@ class CourantCompile extends AbstractMigration {
 
 		require_once 'lib/configuratie.include.php';
 
-		$courantModel = CourantModel::instance();
-		$courantBerichtModel = CourantBerichtModel::instance();
+		$courantModel = CourantRepository::instance();
+		$courantBerichtModel = CourantBerichtRepository::instance();
 		$couranten = $courantModel->find();
 
 		foreach ($couranten as $courant) {

@@ -2,11 +2,11 @@
 
 namespace CsrDelft\common;
 
-use CsrDelft\model\entity\GoogleToken;
+use CsrDelft\entity\GoogleToken;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\GoogleTokenModel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\GoogleTokenRepository;
+use CsrDelft\repository\ProfielRepository;
 use DOMDocument;
 use DOMText;
 use Exception;
@@ -86,8 +86,8 @@ class GoogleSync {
 	 * @throws CsrException
 	 */
 	private function __construct() {
-		/** @var GoogleToken|false $google_token */
-		$google_token = GoogleTokenModel::instance()->find('uid = ?', [LoginModel::getUid()])->fetch();
+		$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
+		$google_token = $googleTokenRepository->find(LoginModel::getUid());
 		if ($google_token === false) {
 			throw new CsrException('Authsub token not available, use doRequestToken.');
 		}
@@ -113,7 +113,8 @@ class GoogleSync {
 			$this->loadContactsForGroup($this->groupid);
 		} catch (CsrException $e) {
 			triggerExceptionAsWarning($e);
-			GoogleTokenModel::instance()->delete($google_token);
+			$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
+			$googleTokenRepository->delete($google_token);
 			throw new CsrGebruikerException("Google synchronisatie mislukt");
 		}
 	}
@@ -655,7 +656,8 @@ class GoogleSync {
 	 * @return bool
 	 */
 	public static function isAuthenticated() {
-		return GoogleTokenModel::instance()->count('uid = ?', [LoginModel::getUid()]) === 1;
+		$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
+		return $googleTokenRepository->exists(LoginModel::getUid());
 	}
 
 	/**

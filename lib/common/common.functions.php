@@ -17,8 +17,6 @@ use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
-use CsrDelft\view\ToResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 define('DATE_FORMAT', 'Y-m-d');
 define('DATETIME_FORMAT', 'Y-m-d H:i:s');
@@ -1083,11 +1081,13 @@ function sql_contains($field) {
 }
 
 function printCsrfField($path = '', $method = 'post') {
-	(new CsrfField(CsrfService::instance()->generateToken($path, $method)))->view();
+	$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
+	(new CsrfField($csrfService->generateToken($path, $method)))->view();
 }
 
 function csrfMetaTag() {
-	$token = CsrfService::instance()->generateToken('', 'POST');
+	$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
+	$token = $csrfService->generateToken('', 'POST');
 	return '<meta property="X-CSRF-ID" content="'. htmlentities($token->getId()) .'" /><meta property="X-CSRF-VALUE" content="'. htmlentities($token->getValue()) .'" />';
 }
 
@@ -1165,13 +1165,13 @@ function triggerExceptionAsWarning(Exception $e) {
 }
 
 /**
- * @param \Traversable|array
+ * @param Traversable|array
  * @return array
  */
 function as_array($value) {
 	if (is_array($value)) {
 		return $value;
-	} else if ($value instanceof \Traversable) {
+	} else if ($value instanceof Traversable) {
 		return iterator_to_array($value);
 	}
 	throw new CsrException("Geen array of iterable");

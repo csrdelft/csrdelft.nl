@@ -23,9 +23,11 @@ use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 
 /**
@@ -78,7 +80,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		foreach ($diff as $change) {
 			$changes[] = new ProfielLogValueChange($change->property, $change->old_value, $change->new_value);
 		}
-		return new ProfielUpdateLogGroup($uid, new \DateTime(), $changes);
+		return new ProfielUpdateLogGroup($uid, new DateTime(), $changes);
 	}
 
 	/**
@@ -127,7 +129,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
 		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee;
-		$profiel->changelog = [new ProfielCreateLogGroup(LoginModel::getUid(), new \DateTime())];
+		$profiel->changelog = [new ProfielCreateLogGroup(LoginModel::getUid(), new DateTime())];
 		return $profiel;
 	}
 
@@ -160,7 +162,7 @@ class ProfielRepository extends ServiceEntityRepository {
 	public function update(Profiel $profiel) {
 		try {
 			$this->save_ldap($profiel);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1); //TODO: logging
 		}
 		$this->ormUpdate($profiel);
@@ -460,7 +462,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		$changes = $this->verwijderVelden($profiel);
 		if (sizeof($changes) == 0)
 			return false;
-		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginModel::getUid(), new \DateTime(), $changes);
+		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginModel::getUid(), new DateTime(), $changes);
 		$this->update($profiel);
 		return true;
 	}

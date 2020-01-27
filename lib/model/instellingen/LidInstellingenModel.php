@@ -11,8 +11,9 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\Orm\Persistence\Database;
+use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
-use Symfony\Component\Config\Exception\FileLoaderLoadException;
+use Symfony\Component\Config\Exception\LoaderLoadException;
 
 
 /**
@@ -28,10 +29,11 @@ class LidInstellingenModel extends CachedPersistenceModel {
 
 	const ORM = LidInstelling::class;
 	protected $memcache_prefetch = true;
+
 	/**
 	 * InstellingenModel constructor.
 	 * @throws FileLoaderImportCircularReferenceException
-	 * @throws FileLoaderLoadException
+	 * @throws LoaderLoadException
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -151,7 +153,7 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function save() {
 		// create matrix for sqlInsertMultiple

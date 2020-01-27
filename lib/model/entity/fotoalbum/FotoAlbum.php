@@ -7,8 +7,6 @@ use CsrDelft\model\entity\Map;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbum.class.php
