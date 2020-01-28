@@ -4,6 +4,11 @@
 	@include('head')
 </head>
 <body class="nav-is-fixed" @yield('bodyArgs')>
+@php(view('menu.main', [
+  'root' => \CsrDelft\model\MenuModel::instance()->getMenu('main'),
+  'personal' => \CsrDelft\model\MenuModel::instance()->getMenu('Personal'),
+  'favorieten' => \CsrDelft\model\MenuModel::instance()->getMenu(\CsrDelft\model\security\LoginModel::getUid()),
+])->view())
 <nav id="zijbalk">
 	@php($zijbalk = \CsrDelft\view\Zijbalk::addStandaardZijbalk(isset($zijbalk) ? $zijbalk : []))
 	@foreach($zijbalk as $block)
@@ -15,11 +20,6 @@
 		</div>
 	@endcan @endif
 </nav>
-@php(view('menu.main', [
-  'root' => \CsrDelft\model\MenuModel::instance()->getMenu('main'),
-  'personal' => \CsrDelft\model\MenuModel::instance()->getMenu('Personal'),
-  'favorieten' => \CsrDelft\model\MenuModel::instance()->getMenu(\CsrDelft\model\security\LoginModel::getUid()),
-])->view())
 <main class="container bg-white my-3 flex-shrink-0">
 	<nav aria-label="breadcrumb">
 		@section('breadcrumbs')
