@@ -20,7 +20,7 @@
 		</div>
 	@endcan @endif
 </nav>
-<main class="container bg-white my-3 flex-shrink-0">
+<main class="container my-3 flex-shrink-0">
 	<nav aria-label="breadcrumb">
 		@section('breadcrumbs')
 			{!! csr_breadcrumbs(\CsrDelft\model\MenuModel::instance()->getBreadcrumbs($_SERVER['REQUEST_URI'])) !!}
