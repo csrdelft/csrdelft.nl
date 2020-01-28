@@ -129,7 +129,7 @@ class LLLijst extends LLWeergave {
 				default:
 					try {
 						if ($profiel->$veld instanceof \DateTime) {
-							echo $profiel->$veld->format(DATETIME_FORMAT);
+							echo $profiel->$veld->format(DATE_FORMAT);
 						} else {
 							echo htmlspecialchars($profiel->$veld);
 						}
