@@ -13,6 +13,16 @@
 		<ul id="cd-primary-nav" class="navbar-nav">
 			@can(P_LOGGED_IN)
 				@include('menu.main_tree', ['parent' => $root])
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="menu-favorieten" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Favorieten
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="menu-favorieten">
+						@include('menu.sub_tree', ['parent' => $favorieten])
+						<li><a href="/menubeheer/toevoegen/favoriet" class="dropdown-item post popup addfav"
+									 title="Huidige pagina toevoegen aan favorieten"><i class="far fa-plus"></i> Favoriet toevoegen</a></li>
+					</ul>
+				</li>
 			@elsecan
 				<li><a href="/">Log in</a></li>
 			@endcan

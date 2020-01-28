@@ -22,14 +22,6 @@
 				@endif
 			</a>
 		</li>
-		<li class="dropdown-submenu dropleft">
-			<a class="dropdown-item dropdown-toggle" href="#" id="menu-favorieten">Favorieten</a>
-			<ul class="dropdown-menu" aria-labelledby="menu-favorieten">
-				@include('menu.sub_tree', ['parent' => $favorieten])
-			</ul>
-		</li>
-		<li><a href="/menubeheer/toevoegen/favoriet" class="dropdown-item post popup addfav"
-					 title="Huidige pagina toevoegen aan favorieten">Favoriet toevoegen</a></li>
 		@include('menu.sub_tree', ['parent' => $parent, 'dropleft' => true])
 	</ul>
 </li>
