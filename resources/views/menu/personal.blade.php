@@ -1,7 +1,9 @@
+<li class="nav-item d-md-block d-none ml-3">
+	<img src="{{\CsrDelft\model\security\LoginModel::getProfiel()->getPasfotoPath('vierkant')}}" alt="Pasfoto" class="pasfoto-menu"/>
+</li>
 <li class="nav-item dropdown">
-	<a class="nav-link dropdown-toggle" href="#" id="menu-personal" role="button" data-toggle="dropdown"
+	<a class="nav-link dropdown-toggle pl-2" href="#" id="menu-personal" role="button" data-toggle="dropdown"
 		 aria-haspopup="true" aria-expanded="false">
-		{!! \CsrDelft\model\security\LoginModel::getProfiel()->getPasfotoTag("pasfoto-menu") !!}
 		{{ CsrDelft\model\security\LoginModel::getProfiel()->getNaam('volledig') }}
 	</a>
 	<ul class="dropdown-menu" aria-labelledby="menu-personal">

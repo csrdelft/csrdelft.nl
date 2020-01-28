@@ -10,7 +10,7 @@
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div id="navbarNav" class="collapse navbar-collapse">
-		<ul id="cd-primary-nav" class="navbar-nav">
+		<ul id="cd-primary-nav" class="navbar-nav flex-wrap">
 			@can(P_LOGGED_IN)
 				@include('menu.main_tree', ['parent' => $root])
 				<li class="nav-item dropdown">
