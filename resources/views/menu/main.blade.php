@@ -3,7 +3,7 @@
 			class="fa fa-lg fa-fw fa-bookmark"></i></a>
 	<a class="navbar-brand" href="/">
 		<img src="/images/beeldmerk-wit.png" alt="Beeldmerk C.S.R. Delft"/>
-		C.S.R. Delft
+		<h2>C.S.R. Delft</h2>
 	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
 					aria-expanded="false" aria-label="Toggle navigation">

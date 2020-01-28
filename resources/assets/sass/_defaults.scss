@@ -41,6 +41,8 @@ $body-bg: $white !default;
 $body-color: $black !default;
 $headings-color: inherit !default;
 
+$headings-font-family: "Source Sans Pro", Helvetica, Arial, sans-serif !default;
+
 /** Stek specifieke variabelen. */
 
 $donkerblauw: #11273A;
@@ -71,6 +73,8 @@ $menu-bg: #ffffff !default;
 $menu-color: #000000 !default;
 $menu-small-bg: #0a338d !default;
 $menu-small-color: #ffffff !default;
+
+$navbar-dark-color: white;
 
 /* zoeken */
 $zoeken-active-bg: #428bca !default;
