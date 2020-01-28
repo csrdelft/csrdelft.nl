@@ -55,15 +55,11 @@ class LoginController extends AbstractController {
 		$values = $form->getValues();
 
 		if ($form->validate() && $this->loginModel->login($values['user'], $values['pass'])) {
-			// Remember login form
 			if ($values['remember']) {
 				$remember = $this->rememberLoginModel->nieuw();
-				$form = new RememberAfterLoginForm($remember, $values['redirect']);
-				$form->css_classes[] = 'redirect';
-
-				$body = new CmsPaginaView($this->cmsPaginaRepository->find(instelling('stek', 'homepage')));
-				return view('default', ['content' => $body, 'modal' => $form]);
+				$this->rememberLoginModel->rememberLogin($remember);
 			}
+
 			if ($values['redirect']) {
 				return $this->csrRedirect(urldecode($values['redirect']));
 			}
