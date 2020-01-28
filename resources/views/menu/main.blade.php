@@ -20,7 +20,7 @@
 					<ul class="dropdown-menu" aria-labelledby="menu-favorieten">
 						@include('menu.sub_tree', ['parent' => $favorieten])
 						<li><a href="/menubeheer/toevoegen/favoriet" class="dropdown-item post popup addfav"
-									 title="Huidige pagina toevoegen aan favorieten"><i class="far fa-plus"></i> Favoriet toevoegen</a></li>
+									 title="Huidige pagina toevoegen aan favorieten"><i class="fa fa-plus"></i> Favoriet toevoegen</a></li>
 					</ul>
 				</li>
 			@elsecan
