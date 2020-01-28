@@ -17,12 +17,14 @@
 
 #zijbalk {
 	position: absolute;
-	top: 0;
+	top: 54px;
 	left: 0;
 	width: 179px;
 	padding: 0 5px 40px 5px;
 	background-color: $zijbalk-bg;
 	z-index: $zindex-zijbalk;
+	height: auto;
+	transform: translateX(-200px);
 
 	.cd-beeldmerk {
 		height: 200px;
@@ -123,7 +125,6 @@ Overrides voor bredere schermen
 	#zijbalk {
 		width: 200px;
 		padding-left: 10px;
-		border-left: 7px solid $zijbalk-border;
 	}
 }
 
@@ -136,8 +137,7 @@ Initieel verbergen, weergeven als :target of .target op #zijbalk
 @include media-breakpoint-down(sm) {
 	#zijbalk {
 		transform: translateX(-179px);
-		transition: transform 0.3s;
-		top: auto;
+		transition: transform 0.1s;
 	}
 
 	.cd-main-content {

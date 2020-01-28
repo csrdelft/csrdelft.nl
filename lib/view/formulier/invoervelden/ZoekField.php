@@ -14,9 +14,9 @@ class ZoekField extends TextField {
 
 	public function __construct($name) {
 		parent::__construct($name, null, null);
-		$this->css_classes[] = 'form-control';
+		$this->css_classes[] = 'form-control mr-sm-2';
 		$this->css_classes[] = 'clicktogo';
-		$this->placeholder = 'Zoek op titel';
+		$this->placeholder = 'Zoeken';
 		$this->autoselect = true;
 		$this->onkeydown = <<<JS
 if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
@@ -87,10 +87,10 @@ JS;
 			$html .= ucfirst($option) . '</a>';
 		}
 		?>
-		<div class="input-group">
+		<div class="form-inline">
             <?= parent::getHtml() ?>
-            <div class="input-group-append dropdown">
-                <button id="cd-zoek-engines" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+            <div class="dropdown">
+                <button id="cd-zoek-engines" class="btn btn-light dropdown-toggle ZoekFieldDropdown" data-toggle="dropdown"
                         aria-expanded="false">
                     <span class="fa fa-search"></span>
                     <span class="caret"></span>
@@ -110,9 +110,9 @@ JS;
                         Wiki inhoud
                     </a>
                     <a class="divider"></a>
-                    <div class="dropdown-submenu">
-                        <a class="dropdown-item" href="#">Snelzoeken</a>
-                        <div class="dropdown-menu">
+                    <div class="dropdown-submenu dropleft">
+                        <a class="dropdown-item dropdown-toggle" href="#" id="menu-snelzoeken">Snelzoeken</a>
+                        <div class="dropdown-menu" aria-labelledby="menu-snelzoeken">
                             <a class="dropdown-item" href="/instellingen#instelling-zoeken">Aanpassen...</a>
                             <a class="divider"></a>
 							<?= $html; ?>
