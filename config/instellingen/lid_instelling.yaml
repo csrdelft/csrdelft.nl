@@ -38,7 +38,7 @@ instellingen:
       default: 'eigen'
       beschrijving: 'Geef corvee weer in de agenda, geldt ook voor de agenda ge&iuml;mporteerd in je eigen systeem.'
     weergave:
-      titel: 'Standaard weergave agenda'
+      titel: 'Standaard weergave'
       type: Enumeration
       opties: ['maand', 'week', 'dag', 'agenda']
       default: 'maand'
