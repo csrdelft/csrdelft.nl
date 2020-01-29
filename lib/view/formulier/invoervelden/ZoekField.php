@@ -87,7 +87,7 @@ JS;
 			$html .= ucfirst($option) . '</a>';
 		}
 		?>
-		<div class="form-inline">
+		<div class="form-inline flex-nowrap">
             <?= parent::getHtml() ?>
             <div class="dropdown">
                 <button id="cd-zoek-engines" class="btn btn-light dropdown-toggle ZoekFieldDropdown" data-toggle="dropdown"
