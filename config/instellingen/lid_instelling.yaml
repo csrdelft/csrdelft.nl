@@ -200,6 +200,15 @@ instellingen:
       default: 'C.S.R.-leden'
       beschrijving: ''
   zijbalk:
+    breedte:
+      titel: 'Zijbalk weergave'
+      type: Enumeration
+      opties:
+        zijbalk_normaal: Normaal
+        zijbalk_extra_breed: Extra breed
+        zijbalk_verborgen: Verborgen
+      default: 'zijbalk_normaal'
+      beschrijving: ''
     ishetal:
       titel: 'Is het al… weergeven'
       type: Enumeration

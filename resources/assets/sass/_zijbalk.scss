@@ -10,8 +10,45 @@
 		color: $zijbalk-ishetal-nee;
 		text-align: center;
 	}
+
 	.ja {
 		color: $zijbalk-ishetal-ja;
+	}
+}
+
+.zijbalk_verborgen {
+	margin-left: 0;
+
+	#menu {
+		margin-left: 0;
+
+		[href="#zijbalk"] {
+			display: none !important;
+		}
+	}
+
+	#zijbalk {
+		display: none;
+	}
+}
+
+.zijbalk_extra_breed {
+	margin-left: 250px;
+	@include media-breakpoint-down(sm) {
+		margin-left: 0;
+
+		#menu {
+			margin-left: 0;
+		}
+	}
+
+	#menu {
+		margin-left: -250px;
+	}
+
+	#zijbalk {
+		width: 250px;
+		transform: translateX(-250px);
 	}
 }
 
@@ -94,6 +131,7 @@
 		div.fotos a {
 			text-decoration: none;
 		}
+
 		img {
 			float: left;
 			width: 55px;

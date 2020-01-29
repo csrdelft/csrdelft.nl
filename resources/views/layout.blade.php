@@ -3,7 +3,7 @@
 <head>
 	@include('head')
 </head>
-<body class="nav-is-fixed" @yield('bodyArgs')>
+<body class="nav-is-fixed {{lid_instelling('zijbalk', 'breedte')}}" @yield('bodyArgs')>
 @php(view('menu.main', [
   'root' => \CsrDelft\model\MenuModel::instance()->getMenu('main'),
   'personal' => \CsrDelft\model\MenuModel::instance()->getMenu('Personal'),
