@@ -10,12 +10,13 @@
 }
 
 .subalbums {
+	display: flex;
+	flex-wrap: wrap;
 	.subalbum {
 		position: relative;
 		width: 150px;
 		height: 150px;
 		margin: 0 1px 1px 0;
-		float: left;
 		cursor: pointer;
 
 		.subalbumname {
