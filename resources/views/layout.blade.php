@@ -49,16 +49,18 @@
 			@php($menu = \CsrDelft\model\MenuModel::instance()->getMenu('main'))
 
 			@foreach($menu->getChildren() as $item)
-				<div class="col-6 col-md">
-					<h5>{{$item->tekst}}</h5>
-					<ul class="list-unstyled text-small">
-						@foreach($item->getChildren() as $subItem)
-							@if($subItem->magBekijken())
-								<li><a class="text-muted" href="{{$subItem->link}}">{{$subItem->tekst}}</a></li>
-							@endif
-						@endforeach
-					</ul>
-				</div>
+				@if($item->magBekijken())
+					<div class="col-6 col-md">
+						<h5>{{$item->tekst}}</h5>
+						<ul class="list-unstyled text-small">
+							@foreach($item->getChildren() as $subItem)
+								@if($subItem->magBekijken())
+									<li><a class="text-muted" href="{{$subItem->link}}">{{$subItem->tekst}}</a></li>
+								@endif
+							@endforeach
+						</ul>
+					</div>
+				@endif
 			@endforeach
 		</div>
 	</div>
@@ -90,8 +92,8 @@
 @if(lid_instelling('layout', 'assistent') !== 'nee')
 	<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css">
 	<script type="application/javascript">
-      const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
-      const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden')}}';
+		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
+		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden')}}';
 	</script>
 	@script('fxclippy.js')
 @endif
