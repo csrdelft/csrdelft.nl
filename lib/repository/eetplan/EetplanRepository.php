@@ -3,10 +3,10 @@
 namespace CsrDelft\repository\eetplan;
 
 use CsrDelft\entity\eetplan\Eetplan;
-use CsrDelft\model\eetplan\EetplanFactory;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\EetplanFactory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace CsrDelft\model\eetplan;
+namespace CsrDelft\service;
 
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
-use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\model\entity\groepen\Woonoord;
 
 /**
  * EetplanFactory.class.php
