@@ -4,7 +4,6 @@ namespace CsrDelft\events;
 
 use CsrDelft\common\ShutdownHandler;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class ExceptionListener {
 	/**
@@ -13,10 +12,7 @@ class ExceptionListener {
 	 */
 	public function onKernelException(ExceptionEvent $event) {
 		if (!DEBUG) {
-			$exception = $event->getThrowable();
-			if ($exception instanceof HttpExceptionInterface && $exception->getStatusCode() === 500) {
-				ShutdownHandler::slackShutdownHandler();
-			}
+			ShutdownHandler::slackShutdownHandler();
 		}
 	}
 }
