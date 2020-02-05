@@ -5,6 +5,7 @@ monolog:
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: error
         slackwebhook:
+            type: slackwebhook
             webhook_url: '%app.slack.url%'
             channel: '%app.slack.channel%'
             icon_emoji: '%app.slack.icon%'
