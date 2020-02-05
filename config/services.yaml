@@ -5,6 +5,9 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
 
+imports:
+  - { resource: 'fromIni.php' }
+
 services:
   # default configuration for services in *this* file
   _defaults:
@@ -50,7 +53,3 @@ services:
   CsrDelft\events\JsonBodyEventListener:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
-
-  CsrDelft\events\ExceptionListener:
-    tags:
-      - { name: kernel.event_listener, event: kernel.exception }
