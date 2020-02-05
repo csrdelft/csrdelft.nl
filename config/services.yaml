@@ -50,3 +50,7 @@ services:
   CsrDelft\events\JsonBodyEventListener:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
+
+  CsrDelft\events\ExceptionListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception }
