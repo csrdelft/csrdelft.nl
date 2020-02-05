@@ -5,7 +5,7 @@ use CsrDelft\common\Ini;
 $inis = [
 	'slack' => [
 		'location' => Ini::SLACK,
-		'defaults' => ['url' => '', 'username' => '', 'channel' => '', 'icon' => '']
+		'defaults' => ['url' => 'vul-in', 'username' => '', 'channel' => '', 'icon' => '']
 	],
 ];
 
