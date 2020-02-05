@@ -3,14 +3,14 @@
 use CsrDelft\common\Ini;
 
 $inis = [
-	'slack' => Ini::SLACK,
+	'slack' => [
+		'location' => Ini::SLACK,
+		'defaults' => ['url' => '', 'username' => '', 'channel' => '', 'icon' => '']
+	],
 ];
 
-// Lees per INI bestand en sla op als parameters
-foreach ($inis as $name => $location) {
-	if (!Ini::bestaat($location)) continue;
-	$config = Ini::lees($location);
-	foreach($config as $key => $value) {
-		$container->setParameter("app.{$name}.{$key}", $value);
+foreach ($inis as $name => $options) {
+	foreach ($options['defaults'] as $key => $value) {
+		$container->setParameter("app.{$name}.{$key}", Ini::leesOfStandaard($options['location'], $key, $value));
 	}
 }
