@@ -67,5 +67,6 @@ $tabel-regel-licht: $kleur-secundair;
 $tabel-regel-donker: lighten($kleur-secundair, 5%);
 $tabel-hover: darken($kleur-secundair, 5%);
 
+$footer-background: darken($kleur-primair, 5%);
 /* importeer basis */
 @import "../base";
