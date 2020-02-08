@@ -46,7 +46,7 @@ class BbMaaltijd extends BbTag {
 	}
 
 	public function render() {
-		$result = '<div class="my-3 p-3 bg-white rounded shadow-sm">';
+		$result = '<div class="my-3 p-3 maaltijdketzer-wrapper rounded shadow-sm">';
 		foreach ($this->maaltijden as $maaltijd) {
 			// Aanmeldingen
 			$aanmeldingen = MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorLid(array($maaltijd->maaltijd_id => $maaltijd), LoginModel::getUid());
