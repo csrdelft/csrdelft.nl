@@ -270,6 +270,10 @@ class LoginModel extends PersistenceModel implements Validator {
 			$account = $this->accountModel::get($user);
 		} else {
 			$account = $this->accountModel->find('username = ?', array($user), null, null, 1)->fetch();
+
+			if (!$account) {
+				$account = $this->accountModel->getByEmail($user);
+			}
 		}
 
 		// Onbekende gebruiker

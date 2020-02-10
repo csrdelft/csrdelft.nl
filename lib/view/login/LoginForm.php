@@ -23,7 +23,7 @@ class LoginForm extends Formulier {
 		$fields['redirect'] = new HiddenField('redirect', $redirectUri);
 
 		$fields['user'] = new TextField('user', null, null);
-		$fields['user']->placeholder = 'Bijnaam of lidnummer';
+		$fields['user']->placeholder = 'Lidnummer of emailadres';
 
 		$fields['pass'] = new WachtwoordField('pass', null, null);
 		$fields['pass']->placeholder = 'Wachtwoord';
