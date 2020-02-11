@@ -20,17 +20,17 @@ class Boek {
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
 	 */
-	public $id;   //boekId
+	public $id;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
 	 */
-	public $titel;   //String
+	public $titel;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
 	 */
-	public $auteur;   //String Auteur
+	public $auteur;
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -102,7 +102,7 @@ class Boek {
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
 	public function magBekijken() {
-		return LoginModel::mag(P_BIEB_READ) OR $this->magBewerken();
+		return LoginModel::mag(P_BIEB_READ) || $this->magBewerken();
 	}
 
 	/**
@@ -112,7 +112,7 @@ class Boek {
 	 *    boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
 	public function magBewerken() {
-		return LoginModel::mag(P_BIEB_EDIT) OR $this->isEigenaar() OR $this->magVerwijderen();
+		return LoginModel::mag(P_BIEB_EDIT) || $this->isEigenaar() || $this->magVerwijderen();
 	}
 
 	/**
@@ -127,8 +127,7 @@ class Boek {
 	 *        geen geen resultaat of niet de eigenaar
 	 */
 	public function isEigenaar($uid = null) {
-		$exemplaren = $this->getExemplaren();
-		foreach ($exemplaren as $exemplaar) {
+		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($uid != null) {
 				if ($uid == $exemplaar->eigenaar_uid) {
 					return true;
@@ -146,7 +145,7 @@ class Boek {
 	 * @return BoekExemplaar[]
 	 */
 	public function getExemplaren() {
-		return $this->exemplaren;
+		return $this->exemplaren ?? [];
 	}
 
 	/**
@@ -160,8 +159,7 @@ class Boek {
 	}
 
 	public function isBiebBoek() {
-		$exemplaren = $this->getExemplaren();
-		foreach ($exemplaren as $exemplaar) {
+		foreach ($this->getExemplaren() as $exemplaar) {
 			if ($exemplaar->isBiebBoek()) {
 				return true;
 			}
@@ -173,6 +171,6 @@ class Boek {
 	 * @return BoekRecensie[]
 	 */
 	public function getRecensies() {
-		return $this->recensies;
+		return $this->recensies ?? [];
 	}
 }

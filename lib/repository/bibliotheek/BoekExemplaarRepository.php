@@ -61,10 +61,10 @@ class BoekExemplaarRepository extends ServiceEntityRepository {
 
 	public function addExemplaar(Boek $boek, string $uid) {
 		$exemplaar = new BoekExemplaar();
-		$exemplaar->boek_id = $boek->id;
+		$exemplaar->boek = $boek;
 		$exemplaar->eigenaar_uid = $uid;
-		$exemplaar->toegevoegd = getDateTime();
-		$exemplaar->uitleendatum= '0000-00-00 00:00:00';
+		$exemplaar->toegevoegd = date_create();
+		$exemplaar->uitleendatum = null;
 		$exemplaar->opmerking = '';
 		$exemplaar->leningen = 0;
 		$this->getEntityManager()->persist($exemplaar);

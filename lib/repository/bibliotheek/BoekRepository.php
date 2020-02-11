@@ -19,7 +19,7 @@ class BoekRepository extends ServiceEntityRepository {
 	}
 
 	public function existsTitel($value) {
-		return count($this->findBy(['title' => $value])) > 0;
+		return count($this->findBy(['titel' => $value])) > 0;
 	}
 
 	/**

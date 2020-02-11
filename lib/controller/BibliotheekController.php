@@ -130,7 +130,7 @@ class BibliotheekController extends AbstractController {
 				$manager->persist($boek);
 				$manager->flush();
 
-				return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek_id]);
+				return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
 			}
 		}
 
