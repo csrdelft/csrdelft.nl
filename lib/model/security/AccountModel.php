@@ -3,6 +3,7 @@
 namespace CsrDelft\model\security;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
@@ -45,6 +46,24 @@ class AccountModel extends CachedPersistenceModel {
 	 */
 	public static function existsUid($uid) {
 		return static::instance()->existsByPrimaryKey(array($uid));
+	}
+
+	/**
+	 * @param $email
+	 * @return Account|null
+	 */
+	public function getByEmail($email) {
+		$accounts = $this->find('email = ?', [$email])->fetchAll();
+
+		if (count($accounts) == 0) {
+			return null;
+		}
+
+		if (count($accounts) > 1) {
+			throw new CsrException("Meerdere accounts gevonden met dit emailadres. " . $email);
+		}
+
+		return $accounts[0];
 	}
 
 	/**

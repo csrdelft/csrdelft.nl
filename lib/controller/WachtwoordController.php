@@ -91,11 +91,11 @@ class WachtwoordController extends AbstractController {
 		$form = new WachtwoordVergetenForm();
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$account = AccountModel::get($values['user']);
+			$account = $this->accountModel->getByEmail($values['mail']);
 			// mag wachtwoord reset aanvragen?
 			// (mag ook als na verify($tokenString) niet ingelogd is met wachtwoord en dus AuthenticationMethod::url_token is)
-			if (!$account OR !AccessModel::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions()) OR mb_strtolower($account->email) !== mb_strtolower($values['mail'])) {
-				setMelding('Lidnummer en/of e-mailadres onjuist', -1);
+			if (!$account || !AccessModel::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions())) {
+				setMelding('E-mailadres onjuist', -1);
 			} else {
 				$token = $this->oneTimeTokensModel->createToken($account->uid, '/wachtwoord/reset');
 				// stuur resetmail
