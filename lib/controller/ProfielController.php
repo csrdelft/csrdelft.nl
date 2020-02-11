@@ -7,8 +7,6 @@ use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\bibliotheek\BoekExemplaarModel;
-use CsrDelft\model\bibliotheek\BoekRecensieModel;
 use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
 use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
@@ -33,6 +31,8 @@ use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
+use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\VerjaardagenService;
@@ -73,7 +73,7 @@ class ProfielController extends AbstractController {
 	 */
 	private $commissiesModel;
 	/**
-	 * @var BoekRecensieModel
+	 * @var BoekRecensieRepository
 	 */
 	private $boekRecensieModel;
 	/**
@@ -85,7 +85,7 @@ class ProfielController extends AbstractController {
 	 */
 	private $maaltijdAanmeldingenModel;
 	/**
-	 * @var BoekExemplaarModel
+	 * @var BoekExemplaarRepository
 	 */
 	private $boekExemplaarModel;
 	/**
@@ -154,8 +154,8 @@ class ProfielController extends AbstractController {
 		AccountModel $accountModel,
 		ActiviteitenModel $activiteitenModel,
 		BesturenModel $besturenModel,
-		BoekExemplaarModel $boekExemplaarModel,
-		BoekRecensieModel $boekRecensieModel,
+		BoekExemplaarRepository $boekExemplaarModel,
+		BoekRecensieRepository $boekRecensieModel,
 		CiviBestellingModel $civiBestellingModel,
 		CommissieVoorkeurModel $commissieVoorkeurModel,
 		CorveeVoorkeurenModel $corveeVoorkeurenModel,

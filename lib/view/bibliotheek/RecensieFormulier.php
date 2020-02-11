@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bibliotheek;
 
-use CsrDelft\model\entity\bibliotheek\BoekRecensie;
+use CsrDelft\entity\bibliotheek\BoekRecensie;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;

@@ -4,7 +4,7 @@
 namespace CsrDelft\view\bibliotheek;
 
 
-use CsrDelft\model\entity\bibliotheek\BoekExemplaar;
+use CsrDelft\entity\bibliotheek\BoekExemplaar;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;

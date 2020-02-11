@@ -2,7 +2,8 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\bibliotheek\BoekModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\repository\bibliotheek\BoekRepository;
 
 /**
  */
@@ -13,7 +14,8 @@ class TitelField extends TextField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if (BoekModel::instance()->existsTitel($this->value)) {
+		$boekRepository = ContainerFacade::getContainer()->get(BoekRepository::class);
+		if ($boekRepository->existsTitel($this->value)) {
 			$this->error = 'Titel bestaat al.';
 		}
 		return $this->error == '';

@@ -1,21 +1,14 @@
 <?php
 
-namespace CsrDelft\model\bibliotheek;
+namespace CsrDelft\service;
 
-use CsrDelft\model\entity\bibliotheek\Boek;
+use CsrDelft\entity\bibliotheek\Boek;
 use EasyRdf_Graph;
 use EasyRdf_Resource;
 
 class BoekImporter {
-
-	/**
-	 * BoekImporter constructor.
-	 */
-	public function __construct() {
-	}
-
 	public function import(Boek $boek) {
-		$isbn = filter_var($boek->getISBN(), FILTER_SANITIZE_NUMBER_INT);
+		$isbn = filter_var($boek->isbn, FILTER_SANITIZE_NUMBER_INT);
 		if (trim($isbn) === '') {
 			return;
 		}

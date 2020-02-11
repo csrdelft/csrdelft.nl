@@ -16,10 +16,10 @@
  * @var \CsrDelft\model\entity\maalcie\CorveeKwalificatie $corveekwalificaties
  * @var int $forumpostcount
  * @var \CsrDelft\model\entity\forum\ForumPost[] $forumrecent
- * @var \CsrDelft\model\entity\bibliotheek\BoekExemplaar[] $boeken
+ * @var \CsrDelft\entity\bibliotheek\BoekExemplaar[] $boeken
  * @var \CsrDelft\model\entity\maalcie\MaaltijdAanmelding[] $recenteAanmeldingen
  * @var \CsrDelft\model\entity\maalcie\MaaltijdAbonnement[] $abos
- * @var \CsrDelft\model\entity\bibliotheek\BoekRecensie[] $gerecenseerdeboeken
+ * @var \CsrDelft\entity\bibliotheek\BoekRecensie[] $gerecenseerdeboeken
  * @var \CsrDelft\view\fotoalbum\FotoBBView[] $fotos
  */
 ?>

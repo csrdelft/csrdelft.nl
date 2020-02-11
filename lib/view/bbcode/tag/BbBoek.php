@@ -3,10 +3,11 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\model\bibliotheek\BoekModel;
-use CsrDelft\model\entity\bibliotheek\Boek;
+use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\bibliotheek\BoekRepository;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -31,8 +32,8 @@ class BbBoek extends BbTag {
 	public function renderLight() {
 		try {
 			/** @var Boek $boek */
-			$boek = BoekModel::instance()->get((int)$this->content);
-			return BbHelper::lightLinkBlock('boek', $boek->getUrl(), $boek->getTitel(), 'Auteur: ' . $boek->getAuteur());
+			$boek = ContainerFacade::getContainer()->get(BoekRepository::class)->find($this->content);
+			return BbHelper::lightLinkBlock('boek', $boek->getUrl(), $boek->titel, 'Auteur: ' . $boek->auteur);
 		} catch (CsrException $e) {
 			return '[boek] Boek [boekid:' . (int)$this->content . '] bestaat niet.';
 		}
@@ -43,7 +44,7 @@ class BbBoek extends BbTag {
 
 		try {
 			/** @var Boek $boek */
-			$boek = BoekModel::instance()->get((int)$this->content);
+			$boek = ContainerFacade::getContainer()->get(BoekRepository::class)->find($this->content);
 			return view('bibliotheek.boek-bb', ['boek' => $boek])->getHtml();
 		} catch (CsrException $e) {
 			return '[boek] Boek [boekid:' . (int)$this->content . '] bestaat niet.';
