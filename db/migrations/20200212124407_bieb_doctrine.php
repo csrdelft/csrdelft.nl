@@ -12,6 +12,8 @@ class BiebDoctrine extends AbstractMigration {
 
 		$this->table('biebboek')
 			->changeColumn('isbn', 'string', ['null' => true])
+			->changeColumn('paginas', 'integer', ['null' => true])
+			->changeColumn('categorie_id', 'integer', ['null' => true])
 			->update();
 	}
 
@@ -24,6 +26,8 @@ class BiebDoctrine extends AbstractMigration {
 
 		$this->table('biebboek')
 			->changeColumn('isbn', 'string', ['null' => false])
+			->changeColumn('paginas', 'integer', ['null' => false])
+			->changeColumn('categorie_id', 'integer', ['null' => false])
 			->update();
 	}
 }
