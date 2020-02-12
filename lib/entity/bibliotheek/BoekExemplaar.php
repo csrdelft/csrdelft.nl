@@ -1,46 +1,78 @@
 <?php
 
 
-namespace CsrDelft\model\entity\bibliotheek;
+namespace CsrDelft\entity\bibliotheek;
 
 
-use CsrDelft\model\bibliotheek\BoekModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @package CsrDelft\model\entity\bibliotheek
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BoekExemplaarRepository")
+ * @ORM\Table("biebexemplaar")
+ */
 class BoekExemplaar extends PersistentEntity {
 
 	/**
-	 * @var int id
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
 	public $id;
 	/**
-	 * @var int id
+	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $boek_id;
 	/**
-	 * @var string uid
+	 * @var string
+	 * @ORM\Column(type="string", length=191)
 	 */
 	public $eigenaar_uid;
 	/**
-	 * @var string uid
+	 * @var string
+	 * @ORM\Column(type="text")
 	 */
 	public $opmerking;
 
+	/**
+	 * @var string
+	 * @ORM\Column(type="string", length=191, nullable=true)
+	 */
 	public $uitgeleend_uid;
 
+	/**
+	 * @var \DateTime
+	 * @ORM\Column(type="datetime")
+	 */
 	public $toegevoegd;
 
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
 	public $status = 'beschikbaar';
 
+	/**
+	 * @var \DateTime
+	 * @ORM\Column(type="datetime")
+	 */
 	public $uitleendatum;
 	/**
-	 * @var int leningen
+	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $leningen;
 
-
+	/**
+	 * @var Boek
+	 * @ORM\ManyToOne(targetEntity="Boek", inversedBy="exemplaren")
+	 * @ORM\JoinColumn(name="boek_id", referencedColumnName="id")
+	 */
+	public $boek;
 
 	public function isBiebBoek() : bool {
 		return $this->eigenaar_uid == 'x222';
@@ -49,7 +81,7 @@ class BoekExemplaar extends PersistentEntity {
 	public function isEigenaar() : bool {
 		if ($this->eigenaar_uid == LoginModel::getUid()) {
 			return true;
-		} elseif ($this->isBiebBoek() AND LoginModel::mag(P_BIEB_MOD)) {
+		} elseif ($this->isBiebBoek() && LoginModel::mag(P_BIEB_MOD)) {
 			return true;
 		}
 		return false;
@@ -66,11 +98,11 @@ class BoekExemplaar extends PersistentEntity {
 	 * @return Boek
 	 */
 	public function getBoek() {
-		return BoekModel::instance()->get($this->boek_id);
+		return $this->boek;
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag(P_BIEB_READ) OR $this->magBewerken();
+		return LoginModel::mag(P_BIEB_READ) || $this->magBewerken();
 	}
 
 	public function isBeschikbaar() {
@@ -92,26 +124,4 @@ class BoekExemplaar extends PersistentEntity {
 	public function isVermist() {
 		return $this->status == 'vermist';
 	}
-
-	/**
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'id' => [T::Integer, false, "auto_increment"],
-		'boek_id' => [T::Integer, false],
-		'eigenaar_uid' => [T::StringKey, false],
-		'opmerking' => [T::Text, false],
-		'uitgeleend_uid' => [T::StringKey, true],
-		'toegevoegd' => [T::DateTime, false],
-		'uitleendatum' => [T::DateTime, true],
-		'status' => [T::Enumeration, false, BoekExemplaarStatus::class],
-		'leningen' => [T::Integer, false]
-	];
-
-
-	/**
-	 * @var string[]
-	 */
-	protected static $primary_key = ['id'];
-	protected static $table_name = 'biebexemplaar';
 }

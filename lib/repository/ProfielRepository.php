@@ -4,13 +4,12 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\LDAP;
-use CsrDelft\model\bibliotheek\BoekExemplaarModel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\profiel\AbstractProfielLogEntry;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
 use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
@@ -23,6 +22,7 @@ use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
@@ -55,15 +55,15 @@ class ProfielRepository extends ServiceEntityRepository {
 	 */
 	private $corveeTakenModel;
 	/**
-	 * @var BoekExemplaarModel
+	 * @var BoekExemplaarRepository
 	 */
 	private $boekExemplaarModel;
 
 	public function __construct(
-		ManagerRegistry $registry,
-		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
-		CorveeTakenModel $corveeTakenModel,
-		BoekExemplaarModel $boekExemplaarModel
+        ManagerRegistry $registry,
+        MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
+        CorveeTakenModel $corveeTakenModel,
+        BoekExemplaarRepository $boekExemplaarModel
 	) {
 		parent::__construct($registry, Profiel::class);
 

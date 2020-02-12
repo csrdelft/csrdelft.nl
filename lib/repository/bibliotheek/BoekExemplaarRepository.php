@@ -1,31 +1,30 @@
 <?php
 
-namespace CsrDelft\model\bibliotheek;
+namespace CsrDelft\repository\bibliotheek;
 
-use CsrDelft\model\entity\bibliotheek\Boek;
+use CsrDelft\entity\bibliotheek\Boek;
+use CsrDelft\entity\bibliotheek\BoekExemplaar;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\PersistenceModel;
-use CsrDelft\model\entity\bibliotheek\BoekExemplaar;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * RecensieModel.class.php  |  Gerrit Uitslag
- *
- * een boekbeschrijving of boekrecensie
- *
+ * @method BoekExemplaar|null find($id, $lockMode = null, $lockVersion = null)
+ * @method BoekExemplaar|null findOneBy(array $criteria, array $orderBy = null)
+ * @method BoekExemplaar[]    findAll()
+ * @method BoekExemplaar[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoekExemplaarModel extends PersistenceModel {
-
-
-	const ORM = BoekExemplaar::class;
-
+class BoekExemplaarRepository extends ServiceEntityRepository {
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, BoekExemplaar::class);
+	}
 
 	/**
 	 * @param $id
-	 * @return PersistentEntity|false|BoekExemplaar
+	 * @return BoekExemplaar|null
 	 */
 	public function get($id) {
-		return $this->retrieveByPrimaryKey([$id]);
+		return $this->find($id);
 	}
 
 	public function getExemplaren(Boek $boek) {
@@ -37,7 +36,7 @@ class BoekExemplaarModel extends PersistenceModel {
 	 * @return BoekExemplaar[]
 	 */
 	public function getGeleend(Profiel $profiel) {
-		return $this->find("uitgeleend_uid = ?", [$profiel->uid])->fetchAll();
+		return $this->findBy(['uitgeleend_uid' => $profiel->uid]);
 	}
 
 	/**
@@ -45,7 +44,7 @@ class BoekExemplaarModel extends PersistenceModel {
 	 * @return BoekExemplaar[]
 	 */
 	public function getEigendom($uid) {
-		return $this->find("eigenaar_uid = ?", [$uid])->fetchAll();
+		return $this->findBy(['eigenaar_uid' => $uid]);
 	}
 
 	public function leen(BoekExemplaar $exemplaar, string $uid) {
@@ -54,26 +53,29 @@ class BoekExemplaarModel extends PersistenceModel {
 		} else {
 			$exemplaar->status = 'uitgeleend';
 			$exemplaar->uitgeleend_uid = $uid;
-			$this->update($exemplaar);
+			$this->getEntityManager()->persist($exemplaar);
+			$this->getEntityManager()->flush();
 			return true;
 		}
 	}
 
 	public function addExemplaar(Boek $boek, string $uid) {
 		$exemplaar = new BoekExemplaar();
-		$exemplaar->boek_id = $boek->id;
+		$exemplaar->boek = $boek;
 		$exemplaar->eigenaar_uid = $uid;
-		$exemplaar->toegevoegd = getDateTime();
-		$exemplaar->uitleendatum= '0000-00-00 00:00:00';
+		$exemplaar->toegevoegd = date_create();
+		$exemplaar->uitleendatum = null;
 		$exemplaar->opmerking = '';
 		$exemplaar->leningen = 0;
-		$this->create($exemplaar);
+		$this->getEntityManager()->persist($exemplaar);
+		$this->getEntityManager()->flush();
 	}
 
 	public function terugGegeven(BoekExemplaar $exemplaar) {
 		if ($exemplaar->isUitgeleend()) {
 			$exemplaar->status = 'teruggegeven';
-			$this->update($exemplaar);
+			$this->getEntityManager()->persist($exemplaar);
+			$this->getEntityManager()->flush();
 			return true;
 		} else {
 			return false;
@@ -83,7 +85,8 @@ class BoekExemplaarModel extends PersistenceModel {
 	public function terugOntvangen(BoekExemplaar $exemplaar) {
 		if ($exemplaar->isUitgeleend() || $exemplaar->isTeruggegeven()) {
 			$exemplaar->status = 'beschikbaar';
-			$this->update($exemplaar);
+			$this->getEntityManager()->persist($exemplaar);
+			$this->getEntityManager()->flush();
 			return true;
 		} else {
 			return false;
@@ -93,7 +96,8 @@ class BoekExemplaarModel extends PersistenceModel {
 	public function setVermist(BoekExemplaar $exemplaar) {
 		if ($exemplaar->isBeschikbaar()) {
 			$exemplaar->status = 'vermist';
-			$this->update($exemplaar);
+			$this->getEntityManager()->persist($exemplaar);
+			$this->getEntityManager()->flush();
 			return true;
 		} else {
 			return false;
@@ -103,7 +107,8 @@ class BoekExemplaarModel extends PersistenceModel {
 	public function setGevonden(BoekExemplaar $exemplaar) {
 		if ($exemplaar->isVermist()) {
 			$exemplaar->status = 'beschikbaar';
-			$this->update($exemplaar);
+			$this->getEntityManager()->persist($exemplaar);
+			$this->getEntityManager()->flush();
 			return true;
 		} else {
 			return false;
