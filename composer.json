@@ -80,10 +80,10 @@
 		"update-prod": [
 			"git fetch",
 			"@onderhoud true",
-			"rm -r ./var/cache",
-			"@flushcache",
 			"git merge FETCH_HEAD",
 			"@migrate",
+			"rm -r ./var/cache",
+			"@flushcache",
 			"@onderhoud false",
 			"@php bin/console cache:warmup"
 		],
