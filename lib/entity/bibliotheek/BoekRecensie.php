@@ -53,6 +53,10 @@ class BoekRecensie {
 	 */
 	protected $boek;
 
+	public function getBoek() {
+		return $this->boek;
+	}
+
 	/*
 	 * @param 	$uid lidnummer of null
 	 * @return	bool
