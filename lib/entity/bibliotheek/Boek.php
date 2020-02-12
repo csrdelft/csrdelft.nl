@@ -90,6 +90,10 @@ class Boek {
 		return $this->categorie;
 	}
 
+	public function setCategorie(BiebRubriek $biebRubriek) {
+		$this->categorie = $biebRubriek;
+	}
+
 	public function getStatus() {
 		return "";
 	}

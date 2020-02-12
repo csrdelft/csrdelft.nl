@@ -3,9 +3,11 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\entity\bibliotheek\BiebRubriek;
 use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekRecensie;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\bibliotheek\BiebRubriekRepository;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
 use CsrDelft\repository\bibliotheek\BoekRepository;
@@ -45,17 +47,23 @@ class BibliotheekController extends AbstractController {
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
+	/**
+	 * @var BiebRubriekRepository
+	 */
+	private $biebRubriekRepository;
 
 	public function __construct(
 		BoekExemplaarRepository $boekExemplaarRepository,
 		BoekRepository $boekRepository,
 		BoekRecensieRepository $boekRecensieRepository,
+		BiebRubriekRepository $biebRubriekRepository,
 		CmsPaginaRepository $cmsPaginaRepository
 	) {
 		$this->boekExemplaarRepository = $boekExemplaarRepository;
 		$this->boekRepository = $boekRepository;
 		$this->boekRecensieRepository = $boekRecensieRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
+		$this->biebRubriekRepository = $biebRubriekRepository;
 	}
 
 	public function recensie($boek_id) {
@@ -126,6 +134,7 @@ class BibliotheekController extends AbstractController {
 			if (!$boek->magBewerken()) {
 				throw new CsrToegangException('U mag dit boek niet bewerken');
 			} else {
+				$boek->setCategorie($this->biebRubriekRepository->find($boek->categorie_id));
 				$manager = $this->getDoctrine()->getManager();
 				$manager->persist($boek);
 				$manager->flush();

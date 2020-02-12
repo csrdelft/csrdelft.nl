@@ -22,7 +22,7 @@ class BoekFormulier extends Formulier {
 		parent::__construct($boek, $boek->id == null ? "/bibliotheek/boek" : "/bibliotheek/boek/$boek->id", '');
 		if ($boek->id == null || $boek->magBewerken()) {
 			$fields = [];
-			$fields['titel'] = new TitelField('titel', $boek->titel, "Titel:", 200);
+			$fields['titel'] = new TitelField('titel', $boek->titel, "Titel:", $boek->id == null, 200);
 			$fields['auteur'] = new TextField('auteur', $boek->auteur, 'Auteur', 100);
 			$fields['auteur']->suggestions[] = '/bibliotheek/autocomplete/auteur?q=';
 			$fields['auteur']->placeholder = 'Achternaam, Voornaam V.L. van de';
