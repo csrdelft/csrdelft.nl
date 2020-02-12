@@ -45,7 +45,8 @@ class BoekRepository extends ServiceEntityRepository {
 	 */
 	public function autocompleteBoek(string $zoekterm) {
 		$qb = $this->createQueryBuilder('boek');
-		$qb->where($qb->expr()->like('boek.titel', '%' . $zoekterm . '%'));
-		return $qb->getQuery()->getArrayResult();
+		$qb->where($qb->expr()->like('boek.titel', ':zoekterm'));
+		$qb->setParameters(['zoekterm' => sql_contains($zoekterm)]);
+		return $qb->getQuery()->getResult();
 	}
 }

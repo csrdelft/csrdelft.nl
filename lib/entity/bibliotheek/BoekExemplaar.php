@@ -102,7 +102,7 @@ class BoekExemplaar extends PersistentEntity {
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag(P_BIEB_READ) OR $this->magBewerken();
+		return LoginModel::mag(P_BIEB_READ) || $this->magBewerken();
 	}
 
 	public function isBeschikbaar() {
