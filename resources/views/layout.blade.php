@@ -39,7 +39,7 @@
 		<div class="row">
 			<div class="col-12 col-md-auto">
 				<img src="/dist/images/beeldmerk.png" width="80" class="d-block mb-2" alt="C.S.R. Logo"/>
-				<small class="d-block mb-3 text-muted">© 2006-2019</small>
+				<small class="d-block mb-3 text-muted">© 2006-{{date('Y')}}</small>
 				@if(!DEBUG) @can(P_ADMIN)
 					<small class="cd-block mb-3">
 						<a href="{{ commitLink() }}" target="_blank" class="not-external text-muted">{{ commitHash() }}</a>
