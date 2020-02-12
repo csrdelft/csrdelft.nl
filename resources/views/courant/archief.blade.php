@@ -21,6 +21,7 @@
 	</ul>
 
 	<h1>Archief C.S.R.-courant</h1>
+	<div class="row">
 	@php($jaar = 0)
 	@foreach ($couranten as $courant)
 	@if ($jaar != $courant->getJaar())
@@ -28,9 +29,10 @@
 	</div>
 	@endif
 	@php($jaar = $courant->getJaar())
-	<div class="CourantArchiefJaar"><h3>{{$jaar}}</h3>
+	<div class="col-auto"><h3>{{$jaar}}</h3>
 		@endif
 		<a href="/courant/bekijken/{{$courant->id}}">{{$courant->verzendMoment->format("d F")}}</a><br/>
 		@endforeach
+	</div>
 	</div>
 @endsection
