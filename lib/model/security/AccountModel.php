@@ -53,6 +53,10 @@ class AccountModel extends CachedPersistenceModel {
 	 * @return Account|null
 	 */
 	public function getByEmail($email) {
+		if (!$email) {
+			return null;
+		}
+
 		$accounts = $this->find('email = ?', [$email])->fetchAll();
 
 		if (count($accounts) == 0) {
