@@ -141,6 +141,8 @@ class DocumentenController extends AbstractController {
 			/** @var Document $document */
 			$document = $form->getModel();
 
+			$document->categorie = $this->documentCategorieRepository->find($document->categorie_id);
+
 			$document->eigenaar = LoginModel::getUid();
 			$document->toegevoegd = date_create();
 
