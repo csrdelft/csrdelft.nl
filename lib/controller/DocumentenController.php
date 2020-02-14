@@ -124,7 +124,7 @@ class DocumentenController extends AbstractController {
 		if ($form->isPosted() && $form->validate()) {
 			$this->documentRepository->update($document);
 
-			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie_id]);
+			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie->id]);
 		} else {
 			return view('default', [
 				'titel' => 'Document bewerken',
@@ -140,8 +140,6 @@ class DocumentenController extends AbstractController {
 		if ($form->isPosted() && $form->validate()) {
 			/** @var Document $document */
 			$document = $form->getModel();
-
-			$document->categorie = $this->documentCategorieRepository->find($document->categorie_id);
 
 			$document->eigenaar = LoginModel::getUid();
 			$document->toegevoegd = date_create();
@@ -160,7 +158,7 @@ class DocumentenController extends AbstractController {
 
 			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
 
-			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie_id]);
+			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie->id]);
 		} else {
 			return view('default', [
 				'titel' => 'Document toevoegen',

@@ -516,7 +516,7 @@ JS;
 			} else {
 				$js .= <<<JS
 
-	remote: { 
+	remote: {
     	url:"{$source}%QUERY",
 		wildcard: '%QUERY'
 	}
