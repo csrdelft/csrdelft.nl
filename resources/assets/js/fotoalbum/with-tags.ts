@@ -335,15 +335,21 @@ const withTags: GalleryDecorator = (constructor) =>
 
 		private drawTagForm(formHtml: string, position: Position) {
 			const pos = this.getScreenPos(position);
-			this.tagFormDiv = createElement(formHtml);
-			const scripts = this.tagFormDiv.querySelectorAll('script') as NodeListOf<HTMLScriptElement>;
-			// tslint:disable-next-line:no-eval
+			this.tagFormDiv = createElement(formHtml, {
+				style: {
+					left: pos.x - pos.size / 2 + 'px',
+					position: 'absolute',
+					top: pos.y + pos.size / 2 + 'px',
+					zIndex: '10000',
+				},
+			});
+
+			const scripts = this.tagFormDiv.querySelectorAll('script');
+			for (const script of scripts) {
+				$.globalEval(script.innerText);
+			}
+
 			this.getElement().appendChild(this.tagFormDiv);
-			scripts.forEach((s) => $.globalEval(s.innerText));
-			this.tagFormDiv.style.left = pos.x - pos.size / 2 + 'px';
-			this.tagFormDiv.style.position = 'absolute';
-			this.tagFormDiv.style.top = pos.y + pos.size + 'px';
-			this.tagFormDiv.style.zIndex = '10000';
 			// set attr for move/resize
 			this.tagFormDiv.dataset.tagPosition = JSON.stringify(position);
 			// set submit handler

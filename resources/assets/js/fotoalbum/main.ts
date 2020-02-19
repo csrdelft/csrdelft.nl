@@ -15,7 +15,7 @@ declare module 'jgallery/types/gallery/parameters' {
 }
 
 const loadFotoAlbum = async () => {
-	const albums = document.querySelectorAll('.fotoalbum') as NodeListOf<HTMLElement>;
+	const albums = document.querySelectorAll<HTMLElement>('.fotoalbum');
 	for (const album of albums) {
 		const {isLoggedIn, magAanpassen, root, fotos} = album.dataset;
 
