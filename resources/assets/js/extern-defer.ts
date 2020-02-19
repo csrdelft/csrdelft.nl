@@ -6,7 +6,7 @@ import $ from 'jquery';
 import {bbvideoDisplay} from './bbcode';
 import {init} from './ctx';
 import './formulier';
-import './fotoalbum/FotoAlbum';
+import './fotoalbum/main';
 
 require('lightbox2');
 require('./lib/jquery.markitup');

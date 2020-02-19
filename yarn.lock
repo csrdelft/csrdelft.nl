@@ -779,11 +779,6 @@
   dependencies:
     "@types/jquery" "*"
 
-"@types/events@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
-  integrity sha512-KEIlhXnIutzKwRbQkGWb/I4HFqBuUykAdHgDED6xqwXJfONCjF5VoE0cXEiurh3XauygxzeDzgtXUqvLkxFzzA==
-
 "@types/hammerjs@^2.0.36":
   version "2.0.36"
   resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.36.tgz#17ce0a235e9ffbcdcdf5095646b374c2bf615a4c"
@@ -3220,11 +3215,6 @@ follow-redirects@1.5.10:
   dependencies:
     debug "=3.1.0"
 
-font-awesome@>=4.1.0:
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
-  integrity sha1-j6jPBBGhoxr9B7BtKQK7n8gVoTM=
-
 for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -4085,15 +4075,10 @@ jest-worker@^24.9.0:
     merge-stream "^2.0.0"
     supports-color "^6.1.0"
 
-jgallery@^1.6.4:
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/jgallery/-/jgallery-1.6.4.tgz#d47dbb391e44e6da6e5f82144757403ea1113901"
-  integrity sha512-FwZrOKITQFk53wG2XmBEZdPjRbOIfgqfIXFOp96eGR3VH36MJso4OgDfC+sXFgSQPyIDswMWa/b+BJouTumuPw==
-  dependencies:
-    font-awesome ">=4.1.0"
-    jquery ">=1.7.0"
-    tinycolor2 ">=0.9.16"
-    touchswipe ">=1.6.0"
+jgallery@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/jgallery/-/jgallery-2.2.0.tgz#d6bf6a65c9c350364dc6ae2a47cf1da1ae61fc06"
+  integrity sha512-MNAaX+u0nmpGMJ/FBygHSp0xoQPSMKEDnjBrASFNvgtU8gAvSsJVZnz9E3V88DAu3pHsxb6lp5DbPKPiU8jlzg==
 
 jquery-hoverintent@^1.10.0:
   version "1.10.1"
@@ -6915,11 +6900,6 @@ timsort@^0.3.0:
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
-tinycolor2@>=0.9.16:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.4.1.tgz#f4fad333447bc0b07d4dc8e9209d8f39a8ac77e8"
-  integrity sha1-9PrTM0R7wLB9TcjpIJ2POaisd+g=
-
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
@@ -6961,11 +6941,6 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
-
-touchswipe@>=1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/touchswipe/-/touchswipe-1.6.0.tgz#bd0a00de133ae2aa3c4216211cc77c988f156176"
-  integrity sha1-vQoA3hM64qo8QhYhHMd8mI8VYXY=
 
 tough-cookie@~2.4.3:
   version "2.4.3"

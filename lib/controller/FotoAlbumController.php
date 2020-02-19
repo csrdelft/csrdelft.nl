@@ -202,13 +202,13 @@ class FotoAlbumController extends AbstractController {
 		exit;
 	}
 
-	public function hernoemen($dir) {
+	public function hernoemen(Request $request, $dir) {
 		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
 			throw new CsrToegangException();
 		}
-		$naam = trim(filter_input(INPUT_POST, 'Nieuwe_naam', FILTER_SANITIZE_STRING));
+		$naam = trim($request->request->get('naam'));
 		if ($album !== null) {
 			try {
 				$this->fotoAlbumModel->hernoemAlbum($album, $naam);
@@ -221,13 +221,13 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
-	public function albumcover($dir) {
+	public function albumcover(Request $request, $dir) {
 		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
 			throw new CsrToegangException();
 		}
-		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$filename = $request->request->get('foto');
 		$cover = new Foto($filename, $album);
 		if ($cover->exists() && $this->fotoAlbumModel->setAlbumCover($album, $cover)) {
 			return new JsonResponse($album->getUrl() . '#' . $cover->getResizedUrl());
@@ -236,7 +236,7 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
-	public function verwijderen($dir) {
+	public function verwijderen(Request $request, $dir) {
 		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magVerwijderen()) {
@@ -251,7 +251,7 @@ class FotoAlbumController extends AbstractController {
 				return new JsonResponse($album->getUrl());
 			}
 		}
-		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
 		if ($this->fotoModel->verwijderFoto($foto)) {
 			echo '<div id="' . md5($filename) . '" class="remove"></div>';
@@ -261,15 +261,15 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
-	public function roteren($dir) {
+	public function roteren(Request $request, $dir) {
 		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
 			throw new CsrToegangException();
 		}
-		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
-		$degrees = (int)filter_input(INPUT_POST, 'rotation', FILTER_SANITIZE_NUMBER_INT);
+		$degrees = $request->request->getInt('rotation');
 		$foto->rotate($degrees);
 		return new JsonResponse(true);
 	}
@@ -297,10 +297,10 @@ class FotoAlbumController extends AbstractController {
 		return new JsonResponse($result);
 	}
 
-	public function gettags($dir) {
+	public function gettags(Request $request, $dir) {
 		$album = $this->fotoAlbumModel->getFotoAlbum($dir);
 
-		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
 			throw new CsrToegangException();
@@ -316,7 +316,7 @@ class FotoAlbumController extends AbstractController {
 		if (!$album->magToevoegen()) {
 			throw new CsrToegangException();
 		}
-		$filename = filter_input(INPUT_POST, 'foto', FILTER_SANITIZE_STRING);
+		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
 			throw new CsrToegangException();
@@ -336,9 +336,9 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
-	public function removetag() {
-		$refuuid = filter_input(INPUT_POST, 'refuuid', FILTER_SANITIZE_STRING);
-		$keyword = filter_input(INPUT_POST, 'keyword', FILTER_SANITIZE_STRING);
+	public function removetag(Request $request) {
+		$refuuid = $request->request->get('refuuid');
+		$keyword = $request->request->get('keyword');
 		if (!LoginModel::mag(P_ALBUM_MOD) && !LoginModel::mag($keyword)) {
 			throw new CsrToegangException();
 		}
@@ -376,7 +376,7 @@ class FotoAlbumController extends AbstractController {
 		return $response;
 	}
 
-	public function raw_image_thumb($dir, $foto, $ext) {
+	public function raw_image_thumb(Request $request, $dir, $foto, $ext) {
 		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
 			throw new NotFoundHttpException();
 		}
@@ -388,10 +388,15 @@ class FotoAlbumController extends AbstractController {
 		}
 		$afbeelding = new Afbeelding($foto->getThumbPath());
 
-		return new BinaryFileResponse($afbeelding->getFullPath());
+		$binaryFileResponse = new BinaryFileResponse($afbeelding->getFullPath(), 200, [], true, null, true);
+		$expires = new \DateTime();
+		$expires->modify("+1 day");
+		$binaryFileResponse->setExpires($expires);
+		$binaryFileResponse->isNotModified($request);
+		return $binaryFileResponse;
 	}
 
-	public function raw_image_resized($dir, $foto, $ext) {
+	public function raw_image_resized(Request $request, $dir, $foto, $ext) {
 		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
 			throw new NotFoundHttpException();
 		}
@@ -402,6 +407,12 @@ class FotoAlbumController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		$afbeelding = new Afbeelding($foto->getResizedPath());
-		return new BinaryFileResponse($afbeelding->getFullPath());
+
+		$binaryFileResponse = new BinaryFileResponse($afbeelding->getFullPath(), 200, [], true, null, true);
+		$expires = new \DateTime();
+		$expires->modify("+1 day");
+		$binaryFileResponse->setExpires($expires);
+		$binaryFileResponse->isNotModified($request);
+		return $binaryFileResponse;
 	}
 }
