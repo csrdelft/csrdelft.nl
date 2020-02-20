@@ -50,7 +50,7 @@
 						Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
 						studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
 						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
-						Ook bij C.S.R. stellen we van 19 t/m 22 augustus onze deuren open, dus kom vooral langs om de sfeer
+						Ook bij C.S.R. stellen we van 17 t/m 20 augustus onze deuren open, dus kom vooral langs om de sfeer
 						van C.S.R. en de rest van Delft te proeven!</p>
 				</div>
 			</div>
@@ -77,7 +77,7 @@
 						Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hieronder voor de
 						mogelijkheden of voor het opvragen van een informatiepakket.</p>
 					<a href="#footer" class="special">Vul interesseformulier in</a>
-					<p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 26 augustus t/m 1 september vrij
+					<p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 24 t/m 30 augustus vrij
 						houdt voor de novitiaatsweek.</p>
 					<a href="/lidworden" class="special">Meer informatie over lid worden</a>
 				</div>
