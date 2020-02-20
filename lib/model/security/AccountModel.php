@@ -53,7 +53,7 @@ class AccountModel extends CachedPersistenceModel {
 	 * @return Account|null
 	 */
 	public function getByEmail($email) {
-		if (!$email) {
+		if (empty($email)) {
 			return null;
 		}
 
@@ -64,7 +64,7 @@ class AccountModel extends CachedPersistenceModel {
 		}
 
 		if (count($accounts) > 1) {
-			throw new CsrException("Meerdere accounts gevonden met dit emailadres. " . $email);
+			throw new CsrException(sprintf("Meerdere accounts gevonden met dit emailadres: \"%s\".", $email));
 		}
 
 		return $accounts[0];
