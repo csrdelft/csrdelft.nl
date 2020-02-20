@@ -1,6 +1,8 @@
 import JGallery from 'jgallery';
+import {Size} from 'jgallery/src/preview';
 import withDownloadButton from './with-download-button';
 import withFullscreenButton from './with-fullscreen-button';
+import withHotkeys from './with-hotkeys';
 
 declare module 'jgallery/types/album-item' {
 	export default interface AlbumItem {
@@ -19,7 +21,7 @@ const loadFotoAlbum = async () => {
 	for (const album of albums) {
 		const {isLoggedIn, magAanpassen, root, fotos} = album.dataset;
 
-		const decorators = [withFullscreenButton, withDownloadButton];
+		const decorators = [withFullscreenButton, withDownloadButton, withHotkeys];
 
 		if (isLoggedIn === 'true') {
 			const withTags = await import('./with-tags');
@@ -34,6 +36,7 @@ const loadFotoAlbum = async () => {
 		album.appendChild(JGallery.create(JSON.parse(fotos!), {
 			decorators,
 			root,
+			previewSize: Size.contain,
 			tooltipThumbnailsToggle: 'Thumbnails weergeven',
 			tooltipChangeSize: 'Grootte veranderen',
 			tooltipSeeAllItems: 'Alle foto\'s weergeven',
