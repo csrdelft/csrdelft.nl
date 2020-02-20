@@ -4075,10 +4075,9 @@ jest-worker@^24.9.0:
     merge-stream "^2.0.0"
     supports-color "^6.1.0"
 
-jgallery@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/jgallery/-/jgallery-2.2.0.tgz#d6bf6a65c9c350364dc6ae2a47cf1da1ae61fc06"
-  integrity sha512-MNAaX+u0nmpGMJ/FBygHSp0xoQPSMKEDnjBrASFNvgtU8gAvSsJVZnz9E3V88DAu3pHsxb6lp5DbPKPiU8jlzg==
+"jgallery@https://github.com/jakubkowalczyk-pl/jgallery":
+  version "2.2.1"
+  resolved "https://github.com/jakubkowalczyk-pl/jgallery#7f517e2ae765f6423c4d6b2337a83a7da6f9c22d"
 
 jquery-hoverintent@^1.10.0:
   version "1.10.1"
