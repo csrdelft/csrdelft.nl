@@ -239,14 +239,16 @@ class FotoAlbum extends Map {
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
 				'url' => $foto->getResizedUrl(),
+				'fullUrl' => CSR_ROOT . $foto->getFullUrl(),
 				'thumbUrl' => $foto->getThumbUrl(),
-				'title' => CSR_ROOT . str_replace('%20', ' ', $foto->getFullUrl()),
+				'title' => '',
+				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),
 			];
 		}
 
 		$hoofdAlbum = [
 			'title' => ucfirst($this->dirname),
-			'images' => $fotos,
+			'items' => $fotos,
 		];
 
 		$albums = [$hoofdAlbum];
@@ -267,10 +269,13 @@ class FotoAlbum extends Map {
 	 */
 	public function getAlbumArray() {
 		$fotos = [];
-
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
 				'url' => $foto->getResizedUrl(),
+				'fullUrl' => CSR_ROOT . $foto->getFullUrl(),
+				'thumbUrl' => $foto->getThumbUrl(),
+				'title' => '',
+				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),
 			];
 		}
 

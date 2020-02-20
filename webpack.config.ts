@@ -140,7 +140,6 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 			// Verwerk .ts (typescript) bestanden en maak er javascript van.
 			{
 				test: /\.ts$/,
-				exclude: /node_modules/,
 				use: {
 					loader: 'ts-loader',
 					options: {
