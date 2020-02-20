@@ -344,12 +344,13 @@ const withTags: GalleryDecorator = (constructor) =>
 				},
 			});
 
+			this.getElement().appendChild(this.tagFormDiv);
+
 			const scripts = this.tagFormDiv.querySelectorAll('script');
 			for (const script of scripts) {
 				$.globalEval(script.innerText);
 			}
 
-			this.getElement().appendChild(this.tagFormDiv);
 			// set attr for move/resize
 			this.tagFormDiv.dataset.tagPosition = JSON.stringify(position);
 			// set submit handler
