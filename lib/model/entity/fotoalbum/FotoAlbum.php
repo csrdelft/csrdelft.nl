@@ -168,15 +168,17 @@ class FotoAlbum extends Map {
 		return $this->subalbums;
 	}
 
-	public function getCoverUrl() {
+	public function getCoverUrls() {
+		$fotos = [];
+		$fotos[] = $this->getCoverUrl();
+		$fotos[] = $this->getRandomCover();
+		$fotos[] = $this->getRandomCover();
+
+		return $fotos;
+	}
+
+	public function getRandomCover() {
 		if ($this->hasFotos()) {
-			if ($this->dirname !== 'Posters') {
-				foreach ($this->getFotos() as $foto) {
-					if (strpos($foto->filename, 'folder') !== false) {
-						return $foto->getThumbUrl();
-					}
-				}
-			}
 			// Anders een willekeurige foto:
 			$count = count($this->fotos);
 			if ($count > 0) {
@@ -192,6 +194,17 @@ class FotoAlbum extends Map {
 		}
 		// If all else fails:
 		return '/plaetjes/_geen_thumb.jpg';
+	}
+
+	public function getCoverUrl() {
+		if ($this->hasFotos() && $this->dirname !== 'Posters') {
+			foreach ($this->getFotos() as $foto) {
+				if (strpos($foto->filename, 'folder') !== false) {
+					return $foto->getThumbUrl();
+				}
+			}
+		}
+		return $this->getRandomCover();
 	}
 
 	public function getMostRecentSubAlbum() {

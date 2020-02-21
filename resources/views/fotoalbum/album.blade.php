@@ -57,9 +57,17 @@
 		<div class="subalbums">
 			@foreach($album->getSubAlbums() as $subAlbum)
 				<div class="subalbum">
-					<a href="{{$subAlbum->getUrl()}}#{{preg_replace('/_thumbs/', '_resized', $subAlbum->getCoverUrl())}}">
-						<img src="{{$subAlbum->getCoverUrl()}}" alt="{{ucfirst($subAlbum->dirname)}}"/>
-						<div class="subalbumname">{{ucfirst($subAlbum->dirname)}}</div>
+						<div class="subalbum-cover">
+							@foreach($subAlbum->getCoverUrls() as $index=> $cover)
+								<a class="img{{$index}}" href="{{$subAlbum->getUrl()}}#{{preg_replace('/_thumbs\//', '', $cover)}}">
+									<img src="{{$cover}}" alt="{{$cover}}"/>
+								</a>
+							@endforeach
+						</div>
+					<a href="{{$subAlbum->getUrl()}}">
+						<div class="album-description">
+							<h4 class="subalbumname">{{ucfirst($subAlbum->dirname)}}</h4>
+						</div>
 					</a>
 				</div>
 			@endforeach

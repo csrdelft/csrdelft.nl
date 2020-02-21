@@ -9,33 +9,56 @@
 	}
 }
 
+.subalbum-cover {
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 0.3em;
+	padding: 0.3em;
+
+	height: 200px;
+
+	a {
+		justify-self: stretch;
+		align-self: stretch;
+	}
+
+	img {
+		max-width: 100%;
+		width: 100%;
+		object-fit: cover;
+		border-radius: 3px;
+	}
+
+	.img0 {
+		grid-area: 1 / 1 / 3 / 3;
+	}
+}
+
+.album-description {
+	color: $black;
+	padding: 1em;
+}
+
 .subalbums {
 	display: flex;
 	flex-wrap: wrap;
-	.subalbum {
-		position: relative;
-		width: 150px;
-		height: 150px;
-		margin: 0 1px 1px 0;
-		cursor: pointer;
+	justify-content: space-around;
 
-		.subalbumname {
-			position: absolute;
-			top: 60%;
-			width: 100%;
-			padding: 5px 2px 5px 2px;
-			text-align: center;
-			font-weight: bold;
-			color: black;
-			background-color: white;
-			opacity: 0.8;
-		}
+	.subalbum {
+		margin: 1em;
+		width: 300px;
+		height: 300px;
+		border: 1px solid #ddd;
+		border-radius: 5px;
 	}
+
 	.subalbum:hover {
 		text-decoration: none;
 
 		.subalbumname {
 			opacity: 0.9;
+			text-decoration: none;
 		}
 	}
 }
