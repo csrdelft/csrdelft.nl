@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\security\RememberLoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
@@ -55,17 +55,13 @@ class LoginController extends AbstractController {
 		$values = $form->getValues();
 
 		if ($form->validate() && $this->loginModel->login($values['user'], $values['pass'])) {
-			// Remember login form
 			if ($values['remember']) {
 				$remember = $this->rememberLoginModel->nieuw();
-				$form = new RememberAfterLoginForm($remember, $values['redirect']);
-				$form->css_classes[] = 'redirect';
-
-				$body = new CmsPaginaView($this->cmsPaginaRepository->find(instelling('stek', 'homepage')));
-				return view('default', ['content' => $body, 'modal' => $form]);
+				$this->rememberLoginModel->rememberLogin($remember);
 			}
+
 			if ($values['redirect']) {
-				return $this->redirect(urldecode($values['redirect']));
+				return $this->csrRedirect(urldecode($values['redirect']));
 			}
 			return $this->redirectToRoute('default');
 		} else {
@@ -84,8 +80,8 @@ class LoginController extends AbstractController {
 
 	public function su($uid = null) {
 		$this->loginModel->switchUser($uid);
-		setMelding('U bekijkt de webstek nu als ' . ProfielModel::getNaam($uid, 'volledig') . '!', 1);
-		return $this->redirect(HTTP_REFERER);
+		setMelding('U bekijkt de webstek nu als ' . ProfielRepository::getNaam($uid, 'volledig') . '!', 1);
+		return $this->csrRedirect(HTTP_REFERER);
 	}
 
 	public function endsu() {
@@ -95,6 +91,6 @@ class LoginController extends AbstractController {
 			$this->loginModel->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
-		return $this->redirect(HTTP_REFERER);
+		return $this->csrRedirect(HTTP_REFERER);
 	}
 }

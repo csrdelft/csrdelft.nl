@@ -193,7 +193,7 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function magStatistiekBekijken() {
-		return $this->magModereren() OR ($this->uid != 'x999' AND $this->uid === LoginModel::getUid());
+		return $this->magModereren() OR ($this->uid != LoginModel::UID_EXTERN AND $this->uid === LoginModel::getUid());
 	}
 
 	public function magVerbergen() {

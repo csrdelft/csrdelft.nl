@@ -15,7 +15,7 @@
 				 title="Link naar deze post">&rarr;</a>
 		</div>
 		<div class="naam">
-			{!! CsrDelft\model\ProfielModel::getLink($post->uid, 'user') !!}
+			{!! \CsrDelft\repository\ProfielRepository::getLink($post->uid, 'user') !!}
 		</div>
 
 
@@ -81,8 +81,8 @@
 		</div>
 
 		@auth
-			@if($post->uid !== 'x999')
-				<div class="forumpasfoto">{!! CsrDelft\model\ProfielModel::getLink($post->uid, 'pasfoto') !!}</div>
+			@if($post->uid !== \CsrDelft\model\security\LoginModel::UID_EXTERN)
+				<div class="forumpasfoto">{!! \CsrDelft\repository\ProfielRepository::getLink($post->uid, 'pasfoto') !!}</div>
 			@endif
 		@endauth
 	</div>

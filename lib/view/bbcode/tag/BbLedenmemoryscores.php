@@ -3,6 +3,8 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
+use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\model\entity\groepen\Lichting;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
@@ -17,7 +19,7 @@ use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 class BbLedenmemoryscores extends BbTag {
 
 	/**
-	 * @var \CsrDelft\model\entity\groepen\AbstractGroep|\CsrDelft\model\entity\groepen\Lichting|false|null
+	 * @var AbstractGroep|Lichting|false|null
 	 */
 	private $groep;
 	private $titel;

@@ -6,7 +6,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
-use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
@@ -24,7 +23,7 @@ class LoginForm extends Formulier {
 		$fields['redirect'] = new HiddenField('redirect', $redirectUri);
 
 		$fields['user'] = new TextField('user', null, null);
-		$fields['user']->placeholder = 'Bijnaam of lidnummer';
+		$fields['user']->placeholder = 'Lidnummer of emailadres';
 
 		$fields['pass'] = new WachtwoordField('pass', null, null);
 		$fields['pass']->placeholder = 'Wachtwoord';

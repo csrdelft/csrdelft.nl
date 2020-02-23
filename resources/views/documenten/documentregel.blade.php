@@ -22,6 +22,6 @@
 	<td class="size">{{$document->filesize}}</td>
 	<td title="{{$document->mimetype}}">{!! $document->getMimetypeIcon() !!}</td>
 	<td>{!! reldate($document->toegevoegd) !!}</td>
-	<td>{!! CsrDelft\model\ProfielModel::getLink($document->eigenaar, 'civitas') !!}</td>
+	<td>{!! \CsrDelft\repository\ProfielRepository::getLink($document->eigenaar, 'civitas') !!}</td>
 </tr>
 

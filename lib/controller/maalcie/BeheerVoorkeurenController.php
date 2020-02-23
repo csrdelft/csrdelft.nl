@@ -5,7 +5,7 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -26,7 +26,7 @@ class BeheerVoorkeurenController {
 	}
 
 	public function inschakelen($crid, $uid) {
-		if (!ProfielModel::existsUid($uid)) {
+		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$voorkeur = new CorveeVoorkeur();
@@ -39,7 +39,7 @@ class BeheerVoorkeurenController {
 	}
 
 	public function uitschakelen($crid, $uid) {
-		if (!ProfielModel::existsUid($uid)) {
+		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$voorkeur = new CorveeVoorkeur();

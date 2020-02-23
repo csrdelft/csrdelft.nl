@@ -11,12 +11,13 @@ namespace CsrDelft\view;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\view\datatable\DataTableResponse;
+use Exception;
 
 class RechtenData extends DataTableResponse {
 
 	/**
 	 * @param AccessControl $ac
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function renderElement($ac) {
 		$array = $ac->jsonSerialize();

@@ -4,9 +4,9 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\GoogleSync;
-use CsrDelft\model\entity\GoogleToken;
-use CsrDelft\model\GoogleTokenModel;
+use CsrDelft\entity\GoogleToken;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\GoogleTokenRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,11 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class GoogleController extends AbstractController {
 	/**
-	 * @var GoogleTokenModel
+	 * @var GoogleTokenRepository
 	 */
 	private $googleTokenModel;
 
-	public function __construct(GoogleTokenModel $googleTokenModel) {
+	public function __construct(GoogleTokenRepository $googleTokenModel) {
 		$this->googleTokenModel = $googleTokenModel;
 	}
 
@@ -42,14 +42,14 @@ class GoogleController extends AbstractController {
 				$this->googleTokenModel->create($googleToken);
 			}
 
-			return $this->redirect(urldecode($state));
+			return $this->csrRedirect(urldecode($state));
 		}
 
 		if ($error) {
 			setMelding('Verbinding met Google niet geaccepteerd', 2);
 			$state = substr(strstr($state, 'addToGoogleContacts', true), 0, -1);
 
-			return $this->redirect($state);
+			return $this->csrRedirect($state);
 		}
 
 		throw new CsrException('Geen error en geen code van Google gekregen.');

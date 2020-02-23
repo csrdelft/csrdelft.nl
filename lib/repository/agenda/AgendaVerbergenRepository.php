@@ -7,7 +7,7 @@ use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class AgendaVerbergenRepository extends ServiceEntityRepository {
 	use OrmTrait;

@@ -2,10 +2,11 @@
 
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Persistence\Database;
 
 /**
@@ -23,7 +24,7 @@ class CorveePuntenModel {
 			$matrix = self::loadPuntenTotaalVoorAlleLeden();
 			foreach ($matrix as $uid => $totalen) {
 				try {
-					$profiel = ProfielModel::get($uid); // false if lid does not exist
+					$profiel = ProfielRepository::get($uid); // false if lid does not exist
 					if (!$profiel) {
 						throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 					}
@@ -56,7 +57,7 @@ class CorveePuntenModel {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
 		}
-		$profiel = ProfielModel::get($uid); // false if lid does not exist
+		$profiel = ProfielRepository::get($uid); // false if lid does not exist
 		if (!$profiel) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
@@ -82,7 +83,7 @@ class CorveePuntenModel {
 		if (is_int($bonus_malus)) {
 			$profiel->corvee_punten_bonus = $bonus_malus;
 		}
-		ProfielModel::instance()->update($profiel);
+		ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel);
 	}
 
 	public static function loadPuntenTotaalVoorAlleLeden() {
@@ -118,7 +119,7 @@ class CorveePuntenModel {
 		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
 		$matrix = self::loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
-			$profiel = ProfielModel::get($uid); // false if lid does not exist
+			$profiel = ProfielRepository::get($uid); // false if lid does not exist
 			if (!$profiel) {
 				throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 			}

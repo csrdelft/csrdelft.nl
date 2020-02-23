@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\fiscaat\pin;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\fiscaat\pin\PinTransactie;
 use CsrDelft\Orm\PersistenceModel;
 
@@ -30,7 +31,7 @@ class PinTransactieModel extends PersistenceModel {
 	/**
 	 * @param PinTransactie $pinTransactie
 	 * @return string
-	 * @throws \CsrDelft\common\CsrException
+	 * @throws CsrException
 	 */
 	public function getKorteBeschrijving($pinTransactie) {
 		return sprintf('€%.2f',$pinTransactie->getBedragInCenten()/100);

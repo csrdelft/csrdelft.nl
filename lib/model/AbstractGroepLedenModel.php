@@ -96,7 +96,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 			}
 		}
 		$db = Database::instance();
-		$profielTable = ProfielModel::instance()->getTableName();
+		$profielTable = 'profielen';
 		return new GroepStatistiek(
 			$totaal,
 			$db->sqlSelect(['naam', 'count(*)'], 'profielen LEFT JOIN verticalen ON profielen.verticale = verticalen.letter', 'uid IN (' . $sqlIn . ')', $uids, 'verticale', null)->fetchAll(),

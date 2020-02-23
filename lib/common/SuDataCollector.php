@@ -4,11 +4,11 @@
 namespace CsrDelft\common;
 
 
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Throwable;
 
 class SuDataCollector extends DataCollector {
 
@@ -16,9 +16,9 @@ class SuDataCollector extends DataCollector {
 	 * Collects data for the given Request and Response.
 	 * @param Request $request
 	 * @param Response $response
-	 * @param \Exception|null $exception
+	 * @param Throwable $exception
 	 */
-	public function collect(Request $request, Response $response, \Exception $exception = null) {
+	public function collect(Request $request, Response $response, Throwable $exception = null) {
 		$this->data = [
 			'can_su' => LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued(),
 			'is_sued' => LoginModel::instance()->isSued(),

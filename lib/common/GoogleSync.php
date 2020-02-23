@@ -2,11 +2,11 @@
 
 namespace CsrDelft\common;
 
-use CsrDelft\model\entity\GoogleToken;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\GoogleTokenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\GoogleToken;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\GoogleTokenRepository;
+use CsrDelft\repository\ProfielRepository;
 use DOMDocument;
 use DOMText;
 use Exception;
@@ -86,8 +86,8 @@ class GoogleSync {
 	 * @throws CsrException
 	 */
 	private function __construct() {
-		/** @var GoogleToken|false $google_token */
-		$google_token = GoogleTokenModel::instance()->find('uid = ?', [LoginModel::getUid()])->fetch();
+		$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
+		$google_token = $googleTokenRepository->find(LoginModel::getUid());
 		if ($google_token === false) {
 			throw new CsrException('Authsub token not available, use doRequestToken.');
 		}
@@ -113,7 +113,8 @@ class GoogleSync {
 			$this->loadContactsForGroup($this->groupid);
 		} catch (CsrException $e) {
 			triggerExceptionAsWarning($e);
-			GoogleTokenModel::instance()->delete($google_token);
+			$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
+			$googleTokenRepository->delete($google_token);
 			throw new CsrGebruikerException("Google synchronisatie mislukt");
 		}
 	}
@@ -346,7 +347,7 @@ class GoogleSync {
 			if ($profiel instanceof Profiel) {
 				$profielBatch[] = $profiel;
 			} else {
-				$profiel = ProfielModel::get($profiel);
+				$profiel = ProfielRepository::get($profiel);
 				if ($profiel !== false) {
 					$profielBatch[] = $profiel;
 				}
@@ -410,7 +411,7 @@ class GoogleSync {
 				$this->fixSimpleXMLNameSpace($contact);
 
 				$contact = $this->unpackGoogleContact($contact);
-				$profiel = ProfielModel::get($contact['csruid']);
+				$profiel = ProfielRepository::get($contact['csruid']);
 				if ($profiel !== false) {
 					$this->updatePhoto($contact, $profiel);
 				}
@@ -430,7 +431,7 @@ class GoogleSync {
 	 */
 	public function syncLid(Profiel $profiel) {
 		if (!$profiel instanceof Profiel) {
-			$profiel = ProfielModel::get($profiel);
+			$profiel = ProfielRepository::get($profiel);
 		}
 
 		//kijk of het lid al bestaat in de googlecontacs-feed.
@@ -599,9 +600,9 @@ class GoogleSync {
 			}
 		}
 
-		if ($profiel->gebdatum != '' AND $profiel->gebdatum != '0000-00-00') {
+		if ($profiel->gebdatum != null && $profiel->gebdatum->format(DATE_FORMAT) != '0000-00-00') {
 			$geboortedatum = $doc->createElement('gContact:birthday');
-			$geboortedatum->setAttribute('when', $profiel->gebdatum);
+			$geboortedatum->setAttribute('when', $profiel->gebdatum->format(DATE_FORMAT));
 			$entry->appendChild($geboortedatum);
 		}
 
@@ -655,7 +656,8 @@ class GoogleSync {
 	 * @return bool
 	 */
 	public static function isAuthenticated() {
-		return GoogleTokenModel::instance()->count('uid = ?', [LoginModel::getUid()]) === 1;
+		$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
+		return $googleTokenRepository->exists(LoginModel::getUid());
 	}
 
 	/**

@@ -4,20 +4,19 @@
 # -------------------------------------------------------------------
 # common.functions.php
 # -------------------------------------------------------------------
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\instellingen\InstellingenModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\model\instellingen\LidInstellingenModel;
-use CsrDelft\model\instellingen\LidToestemmingModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
-use CsrDelft\view\ToResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 define('DATE_FORMAT', 'Y-m-d');
 define('DATETIME_FORMAT', 'Y-m-d H:i:s');
@@ -995,9 +994,10 @@ function is_ingelogd_account($uid) {
  * @return bool
  */
 function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_MOD) {
+	$lidToestemmingRepository = ContainerFacade::getContainer()->get(LidToestemmingRepository::class);
 	if (is_array($key)) {
 		foreach ($key as $item) {
-			if (!LidToestemmingModel::instance()->toestemming($profiel, $item, $cat, $uitzondering)) {
+			if (!$lidToestemmingRepository->toestemming($profiel, $item, $cat, $uitzondering)) {
 				return false;
 			}
 		}
@@ -1005,7 +1005,7 @@ function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_
 		return true;
 	}
 
-	return LidToestemmingModel::instance()->toestemming($profiel, $key, $cat, $uitzondering);
+	return $lidToestemmingRepository->toestemming($profiel, $key, $cat, $uitzondering);
 }
 
 function lid_instelling($module, $key) {
@@ -1013,7 +1013,7 @@ function lid_instelling($module, $key) {
 }
 
 function instelling($module, $key) {
-	return InstellingenModel::instance()->getValue($module, $key);
+	return ContainerFacade::getContainer()->get(InstellingenRepository::class)->getValue($module, $key);
 }
 
 function to_unix_path($path) {
@@ -1081,11 +1081,13 @@ function sql_contains($field) {
 }
 
 function printCsrfField($path = '', $method = 'post') {
-	(new CsrfField(CsrfService::instance()->generateToken($path, $method)))->view();
+	$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
+	(new CsrfField($csrfService->generateToken($path, $method)))->view();
 }
 
 function csrfMetaTag() {
-	$token = CsrfService::instance()->generateToken('', 'POST');
+	$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
+	$token = $csrfService->generateToken('', 'POST');
 	return '<meta property="X-CSRF-ID" content="'. htmlentities($token->getId()) .'" /><meta property="X-CSRF-VALUE" content="'. htmlentities($token->getValue()) .'" />';
 }
 
@@ -1163,13 +1165,13 @@ function triggerExceptionAsWarning(Exception $e) {
 }
 
 /**
- * @param \Traversable|array
+ * @param Traversable|array
  * @return array
  */
 function as_array($value) {
 	if (is_array($value)) {
 		return $value;
-	} else if ($value instanceof \Traversable) {
+	} else if ($value instanceof Traversable) {
 		return iterator_to_array($value);
 	}
 	throw new CsrException("Geen array of iterable");

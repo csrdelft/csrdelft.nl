@@ -6,7 +6,8 @@ use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\model\OrmTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
+use PDOStatement;
 
 /**
  * Class DocumentCategorieModel.
@@ -60,7 +61,7 @@ class DocumentCategorieRepository extends ServiceEntityRepository {
 	 * @param DocumentCategorie $categorie
 	 * @param $aantal
 	 *
-	 * @return \PDOStatement|Document[]
+	 * @return PDOStatement|Document[]
 	 */
 	public function getRecent(DocumentCategorie $categorie, $aantal) {
 		return $this->documentRepository->ormFind(

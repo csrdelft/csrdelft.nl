@@ -6,9 +6,9 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\ProfielModel;
-use CsrDelft\model\ProfielService;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\ProfielService;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTableResponse;
@@ -169,7 +169,7 @@ class BeheerCiviSaldoController {
 
 		$resp = [];
 		foreach ($civiSaldi as $civiSaldo) {
-			$profiel = ProfielModel::get($civiSaldo->uid);
+			$profiel = ProfielRepository::get($civiSaldo->uid);
 			$resp[] = [
 				'label' => $profiel === false ? $civiSaldo->naam : $profiel->getNaam('volledig'),
 				'value' => $civiSaldo->uid

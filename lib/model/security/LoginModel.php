@@ -4,13 +4,13 @@ namespace CsrDelft\model\security;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\model\entity\security\RememberLogin;
-use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\Validator;
 
@@ -27,6 +27,7 @@ use CsrDelft\view\Validator;
 class LoginModel extends PersistenceModel implements Validator {
 
 	const ORM = LoginSession::class;
+	public const UID_EXTERN = 'x999';
 	private $tempSwitchUid;
 	/**
 	 * @var AccountModel
@@ -65,7 +66,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return Profiel|false
 	 */
 	public static function getProfiel() {
-		return ProfielModel::get(static::getUid());
+		return ProfielRepository::get(static::getUid());
 	}
 
 	/**
@@ -104,13 +105,13 @@ class LoginModel extends PersistenceModel implements Validator {
 		$this->current_session = $this->getCurrentSession();
 		if ($this->validate()) {
 			// Public gebruiker heeft geen DB sessie
-			if ($_SESSION['_uid'] != 'x999') {
+			if ($_SESSION['_uid'] != self::UID_EXTERN) {
 				$this->current_session->expire = getDateTime(time() + getSessionMaxLifeTime());
 				$this->update($this->current_session);
 			}
 		} else {
 			// Subject assignment:
-			$_SESSION['_uid'] = 'x999';
+			$_SESSION['_uid'] = self::UID_EXTERN;
 			$_SESSION['_authenticationMethod'] = null;
 
 			// Remember login
@@ -121,7 +122,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 			}
 		}
-		if ($_SESSION['_uid'] == 'x999')  {
+		if ($_SESSION['_uid'] == self::UID_EXTERN)  {
 			/**
 			 * Als we x999 zijn checken we of er misschien een private token in de $_GET staat.
 			 * Deze staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
@@ -153,7 +154,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		// Public gebruiker vereist geen authenticatie
-		if ($_SESSION['_uid'] === 'x999') {
+		if ($_SESSION['_uid'] === self::UID_EXTERN) {
 			return true;
 		}
 		// Controleer of sessie niet gesloten is door gebruiker
@@ -269,6 +270,10 @@ class LoginModel extends PersistenceModel implements Validator {
 			$account = $this->accountModel::get($user);
 		} else {
 			$account = $this->accountModel->find('username = ?', array($user), null, null, 1)->fetch();
+
+			if (!$account) {
+				$account = $this->accountModel->getByEmail($user);
+			}
 		}
 
 		// Onbekende gebruiker
@@ -318,7 +323,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		// Subject assignment:
 		$_SESSION['_uid'] = $account->uid;
 
-		if ($account->uid !== 'x999') {
+		if ($account->uid !== self::UID_EXTERN) {
 			// Permissions change: delete old session
 			session_regenerate_id(true);
 
@@ -350,7 +355,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 
 			if ($remember) {
-				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
+				setMelding('Welkom ' . ProfielRepository::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
 			} elseif (!$alreadyAuthenticatedByUrlToken) {
 
 				// Controleer actief wachtwoordbeleid
@@ -364,7 +369,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 
 				// Welcome message
-				setMelding('Welkom ' . ProfielModel::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">' . $this->count('uid = ? AND expire > NOW()', array($account->uid)) . 'x ingelogd</a>.', 0);
+				setMelding('Welkom ' . ProfielRepository::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">' . $this->count('uid = ? AND expire > NOW()', array($account->uid)) . 'x ingelogd</a>.', 0);
 			}
 		}
 		return true;

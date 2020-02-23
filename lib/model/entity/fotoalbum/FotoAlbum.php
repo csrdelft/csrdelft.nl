@@ -7,8 +7,6 @@ use CsrDelft\model\entity\Map;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * FotoAlbum.class.php
@@ -170,15 +168,17 @@ class FotoAlbum extends Map {
 		return $this->subalbums;
 	}
 
-	public function getCoverUrl() {
+	public function getCoverUrls() {
+		$fotos = [];
+		$fotos[] = $this->getCoverUrl();
+		$fotos[] = $this->getRandomCover();
+		$fotos[] = $this->getRandomCover();
+
+		return $fotos;
+	}
+
+	public function getRandomCover() {
 		if ($this->hasFotos()) {
-			if ($this->dirname !== 'Posters') {
-				foreach ($this->getFotos() as $foto) {
-					if (strpos($foto->filename, 'folder') !== false) {
-						return $foto->getThumbUrl();
-					}
-				}
-			}
 			// Anders een willekeurige foto:
 			$count = count($this->fotos);
 			if ($count > 0) {
@@ -194,6 +194,17 @@ class FotoAlbum extends Map {
 		}
 		// If all else fails:
 		return '/plaetjes/_geen_thumb.jpg';
+	}
+
+	public function getCoverUrl() {
+		if ($this->hasFotos() && $this->dirname !== 'Posters') {
+			foreach ($this->getFotos() as $foto) {
+				if (strpos($foto->filename, 'folder') !== false) {
+					return $foto->getThumbUrl();
+				}
+			}
+		}
+		return $this->getRandomCover();
 	}
 
 	public function getMostRecentSubAlbum() {
@@ -241,14 +252,16 @@ class FotoAlbum extends Map {
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
 				'url' => $foto->getResizedUrl(),
+				'fullUrl' => CSR_ROOT . $foto->getFullUrl(),
 				'thumbUrl' => $foto->getThumbUrl(),
-				'title' => CSR_ROOT . str_replace('%20', ' ', $foto->getFullUrl()),
+				'title' => '',
+				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),
 			];
 		}
 
 		$hoofdAlbum = [
 			'title' => ucfirst($this->dirname),
-			'images' => $fotos,
+			'items' => $fotos,
 		];
 
 		$albums = [$hoofdAlbum];
@@ -269,10 +282,13 @@ class FotoAlbum extends Map {
 	 */
 	public function getAlbumArray() {
 		$fotos = [];
-
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
 				'url' => $foto->getResizedUrl(),
+				'fullUrl' => CSR_ROOT . $foto->getFullUrl(),
+				'thumbUrl' => $foto->getThumbUrl(),
+				'title' => '',
+				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),
 			];
 		}
 

@@ -6,7 +6,7 @@ use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\RechtenGroep;
 use CsrDelft\model\groepen\leden\CommissieLedenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccessModel;
 
 class RechtenGroepenModel extends AbstractGroepenModel {
@@ -47,7 +47,7 @@ class RechtenGroepenModel extends AbstractGroepenModel {
 	 */
 	public function getWikiToegang($uid) {
 		$result = [];
-		$profiel = ProfielModel::get($uid);
+		$profiel = ProfielRepository::get($uid);
 		if (!$profiel) {
 			return $result;
 		}

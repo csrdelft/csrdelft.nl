@@ -8,7 +8,6 @@ use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Foto.class.php
@@ -123,7 +122,7 @@ class Foto extends Afbeelding {
 		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
-		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 150x150^ -gravity center -extent 150x150 -format jpg -quality 80 -auto-orient ' . $rotate . escapeshellarg($this->getThumbPath());
+		$command = IMAGEMAGICK . ' ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 200x200^ -gravity center -extent 150x150 -format jpg -quality 80 -auto-orient ' . $rotate . escapeshellarg($this->getThumbPath());
 		shell_exec($command);
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);

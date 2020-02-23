@@ -3,7 +3,7 @@
 namespace CsrDelft\model\commissievoorkeuren;
 
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurOpmerking;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
 

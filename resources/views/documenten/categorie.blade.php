@@ -32,7 +32,7 @@ Documenten in categorie: {{ $categorie->naam }}
 		</tr>
 		</thead>
 		<tbody>
-		@forelse($documenten as $document)
+		@forelse($categorie->documenten as $document)
 			@include('documenten.documentregel', ['document' => $document])
 		@empty
 			<tr>

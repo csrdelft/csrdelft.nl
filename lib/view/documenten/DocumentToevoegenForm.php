@@ -2,11 +2,14 @@
 
 namespace CsrDelft\view\documenten;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\documenten\Document;
+use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\model\entity\Map;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
+use CsrDelft\view\formulier\keuzevelden\EntitySelectField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
@@ -30,10 +33,13 @@ class DocumentToevoegenForm extends Formulier {
 		$map->dirname = basename($map->path);
 
 		if (!$this->isPosted()) {
-			$this->model->categorie_id = filter_input(INPUT_GET, 'catID', FILTER_VALIDATE_INT);
+			$catId = filter_input(INPUT_GET, 'catID', FILTER_VALIDATE_INT);
+			if ($catId) {
+				$this->model->categorie = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager')->getReference(DocumentCategorie::class, $catId);
+			}
 		}
 
-		$fields[] = new SelectField('categorie_id', $this->model->categorie_id, 'Categorie', $categorieNamen);
+		$fields[] = new EntitySelectField('categorie', $this->model->categorie, 'Categorie', DocumentCategorie::class);
 		$fields[] = new RequiredTextField('naam', $this->model->naam, 'Documentnaam');
 		$fields[] = $this->uploader = new RequiredFileField('document', 'Document', $this->model, $map);
 		$fields['rechten'] = new RechtenField('leesrechten', $this->model->leesrechten, 'Leesrechten');

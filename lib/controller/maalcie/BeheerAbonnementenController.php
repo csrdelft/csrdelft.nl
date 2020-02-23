@@ -6,7 +6,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * BeheerMaaltijdenController.class.php
@@ -73,7 +73,7 @@ class BeheerAbonnementenController {
 	}
 
 	public function inschakelen($mrid, $uid) {
-		if (!ProfielModel::existsUid($uid)) {
+		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat nie.', $uid));
 		}
 		$abo = new MaaltijdAbonnement();
@@ -88,7 +88,7 @@ class BeheerAbonnementenController {
 	}
 
 	public function uitschakelen($mrid, $uid) {
-		if (!ProfielModel::existsUid($uid)) {
+		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		$abo_aantal = $this->maaltijdAbonnementenModel->uitschakelenAbonnement((int)$mrid, $uid);

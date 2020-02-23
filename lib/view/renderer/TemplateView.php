@@ -6,6 +6,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
+use Exception;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -27,7 +28,7 @@ class TemplateView implements View, ToResponse {
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function view() {
 		$this->template->display();
@@ -35,7 +36,7 @@ class TemplateView implements View, ToResponse {
 
 	/**
 	 * @return string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getHtml() {
 		return $this->template->render();
@@ -46,28 +47,28 @@ class TemplateView implements View, ToResponse {
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getTitel() {
 		throw new CsrException("getTitel: Not supported");
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getBody() {
 		throw new CsrException("getBody: Not supported");
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getModel() {
 		throw new CsrException("getModel: Not supported");
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getBreadcrumbs() {
 		throw new CsrException("getBreadcrumbs: Not supported");

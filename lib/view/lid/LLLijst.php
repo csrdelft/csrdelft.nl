@@ -2,8 +2,9 @@
 
 namespace CsrDelft\view\lid;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
+use Exception;
 
 /**
  * De 'normale' ledenlijst, zoals het is zoals het was.
@@ -43,8 +44,6 @@ class LLLijst extends LLWeergave {
 				case 'kring':
 				case 'patroon':
 				case 'verticale':
-					$aoColumns[] = '{"sType": \'html\'}';
-					break;
 				case 'woonoord':
 					$aoColumns[] = '{"sType": \'html\'}';
 					break;
@@ -89,7 +88,7 @@ class LLLijst extends LLWeergave {
 					break;
 
 				case 'patroon':
-					$patroon = ProfielModel::get($profiel->patroon);
+					$patroon = ProfielRepository::get($profiel->patroon);
 					if ($patroon) {
 						echo $patroon->getLink('volledig');
 					} else {
@@ -98,7 +97,7 @@ class LLLijst extends LLWeergave {
 					break;
 
 				case 'echtgenoot':
-					$echtgenoot = ProfielModel::get($profiel->echtgenoot);
+					$echtgenoot = ProfielRepository::get($profiel->echtgenoot);
 					if ($echtgenoot) {
 						echo $echtgenoot->getLink('volledig');
 					} else {
@@ -129,8 +128,12 @@ class LLLijst extends LLWeergave {
 
 				default:
 					try {
-						echo htmlspecialchars($profiel->$veld);
-					} catch (\Exception $e) {
+						if ($profiel->$veld instanceof \DateTime) {
+							echo $profiel->$veld->format(DATE_FORMAT);
+						} else {
+							echo htmlspecialchars($profiel->$veld);
+						}
+					} catch (Exception $e) {
 						echo ' - ';
 					}
 			}

@@ -108,10 +108,10 @@ class FileField extends RadioField {
 		$js = parent::getJavascript() . <<<JS
 
 $('input[name="{$this->name}"]').change(function (event) {
-	var aan = $('input[name="{$this->name}"]:checked').parent();
+	var aan = $('input[name="{$this->name}"]:checked').parent().parent();
 	aan.addClass('verborgen');
 	aan.next('.UploadKeuze').slideDown(250);
-	var uit = $('input[name="{$this->name}"]').parent().not(aan);
+	var uit = $('input[name="{$this->name}"]').parent().parent().not(aan);
 	uit.removeClass('verborgen');
 	uit.next('.UploadKeuze').slideUp(250);
 });

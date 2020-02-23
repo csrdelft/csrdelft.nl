@@ -2,9 +2,9 @@
 
 namespace CsrDelft\model\entity\security;
 
-use CsrDelft\model\ProfielModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * Account.class.php
@@ -107,7 +107,7 @@ class Account extends PersistentEntity {
 	protected static $table_name = 'accounts';
 
 	public function getProfiel() {
-		return ProfielModel::get($this->uid);
+		return ProfielRepository::get($this->uid);
 	}
 
 	public function hasPrivateToken() {

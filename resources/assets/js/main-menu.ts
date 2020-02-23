@@ -1,5 +1,6 @@
 import Hammer from 'hammerjs';
 import $ from 'jquery';
+import {docReady} from './util';
 
 declare global {
 	// Hammer kan een Document als element krijgen, dit zorgt ervoor dat horizontale scroll mogelijk is op mobiel.
@@ -9,31 +10,21 @@ declare global {
 	}
 }
 
-$(() => {
+docReady(() => {
 
 	if (!$('#menu').length) { return; }
 
 	let active: string | null = null;
 
-	function isVisible(id: string) {
-		return active === id;
-	}
-
 	/**
 	 * Zorg ervoor dat de body niet kan scrollen als de overlay zichtbaar is.
 	 */
 	function toggleScroll() {
-		if (active === '#search' || active === '#menu') {
-			$('body')
-				.removeClass('overflow-x-hidden')
-				.addClass('overflow-hidden');
-		} else if (active === '#zijbalk') {
-			$('body')
-				.removeClass('overflow-hidden')
-				.addClass('overflow-x-hidden');
+		if (active === '#zijbalk') {
+			$('body').addClass('overflow-x-hidden');
 		} else {
 			// Sta toe om te scrollen _nadat_ de animatie klaar is.
-			setTimeout(() => $('body').removeClass('overflow-hidden overflow-x-hidden'), 300);
+			setTimeout(() => $('body').removeClass('overflow-x-hidden'), 300);
 		}
 	}
 
@@ -52,22 +43,30 @@ $(() => {
 		toggleScroll();
 	}
 
-	function view(id: string) {
-		active = id;
+	$('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
+		if (!$(this).next().hasClass('show')) {
+			$(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
+		}
+		const $subMenu = $(this).next('.dropdown-menu');
+		$subMenu.toggleClass('show');
 
-		$('.target').not(id).removeClass('target');
-		$(id).addClass('target');
+		$(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', () => {
+			$('.dropdown-submenu .show').removeClass('show');
+		});
 
-		toggleScroll();
-	}
+		return false;
+	});
 
 	/**
 	 * Toggle view met id.
 	 * @param id
 	 */
 	function toggle(id: string) {
-		return (event: Event) => {
-			event.preventDefault();
+		return (event?: Event) => {
+			if (event) {
+				event.preventDefault();
+				event.stopImmediatePropagation();
+			}
 			if (active === id) {
 				reset();
 			} else {
@@ -81,74 +80,40 @@ $(() => {
 		};
 	}
 
-	// open submenu
-	$('.has-children').children('a').on('click', function (event) {
-		event.preventDefault();
-		const selected = $(this);
-		if (selected.next('ul').hasClass('is-hidden')) {
-			// desktop version only
-			selected
-				.addClass('selected')
-				.next('ul')
-				.removeClass('is-hidden')
-				.end()
-				.parent('.has-children')
-				.parent('ul')
-				.addClass('moves-out');
-			selected
-				.parent('.has-children')
-				.siblings('.has-children')
-				.children('ul')
-				.addClass('is-hidden')
-				.end()
-				.children('a')
-				.removeClass('selected');
-		} else {
-			selected
-				.removeClass('selected')
-				.next('ul')
-				.addClass('is-hidden')
-				.end()
-				.parent('.has-children')
-				.parent('ul')
-				.removeClass('moves-out');
-		}
-	});
-
-	// submenu items - go back link
-	$('.go-back').on('click', function (event) {
-		event.preventDefault();
-		$(this).parent('ul').addClass('is-hidden').parent('.has-children').parent('ul').removeClass('moves-out');
-	});
-
-	$('.trigger[href="#menu"]').on('click', toggle('#menu'));
 	$('.trigger[href="#zijbalk"]').on('click', toggle('#zijbalk'));
-	$('.trigger[href="#search"]').on('click', toggle('#search'));
+	$('main,#menu,footer').on('click', reset);
 
-	$('#cd-main-overlay,.cd-main-content').on('click', reset);
+	const searchfield = document.querySelector<HTMLInputElement>('input[type=search].ZoekField');
 
-	const $searchfield = $('.cd-search').find('input[type="search"]');
+	if (!searchfield) {
+		return;
+	}
 
-	// Catch keystrokes for instant search
-	$(document).on('keydown', (event: JQuery.KeyDownEvent) => {
+	document.addEventListener('keydown', (event: KeyboardEvent) => {
 		// Geen instantsearch met modifiers
 		if (event.ctrlKey || event.altKey || event.metaKey) {
 			return;
 		}
 
-		// Geen instantsearch als we in een input-element of text-area zitten.
-		const element = event.target.tagName.toUpperCase();
-		if (element === 'INPUT' || element === 'TEXTAREA' || element === 'SELECT') {
+		if (event.key === 'Escape') {
+			searchfield.blur();
 			return;
 		}
 
+		// Geen instantsearch als we in een input-element of text-area zitten.
+		const element = event.target as HTMLElement;
+		if (element) {
+			const tagName = element.tagName.toUpperCase();
+
+			if (tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT') {
+				return;
+			}
+		}
+
 		// a-z en 0-9 incl. numpad
-		if ((event.keyCode > 64 && event.keyCode < 91)
-			|| (event.keyCode > 47 && event.keyCode < 58)
-			|| (event.keyCode > 95 && event.keyCode < 106)) {
-			view('#search');
-			$searchfield.val('');
-			$searchfield.trigger('focus');
+		if (/^\w$/.test(event.key)) {
+			searchfield.value = '';
+			searchfield.focus();
 		}
 	});
 
@@ -172,11 +137,7 @@ $(() => {
 			return;
 		}
 
-		if (isVisible('#zijbalk') || isVisible('#menu')) {
-			reset();
-		} else {
-			view('#zijbalk');
-		}
+		toggle('#zijbalk')();
 	});
 
 	hammertime.on('swipeleft', (e) => {
@@ -184,10 +145,6 @@ $(() => {
 			return;
 		}
 
-		if (isVisible('#zijbalk') || isVisible('#menu')) {
-			reset();
-		} else {
-			view('#menu');
-		}
+		reset();
 	});
 });

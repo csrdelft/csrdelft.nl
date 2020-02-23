@@ -4,7 +4,6 @@ namespace CsrDelft\view\fiscaat;
 
 use CsrDelft\model\entity\fiscaat\CiviCategorie;
 use CsrDelft\view\JsonLijstResponse;
-use CsrDelft\view\JsonResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

@@ -1,3 +1,4 @@
+<?php /** @var \CsrDelft\entity\profiel\Profiel $profiel */ ?>
 <div id="zijbalk_verjaardagen">
 	<div class="zijbalk-kopje">
 		@can(P_LEDEN_READ)
@@ -12,14 +13,14 @@
 			@foreach($verjaardagen as $profiel)
 				<div class="verjaardag @if($profiel->isJarig()) cursief @endif ">
 					{!! $profiel->getLink('pasfoto') !!}
-					<span class="datum">{{date('d-m', strtotime($profiel->gebdatum))}}</span>
+					<span class="datum">{{date('d-m', $profiel->gebdatum->getTimestamp())}}</span>
 				</div>
 			@endforeach
 			<div class="clear"></div>
 		</div>
 	@else
 		@foreach($verjaardagen as $profiel)
-			<div class="item">{{date('d-m', strtotime($profiel->gebdatum))}}
+			<div class="item">{{date('d-m', $profiel->gebdatum->getTimestamp())}}
 				<span @if($profiel->isJarig()) class="cursief" @endif >{!! $profiel->getLink('civitas') !!}</span>
 			</div>
 		@endforeach

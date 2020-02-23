@@ -2,7 +2,9 @@
 
 namespace CsrDelft\entity\documenten;
 
+use CsrDelft\entity\ISelectEntity;
 use CsrDelft\model\security\LoginModel;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("DocumentCategorie")
  * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentCategorieRepository")
  */
-class DocumentCategorie  {
+class DocumentCategorie implements ISelectEntity {
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
@@ -34,7 +36,22 @@ class DocumentCategorie  {
 	 */
 	public $leesrechten;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\documenten\Document", mappedBy="categorie")
+	 * @ORM\OrderBy({"toegevoegd" = "DESC"})
+	 * @var Document[]|ArrayCollection
+	 */
+	public $documenten;
+
 	public function magBekijken() {
 		return LoginModel::mag($this->leesrechten);
+	}
+
+	public function getValue() {
+		return $this->naam;
+	}
+
+	public function getId() {
+		return $this->id;
 	}
 }

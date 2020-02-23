@@ -1,17 +1,18 @@
 @foreach($parent->getChildren() as $item)
 	@if($item->tekst == 'Personal')
-		@include('menu.personal', ['parent' => $item])
 	@elseif($item->magBekijken())
 		@if($item->hasChildren())
-			<li class="has-children">
-				<a href="#menu">{{$item->tekst}}</a>
-				<ul class="is-hidden">
-					<li class="go-back"><a href="#menu">{{$item->tekst}}</a></li>
-					@include('menu.main_tree', ['parent' => $item])
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="menu-{{$item->item_id}}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{{$item->tekst}}
+				</a>
+				<ul class="dropdown-menu" aria-labelledby="menu-{{$item->item_id}}">
+					@include('menu.sub_tree', ['parent' => $item, 'sub' => true])
 				</ul>
 			</li>
 		@else
-			<li><a href="{{$item->link}}" @if(startsWith($item->link, 'http')) target="_blank" @endif >{{$item->tekst}}</a>
+			<li class="nav-item">
+				<a class="nav-link" href="{{$item->link}}" @if(startsWith($item->link, 'http')) target="_blank" @endif >{{$item->tekst}}</a>
 			</li>
 		@endif
 	@endif

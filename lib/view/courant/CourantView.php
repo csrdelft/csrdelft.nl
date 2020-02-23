@@ -3,8 +3,8 @@
 namespace CsrDelft\view\courant;
 
 use CsrDelft\common\Ini;
-use CsrDelft\model\entity\courant\Courant;
-use CsrDelft\model\entity\courant\CourantCategorie;
+use CsrDelft\entity\courant\Courant;
+use CsrDelft\entity\courant\CourantCategorie;
 use CsrDelft\view\ToResponse;
 use Symfony\Component\HttpFoundation\Response;
 

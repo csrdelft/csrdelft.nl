@@ -54,7 +54,7 @@ class GroepenBeheerTable extends DataTable {
 
 		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/voorbeeld', 'Voorbeeldweergave van de ketzer', 'show'));
 
-		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $model->getUrl() . '/:id/nieuw', 'Nieuw', 'Nieuwe toevoegen', 'toevoegen'));
+		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $model->getUrl() . '/nieuw', 'Nieuw', 'Nieuwe toevoegen', 'toevoegen'));
 
 		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/aanmaken', 'Nieuwe toevoegen die de huidige opvolgt', 'toevoegen'));
 

@@ -10,19 +10,57 @@
 		color: $zijbalk-ishetal-nee;
 		text-align: center;
 	}
+
 	.ja {
 		color: $zijbalk-ishetal-ja;
 	}
 }
 
+.zijbalk_verborgen {
+	margin-left: 0;
+
+	#menu {
+		margin-left: 0;
+
+		[href="#zijbalk"] {
+			display: none !important;
+		}
+	}
+
+	#zijbalk {
+		display: none;
+	}
+}
+
+.zijbalk_extra_breed {
+	margin-left: 250px;
+	@include media-breakpoint-down(sm) {
+		margin-left: 0;
+
+		#menu {
+			margin-left: 0;
+		}
+	}
+
+	#menu {
+		margin-left: -250px;
+	}
+
+	#zijbalk {
+		width: 250px;
+		transform: translateX(-250px);
+	}
+}
+
 #zijbalk {
 	position: absolute;
-	top: 0;
 	left: 0;
 	width: 179px;
 	padding: 0 5px 40px 5px;
 	background-color: $zijbalk-bg;
 	z-index: $zindex-zijbalk;
+	height: auto;
+	transform: translateX(-200px);
 
 	.cd-beeldmerk {
 		height: 200px;
@@ -93,6 +131,7 @@
 		div.fotos a {
 			text-decoration: none;
 		}
+
 		img {
 			float: left;
 			width: 55px;
@@ -123,7 +162,6 @@ Overrides voor bredere schermen
 	#zijbalk {
 		width: 200px;
 		padding-left: 10px;
-		border-left: 7px solid $zijbalk-border;
 	}
 }
 
@@ -136,8 +174,7 @@ Initieel verbergen, weergeven als :target of .target op #zijbalk
 @include media-breakpoint-down(sm) {
 	#zijbalk {
 		transform: translateX(-179px);
-		transition: transform 0.3s;
-		top: auto;
+		transition: transform 0.1s;
 	}
 
 	.cd-main-content {

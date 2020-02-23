@@ -1,10 +1,11 @@
 <?php /** @noinspection PhpUnused wordt gebruikt in templates*/
 
-use CsrDelft\common\CRLFView;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\MenuModel;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
-use CsrDelft\view\View;
+use CsrDelft\view\toestemming\ToestemmingModalForm;
 
 /**
  * Hulpmethodes die gebruikt worden in views.
@@ -411,7 +412,7 @@ function escape_ical($string, $prefix_length) {
 	$wrap = mb_substr($string, 0, $length);
 	$rest = mb_substr($string, $length);
 	if (!empty($rest)) {
-		$wrap .= "\r\n " . wordwrap($rest, 59, "\r\n ", true);
+		$wrap .= "\n " . wordwrap($rest, 59, "\n ", true);
 	}
 	return $wrap;
 }
@@ -426,4 +427,12 @@ function commitHash($full = false) {
 
 function commitLink() {
 	return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
+}
+
+function toestemming_gegeven() {
+	return ContainerFacade::getContainer()->get(LidToestemmingRepository::class)->toestemmingGegeven();
+}
+
+function toestemming_form() {
+	return new ToestemmingModalForm(ContainerFacade::getContainer()->get(LidToestemmingRepository::class));
 }

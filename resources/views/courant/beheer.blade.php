@@ -33,7 +33,7 @@
 	</p>
 	@if(count($berichten) > 0)
 		<div id="courantKnoppenContainer">
-			@if($courantModel->magVerzenden())
+			@if($magVerzenden)
 				<a href="/courant/verzenden" title="De C.S.R.-courant wilt versturen?" class="btn btn-primary post confirm">Verzenden</a>
 				<a href="/courant/voorbeeld" class="btn btn-primary" target="_blank">Laat voorbeeld zien</a>
 			@endif
@@ -44,19 +44,19 @@
 			@foreach($berichten as $bericht)
 				<dt>
 					<span
-						class="onderstreept">{{$bericht->cat ? CsrDelft\model\entity\courant\CourantCategorie::getDescription($bericht->cat) : 'Geen categorie'}}</span>
-					@if($courantModel->magBeheren())
-						{!! CsrDelft\model\ProfielModel::getLink($bericht->uid, 'civitas') !!}
+						class="onderstreept">{{$bericht->cat ? \CsrDelft\entity\courant\CourantCategorie::getDescription($bericht->cat) : 'Geen categorie'}}</span>
+					@if($magBeheren)
+						{!! \CsrDelft\repository\ProfielRepository::getLink($bericht->uid, 'civitas') !!}
 					@endif
 					<span class="dikgedrukt">{{$bericht->titel}}</span>
-					@if($courantModel->magBeheren($bericht->uid))
+					@if($bericht->magBeheren())
 						<a class="btn btn-primary" href="/courant/bewerken/{{$bericht->id}}">bewerken</a>
 						<a class="btn btn-primary post confirm ReloadPage" href="/courant/verwijderen/{{$bericht->id}}"
 							 title="Bericht verwijderen">verwijderen</a>
 					@endif
 				</dt>
 				<dd id="courantbericht{$bericht->id}"></dd>
-				@if(!$courantModel->magBeheren($bericht->uid))
+				@if(!$bericht->magBeheren())
 					<dd>{!! bbcode($bericht->bericht, "mail") !!}</dd>
 				@endif
 			@endforeach

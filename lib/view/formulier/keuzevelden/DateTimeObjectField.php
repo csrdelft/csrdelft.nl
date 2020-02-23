@@ -2,8 +2,6 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use CsrDelft\view\formulier\invoervelden\TextField;
-
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>

@@ -2,11 +2,12 @@
 
 namespace CsrDelft\model\groepen\leden;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\Lichting;
 use CsrDelft\model\entity\groepen\LichtingsLid;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -24,7 +25,7 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 	 * @return LichtingsLid|false
 	 */
 	public function get(AbstractGroep $lichting, $uid) {
-		$profiel = ProfielModel::get($uid);
+		$profiel = ProfielRepository::get($uid);
 		if ($profiel AND $profiel->lidjaar === $lichting->lidjaar) {
 			$lid = $this->nieuw($lichting, $uid);
 			$lid->door_uid = null;
@@ -42,7 +43,7 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 	 */
 	public function getLedenVoorGroep(AbstractGroep $lichting) {
 		$leden = array();
-		foreach (ProfielModel::instance()->prefetch('lidjaar = ?', array($lichting->lidjaar)) as $profiel) {
+		foreach (ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('lidjaar = ?', array($lichting->lidjaar)) as $profiel) {
 			$lid = $this->get($lichting, $profiel->uid);
 			if ($lid) {
 				$leden[] = $lid;

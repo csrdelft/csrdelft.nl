@@ -11,7 +11,7 @@ use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
@@ -72,7 +72,7 @@ class EetplanController {
 		}
 
 		return view('eetplan.noviet', [
-			'noviet' => ProfielModel::get($uid),
+			'noviet' => ProfielRepository::get($uid),
 			'eetplan' => $this->eetplanModel->getEetplanVoorNoviet($uid)
 		]);
 	}
@@ -229,7 +229,7 @@ class EetplanController {
 
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanModel->count("avond = ?", array($form->getValues()['avond'])) > 0) {
+		} elseif ($this->eetplanModel->ormCount("avond = ?", array($form->getValues()['avond'])) > 0) {
 			setMelding('Er bestaat al een eetplan met deze datum', -1);
 			return $form;
 		} else {

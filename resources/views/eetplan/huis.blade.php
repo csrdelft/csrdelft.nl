@@ -24,15 +24,14 @@
 
 		@foreach($eetplan as $avond)
 			@foreach($avond as $sessie)
-				@php($noviet = $sessie->getNoviet())
 				<tr>
 					@if($loop->index == 1)
 						<th rowspan="{{count($avond)}}" class="table-light">{{$sessie->avond->format("d-m-Y")}}</th>
 					@endif
-					<td>{!! CsrDelft\model\ProfielModel::getLink($noviet->uid, 'civitas') !!}</td>
-					<td>{{$noviet->mobiel}}</td>
-					<td>{{$noviet->email}}</td>
-					<td>{{$noviet->eetwens}}</td>
+					<td>{!! $sessie->noviet->getLink('civitas') !!}</td>
+					<td>{{$sessie->noviet->mobiel}}</td>
+					<td>{{$sessie->noviet->email}}</td>
+					<td>{{$sessie->noviet->eetwens}}</td>
 				</tr>
 			@endforeach
 		@endforeach

@@ -35,10 +35,7 @@ class DocumentenController extends AbstractController {
 	 * Recente documenten uit alle categorieën tonen
 	 */
 	public function recenttonen() {
-		return view('documenten.documenten', [
-			'categorieen' => $this->documentCategorieRepository->findAll(),
-			'model' => $this->documentCategorieRepository
-		]);
+		return view('documenten.documenten', ['categorieen' => $this->documentCategorieRepository->findAll()]);
 	}
 
 	public function verwijderen($id) {
@@ -111,10 +108,7 @@ class DocumentenController extends AbstractController {
 		} elseif (!$categorie->magBekijken()) {
 			throw new CsrToegangException('Mag deze categorie niet bekijken');
 		} else {
-			return view('documenten.categorie', [
-				'documenten' => $this->documentCategorieRepository->getRecent($categorie, 0),
-				'categorie' => $categorie,
-			]);
+			return view('documenten.categorie', ['categorie' => $categorie]);
 		}
 	}
 
@@ -130,7 +124,7 @@ class DocumentenController extends AbstractController {
 		if ($form->isPosted() && $form->validate()) {
 			$this->documentRepository->update($document);
 
-			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie_id]);
+			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie->id]);
 		} else {
 			return view('default', [
 				'titel' => 'Document bewerken',
@@ -164,7 +158,7 @@ class DocumentenController extends AbstractController {
 
 			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
 
-			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie_id]);
+			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie->id]);
 		} else {
 			return view('default', [
 				'titel' => 'Document toevoegen',
@@ -188,7 +182,7 @@ class DocumentenController extends AbstractController {
 			if ($doc->magBekijken()) {
 				$result[] = array(
 					'url' => '/documenten/bekijken/' . $doc->id . '/' . $doc->filename,
-					'label' => $this->documentCategorieRepository->find($doc->categorie_id)->naam,
+					'label' => $doc->categorie->naam,
 					'value' => $doc->naam,
 					'icon' => Icon::getTag('document'),
 					'id' => $doc->id

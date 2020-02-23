@@ -4,7 +4,7 @@ namespace CsrDelft\model\entity\fotoalbum;
 
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\fotoalbum\FotoTagsModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 
 /**
@@ -28,7 +28,7 @@ class FotoTagAlbum extends FotoAlbum {
 		$this->uid = $uid;
 		$this->subalbums = array();
 		$this->path = PHOTOALBUM_PATH;
-		$this->dirname = 'Foto\'s met ' . ProfielModel::getNaam($uid, 'civitas');
+		$this->dirname = 'Foto\'s met ' . ProfielRepository::getNaam($uid, 'civitas');
 	}
 
 	public function modified() {

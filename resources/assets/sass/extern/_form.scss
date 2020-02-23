@@ -13,6 +13,12 @@
   cursor: pointer;
 }
 
+.verborgen {
+	visibility: hidden;
+	position:absolute;
+	width: 0 !important;
+}
+
 form {
   margin: 0 0 0 0;
 

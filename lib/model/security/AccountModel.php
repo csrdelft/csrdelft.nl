@@ -2,10 +2,12 @@
 
 namespace CsrDelft\model\security;
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\CachedPersistenceModel;
 
 /**
@@ -19,6 +21,7 @@ class AccountModel extends CachedPersistenceModel {
 
 	const ORM = Account::class;
 	const PASSWORD_HASH_ALGORITHM = PASSWORD_DEFAULT;
+
 	/**
 	 * @param $uid
 	 * @return Account|false
@@ -46,6 +49,28 @@ class AccountModel extends CachedPersistenceModel {
 	}
 
 	/**
+	 * @param $email
+	 * @return Account|null
+	 */
+	public function getByEmail($email) {
+		if (empty($email)) {
+			return null;
+		}
+
+		$accounts = $this->find('email = ?', [$email])->fetchAll();
+
+		if (count($accounts) == 0) {
+			return null;
+		}
+
+		if (count($accounts) > 1) {
+			throw new CsrException(sprintf("Meerdere accounts gevonden met dit emailadres: \"%s\".", $email));
+		}
+
+		return $accounts[0];
+	}
+
+	/**
 	 * @param string $name
 	 *
 	 * @return bool
@@ -61,7 +86,7 @@ class AccountModel extends CachedPersistenceModel {
 	 * @throws CsrGebruikerException
 	 */
 	public function maakAccount($uid) {
-		$profiel = ProfielModel::get($uid);
+		$profiel = ProfielRepository::get($uid);
 		if (!$profiel) {
 			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
@@ -147,7 +172,7 @@ class AccountModel extends CachedPersistenceModel {
 			$profiel = $account->getProfiel();
 			if ($profiel) {
 				$profiel->email = $account->email;
-				ProfielModel::instance()->update($profiel);
+				ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel);
 			}
 		}
 		return true;

@@ -26,6 +26,17 @@ h1.Titel {
 
 /** FORMULIER **************************************************************/
 
+.ZoekField {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.ZoekFieldDropdown {
+	border-left: 0;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+}
+
 .Formulier, .ForumFormulier {
   .field-required {
     color: red;
@@ -148,6 +159,10 @@ h1.Titel {
   .InlineForm.ToggleForm {
     display: none;
   }
+}
+
+.twitter-typeahead > .form-control {
+	width: 100%;
 }
 
 .form-control.loading {

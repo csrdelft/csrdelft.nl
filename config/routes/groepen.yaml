@@ -6,45 +6,45 @@ groep-overzicht:
     route: groep-commissies-overzicht
 
 groep-activiteiten:
-  resource: CsrDelft\controller\groepen\ActiviteitenController:loadRoutes
+  resource: CsrDelft\controller\groepen\ActiviteitenController::loadRoutes
   type: service
 
 groep-besturen:
-  resource: CsrDelft\controller\groepen\BesturenController:loadRoutes
+  resource: CsrDelft\controller\groepen\BesturenController::loadRoutes
   type: service
 
 groep-commissies:
-  resource: CsrDelft\controller\groepen\CommissiesController:loadRoutes
+  resource: CsrDelft\controller\groepen\CommissiesController::loadRoutes
   type: service
 
 groep-ketzers:
-  resource: CsrDelft\controller\groepen\KetzersController:loadRoutes
+  resource: CsrDelft\controller\groepen\KetzersController::loadRoutes
   type: service
 
 groep-lichtingen:
-  resource: CsrDelft\controller\groepen\LichtingenController:loadRoutes
+  resource: CsrDelft\controller\groepen\LichtingenController::loadRoutes
   type: service
 
 groep-onderverenigingen:
-  resource: CsrDelft\controller\groepen\OnderverenigingenController:loadRoutes
+  resource: CsrDelft\controller\groepen\OnderverenigingenController::loadRoutes
   type: service
 
 groep-rechtengroepen:
-  resource: CsrDelft\controller\groepen\RechtengroepenController:loadRoutes
+  resource: CsrDelft\controller\groepen\RechtengroepenController::loadRoutes
   type: service
 
 groep-verticalen:
-  resource: CsrDelft\controller\groepen\VerticalenController:loadRoutes
+  resource: CsrDelft\controller\groepen\VerticalenController::loadRoutes
   type: service
 
 groep-werkgroepen:
-  resource: CsrDelft\controller\groepen\WerkgroepenController:loadRoutes
+  resource: CsrDelft\controller\groepen\WerkgroepenController::loadRoutes
   type: service
 
 groep-woonoorden:
-  resource: CsrDelft\controller\groepen\WoonoordenController:loadRoutes
+  resource: CsrDelft\controller\groepen\WoonoordenController::loadRoutes
   type: service
 
 groep-kringen:
-  resource: CsrDelft\controller\groepen\KringenController:loadRoutes
+  resource: CsrDelft\controller\groepen\KringenController::loadRoutes
   type: service

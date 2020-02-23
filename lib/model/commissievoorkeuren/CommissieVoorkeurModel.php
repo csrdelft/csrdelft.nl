@@ -4,7 +4,7 @@ namespace CsrDelft\model\commissievoorkeuren;
 
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\model\entity\commissievoorkeuren\VoorkeurVoorkeur;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\Orm\PersistenceModel;
 use PDOStatement;
 

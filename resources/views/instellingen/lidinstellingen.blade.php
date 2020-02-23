@@ -37,54 +37,51 @@
 					<div class="form-group row instelling" id="instelling-{{$module}}-{{$id}}">
 						<label class="col-md-3 col-form-label" for="inst_{{$module}}_{{$id}}">{!! $titel !!}</label>
 
-						@if($type === \CsrDelft\model\instellingen\InstellingType::Enumeration)
-							@if(count($opties) > 8)
-								<div class="col-md-9">
+						<div class="col-md-9">
+							@if($type === \CsrDelft\model\instellingen\InstellingType::Enumeration)
+								@if(count($opties) > 8)
 									<select name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" class="form-control change-opslaan"
 													data-href="/instellingen/update/{{$module}}/{{$id}}">
 										@foreach($opties as $optie)
 											<option value="{{$optie}}" @if($optie === $keuze) selected @endif>{{ucfirst($optie)}}</option>
 										@endforeach
 									</select>
-								</div>
-							@else
-								{{-- Verticaal op xs --}}
-								<div class="btn-group-vertical btn-group-toggle col d-inline-flex d-sm-none" data-buttons="radio">
-									@foreach($opties as $optieId => $optie)
-										@php($optieId = is_int($optieId) ? $optie : $optieId)
-										<a class="post noanim instellingKnop btn btn-secondary @if($optie === $keuze) active @endif"
-											 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
-									@endforeach
-								</div>
-								{{-- Horizontaal op alle andere --}}
-								<div class="d-none d-sm-inline-flex btn-group btn-group-toggle col-auto" data-buttons="radio">
-									@foreach($opties as $optieId => $optie)
-										@php($optieId = is_int($optieId) ? $optie : $optieId)
-										<a class="post noanim instellingKnop btn btn-secondary @if($optieId === $keuze) active @endif"
-											 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
-									@endforeach
-								</div>
-							@endif
-						@elseif($type === \CsrDelft\model\instellingen\InstellingType::String)
-							<div class="col-md-9">
+								@else
+									{{-- Verticaal op xs --}}
+									<div class="btn-group-vertical btn-group-toggle d-inline-flex d-sm-none" data-buttons="radio">
+										@foreach($opties as $optieId => $optie)
+											@php($optieId = is_int($optieId) ? $optie : $optieId)
+											<a class="post noanim instellingKnop btn btn-secondary @if($optie === $keuze) active @endif"
+												 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
+										@endforeach
+									</div>
+									{{-- Horizontaal op alle andere --}}
+									<div class="d-none d-sm-inline-flex btn-group btn-group-toggle"
+											 data-buttons="radio">
+										@foreach($opties as $optieId => $optie)
+											@php($optieId = is_int($optieId) ? $optie : $optieId)
+											<a class="post noanim instellingKnop btn btn-secondary @if($optieId === $keuze) active @endif"
+												 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
+										@endforeach
+									</div>
+								@endif
+							@elseif($type === \CsrDelft\model\instellingen\InstellingType::String)
 								<input type="text" name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" value="{{$keuze}}"
 											 data-href="/instellingen/update/{{$module}}/{{$id}}"
 											 class="form-control change-opslaan" minlength="{{$opties[0]}}" maxlength="{{$opties[1]}}"/>
-							</div>
-						@elseif($type === \CsrDelft\model\instellingen\InstellingType::Integer)
-							<div class="col-md-9">
+							@elseif($type === \CsrDelft\model\instellingen\InstellingType::Integer)
 								<input type="number" name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" value="{{$keuze}}"
 											 data-href="/instellingen/update/{{$module}}/{{$id}}"
 											 class="form-control change-opslaan" data-href="/instellingen/update/{{$module}}/{{$id}}"
 											 min="{{$opties[0]}}" max="{{$opties[1]}}"/>
-							</div>
-						@else
-							<div class="col-md-9 bg-danger">Voor dit type bestaat geen optie.</div>
-						@endif
-						<small class="col-md-9 offset-md-3 form-text text-muted">
-							@php($default = isset($opties[$default]) ? $opties[$default] : $default)
-							{{$beschrijving}} Standaard waarde: "{{ucfirst($default)}}".
-						</small>
+							@else
+								<div class="bg-danger">Voor dit type bestaat geen optie.</div>
+							@endif
+							<small class="form-text text-muted">
+								@php($default = isset($opties[$default]) ? $opties[$default] : $default)
+								{{$beschrijving}} Standaard waarde: "{{ucfirst($default)}}".
+							</small>
+						</div>
 					</div>
 				@endforeach
 			@endforeach

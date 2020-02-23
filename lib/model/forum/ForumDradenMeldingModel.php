@@ -7,9 +7,9 @@ use CsrDelft\model\entity\forum\ForumDraadMelding;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\instellingen\LidInstellingenModel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
@@ -129,13 +129,13 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 	 * @param ForumPost $post
 	 */
 	public function stuurMeldingenNaarVolgers(ForumPost $post) {
-		$auteur = ProfielModel::get($post->uid);
+		$auteur = ProfielRepository::get($post->uid);
 		$draad = $post->getForumDraad();
 
 		// Laad meldingsbericht in
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumaltijdmelding.mail');
 		foreach ($this->getAltijdMeldingVoorDraad($draad) as $volger) {
-			$volger = ProfielModel::get($volger->uid);
+			$volger = ProfielRepository::get($volger->uid);
 
 			// Stuur geen meldingen als lid niet gevonden is of lid de auteur
 			if (!$volger || $volger->uid === $post->uid) {
@@ -164,14 +164,14 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 	 * @param ForumPost $post
 	 */
 	public function stuurMeldingenNaarGenoemden(ForumPost $post) {
-		$auteur = ProfielModel::get($post->uid);
+		$auteur = ProfielRepository::get($post->uid);
 		$draad = $post->getForumDraad();
 
 		// Laad meldingsbericht in
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumvermeldingmelding.mail');
 		$genoemden = $this->zoekGenoemdeLeden($post->tekst);
 		foreach ($genoemden as $uid) {
-			$genoemde = ProfielModel::get($uid);
+			$genoemde = ProfielRepository::get($uid);
 
 			// Stuur geen meldingen als lid niet gevonden is, lid de auteur is of als lid geen meldingen wil voor draadje
 			// Met laatste voorwaarde worden ook leden afgevangen die sowieso al een melding zouden ontvangen

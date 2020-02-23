@@ -13,7 +13,6 @@ class WachtwoordVergetenForm extends Formulier {
 		parent::__construct(null, '/wachtwoord/vergeten', 'Wachtwoord vergeten');
 
 		$fields = [];
-		$fields[] = new RequiredTextField('user', null, 'Lidnummer');
 		$fields[] = new RequiredEmailField('mail', null, 'E-mailadres');
 		$fields[] = new FormDefaultKnoppen('/', false, true, true, true);
 

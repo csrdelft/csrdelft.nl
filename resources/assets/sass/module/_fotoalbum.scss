@@ -9,34 +9,56 @@
 	}
 }
 
+.subalbum-cover {
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 0.3em;
+	padding: 0.3em;
+
+	height: 200px;
+
+	a {
+		justify-self: stretch;
+		align-self: stretch;
+	}
+
+	img {
+		max-width: 100%;
+		width: 100%;
+		object-fit: cover;
+		border-radius: 3px;
+	}
+
+	.img0 {
+		grid-area: 1 / 1 / 3 / 3;
+	}
+}
+
+.album-description {
+	color: $black;
+	padding: 1em;
+}
+
 .subalbums {
-	position: absolute;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
 
 	.subalbum {
-		position: relative;
-		width: 150px;
-		height: 150px;
-		margin: 0 1px 1px 0;
-		float: left;
-		cursor: pointer;
-
-		.subalbumname {
-			position: absolute;
-			top: 60%;
-			width: 100%;
-			padding: 5px 2px 5px 2px;
-			text-align: center;
-			font-weight: bold;
-			color: black;
-			background-color: white;
-			opacity: 0.8;
-		}
+		margin: 1em;
+		width: 300px;
+		height: 300px;
+		border: 1px solid #ddd;
+		border-radius: 5px;
 	}
+
 	.subalbum:hover {
 		text-decoration: none;
 
 		.subalbumname {
 			opacity: 0.9;
+			text-decoration: none;
 		}
 	}
 }
@@ -51,70 +73,6 @@
 	opacity: 1;
 }
 
-.jgallery {
-	background-color: #fff !important;
-
-	.zoom-container {
-		.jgallery-container {
-			background: none !important;
-		}
-		.overlay {
-			background-color: #fff !important;
-		}
-	}
-
-	.jgallery-thumbnails {
-
-		.jgallery-container {
-			overflow-x: auto;
-
-			.jgallery-container-inner {
-				height: 150px;
-				padding: 0 !important;
-			}
-		}
-	}
-	.jgallery-thumbnails.full-screen {
-
-		.jgallery-container {
-			overflow-y: auto;
-		}
-
-		.jgallery-close, .change-album {
-			display: none;
-		}
-	}
-}
-
-@media only screen and (min-width: 960px) {
-	.jgallery.jgallery-full-screen {
-		.zoom-container {
-			.nav {
-				top: 50px;
-			}
-		}
-	}
-}
-@media only screen and (max-width: 959px) {
-	.jgallery.jgallery-full-screen {
-		.zoom-container {
-			.nav {
-				right: 50px;
-			}
-		}
-	}
-}
-.jgallery.jgallery-slider::after {
-	background: none;
-	box-shadow: none;
-}
-.jgallery.jgallery-slider {
-
-	.imageLoaderPositionAbsolute {
-		display: none !important;
-	}
-}
-
 .fototag {
 	position: absolute;
 	z-index: 10000;
@@ -127,4 +85,21 @@
 }
 .fototag.active, .fototag:hover {
 	border: 2px solid #e8cf2a;
+}
+
+.j-gallery-icon {
+	display: inline-flex;
+	cursor: pointer;
+	width: 32px;
+	height: 24px;
+	vertical-align: middle;
+	align-items: center;
+	box-sizing: border-box;
+	justify-content: center;
+	position: relative;
+	margin: 0 0.25em;
+}
+
+.j-gallery-drop-down > div {
+	position: absolute !important;
 }

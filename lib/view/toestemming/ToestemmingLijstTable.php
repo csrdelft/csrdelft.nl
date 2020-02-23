@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\toestemming;
 
-use CsrDelft\model\entity\LidToestemming;
+use CsrDelft\entity\LidToestemming;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\CollectionDataTableKnop;
 use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;

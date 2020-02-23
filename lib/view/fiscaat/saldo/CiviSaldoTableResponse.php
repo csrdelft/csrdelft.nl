@@ -3,7 +3,7 @@
 namespace CsrDelft\view\fiscaat\saldo;
 
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
 /**
@@ -20,7 +20,7 @@ class CiviSaldoTableResponse extends DataTableResponse {
 			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,
 			'uid' => $entity->uid,
-			'naam' => ProfielModel::existsUid($entity->uid) ? ProfielModel::getNaam($entity->uid, 'volledig') : $entity->naam,
+			'naam' => ProfielRepository::existsUid($entity->uid) ? ProfielRepository::getNaam($entity->uid, 'volledig') : $entity->naam,
 			'lichting' => substr($entity->uid, 0, 2),
 			'saldo' => $entity->saldo,
 			'laatst_veranderd' => $entity->laatst_veranderd,

@@ -1,7 +1,7 @@
 <?php
 
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Persistence\Database;
 
 class Barsysteem {
@@ -74,7 +74,7 @@ SQL
 			$persoon["naam"] = $row["naam"];
 			$persoon["status"] = LidStatus::Nobody;
 			if ($row["uid"]) {
-				$profiel = ProfielModel::get($row["uid"]);
+				$profiel = ProfielRepository::get($row["uid"]);
 				if ($profiel) {
 					$persoon["naam"] = $this->getNaam($profiel);
 					$persoon["status"] = $profiel->status;
@@ -159,7 +159,7 @@ SQL
 		$this->db->beginTransaction();
 
 		$q = $this->db->prepare("INSERT INTO CiviBestelling (uid, cie, totaal) VALUES (:socCieId, :commissie, 0);");
-		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_INT);
+		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_STR);
 		$q->bindValue(":commissie", $cie, PDO::PARAM_STR);
 		$q->execute();
 		$bestelId = $this->db->lastInsertId();
@@ -450,10 +450,10 @@ ORDER BY yearweek DESC
 		while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
 			$result[] = array(
-				'naam' => $this->getNaam(ProfielModel::get($r['uid'])),
-				'email' => ProfielModel::get($r['uid'])->getPrimaryEmail(),
+				'naam' => $this->getNaam(ProfielRepository::get($r['uid'])),
+				'email' => ProfielRepository::get($r['uid'])->getPrimaryEmail(),
 				'saldo' => $r['saldo'],
-				'status' => ProfielModel::get($r['uid'])->status
+				'status' => ProfielRepository::get($r['uid'])->status
 			);
 		}
 
@@ -488,7 +488,7 @@ ORDER BY yearweek DESC
 	public function updatePerson($id, $name) {
 
 		$q = $this->db->prepare("UPDATE CiviSaldo SET naam = :naam WHERE uid = :id");
-		$q->bindValue(':id', $id, PDO::PARAM_INT);
+		$q->bindValue(':id', $id, PDO::PARAM_STR);
 		$q->bindValue(':naam', $name, PDO::PARAM_STR);
 		return $q->execute();
 	}
@@ -496,7 +496,7 @@ ORDER BY yearweek DESC
 	public function removePerson($id) {
 
 		$q = $this->db->prepare("UPDATE CiviSaldo SET deleted = 1 WHERE uid = :id AND saldo = 0");
-		$q->bindValue(':id', $id, PDO::PARAM_INT);
+		$q->bindValue(':id', $id, PDO::PARAM_STR);
 		$q->execute();
 		return $q->rowCount();
 	}
@@ -510,7 +510,7 @@ ORDER BY yearweek DESC
 			$q->bindValue(':uid', $uid, PDO::PARAM_STR);
 		} else {
 			$latest = $this->db->query("SELECT uid FROM CiviSaldo WHERE uid LIKE 'c%' ORDER BY uid DESC LIMIT 1")->fetchColumn();
-			$q->bindValue(':uid', ++$latest, PDO::PARAM_INT);
+			$q->bindValue(':uid', ++$latest, PDO::PARAM_STR);
 		}
 
 		return $q->execute();

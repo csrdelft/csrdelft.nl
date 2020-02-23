@@ -1,0 +1,13 @@
+monolog:
+    handlers:
+        nested:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: critical
+        slackwebhook:
+            type: slackwebhook
+            webhook_url: '%app.slack.url%'
+            channel: '%app.slack.channel%'
+            icon_emoji: '%app.slack.icon%'
+            bot_name: '%app.slack.username%'
+            level: critical

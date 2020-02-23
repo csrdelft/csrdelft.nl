@@ -16,7 +16,7 @@ class RedirectingController extends AbstractController
 
 		// 308 (Permanent Redirect) is similar to 301 (Moved Permanently) except
 		// that it does not allow changing the request method (e.g. from POST to GET)
-		return $this->redirect($url, 308);
+		return $this->csrRedirect($url, 308);
 	}
 }
 

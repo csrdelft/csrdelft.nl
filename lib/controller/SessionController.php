@@ -100,6 +100,16 @@ class SessionController {
 		}
 	}
 
+	public function forgetAll() {
+		$remembers = $this->rememberLoginModel->find('uid = ?', [LoginModel::getUid()])->fetchAll();
+
+		foreach ($remembers as $remember) {
+			$this->rememberLoginModel->delete($remember);
+		}
+
+		return new RemoveRowsResponse($remembers);
+	}
+
 	public function forget() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (!$selection) {

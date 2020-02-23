@@ -1,11 +1,13 @@
-$kleur-groen: #368C70;
-$kleur-blauw-donker: #0A4F51;
-$kleur-oranje: #E9600B;
-$kleur-beige: #F2EBC7;
-$kleur-blauw: #197173;
-$kleur-rood: #C33A3A;
-$kleur-rood-donker: #5A1C1C;
+$kleur-primair: #33332d;
+$kleur-secundair: #6f8b8c;
+$kleur-textheader: #8c7456;
+$kleur-text: #f2ebc7;
+$kleur-hover: #E9600B;
 
+$kleur-groen: #ABD1B5;
+$kleur-rood: #B0413E;
+
+/*
 @font-face {
 	font-family: 'Futura';
 	src: url('../../fonts/motown-fever/Futura-Bold.woff2') format('woff2'),
@@ -15,53 +17,58 @@ $kleur-rood-donker: #5A1C1C;
 }
 
 @font-face {
-	font-family: 'Futura Bk BT';
+	font-family: 'Futura BT';
 	src: url('../../fonts/motown-fever/FuturaBT-Book.woff2') format('woff2'),
 	url('../../fonts/motown-fever/FuturaBT-Book.woff') format('woff');
 	font-weight: normal;
 	font-style: normal;
 }
+*/
 
-$font-family-base: "Futura Bk BT", sans-serif;
-$headings-font-family: "Futura", sans-serif;
+$font: Calibri, sans-serif;
+$font-family-base: $font;
+$headings-font-family: ($font, uppercase);
 
 $theme-colors: (
 	"primary": $kleur-groen,
-	"danger": #ff4136,
-	"white": $kleur-beige,
+	"danger": #E54B4B,
+	"white": $kleur-text,
 );
 
-$card-bg: $kleur-blauw;
-$list-group-bg: $kleur-blauw;
+$card-bg: $kleur-primair;
+$list-group-bg: $kleur-primair;
 
-$link-color: $kleur-beige;
-$link-hover-color: $kleur-oranje;
-$body-bg: $kleur-blauw-donker;
-$body-color: $kleur-beige;
-$beeldmerk: url(/dies/2019/images/logo.svg);
-$zijbalk-bg: $kleur-blauw;
-$zijbalk-kopje: $kleur-beige;
-$zijbalk-border: $kleur-oranje;
+$link-color: $kleur-text;
+$link-hover-color: $kleur-hover;
+$body-bg: $kleur-secundair;
+$body-color: $kleur-text;
+
+$zijbalk-bg: $kleur-primair;
+$zijbalk-kopje: $kleur-text;
+$zijbalk-border: $kleur-hover;
 $zijbalk-ishetal-ja: $kleur-groen;
 $zijbalk-ishetal-nee: $kleur-rood;
 
-$bb-block-bg: $kleur-blauw;
+$bb-block-bg: $kleur-primair;
 $bb-alt-bg: darken($body-bg, 4%);
-$bb-hover-bg: $kleur-oranje;
-$menu-primary-hover: $kleur-beige;
+$bb-hover-bg: $kleur-hover;
+$menu-primary-hover: $kleur-textheader;
 $menu-bg: $body-bg;
 $menu-color: $body-color;
 $menu-small-bg: $body-bg;
 $menu-small-color: $body-color;
 
-$modal-content-bg: $kleur-blauw-donker;
+$modal-content-bg: $kleur-secundair;
 
 $zoeken-active-bg: lighten($body-bg, 10%);
 
-$tabel-header: $kleur-blauw-donker;
-$tabel-regel-licht: $kleur-blauw-donker;
-$tabel-regel-donker: lighten($kleur-blauw-donker, 5%);
-$tabel-hover: darken($kleur-blauw-donker, 5%);
+$tabel-header: $kleur-secundair;
+$tabel-regel-licht: $kleur-secundair;
+$tabel-regel-donker: lighten($kleur-secundair, 5%);
+$tabel-hover: darken($kleur-secundair, 5%);
+
+$footer-background: darken($kleur-primair, 5%);
+$maaltijdketzer-bg: $kleur-primair;
 
 /* importeer basis */
 @import "../base";

@@ -62,7 +62,7 @@ trait OrmTrait {
 		$entityManager->flush();
 	}
 
-	public function count($criteria, $criteria_params) {
+	public function ormCount($criteria, $criteria_params) {
 		/** @var EntityManager $entityManager */
 		$entityManager = $this->getEntityManager();
 		/** @var ClassMetadata $metadata */
@@ -87,7 +87,13 @@ trait OrmTrait {
 		/** @var ClassMetadata $metadata */
 		$metadata = $this->getClassMetadata();
 
-		return parent::find($metadata->getIdentifierValues($entity)) !== null;
+		$identifierValues = $metadata->getIdentifierValues($entity);
+
+		if ($identifierValues == null) {
+			return false;
+		}
+
+		return parent::find($identifierValues) !== null;
 	}
 
 	/**

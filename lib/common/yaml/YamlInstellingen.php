@@ -5,7 +5,7 @@ namespace CsrDelft\common\yaml;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
-use Symfony\Component\Config\Exception\FileLoaderLoadException;
+use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Config\FileLocator;
 
 /**
@@ -28,7 +28,7 @@ trait YamlInstellingen {
 	 * @param string $resource
 	 * @param ConfigurationInterface $configuration
 	 * @throws FileLoaderImportCircularReferenceException
-	 * @throws FileLoaderLoadException
+	 * @throws LoaderLoadException
 	 */
 	protected function load($resource, $configuration) {
 		$file = CONFIG_CACHE_PATH . str_replace('/', '_', $resource) . '.cache.php';

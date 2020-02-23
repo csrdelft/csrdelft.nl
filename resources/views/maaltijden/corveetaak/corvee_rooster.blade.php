@@ -75,7 +75,7 @@
 										@if($taak->uid)
 											@if($taak->uid === CsrDelft\model\security\LoginModel::getUid())
 											@endif
-											{!! CsrDelft\model\ProfielModel::getLink($taak->uid,instelling('corvee', 'weergave_ledennamen_corveerooster')) !!}
+											{!! \CsrDelft\repository\ProfielRepository::getLink($taak->uid,instelling('corvee', 'weergave_ledennamen_corveerooster')) !!}
 										@else
 											<span class="cursief">vacature</span>
 										@endif

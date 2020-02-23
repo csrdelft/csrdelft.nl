@@ -1,6 +1,14 @@
+<?php
+/**
+ * @var $boek \CsrDelft\entity\bibliotheek\Boek
+ * @var $boekFormulier \CsrDelft\view\bibliotheek\BoekFormulier
+ * @var $exemplaarFormulieren \CsrDelft\view\bibliotheek\BoekExemplaarFormulier[]
+ * @var $recensieFormulier \CsrDelft\view\bibliotheek\RecensieFormulier
+ */
+?>
 @extends('layout')
 
-@section('titel', 'Bibliotheek - Boek: ' . $boek->getTitel())
+@section('titel', 'Bibliotheek - Boek: ' . $boek->titel)
 
 @section('content')
 	<div class="foutje">{!! getMelding() !!}</div>
@@ -18,7 +26,7 @@
 
 
 	{{-- nieuw boek formulier --}}
-	@if($boek->getId()==0)
+	@if($boek->id==0)
 		<div class="col-md-8">
 			<h1>Nieuw boek toevoegen</h1>
 			<p>Zoek via het Google Books-zoekveld je boek en kies een van de suggesties om de boekgegevens hieronder in te
@@ -40,7 +48,7 @@
 	@else
 		<div class="row">
 			{{-- weergave bestaand boek, soms met bewerkbare velden --}}
-			<div class="boek col-md-8" id="{{$boek->getId()}}">
+			<div class="boek col-md-8" id="{{$boek->id}}">
 
 				@if($boekFormulier->hasFields())
 
@@ -49,46 +57,46 @@
 				@else
 					<div class="row">
 						<div class="col-3 col-form-label">Boek</div>
-						<div class="col-9">{{$boek->getTitel()}}</div>
+						<div class="col-9">{{$boek->titel}}</div>
 					</div>
-					@if($boek->getAuteur()!='')
+					@if($boek->auteur!='')
 						<div class="row">
 							<div class="col-3 col-form-label">Auteur</div>
-							<div class="col-9">{{$boek->getAuteur()}}</div>
+							<div class="col-9">{{$boek->auteur}}</div>
 						</div>@endif
-					@if($boek->getPaginas()!=0)
+					@if($boek->paginas!=0)
 						<div class="row">
 							<div class="col-3 col-form-label">Pagina's</div>
-							<div class="col-9">{{$boek->getPaginas()}}</div>
+							<div class="col-9">{{$boek->paginas}}</div>
 						</div>@endif
-					@if($boek->getTaal()!='')
+					@if($boek->taal!='')
 						<div class="row">
 							<div class="col-3 col-form-label">Taal</div>
-							<div class="col-9">{{$boek->getTaal()}}</div>
+							<div class="col-9">{{$boek->taal}}</div>
 						</div>@endif
-					@if($boek->getISBN()!='')
+					@if($boek->isbn!='')
 						<div class="row">
 							<div class="col-3 col-form-label">ISBN</div>
-							<div class="col-9">{{$boek->getISBN()}}</div>
+							<div class="col-9">{{$boek->isbn}}</div>
 						</div>@endif
-					@if($boek->getUitgeverij()!='')
+					@if($boek->uitgeverij!='')
 						<div class="row">
 							<div class="col-3 col-form-label">Uitgeverij</div>
-							<div class="col-9">{{$boek->getUitgeverij()}}</div>
+							<div class="col-9">{{$boek->uitgeverij}}</div>
 						</div>@endif
-					@if($boek->getUitgavejaar()!=0)
+					@if($boek->uitgavejaar!=0)
 						<div class="row">
 							<div class="col-3 col-form-label">Uitgavejaar</div>
-							<div class="col-9">{{$boek->getUitgavejaar()}}</div>
+							<div class="col-9">{{$boek->uitgavejaar}}</div>
 						</div>@endif
 					<div class="row">
 						<div class="col-3 col-form-label">Rubriek</div>
 						<div class="col-9">{{$boek->getRubriek()->__toString()}}</div>
 					</div>
-					@if($boek->getCode()!='' && $boek->isBiebboek())
+					@if($boek->code!='' && $boek->isBiebboek())
 						<div class="row">
 							<div class="col-3 col-form-label">Code</div>
-							<div class="col-9">{{$boek->getCode()}}</div>
+							<div class="col-9">{{$boek->code}}</div>
 						</div>@endif
 				@endif
 
@@ -100,21 +108,21 @@
 				{{-- blok rechts met knopjes --}}
 				<ul class="col-md-4 list-group">
 					<li class="list-group-item"><a href="/bibliotheek/boek">@icon("book_add") Nieuw boek</a></li>
-					@if($boek->getId()!=0)
+					@if($boek->id!=0)
 						@if($boek->magVerwijderen())
 							<li class="list-group-item"><a class="post verwijderen"
-																						 href="/bibliotheek/verwijderboek/{{$boek->getId()}}"
+																						 href="/bibliotheek/verwijderboek/{{$boek->id}}"
 																						 title="Boek verwijderen"
 																						 onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">@icon("verwijderen")
 									Verwijderen</a></li>
 						@endif
-						<li class="list-group-item"><a class="post ReloadPage" href="/bibliotheek/addexemplaar/{{$boek->getId()}}"
+						<li class="list-group-item"><a class="post ReloadPage" href="/bibliotheek/addexemplaar/{{$boek->id}}"
 																					 title="Ik bezit dit boek ook"
 																					 onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">@icon("user_add")
 								Ik bezit dit boek</a></li>
 						@can(P_BIEB_MOD)
 							<li class="list-group-item"><a class="post ReloadPage"
-																						 href="/bibliotheek/addexemplaar/{{$boek->getId()}}/x222"
+																						 href="/bibliotheek/addexemplaar/{{$boek->id}}/x222"
 																						 title="C.S.R.-bieb bezit dit boek ook"
 																						 onclick="return confirm('Bezit de C.S.R.-bieb een exemplaar van dit boek?')">@icon("user_add")
 									Is een biebboek</a></li>
@@ -131,7 +139,8 @@
 				@forelse($boek->getExemplaren() as $exemplaar)
 					<div
 						class="exemplaar uitgebreid @if(count($boek->getExemplaren())>4 && !$exemplaar->isEigenaar() && ($exemplaar->eigenaar_uid!='x222' || $total_exemplaren_bibliotheek>0 ))verborgen @endif ">
-						<div class="fotolabel">{!! CsrDelft\model\ProfielModel::getLink($exemplaar->eigenaar_uid, 'pasfoto') !!}</div>
+						<div
+							class="fotolabel">{!! \CsrDelft\repository\ProfielRepository::getLink($exemplaar->eigenaar_uid, 'pasfoto') !!}</div>
 						<div class="gegevensexemplaar" id="ex{{$exemplaar->id}}">
 							{{-- eigenaar --}}
 							<div class="regel">
@@ -139,7 +148,7 @@
 								@if($exemplaar->eigenaar_uid=='x222')@php($total_exemplaren_bibliotheek += 1)
 								C.S.R.-bibliotheek
 								@else
-									{!! CsrDelft\model\ProfielModel::getLink($exemplaar->eigenaar_uid, 'civitas') !!}
+									{!! \CsrDelft\repository\ProfielRepository::getLink($exemplaar->eigenaar_uid, 'civitas') !!}
 								@endif
 							</div>
 
@@ -156,27 +165,27 @@
 							{{-- status --}}
 							<div class="regel">
 								<label>Status</label>
-								@if($exemplaar->getStatus()=='uitgeleend')
+								@if($exemplaar->status=='uitgeleend')
 									<span
-										title="Sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Uitgeleend aan {{CsrDelft\model\ProfielModel::getLink($exemplaar->uitgeleend_uid, 'civitas')}}</span>
-								@elseif($exemplaar->getStatus()=='teruggegeven')
+										title="Sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Uitgeleend aan {{\CsrDelft\repository\ProfielRepository::getLink($exemplaar->uitgeleend_uid, 'civitas')}}</span>
+								@elseif($exemplaar->status=='teruggegeven')
 									<span
-										title="Was uitgeleend sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Teruggegeven door {{CsrDelft\model\ProfielModel::getLink($exemplaar->uitgeleend_uid, 'civitas')}}</span>
-								@elseif($exemplaar->getStatus()=='vermist')
+										title="Was uitgeleend sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Teruggegeven door {{\CsrDelft\repository\ProfielRepository::getLink($exemplaar->uitgeleend_uid, 'civitas')}}</span>
+								@elseif($exemplaar->status=='vermist')
 									<span class="waarschuwing"
 												title="Sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Vermist</span>
-								@elseif($exemplaar->getStatus()=='beschikbaar' )
+								@elseif($exemplaar->status=='beschikbaar' )
 									Beschikbaar
 								@endif
 							</div>
-							@if($exemplaar->getStatus()=='beschikbaar' && $boek->isEigenaar($exemplaar->id))
+							@if($exemplaar->status=='beschikbaar' && $boek->isEigenaar($exemplaar->id))
 								@php($boek->ajaxformuliervelden->findByName("lener_`$exemplaar->id`")->view())
 							@endif
 							{{-- actieknoppen --}}
 							<div class="regel actieknoppen">
 								<label>&nbsp;</label>
 								<div>
-									@if($exemplaar->getStatus()=='beschikbaar')
+									@if($exemplaar->status=='beschikbaar')
 										@if($exemplaar->eigenaar_uid=='x222') {{-- bibliothecaris werkt met kaartjes --}}
 										@if(!$boek->isEigenaar($exemplaar->id)) {{-- BASFCie hoeft opmerking niet te zien --}}
 										<span
@@ -186,35 +195,35 @@
 										@else
 											<a class="btn post ReloadPage" href="/bibliotheek/exemplaarlenen/{{$exemplaar->id}}"
 												 title="Leen dit boek"
-												 onclick="return confirm('U wilt dit boek van {{CsrDelft\model\ProfielModel::getNaam($exemplaar->eigenaar_uid)}} lenen?')">@icon("lorry")
+												 onclick="return confirm('U wilt dit boek van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} lenen?')">@icon("lorry")
 												Exemplaar lenen</a>
 										@endif
 									@elseif($exemplaar->status=='uitgeleend' && CsrDelft\model\security\LoginModel::getUid()==$exemplaar->uitgeleend_uid && $exemplaar->uitgeleend_uid!=$exemplaar->eigenaar_uid)
 										<a class="btn post ReloadPage" href="/bibliotheek/exemplaarteruggegeven/{{$exemplaar->id}}"
 											 title="Boek heb ik teruggegeven"
-											 onclick="return confirm('U heeft dit exemplaar van {{CsrDelft\model\ProfielModel::getNaam($exemplaar->eigenaar_uid)}} teruggegeven?')">@icon("lorry_go")
+											 onclick="return confirm('U heeft dit exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} teruggegeven?')">@icon("lorry_go")
 											Teruggegeven</a>
 									@endif
 									@if($exemplaar->isEigenaar())
-										@if(($exemplaar->getStatus()=='uitgeleend' || $exemplaar->isTeruggegeven()))
+										@if(($exemplaar->status=='uitgeleend' || $exemplaar->isTeruggegeven()))
 											<a class="btn post ReloadPage" href="/bibliotheek/exemplaarterugontvangen/{{$exemplaar->id}}"
 												 title="Boek is ontvangen"
-												 onclick="return confirm('Dit exemplaar van {{CsrDelft\model\ProfielModel::getNaam($exemplaar->eigenaar_uid)}} is terugontvangen?')">@icon("lorry_flatbed")
+												 onclick="return confirm('Dit exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} is terugontvangen?')">@icon("lorry_flatbed")
 												Ontvangen</a>
-										@elseif($exemplaar->getStatus()=='beschikbaar')
+										@elseif($exemplaar->status=='beschikbaar')
 											<a class="btn post ReloadPage" href="/bibliotheek/exemplaarvermist/{{$exemplaar->id}}"
 												 title="Exemplaar is vermist"
-												 onclick="return confirm('Is het exemplaar van {{CsrDelft\model\ProfielModel::getNaam($exemplaar->eigenaar_uid)}} vermist?')">@icon("emoticon_unhappy")
+												 onclick="return confirm('Is het exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} vermist?')">@icon("emoticon_unhappy")
 												Vermist</a>
-										@elseif($exemplaar->getStatus()=='vermist')
+										@elseif($exemplaar->status=='vermist')
 											<a class="btn post ReloadPage" href="/bibliotheek/exemplaargevonden/{{$exemplaar->id}}"
 												 title="Exemplaar teruggevonden"
-												 onclick="return confirm('Is het exemplaar van {{CsrDelft\model\ProfielModel::getNaam($exemplaar->eigenaar_uid)}} teruggevonden?')">@icon("emoticon_smile")
+												 onclick="return confirm('Is het exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} teruggevonden?')">@icon("emoticon_smile")
 												Teruggevonden</a>
 										@endif
 										<a class="btn post ReloadPage" href="/bibliotheek/verwijderexemplaar/{{$exemplaar->id}}"
 											 title="Exemplaar verwijderen"
-											 onclick="return confirm('Weet u zeker dat u dit exemplaar van {{CsrDelft\model\ProfielModel::getNaam($exemplaar->eigenaar_uid)}} wilt verwijderen?')">@icon("verwijderen")
+											 onclick="return confirm('Weet u zeker dat u dit exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} wilt verwijderen?')">@icon("verwijderen")
 											Verwijderen</a>
 									@endif
 								</div>
@@ -231,7 +240,7 @@
 					<div class="exemplaar compact">
 						@foreach($boek->getExemplaren() as $exemplaar)
 							@if(!$boek->isEigenaar($exemplaar->id) && ($exemplaar->eigenaar_uid!='x222' || $total_exemplaren_bibliotheek>0 ))
-								{{CsrDelft\model\ProfielModel::getLink($exemplaar->eigenaar_uid, 'pasfoto')}}
+								{{\CsrDelft\repository\ProfielRepository::getLink($exemplaar->eigenaar_uid, 'pasfoto')}}
 								<div class="statusmarkering"><span class="biebindicator {{$exemplaar->status}}"
 																									 title="Boek is {{$exemplaar->status}}">• </span></div>
 							@endif
@@ -261,13 +270,13 @@
 						<tr>
 							<td class="linkerkolom recensist">
 							<span
-								class="recensist">{!! CsrDelft\model\ProfielModel::getLink($beschrijving->schrijver_uid, 'civitas') !!}</span><br/>
+								class="recensist">{!! \CsrDelft\repository\ProfielRepository::getLink($beschrijving->schrijver_uid, 'civitas') !!}</span><br/>
 								<span class="moment">{!! reldate($beschrijving->toegevoegd) !!}</span><br/>
 
 								{{-- knopjes bij elke post --}}
 								@if($beschrijving->magVerwijderen())
 									<a
-										href="/bibliotheek/verwijderbeschrijving/{{$boek->getId()}}/{{CsrDelft\model\security\LoginModel::getUid()}}"
+										href="/bibliotheek/verwijderbeschrijving/{{$boek->id}}/{{CsrDelft\model\security\LoginModel::getUid()}}"
 										class="post ReloadPage"
 										onclick="return confirm('Weet u zeker dat u deze beschrijving wilt verwijderen?')"><span
 											class="ico cross  " title="Verwijderen"></span> Verwijderen</a>

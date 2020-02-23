@@ -9,16 +9,67 @@
 Primary style
 
 -------------------------------- */
-
-.navbar {
-	width: 100vw;
-}
-
 .cd-user-avatar {
 	width: 32px;
 	height: 32px;
 	border-radius: 4px;
 	margin-right: 4px;
+}
+
+#menu {
+	top: 0;
+	background: $donkerblauw;
+	border-bottom: 3px solid $orange;
+	position: sticky;
+	z-index: $zindex-menu;
+
+	.pasfoto-menu {
+		height: 32px;
+		clip-path: circle();
+	}
+
+	.navbar-search {
+		width: 300px;
+
+		form {
+			width: 100%;
+		}
+
+		.twitter-typeahead {
+			flex-grow: 1;
+		}
+	}
+
+	.navbar-brand {
+		width: 200px;
+		margin-right: 1rem;
+		margin-left: -1rem;
+		padding: 0 20px;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+
+		h2 {
+			font-size: 1.5rem;
+			margin-bottom: 0;
+		}
+
+		img {
+			height: 50px;
+			margin: -10px 0;
+		}
+	}
+
+	.nav-link {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+}
+
+@include media-breakpoint-down(md) {
+	#menu .navbar-nav {
+		width: 100%;
+	}
 }
 
 #cd-main-trigger, #cd-user-avatar {
@@ -208,10 +259,6 @@ Main components
 }
 
 @include media-breakpoint-up(lg) {
-	.navbar {
-		display: none;
-	}
-
 	.cd-primary-nav {
 		position: static;
 		height: auto;
@@ -305,7 +352,7 @@ Main components
 					cursor: default;
 				}
 
-				& > a{
+				& > a {
 					&:hover, &:active {
 						text-decoration: none;
 					}
@@ -364,6 +411,7 @@ Main components
 	.cd-primary-nav .cd-secondary-nav > .has-children > a {
 		/* Geen pijltje boven kolommen breed scherm */
 		padding: 0;
+
 		&::after {
 			content: "";
 		}
@@ -381,6 +429,12 @@ support for no js
 	width: 100%;
 	overflow: visible;
 	visibility: visible;
+}
+
+@include media-breakpoint-up(lg) {
+	#menu {
+		margin-left: -200px;
+	}
 }
 
 @include media-breakpoint-up(md) {

@@ -4,8 +4,8 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\profiel\Profiel;
-use CsrDelft\model\ProfielModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 
@@ -37,7 +37,7 @@ class BbLid extends BbTag {
 	 * @throws BbException
 	 */
 	private function getProfiel() {
-		$profiel = ProfielModel::get($this->content);
+		$profiel = ProfielRepository::get($this->content);
 
 		if (!$profiel) {
 			throw new BbException('[lid] ' . htmlspecialchars($this->content) . '] &notin; db.');

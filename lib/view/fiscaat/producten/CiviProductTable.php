@@ -6,7 +6,6 @@ use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
-use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;

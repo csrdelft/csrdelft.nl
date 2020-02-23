@@ -5,6 +5,7 @@
 		<a href="#0">{{$root->tekst}}</a>
 	@endif
 </div>
+@if($root->children)
 @foreach ($root->children as $item)
 	@if($item->magBekijken())
 		<div class="item @if($item->active) active @endif @if($root->tekst == 'Sponsors') ads @endif">
@@ -16,3 +17,4 @@
 		</div>
 	@endif
 @endforeach
+@endif

@@ -41,7 +41,11 @@ class RememberLoginModel extends PersistenceModel {
 		$remember = new RememberLogin();
 		$remember->uid = LoginModel::getUid();
 		$remember->remember_since = getDateTime();
-		$remember->device_name = '';
+		if (isset($_SERVER['HTTP_USER_AGENT'])) {
+			$remember->device_name = $_SERVER['HTTP_USER_AGENT'];
+		} else {
+			$remember->device_name = '';
+		}
 		if (isset($_SERVER['REMOTE_ADDR'])) {
 			$remember->ip = $_SERVER['REMOTE_ADDR'];
 		} else {
