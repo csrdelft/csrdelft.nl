@@ -7,8 +7,6 @@ use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
-use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
 use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
@@ -33,6 +31,8 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
+use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
+use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\VerjaardagenService;
@@ -42,6 +42,7 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ProfielController extends AbstractController {
 	/**
@@ -49,13 +50,13 @@ class ProfielController extends AbstractController {
 	 */
 	private $profielRepository;
 	/**
-	 * @var VoorkeurOpmerkingModel
+	 * @var VoorkeurOpmerkingRepository
 	 */
-	private $voorkeurOpmerkingModel;
+	private $voorkeurOpmerkingRepository;
 	/**
-	 * @var CommissieVoorkeurModel
+	 * @var CommissieVoorkeurRepository
 	 */
-	private $commissieVoorkeurModel;
+	private $commissieVoorkeurRepository;
 	/**
 	 * @var FotoTagsModel
 	 */
@@ -157,7 +158,7 @@ class ProfielController extends AbstractController {
 		BoekExemplaarRepository $boekExemplaarModel,
 		BoekRecensieRepository $boekRecensieModel,
 		CiviBestellingModel $civiBestellingModel,
-		CommissieVoorkeurModel $commissieVoorkeurModel,
+		CommissieVoorkeurRepository $commissieVoorkeurRepository,
 		CorveeVoorkeurenModel $corveeVoorkeurenModel,
 		CommissiesModel $commissiesModel,
 		CorveeTakenModel $corveeTakenModel,
@@ -172,7 +173,7 @@ class ProfielController extends AbstractController {
 		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
 		OnderverenigingenModel $onderverenigingenModel,
 		RechtenGroepenModel $rechtenGroepenModel,
-		VoorkeurOpmerkingModel $voorkeurOpmerkingModel,
+		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
 		WerkgroepenModel $werkgroepenModel,
 		SaldoGrafiekModel $saldoGrafiekModel,
 		VerjaardagenService $verjaardagenService
@@ -184,7 +185,7 @@ class ProfielController extends AbstractController {
 		$this->boekExemplaarModel = $boekExemplaarModel;
 		$this->boekRecensieModel = $boekRecensieModel;
 		$this->civiBestellingModel = $civiBestellingModel;
-		$this->commissieVoorkeurModel = $commissieVoorkeurModel;
+		$this->commissieVoorkeurRepository = $commissieVoorkeurRepository;
 		$this->commissiesModel = $commissiesModel;
 		$this->corveeTakenModel = $corveeTakenModel;
 		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
@@ -199,7 +200,7 @@ class ProfielController extends AbstractController {
 		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
 		$this->onderverenigingenModel = $onderverenigingenModel;
 		$this->rechtenGroepenModel = $rechtenGroepenModel;
-		$this->voorkeurOpmerkingModel = $voorkeurOpmerkingModel;
+		$this->voorkeurOpmerkingRepository = $voorkeurOpmerkingRepository;
 		$this->werkgroepenModel = $werkgroepenModel;
 		$this->saldoGrafiekModel = $saldoGrafiekModel;
 		$this->verjaardagenService = $verjaardagenService;
@@ -349,7 +350,7 @@ class ProfielController extends AbstractController {
 		return $this->profielBewerken($profiel);
 	}
 
-	public function voorkeuren($uid) {
+	public function voorkeuren(EntityManagerInterface $em, $uid) {
 		$profiel = $this->profielRepository->get($uid);
 
 		if ($profiel === false) {
@@ -362,12 +363,14 @@ class ProfielController extends AbstractController {
 		if ($form->isPosted() && $form->validate()) {
 			$voorkeuren = $form->getVoorkeuren();
 			$opmerking = $form->getOpmerking();
+			$manager = $this->getDoctrine()->getManager();
 			foreach ($voorkeuren as $voorkeur) {
-				$this->commissieVoorkeurModel->updateOrCreate($voorkeur);
+				$manager->persist($voorkeur);
 			}
-			$this->voorkeurOpmerkingModel->updateOrCreate($opmerking);
+			$manager->persist($opmerking);
+			$manager->flush();
 			setMelding('Voorkeuren opgeslagen', 1);
-			$this->redirectToRoute('profiel-voorkeuren');
+			$this->redirectToRoute('profiel-voorkeuren', ['uid' => $uid]);
 
 		}
 		return view('default', ['content' => $form]);

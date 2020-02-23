@@ -3,17 +3,18 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
-use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieCategorieModel;
-use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
-use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
-use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
-use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
+use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
+use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
+use CsrDelft\entity\commissievoorkeuren\VoorkeurOpmerking;
+use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
+use CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository;
+use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\commissievoorkeuren\AddCategorieFormulier;
 use CsrDelft\view\commissievoorkeuren\AddCommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\CommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 /**
@@ -26,74 +27,74 @@ use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
  */
 class CommissieVoorkeurenController extends AbstractController {
 	/**
-	 * @var CommissieVoorkeurModel
+	 * @var CommissieVoorkeurRepository
 	 */
-	private $commissieVoorkeurModel;
+	private $commissieVoorkeurRepository;
 	/**
-	 * @var VoorkeurCommissieModel
+	 * @var VoorkeurCommissieRepository
 	 */
-	private $voorkeurCommissieModel;
+	private $voorkeurCommissieRepository;
 	/**
-	 * @var VoorkeurCommissieCategorieModel
+	 * @var VoorkeurOpmerkingRepository
 	 */
-	private $voorkeurCommissieCategorieModel;
-	/**
-	 * @var VoorkeurOpmerkingModel
-	 */
-	private $voorkeurOpmerkingModel;
+	private $voorkeurOpmerkingRepository;
 
 	public function __construct(
-		CommissieVoorkeurModel $commissieVoorkeurModel,
-		VoorkeurCommissieModel $voorkeurCommissieModel,
-		VoorkeurCommissieCategorieModel $voorkeurCommissieCategorieModel,
-		VoorkeurOpmerkingModel $voorkeurOpmerkingModel
+		CommissieVoorkeurRepository $commissieVoorkeurRepository,
+		VoorkeurCommissieRepository $voorkeurCommissieRepository,
+		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository
 	) {
-		$this->commissieVoorkeurModel = $commissieVoorkeurModel;
-		$this->voorkeurCommissieModel = $voorkeurCommissieModel;
-		$this->voorkeurCommissieCategorieModel = $voorkeurCommissieCategorieModel;
-		$this->voorkeurOpmerkingModel = $voorkeurOpmerkingModel;
+		$this->commissieVoorkeurRepository = $commissieVoorkeurRepository;
+		$this->voorkeurCommissieRepository = $voorkeurCommissieRepository;
+		$this->voorkeurOpmerkingRepository = $voorkeurOpmerkingRepository;
 	}
 
 	public function overzicht() {
 		return view('commissievoorkeuren.overzicht', [
-			'categorien' => $this->voorkeurCommissieModel->getByCategorie(),
+			'categorien' => $this->voorkeurCommissieRepository->getByCategorie(),
 			'commissieFormulier' => new AddCommissieFormulier(new VoorkeurCommissie()),
 			'categorieFormulier' => new AddCategorieFormulier(new VoorkeurCommissieCategorie()),
 		]);
 	}
 
 	public function commissie($commissieId) {
-		/** @var VoorkeurCommissie $commissie */
-		$commissie = $this->voorkeurCommissieModel->retrieveByUUID($commissieId);
+		$commissie = $this->getDoctrine()->getRepository(VoorkeurCommissie::class)->find($commissieId);
 
 		return view('commissievoorkeuren.commissie', [
-			'voorkeuren' => $this->commissieVoorkeurModel->getVoorkeurenVoorCommissie($commissie),
+			'voorkeuren' => $this->commissieVoorkeurRepository->getVoorkeurenVoorCommissie($commissie),
 			'commissie' => $commissie,
 			'commissieFormulier' => new CommissieFormulier($commissie),
 		]);
 	}
 
 	public function updatecommissie($commissieId) {
-		$commissie = $this->voorkeurCommissieModel->retrieveByUUID($commissieId);
+		$commissie = $this->getDoctrine()->getRepository(VoorkeurCommissie::class)->find($commissieId);
 		$body = new CommissieFormulier($commissie);
 		if ($body->validate()) {
-			$this->voorkeurCommissieModel->update($commissie);
+			$manager = $this->getDoctrine()->getManager();
+			$manager->persist($commissie);
+			$manager->flush();
+
 			setMelding('Aanpassingen commissie opgeslagen', 1);
 		}
-		return $this->redirectToRoute('commissievoorkeuren-updatecommissie');
+		return $this->redirectToRoute('commissievoorkeuren-updatecommissie', ['commissieId' => $commissieId]);
 	}
 
-	public function nieuwecommissie() {
+	public function nieuwecommissie(EntityManagerInterface $em) {
 		$model = new VoorkeurCommissie();
 		$form = new AddCommissieFormulier($model);
 
 		if ($form->validate()) {
-			$id = $this->voorkeurCommissieModel->create($model);
-			return $this->redirectToRoute('commissievoorkeuren-commissie', ['commissieId' => $id]);
+			$model->categorie = $em->getReference(VoorkeurCommissieCategorie::class, 1);
+			$manager = $this->getDoctrine()->getManager();
+			$manager->persist($model);
+			$manager->flush();
+
+			return $this->redirectToRoute('commissievoorkeuren-commissie', ['commissieId' => $model->id]);
 		}
 
 		return view('commissievoorkeuren.overzicht', [
-			'categorien' => $this->voorkeurCommissieModel->getByCategorie(),
+			'categorien' => $this->voorkeurCommissieRepository->getByCategorie(),
 			'commissieFormulier' => $form,
 			'categorieFormulier' => new AddCategorieFormulier(new VoorkeurCommissieCategorie()),
 		]);
@@ -103,22 +104,26 @@ class CommissieVoorkeurenController extends AbstractController {
 		$model = new VoorkeurCommissieCategorie();
 		$form = new AddCategorieFormulier($model);
 		if ($form->validate()) {
-			$this->voorkeurCommissieCategorieModel->create($model);
+			$manager = $this->getDoctrine()->getManager();
+			$manager->persist($model);
+			$manager->flush();
 			return $this->redirectToRoute('commissievoorkeuren'); // Prevent resubmit
 		}
 
 		return view('commissievoorkeuren.overzicht', [
-			'categorien' => $this->voorkeurCommissieModel->getByCategorie(),
+			'categorien' => $this->voorkeurCommissieRepository->getByCategorie(),
 			'commissieFormulier' => new AddCommissieFormulier(new VoorkeurCommissie()),
 			'categorieFormulier' => $form,
 		]);
 	}
 
 	public function verwijdercategorie($categorieId) {
-		/** @var VoorkeurCommissieCategorie $model */
-		$model = $this->voorkeurCommissieCategorieModel->retrieveByUUID($categorieId);
-		if (count($model->getCommissies()) == 0) {
-			$this->voorkeurCommissieCategorieModel->delete($model);
+		$model = $this->getDoctrine()->getRepository(VoorkeurCommissieCategorie::class)->find($categorieId);
+
+		if (count($model->commissies) == 0) {
+			$manager = $this->getDoctrine()->getManager();
+			$manager->remove($model);
+			$manager->flush();
 			setMelding("Categorie '{$model->naam}' succesvol verwijderd", 1);
 
 		} else {
@@ -135,9 +140,9 @@ class CommissieVoorkeurenController extends AbstractController {
 
 		$profiel = ProfielRepository::get($uid);
 
-		$voorkeuren = $this->commissieVoorkeurModel->getVoorkeurenVoorLid($profiel);
+		$voorkeuren = $this->commissieVoorkeurRepository->getVoorkeurenVoorLid($profiel);
 		$voorkeurenMap = [];
-		$commissies = $this->voorkeurCommissieModel->find('zichtbaar = 1')->fetchAll();
+		$commissies = $this->voorkeurCommissieRepository->findBy(['zichtbaar' => 'true']);
 		foreach ($commissies as $commissie) {
 			$voorkeurenMap[$commissie->id] = null;
 		}
@@ -145,7 +150,7 @@ class CommissieVoorkeurenController extends AbstractController {
 			$voorkeurenMap[$voorkeur->cid] = $voorkeur;
 		}
 
-		$opmerking = $this->voorkeurOpmerkingModel->getOpmerkingVoorLid($profiel);
+		$opmerking = $this->voorkeurOpmerkingRepository->getOpmerkingVoorLid($profiel);
 
 		return view('commissievoorkeuren.profiel', [
 			'profiel' => $profiel,
@@ -157,10 +162,19 @@ class CommissieVoorkeurenController extends AbstractController {
 	}
 
 	public function lidpaginaopmerking($uid) {
-		$opmerking = $this->voorkeurOpmerkingModel->getOpmerkingVoorLid(ProfielRepository::get($uid));
-		$form = (new CommissieVoorkeurPraesesOpmerkingForm($opmerking));
+		$opmerking = $this->getDoctrine()->getRepository(VoorkeurOpmerking::class)->find($uid);
+
+		if (!$opmerking) {
+			$opmerking = new VoorkeurOpmerking();
+			$opmerking->uid = $uid;
+		}
+
+		$form = new CommissieVoorkeurPraesesOpmerkingForm($opmerking);
+
 		if ($form->validate()) {
-			$this->voorkeurOpmerkingModel->updateOrCreate($opmerking);
+			$manager = $this->getDoctrine()->getManager();
+			$manager->persist($opmerking);
+			$manager->flush();
 		}
 
 		return $this->redirectToRoute('commissievoorkeuren-lidpagina-lijst');

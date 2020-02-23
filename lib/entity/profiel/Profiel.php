@@ -5,6 +5,7 @@ namespace CsrDelft\entity\profiel;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
+use CsrDelft\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\GroepStatus;
