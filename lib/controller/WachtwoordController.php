@@ -9,7 +9,7 @@ use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\security\OneTimeTokensModel;
+use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
 
@@ -27,14 +27,14 @@ class WachtwoordController extends AbstractController {
 	 */
 	private $accountModel;
 	/**
-	 * @var OneTimeTokensModel
+	 * @var OneTimeTokensRepository
 	 */
-	private $oneTimeTokensModel;
+	private $oneTimeTokensRepository;
 
-	public function __construct(LoginModel $loginModel, AccountModel $accountModel, OneTimeTokensModel $oneTimeTokensModel) {
+	public function __construct(LoginModel $loginModel, AccountModel $accountModel, OneTimeTokensRepository $oneTimeTokensRepository) {
 		$this->loginModel = $loginModel;
 		$this->accountModel = $accountModel;
-		$this->oneTimeTokensModel = $oneTimeTokensModel;
+		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 	}
 
 	public function wijzigen() {
@@ -55,7 +55,7 @@ class WachtwoordController extends AbstractController {
 
 	public function reset() {
 		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
-		$account = $this->oneTimeTokensModel->verifyToken('/wachtwoord/reset', $token);
+		$account = $this->oneTimeTokensRepository->verifyToken('/wachtwoord/reset', $token);
 
 		if ($account == null) {
 			throw new CsrToegangException();
@@ -69,7 +69,7 @@ class WachtwoordController extends AbstractController {
 			}
 			// token verbruikt
 			// (pas na wachtwoord opslaan om meedere pogingen toe te staan als wachtwoord niet aan eisen voldoet)
-			$this->oneTimeTokensModel->discardToken($account->uid, '/wachtwoord/reset');
+			$this->oneTimeTokensRepository->discardToken($account->uid, '/wachtwoord/reset');
 			// inloggen alsof gebruiker wachtwoord heeft ingevoerd
 			$loggedin = $this->loginModel->login($account->uid, $pass_plain, false);
 			if (!$loggedin) {
@@ -97,12 +97,12 @@ class WachtwoordController extends AbstractController {
 			if (!$account || !AccessModel::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions())) {
 				setMelding('E-mailadres onjuist', -1);
 			} else {
-				$token = $this->oneTimeTokensModel->createToken($account->uid, '/wachtwoord/reset');
+				$token = $this->oneTimeTokensRepository->createToken($account->uid, '/wachtwoord/reset');
 				// stuur resetmail
 				$profiel = $account->getProfiel();
 				$url =  CSR_ROOT ."/wachtwoord/reset?token=". rawurlencode($token[0]);
 				$bericht = "Geachte " . $profiel->getNaam('civitas') .
-					",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1] .
+					",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1]->format(DATETIME_FORMAT) .
 					".\n\n[url=". $url  .
 					"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
 				$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'

@@ -20,12 +20,12 @@
 use CsrDelft\Kernel;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\forum\ForumModel;
-use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\LogModel;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\security\OneTimeTokensModel;
+use CsrDelft\repository\instellingen\InstellingenRepository;
+use CsrDelft\repository\security\OneTimeTokensRepository;
 
 chdir(dirname(__FILE__) . '/../lib/');
 
@@ -38,7 +38,7 @@ $start = microtime(true);
 $debugLogModel = $container->get(DebugLogModel::class);
 $logModel = $container->get(LogModel::class);
 $loginModel = $container->get(LoginModel::class);
-$oneTimeTokensModel = $container->get(OneTimeTokensModel::class);
+$oneTimeTokensModel = $container->get(OneTimeTokensRepository::class);
 $instellingenRepository = $container->get(InstellingenRepository::class);
 $lidInstellingenModel = $container->get(LidInstellingenModel::class);
 $corveeHerinneringenModel = $container->get(CorveeHerinneringenModel::class);
