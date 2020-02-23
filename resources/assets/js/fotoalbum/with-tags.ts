@@ -197,10 +197,13 @@ const withTags: GalleryDecorator = (constructor) =>
 		}
 
 		private getScreenPos(position: Position): Position {
-			const img = this.imageElement;
-			const parent = img.parentElement!;
-			const w = img.clientWidth;
-			const h = img.clientHeight;
+			if (this.imageElement == null) {
+				return { size: 0, x: 0, y: 0 };
+			}
+
+			const parent = this.imageElement.parentElement!;
+			const w = this.imageElement.clientWidth;
+			const h = this.imageElement.clientHeight;
 			const fotoTopLeft = {
 				x: (parent.clientWidth - w) / 2,
 				y: (parent.clientHeight - h) / 2,

@@ -1,6 +1,7 @@
 import JGallery from 'jgallery';
 import {Size} from 'jgallery/src/preview';
 import withDownloadButton from './with-download-button';
+import withFullSizePreview from './with-full-size-preview';
 import withFullscreenButton from './with-fullscreen-button';
 import withHotkeys from './with-hotkeys';
 import withPreload from './with-preload';
@@ -22,7 +23,7 @@ const loadFotoAlbum = async () => {
 	for (const album of albums) {
 		const {isLoggedIn, magAanpassen, root, fotos} = album.dataset;
 
-		const decorators = [withFullscreenButton, withDownloadButton, withHotkeys, withPreload];
+		const decorators = [withFullscreenButton, withDownloadButton, withHotkeys, withPreload, withFullSizePreview];
 
 		if (isLoggedIn === 'true') {
 			const withTags = await import('./with-tags');
