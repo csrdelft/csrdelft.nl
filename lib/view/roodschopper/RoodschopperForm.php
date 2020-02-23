@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\roodschopper;
 
-use CsrDelft\model\Roodschopper;
+use CsrDelft\service\Roodschopper;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\required\RequiredBedragField;

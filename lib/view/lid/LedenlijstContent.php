@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\lid;
 
-use CsrDelft\model\LidZoeker;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\LidZoeker;
 use CsrDelft\view\View;
 
 /**

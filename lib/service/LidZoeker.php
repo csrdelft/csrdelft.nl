@@ -1,13 +1,13 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\service;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\LidStatus;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;

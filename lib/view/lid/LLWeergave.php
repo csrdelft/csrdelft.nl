@@ -3,7 +3,7 @@
 namespace CsrDelft\view\lid;
 
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\LidZoeker;
+use CsrDelft\service\LidZoeker;
 
 abstract class LLWeergave {
 

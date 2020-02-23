@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\service;
 
 /**
  * Roodschopperklasse.
@@ -14,9 +14,9 @@ namespace CsrDelft\model;
  */
 
 use CsrDelft\common\Ini;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
