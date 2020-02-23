@@ -4,25 +4,25 @@
 namespace CsrDelft\controller;
 
 
-use CsrDelft\model\ForumPlaatjeModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\ForumPlaatjeRepository;
 use CsrDelft\view\plaatjes\PlaatjesUploadModalForm;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ForumPlaatjesController {
-	/** @var ForumPlaatjeModel  */
-	private $forumPlaatjeModel;
+	/** @var ForumPlaatjeRepository  */
+	private $forumPlaatjeRepository;
 
-	public function __construct(ForumPlaatjeModel $forumPlaatjeModel) {
-		$this->forumPlaatjeModel = $forumPlaatjeModel;
+	public function __construct(ForumPlaatjeRepository $forumPlaatjeRepository) {
+		$this->forumPlaatjeRepository = $forumPlaatjeRepository;
 	}
 
 	public function upload() {
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
-			$plaatje = $this->forumPlaatjeModel->fromUploader($form->uploader, LoginModel::getUid());
+			$plaatje = $this->forumPlaatjeRepository->fromUploader($form->uploader, LoginModel::getUid());
 			return view('forum.insert_plaatje', ['plaatje' => $plaatje]);
 		} else {
 			return $form;
@@ -30,7 +30,7 @@ class ForumPlaatjesController {
 	}
 
 	public function bekijken($id, $resized=false) {
-		$plaatje = $this->forumPlaatjeModel->getByKey($id);
+		$plaatje = $this->forumPlaatjeRepository->getByKey($id);
 		if (!$plaatje) {
 			throw new NotFoundHttpException();
 		}

@@ -5,8 +5,9 @@ namespace CsrDelft\view\bbcode\tag;
 
 
 use CsrDelft\bb\BbException;
-use CsrDelft\model\entity\ForumPlaatje;
-use CsrDelft\model\ForumPlaatjeModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\ForumPlaatje;
+use CsrDelft\repository\ForumPlaatjeRepository;
 
 class BbForumPlaatje extends BbImg {
 
@@ -38,11 +39,13 @@ class BbForumPlaatje extends BbImg {
 
 	/**
 	 * @param array $arguments
+	 * @throws BbException
 	 */
 	public function parse($arguments = [])
 	{
 		$this->readMainArgument($arguments);
-		$plaatje = ForumPlaatjeModel::instance()->getByKey($this->content);
+		$forumPlaatjeRepository = ContainerFacade::getContainer()->get(ForumPlaatjeRepository::class);
+		$plaatje = $forumPlaatjeRepository->getByKey($this->content);
 		if (!$plaatje) {
 			throw new BbException("Plaatje bestaat niet");
 		}
