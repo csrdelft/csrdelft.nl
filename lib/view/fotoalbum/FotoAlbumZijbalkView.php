@@ -42,7 +42,7 @@ class FotoAlbumZijbalkView implements View {
 		}
 		shuffle($fotos);
 		for ($i = 0; $i < $limit; $i++) {
-			echo '<a href="' . $this->model->getUrl() . '#' . $fotos[$i]->getResizedUrl() . '"><img src="' . $fotos[$i]->getThumbUrl() . '"></a>';
+			echo '<a href="' . $this->model->getUrl() . '#' . $fotos[$i]->getFullUrl() . '"><img src="' . $fotos[$i]->getThumbUrl() . '"></a>';
 		}
 		echo '</div></div></div>';
 	}
