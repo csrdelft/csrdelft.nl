@@ -183,21 +183,6 @@
 							</a>
 						</li>
 						<li>
-							<a href="https://autoverzekering.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/logo-AVZ.png' alt='Autoverzekering vergelijken'>
-							</a>
-						</li>
-						<li>
-							<a href="https://www.easyswitch.nl/energie-vergelijken/">
-								<img src='https://csrdelft.nl/plaetjes/banners/logo-ES.png' alt='Energie vergelijken'>
-							</a>
-						</li>
-						<li>
-							<a href="https://overstappen.nl/autoverzekering">
-								<img src='https://csrdelft.nl/plaetjes/banners/logo-OS.png' alt='Goedkope autoverzekering'>
-							</a>
-						</li>
-						<li>
 							<a href="http://mechdes.nl/">
 								<img src='https://csrdelft.nl/plaetjes/banners/mechdes.gif' alt='Mechdes advertentie'>
 							</a>
