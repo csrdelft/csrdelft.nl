@@ -3,9 +3,10 @@
 namespace CsrDelft\model\security;
 
 use CsrDelft\common\Ini;
+use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
-use CsrDelft\model\entity\security\RememberLogin;
+use CsrDelft\repository\security\RememberLoginRepository;
 
 
 /**
@@ -40,11 +41,11 @@ class CliLoginModel extends LoginModel {
 	/**
 	 * CliLoginModel constructor.
 	 * @param AccountModel $accountModel
-	 * @param RememberLoginModel $rememberLoginModel
+	 * @param RememberLoginRepository $rememberLoginRepository
 	 */
-	public function __construct(AccountModel $accountModel, RememberLoginModel $rememberLoginModel) {
+	public function __construct(AccountModel $accountModel, RememberLoginRepository $rememberLoginRepository) {
 		parent::__static();
-		parent::__construct($accountModel, $rememberLoginModel);
+		parent::__construct($accountModel, $rememberLoginRepository);
 	}
 
 	public function authenticate() {

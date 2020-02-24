@@ -6,19 +6,19 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Ini;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccountModel;
-use CsrDelft\model\security\RememberLoginModel;
+use CsrDelft\repository\security\RememberLoginRepository;
 use Exception;
 use Firebase\JWT\JWT;
-use \Jacwright\RestServer\RestException;
+use Jacwright\RestServer\RestException;
 
 class ApiAuthController {
 	private $accountModel;
-	private $rememberLoginModel;
+	private $rememberLoginRepository;
 
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 
-		$this->rememberLoginModel = $container->get(RememberLoginModel::class);
+		$this->rememberLoginRepository = $container->get(RememberLoginRepository::class);
 		$this->accountModel = $container->get(AccountModel::class);
 	}
 
@@ -121,11 +121,11 @@ class ApiAuthController {
 		$rand = crypto_rand_token(255);
 
 		// Save the refresh token
-		$remember = $this->rememberLoginModel->nieuw();
+		$remember = $this->rememberLoginRepository->nieuw();
 		$remember->lock_ip = false;
 		$remember->device_name = 'API 2.0: ' . filter_var(strval($_SERVER['HTTP_USER_AGENT']), FILTER_SANITIZE_STRING);
 		$remember->token = hash('sha512', $rand);
-		$this->rememberLoginModel->create($remember);
+		$this->rememberLoginRepository->create($remember);
 
 		// Respond with both tokens
 		return [
@@ -148,7 +148,7 @@ class ApiAuthController {
 		$refresh_token = filter_var(strval($_POST['refresh_token']), FILTER_SANITIZE_STRING);
 
 		// Check refresh token
-		$remember = $this->rememberLoginModel->find('token = ?', array(hash('sha512', $refresh_token)), null, null, 1)->fetch();
+		$remember = $this->rememberLoginRepository->find('token = ?', array(hash('sha512', $refresh_token)), null, null, 1)->fetch();
 
 		if (!$remember) {
 			throw new RestException(401);

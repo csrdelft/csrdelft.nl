@@ -5,12 +5,13 @@ namespace CsrDelft\model\security;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
-use CsrDelft\model\entity\security\RememberLogin;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\Validator;
 
@@ -34,9 +35,9 @@ class LoginModel extends PersistenceModel implements Validator {
 	 */
 	private $accountModel;
 	/**
-	 * @var RememberLoginModel
+	 * @var RememberLoginRepository
 	 */
-	private $rememberLoginModel;
+	private $rememberLoginRepository;
 
 	/**
 	 * @return string
@@ -87,13 +88,13 @@ class LoginModel extends PersistenceModel implements Validator {
 	/**
 	 * LoginModel constructor.
 	 * @param AccountModel $accountModel
-	 * @param RememberLoginModel $rememberLoginModel
+	 * @param RememberLoginRepository $rememberLoginRepository
 	 */
-	public function __construct(AccountModel $accountModel, RememberLoginModel $rememberLoginModel) {
+	public function __construct(AccountModel $accountModel, RememberLoginRepository $rememberLoginRepository) {
 		parent::__construct();
 
 		$this->accountModel = $accountModel;
-		$this->rememberLoginModel = $rememberLoginModel;
+		$this->rememberLoginRepository = $rememberLoginRepository;
 	}
 
 	public function authenticate() {
@@ -116,7 +117,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 			// Remember login
 			if (isset($_COOKIE['remember'])) {
-				$remember = $this->rememberLoginModel->verifyToken($_COOKIE['remember']);
+				$remember = $this->rememberLoginRepository->verifyToken($_COOKIE['remember']);
 				if ($remember) {
 					$this->login($remember->uid, null, false, $remember, $remember->lock_ip);
 				}
@@ -380,10 +381,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	public function logout() {
 		// Forget autologin
 		if (isset($_COOKIE['remember'])) {
-			$remember = $this->rememberLoginModel->find('token = ?', array(hash('sha512', $_COOKIE['remember'])), null, null, 1)->fetch();
-			if ($remember) {
-				$this->rememberLoginModel->delete($remember);
-			}
+			$this->rememberLoginRepository->verwijder(hash('sha512', $_COOKIE['remember']));
 			setRememberCookie(null);
 		}
 		// Destroy login session

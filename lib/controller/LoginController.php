@@ -2,11 +2,10 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\security\RememberLoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
-use CsrDelft\view\cms\CmsPaginaView;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\login\RememberAfterLoginForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,16 +24,16 @@ class LoginController extends AbstractController {
 	 */
 	private $loginModel;
 	/**
-	 * @var RememberLoginModel
+	 * @var RememberLoginRepository
 	 */
-	private $rememberLoginModel;
+	private $rememberLoginRepository;
 	/**
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
 
-	public function __construct(LoginModel $loginModel, RememberLoginModel $rememberLoginModel, CmsPaginaRepository $cmsPaginaRepository) {
-		$this->rememberLoginModel = $rememberLoginModel;
+	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository, CmsPaginaRepository $cmsPaginaRepository) {
+		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->loginModel = $loginModel;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
@@ -56,8 +55,8 @@ class LoginController extends AbstractController {
 
 		if ($form->validate() && $this->loginModel->login($values['user'], $values['pass'])) {
 			if ($values['remember']) {
-				$remember = $this->rememberLoginModel->nieuw();
-				$this->rememberLoginModel->rememberLogin($remember);
+				$remember = $this->rememberLoginRepository->nieuw();
+				$this->rememberLoginRepository->rememberLogin($remember);
 			}
 
 			if ($values['redirect']) {

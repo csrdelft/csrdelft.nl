@@ -3,9 +3,9 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\security\RememberLogin;
+use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\security\RememberLoginModel;
+use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\LoginSessionsData;
@@ -16,19 +16,19 @@ use CsrDelft\view\login\RememberLoginForm;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 28/07/2019
  */
-class SessionController {
+class SessionController extends AbstractController {
 	/**
 	 * @var LoginModel
 	 */
 	private $loginModel;
 	/**
-	 * @var RememberLoginModel
+	 * @var RememberLoginRepository
 	 */
-	private $rememberLoginModel;
+	private $rememberLoginRepository;
 
-	public function __construct(LoginModel $loginModel, RememberLoginModel $rememberLoginModel) {
+	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository) {
 		$this->loginModel = $loginModel;
-		$this->rememberLoginModel = $rememberLoginModel;
+		$this->rememberLoginRepository = $rememberLoginRepository;
 	}
 
 	public function sessionsdata() {
@@ -53,29 +53,31 @@ class SessionController {
 			throw new CsrToegangException();
 		}
 		$response = array();
+		$manager = $this->getDoctrine()->getManager();
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
-			$remember = $this->rememberLoginModel->retrieveByUUID($UUID);
+			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
 			if (!$remember || $remember->uid !== LoginModel::getUid()) {
 				throw new CsrToegangException();
 			}
 			$remember->lock_ip = !$remember->lock_ip;
-			$this->rememberLoginModel->update($remember);
+			$manager->persist($remember);
 			$response[] = $remember;
 		}
+		$manager->flush();
 		return new RememberLoginData($response);
 	}
 
 	public function rememberdata() {
-		return new RememberLoginData($this->rememberLoginModel->find('uid = ?', array(LoginModel::getUid())));
+		return new RememberLoginData($this->rememberLoginRepository->findBy(['uid' => LoginModel::getUid()]));
 	}
 
 	public function remember() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (isset($selection[0])) {
-			$remember = $this->rememberLoginModel->retrieveByUUID($selection[0]);
+			$remember = $this->rememberLoginRepository->retrieveByUUID($selection[0]);
 		} else {
-			$remember = $this->rememberLoginModel->nieuw();
+			$remember = $this->rememberLoginRepository->nieuw();
 		}
 		if (!$remember || $remember->uid !== LoginModel::getUid()) {
 			throw new CsrToegangException();
@@ -83,9 +85,10 @@ class SessionController {
 		$form = new RememberLoginForm($remember);
 		if ($form->validate()) {
 			if ($remember->id) {
-				$this->rememberLoginModel->update($remember);
+				$this->getDoctrine()->getManager()->persist($remember);
+				$this->getDoctrine()->getManager()->flush();
 			} else {
-				$this->rememberLoginModel->rememberLogin($remember);
+				$this->rememberLoginRepository->rememberLogin($remember);
 			}
 			if (isset($_POST['DataTableId'])) {
 				return new RememberLoginData(array($remember));
@@ -101,11 +104,13 @@ class SessionController {
 	}
 
 	public function forgetAll() {
-		$remembers = $this->rememberLoginModel->find('uid = ?', [LoginModel::getUid()])->fetchAll();
+		$remembers = $this->rememberLoginRepository->findBy(['uid' => LoginModel::getUid()]);
 
+		$manager = $this->getDoctrine()->getManager();
 		foreach ($remembers as $remember) {
-			$this->rememberLoginModel->delete($remember);
+			$manager->remove($remember);
 		}
+		$manager->flush();
 
 		return new RemoveRowsResponse($remembers);
 	}
@@ -116,15 +121,17 @@ class SessionController {
 			throw new CsrToegangException();
 		}
 		$response = array();
+		$manager = $this->getDoctrine()->getManager();
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
-			$remember = $this->rememberLoginModel->retrieveByUUID($UUID);
+			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
 			if (!$remember || $remember->uid !== LoginModel::getUid()) {
 				throw new CsrToegangException();
 			}
-			$this->rememberLoginModel->delete($remember);
+			$manager->remove($remember);
 			$response[] = $remember;
 		}
+		$manager->flush();
 		return new RemoveRowsResponse($response);
 	}
 }

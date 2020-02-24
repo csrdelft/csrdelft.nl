@@ -8,7 +8,7 @@ use CsrDelft\view\Icon;
 class RememberLoginData extends DataTableResponse {
 
 	public function renderElement($remember) {
-		$array = $remember->jsonSerialize();
+		$array = (array)$remember;
 
 		$array['token'] = null; // keep it private
 
