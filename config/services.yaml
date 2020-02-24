@@ -57,3 +57,7 @@ services:
   CsrDelft\common\datatable\DataTableEntryNormalizer:
     tags:
       - { name: serializer.normalizer }
+
+  CsrDelft\common\datatable\RemoveDataTableEntryNormalizer:
+    tags:
+      - { name: serializer.normalizer }

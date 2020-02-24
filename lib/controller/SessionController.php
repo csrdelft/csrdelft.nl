@@ -118,8 +118,8 @@ class SessionController extends AbstractController {
 		$response = [];
 		$manager = $this->getDoctrine()->getManager();
 		foreach ($remembers as $remember) {
+			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);
 			$manager->remove($remember);
-			$response[] = new RemoveDataTableEntry($remember);
 		}
 		$manager->flush();
 
@@ -140,7 +140,7 @@ class SessionController extends AbstractController {
 				throw new CsrToegangException();
 			}
 			$manager->remove($remember);
-			$response[] = new RemoveDataTableEntry($remember);
+			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);
 		}
 		$manager->flush();
 		return new GenericDataTableResponse($this->serializer, $response);

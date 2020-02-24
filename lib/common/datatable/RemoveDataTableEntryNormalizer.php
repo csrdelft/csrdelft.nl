@@ -29,13 +29,20 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface 
 		$this->normalizer = $normalizer;
 	}
 
+	/**
+	 * @param RemoveDataTableEntry $removed
+	 * @param string|null $format
+	 * @param array $context
+	 * @return array|\ArrayObject|bool|float|int|string|null
+	 */
 	public function normalize($removed, string $format = null, array $context = []) {
-		$topic = $removed->getEntity();
+		$id = $removed->getId();
 
-		$metadata = $this->entityManager->getClassMetadata(get_class($topic));
-
+		if (!is_array($id)) {
+			$id = [$id];
+		}
 		return [
-			'UUID' => strtolower(sprintf('%s@%s.csrdelft.nl', implode('.', $metadata->getIdentifierValues($topic)), short_class($topic))),
+			'UUID' => strtolower(sprintf('%s@%s.csrdelft.nl', implode('.', $id), short_class($removed->getClass()))),
 			'remove' => true,
 		];
 	}

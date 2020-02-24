@@ -5,16 +5,25 @@ namespace CsrDelft\common\datatable;
 
 
 class RemoveDataTableEntry {
-	private $entity;
+	private $id;
+	private $class;
 
-	public function __construct($entity) {
-		$this->entity = $entity;
+	public function __construct($id, $class) {
+		$this->id = $id;
+		$this->class = $class;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getEntity() {
-		return $this->entity;
+	public function getId() {
+		return $this->id;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getClass() {
+		return $this->class;
 	}
 }
