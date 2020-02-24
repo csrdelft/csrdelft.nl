@@ -34,10 +34,17 @@ class IsHetAlView implements View {
 		'u het forum kan volgen met RSS?' => '/profiel#forum'
 	);
 
+	private static $redEenKindActief = true;
+	private static $redEenKindHuidig = 180;
+	private static $redEenKindDoel = 280;
+
 	public function __construct($ishetal) {
 		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
 			$opties = array_slice(LidInstellingenModel::instance()->getTypeOptions('zijbalk', 'ishetal'), 2);
+			if (!self::$redEenKindActief && ($key = array_search('red een kind', $opties)) !== false) {
+				unset($opties[$key]);
+			}
 			$this->model = $opties[array_rand($opties)];
 		}
 		switch ($this->model) {
@@ -47,9 +54,13 @@ class IsHetAlView implements View {
 				$this->ja = null;
 				break;
 
+			case 'red een kind':
+				$this->ja = self::$redEenKindHuidig >= self::$redEenKindDoel;
+				break;
+
 			case 'dies' :
-				$begin = strtotime('2020-02-11');
-				$einde = strtotime('2020-02-22');
+				$begin = strtotime('2021-02-09');
+				$einde = strtotime('2021-02-19');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
@@ -124,6 +135,10 @@ class IsHetAlView implements View {
 				echo '<iframe src="https://banner.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
 				break;
 
+			case 'red een kind':
+				echo 'Hebben we al genoeg geld voor Red een Kind?';
+				break;
+
 			case 'jarig':
 				echo 'Ben ik al jarig?';
 				break;
@@ -168,6 +183,11 @@ class IsHetAlView implements View {
 		} else {
 			// wist u dat
 		}
+
+		if ($this->model === 'red een kind') {
+			echo '<progress id="file" value="' . self::$redEenKindHuidig . '" max="' . self::$redEenKindDoel . '" title="€ ' . self::$redEenKindHuidig . ',- van € ' . self::$redEenKindDoel . ',-"></progress>';
+		}
+
 		echo '</div>';
 	}
 
