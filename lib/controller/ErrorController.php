@@ -17,11 +17,16 @@ class ErrorController {
 	public function handleException(RequestStack $requestStack, Throwable $exception, ContainerInterface $container) {
 		$request = $requestStack->getMasterRequest();
 
-		if ($request->getMethod() == 'POST') {
-			return new Response($exception->getMessage(), $exception->getStatusCode());
+		$statusCode = 500;
+		if (method_exists($exception, 'getStatusCode')) {
+			$statusCode = $exception->getStatusCode();
 		}
 
-		switch ($exception->getStatusCode()) {
+		if ($request->getMethod() == 'POST') {
+			return new Response($exception->getMessage(), $statusCode);
+		}
+
+		switch ($statusCode) {
 			case Response::HTTP_BAD_REQUEST:
 			{
 				return new Response(view('fout.400', ['bericht' => $exception->getMessage()]), Response::HTTP_BAD_REQUEST);
