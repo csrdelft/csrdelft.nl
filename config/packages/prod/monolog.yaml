@@ -10,4 +10,5 @@ monolog:
             channel: '%app.slack.channel%'
             icon_emoji: '%app.slack.icon%'
             bot_name: '%app.slack.username%'
+            include_extra: true
             level: critical
