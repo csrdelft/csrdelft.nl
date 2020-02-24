@@ -3,14 +3,18 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\security\RememberLoginRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\LoginSessionsData;
 use CsrDelft\view\login\RememberLoginData;
 use CsrDelft\view\login\RememberLoginForm;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -25,10 +29,15 @@ class SessionController extends AbstractController {
 	 * @var RememberLoginRepository
 	 */
 	private $rememberLoginRepository;
+	/**
+	 * @var SerializerInterface
+	 */
+	private $serializer;
 
-	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository) {
+	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository, SerializerInterface $serializer) {
 		$this->loginModel = $loginModel;
 		$this->rememberLoginRepository = $rememberLoginRepository;
+		$this->serializer = $serializer;
 	}
 
 	public function sessionsdata() {
@@ -44,7 +53,7 @@ class SessionController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		$deleted = $this->loginModel->delete($session);
-		return new RemoveRowsResponse(array($session), $deleted === 1 ? 200 : 404);
+		return new RemoveRowsResponse([$session], $deleted === 1 ? 200 : 404);
 	}
 
 	public function lockip() {
@@ -52,7 +61,7 @@ class SessionController extends AbstractController {
 		if (!$selection) {
 			throw new CsrToegangException();
 		}
-		$response = array();
+		$response = [];
 		$manager = $this->getDoctrine()->getManager();
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
@@ -65,15 +74,16 @@ class SessionController extends AbstractController {
 			$response[] = $remember;
 		}
 		$manager->flush();
-		return new RememberLoginData($response);
+		return new GenericDataTableResponse($this->serializer, $response);
 	}
 
 	public function rememberdata() {
-		return new RememberLoginData($this->rememberLoginRepository->findBy(['uid' => LoginModel::getUid()]));
+		$rememberLogins = $this->rememberLoginRepository->findBy(['uid' => LoginModel::getUid()]);
+		return new GenericDataTableResponse($this->serializer, $rememberLogins);
 	}
 
 	public function remember() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		if (isset($selection[0])) {
 			$remember = $this->rememberLoginRepository->retrieveByUUID($selection[0]);
 		} else {
@@ -91,11 +101,10 @@ class SessionController extends AbstractController {
 				$this->rememberLoginRepository->rememberLogin($remember);
 			}
 			if (isset($_POST['DataTableId'])) {
-				return new RememberLoginData(array($remember));
+				return new GenericDataTableResponse($this->serializer, [$remember]);
 			} else if (!empty($_POST['redirect'])) {
 				return new JsonResponse($_POST['redirect']);
-			}
-			else {
+			} else {
 				return new JsonResponse(CSR_ROOT);
 			}
 		} else {
@@ -106,13 +115,15 @@ class SessionController extends AbstractController {
 	public function forgetAll() {
 		$remembers = $this->rememberLoginRepository->findBy(['uid' => LoginModel::getUid()]);
 
+		$response = [];
 		$manager = $this->getDoctrine()->getManager();
 		foreach ($remembers as $remember) {
 			$manager->remove($remember);
+			$response[] = new RemoveDataTableEntry($remember);
 		}
 		$manager->flush();
 
-		return new RemoveRowsResponse($remembers);
+		return new GenericDataTableResponse($this->serializer, $response);
 	}
 
 	public function forget() {
@@ -120,7 +131,7 @@ class SessionController extends AbstractController {
 		if (!$selection) {
 			throw new CsrToegangException();
 		}
-		$response = array();
+		$response = [];
 		$manager = $this->getDoctrine()->getManager();
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
@@ -129,9 +140,9 @@ class SessionController extends AbstractController {
 				throw new CsrToegangException();
 			}
 			$manager->remove($remember);
-			$response[] = $remember;
+			$response[] = new RemoveDataTableEntry($remember);
 		}
 		$manager->flush();
-		return new RemoveRowsResponse($response);
+		return new GenericDataTableResponse($this->serializer, $response);
 	}
 }

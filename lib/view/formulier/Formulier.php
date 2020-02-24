@@ -7,6 +7,7 @@ use CsrDelft\model\ChangeLogModel;
 use CsrDelft\service\CsrfService;
 use CsrDelft\model\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
@@ -57,7 +58,9 @@ class Formulier implements View, Validator, ToResponse {
 		$this->css_classes[] = 'Formulier';
 		// Link with DataTable?
 		if ($dataTableId === true) {
-			$this->dataTableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
+			$this->dataTableId = ContainerFacade::getContainer()->get('request_stack')
+				->getCurrentRequest()
+				->request->filter('DataTableId', [], FILTER_SANITIZE_STRING);
 		} else {
 			$this->dataTableId = $dataTableId;
 		}

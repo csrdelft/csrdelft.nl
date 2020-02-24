@@ -377,6 +377,9 @@
     "symfony/http-kernel": {
         "version": "v3.4.32"
     },
+    "symfony/inflector": {
+        "version": "v5.0.4"
+    },
     "symfony/mime": {
         "version": "v5.0.2"
     },
@@ -418,6 +421,12 @@
     "symfony/profiler-pack": {
         "version": "v1.0.4"
     },
+    "symfony/property-access": {
+        "version": "v5.0.4"
+    },
+    "symfony/property-info": {
+        "version": "v5.0.4"
+    },
     "symfony/routing": {
         "version": "3.3",
         "recipe": {
@@ -436,6 +445,12 @@
     },
     "symfony/security-csrf": {
         "version": "v3.4.35"
+    },
+    "symfony/serializer": {
+        "version": "v5.0.4"
+    },
+    "symfony/serializer-pack": {
+        "version": "v1.0.2"
     },
     "symfony/service-contracts": {
         "version": "v2.0.1"

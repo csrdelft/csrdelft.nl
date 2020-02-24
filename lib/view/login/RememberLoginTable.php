@@ -13,7 +13,7 @@ class RememberLoginTable extends DataTable {
 	public function __construct() {
 		parent::__construct(RememberLogin::class, '/session/rememberdata', 'Automatisch inloggen');
 		$this->settings['tableTools']['aButtons'] = array();
-		$this->hideColumn('token');
+		$this->deleteColumn('token');
 		$this->hideColumn('uid');
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');

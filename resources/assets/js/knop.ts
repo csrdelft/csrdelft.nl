@@ -56,8 +56,8 @@ function knopAjax(knop: JQuery, type: string) {
 	if (knop.hasClass('DataTableRowKnop')) {
 		const dataTableId = knop.parents('table').attr('id');
 		data = {
-			'DataTableId': dataTableId,
-			'DataTableSelection[]': [knop.parents('tr').attr('data-uuid')],
+			DataTableId: dataTableId,
+			DataTableSelection: knop.parents('tr').attr('data-uuid'),
 		};
 
 		done = (response: any) => {

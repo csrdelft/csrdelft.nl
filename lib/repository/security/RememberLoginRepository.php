@@ -3,6 +3,7 @@
 namespace CsrDelft\repository\security;
 
 use CsrDelft\entity\security\RememberLogin;
+use CsrDelft\model\RetrieveByUuidTrait;
 use CsrDelft\model\security\LoginModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -19,6 +20,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method RememberLogin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class RememberLoginRepository extends ServiceEntityRepository {
+	use RetrieveByUuidTrait;
+
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, RememberLogin::class);
 	}
@@ -84,18 +87,11 @@ class RememberLoginRepository extends ServiceEntityRepository {
 		return $remember;
 	}
 
-	public function retrieveByUuid($UUID) {
-		/** @var ClassMetadata $metadata */
-		$metadata = $this->getClassMetadata();
-
-		$parts = explode('@', $UUID, 2);
-		$primary_key_values = explode('.', $parts[0]);
-		return $this->findOneBy(array_combine($metadata->getIdentifierFieldNames(), $primary_key_values));
-	}
-
 	public function verwijder($token) {
 		$rememberLogin = $this->findOneBy(['token' => $token]);
-		$this->getEntityManager()->remove($rememberLogin);
-		$this->getEntityManager()->flush();
+		if ($rememberLogin) {
+			$this->getEntityManager()->remove($rememberLogin);
+			$this->getEntityManager()->flush();
+		}
 	}
 }

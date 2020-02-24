@@ -53,3 +53,7 @@ services:
   CsrDelft\events\JsonBodyEventListener:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
+
+  CsrDelft\common\datatable\DataTableEntryNormalizer:
+    tags:
+      - { name: serializer.normalizer }
