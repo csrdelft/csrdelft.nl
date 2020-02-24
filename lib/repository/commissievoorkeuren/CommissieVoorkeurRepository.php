@@ -17,8 +17,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method VoorkeurVoorkeur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CommissieVoorkeurRepository extends ServiceEntityRepository {
-	const ORM = VoorkeurVoorkeur::class;
-
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, VoorkeurVoorkeur::class);
 	}
@@ -54,8 +52,8 @@ class CommissieVoorkeurRepository extends ServiceEntityRepository {
 		$voorkeur = $this->find(['uid' => $profiel->uid, 'cid' => $commissie->id]);
 		if ($voorkeur == null) {
 			$voorkeur = new VoorkeurVoorkeur();
-			$voorkeur->profiel = $profiel;
-			$voorkeur->commissie = $commissie;
+			$voorkeur->setProfiel($profiel);
+			$voorkeur->setCommissie($commissie);
 			$voorkeur->voorkeur = 1;
 		}
 		return $voorkeur;

@@ -2,11 +2,8 @@
 
 namespace CsrDelft\entity\commissievoorkeuren;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\security\AccessModel;
-use CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository;
-use CsrDelft\repository\ProfielRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -64,6 +61,26 @@ class VoorkeurVoorkeur {
 	 * @ORM\JoinColumn(name="cid")
 	 */
 	public $commissie;
+
+	/**
+	 * cid is onderdeel van primary key en moet dus gezet zijn bij saven.
+	 *
+	 * @param VoorkeurCommissie $commissie
+	 */
+	public function setCommissie(VoorkeurCommissie $commissie) {
+		$this->commissie = $commissie;
+		$this->cid = $commissie->id;
+	}
+
+	/**
+	 * uid is onderdeel van primary key en moet dus gezet zijn bij saven.
+	 *
+	 * @param Profiel $profiel
+	 */
+	public function setProfiel(Profiel $profiel) {
+		$this->profiel = $profiel;
+		$this->uid = $profiel->uid;
+	}
 
 	public function heeftGedaan() {
 		return AccessModel::mag($this->profiel->getAccount(), 'commissie:' . $this->commissie->naam . ',commissie:' . $this->commissie->naam . ':ot');
