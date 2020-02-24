@@ -180,7 +180,7 @@ const withTags: GalleryDecorator = (constructor) =>
 			// get new ones
 			const url = this.getUrl();
 			const data = new FormData();
-			data.append('foto', basename(url));
+			data.append('foto', basename(decodeURI(url)));
 			axios.post('/fotoalbum/gettags' + dirname(url), data)
 				.then((response) => this.drawTags(response.data));
 		}
@@ -322,7 +322,7 @@ const withTags: GalleryDecorator = (constructor) =>
 		private addTag(position: Position) {
 			const url = this.getUrl();
 			const data = new FormData();
-			data.append('foto', basename(url));
+			data.append('foto', basename(decodeURI(url)));
 			data.append('x', Math.round(position.x).toString());
 			data.append('y', Math.round(position.y).toString());
 			data.append('size', Math.round(position.size).toString());
