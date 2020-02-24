@@ -45,7 +45,7 @@
 	</div>
 	<div class="field">
 		<label for="telefoon">Telefoon</label>
-		<input type="text" name="telefoon" id="telefoon"/>
+		<input type="text" name="telefoon" id="telefoon" required/>
 	</div>
 	<div class="field">
 		<input type="checkbox" id="interesse1" name="interesse1"
