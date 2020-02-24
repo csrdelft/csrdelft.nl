@@ -100,8 +100,12 @@ class Formulier implements View, Validator, ToResponse {
 
 	private function loadProperty(InputField $field) {
 		$fieldName = $field->getName();
-		if ($this->model && property_exists($this->model, $fieldName)) {
-			$this->model->$fieldName = $field->getFormattedValue();
+		if ($this->model) {
+			if (method_exists($this->model, 'set' . ucfirst($fieldName))) {
+				call_user_func([$this->model, 'set' . ucfirst($fieldName)], $field->getFormattedValue());
+			} elseif (property_exists($this->model, $fieldName)) {
+				$this->model->$fieldName = $field->getFormattedValue();
+			}
 		}
 	}
 

@@ -19,6 +19,7 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\view\datatable\DataTableColumn;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use GuzzleHttp\Exception\RequestException;
@@ -843,5 +844,9 @@ class Profiel implements Agendeerbaar {
 			return true;
 		}
 		return in_array($this->status, Profiel::$properties_lidstatus[$name]);
+	}
+
+	public function getDataTableColumn() {
+		return new DataTableColumn($this->getLink('volledig'), $this->achternaam, $this->getNaam('volledig'));
 	}
 }

@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\model\entity\groepen\GroepStatus;
@@ -14,6 +15,7 @@ use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenForm;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenResponse;
@@ -23,40 +25,47 @@ use CsrDelft\view\eetplan\EetplanBekendenTable;
 use CsrDelft\view\eetplan\EetplanHuizenResponse;
 use CsrDelft\view\eetplan\EetplanHuizenTable;
 use CsrDelft\view\eetplan\EetplanHuizenZoekenResponse;
-use CsrDelft\view\eetplan\EetplanRelatieResponse;
 use CsrDelft\view\eetplan\NieuwEetplanForm;
 use CsrDelft\view\eetplan\VerwijderEetplanForm;
 use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Controller voor eetplan.
  */
-class EetplanController {
+class EetplanController extends AbstractController {
 	/** @var string */
 	private $lichting;
 	/** @var EetplanRepository */
-	private $eetplanModel;
+	private $eetplanRepository;
 	/** @var EetplanBekendenRepository */
-	private $eetplanBekendenModel;
+	private $eetplanBekendenRepository;
 	/** @var WoonoordenModel */
 	private $woonoordenModel;
+	/**
+	 * @var SerializerInterface
+	 */
+	private $serializer;
 
 	public function __construct(
+		SerializerInterface $serializer,
 		EetplanRepository $eetplanRepository,
 		EetplanBekendenRepository $eetplanBekendenModel,
 		WoonoordenModel $woonoordenModel
 	) {
-		$this->eetplanModel = $eetplanRepository;
-		$this->eetplanBekendenModel = $eetplanBekendenModel;
+		$this->eetplanRepository = $eetplanRepository;
+		$this->eetplanBekendenRepository = $eetplanBekendenModel;
 		$this->woonoordenModel = $woonoordenModel;
 		$this->lichting = substr((string)LichtingenModel::getJongsteLidjaar(), 2, 2);
+		$this->serializer = $serializer;
 	}
 
 	public function view() {
 		return view('eetplan.overzicht', [
-			'eetplan' => $this->eetplanModel->getEetplan($this->lichting)
+			'eetplan' => $this->eetplanRepository->getEetplan($this->lichting)
 		]);
 	}
 
@@ -66,19 +75,19 @@ class EetplanController {
 	 * @throws CsrToegangException
 	 */
 	public function noviet($uid = null) {
-		$eetplan = $this->eetplanModel->getEetplanVoorNoviet($uid);
+		$eetplan = $this->eetplanRepository->getEetplanVoorNoviet($uid);
 		if ($eetplan === false) {
 			throw new CsrNotFoundException("Geen eetplan gevonden voor deze noviet");
 		}
 
 		return view('eetplan.noviet', [
 			'noviet' => ProfielRepository::get($uid),
-			'eetplan' => $this->eetplanModel->getEetplanVoorNoviet($uid)
+			'eetplan' => $this->eetplanRepository->getEetplanVoorNoviet($uid)
 		]);
 	}
 
 	public function huis($id = null) {
-		$eetplan = $this->eetplanModel->getEetplanVoorHuis($id, $this->lichting);
+		$eetplan = $this->eetplanRepository->getEetplanVoorHuis($id, $this->lichting);
 		if ($eetplan == []) {
 			throw new CsrGebruikerException('Huis niet gevonden');
 		}
@@ -91,7 +100,7 @@ class EetplanController {
 
 	public function woonoorden($actie = null) {
 		if ($actie == 'toggle') {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			$selection = $this->getDataTableSelection();
 			$woonoorden = [];
 			foreach ($selection as $woonoord) {
 				/** @var Woonoord $woonoord */
@@ -112,7 +121,7 @@ class EetplanController {
 	 * @throws CsrToegangException
 	 */
 	public function bekendehuizen() {
-		return new EetplanBekendeHuizenResponse($this->eetplanModel->getBekendeHuizen($this->lichting));
+		return new EetplanBekendeHuizenResponse($this->eetplanRepository->getBekendeHuizen($this->lichting));
 	}
 
 	public function bekendehuizen_toevoegen() {
@@ -121,53 +130,53 @@ class EetplanController {
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/toevoegen');
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanModel->exists($eetplan)) {
+		} elseif ($this->eetplanRepository->exists($eetplan)) {
 			setMelding('Deze noviet is al eens op dit huis geweest', -1);
 			return $form;
 		} else {
-			$this->eetplanModel->create($eetplan);
-			return new EetplanBekendeHuizenResponse($this->eetplanModel->getBekendeHuizen($this->lichting));
+			$this->eetplanRepository->create($eetplan);
+			return new EetplanBekendeHuizenResponse($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		}
 	}
 
 	public function bekendehuizen_bewerken($uuid = null) {
 		if (!$uuid) {
-			$uuid = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY)[0];
+			$uuid = $this->getDataTableSelection()[0];
 		}
 
-		$eetplan = $this->eetplanModel->retrieveByUUID($uuid);
+		$eetplan = $this->eetplanRepository->retrieveByUUID($uuid);
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/bewerken/' . $uuid, true);
 		if ($form->isPosted() && $form->validate()) {
-			$this->eetplanModel->update($eetplan);
-			return new EetplanBekendeHuizenResponse($this->eetplanModel->getBekendeHuizen($this->lichting));
+			$this->eetplanRepository->update($eetplan);
+			return new EetplanBekendeHuizenResponse($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		} else {
 			return $form;
 		}
 	}
 
 	public function bekendehuizen_verwijderen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		$verwijderd = array();
 		if ($selection !== false) {
 			foreach ($selection as $uuid) {
-				$eetplan = $this->eetplanModel->retrieveByUUID($uuid);
+				$eetplan = $this->eetplanRepository->retrieveByUUID($uuid);
 				if ($eetplan === false) continue;
-				$this->eetplanModel->delete($eetplan);
+				$this->eetplanRepository->delete($eetplan);
 				$verwijderd[] = $eetplan;
 			}
 		}
 		return new RemoveRowsResponse($verwijderd);
 	}
 
-	public function bekendehuizen_zoeken() {
-		$huisnaam = filter_input(INPUT_GET, 'q');
+	public function bekendehuizen_zoeken(Request $request) {
+		$huisnaam = $request->query->get('q');
 		$huisnaam = '%' . $huisnaam . '%';
 		$woonoorden = $this->woonoordenModel->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
 		return new EetplanHuizenZoekenResponse($woonoorden);
 	}
 
 	public function novietrelatie() {
-		return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
+		return new GenericDataTableResponse($this->serializer, $this->eetplanBekendenRepository->getBekenden($this->lichting));
 	}
 
 	public function novietrelatie_toevoegen() {
@@ -175,39 +184,39 @@ class EetplanController {
 		$form = new EetplanBekendenForm($eetplanbekenden, '/eetplan/novietrelatie/toevoegen');
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanBekendenModel->exists($eetplanbekenden)) {
+		} elseif ($this->eetplanBekendenRepository->exists($eetplanbekenden)) {
 			setMelding('Bekenden bestaan al', -1);
 			return $form;
 		} else {
-			$this->eetplanBekendenModel->create($eetplanbekenden);
-			return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
+			$this->eetplanBekendenRepository->create($eetplanbekenden);
+			return new GenericDataTableResponse($this->serializer, $this->eetplanBekendenRepository->getBekenden($this->lichting));
 		}
 	}
 
 	public function novietrelatie_bewerken($uuid) {
 		if (!$uuid) {
-			$uuid = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY)[0];
+			$uuid = $this->getDataTableSelection()[0];
 		}
 
-		$eetplanbekenden = $this->eetplanBekendenModel->retrieveByUUID($uuid);
+		$eetplanbekenden = $this->eetplanBekendenRepository->retrieveByUUID($uuid);
 		$form = new EetplanBekendenForm($eetplanbekenden, '/eetplan/novietrelatie/bewerken/' . $uuid, true);
 		if ($form->isPosted() && $form->validate()) {
-			$this->eetplanBekendenModel->update($eetplanbekenden);
-			return new EetplanRelatieResponse($this->eetplanBekendenModel->getBekenden($this->lichting));
+			$this->eetplanBekendenRepository->update($eetplanbekenden);
+			return new GenericDataTableResponse($this->serializer, $this->eetplanBekendenRepository->getBekenden($this->lichting));
 		} else {
 			return $form;
 		}
 	}
 
 	public function novietrelatie_verwijderen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$verwijderd = array();
+		$selection = $this->getDataTableSelection();
+		$verwijderd = [];
 		foreach ($selection as $uuid) {
-			$bekenden = $this->eetplanBekendenModel->retrieveByUUID($uuid);
-			$this->eetplanBekendenModel->delete($bekenden);
-			$verwijderd[] = $bekenden;
+			$bekenden = $this->eetplanBekendenRepository->retrieveByUUID($uuid);
+			$this->eetplanBekendenRepository->delete($bekenden);
+			$verwijderd[] = new RemoveDataTableEntry([$bekenden->uid1, $bekenden->uid2], EetplanBekenden::class);
 		}
-		return new RemoveRowsResponse($verwijderd);
+		return new GenericDataTableResponse($this->serializer, $verwijderd);
 	}
 
 	/**
@@ -220,7 +229,7 @@ class EetplanController {
 			'bekendentable' => new EetplanBekendenTable(),
 			'huizentable' => new EetplanHuizenTable(),
 			'bekendehuizentable' => new EetplanBekendeHuizenTable(),
-			'eetplan' => $this->eetplanModel->getEetplan($this->lichting)
+			'eetplan' => $this->eetplanRepository->getEetplan($this->lichting)
 		]);
 	}
 
@@ -229,32 +238,32 @@ class EetplanController {
 
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanModel->ormCount("avond = ?", array($form->getValues()['avond'])) > 0) {
+		} elseif ($this->eetplanRepository->ormCount("avond = ?", array($form->getValues()['avond'])) > 0) {
 			setMelding('Er bestaat al een eetplan met deze datum', -1);
 			return $form;
 		} else {
 			$avond = $form->getValues()['avond'];
-			$eetplan = $this->eetplanModel->maakEetplan($avond, $this->lichting);
+			$eetplan = $this->eetplanRepository->maakEetplan($avond, $this->lichting);
 
 			foreach ($eetplan as $sessie) {
-				$this->eetplanModel->create($sessie);
+				$this->eetplanRepository->create($sessie);
 			}
 
-			return view('eetplan.table', ['eetplan' => $this->eetplanModel->getEetplan($this->lichting)]);
+			return view('eetplan.table', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);
 		}
 	}
 
 	public function verwijderen() {
-		$avonden = $this->eetplanModel->getAvonden($this->lichting);
+		$avonden = $this->eetplanRepository->getAvonden($this->lichting);
 		$form = new VerwijderEetplanForm($avonden);
 
 		if (!$form->validate()) {
 			return $form;
 		} else {
 			$avond = date_create($form->getValues()['avond']);
-			$this->eetplanModel->verwijderEetplan($avond, $this->lichting);
+			$this->eetplanRepository->verwijderEetplan($avond, $this->lichting);
 
-			return view('eetplan.table', ['eetplan' => $this->eetplanModel->getEetplan($this->lichting)]);
+			return view('eetplan.table', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);
 		}
 	}
 }
