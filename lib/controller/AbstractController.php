@@ -20,9 +20,15 @@ class AbstractController extends BaseController {
 	 * @return string[]
 	 */
 	protected function getDataTableSelection() {
-		return $this->container->get('request_stack')
+		$selection = $this->container->get('request_stack')
 			->getCurrentRequest()
 			->request->filter(DataTable::POST_SELECTION, [], FILTER_SANITIZE_STRING);
+
+		if (is_string($selection)) {
+			return [$selection];
+		}
+
+		return $selection;
 	}
 
 	/**
