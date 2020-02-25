@@ -8,6 +8,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\model\groepen\LichtingenModel;
@@ -16,9 +17,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\view\datatable\GenericDataTableResponse;
-use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenForm;
-use CsrDelft\view\eetplan\EetplanBekendeHuizenResponse;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenTable;
 use CsrDelft\view\eetplan\EetplanBekendenForm;
 use CsrDelft\view\eetplan\EetplanBekendenTable;
@@ -28,6 +27,7 @@ use CsrDelft\view\eetplan\EetplanHuizenZoekenResponse;
 use CsrDelft\view\eetplan\NieuwEetplanForm;
 use CsrDelft\view\eetplan\VerwijderEetplanForm;
 use CsrDelft\view\View;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -116,17 +116,12 @@ class EetplanController extends AbstractController {
 		}
 	}
 
-	/**
-	 * @return View
-	 * @throws CsrToegangException
-	 */
 	public function bekendehuizen() {
-		return new EetplanBekendeHuizenResponse($this->eetplanRepository->getBekendeHuizen($this->lichting));
+		return new GenericDataTableResponse($this->serializer, $this->eetplanRepository->getBekendeHuizen($this->lichting));
 	}
 
-	public function bekendehuizen_toevoegen() {
+	public function bekendehuizen_toevoegen(EntityManagerInterface $em) {
 		$eetplan = new Eetplan();
-		$eetplan->avond = '0000-00-00';
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/toevoegen');
 		if (!$form->validate()) {
 			return $form;
@@ -134,8 +129,9 @@ class EetplanController extends AbstractController {
 			setMelding('Deze noviet is al eens op dit huis geweest', -1);
 			return $form;
 		} else {
+			$eetplan->noviet = $em->getReference(Profiel::class, $eetplan->uid);
 			$this->eetplanRepository->create($eetplan);
-			return new EetplanBekendeHuizenResponse($this->eetplanRepository->getBekendeHuizen($this->lichting));
+			return new GenericDataTableResponse($this->serializer, $this->eetplanRepository->getBekendeHuizen($this->lichting));
 		}
 	}
 
@@ -148,7 +144,7 @@ class EetplanController extends AbstractController {
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/bewerken/' . $uuid, true);
 		if ($form->isPosted() && $form->validate()) {
 			$this->eetplanRepository->update($eetplan);
-			return new EetplanBekendeHuizenResponse($this->eetplanRepository->getBekendeHuizen($this->lichting));
+			return new GenericDataTableResponse($this->serializer, $this->eetplanRepository->getBekendeHuizen($this->lichting));
 		} else {
 			return $form;
 		}
@@ -162,10 +158,10 @@ class EetplanController extends AbstractController {
 				$eetplan = $this->eetplanRepository->retrieveByUUID($uuid);
 				if ($eetplan === false) continue;
 				$this->eetplanRepository->delete($eetplan);
-				$verwijderd[] = $eetplan;
+				$verwijderd[] = new RemoveDataTableEntry([$eetplan->uid, $eetplan->woonoord_id], Eetplan::class);
 			}
 		}
-		return new RemoveRowsResponse($verwijderd);
+		return new GenericDataTableResponse($this->serializer, $verwijderd);
 	}
 
 	public function bekendehuizen_zoeken(Request $request) {

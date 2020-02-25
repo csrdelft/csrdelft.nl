@@ -52,6 +52,7 @@ class EntityField extends InputField {
 		parent::__construct($name, $this->entity->$show, $description, $model);
 		$this->suggestions[] = $url;
 		$this->show_value = $show;
+		$this->origvalue = $this->entity->$key;
 		$this->value = $this->getValue();
 	}
 

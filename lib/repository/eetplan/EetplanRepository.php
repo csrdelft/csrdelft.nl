@@ -150,7 +150,7 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @return Eetplan[]
 	 */
 	public function getBekendeHuizen($lichting) {
-		return $this->ormFind('uid LIKE ? AND avond = "0000-00-00"', [$lichting . "%"]);
+		return $this->ormFind('uid LIKE ? AND avond IS NULL', [$lichting . "%"]);
 	}
 
 	/**
