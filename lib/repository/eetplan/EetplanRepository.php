@@ -50,7 +50,7 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
 	public function getAvonden($lichting) {
-		return $this->ormFind('uid LIKE ? AND avond <> "0000-00-00"', [$lichting . "%"], 'avond');
+		return $this->ormFind('uid LIKE ? AND avond IS NOT NULL', [$lichting . "%"], 'avond');
 	}
 
 	/**
@@ -63,10 +63,10 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @return array Het eetplan
 	 */
 	public function getEetplan($lichting) {
-		// Avond 0000-00-00 wordt gebruikt voor novieten die huizen kennen
+		// Avond null wordt gebruikt voor novieten die huizen kennen
 		// Orderen bij avond, zodat de avondvolgorde per noviet klopt
 		/** @var Eetplan[] $eetplan */
-		$eetplan = $this->ormFind('uid LIKE ? AND avond <> "0000-00-00"', [$lichting . "%"], null, 'avond');
+		$eetplan = $this->ormFind('uid LIKE ? AND avond IS NOT NULL', [$lichting . "%"], null, 'avond');
 		$eetplanFeut = [];
 		$avonden = [];
 		foreach ($eetplan as $sessie) {
@@ -125,7 +125,7 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @return Eetplan[]|false lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
 	 */
 	public function getEetplanVoorNoviet($uid) {
-		return $this->ormFind('uid = ? AND avond <> "0000-00-00"', [$uid], null, 'avond');
+		return $this->ormFind('uid = ? AND avond IS NOT NULL', [$uid], null, 'avond');
 	}
 
 	/**
@@ -135,7 +135,7 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @return Eetplan[] lijst van eetplansessies voor dit huis, gegroepeerd op avond (oplopend)
 	 */
 	public function getEetplanVoorHuis($id, $lichting) {
-		$sessies = $this->ormFind('uid LIKE ? AND woonoord_id = ? AND avond <> "0000-00-00"', [$lichting . "%", $id], null, 'avond');
+		$sessies = $this->ormFind('uid LIKE ? AND woonoord_id = ? AND avond IS NOT NULL', [$lichting . "%", $id], null, 'avond');
 
 		return array_reduce($sessies, function (array $accumulator, Eetplan $eetplan) {
 			$accumulator[$eetplan->avond->format(self::FMT_DATE)][] = $eetplan;
