@@ -55,6 +55,7 @@ class CourantBericht {
 
 	public function setVolgorde() {
 		$this->volgorde = [
+			null => null,
 			'voorwoord' => 0,
 			'bestuur' => 1,
 			'csr' => 2,
