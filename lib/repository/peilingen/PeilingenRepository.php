@@ -7,7 +7,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingStem;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -41,10 +40,10 @@ class PeilingenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param PersistentEntity|Peiling $entity
+	 * @param Peiling $entity
 	 * @return void
 	 */
-	public function delete(PersistentEntity $entity) {
+	public function delete(Peiling $entity) {
 		$manager = $this->getEntityManager();
 
 		$manager->beginTransaction();
