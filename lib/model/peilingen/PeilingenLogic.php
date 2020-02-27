@@ -180,24 +180,5 @@ class PeilingenLogic {
 		$magStemmenZien = ($this->peilingStemmenModel->heeftgestemd($peilingId, $uid) || !$peiling->getMagStemmen()) && $peiling->resultaat_zichtbaar;
 
 		return $this->serializer->serialize($opties, 'json', ['groups' => 'vue']);
-
-		return array_map(function (PeilingOptie $optie) use ($magStemmenZien, $peiling) {
-			$arr = (array)$optie;
-
-			// Als iemand nog niet gestemd heeft is deze info niet zichtbaar.
-			if (!$magStemmenZien && !$this->peilingenModel->magBewerken($peiling)) {
-				$arr['stemmen'] = 0;
-			}
-
-			$arr['beschrijving'] = CsrBB::parse($arr['beschrijving']);
-
-			$ingebrachtDoor = ProfielRepository::get($optie->ingebracht_door);
-
-			$arr['ingebracht_door'] = $ingebrachtDoor
-				? new DataTableColumn($ingebrachtDoor->getLink('volledig'), $ingebrachtDoor->achternaam, $ingebrachtDoor->getNaam('volledig'))
-				: null;
-
-			return $arr;
-		}, $opties);
 	}
 }

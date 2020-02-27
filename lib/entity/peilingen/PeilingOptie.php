@@ -46,7 +46,7 @@ class PeilingOptie implements DataTableEntry {
 	 * Aantal stemmen
 	 * @var int
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "vue"})
+	 * @Serializer\Groups({"datatable"})
 	 */
 	public $stemmen = 0;
 	/**
@@ -55,6 +55,21 @@ class PeilingOptie implements DataTableEntry {
 	 * @Serializer\Groups({"datatable"})
 	 */
 	public $ingebracht_door;
+
+	/**
+	 * @return int
+	 * @Serializer\Groups("vue")
+	 * @Serializer\SerializedName("stemmen")
+	 */
+	public function getVueStemmen() {
+		$magStemmenZien = ($this->peiling->getHeeftGestemd() || !$this->peiling->getMagStemmen()) && $this->peiling->resultaat_zichtbaar;
+
+		if ($magStemmenZien) {
+			return $this->stemmen;
+		}
+
+		return 0;
+	}
 
 	/**
 	 * @var Peiling
