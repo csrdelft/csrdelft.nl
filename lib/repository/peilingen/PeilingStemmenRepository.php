@@ -9,6 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
  * @method PeilingStem|null find($id, $lockMode = null, $lockVersion = null)
  * @method PeilingStem|null findOneBy(array $criteria, array $orderBy = null)
  * @method PeilingStem[]    findAll()

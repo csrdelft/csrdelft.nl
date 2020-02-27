@@ -12,6 +12,7 @@ use CsrDelft\repository\peilingen\PeilingOptiesRepository;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieTable;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -24,10 +25,10 @@ class PeilingOptiesController extends AbstractController {
 	/** @var PeilingenLogic */
 	private $peilingenLogic;
 	/** @var PeilingOptiesRepository */
-	private $peilingOptiesModel;
+	private $peilingOptiesRepository;
 
-	public function __construct(PeilingOptiesRepository $peilingOptiesModel, PeilingenLogic $peilingenLogic) {
-		$this->peilingOptiesModel = $peilingOptiesModel;
+	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingenLogic $peilingenLogic) {
+		$this->peilingOptiesRepository = $peilingOptiesRepository;
 		$this->peilingenLogic = $peilingenLogic;
 	}
 
@@ -36,14 +37,14 @@ class PeilingOptiesController extends AbstractController {
 	}
 
 	public function lijst($id) {
-		return $this->tableData($this->peilingOptiesModel->findBy(['peiling_id' => $id]));
+		return $this->tableData($this->peilingOptiesRepository->findBy(['peiling_id' => $id]));
 	}
 
 	/**
+	 * @param EntityManagerInterface $em
 	 * @param $id
 	 * @return PeilingOptieForm|Response
-	 * @throws CsrGebruikerException
-	 * @throws \Doctrine\ORM\ORMException
+	 * @throws ORMException
 	 */
 	public function toevoegen(EntityManagerInterface $em, $id) {
 		$form = new PeilingOptieForm(new PeilingOptie(), $id);
@@ -74,7 +75,7 @@ class PeilingOptiesController extends AbstractController {
 		$selection = $this->getDataTableSelection();
 
 		/** @var PeilingOptie|false $peilingOptie */
-		$peilingOptie = $this->peilingOptiesModel->retrieveByUUID($selection[0]);
+		$peilingOptie = $this->peilingOptiesRepository->retrieveByUUID($selection[0]);
 
 		if ($peilingOptie !== false && $peilingOptie->stemmen == 0) {
 			$this->getDoctrine()->getManager()->remove($peilingOptie);

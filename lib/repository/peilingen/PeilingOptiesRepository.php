@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ *
  * @method PeilingOptie|null find($id, $lockMode = null, $lockVersion = null)
  * @method PeilingOptie|null findOneBy(array $criteria, array $orderBy = null)
  * @method PeilingOptie[]    findAll()

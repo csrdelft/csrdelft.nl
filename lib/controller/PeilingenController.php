@@ -14,6 +14,7 @@ use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
 use CsrDelft\view\View;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,12 +23,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PeilingenController extends AbstractController {
 	/** @var PeilingenRepository */
-	private $peilingenModel;
+	private $peilingenRepository;
 	/** @var PeilingenLogic */
 	private $peilingenLogic;
 
-	public function __construct(PeilingenRepository $peilingenModel, PeilingenLogic $peilingenLogic) {
-		$this->peilingenModel = $peilingenModel;
+	public function __construct(PeilingenRepository $peilingenRepository, PeilingenLogic $peilingenLogic) {
+		$this->peilingenRepository = $peilingenRepository;
 		$this->peilingenLogic = $peilingenLogic;
 	}
 
@@ -40,7 +41,7 @@ class PeilingenController extends AbstractController {
 		// Laat een modal zien als een specifieke peiling bewerkt wordt
 		if ($id) {
 			$table = new PeilingTable();
-			$peiling = $this->peilingenModel->find($id);
+			$peiling = $this->peilingenRepository->find($id);
 			$table->setSearch($peiling->titel);
 			$form = new PeilingForm($peiling, false);
 			$form->setDataTableId($table->getDataTableId());
@@ -55,12 +56,13 @@ class PeilingenController extends AbstractController {
 	 * @return Response
 	 */
 	public function lijst() {
-		return $this->tableData($this->peilingenModel->getPeilingenVoorBeheer());
+		return $this->tableData($this->peilingenRepository->getPeilingenVoorBeheer());
 	}
 
 	/**
+	 * @param EntityManagerInterface $em
 	 * @return Response|View
-	 * @throws CsrGebruikerException
+	 * @throws ORMException
 	 */
 	public function nieuw(EntityManagerInterface $em) {
 		$peiling = new Peiling();
@@ -88,9 +90,9 @@ class PeilingenController extends AbstractController {
 		$selection = $this->getDataTableSelection();
 
 		if ($selection) {
-			$peiling = $this->peilingenModel->retrieveByUUID($selection[0]);
+			$peiling = $this->peilingenRepository->retrieveByUUID($selection[0]);
 
-			if (!$this->peilingenModel->magBewerken($peiling)) {
+			if (!$this->peilingenRepository->magBewerken($peiling)) {
 				throw new CsrGebruikerException('Je mag deze peiling niet bewerken!');
 			}
 		} else {
@@ -115,10 +117,10 @@ class PeilingenController extends AbstractController {
 	 */
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
-		$peiling = $this->peilingenModel->retrieveByUUID($selection[0]);
+		$peiling = $this->peilingenRepository->retrieveByUUID($selection[0]);
 		$removed = new RemoveDataTableEntry($peiling->id, Peiling::class);
 
-		$this->peilingenModel->delete($peiling);
+		$this->peilingenRepository->delete($peiling);
 
 		return $this->tableData([$removed]);
 	}
