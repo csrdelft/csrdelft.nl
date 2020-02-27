@@ -88,7 +88,6 @@ class Peiling implements DataTableEntry {
 	/**
 	 * @var PeilingOptie[]
 	 * @ORM\OneToMany(targetEntity="PeilingOptie", mappedBy="peiling")
-//	 * @ORM\JoinColumn(name="id", referencedColumnName="peiling_id")
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $opties;

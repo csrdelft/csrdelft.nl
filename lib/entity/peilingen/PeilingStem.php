@@ -27,13 +27,11 @@ class PeilingStem {
 	 * @ORM\Id()
 	 */
 	public $uid;
-
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 */
 	public $aantal;
-
 	/**
 	 * @var Peiling
 	 * @ORM\ManyToOne(targetEntity="Peiling", inversedBy="stemmen")

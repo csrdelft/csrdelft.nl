@@ -55,6 +55,11 @@ class PeilingOptie implements DataTableEntry {
 	 * @Serializer\Groups({"datatable"})
 	 */
 	public $ingebracht_door;
+	/**
+	 * @var Peiling
+	 * @ORM\ManyToOne(targetEntity="Peiling", inversedBy="opties")
+	 */
+	public $peiling;
 
 	/**
 	 * @return int
@@ -70,16 +75,6 @@ class PeilingOptie implements DataTableEntry {
 
 		return 0;
 	}
-
-	/**
-	 * @var Peiling
-	 * @ORM\ManyToOne(targetEntity="Peiling", inversedBy="opties")
-	 */
-	public $peiling;
-
-	protected static $computed_attributes = [
-		'beschrijving_formatted' => []
-	];
 
 	/**
 	 * @return string
