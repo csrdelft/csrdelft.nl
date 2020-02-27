@@ -2,59 +2,65 @@
 
 namespace CsrDelft\model\peilingen;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\peilingen\PeilingOptie;
-use CsrDelft\model\entity\peilingen\PeilingStem;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\entity\peilingen\Peiling;
+use CsrDelft\entity\peilingen\PeilingStem;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\DependencyManager;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\bbcode\CsrBB;
-use CsrDelft\view\datatable\DataTableColumn;
+use CsrDelft\repository\peilingen\PeilingenRepository;
+use CsrDelft\repository\peilingen\PeilingOptiesRepository;
+use CsrDelft\repository\peilingen\PeilingStemmenRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 02/11/2018
  */
-class PeilingenLogic extends DependencyManager {
+class PeilingenLogic {
 	/**
-	 * @var PeilingenModel
+	 * @var PeilingenRepository
 	 */
-	private $peilingenModel;
+	private $peilingenRepository;
 	/**
-	 * @var PeilingOptiesModel
+	 * @var PeilingOptiesRepository
 	 */
-	private $peilingOptiesModel;
+	private $peilingOptiesRepository;
 	/**
-	 * @var PeilingStemmenModel
+	 * @var PeilingStemmenRepository
 	 */
-	private $peilingStemmenModel;
+	private $peilingStemmenRepository;
+	/**
+	 * @var SerializerInterface
+	 */
+	private $serializer;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
 
 	public function __construct(
-		PeilingenModel $peilingenModel,
-		PeilingOptiesModel $peilingOptiesModel,
-		PeilingStemmenModel $peilingStemmenModel
+		PeilingenRepository $peilingenRepository,
+		PeilingOptiesRepository $peilingOptiesRepository,
+		PeilingStemmenRepository $peilingStemmenRepository,
+	SerializerInterface $serializer,
+	EntityManagerInterface $entityManager
 	) {
-		$this->peilingenModel = $peilingenModel;
-		$this->peilingOptiesModel = $peilingOptiesModel;
-		$this->peilingStemmenModel = $peilingStemmenModel;
-	}
-
-	public function getOptiesVoorPeiling($peilingId) {
-		$peiling = $this->peilingenModel->getPeilingById($peilingId);
-		if ($peiling) {
-			return $this->peilingOptiesModel->getByPeilingId($peilingId);
-		}
-		return [];
+		$this->peilingenRepository = $peilingenRepository;
+		$this->peilingOptiesRepository = $peilingOptiesRepository;
+		$this->peilingStemmenRepository = $peilingStemmenRepository;
+		$this->serializer = $serializer;
+		$this->entityManager = $entityManager;
 	}
 
 	public function magOptieToevoegen($peilingId) {
-		$peiling = $this->peilingenModel->getPeilingById($peilingId);
-		if ($this->peilingenModel->magBewerken($peiling)) {
+		$peiling = $this->peilingenRepository->getPeilingById($peilingId);
+		if ($this->peilingenRepository->magBewerken($peiling)) {
 			return true;
 		}
 
-		if ($this->peilingStemmenModel->heeftGestemd($peilingId, LoginModel::getUid())) {
+		if ($this->peilingStemmenRepository->heeftGestemd($peilingId, LoginModel::getUid())) {
 			return false;
 		}
 
@@ -62,36 +68,41 @@ class PeilingenLogic extends DependencyManager {
 			return false;
 		}
 
-		$aantalVoorgesteld = $this->peilingOptiesModel->count('peiling_id = ? AND ingebracht_door = ?', [$peilingId, LoginModel::getUid()]);
+		$aantalVoorgesteld = $this->peilingOptiesRepository->count(['peiling_id' => $peilingId, 'ingebracht_door' => LoginModel::getUid()]);
 		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
 	}
 
 	public function stem($peilingId, $opties, $uid) {
-		$peilingOptiesModel = $this->peilingOptiesModel;
-		$peilingStemmenModel = $this->peilingStemmenModel;
-		return Database::transaction(function () use ($peilingId, $opties, $uid, $peilingOptiesModel, $peilingStemmenModel) {
+		try {
+			$this->entityManager->beginTransaction();
+
 			if ($this->isGeldigeStem($peilingId, $opties, $uid)) {
 				$opties = $this->valideerOpties($peilingId, $opties);
 
 				foreach ($opties as $optieId) {
-					$optie = $peilingOptiesModel->getById($optieId);
+					$optie = $this->peilingOptiesRepository->find($optieId);
 					$optie->stemmen += 1;
 
-					$peilingOptiesModel->update($optie);
+					$this->entityManager->persist($optie);
 				}
 
 				$stem = new PeilingStem();
 				$stem->peiling_id = $peilingId;
+				$stem->peiling = $this->entityManager->getReference(Peiling::class, $peilingId);
 				$stem->uid = $uid;
 				$stem->aantal = count($opties);
-
-				$peilingStemmenModel->create($stem);
-
-				return true;
+				$this->entityManager->persist($stem);
+				$this->entityManager->flush();
+				$result = true;
+			} else {
+				$result = false;
 			}
-
-			return false;
-		});
+			$this->entityManager->commit();
+			return $result;
+		} catch (ORMException $ex) {
+			$this->entityManager->rollback();
+			throw new CsrException($ex->getMessage());
+		}
 	}
 
 	/**
@@ -102,7 +113,7 @@ class PeilingenLogic extends DependencyManager {
 	 * @return int[]
 	 */
 	public function valideerOpties($peilingId, $opties) {
-		$mogelijkeOpties = $this->peilingOptiesModel->find('peiling_id = ?', [$peilingId])->fetchAll();
+		$mogelijkeOpties = $this->peilingOptiesRepository->findBy(['peiling_id' => $peilingId]);
 		$mogelijkeOptieIds = array_map(function ($optie) {
 			return $optie->id;
 		}, $mogelijkeOpties);
@@ -117,7 +128,7 @@ class PeilingenLogic extends DependencyManager {
 	 * @throws CsrGebruikerException
 	 */
 	public function isGeldigeStem($peilingId, $opties, $uid) {
-		$peiling = $this->peilingenModel->getPeilingById($peilingId);
+		$peiling = $this->peilingenRepository->getPeilingById($peilingId);
 
 		if (!$peiling) {
 			throw new CsrGebruikerException('Deze peiling bestaat niet');
@@ -127,7 +138,7 @@ class PeilingenLogic extends DependencyManager {
 			throw new CsrGebruikerException('Mag niet op deze peiling stemmen.');
 		}
 
-		if ($this->peilingStemmenModel->heeftGestemd($peilingId, $uid)) {
+		if ($this->peilingStemmenRepository->heeftGestemd($peilingId, $uid)) {
 			throw new CsrGebruikerException('Alreeds gestemd.');
 		}
 
@@ -150,29 +161,9 @@ class PeilingenLogic extends DependencyManager {
 		return true;
 	}
 
-	public function getOptionsAsJson($peilingId, $uid) {
-		$peiling = $this->peilingenModel->getPeilingById($peilingId);
-		$opties = $this->peilingOptiesModel->getByPeilingId($peilingId);
+	public function getOptionsAsJson($peilingId) {
+		$opties = $this->peilingOptiesRepository->getByPeilingId($peilingId);
 
-		$magStemmenZien = ($this->peilingStemmenModel->heeftgestemd($peilingId, $uid) || !$peiling->getMagStemmen()) && $peiling->resultaat_zichtbaar;
-
-		return array_map(function (PeilingOptie $optie) use ($magStemmenZien, $peiling) {
-			$arr = $optie->jsonSerialize();
-
-			// Als iemand nog niet gestemd heeft is deze info niet zichtbaar.
-			if (!$magStemmenZien && !$this->peilingenModel->magBewerken($peiling)) {
-				$arr['stemmen'] = 0;
-			}
-
-			$arr['beschrijving'] = CsrBB::parse($arr['beschrijving']);
-
-			$ingebrachtDoor = ProfielRepository::get($optie->ingebracht_door);
-
-			$arr['ingebracht_door'] = $ingebrachtDoor
-				? new DataTableColumn($ingebrachtDoor->getLink('volledig'), $ingebrachtDoor->achternaam, $ingebrachtDoor->getNaam('volledig'))
-				: null;
-
-			return $arr;
-		}, $opties);
+		return $this->serializer->serialize($opties, 'json', ['groups' => 'vue']);
 	}
 }

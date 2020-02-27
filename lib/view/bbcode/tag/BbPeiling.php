@@ -4,10 +4,11 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\peilingen\Peiling;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\model\peilingen\PeilingenLogic;
-use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -39,9 +40,11 @@ class BbPeiling extends BbTag {
 	}
 
 	public function render() {
+		$optionsAsJson = ContainerFacade::getContainer()->get(PeilingenLogic::class)->getOptionsAsJson($this->peiling->id, LoginModel::getUid());
+		$serializer = ContainerFacade::getContainer()->get('serializer');
+		$peilingSerialized = $serializer->serialize($this->peiling, 'json', ['groups' => 'vue']);
 		return view('peilingen.peiling', [
-			'peiling' => $this->peiling,
-			'opties' => PeilingenLogic::instance()->getOptionsAsJson($this->peiling->id, LoginModel::getUid()),
+			'peiling' => $peilingSerialized,
 		])->getHtml();
 	}
 
@@ -51,7 +54,8 @@ class BbPeiling extends BbTag {
 	 * @throws BbException
 	 */
 	private function getPeiling($peiling_id): Peiling {
-		$peiling = PeilingenModel::instance()->getPeilingById($peiling_id);
+		$peilingenRepository = ContainerFacade::getContainer()->get(PeilingenRepository::class);
+		$peiling = $peilingenRepository->getPeilingById($peiling_id);
 		if ($peiling === false) {
 			throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
 		}

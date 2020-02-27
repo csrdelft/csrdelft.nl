@@ -18,9 +18,9 @@
 		private text = 'Optie toevoegen';
 
 		@Prop({
-			type: String,
+			type: Number,
 		})
-		private id: string;
+		private id: number;
 
 		protected get optieToevoegenUrl() {
 			return `/peilingen/opties/${this.id}/toevoegen`;

@@ -19,6 +19,6 @@ class DateTimeObjectField extends DateTimeField {
 	}
 
 	public function getFormattedValue() {
-		return date_create($this->value);
+		return $this->value ? date_create($this->value) : null;
 	}
 }

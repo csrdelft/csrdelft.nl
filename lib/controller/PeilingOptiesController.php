@@ -3,14 +3,17 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\peilingen\PeilingOptie;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\entity\peilingen\Peiling;
+use CsrDelft\entity\peilingen\PeilingOptie;
 use CsrDelft\model\peilingen\PeilingenLogic;
-use CsrDelft\model\peilingen\PeilingOptiesModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\datatable\RemoveRowsResponse;
+use CsrDelft\repository\peilingen\PeilingOptiesRepository;
 use CsrDelft\view\peilingen\PeilingOptieForm;
-use CsrDelft\view\peilingen\PeilingOptieResponse;
 use CsrDelft\view\peilingen\PeilingOptieTable;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -21,11 +24,11 @@ use CsrDelft\view\peilingen\PeilingOptieTable;
 class PeilingOptiesController extends AbstractController {
 	/** @var PeilingenLogic */
 	private $peilingenLogic;
-	/** @var PeilingOptiesModel */
-	private $peilingOptiesModel;
+	/** @var PeilingOptiesRepository */
+	private $peilingOptiesRepository;
 
-	public function __construct(PeilingOptiesModel $peilingOptiesModel, PeilingenLogic $peilingenLogic) {
-		$this->peilingOptiesModel = $peilingOptiesModel;
+	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingenLogic $peilingenLogic) {
+		$this->peilingOptiesRepository = $peilingOptiesRepository;
 		$this->peilingenLogic = $peilingenLogic;
 	}
 
@@ -34,15 +37,16 @@ class PeilingOptiesController extends AbstractController {
 	}
 
 	public function lijst($id) {
-		return new PeilingOptieResponse($this->peilingenLogic->getOptionsAsJson($id, LoginModel::getUid()));
+		return $this->tableData($this->peilingOptiesRepository->findBy(['peiling_id' => $id]));
 	}
 
 	/**
+	 * @param EntityManagerInterface $em
 	 * @param $id
-	 * @return PeilingOptieForm|PeilingOptieResponse
-	 * @throws CsrGebruikerException
+	 * @return PeilingOptieForm|Response
+	 * @throws ORMException
 	 */
-	public function toevoegen($id) {
+	public function toevoegen(EntityManagerInterface $em, $id) {
 		$form = new PeilingOptieForm(new PeilingOptie(), $id);
 
 		if (!$this->peilingenLogic->magOptieToevoegen($id)) {
@@ -53,27 +57,31 @@ class PeilingOptiesController extends AbstractController {
 			/** @var PeilingOptie $optie */
 			$optie = $form->getModel();
 			$optie->ingebracht_door = LoginModel::getUid();
-			$optie->peiling_id = $id;
-			$optie->id = (int)$this->peilingOptiesModel->create($optie);
-			return new PeilingOptieResponse([$optie]);
+			$optie->peiling = $em->getReference(Peiling::class, $id);
+
+			$this->getDoctrine()->getManager()->persist($optie);
+			$this->getDoctrine()->getManager()->flush();
+			return $this->tableData([$optie]);
 		}
 
 		return $form;
 	}
 
 	/**
-	 * @return RemoveRowsResponse
+	 * @return Response
 	 * @throws CsrGebruikerException
 	 */
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
 
 		/** @var PeilingOptie|false $peilingOptie */
-		$peilingOptie = $this->peilingOptiesModel->retrieveByUUID($selection[0]);
+		$peilingOptie = $this->peilingOptiesRepository->retrieveByUUID($selection[0]);
 
 		if ($peilingOptie !== false && $peilingOptie->stemmen == 0) {
-			$this->peilingOptiesModel->delete($peilingOptie);
-			return new RemoveRowsResponse([$peilingOptie]);
+			$this->getDoctrine()->getManager()->remove($peilingOptie);
+			$removed = new RemoveDataTableEntry($peilingOptie->id, PeilingOptie::class);
+			$this->getDoctrine()->getManager()->flush();
+			return $this->tableData([$removed]);
 		} else {
 			throw new CsrGebruikerException('Peiling optie bestaat niet of er is al een keer op gestemd.');
 		}
