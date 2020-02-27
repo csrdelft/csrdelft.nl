@@ -16,7 +16,6 @@ use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
-use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenForm;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenTable;
 use CsrDelft\view\eetplan\EetplanBekendenForm;
@@ -29,7 +28,6 @@ use CsrDelft\view\eetplan\VerwijderEetplanForm;
 use CsrDelft\view\View;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -45,22 +43,14 @@ class EetplanController extends AbstractController {
 	private $eetplanBekendenRepository;
 	/** @var WoonoordenModel */
 	private $woonoordenModel;
-	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
 
 	public function __construct(
-		SerializerInterface $serializer,
-		EetplanRepository $eetplanRepository,
-		EetplanBekendenRepository $eetplanBekendenModel,
-		WoonoordenModel $woonoordenModel
+		EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenModel, WoonoordenModel $woonoordenModel
 	) {
 		$this->eetplanRepository = $eetplanRepository;
 		$this->eetplanBekendenRepository = $eetplanBekendenModel;
 		$this->woonoordenModel = $woonoordenModel;
 		$this->lichting = substr((string)LichtingenModel::getJongsteLidjaar(), 2, 2);
-		$this->serializer = $serializer;
 	}
 
 	public function view() {
@@ -117,7 +107,7 @@ class EetplanController extends AbstractController {
 	}
 
 	public function bekendehuizen() {
-		return new GenericDataTableResponse($this->serializer, $this->eetplanRepository->getBekendeHuizen($this->lichting));
+		return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 	}
 
 	public function bekendehuizen_toevoegen(EntityManagerInterface $em) {
@@ -131,7 +121,7 @@ class EetplanController extends AbstractController {
 		} else {
 			$eetplan->noviet = $em->getReference(Profiel::class, $eetplan->uid);
 			$this->eetplanRepository->create($eetplan);
-			return new GenericDataTableResponse($this->serializer, $this->eetplanRepository->getBekendeHuizen($this->lichting));
+			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		}
 	}
 
@@ -144,7 +134,7 @@ class EetplanController extends AbstractController {
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/bewerken/' . $uuid, true);
 		if ($form->isPosted() && $form->validate()) {
 			$this->eetplanRepository->update($eetplan);
-			return new GenericDataTableResponse($this->serializer, $this->eetplanRepository->getBekendeHuizen($this->lichting));
+			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		} else {
 			return $form;
 		}
@@ -161,7 +151,7 @@ class EetplanController extends AbstractController {
 				$verwijderd[] = new RemoveDataTableEntry([$eetplan->uid, $eetplan->woonoord_id], Eetplan::class);
 			}
 		}
-		return new GenericDataTableResponse($this->serializer, $verwijderd);
+		return $this->tableData($verwijderd);
 	}
 
 	public function bekendehuizen_zoeken(Request $request) {
@@ -172,7 +162,7 @@ class EetplanController extends AbstractController {
 	}
 
 	public function novietrelatie() {
-		return new GenericDataTableResponse($this->serializer, $this->eetplanBekendenRepository->getBekenden($this->lichting));
+		return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
 	}
 
 	public function novietrelatie_toevoegen() {
@@ -185,7 +175,7 @@ class EetplanController extends AbstractController {
 			return $form;
 		} else {
 			$this->eetplanBekendenRepository->create($eetplanbekenden);
-			return new GenericDataTableResponse($this->serializer, $this->eetplanBekendenRepository->getBekenden($this->lichting));
+			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
 		}
 	}
 
@@ -198,7 +188,7 @@ class EetplanController extends AbstractController {
 		$form = new EetplanBekendenForm($eetplanbekenden, '/eetplan/novietrelatie/bewerken/' . $uuid, true);
 		if ($form->isPosted() && $form->validate()) {
 			$this->eetplanBekendenRepository->update($eetplanbekenden);
-			return new GenericDataTableResponse($this->serializer, $this->eetplanBekendenRepository->getBekenden($this->lichting));
+			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
 		} else {
 			return $form;
 		}
@@ -212,7 +202,7 @@ class EetplanController extends AbstractController {
 			$this->eetplanBekendenRepository->delete($bekenden);
 			$verwijderd[] = new RemoveDataTableEntry([$bekenden->uid1, $bekenden->uid2], EetplanBekenden::class);
 		}
-		return new GenericDataTableResponse($this->serializer, $verwijderd);
+		return $this->tableData($verwijderd);
 	}
 
 	/**

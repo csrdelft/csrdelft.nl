@@ -12,7 +12,6 @@ use CsrDelft\repository\peilingen\PeilingOptiesRepository;
 use CsrDelft\repository\peilingen\PeilingStemmenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -32,10 +31,6 @@ class PeilingenLogic {
 	 */
 	private $peilingStemmenRepository;
 	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
-	/**
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
@@ -44,13 +39,11 @@ class PeilingenLogic {
 		PeilingenRepository $peilingenRepository,
 		PeilingOptiesRepository $peilingOptiesRepository,
 		PeilingStemmenRepository $peilingStemmenRepository,
-	SerializerInterface $serializer,
-	EntityManagerInterface $entityManager
+		EntityManagerInterface $entityManager
 	) {
 		$this->peilingenRepository = $peilingenRepository;
 		$this->peilingOptiesRepository = $peilingOptiesRepository;
 		$this->peilingStemmenRepository = $peilingStemmenRepository;
-		$this->serializer = $serializer;
 		$this->entityManager = $entityManager;
 	}
 
@@ -159,11 +152,5 @@ class PeilingenLogic {
 		}
 
 		return true;
-	}
-
-	public function getOptionsAsJson($peilingId) {
-		$opties = $this->peilingOptiesRepository->getByPeilingId($peilingId);
-
-		return $this->serializer->serialize($opties, 'json', ['groups' => 'vue']);
 	}
 }

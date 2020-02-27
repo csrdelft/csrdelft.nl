@@ -7,14 +7,10 @@ use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\security\RememberLoginRepository;
-use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\LoginSessionsData;
-use CsrDelft\view\login\RememberLoginData;
 use CsrDelft\view\login\RememberLoginForm;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -29,15 +25,10 @@ class SessionController extends AbstractController {
 	 * @var RememberLoginRepository
 	 */
 	private $rememberLoginRepository;
-	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
 
-	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository, SerializerInterface $serializer) {
+	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository) {
 		$this->loginModel = $loginModel;
 		$this->rememberLoginRepository = $rememberLoginRepository;
-		$this->serializer = $serializer;
 	}
 
 	public function sessionsdata() {
@@ -74,12 +65,11 @@ class SessionController extends AbstractController {
 			$response[] = $remember;
 		}
 		$manager->flush();
-		return new GenericDataTableResponse($this->serializer, $response);
+		return $this->tableData($response);
 	}
 
 	public function rememberdata() {
-		$rememberLogins = $this->rememberLoginRepository->findBy(['uid' => LoginModel::getUid()]);
-		return new GenericDataTableResponse($this->serializer, $rememberLogins);
+		return $this->tableData($this->rememberLoginRepository->findBy(['uid' => LoginModel::getUid()]));
 	}
 
 	public function remember() {
@@ -101,7 +91,7 @@ class SessionController extends AbstractController {
 				$this->rememberLoginRepository->rememberLogin($remember);
 			}
 			if (isset($_POST['DataTableId'])) {
-				return new GenericDataTableResponse($this->serializer, [$remember]);
+				return $this->tableData([$remember]);
 			} else if (!empty($_POST['redirect'])) {
 				return new JsonResponse($_POST['redirect']);
 			} else {
@@ -123,7 +113,7 @@ class SessionController extends AbstractController {
 		}
 		$manager->flush();
 
-		return new GenericDataTableResponse($this->serializer, $response);
+		return $this->tableData($remember);
 	}
 
 	public function forget() {
@@ -143,6 +133,6 @@ class SessionController extends AbstractController {
 			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);
 		}
 		$manager->flush();
-		return new GenericDataTableResponse($this->serializer, $response);
+		return $this->tableData($response);
 	}
 }
