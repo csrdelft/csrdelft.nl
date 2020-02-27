@@ -40,11 +40,10 @@ class BbPeiling extends BbTag {
 	}
 
 	public function render() {
-		$optionsAsJson = ContainerFacade::getContainer()->get(PeilingenLogic::class)->getOptionsAsJson($this->peiling->id, LoginModel::getUid());
 		$serializer = ContainerFacade::getContainer()->get('serializer');
-		$peilingSerialized = $serializer->serialize($this->peiling, 'json', ['groups' => 'vue']);
+
 		return view('peilingen.peiling', [
-			'peiling' => $peilingSerialized,
+			'peiling' => $serializer->serialize($this->peiling, 'json', ['groups' => 'vue']),
 		])->getHtml();
 	}
 
