@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\peilingen;
 
-use CsrDelft\model\entity\peilingen\PeilingOptie;
+use CsrDelft\entity\peilingen\PeilingOptie;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;

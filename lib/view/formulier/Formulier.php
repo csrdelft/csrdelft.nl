@@ -60,7 +60,7 @@ class Formulier implements View, Validator, ToResponse {
 		if ($dataTableId === true) {
 			$this->dataTableId = ContainerFacade::getContainer()->get('request_stack')
 				->getCurrentRequest()
-				->request->filter('DataTableId', [], FILTER_SANITIZE_STRING);
+				->request->filter('DataTableId', '', FILTER_SANITIZE_STRING);
 		} else {
 			$this->dataTableId = $dataTableId;
 		}

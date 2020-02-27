@@ -3,10 +3,8 @@
 namespace CsrDelft\repository\security;
 
 use CsrDelft\entity\security\RememberLogin;
-use CsrDelft\model\RetrieveByUuidTrait;
 use CsrDelft\model\security\LoginModel;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -18,9 +16,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method RememberLogin|null findOneBy(array $criteria, array $orderBy = null)
  * @method RememberLogin[]    findAll()
  * @method RememberLogin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method RememberLogin|null retrieveByUuid($UUID)
  */
-class RememberLoginRepository extends ServiceEntityRepository {
-	use RetrieveByUuidTrait;
+class RememberLoginRepository extends AbstractRepository {
 
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, RememberLogin::class);

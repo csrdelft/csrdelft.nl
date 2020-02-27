@@ -3,13 +3,16 @@
 namespace CsrDelft\view\peilingen;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\peilingen\Peiling;
+use CsrDelft\entity\peilingen\Peiling;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
+use CsrDelft\view\formulier\invoervelden\HiddenObjectField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredBBCodeField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\DateTimeField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -34,13 +37,13 @@ class PeilingForm extends ModalForm
 		$fields = [];
 
 		$fields[] = new HiddenField('id', $model->id);
-		$fields[] = new HiddenField('eigenaar', $model->eigenaar);
+		$fields[] = new HiddenObjectField('eigenaarProfiel', $model->eigenaarProfiel, Profiel::class);
 		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
 		$fields[] = new RequiredBBCodeField('beschrijving', $model->beschrijving, 'Beschrijving');
 		$fields[] = new JaNeeField('resultaat_zichtbaar', $model->resultaat_zichtbaar, 'Resultaat zichtbaar');
 		$fields[] = new RequiredIntField('aantal_voorstellen', $model->aantal_voorstellen ?? 0, 'Aantal voorstellen', 0, 10);
 		$fields[] = new RequiredIntField('aantal_stemmen', $model->aantal_stemmen ?? 1, 'Aantal stemmen', 0, 10);
-		$fields[] = new DateTimeField('sluitingsdatum', $model->sluitingsdatum, 'Sluitingsdatum');
+		$fields[] = new DateTimeObjectField('sluitingsdatum', $model->sluitingsdatum, 'Sluitingsdatum');
 		$fields[] = new RechtenField('rechten_stemmen', $model->rechten_stemmen, 'Rechten stemmen');
 		$fields['rechten_mod'] = new RechtenField('rechten_mod', $model->rechten_mod, 'Rechten bewerken');
 		$fields['rechten_mod']->title = 'Een peiling mag altijd bewerkt worden door jou, de BASFCie, de PubCie en het bestuur.';

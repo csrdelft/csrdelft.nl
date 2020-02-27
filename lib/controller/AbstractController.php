@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -52,5 +53,9 @@ class AbstractController extends BaseController {
 			}
 			return parent::redirect($url, $status);
 
+	}
+
+	protected function tableData($data) {
+		return new GenericDataTableResponse($this->get('serializer'), $data);
 	}
 }

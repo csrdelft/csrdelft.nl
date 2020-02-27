@@ -3,28 +3,30 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\peilingen\Peiling;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\entity\peilingen\Peiling;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\peilingen\PeilingenLogic;
-use CsrDelft\model\peilingen\PeilingenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\datatable\RemoveRowsResponse;
+use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\peilingen\PeilingForm;
-use CsrDelft\view\peilingen\PeilingResponse;
 use CsrDelft\view\peilingen\PeilingTable;
 use CsrDelft\view\View;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class PeilingenController extends AbstractController {
-	/** @var PeilingenModel */
+	/** @var PeilingenRepository */
 	private $peilingenModel;
 	/** @var PeilingenLogic */
 	private $peilingenLogic;
 
-	public function __construct(PeilingenModel $peilingenModel, PeilingenLogic $peilingenLogic) {
+	public function __construct(PeilingenRepository $peilingenModel, PeilingenLogic $peilingenLogic) {
 		$this->peilingenModel = $peilingenModel;
 		$this->peilingenLogic = $peilingenLogic;
 	}
@@ -38,7 +40,7 @@ class PeilingenController extends AbstractController {
 		// Laat een modal zien als een specifieke peiling bewerkt wordt
 		if ($id) {
 			$table = new PeilingTable();
-			$peiling = $this->peilingenModel->find('id = ?', [$id])->fetch();
+			$peiling = $this->peilingenModel->find($id);
 			$table->setSearch($peiling->titel);
 			$form = new PeilingForm($peiling, false);
 			$form->setDataTableId($table->getDataTableId());
@@ -50,34 +52,36 @@ class PeilingenController extends AbstractController {
 	}
 
 	/**
-	 * @return View
+	 * @return Response
 	 */
 	public function lijst() {
-		return new PeilingResponse($this->peilingenModel->getPeilingenVoorBeheer());
+		return $this->tableData($this->peilingenModel->getPeilingenVoorBeheer());
 	}
 
 	/**
-	 * @return View
+	 * @return Response|View
 	 * @throws CsrGebruikerException
 	 */
-	public function nieuw() {
+	public function nieuw(EntityManagerInterface $em) {
 		$peiling = new Peiling();
 		$form = new PeilingForm($peiling, true);
 
 		if ($form->isPosted() && $form->validate()) {
 			$peiling = $form->getModel();
-			$peiling->eigenaar = LoginModel::getUid();
+			$peiling->eigenaarProfiel = $em->getReference(Profiel::class, LoginModel::getUid());
 			$peiling->mag_bewerken = false;
 
-			$peiling->id = $this->peilingenModel->create($form->getModel());
-			return new PeilingResponse([$peiling]);
+			$this->getDoctrine()->getManager()->persist($peiling);
+			$this->getDoctrine()->getManager()->flush();
+
+			return $this->tableData([$peiling]);
 		}
 
 		return $form;
 	}
 
 	/**
-	 * @return View
+	 * @return Response|View
 	 * @throws CsrGebruikerException
 	 */
 	public function bewerken() {
@@ -97,24 +101,26 @@ class PeilingenController extends AbstractController {
 		$form = new PeilingForm($peiling, false);
 		if ($form->isPosted() && $form->validate()) {
 			$peiling = $form->getModel();
+			$this->getDoctrine()->getManager()->persist($peiling);
+			$this->getDoctrine()->getManager()->flush();
 
-			$this->peilingenModel->update($peiling);
-			return new PeilingResponse([$peiling]);
+			return $this->tableData([$peiling]);
 		}
 
 		return $form;
 	}
 
 	/**
-	 * @return View
+	 * @return Response
 	 */
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
 		$peiling = $this->peilingenModel->retrieveByUUID($selection[0]);
+		$removed = new RemoveDataTableEntry($peiling->id, Peiling::class);
 
 		$this->peilingenModel->delete($peiling);
 
-		return new RemoveRowsResponse([$peiling]);
+		return $this->tableData([$removed]);
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <?php
 
 namespace CsrDelft\view\peilingen;
-use CsrDelft\model\peilingen\PeilingOptiesModel;
+use CsrDelft\entity\peilingen\PeilingOptie;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
@@ -15,7 +15,7 @@ class PeilingOptieTable extends DataTable
 {
 	public function __construct($id)
 	{
-		parent::__construct(PeilingOptiesModel::ORM, '/peilingen/opties/' . $id, null);
+		parent::__construct(PeilingOptie::class, '/peilingen/opties/' . $id, null);
 
 		$this->hideColumn('peiling_id');
 
