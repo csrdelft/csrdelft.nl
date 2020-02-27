@@ -133,6 +133,7 @@ $.fn.dataTable.ext.buttons.confirm = {
 			buttons: [
 				{
 					action: config.action,
+					name: 'confirm' + config.text,
 					className: 'dt-button-ico dt-ico-exclamation dt-button-warning',
 					extend: 'default',
 					href: config.href,
@@ -142,7 +143,7 @@ $.fn.dataTable.ext.buttons.confirm = {
 			],
 		} as ButtonsSettings);
 
-		dt.buttons().container().appendTo(config._collection);
+		dt.button('confirm' + config.text + ':name').node().appendTo(config._collection);
 
 		// Reset action to extend one.
 		config.action = $.fn.dataTable.ext.buttons.collection.action;
