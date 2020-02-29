@@ -14,13 +14,17 @@ class AnnotationDataTable extends DataTable {
 
 		foreach ($properties as $field => $property) {
 			$this->addColumn($property->name, null, null, $property->type ? new CellRender($property->type) : null);
-			if ($property->id) {
+			if ($property->hidden) {
 				$this->hideColumn($field);
 			}
 		}
 
 		foreach ($annotationReader->getKnoppen() as $knop) {
 			$this->addKnop($knop);
+		}
+
+		foreach ($annotationReader->getRowKnoppen() as $rowKnop) {
+			$this->addRowKnop($rowKnop);
 		}
 
 		$config = $annotationReader->getConfig();

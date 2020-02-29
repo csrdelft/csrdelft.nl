@@ -6,11 +6,14 @@ use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\view\bbcode\CsrBB;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
+use CsrDelft\common\datatable\annotation as DT;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\peilingen\PeilingOptiesRepository")
  * @ORM\Table("peiling_optie")
+ * @DT\DataTable()
+ * @DT\DataTableRowKnop(action="/peilingen/opties/verwijderen", title="Optie verwijderen", icon="verwijderen")
  */
 class PeilingOptie implements DataTableEntry {
 	/**
@@ -19,40 +22,43 @@ class PeilingOptie implements DataTableEntry {
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "vue"})
+	 * @Serializer\Groups("vue")
 	 */
 	public $id;
 	/**
 	 * Foreign key
 	 * @var int
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable", "vue"})
+	 * @Serializer\Groups("vue")
+	 * @DT\DataTableColumn(hidden=true)
 	 */
 	public $peiling_id;
 	/**
 	 * Titel
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups({"datatable", "vue"})
+	 * @Serializer\Groups("vue")
+	 * @DT\DataTableColumn()
 	 */
 	public $titel;
 	/**
 	 * @var string
 	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
+	 * @Serializer\Groups("vue")
+	 * @DT\DataTableColumn(searchable=true)
 	 */
 	public $beschrijving;
 	/**
 	 * Aantal stemmen
 	 * @var int
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable"})
+	 * @DT\DataTableColumn()
 	 */
 	public $stemmen = 0;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string", length=4, nullable=true)
-	 * @Serializer\Groups({"datatable"})
+	 * @DT\DataTableColumn()
 	 */
 	public $ingebracht_door;
 	/**
@@ -78,7 +84,8 @@ class PeilingOptie implements DataTableEntry {
 
 	/**
 	 * @return string
-	 * @Serializer\Groups({"datatable", "vue"})
+	 * @Serializer\Groups("vue")
+	 * @DT\DataTableColumn()
 	 */
 	public function getBeschrijvingFormatted() {
 		return CsrBB::parse($this->beschrijving);

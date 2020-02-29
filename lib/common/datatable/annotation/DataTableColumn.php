@@ -32,4 +32,8 @@ class DataTableColumn {
 	 */
 	public $searchable;
 	public $defaultContent;
+	/**
+	 * @var boolean
+	 */
+	public $hidden;
 }

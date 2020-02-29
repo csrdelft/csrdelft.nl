@@ -9,8 +9,9 @@ use CsrDelft\entity\peilingen\PeilingOptie;
 use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
+use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\Multiplicity;
 use CsrDelft\view\peilingen\PeilingOptieForm;
-use CsrDelft\view\peilingen\PeilingOptieTable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +34,8 @@ class PeilingOptiesController extends AbstractController {
 	}
 
 	public function table($id) {
-		return new PeilingOptieTable($id);
+		return $this->createDataTable(PeilingOptie::class, $this->generateUrl('peilingen-opties-table-content', ['id' => $id]))
+			->addKnop(new DataTableKnop(Multiplicity::None(), $this->generateUrl('peilingen-opties-toevoegen', ['id' => $id]), 'Toevoegen', 'Optie toevoegen', 'add'));
 	}
 
 	public function lijst($id) {

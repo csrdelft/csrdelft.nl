@@ -5,7 +5,10 @@ namespace CsrDelft\common\datatable;
 
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\datatable\annotation\DataTable;
 use CsrDelft\common\datatable\annotation\DataTableColumn;
+use CsrDelft\common\datatable\annotation\DataTableKnop;
+use CsrDelft\common\datatable\annotation\DataTableRowKnop;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\Id;
@@ -30,9 +33,13 @@ class DataTableAnnotationReader {
 	 */
 	private $dataTable;
 	/**
-	 * @var annotation\DataTableKnop
+	 * @var \CsrDelft\view\datatable\knoppen\DataTableKnop[]
 	 */
 	private $knoppen;
+	/**
+	 * @var \CsrDelft\view\datatable\knoppen\DataTableRowKnop[]
+	 */
+	private $rowKnoppen;
 
 	public function __construct($class) {
 		$this->reader = new AnnotationReader();
@@ -43,7 +50,6 @@ class DataTableAnnotationReader {
 	}
 
 	/**
-	 * @param $class
 	 * @return DataTableColumn[]
 	 */
 	public function getProperties() {
@@ -60,8 +66,11 @@ class DataTableAnnotationReader {
 				}
 				$properties[$property->name] = $propertyAnnotation;
 			} elseif ($idAnnotation = $this->reader->getPropertyAnnotation($property, Id::class)) {
-				$idAnnotation->name = $property->name;
-				$properties[$property->name] = $idAnnotation;
+				$column = new DataTableColumn();
+				$column->id = true;
+				$column->name = $property->name;
+				$column->hidden = true;
+				$properties[$property->name] = $column;
 			}
 		}
 
@@ -81,7 +90,7 @@ class DataTableAnnotationReader {
 
 						$methodAnnotation->name = $converter->normalize($attributeName);
 					} else {
-						throw new CsrException("Methode " . $method->name . " in " . $this->reflectionClass->class . " begint niet met 'get' en heeft wel het DataTableColumn attribuut.");
+						throw new CsrException("Methode " . $method->name . " in " . $this->reflectionClass->name . " begint niet met 'get' en heeft wel het DataTableColumn attribuut.");
 					}
 				}
 
@@ -95,21 +104,30 @@ class DataTableAnnotationReader {
 	public function getClassAttributes() {
 		$classAnnotation = $this->reader->getClassAnnotations($this->reflectionClass);
 		$this->knoppen = [];
+		$this->rowKnoppen = [];
 		$order = null;
 
 		foreach ($classAnnotation as $annotation) {
-			if ($annotation instanceof \CsrDelft\common\datatable\annotation\DataTableKnop) {
+			if ($annotation instanceof DataTableKnop) {
 				$this->knoppen[] = $annotation->getKnop();
 			}
 
-			if ($annotation instanceof \CsrDelft\common\datatable\annotation\DataTable) {
+			if ($annotation instanceof DataTable) {
 				$this->dataTable = $annotation;
+			}
+
+			if ($annotation instanceof DataTableRowKnop) {
+				$this->rowKnoppen = $annotation->getKnop();
 			}
 		}
 	}
 
 	public function getKnoppen() {
 		return $this->knoppen;
+	}
+
+	public function getRowKnoppen() {
+		return $this->rowKnoppen;
 	}
 
 	public function getConfig() {

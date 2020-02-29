@@ -17,13 +17,10 @@ class DataTableKnop {
 	 * @Enum({"", "== 0", "== 1", "== 2", ">= 1"})
 	 */
 	public $multiplicity;
-	public $tableId;
 	public $label;
 	public $url;
 	public $icon;
-	public $id;
 	public $extend = "default";
-	public $buttons;
 	public $title;
 
 	public function getKnop() {

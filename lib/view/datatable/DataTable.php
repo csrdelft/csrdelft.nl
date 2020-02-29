@@ -145,9 +145,11 @@ class DataTable implements View, FormElement, ToResponse {
 	/**
 	 * @param DataTableKnop $knop
 	 */
-	protected function addKnop(DataTableKnop $knop) {
+	public function addKnop(DataTableKnop $knop) {
 		$knop->setDataTableId($this->dataTableId);
 		$this->settings['userButtons'][] = $knop;
+
+		return $this;
 	}
 
 	protected function addRowKnop(DataTableRowKnop $knop) {
