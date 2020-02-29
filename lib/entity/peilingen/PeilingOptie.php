@@ -85,7 +85,7 @@ class PeilingOptie implements DataTableEntry {
 	/**
 	 * @return string
 	 * @Serializer\Groups("vue")
-	 * @DT\DataTableColumn()
+	 * @DT\DataTableColumn(name="beschrijving")
 	 */
 	public function getBeschrijvingFormatted() {
 		return CsrBB::parse($this->beschrijving);
