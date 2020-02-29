@@ -40,23 +40,29 @@ class DataTableAnnotationReader {
 	 * @var \CsrDelft\view\datatable\knoppen\DataTableRowKnop[]
 	 */
 	private $rowKnoppen;
+	/**
+	 * @var \CsrDelft\view\datatable\DataTableColumn[]
+	 */
+	private $properties;
+	/**
+	 * @var \CsrDelft\view\datatable\DataTableColumn[]
+	 */
+	private $methods;
 
 	public function __construct($class) {
 		$this->reader = new AnnotationReader();
 		$this->converter = new CamelCaseToSnakeCaseNameConverter();
 		$this->reflectionClass = new \ReflectionClass($class);
 
-		$this->getClassAttributes();
+		$this->initClass();
+		$this->initProperties();
+		$this->initMethods();
 	}
 
-	/**
-	 * @return DataTableColumn[]
-	 */
-	public function getProperties() {
+	private function initProperties() {
 		$reflectionProperties = $this->reflectionClass->getProperties();
-		$reflectionMethods = $this->reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-		$properties =[];
+		$this->properties = [];
 
 		foreach ($reflectionProperties as $property) {
 			/** @var \CsrDelft\common\datatable\annotation\DataTableColumn|null $propertyAnnotation */
@@ -64,18 +70,21 @@ class DataTableAnnotationReader {
 				if (!$propertyAnnotation->name) {
 					$propertyAnnotation->name = $property->name;
 				}
-				$properties[$property->name] = $propertyAnnotation;
-			} elseif ($idAnnotation = $this->reader->getPropertyAnnotation($property, Id::class)) {
+				$this->properties[$property->name] = $propertyAnnotation;
+			} elseif ($this->reader->getPropertyAnnotation($property, Id::class)) {
 				$column = new DataTableColumn();
 				$column->id = true;
 				$column->name = $property->name;
 				$column->hidden = true;
-				$properties[$property->name] = $column;
+				$this->properties[$property->name] = $column;
 			}
 		}
+	}
 
-		$converter = new CamelCaseToSnakeCaseNameConverter();
+	private function initMethods() {
+		$reflectionMethods = $this->reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
+		$this->methods = [];
 		foreach ($reflectionMethods as $method) {
 			if ($method->getDeclaringClass()->name !== $this->reflectionClass->name) {
 				continue;
@@ -88,24 +97,28 @@ class DataTableAnnotationReader {
 					if ($accessor) {
 						$attributeName = lcfirst($matches[2]);
 
-						$methodAnnotation->name = $converter->normalize($attributeName);
+						$methodAnnotation->name = $this->converter->normalize($attributeName);
 					} else {
 						throw new CsrException("Methode " . $method->name . " in " . $this->reflectionClass->name . " begint niet met 'get' en heeft wel het DataTableColumn attribuut.");
 					}
 				}
 
-				$properties[$method->name] = $methodAnnotation;
+				$this->methods[$method->name] = $methodAnnotation;
 			}
 		}
-
-		return $properties;
 	}
 
-	public function getClassAttributes() {
+	/**
+	 * @return \CsrDelft\view\datatable\DataTableColumn[]
+	 */
+	public function getProperties() {
+		return $this->properties + $this->methods;
+	}
+
+	public function initClass() {
 		$classAnnotation = $this->reader->getClassAnnotations($this->reflectionClass);
 		$this->knoppen = [];
 		$this->rowKnoppen = [];
-		$order = null;
 
 		foreach ($classAnnotation as $annotation) {
 			if ($annotation instanceof DataTableKnop) {
