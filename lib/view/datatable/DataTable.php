@@ -70,9 +70,11 @@ class DataTable implements View, FormElement, ToResponse {
 
 	private $columns = array();
 	private $groupByColumn;
+	protected $orm;
 
 	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
 		$this->model = new $orm();
+		$this->orm = $orm;
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
@@ -90,11 +92,17 @@ class DataTable implements View, FormElement, ToResponse {
 			'defaultContent' => ''
 		);
 
+		$this->init();
+
+		$this->hideColumn('detailSource');
+	}
+
+	protected function init() {
 		$metadata = null;
-		if (!is_subclass_of($orm, PersistentEntity::class)) { // Deze klasse is in doctrine.
+		if (!is_subclass_of($this->orm, PersistentEntity::class)) { // Deze klasse is in doctrine.
 			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
 			try {
-				$metadata = $manager->getClassMetaData($orm);
+				$metadata = $manager->getClassMetaData($this->orm);
 			} catch (MappingException $ex) {
 				// ignore deze klasse is niet in doctrine
 			}
@@ -120,7 +128,6 @@ class DataTable implements View, FormElement, ToResponse {
 			foreach ($this->model->getPrimaryKey() as $attribute) {
 				$this->hideColumn($attribute);
 			}
-
 		}
 	}
 

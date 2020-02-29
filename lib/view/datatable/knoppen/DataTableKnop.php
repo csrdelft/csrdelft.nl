@@ -9,6 +9,7 @@ use JsonSerializable;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/05/2017
+ * @Annotation
  */
 class DataTableKnop implements JsonSerializable {
 	protected $multiplicity;

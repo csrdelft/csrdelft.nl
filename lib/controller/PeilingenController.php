@@ -39,8 +39,8 @@ class PeilingenController extends AbstractController {
 	 */
 	public function table($id = null) {
 		// Laat een modal zien als een specifieke peiling bewerkt wordt
+		$table = $this->createDataTable(Peiling::class, $this->generateUrl('peilingen-beheer-post'), 'Peilingen beheer');
 		if ($id) {
-			$table = new PeilingTable();
 			$peiling = $this->peilingenRepository->find($id);
 			$table->setSearch($peiling->titel);
 			$form = new PeilingForm($peiling, false);
@@ -48,7 +48,7 @@ class PeilingenController extends AbstractController {
 
 			return view('default', ['content' => $table, 'modal' => $form]);
 		} else {
-			return view('default', ['content' => new PeilingTable()]);
+			return view('default', ['content' => $table]);
 		}
 	}
 

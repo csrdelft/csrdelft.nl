@@ -4,6 +4,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\view\datatable\AnnotationDataTable;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
@@ -57,5 +58,9 @@ class AbstractController extends BaseController {
 
 	protected function tableData($data) {
 		return new GenericDataTableResponse($this->get('serializer'), $data);
+	}
+
+	protected function createDataTable($entity, $dataUrl, $title = false, $groupByColumn = null) {
+		return new AnnotationDataTable($entity, $dataUrl, $title, $groupByColumn);
 	}
 }

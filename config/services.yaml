@@ -54,6 +54,10 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
+  CsrDelft\common\datatable\DataTableNormalizer:
+    tags:
+      - { name: serializer.normalizer }
+
   CsrDelft\common\datatable\DataTableEntryNormalizer:
     tags:
       - { name: serializer.normalizer }
