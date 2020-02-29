@@ -69,14 +69,12 @@ class Peiling implements DataTableEntry {
 	 * @var integer
 	 * @ORM\Column(type="integer")
 	 * @Serializer\Groups("vue")
-	 * @DT\DataTableColumn()
 	 */
 	public $aantal_voorstellen;
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
 	 * @Serializer\Groups("vue")
-	 * @DT\DataTableColumn()
 	 */
 	public $aantal_stemmen;
 	/**
