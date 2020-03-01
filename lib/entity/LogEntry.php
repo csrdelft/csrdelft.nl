@@ -1,82 +1,68 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\entity;
 
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LogEntry.class.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\LogRepository")
+ * @ORM\Table("log")
  */
-class LogEntry extends PersistentEntity {
+class LogEntry {
 
 	/**
 	 * Primary key
 	 * @var int
+	 * @ORM\Column(type="integer", name="ID")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
 	public $ID;
 	/**
 	 * UID of user or x999
 	 * @var string
+	 * @ORM\Column(type="string", length=4)
 	 */
 	public $uid;
 	/**
 	 * IP address of user
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $ip;
 	/**
 	 * Position of user (if enabled)
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $locatie;
 	/**
 	 * DateTime
-	 * @var string
+	 * @var \DateTime
+	 * @ORM\Column(type="datetime")
 	 */
 	public $moment;
 	/**
 	 * Request URL
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $url;
 	/**
 	 * HTTP Referer
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $referer;
 	/**
 	 * User agent
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $useragent;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'ID' => array(T::Integer, false, 'auto_increment'),
-		'uid' => array(T::UID),
-		'ip' => array(T::String),
-		'locatie' => array(T::String),
-		'moment' => array(T::DateTime),
-		'url' => array(T::String),
-		'referer' => array(T::String),
-		'useragent' => array(T::String)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('ID');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'log';
 
 	public function getFormattedReferer() {
 		if ($this->referer == '') {

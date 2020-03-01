@@ -9,12 +9,12 @@ use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\LogModel;
 use CsrDelft\model\SavedQueryModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\OrmMemcache;
+use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\ProfielService;
 use CsrDelft\service\Roodschopper;
@@ -48,9 +48,9 @@ class ToolsController extends AbstractController {
 	 */
 	private $loginModel;
 	/**
-	 * @var LogModel
+	 * @var LogRepository
 	 */
-	private $logModel;
+	private $logRepository;
 	/**
 	 * @var SavedQueryModel
 	 */
@@ -60,12 +60,12 @@ class ToolsController extends AbstractController {
 	 */
 	private $profielService;
 
-	public function __construct(AccountModel $accountModel, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogModel $logModel, SavedQueryModel $savedQueryModel) {
+	public function __construct(AccountModel $accountModel, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogRepository $logRepository, SavedQueryModel $savedQueryModel) {
 		$this->savedQueryModel = $savedQueryModel;
 		$this->accountModel = $accountModel;
 		$this->profielRepository = $profielRepository;
 		$this->loginModel = $loginModel;
-		$this->logModel = $logModel;
+		$this->logRepository = $logRepository;
 		$this->profielService = $profielService;
 	}
 
@@ -81,21 +81,17 @@ class ToolsController extends AbstractController {
 	}
 
 	public function stats(Request $request) {
-		$criteria = null;
-		$params = [];
 		if ($request->query->has('uid')) {
-			$criteria = "uid = ?";
-			$params[] = $request->query->get('uid');
+			$by = ['uid' => $request->query->get('uid')];
 		} elseif ($request->query->has('ip')) {
-			$criteria = "ip = ?";
-			$params[] = $request->query->get('ip');
+			$by = ['ip' => $request->query->get('ip')];
+		} else {
+			$by = [];
 		}
 
-		$log = $this->logModel->find($criteria, $params, null, 'ID DESC', 30)->fetchAll();
+		$log = $this->logRepository->findBy($by, ['ID' => 'desc'], 30);
 
-		return view('stats.stats', [
-			'log' => $log
-		]);
+		return view('stats.stats', ['log' => $log]);
 	}
 
 	public function verticalelijsten() {
@@ -273,26 +269,28 @@ class ToolsController extends AbstractController {
 		$profielen = $this->profielService->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
 
 		$scoredProfielen = [];
- 		foreach ($profielen as $profiel) {
- 			$score = 0;
+		foreach ($profielen as $profiel) {
+			$score = 0;
 
- 			// Beste match start met de zoekterm
- 			if (startsWith(strtolower($profiel->getNaam('volledig')), strtolower($query))) {
- 				$score += 100;
+			// Beste match start met de zoekterm
+			if (startsWith(strtolower($profiel->getNaam('volledig')), strtolower($query))) {
+				$score += 100;
 			}
 
- 			// Zoek meest lijkende match
- 			$score -= levenshtein($query, $profiel->getNaam());
+			// Zoek meest lijkende match
+			$score -= levenshtein($query, $profiel->getNaam());
 
- 			$scoredProfielen[] = [
- 				'profiel' => $profiel,
+			$scoredProfielen[] = [
+				'profiel' => $profiel,
 				'score' => $score,
 			];
 		}
 
- 		usort($scoredProfielen, function ($a, $b) { return $b['score'] - $a['score']; });
+		usort($scoredProfielen, function ($a, $b) {
+			return $b['score'] - $a['score'];
+		});
 
- 		$scoredProfielen = array_slice($scoredProfielen, 0, 5);
+		$scoredProfielen = array_slice($scoredProfielen, 0, 5);
 
 		$result = array();
 		foreach ($scoredProfielen as $scoredProfiel) {

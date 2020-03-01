@@ -20,7 +20,7 @@
 		@foreach($log as $logRegel)
 			<tr>
 				<td>
-					{{ date('D H:i', strtotime($logRegel->moment)) }}
+					{{ $logRegel->moment->format("D H:i") }}
 				</td>
 				<td>
 					<a href="?uid={{ $logRegel->uid }}">+</a>

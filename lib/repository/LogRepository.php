@@ -1,23 +1,23 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\repository;
 
-use CsrDelft\model\entity\LogEntry;
-use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\entity\LogEntry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * LogModel.class.php
- *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- *
  */
-class LogModel extends PersistenceModel {
-
-	const ORM = LogEntry::class;
+class LogRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, LogEntry::class);
+	}
 
 	public function opschonen() {
-		// Gebruik directe delete, dit is veel sneller
-		$this->database->sqlDelete($this->getTableName(), 'moment < ?', array(date('Y-m-d H:i:s', strtotime('-2 months'))));
+		$this->getEntityManager()
+			->createQuery('DELETE CsrDelft\entity\LogEntry l WHERE l.moment < :moment')
+			->setParameter('moment', date_create('-2 months'))
+			->execute();
 	}
 
 	public function log() {
@@ -29,7 +29,7 @@ class LogModel extends PersistenceModel {
 		} else {
 			$entry->uid = 'fout';
 		}
-		$entry->moment = getDateTime();
+		$entry->moment = date_create();
 		$entry->locatie = '';
 		if (isset($_SERVER['REMOTE_ADDR'])) {
 			$entry->ip = $_SERVER['REMOTE_ADDR'];
@@ -53,7 +53,9 @@ class LogModel extends PersistenceModel {
 			$entry->useragent = '';
 		}
 		$entry->removeOverflow();
-		$this->create($entry);
+
+		$this->getEntityManager()->persist($entry);
+		$this->getEntityManager()->flush();
 	}
 
 }

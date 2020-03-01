@@ -18,7 +18,6 @@ use CsrDelft\Kernel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\instellingen\LidInstellingenModel;
-use CsrDelft\model\LogModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\CliLoginModel;
 use CsrDelft\model\security\LoginModel;
@@ -26,6 +25,7 @@ use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
+use CsrDelft\repository\LogRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once dirname(__DIR__) . '/lib/defines.defaults.php';
@@ -188,7 +188,7 @@ switch (constant('MODE')) {
 		// Validate login
 		$container->get(LoginModel::class)->authenticate();
 
-		$container->get(LogModel::class)->log();
+		$container->get(LogRepository::class)->log();
 
 		// Prefetch
 		$container->get(LidInstellingenModel::class)->prefetch('uid = ?', [LoginModel::getUid()]);
