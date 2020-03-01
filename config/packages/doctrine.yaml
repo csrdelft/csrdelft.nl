@@ -26,3 +26,20 @@ doctrine:
                 dir: '%kernel.project_dir%/lib/entity'
                 prefix: 'CsrDelft\entity'
                 alias: App
+        second_level_cache:
+          region_cache_driver:
+            type: service
+            id: memcached_cache_service
+          enabled: true
+          region_lifetime: 86400
+
+services:
+    memcached_service:
+      class: Memcached
+      calls:
+        - [addServer, ["%env(CACHE_PATH)%csrdelft-cache.socket", 0]]
+
+    memcached_cache_service:
+      class: Doctrine\Common\Cache\MemcachedCache
+      calls:
+        - [setMemcached, ["@memcached_service"]]
