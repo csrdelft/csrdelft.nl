@@ -186,6 +186,12 @@ class Profiel implements Agendeerbaar {
 	 * @ORM\Column(type="string")
 	 * @var string
 	 */
+	public $sec_email;
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+
 	public $mobiel;
 	/**
 	 * @ORM\Column(type="string")
