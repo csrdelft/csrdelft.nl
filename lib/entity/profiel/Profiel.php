@@ -407,12 +407,6 @@ class Profiel implements Agendeerbaar {
 		return $this->email;
 	}
 
-	public function getSecundairEmail() {
-		if (AccountModel::existsUid($this->uid)) {
-			return $this->getAccount()->sec_email;
-		}
-		return $this->sec_email;
-	}
 	/**
 	 * Geef een array met contactgegevens terug, als de velden niet leeg zijn.
 	 *
@@ -421,7 +415,6 @@ class Profiel implements Agendeerbaar {
 	public function getContactgegevens() {
 		return array_filter_empty(array(
 			'Email' => $this->getPrimaryEmail(),
-			'Secundair Email' => $this->getSecundairEmail(),
 			'LinkedIn' => $this->linkedin,
 			'Website' => $this->website
 		));
