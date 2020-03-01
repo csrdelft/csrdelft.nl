@@ -210,7 +210,13 @@
 				@if(is_zichtbaar($profiel, 'email'))
 					<dt>Email</dt>
 					<dd>{{$profiel->getPrimaryEmail()}}</dd>
+					@if($profiel->sec_email)
+						<dt></dt>
+						<dd>{{$profiel->sec_email}}</dd>
+					@endif
+
 				@endif
+
 				@if($profiel->linkedin)
 					<dt>LinkedIn</dt>
 					<dd>{{$profiel->linkedin}}</dd>

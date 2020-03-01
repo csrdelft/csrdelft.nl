@@ -23,6 +23,7 @@ use CsrDelft\view\formulier\invoervelden\IBANField;
 use CsrDelft\view\formulier\invoervelden\LandField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
+use CsrDelft\view\formulier\invoervelden\EmailField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLandField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\StudieField;
@@ -176,6 +177,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('Contact');
 		//TODO: email & multiple contacts
 		$fields['email'] = new RequiredEmailField('email', $profiel->email, 'E-mailadres');
+		$fields['sec_email'] = new EmailField('sec_email', $profiel->sec_email, 'Secundair e-mailadres');
 		if (!$inschrijven) {
 			$fields['email']->readonly = true;
 			$fields['email']->required = false;
