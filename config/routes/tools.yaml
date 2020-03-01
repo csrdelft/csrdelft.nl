@@ -70,6 +70,12 @@ tools-verticalelijsten:
   methods: GET
   defaults: { _mag: P_ADMIN }
 
+tools-memcachestats:
+  path: /tools/memcachestats
+  controller: CsrDelft\controller\ToolsController::memcachestats
+  methods: GET
+  defaults: { _mag: P_ADMIN }
+
 tools-syncldap:
   path: /tools/syncldap
   controller: CsrDelft\controller\ToolsController::syncldap
