@@ -74,13 +74,10 @@ class CmsPaginaController extends AbstractController {
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
 			$pagina->laatst_gewijzigd = date_create();
-			if ($this->cmsPaginaRepository->exists($pagina)) {
-				$this->cmsPaginaRepository->update($pagina);
-				setMelding('Bijgewerkt: ' . $pagina->naam, 1);
-	 		} else {
-				$this->cmsPaginaRepository->create($pagina);
-				setMelding('Ingevoegd: ' . $pagina->naam, 1);
-			}
+			$manager = $this->getDoctrine()->getManager();
+			$manager->persist($pagina);
+			$manager->flush();
+			setMelding('Bijgewerkt: ' . $pagina->naam, 1);
 			return $this->redirectToRoute('cms-bekijken', ['naam' => $pagina->naam]);
 		} else {
 			return view('default', ['content' => $form]);
@@ -93,7 +90,9 @@ class CmsPaginaController extends AbstractController {
 		if (!$pagina OR !$pagina->magVerwijderen()) {
 			throw new CsrToegangException();
 		}
-		$this->cmsPaginaRepository->delete($pagina);
+		$manager = $this->getDoctrine()->getManager();
+		$manager->remove($pagina);
+		$manager->flush();
 		setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
 
 		return new JsonResponse(CSR_ROOT); // redirect

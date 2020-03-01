@@ -27,15 +27,10 @@ class LoginController extends AbstractController {
 	 * @var RememberLoginRepository
 	 */
 	private $rememberLoginRepository;
-	/**
-	 * @var CmsPaginaRepository
-	 */
-	private $cmsPaginaRepository;
 
-	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository, CmsPaginaRepository $cmsPaginaRepository) {
+	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository) {
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->loginModel = $loginModel;
-		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
 	public function loginForm (Request $request) {
