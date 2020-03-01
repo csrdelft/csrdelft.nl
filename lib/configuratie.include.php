@@ -110,7 +110,7 @@ $pdo = new PDO('mysql:host=' . $cred['host'] . ';dbname=' . $cred['db'], $cred['
 ]);
 
 // Set csrdelft/orm parts of the container
-$container->set(OrmMemcache::class, new OrmMemcache(DATA_PATH));
+$container->set(OrmMemcache::class, new OrmMemcache(MEMCACHED_PATH));
 $container->set(Database::class, new Database($pdo));
 $container->set(DatabaseAdmin::class, new DatabaseAdmin($pdo));
 

@@ -33,6 +33,7 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('BASE_PATH', realpath(__DIR__ . '/../') . '/'); # Zet naar absoluut path in je eigen omgeving
 @define('ETC_PATH', BASE_PATH . 'etc/');
 @define('DATA_PATH', BASE_PATH . 'data/');
+@define('MEMCACHED_PATH', DATA_PATH);
 @define('SESSION_PATH', BASE_PATH . 'sessie/');
 @define('LIB_PATH', BASE_PATH . 'lib/');
 @define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
