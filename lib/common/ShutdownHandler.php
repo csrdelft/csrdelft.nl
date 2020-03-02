@@ -57,7 +57,7 @@ final class ShutdownHandler {
 		$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
 		$headers[] = 'Content-Type: text/plain; charset=UTF-8';
 		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
-		$subject = 'Fatal error: ' . $debug['error']['message'];
+		$subject = 'Fatal error: ' . $debug['message'];
 		mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
 	}
 
