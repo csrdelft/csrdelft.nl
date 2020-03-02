@@ -36,11 +36,9 @@ class GoogleController extends AbstractController {
 			$googleToken->uid = LoginModel::getUid();
 			$googleToken->token = $client->getRefreshToken();
 
-			if ($this->googleTokenModel->exists($googleToken)) {
-				$this->googleTokenModel->update($googleToken);
-			} else {
-				$this->googleTokenModel->create($googleToken);
-			}
+			$manager = $this->getDoctrine()->getManager();
+			$manager->persist($googleToken);
+			$manager->flush();
 
 			return $this->csrRedirect(urldecode($state));
 		}
