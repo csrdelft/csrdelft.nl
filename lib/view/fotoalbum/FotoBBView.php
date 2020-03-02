@@ -36,7 +36,7 @@ class FotoBBView implements ToResponse, View {
 		if ($this->groot) {
 			$html .= '?fullscreen';
 		}
-		$html .= '#' . $this->model->getResizedUrl() . '" class="';
+		$html .= '#' . $this->model->getFullUrl() . '" class="';
 		if ($this->responsive) {
 			$html .= 'responsive';
 		}
