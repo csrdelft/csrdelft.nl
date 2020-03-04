@@ -10,7 +10,7 @@ services:
   memcache_service:
     class: Memcache
     calls:
-      - [addServer, ["unix://%env(CACHE_PATH)%csrdelft-cache.socket", 0]]
+      - [connect, ["unix://%env(CACHE_PATH)%csrdelft-cache.socket", 0]]
 
   memcache_cache_service:
     class: CsrDelft\common\cache\MemcacheCache
