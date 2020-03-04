@@ -29,9 +29,10 @@ class IsHetAlView implements View {
 	 * @var array
 	 */
 	public static $wistudat = array(
+		'u kan eten bij een broederhuis do 12 maart?' => '/forum/reactie/124823#124823',
 		'u de webstek geheel naar wens kan instellen?' => '/instellingen',
 		'u de C.S.R.-agenda kan importeren met ICAL?' => '/profiel#agenda',
-		'u het forum kan volgen met RSS?' => '/profiel#forum'
+		'u het forum kan volgen met RSS?' => '/profiel#forum',
 	);
 
 	private static $redEenKindActief = true;
