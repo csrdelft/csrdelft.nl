@@ -31,7 +31,7 @@ $ git submodule update
 ```
 
 ### Stap 3.1
-De hele filestructuur van de repository is nu gedownload op je computer. Een korte uitleg van wat welke folder betekent is te vinden op DEZE WIKIPAGINA (reference nog toevoegen)
+De hele filestructuur van de repository is nu gedownload op je computer. Een korte uitleg van wat welke folder betekent is te vinden op [deze wikipagina](https://github.com/csrdelft/csrdelft.nl/wiki/Filestructuur)
 <br><br>
 
 ## Stap 4: Installatie
