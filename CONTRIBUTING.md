@@ -37,25 +37,7 @@ De hele filestructuur van de repository is nu gedownload op je computer. Een kor
 ## Stap 4: Installatie
 Er zijn drie mogelijke manieren om te installeren, met Docker, Symfony of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
 
-### Symfony
-Dit is nieuw en werkt nog niet 100% (je kan geen groepen bekijken). Waarschijnlijk wordt dit de manier om de boel te draaien.
-
-Installeer Symfony CLI https://symfony.com/doc/master/cloud/getting-started#installing-the-cli-tool
-
-Installeer een MySQL server zoals bij handmatig beschreven en zorg dat deze draait.
-
-Zet `CSR_DOMAIN` naar `127.0.0.1` en `SERVER_PORT` naar `8000` in `lib/defines.include.php` (van `lib/defines.include.php.development.sample`)
-
-Voer het volgende commando uit.
-
-```
-$ symfony server:start --document-root=htdocs
-```
-
-De boel draait nu op `127.0.0.1:8000`
-<br><br><br>
-
-### Met de hand
+### 1. Met de hand
 Installeer Apache2 met PHP en MySQL. Op Windows is er XAMPP, wat dit makkelijk maakt.
 
 #### Apache2
@@ -143,9 +125,9 @@ Vervolgens kan er een foutmelding worden gegooid waarbij staat:
 - etc...
 
 Ga bij zo'n soort foutmelding in de repository folder naar de map `etc`. Maak een kopie van een bovengenoemd \*\*\*.ini.sample bestand en verwijder de .sample file extension. Dit zal het moeten fixen.
-<br><br><br>
+<hr>
 
-### Docker
+### 2. Docker
 Installeer [Docker](http://docker.com).
 
 Kopieer de database dump naar de `data` map. Kopieer de plaetjes naar de `htdocs/plaetjes` map. Kopieer eventuele pasfoto's en fotoalbums naar `data/foto`
@@ -170,7 +152,24 @@ Handige Docker commando's
 
     # Als de javascript build om de een of andere reden is omgevallen
     $ docker-compose restart yarn
+<hr>
 
+### 3. Symfony
+Dit is nieuw en werkt nog niet 100% (je kan geen groepen bekijken). Waarschijnlijk wordt dit de manier om de boel te draaien.
+
+Installeer Symfony CLI https://symfony.com/doc/master/cloud/getting-started#installing-the-cli-tool
+
+Installeer een MySQL server zoals bij handmatig beschreven en zorg dat deze draait.
+
+Zet `CSR_DOMAIN` naar `127.0.0.1` en `SERVER_PORT` naar `8000` in `lib/defines.include.php` (van `lib/defines.include.php.development.sample`)
+
+Voer het volgende commando uit.
+
+```
+$ symfony server:start --document-root=htdocs
+```
+
+De boel draait nu op `127.0.0.1:8000`
 <br><br>
 
 ## Development
