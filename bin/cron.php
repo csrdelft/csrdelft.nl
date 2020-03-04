@@ -20,10 +20,10 @@
 use CsrDelft\Kernel;
 use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\forum\ForumModel;
-use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\InstellingenRepository;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 
@@ -40,7 +40,7 @@ $logModel = $container->get(LogRepository::class);
 $loginModel = $container->get(LoginModel::class);
 $oneTimeTokensModel = $container->get(OneTimeTokensRepository::class);
 $instellingenRepository = $container->get(InstellingenRepository::class);
-$lidInstellingenModel = $container->get(LidInstellingenModel::class);
+$lidInstellingenRepository = $container->get(LidInstellingenRepository::class);
 $corveeHerinneringenModel = $container->get(CorveeHerinneringenModel::class);
 $forumModel = $container->get(ForumModel::class);
 
@@ -75,7 +75,7 @@ try {
 // Instellingen
 try {
 	$instellingenRepository->opschonen();
-	$lidInstellingenModel->opschonen();
+	$lidInstellingenRepository->opschonen();
 } catch (Exception $e) {
 	$debugLogModel->log('cron.php', '(Lid)InstellingenModel::instance()->opschonen()', array(), $e);
 }

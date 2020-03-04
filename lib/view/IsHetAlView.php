@@ -4,9 +4,9 @@ namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\agenda\AgendaItem;
-use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 
 class IsHetAlView implements View {
 	/**
@@ -42,7 +42,8 @@ class IsHetAlView implements View {
 	public function __construct($ishetal) {
 		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
-			$opties = array_slice(LidInstellingenModel::instance()->getTypeOptions('zijbalk', 'ishetal'), 2);
+			$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
+			$opties = array_slice($lidInstellingenRepository->getTypeOptions('zijbalk', 'ishetal'), 2);
 			if (!self::$redEenKindActief && ($key = array_search('red een kind', $opties)) !== false) {
 				unset($opties[$key]);
 			}

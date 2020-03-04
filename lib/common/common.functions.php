@@ -8,11 +8,11 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\instellingen\InstellingenRepository;
-use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\repository\instellingen\InstellingenRepository;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\CsrfField;
@@ -1009,7 +1009,7 @@ function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_
 }
 
 function lid_instelling($module, $key) {
-	return LidInstellingenModel::instance()->getValue($module, $key);
+	return ContainerFacade::getContainer()->get(LidInstellingenRepository::class)->getValue($module, $key);
 }
 
 function instelling($module, $key) {

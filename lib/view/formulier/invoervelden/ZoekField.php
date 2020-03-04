@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\instellingen\LidInstellingenModel;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 
 /**
  */
@@ -72,7 +73,8 @@ JS;
 
 	public function view() {
 		$html = '';
-		foreach (LidInstellingenModel::instance()->getModuleKeys('zoeken') as $option) {
+		$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
+		foreach ($lidInstellingenRepository->getModuleKeys('zoeken') as $option) {
 			$html .= '<a class="dropdown-item disabled" href="#">';
 			$instelling = lid_instelling('zoeken', $option);
 			if ($instelling !== 'nee') {

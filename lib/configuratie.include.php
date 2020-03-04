@@ -17,7 +17,6 @@ use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\CliLoginModel;
 use CsrDelft\model\security\LoginModel;
@@ -25,6 +24,7 @@ use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\LogRepository;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -191,7 +191,6 @@ switch (constant('MODE')) {
 		$container->get(LogRepository::class)->log();
 
 		// Prefetch
-		$container->get(LidInstellingenModel::class)->prefetch('uid = ?', [LoginModel::getUid()]);
 		$container->get(VerticalenModel::class)->prefetch();
 		$container->get(ForumModel::class)->prefetch();
 
