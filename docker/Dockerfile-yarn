@@ -1,4 +1,4 @@
-FROM node:11-alpine
+FROM node:13-alpine
 
 RUN apk add --no-cache \
 	git \
@@ -8,6 +8,7 @@ RUN apk add --no-cache \
 	libpng-dev \
 	libtool \
 	make \
+	python \
 	nasm
 
 WORKDIR /app
