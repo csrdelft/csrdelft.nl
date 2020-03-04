@@ -45,6 +45,7 @@ Maak in je `hosts` (`/etc/hosts` of `C:\Windows\system32\drivers\etc\hosts`) bes
 Voeg bijvoorbeeld de volgende regel toe: `127.0.0.1 dev-csrdelft.nl`
 
 De volgende configuratie werkt goed voor Apache2. (**Let op de** `php_value include_path ...`.)
+
 In XAMPP: `Apache => config => <Browse>[Apache] => conf => extra => httpd-vhosts.conf` en plak het volgende:
 ```
 <VirtualHost dev-csrdelft.nl:80>
@@ -159,7 +160,7 @@ Dit is nieuw en werkt nog niet 100% (je kan geen groepen bekijken). Waarschijnli
 
 Installeer Symfony CLI https://symfony.com/doc/master/cloud/getting-started#installing-the-cli-tool
 
-Installeer een MySQL server zoals bij handmatig beschreven en zorg dat deze draait.
+Installeer een MySQL server zoals staat beschreven bij "Met de hand" en zorg dat deze draait.
 
 Zet `CSR_DOMAIN` naar `127.0.0.1` en `SERVER_PORT` naar `8000` in `lib/defines.include.php` (van `lib/defines.include.php.development.sample`)
 
@@ -172,7 +173,7 @@ $ symfony server:start --document-root=htdocs
 De boel draait nu op `127.0.0.1:8000`
 <br><br>
 
-## Development
+## Stap 5: Development
 
 ### Editorconfig
 Zorg ervoor dat je editor zo is ingesteld dat de code style (indent/newline types) goed staat ingesteld. Check .editorconfig voor de huidige instellingen.
@@ -212,7 +213,7 @@ Het component label is altijd zwart en beschrijft het onderdeel van de stek waar
 `component:soccie`
 ...
 
-## CmsPaginas
+### CmsPaginas
 De volgende CMS pagina's zijn gehardcoded in de stek, zorg dat deze in de `cms_paginas` tabel aanwezig zijn.
 
 * De lege CMS pagina, alle velden leeg
