@@ -19,7 +19,7 @@
 			</tr>
 			@php($opties = ['', 'nee', 'misschien', 'ja'])
 			@foreach($voorkeuren as $voorkeur)
-				@php($profiel = $voorkeur->getProfiel())
+				@php($profiel = $voorkeur->profiel)
 				@if($profiel->isLid() && $voorkeur->voorkeur >= 2)
 					<tr @if($voorkeur->heeftGedaan()) style="opacity: .50" @endif >
 						<td><a href="/commissievoorkeuren/lidpagina/{{$voorkeur->uid}}">{{$profiel->getNaam()}}</a>
