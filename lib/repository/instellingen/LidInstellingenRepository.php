@@ -9,8 +9,6 @@ use CsrDelft\entity\instellingen\LidInstelling;
 use CsrDelft\model\instellingen\InstellingConfiguration;
 use CsrDelft\model\instellingen\InstellingType;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -53,7 +51,9 @@ class LidInstellingenRepository extends AbstractRepository {
 	public function getAllForLid(string $uid) {
 		$result = [];
 		foreach ($this->findBy(['uid' => $uid]) as $instelling) {
-			if (!isset($result[$instelling->module])) $result[$instelling->module] = [];
+			if (!isset($result[$instelling->module])) {
+				$result[$instelling->module] = [];
+			}
 			$result[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
 		}
 
@@ -61,7 +61,13 @@ class LidInstellingenRepository extends AbstractRepository {
 	}
 
 	public function getValue($module, $id) {
-		return $this->getInstelling($module, $id)->waarde;
+		$instelling = $this->getInstelling($module, $id);
+
+		if ($this->getType($module, $id) == InstellingType::Integer) {
+			return (int)$instelling->waarde;
+		}
+
+		return $instelling->waarde;
 	}
 
 	/**
@@ -114,13 +120,21 @@ class LidInstellingenRepository extends AbstractRepository {
 		return $this->getField($module, $id, InstellingConfiguration::FIELD_DEFAULT);
 	}
 
+	public function getType($module, $id) {
+		if ($this->hasKey($module, $id)) {
+			return $this->getField($module, $id, InstellingConfiguration::FIELD_TYPE);
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * @throws Exception
 	 */
 	public function save() {
 		foreach ($this->getAll() as $module => $instellingen) {
 			foreach ($instellingen as $id => $waarde) {
-				if ($this->getType($module, $id) === T::Integer) {
+				if ($this->getType($module, $id) === InstellingType::Integer) {
 					$filter = FILTER_SANITIZE_NUMBER_INT;
 				} else {
 					$filter = FILTER_SANITIZE_STRING;
@@ -140,36 +154,18 @@ class LidInstellingenRepository extends AbstractRepository {
 		$this->getEntityManager()->flush();
 	}
 
-	public function getType($module, $id) {
-		if ($this->hasKey($module, $id)) {
-			return $this->getField($module, $id, InstellingConfiguration::FIELD_TYPE);
-		} else {
-			return null;
-		}
-	}
-
 	public function isValidValue($module, $id, $waarde) {
 		$options = $this->getTypeOptions($module, $id);
 		switch ($this->getType($module, $id)) {
 			case InstellingType::Enumeration:
-				if (isset($options[$waarde]) || in_array($waarde, $options)) {
-					return true;
-				}
-				break;
-
+				return isset($options[$waarde]) || in_array($waarde, $options);
 			case InstellingType::Integer:
-				if ($waarde >= $options[0] AND $waarde <= $options[1]) {
-					return true;
-				}
-				break;
-
+				return is_numeric($waarde) && $waarde >= $options[0] && $waarde <= $options[1];
 			case InstellingType::String:
-				if (strlen($waarde) >= $options[0] AND strlen($waarde) <= $options[1] AND preg_match('/^[\w\-_\. ]*$/', $waarde)) {
-					return true;
-				}
-				break;
+				return strlen($waarde) >= $options[0] && strlen($waarde) <= $options[1] && preg_match('/^[\w\-_\. ]*$/', $waarde);
+			default:
+				return false;
 		}
-		return false;
 	}
 
 	public function getTypeOptions($module, $id) {
@@ -213,12 +209,11 @@ class LidInstellingenRepository extends AbstractRepository {
 		$type = $this->getTypeOptions($entity->module, $entity->instelling_id);
 		$typeOptions = $this->getTypeOptions($entity->module, $entity->instelling_id);
 
-		if ($type === T::Enumeration
-			&& !in_array($entity->waarde, $typeOptions)) {
+		if ($type === InstellingType::Enumeration && !in_array($entity->waarde, $typeOptions)) {
 			throw new CsrGebruikerException("Waarde is geen geldige optie");
 		}
 
-		if ($type === T::String) {
+		if ($type === InstellingType::String) {
 			if (strlen($entity->waarde) > $typeOptions[1]) {
 				throw new CsrGebruikerException("Waarde is te lang");
 			}
@@ -228,7 +223,7 @@ class LidInstellingenRepository extends AbstractRepository {
 			}
 		}
 
-		if ($type === T::Integer) {
+		if ($type === InstellingType::Integer) {
 			if (intval($entity->waarde) > $typeOptions[1]) {
 				throw new CsrGebruikerException("Waarde is te lang");
 			}

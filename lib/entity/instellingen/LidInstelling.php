@@ -43,24 +43,4 @@ class LidInstelling {
 	 * @ORM\Column(type="text")
 	 */
 	public $waarde;
-
-//	public function __construct($cast = false, array $attributes_retrieved = null) {
-//		parent::__construct($cast, $attributes_retrieved);
-//
-//		if ($cast) {
-//			$this->castWaarde();
-//		}
-//	}
-//
-//	public function onAttributesRetrieved(array $attributes) {
-//		parent::onAttributesRetrieved($attributes);
-//
-//		$this->castWaarde();
-//	}
-//
-//	protected function castWaarde() {
-//		if (LidInstellingenRepository::instance()->getType($this->module, $this->instelling_id) === T::Integer) {
-//			$this->waarde = (int)$this->waarde;
-//		}
-//	}
 }

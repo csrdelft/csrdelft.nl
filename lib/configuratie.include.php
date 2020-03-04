@@ -191,7 +191,6 @@ switch (constant('MODE')) {
 		$container->get(LogRepository::class)->log();
 
 		// Prefetch
-//		$container->get(LidInstellingenRepository::class)->prefetch('uid = ?', [LoginModel::getUid()]);
 		$container->get(VerticalenModel::class)->prefetch();
 		$container->get(ForumModel::class)->prefetch();
 
