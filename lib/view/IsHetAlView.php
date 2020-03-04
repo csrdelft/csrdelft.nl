@@ -36,7 +36,7 @@ class IsHetAlView implements View {
 	);
 
 	private static $redEenKindActief = true;
-	private static $redEenKindHuidig = 180;
+	private static $redEenKindHuidig = 280;
 	private static $redEenKindDoel = 280;
 
 	public function __construct($ishetal) {

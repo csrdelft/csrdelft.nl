@@ -31,7 +31,7 @@
 			@php((new \CsrDelft\view\formulier\InstantSearchForm())->view())
 		</div>
 		<ul class="navbar-nav">
-			@foreach($root->getChildren() as $item)
+			@foreach($root->children as $item)
 				@if($item->tekst == 'Personal')
 					@include('menu.personal', ['parent' => $item])
 				@endif

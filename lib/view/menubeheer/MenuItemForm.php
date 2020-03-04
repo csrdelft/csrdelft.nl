@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\menubeheer;
 
-use CsrDelft\model\entity\MenuItem;
+use CsrDelft\entity\MenuItem;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;

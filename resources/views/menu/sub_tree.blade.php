@@ -1,4 +1,4 @@
-@foreach($parent->getChildren() as $item)
+@foreach($parent->children as $item)
 	@if($item->magBekijken())
 		@if($item->hasChildren())
 			<li class="dropdown-submenu @if(isset($dropleft)) dropleft @endif ">

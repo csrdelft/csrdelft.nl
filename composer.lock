@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "585b1fa7603c3621c8c640c59a8cc480",
+    "content-hash": "dde73ac0d096f5a2c378cfa67a23eaf2",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -3319,16 +3319,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v5.0.3",
+            "version": "v5.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "b503e72c8e2fa55eed9e2d3dd6a166f3eaaabb9a"
+                "reference": "c6255e419e8592dab7de6e29b014ae9e8926989a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/b503e72c8e2fa55eed9e2d3dd6a166f3eaaabb9a",
-                "reference": "b503e72c8e2fa55eed9e2d3dd6a166f3eaaabb9a",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/c6255e419e8592dab7de6e29b014ae9e8926989a",
+                "reference": "c6255e419e8592dab7de6e29b014ae9e8926989a",
                 "shasum": ""
             },
             "require": {
@@ -3394,7 +3394,7 @@
                 "caching",
                 "psr6"
             ],
-            "time": "2020-01-10T21:57:37+00:00"
+            "time": "2020-02-24T15:05:31+00:00"
         },
         {
             "name": "symfony/cache-contracts",

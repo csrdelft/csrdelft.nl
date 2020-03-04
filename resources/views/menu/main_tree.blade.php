@@ -1,4 +1,4 @@
-@foreach($parent->getChildren() as $item)
+@foreach($parent->children as $item)
 	@if($item->tekst == 'Personal')
 	@elseif($item->magBekijken())
 		@if($item->hasChildren())

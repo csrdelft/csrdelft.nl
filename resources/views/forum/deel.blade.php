@@ -24,10 +24,10 @@
 					@endforeach
 				</optgroup>
 			@endforeach
-			@foreach(\CsrDelft\model\MenuModel::instance()->getMenu('remotefora')->getChildren() as $remotecat)
+			@foreach(get_menu('remotefora')->children as $remotecat)
 				@if($remotecat->magBekijken())
 					<optgroup label="{{$remotecat->tekst}}">
-						@foreach($remotecat->getChildren() as $remoteforum)
+						@foreach($remotecat->children as $remoteforum)
 							@if($remoteforum->magBekijken())
 								<option value="{{$remoteforum->link}}">{{$remoteforum->tekst}}</option>
 							@endif

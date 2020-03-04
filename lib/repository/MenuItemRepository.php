@@ -1,33 +1,43 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\documenten\DocumentCategorie;
+use CsrDelft\entity\MenuItem;
 use CsrDelft\model\entity\forum\ForumCategorie;
-use CsrDelft\model\entity\MenuItem;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * MenuModel.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @method MenuItem|null find($id, $lockMode = null, $lockVersion = null)
+ * @method MenuItem|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MenuItem[]    findAll()
+ * @method MenuItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MenuModel extends CachedPersistenceModel {
-
-	const ORM = MenuItem::class;
+class MenuItemRepository extends AbstractRepository {
 
 	/**
 	 * Default ORDER BY
 	 * @var string
 	 */
 	protected $default_order = 'volgorde ASC, tekst ASC';
+	/**
+	 * @var CacheInterface
+	 */
+	private $cache;
+
+	public function __construct(ManagerRegistry $registry, CacheInterface $cache) {
+		parent::__construct($registry, MenuItem::class);
+		$this->cache = $cache;
+	}
 
 	/**
 	 * Get menu for viewing.
@@ -40,34 +50,33 @@ class MenuModel extends CachedPersistenceModel {
 		if (empty($naam)) {
 			return null;
 		}
-		$key = $naam . '-menu';
-		if ($this->isCached($key, true)) {
-			$loaded = $this->isCached($key, false); // is the tree root present in runtime cache?
-			$root = $this->getCached($key, true); // this only puts the tree root in runtime cache
-			if (!$loaded) {
-				$this->cacheResult($this->flattenMenu($root), false); // put tree children in runtime cache as well
-			}
-			return $root;
-		}
-		// not cached
-		$root = $this->getMenuRoot($naam);
-		if ($root) {
+
+		return $this->cache->get($naam . '-menu', function (ItemInterface $item) use ($naam) {
+			$root = $this->getMenuRoot($naam);
 			$this->getExtendedTree($root);
-		} else {
-			// niet bestaand menu?
-			$root = $this->nieuw(0);
-			$root->tekst = $naam;
-			if ($naam == LoginModel::getUid()) {
-				// maak favorieten menu
-				$root->link = '/menubeheer/beheer/' . $naam;
-			} else {
-				$root->link = '';
-			}
-			$this->create($root);
-		}
-		$this->cache($root); // cache for getParent()
-		$this->setCache($key, $root, true);
-		return $root;
+
+			return $root;
+		});
+//		if ($this->isCached($key, true)) {
+//			$loaded = $this->isCached($key, false); // is the tree root present in runtime cache?
+//			$root = $this->getCached($key, true); // this only puts the tree root in runtime cache
+//			if (!$loaded) {
+//				$this->cacheResult($this->flattenMenu($root), false); // put tree children in runtime cache as well
+//			}
+//			return $root;
+//		}
+		// not cached
+//		$this->cache($root); // cache for getParent()
+//		$this->setCache($key, $root, true);
+	}
+
+	/**
+	 * @param string $naam
+	 *
+	 * @return MenuItem|null
+	 */
+	public function getMenuRoot($naam) {
+		return $this->findOneBy(['parent_id' => 0, 'tekst' => $naam]);
 	}
 
 	/**
@@ -78,9 +87,10 @@ class MenuModel extends CachedPersistenceModel {
 	 * @return MenuItem $parent
 	 */
 	public function getExtendedTree(MenuItem $parent) {
-		foreach ($parent->getChildren() as $child) {
-			$this->getExtendedTree($child);
-		}
+		if ($parent->children)
+			foreach ($parent->children as $child) {
+				$this->getExtendedTree($child);
+			}
 		// append additional children
 		switch ($parent->tekst) {
 
@@ -93,7 +103,7 @@ class MenuModel extends CachedPersistenceModel {
 					$item->link = '/forum#' . $categorie->categorie_id;
 					$item->tekst = $categorie->titel;
 					$parent->children[] = $item;
-					$this->cache($item);
+//					$this->cache($item);
 
 					foreach ($categorie->getForumDelen() as $deel) {
 						$subitem = $this->nieuw($item->item_id);
@@ -103,7 +113,7 @@ class MenuModel extends CachedPersistenceModel {
 						$item->children[] = $subitem;
 					}
 				}
-				foreach (MenuModel::instance()->getMenu('remotefora')->getChildren() as $remotecat) {
+				foreach ($this->getMenu('remotefora')->children as $remotecat) {
 					$parent->children[] = $remotecat;
 				}
 				break;
@@ -133,100 +143,6 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * Build tree structure.
-	 *
-	 * @param MenuItem $parent
-	 * @return MenuItem $parent
-	 */
-	public function getTree(MenuItem $parent) {
-		foreach ($parent->getChildren() as $child) {
-			$this->getTree($child);
-		}
-		return $parent;
-	}
-
-	/**
-	 * Flatten tree structure.
-	 *
-	 * @param MenuItem $root
-	 * @return MenuItem[]
-	 */
-	public function flattenMenu(MenuItem $root) {
-		$list = $root->getChildren();
-		foreach ($list as $child) {
-			$list = array_merge($list, $this->flattenMenu($child));
-		}
-		return $list;
-	}
-
-	/**
-	 * @param string $naam
-	 *
-	 * @return bool|MenuItem
-	 */
-	public function getMenuRoot($naam) {
-		$root = $this->find('parent_id = ? AND tekst = ? ', array(0, $naam), null, null, 1)->fetch();
-		if ($root) {
-			return $this->cache($root);
-		}
-		return false;
-	}
-
-	/**
-	 * @param MenuItem $parent
-	 *
-	 * @return MenuItem[]
-	 */
-	public function getChildren(MenuItem $parent) {
-		return $this->prefetch('parent_id = ?', array($parent->item_id)); // cache for getParent()
-	}
-
-	/**
-	 * Lijst van alle menu roots om te beheren.
-	 *
-	 * @return MenuItem[]|false
-	 */
-	public function getMenuBeheerLijst() {
-		if (LoginModel::mag(P_ADMIN)) {
-			return $this->find('parent_id = ?', array(0));
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @param MenuItem $item
-	 *
-	 * @return MenuItem
-	 */
-	public function getRoot(MenuItem $item) {
-		if ($item->parent_id === 0) {
-			return $item;
-		}
-		return $this->getRoot($item->getParent());
-	}
-
-	/**
-	 * Get menu item by id (cached).
-	 *
-	 * @param int $id
-	 * @return MenuItem|false
-	 */
-	public function getMenuItem($id) {
-		return $this->retrieveByPrimaryKey(array($id));
-	}
-
-	/**
-	 * Get the parent of a menu item (cached).
-	 *
-	 * @param MenuItem $item
-	 * @return MenuItem
-	 */
-	public function getParent(MenuItem $item) {
-		return $this->getMenuItem($item->parent_id);
-	}
-
-	/**
 	 * @param int $parent_id
 	 *
 	 * @return MenuItem
@@ -241,22 +157,81 @@ class MenuModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * @param PersistentEntity|MenuItem $entity
+	 * Build tree structure.
 	 *
-	 * @return void
+	 * @param MenuItem $parent
+	 * @return MenuItem $parent
 	 */
-	public function create(PersistentEntity $entity) {
-		$entity->item_id = (int)parent::create($entity);
-		$this->flushCache(true);
+	public function getTree(MenuItem $parent) {
+		foreach ($parent->children as $child) {
+			$this->getTree($child);
+		}
+		return $parent;
 	}
 
 	/**
-	 * @param PersistentEntity|MenuItem $entity
-	 * @return int
+	 * Flatten tree structure.
+	 *
+	 * @param MenuItem $root
+	 * @return MenuItem[]
 	 */
-	public function update(PersistentEntity $entity) {
-		$this->flushCache(true);
-		return parent::update($entity);
+	public function flattenMenu(MenuItem $root) {
+		$list = [$root];
+
+		if ($root->children) {
+			foreach ($root->children as $child) {
+				$list[] = $child;
+				foreach ($this->flattenMenu($child) as $subChild) {
+					$list[] = $subChild;
+				}
+			}
+		}
+		return $list;
+	}
+
+	/**
+	 * Lijst van alle menu roots om te beheren.
+	 *
+	 * @return MenuItem[]|false
+	 */
+	public function getMenuBeheerLijst() {
+		if (LoginModel::mag(P_ADMIN)) {
+			return $this->findBy(['parent_id' => 0]);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @param MenuItem $item
+	 *
+	 * @return MenuItem
+	 */
+	public function getRoot(MenuItem $item) {
+		if ($item->parent_id === 0) {
+			return $item;
+		}
+		return $this->getRoot($item->parent);
+	}
+
+	/**
+	 * Get the parent of a menu item (cached).
+	 *
+	 * @param MenuItem $item
+	 * @return MenuItem
+	 */
+	public function getParent(MenuItem $item) {
+		return $this->getMenuItem($item->parent_id);
+	}
+
+	/**
+	 * Get menu item by id (cached).
+	 *
+	 * @param int $id
+	 * @return MenuItem|false
+	 */
+	public function getMenuItem($id) {
+		return $this->find($id);
 	}
 
 	/**
@@ -270,8 +245,8 @@ class MenuModel extends CachedPersistenceModel {
 			$update = array('parent_id' => $item->parent_id);
 			$where = 'parent_id = :oldid';
 			$rowCount = Database::instance()->sqlUpdate($this->getTableName(), $update, $where, array(':oldid' => $item->item_id));
+			$this->cache->delete($item->tekst . '-menu');
 			$this->delete($item);
-			$this->flushCache(true);
 			return $rowCount;
 		});
 	}
@@ -288,7 +263,7 @@ class MenuModel extends CachedPersistenceModel {
 		$html = '<ol class="breadcrumb">';
 		foreach ($breadcrumbs as $k => $breadcrumb) {
 			if (is_string($breadcrumb)) {
-				$breadcrumb = (object) ['link' => $k, 'tekst' => $breadcrumb];
+				$breadcrumb = (object)['link' => $k, 'tekst' => $breadcrumb];
 			}
 
 			if ($k == array_key_last($breadcrumbs)) {
@@ -335,17 +310,14 @@ class MenuModel extends CachedPersistenceModel {
 			];
 		}
 
-		/** @var MenuItem $item */
-		$items = $this->find('link = ? AND zichtbaar = 1', [$link])->fetchAll();
-
-		$item = null;
+		$items = $this->findBy(['link' => $link, 'zichtbaar' => $link]);
 
 		foreach ($items as $item) {
 			if ($item->magBekijken()) {
 				$breadcrumbs = [$item];
 
 				while ($item->parent_id !== 0) {
-					$item = $item->getParent();
+					$item = $item->parent;
 
 					$breadcrumbs[] = $item;
 				}

@@ -8,9 +8,9 @@ use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
-use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
+use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
 use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
@@ -24,9 +24,10 @@ use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
 abstract class Zijbalk {
 
 	public static function addStandaardZijbalk(array $zijbalk) {
+		$menuItemRepository = ContainerFacade::getContainer()->get(MenuItemRepository::class);
 		// Favorieten menu
 		if (LoginModel::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'favorieten') == 'ja') {
-			$menu = MenuModel::instance()->getMenu(LoginModel::getUid());
+			$menu = $menuItemRepository->getMenu(LoginModel::getUid());
 			$menu->tekst = 'Favorieten';
 			array_unshift($zijbalk, view('menu.block', ['root' => $menu]));
 		}
@@ -37,7 +38,7 @@ abstract class Zijbalk {
 
 		// Sponsors
 		if (LoginModel::mag(P_LOGGED_IN)) {
-			$sponsor_menu = MenuModel::instance()->getMenu("sponsors");
+			$sponsor_menu = $menuItemRepository->getMenu("sponsors");
 			$sponsor_menu->tekst = 'Mogelijkheden';
 			$zijbalk[] = view('menu.block', ['root' => $sponsor_menu]);
 		}

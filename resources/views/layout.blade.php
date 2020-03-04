@@ -5,9 +5,9 @@
 </head>
 <body class="nav-is-fixed {{lid_instelling('zijbalk', 'breedte')}}" @yield('bodyArgs')>
 @php(view('menu.main', [
-  'root' => \CsrDelft\model\MenuModel::instance()->getMenu('main'),
-  'personal' => \CsrDelft\model\MenuModel::instance()->getMenu('Personal'),
-  'favorieten' => \CsrDelft\model\MenuModel::instance()->getMenu(\CsrDelft\model\security\LoginModel::getUid()),
+  'root' => get_menu('main'),
+  'personal' => get_menu('Personal'),
+  'favorieten' => get_menu(\CsrDelft\model\security\LoginModel::getUid()),
 ])->view())
 <nav id="zijbalk">
 	@php($zijbalk = \CsrDelft\view\Zijbalk::addStandaardZijbalk(isset($zijbalk) ? $zijbalk : []))
@@ -23,7 +23,7 @@
 <main class="container my-3 flex-shrink-0">
 	<nav aria-label="breadcrumb">
 		@section('breadcrumbs')
-			{!! csr_breadcrumbs(\CsrDelft\model\MenuModel::instance()->getBreadcrumbs($_SERVER['REQUEST_URI'])) !!}
+			{!! csr_breadcrumbs(get_breadcrumbs($_SERVER['REQUEST_URI'])) !!}
 		@show
 	</nav>
 	<div class="cd-page-content">
@@ -46,14 +46,12 @@
 					</small>
 				@endcan @endif
 			</div>
-			@php($menu = \CsrDelft\model\MenuModel::instance()->getMenu('main'))
-
-			@foreach($menu->getChildren() as $item)
+			@foreach(get_menu('main')->children as $item)
 				@if($item->magBekijken())
 					<div class="col-6 col-md">
 						<h5>{{$item->tekst}}</h5>
 						<ul class="list-unstyled text-small">
-							@foreach($item->getChildren() as $subItem)
+							@foreach($item->children as $subItem)
 								@if($subItem->magBekijken())
 									<li><a class="text-muted" href="{{$subItem->link}}">{{$subItem->tekst}}</a></li>
 								@endif

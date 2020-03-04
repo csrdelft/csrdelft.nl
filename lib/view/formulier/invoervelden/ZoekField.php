@@ -3,9 +3,9 @@
 namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\repository\MenuItemRepository;
 
 /**
  */
@@ -35,11 +35,13 @@ else {
 JS;
 		if (LoginModel::mag(P_LEDEN_READ)) {
 
+			$menuRepository = ContainerFacade::getContainer()->get(MenuItemRepository::class);
+
 			if (lid_instelling('zoeken', 'favorieten') === 'ja') {
-				$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
+				$this->addSuggestions($menuRepository->getMenu(LoginModel::getUid())->children);
 			}
 			if (lid_instelling('zoeken', 'menu') === 'ja') {
-				$this->addSuggestions(MenuModel::instance()->flattenMenu(MenuModel::instance()->getMenu('main')));
+				$this->addSuggestions($menuRepository->flattenMenu($menuRepository->getMenu('main')));
 			}
 
 			$this->suggestions[] = '/zoeken?q=';
@@ -50,10 +52,10 @@ JS;
 		}
 	}
 
-	private function addSuggestions(array $list) {
+	private function addSuggestions($list) {
 		foreach ($list as $item) {
 			if ($item->magBekijken()) {
-				$parent = $item->getParent();
+				$parent = $item->parent;
 				if ($parent AND $parent->tekst != 'main') {
 					if ($parent->tekst == LoginModel::getUid()) { // werkomheen
 						$parent->tekst = 'Favorieten';

@@ -1,8 +1,8 @@
 <?php /** @noinspection PhpUnused wordt gebruikt in templates*/
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\MenuModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
+use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
@@ -385,7 +385,7 @@ function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) 
 }
 
 function csr_breadcrumbs($breadcrumbs) {
-	return MenuModel::instance()->renderBreadcrumbs($breadcrumbs);
+	return ContainerFacade::getContainer()->get(MenuItemRepository::class)->renderBreadcrumbs($breadcrumbs);
 }
 
 /**
@@ -435,4 +435,12 @@ function toestemming_gegeven() {
 
 function toestemming_form() {
 	return new ToestemmingModalForm(ContainerFacade::getContainer()->get(LidToestemmingRepository::class));
+}
+
+function get_menu($name) {
+	return ContainerFacade::getContainer()->get(MenuItemRepository::class)->getMenu($name);
+}
+
+function get_breadcrumbs($name) {
+	return ContainerFacade::getContainer()->get(MenuItemRepository::class)->getBreadcrumbs($name);
 }

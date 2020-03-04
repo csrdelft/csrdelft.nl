@@ -1,13 +1,14 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\entity;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\model\forum\ForumDradenModel;
-use CsrDelft\model\MenuModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\MenuItemRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * MenuItem.class.php
@@ -16,42 +17,53 @@ use CsrDelft\Orm\Entity\T;
  *
  * Een menu-item instantie beschrijft een menu onderdeel van een menu-boom
  * en heeft daarom een parent.
+ *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\MenuItemRepository")
+ * @ORM\Table("menus")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class MenuItem extends PersistentEntity {
-
+class MenuItem {
 	/**
 	 * Primary key
 	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
 	 */
 	public $item_id;
 	/**
 	 * Dit menu-item is een sub-item van
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $parent_id;
 	/**
 	 * Volgorde van weergave
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $volgorde;
 	/**
 	 * Link tekst
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $tekst;
 	/**
 	 * Link url
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $link;
 	/**
 	 * LoginModel::mag
 	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $rechten_bekijken;
 	/**
 	 * Zichtbaar of verborgen
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $zichtbaar;
 	/**
@@ -59,74 +71,22 @@ class MenuItem extends PersistentEntity {
 	 * @var boolean
 	 */
 	public $active;
+
+	/**
+	 * @var MenuItem|null
+	 * @ORM\ManyToOne(targetEntity="MenuItem", inversedBy="children")
+	 * @ORM\JoinColumn(fieldName="parent_id", referencedColumnName="item_id")
+	 */
+	public $parent;
 	/**
 	 * De sub-items van dit menu-item
-	 * @var array
+	 * @var MenuItem[]
+	 * @ORM\OneToMany(targetEntity="MenuItem", mappedBy="parent")
 	 */
 	public $children;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'item_id' => array(T::Integer, false, 'auto_increment'),
-		'parent_id' => array(T::Integer),
-		'volgorde' => array(T::Integer),
-		'tekst' => array(T::String),
-		'link' => array(T::String),
-		'rechten_bekijken' => array(T::String, true),
-		'zichtbaar' => array(T::Boolean)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('item_id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'menus';
-
-	public function getChildren() {
-		if (!isset($this->children)) {
-			$this->children = MenuModel::instance()->getChildren($this);
-		}
-		return $this->children;
-	}
 
 	public function hasChildren() {
-		$this->getChildren();
 		return !empty($this->children);
-	}
-
-	/**
-	 * Do not store parent as well as children:
-	 * bi-directional not possible for serialization.
-	 *
-	 * @return MenuItem
-	 */
-	public function getParent() {
-		return MenuModel::instance()->getParent($this);
-	}
-
-	/**
-	 * Bepaald of het gevraagde menu-item een
-	 * sub-item is van dit menu-item.
-	 *
-	 * @param MenuItem $item
-	 * @return boolean
-	 */
-	public function isParentOf(MenuItem $item) {
-		if ($this->item_id === $item->parent_id) {
-			return false;
-		}
-		foreach ($this->getChildren() as $child) {
-			if ($child->isParentOf($item)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public function magBekijken() {
