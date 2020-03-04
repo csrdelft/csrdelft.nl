@@ -41,7 +41,8 @@ class IsHetAlView implements View {
 	public function __construct($ishetal) {
 		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
-			$opties = array_slice(LidInstellingenRepository::instance()->getTypeOptions('zijbalk', 'ishetal'), 2);
+			$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
+			$opties = array_slice($lidInstellingenRepository->getTypeOptions('zijbalk', 'ishetal'), 2);
 			if (!self::$redEenKindActief && ($key = array_search('red een kind', $opties)) !== false) {
 				unset($opties[$key]);
 			}
