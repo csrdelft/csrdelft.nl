@@ -1,0 +1,18 @@
+doctrine:
+  orm:
+    second_level_cache:
+      region_cache_driver:
+        type: service
+        id: memcache_cache_service
+      enabled: true
+      region_lifetime: 86400
+services:
+  memcache_service:
+    class: Memcache
+    calls:
+      - [connect, ["unix://%env(CACHE_PATH)%csrdelft-cache.socket", 0]]
+
+  memcache_cache_service:
+    class: CsrDelft\common\cache\MemcacheCache
+    calls:
+      - [setMemcache, ["@memcache_service"]]

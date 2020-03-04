@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\instellingen\InstellingenRepository")
  * @ORM\Table("instellingen")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Instelling {
 

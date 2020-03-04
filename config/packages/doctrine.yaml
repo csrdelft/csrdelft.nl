@@ -26,3 +26,4 @@ doctrine:
                 dir: '%kernel.project_dir%/lib/entity'
                 prefix: 'CsrDelft\entity'
                 alias: App
+

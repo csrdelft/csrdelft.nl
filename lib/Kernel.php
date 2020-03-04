@@ -54,6 +54,11 @@ class Kernel extends BaseKernel {
 		$loader->load($confDir . '/{packages}/' . $this->environment . '/**/*' . self::CONFIG_EXTS, 'glob');
 		$loader->load($confDir . '/{services}' . self::CONFIG_EXTS, 'glob');
 		$loader->load($confDir . '/{services}_' . $this->environment . self::CONFIG_EXTS, 'glob');
+
+		// We willen dat alles ook werkt als Memcache niet bestaat
+		if (class_exists("Memcache")) {
+			$loader->load($confDir . '/custom/memcache.yaml');
+		}
 	}
 
 	/**

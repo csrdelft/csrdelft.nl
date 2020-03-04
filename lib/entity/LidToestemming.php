@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Een LidToestemming beschrijft een Instelling per Lid.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\instellingen\LidToestemmingRepository")
  * @ORM\Table("lidtoestemmingen")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class LidToestemming {
 	/**

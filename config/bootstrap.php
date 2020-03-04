@@ -8,6 +8,7 @@ require dirname(__DIR__).'/vendor/autoload.php';
 
 $cred = Ini::lees(Ini::MYSQL);
 $_ENV['DATABASE_URL'] = "mysql://{$cred['user']}:{$cred['pass']}@{$cred['host']}:3306/{$cred['db']}";
+$_ENV['CACHE_PATH'] = MEMCACHED_PATH;
 
 $_SERVER += $_ENV;
 $_SERVER['APP_ENV'] = DEBUG ? 'dev' : 'prod';

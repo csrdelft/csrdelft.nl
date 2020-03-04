@@ -89,7 +89,7 @@ Maak een database `csrdelft` aan.
 CREATE USER 'csrdelft'@'localhost' IDENTIFIED BY 'bl44t';
 CREATE DATABASE `csrdelft` ;
 GRANT ALL PRIVILEGES ON `csrdelft` . * TO 'csrdelft'@'localhost';
-``` 
+```
 
 Hernoem `etc/mysql.ini.sample` naar `etc/mysql.ini` en voer de goede waarden in.
 
@@ -120,6 +120,18 @@ $ yarn run watch
 $ yarn run watch-poll
 ```
 
+#### Cache (geavanceerd)
+
+In productie draait memcached als cache. Het is ook mogelijk om deze lokaal in te stellen om bijvoorbeeld te testen. Installeer hiervoor de memcache php extensie van pecl (let op, geen **d** aan het eind).
+
+De memcached server maakt een unix socket in de data map met de naam `csrdelft-cache.socket`, de mapnaam is aan te passen met de `MEMCACHED_PATH` constant, de naam van de socket is gehard-coded.
+
+```bash
+$ memcached -s ./data/csrdelft-cache.socket
+```
+
+Let op, als je de memcache plugin installeerd wordt er geprobeerd om een verbinding met de cache te maken en moet de cache dus draaien. Als je dit vervelend vindt moet je er maar iets voor bouwen.
+
 ### Docker
 
 Installeer [Docker](http://docker.com).
@@ -132,18 +144,18 @@ Kopieer de database dump naar de `data` map. Kopieer de plaetjes naar de `htdocs
 Dit zet alles klaar om de stek te runnen. Als dit klaar is kun je naar `http://localhost:8080` navigeren. Aanpassingen worden direct doorgevoerd.
 
 Je kan met de database verbinden op `localhost:3307`, met PhpStorm, HeidiSQL, of wat anders. Met gebruikersnaam `csrdelft`, wachtwoord `bl44t` op database `csrdelft`.
-    
-Handige Docker commando's 
+
+Handige Docker commando's
 
     # Voeg een php dependency toe
     $ docker-compose run composer require myVendor/package
-    
+
     # Voer de migraties uit
     $ docker-compose run composer run-script migrate
-    
+
     # Voeg een npm dependency toe
     $ docker-compose run yarn add myPackage
-    
+
     # Als de javascript build om de een of andere reden is omgevallen
     $ docker-compose restart yarn
 
