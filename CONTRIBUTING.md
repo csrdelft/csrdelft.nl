@@ -28,6 +28,10 @@ $ git submodule init
 $ git submodule update
 ```
 
+### Stap 3.1
+De hele filestructuur van de repository is nu gedownload op je computer. Een korte uitleg van wat welke folder betekent is te vinden op DEZE WIKIPAGINA (reference nog toevoegen)
+
+
 ## Stap 4: Installatie
 
 Er zijn drie mogelijke manieren om te installeren, met Docker, Symfony of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
@@ -56,16 +60,17 @@ Installeer Apache2 met PHP en MySQL. Op Windows is er XAMPP, wat dit makkelijk m
 
 #### Apache2
 
-Maak in je `hosts` (`/etc/hosts` of `C:\Windows\system32\drivers\etc\hosts`) bestand een verwijzing van `dev.csrdelft.nl` naar `localhost`.
+Maak in je `hosts` (`/etc/hosts` of `C:\Windows\system32\drivers\etc\hosts`) bestand een verwijzing van `dev-csrdelft.nl` naar `localhost`.
+Voeg bijvoorbeeld de volgende regel toe: `127.0.0.1 dev-csrdelft.nl`
 
-De volgende configuratie werkt goed voor Apache2, let op de `php_value include_path ...`.
-
+De volgende configuratie werkt goed voor Apache2. (**Let op de** `php_value include_path ...`.)
+In XAMPP: `Apache => config => <Browse>[Apache] => conf => extra => httpd-vhosts.conf` en plak het volgende:
 ```
-<VirtualHost dev.csrdelft.nl:80>
+<VirtualHost dev-csrdelft.nl:80>
     DocumentRoot "<repo root>\htdocs"
-    ServerName dev.csrdelft.nl
-    ServerAlias dev.csrdelft.nl
-    ErrorLog "logs/dev.csrdelft.nl-error.log"
+    ServerName dev-csrdelft.nl
+    ServerAlias dev-csrdelft.nl
+    ErrorLog "logs/dev-csrdelft.nl-error.log"
     #tell php to look in the lib-dir
     php_value include_path "<repo root>\lib"
     <Directory "<repo root>\htdocs">
@@ -79,7 +84,9 @@ De volgende configuratie werkt goed voor Apache2, let op de `php_value include_p
 
 #### PHP
 
-Enable `mod_ldap` en .. in `php.ini`
+Enable `ldap` in `php.ini`
+
+In XAMPP: `Apache => config => PHP (php.ini) => Zoek naar ldap => Haal de ; bij ;extension=ldap weg`
 
 #### MySQL
 
@@ -87,7 +94,7 @@ Maak een database `csrdelft` aan.
 
 ```
 CREATE USER 'csrdelft'@'localhost' IDENTIFIED BY 'bl44t';
-CREATE DATABASE `csrdelft` ;
+CREATE DATABASE `csrdelft`;
 GRANT ALL PRIVILEGES ON `csrdelft` . * TO 'csrdelft'@'localhost';
 ```
 
@@ -131,6 +138,18 @@ $ memcached -s ./data/csrdelft-cache.socket
 ```
 
 Let op, als je de memcache plugin installeerd wordt er geprobeerd om een verbinding met de cache te maken en moet de cache dus draaien. Als je dit vervelend vindt moet je er maar iets voor bouwen.
+
+#### Voorkomende foutmeldingen
+
+Als de stek nu draait (Apache is gestart en de database is actief), ga dan naar localhost:8080 in de webbrowser.
+Vervolgens kan er een foutmelding worden gegooid waarbij staat:
+- slack.ini is not available (of iets soortgelijks)
+- google.ini is not available (of iets soortgelijks)
+- emails.ini is not available (of iets soortgelijks)
+- etc...
+
+Ga bij zo'n soort foutmelding in de repository folder naar de map `etc`. Maak een kopie van een bovengenoemd \*\*\*.ini.sample bestand en verwijder de .sample file extension. Dit zal het moeten fixen.
+
 
 ### Docker
 
