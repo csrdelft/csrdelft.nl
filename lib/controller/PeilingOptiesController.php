@@ -6,9 +6,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingOptie;
-use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
+use CsrDelft\service\PeilingenService;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieTable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,14 +22,14 @@ use Symfony\Component\HttpFoundation\Response;
  * Voor routes in /peilingen/opties
  */
 class PeilingOptiesController extends AbstractController {
-	/** @var PeilingenLogic */
-	private $peilingenLogic;
+	/** @var PeilingenService */
+	private $peilingenService;
 	/** @var PeilingOptiesRepository */
 	private $peilingOptiesRepository;
 
-	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingenLogic $peilingenLogic) {
+	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingenService $peilingenService) {
 		$this->peilingOptiesRepository = $peilingOptiesRepository;
-		$this->peilingenLogic = $peilingenLogic;
+		$this->peilingenService = $peilingenService;
 	}
 
 	public function table($id) {
@@ -49,7 +49,7 @@ class PeilingOptiesController extends AbstractController {
 	public function toevoegen(EntityManagerInterface $em, $id) {
 		$form = new PeilingOptieForm(new PeilingOptie(), $id);
 
-		if (!$this->peilingenLogic->magOptieToevoegen($id)) {
+		if (!$this->peilingenService->magOptieToevoegen($id)) {
 			throw new CsrGebruikerException("Mag geen opties meer toevoegen!");
 		}
 

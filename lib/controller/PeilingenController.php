@@ -6,9 +6,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\peilingen\PeilingenLogic;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\peilingen\PeilingenRepository;
+use CsrDelft\service\PeilingenService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
@@ -24,12 +24,12 @@ use Symfony\Component\HttpFoundation\Response;
 class PeilingenController extends AbstractController {
 	/** @var PeilingenRepository */
 	private $peilingenRepository;
-	/** @var PeilingenLogic */
-	private $peilingenLogic;
+	/** @var PeilingenService */
+	private $peilingenService;
 
-	public function __construct(PeilingenRepository $peilingenRepository, PeilingenLogic $peilingenLogic) {
+	public function __construct(PeilingenRepository $peilingenRepository, PeilingenService $peilingenService) {
 		$this->peilingenRepository = $peilingenRepository;
-		$this->peilingenLogic = $peilingenLogic;
+		$this->peilingenService = $peilingenService;
 	}
 
 	/**
@@ -133,7 +133,7 @@ class PeilingenController extends AbstractController {
 	public function stem(Request $request, $id) {
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);
 
-		if($this->peilingenLogic->stem($id, $ids, LoginModel::getUid())) {
+		if($this->peilingenService->stem($id, $ids, LoginModel::getUid())) {
 			return new JsonResponse(true);
 		} else {
 			return new JsonResponse(false, 400);

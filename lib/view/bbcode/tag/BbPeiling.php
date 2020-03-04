@@ -6,8 +6,6 @@ use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\peilingen\Peiling;
-use CsrDelft\model\peilingen\PeilingenLogic;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 

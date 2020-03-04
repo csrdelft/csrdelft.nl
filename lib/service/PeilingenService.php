@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\peilingen;
+namespace CsrDelft\service;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
@@ -17,7 +17,7 @@ use Doctrine\ORM\ORMException;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 02/11/2018
  */
-class PeilingenLogic {
+class PeilingenService {
 	/**
 	 * @var PeilingenRepository
 	 */
