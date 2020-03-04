@@ -2,17 +2,18 @@
 
 namespace CsrDelft\model\forum;
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadMelding;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\instellingen\LidInstellingenModel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * Model voor bijhouden, bewerken en verzenden van meldingen voor forumberichten
@@ -56,7 +57,8 @@ class ForumDradenMeldingModel extends CachedPersistenceModel {
 		if ($voorkeur) {
 			return $voorkeur->niveau;
 		} else {
-			$wilMeldingBijVermelding = LidInstellingenModel::instance()->getInstellingVoorLid('forum', 'meldingStandaard', $uid);
+			$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
+			$wilMeldingBijVermelding = $lidInstellingenRepository->getInstellingVoorLid('forum', 'meldingStandaard', $uid);
 			return $wilMeldingBijVermelding === 'ja' ? ForumDraadMeldingNiveau::VERMELDING : ForumDraadMeldingNiveau::NOOIT;
 		}
 	}

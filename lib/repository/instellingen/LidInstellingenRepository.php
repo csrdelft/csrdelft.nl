@@ -1,56 +1,47 @@
 <?php
 
-namespace CsrDelft\model\instellingen;
+namespace CsrDelft\repository\instellingen;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\yaml\YamlInstellingen;
-use CsrDelft\model\entity\instellingen\LidInstelling;
+use CsrDelft\entity\instellingen\LidInstelling;
+use CsrDelft\model\instellingen\InstellingConfiguration;
+use CsrDelft\model\instellingen\InstellingType;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\AbstractRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 
 
 /**
- * LidInstellingenModel.class.php
- *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  *
  * Deze class houdt de instellingen bij voor een gebruiker.
  * In de sessie en in het profiel van leden.
+ * @method LidInstelling|null findOneBy(array $criteria, array $orderBy = null)
+ * @method LidInstelling[]    findAll()
+ * @method LidInstelling|null find($id, $lockMode = null, $lockVersion = null)
+ * @method LidInstelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LidInstellingenModel extends CachedPersistenceModel {
+class LidInstellingenRepository extends AbstractRepository {
 	use YamlInstellingen;
 
-	const ORM = LidInstelling::class;
-	protected $memcache_prefetch = true;
-
 	/**
-	 * InstellingenModel constructor.
+	 * @param ManagerRegistry $registry
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
-	public function __construct() {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, LidInstelling::class);
 
 		$this->load('instellingen/lid_instelling.yaml', new InstellingConfiguration());
 	}
 
-	/**
-	 * Uid van lid waarvoor instellingen opgehaald moeten worden.
-	 * Indien niet ingevuld wordt huidig lid gebruikt.
-	 * @var int
-	 */
-	private $uid;
-
-	private function getUid() {
-		return LoginModel::getUid();
-	}
 	/**
 	 * Geeft een array terug van dezelfde vorm als de instellingen, maar gevuld met gekozen instellingen.
 	 *
@@ -60,13 +51,17 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	 * @return string[]
 	 */
 	public function getAllForLid(string $uid) {
-		return array_reduce($this->find('uid = ?', [$uid])->fetchAll(), function ($carry, LidInstelling $instelling) {
-			if (!isset($carry[$instelling->module])) $carry[$instelling->module] = [];
+		$result = [];
+		foreach ($this->findBy(['uid' => $uid]) as $instelling) {
+			if (!isset($result[$instelling->module])) $result[$instelling->module] = [];
+			$result[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
+		}
 
-			$carry[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
+		return $result;
+	}
 
-			return $carry;
-		}, []);
+	public function getValue($module, $id) {
+		return $this->getInstelling($module, $id)->waarde;
 	}
 
 	/**
@@ -83,7 +78,7 @@ class LidInstellingenModel extends CachedPersistenceModel {
 		if (!$uid) {
 			$uid = $this->getUid();
 		}
-		$instelling = $this->retrieveByPrimaryKey([$module, $id, $uid]);
+		$instelling = $this->findOneBy(['module' => $module, 'instelling_id' => $id, 'uid' => $uid]);
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
 				$instelling = $this->newInstelling($module, $id, $uid);
@@ -92,10 +87,15 @@ class LidInstellingenModel extends CachedPersistenceModel {
 		} else {
 			if ($instelling) {
 				// Haal niet-bestaande instelling uit de database
-				$this->delete($instelling);
+				$this->getEntityManager()->remove($instelling);
+				$this->getEntityManager()->flush();
 			}
 			throw new CsrException(sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module));
 		}
+	}
+
+	private function getUid() {
+		return LoginModel::getUid();
 	}
 
 	protected function newInstelling($module, $id, $uid) {
@@ -104,8 +104,40 @@ class LidInstellingenModel extends CachedPersistenceModel {
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->uid = $uid;
-		$this->create($instelling);
+
+		$this->getEntityManager()->persist($instelling);
+		$this->getEntityManager()->flush();
 		return $instelling;
+	}
+
+	public function getDefault($module, $id) {
+		return $this->getField($module, $id, InstellingConfiguration::FIELD_DEFAULT);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function save() {
+		foreach ($this->getAll() as $module => $instellingen) {
+			foreach ($instellingen as $id => $waarde) {
+				if ($this->getType($module, $id) === T::Integer) {
+					$filter = FILTER_SANITIZE_NUMBER_INT;
+				} else {
+					$filter = FILTER_SANITIZE_STRING;
+				}
+				$waarde = filter_input(INPUT_POST, $module . '_' . $id, $filter);
+				if (!$this->isValidValue($module, $id, $waarde)) {
+					$waarde = $this->getDefault($module, $id);
+				}
+				$instelling = new LidInstelling();
+				$instelling->module = $module;
+				$instelling->instelling_id = $id;
+				$instelling->uid = $this->getUid();
+				$instelling->waarde = $waarde;
+				$this->getEntityManager()->persist($instelling);
+			}
+		}
+		$this->getEntityManager()->flush();
 	}
 
 	public function getType($module, $id) {
@@ -114,14 +146,6 @@ class LidInstellingenModel extends CachedPersistenceModel {
 		} else {
 			return null;
 		}
-	}
-
-	public function getTypeOptions($module, $id) {
-		return $this->getField($module, $id, InstellingConfiguration::FIELD_OPTIES);
-	}
-
-	public function getDefault($module, $id) {
-		return $this->getField($module, $id, InstellingConfiguration::FIELD_DEFAULT);
 	}
 
 	public function isValidValue($module, $id, $waarde) {
@@ -148,45 +172,40 @@ class LidInstellingenModel extends CachedPersistenceModel {
 		return false;
 	}
 
-	public function getValue($module, $id) {
-		return $this->getInstelling($module, $id)->waarde;
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	public function save() {
-		// create matrix for sqlInsertMultiple
-		$properties[] = $this->getAttributes();
-		foreach ($this->getAll() as $module => $instellingen) {
-			foreach ($instellingen as $id => $waarde) {
-				if ($this->getType($module, $id) === T::Integer) {
-					$filter = FILTER_SANITIZE_NUMBER_INT;
-				} else {
-					$filter = FILTER_SANITIZE_STRING;
-				}
-				$waarde = filter_input(INPUT_POST, $module . '_' . $id, $filter);
-				if (!$this->isValidValue($module, $id, $waarde)) {
-					$waarde = $this->getDefault($module, $id);
-				}
-				$properties[] = array($module, $id, $waarde, $this->getUid());
-			}
-		}
-		Database::instance()->sqlInsertMultiple($this->getTableName(), $properties, true);
-		$this->flushCache(true);
+	public function getTypeOptions($module, $id) {
+		return $this->getField($module, $id, InstellingConfiguration::FIELD_OPTIES);
 	}
 
 	public function resetForAll($module, $id) {
-		Database::instance()->sqlDelete($this->getTableName(), 'module = ? AND instelling_id = ?', array($module, $id));
-		$this->flushCache(true);
+		$this->createQueryBuilder('i')
+			->andWhere('i.module = :module')
+			->andWhere('i.instelling_id = :id')
+			->setParameters(['module' => $module, 'id' => $id])
+			->delete()
+			->getQuery()
+			->execute();
 	}
 
 	/**
-	 * @param LidInstelling|PersistentEntity $entity
+	 * @param string $module
+	 * @param string $id
+	 * @param string $waarde
+	 *
+	 * @return LidInstelling
+	 */
+	public function wijzigInstelling($module, $id, $waarde) {
+		$instelling = $this->getInstelling($module, $id);
+		$instelling->waarde = $waarde;
+		$this->update($instelling);
+		return $instelling;
+	}
+
+	/**
+	 * @param LidInstelling $entity
 	 * @return int
 	 * @throws CsrGebruikerException
 	 */
-	public function update(PersistentEntity $entity) {
+	public function update($entity) {
 		if (!$this->hasKey($entity->module, $entity->instelling_id)) {
 			throw new CsrGebruikerException("Instelling '{$entity->instelling_id}' uit module '{$entity->module}' niet gevonden.");
 		}
@@ -223,20 +242,6 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	}
 
 	/**
-	 * @param string $module
-	 * @param string $id
-	 * @param string $waarde
-	 *
-	 * @return LidInstelling
-	 */
-	public function wijzigInstelling($module, $id, $waarde) {
-		$instelling = $this->getInstelling($module, $id);
-		$instelling->waarde = $waarde;
-		$this->update($instelling);
-		return $instelling;
-	}
-
-	/**
 	 * Haal een instelling op uit het cache of de database voor opgegeven lid.
 	 * Als een instelling niet is gezet wordt deze aangemaakt met de default waarde en opgeslagen.
 	 *
@@ -252,10 +257,12 @@ class LidInstellingenModel extends CachedPersistenceModel {
 	/**
 	 */
 	public function opschonen() {
-		foreach ($this->find() as $instelling) {
+		foreach ($this->findAll() as $instelling) {
 			if (!$this->hasKey($instelling->module, $instelling->instelling_id)) {
-				$this->delete($instelling);
+				$this->getEntityManager()->remove($instelling);
 			}
 		}
+
+		$this->getEntityManager()->flush();
 	}
 }

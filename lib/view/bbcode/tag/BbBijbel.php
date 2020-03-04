@@ -3,7 +3,8 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\instellingen\LidInstellingenModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -41,7 +42,8 @@ class BbBijbel extends BbTag {
 		}
 
 		$vertaling1 = $this->vertaling;
-		if (!LidInstellingenModel::instance()->isValidValue('algemeen', 'bijbel', $vertaling1)) {
+		$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
+		if (!$lidInstellingenRepository->isValidValue('algemeen', 'bijbel', $vertaling1)) {
 			$vertaling1 = null;
 		}
 		if ($vertaling1 === null) {

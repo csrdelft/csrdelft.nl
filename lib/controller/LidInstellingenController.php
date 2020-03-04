@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\model\instellingen\LidInstellingenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\view\JsonResponse;
 use Exception;
 
@@ -14,17 +14,17 @@ use Exception;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class LidInstellingenController extends AbstractController {
-	/** @var LidInstellingenModel  */
-	private $lidInstellingenModel;
+	/** @var LidInstellingenRepository  */
+	private $lidInstellingenRepository;
 
-	public function __construct(LidInstellingenModel $lidInstellingenModel) {
-		$this->lidInstellingenModel = $lidInstellingenModel;
+	public function __construct(LidInstellingenRepository $lidInstellingenRepository) {
+		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
 	public function beheer() {
 		return view('instellingen.lidinstellingen', [
-			'defaultInstellingen' => $this->lidInstellingenModel->getAll(),
-			'instellingen' => $this->lidInstellingenModel->getAllForLid(LoginModel::getUid())
+			'defaultInstellingen' => $this->lidInstellingenRepository->getAll(),
+			'instellingen' => $this->lidInstellingenRepository->getAllForLid(LoginModel::getUid())
 		]);
 	}
 
@@ -33,8 +33,8 @@ class LidInstellingenController extends AbstractController {
 			$waarde = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_STRING);
 		}
 
-		if ($this->lidInstellingenModel->isValidValue($module, $instelling, urldecode($waarde))) {
-			$this->lidInstellingenModel->wijzigInstelling($module, $instelling, urldecode($waarde));
+		if ($this->lidInstellingenRepository->isValidValue($module, $instelling, urldecode($waarde))) {
+			$this->lidInstellingenRepository->wijzigInstelling($module, $instelling, urldecode($waarde));
 			return new JsonResponse(['success' => true]);
 		} else {
 			return new JsonResponse(['success' => false], 400);
@@ -45,13 +45,13 @@ class LidInstellingenController extends AbstractController {
 	 * @throws Exception
 	 */
 	public function opslaan() {
-		$this->lidInstellingenModel->save(); // fetches $_POST values itself
+		$this->lidInstellingenRepository->save(); // fetches $_POST values itself
 		setMelding('Instellingen opgeslagen', 1);
 		return $this->redirectToRoute('lidinstellingen-beheer');
 	}
 
 	public function reset($module, $key) {
-		$this->lidInstellingenModel->resetForAll($module, $key);
+		$this->lidInstellingenRepository->resetForAll($module, $key);
 		setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
 		return new JsonResponse(true);
 	}
