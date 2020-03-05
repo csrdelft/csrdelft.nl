@@ -24,7 +24,6 @@ use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
-use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\LogRepository;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -110,7 +109,7 @@ $pdo = new PDO('mysql:host=' . $cred['host'] . ';dbname=' . $cred['db'], $cred['
 ]);
 
 // Set csrdelft/orm parts of the container
-$container->set(OrmMemcache::class, new OrmMemcache(MEMCACHED_PATH));
+$container->set(OrmMemcache::class, new OrmMemcache(MEMCACHED_HOST, MEMCACHED_PORT));
 $container->set(Database::class, new Database($pdo));
 $container->set(DatabaseAdmin::class, new DatabaseAdmin($pdo));
 

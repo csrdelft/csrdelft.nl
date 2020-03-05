@@ -3,16 +3,22 @@ doctrine:
     second_level_cache:
       region_cache_driver:
         type: service
-        id: memcache_cache_service
+        id: stek.cache.provider
       enabled: true
       region_lifetime: 86400
+
+framework:
+  cache:
+    app: cache.adapter.doctrine
+    default_doctrine_provider: stek.cache.provider
+
 services:
-  memcache_service:
+  stek.cache.memcache:
     class: Memcache
     calls:
-      - [connect, ["unix://%env(CACHE_PATH)%csrdelft-cache.socket", 0]]
+      - [connect, ["%env(CACHE_HOST)%", "%env(CACHE_PORT)%"]]
 
-  memcache_cache_service:
+  stek.cache.provider:
     class: CsrDelft\common\cache\MemcacheCache
     calls:
-      - [setMemcache, ["@memcache_service"]]
+      - [setMemcache, ["@stek.cache.memcache"]]

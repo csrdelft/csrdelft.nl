@@ -57,6 +57,9 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 # - gebruik MODE_FAST = 2 in productie
 @define('BLADEONE_MODE', 0);
 
+@define('MEMCACHED_HOST', 'unix://' . CACHE_PATH . 'csrdelft-cache.socket');
+@define('MEMCACHED_PORT', 0);
+
 # wordt gebruikt voor secure cookies, zonder deze kan niet geleefd worden
 if (!defined('CSR_DOMAIN')) {
 	throw new Exception('CSR_DOMAIN niet gezet.');
