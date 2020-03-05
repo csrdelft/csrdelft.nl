@@ -8,8 +8,9 @@ use CsrDelft\entity\MenuItem;
 use CsrDelft\model\entity\forum\ForumCategorie;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -51,23 +52,16 @@ class MenuItemRepository extends AbstractRepository {
 			return null;
 		}
 
-		return $this->cache->get($naam . '-menu', function (ItemInterface $item) use ($naam) {
-			$root = $this->getMenuRoot($naam);
+		return $this->cache->get($this->createCacheKey($naam), function (ItemInterface $item) use ($naam) {
+			$root = $this->findBy(['tekst' => $naam])[0];
 			$this->getExtendedTree($root);
 
 			return $root;
 		});
-//		if ($this->isCached($key, true)) {
-//			$loaded = $this->isCached($key, false); // is the tree root present in runtime cache?
-//			$root = $this->getCached($key, true); // this only puts the tree root in runtime cache
-//			if (!$loaded) {
-//				$this->cacheResult($this->flattenMenu($root), false); // put tree children in runtime cache as well
-//			}
-//			return $root;
-//		}
-		// not cached
-//		$this->cache($root); // cache for getParent()
-//		$this->setCache($key, $root, true);
+	}
+
+	private function createCacheKey($naam) {
+		return 'stek.menu.' . $naam;
 	}
 
 	/**
@@ -84,9 +78,9 @@ class MenuItemRepository extends AbstractRepository {
 	 * Deze komen in memcache terecht.
 	 *
 	 * @param MenuItem $parent
-	 * @return MenuItem $parent
+	 * @return MenuItem
 	 */
-	public function getExtendedTree(MenuItem $parent) {
+	private function getExtendedTree(MenuItem $parent) {
 		if ($parent->children)
 			foreach ($parent->children as $child) {
 				$this->getExtendedTree($child);
@@ -97,16 +91,15 @@ class MenuItemRepository extends AbstractRepository {
 			case 'Forum':
 				foreach (ForumModel::instance()->prefetch() as $categorie) {
 					/** @var ForumCategorie $categorie */
-					$item = $this->nieuw($parent->item_id);
+					$item = $this->nieuw($parent);
 					$item->item_id = -$categorie->categorie_id; // nodig voor getParent()
 					$item->rechten_bekijken = $categorie->rechten_lezen;
 					$item->link = '/forum#' . $categorie->categorie_id;
 					$item->tekst = $categorie->titel;
 					$parent->children[] = $item;
-//					$this->cache($item);
 
 					foreach ($categorie->getForumDelen() as $deel) {
-						$subitem = $this->nieuw($item->item_id);
+						$subitem = $this->nieuw($item);
 						$subitem->rechten_bekijken = $deel->rechten_lezen;
 						$subitem->link = '/forum/deel/' . $deel->forum_id;
 						$subitem->tekst = $deel->titel;
@@ -124,7 +117,7 @@ class MenuItemRepository extends AbstractRepository {
 				$categorien = $documentCategorieRepository->findAll();
 				foreach ($categorien as $categorie) {
 					/** @var DocumentCategorie $categorie */
-					$item = $this->nieuw($parent->item_id);
+					$item = $this->nieuw($parent);
 					$item->rechten_bekijken = $categorie->leesrechten;
 					$item->link = '/documenten/categorie/' . $categorie->id;
 					$item->tekst = $categorie->naam;
@@ -143,30 +136,18 @@ class MenuItemRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param int $parent_id
+	 * @param MenuItem $parent
 	 *
 	 * @return MenuItem
 	 */
-	public function nieuw($parent_id) {
+	public function nieuw($parent) {
 		$item = new MenuItem();
-		$item->parent_id = $parent_id;
+		$item->parent = $parent;
+		$item->parent_id = $parent->item_id;
 		$item->volgorde = 0;
 		$item->rechten_bekijken = LoginModel::getUid();
 		$item->zichtbaar = true;
 		return $item;
-	}
-
-	/**
-	 * Build tree structure.
-	 *
-	 * @param MenuItem $parent
-	 * @return MenuItem $parent
-	 */
-	public function getTree(MenuItem $parent) {
-		foreach ($parent->children as $child) {
-			$this->getTree($child);
-		}
-		return $parent;
 	}
 
 	/**
@@ -176,17 +157,28 @@ class MenuItemRepository extends AbstractRepository {
 	 * @return MenuItem[]
 	 */
 	public function flattenMenu(MenuItem $root) {
+		return $this->cache->get($this->createFlatCacheKey($root->tekst), function (ItemInterface $item) use ($root) {
+			return $this->_flattenMenu($root);
+		});
+	}
+
+	private function createFlatCacheKey($naam) {
+		return 'stek.menu-flat.' . $naam;
+	}
+
+	private function _flattenMenu(MenuItem $root) {
 		$list = [$root];
 
 		if ($root->children) {
 			foreach ($root->children as $child) {
 				$list[] = $child;
-				foreach ($this->flattenMenu($child) as $subChild) {
+				foreach ($this->_flattenMenu($child) as $subChild) {
 					$list[] = $subChild;
 				}
 			}
 		}
 		return $list;
+
 	}
 
 	/**
@@ -200,18 +192,6 @@ class MenuItemRepository extends AbstractRepository {
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * @param MenuItem $item
-	 *
-	 * @return MenuItem
-	 */
-	public function getRoot(MenuItem $item) {
-		if ($item->parent_id === 0) {
-			return $item;
-		}
-		return $this->getRoot($item->parent);
 	}
 
 	/**
@@ -240,15 +220,30 @@ class MenuItemRepository extends AbstractRepository {
 	 * @return int
 	 */
 	public function removeMenuItem(MenuItem $item) {
-		return Database::transaction(function () use ($item) {
-			// give new parent to otherwise future orphans
-			$update = array('parent_id' => $item->parent_id);
-			$where = 'parent_id = :oldid';
-			$rowCount = Database::instance()->sqlUpdate($this->getTableName(), $update, $where, array(':oldid' => $item->item_id));
-			$this->cache->delete($item->tekst . '-menu');
-			$this->delete($item);
-			return $rowCount;
-		});
+		$manager = $this->getEntityManager();
+		$manager->beginTransaction();
+
+		$count = 0;
+
+		try {
+			if ($item->children) {
+				foreach ($item->children as $child) {
+					$child->parent = $item->parent;
+					$count++;
+				}
+			}
+
+			$this->deleteItemFromCache($item);
+
+			$manager->remove($item);
+			$manager->flush();
+
+			$manager->commit();
+		} catch (ORMException $exception) {
+			$manager->rollback();
+		}
+
+		return $count;
 	}
 
 	/**
@@ -327,5 +322,40 @@ class MenuItemRepository extends AbstractRepository {
 		}
 
 		return [];
+	}
+
+	/**
+	 * Gooit ook de cache leeg.
+	 *
+	 * @param MenuItem $item
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function persist(MenuItem $item) {
+		$this->getEntityManager()->persist($item);
+		$this->getEntityManager()->flush();
+
+		$this->deleteItemFromCache($item);
+	}
+
+	public function deleteItemFromCache(MenuItem $item) {
+		while ($item->parent_id !== 0) {
+			$this->cache->delete($this->createCacheKey($item->tekst));
+			$this->cache->delete($this->createFlatCacheKey($item->tekst));
+
+			$item = $item->parent;
+		}
+	}
+
+	/**
+	 * @param MenuItem $item
+	 *
+	 * @return MenuItem
+	 */
+	public function getRoot(MenuItem $item) {
+		if ($item->parent_id === 0) {
+			return $item;
+		}
+		return $this->getRoot($item->parent);
 	}
 }

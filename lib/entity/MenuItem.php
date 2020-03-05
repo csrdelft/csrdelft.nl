@@ -5,10 +5,8 @@ namespace CsrDelft\entity;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
-use CsrDelft\repository\MenuItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * MenuItem.class.php
@@ -20,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\MenuItemRepository")
  * @ORM\Table("menus")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class MenuItem {
 	/**
@@ -28,6 +25,7 @@ class MenuItem {
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
 	public $item_id;
 	/**
@@ -80,13 +78,21 @@ class MenuItem {
 	public $parent;
 	/**
 	 * De sub-items van dit menu-item
-	 * @var MenuItem[]
+	 * @var MenuItem[]|PersistentCollection
 	 * @ORM\OneToMany(targetEntity="MenuItem", mappedBy="parent")
 	 */
 	public $children;
 
 	public function hasChildren() {
-		return !empty($this->children);
+		if (!$this->children) {
+			return false;
+		}
+
+		if (is_array($this->children)) {
+			return count($this->children);
+		}
+
+		return $this->children->count();
 	}
 
 	public function magBekijken() {

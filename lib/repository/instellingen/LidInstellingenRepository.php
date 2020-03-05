@@ -233,7 +233,8 @@ class LidInstellingenRepository extends AbstractRepository {
 			}
 		}
 
-		return parent::update($entity);
+		$this->getEntityManager()->persist($entity);
+		$this->getEntityManager()->flush();
 	}
 
 	/**

@@ -10,8 +10,6 @@ use CsrDelft\view\MeldingResponse;
 use CsrDelft\view\menubeheer\MenuItemForm;
 
 /**
- * MenuBeheerController.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class MenuBeheerController {
@@ -47,13 +45,13 @@ class MenuBeheerController {
 		if (!$parent OR !$parent->magBeheren()) {
 			throw new CsrToegangException();
 		}
-		$item = $this->menuItemRepository->nieuw($parent->item_id);
+		$item = $this->menuItemRepository->nieuw($parent);
 		if (!$item OR !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$form = new MenuItemForm($item, 'toevoegen', $parent_id); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
-			$this->menuItemRepository->create($item);
+			$this->menuItemRepository->persist($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
 			return new MeldingResponse();
 		} else {
@@ -68,7 +66,7 @@ class MenuBeheerController {
 		}
 		$form = new MenuItemForm($item, 'bewerken', $item->item_id); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
-			$rowCount = $this->menuItemRepository->update($item);
+			$rowCount = $this->menuItemRepository->persist($item);
 			if ($rowCount > 0) {
 				setMelding($item->tekst . ' bijgewerkt', 1);
 			} else {
@@ -99,12 +97,8 @@ class MenuBeheerController {
 			throw new CsrToegangException();
 		}
 		$item->zichtbaar = !$item->zichtbaar;
-		$rowCount = $this->menuItemRepository->update($item);
-		if ($rowCount > 0) {
-			setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
-		} else {
-			setMelding($item->tekst . ' ongewijzigd', 0);
-		}
+		$this->menuItemRepository->persist($item);
+		setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
 		return new JsonResponse(true);
 	}
 }
