@@ -96,11 +96,11 @@ class MenuItem {
 	}
 
 	public function magBekijken() {
-		return $this->zichtbaar AND LoginModel::mag($this->rechten_bekijken);
+		return $this->zichtbaar && LoginModel::mag($this->rechten_bekijken);
 	}
 
 	public function magBeheren() {
-		return $this->rechten_bekijken == LoginModel::getUid() OR LoginModel::mag(P_ADMIN);
+		return $this->rechten_bekijken == LoginModel::getUid() || LoginModel::mag(P_ADMIN);
 	}
 
 	public function isOngelezen() {

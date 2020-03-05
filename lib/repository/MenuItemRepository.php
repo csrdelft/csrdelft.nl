@@ -52,7 +52,7 @@ class MenuItemRepository extends AbstractRepository {
 			return null;
 		}
 
-		return $this->cache->get($this->createCacheKey($naam), function (ItemInterface $item) use ($naam) {
+		return $this->cache->get($this->createCacheKey($naam), function () use ($naam) {
 			$root = $this->findBy(['tekst' => $naam])[0];
 			$this->getExtendedTree($root);
 
@@ -157,7 +157,7 @@ class MenuItemRepository extends AbstractRepository {
 	 * @return MenuItem[]
 	 */
 	public function flattenMenu(MenuItem $root) {
-		return $this->cache->get($this->createFlatCacheKey($root->tekst), function (ItemInterface $item) use ($root) {
+		return $this->cache->get($this->createFlatCacheKey($root->tekst), function () use ($root) {
 			return $this->_flattenMenu($root);
 		});
 	}
