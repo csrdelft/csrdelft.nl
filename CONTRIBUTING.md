@@ -69,8 +69,6 @@ Enable `ldap` in `php.ini`
 
 In XAMPP: `Apache => config => PHP (php.ini) => Zoek naar ldap => Haal de ; bij ;extension=ldap weg`
 
-Hierna, ga naar de directory `<repo root>\lib`, en kopieer de waardes in `defines.include.php.development.sample` naar `defines.include.php`.
-
 #### MySQL
 Maak een database `csrdelft` aan.
 
