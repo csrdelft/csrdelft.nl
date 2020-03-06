@@ -83,7 +83,8 @@ Als je database verbinding anders is dan gebruiker `csrdelft` met wachtwoord `bl
 Plaats de export die je in stap 0 hebt gefixt in de database.
 
 #### Dependencies
-Gebruik [Composer](https://getcomposer.org/) om de dependencies te installeren door het volgende commando in de projectmap uit te voeren.
+Download en installeer [Composer](https://getcomposer.org/). Dit wordt gebruikt om de dependencies te installeren.
+Open vervolgens een terminal in de projectmap en voer het volgende commando uit.
 
 ```bash
 composer install
