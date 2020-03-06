@@ -46,7 +46,7 @@ Voeg bijvoorbeeld de volgende regel toe: `127.0.0.1 dev-csrdelft.nl`
 
 De volgende configuratie werkt goed voor Apache2. (**Let op de** `php_value include_path ...`.)
 
-In XAMPP: `Apache => config => <Browse>[Apache] => conf => extra => httpd-vhosts.conf` en plak het volgende:
+In XAMPP (waarmee altijd XAMPP Control Panel wordt bedoeld): `Apache => config => <Browse>[Apache] => conf => extra => httpd-vhosts.conf` en plak het volgende:
 ```
 <VirtualHost dev-csrdelft.nl:80>
     DocumentRoot "<repo root>\htdocs"
@@ -74,7 +74,7 @@ We gaan nu een MySQL server opstarten, waar vervolgens de lokale database op run
 
 In XAMPP: `MySQL => start`. Hopelijk start de MySQL server gelijk op. Stel de 3306 poort is bezet, dan zijn er 2 oplossingen:
 1. Klik op de Netstat knop in XAMPP, kijk welk process port 3306 bezet houdt en kill dit programma via de Task Manager.
-2. Verander de poort voor de MySQL server. Ga naar `C:/XAMPP/mysql/bin` en open de `my.ini` file. Vervang de 3306 poort overal naar een ander poortnummer.
+2. [Verander de poort voor de MySQL server](https://stackoverflow.com/questions/32173242/conflicting-ports-of-mysql-and-xampp). In XAMPP: `MySQL => config => my.ini`. Vervang de 3306 poort overal naar een ander poortnummer, bijvoorbeeld 3307. Ga dan in XAMPP zelf naar `config => Service and Port Settings => MySQL Tab` En verander de service naam `mysql` to `mysqlxampp` en de main port 3306 naar 3307`.
 
 In de C:/XAMPP folder, ga naar `mysql\bin`. Open een terminal en typ het volgende commando:
 ```
