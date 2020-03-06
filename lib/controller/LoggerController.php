@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\Ini;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +20,7 @@ class LoggerController {
 	public function log(Request $request) {
 		if (!isset($_SESSION[self::LAATSTE_LOG_MELDING])) $_SESSION[self::LAATSTE_LOG_MELDING] = 0;
 
-		if ($_SESSION[self::LAATSTE_LOG_MELDING] < time() - self::LOG_TIMEOUT && Ini::bestaat(Ini::SLACK)) {
+		if ($_SESSION[self::LAATSTE_LOG_MELDING] < time() - self::LOG_TIMEOUT && !empty(env('SLACK_URL'))) {
 			$message = $request->request->get('message');
 			$col = $request->request->get('col');
 			$line = $request->request->get('line');
@@ -29,8 +28,11 @@ class LoggerController {
 			$error = $request->request->get('error');
 			$pagina = $request->request->get('pagina');
 
-			$slackConfig = Ini::lees(Ini::SLACK);
-			$slackClient = new SlackClient($slackConfig['url'], $slackConfig);
+			$slackClient = new SlackClient(env('SLACK_URL'), [
+				'username' => env('SLACK_USERNAME'),
+				'channel' => env('SLACK_CHANNEL'),
+				'icon' => env('SLACK_ICON'),
+			]);
 			$foutmelding = $slackClient->createMessage();
 
 			$moment = date('r');

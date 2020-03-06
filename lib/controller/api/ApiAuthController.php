@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Ini;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\repository\security\RememberLoginRepository;
@@ -39,7 +38,7 @@ class ApiAuthController {
 		}
 
 		try {
-			$token = JWT::decode($jwt, Ini::lees(Ini::JWT, 'secret'), array('HS512'));
+			$token = JWT::decode($jwt, env('JWT_SECRET'), array('HS512'));
 		} catch (Exception $e) {
 			throw new RestException(401);
 		}
@@ -104,7 +103,7 @@ class ApiAuthController {
 
 		$data = [
 			'iat' => $issuedAt,
-			'exp' => $issuedAt + Ini::lees(Ini::JWT, 'lifetime'),
+			'exp' => $issuedAt + env('JWT_LIFETIME'),
 			'jti' => $tokenId,
 			'data' => [
 				'userId' => $account->uid
@@ -112,7 +111,7 @@ class ApiAuthController {
 		];
 
 		// Encode the JWT
-		$token = JWT::encode($data, Ini::lees(Ini::JWT, 'secret'), 'HS512');
+		$token = JWT::encode($data, env('JWT_SECRET'), 'HS512');
 
 		// Register uid for this session
 		$_SESSION['_uid'] = $account->uid;
@@ -160,7 +159,7 @@ class ApiAuthController {
 
 		$data = [
 			'iat' => $issuedAt,
-			'exp' => $issuedAt + Ini::lees(Ini::JWT, 'lifetime'),
+			'exp' => $issuedAt + env('JWT_LIFETIME'),
 			'jti' => $tokenId,
 			'data' => [
 				'userId' => $remember->uid
@@ -168,7 +167,7 @@ class ApiAuthController {
 		];
 
 		// Encode the new JWT
-		$token = JWT::encode($data, Ini::lees(Ini::JWT, 'secret'), 'HS512');
+		$token = JWT::encode($data, env('JWT_SECRET'), 'HS512');
 
 		// Respond
 		return [

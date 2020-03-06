@@ -12,7 +12,6 @@
  */
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Ini;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
 use CsrDelft\model\forum\ForumModel;
@@ -27,9 +26,9 @@ use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 // Zet omgeving klaar.
 require __DIR__ . '/../config/bootstrap.php';
+require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 
 // Registreer foutmelding handlers
 if (DEBUG) {
@@ -56,7 +55,7 @@ date_default_timezone_set('Europe/Amsterdam');
 
 
 // default is website mode
-if (getenv('CI')) {
+if (env('CI')) {
 	define('MODE', 'TRAVIS');
 } elseif (php_sapi_name() === 'cli') {
 	define('MODE', 'CLI');
@@ -93,23 +92,11 @@ $kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
 $kernel->boot();
 $container = $kernel->getContainer();
 
-$cred = Ini::lees(Ini::MYSQL);
-if ($cred === false) {
-	$cred = array(
-		'host' => 'localhost',
-		'user' => 'admin',
-		'pass' => 'password',
-		'db' => 'csrdelft'
-	);
-}
-
-$pdo = new PDO('mysql:host=' . $cred['host'] . ';dbname=' . $cred['db'], $cred['user'], $cred['pass'], [
-	PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8MB4'",
-	PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-]);
+// Gebruik de PDO connectie van doctrine
+$pdo = $container->get('doctrine.dbal.default_connection')->getWrappedConnection();
 
 // Set csrdelft/orm parts of the container
-$container->set(OrmMemcache::class, new OrmMemcache(MEMCACHED_HOST, MEMCACHED_PORT));
+$container->set(OrmMemcache::class, new OrmMemcache(env('CACHE_HOST'), (int)env('CACHE_PORT')));
 $container->set(Database::class, new Database($pdo));
 $container->set(DatabaseAdmin::class, new DatabaseAdmin($pdo));
 
@@ -139,7 +126,7 @@ if (FORCE_HTTPS) {
 }
 
 // Router
-switch (constant('MODE')) {
+switch (MODE) {
 	case 'TRAVIS':
 		if (isSyrinx()) die("Syrinx is geen Travis!");
 		break;
@@ -172,12 +159,12 @@ switch (constant('MODE')) {
 		ini_set('session.use_only_cookies', true);
 		ini_set('session.cookie_lifetime', 0);
 		ini_set('session.cookie_path', '/');
-		ini_set('session.cookie_domain', CSR_DOMAIN);
+		ini_set('session.cookie_domain', env('CSR_DOMAIN'));
 		ini_set('session.cookie_secure', FORCE_HTTPS);
 		ini_set('session.cookie_httponly', true);
 		ini_set('log_errors_max_len', 0);
 		ini_set('xdebug.max_nesting_level', 2000);
-		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		session_set_cookie_params(0, '/', env('CSR_DOMAIN'), FORCE_HTTPS, true);
 
 		session_start();
 		if (session_id() == 'deleted') {

@@ -120,9 +120,9 @@ function group_by_distinct($prop, $in, $del = true) {
 function setRememberCookie($token) {
 	if ($token == null) {
 		unset($_COOKIE['remember']);
-		setcookie('remember', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		setcookie('remember', null, -1, '/', env('CSR_DOMAIN'), FORCE_HTTPS, true);
 	} else {
-		setcookie('remember', $token, time() + (int)instelling('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
+		setcookie('remember', $token, time() + (int)instelling('beveiliging', 'remember_login_seconds'), '/', env('CSR_DOMAIN'), FORCE_HTTPS, true);
 	}
 }
 

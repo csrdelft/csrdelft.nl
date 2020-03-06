@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\courant;
 
-use CsrDelft\common\Ini;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\entity\courant\CourantCategorie;
 use CsrDelft\view\ToResponse;
@@ -29,7 +28,6 @@ class CourantView implements ToResponse {
 	public function __construct(Courant $courant, $berichten) {
 		$this->model = $courant;
 		setlocale(LC_ALL, 'nl_NL@euro');
-		$this->instellingen = Ini::lees(Ini::CSRMAIL);
 		$this->berichten = $berichten;
 	}
 
@@ -44,7 +42,6 @@ class CourantView implements ToResponse {
 	public function getHtml($headers = false) {
 		return view('courant.mail', [
 			'headers' => $headers,
-			'instellingen' => $this->instellingen,
 			'courant' => $this->model,
 			'berichten' => $this->berichten,
 			'catNames' => CourantCategorie::getSelectOptions(),

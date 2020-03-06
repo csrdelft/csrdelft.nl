@@ -6,7 +6,6 @@
  * @date 06/09/2017
  */
 
-use CsrDelft\common\Ini;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\pin\PinTransactieDownloader;
@@ -48,7 +47,12 @@ foreach ($vorigePinTransacties as $pinTransactie) {
 	PinTransactieModel::instance()->delete($pinTransactie);
 }
 
-$settings = Ini::lees(Ini::PIN_TRANSACTIE_DOWNLOAD);
+$settings = [
+	PinTransactieDownloader::SETTINGS_USERNAME => env('PIN_USERNAME'),
+	PinTransactieDownloader::SETTINGS_PASSWORD => env('PIN_PASSWORD'),
+	PinTransactieDownloader::SETTINGS_STORE => env('PIN_STORE'),
+	PinTransactieDownloader::SETTINGS_URL => env('PIN_URL'),
+];
 
 // Download pintransacties en sla op in DB.
 $pintransacties = PinTransactieDownloader::download($settings, $from);
@@ -90,7 +94,7 @@ MAIL;
 			echo sprintf("Er zijn %d pin transacties gedownload.\n", count($pintransacties));
 
 		} else {
-			$mail = new Mail([$settings['monitoring_email'] => 'Pin Transactie Monitoring'], '[CiviSaldo] Pin transactie fouten gevonden.', $body);
+			$mail = new Mail([env('PIN_MONITORING_EMAIL') => 'Pin Transactie Monitoring'], '[CiviSaldo] Pin transactie fouten gevonden.', $body);
 			$mail->send();
 		}
 	}

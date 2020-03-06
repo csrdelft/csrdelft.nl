@@ -38,22 +38,21 @@ class LDAP {
 		if ($this->_conn !== false)
 			$this->disconnect();
 
-		if (!Ini::bestaat(Ini::LDAP)) {
+		if (!env('LDAP_HOST')) {
 			throw new CsrException('LDAP not available');
 		}
-		$ldapini = Ini::lees(Ini::LDAP);
-		$conn = ldap_connect($ldapini['ldap_host'], $ldapini['ldap_port']);
+		$conn = ldap_connect(env('LDAP_HOST'), (int) env('LDAP_PORT'));
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
 		ldap_start_tls($conn);
 		if ($dobind === true) {
-			$bind = ldap_bind($conn, $ldapini['ldap_binddn'], $ldapini['ldap_passwd']);
+			$bind = ldap_bind($conn, env('LDAP_BINDDN'), env('LDAP_PASSWD'));
 			if ($bind !== true)
 				return false;
 		}
 		# Onthouden van wat instellingen
 		$this->_conn = $conn;
-		$this->_base_leden = $ldapini['ldap_base_leden'];
-		$this->_base_groepen = $ldapini['ldap_base_groepen'];
+		$this->_base_leden = env('LDAP_BASE_LEDEN');
+		$this->_base_groepen = env('LDAP_BASE_GROEPEN');
 
 		return true;
 	}
