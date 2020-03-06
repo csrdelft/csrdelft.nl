@@ -32,7 +32,9 @@ require __DIR__ . '/../config/bootstrap.php';
 require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 
 // Registreer foutmelding handlers
-if (DEBUG) {
+if (env('CI')) {
+	// geen handlers
+} elseif (DEBUG) {
 	register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
 	umask(0000);
 
