@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\instellingen;
+namespace CsrDelft\common\instellingen;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

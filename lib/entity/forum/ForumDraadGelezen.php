@@ -1,0 +1,40 @@
+<?php
+
+namespace CsrDelft\entity\forum;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * Een ForumDraad kan worden gelezen door een lid op een bepaald moment.
+ *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDradenGelezenRepository")
+ * @ORM\Table("forum_draden_gelezen")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
+ */
+class ForumDraadGelezen {
+	/**
+	 * Shared primary key
+	 * Foreign key
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 */
+	public $draad_id;
+	/**
+	 * Lidnummer
+	 * Shared primary key
+	 * Foreign key
+	 * @var string
+	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Id()
+	 */
+	public $uid;
+	/**
+	 * Datum en tijd van laatst gelezen
+	 * @var \DateTime
+	 * @ORM\Column(type="datetime")
+	 */
+	public $datum_tijd;
+}

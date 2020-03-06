@@ -8,6 +8,7 @@ use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use PDO;
 
 /**
@@ -43,9 +44,9 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	private $forumDradenModel;
 	/**
-	 * @var ForumDradenGelezenModel
+	 * @var ForumDradenGelezenRepository
 	 */
-	private $forumDradenGelezenModel;
+	private $forumDradenGelezenRepository;
 	/**
 	 * @var ForumDradenReagerenModel
 	 */
@@ -70,7 +71,7 @@ class ForumModel extends CachedPersistenceModel {
 	public function __construct(
 		ForumDelenModel $forumDelenModel,
 		ForumDradenModel $forumDradenModel,
-		ForumDradenGelezenModel $forumDradenGelezenModel,
+		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
 		ForumDradenMeldingModel $forumDradenMeldingModel,
@@ -81,7 +82,7 @@ class ForumModel extends CachedPersistenceModel {
 
 		$this->forumDelenModel = $forumDelenModel;
 		$this->forumDradenModel = $forumDradenModel;
-		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
+		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
 		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
@@ -136,7 +137,7 @@ class ForumModel extends CachedPersistenceModel {
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
 			if (AccountModel::isValidUid($uid)) {
-				$this->forumDradenGelezenModel->verwijderDraadGelezenVoorLid($uid);
+				$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLid($uid);
 				$this->forumDradenVerbergenModel->toonAllesVoorLid($uid);
 				$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($uid);
 				$this->forumDelenMeldingModel->stopAlleMeldingenVoorLid($uid);
@@ -152,7 +153,7 @@ class ForumModel extends CachedPersistenceModel {
 			// Settings verwijderen
 			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
 			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
-			$this->forumDradenGelezenModel->verwijderDraadGelezen($draad);
+			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
 			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);
 
 			// Oude verwijderde posts definitief verwijderen

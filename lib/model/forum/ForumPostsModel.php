@@ -4,15 +4,16 @@ namespace CsrDelft\model\forum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
-use CsrDelft\model\entity\forum\ForumDraadGelezen;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use PDO;
 use PDOException;
@@ -58,9 +59,9 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	 */
 	private $aantal_wacht;
 	/**
-	 * @var ForumDradenGelezenModel
+	 * @var ForumDradenGelezenRepository
 	 */
-	private $forumDradenGelezenModel;
+	private $forumDradenGelezenRepository;
 
 	/**
 	 * @param $id
@@ -76,13 +77,13 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	}
 
 	public function __construct(
-		ForumDradenGelezenModel $forumDradenGelezenModel
+		ForumDradenGelezenRepository $forumDradenGelezenRepository
 	) {
 		parent::__construct();
 		$this->pagina = 1;
 		$this->per_pagina = (int)lid_instelling('forum', 'posts_per_pagina');
 		$this->aantal_paginas = array();
-		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
+		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 	}
 
 	public function getAantalPerPagina() {
@@ -129,7 +130,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	}
 
 	public function setPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen) {
-		$count = 1 + $this->count('draad_id = ? AND datum_tijd <= ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd));
+		$count = 1 + $this->count('draad_id = ? AND datum_tijd <= ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($gelezen->draad_id, $gelezen->datum_tijd->format(DATETIME_FORMAT)));
 		$this->getAantalPaginas($gelezen->draad_id); // set per_pagina
 		$this->setHuidigePagina((int)ceil($count / $this->per_pagina), $gelezen->draad_id);
 	}
@@ -230,7 +231,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$count = count($draden_ids);
 		if ($count > 0) {
 			array_unshift($draden_ids, LoginModel::getUid());
-			$this->forumDradenGelezenModel->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
+//			$this->forumDradenGelezenRepository->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
 		}
 		return $posts;
 	}

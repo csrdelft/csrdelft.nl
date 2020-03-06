@@ -4,10 +4,10 @@ namespace CsrDelft\repository\instellingen;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\instellingen\InstellingConfiguration;
+use CsrDelft\common\instellingen\InstellingType;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\instellingen\LidInstelling;
-use CsrDelft\model\instellingen\InstellingConfiguration;
-use CsrDelft\model\instellingen\InstellingType;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;

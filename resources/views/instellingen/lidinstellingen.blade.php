@@ -38,7 +38,7 @@
 						<label class="col-md-3 col-form-label" for="inst_{{$module}}_{{$id}}">{!! $titel !!}</label>
 
 						<div class="col-md-9">
-							@if($type === \CsrDelft\model\instellingen\InstellingType::Enumeration)
+							@if($type === \CsrDelft\common\instellingen\InstellingType::Enumeration)
 								@if(count($opties) > 8)
 									<select name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" class="form-control change-opslaan"
 													data-href="/instellingen/update/{{$module}}/{{$id}}">
@@ -65,11 +65,11 @@
 										@endforeach
 									</div>
 								@endif
-							@elseif($type === \CsrDelft\model\instellingen\InstellingType::String)
+							@elseif($type === \CsrDelft\common\instellingen\InstellingType::String)
 								<input type="text" name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" value="{{$keuze}}"
 											 data-href="/instellingen/update/{{$module}}/{{$id}}"
 											 class="form-control change-opslaan" minlength="{{$opties[0]}}" maxlength="{{$opties[1]}}"/>
-							@elseif($type === \CsrDelft\model\instellingen\InstellingType::Integer)
+							@elseif($type === \CsrDelft\common\instellingen\InstellingType::Integer)
 								<input type="number" name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" value="{{$keuze}}"
 											 data-href="/instellingen/update/{{$module}}/{{$id}}"
 											 class="form-control change-opslaan" data-href="/instellingen/update/{{$module}}/{{$id}}"

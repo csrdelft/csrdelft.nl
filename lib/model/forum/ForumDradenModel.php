@@ -11,6 +11,7 @@ use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use PDO;
 use PDOException;
 
@@ -72,9 +73,9 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	);
 
 	/**
-	 * @var ForumDradenGelezenModel
+	 * @var ForumDradenGelezenRepository
 	 */
-	private $forumDradenGelezenModel;
+	private $forumDradenGelezenRepository;
 
 	/**
 	 * @var ForumDradenReagerenModel
@@ -110,7 +111,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	}
 
 	public function __construct(
-		ForumDradenGelezenModel $forumDradenGelezenModel,
+		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
 		ForumDradenMeldingModel $forumDradenMeldingModel,
@@ -122,7 +123,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$this->aantal_paginas = array();
 		$this->aantal_plakkerig = null;
 
-		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
+		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
 		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
@@ -296,7 +297,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		if ($count > 0) {
 			$draden_ids = array_keys($dradenById);
 			array_unshift($draden_ids, LoginModel::getUid());
-			$this->forumDradenGelezenModel->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
+//			$this->forumDradenGelezenRepository->prefetch('uid = ? AND draad_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $draden_ids);
 			if ($getLatestPosts) {
 				$latest_post_ids = array_map(function ($draad) {
 					return $draad->laatste_post_id;
@@ -359,7 +360,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		} elseif ($property === 'verwijderd') {
 			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
 			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
-			$this->forumDradenGelezenModel->verwijderDraadGelezen($draad);
+			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
 			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);
 			$this->forumPostsModel->verwijderForumPostsVoorDraad($draad);
 		}

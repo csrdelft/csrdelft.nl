@@ -3,9 +3,9 @@
 namespace CsrDelft\repository\instellingen;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\instellingen\InstellingConfiguration;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\Instelling;
-use CsrDelft\model\instellingen\InstellingConfiguration;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;

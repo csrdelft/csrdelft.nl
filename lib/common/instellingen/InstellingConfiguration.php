@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\instellingen;
+namespace CsrDelft\common\instellingen;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

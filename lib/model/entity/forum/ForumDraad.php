@@ -2,13 +2,15 @@
 
 namespace CsrDelft\model\entity\forum;
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\model\forum\ForumDelenModel;
-use CsrDelft\model\forum\ForumDradenGelezenModel;
 use CsrDelft\model\forum\ForumDradenVerbergenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\view\ChartTimeSeries;
 
 /**
@@ -213,7 +215,8 @@ class ForumDraad extends PersistentEntity {
 
 	public function getLezers() {
 		if (!isset($this->lezers)) {
-			$this->lezers = ForumDradenGelezenModel::instance()->getLezersVanDraad($this);
+			$forumDradenGelezeRepository = ContainerFacade::getContainer()->get(ForumDradenGelezenRepository::class);
+			$this->lezers = $forumDradenGelezeRepository->getLezersVanDraad($this);
 		}
 		return $this->lezers;
 	}
@@ -231,13 +234,14 @@ class ForumDraad extends PersistentEntity {
 	 * @return ForumDraadGelezen|false $gelezen
 	 */
 	public function getWanneerGelezen() {
-		return ForumDradenGelezenModel::instance()->getWanneerGelezenDoorLid($this);
+		$forumDradenGelezenRepository = ContainerFacade::getContainer()->get(ForumDradenGelezenRepository::class);
+		return $forumDradenGelezenRepository->getWanneerGelezenDoorLid($this);
 	}
 
 	public function isOngelezen() {
 		$gelezen = $this->getWanneerGelezen();
 		if ($gelezen) {
-			if (strtotime($this->laatst_gewijzigd) > strtotime($gelezen->datum_tijd)) {
+			if (strtotime($this->laatst_gewijzigd) > $gelezen->datum_tijd->getTimestamp()) {
 				return true;
 			}
 			return false;
@@ -278,7 +282,7 @@ class ForumDraad extends PersistentEntity {
 			$gelezen = $this->getWanneerGelezen();
 			if ($gelezen) {
 				$where .= ' AND laatst_gewijzigd > ?';
-				$params[] = $gelezen->datum_tijd;
+				$params[] = $gelezen->datum_tijd->format(DATETIME_FORMAT);
 			}
 			$this->aantal_ongelezen_posts = ForumPostsModel::instance()->count($where, $params);
 		}

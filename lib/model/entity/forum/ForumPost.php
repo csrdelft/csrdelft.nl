@@ -127,7 +127,7 @@ class ForumPost extends PersistentEntity {
 		if (!isset($this->aantal_gelezen)) {
 			$this->aantal_gelezen = 0;
 			foreach ($this->getForumDraad()->getLezers() as $gelezen) {
-				if ($this->laatst_gewijzigd AND $this->laatst_gewijzigd <= $gelezen->datum_tijd) {
+				if ($this->laatst_gewijzigd AND $this->laatst_gewijzigd <= $gelezen->datum_tijd->getTimestamp()) {
 					$this->aantal_gelezen++;
 				}
 			}

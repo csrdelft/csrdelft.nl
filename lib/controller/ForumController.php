@@ -13,7 +13,6 @@ use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\forum\ForumDelenMeldingModel;
 use CsrDelft\model\forum\ForumDelenModel;
-use CsrDelft\model\forum\ForumDradenGelezenModel;
 use CsrDelft\model\forum\ForumDradenMeldingModel;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumDradenReagerenModel;
@@ -21,6 +20,7 @@ use CsrDelft\model\forum\ForumDradenVerbergenModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -51,9 +51,9 @@ class ForumController extends AbstractController {
 	 */
 	private $forumDelenModel;
 	/**
-	 * @var ForumDradenGelezenModel
+	 * @var ForumDradenGelezenRepository
 	 */
-	private $forumDradenGelezenModel;
+	private $forumDradenGelezenRepository;
 	/**
 	 * @var ForumDradenMeldingModel
 	 */
@@ -85,7 +85,7 @@ class ForumController extends AbstractController {
 		ForumDradenMeldingModel $forumDradenMeldingModel,
 		ForumDelenMeldingModel $forumDelenMeldingModel,
 		ForumDelenModel $forumDelenModel,
-		ForumDradenGelezenModel $forumDradenGelezenModel,
+		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenModel $forumDradenModel,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
@@ -94,7 +94,7 @@ class ForumController extends AbstractController {
 		$this->debugLogModel = $debugLogModel;
 		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
 		$this->forumDelenModel = $forumDelenModel;
-		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
+		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenModel = $forumDradenModel;
 		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
@@ -349,12 +349,12 @@ class ForumController extends AbstractController {
 			'gedeeld_met_opties' => $this->forumDelenModel->getForumDelenOptiesOmTeDelen($draad->getForumDeel()),
 			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
 			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
-			'gelezen_moment' => $gelezen ? strtotime($gelezen->datum_tijd) : false,
+			'gelezen_moment' => $gelezen ? $gelezen->datum_tijd->getTimestamp() : false,
 			'meldingsniveau' => $draad->magMeldingKrijgen() ? $this->forumDradenMeldingModel->getVoorkeursNiveauVoorLid($draad) : '',
 		]);
 
 		if (LoginModel::mag(P_LOGGED_IN)) {
-			$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad);
+			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
 		}
 
 		return $view;
@@ -520,7 +520,7 @@ class ForumController extends AbstractController {
 	public function bladwijzer(int $draad_id) {
 		$draad = $this->forumDradenModel->get($draad_id);
 		$timestamp = (int)filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
-		if ($this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, $timestamp - 1)) {
+		if ($this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, $timestamp - 1)) {
 			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
 		}
 		exit; //TODO: JsonResponse
@@ -710,7 +710,7 @@ class ForumController extends AbstractController {
 
 		// markeer als gelezen
 		if (LoginModel::mag(P_LOGGED_IN)) {
-			$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad);
+			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
 		}
 
 		// voorkom dubbelposts
@@ -762,7 +762,7 @@ class ForumController extends AbstractController {
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 		$this->forumPostsModel->bewerkForumPost($tekst, $reden, $post);
-		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($post->getForumDraad(), strtotime($post->laatst_gewijzigd));
+		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($post->getForumDraad(), strtotime($post->laatst_gewijzigd));
 		return view('forum.partial.post_lijst', ['post' => $post]);
 	}
 
