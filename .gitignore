@@ -47,6 +47,7 @@ htdocs/dist
 package-lock.json
 .cache-loader
 webpack.config.js
+.onderhoud
 
 ###> symfony/framework-bundle ###
 /.env.local

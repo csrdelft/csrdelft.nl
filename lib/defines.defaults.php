@@ -19,8 +19,6 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('DB_DROP', false); # heb je een backup gemaakt?
 # debug modus
 @define('DEBUG', false);
-# onderhoud modus
-@define('ONDERHOUD', false);
 # measure time
 @define('TIME_MEASURE', false);
 # redirect to https

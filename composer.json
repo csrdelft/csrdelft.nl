@@ -76,17 +76,16 @@
 		"generator": "@php bin/dev/generate.php",
 		"production": "@php bin/ci/compile.php",
 		"flushcache": "@php bin/flushcache.php",
-		"onderhoud": "bin/prod/onderhoud.sh",
 		"analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",
 		"test": "@php vendor/phpunit/phpunit/phpunit --bootstrap ./phpunit.init.php tests",
 		"update-prod": [
 			"git fetch",
-			"@onderhoud true",
+			"touch .onderhoud",
 			"git merge FETCH_HEAD",
 			"@migrate",
 			"rm -r ./var/cache",
 			"@flushcache",
-			"@onderhoud false",
+			"rm .onderhoud",
 			"@php bin/console cache:warmup"
 		],
 		"auto-scripts": {

@@ -7,7 +7,7 @@ require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 /**
  * Ga niet verder als de stek in onderhoudsmodus staat.
  */
-if (ONDERHOUD) {
+if (file_exists(__DIR__ . '/../.onderhoud')) {
 	http_response_code(503);
 	echo <<<'HTML'
 <!doctype html>
