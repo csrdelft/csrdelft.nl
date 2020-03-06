@@ -107,6 +107,7 @@ Open vervolgens een terminal in de projectmap en voer het volgende commando uit.
 
 ```bash
 composer install
+composer migrate (als de csrdelft database al is aangemaakt en de data dump staat erin)
 ```
 
 Download en installeer [Yarn](https://classic.yarnpkg.com/en/docs/install). Dit wordt gebruikt om JavaScript dependencies te installeren en om JavaScript te builden.
