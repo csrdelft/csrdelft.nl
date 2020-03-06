@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 // Zet omgeving klaar.
 require __DIR__ . '/../config/bootstrap.php';
-require_once dirname(__DIR__) . '/lib/defines.defaults.php';
+require_once __DIR__ . '/defines.php';
 
 // Registreer foutmelding handlers
 if (env('CI')) {

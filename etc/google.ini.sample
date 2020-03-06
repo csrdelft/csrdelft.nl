@@ -1,6 +1,0 @@
-; Configuratie voor Google services.
-[google]
-captcha_secret = ;
-client_id = ;
-client_secret = ;
-embed_key = ;

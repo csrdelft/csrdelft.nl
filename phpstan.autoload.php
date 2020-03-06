@@ -3,5 +3,5 @@ define('HTTP_REFERER', '');
 define('REQUEST_URI', '');
 define('MODE', '');
 
-include 'defines.defaults.php';
+include 'defines.php';
 ?>
