@@ -70,7 +70,16 @@ Enable `ldap` in `php.ini`
 In XAMPP: `Apache => config => PHP (php.ini) => Zoek naar ldap => Haal de ; bij ;extension=ldap weg`
 
 #### MySQL
-Maak een database `csrdelft` aan.
+We gaan nu een MySQL server opstarten, waar vervolgens de lokale database op runt.
+In XAMPP: `MySQL => start`. Hopelijk start de MySQL server gelijk op. Stel de 3306 poort is bezet, dan zijn er 2 oplossingen:
+1. Klik op de Netstat knop in XAMPP, kijk welk process port 3306 bezet houdt en kill dit programma via de Task Manager.
+2. Verander de poort voor de MySQL server. Ga naar `C:/XAMPP/mysql/bin` en open de `my.ini` file. Vervang de 3306 poort overal naar een ander poortnummer.
+
+In de C:/XAMPP folder, ga naar `mysql\bin`. Open een terminal en typ het volgende commando:
+`./mysql.exe -u root -p` of `mysql -u root -p` als het `mysql` commando al wel gedefinieerd is in een windows PATH variable.
+
+Je bent nu ingelogd op de MySQL server.
+Maak vervolgens een database `csrdelft` aan.
 
 ```
 CREATE USER 'csrdelft'@'localhost' IDENTIFIED BY 'bl44t';
@@ -80,7 +89,13 @@ GRANT ALL PRIVILEGES ON `csrdelft` . * TO 'csrdelft'@'localhost';
 
 Als je database verbinding anders is dan gebruiker `csrdelft` met wachtwoord `bl44t` op host `localhost` en database `csrdelft`, voeg dan de dsn van je database toe aan `.env.local`
 
-Plaats de export die je in stap 0 hebt gefixt in de database.
+Switch nu naar de csrdelft database met het commando:
+`use csrdelft;`
+**Plaats nu de export die je in stap 0 hebt gefixt in de database.** Doe dit als volgt:
+```
+source <repo root>\data\***.sql (Met *** voor de tabellen file);
+source <repo root>\data\***.sql (Met *** voor de data file);
+```
 
 #### Dependencies
 Download en installeer [Composer](https://getcomposer.org/). Dit wordt gebruikt om de dependencies te installeren.
