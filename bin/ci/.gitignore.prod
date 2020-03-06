@@ -55,3 +55,7 @@ phpunit.init.php
 .sonar-project.properties
 package.json
 yarn.lock
+
+/.env.local
+/.env.local.php
+/.env.*.local

@@ -69,8 +69,6 @@ Enable `ldap` in `php.ini`
 
 In XAMPP: `Apache => config => PHP (php.ini) => Zoek naar ldap => Haal de ; bij ;extension=ldap weg`
 
-Hierna, ga naar de directory `<repo root>\lib`, en kopieer de waardes in `defines.include.php.development.sample` naar `defines.include.php`.
-
 #### MySQL
 Maak een database `csrdelft` aan.
 
@@ -85,15 +83,14 @@ Als je database verbinding anders is dan gebruiker `csrdelft` met wachtwoord `bl
 Plaats de export die je in stap 0 hebt gefixt in de database.
 
 #### Dependencies
-Gebruik [Composer](https://getcomposer.org/) om de dependencies te installeren door het volgende commando in de projectmap uit te voeren.
+Download en installeer [Composer](https://getcomposer.org/). Dit wordt gebruikt om de dependencies te installeren.
+Open vervolgens een terminal in de projectmap en voer het volgende commando uit.
 
 ```bash
 composer install
 ```
 
-Installeer ImageMagick om het fotoalbum goed te laten werken. Als je v7 van imagemagick hebt geinstalleerd voeg dan `IMAGEMAGICK=magick` toe aan `.env.local`
-
-Gebruik [yarn](https://yarnpkg.com) om javascript dependencies te installeren en om javascript te builden.
+Download en installeer [Yarn](https://classic.yarnpkg.com/en/docs/install). Dit wordt gebruikt om JavaScript dependencies te installeren en om JavaScript te builden.
 
 ```bash
 # Installeer dependencies
@@ -108,7 +105,10 @@ $ yarn run watch
 $ yarn run watch-poll
 ```
 
-Ga naar `http://dev-csrdelft.nl`
+Download en installeer [ImageMagick](https://imagemagick.org/script/download.php). Dit wordt gebruikt om het fotoalbum goed te laten werken. Als je v7 van ImageMagick hebt geinstalleerd voeg dan `IMAGEMAGICK=magick` toe aan `.env.local`
+
+#### Klaar
+Ga nu naar `http://dev-csrdelft.nl`
 
 #### Cache (geavanceerd)
 In productie draait memcached als cache. Het is niet nodig om deze lokaal te draaien, maar het is wel mogelijk mogelijk om deze lokaal in te stellen om bijvoorbeeld te testen. Installeer hiervoor de memcache php extensie van pecl (let op, geen **d** aan het eind).
