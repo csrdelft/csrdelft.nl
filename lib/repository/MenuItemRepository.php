@@ -24,12 +24,6 @@ use Symfony\Contracts\Cache\ItemInterface;
  * @method MenuItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class MenuItemRepository extends AbstractRepository {
-
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'volgorde ASC, tekst ASC';
 	/**
 	 * @var CacheInterface
 	 */

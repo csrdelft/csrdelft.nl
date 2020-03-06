@@ -80,6 +80,7 @@ class MenuItem {
 	 * De sub-items van dit menu-item
 	 * @var MenuItem[]|PersistentCollection
 	 * @ORM\OneToMany(targetEntity="MenuItem", mappedBy="parent")
+	 * @ORM\OrderBy({"volgorde": "ASC", "tekst": "ASC"})
 	 */
 	public $children;
 
