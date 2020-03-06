@@ -74,7 +74,7 @@ We gaan nu een MySQL server opstarten, waar vervolgens de lokale database op run
 
 In XAMPP: `MySQL => start`. Hopelijk start de MySQL server gelijk op. Stel de 3306 poort is bezet, dan zijn er 2 oplossingen:
 1. Klik op de Netstat knop in XAMPP, kijk welk process port 3306 bezet houdt en kill dit programma via de Task Manager.
-2. [Verander de poort voor de MySQL server](https://stackoverflow.com/questions/32173242/conflicting-ports-of-mysql-and-xampp). In XAMPP: `MySQL => config => my.ini`. Vervang de 3306 poort overal naar een ander poortnummer, bijvoorbeeld 3307. Ga dan in XAMPP zelf naar `config => Service and Port Settings => MySQL Tab` En verander de service naam `mysql` to `mysqlxampp` en de main port 3306 naar 3307`.
+2. [Verander de poort voor de MySQL server](https://stackoverflow.com/questions/32173242/conflicting-ports-of-mysql-and-xampp). In XAMPP: `MySQL => config => my.ini`. Vervang de 3306 poort overal naar een ander poortnummer, bijvoorbeeld 3307. Ga dan in XAMPP zelf naar `config => Service and Port Settings => MySQL Tab` En verander de service naam `mysql` naar `mysqlxampp` en de main port 3306 naar 3307`.
 
 In de C:/XAMPP folder, ga naar `mysql\bin`. Open een terminal en typ het volgende commando:
 ```
