@@ -89,7 +89,7 @@ Gebruik [Composer](https://getcomposer.org/) om de dependencies te installeren d
 composer install
 ```
 
-Installeer ImageMagick om het fotoalbum goed te laten werken. Als je v7 van imagemagick hebt geinstalleerd voeg dan `IMAGEMAGICk=magick` toe aan `.env.local`
+Installeer ImageMagick om het fotoalbum goed te laten werken. Als je v7 van imagemagick hebt geinstalleerd voeg dan `IMAGEMAGICK=magick` toe aan `.env.local`
 
 Gebruik [yarn](https://yarnpkg.com) om javascript dependencies te installeren en om javascript te builden.
 
