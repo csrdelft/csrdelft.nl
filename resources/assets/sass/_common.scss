@@ -383,16 +383,10 @@ Bootstrap overrides / uitbreidingen
  */
 
 .sticky-top {
-	// Default 0 is wel heel krap.
-	top: 5px;
+	// Compenseer voor bovenbalk
+	top: 60px;
 }
 
-@include media-breakpoint-down(md) {
-	.sticky-top {
-		// In down md is er een bovenbalk van 42px
-		top: 47px;
-	}
-}
 // Fix plek icoontje in een alert
 .alert .ico {
 	margin-right: 0.75rem;
