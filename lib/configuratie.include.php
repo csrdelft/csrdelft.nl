@@ -24,6 +24,7 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
+use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
 // Zet omgeving klaar.
@@ -33,6 +34,9 @@ require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 // Registreer foutmelding handlers
 if (DEBUG) {
 	register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
+	umask(0000);
+
+	Debug::enable();
 } else {
 	register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
 	set_error_handler([ShutdownHandler::class, 'slackHandler']);

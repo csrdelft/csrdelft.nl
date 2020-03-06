@@ -13,7 +13,7 @@
 # database automatisch droppen
 @define('DB_DROP', false); # heb je een backup gemaakt?
 # debug modus
-@define('DEBUG', false);
+@define('DEBUG', $_SERVER['APP_DEBUG']);
 # measure time
 @define('TIME_MEASURE', false);
 # redirect to https
