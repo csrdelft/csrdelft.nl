@@ -130,6 +130,8 @@ Download en installeer [ImageMagick](https://imagemagick.org/script/download.php
 #### Klaar
 Ga nu naar `http://dev-csrdelft.nl`
 
+P.S. Iedere keer als je wil gaan programmeren aan de stek, moet je weer `yarn run watch` uitvoeren.
+
 #### Cache (geavanceerd)
 In productie draait memcached als cache. Het is niet nodig om deze lokaal te draaien, maar het is wel mogelijk mogelijk om deze lokaal in te stellen om bijvoorbeeld te testen. Installeer hiervoor de memcache php extensie van pecl (let op, geen **d** aan het eind).
 
