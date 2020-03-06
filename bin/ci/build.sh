@@ -8,8 +8,7 @@ if (( $SKIP_BUILD == 1 )); then
 cd $TRAVIS_BUILD_DIR
 
 # Zet scripts op de juiste plek
-cp $TRAVIS_BUILD_DIR/bin/ci/mysql.ini.travis $TRAVIS_BUILD_DIR/etc/mysql.ini
-cp $TRAVIS_BUILD_DIR/bin/ci/defines.include.php $TRAVIS_BUILD_DIR/lib/defines.include.php
+cp $TRAVIS_BUILD_DIR/bin/ci/.env.local $TRAVIS_BUILD_DIR/.env.local
 
 # Stel een database in voor composer.
 mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft;'

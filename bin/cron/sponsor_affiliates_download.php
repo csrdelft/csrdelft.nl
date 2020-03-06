@@ -6,15 +6,6 @@
  * @date 26/10/2017
  */
 
-use CsrDelft\common\Ini;
-
-/**
- * Settings constants.
- */
-const SETTINGS_CLUBID = 'clubid';
-const SETTINGS_SL_HOST = 'sl_host';
-const SETTINGS_UA = 'useragent';
-
 /**
  * Url constants.
  */
@@ -22,16 +13,14 @@ const SETTINGS_UA = 'useragent';
 require_once __DIR__ . '/../lib/configuratie.include.php';
 
 //Steps
-$settings = Ini::lees(Ini::SPONSOR_AFFILIATES_DOWNLOAD);
-
-$SL_HOST = $settings[SETTINGS_SL_HOST];
+$SL_HOST = env('SPONSOR_SL_HOST');
 $PAGE_URL = $SL_HOST . '/api/?call=webshops_club_extension&club=';
 
-$clubId = $settings[SETTINGS_CLUBID];
+$clubId = env('SPONSOR_CLUBID');
 $scrapeUrl = $PAGE_URL . $clubId;
 
 //1. GET JSON
-$result = curl_request($scrapeUrl, [CURLOPT_USERAGENT => $settings[SETTINGS_UA]]);
+$result = curl_request($scrapeUrl, [CURLOPT_USERAGENT => env('SPONSOR_USERAGENT')]);
 $webshops = json_decode($result)->webshops;
 
 //3. Follow links to final destination

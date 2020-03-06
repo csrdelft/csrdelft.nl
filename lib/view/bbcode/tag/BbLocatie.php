@@ -3,7 +3,6 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\Ini;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\Icon;
 use function trim;
@@ -36,7 +35,7 @@ class BbLocatie extends BbTag {
 		if (trim(htmlspecialchars($address)) == '') {
 			$maps = 'Geen adres opgegeven';
 		} else {
-			$maps = '<iframe height="' . $this->height . '" frameborder="0" style="border:0;width:100%" src="https://www.google.com/maps/embed/v1/place?q=' . urlencode(htmlspecialchars($address)) . '&key=' . Ini::lees(Ini::GOOGLE, 'embed_key') . '"></iframe>';
+			$maps = '<iframe height="' . $this->height . '" frameborder="0" style="border:0;width:100%" src="https://www.google.com/maps/embed/v1/place?q=' . urlencode(htmlspecialchars($address)) . '&key=' . env('GOOGLE_EMBED_KEY') . '"></iframe>';
 		}
 		$map = $maps;
 		return '<span class="hoverIntent"><a href="' . $url . '">' . $address . Icon::getTag('map', null, 'Kaart', 'text') . '</a><div class="hoverIntentContent">' . $map . '</div></span>';

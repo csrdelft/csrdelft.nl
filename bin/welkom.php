@@ -1,6 +1,5 @@
 <?php
 
-use CsrDelft\common\Ini;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\repository\ProfielRepository;
@@ -46,7 +45,7 @@ Mark Bekooy,
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 TEXT;
     $mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
-    $mail->addBcc(array(Ini::lees(Ini::EMAILS, 'pubcie') => 'PubCie C.S.R.'));
+    $mail->addBcc(array(env('EMAIL_PUBCIE') => 'PubCie C.S.R.'));
     $mail->send();
 
 	if (!AccountModel::existsUid($profiel->uid)) {

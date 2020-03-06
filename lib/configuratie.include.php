@@ -12,7 +12,6 @@
  */
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Ini;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
 use CsrDelft\model\forum\ForumModel;
@@ -25,15 +24,21 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
+use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
-require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 // Zet omgeving klaar.
 require __DIR__ . '/../config/bootstrap.php';
+require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 
 // Registreer foutmelding handlers
-if (DEBUG) {
+if (env('CI')) {
+	// geen handlers
+} elseif (DEBUG) {
 	register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
+	umask(0000);
+
+	Debug::enable();
 } else {
 	register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
 	set_error_handler([ShutdownHandler::class, 'slackHandler']);
@@ -56,7 +61,7 @@ date_default_timezone_set('Europe/Amsterdam');
 
 
 // default is website mode
-if (getenv('CI')) {
+if (env('CI')) {
 	define('MODE', 'TRAVIS');
 } elseif (php_sapi_name() === 'cli') {
 	define('MODE', 'CLI');
@@ -93,23 +98,11 @@ $kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
 $kernel->boot();
 $container = $kernel->getContainer();
 
-$cred = Ini::lees(Ini::MYSQL);
-if ($cred === false) {
-	$cred = array(
-		'host' => 'localhost',
-		'user' => 'admin',
-		'pass' => 'password',
-		'db' => 'csrdelft'
-	);
-}
-
-$pdo = new PDO('mysql:host=' . $cred['host'] . ';dbname=' . $cred['db'], $cred['user'], $cred['pass'], [
-	PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8MB4'",
-	PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-]);
+// Gebruik de PDO connectie van doctrine
+$pdo = $container->get('doctrine.dbal.default_connection')->getWrappedConnection();
 
 // Set csrdelft/orm parts of the container
-$container->set(OrmMemcache::class, new OrmMemcache(MEMCACHED_HOST, MEMCACHED_PORT));
+$container->set(OrmMemcache::class, new OrmMemcache(env('CACHE_HOST'), (int)env('CACHE_PORT')));
 $container->set(Database::class, new Database($pdo));
 $container->set(DatabaseAdmin::class, new DatabaseAdmin($pdo));
 
@@ -139,7 +132,7 @@ if (FORCE_HTTPS) {
 }
 
 // Router
-switch (constant('MODE')) {
+switch (MODE) {
 	case 'TRAVIS':
 		if (isSyrinx()) die("Syrinx is geen Travis!");
 		break;

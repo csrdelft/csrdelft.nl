@@ -6,7 +6,7 @@ MIME-Version: 1.0
 Content-Type: text/html; charset=utf-8
 User-Agent: telnet localhost 25
 X-Complaints-To: pubcie@csrdelft.nl
-Approved: {{$instellingen['password']}}
+Approved: {{env('CSRMAIL_PASSWORD')}}
 Subject: C.S.R.-courant {{strftime("%e %B %Y")}}
 @endif
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">

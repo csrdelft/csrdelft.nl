@@ -28,7 +28,6 @@ htdocs/owee/2006/plaetjes/*
 htdocs/owee/2007/plaetjes/*
 htdocs/plaetjes/*
 htdocs/tools/alphabanner/alphabanner.cache.*
-lib/defines.include.php
 sessie/*
 /tmp
 tmp/*

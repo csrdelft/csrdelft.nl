@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\common\Ini;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\view\PlainView;
@@ -71,7 +70,7 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-		$mail = new Mail([Ini::lees(Ini::EMAILS, 'oweecie') => "OweeCie"], "Interesseformulier", $bericht);
+		$mail = new Mail([env('EMAIL_OWEECIE') => "OweeCie"], "Interesseformulier", $bericht);
 		$mail->setFrom($email);
 		$mail->send();
 
@@ -97,7 +96,7 @@ De PubCie.
 	 * @return mixed
 	 */
 	public function checkCaptcha($response) {
-		$secret = Ini::lees(Ini::GOOGLE, 'captcha_secret');
+		$secret = env('GOOGLE_CAPTCHA_SECRET');
 
 		$ch = curl_init("https://www.google.com/recaptcha/api/siteverify");
 		curl_setopt($ch, CURLOPT_POST, 1);

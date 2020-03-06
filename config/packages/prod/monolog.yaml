@@ -6,9 +6,9 @@ monolog:
             level: critical
         slackwebhook:
             type: slackwebhook
-            webhook_url: '%app.slack.url%'
-            channel: '%app.slack.channel%'
-            icon_emoji: '%app.slack.icon%'
-            bot_name: '%app.slack.username%'
+            webhook_url: '%env(SLACK_URL)%'
+            channel: '%env(SLACK_CHANNEL)%'
+            icon_emoji: '%env(SLACK_ICON)%'
+            bot_name: '%env(SLACK_USERNAME)%'
             include_extra: true
             level: critical

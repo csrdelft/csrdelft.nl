@@ -1,14 +1,9 @@
 <?php
 
-// Geef de mogelijkheid om defines te overriden.
-if (is_file(__DIR__ . '/defines.include.php')) {
-    require_once 'defines.include.php';
-}
-
 # -------------------------------------------------------------------
 # defines.defaults.php
 # -------------------------------------------------------------------
-# Dit zijn de standaard instellingen, pas ze aan in defines.include.php
+# Zet alle defines klaar
 # -------------------------------------------------------------------
 #
 # database automatisch controleren
@@ -18,17 +13,18 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 # database automatisch droppen
 @define('DB_DROP', false); # heb je een backup gemaakt?
 # debug modus
-@define('DEBUG', false);
+@define('DEBUG', $_SERVER['APP_DEBUG']);
 # measure time
 @define('TIME_MEASURE', false);
 # redirect to https
-@define('FORCE_HTTPS', true);
+@define('FORCE_HTTPS', env('FORCE_HTTPS') == 'true');
 # urls ZONDER trailing slash
-@define('CSR_ROOT', 'https://' . CSR_DOMAIN);
+@define('CSR_DOMAIN', env('CSR_DOMAIN'));
+@define('CSR_ROOT', env('CSR_ROOT'));
 # Toegestane API origins
 @define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io');
 # paden MET trailing slash
-@define('BASE_PATH', realpath(__DIR__ . '/../') . '/'); # Zet naar absoluut path in je eigen omgeving
+@define('BASE_PATH', env('BASE_PATH') ?: realpath(__DIR__ . '/../') . '/'); # Zet naar absoluut path in je eigen omgeving
 @define('ETC_PATH', BASE_PATH . 'etc/');
 @define('DATA_PATH', BASE_PATH . 'data/');
 @define('MEMCACHED_PATH', DATA_PATH);
@@ -47,23 +43,15 @@ if (is_file(__DIR__ . '/defines.include.php')) {
 @define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
 @define('CONFIG_PATH', BASE_PATH . 'config');
 @define('TEMPLATE_DIR', LIB_PATH . 'templates/');
-# ImageMagick ('magick' voor v7, 'convert' voor v6)
-@define('IMAGEMAGICK', 'magick');
 # BladeOne
-# - gebruik MODE_AUTO = 0 voor normale development
-# - gebruik MODE_SLOW = 1 als je grote veranderingen maakt
-# - gebruik MODE_FAST = 2 in productie
-@define('BLADEONE_MODE', 0);
-
-@define('MEMCACHED_HOST', 'unix://' . MEMCACHED_PATH . 'csrdelft-cache.socket');
-@define('MEMCACHED_PORT', 0);
+@define('BLADEONE_MODE', env('BLADEONE_MODE'));
 
 # wordt gebruikt voor secure cookies, zonder deze kan niet geleefd worden
 if (!defined('CSR_DOMAIN')) {
 	throw new Exception('CSR_DOMAIN niet gezet.');
 }
 
-# Permissies, niet aanpasbaar door defines.include.php
+# Permissies
 define('P_PUBLIC', 'P_PUBLIC');
 define('P_LOGGED_IN', 'P_LOGGED_IN');
 define('P_ADMIN', 'P_ADMIN');

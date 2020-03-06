@@ -16,8 +16,7 @@ services:
       XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9000 remote_enable=1
     volumes:
       - ./:/app
-      - ./docker/dev/defines.include.php:/app/lib/defines.include.php
-      - ./docker/dev/mysql.ini:/app/etc/mysql.ini
+      - ./docker/dev/.env.local:/app/.env.local
       - ./vendor:/app/vendor
 
   composer:
@@ -28,8 +27,7 @@ services:
     command: install --ignore-platform-reqs # Doe initieel een install
     volumes:
       - ./:/app
-      - ./docker/dev/defines.include.php:/app/lib/defines.include.php
-      - ./docker/dev/mysql.ini:/app/etc/mysql.ini
+      - ./docker/dev/.env.local:/app/.env.local
       - ./vendor:/app/vendor
 
   stekdb:

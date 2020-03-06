@@ -138,11 +138,12 @@ final class ShutdownHandler {
 
 
 		$debug = self::getDebug();
-		if ($debug !== null
-			&& Ini::bestaat(Ini::SLACK)
-		) {
-			$slackConfig = Ini::lees(Ini::SLACK);
-			$slackClient = new SlackClient($slackConfig['url'], $slackConfig);
+		if ($debug !== null && !empty(env('SLACK_URL'))) {
+			$slackClient = new SlackClient(env('SLACK_URL'), [
+				'username' => env('SLACK_USERNAME'),
+				'channel' => env('SLACK_CHANNEL'),
+				'icon' => env('SLACK_ICON'),
+			]);
 			$foutmelding = $slackClient->createMessage();
 
 			$errorName = errorName($errno);

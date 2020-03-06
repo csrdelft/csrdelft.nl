@@ -80,7 +80,7 @@ CREATE DATABASE `csrdelft`;
 GRANT ALL PRIVILEGES ON `csrdelft` . * TO 'csrdelft'@'localhost';
 ```
 
-Hernoem `etc/mysql.ini.sample` naar `etc/mysql.ini` en voer de goede waarden in.
+Als je database verbinding anders is dan gebruiker `csrdelft` met wachtwoord `bl44t` op host `localhost` en database `csrdelft`, voeg dan de dsn van je database toe aan `.env.local`
 
 Plaats de export die je in stap 0 hebt gefixt in de database.
 
@@ -91,7 +91,7 @@ Gebruik [Composer](https://getcomposer.org/) om de dependencies te installeren d
 composer install
 ```
 
-Installeer ImageMagick om het fotoalbum goed te laten werken. Controleer of de `IMAGEMAGICK` constante klopt.
+Installeer ImageMagick om het fotoalbum goed te laten werken. Als je v7 van imagemagick hebt geinstalleerd voeg dan `IMAGEMAGICK=magick` toe aan `.env.local`
 
 Gebruik [yarn](https://yarnpkg.com) om javascript dependencies te installeren en om javascript te builden.
 
@@ -108,26 +108,15 @@ $ yarn run watch
 $ yarn run watch-poll
 ```
 
+Ga naar `http://dev-csrdelft.nl`
+
 #### Cache (geavanceerd)
-In productie draait memcached als cache. Het is ook mogelijk om deze lokaal in te stellen om bijvoorbeeld te testen. Installeer hiervoor de memcache php extensie van pecl (let op, geen **d** aan het eind).
+In productie draait memcached als cache. Het is niet nodig om deze lokaal te draaien, maar het is wel mogelijk mogelijk om deze lokaal in te stellen om bijvoorbeeld te testen. Installeer hiervoor de memcache php extensie van pecl (let op, geen **d** aan het eind).
 
-De memcached server maakt een unix socket in de data map met de naam `csrdelft-cache.socket`, de mapnaam is aan te passen met de `MEMCACHED_PATH` constant, de naam van de socket is gehard-coded.
+Download memcached en voer deze uit. Op Windows kun je [nssm](http://nssm.cc/) gebruiken om memcached als een service te installeren. Standaard draait memcached op poort 11211.
 
-```bash
-$ memcached -s ./data/csrdelft-cache.socket
-```
+Voeg `CACHE_HOST=localhost` en `CACHE_PORT=11211` toe aan `.env.local`.
 
-Let op, als je de memcache plugin installeerd wordt er geprobeerd om een verbinding met de cache te maken en moet de cache dus draaien. Als je dit vervelend vindt moet je er maar iets voor bouwen.
-
-#### Voorkomende foutmeldingen
-Als de stek nu draait (Apache is gestart en de database is actief), ga dan naar localhost:8080 in de webbrowser.
-Vervolgens kan er een foutmelding worden gegooid waarbij staat:
-- slack.ini is not available (of iets soortgelijks)
-- google.ini is not available (of iets soortgelijks)
-- emails.ini is not available (of iets soortgelijks)
-- etc...
-
-Ga bij zo'n soort foutmelding in de repository folder naar de map `etc`. Maak een kopie van een bovengenoemd \*\*\*.ini.sample bestand en verwijder de .sample file extension. Dit zal het moeten fixen.
 <hr>
 
 ### 2. Docker
@@ -164,7 +153,7 @@ Installeer Symfony CLI https://symfony.com/doc/master/cloud/getting-started#inst
 
 Installeer een MySQL server zoals staat beschreven bij "Met de hand" en zorg dat deze draait.
 
-Zet `CSR_DOMAIN` naar `127.0.0.1` en `SERVER_PORT` naar `8000` in `lib/defines.include.php` (van `lib/defines.include.php.development.sample`)
+Voeg `CSR_DOMAIN=127.0.0.1` en `CSR_ROOT=http://127.0.0.1:8000` toe aan `.env.local`
 
 Voer het volgende commando uit.
 

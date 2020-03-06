@@ -2,7 +2,6 @@
 
 use CsrDelft\Kernel;
 use Symfony\Component\HttpFoundation\Request;
-require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 
 /**
  * Ga niet verder als de stek in onderhoudsmodus staat.

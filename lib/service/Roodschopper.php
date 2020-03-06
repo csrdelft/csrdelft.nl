@@ -13,7 +13,6 @@ namespace CsrDelft\service;
  * @deprecated
  */
 
-use CsrDelft\common\Ini;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
@@ -39,7 +38,7 @@ class Roodschopper {
 
 	public static function getDefaults() {
 		$return = new Roodschopper();
-		$return->from = Ini::lees(Ini::EMAILS, 'fiscus');
+		$return->from = env('EMAIL_FISCUS');
 		$return->verzenden = false;
 		$return->saldogrens = -520;
 		$return->onderwerp = 'U staat rood';

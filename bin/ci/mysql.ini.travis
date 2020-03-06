@@ -1,8 +1,0 @@
-;
-; Dit zijn de inloggegevens van MySQL voor Travis
-;
-[csrdelft]
-host = localhost
-user = travis
-pass = ''
-db = csrdelft

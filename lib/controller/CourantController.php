@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\common\Ini;
 use CsrDelft\entity\courant\CourantBericht;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CourantBerichtRepository;
@@ -125,7 +124,7 @@ class CourantController extends AbstractController {
 		$courantView = new CourantView($courant, $this->courantBerichtRepository->findAll());
 		$courant->inhoud = $courantView->getHtml(false);
 		if ($iedereen === 'iedereen') {
-			$this->courantRepository->verzenden(Ini::lees(Ini::EMAILS, 'leden'), $courantView);
+			$this->courantRepository->verzenden(env('EMAIL_LEDEN'), $courantView);
 			/** @var Connection $conn */
 			$conn = $this->getDoctrine()->getConnection();
 			$conn->beginTransaction();
@@ -151,7 +150,7 @@ class CourantController extends AbstractController {
 
 			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<strong>Aan iedereen verzonden</strong></div>');
 		} else {
-			$this->courantRepository->verzenden(Ini::lees(Ini::EMAILS, 'pubcie'), $courantView);
+			$this->courantRepository->verzenden(env('EMAIL_PUBCIE'), $courantView);
 			setMelding('Verzonden naar de PubCie', 1);
 			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>');
 		}

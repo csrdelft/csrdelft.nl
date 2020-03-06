@@ -2,11 +2,10 @@
 /**
  * Configuratie voor Phinx, verbind met de stek database om daar migraties op te kunnen runnen.
  */
-// PHP from Phinx might not have a proper path
-set_include_path(get_include_path() . PATH_SEPARATOR . 'lib');
-require_once 'defines.defaults.php';
 
-$db_cred = parse_ini_file(ETC_PATH . 'mysql.ini');
+use Phinx\Migration\Manager\Environment;
+
+require __DIR__ . '/config/bootstrap.php';
 
 return [
 	'paths' => [
@@ -17,13 +16,11 @@ return [
 	'environments' => [
 		'default_migration_table' => 'phinxlog',
 		'default_database' => 'stekdb',
-		'stekdb' => [
-			'adapter' => 'mysql',
-			'host' => $db_cred['host'],
-			'name' => $db_cred['db'],
-			'user' => $db_cred['user'],
-			'pass' => $db_cred['pass']
-		]
+		// https://github.com/cakephp/phinx/issues/1706
+		// Voer de dsn parse logica zelf uit.
+		'stekdb' => (new Environment(null, [
+			'dsn' => env('DATABASE_URL'),
+		]))->getOptions()
 	],
 
 	'version_order' => 'creation'
