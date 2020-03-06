@@ -12,7 +12,6 @@ etc/*.crt
 etc/*.csr
 etc/*.htpasswd
 etc/*.kdbx
-lib/defines.include.php
 
 # Overige mappen
 htdocs/download/*

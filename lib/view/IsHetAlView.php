@@ -95,7 +95,7 @@ class IsHetAlView implements View {
 					$this->ja = false;
 					$tijd = time();
 				}
-				setcookie('studeren', $tijd, time() + 30 * 60, '/', env('CSR_DOMAIN'), FORCE_HTTPS, true);
+				setcookie('studeren', $tijd, time() + 30 * 60, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 				break;
 
 			default:

@@ -18,7 +18,6 @@ class CourantView implements ToResponse {
 
 	private $model;
 	private $berichten;
-	private $instellingen;
 
 	/**
 	 * CourantView constructor.

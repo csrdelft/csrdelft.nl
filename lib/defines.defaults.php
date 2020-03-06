@@ -51,7 +51,7 @@ if (!defined('CSR_DOMAIN')) {
 	throw new Exception('CSR_DOMAIN niet gezet.');
 }
 
-# Permissies, niet aanpasbaar door defines.include.php
+# Permissies
 define('P_PUBLIC', 'P_PUBLIC');
 define('P_LOGGED_IN', 'P_LOGGED_IN');
 define('P_ADMIN', 'P_ADMIN');
