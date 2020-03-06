@@ -1,55 +1,50 @@
 <?php
 
 # -------------------------------------------------------------------
-# defines.defaults.php
+# defines.include.php
 # -------------------------------------------------------------------
 # Zet alle defines klaar
 # -------------------------------------------------------------------
 #
 # database automatisch controleren
-@define('DB_CHECK', false); # zie PersistentEntity::checkTable()
+define('DB_CHECK', false); # zie PersistentEntity::checkTable()
 # database automatisch bijwerken
-@define('DB_MODIFY', false); # heb je een backup gemaakt?
+define('DB_MODIFY', false); # heb je een backup gemaakt?
 # database automatisch droppen
-@define('DB_DROP', false); # heb je een backup gemaakt?
+define('DB_DROP', false); # heb je een backup gemaakt?
 # debug modus
-@define('DEBUG', $_SERVER['APP_DEBUG']);
+define('DEBUG', env('APP_ENV') == 'dev');
 # measure time
-@define('TIME_MEASURE', false);
+define('TIME_MEASURE', false);
 # redirect to https
-@define('FORCE_HTTPS', env('FORCE_HTTPS') == 'true');
+define('FORCE_HTTPS', env('FORCE_HTTPS') == 'true');
 # urls ZONDER trailing slash
-@define('CSR_DOMAIN', env('CSR_DOMAIN'));
-@define('CSR_ROOT', env('CSR_ROOT'));
+define('CSR_ROOT', env('CSR_ROOT'));
+define('CSR_DOMAIN', parse_url(CSR_ROOT)['host']);
 # Toegestane API origins
-@define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io');
+define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io');
 # paden MET trailing slash
-@define('BASE_PATH', env('BASE_PATH') ?: realpath(__DIR__ . '/../') . '/'); # Zet naar absoluut path in je eigen omgeving
-@define('ETC_PATH', BASE_PATH . 'etc/');
-@define('DATA_PATH', BASE_PATH . 'data/');
-@define('MEMCACHED_PATH', DATA_PATH);
-@define('SESSION_PATH', BASE_PATH . 'sessie/');
-@define('LIB_PATH', BASE_PATH . 'lib/');
-@define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
-@define('VAR_PATH', BASE_PATH . 'var/');
-@define('TMP_PATH', VAR_PATH . 'tmp/');
-@define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
-@define('PHOTOALBUM_PATH', DATA_PATH . 'foto/fotoalbum/');
-@define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
-@define('PLAATJES_PATH', DATA_PATH . 'plaatjes/');
-@define('CONFIG_CACHE_PATH', VAR_PATH . 'config_cache/');
-@define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
-@define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
-@define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
-@define('CONFIG_PATH', BASE_PATH . 'config');
-@define('TEMPLATE_DIR', LIB_PATH . 'templates/');
+define('BASE_PATH', env('BASE_PATH') ?: realpath(__DIR__ . '/../') . '/');
+define('ETC_PATH', BASE_PATH . 'etc/');
+define('DATA_PATH', BASE_PATH . 'data/');
+define('MEMCACHED_PATH', DATA_PATH);
+define('SESSION_PATH', BASE_PATH . 'sessie/');
+define('LIB_PATH', BASE_PATH . 'lib/');
+define('HTDOCS_PATH', BASE_PATH . 'htdocs/');
+define('VAR_PATH', BASE_PATH . 'var/');
+define('TMP_PATH', VAR_PATH . 'tmp/');
+define('PHOTOS_PATH', HTDOCS_PATH . 'plaetjes/');
+define('PHOTOALBUM_PATH', DATA_PATH . 'foto/fotoalbum/');
+define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
+define('PLAATJES_PATH', DATA_PATH . 'plaatjes/');
+define('CONFIG_CACHE_PATH', VAR_PATH . 'config_cache/');
+define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
+define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
+define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
+define('CONFIG_PATH', BASE_PATH . 'config');
+define('TEMPLATE_DIR', LIB_PATH . 'templates/');
 # BladeOne
-@define('BLADEONE_MODE', env('BLADEONE_MODE'));
-
-# wordt gebruikt voor secure cookies, zonder deze kan niet geleefd worden
-if (!defined('CSR_DOMAIN')) {
-	throw new Exception('CSR_DOMAIN niet gezet.');
-}
+define('BLADEONE_MODE', env('BLADEONE_MODE'));
 
 # Permissies
 define('P_PUBLIC', 'P_PUBLIC');

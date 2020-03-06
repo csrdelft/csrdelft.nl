@@ -71,22 +71,24 @@
 			"Composer\\Config::disableProcessTimeout",
 			"symfony serve --document-root htdocs"
 		],
-		"phinx": "vendor/bin/phinx",
-		"migrate": "vendor/bin/phinx migrate",
+		"phinx": "@php vendor/robmorgan/phinx/bin/phinx",
+		"migrate": "@phinx migrate",
 		"generator": "@php bin/dev/generate.php",
 		"production": "@php bin/ci/compile.php",
 		"flushcache": "@php bin/flushcache.php",
-		"analyse": "vendor/bin/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",
+		"analyse": "@php vendor/phpstan/phpstan/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",
 		"test": "@php vendor/phpunit/phpunit/phpunit --bootstrap ./phpunit.init.php tests",
+		"console": "@php bin/console",
 		"update-prod": [
 			"git fetch",
 			"touch .onderhoud",
 			"git merge FETCH_HEAD",
+			"@composer dump-env prod",
 			"@migrate",
 			"rm -r ./var/cache",
 			"@flushcache",
 			"rm .onderhoud",
-			"@php bin/console cache:warmup"
+			"@console cache:warmup"
 		],
 		"auto-scripts": {
 			"cache:clear": "symfony-cmd",
