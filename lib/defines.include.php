@@ -1,7 +1,7 @@
 <?php
 
 # -------------------------------------------------------------------
-# defines.php
+# defines.include.php
 # -------------------------------------------------------------------
 # Zet alle defines klaar
 # -------------------------------------------------------------------
@@ -13,14 +13,14 @@ define('DB_MODIFY', false); # heb je een backup gemaakt?
 # database automatisch droppen
 define('DB_DROP', false); # heb je een backup gemaakt?
 # debug modus
-define('DEBUG', $_SERVER['APP_DEBUG']);
+define('DEBUG', env('APP_ENV') == 'dev');
 # measure time
 define('TIME_MEASURE', false);
 # redirect to https
 define('FORCE_HTTPS', env('FORCE_HTTPS') == 'true');
 # urls ZONDER trailing slash
-define('CSR_DOMAIN', env('CSR_DOMAIN'));
 define('CSR_ROOT', env('CSR_ROOT'));
+define('CSR_DOMAIN', parse_url(CSR_ROOT)['host']);
 # Toegestane API origins
 define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io');
 # paden MET trailing slash
