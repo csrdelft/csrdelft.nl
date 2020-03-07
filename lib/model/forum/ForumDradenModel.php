@@ -13,6 +13,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use PDO;
 use PDOException;
 
@@ -84,9 +85,9 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	private $forumDradenReagerenModel;
 
 	/**
-	 * @var ForumDradenVerbergenModel
+	 * @var ForumDradenVerbergenRepository
 	 */
-	private $forumDradenVerbergenModel;
+	private $forumDradenVerbergenRepository;
 
 	/**
 	 * @var ForumDradenMeldingRepository
@@ -114,7 +115,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	public function __construct(
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
-		ForumDradenVerbergenModel $forumDradenVerbergenModel,
+		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
 		ForumPostsModel $forumPostsModel
 	) {
@@ -126,7 +127,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
-		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
+		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
 		$this->forumPostsModel = $forumPostsModel;
 	}
@@ -270,7 +271,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$forum_ids_stub = implode(', ', array_fill(0, $count, '?'));
 		$forum_ids = array_keys($delenById);
 		$where_params = array_merge($forum_ids, $forum_ids);
-		$verbergen = $this->forumDradenVerbergenModel->prefetch('uid = ?', array(LoginModel::getUid()));
+		$verbergen = $this->forumDradenVerbergenRepository->findBy(['uid' => LoginModel::getUid()]);
 		$draden_ids = array_keys(group_by_distinct('draad_id', $verbergen));
 		$count = count($draden_ids);
 		if ($count > 0) {
@@ -355,12 +356,12 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 			throw new CsrException('Wijzigen van ' . $property . ' mislukt');
 		}
 		if ($property === 'belangrijk') {
-			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
+			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
 		} elseif ($property === 'gesloten') {
 			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen($draad);
 		} elseif ($property === 'verwijderd') {
 			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen($draad);
-			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
+			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
 			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
 			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);
 			$this->forumPostsModel->verwijderForumPostsVoorDraad($draad);

@@ -11,6 +11,7 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use PDO;
 
 /**
@@ -54,9 +55,9 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	private $forumDradenReagerenModel;
 	/**
-	 * @var ForumDradenVerbergenModel
+	 * @var ForumDradenVerbergenRepository
 	 */
-	private $forumDradenVerbergenModel;
+	private $forumDradenVerbergenRepository;
 	/**
 	 * @var ForumDradenMeldingRepository
 	 */
@@ -75,7 +76,7 @@ class ForumModel extends CachedPersistenceModel {
 		ForumDradenModel $forumDradenModel,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
-		ForumDradenVerbergenModel $forumDradenVerbergenModel,
+		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingModel,
 		ForumPostsModel $forumPostsModel,
 		ForumDelenMeldingRepository $forumDelenMeldingRepository
@@ -86,7 +87,7 @@ class ForumModel extends CachedPersistenceModel {
 		$this->forumDradenModel = $forumDradenModel;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
-		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
+		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
 		$this->forumPostsModel = $forumPostsModel;
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
@@ -140,7 +141,7 @@ class ForumModel extends CachedPersistenceModel {
 		foreach ($uids as $uid) {
 			if (AccountModel::isValidUid($uid)) {
 				$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLid($uid);
-				$this->forumDradenVerbergenModel->toonAllesVoorLid($uid);
+				$this->forumDradenVerbergenRepository->toonAllesVoorLid($uid);
 				$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($uid);
 				$this->forumDelenMeldingRepository->stopAlleMeldingenVoorLid($uid);
 				$this->forumDradenReagerenModel->verwijderReagerenVoorLid($uid);
@@ -154,7 +155,7 @@ class ForumModel extends CachedPersistenceModel {
 
 			// Settings verwijderen
 			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
-			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
+			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
 			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
 			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);
 

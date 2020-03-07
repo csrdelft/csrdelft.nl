@@ -5,12 +5,12 @@ namespace CsrDelft\model\entity\forum;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\model\forum\ForumDelenModel;
-use CsrDelft\model\forum\ForumDradenVerbergenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
+use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\view\ChartTimeSeries;
 
 /**
@@ -208,7 +208,8 @@ class ForumDraad extends PersistentEntity {
 
 	public function isVerborgen() {
 		if (!isset($this->verbergen)) {
-			$this->verbergen = ForumDradenVerbergenModel::instance()->getVerbergenVoorLid($this);
+			$forumDradenVerbergenRepository = ContainerFacade::getContainer()->get(ForumDradenVerbergenRepository::class);
+			$this->verbergen = $forumDradenVerbergenRepository->getVerbergenVoorLid($this);
 		}
 		return $this->verbergen;
 	}

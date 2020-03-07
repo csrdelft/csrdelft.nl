@@ -14,13 +14,13 @@ use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumDradenReagerenModel;
-use CsrDelft\model\forum\ForumDradenVerbergenModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -67,9 +67,9 @@ class ForumController extends AbstractController {
 	 */
 	private $forumDradenReagerenModel;
 	/**
-	 * @var ForumDradenVerbergenModel
+	 * @var ForumDradenVerbergenRepository
 	 */
-	private $forumDradenVerbergenModel;
+	private $forumDradenVerbergenRepository;
 	/**
 	 * @var ForumModel
 	 */
@@ -88,7 +88,7 @@ class ForumController extends AbstractController {
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenModel $forumDradenModel,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
-		ForumDradenVerbergenModel $forumDradenVerbergenModel,
+		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumPostsModel $forumPostsModel
 	) {
 		$this->debugLogModel = $debugLogModel;
@@ -97,7 +97,7 @@ class ForumController extends AbstractController {
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenModel = $forumDradenModel;
 		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
-		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
+		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumModel = $forumModel;
 		$this->forumPostsModel = $forumPostsModel;
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
@@ -435,7 +435,7 @@ class ForumController extends AbstractController {
 		if ($draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is al verborgen');
 		}
-		$this->forumDradenVerbergenModel->setVerbergenVoorLid($draad);
+		$this->forumDradenVerbergenRepository->setVerbergenVoorLid($draad);
 		return new JsonResponse(true);
 	}
 
@@ -453,7 +453,7 @@ class ForumController extends AbstractController {
 		if (!$draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is niet verborgen');
 		}
-		$this->forumDradenVerbergenModel->setVerbergenVoorLid($draad, false);
+		$this->forumDradenVerbergenRepository->setVerbergenVoorLid($draad, false);
 		return new JsonResponse(true);
 	}
 
@@ -461,8 +461,8 @@ class ForumController extends AbstractController {
 	 * Forum draden die verborgen zijn door lid weer tonen.
 	 */
 	public function toonalles() {
-		$aantal = $this->forumDradenVerbergenModel->getAantalVerborgenVoorLid();
-		$this->forumDradenVerbergenModel->toonAllesVoorLid(LoginModel::getUid());
+		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
+		$this->forumDradenVerbergenRepository->toonAllesVoorLid(LoginModel::getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		return new JsonResponse(true);
 	}
