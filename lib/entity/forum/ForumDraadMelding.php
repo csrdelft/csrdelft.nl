@@ -1,20 +1,27 @@
 <?php
 
-namespace CsrDelft\model\entity\forum;
+namespace CsrDelft\entity\forum;
 
-use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ForumDraadMelding.class.php
  * Leden kunnen meldingen krijgen voor een forumdraad
+ *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDradenMeldingRepository")
+ * @ORM\Table("forum_draden_volgen")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumDraadMelding extends PersistentEntity {
+class ForumDraadMelding {
 
 	/**
 	 * Shared primary key
 	 * Foreign key
 	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
 	 */
 	public $draad_id;
 	/**
@@ -22,11 +29,14 @@ class ForumDraadMelding extends PersistentEntity {
 	 * Shared primary key
 	 * Foreign key
 	 * @var string
+	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Id()
 	 */
 	public $uid;
 	/**
 	 * Volgniveau
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $niveau = 'altijd';
 	/**

@@ -12,6 +12,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
+use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use PDO;
 use PDOException;
 
@@ -88,9 +89,9 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	private $forumDradenVerbergenModel;
 
 	/**
-	 * @var ForumDradenMeldingModel
+	 * @var ForumDradenMeldingRepository
 	 */
-	private $forumDradenMeldingModel;
+	private $forumDradenMeldingRepository;
 
 	/**
 	 * @var ForumPostsModel
@@ -114,7 +115,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
-		ForumDradenMeldingModel $forumDradenMeldingModel,
+		ForumDradenMeldingRepository $forumDradenMeldingRepository,
 		ForumPostsModel $forumPostsModel
 	) {
 		parent::__construct();
@@ -126,7 +127,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
-		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
+		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
 		$this->forumPostsModel = $forumPostsModel;
 	}
 
@@ -356,9 +357,9 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		if ($property === 'belangrijk') {
 			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
 		} elseif ($property === 'gesloten') {
-			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
+			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen($draad);
 		} elseif ($property === 'verwijderd') {
-			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
+			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen($draad);
 			$this->forumDradenVerbergenModel->toonDraadVoorIedereen($draad);
 			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
 			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);

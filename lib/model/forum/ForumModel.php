@@ -9,6 +9,7 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
+use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use PDO;
 
 /**
@@ -56,11 +57,11 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	private $forumDradenVerbergenModel;
 	/**
-	 * @var ForumDradenMeldingModel
+	 * @var ForumDradenMeldingRepository
 	 */
 	private $forumDradenMeldingModel;
 	/**
-	 * @var ForumDradenMeldingModel
+	 * @var ForumDelenMeldingModel
 	 */
 	private $forumDelenMeldingModel;
 	/**
@@ -74,7 +75,7 @@ class ForumModel extends CachedPersistenceModel {
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenReagerenModel $forumDradenReagerenModel,
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
-		ForumDradenMeldingModel $forumDradenMeldingModel,
+		ForumDradenMeldingRepository $forumDradenMeldingModel,
 		ForumPostsModel $forumPostsModel,
 		ForumDelenMeldingModel $forumDelenMeldingModel
 	) {
