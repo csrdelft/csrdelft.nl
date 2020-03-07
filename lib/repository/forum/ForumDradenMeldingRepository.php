@@ -67,21 +67,19 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	}
 
 	public function stopAlleMeldingenVoorLid($uid) {
-		$manager = $this->getEntityManager();
-		foreach ($this->find('uid = ?', array($uid)) as $volgen) {
-			$manager->remove($volgen);
-		}
-
-		$manager->flush();
+		$this->createQueryBuilder('m')
+			->where('m.uid = :uid')
+			->setParameter('uid', $uid)
+			->delete()
+			->getQuery()->execute();
 	}
 
 	public function stopMeldingenVoorIedereen($draad) {
-		$manager = $this->getEntityManager();
-		foreach ($this->find('draad_id = ?', array($draad->draad_id)) as $volgen) {
-			$manager->remove($volgen);
-		}
-
-		$manager->flush();
+		$this->createQueryBuilder('m')
+			->where('m.draad_id = :draad_id')
+			->setParameter('draad_id', $draad->id)
+			->delete()
+			->getQuery()->execute();
 	}
 
 	public function stuurMeldingen(ForumPost $post) {
