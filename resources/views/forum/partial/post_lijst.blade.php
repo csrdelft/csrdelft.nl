@@ -1,13 +1,4 @@
-@if($post->gefilterd)
-	<div class="filtered">
-		<a class="weergeeflink" onclick="$('#forumpost-row-{{$post->post_id}}').show();
-			$(this).remove()">
-			&gt;&gt; {{$post->gefilterd}}, klik om weer te geven. &lt;&lt;
-		</a>
-	</div>
-@endif
-
-<div id="forumpost-row-{{$post->post_id}}" class="forum-post" @if($post->gefilterd) style="display: none;"@endif>
+<div id="forumpost-row-{{$post->post_id}}" class="forum-post">
 	<div class="auteur">
 		<div class="postpijl">
 			<a class="postanchor" id="{{$post->post_id}}"></a>

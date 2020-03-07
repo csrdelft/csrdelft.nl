@@ -167,12 +167,6 @@ instellingen:
       opties: ['nee', 'boven bericht', 'in bericht']
       default: 'boven bericht'
       beschrijving: 'Weergave van fotos op het forum.'
-    filter2008:
-      titel: 'Berichten van 2008 eerst verbergen'
-      type: Enumeration
-      opties: ['ja', 'nee']
-      default: 'nee'
-      beschrijving: 'Verberg berichten van leden uit 2008'
     meldingStandaard:
       titel: 'E-mail bij vermelding'
       type: Enumeration

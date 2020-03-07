@@ -198,7 +198,6 @@ class LidInstellingenRepository extends AbstractRepository {
 
 	/**
 	 * @param LidInstelling $entity
-	 * @return int
 	 * @throws CsrGebruikerException
 	 */
 	public function update($entity) {

@@ -68,11 +68,6 @@ class ForumPost extends PersistentEntity {
 	 */
 	public $wacht_goedkeuring;
 	/**
-	 * Reden van wegfilteren
-	 * @var string
-	 */
-	public $gefilterd;
-	/**
 	 * Aantal lezers dat deze post gelezen heeft
 	 * @var int
 	 */

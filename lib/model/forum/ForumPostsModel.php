@@ -196,14 +196,6 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 			$first_post = $this->getEerstePostVoorDraad($draad);
 			array_unshift($posts, $first_post);
 		}
-		// 2008-filter
-		if (lid_instelling('forum', 'filter2008') == 'ja') {
-			foreach ($posts as $post) {
-				if (startsWith($post->uid, '08')) {
-					$post->gefilterd = 'Bericht van 2008';
-				}
-			}
-		}
 		return $posts;
 	}
 
