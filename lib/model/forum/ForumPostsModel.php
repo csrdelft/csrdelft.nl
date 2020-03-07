@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\forum;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumDraadGelezen;
@@ -13,6 +14,7 @@ use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use PDO;
@@ -332,7 +334,7 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		$draad->laatste_wijziging_uid = $post->uid;
 		if ($draad->wacht_goedkeuring) {
 			$draad->wacht_goedkeuring = false;
-			ForumDelenMeldingModel::instance()->stuurMeldingen($post);
+			ContainerFacade::getContainer()->get(ForumDelenMeldingRepository::class)->stuurMeldingen($post);
 		}
 		ForumDradenModel::instance()->update($draad);
 	}

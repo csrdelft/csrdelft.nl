@@ -8,6 +8,7 @@ use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use PDO;
@@ -61,9 +62,9 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	private $forumDradenMeldingModel;
 	/**
-	 * @var ForumDelenMeldingModel
+	 * @var ForumDelenMeldingRepository
 	 */
-	private $forumDelenMeldingModel;
+	private $forumDelenMeldingRepository;
 	/**
 	 * @var ForumPostsModel
 	 */
@@ -77,7 +78,7 @@ class ForumModel extends CachedPersistenceModel {
 		ForumDradenVerbergenModel $forumDradenVerbergenModel,
 		ForumDradenMeldingRepository $forumDradenMeldingModel,
 		ForumPostsModel $forumPostsModel,
-		ForumDelenMeldingModel $forumDelenMeldingModel
+		ForumDelenMeldingRepository $forumDelenMeldingRepository
 	) {
 		parent::__construct();
 
@@ -88,7 +89,7 @@ class ForumModel extends CachedPersistenceModel {
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
 		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
 		$this->forumPostsModel = $forumPostsModel;
-		$this->forumDelenMeldingModel = $forumDelenMeldingModel;
+		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 	}
 
 	public function get($id) {
@@ -141,7 +142,7 @@ class ForumModel extends CachedPersistenceModel {
 				$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLid($uid);
 				$this->forumDradenVerbergenModel->toonAllesVoorLid($uid);
 				$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($uid);
-				$this->forumDelenMeldingModel->stopAlleMeldingenVoorLid($uid);
+				$this->forumDelenMeldingRepository->stopAlleMeldingenVoorLid($uid);
 				$this->forumDradenReagerenModel->verwijderReagerenVoorLid($uid);
 			}
 		}

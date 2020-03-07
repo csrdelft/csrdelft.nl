@@ -11,7 +11,6 @@ use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\entity\security\Account;
-use CsrDelft\model\forum\ForumDelenMeldingModel;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumDradenReagerenModel;
@@ -19,6 +18,7 @@ use CsrDelft\model\forum\ForumDradenVerbergenModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use CsrDelft\view\ChartTimeSeries;
@@ -43,9 +43,9 @@ class ForumController extends AbstractController {
 	 */
 	private $debugLogModel;
 	/**
-	 * @var ForumDelenMeldingModel
+	 * @var ForumDelenMeldingRepository
 	 */
-	private $forumDelenMeldingModel;
+	private $forumDelenMeldingRepository;
 	/**
 	 * @var ForumDelenModel
 	 */
@@ -83,7 +83,7 @@ class ForumController extends AbstractController {
 		ForumModel $forumModel,
 		DebugLogModel $debugLogModel,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumDelenMeldingModel $forumDelenMeldingModel,
+		ForumDelenMeldingRepository $forumDelenMeldingRepository,
 		ForumDelenModel $forumDelenModel,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenModel $forumDradenModel,
@@ -100,7 +100,7 @@ class ForumController extends AbstractController {
 		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
 		$this->forumModel = $forumModel;
 		$this->forumPostsModel = $forumPostsModel;
-		$this->forumDelenMeldingModel = $forumDelenMeldingModel;
+		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 	}
 
 	/**
@@ -286,7 +286,7 @@ class ForumController extends AbstractController {
 			'post_form_titel' => $this->forumDradenReagerenModel->getConceptTitel($deel),
 			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($deel),
 			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDeel($deel),
-			'deelmelding' => $this->forumDelenMeldingModel->lidWilMeldingVoorDeel($deel)
+			'deelmelding' => $this->forumDelenMeldingRepository->lidWilMeldingVoorDeel($deel)
 		]);
 	}
 
@@ -507,7 +507,7 @@ class ForumController extends AbstractController {
 		if ($niveau !== 'aan' && $niveau !== 'uit') {
 			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
 		}
-		$this->forumDelenMeldingModel->setMeldingVoorLid($deel, $niveau === 'aan');
+		$this->forumDelenMeldingRepository->setMeldingVoorLid($deel, $niveau === 'aan');
 		return new JsonResponse(true);
 	}
 
@@ -691,7 +691,7 @@ class ForumController extends AbstractController {
 			$this->forumPostsModel->goedkeurenForumPost($post);
 			$this->forumDradenMeldingRepository->stuurMeldingen($post);
 			if ($nieuw) {
-				$this->forumDelenMeldingModel->stuurMeldingen($post);
+				$this->forumDelenMeldingRepository->stuurMeldingen($post);
 			}
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 			if ($nieuw && lid_instelling('forum', 'meldingEigenDraad') === 'ja') {

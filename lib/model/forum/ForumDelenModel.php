@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\forum;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\forum\ForumCategorie;
@@ -10,6 +11,7 @@ use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 
 /**
  * ForumDelenModel.class.php
@@ -88,7 +90,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 	}
 
 	public function verwijderForumDeel($id) {
-		ForumDelenMeldingModel::instance()->stopMeldingenVoorIedereen($id);
+		ContainerFacade::getContainer()->get(ForumDelenMeldingRepository::class)->stopMeldingenVoorIedereen($id);
 		$rowCount = $this->deleteByPrimaryKey(array($id));
 		if ($rowCount !== 1) {
 			throw new CsrException('Deelforum verwijderen mislukt');

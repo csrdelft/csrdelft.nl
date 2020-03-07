@@ -1,41 +1,48 @@
 <?php
 
-namespace CsrDelft\model\forum;
+namespace CsrDelft\repository\forum;
 
+use CsrDelft\entity\forum\ForumDeelMelding;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\forum\ForumDeel;
-use CsrDelft\model\entity\forum\ForumDeelMelding;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Model voor bijhouden, bewerken en verzenden van meldingen voor forumberichten in forumdelen
  *
  * @author J.P.T. Nederveen <ik@tim365.nl>
+ * @method ForumDeelMelding|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ForumDeelMelding|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ForumDeelMelding[]    findAll()
+ * @method ForumDeelMelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumDelenMeldingModel extends CachedPersistenceModel {
-
-	const ORM = ForumDeelMelding::class;
+class ForumDelenMeldingRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, ForumDeelMelding::class);
+	}
 
 	protected function maakForumDeelMelding($forum_id, $uid) {
 		$melding = new ForumDeelMelding();
 		$melding->forum_id = $forum_id;
 		$melding->uid = $uid;
-		$this->create($melding);
+		$this->getEntityManager()->persist($melding);
+		$this->getEntityManager()->flush();
 		return $melding;
 	}
 
 	/**
 	 * Haal iedereen op die een melding wil voor gegeven forumdeel.
 	 * @param ForumDeel $deel
-	 * @return Profiel[]
+	 * @return ForumDeelMelding[]
 	 */
 	public function getMeldingenVoorDeel(ForumDeel $deel) {
-		return $this->prefetch('forum_id = ?', [$deel->forum_id]);
+		return $this->findBy(['forum_id' => $deel->forum_id]);
 	}
 
 	/**
@@ -47,7 +54,7 @@ class ForumDelenMeldingModel extends CachedPersistenceModel {
 	public function lidWilMeldingVoorDeel(ForumDeel $deel, $uid = null) {
 		if ($uid === null) $uid = LoginModel::getUid();
 
-		return $this->existsByPrimaryKey([$deel->forum_id, $uid]);
+		return $this->find(['forum_id' => $deel->forum_id, 'uid' => $uid]) !== null;
 	}
 
 	/**
@@ -66,8 +73,9 @@ class ForumDelenMeldingModel extends CachedPersistenceModel {
 		$lidWilMeldingVoorDeel = $this->lidWilMeldingVoorDeel($deel, $uid);
 		if ($lidWilMeldingVoorDeel && !$actief) {
 			// Wil niet, heeft nog wel
-			$melding = $this->retrieveByPrimaryKey([$deel->forum_id, $uid]);
-			$this->delete($melding);
+			$melding = $this->find(['forum_id' => $deel->forum_id, 'uid' => $uid]);
+			$this->getEntityManager()->remove($melding);
+			$this->getEntityManager()->flush();
 		} elseif (!$lidWilMeldingVoorDeel && $actief) {
 			// Wil wel, heeft nog niet
 			$this->maakForumDeelMelding($deel->forum_id, $uid);
@@ -79,9 +87,11 @@ class ForumDelenMeldingModel extends CachedPersistenceModel {
 	 * @param string $uid
 	 */
 	public function stopAlleMeldingenVoorLid($uid) {
-		foreach ($this->find('uid = ?', [$uid]) as $melding) {
-			$this->delete($melding);
+		$manager = $this->getEntityManager();
+		foreach ($this->findBy(['uid' => $uid]) as $melding) {
+			$manager->remove($melding);
 		}
+		$manager->flush();
 	}
 
 	/**
@@ -90,9 +100,11 @@ class ForumDelenMeldingModel extends CachedPersistenceModel {
 	 */
 	public function stopMeldingenVoorIedereen($deel) {
 		$id = $deel instanceof ForumDeel ? $deel->forum_id : $deel;
-		foreach ($this->find('forum_id = ?', [$id]) as $melding) {
-			$this->delete($melding);
+		$manager = $this->getEntityManager();
+		foreach ($this->findBy(['forum_id' => $id]) as $melding) {
+			$manager->remove($melding);
 		}
+		$manager->flush();
 	}
 
 	/**
