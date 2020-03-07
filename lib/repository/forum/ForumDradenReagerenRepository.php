@@ -44,7 +44,7 @@ class ForumDradenReagerenRepository extends AbstractRepository {
 	 * @return ForumDraadReageren
 	 */
 	protected function getReagerenDoorLid(ForumDeel $deel, $draad_id = null) {
-		return $this->find(['forum_id' => $deel->forum_id, 'draad_id' => (int) $draad_id, 'uid' => LoginModel::getUid()]);
+		return $this->find(['forum_id' => (int) $deel->forum_id, 'draad_id' => (int) $draad_id, 'uid' => LoginModel::getUid()]);
 	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad) {
@@ -56,7 +56,7 @@ class ForumDradenReagerenRepository extends AbstractRepository {
 
 	public function getReagerenVoorDeel(ForumDeel $deel) {
 		return $this->createQueryBuilder('r')
-			->where('r.forum_id = :forum_id and r.draad_id = 0 and r.uid != :uid and datum_tijd > :datum_tijd')
+			->where('r.forum_id = :forum_id and r.draad_id = 0 and r.uid != :uid and r.datum_tijd > :datum_tijd')
 			->setParameters(['forum_id' => $deel->forum_id, 'uid' => LoginModel::getUid(), 'datum_tijd' => date_create(instelling('forum', 'reageren_tijd'))])
 			->getQuery()->getResult();
 	}
