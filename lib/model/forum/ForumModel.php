@@ -11,6 +11,7 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use PDO;
 
@@ -51,9 +52,9 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	private $forumDradenGelezenRepository;
 	/**
-	 * @var ForumDradenReagerenModel
+	 * @var ForumDradenReagerenRepository
 	 */
-	private $forumDradenReagerenModel;
+	private $forumDradenReagerenRepository;
 	/**
 	 * @var ForumDradenVerbergenRepository
 	 */
@@ -75,7 +76,7 @@ class ForumModel extends CachedPersistenceModel {
 		ForumDelenModel $forumDelenModel,
 		ForumDradenModel $forumDradenModel,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDradenReagerenModel $forumDradenReagerenModel,
+		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingModel,
 		ForumPostsModel $forumPostsModel,
@@ -86,7 +87,7 @@ class ForumModel extends CachedPersistenceModel {
 		$this->forumDelenModel = $forumDelenModel;
 		$this->forumDradenModel = $forumDradenModel;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
+		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
 		$this->forumPostsModel = $forumPostsModel;
@@ -127,7 +128,7 @@ class ForumModel extends CachedPersistenceModel {
 
 	public function opschonen() {
 		// Oude lege concepten verwijderen
-		$this->forumDradenReagerenModel->verwijderLegeConcepten();
+		$this->forumDradenReagerenRepository->verwijderLegeConcepten();
 
 		// Niet-goedgekeurde posts verwijderen
 		$posts = $this->forumPostsModel->find('verwijderd = TRUE AND wacht_goedkeuring = TRUE');
@@ -144,7 +145,7 @@ class ForumModel extends CachedPersistenceModel {
 				$this->forumDradenVerbergenRepository->toonAllesVoorLid($uid);
 				$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($uid);
 				$this->forumDelenMeldingRepository->stopAlleMeldingenVoorLid($uid);
-				$this->forumDradenReagerenModel->verwijderReagerenVoorLid($uid);
+				$this->forumDradenReagerenRepository->verwijderReagerenVoorLid($uid);
 			}
 		}
 
@@ -157,7 +158,7 @@ class ForumModel extends CachedPersistenceModel {
 			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
 			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
 			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
-			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);
+			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
 
 			// Oude verwijderde posts definitief verwijderen
 			$posts = $this->forumPostsModel->find('verwijderd = TRUE AND draad_id = ?', array($draad->draad_id));

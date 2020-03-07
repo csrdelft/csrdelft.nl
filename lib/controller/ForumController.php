@@ -13,13 +13,13 @@ use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenModel;
-use CsrDelft\model\forum\ForumDradenReagerenModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
@@ -63,9 +63,9 @@ class ForumController extends AbstractController {
 	 */
 	private $forumDradenModel;
 	/**
-	 * @var ForumDradenReagerenModel
+	 * @var ForumDradenReagerenRepository
 	 */
-	private $forumDradenReagerenModel;
+	private $forumDradenReagerenRepository;
 	/**
 	 * @var ForumDradenVerbergenRepository
 	 */
@@ -87,7 +87,7 @@ class ForumController extends AbstractController {
 		ForumDelenModel $forumDelenModel,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenModel $forumDradenModel,
-		ForumDradenReagerenModel $forumDradenReagerenModel,
+		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumPostsModel $forumPostsModel
 	) {
@@ -96,7 +96,7 @@ class ForumController extends AbstractController {
 		$this->forumDelenModel = $forumDelenModel;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenModel = $forumDradenModel;
-		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
+		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumModel = $forumModel;
 		$this->forumPostsModel = $forumPostsModel;
@@ -246,9 +246,9 @@ class ForumController extends AbstractController {
 			'deel' => $deel,
 			'paging' => $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
-			'post_form_titel' => $this->forumDradenReagerenModel->getConceptTitel($deel),
-			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($deel),
-			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDeel($deel)
+			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
+			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($deel),
+			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel)
 		]);
 	}
 
@@ -283,9 +283,9 @@ class ForumController extends AbstractController {
 			'deel' => $deel,
 			'paging' => $paging && $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
-			'post_form_titel' => $this->forumDradenReagerenModel->getConceptTitel($deel),
-			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($deel),
-			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDeel($deel),
+			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
+			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($deel),
+			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel),
 			'deelmelding' => $this->forumDelenMeldingRepository->lidWilMeldingVoorDeel($deel)
 		]);
 	}
@@ -343,8 +343,8 @@ class ForumController extends AbstractController {
 			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
 			'paging' => $paging && $this->forumPostsModel->getAantalPaginas($draad->draad_id) > 1,
-			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($draad->getForumDeel(), $draad->draad_id),
-			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDraad($draad),
+			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($draad->getForumDeel(), $draad->draad_id),
+			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad),
 			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
 			'gedeeld_met_opties' => $this->forumDelenModel->getForumDelenOptiesOmTeDelen($draad->getForumDeel()),
 			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
@@ -635,9 +635,9 @@ class ForumController extends AbstractController {
 
 			// concept wissen
 			if ($nieuw) {
-				$this->forumDradenReagerenModel->setConcept($deel);
+				$this->forumDradenReagerenRepository->setConcept($deel);
 			} else {
-				$this->forumDradenReagerenModel->setConcept($deel, $draad->draad_id);
+				$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id);
 			}
 
 			return $redirect;
@@ -645,9 +645,9 @@ class ForumController extends AbstractController {
 
 		// concept opslaan
 		if ($draad == null) {
-			$this->forumDradenReagerenModel->setConcept($deel, null, $tekst, $titel);
+			$this->forumDradenReagerenRepository->setConcept($deel, null, $tekst, $titel);
 		} else {
-			$this->forumDradenReagerenModel->setConcept($deel, $draad->draad_id, $tekst);
+			$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id, $tekst);
 		}
 
 
@@ -703,9 +703,9 @@ class ForumController extends AbstractController {
 
 		// concept wissen
 		if ($nieuw) {
-			$this->forumDradenReagerenModel->setConcept($deel);
+			$this->forumDradenReagerenRepository->setConcept($deel);
 		} else {
-			$this->forumDradenReagerenModel->setConcept($deel, $draad->draad_id);
+			$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id);
 		}
 
 		// markeer als gelezen
@@ -856,21 +856,21 @@ class ForumController extends AbstractController {
 				throw new CsrToegangException("Draad bevindt zich niet in deel");
 			}
 			if (empty($ping)) {
-				$this->forumDradenReagerenModel->setConcept($deel, $draad_id, $concept);
+				$this->forumDradenReagerenRepository->setConcept($deel, $draad_id, $concept);
 			} elseif ($ping === 'true') {
-				$this->forumDradenReagerenModel->setWanneerReagerenDoorLid($deel, $draad_id);
+				$this->forumDradenReagerenRepository->setWanneerReagerenDoorLid($deel, $draad_id);
 			}
-			$reageren = $this->forumDradenReagerenModel->getReagerenVoorDraad($draad);
+			$reageren = $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad);
 		} else {
 			if (!$deel->magPosten()) {
 				throw new CsrToegangException("Mag niet posten");
 			}
 			if (empty($ping)) {
-				$this->forumDradenReagerenModel->setConcept($deel, null, $concept, $titel);
+				$this->forumDradenReagerenRepository->setConcept($deel, null, $concept, $titel);
 			} elseif ($ping === 'true') {
-				$this->forumDradenReagerenModel->setWanneerReagerenDoorLid($deel);
+				$this->forumDradenReagerenRepository->setWanneerReagerenDoorLid($deel);
 			}
-			$reageren = $this->forumDradenReagerenModel->getReagerenVoorDeel($deel);
+			$reageren = $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel);
 		}
 
 		return view('forum.partial.draad_reageren', [

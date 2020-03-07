@@ -13,6 +13,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use PDO;
 use PDOException;
@@ -80,9 +81,9 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 	private $forumDradenGelezenRepository;
 
 	/**
-	 * @var ForumDradenReagerenModel
+	 * @var ForumDradenReagerenRepository
 	 */
-	private $forumDradenReagerenModel;
+	private $forumDradenReagerenRepository;
 
 	/**
 	 * @var ForumDradenVerbergenRepository
@@ -114,7 +115,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 
 	public function __construct(
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDradenReagerenModel $forumDradenReagerenModel,
+		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
 		ForumPostsModel $forumPostsModel
@@ -126,7 +127,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 		$this->aantal_plakkerig = null;
 
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
+		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
 		$this->forumPostsModel = $forumPostsModel;
@@ -363,7 +364,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen($draad);
 			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
 			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
-			$this->forumDradenReagerenModel->verwijderReagerenVoorDraad($draad);
+			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
 			$this->forumPostsModel->verwijderForumPostsVoorDraad($draad);
 		}
 	}
