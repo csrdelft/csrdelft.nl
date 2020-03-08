@@ -31,7 +31,7 @@ class ForumCategorieRepository extends AbstractRepository {
 	/**
 	 * @var ForumDradenRepository
 	 */
-	private $forumDradenModel;
+	private $forumDradenRepository;
 	/**
 	 * @var ForumDradenGelezenRepository
 	 */
@@ -60,7 +60,7 @@ class ForumCategorieRepository extends AbstractRepository {
 	public function __construct(
 		ManagerRegistry $managerRegistry,
 		ForumDelenRepository $forumDelenRepository,
-		ForumDradenRepository $forumDradenModel,
+		ForumDradenRepository $forumDradenRepository,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
@@ -71,7 +71,7 @@ class ForumCategorieRepository extends AbstractRepository {
 		parent::__construct($managerRegistry, ForumCategorie::class);
 
 		$this->forumDelenRepository = $forumDelenRepository;
-		$this->forumDradenModel = $forumDradenModel;
+		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
@@ -141,7 +141,7 @@ class ForumCategorieRepository extends AbstractRepository {
 
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
 		$datetime = getDateTime(strtotime('-1 year'));
-		$draden = $this->forumDradenModel->find('verwijderd = TRUE OR (gesloten = TRUE AND (laatst_gewijzigd IS NULL OR laatst_gewijzigd < ?))', array($datetime));
+		$draden = $this->forumDradenRepository->find('verwijderd = TRUE OR (gesloten = TRUE AND (laatst_gewijzigd IS NULL OR laatst_gewijzigd < ?))', array($datetime));
 		foreach ($draden as $draad) {
 
 			// Settings verwijderen
@@ -158,7 +158,7 @@ class ForumCategorieRepository extends AbstractRepository {
 			if ($draad->verwijderd) {
 
 				// Als het goed is zijn er nooit niet-verwijderde posts in een verwijderd draadje
-				$this->forumDradenModel->delete($draad);
+				$this->forumDradenRepository->delete($draad);
 			}
 		}
 	}
