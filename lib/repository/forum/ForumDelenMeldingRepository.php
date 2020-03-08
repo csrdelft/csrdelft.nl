@@ -2,9 +2,9 @@
 
 namespace CsrDelft\repository\forum;
 
+use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDeelMelding;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\Mail;

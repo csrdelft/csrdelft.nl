@@ -11,12 +11,12 @@ use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\entity\security\Account;
-use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
+use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
@@ -47,9 +47,9 @@ class ForumController extends AbstractController {
 	 */
 	private $forumDelenMeldingRepository;
 	/**
-	 * @var ForumDelenModel
+	 * @var ForumDelenRepository
 	 */
-	private $forumDelenModel;
+	private $forumDelenRepository;
 	/**
 	 * @var ForumDradenGelezenRepository
 	 */
@@ -84,7 +84,7 @@ class ForumController extends AbstractController {
 		DebugLogModel $debugLogModel,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
 		ForumDelenMeldingRepository $forumDelenMeldingRepository,
-		ForumDelenModel $forumDelenModel,
+		ForumDelenRepository $forumDelenRepository,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenModel $forumDradenModel,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
@@ -93,7 +93,7 @@ class ForumController extends AbstractController {
 	) {
 		$this->debugLogModel = $debugLogModel;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
-		$this->forumDelenModel = $forumDelenModel;
+		$this->forumDelenRepository = $forumDelenRepository;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenModel = $forumDradenModel;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
@@ -116,7 +116,7 @@ class ForumController extends AbstractController {
 	public function grafiekdata($type) {
 		$datasets = [];
 		if ($type == 'details') {
-			foreach ($this->forumDelenModel->getForumDelenVoorLid() as $deel) {
+			foreach ($this->forumDelenRepository->getForumDelenVoorLid() as $deel) {
 				$datasets[$deel->titel] = $this->forumPostsModel->getStatsVoorForumDeel($deel);
 			}
 		} else {
@@ -144,7 +144,7 @@ class ForumController extends AbstractController {
 	 */
 	public function wacht() {
 		return view('forum.wacht', [
-			'resultaten' => $this->forumDelenModel->getWachtOpGoedkeuring()
+			'resultaten' => $this->forumDelenRepository->getWachtOpGoedkeuring()
 		]);
 	}
 
@@ -172,7 +172,7 @@ class ForumController extends AbstractController {
 		return view('forum.resultaten', [
 			'titel' => 'Zoeken',
 			'form' => $zoekform,
-			'resultaten' => $this->forumDelenModel->zoeken($forumZoeken),
+			'resultaten' => $this->forumDelenRepository->zoeken($forumZoeken),
 			'query' => $forumZoeken->zoekterm,
 		]);
 	}
@@ -199,7 +199,7 @@ class ForumController extends AbstractController {
 
 		$forumZoeken = ForumZoeken::nieuw($query, $limit, ['titel']);
 
-		$draden = $this->forumDelenModel->zoeken($forumZoeken);
+		$draden = $this->forumDelenRepository->zoeken($forumZoeken);
 
 		foreach ($draden as $draad) {
 			$result[] = $this->draadAutocompleteArray($draad);
@@ -238,7 +238,7 @@ class ForumController extends AbstractController {
 	public function recent($pagina = 1, $belangrijk = null) {
 		$this->forumDradenModel->setHuidigePagina((int)$pagina, 0);
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
-		$deel = $this->forumDelenModel->getRecent($belangrijk);
+		$deel = $this->forumDelenRepository->getRecent($belangrijk);
 
 		return view('forum.deel', [
 			'zoekform' => new ForumSnelZoekenForm(),
@@ -261,7 +261,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function deel(int $forum_id, $pagina = 1) {
-		$deel = $this->forumDelenModel->get($forum_id);
+		$deel = $this->forumDelenRepository->get($forum_id);
 		if (!$deel->magLezen()) {
 			throw new CsrToegangException();
 		}
@@ -346,7 +346,7 @@ class ForumController extends AbstractController {
 			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($draad->getForumDeel(), $draad->draad_id),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad),
 			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
-			'gedeeld_met_opties' => $this->forumDelenModel->getForumDelenOptiesOmTeDelen($draad->getForumDeel()),
+			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen($draad->getForumDeel()),
 			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
 			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
 			'gelezen_moment' => $gelezen ? $gelezen->datum_tijd->getTimestamp() : false,
@@ -366,10 +366,10 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function aanmaken() {
-		$deel = $this->forumDelenModel->nieuwForumDeel();
+		$deel = $this->forumDelenRepository->nieuwForumDeel();
 		$form = new ForumDeelForm($deel, true); // fetches POST values itself
 		if ($form->validate()) {
-			$this->forumDelenModel->create($deel);
+			$this->forumDelenRepository->create($deel);
 			return new JsonResponse(true);
 		} else {
 			return $form;
@@ -385,13 +385,10 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function beheren(int $forum_id) {
-		$deel = $this->forumDelenModel->get($forum_id);
+		$deel = $this->forumDelenRepository->get($forum_id);
 		$form = new ForumDeelForm($deel); // fetches POST values itself
 		if ($form->validate()) {
-			$rowCount = $this->forumDelenModel->update($deel);
-			if ($rowCount !== 1) {
-				throw new CsrGebruikerException('Forum beheren mislukt!');
-			}
+			$this->forumDelenRepository->update($deel);
 			return new JsonResponse(true);
 		} else {
 			return $form;
@@ -407,12 +404,12 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function opheffen(int $forum_id) {
-		$deel = $this->forumDelenModel->get($forum_id);
+		$deel = $this->forumDelenRepository->get($forum_id);
 		$count = $this->forumDradenModel->count('forum_id = ?', array($deel->forum_id));
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
 		} else {
-			$this->forumDelenModel->verwijderForumDeel($deel->forum_id);
+			$this->forumDelenRepository->verwijderForumDeel($deel->forum_id);
 			setMelding('Deelforum verwijderd', 1);
 		}
 		return new JsonResponse('/forum'); // redirect
@@ -500,7 +497,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function deelmelding(int $forum_id, $niveau) {
-		$deel = $this->forumDelenModel->get($forum_id);
+		$deel = $this->forumDelenRepository->get($forum_id);
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
 			throw new CsrToegangException('Deel mag geen melding voor ontvangen worden');
 		}
@@ -550,7 +547,7 @@ class ForumController extends AbstractController {
 		} elseif ($property === 'forum_id' || $property === 'gedeeld_met') {
 			$value = (int)filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			if ($property === 'forum_id') {
-				$deel = $this->forumDelenModel->get($value);
+				$deel = $this->forumDelenRepository->get($value);
 				if (!$deel->magModereren()) {
 					throw new CsrToegangException();
 				}
@@ -591,7 +588,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrToegangException
 	 */
 	public function posten(int $forum_id, $draad_id = null) {
-		$deel = $this->forumDelenModel->get($forum_id);
+		$deel = $this->forumDelenRepository->get($forum_id);
 		$draad = null;
 		// post in bestaand draadje?
 		$titel = null;
@@ -846,7 +843,7 @@ class ForumController extends AbstractController {
 		$concept = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$ping = filter_input(INPUT_POST, 'ping', FILTER_SANITIZE_STRING);
 
-		$deel = $this->forumDelenModel->get((int)$forum_id);
+		$deel = $this->forumDelenRepository->get((int)$forum_id);
 		// bestaand draadje?
 		if ($draad_id !== null) {
 			$draad = $this->forumDradenModel->get((int)$draad_id);

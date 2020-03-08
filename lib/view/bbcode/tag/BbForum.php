@@ -5,10 +5,11 @@ namespace CsrDelft\view\bbcode\tag;
 
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\forum\ForumDeel;
-use CsrDelft\model\forum\ForumDelenModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\forum\ForumDelenRepository;
 use Exception;
 
 class BbForum extends BbTag {
@@ -55,15 +56,16 @@ class BbForum extends BbTag {
 		}
 
 		ForumDradenModel::instance()->setAantalPerPagina($this->num);
+		$forumDelenRepository = ContainerFacade::getContainer()->get(ForumDelenRepository::class);
 		switch ($this->content) {
 			case 'recent':
-				$this->deel = ForumDelenModel::instance()->getRecent();
+				$this->deel = $forumDelenRepository->getRecent();
 				break;
 			case 'belangrijk':
-				$this->deel = ForumDelenModel::instance()->getRecent(true);
+				$this->deel = $forumDelenRepository->getRecent(true);
 				break;
 			default:
-				$this->deel = ForumDelenModel::instance()->get($this->content);
+				$this->deel = $forumDelenRepository->get($this->content);
 				break;
 		}
 	}

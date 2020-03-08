@@ -2,15 +2,17 @@
 
 namespace CsrDelft\model\forum;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\forum\ForumDeel;
+use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
@@ -264,7 +266,7 @@ class ForumDradenModel extends CachedPersistenceModel implements Paging {
 			$pagina = $this->pagina;
 			$offset = ($pagina - 1) * $aantal;
 		}
-		$delenById = ForumDelenModel::instance()->getForumDelenVoorLid($rss);
+		$delenById = ContainerFacade::getContainer()->get(ForumDelenRepository::class)->getForumDelenVoorLid($rss);
 		$count = count($delenById);
 		if ($count < 1) {
 			return array();

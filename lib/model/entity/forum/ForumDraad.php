@@ -4,11 +4,11 @@ namespace CsrDelft\model\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\forum\ForumDraadGelezen;
-use CsrDelft\model\forum\ForumDelenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\view\ChartTimeSeries;
@@ -162,11 +162,11 @@ class ForumDraad extends PersistentEntity {
 	protected static $table_name = 'forum_draden';
 
 	public function getForumDeel() {
-		return ForumDelenModel::instance()->get($this->forum_id);
+		return ContainerFacade::getContainer()->get(ForumDelenRepository::class)->get($this->forum_id);
 	}
 
 	public function getGedeeldMet() {
-		return ForumDelenModel::instance()->get($this->gedeeld_met);
+		return ContainerFacade::getContainer()->get(ForumDelenRepository::class)->get($this->gedeeld_met);
 	}
 
 	public function isGedeeld() {

@@ -3,7 +3,7 @@
 namespace CsrDelft\view\forum;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\forum\ForumDeel;
+use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;

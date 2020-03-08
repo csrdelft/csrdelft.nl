@@ -9,6 +9,7 @@ use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
+use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
@@ -40,9 +41,9 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	private $indeling;
 	/**
-	 * @var ForumDelenModel
+	 * @var ForumDelenRepository
 	 */
-	private $forumDelenModel;
+	private $forumDelenRepository;
 	/**
 	 * @var ForumDradenModel
 	 */
@@ -73,7 +74,7 @@ class ForumModel extends CachedPersistenceModel {
 	private $forumPostsModel;
 
 	public function __construct(
-		ForumDelenModel $forumDelenModel,
+		ForumDelenRepository $forumDelenRepository,
 		ForumDradenModel $forumDradenModel,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
@@ -84,7 +85,7 @@ class ForumModel extends CachedPersistenceModel {
 	) {
 		parent::__construct();
 
-		$this->forumDelenModel = $forumDelenModel;
+		$this->forumDelenRepository = $forumDelenRepository;
 		$this->forumDradenModel = $forumDradenModel;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
@@ -109,7 +110,7 @@ class ForumModel extends CachedPersistenceModel {
 	 */
 	public function getForumIndelingVoorLid() {
 		if (!isset($this->indeling)) {
-			$delenByCategorieId = group_by('categorie_id', $this->forumDelenModel->getForumDelenVoorLid());
+			$delenByCategorieId = group_by('categorie_id', $this->forumDelenRepository->getForumDelenVoorLid());
 			$this->indeling = array();
 			foreach ($this->prefetch() as $categorie) {
 				/** @var ForumCategorie $categorie */

@@ -2,10 +2,12 @@
 
 namespace CsrDelft\model\entity\forum;
 
-use CsrDelft\model\forum\ForumDelenModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\forum\ForumDelenRepository;
 
 /**
  * ForumCategorie.class.php
@@ -74,7 +76,8 @@ class ForumCategorie extends PersistentEntity {
 	 */
 	public function getForumDelen() {
 		if (!isset($this->forum_delen)) {
-			$this->setForumDelen(ForumDelenModel::instance()->getForumDelenVoorCategorie($this));
+			$forumDelenRepository = ContainerFacade::getContainer()->get(ForumDelenRepository::class);
+			$this->setForumDelen($forumDelenRepository->getForumDelenVoorCategorie($this));
 		}
 		return $this->forum_delen;
 	}

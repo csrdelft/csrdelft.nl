@@ -1,62 +1,71 @@
 <?php
 
-namespace CsrDelft\model\entity\forum;
+namespace CsrDelft\entity\forum;
 
+use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ForumDeel.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een deelforum zit in een forumcategorie bevat ForumDraden.
- *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDelenRepository")
+ * @ORM\Table("forum_delen")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumDeel extends PersistentEntity {
-
+class ForumDeel {
 	/**
 	 * Primary key
 	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
 	public $forum_id;
 	/**
 	 * Dit forum valt onder deze categorie
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $categorie_id;
 	/**
 	 * Titel
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $titel;
 	/**
 	 * Omschrijving
 	 * @var string
+	 * @ORM\Column(type="text")
 	 */
 	public $omschrijving;
 	/**
 	 * Rechten benodigd voor lezen
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $rechten_lezen;
 	/**
 	 * Rechten benodigd voor posten
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $rechten_posten;
 	/**
 	 * Rechten benodigd voor modereren
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $rechten_modereren;
 	/**
 	 * Weergave volgorde
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $volgorde;
 	/**
@@ -64,30 +73,6 @@ class ForumDeel extends PersistentEntity {
 	 * @var ForumDraad[]
 	 */
 	private $forum_draden;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'forum_id' => array(T::Integer, false, 'auto_increment'),
-		'categorie_id' => array(T::Integer),
-		'titel' => array(T::String),
-		'omschrijving' => array(T::Text),
-		'rechten_lezen' => array(T::String),
-		'rechten_posten' => array(T::String),
-		'rechten_modereren' => array(T::String),
-		'volgorde' => array(T::Integer)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('forum_id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'forum_delen';
 
 	public function getForumCategorie() {
 		return ForumModel::instance()->get($this->categorie_id);

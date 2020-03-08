@@ -1,28 +1,29 @@
 <?php
 
-namespace CsrDelft\model\forum;
+namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumCategorie;
-use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumZoeken;
-use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\model\forum\ForumDradenModel;
+use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\repository\forum\ForumDelenMeldingRepository;
+use CsrDelft\repository\AbstractRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * ForumDelenModel.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 30/03/2017
+ * @method ForumDeel|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ForumDeel|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ForumDeel[]    findAll()
+ * @method ForumDeel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumDelenModel extends CachedPersistenceModel {
-
-	const ORM = ForumDeel::class;
+class ForumDelenRepository extends AbstractRepository {
 	/**
 	 * @var ForumDradenModel
 	 */
@@ -32,8 +33,8 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 */
 	private $forumPostsModel;
 
-	public function __construct(ForumDradenModel $forumDradenModel, ForumPostsModel $forumPostsModel) {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registry, ForumDradenModel $forumDradenModel, ForumPostsModel $forumPostsModel) {
+		parent::__construct($registry, ForumDeel::class);
 
 		$this->forumDradenModel = $forumDradenModel;
 		$this->forumPostsModel = $forumPostsModel;
@@ -56,8 +57,7 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 * @throws CsrGebruikerException
 	 */
 	public function get($id) {
-		/** @var ForumDeel $deel */
-		$deel = $this->retrieveByPrimaryKey(array($id));
+		$deel = $this->find($id);
 		if (!$deel) {
 			throw new CsrGebruikerException('Forum bestaat niet!');
 		}
@@ -68,8 +68,9 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 * @param PersistentEntity|ForumDeel $entity
 	 * @return int
 	 */
-	public function create(PersistentEntity $entity) {
-		$entity->forum_id = (int)parent::create($entity);
+	public function create(ForumDeel $entity) {
+		$this->getEntityManager()->persist($entity);
+		$this->getEntityManager()->flush();
 		return $entity->forum_id;
 	}
 
@@ -86,24 +87,22 @@ class ForumDelenModel extends CachedPersistenceModel {
 	}
 
 	public function bestaatForumDeel($id) {
-		return $this->existsByPrimaryKey(array($id));
+		return $this->findBy($id) !== null;
 	}
 
 	public function verwijderForumDeel($id) {
 		ContainerFacade::getContainer()->get(ForumDelenMeldingRepository::class)->stopMeldingenVoorIedereen($id);
-		$rowCount = $this->deleteByPrimaryKey(array($id));
-		if ($rowCount !== 1) {
-			throw new CsrException('Deelforum verwijderen mislukt');
-		}
+		$this->getEntityManager()->remove($this->find($id));
+		$this->getEntityManager()->flush();
 	}
 
 	public function getForumDelenVoorCategorie(ForumCategorie $categorie) {
-		return $this->prefetch('categorie_id = ?', array($categorie->categorie_id));
+		return $this->findBy(['categorie_id' => $categorie->categorie_id]);
 	}
 
 	public function getForumDelenVoorLid($rss = false) {
 		/** @var ForumDeel[] $delen */
-		$delen = group_by_distinct('forum_id', $this->prefetch());
+		$delen = group_by_distinct('forum_id', $this->findAll());
 		foreach ($delen as $forum_id => $deel) {
 			if (!$deel->magLezen($rss)) {
 				unset($delen[$forum_id]);
@@ -119,16 +118,20 @@ class ForumDelenModel extends CachedPersistenceModel {
 	 * @return ForumDeel[]
 	 */
 	public function getForumDelenOptiesOmTeDelen(ForumDeel $deel) {
+		$qb = $this->createQueryBuilder('r')
+			->where('r.rechten_posten != :rechten_posten and r.rechten_posten LIKE :query')
+			->setParameter('rechten_posten', $deel->rechten_posten);
 		if (strpos($deel->rechten_posten, 'verticale:') !== false) {
-			$query = '%verticale:%';
-			$orderby = 'titel ASC';
+			$qb->setParameter('query', '%verticale:%');
+			$qb->orderBy('r.titel', 'ASC');
 		} elseif (strpos($deel->rechten_posten, 'lidjaar:') !== false) {
-			$query = '%lidjaar:%';
-			$orderby = 'titel DESC';
+			$qb->setParameter('query', '%lidjaar:%');
+			$qb->orderBy('r.titel', 'DESC');
 		} else {
 			return array();
 		}
-		return $this->prefetch('rechten_posten != ? AND rechten_posten LIKE ?', array($deel->rechten_posten, $query), null, $orderby);
+
+		return $qb->getQuery()->getResult();
 	}
 
 	public function getRecent($belangrijk = null) {
@@ -179,6 +182,11 @@ class ForumDelenModel extends CachedPersistenceModel {
 			setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
 		}
 		return $dradenById;
+	}
+
+	public function update(ForumDeel $deel) {
+		$this->getEntityManager()->persist($deel);
+		$this->getEntityManager()->flush();
 	}
 
 	/**

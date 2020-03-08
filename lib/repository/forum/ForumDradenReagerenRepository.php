@@ -2,8 +2,8 @@
 
 namespace CsrDelft\repository\forum;
 
+use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraadReageren;
-use CsrDelft\model\entity\forum\ForumDeel;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
