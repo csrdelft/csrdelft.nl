@@ -4,8 +4,8 @@ namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
-use CsrDelft\model\entity\forum\ForumCategorie;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\forum\ForumDradenModel;

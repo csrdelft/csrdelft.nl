@@ -12,7 +12,6 @@ use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\forum\ForumDradenModel;
-use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
@@ -21,6 +20,7 @@ use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
+use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -71,16 +71,16 @@ class ForumController extends AbstractController {
 	 */
 	private $forumDradenVerbergenRepository;
 	/**
-	 * @var ForumModel
+	 * @var ForumCategorieRepository
 	 */
-	private $forumModel;
+	private $forumCategorieRepository;
 	/**
 	 * @var ForumPostsModel
 	 */
 	private $forumPostsModel;
 
 	public function __construct(
-		ForumModel $forumModel,
+		ForumCategorieRepository $forumCategorieRepository,
 		DebugLogModel $debugLogModel,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
 		ForumDelenMeldingRepository $forumDelenMeldingRepository,
@@ -98,7 +98,7 @@ class ForumController extends AbstractController {
 		$this->forumDradenModel = $forumDradenModel;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
-		$this->forumModel = $forumModel;
+		$this->forumCategorieRepository = $forumCategorieRepository;
 		$this->forumPostsModel = $forumPostsModel;
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 	}
@@ -109,7 +109,7 @@ class ForumController extends AbstractController {
 	public function forum() {
 		return view('forum.overzicht', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumModel->getForumIndelingVoorLid()
+			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid()
 		]);
 	}
 
@@ -242,7 +242,7 @@ class ForumController extends AbstractController {
 
 		return view('forum.deel', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
+			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'deel' => $deel,
 			'paging' => $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
@@ -279,7 +279,7 @@ class ForumController extends AbstractController {
 		}
 		return view('forum.deel', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
+			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'deel' => $deel,
 			'paging' => $paging && $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
@@ -345,7 +345,7 @@ class ForumController extends AbstractController {
 			'paging' => $paging && $this->forumPostsModel->getAantalPaginas($draad->draad_id) > 1,
 			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($draad->getForumDeel(), $draad->draad_id),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad),
-			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
+			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen($draad->getForumDeel()),
 			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
 			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,

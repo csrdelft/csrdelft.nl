@@ -34,6 +34,7 @@ use GuzzleHttp\Exception\RequestException;
  * Profiel van een lid. Agendeerbaar vanwege verjaardag in agenda.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\ProfielRepository")
  * @ORM\Table("profielen")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Profiel implements Agendeerbaar {
 	/**

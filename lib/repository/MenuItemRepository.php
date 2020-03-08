@@ -4,16 +4,15 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\documenten\DocumentCategorie;
+use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\MenuItem;
-use CsrDelft\model\entity\forum\ForumCategorie;
-use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
+use CsrDelft\repository\forum\ForumCategorieRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -83,7 +82,7 @@ class MenuItemRepository extends AbstractRepository {
 		switch ($parent->tekst) {
 
 			case 'Forum':
-				foreach (ForumModel::instance()->prefetch() as $categorie) {
+				foreach (ContainerFacade::getContainer()->get(ForumCategorieRepository::class)->findAll() as $categorie) {
 					/** @var ForumCategorie $categorie */
 					$item = $this->nieuw($parent);
 					$item->item_id = -$categorie->categorie_id; // nodig voor getParent()

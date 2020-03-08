@@ -1,40 +1,25 @@
 <?php
 
-namespace CsrDelft\model\forum;
+namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\forum\ForumCategorie;
+use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\forum\ForumDradenModel;
+use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\AccountModel;
-use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\repository\forum\ForumDelenMeldingRepository;
-use CsrDelft\repository\forum\ForumDelenRepository;
-use CsrDelft\repository\forum\ForumDradenGelezenRepository;
-use CsrDelft\repository\forum\ForumDradenMeldingRepository;
-use CsrDelft\repository\forum\ForumDradenReagerenRepository;
-use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
+use CsrDelft\repository\AbstractRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use PDO;
 
 /**
- * ForumModel.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
+ * @method ForumCategorie|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ForumCategorie|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ForumCategorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForumModel extends CachedPersistenceModel {
-
-	const ORM = ForumCategorie::class;
-
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'volgorde ASC';
-	/**
-	 * Store forum categorien array as a whole in memcache
-	 * @var boolean
-	 */
-	protected $memcache_prefetch = true;
+class ForumCategorieRepository extends AbstractRepository {
 	/**
 	 * Lazy loading
 	 * @var array
@@ -74,6 +59,7 @@ class ForumModel extends CachedPersistenceModel {
 	private $forumPostsModel;
 
 	public function __construct(
+		ManagerRegistry $managerRegistry,
 		ForumDelenRepository $forumDelenRepository,
 		ForumDradenModel $forumDradenModel,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
@@ -83,7 +69,7 @@ class ForumModel extends CachedPersistenceModel {
 		ForumPostsModel $forumPostsModel,
 		ForumDelenMeldingRepository $forumDelenMeldingRepository
 	) {
-		parent::__construct();
+		parent::__construct($managerRegistry, ForumCategorie::class);
 
 		$this->forumDelenRepository = $forumDelenRepository;
 		$this->forumDradenModel = $forumDradenModel;
@@ -96,11 +82,15 @@ class ForumModel extends CachedPersistenceModel {
 	}
 
 	public function get($id) {
-		$categorie = $this->retrieveByPrimaryKey(array($id));
+		$categorie = $this->find($id);
 		if (!$categorie) {
 			throw new CsrGebruikerException('Forum-categorie bestaat niet!');
 		}
 		return $categorie;
+	}
+
+	public function findAll() {
+		return $this->findBy([], ['volgorde' => 'ASC']);
 	}
 
 	/**
@@ -112,7 +102,7 @@ class ForumModel extends CachedPersistenceModel {
 		if (!isset($this->indeling)) {
 			$delenByCategorieId = group_by('categorie_id', $this->forumDelenRepository->getForumDelenVoorLid());
 			$this->indeling = array();
-			foreach ($this->prefetch() as $categorie) {
+			foreach ($this->findAll() as $categorie) {
 				/** @var ForumCategorie $categorie */
 				if ($categorie->magLezen()) {
 					$this->indeling[] = $categorie;

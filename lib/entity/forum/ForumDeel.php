@@ -2,11 +2,12 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\forum\ForumDradenModel;
-use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\forum\ForumCategorieRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -75,7 +76,7 @@ class ForumDeel {
 	private $forum_draden;
 
 	public function getForumCategorie() {
-		return ForumModel::instance()->get($this->categorie_id);
+		return ContainerFacade::getContainer()->get(ForumCategorieRepository::class)->get($this->categorie_id);
 	}
 
 	public function magLezen($rss = false) {

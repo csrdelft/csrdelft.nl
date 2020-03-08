@@ -14,7 +14,6 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
-use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\CliLoginModel;
@@ -23,6 +22,7 @@ use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
+use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\LogRepository;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
@@ -183,7 +183,6 @@ switch (MODE) {
 
 		// Prefetch
 		$container->get(VerticalenModel::class)->prefetch();
-		$container->get(ForumModel::class)->prefetch();
 
 		// Database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {

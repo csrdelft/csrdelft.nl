@@ -19,9 +19,9 @@
 
 use CsrDelft\Kernel;
 use CsrDelft\model\DebugLogModel;
-use CsrDelft\model\forum\ForumModel;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\LogRepository;
@@ -42,7 +42,7 @@ $oneTimeTokensModel = $container->get(OneTimeTokensRepository::class);
 $instellingenRepository = $container->get(InstellingenRepository::class);
 $lidInstellingenRepository = $container->get(LidInstellingenRepository::class);
 $corveeHerinneringenModel = $container->get(CorveeHerinneringenModel::class);
-$forumModel = $container->get(ForumModel::class);
+$forumCategorieRepository = $container->get(ForumCategorieRepository::class);
 
 // Debuglog
 try {
@@ -89,7 +89,7 @@ try {
 
 // Forum opschonen
 try {
-	$forumModel->opschonen();
+	$forumCategorieRepository->opschonen();
 } catch (Exception $e) {
 	$debugLogModel->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);
 }

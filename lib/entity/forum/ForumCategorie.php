@@ -1,13 +1,11 @@
 <?php
 
-namespace CsrDelft\model\entity\forum;
+namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\forum\ForumDelenRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ForumCategorie.class.php
@@ -16,27 +14,36 @@ use CsrDelft\repository\forum\ForumDelenRepository;
  *
  * Een forum categorie bevat deelfora.
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumCategorieRepository")
+ * @ORM\Table("forum_categorien")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumCategorie extends PersistentEntity {
+class ForumCategorie {
 
 	/**
 	 * Primary key
 	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
 	public $categorie_id;
 	/**
 	 * Titel
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $titel;
 	/**
 	 * Rechten benodigd voor bekijken
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $rechten_lezen;
 	/**
 	 * Weergave volgorde
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $volgorde;
 	/**
@@ -44,26 +51,6 @@ class ForumCategorie extends PersistentEntity {
 	 * @var ForumDeel[]
 	 */
 	private $forum_delen;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'categorie_id' => array(T::Integer, false, 'auto_increment'),
-		'titel' => array(T::String),
-		'rechten_lezen' => array(T::String),
-		'volgorde' => array(T::Integer)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('categorie_id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'forum_categorien';
 
 	public function magLezen() {
 		return LoginModel::mag($this->rechten_lezen);

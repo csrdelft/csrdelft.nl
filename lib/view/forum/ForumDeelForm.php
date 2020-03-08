@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view\forum;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumDeel;
-use CsrDelft\model\forum\ForumModel;
+use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
@@ -29,7 +30,7 @@ class ForumDeelForm extends ModalForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$lijst = array();
-		foreach (ForumModel::instance()->prefetch() as $categorie) {
+		foreach (ContainerFacade::getContainer()->get(ForumCategorieRepository::class)->findAll() as $categorie) {
 			$lijst[$categorie->categorie_id] = $categorie->titel;
 		}
 
