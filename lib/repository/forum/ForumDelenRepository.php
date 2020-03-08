@@ -6,9 +6,9 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
-use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\entity\forum\ForumDraad;
+use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\forum\ForumZoeken;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\repository\AbstractRepository;
@@ -25,7 +25,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumDelenRepository extends AbstractRepository {
 	/**
-	 * @var ForumDradenModel
+	 * @var ForumDradenRepository
 	 */
 	private $forumDradenModel;
 	/**
@@ -33,7 +33,7 @@ class ForumDelenRepository extends AbstractRepository {
 	 */
 	private $forumPostsModel;
 
-	public function __construct(ManagerRegistry $registry, ForumDradenModel $forumDradenModel, ForumPostsModel $forumPostsModel) {
+	public function __construct(ManagerRegistry $registry, ForumDradenRepository $forumDradenModel, ForumPostsModel $forumPostsModel) {
 		parent::__construct($registry, ForumDeel::class);
 
 		$this->forumDradenModel = $forumDradenModel;
@@ -207,6 +207,7 @@ class ForumDelenRepository extends AbstractRepository {
 		$zoek_in = $forumZoeken->zoek_in;
 
 		$gevonden_draden = [];
+		/** @var ForumPost[] $gevonden_posts */
 		$gevonden_posts = [];
 
 		if (in_array('titel', $zoek_in)) {

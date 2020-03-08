@@ -15,7 +15,7 @@
 	</div>
 
 	@foreach($draden as $draad)
-		@php($timestamp = strtotime($draad->laatst_gewijzigd))
+		@php($timestamp = $draad->laatst_gewijzigd->getTimeStamp())
 
 		@if(lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen')
 			@php($urlHash = '#ongelezen')

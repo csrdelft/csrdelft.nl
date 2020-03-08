@@ -6,21 +6,21 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\model\DebugLogModel;
-use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\entity\security\Account;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
-use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -59,7 +59,7 @@ class ForumController extends AbstractController {
 	 */
 	private $forumDradenMeldingRepository;
 	/**
-	 * @var ForumDradenModel
+	 * @var ForumDradenRepository
 	 */
 	private $forumDradenModel;
 	/**
@@ -86,7 +86,7 @@ class ForumController extends AbstractController {
 		ForumDelenMeldingRepository $forumDelenMeldingRepository,
 		ForumDelenRepository $forumDelenRepository,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDradenModel $forumDradenModel,
+		ForumDradenRepository $forumDradenModel,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumPostsModel $forumPostsModel

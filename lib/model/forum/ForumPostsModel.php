@@ -6,8 +6,8 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumDeel;
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadGelezen;
-use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\Paging;
@@ -16,6 +16,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use PDO;
 use PDOException;
@@ -115,7 +116,8 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 
 	public function getAantalPaginas($draad_id) {
 		if (!array_key_exists($draad_id, $this->aantal_paginas)) {
-			$draad = ForumDradenModel::instance()->get($draad_id);
+			$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
+			$draad = $forumDradenRepository->get($draad_id);
 			if ($draad->pagina_per_post) {
 				$this->per_pagina = 1;
 			} else {
@@ -254,7 +256,8 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		if ($rowCount !== 1) {
 			throw new CsrException('Verwijderen mislukt');
 		}
-		ForumDradenModel::instance()->resetLastPost($post->getForumDraad());
+		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
+		$forumDradenRepository->resetLastPost($post->getForumDraad());
 	}
 
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
@@ -277,10 +280,11 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		}
 		if ($gelijkheid < 90) {
 			$draad = $post->getForumDraad();
-			$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
+			$draad->laatst_gewijzigd = date_create($post->laatst_gewijzigd);
 			$draad->laatste_post_id = $post->post_id;
 			$draad->laatste_wijziging_uid = $post->uid;
-			$rowCount = ForumDradenModel::instance()->update($draad);
+			$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
+			$rowCount = $forumDradenRepository->update($draad);
 			if ($rowCount !== 1) {
 				throw new CsrException('Bewerken mislukt');
 			}
@@ -296,8 +300,9 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 		if ($rowCount !== 1) {
 			throw new CsrException('Verplaatsen mislukt');
 		}
-		ForumDradenModel::instance()->resetLastPost($post->getForumDraad());
-		ForumDradenModel::instance()->resetLastPost($oudeDraad);
+		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
+		$forumDradenRepository->resetLastPost($post->getForumDraad());
+		$forumDradenRepository->resetLastPost($oudeDraad);
 	}
 
 	public function offtopicForumPost(ForumPost $post) {
@@ -321,14 +326,15 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 			}
 		}
 		$draad = $post->getForumDraad();
-		$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
+		$draad->laatst_gewijzigd = date_create($post->laatst_gewijzigd);
 		$draad->laatste_post_id = $post->post_id;
 		$draad->laatste_wijziging_uid = $post->uid;
 		if ($draad->wacht_goedkeuring) {
 			$draad->wacht_goedkeuring = false;
 			ContainerFacade::getContainer()->get(ForumDelenMeldingRepository::class)->stuurMeldingen($post);
 		}
-		ForumDradenModel::instance()->update($draad);
+		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
+		$forumDradenRepository->update($draad);
 	}
 
 	public function citeerForumPost(ForumPost $post) {
@@ -345,11 +351,11 @@ class ForumPostsModel extends CachedPersistenceModel implements Paging {
 	public function getStatsVoorForumDeel(ForumDeel $deel) {
 		$terug = getDateTime(strtotime(instelling('forum', 'grafiek_stats_periode')));
 		$fields = array('UNIX_TIMESTAMP(DATE(p.datum_tijd)) AS timestamp', 'COUNT(*) AS count');
-		return Database::instance()->sqlSelect($fields, $this->getTableName() . ' AS p RIGHT JOIN ' . ForumDradenModel::instance()->getTableName() . ' AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
+		return Database::instance()->sqlSelect($fields, $this->getTableName() . ' AS p RIGHT JOIN forum_draden AS d ON p.draad_id = d.draad_id', 'd.forum_id = ? AND p.datum_tijd > ?', array($deel->forum_id, $terug), 'timestamp');
 	}
 
 	public function getStatsVoorDraad(ForumDraad $draad) {
-		$terug = getDateTime(strtotime(instelling('forum', 'grafiek_draad_recent'), strtotime($draad->laatst_gewijzigd)));
+		$terug = getDateTime(strtotime(instelling('forum', 'grafiek_draad_recent'), $draad->laatst_gewijzigd->getTimestamp()));
 		$fields = array('UNIX_TIMESTAMP(DATE(datum_tijd)) AS timestamp', 'COUNT(*) AS count');
 		return Database::instance()->sqlSelect($fields, $this->getTableName(), 'draad_id = ? AND datum_tijd > ?', array($draad->draad_id, $terug), 'timestamp');
 	}

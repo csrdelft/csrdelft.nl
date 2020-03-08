@@ -2,9 +2,10 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -115,7 +116,8 @@ class MenuItem {
 				$draad_id = substr($this->link, $begin);
 			}
 			try {
-				$draad = ForumDradenModel::instance()->get((int)$draad_id);
+				$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
+				$draad = $forumDradenRepository->get((int)$draad_id);
 				return $draad->isOngelezen();
 			} catch (CsrException $e) {
 				setMelding('Uw favoriete forumdraadje bestaat helaas niet meer: ' . htmlspecialchars($this->tekst), 2);

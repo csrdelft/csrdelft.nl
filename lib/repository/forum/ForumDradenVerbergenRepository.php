@@ -2,8 +2,8 @@
 
 namespace CsrDelft\repository\forum;
 
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadVerbergen;
-use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;

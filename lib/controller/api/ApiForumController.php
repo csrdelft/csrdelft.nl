@@ -3,12 +3,12 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumPost;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
@@ -24,7 +24,7 @@ class ApiForumController {
 
 		$this->forumDradenGelezenModel = $container->get(ForumDradenGelezenRepository::class);
 		$this->forumPostsModel = $container->get(ForumPostsModel::class);
-		$this->forumDradenModel = $container->get(ForumDradenModel::class);
+		$this->forumDradenModel = $container->get(ForumDradenRepository::class);
 	}
 
 	/**

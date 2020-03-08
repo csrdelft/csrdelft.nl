@@ -73,7 +73,7 @@
 					<div class="col-md-6">
 						<select id="belangrijk" class="form-control" name="belangrijk">
 							<option value="" @if(!$draad->belangrijk)selected="selected"@endif>Niet belangrijk</option>
-							@foreach(\CsrDelft\model\forum\ForumDradenModel::$belangrijk_opties as $group => $list)
+							@foreach(\CsrDelft\repository\forum\ForumDradenRepository::$belangrijk_opties as $group => $list)
 								<optgroup label="{{$group}}">
 									@foreach($list as $value => $label)
 										<option value="{{$value}}"
