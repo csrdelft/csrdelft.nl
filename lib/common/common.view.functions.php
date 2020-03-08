@@ -1,6 +1,7 @@
 <?php /** @noinspection PhpUnused wordt gebruikt in templates*/
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\CsrException;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\bbcode\CsrBB;
@@ -50,6 +51,10 @@ function crlf_endings(string $input) {
  * @return string
  */
 function asset(string $asset) {
+	if (!file_exists(HTDOCS_PATH . 'dist/manifest.json')) {
+		throw new CsrException('htdocs/dist/manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
+	}
+
 	$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/manifest.json'), true);
 
 	if (isset($manifest[$asset])) {
