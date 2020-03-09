@@ -19,6 +19,10 @@ doctrine:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        dql:
+          # Zie https://github.com/beberlei/DoctrineExtensions voor meer mooie extensies.
+          string_functions:
+            match: DoctrineExtensions\Query\Mysql\MatchAgainst
         mappings:
             CsrDelft:
                 is_bundle: false
