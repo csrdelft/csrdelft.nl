@@ -134,7 +134,7 @@ class ToolsController extends AbstractController {
 	}
 
 	public function syncldap() {
-		if (DEBUG OR LoginModel::mag(P_ADMIN) OR $this->loginModel->isSued()) {
+		if (DEBUG || LoginModel::mag(P_ADMIN) || $this->loginModel->isSued()) {
 			$ldap = new LDAP();
 			foreach ($this->profielRepository->findAll() as $profiel) {
 				$this->profielRepository->save_ldap($profiel, $ldap);

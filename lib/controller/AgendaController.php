@@ -125,8 +125,8 @@ class AgendaController {
 		if ($request->query->has('limit')) {
 			$limit = $request->query->getInt('limit');
 		}
-		$van = date('Y-m-d');
-		$tot = date('Y-m-d', strtotime('+6 months'));
+		$van = date(DATE_FORMAT);
+		$tot = date(DATE_FORMAT, strtotime('+6 months'));
 		/** @var AgendaItem[] $items */
 		$items = $this->agendaRepository->ormFind('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', [$van, $tot, $query, $query, $query], null, 'begin_moment ASC, titel ASC', $limit);
 		$result = [];
@@ -151,7 +151,7 @@ class AgendaController {
 	}
 
 	public function courant() {
-		$beginMoment = strtotime(date('Y-m-d'));
+		$beginMoment = strtotime(date(DATE_FORMAT));
 		$eindMoment = strtotime('next saturday', strtotime('+2 weeks', $beginMoment));
 		$items = $this->agendaRepository->getAllAgendeerbaar($beginMoment, $eindMoment, false, false);
 		return view('agenda.courant', ['items' => $items]);

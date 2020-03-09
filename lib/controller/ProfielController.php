@@ -264,11 +264,11 @@ class ProfielController extends AbstractController {
 	public function nieuw($lidjaar, $status) {
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
-		if (!preg_match('/^[0-9]{4}$/', $lidjaar) OR !in_array($lidstatus, LidStatus::getTypeOptions())) {
+		if (!preg_match('/^[0-9]{4}$/', $lidjaar) || !in_array($lidstatus, LidStatus::getTypeOptions())) {
 			throw new CsrToegangException();
 		}
 		// NovCie mag novieten aanmaken
-		if ($lidstatus !== LidStatus::Noviet AND !LoginModel::mag(P_LEDEN_MOD)) {
+		if ($lidstatus !== LidStatus::Noviet && !LoginModel::mag(P_LEDEN_MOD)) {
 			throw new CsrToegangException();
 		}
 		// Maak nieuw profiel zonder op te slaan

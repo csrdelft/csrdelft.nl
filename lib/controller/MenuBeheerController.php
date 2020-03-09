@@ -23,11 +23,11 @@ class MenuBeheerController {
 	}
 
 	public function beheer($menu_name = 'main') {
-		if ($menu_name != LoginModel::getUid() AND !LoginModel::mag(P_ADMIN)) {
+		if ($menu_name != LoginModel::getUid() && !LoginModel::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
 		$root = $this->menuItemRepository->getMenu($menu_name);
-		if (!$root OR !$root->magBeheren()) {
+		if (!$root || !$root->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		return view('menubeheer.tree', [
@@ -42,11 +42,11 @@ class MenuBeheerController {
 		} else {
 			$parent = $this->menuItemRepository->getMenuItem((int)$parent_id);
 		}
-		if (!$parent OR !$parent->magBeheren()) {
+		if (!$parent || !$parent->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$item = $this->menuItemRepository->nieuw($parent);
-		if (!$item OR !$item->magBeheren()) {
+		if (!$item || !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$form = new MenuItemForm($item, 'toevoegen', $parent_id); // fetches POST values itself
@@ -61,7 +61,7 @@ class MenuBeheerController {
 
 	public function bewerken($item_id) {
 		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
-		if (!$item OR !$item->magBeheren()) {
+		if (!$item || !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$form = new MenuItemForm($item, 'bewerken', $item->item_id); // fetches POST values itself
@@ -80,7 +80,7 @@ class MenuBeheerController {
 
 	public function verwijderen($item_id) {
 		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
-		if (!$item OR !$item->magBeheren()) {
+		if (!$item || !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$rowCount = $this->menuItemRepository->removeMenuItem($item);
@@ -93,7 +93,7 @@ class MenuBeheerController {
 
 	public function zichtbaar($item_id) {
 		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
-		if (!$item OR !$item->magBeheren()) {
+		if (!$item || !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
 		$item->zichtbaar = !$item->zichtbaar;
