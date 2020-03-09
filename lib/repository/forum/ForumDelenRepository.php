@@ -41,17 +41,6 @@ class ForumDelenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'volgorde ASC';
-	/**
-	 * Store forum delen array as a whole in memcache
-	 * @var boolean
-	 */
-	protected $memcache_prefetch = true;
-
-	/**
 	 * @param $id
 	 * @return ForumDeel
 	 * @throws CsrGebruikerException
@@ -97,12 +86,12 @@ class ForumDelenRepository extends AbstractRepository {
 	}
 
 	public function getForumDelenVoorCategorie(ForumCategorie $categorie) {
-		return $this->findBy(['categorie_id' => $categorie->categorie_id]);
+		return $this->findBy(['categorie_id' => $categorie->categorie_id], ['volgorde' => 'ASC']);
 	}
 
 	public function getForumDelenVoorLid($rss = false) {
 		/** @var ForumDeel[] $delen */
-		$delen = group_by_distinct('forum_id', $this->findAll());
+		$delen = group_by_distinct('forum_id', $this->findBy([], ['volgorde' => 'ASC']));
 		foreach ($delen as $forum_id => $deel) {
 			if (!$deel->magLezen($rss)) {
 				unset($delen[$forum_id]);
@@ -211,7 +200,11 @@ class ForumDelenRepository extends AbstractRepository {
 		$gevonden_posts = [];
 
 		if (in_array('titel', $zoek_in)) {
-			$gevonden_draden = group_by_distinct('draad_id', $this->forumDradenRepository->zoeken($forumZoeken));
+			$gevonden_draden = [];
+			foreach ($this->forumDradenRepository->zoeken($forumZoeken) as [0 => $draad, 'score' => $score]) {
+				$gevonden_draden[$draad->draad_id] = $draad;
+				$draad->score = $score;
+			}
 		}
 
 		if (in_array('alle_berichten', $zoek_in)) {
@@ -256,22 +249,28 @@ class ForumDelenRepository extends AbstractRepository {
 		return $gevonden_draden;
 	}
 
-	function sorteerFunctie($sorteerOp) {
-		switch ($sorteerOp) {
-			case 'aangemaakt_op': return function ($a, $b) {
-					return ($a->datum_tijd < $b->datum_tijd) ? 1 : -1;
-				};
-			case 'laatste_bericht': return function ($a, $b) {
-					return ($a->laatst_gewijzigd < $b->laatst_gewijzigd) ? 1 : -1;
-				};
-			case 'relevantie': return function ($a, $b) {
-					return ($a->score < $b->score) ? 1 : -1;
-				};
-			default: throw new CsrGebruikerException('Onbekende sorteermethode');
-		}
+	function laatstGewijzigd($draden) {
+		return max(array_map(function ($draad) {
+			return $draad->laatst_gewijzigd;
+		}, $draden));
 	}
 
-	function laatstGewijzigd($draden) {
-		return max(array_map(function ($draad) { return $draad->laatst_gewijzigd; }, $draden));
+	function sorteerFunctie($sorteerOp) {
+		switch ($sorteerOp) {
+			case 'aangemaakt_op':
+				return function ($a, $b) {
+					return ($a->datum_tijd < $b->datum_tijd) ? 1 : -1;
+				};
+			case 'laatste_bericht':
+				return function ($a, $b) {
+					return ($a->laatst_gewijzigd < $b->laatst_gewijzigd) ? 1 : -1;
+				};
+			case 'relevantie':
+				return function ($a, $b) {
+					return ($a->score < $b->score) ? 1 : -1;
+				};
+			default:
+				throw new CsrGebruikerException('Onbekende sorteermethode');
+		}
 	}
 }

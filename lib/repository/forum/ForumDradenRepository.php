@@ -13,7 +13,9 @@ use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
+use Doctrine\DBAL\Exception\SyntaxErrorException;
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use PDO;
@@ -209,37 +211,33 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	}
 
 	public function zoeken(ForumZoeken $forumZoeken) {
+		$qb = $this->createQueryBuilder('draad');
 		// Als er geen spatie in de zoekterm zit, doe dan keyword search met '<zoekterm>*'
 		if (strstr($forumZoeken->zoekterm, ' ') == false) {
-			$attributes = ['*', 'MATCH(titel) AGAINST (? IN BOOLEAN MODE) AS score'];
-			$where_params = [$forumZoeken->zoekterm . '*', $forumZoeken->van, $forumZoeken->tot];
+			$qb->addSelect('MATCH(draad.titel) AGAINST (:query IN BOOLEAN MODE) AS score');
 		} else {
-			$attributes = ['*', 'MATCH(titel) AGAINST (? IN NATURAL LANGUAGE MODE) AS score'];
-			$where_params = [$forumZoeken->zoekterm, $forumZoeken->van, $forumZoeken->tot];
+			$qb->addSelect('MATCH(draad.titel) AGAINST (:query IN NATURAL LANGUAGE MODE) AS score');
 		}
-		$where = 'wacht_goedkeuring = FALSE AND verwijderd = FALSE AND laatst_gewijzigd >= ? AND laatst_gewijzigd <= ?';
+
+		$qb->setParameter('query', $forumZoeken->zoekterm);
+		$qb->where('draad.wacht_goedkeuring = false and draad.verwijderd = false and draad.laatst_gewijzigd >= :van and draad.laatst_gewijzigd <= :tot');
+		$qb->setParameter('van', $forumZoeken->van);
+		$qb->setParameter('tot', $forumZoeken->tot);
 		if (!LoginModel::mag(P_LOGGED_IN)) {
-			$where .= ' AND (gesloten = FALSE OR laatst_gewijzigd >= ?)';
-			$where_params[] = getDateTime(strtotime(instelling('forum', 'externen_geentoegang_gesloten')));
+			$qb->andWhere('draad.gesloten = false or draad.laatst_gewijzigd >= :laatst_gewijzigd');
+			$qb->setParameter('laatst_gewijzigd', date_create(instelling('forum', 'externen_geentoegang_gesloten')));
 		}
-		$order = 'score DESC, plakkerig DESC';
-		$where .= ' HAVING score > 0';
+		$qb->orderBy('score', 'DESC');
+		$qb->addOrderBy('draad.plakkerig', 'DESC');
+		$qb->having('score > 0');
+		$qb->setMaxResults($forumZoeken->limit);
 		try {
-			$results = Database::instance()->sqlSelect(
-				$attributes,
-				$this->getTableName(),
-				$where,
-				$where_params,
-				null,
-				$order,
-				$forumZoeken->limit
-			);
-		} catch (PDOException $ex) {
+			$results = $qb->getQuery()->getResult();
+		} catch (SyntaxErrorException $ex) {
 			setMelding('Op deze term kan niet gezocht worden', -1);
 			// Syntax error in de MATCH in BOOLEAN MODE
 			return [];
 		}
-		$results->setFetchMode(PDO::FETCH_CLASS, static::ORM, array($cast = true));
 		return $results;
 	}
 
