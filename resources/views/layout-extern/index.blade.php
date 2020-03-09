@@ -178,11 +178,6 @@
 							</a>
 						</li>
 						<li>
-							<a href="https://www.huizenmarkt.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/logo-huizenmarkt.png' alt='Huurwoningen'>
-							</a>
-						</li>
-						<li>
 							<a href="http://mechdes.nl/">
 								<img src='https://csrdelft.nl/plaetjes/banners/mechdes.gif' alt='Mechdes advertentie'>
 							</a>
