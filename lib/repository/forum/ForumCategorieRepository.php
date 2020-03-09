@@ -140,8 +140,10 @@ class ForumCategorieRepository extends AbstractRepository {
 		}
 
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
-		$datetime = getDateTime(strtotime('-1 year'));
-		$draden = $this->forumDradenRepository->find('verwijderd = TRUE OR (gesloten = TRUE AND (laatst_gewijzigd IS NULL OR laatst_gewijzigd < ?))', array($datetime));
+		$draden = $this->forumDradenRepository->createQueryBuilder('fd')
+			->where('fd.verwijderd = true or (fd.gesloten = true and (fd.laatst_gewijzigd is null or fd.laatst_gewijzigd < :laatst_gewijzigd))')
+			->setParameter('laatst_gewijzigd', date_create('-1 year'))
+			->getQuery()->getResult();
 		foreach ($draden as $draad) {
 
 			// Settings verwijderen

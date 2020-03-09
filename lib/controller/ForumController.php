@@ -405,7 +405,7 @@ class ForumController extends AbstractController {
 	 */
 	public function opheffen(int $forum_id) {
 		$deel = $this->forumDelenRepository->get($forum_id);
-		$count = $this->forumDradenRepository->count('forum_id = ?', array($deel->forum_id));
+		$count = $this->forumDradenRepository->findBy(['forum_id' =>$deel->forum_id])->count();
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
 		} else {

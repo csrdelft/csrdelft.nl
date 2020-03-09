@@ -13,6 +13,7 @@ use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
+use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use PDO;
@@ -24,7 +25,7 @@ use PDOException;
  * @date 30/03/2017
  * @method ForumDraad|null find($id, $lockMode = null, $lockVersion = null)
  * @method ForumDraad|null findOneBy(array $criteria, array $orderBy = null)
- * @method ForumDraad[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PersistentCollection|ForumDraad[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ForumDradenRepository extends AbstractRepository implements Paging {
 
@@ -244,7 +245,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 
 
 	public function getPrullenbakVoorDeel(ForumDeel $deel) {
-		return $this->findBy(['forum_id' => $deel->forum_id, 'verwijderd' => true]);
+		return $this->findBy(['forum_id' => $deel->forum_id, 'verwijderd' => true], ['plakkerig' => 'DESC', 'laatst_gewijzigd' => 'DESC']);
 	}
 
 	public function getBelangrijkeForumDradenVoorDeel(ForumDeel $deel) {

@@ -62,6 +62,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		$melding->niveau = $niveau;
 
 		$this->getEntityManager()->persist($melding);
+		$this->getEntityManager()->flush();
 		return $melding;
 	}
 

@@ -153,7 +153,7 @@ class ForumDelenRepository extends AbstractRepository {
 	 */
 	public function getWachtOpGoedkeuring() {
 		$postsByDraadId = group_by('draad_id', $this->forumPostsModel->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-		$dradenById = group_by_distinct('draad_id', $this->forumDradenRepository->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$dradenById = group_by_distinct('draad_id', $this->forumDradenRepository->findBy(['wacht_goedkeuring' => true, 'verwijderd' => false]));
 		$dradenById += $this->forumDradenRepository->getForumDradenById(array_keys($postsByDraadId)); // laad draden bij posts
 		foreach ($dradenById as $draad) { // laad posts bij draden
 			if (array_key_exists($draad->draad_id, $postsByDraadId)) { // post is al gevonden
