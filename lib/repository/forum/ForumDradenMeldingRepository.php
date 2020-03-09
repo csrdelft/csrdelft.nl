@@ -66,7 +66,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		return $melding;
 	}
 
-	public function stopAlleMeldingenVoorLid($uid) {
+	public function stopAlleMeldingenVoorLid(string $uid) {
 		$this->createQueryBuilder('m')
 			->where('m.uid = :uid')
 			->setParameter('uid', $uid)
@@ -74,10 +74,10 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 			->getQuery()->execute();
 	}
 
-	public function stopMeldingenVoorIedereen($draad) {
+	public function stopMeldingenVoorIedereen(ForumDraad $draad) {
 		$this->createQueryBuilder('m')
 			->where('m.draad_id = :draad_id')
-			->setParameter('draad_id', $draad->id)
+			->setParameter('draad_id', $draad->draad_id)
 			->delete()
 			->getQuery()->execute();
 	}
