@@ -3,19 +3,19 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumPost;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 use Jacwright\RestServer\RestException;
 
 class ApiForumController {
-	private $forumDradenModel;
+	private $forumDradenRepository;
 	private $forumPostsModel;
 	private $forumDradenGelezenModel;
 
@@ -24,7 +24,7 @@ class ApiForumController {
 
 		$this->forumDradenGelezenModel = $container->get(ForumDradenGelezenRepository::class);
 		$this->forumPostsModel = $container->get(ForumPostsModel::class);
-		$this->forumDradenModel = $container->get(ForumDradenModel::class);
+		$this->forumDradenRepository = $container->get(ForumDradenRepository::class);
 	}
 
 	/**
@@ -44,7 +44,7 @@ class ApiForumController {
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
-		$draden = $this->forumDradenModel->getRecenteForumDraden($limit, null, false, $offset, true);
+		$draden = $this->forumDradenRepository->getRecenteForumDraden($limit, null, false, $offset, true);
 
 		foreach ($draden as $draad) {
 			$draad->ongelezen = $draad->getAantalOngelezenPosts();
@@ -66,7 +66,7 @@ class ApiForumController {
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
 		try {
-			$draad = $this->forumDradenModel->get((int)$id);
+			$draad = $this->forumDradenRepository->get((int)$id);
 		} catch (Exception $e) {
 			throw new RestException(404);
 		}

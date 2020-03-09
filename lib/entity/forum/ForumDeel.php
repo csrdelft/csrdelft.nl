@@ -3,11 +3,10 @@
 namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumCategorieRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -107,7 +106,7 @@ class ForumDeel {
 	 */
 	public function getForumDraden() {
 		if (!isset($this->forum_draden)) {
-			$this->setForumDraden(ForumDradenModel::instance()->getForumDradenVoorDeel($this));
+			$this->setForumDraden(ContainerFacade::getContainer()->get(ForumDradenRepository::class)->getForumDradenVoorDeel($this));
 		}
 		return $this->forum_draden;
 	}
@@ -122,7 +121,7 @@ class ForumDeel {
 	 *
 	 * @param array $forum_draden
 	 */
-	public function setForumDraden(array $forum_draden) {
+	public function setForumDraden($forum_draden) {
 		$this->forum_draden = $forum_draden;
 	}
 

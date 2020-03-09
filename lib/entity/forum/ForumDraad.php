@@ -1,17 +1,16 @@
 <?php
 
-namespace CsrDelft\model\entity\forum;
+namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\forum\ForumDraadGelezen;
+use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\view\ChartTimeSeries;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ForumDraad.class.php
@@ -20,87 +19,108 @@ use CsrDelft\view\ChartTimeSeries;
  *
  * Een ForumDraad zit in een deelforum en bevat forumposts.
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDradenRepository")
+ * @ORM\Table("forum_draden")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumDraad extends PersistentEntity {
+class ForumDraad {
 
 	/**
 	 * Primary key
 	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
 	public $draad_id;
 	/**
 	 * Forum waaronder dit topic valt
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $forum_id;
 	/**
 	 * Forum waarmee dit topic gedeeld is
 	 * @var int
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $gedeeld_met;
 	/**
 	 * Lidnummer van auteur
 	 * @var string
+	 * @ORM\Column(type="string", length=4)
 	 */
 	public $uid;
 	/**
 	 * Titel
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $titel;
 	/**
 	 * Datum en tijd van aanmaken
-	 * @var string
+	 * @var \DateTime
+	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;
 	/**
 	 * Datum en tijd van laatst geplaatste of gewijzigde post
-	 * @var string
+	 * @var \DateTime
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $laatst_gewijzigd;
 	/**
 	 * Id van de laatst geplaatste of gewijzigde post
-	 * @var string
+	 * @var integer
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $laatste_post_id;
 	/**
 	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
 	 * @var string
+	 * @ORM\Column(type="string", length=4, nullable=true)
 	 */
 	public $laatste_wijziging_uid;
 	/**
 	 * Gesloten (posten niet meer mogelijk)
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $gesloten;
 	/**
 	 * Verwijderd
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $verwijderd;
 	/**
 	 * Wacht op goedkeuring
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $wacht_goedkeuring;
 	/**
 	 * Altijd bovenaan weergeven
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $plakkerig;
 	/**
 	 * Belangrijk markering
 	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $belangrijk;
 	/**
 	 * Eerste post altijd bovenaan weergeven
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $eerste_post_plakkerig;
 	/**
 	 * Een post per pagina
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $pagina_per_post;
 	/**
@@ -128,38 +148,6 @@ class ForumDraad extends PersistentEntity {
 	 * @var boolean
 	 */
 	private $verbergen;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'draad_id' => array(T::Integer, false, 'auto_increment'),
-		'forum_id' => array(T::Integer),
-		'gedeeld_met' => array(T::Integer, true),
-		'uid' => array(T::UID),
-		'titel' => array(T::String),
-		'datum_tijd' => array(T::DateTime),
-		'laatst_gewijzigd' => array(T::DateTime, true),
-		'laatste_post_id' => array(T::Integer, true),
-		'laatste_wijziging_uid' => array(T::UID, true),
-		'gesloten' => array(T::Boolean),
-		'verwijderd' => array(T::Boolean),
-		'wacht_goedkeuring' => array(T::Boolean),
-		'plakkerig' => array(T::Boolean),
-		'belangrijk' => array(T::String, true),
-		'eerste_post_plakkerig' => array(T::Boolean),
-		'pagina_per_post' => array(T::Boolean)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('draad_id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'forum_draden';
 
 	public function getForumDeel() {
 		return ContainerFacade::getContainer()->get(ForumDelenRepository::class)->get($this->forum_id);
@@ -174,32 +162,32 @@ class ForumDraad extends PersistentEntity {
 	}
 
 	public function magLezen() {
-		if ($this->verwijderd AND !$this->magModereren()) {
+		if ($this->verwijderd && !$this->magModereren()) {
 			return false;
 		}
-		if (!LoginModel::mag(P_LOGGED_IN) AND $this->gesloten AND strtotime($this->laatst_gewijzigd) < strtotime(instelling('forum', 'externen_geentoegang_gesloten'))) {
+		if (!LoginModel::mag(P_LOGGED_IN) && $this->gesloten && $this->laatst_gewijzigd < date_create(instelling('forum', 'externen_geentoegang_gesloten'))) {
 			return false;
 		}
-		return $this->getForumDeel()->magLezen() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magLezen());
+		return $this->getForumDeel()->magLezen() || ($this->isGedeeld() && $this->getGedeeldMet()->magLezen());
 	}
 
 	public function magPosten() {
-		if ($this->verwijderd OR $this->gesloten) {
+		if ($this->verwijderd || $this->gesloten) {
 			return false;
 		}
-		return $this->getForumDeel()->magPosten() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magPosten());
+		return $this->getForumDeel()->magPosten() || ($this->isGedeeld() && $this->getGedeeldMet()->magPosten());
 	}
 
 	public function magModereren() {
-		return $this->getForumDeel()->magModereren() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magModereren());
+		return $this->getForumDeel()->magModereren() || ($this->isGedeeld() && $this->getGedeeldMet()->magModereren());
 	}
 
 	public function magStatistiekBekijken() {
-		return $this->magModereren() OR ($this->uid != LoginModel::UID_EXTERN AND $this->uid === LoginModel::getUid());
+		return $this->magModereren() || ($this->uid != LoginModel::UID_EXTERN && $this->uid === LoginModel::getUid());
 	}
 
 	public function magVerbergen() {
-		return !$this->belangrijk AND LoginModel::mag(P_LOGGED_IN);
+		return !$this->belangrijk && LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function magMeldingKrijgen() {
@@ -242,7 +230,7 @@ class ForumDraad extends PersistentEntity {
 	public function isOngelezen() {
 		$gelezen = $this->getWanneerGelezen();
 		if ($gelezen) {
-			if (strtotime($this->laatst_gewijzigd) > $gelezen->datum_tijd->getTimestamp()) {
+			if ($this->laatst_gewijzigd > $gelezen->datum_tijd) {
 				return true;
 			}
 			return false;

@@ -72,11 +72,12 @@
 
 		@if($paging)
 			<div class="paging">
+				@php($forumDradenRepository = \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\repository\forum\ForumDradenRepository::class))
 				@if(isset($deel->forum_id))
 					{!! sliding_pager([
               'baseurl' => "/forum/deel/$deel->forum_id/",
-              'pagecount' => \CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas($deel->forum_id),
-              'curpage' => \CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina(),
+              'pagecount' => $forumDradenRepository->getAantalPaginas($deel->forum_id),
+              'curpage' => $forumDradenRepository->getHuidigePagina(),
               'separator' => ' &nbsp;',
               'show_prev_next' => true
               ]) !!}
@@ -84,13 +85,13 @@
 					{!! sliding_pager([
                 'baseurl' => '/forum/recent/',
                 'url_append' => $belangrijk,
-                'pagecount' => \CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas(),
-                'curpage' => \CsrDelft\model\forum\ForumDradenModel::instance()->getHuidigePagina(),
+                'pagecount' => $forumDradenRepository->getAantalPaginas(),
+                'curpage' => $forumDradenRepository->getHuidigePagina(),
                 'separator' => ' &nbsp;'
                 ]) !!}
 					&nbsp;
 					<a
-						href="/forum/recent/{{CsrDelft\model\forum\ForumDradenModel::instance()->getAantalPaginas(null)}}{{$belangrijk}}">verder
+						href="/forum/recent/{{$forumDradenRepository->getAantalPaginas(null)}}{{$belangrijk}}">verder
 						terug</a>
 				@endif
 			</div>

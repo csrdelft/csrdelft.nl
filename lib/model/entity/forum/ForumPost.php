@@ -2,10 +2,11 @@
 
 namespace CsrDelft\model\entity\forum;
 
-use CsrDelft\model\forum\ForumDradenModel;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\forum\ForumDradenRepository;
 
 /**
  * ForumPost.class.php
@@ -100,7 +101,7 @@ class ForumPost extends PersistentEntity {
 	protected static $table_name = 'forum_posts';
 
 	public function getForumDraad() {
-		return ForumDradenModel::instance()->get($this->draad_id);
+		return ContainerFacade::getContainer()->get(ForumDradenRepository::class)->get($this->draad_id);
 	}
 
 	public function magCiteren() {

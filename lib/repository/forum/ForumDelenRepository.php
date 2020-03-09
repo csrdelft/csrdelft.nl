@@ -6,9 +6,9 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
-use CsrDelft\model\entity\forum\ForumDraad;
+use CsrDelft\entity\forum\ForumDraad;
+use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\forum\ForumZoeken;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\repository\AbstractRepository;
@@ -25,31 +25,20 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumDelenRepository extends AbstractRepository {
 	/**
-	 * @var ForumDradenModel
+	 * @var ForumDradenRepository
 	 */
-	private $forumDradenModel;
+	private $forumDradenRepository;
 	/**
 	 * @var ForumPostsModel
 	 */
 	private $forumPostsModel;
 
-	public function __construct(ManagerRegistry $registry, ForumDradenModel $forumDradenModel, ForumPostsModel $forumPostsModel) {
+	public function __construct(ManagerRegistry $registry, ForumDradenRepository $forumDradenRepository, ForumPostsModel $forumPostsModel) {
 		parent::__construct($registry, ForumDeel::class);
 
-		$this->forumDradenModel = $forumDradenModel;
+		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumPostsModel = $forumPostsModel;
 	}
-
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'volgorde ASC';
-	/**
-	 * Store forum delen array as a whole in memcache
-	 * @var boolean
-	 */
-	protected $memcache_prefetch = true;
 
 	/**
 	 * @param $id
@@ -97,12 +86,12 @@ class ForumDelenRepository extends AbstractRepository {
 	}
 
 	public function getForumDelenVoorCategorie(ForumCategorie $categorie) {
-		return $this->findBy(['categorie_id' => $categorie->categorie_id]);
+		return $this->findBy(['categorie_id' => $categorie->categorie_id], ['volgorde' => 'ASC']);
 	}
 
 	public function getForumDelenVoorLid($rss = false) {
 		/** @var ForumDeel[] $delen */
-		$delen = group_by_distinct('forum_id', $this->findAll());
+		$delen = group_by_distinct('forum_id', $this->findBy([], ['volgorde' => 'ASC']));
 		foreach ($delen as $forum_id => $deel) {
 			if (!$deel->magLezen($rss)) {
 				unset($delen[$forum_id]);
@@ -141,7 +130,7 @@ class ForumDelenRepository extends AbstractRepository {
 		} else {
 			$deel->titel = 'Recent gewijzigd';
 		}
-		$deel->setForumDraden($this->forumDradenModel->getRecenteForumDraden(null, $belangrijk));
+		$deel->setForumDraden($this->forumDradenRepository->getRecenteForumDraden(null, $belangrijk));
 		return $deel;
 	}
 
@@ -153,8 +142,8 @@ class ForumDelenRepository extends AbstractRepository {
 	 */
 	public function getWachtOpGoedkeuring() {
 		$postsByDraadId = group_by('draad_id', $this->forumPostsModel->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-		$dradenById = group_by_distinct('draad_id', $this->forumDradenModel->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
-		$dradenById += $this->forumDradenModel->getForumDradenById(array_keys($postsByDraadId)); // laad draden bij posts
+		$dradenById = group_by_distinct('draad_id', $this->forumDradenRepository->findBy(['wacht_goedkeuring' => true, 'verwijderd' => false]));
+		$dradenById += $this->forumDradenRepository->getForumDradenById(array_keys($postsByDraadId)); // laad draden bij posts
 		foreach ($dradenById as $draad) { // laad posts bij draden
 			if (array_key_exists($draad->draad_id, $postsByDraadId)) { // post is al gevonden
 				$draad->setForumPosts($postsByDraadId[$draad->draad_id]);
@@ -169,7 +158,7 @@ class ForumDelenRepository extends AbstractRepository {
 					$melding .= 'goedgekeurd';
 					setMelding($melding, 2);
 				}
-				$this->forumDradenModel->update($draad);
+				$this->forumDradenRepository->update($draad);
 			}
 		}
 		// check permissies
@@ -207,10 +196,15 @@ class ForumDelenRepository extends AbstractRepository {
 		$zoek_in = $forumZoeken->zoek_in;
 
 		$gevonden_draden = [];
+		/** @var ForumPost[] $gevonden_posts */
 		$gevonden_posts = [];
 
 		if (in_array('titel', $zoek_in)) {
-			$gevonden_draden = group_by_distinct('draad_id', $this->forumDradenModel->zoeken($forumZoeken));
+			$gevonden_draden = [];
+			foreach ($this->forumDradenRepository->zoeken($forumZoeken) as [0 => $draad, 'score' => $score]) {
+				$gevonden_draden[$draad->draad_id] = $draad;
+				$draad->score = $score;
+			}
 		}
 
 		if (in_array('alle_berichten', $zoek_in)) {
@@ -221,7 +215,7 @@ class ForumDelenRepository extends AbstractRepository {
 			$gevonden_posts += group_by('draad_id', $this->forumPostsModel->zoeken($forumZoeken, true));
 		}
 
-		$gevonden_draden += $this->forumDradenModel->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
+		$gevonden_draden += $this->forumDradenRepository->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
 
 		// laad posts bij draden
 		foreach ($gevonden_draden as $draad) {
@@ -255,22 +249,28 @@ class ForumDelenRepository extends AbstractRepository {
 		return $gevonden_draden;
 	}
 
-	function sorteerFunctie($sorteerOp) {
-		switch ($sorteerOp) {
-			case 'aangemaakt_op': return function ($a, $b) {
-					return ($a->datum_tijd < $b->datum_tijd) ? 1 : -1;
-				};
-			case 'laatste_bericht': return function ($a, $b) {
-					return ($a->laatst_gewijzigd < $b->laatst_gewijzigd) ? 1 : -1;
-				};
-			case 'relevantie': return function ($a, $b) {
-					return ($a->score < $b->score) ? 1 : -1;
-				};
-			default: throw new CsrGebruikerException('Onbekende sorteermethode');
-		}
+	function laatstGewijzigd($draden) {
+		return max(array_map(function ($draad) {
+			return $draad->laatst_gewijzigd;
+		}, $draden));
 	}
 
-	function laatstGewijzigd($draden) {
-		return max(array_map(function ($draad) { return $draad->laatst_gewijzigd; }, $draden));
+	function sorteerFunctie($sorteerOp) {
+		switch ($sorteerOp) {
+			case 'aangemaakt_op':
+				return function ($a, $b) {
+					return ($a->datum_tijd < $b->datum_tijd) ? 1 : -1;
+				};
+			case 'laatste_bericht':
+				return function ($a, $b) {
+					return ($a->laatst_gewijzigd < $b->laatst_gewijzigd) ? 1 : -1;
+				};
+			case 'relevantie':
+				return function ($a, $b) {
+					return ($a->score < $b->score) ? 1 : -1;
+				};
+			default:
+				throw new CsrGebruikerException('Onbekende sorteermethode');
+		}
 	}
 }

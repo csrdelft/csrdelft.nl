@@ -1,4 +1,7 @@
 {
+    "beberlei/doctrineextensions": {
+        "version": "v1.2.6"
+    },
     "cakephp/cache": {
         "version": "3.8.6"
     },

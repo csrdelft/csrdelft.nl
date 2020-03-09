@@ -6,21 +6,21 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\model\DebugLogModel;
-use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\entity\security\Account;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
-use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -59,9 +59,9 @@ class ForumController extends AbstractController {
 	 */
 	private $forumDradenMeldingRepository;
 	/**
-	 * @var ForumDradenModel
+	 * @var ForumDradenRepository
 	 */
-	private $forumDradenModel;
+	private $forumDradenRepository;
 	/**
 	 * @var ForumDradenReagerenRepository
 	 */
@@ -86,7 +86,7 @@ class ForumController extends AbstractController {
 		ForumDelenMeldingRepository $forumDelenMeldingRepository,
 		ForumDelenRepository $forumDelenRepository,
 		ForumDradenGelezenRepository $forumDradenGelezenRepository,
-		ForumDradenModel $forumDradenModel,
+		ForumDradenRepository $forumDradenRepository,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumPostsModel $forumPostsModel
@@ -95,7 +95,7 @@ class ForumController extends AbstractController {
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
 		$this->forumDelenRepository = $forumDelenRepository;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
-		$this->forumDradenModel = $forumDradenModel;
+		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumCategorieRepository = $forumCategorieRepository;
@@ -134,7 +134,7 @@ class ForumController extends AbstractController {
 		 * @var Account $account
 		 */
 		return view('forum.rss', [
-			'draden' => $this->forumDradenModel->getRecenteForumDraden(null, null, true),
+			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
 			'privatelink' => LoginModel::getAccount()->getRssLink()
 		]);
 	}
@@ -157,7 +157,7 @@ class ForumController extends AbstractController {
 	 */
 	public function zoeken($query = null, int $pagina = 1) {
 		$this->forumPostsModel->setHuidigePagina($pagina, 0);
-		$this->forumDradenModel->setHuidigePagina($pagina, 0);
+		$this->forumDradenRepository->setHuidigePagina($pagina, 0);
 		$forumZoeken = new ForumZoeken();
 		$forumZoeken->zoekterm = $query;
 		$zoekform = new ForumZoekenForm($forumZoeken);
@@ -236,7 +236,7 @@ class ForumController extends AbstractController {
 	 * @return View
 	 */
 	public function recent($pagina = 1, $belangrijk = null) {
-		$this->forumDradenModel->setHuidigePagina((int)$pagina, 0);
+		$this->forumDradenRepository->setHuidigePagina((int)$pagina, 0);
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = $this->forumDelenRepository->getRecent($belangrijk);
 
@@ -244,7 +244,7 @@ class ForumController extends AbstractController {
 			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'deel' => $deel,
-			'paging' => $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
+			'paging' => $this->forumDradenRepository->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
 			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
 			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($deel),
@@ -267,21 +267,21 @@ class ForumController extends AbstractController {
 		}
 		$paging = true;
 		if ($pagina === 'laatste') {
-			$this->forumDradenModel->setLaatstePagina($deel->forum_id);
+			$this->forumDradenRepository->setLaatstePagina($deel->forum_id);
 		} elseif ($pagina === 'prullenbak' && $deel->magModereren()) {
-			$deel->setForumDraden($this->forumDradenModel->getPrullenbakVoorDeel($deel));
+			$deel->setForumDraden($this->forumDradenRepository->getPrullenbakVoorDeel($deel));
 			$paging = false;
 		} elseif ($pagina === 'belangrijk' && $deel->magLezen()) {
-			$deel->setForumDraden($this->forumDradenModel->getBelangrijkeForumDradenVoorDeel($deel));
+			$deel->setForumDraden($this->forumDradenRepository->getBelangrijkeForumDradenVoorDeel($deel));
 			$paging = false;
 		} else {
-			$this->forumDradenModel->setHuidigePagina((int)$pagina, $deel->forum_id);
+			$this->forumDradenRepository->setHuidigePagina((int)$pagina, $deel->forum_id);
 		}
 		return view('forum.deel', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'deel' => $deel,
-			'paging' => $paging && $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
+			'paging' => $paging && $this->forumDradenRepository->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
 			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
 			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($deel),
@@ -315,7 +315,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function onderwerp(int $draad_id, $pagina = null, $statistiek = null) {
-		$draad = $this->forumDradenModel->get($draad_id);
+		$draad = $this->forumDradenRepository->get($draad_id);
 		if (!$draad->magLezen()) {
 			throw new CsrToegangException();
 		}
@@ -405,7 +405,7 @@ class ForumController extends AbstractController {
 	 */
 	public function opheffen(int $forum_id) {
 		$deel = $this->forumDelenRepository->get($forum_id);
-		$count = $this->forumDradenModel->count('forum_id = ?', array($deel->forum_id));
+		$count = $this->forumDradenRepository->findBy(['forum_id' =>$deel->forum_id])->count();
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
 		} else {
@@ -425,7 +425,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function verbergen(int $draad_id) {
-		$draad = $this->forumDradenModel->get($draad_id);
+		$draad = $this->forumDradenRepository->get($draad_id);
 		if (!$draad->magVerbergen()) {
 			throw new CsrGebruikerException('Onderwerp mag niet verborgen worden');
 		}
@@ -446,7 +446,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function tonen(int $draad_id) {
-		$draad = $this->forumDradenModel->get($draad_id);
+		$draad = $this->forumDradenRepository->get($draad_id);
 		if (!$draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is niet verborgen');
 		}
@@ -475,7 +475,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrException
 	 */
 	public function meldingsniveau(int $draad_id, $niveau) {
-		$draad = $this->forumDradenModel->get($draad_id);
+		$draad = $this->forumDradenRepository->get($draad_id);
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
 			throw new CsrToegangException('Onderwerp mag geen melding voor ontvangen worden');
 		}
@@ -515,7 +515,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrGebruikerException
 	 */
 	public function bladwijzer(int $draad_id) {
-		$draad = $this->forumDradenModel->get($draad_id);
+		$draad = $this->forumDradenRepository->get($draad_id);
 		$timestamp = (int)filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
 		if ($this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, $timestamp - 1)) {
 			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
@@ -534,7 +534,7 @@ class ForumController extends AbstractController {
 	 * @throws CsrToegangException
 	 */
 	public function wijzigen(int $draad_id, $property) {
-		$draad = $this->forumDradenModel->get($draad_id);
+		$draad = $this->forumDradenRepository->get($draad_id);
 		// gedeelde moderators mogen dit niet
 		if (!$draad->getForumDeel()->magModereren()) {
 			throw new CsrToegangException();
@@ -562,7 +562,7 @@ class ForumController extends AbstractController {
 		} else {
 			throw new CsrToegangException("Kan draad niet wijzigen");
 		}
-		$this->forumDradenModel->wijzigForumDraad($draad, $property, $value);
+		$this->forumDradenRepository->wijzigForumDraad($draad, $property, $value);
 		if (is_bool($value)) {
 			$wijziging = ($value ? 'wel ' : 'niet ') . $property;
 		} else {
@@ -593,7 +593,7 @@ class ForumController extends AbstractController {
 		// post in bestaand draadje?
 		$titel = null;
 		if ($draad_id !== null) {
-			$draad = $this->forumDradenModel->get($draad_id);
+			$draad = $this->forumDradenRepository->get($draad_id);
 
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
@@ -671,7 +671,7 @@ class ForumController extends AbstractController {
 				return $redirect;
 			}
 			// maak draad
-			$draad = $this->forumDradenModel->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
+			$draad = $this->forumDradenRepository->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
 		}
 
 		// maak post
@@ -776,7 +776,7 @@ class ForumController extends AbstractController {
 			throw new CsrToegangException("Geen moderator");
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
-		$nieuwDraad = $this->forumDradenModel->get((int)$nieuw);
+		$nieuwDraad = $this->forumDradenRepository->get((int)$nieuw);
 		if (!$nieuwDraad->magModereren()) {
 			throw new CsrToegangException("Geen moderator");
 		}
@@ -846,7 +846,7 @@ class ForumController extends AbstractController {
 		$deel = $this->forumDelenRepository->get((int)$forum_id);
 		// bestaand draadje?
 		if ($draad_id !== null) {
-			$draad = $this->forumDradenModel->get((int)$draad_id);
+			$draad = $this->forumDradenRepository->get((int)$draad_id);
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {

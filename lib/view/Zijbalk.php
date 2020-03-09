@@ -3,13 +3,13 @@
 namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
@@ -56,10 +56,11 @@ abstract class Zijbalk {
 			}
 			$zijbalk[] = view('agenda.zijbalk', ['items' => $items]);
 		}
+		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
 		// Nieuwste belangrijke forumberichten
 		if (lid_instelling('zijbalk', 'forum_belangrijk') > 0) {
 			$zijbalk[] = view('forum.partial.draad_zijbalk', [
-				'draden' => ForumDradenModel::instance()->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum_belangrijk'), true),
+				'draden' => $forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum_belangrijk'), true),
 				'aantalWacht' => ForumPostsModel::instance()->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => true
 			]);
@@ -68,7 +69,7 @@ abstract class Zijbalk {
 		if (lid_instelling('zijbalk', 'forum') > 0) {
 			$belangrijk = (lid_instelling('zijbalk', 'forum_belangrijk') > 0 ? false : null);
 			$zijbalk[] = view('forum.partial.draad_zijbalk', [
-				'draden' => ForumDradenModel::instance()->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
+				'draden' => $forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
 				'aantalWacht' => ForumPostsModel::instance()->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => $belangrijk
 			]);

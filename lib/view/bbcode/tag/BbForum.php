@@ -7,9 +7,9 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\forum\ForumDeel;
-use CsrDelft\model\forum\ForumDradenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDelenRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use Exception;
 
 class BbForum extends BbTag {
@@ -55,8 +55,10 @@ class BbForum extends BbTag {
 			$this->num = (int)$arguments['num'];
 		}
 
-		ForumDradenModel::instance()->setAantalPerPagina($this->num);
+		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
 		$forumDelenRepository = ContainerFacade::getContainer()->get(ForumDelenRepository::class);
+
+		$forumDradenRepository->setAantalPerPagina($this->num);
 		switch ($this->content) {
 			case 'recent':
 				$this->deel = $forumDelenRepository->getRecent();

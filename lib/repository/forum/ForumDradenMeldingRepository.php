@@ -3,9 +3,9 @@
 namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMelding;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumPost;
 use CsrDelft\model\entity\Mail;
