@@ -55,7 +55,7 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 			$gelezen = $this->maakForumDraadGelezen($draad->draad_id);
 		}
 		if (is_int($timestamp)) {
-			$gelezen->datum_tijd = date_create($timestamp);
+			$gelezen->datum_tijd = date_create("@$timestamp");
 		} else {
 			foreach ($draad->getForumPosts() as $post) {
 				if (strtotime($post->laatst_gewijzigd) > $gelezen->datum_tijd->getTimestamp()) {
