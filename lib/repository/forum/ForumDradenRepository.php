@@ -11,15 +11,11 @@ use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\DBAL\Exception\SyntaxErrorException;
 use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use PDO;
-use PDOException;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -30,8 +26,6 @@ use PDOException;
  * @method PersistentCollection|ForumDraad[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ForumDradenRepository extends AbstractRepository implements Paging {
-
-	const ORM = ForumDraad::class;
 	/**
 	 * Mogelijke markeringen voor belangrijke draadjes
 	 * @var array
@@ -149,9 +143,9 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	}
 
 	public function setHuidigePagina($pagina, $forum_id) {
-		if (!is_int($pagina) OR $pagina < 1) {
+		if (!is_int($pagina) || $pagina < 1) {
 			$pagina = 1;
-		} elseif ($forum_id !== 0 AND $pagina > $this->getAantalPaginas($forum_id)) {
+		} elseif ($forum_id !== 0 && $pagina > $this->getAantalPaginas($forum_id)) {
 			$pagina = $this->getAantalPaginas($forum_id);
 		}
 		$this->pagina = $pagina;

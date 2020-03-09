@@ -162,32 +162,32 @@ class ForumDraad {
 	}
 
 	public function magLezen() {
-		if ($this->verwijderd AND !$this->magModereren()) {
+		if ($this->verwijderd && !$this->magModereren()) {
 			return false;
 		}
-		if (!LoginModel::mag(P_LOGGED_IN) AND $this->gesloten AND $this->laatst_gewijzigd < date_create(instelling('forum', 'externen_geentoegang_gesloten'))) {
+		if (!LoginModel::mag(P_LOGGED_IN) && $this->gesloten && $this->laatst_gewijzigd < date_create(instelling('forum', 'externen_geentoegang_gesloten'))) {
 			return false;
 		}
-		return $this->getForumDeel()->magLezen() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magLezen());
+		return $this->getForumDeel()->magLezen() || ($this->isGedeeld() && $this->getGedeeldMet()->magLezen());
 	}
 
 	public function magPosten() {
-		if ($this->verwijderd OR $this->gesloten) {
+		if ($this->verwijderd || $this->gesloten) {
 			return false;
 		}
-		return $this->getForumDeel()->magPosten() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magPosten());
+		return $this->getForumDeel()->magPosten() || ($this->isGedeeld() && $this->getGedeeldMet()->magPosten());
 	}
 
 	public function magModereren() {
-		return $this->getForumDeel()->magModereren() OR ($this->isGedeeld() AND $this->getGedeeldMet()->magModereren());
+		return $this->getForumDeel()->magModereren() || ($this->isGedeeld() && $this->getGedeeldMet()->magModereren());
 	}
 
 	public function magStatistiekBekijken() {
-		return $this->magModereren() OR ($this->uid != LoginModel::UID_EXTERN AND $this->uid === LoginModel::getUid());
+		return $this->magModereren() || ($this->uid != LoginModel::UID_EXTERN && $this->uid === LoginModel::getUid());
 	}
 
 	public function magVerbergen() {
-		return !$this->belangrijk AND LoginModel::mag(P_LOGGED_IN);
+		return !$this->belangrijk && LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function magMeldingKrijgen() {
