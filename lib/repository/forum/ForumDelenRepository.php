@@ -7,9 +7,8 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
-use CsrDelft\model\entity\forum\ForumPost;
+use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\model\entity\forum\ForumZoeken;
-use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,11 +28,11 @@ class ForumDelenRepository extends AbstractRepository {
 	 */
 	private $forumDradenRepository;
 	/**
-	 * @var ForumPostsModel
+	 * @var ForumPostsRepository
 	 */
 	private $forumPostsModel;
 
-	public function __construct(ManagerRegistry $registry, ForumDradenRepository $forumDradenRepository, ForumPostsModel $forumPostsModel) {
+	public function __construct(ManagerRegistry $registry, ForumDradenRepository $forumDradenRepository, ForumPostsRepository $forumPostsModel) {
 		parent::__construct($registry, ForumDeel::class);
 
 		$this->forumDradenRepository = $forumDradenRepository;

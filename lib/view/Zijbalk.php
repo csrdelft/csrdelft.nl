@@ -3,13 +3,13 @@
 namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
+use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
@@ -57,11 +57,12 @@ abstract class Zijbalk {
 			$zijbalk[] = view('agenda.zijbalk', ['items' => $items]);
 		}
 		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
+		$forumPostsRepository = ContainerFacade::getContainer()->get(ForumPostsRepository::class);
 		// Nieuwste belangrijke forumberichten
 		if (lid_instelling('zijbalk', 'forum_belangrijk') > 0) {
 			$zijbalk[] = view('forum.partial.draad_zijbalk', [
 				'draden' => $forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum_belangrijk'), true),
-				'aantalWacht' => ForumPostsModel::instance()->getAantalWachtOpGoedkeuring(),
+				'aantalWacht' => $forumPostsRepository->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => true
 			]);
 		}
@@ -70,13 +71,13 @@ abstract class Zijbalk {
 			$belangrijk = (lid_instelling('zijbalk', 'forum_belangrijk') > 0 ? false : null);
 			$zijbalk[] = view('forum.partial.draad_zijbalk', [
 				'draden' => $forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
-				'aantalWacht' => ForumPostsModel::instance()->getAantalWachtOpGoedkeuring(),
+				'aantalWacht' => $forumPostsRepository->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => $belangrijk
 			]);
 		}
 		// Zelfgeposte forumberichten
 		if (lid_instelling('zijbalk', 'forum_zelf') > 0) {
-			$posts = ForumPostsModel::instance()->getRecenteForumPostsVanLid(LoginModel::getUid(), (int)lid_instelling('zijbalk', 'forum_zelf'), true);
+			$posts = $forumPostsRepository->getRecenteForumPostsVanLid(LoginModel::getUid(), (int)lid_instelling('zijbalk', 'forum_zelf'), true);
 			$zijbalk[] = view('forum.partial.post_zijbalk', ['posts' => $posts]);
 		}
 		// Ledenmemory topscores

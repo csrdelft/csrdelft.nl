@@ -5,7 +5,6 @@ namespace CsrDelft\repository\forum;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
@@ -53,7 +52,7 @@ class ForumCategorieRepository extends AbstractRepository {
 	 */
 	private $forumDelenMeldingRepository;
 	/**
-	 * @var ForumPostsModel
+	 * @var ForumPostsRepository
 	 */
 	private $forumPostsModel;
 
@@ -65,7 +64,7 @@ class ForumCategorieRepository extends AbstractRepository {
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingModel,
-		ForumPostsModel $forumPostsModel,
+		ForumPostsRepository $forumPostsModel,
 		ForumDelenMeldingRepository $forumDelenMeldingRepository
 	) {
 		parent::__construct($managerRegistry, ForumCategorie::class);

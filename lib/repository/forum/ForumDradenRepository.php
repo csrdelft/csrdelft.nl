@@ -8,7 +8,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumZoeken;
-use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
@@ -92,7 +91,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	private $forumDradenMeldingRepository;
 
 	/**
-	 * @var ForumPostsModel
+	 * @var ForumPostsRepository
 	 */
 	private $forumPostsModel;
 
@@ -102,7 +101,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumPostsModel $forumPostsModel
+		ForumPostsRepository $forumPostsModel
 	) {
 		parent::__construct($registry, ForumDraad::class);
 		$this->pagina = 1;

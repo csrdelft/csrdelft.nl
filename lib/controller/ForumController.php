@@ -11,16 +11,16 @@ use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\entity\security\Account;
-use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenMeldingRepository;
-use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenReagerenRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
+use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -75,7 +75,7 @@ class ForumController extends AbstractController {
 	 */
 	private $forumCategorieRepository;
 	/**
-	 * @var ForumPostsModel
+	 * @var ForumPostsRepository
 	 */
 	private $forumPostsModel;
 
@@ -89,7 +89,7 @@ class ForumController extends AbstractController {
 		ForumDradenRepository $forumDradenRepository,
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
-		ForumPostsModel $forumPostsModel
+		ForumPostsRepository $forumPostsModel
 	) {
 		$this->debugLogModel = $debugLogModel;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;

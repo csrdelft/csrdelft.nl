@@ -13,6 +13,9 @@
 @endsection
 
 @section('content')
+	@php
+		$forumPostsRepository = \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\repository\forum\ForumPostsRepository::class);
+	@endphp
 	{!! getMelding() !!}
 	<div class="forum-header btn-toolbar">
 
@@ -21,7 +24,7 @@
 				@if(!$statistiek && $draad->magStatistiekBekijken())
 					<div class="btn-group mr-2">
 						<a
-							href="/forum/onderwerp/{{$draad->draad_id}}/{{CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina()}}/statistiek"
+							href="/forum/onderwerp/{{$draad->draad_id}}/{{$forumPostsRepository->getHuidigePagina()}}/statistiek"
 							class="btn btn-light" title="Toon statistieken">@icon('chart_line')</a>
 					</div>
 
@@ -116,13 +119,13 @@
 			{!! sliding_pager([
           'baseurl' => "/forum/onderwerp/$draad->draad_id/",
           'url_append' => $statistiek ? '/statistiek' : '',
-          'pagecount' => \CsrDelft\model\forum\ForumPostsModel::instance()->getAantalPaginas($draad->draad_id),
-          'curpage' => \CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina()
+          'pagecount' => $forumPostsRepository->getAantalPaginas($draad->draad_id),
+          'curpage' => $forumPostsRepository->getHuidigePagina()
           ]) !!}
 		</div>
 	@endsection
 	{{--Paginering boven eerste post op de pagina als de eerste post van het draadje niet plakkerig is of dit de eerste pagina is --}}
-	@if($paging && (!$draad->eerste_post_plakkerig || \CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina() === 1))
+	@if($paging && (!$draad->eerste_post_plakkerig || $forumPostsRepository->getHuidigePagina() === 1))
 		@yield('paginering')
 	@endif
 
@@ -140,7 +143,7 @@
 		@include('forum.partial.post_lijst', ['post' => $post])
 
 		{{-- Paginering onder eerste plakkerige post op alle pagina's behalve de eerste --}}
-		@if($paging && $draad->eerste_post_plakkerig && \CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina() !== 1 && $loop->first)
+		@if($paging && $draad->eerste_post_plakkerig && $forumPostsRepository->getHuidigePagina() !== 1 && $loop->first)
 			@yield('paginering')
 		@endif
 	@endforeach
@@ -152,7 +155,7 @@
 
 	{{-- Geen ongelezen berichten op de laatste pagina betekend in het geheel geen ongelezen berichten --}}
 
-	@if(!$vanaf && \CsrDelft\model\forum\ForumPostsModel::instance()->getHuidigePagina() === \CsrDelft\model\forum\ForumPostsModel::instance()->getAantalPaginas($draad->draad_id))
+	@if(!$vanaf && $forumPostsRepository->getHuidigePagina() === $forumPostsRepository->getAantalPaginas($draad->draad_id))
 		<div class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></div>
 	@else
 		<div class="tussenschot"></div>

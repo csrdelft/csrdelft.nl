@@ -11,7 +11,6 @@ use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
-use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\fotoalbum\FotoModel;
 use CsrDelft\model\fotoalbum\FotoTagsModel;
 use CsrDelft\model\groepen\ActiviteitenModel;
@@ -33,6 +32,7 @@ use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
 use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
+use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\VerjaardagenService;
@@ -90,7 +90,7 @@ class ProfielController extends AbstractController {
 	 */
 	private $boekExemplaarModel;
 	/**
-	 * @var ForumPostsModel
+	 * @var ForumPostsRepository
 	 */
 	private $forumPostsModel;
 	/**
@@ -163,7 +163,7 @@ class ProfielController extends AbstractController {
 		CommissiesModel $commissiesModel,
 		CorveeTakenModel $corveeTakenModel,
 		CorveeVrijstellingenModel $corveeVrijstellingenModel,
-		ForumPostsModel $forumPostsModel,
+		ForumPostsRepository $forumPostsModel,
 		FotoModel $fotoModel,
 		FotoTagsModel $fotoTagsModel,
 		KetzersModel $ketzersModel,

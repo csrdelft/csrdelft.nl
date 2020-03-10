@@ -14,7 +14,7 @@
 	@if(!isset($deel->forum_id) || (isset($deel->forum_id) && $deel->magModereren()))
 		<div class="btn-group mr-2">
 			<a href="/forum/wacht" class="btn btn-light"
-				 title="Reacties die wachten op goedkeuring">@icon('hourglass') {{CsrDelft\model\forum\ForumPostsModel::instance()->getAantalWachtOpGoedkeuring()}}</a>
+				 title="Reacties die wachten op goedkeuring">@icon('hourglass') {{\CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\repository\forum\ForumPostsRepository::class)->getAantalWachtOpGoedkeuring()}}</a>
 		</div>
 	@endif
 @endcan

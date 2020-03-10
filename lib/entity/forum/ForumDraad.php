@@ -3,12 +3,11 @@
 namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\forum\ForumPost;
-use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
+use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\view\ChartTimeSeries;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -245,7 +244,7 @@ class ForumDraad {
 	 */
 	public function getForumPosts() {
 		if (!isset($this->forum_posts)) {
-			$this->setForumPosts(ForumPostsModel::instance()->getForumPostsVoorDraad($this));
+			$this->setForumPosts(ContainerFacade::getContainer()->get(ForumPostsRepository::class)->getForumPostsVoorDraad($this));
 		}
 		return $this->forum_posts;
 	}
@@ -266,20 +265,14 @@ class ForumDraad {
 
 	public function getAantalOngelezenPosts() {
 		if (!isset($this->aantal_ongelezen_posts)) {
-			$where = 'draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE';
-			$params = array($this->draad_id);
-			$gelezen = $this->getWanneerGelezen();
-			if ($gelezen) {
-				$where .= ' AND laatst_gewijzigd > ?';
-				$params[] = $gelezen->datum_tijd->format(DATETIME_FORMAT);
-			}
-			$this->aantal_ongelezen_posts = ForumPostsModel::instance()->count($where, $params);
+			$forumPostsRepository = ContainerFacade::getContainer()->get(ForumPostsRepository::class);
+			$this->aantal_ongelezen_posts = $forumPostsRepository->getAantalOngelezenPosts($this);
 		}
 		return $this->aantal_ongelezen_posts;
 	}
 
 	public function getStats() {
-		return ForumPostsModel::instance()->getStatsVoorDraad($this);
+		return ContainerFacade::getContainer()->get(ForumPostsRepository::class)->getStatsVoorDraad($this);
 	}
 
 	public function getStatsJson() {

@@ -22,7 +22,9 @@ doctrine:
         dql:
           # Zie https://github.com/beberlei/DoctrineExtensions voor meer mooie extensies.
           string_functions:
+            date: DoctrineExtensions\Query\Mysql\Date
             match: DoctrineExtensions\Query\Mysql\MatchAgainst
+            unix_timestamp: DoctrineExtensions\Query\Mysql\UnixTimestamp
         mappings:
             CsrDelft:
                 is_bundle: false
