@@ -27,7 +27,7 @@
 				<div class="content">
 					<h2 class="major">C.S.R. Delft</h2>
 					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
-						Delft, rijk aan tradities die zijn ontstaan in haar 57-jarig bestaan. Het is een breed gezelschap
+						Delft, rijk aan tradities die zijn ontstaan in haar 58-jarig bestaan. Het is een breed gezelschap
 						van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
 						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
 						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
@@ -77,8 +77,7 @@
 						Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hieronder voor de
 						mogelijkheden of voor het opvragen van een informatiepakket.</p>
 					<a href="#footer" class="special">Vul interesseformulier in</a>
-					<p class="lidworden">Wil je lid worden? Zorg ervoor dat je de week van 24 t/m 30 augustus vrij
-						houdt voor de novitiaatsweek.</p>
+					<p class="lidworden">Wil je lid worden? Inschrijven kan in de OWee (17 t/m 20 augustus) in onze sociëteit. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek.</p>
 					<a href="/lidworden" class="special">Meer informatie over lid worden</a>
 				</div>
 			</div>
