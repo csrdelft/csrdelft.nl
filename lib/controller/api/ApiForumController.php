@@ -44,7 +44,7 @@ class ApiForumController {
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
-		$draden = $this->forumDradenRepository->getRecenteForumDraden($limit, null, false, $offset, true);
+		$draden = $this->forumDradenRepository->getRecenteForumDraden($limit, null, false, $offset);
 
 		foreach ($draden as $draad) {
 			$draad->ongelezen = $draad->getAantalOngelezenPosts();
@@ -77,7 +77,7 @@ class ApiForumController {
 
 		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, time());
 
-		$posts = $this->forumPostsRepository->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($id), null, 'datum_tijd DESC', $limit, $offset);
+		$posts = $this->forumPostsRepository->findBy(['draad_id' => $id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['datum_tijd' => 'DESC'], $limit, $offset);
 
 		// Most recent first
 		$posts = array_reverse($posts);

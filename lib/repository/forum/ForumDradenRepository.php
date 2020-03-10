@@ -280,10 +280,9 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	 * @param boolean|null $belangrijk
 	 * @param boolean $rss
 	 * @param int $offset
-	 * @param boolean $getLatestPosts
 	 * @return ForumDraad[]
 	 */
-	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0, $getLatestPosts = false) {
+	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0) {
 		if (!is_int($aantal)) {
 			$aantal = $this->per_pagina;
 			$pagina = $this->pagina;
@@ -329,12 +328,6 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		if ($count > 0) {
 			$draden_ids = array_keys($dradenById);
 			array_unshift($draden_ids, LoginModel::getUid());
-			if ($getLatestPosts) {
-				$latest_post_ids = array_map(function ($draad) {
-					return $draad->laatste_post_id;
-				}, array_values($dradenById));
-				$this->forumPostsRepository->prefetch('wacht_goedkeuring = FALSE AND verwijderd = FALSE AND post_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $latest_post_ids);
-			}
 		}
 		return $dradenById;
 	}

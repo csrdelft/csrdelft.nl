@@ -4,6 +4,7 @@ namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumCategorie;
+use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\Persistence\Database;
@@ -120,10 +121,11 @@ class ForumCategorieRepository extends AbstractRepository {
 		$this->forumDradenReagerenRepository->verwijderLegeConcepten();
 
 		// Niet-goedgekeurde posts verwijderen
-		$posts = $this->forumPostsRepository->find('verwijderd = TRUE AND wacht_goedkeuring = TRUE');
-		foreach ($posts as $post) {
-			$this->forumPostsRepository->delete($post);
-		}
+
+		$this->forumPostsRepository->createQueryBuilder('fp')
+			->delete()
+			->where('fp.verwijderd = true and fp.wacht_goedkeuring = true')
+			->getQuery()->execute();
 
 		// Voor alle ex-leden settings opschonen
 		$uids = Database::instance()->sqlSelect(array('uid'), 'profielen', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
@@ -139,6 +141,7 @@ class ForumCategorieRepository extends AbstractRepository {
 		}
 
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
+		/** @var ForumDraad[] $draden */
 		$draden = $this->forumDradenRepository->createQueryBuilder('fd')
 			->where('fd.verwijderd = true or (fd.gesloten = true and (fd.laatst_gewijzigd is null or fd.laatst_gewijzigd < :laatst_gewijzigd))')
 			->setParameter('laatst_gewijzigd', date_create('-1 year'))
@@ -152,14 +155,16 @@ class ForumCategorieRepository extends AbstractRepository {
 			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
 
 			// Oude verwijderde posts definitief verwijderen
-			$posts = $this->forumPostsRepository->find('verwijderd = TRUE AND draad_id = ?', array($draad->draad_id));
-			foreach ($posts as $post) {
-				$this->forumPostsRepository->delete($post);
-			}
-			if ($draad->verwijderd) {
+			$this->forumPostsRepository->createQueryBuilder('fp')
+				->delete()
+				->where('fp.verwijderd = true and fp.draad_id = :draad_id')
+				->setParameter('draad_id', $draad->draad_id)
+				->getQuery()->execute();
 
+			if ($draad->verwijderd) {
 				// Als het goed is zijn er nooit niet-verwijderde posts in een verwijderd draadje
-				$this->forumDradenRepository->delete($draad);
+				$this->getEntityManager()->remove($draad);
+				$this->getEntityManager()->flush();
 			}
 		}
 	}
