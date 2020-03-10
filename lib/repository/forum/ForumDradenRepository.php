@@ -210,7 +210,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		if (strstr($forumZoeken->zoekterm, ' ') == false) {
 			$qb->addSelect('MATCH(draad.titel) AGAINST (:query IN BOOLEAN MODE) AS score');
 		} else {
-			$qb->addSelect('MATCH(draad.titel) AGAINST (:query IN NATURAL LANGUAGE MODE) AS score');
+			$qb->addSelect('MATCH(draad.titel) AGAINST (:query) AS score');
 		}
 
 		$qb->setParameter('query', $forumZoeken->zoekterm);
