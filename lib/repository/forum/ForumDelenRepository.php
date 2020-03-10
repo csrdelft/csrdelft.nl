@@ -249,10 +249,10 @@ class ForumDelenRepository extends AbstractRepository {
 		return $gevonden_draden;
 	}
 
-	function laatstGewijzigd($draden) {
-		return max(array_map(function ($draad) {
-			return $draad->laatst_gewijzigd;
-		}, $draden));
+	function laatstGewijzigd($posts) {
+		return max(array_map(function (ForumPost $post) {
+			return date_create($post->laatst_gewijzigd);
+		}, $posts));
 	}
 
 	function sorteerFunctie($sorteerOp) {

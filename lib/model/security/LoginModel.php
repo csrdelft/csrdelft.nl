@@ -303,6 +303,11 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 			}
 
+			if (!empty($account->blocked_reason)) {
+				$_SESSION['auth_error'] = 'Dit account is geblokkeerd: ' . $account->blocked_reason;
+				return false;
+			}
+
 			// Check password
 			if ($this->accountModel->controleerWachtwoord($account, $pass_plain)) {
 				$this->accountModel->successfulLoginAttempt($account);
