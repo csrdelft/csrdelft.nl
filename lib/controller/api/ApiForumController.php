@@ -16,14 +16,14 @@ use Jacwright\RestServer\RestException;
 
 class ApiForumController {
 	private $forumDradenRepository;
-	private $forumPostsModel;
+	private $forumPostsRepository;
 	private $forumDradenGelezenModel;
 
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 
 		$this->forumDradenGelezenModel = $container->get(ForumDradenGelezenRepository::class);
-		$this->forumPostsModel = $container->get(ForumPostsRepository::class);
+		$this->forumPostsRepository = $container->get(ForumPostsRepository::class);
 		$this->forumDradenRepository = $container->get(ForumDradenRepository::class);
 	}
 
@@ -48,7 +48,7 @@ class ApiForumController {
 
 		foreach ($draden as $draad) {
 			$draad->ongelezen = $draad->getAantalOngelezenPosts();
-			$draad->laatste_post = $this->forumPostsModel->get($draad->laatste_post_id);
+			$draad->laatste_post = $this->forumPostsRepository->get($draad->laatste_post_id);
 			$draad->laatste_wijziging_naam = ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'civitas');
 		}
 
@@ -77,7 +77,7 @@ class ApiForumController {
 
 		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, time());
 
-		$posts = $this->forumPostsModel->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($id), null, 'datum_tijd DESC', $limit, $offset);
+		$posts = $this->forumPostsRepository->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($id), null, 'datum_tijd DESC', $limit, $offset);
 
 		// Most recent first
 		$posts = array_reverse($posts);

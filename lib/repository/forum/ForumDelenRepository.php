@@ -30,13 +30,13 @@ class ForumDelenRepository extends AbstractRepository {
 	/**
 	 * @var ForumPostsRepository
 	 */
-	private $forumPostsModel;
+	private $forumPostsRepository;
 
-	public function __construct(ManagerRegistry $registry, ForumDradenRepository $forumDradenRepository, ForumPostsRepository $forumPostsModel) {
+	public function __construct(ManagerRegistry $registry, ForumDradenRepository $forumDradenRepository, ForumPostsRepository $forumPostsRepository) {
 		parent::__construct($registry, ForumDeel::class);
 
 		$this->forumDradenRepository = $forumDradenRepository;
-		$this->forumPostsModel = $forumPostsModel;
+		$this->forumPostsRepository = $forumPostsRepository;
 	}
 
 	/**
@@ -140,7 +140,7 @@ class ForumDelenRepository extends AbstractRepository {
 	 * @return ForumDraad[]
 	 */
 	public function getWachtOpGoedkeuring() {
-		$postsByDraadId = group_by('draad_id', $this->forumPostsModel->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
+		$postsByDraadId = group_by('draad_id', $this->forumPostsRepository->find('wacht_goedkeuring = TRUE AND verwijderd = FALSE'));
 		$dradenById = group_by_distinct('draad_id', $this->forumDradenRepository->findBy(['wacht_goedkeuring' => true, 'verwijderd' => false]));
 		$dradenById += $this->forumDradenRepository->getForumDradenById(array_keys($postsByDraadId)); // laad draden bij posts
 		foreach ($dradenById as $draad) { // laad posts bij draden
@@ -166,7 +166,7 @@ class ForumDelenRepository extends AbstractRepository {
 				unset($dradenById[$draad_id]);
 			}
 		}
-		if (empty($dradenById) AND $this->forumPostsModel->getAantalWachtOpGoedkeuring() > 0) {
+		if (empty($dradenById) AND $this->forumPostsRepository->getAantalWachtOpGoedkeuring() > 0) {
 			setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
 		}
 		return $dradenById;
@@ -207,11 +207,11 @@ class ForumDelenRepository extends AbstractRepository {
 		}
 
 		if (in_array('alle_berichten', $zoek_in)) {
-			$gevonden_posts += group_by('draad_id', $this->forumPostsModel->zoeken($forumZoeken, false));
+			$gevonden_posts += group_by('draad_id', $this->forumPostsRepository->zoeken($forumZoeken, false));
 		}
 
 		if (in_array('eerste_bericht', $zoek_in)) {
-			$gevonden_posts += group_by('draad_id', $this->forumPostsModel->zoeken($forumZoeken, true));
+			$gevonden_posts += group_by('draad_id', $this->forumPostsRepository->zoeken($forumZoeken, true));
 		}
 
 		$gevonden_draden += $this->forumDradenRepository->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts
@@ -230,7 +230,7 @@ class ForumDelenRepository extends AbstractRepository {
 					$draad->score += (float)$post->score;
 				}
 			} else { // laad eerste post
-				$array_first_post = $this->forumPostsModel->getEerstePostVoorDraad($draad);
+				$array_first_post = $this->forumPostsRepository->getEerstePostVoorDraad($draad);
 				$draad->setForumPosts([$array_first_post]);
 			}
 		}

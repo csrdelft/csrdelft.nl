@@ -54,7 +54,7 @@ class ForumCategorieRepository extends AbstractRepository {
 	/**
 	 * @var ForumPostsRepository
 	 */
-	private $forumPostsModel;
+	private $forumPostsRepository;
 
 	public function __construct(
 		ManagerRegistry $managerRegistry,
@@ -64,7 +64,7 @@ class ForumCategorieRepository extends AbstractRepository {
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingModel,
-		ForumPostsRepository $forumPostsModel,
+		ForumPostsRepository $forumPostsRepository,
 		ForumDelenMeldingRepository $forumDelenMeldingRepository
 	) {
 		parent::__construct($managerRegistry, ForumCategorie::class);
@@ -75,7 +75,7 @@ class ForumCategorieRepository extends AbstractRepository {
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
-		$this->forumPostsModel = $forumPostsModel;
+		$this->forumPostsRepository = $forumPostsRepository;
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
 	}
 
@@ -120,9 +120,9 @@ class ForumCategorieRepository extends AbstractRepository {
 		$this->forumDradenReagerenRepository->verwijderLegeConcepten();
 
 		// Niet-goedgekeurde posts verwijderen
-		$posts = $this->forumPostsModel->find('verwijderd = TRUE AND wacht_goedkeuring = TRUE');
+		$posts = $this->forumPostsRepository->find('verwijderd = TRUE AND wacht_goedkeuring = TRUE');
 		foreach ($posts as $post) {
-			$this->forumPostsModel->delete($post);
+			$this->forumPostsRepository->delete($post);
 		}
 
 		// Voor alle ex-leden settings opschonen
@@ -152,9 +152,9 @@ class ForumCategorieRepository extends AbstractRepository {
 			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
 
 			// Oude verwijderde posts definitief verwijderen
-			$posts = $this->forumPostsModel->find('verwijderd = TRUE AND draad_id = ?', array($draad->draad_id));
+			$posts = $this->forumPostsRepository->find('verwijderd = TRUE AND draad_id = ?', array($draad->draad_id));
 			foreach ($posts as $post) {
-				$this->forumPostsModel->delete($post);
+				$this->forumPostsRepository->delete($post);
 			}
 			if ($draad->verwijderd) {
 

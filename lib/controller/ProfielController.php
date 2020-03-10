@@ -92,7 +92,7 @@ class ProfielController extends AbstractController {
 	/**
 	 * @var ForumPostsRepository
 	 */
-	private $forumPostsModel;
+	private $forumPostsRepository;
 	/**
 	 * @var KwalificatiesModel
 	 */
@@ -163,7 +163,7 @@ class ProfielController extends AbstractController {
 		CommissiesModel $commissiesModel,
 		CorveeTakenModel $corveeTakenModel,
 		CorveeVrijstellingenModel $corveeVrijstellingenModel,
-		ForumPostsRepository $forumPostsModel,
+		ForumPostsRepository $forumPostsRepository,
 		FotoModel $fotoModel,
 		FotoTagsModel $fotoTagsModel,
 		KetzersModel $ketzersModel,
@@ -190,7 +190,7 @@ class ProfielController extends AbstractController {
 		$this->corveeTakenModel = $corveeTakenModel;
 		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
 		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
-		$this->forumPostsModel = $forumPostsModel;
+		$this->forumPostsRepository = $forumPostsRepository;
 		$this->fotoModel = $fotoModel;
 		$this->fotoTagsModel = $fotoTagsModel;
 		$this->ketzersModel = $ketzersModel;
@@ -251,8 +251,8 @@ class ProfielController extends AbstractController {
 			'corveevoorkeuren' => $this->corveeVoorkeurenModel->getVoorkeurenVoorLid($uid),
 			'corveevrijstelling' => $this->corveeVrijstellingenModel->getVrijstelling($uid),
 			'corveekwalificaties' => $this->kwalificatiesModel->getKwalificatiesVanLid($uid),
-			'forumpostcount' => $this->forumPostsModel->getAantalForumPostsVoorLid($uid),
-			'forumrecent' => $this->forumPostsModel->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
+			'forumpostcount' => $this->forumPostsRepository->getAantalForumPostsVoorLid($uid),
+			'forumrecent' => $this->forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
 			'boeken' => $this->boekExemplaarModel->getEigendom($uid),
 			'recenteAanmeldingen' => $this->maaltijdAanmeldingenModel->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
 			'abos' => $this->maaltijdAbonnementenModel->getAbonnementenVoorLid($uid),

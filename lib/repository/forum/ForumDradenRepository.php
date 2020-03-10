@@ -93,7 +93,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	/**
 	 * @var ForumPostsRepository
 	 */
-	private $forumPostsModel;
+	private $forumPostsRepository;
 
 	public function __construct(
 		ManagerRegistry $registry,
@@ -101,7 +101,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumPostsRepository $forumPostsModel
+		ForumPostsRepository $forumPostsRepository
 	) {
 		parent::__construct($registry, ForumDraad::class);
 		$this->pagina = 1;
@@ -113,7 +113,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
-		$this->forumPostsModel = $forumPostsModel;
+		$this->forumPostsRepository = $forumPostsRepository;
 	}
 
 	/**
@@ -333,7 +333,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 				$latest_post_ids = array_map(function ($draad) {
 					return $draad->laatste_post_id;
 				}, array_values($dradenById));
-				$this->forumPostsModel->prefetch('wacht_goedkeuring = FALSE AND verwijderd = FALSE AND post_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $latest_post_ids);
+				$this->forumPostsRepository->prefetch('wacht_goedkeuring = FALSE AND verwijderd = FALSE AND post_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $latest_post_ids);
 			}
 		}
 		return $dradenById;
@@ -396,7 +396,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
 			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
 			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
-			$this->forumPostsModel->verwijderForumPostsVoorDraad($draad);
+			$this->forumPostsRepository->verwijderForumPostsVoorDraad($draad);
 		}
 	}
 
