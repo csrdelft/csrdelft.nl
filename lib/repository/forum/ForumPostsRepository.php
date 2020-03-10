@@ -166,9 +166,9 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	}
 
 	public function setHuidigePagina($pagina, $draad_id) {
-		if (!is_int($pagina) OR $pagina < 1) {
+		if (!is_int($pagina) || $pagina < 1) {
 			$pagina = 1;
-		} elseif ($draad_id !== 0 AND $pagina > $this->getAantalPaginas($draad_id)) {
+		} elseif ($draad_id !== 0 && $pagina > $this->getAantalPaginas($draad_id)) {
 			$pagina = $this->getAantalPaginas($draad_id);
 		}
 		$this->pagina = $pagina;
@@ -247,7 +247,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		}
 
 		$posts = $qb->getQuery()->getResult();
-		if ($draad->eerste_post_plakkerig AND $this->pagina !== 1) {
+		if ($draad->eerste_post_plakkerig && $this->pagina !== 1) {
 			$first_post = $this->getEerstePostVoorDraad($draad);
 			array_unshift($posts, $first_post);
 		}

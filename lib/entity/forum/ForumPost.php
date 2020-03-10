@@ -92,7 +92,7 @@ class ForumPost {
 	}
 
 	public function magCiteren() {
-		return LoginModel::mag(P_LOGGED_IN) AND $this->getForumDraad()->magPosten();
+		return LoginModel::mag(P_LOGGED_IN) && $this->getForumDraad()->magPosten();
 	}
 
 	public function magBewerken() {
@@ -103,14 +103,14 @@ class ForumPost {
 		if (!$draad->magPosten()) {
 			return false;
 		}
-		return $this->uid === LoginModel::getUid() AND LoginModel::mag(P_LOGGED_IN);
+		return $this->uid === LoginModel::getUid() && LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function getAantalGelezen() {
 		if (!isset($this->aantal_gelezen)) {
 			$this->aantal_gelezen = 0;
 			foreach ($this->getForumDraad()->getLezers() as $gelezen) {
-				if ($this->laatst_gewijzigd AND $this->laatst_gewijzigd <= $gelezen->datum_tijd->getTimestamp()) {
+				if ($this->laatst_gewijzigd && $this->laatst_gewijzigd <= $gelezen->datum_tijd->getTimestamp()) {
 					$this->aantal_gelezen++;
 				}
 			}

@@ -166,7 +166,7 @@ class ForumDelenRepository extends AbstractRepository {
 				unset($dradenById[$draad_id]);
 			}
 		}
-		if (empty($dradenById) AND $this->forumPostsRepository->getAantalWachtOpGoedkeuring() > 0) {
+		if (empty($dradenById) && $this->forumPostsRepository->getAantalWachtOpGoedkeuring() > 0) {
 			setMelding('U heeft onvoldoende rechten om de berichten goed te keuren', 0);
 		}
 		return $dradenById;
