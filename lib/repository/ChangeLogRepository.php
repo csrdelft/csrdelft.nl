@@ -1,21 +1,23 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\repository;
 
-use CsrDelft\model\entity\ChangeLogEntry;
+use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\PersistenceModel;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * ChangeLogModel.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @method ChangeLogEntry|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ChangeLogEntry|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ChangeLogEntry[]    findAll()
+ * @method ChangeLogEntry[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ChangeLogModel extends PersistenceModel {
-
-	const ORM = ChangeLogEntry::class;
+class ChangeLogRepository extends AbstractRepository {
 	/**
 	 * @var LoginModel
 	 */
@@ -23,10 +25,11 @@ class ChangeLogModel extends PersistenceModel {
 
 	/**
 	 * ChangeLogModel constructor.
+	 * @param ManagerRegistry $registry
 	 * @param LoginModel $loginModel
 	 */
-	public function __construct(LoginModel $loginModel) {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registry, LoginModel $loginModel) {
+		parent::__construct($registry, ChangeLogEntry::class);
 
 		$this->loginModel = $loginModel;
 	}
@@ -41,7 +44,7 @@ class ChangeLogModel extends PersistenceModel {
 	 */
 	public function nieuw($subject, $property, $old, $new) {
 		$change = new ChangeLogEntry();
-		$change->moment = getDateTime();
+		$change->moment = date_create();
 		if ($subject instanceof PersistentEntity) {
 			$change->subject = $subject->getUUID();
 		} else {
@@ -63,7 +66,8 @@ class ChangeLogModel extends PersistenceModel {
 	 * @return void
 	 */
 	public function create(PersistentEntity $change) {
-		$change->id = (int)parent::create($change);
+		$this->getEntityManager()->persist($change);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
@@ -88,5 +92,4 @@ class ChangeLogModel extends PersistenceModel {
 			$this->create($change);
 		}
 	}
-
 }

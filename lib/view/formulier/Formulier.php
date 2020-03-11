@@ -3,11 +3,10 @@
 namespace CsrDelft\view\formulier;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\ChangeLogModel;
-use CsrDelft\service\CsrfService;
-use CsrDelft\model\entity\ChangeLogEntry;
+use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\datatable\DataTable;
+use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
@@ -297,6 +296,7 @@ HTML;
 	 * @returns ChangeLogEntry[]
 	 */
 	public function diff() {
+		$changeLogRepository = ContainerFacade::getContainer()->get(ChangeLogRepository::class);
 		$diff = array();
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof InputField) {
@@ -304,7 +304,7 @@ HTML;
 				$new = $field->getValue();
 				if ($old !== $new) {
 					$prop = $field->getName();
-					$diff[$prop] = ChangeLogModel::instance()->nieuw($this->getModel(), $prop, $old, $new);
+					$diff[$prop] = $changeLogRepository->nieuw($this->getModel(), $prop, $old, $new);
 				}
 			}
 		}

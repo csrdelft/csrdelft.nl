@@ -3,15 +3,15 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\security\LoginModel;
-use \Jacwright\RestServer\RestException;
+use CsrDelft\repository\ChangeLogRepository;
+use Jacwright\RestServer\RestException;
 
 class ApiActiviteitenController {
-	/** @var ChangeLogModel  */
-	private $changeLogModel;
+	/** @var ChangeLogRepository  */
+	private $changeLogRepository;
 	/** @var ActiviteitenModel  */
 	private $activiteitenModel;
 
@@ -19,7 +19,7 @@ class ApiActiviteitenController {
 		$container = ContainerFacade::getContainer();
 
 		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
-		$this->changeLogModel = $container->get(ChangeLogModel::class);
+		$this->changeLogRepository = $container->get(ChangeLogRepository::class);
 	}
 
 	/**
@@ -47,7 +47,7 @@ class ApiActiviteitenController {
 		$model = $activiteit::getLedenModel();
 		$lid = $model->nieuw($activiteit, $_SESSION['_uid']);
 
-		$this->changeLogModel->log($activiteit, 'aanmelden', null, $lid->uid);
+		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
 		$model->create($lid);
 
 		return array('data' => $activiteit);
@@ -70,7 +70,7 @@ class ApiActiviteitenController {
 
 		$model = $activiteit::getLedenModel();
 		$lid = $model->get($activiteit, $_SESSION['_uid']);
-		$this->changeLogModel->log($activiteit, 'afmelden', $lid->uid, null);
+		$this->changeLogRepository->log($activiteit, 'afmelden', $lid->uid, null);
 		$model->delete($lid);
 
 		return array('data' => $activiteit);

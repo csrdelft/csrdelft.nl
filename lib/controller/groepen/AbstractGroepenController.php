@@ -2,21 +2,24 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\AbstractGroepenModel;
-use CsrDelft\model\ChangeLogModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
 use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\groepen\GroepStatus;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
@@ -30,7 +33,6 @@ use CsrDelft\view\groepen\GroepenBeheerData;
 use CsrDelft\view\groepen\GroepenBeheerTable;
 use CsrDelft\view\groepen\GroepenDeelnameGrafiek;
 use CsrDelft\view\groepen\GroepenView;
-use CsrDelft\view\groepen\GroepLogboekData;
 use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\groepen\leden\GroepEetwensView;
 use CsrDelft\view\groepen\leden\GroepEmailsView;
@@ -52,19 +54,19 @@ use Symfony\Component\Routing\RouteCollection;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-abstract class AbstractGroepenController implements RouteLoaderInterface {
+abstract class AbstractGroepenController extends AbstractController implements RouteLoaderInterface {
 	/** @var DataTable */
 	protected $table;
 	/** @var AbstractGroepenModel */
 	protected $model;
 	/**
-	 * @var ChangeLogModel
+	 * @var ChangeLogRepository
 	 */
-	private $changeLogModel;
+	private $changeLogRepository;
 
 	public function __construct($model = null) {
 		$this->model = $model;
-		$this->changeLogModel = ChangeLogModel::instance();
+		$this->changeLogRepository = ContainerFacade::getContainer()->get(ChangeLogRepository::class);
 	}
 
 	/**
@@ -289,7 +291,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 			$form->setDataTableId($this->table->getDataTableId());
 			return view('default', ['content' => $this->table, 'modal' => $form]);
 		} elseif ($form->validate()) {
-			$this->changeLogModel->log($groep, 'create', null, print_r($groep, true));
+			$this->changeLogRepository->log($groep, 'create', null, print_r($groep, true));
 			$this->model->create($groep);
 			$response[] = $groep;
 			if ($old) {
@@ -335,7 +337,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 				$form->setDataTableId($this->table->getDataTableId());
 				return view('default', ['content' => $this->table, 'modal' => $form]);
 			} elseif ($form->validate()) {
-				$this->changeLogModel->logChanges($form->diff());
+				$this->changeLogRepository->logChanges($form->diff());
 				$this->model->update($groep);
 				return new GroepenBeheerData([$groep]);
 			} else {
@@ -354,7 +356,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 			}
 			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($form->validate()) {
-				$this->changeLogModel->logChanges($form->diff());
+				$this->changeLogRepository->logChanges($form->diff());
 				$this->model->update($groep);
 				return new GroepenBeheerData([$groep]);
 			} else {
@@ -368,7 +370,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($id);
 		if ($groep && $groep->mag(AccessAction::Verwijderen) && count($groep->getLeden()) === 0) {
-			$this->changeLogModel->log($groep, 'delete', print_r($groep, true), null);
+			$this->changeLogRepository->log($groep, 'delete', print_r($groep, true), null);
 			$this->model->delete($groep);
 			$response[] = $groep;
 		}
@@ -385,8 +387,8 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($id);
 			if ($groep and $groep->mag(AccessAction::Opvolging)) {
-				$this->changeLogModel->log($groep, 'familie', $groep->familie, $values['familie']);
-				$this->changeLogModel->log($groep, 'status', $groep->status, $values['status']);
+				$this->changeLogRepository->log($groep, 'familie', $groep->familie, $values['familie']);
+				$this->changeLogRepository->log($groep, 'status', $groep->status, $values['status']);
 				$groep->familie = $values['familie'];
 				$groep->status = $values['status'];
 				$this->model->update($groep);
@@ -411,13 +413,13 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 			$groep = $this->model->retrieveByUUID($id);
 			if ($groep and $groep->mag(AccessAction::Wijzigen)) {
 				if ($converteer) {
-					$this->changeLogModel->log($groep, 'class', get_class($groep), $model::ORM);
+					$this->changeLogRepository->log($groep, 'class', get_class($groep), $model::ORM);
 					$nieuw = $model->converteer($groep, $this->model, $values['soort']);
 					if ($nieuw) {
 						$response[] = $groep;
 					}
 				} elseif (property_exists($groep, 'soort')) {
-					$this->changeLogModel->log($groep, 'soort', $groep->soort, $values['soort']);
+					$this->changeLogRepository->log($groep, 'soort', $groep->soort, $values['soort']);
 					$groep->soort = $values['soort'];
 					$rowCount = $this->model->update($groep);
 					if ($rowCount > 0) {
@@ -440,7 +442,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($id);
 		if ($groep and property_exists($groep, 'aanmelden_tot') and time() <= strtotime($groep->aanmelden_tot) and $groep->mag(AccessAction::Wijzigen)) {
-			$this->changeLogModel->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, getDateTime());
+			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, getDateTime());
 			$groep->aanmelden_tot = getDateTime();
 			$this->model->update($groep);
 			$response[] = $groep;
@@ -460,7 +462,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 	/**
 	 * @param Request $request
 	 * @param $id
-	 * @return GroepLogboekForm|GroepLogboekData
+	 * @return GenericDataTableResponse|GroepLogboekForm
 	 */
 	public function logboek(Request $request, $id) {
 		// data request
@@ -469,8 +471,8 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 			if (!$groep->mag(AccessAction::Bekijken)) {
 				throw new CsrToegangException();
 			}
-			$data = $this->changeLogModel->find('subject = ?', [$groep->getUUID()]);
-			return new GroepLogboekData($data);
+			$data = $this->changeLogRepository->findBy(['subject' => $groep->getUUID()]);
+			return $this->tableData($data);
 		} // popup request
 		else {
 			/** @var AbstractGroep $groep */
@@ -519,7 +521,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 
 		$lid->opmerking2 = $keuzes;
 
-		$this->changeLogModel->log($groep, 'aanmelden', null, $lid->uid);
+		$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
 		$model->create($lid);
 
 		return new JsonResponse(['success' => true]);
@@ -538,7 +540,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 		$form = new GroepAanmeldenForm($lid, $groep);
 
 		if ($form->validate()) {
-			$this->changeLogModel->log($groep, 'aanmelden', null, $lid->uid);
+			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
 			$model->create($lid);
 			return new GroepPasfotosView($groep);
 		} else {
@@ -559,7 +561,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
 
 		if ($form->validate()) {
-			$this->changeLogModel->log($groep, 'aanmelden', null, $lid->uid);
+			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
 			$model->create($lid);
 			return new GroepLedenData([$lid]);
 		} else {
@@ -579,7 +581,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 		$form = new GroepBewerkenForm($lid, $groep);
 
 		if ($form->validate()) {
-			$this->changeLogModel->logChanges($form->diff());
+			$this->changeLogRepository->logChanges($form->diff());
 			$model->update($lid);
 		}
 
@@ -608,7 +610,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken');
 
 		if ($form->validate()) {
-			$this->changeLogModel->logChanges($form->diff());
+			$this->changeLogRepository->logChanges($form->diff());
 			$model->update($lid);
 			return new GroepLedenData([$lid]);
 		} else {
@@ -631,7 +633,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 			throw new CsrToegangException('Niet aangemeld');
 		}
 
-		$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
+		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
 		$model->delete($lid);
 
 		return new GroepView($groep);
@@ -646,7 +648,7 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 		}
 
 		$lid = $model->get($groep, $uid);
-		$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
+		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
 		$model->delete($lid);
 		return new RemoveRowsResponse([$lid]);
 	}
@@ -674,8 +676,8 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 			}
 			Database::transaction(function () use ($groep, $ot_groep, $uid, $model) {
 				$lid = $model->get($groep, $uid);
-				$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
-				$this->changeLogModel->log($ot_groep, 'aanmelden', $lid->uid, null);
+				$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
+				$this->changeLogRepository->log($ot_groep, 'aanmelden', $lid->uid, null);
 				$model->delete($lid);
 				$lid->groep_id = $ot_groep->id;
 				$model->create($lid);
@@ -699,8 +701,8 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 					if ($ot_groep->getLid($lid->uid)) {
 						throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
 					}
-					$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
-					$this->changeLogModel->log($ot_groep, 'aanmelden', $lid->uid, null);
+					$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
+					$this->changeLogRepository->log($ot_groep, 'aanmelden', $lid->uid, null);
 					$model->delete($lid);
 					$lid->groep_id = $ot_groep->id;
 					$lid->lid_sinds = getDateTime();
