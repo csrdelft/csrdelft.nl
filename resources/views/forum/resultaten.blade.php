@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumDraad[] $resultaten
+ * @var \CsrDelft\view\forum\ForumZoekenForm $form
+ */
+?>
 @extends('forum.base')
 
 @section('titel')
@@ -66,7 +72,7 @@
 									@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 										{!! reldate($post->datum_tijd) !!}
 									@else
-										{{$post->datum_tijd}}
+										{{$post->datum_tijd->format(DATETIME_FORMAT)}}
 									@endif
 								</span>
 								@auth

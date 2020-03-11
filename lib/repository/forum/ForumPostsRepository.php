@@ -288,7 +288,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		$post->draad_id = (int)$draad_id;
 		$post->uid = LoginModel::getUid();
 		$post->tekst = $tekst;
-		$post->datum_tijd = getDateTime();
+		$post->datum_tijd = date_create();
 		$post->laatst_gewijzigd = $post->datum_tijd;
 		$post->bewerkt_tekst = null;
 		$post->verwijderd = false;
@@ -326,8 +326,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post) {
 		similar_text($post->tekst, $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;
-		$post->laatst_gewijzigd = getDateTime();
-		$bewerkt = 'bewerkt door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]';
+		$post->laatst_gewijzigd = date_create();
+		$bewerkt = 'bewerkt door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]';
 		if ($reden !== '') {
 			$bewerkt .= ': [tekst]' . CsrBB::escapeUbbOff($reden) . '[/tekst]';
 		}
@@ -341,7 +341,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		}
 		if ($gelijkheid < 90) {
 			$draad = $post->getForumDraad();
-			$draad->laatst_gewijzigd = date_create($post->laatst_gewijzigd);
+			$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 			$draad->laatste_post_id = $post->post_id;
 			$draad->laatste_wijziging_uid = $post->uid;
 			$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
@@ -355,8 +355,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post) {
 		$oudeDraad = $post->getForumDraad();
 		$post->draad_id = $nieuwDraad->draad_id;
-		$post->laatst_gewijzigd = getDateTime();
-		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
+		$post->laatst_gewijzigd = date_create();
+		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]' . "\n";
 		try {
 			$this->getEntityManager()->persist($post);
 			$this->getEntityManager()->flush();
@@ -370,8 +370,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 
 	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
-		$post->laatst_gewijzigd = getDateTime();
-		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate]' . "\n";
+		$post->laatst_gewijzigd = date_create();
+		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]' . "\n";
 		try {
 			$this->getEntityManager()->persist($post);
 			$this->getEntityManager()->flush();
@@ -383,8 +383,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	public function goedkeurenForumPost(ForumPost $post) {
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
-			$post->laatst_gewijzigd = getDateTime();
-			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd . '[/reldate][/prive]' . "\n";
+			$post->laatst_gewijzigd = date_create();
+			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate][/prive]' . "\n";
 			try {
 				$this->getEntityManager()->persist($post);
 				$this->getEntityManager()->flush();
@@ -393,7 +393,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 			}
 		}
 		$draad = $post->getForumDraad();
-		$draad->laatst_gewijzigd = date_create($post->laatst_gewijzigd);
+		$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 		$draad->laatste_post_id = $post->post_id;
 		$draad->laatste_wijziging_uid = $post->uid;
 		if ($draad->wacht_goedkeuring) {

@@ -133,7 +133,7 @@
 	@foreach($draad->getForumPosts() as $post)
 
 		{{-- Als posts gewijzigd zijn zonder draad gewijzigd te triggeren voorkomt $draad->isOngelezen() dat de gele lijn wordt getoond --}}
-		@if(!$vanaf && $draad_ongelezen && (!$gelezen_moment || strtotime($post->laatst_gewijzigd) > $gelezen_moment))
+		@if(!$vanaf && $draad_ongelezen && (!$gelezen_moment || $post->laatst_gewijzigd > $gelezen_moment))
 			@php($vanaf = true)
 			<div class="tussenschot ongelezenvanaf"><a id="ongelezen"></a></div>
 		@else

@@ -46,20 +46,19 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 	 * Ga na welke posts op de huidige pagina het laatst is geplaatst of gewijzigd.
 	 *
 	 * @param ForumDraad $draad
-	 * @param int $timestamp
-	 * @return int number of rows affected
+	 * @param \DateTime $moment
 	 */
-	public function setWanneerGelezenDoorLid(ForumDraad $draad, $timestamp = null) {
+	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null) {
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
 		if (!$gelezen) {
 			$gelezen = $this->maakForumDraadGelezen($draad->draad_id);
 		}
-		if (is_int($timestamp)) {
-			$gelezen->datum_tijd = date_create("@$timestamp");
+		if ($moment) {
+			$gelezen->datum_tijd = $moment;
 		} else {
 			foreach ($draad->getForumPosts() as $post) {
-				if (strtotime($post->laatst_gewijzigd) > $gelezen->datum_tijd->getTimestamp()) {
-					$gelezen->datum_tijd = date_create($post->laatst_gewijzigd);
+				if ($post->laatst_gewijzigd > $gelezen->datum_tijd) {
+					$gelezen->datum_tijd = $post->laatst_gewijzigd;
 				}
 			}
 		}

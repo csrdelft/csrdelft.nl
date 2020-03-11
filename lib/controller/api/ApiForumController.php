@@ -75,7 +75,7 @@ class ApiForumController {
 			throw new RestException(403);
 		}
 
-		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, time());
+		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, date_create());
 
 		$posts = $this->forumPostsRepository->findBy(['draad_id' => $id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['datum_tijd' => 'DESC'], $limit, $offset);
 
