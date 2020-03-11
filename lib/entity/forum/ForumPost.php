@@ -1,12 +1,11 @@
 <?php
 
-namespace CsrDelft\model\entity\forum;
+namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\forum\ForumDradenRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ForumPost.class.php
@@ -14,58 +13,72 @@ use CsrDelft\repository\forum\ForumDradenRepository;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een forumpost zit in een ForumDraad.
- *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumPostsRepository")
+ * @ORM\Table("forum_posts")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumPost extends PersistentEntity {
+class ForumPost {
 
 	/**
 	 * Primary key
 	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
 	public $post_id;
 	/**
 	 * Deze post is van dit draadje
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $draad_id;
 	/**
 	 * Lidnummer van auteur
 	 * @var string
+	 * @ORM\Column(type="string", length=4)
 	 */
 	public $uid;
 	/**
 	 * Tekst
 	 * @var string
+	 * @ORM\Column(type="text")
 	 */
 	public $tekst;
 	/**
 	 * Datum en tijd van aanmaken
-	 * @var string
+	 * @var \DateTime
+	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;
 	/**
 	 * Datum en tijd van laatste bewerking
-	 * @var string
+	 * @var \DateTime
+	 * @ORM\Column(type="datetime")
 	 */
 	public $laatst_gewijzigd;
 	/**
 	 * Bewerking logboek
 	 * @var string
+	 * @ORM\Column(type="text", nullable=true)
 	 */
 	public $bewerkt_tekst;
 	/**
 	 * Verwijderd
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $verwijderd;
 	/**
 	 * IP adres van de auteur
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $auteur_ip;
 	/**
 	 * Wacht op goedkeuring
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $wacht_goedkeuring;
 	/**
@@ -73,39 +86,13 @@ class ForumPost extends PersistentEntity {
 	 * @var int
 	 */
 	private $aantal_gelezen;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'post_id' => array(T::Integer, false, 'auto_increment'),
-		'draad_id' => array(T::Integer),
-		'uid' => array(T::UID),
-		'tekst' => array(T::Text),
-		'datum_tijd' => array(T::DateTime),
-		'laatst_gewijzigd' => array(T::DateTime),
-		'bewerkt_tekst' => array(T::Text, true),
-		'verwijderd' => array(T::Boolean),
-		'auteur_ip' => array(T::String),
-		'wacht_goedkeuring' => array(T::Boolean)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('post_id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'forum_posts';
 
 	public function getForumDraad() {
 		return ContainerFacade::getContainer()->get(ForumDradenRepository::class)->get($this->draad_id);
 	}
 
 	public function magCiteren() {
-		return LoginModel::mag(P_LOGGED_IN) AND $this->getForumDraad()->magPosten();
+		return LoginModel::mag(P_LOGGED_IN) && $this->getForumDraad()->magPosten();
 	}
 
 	public function magBewerken() {
@@ -116,14 +103,14 @@ class ForumPost extends PersistentEntity {
 		if (!$draad->magPosten()) {
 			return false;
 		}
-		return $this->uid === LoginModel::getUid() AND LoginModel::mag(P_LOGGED_IN);
+		return $this->uid === LoginModel::getUid() && LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function getAantalGelezen() {
 		if (!isset($this->aantal_gelezen)) {
 			$this->aantal_gelezen = 0;
 			foreach ($this->getForumDraad()->getLezers() as $gelezen) {
-				if ($this->laatst_gewijzigd AND $this->laatst_gewijzigd <= $gelezen->datum_tijd->getTimestamp()) {
+				if ($this->laatst_gewijzigd && $this->laatst_gewijzigd <= $gelezen->datum_tijd->getTimestamp()) {
 					$this->aantal_gelezen++;
 				}
 			}

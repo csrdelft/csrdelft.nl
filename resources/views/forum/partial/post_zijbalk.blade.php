@@ -1,9 +1,14 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumPost[] $posts
+ */
+?>
 <div class="zijbalk_forum">
 	<div class="zijbalk-kopje">
 		<a href="/profiel/{{\CsrDelft\model\security\LoginModel::getUid()}}#forum">Forum (zelf gepost)</a>
 	</div>
 	@foreach($posts as $post)
-		@php($timestamp = strtotime($post->datum_tijd))
+		@php($timestamp = $post->datum_tijd->getTimestamp())
 		@php($draad = $post->getForumDraad())
 		@php($ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave'))
 		<div class="item">

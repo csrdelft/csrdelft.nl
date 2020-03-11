@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumPost $post
+ */
+?>
 <div id="forumpost-row-{{$post->post_id}}" class="forum-post">
 	<div class="auteur">
 		<div class="postpijl">
@@ -14,7 +19,7 @@
 			@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 				{!! reldate($post->datum_tijd) !!}
 			@else
-				{{$post->datum_tijd}}
+				{{$post->datum_tijd->format(DATETIME_FORMAT)}}
 			@endif
 		</span>
 
@@ -38,7 +43,8 @@
 			@else
 				@if($post->verwijderd)
 					<div class="post-verwijderd">Deze reactie is verwijderd.</div>
-					title="Bericht herstellen">@icon('arrow_undo')</a>
+					<a href="/forum/verwijderen/{{$post->post_id}}" class="btn post"
+						title="Bericht herstellen">@icon('arrow_undo')</a>
 				@endif
 				@if($post->magCiteren())
 					<a href="#reageren" class="btn citeren" data-citeren="{{$post->post_id}}"
@@ -50,7 +56,7 @@
 						 onclick="window.forum.forumBewerken({{$post->post_id}});" title="Bewerk bericht">@icon('pencil')</a>
 				@endif
 				@auth
-					@php($timestamp = strtotime($post->datum_tijd))
+					@php($timestamp = $post->datum_tijd->getTimestamp())
 					<a id="timestamp{{$timestamp}}" href="/forum/bladwijzer/{{$post->draad_id}}"
 						 class="btn post forummodknop bladwijzer" data="timestamp={{$timestamp}}"
 						 title="Bladwijzer bij dit bericht leggen">@icon('tab')</a>

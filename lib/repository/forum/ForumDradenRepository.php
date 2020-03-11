@@ -8,7 +8,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\model\entity\forum\ForumZoeken;
-use CsrDelft\model\forum\ForumPostsModel;
 use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
@@ -92,9 +91,9 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	private $forumDradenMeldingRepository;
 
 	/**
-	 * @var ForumPostsModel
+	 * @var ForumPostsRepository
 	 */
-	private $forumPostsModel;
+	private $forumPostsRepository;
 
 	public function __construct(
 		ManagerRegistry $registry,
@@ -102,7 +101,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		ForumDradenReagerenRepository $forumDradenReagerenRepository,
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
-		ForumPostsModel $forumPostsModel
+		ForumPostsRepository $forumPostsRepository
 	) {
 		parent::__construct($registry, ForumDraad::class);
 		$this->pagina = 1;
@@ -114,7 +113,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
 		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
-		$this->forumPostsModel = $forumPostsModel;
+		$this->forumPostsRepository = $forumPostsRepository;
 	}
 
 	/**
@@ -281,10 +280,9 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	 * @param boolean|null $belangrijk
 	 * @param boolean $rss
 	 * @param int $offset
-	 * @param boolean $getLatestPosts
 	 * @return ForumDraad[]
 	 */
-	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0, $getLatestPosts = false) {
+	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0) {
 		if (!is_int($aantal)) {
 			$aantal = $this->per_pagina;
 			$pagina = $this->pagina;
@@ -330,12 +328,6 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		if ($count > 0) {
 			$draden_ids = array_keys($dradenById);
 			array_unshift($draden_ids, LoginModel::getUid());
-			if ($getLatestPosts) {
-				$latest_post_ids = array_map(function ($draad) {
-					return $draad->laatste_post_id;
-				}, array_values($dradenById));
-				$this->forumPostsModel->prefetch('wacht_goedkeuring = FALSE AND verwijderd = FALSE AND post_id IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $latest_post_ids);
-			}
 		}
 		return $dradenById;
 	}
@@ -397,13 +389,13 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
 			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
 			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
-			$this->forumPostsModel->verwijderForumPostsVoorDraad($draad);
+			$this->forumPostsRepository->verwijderForumPostsVoorDraad($draad);
 		}
 	}
 
 	public function resetLastPost(ForumDraad $draad) {
 		// reset last post
-		$last_post = $this->findBy(['draad_id' => $draad->draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['laatst_gewijzigd' => 'DESC'])[0];
+		$last_post = $this->forumPostsRepository->findBy(['draad_id' => $draad->draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['laatst_gewijzigd' => 'DESC'])[0];
 		if ($last_post) {
 			$draad->laatste_post_id = $last_post->post_id;
 			$draad->laatste_wijziging_uid = $last_post->uid;
@@ -422,6 +414,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	public function update(ForumDraad $draad) {
 		try {
 			$this->getEntityManager()->persist($draad);
+			$this->getEntityManager()->flush();
 
 			return 1;
 		} catch (\Exception $ex) {

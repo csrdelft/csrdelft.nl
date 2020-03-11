@@ -15,7 +15,7 @@
  * @var \CsrDelft\model\entity\maalcie\CorveeVrijstelling $corveevrijstelling
  * @var \CsrDelft\model\entity\maalcie\CorveeKwalificatie $corveekwalificaties
  * @var int $forumpostcount
- * @var \CsrDelft\model\entity\forum\ForumPost[] $forumrecent
+ * @var \CsrDelft\entity\forum\ForumPost[] $forumrecent
  * @var \CsrDelft\entity\bibliotheek\BoekExemplaar[] $boeken
  * @var \CsrDelft\model\entity\maalcie\MaaltijdAanmelding[] $recenteAanmeldingen
  * @var \CsrDelft\model\entity\maalcie\MaaltijdAbonnement[] $abos
@@ -595,7 +595,7 @@
 										@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 											{!! reldate($post->datum_tijd) !!}
 										@else
-											{{$post->datum_tijd}}
+											{{$post->datum_tijd->format(DATETIME_FORMAT)}}
 										@endif
 									</td>
 								</tr>
