@@ -32,6 +32,7 @@ class VoorkeurOpmerkingRepository extends ServiceEntityRepository {
 		if ($result == false) {
 			$result = new VoorkeurOpmerking();
 			$result->profiel = $profiel;
+			$result->uid = $profiel->uid;
 		}
 		return $result;
 	}
