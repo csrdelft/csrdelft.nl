@@ -133,11 +133,8 @@ Ga nu naar `http://dev-csrdelft.nl`
 P.S. Iedere keer als je wil gaan programmeren aan de stek, moet je weer `yarn run watch` uitvoeren.
 
 #### Cache (geavanceerd)
-In productie draait memcached als cache. Het is niet nodig om deze lokaal te draaien, maar het is wel mogelijk mogelijk om deze lokaal in te stellen om bijvoorbeeld te testen. Installeer hiervoor de memcache php extensie van pecl (let op, geen **d** aan het eind).
 
-Download memcached en voer deze uit. Op Windows kun je [nssm](http://nssm.cc/) gebruiken om memcached als een service te installeren. Standaard draait memcached op poort 11211.
-
-Voeg `CACHE_HOST=localhost` en `CACHE_PORT=11211` toe aan `.env.local`.
+Dit is optioneel, maar kan helpen om je dev stek wat sneller te maken of om specifieke cache problemen te kunnen testen. Lees het [Cache](https://github.com/csrdelft/csrdelft.nl/wiki/Caching) document op de wiki voor meer info.
 
 <hr>
 
