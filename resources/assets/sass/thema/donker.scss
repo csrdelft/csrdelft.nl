@@ -1,28 +1,29 @@
 $dark-grey: #1E1F23;
 $darker-grey: #101011;
 
-$white: #000;
-$gray-900: #f8f9fa !default;
-$gray-800: #e9ecef !default;
-$gray-700: #dee2e6 !default;
-$gray-600: #ced4da !default;
+$black: #000;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
 $gray-500: #adb5bd !default;
-$gray-400: #6c757d !default;
-$gray-300: #495057 !default;
-$gray-200: #343a40 !default;
-$gray-100: #212529 !default;
-$black: #fff;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$white: #fff;
 
 $body-bg: $dark-grey;
-$body-color: darken($black, 7%);
+$body-color: darken($white, 7%);
 $headings-color: inherit;
+$text-muted: $gray-400;
 
 $primary: #006699;
 $secondary: lighten($body-bg, 20%);
-$light: $gray-100;
-$dark: $gray-800;
-$yiq-text-dark:             $white;
-$yiq-text-light:            $gray-900;
+$dark: $gray-900;
+$light: $gray-200;
+$yiq-text-dark: $black;
+$yiq-text-light: $gray-100;
 
 @font-face {
 	font-family: 'Ubuntu-Light';
@@ -99,7 +100,7 @@ $card-border-color: rgba(0, 0, 0, 0.3);
 @import "../base";
 
 .close {
-	color: $white;
+	color: $black;
 }
 
 /* Pas om-en-om kleuren in de lichtingen, vertikalen, kringen, etc. aan */
@@ -138,7 +139,7 @@ table.groep-lijst tr:nth-child(even) {
 
 /* Maak tekst zwart in prive bb-code (voor leesbaarheid) */
 .bb-prive {
-	color: black;
+	color: $black;
 }
 
 /* Pas achtergrond van, onder andere het courant formulier, aan */
