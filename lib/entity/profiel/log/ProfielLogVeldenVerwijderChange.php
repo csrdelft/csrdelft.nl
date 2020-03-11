@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity\profiel;
+namespace CsrDelft\entity\profiel\log;
 
 /**
  * ProfielLogVeldenVerwijderChange.class.php

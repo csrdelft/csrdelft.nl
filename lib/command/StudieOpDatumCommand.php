@@ -2,10 +2,10 @@
 
 namespace CsrDelft\command;
 
+use CsrDelft\entity\profiel\log\ProfielLogValueChange;
+use CsrDelft\entity\profiel\log\ProfielUpdateLogGroup;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\profiel\ProfielLogValueChange;
-use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\repository\ProfielRepository;
 use DateTime;
 use Symfony\Component\Console\Command\Command;

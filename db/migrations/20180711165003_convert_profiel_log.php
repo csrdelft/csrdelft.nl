@@ -1,18 +1,18 @@
 <?php
 require_once __DIR__.'/../../vendor/autoload.php';
 
-use Phinx\Migration\AbstractMigration;
-use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
-use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
-use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
-use CsrDelft\model\entity\profiel\UnparsedProfielLogGroup;
+use CsrDelft\entity\profiel\log\ProfielLogCoveeTakenVerwijderChange;
+use CsrDelft\entity\profiel\log\ProfielLogTextEntry;
+use CsrDelft\entity\profiel\log\ProfielUpdateLogGroup;
+use CsrDelft\entity\profiel\log\UnparsedProfielLogGroup;
+use Ferno\Loco\ConcParser;
 use Ferno\Loco\Grammar;
 use Ferno\Loco\GreedyMultiParser;
 use Ferno\Loco\LazyAltParser;
 use Ferno\Loco\RegexParser;
-use Ferno\Loco\Utf8Parser;
 use Ferno\Loco\StringParser;
-use Ferno\Loco\ConcParser;
+use Ferno\Loco\Utf8Parser;
+use Phinx\Migration\AbstractMigration;
 
 class ConvertProfielLog extends AbstractMigration {
 	public function change() {
@@ -148,7 +148,7 @@ class ProfielLogParser {
 						"DATE",
 						"STRING"
 					], function ($xignore, $lid, $xxignore, $date, $xxxignore) {
-						return new \CsrDelft\model\entity\profiel\ProfielCreateLogGroup($lid, $date);
+						return new \CsrDelft\entity\profiel\log\ProfielCreateLogGroup($lid, $date);
 					}),
 					"LOGITEM_CREATED" => new ConcParser([
 						new RegexParser("/^Aangemaakt door /"),
@@ -157,10 +157,10 @@ class ProfielLogParser {
 						"DATE",
 						new StringParser("[br]")
 					], function ($xignore, $lid, $xxignore, $date, $xxxignore) {
-						return new \CsrDelft\model\entity\profiel\ProfielCreateLogGroup($lid, $date);
+						return new \CsrDelft\entity\profiel\log\ProfielCreateLogGroup($lid, $date);
 					}),
 					"CHANGE" => new RegexParser("/^\(([^\(\)]*)\) ([^\[\]]*) => ([^\[\]]*)\[br\]/", function ($all, $prop, $old, $new) {
-						return new \CsrDelft\model\entity\profiel\ProfielLogValueChange($prop, $old, $new);
+						return new \CsrDelft\entity\profiel\log\ProfielLogValueChange($prop, $old, $new);
 					}),
 
 					"LID" => new ConcParser([new StringParser("[lid="),
