@@ -195,7 +195,7 @@ class ForumDelenRepository extends AbstractRepository {
 		$zoek_in = $forumZoeken->zoek_in;
 
 		$gevonden_draden = [];
-		/** @var ForumPost[] $gevonden_posts */
+		/** @var ForumPost[][] $gevonden_posts */
 		$gevonden_posts = [];
 
 		if (in_array('titel', $zoek_in)) {

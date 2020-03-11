@@ -135,13 +135,9 @@ class ForumDraad {
 	/**
 	 * Lijst van lezers (wanneer)
 	 * @var ForumDraadGelezen[]
+	 * @ORM\OneToMany(targetEntity="ForumDraadGelezen", mappedBy="draad")
 	 */
-	private $lezers;
-	/**
-	 * Aantal lezers
-	 * @var int
-	 */
-	private $aantal_lezers;
+	public $lezers;
 	/**
 	 * Verbergen voor gebruiker
 	 * @var boolean
@@ -201,19 +197,8 @@ class ForumDraad {
 		return $this->verbergen;
 	}
 
-	public function getLezers() {
-		if (!isset($this->lezers)) {
-			$forumDradenGelezeRepository = ContainerFacade::getContainer()->get(ForumDradenGelezenRepository::class);
-			$this->lezers = $forumDradenGelezeRepository->getLezersVanDraad($this);
-		}
-		return $this->lezers;
-	}
-
 	public function getAantalLezers() {
-		if (!isset($this->aantal_lezers)) {
-			$this->aantal_lezers = count($this->getLezers());
-		}
-		return $this->aantal_lezers;
+		return count($this->lezers);
 	}
 
 	/**

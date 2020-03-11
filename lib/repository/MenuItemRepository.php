@@ -91,7 +91,7 @@ class MenuItemRepository extends AbstractRepository {
 					$item->tekst = $categorie->titel;
 					$parent->children[] = $item;
 
-					foreach ($categorie->getForumDelen() as $deel) {
+					foreach ($categorie->forum_delen as $deel) {
 						$subitem = $this->nieuw($item);
 						$subitem->rechten_bekijken = $deel->rechten_lezen;
 						$subitem->link = '/forum/deel/' . $deel->forum_id;

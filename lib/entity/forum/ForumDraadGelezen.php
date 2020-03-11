@@ -37,4 +37,11 @@ class ForumDraadGelezen {
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;
+
+	/**
+	 * @var ForumDraad
+	 * @ORM\ManyToOne(targetEntity="ForumDraad", inversedBy="lezers")
+	 * @ORM\JoinColumn(name="draad_id", referencedColumnName="draad_id")
+	 */
+	public $draad;
 }

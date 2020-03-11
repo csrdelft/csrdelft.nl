@@ -109,8 +109,8 @@ class ForumPost {
 	public function getAantalGelezen() {
 		if (!isset($this->aantal_gelezen)) {
 			$this->aantal_gelezen = 0;
-			foreach ($this->getForumDraad()->getLezers() as $gelezen) {
-				if ($this->laatst_gewijzigd && $this->laatst_gewijzigd <= $gelezen->datum_tijd->getTimestamp()) {
+			foreach ($this->getForumDraad()->lezers as $gelezen) {
+				if ($this->laatst_gewijzigd && $this->laatst_gewijzigd <= $gelezen->datum_tijd) {
 					$this->aantal_gelezen++;
 				}
 			}

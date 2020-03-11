@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumCategorie[] $categorien
+ */
+?>
 @extends('forum.base')
 
 @section('titel', $deel->titel)
@@ -7,34 +12,37 @@
 		<li class="breadcrumb-item"><a href="/" title="Thuis"><span class="fa fa-home"></span></a></li>
 		<li class="breadcrumb-item"><a href="/forum">Forum</a></li>
 		<li class="breadcrumb-item active"><select name="forum_id" class="form-control form-control-sm"
-							onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
-			<option value="/forum/belangrijk"
-							@if($deel->titel === 'Belangrijk recent gewijzigd')selected="selected"@endif>
-				Belangrijk recent gewijzigd
-			</option>
-			<option value="/forum/recent" @if($deel->titel === 'Recent gewijzigd')selected="selected"@endif>
-				Recent gewijzigd
-			</option>
+																							 onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
+				<option value="/forum/belangrijk"
+								@if($deel->titel === 'Belangrijk recent gewijzigd')selected="selected"@endif>
+					Belangrijk recent gewijzigd
+				</option>
+				<option value="/forum/recent" @if($deel->titel === 'Recent gewijzigd')selected="selected"@endif>
+					Recent gewijzigd
+				</option>
 
-			@foreach($categorien as $categorie)
-				<optgroup label="{{$categorie->titel}}">;
-					@foreach ($categorie->getForumDelen() as $newDeel) {
-					<option value="/forum/deel/{{$newDeel->forum_id}}"
-									@if ($newDeel->forum_id === $deel->forum_id)selected="selected"@endif>{{$newDeel->titel}}</option>
-					@endforeach
-				</optgroup>
-			@endforeach
-			@foreach(get_menu('remotefora')->children as $remotecat)
-				@if($remotecat->magBekijken())
-					<optgroup label="{{$remotecat->tekst}}">
-						@foreach($remotecat->children as $remoteforum)
-							@if($remoteforum->magBekijken())
-								<option value="{{$remoteforum->link}}">{{$remoteforum->tekst}}</option>
-							@endif
+				@foreach($categorien as $categorie)
+					<optgroup label="{{$categorie->titel}}">;
+						@foreach ($categorie->forum_delen as $newDeel) {
+						@if(!$newDeel->magLezen())
+							@continue
+						@endif
+						<option value="/forum/deel/{{$newDeel->forum_id}}"
+										@if ($newDeel->forum_id === $deel->forum_id)selected="selected"@endif>{{$newDeel->titel}}</option>
 						@endforeach
 					</optgroup>
-				@endif
-			@endforeach
+				@endforeach
+				@foreach(get_menu('remotefora')->children as $remotecat)
+					@if($remotecat->magBekijken())
+						<optgroup label="{{$remotecat->tekst}}">
+							@foreach($remotecat->children as $remoteforum)
+								@if($remoteforum->magBekijken())
+									<option value="{{$remoteforum->link}}">{{$remoteforum->tekst}}</option>
+								@endif
+							@endforeach
+						</optgroup>
+					@endif
+				@endforeach
 			</select></li>
 	</ol>
 @endsection

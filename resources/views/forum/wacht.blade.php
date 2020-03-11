@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumDraad[] $resultaten
+ */
+?>
 @extends('forum.base')
 
 @section('titel', 'Wacht op goedkeuring')

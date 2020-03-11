@@ -29,8 +29,6 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 		$gelezen->draad_id = $draad_id;
 		$gelezen->uid = LoginModel::getUid();
 		$gelezen->datum_tijd = date_create();
-		$this->getEntityManager()->persist($gelezen);
-		$this->getEntityManager()->flush();
 		return $gelezen;
 	}
 

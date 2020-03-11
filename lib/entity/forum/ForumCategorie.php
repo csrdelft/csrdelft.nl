@@ -49,29 +49,13 @@ class ForumCategorie {
 	/**
 	 * Forumdelen
 	 * @var ForumDeel[]
+	 * @ORM\OneToMany(targetEntity="ForumDeel", mappedBy="categorie")
+	 * @ORM\OrderBy({"volgorde": "ASC"})
 	 */
-	private $forum_delen;
+	public $forum_delen;
 
 	public function magLezen() {
 		return LoginModel::mag($this->rechten_lezen);
-	}
-
-	/**
-	 * Lazy loading by foreign key.
-	 *
-	 * @return ForumDeel[]
-	 */
-	public function getForumDelen() {
-		if (!isset($this->forum_delen)) {
-			$forumDelenRepository = ContainerFacade::getContainer()->get(ForumDelenRepository::class);
-			$this->setForumDelen($forumDelenRepository->getForumDelenVoorCategorie($this));
-		}
-		return $this->forum_delen;
-	}
-
-	public function hasForumDelen() {
-		$this->getForumDelen();
-		return !empty($this->forum_delen);
 	}
 
 	/**

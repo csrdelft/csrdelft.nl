@@ -69,18 +69,20 @@ class ForumDeel {
 	 */
 	public $volgorde;
 	/**
+	 * @var ForumCategorie
+	 * @ORM\ManyToOne(targetEntity="ForumCategorie", inversedBy="forum_delen")
+	 * @ORM\JoinColumn(name="categorie_id", referencedColumnName="categorie_id")
+	 */
+	public $categorie;
+	/**
 	 * Forumdraden
 	 * @var ForumDraad[]
 	 */
 	private $forum_draden;
 
-	public function getForumCategorie() {
-		return ContainerFacade::getContainer()->get(ForumCategorieRepository::class)->get($this->categorie_id);
-	}
-
 	public function magLezen($rss = false) {
 		$auth = ($rss ? AuthenticationMethod::getTypeOptions() : null);
-		return LoginModel::mag(P_FORUM_READ, $auth) AND LoginModel::mag($this->rechten_lezen, $auth) AND $this->getForumCategorie()->magLezen();
+		return LoginModel::mag(P_FORUM_READ, $auth) AND LoginModel::mag($this->rechten_lezen, $auth) AND $this->categorie->magLezen();
 	}
 
 	public function magPosten() {

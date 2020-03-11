@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumDraad $draad
+ * @var \CsrDelft\entity\forum\ForumCategorie[] $categorien
+ */
+?>
 <div id="modereren" class="card collapse forum-header">
 	<div class="modal-header">
 		<h5 class="modal-title">Draad modereren</h5>
@@ -40,7 +46,7 @@
 					<select id="verplaats-naar" class="form-control" name="forum_id">
 						@foreach($categorien as $categorie)
 							<optgroup label="{{$categorie->titel}}">
-								@foreach($categorie->getForumDelen() as $newDeel)
+								@foreach($categorie->forum_delen as $newDeel)
 									<option value="{{$newDeel->forum_id}}"
 													@if($newDeel->forum_id === $draad->getForumDeel()->forum_id) selected="selected" @endif>{{$newDeel->titel}}</option>
 								@endforeach

@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumDraad $draad
+ * @var \CsrDelft\view\forum\ForumZoekenForm $zoekform
+ */
+?>
 @extends('forum.base')
 
 @section('titel', $draad->titel)
