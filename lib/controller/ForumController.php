@@ -322,7 +322,7 @@ class ForumController extends AbstractController {
 		if (LoginModel::mag(P_LOGGED_IN)) {
 			$gelezen = $draad->getWanneerGelezen();
 		} else {
-			$gelezen = false;
+			$gelezen = null;
 		}
 		if ($pagina === null) {
 			$pagina = lid_instelling('forum', 'open_draad_op_pagina');
@@ -343,10 +343,10 @@ class ForumController extends AbstractController {
 			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
 			'paging' => $paging && $this->forumPostsRepository->getAantalPaginas($draad->draad_id) > 1,
-			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($draad->getForumDeel(), $draad->draad_id),
+			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
-			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen($draad->getForumDeel()),
+			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen($draad->deel),
 			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
 			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
 			'gelezen_moment' => $gelezen ? $gelezen->datum_tijd : false,
@@ -536,7 +536,7 @@ class ForumController extends AbstractController {
 	public function wijzigen(int $draad_id, $property) {
 		$draad = $this->forumDradenRepository->get($draad_id);
 		// gedeelde moderators mogen dit niet
-		if (!$draad->getForumDeel()->magModereren()) {
+		if (!$draad->deel->magModereren()) {
 			throw new CsrToegangException();
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'eerste_post_plakkerig', 'pagina_per_post'))) {
@@ -671,11 +671,11 @@ class ForumController extends AbstractController {
 				return $redirect;
 			}
 			// maak draad
-			$draad = $this->forumDradenRepository->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
+			$draad = $this->forumDradenRepository->maakForumDraad($deel, $titel, $wacht_goedkeuring);
 		}
 
 		// maak post
-		$post = $this->forumPostsRepository->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $mailadres);
+		$post = $this->forumPostsRepository->maakForumPost($draad, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $mailadres);
 
 		// bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht?
 		if ($wacht_goedkeuring) {
@@ -759,7 +759,7 @@ class ForumController extends AbstractController {
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 		$this->forumPostsRepository->bewerkForumPost($tekst, $reden, $post);
-		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($post->getForumDraad(), $post->laatst_gewijzigd);
+		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($post->draad, $post->laatst_gewijzigd);
 		return view('forum.partial.post_lijst', ['post' => $post]);
 	}
 
@@ -771,7 +771,7 @@ class ForumController extends AbstractController {
 	 */
 	public function verplaatsen($post_id) {
 		$post = $this->forumPostsRepository->get((int)$post_id);
-		$oudDraad = $post->getForumDraad();
+		$oudDraad = $post->draad;
 		if (!$oudDraad->magModereren()) {
 			throw new CsrToegangException("Geen moderator");
 		}
@@ -793,7 +793,7 @@ class ForumController extends AbstractController {
 	 */
 	public function verwijderen($post_id) {
 		$post = $this->forumPostsRepository->get((int)$post_id);
-		if (!$post->getForumDraad()->magModereren()) {
+		if (!$post->draad->magModereren()) {
 			throw new CsrToegangException("Geen moderator");
 		}
 		$this->forumPostsRepository->verwijderForumPost($post);
@@ -808,7 +808,7 @@ class ForumController extends AbstractController {
 	 */
 	public function offtopic($post_id) {
 		$post = $this->forumPostsRepository->get((int)$post_id);
-		if (!$post->getForumDraad()->magModereren()) {
+		if (!$post->draad->magModereren()) {
 			throw new CsrToegangException("Geen moderator");
 		}
 		$this->forumPostsRepository->offtopicForumPost($post);
@@ -823,7 +823,7 @@ class ForumController extends AbstractController {
 	 */
 	public function goedkeuren($post_id) {
 		$post = $this->forumPostsRepository->get((int)$post_id);
-		if (!$post->getForumDraad()->magModereren()) {
+		if (!$post->draad->magModereren()) {
 			throw new CsrToegangException("Geen moderator");
 		}
 		$this->forumPostsRepository->goedkeurenForumPost($post);
@@ -906,7 +906,7 @@ class ForumController extends AbstractController {
 			'url' => $url,
 			'icon' => $icon,
 			'title' => $title,
-			'label' => $draad->getForumDeel()->titel,
+			'label' => $draad->deel->titel,
 			'value' => $draad->titel
 		];
 	}

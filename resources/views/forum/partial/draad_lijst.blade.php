@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumDraad $draad
+ * @var \CsrDelft\entity\forum\ForumDeel $deel
+ */
+?>
 <div class="alternate-row draad-titel">
 	@if($draad->wacht_goedkeuring)
 		<small class="niet-dik">[ter goedkeuring...]</small>
@@ -29,8 +35,8 @@
 		@endif
 	@endauth
 	@if(!isset($deel->forum_id))
-		<span class="lichtgrijs">[<a href="/forum/deel/{{$draad->getForumDeel()->forum_id}}"
-																 class="lichtgrijs">{{$draad->getForumDeel()->titel}}</a>]</span>
+		<span class="lichtgrijs">[<a href="/forum/deel/{{$draad->deel->forum_id}}"
+																 class="lichtgrijs">{{$draad->deel->titel}}</a>]</span>
 	@endif
 </div>
 <div class="alternate-row draad-laatst-gewijzigd">

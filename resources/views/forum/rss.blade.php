@@ -40,7 +40,7 @@
 			<pubDate>{{rfc2822($post->datum_tijd)}}</pubDate>
 			@endforeach--}}
 			<dc:creator>{{\CsrDelft\repository\ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'user')}}</dc:creator>
-			<category>{{$draad->getForumDeel()->categorie->titel}} » {{$draad->getForumDeel()->titel}}</category>
+			<category>{{$draad->deel->categorie->titel}} » {{$draad->deel->titel}}</category>
 			<comments>{{CSR_ROOT}}/forum/onderwerp/{{$draad->draad_id}}</comments>
 			<guid isPermaLink="true">{{CSR_ROOT}}/forum/reactie/{{$draad->laatste_post_id}}#{{$draad->laatste_post_id}}</guid>
 		</item>

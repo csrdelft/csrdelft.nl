@@ -584,11 +584,11 @@
 								<tr>
 									<td><a href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}"
 												 title="{{$post->tekst}}"
-												 @if($post->getForumDraad()->isOngelezen())
+												 @if($post->draad->isOngelezen())
 												 class="{{lid_instelling('forum', 'ongelezenWeergave')}}"
 											@endif
 										>
-											{{truncate($post->getForumDraad()->titel, 75)}}
+											{{truncate($post->draad->titel, 75)}}
 										</a>
 									</td>
 									<td>

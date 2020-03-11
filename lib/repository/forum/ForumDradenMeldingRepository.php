@@ -94,7 +94,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	 */
 	public function stuurMeldingenNaarVolgers(ForumPost $post) {
 		$auteur = ProfielRepository::get($post->uid);
-		$draad = $post->getForumDraad();
+		$draad = $post->draad;
 
 		// Laad meldingsbericht in
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumaltijdmelding.mail');
@@ -153,7 +153,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	 */
 	public function stuurMeldingenNaarGenoemden(ForumPost $post) {
 		$auteur = ProfielRepository::get($post->uid);
-		$draad = $post->getForumDraad();
+		$draad = $post->draad;
 
 		// Laad meldingsbericht in
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumvermeldingmelding.mail');

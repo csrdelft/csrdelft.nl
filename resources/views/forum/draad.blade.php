@@ -9,7 +9,7 @@
 @section('titel', $draad->titel)
 
 @section('breadcrumbs')
-	@php($deel = $draad->getForumDeel())
+	@php($deel = $draad->deel)
 	{!! csr_breadcrumbs([
 		'/' => 'main',
 		'/forum' => 'Forum',
@@ -104,7 +104,7 @@
 	@elseif($draad->gesloten)
 		<div class="draad-gesloten">
 			U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
-			@if($draad->getForumDeel()->isOpenbaar() && strtotime($draad->laatst_gewijzigd) < strtotime(instelling('forum', 'externen_geentoegang_gesloten')))
+			@if($draad->deel->isOpenbaar() && strtotime($draad->laatst_gewijzigd) < strtotime(instelling('forum', 'externen_geentoegang_gesloten')))
 				<div class="dikgedrukt">Dit externe onderwerp is niet meer toegankelijk voor externen en zoekmachines.</div>
 			@endif
 		</div>
@@ -178,7 +178,7 @@
 
 	@if($draad->magPosten())
 		@include('forum.partial.draad_reageren')
-		@include('forum.partial.post_form', ['deel' => $draad->getForumDeel()])
+		@include('forum.partial.post_form', ['deel' => $draad->deel])
 	@endif
 </div>
 

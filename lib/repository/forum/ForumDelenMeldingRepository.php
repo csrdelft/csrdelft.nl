@@ -159,8 +159,8 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	 */
 	public function stuurMeldingenNaarVolgers(ForumPost $post) {
 		$auteur = ProfielRepository::get($post->uid);
-		$draad = $post->getForumDraad();
-		$deel = $draad->getForumDeel();
+		$draad = $post->draad;
+		$deel = $draad->deel;
 
 		// Laad meldingsbericht in
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumdeelmelding.mail');

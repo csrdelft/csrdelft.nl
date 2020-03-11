@@ -25,9 +25,9 @@
 			@foreach($resultaten as $draad)
 				<div class="forum-zoeken-header">
 					<div>
-							<span title="Nieuw onderwerp in {{$draad->getForumDeel()->titel}}">{{$draad->titel}}
+							<span title="Nieuw onderwerp in {{$draad->deel->titel}}">{{$draad->titel}}
 								<span>
-									[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->getForumDeel()->titel}}</a>]
+									[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->deel->titel}}</a>]
 								</span>
 								@icon('new')
 							</span>

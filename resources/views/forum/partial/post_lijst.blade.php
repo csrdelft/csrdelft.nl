@@ -61,7 +61,7 @@
 						 class="btn post forummodknop bladwijzer" data="timestamp={{$timestamp}}"
 						 title="Bladwijzer bij dit bericht leggen">@icon('tab')</a>
 				@endauth
-				@if($post->getForumDraad()->magModereren())
+				@if($post->draad->magModereren())
 					<a href="/forum/offtopic/{{$post->post_id}}"
 						 class="btn post confirm @if(!$post->wacht_goedkeuring) forummodknop @endif"
 						 title="Offtopic markeren">@icon('thumb_down')</a>

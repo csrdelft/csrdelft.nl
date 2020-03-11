@@ -9,7 +9,7 @@
 	</div>
 	@foreach($posts as $post)
 		@php($timestamp = $post->datum_tijd->getTimestamp())
-		@php($draad = $post->getForumDraad())
+		@php($draad = $post->draad)
 		@php($ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave'))
 		<div class="item">
 			<a href="/forum/reactie/{{$post->post_id}}#{{$post->post_id}}" title="{{$draad->titel}}"

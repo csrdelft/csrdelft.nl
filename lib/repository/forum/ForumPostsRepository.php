@@ -188,7 +188,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 			foreach ($results as $result) {
 				/** @var $post ForumPost */
 				$post = $result[0];
-				if ($this->getEerstePostVoorDraad($post->getForumDraad())->post_id == $post->post_id) {
+				if ($this->getEerstePostVoorDraad($post->draad)->post_id == $post->post_id) {
 					$out[] = $result;
 				}
 			}
@@ -272,7 +272,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		$posts = array();
 		$draden_ids = array();
 		foreach ($results as $post) {
-			if ($post->getForumDraad()->magLezen()) {
+			if ($post->draad->magLezen()) {
 				$posts[] = $post;
 				$draden_ids[] = $post->draad_id;
 			}
@@ -284,9 +284,9 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		return $posts;
 	}
 
-	public function maakForumPost($draad_id, $tekst, $ip, $wacht_goedkeuring, $email) {
+	public function maakForumPost($draad, $tekst, $ip, $wacht_goedkeuring, $email) {
 		$post = new ForumPost();
-		$post->draad_id = (int)$draad_id;
+		$post->draad = $draad;
 		$post->uid = LoginModel::getUid();
 		$post->tekst = $tekst;
 		$post->datum_tijd = date_create();
@@ -312,7 +312,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 			throw new CsrException('Verwijderen mislukt', 500, $exception);
 		}
 		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
-		$forumDradenRepository->resetLastPost($post->getForumDraad());
+		$forumDradenRepository->resetLastPost($post->draad);
 	}
 
 	public function verwijderForumPostsVoorDraad(ForumDraad $draad) {
@@ -341,7 +341,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 			throw new CsrException('Bewerken mislukt', 500, $exception);
 		}
 		if ($gelijkheid < 90) {
-			$draad = $post->getForumDraad();
+			$draad = $post->draad;
 			$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 			$draad->laatste_post_id = $post->post_id;
 			$draad->laatste_wijziging_uid = $post->uid;
@@ -354,8 +354,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	}
 
 	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post) {
-		$oudeDraad = $post->getForumDraad();
-		$post->draad_id = $nieuwDraad->draad_id;
+		$oudeDraad = $post->draad;
+		$post->draad = $nieuwDraad;
 		$post->laatst_gewijzigd = date_create();
 		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]' . "\n";
 		try {
@@ -364,9 +364,14 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		} catch (ORMException $exception) {
 			throw new CsrException('Verplaatsen mislukt', 500, $exception);
 		}
+
 		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
-		$forumDradenRepository->resetLastPost($post->getForumDraad());
-		$forumDradenRepository->resetLastPost($oudeDraad);
+		$forumDradenRepository->resetLastPost($post->draad);
+		if (count($oudeDraad->getForumPosts()) == 0) {
+			$forumDradenRepository->wijzigForumDraad($oudeDraad, 'verwijderd', true);
+		} else {
+			$forumDradenRepository->resetLastPost($oudeDraad);
+		}
 	}
 
 	public function offtopicForumPost(ForumPost $post) {
@@ -393,7 +398,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 				throw new CsrException('Goedkeuren mislukt', 500, $exception);
 			}
 		}
-		$draad = $post->getForumDraad();
+		$draad = $post->draad;
 		$draad->laatst_gewijzigd = $post->laatst_gewijzigd;
 		$draad->laatste_post_id = $post->post_id;
 		$draad->laatste_wijziging_uid = $post->uid;

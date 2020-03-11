@@ -46,7 +46,7 @@
 						@elseif($draad->gesloten)
 							@icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren')
 						@endif
-						<span>[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->getForumDeel()->titel}}</a>]</span>
+						<span>[<a href="/forum/deel/{{$draad->forum_id}}">{{$draad->deel->titel}}</a>]</span>
 					</div>
 					<div class="niet-dik">
 						@if(lid_instelling('forum', 'datumWeergave') === 'relatief')

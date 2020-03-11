@@ -349,10 +349,10 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		return group_by_distinct('draad_id', $draden);
 	}
 
-	public function maakForumDraad($forum_id, $titel, $wacht_goedkeuring) {
+	public function maakForumDraad($deel, $titel, $wacht_goedkeuring) {
 		$draad = new ForumDraad();
-		$draad->forum_id = (int)$forum_id;
-		$draad->gedeeld_met = null;
+		$draad->deel = $deel;
+		$draad->gedeeld_met_deel = null;
 		$draad->uid = LoginModel::getUid();
 		$draad->titel = $titel;
 		$draad->datum_tijd = date_create();

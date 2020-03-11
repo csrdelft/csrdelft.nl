@@ -23,7 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class ForumDraad {
-
 	/**
 	 * Primary key
 	 * @var int
@@ -143,14 +142,19 @@ class ForumDraad {
 	 * @var boolean
 	 */
 	private $verbergen;
+	/**
+	 * @var ForumDeel
+	 * @ORM\ManyToOne(targetEntity="ForumDeel")
+	 * @ORM\JoinColumn(name="forum_id", referencedColumnName="forum_id")
+	 */
+	public $deel;
 
-	public function getForumDeel() {
-		return ContainerFacade::getContainer()->get(ForumDelenRepository::class)->get($this->forum_id);
-	}
-
-	public function getGedeeldMet() {
-		return ContainerFacade::getContainer()->get(ForumDelenRepository::class)->get($this->gedeeld_met);
-	}
+	/**
+	 * @var ForumDeel
+	 * @ORM\ManyToOne(targetEntity="ForumDeel")
+	 * @ORM\JoinColumn(name="gedeeld_met", referencedColumnName="forum_id", nullable=true)
+	 */
+	public $gedeeld_met_deel;
 
 	public function isGedeeld() {
 		return !empty($this->gedeeld_met);
@@ -163,18 +167,18 @@ class ForumDraad {
 		if (!LoginModel::mag(P_LOGGED_IN) && $this->gesloten && $this->laatst_gewijzigd < date_create(instelling('forum', 'externen_geentoegang_gesloten'))) {
 			return false;
 		}
-		return $this->getForumDeel()->magLezen() || ($this->isGedeeld() && $this->getGedeeldMet()->magLezen());
+		return $this->deel->magLezen() || ($this->isGedeeld() && $this->gedeeld_met_deel->magLezen());
 	}
 
 	public function magPosten() {
 		if ($this->verwijderd || $this->gesloten) {
 			return false;
 		}
-		return $this->getForumDeel()->magPosten() || ($this->isGedeeld() && $this->getGedeeldMet()->magPosten());
+		return $this->deel->magPosten() || ($this->isGedeeld() && $this->gedeeld_met_deel->magPosten());
 	}
 
 	public function magModereren() {
-		return $this->getForumDeel()->magModereren() || ($this->isGedeeld() && $this->getGedeeldMet()->magModereren());
+		return $this->deel->magModereren() || ($this->isGedeeld() && $this->gedeeld_met_deel->magModereren());
 	}
 
 	public function magStatistiekBekijken() {
@@ -202,9 +206,9 @@ class ForumDraad {
 	}
 
 	/**
-	 * FALSE if ongelezen!
+	 * null if ongelezen!
 	 *
-	 * @return ForumDraadGelezen|false $gelezen
+	 * @return ForumDraadGelezen|null $gelezen
 	 */
 	public function getWanneerGelezen() {
 		$forumDradenGelezenRepository = ContainerFacade::getContainer()->get(ForumDradenGelezenRepository::class);

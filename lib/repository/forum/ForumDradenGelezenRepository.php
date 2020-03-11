@@ -24,9 +24,10 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 		parent::__construct($registry, ForumDraadGelezen::class);
 	}
 
-	protected function maakForumDraadGelezen($draad_id) {
+	protected function maakForumDraadGelezen(ForumDraad $draad) {
 		$gelezen = new ForumDraadGelezen();
-		$gelezen->draad_id = $draad_id;
+		$gelezen->draad = $draad;
+		$gelezen->draad_id = $draad->draad_id; // Set pk
 		$gelezen->uid = LoginModel::getUid();
 		$gelezen->datum_tijd = date_create();
 		return $gelezen;
@@ -49,7 +50,7 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null) {
 		$gelezen = $this->getWanneerGelezenDoorLid($draad);
 		if (!$gelezen) {
-			$gelezen = $this->maakForumDraadGelezen($draad->draad_id);
+			$gelezen = $this->maakForumDraadGelezen($draad);
 		}
 		if ($moment) {
 			$gelezen->datum_tijd = $moment;

@@ -86,17 +86,19 @@ class ForumPost {
 	 * @var int
 	 */
 	private $aantal_gelezen;
-
-	public function getForumDraad() {
-		return ContainerFacade::getContainer()->get(ForumDradenRepository::class)->get($this->draad_id);
-	}
+	/**
+	 * @var ForumDraad
+	 * @ORM\ManyToOne(targetEntity="ForumDraad")
+	 * @ORM\JoinColumn(name="draad_id", referencedColumnName="draad_id")
+	 */
+	public $draad;
 
 	public function magCiteren() {
-		return LoginModel::mag(P_LOGGED_IN) && $this->getForumDraad()->magPosten();
+		return LoginModel::mag(P_LOGGED_IN) && $this->draad->magPosten();
 	}
 
 	public function magBewerken() {
-		$draad = $this->getForumDraad();
+		$draad = $this->draad;
 		if ($draad->magModereren()) {
 			return true;
 		}
@@ -106,10 +108,14 @@ class ForumPost {
 		return $this->uid === LoginModel::getUid() && LoginModel::mag(P_LOGGED_IN);
 	}
 
+	public function getGelezenPercentage() {
+		return $this->getAantalGelezen() * 100 / $this->draad->getAantalLezers();
+	}
+
 	public function getAantalGelezen() {
 		if (!isset($this->aantal_gelezen)) {
 			$this->aantal_gelezen = 0;
-			foreach ($this->getForumDraad()->lezers as $gelezen) {
+			foreach ($this->draad->lezers as $gelezen) {
 				if ($this->laatst_gewijzigd && $this->laatst_gewijzigd <= $gelezen->datum_tijd) {
 					$this->aantal_gelezen++;
 				}
@@ -118,12 +124,8 @@ class ForumPost {
 		return $this->aantal_gelezen;
 	}
 
-	public function getGelezenPercentage() {
-		return $this->getAantalGelezen() * 100 / $this->getForumDraad()->getAantalLezers();
-	}
-
 	public function getLink($external = false) {
-	    return ($external ? CSR_ROOT : '') . "/forum/reactie/" . $this->post_id . "#" . $this->post_id;
-    }
+		return ($external ? CSR_ROOT : '') . "/forum/reactie/" . $this->post_id . "#" . $this->post_id;
+	}
 
 }

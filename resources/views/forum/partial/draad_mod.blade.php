@@ -48,7 +48,7 @@
 							<optgroup label="{{$categorie->titel}}">
 								@foreach($categorie->forum_delen as $newDeel)
 									<option value="{{$newDeel->forum_id}}"
-													@if($newDeel->forum_id === $draad->getForumDeel()->forum_id) selected="selected" @endif>{{$newDeel->titel}}</option>
+													@if($newDeel->forum_id === $draad->deel->forum_id) selected="selected" @endif>{{$newDeel->titel}}</option>
 								@endforeach
 							</optgroup>
 						@endforeach
