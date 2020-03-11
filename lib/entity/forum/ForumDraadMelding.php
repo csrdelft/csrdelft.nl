@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class ForumDraadMelding {
-
 	/**
 	 * Shared primary key
 	 * Foreign key
@@ -23,6 +22,13 @@ class ForumDraadMelding {
 	 * @ORM\Id()
 	 */
 	public $draad_id;
+
+	/**
+	 * @var ForumDraad
+	 * @ORM\ManyToOne(targetEntity="ForumDraad", inversedBy="meldingen")
+	 * @ORM\JoinColumn(name="draad_id", referencedColumnName="draad_id")
+	 */
+	public $draad;
 	/**
 	 * Lidnummer
 	 * Shared primary key
@@ -34,28 +40,10 @@ class ForumDraadMelding {
 	public $uid;
 	/**
 	 * Volgniveau
+	 * @see ForumDraadMeldingNiveau
 	 * @var string
 	 * @ORM\Column(type="string")
 	 */
 	public $niveau = 'altijd';
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'draad_id' => array(T::Integer),
-		'uid' => array(T::UID),
-		'niveau' => array(T::Enumeration, false, ForumDraadMeldingNiveau::class)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('draad_id', 'uid');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'forum_draden_volgen';
 
 }

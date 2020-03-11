@@ -3,13 +3,12 @@
 namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Eisen;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\forum\ForumDelenRepository;
-use CsrDelft\repository\forum\ForumDradenGelezenRepository;
-use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
-use CsrDelft\view\ChartTimeSeries;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * ForumDraad.class.php
@@ -122,6 +121,24 @@ class ForumDraad {
 	 */
 	public $pagina_per_post;
 	/**
+	 * Lijst van lezers (wanneer)
+	 * @var PersistentCollection|ForumDraadGelezen[]
+	 * @ORM\OneToMany(targetEntity="ForumDraadGelezen", mappedBy="draad", fetch="LAZY")
+	 */
+	public $lezers;
+	/**
+	 * @var ForumDeel
+	 * @ORM\ManyToOne(targetEntity="ForumDeel")
+	 * @ORM\JoinColumn(name="forum_id", referencedColumnName="forum_id")
+	 */
+	public $deel;
+	/**
+	 * @var ForumDeel
+	 * @ORM\ManyToOne(targetEntity="ForumDeel")
+	 * @ORM\JoinColumn(name="gedeeld_met", referencedColumnName="forum_id", nullable=true)
+	 */
+	public $gedeeld_met_deel;
+	/**
 	 * Forumposts
 	 * @var ForumPost[]
 	 */
@@ -132,32 +149,47 @@ class ForumDraad {
 	 */
 	private $aantal_ongelezen_posts;
 	/**
-	 * Lijst van lezers (wanneer)
-	 * @var ForumDraadGelezen[]
-	 * @ORM\OneToMany(targetEntity="ForumDraadGelezen", mappedBy="draad")
-	 */
-	public $lezers;
-	/**
-	 * Verbergen voor gebruiker
-	 * @var boolean
+	 * @var PersistentCollection|ForumDraadVerbergen[]
+	 * @ORM\OneToMany(targetEntity="ForumDraadVerbergen", mappedBy="draad")
 	 */
 	private $verbergen;
 	/**
-	 * @var ForumDeel
-	 * @ORM\ManyToOne(targetEntity="ForumDeel")
-	 * @ORM\JoinColumn(name="forum_id", referencedColumnName="forum_id")
+	 * @var PersistentCollection|ForumDraadMelding[]
+	 * @ORM\OneToMany(targetEntity="ForumDraadMelding", mappedBy="draad")
 	 */
-	public $deel;
+	private $meldingen;
 
-	/**
-	 * @var ForumDeel
-	 * @ORM\ManyToOne(targetEntity="ForumDeel")
-	 * @ORM\JoinColumn(name="gedeeld_met", referencedColumnName="forum_id", nullable=true)
-	 */
-	public $gedeeld_met_deel;
+	public function __construct() {
+		$this->verbergen = new ArrayCollection();
+		$this->meldingen = new ArrayCollection();
+	}
+
+
+	public function magPosten() {
+		if ($this->verwijderd || $this->gesloten) {
+			return false;
+		}
+		return $this->deel->magPosten() || ($this->isGedeeld() && $this->gedeeld_met_deel->magPosten());
+	}
 
 	public function isGedeeld() {
 		return !empty($this->gedeeld_met);
+	}
+
+	public function magStatistiekBekijken() {
+		return $this->magModereren() || ($this->uid != LoginModel::UID_EXTERN && $this->uid === LoginModel::getUid());
+	}
+
+	public function magModereren() {
+		return $this->deel->magModereren() || ($this->isGedeeld() && $this->gedeeld_met_deel->magModereren());
+	}
+
+	public function magVerbergen() {
+		return !$this->belangrijk && LoginModel::mag(P_LOGGED_IN);
+	}
+
+	public function magMeldingKrijgen() {
+		return $this->magLezen();
 	}
 
 	public function magLezen() {
@@ -170,39 +202,22 @@ class ForumDraad {
 		return $this->deel->magLezen() || ($this->isGedeeld() && $this->gedeeld_met_deel->magLezen());
 	}
 
-	public function magPosten() {
-		if ($this->verwijderd || $this->gesloten) {
-			return false;
-		}
-		return $this->deel->magPosten() || ($this->isGedeeld() && $this->gedeeld_met_deel->magPosten());
-	}
-
-	public function magModereren() {
-		return $this->deel->magModereren() || ($this->isGedeeld() && $this->gedeeld_met_deel->magModereren());
-	}
-
-	public function magStatistiekBekijken() {
-		return $this->magModereren() || ($this->uid != LoginModel::UID_EXTERN && $this->uid === LoginModel::getUid());
-	}
-
-	public function magVerbergen() {
-		return !$this->belangrijk && LoginModel::mag(P_LOGGED_IN);
-	}
-
-	public function magMeldingKrijgen() {
-		return $this->magLezen();
-	}
-
 	public function isVerborgen() {
-		if (!isset($this->verbergen)) {
-			$forumDradenVerbergenRepository = ContainerFacade::getContainer()->get(ForumDradenVerbergenRepository::class);
-			$this->verbergen = $forumDradenVerbergenRepository->getVerbergenVoorLid($this);
-		}
-		return $this->verbergen;
+		return $this->verbergen->matching(Eisen::voorIngelogdeGebruiker())->first() != null;
 	}
 
 	public function getAantalLezers() {
 		return count($this->lezers);
+	}
+
+	public function isOngelezen() {
+		if ($gelezen = $this->getWanneerGelezen()) {
+			if ($this->laatst_gewijzigd > $gelezen->datum_tijd) {
+				return true;
+			}
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -211,19 +226,12 @@ class ForumDraad {
 	 * @return ForumDraadGelezen|null $gelezen
 	 */
 	public function getWanneerGelezen() {
-		$forumDradenGelezenRepository = ContainerFacade::getContainer()->get(ForumDradenGelezenRepository::class);
-		return $forumDradenGelezenRepository->getWanneerGelezenDoorLid($this);
+		return $this->lezers->matching(Eisen::voorIngelogdeGebruiker())->first();
 	}
 
-	public function isOngelezen() {
-		$gelezen = $this->getWanneerGelezen();
-		if ($gelezen) {
-			if ($this->laatst_gewijzigd > $gelezen->datum_tijd) {
-				return true;
-			}
-			return false;
-		}
-		return true;
+	public function hasForumPosts() {
+		$this->getForumPosts();
+		return !empty($this->forum_posts);
 	}
 
 	/**
@@ -236,11 +244,6 @@ class ForumDraad {
 			$this->setForumPosts(ContainerFacade::getContainer()->get(ForumPostsRepository::class)->getForumPostsVoorDraad($this));
 		}
 		return $this->forum_posts;
-	}
-
-	public function hasForumPosts() {
-		$this->getForumPosts();
-		return !empty($this->forum_posts);
 	}
 
 	/**
@@ -260,13 +263,16 @@ class ForumDraad {
 		return $this->aantal_ongelezen_posts;
 	}
 
-	public function getStats() {
-		return ContainerFacade::getContainer()->get(ForumPostsRepository::class)->getStatsVoorDraad($this);
-	}
+	public function getMeldingsNiveau() {
+		if (!$this->magLezen()) {
+			return false;
+		}
 
-	public function getStatsJson() {
-		$formatter = new ChartTimeSeries(array($this->getStats()));
-		return $formatter->getJson($formatter->getModel());
-	}
+		/** @var ForumDraadMelding $melding */
+		if ($melding = $this->meldingen->matching(Eisen::voorIngelogdeGebruiker())->first()) {
+			return $melding->niveau;
+		}
 
+		return false;
+	}
 }

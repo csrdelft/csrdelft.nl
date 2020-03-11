@@ -27,34 +27,14 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 		parent::__construct($registry, ForumDeelMelding::class);
 	}
 
-	protected function maakForumDeelMelding($forum_id, $uid) {
+	protected function maakForumDeelMelding(ForumDeel $deel, $uid) {
 		$melding = new ForumDeelMelding();
-		$melding->forum_id = $forum_id;
+		$melding->deel = $deel;
+		$melding->forum_id = $deel->forum_id;
 		$melding->uid = $uid;
 		$this->getEntityManager()->persist($melding);
 		$this->getEntityManager()->flush();
 		return $melding;
-	}
-
-	/**
-	 * Haal iedereen op die een melding wil voor gegeven forumdeel.
-	 * @param ForumDeel $deel
-	 * @return ForumDeelMelding[]
-	 */
-	public function getMeldingenVoorDeel(ForumDeel $deel) {
-		return $this->findBy(['forum_id' => $deel->forum_id]);
-	}
-
-	/**
-	 * Checkt of gegeven lid melding wil ontvangen voor gegeven forumdeel.
-	 * @param ForumDeel $deel
-	 * @param string $uid uid van lid, standaard ingelogd lid
-	 * @return bool `true` als lid melding wil ontvangen voor gegeven forumdeel
-	 */
-	public function lidWilMeldingVoorDeel(ForumDeel $deel, $uid = null) {
-		if ($uid === null) $uid = LoginModel::getUid();
-
-		return $this->find(['forum_id' => $deel->forum_id, 'uid' => $uid]) !== null;
 	}
 
 	/**
@@ -70,7 +50,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	public function setMeldingVoorLid(ForumDeel $deel, $actief, $uid = null) {
 		if ($uid === null) $uid = LoginModel::getUid();
 
-		$lidWilMeldingVoorDeel = $this->lidWilMeldingVoorDeel($deel, $uid);
+		$lidWilMeldingVoorDeel = $deel->lidWilMeldingVoorDeel($uid);
 		if ($lidWilMeldingVoorDeel && !$actief) {
 			// Wil niet, heeft nog wel
 			$melding = $this->find(['forum_id' => $deel->forum_id, 'uid' => $uid]);
@@ -78,7 +58,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 			$this->getEntityManager()->flush();
 		} elseif (!$lidWilMeldingVoorDeel && $actief) {
 			// Wil wel, heeft nog niet
-			$this->maakForumDeelMelding($deel->forum_id, $uid);
+			$this->maakForumDeelMelding($deel, $uid);
 		}
 	}
 
@@ -164,7 +144,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 
 		// Laad meldingsbericht in
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumdeelmelding.mail');
-		foreach ($this->getMeldingenVoorDeel($deel) as $volger) {
+		foreach ($deel->meldingen as $volger) {
 			$volger = ProfielRepository::get($volger->uid);
 
 			// Stuur geen meldingen als lid niet gevonden is of lid de auteur

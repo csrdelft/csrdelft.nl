@@ -32,17 +32,6 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		parent::__construct($registry, ForumDraadMelding::class);
 	}
 
-	public function getVoorkeursNiveauVoorLid(ForumDraad $draad, $uid = null) {
-		if ($uid === null) $uid = LoginModel::getUid();
-
-		$voorkeur = $this->find(['draad_id' => $draad->draad_id, 'uid' => $uid]);
-		if ($voorkeur) {
-			return $voorkeur->niveau;
-		} else {
-			return false;
-		}
-	}
-
 	public function setNiveauVoorLid(ForumDraad $draad, $niveau) {
 		$uid = LoginModel::getUid();
 		$voorkeur = $this->find(['draad_id' => $draad->draad_id, 'uid' => $uid]);

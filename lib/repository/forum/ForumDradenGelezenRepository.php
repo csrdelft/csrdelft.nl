@@ -34,21 +34,13 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param ForumDraad $draad
-	 * @return ForumDraadGelezen|null
-	 */
-	public function getWanneerGelezenDoorLid(ForumDraad $draad) {
-		return $this->find(['draad_id' => $draad->draad_id, 'uid'=>LoginModel::getUid()]);
-	}
-
-	/**
 	 * Ga na welke posts op de huidige pagina het laatst is geplaatst of gewijzigd.
 	 *
 	 * @param ForumDraad $draad
 	 * @param \DateTime $moment
 	 */
 	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null) {
-		$gelezen = $this->getWanneerGelezenDoorLid($draad);
+		$gelezen = $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginModel::getUid()]);
 		if (!$gelezen) {
 			$gelezen = $this->maakForumDraadGelezen($draad);
 		}
@@ -64,10 +56,6 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 
 		$this->getEntityManager()->persist($gelezen);
 		$this->getEntityManager()->flush();
-	}
-
-	public function getLezersVanDraad(ForumDraad $draad) {
-		return $this->findBy(['draad_id' => $draad->draad_id]);
 	}
 
 	public function verwijderDraadGelezen(ForumDraad $draad) {

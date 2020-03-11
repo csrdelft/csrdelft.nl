@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumDeel $deel
+ */
+?>
 @php($ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave'))
 @if(lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen')
 	@php($urlHash = "#ongelezen")

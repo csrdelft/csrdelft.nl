@@ -22,9 +22,10 @@ class ForumDradenVerbergenRepository extends AbstractRepository {
 		parent::__construct($registry, ForumDraadVerbergen::class);
 	}
 
-	protected function maakForumDraadVerbergen($draad_id) {
+	protected function maakForumDraadVerbergen(ForumDraad $draad) {
 		$verbergen = new ForumDraadVerbergen();
-		$verbergen->draad_id = $draad_id;
+		$verbergen->draad = $draad;
+		$verbergen->draad_id = $draad->draad_id;
 		$verbergen->uid = LoginModel::getUid();
 		$this->getEntityManager()->persist($verbergen);
 		$this->getEntityManager()->flush();
@@ -42,7 +43,7 @@ class ForumDradenVerbergenRepository extends AbstractRepository {
 	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true) {
 		if ($verbergen) {
 			if (!$this->getVerbergenVoorLid($draad)) {
-				$this->maakForumDraadVerbergen($draad->draad_id);
+				$this->maakForumDraadVerbergen($draad);
 			}
 		} elseif ($entity = $this->getVerbergenVoorLid($draad)) {
 			$this->getEntityManager()->remove($entity);
@@ -51,19 +52,19 @@ class ForumDradenVerbergenRepository extends AbstractRepository {
 	}
 
 	public function toonAllesVoorLid($uid) {
-		$manager = $this->getEntityManager();
-		foreach ($this->findBy(['uid' =>$uid]) as $verborgen) {
-			$manager->remove($verborgen);
-		}
-		$manager->flush();
+		$this->createQueryBuilder('v')
+			->delete()
+			->where('v.uid = :uid')
+			->setParameter('uid', $uid)
+			->getQuery()->execute();
 	}
 
 	public function toonDraadVoorIedereen(ForumDraad $draad) {
-		$manager = $this->getEntityManager();
-		foreach ($this->findBy(['draad_id' => $draad->draad_id]) as $verborgen) {
-			$manager->remove($verborgen);
-		}
-		$manager->flush();
+		$this->createQueryBuilder('v')
+			->delete()
+			->where('v.draad_id = :draad_id')
+			->setParameter('draad_id', $draad->draad_id)
+			->getQuery()->execute();
 	}
 
 }

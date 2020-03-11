@@ -23,6 +23,12 @@ class ForumDraadVerbergen {
 	 */
 	public $draad_id;
 	/**
+	 * @var ForumDraad
+	 * @ORM\ManyToOne(targetEntity="ForumDraad", inversedBy="verbergen")
+	 * @ORM\JoinColumn(name="draad_id", referencedColumnName="draad_id")
+	 */
+	public $draad;
+	/**
 	 * Lidnummer
 	 * Shared primary key
 	 * Foreign key

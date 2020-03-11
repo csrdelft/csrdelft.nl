@@ -1,9 +1,14 @@
+<?php
+/**
+ * @var \CsrDelft\entity\forum\ForumDeel $deel
+ */
+?>
 @can(P_LOGGED_IN)
-	@if(isset($deelmelding))
+	@if($deel->magMeldingKrijgen())
 		<div class="btn-group mr-2">
-			<a href="/forum/deelmelding/{{$deel->forum_id}}/uit" class="btn btn-light post ReloadPage melding-nooit @if(!$deelmelding) active @endif"
+			<a href="/forum/deelmelding/{{$deel->forum_id}}/uit" class="btn btn-light post ReloadPage melding-nooit @if(!$deel->lidWilMeldingVoorDeel()) active @endif"
 				 title="Geen meldingen voor forumdeel onvangen">@icon('email_delete', 'email_delete')</a>
-			<a href="/forum/deelmelding/{{$deel->forum_id}}/aan" class="btn btn-light post ReloadPage melding-altijd @if($deelmelding) active @endif"
+			<a href="/forum/deelmelding/{{$deel->forum_id}}/aan" class="btn btn-light post ReloadPage melding-altijd @if($deel->lidWilMeldingVoorDeel()) active @endif"
 				 title="Meldingen ontvangen voor nieuwe berichten in forumdeel">@icon('email_add', 'email_add')</a>
 		</div>
 	@endif

@@ -1,6 +1,8 @@
 <?php
 /**
  * @var \CsrDelft\entity\forum\ForumCategorie[] $categorien
+ * @var \CsrDelft\entity\forum\ForumDeel $deel
+ * @var \CsrDelft\view\forum\ForumZoekenForm $zoekform
  */
 ?>
 @extends('forum.base')

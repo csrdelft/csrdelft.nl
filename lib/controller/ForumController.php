@@ -286,7 +286,6 @@ class ForumController extends AbstractController {
 			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
 			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($deel),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel),
-			'deelmelding' => $this->forumDelenMeldingRepository->lidWilMeldingVoorDeel($deel)
 		]);
 	}
 
@@ -350,7 +349,6 @@ class ForumController extends AbstractController {
 			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
 			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
 			'gelezen_moment' => $gelezen ? $gelezen->datum_tijd : false,
-			'meldingsniveau' => $draad->magMeldingKrijgen() ? $this->forumDradenMeldingRepository->getVoorkeursNiveauVoorLid($draad) : '',
 		]);
 
 		if (LoginModel::mag(P_LOGGED_IN)) {

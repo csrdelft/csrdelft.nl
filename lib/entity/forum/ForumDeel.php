@@ -3,11 +3,13 @@
 namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Eisen;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -75,10 +77,19 @@ class ForumDeel {
 	 */
 	public $categorie;
 	/**
+	 * @var PersistentCollection|ForumDeelMelding[]
+	 * @ORM\OneToMany(targetEntity="ForumDeelMelding", mappedBy="deel")
+	 */
+	public $meldingen;
+	/**
 	 * Forumdraden
 	 * @var ForumDraad[]
 	 */
 	private $forum_draden;
+
+	public function __construct() {
+		$this->meldingen = new ArrayCollection();
+	}
 
 	public function magLezen($rss = false) {
 		$auth = ($rss ? AuthenticationMethod::getTypeOptions() : null);
@@ -127,4 +138,9 @@ class ForumDeel {
 		$this->forum_draden = $forum_draden;
 	}
 
+	public function lidWilMeldingVoorDeel($uid = null) {
+		if ($uid === null) $uid = LoginModel::getUid();
+
+		return $this->meldingen->matching(Eisen::voorGebruiker($uid))->first() != null;
+	}
 }

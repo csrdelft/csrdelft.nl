@@ -21,6 +21,13 @@ class ForumDeelMelding {
 	public $forum_id;
 
 	/**
+	 * @var ForumDeel
+	 * @ORM\ManyToOne(targetEntity="ForumDeel", inversedBy="meldingen")
+	 * @ORM\JoinColumn(name="forum_id", referencedColumnName="forum_id")
+	 */
+	public $deel;
+
+	/**
 	 * Lidnummer
 	 * Shared primary key
 	 * Foreign key

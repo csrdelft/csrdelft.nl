@@ -2,9 +2,7 @@
 
 namespace CsrDelft\entity\forum;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\forum\ForumDradenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
