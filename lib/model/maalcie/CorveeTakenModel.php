@@ -47,23 +47,19 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function puntenToekennen(CorveeTaak $taak) {
-		Database::transaction(function () use ($taak) {
-			CorveePuntenModel::puntenToekennen($taak->uid, $taak->punten, $taak->bonus_malus);
-			$taak->punten_toegekend = $taak->punten_toegekend + $taak->punten;
-			$taak->bonus_toegekend = $taak->bonus_toegekend + $taak->bonus_malus;
-			$taak->wanneer_toegekend = date('Y-m-d H:i');
-			$this->update($taak);
-		});
+		CorveePuntenModel::puntenToekennen($taak->uid, $taak->punten, $taak->bonus_malus);
+		$taak->punten_toegekend = $taak->punten_toegekend + $taak->punten;
+		$taak->bonus_toegekend = $taak->bonus_toegekend + $taak->bonus_malus;
+		$taak->wanneer_toegekend = date('Y-m-d H:i');
+		$this->update($taak);
 	}
 
 	public function puntenIntrekken(CorveeTaak $taak) {
-		Database::transaction(function () use ($taak) {
-			CorveePuntenModel::puntenIntrekken($taak->uid, $taak->punten, $taak->bonus_malus);
-			$taak->punten_toegekend = $taak->punten_toegekend - $taak->punten;
-			$taak->bonus_toegekend = $taak->bonus_toegekend - $taak->bonus_malus;
-			$taak->wanneer_toegekend = null;
-			$this->update($taak);
-		});
+		CorveePuntenModel::puntenIntrekken($taak->uid, $taak->punten, $taak->bonus_malus);
+		$taak->punten_toegekend = $taak->punten_toegekend - $taak->punten;
+		$taak->bonus_toegekend = $taak->bonus_toegekend - $taak->bonus_malus;
+		$taak->wanneer_toegekend = null;
+		$this->update($taak);
 	}
 
 	public function getRoosterMatrix(array $taken) {
