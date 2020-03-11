@@ -395,7 +395,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 
 	public function resetLastPost(ForumDraad $draad) {
 		// reset last post
-		$last_post = $this->findBy(['draad_id' => $draad->draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['laatst_gewijzigd' => 'DESC'])[0];
+		$last_post = $this->forumPostsRepository->findBy(['draad_id' => $draad->draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['laatst_gewijzigd' => 'DESC'])[0];
 		if ($last_post) {
 			$draad->laatste_post_id = $last_post->post_id;
 			$draad->laatste_wijziging_uid = $last_post->uid;
@@ -414,6 +414,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	public function update(ForumDraad $draad) {
 		try {
 			$this->getEntityManager()->persist($draad);
+			$this->getEntityManager()->flush();
 
 			return 1;
 		} catch (\Exception $ex) {

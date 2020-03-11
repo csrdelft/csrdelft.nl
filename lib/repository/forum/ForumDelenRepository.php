@@ -149,7 +149,7 @@ class ForumDelenRepository extends AbstractRepository {
 			} else {
 				$melding = 'Draad ' . $draad->draad_id . ' niet goedgekeurd, maar alle posts wel. Automatische actie: ';
 				$draad->wacht_goedkeuring = false;
-				if (count($draad->getPosts()) === 0) {
+				if (count($draad->getForumPosts()) === 0) {
 					$draad->verwijderd = true;
 					$melding .= 'verwijderd (bevat geen berichten)';
 					setMelding($melding, 2);

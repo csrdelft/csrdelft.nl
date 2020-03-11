@@ -138,20 +138,20 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 
 	public function getPaginaVoorPost(ForumPost $post) {
 		$count = $this->createQueryBuilder('fp')
+			->select('count(fp.post_id)')
 			->where('fp.draad_id = :draad_id and fp.post_id <= :post_id and fp.wacht_goedkeuring = false and fp.verwijderd = false')
 			->setParameter('draad_id', $post->draad_id)
 			->setParameter('post_id', $post->post_id)
-			->select('count(*)')
 			->getQuery()->getSingleScalarResult();
 		return (int)ceil($count / $this->per_pagina);
 	}
 
 	public function setPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen) {
 		$count = 1 + $this->createQueryBuilder('fp')
+				->select('count(fp.post_id)')
 				->where('fp.draad_id = :draad_id and fp.datum_tijd <= :datum_tijd and fp.wacht_goedkeuring = false and fp.verwijderd = false')
 				->setParameter('draad_id', $gelezen->draad_id)
 				->setParameter('datum_tijd', $gelezen->datum_tijd)
-				->select('count(*)')
 				->getQuery()->getSingleScalarResult();
 		$this->getAantalPaginas($gelezen->draad_id); // set per_pagina
 		$this->setHuidigePagina((int)ceil($count / $this->per_pagina), $gelezen->draad_id);

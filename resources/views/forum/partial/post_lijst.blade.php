@@ -43,7 +43,8 @@
 			@else
 				@if($post->verwijderd)
 					<div class="post-verwijderd">Deze reactie is verwijderd.</div>
-					title="Bericht herstellen">@icon('arrow_undo')</a>
+					<a href="/forum/verwijderen/{{$post->post_id}}" class="btn post"
+						title="Bericht herstellen">@icon('arrow_undo')</a>
 				@endif
 				@if($post->magCiteren())
 					<a href="#reageren" class="btn citeren" data-citeren="{{$post->post_id}}"
