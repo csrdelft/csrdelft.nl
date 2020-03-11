@@ -229,7 +229,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 
 	public function getForumPostsVoorDraad(ForumDraad $draad) {
 		$qb = $this->createQueryBuilder('fp')
-			->where('fp.draad_id = :draad_id')
+			->where('fp.draad_id = :draad_id and fp.verwijderd = false')
 			->setParameter('draad_id', $draad->draad_id)
 			->orderBy('fp.datum_tijd', 'ASC')
 			->setMaxResults($this->per_pagina)
