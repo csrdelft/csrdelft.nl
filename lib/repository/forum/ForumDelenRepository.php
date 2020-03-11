@@ -199,7 +199,6 @@ class ForumDelenRepository extends AbstractRepository {
 		$gevonden_posts = [];
 
 		if (in_array('titel', $zoek_in)) {
-			$gevonden_draden = [];
 			foreach ($this->forumDradenRepository->zoeken($forumZoeken) as [0 => $draad, 'score' => $score]) {
 				$gevonden_draden[$draad->draad_id] = $draad;
 				$draad->score = $score;
@@ -207,11 +206,17 @@ class ForumDelenRepository extends AbstractRepository {
 		}
 
 		if (in_array('alle_berichten', $zoek_in)) {
-			$gevonden_posts += group_by('draad_id', $this->forumPostsRepository->zoeken($forumZoeken, false));
+			foreach ($this->forumPostsRepository->zoeken($forumZoeken, false) as [0 => $post, 'score' => $score]) {
+				$gevonden_posts[$post->draad_id][] = $post;
+				$post->score = $score;
+			}
 		}
 
 		if (in_array('eerste_bericht', $zoek_in)) {
-			$gevonden_posts += group_by('draad_id', $this->forumPostsRepository->zoeken($forumZoeken, true));
+			foreach ($this->forumPostsRepository->zoeken($forumZoeken, true) as [0 => $post, 'score' => $score]) {
+				$gevonden_posts[$post->draad_id][] = $post;
+				$post->score = $score;
+			}
 		}
 
 		$gevonden_draden += $this->forumDradenRepository->getForumDradenById(array_keys($gevonden_posts)); // laad draden bij posts

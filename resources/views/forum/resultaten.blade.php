@@ -58,7 +58,7 @@
 				</div>
 				<div class="forum-zoeken-bericht">
 					@foreach($draad->getForumPosts() as $post)
-						<div id="forumpost-row-{{$post->post_id}}" class="forum-post @if($post->gefilterd) verborgen @endif">
+						<div id="forumpost-row-{{$post->post_id}}" class="forum-post">
 							<div class="auteur">
 								<div class="postpijl">
 									<a class="postanchor" id="{{$post->post_id}}"></a>

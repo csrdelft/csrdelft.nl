@@ -186,8 +186,9 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		if ($alleen_eerste_post) {
 			$out = [];
 			foreach ($results as $result) {
-				/** @var $result ForumPost */
-				if ($this->getEerstePostVoorDraad($result->getForumDraad())->post_id == $result->post_id) {
+				/** @var $post ForumPost */
+				$post = $result[0];
+				if ($this->getEerstePostVoorDraad($post->getForumDraad())->post_id == $post->post_id) {
 					$out[] = $result;
 				}
 			}
