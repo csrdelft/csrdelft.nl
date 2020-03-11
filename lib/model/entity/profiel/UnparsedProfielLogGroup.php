@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\entity\profiel\log;
+namespace CsrDelft\model\entity\profiel;
 use CsrDelft\view\bbcode\CsrBB;
 
 /**

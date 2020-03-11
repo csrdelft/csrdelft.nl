@@ -4,15 +4,15 @@
 namespace CsrDelft\common;
 
 
-use CsrDelft\entity\profiel\log\ProfielCreateLogGroup;
-use CsrDelft\entity\profiel\log\ProfielLogCoveeTakenVerwijderChange;
-use CsrDelft\entity\profiel\log\ProfielLogGroup;
-use CsrDelft\entity\profiel\log\ProfielLogTextEntry;
-use CsrDelft\entity\profiel\log\ProfielLogValueChange;
-use CsrDelft\entity\profiel\log\ProfielLogValueChangeCensuur;
-use CsrDelft\entity\profiel\log\ProfielLogVeldenVerwijderChange;
-use CsrDelft\entity\profiel\log\ProfielUpdateLogGroup;
-use CsrDelft\entity\profiel\log\UnparsedProfielLogGroup;
+use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
+use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
+use CsrDelft\model\entity\profiel\ProfielLogGroup;
+use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
+use CsrDelft\model\entity\profiel\ProfielLogValueChange;
+use CsrDelft\model\entity\profiel\ProfielLogValueChangeCensuur;
+use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
+use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
+use CsrDelft\model\entity\profiel\UnparsedProfielLogGroup;
 use CsrDelft\Orm\JsonSerializer\SafeJsonSerializer;
 use DateTime;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
