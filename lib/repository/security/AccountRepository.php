@@ -8,6 +8,7 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
+use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\AccessService;
 use Doctrine\Persistence\ManagerRegistry;
@@ -33,11 +34,16 @@ class AccountRepository extends AbstractRepository {
 	 * @var CiviSaldoRepository
 	 */
 	private $civiSaldoRepository;
+	/**
+	 * @var MenuItemRepository
+	 */
+	private $menuItemRepository;
 
-	public function __construct(ManagerRegistry $registry, AccessService $accessService, CiviSaldoRepository $civiSaldoRepository) {
+	public function __construct(ManagerRegistry $registry, AccessService $accessService, CiviSaldoRepository $civiSaldoRepository, MenuItemRepository $menuItemRepository) {
 		parent::__construct($registry, Account::class);
 		$this->accessService = $accessService;
 		$this->civiSaldoRepository = $civiSaldoRepository;
+		$this->menuItemRepository = $menuItemRepository;
 	}
 
 	const PASSWORD_HASH_ALGORITHM = PASSWORD_DEFAULT;
@@ -116,6 +122,15 @@ class AccountRepository extends AbstractRepository {
 		if (!$this->civiSaldoRepository->getSaldo($uid)) {
 			// Maak een CiviSaldo voor dit account
 			$this->civiSaldoRepository->maakSaldo($uid);
+		}
+
+		if (!$this->menuItemRepository->getMenuRoot($uid)) {
+			$menuItem = $this->menuItemRepository->nieuw(null);
+			$menuItem->rechten_bekijken = $uid;
+			$menuItem->tekst = $uid;
+			$menuItem->link = '';
+
+			$this->_em->persist($menuItem);
 		}
 
 		$account = new Account();
