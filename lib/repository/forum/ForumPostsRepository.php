@@ -11,7 +11,6 @@ use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\model\entity\forum\ForumZoeken;
 use CsrDelft\model\Paging;
-use CsrDelft\model\RetrieveByUuidTrait;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\view\bbcode\CsrBB;
@@ -29,13 +28,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumPost|null find($id, $lockMode = null, $lockVersion = null)
  */
 class ForumPostsRepository extends AbstractRepository implements Paging {
-	use RetrieveByUuidTrait;
-
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'datum_tijd ASC';
 	/**
 	 * Huidige pagina
 	 * @var int
