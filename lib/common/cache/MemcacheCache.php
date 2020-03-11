@@ -103,7 +103,7 @@ class MemcacheCache extends CacheProvider
 	}
 
 	private function fixId($id) {
-		return str_replace(' ', '-', $id);
+		return urlencode($id);
 	}
 
 	/**
