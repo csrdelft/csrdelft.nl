@@ -7,7 +7,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
-use CsrDelft\model\entity\forum\ForumZoeken;
+use CsrDelft\entity\forum\ForumZoeken;
 use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;

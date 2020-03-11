@@ -9,7 +9,7 @@ use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\entity\forum\ForumPost;
-use CsrDelft\model\entity\forum\ForumZoeken;
+use CsrDelft\entity\forum\ForumZoeken;
 use CsrDelft\model\Paging;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;

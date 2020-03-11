@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\forum;
 
-use CsrDelft\model\entity\forum\ForumZoeken;
+use CsrDelft\entity\forum\ForumZoeken;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\TextField;
 

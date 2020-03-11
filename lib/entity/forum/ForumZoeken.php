@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity\forum;
+namespace CsrDelft\entity\forum;
 
 use DateTime;
 
