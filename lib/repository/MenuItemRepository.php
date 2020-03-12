@@ -54,7 +54,7 @@ class MenuItemRepository extends AbstractRepository {
 	}
 
 	private function createCacheKey($naam) {
-		return 'stek.menu.' . $naam;
+		return 'stek.menu.' . urlencode($naam);
 	}
 
 	/**
@@ -156,7 +156,7 @@ class MenuItemRepository extends AbstractRepository {
 	}
 
 	private function createFlatCacheKey($naam) {
-		return 'stek.menu-flat.' . $naam;
+		return 'stek.menu-flat.' . urlencode($naam);
 	}
 
 	private function _flattenMenu(MenuItem $root) {
