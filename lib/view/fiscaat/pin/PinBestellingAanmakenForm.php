@@ -3,7 +3,7 @@
 namespace CsrDelft\view\fiscaat\pin;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatch;
+use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\CivisaldoField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

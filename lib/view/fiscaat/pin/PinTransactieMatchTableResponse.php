@@ -2,11 +2,11 @@
 
 namespace CsrDelft\view\fiscaat\pin;
 
-use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatch;
-use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatchStatusEnum;
+use CsrDelft\entity\pin\PinTransactieMatch;
+use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
-use CsrDelft\model\fiscaat\pin\PinTransactieModel;
+use CsrDelft\repository\pin\PinTransactieMatchRepository;
+use CsrDelft\repository\pin\PinTransactieRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 
@@ -29,13 +29,13 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 			}
 
 			if ($entity->transactie_id !== null) {
-				$pinTransactie = PinTransactieModel::instance()->get($entity->transactie_id);
-				$transactieBeschrijving = PinTransactieModel::instance()->getKorteBeschrijving($pinTransactie);
+				$pinTransactie = PinTransactieRepository::instance()->get($entity->transactie_id);
+				$transactieBeschrijving = PinTransactieRepository::instance()->getKorteBeschrijving($pinTransactie);
 			} else {
 				$transactieBeschrijving = '-';
 			}
 
-			$moment = PinTransactieMatchModel::instance()->getMoment($entity);
+			$moment = PinTransactieMatchRepository::instance()->getMoment($entity);
 
 			return [
 				'UUID' => $entity->getUUID(),

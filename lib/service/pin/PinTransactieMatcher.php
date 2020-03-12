@@ -1,15 +1,18 @@
 <?php
 
-namespace CsrDelft\model\fiscaat\pin;
+namespace CsrDelft\service\pin;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\entity\pin\PinTransactie;
+use CsrDelft\entity\pin\PinTransactieMatch;
+use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
-use CsrDelft\model\entity\fiscaat\pin\PinTransactie;
-use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatch;
-use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatchStatusEnum;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\repository\pin\PinTransactieMatchRepository;
+use CsrDelft\repository\pin\PinTransactieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Match transacties (wat in het systeem van de payment provider staat) met bestellingen (wat er in het SocCie systeem staat).
@@ -40,7 +43,7 @@ class PinTransactieMatcher {
 	 */
 	private $matches;
 	/**
-	 * @var PinTransactieMatchModel
+	 * @var PinTransactieMatchRepository
 	 */
 	private $pinTransactieMatchModel;
 	/**
@@ -52,15 +55,26 @@ class PinTransactieMatcher {
 	 */
 	private $civiBestellingInhoudModel;
 	/**
-	 * @var PinTransactieModel
+	 * @var PinTransactieRepository
 	 */
 	private $pinTransactieModel;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
 
-	public function __construct(PinTransactieMatchModel $pinTransactieMatchModel, CiviBestellingModel $civiBestellingModel, CiviBestellingInhoudModel $civiBestellingInhoudModel, PinTransactieModel $pinTransactieModel) {
+	public function __construct(
+		EntityManagerInterface $entityManager,
+		PinTransactieMatchRepository $pinTransactieMatchModel,
+		CiviBestellingModel $civiBestellingModel,
+		CiviBestellingInhoudModel $civiBestellingInhoudModel,
+		PinTransactieRepository $pinTransactieModel
+	) {
 		$this->pinTransactieMatchModel = $pinTransactieMatchModel;
 		$this->civiBestellingModel = $civiBestellingModel;
 		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
 		$this->pinTransactieModel = $pinTransactieModel;
+		$this->entityManager = $entityManager;
 	}
 
 	public function setPinTransacties(array $pinTransacties) {
@@ -74,13 +88,8 @@ class PinTransactieMatcher {
 	/**
 	 */
 	public function clean() {
-		foreach ($this->pinBestellingen as $pinBestelling) {
-			$matches = $this->pinTransactieMatchModel->find('bestelling_id = ?', [$pinBestelling->bestelling_id])->fetchAll();
-
-			foreach ($matches as $match) {
-				$this->pinTransactieMatchModel->delete($match);
-			}
-		}
+		$ids = array_map(function (CiviBestellingInhoud $inhoud) { return $inhoud->bestelling_id; }, $this->pinBestellingen);
+		$this->pinTransactieMatchModel->cleanByBestellingIds($ids);
 	}
 
 	/**
@@ -251,8 +260,9 @@ class PinTransactieMatcher {
 	 */
 	public function save() {
 		foreach ($this->matches as $match) {
-			$this->pinTransactieMatchModel->create($match);
+			$this->entityManager->persist($match);
 		}
+		$this->entityManager->flush();
 	}
 
 	/**

@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
 
+use CsrDelft\entity\pin\PinTransactie;
+use CsrDelft\entity\pin\PinTransactieMatch;
+use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
-use CsrDelft\model\entity\fiscaat\pin\PinTransactie;
-use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatchStatusEnum;
-use CsrDelft\model\entity\fiscaat\pin\PinTransactieMatch;
-use CsrDelft\model\fiscaat\pin\PinTransactieMatcher;
+use CsrDelft\service\pin\PinTransactieMatcher;
 use PHPUnit\Framework\TestCase;
 
 final class PinTransactieMatcherTest extends TestCase {
 	private function createMatcher() {
 		return new PinTransactieMatcher(
-			$this->createMock(\CsrDelft\model\fiscaat\pin\PinTransactieMatchModel::class),
+			$this->createMock(\CsrDelft\repository\pin\PinTransactieMatchRepository::class),
 			$this->createMock(\CsrDelft\model\fiscaat\CiviBestellingModel::class),
 			$this->createMock(\CsrDelft\model\fiscaat\CiviBestellingInhoudModel::class),
-			$this->createMock(\CsrDelft\model\fiscaat\pin\PinTransactieModel::class)
+			$this->createMock(\CsrDelft\repository\pin\PinTransactieRepository::class)
 		);
 	}
 

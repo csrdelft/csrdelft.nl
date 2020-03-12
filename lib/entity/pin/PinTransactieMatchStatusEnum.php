@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity\fiscaat\pin;
+namespace CsrDelft\entity\pin;
 
 use CsrDelft\Orm\Entity\PersistentEnum;
 

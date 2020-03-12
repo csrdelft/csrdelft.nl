@@ -2,7 +2,8 @@
 
 namespace CsrDelft\view\fiscaat\pin;
 
-use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
+use CsrDelft\entity\pin\PinTransactieMatch;
+use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\CollectionDataTableKnop;
 use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
@@ -16,7 +17,7 @@ use CsrDelft\view\datatable\Multiplicity;
  */
 class PinTransactieMatchTable extends DataTable {
 	public function __construct() {
-		parent::__construct(PinTransactieMatchModel::ORM, '/fiscaat/pin?filter=metFout', 'Overzicht van pintransacties matches');
+		parent::__construct(PinTransactieMatch::class, '/fiscaat/pin?filter=metFout', 'Overzicht van pintransacties matches');
 
 		$weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van de tabel', 'cart');
 		$weergave->addKnop(new SourceChangeDataTableKnop('/fiscaat/pin?filter=metFout', 'Met fouten', 'Fouten weergeven', 'cart_error'));

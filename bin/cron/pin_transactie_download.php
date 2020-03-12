@@ -6,17 +6,17 @@
  * @date 06/09/2017
  */
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\fiscaat\pin\PinTransactieDownloader;
-use CsrDelft\model\fiscaat\pin\PinTransactieMatcher;
-use CsrDelft\model\fiscaat\pin\PinTransactieMatchModel;
-use CsrDelft\model\fiscaat\pin\PinTransactieModel;
+use CsrDelft\repository\pin\PinTransactieMatchRepository;
+use CsrDelft\repository\pin\PinTransactieRepository;
+use CsrDelft\service\pin\PinTransactieDownloader;
+use CsrDelft\service\pin\PinTransactieMatcher;
 
 /**
  * Date constants.
  */
-const DATE_FORMAT = 'Y-m-d';
 const DURATION_DAY_IN_SECONDS = 86400;
 
 require_once __DIR__ . '/../../lib/configuratie.include.php';
@@ -32,46 +32,35 @@ if (isset($argv[1])) {
 $from = date(DATE_FORMAT . ' 12:00:00', $moment - DURATION_DAY_IN_SECONDS);
 $to = date(DATE_FORMAT . ' 12:00:00', $moment);
 
+$container = ContainerFacade::getContainer();
+$pinTransactieRepository = $container->get(PinTransactieRepository::class);
+$pinTransactieMatchRepository = $container->get(PinTransactieMatchRepository::class);
+$pinTransactieMatcher = $container->get(PinTransactieMatcher::class);
+$pinTransactieDownloader = $container->get(PinTransactieDownloader::class);
+$civiBestellingModel = $container->get(CiviBestellingModel::class);
+
 // Verwijder eerdere download.
-$vorigePinTransacties = PinTransactieModel::instance()->getPinTransactieInMoment($from, $to);
+$vorigePinTransacties = $pinTransactieRepository->getPinTransactieInMoment($from, $to);
 
-foreach ($vorigePinTransacties as $pinTransactie) {
-    $matches = PinTransactieMatchModel::instance()->find('transactie_id = ?', [$pinTransactie->id])->fetchAll();
-
-    foreach ($matches as $match) {
-        PinTransactieMatchModel::instance()->delete($match);
-    }
-}
-
-foreach ($vorigePinTransacties as $pinTransactie) {
-	PinTransactieModel::instance()->delete($pinTransactie);
-}
-
-$settings = [
-	PinTransactieDownloader::SETTINGS_USERNAME => env('PIN_USERNAME'),
-	PinTransactieDownloader::SETTINGS_PASSWORD => env('PIN_PASSWORD'),
-	PinTransactieDownloader::SETTINGS_STORE => env('PIN_STORE'),
-	PinTransactieDownloader::SETTINGS_URL => env('PIN_URL'),
-];
+$pinTransactieMatchRepository->cleanByTransactieIds($vorigePinTransacties);
+$pinTransactieRepository->clean($vorigePinTransacties);
 
 // Download pintransacties en sla op in DB.
-$pintransacties = PinTransactieDownloader::download($settings, $from);
+$pintransacties = $pinTransactieDownloader->download($from, env('PIN_URL'), env('PIN_STORE'), env('PIN_USERNAME'), env('PIN_PASSWORD'));
 
 // Haal pinbestellingen op.
-$pinbestellingen = CiviBestellingModel::instance()->getPinBestellingInMoment($from, $to);
+$pinbestellingen = $civiBestellingModel->getPinBestellingInMoment($from, $to);
 
 try {
-	$matcher = \CsrDelft\common\ContainerFacade::getContainer()->get(PinTransactieMatcher::class);
-	$matcher->setPinTransacties($pintransacties);
-	$matcher->setPinBestellingen($pinbestellingen);
+	$pinTransactieMatcher->setPinTransacties($pintransacties);
+	$pinTransactieMatcher->setPinBestellingen($pinbestellingen);
 
-	$matcher->clean();
-	$matcher->match();
-	$matcher->save();
+	$pinTransactieMatcher->clean();
+	$pinTransactieMatcher->match();
+	$pinTransactieMatcher->save();
 
-
-	if ($matcher->bevatFouten()) {
-		$report = $matcher->genereerReport();
+	if ($pinTransactieMatcher->bevatFouten()) {
+		$report = $pinTransactieMatcher->genereerReport();
 
 		$body = <<<MAIL
 Beste am. Fiscus,
@@ -84,7 +73,7 @@ De volgende fouten zijn gevonden.
 
 Met vriendelijke groet,
 
-namense de PubCie,
+namens de PubCie,
 Feut
 MAIL;
 
@@ -97,6 +86,8 @@ MAIL;
 			$mail = new Mail([env('PIN_MONITORING_EMAIL') => 'Pin Transactie Monitoring'], '[CiviSaldo] Pin transactie fouten gevonden.', $body);
 			$mail->send();
 		}
+	} elseif($interactive) {
+		echo "Er is niets gedownload!\n";
 	}
 
 } catch (Exception $e) {

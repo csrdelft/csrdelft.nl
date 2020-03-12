@@ -1,8 +1,10 @@
 <?php
 
-namespace CsrDelft\model\fiscaat\pin;
+namespace CsrDelft\service\pin;
 
-use CsrDelft\model\entity\fiscaat\pin\PinTransactie;
+use CsrDelft\entity\pin\PinTransactie;
+use CsrDelft\repository\pin\PinTransactieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMXPath;
 
@@ -47,15 +49,26 @@ class PinTransactieDownloader
 	const DATE_START_MINUTES = '00';
 	const DURATION_DAY = '0';
 	const POST_FIELD_NUM_ROWS = 'select.num_rows';
+	/**
+	 * @var PinTransactieRepository
+	 */
+	private $pinTransactieRepository;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
 
-	public static function download($settings, $moment)
+	public function __construct(PinTransactieRepository $pinTransactieRepository, EntityManagerInterface $entityManager) {
+		$this->pinTransactieRepository = $pinTransactieRepository;
+		$this->entityManager = $entityManager;
+	}
+
+	public function download($moment, $baseUrl, $store, $username, $password)
 	{
-		$baseUrl = $settings[self::SETTINGS_URL];
-
 		//1. Login
 		$postFields = [
-			self::POST_FIELD_LOGIN_USERNAME => $settings[self::SETTINGS_USERNAME],
-			self::POST_FIELD_LOGIN_PASSWORD => $settings[self::SETTINGS_PASSWORD],
+			self::POST_FIELD_LOGIN_USERNAME => $username,
+			self::POST_FIELD_LOGIN_PASSWORD => $password,
 		];
 		$result = static::postPage(url2absolute($baseUrl, self::RELATIVE_URL_LOGIN), $postFields, null, true);
 
@@ -85,7 +98,7 @@ class PinTransactieDownloader
 			self::POST_FIELD_PERIOD_FROM_DATE_MINUTES => self::DATE_START_MINUTES,
 			self::POST_FIELD_PERIOD_DURATION => self::DURATION_DAY,
 			self::POST_FIELD_NUM_ROWS => 2,
-			self::POST_FIELD_STORE => $settings[self::SETTINGS_STORE],
+			self::POST_FIELD_STORE => $store,
 		];
 		$result = self::postPage(url2absolute($baseUrl, $searchUrl), $postFields, $sessionCookie);
 
@@ -113,10 +126,12 @@ class PinTransactieDownloader
 			$pinTransactie->AUTRSP = $labels->item(10)->nodeValue;
 			$pinTransactie->STAN = $labels->item(11)->nodeValue;
 
-			$pinTransactie->id = PinTransactieModel::instance()->create($pinTransactie);
+			$this->entityManager->persist($pinTransactie);
 
 			$pinTransacties[] = $pinTransactie;
 		}
+
+		$this->entityManager->flush();
 
 		return $pinTransacties;
 	}
