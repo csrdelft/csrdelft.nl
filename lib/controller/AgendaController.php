@@ -125,7 +125,7 @@ class AgendaController {
 			$limit = $request->query->getInt('limit');
 		}
 		/** @var AgendaItem[] $items */
-		$items = $this->agendaRepository->zoeken(date_create(), date_create('+6 months'), $zoekterm, $limit);
+		$items = $this->agendaRepository->zoeken(date_create_immutable(), date_create_immutable('+6 months'), $zoekterm, $limit);
 		$result = [];
 		foreach ($items as $item) {
 			$begin = $item->getBeginMoment();
