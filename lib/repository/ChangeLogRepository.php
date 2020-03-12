@@ -62,10 +62,10 @@ class ChangeLogRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param ChangeLogEntry|PersistentEntity $change
+	 * @param ChangeLogEntry $change
 	 * @return void
 	 */
-	public function create(PersistentEntity $change) {
+	public function create(ChangeLogEntry $change) {
 		$this->getEntityManager()->persist($change);
 		$this->getEntityManager()->flush();
 	}
