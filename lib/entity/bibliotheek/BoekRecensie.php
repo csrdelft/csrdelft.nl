@@ -27,7 +27,7 @@ class BoekRecensie {
 	public $boek_id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 */
 	public $schrijver_uid;
 	/**

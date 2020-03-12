@@ -38,7 +38,7 @@ class Peiling implements DataTableEntry {
 	public $beschrijving;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=4, nullable=true)
+	 * @ORM\Column(type="uid", nullable=true)
 	 * @Serializer\Groups("vue")
 	 */
 	public $eigenaar;

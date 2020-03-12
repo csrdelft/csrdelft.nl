@@ -51,7 +51,7 @@ class PeilingOptie implements DataTableEntry {
 	public $stemmen = 0;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=4, nullable=true)
+	 * @ORM\Column(type="uid", nullable=true)
 	 * @Serializer\Groups({"datatable"})
 	 */
 	public $ingebracht_door;

@@ -20,7 +20,7 @@ class OneTimeToken {
 	 * Shared primary key
 	 * Foreign key
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @ORM\Id()
 	 */
 	public $uid;
@@ -28,14 +28,14 @@ class OneTimeToken {
 	 * Protected action url
 	 * Shared primary key
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
 	 */
 	public $url;
 	/**
 	 * Token string
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 */
 	public $token;
 	/**

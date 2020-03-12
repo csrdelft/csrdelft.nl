@@ -17,19 +17,19 @@ class LidToestemming {
 	 * Lidnummer
 	 * Foreign key
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @ORM\Id()
 	 */
 	public $uid;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
 	 */
 	public $module;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
 	 */
 	public $instelling_id;

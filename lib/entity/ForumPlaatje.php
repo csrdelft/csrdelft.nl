@@ -24,7 +24,7 @@ class ForumPlaatje {
 	public $id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 */
 	public $access_key;
 	/**
@@ -34,7 +34,7 @@ class ForumPlaatje {
 	public $datum_toegevoegd;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=4, nullable=true)
+	 * @ORM\Column(type="uid", nullable=true)
 	 */
 	public $maker;
 	/**

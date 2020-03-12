@@ -33,7 +33,7 @@ class Courant {
 	public $inhoud;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 */
 	public $verzender;
 

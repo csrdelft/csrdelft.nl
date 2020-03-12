@@ -45,7 +45,7 @@ class ForumDraad {
 	/**
 	 * Lidnummer van auteur
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 */
 	public $uid;
 	/**
@@ -75,7 +75,7 @@ class ForumDraad {
 	/**
 	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
 	 * @var string
-	 * @ORM\Column(type="string", length=4, nullable=true)
+	 * @ORM\Column(type="uid", nullable=true)
 	 */
 	public $laatste_wijziging_uid;
 	/**

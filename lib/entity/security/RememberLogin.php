@@ -34,7 +34,7 @@ class RememberLogin implements DataTableEntry {
 	/**
 	 * Lidnummer
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;

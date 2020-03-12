@@ -29,7 +29,7 @@ class BoekExemplaar extends PersistentEntity {
 	public $boek_id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 */
 	public $eigenaar_uid;
 	/**
@@ -40,7 +40,7 @@ class BoekExemplaar extends PersistentEntity {
 
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191, nullable=true)
+	 * @ORM\Column(type="stringkey", nullable=true)
 	 */
 	public $uitgeleend_uid;
 

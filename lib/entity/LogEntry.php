@@ -24,7 +24,7 @@ class LogEntry {
 	/**
 	 * UID of user or x999
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 */
 	public $uid;
 	/**

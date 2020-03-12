@@ -28,14 +28,14 @@ class Instelling {
 	/**
 	 * Shared primary key
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
 	 */
 	public $module;
 	/**
 	 * Shared primary key
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
 	 */
 	public $instelling_id;

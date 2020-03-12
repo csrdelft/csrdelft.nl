@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class Eetplan implements DataTableEntry {
 	/**
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @ORM\Id()
 	 * @var string
 	 * @Serializer\Groups("datatable")

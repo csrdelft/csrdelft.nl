@@ -20,7 +20,7 @@ class CmsPagina {
 	/**
 	 * Primary key
 	 * @ORM\Id()
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 * @var string
 	 */
 	public $naam;

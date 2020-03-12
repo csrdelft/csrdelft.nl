@@ -26,7 +26,7 @@ class AgendaVerbergen {
 	/**
 	 * UUID of Agendeerbaar entity
 	 * Shared primary key
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
 	 * @var string
 	 */

@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class VoorkeurOpmerking {
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @ORM\Id()
 	 */
 	public $uid;

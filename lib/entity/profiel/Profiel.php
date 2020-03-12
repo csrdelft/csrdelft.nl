@@ -39,7 +39,7 @@ use GuzzleHttp\Exception\RequestException;
 class Profiel implements Agendeerbaar {
 	/**
 	 * @ORM\Id()
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @var string
 	 */
 	public $uid;
@@ -112,7 +112,7 @@ class Profiel implements Agendeerbaar {
 	public $lengte;
 	// getrouwd
 	/**
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @var string
 	 */
 	public $echtgenoot;
@@ -270,7 +270,7 @@ class Profiel implements Agendeerbaar {
 	public $kringcoach;
 	// civi-gegevens
 	/**
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @var string
 	 */
 	public $patroon;

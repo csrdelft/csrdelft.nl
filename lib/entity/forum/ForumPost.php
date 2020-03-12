@@ -34,7 +34,7 @@ class ForumPost {
 	/**
 	 * Lidnummer van auteur
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 */
 	public $uid;
 	/**

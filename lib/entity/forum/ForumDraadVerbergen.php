@@ -33,7 +33,7 @@ class ForumDraadVerbergen {
 	 * Shared primary key
 	 * Foreign key
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @ORM\Id()
 	 */
 	public $uid;

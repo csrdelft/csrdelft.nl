@@ -61,7 +61,7 @@ class ChangeLogEntry {
 	/**
 	 * Lidnummer of who did it
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;
