@@ -4,8 +4,8 @@ namespace CsrDelft\repository;
 
 use CsrDelft\entity\DebugLogEntry;
 use CsrDelft\model\security\LoginModel;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
