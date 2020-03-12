@@ -25,7 +25,7 @@ class ChangeLogEntry {
 	public $id;
 	/**
 	 * The moment it changed
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 * @Serializer\Groups("datatable")
 	 */
