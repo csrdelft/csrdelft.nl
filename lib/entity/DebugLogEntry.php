@@ -1,103 +1,85 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\entity;
 
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * DebugLogEntry.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\DebugLogRepository")
+ * @ORM\Table("debug_log")
  */
-class DebugLogEntry extends PersistentEntity {
-
+class DebugLogEntry {
 	/**
 	 * Primary key
 	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
 	public $id;
 	/**
 	 * Module controller and action with params
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $class_function;
 	/**
 	 * Dump data
 	 * @var string LongText
+	 * @ORM\Column(type="longtext")
 	 */
 	public $dump;
 	/**
 	 * Call trace
 	 * @var string
+	 * @ORM\Column(type="text")
 	 */
 	public $call_trace;
 	/**
 	 * DateTime
 	 * @var string
+	 * @ORM\Column(type="datetime")
 	 */
 	public $moment;
 	/**
 	 * Lidnummer
 	 * @var string
+	 * @ORM\Column(type="uid", nullable=true)
 	 */
 	public $uid;
 	/**
 	 * Lidnummer of original user
 	 * @var string
+	 * @ORM\Column(type="uid", nullable=true)
 	 */
 	public $su_uid;
 	/**
 	 * IP address
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $ip;
 	/**
-	 * IP address referer
-	 * @var string
-	 */
-	public $ip_referer;
-	/**
 	 * Request URI
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $request;
 	/**
 	 * Referer
 	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $referer;
 	/**
 	 * User agent
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $user_agent;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'id' => array(T::Integer, false, 'auto_increment'),
-		'class_function' => array(T::String),
-		'dump' => array(T::LongText, true),
-		'call_trace' => array(T::Text),
-		'moment' => array(T::DateTime),
-		'uid' => array(T::UID, true),
-		'su_uid' => array(T::UID, true),
-		'ip' => array(T::String),
-		'request' => array(T::String),
-		'referer' => array(T::String, true),
-		'user_agent' => array(T::String)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'debug_log';
-
 }

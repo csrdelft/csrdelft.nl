@@ -12,7 +12,8 @@
  * test door ./cron.monthly.php te typen
  */
 
-use CsrDelft\model\DebugLogModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\repository\DebugLogRepository;
 
 chdir(dirname(__FILE__) . '/../lib/');
 
@@ -23,7 +24,7 @@ $start = microtime(true);
 try {
     passthru('php ../bin/cron/sponsor_affiliates_download.php');
 } catch (Exception $e) {
-    DebugLogModel::instance()->log('cron.php', 'php sponsor_affiliates_download.php', array(), $e);
+    ContainerFacade::getContainer()->get(DebugLogRepository::class)->log('cron.php', 'php sponsor_affiliates_download.php', array(), $e);
 }
 
 $finish = microtime(true) - $start;

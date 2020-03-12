@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\common;
+namespace CsrDelft\common\Doctrine\Type;
 
 
 use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;

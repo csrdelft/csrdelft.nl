@@ -2,9 +2,9 @@
 
 namespace CsrDelft\common;
 
-use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
+use CsrDelft\repository\DebugLogRepository;
 use Exception;
 use Maknz\Slack\Client as SlackClient;
 use Throwable;
@@ -69,7 +69,7 @@ final class ShutdownHandler {
 	public static function debugLogHandler() {
 		$debug = static::getDebug();
 		if ($debug !== null) {
-			DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
+			ContainerFacade::getContainer()->get(DebugLogRepository::class)->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
 		}
 	}
 

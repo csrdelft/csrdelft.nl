@@ -18,9 +18,9 @@
  */
 
 use CsrDelft\Kernel;
-use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
@@ -35,7 +35,7 @@ $container = $kernel->getContainer();
 
 $start = microtime(true);
 
-$debugLogModel = $container->get(DebugLogModel::class);
+$debugLogRepository = $container->get(DebugLogRepository::class);
 $logModel = $container->get(LogRepository::class);
 $loginModel = $container->get(LoginModel::class);
 $oneTimeTokensModel = $container->get(OneTimeTokensRepository::class);
@@ -46,30 +46,30 @@ $forumCategorieRepository = $container->get(ForumCategorieRepository::class);
 
 // Debuglog
 try {
-	$debugLogModel->opschonen();
+	$debugLogRepository->opschonen();
 } catch (Exception $e) {
-	$debugLogModel->log('cron.php', 'DebugLogModel::opschonen()', array(), $e);
+	$debugLogRepository->log('cron.php', 'DebugLogModel::opschonen()', array(), $e);
 }
 
 // Log
 try {
 	$logModel->opschonen();
 } catch (Exception $e) {
-	$debugLogModel->log('cron.php', 'LogModel::opschonen()', array(), $e);
+	$debugLogRepository->log('cron.php', 'LogModel::opschonen()', array(), $e);
 }
 
 // LoginModel
 try {
 	$loginModel->opschonen();
 } catch (Exception $e) {
-	$debugLogModel->log('cron.php', 'LoginModel::opschonen()', array(), $e);
+	$debugLogRepository->log('cron.php', 'LoginModel::opschonen()', array(), $e);
 }
 
 // VerifyModel
 try {
 	$oneTimeTokensModel->opschonen();
 } catch (Exception $e) {
-	$debugLogModel->log('cron.php', 'VerifyModel::opschonen()', array(), $e);
+	$debugLogRepository->log('cron.php', 'VerifyModel::opschonen()', array(), $e);
 }
 
 // Instellingen
@@ -77,27 +77,27 @@ try {
 	$instellingenRepository->opschonen();
 	$lidInstellingenRepository->opschonen();
 } catch (Exception $e) {
-	$debugLogModel->log('cron.php', '(Lid)InstellingenModel::instance()->opschonen()', array(), $e);
+	$debugLogRepository->log('cron.php', '(Lid)InstellingenModel::instance()->opschonen()', array(), $e);
 }
 
 // Corvee herinneringen
 try {
 	$corveeHerinneringenModel::stuurHerinneringen();
 } catch (Exception $e) {
-	$debugLogModel->log('cron.php', 'CorveeHerinneringenModel::stuurHerinneringen()', array(), $e);
+	$debugLogRepository->log('cron.php', 'CorveeHerinneringenModel::stuurHerinneringen()', array(), $e);
 }
 
 // Forum opschonen
 try {
 	$forumCategorieRepository->opschonen();
 } catch (Exception $e) {
-	$debugLogModel->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);
+	$debugLogRepository->log('cron.php', 'ForumModel::instance()->opschonen()', array(), $e);
 }
 
 passthru('php ../bin/cron/pin_transactie_download.php', $ret);
 
 if ($ret !== 0) {
-	$debugLogModel->log('cron.php', 'pin_transactie_download', [], 'exit '. $ret);
+	$debugLogRepository->log('cron.php', 'pin_transactie_download', [], 'exit '. $ret);
 }
 
 $finish = microtime(true) - $start;

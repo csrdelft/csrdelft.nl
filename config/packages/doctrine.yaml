@@ -14,7 +14,9 @@ doctrine:
 
         url: '%env(resolve:DATABASE_URL)%'
         types:
-          changelog: CsrDelft\common\ChangeLogType
+          changelog: CsrDelft\common\Doctrine\Type\ChangeLogType
+          longtext: CsrDelft\common\Doctrine\Type\LongTextType
+          uid: CsrDelft\common\Doctrine\Type\UidType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

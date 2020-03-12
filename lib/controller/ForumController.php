@@ -9,9 +9,9 @@ use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumZoeken;
-use CsrDelft\model\DebugLogModel;
 use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
 use CsrDelft\repository\forum\ForumDelenRepository;
@@ -39,9 +39,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ForumController extends AbstractController {
 	/**
-	 * @var DebugLogModel
+	 * @var DebugLogRepository
 	 */
-	private $debugLogModel;
+	private $debugLogRepository;
 	/**
 	 * @var ForumDelenMeldingRepository
 	 */
@@ -81,7 +81,7 @@ class ForumController extends AbstractController {
 
 	public function __construct(
 		ForumCategorieRepository $forumCategorieRepository,
-		DebugLogModel $debugLogModel,
+		DebugLogRepository $debugLogRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
 		ForumDelenMeldingRepository $forumDelenMeldingRepository,
 		ForumDelenRepository $forumDelenRepository,
@@ -91,7 +91,7 @@ class ForumController extends AbstractController {
 		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
 		ForumPostsRepository $forumPostsRepository
 	) {
-		$this->debugLogModel = $debugLogModel;
+		$this->debugLogRepository = $debugLogRepository;
 		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
 		$this->forumDelenRepository = $forumDelenRepository;
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
@@ -614,7 +614,7 @@ class ForumController extends AbstractController {
 		$filter = new SimpleSpamfilter();
 		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
 		if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || (isset($titel) && $titel && $filter->isSpam($titel))) {
-			$this->debugLogModel->log(static::class, 'posten', [$forum_id, $draad_id], 'SPAM ' . $tekst);
+			$this->debugLogRepository->log(static::class, 'posten', [$forum_id, $draad_id], 'SPAM ' . $tekst);
 			setMelding('SPAM', -1);
 			throw new CsrToegangException("");
 		}

@@ -1,27 +1,23 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\repository;
 
-use CsrDelft\model\entity\DebugLogEntry;
+use CsrDelft\entity\DebugLogEntry;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\PersistenceModel;
 use Exception;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 /**
- * DebugLogModel.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class DebugLogModel extends PersistenceModel {
-
-	const ORM = DebugLogEntry::class;
+class DebugLogRepository extends AbstractRepository {
 	/**
 	 * @var LoginModel
 	 */
 	private $loginModel;
 
-	public function __construct(LoginModel $loginModel) {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registry, LoginModel $loginModel) {
+		parent::__construct($registry, DebugLogEntry::class);
 
 		$this->loginModel = $loginModel;
 	}
@@ -29,10 +25,11 @@ class DebugLogModel extends PersistenceModel {
 	/**
 	 */
 	public function opschonen() {
-		$entries = $this->find('moment < ?', array(strtotime('-2 months')));
-		foreach ($entries as $entry) {
-			$this->delete($entry);
-		}
+		$this->createQueryBuilder('l')
+			->delete()
+			->where('l.moment < :moment')
+			->setParameter('moment', date_create('-2 months'))
+			->getQuery()->execute();
 	}
 
 	/**
@@ -49,7 +46,7 @@ class DebugLogModel extends PersistenceModel {
 		$entry->dump = $dump;
 		$exception = new Exception();
 		$entry->call_trace = $exception->getTraceAsString();
-		$entry->moment = getDateTime();
+		$entry->moment = date_create();
 		$entry->uid = LoginModel::getUid();
 		if ($this->loginModel->isSued()) {
 			$entry->su_uid = LoginModel::getSuedFrom()->uid;
@@ -57,13 +54,14 @@ class DebugLogModel extends PersistenceModel {
 		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
 		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
 		$entry->request = REQUEST_URI ?: 'CLI';
-		$entry->ip_referer = HTTP_REFERER ?: '';
 		$entry->user_agent = @$_SERVER['HTTP_USER_AGENT'] ?: 'CLI';
-		$entry->id = $this->create($entry);
-		if (DEBUG AND $this->database->getDatabase()->inTransaction()) {
+
+		$this->getEntityManager()->persist($entry);
+		if (DEBUG AND $this->getEntityManager()->getConnection()->isTransactionActive()) {
 			setMelding('Debug log may not be committed: database transaction', 2);
 			setMelding($dump, 0);
 		}
+		$this->getEntityManager()->flush();
 		return $entry;
 	}
 
