@@ -40,13 +40,14 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 			$this->getEntityManager()->persist($voorkeur);
 			$this->getEntityManager()->flush();
 		} else {
-			$this->maakForumDraadMelding($draad->draad_id, $uid, $niveau);
+			$this->maakForumDraadMelding($draad, $uid, $niveau);
 		}
 	}
 
-	protected function maakForumDraadMelding($draad_id, $uid, $niveau) {
+	protected function maakForumDraadMelding(ForumDraad $draad, $uid, $niveau) {
 		$melding = new ForumDraadMelding();
-		$melding->draad_id = $draad_id;
+		$melding->draad = $draad;
+		$melding->draad_id = $draad->draad_id;
 		$melding->uid = $uid;
 		$melding->niveau = $niveau;
 

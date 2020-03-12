@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\model\entity\bibliotheek;
+namespace CsrDelft\entity\bibliotheek;
 
 
 use CsrDelft\common\CsrException;
