@@ -5,19 +5,20 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\Afbeelding;
-use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\fotoalbum\FotoAlbumModel;
-use CsrDelft\model\fotoalbum\FotoModel;
-use CsrDelft\model\fotoalbum\FotoTagsModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
+use CsrDelft\repository\fotoalbum\FotoRepository;
+use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
 use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -34,18 +35,18 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class FotoAlbumController extends AbstractController {
 	private $fotoAlbumModel;
 	/**
-	 * @var FotoTagsModel
+	 * @var FotoTagsRepository
 	 */
-	private $fotoTagsModel;
+	private $fotoTagsRepository;
 	/**
-	 * @var FotoModel
+	 * @var FotoRepository
 	 */
-	private $fotoModel;
+	private $fotoRepository;
 
-	public function __construct(FotoTagsModel $fotoTagsModel, FotoAlbumModel $fotoAlbumModel, FotoModel $fotoModel) {
-		$this->fotoTagsModel = $fotoTagsModel;
+	public function __construct(FotoTagsRepository $fotoTagsRepository, FotoAlbumRepository $fotoAlbumModel, FotoRepository $fotoRepository) {
+		$this->fotoTagsRepository = $fotoTagsRepository;
 		$this->fotoAlbumModel = $fotoAlbumModel;
-		$this->fotoModel = $fotoModel;
+		$this->fotoRepository = $fotoRepository;
 	}
 
 	public function bekijken($dir) {
@@ -125,20 +126,19 @@ class FotoAlbumController extends AbstractController {
 					$uploader->opslaan($album->path, $filename);
 					$foto = new Foto($filename, $album);
 					// opslaan gelukt?
-					if ($foto->exists()) {
-						$this->fotoModel->verwerkFoto($foto);
-						// verwerken gelukt?
-						if ($foto->isComplete()) {
-							if ($poster) {
-								return $this->csrRedirect($album->getUrl() . '#' . $foto->getResizedUrl());
-							} else {
-								return new JsonResponse(true);
-							}
-						} else {
-							throw new CsrGebruikerException('Verwerken mislukt');
-						}
-					} else {
+					if (!$foto->exists()) {
 						throw new CsrGebruikerException('Opslaan mislukt');
+					}
+					$this->fotoRepository->verwerkFoto($foto);
+					// verwerken gelukt?
+					if (!$foto->isComplete()) {
+						throw new CsrGebruikerException('Verwerken mislukt');
+					}
+
+					if ($poster) {
+						return $this->csrRedirect($album->getUrl() . '#' . $foto->getResizedUrl());
+					} else {
+						return new JsonResponse(true);
 					}
 				} catch (CsrGebruikerException $e) {
 					return new JsonResponse(array('error' => $e->getMessage()), 500);
@@ -243,17 +243,18 @@ class FotoAlbumController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		if ($album->isEmpty()) {
-			if (1 === $this->fotoAlbumModel->delete($album)) {
+			try {
+				$this->fotoAlbumModel->delete($album);
 				setMelding('Fotoalbum verwijderen geslaagd', 1);
 				return new JsonResponse(dirname($album->getUrl()));
-			} else {
+			} catch (ORMException $ex) {
 				setMelding('Fotoalbum verwijderen mislukt', -1);
 				return new JsonResponse($album->getUrl());
 			}
 		}
 		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
-		if ($this->fotoModel->verwijderFoto($foto)) {
+		if ($this->fotoRepository->verwijderFoto($foto)) {
 			echo '<div id="' . md5($filename) . '" class="remove"></div>';
 			exit;
 		} else {
@@ -270,7 +271,7 @@ class FotoAlbumController extends AbstractController {
 		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
 		$degrees = $request->request->getInt('rotation');
-		$foto->rotate($degrees);
+		$this->fotoRepository->rotate($foto, $degrees);
 		return new JsonResponse(true);
 	}
 
@@ -285,7 +286,7 @@ class FotoAlbumController extends AbstractController {
 		$query = iconv('utf-8', 'ascii//TRANSLIT', $zoekterm); // convert accented characters to regular
 		$limit = $request->query->getInt('limit', 5);
 		$result = array();
-		foreach ($this->fotoAlbumModel->find('subdir LIKE ?', array('%'. $query . '%'), null, 'subdir DESC', $limit) as $album) {
+		foreach ($this->fotoAlbumModel->find('subdir LIKE ?', array('%' . $query . '%'), null, 'subdir DESC', $limit) as $album) {
 			/** @var FotoAlbum $album */
 			$result[] = array(
 				'icon' => Icon::getTag('fotoalbum', null, 'Fotoalbum', 'mr-2'),
@@ -306,8 +307,8 @@ class FotoAlbumController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		// return all tags
-		$tags = $this->fotoTagsModel->getTags($foto);
-		return new JsonResponse($tags->fetchAll());
+		$tags = $this->fotoTagsRepository->getTags($foto);
+		return new JsonResponse($tags);
 	}
 
 	public function addtag(Request $request, $dir) {
@@ -327,10 +328,10 @@ class FotoAlbumController extends AbstractController {
 			$x = $formulier->findByName('x')->getValue();
 			$y = $formulier->findByName('y')->getValue();
 			$size = $formulier->findByName('size')->getValue();
-			$this->fotoTagsModel->addTag($foto, $uid, $x, $y, $size);
+			$this->fotoTagsRepository->addTag($foto, $uid, $x, $y, $size);
 			// return all tags
-			$tags = $this->fotoTagsModel->getTags($foto);
-			return new JsonResponse($tags->fetchAll());
+			$tags = $this->fotoTagsRepository->getTags($foto);
+			return new JsonResponse($tags);
 		} else {
 			return $formulier;
 		}
@@ -342,13 +343,13 @@ class FotoAlbumController extends AbstractController {
 		if (!LoginModel::mag(P_ALBUM_MOD) && !LoginModel::mag($keyword)) {
 			throw new CsrToegangException();
 		}
-		$this->fotoTagsModel->removeTag($refuuid, $keyword);
+		$this->fotoTagsRepository->removeTag($refuuid, $keyword);
 		/** @var Foto $foto */
-		$foto = $this->fotoModel->retrieveByUUID($refuuid);
+		$foto = $this->fotoRepository->retrieveByUUID($refuuid);
 		if ($foto) {
 			// return all tags
-			$tags = $this->fotoTagsModel->getTags($foto);
-			return new JsonResponse($tags->fetchAll());
+			$tags = $this->fotoTagsRepository->getTags($foto);
+			return new JsonResponse($tags);
 		} else {
 			return new JsonResponse(array());
 		}

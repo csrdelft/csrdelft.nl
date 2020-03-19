@@ -6,13 +6,11 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleSync;
+use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
-use CsrDelft\model\fotoalbum\FotoModel;
-use CsrDelft\model\fotoalbum\FotoTagsModel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
@@ -33,6 +31,8 @@ use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
 use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\repository\fotoalbum\FotoRepository;
+use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\VerjaardagenService;
@@ -58,13 +58,13 @@ class ProfielController extends AbstractController {
 	 */
 	private $commissieVoorkeurRepository;
 	/**
-	 * @var FotoTagsModel
+	 * @var FotoTagsRepository
 	 */
-	private $fotoTagsModel;
+	private $fotoTagsRepository;
 	/**
-	 * @var FotoModel
+	 * @var FotoRepository
 	 */
-	private $fotoModel;
+	private $fotoRepository;
 	/**
 	 * @var BesturenModel
 	 */
@@ -164,8 +164,8 @@ class ProfielController extends AbstractController {
 		CorveeTakenModel $corveeTakenModel,
 		CorveeVrijstellingenModel $corveeVrijstellingenModel,
 		ForumPostsRepository $forumPostsRepository,
-		FotoModel $fotoModel,
-		FotoTagsModel $fotoTagsModel,
+		FotoRepository $fotoRepository,
+		FotoTagsRepository $fotoTagsRepository,
 		KetzersModel $ketzersModel,
 		KwalificatiesModel $kwalificatiesModel,
 		LidToestemmingRepository $lidToestemmingRepository,
@@ -191,8 +191,8 @@ class ProfielController extends AbstractController {
 		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
 		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
 		$this->forumPostsRepository = $forumPostsRepository;
-		$this->fotoModel = $fotoModel;
-		$this->fotoTagsModel = $fotoTagsModel;
+		$this->fotoRepository = $fotoRepository;
+		$this->fotoTagsRepository = $fotoTagsRepository;
 		$this->ketzersModel = $ketzersModel;
 		$this->kwalificatiesModel = $kwalificatiesModel;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
@@ -228,9 +228,9 @@ class ProfielController extends AbstractController {
 		}
 
 		$fotos = [];
-		foreach ($this->fotoTagsModel->find('keyword = ?', [$uid], null, null, 3) as $tag) {
+		foreach ($this->fotoTagsRepository->findBy(['keyword' => $uid], null, 3) as $tag) {
 			/** @var Foto $foto */
-			$foto = $this->fotoModel->retrieveByUUID($tag->refuuid);
+			$foto = $this->fotoRepository->retrieveByUUID($tag->refuuid);
 			if ($foto) {
 				$fotos[] = new FotoBBView($foto);
 			}

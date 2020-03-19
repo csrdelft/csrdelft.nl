@@ -2,11 +2,13 @@
 
 namespace CsrDelft\model\entity\fotoalbum;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrNotFoundException;
+use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\Map;
-use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * FotoAlbum.class.php
@@ -14,12 +16,16 @@ use CsrDelft\Orm\Entity\T;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoAlbumRepository")
+ * @ORM\Table("fotoalbums")
  */
 class FotoAlbum extends Map {
 
 	/**
 	 * Relatief pad in fotoalbum
 	 * @var string
+	 * @ORM\Column(type="stringkey")
+	 * @ORM\Id()
 	 */
 	public $subdir;
 	/**
@@ -40,26 +46,9 @@ class FotoAlbum extends Map {
 	/**
 	 * Creator
 	 * @var string
+	 * @ORM\Column(type="uid")
 	 */
 	public $owner;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'subdir' => array(T::StringKey),
-		'owner' => array(T::UID)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('subdir');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'fotoalbums';
 
 	public function __construct($path = null, $absolute = false) {
 		parent::__construct();
@@ -155,7 +144,7 @@ class FotoAlbum extends Map {
 			}
 			foreach ($scan as $entry) {
 				if (substr($entry, 0, 1) !== '.' && substr($entry, 0, 1) !== '_' && is_dir(join_paths($this->path, $entry))) {
-					$subalbum = FotoAlbumModel::instance()->getFotoAlbum(join_paths($this->subdir, $entry));
+					$subalbum = ContainerFacade::getContainer()->get(FotoAlbumRepository::class)->getFotoAlbum(join_paths($this->subdir, $entry));
 					if ($subalbum) {
 						$this->subalbums[] = $subalbum;
 						if ($recursive) {
@@ -236,9 +225,6 @@ class FotoAlbum extends Map {
 	}
 
 	public function isOwner() {
-		if (!isset($this->owner)) {
-			FotoAlbumModel::instance()->retrieveAttributes($this, array('owner'));
-		}
 		return LoginModel::mag($this->owner);
 	}
 

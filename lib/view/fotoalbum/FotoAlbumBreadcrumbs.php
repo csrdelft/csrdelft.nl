@@ -4,7 +4,7 @@ namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -50,7 +50,7 @@ class FotoAlbumBreadcrumbs {
 
 	private static function getDropDown($subdir, $albumnaam) {
 		try {
-			$parent = FotoAlbumModel::instance()->getFotoAlbum($subdir);
+			$parent = FotoAlbumRepository::instance()->getFotoAlbum($subdir);
 			$albums = $parent->getSubAlbums();
 			$dropdown = '<select onchange="location.href=this.value;">';
 			foreach ($albums as $album) {
