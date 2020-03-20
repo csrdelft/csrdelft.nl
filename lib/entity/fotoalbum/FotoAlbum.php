@@ -1,10 +1,9 @@
 <?php
 
-namespace CsrDelft\model\entity\fotoalbum;
+namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\Map;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
@@ -20,7 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("fotoalbums")
  */
 class FotoAlbum extends Map {
-
 	/**
 	 * Relatief pad in fotoalbum
 	 * @var string
@@ -51,7 +49,6 @@ class FotoAlbum extends Map {
 	public $owner;
 
 	public function __construct($path = null, $absolute = false) {
-		parent::__construct();
 		if ($path === true) { // called from PersistenceModel
 			$this->path = realpathunix(join_paths(PHOTOALBUM_PATH, $this->subdir));
 		} else if ($absolute == true && startsWith(realpathunix($path), realpathunix(PHOTOALBUM_PATH))) { // Check that $path is inside PHOTOALBUM_PATH

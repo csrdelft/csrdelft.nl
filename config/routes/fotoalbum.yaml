@@ -1,23 +1,23 @@
 fotoalbum-thumb:
   path: /fotoalbum/{dir}/_thumbs/{foto}.{ext}
-  controller: CsrDelft\controller\FotoAlbumController::raw_image_thumb
+  controller: CsrDelft\controller\FotoAlbumController::raw_image
   methods: GET
   requirements: { dir: ".+", foto: "[^/]+", ext: "JPE?G|PNG|jpe?g|png" } # Sta / expliciet toe in dir
-  defaults: { _mag: "P_ALBUM_READ|P_ALBUM_PUBLIC_READ" }
+  defaults: { _mag: "P_ALBUM_READ|P_ALBUM_PUBLIC_READ", type: thumb }
 
 fotoalbum-resized:
   path: /fotoalbum/{dir}/_resized/{foto}.{ext}
-  controller: CsrDelft\controller\FotoAlbumController::raw_image_resized
+  controller: CsrDelft\controller\FotoAlbumController::raw_image
   methods: GET
   requirements: { dir: ".+", foto: "[^/]+", ext: "JPE?G|PNG|jpe?g|png" } # Sta / expliciet toe in dir
-  defaults: { _mag: "P_ALBUM_READ|P_ALBUM_PUBLIC_READ" }
+  defaults: { _mag: "P_ALBUM_READ|P_ALBUM_PUBLIC_READ", type: resized }
 
 fotoalbum-foto:
   path: /fotoalbum/{dir}/{foto}.{ext}
   controller: CsrDelft\controller\FotoAlbumController::raw_image
   methods: GET
   requirements: { dir: ".+", foto: "[^/]+", ext: "JPE?G|PNG|jpe?g|png" } # Sta / expliciet toe in dir
-  defaults: { _mag: "P_ALBUM_READ|P_ALBUM_PUBLIC_READ" }
+  defaults: { _mag: "P_ALBUM_READ|P_ALBUM_PUBLIC_READ", type: full }
 
 fotoalbum-uploaden:
   path: /fotoalbum/uploaden/{dir}

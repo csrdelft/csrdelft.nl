@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity\fotoalbum;
+namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\LoginModel;

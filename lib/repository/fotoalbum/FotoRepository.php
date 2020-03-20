@@ -7,6 +7,8 @@ use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\model\RetrieveByUuidTrait;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class FotoRepository extends AbstractRepository {
@@ -36,8 +38,15 @@ class FotoRepository extends AbstractRepository {
 
 	/**
 	 * @param Foto $foto
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function create(Foto $foto) {
+		$dbFoto = $this->find(['subdir' => $foto->subdir, 'filename' => $foto->filename]);
+		if ($dbFoto) {
+			$foto = $dbFoto;
+		}
+
 		$foto->owner = LoginModel::getUid();
 		$foto->rotation = 0;
 
@@ -46,8 +55,13 @@ class FotoRepository extends AbstractRepository {
 	}
 
 	public function delete(Foto $foto) {
-		$this->getEntityManager()->remove($foto);
-		$this->getEntityManager()->flush();
+		// Sta toe om een detached foto entity te verwijderen.
+		$this->createQueryBuilder('foto')
+			->delete()
+			->where('foto.subdir = :subdir and foto.filename = :filename')
+			->setParameter('subdir', $foto->subdir)
+			->setParameter('filename', $foto->filename)
+			->getQuery()->execute();
 	}
 
 	/**
@@ -95,8 +109,8 @@ class FotoRepository extends AbstractRepository {
 	 *
 	 * @param Foto $foto
 	 * @param int $degrees
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function rotate(Foto $foto, $degrees) {
 		$foto->rotation += $degrees;

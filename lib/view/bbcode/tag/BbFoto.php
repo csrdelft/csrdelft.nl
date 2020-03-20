@@ -4,6 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
@@ -60,7 +61,7 @@ class BbFoto extends BbTag {
 		$path = implode('/', $parts);
 		$path = str_replace('fotoalbum/', '', $path);
 		try {
-			$album = FotoAlbumRepository::instance()->getFotoAlbum($path);
+			$album = ContainerFacade::getContainer()->get(FotoAlbumRepository::class)->getFotoAlbum($path);
 			$foto = new Foto($filename, $album);
 			if (!$foto->exists()) {
 				throw new BbException('Foto niet gevonden.');

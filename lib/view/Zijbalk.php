@@ -89,7 +89,7 @@ abstract class Zijbalk {
 		}
 		// Nieuwste fotoalbum
 		if (lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
-			$album = FotoAlbumRepository::instance()->getMostRecentFotoAlbum();
+			$album = ContainerFacade::getContainer()->get(FotoAlbumRepository::class)->getMostRecentFotoAlbum();
 			if ($album !== null) {
 				$zijbalk[] = new FotoAlbumZijbalkView($album);
 			}

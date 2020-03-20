@@ -6,12 +6,14 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\fotoalbum\Foto;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
+use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use RecursiveDirectoryIterator;
@@ -42,9 +44,34 @@ class FotoAlbumRepository extends AbstractRepository {
 	}
 
 	/**
+	 * @param string $dir
+	 * @param int $limit
+	 * @return FotoAlbum[]
+	 */
+	public function zoeken($dir, $limit) {
+		return $this->createQueryBuilder('fa')
+			->where('fa.subdir LIKE :subdir')
+			->setParameter('subdir', '%' . $dir . '%')
+			->orderBy('fa.subdir', 'DESC')
+			->setMaxResults($limit)
+			->getQuery()->getResult();
+	}
+
+	/**
+	 * @param string $subdir
+	 * @return FotoAlbum[]
+	 */
+	public function findBySubdir($subdir) {
+		return $this->createQueryBuilder('fa')
+			->where('fa.subdir LIKE :subdir')
+			->setParameter('subdir', $subdir . '%')
+			->getQuery()->getResult();
+	}
+
+	/**
 	 * @param FotoAlbum $album
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function create(FotoAlbum $album) {
 		if (!file_exists($album->path)) {
@@ -62,8 +89,8 @@ class FotoAlbumRepository extends AbstractRepository {
 	/**
 	 * @param FotoAlbum $album
 	 * @return void
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function delete(FotoAlbum $album) {
 		$path = $album->path . '_resized';
@@ -180,7 +207,7 @@ HTML;
 		}
 
 		// nieuwe subdir op basis van path
-		$newDir = dirname($oldDir) . '/' . $newName . '/';
+		$newDir = dirname($oldDir) . '/' . $newName;
 
 		if (is_dir(PHOTOALBUM_PATH . $newDir)) {
 			throw new CsrException('Nieuwe album naam bestaat al');
@@ -200,13 +227,17 @@ HTML;
 		$album->subdir = $newDir;
 		$album->path = PHOTOALBUM_PATH . $newDir;
 
-		foreach ($this->find('subdir LIKE ?', array($oldDir . '%')) as $subdir) {
+		foreach ($this->findBySubdir($oldDir) as $subdir) {
 			// updaten gaat niet vanwege primary key
 			$this->delete($subdir);
 			$subdir->subdir = str_replace($oldDir, $newDir, $album->subdir);
 			$this->create($subdir);
 		}
-		foreach ($this->fotoRepository->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+		$fotos = $this->fotoRepository->createQueryBuilder('f')
+			->where('f.subdir LIKE :subdir')
+			->setParameter('subdir', $oldDir . '%')
+			->getQuery()->getResult();
+		foreach ($fotos as $foto) {
 			/** @var Foto $foto */
 			$oldUUID = $foto->getUUID();
 			// updaten gaat niet vanwege primary key
@@ -267,7 +298,7 @@ HTML;
 	}
 
 	public function opschonen(FotoAlbum $fotoalbum) {
-		foreach ($this->find('subdir LIKE ?', array($fotoalbum->subdir . '%')) as $album) {
+		foreach ($this->findBySubdir($fotoalbum->subdir) as $album) {
 			/** @var FotoAlbum $album */
 			if (!$album->exists()) {
 				foreach ($this->fotoRepository->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {

@@ -5,8 +5,6 @@ namespace CsrDelft\entity\fotoalbum;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\Afbeelding;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\security\LoginModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
