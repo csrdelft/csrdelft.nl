@@ -1,11 +1,12 @@
 <?php
 
-namespace CsrDelft\model\entity\fotoalbum;
+namespace CsrDelft\entity\fotoalbum;
 
-use CsrDelft\model\fotoalbum\FotoModel;
-use CsrDelft\model\fotoalbum\FotoTagsModel;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\fotoalbum\FotoRepository;
+use CsrDelft\repository\fotoalbum\FotoTagsRepository;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * FotoTagAlbum.class.php
@@ -58,8 +59,11 @@ class FotoTagAlbum extends FotoAlbum {
 	public function getFotos($incompleet = false) {
 		if (!isset($this->fotos)) {
 			// find tagged fotos
-			foreach (FotoTagsModel::instance()->find('keyword = ?', array($this->uid)) as $tag) {
-				$foto = FotoModel::instance()->retrieveByUUID($tag->refuuid);
+			$container = ContainerFacade::getContainer();
+			$fotoTagsRepository = $container->get(FotoTagsRepository::class);
+			$fotoRepository = $container->get(FotoRepository::class);
+			foreach ($fotoTagsRepository->findBy(['keyword' =>$this->uid]) as $tag) {
+				$foto = $fotoRepository->retrieveByUUID($tag->refuuid);
 				if ($foto) {
 					$this->fotos[] = $foto;
 				}

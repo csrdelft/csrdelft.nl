@@ -1,20 +1,18 @@
 <?php
 
-namespace CsrDelft\model\entity\fotoalbum;
+namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\Afbeelding;
-use CsrDelft\model\fotoalbum\FotoModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Foto.class.php
- *
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoRepository")
+ * @ORM\Table("fotos")
  */
 class Foto extends Afbeelding {
 	const FOTOALBUM_ROOT = "/fotoalbum";
@@ -22,40 +20,31 @@ class Foto extends Afbeelding {
 	const RESIZED_DIR = '_resized';
 
 	/**
+	 * @var string
+	 * @ORM\Column(type="stringkey")
+	 * @ORM\Id()
+	 */
+	public $filename;
+
+	/**
 	 * Relatief pad in fotoalbum
 	 * @var string
+	 * @ORM\Column(type="stringkey")
+	 * @ORM\Id()
 	 */
 	public $subdir;
 	/**
 	 * Degrees of rotation
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $rotation;
 	/**
 	 * Uploader
 	 * @var string
+	 * @ORM\Column(type="uid")
 	 */
 	public $owner;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'subdir' => array(T::StringKey),
-		'filename' => array(T::StringKey),
-		'rotation' => array(T::Integer),
-		'owner' => array(T::UID)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('subdir', 'filename');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'fotos';
 
 	public function __construct($filename = null, FotoAlbum $album = null, $parse = false) {
 		if ($filename === true) { // called from PersistenceModel
@@ -152,35 +141,6 @@ class Foto extends Afbeelding {
 
 	public function isComplete() {
 		return $this->hasThumb() && $this->hasResized();
-	}
-
-	/**
-	 * Rotate resized & thumb for prettyPhoto to show the right way up.
-	 *
-	 * @param int $degrees
-	 */
-	public function rotate($degrees) {
-		if (!isset($this->rotation)) {
-			FotoModel::instance()->retrieveAttributes($this, array('rotation', 'owner'));
-		}
-		$this->rotation += $degrees;
-		$this->rotation %= 360;
-		FotoModel::instance()->update($this);
-		if ($this->hasThumb()) {
-			unlink($this->getThumbPath());
-		}
-		$this->createThumb();
-		if ($this->hasResized()) {
-			unlink($this->getResizedPath());
-		}
-		$this->createResized();
-	}
-
-	public function isOwner() {
-		if (!isset($this->owner)) {
-			FotoModel::instance()->retrieveAttributes($this, array('rotation', 'owner'));
-		}
-		return LoginModel::mag($this->owner);
 	}
 
 	public function magBekijken() {

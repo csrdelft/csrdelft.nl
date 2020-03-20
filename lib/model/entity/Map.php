@@ -2,15 +2,10 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\Orm\Entity\PersistentEntity;
-
 /**
- * Map.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
-class Map extends PersistentEntity {
+class Map {
 
 	/**
 	 * Mapnaam
@@ -44,5 +39,4 @@ class Map extends PersistentEntity {
 	public function exists() {
 		return @is_readable($this->path) AND is_dir($this->path);
 	}
-
 }

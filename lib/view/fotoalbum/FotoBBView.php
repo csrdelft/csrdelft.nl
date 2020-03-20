@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fotoalbum;
 
-use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Response;

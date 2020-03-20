@@ -3,13 +3,13 @@
 namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\fotoalbum\FotoAlbumModel;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
@@ -89,7 +89,7 @@ abstract class Zijbalk {
 		}
 		// Nieuwste fotoalbum
 		if (lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
-			$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
+			$album = ContainerFacade::getContainer()->get(FotoAlbumRepository::class)->getMostRecentFotoAlbum();
 			if ($album !== null) {
 				$zijbalk[] = new FotoAlbumZijbalkView($album);
 			}

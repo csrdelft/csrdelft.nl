@@ -4,11 +4,12 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
-use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
+use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 
@@ -103,8 +104,9 @@ class BbFotoalbum extends BbTag {
 	 */
 	private function getAlbum(string $url) {
 		try {
+			$fotoAlbumRepository = ContainerFacade::getContainer()->get(FotoAlbumRepository::class);
 			if ($url === 'laatste') {
-				$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
+				$album = $fotoAlbumRepository->getMostRecentFotoAlbum();
 			} else {
 				//vervang url met pad
 				$url = str_ireplace(CSR_ROOT, '', $url);
@@ -114,7 +116,7 @@ class BbFotoalbum extends BbTag {
 				if (startsWith($url, '/')) {
 					$url = substr($url, 1);
 				}
-				$album = FotoAlbumModel::instance()->getFotoAlbum($url);
+				$album = $fotoAlbumRepository->getFotoAlbum($url);
 			}
 			return $album;
 		} catch (CsrNotFoundException $ex) {

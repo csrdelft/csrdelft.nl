@@ -1,72 +1,98 @@
 <?php
 
-namespace CsrDelft\model\fotoalbum;
+namespace CsrDelft\repository\fotoalbum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\model\entity\fotoalbum\Foto;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\entity\fotoalbum\Foto;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
+use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 /**
- * FotoAlbumModel.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
-class FotoAlbumModel extends PersistenceModel {
-
-	const ORM = FotoAlbum::class;
-
+class FotoAlbumRepository extends AbstractRepository {
 	/**
-	 * @var FotoModel
+	 * @var FotoRepository
 	 */
-	private $fotoModel;
+	private $fotoRepository;
 	/**
-	 * @var FotoTagsModel
+	 * @var FotoTagsRepository
 	 */
-	private $fotoTagsModel;
+	private $fotoTagsRepository;
 
 	public function __construct(
-		FotoModel $fotoModel,
-		FotoTagsModel $fotoTagsModel
+		ManagerRegistry $registry,
+		FotoRepository $fotoRepository,
+		FotoTagsRepository $fotoTagsRepository
 	) {
-		parent::__construct();
+		parent::__construct($registry, FotoAlbum::class);
 
-		$this->fotoModel = $fotoModel;
-		$this->fotoTagsModel = $fotoTagsModel;
+		$this->fotoRepository = $fotoRepository;
+		$this->fotoTagsRepository = $fotoTagsRepository;
 	}
 
 	/**
-	 * @param PersistentEntity|FotoAlbum $album
-	 * @return string
-	 * @throws CsrException
+	 * @param string $dir
+	 * @param int $limit
+	 * @return FotoAlbum[]
 	 */
-	public function create(PersistentEntity $album) {
-		if (!file_exists($album->path)) {
-			mkdir($album->path);
-			if (false === @chmod($album->path, 0755)) {
+	public function zoeken($dir, $limit) {
+		return $this->createQueryBuilder('fa')
+			->where('fa.subdir LIKE :subdir')
+			->setParameter('subdir', '%' . $dir . '%')
+			->orderBy('fa.subdir', 'DESC')
+			->setMaxResults($limit)
+			->getQuery()->getResult();
+	}
+
+	/**
+	 * @param string $subdir
+	 * @return FotoAlbum[]
+	 */
+	public function findBySubdir($subdir) {
+		return $this->createQueryBuilder('fa')
+			->where('fa.subdir LIKE :subdir')
+			->setParameter('subdir', $subdir . '%')
+			->getQuery()->getResult();
+	}
+
+	/**
+	 * @param FotoAlbum $album
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function create(FotoAlbum $album) {
+		if (!file_exists($album->getPath())) {
+			mkdir($album->getPath());
+			if (false === @chmod($album->getPath(), 0755)) {
 				throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars($album->path));
 			}
 		}
 		$album->owner = LoginModel::getUid();
-		return parent::create($album);
+
+		$this->getEntityManager()->persist($album);
+		$this->getEntityManager()->flush();
 	}
 
 	/**
-	 * @param PersistentEntity|FotoAlbum $album
-	 * @return int
+	 * @param FotoAlbum $album
+	 * @return void
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
-	public function delete(PersistentEntity $album) {
+	public function delete(FotoAlbum $album) {
 		$path = $album->path . '_resized';
 		if (file_exists($path)) {
 			rmdir($path);
@@ -78,7 +104,9 @@ class FotoAlbumModel extends PersistenceModel {
 		if (file_exists($album->path)) {
 			rmdir($album->path);
 		}
-		return parent::delete($album);
+
+		$this->getEntityManager()->remove($album);
+		$this->getEntityManager()->flush();
 	}
 
 	public function getFotoAlbum($path) {
@@ -115,7 +143,7 @@ class FotoAlbumModel extends PersistenceModel {
 				if ($object->isDir()) {
 					$albums++;
 					$album = new FotoAlbum($path, true);
-					if (!$this->exists($album)) {
+					if (!$this->find($album->subdir)) {
 						$this->create($album);
 					}
 					if (false === @chmod($path, 0755)) {
@@ -134,7 +162,7 @@ class FotoAlbumModel extends PersistenceModel {
 					if (!$foto->exists()) {
 						throw new CsrException('Foto bestaat niet: ' . $foto->directory . $foto->filename);
 					}
-					$this->fotoModel->verwerkFoto($foto);
+					$this->fotoRepository->verwerkFoto($foto);
 					if (false === @chmod($path, 0644)) {
 						throw new CsrException('Geen eigenaar van foto: ' . $path);
 					}
@@ -179,7 +207,7 @@ HTML;
 		}
 
 		// nieuwe subdir op basis van path
-		$newDir = dirname($oldDir) . '/' . $newName . '/';
+		$newDir = dirname($oldDir) . '/' . $newName;
 
 		if (is_dir(PHOTOALBUM_PATH . $newDir)) {
 			throw new CsrException('Nieuwe album naam bestaat al');
@@ -199,24 +227,24 @@ HTML;
 		$album->subdir = $newDir;
 		$album->path = PHOTOALBUM_PATH . $newDir;
 
-		foreach ($this->find('subdir LIKE ?', array($oldDir . '%')) as $subdir) {
+		foreach ($this->findBySubdir($oldDir) as $subdir) {
 			// updaten gaat niet vanwege primary key
 			$this->delete($subdir);
 			$subdir->subdir = str_replace($oldDir, $newDir, $album->subdir);
 			$this->create($subdir);
 		}
-		foreach ($this->fotoModel->find('subdir LIKE ?', array($oldDir . '%')) as $foto) {
+		foreach ($this->fotoRepository->findBySubdir($oldDir) as $foto) {
 			/** @var Foto $foto */
 			$oldUUID = $foto->getUUID();
 			// updaten gaat niet vanwege primary key
-			$this->fotoModel->delete($foto);
+			$this->fotoRepository->delete($foto);
 			$foto->subdir = str_replace($oldDir, $newDir, $foto->subdir);
-			$this->fotoModel->create($foto);
-			foreach ($this->fotoTagsModel->find('refuuid = ?', array($oldUUID)) as $tag) {
+			$this->fotoRepository->create($foto);
+			foreach ($this->fotoTagsRepository->findBy(['refuuid' => $oldUUID]) as $tag) {
 				// updaten gaat niet vanwege primary key
-				$this->fotoTagsModel->delete($tag);
+				$this->fotoTagsRepository->delete($tag);
 				$tag->refuuid = $foto->getUUID();
-				$this->fotoTagsModel->create($tag);
+				$this->fotoTagsRepository->create($tag);
 			}
 		}
 		return true;
@@ -239,9 +267,9 @@ HTML;
 				if ($success) {
 					// database in sync houden
 					// updaten gaat niet vanwege primary key
-					$this->fotoModel->delete($foto);
+					$this->fotoRepository->delete($foto);
 					$foto->filename = str_replace('folder', '', $foto->filename);
-					$this->fotoModel->create($foto);
+					$this->fotoRepository->create($foto);
 				}
 				if ($foto === $cover) {
 					return $success;
@@ -258,20 +286,20 @@ HTML;
 		if ($success) {
 			// database in sync houden
 			// updaten gaat niet vanwege primary key
-			$this->fotoModel->delete($cover);
+			$this->fotoRepository->delete($cover);
 			$cover->filename = substr_replace($cover->filename, 'folder', strrpos($cover->filename, '.'), 0);
-			$this->fotoModel->create($cover);
+			$this->fotoRepository->create($cover);
 		}
 		return $success;
 	}
 
 	public function opschonen(FotoAlbum $fotoalbum) {
-		foreach ($this->find('subdir LIKE ?', array($fotoalbum->subdir . '%')) as $album) {
+		foreach ($this->findBySubdir($fotoalbum->subdir) as $album) {
 			/** @var FotoAlbum $album */
 			if (!$album->exists()) {
-				foreach ($this->fotoModel->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
-					$this->fotoModel->delete($foto);
-					$this->fotoTagsModel->verwijderFotoTags($foto);
+				foreach ($this->fotoRepository->findBySubdir($album->subdir) as $foto) {
+					$this->fotoRepository->delete($foto);
+					$this->fotoTagsRepository->verwijderFotoTags($foto);
 				}
 				$this->delete($album);
 			}
