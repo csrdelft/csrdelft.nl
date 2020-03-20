@@ -233,11 +233,7 @@ HTML;
 			$subdir->subdir = str_replace($oldDir, $newDir, $album->subdir);
 			$this->create($subdir);
 		}
-		$fotos = $this->fotoRepository->createQueryBuilder('f')
-			->where('f.subdir LIKE :subdir')
-			->setParameter('subdir', $oldDir . '%')
-			->getQuery()->getResult();
-		foreach ($fotos as $foto) {
+		foreach ($this->fotoRepository->findBySubdir($oldDir) as $foto) {
 			/** @var Foto $foto */
 			$oldUUID = $foto->getUUID();
 			// updaten gaat niet vanwege primary key

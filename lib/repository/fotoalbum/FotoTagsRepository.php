@@ -55,7 +55,7 @@ class FotoTagsRepository extends AbstractRepository {
 		$tag->refuuid = $foto->getUUID();
 		$tag->keyword = $uid;
 		$tag->door = LoginModel::getUid();
-		$tag->wanneer = getDateTime();
+		$tag->wanneer = date_create();
 		$tag->x = (int)$x;
 		$tag->y = (int)$y;
 		$tag->size = (int)$size;

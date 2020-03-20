@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoTagsRepository")
  * @ORM\Table("foto_tags")
  */
-class FotoTag {
+class FotoTag implements \JsonSerializable {
 	/**
 	 * @see PersistentEntity Unique Universal Identifier
 	 * @var string
@@ -35,7 +35,7 @@ class FotoTag {
 	public $door;
 	/**
 	 * Gemaakt op datum en tijd
-	 * @var string
+	 * @var \DateTime
 	 * @ORM\Column(type="datetime")
 	 */
 	public $wanneer;
