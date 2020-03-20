@@ -49,7 +49,7 @@ class FotoAlbum extends Map {
 	public $owner;
 
 	public function __construct($path = null, $absolute = false) {
-		if ($path === true) { // called from PersistenceModel
+		if ($path === null) { // called from PersistenceModel
 			$this->path = realpathunix(join_paths(PHOTOALBUM_PATH, $this->subdir));
 		} else if ($absolute == true && startsWith(realpathunix($path), realpathunix(PHOTOALBUM_PATH))) { // Check that $path is inside PHOTOALBUM_PATH
 			$this->path = rtrim($path, "/");
@@ -62,6 +62,10 @@ class FotoAlbum extends Map {
 			throw new CsrNotFoundException("Fotoalbum niet gevonden");
 		}
 		$this->dirname = basename($this->path);
+	}
+
+	public function getPath() {
+		return $this->path ?? join_paths(PHOTOALBUM_PATH, $this->subdir);
 	}
 
 	/**

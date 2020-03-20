@@ -74,9 +74,9 @@ class FotoAlbumRepository extends AbstractRepository {
 	 * @throws OptimisticLockException
 	 */
 	public function create(FotoAlbum $album) {
-		if (!file_exists($album->path)) {
-			mkdir($album->path);
-			if (false === @chmod($album->path, 0755)) {
+		if (!file_exists($album->getPath())) {
+			mkdir($album->getPath());
+			if (false === @chmod($album->getPath(), 0755)) {
 				throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars($album->path));
 			}
 		}
@@ -301,7 +301,7 @@ HTML;
 		foreach ($this->findBySubdir($fotoalbum->subdir) as $album) {
 			/** @var FotoAlbum $album */
 			if (!$album->exists()) {
-				foreach ($this->fotoRepository->find('subdir LIKE ?', array($album->subdir . '%')) as $foto) {
+				foreach ($this->fotoRepository->findBySubdir($album->subdir) as $foto) {
 					$this->fotoRepository->delete($foto);
 					$this->fotoTagsRepository->verwijderFotoTags($foto);
 				}

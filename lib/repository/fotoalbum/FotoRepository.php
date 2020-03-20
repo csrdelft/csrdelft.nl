@@ -129,4 +129,15 @@ class FotoRepository extends AbstractRepository {
 		$foto->createResized();
 	}
 
+	/**
+	 * @param string|null $subdir
+	 * @return Foto[]
+	 */
+	public function findBySubdir(?string $subdir) {
+		return $this->createQueryBuilder('foto')
+			->where('foto.subdir like :subdir')
+			->setParameter('subdir', $subdir . '%')
+			->getQuery()->getResult();
+	}
+
 }
