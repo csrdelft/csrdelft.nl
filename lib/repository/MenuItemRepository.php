@@ -47,6 +47,11 @@ class MenuItemRepository extends AbstractRepository {
 
 		return $this->cache->get($this->createCacheKey($naam), function () use ($naam) {
 			$root = $this->findBy(['tekst' => $naam])[0];
+
+			if ($root == null) {
+				return null;
+			}
+
 			$this->getExtendedTree($root);
 
 			return $root;
