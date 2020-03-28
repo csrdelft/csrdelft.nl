@@ -1,0 +1,5 @@
+stekpakket-kiezen:
+  path: /stekpakket
+  controller: CsrDelft\controller\StekPakketController::kiezen
+  methods: GET
+  defaults: { _mag: P_LOGGED_IN }
