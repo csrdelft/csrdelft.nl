@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\model\groepen\OnderverenigingenModel;
 
@@ -9,6 +9,9 @@ use CsrDelft\model\groepen\OnderverenigingenModel;
  * @since 27/03/2019
  */
 class BbOndervereniging extends BbTagGroep {
+	public function __construct(OnderverenigingenModel $model) {
+		parent::__construct($model);
+	}
 
 	public static function getTagName() {
 		return 'ondervereniging';
@@ -16,9 +19,5 @@ class BbOndervereniging extends BbTagGroep {
 
 	public function getLidNaam() {
 		return 'leden';
-	}
-
-	public function getModel() {
-		return OnderverenigingenModel::class;
 	}
 }

@@ -21,7 +21,7 @@
 						@endif
 					</div>
 					<div class="blue back">
-						<img src="{{$lid->getPasFotoPath(true)}}" title="{{$learnmode?$lid->getNaam('volledig'):''}}"/>
+						<img src="{{$lid->getPasFotoPath('vierkant')}}" title="{{$learnmode?$lid->getNaam('volledig'):''}}"/>
 					</div>
 				</div>
 			@endforeach

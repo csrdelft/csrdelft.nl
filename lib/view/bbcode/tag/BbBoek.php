@@ -20,6 +20,14 @@ use CsrDelft\view\bbcode\BbHelper;
  * @example [boek=123]
  */
 class BbBoek extends BbTag {
+	/**
+	 * @var BoekRepository
+	 */
+	private $boekRepository;
+
+	public function __construct(BoekRepository $boekRepository) {
+		$this->boekRepository = $boekRepository;
+	}
 
 	public static function getTagName() {
 		return 'boek';
@@ -31,8 +39,7 @@ class BbBoek extends BbTag {
 
 	public function renderLight() {
 		try {
-			/** @var Boek $boek */
-			$boek = ContainerFacade::getContainer()->get(BoekRepository::class)->find($this->content);
+			$boek = $this->boekRepository->find($this->content);
 			return BbHelper::lightLinkBlock('boek', $boek->getUrl(), $boek->titel, 'Auteur: ' . $boek->auteur);
 		} catch (CsrException $e) {
 			return '[boek] Boek [boekid:' . (int)$this->content . '] bestaat niet.';
@@ -43,8 +50,7 @@ class BbBoek extends BbTag {
 		if (!mag("P_BIEB_READ")) return null;
 
 		try {
-			/** @var Boek $boek */
-			$boek = ContainerFacade::getContainer()->get(BoekRepository::class)->find($this->content);
+			$boek = $this->boekRepository->find($this->content);
 			return view('bibliotheek.boek-bb', ['boek' => $boek])->getHtml();
 		} catch (CsrException $e) {
 			return '[boek] Boek [boekid:' . (int)$this->content . '] bestaat niet.';

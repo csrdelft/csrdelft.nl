@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\model\groepen\ActiviteitenModel;
 
@@ -9,13 +9,12 @@ use CsrDelft\model\groepen\ActiviteitenModel;
  * @since 27/03/2019
  */
 class BbActiviteit extends BbTagGroep {
+	public function __construct(ActiviteitenModel $model) {
+		parent::__construct($model);
+	}
 
 	public static function getTagName() {
 		return 'activiteit';
-	}
-
-	public function getModel() {
-		return ActiviteitenModel::class;
 	}
 
 	public function getLidNaam() {

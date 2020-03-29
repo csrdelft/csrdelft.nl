@@ -5,8 +5,8 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -18,12 +18,21 @@ use CsrDelft\view\bbcode\BbHelper;
  * @example [lid]0436[/lid]
  */
 class BbLid extends BbTag {
+
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
+
+	public function __construct(ProfielRepository $profielRepository) {
+		$this->profielRepository = $profielRepository;
+	}
+
 	public static function getTagName() {
 		return 'lid';
 	}
 
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return LoginModel::mag(P_LEDEN_READ . "," . P_OUDLEDEN_READ);
 	}
 
@@ -37,7 +46,7 @@ class BbLid extends BbTag {
 	 * @throws BbException
 	 */
 	private function getProfiel() {
-		$profiel = ProfielRepository::get($this->content);
+		$profiel = $this->profielRepository->find($this->content);
 
 		if (!$profiel) {
 			throw new BbException('[lid] ' . htmlspecialchars($this->content) . '] &notin; db.');
@@ -51,15 +60,14 @@ class BbLid extends BbTag {
 	 * @throws BbException
 	 */
 	public function render() {
-			$profiel = $this->getProfiel();
-			return $profiel->getLink('user');
+		$profiel = $this->getProfiel();
+		return $profiel->getLink('user');
 	}
 
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		$this->readMainArgument($arguments);
 	}
 }
