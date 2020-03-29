@@ -67,8 +67,8 @@
 		<div class="row mt-4 mb-5" v-if="gekozenBasispakket">
 			<div class="col-lg-1 col-xl-2"></div>
 			<div class="col">
-				<div class="bevestigen actief" v-if="gewijzigd && !laden" @click="laden = true;">Sla stekpakket op</div>
-				<div class="bevestigen laden" v-if="laden" @click="gewijzigd = false;laden = false;">Een ogenblik geduld...</div>
+				<div class="bevestigen actief" v-if="gewijzigd && !laden" @click="slaOp">Sla stekpakket op</div>
+				<div class="bevestigen laden" v-if="laden">Een ogenblik geduld...</div>
 				<div class="bevestigen opgeslagen" v-if="!gewijzigd && !laden"><i class="fa fa-check"></i>&emsp;Opgeslagen</div>
 			</div>
 			<div class="col-lg-1 col-xl-2"></div>
@@ -77,6 +77,7 @@
 </template>
 
 <script lang="ts">
+	import axios from 'axios';
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
 	import OptieWeergave from './OptieWeergave.vue';
@@ -111,12 +112,22 @@
 		protected basispakketten: BasisPakket[];
 		@Prop()
 		protected opties: OptieGroep[];
+		@Prop()
+		protected opslaan: string;
+		@Prop()
+		protected basispakket: string;
 
-		protected gekozenBasispakket = '';
+		protected gekozenBasispakket: string = '';
+
 		protected keyIndex = 0;
 		protected gewijzigd = false;
 		protected laden = false;
 		protected totaal = 0;
+
+		protected mounted() {
+			this.gekozenBasispakket = this.basispakket;
+			this.berekenTotaal();
+		}
 
 		protected kiesBasispakket(pakket: string, niveau: number) {
 			if (this.laden) {
@@ -161,6 +172,34 @@
 				}
 			}
 			this.totaal = totaal;
+		}
+
+		protected get optieLijst() {
+			const lijst = [];
+			for (const groep of this.opties) {
+				for (const optie in groep.opties) {
+					if (!(groep.opties.hasOwnProperty(optie))) {
+						continue;
+					}
+					if (groep.opties[optie].actief) {
+						lijst.push(optie);
+					}
+				}
+			}
+			return lijst;
+		}
+
+		protected slaOp() {
+			this.laden = true;
+			axios.post(this.opslaan, {
+				basispakket: this.gekozenBasispakket,
+				opties: this.optieLijst,
+			}).then(() => {
+				this.laden = false;
+				this.gewijzigd = false;
+			}).catch(() => {
+				this.laden = false;
+			});
 		}
 	}
 </script>

@@ -3,18 +3,13 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\Lichting;
-use CsrDelft\model\entity\groepen\Verticale;
-use CsrDelft\model\entity\LidStatus;
-use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\LedenMemoryScoresModel;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\entity\commissievoorkeuren\StekPakket;
+use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\StekPakketRepository;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
-use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 
 class StekPakketController {
 	private $basispakketten = [
@@ -130,18 +125,73 @@ class StekPakketController {
 		],
 	];
 
-	public function kiezen() {
+	public function kiezen(RouterInterface $router, StekPakketRepository $repo) {
+		// Huidige keuze inladen
+		$stekpakket = $repo->getStekPakketVoorLid(LoginModel::getProfiel());
+
 		// Zet defaults
 		foreach ($this->opties as $key => $groep) {
 			foreach ($groep['opties'] as $optieKey => $optie) {
-				$this->opties[$key]['opties'][$optieKey]['actief'] = false;
+				$this->opties[$key]['opties'][$optieKey]['actief'] = $stekpakket ? in_array($optieKey, $stekpakket->opties) : false;
 			}
 		}
 
 		// Laad Vue app.
 		return view('stekpakket', [
 			'basispakketten' => json_encode($this->basispakketten),
+			'basispakket' => $stekpakket ? $stekpakket->basispakket : '',
 			'opties' => json_encode($this->opties),
+			'opslaan' => $router->generate('stekpakket-opslaan'),
 		]);
+	}
+
+	public function opslaan(Request $request, StekPakketRepository $repo, EntityManagerInterface $em) {
+		// Valideren
+		foreach ($this->basispakketten as $pakket) {
+			if ($pakket['titel'] === $request->request->get('basispakket')) {
+				$basispakket = $pakket['titel'];
+			}
+		}
+
+		if (!isset($basispakket)) {
+			throw new CsrGebruikerException("Selecteer een basispakket");
+		}
+
+		// Opties
+		$opties = $request->request->get('opties', []);
+		if (!is_array($opties)) {
+			$opties = [];
+		}
+
+		$prijs = 0;
+		$geselecteerdeOpties = [];
+		foreach ($this->opties as $groep) {
+			foreach ($groep['opties'] as $key => $optie) {
+				if (in_array($key, $opties)) {
+					$prijs += $optie['prijs'];
+					$geselecteerdeOpties[] = $key;
+				}
+			}
+		}
+
+		// Oude verwijderen
+		$uid = LoginModel::getUid();
+		$old = $repo->findOneBy(['uid' => $uid]);
+		if ($old) {
+			$em->remove($old);
+			$em->flush();
+		}
+
+		// Nieuwe invoegen
+		$stekpakket = new StekPakket();
+		$stekpakket->setProfiel(LoginModel::getProfiel());
+		$stekpakket->basispakket = $basispakket;
+		$stekpakket->opties = $geselecteerdeOpties;
+		$stekpakket->prijs = $prijs;
+		$stekpakket->setTimestamp();
+		$em->persist($stekpakket);
+		$em->flush();
+
+		return new JsonResponse(['success' => true]);
 	}
 }

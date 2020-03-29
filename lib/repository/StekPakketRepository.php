@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\repository\commissievoorkeuren;
+namespace CsrDelft\repository;
 
 use CsrDelft\entity\commissievoorkeuren\StekPakket;
 use CsrDelft\entity\profiel\Profiel;

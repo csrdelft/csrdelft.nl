@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class VoorkeurVoorkeur
  * @package CsrDelft\model\entity
- * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\StekPakketRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\StekPakketRepository")
  * @ORM\Table("stekPakket")
  */
 class StekPakket {
@@ -44,11 +44,7 @@ class StekPakket {
 	 */
 	public $timestamp;
 
-	/**
-	 * @ORM\PreUpdate
-	 */
-	public function setTimestamp()
-	{
+	public function setTimestamp() {
 		$this->timestamp = new \DateTime();
 	}
 
