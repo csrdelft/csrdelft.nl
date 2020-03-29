@@ -1,29 +1,36 @@
 <template>
 	<div>
-		<div class="kopje">{{ value.groep }}</div>
-		<div class="opties" v-for="(details, key) in value.opties">
+		<div class="kopje">{{ $parent.opties[index].groep }}</div>
+		<div class="opties" v-for="(details, key) in $parent.opties[index].opties">
 			<div class="selecteer">
-				<toggle-button :width="40" v-model="details.actief" @change="toggle"/>
+				<toggle-button :width="40" :value="$parent.opties[index].opties[key].actief" @change="toggle($event, key)" :sync="true" />
 			</div>
-			<div class="uitleg">{{ details.optie }} <span>(&euro; {{ details.prijs.toFixed(2).replace('.', ',') }})</span></div>
+			<div class="uitleg">{{ $parent.opties[index].opties[key].optie }} <span>(&euro; {{ $parent.opties[index].opties[key].prijs.toFixed(2).replace('.', ',') }})</span></div>
 		</div>
 	</div>
 </template>
 <script lang="ts">
 	import Vue from 'vue';
 	import {ToggleButton} from 'vue-js-toggle-button';
-	import {Component, Prop, Watch} from 'vue-property-decorator';
-	import {OptieGroep} from './StekPakket.vue';
+	import {Component, Prop} from 'vue-property-decorator';
 
 	@Component({
 		components: {ToggleButton},
 	})
 	export default class OptieWeergave extends Vue {
 		@Prop()
-		protected value: OptieGroep;
+		protected index: number;
 
-		protected toggle() {
-			this.$emit('input', this.value);
+		protected toggle(value: any, key: string) {
+			const details = this.$parent.opties[this.index].opties[key];
+			details.actief = value.value;
+			if ('pre' in details && value.value) {
+				this.$parent.opties[this.index].opties[details.pre].actief = true;
+			}
+			if ('post' in details && !value.value) {
+				this.$parent.opties[this.index].opties[details.post].actief = false;
+			}
+			this.$forceUpdate();
 		}
 	}
 </script>

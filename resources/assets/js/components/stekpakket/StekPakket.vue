@@ -43,12 +43,12 @@
 			<div class="col-lg-1 col-xl-2"></div>
 			<div class="col-sm">
 				<template v-for="(groep, index) in opties">
-					<OptieWeergave :key="groep.groep + keyIndex" v-if="index < opties.length / 2" v-model="opties[index]"/>
+					<OptieWeergave :key="groep.groep + keyIndex" v-if="index < opties.length / 2" :index="index" />
 				</template>
 			</div>
 			<div class="col-sm">
 				<template v-for="(groep, index) in opties">
-					<OptieWeergave :key="groep.groep + keyIndex" v-if="index >= opties.length / 2" v-model="opties[index]"/>
+					<OptieWeergave :key="groep.groep + keyIndex" v-if="index >= opties.length / 2" :index="index" />
 				</template>
 			</div>
 			<div class="col-lg-1 col-xl-2"></div>
@@ -109,12 +109,14 @@
 			this.gekozenBasispakket = pakket;
 			this.keyIndex++;
 
-			const offset = $('#configuratie').offset();
-			if (offset) {
-				$('html, body').animate({
-					scrollTop: offset.top - 50,
-				}, 800);
-			}
+			this.$nextTick(() => {
+				const offset = $('#configuratie').offset();
+				if (offset) {
+					$('html, body').animate({
+						scrollTop: offset.top - 50,
+					}, 800);
+				}
+			});
 		}
 	}
 </script>
