@@ -25,30 +25,51 @@
 		</div>
 		<div class="row equal">
 			<div class="col-12"><h2>Kies een basispakket</h2></div>
-			<div class="col-xl-3 col-sm-6" v-for="i in [1,2,3,4]">
-				<div class="pakket">
-					<div class="titel">Randlid</div>
-					<div class="usp"><i class="fa fa-check"></i> Forum afgelopen week lezen</div>
-					<div class="usp"><i class="fa fa-check"></i> Forum afgelopen week lezen</div>
-					<div class="usp"><i class="fa fa-check"></i> Forum afgelopen week lezen</div>
-					<div class="usp"><i class="fa fa-check"></i> Forum afgelopen week lezen</div>
+			<div class="col-xl-3 col-sm-6" v-for="pakket in $props.basispakketten">
+				<div class="pakket" :class="{ 'actief': gekozenBasispakket === pakket.titel }" @click="kiesBasispakket(pakket.titel)">
+					<div class="titel">{{ pakket.titel }}</div>
+					<div class="usp" v-for="usp in pakket.usps"><i class="fa fa-check"></i> {{ usp }}</div>
 					<div class="prijs">
-						<div class="getal">0<span>,00</span></div>
+						<div class="getal">&euro; {{ pakket.euro }}<span>,{{ (pakket.centen < 10 ? '0' : '') + pakket.centen }}</span></div>
 						<div class="per">per maand</div>
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="row" v-if="gekozenBasispakket" id="configuratie">
+			<div class="col-12"><h2>Configureer uw stekpakket</h2></div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
 	import Vue from 'vue';
-	import {Component} from 'vue-property-decorator';
+	import {Component, Prop} from 'vue-property-decorator';
+
+	interface BasisPakket {
+		titel: string;
+		usps: string[];
+		euro: number;
+		centen: number;
+		onderdelen: string[];
+	}
 
 	@Component
 	export default class StekPakket extends Vue {
+		@Prop()
+		protected basispakketten: BasisPakket[];
 
+		protected gekozenBasispakket = '';
+
+		protected kiesBasispakket(pakket: string) {
+			this.gekozenBasispakket = pakket;
+			const offset = $('#configuratie').offset();
+			if (offset) {
+				$('html, body').animate({
+					scrollTop: offset.top,
+				}, 800);
+			}
+		}
 	}
 </script>
 
@@ -95,15 +116,16 @@
 	.pakket {
 		border: 1px solid #3498db;
 		border-radius: 5px;
-		padding: 0 20px;
 		text-align: center;
 		margin-bottom: 30px;
 		min-height: calc(100% - 30px);
 		background: white;
 		color: black;
 		cursor: pointer;
+		padding: 0 15px 65px;
+		position: relative;
 
-		&:hover, &:focus {
+		&:hover, &:focus, &.actief {
 			background: #3498db;
 			color: white;
 			border-top-width: 0;
@@ -124,14 +146,14 @@
 			background: #3498db;
 			border-radius: 0 0 3px 3px;
 			color: white;
-			font-size: 10pt;
+			font-size: 12pt;
 			font-weight: 600;
 			display: inline-block;
-			padding: 2px 12px;
+			padding: 2px 16px;
 		}
 
 		.usp {
-			font-size: 11pt;
+			font-size: 10pt;
 			font-weight: 300;
 			text-align: left;
 			line-height: 17pt;
@@ -143,14 +165,30 @@
 		}
 
 		.prijs {
-			.getal {
-				span {
+			position: absolute;
+			width: 100%;
+			left: 0;
+			bottom: 10px;
+			right: 0;
 
+			.getal {
+				font-size: 23pt;
+				font-weight: 600;
+				vertical-align: top;
+				line-height: 24pt;
+
+				span {
+					font-weight: 400;
+					font-size: 13pt;
+					vertical-align: top;
+					line-height: 17pt;
 				}
 			}
 
 			.per {
-
+				font-weight: 300;
+				font-size: 11px;
+				margin-top: -5px;
 			}
 		}
 	}

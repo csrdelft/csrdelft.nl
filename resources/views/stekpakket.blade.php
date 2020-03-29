@@ -7,5 +7,8 @@
 @endpush
 
 @section('content')
-	<StekPakket class="vue-context"></StekPakket>
+	<StekPakket
+		class="vue-context"
+		:basispakketten="Object.values({{$basispakketten}})">
+	</StekPakket>
 @endsection
