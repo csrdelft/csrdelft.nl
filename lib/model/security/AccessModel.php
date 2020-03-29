@@ -29,7 +29,7 @@ use CsrDelft\model\maalcie\KwalificatiesModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\repository\maalcie\MaaltijdAanmeldingRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 
 /**
@@ -871,7 +871,7 @@ class AccessModel extends CachedPersistenceModel {
 					return false;
 				}
 				// Aangemeld voor maaltijd?
-				if (!$role AND ContainerFacade::getContainer()->get(MaaltijdAanmeldingRepository::class)->getIsAangemeld((int)$gevraagd, $profiel->uid)) {
+				if (!$role AND ContainerFacade::getContainer()->get(MaaltijdAanmeldingenRepository::class)->getIsAangemeld((int)$gevraagd, $profiel->uid)) {
 					return true;
 				} // Mag maaltijd sluiten?
 				elseif ($role === 'SLUITEN') {

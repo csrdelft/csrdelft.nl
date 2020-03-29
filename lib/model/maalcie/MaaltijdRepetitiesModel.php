@@ -6,7 +6,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
-use CsrDelft\repository\maalcie\MaaltijdAanmeldingRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 
 /**
  * MaaltijdRepetitiesModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -18,13 +18,13 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 
 	protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
 	/**
-	 * @var MaaltijdAanmeldingRepository
+	 * @var MaaltijdAanmeldingenRepository
 	 */
-	private $maaltijdAanmeldingRepository;
+	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(MaaltijdAanmeldingRepository $maaltijdAanmeldingRepository) {
+	public function __construct(MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
 		parent::__construct();
-		$this->maaltijdAanmeldingRepository = $maaltijdAanmeldingRepository;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
 	/**
@@ -38,7 +38,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 		$repetities = $this->find('abonneerbaar = true');
 		$result = array();
 		foreach ($repetities as $repetitie) {
-			if ($this->maaltijdAanmeldingRepository->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
+			if ($this->maaltijdAanmeldingenRepository->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
 				$result[$repetitie->mlt_repetitie_id] = $repetitie;
 			}
 		}

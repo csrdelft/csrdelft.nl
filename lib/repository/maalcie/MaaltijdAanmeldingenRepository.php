@@ -53,7 +53,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $uid);
 			$verschil = $aantalGasten - $aanmelding->aantal_gasten;
 			$aanmelding->aantal_gasten = $aantalGasten;
-			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+			$aanmelding->laatst_gewijzigd = date_create();
 			$this->getEntityManager()->persist($aanmelding);
 			$this->getEntityManager()->flush();
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
@@ -64,7 +64,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			$aanmelding->door_uid = $doorUid;
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->gasten_eetwens = $gastenEetwens;
-			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+			$aanmelding->laatst_gewijzigd = date_create();
 			$this->getEntityManager()->persist($aanmelding);
 			$this->getEntityManager()->flush();
 
@@ -211,7 +211,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			throw new CsrGebruikerException('Maaltijd zit te vol');
 		}
 		if ($aanmelding->aantal_gasten !== $gasten) {
-			$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+			$aanmelding->laatst_gewijzigd = date_create();
 		}
 		$aanmelding->aantal_gasten = $gasten;
 		$this->getEntityManager()->persist($aanmelding);
@@ -372,7 +372,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 				$aanmelding->uid = $uid;
 				$aanmelding->door_uid = $uid;
 				$aanmelding->door_abonnement = $mrid;
-				$aanmelding->laatst_gewijzigd = date('Y-m-d H:i');
+				$aanmelding->laatst_gewijzigd = date_create();
 				$aanmelding->gasten_eetwens = '';
 
 				$this->getEntityManager()->persist($aanmelding);
