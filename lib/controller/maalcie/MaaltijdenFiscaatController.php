@@ -8,9 +8,9 @@ use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
@@ -31,9 +31,9 @@ class MaaltijdenFiscaatController {
 	 */
 	private $maaltijdenModel;
 	/**
-	 * @var MaaltijdAanmeldingenModel
+	 * @var MaaltijdAanmeldingenRepository
 	 */
-	private $maaltijdAanmeldingenModel;
+	private $maaltijdAanmeldingenRepository;
 	/**
 	 * @var CiviBestellingModel
 	 */
@@ -46,13 +46,13 @@ class MaaltijdenFiscaatController {
 	public function __construct(
 		CiviProductModel $civiProductModel,
 		MaaltijdenModel $maaltijdenModel,
-		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		CiviBestellingModel $civiBestellingModel,
 		CiviSaldoModel $civiSaldoModel
 	) {
 		$this->civiProductModel = $civiProductModel;
 		$this->maaltijdenModel = $maaltijdenModel;
-		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->civiBestellingModel = $civiBestellingModel;
 		$this->civiSaldoModel = $civiSaldoModel;
 	}
@@ -94,13 +94,13 @@ class MaaltijdenFiscaatController {
 
 		$maaltijden = Database::transaction(function () use ($maaltijd) {
 			# Ga alle personen in de maaltijd af
-			$aanmeldingen = $this->maaltijdAanmeldingenModel->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
+			$aanmeldingen = $this->maaltijdAanmeldingenRepository->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 
 			/** @var Civibestelling[] $bestellingen */
 			$bestellingen = array();
 			# Maak een bestelling voor deze persoon
 			foreach ($aanmeldingen as $aanmelding) {
-				$bestellingen[] = $this->maaltijdAanmeldingenModel->maakCiviBestelling($aanmelding);
+				$bestellingen[] = $this->maaltijdAanmeldingenRepository->maakCiviBestelling($aanmelding);
 			}
 
 			# Reken de bestelling af

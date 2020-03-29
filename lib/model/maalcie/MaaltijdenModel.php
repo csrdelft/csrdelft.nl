@@ -9,6 +9,7 @@ use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingRepository;
 use Exception;
 
 /**
@@ -22,7 +23,7 @@ class MaaltijdenModel extends PersistenceModel {
 	protected $default_order = 'datum ASC, tijd ASC';
 
 	/**
-	 * @var MaaltijdAanmeldingenModel
+	 * @var MaaltijdAanmeldingRepository
 	 */
 	private $maaltijdAanmeldingenModel;
 
@@ -48,14 +49,14 @@ class MaaltijdenModel extends PersistenceModel {
 
 	/**
 	 * MaaltijdenModel constructor.
-	 * @param MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel
+	 * @param MaaltijdAanmeldingRepository $maaltijdAanmeldingenModel
 	 * @param MaaltijdAbonnementenModel $maaltijdAbonnementenModel
 	 * @param ArchiefMaaltijdModel $archiefMaaltijdModel
 	 * @param CorveeTakenModel $corveeTakenModel
 	 * @param CorveeRepetitiesModel $corveeRepetitiesModel
 	 */
 	public function __construct(
-		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
+		MaaltijdAanmeldingRepository $maaltijdAanmeldingenModel,
 		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
 		ArchiefMaaltijdModel $archiefMaaltijdModel,
 		CorveeTakenModel $corveeTakenModel,

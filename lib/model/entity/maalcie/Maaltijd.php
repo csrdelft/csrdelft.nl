@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
@@ -9,11 +10,11 @@ use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 
 /**
  * Maaltijd.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -76,8 +77,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 	 * @return int
 	 */
 	public function getAantalAanmeldingen() {
-		$aantal = MaaltijdAanmeldingenModel::instance()->select(array('SUM(aantal_gasten) + COUNT(*)'), 'maaltijd_id = ?', array($this->maaltijd_id));
-		return (int)$aantal->fetchColumn();
+		return ContainerFacade::getContainer()->get(MaaltijdAanmeldingenRepository::class)->getAantalAanmeldingen($this);
 	}
 
 	/**
@@ -161,7 +161,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 
 	public function isTransparant() {
 		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
-		$aangemeld = MaaltijdAanmeldingenModel::instance()->getIsAangemeld($this->maaltijd_id, LoginModel::getUid());
+		$aangemeld = ContainerFacade::getContainer()->get(MaaltijdAanmeldingenRepository::class)->getIsAangemeld($this->maaltijd_id, LoginModel::getUid());
 		return lid_instelling('agenda', 'transparantICal') === 'ja' || !$aangemeld;
 	}
 

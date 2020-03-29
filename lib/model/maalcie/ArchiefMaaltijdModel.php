@@ -6,9 +6,20 @@ use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\maalcie\ArchiefMaaltijd;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 
 class ArchiefMaaltijdModel extends PersistenceModel {
 	const ORM = ArchiefMaaltijd::class;
+	/**
+	 * @var MaaltijdAanmeldingenRepository
+	 */
+	private $maaltijdAanmeldingenRepository;
+
+	public function __construct(MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+		parent::__construct();
+
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+	}
 
 	protected $default_order = 'datum DESC, tijd DESC';
 
@@ -34,7 +45,7 @@ class ArchiefMaaltijdModel extends PersistenceModel {
 		$archief->tijd = $maaltijd->tijd;
 		$archief->prijs = $maaltijd->getPrijs();
 		$archief->aanmeldingen = '';
-		foreach (MaaltijdAanmeldingenModel::instance()->getAanmeldingenVoorMaaltijd($maaltijd) as $aanmelding) {
+		foreach ($this->maaltijdAanmeldingenRepository->getAanmeldingenVoorMaaltijd($maaltijd) as $aanmelding) {
 			if ($aanmelding->uid === '') {
 				$archief->aanmeldingen .= 'gast';
 			} else {
