@@ -26,7 +26,7 @@
 		<div class="row equal">
 			<div class="col-12"><h2>Kies een basispakket</h2></div>
 			<div class="col-xl-3 col-sm-6" v-for="pakket in $props.basispakketten">
-				<div class="pakket" :class="{ 'actief': gekozenBasispakket === pakket.titel }" @click="kiesBasispakket(pakket.titel)">
+				<div class="pakket" :class="{ 'actief': gekozenBasispakket === pakket.titel }" @click="kiesBasispakket(pakket.titel, pakket.niveau)">
 					<div class="titel">{{ pakket.titel }}</div>
 					<div class="usp" v-for="usp in pakket.usps"><i class="fa fa-check"></i> {{ usp }}</div>
 					<div class="prijs">
@@ -39,39 +39,91 @@
 		<div class="row" v-if="gekozenBasispakket" id="configuratie">
 			<div class="col-12"><h2>Configureer uw stekpakket</h2></div>
 		</div>
+		<div class="row" v-if="gekozenBasispakket">
+			<div class="col-lg-1 col-xl-2"></div>
+			<div class="col-sm">
+				<template v-for="(groep, index) in opties">
+					<OptieWeergave :key="groep.groep + keyIndex" v-if="index < opties.length / 2" v-model="opties[index]"/>
+				</template>
+			</div>
+			<div class="col-sm">
+				<template v-for="(groep, index) in opties">
+					<OptieWeergave :key="groep.groep + keyIndex" v-if="index >= opties.length / 2" v-model="opties[index]"/>
+				</template>
+			</div>
+			<div class="col-lg-1 col-xl-2"></div>
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
+	import OptieWeergave from './OptieWeergave.vue';
 
 	interface BasisPakket {
 		titel: string;
 		usps: string[];
 		euro: number;
 		centen: number;
-		onderdelen: string[];
+		niveau: number;
 	}
 
-	@Component
+	export interface OptieGroep {
+		groep: string;
+		opties: { [key: string]: Optie };
+	}
+
+	export interface Optie {
+		optie: string;
+		vanaf: number;
+		prijs: number;
+		pre?: string;
+		post?: string;
+		actief: boolean;
+	}
+
+	@Component({
+		components: {OptieWeergave},
+	})
 	export default class StekPakket extends Vue {
 		@Prop()
 		protected basispakketten: BasisPakket[];
+		@Prop()
+		protected opties: OptieGroep[];
 
 		protected gekozenBasispakket = '';
+		protected keyIndex = 0;
 
-		protected kiesBasispakket(pakket: string) {
+		protected kiesBasispakket(pakket: string, niveau: number) {
+			// Zet inbegrepen op aan
+			for (const groep of this.opties) {
+				for (const optie in groep.opties) {
+					if (!(groep.opties.hasOwnProperty(optie))) {
+						continue;
+					}
+					groep.opties[optie].actief = niveau >= groep.opties[optie].vanaf;
+				}
+			}
+
 			this.gekozenBasispakket = pakket;
+			this.keyIndex++;
+
 			const offset = $('#configuratie').offset();
 			if (offset) {
 				$('html, body').animate({
-					scrollTop: offset.top,
+					scrollTop: offset.top - 50,
 				}, 800);
 			}
 		}
 	}
 </script>
+
+<style>
+	.container {
+		max-width: 1140px !important;
+	}
+</style>
 
 <style scoped lang="scss">
 	.stekpakket {

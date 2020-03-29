@@ -9,6 +9,7 @@
 @section('content')
 	<StekPakket
 		class="vue-context"
-		:basispakketten="Object.values({{$basispakketten}})">
+		:basispakketten="Object.values({{$basispakketten}})"
+		:opties="Object.values({{$opties}})">
 	</StekPakket>
 @endsection
