@@ -18,6 +18,19 @@ class BbForum extends BbTag {
 	 * @var ForumDeel
 	 */
 	private $deel;
+	/**
+	 * @var ForumDradenRepository
+	 */
+	private $forumDradenRepository;
+	/**
+	 * @var ForumDelenRepository
+	 */
+	private $forumDelenRepository;
+
+	public function __construct(ForumDradenRepository $forumDradenRepository, ForumDelenRepository $forumDelenRepository) {
+		$this->forumDradenRepository = $forumDradenRepository;
+		$this->forumDelenRepository = $forumDelenRepository;
+	}
 
 	public static function getTagName() {
 		return 'forum';
@@ -55,19 +68,16 @@ class BbForum extends BbTag {
 			$this->num = (int)$arguments['num'];
 		}
 
-		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
-		$forumDelenRepository = ContainerFacade::getContainer()->get(ForumDelenRepository::class);
-
-		$forumDradenRepository->setAantalPerPagina($this->num);
+		$this->forumDradenRepository->setAantalPerPagina($this->num);
 		switch ($this->content) {
 			case 'recent':
-				$this->deel = $forumDelenRepository->getRecent();
+				$this->deel = $this->forumDelenRepository->getRecent();
 				break;
 			case 'belangrijk':
-				$this->deel = $forumDelenRepository->getRecent(true);
+				$this->deel = $this->forumDelenRepository->getRecent(true);
 				break;
 			default:
-				$this->deel = $forumDelenRepository->get($this->content);
+				$this->deel = $this->forumDelenRepository->get($this->content);
 				break;
 		}
 	}

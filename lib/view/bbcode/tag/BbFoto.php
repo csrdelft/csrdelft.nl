@@ -14,10 +14,10 @@ use CsrDelft\view\fotoalbum\FotoBBView;
 /**
  * Toont de thumbnail van een foto met link naar fotoalbum.
  *
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @since 27/03/2019
  * @param optional Boolean $arguments['responsive'] Responsive sizing
  *
+ * @since 27/03/2019
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @example [foto responsive]/pad/naar/foto[/foto]
  */
 class BbFoto extends BbTag {
@@ -30,13 +30,21 @@ class BbFoto extends BbTag {
 	 * @var Foto
 	 */
 	private $foto;
-	public function isAllowed()
-	{
-		return $this->foto->magBekijken();
+	/**
+	 * @var FotoAlbumRepository
+	 */
+	private $fotoAlbumRepository;
+
+	public function __construct(FotoAlbumRepository $fotoAlbumRepository) {
+		$this->fotoAlbumRepository = $fotoAlbumRepository;
 	}
 
 	public static function getTagName() {
 		return 'foto';
+	}
+
+	public function isAllowed() {
+		return $this->foto->magBekijken();
 	}
 
 	public function renderLight() {
@@ -51,6 +59,15 @@ class BbFoto extends BbTag {
 	}
 
 	/**
+	 * @param array $arguments
+	 */
+	public function parse($arguments = []) {
+		$this->responsive = isset($arguments['responsive']);
+		$this->readMainArgument($arguments);
+		$this->foto = $this->getFoto(explode('/', $this->content), $this->content);
+	}
+
+	/**
 	 * @param array $parts
 	 * @param string $url
 	 * @return Foto
@@ -61,7 +78,7 @@ class BbFoto extends BbTag {
 		$path = implode('/', $parts);
 		$path = str_replace('fotoalbum/', '', $path);
 		try {
-			$album = ContainerFacade::getContainer()->get(FotoAlbumRepository::class)->getFotoAlbum($path);
+			$album = $this->fotoAlbumRepository->getFotoAlbum($path);
 			$foto = new Foto($filename, $album);
 			if (!$foto->exists()) {
 				throw new BbException('Foto niet gevonden.');
@@ -70,15 +87,5 @@ class BbFoto extends BbTag {
 		} catch (CsrNotFoundException $ex) {
 			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($url) . '</div>');
 		}
-	}
-
-	/**
-	 * @param array $arguments
-	 */
-	public function parse($arguments = [])
-	{
-		$this->responsive = isset($arguments['responsive']);
-		$this->readMainArgument($arguments);
-		$this->foto =  $this->getFoto(explode('/', $this->content), $this->content);
 	}
 }

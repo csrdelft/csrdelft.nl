@@ -15,6 +15,15 @@ class BbBijbel extends BbTag {
 
 	private $bijbel;
 	private $vertaling;
+	/**
+	 * @var LidInstellingenRepository
+	 */
+	private $lidInstellingenRepository;
+
+	public function __construct(LidInstellingenRepository $lidInstellingenRepository) {
+		$this->lidInstellingenRepository = $lidInstellingenRepository;
+	}
+
 	public static function getTagName() {
 		return 'bijbel';
 	}
@@ -42,8 +51,7 @@ class BbBijbel extends BbTag {
 		}
 
 		$vertaling1 = $this->vertaling;
-		$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
-		if (!$lidInstellingenRepository->isValidValue('algemeen', 'bijbel', $vertaling1)) {
+		if (!$this->lidInstellingenRepository->isValidValue('algemeen', 'bijbel', $vertaling1)) {
 			$vertaling1 = null;
 		}
 		if ($vertaling1 === null) {

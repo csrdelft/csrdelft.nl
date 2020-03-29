@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
@@ -16,18 +16,26 @@ use CsrDelft\model\security\LoginModel;
  * @example [verticale=A]
  */
 class BbVerticale extends BbTag {
+	/**
+	 * @var VerticalenModel
+	 */
+	private $verticalenModel;
+
+	public function __construct(VerticalenModel $verticalenModel) {
+		$this->verticalenModel = $verticalenModel;
+	}
 
 	public static function getTagName() {
 		return 'verticale';
 	}
-	public function isAllowed()
-	{
+
+	public function isAllowed() {
 		return LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function render() {
 		try {
-			$verticale = VerticalenModel::instance()->get($this->content);
+			$verticale = $this->verticalenModel->get($this->content);
 			return '<a href="/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
 		} catch (CsrException $e) {
 			return 'Verticale met letter=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="/verticalen">Zoeken</a>';
@@ -37,8 +45,7 @@ class BbVerticale extends BbTag {
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		$this->readMainArgument($arguments);
 	}
 }

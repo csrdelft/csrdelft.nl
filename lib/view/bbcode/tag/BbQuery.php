@@ -24,29 +24,26 @@ class BbQuery extends BbTag {
 	 * @var SavedQueryResult
 	 */
 	private $query;
+	/**
+	 * @var SavedQueryModel
+	 */
+	private $savedQueryModel;
+
+	public function __construct(SavedQueryModel $savedQueryModel) {
+		$this->savedQueryModel = $savedQueryModel;
+	}
 
 	public static function getTagName() {
 		return 'query';
 	}
 
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return $this->query->query->magBekijken();
 	}
 
 	public function renderLight() {
 		$url = '/tools/query?id=' . urlencode($this->content);
 		return BbHelper::lightLinkBlock('query', $url, $this->query->query->beschrijving, count($this->query->rows) . ' regels');
-	}
-
-	/**
-	 * @param int $queryID
-	 * @throws BbException
-	 */
-	private function assertId(int $queryID) {
-		if ($queryID == 0) {
-			throw new BbException('[query] Geen geldig query-id opgegeven');
-		}
 	}
 
 	public function render() {
@@ -58,11 +55,20 @@ class BbQuery extends BbTag {
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		$this->readMainArgument($arguments);
 		$this->content = (int)$this->content;
 		$this->assertId($this->content);
-		$this->query = SavedQueryModel::instance()->loadQuery($this->content);
+		$this->query = $this->savedQueryModel->loadQuery($this->content);
+	}
+
+	/**
+	 * @param int $queryID
+	 * @throws BbException
+	 */
+	private function assertId(int $queryID) {
+		if ($queryID == 0) {
+			throw new BbException('[query] Geen geldig query-id opgegeven');
+		}
 	}
 }

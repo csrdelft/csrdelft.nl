@@ -8,6 +8,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Peiling
@@ -23,6 +24,19 @@ class BbPeiling extends BbTag {
 	 * @var Peiling
 	 */
 	private $peiling;
+	/**
+	 * @var SerializerInterface
+	 */
+	private $serializer;
+	/**
+	 * @var PeilingenRepository
+	 */
+	private $peilingenRepository;
+
+	public function __construct(SerializerInterface $serializer, PeilingenRepository $peilingenRepository) {
+		$this->serializer = $serializer;
+		$this->peilingenRepository = $peilingenRepository;
+	}
 
 	public static function getTagName() {
 		return 'peiling';
@@ -38,10 +52,8 @@ class BbPeiling extends BbTag {
 	}
 
 	public function render() {
-		$serializer = ContainerFacade::getContainer()->get('serializer');
-
 		return view('peilingen.peiling', [
-			'peiling' => $serializer->serialize($this->peiling, 'json', ['groups' => 'vue']),
+			'peiling' => $this->serializer->serialize($this->peiling, 'json', ['groups' => 'vue']),
 		])->getHtml();
 	}
 
@@ -51,8 +63,7 @@ class BbPeiling extends BbTag {
 	 * @throws BbException
 	 */
 	private function getPeiling($peiling_id): Peiling {
-		$peilingenRepository = ContainerFacade::getContainer()->get(PeilingenRepository::class);
-		$peiling = $peilingenRepository->getPeilingById($peiling_id);
+		$peiling = $this->peilingenRepository->getPeilingById($peiling_id);
 		if ($peiling === false) {
 			throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
 		}

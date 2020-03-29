@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\model\groepen\KetzersModel;
 
@@ -9,13 +9,12 @@ use CsrDelft\model\groepen\KetzersModel;
  * @since 27/03/2019
  */
 class BbKetzer extends BbTagGroep {
+	public function __construct(KetzersModel $model) {
+		parent::__construct($model);
+	}
 
 	public static function getTagName() {
 		return 'ketzer';
-	}
-
-	public function getModel() {
-		return KetzersModel::class;
 	}
 
 	public function getLidNaam() {
