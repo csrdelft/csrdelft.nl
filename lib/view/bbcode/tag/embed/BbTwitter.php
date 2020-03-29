@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\embed;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
@@ -47,8 +47,8 @@ HTML;
 		}
 
 		return <<<HTML
-<a class="twitter-timeline" 
-	 data-lang="nl" data-width="{$width}" data-height="{$height}" data-dnt="true" data-theme="light" data-link-color="#0a338d" 
+<a class="twitter-timeline"
+	 data-lang="nl" data-width="{$width}" data-height="{$height}" data-dnt="true" data-theme="light" data-link-color="#0a338d"
 	 href="https://twitter.com/{$this->content}">
 	 	Tweets van {$this->content}
 </a>

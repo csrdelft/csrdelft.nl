@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\model\groepen\CommissiesModel;
 
@@ -9,6 +9,9 @@ use CsrDelft\model\groepen\CommissiesModel;
  * @since 27/03/2019
  */
 class BbCommissie extends BbTagGroep {
+	public function __construct(CommissiesModel $model) {
+		parent::__construct($model);
+	}
 
 	public static function getTagName() {
 		return 'commissie';
@@ -16,9 +19,5 @@ class BbCommissie extends BbTagGroep {
 
 	public function getLidNaam() {
 		return 'leden';
-	}
-
-	public function getModel() {
-		return CommissiesModel::class;
 	}
 }

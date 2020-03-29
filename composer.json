@@ -7,7 +7,7 @@
 		}
 	],
 	"require": {
-		"csrdelft/bb": "1.1.6",
+		"csrdelft/bb": "1.1.7",
 		"csrdelft/orm": "^1.9",
 		"easyrdf/easyrdf": "^0.9.1",
 		"eftec/bladeone": "3.21",

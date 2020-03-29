@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\model\groepen\BesturenModel;
 
@@ -9,6 +9,9 @@ use CsrDelft\model\groepen\BesturenModel;
  * @since 27/03/2019
  */
 class BbBestuur extends BbTagGroep {
+	public function __construct(BesturenModel $model) {
+		parent::__construct($model);
+	}
 
 	public static function getTagName() {
 		return 'bestuur';
@@ -16,9 +19,5 @@ class BbBestuur extends BbTagGroep {
 
 	public function getLidNaam() {
 		return 'personen';
-	}
-
-	public function getModel() {
-		return BesturenModel::class;
 	}
 }

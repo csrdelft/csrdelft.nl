@@ -48,6 +48,14 @@ class BbFotoalbum extends BbTag {
 	 * @var bool|FotoAlbum|FotoTagAlbum|null
 	 */
 	private $album;
+	/**
+	 * @var FotoAlbumRepository
+	 */
+	private $fotoAlbumRepository;
+
+	public function __construct(FotoAlbumRepository $fotoAlbumRepository) {
+		$this->fotoAlbumRepository = $fotoAlbumRepository;
+	}
 
 	public static function getTagName() {
 		return 'fotoalbum';
@@ -104,9 +112,8 @@ class BbFotoalbum extends BbTag {
 	 */
 	private function getAlbum(string $url) {
 		try {
-			$fotoAlbumRepository = ContainerFacade::getContainer()->get(FotoAlbumRepository::class);
 			if ($url === 'laatste') {
-				$album = $fotoAlbumRepository->getMostRecentFotoAlbum();
+				$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
 			} else {
 				//vervang url met pad
 				$url = str_ireplace(CSR_ROOT, '', $url);
@@ -116,7 +123,7 @@ class BbFotoalbum extends BbTag {
 				if (startsWith($url, '/')) {
 					$url = substr($url, 1);
 				}
-				$album = $fotoAlbumRepository->getFotoAlbum($url);
+				$album = $this->fotoAlbumRepository->getFotoAlbum($url);
 			}
 			return $album;
 		} catch (CsrNotFoundException $ex) {

@@ -5,7 +5,6 @@ namespace CsrDelft\view\bbcode\tag;
 
 
 use CsrDelft\bb\BbException;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\ForumPlaatje;
 use CsrDelft\repository\ForumPlaatjeRepository;
 
@@ -15,25 +14,28 @@ class BbForumPlaatje extends BbImg {
 	 * @var ForumPlaatje
 	 */
 	private $plaatje;
+	/**
+	 * @var ForumPlaatjeRepository
+	 */
+	private $forumPlaatjeRepository;
 
-	public static function getTagName()
-	{
+	public function __construct(ForumPlaatjeRepository $forumPlaatjeRepository) {
+		$this->forumPlaatjeRepository = $forumPlaatjeRepository;
+	}
+
+	public static function getTagName() {
 		return 'plaatje';
 	}
 
-
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return mag("P_LOGGED_IN");
 	}
 
-	public function getLinkUrl()
-	{
+	public function getLinkUrl() {
 		return $this->plaatje->getUrl(false);
 	}
 
-	public function getSourceUrl()
-	{
+	public function getSourceUrl() {
 		return $this->plaatje->getUrl(true);
 	}
 
@@ -41,11 +43,9 @@ class BbForumPlaatje extends BbImg {
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		$this->readMainArgument($arguments);
-		$forumPlaatjeRepository = ContainerFacade::getContainer()->get(ForumPlaatjeRepository::class);
-		$plaatje = $forumPlaatjeRepository->getByKey($this->content);
+		$plaatje = $this->forumPlaatjeRepository->getByKey($this->content);
 		if (!$plaatje) {
 			throw new BbException("Plaatje bestaat niet");
 		}
