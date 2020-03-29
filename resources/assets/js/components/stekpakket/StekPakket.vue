@@ -53,6 +53,26 @@
 			</div>
 			<div class="col-lg-1 col-xl-2"></div>
 		</div>
+		<div class="row mt-4" v-if="gekozenBasispakket">
+			<div class="col-lg-1 col-xl-2"></div>
+			<div class="col-auto optellingTitel">
+				Uw stekpakket:
+			</div>
+			<div class="col optelling">
+				<div class="getal">&euro; {{ Math.floor(totaal) }}<span>,{{ (totaal - Math.floor(totaal) < 0.10 ? '0' : '') + Math.round((totaal - Math.floor(totaal)) * 100) }}</span></div>
+				<div class="per">per maand</div>
+			</div>
+			<div class="col-lg-1 col-xl-2"></div>
+		</div>
+		<div class="row mt-4 mb-5" v-if="gekozenBasispakket">
+			<div class="col-lg-1 col-xl-2"></div>
+			<div class="col">
+				<div class="bevestigen actief" v-if="gewijzigd && !laden" @click="laden = true;">Sla stekpakket op</div>
+				<div class="bevestigen laden" v-if="laden" @click="gewijzigd = false;laden = false;">Een ogenblik geduld...</div>
+				<div class="bevestigen opgeslagen" v-if="!gewijzigd && !laden"><i class="fa fa-check"></i>&emsp;Opgeslagen</div>
+			</div>
+			<div class="col-lg-1 col-xl-2"></div>
+		</div>
 	</div>
 </template>
 
@@ -94,8 +114,15 @@
 
 		protected gekozenBasispakket = '';
 		protected keyIndex = 0;
+		protected gewijzigd = false;
+		protected laden = false;
+		protected totaal = 0;
 
 		protected kiesBasispakket(pakket: string, niveau: number) {
+			if (this.laden) {
+				return;
+			}
+
 			// Zet inbegrepen op aan
 			for (const groep of this.opties) {
 				for (const optie in groep.opties) {
@@ -108,6 +135,8 @@
 
 			this.gekozenBasispakket = pakket;
 			this.keyIndex++;
+			this.gewijzigd = true;
+			this.berekenTotaal();
 
 			this.$nextTick(() => {
 				const offset = $('#configuratie').offset();
@@ -117,6 +146,21 @@
 					}, 800);
 				}
 			});
+		}
+
+		protected berekenTotaal() {
+			let totaal = 0;
+			for (const groep of this.opties) {
+				for (const optie in groep.opties) {
+					if (!(groep.opties.hasOwnProperty(optie))) {
+						continue;
+					}
+					if (groep.opties[optie].actief) {
+						totaal += groep.opties[optie].prijs;
+					}
+				}
+			}
+			this.totaal = totaal;
 		}
 	}
 </script>
@@ -244,6 +288,61 @@
 				font-size: 11px;
 				margin-top: -5px;
 			}
+		}
+	}
+
+	.optellingTitel {
+		font-size: 20pt;
+		font-weight: 600;
+	}
+
+	.optelling {
+		text-align: right;
+
+		.getal {
+			font-size: 23pt;
+			font-weight: 600;
+			vertical-align: top;
+			line-height: 24pt;
+
+			span {
+				font-weight: 400;
+				font-size: 13pt;
+				vertical-align: top;
+				line-height: 17pt;
+			}
+		}
+
+		.per {
+			font-weight: 300;
+			font-size: 11px;
+			margin-top: -5px;
+		}
+	}
+
+	.bevestigen {
+		color: white;
+		transition: background 0.2s ease-in-out;
+		font-weight: 600;
+		font-size: 13pt;
+		text-align: center;
+		padding: 5px 10px;
+		border-radius: 5px;
+
+		&.actief {
+			background-color: #3498DB;
+			cursor: pointer;
+			&:hover {
+				background-color: #58C1FF;
+			}
+		}
+
+		&.laden {
+			background-color: #58C1FF;
+		}
+
+		&.opgeslagen {
+			background-color: #2ECC71;
 		}
 	}
 </style>

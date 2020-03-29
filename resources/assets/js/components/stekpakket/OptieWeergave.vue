@@ -3,9 +3,16 @@
 		<div class="kopje">{{ $parent.opties[index].groep }}</div>
 		<div class="opties" v-for="(details, key) in $parent.opties[index].opties">
 			<div class="selecteer">
-				<toggle-button :width="40" :value="$parent.opties[index].opties[key].actief" @change="toggle($event, key)" :sync="true" />
+				<toggle-button
+					:width="40"
+					:value="$parent.opties[index].opties[key].actief"
+					@change="toggle($event, key)" :sync="true"/>
 			</div>
-			<div class="uitleg">{{ $parent.opties[index].opties[key].optie }} <span>(&euro; {{ $parent.opties[index].opties[key].prijs.toFixed(2).replace('.', ',') }})</span></div>
+			<div class="uitleg"
+				 @click="toggle({value: !$parent.opties[index].opties[key].actief}, key)">
+				{{ $parent.opties[index].opties[key].optie }}
+				<span>(&euro; {{ $parent.opties[index].opties[key].prijs.toFixed(2).replace('.', ',') }})</span>
+			</div>
 		</div>
 	</div>
 </template>
@@ -22,6 +29,9 @@
 		protected index: number;
 
 		protected toggle(value: any, key: string) {
+			if (this.$parent.laden) {
+				return;
+			}
 			const details = this.$parent.opties[this.index].opties[key];
 			details.actief = value.value;
 			if ('pre' in details && value.value) {
@@ -30,6 +40,8 @@
 			if ('post' in details && !value.value) {
 				this.$parent.opties[this.index].opties[details.post].actief = false;
 			}
+			this.$parent.gewijzigd = true;
+			this.$parent.berekenTotaal();
 			this.$forceUpdate();
 		}
 	}
