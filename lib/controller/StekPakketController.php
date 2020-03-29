@@ -24,7 +24,6 @@ class StekPakketController {
 				'Forum afgelopen week lezen',
 				'Agenda komende 3 dagen',
 				'Courant',
-				'2 CiviSaldo-transacties',
 			],
 			'euro' => 0,
 			'centen' => 0,
@@ -38,7 +37,6 @@ class StekPakketController {
 				'Kringen & werkgroepen bekijken',
 				'Lichtingen & verticalen bekijken',
 				'Eigen gegevens aanpassen',
-				'5 CiviSaldo-transacties',
 			],
 			'euro' => 1,
 			'centen' => 50,
@@ -53,7 +51,6 @@ class StekPakketController {
 				'Commissies bekijken',
 				'Documenten bekijken',
 				'Wiki leesrechten',
-				'20 CiviSaldo-transacties',
 			],
 			'euro' => 4,
 			'centen' => 0,
@@ -69,9 +66,8 @@ class StekPakketController {
 				'Commissies op je profiel tonen',
 				'Zien wie je profiel bezoekt',
 				'Wiki schrijfrechten',
-				'100 CiviSaldo-transacties',
 			],
-			'euro' => 7,
+			'euro' => 6,
 			'centen' => 50,
 			'niveau' => 4
 		],
@@ -83,7 +79,7 @@ class StekPakketController {
 			'opties' => [
 				'f_week' => ['optie' => 'Forum afgelopen week lezen', 'vanaf' => 1, 'prijs' => 0, 'post' => 'f_lees'],
 				'f_lees' => ['optie' => 'Forumhistorie lezen', 'vanaf' => 2, 'prijs' => 0.5, 'pre' => 'f_week'],
-				'f_schrijf' => ['optie' => 'Forumberichten schrijven', 'vanaf' => 3, 'prijs' => 0.3],
+				'f_schrijf' => ['optie' => 'Forumberichten schrijven', 'vanaf' => 3, 'prijs' => 0.4],
 			]
 		],
 		[
@@ -92,7 +88,7 @@ class StekPakketController {
 				'a_dagen' => ['optie' => 'Agenda komende 3 dagen bekijken', 'vanaf' => 1, 'prijs' => 0, 'post' => 'a_lees'],
 				'a_lees' => ['optie' => 'Agenda toekomst bekijken', 'vanaf' => 2, 'prijs' => 0.2, 'pre' => 'a_dagen'],
 				'a_maaltijd' => ['optie' => 'Maaltijdaanmeldingen', 'vanaf' => 3, 'prijs' => 0.2],
-				'a_ketzen' => ['optie' => 'In- en uitketzen in ketzers', 'vanaf' => 3, 'prijs' => 0.2],
+				'a_ketzen' => ['optie' => 'In- en uitketzen in ketzers', 'vanaf' => 3, 'prijs' => 0.3],
 				'a_ketzer' => ['optie' => 'Ketzers maken', 'vanaf' => 4, 'prijs' => 0.3],
 			]
 		],
@@ -100,9 +96,9 @@ class StekPakketController {
 			'groep' => 'Groepen',
 			'opties' => [
 				'g_kring' => ['optie' => 'Kringen & werkgroepen bekijken', 'vanaf' => 2, 'prijs' => 0.1],
-				'g_lichting' => ['optie' => 'Lichtingen & verticalen bekijken', 'vanaf' => 2, 'prijs' => 0.1],
+				'g_lichting' => ['optie' => 'Lichtingen & verticalen bekijken', 'vanaf' => 2, 'prijs' => 0.2],
 				'g_commissie' => ['optie' => 'Commissies bekijken', 'vanaf' => 3, 'prijs' => 0.3],
-				'g_ondervereniging' => ['optie' => 'Onderverenigingen bekijken', 'vanaf' => 4, 'prijs' => 0.2],
+				'g_ondervereniging' => ['optie' => 'Onderverenigingen bekijken', 'vanaf' => 4, 'prijs' => 0.3],
 			]
 		],
 		[
@@ -111,9 +107,9 @@ class StekPakketController {
 				'c_courant' => ['optie' => 'Courant', 'vanaf' => 1, 'prijs' => 0],
 				'c_kringdocumenten' => ['optie' => 'Kringdocumenten', 'vanaf' => 2, 'prijs' => 0.2, 'post' => 'c_document_lees'],
 				'c_corvee' => ['optie' => 'Corveerooster', 'vanaf' => 2, 'prijs' => 0.1],
-				'c_document_lees' => ['optie' => 'Documenten bekijken', 'vanaf' => 3, 'prijs' => 0.2, 'pre' => 'c_kringdocumenten'],
+				'c_document_lees' => ['optie' => 'Documenten bekijken', 'vanaf' => 3, 'prijs' => 0.3, 'pre' => 'c_kringdocumenten'],
 				'c_document_upload' => ['optie' => 'Documenten uploaden', 'vanaf' => 4, 'prijs' => 0.5],
-				'c_bibliotheek' => ['optie' => 'Bibliotheek', 'vanaf' => 4, 'prijs' => 0.1],
+				'c_bibliotheek' => ['optie' => 'Bibliotheek', 'vanaf' => 4, 'prijs' => 0.2],
 			]
 		],
 		[
@@ -122,14 +118,14 @@ class StekPakketController {
 				'l_aanpassen' => ['optie' => 'Eigen gegevens aanpassen', 'vanaf' => 2, 'prijs' => 0.2],
 				'l_bekijken' => ['optie' => 'Ledengegevens bekijken', 'vanaf' => 3, 'prijs' => 0.5],
 				'l_commissies' => ['optie' => 'Commissies op profiel tonen', 'vanaf' => 4, 'prijs' => 0.25],
-				'l_bezoekers' => ['optie' => 'Zien wie je profiel bezoekt', 'vanaf' => 4, 'prijs' => 0.25],
+				'l_bezoekers' => ['optie' => 'Zien wie je profiel bezoekt', 'vanaf' => 4, 'prijs' => 0.50],
 			]
 		],
 		[
 			'groep' => 'Wiki',
 			'opties' => [
 				'w_lees' => ['optie' => 'Wiki leesrechten', 'vanaf' => 3, 'prijs' => 0.5, 'post' => 'w_schrijf'],
-				'w_schrijf' => ['optie' => 'Wiki schrijfrechten', 'vanaf' => 4, 'prijs' => 0.3, 'pre' => 'w_lees'],
+				'w_schrijf' => ['optie' => 'Wiki schrijfrechten', 'vanaf' => 4, 'prijs' => 0.45, 'pre' => 'w_lees'],
 			]
 		],
 	];
