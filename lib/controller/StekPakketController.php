@@ -70,6 +70,7 @@ class StekPakketController {
 				'Zien wie je profiel bezoekt',
 				'Wiki schrijfrechten',
 				'100 CiviSaldo-transacties',
+				'Zien wie je profiel heeft bekeken'
 			],
 			'euro' => 7,
 			'centen' => 50,
