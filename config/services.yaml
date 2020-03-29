@@ -31,7 +31,7 @@ services:
 
   CsrDelft\view\bbcode\:
     resource: '../lib/view/bbcode/'
-    shared: false
+    shared: false # iedere instance is uniek
     public: true
 
   CsrDelft\repository\:
