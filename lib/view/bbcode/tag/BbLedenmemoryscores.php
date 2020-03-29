@@ -7,7 +7,6 @@ use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\Lichting;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
@@ -23,14 +22,26 @@ class BbLedenmemoryscores extends BbTag {
 	 */
 	private $groep;
 	private $titel;
+	/**
+	 * @var VerticalenModel
+	 */
+	private $verticalenModel;
+	/**
+	 * @var LichtingenModel
+	 */
+	private $lichtingenModel;
 
-	public function isAllowed()
-	{
-		LoginModel::mag(P_LOGGED_IN);
+	public function __construct(VerticalenModel $verticalenModel, LichtingenModel $lichtingenModel) {
+		$this->verticalenModel = $verticalenModel;
+		$this->lichtingenModel = $lichtingenModel;
 	}
 
 	public static function getTagName() {
 		return 'ledenmemoryscores';
+	}
+
+	public function isAllowed() {
+		LoginModel::mag(P_LOGGED_IN);
 	}
 
 	public function renderLight() {
@@ -41,15 +52,14 @@ class BbLedenmemoryscores extends BbTag {
 	 * @param $arguments
 	 */
 	function parse($arguments = []) {
-		LedenMemoryScoresModel::instance();
 		$groep = null;
 		$titel = null;
 		if (isset($arguments['verticale'])) {
 			$v = filter_var($arguments['verticale'], FILTER_SANITIZE_STRING);
 			if (strlen($v) > 1) {
-				$verticale = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+				$verticale = $this->verticalenModel->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
 			} else {
-				$verticale = VerticalenModel::instance()->get($v);
+				$verticale = $this->verticalenModel->get($v);
 			}
 			if ($verticale) {
 				$titel = ' Verticale ' . $verticale->naam;
@@ -60,7 +70,7 @@ class BbLedenmemoryscores extends BbTag {
 			if ($l < 1950) {
 				$l = LichtingenModel::getJongsteLidjaar();
 			}
-			$lichting = LichtingenModel::instance()->get($l);
+			$lichting = $this->lichtingenModel->get($l);
 			if ($lichting) {
 				$titel = ' Lichting ' . $lichting->lidjaar;
 				$groep = $lichting;

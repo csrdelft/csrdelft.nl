@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\model\groepen\RechtenGroepenModel;
 
@@ -9,6 +9,9 @@ use CsrDelft\model\groepen\RechtenGroepenModel;
  * @since 27/03/2019
  */
 class BbGroep extends BbTagGroep {
+	public function __construct(RechtenGroepenModel $model) {
+		parent::__construct($model);
+	}
 
 	public static function getTagName() {
 		return 'groep';
@@ -16,9 +19,5 @@ class BbGroep extends BbTagGroep {
 
 	public function getLidNaam() {
 		return 'personen';
-	}
-
-	public function getModel() {
-		return RechtenGroepenModel::class;
 	}
 }

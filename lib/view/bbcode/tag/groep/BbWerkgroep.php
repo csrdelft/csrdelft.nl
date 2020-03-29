@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\model\groepen\WerkgroepenModel;
 
@@ -9,6 +9,9 @@ use CsrDelft\model\groepen\WerkgroepenModel;
  * @since 27/03/2019
  */
 class BbWerkgroep extends BbTagGroep {
+	public function __construct(WerkgroepenModel $model) {
+		parent::__construct($model);
+	}
 
 	public static function getTagName() {
 		return 'werkgroep';
@@ -16,9 +19,5 @@ class BbWerkgroep extends BbTagGroep {
 
 	public function getLidNaam() {
 		return 'aanmeldingen';
-	}
-
-	public function getModel() {
-		return WerkgroepenModel::class;
 	}
 }

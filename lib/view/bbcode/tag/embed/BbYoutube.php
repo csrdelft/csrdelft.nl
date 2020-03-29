@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\embed;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;

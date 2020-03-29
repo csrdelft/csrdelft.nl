@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\view\bbcode\tag;
+namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\model\groepen\WoonoordenModel;
 
@@ -9,6 +9,9 @@ use CsrDelft\model\groepen\WoonoordenModel;
  * @since 27/03/2019
  */
 class BbWoonoord extends BbTagGroep {
+	public function __construct(WoonoordenModel $model) {
+		parent::__construct($model);
+	}
 
 	public static function getTagName() {
 		return 'woonoord';
@@ -16,9 +19,5 @@ class BbWoonoord extends BbTagGroep {
 
 	public function getLidNaam() {
 		return 'bewoners';
-	}
-
-	public function getModel() {
-		return WoonoordenModel::class;
 	}
 }
