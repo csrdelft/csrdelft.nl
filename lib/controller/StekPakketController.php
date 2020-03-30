@@ -3,7 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\entity\commissievoorkeuren\StekPakket;
+use CsrDelft\entity\StekPakket;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\StekPakketRepository;
 use CsrDelft\view\JsonResponse;

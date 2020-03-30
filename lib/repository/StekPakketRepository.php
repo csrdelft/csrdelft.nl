@@ -2,7 +2,7 @@
 
 namespace CsrDelft\repository;
 
-use CsrDelft\entity\commissievoorkeuren\StekPakket;
+use CsrDelft\entity\StekPakket;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
