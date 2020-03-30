@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class VoorkeurVoorkeur
  * @package CsrDelft\model\entity
  * @ORM\Entity(repositoryClass="CsrDelft\repository\StekPakketRepository")
- * @ORM\Table("stekPakket")
+ * @ORM\Table("stekpakket")
  */
 class StekPakket {
 	/**
