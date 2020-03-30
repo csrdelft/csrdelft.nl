@@ -8,4 +8,8 @@ class VeranderStekpakketDecimal extends AbstractMigration {
 			->changeColumn('prijs', 'decimal', ['precision' => 4, 'scale' => 2])
 			->save();
 	}
+
+	public function down() {
+
+	}
 }
