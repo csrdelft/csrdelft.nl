@@ -168,7 +168,7 @@
 			this.totaal = totaal;
 		}
 
-		protected get optieLijst() {
+		protected getOptieLijst() {
 			const lijst = [];
 			for (const groep of this.opties) {
 				for (const [key, optie] of Object.entries(groep.opties)) {
@@ -184,7 +184,7 @@
 			this.laden = true;
 			axios.post(this.opslaan, {
 				basispakket: this.gekozenBasispakket,
-				opties: this.optieLijst,
+				opties: this.getOptieLijst(),
 			}).then(() => {
 				this.laden = false;
 				this.gewijzigd = false;
