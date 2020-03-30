@@ -132,7 +132,7 @@ class StekPakketController {
 		// Zet defaults
 		foreach ($this->opties as $key => $groep) {
 			foreach ($groep['opties'] as $optieKey => $optie) {
-				$this->opties[$key]['opties'][$optieKey]['actief'] = $stekpakket ? in_array($optieKey, $stekpakket->opties) : false;
+				$this->opties[$key]['opties'][$optieKey]['actief'] = $stekpakket && in_array($optieKey, $stekpakket->opties);
 			}
 		}
 
