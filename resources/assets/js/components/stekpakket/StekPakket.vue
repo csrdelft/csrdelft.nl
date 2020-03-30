@@ -136,11 +136,8 @@
 
 			// Zet inbegrepen op aan
 			for (const groep of this.opties) {
-				for (const optie in groep.opties) {
-					if (!(groep.opties.hasOwnProperty(optie))) {
-						continue;
-					}
-					groep.opties[optie].actief = niveau >= groep.opties[optie].vanaf;
+				for (const optie of Object.values(groep.opties)) {
+					optie.actief = niveau >= optie.vanaf;
 				}
 			}
 
@@ -162,12 +159,9 @@
 		protected berekenTotaal() {
 			let totaal = 0;
 			for (const groep of this.opties) {
-				for (const optie in groep.opties) {
-					if (!(groep.opties.hasOwnProperty(optie))) {
-						continue;
-					}
-					if (groep.opties[optie].actief) {
-						totaal += groep.opties[optie].prijs;
+				for (const optie of Object.values(groep.opties)) {
+					if (optie.actief) {
+						totaal += optie.prijs;
 					}
 				}
 			}
@@ -177,12 +171,9 @@
 		protected get optieLijst() {
 			const lijst = [];
 			for (const groep of this.opties) {
-				for (const optie in groep.opties) {
-					if (!(groep.opties.hasOwnProperty(optie))) {
-						continue;
-					}
-					if (groep.opties[optie].actief) {
-						lijst.push(optie);
+				for (const [key, optie] of Object.entries(groep.opties)) {
+					if (optie.actief) {
+						lijst.push(key);
 					}
 				}
 			}
