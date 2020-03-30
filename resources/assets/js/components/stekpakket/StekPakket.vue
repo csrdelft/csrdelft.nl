@@ -43,12 +43,12 @@
 			<div class="col-lg-1 col-xl-2"></div>
 			<div class="col-sm">
 				<template v-for="(groep, index) in opties">
-					<OptieWeergave :key="groep.groep + keyIndex" v-if="index < opties.length / 2" :index="index" />
+					<OptieWeergave :key="groep.groep + keyIndex" v-if="index < opties.length / 2" :index="index" @toggle="wijziging" />
 				</template>
 			</div>
 			<div class="col-sm">
 				<template v-for="(groep, index) in opties">
-					<OptieWeergave :key="groep.groep + keyIndex" v-if="index >= opties.length / 2" :index="index" />
+					<OptieWeergave :key="groep.groep + keyIndex" v-if="index >= opties.length / 2" :index="index" @toggle="wijziging" />
 				</template>
 			</div>
 			<div class="col-lg-1 col-xl-2"></div>
@@ -59,14 +59,14 @@
 				Uw stekpakket:
 			</div>
 			<div class="col optelling">
-				<div class="getal">&euro; {{ Math.floor(totaal) }}<span>,{{ (totaal - Math.floor(totaal) < 0.10 ? '0' : '') + Math.round((totaal - Math.floor(totaal)) * 100) }}</span></div>
+				<div class="getal">&euro; {{ Math.floor(totaal) }}<span>,{{ (totaal - Math.floor(totaal) < 0.095 ? '0' : '') + Math.round((totaal - Math.floor(totaal)) * 100) }}</span></div>
 				<div class="per">per maand</div>
 			</div>
 			<div class="col-lg-1 col-xl-2"></div>
 		</div>
 		<div class="row mt-4 mb-5" v-if="gekozenBasispakket">
 			<div class="col-lg-1 col-xl-2"></div>
-			<div class="col">
+			<div class="col pb-5">
 				<div class="bevestigen actief" v-if="gewijzigd && !laden" @click="slaOp">Sla stekpakket op</div>
 				<div class="bevestigen laden" v-if="laden">Een ogenblik geduld...</div>
 				<div class="bevestigen opgeslagen" v-if="!gewijzigd && !laden"><i class="fa fa-check"></i>&emsp;Opgeslagen</div>
@@ -156,6 +156,11 @@
 			});
 		}
 
+		protected wijziging(prijsverschil: number) {
+			this.gewijzigd = true;
+			this.totaal = Math.round((this.totaal + prijsverschil) * 100) / 100;
+		}
+
 		protected berekenTotaal() {
 			let totaal = 0;
 			for (const groep of this.opties) {
@@ -165,7 +170,7 @@
 					}
 				}
 			}
-			this.totaal = totaal;
+			this.totaal = Math.round(totaal * 100) / 100;
 		}
 
 		protected getOptieLijst() {

@@ -33,15 +33,17 @@
 				return;
 			}
 			const details = this.$parent.opties[this.index].opties[key];
+			let prijsverschil = details.prijs * (value.value ? 1 : -1);
 			details.actief = value.value;
-			if ('pre' in details && value.value) {
+			if ('pre' in details && value.value && !this.$parent.opties[this.index].opties[details.pre].actief) {
 				this.$parent.opties[this.index].opties[details.pre].actief = true;
+				prijsverschil += this.$parent.opties[this.index].opties[details.pre].prijs;
 			}
-			if ('post' in details && !value.value) {
+			if ('post' in details && !value.value && this.$parent.opties[this.index].opties[details.post].actief) {
 				this.$parent.opties[this.index].opties[details.post].actief = false;
+				prijsverschil -= this.$parent.opties[this.index].opties[details.post].prijs;
 			}
-			this.$parent.gewijzigd = true;
-			this.$parent.berekenTotaal();
+			this.$emit('toggle', prijsverschil);
 			this.$forceUpdate();
 		}
 	}
