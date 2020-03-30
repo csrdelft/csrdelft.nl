@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\entity\commissievoorkeuren;
+namespace CsrDelft\entity;
 
 use CsrDelft\entity\profiel\Profiel;
 use DateTime;
