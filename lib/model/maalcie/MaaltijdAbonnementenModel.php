@@ -6,79 +6,42 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\ProfielRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * MaaltijdAbonnementenModel.class.php    |    P.W.G. Brussee (brussee@live.nl)
  *
  */
 class MaaltijdAbonnementenModel extends PersistenceModel {
-
 	const ORM = MaaltijdAbonnement::class;
-
 	/**
-	 * Geeft de ingeschakelde abonnementen voor een lid terug plus
-	 * de abonnementen die nog kunnen worden ingeschakeld op basis
-	 * van de meegegeven maaltijdrepetities.
-	 *
-	 * @param string $uid
-	 * @param boolean $abonneerbaar alleen abonneerbare abonnementen
-	 * @param boolean $uitgeschakeld ook uitgeschakelde abonnementen
-	 * @return MaaltijdAbonnement[]
+	 * @var MaaltijdAanmeldingenRepository
 	 */
-	public function getAbonnementenVoorLid($uid, $abonneerbaar = false, $uitgeschakeld = false) {
-		return Database::transaction(function () use ($uid, $abonneerbaar, $uitgeschakeld) {
-			if ($abonneerbaar) {
-				$repById = MaaltijdRepetitiesModel::instance()->getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
-			} else {
-				$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
-			}
-			$lijst = array();
-			$abos = $this->find('uid = ?', array($uid));
-			foreach ($abos as $abo) { // ingeschakelde abonnementen
-				$mrid = $abo->mlt_repetitie_id;
-				if (!array_key_exists($mrid, $repById)) { // ingeschakelde abonnementen altijd weergeven
-					$repById[$mrid] = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
-				}
-				$abo->maaltijd_repetitie = $repById[$mrid];
-				$abo->van_uid = $uid;
-				$lijst[$mrid] = $abo;
-			}
-			if ($uitgeschakeld) {
-				foreach ($repById as $repetitie) {
-					$mrid = $repetitie->mlt_repetitie_id;
-					if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen weergeven
-						$abo = new MaaltijdAbonnement();
-						$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
-						$abo->maaltijd_repetitie = $repetitie;
-						$abo->van_uid = $uid;
-						$lijst[$mrid] = $abo;
-					}
-				}
-			}
-			ksort($lijst);
-			return $lijst;
-		});
-	}
+	private $maaltijdAanmeldingenRepository;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
 
-	public function getHeeftAbonnement($mrid, $uid) {
-		$abonnement = new MaaltijdAbonnement();
-		$abonnement->mlt_repetitie_id = $mrid;
-		$abonnement->uid = $uid;
-		return $this->exists($abonnement);
+	public function __construct(MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, EntityManagerInterface $em) {
+		parent::__construct();
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->em = $em;
 	}
 
 	public function getAbonnementenWaarschuwingenMatrix() {
-		return Database::transaction(function () {
+		return $this->em->transactional(function () {
 			$abos = $this->find();
 
 			$waarschuwingen = array();
 
 			foreach ($abos as $abo) {
 				$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($abo->mlt_repetitie_id);
-				if (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
+				if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
 					$abo->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter;
 					$waarschuwingen[$abo->uid][$abo->mlt_repetitie_id] = $abo;
 				} elseif (!$repetitie->abonneerbaar) {
@@ -96,8 +59,31 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		});
 	}
 
+	/**
+	 * @param $matrix
+	 * @param $repById
+	 * @param bool $ingeschakeld
+	 * @return array
+	 */
+	private function fillHoles($matrix, $repById, $ingeschakeld = false) {
+		foreach ($repById as $mrid => $repetitie) { // vul gaten in matrix vanwege uitgeschakelde abonnementen
+			foreach ($matrix as $uid => $abos) {
+				if (!array_key_exists($mrid, $abos)) {
+					$abonnement = new MaaltijdAbonnement();
+					$abonnement->mlt_repetitie_id = $ingeschakeld ? $mrid : null;
+					$abonnement->van_uid = $uid;
+					$abonnement->maaltijd_repetitie = $repetitie;
+					$matrix[$uid][$mrid] = $abonnement;
+				}
+				ksort($repById);
+				ksort($matrix[$uid]);
+			}
+		}
+		return array($matrix, $repById);
+	}
+
 	public function getAbonnementenAbonneerbaarMatrix() {
-		return Database::transaction(function () {
+		return $this->em->transactional(function () {
 			$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
 			$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
 			$sql .= ' r.abonnement_filter AS filter,'; // controleer later
@@ -119,7 +105,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 				foreach ($abos as $abo) {
 					$rep = $repById[$abo->mlt_repetitie_id];
 					$abo->maaltijd_repetitie = $rep;
-					if (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($lid->uid, $rep->abonnement_filter)) {
+					if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($lid->uid, $rep->abonnement_filter)) {
 						$abo->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $rep->abonnement_filter;
 					}
 					$matrix[$lid->uid][$abo->mlt_repetitie_id] = $abo;
@@ -136,7 +122,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @return MaaltijdAbonnement[][] 2d matrix met eerst uid, en dan repetitie id
 	 */
 	public function getAbonnementenMatrix() {
-		return Database::transaction(function () {
+		return $this->em->transactional(function () {
 			$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
 			$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
 			$sql .= ' r.abonnement_filter AS filter,'; // controleer later
@@ -169,7 +155,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 					$abonnement->foutmelding = 'Niet abonneerbaar';
 				} elseif ($abo['status_err']) {
 					$abonnement->waarschuwing = 'Geen huidig lid';
-				} elseif (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($uid, $abo['filter'])) {
+				} elseif (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($uid, $abo['filter'])) {
 					$abonnement->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['filter'];
 				}
 				$matrix[$uid][$mrid] = $abonnement;
@@ -178,35 +164,12 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 		});
 	}
 
-	/**
-	 * @param $matrix
-	 * @param $repById
-	 * @param bool $ingeschakeld
-	 * @return array
-	 */
-	private function fillHoles($matrix, $repById, $ingeschakeld = false) {
-		foreach ($repById as $mrid => $repetitie) { // vul gaten in matrix vanwege uitgeschakelde abonnementen
-			foreach ($matrix as $uid => $abos) {
-				if (!array_key_exists($mrid, $abos)) {
-					$abonnement = new MaaltijdAbonnement();
-					$abonnement->mlt_repetitie_id = $ingeschakeld ? $mrid : null;
-					$abonnement->van_uid = $uid;
-					$abonnement->maaltijd_repetitie = $repetitie;
-					$matrix[$uid][$mrid] = $abonnement;
-				}
-				ksort($repById);
-				ksort($matrix[$uid]);
-			}
-		}
-		return array($matrix, $repById);
-	}
-
 	public function getAbonnementenVoorRepetitie($mrid) {
 		return $this->find('mlt_repetitie_id = ?', array($mrid));
 	}
 
 	public function getAbonnementenVanNovieten() {
-		return Database::transaction(function () {
+		return $this->em->transactional(function () {
 			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('status = "S_NOVIET"');
 			$matrix = array();
 			foreach ($novieten as $noviet) {
@@ -222,7 +185,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @throws CsrGebruikerException
 	 */
 	public function inschakelenAbonnement($abo) {
-		return Database::transaction(function () use ($abo) {
+		return $this->em->transactional(function () use ($abo) {
 			$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($abo->mlt_repetitie_id);
 			if (!$repetitie->abonneerbaar) {
 				throw new CsrGebruikerException('Niet abonneerbaar');
@@ -230,7 +193,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 			if ($this->exists($abo)) {
 				throw new CsrGebruikerException('Abonnement al ingeschakeld');
 			}
-			if (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
+			if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
 				throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 			}
 
@@ -238,18 +201,20 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 			$abo->wanneer_ingeschakeld = date('Y-m-d H:i');
 			$this->create($abo);
 
-			return MaaltijdAanmeldingenModel::instance()->aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
+			$return = $this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
+
+			return $return;
 		});
 	}
 
 	public function inschakelenAbonnementVoorNovieten($mrid) {
-		return Database::transaction(function () use ($mrid) {
+		return $this->em->transactional(function () use ($mrid) {
 			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('status = "S_NOVIET"');
 
 			$aantal = 0;
 			foreach ($novieten as $noviet) {
 				$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
-				if (!MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($noviet->uid, $repetitie->abonnement_filter)) {
+				if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($noviet->uid, $repetitie->abonnement_filter)) {
 					continue;
 				}
 
@@ -262,7 +227,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 					continue;
 				}
 				$this->create($abo);
-				MaaltijdAanmeldingenModel::instance()->aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $noviet->uid);
+				$this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $noviet->uid);
 				$aantal += 1;
 			}
 
@@ -271,7 +236,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	}
 
 	public function uitschakelenAbonnement($mrid, $uid) {
-		return Database::transaction(function () use ($mrid, $uid) {
+		return $this->em->transactional(function () use ($mrid, $uid) {
 			if (!$this->getHeeftAbonnement($mrid, $uid)) {
 				throw new CsrGebruikerException('Abonnement al uitgeschakeld');
 			}
@@ -280,9 +245,16 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 			$abo->mlt_repetitie_id = $mrid;
 			$abo->van_uid = $uid;
 
-			$aantal = MaaltijdAanmeldingenModel::instance()->afmeldenDoorAbonnement($mrid, $uid);
+			$aantal = $this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement($mrid, $uid);
 			return array($abo, $aantal);
 		});
+	}
+
+	public function getHeeftAbonnement($mrid, $uid) {
+		$abonnement = new MaaltijdAbonnement();
+		$abonnement->mlt_repetitie_id = $mrid;
+		$abonnement->uid = $uid;
+		return $this->exists($abonnement);
 	}
 
 	/**
@@ -294,12 +266,12 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @return int amount of deleted abos
 	 */
 	public function verwijderAbonnementen($mrid) {
-		return Database::transaction(function () use ($mrid) {
+		return $this->em->transactional(function () use ($mrid) {
 			/** @var MaaltijdAbonnement[] $abos */
 			$abos = $this->find('mlt_repetitie_id = ?', array($mrid))->fetchAll();
 			$aantal = count($abos);
 			foreach ($abos as $abo) {
-				MaaltijdAanmeldingenModel::instance()->afmeldenDoorAbonnement($mrid, $abo->uid);
+				$this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement($mrid, $abo->uid);
 				$this->delete($abo);
 			}
 			return $aantal;
@@ -314,7 +286,7 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 	 * @return int amount of deleted abos
 	 */
 	public function verwijderAbonnementenVoorLid($uid) {
-		return Database::transaction(function () use ($uid) {
+		return $this->em->transactional(function () use ($uid) {
 			$abos = $this->getAbonnementenVoorLid($uid);
 			$aantal = 0;
 			foreach ($abos as $abo) {
@@ -324,6 +296,51 @@ class MaaltijdAbonnementenModel extends PersistenceModel {
 				setMelding('Niet alle abonnementen zijn uitgeschakeld!', -1);
 			}
 			return $aantal;
+		});
+	}
+
+	/**
+	 * Geeft de ingeschakelde abonnementen voor een lid terug plus
+	 * de abonnementen die nog kunnen worden ingeschakeld op basis
+	 * van de meegegeven maaltijdrepetities.
+	 *
+	 * @param string $uid
+	 * @param boolean $abonneerbaar alleen abonneerbare abonnementen
+	 * @param boolean $uitgeschakeld ook uitgeschakelde abonnementen
+	 * @return MaaltijdAbonnement[]
+	 */
+	public function getAbonnementenVoorLid($uid, $abonneerbaar = false, $uitgeschakeld = false) {
+		return $this->em->transactional(function () use ($uid, $abonneerbaar, $uitgeschakeld) {
+			if ($abonneerbaar) {
+				$repById = MaaltijdRepetitiesModel::instance()->getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
+			} else {
+				$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
+			}
+			$lijst = array();
+			$abos = $this->find('uid = ?', array($uid));
+			foreach ($abos as $abo) { // ingeschakelde abonnementen
+				$mrid = $abo->mlt_repetitie_id;
+				if (!array_key_exists($mrid, $repById)) { // ingeschakelde abonnementen altijd weergeven
+					$repById[$mrid] = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
+				}
+				$abo->maaltijd_repetitie = $repById[$mrid];
+				$abo->van_uid = $uid;
+				$lijst[$mrid] = $abo;
+			}
+			if ($uitgeschakeld) {
+				foreach ($repById as $repetitie) {
+					$mrid = $repetitie->mlt_repetitie_id;
+					if (!array_key_exists($mrid, $lijst)) { // uitgeschakelde abonnementen weergeven
+						$abo = new MaaltijdAbonnement();
+						$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+						$abo->maaltijd_repetitie = $repetitie;
+						$abo->van_uid = $uid;
+						$lijst[$mrid] = $abo;
+					}
+				}
+			}
+			ksort($lijst);
+			return $lijst;
 		});
 	}
 }

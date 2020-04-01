@@ -17,7 +17,7 @@
  * @var int $forumpostcount
  * @var \CsrDelft\entity\forum\ForumPost[] $forumrecent
  * @var \CsrDelft\entity\bibliotheek\BoekExemplaar[] $boeken
- * @var \CsrDelft\model\entity\maalcie\MaaltijdAanmelding[] $recenteAanmeldingen
+ * @var \CsrDelft\entity\maalcie\MaaltijdAanmelding[] $recenteAanmeldingen
  * @var \CsrDelft\model\entity\maalcie\MaaltijdAbonnement[] $abos
  * @var \CsrDelft\entity\bibliotheek\BoekRecensie[] $gerecenseerdeboeken
  * @var \CsrDelft\view\fotoalbum\FotoBBView[] $fotos

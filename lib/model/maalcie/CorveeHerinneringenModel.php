@@ -2,9 +2,11 @@
 
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\entity\Mail;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 
 /**
@@ -29,7 +31,7 @@ class CorveeHerinneringenModel {
 		$bericht = $taak->getCorveeFunctie()->email_bericht;
 		$eten = '';
 		if ($taak->maaltijd_id !== null) {
-			$aangemeld = MaaltijdAanmeldingenModel::instance()->getIsAangemeld($taak->maaltijd_id, $uid);
+			$aangemeld = ContainerFacade::getContainer()->get(MaaltijdAanmeldingenRepository::class)->getIsAangemeld($taak->maaltijd_id, $uid);
 			if ($aangemeld) {
 				$eten = instelling('corvee', 'mail_wel_meeeten');
 			} else {

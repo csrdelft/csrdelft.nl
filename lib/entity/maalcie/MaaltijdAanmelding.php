@@ -1,12 +1,12 @@
 <?php
 
-namespace CsrDelft\model\entity\maalcie;
+namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * MaaltijdAanmelding.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -29,17 +29,48 @@ use CsrDelft\Orm\Entity\T;
  *
  * Zie ook MaaltijdAbonnement.class.php
  *
+ * @ORM\Entity(repositoryClass="MaaltijdAanmeldingenRepository")
+ * @ORM\Table("mlt_aanmeldingen")
  */
-class MaaltijdAanmelding extends PersistentEntity {
-	# shared primary key
+class MaaltijdAanmelding {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 */
+	public $maaltijd_id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="uid")
+	 * @ORM\Id()
+	 */
+	public $uid;
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $aantal_gasten = 0;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	public $gasten_eetwens;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $door_abonnement;
+	/**
+	 * @var string
+	 * @ORM\Column(type="uid")
+	 */
+	public $door_uid;
+	/**
+	 * @var \DateTime
+	 * @ORM\Column(type="datetime")
+	 */
+	public $laatst_gewijzigd;
 
-	public $maaltijd_id; # foreign key maaltijd.id
-	public $uid; # foreign key lid.uid
-	public $aantal_gasten = 0; # int 11
-	public $gasten_eetwens; # string 255
-	public $door_abonnement; # foreign key mlt_repetitie.id
-	public $door_uid; # foreign key lid.uid
-	public $laatst_gewijzigd; # datetime
 	/** @var Maaltijd */
 	public $maaltijd;
 
@@ -111,18 +142,4 @@ class MaaltijdAanmelding extends PersistentEntity {
 
 		throw new CsrException("Ongeldige saldo status: " . $status);
 	}
-
-	protected static $table_name = 'mlt_aanmeldingen';
-	protected static $persistent_attributes = array(
-		'maaltijd_id' => array(T::Integer),
-		'uid' => array(T::UID),
-		'aantal_gasten' => array(T::Integer),
-		'gasten_eetwens' => array(T::String, true),
-		'door_abonnement' => array(T::Integer, true),
-		'door_uid' => array(T::UID, true),
-		'laatst_gewijzigd' => array(T::DateTime),
-	);
-
-	protected static $primary_key = array('maaltijd_id', 'uid');
-
 }
