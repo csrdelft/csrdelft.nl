@@ -66,7 +66,7 @@ class MaaltijdAanmelding {
 	 */
 	public $door_uid;
 	/**
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $laatst_gewijzigd;

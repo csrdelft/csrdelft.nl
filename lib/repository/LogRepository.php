@@ -16,7 +16,7 @@ class LogRepository extends AbstractRepository {
 	public function opschonen() {
 		$this->getEntityManager()
 			->createQuery('DELETE CsrDelft\entity\LogEntry l WHERE l.moment < :moment')
-			->setParameter('moment', date_create('-2 months'))
+			->setParameter('moment', date_create_immutable('-2 months'))
 			->execute();
 	}
 
@@ -29,7 +29,7 @@ class LogRepository extends AbstractRepository {
 		} else {
 			$entry->uid = 'fout';
 		}
-		$entry->moment = date_create();
+		$entry->moment = date_create_immutable();
 		$entry->locatie = '';
 		if (isset($_SERVER['REMOTE_ADDR'])) {
 			$entry->ip = $_SERVER['REMOTE_ADDR'];

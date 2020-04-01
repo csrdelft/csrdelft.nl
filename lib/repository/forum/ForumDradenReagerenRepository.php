@@ -28,7 +28,7 @@ class ForumDradenReagerenRepository extends AbstractRepository {
 		$reageren->forum_id = $deel->forum_id;
 		$reageren->draad_id = (int)$draad_id;
 		$reageren->uid = LoginModel::getUid();
-		$reageren->datum_tijd = date_create();
+		$reageren->datum_tijd = date_create_immutable();
 		$reageren->concept = $concept;
 		$reageren->titel = $titel;
 		$this->getEntityManager()->persist($reageren);
@@ -50,21 +50,21 @@ class ForumDradenReagerenRepository extends AbstractRepository {
 	public function getReagerenVoorDraad(ForumDraad $draad) {
 		return $this->createQueryBuilder('r')
 			->where('r.draad_id = :draad_id and r.uid != :uid and r.datum_tijd > :datum_tijd')
-			->setParameters(['draad_id' => $draad->draad_id, 'uid' => LoginModel::getUid(), 'datum_tijd' => date_create(instelling('forum', 'reageren_tijd'))])
+			->setParameters(['draad_id' => $draad->draad_id, 'uid' => LoginModel::getUid(), 'datum_tijd' => date_create_immutable(instelling('forum', 'reageren_tijd'))])
 			->getQuery()->getResult();
 	}
 
 	public function getReagerenVoorDeel(ForumDeel $deel) {
 		return $this->createQueryBuilder('r')
 			->where('r.forum_id = :forum_id and r.draad_id = 0 and r.uid != :uid and r.datum_tijd > :datum_tijd')
-			->setParameters(['forum_id' => $deel->forum_id, 'uid' => LoginModel::getUid(), 'datum_tijd' => date_create(instelling('forum', 'reageren_tijd'))])
+			->setParameters(['forum_id' => $deel->forum_id, 'uid' => LoginModel::getUid(), 'datum_tijd' => date_create_immutable(instelling('forum', 'reageren_tijd'))])
 			->getQuery()->getResult();
 	}
 
 	public function verwijderLegeConcepten() {
 		$this->createQueryBuilder('r')
 			->where('r.concept IS NULL and r.datum_tijd < :datum_tijd')
-			->setParameter('datum_tijd', date_create(instelling('forum', 'reageren_tijd')))
+			->setParameter('datum_tijd', date_create_immutable(instelling('forum', 'reageren_tijd')))
 			->delete()
 			->getQuery()->execute();
 	}
@@ -88,7 +88,7 @@ class ForumDradenReagerenRepository extends AbstractRepository {
 	public function setWanneerReagerenDoorLid(ForumDeel $deel, $draad_id = null) {
 		$reageren = $this->getReagerenDoorLid($deel, $draad_id);
 		if ($reageren) {
-			$reageren->datum_tijd = date_create();
+			$reageren->datum_tijd = date_create_immutable();
 			$this->getEntityManager()->persist($reageren);
 			$this->getEntityManager()->flush();
 		} else {

@@ -79,7 +79,7 @@ class Peiling implements DataTableEntry {
 	 */
 	public $rechten_mod;
 	/**
-	 * @var \DateTime|null
+	 * @var \DateTimeImmutable|null
 	 * @ORM\Column(type="datetime", nullable=true)
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */

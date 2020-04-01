@@ -217,7 +217,7 @@ class EetplanFactory {
 
 			# Maak een entity voor deze sessie
 			$nieuweetplan = new Eetplan();
-			$nieuweetplan->avond = date_create($avond);
+			$nieuweetplan->avond = date_create_immutable($avond);
 			$nieuweetplan->uid = $uid;
 			$nieuweetplan->woonoord_id = $huis_id;
 

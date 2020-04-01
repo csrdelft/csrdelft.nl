@@ -366,7 +366,7 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
 }
 
 function reldate($datum) {
-	if ($datum instanceof DateTime || $datum instanceof DateTimeImmutable) {
+	if ($datum instanceof DateTimeInterface) {
 		$moment = $datum->getTimestamp();
 	} else {
 		$moment = strtotime($datum);

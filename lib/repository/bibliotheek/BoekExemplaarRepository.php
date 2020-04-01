@@ -63,7 +63,7 @@ class BoekExemplaarRepository extends ServiceEntityRepository {
 		$exemplaar = new BoekExemplaar();
 		$exemplaar->boek = $boek;
 		$exemplaar->eigenaar_uid = $uid;
-		$exemplaar->toegevoegd = date_create();
+		$exemplaar->toegevoegd = date_create_immutable();
 		$exemplaar->uitleendatum = null;
 		$exemplaar->opmerking = '';
 		$exemplaar->leningen = 0;

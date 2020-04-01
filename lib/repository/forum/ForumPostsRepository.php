@@ -289,7 +289,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		$post->draad = $draad;
 		$post->uid = LoginModel::getUid();
 		$post->tekst = $tekst;
-		$post->datum_tijd = date_create();
+		$post->datum_tijd = date_create_immutable();
 		$post->laatst_gewijzigd = $post->datum_tijd;
 		$post->bewerkt_tekst = null;
 		$post->verwijderd = false;
@@ -327,7 +327,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	public function bewerkForumPost($nieuwe_tekst, $reden, ForumPost $post) {
 		similar_text($post->tekst, $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;
-		$post->laatst_gewijzigd = date_create();
+		$post->laatst_gewijzigd = date_create_immutable();
 		$bewerkt = 'bewerkt door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]';
 		if ($reden !== '') {
 			$bewerkt .= ': [tekst]' . CsrBB::escapeUbbOff($reden) . '[/tekst]';
@@ -356,7 +356,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	public function verplaatsForumPost(ForumDraad $nieuwDraad, ForumPost $post) {
 		$oudeDraad = $post->draad;
 		$post->draad = $nieuwDraad;
-		$post->laatst_gewijzigd = date_create();
+		$post->laatst_gewijzigd = date_create_immutable();
 		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]' . "\n";
 		try {
 			$this->getEntityManager()->persist($post);
@@ -376,7 +376,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 
 	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
-		$post->laatst_gewijzigd = date_create();
+		$post->laatst_gewijzigd = date_create_immutable();
 		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]' . "\n";
 		try {
 			$this->getEntityManager()->persist($post);
@@ -389,7 +389,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	public function goedkeurenForumPost(ForumPost $post) {
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
-			$post->laatst_gewijzigd = date_create();
+			$post->laatst_gewijzigd = date_create_immutable();
 			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate][/prive]' . "\n";
 			try {
 				$this->getEntityManager()->persist($post);
@@ -419,7 +419,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		$qb = $this->createQueryBuilder('fp');
 		$qb->select(['UNIX_TIMESTAMP(DATE(fp.datum_tijd)) AS timestamp', 'COUNT(fp.post_id) AS count']);
 		$qb->where('fp.datum_tijd > :terug');
-		$qb->setParameter('terug', date_create(instelling('forum', 'grafiek_stats_periode')));
+		$qb->setParameter('terug', date_create_immutable(instelling('forum', 'grafiek_stats_periode')));
 		$qb->groupBy('timestamp');
 		return $qb->getQuery()->getResult();
 	}
@@ -433,7 +433,7 @@ select unix_timestamp(date(p.datum_tijd)) as timestamp, count(p.post_id) as coun
 right join forum_draden as d on p.draad_id = d.draad_id where d.forum_id = :forum_id and p.datum_tijd > :datum_tijd
 group by timestamp
 SQL, $rsm)
-			->setParameters(['forum_id' => $deel->forum_id, 'datum_tijd' => date_create(instelling('forum', 'grafiek_stats_periode'))])
+			->setParameters(['forum_id' => $deel->forum_id, 'datum_tijd' => date_create_immutable(instelling('forum', 'grafiek_stats_periode'))])
 			->getResult();
 	}
 

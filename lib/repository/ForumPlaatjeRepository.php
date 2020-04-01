@@ -36,7 +36,7 @@ class ForumPlaatjeRepository extends ServiceEntityRepository {
 
 	private static function generate() {
 		$plaatje = new ForumPlaatje();
-		$plaatje->datum_toegevoegd = date_create();
+		$plaatje->datum_toegevoegd = date_create_immutable();
 		$plaatje->access_key = bin2hex(random_bytes(16));
 		return $plaatje;
 	}

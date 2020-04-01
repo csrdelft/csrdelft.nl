@@ -48,7 +48,7 @@ class CourantBericht {
 	 */
 	public $uid;
 	/**
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime", name="datumTijd")
 	 */
 	public $datumTijd;

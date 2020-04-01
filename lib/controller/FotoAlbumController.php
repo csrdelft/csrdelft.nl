@@ -385,7 +385,7 @@ class FotoAlbumController extends AbstractController {
 
 		$response = new BinaryFileResponse($path, 200, [], true, null, true);
 		$response->setContentDisposition($request->query->has('download') ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE, $image->filename);
-		$response->setExpires(date_create('+1 day'));
+		$response->setExpires(date_create_immutable('+1 day'));
 		$response->isNotModified($request);
 
 		return $response;

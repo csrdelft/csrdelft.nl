@@ -44,7 +44,7 @@ class ChangeLogRepository extends AbstractRepository {
 	 */
 	public function nieuw($subject, $property, $old, $new) {
 		$change = new ChangeLogEntry();
-		$change->moment = date_create();
+		$change->moment = date_create_immutable();
 		if ($subject instanceof PersistentEntity) {
 			$change->subject = $subject->getUUID();
 		} else {

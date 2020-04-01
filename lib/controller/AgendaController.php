@@ -201,8 +201,8 @@ class AgendaController {
 
 		if (!$item->magBeheren()) throw new CsrToegangException();
 
-		$item->begin_moment = date_create($request->request->get('begin_moment'));
-		$item->eind_moment = date_create($request->request->get('eind_moment'));
+		$item->begin_moment = date_create_immutable($request->request->get('begin_moment'));
+		$item->eind_moment = date_create_immutable($request->request->get('eind_moment'));
 
 		$this->agendaRepository->update($item);
 

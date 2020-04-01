@@ -28,7 +28,7 @@ class ForumPlaatje {
 	 */
 	public $access_key;
 	/**
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_toegevoegd;

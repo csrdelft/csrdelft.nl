@@ -35,7 +35,7 @@ class FotoTag implements \JsonSerializable {
 	public $door;
 	/**
 	 * Gemaakt op datum en tijd
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $wanneer;

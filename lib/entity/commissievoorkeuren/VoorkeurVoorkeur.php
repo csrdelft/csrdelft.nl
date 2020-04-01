@@ -35,7 +35,7 @@ class VoorkeurVoorkeur {
 	public $voorkeur;
 
 	/**
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $timestamp;
@@ -45,7 +45,7 @@ class VoorkeurVoorkeur {
 	 */
 	public function setTimestamp()
 	{
-		$this->timestamp = new \DateTime();
+		$this->timestamp = new \DateTimeImmutable();
 	}
 
 	/**

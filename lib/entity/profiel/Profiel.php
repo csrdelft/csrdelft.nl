@@ -97,12 +97,12 @@ class Profiel implements Agendeerbaar {
 	public $geslacht;
 	/**
 	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 */
 	public $gebdatum;
 	/**
 	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 */
 	public $sterfdatum;
 	/**
@@ -228,7 +228,7 @@ class Profiel implements Agendeerbaar {
 	public $lidjaar;
 	/**
 	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 */
 	public $lidafdatum;
 	/**

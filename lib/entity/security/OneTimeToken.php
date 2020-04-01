@@ -40,7 +40,7 @@ class OneTimeToken {
 	public $token;
 	/**
 	 * Moment of expiration
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $expire;

@@ -237,8 +237,8 @@ class AgendaRepository extends ServiceEntityRepository {
 		if (!preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
 			$datum = strtotime('Y-m-d');
 		}
-		$item->begin_moment = date_create(getDateTime(strtotime($datum) + 72000));
-		$item->eind_moment = date_create(getDateTime(strtotime($datum) + 79200));
+		$item->begin_moment = date_create_immutable(getDateTime(strtotime($datum) + 72000));
+		$item->eind_moment = date_create_immutable(getDateTime(strtotime($datum) + 79200));
 		if (LoginModel::mag(P_AGENDA_MOD)) {
 			$item->rechten_bekijken = instelling('agenda', 'standaard_rechten');
 		} else {

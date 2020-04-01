@@ -246,7 +246,7 @@ class EetplanController extends AbstractController {
 		if (!$form->validate()) {
 			return $form;
 		} else {
-			$avond = date_create($form->getValues()['avond']);
+			$avond = date_create_immutable($form->getValues()['avond']);
 			$this->eetplanRepository->verwijderEetplan($avond, $this->lichting);
 
 			return view('eetplan.table', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);

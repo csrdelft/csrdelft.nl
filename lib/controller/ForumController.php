@@ -515,7 +515,7 @@ class ForumController extends AbstractController {
 	public function bladwijzer(int $draad_id) {
 		$draad = $this->forumDradenRepository->get($draad_id);
 		$timestamp = (int)filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
-		if ($this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, date_create('@' . ($timestamp - 1)))) {
+		if ($this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, date_create_immutable('@' . ($timestamp - 1)))) {
 			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
 		}
 		exit; //TODO: JsonResponse
