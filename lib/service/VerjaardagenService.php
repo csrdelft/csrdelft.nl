@@ -58,7 +58,7 @@ class VerjaardagenService {
 	 *
 	 * @return Profiel[]
 	 */
-	public function getTussen(\DateTimeImmutable $van, \DateTimeImmutable $tot, $limiet = null) {
+	public function getTussen(\DateTimeInterface $van, \DateTimeInterface $tot, $limiet = null) {
 		$vanjaar = $van->format('Y');
 		$totjaar = $tot->format('Y');
 		$van = $van->format(DATE_FORMAT);
