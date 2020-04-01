@@ -11,7 +11,7 @@
 			</div>
 			<div class="col-lg-2"></div>
 		</div>
-		<div class="row align-items-center">
+		<div class="row align-items-center mt-4">
 			<div class="col-lg-2"></div>
 			<div class="col-lg">
 				<p>
@@ -68,9 +68,9 @@
 			<div class="col pb-5">
 				<div class="optie" v-if="heeftcivisaldo">
 					<div class="selecteer">
-						<toggle-button :width="40" :value="isDonatie" />
+						<toggle-button :width="40" v-model="isDonatie" sync @change="gewijzigd = true;" />
 					</div>
-					<div class="uitleg" @click="isDonatie = !isDonatie">
+					<div class="uitleg" @click="isDonatie = !isDonatie; gewijzigd = true;">
 						Ik wil dit bedrag eenmalig doneren aan de PrakCie ten behoeve van Open Doors.
 					</div>
 				</div>
