@@ -7,18 +7,18 @@
 			</div>
 			<div class="col">
 				<h1>De prijs van de stek</h1>
-				<div class="subtitel">Stel uw stekpakket samen</div>
+				<div class="subtitel">Stel uw stekpakket samen en doneer aan Open Doors</div>
 			</div>
 			<div class="col-lg-2"></div>
 		</div>
-		<div class="row align-items-center">
+		<div class="row align-items-center mt-4">
 			<div class="col-lg-2"></div>
 			<div class="col-lg">
 				<p>
-					Hieronder kunt u uw eigen stekpakket samenstellen.
-					U selecteert eerst een basispakket en past dit vervolgens aan naar uw smaak.
-					De kosten van uw stekpakket worden maandelijks afgeschreven van uw CiviSaldo.
-					Het stekpakket kunt u per maand bijstellen.
+					Uiteraard gaan wij geen geld vragen voor het gebruik van de stek.
+					U heeft nu wel de mogelijkheid aan te geven om de prijs van uw persoonlijke stekpakket te doneren aan de PrakCie ten behoeve van Open Doors.
+					Zet hiervoor uiterlijk vrijdag de optie onderaan deze pagina aan.
+					Het bedrag zal worden afgeschreven van uw CiviSaldo.
 				</p>
 			</div>
 			<div class="col-lg-2"></div>
@@ -60,13 +60,23 @@
 			</div>
 			<div class="col optelling">
 				<div class="getal">&euro; {{ Math.floor(totaal) }}<span>,{{ (totaal - Math.floor(totaal) < 0.095 ? '0' : '') + Math.round((totaal - Math.floor(totaal)) * 100) }}</span></div>
-				<div class="per">per maand</div>
 			</div>
 			<div class="col-lg-1 col-xl-2"></div>
 		</div>
 		<div class="row mt-4 mb-5" v-if="gekozenBasispakket">
 			<div class="col-lg-1 col-xl-2"></div>
 			<div class="col pb-5">
+				<div class="optie" v-if="heeftcivisaldo">
+					<div class="selecteer">
+						<toggle-button :width="40" v-model="isDonatie" sync @change="gewijzigd = true;" />
+					</div>
+					<div class="uitleg" @click="isDonatie = !isDonatie; gewijzigd = true;">
+						Ik wil dit bedrag eenmalig doneren aan de PrakCie ten behoeve van Open Doors.
+					</div>
+				</div>
+				<p v-else>
+					U heeft geen CiviSaldo, dus kunt helaas niet op deze manier doneren.
+				</p>
 				<div class="bevestigen actief" v-if="gewijzigd && !laden" @click="slaOp">Sla stekpakket op</div>
 				<div class="bevestigen laden" v-if="laden">Een ogenblik geduld...</div>
 				<div class="bevestigen opgeslagen" v-if="!gewijzigd && !laden"><i class="fa fa-check"></i>&emsp;Opgeslagen</div>
@@ -79,6 +89,7 @@
 <script lang="ts">
 	import axios from 'axios';
 	import Vue from 'vue';
+	import {ToggleButton} from 'vue-js-toggle-button';
 	import {Component, Prop} from 'vue-property-decorator';
 	import OptieWeergave from './OptieWeergave.vue';
 
@@ -105,7 +116,7 @@
 	}
 
 	@Component({
-		components: {OptieWeergave},
+		components: {OptieWeergave, ToggleButton},
 	})
 	export default class StekPakket extends Vue {
 		@Prop()
@@ -116,8 +127,13 @@
 		protected opslaan: string;
 		@Prop()
 		protected basispakket: string;
+		@Prop()
+		protected donatie: boolean;
+		@Prop()
+		protected heeftcivisaldo: boolean;
 
 		protected gekozenBasispakket: string = '';
+		protected isDonatie = false;
 
 		protected keyIndex = 0;
 		protected gewijzigd = false;
@@ -126,6 +142,7 @@
 
 		protected mounted() {
 			this.gekozenBasispakket = this.basispakket;
+			this.isDonatie = this.donatie;
 			this.berekenTotaal();
 		}
 
@@ -190,6 +207,7 @@
 			axios.post(this.opslaan, {
 				basispakket: this.gekozenBasispakket,
 				opties: this.getOptieLijst(),
+				donatie: this.isDonatie,
 			}).then(() => {
 				this.laden = false;
 				this.gewijzigd = false;
@@ -378,6 +396,22 @@
 
 		&.opgeslagen {
 			background-color: #2ECC71;
+		}
+	}
+
+	.optie {
+		display: grid;
+		grid-template-columns: min-content auto;
+		padding-bottom: 14px;
+
+		.selecteer {
+			padding-right: 16px;
+		}
+
+		.uitleg {
+			font-weight: 300;
+			font-size: 12pt;
+			line-height: 22px;
 		}
 	}
 </style>

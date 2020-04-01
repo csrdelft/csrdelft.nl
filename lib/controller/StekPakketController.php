@@ -4,11 +4,13 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\StekPakket;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\StekPakketRepository;
 use CsrDelft\view\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
 class StekPakketController {
@@ -125,7 +127,14 @@ class StekPakketController {
 		],
 	];
 
+	private function checkDate() {
+		if (time() > strtotime('3-4-2020')) {
+			throw new NotFoundHttpException();
+		}
+	}
+
 	public function kiezen(RouterInterface $router, StekPakketRepository $repo) {
+		$this->checkDate();
 		// Huidige keuze inladen
 		$stekpakket = $repo->getStekPakketVoorLid(LoginModel::getProfiel());
 
@@ -136,16 +145,22 @@ class StekPakketController {
 			}
 		}
 
+		$civiSaldo = CiviSaldoModel::instance()->getSaldo(LoginModel::getUid());
+		$heeftCiviSaldo = $civiSaldo && !$civiSaldo->deleted;
+
 		// Laad Vue app.
 		return view('stekpakket', [
 			'basispakketten' => json_encode($this->basispakketten),
 			'basispakket' => $stekpakket ? $stekpakket->basispakket : '',
+			'donatie' => json_encode($stekpakket && $stekpakket->donatie),
+			'heeftCiviSaldo' => json_encode($heeftCiviSaldo),
 			'opties' => json_encode($this->opties),
 			'opslaan' => $router->generate('stekpakket-opslaan'),
 		]);
 	}
 
 	public function opslaan(Request $request, StekPakketRepository $repo, EntityManagerInterface $em) {
+		$this->checkDate();
 		// Valideren
 		foreach ($this->basispakketten as $pakket) {
 			if ($pakket['titel'] === $request->request->get('basispakket')) {
@@ -182,12 +197,17 @@ class StekPakketController {
 			$em->flush();
 		}
 
+		// Donatie
+		$donatie = $request->request->getBoolean('donatie', false);
+		$donatie &= CiviSaldoModel::instance()->getSaldo(LoginModel::getUid()) != false;
+
 		// Nieuwe invoegen
 		$stekpakket = new StekPakket();
 		$stekpakket->setProfiel(LoginModel::getProfiel());
 		$stekpakket->basispakket = $basispakket;
 		$stekpakket->opties = $geselecteerdeOpties;
 		$stekpakket->prijs = $prijs;
+		$stekpakket->donatie = $donatie;
 		$stekpakket->setTimestamp();
 		$em->persist($stekpakket);
 		$em->flush();

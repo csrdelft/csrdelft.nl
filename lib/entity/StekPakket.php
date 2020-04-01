@@ -39,6 +39,12 @@ class StekPakket {
 	public $opties;
 
 	/**
+	 * @var boolean
+	 * @ORM\Column(type="boolean")
+	 */
+	public $donatie;
+
+	/**
 	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
