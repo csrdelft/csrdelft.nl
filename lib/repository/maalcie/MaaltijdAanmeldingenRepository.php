@@ -167,8 +167,11 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 
 		$result = array();
 		foreach ($aanmeldingen as $aanmelding) {
-			$aanmelding->maaltijd = $maaltijdenById[$aanmelding->maaltijd_id];
-			$result[$aanmelding->maaltijd_id] = $aanmelding;
+			if ($aanmelding) {
+
+				$aanmelding->maaltijd = $maaltijdenById[$aanmelding->maaltijd_id];
+				$result[$aanmelding->maaltijd_id] = $aanmelding;
+			}
 		}
 		return $result;
 	}
@@ -303,15 +306,16 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$aantal = 0;
 		$aanmeldingen = array();
 		foreach ($mids as $mid) {
-			$aanmeldingen = array_merge($aanmeldingen, $this->find('maaltijd_id = ?', array($mid))->fetchAll());
+			$aanmeldingen = array_merge($aanmeldingen, $this->findBy(['maaltijd_id' => $mid]));
 		}
 		foreach ($aanmeldingen as $aanmelding) { // check filter voor elk aangemeld lid
 			$uid = $aanmelding->uid;
 			if (!$this->checkAanmeldFilter($uid, $filter)) { // verwijder aanmelding indien niet toegestaan
 				$aantal += 1 + $aanmelding->aantal_gasten;
-				$this->delete($aanmelding);
+				$this->getEntityManager()->remove($aanmelding);
 			}
 		}
+		$this->getEntityManager()->flush();
 		return $aantal;
 	}
 
@@ -353,7 +357,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 
 		$maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($mrid, date('Y-m-d')));
 		foreach ($maaltijden as $maaltijd) {
-			if (!$this->existsByPrimaryKey(array($maaltijd->maaltijd_id, $uid))) {
+			if (!$this->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => $uid])) {
 				if ($this->aanmeldenDoorAbonnement($maaltijd, $mrid, $uid)) {
 					$aantal++;
 				}
