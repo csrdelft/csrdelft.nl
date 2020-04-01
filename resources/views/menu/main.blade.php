@@ -6,7 +6,7 @@
 		<h2>C.S.R. Delft</h2>
 	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
-					aria-expanded="false" aria-label="Toggle navigation">
+			aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div id="navbarNav" class="collapse navbar-collapse">
@@ -20,7 +20,7 @@
 					<ul class="dropdown-menu" aria-labelledby="menu-favorieten">
 						@include('menu.sub_tree', ['parent' => $favorieten])
 						<li><a href="/menubeheer/toevoegen/favoriet" class="dropdown-item post popup addfav"
-									 title="Huidige pagina toevoegen aan favorieten"><i class="fa fa-plus"></i> Favoriet toevoegen</a></li>
+							   title="Huidige pagina toevoegen aan favorieten"><i class="fa fa-plus"></i> Favoriet toevoegen</a></li>
 					</ul>
 				</li>
 			@elsecan
@@ -39,4 +39,62 @@
 		</ul>
 	</div>
 </nav>
+@if(time() < strtotime("2-4-2020"))
+	<a class="notice" href="/stekpakket">
+		U heeft
+		@if(date('j') == 30)
+			nog 3 dagen
+		@endif
+		@if(date('j') == 31)
+			nog 2 dagen
+		@endif
+		@if(date('j') == 1)
+			alleen vandaag nog
+		@endif
+		om uw stekpakket te configureren.</a>
+	<style>
+		.notice {
+			display: block;
+			background: #e59200;
+			margin-left: -200px;
+			z-index: 1000;
+			color: white;
+			padding: 8px 18px 11px;
+			font-size: 15px;
+			line-height: 16px;
+			font-weight: bold;
+			text-align: center;
+		}
 
+		.notice:hover {
+			color: white;
+			text-decoration: none;
+		}
+
+		@media (max-width: 991.98px) {
+			.notice {
+				margin-left: 0;
+			}
+		}
+	</style>
+@endif
+@if(rand(1,3) ===  1 && time() < strtotime('2-4-2020'))
+	<style>
+		body {
+			-moz-transform: scaleX(-1);
+			-o-transform: scaleX(-1);
+			-webkit-transform: scaleX(-1);
+			transform: scaleX(-1);
+			filter: FlipH;
+			-ms-filter: "FlipH";
+			margin-left: 0;
+			margin-right: 200px;
+		}
+
+		@media (max-width: 991.98px) {
+			body {
+				margin-right: 0;
+			}
+		}
+	</style>
+@endif

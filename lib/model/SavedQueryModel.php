@@ -24,7 +24,7 @@ class SavedQueryModel extends PersistenceModel {
 	 * @return SavedQuery[]|PDOStatement
 	 */
 	public function getQueries() {
-		return $this->find();
+		return $this->find(null, [], null, 'categorie');
 	}
 
 	public function loadQuery($queryId) {
