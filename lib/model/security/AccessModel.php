@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\security;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\groepen\CommissieFunctie;
 use CsrDelft\model\entity\groepen\GroepStatus;
@@ -25,10 +26,10 @@ use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 
 /**
@@ -870,7 +871,7 @@ class AccessModel extends CachedPersistenceModel {
 					return false;
 				}
 				// Aangemeld voor maaltijd?
-				if (!$role AND MaaltijdAanmeldingenModel::instance()->getIsAangemeld((int)$gevraagd, $profiel->uid)) {
+				if (!$role AND ContainerFacade::getContainer()->get(MaaltijdAanmeldingenRepository::class)->getIsAangemeld((int)$gevraagd, $profiel->uid)) {
 					return true;
 				} // Mag maaltijd sluiten?
 				elseif ($role === 'SLUITEN') {

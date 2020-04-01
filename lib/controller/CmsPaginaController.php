@@ -73,7 +73,7 @@ class CmsPaginaController extends AbstractController {
 		}
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
-			$pagina->laatst_gewijzigd = date_create();
+			$pagina->laatst_gewijzigd = date_create_immutable();
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($pagina);
 			$manager->flush();

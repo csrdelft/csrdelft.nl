@@ -90,7 +90,7 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 		$token->uid = $uid;
 		$token->url = $url;
 		$token->token = hash('sha512', $rand);
-		$token->expire = date_create(instelling('beveiliging', 'one_time_token_expire_after'));
+		$token->expire = date_create_immutable(instelling('beveiliging', 'one_time_token_expire_after'));
 		$token->verified = false;
 		$this->getEntityManager()->persist($token);
 		$this->getEntityManager()->flush();

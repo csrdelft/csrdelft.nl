@@ -7,10 +7,10 @@ use CsrDelft\controller\AbstractController;
 use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\ArchiefMaaltijdModel;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
@@ -40,14 +40,14 @@ class BeheerMaaltijdenController extends AbstractController {
 	 */
 	private $maaltijdRepetitiesModel;
 	/**
-	 * @var MaaltijdAanmeldingenModel
+	 * @var MaaltijdAanmeldingenRepository
 	 */
-	private $maaltijdAanmeldingenModel;
+	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(MaaltijdenModel $maaltijdenModel, MaaltijdRepetitiesModel $maaltijdRepetitiesModel, MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel) {
+	public function __construct(MaaltijdenModel $maaltijdenModel, MaaltijdRepetitiesModel $maaltijdRepetitiesModel, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
 		$this->maaltijdenModel = $maaltijdenModel;
 		$this->maaltijdRepetitiesModel = $maaltijdRepetitiesModel;
-		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
 	public function GET_prullenbak() {
@@ -208,7 +208,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		$form = new AanmeldingForm($maaltijd, true); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$this->maaltijdAanmeldingenModel->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
+			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
 			return new BeheerMaaltijdenLijst(array($maaltijd));
 		} else {
 			return $form;
@@ -222,7 +222,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		$form = new AanmeldingForm($maaltijd, false); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$this->maaltijdAanmeldingenModel->afmeldenDoorLid($maaltijd, $values['voor_lid'], true);
+			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $values['voor_lid'], true);
 			return new BeheerMaaltijdenLijst(array($maaltijd));
 		} else {
 			return $form;

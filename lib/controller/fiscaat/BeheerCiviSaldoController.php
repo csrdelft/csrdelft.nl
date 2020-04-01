@@ -113,7 +113,7 @@ class BeheerCiviSaldoController {
 		if ($form->validate()) {
 			/** @var CiviSaldo $saldo */
 			$saldo = $form->getModel();
-			$saldo->laatst_veranderd = date_create()->format(DATE_ISO8601);
+			$saldo->laatst_veranderd = date_create_immutable()->format(DATE_ISO8601);
 
 			if (is_null($saldo->uid)) {
 				$laatsteSaldo = $this->civiSaldoModel->find("uid LIKE 'c%'", [], null, 'uid DESC', 1)->fetch();

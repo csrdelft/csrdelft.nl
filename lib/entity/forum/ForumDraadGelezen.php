@@ -33,7 +33,7 @@ class ForumDraadGelezen {
 	public $uid;
 	/**
 	 * Datum en tijd van laatst gelezen
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;

@@ -22,7 +22,7 @@ class Courant {
 	 */
 	public $id;
 	/**
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime", name="verzendMoment")
 	 */
 	public $verzendMoment;

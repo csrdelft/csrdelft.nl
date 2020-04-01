@@ -6,6 +6,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 
 /**
  * MaaltijdRepetitiesModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -16,6 +17,15 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	const ORM = MaaltijdRepetitie::class;
 
 	protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
+	/**
+	 * @var MaaltijdAanmeldingenRepository
+	 */
+	private $maaltijdAanmeldingenRepository;
+
+	public function __construct(MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+		parent::__construct();
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+	}
 
 	/**
 	 * Filtert de repetities met het abonnement-filter van de maaltijd-repetitie op de permissies van het ingelogde lid.
@@ -28,7 +38,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 		$repetities = $this->find('abonneerbaar = true');
 		$result = array();
 		foreach ($repetities as $repetitie) {
-			if (MaaltijdAanmeldingenModel::instance()->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
+			if ($this->maaltijdAanmeldingenRepository->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
 				$result[$repetitie->mlt_repetitie_id] = $repetitie;
 			}
 		}

@@ -62,14 +62,17 @@ class AgendaRepository extends ServiceEntityRepository {
 	public function __construct(
 		ManagerRegistry $registry,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
+		ActiviteitenModel $activiteitenModel,
+		CorveeTakenModel $corveeTakenModel,
+		MaaltijdenModel $maaltijdenModel,
 		VerjaardagenService $verjaardagenService
 	) {
 		parent::__construct($registry, AgendaItem::class);
 
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
-		$this->activiteitenModel = ActiviteitenModel::instance();
-		$this->corveeTakenModel = CorveeTakenModel::instance();
-		$this->maaltijdenModel = MaaltijdenModel::instance();
+		$this->activiteitenModel = $activiteitenModel;
+		$this->corveeTakenModel = $corveeTakenModel;
+		$this->maaltijdenModel = $maaltijdenModel;
 		$this->verjaardagenService = $verjaardagenService;
 	}
 
@@ -96,11 +99,11 @@ class AgendaRepository extends ServiceEntityRepository {
 	 * @return AgendaItem|null
 	 */
 	public function getAgendaItem($itemId) {
-		return $this->doctrineFind($itemId);
+		return $this->find($itemId);
 	}
 
 	public function getICalendarItems() {
-		return $this->filterVerborgen($this->getAllAgendeerbaar(strtotime(instelling('agenda', 'ical_from')), strtotime(instelling('agenda', 'ical_to')), true));
+		return $this->filterVerborgen($this->getAllAgendeerbaar(date_create_immutable(instelling('agenda', 'ical_from')), date_create_immutable(instelling('agenda', 'ical_to')), true));
 	}
 
 	public function filterVerborgen(array $items) {
@@ -123,28 +126,43 @@ class AgendaRepository extends ServiceEntityRepository {
 	}
 
 	/**
-	 * @param integer $van
-	 * @param integer $tot
+	 * @param \DateTimeImmutable $van
+	 * @param \DateTimeImmutable $tot
+	 * @param $query
+	 * @param $limiet
+	 * @return AgendaItem[]
+	 */
+	public function zoeken(\DateTimeImmutable $van, \DateTimeImmutable $tot, $query, $limiet) {
+		return $this->createQueryBuilder('a')
+			->where('a.eind_moment >= :van and a.begin_moment <= :tot')
+			->andWhere('a.titel like :query or a.beschrijving like :query or a.locatie like :query')
+			->setParameter('van', $van)
+			->setParameter('tot', $tot)
+			->setParameter('query', sql_contains($query))
+			->orderBy('a.begin_moment', 'ASC')
+			->addOrderBy('a.titel', 'ASC')
+			->setMaxResults($limiet)
+			->getQuery()->getResult();
+	}
+
+	/**
+	 * @param \DateTimeImmutable $van
+	 * @param \DateTimeImmutable $tot
 	 * @param bool $ical
 	 * @param bool $zijbalk
 	 * @return Agendeerbaar[]
-	 * @throws CsrException
 	 */
-	public function getAllAgendeerbaar($van, $tot, $ical = false, $zijbalk = false) {
+	public function getAllAgendeerbaar(\DateTimeImmutable $van, \DateTimeImmutable $tot, $ical = false, $zijbalk = false) {
 		$result = array();
 
-		if (!is_int($van)) {
-			throw new CsrException('Invalid timestamp: $van getAllAgendeerbaar()');
-		}
-		if (!is_int($tot)) {
-			throw new CsrException('Invalid timestamp: $tot getAllAgendeerbaar()');
-		}
-
 		// AgendaItems
-		$begin_moment = date('Y-m-d', $van);
-		$eind_moment = date('Y-m-d', $tot);
 		/** @var AgendaItem[] $items */
-		$items = $this->ormFind('(begin_moment >= ? AND begin_moment < ? + INTERVAL 1 DAY) OR (eind_moment >= ? AND eind_moment < ? + INTERVAL 1 DAY)', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
+		$items = $this->createQueryBuilder('a')
+			->where('a.begin_moment >= :begin_moment and a.begin_moment < :eind_moment')
+			->orWhere('a.eind_moment >= :begin_moment and a.eind_moment < :eind_moment')
+			->setParameter('begin_moment', $van)
+			->setParameter('eind_moment', $tot->add(\DateInterval::createFromDateString('1 day')))
+			->getQuery()->getResult();
 		foreach ($items as $item) {
 			if ($item->magBekijken($ical)) {
 				$result[] = $item;
@@ -157,7 +175,7 @@ class AgendaRepository extends ServiceEntityRepository {
 		/** @var Activiteit[] $activiteiten */
 		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (
 		    (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)
-		  )', array($begin_moment, $eind_moment, $begin_moment, $eind_moment));
+		  )', array($van->format(DATETIME_FORMAT), $tot->format(DATETIME_FORMAT), $van->format(DATETIME_FORMAT), $tot->format(DATETIME_FORMAT)));
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
 			if (in_array($activiteit->soort, [ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES]) OR $activiteit->mag(AccessAction::Bekijken, $auth)) {
@@ -167,14 +185,14 @@ class AgendaRepository extends ServiceEntityRepository {
 
 		// Maaltijden
 		if (lid_instelling('agenda', 'toonMaaltijden') === 'ja') {
-			$result = array_merge($result, $this->maaltijdenModel->getMaaltijdenVoorAgenda($van, $tot));
+			$result = array_merge($result, $this->maaltijdenModel->getMaaltijdenVoorAgenda($van->getTimestamp(), $tot->getTimestamp()));
 		}
 
 		// CorveeTaken
 		if (lid_instelling('agenda', 'toonCorvee') === 'iedereen') {
-			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van, $tot, true));
+			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van->getTimestamp(), $tot->getTimestamp(), true));
 		} elseif (lid_instelling('agenda', 'toonCorvee') === 'eigen') {
-			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van, $tot, false));
+			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van->getTimestamp(), $tot->getTimestamp(), false));
 		}
 
 		// Verjaardagen
@@ -195,51 +213,6 @@ class AgendaRepository extends ServiceEntityRepository {
 		return $result;
 	}
 
-	public function getItemsByMaand($jaar, $maand) {
-		// Zondag van de eerste week van de maand uitrekenen
-		$startMoment = mktime(0, 0, 0, $maand, 1, $jaar);
-		if (date('w', $startMoment) != 0) {
-			$startMoment = strtotime('last Sunday', $startMoment);
-		}
-
-		// Zaterdag van de laatste week van de maand uitrekenen
-		$eindMoment = mktime(0, 0, 0, $maand, 1, $jaar);
-		$eindMoment = strtotime('+1 month', $eindMoment) - 1;
-		if (date('w', $eindMoment) != 6) {
-			$eindMoment = strtotime('next Saturday', $eindMoment);
-		}
-
-		// Array met weken en dagen maken
-		$cur = $startMoment;
-		$agenda = array();
-		while ($cur <= $eindMoment) {
-			$week = getWeekNumber($cur);
-			$dag = date('d', $cur);
-			$agenda[$week][$dag]['datum'] = $cur;
-			$agenda[$week][$dag]['items'] = array();
-
-			$cur = strtotime('+1 day', $cur);
-		}
-
-		// Items toevoegen aan het array
-		$items = $this->getAllAgendeerbaar($startMoment, $eindMoment);
-		foreach ($items as $item) {
-			$begin = $item->getBeginMoment();
-			$eind = $item->getEindMoment();
-			// Plaats in dag(en)
-			for ($cur = $begin; $cur <= $eind; $cur += 86400) {
-				$week = getWeekNumber($cur);
-				$dag = date('d', $cur);
-				if (isset($agenda[$week][$dag])) {
-					$agenda[$week][$dag]['items'][] = $item;
-				} else {
-					continue; // multi-dag event gaat over maandgrens heen
-				}
-			}
-		}
-		return $agenda;
-	}
-
 	/**
 	 * Zoek in de activiteiten (titel en beschrijving) van vandaag
 	 * naar het woord $woord, geef de eerste terug.
@@ -247,7 +220,7 @@ class AgendaRepository extends ServiceEntityRepository {
 	 * @return mixed|null
 	 */
 	public function zoekWoordAgenda($woord) {
-		foreach ($this->getItemsByDay(date('Y'), date('m'), date('d')) as $item) {
+		foreach ($this->getItemsByDay(date_create_immutable()) as $item) {
 			if (stristr($item->getTitel(), $woord) !== false OR stristr($item->getBeschrijving(), $woord) !== false) {
 				return $item;
 			}
@@ -255,9 +228,8 @@ class AgendaRepository extends ServiceEntityRepository {
 		return null;
 	}
 
-	public function getItemsByDay($jaar, $maand, $dag) {
-		$time = mktime(0, 0, 0, $maand, $dag, $jaar);
-		return $this->getAllAgendeerbaar($time, $time);
+	public function getItemsByDay(\DateTimeImmutable $dag) {
+		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
 	public function nieuw($datum) {
@@ -265,8 +237,8 @@ class AgendaRepository extends ServiceEntityRepository {
 		if (!preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
 			$datum = strtotime('Y-m-d');
 		}
-		$item->begin_moment = date_create(getDateTime(strtotime($datum) + 72000));
-		$item->eind_moment = date_create(getDateTime(strtotime($datum) + 79200));
+		$item->begin_moment = date_create_immutable(getDateTime(strtotime($datum) + 72000));
+		$item->eind_moment = date_create_immutable(getDateTime(strtotime($datum) + 79200));
 		if (LoginModel::mag(P_AGENDA_MOD)) {
 			$item->rechten_bekijken = instelling('agenda', 'standaard_rechten');
 		} else {

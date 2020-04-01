@@ -41,7 +41,7 @@ class LogEntry {
 	public $locatie;
 	/**
 	 * DateTime
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $moment;

@@ -39,7 +39,7 @@ class Document extends Bestand {
 	 */
 	public $categorie_id;
 	/**
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;

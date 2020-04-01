@@ -56,13 +56,13 @@ class ForumDraad {
 	public $titel;
 	/**
 	 * Datum en tijd van aanmaken
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;
 	/**
 	 * Datum en tijd van laatst geplaatste of gewijzigde post
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $laatst_gewijzigd;
@@ -196,7 +196,7 @@ class ForumDraad {
 		if ($this->verwijderd && !$this->magModereren()) {
 			return false;
 		}
-		if (!LoginModel::mag(P_LOGGED_IN) && $this->gesloten && $this->laatst_gewijzigd < date_create(instelling('forum', 'externen_geentoegang_gesloten'))) {
+		if (!LoginModel::mag(P_LOGGED_IN) && $this->gesloten && $this->laatst_gewijzigd < date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten'))) {
 			return false;
 		}
 		return $this->deel->magLezen() || ($this->isGedeeld() && $this->gedeeld_met_deel->magLezen());

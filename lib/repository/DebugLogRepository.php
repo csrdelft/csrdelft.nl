@@ -28,7 +28,7 @@ class DebugLogRepository extends AbstractRepository {
 		$this->createQueryBuilder('l')
 			->delete()
 			->where('l.moment < :moment')
-			->setParameter('moment', date_create('-2 months'))
+			->setParameter('moment', date_create_immutable('-2 months'))
 			->getQuery()->execute();
 	}
 
@@ -46,7 +46,7 @@ class DebugLogRepository extends AbstractRepository {
 		$entry->dump = $dump;
 		$exception = new Exception();
 		$entry->call_trace = $exception->getTraceAsString();
-		$entry->moment = date_create();
+		$entry->moment = date_create_immutable();
 		$entry->uid = LoginModel::getUid();
 		if ($this->loginModel->isSued()) {
 			$entry->su_uid = LoginModel::getSuedFrom()->uid;

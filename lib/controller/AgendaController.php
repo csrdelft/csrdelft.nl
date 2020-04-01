@@ -120,15 +120,12 @@ class AgendaController {
 			$zoekterm = $request->query->get('q');
 		}
 
-		$query = '%' . $zoekterm . '%';
 		$limit = 5;
 		if ($request->query->has('limit')) {
 			$limit = $request->query->getInt('limit');
 		}
-		$van = date(DATE_FORMAT);
-		$tot = date(DATE_FORMAT, strtotime('+6 months'));
 		/** @var AgendaItem[] $items */
-		$items = $this->agendaRepository->ormFind('eind_moment >= ? AND begin_moment <= ? AND (titel LIKE ? OR beschrijving LIKE ? OR locatie LIKE ?)', [$van, $tot, $query, $query, $query], null, 'begin_moment ASC, titel ASC', $limit);
+		$items = $this->agendaRepository->zoeken(date_create_immutable(), date_create_immutable('+6 months'), $zoekterm, $limit);
 		$result = [];
 		foreach ($items as $item) {
 			$begin = $item->getBeginMoment();
@@ -151,9 +148,7 @@ class AgendaController {
 	}
 
 	public function courant() {
-		$beginMoment = strtotime(date(DATE_FORMAT));
-		$eindMoment = strtotime('next saturday', strtotime('+2 weeks', $beginMoment));
-		$items = $this->agendaRepository->getAllAgendeerbaar($beginMoment, $eindMoment, false, false);
+		$items = $this->agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + 2 weeks'), false, false);
 		return view('agenda.courant', ['items' => $items]);
 	}
 
@@ -206,8 +201,8 @@ class AgendaController {
 
 		if (!$item->magBeheren()) throw new CsrToegangException();
 
-		$item->begin_moment = date_create($request->request->get('begin_moment'));
-		$item->eind_moment = date_create($request->request->get('eind_moment'));
+		$item->begin_moment = date_create_immutable($request->request->get('begin_moment'));
+		$item->eind_moment = date_create_immutable($request->request->get('eind_moment'));
 
 		$this->agendaRepository->update($item);
 
@@ -268,11 +263,11 @@ class AgendaController {
 		return $item;
 	}
 
-	public function feed() {
-		$startMoment = strtotime(filter_input(INPUT_GET, 'start'));
-		$eindMoment = strtotime(filter_input(INPUT_GET, 'end'));
+	public function feed(Request $request) {
+		$startMoment = date_create_immutable($request->query->get('start'));
+		$eindMoment = date_create_immutable($request->query->get('end'));
 
-		if (abs($startMoment - $eindMoment) > self::SECONDEN_IN_JAAR) {
+		if ($startMoment->add(\DateInterval::createFromDateString('1 year')) < $eindMoment) {
 			// Om de gare logica omtrent verjaardagen te laten werken
 			throw new CsrGebruikerException("Verschil tussen start en eind mag niet groter zijn dan een jaar.");
 		}

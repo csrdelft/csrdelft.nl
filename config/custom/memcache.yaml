@@ -1,3 +1,5 @@
+# Deze configuratie wordt niet automatisch ingeladen, maar door Kernel als aan de voorwaarden voor laden voldaan wordt.
+
 doctrine:
   orm:
     second_level_cache:

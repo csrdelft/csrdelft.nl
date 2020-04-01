@@ -45,13 +45,13 @@ class StekPakket {
 	public $donatie;
 
 	/**
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $timestamp;
 
 	public function setTimestamp() {
-		$this->timestamp = new \DateTime();
+		$this->timestamp = new \DateTimeImmutable();
 	}
 
 	/**

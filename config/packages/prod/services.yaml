@@ -1,0 +1,6 @@
+services:
+  app.monolog.processor.web:
+    class: CsrDelft\common\Logging\LogProcessor
+    arguments: ["@request_stack"]
+    tags:
+      - { name: monolog.processor, method: processRecord }

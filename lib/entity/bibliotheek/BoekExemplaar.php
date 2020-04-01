@@ -45,7 +45,7 @@ class BoekExemplaar extends PersistentEntity {
 	public $uitgeleend_uid;
 
 	/**
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;
@@ -57,7 +57,7 @@ class BoekExemplaar extends PersistentEntity {
 	public $status = 'beschikbaar';
 
 	/**
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $uitleendatum;

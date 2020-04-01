@@ -8,10 +8,10 @@ use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use Jacwright\RestServer\RestException;
 
 class ApiAgendaController {
@@ -23,14 +23,14 @@ class ApiAgendaController {
 	private $activiteitDeelnemersModel;
 	/** @var MaaltijdenModel */
 	private $maaltijdenModel;
-	/** @var MaaltijdAanmeldingenModel */
-	private $maaltijdAanmeldingenModel;
+	/** @var MaaltijdAanmeldingenRepository */
+	private $maaltijdAanmeldingenRepository;
 
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 		$this->agendaRepository = $container->get(AgendaRepository::class);
 		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
-		$this->maaltijdAanmeldingenModel = $container->get(MaaltijdAanmeldingenModel::class);
+		$this->maaltijdAanmeldingenRepository = $container->get(MaaltijdAanmeldingenRepository::class);
 		$this->maaltijdenModel = $container->get(MaaltijdenModel::class);
 		$this->activiteitDeelnemersModel = $container->get(ActiviteitDeelnemersModel::class);
 	}
@@ -107,7 +107,7 @@ class ApiAgendaController {
 			$result[] = $maaltijd;
 
 		}
-		$maaltijdAanmeldingen = array_keys($this->maaltijdAanmeldingenModel->getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
+		$maaltijdAanmeldingen = array_keys($this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
 
 		// Sorteren
 		usort($result, array(AgendaRepository::class, 'vergelijkAgendeerbaars'));

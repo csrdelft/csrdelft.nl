@@ -97,12 +97,12 @@ class Profiel implements Agendeerbaar {
 	public $geslacht;
 	/**
 	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 */
 	public $gebdatum;
 	/**
 	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 */
 	public $sterfdatum;
 	/**
@@ -228,7 +228,7 @@ class Profiel implements Agendeerbaar {
 	public $lidjaar;
 	/**
 	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 */
 	public $lidafdatum;
 	/**
@@ -501,17 +501,17 @@ class Profiel implements Agendeerbaar {
 			$van = $GLOBALS['agenda_van'];
 			$tot = $GLOBALS['agenda_tot'];
 
-			$datum = date('Y', $van) . '-' . $dag . ' 00:00:00';
+			$datum = date_create_immutable($van->format('Y') . '-' . $dag . ' 00:00:00');
 
-			if (strtotime($datum) < strtotime($van) || strtotime($datum) > strtotime($tot)) {
-				$datum = date('Y', $tot) . '-' . $dag . ' 00:00:00';
+			if ($datum < $van || $datum > $tot) {
+				$datum = date_create_immutable($tot->format('Y') . '-' . $dag . ' 00:00:00');
 			}
 		} else if (isset($GLOBALS['agenda_jaar'])) {
-			$datum = $GLOBALS['agenda_jaar'] . '-' . $dag . ' 00:00:00';
+			$datum = date_create_immutable($GLOBALS['agenda_jaar'] . '-' . $dag . ' 00:00:00');
 		} else {
-			$datum = date('Y') . '-' . $dag . ' 00:00:00'; // 1 b'vo
+			$datum = date_create_immutable(date('Y') . '-' . $dag . ' 00:00:00');
 		}
-		return strtotime($datum);
+		return $datum->getTimestamp();
 	}
 
 	public function getEindMoment() {

@@ -22,7 +22,6 @@ use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
@@ -34,6 +33,7 @@ use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
@@ -82,9 +82,9 @@ class ProfielController extends AbstractController {
 	 */
 	private $maaltijdAbonnementenModel;
 	/**
-	 * @var MaaltijdAanmeldingenModel
+	 * @var MaaltijdAanmeldingenRepository
 	 */
-	private $maaltijdAanmeldingenModel;
+	private $maaltijdAanmeldingenRepository;
 	/**
 	 * @var BoekExemplaarRepository
 	 */
@@ -169,7 +169,7 @@ class ProfielController extends AbstractController {
 		KetzersModel $ketzersModel,
 		KwalificatiesModel $kwalificatiesModel,
 		LidToestemmingRepository $lidToestemmingRepository,
-		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
 		OnderverenigingenModel $onderverenigingenModel,
 		RechtenGroepenModel $rechtenGroepenModel,
@@ -196,7 +196,7 @@ class ProfielController extends AbstractController {
 		$this->ketzersModel = $ketzersModel;
 		$this->kwalificatiesModel = $kwalificatiesModel;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
-		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
 		$this->onderverenigingenModel = $onderverenigingenModel;
 		$this->rechtenGroepenModel = $rechtenGroepenModel;
@@ -254,7 +254,7 @@ class ProfielController extends AbstractController {
 			'forumpostcount' => $this->forumPostsRepository->getAantalForumPostsVoorLid($uid),
 			'forumrecent' => $this->forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
 			'boeken' => $this->boekExemplaarModel->getEigendom($uid),
-			'recenteAanmeldingen' => $this->maaltijdAanmeldingenModel->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
+			'recenteAanmeldingen' => $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
 			'abos' => $this->maaltijdAbonnementenModel->getAbonnementenVoorLid($uid),
 			'gerecenseerdeboeken' => $this->boekRecensieModel->getVoorLid($uid),
 			'fotos' => $fotos

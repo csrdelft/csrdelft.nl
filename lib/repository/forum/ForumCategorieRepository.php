@@ -144,7 +144,7 @@ class ForumCategorieRepository extends AbstractRepository {
 		/** @var ForumDraad[] $draden */
 		$draden = $this->forumDradenRepository->createQueryBuilder('fd')
 			->where('fd.verwijderd = true or (fd.gesloten = true and (fd.laatst_gewijzigd is null or fd.laatst_gewijzigd < :laatst_gewijzigd))')
-			->setParameter('laatst_gewijzigd', date_create('-1 year'))
+			->setParameter('laatst_gewijzigd', date_create_immutable('-1 year'))
 			->getQuery()->getResult();
 		foreach ($draden as $draad) {
 

@@ -46,11 +46,8 @@ abstract class Zijbalk {
 		// Agenda
 		if (LoginModel::mag(P_AGENDA_READ) && lid_instelling('zijbalk', 'agendaweken') > 0 && lid_instelling('zijbalk', 'agenda_max') > 0) {
 			$aantalWeken = lid_instelling('zijbalk', 'agendaweken');
-			$beginMoment = strtotime(date('Y-m-d'));
-			$eindMoment = strtotime('+' . $aantalWeken . ' weeks', $beginMoment);
-			$eindMoment = strtotime('next saturday', $eindMoment);
 			$agendaRepository = ContainerFacade::getContainer()->get(AgendaRepository::class);
-			$items = $agendaRepository->getAllAgendeerbaar($beginMoment, $eindMoment, false, true);
+			$items = $agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + ' . $aantalWeken . ' weeks'), false, true);
 			if (count($items) > lid_instelling('zijbalk', 'agenda_max')) {
 				$items = array_slice($items, 0, lid_instelling('zijbalk', 'agenda_max'));
 			}

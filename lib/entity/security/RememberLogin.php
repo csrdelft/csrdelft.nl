@@ -40,7 +40,7 @@ class RememberLogin implements DataTableEntry {
 	public $uid;
 	/**
 	 * DateTime
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $remember_since;

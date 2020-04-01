@@ -36,12 +36,12 @@ class BoekRecensie {
 	 */
 	public $beschrijving;
 	/**
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;
 	/**
-	 * @var \DateTime
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $bewerkdatum;

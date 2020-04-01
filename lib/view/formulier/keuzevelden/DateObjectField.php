@@ -22,6 +22,6 @@ class DateObjectField extends DateField {
 	}
 
 	public function getFormattedValue() {
-		return date_create($this->getValue());
+		return date_create_immutable($this->getValue());
 	}
 }

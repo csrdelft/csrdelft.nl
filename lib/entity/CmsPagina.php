@@ -3,7 +3,6 @@
 namespace CsrDelft\entity;
 
 use CsrDelft\model\security\LoginModel;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,7 +38,7 @@ class CmsPagina {
 	/**
 	 * DateTime
 	 * @ORM\Column(type="datetime")
-	 * @var DateTime
+	 * @var \DateTimeImmutable
 	 */
 	public $laatst_gewijzigd;
 	/**

@@ -89,7 +89,7 @@ class CiviProductModel extends PersistenceModel {
 
 			$prijs = new CiviPrijs();
 			$prijs->product_id = $product->id;
-			$prijs->van = date_create('now')->format('Y-m-d H:i:s');
+			$prijs->van = date_create_immutable('now')->format('Y-m-d H:i:s');
 			$prijs->tot = NULL;
 			$prijs->prijs = $product->prijs;
 
@@ -105,7 +105,7 @@ class CiviProductModel extends PersistenceModel {
 	 */
 	public function update(PersistentEntity $product) {
 		return Database::transaction(function () use ($product) {
-			$nu = date_create('now')->format('Y-m-d H:i:s');
+			$nu = date_create_immutable('now')->format('Y-m-d H:i:s');
 
 			/** @var CiviPrijs $prijs */
 			$prijs = $this->getPrijs($product);
