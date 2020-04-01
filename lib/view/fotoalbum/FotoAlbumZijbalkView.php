@@ -8,7 +8,7 @@
 
 namespace CsrDelft\view\fotoalbum;
 
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\view\View;
 

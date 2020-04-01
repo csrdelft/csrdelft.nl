@@ -1,0 +1,11 @@
+stekpakket-kiezen:
+  path: /stekpakket
+  controller: CsrDelft\controller\StekPakketController::kiezen
+  methods: GET
+  defaults: { _mag: P_LOGGED_IN }
+
+stekpakket-opslaan:
+  path: /stekpakket/opslaan
+  controller: CsrDelft\controller\StekPakketController::opslaan
+  methods: POST
+  defaults: { _mag: P_LOGGED_IN }

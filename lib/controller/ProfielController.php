@@ -6,13 +6,11 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\GoogleSync;
+use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\fotoalbum\Foto;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
-use CsrDelft\model\fotoalbum\FotoModel;
-use CsrDelft\model\fotoalbum\FotoTagsModel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\BesturenModel;
 use CsrDelft\model\groepen\CommissiesModel;
@@ -24,7 +22,6 @@ use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
 use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
@@ -33,7 +30,10 @@ use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
 use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\repository\fotoalbum\FotoRepository;
+use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
@@ -58,13 +58,13 @@ class ProfielController extends AbstractController {
 	 */
 	private $commissieVoorkeurRepository;
 	/**
-	 * @var FotoTagsModel
+	 * @var FotoTagsRepository
 	 */
-	private $fotoTagsModel;
+	private $fotoTagsRepository;
 	/**
-	 * @var FotoModel
+	 * @var FotoRepository
 	 */
-	private $fotoModel;
+	private $fotoRepository;
 	/**
 	 * @var BesturenModel
 	 */
@@ -82,9 +82,9 @@ class ProfielController extends AbstractController {
 	 */
 	private $maaltijdAbonnementenModel;
 	/**
-	 * @var MaaltijdAanmeldingenModel
+	 * @var MaaltijdAanmeldingenRepository
 	 */
-	private $maaltijdAanmeldingenModel;
+	private $maaltijdAanmeldingenRepository;
 	/**
 	 * @var BoekExemplaarRepository
 	 */
@@ -164,12 +164,12 @@ class ProfielController extends AbstractController {
 		CorveeTakenModel $corveeTakenModel,
 		CorveeVrijstellingenModel $corveeVrijstellingenModel,
 		ForumPostsRepository $forumPostsRepository,
-		FotoModel $fotoModel,
-		FotoTagsModel $fotoTagsModel,
+		FotoRepository $fotoRepository,
+		FotoTagsRepository $fotoTagsRepository,
 		KetzersModel $ketzersModel,
 		KwalificatiesModel $kwalificatiesModel,
 		LidToestemmingRepository $lidToestemmingRepository,
-		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
 		OnderverenigingenModel $onderverenigingenModel,
 		RechtenGroepenModel $rechtenGroepenModel,
@@ -191,12 +191,12 @@ class ProfielController extends AbstractController {
 		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
 		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
 		$this->forumPostsRepository = $forumPostsRepository;
-		$this->fotoModel = $fotoModel;
-		$this->fotoTagsModel = $fotoTagsModel;
+		$this->fotoRepository = $fotoRepository;
+		$this->fotoTagsRepository = $fotoTagsRepository;
 		$this->ketzersModel = $ketzersModel;
 		$this->kwalificatiesModel = $kwalificatiesModel;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
-		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
 		$this->onderverenigingenModel = $onderverenigingenModel;
 		$this->rechtenGroepenModel = $rechtenGroepenModel;
@@ -228,9 +228,9 @@ class ProfielController extends AbstractController {
 		}
 
 		$fotos = [];
-		foreach ($this->fotoTagsModel->find('keyword = ?', [$uid], null, null, 3) as $tag) {
+		foreach ($this->fotoTagsRepository->findBy(['keyword' => $uid], null, 3) as $tag) {
 			/** @var Foto $foto */
-			$foto = $this->fotoModel->retrieveByUUID($tag->refuuid);
+			$foto = $this->fotoRepository->retrieveByUUID($tag->refuuid);
 			if ($foto) {
 				$fotos[] = new FotoBBView($foto);
 			}
@@ -254,7 +254,7 @@ class ProfielController extends AbstractController {
 			'forumpostcount' => $this->forumPostsRepository->getAantalForumPostsVoorLid($uid),
 			'forumrecent' => $this->forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
 			'boeken' => $this->boekExemplaarModel->getEigendom($uid),
-			'recenteAanmeldingen' => $this->maaltijdAanmeldingenModel->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
+			'recenteAanmeldingen' => $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
 			'abos' => $this->maaltijdAbonnementenModel->getAbonnementenVoorLid($uid),
 			'gerecenseerdeboeken' => $this->boekRecensieModel->getVoorLid($uid),
 			'fotos' => $fotos

@@ -8,7 +8,7 @@
 
 namespace CsrDelft\view\fotoalbum;
 
-use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\entity\fotoalbum\Foto;
 
 class FotoAlbumBBView extends FotoAlbumZijbalkView {
 

@@ -21,12 +21,20 @@ class BbDocument extends BbTag {
 	 * @var Document
 	 */
 	private $document;
+	/**
+	 * @var DocumentRepository
+	 */
+	private $documentRepository;
+
+	public function __construct(DocumentRepository $documentRepository) {
+		$this->documentRepository = $documentRepository;
+	}
+
 	public static function getTagName() {
 		return 'document';
 	}
 
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return $this->document == false || $this->document->magBekijken();
 	}
 
@@ -50,10 +58,8 @@ class BbDocument extends BbTag {
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
-	{
+	public function parse($arguments = []) {
 		$this->readMainArgument($arguments);
-		$documentRepository = ContainerFacade::getContainer()->get(DocumentRepository::class);
-		$this->document = $documentRepository->get($this->content);
+		$this->document = $this->documentRepository->get($this->content);
 	}
 }

@@ -4,11 +4,12 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
-use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
+use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 
@@ -47,6 +48,14 @@ class BbFotoalbum extends BbTag {
 	 * @var bool|FotoAlbum|FotoTagAlbum|null
 	 */
 	private $album;
+	/**
+	 * @var FotoAlbumRepository
+	 */
+	private $fotoAlbumRepository;
+
+	public function __construct(FotoAlbumRepository $fotoAlbumRepository) {
+		$this->fotoAlbumRepository = $fotoAlbumRepository;
+	}
 
 	public static function getTagName() {
 		return 'fotoalbum';
@@ -104,7 +113,7 @@ class BbFotoalbum extends BbTag {
 	private function getAlbum(string $url) {
 		try {
 			if ($url === 'laatste') {
-				$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
+				$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
 			} else {
 				//vervang url met pad
 				$url = str_ireplace(CSR_ROOT, '', $url);
@@ -114,7 +123,7 @@ class BbFotoalbum extends BbTag {
 				if (startsWith($url, '/')) {
 					$url = substr($url, 1);
 				}
-				$album = FotoAlbumModel::instance()->getFotoAlbum($url);
+				$album = $this->fotoAlbumRepository->getFotoAlbum($url);
 			}
 			return $album;
 		} catch (CsrNotFoundException $ex) {

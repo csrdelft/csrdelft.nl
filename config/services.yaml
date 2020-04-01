@@ -29,6 +29,11 @@ services:
     exclude: '../lib/model/entity'
     public: true # Alle modellen zijn uit de container te trekken.
 
+  CsrDelft\view\bbcode\:
+    resource: '../lib/view/bbcode/'
+    shared: false # iedere instance is uniek
+    public: true
+
   CsrDelft\repository\:
     resource: '../lib/repository'
     public: true # Alle repositories zijn (voor nu) uit de container te trekken.

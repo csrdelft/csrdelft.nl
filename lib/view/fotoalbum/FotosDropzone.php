@@ -3,7 +3,7 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\Dropzone;
