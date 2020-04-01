@@ -78,7 +78,7 @@
 		}
 	</style>
 @endif
-@if(rand(1,3) ===  1)
+@if(rand(1,3) ===  1 && time() < strtotime('2-4-2020'))
 	<style>
 		body {
 			-moz-transform: scaleX(-1);
