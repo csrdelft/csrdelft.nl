@@ -12,6 +12,8 @@
 		basispakket="{{$basispakket}}"
 		:basispakketten="Object.values({{$basispakketten}})"
 		:opties="Object.values({{$opties}})"
+		:donatie="JSON.parse({{$donatie}})"
+		:heeftcivisaldo="JSON.parse({{$heeftCiviSaldo}})"
 		opslaan="{{$opslaan}}">
 	</StekPakket>
 @endsection
