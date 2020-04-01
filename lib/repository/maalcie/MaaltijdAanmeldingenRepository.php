@@ -252,7 +252,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @return MaaltijdAanmelding[]
 	 */
 	public function getAanmeldingenVoorMaaltijd(Maaltijd $maaltijd) {
-		$aanmeldingen = $this->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
+		$aanmeldingen = $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->maaltijd = $maaltijd;

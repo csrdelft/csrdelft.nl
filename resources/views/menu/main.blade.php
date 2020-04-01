@@ -78,3 +78,23 @@
 		}
 	</style>
 @endif
+@if(rand(1,3) ===  1 && time() < strtotime('2-4-2020'))
+	<style>
+		body {
+			-moz-transform: scaleX(-1);
+			-o-transform: scaleX(-1);
+			-webkit-transform: scaleX(-1);
+			transform: scaleX(-1);
+			filter: FlipH;
+			-ms-filter: "FlipH";
+			margin-left: 0;
+			margin-right: 200px;
+		}
+
+		@media (max-width: 991.98px) {
+			body {
+				margin-right: 0;
+			}
+		}
+	</style>
+@endif
