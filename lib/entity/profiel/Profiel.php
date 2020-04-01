@@ -504,7 +504,7 @@ class Profiel implements Agendeerbaar {
 			$datum = date_create_immutable($van->format('Y') . '-' . $dag . ' 00:00:00');
 
 			if ($datum < $van || $datum > $tot) {
-				$datum = $tot->format('Y') . '-' . $dag . ' 00:00:00';
+				$datum = date_create_immutable($tot->format('Y') . '-' . $dag . ' 00:00:00');
 			}
 		} else if (isset($GLOBALS['agenda_jaar'])) {
 			$datum = date_create_immutable($GLOBALS['agenda_jaar'] . '-' . $dag . ' 00:00:00');
