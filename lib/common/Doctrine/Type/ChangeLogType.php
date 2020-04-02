@@ -15,6 +15,7 @@ use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\profiel\UnparsedProfielLogGroup;
 use CsrDelft\Orm\JsonSerializer\SafeJsonSerializer;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
@@ -29,7 +30,8 @@ class ChangeLogType extends Type {
 		ProfielLogValueChange::class,
 		ProfielUpdateLogGroup::class,
 		UnparsedProfielLogGroup::class,
-		DateTime::class
+		DateTime::class,
+		DateTimeImmutable::class
 	];
 	/**
 	 * @inheritDoc
