@@ -20,7 +20,7 @@ maalcie-maaltijden-repetities-opslaan:
   path: /maaltijden/repetities/opslaan/{mrid}
   controller: CsrDelft\controller\maalcie\MaaltijdRepetitiesController::opslaan
   methods: POST
-  defaults: { _mag: P_MAAL_MOD }
+  defaults: { mrid: 0, _mag: P_MAAL_MOD }
 
 maalcie-maaltijden-repetities-verwijder:
   path: /maaltijden/repetities/verwijder/{mrid}

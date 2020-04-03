@@ -4,8 +4,8 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
-use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
 
 /**
@@ -19,13 +19,13 @@ class BeheerAbonnementenController {
 	 */
 	private $maaltijdAbonnementenRepository;
 	/**
-	 * @var MaaltijdRepetitiesModel
+	 * @var MaaltijdRepetitiesRepository
 	 */
-	private $maaltijdRepetitiesModel;
+	private $maaltijdRepetitiesRepository;
 
-	public function __construct(MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository, MaaltijdRepetitiesModel $maaltijdRepetitiesModel) {
+	public function __construct(MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository) {
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
-		$this->maaltijdRepetitiesModel = $maaltijdRepetitiesModel;
+		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 	}
 
 	public function waarschuwingen() {
@@ -33,7 +33,7 @@ class BeheerAbonnementenController {
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'waarschuwing',
-			'aborepetities' => $this->maaltijdRepetitiesModel->find('abonneerbaar = true'),
+			'aborepetities' => $this->maaltijdRepetitiesRepository->findBy(['abonneerbaar' => 'true']),
 			'repetities' => $matrix_repetities[1],
 			'matrix' => $matrix_repetities[0],
 		]);
@@ -44,7 +44,7 @@ class BeheerAbonnementenController {
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'in',
-			'aborepetities' => $this->maaltijdRepetitiesModel->find('abonneerbaar = true'),
+			'aborepetities' => $this->maaltijdRepetitiesRepository->find(['abonneerbaar' => 'true']),
 			'repetities' => $matrix_repetities[1],
 			'matrix' => $matrix_repetities[0],
 		]);
@@ -55,7 +55,7 @@ class BeheerAbonnementenController {
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'waarschuwing',
-			'aborepetities' => $this->maaltijdRepetitiesModel->find('abonneerbaar = true'),
+			'aborepetities' => $this->maaltijdRepetitiesRepository->find(['abonneerbaar' => 'true']),
 			'repetities' => $matrix_repetities[1],
 			'matrix' => $matrix_repetities[0],
 		]);

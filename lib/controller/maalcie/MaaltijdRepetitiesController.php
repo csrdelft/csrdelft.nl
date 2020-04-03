@@ -2,9 +2,9 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 
 /**
@@ -15,16 +15,16 @@ use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 class MaaltijdRepetitiesController {
 	private $repetitie = null;
 	/**
-	 * @var MaaltijdRepetitiesModel
+	 * @var MaaltijdRepetitiesRepository
 	 */
-	private $maaltijdRepetitiesModel;
+	private $maaltijdRepetitiesRepository;
 	/**
 	 * @var MaaltijdenModel
 	 */
 	private $maaltijdenModel;
 
-	public function __construct(MaaltijdRepetitiesModel $maaltijdRepetitiesModel, MaaltijdenModel $maaltijdenModel) {
-		$this->maaltijdRepetitiesModel = $maaltijdRepetitiesModel;
+	public function __construct(MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, MaaltijdenModel $maaltijdenModel) {
+		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdenModel = $maaltijdenModel;
 	}
 
@@ -34,7 +34,7 @@ class MaaltijdRepetitiesController {
 			$modal = $this->bewerk($mrid);
 		}
 		return view('maaltijden.maaltijdrepetitie.beheer_maaltijd_repetities', [
-			'repetities' => $this->maaltijdRepetitiesModel->getAlleRepetities(),
+			'repetities' => $this->maaltijdRepetitiesRepository->getAlleRepetities(),
 			'modal' => $modal
 		]);
 	}
@@ -44,7 +44,7 @@ class MaaltijdRepetitiesController {
 	}
 
 	public function bewerk($mrid) {
-		return new MaaltijdRepetitieForm($this->maaltijdRepetitiesModel->getRepetitie($mrid)); // fetches POST values itself
+		return new MaaltijdRepetitieForm($this->maaltijdRepetitiesRepository->getRepetitie($mrid)); // fetches POST values itself
 	}
 
 	public function opslaan($mrid) {
@@ -56,7 +56,7 @@ class MaaltijdRepetitiesController {
 		if ($view->validate()) {
 			$repetitie = $view->getModel();
 
-			$aantal = $this->maaltijdRepetitiesModel->saveRepetitie($repetitie);
+			$aantal = $this->maaltijdRepetitiesRepository->saveRepetitie($repetitie);
 			if ($aantal > 0) {
 				setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 			}
@@ -68,7 +68,7 @@ class MaaltijdRepetitiesController {
 	}
 
 	public function verwijder($mrid) {
-		$aantal = $this->maaltijdRepetitiesModel->verwijderRepetitie($mrid);
+		$aantal = $this->maaltijdRepetitiesRepository->verwijderRepetitie($mrid);
 		if ($aantal > 0) {
 			setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}

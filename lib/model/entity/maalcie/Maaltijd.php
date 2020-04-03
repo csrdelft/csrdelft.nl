@@ -10,11 +10,11 @@ use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 
 /**
  * Maaltijd.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -228,7 +228,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 	 */
 	public function jsonSerialize() {
 		$json = parent::jsonSerialize();
-		$json['repetitie_naam'] = is_int($this->mlt_repetitie_id) ? MaaltijdRepetitiesModel::instance()->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
+		$json['repetitie_naam'] = is_int($this->mlt_repetitie_id) ? ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
 		$json['tijd'] = date('G:i', strtotime($json['tijd']));
 		$json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
 		$json['prijs'] = strval($this->getPrijs());

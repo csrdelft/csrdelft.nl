@@ -6,7 +6,6 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -44,7 +43,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 			$waarschuwingen = [];
 
 			foreach ($abos as $abo) {
-				$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($abo->mlt_repetitie_id);
+				$repetitie = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($abo->mlt_repetitie_id);
 				if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
 					$abo->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter;
 					$waarschuwingen[$abo->uid][$abo->mlt_repetitie_id] = $abo;
@@ -57,7 +56,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 				}
 			}
 
-			$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true);
+			$repById = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities(true);
 
 			return $this->fillHoles($waarschuwingen, $repById);
 		});
@@ -92,7 +91,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 */
 	public function getAbonnementenAbonneerbaarMatrix() {
 		return $this->_em->transactional(function () {
-			$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
+			$repById = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities(true); // grouped by mrid
 			$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
 			$sql .= ' r.abonnement_filter AS filter,'; // controleer later
 			$sql .= ' (r.abonneerbaar = false) AS abo_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
@@ -132,7 +131,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 */
 	public function getAbonnementenMatrix() {
 		return $this->_em->transactional(function () {
-			$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
+			$repById = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities(true); // grouped by mrid
 			$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
 			$sql .= ' r.abonnement_filter AS filter,'; // controleer later
 			$sql .= ' (r.abonneerbaar = false) AS abo_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
@@ -200,7 +199,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 */
 	public function inschakelenAbonnement($abo) {
 		return $this->_em->transactional(function () use ($abo) {
-			$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($abo->mlt_repetitie_id);
+			$repetitie = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($abo->mlt_repetitie_id);
 			if (!$repetitie->abonneerbaar) {
 				throw new CsrGebruikerException('Niet abonneerbaar');
 			}
@@ -231,7 +230,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 
 			$aantal = 0;
 			foreach ($novieten as $noviet) {
-				$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
+				$repetitie = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($mrid);
 				if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($noviet->uid, $repetitie->abonnement_filter)) {
 					continue;
 				}
@@ -344,17 +343,18 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 */
 	public function getAbonnementenVoorLid($uid, $abonneerbaar = false, $uitgeschakeld = false) {
 		return $this->_em->transactional(function () use ($uid, $abonneerbaar, $uitgeschakeld) {
+			$maaltijdRepetitiesRepository = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class);
 			if ($abonneerbaar) {
-				$repById = MaaltijdRepetitiesModel::instance()->getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
+				$repById = $maaltijdRepetitiesRepository->getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
 			} else {
-				$repById = MaaltijdRepetitiesModel::instance()->getAlleRepetities(true); // grouped by mrid
+				$repById = $maaltijdRepetitiesRepository->getAlleRepetities(true); // grouped by mrid
 			}
 			$lijst = array();
 			$abos = $this->findBy(['uid' => $uid]);
 			foreach ($abos as $abo) { // ingeschakelde abonnementen
 				$mrid = $abo->mlt_repetitie_id;
 				if (!array_key_exists($mrid, $repById)) { // ingeschakelde abonnementen altijd weergeven
-					$repById[$mrid] = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
+					$repById[$mrid] = $maaltijdRepetitiesRepository->getRepetitie($mrid);
 				}
 				$abo->maaltijd_repetitie = $repById[$mrid];
 				$abo->van_uid = $uid;

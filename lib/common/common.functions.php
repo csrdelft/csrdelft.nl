@@ -20,6 +20,7 @@ use CsrDelft\view\Icon;
 
 define('DATE_FORMAT', 'Y-m-d');
 define('DATETIME_FORMAT', 'Y-m-d H:i:s');
+define('TIME_FORMAT', 'H:i');
 
 /**
  * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions

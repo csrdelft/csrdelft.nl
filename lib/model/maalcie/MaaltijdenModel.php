@@ -5,8 +5,8 @@ namespace CsrDelft\model\maalcie;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
@@ -81,7 +81,7 @@ class MaaltijdenModel extends PersistenceModel {
 		$maaltijd->titel = $repetitie->standaard_titel;
 		$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
 		$maaltijd->datum = date('Y-m-d', $datum);
-		$maaltijd->tijd = $repetitie->standaard_tijd;
+		$maaltijd->tijd = $repetitie->standaard_tijd->format(TIME_FORMAT);
 		$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
 		$maaltijd->omschrijving = null;
 		$maaltijd->verwerkt = false;
@@ -393,7 +393,7 @@ class MaaltijdenModel extends PersistenceModel {
 				}
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
-				$maaltijd->tijd = $repetitie->standaard_tijd;
+				$maaltijd->tijd = $repetitie->standaard_tijd->format(TIME_FORMAT);
 				$maaltijd->product_id = $repetitie->product_id;
 				$maaltijd->aanmeld_filter = $filter;
 				try {

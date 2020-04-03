@@ -31,7 +31,7 @@ corvee-repetities-opslaan:
   controller: CsrDelft\controller\maalcie\CorveeRepetitiesController::opslaan
   methods: POST
   requirements: { crid: '\d+' }
-  defaults: { _mag: P_CORVEE_MOD }
+  defaults: { crid: 0, _mag: P_CORVEE_MOD }
 
 corvee-repetities-verwijder:
   path: /corvee/repetities/verwijder/{crid}

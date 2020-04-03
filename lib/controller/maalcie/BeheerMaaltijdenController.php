@@ -4,13 +4,13 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\ArchiefMaaltijdModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
@@ -36,17 +36,17 @@ class BeheerMaaltijdenController extends AbstractController {
 	 */
 	private $maaltijdenModel;
 	/**
-	 * @var MaaltijdRepetitiesModel
+	 * @var MaaltijdRepetitiesRepository
 	 */
-	private $maaltijdRepetitiesModel;
+	private $maaltijdRepetitiesRepository;
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(MaaltijdenModel $maaltijdenModel, MaaltijdRepetitiesModel $maaltijdRepetitiesModel, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+	public function __construct(MaaltijdenModel $maaltijdenModel, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
 		$this->maaltijdenModel = $maaltijdenModel;
-		$this->maaltijdRepetitiesModel = $maaltijdRepetitiesModel;
+		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
@@ -89,7 +89,7 @@ class BeheerMaaltijdenController extends AbstractController {
 			$modal = $this->bewerk($mid);
 		}
 		/** @var MaaltijdRepetitie[] $repetities */
-		$repetities = $this->maaltijdRepetitiesModel->find();
+		$repetities = $this->maaltijdRepetitiesRepository->findAll();
 		return view('maaltijden.pagina', [
 			'titel' => 'Maaltijdenbeheer',
 			'content' => new BeheerMaaltijdenTable($repetities),
@@ -137,7 +137,7 @@ class BeheerMaaltijdenController extends AbstractController {
 			return new BeheerMaaltijdenLijst(array($maaltijd_aanmeldingen[0]));
 		} elseif ($request->query->has('mrid')) {
 			$mrid = $request->query->get('mrid');
-			$repetitie = $this->maaltijdRepetitiesModel->getRepetitie($mrid);
+			$repetitie = $this->maaltijdRepetitiesRepository->getRepetitie($mrid);
 			$beginDatum = $repetitie->getFirstOccurrence();
 			if ($repetitie->periode_in_dagen > 0) {
 				return new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
@@ -146,7 +146,7 @@ class BeheerMaaltijdenController extends AbstractController {
 				$maaltijd->product_id = $repetitie->product_id;
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
-				$maaltijd->tijd = $repetitie->standaard_tijd;
+				$maaltijd->tijd = $repetitie->standaard_tijd->format(TIME_FORMAT);
 				$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
 				return new MaaltijdForm($maaltijd, 'nieuw');
 			}
@@ -256,7 +256,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	// Repetitie-Maaltijden ############################################################
 
 	public function aanmaken($mrid) {
-		$repetitie = $this->maaltijdRepetitiesModel->getRepetitie($mrid);
+		$repetitie = $this->maaltijdRepetitiesRepository->getRepetitie($mrid);
 		$form = new RepetitieMaaltijdenForm($repetitie); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();

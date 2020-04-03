@@ -87,7 +87,7 @@ class CorveeRepetitiesModel extends PersistenceModel {
 	public function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
 		return Database::transaction(function () use ($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
 			$voorkeuren = 0;
-			if ($crid === 0) {
+			if ($crid == 0) {
 				$repetitie = $this->nieuw(0, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
 				$repetitie->crv_repetitie_id = $this->create($repetitie);
 			} else {

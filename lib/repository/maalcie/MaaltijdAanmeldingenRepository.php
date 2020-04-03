@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
@@ -10,7 +11,6 @@ use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\repository\AbstractRepository;
@@ -348,7 +348,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @throws CsrGebruikerException indien niet toegestaan vanwege aanmeldrestrictie
 	 */
 	public function aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid) {
-		$repetitie = MaaltijdRepetitiesModel::instance()->getRepetitie($mrid);
+		$repetitie = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($mrid);
 		if (!$this->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
 			throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 		}

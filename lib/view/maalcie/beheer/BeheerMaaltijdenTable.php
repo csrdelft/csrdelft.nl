@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
-use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;

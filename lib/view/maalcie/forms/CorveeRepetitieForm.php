@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
 use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
@@ -44,7 +45,7 @@ class CorveeRepetitieForm extends ModalForm {
 			}
 		}
 
-		$mlt_repetities = MaaltijdRepetitiesModel::instance()->getAlleRepetities();
+		$mlt_repetities = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities();
 		$repetitieNamen = array('' => '');
 		foreach ($mlt_repetities as $rep) {
 			$repetitieNamen[$rep->mlt_repetitie_id] = $rep->standaard_titel;

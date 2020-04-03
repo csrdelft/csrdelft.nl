@@ -1,31 +1,36 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\PersistenceModel;
-use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
-use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\model\maalcie\CorveeRepetitiesModel;
+use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\repository\AbstractRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
+use Throwable;
 
 /**
- * MaaltijdRepetitiesModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdRepetitiesRepository  |  P.W.G. Brussee (brussee@live.nl)
  *
+ * @method MaaltijdRepetitie|null find($id, $lockMode = null, $lockVersion = null)
+ * @method MaaltijdRepetitie|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MaaltijdRepetitie[]    findAll()
+ * @method MaaltijdRepetitie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MaaltijdRepetitiesModel extends PersistenceModel {
-
-	const ORM = MaaltijdRepetitie::class;
-
+class MaaltijdRepetitiesRepository extends AbstractRepository {
 	protected $default_order = '(periode_in_dagen = 0) ASC, periode_in_dagen ASC, dag_vd_week ASC, standaard_titel ASC';
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registry, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+		parent::__construct($registry, MaaltijdRepetitie::class);
+
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
@@ -37,7 +42,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	 * @internal param MaaltijdRepetitie[] $repetities
 	 */
 	public function getAbonneerbareRepetitiesVoorLid($uid) {
-		$repetities = $this->find('abonneerbaar = true');
+		$repetities = $this->findBy(['abonneerbaar' => 'true']);
 		$result = array();
 		foreach ($repetities as $repetitie) {
 			if ($this->maaltijdAanmeldingenRepository->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
@@ -48,7 +53,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	}
 
 	public function getAlleRepetities($groupById = false) {
-		$repetities = $this->find();
+		$repetities = $this->findAll();
 		if ($groupById) {
 			$result = array();
 			foreach ($repetities as $repetitie) {
@@ -65,8 +70,8 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	 * @throws CsrGebruikerException
 	 */
 	public function getRepetitie($mrid) {
-		$repetitie = $this->retrieveByPrimaryKey(array($mrid));
-		if ($repetitie === false) {
+		$repetitie = $this->find($mrid);
+		if (!$repetitie) {
 			throw new CsrGebruikerException('Get maaltijd-repetitie faalt: Not found $mrid =' . $mrid);
 		}
 		return $repetitie;
@@ -75,22 +80,27 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 	/**
 	 * @param $repetitie MaaltijdRepetitie
 	 * @return array
+	 * @throws Throwable
 	 */
 	public function saveRepetitie($repetitie) {
-		return Database::transaction(function () use ($repetitie) {
+		return $this->_em->transactional(function () use ($repetitie) {
 			$abos = 0;
-			if ($repetitie->mlt_repetitie_id == null) {
-				$repetitie->mlt_repetitie_id = $this->create($repetitie);
-			} else {
-				$this->update($repetitie);
-				if (!$repetitie->abonneerbaar) { // niet (meer) abonneerbaar
-					$abos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($repetitie->mlt_repetitie_id);
-				}
+			$this->_em->persist($repetitie);
+			$this->_em->flush();
+			if (!$repetitie->abonneerbaar) { // niet (meer) abonneerbaar
+				$abos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($repetitie->mlt_repetitie_id);
 			}
 			return $abos;
 		});
 	}
 
+	/**
+	 * @param $mrid
+	 * @return int
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @throws Throwable
+	 */
 	public function verwijderRepetitie($mrid) {
 		if (!is_numeric($mrid) || $mrid <= 0) {
 			throw new CsrGebruikerException('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
@@ -103,7 +113,8 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 			throw new CsrGebruikerException('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 		$aantalAbos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($mrid);
-		$this->deleteByPrimaryKey(array($mrid));
+		$this->_em->remove($this->_em->getReference(MaaltijdRepetitie::class, $mrid));
+		$this->_em->flush();
 		return $aantalAbos;
 	}
 }

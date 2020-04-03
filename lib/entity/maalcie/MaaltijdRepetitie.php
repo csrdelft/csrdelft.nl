@@ -1,10 +1,10 @@
 <?php
 
-namespace CsrDelft\model\entity\maalcie;
+namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\model\fiscaat\CiviProductModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
+use Monolog\DateTimeImmutable;
 
 /**
  * MaaltijdRepetitie.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -24,42 +24,66 @@ use CsrDelft\Orm\Entity\T;
  * De standaard titel, limiet en filter worden standaard overgenomen, maar kunnen worden overschreven per maaltijd.
  * Bij het aanmaken van een nieuwe maaltijd (op basis van deze repetitie) worden alle leden met een abonnement op deze repetitie aangemeldt voor deze nieuwe maaltijd.
  *
+ * @see MaaltijdAbonnement
  *
- * Zie ook MaaltijdAbonnement.class.php
- *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository")
+ * @ORM\Table("mlt_repetities")
  */
-class MaaltijdRepetitie extends PersistentEntity {
-	# primary key
-
-	public $mlt_repetitie_id; # int 11
+class MaaltijdRepetitie {
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
+	public $mlt_repetitie_id;
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
 	public $product_id;
 	/**
 	 * 0: Sunday
 	 * 6: Saturday
+	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
-	public $dag_vd_week; # int 1
-	public $periode_in_dagen; # int 11
-	public $standaard_titel; # string 255
-	public $standaard_tijd; # time
-	public $standaard_prijs; # double
-	public $abonneerbaar; # boolean
-	public $standaard_limiet; # int 11
-	public $abonnement_filter; # string 255
-
-	protected static $table_name = 'mlt_repetities';
-	protected static $persistent_attributes = array(
-		'mlt_repetitie_id' => array(T::Integer, false, 'auto_increment'),
-		'product_id' => array(T::Integer),
-		'dag_vd_week' => array(T::Integer),
-		'periode_in_dagen' => array(T::Integer),
-		'standaard_titel' => array(T::String),
-		'standaard_tijd' => array(T::Time),
-		'standaard_prijs' => array(T::Integer, true),
-		'abonneerbaar' => array(T::Boolean),
-		'standaard_limiet' => array(T::Integer),
-		'abonnement_filter' => array(T::String, true)
-	);
-	protected static $primary_key = array('mlt_repetitie_id');
+	public $dag_vd_week;
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $periode_in_dagen;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $standaard_titel;
+	/**
+	 * @var DateTimeImmutable
+	 * @ORM\Column(type="time")
+	 */
+	public $standaard_tijd;
+	/**
+	 * @var int|null
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $standaard_prijs;
+	/**
+	 * @var boolean
+	 * @ORM\Column(type="boolean")
+	 */
+	public $abonneerbaar;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $standaard_limiet;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	public $abonnement_filter;
 
 	public function getStandaardPrijs() {
 		return CiviProductModel::instance()->getPrijs(CiviProductModel::instance()->getProduct($this->product_id))->prijs;
