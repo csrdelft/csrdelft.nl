@@ -1,12 +1,11 @@
 <?php
 
-namespace CsrDelft\model\entity\maalcie;
+namespace CsrDelft\entity\maalcie;
 
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MaaltijdAbonnement.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdAbonnement  |  P.W.G. Brussee (brussee@live.nl)
  *
  *
  * Een mlt_abonnement instantie beschrijft een individueel abonnement van een lid voor een maaltijd-repetitie als volgt:
@@ -28,26 +27,31 @@ use CsrDelft\Orm\Entity\T;
  * (Extreem eenvoudig aan te passen door bij het verwijderen van aanmeldingen niet te checken op door_abonnement.)
  *
  *
- * Zie ook MaaltijdAanmelding.class.php
- *
+ * @see MaaltijdAanmelding
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository")
+ * @ORM\Table("mlt_abonnementen")
  */
-class MaaltijdAbonnement extends PersistentEntity {
-	# shared primary key
-
-	public $mlt_repetitie_id; # foreign key mlt_repetitie.id
-	public $uid; # foreign key lid.uid
+class MaaltijdAbonnement {
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 */
+	public $mlt_repetitie_id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="uid")
+	 * @ORM\Id()
+	 */
+	public $uid;
+	/**
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="datetime")
+	 */
 	public $wanneer_ingeschakeld; # datetime
+
 	public $maaltijd_repetitie;
 	public $van_uid;
 	public $waarschuwing;
 	public $foutmelding;
-
-	protected static $table_name = 'mlt_abonnementen';
-	protected static $persistent_attributes = array(
-		'mlt_repetitie_id' => array(T::Integer),
-		'uid' => array(T::UID),
-		'wanneer_ingeschakeld' => array(T::DateTime),
-	);
-
-	protected static $primary_key = array('mlt_repetitie_id', 'uid');
 }

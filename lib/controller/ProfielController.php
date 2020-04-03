@@ -22,7 +22,6 @@ use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
-use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
@@ -34,6 +33,7 @@ use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
@@ -78,9 +78,9 @@ class ProfielController extends AbstractController {
 	 */
 	private $boekRecensieModel;
 	/**
-	 * @var MaaltijdAbonnementenModel
+	 * @var MaaltijdAbonnementenRepository
 	 */
-	private $maaltijdAbonnementenModel;
+	private $maaltijdAbonnementenRepository;
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
@@ -151,32 +151,32 @@ class ProfielController extends AbstractController {
 	private $verjaardagenService;
 
 	public function __construct(
-		ProfielRepository $profielRepository,
-		AccountModel $accountModel,
-		ActiviteitenModel $activiteitenModel,
-		BesturenModel $besturenModel,
-		BoekExemplaarRepository $boekExemplaarModel,
-		BoekRecensieRepository $boekRecensieModel,
-		CiviBestellingModel $civiBestellingModel,
-		CommissieVoorkeurRepository $commissieVoorkeurRepository,
-		CorveeVoorkeurenModel $corveeVoorkeurenModel,
-		CommissiesModel $commissiesModel,
-		CorveeTakenModel $corveeTakenModel,
-		CorveeVrijstellingenModel $corveeVrijstellingenModel,
-		ForumPostsRepository $forumPostsRepository,
-		FotoRepository $fotoRepository,
-		FotoTagsRepository $fotoTagsRepository,
-		KetzersModel $ketzersModel,
-		KwalificatiesModel $kwalificatiesModel,
-		LidToestemmingRepository $lidToestemmingRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
-		OnderverenigingenModel $onderverenigingenModel,
-		RechtenGroepenModel $rechtenGroepenModel,
-		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
-		WerkgroepenModel $werkgroepenModel,
-		SaldoGrafiekModel $saldoGrafiekModel,
-		VerjaardagenService $verjaardagenService
+        ProfielRepository $profielRepository,
+        AccountModel $accountModel,
+        ActiviteitenModel $activiteitenModel,
+        BesturenModel $besturenModel,
+        BoekExemplaarRepository $boekExemplaarModel,
+        BoekRecensieRepository $boekRecensieModel,
+        CiviBestellingModel $civiBestellingModel,
+        CommissieVoorkeurRepository $commissieVoorkeurRepository,
+        CorveeVoorkeurenModel $corveeVoorkeurenModel,
+        CommissiesModel $commissiesModel,
+        CorveeTakenModel $corveeTakenModel,
+        CorveeVrijstellingenModel $corveeVrijstellingenModel,
+        ForumPostsRepository $forumPostsRepository,
+        FotoRepository $fotoRepository,
+        FotoTagsRepository $fotoTagsRepository,
+        KetzersModel $ketzersModel,
+        KwalificatiesModel $kwalificatiesModel,
+        LidToestemmingRepository $lidToestemmingRepository,
+        MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+        MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+        OnderverenigingenModel $onderverenigingenModel,
+        RechtenGroepenModel $rechtenGroepenModel,
+        VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
+        WerkgroepenModel $werkgroepenModel,
+        SaldoGrafiekModel $saldoGrafiekModel,
+        VerjaardagenService $verjaardagenService
 	) {
 		$this->profielRepository = $profielRepository;
 		$this->accountModel = $accountModel;
@@ -197,7 +197,7 @@ class ProfielController extends AbstractController {
 		$this->kwalificatiesModel = $kwalificatiesModel;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
+		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->onderverenigingenModel = $onderverenigingenModel;
 		$this->rechtenGroepenModel = $rechtenGroepenModel;
 		$this->voorkeurOpmerkingRepository = $voorkeurOpmerkingRepository;
@@ -255,7 +255,7 @@ class ProfielController extends AbstractController {
 			'forumrecent' => $this->forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
 			'boeken' => $this->boekExemplaarModel->getEigendom($uid),
 			'recenteAanmeldingen' => $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
-			'abos' => $this->maaltijdAbonnementenModel->getAbonnementenVoorLid($uid),
+			'abos' => $this->maaltijdAbonnementenRepository->getAbonnementenVoorLid($uid),
 			'gerecenseerdeboeken' => $this->boekRecensieModel->getVoorLid($uid),
 			'fotos' => $fotos
 		]);

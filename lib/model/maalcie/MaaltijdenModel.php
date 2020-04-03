@@ -11,6 +11,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use Exception;
 
 /**
@@ -29,9 +30,9 @@ class MaaltijdenModel extends PersistenceModel {
 	private $maaltijdAanmeldingenRepository;
 
 	/**
-	 * @var MaaltijdAbonnementenModel
+	 * @var MaaltijdAbonnementenRepository
 	 */
-	private $maaltijdAbonnementenModel;
+	private $maaltijdAbonnementenRepository;
 
 	/**
 	 * @var ArchiefMaaltijdModel
@@ -50,23 +51,23 @@ class MaaltijdenModel extends PersistenceModel {
 
 	/**
 	 * MaaltijdenModel constructor.
-	 * @param MaaltijdAanmeldingenRepository $maaltijdAanmeldingenModel
-	 * @param MaaltijdAbonnementenModel $maaltijdAbonnementenModel
+	 * @param MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+	 * @param MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
 	 * @param ArchiefMaaltijdModel $archiefMaaltijdModel
 	 * @param CorveeTakenModel $corveeTakenModel
 	 * @param CorveeRepetitiesModel $corveeRepetitiesModel
 	 */
 	public function __construct(
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenModel,
-		MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
-		ArchiefMaaltijdModel $archiefMaaltijdModel,
-		CorveeTakenModel $corveeTakenModel,
-		CorveeRepetitiesModel $corveeRepetitiesModel
+        MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+        MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+        ArchiefMaaltijdModel $archiefMaaltijdModel,
+        CorveeTakenModel $corveeTakenModel,
+        CorveeRepetitiesModel $corveeRepetitiesModel
 	) {
 		parent::__construct();
 
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenModel;
-		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->archiefMaaltijdModel = $archiefMaaltijdModel;
 		$this->corveeTakenModel = $corveeTakenModel;
 		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
@@ -305,7 +306,7 @@ class MaaltijdenModel extends PersistenceModel {
 		$aantal = 0;
 		// aanmelden van leden met abonnement op deze repetitie
 		if (!$maaltijd->gesloten && $maaltijd->mlt_repetitie_id !== null) {
-			$abonnementen = $this->maaltijdAbonnementenModel->getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
+			$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
 			foreach ($abonnementen as $abo) {
 				if ($this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
 					if ($this->maaltijdAanmeldingenRepository->aanmeldenDoorAbonnement($maaltijd, $abo->mlt_repetitie_id, $abo->uid)) {

@@ -18,11 +18,11 @@ use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\maalcie\CorveeTakenModel;
-use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
+use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
@@ -47,9 +47,9 @@ class ProfielRepository extends ServiceEntityRepository {
 		update as ormUpdate;
 	}
 	/**
-	 * @var MaaltijdAbonnementenModel
+	 * @var MaaltijdAbonnementenRepository
 	 */
-	private $maaltijdAbonnementenModel;
+	private $maaltijdAbonnementenRepository;
 	/**
 	 * @var CorveeTakenModel
 	 */
@@ -61,13 +61,13 @@ class ProfielRepository extends ServiceEntityRepository {
 
 	public function __construct(
         ManagerRegistry $registry,
-        MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
+        MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
         CorveeTakenModel $corveeTakenModel,
         BoekExemplaarRepository $boekExemplaarModel
 	) {
 		parent::__construct($registry, Profiel::class);
 
-		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
+		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->corveeTakenModel = $corveeTakenModel;
 		$this->boekExemplaarModel = $boekExemplaarModel;
 	}
@@ -281,7 +281,7 @@ class ProfielRepository extends ServiceEntityRepository {
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
-		$aantal = $this->maaltijdAbonnementenModel->verwijderAbonnementenVoorLid($profiel->uid);
+		$aantal = $this->maaltijdAbonnementenRepository->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
 			return [new ProfielLogTextEntry('Afmelden abo\'s: ' . $aantal . ' uitgezet.')];
 		}

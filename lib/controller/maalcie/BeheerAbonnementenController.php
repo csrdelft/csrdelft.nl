@@ -3,9 +3,9 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\MaaltijdAbonnement;
-use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
+use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\ProfielRepository;
 
 /**
@@ -15,21 +15,21 @@ use CsrDelft\repository\ProfielRepository;
  */
 class BeheerAbonnementenController {
 	/**
-	 * @var MaaltijdAbonnementenModel
+	 * @var MaaltijdAbonnementenRepository
 	 */
-	private $maaltijdAbonnementenModel;
+	private $maaltijdAbonnementenRepository;
 	/**
 	 * @var MaaltijdRepetitiesModel
 	 */
 	private $maaltijdRepetitiesModel;
 
-	public function __construct(MaaltijdAbonnementenModel $maaltijdAbonnementenModel, MaaltijdRepetitiesModel $maaltijdRepetitiesModel) {
-		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
+	public function __construct(MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository, MaaltijdRepetitiesModel $maaltijdRepetitiesModel) {
+		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->maaltijdRepetitiesModel = $maaltijdRepetitiesModel;
 	}
 
 	public function waarschuwingen() {
-		$matrix_repetities = $this->maaltijdAbonnementenModel->getAbonnementenWaarschuwingenMatrix();
+		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenWaarschuwingenMatrix();
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'waarschuwing',
@@ -40,7 +40,7 @@ class BeheerAbonnementenController {
 	}
 
 	public function ingeschakeld() {
-		$matrix_repetities = $this->maaltijdAbonnementenModel->getAbonnementenMatrix();
+		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenMatrix();
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'in',
@@ -51,7 +51,7 @@ class BeheerAbonnementenController {
 	}
 
 	public function abonneerbaar() {
-		$matrix_repetities = $this->maaltijdAbonnementenModel->getAbonnementenAbonneerbaarMatrix();
+		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenAbonneerbaarMatrix();
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'waarschuwing',
@@ -63,8 +63,8 @@ class BeheerAbonnementenController {
 
 	public function novieten() {
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
-		$aantal = $this->maaltijdAbonnementenModel->inschakelenAbonnementVoorNovieten((int)$mrid);
-		$matrix = $this->maaltijdAbonnementenModel->getAbonnementenVanNovieten();
+		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnementVoorNovieten((int)$mrid);
+		$matrix = $this->maaltijdAbonnementenRepository->getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
 		setMelding(
 			$aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' aangemaakt voor ' .
@@ -79,7 +79,7 @@ class BeheerAbonnementenController {
 		$abo = new MaaltijdAbonnement();
 		$abo->mlt_repetitie_id = $mrid;
 		$abo->uid = $uid;
-		$aantal = $this->maaltijdAbonnementenModel->inschakelenAbonnement($abo);
+		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnement($abo);
 		if ($aantal > 0) {
 			$melding = 'Automatisch aangemeld voor ' . $aantal . ' maaltijd' . ($aantal === 1 ? '' : 'en');
 			setMelding($melding, 2);
@@ -91,7 +91,7 @@ class BeheerAbonnementenController {
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
-		$abo_aantal = $this->maaltijdAbonnementenModel->uitschakelenAbonnement((int)$mrid, $uid);
+		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement((int)$mrid, $uid);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);

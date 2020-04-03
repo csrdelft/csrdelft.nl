@@ -2,11 +2,13 @@
 
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 
 /**
  * MaaltijdRepetitiesModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -82,7 +84,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 			} else {
 				$this->update($repetitie);
 				if (!$repetitie->abonneerbaar) { // niet (meer) abonneerbaar
-					$abos = MaaltijdAbonnementenModel::instance()->verwijderAbonnementen($repetitie->mlt_repetitie_id);
+					$abos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($repetitie->mlt_repetitie_id);
 				}
 			}
 			return $abos;
@@ -100,7 +102,7 @@ class MaaltijdRepetitiesModel extends PersistenceModel {
 			MaaltijdenModel::instance()->verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
 			throw new CsrGebruikerException('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
-		$aantalAbos = MaaltijdAbonnementenModel::instance()->verwijderAbonnementen($mrid);
+		$aantalAbos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($mrid);
 		$this->deleteByPrimaryKey(array($mrid));
 		return $aantalAbos;
 	}
