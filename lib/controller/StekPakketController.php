@@ -128,7 +128,7 @@ class StekPakketController {
 	];
 
 	private function checkDate() {
-		if (time() > strtotime('3-4-2020')) {
+		if (time() > strtotime('4-4-2020')) {
 			throw new NotFoundHttpException();
 		}
 	}
