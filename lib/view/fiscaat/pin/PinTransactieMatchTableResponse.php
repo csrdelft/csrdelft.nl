@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\pin;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
@@ -20,22 +21,27 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 	 * @throws Exception
 	 */
 	public function renderElement($entity) {
+		$container = ContainerFacade::getContainer();
+		$pinTransactieRepository = $container->get(PinTransactieRepository::class);
+		$pinTransactieMatchRepository = $container->get(PinTransactieMatchRepository::class);
+		$civiBestellingModel = $container->get(CiviBestellingModel::class);
+
 		if ($entity instanceof PinTransactieMatch) {
 			if ($entity->bestelling_id !== null) {
-				$bestelling = CiviBestellingModel::instance()->get($entity->bestelling_id);
-				$bestellingBeschrijving = CiviBestellingModel::instance()->getPinBeschrijving($bestelling);
+				$bestelling = $civiBestellingModel->get($entity->bestelling_id);
+				$bestellingBeschrijving = $civiBestellingModel->getPinBeschrijving($bestelling);
 			} else {
 				$bestellingBeschrijving = '-';
 			}
 
 			if ($entity->transactie_id !== null) {
-				$pinTransactie = PinTransactieRepository::instance()->get($entity->transactie_id);
-				$transactieBeschrijving = PinTransactieRepository::instance()->getKorteBeschrijving($pinTransactie);
+				$pinTransactie = $pinTransactieRepository->get($entity->transactie_id);
+				$transactieBeschrijving = $pinTransactieRepository->getKorteBeschrijving($pinTransactie);
 			} else {
 				$transactieBeschrijving = '-';
 			}
 
-			$moment = PinTransactieMatchRepository::instance()->getMoment($entity);
+			$moment = $pinTransactieMatchRepository->getMoment($entity);
 
 			return [
 				'UUID' => $entity->getUUID(),
