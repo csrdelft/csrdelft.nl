@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
+use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
@@ -18,7 +19,7 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 		$data = $maaltijd->jsonSerialize();
 
 		// Haal beoordelingsamenvatting op
-		$stat = MaaltijdBeoordelingenModel::instance()->getBeoordelingSamenvatting($maaltijd);
+		$stat = ContainerFacade::getContainer()->get(MaaltijdBeoordelingenRepository::class)->getBeoordelingSamenvatting($maaltijd);
 		$data['aantal_beoordelingen'] = $stat->kwantiteitAantal . ", " . $stat->kwaliteitAantal;
 		$data['kwantiteit'] = $this->getalWeergave($stat->kwantiteit, '-', 3);
 		$data['kwaliteit'] = $this->getalWeergave($stat->kwaliteit, '-', 3);

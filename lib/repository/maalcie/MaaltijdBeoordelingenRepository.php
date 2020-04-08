@@ -1,37 +1,50 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\repository\maalcie;
 
+use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\AbstractRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
 use stdClass;
 
 /**
- * MaaltijdBeoordelingenModel.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @method MaaltijdBeoordeling|null find($id, $lockMode = null, $lockVersion = null)
+ * @method MaaltijdBeoordeling|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MaaltijdBeoordeling[]    findAll()
+ * @method MaaltijdBeoordeling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MaaltijdBeoordelingenModel extends PersistenceModel {
+class MaaltijdBeoordelingenRepository extends AbstractRepository {
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, MaaltijdBeoordeling::class);
+	}
 
-	const ORM = MaaltijdBeoordeling::class;
-
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @return MaaltijdBeoordeling
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function nieuw(Maaltijd $maaltijd) {
 		$b = new MaaltijdBeoordeling();
 		$b->maaltijd_id = $maaltijd->maaltijd_id;
 		$b->uid = LoginModel::getUid();
 		$b->kwantiteit = null;
 		$b->kwaliteit = null;
-		$this->create($b);
+		$this->_em->persist($b);
+		$this->_em->flush();
 		return $b;
 	}
 
 	public function getBeoordelingSamenvatting(Maaltijd $maaltijd) {
 		// Haal beoordelingen voor deze maaltijd op
-		$beoordelingen = $this->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
+		$beoordelingen = $this->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 
 		// Bepaal gemiddelde en gemiddelde afwijking
 		$kwantiteit = 0;
@@ -42,7 +55,7 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 		$kwaliteitAantal = 0;
 		foreach ($beoordelingen as $b) {
 			// Haal gemiddelde beoordeling van lid op
-			$userAverage = Database::instance()->sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), $this->getTableName(), 'uid = ?', array($b->uid));
+			$userAverage = Database::instance()->sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), 'mlt_beoordelingen', 'uid = ?', array($b->uid));
 			$userAverage->execute();
 			$avg = $userAverage->fetchAll();
 
@@ -74,4 +87,13 @@ class MaaltijdBeoordelingenModel extends PersistenceModel {
 		return $object;
 	}
 
+	/**
+	 * @param MaaltijdBeoordeling $maaltijdBeoordeling
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function update(MaaltijdBeoordeling $maaltijdBeoordeling) {
+		$this->_em->persist($maaltijdBeoordeling);
+		$this->_em->flush();
+	}
 }

@@ -4,13 +4,12 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
@@ -36,18 +35,18 @@ class BbMaaltijd extends BbTag {
 	 */
 	private $maaltijdAanmeldingenRepository;
 	/**
-	 * @var MaaltijdBeoordelingenModel
+	 * @var MaaltijdBeoordelingenRepository
 	 */
-	private $maaltijdBeoordelingenModel;
+	private $maaltijdBeoordelingenRepository;
 	/**
 	 * @var MaaltijdenModel
 	 */
 	private $maaltijdenModel;
 
-	public function __construct(MaaltijdenModel $maaltijdenModel, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdBeoordelingenModel $maaltijdBeoordelingenModel) {
+	public function __construct(MaaltijdenModel $maaltijdenModel, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository) {
 		$this->maaltijdenModel = $maaltijdenModel;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->maaltijdBeoordelingenModel = $maaltijdBeoordelingenModel;
+		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 	}
 
 	public static function getTagName() {
@@ -79,9 +78,9 @@ class BbMaaltijd extends BbTag {
 			$kwaliteit = null;
 			$kwantiteit = null;
 			if ($maaltijd->getEindMoment() < time()) {
-				$beoordeling = $this->maaltijdBeoordelingenModel->find('maaltijd_id = ? AND uid = ?', array($maaltijd->maaltijd_id, LoginModel::getUid()))->fetch();
+				$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => LoginModel::getUid()]);
 				if (!$beoordeling) {
-					$beoordeling = $this->maaltijdBeoordelingenModel->nieuw($maaltijd);
+					$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);
 				}
 				$kwantiteit = (new MaaltijdKwantiteitBeoordelingForm($maaltijd, $beoordeling))->getHtml();
 				$kwaliteit = (new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling))->getHtml();

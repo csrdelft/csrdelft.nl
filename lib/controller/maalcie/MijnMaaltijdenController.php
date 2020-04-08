@@ -5,10 +5,10 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\model\maalcie\CorveeTakenModel;
-use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
 use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
@@ -28,23 +28,23 @@ class MijnMaaltijdenController {
 	 */
 	private $corveeTakenModel;
 	/**
-	 * @var MaaltijdBeoordelingenModel
+	 * @var MaaltijdBeoordelingenRepository
 	 */
-	private $maaltijdBeoordelingenModel;
+	private $maaltijdBeoordelingenRepository;
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
 	private $maaltijdAanmeldingenRepository;
 
 	public function __construct(
-		MaaltijdenModel $maaltijdenModel,
-		CorveeTakenModel $corveeTakenModel,
-		MaaltijdBeoordelingenModel $maaltijdBeoordelingenModel,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+        MaaltijdenModel $maaltijdenModel,
+        CorveeTakenModel $corveeTakenModel,
+        MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository,
+        MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	) {
 		$this->maaltijdenModel = $maaltijdenModel;
 		$this->corveeTakenModel = $corveeTakenModel;
-		$this->maaltijdBeoordelingenModel = $maaltijdBeoordelingenModel;
+		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
@@ -66,9 +66,9 @@ class MijnMaaltijdenController {
 			$maaltijd = $aanmelding->maaltijd;
 			$mid = $aanmelding->maaltijd_id;
 			$beoordelen[$mid] = $maaltijd;
-			$beoordeling = $this->maaltijdBeoordelingenModel->find('maaltijd_id = ? AND uid = ?', array($mid, LoginModel::getUid()))->fetch();
+			$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $mid, 'uid' => LoginModel::getUid()]);
 			if (!$beoordeling) {
-				$beoordeling = $this->maaltijdBeoordelingenModel->nieuw($maaltijd);
+				$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);
 			}
 			$kwantiteit_forms[$mid] = new MaaltijdKwantiteitBeoordelingForm($maaltijd, $beoordeling);
 			$kwaliteit_forms[$mid] = new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling);
@@ -154,16 +154,16 @@ class MijnMaaltijdenController {
 
 	public function beoordeling($mid) {
 		$maaltijd = $this->maaltijdenModel->getMaaltijd($mid);
-		$beoordeling = $this->maaltijdBeoordelingenModel->find('maaltijd_id = ? AND uid = ?', array($mid, LoginModel::getUid()))->fetch();
+		$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $mid, 'uid' => LoginModel::getUid()]);
 		if (!$beoordeling) {
-			$beoordeling = $this->maaltijdBeoordelingenModel->nieuw($maaltijd);
+			$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);
 		}
 		$form = new MaaltijdKwantiteitBeoordelingForm($maaltijd, $beoordeling);
 		if (!$form->validate()) {
 			$form = new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling);
 		}
 		if ($form->validate()) {
-			$this->maaltijdBeoordelingenModel->update($beoordeling);
+			$this->maaltijdBeoordelingenRepository->update($beoordeling);
 		}
 		return new JsonResponse(null);
 	}
