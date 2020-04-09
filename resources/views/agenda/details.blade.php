@@ -72,7 +72,7 @@
 	<div class="card-body">
 		@if($item instanceof \CsrDelft\entity\maalcie\Maaltijd)
 			<div class="tijd">
-				{{strftime("%R", $item->getBeginMoment())}} - {{strftime("%R", $item->getEindMoment())}}
+				{{$item->getBeginMoment()->format('H:i')}} - {{$item->getEindMoment()->format('H:i')}}
 			</div>
 		@elseif($item instanceof CsrDelft\model\entity\agenda\Agendeerbaar)
 			@if(!$item->isHeledag())
