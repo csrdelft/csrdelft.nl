@@ -150,8 +150,9 @@ class PeilingenRepository extends AbstractRepository {
 			$zichtbarePeilingen = $this->findBy(['eigenaar' => LoginModel::getUid()]);
 			$peilingenMetRechten = $this->createQueryBuilder('p')
 				->andWhere('p.eigenaar <> :uid')
-				->andWhere('p.rechten_mod <> ""')
+				->andWhere('p.rechten_mod <> :rechten')
 				->setParameter('uid', LoginModel::getUid())
+				->setParameter('rechten', '')
 				->getQuery()->getResult();
 			foreach ($peilingenMetRechten as $peiling) {
 				if (LoginModel::mag($peiling->rechten_mod)) {
