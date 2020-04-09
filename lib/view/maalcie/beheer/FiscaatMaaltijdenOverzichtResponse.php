@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
-use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\view\datatable\DataTableResponse;
 
 class FiscaatMaaltijdenOverzichtResponse extends DataTableResponse {

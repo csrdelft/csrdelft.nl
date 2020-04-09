@@ -8,10 +8,10 @@ use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Jacwright\RestServer\RestException;
 
 class ApiAgendaController {
@@ -21,8 +21,8 @@ class ApiAgendaController {
 	private $agendaRepository;
 	/** @var ActiviteitDeelnemersModel */
 	private $activiteitDeelnemersModel;
-	/** @var MaaltijdenModel */
-	private $maaltijdenModel;
+	/** @var MaaltijdenRepository */
+	private $maaltijdenRepository;
 	/** @var MaaltijdAanmeldingenRepository */
 	private $maaltijdAanmeldingenRepository;
 
@@ -31,7 +31,7 @@ class ApiAgendaController {
 		$this->agendaRepository = $container->get(AgendaRepository::class);
 		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
 		$this->maaltijdAanmeldingenRepository = $container->get(MaaltijdAanmeldingenRepository::class);
-		$this->maaltijdenModel = $container->get(MaaltijdenModel::class);
+		$this->maaltijdenRepository = $container->get(MaaltijdenRepository::class);
 		$this->activiteitDeelnemersModel = $container->get(ActiviteitDeelnemersModel::class);
 	}
 
@@ -94,7 +94,7 @@ class ApiAgendaController {
 		}
 
 		// Maaltijden
-		$maaltijden = $this->maaltijdenModel->getMaaltijdenVoorAgenda($from, $to);
+		$maaltijden = $this->maaltijdenRepository->getMaaltijdenVoorAgenda($from, $to);
 
 
 		// Maaltijd aanmeldingen

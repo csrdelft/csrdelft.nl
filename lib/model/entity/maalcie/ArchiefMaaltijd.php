@@ -5,6 +5,7 @@ namespace CsrDelft\model\entity\maalcie;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * MaaltijdArchief.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -25,14 +26,37 @@ use CsrDelft\Orm\Entity\T;
  *
  */
 class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
-	# primary key
-
-	public $maaltijd_id; # int 11
-	public $titel; # string 255
-	public $datum; # date
-	public $tijd; # time
-	public $prijs; # int 11
-	public $aanmeldingen; # text
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 */
+	public $maaltijd_id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $titel;
+	/**
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="date")
+	 */
+	public $datum;
+	/**
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="time")
+	 */
+	public $tijd;
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $prijs;
+	/**
+	 * @var string
+	 * @ORM\Column(type="text")
+	 */
+	public $aanmeldingen;
 
 	public function getPrijsFloat() {
 		return (float)$this->prijs / 100.0;
@@ -60,7 +84,7 @@ class ArchiefMaaltijd extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getBeginMoment() {
-		return strtotime($this->datum . ' ' . $this->tijd);
+		return $this->datum->setTime($this->tijd->format('H'), $this->tijd->format('i'), $this->tijd->format('s'));
 	}
 
 	public function getEindMoment() {

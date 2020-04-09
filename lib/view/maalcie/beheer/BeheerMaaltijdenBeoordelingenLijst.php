@@ -3,8 +3,8 @@
 namespace CsrDelft\view\maalcie\beheer;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
-use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;

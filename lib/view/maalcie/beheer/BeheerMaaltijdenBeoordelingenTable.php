@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
-use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\DataTable;
 
@@ -11,7 +11,7 @@ class BeheerMaaltijdenBeoordelingenTable extends DataTable {
 	 * BeheerMaaltijdenBeoordeelingenView constructor.
 	 */
 	public function __construct() {
-		parent::__construct(MaaltijdenModel::ORM, '/maaltijden/beheer/beoordelingen');
+		parent::__construct(Maaltijd::class, '/maaltijden/beheer/beoordelingen');
 
 		$this->hideColumn('mlt_repetitie_id');
 		$this->hidecolumn('product_id');

@@ -9,7 +9,7 @@ use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeToewijzenModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
@@ -24,18 +24,18 @@ class BeheerTakenController extends AbstractController {
 	 */
 	private $corveeTakenModel;
 	/**
-	 * @var MaaltijdenModel
+	 * @var MaaltijdenRepository
 	 */
-	private $maaltijdenModel;
+	private $maaltijdenRepository;
 	/**
 	 * @var CorveeRepetitiesModel
 	 */
 	private $corveeRepetitiesModel;
 
-	public function __construct(CorveeTakenModel $corveeTakenModel, MaaltijdenModel $maaltijdenModel, CorveeRepetitiesModel $corveeRepetitiesModel) {
+	public function __construct(CorveeTakenModel $corveeTakenModel, MaaltijdenRepository $maaltijdenRepository, CorveeRepetitiesModel $corveeRepetitiesModel) {
 		$this->corveeTakenModel = $corveeTakenModel;
 
-		$this->maaltijdenModel = $maaltijdenModel;
+		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
 	}
 
@@ -49,7 +49,7 @@ class BeheerTakenController extends AbstractController {
 			$modal = $this->bewerk($tid);
 		}
 		if (is_numeric($mid) && $mid > 0) {
-			$maaltijd = $this->maaltijdenModel->getMaaltijd($mid, true);
+			$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid, true);
 			$taken = $this->corveeTakenModel->getTakenVoorMaaltijd($mid, true);
 		} else {
 			$taken = $this->corveeTakenModel->getAlleTaken();
@@ -133,7 +133,7 @@ class BeheerTakenController extends AbstractController {
 			$taak = $this->corveeTakenModel->saveTaak((int)$tid, (int)$values->functie_id, $values->uid, $values->crv_repetitie_id, $values->maaltijd_id, $values->datum, $values->punten, $values->bonus_malus);
 			$maaltijd = null;
 			if (endsWith($_SERVER['HTTP_REFERER'], '/corvee/beheer/maaltijd/' . $values->maaltijd_id)) { // state of gui
-				$maaltijd = $this->maaltijdenModel->getMaaltijd($values->maaltijd_id);
+				$maaltijd = $this->maaltijdenRepository->getMaaltijd($values->maaltijd_id);
 			}
 			return view('maaltijden.corveetaak.beheer_taak_lijst', [
 				'taak' => $taak,
@@ -149,7 +149,7 @@ class BeheerTakenController extends AbstractController {
 	public function nieuw($mid = null) {
 		$beginDatum = null;
 		if ($mid !== null) {
-			$maaltijd = $this->maaltijdenModel->getMaaltijd($mid);
+			$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
 			$beginDatum = $maaltijd->datum;
 		}
 		$crid = filter_input(INPUT_POST, 'crv_repetitie_id', FILTER_SANITIZE_NUMBER_INT);

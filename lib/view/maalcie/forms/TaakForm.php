@@ -2,10 +2,11 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\LidField;
@@ -69,7 +70,7 @@ class TaakForm extends ModalForm {
 		$fields = $this->getFields();
 		if (is_numeric($fields['mid']->getValue())) {
 			try {
-				MaaltijdenModel::instance()->getMaaltijd($fields['mid']->getValue(), true);
+				ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd($fields['mid']->getValue(), true);
 			} catch (CsrGebruikerException $e) {
 				$fields['mid']->error = 'Maaltijd bestaat niet.';
 				$valid = false;

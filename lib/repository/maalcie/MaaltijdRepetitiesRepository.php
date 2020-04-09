@@ -6,7 +6,6 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -108,8 +107,9 @@ class MaaltijdRepetitiesRepository extends AbstractRepository {
 		if (CorveeRepetitiesModel::instance()->existMaaltijdRepetitieCorvee($mrid)) {
 			throw new CsrGebruikerException('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
-		if (MaaltijdenModel::instance()->existRepetitieMaaltijden($mrid)) {
-			MaaltijdenModel::instance()->verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
+		$maaltijdenRepository = ContainerFacade::getContainer()->get(MaaltijdenRepository::class);
+		if ($maaltijdenRepository->existRepetitieMaaltijden($mrid)) {
+			$maaltijdenRepository->verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
 			throw new CsrGebruikerException('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 		$aantalAbos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($mrid);

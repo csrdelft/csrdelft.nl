@@ -3,8 +3,8 @@
 namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
-use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;

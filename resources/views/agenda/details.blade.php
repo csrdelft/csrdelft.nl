@@ -13,7 +13,7 @@
 				<h5 class="card-title mb-0">
 					@if($item instanceof \CsrDelft\entity\profiel\Profiel)
 						@icon('verjaardag') {!! $item->getLink() !!}
-					@elseif($item instanceof \CsrDelft\model\entity\maalcie\Maaltijd)
+					@elseif($item instanceof \CsrDelft\entity\maalcie\Maaltijd)
 						<img src="/images/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon"/>
 						<a href="{{$item->getUrl()}}">{{$item->getTitel()}}</a>
 					@elseif($item instanceof \CsrDelft\model\entity\maalcie\CorveeTaak)
@@ -70,7 +70,7 @@
 		</div>
 	</div>
 	<div class="card-body">
-		@if($item instanceof CsrDelft\model\entity\maalcie\Maaltijd)
+		@if($item instanceof \CsrDelft\entity\maalcie\Maaltijd)
 			<div class="tijd">
 				{{strftime("%R", $item->getBeginMoment())}} - {{strftime("%R", $item->getEindMoment())}}
 			</div>

@@ -2,9 +2,9 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -84,7 +84,7 @@ class MaaltijdAanmelding {
 	}
 
 	public function getMaaltijd() {
-		return MaaltijdenModel::instance()->getMaaltijd($this->maaltijd_id);
+		return ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd($this->maaltijd_id);
 	}
 
 	/**

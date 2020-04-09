@@ -1,20 +1,22 @@
 <?php
 
-namespace CsrDelft\model\entity\maalcie;
+namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\model\entity\maalcie\CorveeFunctie;
+use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Maaltijd.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -40,24 +42,80 @@ use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
  *
  * Zie ook MaaltijdAanmelding.class.php
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdenRepository")
+ * @ORM\Table("mlt_maaltijden")
  */
-class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLimiet {
-	# primary key
-
-	public $maaltijd_id; # int 11
-	public $mlt_repetitie_id; # foreign key mlt_repetitie.id
+class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
+	public $maaltijd_id;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $mlt_repetitie_id;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
 	public $product_id;
-	public $titel; # string 255
-	public $aanmeld_limiet; # int 11
-	public $datum; # date
-	public $tijd; # time
-	public $gesloten = false; # boolean
-	public $laatst_gesloten; # int 11
-	public $verwijderd = false; # boolean
-	public $aanmeld_filter; # string 255
-	public $omschrijving; # text
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $aanmeld_limiet;
+	/**
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="date")
+	 */
+	public $datum;
+	/**
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="time")
+	 */
+	public $tijd;
+	/**
+	 * @var bool
+	 * @ORM\Column(type="boolean")
+	 */
+	public $gesloten = false;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $laatst_gesloten;
+	/**
+	 * @var bool
+	 * @ORM\Column(type="boolean")
+	 */
+	public $verwijderd = false;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $aanmeld_filter;
+	/**
+	 * @var string
+	 * @ORM\Column(type="text")
+	 */
+	public $omschrijving;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
 	public $aantal_aanmeldingen;
-	public $archief;
+	/**
+	 * @var bool
+	 * @ORM\Column(type="boolean")
+	 */
 	public $verwerkt = false;
 	/**
 	 * De taak die rechten geeft voor het bekijken en sluiten van de maaltijd(-lijst)
@@ -136,7 +194,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 	}
 
 	public function getBeginMoment() {
-		return strtotime($this->datum . ' ' . $this->tijd);
+		return $this->datum->setTime($this->tijd->format('H'), $this->tijd->format('i'), $this->tijd->format('s'))->getTimestamp();
 	}
 
 	public function getEindMoment() {
@@ -201,25 +259,6 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 		return $this->magBekijken($uid) AND $this->maaltijdcorvee->getCorveeFunctie()->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
 	}
 
-	protected static $table_name = 'mlt_maaltijden';
-	protected static $persistent_attributes = array(
-		'maaltijd_id' => array(T::Integer, false, 'auto_increment'),
-		'mlt_repetitie_id' => array(T::Integer, true),
-		'product_id' => array(T::Integer),
-		'titel' => array(T::String),
-		'aanmeld_limiet' => array(T::Integer),
-		'datum' => array(T::Date),
-		'tijd' => array(T::Time),
-		'gesloten' => array(T::Boolean),
-		'laatst_gesloten' => array(T::Timestamp, true),
-		'verwijderd' => array(T::Boolean),
-		'aanmeld_filter' => array(T::String, true),
-		'omschrijving' => array(T::Text, true),
-		'verwerkt' => array(T::Boolean)
-	);
-
-	protected static $primary_key = array('maaltijd_id');
-
 	/**
 	 * De API voor de app gebruikt json_encode
 	 *
@@ -227,7 +266,7 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 	 * @throws CsrGebruikerException
 	 */
 	public function jsonSerialize() {
-		$json = parent::jsonSerialize();
+		$json = (array) $this;
 		$json['repetitie_naam'] = is_int($this->mlt_repetitie_id) ? ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
 		$json['tijd'] = date('G:i', strtotime($json['tijd']));
 		$json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
@@ -237,5 +276,9 @@ class Maaltijd extends PersistentEntity implements Agendeerbaar, HeeftAanmeldLim
 
 	function getAanmeldLimiet() {
 		return $this->aanmeld_limiet;
+	}
+
+	public function getUUID() {
+		return $this->maaltijd_id . "@Maaltijd.csrdelft.nl";
 	}
 }
