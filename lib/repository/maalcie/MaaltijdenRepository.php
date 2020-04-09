@@ -109,7 +109,7 @@ class MaaltijdenRepository extends AbstractRepository {
 			throw new CsrGebruikerException('Maaltijd is al gesloten');
 		}
 		$maaltijd->gesloten = true;
-		$maaltijd->laatst_gesloten = date('Y-m-d H:i:s');
+		$maaltijd->laatst_gesloten = date_create_immutable();
 		$this->_em->persist($maaltijd);
 		$this->_em->flush();
 	}

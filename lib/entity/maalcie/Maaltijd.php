@@ -89,7 +89,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	public $gesloten = false;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="datetime")
 	 */
 	public $laatst_gesloten;
 	/**

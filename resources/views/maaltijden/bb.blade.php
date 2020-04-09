@@ -81,7 +81,7 @@
 						@endif
 
 						@if($maaltijd->gesloten && $maaltijd->getEindMoment() > time())
-							@php($date = strftime("%H:%M", strtotime($maaltijd->laatst_gesloten)))
+							@php($date = $maaltijd->laatst_gesloten->format(TIME_FORMAT))
 							@icon("lock", null, "Maaltijd is gesloten om " . $date)
 						@endif
 					@endcan
