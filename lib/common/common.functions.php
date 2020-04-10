@@ -18,6 +18,7 @@ use CsrDelft\service\CsrfService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
 
+define('LONG_DATE_FORMAT', 'D j M'); // Ma 3 Jan
 define('DATE_FORMAT', 'Y-m-d');
 define('DATETIME_FORMAT', 'Y-m-d H:i:s');
 define('TIME_FORMAT', 'H:i');

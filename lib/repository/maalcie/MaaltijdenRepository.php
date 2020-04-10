@@ -86,7 +86,7 @@ class MaaltijdenRepository extends AbstractRepository {
 		$maaltijd->titel = $repetitie->standaard_titel;
 		$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
 		$maaltijd->datum = $datum;
-		$maaltijd->tijd = $repetitie->standaard_tijd->format(TIME_FORMAT);
+		$maaltijd->tijd = $repetitie->standaard_tijd;
 		$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
 		$maaltijd->omschrijving = null;
 		$maaltijd->verwerkt = false;
@@ -120,7 +120,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	public function getMaaltijdenToekomst() {
 		return $this->createQueryBuilder('m')
 			->where('m.verwijderd = false and m.datum > :datum')
-			->setParameter('m.datum', date_create('+1 week'))
+			->setParameter(':datum', date_create('+1 week'))
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
 			->getQuery()->getResult();
@@ -189,13 +189,15 @@ class MaaltijdenRepository extends AbstractRepository {
 	/**
 	 * Haalt de maaltijden in het verleden op voor de ingestelde periode.
 	 *
+	 * @param DateTimeInterface $timestamp
+	 * @param null $limit
 	 * @return Maaltijd[]
 	 */
-	public function getRecenteMaaltijden($timestamp, $limit = null) {
+	public function getRecenteMaaltijden(DateTimeInterface $timestamp, $limit = null) {
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
 			->where('m.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum')
-			->setParameter('van_datum', date_create($timestamp))
+			->setParameter('van_datum', $timestamp)
 			->setParameter('tot_datum', date_create())
 			->setMaxResults($limit)
 			->orderBy('m.datum', 'ASC')
@@ -377,7 +379,7 @@ class MaaltijdenRepository extends AbstractRepository {
 				$archief = $this->archiefMaaltijdenRepository->vanMaaltijd($maaltijd);
 				$this->archiefMaaltijdenRepository->create($archief);
 				if ($this->corveeTakenModel->existMaaltijdCorvee($maaltijd->maaltijd_id)) {
-					setMelding($maaltijd->datum . ' ' . $maaltijd->titel . ' heeft nog gekoppelde corveetaken!', 2);
+					setMelding($maaltijd->getMoment()->format(DATETIME_FORMAT) . ' heeft nog gekoppelde corveetaken!', 2);
 				}
 			} catch (CsrGebruikerException $e) {
 				$errors[] = $e;

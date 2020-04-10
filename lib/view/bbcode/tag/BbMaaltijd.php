@@ -60,7 +60,7 @@ class BbMaaltijd extends BbTag {
 	public function renderLight() {
 		$maaltijd = $this->maaltijden[0];
 		$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
-		return BbHelper::lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->datum . ' ' . $maaltijd->tijd);
+		return BbHelper::lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->getMoment()->format(DATETIME_FORMAT));
 	}
 
 	public function render() {
@@ -136,7 +136,7 @@ class BbMaaltijd extends BbTag {
 					$maaltijd2 = reset($maaltijden);
 				}
 			} elseif ($mid === 'beoordeling') {
-				$timestamp = strtotime(instelling('maaltijden', 'beoordeling_periode'));
+				$timestamp = date_create_immutable(instelling('maaltijden', 'beoordeling_periode'));
 				$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
 				$recent = array_slice(array_map(function($m) { return $m->maaltijd; }, $recent), -2);
 				if (count($recent) === 0) throw new BbException('');

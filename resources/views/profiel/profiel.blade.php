@@ -507,7 +507,7 @@
 						<ul class="list-unstyled">
 							@foreach($recenteAanmeldingen as $aanmelding)
 								<li>
-									{{$aanmelding->maaltijd->getTitel()}} <span class="lichtgrijs">({{strftime('%a %e %b', strtotime($aanmelding->maaltijd->datum))}})</span>
+									{{$aanmelding->maaltijd->getTitel()}} <span class="lichtgrijs">({{$aanmelding->maaltijd->datum->format(LONG_DATE_FORMAT)}})</span>
 								</li>
 							@endforeach
 						</ul>

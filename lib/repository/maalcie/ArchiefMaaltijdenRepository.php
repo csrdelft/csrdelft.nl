@@ -2,8 +2,8 @@
 
 namespace CsrDelft\repository\maalcie;
 
+use CsrDelft\entity\maalcie\ArchiefMaaltijd;
 use CsrDelft\entity\maalcie\Maaltijd;
-use CsrDelft\model\entity\maalcie\ArchiefMaaltijd;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
-use CsrDelft\model\entity\maalcie\ArchiefMaaltijd;
+use CsrDelft\entity\maalcie\ArchiefMaaltijd;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;

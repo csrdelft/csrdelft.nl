@@ -83,7 +83,7 @@ class MaaltijdenFiscaatController {
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
 		# Controleer of de maaltijd gesloten is en geweest is
-		if ($maaltijd->gesloten == false OR date_create_immutable(sprintf("%s %s", $maaltijd->datum, $maaltijd->tijd)) >= date_create_immutable("now")) {
+		if ($maaltijd->gesloten == false OR $maaltijd->getMoment() >= date_create_immutable("now")) {
 			throw new CsrGebruikerException("Maaltijd nog niet geweest");
 		}
 

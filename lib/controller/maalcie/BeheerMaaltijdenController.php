@@ -80,7 +80,7 @@ class BeheerMaaltijdenController extends AbstractController {
 				break;
 		}
 
-		return new BeheerMaaltijdenLijst($data);
+		return $this->tableData($data);
 	}
 
 	public function GET_beheer($mid = null) {
@@ -146,7 +146,7 @@ class BeheerMaaltijdenController extends AbstractController {
 				$maaltijd->product_id = $repetitie->product_id;
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
-				$maaltijd->tijd = $repetitie->standaard_tijd->format(TIME_FORMAT);
+				$maaltijd->tijd = $repetitie->standaard_tijd;
 				$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
 				return new MaaltijdForm($maaltijd, 'nieuw');
 			}

@@ -51,7 +51,7 @@ class MijnMaaltijdenController {
 	public function ketzer() {
 		$maaltijden = $this->maaltijdenRepository->getKomendeMaaltijdenVoorLid(LoginModel::getUid());
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
-		$timestamp = strtotime(instelling('maaltijden', 'beoordeling_periode'));
+		$timestamp = date_create_immutable(instelling('maaltijden', 'beoordeling_periode'));
 		$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
 		$beoordelen = [];
 		$kwantiteit_forms = [];

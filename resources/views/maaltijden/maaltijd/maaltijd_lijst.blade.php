@@ -5,10 +5,10 @@
  */
 ?>
 @extends('plain')
-@section('titel', $titel . " " . strftime("%A %e %B", strtotime($maaltijd->datum)))
+@section('titel', $titel . " " . $maaltijd->datum->format(LONG_DATE_FORMAT))
 
 @section('content')
-	<h1>{{$titel}} op {{strftime("%A %e %B %Y", strtotime($maaltijd->datum))}}</h1>
+	<h1>{{$titel}} op {{$maaltijd->datum->format(LONG_DATE_FORMAT . ' %Y')}}</h1>
 	<div
 		class="header">{!! str_replace("MAALTIJDPRIJS", $prijs, instelling('maaltijden', 'maaltijdlijst_tekst')) !!}</div>
 	@if(!$maaltijd->gesloten)

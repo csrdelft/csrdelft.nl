@@ -7,7 +7,7 @@
 <tr id="maaltijd-row-{{$maaltijd->maaltijd_id}}"
 		@if($maaltijd->aanmeld_limiet === 0 or ($maaltijd->gesloten and ! $aanmelding)) class="taak-grijs" @endif >
 	<td>
-		{{$maaltijd->datum->format("D j M")}} {{$maaltijd->tijd->format(TIME_FORMAT)}}
+		{{$maaltijd->datum->format(LONG_DATE_FORMAT)}} {{$maaltijd->tijd->format(TIME_FORMAT)}}
 		@if($maaltijd->magBekijken(CsrDelft\model\security\LoginModel::getUid()))
 			<div class="float-right">
 				@icon("paintcan", null, $maaltijd->maaltijdcorvee->getCorveeFunctie()->naam)

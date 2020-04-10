@@ -267,7 +267,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		return $lijst;
 	}
 
-	public function getRecenteAanmeldingenVoorLid($uid, $timestamp) {
+	public function getRecenteAanmeldingenVoorLid($uid, \DateTimeInterface $timestamp) {
 		$maaltijdenById = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getRecenteMaaltijden($timestamp);
 		return $this->getAanmeldingenVoorLid($maaltijdenById, $uid);
 	}
