@@ -72,6 +72,7 @@ class ZoekController {
 		if (lid_instelling('zoeken', 'boeken') === 'ja') {
 			$resultaat['Boeken'] = $bibliotheekController->zoeken($request, $zoekterm)->getModel();
 		}
+		
 		return new JsonResponse(array_merge(...array_values($resultaat)));
 	}
 }
