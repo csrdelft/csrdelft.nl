@@ -64,6 +64,12 @@ tools-streeplijst:
   methods: GET
   defaults: { _mag: P_OUDLEDEN_READ }
 
+tools-presentielijst:
+  path: /tools/presentielijst
+  controller: CsrDelft\controller\ToolsController::presentielijst
+  methods: GET
+  defaults: { _mag: P_OUDLEDEN_READ }
+
 tools-verticalelijsten:
   path: /tools/verticalelijsten
   controller: CsrDelft\controller\ToolsController::verticalelijsten

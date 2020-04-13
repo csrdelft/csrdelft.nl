@@ -22,6 +22,7 @@ use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
+use CsrDelft\view\Presentielijstcontent;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
@@ -71,6 +72,17 @@ class ToolsController extends AbstractController {
 
 	public function streeplijst() {
 		$body = new Streeplijstcontent();
+
+		# yuck
+		if (isset($_GET['iframe'])) {
+			return new PlainView($body->getHtml());
+		} else {
+			return view('default', ['content' => $body]);
+		}
+	}
+
+	public function presentielijst() {
+		$body = new Presentielijstcontent();
 
 		# yuck
 		if (isset($_GET['iframe'])) {

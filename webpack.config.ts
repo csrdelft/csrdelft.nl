@@ -198,7 +198,10 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 					},
 					{
 						loader: 'resolve-url-loader',
-						options: {},
+						options: {
+							//optie om error met yarn run dev te fixen als het klaagt over url() errors
+							removeCR: true,
+						},
 					},
 					{
 						loader: 'sass-loader',
