@@ -120,7 +120,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	public function getMaaltijdenToekomst() {
 		return $this->createQueryBuilder('m')
 			->where('m.verwijderd = false and m.datum > :datum')
-			->setParameter(':datum', date_create('+1 week'))
+			->setParameter(':datum', date_create('-1 week'))
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
 			->getQuery()->getResult();
@@ -258,7 +258,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	 */
 	public function saveMaaltijd($maaltijd) {
 		$verwijderd = 0;
-		if ($maaltijd->maaltijd_id == 0) {
+		if (!$maaltijd->maaltijd_id) {
 			$this->_em->persist($maaltijd);
 			$this->_em->flush();
 			$this->meldAboAan($maaltijd);

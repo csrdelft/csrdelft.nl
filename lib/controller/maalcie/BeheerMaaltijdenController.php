@@ -59,7 +59,8 @@ class BeheerMaaltijdenController extends AbstractController {
 
 	public function POST_prullenbak() {
 		$data = $this->maaltijdenRepository->findBy(['verwijderd' => true]);
-		return new BeheerMaaltijdenLijst($data);
+
+		return $this->tableData($data);
 	}
 
 	public function POST_beheer(Request $request) {
@@ -122,7 +123,7 @@ class BeheerMaaltijdenController extends AbstractController {
 			$this->maaltijdenRepository->sluitMaaltijd($maaltijd);
 		}
 
-		return new BeheerMaaltijdenLijst(array($maaltijd));
+		return $this->tableData([$maaltijd]);
 	}
 
 	public function nieuw(Request $request) {
@@ -130,11 +131,11 @@ class BeheerMaaltijdenController extends AbstractController {
 		$form = new MaaltijdForm($maaltijd, 'nieuw');
 
 		if ($form->validate()) {
-			$maaltijd_aanmeldingen = $this->maaltijdenRepository->saveMaaltijd($maaltijd);
-			if ($maaltijd_aanmeldingen[1] > 0) {
-				setMelding($maaltijd_aanmeldingen[1] . ' aanmelding' . ($maaltijd_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd_aanmeldingen[0]->aanmeld_filter, 2);
+			[$maaltijd, $aanmeldingen] = $this->maaltijdenRepository->saveMaaltijd($maaltijd);
+			if ($aanmeldingen > 0) {
+				setMelding($aanmeldingen . ' aanmelding' . ($aanmeldingen !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter, 2);
 			}
-			return new BeheerMaaltijdenLijst(array($maaltijd_aanmeldingen[0]));
+			return $this->tableData([$maaltijd]);
 		} elseif ($request->query->has('mrid')) {
 			$mrid = $request->query->get('mrid');
 			$repetitie = $this->maaltijdRepetitiesRepository->getRepetitie($mrid);
@@ -170,7 +171,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		$form = new MaaltijdForm($maaltijd, 'bewerk');
 		if ($form->validate()) {
 			$this->maaltijdenRepository->update($maaltijd);
-			return new BeheerMaaltijdenLijst(array($maaltijd));
+			return $this->tableData([$maaltijd]);
 		} else {
 			return $form;
 		}
@@ -209,7 +210,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
-			return new BeheerMaaltijdenLijst(array($maaltijd));
+			return $this->tableData([$maaltijd]);
 		} else {
 			return $form;
 		}
@@ -223,7 +224,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $values['voor_lid'], true);
-			return new BeheerMaaltijdenLijst(array($maaltijd));
+			return $this->tableData([$maaltijd]);
 		} else {
 			return $form;
 		}
@@ -264,7 +265,7 @@ class BeheerMaaltijdenController extends AbstractController {
 			if (empty($maaltijden)) {
 				throw new CsrGebruikerException('Geen nieuwe maaltijden aangemaakt.');
 			}
-			return new BeheerMaaltijdenLijst($maaltijden);
+			return $this->tableData($maaltijden);
 		} else {
 			return $form;
 		}

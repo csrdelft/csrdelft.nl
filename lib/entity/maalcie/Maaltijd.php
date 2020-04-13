@@ -324,6 +324,11 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 		return $this->aanmeld_limiet;
 	}
 
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("UUID")
+	 */
 	public function getUUID() {
 		return $this->maaltijd_id . "@maaltijd.csrdelft.nl";
 	}

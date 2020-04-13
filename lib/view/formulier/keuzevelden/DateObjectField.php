@@ -15,7 +15,7 @@ use DateTime;
  */
 class DateObjectField extends DateField {
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
-		if ($value instanceof DateTime) {
+		if ($value instanceof \DateTimeInterface) {
 			$value = $value->format(DATE_FORMAT);
 		}
 		parent::__construct($name, $value, $description);
