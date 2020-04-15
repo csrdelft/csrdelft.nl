@@ -4,6 +4,7 @@ namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * MaaltijdArchief  |  P.W.G. Brussee (brussee@live.nl)
@@ -30,11 +31,13 @@ class ArchiefMaaltijd implements Agendeerbaar {
 	 * @var integer
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
+	 * @Serializer\Groups("datatable")
 	 */
 	public $maaltijd_id;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $titel;
 	/**
@@ -50,6 +53,7 @@ class ArchiefMaaltijd implements Agendeerbaar {
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $prijs;
 	/**
@@ -57,6 +61,33 @@ class ArchiefMaaltijd implements Agendeerbaar {
 	 * @ORM\Column(type="text")
 	 */
 	public $aanmeldingen;
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("tijd")
+	 */
+	public function getTijdFormatted() {
+		return $this->tijd->format(TIME_FORMAT);
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("datum")
+	 */
+	public function getDatumFormatted() {
+		return $this->datum->format(DATE_FORMAT);
+	}
+
+	/**
+	 * @return int
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("aanmeldingen")
+	 */
+	public function getAantalAanmelding() {
+		return count($this->getAanmeldingenArray());
+	}
 
 	// Agendeerbaar ############################################################
 

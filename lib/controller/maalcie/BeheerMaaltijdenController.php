@@ -15,7 +15,6 @@ use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenTable;
-use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\PrullenbakMaaltijdenTable;
@@ -107,7 +106,7 @@ class BeheerMaaltijdenController extends AbstractController {
 
 	public function POST_archief(ArchiefMaaltijdenRepository $archiefMaaltijdenRepository) {
 		$data = $archiefMaaltijdenRepository->findAll();
-		return new BeheerMaaltijdenLijst($data);
+		return $this->tableData($data);
 	}
 
 	public function toggle($mid) {
