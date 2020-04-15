@@ -27,6 +27,10 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 		parent::__construct($registry, OneTimeToken::class);
 	}
 
+	public function hasToken($uid, $url) {
+		return $this->find(['uid' => $uid, 'url' => $url]) != null;
+	}
+
 	/**
 	 * Verify that the token for the given url is valid. If valid returns the associated account. Otherwise returns null.
 	 *
@@ -101,10 +105,11 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 	/**
 	 */
 	public function opschonen() {
-		foreach ($this->find('expire <= NOW()') as $token) {
-			$this->getEntityManager()->remove($token);
-		}
-		$this->getEntityManager()->flush();
+		$this->createQueryBuilder('t')
+			->delete()
+			->where('t.expire <= :now')
+			->setParameter('now', date_create_immutable())
+			->getQuery()->execute();
 	}
 
 }

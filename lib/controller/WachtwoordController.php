@@ -97,6 +97,10 @@ class WachtwoordController extends AbstractController {
 			if (!$account || !AccessModel::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions())) {
 				setMelding('E-mailadres onjuist', -1);
 			} else {
+				if ($this->oneTimeTokensRepository->hasToken($account->uid, '/wachtwoord/reset')) {
+					$this->oneTimeTokensRepository->discardToken($account->uid, '/wachtwoord/reset');
+				}
+
 				$token = $this->oneTimeTokensRepository->createToken($account->uid, '/wachtwoord/reset');
 				// stuur resetmail
 				$profiel = $account->getProfiel();
