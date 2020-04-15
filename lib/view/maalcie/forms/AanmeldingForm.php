@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLidField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

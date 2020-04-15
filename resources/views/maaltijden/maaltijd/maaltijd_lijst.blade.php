@@ -1,8 +1,14 @@
+<?php
+/**
+ * @var \CsrDelft\entity\maalcie\Maaltijd $maaltijd
+ * @var \CsrDelft\entity\maalcie\MaaltijdAanmelding $aanmelding
+ */
+?>
 @extends('plain')
-@section('titel', $titel . " " . strftime("%A %e %B", strtotime($maaltijd->datum)))
+@section('titel', $titel . " " . $maaltijd->datum->format(LONG_DATE_FORMAT))
 
 @section('content')
-	<h1>{{$titel}} op {{strftime("%A %e %B %Y", strtotime($maaltijd->datum))}}</h1>
+	<h1>{{$titel}} op {{$maaltijd->datum->format(LONG_DATE_FORMAT . ' %Y')}}</h1>
 	<div
 		class="header">{!! str_replace("MAALTIJDPRIJS", $prijs, instelling('maaltijden', 'maaltijdlijst_tekst')) !!}</div>
 	@if(!$maaltijd->gesloten)
@@ -22,7 +28,7 @@
 				<div class="row no-gutters py-1" style="border-bottom: 1px solid #999;">
 					@if($aanmelding->uid)
 						<div class="col">
-							{!! \CsrDelft\repository\ProfielRepository::getLink($aanmelding->uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
+							{!! \CsrDelft\repository\ProfielRepository::getLink($aanmelding->uid, instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
 							<br/>
 							@php($eetwens = \CsrDelft\repository\ProfielRepository::get($aanmelding->uid)->eetwens)
 							@if($eetwens !== '')

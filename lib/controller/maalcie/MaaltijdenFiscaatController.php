@@ -3,14 +3,14 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
@@ -27,9 +27,9 @@ class MaaltijdenFiscaatController {
 	 */
 	private $civiProductModel;
 	/**
-	 * @var MaaltijdenModel
+	 * @var MaaltijdenRepository
 	 */
-	private $maaltijdenModel;
+	private $maaltijdenRepository;
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
@@ -44,14 +44,14 @@ class MaaltijdenFiscaatController {
 	private $civiSaldoModel;
 
 	public function __construct(
-		CiviProductModel $civiProductModel,
-		MaaltijdenModel $maaltijdenModel,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		CiviBestellingModel $civiBestellingModel,
-		CiviSaldoModel $civiSaldoModel
+        CiviProductModel $civiProductModel,
+        MaaltijdenRepository $maaltijdenRepository,
+        MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+        CiviBestellingModel $civiBestellingModel,
+        CiviSaldoModel $civiSaldoModel
 	) {
 		$this->civiProductModel = $civiProductModel;
-		$this->maaltijdenModel = $maaltijdenModel;
+		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->civiBestellingModel = $civiBestellingModel;
 		$this->civiSaldoModel = $civiSaldoModel;
@@ -65,7 +65,7 @@ class MaaltijdenFiscaatController {
 	}
 
 	public function POST_overzicht() {
-		$data = $this->maaltijdenModel->find('verwerkt = true');
+		$data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
 		return new FiscaatMaaltijdenOverzichtResponse($data);
 	}
 
@@ -80,10 +80,10 @@ class MaaltijdenFiscaatController {
 		# Haal maaltijd op
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var Maaltijd $maaltijd */
-		$maaltijd = $this->maaltijdenModel->retrieveByUUID($selection[0]);
+		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
 		# Controleer of de maaltijd gesloten is en geweest is
-		if ($maaltijd->gesloten == false OR date_create_immutable(sprintf("%s %s", $maaltijd->datum, $maaltijd->tijd)) >= date_create_immutable("now")) {
+		if ($maaltijd->gesloten == false OR $maaltijd->getMoment() >= date_create_immutable("now")) {
 			throw new CsrGebruikerException("Maaltijd nog niet geweest");
 		}
 
@@ -112,7 +112,7 @@ class MaaltijdenFiscaatController {
 			# Zet de maaltijd op verwerkt
 			$maaltijd->verwerkt = true;
 
-			$this->maaltijdenModel->update($maaltijd);
+			$this->maaltijdenRepository->update($maaltijd);
 
 			return array($maaltijd);
 		});

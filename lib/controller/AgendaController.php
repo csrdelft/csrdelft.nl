@@ -6,18 +6,18 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\agenda\AgendaItem;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\Ketzer;
-use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\agenda\AgendaVerbergenRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\agenda\AgendaItemForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
@@ -50,27 +50,27 @@ class AgendaController {
 	 */
 	private $corveeTakenModel;
 	/**
-	 * @var MaaltijdenModel
+	 * @var MaaltijdenRepository
 	 */
-	private $maaltijdenModel;
+	private $maaltijdenRepository;
 	/**
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
 
 	public function __construct(
-		AgendaRepository $agendaRepository,
-		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenModel $activiteitenModel,
-		CorveeTakenModel $corveeTakenModel,
-		MaaltijdenModel $maaltijdenModel,
-		ProfielRepository $profielRepository
+        AgendaRepository $agendaRepository,
+        AgendaVerbergenRepository $agendaVerbergenRepository,
+        ActiviteitenModel $activiteitenModel,
+        CorveeTakenModel $corveeTakenModel,
+        MaaltijdenRepository $maaltijdenRepository,
+        ProfielRepository $profielRepository
 	) {
 		$this->agendaRepository = $agendaRepository;
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenModel = $activiteitenModel;
 		$this->corveeTakenModel = $corveeTakenModel;
-		$this->maaltijdenModel = $maaltijdenModel;
+		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->profielRepository = $profielRepository;
 	}
 
@@ -241,7 +241,7 @@ class AgendaController {
 				break;
 
 			case 'maaltijd':
-				$item = $this->maaltijdenModel->retrieveByUUID($refuuid);
+				$item = $this->maaltijdenRepository->retrieveByUUID($refuuid);
 				break;
 
 			case 'corveetaak':

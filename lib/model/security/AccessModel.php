@@ -26,10 +26,10 @@ use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
 
 /**
@@ -879,7 +879,7 @@ class AccessModel extends CachedPersistenceModel {
 						return true;
 					}
 					try {
-						$maaltijd = MaaltijdenModel::instance()->getMaaltijd((int)$gevraagd);
+						$maaltijd = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd((int)$gevraagd);
 						if ($maaltijd AND $maaltijd->magSluiten($profiel->uid)) {
 							return true;
 						}

@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 
@@ -19,13 +19,13 @@ class MaaltijdRepetitiesController {
 	 */
 	private $maaltijdRepetitiesRepository;
 	/**
-	 * @var MaaltijdenModel
+	 * @var MaaltijdenRepository
 	 */
-	private $maaltijdenModel;
+	private $maaltijdenRepository;
 
-	public function __construct(MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, MaaltijdenModel $maaltijdenModel) {
+	public function __construct(MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, MaaltijdenRepository $maaltijdenRepository) {
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
-		$this->maaltijdenModel = $maaltijdenModel;
+		$this->maaltijdenRepository = $maaltijdenRepository;
 	}
 
 	public function beheer($mrid = null) {
@@ -81,7 +81,7 @@ class MaaltijdRepetitiesController {
 		$view = $this->opslaan($mrid);
 		if ($this->repetitie) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
-			$updated_aanmeldingen = $this->maaltijdenModel->updateRepetitieMaaltijden($this->repetitie, $verplaats);
+			$updated_aanmeldingen = $this->maaltijdenRepository->updateRepetitieMaaltijden($this->repetitie, $verplaats);
 			setMelding($updated_aanmeldingen[0] . ' maaltijd' . ($updated_aanmeldingen[0] !== 1 ? 'en' : '') . ' bijgewerkt' . ($verplaats ? ' en eventueel verplaatst.' : '.'), 1);
 			if ($updated_aanmeldingen[1] > 0) {
 				setMelding($updated_aanmeldingen[1] . ' aanmelding' . ($updated_aanmeldingen[1] !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $view->getModel()->abonnement_filter, 2);

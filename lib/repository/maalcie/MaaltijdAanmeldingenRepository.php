@@ -4,13 +4,12 @@ namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
-use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\AccountModel;
 use CsrDelft\repository\AbstractRepository;
@@ -39,7 +38,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$gastenEetwens = ''
 	) {
 		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < strtotime(date('Y-m-d H:i'))) {
-			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
+			ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
 			$this->assertMagAanmelden($maaltijd, $uid);
@@ -133,7 +132,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 */
 	public function afmeldenDoorAbonnement($mrid, $uid) {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
-		$maaltijden = MaaltijdenModel::instance()->getKomendeOpenRepetitieMaaltijden($mrid);
+		$maaltijden = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getKomendeOpenRepetitieMaaltijden($mrid);
 		if (empty($maaltijden)) {
 			return 0;
 		}
@@ -181,7 +180,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			throw new CsrGebruikerException('Niet aangemeld');
 		}
 		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
-			MaaltijdenModel::instance()->sluitMaaltijd($maaltijd);
+			ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer && $maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is gesloten');
@@ -204,7 +203,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			throw new CsrGebruikerException('Niet aangemeld');
 		}
 
-		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		$maaltijd = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd($mid);
 		if ($maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is gesloten');
 		}
@@ -232,7 +231,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			throw new CsrGebruikerException('Niet aangemeld');
 		}
 
-		$maaltijd = MaaltijdenModel::instance()->getMaaltijd($mid);
+		$maaltijd = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd($mid);
 		if ($maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is gesloten');
 		}
@@ -268,8 +267,8 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		return $lijst;
 	}
 
-	public function getRecenteAanmeldingenVoorLid($uid, $timestamp) {
-		$maaltijdenById = MaaltijdenModel::instance()->getRecenteMaaltijden($timestamp);
+	public function getRecenteAanmeldingenVoorLid($uid, \DateTimeInterface $timestamp) {
+		$maaltijdenById = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getRecenteMaaltijden($timestamp);
 		return $this->getAanmeldingenVoorLid($maaltijdenById, $uid);
 	}
 
@@ -354,8 +353,17 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		}
 
 		$aantal = 0;
+		$maaltijdenRepository = ContainerFacade::getContainer()->get(MaaltijdenRepository::class);
 
-		$maaltijden = MaaltijdenModel::instance()->find("mlt_repetitie_id = ? AND gesloten = false AND verwijderd = false AND datum >= ?", array($mrid, date('Y-m-d')));
+		/** @var Maaltijd[] $maaltijden */
+		$maaltijden = $maaltijdenRepository->createQueryBuilder('m')
+			->where('m.mlt_repetitie_id = :repetitie and m.gesloten = false and m.verwijderd = false and m.datum >= :datum')
+			->setParameter('repetitie', $mrid)
+			->setParameter('datum', date_create())
+			->orderBy('m.datum', 'ASC')
+			->addOrderBy('m.tijd', 'ASC')
+			->getQuery()->getResult();
+
 		foreach ($maaltijden as $maaltijd) {
 			if (!$this->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => $uid])) {
 				if ($this->aanmeldenDoorAbonnement($maaltijd, $mrid, $uid)) {

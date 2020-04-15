@@ -2,7 +2,6 @@
 
 namespace CsrDelft\repository\agenda;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\Activiteit;
@@ -11,9 +10,9 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\VerjaardagenService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -51,28 +50,28 @@ class AgendaRepository extends ServiceEntityRepository {
 	 */
 	private $corveeTakenModel;
 	/**
-	 * @var MaaltijdenModel
+	 * @var MaaltijdenRepository
 	 */
-	private $maaltijdenModel;
+	private $maaltijdenRepository;
 	/**
 	 * @var VerjaardagenService
 	 */
 	private $verjaardagenService;
 
 	public function __construct(
-		ManagerRegistry $registry,
-		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenModel $activiteitenModel,
-		CorveeTakenModel $corveeTakenModel,
-		MaaltijdenModel $maaltijdenModel,
-		VerjaardagenService $verjaardagenService
+        ManagerRegistry $registry,
+        AgendaVerbergenRepository $agendaVerbergenRepository,
+        ActiviteitenModel $activiteitenModel,
+        CorveeTakenModel $corveeTakenModel,
+        MaaltijdenRepository $maaltijdenRepository,
+        VerjaardagenService $verjaardagenService
 	) {
 		parent::__construct($registry, AgendaItem::class);
 
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenModel = $activiteitenModel;
 		$this->corveeTakenModel = $corveeTakenModel;
-		$this->maaltijdenModel = $maaltijdenModel;
+		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->verjaardagenService = $verjaardagenService;
 	}
 
@@ -185,7 +184,7 @@ class AgendaRepository extends ServiceEntityRepository {
 
 		// Maaltijden
 		if (lid_instelling('agenda', 'toonMaaltijden') === 'ja') {
-			$result = array_merge($result, $this->maaltijdenModel->getMaaltijdenVoorAgenda($van->getTimestamp(), $tot->getTimestamp()));
+			$result = array_merge($result, $this->maaltijdenRepository->getMaaltijdenVoorAgenda($van->getTimestamp(), $tot->getTimestamp()));
 		}
 
 		// CorveeTaken

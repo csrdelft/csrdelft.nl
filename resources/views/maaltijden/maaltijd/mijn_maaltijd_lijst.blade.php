@@ -1,7 +1,13 @@
+<?php
+/**
+ * @var \CsrDelft\entity\maalcie\Maaltijd $maaltijd
+ * @var \CsrDelft\entity\maalcie\MaaltijdAanmelding $aanmelding
+ */
+?>
 <tr id="maaltijd-row-{{$maaltijd->maaltijd_id}}"
 		@if($maaltijd->aanmeld_limiet === 0 or ($maaltijd->gesloten and ! $aanmelding)) class="taak-grijs" @endif >
 	<td>
-		{{strftime("%a %e %b", strtotime($maaltijd->datum))}} {{strftime("%H:%M", strtotime($maaltijd->tijd))}}
+		{{$maaltijd->datum->format(LONG_DATE_FORMAT)}} {{$maaltijd->tijd->format(TIME_FORMAT)}}
 		@if($maaltijd->magBekijken(CsrDelft\model\security\LoginModel::getUid()))
 			<div class="float-right">
 				@icon("paintcan", null, $maaltijd->maaltijdcorvee->getCorveeFunctie()->naam)
@@ -41,7 +47,7 @@
 				Ja
 				@if($aanmelding->door_abonnement) (abo) @endif
 				<div class="float-right">
-					@icon("lock", null, "Maaltijd is gesloten om " . strftime('%H:%M', strtotime($maaltijd->laatst_gesloten)) . "")
+					@icon("lock", null, "Maaltijd is gesloten om " . $maaltijd->laatst_gesloten->format(TIME_FORMAT) . "")
 				</div>
 		@else
 			<td class="maaltijd-aangemeld">
@@ -104,7 +110,7 @@
 						Nee
 						@if($maaltijd->gesloten)
 							<span class="float-right">
-							@icon("lock", null, "Maaltijd is gesloten om " . strftime("%H:%M", strtotime($maaltijd->laatst_gesloten)) . "")
+							@icon("lock", null, "Maaltijd is gesloten om " . $maaltijd->laatst_gesloten->format(TIME_FORMAT) . "")
 						</span>
 				@endif
 				@else

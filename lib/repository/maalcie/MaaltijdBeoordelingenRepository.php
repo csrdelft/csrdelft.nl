@@ -2,8 +2,8 @@
 
 namespace CsrDelft\repository\maalcie;
 
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
-use CsrDelft\model\entity\maalcie\Maaltijd;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;

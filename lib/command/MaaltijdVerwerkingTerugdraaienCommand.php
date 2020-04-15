@@ -5,8 +5,8 @@ namespace CsrDelft\command;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -16,13 +16,13 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 class MaaltijdVerwerkingTerugdraaienCommand extends Command {
-	/** @var MaaltijdenModel */
-	private $maaltijdenModel;
+	/** @var MaaltijdenRepository */
+	private $maaltijdenRepository;
 	/** @var CiviBestellingModel */
 	private $civiBestellingModel;
 
-	public function __construct(MaaltijdenModel $maaltijdenModel, CiviBestellingModel $civiBestellingModel) {
-		$this->maaltijdenModel = $maaltijdenModel;
+	public function __construct(MaaltijdenRepository $maaltijdenRepository, CiviBestellingModel $civiBestellingModel) {
+		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->civiBestellingModel = $civiBestellingModel;
 
 		parent::__construct();
@@ -44,7 +44,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 			$mid = $helper->ask($input, $output, $question);
 			if (is_numeric($mid)) {
 				try {
-					$maaltijd = $this->maaltijdenModel->getMaaltijd($mid);
+					$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
 						if (!$maaltijd->verwerkt) {
 						$output->writeln("Maaltijd is nog niet verwerkt");
 					} else {
@@ -59,11 +59,11 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 		$output->writeln("");
 
 		// Haal maaltijden op deze datum op
-		$maaltijden = $this->maaltijdenModel->find('datum = ? AND verwerkt = 1', [$datum])->fetchAll();
+		$maaltijden = $this->maaltijdenRepository->findBy(['datum' => $datum, 'verwerkt' => '1']);
 		$maaltijdTekst = count($maaltijden) > 1 ? count($maaltijden) . ' maaltijden' : 'maaltijd';
 		$output->writeln("De verwerking van de volgende {$maaltijdTekst} wordt hiermee ongedaan gemaakt:");
 		foreach ($maaltijden as $maaltijd) {
-			$output->writeln("- " . $maaltijd->titel . " " . $maaltijd->datum);
+			$output->writeln("- " . $maaltijd->titel . " " . $maaltijd->datum->format(DATE_FORMAT));
 		}
 
 		// Haal bestellingen op
@@ -107,7 +107,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 				reset($maaltijden);
 				foreach ($maaltijden as $maaltijd) {
 					$maaltijd->verwerkt = false;
-					$this->maaltijdenModel->update($maaltijd);
+					$this->maaltijdenRepository->update($maaltijd);
 				}
 			});
 		} catch (Exception $e) {

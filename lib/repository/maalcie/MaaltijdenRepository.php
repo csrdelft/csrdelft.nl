@@ -1,27 +1,31 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\model\maalcie\CorveeRepetitiesModel;
+use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\PersistenceModel;
-use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
-use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
+use CsrDelft\repository\AbstractRepository;
+use DateInterval;
+use DateTimeInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
 /**
- * MaaltijdenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ * MaaltijdenRepository  |  P.W.G. Brussee (brussee@live.nl)
  *
+ * @method Maaltijd|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Maaltijd|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Maaltijd[]    findAll()
+ * @method Maaltijd[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MaaltijdenModel extends PersistenceModel {
-
-	const ORM = Maaltijd::class;
-
+class MaaltijdenRepository extends AbstractRepository {
 	protected $default_order = 'datum ASC, tijd ASC';
 
 	/**
@@ -35,9 +39,9 @@ class MaaltijdenModel extends PersistenceModel {
 	private $maaltijdAbonnementenRepository;
 
 	/**
-	 * @var ArchiefMaaltijdModel
+	 * @var ArchiefMaaltijdenRepository
 	 */
-	private $archiefMaaltijdModel;
+	private $archiefMaaltijdenRepository;
 
 	/**
 	 * @var CorveeTakenModel
@@ -50,38 +54,39 @@ class MaaltijdenModel extends PersistenceModel {
 	private $corveeRepetitiesModel;
 
 	/**
-	 * MaaltijdenModel constructor.
+	 * @param ManagerRegistry $registry
 	 * @param MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	 * @param MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
-	 * @param ArchiefMaaltijdModel $archiefMaaltijdModel
+	 * @param ArchiefMaaltijdenRepository $archiefMaaltijdenRepository
 	 * @param CorveeTakenModel $corveeTakenModel
 	 * @param CorveeRepetitiesModel $corveeRepetitiesModel
 	 */
 	public function __construct(
-        MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-        MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-        ArchiefMaaltijdModel $archiefMaaltijdModel,
-        CorveeTakenModel $corveeTakenModel,
-        CorveeRepetitiesModel $corveeRepetitiesModel
+		ManagerRegistry $registry,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+		ArchiefMaaltijdenRepository $archiefMaaltijdenRepository,
+		CorveeTakenModel $corveeTakenModel,
+		CorveeRepetitiesModel $corveeRepetitiesModel
 	) {
-		parent::__construct();
+		parent::__construct($registry, Maaltijd::class);
 
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
-		$this->archiefMaaltijdModel = $archiefMaaltijdModel;
+		$this->archiefMaaltijdenRepository = $archiefMaaltijdenRepository;
 		$this->corveeTakenModel = $corveeTakenModel;
 		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
 	}
 
 
-	public function vanRepetitie(MaaltijdRepetitie $repetitie, $datum) {
+	public function vanRepetitie(MaaltijdRepetitie $repetitie, DateTimeInterface $datum) {
 		$maaltijd = new Maaltijd();
 		$maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 		$maaltijd->product_id = $repetitie->product_id;
 		$maaltijd->titel = $repetitie->standaard_titel;
 		$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
-		$maaltijd->datum = date('Y-m-d', $datum);
-		$maaltijd->tijd = $repetitie->standaard_tijd->format(TIME_FORMAT);
+		$maaltijd->datum = $datum;
+		$maaltijd->tijd = $repetitie->standaard_tijd;
 		$maaltijd->aanmeld_filter = $repetitie->abonnement_filter;
 		$maaltijd->omschrijving = null;
 		$maaltijd->verwerkt = false;
@@ -94,7 +99,8 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new CsrGebruikerException('Maaltijd is al geopend');
 		}
 		$maaltijd->gesloten = false;
-		$this->update($maaltijd);
+		$this->_em->persist($maaltijd);
+		$this->_em->flush();
 		return $maaltijd;
 	}
 
@@ -103,24 +109,33 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new CsrGebruikerException('Maaltijd is al gesloten');
 		}
 		$maaltijd->gesloten = true;
-		$maaltijd->laatst_gesloten = date('Y-m-d H:i:s');
-		$this->update($maaltijd);
+		$maaltijd->laatst_gesloten = date_create_immutable();
+		$this->_em->persist($maaltijd);
+		$this->_em->flush();
 	}
 
-	public function getMaaltijden(
-		$criteria = null,
-		array $criteria_params = array(),
-		$groupby = null,
-		$orderby = null,
-		$limit = null,
-		$start = 0
-	) {
-		$filter = 'verwijderd = false';
-		if ($criteria != null AND $criteria != '') {
-			$filter .= ' AND ' . $criteria;
-		}
+	/**
+	 * @return Maaltijd[]
+	 */
+	public function getMaaltijdenToekomst() {
+		return $this->createQueryBuilder('m')
+			->where('m.verwijderd = false and m.datum > :datum')
+			->setParameter(':datum', date_create('-1 week'))
+			->orderBy('m.datum', 'ASC')
+			->addOrderBy('m.tijd', 'ASC')
+			->getQuery()->getResult();
+	}
 
-		return $this->find($filter, $criteria_params, $groupby, $orderby, $limit, $start);
+	public function getMaaltijdenHistorie() {
+		return $this->createQueryBuilder('m')
+			->where('m.verwijderd = false and m.datum <= CURDATE()')
+			->orderBy('m.datum', 'ASC')
+			->addOrderBy('m.tijd', 'ASC')
+			->getQuery()->getResult();
+	}
+
+	public function getMaaltijden() {
+		return $this->findBy(['verwijderd' => false]);
 	}
 
 	/**
@@ -139,7 +154,14 @@ class MaaltijdenModel extends PersistenceModel {
 		if (!is_int($tot)) {
 			throw new CsrException('Invalid timestamp: $tot getMaaltijdenVoorAgenda()');
 		}
-		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
+		/** @var Maaltijd[] $maaltijden */
+		$maaltijden = $this->createQueryBuilder('m')
+			->where('m.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum')
+			->setParameter('van_datum', date_create("@$van"))
+			->setParameter('tot_datum', date_create("@$tot"))
+			->orderBy('m.datum', 'ASC')
+			->addOrderBy('m.tijd', 'ASC')
+			->getQuery()->getResult();
 		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, LoginModel::getUid());
 		return $maaltijden;
 	}
@@ -153,7 +175,13 @@ class MaaltijdenModel extends PersistenceModel {
 	 */
 	public function getKomendeMaaltijdenVoorLid($uid) {
 		/** @var Maaltijd[] $maaltijden */
-		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d'), date('Y-m-d', strtotime(instelling('maaltijden', 'toon_ketzer_vooraf')))));
+		$maaltijden = $this->createQueryBuilder('m')
+			->where('m.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum')
+			->setParameter('van_datum', date_create())
+			->setParameter('tot_datum', date_create(instelling('maaltijden', 'toon_ketzer_vooraf')))
+			->orderBy('m.datum', 'ASC')
+			->addOrderBy('m.tijd', 'ASC')
+			->getQuery()->getResult();
 		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, $uid, true);
 		return $maaltijden;
 	}
@@ -161,12 +189,21 @@ class MaaltijdenModel extends PersistenceModel {
 	/**
 	 * Haalt de maaltijden in het verleden op voor de ingestelde periode.
 	 *
+	 * @param DateTimeInterface $timestamp
+	 * @param null $limit
 	 * @return Maaltijd[]
 	 */
-	public function getRecenteMaaltijden($timestamp, $limit = null) {
+	public function getRecenteMaaltijden(DateTimeInterface $timestamp, $limit = null) {
 		/** @var Maaltijd[] $maaltijden */
-		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $timestamp), date('Y-m-d')), null, null, $limit);
-		$maaltijdenById = array();
+		$maaltijden = $this->createQueryBuilder('m')
+			->where('m.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum')
+			->setParameter('van_datum', $timestamp)
+			->setParameter('tot_datum', date_create())
+			->setMaxResults($limit)
+			->orderBy('m.datum', 'ASC')
+			->addOrderBy('m.tijd', 'ASC')
+			->getQuery()->getResult();
+		$maaltijdenById = [];
 		foreach ($maaltijden as $maaltijd) {
 			// Sla over als maaltijd nog niet voorbij is
 			if ($maaltijd->getEindMoment() > time()) continue;
@@ -190,7 +227,7 @@ class MaaltijdenModel extends PersistenceModel {
 	}
 
 	public function getVerwijderdeMaaltijden() {
-		return $this->find('verwijderd = true');
+		return $this->findBy(['verwijderd' => 'true']);
 	}
 
 	/**
@@ -209,8 +246,8 @@ class MaaltijdenModel extends PersistenceModel {
 	}
 
 	private function loadMaaltijd($mid) {
-		$maaltijd = $this->retrieveByPrimaryKey(array($mid));
-		if ($maaltijd === false) throw new CsrGebruikerException('Maaltijd bestaat niet: ' . $mid);
+		$maaltijd = $this->find($mid);
+		if (!$maaltijd) throw new CsrGebruikerException('Maaltijd bestaat niet: ' . $mid);
 		return $maaltijd;
 	}
 
@@ -221,11 +258,13 @@ class MaaltijdenModel extends PersistenceModel {
 	 */
 	public function saveMaaltijd($maaltijd) {
 		$verwijderd = 0;
-		if ($maaltijd->maaltijd_id == 0) {
-			$maaltijd->maaltijd_id = $this->create($maaltijd);
+		if (!$maaltijd->maaltijd_id) {
+			$this->_em->persist($maaltijd);
+			$this->_em->flush();
 			$this->meldAboAan($maaltijd);
 		} else {
-			$this->update($maaltijd);
+			$this->_em->persist($maaltijd);
+			$this->_em->flush();
 			if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
 				$this->sluitMaaltijd($maaltijd);
 			}
@@ -259,10 +298,12 @@ class MaaltijdenModel extends PersistenceModel {
 				throw new CsrGebruikerException('Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!');
 			}
 			$this->maaltijdAanmeldingenRepository->deleteAanmeldingenVoorMaaltijd($mid);
-			$this->deleteByPrimaryKey(array($mid));
+			$this->_em->remove($maaltijd);
+			$this->_em->flush();
 		} else {
 			$maaltijd->verwijderd = true;
-			$this->update($maaltijd);
+			$this->_em->persist($maaltijd);
+			$this->_em->flush();
 		}
 	}
 
@@ -272,7 +313,8 @@ class MaaltijdenModel extends PersistenceModel {
 			throw new CsrGebruikerException('Maaltijd is niet verwijderd');
 		}
 		$maaltijd->verwijderd = false;
-		$this->update($maaltijd);
+		$this->_em->persist($maaltijd);
+		$this->_em->flush();
 		return $maaltijd;
 	}
 
@@ -286,7 +328,7 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return Maaltijd[]
 	 */
 	private function filterMaaltijdenVoorLid($maaltijden, $uid, $verbergVerleden = false) {
-		$result = array();
+		$result = [];
 		foreach ($maaltijden as $maaltijd) {
 			// Verberg afgelopen maaltijd
 			if ($verbergVerleden && $maaltijd->getEindMoment() < time()) continue;
@@ -324,14 +366,20 @@ class MaaltijdenModel extends PersistenceModel {
 		if (!is_int($van) || !is_int($tot)) {
 			throw new CsrException('Invalid timestamp: archiveerOudeMaaltijden()');
 		}
-		$errors = array();
-		$maaltijden = $this->find('verwijderd = FALSE AND datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)))->fetchAll();
+		$errors = [];
+		$maaltijden = $this->createQueryBuilder('m')
+			->where('m.verwijderd = false and m.datum >= :van_datum and datum <= :tot_datum')
+			->setParameter('van_datum', $van)
+			->setParameter('tot_datum', $tot)
+			->orderBy('m.datum', 'ASC')
+			->orderBy('m.tijd', 'ASC')
+			->getQuery()->getResult();
 		foreach ($maaltijden as $maaltijd) {
 			try {
-				$archief = $this->archiefMaaltijdModel->vanMaaltijd($maaltijd);
-				$this->archiefMaaltijdModel->create($archief);
+				$archief = $this->archiefMaaltijdenRepository->vanMaaltijd($maaltijd);
+				$this->archiefMaaltijdenRepository->create($archief);
 				if ($this->corveeTakenModel->existMaaltijdCorvee($maaltijd->maaltijd_id)) {
-					setMelding($maaltijd->datum . ' ' . $maaltijd->titel . ' heeft nog gekoppelde corveetaken!', 2);
+					setMelding($maaltijd->getMoment()->format(DATETIME_FORMAT) . ' heeft nog gekoppelde corveetaken!', 2);
 				}
 			} catch (CsrGebruikerException $e) {
 				$errors[] = $e;
@@ -344,18 +392,31 @@ class MaaltijdenModel extends PersistenceModel {
 	// Repetitie-Maaltijden ############################################################
 
 	public function getKomendeRepetitieMaaltijden($mrid) {
-		return $this->find('mlt_repetitie_id = ? AND verwijderd = FALSE AND datum >= ?', array($mrid, date('Y-m-d')));
+		return $this->createQueryBuilder('m')
+			->where('m.mlt_repetitie_id = :maaltijd_id and verwijderd = false and datum >= :datum')
+			->setParameter('maaltijd_id', $mrid)
+			->setParameter('datum', date_create())
+			->orderBy('m.datum', 'ASC')
+			->addOrderBy('m.tijd', 'ASC')
+			->getQuery()->getResult();
 	}
 
 	public function getKomendeOpenRepetitieMaaltijden($mrid) {
-		return $this->find('mlt_repetitie_id = ? AND gesloten = FALSE AND verwijderd = FALSE AND datum >= ?', array($mrid, date('Y-m-d')));
+		return $this->createQueryBuilder('m')
+			->where('m.mlt_repetitie_id = :repetitie and gesloten = false and verwijderd = false and datum >= :datum')
+			->setParameter('repetitie', $mrid)
+			->setParameter('datum', date_create())
+			->orderBy('m.datum', 'ASC')
+			->addOrderBy('m.tijd', 'ASC')
+			->getQuery()->getResult();
 	}
 
 	public function verwijderRepetitieMaaltijden($mrid) {
-		$maaltijden = $this->find('mlt_repetitie_id = ?', array($mrid));
+		$maaltijden = $this->findBy(['mlt_repetitie_id' => $mrid]);
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijd->verwijderd = true;
-			$this->update($maaltijd);
+			$this->_em->persist($maaltijd);
+			$this->_em->flush();
 		}
 	}
 
@@ -367,37 +428,36 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public function existRepetitieMaaltijden($mrid) {
-		return $this->count('mlt_repetitie_id = ?', array($mrid)) > 0;
+		return $this->count(['mlt_repetitie_id' => $mrid]) > 0;
 	}
 
 	public function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
-		return Database::transaction(function () use ($repetitie, $verplaats) {
+		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
 			// update day of the week & check filter
 			$updated = 0;
 			$aanmeldingen = 0;
-			$maaltijden = $this->find('verwijderd = FALSE AND mlt_repetitie_id = ?', array($repetitie->mlt_repetitie_id));
+			$maaltijden = $this->findBy(['verwijderd' => false, 'mlt_repetitie_id' => $repetitie->mlt_repetitie_id]);
 			$filter = $repetitie->abonnement_filter;
 			if (!empty($filter)) {
 				$aanmeldingen = $this->maaltijdAanmeldingenRepository->checkAanmeldingenFilter($filter, $maaltijden);
 			}
 			foreach ($maaltijden as $maaltijd) {
 				if ($verplaats) {
-					$datum = strtotime($maaltijd->datum);
-					$shift = $repetitie->dag_vd_week - date('w', $datum);
+					$shift = $repetitie->dag_vd_week - $maaltijd->datum->format('w');
 					if ($shift > 0) {
-						$datum = strtotime('+' . $shift . ' days', $datum);
+						$maaltijd->datum = $maaltijd->datum->add(DateInterval::createFromDateString('+' . $shift . 'days'));
 					} elseif ($shift < 0) {
-						$datum = strtotime($shift . ' days', $datum);
+						$maaltijd->datum = $maaltijd->datum->add(DateInterval::createFromDateString($shift . ' days'));
 					}
-					$maaltijd->datum = date('Y-m-d', $datum);
 				}
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
-				$maaltijd->tijd = $repetitie->standaard_tijd->format(TIME_FORMAT);
+				$maaltijd->tijd = $repetitie->standaard_tijd;
 				$maaltijd->product_id = $repetitie->product_id;
 				$maaltijd->aanmeld_filter = $filter;
 				try {
-					$this->update($maaltijd);
+					$this->_em->persist($maaltijden);
+					$this->_em->flush();
 					$updated++;
 				} catch (Exception $e) {
 
@@ -418,46 +478,50 @@ class MaaltijdenModel extends PersistenceModel {
 	 * @return Maaltijd[]
 	 * @throws CsrGebruikerException
 	 */
-	public function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $beginDatum, $eindDatum) {
-		$doctrine = ContainerFacade::getContainer()->get('doctrine');
-		$conn = $doctrine->getConnection();
-		$conn->beginTransaction();
-		try {
+	public function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, DateTimeInterface $beginDatum, DateTimeInterface $eindDatum) {
+		return $this->_em->transactional(function () use ($repetitie, $beginDatum, $eindDatum) {
 			if ($repetitie->periode_in_dagen < 1) {
 				throw new CsrGebruikerException('New repetitie-maaltijden faalt: $periode =' . $repetitie->periode_in_dagen);
 			}
 
 			// start at first occurence
-			$shift = $repetitie->dag_vd_week - date('w', $beginDatum) + 7;
+			$shift = $repetitie->dag_vd_week - $beginDatum->format('w') + 7;
 			$shift %= 7;
 			if ($shift > 0) {
-				$beginDatum = strtotime('+' . $shift . ' days', $beginDatum);
+				$beginDatum = $beginDatum->add(DateInterval::createFromDateString("+{$shift} days"));
 			}
 			$datum = $beginDatum;
 			$corveerepetities = $this->corveeRepetitiesModel->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id)->fetchAll();
-			$maaltijden = array();
+			$maaltijden = [];
 			while ($datum <= $eindDatum) { // break after one
 
 				$maaltijd = $this->vanRepetitie($repetitie, $datum);
-				$maaltijd->maaltijd_id = $this->create($maaltijd);
+				$this->_em->persist($maaltijd);
+				$this->_em->flush();
 				$this->meldAboAan($maaltijd);
 
 				foreach ($corveerepetities as $corveerepetitie) {
-					$this->corveeTakenModel->newRepetitieTaken($corveerepetitie, $datum, $datum, intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
+					$this->corveeTakenModel->newRepetitieTaken($corveerepetitie, $datum->format(DATE_FORMAT), $datum->format(DATE_FORMAT), intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
 				}
 				$maaltijden[] = $maaltijd;
 				if ($repetitie->periode_in_dagen < 1) {
 					break;
 				}
-				$datum = strtotime('+' . $repetitie->periode_in_dagen . ' days', $datum);
+				$datum = $datum->add(DateInterval::createFromDateString('+' . $repetitie->periode_in_dagen . ' days'));
 			}
-			$conn->commit();
 			return $maaltijden;
-		} catch (Exception $ex) {
-			$conn->rollBack();
-			throw $ex;
-		}
+		});
 
+	}
+
+	public function update(Maaltijd $maaltijd) {
+		$this->_em->persist($maaltijd);
+		$this->_em->flush();
+	}
+
+	public function delete(Maaltijd $maaltijd) {
+		$this->_em->remove($maaltijd);
+		$this->_em->flush();
 	}
 
 }

@@ -1,41 +1,33 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\repository\maalcie;
 
-use CsrDelft\common\CsrException;
-use CsrDelft\model\entity\maalcie\ArchiefMaaltijd;
-use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\Orm\PersistenceModel;
-use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\entity\maalcie\ArchiefMaaltijd;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\repository\AbstractRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class ArchiefMaaltijdModel extends PersistenceModel {
-	const ORM = ArchiefMaaltijd::class;
+/**
+ * Class ArchiefMaaltijdenRepository
+ * @package CsrDelft\repository\maalcie
+ * @method ArchiefMaaltijd|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ArchiefMaaltijd|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ArchiefMaaltijd[]    findAll()
+ * @method ArchiefMaaltijd[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+class ArchiefMaaltijdenRepository extends AbstractRepository {
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registry, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+		parent::__construct($registry, ArchiefMaaltijd::class);
 
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
 	protected $default_order = 'datum DESC, tijd DESC';
-
-	public function getArchiefMaaltijdenTussen($van = null, $tot = null) {
-		if ($van === null) { // RSS
-			$van = 0;
-		} elseif (!is_int($van)) {
-			throw new CsrException('Invalid timestamp: $van getArchiefMaaltijden()');
-		}
-		if ($tot === null) { // RSS
-			$tot = time();
-		} elseif (!is_int($tot)) {
-			throw new CsrException('Invalid timestamp: $tot getArchiefMaaltijden()');
-		}
-		return $this->find('datum >= ? AND datum <= ?', array(date('Y-m-d', $van), date('Y-m-d', $tot)));
-	}
 
 	public function vanMaaltijd(Maaltijd $maaltijd) {
 		$archief = new ArchiefMaaltijd();
@@ -61,5 +53,10 @@ class ArchiefMaaltijdModel extends PersistenceModel {
 		}
 
 		return $archief;
+	}
+
+	public function create(ArchiefMaaltijd $archiefMaaltijd) {
+		$this->_em->persist($archiefMaaltijd);
+		$this->_em->flush();
 	}
 }

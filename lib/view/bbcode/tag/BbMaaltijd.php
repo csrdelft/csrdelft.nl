@@ -5,11 +5,11 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
-use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
@@ -39,12 +39,12 @@ class BbMaaltijd extends BbTag {
 	 */
 	private $maaltijdBeoordelingenRepository;
 	/**
-	 * @var MaaltijdenModel
+	 * @var MaaltijdenRepository
 	 */
-	private $maaltijdenModel;
+	private $maaltijdenRepository;
 
-	public function __construct(MaaltijdenModel $maaltijdenModel, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository) {
-		$this->maaltijdenModel = $maaltijdenModel;
+	public function __construct(MaaltijdenRepository $maaltijdenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository) {
+		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 	}
@@ -60,7 +60,7 @@ class BbMaaltijd extends BbTag {
 	public function renderLight() {
 		$maaltijd = $this->maaltijden[0];
 		$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
-		return BbHelper::lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->datum . ' ' . $maaltijd->tijd);
+		return BbHelper::lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->getMoment()->format(DATETIME_FORMAT));
 	}
 
 	public function render() {
@@ -125,7 +125,7 @@ class BbMaaltijd extends BbTag {
 
 		try {
 			if ($mid === 'next' || $mid === 'eerstvolgende' || $mid === 'next2' || $mid === 'eerstvolgende2') {
-				$maaltijden = $this->maaltijdenModel->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
+				$maaltijden = $this->maaltijdenRepository->getKomendeMaaltijdenVoorLid(LoginModel::getUid()); // met filter
 				$aantal = sizeof($maaltijden);
 				if ($aantal < 1) {
 					throw new BbException('<div class="bb-block bb-maaltijd">Geen aankomende maaltijd.</div>');
@@ -136,14 +136,14 @@ class BbMaaltijd extends BbTag {
 					$maaltijd2 = reset($maaltijden);
 				}
 			} elseif ($mid === 'beoordeling') {
-				$timestamp = strtotime(instelling('maaltijden', 'beoordeling_periode'));
+				$timestamp = date_create_immutable(instelling('maaltijden', 'beoordeling_periode'));
 				$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
 				$recent = array_slice(array_map(function($m) { return $m->maaltijd; }, $recent), -2);
 				if (count($recent) === 0) throw new BbException('');
 				$maaltijd = array_values($recent)[0];
 				if (count($recent) > 1) $maaltijd2 = array_values($recent)[1];
 			} elseif (preg_match('/\d+/', $mid)) {
-				$maaltijd = $this->maaltijdenModel->getMaaltijdVoorKetzer((int)$mid); // met filter
+				$maaltijd = $this->maaltijdenRepository->getMaaltijdVoorKetzer((int)$mid); // met filter
 
 				if (!$maaltijd) {
 					throw new BbException('');

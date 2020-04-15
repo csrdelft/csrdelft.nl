@@ -34,7 +34,7 @@
 					 class="btn popup">@icon("cup_edit")</a>
 			@endif
 			<span
-				class="dikgedrukt">{{$maaltijd->getTitel()}} op {{strftime("%A %e %b", $maaltijd->datum)}} om {{strftime("%H:%M", $maaltijd->tijd)}}</span>
+				class="dikgedrukt">{{$maaltijd->getTitel()}} op {{$maaltijd->datum->format(LONG_DATE_FORMAT)}} om {{$maaltijd->tijd->format(TIME_FORMAT)}}</span>
 		</p>
 		@if($maaltijd->verwijderd)
 			<p>Onderstaande tabel toont de corveetaken voor deze maaltijd, ook die verwijderd zijn.
