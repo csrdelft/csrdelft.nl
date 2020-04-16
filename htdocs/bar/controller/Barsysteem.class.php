@@ -395,7 +395,7 @@ JOIN CiviCategorie AS G ON
 WHERE
 	B.deleted = 0 AND
 	G.status = 1 AND
-	B.cie = 'soccie'
+	B.cie != 'maalcie'
 GROUP BY
 	yearweek,
 	G.id
