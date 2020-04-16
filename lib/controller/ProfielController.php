@@ -254,7 +254,7 @@ class ProfielController extends AbstractController {
 			'forumpostcount' => $this->forumPostsRepository->getAantalForumPostsVoorLid($uid),
 			'forumrecent' => $this->forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
 			'boeken' => $this->boekExemplaarModel->getEigendom($uid),
-			'recenteAanmeldingen' => $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($uid, strtotime(instelling('maaltijden', 'recent_lidprofiel'))),
+			'recenteAanmeldingen' => $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($uid, date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))),
 			'abos' => $this->maaltijdAbonnementenRepository->getAbonnementenVoorLid($uid),
 			'gerecenseerdeboeken' => $this->boekRecensieModel->getVoorLid($uid),
 			'fotos' => $fotos
