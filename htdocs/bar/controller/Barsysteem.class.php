@@ -381,6 +381,7 @@ SQL
 SELECT G.type,
 	SUM(I.aantal * PR.prijs) AS total,
 	WEEK(B.moment, 3) AS week,
+    YEAR(B.moment) as year,
 	YEARWEEK(B.moment, 3) AS yearweek
 FROM CiviBestelling AS B
 JOIN CiviBestellingInhoud AS I ON
@@ -415,7 +416,7 @@ ORDER BY yearweek DESC
 				$week['content'][] = array('type' => $r['type'], 'total' => $r['total']);
 			} else {
 				$week['content'] = array(array('type' => $r['type'], 'total' => $r['total']));
-				$week['title'] = 'Week ' . $r['week'];
+				$week['title'] = 'Week ' . $r['week'] . ', ' . $r['year'];
 			}
 
 			$weeks[$r['yearweek']] = $week;
