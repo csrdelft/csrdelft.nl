@@ -921,7 +921,7 @@ $(function () {
 				});
 
 				$("#productBeheer, #persoonBeheer, #tools").addClass("hidden");
-				$("#grootboekInvoer").html(html).removeClass("hidden");
+				$("#grootboekInvoer").html(html.reverse()).removeClass("hidden");
 
 			}
 		});
