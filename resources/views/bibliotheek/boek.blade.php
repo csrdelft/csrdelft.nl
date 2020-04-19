@@ -167,10 +167,10 @@
 								<label>Status</label>
 								@if($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::uitgeleend())
 									<span
-										title="Sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Uitgeleend aan {{\CsrDelft\repository\ProfielRepository::getLink($exemplaar->uitgeleend_uid, 'civitas')}}</span>
+										title="Sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Uitgeleend aan {!! \CsrDelft\repository\ProfielRepository::getLink($exemplaar->uitgeleend_uid, 'civitas') !!}</span>
 								@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::teruggegeven())
 									<span
-										title="Was uitgeleend sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Teruggegeven door {{\CsrDelft\repository\ProfielRepository::getLink($exemplaar->uitgeleend_uid, 'civitas')}}</span>
+										title="Was uitgeleend sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Teruggegeven door {!! \CsrDelft\repository\ProfielRepository::getLink($exemplaar->uitgeleend_uid, 'civitas') !!}</span>
 								@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::vermist())
 									<span class="waarschuwing"
 												title="Sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Vermist</span>
