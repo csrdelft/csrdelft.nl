@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\security\AccountRepository")
  * @ORM\Table("accounts")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Account {
 
@@ -92,9 +93,12 @@ class Account {
 	 */
 	public $private_token_since;
 
-	public function getProfiel() {
-		return ProfielRepository::get($this->uid);
-	}
+	/**
+	 * @var Profiel
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 
 	public function hasPrivateToken() {
 		return !empty($this->private_token);

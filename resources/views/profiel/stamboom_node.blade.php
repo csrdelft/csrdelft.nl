@@ -8,7 +8,7 @@
 				</div>
 			</a>
 			@if($profiel->hasKinderen())
-				@include('profiel.stamboom_node', ['profielen' => $profiel->getKinderen()])
+				@include('profiel.stamboom_node', ['profielen' => $profiel->kinderen])
 			@endif
 		</li>
 	@endforeach

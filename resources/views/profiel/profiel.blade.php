@@ -115,7 +115,7 @@
 				<dd>{{$profiel->getNaam('civitas')}}</dd>
 				<dt>Lidnummer</dt>
 				<dd>
-					@if(\CsrDelft\repository\security\AccountRepository::existsUid($profiel->uid) && \CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount()))
+					@if($profiel->account && \CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->account))
 						<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 					@else
 						{{$profiel->uid}}
@@ -256,30 +256,29 @@
 			</dl>
 			@if(is_zichtbaar($profiel, ['kinderen'], 'intern') && is_zichtbaar($profiel, ['patroon'], 'profiel'))
 				<dl class="col-md-6">
-					@php($patroon = \CsrDelft\repository\ProfielRepository::get($profiel->patroon))
-					@if($patroon)
+					@if($profiel->patroonProfiel)
 						<dt>
-							@if($patroon->geslacht === \CsrDelft\model\entity\Geslacht::Vrouw)
+							@if($profiel->patroonProfiel->geslacht === \CsrDelft\model\entity\Geslacht::Vrouw)
 								Matroon
 							@else
 								Patroon
 							@endif
 						</dt>
 						<dd>
-							{!! $patroon->getLink('civitas') !!}
+							{!! $profiel->patroonProfiel->getLink('civitas') !!}
 						</dd>
 					@endif
 					@if($profiel->hasKinderen())
 						<dt>Kinderen</dt>
 						<dd>
 							<ul class="list-unstyled">
-								@foreach($profiel->getKinderen() as $kind)
+								@foreach($profiel->kinderen as $kind)
 									<li>{!! $kind->getLink('civitas') !!}</li>
 								@endforeach
 							</ul>
 						</dd>
 					@endif
-					@if($patroon || $profiel->hasKinderen())
+					@if($profiel->patroonProfiel || $profiel->hasKinderen())
 						<dt></dt>
 						<dd>
 							<a class="btn btn-light" href="/profiel/{{$profiel->uid}}/stamboom"
@@ -546,9 +545,9 @@
 			<dl id="agenda">
 				<dt>Persoonlijke ICal-feed</dt>
 				<dd>
-					@if($profiel->getAccount()->hasPrivateToken())
+					@if($profiel->account->hasPrivateToken())
 						<input title="ICal-feed" class="form-control" type="text"
-									 value="{{$profiel->getAccount()->getICalLink()}}"
+									 value="{{$profiel->account->getICalLink()}}"
 									 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 					@endif
 					&nbsp;
@@ -562,9 +561,9 @@
 				@if(is_ingelogd_account($profiel->uid))
 					<dt>Persoonlijk RSS-feed</dt>
 					<dd>
-						@if($profiel->getAccount()->hasPrivateToken())
+						@if($profiel->account->hasPrivateToken())
 							<input title="RSS-feed" class="form-control" type="text"
-										 value="{{$profiel->getAccount()->getRssLink()}}"
+										 value="{{$profiel->account->getRssLink()}}"
 										 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 						@endif
 						<a id="tokenaanvragen" class="btn btn-primary" href="/profiel/{{$profiel->uid}}/resetPrivateToken">

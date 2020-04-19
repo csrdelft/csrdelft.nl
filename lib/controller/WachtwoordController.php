@@ -76,7 +76,7 @@ class WachtwoordController extends AbstractController {
 				throw new CsrGebruikerException('Inloggen met nieuw wachtwoord mislukt');
 			}
 			// stuur bevestigingsmail
-			$profiel = $account->getProfiel();
+			$profiel = $account->profiel;
 			$bericht = "Geachte " . $profiel->getNaam('civitas') .
 				",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
 			$emailNaam = $profiel->getNaam('volledig');
@@ -103,7 +103,7 @@ class WachtwoordController extends AbstractController {
 
 				$token = $this->oneTimeTokensRepository->createToken($account->uid, '/wachtwoord/reset');
 				// stuur resetmail
-				$profiel = $account->getProfiel();
+				$profiel = $account->profiel;
 				$url =  CSR_ROOT ."/wachtwoord/reset?token=". rawurlencode($token[0]);
 				$bericht = "Geachte " . $profiel->getNaam('civitas') .
 					",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1]->format(DATETIME_FORMAT) .

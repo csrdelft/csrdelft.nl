@@ -211,8 +211,8 @@ class ProfielRepository extends ServiceEntityRepository {
 			$entry['mozillahomecountryname'] = $profiel->land;
 			$entry['mozillahomeurl'] = $profiel->website;
 			$entry['description'] = 'Ledenlijst C.S.R. Delft';
-			if ($profiel->getAccount()) {
-				$entry['userPassword'] = $profiel->getAccount()->pass_hash;
+			if ($profiel->account) {
+				$entry['userPassword'] = $profiel->account->pass_hash;
 			}
 
 			$woonoord = $profiel->getWoonoord();

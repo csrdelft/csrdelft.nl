@@ -182,7 +182,7 @@ class AccountRepository extends AbstractRepository {
 
 		if ($isVeranderd) {
 			// Sync LDAP
-			$profiel = $account->getProfiel();
+			$profiel = $account->profiel;
 			if ($profiel) {
 				$profiel->email = $account->email;
 				ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel);

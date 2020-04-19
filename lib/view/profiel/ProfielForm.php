@@ -57,7 +57,7 @@ class ProfielForm extends Formulier {
 		}
 
 		$admin = LoginModel::mag(P_LEDEN_MOD);
-		$inschrijven = !$profiel->getAccount();
+		$inschrijven = !$profiel->account;
 
 		$fields = [];
 		if ($inschrijven) {

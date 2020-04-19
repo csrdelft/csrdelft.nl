@@ -212,7 +212,12 @@ class ProfielController extends AbstractController {
 		if ($profiel === false) {
 			throw new CsrNotFoundException();
 		}
-		$this->accountRepository->resetPrivateToken($profiel->getAccount());
+
+		if ($profiel->account == null) {
+			throw new CsrNotFoundException("Profiel heeft geen account");
+		}
+
+		$this->accountRepository->resetPrivateToken($profiel->account);
 		return $this->profiel($uid);
 	}
 

@@ -5,6 +5,7 @@ namespace CsrDelft\entity\profiel;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
+use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\GroepStatus;
@@ -19,6 +20,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use GuzzleHttp\Exception\RequestException;
 
@@ -356,6 +358,13 @@ class Profiel implements Agendeerbaar {
 	public $zingen;
 
 	/**
+	 * @var Account|null
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\security\Account")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=true)
+	 */
+	public $account;
+
+	/**
 	 * In $properties_lidstatus kan per property worden aangegeven voor welke lidstatusen deze nodig. Bij wijziging van
 	 * lidstatus wordt een property verwijderd als deze niet langer nodig is.
 	 */
@@ -402,8 +411,8 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getPrimaryEmail() {
-		if (AccountRepository::existsUid($this->uid)) {
-			return $this->getAccount()->email;
+		if ($this->account != null) {
+			return $this->account->email;
 		}
 		return $this->email;
 	}
@@ -754,27 +763,26 @@ class Profiel implements Agendeerbaar {
 		return '<img class="' . htmlspecialchars($cssClass) . '" src="' . $this->getPasfotoPath() . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
 	}
 
-	private $kinderen;
+	/**
+	 * @var Profiel|null
+	 * @ORM\ManyToOne(targetEntity="Profiel", inversedBy="kinderen")
+	 * @ORM\JoinColumn(name="patroon", referencedColumnName="uid", nullable=true)
+	 */
+	public $patroonProfiel;
 
 	/**
-	 * @return Profiel[]
+	 * @var Profiel[]|ArrayCollection
+	 * @ORM\OneToMany(targetEntity="Profiel", mappedBy="patroonProfiel")
 	 */
-	public function getKinderen() {
-		if ($this->kinderen == null) {
-			$container = ContainerFacade::getContainer();
-			$this->kinderen = $container->get(ProfielRepository::class)->ormFind('patroon = ?', array($this->uid));
-		}
-
-		return $this->kinderen;
-	}
+	public $kinderen;
 
 	public function hasKinderen() {
-		return count($this->getKinderen()) !== 0;
+		return $this->kinderen->count() !== 0;
 	}
 
 	public function getNageslachtGrootte() {
 		$nageslacht = 0;
-		foreach ($this->getKinderen() as $kind) {
+		foreach ($this->kinderen as $kind) {
 			$nageslacht++;
 			$nageslacht += $kind->getNageslachtGrootte();
 		}

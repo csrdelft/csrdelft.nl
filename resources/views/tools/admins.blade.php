@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\security\Account[] $accounts
+ */
+?>
 @extends('layout')
 
 @section('titel', 'Admins')
@@ -39,7 +44,7 @@
 	@foreach($accounts as $account)
 		<tr>
 			<td>{{$account->uid}}</td>
-			<td>{!! $account->getProfiel()->getLink() !!}</td>
+			<td>{!! $account->profiel->getLink() !!}</td>
 			<td>{{$account->perm_role}}</td>
 		</tr>
 	@endforeach

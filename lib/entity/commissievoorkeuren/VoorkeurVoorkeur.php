@@ -83,6 +83,6 @@ class VoorkeurVoorkeur {
 	}
 
 	public function heeftGedaan() {
-		return AccessModel::mag($this->profiel->getAccount(), 'commissie:' . $this->commissie->naam . ',commissie:' . $this->commissie->naam . ':ot');
+		return AccessModel::mag($this->profiel->account, 'commissie:' . $this->commissie->naam . ',commissie:' . $this->commissie->naam . ':ot');
 	}
 }

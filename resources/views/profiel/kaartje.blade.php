@@ -1,6 +1,11 @@
+<?php
+/**
+ * @var \CsrDelft\entity\profiel\Profiel $profiel
+ */
+?>
 <div class="card visitekaartje flex-row">
 	<div class="card-body @if($profiel->isJarig()) jarig @endif ">
-		@if (\CsrDelft\repository\security\AccountRepository::existsUid($profiel->uid) AND CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount()))
+		@if ($profiel->account && CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->account))
 			<div class="float-right">
 				<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 			</div>
