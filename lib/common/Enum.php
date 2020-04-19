@@ -16,7 +16,12 @@ abstract class Enum {
 	 */
 	protected static $mapChoiceToDescription = [];
 
-	public function __construct($value) {
+	/**
+	 * Gebruik de from methode om een enum te maken.
+	 * Enum constructor.
+	 * @param $value
+	 */
+	private function __construct($value) {
 		if (!static::isValidValue($value)) {
 			throw new \InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
 		}
