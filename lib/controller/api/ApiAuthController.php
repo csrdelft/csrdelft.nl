@@ -65,8 +65,8 @@ class ApiAuthController {
 			$pass = filter_var(strval($_POST['pass']), FILTER_SANITIZE_STRING);
 
 			// Check uid
-			if (AccountRepository::isValidUid($user)) {
-				$account = AccountRepository::get($user);
+			if ($this->accountRepository->isValidUid($user)) {
+				$account = $this->accountRepository->get($user);
 			}
 
 			// Check account

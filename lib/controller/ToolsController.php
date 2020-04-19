@@ -216,7 +216,7 @@ class ToolsController extends AbstractController {
 		}
 
 		if ($given == 'uid') {
-			if (AccountRepository::isValidUid($string)) {
+			if ($this->accountRepository->isValidUid($string)) {
 				return new PlainView(uid2naam($string));
 			} else {
 				$uids = explode(',', $string);
