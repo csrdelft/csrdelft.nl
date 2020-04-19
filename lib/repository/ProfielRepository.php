@@ -3,12 +3,13 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Doctrine\Type\OntvangtContactueelType;
 use CsrDelft\common\LDAP;
+use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\profiel\AbstractProfielLogEntry;
 use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
 use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
@@ -80,7 +81,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		foreach ($diff as $change) {
 			$changes[] = new ProfielLogValueChange($change->property, $change->old_value, $change->new_value);
 		}
-		return new ProfielUpdateLogGroup($uid, new DateTime(), $changes);
+		return new ProfielUpdateLogGroup($uid, date_create_immutable(), $changes);
 	}
 
 	/**
@@ -128,7 +129,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		$profiel = new Profiel();
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
-		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee;
+		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee();
 		$profiel->changelog = [new ProfielCreateLogGroup(LoginModel::getUid(), new DateTime())];
 		return $profiel;
 	}

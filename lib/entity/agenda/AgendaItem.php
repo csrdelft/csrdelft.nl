@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\agenda;
 
-use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\LoginModel;
 use Doctrine\ORM\Mapping as ORM;

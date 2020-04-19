@@ -3,11 +3,11 @@
 namespace CsrDelft\model\entity\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * CorveeTaak.class.php  |  P.W.G. Brussee (brussee@live.nl)

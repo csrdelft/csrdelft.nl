@@ -3,7 +3,7 @@
 namespace CsrDelft\repository\agenda;
 
 use CsrDelft\entity\agenda\AgendaVerbergen;
-use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

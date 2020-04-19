@@ -5,7 +5,7 @@ namespace CsrDelft\entity\maalcie;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\entity\maalcie\CorveeTaak;

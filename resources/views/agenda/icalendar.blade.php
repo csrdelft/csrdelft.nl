@@ -1,4 +1,4 @@
-<?php /** @var \CsrDelft\model\entity\agenda\Agendeerbaar[] $items */
+<?php /** @var \CsrDelft\entity\agenda\Agendeerbaar[] $items */
 ?>BEGIN:VCALENDAR
 PRODID:-//C.S.R. Delft//C.S.R. agenda//NL
 VERSION:2.0

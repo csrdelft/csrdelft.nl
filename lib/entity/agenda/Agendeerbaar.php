@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity\agenda;
+namespace CsrDelft\entity\agenda;
 
 /**
  * Agendeerbaar.interface.php
