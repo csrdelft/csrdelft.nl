@@ -8,7 +8,7 @@ use CsrDelft\common\Enum;
 
 class EnumSelectField extends SelectField {
 	/**
-	 * @var string
+	 * @var Enum
 	 */
 	private $enumClass;
 
@@ -28,6 +28,6 @@ class EnumSelectField extends SelectField {
 
 	public function getFormattedValue() {
 		$enumClass = $this->enumClass;
-		return new $enumClass($this->value);
+		return $enumClass::from($this->value);
 	}
 }

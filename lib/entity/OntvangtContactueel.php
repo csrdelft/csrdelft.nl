@@ -3,7 +3,6 @@
 namespace CsrDelft\entity;
 
 use CsrDelft\common\Enum;
-use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
  * OntvangtContactueel.enum.php
@@ -20,15 +19,15 @@ class OntvangtContactueel extends Enum {
 	const Nee = 'nee';
 
 	public static function Nee(){
-		return new static(self::Nee);
+		return static::from(self::Nee);
 	}
 
 	public static function Digitaal() {
-		return new static(self::Digitaal);
+		return static::from(self::Digitaal);
 	}
 
 	public static function Ja() {
-		return new static(self::Ja);
+		return static::from(self::Ja);
 	}
 
 	/**

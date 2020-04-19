@@ -22,6 +22,7 @@ doctrine:
           uid: CsrDelft\common\Doctrine\Type\UidType
           stringkey: CsrDelft\common\Doctrine\Type\StringKeyType
           enumontvangtcontactueel: CsrDelft\common\Doctrine\Type\OntvangtContactueelType
+          enumboekexemplaarstatus: CsrDelft\common\Doctrine\Type\BoekExemplaarStatusType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

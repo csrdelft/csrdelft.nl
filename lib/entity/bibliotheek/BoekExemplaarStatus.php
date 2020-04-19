@@ -5,24 +5,31 @@ namespace CsrDelft\entity\bibliotheek;
 
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Enum;
 use CsrDelft\Orm\Entity\PersistentEnum;
 
-class BoekExemplaarStatus extends PersistentEnum {
+class BoekExemplaarStatus extends Enum {
 
 	const beschikbaar = 'beschikbaar';
 	const uitgeleend = 'uitgeleend';
 	const teruggegeven = 'teruggegeven';
 	const vermist = 'vermist';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::beschikbaar => self::beschikbaar,
-		self::uitgeleend => self::uitgeleend,
-		self::teruggegeven => self::teruggegeven,
-		self::vermist => self::vermist
-	];
+	public static function beschikbaar() {
+		return static::from(self::beschikbaar);
+	}
+
+	public static function uitgeleend() {
+		return static::from(self::uitgeleend);
+	}
+
+	public static function teruggegeven() {
+		return static::from(self::teruggegeven);
+	}
+
+	public static function vermist() {
+		return static::from(self::vermist);
+	}
 
 	/**
 	 * @var string[]
@@ -34,16 +41,10 @@ class BoekExemplaarStatus extends PersistentEnum {
 		self::vermist => 'Vermist'
 	];
 
-	/**
-	 * @param string $option
-	 * @return string
-	 * @throws CsrException
-	 */
-	public static function getChar($option) {
-		if (isset(static::$supportedChoices[$option])) {
-			return strtoupper(substr($option, 0, 2));
-		} else {
-			throw new CsrException('BoekExemplaarStatus onbekend');
-		}
-	}
+	protected static $mapChoiceToChar = [
+		self::beschikbaar => "BE",
+		self::uitgeleend => "UI",
+		self::teruggegeven => "TE",
+		self::vermist => "VE",
+	];
 }

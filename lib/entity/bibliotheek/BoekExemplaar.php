@@ -51,10 +51,10 @@ class BoekExemplaar extends PersistentEntity {
 	public $toegevoegd;
 
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var BoekExemplaarStatus
+	 * @ORM\Column(type="enumboekexemplaarstatus")
 	 */
-	public $status = 'beschikbaar';
+	public $status;
 
 	/**
 	 * @var \DateTimeImmutable
@@ -90,9 +90,6 @@ class BoekExemplaar extends PersistentEntity {
 	public function magBewerken() : bool {
 		return $this->isEigenaar();
 	}
-	public function getStatus() {
-		return $this->status;
-	}
 
 	/**
 	 * @return Boek
@@ -106,7 +103,7 @@ class BoekExemplaar extends PersistentEntity {
 	}
 
 	public function isBeschikbaar() {
-		return $this->getStatus() == 'beschikbaar';
+		return $this->status === BoekExemplaarStatus::beschikbaar();
 	}
 
 	public function kanLenen(string $uid) {
@@ -114,14 +111,14 @@ class BoekExemplaar extends PersistentEntity {
 	}
 
 	public function isUitgeleend() {
-		return $this->status == 'uitgeleend';
+		return $this->status === BoekExemplaarStatus::uitgeleend();
 	}
 
 	public function isTeruggegeven() {
-		return $this->status == 'teruggegeven';
+		return $this->status === BoekExemplaarStatus::teruggegeven();
 	}
 
 	public function isVermist() {
-		return $this->status == 'vermist';
+		return $this->status === BoekExemplaarStatus::vermist();
 	}
 }

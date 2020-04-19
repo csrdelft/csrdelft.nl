@@ -7,6 +7,7 @@ use ReflectionClass;
 
 abstract class Enum {
 	private static $constCacheArray = NULL;
+	private static $instanceCacheArray = [];
 
 	private $value;
 
@@ -20,6 +21,22 @@ abstract class Enum {
 			throw new \InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
 		}
 		$this->value = $value;
+	}
+
+	/**
+	 * @param $value
+	 * @return static
+	 */
+	public static function from($value) {
+		if (!static::isValidValue($value)) {
+			throw new \InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
+		}
+
+		if (!isset(static::$instanceCacheArray[$value])) {
+			static::$instanceCacheArray[$value] = new static($value);
+		}
+
+		return static::$instanceCacheArray[$value];
 	}
 
 	public static function getEnumValues() {
@@ -60,6 +77,10 @@ abstract class Enum {
 
 	public function getValue() {
 		return $this->value;
+	}
+
+	public function getDescription() {
+		return static::$mapChoiceToDescription[$this->value];
 	}
 }
 

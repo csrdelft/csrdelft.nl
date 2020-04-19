@@ -26,7 +26,7 @@ abstract class EnumType extends Type {
 
 	public function convertToPHPValue($value, AbstractPlatform $platform) {
 		$enumClass = $this->enumClass;
-		return new $enumClass($value);
+		return $enumClass::from($value);
 	}
 
 	public function convertToDatabaseValue($value, AbstractPlatform $platform) {

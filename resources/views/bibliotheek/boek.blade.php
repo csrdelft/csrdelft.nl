@@ -165,27 +165,27 @@
 							{{-- status --}}
 							<div class="regel">
 								<label>Status</label>
-								@if($exemplaar->status=='uitgeleend')
+								@if($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::uitgeleend())
 									<span
 										title="Sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Uitgeleend aan {{\CsrDelft\repository\ProfielRepository::getLink($exemplaar->uitgeleend_uid, 'civitas')}}</span>
-								@elseif($exemplaar->status=='teruggegeven')
+								@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::teruggegeven())
 									<span
 										title="Was uitgeleend sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Teruggegeven door {{\CsrDelft\repository\ProfielRepository::getLink($exemplaar->uitgeleend_uid, 'civitas')}}</span>
-								@elseif($exemplaar->status=='vermist')
+								@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::vermist())
 									<span class="waarschuwing"
 												title="Sinds {{strip_tags(reldate($exemplaar->uitleendatum))}}">Vermist</span>
-								@elseif($exemplaar->status=='beschikbaar' )
+								@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::beschikbaar())
 									Beschikbaar
 								@endif
 							</div>
-							@if($exemplaar->status=='beschikbaar' && $boek->isEigenaar($exemplaar->id))
+							@if($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::beschikbaar() && $boek->isEigenaar($exemplaar->id))
 								@php($boek->ajaxformuliervelden->findByName("lener_`$exemplaar->id`")->view())
 							@endif
 							{{-- actieknoppen --}}
 							<div class="regel actieknoppen">
 								<label>&nbsp;</label>
 								<div>
-									@if($exemplaar->status=='beschikbaar')
+									@if($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::beschikbaar())
 										@if($exemplaar->eigenaar_uid=='x222') {{-- bibliothecaris werkt met kaartjes --}}
 										@if(!$boek->isEigenaar($exemplaar->id)) {{-- BASFCie hoeft opmerking niet te zien --}}
 										<span
@@ -198,24 +198,24 @@
 												 onclick="return confirm('U wilt dit boek van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} lenen?')">@icon("lorry")
 												Exemplaar lenen</a>
 										@endif
-									@elseif($exemplaar->status=='uitgeleend' && CsrDelft\model\security\LoginModel::getUid()==$exemplaar->uitgeleend_uid && $exemplaar->uitgeleend_uid!=$exemplaar->eigenaar_uid)
+									@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::uitgeleend() && CsrDelft\model\security\LoginModel::getUid()==$exemplaar->uitgeleend_uid && $exemplaar->uitgeleend_uid!=$exemplaar->eigenaar_uid)
 										<a class="btn post ReloadPage" href="/bibliotheek/exemplaarteruggegeven/{{$exemplaar->id}}"
 											 title="Boek heb ik teruggegeven"
 											 onclick="return confirm('U heeft dit exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} teruggegeven?')">@icon("lorry_go")
 											Teruggegeven</a>
 									@endif
 									@if($exemplaar->isEigenaar())
-										@if(($exemplaar->status=='uitgeleend' || $exemplaar->isTeruggegeven()))
+										@if(($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::uitgeleend() || $exemplaar->isTeruggegeven()))
 											<a class="btn post ReloadPage" href="/bibliotheek/exemplaarterugontvangen/{{$exemplaar->id}}"
 												 title="Boek is ontvangen"
 												 onclick="return confirm('Dit exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} is terugontvangen?')">@icon("lorry_flatbed")
 												Ontvangen</a>
-										@elseif($exemplaar->status=='beschikbaar')
+										@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::beschikbaar())
 											<a class="btn post ReloadPage" href="/bibliotheek/exemplaarvermist/{{$exemplaar->id}}"
 												 title="Exemplaar is vermist"
 												 onclick="return confirm('Is het exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} vermist?')">@icon("emoticon_unhappy")
 												Vermist</a>
-										@elseif($exemplaar->status=='vermist')
+										@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::vermist())
 											<a class="btn post ReloadPage" href="/bibliotheek/exemplaargevonden/{{$exemplaar->id}}"
 												 title="Exemplaar teruggevonden"
 												 onclick="return confirm('Is het exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} teruggevonden?')">@icon("emoticon_smile")
@@ -241,8 +241,8 @@
 						@foreach($boek->getExemplaren() as $exemplaar)
 							@if(!$boek->isEigenaar($exemplaar->id) && ($exemplaar->eigenaar_uid!='x222' || $total_exemplaren_bibliotheek>0 ))
 								{{\CsrDelft\repository\ProfielRepository::getLink($exemplaar->eigenaar_uid, 'pasfoto')}}
-								<div class="statusmarkering"><span class="biebindicator {{$exemplaar->status}}"
-																									 title="Boek is {{$exemplaar->status}}">• </span></div>
+								<div class="statusmarkering"><span class="biebindicator {{$exemplaar->status->getDescription()}}"
+																									 title="Boek is {{$exemplaar->status->getDescription()}}">• </span></div>
 							@endif
 							@if($exemplaar->eigenaar_uid=='x222')
 								@php($total_exemplaren_bibliotheek += 1)
