@@ -477,10 +477,10 @@ class ForumController extends AbstractController {
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
 			throw new CsrToegangException('Onderwerp mag geen melding voor ontvangen worden');
 		}
-		if (!ForumDraadMeldingNiveau::isOptie($niveau)) {
+		if (!ForumDraadMeldingNiveau::isValidValue($niveau)) {
 			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
 		}
-		$this->forumDradenMeldingRepository->setNiveauVoorLid($draad, $niveau);
+		$this->forumDradenMeldingRepository->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::from($niveau));
 		return new JsonResponse(true);
 	}
 
@@ -690,7 +690,7 @@ class ForumController extends AbstractController {
 			}
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 			if ($nieuw && lid_instelling('forum', 'meldingEigenDraad') === 'ja') {
-				$this->forumDradenMeldingRepository->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD);
+				$this->forumDradenMeldingRepository->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD());
 			}
 
 			$redirect = $this->redirectToRoute('forum-reactie', ['post_id' => $post->post_id, '_fragment' => $post->post_id]);

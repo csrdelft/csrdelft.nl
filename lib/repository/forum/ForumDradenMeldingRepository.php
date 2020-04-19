@@ -32,7 +32,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		parent::__construct($registry, ForumDraadMelding::class);
 	}
 
-	public function setNiveauVoorLid(ForumDraad $draad, $niveau) {
+	public function setNiveauVoorLid(ForumDraad $draad, ForumDraadMeldingNiveau $niveau) {
 		$uid = LoginModel::getUid();
 		$voorkeur = $this->find(['draad_id' => $draad->draad_id, 'uid' => $uid]);
 		if ($voorkeur) {
@@ -44,7 +44,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		}
 	}
 
-	protected function maakForumDraadMelding(ForumDraad $draad, $uid, $niveau) {
+	protected function maakForumDraadMelding(ForumDraad $draad, $uid, ForumDraadMeldingNiveau $niveau) {
 		$melding = new ForumDraadMelding();
 		$melding->draad = $draad;
 		$melding->draad_id = $draad->draad_id;
@@ -100,7 +100,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	}
 
 	public function getAltijdMeldingVoorDraad(ForumDraad $draad) {
-		return $this->findBy(['draad_id' => $draad->draad_id, 'niveau' => ForumDraadMeldingNiveau::ALTIJD]);
+		return $this->findBy(['draad_id' => $draad->draad_id, 'niveau' => ForumDraadMeldingNiveau::ALTIJD()]);
 	}
 
 	/**
@@ -153,7 +153,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 
 			// Stuur geen meldingen als lid niet gevonden is, lid de auteur is of als lid geen meldingen wil voor draadje
 			// Met laatste voorwaarde worden ook leden afgevangen die sowieso al een melding zouden ontvangen
-			if (!$genoemde || !AccountRepository::existsUid($genoemde->uid) || $genoemde->uid === $post->uid || $this->getNiveauVoorLid($draad, $genoemde->uid) !== ForumDraadMeldingNiveau::VERMELDING) {
+			if (!$genoemde || !AccountRepository::existsUid($genoemde->uid) || $genoemde->uid === $post->uid || $this->getNiveauVoorLid($draad, $genoemde->uid) !== ForumDraadMeldingNiveau::VERMELDING()) {
 				continue;
 			}
 
@@ -195,7 +195,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		} else {
 			$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
 			$wilMeldingBijVermelding = $lidInstellingenRepository->getInstellingVoorLid('forum', 'meldingStandaard', $uid);
-			return $wilMeldingBijVermelding === 'ja' ? ForumDraadMeldingNiveau::VERMELDING : ForumDraadMeldingNiveau::NOOIT;
+			return $wilMeldingBijVermelding === 'ja' ? ForumDraadMeldingNiveau::VERMELDING() : ForumDraadMeldingNiveau::NOOIT();
 		}
 	}
 }

@@ -2,23 +2,25 @@
 
 namespace CsrDelft\entity\forum;
 
-use CsrDelft\common\CsrException;
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
-class ForumDraadMeldingNiveau extends PersistentEnum {
+class ForumDraadMeldingNiveau extends Enum {
 
 	const NOOIT = 'nooit';
 	const VERMELDING = 'vermelding';
 	const ALTIJD = 'altijd';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::NOOIT => self::NOOIT,
-		self::VERMELDING => self::VERMELDING,
-		self::ALTIJD => self::ALTIJD
-	];
+	public static function NOOIT() {
+		return static::from(self::NOOIT);
+	}
+
+	public static function VERMELDING() {
+		return static::from(self::VERMELDING);
+	}
+
+	public static function ALTIJD() {
+		return static::from(self::ALTIJD);
+	}
 
 	/**
 	 * @var string[]
@@ -28,21 +30,4 @@ class ForumDraadMeldingNiveau extends PersistentEnum {
 		self::VERMELDING => 'Bij vermelding',
 		self::ALTIJD => 'Altijd'
 	];
-
-	/**
-	 * @param string $option
-	 * @return string
-	 * @throws CsrException
-	 */
-	public static function getChar($option) {
-		if (isset(static::$supportedChoices[$option])) {
-			return strtoupper(substr($option, 0, 2));
-		} else {
-			throw new CsrException('ForumDraadMeldingNiveau onbekend');
-		}
-	}
-
-	public static function isOptie($optie) {
-		return isset(static::$supportedChoices[$optie]);
-	}
 }

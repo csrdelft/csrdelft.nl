@@ -43,13 +43,13 @@
 				@if($draad->magMeldingKrijgen())
 					<div class="btn-group mr-2">
 						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/nooit"
-							 class="btn btn-light post ReloadPage melding-nooit @if($draad->getMeldingsNiveau() == \CsrDelft\entity\forum\ForumDraadMeldingNiveau::NOOIT) active @endif"
+							 class="btn btn-light post ReloadPage melding-nooit @if($draad->getMeldingsNiveau() === \CsrDelft\entity\forum\ForumDraadMeldingNiveau::NOOIT()) active @endif"
 							 title="Nooit meldingen ontvangen">@icon('email_delete', 'email_delete')</a>
 						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/vermelding"
-							 class="btn btn-light post ReloadPage melding-vermelding @if($draad->getMeldingsNiveau() == \CsrDelft\entity\forum\ForumDraadMeldingNiveau::VERMELDING) active @endif"
+							 class="btn btn-light post ReloadPage melding-vermelding @if($draad->getMeldingsNiveau() === \CsrDelft\entity\forum\ForumDraadMeldingNiveau::VERMELDING()) active @endif"
 							 title="Melding ontvangen als ik genoemd word">@icon('email_error', 'email_error')</a>
 						<a href="/forum/meldingsniveau/{{$draad->draad_id}}/altijd"
-							 class="btn btn-light post ReloadPage melding-altijd @if($draad->getMeldingsNiveau() == \CsrDelft\entity\forum\ForumDraadMeldingNiveau::ALTIJD) active @endif"
+							 class="btn btn-light post ReloadPage melding-altijd @if($draad->getMeldingsNiveau() === \CsrDelft\entity\forum\ForumDraadMeldingNiveau::ALTIJD()) active @endif"
 							 title="Melding ontvangen bij elk nieuw bericht">@icon('email_add', 'email_add')</a>
 					</div>
 				@endif
