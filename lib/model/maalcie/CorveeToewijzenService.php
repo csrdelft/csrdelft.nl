@@ -10,7 +10,20 @@ use CsrDelft\repository\ProfielRepository;
  * CorveeToewijzenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
  *
  */
-class CorveeToewijzenModel {
+class CorveeToewijzenService {
+	/**
+	 * @var CorveePuntenService
+	 */
+	private $corveePuntenService;
+	/**
+	 * @var CorveeVrijstellingenModel
+	 */
+	private $corveeVrijstellingenModel;
+
+	public function __construct(CorveeVrijstellingenModel $corveeVrijstellingenModel, CorveePuntenService $corveePuntenService) {
+		$this->corveePuntenService = $corveePuntenService;
+		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
+	}
 
 	/**
 	 * Bepaald de suggesties voor het toewijzen van een corveetaak.
@@ -21,8 +34,8 @@ class CorveeToewijzenModel {
 	 * @return array
 	 * @throws CsrGebruikerException
 	 */
-	public static function getSuggesties(CorveeTaak $taak) {
-		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
+	public function getSuggesties(CorveeTaak $taak) {
+		$vrijstellingen = $this->corveeVrijstellingenModel->getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
 		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
 			$lijst = array();
@@ -43,7 +56,7 @@ class CorveeToewijzenModel {
 						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
-				$lijst[$uid] = CorveePuntenModel::loadPuntenVoorLid($profiel, array($functie->functie_id => $functie));
+				$lijst[$uid] = $this->corveePuntenService->loadPuntenVoorLid($profiel, array($functie->functie_id => $functie));
 				$lijst[$uid]['aantal'] = $lijst[$uid]['aantal'][$functie->functie_id];
 				$avg += $lijst[$uid]['aantal'];
 			}
@@ -53,7 +66,7 @@ class CorveeToewijzenModel {
 			}
 			$sorteer = 'sorteerKwali';
 		} else {
-			$lijst = CorveePuntenModel::loadPuntenVoorAlleLeden();
+			$lijst = $this->corveePuntenService->loadPuntenVoorAlleLeden();
 			foreach ($lijst as $uid => $punten) {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
@@ -82,11 +95,11 @@ class CorveeToewijzenModel {
 				$lijst[$uid]['voorkeur'] = false;
 			}
 		}
-		uasort($lijst, array('self', $sorteer));
+		uasort($lijst, [$this, $sorteer]);
 		return $lijst;
 	}
 
-	static function sorteerKwali($a, $b) {
+	function sorteerKwali($a, $b) {
 		if ($a['laatste'] !== false && $b['laatste'] !== false) {
 			$a = $a['laatste']->getBeginMoment();
 			$b = $b['laatste']->getBeginMoment();
@@ -107,7 +120,7 @@ class CorveeToewijzenModel {
 		}
 	}
 
-	static function sorteerPrognose($a, $b) {
+	function sorteerPrognose($a, $b) {
 		$a = $a['prognose'];
 		$b = $b['prognose'];
 		if ($a === $b) {
@@ -118,5 +131,4 @@ class CorveeToewijzenModel {
 			return 1;
 		}
 	}
-
 }

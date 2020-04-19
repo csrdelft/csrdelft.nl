@@ -8,7 +8,7 @@ use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\maalcie\CorveeHerinneringenModel;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
-use CsrDelft\model\maalcie\CorveeToewijzenModel;
+use CsrDelft\model\maalcie\CorveeToewijzenService;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
@@ -31,12 +31,16 @@ class BeheerTakenController extends AbstractController {
 	 * @var CorveeRepetitiesModel
 	 */
 	private $corveeRepetitiesModel;
+	/**
+	 * @var CorveeToewijzenService
+	 */
+	private $corveeToewijzenService;
 
-	public function __construct(CorveeTakenModel $corveeTakenModel, MaaltijdenRepository $maaltijdenRepository, CorveeRepetitiesModel $corveeRepetitiesModel) {
+	public function __construct(CorveeTakenModel $corveeTakenModel, MaaltijdenRepository $maaltijdenRepository, CorveeRepetitiesModel $corveeRepetitiesModel, CorveeToewijzenService $corveeToewijzenService) {
 		$this->corveeTakenModel = $corveeTakenModel;
-
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
+		$this->corveeToewijzenService = $corveeToewijzenService;
 	}
 
 	public function maaltijd($mid) {
@@ -198,7 +202,7 @@ class BeheerTakenController extends AbstractController {
 				'prullenbak' => false,
 			]);
 		} else {
-			$suggesties = CorveeToewijzenModel::getSuggesties($taak);
+			$suggesties = $this->corveeToewijzenService->getSuggesties($taak);
 			return new ToewijzenForm($taak, $suggesties); // fetches POST values itself
 		}
 	}

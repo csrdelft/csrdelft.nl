@@ -10,18 +10,30 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Persistence\Database;
 
 /**
- * CorveePuntenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
- *
+ * CorveePuntenService  |  P.W.G. Brussee (brussee@live.nl)
  */
-class CorveePuntenModel {
+class CorveePuntenService {
+	/**
+	 * @var CorveeVrijstellingenModel
+	 */
+	private $corveeVrijstellingenModel;
+	/**
+	 * @var CorveeTakenModel
+	 */
+	private $corveeTakenModel;
 
-	public static function resetCorveejaar() {
+	public function __construct(CorveeVrijstellingenModel $corveeVrijstellingenModel, CorveeTakenModel $corveeTakenModel) {
+		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
+		$this->corveeTakenModel = $corveeTakenModel;
+	}
+
+	public function resetCorveejaar() {
 		return Database::transaction(function () {
 			$aantal = 0;
 			$errors = array();
 			/** @var CorveeVrijstelling[] $vrijstellingen */
-			$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
-			$matrix = self::loadPuntenTotaalVoorAlleLeden();
+			$vrijstellingen = $this->corveeVrijstellingenModel->getAlleVrijstellingen(true); // grouped by uid
+			$matrix = $this->loadPuntenTotaalVoorAlleLeden();
 			foreach ($matrix as $uid => $totalen) {
 				try {
 					$profiel = ProfielRepository::get($uid); // false if lid does not exist
@@ -35,25 +47,25 @@ class CorveePuntenModel {
 						$vrijstelling = $vrijstellingen[$uid];
 						$punten += $vrijstelling->getPunten();
 						if (time() > strtotime($vrijstelling->eind_datum)) {
-							CorveeVrijstellingenModel::instance()->verwijderVrijstelling($vrijstelling->uid);
+							$this->corveeVrijstellingenModel->verwijderVrijstelling($vrijstelling->uid);
 							$aantal++;
 						} else { // niet dubbel toekennen
 							$vrijstelling->percentage = 0;
-							CorveeVrijstellingenModel::instance()->saveVrijstelling($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
+							$this->corveeVrijstellingenModel->saveVrijstelling($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
 						}
 					}
 					$punten -= intval(instelling('corvee', 'punten_per_jaar'));
-					self::savePuntenVoorLid($profiel, $punten, 0);
+					$this->savePuntenVoorLid($profiel, $punten, 0);
 				} catch (CsrGebruikerException $e) {
 					$errors[] = $e;
 				}
 			}
-			$taken = CorveeTakenModel::instance()->verwijderOudeTaken();
+			$taken = $this->corveeTakenModel->verwijderOudeTaken();
 			return array($aantal, $taken, $errors);
 		});
 	}
 
-	public static function puntenToekennen($uid, $punten, $bonus_malus) {
+	public function puntenToekennen($uid, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
 		}
@@ -62,18 +74,18 @@ class CorveePuntenModel {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 		if ($punten !== 0 OR $bonus_malus !== 0) {
-			self::savePuntenVoorLid($profiel, (int)$profiel->corvee_punten + $punten, (int)$profiel->corvee_punten_bonus + $bonus_malus);
+			$this->savePuntenVoorLid($profiel, (int)$profiel->corvee_punten + $punten, (int)$profiel->corvee_punten_bonus + $bonus_malus);
 		}
 	}
 
-	public static function puntenIntrekken($uid, $punten, $bonus_malus) {
+	public function puntenIntrekken($uid, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten intrekken faalt: geen integer');
 		}
-		self::puntenToekennen($uid, -$punten, -$bonus_malus);
+		$this->puntenToekennen($uid, -$punten, -$bonus_malus);
 	}
 
-	public static function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
+	public function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
 		if (!is_int($punten) && !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Save punten voor lid ' . $profiel->uid . ' faalt: geen integer');
 		}
@@ -86,11 +98,11 @@ class CorveePuntenModel {
 		ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel);
 	}
 
-	public static function loadPuntenTotaalVoorAlleLeden() {
-		return self::loadPuntenTotaal('status IN("S_LID", "S_GASTLID", "S_NOVIET")');
+	public function loadPuntenTotaalVoorAlleLeden() {
+		return $this->loadPuntenTotaal('status IN("S_LID", "S_GASTLID", "S_NOVIET")');
 	}
 
-	private static function loadPuntenTotaal($where = null, $values = array(), $limit = null) {
+	private function loadPuntenTotaal($where = null, $values = array(), $limit = null) {
 		$sql = 'SELECT uid, corvee_punten, corvee_punten_bonus';
 		$sql .= ' FROM profielen';
 		if ($where !== null) {
@@ -114,10 +126,10 @@ class CorveePuntenModel {
 		return $totalen;
 	}
 
-	public static function loadPuntenVoorAlleLeden($functies = null) {
-		$taken = CorveeTakenModel::instance()->getAlleTaken(true); // grouped by uid
-		$vrijstellingen = CorveeVrijstellingenModel::instance()->getAlleVrijstellingen(true); // grouped by uid
-		$matrix = self::loadPuntenTotaalVoorAlleLeden();
+	public function loadPuntenVoorAlleLeden($functies = null) {
+		$taken = $this->corveeTakenModel->getAlleTaken(true); // grouped by uid
+		$vrijstellingen = $this->corveeVrijstellingenModel->getAlleVrijstellingen(true); // grouped by uid
+		$matrix = $this->loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
 			$profiel = ProfielRepository::get($uid); // false if lid does not exist
 			if (!$profiel) {
@@ -131,15 +143,15 @@ class CorveePuntenModel {
 			if (array_key_exists($uid, $vrijstellingen)) {
 				$vrijstelling = $vrijstellingen[$uid];
 			}
-			$matrix[$uid] = self::loadPuntenVoorLid($profiel, $functies, $lidtaken, $vrijstelling);
+			$matrix[$uid] = $this->loadPuntenVoorLid($profiel, $functies, $lidtaken, $vrijstelling);
 		}
 		return $matrix;
 	}
 
-	public static function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = false) {
+	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = false) {
 		if ($lidtaken === null) {
-			$lidtaken = CorveeTakenModel::instance()->getTakenVoorLid($profiel->uid);
-			$vrijstelling = CorveeVrijstellingenModel::instance()->getVrijstelling($profiel->uid);
+			$lidtaken = $this->corveeTakenModel->getTakenVoorLid($profiel->uid);
+			$vrijstelling = $this->corveeVrijstellingenModel->getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren
 			$lijst = array();
@@ -148,7 +160,7 @@ class CorveePuntenModel {
 				$lijst['prognose'] += $taak->getPuntenPrognose();
 			}
 		} else {
-			$lijst = self::sumPuntenPerFunctie($functies, $lidtaken);
+			$lijst = $this->sumPuntenPerFunctie($functies, $lidtaken);
 		}
 		if ($vrijstelling === false) {
 			$lijst['vrijstelling'] = false;
@@ -161,7 +173,7 @@ class CorveePuntenModel {
 		$lijst['puntenTotaal'] = (int)$profiel->corvee_punten;
 		$lijst['bonusTotaal'] = (int)$profiel->corvee_punten_bonus;
 		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
-		$lijst['prognoseColor'] = self::rgbCalculate($lijst['prognose']);
+		$lijst['prognoseColor'] = $this->rgbCalculate($lijst['prognose']);
 		if ($profiel->isLid()) {
 			$lijst['tekort'] = instelling('corvee', 'punten_per_jaar') - $lijst['prognose'];
 		} else {
@@ -170,14 +182,14 @@ class CorveePuntenModel {
 		if ($lijst['tekort'] < 0) {
 			$lijst['tekort'] = 0;
 		}
-		$lijst['tekortColor'] = self::rgbCalculate($lijst['tekort'], true);
+		$lijst['tekortColor'] = $this->rgbCalculate($lijst['tekort'], true);
 		return $lijst;
 	}
 
-	private static function sumPuntenPerFunctie($functies, $taken) {
-		$sumAantal = array();
-		$sumPunten = array();
-		$sumBonus = array();
+	private function sumPuntenPerFunctie($functies, $taken) {
+		$sumAantal = [];
+		$sumPunten = [];
+		$sumBonus = [];
 		$sumPrognose = 0;
 		foreach ($functies as $fid => $functie) {
 			$sumAantal[$fid] = 0;
@@ -193,13 +205,16 @@ class CorveePuntenModel {
 			}
 			$sumPrognose += $taak->getPuntenPrognose();
 		}
-		return array('aantal' => $sumAantal, 'punten' => $sumPunten, 'bonus' => $sumBonus, 'prognose' => $sumPrognose, 'prognoseColor' => self::rgbCalculate($sumPrognose));
+		return array('aantal' => $sumAantal, 'punten' => $sumPunten, 'bonus' => $sumBonus, 'prognose' => $sumPrognose, 'prognoseColor' => $this->rgbCalculate($sumPrognose));
 	}
 
 	/**
 	 * RGB kleurovergang berekenen
+	 * @param $punten
+	 * @param bool $tekort
+	 * @return string
 	 */
-	private static function rgbCalculate($punten, $tekort = false) {
+	private function rgbCalculate($punten, $tekort = false) {
 		$perjaar = intval(instelling('corvee', 'punten_per_jaar'));
 		if (!$tekort) {
 			$punten = $perjaar - $punten;
@@ -220,5 +235,4 @@ class CorveePuntenModel {
 
 		return dechex(8 + round($r * 6)) . dechex(8 + round($g * 6)) . dechex(8);
 	}
-
 }

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\model\maalcie\CorveePuntenModel;
+use CsrDelft\model\maalcie\CorveePuntenService;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\maalcie\FunctiesModel;
@@ -25,18 +25,23 @@ class MijnCorveeController {
 	 * @var CorveeVrijstellingenModel
 	 */
 	private $corveeVrijstellingenModel;
+	/**
+	 * @var CorveePuntenService
+	 */
+	private $corveePuntenService;
 
-	public function __construct(CorveeTakenModel $corveeTakenModel, CorveeVrijstellingenModel $corveeVrijstellingenModel, FunctiesModel $functiesModel) {
+	public function __construct(CorveeTakenModel $corveeTakenModel, CorveeVrijstellingenModel $corveeVrijstellingenModel, FunctiesModel $functiesModel, CorveePuntenService $corveePuntenService) {
 		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
 		$this->functiesModel = $functiesModel;
 		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveePuntenService = $corveePuntenService;
 	}
 
 	public function mijn() {
 		$taken = $this->corveeTakenModel->getKomendeTakenVoorLid(LoginModel::getUid());
 		$rooster = $this->corveeTakenModel->getRoosterMatrix($taken->fetchAll());
 		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
-		$punten = CorveePuntenModel::loadPuntenVoorLid(LoginModel::getProfiel(), $functies);
+		$punten = $this->corveePuntenService->loadPuntenVoorLid(LoginModel::getProfiel(), $functies);
 		$vrijstelling = $this->corveeVrijstellingenModel->getVrijstelling(LoginModel::getUid());
 		return view('maaltijden.corveetaak.mijn', [
 			'rooster' => $rooster,
