@@ -47,7 +47,7 @@ class AccountController extends AbstractController {
 		if ($uid == null) {
 			$uid = $this->loginModel->getUid();
 		}
-		if (AccountRepository::get($uid)) {
+		if ($this->accountRepository->get($uid)) {
 			setMelding('Account bestaat al', 0);
 		} else {
 			$account = $this->accountRepository->maakAccount($uid);
