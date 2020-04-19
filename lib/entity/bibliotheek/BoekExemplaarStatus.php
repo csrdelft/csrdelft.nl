@@ -4,9 +4,7 @@
 namespace CsrDelft\entity\bibliotheek;
 
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\Enum;
-use CsrDelft\Orm\Entity\PersistentEnum;
 
 class BoekExemplaarStatus extends Enum {
 

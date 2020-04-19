@@ -43,7 +43,7 @@ class CourantView implements ToResponse {
 			'headers' => $headers,
 			'courant' => $this->model,
 			'berichten' => $this->berichten,
-			'catNames' => CourantCategorie::getSelectOptions(),
+			'catNames' => CourantCategorie::getEnumDescriptions(),
 		])->getHtml();
 	}
 

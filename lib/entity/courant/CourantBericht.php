@@ -28,8 +28,8 @@ class CourantBericht {
 	 */
 	public $titel;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var CourantCategorie
+	 * @ORM\Column(type="enumcourantcategorie")
 	 */
 	public $cat;
 	/**
@@ -54,14 +54,17 @@ class CourantBericht {
 	public $datumTijd;
 
 	public function setVolgorde() {
+		if ($this->cat == null) {
+			return;
+		}
+
 		$this->volgorde = [
-			null => null,
 			'voorwoord' => 0,
 			'bestuur' => 1,
 			'csr' => 2,
 			'overig' => 3,
 			'sponsor' => 4,
-		][$this->cat];
+		][$this->cat->getValue()];
 	}
 
 	public function magBeheren() {

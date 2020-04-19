@@ -4,6 +4,7 @@ namespace CsrDelft\view\profiel;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Doctrine\Type\OntvangtContactueelType;
+use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\security\LoginModel;
@@ -151,7 +152,7 @@ class ProfielForm extends Formulier {
 				$fields[] = new Subkopje('Oudledenpost');
 				$fields[] = new TextField('adresseringechtpaar', $profiel->adresseringechtpaar, 'Tenaamstelling post echtpaar', 250);
 
-				$fields[] = new EnumSelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?');
+				$fields[] = new EnumSelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?', OntvangtContactueel::class);
 			}
 		}
 

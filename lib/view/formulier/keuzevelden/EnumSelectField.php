@@ -17,16 +17,21 @@ class EnumSelectField extends SelectField {
 	 * @param $name
 	 * @param $value Enum
 	 * @param $description
+	 * @param $enumClass Enum|string
 	 * @param int $size
 	 * @param bool $multiple
 	 */
-	public function __construct($name, $value, $description, $size = 1, $multiple = false) {
-		parent::__construct($name, $value->getValue(), $description, $value::getEnumDescriptions(), false, $size, $multiple);
+	public function __construct($name, $value, $description, $enumClass, $size = 1, $multiple = false) {
+		parent::__construct($name, $value == null ? null : $value->getValue(), $description, $enumClass::getEnumDescriptions(), false, $size, $multiple);
 
-		$this->enumClass = get_class($value);
+		$this->enumClass = $enumClass;
 	}
 
 	public function getFormattedValue() {
+		if ($this->value == null) {
+			return null;
+		}
+
 		$enumClass = $this->enumClass;
 		return $enumClass::from($this->value);
 	}

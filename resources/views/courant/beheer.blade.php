@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\courant\CourantBericht[] $berichten
+ */
+?>
 @extends('layout')
 
 @section('titel', 'Inzendingen C.S.R.-courant')
@@ -44,7 +49,7 @@
 			@foreach($berichten as $bericht)
 				<dt>
 					<span
-						class="onderstreept">{{$bericht->cat ? \CsrDelft\entity\courant\CourantCategorie::getDescription($bericht->cat) : 'Geen categorie'}}</span>
+						class="onderstreept">{{$bericht->cat ? $bericht->cat->getDescription() : 'Geen categorie'}}</span>
 					@if($magBeheren)
 						{!! \CsrDelft\repository\ProfielRepository::getLink($bericht->uid, 'civitas') !!}
 					@endif

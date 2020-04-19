@@ -12,6 +12,7 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredBBCodeField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
@@ -27,7 +28,7 @@ class CourantBerichtFormulier extends Formulier {
 		$fields = [];
 
 		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
-		$fields['cat'] = new RequiredSelectField('cat', $model->cat, 'Categorie', CourantCategorie::getSelectOptions());
+		$fields['cat'] = new RequiredEnumSelectField('cat', $model->cat, 'Categorie', CourantCategorie::class);
 		$fields['cat']->title = '
 		Selecteer hier een categorie. Uw invoer is enkel een voorstel.
 		<em>Aankondigingen over kamers te huur komen in <strong>overig</strong> terecht! C.S.R. is bedoeld voor

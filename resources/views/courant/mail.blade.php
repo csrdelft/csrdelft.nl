@@ -133,7 +133,7 @@ Subject: C.S.R.-courant {{strftime("%e %B %Y")}}
 									<div class="inhoudKop"><b>{{$catName}}</b></div>
 									<ul>
 										@foreach($berichten as $bericht)
-											@if($bericht->cat == $categorie)
+											@if($bericht->cat->getValue() == $categorie)
 												<li><a href="#{{$bericht->id}}"
 															 style="text-decoration: none;">{!! bbcode($bericht->titel, "mail") !!}</a></li>
 											@endif

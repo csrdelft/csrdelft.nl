@@ -4,22 +4,14 @@
 namespace CsrDelft\entity\courant;
 
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
-class CourantCategorie extends PersistentEnum {
+class CourantCategorie extends Enum {
 	const VOORWOORD = 'voorwoord';
 	const BESTUUR = 'bestuur';
 	const CSR = 'csr';
 	const OVERIG = 'overig';
 	const SPONSOR = 'sponsor';
-
-	protected static $supportedChoices = [
-		self::VOORWOORD => self::VOORWOORD,
-		self::BESTUUR => self::BESTUUR,
-		self::CSR => self::CSR,
-		self::OVERIG => self::OVERIG,
-		self::SPONSOR => self::SPONSOR,
-	];
 
 	protected static $mapChoiceToChar = [
 		self::VOORWOORD => 'v',
@@ -39,5 +31,25 @@ class CourantCategorie extends PersistentEnum {
 
 	public static function getSelectOptions() {
 		return static::$mapChoiceToDescription;
+	}
+
+	public function VOORWOORD() {
+		return static::from(self::VOORWOORD);
+	}
+
+	public function BESTUUR() {
+		return static::from(self::BESTUUR);
+	}
+
+	public function CSR() {
+		return static::from(self::CSR);
+	}
+
+	public function OVERIG() {
+		return static::from(self::OVERIG);
+	}
+
+	public function SPONSOR() {
+		return static::from(self::SPONSOR);
 	}
 }
