@@ -9,7 +9,7 @@ use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumZoeken;
-use CsrDelft\model\entity\security\Account;
+use CsrDelft\entity\security\Account;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;

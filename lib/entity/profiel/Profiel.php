@@ -5,7 +5,6 @@ namespace CsrDelft\entity\profiel;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
-use CsrDelft\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\GroepStatus;
@@ -15,12 +14,11 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\groepen\KringenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use GuzzleHttp\Exception\RequestException;
 
@@ -400,11 +398,11 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getAccount() {
-		return AccountModel::get($this->uid);
+		return AccountRepository::get($this->uid);
 	}
 
 	public function getPrimaryEmail() {
-		if (AccountModel::existsUid($this->uid)) {
+		if (AccountRepository::existsUid($this->uid)) {
 			return $this->getAccount()->email;
 		}
 		return $this->email;

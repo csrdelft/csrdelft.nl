@@ -8,10 +8,10 @@ use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccountRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -110,7 +110,7 @@ class FotoAlbumRepository extends AbstractRepository {
 	}
 
 	public function getFotoAlbum($path) {
-		if (AccountModel::isValidUid($path) AND ProfielRepository::existsUid($path)) {
+		if (AccountRepository::isValidUid($path) AND ProfielRepository::existsUid($path)) {
 			$album = new FotoTagAlbum($path);
 		} else {
 			$album = new FotoAlbum($path);

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\login;
 
-use CsrDelft\model\entity\security\Account;
+use CsrDelft\entity\security\Account;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;

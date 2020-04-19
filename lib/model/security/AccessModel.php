@@ -4,13 +4,13 @@ namespace CsrDelft\model\security;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
+use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\groepen\CommissieFunctie;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessRole;
-use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\groepen\BesturenModel;
@@ -31,6 +31,7 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccountRepository;
 
 /**
  * AccessModel.class.php
@@ -169,7 +170,7 @@ class AccessModel extends CachedPersistenceModel {
 			}
 			// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
 			if (!in_array($method, $allowedAuthenticationMethods)) {
-				$subject = AccountModel::get(LoginModel::UID_EXTERN);
+				$subject = AccountRepository::get(LoginModel::UID_EXTERN);
 			}
 		}
 
@@ -369,7 +370,7 @@ class AccessModel extends CachedPersistenceModel {
 		$permission = strtoupper($permission);
 
 		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
-		if (AccountModel::isValidUid(strtolower($permission))) {
+		if (AccountRepository::isValidUid(strtolower($permission))) {
 			return true;
 		}
 

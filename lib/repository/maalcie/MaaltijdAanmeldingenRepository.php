@@ -11,9 +11,9 @@ use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\security\AccessModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccountRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -100,7 +100,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @throws CsrGebruikerException Als de gebruiker niet bestaat
 	 */
 	public function checkAanmeldFilter($uid, $filter) {
-		$account = AccountModel::get($uid); // false if account does not exist
+		$account = AccountRepository::get($uid); // false if account does not exist
 		if (!$account) {
 			throw new CsrGebruikerException('Lid bestaat niet: $uid =' . $uid);
 		}
