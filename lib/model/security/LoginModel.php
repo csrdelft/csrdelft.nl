@@ -269,7 +269,7 @@ class LoginModel extends PersistenceModel implements Validator {
 
 		// Inloggen met lidnummer of gebruikersnaam
 		if ($this->accountRepository::isValidUid($user)) {
-			$account = $this->accountRepository::get($user);
+			$account = $this->accountRepository->get($user);
 		} else {
 			$account = $this->accountRepository->findOneByUsername($user);
 
@@ -404,7 +404,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($this->isSued()) {
 			throw new CsrGebruikerException('Geneste su niet mogelijk!');
 		}
-		$suNaar = $this->accountRepository::get($uid);
+		$suNaar = $this->accountRepository->get($uid);
 		if (!$this->maySuTo($suNaar)) {
 			throw new CsrGebruikerException('Deze gebruiker mag niet inloggen!');
 		}

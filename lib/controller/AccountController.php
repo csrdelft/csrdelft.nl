@@ -74,7 +74,7 @@ class AccountController extends AbstractController {
 			setMelding('U mag geen account wijzigen want u bent niet recent met wachtwoord ingelogd', 2);
 			throw new CsrToegangException();
 		}
-		$account = AccountRepository::get($uid);
+		$account = $this->accountRepository->get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 			throw new CsrToegangException();
@@ -102,7 +102,7 @@ class AccountController extends AbstractController {
 		if ($uid !== $this->loginModel->getUid() && !LoginModel::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
-		$account = AccountRepository::get($uid);
+		$account = $this->accountRepository->get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 		} else {

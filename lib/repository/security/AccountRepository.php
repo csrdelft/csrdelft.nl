@@ -252,4 +252,8 @@ class AccountRepository extends AbstractRepository {
 		$this->_em->flush();
 	}
 
+	public function delete(Account $account) {
+		$this->_em->remove($account);
+		$this->_em->flush();
+	}
 }

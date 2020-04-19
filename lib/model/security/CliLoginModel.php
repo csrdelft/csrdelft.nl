@@ -84,8 +84,8 @@ class CliLoginModel extends LoginModel {
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
 		// Inloggen met lidnummer of gebruikersnaam
-		if (AccountRepository::isValidUid($user)) {
-			$account = AccountRepository::get($user);
+		if ($this->accountRepository->isValidUid($user)) {
+			$account = $this->accountRepository->get($user);
 		} else {
 			$account = $this->accountRepository->findOneByUsername($user);
 		}
