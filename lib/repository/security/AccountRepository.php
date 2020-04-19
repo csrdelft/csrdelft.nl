@@ -10,7 +10,9 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\Proxy;
 
 /**
  * AccountRepository
@@ -37,7 +39,19 @@ class AccountRepository extends AbstractRepository {
 	 * @return Account|false
 	 */
 	public static function get($uid) {
-		return ContainerFacade::getContainer()->get(AccountRepository::class)->find($uid);
+		$accountRepository = ContainerFacade::getContainer()->get(AccountRepository::class);
+		$entity = $accountRepository->find($uid);
+		// Er is een OneToOne met account, maar account bestaat soms niet.
+		// Dit zorgt voor een EntityNotFoundException
+		// Zorg ervoor dat er gecheckt wordt of deze entity bestaat.
+		if ($entity instanceof Proxy && !$entity->__isInitialized()) {
+			try {
+				$entity->__load();
+			} catch (EntityNotFoundException $ex) {
+				return null;
+			}
+		}
+		return $entity;
 	}
 
 	/**
