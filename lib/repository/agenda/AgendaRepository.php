@@ -3,7 +3,7 @@
 namespace CsrDelft\repository\agenda;
 
 use CsrDelft\entity\agenda\AgendaItem;
-use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;

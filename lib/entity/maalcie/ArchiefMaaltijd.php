@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\maalcie;
 
-use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\agenda\Agendeerbaar;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 

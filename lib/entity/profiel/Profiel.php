@@ -2,11 +2,11 @@
 
 namespace CsrDelft\entity\profiel;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
+use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\security\Account;
-use CsrDelft\model\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\LidStatus;
@@ -16,7 +16,6 @@ use CsrDelft\model\groepen\KringenModel;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
@@ -122,8 +121,8 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $adresseringechtpaar;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="enumontvangtcontactueel")
+	 * @var OntvangtContactueel
 	 */
 	public $ontvangtcontactueel;
 	// adres
@@ -227,7 +226,7 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $lidjaar;
 	/**
-	 * @ORM\Column(type="date")
+	 * @ORM\Column(type="date", nullable=true)
 	 * @var \DateTimeImmutable
 	 */
 	public $lidafdatum;

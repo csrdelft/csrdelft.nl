@@ -3,9 +3,9 @@
 namespace CsrDelft\view\profiel;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Doctrine\Type\OntvangtContactueelType;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -30,6 +30,7 @@ use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\formulier\keuzevelden\DateObjectField;
+use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredGeslachtField;
@@ -150,11 +151,7 @@ class ProfielForm extends Formulier {
 				$fields[] = new Subkopje('Oudledenpost');
 				$fields[] = new TextField('adresseringechtpaar', $profiel->adresseringechtpaar, 'Tenaamstelling post echtpaar', 250);
 
-				$contactueel = array();
-				foreach (OntvangtContactueel::getTypeOptions() as $optie) {
-					$contactueel[$optie] = OntvangtContactueel::getDescription($optie);
-				}
-				$fields[] = new SelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?', $contactueel);
+				$fields[] = new EnumSelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?');
 			}
 		}
 

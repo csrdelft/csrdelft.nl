@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
-use CsrDelft\model\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
 use CsrDelft\model\security\LoginModel;

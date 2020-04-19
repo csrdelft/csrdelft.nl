@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \CsrDelft\model\entity\agenda\Agendeerbaar $item
+ * @var \CsrDelft\entity\agenda\Agendeerbaar $item
  * @var \CsrDelft\entity\agenda\AgendaItem $item
  * @var \CsrDelft\entity\profiel\Profiel $item
  * @var \CsrDelft\model\entity\maalcie\CorveeTaak $item
@@ -23,7 +23,7 @@
 							@icon('paintcan')
 						@endif
 						<a href="{{$item->getUrl()}}">{{$item->getTitel()}}</a>
-					@elseif($item instanceof \CsrDelft\model\entity\agenda\Agendeerbaar)
+					@elseif($item instanceof \CsrDelft\entity\agenda\Agendeerbaar)
 						@if($item->getUrl())
 							<a href="{{$item->getUrl()}}">{{$item->getTitel()}}</a>
 						@else
@@ -74,7 +74,7 @@
 			<div class="tijd">
 				{{$item->getBeginMoment()->format('H:i')}} - {{$item->getEindMoment()->format('H:i')}}
 			</div>
-		@elseif($item instanceof CsrDelft\model\entity\agenda\Agendeerbaar)
+		@elseif($item instanceof \CsrDelft\entity\agenda\Agendeerbaar)
 			@if(!$item->isHeledag())
 				<p>
 					{{strftime("%R", $item->getBeginMoment())}}

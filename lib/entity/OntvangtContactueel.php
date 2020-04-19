@@ -1,7 +1,8 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\entity;
 
+use CsrDelft\common\Enum;
 use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
@@ -10,8 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-abstract class OntvangtContactueel extends PersistentEnum {
-
+class OntvangtContactueel extends Enum {
 	/**
 	 * OntvangtContactueel opties.
 	 */
@@ -19,14 +19,17 @@ abstract class OntvangtContactueel extends PersistentEnum {
 	const Digitaal = 'digitaal';
 	const Nee = 'nee';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::Ja => self::Ja,
-		self::Digitaal => self::Digitaal,
-		self::Nee => self::Nee,
-	];
+	public static function Nee(){
+		return new static(self::Nee);
+	}
+
+	public static function Digitaal() {
+		return new static(self::Digitaal);
+	}
+
+	public static function Ja() {
+		return new static(self::Ja);
+	}
 
 	/**
 	 * @var string[]
