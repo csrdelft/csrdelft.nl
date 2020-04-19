@@ -2,9 +2,8 @@
 
 namespace CsrDelft\repository\security;
 
+use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\OneTimeToken;
-use CsrDelft\model\entity\security\Account;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -47,7 +46,7 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 		$qb->setParameters(['url' => $url, 'token' => hash('sha512', $token)]);
 		try {
 			$tokenObj = $qb->getQuery()->getSingleResult();
-			return AccountModel::get($tokenObj->uid);
+			return AccountRepository::get($tokenObj->uid);
 		} catch (NoResultException $e) {
 			return null;
 		} catch (NonUniqueResultException $e) {

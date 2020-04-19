@@ -3,8 +3,8 @@
 namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\ProfielService;
 
 /**
@@ -34,7 +34,7 @@ class LidField extends TextField {
 		if ($this->empty_null AND empty($this->value)) {
 			return null;
 		}
-		if (!AccountModel::isValidUid($this->value)) {
+		if (!AccountRepository::isValidUid($this->value)) {
 			$profielService = ContainerFacade::getContainer()->get(ProfielService::class);
 			$profielen = $profielService->zoekLeden($this->value, 'naam', 'alle', 'achternaam', $this->zoekin);
 			if (!empty($profielen)) {
@@ -54,7 +54,7 @@ class LidField extends TextField {
 		}
 		$value = parent::getValue();
 		// geldig uid?
-		if (AccountModel::isValidUid($value) AND ProfielRepository::existsUid($value)) {
+		if (AccountRepository::isValidUid($value) AND ProfielRepository::existsUid($value)) {
 			return true;
 		}
 		$profielService = ContainerFacade::getContainer()->get(ProfielService::class);

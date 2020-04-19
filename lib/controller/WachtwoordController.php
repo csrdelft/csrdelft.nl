@@ -7,8 +7,8 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccessModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
@@ -23,17 +23,17 @@ class WachtwoordController extends AbstractController {
 	 */
 	private $loginModel;
 	/**
-	 * @var AccountModel
+	 * @var AccountRepository
 	 */
-	private $accountModel;
+	private $accountRepository;
 	/**
 	 * @var OneTimeTokensRepository
 	 */
 	private $oneTimeTokensRepository;
 
-	public function __construct(LoginModel $loginModel, AccountModel $accountModel, OneTimeTokensRepository $oneTimeTokensRepository) {
+	public function __construct(LoginModel $loginModel, AccountRepository $accountRepository, OneTimeTokensRepository $oneTimeTokensRepository) {
 		$this->loginModel = $loginModel;
-		$this->accountModel = $accountModel;
+		$this->accountRepository = $accountRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 	}
 
@@ -47,7 +47,7 @@ class WachtwoordController extends AbstractController {
 		if ($form->validate()) {
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
-			$this->accountModel->wijzigWachtwoord($account, $pass_plain);
+			$this->accountRepository->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Wachtwoord instellen geslaagd', 1);
 		}
 		return view('default', ['content' => $form]);
@@ -64,7 +64,7 @@ class WachtwoordController extends AbstractController {
 		if ($form->validate()) {
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
-			if ($this->accountModel->wijzigWachtwoord($account, $pass_plain)) {
+			if ($this->accountRepository->wijzigWachtwoord($account, $pass_plain)) {
 				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
 			// token verbruikt
@@ -91,7 +91,7 @@ class WachtwoordController extends AbstractController {
 		$form = new WachtwoordVergetenForm();
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$account = $this->accountModel->getByEmail($values['mail']);
+			$account = $this->accountRepository->findOneByEmail($values['mail']);
 			// mag wachtwoord reset aanvragen?
 			// (mag ook als na verify($tokenString) niet ingelogd is met wachtwoord en dus AuthenticationMethod::url_token is)
 			if (!$account || !AccessModel::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions())) {

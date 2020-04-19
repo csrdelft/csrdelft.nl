@@ -5,12 +5,13 @@ namespace CsrDelft\model\security;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\RememberLogin;
-use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\Validator;
@@ -23,7 +24,7 @@ use CsrDelft\view\Validator;
  *
  * Model van het huidige ingeloggede account voor inloggen, uitloggen, su'en etc.
  *
- * @see AccountModel
+ * @see AccountRepository
  */
 class LoginModel extends PersistenceModel implements Validator {
 
@@ -31,9 +32,9 @@ class LoginModel extends PersistenceModel implements Validator {
 	public const UID_EXTERN = 'x999';
 	private $tempSwitchUid;
 	/**
-	 * @var AccountModel
+	 * @var AccountRepository
 	 */
-	private $accountModel;
+	protected $accountRepository;
 	/**
 	 * @var RememberLoginRepository
 	 */
@@ -53,14 +54,14 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return Account|false
 	 */
 	public static function getSuedFrom() {
-		return AccountModel::get($_SESSION['_suedFrom']);
+		return AccountRepository::get($_SESSION['_suedFrom']);
 	}
 
 	/**
 	 * @return Account|false
 	 */
 	public static function getAccount() {
-		return AccountModel::get(static::getUid());
+		return AccountRepository::get(static::getUid());
 	}
 
 	/**
@@ -87,13 +88,13 @@ class LoginModel extends PersistenceModel implements Validator {
 
 	/**
 	 * LoginModel constructor.
-	 * @param AccountModel $accountModel
+	 * @param AccountRepository $accountRepository
 	 * @param RememberLoginRepository $rememberLoginRepository
 	 */
-	public function __construct(AccountModel $accountModel, RememberLoginRepository $rememberLoginRepository) {
+	public function __construct(AccountRepository $accountRepository, RememberLoginRepository $rememberLoginRepository) {
 		parent::__construct();
 
-		$this->accountModel = $accountModel;
+		$this->accountRepository = $accountRepository;
 		$this->rememberLoginRepository = $rememberLoginRepository;
 	}
 
@@ -130,7 +131,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			 */
 			$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-				$account = $this->accountModel->find('private_token = ?', array($token), null, null, 1)->fetch();
+				$account = $this->accountRepository->findOneBy(['private_token' => $token]);
 				if ($account) {
 					$this->login($account->uid, null, false, null, true, true, getDateTime());
 				}
@@ -188,7 +189,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		// Controleer of wachtwoord is verlopen
-		$pass_since = strtotime($account->pass_since);
+		$pass_since = $account->pass_since->getTimestamp();
 		$verloop_na = strtotime(instelling('beveiliging', 'wachtwoorden_verlopen_ouder_dan'));
 		$waarschuwing_vooraf = strtotime(instelling('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
 		if ($pass_since < $verloop_na) {
@@ -267,13 +268,13 @@ class LoginModel extends PersistenceModel implements Validator {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
 
 		// Inloggen met lidnummer of gebruikersnaam
-		if ($this->accountModel::isValidUid($user)) {
-			$account = $this->accountModel::get($user);
+		if ($this->accountRepository::isValidUid($user)) {
+			$account = $this->accountRepository->get($user);
 		} else {
-			$account = $this->accountModel->find('username = ?', array($user), null, null, 1)->fetch();
+			$account = $this->accountRepository->findOneByUsername($user);
 
 			if (!$account) {
-				$account = $this->accountModel->getByEmail($user);
+				$account = $this->accountRepository->findOneByEmail($user);
 			}
 		}
 
@@ -296,7 +297,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			// Moet eventueel wachten?
 			if ($evtWachten) {
 				// Check timeout
-				$timeout = $this->accountModel->moetWachten($account);
+				$timeout = $this->accountRepository->moetWachten($account);
 				if ($timeout > 0) {
 					$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
 					return false;
@@ -309,8 +310,8 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 
 			// Check password
-			if ($this->accountModel->controleerWachtwoord($account, $pass_plain)) {
-				$this->accountModel->successfulLoginAttempt($account);
+			if ($this->accountRepository->controleerWachtwoord($account, $pass_plain)) {
+				$this->accountRepository->successfulLoginAttempt($account);
 				$_SESSION['_authenticationMethod'] = AuthenticationMethod::password_login;
 			} // Wrong password
 			else {
@@ -320,7 +321,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				} // Regular failed username+password
 				else {
 					$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
-					$this->accountModel->failedLoginAttempt($account);
+					$this->accountRepository->failedLoginAttempt($account);
 				}
 				return false;
 			}
@@ -403,7 +404,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($this->isSued()) {
 			throw new CsrGebruikerException('Geneste su niet mogelijk!');
 		}
-		$suNaar = $this->accountModel::get($uid);
+		$suNaar = $this->accountRepository->get($uid);
 		if (!$this->maySuTo($suNaar)) {
 			throw new CsrGebruikerException('Deze gebruiker mag niet inloggen!');
 		}

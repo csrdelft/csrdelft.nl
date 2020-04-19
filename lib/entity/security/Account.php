@@ -1,110 +1,96 @@
 <?php
 
-namespace CsrDelft\model\entity\security;
+namespace CsrDelft\entity\security;
 
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Account.class.php
+ * Account
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Login account.
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\security\AccountRepository")
+ * @ORM\Table("accounts")
  */
-class Account extends PersistentEntity {
+class Account {
 
 	/**
 	 * Lidnummer
 	 * Foreign key
 	 * @var string
+	 * @ORM\Column(type="uid")
+	 * @ORM\Id()
 	 */
 	public $uid;
 	/**
 	 * Gebruikersnaam
 	 * @var string
+	 * @ORM\Column(type="stringkey")
 	 */
 	public $username;
 	/**
 	 * E-mail address
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $email;
 	/**
 	 * Password hash
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $pass_hash;
 	/**
 	 * DateTime last change
-	 * @var string
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="datetime")
 	 */
 	public $pass_since;
 	/**
 	 * DateTime last successful login
-	 * @var string
+	 * @var \DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $last_login_success;
 	/**
 	 * DateTime last login attempt
-	 * @var string
+	 * @var \DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $last_login_attempt;
 	/**
 	 * Amount of failed login attempts
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $failed_login_attempts;
 	/**
 	 * Reden van blokkering
-	 * @var string
+	 * @var string|null
+	 * @ORM\Column(type="text", nullable=true)
 	 */
 	public $blocked_reason;
 	/**
 	 * RBAC permissions role
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $perm_role;
 	/**
 	 * RSS & ICAL token
-	 * @var string
+	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $private_token;
 	/**
 	 * DateTime last change
-	 * @var string
+	 * @var \DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $private_token_since;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'uid' => array(T::UID),
-		'username' => array(T::StringKey),
-		'email' => array(T::String),
-		'pass_hash' => array(T::String),
-		'pass_since' => array(T::DateTime),
-		'last_login_success' => array(T::DateTime, true),
-		'last_login_attempt' => array(T::DateTime, true),
-		'failed_login_attempts' => array(T::Integer),
-		'blocked_reason' => array(T::Text, true),
-		'perm_role' => array(T::Enumeration, false, AccessRole::class),
-		'private_token' => array(T::String, true),
-		'private_token_since' => array(T::DateTime, true)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('uid');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'accounts';
 
 	public function getProfiel() {
 		return ProfielRepository::get($this->uid);

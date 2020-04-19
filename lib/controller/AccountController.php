@@ -6,9 +6,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\AccessModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
 
@@ -22,17 +22,17 @@ class AccountController extends AbstractController {
 	 */
 	private $cmsPaginaRepository;
 	/**
-	 * @var AccountModel
+	 * @var AccountRepository
 	 */
-	private $accountModel;
+	private $accountRepository;
 	/**
 	 * @var LoginModel
 	 */
 	private $loginModel;
 
-	public function __construct(AccountModel $accountModel, LoginModel $loginModel, CmsPaginaRepository $cmsPaginaRepository) {
+	public function __construct(AccountRepository $accountRepository, LoginModel $loginModel, CmsPaginaRepository $cmsPaginaRepository) {
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
-		$this->accountModel = $accountModel;
+		$this->accountRepository = $accountRepository;
 		$this->loginModel = $loginModel;
 	}
 
@@ -47,10 +47,10 @@ class AccountController extends AbstractController {
 		if ($uid == null) {
 			$uid = $this->loginModel->getUid();
 		}
-		if (AccountModel::get($uid)) {
+		if ($this->accountRepository->get($uid)) {
 			setMelding('Account bestaat al', 0);
 		} else {
-			$account = $this->accountModel->maakAccount($uid);
+			$account = $this->accountRepository->maakAccount($uid);
 			if ($account) {
 				setMelding('Account succesvol aangemaakt', 1);
 			} else {
@@ -74,7 +74,7 @@ class AccountController extends AbstractController {
 			setMelding('U mag geen account wijzigen want u bent niet recent met wachtwoord ingelogd', 2);
 			throw new CsrToegangException();
 		}
-		$account = AccountModel::get($uid);
+		$account = $this->accountRepository->get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 			throw new CsrToegangException();
@@ -89,7 +89,7 @@ class AccountController extends AbstractController {
 			}
 			// username, email & wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
-			$this->accountModel->wijzigWachtwoord($account, $pass_plain);
+			$this->accountRepository->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
 		return view('default', ['content' => $form]);
@@ -102,11 +102,11 @@ class AccountController extends AbstractController {
 		if ($uid !== $this->loginModel->getUid() && !LoginModel::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
-		$account = AccountModel::get($uid);
+		$account = $this->accountRepository->get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 		} else {
-			$result = $this->accountModel->delete($account);
+			$result = $this->accountRepository->delete($account);
 			if ($result === 1) {
 				setMelding('Account succesvol verwijderd', 1);
 			} else {

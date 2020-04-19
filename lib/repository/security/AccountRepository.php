@@ -1,23 +1,33 @@
 <?php
 
-namespace CsrDelft\model\security;
+namespace CsrDelft\repository\security;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\security\Account;
+use CsrDelft\entity\security\Account;
+use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\model\security\AccessModel;
+use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\Orm\CachedPersistenceModel;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * AccountModel.class.php
+ * AccountRepository
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Wachtwoord en login timeout management.
+ * @method Account|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Account|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Account[]    findAll()
+ * @method Account[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AccountModel extends CachedPersistenceModel {
+class AccountRepository extends AbstractRepository {
+
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Account::class);
+	}
 
 	const ORM = Account::class;
 	const PASSWORD_HASH_ALGORITHM = PASSWORD_DEFAULT;
@@ -27,7 +37,7 @@ class AccountModel extends CachedPersistenceModel {
 	 * @return Account|false
 	 */
 	public static function get($uid) {
-		return static::instance()->retrieveByPrimaryKey(array($uid));
+		return ContainerFacade::getContainer()->get(AccountRepository::class)->find($uid);
 	}
 
 	/**
@@ -45,29 +55,23 @@ class AccountModel extends CachedPersistenceModel {
 	 * @return bool
 	 */
 	public static function existsUid($uid) {
-		return static::instance()->existsByPrimaryKey(array($uid));
+		return ContainerFacade::getContainer()->get(AccountRepository::class)->find($uid) != null;
 	}
 
 	/**
 	 * @param $email
 	 * @return Account|null
 	 */
-	public function getByEmail($email) {
+	public function findOneByEmail($email) {
 		if (empty($email)) {
 			return null;
 		}
 
-		$accounts = $this->find('email = ?', [$email])->fetchAll();
+		return $this->findOneBy(['email' => $email]);
+	}
 
-		if (count($accounts) == 0) {
-			return null;
-		}
-
-		if (count($accounts) > 1) {
-			throw new CsrException(sprintf("Meerdere accounts gevonden met dit emailadres: \"%s\".", $email));
-		}
-
-		return $accounts[0];
+	public function findOneByUsername($username) {
+		return $this->findOneBy(['username' => $username]);
 	}
 
 	/**
@@ -76,7 +80,14 @@ class AccountModel extends CachedPersistenceModel {
 	 * @return bool
 	 */
 	public function existsUsername($name) {
-		return $this->database->sqlExists($this->getTableName(), 'username = ?', array($name));
+		return $this->findOneBy(['username' => $name]) != null;
+	}
+
+	public function findAdmins() {
+		return $this->createQueryBuilder('a')
+			->where('a.perm_role NOT IN (:admin_perm_roles)')
+			->setParameter('admin_perm_roles', [AccessRole::Lid, AccessRole::Nobody, AccessRole::Eter, AccessRole::Oudlid])
+			->getQuery()->getResult();
 	}
 
 	/**
@@ -100,10 +111,11 @@ class AccountModel extends CachedPersistenceModel {
 		$account->username = $uid;
 		$account->email = $profiel->email;
 		$account->pass_hash = '';
-		$account->pass_since = getDateTime();
+		$account->pass_since = date_create_immutable();
 		$account->failed_login_attempts = 0;
 		$account->perm_role = AccessModel::instance()->getDefaultPermissionRole($profiel->status);
-		$this->create($account);
+		$this->_em->persist($account);
+		$this->_em->flush();
 		return $account;
 	}
 
@@ -124,7 +136,7 @@ class AccountModel extends CachedPersistenceModel {
 		}
 
 		// Rehash wachtwoord als de hash niet aan de eisen voldoet
-		if ($valid && password_needs_rehash($hash, AccountModel::PASSWORD_HASH_ALGORITHM)) {
+		if ($valid && password_needs_rehash($hash, AccountRepository::PASSWORD_HASH_ALGORITHM)) {
 			$this->wijzigWachtwoord($account, $passPlain, false);
 		}
 
@@ -146,7 +158,7 @@ class AccountModel extends CachedPersistenceModel {
 	 * @return string
 	 */
 	public function maakWachtwoord($passPlain) {
-		return password_hash($passPlain, AccountModel::PASSWORD_HASH_ALGORITHM);
+		return password_hash($passPlain, AccountRepository::PASSWORD_HASH_ALGORITHM);
 	}
 
 	/**
@@ -162,10 +174,11 @@ class AccountModel extends CachedPersistenceModel {
 		if ($passPlain != '') {
 			$account->pass_hash = $this->maakWachtwoord($passPlain);
 			if ($isVeranderd) {
-				$account->pass_since = getDateTime();
+				$account->pass_since = date_create_immutable();
 			}
 		}
-		$this->update($account);
+		$this->_em->persist($account);
+		$this->_em->flush();
 
 		if ($isVeranderd) {
 			// Sync LDAP
@@ -183,8 +196,9 @@ class AccountModel extends CachedPersistenceModel {
 	 */
 	public function resetPrivateToken(Account $account) {
 		$account->private_token = crypto_rand_token(150);
-		$account->private_token_since = getDateTime();
-		$this->update($account);
+		$account->private_token_since = date_create_immutable();
+		$this->_em->persist($account);
+		$this->_em->flush();
 	}
 
 	/**
@@ -210,7 +224,7 @@ class AccountModel extends CachedPersistenceModel {
 				$wacht = 45;
 				break;
 		}
-		$diff = strtotime($account->last_login_attempt) + $wacht - time();
+		$diff = $account->last_login_attempt->getTimestamp() + $wacht - time();
 		if ($diff > 0) {
 			return $diff;
 		}
@@ -222,8 +236,9 @@ class AccountModel extends CachedPersistenceModel {
 	 */
 	public function failedLoginAttempt(Account $account) {
 		$account->failed_login_attempts++;
-		$account->last_login_attempt = getDateTime();
-		$this->update($account);
+		$account->last_login_attempt = date_create_immutable();
+		$this->_em->persist($account);
+		$this->_em->flush();
 	}
 
 	/**
@@ -231,9 +246,14 @@ class AccountModel extends CachedPersistenceModel {
 	 */
 	public function successfulLoginAttempt(Account $account) {
 		$account->failed_login_attempts = 0;
-		$account->last_login_attempt = getDateTime();
-		$account->last_login_success = getDateTime();
-		$this->update($account);
+		$account->last_login_attempt = date_create_immutable();
+		$account->last_login_success = date_create_immutable();
+		$this->_em->persist($account);
+		$this->_em->flush();
 	}
 
+	public function delete(Account $account) {
+		$this->_em->remove($account);
+		$this->_em->flush();
+	}
 }

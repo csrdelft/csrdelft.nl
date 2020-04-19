@@ -77,7 +77,7 @@
 								<a href="/toestemming" class="btn btn-light" title="Pas toestemming aan">@icon('lock_edit')</a>
 							@endif
 							@if(mag(P_ADMIN) || is_ingelogd_account($profiel->uid))
-								@if(\CsrDelft\model\security\AccountModel::existsUid($profiel->uid))
+								@if(\CsrDelft\repository\security\AccountRepository::existsUid($profiel->uid))
 									<a href="/account/{{$profiel->uid}}/bewerken" class="btn btn-light"
 										 title="Inloggegevens bewerken">@icon('key')</a>
 								@else
@@ -115,7 +115,7 @@
 				<dd>{{$profiel->getNaam('civitas')}}</dd>
 				<dt>Lidnummer</dt>
 				<dd>
-					@if(\CsrDelft\model\security\AccountModel::existsUid($profiel->uid) && \CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount()))
+					@if(\CsrDelft\repository\security\AccountRepository::existsUid($profiel->uid) && \CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount()))
 						<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 					@else
 						{{$profiel->uid}}

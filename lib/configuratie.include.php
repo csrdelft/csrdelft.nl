@@ -15,15 +15,14 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
 use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\CliLoginModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
-use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\LogRepository;
+use CsrDelft\repository\security\AccountRepository;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -118,9 +117,9 @@ if (FORCE_HTTPS) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-			$account = $container->get(AccountModel::class)->find('private_token = ?', array($token), null, null, 1)->fetch();
+			$account = $container->get(AccountRepository::class)->find('private_token = ?', array($token), null, null, 1)->fetch();
 			// Reset private token, user has to get a new one
-			$container->get(AccountModel::class)->resetPrivateToken($account);
+			$container->get(AccountRepository::class)->resetPrivateToken($account);
 			// TODO: Log dit
 		}
 		// redirect to https

@@ -5,6 +5,7 @@ namespace CsrDelft\model\security;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 
 
@@ -39,12 +40,12 @@ class CliLoginModel extends LoginModel {
 
 	/**
 	 * CliLoginModel constructor.
-	 * @param AccountModel $accountModel
+	 * @param AccountRepository $accountRepository
 	 * @param RememberLoginRepository $rememberLoginRepository
 	 */
-	public function __construct(AccountModel $accountModel, RememberLoginRepository $rememberLoginRepository) {
+	public function __construct(AccountRepository $accountRepository, RememberLoginRepository $rememberLoginRepository) {
 		parent::__static();
-		parent::__construct($accountModel, $rememberLoginRepository);
+		parent::__construct($accountRepository, $rememberLoginRepository);
 	}
 
 	public function authenticate() {
@@ -83,10 +84,10 @@ class CliLoginModel extends LoginModel {
 		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
 
 		// Inloggen met lidnummer of gebruikersnaam
-		if (AccountModel::isValidUid($user)) {
-			$account = AccountModel::get($user);
+		if ($this->accountRepository->isValidUid($user)) {
+			$account = $this->accountRepository->get($user);
 		} else {
-			$account = AccountModel::instance()->find('username = ?', array($user), null, null, 1)->fetch();
+			$account = $this->accountRepository->findOneByUsername($user);
 		}
 
 		// Onbekende gebruiker
@@ -98,8 +99,8 @@ class CliLoginModel extends LoginModel {
 		session_unset();
 
 		// Check password
-		if (AccountModel::instance()->controleerWachtwoord($account, $pass_plain)) {
-			AccountModel::instance()->successfulLoginAttempt($account);
+		if ($this->accountRepository->controleerWachtwoord($account, $pass_plain)) {
+			$this->accountRepository->successfulLoginAttempt($account);
 		} // Wrong password
 		else {
 			// Password deleted (by admin)
@@ -107,7 +108,7 @@ class CliLoginModel extends LoginModel {
 				die('Gebruik wachtwoord vergeten of mail de PubCie');
 			} // Regular failed username+password
 			else {
-				AccountModel::instance()->failedLoginAttempt($account);
+				$this->accountRepository->failedLoginAttempt($account);
 				die('Inloggen niet geslaagd');
 			}
 		}

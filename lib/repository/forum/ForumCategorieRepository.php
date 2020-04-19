@@ -6,9 +6,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\security\AccountRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use PDO;
 
@@ -131,7 +131,7 @@ class ForumCategorieRepository extends AbstractRepository {
 		$uids = Database::instance()->sqlSelect(array('uid'), 'profielen', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
-			if (AccountModel::isValidUid($uid)) {
+			if (AccountRepository::isValidUid($uid)) {
 				$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLid($uid);
 				$this->forumDradenVerbergenRepository->toonAllesVoorLid($uid);
 				$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($uid);

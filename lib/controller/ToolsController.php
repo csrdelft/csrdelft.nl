@@ -10,12 +10,12 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\SavedQueryModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\ProfielService;
 use CsrDelft\service\Roodschopper;
 use CsrDelft\view\bbcode\CsrBB;
@@ -36,9 +36,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ToolsController extends AbstractController {
 	/**
-	 * @var AccountModel
+	 * @var AccountRepository
 	 */
-	private $accountModel;
+	private $accountRepository;
 	/**
 	 * @var ProfielRepository
 	 */
@@ -60,9 +60,9 @@ class ToolsController extends AbstractController {
 	 */
 	private $profielService;
 
-	public function __construct(AccountModel $accountModel, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogRepository $logRepository, SavedQueryModel $savedQueryModel) {
+	public function __construct(AccountRepository $accountRepository, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogRepository $logRepository, SavedQueryModel $savedQueryModel) {
 		$this->savedQueryModel = $savedQueryModel;
-		$this->accountModel = $accountModel;
+		$this->accountRepository = $accountRepository;
 		$this->profielRepository = $profielRepository;
 		$this->loginModel = $loginModel;
 		$this->logRepository = $logRepository;
@@ -156,7 +156,7 @@ class ToolsController extends AbstractController {
 
 	public function admins() {
 		return view('tools.admins', [
-			'accounts' => $this->accountModel->find('perm_role NOT IN (?,?,?,?)', ['R_LID', 'R_NOBODY', 'R_ETER', 'R_OUDLID'], null, 'perm_role'),
+			'accounts' => $this->accountRepository->findAdmins(),
 		]);
 	}
 
@@ -216,7 +216,7 @@ class ToolsController extends AbstractController {
 		}
 
 		if ($given == 'uid') {
-			if (AccountModel::isValidUid($string)) {
+			if ($this->accountRepository->isValidUid($string)) {
 				return new PlainView(uid2naam($string));
 			} else {
 				$uids = explode(',', $string);

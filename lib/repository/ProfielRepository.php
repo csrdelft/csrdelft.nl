@@ -19,10 +19,10 @@ use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\OrmTrait;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
+use CsrDelft\repository\security\AccountRepository;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
@@ -253,7 +253,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		$geenAboEnCorveeVoor = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Commissie, LidStatus::Overleden);
 		if (in_array($profiel->status, $geenAboEnCorveeVoor)) {
 			//maaltijdabo's uitzetten (R_ETER is een S_NOBODY die toch een abo mag hebben)
-			$account = AccountModel::get($profiel->uid);
+			$account = AccountRepository::get($profiel->uid);
 			if (!$account OR $account->perm_role !== AccessRole::Eter) {
 				$removedabos = $this->disableMaaltijdabos($profiel, $oudestatus);
 				$changes = array_merge($changes, $removedabos);

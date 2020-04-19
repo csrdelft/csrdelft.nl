@@ -1,6 +1,6 @@
 <div class="card visitekaartje flex-row">
 	<div class="card-body @if($profiel->isJarig()) jarig @endif ">
-		@if (CsrDelft\model\security\AccountModel::existsUid($profiel->uid) AND CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount()))
+		@if (\CsrDelft\repository\security\AccountRepository::existsUid($profiel->uid) AND CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->getAccount()))
 			<div class="float-right">
 				<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 			</div>

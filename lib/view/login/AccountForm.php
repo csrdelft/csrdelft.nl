@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\login;
 
+use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\security\AccessRole;
-use CsrDelft\model\entity\security\Account;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;

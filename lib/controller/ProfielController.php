@@ -22,7 +22,6 @@ use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\maalcie\KwalificatiesModel;
-use CsrDelft\model\security\AccountModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
@@ -35,6 +34,7 @@ use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\fotoalbum\FotoBBView;
@@ -138,9 +138,9 @@ class ProfielController extends AbstractController {
 	 */
 	private $lidToestemmingRepository;
 	/**
-	 * @var AccountModel
+	 * @var AccountRepository
 	 */
-	private $accountModel;
+	private $accountRepository;
 	/**
 	 * @var SaldoGrafiekModel
 	 */
@@ -151,35 +151,35 @@ class ProfielController extends AbstractController {
 	private $verjaardagenService;
 
 	public function __construct(
-        ProfielRepository $profielRepository,
-        AccountModel $accountModel,
-        ActiviteitenModel $activiteitenModel,
-        BesturenModel $besturenModel,
-        BoekExemplaarRepository $boekExemplaarModel,
-        BoekRecensieRepository $boekRecensieModel,
-        CiviBestellingModel $civiBestellingModel,
-        CommissieVoorkeurRepository $commissieVoorkeurRepository,
-        CorveeVoorkeurenModel $corveeVoorkeurenModel,
-        CommissiesModel $commissiesModel,
-        CorveeTakenModel $corveeTakenModel,
-        CorveeVrijstellingenModel $corveeVrijstellingenModel,
-        ForumPostsRepository $forumPostsRepository,
-        FotoRepository $fotoRepository,
-        FotoTagsRepository $fotoTagsRepository,
-        KetzersModel $ketzersModel,
-        KwalificatiesModel $kwalificatiesModel,
-        LidToestemmingRepository $lidToestemmingRepository,
-        MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-        MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-        OnderverenigingenModel $onderverenigingenModel,
-        RechtenGroepenModel $rechtenGroepenModel,
-        VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
-        WerkgroepenModel $werkgroepenModel,
-        SaldoGrafiekModel $saldoGrafiekModel,
-        VerjaardagenService $verjaardagenService
+		ProfielRepository $profielRepository,
+		AccountRepository $accountRepository,
+		ActiviteitenModel $activiteitenModel,
+		BesturenModel $besturenModel,
+		BoekExemplaarRepository $boekExemplaarModel,
+		BoekRecensieRepository $boekRecensieModel,
+		CiviBestellingModel $civiBestellingModel,
+		CommissieVoorkeurRepository $commissieVoorkeurRepository,
+		CorveeVoorkeurenModel $corveeVoorkeurenModel,
+		CommissiesModel $commissiesModel,
+		CorveeTakenModel $corveeTakenModel,
+		CorveeVrijstellingenModel $corveeVrijstellingenModel,
+		ForumPostsRepository $forumPostsRepository,
+		FotoRepository $fotoRepository,
+		FotoTagsRepository $fotoTagsRepository,
+		KetzersModel $ketzersModel,
+		KwalificatiesModel $kwalificatiesModel,
+		LidToestemmingRepository $lidToestemmingRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+		OnderverenigingenModel $onderverenigingenModel,
+		RechtenGroepenModel $rechtenGroepenModel,
+		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
+		WerkgroepenModel $werkgroepenModel,
+		SaldoGrafiekModel $saldoGrafiekModel,
+		VerjaardagenService $verjaardagenService
 	) {
 		$this->profielRepository = $profielRepository;
-		$this->accountModel = $accountModel;
+		$this->accountRepository = $accountRepository;
 		$this->activiteitenModel = $activiteitenModel;
 		$this->besturenModel = $besturenModel;
 		$this->boekExemplaarModel = $boekExemplaarModel;
@@ -212,7 +212,7 @@ class ProfielController extends AbstractController {
 		if ($profiel === false) {
 			throw new CsrNotFoundException();
 		}
-		$this->accountModel->resetPrivateToken($profiel->getAccount());
+		$this->accountRepository->resetPrivateToken($profiel->getAccount());
 		return $this->profiel($uid);
 	}
 

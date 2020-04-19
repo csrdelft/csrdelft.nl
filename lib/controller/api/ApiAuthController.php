@@ -4,21 +4,21 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\AccountModel;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use Exception;
 use Firebase\JWT\JWT;
 use Jacwright\RestServer\RestException;
 
 class ApiAuthController {
-	private $accountModel;
+	private $accountRepository;
 	private $rememberLoginRepository;
 
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 
 		$this->rememberLoginRepository = $container->get(RememberLoginRepository::class);
-		$this->accountModel = $container->get(AccountModel::class);
+		$this->accountRepository = $container->get(AccountRepository::class);
 	}
 
 	/**
@@ -65,27 +65,27 @@ class ApiAuthController {
 			$pass = filter_var(strval($_POST['pass']), FILTER_SANITIZE_STRING);
 
 			// Check uid
-			if (AccountModel::isValidUid($user)) {
-				$account = AccountModel::get($user);
+			if ($this->accountRepository->isValidUid($user)) {
+				$account = $this->accountRepository->get($user);
 			}
 
 			// Check account
 			if ($account) {
 
 				// Check timeout
-				$timeout = $this->accountModel->moetWachten($account);
+				$timeout = $this->accountRepository->moetWachten($account);
 
 				if ($timeout === 0) {
 
 					// Check password
-					$validPassword = $this->accountModel->controleerWachtwoord($account, $pass);
+					$validPassword = $this->accountRepository->controleerWachtwoord($account, $pass);
 
 					if ($validPassword) {
-						$this->accountModel->successfulLoginAttempt($account);
+						$this->accountRepository->successfulLoginAttempt($account);
 						$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
 						$credentialsAreValid = true;
 					} else {
-						$this->accountModel->failedLoginAttempt($account);
+						$this->accountRepository->failedLoginAttempt($account);
 					}
 
 				}

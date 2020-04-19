@@ -4,7 +4,7 @@ namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\security\AccountModel;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\ProfielService;
 
 /**
@@ -28,7 +28,7 @@ class CivisaldoField extends TextField {
 		if ($this->empty_null AND empty($this->value)) {
 			return null;
 		}
-		if (!AccountModel::isValidUid($this->value)) {
+		if (!AccountRepository::isValidUid($this->value)) {
 			$profielService = ContainerFacade::getContainer()->get(ProfielService::class);
 			$profielen = $profielService->zoekLeden($this->value, 'naam', 'alle', 'achternaam', $this->zoekin);
 			if (!empty($profielen)) {
@@ -48,7 +48,7 @@ class CivisaldoField extends TextField {
 		}
 		$value = parent::getValue();
 		// geldig uid?
-		if (AccountModel::isValidUid($value) AND CiviSaldoModel::instance()->existsByUid($value)) {
+		if (AccountRepository::isValidUid($value) AND CiviSaldoModel::instance()->existsByUid($value)) {
 			return true;
 		}
 		$this->error = 'Geen geldig lid';
