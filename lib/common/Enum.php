@@ -37,11 +37,17 @@ abstract class Enum {
 			throw new \InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
 		}
 
-		if (!isset(static::$instanceCacheArray[$value])) {
-			static::$instanceCacheArray[$value] = new static($value);
+		$calledClass = get_called_class();
+
+		if (!isset(self::$instanceCacheArray[$calledClass])) {
+			self::$instanceCacheArray[$calledClass] = [];
 		}
 
-		return static::$instanceCacheArray[$value];
+		if (!isset(self::$instanceCacheArray[$calledClass][$value])) {
+			self::$instanceCacheArray[$calledClass][$value] = new static($value);
+		}
+
+		return self::$instanceCacheArray[$calledClass][$value];
 	}
 
 	public static function getEnumValues() {
