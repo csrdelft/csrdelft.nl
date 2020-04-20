@@ -256,16 +256,16 @@
 			</dl>
 			@if(is_zichtbaar($profiel, ['kinderen'], 'intern') && is_zichtbaar($profiel, ['patroon'], 'profiel'))
 				<dl class="col-md-6">
-					@if($profiel->patroonProfiel)
+					@if($profiel->getPatroonProfiel())
 						<dt>
-							@if($profiel->patroonProfiel->geslacht === \CsrDelft\model\entity\Geslacht::Vrouw)
+							@if($profiel->getPatroonProfiel()->geslacht === \CsrDelft\model\entity\Geslacht::Vrouw)
 								Matroon
 							@else
 								Patroon
 							@endif
 						</dt>
 						<dd>
-							{!! $profiel->patroonProfiel->getLink('civitas') !!}
+							{!! $profiel->getPatroonProfiel()->getLink('civitas') !!}
 						</dd>
 					@endif
 					@if($profiel->hasKinderen())
@@ -278,7 +278,7 @@
 							</ul>
 						</dd>
 					@endif
-					@if($profiel->patroonProfiel || $profiel->hasKinderen())
+					@if($profiel->getPatroonProfiel() || $profiel->hasKinderen())
 						<dt></dt>
 						<dd>
 							<a class="btn btn-light" href="/profiel/{{$profiel->uid}}/stamboom"

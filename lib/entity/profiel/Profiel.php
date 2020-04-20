@@ -20,7 +20,9 @@ use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Persistence\Proxy;
 use GuzzleHttp\Exception\RequestException;
 
 
@@ -767,7 +769,19 @@ class Profiel implements Agendeerbaar {
 	 * @ORM\ManyToOne(targetEntity="Profiel", inversedBy="kinderen")
 	 * @ORM\JoinColumn(name="patroon", referencedColumnName="uid", nullable=true)
 	 */
-	public $patroonProfiel;
+	private $patroonProfiel;
+
+	public function getPatroonProfiel() {
+		try {
+			$patroonProfiel = $this->patroonProfiel;
+			if ($patroonProfiel instanceof Proxy) {
+				$patroonProfiel->__load();
+			}
+			return $patroonProfiel;
+		} catch (EntityNotFoundException $ex) {
+			return null;
+		}
+	}
 
 	/**
 	 * @var Profiel[]|ArrayCollection
