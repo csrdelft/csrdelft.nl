@@ -85,5 +85,6 @@ class StudieOpDatumCommand extends Command {
 		}
 
 		$output->writeln("");
+		return 0;
 	}
 }
