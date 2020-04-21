@@ -15,6 +15,7 @@ use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * MaaltijdenFiscaatController.class.php
@@ -76,7 +77,7 @@ class MaaltijdenFiscaatController {
 		]);
 	}
 
-	public function POST_verwerk() {
+	public function POST_verwerk(EntityManagerInterface $em) {
 		# Haal maaltijd op
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var Maaltijd $maaltijd */
@@ -92,7 +93,8 @@ class MaaltijdenFiscaatController {
 			throw new CsrGebruikerException("Maaltijd is al verwerkt");
 		}
 
-		$maaltijden = Database::transaction(function () use ($maaltijd) {
+		$maaltijden = [];
+		$em->transactional(function () use ($maaltijd, $maaltijden) {
 			# Ga alle personen in de maaltijd af
 			$aanmeldingen = $this->maaltijdAanmeldingenRepository->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 
@@ -114,7 +116,7 @@ class MaaltijdenFiscaatController {
 
 			$this->maaltijdenRepository->update($maaltijd);
 
-			return array($maaltijd);
+			$maaltijden[] = $maaltijd;
 		});
 
 		return new RemoveRowsResponse($maaltijden);
