@@ -40,10 +40,9 @@ class ForumDraadMelding {
 	public $uid;
 	/**
 	 * Volgniveau
-	 * @see ForumDraadMeldingNiveau
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var ForumDraadMeldingNiveau
+	 * @ORM\Column(type="enumforumdraadmeldingniveau")
 	 */
-	public $niveau = 'altijd';
+	public $niveau;
 
 }
