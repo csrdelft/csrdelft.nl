@@ -27,7 +27,7 @@ doctrine:
           enumforumdraadmeldingniveau: CsrDelft\common\Doctrine\Type\ForumDraadMeldingNiveauType
     orm:
         auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         dql:
           # Zie https://github.com/beberlei/DoctrineExtensions voor meer mooie extensies.
