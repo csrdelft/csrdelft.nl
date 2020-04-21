@@ -44,7 +44,7 @@ class BeheerAbonnementenController {
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'in',
-			'aborepetities' => $this->maaltijdRepetitiesRepository->find(['abonneerbaar' => 'true']),
+			'aborepetities' => $this->maaltijdRepetitiesRepository->findBy(['abonneerbaar' => 'true']),
 			'repetities' => $matrix_repetities[1],
 			'matrix' => $matrix_repetities[0],
 		]);
@@ -55,7 +55,7 @@ class BeheerAbonnementenController {
 
 		return view('maaltijden.abonnement.beheer_abonnementen', [
 			'toon' => 'waarschuwing',
-			'aborepetities' => $this->maaltijdRepetitiesRepository->find(['abonneerbaar' => 'true']),
+			'aborepetities' => $this->maaltijdRepetitiesRepository->findBy(['abonneerbaar' => 'true']),
 			'repetities' => $matrix_repetities[1],
 			'matrix' => $matrix_repetities[0],
 		]);

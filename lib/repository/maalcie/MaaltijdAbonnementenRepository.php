@@ -342,8 +342,10 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 * @throws Throwable
 	 */
 	public function getAbonnementenVoorLid($uid, $abonneerbaar = false, $uitgeschakeld = false) {
-		$lijst = [];
-		$this->_em->transactional(function () use ($lijst, $uid, $abonneerbaar, $uitgeschakeld) {
+
+		$lijst = $this->_em->transactional(function () use ($uid, $abonneerbaar, $uitgeschakeld) {
+			$lijst = [];
+
 			$maaltijdRepetitiesRepository = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class);
 			if ($abonneerbaar) {
 				$repById = $maaltijdRepetitiesRepository->getAbonneerbareRepetitiesVoorLid($uid); // grouped by mrid
@@ -373,7 +375,13 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 				}
 			}
 			ksort($lijst);
+
+			return $lijst;
 		});
+
+		if ($lijst === true) {
+			return [];
+		}
 
 		return $lijst;
 	}

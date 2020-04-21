@@ -93,8 +93,8 @@ class MaaltijdenFiscaatController {
 			throw new CsrGebruikerException("Maaltijd is al verwerkt");
 		}
 
-		$maaltijden = [];
-		$em->transactional(function () use ($maaltijd, $maaltijden) {
+		$maaltijden = $em->transactional(function () use ($maaltijd) {
+			$maaltijden = [];
 			# Ga alle personen in de maaltijd af
 			$aanmeldingen = $this->maaltijdAanmeldingenRepository->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 
@@ -116,7 +116,7 @@ class MaaltijdenFiscaatController {
 
 			$this->maaltijdenRepository->update($maaltijd);
 
-			$maaltijden[] = $maaltijd;
+			return [$maaltijd];
 		});
 
 		return new RemoveRowsResponse($maaltijden);
