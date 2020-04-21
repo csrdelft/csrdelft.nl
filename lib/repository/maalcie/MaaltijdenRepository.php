@@ -379,7 +379,7 @@ class MaaltijdenRepository extends AbstractRepository {
 				$archief = $this->archiefMaaltijdenRepository->vanMaaltijd($maaltijd);
 				$this->archiefMaaltijdenRepository->create($archief);
 				if ($this->corveeTakenModel->existMaaltijdCorvee($maaltijd->maaltijd_id)) {
-					setMelding($maaltijd->getMoment()->format(DATETIME_FORMAT) . ' heeft nog gekoppelde corveetaken!', 2);
+					setMelding(date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT) . ' heeft nog gekoppelde corveetaken!', 2);
 				}
 			} catch (CsrGebruikerException $e) {
 				$errors[] = $e;
@@ -501,7 +501,7 @@ class MaaltijdenRepository extends AbstractRepository {
 				$this->meldAboAan($maaltijd);
 
 				foreach ($corveerepetities as $corveerepetitie) {
-					$this->corveeTakenModel->newRepetitieTaken($corveerepetitie, $datum->format(DATE_FORMAT), $datum->format(DATE_FORMAT), intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
+					$this->corveeTakenModel->newRepetitieTaken($corveerepetitie, date_format_intl($datum, DATE_FORMAT), date_format_intl($datum, DATE_FORMAT), intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
 				}
 				$maaltijden[] = $maaltijd;
 				if ($repetitie->periode_in_dagen < 1) {

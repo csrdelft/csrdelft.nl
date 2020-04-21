@@ -13,7 +13,7 @@ namespace CsrDelft\view\formulier\keuzevelden;
 class DateTimeObjectField extends DateTimeField {
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
 		if ($value instanceof \DateTimeInterface) {
-			$value = $value->format(DATETIME_FORMAT);
+			$value = date_format_intl($value, DATETIME_FORMAT);
 		}
 		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}

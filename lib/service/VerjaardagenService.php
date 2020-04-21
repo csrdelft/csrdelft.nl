@@ -61,8 +61,8 @@ class VerjaardagenService {
 	public function getTussen(\DateTimeInterface $van, \DateTimeInterface $tot, $limiet = null) {
 		$vanjaar = $van->format('Y');
 		$totjaar = $tot->format('Y');
-		$van = $van->format(DATE_FORMAT);
-		$tot = $tot->format(DATE_FORMAT);
+		$van = date_format_intl($van, DATE_FORMAT);
+		$tot = date_format_intl($tot, DATE_FORMAT);
 
 		return $this->profielRepository->ormFind("status IN ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND NOT gebdatum = '0000-00-00' AND (
             (CONCAT(?, SUBSTRING(gebdatum, 5)) >= ? AND CONCAT(?, SUBSTRING(gebdatum, 5)) < ?)

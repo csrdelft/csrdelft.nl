@@ -128,8 +128,8 @@ class LLLijst extends LLWeergave {
 
 				default:
 					try {
-						if ($profiel->$veld instanceof \DateTime) {
-							echo $profiel->$veld->format(DATE_FORMAT);
+						if ($profiel->$veld instanceof \DateTimeInterface) {
+							echo date_format_intl($profiel->$veld, DATE_FORMAT);
 						} else {
 							echo htmlspecialchars($profiel->$veld);
 						}

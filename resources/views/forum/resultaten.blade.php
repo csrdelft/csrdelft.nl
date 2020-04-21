@@ -72,7 +72,7 @@
 									@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 										{!! reldate($post->datum_tijd) !!}
 									@else
-										{{$post->datum_tijd->format(DATETIME_FORMAT)}}
+										{{date_format_intl($post->datum_tijd, DATETIME_FORMAT)}}
 									@endif
 								</span>
 								@auth

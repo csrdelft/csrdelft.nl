@@ -600,9 +600,9 @@ class GoogleSync {
 			}
 		}
 
-		if ($profiel->gebdatum != null && $profiel->gebdatum->format(DATE_FORMAT) != '0000-00-00') {
+		if ($profiel->gebdatum != null && date_format_intl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00') {
 			$geboortedatum = $doc->createElement('gContact:birthday');
-			$geboortedatum->setAttribute('when', $profiel->gebdatum->format(DATE_FORMAT));
+			$geboortedatum->setAttribute('when', date_format_intl($profiel->gebdatum, DATE_FORMAT));
 			$entry->appendChild($geboortedatum);
 		}
 

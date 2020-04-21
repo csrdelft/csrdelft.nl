@@ -95,7 +95,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $gesloten = false;
 	/**
-	 * @var integer
+	 * @var \DateTimeInterface
 	 * @ORM\Column(type="datetime")
 	 * @Serializer\Groups("datatable")
 	 */
@@ -284,8 +284,8 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public function jsonSerialize() {
 		$json = (array) $this;
-		$json['datum'] = $this->datum->format(DATE_FORMAT);
-		$json['tijd'] = $this->tijd->format(TIME_FORMAT);
+		$json['datum'] = date_format_intl($this->datum, DATE_FORMAT);
+		$json['tijd'] = date_format_intl($this->tijd, TIME_FORMAT);
 		$json['repetitie_naam'] = is_int($this->mlt_repetitie_id) ? ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
 		$json['tijd'] = date('G:i', strtotime($json['tijd']));
 		$json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
@@ -308,7 +308,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @Serializer\SerializedName("tijd")
 	 */
 	public function getDataTableTijd() {
-		return $this->tijd->format(TIME_FORMAT);
+		return date_format_intl($this->tijd, TIME_FORMAT);
 	}
 
 	/**
@@ -317,7 +317,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @Serializer\SerializedName("datum")
 	 */
 	public function getDataTableDatum() {
-		return $this->datum->format(DATE_FORMAT);
+		return date_format_intl($this->datum, DATE_FORMAT);
 	}
 
 	function getAanmeldLimiet() {

@@ -328,7 +328,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		similar_text($post->tekst, $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;
 		$post->laatst_gewijzigd = date_create_immutable();
-		$bewerkt = 'bewerkt door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]';
+		$bewerkt = 'bewerkt door [lid=' . LoginModel::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]';
 		if ($reden !== '') {
 			$bewerkt .= ': [tekst]' . CsrBB::escapeUbbOff($reden) . '[/tekst]';
 		}
@@ -357,7 +357,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		$oudeDraad = $post->draad;
 		$post->draad = $nieuwDraad;
 		$post->laatst_gewijzigd = date_create_immutable();
-		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]' . "\n";
+		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]' . "\n";
 		try {
 			$this->getEntityManager()->persist($post);
 			$this->getEntityManager()->flush();

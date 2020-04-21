@@ -449,3 +449,17 @@ function get_menu($name) {
 function get_breadcrumbs($name) {
 	return ContainerFacade::getContainer()->get(MenuItemRepository::class)->getBreadcrumbs($name);
 }
+
+/**
+ * Zie http://userguide.icu-project.org/formatparse/datetime voor de geaccepteerde formats
+ *
+ * @param DateTimeInterface $date
+ * @param $format
+ * @return false|string
+ */
+function date_format_intl(DateTimeInterface $date, $format) {
+	$fmt = new IntlDateFormatter('nl', null, null);
+	$fmt->setPattern($format);
+
+	return $fmt->format($date);
+}

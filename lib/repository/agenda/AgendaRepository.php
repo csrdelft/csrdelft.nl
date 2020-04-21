@@ -174,7 +174,7 @@ class AgendaRepository extends ServiceEntityRepository {
 		/** @var Activiteit[] $activiteiten */
 		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (
 		    (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)
-		  )', array($van->format(DATETIME_FORMAT), $tot->format(DATETIME_FORMAT), $van->format(DATETIME_FORMAT), $tot->format(DATETIME_FORMAT)));
+		  )', array(date_format_intl($van, DATETIME_FORMAT), date_format_intl($tot, DATETIME_FORMAT), date_format_intl($van, DATETIME_FORMAT), date_format_intl($tot, DATETIME_FORMAT)));
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
 			if (in_array($activiteit->soort, [ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES]) OR $activiteit->mag(AccessAction::Bekijken, $auth)) {

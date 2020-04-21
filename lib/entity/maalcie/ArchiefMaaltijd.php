@@ -68,7 +68,7 @@ class ArchiefMaaltijd implements Agendeerbaar {
 	 * @Serializer\SerializedName("tijd")
 	 */
 	public function getTijdFormatted() {
-		return $this->tijd->format(TIME_FORMAT);
+		return date_format_intl($this->tijd, TIME_FORMAT);
 	}
 
 	/**
@@ -77,7 +77,7 @@ class ArchiefMaaltijd implements Agendeerbaar {
 	 * @Serializer\SerializedName("datum")
 	 */
 	public function getDatumFormatted() {
-		return $this->datum->format(DATE_FORMAT);
+		return date_format_intl($this->datum, DATE_FORMAT);
 	}
 
 	/**

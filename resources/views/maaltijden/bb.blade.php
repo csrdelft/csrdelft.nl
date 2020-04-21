@@ -1,4 +1,8 @@
-<div class="media pt-3 maaltijdketzer-{{$maaltijd->maaltijd_id}}" data-maaltijdnaam="{{$maaltijd->titel}}">
+<?php
+/**
+ * @var \CsrDelft\entity\maalcie\Maaltijd $maaltijd
+ */
+?><div class="media pt-3 maaltijdketzer-{{$maaltijd->maaltijd_id}}" data-maaltijdnaam="{{$maaltijd->titel}}">
 	<div class="media-body pb-3 mb-0 lh-125 @if(isset($border) && $border) border-bottom border-gray @endif ">
 		<div class="row">
 			<div class="col">
@@ -8,7 +12,7 @@
 						&nbsp; (&euro; {{sprintf("%.2f", $maaltijd->getPrijsFloat()) }})
 					@endif
 				</h6>
-				op {{$maaltijd->datum->format(LONG_DATE_FORMAT)}} om {{ $maaltijd->tijd->format(TIME_FORMAT) }}
+				op {{date_format_intl($maaltijd->datum, LONG_DATE_FORMAT)}} om {{ date_format_intl($maaltijd->tijd, TIME_FORMAT) }}
 				@if($maaltijd->magBekijken(CsrDelft\model\security\LoginModel::getUid()))
 					<div class="float-right">
 						@icon("paintcan", null, $maaltijd->maaltijdcorvee->getCorveeFunctie()->naam)
@@ -81,7 +85,7 @@
 						@endif
 
 						@if($maaltijd->gesloten && $maaltijd->getEindMoment() > time())
-							@php($date = $maaltijd->laatst_gesloten->format(TIME_FORMAT))
+							@php($date = date_format_intl($maaltijd->laatst_gesloten, TIME_FORMAT))
 							@icon("lock", null, "Maaltijd is gesloten om " . $date)
 						@endif
 					@endcan

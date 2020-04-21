@@ -66,7 +66,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 		$maaltijdTekst = count($maaltijden) > 1 ? count($maaltijden) . ' maaltijden' : 'maaltijd';
 		$output->writeln("De verwerking van de volgende {$maaltijdTekst} wordt hiermee ongedaan gemaakt:");
 		foreach ($maaltijden as $maaltijd) {
-			$output->writeln("- " . $maaltijd->titel . " " . $maaltijd->datum->format(DATE_FORMAT));
+			$output->writeln("- " . $maaltijd->titel . " " . date_format_intl($maaltijd->datum, DATE_FORMAT));
 		}
 
 		// Haal bestellingen op

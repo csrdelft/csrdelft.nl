@@ -60,7 +60,7 @@ class BbMaaltijd extends BbTag {
 	public function renderLight() {
 		$maaltijd = $this->maaltijden[0];
 		$url = $maaltijd->getUrl() . '#' . $maaltijd->maaltijd_id;
-		return BbHelper::lightLinkBlock('maaltijd', $url, $maaltijd->titel, $maaltijd->getMoment()->format(DATETIME_FORMAT));
+		return BbHelper::lightLinkBlock('maaltijd', $url, $maaltijd->titel, date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT));
 	}
 
 	public function render() {

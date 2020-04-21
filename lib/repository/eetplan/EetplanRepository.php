@@ -24,7 +24,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EetplanRepository extends ServiceEntityRepository {
 	use OrmTrait;
-	const FMT_DATE = "d-m-Y";
+	const FMT_DATE = "dd-MM-Y";
 
 	/**
 	 * @var EetplanBekendenRepository
@@ -84,8 +84,8 @@ class EetplanRepository extends ServiceEntityRepository {
 				'woonoord' => $sessie->getWoonoord()->naam
 			];
 
-			if (!isset($avonden[$sessie->avond->format(self::FMT_DATE)])) {
-				$avonden[$sessie->avond->format(self::FMT_DATE)] = $sessie->avond;
+			if (!isset($avonden[date_format_intl($sessie->avond, self::FMT_DATE)])) {
+				$avonden[date_format_intl($sessie->avond, self::FMT_DATE)] = $sessie->avond;
 			}
 		}
 
@@ -138,7 +138,7 @@ class EetplanRepository extends ServiceEntityRepository {
 		$sessies = $this->ormFind('uid LIKE ? AND woonoord_id = ? AND avond IS NOT NULL', [$lichting . "%", $id], null, 'avond');
 
 		return array_reduce($sessies, function (array $accumulator, Eetplan $eetplan) {
-			$accumulator[$eetplan->avond->format(self::FMT_DATE)][] = $eetplan;
+			$accumulator[date_format_intl($eetplan->avond, self::FMT_DATE)][] = $eetplan;
 
 			return $accumulator;
 		}, []);

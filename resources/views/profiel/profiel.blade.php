@@ -133,11 +133,11 @@
 					<dt>Voorletters</dt>
 					<dd>{{$profiel->voorletters}}</dd>
 				@endif
-				@if($profiel->gebdatum->format(DATE_FORMAT) != '0000-00-00' && is_zichtbaar($profiel, 'gebdatum'))
+				@if(date_format_intl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00' && is_zichtbaar($profiel, 'gebdatum'))
 					<dt>Geboortedatum</dt>
 					<dd>{{strftime('%d-%m-%Y', $profiel->gebdatum->getTimestamp())}}</dd>
 				@endif
-				@if($profiel->status === \CsrDelft\model\entity\LidStatus::Overleden && $profiel->sterfdatum->format(DATE_FORMAT) !== '0000-00-00')
+				@if($profiel->status === \CsrDelft\model\entity\LidStatus::Overleden && date_format_intl($profiel->sterfdatum, DATE_FORMAT) !== '0000-00-00')
 					<dt>Overleden op</dt>
 					<dd>{{strftime('%d-%m-%y', $profiel->sterfdatum->getTimestamp())}}</dd>
 				@endif
@@ -506,7 +506,7 @@
 						<ul class="list-unstyled">
 							@foreach($recenteAanmeldingen as $aanmelding)
 								<li>
-									{{$aanmelding->maaltijd->getTitel()}} <span class="lichtgrijs">({{$aanmelding->maaltijd->datum->format(LONG_DATE_FORMAT)}})</span>
+									{{$aanmelding->maaltijd->getTitel()}} <span class="lichtgrijs">({{date_format_intl($aanmelding->maaltijd->datum, LONG_DATE_FORMAT)}})</span>
 								</li>
 							@endforeach
 						</ul>
@@ -594,7 +594,7 @@
 										@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 											{!! reldate($post->datum_tijd) !!}
 										@else
-											{{$post->datum_tijd->format(DATETIME_FORMAT)}}
+											{{date_format_intl($post->datum_tijd, DATETIME_FORMAT)}}
 										@endif
 									</td>
 								</tr>

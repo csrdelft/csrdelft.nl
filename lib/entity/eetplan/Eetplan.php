@@ -83,7 +83,7 @@ class Eetplan implements DataTableEntry {
 	 */
 	public function getDataTableAvond() {
 		if ($this->avond) {
-			return $this->avond->format(DATE_FORMAT);
+			return date_format_intl($this->avond, DATE_FORMAT);
 		} else {
 			return null;
 		}

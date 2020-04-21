@@ -169,7 +169,7 @@ class AgendaController {
 			$item->item_id = (int)$this->agendaRepository->create($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input
-				setMelding('Toegevoegd: ' . $item->titel . ' (' . $item->begin_moment->format(DATETIME_FORMAT) . ')', 1);
+				setMelding('Toegevoegd: ' . $item->titel . ' (' . date_format_intl($item->begin_moment, DATETIME_FORMAT) . ')', 1);
 				$item->item_id = null;
 				return new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 			} else {

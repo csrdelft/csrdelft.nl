@@ -53,7 +53,8 @@ error_reporting(E_ALL);
 mb_internal_encoding('UTF-8');
 
 // datum weergave enzo
-setlocale(LC_ALL, 'nl_NL.utf8');
+setlocale(LC_ALL, 'nl_NL');
+//setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
 
@@ -168,6 +169,7 @@ switch (MODE) {
 		ini_set('session.cookie_httponly', true);
 		ini_set('log_errors_max_len', 0);
 		ini_set('xdebug.max_nesting_level', 2000);
+		ini_set('intl.default_locale', 'nl');
 		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
 		session_start();

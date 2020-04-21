@@ -11,7 +11,7 @@
 	<td>{{$repetitie->standaard_titel}}</td>
 	<td>{{$repetitie->getDagVanDeWeekText()}}</td>
 	<td>{{$repetitie->getPeriodeInDagenText()}}</td>
-	<td>{{$repetitie->standaard_tijd->format(TIME_FORMAT)}}</td>
+	<td>{{date_format_intl($repetitie->standaard_tijd, TIME_FORMAT)}}</td>
 	<td>&euro; {{sprintf("%.2f", $repetitie->getStandaardPrijsFloat())}}</td>
 	<td>{{$repetitie->standaard_limiet}}</td>
 	<td>@if($repetitie->abonneerbaar)@icon("tick", null, "Abonneerbaar")@endif</td>
