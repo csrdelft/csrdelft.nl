@@ -238,6 +238,9 @@ class AccountRepository extends AbstractRepository {
 				$wacht = 45;
 				break;
 		}
+		if ($account->last_login_attempt == null) {
+			return 0;
+		}
 		$diff = $account->last_login_attempt->getTimestamp() + $wacht - time();
 		if ($diff > 0) {
 			return $diff;
