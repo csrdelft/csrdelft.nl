@@ -147,7 +147,7 @@ class ApiAuthController {
 		$refresh_token = filter_var(strval($_POST['refresh_token']), FILTER_SANITIZE_STRING);
 
 		// Check refresh token
-		$remember = $this->rememberLoginRepository->find('token = ?', array(hash('sha512', $refresh_token)), null, null, 1)->fetch();
+		$remember = $this->rememberLoginRepository->findOneBy(['token' => hash('sha512', $refresh_token)]);
 
 		if (!$remember) {
 			throw new RestException(401);

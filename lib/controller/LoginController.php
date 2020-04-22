@@ -3,11 +3,9 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\view\login\LoginForm;
-use CsrDelft\view\login\RememberAfterLoginForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

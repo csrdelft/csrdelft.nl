@@ -59,13 +59,16 @@ class BeheerPuntenController {
 	}
 
 	public function resetjaar() {
-		$aantal_taken_errors = $this->corveePuntenService->resetCorveejaar();
+		/**
+		 * @var int $aantal
+		 * @var int $taken
+		 * @var CsrGebruikerException[] $errors
+		 */
+		array($aantal, $taken, $errors) = $this->corveePuntenService->resetCorveejaar();
 		$view = $this->beheer();
-		$aantal = $aantal_taken_errors[0];
-		$taken = $aantal_taken_errors[1];
 		setMelding($aantal . ' vrijstelling' . ($aantal !== 1 ? 'en' : '') . ' verwerkt en verwijderd', 1);
 		setMelding($taken . ' ta' . ($taken !== 1 ? 'ken' : 'ak') . ' naar de prullenbak verplaatst', 0);
-		foreach ($aantal_taken_errors[2] as $error) {
+		foreach ($errors as $error) {
 			setMelding($error->getMessage(), -1);
 		}
 

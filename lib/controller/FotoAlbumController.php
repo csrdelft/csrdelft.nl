@@ -22,7 +22,6 @@ use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * FotoAlbumController.class.php

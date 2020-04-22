@@ -113,7 +113,7 @@ class SessionController extends AbstractController {
 		}
 		$manager->flush();
 
-		return $this->tableData($remember);
+		return $this->tableData($response);
 	}
 
 	public function forget() {

@@ -23,6 +23,7 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\response\IcalResponse;
 use CsrDelft\view\View;
+use DateInterval;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -267,7 +268,7 @@ class AgendaController {
 		$startMoment = date_create_immutable($request->query->get('start'));
 		$eindMoment = date_create_immutable($request->query->get('end'));
 
-		if ($startMoment->add(\DateInterval::createFromDateString('1 year')) < $eindMoment) {
+		if ($startMoment->add(DateInterval::createFromDateString('1 year')) < $eindMoment) {
 			// Om de gare logica omtrent verjaardagen te laten werken
 			throw new CsrGebruikerException("Verschil tussen start en eind mag niet groter zijn dan een jaar.");
 		}

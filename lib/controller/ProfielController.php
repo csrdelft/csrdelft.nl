@@ -42,7 +42,9 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class ProfielController extends AbstractController {
 	/**
@@ -303,7 +305,7 @@ class ProfielController extends AbstractController {
 				$profiel->changelog[] = $changeEntry;
 				if ($nieuw) {
 					try {
-						/** @var \Doctrine\DBAL\Connection $conn */
+						/** @var Connection $conn */
 						$conn = $this->getDoctrine()->getConnection();
 						$conn->setAutoCommit(false);
 						$conn->connect();
@@ -320,7 +322,7 @@ class ProfielController extends AbstractController {
 								}
 							}
 							$conn->commit();
-						} catch (\Exception $e) {
+						} catch (Exception $e) {
 							setMelding($e->getMessage(), -1);
 							$conn->rollBack();
 						} finally {
@@ -355,7 +357,7 @@ class ProfielController extends AbstractController {
 		return $this->profielBewerken($profiel);
 	}
 
-	public function voorkeuren(EntityManagerInterface $em, $uid) {
+	public function voorkeuren($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
 		if ($profiel === false) {
