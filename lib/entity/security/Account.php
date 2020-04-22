@@ -95,7 +95,7 @@ class Account {
 
 	/**
 	 * @var Profiel
-	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel", inversedBy="account")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
 	public $profiel;

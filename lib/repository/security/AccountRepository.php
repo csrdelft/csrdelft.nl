@@ -36,22 +36,11 @@ class AccountRepository extends AbstractRepository {
 
 	/**
 	 * @param $uid
-	 * @return Account|false
+	 * @return Account|null
 	 */
 	public static function get($uid) {
 		$accountRepository = ContainerFacade::getContainer()->get(AccountRepository::class);
-		$entity = $accountRepository->find($uid);
-		// Er is een OneToOne met account, maar account bestaat soms niet.
-		// Dit zorgt voor een EntityNotFoundException
-		// Zorg ervoor dat er gecheckt wordt of deze entity bestaat.
-		if ($entity instanceof Proxy && !$entity->__isInitialized()) {
-			try {
-				$entity->__load();
-			} catch (EntityNotFoundException $ex) {
-				return null;
-			}
-		}
-		return $entity;
+		return $accountRepository->find($uid);
 	}
 
 	/**

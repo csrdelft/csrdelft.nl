@@ -38,6 +38,10 @@ use GuzzleHttp\Exception\RequestException;
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Profiel implements Agendeerbaar {
+	public function __construct() {
+		$this->kinderen = new ArrayCollection();
+	}
+
 	/**
 	 * @ORM\Id()
 	 * @ORM\Column(type="uid")
@@ -360,8 +364,7 @@ class Profiel implements Agendeerbaar {
 
 	/**
 	 * @var Account|null
-	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\security\Account")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=true)
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\security\Account", mappedBy="profiel")
 	 */
 	public $account;
 
@@ -767,7 +770,7 @@ class Profiel implements Agendeerbaar {
 	/**
 	 * @var Profiel|null
 	 * @ORM\ManyToOne(targetEntity="Profiel", inversedBy="kinderen")
-	 * @ORM\JoinColumn(name="patroon", referencedColumnName="uid", nullable=true)
+	 * @ORM\JoinColumn(name="patroon", referencedColumnName="uid")
 	 */
 	private $patroonProfiel;
 
