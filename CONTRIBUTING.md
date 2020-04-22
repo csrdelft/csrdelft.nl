@@ -130,7 +130,8 @@ Download en installeer [ImageMagick](https://imagemagick.org/script/download.php
 #### Klaar
 Ga nu naar `http://dev-csrdelft.nl`
 
-P.S. Iedere keer als je wil gaan programmeren aan de stek, moet je weer `yarn run watch` uitvoeren.
+P.S. Iedere keer als je wil gaan programmeren aan de stek, moet je weer `yarn run watch` uitvoeren.  
+P.P.S `composer install` telkens runnen is ook wel handig.
 
 #### Cache (geavanceerd)
 
