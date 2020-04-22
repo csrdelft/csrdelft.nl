@@ -5,6 +5,8 @@ namespace CsrDelft\repository\maalcie;
 use CsrDelft\entity\maalcie\ArchiefMaaltijd;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\AbstractRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -55,6 +57,11 @@ class ArchiefMaaltijdenRepository extends AbstractRepository {
 		return $archief;
 	}
 
+	/**
+	 * @param ArchiefMaaltijd $archiefMaaltijd
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function create(ArchiefMaaltijd $archiefMaaltijd) {
 		$this->_em->persist($archiefMaaltijd);
 		$this->_em->flush();

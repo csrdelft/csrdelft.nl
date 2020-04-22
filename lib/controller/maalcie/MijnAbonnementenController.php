@@ -5,6 +5,8 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
+use CsrDelft\view\renderer\TemplateView;
+use Throwable;
 
 /**
  * MijnAbonnementenController.class.php
@@ -19,11 +21,20 @@ class MijnAbonnementenController {
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @throws Throwable
+	 */
 	public function mijn() {
 		$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorLid(LoginModel::getUid(), true, true);
 		return view('maaltijden.abonnement.mijn_abonnementen', ['titel' => 'Mijn abonnementen', 'abonnementen' => $abonnementen]);
 	}
 
+	/**
+	 * @param int $mrid
+	 * @return TemplateView
+	 * @throws Throwable
+	 */
 	public function inschakelen($mrid) {
 		$abo = new MaaltijdAbonnement();
 		$abo->mlt_repetitie_id = $mrid;
@@ -36,6 +47,11 @@ class MijnAbonnementenController {
 		return view('maaltijden.abonnement.mijn_abonnement', ['uid' => $abo->uid, 'mrid' => $abo->mlt_repetitie_id]);
 	}
 
+	/**
+	 * @param int $mrid
+	 * @return TemplateView
+	 * @throws Throwable
+	 */
 	public function uitschakelen($mrid) {
 		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement((int)$mrid, LoginModel::getUid());
 		if ($abo_aantal[1] > 0) {

@@ -7,6 +7,8 @@ use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\view\renderer\TemplateView;
+use Throwable;
 
 /**
  * BeheerMaaltijdenController.class.php
@@ -28,6 +30,10 @@ class BeheerAbonnementenController {
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @throws Throwable
+	 */
 	public function waarschuwingen() {
 		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenWaarschuwingenMatrix();
 
@@ -39,6 +45,10 @@ class BeheerAbonnementenController {
 		]);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @throws Throwable
+	 */
 	public function ingeschakeld() {
 		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenMatrix();
 
@@ -50,6 +60,10 @@ class BeheerAbonnementenController {
 		]);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @throws Throwable
+	 */
 	public function abonneerbaar() {
 		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenAbonneerbaarMatrix();
 
@@ -61,6 +75,10 @@ class BeheerAbonnementenController {
 		]);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @throws Throwable
+	 */
 	public function novieten() {
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
 		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnementVoorNovieten((int)$mrid);
@@ -72,6 +90,12 @@ class BeheerAbonnementenController {
 		return view('maaltijden.abonnement.beheer_abonnementen_lijst', ['matrix' => $matrix]);
 	}
 
+	/**
+	 * @param int $mrid
+	 * @param string $uid
+	 * @return TemplateView
+	 * @throws Throwable
+	 */
 	public function inschakelen($mrid, $uid) {
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat nie.', $uid));
@@ -87,6 +111,12 @@ class BeheerAbonnementenController {
 		return view('maaltijden.abonnement.beheer_abonnement', ['abonnement' => $abo]);
 	}
 
+	/**
+	 * @param int $mrid
+	 * @param string $uid
+	 * @return TemplateView
+	 * @throws Throwable
+	 */
 	public function uitschakelen($mrid, $uid) {
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));

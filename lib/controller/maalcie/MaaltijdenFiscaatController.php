@@ -8,7 +8,6 @@ use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
@@ -94,7 +93,6 @@ class MaaltijdenFiscaatController {
 		}
 
 		$maaltijden = $em->transactional(function () use ($maaltijd) {
-			$maaltijden = [];
 			# Ga alle personen in de maaltijd af
 			$aanmeldingen = $this->maaltijdAanmeldingenRepository->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 

@@ -11,6 +11,7 @@ use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
@@ -21,8 +22,13 @@ use CsrDelft\view\maalcie\beheer\PrullenbakMaaltijdenTable;
 use CsrDelft\view\maalcie\forms\AanmeldingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdForm;
 use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Throwable;
 
 /**
  * BeheerMaaltijdenController.class.php
@@ -83,6 +89,12 @@ class BeheerMaaltijdenController extends AbstractController {
 		return $this->tableData($data);
 	}
 
+	/**
+	 * @param null $mid
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function GET_beheer($mid = null) {
 		$modal = null;
 		if ($mid !== null) {
@@ -109,6 +121,12 @@ class BeheerMaaltijdenController extends AbstractController {
 		return $this->tableData($data);
 	}
 
+	/**
+	 * @param int $mid
+	 * @return GenericDataTableResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function toggle($mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
 
@@ -125,6 +143,12 @@ class BeheerMaaltijdenController extends AbstractController {
 		return $this->tableData([$maaltijd]);
 	}
 
+	/**
+	 * @param Request $request
+	 * @return GenericDataTableResponse|MaaltijdForm|RepetitieMaaltijdenForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function nieuw(Request $request) {
 		$maaltijd = new Maaltijd();
 		$form = new MaaltijdForm($maaltijd, 'nieuw');
@@ -156,6 +180,12 @@ class BeheerMaaltijdenController extends AbstractController {
 
 	}
 
+	/**
+	 * @param int|null $mid
+	 * @return GenericDataTableResponse|MaaltijdForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function bewerk($mid = null) {
 		if ($mid === null) {
 			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -176,6 +206,11 @@ class BeheerMaaltijdenController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @return RemoveRowsResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function verwijder() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var Maaltijd $maaltijd */
@@ -191,6 +226,11 @@ class BeheerMaaltijdenController extends AbstractController {
 		return new RemoveRowsResponse(array($maaltijd));
 	}
 
+	/**
+	 * @return RemoveRowsResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function herstel() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var Maaltijd $maaltijd */
@@ -201,6 +241,11 @@ class BeheerMaaltijdenController extends AbstractController {
 		return new RemoveRowsResponse(array($maaltijd)); // Verwijder uit prullenbak
 	}
 
+	/**
+	 * @return GenericDataTableResponse|AanmeldingForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function aanmelden() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var Maaltijd $maaltijd */
@@ -215,6 +260,11 @@ class BeheerMaaltijdenController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @return GenericDataTableResponse|AanmeldingForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function afmelden() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		/** @var Maaltijd $maaltijd */
@@ -229,6 +279,11 @@ class BeheerMaaltijdenController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @return RedirectResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function leegmaken() {
 		$aantal = $this->maaltijdenRepository->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
@@ -241,11 +296,14 @@ class BeheerMaaltijdenController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @return BeheerMaaltijdenBeoordelingenLijst
+	 */
 	public function POST_beoordelingen() {
         $maaltijden = $this->maaltijdenRepository->getMaaltijdenHistorie();
         if (!LoginModel::mag(P_MAAL_MOD)) {
         	// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
-					$maaltijden = array_filter($maaltijden->fetchAll(), function ($maaltijd) {
+					$maaltijden = array_filter($maaltijden, function ($maaltijd) {
 						/** @var Maaltijd $maaltijd */
 						return $maaltijd->magSluiten(LoginModel::getUid());
 					});
@@ -255,6 +313,11 @@ class BeheerMaaltijdenController extends AbstractController {
 
 	// Repetitie-Maaltijden ############################################################
 
+	/**
+	 * @param $mrid
+	 * @return GenericDataTableResponse|RepetitieMaaltijdenForm
+	 * @throws Throwable
+	 */
 	public function aanmaken($mrid) {
 		$repetitie = $this->maaltijdRepetitiesRepository->getRepetitie($mrid);
 		$form = new RepetitieMaaltijdenForm($repetitie); // fetches POST values itself

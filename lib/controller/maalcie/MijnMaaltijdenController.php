@@ -12,6 +12,9 @@ use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -48,6 +51,11 @@ class MijnMaaltijdenController {
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function ketzer() {
 		$maaltijden = $this->maaltijdenRepository->getKomendeMaaltijdenVoorLid(LoginModel::getUid());
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
@@ -103,6 +111,11 @@ class MijnMaaltijdenController {
 		]);
 	}
 
+	/**
+	 * @param int $mid
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function sluit($mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
 		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND !LoginModel::mag(P_MAAL_MOD)) {
@@ -113,6 +126,13 @@ class MijnMaaltijdenController {
 		exit;
 	}
 
+	/**
+	 * @param Request $request
+	 * @param int $mid
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function aanmelden(Request $request, $mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
 		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, LoginModel::getUid(), LoginModel::getUid());
@@ -127,6 +147,13 @@ class MijnMaaltijdenController {
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @param int $mid
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function afmelden(Request $request, $mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
 		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, LoginModel::getUid());
@@ -140,18 +167,36 @@ class MijnMaaltijdenController {
 		}
 	}
 
+	/**
+	 * @param int $mid
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function gasten($mid) {
 		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($mid, LoginModel::getUid(), $gasten);
 		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
+	/**
+	 * @param int $mid
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function opmerking($mid) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
 		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens($mid, LoginModel::getUid(), $opmerking);
 		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
+	/**
+	 * @param int $mid
+	 * @return JsonResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function beoordeling($mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
 		$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $mid, 'uid' => LoginModel::getUid()]);

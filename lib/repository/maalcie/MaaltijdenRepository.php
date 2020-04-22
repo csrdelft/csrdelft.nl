@@ -2,7 +2,6 @@
 
 namespace CsrDelft\repository\maalcie;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\Maaltijd;
@@ -10,10 +9,11 @@ use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
 use DateInterval;
 use DateTimeInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
@@ -94,6 +94,12 @@ class MaaltijdenRepository extends AbstractRepository {
 		return $maaltijd;
 	}
 
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @return Maaltijd
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function openMaaltijd(Maaltijd $maaltijd) {
 		if (!$maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is al geopend');
@@ -104,6 +110,11 @@ class MaaltijdenRepository extends AbstractRepository {
 		return $maaltijd;
 	}
 
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function sluitMaaltijd(Maaltijd $maaltijd) {
 		if ($maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is al gesloten');
@@ -126,6 +137,9 @@ class MaaltijdenRepository extends AbstractRepository {
 			->getQuery()->getResult();
 	}
 
+	/**
+	 * @return Maaltijd[]
+	 */
 	public function getMaaltijdenHistorie() {
 		return $this->createQueryBuilder('m')
 			->where('m.verwijderd = false and m.datum <= CURDATE()')
@@ -134,6 +148,9 @@ class MaaltijdenRepository extends AbstractRepository {
 			->getQuery()->getResult();
 	}
 
+	/**
+	 * @return Maaltijd[]
+	 */
 	public function getMaaltijden() {
 		return $this->findBy(['verwijderd' => false]);
 	}
@@ -215,6 +232,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	/**
 	 * Haalt de maaltijd op die in een ketzer zal worden weergegeven.
 	 *
+	 * @param int $mid
 	 * @return Maaltijd|false
 	 */
 	public function getMaaltijdVoorKetzer($mid) {
@@ -245,6 +263,10 @@ class MaaltijdenRepository extends AbstractRepository {
 		return $maaltijd;
 	}
 
+	/**
+	 * @param int $mid
+	 * @return Maaltijd
+	 */
 	private function loadMaaltijd($mid) {
 		$maaltijd = $this->find($mid);
 		if (!$maaltijd) throw new CsrGebruikerException('Maaltijd bestaat niet: ' . $mid);
@@ -255,6 +277,8 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @param Maaltijd $maaltijd
 	 *
 	 * @return array
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function saveMaaltijd($maaltijd) {
 		$verwijderd = 0;
@@ -276,6 +300,11 @@ class MaaltijdenRepository extends AbstractRepository {
 		return array($maaltijd, $verwijderd);
 	}
 
+	/**
+	 * @return int
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function prullenbakLeegmaken() {
 		$aantal = 0;
 		$maaltijden = $this->getVerwijderdeMaaltijden();
@@ -290,6 +319,11 @@ class MaaltijdenRepository extends AbstractRepository {
 		return $aantal;
 	}
 
+	/**
+	 * @param int $mid
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function verwijderMaaltijd($mid) {
 		$maaltijd = $this->loadMaaltijd($mid);
 		$this->corveeTakenModel->verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
@@ -307,6 +341,12 @@ class MaaltijdenRepository extends AbstractRepository {
 		}
 	}
 
+	/**
+	 * @param $mid
+	 * @return Maaltijd|null
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function herstelMaaltijd($mid) {
 		$maaltijd = $this->loadMaaltijd($mid);
 		if (!$maaltijd->verwijderd) {
@@ -343,6 +383,8 @@ class MaaltijdenRepository extends AbstractRepository {
 
 	/**
 	 * @param Maaltijd $maaltijd
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function meldAboAan($maaltijd) {
 		$aantal = 0;
@@ -362,11 +404,19 @@ class MaaltijdenRepository extends AbstractRepository {
 
 	// Archief-Maaltijden ############################################################
 
+	/**
+	 * @param int $van
+	 * @param int $tot
+	 * @return array
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function archiveerOudeMaaltijden($van, $tot) {
 		if (!is_int($van) || !is_int($tot)) {
 			throw new CsrException('Invalid timestamp: archiveerOudeMaaltijden()');
 		}
 		$errors = [];
+		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
 			->where('m.verwijderd = false and m.datum >= :van_datum and datum <= :tot_datum')
 			->setParameter('van_datum', $van)
@@ -391,6 +441,10 @@ class MaaltijdenRepository extends AbstractRepository {
 
 	// Repetitie-Maaltijden ############################################################
 
+	/**
+	 * @param $mrid
+	 * @return Maaltijd[]
+	 */
 	public function getKomendeRepetitieMaaltijden($mrid) {
 		return $this->createQueryBuilder('m')
 			->where('m.mlt_repetitie_id = :maaltijd_id and verwijderd = false and datum >= :datum')
@@ -401,6 +455,10 @@ class MaaltijdenRepository extends AbstractRepository {
 			->getQuery()->getResult();
 	}
 
+	/**
+	 * @param $mrid
+	 * @return Maaltijd[]
+	 */
 	public function getKomendeOpenRepetitieMaaltijden($mrid) {
 		return $this->createQueryBuilder('m')
 			->where('m.mlt_repetitie_id = :repetitie and gesloten = false and verwijderd = false and datum >= :datum')
@@ -411,6 +469,11 @@ class MaaltijdenRepository extends AbstractRepository {
 			->getQuery()->getResult();
 	}
 
+	/**
+	 * @param $mrid
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function verwijderRepetitieMaaltijden($mrid) {
 		$maaltijden = $this->findBy(['mlt_repetitie_id' => $mrid]);
 		foreach ($maaltijden as $maaltijd) {
@@ -431,6 +494,12 @@ class MaaltijdenRepository extends AbstractRepository {
 		return $this->count(['mlt_repetitie_id' => $mrid]) > 0;
 	}
 
+	/**
+	 * @param MaaltijdRepetitie $repetitie
+	 * @param $verplaats
+	 * @return bool|mixed
+	 * @throws \Throwable
+	 */
 	public function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
 		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
 			// update day of the week & check filter
@@ -472,11 +541,11 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * Alle leden met een abonnement hierop worden automatisch aangemeld.
 	 *
 	 * @param MaaltijdRepetitie $repetitie
-	 * @param int $beginDatum
-	 * @param int $eindDatum
+	 * @param DateTimeInterface $beginDatum
+	 * @param DateTimeInterface $eindDatum
 	 *
 	 * @return Maaltijd[]
-	 * @throws CsrGebruikerException
+	 * @throws \Throwable
 	 */
 	public function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, DateTimeInterface $beginDatum, DateTimeInterface $eindDatum) {
 		return $this->_em->transactional(function () use ($repetitie, $beginDatum, $eindDatum) {
@@ -514,11 +583,21 @@ class MaaltijdenRepository extends AbstractRepository {
 
 	}
 
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function update(Maaltijd $maaltijd) {
 		$this->_em->persist($maaltijd);
 		$this->_em->flush();
 	}
 
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function delete(Maaltijd $maaltijd) {
 		$this->_em->remove($maaltijd);
 		$this->_em->flush();

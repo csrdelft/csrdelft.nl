@@ -14,6 +14,11 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use DateTimeInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -29,6 +34,17 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		parent::__construct($registry, MaaltijdAanmelding::class);
 	}
 
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @param string $uid
+	 * @param string $doorUid
+	 * @param int $aantalGasten
+	 * @param bool $beheer
+	 * @param string $gastenEetwens
+	 * @return MaaltijdAanmelding|null
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function aanmeldenVoorMaaltijd(
 		Maaltijd $maaltijd,
 		$uid,
@@ -114,6 +130,11 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		return $this->find(['maaltijd_id' => $mid, 'uid' => $uid]) != null;
 	}
 
+	/**
+	 * @param $mid
+	 * @param $uid
+	 * @return MaaltijdAanmelding
+	 */
 	public function loadAanmelding($mid, $uid) {
 		$aanmelding = $this->find(['maaltijd_id' => $mid, 'uid' => $uid]);
 		if ($aanmelding == null) {
@@ -129,6 +150,8 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @param string $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
 	 *
 	 * @return int|null
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function afmeldenDoorAbonnement($mrid, $uid) {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
@@ -154,6 +177,11 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		return $aantal;
 	}
 
+	/**
+	 * @param $maaltijdenById
+	 * @param $uid
+	 * @return MaaltijdAanmelding[]
+	 */
 	public function getAanmeldingenVoorLid($maaltijdenById, $uid) {
 		if (empty($maaltijdenById)) {
 			return $maaltijdenById; // array()
@@ -175,6 +203,14 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		return $result;
 	}
 
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @param string $uid
+	 * @param bool $beheer
+	 * @return Maaltijd
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function afmeldenDoorLid(Maaltijd $maaltijd, $uid, $beheer = false) {
 		if (!$this->getIsAangemeld($maaltijd->maaltijd_id, $uid)) {
 			throw new CsrGebruikerException('Niet aangemeld');
@@ -186,12 +222,20 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			throw new CsrGebruikerException('Maaltijd is gesloten');
 		}
 		$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $uid);
-		$this->getEntityManager()->remove($aanmelding);
-		$this->getEntityManager()->flush();
+		$this->_em->remove($aanmelding);
+		$this->_em->flush();
 		$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - 1 - $aanmelding->aantal_gasten;
 		return $maaltijd;
 	}
 
+	/**
+	 * @param int $mid
+	 * @param string $uid
+	 * @param int $gasten
+	 * @return MaaltijdAanmelding
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function saveGasten($mid, $uid, $gasten) {
 		if (!is_numeric($mid) || $mid <= 0) {
 			throw new CsrGebruikerException('Save gasten faalt: Invalid $mid =' . $mid);
@@ -223,6 +267,14 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		return $aanmelding;
 	}
 
+	/**
+	 * @param int $mid
+	 * @param string $uid
+	 * @param string $opmerking
+	 * @return MaaltijdAanmelding
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function saveGastenEetwens($mid, $uid, $opmerking) {
 		if (!is_numeric($mid) || $mid <= 0) {
 			throw new CsrGebruikerException('Save gasten eetwens faalt: Invalid $mid =' . $mid);
@@ -267,7 +319,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		return $lijst;
 	}
 
-	public function getRecenteAanmeldingenVoorLid($uid, \DateTimeInterface $timestamp) {
+	public function getRecenteAanmeldingenVoorLid($uid, DateTimeInterface $timestamp) {
 		$maaltijdenById = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getRecenteMaaltijden($timestamp);
 		return $this->getAanmeldingenVoorLid($maaltijdenById, $uid);
 	}
@@ -276,6 +328,8 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * Called when a Maaltijd is being deleted.
 	 *
 	 * @param int $mid maaltijd-id
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function deleteAanmeldingenVoorMaaltijd($mid) {
 		$aanmeldingen = $this->findBy(['maaltijd_id', $mid]);
@@ -291,6 +345,8 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @param string $filter
 	 * @param Maaltijd[] $maaltijden
 	 * @return int
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function checkAanmeldingenFilter($filter, $maaltijden) {
 		$mids = array();
@@ -344,7 +400,8 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @param int $mrid
 	 * @param string $uid
 	 * @return int|false aantal aanmeldingen or false
-	 * @throws CsrGebruikerException indien niet toegestaan vanwege aanmeldrestrictie
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid) {
 		$repetitie = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($mrid);
@@ -374,6 +431,14 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		return $aantal;
 	}
 
+	/**
+	 * @param Maaltijd $maaltijd
+	 * @param int $mrid
+	 * @param string $uid
+	 * @return bool
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function aanmeldenDoorAbonnement(Maaltijd $maaltijd, $mrid, $uid) {
 		if (!$this->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => $uid])) {
 			try {
@@ -387,8 +452,8 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 				$aanmelding->laatst_gewijzigd = date_create_immutable();
 				$aanmelding->gasten_eetwens = '';
 
-				$this->getEntityManager()->persist($aanmelding);
-				$this->getEntityManager()->flush();
+				$this->_em->persist($aanmelding);
+				$this->_em->flush();
 
 				return true;
 			} catch (CsrGebruikerException $e) {
@@ -402,8 +467,8 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	/**
 	 * @param Maaltijd $maaltijd
 	 * @return integer
-	 * @throws \Doctrine\ORM\NoResultException
-	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 * @throws NoResultException
+	 * @throws NonUniqueResultException
 	 */
 	public function getAantalAanmeldingen(Maaltijd $maaltijd) {
 		return $this->createQueryBuilder('maaltijd_aanmelding')

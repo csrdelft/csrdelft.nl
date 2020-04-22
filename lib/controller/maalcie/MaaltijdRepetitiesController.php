@@ -6,6 +6,10 @@ use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Throwable;
 
 /**
  * MaaltijdRepetitiesController.class.php
@@ -47,6 +51,11 @@ class MaaltijdRepetitiesController {
 		return new MaaltijdRepetitieForm($this->maaltijdRepetitiesRepository->getRepetitie($mrid)); // fetches POST values itself
 	}
 
+	/**
+	 * @param $mrid
+	 * @return MaaltijdRepetitieForm|TemplateView
+	 * @throws Throwable
+	 */
 	public function opslaan($mrid) {
 		if ($mrid > 0) {
 			$view = $this->bewerk($mrid);
@@ -67,6 +76,12 @@ class MaaltijdRepetitiesController {
 		return $view;
 	}
 
+	/**
+	 * @param int $mrid
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @throws Throwable
+	 */
 	public function verwijder($mrid) {
 		$aantal = $this->maaltijdRepetitiesRepository->verwijderRepetitie($mrid);
 		if ($aantal > 0) {
@@ -77,6 +92,11 @@ class MaaltijdRepetitiesController {
 		exit;
 	}
 
+	/**
+	 * @param int $mrid
+	 * @return MaaltijdRepetitieForm|TemplateView
+	 * @throws Throwable
+	 */
 	public function bijwerken($mrid) {
 		$view = $this->opslaan($mrid);
 		if ($this->repetitie) { // opslaan succesvol

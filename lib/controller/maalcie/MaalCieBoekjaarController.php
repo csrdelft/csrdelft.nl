@@ -4,6 +4,9 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\maalcie\forms\BoekjaarSluitenForm;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -20,6 +23,11 @@ class MaalCieBoekjaarController {
 		return view('maaltijden.boekjaar_sluiten');
 	}
 
+	/**
+	 * @return BoekjaarSluitenForm|TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function sluitboekjaar() {
 		$form = new BoekjaarSluitenForm(date('Y-m-d', strtotime('-1 year')), date('Y-m-d')); // fetches POST values itself
 		if ($form->validate()) {
