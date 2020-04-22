@@ -179,7 +179,7 @@
 						</li>
 						<li>
 							<a href="https://www.allekabels.nl/">
-								<img src='https://csrdelft.nl/plaetjes/banners/allekabels.png' alt='Alle kabels'>
+								<img width=40% src='https://csrdelft.nl/plaetjes/banners/allekabels.png' alt='Alle kabels'>
 							</a>
 						</li>
 						<li>
@@ -193,9 +193,8 @@
 							</a>
 						</li>
 						<li>
-							<a href="http://www.pricewise.nl/">
-								<img width=300px src="https://csrdelft.nl/plaetjes/banners/pricewise.svg"
-										 alt="Pricewise">
+							<a href="https://www.pricewise.nl/energie-vergelijken/">
+								<img width=25% src="https://csrdelft.nl/plaetjes/banners/pricewise.svg" alt="Pricewise">
 							</a>
 						</li>
 						<li>
@@ -213,6 +212,11 @@
 							<a href="https://www.goedkoopsteautoverzekering.net/">
 								<img src="https://csrdelft.nl/plaetjes/banners/goedkoopste-autoverzekering.png"
 										 alt="Goedkoopste autoverzekering">
+							</a>
+						</li>
+						<li>
+							<a href="https://www.allianzdirect.nl/autoverzekering/">
+								<img width=60% src='https://csrdelft.nl/plaetjes/banners/allianzdirect.jpg' alt='Allianz Direct'>
 							</a>
 						</li>
 						<li>
