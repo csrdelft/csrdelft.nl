@@ -64,7 +64,7 @@ class BeheerPuntenController {
 		 * @var int $taken
 		 * @var CsrGebruikerException[] $errors
 		 */
-		array($aantal, $taken, $errors) = $this->corveePuntenService->resetCorveejaar();
+		list($aantal, $taken, $errors) = $this->corveePuntenService->resetCorveejaar();
 		$view = $this->beheer();
 		setMelding($aantal . ' vrijstelling' . ($aantal !== 1 ? 'en' : '') . ' verwerkt en verwijderd', 1);
 		setMelding($taken . ' ta' . ($taken !== 1 ? 'ken' : 'ak') . ' naar de prullenbak verplaatst', 0);
