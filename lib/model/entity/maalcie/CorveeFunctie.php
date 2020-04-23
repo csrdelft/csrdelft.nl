@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\maalcie;
 
-use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\model\maalcie\CorveeKwalificatiesModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 
@@ -104,7 +104,7 @@ class CorveeFunctie extends PersistentEntity {
 	 */
 	public function getKwalificaties() {
 		if (!isset($this->kwalificaties)) {
-			$this->setKwalificaties(KwalificatiesModel::instance()->getKwalificatiesVoorFunctie($this->functie_id));
+			$this->setKwalificaties(CorveeKwalificatiesModel::instance()->getKwalificatiesVoorFunctie($this->functie_id));
 		}
 		return $this->kwalificaties;
 	}

@@ -13,7 +13,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class KwalificatiesModel extends CachedPersistenceModel {
+class CorveeKwalificatiesModel extends CachedPersistenceModel {
 
 	const ORM = CorveeKwalificatie::class;
 

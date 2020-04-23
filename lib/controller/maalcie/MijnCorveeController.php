@@ -5,7 +5,7 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\model\maalcie\CorveePuntenService;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
-use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\model\security\LoginModel;
 
 
@@ -18,7 +18,7 @@ class MijnCorveeController {
 	 */
 	private $corveeTakenModel;
 	/**
-	 * @var FunctiesModel
+	 * @var CorveeFunctiesModel
 	 */
 	private $functiesModel;
 	/**
@@ -30,7 +30,7 @@ class MijnCorveeController {
 	 */
 	private $corveePuntenService;
 
-	public function __construct(CorveeTakenModel $corveeTakenModel, CorveeVrijstellingenModel $corveeVrijstellingenModel, FunctiesModel $functiesModel, CorveePuntenService $corveePuntenService) {
+	public function __construct(CorveeTakenModel $corveeTakenModel, CorveeVrijstellingenModel $corveeVrijstellingenModel, CorveeFunctiesModel $functiesModel, CorveePuntenService $corveePuntenService) {
 		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
 		$this->functiesModel = $functiesModel;
 		$this->corveeTakenModel = $corveeTakenModel;

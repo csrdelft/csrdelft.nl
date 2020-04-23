@@ -24,8 +24,8 @@ use CsrDelft\model\groepen\OnderverenigingenModel;
 use CsrDelft\model\groepen\RechtenGroepenModel;
 use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\model\maalcie\CorveeFunctiesModel;
+use CsrDelft\model\maalcie\CorveeKwalificatiesModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
@@ -899,7 +899,7 @@ class AccessModel extends CachedPersistenceModel {
 				if (is_numeric($gevraagd)) {
 					$functie_id = (int)$gevraagd;
 				} else {
-					$functie = FunctiesModel::instance()->prefetch('afkorting = ? OR naam = ?', [$gevraagd, $gevraagd], null, null, 1);
+					$functie = CorveeFunctiesModel::instance()->prefetch('afkorting = ? OR naam = ?', [$gevraagd, $gevraagd], null, null, 1);
 					if (isset($functie[0])) {
 						$functie_id = $functie[0]->functie_id;
 					} else {
@@ -907,7 +907,7 @@ class AccessModel extends CachedPersistenceModel {
 					}
 				}
 
-				return KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
+				return CorveeKwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
 		}
 		return false;
 	}

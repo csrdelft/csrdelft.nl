@@ -12,7 +12,7 @@ use CsrDelft\Orm\CachedPersistenceModel;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class FunctiesModel extends CachedPersistenceModel {
+class CorveeFunctiesModel extends CachedPersistenceModel {
 
 	const ORM = CorveeFunctie::class;
 

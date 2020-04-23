@@ -11,7 +11,7 @@ use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
-use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
@@ -195,7 +195,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 		$gevonden = [];
 
 		/** @var CorveeFunctie[] $functies */
-		$functie = FunctiesModel::instance()->get($functieID);
+		$functie = CorveeFunctiesModel::instance()->get($functieID);
         $taken = CorveeTakenModel::instance()->find('functie_id = ? AND maaltijd_id = ? AND verwijderd = 0', [$functie->functie_id, $this->maaltijd_id]);
         foreach ($taken as $taak) {
             $gevonden[] = $taak;

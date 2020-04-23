@@ -56,7 +56,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		}
 		foreach ($repById as $crid => $repetitie) {
 			if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-				if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
+				if (!CorveeKwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
 					continue;
 				}
 			}
@@ -140,7 +140,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 			throw new CsrGebruikerException('Niet voorkeurbaar');
 		}
 		if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-			if (!KwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
+			if (!CorveeKwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
 				throw new CsrGebruikerException('Niet gekwalificeerd');
 			}
 		}

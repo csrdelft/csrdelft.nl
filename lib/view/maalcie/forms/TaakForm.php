@@ -5,7 +5,7 @@ namespace CsrDelft\view\maalcie\forms;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
-use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
@@ -35,7 +35,7 @@ class TaakForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$functieNamen = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$functieNamen = CorveeFunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
 		$functiePunten = 'var punten=[];';
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->functie_id] = $functie->naam;

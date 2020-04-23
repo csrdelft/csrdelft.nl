@@ -4,7 +4,7 @@ namespace CsrDelft\model\entity\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
-use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
@@ -131,7 +131,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	 * @return CorveeFunctie
 	 */
 	public function getCorveeFunctie() {
-		return FunctiesModel::instance()->get($this->functie_id);
+		return CorveeFunctiesModel::instance()->get($this->functie_id);
 	}
 
 	public function setUid($uid) {

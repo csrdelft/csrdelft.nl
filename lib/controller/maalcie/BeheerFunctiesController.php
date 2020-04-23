@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\maalcie\KwalificatiesModel;
+use CsrDelft\model\maalcie\CorveeFunctiesModel;
+use CsrDelft\model\maalcie\CorveeKwalificatiesModel;
 use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
 use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
@@ -13,15 +13,15 @@ use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
  */
 class BeheerFunctiesController {
 	/**
-	 * @var FunctiesModel
+	 * @var CorveeFunctiesModel
 	 */
 	private $functiesModel;
 	/**
-	 * @var KwalificatiesModel
+	 * @var CorveeKwalificatiesModel
 	 */
 	private $kwalificatiesModel;
 
-	public function __construct(FunctiesModel $functiesModel, KwalificatiesModel $kwalificatiesModel) {
+	public function __construct(CorveeFunctiesModel $functiesModel, CorveeKwalificatiesModel $kwalificatiesModel) {
 		$this->functiesModel = $functiesModel;
 		$this->kwalificatiesModel = $kwalificatiesModel;
 	}

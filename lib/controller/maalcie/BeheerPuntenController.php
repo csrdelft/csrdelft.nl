@@ -4,7 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\maalcie\CorveePuntenService;
-use CsrDelft\model\maalcie\FunctiesModel;
+use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\repository\ProfielRepository;
 
 /**
@@ -15,7 +15,7 @@ use CsrDelft\repository\ProfielRepository;
  */
 class BeheerPuntenController {
 	/**
-	 * @var FunctiesModel
+	 * @var CorveeFunctiesModel
 	 */
 	private $functiesModel;
 	/**
@@ -23,7 +23,7 @@ class BeheerPuntenController {
 	 */
 	private $corveePuntenService;
 
-	public function __construct(FunctiesModel $functiesModel, CorveePuntenService $corveePuntenService) {
+	public function __construct(CorveeFunctiesModel $functiesModel, CorveePuntenService $corveePuntenService) {
 		$this->functiesModel = $functiesModel;
 		$this->corveePuntenService = $corveePuntenService;
 	}
