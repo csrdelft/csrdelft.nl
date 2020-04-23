@@ -16,6 +16,15 @@ use PDOStatement;
  */
 class CorveeRepetitiesModel extends PersistenceModel {
 	const ORM = CorveeRepetitie::class;
+	/**
+	 * @var CorveeTakenModel
+	 */
+	private $corveeTakenModel;
+
+	public function __construct(CorveeTakenModel $corveeTakenModel) {
+		parent::__construct();
+		$this->corveeTakenModel = $corveeTakenModel;
+	}
 
 	public function nieuw($crid = 0, $mrid = null, $dag = null, $periode = null, $fid = 0, $punten = 0, $aantal = null, $voorkeur = null) {
 		$repetitie = new CorveeRepetitie();
@@ -112,8 +121,8 @@ class CorveeRepetitiesModel extends PersistenceModel {
 		if (!is_numeric($crid) || $crid <= 0) {
 			throw new CsrGebruikerException('Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid);
 		}
-		if (CorveeTakenModel::instance()->existRepetitieTaken($crid)) {
-			CorveeTakenModel::instance()->verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
+		if ($this->corveeTakenModel->existRepetitieTaken($crid)) {
+			$this->corveeTakenModel->verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
 			throw new CsrGebruikerException('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 

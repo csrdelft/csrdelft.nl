@@ -15,6 +15,20 @@ use CsrDelft\Orm\CachedPersistenceModel;
 class CorveeFunctiesModel extends CachedPersistenceModel {
 
 	const ORM = CorveeFunctie::class;
+	/**
+	 * @var CorveeTakenModel
+	 */
+	private $corveeTakenModel;
+	/**
+	 * @var CorveeRepetitiesModel
+	 */
+	private $corveeRepetitiesModel;
+
+	public function __construct(CorveeTakenModel $corveeTakenModel, CorveeRepetitiesModel $corveeRepetitiesModel) {
+		parent::__construct();
+		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
+	}
 
 	/**
 	 * Lazy loading of kwalificaties.
@@ -42,10 +56,10 @@ class CorveeFunctiesModel extends CachedPersistenceModel {
 	}
 
 	public function removeFunctie(CorveeFunctie $functie) {
-		if (CorveeTakenModel::instance()->existFunctieTaken($functie->functie_id)) {
+		if ($this->corveeTakenModel->existFunctieTaken($functie->functie_id)) {
 			throw new CsrGebruikerException('Verwijder eerst de bijbehorende corveetaken!');
 		}
-		if (CorveeRepetitiesModel::instance()->existFunctieRepetities($functie->functie_id)) {
+		if ($this->corveeRepetitiesModel->existFunctieRepetities($functie->functie_id)) {
 			throw new CsrGebruikerException('Verwijder eerst de bijbehorende corveerepetities!');
 		}
 		if ($functie->hasKwalificaties()) {

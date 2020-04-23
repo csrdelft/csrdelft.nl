@@ -5,7 +5,7 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
-use CsrDelft\model\maalcie\CorveeHerinneringenModel;
+use CsrDelft\model\maalcie\CorveeHerinneringService;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeToewijzenService;
@@ -35,12 +35,23 @@ class BeheerTakenController extends AbstractController {
 	 * @var CorveeToewijzenService
 	 */
 	private $corveeToewijzenService;
+	/**
+	 * @var CorveeHerinneringService
+	 */
+	private $corveeHerinneringService;
 
-	public function __construct(CorveeTakenModel $corveeTakenModel, MaaltijdenRepository $maaltijdenRepository, CorveeRepetitiesModel $corveeRepetitiesModel, CorveeToewijzenService $corveeToewijzenService) {
+	public function __construct(
+		CorveeTakenModel $corveeTakenModel,
+		MaaltijdenRepository $maaltijdenRepository,
+		CorveeRepetitiesModel $corveeRepetitiesModel,
+		CorveeToewijzenService $corveeToewijzenService,
+		CorveeHerinneringService $corveeHerinneringService
+	) {
 		$this->corveeTakenModel = $corveeTakenModel;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
 		$this->corveeToewijzenService = $corveeToewijzenService;
+		$this->corveeHerinneringService = $corveeHerinneringService;
 	}
 
 	public function maaltijd($mid) {
@@ -69,9 +80,9 @@ class BeheerTakenController extends AbstractController {
 				$model[$datum][$taak->functie_id][] = $taak;
 			}
 		}
-		return view('maaltijden.corveetaak.beheer_taken',[
+		return view('maaltijden.corveetaak.beheer_taken', [
 			'taken' => $model,
-			'maaltijd'=> $maaltijd,
+			'maaltijd' => $maaltijd,
 			'prullenbak' => false,
 			'show' => $maaltijd !== null ? true : false,
 			'repetities' => $this->corveeRepetitiesModel->getAlleRepetities(),
@@ -103,7 +114,7 @@ class BeheerTakenController extends AbstractController {
 	}
 
 	public function herinneren() {
-		$verstuurd_errors = CorveeHerinneringenModel::stuurHerinneringen();
+		$verstuurd_errors = $this->corveeHerinneringService->stuurHerinneringen();
 		$verstuurd = $verstuurd_errors[0];
 		$errors = $verstuurd_errors[1];
 		$aantal = sizeof($verstuurd);
@@ -231,7 +242,7 @@ class BeheerTakenController extends AbstractController {
 
 	public function email($tid) {
 		$taak = $this->corveeTakenModel->getTaak($tid);
-		CorveeHerinneringenModel::stuurHerinnering($taak);
+		$this->corveeHerinneringService->stuurHerinnering($taak);
 		return view('maaltijden.corveetaak.beheer_taak_lijst', [
 			'taak' => $taak,
 			'maaltijd' => null,

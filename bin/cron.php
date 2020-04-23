@@ -18,7 +18,7 @@
  */
 
 use CsrDelft\Kernel;
-use CsrDelft\model\maalcie\CorveeHerinneringenModel;
+use CsrDelft\model\maalcie\CorveeHerinneringService;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
@@ -41,7 +41,7 @@ $loginModel = $container->get(LoginModel::class);
 $oneTimeTokensModel = $container->get(OneTimeTokensRepository::class);
 $instellingenRepository = $container->get(InstellingenRepository::class);
 $lidInstellingenRepository = $container->get(LidInstellingenRepository::class);
-$corveeHerinneringenModel = $container->get(CorveeHerinneringenModel::class);
+$corveeHerinneringService = $container->get(CorveeHerinneringService::class);
 $forumCategorieRepository = $container->get(ForumCategorieRepository::class);
 
 // Debuglog
@@ -82,7 +82,7 @@ try {
 
 // Corvee herinneringen
 try {
-	$corveeHerinneringenModel::stuurHerinneringen();
+	$corveeHerinneringService->stuurHerinneringen();
 } catch (Exception $e) {
 	$debugLogRepository->log('cron.php', 'CorveeHerinneringenModel::stuurHerinneringen()', array(), $e);
 }
