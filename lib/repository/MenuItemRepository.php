@@ -9,6 +9,7 @@ use CsrDelft\entity\MenuItem;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -46,15 +47,19 @@ class MenuItemRepository extends AbstractRepository {
 		}
 
 		return $this->cache->get($this->createCacheKey($naam), function () use ($naam) {
-			$root = $this->findBy(['tekst' => $naam])[0];
+			try {
+				$root = $this->findOneBy(['tekst' => $naam]);
 
-			if ($root == null) {
+				if ($root == null) {
+					return null;
+				}
+
+				$this->getExtendedTree($root);
+
+				return $root;
+			} catch (EntityNotFoundException $ex) {
 				return null;
 			}
-
-			$this->getExtendedTree($root);
-
-			return $root;
 		});
 	}
 

@@ -39,8 +39,10 @@ abstract class Zijbalk {
 		// Sponsors
 		if (LoginModel::mag(P_LOGGED_IN)) {
 			$sponsor_menu = $menuItemRepository->getMenu("sponsors");
-			$sponsor_menu->tekst = 'Mogelijkheden';
-			$zijbalk[] = view('menu.block', ['root' => $sponsor_menu]);
+			if ($sponsor_menu) {
+				$sponsor_menu->tekst = 'Mogelijkheden';
+				$zijbalk[] = view('menu.block', ['root' => $sponsor_menu]);
+			}
 		}
 
 		// Agenda
