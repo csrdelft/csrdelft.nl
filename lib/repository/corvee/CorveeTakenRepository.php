@@ -9,6 +9,7 @@ use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
 use CsrDelft\model\maalcie\CorveePuntenService;
+use CsrDelft\model\RetrieveByUuidTrait;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
@@ -29,6 +30,8 @@ use Throwable;
  * @method CorveeTaak[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CorveeTakenRepository extends AbstractRepository {
+	use RetrieveByUuidTrait;
+
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, CorveeTaak::class);
 	}
