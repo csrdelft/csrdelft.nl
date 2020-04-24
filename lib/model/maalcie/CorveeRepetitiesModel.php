@@ -7,6 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use PDOStatement;
 
 
@@ -17,13 +18,13 @@ use PDOStatement;
 class CorveeRepetitiesModel extends PersistenceModel {
 	const ORM = CorveeRepetitie::class;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 
-	public function __construct(CorveeTakenModel $corveeTakenModel) {
+	public function __construct(CorveeTakenRepository $corveeTakenRepository) {
 		parent::__construct();
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
 
 	public function nieuw($crid = 0, $mrid = null, $dag = null, $periode = null, $fid = 0, $punten = 0, $aantal = null, $voorkeur = null) {
@@ -121,8 +122,8 @@ class CorveeRepetitiesModel extends PersistenceModel {
 		if (!is_numeric($crid) || $crid <= 0) {
 			throw new CsrGebruikerException('Verwijder corvee-repetitie faalt: Invalid $crid =' . $crid);
 		}
-		if ($this->corveeTakenModel->existRepetitieTaken($crid)) {
-			$this->corveeTakenModel->verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
+		if ($this->corveeTakenRepository->existRepetitieTaken($crid)) {
+			$this->corveeTakenRepository->verwijderRepetitieTaken($crid); // delete corveetaken first (foreign key)
 			throw new CsrGebruikerException('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 

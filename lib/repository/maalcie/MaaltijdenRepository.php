@@ -7,9 +7,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
-use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use DateInterval;
 use DateTimeInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -44,9 +44,9 @@ class MaaltijdenRepository extends AbstractRepository {
 	private $archiefMaaltijdenRepository;
 
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 
 	/**
 	 * @var CorveeRepetitiesModel
@@ -58,7 +58,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @param MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	 * @param MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
 	 * @param ArchiefMaaltijdenRepository $archiefMaaltijdenRepository
-	 * @param CorveeTakenModel $corveeTakenModel
+	 * @param CorveeTakenRepository $corveeTakenRepository
 	 * @param CorveeRepetitiesModel $corveeRepetitiesModel
 	 */
 	public function __construct(
@@ -66,7 +66,7 @@ class MaaltijdenRepository extends AbstractRepository {
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		ArchiefMaaltijdenRepository $archiefMaaltijdenRepository,
-		CorveeTakenModel $corveeTakenModel,
+		CorveeTakenRepository $corveeTakenRepository,
 		CorveeRepetitiesModel $corveeRepetitiesModel
 	) {
 		parent::__construct($registry, Maaltijd::class);
@@ -74,7 +74,7 @@ class MaaltijdenRepository extends AbstractRepository {
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->archiefMaaltijdenRepository = $archiefMaaltijdenRepository;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
 	}
 
@@ -326,9 +326,9 @@ class MaaltijdenRepository extends AbstractRepository {
 	 */
 	public function verwijderMaaltijd($mid) {
 		$maaltijd = $this->loadMaaltijd($mid);
-		$this->corveeTakenModel->verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
+		$this->corveeTakenRepository->verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
 		if ($maaltijd->verwijderd) {
-			if ($this->corveeTakenModel->existMaaltijdCorvee($mid)) {
+			if ($this->corveeTakenRepository->existMaaltijdCorvee($mid)) {
 				throw new CsrGebruikerException('Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!');
 			}
 			$this->maaltijdAanmeldingenRepository->deleteAanmeldingenVoorMaaltijd($mid);
@@ -428,7 +428,7 @@ class MaaltijdenRepository extends AbstractRepository {
 			try {
 				$archief = $this->archiefMaaltijdenRepository->vanMaaltijd($maaltijd);
 				$this->archiefMaaltijdenRepository->create($archief);
-				if ($this->corveeTakenModel->existMaaltijdCorvee($maaltijd->maaltijd_id)) {
+				if ($this->corveeTakenRepository->existMaaltijdCorvee($maaltijd->maaltijd_id)) {
 					setMelding(date_format_intl($maaltijd->getMoment(), DATETIME_FORMAT) . ' heeft nog gekoppelde corveetaken!', 2);
 				}
 			} catch (CsrGebruikerException $e) {
@@ -570,7 +570,7 @@ class MaaltijdenRepository extends AbstractRepository {
 				$this->meldAboAan($maaltijd);
 
 				foreach ($corveerepetities as $corveerepetitie) {
-					$this->corveeTakenModel->newRepetitieTaken($corveerepetitie, date_format_intl($datum, DATE_FORMAT), date_format_intl($datum, DATE_FORMAT), intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
+					$this->corveeTakenRepository->newRepetitieTaken($corveerepetitie, date_format_intl($datum, DATE_FORMAT), date_format_intl($datum, DATE_FORMAT), intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
 				}
 				$maaltijden[] = $maaltijd;
 				if ($repetitie->periode_in_dagen < 1) {

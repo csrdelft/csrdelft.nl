@@ -4,9 +4,13 @@ namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\corvee\CorveeTaak;
+use CsrDelft\entity\corvee\CorveePuntenOverzicht;
 use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
 
@@ -19,13 +23,13 @@ class CorveePuntenService {
 	 */
 	private $corveeVrijstellingenRepository;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 
-	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeTakenModel $corveeTakenModel) {
+	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeTakenRepository $corveeTakenRepository) {
 		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
 
 	public function resetCorveejaar() {
@@ -61,7 +65,7 @@ class CorveePuntenService {
 					$errors[] = $e;
 				}
 			}
-			$taken = $this->corveeTakenModel->verwijderOudeTaken();
+			$taken = $this->corveeTakenRepository->verwijderOudeTaken();
 			return array($aantal, $taken, $errors);
 		});
 	}
@@ -127,8 +131,12 @@ class CorveePuntenService {
 		return $totalen;
 	}
 
+	/**
+	 * @param null $functies
+	 * @return CorveePuntenOverzicht[]
+	 */
 	public function loadPuntenVoorAlleLeden($functies = null) {
-		$taken = $this->corveeTakenModel->getAlleTaken(true); // grouped by uid
+		$taken = $this->corveeTakenRepository->getAlleTaken(true); // grouped by uid
 		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(true); // grouped by uid
 		$matrix = $this->loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
@@ -149,44 +157,56 @@ class CorveePuntenService {
 		return $matrix;
 	}
 
-	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = false) {
+	/**
+	 * @param Profiel $profiel
+	 * @param null $functies
+	 * @param null $lidtaken
+	 * @param bool $vrijstelling
+	 * @return CorveePuntenOverzicht
+	 */
+	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null) {
 		if ($lidtaken === null) {
-			$lidtaken = $this->corveeTakenModel->getTakenVoorLid($profiel->uid);
+			$lidtaken = $this->corveeTakenRepository->getTakenVoorLid($profiel->uid);
 			$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren
-			$lijst = array();
-			$lijst['prognose'] = 0;
+			$suggestie = new CorveePuntenOverzicht();
+			$suggestie->prognose = 0;
 			foreach ($lidtaken as $taak) {
-				$lijst['prognose'] += $taak->getPuntenPrognose();
+				$suggestie->prognose += $taak->getPuntenPrognose();
 			}
 		} else {
-			$lijst = $this->sumPuntenPerFunctie($functies, $lidtaken);
+			$suggestie = $this->sumPuntenPerFunctie($functies, $lidtaken);
 		}
-		if ($vrijstelling === false) {
-			$lijst['vrijstelling'] = false;
+		if ($vrijstelling == null) {
+			$suggestie->vrijstelling = null;
 		} else { // bij suggestielijst wordt de prognose gecorrigeerd voor beginDatum van vrijstelling
-			$lijst['vrijstelling'] = $vrijstelling;
-			$lijst['prognose'] += $vrijstelling->getPunten();
+			$suggestie->vrijstelling = $vrijstelling;
+			$suggestie->prognose += $vrijstelling->getPunten();
 		}
 
-		$lijst['lid'] = $profiel;
-		$lijst['puntenTotaal'] = (int)$profiel->corvee_punten;
-		$lijst['bonusTotaal'] = (int)$profiel->corvee_punten_bonus;
-		$lijst['prognose'] += $lijst['puntenTotaal'] + $lijst['bonusTotaal'];
-		$lijst['prognoseColor'] = $this->rgbCalculate($lijst['prognose']);
+		$suggestie->lid = $profiel;
+		$suggestie->puntenTotaal = $profiel->corvee_punten;
+		$suggestie->bonusTotaal = $profiel->corvee_punten_bonus;
+		$suggestie->prognose += $suggestie->puntenTotaal + $suggestie->bonusTotaal;
+		$suggestie->prognoseColor = $this->rgbCalculate($suggestie->prognose);
 		if ($profiel->isLid()) {
-			$lijst['tekort'] = instelling('corvee', 'punten_per_jaar') - $lijst['prognose'];
+			$suggestie->tekort = instelling('corvee', 'punten_per_jaar') - $suggestie->prognose;
 		} else {
-			$lijst['tekort'] = 0 - $lijst['prognose'];
+			$suggestie->tekort = 0 - $suggestie->prognose;
 		}
-		if ($lijst['tekort'] < 0) {
-			$lijst['tekort'] = 0;
+		if ($suggestie->tekort < 0) {
+			$suggestie->tekort = 0;
 		}
-		$lijst['tekortColor'] = $this->rgbCalculate($lijst['tekort'], true);
-		return $lijst;
+		$suggestie->tekortColor = $this->rgbCalculate($suggestie->tekort, true);
+		return $suggestie;
 	}
 
+	/**
+	 * @param CorveeFunctie[] $functies
+	 * @param CorveeTaak[] $taken
+	 * @return CorveePuntenOverzicht
+	 */
 	private function sumPuntenPerFunctie($functies, $taken) {
 		$sumAantal = [];
 		$sumPunten = [];
@@ -206,7 +226,14 @@ class CorveePuntenService {
 			}
 			$sumPrognose += $taak->getPuntenPrognose();
 		}
-		return array('aantal' => $sumAantal, 'punten' => $sumPunten, 'bonus' => $sumBonus, 'prognose' => $sumPrognose, 'prognoseColor' => $this->rgbCalculate($sumPrognose));
+		$suggestie = new CorveePuntenOverzicht();
+		$suggestie->aantal = $sumAantal;
+		$suggestie->punten = $sumPunten;
+		$suggestie->bonus = $sumBonus;
+		$suggestie->prognose = $sumPrognose;
+		$suggestie->prognoseColor = $this->rgbCalculate($sumPrognose);
+
+		return $suggestie;
 	}
 
 	/**

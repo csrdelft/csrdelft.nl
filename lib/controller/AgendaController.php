@@ -12,10 +12,10 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\Ketzer;
 use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\agenda\AgendaVerbergenRepository;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\agenda\AgendaItemForm;
@@ -47,9 +47,9 @@ class AgendaController {
 	 */
 	private $activiteitenModel;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 	/**
 	 * @var MaaltijdenRepository
 	 */
@@ -60,17 +60,17 @@ class AgendaController {
 	private $profielRepository;
 
 	public function __construct(
-        AgendaRepository $agendaRepository,
-        AgendaVerbergenRepository $agendaVerbergenRepository,
-        ActiviteitenModel $activiteitenModel,
-        CorveeTakenModel $corveeTakenModel,
-        MaaltijdenRepository $maaltijdenRepository,
-        ProfielRepository $profielRepository
+		AgendaRepository $agendaRepository,
+		AgendaVerbergenRepository $agendaVerbergenRepository,
+		ActiviteitenModel $activiteitenModel,
+		CorveeTakenRepository $corveeTakenRepository,
+		MaaltijdenRepository $maaltijdenRepository,
+		ProfielRepository $profielRepository
 	) {
 		$this->agendaRepository = $agendaRepository;
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenModel = $activiteitenModel;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->profielRepository = $profielRepository;
 	}
@@ -246,7 +246,7 @@ class AgendaController {
 				break;
 
 			case 'corveetaak':
-				$item = $this->corveeTakenModel->retrieveByUUID($refuuid);
+				$item = $this->corveeTakenRepository->retrieveByUUID($refuuid);
 				break;
 
 			case 'activiteit':

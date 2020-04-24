@@ -1,32 +1,59 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\repository\corvee;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\corvee\CorveeTaak;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\maalcie\CorveeRepetitie;
-use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\model\maalcie\CorveePuntenService;
+use CsrDelft\model\RetrieveByUuidTrait;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use DateTimeInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
 use PDOStatement;
+use Throwable;
 
 /**
- * CorveeTakenModel.class.php    |    P.W.G. Brussee (brussee@live.nl)
+ * @author P.W.G. Brussee (brussee@live.nl)
  *
+ * @method CorveeTaak|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CorveeTaak|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CorveeTaak[]    findAll()
+ * @method CorveeTaak[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeTakenModel extends PersistenceModel {
-	const ORM = CorveeTaak::class;
+class CorveeTakenRepository extends AbstractRepository {
+	use RetrieveByUuidTrait;
 
-	protected $default_order = 'datum ASC';
-
-	public function updateGemaild(CorveeTaak $taak) {
-		$taak->setWanneerGemaild(date('Y-m-d H:i'));
-		$this->update($taak);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, CorveeTaak::class);
 	}
 
+	/**
+	 * @param CorveeTaak $taak
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function updateGemaild(CorveeTaak $taak) {
+		$taak->setWanneerGemaild(date_format_intl(date_create(), DATETIME_FORMAT));
+		$this->_em->persist($taak);
+		$this->_em->flush();
+	}
+
+	/**
+	 * @param CorveeTaak $taak
+	 * @param $uid
+	 * @return bool
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function taakToewijzenAanLid(CorveeTaak $taak, $uid) {
 		if ($taak->uid === $uid) {
 			return false;
@@ -43,27 +70,44 @@ class CorveeTakenModel extends PersistenceModel {
 		if ($puntenruilen && $uid !== null) {
 			$this->puntenToekennen($taak);
 		} else {
-			$this->update($taak);
+			$this->_em->persist($taak);
+			$this->_em->flush();
 		}
 		return true;
 	}
 
+	/**
+	 * @param CorveeTaak $taak
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function puntenToekennen(CorveeTaak $taak) {
 		ContainerFacade::getContainer()->get(CorveePuntenService::class)->puntenToekennen($taak->uid, $taak->punten, $taak->bonus_malus);
 		$taak->punten_toegekend = $taak->punten_toegekend + $taak->punten;
 		$taak->bonus_toegekend = $taak->bonus_toegekend + $taak->bonus_malus;
-		$taak->wanneer_toegekend = date('Y-m-d H:i');
-		$this->update($taak);
+		$taak->wanneer_toegekend = date_create_immutable();
+		$this->_em->persist($taak);
+		$this->_em->flush();
 	}
 
+	/**
+	 * @param CorveeTaak $taak
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function puntenIntrekken(CorveeTaak $taak) {
 		ContainerFacade::getContainer()->get(CorveePuntenService::class)->puntenIntrekken($taak->uid, $taak->punten, $taak->bonus_malus);
 		$taak->punten_toegekend = $taak->punten_toegekend - $taak->punten;
 		$taak->bonus_toegekend = $taak->bonus_toegekend - $taak->bonus_malus;
 		$taak->wanneer_toegekend = null;
-		$this->update($taak);
+		$this->_em->persist($taak);
+		$this->_em->flush();
 	}
 
+	/**
+	 * @param array $taken
+	 * @return array
+	 */
 	public function getRoosterMatrix(array $taken) {
 		$matrix = array();
 		foreach ($taken as $taak) {
@@ -74,16 +118,30 @@ class CorveeTakenModel extends PersistenceModel {
 		return $matrix;
 	}
 
+	/**
+	 * @return CorveeTaak[]
+	 */
 	public function getKomendeTaken() {
-		return $this->find('verwijderd = false AND datum >= ?', array(date('Y-m-d')));
+		return $this->createQueryBuilder('ct')
+			->where('ct.verwijderd = false and ct.datum >= :datum')
+			->setParameter('datum', date_create())
+			->orderBy('ct.datum', 'ASC')
+			->getQuery()->getResult();
 	}
 
+	/**
+	 * @return CorveeTaak[]
+	 */
 	public function getVerledenTaken() {
-		return $this->find('verwijderd = false AND datum < ?', array(date('Y-m-d')));
+		return $this->createQueryBuilder('ct')
+			->where('ct.verwijderd = false and ct.datum < :datum')
+			->setParameter('datum', date_create())
+			->orderBy('ct.datum', 'ASC')
+			->getQuery()->getResult();
 	}
 
 	public function getAlleTaken($groupByUid = false) {
-		$taken = $this->find('verwijderd = false');
+		$taken = $this->findBy(['verwijderd' => false], ['datum' => 'ASC']);
 		if ($groupByUid) {
 			$takenByUid = array();
 			foreach ($taken as $taak) {
@@ -98,12 +156,13 @@ class CorveeTakenModel extends PersistenceModel {
 	}
 
 	public function getVerwijderdeTaken() {
-		return $this->find('verwijderd = true');
+		return $this->findBy(['verwijderd' => true], ['datum' => 'ASC']);
 
 	}
 
 	public function getTaak($tid) {
-		$taak = $this->retrieveByPrimaryKey(array($tid));
+		$taak = $this->find($tid);
+
 		/** @var CorveeTaak $taak */
 		if ($taak->verwijderd) {
 			throw new CsrGebruikerException('Maaltijd is verwijderd');
@@ -114,26 +173,22 @@ class CorveeTakenModel extends PersistenceModel {
 	/**
 	 * Haalt de taken op voor het ingelode lid of alle leden tussen de opgegeven data.
 	 *
-	 * @param int $van Timestamp
-	 * @param int $tot Timestamp
+	 * @param DateTimeInterface $van Timestamp
+	 * @param DateTimeInterface $tot Timestamp
 	 * @param bool $iedereen
 	 * @return CorveeTaak[]
 	 * @throws CsrException
 	 */
-	public function getTakenVoorAgenda($van, $tot, $iedereen = false) {
-		if (!is_int($van)) {
-			throw new CsrException('Invalid timestamp: $van getTakenVoorAgenda()');
-		}
-		if (!is_int($tot)) {
-			throw new CsrException('Invalid timestamp: $tot getTakenVoorAgenda()');
-		}
-		$where = 'verwijderd = FALSE AND datum >= ? AND datum <= ?';
-		$values = array(date('Y-m-d', $van), date('Y-m-d', $tot));
+	public function getTakenVoorAgenda(DateTimeInterface $van, DateTimeInterface $tot, $iedereen = false) {
+		$qb = $this->createQueryBuilder('ct');
+		$qb->where('ct.verwijderd = false and ct.datum >= :van_datum and ct.datum <= :tot_datum');
+		$qb->setParameter('van_datum', $van);
+		$qb->setParameter('tot_datum', $tot);
 		if (!$iedereen) {
-			$where .= ' AND uid = ?';
-			$values[] = LoginModel::getUid();
+			$qb->andWhere('ct.uid = :uid');
+			$qb->setParameter('uid', LoginModel::getUid());
 		}
-		return $this->find($where, $values)->fetchAll();
+		return $qb->getQuery()->getResult();
 	}
 
 	/**
@@ -143,7 +198,7 @@ class CorveeTakenModel extends PersistenceModel {
 	 * @return PDOStatement|CorveeTaak[]
 	 */
 	public function getTakenVoorLid($uid) {
-		return $this->find('verwijderd = false AND uid = ?', array($uid));
+		return $this->findBy(['verwijderd' => false, 'uid' => $uid], ['datum' => 'ASC']);
 	}
 
 	/**
@@ -153,21 +208,38 @@ class CorveeTakenModel extends PersistenceModel {
 	 * @return CorveeTaak
 	 */
 	public function getLaatsteTaakVanLid($uid) {
-		return $this->find('verwijderd = false AND uid = ?', array($uid), null, 'datum DESC', 1)->fetch();
+		return $this->findOneBy(['verwijderd' => false, 'uid' => $uid], ['datum' => 'DESC']);
 	}
 
 	/**
 	 * Haalt de komende taken op waarvoor een lid is ingedeeld.
 	 *
 	 * @param string $uid
-	 * @return PDOStatement|CorveeTaak[]
+	 * @return CorveeTaak[]
 	 */
 	public function getKomendeTakenVoorLid($uid) {
-		return $this->find('verwijderd = false AND uid = ? AND datum >= ?', array($uid, date('Y-m-d')));
+		return $this->createQueryBuilder('ct')
+			->where('ct.verwijderd = false and ct.uid = :uid and ct.datum >= :datum')
+			->setParameter('uid', $uid)
+			->setParameter('datum', date_create_immutable())
+			->orderBy('ct.datum', 'ASC')
+			->getQuery()->getResult();
 	}
 
+	/**
+	 * @param $tid
+	 * @param $fid
+	 * @param $uid
+	 * @param $crid
+	 * @param $mid
+	 * @param $datum
+	 * @param $punten
+	 * @param $bonus_malus
+	 * @return bool|mixed
+	 * @throws Throwable
+	 */
 	public function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
-		return Database::transaction(function () use ($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
+		return $this->_em->transactional(function () use ($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
 			if ($tid === 0) {
 				$taak = $this->newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus);
 			} else {
@@ -181,7 +253,8 @@ class CorveeTakenModel extends PersistenceModel {
 				$taak->punten = $punten;
 				$taak->bonus_malus = $bonus_malus;
 				if (!$this->taakToewijzenAanLid($taak, $uid)) {
-					$this->update($taak);
+					$this->_em->persist($taak);
+					$this->_em->flush();
 				}
 			}
 
@@ -189,51 +262,90 @@ class CorveeTakenModel extends PersistenceModel {
 		});
 	}
 
+	/**
+	 * @param $tid
+	 * @return CorveeTaak|null
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function herstelTaak($tid) {
-		/** @var CorveeTaak $taak */
-		$taak = $this->retrieveByPrimaryKey(array($tid));
+		$taak = $this->find($tid);
 		if (!$taak->verwijderd) {
 			throw new CsrGebruikerException('Corveetaak is niet verwijderd');
 		}
 		$taak->verwijderd = false;
-		$this->update($taak);
+		$this->_em->persist($taak);
+		$this->_em->flush();
 		return $taak;
 	}
 
+	/**
+	 * @return int
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function prullenbakLeegmaken() {
-		$taken = $this->find('verwijderd = true');
+		$taken = $this->findBy(['verwijderd' => true]);
 		foreach ($taken as $taak) {
-			$this->delete($taak);
+			$this->_em->remove($taak);
 		}
-		return $taken->rowCount();
+		$this->_em->flush();
+		return count($taken);
 	}
 
+	/**
+	 * @return int
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function verwijderOudeTaken() {
-		$taken = $this->find('datum < ?', array(date('Y-m-d')));
+		/** @var CorveeTaak[] $taken */
+		$taken = $this->createQueryBuilder('ct')
+			->where('ct.datum < :datum')
+			->setParameter('datum', date_create_immutable())
+			->getQuery()->getResult();
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
-			$this->update($taak);
+			$this->_em->persist($taak);
 		}
-		return $taken->rowCount();
+		$this->_em->flush();
+		return count($taken);
 	}
 
+	/**
+	 * @param $uid
+	 * @return mixed
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function verwijderTakenVoorLid($uid) {
-		$taken = $this->find('uid = ? AND datum >= ?', array($uid, date('Y-m-d')));
+		/** @var CorveeTaak[] $taken */
+		$taken = $this->createQueryBuilder('ct')
+		->where('ct.uid = :uid and ct.datum >= :datum')
+		->setParameter('uid', $uid)
+			->setParameter('datum', date_create_immutable())
+			->getQuery()->getResult();
 		foreach ($taken as $taak) {
-			$this->delete($taak);
+			$this->_em->remove($taak);
 		}
-		return $taken->rowCount();
+		$this->_em->flush();
+		return count($taken);
 	}
 
+	/**
+	 * @param $tid
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function verwijderTaak($tid) {
-		/** @var CorveeTaak $taak */
-		$taak = $this->retrieveByPrimaryKey(array($tid));
+		$taak = $this->find($tid);
 		if ($taak->verwijderd) {
-			$this->delete($taak); // definitief verwijderen
+			$this->_em->remove($taak);
 		} else {
 			$taak->verwijderd = true;
-			$this->update($taak);
+			$this->_em->persist($taak);
 		}
+		$this->_em->flush();
 	}
 
 	public function vanRepetitie(CorveeRepetitie $repetitie, $datum, $mid = null, $uid = null, $bonus_malus = 0) {
@@ -255,6 +367,18 @@ class CorveeTakenModel extends PersistenceModel {
 
 	}
 
+	/**
+	 * @param $fid
+	 * @param $uid
+	 * @param $crid
+	 * @param $mid
+	 * @param $datum
+	 * @param $punten
+	 * @param $bonus_malus
+	 * @return CorveeTaak
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	private function newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
 		$taak = new CorveeTaak();
 		$taak->taak_id = null;
@@ -271,7 +395,8 @@ class CorveeTakenModel extends PersistenceModel {
 		$taak->wanneer_gemaild = '';
 		$taak->verwijderd = false;
 
-		$this->create($taak);
+		$this->_em->persist($taak);
+		$this->_em->flush();
 
 		return $taak;
 	}
@@ -292,9 +417,9 @@ class CorveeTakenModel extends PersistenceModel {
 			throw new CsrGebruikerException('Load taken voor maaltijd faalt: Invalid $mid =' . $mid);
 		}
 		if ($verwijderd) {
-			return $this->find('maaltijd_id = ?', array($mid));
+			return $this->findBy(['maaltijd_id' => $mid], ['datum' => 'ASC']);
 		}
-		return $this->find('verwijderd = false AND maaltijd_id = ?', array($mid));
+		return $this->findBy(['verwijderd' => false, 'maaltijd_id' => $mid], ['datum' => 'ASC']);
 	}
 
 	/**
@@ -304,7 +429,7 @@ class CorveeTakenModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public function existMaaltijdCorvee($mid) {
-		return $this->count('maaltijd_id = ?', array($mid)) > 0;
+		return count($this->findBy(['maaltijd_id' => $mid])) > 0;
 	}
 
 	/**
@@ -312,14 +437,16 @@ class CorveeTakenModel extends PersistenceModel {
 	 *
 	 * @param int $mid
 	 * @return int
+	 * @throws ORMException
 	 */
 	public function verwijderMaaltijdCorvee($mid) {
-		$taken = $this->find('maaltijd_id = ?', array($mid));
+		$taken = $this->findBy(['maaltijd_id' => $mid]);
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
-			$this->update($taak);
+			$this->_em->persist($taak);
 		}
-		return $taken->rowCount();
+		$this->_em->flush();
+		return count($taken);
 	}
 
 	// Functie-Taken ############################################################
@@ -331,21 +458,38 @@ class CorveeTakenModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public function existFunctieTaken($fid) {
-		return $this->count('functie_id = ?', array($fid)) > 0;
+		return count($this->findBy(['functie_id' => $fid])) > 0;
 	}
 
 	// Repetitie-Taken ############################################################
 
+	/**
+	 * @param CorveeRepetitie $repetitie
+	 * @param $beginDatum
+	 * @param $eindDatum
+	 * @param null $mid
+	 * @return bool|mixed
+	 * @throws Throwable
+	 */
 	public function maakRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid = null) {
 		if ($repetitie->periode_in_dagen < 1) {
 			throw new CsrGebruikerException('New repetitie-taken faalt: $periode =' . $repetitie->periode_in_dagen);
 		}
 
-		return Database::transaction(function () use ($repetitie, $beginDatum, $eindDatum, $mid) {
+		return $this->_em->transactional(function () use ($repetitie, $beginDatum, $eindDatum, $mid) {
 			return $this->newRepetitieTaken($repetitie, strtotime($beginDatum), strtotime($eindDatum), $mid);
 		});
 	}
 
+	/**
+	 * @param CorveeRepetitie $repetitie
+	 * @param $beginDatum
+	 * @param $eindDatum
+	 * @param null $mid
+	 * @return array
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function newRepetitieTaken(CorveeRepetitie $repetitie, $beginDatum, $eindDatum, $mid = null) {
 		// start at first occurence
 		$shift = $repetitie->dag_vd_week - date('w', $beginDatum) + 7;
@@ -357,8 +501,8 @@ class CorveeTakenModel extends PersistenceModel {
 		$taken = array();
 		while ($datum <= $eindDatum) { // break after one
 			for ($i = $repetitie->standaard_aantal; $i > 0; $i--) {
-				$taak = $this->vanRepetitie($repetitie, date('Y-m-d', $datum), $mid, null, 0);
-				$this->create($taak);
+				$taak = $this->vanRepetitie($repetitie, date_create_immutable("@$datum"), $mid, null, 0);
+				$this->_em->persist($taak);
 				$taken[] = $taak;
 			}
 			if ($repetitie->periode_in_dagen < 1) {
@@ -366,17 +510,28 @@ class CorveeTakenModel extends PersistenceModel {
 			}
 			$datum = strtotime('+' . $repetitie->periode_in_dagen . ' days', $datum);
 		}
+
+		$this->_em->flush();
+
 		return $taken;
 	}
 
+	/**
+	 * @param $crid
+	 * @return int
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function verwijderRepetitieTaken($crid) {
-		$taken = $this->find('crv_repetitie_id = ?', array($crid));
+		$taken = $this->findBy(['crv_repetitie_id' => $crid]);
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
-			$this->update($taak);
+			$this->_em->persist($taak);
 		}
 
-		return $taken->rowCount();
+		$this->_em->flush();
+
+		return count($taken);
 	}
 
 	/**
@@ -386,26 +541,35 @@ class CorveeTakenModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public function existRepetitieTaken($crid) {
-		return $this->count('crv_repetitie_id = ?', array($crid)) > 0;
+		return count($this->findBy(['crv_repetitie_id' => $crid])) > 0;
 	}
 
+	/**
+	 * @param CorveeRepetitie $repetitie
+	 * @param $verplaats
+	 * @return bool|mixed
+	 * @throws Throwable
+	 */
 	public function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
-		return Database::transaction(function () use ($repetitie, $verplaats) {
-			$taken = $this->find('verwijderd = false AND crv_repetitie_id = ?', array($repetitie->crv_repetitie_id));
+		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
+			$taken = $this->findBy(['verwijderd' => false, 'crv_repetitie_id' => $repetitie->crv_repetitie_id]);
 			/** @var CorveeTaak $taak */
 
 			foreach ($taken as $taak) {
 				$taak->functie_id = $repetitie->functie_id;
 				$taak->punten = $repetitie->standaard_punten;
 
-				$this->update($taak);
+				$this->_em->persist($taak);
 			}
-			$updatecount = $taken->rowCount();
 
-			$taken = $this->find('verwijderd = FALSE AND crv_repetitie_id = ?', array($repetitie->crv_repetitie_id));
+			$this->_em->flush();
+			$updatecount = count($taken);
+
+			$taken = $this->findBy(['verwijderd' => false, 'crv_repetitie_id' => $repetitie->crv_repetitie_id]);
 			$takenPerDatum = array(); // taken per datum indien geen maaltijd
 			$takenPerMaaltijd = array(); // taken per maaltijd
 			$maaltijden = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getKomendeRepetitieMaaltijden($repetitie->mlt_repetitie_id);
+			/** @var Maaltijd[] $maaltijdenById */
 			$maaltijdenById = array();
 			foreach ($maaltijden as $maaltijd) {
 				$takenPerMaaltijd[$maaltijd->maaltijd_id] = array();
@@ -414,17 +578,17 @@ class CorveeTakenModel extends PersistenceModel {
 			// update day of the week
 			$daycount = 0;
 			foreach ($taken as $taak) {
-				$datum = strtotime($taak->datum);
+				$datum = $taak->datum;
 				if ($verplaats) {
-					$shift = $repetitie->dag_vd_week - date('w', $datum);
+					$shift = $repetitie->dag_vd_week - $datum->format('w');
 					if ($shift > 0) {
-						$datum = strtotime('+' . $shift . ' days', $datum);
+						$datum = $datum->add(\DateInterval::createFromDateString('+' . $shift . ' days'));
 					} elseif ($shift < 0) {
-						$datum = strtotime($shift . ' days', $datum);
+						$datum = $datum->add(\DateInterval::createFromDateString($shift . ' days'));
 					}
 					if ($shift !== 0) {
-						$taak->datum = date('Y-m-d', $datum);
-						$this->update($taak);
+						$taak->datum = $datum;
+						$this->_em->persist($taak);
 						$daycount++;
 					}
 				}
@@ -434,7 +598,7 @@ class CorveeTakenModel extends PersistenceModel {
 						$takenPerMaaltijd[$mid][] = $taak;
 					}
 				} else {
-					$takenPerDatum[$datum][] = $taak;
+					$takenPerDatum[date_format_intl($datum, DATE_FORMAT)][] = $taak;
 				}
 			}
 			// standaard aantal aanvullen
@@ -443,7 +607,7 @@ class CorveeTakenModel extends PersistenceModel {
 				$verschil = $repetitie->standaard_aantal - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					$taak = $this->vanRepetitie($repetitie, $taken[0]->datum, null, null, 0);
-					$this->create($taak);
+					$this->_em->persist($taak);
 				}
 				$datumcount += $verschil;
 			}
@@ -452,10 +616,11 @@ class CorveeTakenModel extends PersistenceModel {
 				$verschil = $repetitie->standaard_aantal - sizeof($taken);
 				for ($i = $verschil; $i > 0; $i--) {
 					$taak = $this->vanRepetitie($repetitie, $maaltijdenById[$mid]->datum, $mid, null, 0);
-					$this->create($taak);
+					$this->_em->persist($taak);
 				}
 				$maaltijdcount += $verschil;
 			}
+			$this->_em->flush();
 			return array('update' => $updatecount, 'day' => $daycount, 'datum' => $datumcount, 'maaltijd' => $maaltijdcount);
 		});
 	}

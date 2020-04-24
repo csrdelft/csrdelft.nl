@@ -2,8 +2,11 @@
 
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\entity\corvee\CorveePuntenOverzicht;
+use CsrDelft\entity\corvee\CorveeTaak;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 
 /**
@@ -38,7 +41,8 @@ class CorveeToewijzenService {
 		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
 		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
-			$lijst = array();
+			/** @var CorveePuntenOverzicht[] $corveePuntenOverzichten */
+			$corveePuntenOverzichten = [];
 			$avg = 0;
 			foreach ($functie->getKwalificaties() as $kwali) {
 				$uid = $kwali->uid;
@@ -51,65 +55,64 @@ class CorveeToewijzenService {
 				}
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
-					$datum = date_create_immutable("@" . $taak->getBeginMoment());
-					if ($datum >= $vrijstelling->begin_datum && $datum <= $vrijstelling->eind_datum) {
+					if ($taak->datum >= $vrijstelling->begin_datum && $taak->datum <= $vrijstelling->eind_datum) {
 						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
-				$lijst[$uid] = $this->corveePuntenService->loadPuntenVoorLid($profiel, array($functie->functie_id => $functie));
-				$lijst[$uid]['aantal'] = $lijst[$uid]['aantal'][$functie->functie_id];
-				$avg += $lijst[$uid]['aantal'];
+				$corveePuntenOverzichten[$uid] = $this->corveePuntenService->loadPuntenVoorLid($profiel, array($functie->functie_id => $functie));
+				$corveePuntenOverzichten[$uid]->aantal = $corveePuntenOverzichten[$uid]->aantal[$functie->functie_id];
+				$avg += $corveePuntenOverzichten[$uid]->aantal;
 			}
-			$avg /= sizeof($lijst);
-			foreach ($lijst as $uid => $punten) {
-				$lijst[$uid]['relatief'] = $lijst[$uid]['aantal'] - (int)$avg;
+			$avg /= sizeof($corveePuntenOverzichten);
+			foreach ($corveePuntenOverzichten as $uid => $punten) {
+				$corveePuntenOverzichten[$uid]->relatief = $corveePuntenOverzichten[$uid]->aantal - (int)$avg;
 			}
 			$sorteer = 'sorteerKwali';
 		} else {
-			$lijst = $this->corveePuntenService->loadPuntenVoorAlleLeden();
-			foreach ($lijst as $uid => $punten) {
+			$corveePuntenOverzichten = $this->corveePuntenService->loadPuntenVoorAlleLeden();
+			foreach ($corveePuntenOverzichten as $uid => $punten) {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
-					$datum = date_create_immutable('@' . $taak->getBeginMoment());
+					$datum = $taak->datum;
 					if ($datum >= $vrijstelling->begin_datum && $datum <= $vrijstelling->eind_datum) {
-						unset($lijst[$uid]); // taak valt binnen vrijstelling-periode: suggestie niet weergeven
+						unset($corveePuntenOverzichten[$uid]); // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 					// corrigeer prognose in suggestielijst vóór de aanvang van de vrijstellingsperiode
 					if ($vrijstelling !== null && $datum < $vrijstelling->begin_datum) {
-						$lijst[$uid]['prognose'] -= $vrijstelling->getPunten();
+						$corveePuntenOverzichten[$uid]->prognose -= $vrijstelling->getPunten();
 					}
 				}
 			}
 			$sorteer = 'sorteerPrognose';
 		}
-		foreach ($lijst as $uid => $punten) {
-			$lijst[$uid]['laatste'] = CorveeTakenModel::instance()->getLaatsteTaakVanLid($uid);
-			if ($lijst[$uid]['laatste'] !== false && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime(instelling('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
-				$lijst[$uid]['recent'] = true;
+		foreach ($corveePuntenOverzichten as $uid => $punten) {
+			$corveePuntenOverzichten[$uid]->laatste = ContainerFacade::getContainer()->get(CorveeTakenRepository::class)->getLaatsteTaakVanLid($uid);
+			if ($corveePuntenOverzichten[$uid]->laatste !== null && $corveePuntenOverzichten[$uid]->laatste->getBeginMoment() >= strtotime(instelling('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
+				$corveePuntenOverzichten[$uid]->recent = true;
 			} else {
-				$lijst[$uid]['recent'] = false;
+				$corveePuntenOverzichten[$uid]->recent = false;
 			}
 			if ($taak->crv_repetitie_id !== null) {
-				$lijst[$uid]['voorkeur'] = CorveeVoorkeurenModel::instance()->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
+				$corveePuntenOverzichten[$uid]->voorkeur = CorveeVoorkeurenModel::instance()->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
 			} else {
-				$lijst[$uid]['voorkeur'] = false;
+				$corveePuntenOverzichten[$uid]->voorkeur = false;
 			}
 		}
-		uasort($lijst, [$this, $sorteer]);
-		return $lijst;
+		uasort($corveePuntenOverzichten, [$this, $sorteer]);
+		return $corveePuntenOverzichten;
 	}
 
-	function sorteerKwali($a, $b) {
-		if ($a['laatste'] !== false && $b['laatste'] !== false) {
-			$a = $a['laatste']->getBeginMoment();
-			$b = $b['laatste']->getBeginMoment();
-		} elseif ($a['laatste'] === false) {
+	function sorteerKwali(CorveePuntenOverzicht $a, CorveePuntenOverzicht $b) {
+		if ($a->laatste !== false && $b->laatste !== false) {
+			$a = $a->laatste->getBeginMoment();
+			$b = $b->laatste->getBeginMoment();
+		} elseif ($a->laatste === false) {
 			return -1;
-		} elseif ($b['laatste'] === false) {
+		} elseif ($b->laatste === false) {
 			return 1;
 		} else {
-			$a = $a['aantal'];
-			$b = $b['aantal'];
+			$a = $a->aantal;
+			$b = $b->aantal;
 		}
 		if ($a === $b) {
 			return 0;
@@ -120,9 +123,9 @@ class CorveeToewijzenService {
 		}
 	}
 
-	function sorteerPrognose($a, $b) {
-		$a = $a['prognose'];
-		$b = $b['prognose'];
+	function sorteerPrognose(CorveePuntenOverzicht $a, CorveePuntenOverzicht $b) {
+		$a = $a->prognose;
+		$b = $b->prognose;
 		if ($a === $b) {
 			return 0;
 		} elseif ($a < $b) { // < ASC

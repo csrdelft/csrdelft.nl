@@ -3,7 +3,7 @@
  * @var \CsrDelft\entity\agenda\Agendeerbaar $item
  * @var \CsrDelft\entity\agenda\AgendaItem $item
  * @var \CsrDelft\entity\profiel\Profiel $item
- * @var \CsrDelft\model\entity\maalcie\CorveeTaak $item
+ * @var \CsrDelft\entity\corvee\CorveeTaak $item
  */
 ?>
 <div class="card agenda-card">
@@ -16,7 +16,7 @@
 					@elseif($item instanceof \CsrDelft\entity\maalcie\Maaltijd)
 						<img src="/images/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon"/>
 						<a href="{{$item->getUrl()}}">{{$item->getTitel()}}</a>
-					@elseif($item instanceof \CsrDelft\model\entity\maalcie\CorveeTaak)
+					@elseif($item instanceof \CsrDelft\entity\corvee\CorveeTaak)
 						@if(stristr($item->getCorveeFunctie()->naam, "klus"))
 							<img src="/images/maalcie/drill.png" width="16" height="16" alt="drill" class="icon"/>
 						@else
@@ -72,7 +72,7 @@
 	<div class="card-body">
 		@if($item instanceof \CsrDelft\entity\maalcie\Maaltijd)
 			<div class="tijd">
-				{{$item->getBeginMoment()->format('H:i')}} - {{$item->getEindMoment()->format('H:i')}}
+				{{strftime("%R", $item->getBeginMoment())}} - {{strftime("%R", $item->getEindMoment())}}
 			</div>
 		@elseif($item instanceof \CsrDelft\entity\agenda\Agendeerbaar)
 			@if(!$item->isHeledag())

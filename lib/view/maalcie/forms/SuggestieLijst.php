@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\model\groepen\LichtingenModel;
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\view\formulier\FormElement;

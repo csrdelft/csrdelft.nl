@@ -1,13 +1,15 @@
 <?php
 
-namespace CsrDelft\model\entity\maalcie;
+namespace CsrDelft\entity\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\maalcie\CorveeFunctiesModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
+use DateInterval;
+use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CorveeTaak.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -32,34 +34,88 @@ use CsrDelft\repository\ProfielRepository;
  *
  * Zie ook MaaltijdCorvee.class.php
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeTakenRepository")
+ * @ORM\Table("crv_taken")
  */
-class CorveeTaak extends PersistentEntity implements Agendeerbaar {
-	# primary key
-
-	public $taak_id; # int 11
-	public $functie_id; # foreign key crv_functie.id
-	public $uid; # foreign key lid.uid
-	public $crv_repetitie_id; # foreign key crv_repetitie.id
-	public $maaltijd_id; # foreign key maaltijd.id
-	public $datum; # date
-	public $punten; # int 11
-	public $bonus_malus = 0; # int 11
-	public $punten_toegekend = 0; # int 11
-	public $bonus_toegekend = 0; # int 11
-	public $wanneer_toegekend; # datetime
-	public $wanneer_gemaild; # text
-	public $verwijderd = false; # boolean
+class CorveeTaak implements Agendeerbaar {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
+	public $taak_id;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $functie_id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="uid", nullable=true)
+	 */
+	public $uid;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $crv_repetitie_id;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $maaltijd_id;
+	/**
+	 * @var DateTimeImmutable
+	 * @ORM\Column(type="date")
+	 */
+	public $datum;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $punten;
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $bonus_malus = 0;
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $punten_toegekend = 0;
+	/**
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $bonus_toegekend = 0;
+	/**
+	 * @var DateTimeImmutable
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	public $wanneer_toegekend;
+	/**
+	 * @var string
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	public $wanneer_gemaild;
+	/**
+	 * @var bool
+	 * @ORM\Column(type="boolean")
+	 */
+	public $verwijderd = false;
 
 	public function getPuntenPrognose() {
 		return $this->punten + $this->bonus_malus - $this->punten_toegekend - $this->bonus_toegekend;
 	}
 
-	public function getLaatstGemaildTimestamp() {
+	public function getLaatstGemaildDate() {
 		$pos = strpos($this->wanneer_gemaild, '&#013;');
 		if ($pos === false) {
 			return null;
 		}
-		return strtotime(substr($this->wanneer_gemaild, 0, $pos));
+		return date_create_immutable(substr($this->wanneer_gemaild, 0, $pos));
 	}
 
 	/**
@@ -78,9 +134,9 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getMoetHerinneren() {
 		$aantal = $this->getAantalKeerGemaild();
-		$datum = strtotime($this->datum);
-		$laatst = $this->getLaatstGemaildTimestamp();
-		$nu = strtotime(date('Y-m-d'));
+		$datum = $this->datum;
+		$laatst = $this->getLaatstGemaildDate();
+		$nu = date_create_immutable();
 
 		if ($laatst === $nu) {
 			return false;
@@ -88,9 +144,11 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 
 		for ($i = intval(instelling('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
 
+			$herinnering_email_uiterlijk = DateInterval::createFromDateString(instelling('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'));
+			$herinnering_email = DateInterval::createFromDateString(instelling('corvee', 'herinnering_' . $i . 'e_mail'));
 			if ($aantal < $i &&
-				$nu >= strtotime(instelling('corvee', 'herinnering_' . $i . 'e_mail'), $datum) &&
-				$nu <= strtotime(instelling('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum)
+				$nu >= $datum->add($herinnering_email) &&
+				$nu <= $datum->add($herinnering_email_uiterlijk)
 			) {
 				return true;
 			}
@@ -105,13 +163,13 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	 */
 	public function getIsTelaatGemaild() {
 		$aantal = $this->getAantalKeerGemaild();
-		$datum = strtotime($this->datum);
-		$laatst = $this->getLaatstGemaildTimestamp();
-		$nu = strtotime(date('Y-m-d'));
+		$datum = $this->datum;
+		$laatst = $this->getLaatstGemaildDate();
+		$nu = date_create_immutable();
 		$moeten = 0;
 
 		for ($i = intval(instelling('corvee', 'herinnering_aantal_mails')); $i > 0; $i--) {
-			$uiterlijk = strtotime(instelling('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk'), $datum);
+			$uiterlijk = $datum->add(DateInterval::createFromDateString(instelling('corvee', 'herinnering_' . $i . 'e_mail_uiterlijk')));
 			if ($nu >= $uiterlijk) {
 				$moeten++;
 			}
@@ -158,7 +216,7 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 	}
 
 	public function getBeginMoment() {
-		return strtotime($this->datum);
+		return $this->datum->getTimestamp();
 	}
 
 	public function getEindMoment() {
@@ -195,23 +253,5 @@ class CorveeTaak extends PersistentEntity implements Agendeerbaar {
 		return true;
 	}
 
-	protected static $table_name = 'crv_taken';
-	protected static $persistent_attributes = array(
-		'taak_id' => array(T::Integer, false, 'auto_increment'),
-		'functie_id' => array(T::Integer),
-		'uid' => array(T::UID, true),
-		'crv_repetitie_id' => array(T::Integer, true),
-		'maaltijd_id' => array(T::Integer, true),
-		'datum' => array(T::Date),
-		'punten' => array(T::Integer),
-		'bonus_malus' => array(T::Integer),
-		'punten_toegekend' => array(T::Integer),
-		'bonus_toegekend' => array(T::Integer),
-		'wanneer_toegekend' => array(T::DateTime, true),
-		'wanneer_gemaild' => array(T::Text, true),
-		'verwijderd' => array(T::Boolean)
-	);
-
-	protected static $primary_key = array('taak_id');
 
 }

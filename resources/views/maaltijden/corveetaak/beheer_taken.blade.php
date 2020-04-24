@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var \CsrDelft\entity\corvee\CorveeTaak $taak
+ * @var \CsrDelft\entity\maalcie\Maaltijd $maaltijd
+ */
+?>
 @extends('maaltijden.base')
 
 @section('titel')

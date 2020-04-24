@@ -2,10 +2,10 @@
 
 namespace CsrDelft\model\maalcie;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\model\entity\Mail;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 
@@ -22,22 +22,22 @@ class CorveeHerinneringService {
 	 */
 	private $maaltijdAanmeldingenRepository;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 	/**
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
 
-	public function __construct(MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, CorveeTakenModel $corveeTakenModel, ProfielRepository $profielRepository) {
+	public function __construct(MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, CorveeTakenRepository $corveeTakenRepository, ProfielRepository $profielRepository) {
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->profielRepository = $profielRepository;
 	}
 
 	public function stuurHerinnering(CorveeTaak $taak) {
-		$datum = date('d-m-Y', strtotime($taak->datum));
+		$datum = date_format_intl($taak->datum, DATE_FORMAT);
 		$uid = $taak->uid;
 		$profiel = $this->profielRepository->find($uid);
 		if (!$profiel) {
@@ -62,7 +62,7 @@ class CorveeHerinneringService {
 		$mail->setPlaceholders(array('LIDNAAM' => $lidnaam, 'DATUM' => $datum, 'MEEETEN' => $eten));
 		if ($mail->send()) { // false if failed
 			if (!$mail->inDebugMode()) {
-				$this->corveeTakenModel->updateGemaild($taak);
+				$this->corveeTakenRepository->updateGemaild($taak);
 			}
 			return $datum . ' ' . $taak->getCorveeFunctie()->naam . ' verstuurd! (' . $lidnaam . ')';
 		} else {
@@ -72,9 +72,9 @@ class CorveeHerinneringService {
 
 	public function stuurHerinneringen() {
 		$vooraf = str_replace('-', '+', instelling('corvee', 'herinnering_1e_mail'));
-		$van = strtotime(date('Y-m-d'));
-		$tot = strtotime($vooraf, $van);
-		$taken = $this->corveeTakenModel->getTakenVoorAgenda($van, $tot, true);
+		$van = date_create();
+		$tot = date_create_immutable()->add(\DateInterval::createFromDateString($vooraf));
+		$taken = $this->corveeTakenRepository->getTakenVoorAgenda($van, $tot, true);
 		$verzonden = array();
 		$errors = array();
 		foreach ($taken as $taak) {

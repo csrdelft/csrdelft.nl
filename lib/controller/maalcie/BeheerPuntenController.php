@@ -42,8 +42,8 @@ class BeheerPuntenController {
 		$punten = (int)filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		$this->corveePuntenService->savePuntenVoorLid($profiel, $punten, null);
 		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
-		$lijst = $this->corveePuntenService->loadPuntenVoorLid($profiel, $functies);
-		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $lijst]);
+		$corveePuntenOverzicht = $this->corveePuntenService->loadPuntenVoorLid($profiel, $functies);
+		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $corveePuntenOverzicht]);
 	}
 
 	public function wijzigbonus($uid) {
@@ -54,8 +54,8 @@ class BeheerPuntenController {
 		$bonus = (int)filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		$this->corveePuntenService->savePuntenVoorLid($profiel, null, $bonus);
 		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
-		$lijst = $this->corveePuntenService->loadPuntenVoorLid($profiel, $functies);
-		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $lijst]);
+		$corveePuntenOverzicht = $this->corveePuntenService->loadPuntenVoorLid($profiel, $functies);
+		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $corveePuntenOverzicht]);
 	}
 
 	public function resetjaar() {

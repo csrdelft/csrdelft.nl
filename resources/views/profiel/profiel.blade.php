@@ -10,7 +10,7 @@
  * @var \CsrDelft\model\entity\groepen\Activiteit[] $activiteiten
  * @var object[] bestellinglog
  * @var string $bestellingenlink
- * @var \CsrDelft\model\entity\maalcie\CorveeTaak[] $corveetaken
+ * @var \CsrDelft\entity\corvee\CorveeTaak[] $corveetaken
  * @var \CsrDelft\model\entity\maalcie\CorveeVoorkeur $corveevoorkeuren
  * @var \CsrDelft\entity\corvee\CorveeVrijstelling $corveevrijstelling
  * @var \CsrDelft\entity\corvee\CorveeKwalificatie $corveekwalificaties
@@ -521,7 +521,7 @@
 						<ul class="list-unstyled">
 							@foreach($corveetaken as $taak)
 								<li>
-									{{$taak->getCorveeFunctie()->naam}} <span class="lichtgrijs">({{strftime('%a %e %b', strtotime($taak->datum)) }})</span>
+									{{$taak->getCorveeFunctie()->naam}} <span class="lichtgrijs">({{date_format_intl($taak->datum, LONG_DATE_FORMAT) }})</span>
 								</li>
 							@endforeach
 						</ul>

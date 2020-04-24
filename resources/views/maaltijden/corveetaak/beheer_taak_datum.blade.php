@@ -1,6 +1,11 @@
+<?php
+/**
+ * @var \CsrDelft\entity\corvee\CorveeTaak $taak
+ */
+?>
 <tr id="taak-datum-summary-{{$datum}}"
 		class="taak-datum-summary taak-datum-{{$datum}}
-		@if(strtotime($datum) < strtotime('-1 day'))
+		@if(date_create_immutable($datum) < date_create_immutable('-1 day'))
 		@if(!$show and !$prullenbak)  taak-datum-oud
 	@endif  taak-oud
 @endif
@@ -12,7 +17,7 @@
 				@if($loop->first) {{-- eerste taak van functie: reset ingedeeld-teller --}}
 				@php($count = 0)
 				@if($loop->parent->first)
-					<div class="inline niet-dik" style="width: 80px;">{{strftime("%a %e %b", strtotime($taak->datum))}}</div>
+					<div class="inline niet-dik" style="width: 80px;">{{date_format_intl($taak->datum, LONG_DATE_FORMAT)}}</div>
 				@endif
 				<div class="inline" style="width: 70px;">
 			<span title="{{$taak->getCorveeFunctie()->naam}}">
