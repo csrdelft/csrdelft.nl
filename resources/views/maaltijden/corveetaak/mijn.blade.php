@@ -1,3 +1,10 @@
+<?php
+/**
+ * @var \CsrDelft\entity\corvee\CorveePuntenOverzicht $punten
+ * @var \CsrDelft\entity\corvee\CorveeVrijstelling $vrijstelling
+ * @var \CsrDelft\entity\corvee\CorveeTaak[] $taak
+ */
+?>
 @extends('maaltijden.base')
 
 @section('titel', 'Mijn corveeoverzicht')
@@ -71,37 +78,37 @@
 		</tr>
 		</thead>
 		<tbody>
-		@foreach($punten['aantal'] as $fid => $aantal)
+		@foreach($punten->aantal as $fid => $aantal)
 			<tr>
 				<td>{{$functies[$fid]->naam}} ({{$aantal}})</td>
-				<td>{{$punten['punten'][$fid]}}
-					@if($punten['bonus'][$fid] > 0)
+				<td>{{$punten->punten[$fid]}}
+					@if($punten->bonus[$fid] > 0)
 						+
 					@endif
-					@if($punten['bonus'][$fid] !== 0)
-						{{$punten['bonus'][$fid]}}
+					@if($punten->bonus[$fid] !== 0)
+						{{$punten->bonus[$fid]}}
 					@endif
 				</td>
 			</tr>
 		@endforeach
 		<tr class="dikgedrukt">
 			<td>Totaal</td>
-			<td>{{$punten['puntenTotaal']}}
-				@if($punten['bonusTotaal'] > 0)
+			<td>{{$punten->puntenTotaal}}
+				@if($punten->bonusTotaal > 0)
 					+
 				@endif
-				@if($punten['bonusTotaal'] !== 0)
-					{{$punten['bonusTotaal']}}
+				@if($punten->bonusTotaal !== 0)
+					{{$punten->bonusTotaal}}
 				@endif
 			</td>
 		</tr>
 		<tr class="dikgedrukt">
 			<td>Prognose</td>
-			<td>{{$punten['prognose']}}</td>
+			<td>{{$punten->prognose}}</td>
 		</tr>
 		<tr class="dikgedrukt">
 			<td>Tekort</td>
-			<td style="background-color: {{'#' . $punten['tekortColor']}};">{{$punten['tekort']}}</td>
+			<td style="background-color: {{'#' . $punten->tekortColor}};">{{$punten->tekort}}</td>
 		</tr>
 		</tbody>
 	</table>

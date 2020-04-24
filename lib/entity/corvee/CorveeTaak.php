@@ -216,7 +216,7 @@ class CorveeTaak implements Agendeerbaar {
 	}
 
 	public function getBeginMoment() {
-		return strtotime($this->datum);
+		return $this->datum->getTimestamp();
 	}
 
 	public function getEindMoment() {

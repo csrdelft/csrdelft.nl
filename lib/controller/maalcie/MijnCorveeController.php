@@ -39,7 +39,7 @@ class MijnCorveeController {
 
 	public function mijn() {
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid(LoginModel::getUid());
-		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken->fetchAll());
+		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
 		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
 		$punten = $this->corveePuntenService->loadPuntenVoorLid(LoginModel::getProfiel(), $functies);
 		$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling(LoginModel::getUid());

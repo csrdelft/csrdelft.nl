@@ -5,7 +5,7 @@
 ?>
 <tr id="taak-datum-summary-{{$datum}}"
 		class="taak-datum-summary taak-datum-{{$datum}}
-		@if($datum < date_create_immutable('-1 day'))
+		@if(date_create_immutable($datum) < date_create_immutable('-1 day'))
 		@if(!$show and !$prullenbak)  taak-datum-oud
 	@endif  taak-oud
 @endif

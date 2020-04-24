@@ -84,7 +84,7 @@ class CorveeTakenRepository extends AbstractRepository {
 		ContainerFacade::getContainer()->get(CorveePuntenService::class)->puntenToekennen($taak->uid, $taak->punten, $taak->bonus_malus);
 		$taak->punten_toegekend = $taak->punten_toegekend + $taak->punten;
 		$taak->bonus_toegekend = $taak->bonus_toegekend + $taak->bonus_malus;
-		$taak->wanneer_toegekend = date('Y-m-d H:i');
+		$taak->wanneer_toegekend = date_create_immutable();
 		$this->_em->persist($taak);
 		$this->_em->flush();
 	}
@@ -103,6 +103,10 @@ class CorveeTakenRepository extends AbstractRepository {
 		$this->_em->flush();
 	}
 
+	/**
+	 * @param array $taken
+	 * @return array
+	 */
 	public function getRoosterMatrix(array $taken) {
 		$matrix = array();
 		foreach ($taken as $taak) {
@@ -203,14 +207,14 @@ class CorveeTakenRepository extends AbstractRepository {
 	 * @return CorveeTaak
 	 */
 	public function getLaatsteTaakVanLid($uid) {
-		return $this->findOneBy(['verwijderd' => false, 'uid' => $uid], ['datum', 'DESC']);
+		return $this->findOneBy(['verwijderd' => false, 'uid' => $uid], ['datum' => 'DESC']);
 	}
 
 	/**
 	 * Haalt de komende taken op waarvoor een lid is ingedeeld.
 	 *
 	 * @param string $uid
-	 * @return PDOStatement|CorveeTaak[]
+	 * @return CorveeTaak[]
 	 */
 	public function getKomendeTakenVoorLid($uid) {
 		return $this->createQueryBuilder('ct')

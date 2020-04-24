@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\corvee\CorveePuntenOverzicht[] $suggesties[]
+ */
+?>
 <br/>
 <div id="suggesties" style="border: 1px solid #A9A9A9; ">
 	<table class="maalcie-tabel" style="padding: 0;">
@@ -24,16 +29,16 @@
 			<tbody>
 			@foreach($suggesties as $uid => $suggestie)
 				<tr class="
-							@if(!$suggestie["voorkeur"])  geenvoorkeur @endif
-				@if($suggestie["recent"])  recent @endif
+							@if(!$suggestie->voorkeur)  geenvoorkeur @endif
+				@if($suggestie->recent)  recent @endif
 				@if($jongsteLichting === \CsrDelft\repository\ProfielRepository::get($uid)->lidjaar)  jongste @else oudere @endif
 					">
 					<td style="width: 15px;">
 						<a class="btn submit" style="padding: 0 2px;"
 							 onclick="$(this).closest('form').find('.LidField').val('{{$uid}}');">
-							@if($suggestie["recent"])
+							@if($suggestie->recent)
 								@icon("time_delete", null, "Recent gecorveed")
-							@elseif($suggestie["voorkeur"])
+							@elseif($suggestie->voorkeur)
 								@icon("emoticon_smile", null, "Heeft voorkeur")
 							@else
 								@icon("bullet_go", null, "Toewijzen aan dit lid")
@@ -42,18 +47,18 @@
 					</td>
 					<td style="width: 30px; padding-right: 10px; text-align: right;">
 						@if($kwalificatie_benodigd)
-							@if($suggestie["relatief"] > 0) +@endif
-							{{$suggestie["relatief"]}}
+							@if($suggestie->relatief > 0) +@endif
+							{{$suggestie->relatief}}
 						@else
-							{{$suggestie["prognose"]}}
+							{{$suggestie->prognose}}
 						@endif
 					</td>
 					<td style="width: 140px;">
 						{{\CsrDelft\repository\ProfielRepository::get($uid)->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}}
 					</td>
-					@if($suggestie["laatste"])
-						<td>{{strftime("%d %b %Y", $suggestie["laatste"]->getBeginMoment())}}</td>
-						<td>{{$suggestie["laatste"]->getCorveeFunctie()->naam}}</td>
+					@if($suggestie->laatste)
+						<td>{{strftime("%d %b %Y", $suggestie->laatste->getBeginMoment())}}</td>
+						<td>{{$suggestie->laatste->getCorveeFunctie()->naam}}</td>
 					@else
 						<td colspan="2"></td>
 					@endif
