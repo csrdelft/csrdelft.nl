@@ -6,13 +6,13 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
-use CsrDelft\model\entity\maalcie\CorveeTaak;
 use CsrDelft\model\fiscaat\CiviProductModel;
-use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -192,16 +192,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @return CorveeTaak[]
 	 */
 	public function getCorveeTaken($functieID) {
-		$gevonden = [];
-
-		/** @var CorveeFunctie[] $functies */
-		$functie = CorveeFunctiesModel::instance()->get($functieID);
-        $taken = CorveeTakenModel::instance()->find('functie_id = ? AND maaltijd_id = ? AND verwijderd = 0', [$functie->functie_id, $this->maaltijd_id]);
-        foreach ($taken as $taak) {
-            $gevonden[] = $taak;
-        }
-
-		return $gevonden;
+		return ContainerFacade::getContainer()->get(CorveeTakenRepository::class)->findBy(['functie_id' => $functieID, 'maaltijd_id' => $this->maaltijd_id, 'verwijderd' => false]);
 	}
 
 	// Agendeerbaar ############################################################
@@ -253,7 +244,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 		if (!isset($this->maaltijdcorvee)) {
 			// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
 			// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
-			$taken = CorveeTakenModel::instance()->getTakenVoorAgenda($this->getBeginMoment(), $this->getBeginMoment());
+			$taken = ContainerFacade::getContainer()->get(CorveeTakenRepository::class)->getTakenVoorAgenda($this->getMoment(), $this->getMoment());
 			foreach ($taken as $taak) {
 				if ($taak->uid === $uid AND $taak->maaltijd_id !== null) { // checken op gekoppelde maaltijd (zie hierboven)
 					$this->maaltijdcorvee = $taak; // de taak die toegang geeft tot de maaltijdlijst

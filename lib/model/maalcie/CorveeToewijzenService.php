@@ -2,8 +2,10 @@
 
 namespace CsrDelft\model\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\entity\corvee\CorveeTaak;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 
 /**
@@ -83,7 +85,7 @@ class CorveeToewijzenService {
 			$sorteer = 'sorteerPrognose';
 		}
 		foreach ($lijst as $uid => $punten) {
-			$lijst[$uid]['laatste'] = CorveeTakenModel::instance()->getLaatsteTaakVanLid($uid);
+			$lijst[$uid]['laatste'] = ContainerFacade::getContainer()->get(CorveeTakenRepository::class)->getLaatsteTaakVanLid($uid);
 			if ($lijst[$uid]['laatste'] !== false && $lijst[$uid]['laatste']->getBeginMoment() >= strtotime(instelling('corvee', 'suggesties_recent_verbergen'), $taak->getBeginMoment())) {
 				$lijst[$uid]['recent'] = true;
 			} else {

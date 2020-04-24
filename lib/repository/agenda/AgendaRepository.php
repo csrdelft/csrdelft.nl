@@ -9,9 +9,9 @@ use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\VerjaardagenService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -46,9 +46,9 @@ class AgendaRepository extends ServiceEntityRepository {
 	 */
 	private $activiteitenModel;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 	/**
 	 * @var MaaltijdenRepository
 	 */
@@ -59,18 +59,18 @@ class AgendaRepository extends ServiceEntityRepository {
 	private $verjaardagenService;
 
 	public function __construct(
-        ManagerRegistry $registry,
-        AgendaVerbergenRepository $agendaVerbergenRepository,
-        ActiviteitenModel $activiteitenModel,
-        CorveeTakenModel $corveeTakenModel,
-        MaaltijdenRepository $maaltijdenRepository,
-        VerjaardagenService $verjaardagenService
+		ManagerRegistry $registry,
+		AgendaVerbergenRepository $agendaVerbergenRepository,
+		ActiviteitenModel $activiteitenModel,
+		CorveeTakenRepository $corveeTakenRepository,
+		MaaltijdenRepository $maaltijdenRepository,
+		VerjaardagenService $verjaardagenService
 	) {
 		parent::__construct($registry, AgendaItem::class);
 
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
 		$this->activiteitenModel = $activiteitenModel;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->verjaardagenService = $verjaardagenService;
 	}
@@ -189,9 +189,9 @@ class AgendaRepository extends ServiceEntityRepository {
 
 		// CorveeTaken
 		if (lid_instelling('agenda', 'toonCorvee') === 'iedereen') {
-			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van->getTimestamp(), $tot->getTimestamp(), true));
+			$result = array_merge($result, $this->corveeTakenRepository->getTakenVoorAgenda($van, $tot, true));
 		} elseif (lid_instelling('agenda', 'toonCorvee') === 'eigen') {
-			$result = array_merge($result, $this->corveeTakenModel->getTakenVoorAgenda($van->getTimestamp(), $tot->getTimestamp(), false));
+			$result = array_merge($result, $this->corveeTakenRepository->getTakenVoorAgenda($van, $tot, false));
 		}
 
 		// Verjaardagen

@@ -4,13 +4,14 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeTaak;
+use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -50,7 +51,7 @@ class TaakForm extends ModalForm {
 		$fields['fid']->onchange = $functiePunten . "$('.punten_field').val(punten[this.value]);";
 		$fields['lid'] = new LidField('uid', $taak->uid, 'Naam of lidnummer');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
-		$fields[] = new RequiredDateField('datum', $taak->datum, 'Datum', date('Y') + 2, date('Y') - 2);
+		$fields[] = new RequiredDateObjectField('datum', $taak->datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields['ptn'] = new RequiredIntField('punten', $taak->punten, 'Punten', 0, 10);
 		$fields['ptn']->css_classes[] = 'punten_field';
 		$fields[] = new RequiredIntField('bonus_malus', $taak->bonus_malus, 'Bonus/malus', -10, 10);

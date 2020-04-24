@@ -4,8 +4,8 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
-use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
@@ -27,9 +27,9 @@ class MijnMaaltijdenController {
 	 */
 	private $maaltijdenRepository;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 	/**
 	 * @var MaaltijdBeoordelingenRepository
 	 */
@@ -41,12 +41,12 @@ class MijnMaaltijdenController {
 
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
-		CorveeTakenModel $corveeTakenModel,
+		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
@@ -105,7 +105,7 @@ class MijnMaaltijdenController {
 			'titel' => $maaltijd->getTitel(),
 			'aanmeldingen' => $aanmeldingen,
 			'eterstotaal' => $maaltijd->getAantalAanmeldingen() + $maaltijd->getMarge(),
-			'corveetaken' => $this->corveeTakenModel->getTakenVoorMaaltijd($mid)->fetchAll(),
+			'corveetaken' => $this->corveeTakenRepository->getTakenVoorMaaltijd($mid)->fetchAll(),
 			'maaltijd' => $maaltijd,
 			'prijs' => sprintf("%.2f", $maaltijd->getPrijsFloat()),
 		]);

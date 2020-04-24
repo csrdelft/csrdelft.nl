@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\model\maalcie\CorveeRepetitiesModel;
-use CsrDelft\model\maalcie\CorveeTakenModel;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
 
@@ -21,14 +21,14 @@ class CorveeRepetitiesController {
 	 */
 	private $maaltijdRepetitiesRepository;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 
-	public function __construct(CorveeRepetitiesModel $corveeRepetitiesModel, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, CorveeTakenModel $corveeTakenModel) {
+	public function __construct(CorveeRepetitiesModel $corveeRepetitiesModel, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, CorveeTakenRepository $corveeTakenRepository) {
 		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
 
 	public function beheer($crid = null, $mrid = null) {
@@ -100,7 +100,7 @@ class CorveeRepetitiesController {
 		$view = $this->opslaan($crid);
 		if ($this->repetitie) { // Opslaan gelukt
 			$verplaats = isset($_POST['verplaats_dag']);
-			$aantal = $this->corveeTakenModel->updateRepetitieTaken($this->repetitie, $verplaats);
+			$aantal = $this->corveeTakenRepository->updateRepetitieTaken($this->repetitie, $verplaats);
 			if ($aantal['update'] < $aantal['day']) {
 				$aantal['update'] = $aantal['day'];
 			}

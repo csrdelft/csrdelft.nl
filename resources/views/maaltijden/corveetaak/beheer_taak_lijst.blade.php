@@ -1,5 +1,10 @@
+<?php
+/**
+ * @var \CsrDelft\entity\corvee\CorveeTaak $taak
+ */
+?>
 <tr id="corveetaak-row-{{$taak->taak_id}}" class="taak-datum-{{$taak->datum}}
-@if(($taak->getBeginMoment() < strtotime('-1 day') and !empty($maaltijd)) or $taak->verwijderd)
+@if(($taak->datum < date_create_immutable('-1 day') and !empty($maaltijd)) or $taak->verwijderd)
 	taak-oud
 @endif
 @if(!$show and !$prullenbak)
@@ -54,13 +59,13 @@
 			</div>
 		@endif
 	</td>
-	<td>{{strftime("%a %e %b", strtotime($taak->datum))}}</td>
+	<td>{{date_format_intl($taak->datum, LONG_DATE_FORMAT)}}</td>
 	<td style="width: 100px;">{{$taak->getCorveeFunctie()->naam}}</td>
 	<td
 		class="niet-dik
 @if($taak->uid)
 			taak-toegewezen
-@elseif($taak->getBeginMoment() < strtotime(instelling('corvee', 'waarschuwing_taaktoewijzing_vooraf')))
+@elseif($taak->datum < date_create_immutable(instelling('corvee', 'waarschuwing_taaktoewijzing_vooraf')))
 			taak-warning
 @else
 			taak-open
@@ -80,7 +85,7 @@
 		@endif
 	</td>
 	<td
-		@if($taak->uid and ($taak->punten !== $taak->punten_toegekend or $taak->bonus_malus !== $taak->bonus_toegekend) and $taak->getBeginMoment() < strtotime(instelling('corvee', 'waarschuwing_puntentoewijzing_achteraf')))
+		@if($taak->uid and ($taak->punten !== $taak->punten_toegekend or $taak->bonus_malus !== $taak->bonus_toegekend) and $taak->datum < date_create_immutable(instelling('corvee', 'waarschuwing_puntentoewijzing_achteraf')))
 		class="taak-warning"
 		@endif >
 	{{$taak->punten_toegekend}}

@@ -5,6 +5,7 @@ namespace CsrDelft\model\maalcie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\Orm\CachedPersistenceModel;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 
 /**
  * FunctiesModel.class.php
@@ -16,17 +17,17 @@ class CorveeFunctiesModel extends CachedPersistenceModel {
 
 	const ORM = CorveeFunctie::class;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 	/**
 	 * @var CorveeRepetitiesModel
 	 */
 	private $corveeRepetitiesModel;
 
-	public function __construct(CorveeTakenModel $corveeTakenModel, CorveeRepetitiesModel $corveeRepetitiesModel) {
+	public function __construct(CorveeTakenRepository $corveeTakenRepository, CorveeRepetitiesModel $corveeRepetitiesModel) {
 		parent::__construct();
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
 	}
 
@@ -56,7 +57,7 @@ class CorveeFunctiesModel extends CachedPersistenceModel {
 	}
 
 	public function removeFunctie(CorveeFunctie $functie) {
-		if ($this->corveeTakenModel->existFunctieTaken($functie->functie_id)) {
+		if ($this->corveeTakenRepository->existFunctieTaken($functie->functie_id)) {
 			throw new CsrGebruikerException('Verwijder eerst de bijbehorende corveetaken!');
 		}
 		if ($this->corveeRepetitiesModel->existFunctieRepetities($functie->functie_id)) {

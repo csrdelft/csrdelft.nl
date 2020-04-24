@@ -3,7 +3,6 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Doctrine\Type\OntvangtContactueelType;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
@@ -18,10 +17,10 @@ use CsrDelft\model\entity\profiel\ProfielLogValueChange;
 use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\security\AccessRole;
-use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\security\AccountRepository;
 use DateTime;
@@ -52,24 +51,24 @@ class ProfielRepository extends ServiceEntityRepository {
 	 */
 	private $maaltijdAbonnementenRepository;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 	/**
 	 * @var BoekExemplaarRepository
 	 */
 	private $boekExemplaarModel;
 
 	public function __construct(
-        ManagerRegistry $registry,
-        MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-        CorveeTakenModel $corveeTakenModel,
-        BoekExemplaarRepository $boekExemplaarModel
+		ManagerRegistry $registry,
+		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+		CorveeTakenRepository $corveeTakenRepository,
+		BoekExemplaarRepository $boekExemplaarModel
 	) {
 		parent::__construct($registry, Profiel::class);
 
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->boekExemplaarModel = $boekExemplaarModel;
 	}
 
@@ -297,8 +296,8 @@ class ProfielRepository extends ServiceEntityRepository {
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
-		$taken = $this->corveeTakenModel->getKomendeTakenVoorLid($profiel->uid);
-		$aantal = $this->corveeTakenModel->verwijderTakenVoorLid($profiel->uid);
+		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel->uid);
+		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid($profiel->uid);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}

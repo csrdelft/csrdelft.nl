@@ -7,6 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
 
@@ -19,13 +20,13 @@ class CorveePuntenService {
 	 */
 	private $corveeVrijstellingenRepository;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 
-	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeTakenModel $corveeTakenModel) {
+	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeTakenRepository $corveeTakenRepository) {
 		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
 
 	public function resetCorveejaar() {
@@ -61,7 +62,7 @@ class CorveePuntenService {
 					$errors[] = $e;
 				}
 			}
-			$taken = $this->corveeTakenModel->verwijderOudeTaken();
+			$taken = $this->corveeTakenRepository->verwijderOudeTaken();
 			return array($aantal, $taken, $errors);
 		});
 	}
@@ -128,7 +129,7 @@ class CorveePuntenService {
 	}
 
 	public function loadPuntenVoorAlleLeden($functies = null) {
-		$taken = $this->corveeTakenModel->getAlleTaken(true); // grouped by uid
+		$taken = $this->corveeTakenRepository->getAlleTaken(true); // grouped by uid
 		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(true); // grouped by uid
 		$matrix = $this->loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
@@ -151,7 +152,7 @@ class CorveePuntenService {
 
 	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = false) {
 		if ($lidtaken === null) {
-			$lidtaken = $this->corveeTakenModel->getTakenVoorLid($profiel->uid);
+			$lidtaken = $this->corveeTakenRepository->getTakenVoorLid($profiel->uid);
 			$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren
