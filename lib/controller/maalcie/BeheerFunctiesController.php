@@ -3,10 +3,13 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\model\maalcie\CorveeFunctiesModel;
-use CsrDelft\model\maalcie\CorveeKwalificatiesModel;
+use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
 use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -17,13 +20,13 @@ class BeheerFunctiesController {
 	 */
 	private $functiesModel;
 	/**
-	 * @var CorveeKwalificatiesModel
+	 * @var CorveeKwalificatiesRepository
 	 */
-	private $kwalificatiesModel;
+	private $corveeKwalificatiesRepository;
 
-	public function __construct(CorveeFunctiesModel $functiesModel, CorveeKwalificatiesModel $kwalificatiesModel) {
+	public function __construct(CorveeFunctiesModel $functiesModel, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
 		$this->functiesModel = $functiesModel;
-		$this->kwalificatiesModel = $kwalificatiesModel;
+		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
 	}
 
 	public function beheer($fid = null) {
@@ -72,21 +75,34 @@ class BeheerFunctiesController {
 		return new FunctieDeleteView($fid);
 	}
 
+	/**
+	 * @param $fid
+	 * @return KwalificatieForm|TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function kwalificeer($fid) {
 		$functie = $this->functiesModel->get((int)$fid);
-		$kwalificatie = $this->kwalificatiesModel->nieuw($functie);
+		$kwalificatie = $this->corveeKwalificatiesRepository->nieuw($functie);
 		$form = new KwalificatieForm($kwalificatie); // fetches POST values itself
 		if ($form->validate()) {
-			$this->kwalificatiesModel->kwalificatieToewijzen($kwalificatie);
+			$this->corveeKwalificatiesRepository->kwalificatieToewijzen($kwalificatie);
 			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 		} else {
 			return $form;
 		}
 	}
 
+	/**
+	 * @param $fid
+	 * @param $uid
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function dekwalificeer($fid, $uid) {
 		$functie = $this->functiesModel->get((int)$fid);
-		$this->kwalificatiesModel->kwalificatieIntrekken($uid, $functie->functie_id);
+		$this->corveeKwalificatiesRepository->kwalificatieIntrekken($uid, $functie->functie_id);
 		return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 	}
 

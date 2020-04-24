@@ -2,8 +2,9 @@
 
 namespace CsrDelft\view\maalcie\corvee\functies;
 
-use CsrDelft\model\entity\maalcie\CorveeKwalificatie;
+use CsrDelft\entity\corvee\CorveeKwalificatie;
 use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -18,7 +19,7 @@ class KwalificatieForm extends ModalForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields = [];
-		$fields[] = new LidField('uid', $kwalificatie->uid, 'Naam of lidnummer', 'leden');
+		$fields[] = new LidObjectField('profiel', $kwalificatie->profiel, 'Naam of lidnummer', 'leden');
 
 		$this->addFields($fields);
 

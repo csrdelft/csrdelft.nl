@@ -42,7 +42,7 @@ class CorveeToewijzenService {
 			$avg = 0;
 			foreach ($functie->getKwalificaties() as $kwali) {
 				$uid = $kwali->uid;
-				$profiel = ProfielRepository::get($uid); // false if lid does not exist
+				$profiel = $kwali->profiel;
 				if (!$profiel) {
 					throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 				}

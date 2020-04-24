@@ -5,11 +5,12 @@ namespace CsrDelft\model\maalcie;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * CorveeVoorkeurenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -22,14 +23,14 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 */
 	private $corveeRepetitiesModel;
 	/**
-	 * @var CorveeKwalificatiesModel
+	 * @var CorveeKwalificatiesRepository
 	 */
-	private $corveeKwalificatiesModel;
+	private $corveeKwalificatiesRepository;
 
-	public function __construct(CorveeRepetitiesModel $corveeRepetitiesModel, CorveeKwalificatiesModel $corveeKwalificatiesModel) {
+	public function __construct(CorveeRepetitiesModel $corveeRepetitiesModel, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
 		parent::__construct();
 		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
-		$this->corveeKwalificatiesModel = $corveeKwalificatiesModel;
+		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
 	}
 
 	public function getEetwens(Profiel $profiel) {
@@ -70,7 +71,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		}
 		foreach ($repById as $crid => $repetitie) {
 			if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-				if (!$this->corveeKwalificatiesModel->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
+				if (!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
 					continue;
 				}
 			}
@@ -154,7 +155,7 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 			throw new CsrGebruikerException('Niet voorkeurbaar');
 		}
 		if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-			if (!$this->corveeKwalificatiesModel->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
+			if (!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
 				throw new CsrGebruikerException('Niet gekwalificeerd');
 			}
 		}

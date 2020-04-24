@@ -25,9 +25,9 @@ use CsrDelft\model\groepen\RechtenGroepenModel;
 use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\maalcie\CorveeFunctiesModel;
-use CsrDelft\model\maalcie\CorveeKwalificatiesModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -907,7 +907,7 @@ class AccessModel extends CachedPersistenceModel {
 					}
 				}
 
-				return CorveeKwalificatiesModel::instance()->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
+				return ContainerFacade::getContainer()->get(CorveeKwalificatiesRepository::class)->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
 		}
 		return false;
 	}

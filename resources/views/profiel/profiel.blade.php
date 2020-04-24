@@ -13,7 +13,7 @@
  * @var \CsrDelft\model\entity\maalcie\CorveeTaak[] $corveetaken
  * @var \CsrDelft\model\entity\maalcie\CorveeVoorkeur $corveevoorkeuren
  * @var \CsrDelft\model\entity\maalcie\CorveeVrijstelling $corveevrijstelling
- * @var \CsrDelft\model\entity\maalcie\CorveeKwalificatie $corveekwalificaties
+ * @var \CsrDelft\entity\corvee\CorveeKwalificatie $corveekwalificaties
  * @var int $forumpostcount
  * @var \CsrDelft\entity\forum\ForumPost[] $forumrecent
  * @var \CsrDelft\entity\bibliotheek\BoekExemplaar[] $boeken
@@ -533,7 +533,7 @@
 						<ul class="list-unstyled">
 							@foreach($corveekwalificaties as $kwali)
 								<li>{{$kwali->getCorveeFunctie()->naam}}<span
-										class="lichtgrijs"> (sinds {{$kwali->wanneer_toegewezen}})</span></li>
+										class="lichtgrijs"> (sinds {{date_format_intl($kwali->wanneer_toegewezen, DATETIME_FORMAT)}})</span></li>
 							@endforeach
 						</ul>
 					</dd>

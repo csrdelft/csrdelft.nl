@@ -9,7 +9,7 @@ use CsrDelft\entity\profiel\Profiel;
 
 class LidObjectField extends LidField {
 	public function __construct($name, $value, $description, $zoekin = 'alleleden') {
-		parent::__construct($name, $value->uid, $description, $zoekin);
+		parent::__construct($name, $value->uid ?? null, $description, $zoekin);
 	}
 
 	public function getFormattedValue() {

@@ -21,12 +21,12 @@ use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
-use CsrDelft\model\maalcie\CorveeKwalificatiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
 use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
+use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
@@ -43,7 +43,6 @@ use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
 class ProfielController extends AbstractController {
@@ -96,9 +95,9 @@ class ProfielController extends AbstractController {
 	 */
 	private $forumPostsRepository;
 	/**
-	 * @var CorveeKwalificatiesModel
+	 * @var CorveeKwalificatiesRepository
 	 */
-	private $kwalificatiesModel;
+	private $corveeKwalificatiesRepository;
 	/**
 	 * @var CorveeVrijstellingenModel
 	 */
@@ -153,32 +152,32 @@ class ProfielController extends AbstractController {
 	private $verjaardagenService;
 
 	public function __construct(
-        ProfielRepository $profielRepository,
-        AccountRepository $accountRepository,
-        ActiviteitenModel $activiteitenModel,
-        BesturenModel $besturenModel,
-        BoekExemplaarRepository $boekExemplaarModel,
-        BoekRecensieRepository $boekRecensieModel,
-        CiviBestellingModel $civiBestellingModel,
-        CommissieVoorkeurRepository $commissieVoorkeurRepository,
-        CorveeVoorkeurenModel $corveeVoorkeurenModel,
-        CommissiesModel $commissiesModel,
-        CorveeTakenModel $corveeTakenModel,
-        CorveeVrijstellingenModel $corveeVrijstellingenModel,
-        ForumPostsRepository $forumPostsRepository,
-        FotoRepository $fotoRepository,
-        FotoTagsRepository $fotoTagsRepository,
-        KetzersModel $ketzersModel,
-        CorveeKwalificatiesModel $kwalificatiesModel,
-        LidToestemmingRepository $lidToestemmingRepository,
-        MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-        MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-        OnderverenigingenModel $onderverenigingenModel,
-        RechtenGroepenModel $rechtenGroepenModel,
-        VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
-        WerkgroepenModel $werkgroepenModel,
-        SaldoGrafiekModel $saldoGrafiekModel,
-        VerjaardagenService $verjaardagenService
+		ProfielRepository $profielRepository,
+		AccountRepository $accountRepository,
+		ActiviteitenModel $activiteitenModel,
+		BesturenModel $besturenModel,
+		BoekExemplaarRepository $boekExemplaarModel,
+		BoekRecensieRepository $boekRecensieModel,
+		CiviBestellingModel $civiBestellingModel,
+		CommissieVoorkeurRepository $commissieVoorkeurRepository,
+		CorveeVoorkeurenModel $corveeVoorkeurenModel,
+		CommissiesModel $commissiesModel,
+		CorveeTakenModel $corveeTakenModel,
+		CorveeVrijstellingenModel $corveeVrijstellingenModel,
+		ForumPostsRepository $forumPostsRepository,
+		FotoRepository $fotoRepository,
+		FotoTagsRepository $fotoTagsRepository,
+		KetzersModel $ketzersModel,
+		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
+		LidToestemmingRepository $lidToestemmingRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+		OnderverenigingenModel $onderverenigingenModel,
+		RechtenGroepenModel $rechtenGroepenModel,
+		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
+		WerkgroepenModel $werkgroepenModel,
+		SaldoGrafiekModel $saldoGrafiekModel,
+		VerjaardagenService $verjaardagenService
 	) {
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
@@ -196,7 +195,7 @@ class ProfielController extends AbstractController {
 		$this->fotoRepository = $fotoRepository;
 		$this->fotoTagsRepository = $fotoTagsRepository;
 		$this->ketzersModel = $ketzersModel;
-		$this->kwalificatiesModel = $kwalificatiesModel;
+		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
@@ -257,7 +256,7 @@ class ProfielController extends AbstractController {
 			'corveetaken' => $this->corveeTakenModel->getTakenVoorLid($uid),
 			'corveevoorkeuren' => $this->corveeVoorkeurenModel->getVoorkeurenVoorLid($uid),
 			'corveevrijstelling' => $this->corveeVrijstellingenModel->getVrijstelling($uid),
-			'corveekwalificaties' => $this->kwalificatiesModel->getKwalificatiesVanLid($uid),
+			'corveekwalificaties' => $this->corveeKwalificatiesRepository->getKwalificatiesVanLid($uid),
 			'forumpostcount' => $this->forumPostsRepository->getAantalForumPostsVoorLid($uid),
 			'forumrecent' => $this->forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
 			'boeken' => $this->boekExemplaarModel->getEigendom($uid),
