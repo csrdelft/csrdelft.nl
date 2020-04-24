@@ -36,8 +36,6 @@ class CorveeTakenRepository extends AbstractRepository {
 		parent::__construct($registry, CorveeTaak::class);
 	}
 
-	protected $default_order = 'datum ASC';
-
 	/**
 	 * @param CorveeTaak $taak
 	 * @throws ORMException
@@ -200,7 +198,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	 * @return PDOStatement|CorveeTaak[]
 	 */
 	public function getTakenVoorLid($uid) {
-		return $this->findBy(['verwijderd' => false, 'uid' => $uid]);
+		return $this->findBy(['verwijderd' => false, 'uid' => $uid], ['datum' => 'ASC']);
 	}
 
 	/**
@@ -224,11 +222,24 @@ class CorveeTakenRepository extends AbstractRepository {
 			->where('ct.verwijderd = false and ct.uid = :uid and ct.datum >= :datum')
 			->setParameter('uid', $uid)
 			->setParameter('datum', date_create_immutable())
+			->orderBy('ct.datum', 'ASC')
 			->getQuery()->getResult();
 	}
 
+	/**
+	 * @param $tid
+	 * @param $fid
+	 * @param $uid
+	 * @param $crid
+	 * @param $mid
+	 * @param $datum
+	 * @param $punten
+	 * @param $bonus_malus
+	 * @return bool|mixed
+	 * @throws Throwable
+	 */
 	public function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
-		return Database::transaction(function () use ($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
+		return $this->_em->transactional(function () use ($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
 			if ($tid === 0) {
 				$taak = $this->newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus);
 			} else {
@@ -406,9 +417,9 @@ class CorveeTakenRepository extends AbstractRepository {
 			throw new CsrGebruikerException('Load taken voor maaltijd faalt: Invalid $mid =' . $mid);
 		}
 		if ($verwijderd) {
-			return $this->findBy(['maaltijd_id' => $mid]);
+			return $this->findBy(['maaltijd_id' => $mid], ['datum' => 'ASC']);
 		}
-		return $this->findBy(['verwijderd' => false, 'maaltijd_id' => $mid]);
+		return $this->findBy(['verwijderd' => false, 'maaltijd_id' => $mid], ['datum' => 'ASC']);
 	}
 
 	/**
@@ -587,7 +598,7 @@ class CorveeTakenRepository extends AbstractRepository {
 						$takenPerMaaltijd[$mid][] = $taak;
 					}
 				} else {
-					$takenPerDatum[$datum][] = $taak;
+					$takenPerDatum[date_format_intl($datum, DATE_FORMAT)][] = $taak;
 				}
 			}
 			// standaard aantal aanvullen
