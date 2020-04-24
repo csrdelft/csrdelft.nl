@@ -17,7 +17,7 @@
 			@foreach($repetities as $repetitie)
 				<th class="@cycle('rowColor0','rowColor1')" style="width: 30px;">
 					<div style="width: 28px;">
-						<a href="/corveerepetities/beheer/{{$repetitie->crv_repetitie_id}}" title="Wijzig corveerepetitie"
+						<a href="/corvee/repetities/{{$repetitie->crv_repetitie_id}}" title="Wijzig corveerepetitie"
 							 class="btn popup">
 							@icon("calendar_edit")
 						</a>

@@ -18,7 +18,7 @@
 			<a href="/corvee/beheer/bewerk/{{$taak->taak_id}}" title="Taak wijzigen"
 				 class="btn post popup">@icon("pencil")</a>
 			@if($taak->crv_repetitie_id)
-				<a href="/corveerepetities/beheer/{{$taak->crv_repetitie_id}}" title="Wijzig gekoppelde corveerepetitie"
+				<a href="/corvee/repetities/{{$taak->crv_repetitie_id}}" title="Wijzig gekoppelde corveerepetitie"
 					 class="btn popup">@icon("calendar_edit")</a>
 			@else
 				<div class="inline" style="width: 28px;"></div>
