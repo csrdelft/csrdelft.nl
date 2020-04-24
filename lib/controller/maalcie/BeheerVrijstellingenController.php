@@ -3,7 +3,8 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
+use CsrDelft\entity\corvee\CorveeVrijstelling;
+use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
 use CsrDelft\view\PlainView;
@@ -14,27 +15,27 @@ use CsrDelft\view\PlainView;
  */
 class BeheerVrijstellingenController {
 	/**
-	 * @var CorveeVrijstellingenModel
+	 * @var CorveeVrijstellingenRepository
 	 */
-	private $corveeVrijstellingenModel;
+	private $corveeVrijstellingenRepository;
 
-	public function __construct(CorveeVrijstellingenModel $corveeVrijstellingenModel) {
-		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
+	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenRepository) {
+		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
 	}
 
 	public function beheer() {
-		return view('maaltijden.vrijstelling.beheer_vrijstellingen', ['vrijstellingen' => $this->corveeVrijstellingenModel->find()]);
+		return view('maaltijden.vrijstelling.beheer_vrijstellingen', ['vrijstellingen' => $this->corveeVrijstellingenRepository->findAll()]);
 	}
 
 	public function nieuw() {
-		return new VrijstellingForm($this->corveeVrijstellingenModel->nieuw()); // fetches POST values itself
+		return new VrijstellingForm($this->corveeVrijstellingenRepository->nieuw()); // fetches POST values itself
 	}
 
 	public function bewerk($uid) {
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
-		return new VrijstellingForm($this->corveeVrijstellingenModel->getVrijstelling($uid)); // fetches POST values itself
+		return new VrijstellingForm($this->corveeVrijstellingenRepository->getVrijstelling($uid)); // fetches POST values itself
 	}
 
 	public function opslaan($uid = null) {
@@ -44,9 +45,10 @@ class BeheerVrijstellingenController {
 			$view = $this->nieuw();
 		}
 		if ($view->validate()) {
-			$values = $view->getValues();
+			/** @var CorveeVrijstelling $values */
+			$values = $view->getModel();
 			return view('maaltijden.vrijstelling.beheer_vrijstelling_lijst', [
-				'vrijstelling' => $this->corveeVrijstellingenModel->saveVrijstelling($values['uid'], $values['begin_datum'], $values['eind_datum'], $values['percentage'])
+				'vrijstelling' => $this->corveeVrijstellingenRepository->saveVrijstelling($values->profiel, $values->begin_datum, $values->eind_datum, $values->percentage)
 			]);
 		}
 
@@ -57,7 +59,7 @@ class BeheerVrijstellingenController {
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
-		$this->corveeVrijstellingenModel->verwijderVrijstelling($uid);
+		$this->corveeVrijstellingenRepository->verwijderVrijstelling($uid);
 		return new PlainView('<tr id="vrijstelling-row-' . $uid . '" class="remove"></tr>');
 	}
 

@@ -20,13 +20,13 @@ use CsrDelft\model\groepen\RechtenGroepenModel;
 use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\maalcie\CorveeTakenModel;
 use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
-use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
 use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
+use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
@@ -99,9 +99,9 @@ class ProfielController extends AbstractController {
 	 */
 	private $corveeKwalificatiesRepository;
 	/**
-	 * @var CorveeVrijstellingenModel
+	 * @var CorveeVrijstellingenRepository
 	 */
-	private $corveeVrijstellingenModel;
+	private $corveeVrijstellingenRepository;
 	/**
 	 * @var CorveeVoorkeurenModel
 	 */
@@ -163,7 +163,7 @@ class ProfielController extends AbstractController {
 		CorveeVoorkeurenModel $corveeVoorkeurenModel,
 		CommissiesModel $commissiesModel,
 		CorveeTakenModel $corveeTakenModel,
-		CorveeVrijstellingenModel $corveeVrijstellingenModel,
+		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
 		ForumPostsRepository $forumPostsRepository,
 		FotoRepository $fotoRepository,
 		FotoTagsRepository $fotoTagsRepository,
@@ -190,7 +190,7 @@ class ProfielController extends AbstractController {
 		$this->commissiesModel = $commissiesModel;
 		$this->corveeTakenModel = $corveeTakenModel;
 		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
-		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
+		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->fotoRepository = $fotoRepository;
 		$this->fotoTagsRepository = $fotoTagsRepository;
@@ -255,7 +255,7 @@ class ProfielController extends AbstractController {
 			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginModel::getUid() === $uid ? '' : '/' . $uid),
 			'corveetaken' => $this->corveeTakenModel->getTakenVoorLid($uid),
 			'corveevoorkeuren' => $this->corveeVoorkeurenModel->getVoorkeurenVoorLid($uid),
-			'corveevrijstelling' => $this->corveeVrijstellingenModel->getVrijstelling($uid),
+			'corveevrijstelling' => $this->corveeVrijstellingenRepository->getVrijstelling($uid),
 			'corveekwalificaties' => $this->corveeKwalificatiesRepository->getKwalificatiesVanLid($uid),
 			'forumpostcount' => $this->forumPostsRepository->getAantalForumPostsVoorLid($uid),
 			'forumrecent' => $this->forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),

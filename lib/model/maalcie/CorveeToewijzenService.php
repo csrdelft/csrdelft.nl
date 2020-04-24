@@ -4,7 +4,7 @@ namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeTaak;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 
 /**
  * CorveeToewijzenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -16,13 +16,13 @@ class CorveeToewijzenService {
 	 */
 	private $corveePuntenService;
 	/**
-	 * @var CorveeVrijstellingenModel
+	 * @var CorveeVrijstellingenRepository
 	 */
-	private $corveeVrijstellingenModel;
+	private $corveeVrijstellingenRepository;
 
-	public function __construct(CorveeVrijstellingenModel $corveeVrijstellingenModel, CorveePuntenService $corveePuntenService) {
+	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenModel, CorveePuntenService $corveePuntenService) {
 		$this->corveePuntenService = $corveePuntenService;
-		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
+		$this->corveeVrijstellingenRepository = $corveeVrijstellingenModel;
 	}
 
 	/**
@@ -35,7 +35,7 @@ class CorveeToewijzenService {
 	 * @throws CsrGebruikerException
 	 */
 	public function getSuggesties(CorveeTaak $taak) {
-		$vrijstellingen = $this->corveeVrijstellingenModel->getAlleVrijstellingen(true); // grouped by uid
+		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(true); // grouped by uid
 		$functie = $taak->getCorveeFunctie();
 		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
 			$lijst = array();
@@ -51,8 +51,8 @@ class CorveeToewijzenService {
 				}
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
-					$datum = $taak->getBeginMoment();
-					if ($datum >= strtotime($vrijstelling->begin_datum) && $datum <= strtotime($vrijstelling->eind_datum)) {
+					$datum = date_create_immutable("@" . $taak->getBeginMoment());
+					if ($datum >= $vrijstelling->begin_datum && $datum <= $vrijstelling->eind_datum) {
 						continue; // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 				}
@@ -70,12 +70,12 @@ class CorveeToewijzenService {
 			foreach ($lijst as $uid => $punten) {
 				if (array_key_exists($uid, $vrijstellingen)) {
 					$vrijstelling = $vrijstellingen[$uid];
-					$datum = $taak->getBeginMoment();
-					if ($datum >= strtotime($vrijstelling->begin_datum) && $datum <= strtotime($vrijstelling->eind_datum)) {
+					$datum = date_create_immutable('@' . $taak->getBeginMoment());
+					if ($datum >= $vrijstelling->begin_datum && $datum <= $vrijstelling->eind_datum) {
 						unset($lijst[$uid]); // taak valt binnen vrijstelling-periode: suggestie niet weergeven
 					}
 					// corrigeer prognose in suggestielijst vóór de aanvang van de vrijstellingsperiode
-					if ($vrijstelling !== null && $datum < strtotime($vrijstelling->begin_datum)) {
+					if ($vrijstelling !== null && $datum < $vrijstelling->begin_datum) {
 						$lijst[$uid]['prognose'] -= $vrijstelling->getPunten();
 					}
 				}

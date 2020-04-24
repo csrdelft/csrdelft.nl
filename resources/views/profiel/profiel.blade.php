@@ -12,7 +12,7 @@
  * @var string $bestellingenlink
  * @var \CsrDelft\model\entity\maalcie\CorveeTaak[] $corveetaken
  * @var \CsrDelft\model\entity\maalcie\CorveeVoorkeur $corveevoorkeuren
- * @var \CsrDelft\model\entity\maalcie\CorveeVrijstelling $corveevrijstelling
+ * @var \CsrDelft\entity\corvee\CorveeVrijstelling $corveevrijstelling
  * @var \CsrDelft\entity\corvee\CorveeKwalificatie $corveekwalificaties
  * @var int $forumpostcount
  * @var \CsrDelft\entity\forum\ForumPost[] $forumrecent

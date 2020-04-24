@@ -4,26 +4,27 @@ namespace CsrDelft\model\maalcie;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeVrijstelling;
+use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * CorveePuntenService  |  P.W.G. Brussee (brussee@live.nl)
  */
 class CorveePuntenService {
 	/**
-	 * @var CorveeVrijstellingenModel
+	 * @var CorveeVrijstellingenRepository
 	 */
-	private $corveeVrijstellingenModel;
+	private $corveeVrijstellingenRepository;
 	/**
 	 * @var CorveeTakenModel
 	 */
 	private $corveeTakenModel;
 
-	public function __construct(CorveeVrijstellingenModel $corveeVrijstellingenModel, CorveeTakenModel $corveeTakenModel) {
-		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
+	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeTakenModel $corveeTakenModel) {
+		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
 		$this->corveeTakenModel = $corveeTakenModel;
 	}
 
@@ -32,7 +33,7 @@ class CorveePuntenService {
 			$aantal = 0;
 			$errors = array();
 			/** @var CorveeVrijstelling[] $vrijstellingen */
-			$vrijstellingen = $this->corveeVrijstellingenModel->getAlleVrijstellingen(true); // grouped by uid
+			$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(true); // grouped by uid
 			$matrix = $this->loadPuntenTotaalVoorAlleLeden();
 			foreach ($matrix as $uid => $totalen) {
 				try {
@@ -43,15 +44,15 @@ class CorveePuntenService {
 					$punten = $totalen['puntenTotaal'];
 					$punten += $totalen['bonusTotaal'];
 					$vrijstelling = null;
-					if (array_key_exists($uid, $vrijstellingen) && time() > strtotime($vrijstellingen[$uid]->begin_datum)) {
+					if (array_key_exists($uid, $vrijstellingen) && time() > $vrijstellingen[$uid]->begin_datum->getTimestamp()) {
 						$vrijstelling = $vrijstellingen[$uid];
 						$punten += $vrijstelling->getPunten();
-						if (time() > strtotime($vrijstelling->eind_datum)) {
-							$this->corveeVrijstellingenModel->verwijderVrijstelling($vrijstelling->uid);
+						if (date_create_immutable() > $vrijstelling->eind_datum) {
+							$this->corveeVrijstellingenRepository->verwijderVrijstelling($vrijstelling->uid);
 							$aantal++;
 						} else { // niet dubbel toekennen
 							$vrijstelling->percentage = 0;
-							$this->corveeVrijstellingenModel->saveVrijstelling($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
+							$this->corveeVrijstellingenRepository->saveVrijstelling($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
 						}
 					}
 					$punten -= intval(instelling('corvee', 'punten_per_jaar'));
@@ -128,7 +129,7 @@ class CorveePuntenService {
 
 	public function loadPuntenVoorAlleLeden($functies = null) {
 		$taken = $this->corveeTakenModel->getAlleTaken(true); // grouped by uid
-		$vrijstellingen = $this->corveeVrijstellingenModel->getAlleVrijstellingen(true); // grouped by uid
+		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(true); // grouped by uid
 		$matrix = $this->loadPuntenTotaalVoorAlleLeden();
 		foreach ($matrix as $uid => $totalen) {
 			$profiel = ProfielRepository::get($uid); // false if lid does not exist
@@ -151,7 +152,7 @@ class CorveePuntenService {
 	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = false) {
 		if ($lidtaken === null) {
 			$lidtaken = $this->corveeTakenModel->getTakenVoorLid($profiel->uid);
-			$vrijstelling = $this->corveeVrijstellingenModel->getVrijstelling($profiel->uid);
+			$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren
 			$lijst = array();
