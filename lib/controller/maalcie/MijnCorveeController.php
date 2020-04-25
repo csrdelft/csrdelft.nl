@@ -3,10 +3,10 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\model\maalcie\CorveeFunctiesModel;
-use CsrDelft\model\maalcie\CorveePuntenService;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
+use CsrDelft\service\corvee\CorveePuntenService;
 
 
 /**

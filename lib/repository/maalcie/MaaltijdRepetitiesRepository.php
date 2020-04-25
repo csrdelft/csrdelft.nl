@@ -5,8 +5,8 @@ namespace CsrDelft\repository\maalcie;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -104,7 +104,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository {
 		if (!is_numeric($mrid) || $mrid <= 0) {
 			throw new CsrGebruikerException('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
 		}
-		if (CorveeRepetitiesModel::instance()->existMaaltijdRepetitieCorvee($mrid)) {
+		if (CorveeRepetitiesRepository::instance()->existMaaltijdRepetitieCorvee($mrid)) {
 			throw new CsrGebruikerException('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
 		$maaltijdenRepository = ContainerFacade::getContainer()->get(MaaltijdenRepository::class);

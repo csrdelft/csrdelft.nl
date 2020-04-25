@@ -1,10 +1,10 @@
 <?php
 
-namespace CsrDelft\model\entity\maalcie;
+namespace CsrDelft\entity\corvee;
 
+use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\model\maalcie\CorveeFunctiesModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CorveeRepetitie.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -32,23 +32,54 @@ use CsrDelft\Orm\Entity\T;
  *
  * Zie ook CorveeTaak.class.php
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeRepetitiesRepository")
+ * @ORM\Table("crv_repetities")
  */
-class CorveeRepetitie extends PersistentEntity {
-	# primary key
-
-	public $crv_repetitie_id; # int 11
-	public $mlt_repetitie_id; # foreign key mlt_repetitie.id
+class CorveeRepetitie {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
+	public $crv_repetitie_id;
+	/**
+	 * @var integer|null
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $mlt_repetitie_id;
 	/**
 	 * 0: zondag
 	 * 6: zaterdag
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
-	public $dag_vd_week; # int 1
-	public $periode_in_dagen; # int 11
-	public $functie_id; # foreign key crv_functie.id
-	public $standaard_punten; # int 11
-	public $standaard_aantal; # int 11
-	public $voorkeurbaar; # boolean
+	public $dag_vd_week;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $periode_in_dagen;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $functie_id;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
+	public $standaard_punten;
+	/**
+	 * @var integer|null
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $standaard_aantal;
+	/**
+	 * @var boolean
+	 * @ORM\Column(type="boolean")
+	 */
+	public $voorkeurbaar;
 
 	public function getDagVanDeWeekText() {
 		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
@@ -79,18 +110,4 @@ class CorveeRepetitie extends PersistentEntity {
 	public function getCorveeFunctie() {
 		return CorveeFunctiesModel::instance()->get($this->functie_id);
 	}
-
-	protected static $table_name = 'crv_repetities';
-	protected static $persistent_attributes = array(
-		'crv_repetitie_id' => array(T::Integer, false, 'auto_increment'),
-		'mlt_repetitie_id' => array(T::Integer, true),
-		'dag_vd_week' => array(T::Integer),
-		'periode_in_dagen' => array(T::Integer),
-		'functie_id' => array(T::Integer),
-		'standaard_punten' => array(T::Integer),
-		'standaard_aantal' => array(T::Integer, true),
-		'voorkeurbaar' => array(T::Boolean)
-	);
-
-	protected static $primary_key = array('crv_repetitie_id');
 }

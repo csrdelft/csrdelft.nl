@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeTaak;

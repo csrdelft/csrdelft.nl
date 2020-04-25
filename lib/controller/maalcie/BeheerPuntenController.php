@@ -3,9 +3,9 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\maalcie\CorveePuntenService;
 use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\corvee\CorveePuntenService;
 
 /**
  * BeheerPuntenController.class.php

@@ -5,11 +5,11 @@ namespace CsrDelft\controller\maalcie;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\model\maalcie\CorveeHerinneringService;
-use CsrDelft\model\maalcie\CorveeRepetitiesModel;
-use CsrDelft\model\maalcie\CorveeToewijzenService;
+use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\corvee\CorveeHerinneringService;
+use CsrDelft\service\corvee\CorveeToewijzenService;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
@@ -28,9 +28,9 @@ class BeheerTakenController extends AbstractController {
 	 */
 	private $maaltijdenRepository;
 	/**
-	 * @var CorveeRepetitiesModel
+	 * @var CorveeRepetitiesRepository
 	 */
-	private $corveeRepetitiesModel;
+	private $corveeRepetitiesRepository;
 	/**
 	 * @var CorveeToewijzenService
 	 */
@@ -43,13 +43,13 @@ class BeheerTakenController extends AbstractController {
 	public function __construct(
 		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdenRepository $maaltijdenRepository,
-		CorveeRepetitiesModel $corveeRepetitiesModel,
+		CorveeRepetitiesRepository $corveeRepetitiesRepository,
 		CorveeToewijzenService $corveeToewijzenService,
 		CorveeHerinneringService $corveeHerinneringService
 	) {
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
+		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 		$this->corveeToewijzenService = $corveeToewijzenService;
 		$this->corveeHerinneringService = $corveeHerinneringService;
 	}
@@ -85,7 +85,7 @@ class BeheerTakenController extends AbstractController {
 			'maaltijd' => $maaltijd,
 			'prullenbak' => false,
 			'show' => $maaltijd !== null ? true : false,
-			'repetities' => $this->corveeRepetitiesModel->getAlleRepetities(),
+			'repetities' => $this->corveeRepetitiesRepository->getAlleRepetities(),
 			'modal' => $modal,
 		]);
 	}
@@ -170,9 +170,9 @@ class BeheerTakenController extends AbstractController {
 		}
 		$crid = filter_input(INPUT_POST, 'crv_repetitie_id', FILTER_SANITIZE_NUMBER_INT);
 		if (!empty($crid)) {
-			$repetitie = $this->corveeRepetitiesModel->getRepetitie((int)$crid);
+			$repetitie = $this->corveeRepetitiesRepository->getRepetitie((int)$crid);
 			if ($mid === null) {
-				$beginDatum = $this->corveeRepetitiesModel->getFirstOccurrence($repetitie);
+				$beginDatum = $this->corveeRepetitiesRepository->getFirstOccurrence($repetitie);
 				if ($repetitie->periode_in_dagen > 0) {
 					return new RepetitieCorveeForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 				}
@@ -261,7 +261,7 @@ class BeheerTakenController extends AbstractController {
 	// Repetitie-Taken ############################################################
 
 	public function aanmaken($crid) {
-		$repetitie = $this->corveeRepetitiesModel->getRepetitie($crid);
+		$repetitie = $this->corveeRepetitiesRepository->getRepetitie($crid);
 		$form = new RepetitieCorveeForm($repetitie); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();

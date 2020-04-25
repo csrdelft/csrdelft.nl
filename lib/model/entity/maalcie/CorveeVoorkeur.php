@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\maalcie;
 
+use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 

@@ -18,7 +18,6 @@
  */
 
 use CsrDelft\Kernel;
-use CsrDelft\model\maalcie\CorveeHerinneringService;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
@@ -26,6 +25,7 @@ use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
+use CsrDelft\service\corvee\CorveeHerinneringService;
 
 chdir(dirname(__FILE__) . '/../lib/');
 

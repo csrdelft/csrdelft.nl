@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\model\entity\maalcie\CorveeRepetitie;
+use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\keuzevelden\DateField;

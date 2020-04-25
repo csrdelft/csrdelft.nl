@@ -3,7 +3,7 @@
 namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\maalcie\CorveeRepetitie;
+use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;

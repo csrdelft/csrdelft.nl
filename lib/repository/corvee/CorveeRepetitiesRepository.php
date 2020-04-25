@@ -1,29 +1,31 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\repository\corvee;
 
-use CsrDelft\common\CsrException;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeRepetitie;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\PersistenceModel;
-use CsrDelft\repository\corvee\CorveeTakenRepository;
-use PDOStatement;
+use CsrDelft\entity\corvee\CorveeRepetitie;
+use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
+use CsrDelft\repository\AbstractRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 
 /**
- * CorveeRepetitiesModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ * @author P.W.G. Brussee (brussee@live.nl)
  *
+ * @method CorveeRepetitie|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CorveeRepetitie|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CorveeRepetitie[]    findAll()
+ * @method CorveeRepetitie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeRepetitiesModel extends PersistenceModel {
-	const ORM = CorveeRepetitie::class;
+class CorveeRepetitiesRepository extends AbstractRepository {
 	/**
 	 * @var CorveeTakenRepository
 	 */
 	private $corveeTakenRepository;
 
-	public function __construct(CorveeTakenRepository $corveeTakenRepository) {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registy, CorveeTakenRepository $corveeTakenRepository) {
+		parent::__construct($registy, CorveeRepetitie::class);
 		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
 
@@ -73,33 +75,34 @@ class CorveeRepetitiesModel extends PersistenceModel {
 	}
 
 	public function getAlleRepetities() {
-		return $this->find();
+		return $this->findAll();
 	}
 
 	/**
 	 * Haalt de periodieke taken op die gekoppeld zijn aan een periodieke maaltijd.
 	 *
 	 * @param int $mrid
-	 * @return PDOStatement|CorveeRepetitie[]
+	 * @return CorveeRepetitie[]
 	 */
 	public function getRepetitiesVoorMaaltijdRepetitie($mrid) {
-		return $this->find('mlt_repetitie_id = ?', array($mrid));
+		return $this->findBy(['mlt_repetitie_id' => $mrid]);
 	}
 
 	/**
 	 * @param $crid
-	 * @return CorveeRepetitie|false
+	 * @return CorveeRepetitie|null
 	 */
 	public function getRepetitie($crid) {
-		return $this->retrieveByPrimaryKey(array($crid));
+		return $this->find($crid);
 	}
 
 	public function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
-		return Database::transaction(function () use ($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
+		return $this->_em->transactional(function () use ($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
 			$voorkeuren = 0;
 			if ($crid == 0) {
 				$repetitie = $this->nieuw(0, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
-				$repetitie->crv_repetitie_id = $this->create($repetitie);
+				$this->_em->persist($repetitie);
+				$this->_em->flush();
 			} else {
 				$repetitie = $this->getRepetitie($crid);
 				$repetitie->mlt_repetitie_id = $mrid;
@@ -109,9 +112,10 @@ class CorveeRepetitiesModel extends PersistenceModel {
 				$repetitie->standaard_punten = $punten;
 				$repetitie->standaard_aantal = $aantal;
 				$repetitie->voorkeurbaar = (boolean)$voorkeur;
-				$this->update($repetitie);
+				$this->_em->persist($repetitie);
+				$this->_em->flush();
 				if (!$voorkeur) { // niet (meer) voorkeurbaar
-					$voorkeuren = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid);
+					$voorkeuren = ContainerFacade::getContainer()->get(CorveeVoorkeurenModel::class)->verwijderVoorkeuren($crid);
 				}
 			}
 			return array($repetitie, $voorkeuren);
@@ -127,12 +131,11 @@ class CorveeRepetitiesModel extends PersistenceModel {
 			throw new CsrGebruikerException('Alle bijbehorende corveetaken zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
 
-		return Database::transaction(function () use ($crid) {
-			$aantal = CorveeVoorkeurenModel::instance()->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
-			$deleted = $this->deleteByPrimaryKey(array($crid));
-			if ($deleted !== 1) {
-				throw new CsrException('Delete corvee-repetitie faalt: $deleted =' . $deleted);
-			}
+		return $this->_em->transactional(function () use ($crid) {
+			$aantal = ContainerFacade::getContainer()->get(CorveeVoorkeurenModel::class)->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
+			$repetitie = $this->find($crid);
+			$this->_em->remove($repetitie);
+			$this->_em->flush();
 			return $aantal;
 		});
 	}
@@ -146,7 +149,7 @@ class CorveeRepetitiesModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public function existMaaltijdRepetitieCorvee($mrid) {
-		return $this->count('mlt_repetitie_id = ?', array($mrid)) > 0;
+		return count($this->findBy(['mlt_repetitie_id' => $mrid])) > 0;
 	}
 
 	// Functie-Repetities ############################################################
@@ -158,7 +161,7 @@ class CorveeRepetitiesModel extends PersistenceModel {
 	 * @return bool
 	 */
 	public function existFunctieRepetities($fid) {
-		return $this->count('functie_id = ?', array($fid)) > 0;
+		return count($this->findBy(['functie_id' => $fid])) > 0;
 	}
 
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\corvee\CorveePuntenOverzicht;
+use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\maalcie\CorveeFunctie;

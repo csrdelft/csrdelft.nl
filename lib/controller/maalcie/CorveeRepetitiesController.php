@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\model\maalcie\CorveeRepetitiesModel;
+use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
@@ -13,9 +13,9 @@ use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
 class CorveeRepetitiesController {
 	private $repetitie = null;
 	/**
-	 * @var CorveeRepetitiesModel
+	 * @var CorveeRepetitiesRepository
 	 */
-	private $corveeRepetitiesModel;
+	private $corveeRepetitiesRepository;
 	/**
 	 * @var MaaltijdRepetitiesRepository
 	 */
@@ -25,8 +25,8 @@ class CorveeRepetitiesController {
 	 */
 	private $corveeTakenRepository;
 
-	public function __construct(CorveeRepetitiesModel $corveeRepetitiesModel, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, CorveeTakenRepository $corveeTakenRepository) {
-		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
+	public function __construct(CorveeRepetitiesRepository $corveeRepetitiesRepository, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, CorveeTakenRepository $corveeTakenRepository) {
+		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
@@ -36,12 +36,12 @@ class CorveeRepetitiesController {
 		$maaltijdrepetitie = null;
 		if (is_numeric($crid) && $crid > 0) {
 			$modal = $this->bewerk($crid);
-			$repetities = $this->corveeRepetitiesModel->getAlleRepetities();
+			$repetities = $this->corveeRepetitiesRepository->getAlleRepetities();
 		} elseif (is_numeric($mrid) && $mrid > 0) {
-			$repetities = $this->corveeRepetitiesModel->getRepetitiesVoorMaaltijdRepetitie($mrid);
+			$repetities = $this->corveeRepetitiesRepository->getRepetitiesVoorMaaltijdRepetitie($mrid);
 			$maaltijdrepetitie = $this->maaltijdRepetitiesRepository->getRepetitie($mrid);
 		} else {
-			$repetities = $this->corveeRepetitiesModel->getAlleRepetities();
+			$repetities = $this->corveeRepetitiesRepository->getAlleRepetities();
 		}
 		return view('maaltijden.corveerepetitie.beheer_corvee_repetities', [
 			'repetities' => $repetities,
@@ -55,12 +55,12 @@ class CorveeRepetitiesController {
 	}
 
 	public function nieuw($mrid = null) {
-		$repetitie = $this->corveeRepetitiesModel->nieuw(0, $mrid);
+		$repetitie = $this->corveeRepetitiesRepository->nieuw(0, $mrid);
 		return new CorveeRepetitieForm($repetitie); // fetches POST values itself
 	}
 
 	public function bewerk($crid) {
-		$repetitie = $this->corveeRepetitiesModel->getRepetitie($crid);
+		$repetitie = $this->corveeRepetitiesRepository->getRepetitie($crid);
 		return new CorveeRepetitieForm($repetitie); // fetches POST values itself
 	}
 
@@ -74,7 +74,7 @@ class CorveeRepetitiesController {
 			$values = $view->getValues();
 			$mrid = empty($values['mlt_repetitie_id']) ? null : (int)$values['mlt_repetitie_id'];
 			$voorkeurbaar = empty($values['voorkeurbaar']) ? false : (bool)$values['voorkeurbaar'];
-			list($repetitie, $aantal) = $this->corveeRepetitiesModel->saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $voorkeurbaar);
+			list($repetitie, $aantal) = $this->corveeRepetitiesRepository->saveRepetitie($crid, $mrid, $values['dag_vd_week'], $values['periode_in_dagen'], intval($values['functie_id']), $values['standaard_punten'], $values['standaard_aantal'], $voorkeurbaar);
 			if ($aantal > 0) {
 				setMelding($aantal . ' voorkeur' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 			}
@@ -87,7 +87,7 @@ class CorveeRepetitiesController {
 	}
 
 	public function verwijder($crid) {
-		$aantal = $this->corveeRepetitiesModel->verwijderRepetitie($crid);
+		$aantal = $this->corveeRepetitiesRepository->verwijderRepetitie($crid);
 		if ($aantal > 0) {
 			setMelding($aantal . ' voorkeur' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}

@@ -6,9 +6,9 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\maalcie\CorveeRepetitiesModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use DateInterval;
 use DateTimeInterface;
@@ -49,9 +49,9 @@ class MaaltijdenRepository extends AbstractRepository {
 	private $corveeTakenRepository;
 
 	/**
-	 * @var CorveeRepetitiesModel
+	 * @var CorveeRepetitiesRepository
 	 */
-	private $corveeRepetitiesModel;
+	private $corveeRepetitiesRepository;
 
 	/**
 	 * @param ManagerRegistry $registry
@@ -59,7 +59,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @param MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
 	 * @param ArchiefMaaltijdenRepository $archiefMaaltijdenRepository
 	 * @param CorveeTakenRepository $corveeTakenRepository
-	 * @param CorveeRepetitiesModel $corveeRepetitiesModel
+	 * @param CorveeRepetitiesRepository $corveeRepetitiesRepository
 	 */
 	public function __construct(
 		ManagerRegistry $registry,
@@ -67,7 +67,7 @@ class MaaltijdenRepository extends AbstractRepository {
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		ArchiefMaaltijdenRepository $archiefMaaltijdenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
-		CorveeRepetitiesModel $corveeRepetitiesModel
+		CorveeRepetitiesRepository $corveeRepetitiesRepository
 	) {
 		parent::__construct($registry, Maaltijd::class);
 
@@ -75,7 +75,7 @@ class MaaltijdenRepository extends AbstractRepository {
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->archiefMaaltijdenRepository = $archiefMaaltijdenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->corveeRepetitiesModel = $corveeRepetitiesModel;
+		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 	}
 
 
@@ -560,7 +560,7 @@ class MaaltijdenRepository extends AbstractRepository {
 				$beginDatum = $beginDatum->add(DateInterval::createFromDateString("+{$shift} days"));
 			}
 			$datum = $beginDatum;
-			$corveerepetities = $this->corveeRepetitiesModel->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id)->fetchAll();
+			$corveerepetities = $this->corveeRepetitiesRepository->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id)->fetchAll();
 			$maaltijden = [];
 			while ($datum <= $eindDatum) { // break after one
 
