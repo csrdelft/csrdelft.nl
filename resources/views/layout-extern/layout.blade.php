@@ -26,12 +26,29 @@
 
 	<!-- Header -->
 	<header id="header" class="alt">
-		<h1><a href="/">C.S.R. Delft</a></h1>
+		<nav>
+			<a class="nav-link" href="/owee">Owee</a>
+			<span class="dropdown-menu">
+				<a href="/vereniging" class="nav-link dropdown-link">Vereniging</a>
+				<span class="dropdown">
+					<a href="/vereniging/geloof">Geloof</a>
+					<a href="/vereniging/geloof">Geloof</a>
+					<a href="/vereniging/geloof">Geloof</a>
+					<a href="/vereniging/geloof">Geloof</a>
+					<a href="/vereniging/geloof">Geloof</a>
+					<a href="/vereniging/geloof">Geloof</a>
+					<a href="/vereniging/geloof">Geloof</a>
+				</span>
+			</span>
+			<a class="nav-link" href="/fotos">Foto's</a>
+			<a class="nav-link" href="/forum">Forum</a>
+			<a class="nav-link" href="/lidworden">Lid worden?</a>
+			<a class="nav-link" href="/contact">Contact</a>
+		</nav>
 		<nav>
 			@section('loginbutton')
 			<a class="inloggen" href="#login">Inloggen</a>
 			@show
-			<a href="#menu">Menu</a>
 		</nav>
 	</header>
 
@@ -96,3 +113,7 @@
 </div>
 </body>
 </html>
+<script>export default {
+		components: {}
+	}
+</script>
