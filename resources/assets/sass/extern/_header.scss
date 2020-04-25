@@ -143,19 +143,11 @@
 			height: inherit;
 			line-height: inherit;
 
-			a {
+			.nav-link {
 				height: inherit;
 				line-height: inherit;
-
-				&[href="#menu"] {
-					box-shadow: none;
-					padding: 0 1em;
-				}
-
-				&.inloggen {
-					box-shadow: none;
-					padding: 0 1em;
-				}
+				box-shadow: none;
+				padding: 0 1em;
 			}
 		}
 	}
@@ -163,6 +155,25 @@
 }
 
 @media screen and (max-width: $scherm-smal) {
+	#header {
+		flex-direction: column;
+		position: relative;
+		height: auto;
+	}
+
+	#header nav {
+		flex-direction: column;
+		height: auto;
+
+		.dropdown-menu {
+			width: 100%;
+		}
+
+		.nav-link {
+			width: 100%;
+		}
+	}
+
 
 	#header nav a[href="#menu"] {
 		width: 4em;
