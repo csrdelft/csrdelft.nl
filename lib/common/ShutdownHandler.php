@@ -44,7 +44,12 @@ final class ShutdownHandler {
 			$headers[] = 'Content-Type: text/plain; charset=UTF-8';
 			$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 			$subject = 'Fatal error: ' . $debug['error']['message'];
-			mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
+
+			$dumper = new HtmlDumper();
+			$dumper->setTheme('light');
+			$cloner = new VarCloner();
+
+			mail('pubcie@csrdelft.nl', $subject, $dumper->dump($cloner->cloneVar($debug), true), implode("\r\n", $headers));
 		}
 	}
 
@@ -63,6 +68,7 @@ final class ShutdownHandler {
 		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 		$subject = 'Fatal error: ' . $debug['message'];
 		$dumper = new HtmlDumper();
+		$dumper->setTheme('light');
 		$cloner = new VarCloner();
 
 		mail('pubcie@csrdelft.nl', $subject, $dumper->dump($cloner->cloneVar($debug), true), implode("\r\n", $headers));
