@@ -3,8 +3,8 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
-use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\view\maalcie\forms\EetwensForm;
 
 /**
@@ -12,11 +12,11 @@ use CsrDelft\view\maalcie\forms\EetwensForm;
  */
 class MijnVoorkeurenController {
 	/**
-	 * @var CorveeVoorkeurenModel
+	 * @var CorveeVoorkeurenRepository
 	 */
 	private $corveeVoorkeurenModel;
 
-	public function __construct(CorveeVoorkeurenModel $corveeVoorkeurenModel) {
+	public function __construct(CorveeVoorkeurenRepository $corveeVoorkeurenModel) {
 		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
 	}
 

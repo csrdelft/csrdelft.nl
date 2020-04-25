@@ -4,7 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
-use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
+use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\repository\ProfielRepository;
 
 /**
@@ -12,11 +12,11 @@ use CsrDelft\repository\ProfielRepository;
  */
 class BeheerVoorkeurenController {
 	/**
-	 * @var CorveeVoorkeurenModel
+	 * @var CorveeVoorkeurenRepository
 	 */
 	private $corveeVoorkeurenModel;
 
-	public function __construct(CorveeVoorkeurenModel $corveeVoorkeurenModel) {
+	public function __construct(CorveeVoorkeurenRepository $corveeVoorkeurenModel) {
 		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
 	}
 

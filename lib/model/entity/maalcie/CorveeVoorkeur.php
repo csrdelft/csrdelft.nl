@@ -3,8 +3,7 @@
 namespace CsrDelft\model\entity\maalcie;
 
 use CsrDelft\entity\corvee\CorveeRepetitie;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CorveeVoorkeur.class.php  |  P.W.G. Brussee (brussee@live.nl)
@@ -15,12 +14,23 @@ use CsrDelft\Orm\Entity\T;
  *
  * Zie ook CorveeRepetitie.class.php
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeVoorkeurenRepository")
+ * @ORM\Table("crv_voorkeuren")
  */
-class CorveeVoorkeur extends PersistentEntity {
-	# shared primary key
-
+class CorveeVoorkeur {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 */
 	public $crv_repetitie_id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="uid")
+	 * @ORM\Id()
+	 */
 	public $uid;
+
 	public $corvee_repetitie;
 	public $van_uid;
 
@@ -47,13 +57,4 @@ class CorveeVoorkeur extends PersistentEntity {
 	public function setVanUid($uid) {
 		$this->van_uid = $uid;
 	}
-
-	protected static $table_name = 'crv_voorkeuren';
-	protected static $persistent_attributes = array(
-		'uid' => array(T::UID),
-		'crv_repetitie_id' => array(T::Integer)
-	);
-
-	protected static $primary_key = array('uid', 'crv_repetitie_id');
-
 }
