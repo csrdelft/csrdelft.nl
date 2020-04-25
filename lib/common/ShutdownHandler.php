@@ -8,6 +8,7 @@ use CsrDelft\repository\DebugLogRepository;
 use Doctrine\Common\Util\Debug;
 use Exception;
 use Maknz\Slack\Client as SlackClient;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 
@@ -61,8 +62,7 @@ final class ShutdownHandler {
 		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 		$subject = 'Fatal error: ' . $debug['message'];
 
-		$_SERVER['VAR_DUMPER_FORMAT'] = 'html';
-		mail('pubcie@csrdelft.nl', $subject, VarDumper::dump($debug), implode("\r\n", $headers));
+		mail('pubcie@csrdelft.nl', $subject, (new HtmlDumper())->dump($debug, true), implode("\r\n", $headers));
 	}
 
 	/**
