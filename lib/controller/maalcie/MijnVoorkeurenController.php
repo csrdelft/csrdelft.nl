@@ -2,48 +2,66 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
-use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
+use CsrDelft\entity\corvee\CorveeVoorkeur;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
+use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\view\maalcie\forms\EetwensForm;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class MijnVoorkeurenController {
 	/**
-	 * @var CorveeVoorkeurenModel
+	 * @var CorveeVoorkeurenRepository
 	 */
-	private $corveeVoorkeurenModel;
+	private $corveeVoorkeurenRepository;
 
-	public function __construct(CorveeVoorkeurenModel $corveeVoorkeurenModel) {
-		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
+	public function __construct(CorveeVoorkeurenRepository $corveeVoorkeurenRepository) {
+		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 	}
 
 	public function mijn() {
-		$voorkeuren = $this->corveeVoorkeurenModel->getVoorkeurenVoorLid(LoginModel::getUid(), true);
+		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid(LoginModel::getUid(), true);
 		return view('maaltijden.voorkeuren.mijn_voorkeuren', [
 			'voorkeuren' => $voorkeuren,
 			'eetwens' => new EetwensForm(),
 		]);
 	}
 
-	public function inschakelen($crid) {
+	/**
+	 * @param CorveeRepetitiesRepository $corveeRepetitiesRepository
+	 * @param $crid
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function inschakelen(CorveeRepetitiesRepository $corveeRepetitiesRepository, $crid) {
 		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->crv_repetitie_id = $crid;
-		$voorkeur->uid = LoginModel::getUid();
-		$voorkeur = $this->corveeVoorkeurenModel->inschakelenVoorkeur($voorkeur);
+		$voorkeur->setProfiel(LoginModel::getProfiel());
+		$voorkeur->setCorveeRepetitie($corveeRepetitiesRepository->find($crid));
+
+		$this->corveeVoorkeurenRepository->inschakelenVoorkeur($voorkeur);
+
 		return view('maaltijden.voorkeuren.mijn_voorkeur_veld', [
 			'uid' => $voorkeur->uid,
 			'crid' => $voorkeur->crv_repetitie_id,
 		]);
 	}
 
+	/**
+	 * @param $crid
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function uitschakelen($crid) {
-		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->crv_repetitie_id = $crid;
-		$voorkeur->uid = LoginModel::getUid();
-		$voorkeur = $this->corveeVoorkeurenModel->uitschakelenVoorkeur($voorkeur);
+		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur($crid, LoginModel::getUid());
+		$this->corveeVoorkeurenRepository->uitschakelenVoorkeur($voorkeur);
+
 		return view('maaltijden.voorkeuren.mijn_voorkeur_veld', [
 			'uid' => $voorkeur->uid,
 			'crid' => $voorkeur->crv_repetitie_id,
@@ -53,7 +71,7 @@ class MijnVoorkeurenController {
 	public function eetwens() {
 		$form = new EetwensForm();
 		if ($form->validate()) {
-			$this->corveeVoorkeurenModel->setEetwens(LoginModel::getProfiel(), $form->getField()->getValue());
+			$this->corveeVoorkeurenRepository->setEetwens(LoginModel::getProfiel(), $form->getField()->getValue());
 		}
 		return $form;
 	}

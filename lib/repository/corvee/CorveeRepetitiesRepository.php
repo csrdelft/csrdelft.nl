@@ -5,7 +5,6 @@ namespace CsrDelft\repository\corvee;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeRepetitie;
-use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -65,9 +64,12 @@ class CorveeRepetitiesRepository extends AbstractRepository {
 		return date('Y-m-d', $datum);
 	}
 
+	/**
+	 * @return CorveeRepetitie[]
+	 */
 	public function getVoorkeurbareRepetities() {
 		$repetities = $this->findBy(['voorkeurbaar' => true]);
-		$result = array();
+		$result = [];
 		foreach ($repetities as $repetitie) {
 			$result[$repetitie->crv_repetitie_id] = $repetitie;
 		}
@@ -115,7 +117,7 @@ class CorveeRepetitiesRepository extends AbstractRepository {
 				$this->_em->persist($repetitie);
 				$this->_em->flush();
 				if (!$voorkeur) { // niet (meer) voorkeurbaar
-					$voorkeuren = ContainerFacade::getContainer()->get(CorveeVoorkeurenModel::class)->verwijderVoorkeuren($crid);
+					$voorkeuren = ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->verwijderVoorkeuren($crid);
 				}
 			}
 			return array($repetitie, $voorkeuren);
@@ -132,7 +134,7 @@ class CorveeRepetitiesRepository extends AbstractRepository {
 		}
 
 		return $this->_em->transactional(function () use ($crid) {
-			$aantal = ContainerFacade::getContainer()->get(CorveeVoorkeurenModel::class)->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
+			$aantal = ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->verwijderVoorkeuren($crid); // delete voorkeuren first (foreign key)
 			$repetitie = $this->find($crid);
 			$this->_em->remove($repetitie);
 			$this->_em->flush();

@@ -1,24 +1,28 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\repository\corvee;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\corvee\CorveeVoorkeur;
+use CsrDelft\entity\corvee\CorveeVoorkeurMatrixDTO;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\PersistenceModel;
-use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
-use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
+use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * CorveeVoorkeurenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ * @author P.W.G. Brussee (brussee@live.nl)
  *
+ * @method CorveeVoorkeur|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CorveeVoorkeur|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CorveeVoorkeur[]    findAll()
+ * @method CorveeVoorkeur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeVoorkeurenModel extends PersistenceModel {
-	const ORM = CorveeVoorkeur::class;
+class CorveeVoorkeurenRepository extends AbstractRepository {
 	/**
 	 * @var CorveeRepetitiesRepository
 	 */
@@ -28,8 +32,8 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 */
 	private $corveeKwalificatiesRepository;
 
-	public function __construct(CorveeRepetitiesRepository $corveeRepetitiesRepository, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registry, CorveeRepetitiesRepository $corveeRepetitiesRepository, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
+		parent::__construct($registry, CorveeVoorkeur::class);
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
 	}
@@ -58,16 +62,14 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 */
 	public function getVoorkeurenVoorLid($uid, $uitgeschakeld = false) {
 		$repById = $this->corveeRepetitiesRepository->getVoorkeurbareRepetities(); // grouped by crid
-		$lijst = array();
-		/** @var CorveeVoorkeur[] $voorkeuren */
-		$voorkeuren = $this->find('uid = ?', array($uid));
+		$lijst = [];
+		$voorkeuren = $this->findBy(['uid' => $uid]);
 		foreach ($voorkeuren as $voorkeur) {
 			$crid = $voorkeur->crv_repetitie_id;
 			if (!array_key_exists($crid, $repById)) { // ingeschakelde voorkeuren altijd weergeven
-				$repById[$crid] = $this->corveeRepetitiesRepository->getRepetitie($crid);
+				$repById[$crid] = $voorkeur->corveeRepetitie;
 			}
-			$voorkeur->setCorveeRepetitie($repById[$crid]);
-			$voorkeur->setVanUid($uid);
+			$voorkeur->van_uid = $uid;
 			$lijst[$crid] = $voorkeur;
 		}
 		foreach ($repById as $crid => $repetitie) {
@@ -79,24 +81,14 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 			if (!array_key_exists($crid, $lijst)) { // uitgeschakelde voorkeuren weergeven
 				if ($uitgeschakeld) {
 					$voorkeur = new CorveeVoorkeur();
-					$voorkeur->crv_repetitie_id = $crid;
-					$voorkeur->uid = null;
 					$voorkeur->setCorveeRepetitie($repetitie);
-					$voorkeur->setVanUid($uid);
+					$voorkeur->van_uid = $uid;
 					$lijst[$crid] = $voorkeur;
 				}
 			}
 		}
 		ksort($lijst);
 		return $lijst;
-	}
-
-	public function getHeeftVoorkeur($crid, $uid) {
-		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->crv_repetitie_id = $crid;
-		$voorkeur->uid = $uid;
-
-		return $this->exists($voorkeur);
 	}
 
 	/**
@@ -109,17 +101,15 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		$leden_voorkeuren = $this->loadLedenVoorkeuren();
 		$matrix = array();
 		foreach ($leden_voorkeuren as $lv) { // build matrix
-			$crid = $lv['crid'];
-			$uid = $lv['van'];
+			$crid = $lv->crv_repetitie_id;
+			$uid = $lv->uid;
 			$voorkeur = new CorveeVoorkeur();
-			$voorkeur->crv_repetitie_id = $crid;
-			if ($lv['voorkeur']) { // ingeschakelde voorkeuren
-				$voorkeur->uid = $uid;
-			} else { // uitgeschakelde voorkeuren
-				$voorkeur->uid = null;
+			$voorkeur->setCorveeRepetitie($repById[$crid]);
+			if ($lv->voorkeur) { // ingeschakelde voorkeuren
+				$voorkeur->setProfiel(ProfielRepository::get($uid));
 			}
 			$voorkeur->setCorveeRepetitie($repById[$crid]);
-			$voorkeur->setVanUid($uid);
+			$voorkeur->van_uid = $uid;
 			$matrix[$uid][$crid] = $voorkeur;
 			ksort($repById);
 			ksort($matrix[$uid]);
@@ -127,28 +117,29 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 		return array($matrix, $repById);
 	}
 
+	/**
+	 * @return CorveeVoorkeurMatrixDTO[]
+	 */
 	private function loadLedenVoorkeuren() {
-		$sql = 'SELECT lid.uid AS van, r.crv_repetitie_id AS crid, ';
-		$sql .= ' (EXISTS (SELECT * FROM crv_voorkeuren AS v WHERE v.crv_repetitie_id = crid AND v.uid = van )) AS voorkeur';
-		$sql .= ' FROM profielen AS lid, crv_repetities AS r';
-		$sql .= ' WHERE r.voorkeurbaar = true AND lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")'; // alleen leden
-		$sql .= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-		$db = Database::instance()->getDatabase();
-		$values = array();
-		$query = $db->prepare($sql);
-		$query->execute($values);
-		return $query->fetchAll();
+		return $this->_em->createQuery(<<<'DQL'
+SELECT NEW CsrDelft\entity\corvee\CorveeVoorkeurMatrixDTO(p.uid, r.crv_repetitie_id, v.uid)
+FROM CsrDelft\entity\profiel\Profiel p
+JOIN CsrDelft\entity\corvee\CorveeRepetitie r
+LEFT JOIN CsrDelft\entity\corvee\CorveeVoorkeur v WITH v.uid = p.uid AND v.corveeRepetitie = r
+WHERE r.voorkeurbaar = true AND p.status IN ('S_LID', 'S_GASTLID', 'S_NOVIET')
+ORDER BY p.achternaam ASC, p.voornaam ASC
+DQL
+		)->getResult();
 	}
 
-	public function getVoorkeurenVoorRepetitie($crid) {
-		if (!is_numeric($crid) || $crid <= 0) {
-			throw new CsrGebruikerException('Get voorkeuren voor repetitie faalt: Invalid $crid = ' . $crid);
-		}
-		return $this->find('crv_repetitie_id = ?', array($crid));
-	}
-
+	/**
+	 * @param CorveeVoorkeur $voorkeur
+	 * @return CorveeVoorkeur
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function inschakelenVoorkeur(CorveeVoorkeur $voorkeur) {
-		if ($this->exists($voorkeur)) {
+		if ($this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al ingeschakeld');
 		}
 		$repetitie = $this->corveeRepetitiesRepository->getRepetitie($voorkeur->crv_repetitie_id);
@@ -161,17 +152,29 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 			}
 		}
 
-		$this->create($voorkeur);
+		$this->_em->persist($voorkeur);
+		$this->_em->flush();
 
 		return $voorkeur;
 	}
 
-	public function uitschakelenVoorkeur($voorkeur) {
-		if (!$this->exists($voorkeur)) {
+	public function getHeeftVoorkeur($crid, $uid) {
+		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]) != null;
+	}
+
+	/**
+	 * @param CorveeVoorkeur $voorkeur
+	 * @return CorveeVoorkeur
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function uitschakelenVoorkeur(CorveeVoorkeur $voorkeur) {
+		if (!$this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al uitgeschakeld');
 		}
 
-		$this->delete($voorkeur);
+		$this->_em->remove($voorkeur);
+		$this->_em->flush();
 
 		$voorkeur->uid = null;
 
@@ -182,14 +185,18 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	 * Called when a CorveeRepetitie is being deleted.
 	 * This is only possible after all CorveeVoorkeuren are deleted of this CorveeRepetitie (db foreign key)
 	 *
+	 * @param $crid
 	 * @return int amount of deleted voorkeuren
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function verwijderVoorkeuren($crid) {
-		$voorkeuren = $this->find('crv_repetitie_id = ?', array($crid));
-		$num = $voorkeuren->rowCount();
+		$voorkeuren = $this->findBy(['crv_repetitie_id' => $crid]);
+		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
-			$this->delete($voorkeur);
+			$this->_em->remove($voorkeur);
 		}
+		$this->_em->flush();
 
 		return $num;
 	}
@@ -197,15 +204,24 @@ class CorveeVoorkeurenModel extends PersistenceModel {
 	/**
 	 * Called when a Lid is being made Lid-af.
 	 *
+	 * @param $uid
 	 * @return int amount of deleted voorkeuren
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function verwijderVoorkeurenVoorLid($uid) {
-		$voorkeuren = $this->find('uid = ?', array($uid));
-		$aantal = $voorkeuren->rowCount();
+		$voorkeuren = $this->findBy(['uid' => $uid]);
+		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
-			$this->delete($voorkeur);
+			$this->_em->remove($voorkeur);
 		}
-		return $aantal;
+		$this->_em->flush();
+
+		return $num;
+	}
+
+	public function getVoorkeur($crid, $uid) {
+		return $this->find(['uid' => $uid, 'crv_repetitie_id' => $crid]);
 	}
 
 }

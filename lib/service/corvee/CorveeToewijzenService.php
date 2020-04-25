@@ -6,8 +6,8 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveePuntenOverzicht;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 
 /**
@@ -94,7 +94,7 @@ class CorveeToewijzenService {
 				$corveePuntenOverzichten[$uid]->recent = false;
 			}
 			if ($taak->crv_repetitie_id !== null) {
-				$corveePuntenOverzichten[$uid]->voorkeur = CorveeVoorkeurenModel::instance()->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
+				$corveePuntenOverzichten[$uid]->voorkeur = ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
 			} else {
 				$corveePuntenOverzichten[$uid]->voorkeur = false;
 			}
