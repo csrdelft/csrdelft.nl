@@ -66,7 +66,7 @@ class CorveeRepetitiesRepository extends AbstractRepository {
 	}
 
 	public function getVoorkeurbareRepetities() {
-		$repetities = $this->find('voorkeurbaar = true');
+		$repetities = $this->findBy(['voorkeurbaar' => true]);
 		$result = array();
 		foreach ($repetities as $repetitie) {
 			$result[$repetitie->crv_repetitie_id] = $repetitie;
