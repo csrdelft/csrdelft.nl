@@ -41,13 +41,13 @@ class CorveeHerinneringService {
 		$uid = $taak->uid;
 		$profiel = $this->profielRepository->find($uid);
 		if (!$profiel) {
-			throw new CsrGebruikerException($datum . ' ' . $taak->getCorveeFunctie()->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
+			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
 		}
 		$lidnaam = $profiel->getNaam('civitas');
 		$to = array($profiel->getPrimaryEmail() => $lidnaam);
 		$from = 'corvee@csrdelft.nl';
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
-		$bericht = $taak->getCorveeFunctie()->email_bericht;
+		$bericht = $taak->corveeFunctie->email_bericht;
 		$eten = '';
 		if ($taak->maaltijd_id !== null) {
 			$aangemeld = $this->maaltijdAanmeldingenRepository->getIsAangemeld($taak->maaltijd_id, $uid);
@@ -64,9 +64,9 @@ class CorveeHerinneringService {
 			if (!$mail->inDebugMode()) {
 				$this->corveeTakenRepository->updateGemaild($taak);
 			}
-			return $datum . ' ' . $taak->getCorveeFunctie()->naam . ' verstuurd! (' . $lidnaam . ')';
+			return $datum . ' ' . $taak->corveeFunctie->naam . ' verstuurd! (' . $lidnaam . ')';
 		} else {
-			throw new CsrGebruikerException($datum . ' ' . $taak->getCorveeFunctie()->naam . ' faalt! (' . $lidnaam . ')');
+			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' faalt! (' . $lidnaam . ')');
 		}
 	}
 

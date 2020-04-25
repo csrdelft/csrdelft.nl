@@ -305,7 +305,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		if ($aantal > 0) {
 			$change = new ProfielLogCoveeTakenVerwijderChange([]);
 			foreach ($taken as $taak) {
-				$change->corveetaken[] = strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->getCorveeFunctie()->naam;
+				$change->corveetaken[] = strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->corveeFunctie->naam;
 			}
 			$changes[] = $change;
 			// Corveeceasar mailen over vrijvallende corveetaken.

@@ -20,8 +20,8 @@
 					<div class="inline niet-dik" style="width: 80px;">{{date_format_intl($taak->datum, LONG_DATE_FORMAT)}}</div>
 				@endif
 				<div class="inline" style="width: 70px;">
-			<span title="{{$taak->getCorveeFunctie()->naam}}">
-				&nbsp;{{$taak->getCorveeFunctie()->afkorting}}:&nbsp;
+			<span title="{{$taak->corveeFunctie->naam}}">
+				&nbsp;{{$taak->corveeFunctie->afkorting}}:&nbsp;
 			</span>
 					@endif
 					@if($taak->uid) {{-- ingedeelde taak van functie: teller++ --}}

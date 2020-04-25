@@ -2,10 +2,8 @@
 
 namespace CsrDelft\entity\corvee;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
-use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\ProfielRepository;
 use DateInterval;
 use DateTimeImmutable;
@@ -106,6 +104,13 @@ class CorveeTaak implements Agendeerbaar {
 	 */
 	public $verwijderd = false;
 
+	/**
+	 * @var CorveeFunctie
+	 * @ORM\ManyToOne(targetEntity="CorveeFunctie")
+	 * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id")
+	 */
+	public $corveeFunctie;
+
 	public function getPuntenPrognose() {
 		return $this->punten + $this->bonus_malus - $this->punten_toegekend - $this->bonus_toegekend;
 	}
@@ -183,15 +188,6 @@ class CorveeTaak implements Agendeerbaar {
 		return false;
 	}
 
-	/**
-	 * Lazy loading by foreign key.
-	 *
-	 * @return CorveeFunctie
-	 */
-	public function getCorveeFunctie() {
-		return ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class)->get($this->functie_id);
-	}
-
 	public function setUid($uid) {
 		if ($uid !== null && !ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException('Geen lid: set lid id');
@@ -225,14 +221,14 @@ class CorveeTaak implements Agendeerbaar {
 
 	public function getTitel() {
 		if ($this->uid) {
-			return $this->getCorveeFunctie()->naam . ' ' . ProfielRepository::getNaam($this->uid, 'civitas');
+			return $this->corveeFunctie->naam . ' ' . ProfielRepository::getNaam($this->uid, 'civitas');
 		}
-		return 'Corvee vacature (' . $this->getCorveeFunctie()->naam . ')';
+		return 'Corvee vacature (' . $this->corveeFunctie->naam . ')';
 	}
 
 	public function getBeschrijving() {
 		if ($this->uid) {
-			return $this->getCorveeFunctie()->naam;
+			return $this->corveeFunctie->naam;
 		}
 		return 'Nog niet ingedeeld';
 	}

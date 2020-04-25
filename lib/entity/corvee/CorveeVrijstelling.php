@@ -52,7 +52,6 @@ class CorveeVrijstelling {
 
 	public function setProfiel($profiel) {
 		$this->profiel = $profiel;
-
 		$this->uid = $profiel->uid ?? null;
 	}
 

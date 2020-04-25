@@ -15,7 +15,7 @@
 				op {{date_format_intl($maaltijd->datum, LONG_DATE_FORMAT)}} om {{ date_format_intl($maaltijd->tijd, TIME_FORMAT) }}
 				@if($maaltijd->magBekijken(CsrDelft\model\security\LoginModel::getUid()))
 					<div class="float-right">
-						@icon("paintcan", null, $maaltijd->maaltijdcorvee->getCorveeFunctie()->naam)
+						@icon("paintcan", null, $maaltijd->maaltijdcorvee->corveeFunctie->naam)
 					</div>
 				@endif
 				<div class="small">

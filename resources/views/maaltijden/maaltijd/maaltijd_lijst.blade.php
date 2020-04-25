@@ -2,6 +2,7 @@
 /**
  * @var \CsrDelft\entity\maalcie\Maaltijd $maaltijd
  * @var \CsrDelft\entity\maalcie\MaaltijdAanmelding $aanmelding
+ * @var \CsrDelft\entity\corvee\CorveeTaak[] $corveetaken
  */
 ?>
 @extends('plain')
@@ -96,7 +97,7 @@
 								@else
 									<span class="cursief">vacature</span>
 								@endif
-								&nbsp;({{$taak->getCorveeFunctie()->naam}})
+								&nbsp;({{$taak->corveeFunctie->naam}})
 							</div>
 						@endforeach
 					</div>

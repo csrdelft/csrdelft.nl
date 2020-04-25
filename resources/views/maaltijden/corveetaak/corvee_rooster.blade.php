@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\corvee\CorveeTaak[] $taken
+ */
+?>
 @extends('maaltijden.base')
 
 @section('titel', 'Corveerooster')
@@ -56,7 +61,7 @@
 						@endif
 						@if(array_key_exists(0, $taken))
 							<td>
-								<nobr>{{$taken[0]->getCorveeFunctie()->naam}}</nobr>
+								<nobr>{{$taken[0]->corveeFunctie->naam}}</nobr>
 							</td>
 						@endif
 						@if(!isset($mijn))

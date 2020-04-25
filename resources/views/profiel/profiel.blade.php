@@ -521,7 +521,7 @@
 						<ul class="list-unstyled">
 							@foreach($corveetaken as $taak)
 								<li>
-									{{$taak->getCorveeFunctie()->naam}} <span class="lichtgrijs">({{date_format_intl($taak->datum, LONG_DATE_FORMAT) }})</span>
+									{{$taak->corveeFunctie->naam}} <span class="lichtgrijs">({{date_format_intl($taak->datum, LONG_DATE_FORMAT) }})</span>
 								</li>
 							@endforeach
 						</ul>
@@ -532,7 +532,7 @@
 					<dd>
 						<ul class="list-unstyled">
 							@foreach($corveekwalificaties as $kwali)
-								<li>{{$kwali->getCorveeFunctie()->naam}}<span
+								<li>{{$kwali->corveeFunctie->naam}}<span
 										class="lichtgrijs"> (sinds {{date_format_intl($kwali->wanneer_toegewezen, DATETIME_FORMAT)}})</span></li>
 							@endforeach
 						</ul>

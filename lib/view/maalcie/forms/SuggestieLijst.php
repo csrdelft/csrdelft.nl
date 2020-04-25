@@ -30,7 +30,7 @@ class SuggestieLijst implements ToResponse, FormElement {
 			$this->voorkeurbaar = ContainerFacade::getContainer()->get(CorveeRepetitiesRepository::class)->getRepetitie($crid)->voorkeurbaar;
 		}
 
-		if ($taak->getCorveeFunctie()->kwalificatie_benodigd) {
+		if ($taak->corveeFunctie->kwalificatie_benodigd) {
 			$this->voorkeur = instelling('corvee', 'suggesties_voorkeur_kwali_filter');
 			$this->recent = instelling('corvee', 'suggesties_recent_kwali_filter');
 		} else {
@@ -46,7 +46,7 @@ class SuggestieLijst implements ToResponse, FormElement {
 			'voorkeur' => $this->voorkeur,
 			'recent' => $this->recent,
 			'voorkeurbaar' => $this->voorkeurbaar,
-			'kwalificatie_benodigd' => $this->taak->getCorveeFunctie()->kwalificatie_benodigd,
+			'kwalificatie_benodigd' => $this->taak->corveeFunctie->kwalificatie_benodigd,
 		])->getHtml();
 	}
 

@@ -17,7 +17,7 @@
 						<img src="/images/maalcie/cutlery.png" width="16" height="16" alt="cutlery" class="icon"/>
 						<a href="{{$item->getUrl()}}">{{$item->getTitel()}}</a>
 					@elseif($item instanceof \CsrDelft\entity\corvee\CorveeTaak)
-						@if(stristr($item->getCorveeFunctie()->naam, "klus"))
+						@if(stristr($item->corveeFunctie->naam, "klus"))
 							<img src="/images/maalcie/drill.png" width="16" height="16" alt="drill" class="icon"/>
 						@else
 							@icon('paintcan')

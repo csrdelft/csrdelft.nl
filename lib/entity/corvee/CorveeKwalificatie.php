@@ -2,9 +2,7 @@
 
 namespace CsrDelft\entity\corvee;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,20 +46,20 @@ class CorveeKwalificatie {
 	 */
 	public $profiel;
 
-	public function setProfiel($profiel) {
-		$this->profiel = $profiel;
+	/**
+	 * @var CorveeFunctie
+	 * @ORM\ManyToOne(targetEntity="CorveeFunctie", inversedBy="kwalificaties")
+	 * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id")
+	 */
+	public $corveeFunctie;
 
-		if ($profiel) {
-			$this->uid = $profiel->uid;
-		}
+	public function setCorveeFunctie(CorveeFunctie $corveeFunctie = null) {
+		$this->corveeFunctie = $corveeFunctie;
+		$this->functie_id = $corveeFunctie->functie_id ?? null;
 	}
 
-	/**
-	 * Lazy loading by foreign key.
-	 *
-	 * @return CorveeFunctie
-	 */
-	public function getCorveeFunctie() {
-		return ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class)->get($this->functie_id);
+	public function setProfiel(Profiel $profiel = null) {
+		$this->profiel = $profiel;
+		$this->uid = $profiel->uid ?? null;
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
@@ -101,9 +102,15 @@ class BeheerFunctiesController {
 	 * @throws OptimisticLockException
 	 */
 	public function dekwalificeer($fid, $uid) {
-		$functie = $this->corveeFunctiesRepository->get((int)$fid);
-		$this->corveeKwalificatiesRepository->kwalificatieIntrekken($uid, $functie->functie_id);
-		return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
+		$kwalificatie = $this->corveeKwalificatiesRepository->getKwalificatie($uid, $fid);
+
+		if (!$kwalificatie) {
+			throw new CsrGebruikerException("Niet gekwalificeerd");
+		}
+
+		$this->corveeKwalificatiesRepository->kwalificatieIntrekken($kwalificatie);
+
+		return view('maaltijden.functie.beheer_functie', ['functie' => $kwalificatie->corveeFunctie]);
 	}
 
 }

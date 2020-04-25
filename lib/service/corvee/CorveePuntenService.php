@@ -5,7 +5,7 @@ namespace CsrDelft\service\corvee;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeFunctie;
-use CsrDelft\entity\corvee\CorveePuntenOverzicht;
+use CsrDelft\entity\corvee\CorveePuntenOverzichtDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\entity\profiel\Profiel;
@@ -133,7 +133,7 @@ class CorveePuntenService {
 
 	/**
 	 * @param null $functies
-	 * @return CorveePuntenOverzicht[]
+	 * @return CorveePuntenOverzichtDTO[]
 	 */
 	public function loadPuntenVoorAlleLeden($functies = null) {
 		$taken = $this->corveeTakenRepository->getAlleTaken(true); // grouped by uid
@@ -162,7 +162,7 @@ class CorveePuntenService {
 	 * @param null $functies
 	 * @param null $lidtaken
 	 * @param bool $vrijstelling
-	 * @return CorveePuntenOverzicht
+	 * @return CorveePuntenOverzichtDTO
 	 */
 	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null) {
 		if ($lidtaken === null) {
@@ -170,7 +170,7 @@ class CorveePuntenService {
 			$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren
-			$suggestie = new CorveePuntenOverzicht();
+			$suggestie = new CorveePuntenOverzichtDTO();
 			$suggestie->prognose = 0;
 			foreach ($lidtaken as $taak) {
 				$suggestie->prognose += $taak->getPuntenPrognose();
@@ -205,7 +205,7 @@ class CorveePuntenService {
 	/**
 	 * @param CorveeFunctie[] $functies
 	 * @param CorveeTaak[] $taken
-	 * @return CorveePuntenOverzicht
+	 * @return CorveePuntenOverzichtDTO
 	 */
 	private function sumPuntenPerFunctie($functies, $taken) {
 		$sumAantal = [];
@@ -226,7 +226,7 @@ class CorveePuntenService {
 			}
 			$sumPrognose += $taak->getPuntenPrognose();
 		}
-		$suggestie = new CorveePuntenOverzicht();
+		$suggestie = new CorveePuntenOverzichtDTO();
 		$suggestie->aantal = $sumAantal;
 		$suggestie->punten = $sumPunten;
 		$suggestie->bonus = $sumBonus;

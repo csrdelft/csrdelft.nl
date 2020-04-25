@@ -2,9 +2,7 @@
 
 namespace CsrDelft\entity\corvee;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\ISelectEntity;
-use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,8 +31,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class CorveeFunctie implements ISelectEntity {
-    # ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
-    const KWALIKOK_FUNCTIE_ID = 7;
+	# ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
+	const KWALIKOK_FUNCTIE_ID = 7;
 
 	/**
 	 * Primary key
@@ -84,27 +82,12 @@ class CorveeFunctie implements ISelectEntity {
 	/**
 	 * Kwalificaties
 	 * @var CorveeKwalificatie[]
+	 * @ORM\OneToMany(targetEntity="CorveeKwalificatie", mappedBy="corveeFunctie")
 	 */
-	private $kwalificaties;
-
-	/**
-	 * Lazy loading by foreign key.
-	 *
-	 * @return CorveeKwalificatie[]
-	 */
-	public function getKwalificaties() {
-		if (!isset($this->kwalificaties)) {
-			$this->setKwalificaties(ContainerFacade::getContainer()->get(CorveeKwalificatiesRepository::class)->getKwalificatiesVoorFunctie($this->functie_id));
-		}
-		return $this->kwalificaties;
-	}
+	public $kwalificaties;
 
 	public function hasKwalificaties() {
-		return sizeof($this->getKwalificaties()) > 0;
-	}
-
-	private function setKwalificaties(array $kwalificaties) {
-		$this->kwalificaties = $kwalificaties;
+		return sizeof($this->kwalificaties) > 0;
 	}
 
 	public function getValue() {

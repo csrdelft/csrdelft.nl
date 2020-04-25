@@ -60,7 +60,7 @@
 		@endif
 	</td>
 	<td>{{date_format_intl($taak->datum, LONG_DATE_FORMAT)}}</td>
-	<td style="width: 100px;">{{$taak->getCorveeFunctie()->naam}}</td>
+	<td style="width: 100px;">{{$taak->corveeFunctie->naam}}</td>
 	<td
 		class="niet-dik
 @if($taak->uid)

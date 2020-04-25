@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \CsrDelft\entity\corvee\CorveePuntenOverzicht $puntenlijst
+ * @var \CsrDelft\entity\corvee\CorveePuntenOverzichtDTO $puntenlijst
  */
 ?>
 <tr id="punten-row-{{$puntenlijst->lid->uid}}">

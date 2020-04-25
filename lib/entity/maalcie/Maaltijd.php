@@ -262,7 +262,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @throws CsrException
 	 */
 	public function magSluiten($uid) {
-		return $this->magBekijken($uid) AND $this->maaltijdcorvee->getCorveeFunctie()->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
+		return $this->magBekijken($uid) AND $this->maaltijdcorvee->corveeFunctie->maaltijden_sluiten; // mag iemand met deze functie maaltijden sluiten?
 	}
 
 	/**

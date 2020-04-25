@@ -43,7 +43,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository {
 
 	public function nieuw(CorveeFunctie $functie) {
 		$kwalificatie = new CorveeKwalificatie();
-		$kwalificatie->functie_id = $functie->functie_id;
+		$kwalificatie->setCorveeFunctie($functie);
 		$kwalificatie->wanneer_toegewezen = date_create_immutable();
 		return $kwalificatie;
 	}
@@ -54,7 +54,7 @@ class CorveeKwalificatiesRepository extends AbstractRepository {
 	 * @throws OptimisticLockException
 	 */
 	public function kwalificatieToewijzen(CorveeKwalificatie $kwali) {
-		if ($this->find(['uid' => $kwali->uid, 'functie_id' => $kwali->functie_id]) != null) {
+		if ($this->find(['uid' => $kwali->profiel->uid, 'functie_id' => $kwali->corveeFunctie->functie_id]) != null) {
 			throw new CsrGebruikerException('Is al gekwalificeerd!');
 		}
 
@@ -63,19 +63,22 @@ class CorveeKwalificatiesRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param string $uid
-	 * @param string $fid
+	 * @param CorveeKwalificatie $kwalificatie
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function kwalificatieIntrekken($uid, $fid) {
-		$kwalificatie = $this->find(['uid' => $uid, 'functie_id' => $fid]);
-
-		if ($kwalificatie == null) {
-			throw new CsrGebruikerException('Is niet gekwalificeerd!');
-		}
+	public function kwalificatieIntrekken(CorveeKwalificatie $kwalificatie) {
 		$this->_em->remove($kwalificatie);
 		$this->_em->flush();
+	}
+
+	/**
+	 * @param $uid
+	 * @param $fid
+	 * @return CorveeKwalificatie|null
+	 */
+	public function getKwalificatie($uid, $fid) {
+		return $this->find(['uid' => $uid, 'functie_id' => $fid]);
 	}
 
 }

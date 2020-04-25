@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \CsrDelft\entity\corvee\CorveeKwalificatie $kwali
+ * @var \CsrDelft\entity\corvee\CorveeFunctie $functie
  */
 ?>
 <tr id="corveefunctie-row-{{$functie->functie_id}}">
@@ -19,9 +19,9 @@
 		<div class="kwali"><a title="Toon oudleden" class="btn" onclick="$('div.kwali').toggle();">@icon("eye") Toon oudleden</a></div>
 		<div class="kwali verborgen"><a title="Toon leden" class="btn" onclick="$('div.kwali').toggle();">@icon("eye") Toon leden</a></div>
 		@endif
-		@foreach($functie->getKwalificaties() as $kwali)
+		@foreach($functie->kwalificaties as $kwali)
 		<div class="kwali @if($kwali->profiel->isOudlid()) verborgen @endif ">
-			<a href="/corvee/functies/dekwalificeer/{{$functie->functie_id}}/{{$kwali->uid}}" title="Kwalificatie intrekken" class="btn post">@icon("vcard_delete")</a>
+			<a href="/corvee/functies/dekwalificeer/{{$functie->functie_id}}/{{$kwali->profiel->uid}}" title="Kwalificatie intrekken" class="btn post">@icon("vcard_delete")</a>
 			&nbsp;{{$kwali->profiel->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}}
 			<span class="lichtgrijs"> (sinds {{date_format_intl($kwali->wanneer_toegewezen, DATETIME_FORMAT)}})</span>
 		</div>

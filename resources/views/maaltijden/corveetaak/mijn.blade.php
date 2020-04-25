@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \CsrDelft\entity\corvee\CorveePuntenOverzicht $punten
+ * @var \CsrDelft\entity\corvee\CorveePuntenOverzichtDTO $punten
  * @var \CsrDelft\entity\corvee\CorveeVrijstelling $vrijstelling
  * @var \CsrDelft\entity\corvee\CorveeTaak[] $taak
  */
@@ -51,7 +51,7 @@
 							</td>
 							@if(array_key_exists(0, $taak))
 								<td>
-									<nobr>{{$taak[0]->getCorveeFunctie()->naam}}</nobr>
+									<nobr>{{$taak[0]->corveeFunctie->naam}}</nobr>
 								</td>
 							@endif
 						</tr>

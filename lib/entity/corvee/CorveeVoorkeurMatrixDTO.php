@@ -4,8 +4,6 @@
 namespace CsrDelft\entity\corvee;
 
 
-use CsrDelft\entity\profiel\Profiel;
-
 class CorveeVoorkeurMatrixDTO {
 	/**
 	 * @var string
@@ -25,5 +23,4 @@ class CorveeVoorkeurMatrixDTO {
 		$this->crv_repetitie_id = $repetitie;
 		$this->voorkeur = $voorkeur != null;
 	}
-
 }

@@ -4,7 +4,7 @@ namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\entity\corvee\CorveePuntenOverzicht;
+use CsrDelft\entity\corvee\CorveePuntenOverzichtDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
@@ -40,17 +40,17 @@ class CorveeToewijzenService {
 	 */
 	public function getSuggesties(CorveeTaak $taak) {
 		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(true); // grouped by uid
-		$functie = $taak->getCorveeFunctie();
+		$functie = $taak->corveeFunctie;
 		if ($functie->kwalificatie_benodigd) { // laad alleen gekwalificeerde leden
-			/** @var CorveePuntenOverzicht[] $corveePuntenOverzichten */
+			/** @var CorveePuntenOverzichtDTO[] $corveePuntenOverzichten */
 			$corveePuntenOverzichten = [];
 			$avg = 0;
-			foreach ($functie->getKwalificaties() as $kwali) {
-				$uid = $kwali->uid;
+			foreach ($functie->kwalificaties as $kwali) {
 				$profiel = $kwali->profiel;
 				if (!$profiel) {
-					throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
+					throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $profiel->uid));
 				}
+				$uid = $kwali->profiel->uid;
 				if (!$profiel->isLid()) {
 					continue; // geen oud-lid of overleden lid
 				}
@@ -103,7 +103,7 @@ class CorveeToewijzenService {
 		return $corveePuntenOverzichten;
 	}
 
-	function sorteerKwali(CorveePuntenOverzicht $a, CorveePuntenOverzicht $b) {
+	function sorteerKwali(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
 		if ($a->laatste !== false && $b->laatste !== false) {
 			$a = $a->laatste->getBeginMoment();
 			$b = $b->laatste->getBeginMoment();
@@ -124,7 +124,7 @@ class CorveeToewijzenService {
 		}
 	}
 
-	function sorteerPrognose(CorveePuntenOverzicht $a, CorveePuntenOverzicht $b) {
+	function sorteerPrognose(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
 		$a = $a->prognose;
 		$b = $b->prognose;
 		if ($a === $b) {
