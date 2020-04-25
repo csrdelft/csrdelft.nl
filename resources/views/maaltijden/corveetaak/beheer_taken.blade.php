@@ -2,6 +2,7 @@
 /**
  * @var \CsrDelft\entity\corvee\CorveeTaak $taak
  * @var \CsrDelft\entity\maalcie\Maaltijd $maaltijd
+ * @var \CsrDelft\entity\corvee\CorveeRepetitie[] $repetities
  */
 ?>
 @extends('maaltijden.base')
@@ -86,7 +87,7 @@
 				<select id="crid" name="crv_repetitie_id" value="kies" origvalue="kies" class="FormElement SubmitChange">
 					<option selected="selected">kies</option>
 					@foreach($repetities as $repetitie)
-						<option value="{{$repetitie->crv_repetitie_id}}">{{$repetitie->getCorveeFunctie()->naam}}
+						<option value="{{$repetitie->crv_repetitie_id}}">{{$repetitie->corveeFunctie->naam}}
 							op {{$repetitie->getDagVanDeWeekText()}}</option>
 					@endforeach
 				</select>

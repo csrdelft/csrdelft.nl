@@ -350,7 +350,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	public function vanRepetitie(CorveeRepetitie $repetitie, $datum, $mid = null, $uid = null, $bonus_malus = 0) {
 		$taak = new CorveeTaak();
 		$taak->taak_id = null;
-		$taak->functie_id = $repetitie->functie_id;
+		$taak->functie_id = $repetitie->corveeFunctie->functie_id;
 		$taak->uid = $uid;
 		$taak->crv_repetitie_id = $repetitie->crv_repetitie_id;
 		$taak->maaltijd_id = $mid;
@@ -555,7 +555,7 @@ class CorveeTakenRepository extends AbstractRepository {
 			/** @var CorveeTaak $taak */
 
 			foreach ($taken as $taak) {
-				$taak->functie_id = $repetitie->functie_id;
+				$taak->functie_id = $repetitie->corveeFunctie->functie_id;
 				$taak->punten = $repetitie->standaard_punten;
 
 				$this->_em->persist($taak);

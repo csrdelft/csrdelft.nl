@@ -4,6 +4,7 @@ namespace CsrDelft\repository\corvee;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,28 +29,16 @@ class CorveeRepetitiesRepository extends AbstractRepository {
 		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
 
-	public function nieuw($crid = 0, $mrid = null, $dag = null, $periode = null, $fid = 0, $punten = 0, $aantal = null, $voorkeur = null) {
+	public function nieuw($mrid) {
 		$repetitie = new CorveeRepetitie();
-		$repetitie->crv_repetitie_id = (int)$crid;
+		$repetitie->crv_repetitie_id = null;
 		$repetitie->mlt_repetitie_id = $mrid;
-		if ($dag === null) {
-			$dag = intval(instelling('corvee', 'standaard_repetitie_weekdag'));
-		}
-		$repetitie->dag_vd_week = $dag;
-		if ($periode === null) {
-			$periode = intval(instelling('corvee', 'standaard_repetitie_periode'));
-		}
-		$repetitie->periode_in_dagen = $periode;
-		$repetitie->functie_id = $fid;
-		$repetitie->standaard_punten = $punten;
-		if ($aantal === null) {
-			$aantal = intval(instelling('corvee', 'standaard_aantal_corveers'));
-		}
-		$repetitie->standaard_aantal = $aantal;
-		if ($voorkeur === null) {
-			$voorkeur = (boolean)instelling('corvee', 'standaard_voorkeurbaar');
-		}
-		$repetitie->voorkeurbaar = $voorkeur;
+		$repetitie->dag_vd_week = intval(instelling('corvee', 'standaard_repetitie_weekdag'));
+		$repetitie->periode_in_dagen = intval(instelling('corvee', 'standaard_repetitie_periode'));
+		$repetitie->corveeFunctie = null;
+		$repetitie->standaard_punten = 0;
+		$repetitie->standaard_aantal = intval(instelling('corvee', 'standaard_aantal_corveers'));
+		$repetitie->voorkeurbaar = ((boolean)instelling('corvee', 'standaard_voorkeurbaar'));
 
 		return $repetitie;
 	}
@@ -96,32 +85,6 @@ class CorveeRepetitiesRepository extends AbstractRepository {
 	 */
 	public function getRepetitie($crid) {
 		return $this->find($crid);
-	}
-
-	public function saveRepetitie($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
-		return $this->_em->transactional(function () use ($crid, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur) {
-			$voorkeuren = 0;
-			if ($crid == 0) {
-				$repetitie = $this->nieuw(0, $mrid, $dag, $periode, $fid, $punten, $aantal, $voorkeur);
-				$this->_em->persist($repetitie);
-				$this->_em->flush();
-			} else {
-				$repetitie = $this->getRepetitie($crid);
-				$repetitie->mlt_repetitie_id = $mrid;
-				$repetitie->dag_vd_week = $dag;
-				$repetitie->periode_in_dagen = $periode;
-				$repetitie->functie_id = $fid;
-				$repetitie->standaard_punten = $punten;
-				$repetitie->standaard_aantal = $aantal;
-				$repetitie->voorkeurbaar = (boolean)$voorkeur;
-				$this->_em->persist($repetitie);
-				$this->_em->flush();
-				if (!$voorkeur) { // niet (meer) voorkeurbaar
-					$voorkeuren = ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->verwijderVoorkeuren($crid);
-				}
-			}
-			return array($repetitie, $voorkeuren);
-		});
 	}
 
 	public function verwijderRepetitie($crid) {

@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\corvee\CorveeRepetitie $repetitie
+ */
+?>
 <tr id="repetitie-row-{{$repetitie->crv_repetitie_id}}">
 	<td>
 		<a href="/corvee/repetities/bewerk/{{$repetitie->crv_repetitie_id}}" title="Corveerepetitie wijzigen"
@@ -8,7 +13,7 @@
 				 class="btn">@icon("calendar_link")</a>
 		@endif
 	</td>
-	<td>{{$repetitie->getCorveeFunctie()->naam}}</td>
+	<td>{{$repetitie->corveeFunctie->naam}}</td>
 	<td>{{$repetitie->getDagVanDeWeekText()}}</td>
 	<td>{{$repetitie->getPeriodeInDagenText()}}</td>
 	<td>

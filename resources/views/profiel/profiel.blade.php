@@ -11,7 +11,7 @@
  * @var object[] bestellinglog
  * @var string $bestellingenlink
  * @var \CsrDelft\entity\corvee\CorveeTaak[] $corveetaken
- * @var \CsrDelft\entity\corvee\CorveeVoorkeur $corveevoorkeuren
+ * @var \CsrDelft\entity\corvee\CorveeVoorkeur[] $corveevoorkeuren
  * @var \CsrDelft\entity\corvee\CorveeVrijstelling $corveevrijstelling
  * @var \CsrDelft\entity\corvee\CorveeKwalificatie[] $corveekwalificaties
  * @var int $forumpostcount
@@ -494,7 +494,7 @@
 						<ul class="list-unstyled">
 							@foreach($corveevoorkeuren as $vrk)
 								<li>
-									{{$vrk->getCorveeRepetitie()->getDagVanDeWeekText()}} {{$vrk->getCorveeRepetitie()->getCorveeFunctie()->naam}}
+									{{$vrk->corveeRepetitie->getDagVanDeWeekText()}} {{$vrk->corveeRepetitie->corveeFunctie->naam}}
 								</li>
 							@endforeach
 						</ul>

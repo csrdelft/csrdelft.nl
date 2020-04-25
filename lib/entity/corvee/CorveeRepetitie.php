@@ -81,6 +81,13 @@ class CorveeRepetitie {
 	 */
 	public $voorkeurbaar;
 
+	/**
+	 * @var CorveeFunctie
+	 * @ORM\ManyToOne(targetEntity="CorveeFunctie")
+	 * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id")
+	 */
+	public $corveeFunctie;
+
 	public function getDagVanDeWeekText() {
 		return strftime('%A', ($this->dag_vd_week + 3) * 24 * 3600);
 	}
@@ -100,14 +107,5 @@ class CorveeRepetitie {
 					return 'elke ' . $this->periode_in_dagen . ' dagen';
 				}
 		}
-	}
-
-	/**
-	 * Lazy loading by foreign key.
-	 *
-	 * @return CorveeFunctie
-	 */
-	public function getCorveeFunctie() {
-		return ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class)->get($this->functie_id);
 	}
 }

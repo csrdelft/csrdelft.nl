@@ -73,8 +73,8 @@ class CorveeVoorkeurenRepository extends AbstractRepository {
 			$lijst[$crid] = $voorkeur;
 		}
 		foreach ($repById as $crid => $repetitie) {
-			if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-				if (!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie($uid, $repetitie->functie_id)) {
+			if ($repetitie->corveeFunctie->kwalificatie_benodigd) {
+				if (!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie($uid, $repetitie->corveeFunctie->functie_id)) {
 					continue;
 				}
 			}
@@ -146,8 +146,8 @@ DQL
 		if (!$repetitie->voorkeurbaar) {
 			throw new CsrGebruikerException('Niet voorkeurbaar');
 		}
-		if ($repetitie->getCorveeFunctie()->kwalificatie_benodigd) {
-			if (!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->functie_id)) {
+		if ($repetitie->corveeFunctie->kwalificatie_benodigd) {
+			if (!$this->corveeKwalificatiesRepository->isLidGekwalificeerdVoorFunctie($voorkeur->uid, $repetitie->corveeFunctie->functie_id)) {
 				throw new CsrGebruikerException('Niet gekwalificeerd');
 			}
 		}

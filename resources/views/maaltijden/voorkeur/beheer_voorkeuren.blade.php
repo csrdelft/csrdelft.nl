@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\corvee\CorveeRepetitie $repetitie
+ */
+?>
 @extends('maaltijden.base')
 
 @section('titel', 'Beheer voorkeuren')
@@ -24,7 +29,7 @@
 					</div>
 					<div style="width: 26px; height: 160px;">
 						<div class="vertical niet-dik" style="position: relative; top: 130px;">
-							<nobr>{{$repetitie->getCorveeFunctie()->naam}}</nobr>
+							<nobr>{{$repetitie->corveeFunctie->naam}}</nobr>
 							<br/>
 							<nobr>op {{$repetitie->getDagVanDeWeekText()}}</nobr>
 						</div>
