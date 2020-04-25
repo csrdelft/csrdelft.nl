@@ -11,7 +11,7 @@
  * @var object[] bestellinglog
  * @var string $bestellingenlink
  * @var \CsrDelft\entity\corvee\CorveeTaak[] $corveetaken
- * @var \CsrDelft\model\entity\maalcie\CorveeVoorkeur $corveevoorkeuren
+ * @var \CsrDelft\entity\corvee\CorveeVoorkeur $corveevoorkeuren
  * @var \CsrDelft\entity\corvee\CorveeVrijstelling $corveevrijstelling
  * @var \CsrDelft\entity\corvee\CorveeKwalificatie[] $corveekwalificaties
  * @var int $forumpostcount

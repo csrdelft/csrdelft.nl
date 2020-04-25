@@ -94,7 +94,7 @@ class CorveeToewijzenService {
 				$corveePuntenOverzichten[$uid]->recent = false;
 			}
 			if ($taak->crv_repetitie_id !== null) {
-				$corveePuntenOverzichten[$uid]->voorkeur = CorveeVoorkeurenRepository::instance()->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
+				$corveePuntenOverzichten[$uid]->voorkeur = ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
 			} else {
 				$corveePuntenOverzichten[$uid]->voorkeur = false;
 			}

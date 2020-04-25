@@ -64,6 +64,9 @@ class CorveeRepetitiesRepository extends AbstractRepository {
 		return date('Y-m-d', $datum);
 	}
 
+	/**
+	 * @return CorveeRepetitie[]
+	 */
 	public function getVoorkeurbareRepetities() {
 		$repetities = $this->findBy(['voorkeurbaar' => true]);
 		$result = [];
