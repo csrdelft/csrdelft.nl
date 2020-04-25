@@ -3,10 +3,9 @@
 namespace CsrDelft\repository\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeKwalificatie;
-use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\repository\AbstractRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,7 +13,6 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  * @method CorveeKwalificatie|null find($id, $lockMode = null, $lockVersion = null)
  * @method CorveeKwalificatie|null findOneBy(array $criteria, array $orderBy = null)
  * @method CorveeKwalificatie[]    findAll()

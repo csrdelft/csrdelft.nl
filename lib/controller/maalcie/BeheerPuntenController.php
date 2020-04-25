@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\maalcie\CorveeFunctiesModel;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
 
@@ -15,21 +15,21 @@ use CsrDelft\service\corvee\CorveePuntenService;
  */
 class BeheerPuntenController {
 	/**
-	 * @var CorveeFunctiesModel
+	 * @var CorveeFunctiesRepository
 	 */
-	private $functiesModel;
+	private $corveeFunctiesRepository;
 	/**
 	 * @var CorveePuntenService
 	 */
 	private $corveePuntenService;
 
-	public function __construct(CorveeFunctiesModel $functiesModel, CorveePuntenService $corveePuntenService) {
-		$this->functiesModel = $functiesModel;
+	public function __construct(CorveeFunctiesRepository $corveeFunctiesRepository, CorveePuntenService $corveePuntenService) {
+		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
 		$this->corveePuntenService = $corveePuntenService;
 	}
 
 	public function beheer() {
-		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$matrix = $this->corveePuntenService->loadPuntenVoorAlleLeden($functies);
 		return view('maaltijden.corveepunt.beheer_punten', ['matrix' => $matrix, 'functies' => $functies]);
 	}
@@ -41,7 +41,7 @@ class BeheerPuntenController {
 		}
 		$punten = (int)filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		$this->corveePuntenService->savePuntenVoorLid($profiel, $punten, null);
-		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$corveePuntenOverzicht = $this->corveePuntenService->loadPuntenVoorLid($profiel, $functies);
 		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $corveePuntenOverzicht]);
 	}
@@ -53,7 +53,7 @@ class BeheerPuntenController {
 		}
 		$bonus = (int)filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		$this->corveePuntenService->savePuntenVoorLid($profiel, null, $bonus);
-		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$corveePuntenOverzicht = $this->corveePuntenService->loadPuntenVoorLid($profiel, $functies);
 		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $corveePuntenOverzicht]);
 	}

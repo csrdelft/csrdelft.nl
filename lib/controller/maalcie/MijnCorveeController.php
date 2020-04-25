@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
@@ -18,9 +18,9 @@ class MijnCorveeController {
 	 */
 	private $corveeTakenRepository;
 	/**
-	 * @var CorveeFunctiesModel
+	 * @var CorveeFunctiesRepository
 	 */
-	private $functiesModel;
+	private $corveeFunctiesRepository;
 	/**
 	 * @var CorveeVrijstellingenRepository
 	 */
@@ -30,9 +30,9 @@ class MijnCorveeController {
 	 */
 	private $corveePuntenService;
 
-	public function __construct(CorveeTakenRepository $corveeTakenRepository, CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeFunctiesModel $functiesModel, CorveePuntenService $corveePuntenService) {
+	public function __construct(CorveeTakenRepository $corveeTakenRepository, CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeFunctiesRepository $corveeFunctiesRepository, CorveePuntenService $corveePuntenService) {
 		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
-		$this->functiesModel = $functiesModel;
+		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->corveePuntenService = $corveePuntenService;
 	}
@@ -40,7 +40,7 @@ class MijnCorveeController {
 	public function mijn() {
 		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid(LoginModel::getUid());
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
-		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$punten = $this->corveePuntenService->loadPuntenVoorLid(LoginModel::getProfiel(), $functies);
 		$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling(LoginModel::getUid());
 		return view('maaltijden.corveetaak.mijn', [
@@ -59,7 +59,7 @@ class MijnCorveeController {
 			$taken = $this->corveeTakenRepository->getKomendeTaken();
 			$toonverleden = LoginModel::mag(P_CORVEE_MOD);
 		}
-		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken->fetchAll());
+		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
 		return view('maaltijden.corveetaak.corvee_rooster', ['rooster' => $rooster, 'toonverleden' => $toonverleden]);
 	}
 

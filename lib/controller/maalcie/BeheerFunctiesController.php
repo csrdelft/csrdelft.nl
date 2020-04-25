@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\model\maalcie\CorveeFunctiesModel;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
@@ -16,16 +16,16 @@ use Doctrine\ORM\ORMException;
  */
 class BeheerFunctiesController {
 	/**
-	 * @var CorveeFunctiesModel
+	 * @var CorveeFunctiesRepository
 	 */
-	private $functiesModel;
+	private $corveeFunctiesRepository;
 	/**
 	 * @var CorveeKwalificatiesRepository
 	 */
 	private $corveeKwalificatiesRepository;
 
-	public function __construct(CorveeFunctiesModel $functiesModel, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
-		$this->functiesModel = $functiesModel;
+	public function __construct(CorveeFunctiesRepository $corveeFunctiesRepository, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
+		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
 		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
 	}
 
@@ -35,15 +35,15 @@ class BeheerFunctiesController {
 		if ($fid > 0) {
 			$modal = $this->bewerken($fid);
 		}
-		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
+		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		return view('maaltijden.functie.beheer_functies', ['functies' => $functies, 'modal' => $modal]);
 	}
 
 	public function toevoegen() {
-		$functie = $this->functiesModel->nieuw();
+		$functie = $this->corveeFunctiesRepository->nieuw();
 		$form = new FunctieForm($functie, 'toevoegen'); // fetches POST values itself
 		if ($form->validate()) {
-			$id = $this->functiesModel->create($functie);
+			$id = $this->corveeFunctiesRepository->save($functie);
 			$functie->functie_id = (int)$id;
 			setMelding('Toegevoegd', 1);
 			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
@@ -53,10 +53,10 @@ class BeheerFunctiesController {
 	}
 
 	public function bewerken($fid) {
-		$functie = $this->functiesModel->get((int)$fid);
+		$functie = $this->corveeFunctiesRepository->get((int)$fid);
 		$form = new FunctieForm($functie, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
-			$rowCount = $this->functiesModel->update($functie);
+			$rowCount = $this->corveeFunctiesRepository->save($functie);
 			if ($rowCount > 0) {
 				setMelding('Bijgewerkt', 1);
 			} else {
@@ -69,8 +69,8 @@ class BeheerFunctiesController {
 	}
 
 	public function verwijderen($fid) {
-		$functie = $this->functiesModel->get((int)$fid);
-		$this->functiesModel->removeFunctie($functie);
+		$functie = $this->corveeFunctiesRepository->get((int)$fid);
+		$this->corveeFunctiesRepository->removeFunctie($functie);
 		setMelding('Verwijderd', 1);
 		return new FunctieDeleteView($fid);
 	}
@@ -82,7 +82,7 @@ class BeheerFunctiesController {
 	 * @throws OptimisticLockException
 	 */
 	public function kwalificeer($fid) {
-		$functie = $this->functiesModel->get((int)$fid);
+		$functie = $this->corveeFunctiesRepository->get((int)$fid);
 		$kwalificatie = $this->corveeKwalificatiesRepository->nieuw($functie);
 		$form = new KwalificatieForm($kwalificatie); // fetches POST values itself
 		if ($form->validate()) {
@@ -101,7 +101,7 @@ class BeheerFunctiesController {
 	 * @throws OptimisticLockException
 	 */
 	public function dekwalificeer($fid, $uid) {
-		$functie = $this->functiesModel->get((int)$fid);
+		$functie = $this->corveeFunctiesRepository->get((int)$fid);
 		$this->corveeKwalificatiesRepository->kwalificatieIntrekken($uid, $functie->functie_id);
 		return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 	}

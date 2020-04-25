@@ -4,7 +4,7 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\corvee\CorveeRepetitie;
-use CsrDelft\model\maalcie\CorveeFunctiesModel;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
@@ -35,7 +35,7 @@ class CorveeRepetitieForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$functieNamen = CorveeFunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$functieNamen = ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class)->getAlleFuncties(); // grouped by functie_id
 		$functiePunten = 'var punten=[];';
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->functie_id] = $functie->naam;

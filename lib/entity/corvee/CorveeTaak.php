@@ -2,10 +2,10 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
-use CsrDelft\model\entity\maalcie\CorveeFunctie;
-use CsrDelft\model\maalcie\CorveeFunctiesModel;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\ProfielRepository;
 use DateInterval;
 use DateTimeImmutable;
@@ -189,7 +189,7 @@ class CorveeTaak implements Agendeerbaar {
 	 * @return CorveeFunctie
 	 */
 	public function getCorveeFunctie() {
-		return CorveeFunctiesModel::instance()->get($this->functie_id);
+		return ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class)->get($this->functie_id);
 	}
 
 	public function setUid($uid) {

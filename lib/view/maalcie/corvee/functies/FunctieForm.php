@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\corvee\functies;
 
-use CsrDelft\model\entity\maalcie\CorveeFunctie;
+use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;

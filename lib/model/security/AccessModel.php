@@ -24,9 +24,9 @@ use CsrDelft\model\groepen\OnderverenigingenModel;
 use CsrDelft\model\groepen\RechtenGroepenModel;
 use CsrDelft\model\groepen\WerkgroepenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\maalcie\CorveeFunctiesModel;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
@@ -899,9 +899,16 @@ class AccessModel extends CachedPersistenceModel {
 				if (is_numeric($gevraagd)) {
 					$functie_id = (int)$gevraagd;
 				} else {
-					$functie = CorveeFunctiesModel::instance()->prefetch('afkorting = ? OR naam = ?', [$gevraagd, $gevraagd], null, null, 1);
-					if (isset($functie[0])) {
-						$functie_id = $functie[0]->functie_id;
+					$corveeFunctiesRepository = ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class);
+
+					$functie = $corveeFunctiesRepository->findOneBy(['afkorting' => $gevraagd]);
+
+					if (!$functie) {
+						$functie = $corveeFunctiesRepository->findOneBy(['naam' => $gevraagd]);
+					}
+
+					if ($functie) {
+						$functie_id = $functie->functie_id;
 					} else {
 						return false;
 					}

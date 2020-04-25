@@ -2,8 +2,8 @@
 
 namespace CsrDelft\entity\corvee;
 
-use CsrDelft\model\entity\maalcie\CorveeFunctie;
-use CsrDelft\model\maalcie\CorveeFunctiesModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -108,6 +108,6 @@ class CorveeRepetitie {
 	 * @return CorveeFunctie
 	 */
 	public function getCorveeFunctie() {
-		return CorveeFunctiesModel::instance()->get($this->functie_id);
+		return ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class)->get($this->functie_id);
 	}
 }

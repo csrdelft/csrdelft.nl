@@ -1,22 +1,21 @@
 <?php
 
-namespace CsrDelft\model\maalcie;
+namespace CsrDelft\repository\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeFunctie;
-use CsrDelft\Orm\CachedPersistenceModel;
-use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
-use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\entity\corvee\CorveeFunctie;
+use CsrDelft\repository\AbstractRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * FunctiesModel.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @method CorveeFunctie|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CorveeFunctie|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CorveeFunctie[]    findAll()
+ * @method CorveeFunctie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CorveeFunctiesModel extends CachedPersistenceModel {
-
-	const ORM = CorveeFunctie::class;
+class CorveeFunctiesRepository extends AbstractRepository {
 	/**
 	 * @var CorveeTakenRepository
 	 */
@@ -26,8 +25,8 @@ class CorveeFunctiesModel extends CachedPersistenceModel {
 	 */
 	private $corveeRepetitiesRepository;
 
-	public function __construct(CorveeTakenRepository $corveeTakenRepository, CorveeRepetitiesRepository $corveeRepetitiesRepository) {
-		parent::__construct();
+	public function __construct(ManagerRegistry $registry, CorveeTakenRepository $corveeTakenRepository, CorveeRepetitiesRepository $corveeRepetitiesRepository) {
+		parent::__construct($registry, CorveeFunctie::class);
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 	}
@@ -36,10 +35,10 @@ class CorveeFunctiesModel extends CachedPersistenceModel {
 	 * Lazy loading of kwalificaties.
 	 *
 	 * @param int $fid
-	 * @return CorveeFunctie|false
+	 * @return CorveeFunctie|null
 	 */
 	public function get($fid) {
-		return $this->retrieveByPrimaryKey(array($fid));
+		return $this->find($fid);
 	}
 
 	/**
@@ -48,7 +47,7 @@ class CorveeFunctiesModel extends CachedPersistenceModel {
 	 * @return CorveeFunctie[]
 	 */
 	public function getAlleFuncties() {
-		return group_by_distinct('functie_id', $this->prefetch());
+		return group_by_distinct('functie_id', $this->findAll());
 	}
 
 	public function nieuw() {
@@ -67,7 +66,13 @@ class CorveeFunctiesModel extends CachedPersistenceModel {
 		if ($functie->hasKwalificaties()) {
 			throw new CsrGebruikerException('Verwijder eerst de bijbehorende kwalificaties!');
 		}
-		return $this->delete($functie);
+		$this->_em->remove($functie);
+		$this->_em->flush();
+	}
+
+	public function save(CorveeFunctie $functie) {
+		$this->_em->persist($functie);
+		$this->_em->flush();
 	}
 
 }

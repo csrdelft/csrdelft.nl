@@ -4,11 +4,11 @@ namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveePuntenOverzicht;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\maalcie\CorveeFunctie;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;

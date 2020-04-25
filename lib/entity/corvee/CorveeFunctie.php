@@ -1,12 +1,10 @@
 <?php
 
-namespace CsrDelft\model\entity\maalcie;
+namespace CsrDelft\entity\corvee;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\corvee\CorveeKwalificatie;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CorveeFunctie.class.php
@@ -29,45 +27,57 @@ use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
  *
  * Zie ook CorveeKwalificatie.class.php en CorveeTaak.class.php
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeFunctiesRepository")
+ * @ORM\Table("crv_functies")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class CorveeFunctie extends PersistentEntity {
+class CorveeFunctie {
     # ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
     const KWALIKOK_FUNCTIE_ID = 7;
 
 	/**
 	 * Primary key
 	 * @var int
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
 	public $functie_id;
 	/**
 	 * Naam
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $naam;
 	/**
 	 * Afkorting
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $afkorting;
 	/**
 	 * E-mailbericht
 	 * @var string
+	 * @ORM\Column(type="text")
 	 */
 	public $email_bericht;
 	/**
 	 * Standaard aantal corveepunten
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $standaard_punten;
 	/**
 	 * Is een kwalificatie benodigd
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $kwalificatie_benodigd;
 	/**
 	 * Geeft deze functie speciale rechten
 	 * om maaltijden te mogen sluiten
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $maaltijden_sluiten;
 	/**
@@ -75,29 +85,6 @@ class CorveeFunctie extends PersistentEntity {
 	 * @var CorveeKwalificatie[]
 	 */
 	private $kwalificaties;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'functie_id' => array(T::Integer, false, 'auto_increment'),
-		'naam' => array(T::String),
-		'afkorting' => array(T::String),
-		'email_bericht' => array(T::Text),
-		'standaard_punten' => array(T::Integer),
-		'kwalificatie_benodigd' => array(T::Boolean),
-		'maaltijden_sluiten' => array(T::Boolean)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('functie_id');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'crv_functies';
 
 	/**
 	 * Lazy loading by foreign key.

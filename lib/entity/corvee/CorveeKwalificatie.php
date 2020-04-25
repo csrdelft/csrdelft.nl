@@ -2,9 +2,9 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\maalcie\CorveeFunctie;
-use CsrDelft\model\maalcie\CorveeFunctiesModel;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Zie ook CorveeFunctie.class.php
  * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeKwalificatiesRepository")
  * @ORM\Table("crv_kwalificaties")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class CorveeKwalificatie {
 	/**
@@ -61,6 +62,6 @@ class CorveeKwalificatie {
 	 * @return CorveeFunctie
 	 */
 	public function getCorveeFunctie() {
-		return CorveeFunctiesModel::instance()->get($this->functie_id);
+		return ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class)->get($this->functie_id);
 	}
 }
