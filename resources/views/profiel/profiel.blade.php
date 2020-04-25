@@ -133,7 +133,7 @@
 					<dt>Voorletters</dt>
 					<dd>{{$profiel->voorletters}}</dd>
 				@endif
-				@if(date_format_intl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00' && is_zichtbaar($profiel, 'gebdatum'))
+				@if($profiel->gebdatum && date_format_intl($profiel->gebdatum, DATE_FORMAT) != '0000-00-00' && is_zichtbaar($profiel, 'gebdatum'))
 					<dt>Geboortedatum</dt>
 					<dd>{{strftime('%d-%m-%Y', $profiel->gebdatum->getTimestamp())}}</dd>
 				@endif
