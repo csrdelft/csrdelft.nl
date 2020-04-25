@@ -3,6 +3,8 @@
 /* Banner */
 
 #banner-small {
+	margin-top: 3em;
+	z-index: 10;
   .inner {
     margin: 0 auto -4em;
     width: 55em;
@@ -30,6 +32,8 @@
 }
 
 #banner {
+	margin-top: 3em;
+	z-index: 10;
 	color: black;
 	a {
 		color: black;

@@ -26,28 +26,53 @@
 
 	<!-- Header -->
 	<header id="header" class="alt">
-		<h1><a href="/">C.S.R. Delft</a></h1>
+		<nav>
+			<a class="nav-link" href="/owee">Owee</a>
+			<span class="dropdown-menu">
+				<a href="/vereniging" class="nav-link dropdown-link">Vereniging</a>
+				<span class="dropdown">
+					<a href="/vereniging/geloof">Geloof</a>
+					<a href="/vereniging/vorming">Vorming</a>
+					<a href="/vereniging/gezelligheid">Gezelligheid</a>
+					<a href="/vereniging/sport">Sport</a>
+					<a href="/vereniging/ontspanning">Ontspanning</a>
+				</span>
+			</span>
+			<a class="nav-link" href="/fotoalbum/Publiek">Foto's</a>
+			<span class="dropdown-menu">
+			<a class="nav-link" href="/forum">Forum</a>
+				<span class="dropdown">
+					<a href="/forum/deel/12">Kamers zoeken en aanbieden</a>
+				</span>
+			</span>
+			<a class="nav-link" href="/lidworden">Lid worden?</a>
+			<span class="dropdown-menu">
+			<a class="nav-link" href="/contact">Contact</a>
+				<span class="dropdown">
+					<a href="/contact/bedrijven">Bedrijven</a>
+				</span>
+			</span>
+		</nav>
 		<nav>
 			@section('loginbutton')
-			<a class="inloggen" href="#login">Inloggen</a>
+				<a class="nav-link inloggen" href="#login">Inloggen</a>
 			@show
-			<a href="#menu">Menu</a>
 		</nav>
 	</header>
 
-	@section('loginpopup')
+@section('loginpopup')
 	<!-- Loginform -->
-	<nav id="login">
-		<a href="#_" class="overlay"></a>
-		<div class="inner">
-			<h2>Inloggen</h2>
-			@php((new \CsrDelft\view\login\LoginForm())->view())
-			<a href="#_" class="close">Close</a>
-		</div>
-	</nav>
-	@show
+		<nav id="login">
+			<a href="#_" class="overlay"></a>
+			<div class="inner">
+				<h2>Inloggen</h2>
+				@php((new \CsrDelft\view\login\LoginForm())->view())
+				<a href="#_" class="close">Close</a>
+			</div>
+		</nav>
+@show
 
-	<!-- Menu -->
+<!-- Menu -->
 	<nav id="menu">
 		<a href="#_" class="overlay"></a>
 		<div class="inner">
@@ -70,7 +95,7 @@
 		<section id="banner-small">
 			<div class="inner">
 				<a href="/"><img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging" height="140">
-				<h2>C.S.R. Delft</h2></a>
+					<h2>C.S.R. Delft</h2></a>
 			</div>
 		</section>
 
