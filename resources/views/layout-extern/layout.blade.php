@@ -27,7 +27,7 @@
 	<!-- Header -->
 	<header id="header" class="alt">
 		<nav>
-			<a class="nav-link" href="/owee">Owee</a>
+{{--			<a class="nav-link" href="/owee">Owee</a>--}}
 			<span class="dropdown-menu">
 				<a href="/vereniging" class="nav-link dropdown-link">Vereniging</a>
 				<span class="dropdown">
