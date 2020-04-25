@@ -8,6 +8,7 @@ use CsrDelft\repository\DebugLogRepository;
 use Doctrine\Common\Util\Debug;
 use Exception;
 use Maknz\Slack\Client as SlackClient;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
@@ -61,8 +62,10 @@ final class ShutdownHandler {
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 		$subject = 'Fatal error: ' . $debug['message'];
+		$dumper = new HtmlDumper();
+		$cloner = new VarCloner();
 
-		mail('pubcie@csrdelft.nl', $subject, (new HtmlDumper())->dump($debug, true), implode("\r\n", $headers));
+		mail('pubcie@csrdelft.nl', $subject, $dumper->dump($cloner->cloneVar($debug), true), implode("\r\n", $headers));
 	}
 
 	/**
