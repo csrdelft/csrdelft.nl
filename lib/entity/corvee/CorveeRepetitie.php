@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\corvee;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
