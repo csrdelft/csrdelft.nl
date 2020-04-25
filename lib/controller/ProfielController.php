@@ -105,7 +105,7 @@ class ProfielController extends AbstractController {
 	/**
 	 * @var CorveeVoorkeurenRepository
 	 */
-	private $corveeVoorkeurenModel;
+	private $corveeVoorkeurenRepository;
 	/**
 	 * @var CorveeTakenRepository
 	 */
@@ -160,7 +160,7 @@ class ProfielController extends AbstractController {
 		BoekRecensieRepository $boekRecensieModel,
 		CiviBestellingModel $civiBestellingModel,
 		CommissieVoorkeurRepository $commissieVoorkeurRepository,
-		CorveeVoorkeurenRepository $corveeVoorkeurenModel,
+		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
 		CommissiesModel $commissiesModel,
 		CorveeTakenRepository $corveeTakenRepository,
 		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
@@ -189,7 +189,7 @@ class ProfielController extends AbstractController {
 		$this->commissieVoorkeurRepository = $commissieVoorkeurRepository;
 		$this->commissiesModel = $commissiesModel;
 		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
+		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->fotoRepository = $fotoRepository;
@@ -254,7 +254,7 @@ class ProfielController extends AbstractController {
 			'bestellinglog' => $this->civiBestellingModel->getBeschrijving($this->civiBestellingModel->getBestellingenVoorLid($uid, 10)->fetchAll()),
 			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginModel::getUid() === $uid ? '' : '/' . $uid),
 			'corveetaken' => $this->corveeTakenRepository->getTakenVoorLid($uid),
-			'corveevoorkeuren' => $this->corveeVoorkeurenModel->getVoorkeurenVoorLid($uid),
+			'corveevoorkeuren' => $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid($uid),
 			'corveevrijstelling' => $this->corveeVrijstellingenRepository->getVrijstelling($uid),
 			'corveekwalificaties' => $this->corveeKwalificatiesRepository->getKwalificatiesVanLid($uid),
 			'forumpostcount' => $this->forumPostsRepository->getAantalForumPostsVoorLid($uid),

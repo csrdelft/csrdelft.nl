@@ -18,14 +18,14 @@ class BeheerVoorkeurenController {
 	/**
 	 * @var CorveeVoorkeurenRepository
 	 */
-	private $corveeVoorkeurenModel;
+	private $corveeVoorkeurenRepository;
 
-	public function __construct(CorveeVoorkeurenRepository $corveeVoorkeurenModel) {
-		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
+	public function __construct(CorveeVoorkeurenRepository $corveeVoorkeurenRepository) {
+		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 	}
 
 	public function beheer() {
-		list($matrix, $repetities) = $this->corveeVoorkeurenModel->getVoorkeurenMatrix();
+		list($matrix, $repetities) = $this->corveeVoorkeurenRepository->getVoorkeurenMatrix();
 		return view('maaltijden.voorkeur.beheer_voorkeuren', ['matrix' => $matrix, 'repetities' => $repetities]);
 	}
 
@@ -46,7 +46,7 @@ class BeheerVoorkeurenController {
 		$voorkeur->setProfiel($profielRepository->find($uid));
 		$voorkeur->setCorveeRepetitie($corveeRepetitiesRepository->find($crid));
 
-		$voorkeur = $this->corveeVoorkeurenModel->inschakelenVoorkeur($voorkeur);
+		$voorkeur = $this->corveeVoorkeurenRepository->inschakelenVoorkeur($voorkeur);
 		$voorkeur->van_uid = $voorkeur->uid;
 		return view('maaltijden.voorkeur.beheer_voorkeur_veld', ['voorkeur' => $voorkeur, 'crid' => $crid, 'uid' => $uid]);
 	}
@@ -63,10 +63,10 @@ class BeheerVoorkeurenController {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
 
-		$voorkeur = $this->corveeVoorkeurenModel->getVoorkeur($crid, $uid);
+		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur($crid, $uid);
 		$voorkeur->van_uid = $uid;
 
-		$this->corveeVoorkeurenModel->uitschakelenVoorkeur($voorkeur);
+		$this->corveeVoorkeurenRepository->uitschakelenVoorkeur($voorkeur);
 
 		$voorkeur->setProfiel(null);
 		return view('maaltijden.voorkeur.beheer_voorkeur_veld', ['voorkeur' => $voorkeur, 'crid' => $voorkeur->crv_repetitie_id, 'uid' => $voorkeur->uid]);

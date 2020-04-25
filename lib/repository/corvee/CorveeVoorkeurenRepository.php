@@ -15,7 +15,7 @@ use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * CorveeVoorkeurenModel.class.php  |  P.W.G. Brussee (brussee@live.nl)
+ * @author P.W.G. Brussee (brussee@live.nl)
  *
  * @method CorveeVoorkeur|null find($id, $lockMode = null, $lockVersion = null)
  * @method CorveeVoorkeur|null findOneBy(array $criteria, array $orderBy = null)
