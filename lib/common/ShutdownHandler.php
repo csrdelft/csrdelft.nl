@@ -5,8 +5,10 @@ namespace CsrDelft\common;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\model\TimerModel;
 use CsrDelft\repository\DebugLogRepository;
+use Doctrine\Common\Util\Debug;
 use Exception;
 use Maknz\Slack\Client as SlackClient;
+use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 
 /**
@@ -55,10 +57,12 @@ final class ShutdownHandler {
 		unset($debug['SERVER']['DATABASE_URL']);
 
 		$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
-		$headers[] = 'Content-Type: text/plain; charset=UTF-8';
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 		$subject = 'Fatal error: ' . $debug['message'];
-		mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
+
+		$_SERVER['VAR_DUMPER_FORMAT'] = 'html';
+		mail('pubcie@csrdelft.nl', $subject, VarDumper::dump($debug), implode("\r\n", $headers));
 	}
 
 	/**
