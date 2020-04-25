@@ -121,7 +121,3 @@
 </div>
 </body>
 </html>
-<script>export default {
-		components: {}
-	}
-</script>
