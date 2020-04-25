@@ -9,6 +9,7 @@
 	position: fixed;
 	width: 100%;
 	z-index: 10000;
+	top: 0;
 
 	display: flex;
 	justify-content: space-between;
@@ -30,13 +31,13 @@
 	nav {
 		font-family: "Source Sans Pro", Helvetica, sans-serif;
 		font-size: 0.8em;
-		font-weight: 600;
-		height: 3em;
+		font-weight: 400;
 		letter-spacing: 0.1em;
-		line-height: 3em;
 		text-transform: uppercase;
 		top: 0.7em;
 		display: flex;
+
+		align-items: flex-start;
 
 		.dropdown-menu {
 			position: relative;
@@ -45,35 +46,42 @@
 
 			.dropdown {
 				display: none;
+				position: absolute;
+				z-index: 12;
+				background: $geel;
+				flex-direction: column;
+				padding: 15px 10px 10px;
+				border-bottom-left-radius: 15px;
+				border-bottom-right-radius: 15px;
+				margin: -15px .5em 0;
+				width: 10em;
+				top: 100%;
 
 				a {
+					text-align: center;
 					box-shadow: none;
 					border-radius: 0;
+					border-bottom: none;
+					padding: .8em;
 				}
-
 			}
 
 			&:hover .dropdown {
 				display: flex;
-				border-bottom-left-radius: 0;
-				border-bottom-right-radius: 0;
-			}
-
-			.dropdown {
-				background: $button-bg;
-				flex-direction: column;
-				padding: 10px;
-				border-bottom-left-radius: 5px;
-				border-bottom-right-radius: 5px;
-				margin: 0 .5em;
 			}
 		}
 
 
 		.nav-link {
+			z-index: 13;
+
+			width: 10em;
+			text-align: center;
+
 			display: inline-block;
 			margin: 0 .5em;
 
+			border-bottom: none;
 
 			&:before {
 				float: right;
@@ -82,7 +90,7 @@
 
 			text-decoration: none;
 			border-radius: 15px;
-			padding: 0 1.35em;
+			padding: .8em 1.35em;
 			background: $button-bg;
 
 			&[href="#menu"] {
