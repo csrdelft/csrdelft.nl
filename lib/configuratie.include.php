@@ -44,7 +44,6 @@ if (env('CI')) {
 	register_shutdown_function([ShutdownHandler::class, 'errorPageHandler']);
 }
 
-register_shutdown_function([ShutdownHandler::class, 'timerHandler']);
 register_shutdown_function([ShutdownHandler::class, 'touchHandler']);
 
 // alle meldingen tonen

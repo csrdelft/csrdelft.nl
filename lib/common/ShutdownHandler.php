@@ -3,14 +3,11 @@
 namespace CsrDelft\common;
 
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\TimerModel;
 use CsrDelft\repository\DebugLogRepository;
-use Doctrine\Common\Util\Debug;
 use Exception;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
-use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 
 /**
@@ -180,17 +177,6 @@ MD
 			);
 
 			$foutmelding->send();
-		}
-	}
-
-	/**
-	 * Time de request als dat nodig is.
-	 *
-	 * Runt in Debug en Productie mode.
-	 */
-	public static function timerHandler() {
-		if (defined('TIME_MEASURE') && TIME_MEASURE) {
-			TimerModel::instance()->log();
 		}
 	}
 
