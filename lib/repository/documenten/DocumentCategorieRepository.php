@@ -55,20 +55,4 @@ class DocumentCategorieRepository extends ServiceEntityRepository {
 
 		return $return;
 	}
-
-	/**
-	 * @param DocumentCategorie $categorie
-	 * @param $aantal
-	 *
-	 * @return PDOStatement|Document[]
-	 */
-	public function getRecent(DocumentCategorie $categorie, $aantal) {
-		return $this->documentRepository->ormFind(
-			'categorie_id = ?',
-			[$categorie->id],
-			null,
-			'toegevoegd DESC',
-			$aantal
-		);
-	}
 }

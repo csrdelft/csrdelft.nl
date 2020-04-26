@@ -16,7 +16,7 @@ $jaar = '19';
 
 $profielRepository = $kernel->getContainer()->get(ProfielRepository::class);
 
-foreach ($profielRepository->ormFind('status = ? AND uid LIKE ?', array(LidStatus::Noviet, sprintf("%s%%", $jaar))) as $profiel) {
+foreach ($profielRepository->getNovieten($jaar) as $profiel) {
     $url = CSR_ROOT . '/wachtwoord/aanvragen';
     $tekst = <<<TEXT
 Beste noviet {$profiel->voornaam},

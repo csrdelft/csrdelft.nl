@@ -99,7 +99,11 @@ class ToolsController extends AbstractController {
 			'verticalen' => array_reduce(
 				['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
 				function ($carry, $letter) {
-					$carry[$letter] = $this->profielRepository->ormFind('verticale = ? AND (status="S_LID" OR status="S_NOVIET" OR status="S_GASTLID" OR status="S_KRINGEL")', [$letter]);
+					$carry[$letter] = $this->profielRepository->createQueryBuilder('p')
+						->where('p.verticale = :verticale and p.status in (:lidstatus)')
+						->setParameter('verticale', $letter)
+						->setParameter('lidstatus', LidStatus::getFiscaalLidLike())
+						->getQuery()->getResult();
 					return $carry;
 				},
 				[]
