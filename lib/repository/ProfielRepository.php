@@ -24,7 +24,6 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\security\AccountRepository;
 use DateTime;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -34,18 +33,13 @@ use Exception;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @method Profiel[]    ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
- * @method Profiel|null doctrineFind($id, $lockMode = null, $lockVersion = null)
  * @method Profiel|null find($id, $lockMode = null, $lockVersion = null)
  * @method Profiel|null findOneBy(array $criteria, array $orderBy = null)
  * @method Profiel[]    findAll()
  * @method Profiel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProfielRepository extends ServiceEntityRepository {
-	use OrmTrait {
-		create as ormCreate;
-		update as ormUpdate;
-	}
+class ProfielRepository extends AbstractRepository {
+	use OrmTrait;
 	/**
 	 * @var MaaltijdAbonnementenRepository
 	 */
@@ -135,7 +129,7 @@ class ProfielRepository extends ServiceEntityRepository {
 
 	/**
 	 * @param Profiel $profiel
-	 * @return string
+	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
 	public function create(Profiel $profiel) {
 		// Lichting zijn de laatste 2 cijfers van lidjaar
@@ -153,7 +147,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		}
 		$profiel->uid = $jj . sprintf('%02d', $volgnummer);
 
-		return $this->ormCreate($profiel);
+		$this->save($profiel);
 	}
 
 	/**
@@ -165,7 +159,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1); //TODO: logging
 		}
-		$this->ormUpdate($profiel);
+		$this->save($profiel);
 	}
 
 	/**
@@ -465,6 +459,14 @@ class ProfielRepository extends ServiceEntityRepository {
 		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginModel::getUid(), new DateTime(), $changes);
 		$this->update($profiel);
 		return true;
+	}
+
+	public function getNovieten($lichting) {
+		return $this->createQueryBuilder('p')
+			->where('p.uid like :uid and status = :status')
+			->setParameter('uid', $lichting . '%')
+			->setParameter('status', 'S_NOVIET')
+			->getQuery()->getResult();
 	}
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model;
+namespace CsrDelft\repository;
 
 /**
  * Paging.interface.php

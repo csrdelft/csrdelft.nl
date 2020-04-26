@@ -167,7 +167,7 @@ class AgendaController {
 			if (LoginModel::getProfiel()->verticaleleider && !LoginModel::mag(P_AGENDA_ADD)) {
 				$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
 			}
-			$item->item_id = (int)$this->agendaRepository->create($item);
+			$item->item_id = (int)$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . date_format_intl($item->begin_moment, DATETIME_FORMAT) . ')', 1);
@@ -188,7 +188,7 @@ class AgendaController {
 		}
 		$form = new AgendaItemForm($item, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
-			$this->agendaRepository->update($item);
+			$this->agendaRepository->save($item);
 			return new JsonResponse(true);
 		} else {
 			return $form;
@@ -205,7 +205,7 @@ class AgendaController {
 		$item->begin_moment = date_create_immutable($request->request->get('begin_moment'));
 		$item->eind_moment = date_create_immutable($request->request->get('eind_moment'));
 
-		$this->agendaRepository->update($item);
+		$this->agendaRepository->save($item);
 
 		return new JsonResponse(true);
 	}
@@ -215,7 +215,7 @@ class AgendaController {
 		if (!$item || !$item->magBeheren()) {
 			throw new CsrToegangException();
 		}
-		$this->agendaRepository->delete($item);
+		$this->agendaRepository->remove($item);
 		return new JsonResponse(true);
 	}
 

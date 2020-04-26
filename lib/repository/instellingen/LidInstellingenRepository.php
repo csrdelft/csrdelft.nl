@@ -131,7 +131,7 @@ class LidInstellingenRepository extends AbstractRepository {
 	/**
 	 * @throws Exception
 	 */
-	public function save() {
+	public function saveAll() {
 		foreach ($this->getAll() as $module => $instellingen) {
 			foreach ($instellingen as $id => $waarde) {
 				if ($this->getType($module, $id) === InstellingType::Integer) {

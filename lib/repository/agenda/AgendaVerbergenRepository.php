@@ -6,11 +6,19 @@ use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class AgendaVerbergenRepository extends ServiceEntityRepository {
-	use OrmTrait;
+/**
+ * @package CsrDelft\repository\agenda
+ *
+ * @method AgendaVerbergen|null find($id, $lockMode = null, $lockVersion = null)
+ * @method AgendaVerbergen|null findOneBy(array $criteria, array $orderBy = null)
+ * @method AgendaVerbergen[]    findAll()
+ * @method AgendaVerbergen[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+class AgendaVerbergenRepository extends AbstractRepository {
 
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, AgendaVerbergen::class);
@@ -22,9 +30,9 @@ class AgendaVerbergenRepository extends ServiceEntityRepository {
 			$verborgen = new AgendaVerbergen();
 			$verborgen->uid = LoginModel::getUid();
 			$verborgen->refuuid = $item->getUUID();
-			$this->create($verborgen);
+			$this->save($verborgen);
 		} else {
-			$this->delete($verborgen);
+			$this->remove($verborgen);
 		}
 	}
 

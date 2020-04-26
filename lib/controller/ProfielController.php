@@ -315,7 +315,7 @@ class ProfielController extends AbstractController {
 								// Sla toesteming op.
 								$toestemmingForm = new ToestemmingModalForm($this->lidToestemmingRepository, true);
 								if ($toestemmingForm->validate()) {
-									$this->lidToestemmingRepository->save($profiel->uid);
+									$this->lidToestemmingRepository->saveForLid($profiel->uid);
 								} else {
 									throw new CsrException('Opslaan van toestemming mislukt');
 								}

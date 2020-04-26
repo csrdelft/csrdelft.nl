@@ -120,7 +120,7 @@ class EetplanController extends AbstractController {
 			return $form;
 		} else {
 			$eetplan->noviet = $em->getReference(Profiel::class, $eetplan->uid);
-			$this->eetplanRepository->create($eetplan);
+			$this->eetplanRepository->save($eetplan);
 			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		}
 	}
@@ -133,7 +133,7 @@ class EetplanController extends AbstractController {
 		$eetplan = $this->eetplanRepository->retrieveByUUID($uuid);
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/bewerken/' . $uuid, true);
 		if ($form->isPosted() && $form->validate()) {
-			$this->eetplanRepository->update($eetplan);
+			$this->eetplanRepository->save($eetplan);
 			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		} else {
 			return $form;
@@ -147,7 +147,7 @@ class EetplanController extends AbstractController {
 			foreach ($selection as $uuid) {
 				$eetplan = $this->eetplanRepository->retrieveByUUID($uuid);
 				if ($eetplan === false) continue;
-				$this->eetplanRepository->delete($eetplan);
+				$this->eetplanRepository->remove($eetplan);
 				$verwijderd[] = new RemoveDataTableEntry([$eetplan->uid, $eetplan->woonoord_id], Eetplan::class);
 			}
 		}
@@ -174,7 +174,7 @@ class EetplanController extends AbstractController {
 			setMelding('Bekenden bestaan al', -1);
 			return $form;
 		} else {
-			$this->eetplanBekendenRepository->create($eetplanbekenden);
+			$this->eetplanBekendenRepository->save($eetplanbekenden);
 			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
 		}
 	}
@@ -187,7 +187,7 @@ class EetplanController extends AbstractController {
 		$eetplanbekenden = $this->eetplanBekendenRepository->retrieveByUUID($uuid);
 		$form = new EetplanBekendenForm($eetplanbekenden, '/eetplan/novietrelatie/bewerken/' . $uuid, true);
 		if ($form->isPosted() && $form->validate()) {
-			$this->eetplanBekendenRepository->update($eetplanbekenden);
+			$this->eetplanBekendenRepository->save($eetplanbekenden);
 			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
 		} else {
 			return $form;
@@ -199,7 +199,7 @@ class EetplanController extends AbstractController {
 		$verwijderd = [];
 		foreach ($selection as $uuid) {
 			$bekenden = $this->eetplanBekendenRepository->retrieveByUUID($uuid);
-			$this->eetplanBekendenRepository->delete($bekenden);
+			$this->eetplanBekendenRepository->remove($bekenden);
 			$verwijderd[] = new RemoveDataTableEntry([$bekenden->uid1, $bekenden->uid2], EetplanBekenden::class);
 		}
 		return $this->tableData($verwijderd);
@@ -224,7 +224,7 @@ class EetplanController extends AbstractController {
 
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanRepository->ormCount("avond = ?", array($form->getValues()['avond'])) > 0) {
+		} elseif ($this->eetplanRepository->avondHasEetplan(date_create_immutable($form->getValues()['avond']))) {
 			setMelding('Er bestaat al een eetplan met deze datum', -1);
 			return $form;
 		} else {
@@ -232,7 +232,7 @@ class EetplanController extends AbstractController {
 			$eetplan = $this->eetplanRepository->maakEetplan($avond, $this->lichting);
 
 			foreach ($eetplan as $sessie) {
-				$this->eetplanRepository->create($sessie);
+				$this->eetplanRepository->save($sessie);
 			}
 
 			return view('eetplan.table', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);

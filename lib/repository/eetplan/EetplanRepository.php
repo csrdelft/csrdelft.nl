@@ -5,9 +5,9 @@ namespace CsrDelft\repository\eetplan;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\OrmTrait;
+use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\EetplanFactory;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,13 +16,12 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * Verzorgt het opvragen van eetplangegevens
  *
- * @method Eetplan[]    ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
- * @method Eetplan|null doctrineFind($id, $lockMode = null, $lockVersion = null)
+ * @method Eetplan|null find($id, $lockMode = null, $lockVersion = null)
  * @method Eetplan|null findOneBy(array $criteria, array $orderBy = null)
  * @method Eetplan[]    findAll()
  * @method Eetplan[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EetplanRepository extends ServiceEntityRepository {
+class EetplanRepository extends AbstractRepository {
 	use OrmTrait;
 	const FMT_DATE = "dd-MM-Y";
 
@@ -42,6 +41,10 @@ class EetplanRepository extends ServiceEntityRepository {
 		$this->profielRepository = $profielRepository;
 	}
 
+	public function avondHasEetplan($avond) {
+		return count($this->findBy(['avond' => $avond])) > 0;
+	}
+
 	/**
 	 * Haal alle avonden op die voor deze lichting gelden.
 	 *
@@ -50,7 +53,11 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
 	public function getAvonden($lichting) {
-		return $this->ormFind('uid LIKE ? AND avond IS NOT NULL', [$lichting . "%"], 'avond');
+		return $this->createQueryBuilder('e')
+			->where('e.uid like :uid and e.avond is not null')
+			->setParameter('uid', $lichting . '%')
+			->groupBy('e.avond')
+			->getQuery()->getResult();
 	}
 
 	/**
@@ -66,7 +73,11 @@ class EetplanRepository extends ServiceEntityRepository {
 		// Avond null wordt gebruikt voor novieten die huizen kennen
 		// Orderen bij avond, zodat de avondvolgorde per noviet klopt
 		/** @var Eetplan[] $eetplan */
-		$eetplan = $this->ormFind('uid LIKE ? AND avond IS NOT NULL', [$lichting . "%"], null, 'avond');
+		$eetplan = $this->createQueryBuilder('e')
+			->where('e.uid like :uid and e.avond is not null')
+			->setParameter('uid', $lichting . '%')
+			->orderBy('e.avond', 'DESC')
+			->getQuery()->getArrayResult();
 		$eetplanFeut = [];
 		$avonden = [];
 		foreach ($eetplan as $sessie) {
@@ -107,10 +118,13 @@ class EetplanRepository extends ServiceEntityRepository {
 		$bekenden = $this->eetplanBekendenRepository->getBekenden($lichting);
 		$factory->setBekenden($bekenden);
 
-		$bezocht = $this->ormFind("uid like ?", [$lichting . "%"]);
+		$bezocht = $this->createQueryBuilder('e')
+			->where("uid like :uid")
+			->setParameter('uid', $lichting . '%')
+			->getQuery()->getResult();
 		$factory->setBezocht($bezocht);
 
-		$novieten = $this->profielRepository->ormFind("uid LIKE ? AND status = 'S_NOVIET'", [$lichting . "%"]);
+		$novieten = $this->profielRepository->getNovieten($lichting);
 		$factory->setNovieten($novieten);
 
 		$huizen = WoonoordenModel::instance()->find("eetplan = true AND status = 'ht'")->fetchAll();
@@ -125,7 +139,11 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @return Eetplan[]|false lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
 	 */
 	public function getEetplanVoorNoviet($uid) {
-		return $this->ormFind('uid = ? AND avond IS NOT NULL', [$uid], null, 'avond');
+		return $this->createQueryBuilder('e')
+			->where('e.uid = :uid and e.avond is not null')
+			->setParameter('uid', $uid)
+			->orderBy('e.avond', 'ASC')
+			->getQuery()->getResult();
 	}
 
 	/**
@@ -134,8 +152,14 @@ class EetplanRepository extends ServiceEntityRepository {
 	 *
 	 * @return Eetplan[] lijst van eetplansessies voor dit huis, gegroepeerd op avond (oplopend)
 	 */
-	public function getEetplanVoorHuis($id, $lichting) {
-		$sessies = $this->ormFind('uid LIKE ? AND woonoord_id = ? AND avond IS NOT NULL', [$lichting . "%", $id], null, 'avond');
+	public function getEetplanVoorHuis($woonoord_id, $lichting) {
+		/** @var Eetplan[] $sessies */
+		$sessies = $this->createQueryBuilder('e')
+			->where('e.uid like :uid and e.woonoord_id = :woonoord_id and e.avond is not null')
+			->setParameter('uid', $lichting . '%')
+			->setParameter('woonoord_id', $woonoord_id)
+			->orderBy('e.avond', 'ASC')
+			->getQuery()->getResult();
 
 		return array_reduce($sessies, function (array $accumulator, Eetplan $eetplan) {
 			$accumulator[date_format_intl($eetplan->avond, self::FMT_DATE)][] = $eetplan;
@@ -150,7 +174,10 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @return Eetplan[]
 	 */
 	public function getBekendeHuizen($lichting) {
-		return $this->ormFind('uid LIKE ? AND avond IS NULL', [$lichting . "%"]);
+		return $this->createQueryBuilder('e')
+			->where('e.uid like :uid and avond is null')
+			->setParameter('uid', $lichting . '%')
+			->getQuery()->getResult();
 	}
 
 	/**
@@ -161,16 +188,21 @@ class EetplanRepository extends ServiceEntityRepository {
 		$alleEetplan = $this->getEetplanVoorAvond($avond, $lichting);
 
 		foreach ($alleEetplan as $eetplan) {
-			$this->delete($eetplan);
+			$this->remove($eetplan);
 		}
 	}
 
 	/**
 	 * @param string $avond
 	 *
+	 * @param $lichting
 	 * @return Eetplan[]
 	 */
 	public function getEetplanVoorAvond($avond, $lichting) {
-		return $this->ormFind('avond = ? AND uid LIKE ?', [$avond, $lichting . "%"]);
+		return $this->createQueryBuilder('e')
+			->where('e.avond = :avond and e.uid like :uid')
+			->setParameter('avond', $avond)
+			->setParameter('uid', $lichting . '%')
+			->getQuery()->getResult();
 	}
 }

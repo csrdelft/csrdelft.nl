@@ -4,6 +4,7 @@ namespace CsrDelft\repository\eetplan;
 
 use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\model\OrmTrait;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -11,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 30/03/2017
  */
-class EetplanBekendenRepository extends ServiceEntityRepository {
+class EetplanBekendenRepository extends AbstractRepository {
 	use OrmTrait {
 		exists as ormExists;
 	}

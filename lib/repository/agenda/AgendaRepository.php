@@ -11,6 +11,7 @@ use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\groepen\ActiviteitenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\VerjaardagenService;
@@ -28,7 +29,7 @@ use PDOStatement;
  * @method AgendaItem[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method AgendaItem[]|PDOStatement ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
  */
-class AgendaRepository extends ServiceEntityRepository {
+class AgendaRepository extends AbstractRepository {
 	use OrmTrait;
 
 	const ORM = AgendaItem::class;
@@ -245,5 +246,4 @@ class AgendaRepository extends ServiceEntityRepository {
 		}
 		return $item;
 	}
-
 }

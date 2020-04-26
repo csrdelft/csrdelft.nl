@@ -218,7 +218,7 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 	 * @param null $uid Sla op voor uid
 	 * @throws Exception
 	 */
-	public function save($uid = null) {
+	public function saveForLid($uid = null) {
 		// create matrix for sqlInsertMultiple
 		foreach ($this->defaults as $module => $instellingen) {
 			foreach ($instellingen as $id => $waarde) {

@@ -42,7 +42,7 @@ class ToestemmingController extends AbstractController {
 
 		if ($form->isPosted() && $form->validate()) {
 
-			$this->lidToestemmingRepository->save();
+			$this->lidToestemmingRepository->saveForLid();
 			setMelding('Toestemming opgeslagen', 1);
 			return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
 		} else {

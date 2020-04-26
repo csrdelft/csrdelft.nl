@@ -45,7 +45,7 @@ class DocumentenController extends AbstractController {
 			setMelding('Document bestaat niet!', -1);
 			return $this->redirectToRoute('documenten');
 		} elseif ($document->magVerwijderen()) {
-			$this->documentRepository->delete($document);
+			$this->documentRepository->remove($document);
 		} else {
 			setMelding('Mag document niet verwijderen', -1);
 			return new JsonResponse(false);
@@ -122,7 +122,7 @@ class DocumentenController extends AbstractController {
 
 		$form = new DocumentBewerkenForm($document, $this->documentCategorieRepository->getCategorieNamen());
 		if ($form->isPosted() && $form->validate()) {
-			$this->documentRepository->update($document);
+			$this->documentRepository->save($document);
 
 			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie->id]);
 		} else {
@@ -150,7 +150,7 @@ class DocumentenController extends AbstractController {
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
 
-			$document->id = $this->documentRepository->create($document);
+			$this->documentRepository->save($document);
 
 			if ($document->hasFile()) {
 				$document->deleteFile();

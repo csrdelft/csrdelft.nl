@@ -69,10 +69,4 @@ class CorveeFunctiesRepository extends AbstractRepository {
 		$this->_em->remove($functie);
 		$this->_em->flush();
 	}
-
-	public function save(CorveeFunctie $functie) {
-		$this->_em->persist($functie);
-		$this->_em->flush();
-	}
-
 }
