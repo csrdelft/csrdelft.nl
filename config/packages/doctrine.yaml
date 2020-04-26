@@ -35,6 +35,9 @@ doctrine:
             date: DoctrineExtensions\Query\Mysql\Date
             match: DoctrineExtensions\Query\Mysql\MatchAgainst
             unix_timestamp: DoctrineExtensions\Query\Mysql\UnixTimestamp
+            day: DoctrineExtensions\Query\Mysql\Day
+            dayofyear: DoctrineExtensions\Query\Mysql\DayOfYear
+            now: DoctrineExtensions\Query\Mysql\Now
         mappings:
             CsrDelft:
                 is_bundle: false

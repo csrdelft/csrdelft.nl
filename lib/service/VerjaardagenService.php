@@ -3,7 +3,9 @@
 namespace CsrDelft\service;
 
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
+use DateTimeInterface;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -32,7 +34,12 @@ class VerjaardagenService {
 	 * @return Profiel[]
 	 */
 	public function get($maand) {
-		return $this->profielRepository->ormFind("status in ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND EXTRACT(MONTH FROM gebdatum) = ? ", [$maand], null, 'EXTRACT(DAY FROM gebdatum)');
+		return $this->profielRepository->createQueryBuilder('p')
+			->where('p.status in (:lidstatus) and MONTH(p.gebdatum) = :maand')
+			->setParameter('lidstatus', array_merge(LidStatus::getLidLike(), [LidStatus::Kringel]))
+			->setParameter('maand', $maand)
+			->orderBy('DAY(p.gebdatum)')
+			->getQuery()->getResult();
 	}
 
 	/**
@@ -41,40 +48,42 @@ class VerjaardagenService {
 	 * @return Profiel[]
 	 */
 	public function getKomende($aantal = 10) {
-		return $this->profielRepository->ormFind("status IN ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND NOT gebdatum = '0000-00-00'", [], null, "DATE_ADD(
-					gebdatum,
-					INTERVAL TIMESTAMPDIFF(
-						year,
-						ADDDATE(gebdatum, INTERVAL 1 DAY),
-						CURRENT_DATE
-					)+1 YEAR
-				) ASC", $aantal);
+		return $this->profielRepository->createQueryBuilder('p')
+			->where('p.status in (:lidstatus) and not p.gebdatum = \'0000-00-00\'')
+			->setParameter('lidstatus', array_merge(LidStatus::getLidLike(), [LidStatus::Kringel]))
+			->orderBy('MOD(DAYOFYEAR(p.gebdatum) - DAYOFYEAR(NOW()) + 365, 365)')
+			->setMaxResults($aantal)
+			->getQuery()->getResult();
 	}
 
 	/**
-	 * @param int $van
-	 * @param int $tot
+	 * @param DateTimeInterface $van
+	 * @param DateTimeInterface $tot
 	 * @param int $limiet
 	 *
 	 * @return Profiel[]
 	 */
-	public function getTussen(\DateTimeInterface $van, \DateTimeInterface $tot, $limiet = null) {
-		$vanjaar = $van->format('Y');
-		$totjaar = $tot->format('Y');
-		$van = date_format_intl($van, DATE_FORMAT);
-		$tot = date_format_intl($tot, DATE_FORMAT);
+	public function getTussen(DateTimeInterface $van, DateTimeInterface $tot, $limiet = null) {
+		$vanDag = (int) $van->format('z');
+		$totDag = (int) $tot->format('z');
 
-		return $this->profielRepository->ormFind("status IN ('S_LID', 'S_GASTLID', 'S_NOVIET', 'S_KRINGEL') AND NOT gebdatum = '0000-00-00' AND (
-            (CONCAT(?, SUBSTRING(gebdatum, 5)) >= ? AND CONCAT(?, SUBSTRING(gebdatum, 5)) < ?)
-            OR
-            (CONCAT(?, SUBSTRING(gebdatum, 5)) >= ? AND CONCAT(?, SUBSTRING(gebdatum, 5)) < ?)
-        ) AND gebdatum <= ?", [$vanjaar, $van, $vanjaar, $tot, $totjaar, $van, $totjaar, $tot, $tot], null, "DATE_ADD(
-					gebdatum,
-					INTERVAL TIMESTAMPDIFF(
-						year,
-						ADDDATE(gebdatum, INTERVAL 1 DAY),
-						CURRENT_DATE
-					)+1 YEAR
-				)", $limiet);
+		$qb = $this->profielRepository->createQueryBuilder('p')
+			->where('p.status in (:lidstatus) and not p.gebdatum = \'0000-00-00\' and p.gebdatum <= :gebdatum')
+			->setParameter('lidstatus', array_merge(LidStatus::getLidLike(), [LidStatus::Kringel]))
+			->setParameter('gebdatum', $tot)
+			->orderBy('MOD(DAYOFYEAR(p.gebdatum) - DAYOFYEAR(NOW()) + 365, 365)')
+		->setMaxResults($limiet);
+
+		if ($vanDag > $totDag) { // van en tot spannen over nieuw jaar
+			$qb->andWhere('DAYOFYEAR(p.gebdatum) >= :vanDag or DAYOFYEAR(p.gebdatum) <= :totDag')
+				->setParameter('vanDag', $vanDag)
+				->setParameter('totDag', $totDag);
+		} else {
+			$qb->andWhere('DAYOFYEAR(p.gebdatum) >= :vanDag and DAYOFYEAR(p.gebdatum) <= :totDag')
+				->setParameter('vanDag', $vanDag)
+				->setParameter('totDag', $totDag);
+		}
+
+		return $qb->getQuery()->getResult();
 	}
 }

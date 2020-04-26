@@ -204,7 +204,7 @@ class AgendaRepository extends AbstractRepository {
 			$GLOBALS['agenda_van'] = $van;
 			$GLOBALS['agenda_tot'] = $tot;
 
-			$result = array_merge($result, $this->verjaardagenService->getTussen($van, $tot, 0));
+			$result = array_merge($result, $this->verjaardagenService->getTussen($van, $tot));
 		}
 
 		// Sorteren
