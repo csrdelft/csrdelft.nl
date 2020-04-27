@@ -36,6 +36,7 @@ doctrine:
             match: DoctrineExtensions\Query\Mysql\MatchAgainst
             unix_timestamp: DoctrineExtensions\Query\Mysql\UnixTimestamp
             day: DoctrineExtensions\Query\Mysql\Day
+            month: DoctrineExtensions\Query\Mysql\Month
             dayofyear: DoctrineExtensions\Query\Mysql\DayOfYear
             now: DoctrineExtensions\Query\Mysql\Now
         mappings:
