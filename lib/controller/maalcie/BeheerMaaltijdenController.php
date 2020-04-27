@@ -63,7 +63,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	public function POST_prullenbak() {
-		$data = $this->maaltijdenRepository->findBy(['verwijderd' => true]);
+		$data = $this->maaltijdenRepository->findByVerwijderd(true);
 
 		return $this->tableData($data);
 	}
@@ -72,7 +72,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		$filter = $request->query->get('filter', '');
 		switch ($filter) {
 			case 'prullenbak':
-				$data = $this->maaltijdenRepository->findBy(['verwijderd' => true]);
+				$data = $this->maaltijdenRepository->findByVerwijderd(true);
 				break;
 			case 'onverwerkt':
 				$data = $this->maaltijdenRepository->findBy(['verwijderd' => false, 'gesloten' => true, 'verwerkt' => false]);

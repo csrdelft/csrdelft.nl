@@ -24,6 +24,7 @@ use Exception;
  * @method Maaltijd|null findOneBy(array $criteria, array $orderBy = null)
  * @method Maaltijd[]    findAll()
  * @method Maaltijd[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Maaltijd[]    findByVerwijderd($verwijderd, array $orderBy = null, $limit = null, $offset = null)
  */
 class MaaltijdenRepository extends AbstractRepository {
 	protected $default_order = 'datum ASC, tijd ASC';

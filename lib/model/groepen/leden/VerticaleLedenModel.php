@@ -3,6 +3,7 @@
 namespace CsrDelft\model\groepen\leden;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\Verticale;
@@ -48,12 +49,15 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 	 * @return VerticaleLid[]
 	 */
 	public function getLedenVoorGroep(AbstractGroep $verticale) {
-		$leden = array();
-		$status = LidStatus::getLidLike();
-		$where = 'verticale = ? AND status IN (' . implode(', ', array_fill(0, count($status), '?')) . ')';
-		array_unshift($status, $verticale->letter);
+		$leden = [];
 		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
-		foreach ($profielRepository->ormFind($where, $status) as $profiel) {
+		/** @var Profiel $profielen */
+		$profielen = $profielRepository->createQueryBuilder('p')
+			->where('p.verticale := :verticale and p.status in (:lidstatus)')
+			->setParameter('verticale', $verticale->letter)
+			->setParameter('lidstatus', LidStatus::getLidLike())
+			->getQuery()->getResult();
+		foreach ($profielen as $profiel) {
 			$lid = $this->get($verticale, $profiel->uid);
 			if ($lid) {
 				$leden[] = $lid;

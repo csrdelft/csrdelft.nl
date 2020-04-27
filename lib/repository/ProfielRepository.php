@@ -469,4 +469,15 @@ class ProfielRepository extends AbstractRepository {
 			->getQuery()->getResult();
 	}
 
+	/**
+	 * @param $toegestaan
+	 * @return Profiel[]
+	 */
+	public function findByLidStatus($toegestaan) {
+		return $this->createQueryBuilder('p')
+			->where('p.status in (:toegestaan)')
+			->setParameter('toegestaan', $toegestaan)
+			->getQuery()->getResult();
+	}
+
 }

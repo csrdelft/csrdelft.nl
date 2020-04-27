@@ -34,8 +34,13 @@ class GroepLijstView extends GroepTabView {
 		}
 		// sorteren op achernaam
 		$uids = array_keys($leden);
+		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		/** @var Profiel[] $profielen */
-		$profielen = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('uid IN (' . implode(', ', array_fill(0, count($uids), '?')) . ')', $uids, null, 'achternaam ASC');
+		$profielen = $profielRepository->createQueryBuilder('p')
+			->where('p.uid in (:uids)')
+			->setParameter('uids', $uids)
+			->orderBy('p.achternaam')
+			->getQuery()->getResult();
 		foreach ($profielen as $profiel) {
 			$html .= '<tr><td>';
 			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::Afmelden)) {

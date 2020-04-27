@@ -3,6 +3,7 @@
 namespace CsrDelft\repository\agenda;
 
 use CsrDelft\entity\agenda\AgendaItem;
+use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
@@ -113,11 +114,14 @@ class AgendaRepository extends AbstractRepository {
 			$itemsByUUID[$item->getUUID()] = $item;
 			unset($items[$index]);
 		}
-		$count = count($itemsByUUID);
-		if ($count > 0) {
-			$params = array_keys($itemsByUUID);
-			array_unshift($params, LoginModel::getUid());
-			$verborgen = $this->agendaVerbergenRepository->ormFind('uid = ? AND refuuid IN (' . implode(', ', array_fill(0, $count, '?')) . ')', $params);
+		if (count($itemsByUUID) > 0) {
+			/** @var AgendaVerbergen[] $verborgen */
+			$verborgen = $this->agendaVerbergenRepository->createQueryBuilder('av')
+				->where('av.uid = :uid and av.refuuid in (:uuids)')
+				->setParameter('uid', LoginModel::getUid())
+				->setParameter('uuids', array_keys($itemsByUUID))
+				->getQuery()->getResult();
+
 			foreach ($verborgen as $verbergen) {
 				unset($itemsByUUID[$verbergen->refuuid]);
 			}

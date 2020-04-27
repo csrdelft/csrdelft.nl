@@ -5,6 +5,7 @@ namespace CsrDelft\repository\maalcie;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
@@ -104,11 +105,15 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 			$query = $db->prepare($sql);
 			$query->execute($values);
 
-			$leden = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind("status = ? OR status = ? OR status = ?", LidStatus::getLidLike());
+			/** @var Profiel[] $leden */
+			$leden = ContainerFacade::getContainer()->get(ProfielRepository::class)->createQueryBuilder('p')
+			->where('p.status in (:lidstatus)')
+			->setParameter('lidstatus', LidStatus::getLidLike())
+			->getQuery()->getResult();
 
 			$matrix = array();
 			foreach ($leden as $lid) {
-				$abos = $this->find("uid = ?", array($lid->uid));
+				$abos = $this->findBy(["uid" => $lid->uid]);
 				foreach ($abos as $abo) {
 					$rep = $repById[$abo->mlt_repetitie_id];
 					$abo->maaltijd_repetitie = $rep;
@@ -182,7 +187,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 */
 	public function getAbonnementenVanNovieten() {
 		return $this->_em->transactional(function () {
-			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('status = "S_NOVIET"');
+			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->findBy(['status' =>  LidStatus::Noviet]);
 			$matrix = array();
 			foreach ($novieten as $noviet) {
 				$matrix[$noviet->uid] = $this->findBy(['uid' => $noviet->uid], ['mlt_repetitie_id' => 'DESC']);
@@ -226,7 +231,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 */
 	public function inschakelenAbonnementVoorNovieten($mrid) {
 		return $this->_em->transactional(function () use ($mrid) {
-			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('status = "S_NOVIET"');
+			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->findBy(['status' => LidStatus::Noviet]);
 
 			$aantal = 0;
 			foreach ($novieten as $noviet) {

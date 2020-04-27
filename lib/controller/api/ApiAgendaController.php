@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\model\entity\groepen\Activiteit;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
@@ -66,7 +67,12 @@ class ApiAgendaController {
 		$find = array($fromDate, $toDate);
 
 		// AgendaItems
-		$items = $this->agendaRepository->ormFind($query, $find);
+		/** @var AgendaItem[] $items */
+		$items = $this->agendaRepository->createQueryBuilder('a')
+			->where('a.begin_moment >= :van and a.begin_moment <= :tot')
+			->setParameter('van', date_create($_GET['from']))
+			->setParameter('tot', date_create($_GET['to']))
+			->getQuery()->getResult();
 		foreach ($items as $item) {
 			if ($item->magBekijken()) {
 				$result[] = $item;

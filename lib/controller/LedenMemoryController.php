@@ -104,10 +104,7 @@ class LedenMemoryController {
 
 	public function namenleren() {
 		// Haal alle (adspirant-/gast-)leden op.
-		$toegestaan = implode(', ', array_map(function ($status) {
-			return "'{$status}'";
-		}, LidStatus::getLidLike()));
-		$profielen = $this->profielRepository->ormFind("status IN ({$toegestaan})");
+		$profielen = $this->profielRepository->findByLidStatus(LidStatus::getLidLike());
 
 		// Bouw infostructuur.
 		$leden = array_map(function($profiel) {

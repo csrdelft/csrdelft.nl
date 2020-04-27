@@ -42,8 +42,9 @@ class LichtingLedenModel extends AbstractGroepLedenModel {
 	 * @return LichtingsLid[]
 	 */
 	public function getLedenVoorGroep(AbstractGroep $lichting) {
-		$leden = array();
-		foreach (ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('lidjaar = ?', array($lichting->lidjaar)) as $profiel) {
+		$leden = [];
+		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
+		foreach ($profielRepository->findBy(['lidjaar' => $lichting->lidjaar]) as $profiel) {
 			$lid = $this->get($lichting, $profiel->uid);
 			if ($lid) {
 				$leden[] = $lid;
