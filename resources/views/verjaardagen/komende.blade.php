@@ -11,10 +11,13 @@
 	@if($toonpasfotos)
 		<div class="item" id="komende_pasfotos">
 			@foreach($verjaardagen as $profiel)
+				@if ($profiel->gebdatum)
+{{--					Profiel heeft misschien niet toestemming gegeven. --}}
 				<div class="verjaardag @if($profiel->isJarig()) cursief @endif ">
 					{!! $profiel->getLink('pasfoto') !!}
 					<span class="datum">{{date('d-m', $profiel->gebdatum->getTimestamp())}}</span>
 				</div>
+				@endif
 			@endforeach
 			<div class="clear"></div>
 		</div>
