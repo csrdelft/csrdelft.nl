@@ -451,7 +451,7 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function isJarig() {
-		return substr(date_format_intl($this->gebdatum, DATE_FORMAT), 5, 5) === date('m-d');
+		return $this->gebdatum != null && substr(date_format_intl($this->gebdatum, DATE_FORMAT), 5, 5) === date('m-d');
 	}
 
 	/**
