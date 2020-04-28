@@ -10,17 +10,20 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  */
 class GroepKeuzeType extends PersistentEnum {
 	const CHECKBOX = 'checkbox_1';
+	const DROPDOWN = 'dropdown_1';
 	const RADIOS = 'radios_1';
 	const TEXT = 'text_1';
 
 	protected static $supportedChoices = [
 		self::CHECKBOX => self::CHECKBOX,
+		self::DROPDOWN => self::DROPDOWN,
 		self::RADIOS => self::RADIOS,
 		self::TEXT => self::TEXT,
 	];
 
 	protected static $mapChoiceToDescription = [
 		self::CHECKBOX => 'Een checkbox',
+		self::DROPDOWN => 'Een dropdown',
 		self::RADIOS => 'Radiobuttons',
 		self::TEXT => 'Een textbox',
 	];

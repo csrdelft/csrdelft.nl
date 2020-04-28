@@ -15,6 +15,7 @@
 	import GroepKeuzeType from '../../enum/GroepKeuzeType';
 	import {GroepKeuzeSelectie, KeuzeOptie} from '../../model/groep';
 	import CheckboxKeuze from './keuzes/CheckboxKeuze.vue';
+	import DropDownKeuze from './keuzes/DropDownKeuze.vue';
 	import MultiSelectKeuze from './keuzes/MultiSelectKeuze.vue';
 	import TextKeuze from './keuzes/TextKeuze.vue';
 
@@ -45,6 +46,7 @@
 				case GroepKeuzeType.CHECKBOX: return CheckboxKeuze;
 				case GroepKeuzeType.TEXT: return TextKeuze;
 				case GroepKeuzeType.RADIOS: return MultiSelectKeuze;
+				case GroepKeuzeType.DROPDOWN: return DropDownKeuze;
 				default: throw Error(`Kan component voor GroepKeuzeType '${type}' niet vinden.`);
 			}
 		}
