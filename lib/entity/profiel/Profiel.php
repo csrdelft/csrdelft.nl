@@ -5,6 +5,7 @@ namespace CsrDelft\entity\profiel;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\LidToestemming;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\Geslacht;
@@ -367,6 +368,12 @@ class Profiel implements Agendeerbaar {
 	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\security\Account", mappedBy="profiel")
 	 */
 	public $account;
+
+	/**
+	 * @var LidToestemming[]
+	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\LidToestemming", mappedBy="profiel")
+	 */
+	public $toestemmingen;
 
 	/**
 	 * In $properties_lidstatus kan per property worden aangegeven voor welke lidstatusen deze nodig. Bij wijziging van

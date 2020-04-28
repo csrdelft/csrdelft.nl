@@ -4,8 +4,10 @@ namespace CsrDelft\service;
 
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeInterface;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -34,11 +36,17 @@ class VerjaardagenService {
 	 * @return Profiel[]
 	 */
 	public function get($maand) {
-		return $this->profielRepository->createQueryBuilder('p')
+		$qb = $this->profielRepository->createQueryBuilder('p')
 			->where('p.status in (:lidstatus) and MONTH(p.gebdatum) = :maand')
 			->setParameter('lidstatus', array_merge(LidStatus::getLidLike(), [LidStatus::Kringel]))
 			->setParameter('maand', $maand)
-			->orderBy('DAY(p.gebdatum)')
+			->orderBy('DAY(p.gebdatum)');
+
+		if (!LoginModel::mag(P_LEDEN_MOD)) {
+			static::filterByToestemming($qb, 'profiel', 'gebdatum');
+		}
+
+		return $qb
 			->getQuery()->getResult();
 	}
 
@@ -48,12 +56,25 @@ class VerjaardagenService {
 	 * @return Profiel[]
 	 */
 	public function getKomende($aantal = 10) {
-		return $this->profielRepository->createQueryBuilder('p')
+		$qb = $this->profielRepository->createQueryBuilder('p')
 			->where('p.status in (:lidstatus) and not p.gebdatum = \'0000-00-00\'')
 			->setParameter('lidstatus', array_merge(LidStatus::getLidLike(), [LidStatus::Kringel]))
 			->orderBy('MOD(DAYOFYEAR(p.gebdatum) - DAYOFYEAR(NOW()) + 365, 365)')
-			->setMaxResults($aantal)
-			->getQuery()->getResult();
+			->setMaxResults($aantal);
+
+		if (!LoginModel::mag(P_LEDEN_MOD)) {
+			static::filterByToestemming($qb, 'profiel', 'gebdatum');
+		}
+
+		return $qb->getQuery()->getResult();
+	}
+
+	public static function filterByToestemming(QueryBuilder $queryBuilder, $module, $instelling_id, $profielAlias = 'p') {
+		return $queryBuilder
+			->andWhere('t.waarde = \'ja\' and t.module = :t_module and t.instelling_id = :t_instelling_id')
+			->setParameter('t_module', $module)
+			->setParameter('t_instelling_id', $instelling_id)
+			->join($profielAlias . '.toestemmingen', 't');
 	}
 
 	/**
@@ -82,6 +103,10 @@ class VerjaardagenService {
 			$qb->andWhere('DAYOFYEAR(p.gebdatum) >= :vanDag and DAYOFYEAR(p.gebdatum) <= :totDag')
 				->setParameter('vanDag', $vanDag)
 				->setParameter('totDag', $totDag);
+		}
+
+		if (!LoginModel::mag(P_LEDEN_MOD)) {
+			static::filterByToestemming($qb, 'profiel', 'gebdatum');
 		}
 
 		return $qb->getQuery()->getResult();
