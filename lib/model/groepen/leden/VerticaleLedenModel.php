@@ -53,7 +53,7 @@ class VerticaleLedenModel extends AbstractGroepLedenModel {
 		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		/** @var Profiel $profielen */
 		$profielen = $profielRepository->createQueryBuilder('p')
-			->where('p.verticale := :verticale and p.status in (:lidstatus)')
+			->where('p.verticale = :verticale and p.status in (:lidstatus)')
 			->setParameter('verticale', $verticale->letter)
 			->setParameter('lidstatus', LidStatus::getLidLike())
 			->getQuery()->getResult();
