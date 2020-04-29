@@ -13,7 +13,7 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
 
 class LedenLijstController extends AbstractController {
-	public function lijst(CmsPaginaRepository $cmsPaginaRepository) {
+	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoeker $lidZoeker) {
 		if (!LoginModel::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
@@ -22,14 +22,12 @@ class LedenLijstController extends AbstractController {
 
 		$message = '';
 
-		$zoeker = new LidZoeker();
-
 		if (isset($_GET['q'])) {
 
 			$query = $_GET;
-			$zoeker->parseQuery($query);
+			$lidZoeker->parseQuery($query);
 
-			if ($zoeker->count() == 0) {
+			if ($lidZoeker->count() == 0) {
 				// als er geen resultaten zijn dan verbreden we het statusfilter
 				if (isset($query['status'])) {
 					if ($query['status'] == 'LEDEN') {
@@ -43,11 +41,11 @@ class LedenLijstController extends AbstractController {
 					$query['status'] = 'LEDEN|OUDLEDEN';
 					$message = 'Zoekterm gaf geen resultaten met gegeven statusfilter, gezocht in <em>leden &amp; oudleden</em>.';
 				}
-				$zoeker->parseQuery($query);
+				$lidZoeker->parseQuery($query);
 			}
 		}
 
-		$ledenlijstcontent = new LedenlijstContent($zoeker);
+		$ledenlijstcontent = new LedenlijstContent($lidZoeker);
 
 		if (isset($_GET['addToGoogleContacts'])) {
 			try {
@@ -56,7 +54,7 @@ class LedenLijstController extends AbstractController {
 				$gSync = GoogleSync::instance();
 
 				$start = microtime(true);
-				$message = $gSync->syncLidBatch($zoeker->getLeden());
+				$message = $gSync->syncLidBatch($lidZoeker->getLeden());
 				$elapsed = microtime(true) - $start;
 
 				setMelding(
@@ -72,8 +70,8 @@ class LedenLijstController extends AbstractController {
 		} else {
 
 			//redirect to profile if only one result.
-			if ($zoeker->count() == 1) {
-				$leden = $zoeker->getLeden();
+			if ($lidZoeker->count() == 1) {
+				$leden = $lidZoeker->getLeden();
 				$profiel = $leden[0];
 				return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
 			}

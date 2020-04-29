@@ -12,6 +12,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
+use Doctrine\ORM\QueryBuilder;
 
 
 /**
@@ -71,8 +72,12 @@ class LidZoeker {
 	private $velden = array('naam', 'email', 'telefoon', 'mobiel');
 	private $weergave = LLLijst::class;
 	private $result = null;
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
 
-	public function __construct() {
+	public function __construct(ProfielRepository $profielRepository) {
 		$this->allowStatus = LidStatus::getTypeOptions();
 
 		//wat extra velden voor moderators.
@@ -82,6 +87,7 @@ class LidZoeker {
 
 		//parse default values.
 		$this->parseQuery($this->rawQuery);
+		$this->profielRepository = $profielRepository;
 	}
 
 	public function parseQuery($query) {
@@ -93,7 +99,7 @@ class LidZoeker {
 		$this->rawQuery = $query;
 
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch ook in de oudleden.
-		if (!isset($query['status']) AND LoginModel::getProfiel()->isOudlid()) {
+		if (!isset($query['status']) && LoginModel::getProfiel()->isOudlid()) {
 			$this->rawQuery['status'] = 'LEDEN|OUDLEDEN';
 		}
 
@@ -170,15 +176,12 @@ class LidZoeker {
 
 	/**
 	 * Stel een setje WHERE-voorwaarden samen waarin standaard wordt gezocht.
+	 * @param QueryBuilder $queryBuilder
+	 * @param $zoekterm
+	 * @return QueryBuilder
 	 */
-	private function defaultSearch($zoekterm) {
-		$query = '';
-		$defaults = [];
-		$params = [];
-
-		if ($zoekterm == '*' OR trim($zoekterm) == '') {
-			$query = '1 ';
-		} elseif (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)) { //leden van een groep
+	private function defaultSearch(QueryBuilder $queryBuilder, $zoekterm) {
+		if (preg_match('/^groep:([0-9]+|[a-z]+)$/i', $zoekterm)) { //leden van een groep
 			$uids = array();
 			/*try {
 				//FIXME: $groep = new OldGroep(substr($zoekterm, 6));
@@ -186,117 +189,108 @@ class LidZoeker {
 			} catch (\Exception $e) {
 				//care.
 			}*/
-			$query = "uid IN(" . implode(",", $uids) . ") ";
+			$queryBuilder->where('p.uid in (:uids)');
+			$queryBuilder->setParameter('uids', $uids);
 		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) { //verticale, id, letter
 			$v = substr($zoekterm, 10);
 			if (strlen($v) > 1) {
 				$result = VerticalenModel::instance()->find('naam LIKE ?', [sql_contains($v)]);
-				$query = array();
+				$verticales = [];
 				foreach ($result as $v) {
-					$query[] = 'verticale = ? ';
-					$params[] = $v->letter;
+					$verticales[] = $v->letter;
 				}
-				$query = '(' . implode(' OR ', $query) . ') ';
+				$queryBuilder->where('p.verticale in (:verticales)');
+				$queryBuilder->setParameter('verticales', $verticales);
 			} else {
 				$verticale = VerticalenModel::instance()->get($v);
 				if ($verticale) {
-					$query = 'verticale= ? ';
-					$params[] = $verticale->letter;
+					$queryBuilder->where('p.verticale = :verticale');
+					$queryBuilder->setParameter('verticale', $verticale->letter);
 				} else {
-					$query = 'verticale="" ';
+					$queryBuilder->where('p.verticale = \'\'');
 				}
 			}
 		} elseif (preg_match('/^\d{2}$/', $zoekterm)) { //lichting bij een string van 2 cijfers
-			$query = "RIGHT(lidjaar,2)=" . (int)$zoekterm . " ";
+			$queryBuilder->where('p.lidjaar LIKE :zoekterm');
+			$queryBuilder->setParameter('zoekterm', '__' . $zoekterm);
 		} elseif (preg_match('/^lichting:\d\d(\d\d)?$/', $zoekterm)) { //lichting op de explicite manier
 			$lichting = substr($zoekterm, 9);
 			if (strlen($lichting) == 4) {
-				$query = "lidjaar=" . $lichting . " ";
+				$queryBuilder->where('p.lidjaar = :lidjaar');
+				$queryBuilder->setParameter('lidjaar', $lichting);
 			} else {
-				$query = "RIGHT(lidjaar,2)=" . (int)$lichting . " ";
+				$queryBuilder->where('p.lidjaar LIKE :lidjaar');
+				$queryBuilder->setParameter('lidjaar', '__' . $lichting);
 			}
+
 		} elseif (preg_match('/^[a-z0-9][0-9]{3}$/', $zoekterm)) { //uid's is ook niet zo moeilijk.
-			$query = "uid='" . $zoekterm . "' ";
+			$queryBuilder->where('p.uid = :uid');
+			$queryBuilder->setParameter('uid', $zoekterm);
 		} elseif (preg_match('/^([a-z0-9][0-9]{3} ?,? ?)*([a-z0-9][0-9]{3})$/', $zoekterm)) {
 			//meerdere uid's gescheiden door komma's.
 			//explode en trim() elke waarde van de array.
 			$uids = array_map('trim', explode(',', $zoekterm));
-			$query = "uid IN('" . implode("','", $uids) . "') ";
+			$queryBuilder->where('p.uid in (:uids)');
+			$queryBuilder->setParameter('uids', $uids);
 		} elseif (preg_match('/^(' . implode('|', $this->getDBVeldenAllowed()) . '):=?([a-z0-9\-_])+$/i', $zoekterm)) {
 			//Zoeken in de velden van $this->allowVelden. Zoektermen met 'veld:' ervoor.
 			//met 'veld:=<zoekterm> wordt exact gezocht.
 			$parts = explode(':', $zoekterm);
 
 			if ($parts[1][0] == '=') {
-				$query = $parts[0] . "= ?";
-				$params[] = substr($parts[1], 1);
+				$queryBuilder->where($queryBuilder->expr()->eq('p' . $parts[0], ':zoekterm'));
+				$queryBuilder->setParameter('zoekterm', substr($parts[1], 1));
 			} else {
-				$query = $parts[0] . " LIKE ?";
-				$params[] = sql_contains($parts[1]);
+				$queryBuilder->where($queryBuilder->expr()->like('p.' . $parts[0], ':zoekterm'));
+				$queryBuilder->setParameter('zoekterm', sql_contains($parts[1]));
 			}
 		} else { //als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
-			$defaults[] = "voornaam LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "achternaam LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "CONCAT_WS(' ', voornaam, tussenvoegsel, achternaam) LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "CONCAT_WS(' ', voornaam, achternaam) LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "CONCAT_WS(' ', tussenvoegsel, achternaam) LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "CONCAT_WS(', ', achternaam, tussenvoegsel) LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "nickname LIKE ? ";
-			$params[] = sql_contains($zoekterm);
+
+			$zoekExpr= $queryBuilder->expr()->orX()
+				->add('p.voornaam LIKE :zoekterm')
+				->add('p.achternaam LIKE :zoekterm')
+				->add('CONCAT_WS(\' \', p.voornaam, p.tussenvoegsel, p.achternaam) LIKE :zoekterm')
+				->add('CONCAT_WS(\' \', p.voornaam, p.achternaam) LIKE :zoekterm')
+				->add('CONCAT_WS(\' \', p.tussenvoegsel, p.achternaam) LIKE :zoekterm')
+				->add('CONCAT_WS(\' \', p.achternaam, p.tussenvoegsel) LIKE :zoekterm')
+				->add('p.nickname LIKE :zoekterm')
+				->add('CONCAT_WS(\' \', p.adres, p.postcode, p.woonplaats) LIKE :zoekterm')
+				->add('p.adres LIKE :zoekterm')
+				->add('p.postcode LIKE :zoekterm')
+				->add('p.woonplaats LIKE :zoekterm')
+				->add('p.mobiel LIKE :zoekterm')
+				->add('p.telefoon LIKE :zoekterm')
+				->add('p.studie LIKE :zoekterm')
+				->add('p.email LIKE :zoekterm')
+			;
+
 			if (LoginModel::mag(P_LEDEN_MOD)) {
-				$defaults[] = "eetwens LIKE ? ";
-				$params[] = sql_contains($zoekterm);
+				$zoekExpr->add('p.eetwens LIKE :zoekterm');
 			}
 
-			$defaults[] = "CONCAT_WS(' ', adres, postcode, woonplaats) LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "adres LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "postcode LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "woonplaats LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-
-			$defaults[] = "mobiel LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "telefoon LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-
-			$defaults[] = "studie LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-			$defaults[] = "email LIKE ? ";
-			$params[] = sql_contains($zoekterm);
-
-			$query .= '( ' . implode(' OR ', $defaults) . ' )';
+			$queryBuilder->where($zoekExpr);
+			$queryBuilder->setParameter('zoekterm', sql_contains($zoekterm));
 		}
 
-		return array($params, $query . ' AND ');
+		return $queryBuilder;
 	}
 
 	/**
 	 * Doe de zoektocht.
 	 */
 	public function search() {
-		$query = '';
-		$params = [];
 		$this->result = [];
+		$qb = $this->profielRepository->createQueryBuilder('p');
 
-		if ($this->query != '') {
-			list($paramsPart, $queryPart) = $this->defaultSearch($this->query);
-			$query .= $queryPart;
-			$params = array_merge($params, $paramsPart);
+		if (trim($this->query) == '') {
+			return;
 		}
-		list($paramsPart, $queryPart) = $this->getFilterSQL();
-		$query .= $queryPart;
-		$params = array_merge($params, $paramsPart);
 
-		$result = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind($query, $params, null, implode($this->sort));
+		$this->defaultSearch($qb, $this->query);
+		$this->getFilterSQL($qb);
+
+		/** @var Profiel[] $result */
+		$result = $qb->getQuery()->getResult();
 
 		foreach ($result as $profiel) {
 			if ($this->zoekMag($profiel, $this->query)) {
@@ -347,24 +341,20 @@ class LidZoeker {
 	 * komt er een $key IN ( value0, value1, etc. ) uit.
 	 */
 
-	public function getFilterSQL() {
-		$params = [];
-		$filters = array();
+	public function getFilterSQL(QueryBuilder $queryBuilder) {
+		$andExpr = $queryBuilder->expr()->andX();
+
 		foreach ($this->filters as $key => $value) {
 			if (is_array($value)) {
-				$filters[] = $key . " IN (" . implode(", ", array_map(function ($val) { return '?';}, $value)) . ")";
-				$params = array_merge($params, $value);
+				$andExpr->add("p.{$key} IN (:{$key})");
 			} else {
-				$filters[] = $key . "= ?";
-				$params[] = $value;
+				$andExpr->add("p.{$key} = :{$key}");
 			}
+			$queryBuilder->setParameter($key, $value);
 		}
-		$return = implode(' AND ', $filters);
-		if (strlen(trim($return)) == 0) {
-			return [[], '1'];
-		} else {
-			return [$params, $return];
-		}
+		$queryBuilder->andWhere($andExpr);
+
+		return $queryBuilder;
 	}
 
 	public function getSelectedVelden() {

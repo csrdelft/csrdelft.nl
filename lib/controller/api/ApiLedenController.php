@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\api;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\LidZoeker;
@@ -21,7 +22,7 @@ class ApiLedenController {
 	 */
 	public function getLeden() {
 
-		$zoeker = new LidZoeker();
+		$zoeker = ContainerFacade::getContainer()->get(LidZoeker::class);
 		$leden = [];
 
 		foreach ($zoeker->getLeden() as $profiel) {

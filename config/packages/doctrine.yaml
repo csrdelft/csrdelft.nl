@@ -39,6 +39,7 @@ doctrine:
             month: DoctrineExtensions\Query\Mysql\Month
             dayofyear: DoctrineExtensions\Query\Mysql\DayOfYear
             now: DoctrineExtensions\Query\Mysql\Now
+            concat_ws: DoctrineExtensions\Query\Mysql\ConcatWs
         mappings:
             CsrDelft:
                 is_bundle: false
