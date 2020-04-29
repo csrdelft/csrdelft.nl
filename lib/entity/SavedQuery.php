@@ -1,16 +1,43 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\entity;
 
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
-class SavedQuery extends PersistentEntity {
+/**
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\SavedQueryRepository")
+ * @ORM\Table("savedquery")
+ */
+class SavedQuery {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
 	public $ID;
+	/**
+	 * @var string
+	 * @ORM\Column(type="text")
+	 */
 	public $savedquery;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
 	public $beschrijving;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
 	public $permissie;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
 	public $categorie;
 
 	public function magBekijken() {

@@ -9,12 +9,12 @@ use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\SavedQueryModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\ProfielService;
 use CsrDelft\service\Roodschopper;
@@ -52,16 +52,16 @@ class ToolsController extends AbstractController {
 	 */
 	private $logRepository;
 	/**
-	 * @var SavedQueryModel
+	 * @var SavedQueryRepository
 	 */
-	private $savedQueryModel;
+	private $savedQueryRepository;
 	/**
 	 * @var ProfielService
 	 */
 	private $profielService;
 
-	public function __construct(AccountRepository $accountRepository, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogRepository $logRepository, SavedQueryModel $savedQueryModel) {
-		$this->savedQueryModel = $savedQueryModel;
+	public function __construct(AccountRepository $accountRepository, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogRepository $logRepository, SavedQueryRepository $savedQueryRepository) {
+		$this->savedQueryRepository = $savedQueryRepository;
 		$this->accountRepository = $accountRepository;
 		$this->profielRepository = $profielRepository;
 		$this->loginModel = $loginModel;
@@ -326,10 +326,10 @@ class ToolsController extends AbstractController {
 		throw new CsrToegangException();
 	}
 
-	public function query() {
-		if (isset($_GET['id']) && (int)$_GET['id'] == $_GET['id']) {
-			$id = (int)$_GET['id'];
-			$result = $this->savedQueryModel->loadQuery($id);
+	public function query(Request $request) {
+		if ($request->query->has('id')) {
+			$id = $request->query->getInt('id');
+			$result = $this->savedQueryRepository->loadQuery($id);
 		} else {
 			$result = null;
 		}

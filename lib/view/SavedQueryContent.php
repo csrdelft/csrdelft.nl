@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\SavedQueryResult;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\SavedQueryModel;
+use CsrDelft\repository\SavedQueryRepository;
 
 class SavedQueryContent implements View {
 
@@ -111,7 +112,8 @@ class SavedQueryContent implements View {
 		}
 		$return .= '>';
 		$current = '';
-		foreach (SavedQueryModel::instance()->getQueries() as $query) {
+		$savedQueryRepository = ContainerFacade::getContainer()->get(SavedQueryRepository::class);
+		foreach ($savedQueryRepository->getQueries() as $query) {
 			if (!$query->magBekijken()) {
 				continue;
 			}

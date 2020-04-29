@@ -4,6 +4,8 @@
 namespace CsrDelft\model\entity;
 
 
+use CsrDelft\entity\SavedQuery;
+
 class SavedQueryResult {
 	/** @var SavedQuery */
 	public $query;

@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\model\entity\SavedQueryResult;
-use CsrDelft\model\SavedQueryModel;
+use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\SavedQueryContent;
 
@@ -25,12 +25,12 @@ class BbQuery extends BbTag {
 	 */
 	private $query;
 	/**
-	 * @var SavedQueryModel
+	 * @var SavedQueryRepository
 	 */
-	private $savedQueryModel;
+	private $savedQueryRepository;
 
-	public function __construct(SavedQueryModel $savedQueryModel) {
-		$this->savedQueryModel = $savedQueryModel;
+	public function __construct(SavedQueryRepository $savedQueryRepository) {
+		$this->savedQueryRepository = $savedQueryRepository;
 	}
 
 	public static function getTagName() {
@@ -59,7 +59,7 @@ class BbQuery extends BbTag {
 		$this->readMainArgument($arguments);
 		$this->content = (int)$this->content;
 		$this->assertId($this->content);
-		$this->query = $this->savedQueryModel->loadQuery($this->content);
+		$this->query = $this->savedQueryRepository->loadQuery($this->content);
 	}
 
 	/**
