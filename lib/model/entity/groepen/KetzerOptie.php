@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\groepen\KetzerKeuzesModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
@@ -57,7 +58,7 @@ class KetzerOptie extends PersistentEntity {
 	 * @return KetzerKeuze[]
 	 */
 	public function getKeuzes() {
-		return KetzerKeuzesModel::instance()->getKeuzesVoorOptie($this);
+		return ContainerFacade::getContainer()->get(KetzerKeuzesModel::class)->getKeuzesVoorOptie($this);
 	}
 
 }

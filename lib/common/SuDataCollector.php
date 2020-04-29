@@ -20,8 +20,8 @@ class SuDataCollector extends DataCollector {
 	 */
 	public function collect(Request $request, Response $response, Throwable $exception = null) {
 		$this->data = [
-			'can_su' => LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued(),
-			'is_sued' => LoginModel::instance()->isSued(),
+			'can_su' => LoginModel::mag(P_ADMIN) || ContainerFacade::getContainer()->get(LoginModel::class)->isSued(),
+			'is_sued' => ContainerFacade::getContainer()->get(LoginModel::class)->isSued(),
 			'profiel' => LoginModel::getProfiel(),
 		];
 	}

@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Persistence\Database;
@@ -10,7 +11,7 @@ class Barsysteem {
 	private $beheer;
 	private $csrfToken;
 	function __construct() {
-		$this->db = Database::instance()->getDatabase();
+		$this->db = ContainerFacade::getContainer()->get(Database::class)->getDatabase();
 	}
 
 	function isLoggedIn() {

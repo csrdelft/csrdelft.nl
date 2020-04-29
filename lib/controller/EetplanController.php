@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
@@ -83,7 +84,7 @@ class EetplanController extends AbstractController {
 		}
 
 		return view('eetplan.huis', [
-			'woonoord' => WoonoordenModel::instance()->get($id),
+			'woonoord' => ContainerFacade::getContainer()->get(WoonoordenModel::class)->get($id),
 			'eetplan' => $eetplan,
 		]);
 	}

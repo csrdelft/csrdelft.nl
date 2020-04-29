@@ -7,7 +7,7 @@
 		{{ CsrDelft\model\security\LoginModel::getProfiel()->getNaam('volledig') }}
 	</a>
 	<ul class="dropdown-menu" aria-labelledby="menu-personal">
-		@if(\CsrDelft\model\security\LoginModel::instance()->isSued())
+		@if(\CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\model\security\LoginModel::class)->isSued())
 			<li>
 				<a href="/endsu" class="dropdown-item error"
 					 title="Switch user actie beeindingen">SU {{\CsrDelft\repository\ProfielRepository::getNaam(CsrDelft\model\security\LoginModel::getSuedFrom()->uid, 'civitas')}}</a>

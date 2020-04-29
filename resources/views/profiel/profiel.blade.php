@@ -115,7 +115,7 @@
 				<dd>{{$profiel->getNaam('civitas')}}</dd>
 				<dt>Lidnummer</dt>
 				<dd>
-					@if($profiel->account && \CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->account))
+					@if($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\model\security\LoginModel::class)->maySuTo($profiel->account))
 						<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 					@else
 						{{$profiel->uid}}
@@ -318,7 +318,7 @@
 								(leider)
 							@elseif($profiel->kringcoach)
 								<span
-									title="Kringcoach van verticale {{\CsrDelft\model\groepen\VerticalenModel::instance()->get($profiel->verticale)->naam}}">(kringcoach)</span>
+									title="Kringcoach van verticale {{\CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\model\groepen\VerticalenModel::class)->get($profiel->verticale)->naam}}">(kringcoach)</span>
 							@endif
 						</a>
 					</dd>

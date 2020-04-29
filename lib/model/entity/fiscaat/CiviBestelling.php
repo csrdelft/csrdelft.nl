@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\fiscaat;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
@@ -33,7 +34,7 @@ class CiviBestelling extends PersistentEntity {
 	 * @return PDOStatement|CiviBestellingInhoud[]
 	 */
 	public function getInhoud() {
-		return CiviBestellingInhoudModel::instance()->find('bestelling_id = ?', array($this->id));
+		return ContainerFacade::getContainer()->get(CiviBestellingInhoudModel::class)->find('bestelling_id = ?', array($this->id));
 	}
 
 	/**
@@ -41,7 +42,7 @@ class CiviBestelling extends PersistentEntity {
 	 */
 	public function jsonSerialize() {
 		$data = parent::jsonSerialize();
-		$data['inhoud'] = CiviBestellingModel::instance()->getBeschrijvingText($this->getInhoud());
+		$data['inhoud'] = ContainerFacade::getContainer()->get(CiviBestellingModel::class)->getBeschrijvingText($this->getInhoud());
 		return $data;
 	}
 

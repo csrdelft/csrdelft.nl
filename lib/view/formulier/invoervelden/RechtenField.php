@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\AccessModel;
 
 /**
@@ -13,7 +14,7 @@ class RechtenField extends TextField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
-		$this->suggestions[] = AccessModel::instance()->getPermissionSuggestions();
+		$this->suggestions[] = ContainerFacade::getContainer()->get(AccessModel::class)->getPermissionSuggestions();
 
 		// TODO: bundelen om simultane verbindingen te sparen
 		foreach (array('verticalen', 'lichtingen', 'commissies', 'groepen', 'onderverenigingen', 'woonoorden') as $option) {
@@ -31,7 +32,7 @@ class RechtenField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		$errors = AccessModel::instance()->getPermissionStringErrors($this->value);
+		$errors = ContainerFacade::getContainer()->get(AccessModel::class)->getPermissionStringErrors($this->value);
 		if (!empty($errors)) {
 			$this->error = 'Ongeldig: "' . implode('" & "', $errors) . '"';
 		}

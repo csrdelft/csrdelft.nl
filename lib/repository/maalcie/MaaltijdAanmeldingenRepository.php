@@ -95,7 +95,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @throws CsrGebruikerException
 	 */
 	protected function assertMagAanmelden(Maaltijd $maaltijd, $uid) {
-		if (CiviSaldoModel::instance()->getSaldo($uid) === false) {
+		if (ContainerFacade::getContainer()->get(CiviSaldoModel::class)->getSaldo($uid) === false) {
 			throw new CsrGebruikerException('Aanmelden voor maaltijden niet toegestaan, geen CiviSaldo.');
 		}
 		if (!$this->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {
@@ -387,7 +387,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$inhoud->product_id = $aanmelding->getMaaltijd()->product_id;
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = CiviProductModel::instance()->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
+		$bestelling->totaal = ContainerFacade::getContainer()->get(CiviProductModel::class)->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
 
 		return $bestelling;
 	}

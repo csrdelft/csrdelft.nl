@@ -141,7 +141,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @Serializer\Groups("datatable")
 	 */
 	public function getPrijs() {
-		return CiviProductModel::instance()->getPrijs(CiviProductModel::instance()->getProduct($this->product_id))->prijs;
+		return ContainerFacade::getContainer()->get(CiviProductModel::class)->getPrijs(ContainerFacade::getContainer()->get(CiviProductModel::class)->getProduct($this->product_id))->prijs;
 	}
 
 	/**

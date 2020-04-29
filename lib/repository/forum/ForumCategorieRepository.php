@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\forum;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDraad;
@@ -128,7 +129,7 @@ class ForumCategorieRepository extends AbstractRepository {
 			->getQuery()->execute();
 
 		// Voor alle ex-leden settings opschonen
-		$uids = Database::instance()->sqlSelect(array('uid'), 'profielen', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
+		$uids = ContainerFacade::getContainer()->get(Database::class)->sqlSelect(array('uid'), 'profielen', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
 		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
 		foreach ($uids as $uid) {
 			if (AccountRepository::isValidUid($uid)) {

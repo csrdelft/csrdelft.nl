@@ -104,7 +104,7 @@ class MaaltijdRepetitiesRepository extends AbstractRepository {
 		if (!is_numeric($mrid) || $mrid <= 0) {
 			throw new CsrGebruikerException('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
 		}
-		if (CorveeRepetitiesRepository::instance()->existMaaltijdRepetitieCorvee($mrid)) {
+		if (ContainerFacade::getContainer()->get(CorveeRepetitiesRepository::class)->existMaaltijdRepetitieCorvee($mrid)) {
 			throw new CsrGebruikerException('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
 		$maaltijdenRepository = ContainerFacade::getContainer()->get(MaaltijdenRepository::class);

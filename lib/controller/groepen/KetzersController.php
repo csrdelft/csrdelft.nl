@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\groepen\KetzersModel;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
 use CsrDelft\view\JsonResponse;
@@ -27,7 +28,7 @@ class KetzersController extends AbstractGroepenController {
 			return $this->beheren($request);
 		} elseif ($form->validate()) {
 			$values = $form->getValues();
-			$redirect = $values['model']::instance()->getUrl() . '/aanmaken/' . $values['soort'];
+			$redirect = ContainerFacade::getContainer()->get($values['model'])->getUrl() . '/aanmaken/' . $values['soort'];
 			return new JsonResponse($redirect);
 		} else {
 			return $form;

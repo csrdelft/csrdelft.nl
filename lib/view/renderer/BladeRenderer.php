@@ -1,5 +1,6 @@
 <?php
 namespace CsrDelft\view\renderer;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
 use CsrDelft\view\Icon;
@@ -24,7 +25,7 @@ class BladeRenderer implements Renderer {
 			$this->bladeOne->setInjectResolver(function ($className) {
 				if (is_a($className, DependencyManager::class, true)) {
 					/** @var $className DependencyManager */
-					return $className::instance();
+					return ContainerFacade::getContainer()->get($className);
 				} else {
 					return new $className();
 				}

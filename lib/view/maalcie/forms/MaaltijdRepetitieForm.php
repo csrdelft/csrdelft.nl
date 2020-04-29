@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\fiscaat\CiviProductModel;
@@ -11,7 +12,6 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
-use CsrDelft\view\formulier\keuzevelden\TimeField;
 use CsrDelft\view\formulier\keuzevelden\TimeObjectField;
 use CsrDelft\view\formulier\keuzevelden\WeekdagField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -42,7 +42,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$product = CiviProductModel::instance()->find('id = ?', array($model->product_id))->current();
+		$product = ContainerFacade::getContainer()->get(CiviProductModel::class)->find('id = ?', array($model->product_id))->current();
 		if ($product == false) {
 			$product = new CiviProduct();
 		}
@@ -57,7 +57,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 		if ($model->mlt_repetitie_id !== 0) {
 			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
 		}
-		$fields[] = new RequiredEntityField('product', 'beschrijving', 'Product', CiviProductModel::instance(), '/fiscaat/producten/suggesties?q=', $product);
+		$fields[] = new RequiredEntityField('product', 'beschrijving', 'Product', ContainerFacade::getContainer()->get(CiviProductModel::class), '/fiscaat/producten/suggesties?q=', $product);
 		$fields[] = new IntField('standaard_limiet', $model->standaard_limiet, 'Standaard limiet', 0, 200);
 		$fields[] = new RechtenField('abonnement_filter', $model->abonnement_filter, 'Aanmeldrestrictie');
 

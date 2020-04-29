@@ -13,6 +13,7 @@ namespace CsrDelft\service;
  * @deprecated
  */
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
@@ -77,7 +78,7 @@ h.t. Fiscus.';
 			$status = LidStatus::getFiscaalLidLike();
 		}
 
-		$saldi = CiviSaldoModel::instance()->find('saldo < ?', [$this->saldogrens]);
+		$saldi = ContainerFacade::getContainer()->get(CiviSaldoModel::class)->find('saldo < ?', [$this->saldogrens]);
 
 		$return = [];
 		foreach ($saldi as $saldo) {

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\eetplan;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\OrmTrait;
@@ -127,7 +128,7 @@ class EetplanRepository extends AbstractRepository {
 		$novieten = $this->profielRepository->getNovieten($lichting);
 		$factory->setNovieten($novieten);
 
-		$huizen = WoonoordenModel::instance()->find("eetplan = true AND status = 'ht'")->fetchAll();
+		$huizen = ContainerFacade::getContainer()->get(WoonoordenModel::class)->find("eetplan = true AND status = 'ht'")->fetchAll();
 		$factory->setHuizen($huizen);
 
 		return $factory->genereer($avond, true);

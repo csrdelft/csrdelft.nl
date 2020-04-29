@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\KetzerSelectorsModel;
@@ -72,7 +73,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 * @return KetzerSelector[]
 	 */
 	public function getSelectors() {
-		return KetzerSelectorsModel::instance()->getSelectorsVoorKetzer($this);
+		return ContainerFacade::getContainer()->get(KetzerSelectorsModel::class)->getSelectorsVoorKetzer($this);
 	}
 
 	/**

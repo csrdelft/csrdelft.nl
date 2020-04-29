@@ -101,7 +101,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 			$values = array();
 			$sql .= ' WHERE lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")';
 			$sql .= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-			$db = Database::instance()->getDatabase();
+			$db = ContainerFacade::getContainer()->get(Database::class)->getDatabase();
 			$query = $db->prepare($sql);
 			$query->execute($values);
 
@@ -144,7 +144,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 			$sql .= ' FROM profielen AS lid, mlt_repetities AS r';
 			$sql .= ' HAVING abo = true';
 			$sql .= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-			$db = Database::instance()->getDatabase();
+			$db = ContainerFacade::getContainer()->get(Database::class)->getDatabase();
 			$query = $db->prepare($sql);
 			$query->execute();
 			$abos = $query->fetchAll();

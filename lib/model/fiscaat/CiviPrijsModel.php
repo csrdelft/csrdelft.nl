@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\fiscaat;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\fiscaat\CiviPrijs;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
@@ -25,7 +26,7 @@ class CiviPrijsModel extends PersistenceModel {
 	 * @param CiviProduct $product
 	 */
 	public function verwijderVoorProduct(CiviProduct $product) {
-		if (!Database::instance()->getDatabase()->inTransaction()) throw new CsrException('Kan geen product verwijderen als je niet in een transactie zit!');
+		if (!ContainerFacade::getContainer()->get(Database::class)->getDatabase()->inTransaction()) throw new CsrException('Kan geen product verwijderen als je niet in een transactie zit!');
 
 		$prijzen = $this->find('product_id = ?', [$product->id]);
 

@@ -48,7 +48,7 @@ class CivisaldoField extends TextField {
 		}
 		$value = parent::getValue();
 		// geldig uid?
-		if (AccountRepository::isValidUid($value) AND CiviSaldoModel::instance()->existsByUid($value)) {
+		if (AccountRepository::isValidUid($value) AND ContainerFacade::getContainer()->get(CiviSaldoModel::class)->existsByUid($value)) {
 			return true;
 		}
 		$this->error = 'Geen geldig lid';

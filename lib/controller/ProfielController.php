@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
@@ -390,7 +391,7 @@ class ProfielController extends AbstractController {
 		}
 		try {
 			GoogleSync::doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
-			$gSync = GoogleSync::instance();
+			$gSync = ContainerFacade::getContainer()->get(GoogleSync::class);
 			$msg = $gSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
 		} catch (CsrException $e) {

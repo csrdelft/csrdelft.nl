@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\groepen\KringenModel;
 use CsrDelft\model\groepen\leden\VerticaleLedenModel;
@@ -40,7 +41,7 @@ class Verticale extends AbstractGroep {
 	}
 
 	public function getKringen() {
-		return KringenModel::instance()->getKringenVoorVerticale($this);
+		return ContainerFacade::getContainer()->get(KringenModel::class)->getKringenVoorVerticale($this);
 	}
 
 	/**

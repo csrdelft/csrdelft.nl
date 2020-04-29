@@ -194,7 +194,7 @@ class LidZoeker {
 		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) { //verticale, id, letter
 			$v = substr($zoekterm, 10);
 			if (strlen($v) > 1) {
-				$result = VerticalenModel::instance()->find('naam LIKE ?', [sql_contains($v)]);
+				$result = ContainerFacade::getContainer()->get(VerticalenModel::class)->find('naam LIKE ?', [sql_contains($v)]);
 				$verticales = [];
 				foreach ($result as $v) {
 					$verticales[] = $v->letter;
@@ -202,7 +202,7 @@ class LidZoeker {
 				$queryBuilder->where('p.verticale in (:verticales)');
 				$queryBuilder->setParameter('verticales', $verticales);
 			} else {
-				$verticale = VerticalenModel::instance()->get($v);
+				$verticale = ContainerFacade::getContainer()->get(VerticalenModel::class)->get($v);
 				if ($verticale) {
 					$queryBuilder->where('p.verticale = :verticale');
 					$queryBuilder->setParameter('verticale', $verticale->letter);

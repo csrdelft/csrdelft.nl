@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEntityField;
@@ -25,7 +26,7 @@ class EetplanBekendeHuizenForm extends ModalForm {
 		parent::__construct($model, $action, 'Noviet die een huis kent toevoegen', true);
 		$fields['uid'] = new RequiredLidField('uid', $model->uid, 'Noviet', 'novieten');
 		$woonoord = $model->getWoonoord() ? $model->getWoonoord() : null;
-		$fields['woonoord'] = new RequiredEntityField('woonoord', 'naam', 'Woonoord', WoonoordenModel::instance(), '/eetplan/bekendehuizen/zoeken?q=', $woonoord);
+		$fields['woonoord'] = new RequiredEntityField('woonoord', 'naam', 'Woonoord', ContainerFacade::getContainer()->get(WoonoordenModel::class), '/eetplan/bekendehuizen/zoeken?q=', $woonoord);
 		$fields[] = new TextareaField('opmerking', $model->opmerking, 'Opmerking');
 
 		if ($update) {

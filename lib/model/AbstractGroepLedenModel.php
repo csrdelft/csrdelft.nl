@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\AbstractGroepLid;
 use CsrDelft\model\entity\groepen\GroepStatistiek;
@@ -95,7 +96,7 @@ abstract class AbstractGroepLedenModel extends CachedPersistenceModel {
 				$totaal .= ' van ' . $groep->getAanmeldLimiet();
 			}
 		}
-		$db = Database::instance();
+		$db = ContainerFacade::getContainer()->get(Database::class);
 		$profielTable = 'profielen';
 		return new GroepStatistiek(
 			$totaal,

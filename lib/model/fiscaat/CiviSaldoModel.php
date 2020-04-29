@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\fiscaat;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\entity\fiscaat\CiviSaldoLogEnum;
@@ -76,7 +77,7 @@ class CiviSaldoModel extends PersistenceModel {
 	 */
 	public function getSomSaldiOp(DateTime $date, $profielOnly = false) {
 		$currentSum = $this->getSomSaldi($profielOnly);
-		return $currentSum + CiviBestellingModel::instance()->getSomBestellingenVanaf($date, $profielOnly);
+		return $currentSum + ContainerFacade::getContainer()->get(CiviBestellingModel::class)->getSomBestellingenVanaf($date, $profielOnly);
 	}
 
 	/**

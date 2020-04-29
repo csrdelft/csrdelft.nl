@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
@@ -12,9 +13,7 @@ use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredDateField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredTimeField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredTimeObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormulierKnop;
@@ -41,7 +40,7 @@ class MaaltijdForm extends ModalForm {
 	public function __construct(Maaltijd $maaltijd, $action) {
 		parent::__construct($maaltijd, '/maaltijden/beheer/' . $action, false, true);
 
-		$product = CiviProductModel::instance()->find('id = ?', array($maaltijd->product_id))->current();
+		$product = ContainerFacade::getContainer()->get(CiviProductModel::class)->find('id = ?', array($maaltijd->product_id))->current();
 		if ($product == false) {
 			$product = new CiviProduct();
 		}
@@ -62,7 +61,7 @@ class MaaltijdForm extends ModalForm {
 		$fields[] = new RequiredTextField('titel', $maaltijd->titel, 'Titel', 255, 5);
 		$fields[] = new RequiredDateObjectField('datum', $maaltijd->datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields[] = new RequiredTimeObjectField('tijd', $maaltijd->tijd, 'Tijd', 15);
-		$fields[] = new RequiredEntityField('product', 'beschrijving', 'Product', CiviProductModel::instance(), '/fiscaat/producten/suggesties?q=', $product);
+		$fields[] = new RequiredEntityField('product', 'beschrijving', 'Product', ContainerFacade::getContainer()->get(CiviProductModel::class), '/fiscaat/producten/suggesties?q=', $product);
 		$fields[] = new FormulierKnop('/fiscaat/producten', 'redirect', 'Nieuw product', 'Nieuw product aanmaken', '');
 		$fields[] = new RequiredIntField('aanmeld_limiet', $maaltijd->aanmeld_limiet, 'Aanmeldlimiet', 0, 200);
 		$fields[] = new RechtenField('aanmeld_filter', $maaltijd->aanmeld_filter, 'Aanmeldrestrictie');

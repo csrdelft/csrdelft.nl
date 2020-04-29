@@ -4,6 +4,7 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\model\security\LoginModel;
@@ -51,7 +52,7 @@ class LedenLijstController extends AbstractController {
 			try {
 				GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
 
-				$gSync = GoogleSync::instance();
+				$gSync = ContainerFacade::getContainer()->get(GoogleSync::class);
 
 				$start = microtime(true);
 				$message = $gSync->syncLidBatch($lidZoeker->getLeden());
