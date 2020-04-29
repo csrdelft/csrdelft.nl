@@ -40,6 +40,7 @@ doctrine:
             dayofyear: DoctrineExtensions\Query\Mysql\DayOfYear
             now: DoctrineExtensions\Query\Mysql\Now
             concat_ws: DoctrineExtensions\Query\Mysql\ConcatWs
+            replace: DoctrineExtensions\Query\Mysql\Replace
         mappings:
             CsrDelft:
                 is_bundle: false
