@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een deelnemer van een werkgroep.
  *
- * @ORM\Entity(repositoryClass="WerkgroepDeelnemersRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\WerkgroepDeelnemersRepository")
  * @ORM\Table("werkgroep_deelnemers")
  */
 class WerkgroepDeelnemer extends KetzerDeelnemer {

@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroepLid;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een bewoner van een woonoord / huis.
  *
- * @ORM\Entity(repositoryClass="BewonersRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\BewonersRepository")
  * @ORM\Table("bewoners")
  */
 class Bewoner extends AbstractGroepLid {

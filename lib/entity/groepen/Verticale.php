@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\repository\groepen\leden\VerticaleLedenRepository;
@@ -15,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @ORM\Entity(repositoryClass="VerticalenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenRepository")
  * @ORM\Table("verticalen")
  */
 class Verticale extends AbstractGroep {

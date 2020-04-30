@@ -17,7 +17,7 @@ class KetzerKeuzesRepository extends AbstractGroepenRepository {
 	const ORM = KetzerKeuze::class;
 
 	public function getKeuzesVoorOptie(KetzerOptie $optie) {
-		return $this->prefetch('optie_id = ?', array($optie->optie_id));
+		return $this->findBy(['optie_id' => $optie->optie_id]);
 	}
 
 }

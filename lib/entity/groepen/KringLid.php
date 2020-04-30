@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroepLid;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een lid van een kring.
  *
- * @ORM\Entity(repositoryClass="KringLedenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\KringLedenRepository")
  * @ORM\Table("kring_leden")
  */
 class KringLid extends AbstractGroepLid {

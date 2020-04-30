@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een deelnemer van een ketzer.
  *
- * @ORM\Entity(repositoryClass="KetzerDeelnemersRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\KetzerDeelnemersRepository")
  * @ORM\Table("ketzer_deelnemers")
  */
 class KetzerDeelnemer extends AbstractGroepLid {

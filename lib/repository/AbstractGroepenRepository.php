@@ -33,7 +33,10 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @var AccessModel
 	 */
 	private $accessModel;
-	private $entityClass;
+	/**
+	 * @var AbstractGroep
+	 */
+	public $entityClass;
 	/**
 	 * @var Database
 	 */
@@ -81,8 +84,28 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @throws \Doctrine\ORM\ORMException
 	 * @throws \Doctrine\ORM\OptimisticLockException
 	 */
-	public function create(PersistentEntity $groep) {
+	public function create(AbstractGroep $groep) {
 		$this->_em->persist($groep);
+		$this->_em->flush();
+	}
+
+	/**
+	 * @param AbstractGroep $groep
+	 * @throws \Doctrine\ORM\ORMException
+	 * @throws \Doctrine\ORM\OptimisticLockException
+	 */
+	public function update(AbstractGroep $groep) {
+		$this->_em->persist($groep);
+		$this->_em->flush();
+	}
+
+	/**
+	 * @param AbstractGroep $groep
+	 * @throws \Doctrine\ORM\ORMException
+	 * @throws \Doctrine\ORM\OptimisticLockException
+	 */
+	public function delete(AbstractGroep $groep) {
+		$this->_em->remove($groep);
 		$this->_em->flush();
 	}
 

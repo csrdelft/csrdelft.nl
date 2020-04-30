@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\groepen;
 
 
-use CsrDelft\entity\groepen\KetzerDeelnemer;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een deelnemer van een activiteit.
  *
- * @ORM\Entity(repositoryClass="ActiviteitDeelnemersRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository")
  * @ORM\Table("activiteit_deelnemers")
  */
 class ActiviteitDeelnemer extends KetzerDeelnemer {

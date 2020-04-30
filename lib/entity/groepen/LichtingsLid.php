@@ -3,8 +3,6 @@
 namespace CsrDelft\entity\groepen;
 
 
-use CsrDelft\entity\groepen\AbstractGroepLid;
-
 /**
  * LichtingsLid.class.php
  *

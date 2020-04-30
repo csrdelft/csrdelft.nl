@@ -6,7 +6,6 @@ use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\groepen\RechtenGroep;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractGroepenRepository;
-use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -56,13 +55,13 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 			$result[] = 'htleden-oudleden';
 		}
 		// 1 generatie vooruit en 1 achteruit (default order by)
-		$ft = $this->besturenModel->find('status = ?', [GroepStatus::FT], null, null, 1)->fetch();
-		$ht = $this->besturenModel->find('status = ?', [GroepStatus::HT], null, null, 1)->fetch();
-		$ot = $this->besturenModel->find('status = ?', [GroepStatus::OT], null, null, 1)->fetch();
-		if (($ft AND $ft->getLid($uid)) OR ($ht AND $ht->getLid($uid)) OR ($ot AND $ot->getLid($uid))) {
+		$ft = $this->besturenModel->findOneBy(['status' => GroepStatus::FT()]);
+		$ht = $this->besturenModel->findOneBy(['status' => GroepStatus::HT()]);
+		$ot = $this->besturenModel->findOneBy(['status' => GroepStatus::OT()]);
+		if (($ft && $ft->getLid($uid)) || ($ht && $ht->getLid($uid)) || ($ot && $ot->getLid($uid))) {
 			$result[] = 'bestuur';
 		}
-		foreach ($this->commissieLedenModel->prefetch('uid = ?', array($uid)) as $commissielid) {
+		foreach ($this->commissieLedenModel->findBy(['uid' => $uid]) as $commissielid) {
 			$commissie = $this->commissiesModel->get($commissielid->groep_id);
 			if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
 				$result[] = $commissie->familie;

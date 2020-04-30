@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\leden\BewonersRepository;
 use CsrDelft\model\security\LoginModel;
@@ -17,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een woonoord is waar C.S.R.-ers bij elkaar wonen.
  *
- * @ORM\Entity(repositoryClass="WoonoordenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WoonoordenRepository")
  * @ORM\Table("woonoorden")
  */
 class Woonoord extends AbstractGroep {
@@ -27,11 +26,13 @@ class Woonoord extends AbstractGroep {
 	/**
 	 * Woonoord / Huis
 	 * @var HuisStatus
+	 * @ORM\Column(type="string")
 	 */
 	public $soort;
 
 	/**
 	 * Doet mee met Eetplan
+	 * @ORM\Column(type="boolean")
 	 */
 	public $eetplan;
 	/**

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroepLid;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * VerticaleLid.class.php
@@ -11,6 +11,8 @@ use CsrDelft\entity\groepen\AbstractGroepLid;
  *
  * Een lid van een verticale.
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\VerticaleLedenRepository")
+ * @ORM\Table("verticale_leden")
  */
 class VerticaleLid extends AbstractGroepLid {
 

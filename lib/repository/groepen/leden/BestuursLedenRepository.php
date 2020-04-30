@@ -3,8 +3,6 @@
 namespace CsrDelft\repository\groepen\leden;
 
 use CsrDelft\entity\groepen\BestuursLid;
-use CsrDelft\entity\groepen\KetzerSelector;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractGroepLedenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

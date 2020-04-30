@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\repository\groepen\leden\BestuursLedenRepository;
 use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @ORM\Entity(repositoryClass="BesturenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\BesturenRepository")
  * @ORM\Table("besturen")
  */
 class Bestuur extends AbstractGroep {
@@ -20,8 +19,15 @@ class Bestuur extends AbstractGroep {
 	const LEDEN = BestuursLedenRepository::class;
 
 	/**
+	 * @var BestuursLid[]
+	 * @ORM\OneToMany(targetEntity="BestuursLid")
+	 */
+	public $leden;
+
+	/**
 	 * Bestuurstekst
 	 * @var string
+	 * @ORM\Column(type="text")
 	 */
 	public $bijbeltekst;
 	/**

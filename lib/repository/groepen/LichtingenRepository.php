@@ -3,7 +3,6 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\groepen\Kring;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\Orm\Persistence\Database;

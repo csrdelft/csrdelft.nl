@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\leden\RechtenGroepLedenRepository;
 use CsrDelft\model\security\LoginModel;
@@ -15,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een groep beperkt voor rechten.
- * @ORM\Entity(repositoryClass="RechtenGroepenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\RechtenGroepenRepository")
  * @ORM\Table("groepen")
  */
 class RechtenGroep extends AbstractGroep {

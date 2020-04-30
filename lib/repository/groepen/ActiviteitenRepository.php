@@ -4,7 +4,6 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\ActiviteitSoort;
-use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\model\security\AccessModel;
 use Doctrine\Persistence\ManagerRegistry;
 

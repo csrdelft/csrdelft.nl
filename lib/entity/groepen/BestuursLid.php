@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroepLid;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,11 +11,18 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een lid van een bestuur.
  *
- * @ORM\Entity(repositoryClass="BestuursLedenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\BestuursLedenRepository")
  * @ORM\Table("bestuurs_leden")
  */
 class BestuursLid extends AbstractGroepLid {
 
 	protected static $table_name = 'bestuurs_leden';
+
+	/**
+	 * @var Bestuur
+	 * @ORM\ManyToOne(targetEntity="Bestuur", inversedBy="leden")
+	 * @ORM\JoinColumn(name="groep_id")
+	 */
+	public $bestuur;
 
 }

@@ -2,12 +2,12 @@
 
 namespace CsrDelft\repository\groepen;
 
-use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\expr;
 
 class KringenRepository extends AbstractGroepenRepository {
 	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
@@ -26,8 +26,8 @@ class KringenRepository extends AbstractGroepenRepository {
 		if (is_numeric($id)) {
 			return parent::get($id);
 		}
-		$kringen = $this->prefetch('verticale = ? AND kring_nummer = ?', explode('.', $id), null, null, 1);
-		return reset($kringen);
+		list($verticale, $kringNummer) = explode('.', $id);
+		return $this->findOneBy(['verticale' => $verticale, 'kring_nummer' => $kringNummer]);
 	}
 
 	public function nieuw($letter = null) {
@@ -38,7 +38,7 @@ class KringenRepository extends AbstractGroepenRepository {
 	}
 
 	public function getKringenVoorVerticale(Verticale $verticale) {
-		return $this->prefetch('verticale = ?', [$verticale->letter]);
+		return $this->findBy(['verticale' => $verticale->letter]);
 	}
 
 }

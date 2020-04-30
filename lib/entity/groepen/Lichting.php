@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\leden\LichtingLedenRepository;
 use CsrDelft\Orm\Entity\T;
@@ -13,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @ORM\Entity(repositoryClass="LichtingenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\LichtingenRepository")
  */
 class Lichting extends AbstractGroep {
 

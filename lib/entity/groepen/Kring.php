@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\repository\groepen\leden\KringLedenRepository;
 use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @ORM\Entity(repositoryClass="KringenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KringenRepository")
  * @ORM\Table("kringen")
  */
 class Kring extends AbstractGroep {

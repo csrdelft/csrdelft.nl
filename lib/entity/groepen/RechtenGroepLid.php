@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroepLid;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een lid van een rechten-groep.
  *
- * @ORM\Entity(repositoryClass="RechtenGroepLedenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\AbstractGroepLedenRepository")
  * @ORM\Table("groep_leden")
  */
 class RechtenGroepLid extends AbstractGroepLid {

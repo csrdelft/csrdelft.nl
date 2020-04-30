@@ -9,6 +9,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractGroepLedenRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use PDO;
 
@@ -42,13 +43,13 @@ abstract class AbstractGroep {
 	public $familie;
 	/**
 	 * Datum en tijd begin
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $begin_moment;
 	/**
 	 * Datum en tijd einde
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $eind_moment;
@@ -144,7 +145,11 @@ abstract class AbstractGroep {
 	}
 
 	public function getFamilieSuggesties() {
-		return ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT familie'], $this->getTableName())->fetchAll(PDO::FETCH_COLUMN);
+		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+
+		$tableName = $em->getClassMetadata($this)->getTableName();
+
+		return ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT familie'], $tableName)->fetchAll(PDO::FETCH_COLUMN);
 	}
 
 	public function getOpmerkingSuggesties() {
@@ -153,7 +158,11 @@ abstract class AbstractGroep {
 		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
-			$suggesties = ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT opmerking'], static::getLedenModel()->getTableName(), 'groep_id = ?', [$this->id])->fetchAll(PDO::FETCH_COLUMN);
+			$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+
+			$tableName = $em->getClassMetadata(static::getLedenModel()->entityClass)->getTableName();
+
+			$suggesties = ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT opmerking'], $tableName, 'groep_id = ?', [$this->id])->fetchAll(PDO::FETCH_COLUMN);
 		}
 		return $suggesties;
 	}

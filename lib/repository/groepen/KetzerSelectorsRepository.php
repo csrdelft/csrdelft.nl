@@ -16,7 +16,7 @@ class KetzerSelectorsRepository extends AbstractGroepenRepository {
 	const ORM = KetzerSelector::class;
 
 	public function getSelectorsVoorKetzer(Ketzer $ketzer) {
-		return $this->prefetch('ketzer_id = ?', [$ketzer->id]);
+		return $this->findBy(['ketzer_id' => $ketzer->id]);
 	}
 
 }

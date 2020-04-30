@@ -4,6 +4,7 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -50,7 +51,7 @@ abstract class AbstractGroepLid {
 	public $opmerking2;
 	/**
 	 * Datum en tijd van aanmelden
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $lid_sinds;
