@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\maalcie;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\model\security\LoginModel;
@@ -55,7 +56,7 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 		$kwaliteitAantal = 0;
 		foreach ($beoordelingen as $b) {
 			// Haal gemiddelde beoordeling van lid op
-			$userAverage = Database::instance()->sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), 'mlt_beoordelingen', 'uid = ?', array($b->uid));
+			$userAverage = ContainerFacade::getContainer()->get(Database::class)->sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), 'mlt_beoordelingen', 'uid = ?', array($b->uid));
 			$userAverage->execute();
 			$avg = $userAverage->fetchAll();
 

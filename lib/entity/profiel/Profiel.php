@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\profiel;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\GoogleSync;
 use CsrDelft\entity\agenda\Agendeerbaar;
@@ -822,7 +823,7 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getWoonoord() {
-		$woonoorden = WoonoordenModel::instance()->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		$woonoorden = ContainerFacade::getContainer()->get(WoonoordenModel::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($woonoorden)) {
 			return false;
 		}
@@ -830,11 +831,11 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getVerticale() {
-		return VerticalenModel::instance()->get($this->verticale);
+		return ContainerFacade::getContainer()->get(VerticalenModel::class)->get($this->verticale);
 	}
 
 	public function getKring() {
-		$kringen = KringenModel::instance()->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		$kringen = ContainerFacade::getContainer()->get(KringenModel::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($kringen)) {
 			return false;
 		}
@@ -847,7 +848,7 @@ class Profiel implements Agendeerbaar {
 	 * @return float
 	 */
 	public function getCiviSaldo() {
-		$saldo = CiviSaldoModel::instance()->getSaldo($this->uid);
+		$saldo = ContainerFacade::getContainer()->get(CiviSaldoModel::class)->getSaldo($this->uid);
 		if ($saldo) {
 			return $saldo->saldo / (float) 100;
 		}
@@ -865,7 +866,7 @@ class Profiel implements Agendeerbaar {
 			if (!GoogleSync::isAuthenticated()) {
 				return false;
 			}
-			return !is_null(GoogleSync::instance()->existsInGoogleContacts($this));
+			return !is_null(ContainerFacade::getContainer()->get(GoogleSync::class)->existsInGoogleContacts($this));
 		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), 0);
 			return false;

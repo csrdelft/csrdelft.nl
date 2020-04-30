@@ -4,6 +4,7 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\Lichting;
@@ -90,7 +91,7 @@ class LedenMemoryController {
 					$groep = $this->verticalenModel->retrieveByUUID($groep);
 					break;
 				case 'lichting.csrdelft.nl':
-					$groep = LichtingenModel::instance()->get($parts[0]);
+					$groep = ContainerFacade::getContainer()->get(LichtingenModel::class)->get($parts[0]);
 					break;
 			}
 		}
@@ -143,7 +144,7 @@ class LedenMemoryController {
 		if ($l < $min OR $l > $max) {
 			$l = $max;
 		}
-		$lichting = LichtingenModel::instance()->get($l);
+		$lichting = ContainerFacade::getContainer()->get(LichtingenModel::class)->get($l);
 		return $lichting ? $lichting : null;
 	}
 

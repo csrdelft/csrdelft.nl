@@ -117,7 +117,7 @@ class CorveePuntenService {
 		if (is_int($limit) && $limit > 0) {
 			$sql .= ' LIMIT ' . $limit;
 		}
-		$db = Database::instance();
+		$db = ContainerFacade::getContainer()->get(Database::class);
 		$query = $db->getDatabase()->prepare($sql);
 		$query->execute($values);
 		$result = $query->fetchAll();

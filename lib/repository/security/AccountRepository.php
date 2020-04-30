@@ -10,9 +10,7 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
-use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\Proxy;
 
 /**
  * AccountRepository
@@ -104,9 +102,9 @@ class AccountRepository extends AbstractRepository {
 		if (!$profiel) {
 			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
-		if (CiviSaldoModel::instance()->find('uid = ?', array($uid))->rowCount() === 0){
+		if (ContainerFacade::getContainer()->get(CiviSaldoModel::class)->find('uid = ?', array($uid))->rowCount() === 0){
 			// Maak een CiviSaldo voor dit account
-			CiviSaldoModel::instance()->maakSaldo($uid);
+			ContainerFacade::getContainer()->get(CiviSaldoModel::class)->maakSaldo($uid);
 		}
 
 		$account = new Account();
@@ -116,7 +114,7 @@ class AccountRepository extends AbstractRepository {
 		$account->pass_hash = '';
 		$account->pass_since = date_create_immutable();
 		$account->failed_login_attempts = 0;
-		$account->perm_role = AccessModel::instance()->getDefaultPermissionRole($profiel->status);
+		$account->perm_role = ContainerFacade::getContainer()->get(AccessModel::class)->getDefaultPermissionRole($profiel->status);
 		$this->_em->persist($account);
 		$this->_em->flush();
 		return $account;

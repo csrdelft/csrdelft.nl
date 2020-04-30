@@ -5,7 +5,7 @@
 ?>
 <div class="card visitekaartje flex-row">
 	<div class="card-body @if($profiel->isJarig()) jarig @endif ">
-		@if ($profiel->account && CsrDelft\model\security\LoginModel::instance()->maySuTo($profiel->account))
+		@if ($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\model\security\LoginModel::class)->maySuTo($profiel->account))
 			<div class="float-right">
 				<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 			</div>
@@ -21,16 +21,16 @@
 				{{$profiel->getVerticale()->naam}}
 			@endif
 		</p>
-		@php($bestuurslid = CsrDelft\model\groepen\leden\BestuursLedenModel::instance()->find('uid = ?', array($profiel->uid), null, null, 1)->fetch())
+		@php($bestuurslid = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\model\groepen\leden\BestuursLedenModel::class)->find('uid = ?', array($profiel->uid), null, null, 1)->fetch())
 		@if($bestuurslid)
-			@php($bestuur = CsrDelft\model\groepen\BesturenModel::instance()->get($bestuurslid->groep_id))
+			@php($bestuur = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\model\groepen\BesturenModel::class)->get($bestuurslid->groep_id))
 			<p><a
 					href="{{$bestuur->getUrl()}}">{{CsrDelft\model\entity\groepen\GroepStatus::getChar($bestuur->status)}} {{$bestuurslid->opmerking}}</a>
 			</p>
 		@endif
 
-		@foreach (CsrDelft\model\groepen\leden\CommissieLedenModel::instance()->find('uid = ?', array($profiel->uid), null, 'lid_sinds DESC') as $commissielid)
-			@php($commissie = CsrDelft\model\groepen\CommissiesModel::instance()->get($commissielid->groep_id))
+		@foreach (\CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\model\groepen\leden\CommissieLedenModel::class)->find('uid = ?', array($profiel->uid), null, 'lid_sinds DESC') as $commissielid)
+			@php($commissie = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\model\groepen\CommissiesModel::class)->get($commissielid->groep_id))
 			@if ($commissie->status === CsrDelft\model\entity\groepen\GroepStatus::HT)
 				<p>
 					@if (!empty($commissielid->opmerking))

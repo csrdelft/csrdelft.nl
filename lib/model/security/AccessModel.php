@@ -121,7 +121,7 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	public static function getSubject($environment, $action, $resource) {
 		/** @var AccessControl $ac */
-		$ac = self::instance()->retrieveByPrimaryKey([$environment, $action, $resource]);
+		$ac = ContainerFacade::getContainer()->get(self::class)->retrieveByPrimaryKey([$environment, $action, $resource]);
 		if ($ac) {
 			return $ac->subject;
 		}
@@ -164,7 +164,7 @@ class AccessModel extends CachedPersistenceModel {
 		// Als voor het ingelogde lid een permissie gevraagd wordt
 		if ($subject->uid == LoginModel::getUid()) {
 			// Controlleer hoe de gebruiker ge-authenticeerd is
-			$method = LoginModel::instance()->getAuthenticationMethod();
+			$method = ContainerFacade::getContainer()->get(LoginModel::class)->getAuthenticationMethod();
 			if ($allowedAuthenticationMethods == null) {
 				$allowedAuthenticationMethods = self::$defaultAllowedAuthenticationMethods;
 			}
@@ -175,7 +175,7 @@ class AccessModel extends CachedPersistenceModel {
 		}
 
 		// case insensitive
-		return self::instance()->hasPermission($subject, strtoupper($permission));
+		return ContainerFacade::getContainer()->get(self::class)->hasPermission($subject, strtoupper($permission));
 	}
 
 	/**
@@ -225,12 +225,12 @@ class AccessModel extends CachedPersistenceModel {
 	 */
 	public function getTree($environment, $resource) {
 		if ($environment === ActiviteitenModel::ORM) {
-			$activiteit = ActiviteitenModel::instance()->get($resource);
+			$activiteit = ContainerFacade::getContainer()->get(ActiviteitenModel::class)->get($resource);
 			if ($activiteit) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', [$environment, $resource, $activiteit->soort, '*']);
 			}
 		} elseif ($environment === CommissiesModel::ORM) {
-			$commissie = CommissiesModel::instance()->get($resource);
+			$commissie = ContainerFacade::getContainer()->get(CommissiesModel::class)->get($resource);
 			if ($commissie) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', [$environment, $resource, $commissie->soort, '*']);
 			}
@@ -771,16 +771,16 @@ class AccessModel extends CachedPersistenceModel {
 					switch ($prefix) {
 
 						case self::PREFIX_BESTUUR:
-							$l = BestuursLedenModel::instance()->getTableName();
-							$g = BesturenModel::instance()->getTableName();
+							$l = ContainerFacade::getContainer()->get(BestuursLedenModel::class)->getTableName();
+							$g = ContainerFacade::getContainer()->get(BesturenModel::class)->getTableName();
 							break;
 
 						case self::PREFIX_COMMISSIE:
-							$l = CommissieLedenModel::instance()->getTableName();
-							$g = CommissiesModel::instance()->getTableName();
+							$l = ContainerFacade::getContainer()->get(CommissieLedenModel::class)->getTableName();
+							$g = ContainerFacade::getContainer()->get(CommissiesModel::class)->getTableName();
 							break;
 					}
-					return Database::instance()->sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', [$role, $gevraagd, $profiel->uid]);
+					return ContainerFacade::getContainer()->get(Database::class)->sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', [$role, $gevraagd, $profiel->uid]);
 				}
 			// fall through
 
@@ -806,43 +806,43 @@ class AccessModel extends CachedPersistenceModel {
 							$role = $gevraagd;
 						}
 						if ($gevraagd) {
-							$groep = BesturenModel::instance()->get($gevraagd);
+							$groep = ContainerFacade::getContainer()->get(BesturenModel::class)->get($gevraagd);
 						} else {
-							$groep = BesturenModel::instance()->get('bestuur'); // h.t.
+							$groep = ContainerFacade::getContainer()->get(BesturenModel::class)->get('bestuur'); // h.t.
 						}
 						break;
 
 					case self::PREFIX_COMMISSIE:
-						$groep = CommissiesModel::instance()->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(CommissiesModel::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_KRING:
-						$groep = KringenModel::instance()->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(KringenModel::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_ONDERVERENIGING:
-						$groep = OnderverenigingenModel::instance()->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(OnderverenigingenModel::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_WOONOORD:
-						$groep = WoonoordenModel::instance()->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(WoonoordenModel::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_ACTIVITEIT:
-						$groep = ActiviteitenModel::instance()->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(ActiviteitenModel::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_KETZER:
-						$groep = KetzersModel::instance()->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(KetzersModel::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_WERKGROEP:
-						$groep = WerkgroepenModel::instance()->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(WerkgroepenModel::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_GROEP:
 					default:
-						$groep = RechtenGroepenModel::instance()->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(RechtenGroepenModel::class)->get($gevraagd);
 						break;
 				}
 

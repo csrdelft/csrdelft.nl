@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\forum;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDeelMelding;
 use CsrDelft\entity\forum\ForumDraad;
@@ -116,7 +117,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 		);
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		LoginModel::instance()->overrideUid($ontvanger->uid);
+		ContainerFacade::getContainer()->get(LoginModel::class)->overrideUid($ontvanger->uid);
 
 		// Verzend mail
 		try {
@@ -128,7 +129,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 			}
 		} finally {
 			// Zet UID terug in sessie
-			LoginModel::instance()->resetUid();
+			ContainerFacade::getContainer()->get(LoginModel::class)->resetUid();
 		}
 	}
 

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\AbstractGroepenModel;
 use CsrDelft\model\entity\groepen\Lichting;
 use CsrDelft\model\security\AccessModel;
@@ -63,11 +64,11 @@ class LichtingenModel extends AbstractGroepenModel {
 	}
 
 	public static function getJongsteLidjaar() {
-		return (int)Database::instance()->sqlSelect(['MAX(lidjaar)'], 'profielen')->fetchColumn();
+		return (int)ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['MAX(lidjaar)'], 'profielen')->fetchColumn();
 	}
 
 	public static function getOudsteLidjaar() {
-		return (int)Database::instance()->sqlSelect(['MIN(lidjaar)'], 'profielen', 'lidjaar > 0')->fetchColumn();
+		return (int)ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['MIN(lidjaar)'], 'profielen', 'lidjaar > 0')->fetchColumn();
 	}
 
 }

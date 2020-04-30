@@ -1,5 +1,6 @@
 <?php
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\CourantBerichtRepository;
 use CsrDelft\repository\CourantRepository;
 use CsrDelft\view\courant\CourantView;
@@ -14,8 +15,8 @@ class CourantCompile extends AbstractMigration {
 
 		require_once 'lib/configuratie.include.php';
 
-		$courantModel = CourantRepository::instance();
-		$courantBerichtModel = CourantBerichtRepository::instance();
+		$courantModel = ContainerFacade::getContainer()->get(CourantRepository::class);
+		$courantBerichtModel = ContainerFacade::getContainer()->get(CourantBerichtRepository::class);
 		$couranten = $courantModel->find();
 
 		foreach ($couranten as $courant) {

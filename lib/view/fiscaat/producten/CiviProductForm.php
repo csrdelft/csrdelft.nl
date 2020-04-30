@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\producten;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\fiscaat\CiviCategorie;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
 use CsrDelft\model\fiscaat\CiviCategorieModel;
@@ -22,7 +23,7 @@ class CiviProductForm extends ModalForm {
 	function __construct(CiviProduct $model) {
 		parent::__construct($model, '/fiscaat/producten/opslaan', false, true);
 
-		$categorie = CiviCategorieModel::instance()->find('id = ?', array($model->categorie_id))->fetch();
+		$categorie = ContainerFacade::getContainer()->get(CiviCategorieModel::class)->find('id = ?', array($model->categorie_id))->fetch();
 		if ($categorie == false) {
 			$categorie = new CiviCategorie();
 		}
@@ -34,7 +35,7 @@ class CiviProductForm extends ModalForm {
 		$fields[] = new RequiredIntField('prioriteit', $model->prioriteit, 'Prioriteit');
 		$fields[] = new RequiredJaNeeField('beheer', $model->beheer, 'Beheer');
 		$fields[] = new RequiredBedragField('prijs', $model->prijs, 'Prijs', '€', 0, 50, 0.50);
-		$fields[] = new RequiredEntityField('categorie', 'type', 'Categorie', CiviCategorieModel::instance(), '/fiscaat/categorien/suggesties?q=', $categorie);
+		$fields[] = new RequiredEntityField('categorie', 'type', 'Categorie', ContainerFacade::getContainer()->get(CiviCategorieModel::class), '/fiscaat/categorien/suggesties?q=', $categorie);
 
 		$this->addFields($fields);
 

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\bestellingen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviProductModel;
@@ -17,13 +18,13 @@ class CiviBestellingInhoudTableResponse extends DataTableResponse {
 	 * @return string
 	 */
 	public function renderElement($entity) {
-		$civiProduct = CiviProductModel::instance()->getProduct($entity->product_id);
+		$civiProduct = ContainerFacade::getContainer()->get(CiviProductModel::class)->getProduct($entity->product_id);
 		return [
 			'bestelling_id' => $entity->bestelling_id,
 			'product_id' => $entity->product_id,
 			'aantal' => $entity->aantal,
 			'stukprijs' => sprintf('€%.2f', $civiProduct->prijs / 100),
-			'totaalprijs' => sprintf('€%.2f', CiviBestellingInhoudModel::instance()->getPrijs($entity) / 100),
+			'totaalprijs' => sprintf('€%.2f', ContainerFacade::getContainer()->get(CiviBestellingInhoudModel::class)->getPrijs($entity) / 100),
 			'product' => $civiProduct->beschrijving,
 		];
 	}

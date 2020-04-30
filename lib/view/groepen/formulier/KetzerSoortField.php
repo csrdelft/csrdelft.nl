@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
@@ -45,7 +46,7 @@ class KetzerSoortField extends GroepSoortField {
 			return false;
 		}
 
-		$model = $class[0]::instance(); // require once
+		$model = ContainerFacade::getContainer()->get($class[0]); // require once
 		$orm = $model::ORM;
 		if (!$orm::magAlgemeen(AccessAction::Aanmaken, $soort)) {
 			if ($model instanceof ActiviteitenModel) {

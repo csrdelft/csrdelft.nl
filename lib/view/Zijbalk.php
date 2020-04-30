@@ -82,8 +82,8 @@ abstract class Zijbalk {
 		// Ledenmemory topscores
 		if (LoginModel::mag(P_LEDEN_READ) AND lid_instelling('zijbalk', 'ledenmemory_topscores') > 0) {
 			$lidjaar = LichtingenModel::getJongsteLidjaar();
-			$lichting = LichtingenModel::instance()->get($lidjaar);
-			$scores = LedenMemoryScoresModel::instance()->getGroepTopScores($lichting, (int)lid_instelling('zijbalk', 'ledenmemory_topscores'));
+			$lichting = ContainerFacade::getContainer()->get(LichtingenModel::class)->get($lidjaar);
+			$scores = ContainerFacade::getContainer()->get(LedenMemoryScoresModel::class)->getGroepTopScores($lichting, (int)lid_instelling('zijbalk', 'ledenmemory_topscores'));
 			$zijbalk[] = new LedenMemoryZijbalkView($scores, $lidjaar);
 		}
 		// Nieuwste fotoalbum

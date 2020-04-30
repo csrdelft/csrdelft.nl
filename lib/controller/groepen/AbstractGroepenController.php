@@ -407,7 +407,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if ($form->validate()) {
 			$values = $form->getValues();
 			/** @var AbstractGroepenModel $model */
-			$model = $values['model']::instance();
+			$model = \CsrDelft\common\ContainerFacade::getContainer()->get($values['model']);
 			$converteer = get_class($model) !== get_class($this->model);
 			$response = [];
 			$groep = $this->model->retrieveByUUID($id);

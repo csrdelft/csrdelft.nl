@@ -122,7 +122,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		);
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		LoginModel::instance()->overrideUid($ontvanger->uid);
+		ContainerFacade::getContainer()->get(LoginModel::class)->overrideUid($ontvanger->uid);
 
 		// Verzend mail
 		try {
@@ -132,7 +132,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 			$mail->send();
 		} finally {
 			// Zet UID terug in sessie
-			LoginModel::instance()->resetUid();
+			ContainerFacade::getContainer()->get(LoginModel::class)->resetUid();
 		}
 	}
 
@@ -158,11 +158,11 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 			}
 
 			// Controleer of lid bij draad mag, stel hiervoor tijdelijk de ingelogde gebruiker in op gegeven lid
-			LoginModel::instance()->overrideUid($genoemde->uid);
+			ContainerFacade::getContainer()->get(LoginModel::class)->overrideUid($genoemde->uid);
 			try {
 				$magMeldingKrijgen = $draad->magMeldingKrijgen();
 			} finally {
-				LoginModel::instance()->resetUid();
+				ContainerFacade::getContainer()->get(LoginModel::class)->resetUid();
 			}
 
 			if (!$magMeldingKrijgen) {

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\groepen\VerticalenModel;
 
 /**
@@ -16,7 +17,7 @@ class VerticaleField extends SelectField {
 
 	public function __construct($name, $value, $description) {
 		$verticalen = array();
-		foreach (VerticalenModel::instance()->prefetch() as $v) {
+		foreach (ContainerFacade::getContainer()->get(VerticalenModel::class)->prefetch() as $v) {
 			$verticalen[$v->letter] = $v->naam;
 		}
 		parent::__construct($name, $value, $description, $verticalen);

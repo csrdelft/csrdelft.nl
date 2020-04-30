@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\eetplan;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\model\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
@@ -55,7 +56,7 @@ class Eetplan implements DataTableEntry {
 	 * @return Woonoord|false|mixed
 	 */
 	public function getWoonoord() {
-		return WoonoordenModel::instance()->get($this->woonoord_id);
+		return ContainerFacade::getContainer()->get(WoonoordenModel::class)->get($this->woonoord_id);
 	}
 
 	/**

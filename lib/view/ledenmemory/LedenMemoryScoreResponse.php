@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\ledenmemory;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
@@ -28,7 +29,7 @@ class LedenMemoryScoreResponse extends DataTableResponse {
 				switch ($parts[1]) {
 
 					case 'verticale.csrdelft.nl':
-						$groep = VerticalenModel::instance()->retrieveByUUID($score->groep);
+						$groep = ContainerFacade::getContainer()->get(VerticalenModel::class)->retrieveByUUID($score->groep);
 						$this->titles[$score->groep] = 'Verticale ' . $groep->naam;
 						break;
 

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\groepen\CommissieSoort;
@@ -94,7 +95,7 @@ JS;
 			return false;
 		}
 		$class = $this->value;
-		$model = $class::instance(); // require once
+		$model = ContainerFacade::getContainer()->get($class);
 		$orm = $model::ORM;
 		$soort = $this->getSoort();
 		/**

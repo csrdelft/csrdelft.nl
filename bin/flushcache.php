@@ -2,13 +2,15 @@
 /**
  * Flush de cache.
  */
+
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\Orm\Persistence\OrmMemcache;
 
 chdir(dirname(__FILE__) . '/../lib/');
 
 require_once 'configuratie.include.php';
 
-if (OrmMemcache::instance()->getCache()->flush()) {
+if (ContainerFacade::getContainer()->get(OrmMemcache::class)->getCache()->flush()) {
 	echo 'Memcache succesvol geflushed' . PHP_EOL;
 } else {
 	echo 'Memcache flushen mislukt' . PHP_EOL;

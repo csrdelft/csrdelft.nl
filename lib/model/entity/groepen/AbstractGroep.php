@@ -2,6 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\AbstractGroepLedenModel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
@@ -118,7 +119,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	public static function getLedenModel() {
 		$orm = static::LEDEN;
 
-		return $orm::instance();
+		return ContainerFacade::getContainer()->get($orm);
 	}
 
 	/**
@@ -128,7 +129,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	 * @return AbstractGroepLid
 	 */
 	public function getLid($uid) {
-		return (static::LEDEN)::instance()->get($this, $uid);
+		return ContainerFacade::getContainer()->get(static::LEDEN)->get($this, $uid);
 	}
 
 	/**
@@ -149,7 +150,7 @@ abstract class AbstractGroep extends PersistentEntity {
 	}
 
 	public function getFamilieSuggesties() {
-		return Database::instance()->sqlSelect(['DISTINCT familie'], $this->getTableName())->fetchAll(PDO::FETCH_COLUMN);
+		return ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT familie'], $this->getTableName())->fetchAll(PDO::FETCH_COLUMN);
 	}
 
 	public function getOpmerkingSuggesties() {
@@ -158,7 +159,7 @@ abstract class AbstractGroep extends PersistentEntity {
 		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
-			$suggesties = Database::instance()->sqlSelect(['DISTINCT opmerking'], static::getLedenModel()->getTableName(), 'groep_id = ?', [$this->id])->fetchAll(PDO::FETCH_COLUMN);
+			$suggesties = ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT opmerking'], static::getLedenModel()->getTableName(), 'groep_id = ?', [$this->id])->fetchAll(PDO::FETCH_COLUMN);
 		}
 		return $suggesties;
 	}
@@ -174,7 +175,7 @@ abstract class AbstractGroep extends PersistentEntity {
 		if (!LoginModel::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
 			return false;
 		}
-		$aangemeld = Database::instance()->sqlExists(static::getLedenModel()->getTableName(), 'groep_id = ? AND uid = ?', [$this->id, LoginModel::getUid()]);
+		$aangemeld = ContainerFacade::getContainer()->get(Database::class)->sqlExists(static::getLedenModel()->getTableName(), 'groep_id = ? AND uid = ?', [$this->id, LoginModel::getUid()]);
 		switch ($action) {
 
 			case AccessAction::Aanmelden:

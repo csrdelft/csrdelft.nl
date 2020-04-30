@@ -362,7 +362,7 @@ function isGeldigeDatum($datum) {
  * @param string $cssID
  */
 function debugprint($sString, $cssID = 'pubcie_debug') {
-	if (DEBUG || LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued()) {
+	if (DEBUG || LoginModel::mag(P_ADMIN) || ContainerFacade::getContainer()->get(LoginModel::class)->isSued()) {
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
 }
@@ -542,7 +542,7 @@ function getMaximumFileUploadSize() {
 
 function printDebug() {
 	$enableDebug = filter_input(INPUT_GET, 'debug') !== null;
-	if ($enableDebug && (DEBUG || (LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued()))) {
+	if ($enableDebug && (DEBUG || (LoginModel::mag(P_ADMIN) || ContainerFacade::getContainer()->get(LoginModel::class)->isSued()))) {
 		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
 		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
@@ -572,10 +572,10 @@ function getDebug(
 		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
 	}
 	if ($sql) {
-		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::instance()->getQueries(), "PDO" => Database::instance()->getQueries()), true));
+		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => ContainerFacade::getContainer()->get(DatabaseAdmin::class)->getQueries(), "PDO" => ContainerFacade::getContainer()->get(Database::class)->getQueries()), true));
 	}
 	if ($sqltrace) {
-		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(Database::instance()->getTrace(), true));
+		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(ContainerFacade::getContainer()->get(Database::class)->getTrace(), true));
 	}
 	return $debug;
 }

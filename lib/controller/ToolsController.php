@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
@@ -171,7 +172,7 @@ class ToolsController extends AbstractController {
 	 */
 	public function novieten() {
 		return view('tools.novieten', [
-			'novieten' => Database::instance()->sqlSelect(['*'], 'profielen', 'status = ? AND lidjaar = ?', ['S_NOVIET', date('Y')])
+			'novieten' => ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['*'], 'profielen', 'status = ? AND lidjaar = ?', ['S_NOVIET', date('Y')])
 		]);
 	}
 
@@ -318,7 +319,7 @@ class ToolsController extends AbstractController {
 
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
-			debugprint(OrmMemcache::instance()->getCache()->getStats());
+			debugprint(ContainerFacade::getContainer()->get(OrmMemcache::class)->getCache()->getStats());
 
 			return new PlainView(ob_get_clean());
 		}
