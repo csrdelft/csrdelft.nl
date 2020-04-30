@@ -3,10 +3,10 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\common\GoogleSync;
 use CsrDelft\entity\GoogleToken;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\GoogleTokenRepository;
+use CsrDelft\service\GoogleSync;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

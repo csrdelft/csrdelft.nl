@@ -1,8 +1,10 @@
 <?php
 
-namespace CsrDelft\common;
+namespace CsrDelft\service;
 
-use CsrDelft\entity\GoogleToken;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\GoogleTokenRepository;

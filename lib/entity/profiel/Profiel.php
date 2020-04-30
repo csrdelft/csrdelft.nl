@@ -4,7 +4,6 @@ namespace CsrDelft\entity\profiel;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\GoogleSync;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\entity\OntvangtContactueel;
@@ -19,6 +18,7 @@ use CsrDelft\model\groepen\VerticalenModel;
 use CsrDelft\model\groepen\WoonoordenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\GoogleSync;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use Doctrine\Common\Collections\ArrayCollection;

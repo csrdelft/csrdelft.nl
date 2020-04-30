@@ -6,9 +6,9 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\GoogleSync;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
+use CsrDelft\service\GoogleSync;
 use CsrDelft\service\LidZoeker;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
