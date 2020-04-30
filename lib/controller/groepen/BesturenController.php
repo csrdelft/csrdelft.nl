@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\repository\groepen\BesturenModel;
+use CsrDelft\repository\groepen\BesturenRepository;
 
 /**
  * BesturenController.class.php
@@ -12,7 +12,7 @@ use CsrDelft\repository\groepen\BesturenModel;
  * Controller voor besturen.
  */
 class BesturenController extends AbstractGroepenController {
-	public function __construct(BesturenModel $besturenModel) {
+	public function __construct(BesturenRepository $besturenModel) {
 		parent::__construct($besturenModel);
 	}
 }

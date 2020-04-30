@@ -4,7 +4,7 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ChangeLogRepository;
 use Jacwright\RestServer\RestException;
@@ -12,13 +12,13 @@ use Jacwright\RestServer\RestException;
 class ApiActiviteitenController {
 	/** @var ChangeLogRepository  */
 	private $changeLogRepository;
-	/** @var ActiviteitenModel  */
+	/** @var ActiviteitenRepository  */
 	private $activiteitenModel;
 
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 
-		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
+		$this->activiteitenModel = $container->get(ActiviteitenRepository::class);
 		$this->changeLogRepository = $container->get(ChangeLogRepository::class);
 	}
 

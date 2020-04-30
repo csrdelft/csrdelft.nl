@@ -5,8 +5,8 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Lichting;
-use CsrDelft\repository\groepen\LichtingenModel;
-use CsrDelft\repository\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
@@ -23,15 +23,15 @@ class BbLedenmemoryscores extends BbTag {
 	private $groep;
 	private $titel;
 	/**
-	 * @var VerticalenModel
+	 * @var VerticalenRepository
 	 */
 	private $verticalenModel;
 	/**
-	 * @var LichtingenModel
+	 * @var LichtingenRepository
 	 */
 	private $lichtingenModel;
 
-	public function __construct(VerticalenModel $verticalenModel, LichtingenModel $lichtingenModel) {
+	public function __construct(VerticalenRepository $verticalenModel, LichtingenRepository $lichtingenModel) {
 		$this->verticalenModel = $verticalenModel;
 		$this->lichtingenModel = $lichtingenModel;
 	}
@@ -68,7 +68,7 @@ class BbLedenmemoryscores extends BbTag {
 		} elseif (isset($arguments['lichting'])) {
 			$l = (int)filter_var($arguments['lichting'], FILTER_SANITIZE_NUMBER_INT);
 			if ($l < 1950) {
-				$l = LichtingenModel::getJongsteLidjaar();
+				$l = LichtingenRepository::getJongsteLidjaar();
 			}
 			$lichting = $this->lichtingenModel->get($l);
 			if ($lichting) {

@@ -16,16 +16,16 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\repository\groepen\ActiviteitenModel;
-use CsrDelft\repository\groepen\BesturenModel;
-use CsrDelft\repository\groepen\KetzersModel;
-use CsrDelft\repository\groepen\KringenModel;
-use CsrDelft\repository\groepen\leden\BestuursLedenModel;
-use CsrDelft\repository\groepen\LichtingenModel;
-use CsrDelft\repository\groepen\OnderverenigingenModel;
-use CsrDelft\repository\groepen\RechtenGroepenModel;
-use CsrDelft\repository\groepen\WerkgroepenModel;
-use CsrDelft\repository\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\groepen\BesturenRepository;
+use CsrDelft\repository\groepen\KetzersRepository;
+use CsrDelft\repository\groepen\KringenRepository;
+use CsrDelft\repository\groepen\leden\BestuursLedenRepository;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\OnderverenigingenRepository;
+use CsrDelft\repository\groepen\RechtenGroepenRepository;
+use CsrDelft\repository\groepen\WerkgroepenRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
@@ -228,8 +228,8 @@ class AccessModel extends CachedPersistenceModel {
 	 * @return array
 	 */
 	public function getTree($environment, $resource) {
-		if ($environment === ActiviteitenModel::ORM) {
-			$activiteit = ContainerFacade::getContainer()->get(ActiviteitenModel::class)->get($resource);
+		if ($environment === ActiviteitenRepository::ORM) {
+			$activiteit = ContainerFacade::getContainer()->get(ActiviteitenRepository::class)->get($resource);
 			if ($activiteit) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', [$environment, $resource, $activiteit->soort, '*']);
 			}
@@ -738,13 +738,13 @@ class AccessModel extends CachedPersistenceModel {
 				return (string)$profiel->lidjaar === $gevraagd;
 
 			case self::PREFIX_EERSTEJAARS:
-				if ($profiel->lidjaar === LichtingenModel::getJongsteLidjaar()) {
+				if ($profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
 					return true;
 				}
 				return false;
 
 			case self::PREFIX_OUDEREJAARS:
-				if ($profiel->lidjaar === LichtingenModel::getJongsteLidjaar()) {
+				if ($profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
 					return false;
 				}
 				return true;
@@ -812,9 +812,9 @@ class AccessModel extends CachedPersistenceModel {
 							$role = $gevraagd;
 						}
 						if ($gevraagd) {
-							$groep = ContainerFacade::getContainer()->get(BesturenModel::class)->get($gevraagd);
+							$groep = ContainerFacade::getContainer()->get(BesturenRepository::class)->get($gevraagd);
 						} else {
-							$groep = ContainerFacade::getContainer()->get(BesturenModel::class)->get('bestuur'); // h.t.
+							$groep = ContainerFacade::getContainer()->get(BesturenRepository::class)->get('bestuur'); // h.t.
 						}
 						break;
 
@@ -823,32 +823,32 @@ class AccessModel extends CachedPersistenceModel {
 						break;
 
 					case self::PREFIX_KRING:
-						$groep = ContainerFacade::getContainer()->get(KringenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(KringenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_ONDERVERENIGING:
-						$groep = ContainerFacade::getContainer()->get(OnderverenigingenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(OnderverenigingenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_WOONOORD:
-						$groep = ContainerFacade::getContainer()->get(WoonoordenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_ACTIVITEIT:
-						$groep = ContainerFacade::getContainer()->get(ActiviteitenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(ActiviteitenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_KETZER:
-						$groep = ContainerFacade::getContainer()->get(KetzersModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(KetzersRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_WERKGROEP:
-						$groep = ContainerFacade::getContainer()->get(WerkgroepenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(WerkgroepenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_GROEP:
 					default:
-						$groep = ContainerFacade::getContainer()->get(RechtenGroepenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(RechtenGroepenRepository::class)->get($gevraagd);
 						break;
 				}
 

@@ -2,11 +2,13 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\Orm\Persistence\Database;
 use Doctrine\Persistence\ManagerRegistry;
 use PDO;
 use ReflectionClass;
@@ -32,6 +34,10 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 */
 	private $accessModel;
 	private $entityClass;
+	/**
+	 * @var Database
+	 */
+	private $database;
 
 	/**
 	 * AbstractGroepenModel constructor.
@@ -44,6 +50,16 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 
 		$this->accessModel = $accessModel;
 		$this->entityClass = $entityClass;
+
+		$this->database = ContainerFacade::getContainer()->get(Database::class);
+	}
+
+	public static function getUrl() {
+		return '/groepen/' . static::getNaam();
+	}
+
+	public static function getNaam() {
+		return strtolower(str_replace('Repository', '', classNameZonderNamespace(get_called_class())));
 	}
 
 	/**
@@ -55,33 +71,6 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 			return $this->find($id);
 		}
 		return $this->findOneBy(['familie' => $id, 'status' => GroepStatus::HT()]);
-	}
-
-	public static function getNaam() {
-		return strtolower(str_replace('Repository', '', classNameZonderNamespace(get_called_class())));
-	}
-
-	public static function getUrl() {
-		return '/groepen/' . static::getNaam();
-	}
-
-	/**
-	 * @param null $soort
-	 * @return AbstractGroep
-	 */
-	public function nieuw(/* @noinspection PhpUnusedParameterInspection */$soort = null) {
-		$orm = $this->entityClass;
-		$groep = new $orm();
-		$groep->naam = null;
-		$groep->familie = null;
-		$groep->status = GroepStatus::HT;
-		$groep->samenvatting = '';
-		$groep->omschrijving = null;
-		$groep->begin_moment = null;
-		$groep->eind_moment = null;
-		$groep->website = null;
-		$groep->maker_uid = LoginModel::getUid();
-		return $groep;
 	}
 
 	/**
@@ -151,6 +140,25 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	}
 
 	/**
+	 * @param null $soort
+	 * @return AbstractGroep
+	 */
+	public function nieuw(/* @noinspection PhpUnusedParameterInspection */ $soort = null) {
+		$orm = $this->entityClass;
+		$groep = new $orm();
+		$groep->naam = null;
+		$groep->familie = null;
+		$groep->status = GroepStatus::HT;
+		$groep->samenvatting = '';
+		$groep->omschrijving = null;
+		$groep->begin_moment = null;
+		$groep->eind_moment = null;
+		$groep->website = null;
+		$groep->maker_uid = LoginModel::getUid();
+		return $groep;
+	}
+
+	/**
 	 * Return groepen by GroepStatus voor lid.
 	 *
 	 * @param string $uid
@@ -158,22 +166,29 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @return AbstractGroep[]
 	 */
 	public function getGroepenVoorLid($uid, $status = null) {
-		/** @var AbstractGroep $orm */
-		$orm = static::ORM;
-		$ids = $this->database->sqlSelect(['DISTINCT groep_id'], $orm::getLedenModel()->getTableName(), 'uid = ?', [$uid])->fetchAll(PDO::FETCH_COLUMN);
+
+		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+		/** @var AbstractGroepLedenRepository $ledenModel */
+		$ledenModel = ContainerFacade::getContainer()->get($this->entityClass::LEDEN);
+
+		$ids = $this->database->sqlSelect(['DISTINCT groep_id'], $em->getClassMetadata($ledenModel->entityClass)->getTableName(), 'uid = ?', [$uid])->fetchAll(PDO::FETCH_COLUMN);
 		if (empty($ids)) {
 			return [];
 		}
-		$where = 'id IN (' . implode(', ', array_fill(0, count($ids), '?')) . ')';
-		if ($status === null) {
-			return $this->prefetch($where, $ids);
-		} elseif (is_array($status)) {
-			$where .= ' AND status IN (' . implode(', ', array_fill(0, count($status), '?')) . ')';
-			return $this->prefetch($where, array_merge($ids, $status));
+
+		$qb = $this->createQueryBuilder('ag')
+			->where('ag.id in (:ids)')
+			->setParameter('ids', $ids);
+
+		if (is_array($status)) {
+			$qb->andWhere('ag.status in (:status)')
+				->setParameter('status', $status);
+		} elseif ($status) {
+			$qb->andWhere('ag.status = :status')
+				->setParameter('status', $status);
 		}
-		$where .= ' AND status = ?';
-		$ids[] = $status;
-		return $this->prefetch($where, $ids);
+
+		return $qb->getQuery()->getResult();
 	}
 
 }

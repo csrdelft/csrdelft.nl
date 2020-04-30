@@ -4,7 +4,7 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\groepen\Verticale;
-use CsrDelft\repository\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Controller voor verticalen.
  */
 class VerticalenController extends AbstractGroepenController {
-	public function __construct(VerticalenModel $verticalenModel) {
+	public function __construct(VerticalenRepository $verticalenModel) {
 		parent::__construct($verticalenModel);
 	}
 

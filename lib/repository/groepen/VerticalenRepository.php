@@ -7,7 +7,7 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class VerticalenModel extends AbstractGroepenRepository {
+class VerticalenRepository extends AbstractGroepenRepository {
 	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
 		parent::__construct($accessModel, $registry, Verticale::class);
 	}

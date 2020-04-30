@@ -9,7 +9,7 @@
 	<table class="table">
 		<tr>
 			@foreach($verticalen as $letter => $verticale)
-				<th scope="col"><h3>Verticale {{\CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\VerticalenModel::class)->get($letter)->naam }}</h3></th>
+				<th scope="col"><h3>Verticale {{\CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\VerticalenRepository::class)->get($letter)->naam }}</h3></th>
 			@endforeach
 		</tr>
 		<tr>

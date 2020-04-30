@@ -11,8 +11,8 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\repository\groepen\LichtingenModel;
-use CsrDelft\repository\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\JsonResponse;
@@ -29,11 +29,11 @@ class LedenMemoryController {
 	 */
 	private $profielRepository;
 	/**
-	 * @var VerticalenModel
+	 * @var VerticalenRepository
 	 */
 	private $verticalenModel;
 
-	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielRepository $profielRepository, VerticalenModel $verticalenModel) {
+	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielRepository $profielRepository, VerticalenRepository $verticalenModel) {
 		$this->ledenMemoryScoresModel = $ledenMemoryScoresModel;
 		$this->profielRepository = $profielRepository;
 		$this->verticalenModel = $verticalenModel;
@@ -91,7 +91,7 @@ class LedenMemoryController {
 					$groep = $this->verticalenModel->retrieveByUUID($groep);
 					break;
 				case 'lichting.csrdelft.nl':
-					$groep = ContainerFacade::getContainer()->get(LichtingenModel::class)->get($parts[0]);
+					$groep = ContainerFacade::getContainer()->get(LichtingenRepository::class)->get($parts[0]);
 					break;
 			}
 		}
@@ -139,12 +139,12 @@ class LedenMemoryController {
 	private function getLichting()
 	{
 		$l = (int)filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
-		$min = LichtingenModel::getOudsteLidjaar();
-		$max = LichtingenModel::getJongsteLidjaar();
+		$min = LichtingenRepository::getOudsteLidjaar();
+		$max = LichtingenRepository::getJongsteLidjaar();
 		if ($l < $min OR $l > $max) {
 			$l = $max;
 		}
-		$lichting = ContainerFacade::getContainer()->get(LichtingenModel::class)->get($l);
+		$lichting = ContainerFacade::getContainer()->get(LichtingenRepository::class)->get($l);
 		return $lichting ? $lichting : null;
 	}
 

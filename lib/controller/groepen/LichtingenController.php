@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\repository\groepen\LichtingenModel;
+use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor lichtingen.
  *
- * @property LichtingenModel $model
+ * @property LichtingenRepository $model
  */
 class LichtingenController extends AbstractGroepenController {
-	public function __construct(LichtingenModel $lichtingenModel) {
+	public function __construct(LichtingenRepository $lichtingenModel) {
 		parent::__construct($lichtingenModel);
 	}
 

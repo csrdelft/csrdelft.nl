@@ -8,13 +8,13 @@ use CsrDelft\entity\groepen\CommissieSoort;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\HuisStatus;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\ActiviteitenModel;
-use CsrDelft\repository\groepen\BesturenModel;
-use CsrDelft\repository\groepen\KetzersModel;
-use CsrDelft\repository\groepen\OnderverenigingenModel;
-use CsrDelft\repository\groepen\RechtenGroepenModel;
-use CsrDelft\repository\groepen\WerkgroepenModel;
-use CsrDelft\repository\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\groepen\BesturenRepository;
+use CsrDelft\repository\groepen\KetzersRepository;
+use CsrDelft\repository\groepen\OnderverenigingenRepository;
+use CsrDelft\repository\groepen\RechtenGroepenRepository;
+use CsrDelft\repository\groepen\WerkgroepenRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
@@ -65,13 +65,13 @@ $('#{$this->getId()}Option_CommissiesModel').click();
 JS;
 
 		$this->options = [
-			ActiviteitenModel::class => $this->activiteit,
-			KetzersModel::class => 'Aanschafketzer',
-			WerkgroepenModel::class => short_class(WerkgroepenModel::ORM),
-			RechtenGroepenModel::class => 'Groep (overig)',
-			OnderverenigingenModel::class => short_class(OnderverenigingenModel::ORM),
-			WoonoordenModel::class => short_class(WoonoordenModel::ORM),
-			BesturenModel::class => short_class(BesturenModel::ORM),
+			ActiviteitenRepository::class => $this->activiteit,
+			KetzersRepository::class => 'Aanschafketzer',
+			WerkgroepenRepository::class => short_class(WerkgroepenRepository::ORM),
+			RechtenGroepenRepository::class => 'Groep (overig)',
+			OnderverenigingenRepository::class => short_class(OnderverenigingenRepository::ORM),
+			WoonoordenRepository::class => short_class(WoonoordenRepository::ORM),
+			BesturenRepository::class => short_class(BesturenRepository::ORM),
 			CommissiesRepository::class => $this->commissie
 		];
 	}
@@ -102,11 +102,11 @@ JS;
 		 * @Warning: Duplicate function in GroepForm->validate()
 		 */
 		if (!$orm::magAlgemeen(AccessAction::Beheren, null, $soort)) {
-			if ($model instanceof ActiviteitenModel) {
+			if ($model instanceof ActiviteitenRepository) {
 				$naam = ActiviteitSoort::getDescription($soort);
 			} elseif ($model instanceof CommissiesRepository) {
 				$naam = CommissieSoort::getDescription($soort);
-			} elseif ($model instanceof WoonoordenModel) {
+			} elseif ($model instanceof WoonoordenRepository) {
 				$naam = HuisStatus::getDescription($soort);
 			} else {
 				$naam = $model->getNaam();

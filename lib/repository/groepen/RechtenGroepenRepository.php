@@ -11,15 +11,15 @@ use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RechtenGroepenModel extends AbstractGroepenRepository {
-	/** @var BesturenModel */
+class RechtenGroepenRepository extends AbstractGroepenRepository {
+	/** @var BesturenRepository */
 	private $besturenModel;
 	/** @var CommissieLedenRepository */
 	private $commissieLedenModel;
 	/** @var CommissiesRepository */
 	private $commissiesModel;
 
-	public function __construct(BesturenModel $besturenModel, CommissiesRepository $commissiesModel, CommissieLedenRepository $commissieLedenModel, AccessModel $accessModel, ManagerRegistry $registry) {
+	public function __construct(BesturenRepository $besturenModel, CommissiesRepository $commissiesModel, CommissieLedenRepository $commissieLedenModel, AccessModel $accessModel, ManagerRegistry $registry) {
 		parent::__construct($accessModel, $registry, RechtenGroep::class);
 
 		$this->besturenModel = $besturenModel;

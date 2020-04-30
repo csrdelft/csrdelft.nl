@@ -21,9 +21,9 @@
 				{{$profiel->getVerticale()->naam}}
 			@endif
 		</p>
-		@php($bestuurslid = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\leden\BestuursLedenModel::class)->find('uid = ?', array($profiel->uid), null, null, 1)->fetch())
+		@php($bestuurslid = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\leden\BestuursLedenRepository::class)->find('uid = ?', array($profiel->uid), null, null, 1)->fetch())
 		@if($bestuurslid)
-			@php($bestuur = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\BesturenModel::class)->get($bestuurslid->groep_id))
+			@php($bestuur = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\BesturenRepository::class)->get($bestuurslid->groep_id))
 			<p><a
 					href="{{$bestuur->getUrl()}}">{{\CsrDelft\entity\groepen\GroepStatus::getChar($bestuur->status)}} {{$bestuurslid->opmerking}}</a>
 			</p>

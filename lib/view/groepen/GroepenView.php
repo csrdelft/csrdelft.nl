@@ -6,7 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\BesturenModel;
+use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
@@ -35,7 +35,7 @@ class GroepenView implements View {
 		$this->groepen = $groepen;
 		$this->soort = $soort;
 		$this->geschiedenis = $geschiedenis;
-		if ($model instanceof BesturenModel) {
+		if ($model instanceof BesturenRepository) {
 			$this->tab = GroepTab::Lijst;
 		} else {
 			$this->tab = GroepTab::Pasfotos;

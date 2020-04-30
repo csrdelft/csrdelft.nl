@@ -6,8 +6,8 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\KetzerSelectorsModel;
-use CsrDelft\repository\groepen\leden\KetzerDeelnemersModel;
+use CsrDelft\repository\groepen\KetzerSelectorsRepository;
+use CsrDelft\repository\groepen\leden\KetzerDeelnemersRepository;
 use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,12 +18,12 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een ketzer is een aanmeldbare groep.
  *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KetzersModel")
+ * @ORM\Entity(repositoryClass="KetzersRepository")
  * @ORM\Table("ketzers")
  */
 class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 
-	const LEDEN = KetzerDeelnemersModel::class;
+	const LEDEN = KetzerDeelnemersRepository::class;
 
 	/**
 	 * Maximaal aantal groepsleden
@@ -82,7 +82,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 * @return KetzerSelector[]
 	 */
 	public function getSelectors() {
-		return ContainerFacade::getContainer()->get(KetzerSelectorsModel::class)->getSelectorsVoorKetzer($this);
+		return ContainerFacade::getContainer()->get(KetzerSelectorsRepository::class)->getSelectorsVoorKetzer($this);
 	}
 
 	/**

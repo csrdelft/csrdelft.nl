@@ -3,8 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\groepen\Bestuur;
-use CsrDelft\entity\groepen\GroepVersie;
+use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;

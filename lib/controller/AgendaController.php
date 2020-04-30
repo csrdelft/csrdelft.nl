@@ -11,7 +11,7 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\groepen\Ketzer;
-use CsrDelft\repository\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\agenda\AgendaVerbergenRepository;
@@ -43,7 +43,7 @@ class AgendaController {
 	 */
 	private $agendaVerbergenRepository;
 	/**
-	 * @var ActiviteitenModel
+	 * @var ActiviteitenRepository
 	 */
 	private $activiteitenModel;
 	/**
@@ -62,7 +62,7 @@ class AgendaController {
 	public function __construct(
 		AgendaRepository $agendaRepository,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenModel $activiteitenModel,
+		ActiviteitenRepository $activiteitenModel,
 		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdenRepository $maaltijdenRepository,
 		ProfielRepository $profielRepository

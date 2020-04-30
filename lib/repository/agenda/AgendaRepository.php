@@ -9,7 +9,7 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\repository\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
@@ -43,7 +43,7 @@ class AgendaRepository extends AbstractRepository {
 	 */
 	private $agendaVerbergenRepository;
 	/**
-	 * @var ActiviteitenModel
+	 * @var ActiviteitenRepository
 	 */
 	private $activiteitenModel;
 	/**
@@ -62,7 +62,7 @@ class AgendaRepository extends AbstractRepository {
 	public function __construct(
 		ManagerRegistry $registry,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenModel $activiteitenModel,
+		ActiviteitenRepository $activiteitenModel,
 		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdenRepository $maaltijdenRepository,
 		VerjaardagenService $verjaardagenService

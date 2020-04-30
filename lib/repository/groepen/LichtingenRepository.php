@@ -10,7 +10,7 @@ use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class LichtingenModel extends AbstractGroepenRepository {
+class LichtingenRepository extends AbstractGroepenRepository {
 	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
 		parent::__construct($accessModel, $registry, Lichting::class);
 	}

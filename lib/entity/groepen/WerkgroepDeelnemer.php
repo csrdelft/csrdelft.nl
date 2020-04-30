@@ -3,6 +3,8 @@
 namespace CsrDelft\entity\groepen;
 
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * WerkgroepDeelnemer.class.php
  *
@@ -10,6 +12,8 @@ namespace CsrDelft\entity\groepen;
  *
  * Een deelnemer van een werkgroep.
  *
+ * @ORM\Entity(repositoryClass="WerkgroepDeelnemersRepository")
+ * @ORM\Table("werkgroep_deelnemers")
  */
 class WerkgroepDeelnemer extends KetzerDeelnemer {
 

@@ -5,7 +5,7 @@ namespace CsrDelft\service;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\repository\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -194,7 +194,7 @@ class LidZoeker {
 		} elseif (preg_match('/^verticale:\w*$/', $zoekterm)) { //verticale, id, letter
 			$v = substr($zoekterm, 10);
 			if (strlen($v) > 1) {
-				$result = ContainerFacade::getContainer()->get(VerticalenModel::class)->find('naam LIKE ?', [sql_contains($v)]);
+				$result = ContainerFacade::getContainer()->get(VerticalenRepository::class)->find('naam LIKE ?', [sql_contains($v)]);
 				$verticales = [];
 				foreach ($result as $v) {
 					$verticales[] = $v->letter;
@@ -202,7 +202,7 @@ class LidZoeker {
 				$queryBuilder->where('p.verticale in (:verticales)');
 				$queryBuilder->setParameter('verticales', $verticales);
 			} else {
-				$verticale = ContainerFacade::getContainer()->get(VerticalenModel::class)->get($v);
+				$verticale = ContainerFacade::getContainer()->get(VerticalenRepository::class)->get($v);
 				if ($verticale) {
 					$queryBuilder->where('p.verticale = :verticale');
 					$queryBuilder->setParameter('verticale', $verticale->letter);

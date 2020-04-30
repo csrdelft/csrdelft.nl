@@ -2,13 +2,12 @@
 
 namespace CsrDelft\repository\groepen\leden;
 
-use CsrDelft\entity\groepen\RechtenGroepLid;
-use CsrDelft\repository\AbstractGroepLedenRepository;
+use CsrDelft\entity\groepen\WerkgroepDeelnemer;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RechtenGroepLedenModel extends AbstractGroepLedenRepository {
+class WerkgroepDeelnemersRepository extends KetzerDeelnemersRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {
 		parent::__construct($managerRegistry, self::ORM);
 	}
-	const ORM = RechtenGroepLid::class;
+	const ORM = WerkgroepDeelnemer::class;
 }

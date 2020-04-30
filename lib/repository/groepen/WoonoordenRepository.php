@@ -9,7 +9,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class WoonoordenModel extends AbstractGroepenRepository {
+class WoonoordenRepository extends AbstractGroepenRepository {
 	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
 		parent::__construct($accessModel, $registry, Woonoord::class);
 	}

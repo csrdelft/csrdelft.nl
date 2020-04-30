@@ -11,12 +11,12 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
-use CsrDelft\repository\groepen\ActiviteitenModel;
-use CsrDelft\repository\groepen\BesturenModel;
-use CsrDelft\repository\groepen\KetzersModel;
-use CsrDelft\repository\groepen\OnderverenigingenModel;
-use CsrDelft\repository\groepen\RechtenGroepenModel;
-use CsrDelft\repository\groepen\WerkgroepenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\groepen\BesturenRepository;
+use CsrDelft\repository\groepen\KetzersRepository;
+use CsrDelft\repository\groepen\OnderverenigingenRepository;
+use CsrDelft\repository\groepen\RechtenGroepenRepository;
+use CsrDelft\repository\groepen\WerkgroepenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
@@ -68,7 +68,7 @@ class ProfielController extends AbstractController {
 	 */
 	private $fotoRepository;
 	/**
-	 * @var BesturenModel
+	 * @var BesturenRepository
 	 */
 	private $besturenModel;
 	/**
@@ -116,23 +116,23 @@ class ProfielController extends AbstractController {
 	 */
 	private $civiBestellingModel;
 	/**
-	 * @var ActiviteitenModel
+	 * @var ActiviteitenRepository
 	 */
 	private $activiteitenModel;
 	/**
-	 * @var KetzersModel
+	 * @var KetzersRepository
 	 */
 	private $ketzersModel;
 	/**
-	 * @var RechtenGroepenModel
+	 * @var RechtenGroepenRepository
 	 */
 	private $rechtenGroepenModel;
 	/**
-	 * @var OnderverenigingenModel
+	 * @var OnderverenigingenRepository
 	 */
 	private $onderverenigingenModel;
 	/**
-	 * @var WerkgroepenModel
+	 * @var WerkgroepenRepository
 	 */
 	private $werkgroepenModel;
 	/**
@@ -155,8 +155,8 @@ class ProfielController extends AbstractController {
 	public function __construct(
 		ProfielRepository $profielRepository,
 		AccountRepository $accountRepository,
-		ActiviteitenModel $activiteitenModel,
-		BesturenModel $besturenModel,
+		ActiviteitenRepository $activiteitenModel,
+		BesturenRepository $besturenModel,
 		BoekExemplaarRepository $boekExemplaarModel,
 		BoekRecensieRepository $boekRecensieModel,
 		CiviBestellingModel $civiBestellingModel,
@@ -168,15 +168,15 @@ class ProfielController extends AbstractController {
 		ForumPostsRepository $forumPostsRepository,
 		FotoRepository $fotoRepository,
 		FotoTagsRepository $fotoTagsRepository,
-		KetzersModel $ketzersModel,
+		KetzersRepository $ketzersModel,
 		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
 		LidToestemmingRepository $lidToestemmingRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-		OnderverenigingenModel $onderverenigingenModel,
-		RechtenGroepenModel $rechtenGroepenModel,
+		OnderverenigingenRepository $onderverenigingenModel,
+		RechtenGroepenRepository $rechtenGroepenModel,
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
-		WerkgroepenModel $werkgroepenModel,
+		WerkgroepenRepository $werkgroepenModel,
 		SaldoGrafiekModel $saldoGrafiekModel,
 		VerjaardagenService $verjaardagenService
 	) {

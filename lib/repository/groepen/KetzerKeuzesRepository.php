@@ -8,7 +8,7 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class KetzerKeuzesModel extends AbstractGroepenRepository {
+class KetzerKeuzesRepository extends AbstractGroepenRepository {
 
 	public function __construct(AccessModel $accessModel, ManagerRegistry $managerRegistry) {
 		parent::__construct($accessModel, $managerRegistry, KetzerKeuze::class);

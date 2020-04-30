@@ -5,8 +5,8 @@ namespace CsrDelft\entity\groepen;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\KringenModel;
-use CsrDelft\repository\groepen\leden\VerticaleLedenModel;
+use CsrDelft\repository\groepen\KringenRepository;
+use CsrDelft\repository\groepen\leden\VerticaleLedenRepository;
 use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,12 +15,12 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenModel")
+ * @ORM\Entity(repositoryClass="VerticalenRepository")
  * @ORM\Table("verticalen")
  */
 class Verticale extends AbstractGroep {
 
-	const LEDEN = VerticaleLedenModel::class;
+	const LEDEN = VerticaleLedenRepository::class;
 
 	/**
 	 * Primary key
@@ -46,7 +46,7 @@ class Verticale extends AbstractGroep {
 	}
 
 	public function getKringen() {
-		return ContainerFacade::getContainer()->get(KringenModel::class)->getKringenVoorVerticale($this);
+		return ContainerFacade::getContainer()->get(KringenRepository::class)->getKringenVoorVerticale($this);
 	}
 
 	/**

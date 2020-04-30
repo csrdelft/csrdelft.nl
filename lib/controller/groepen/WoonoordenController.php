@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\repository\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 
 /**
  * WoonoordenController.class.php
@@ -12,7 +12,7 @@ use CsrDelft\repository\groepen\WoonoordenModel;
  * Controller voor woonoorden en huizen.
  */
 class WoonoordenController extends AbstractGroepenController {
-	public function __construct(WoonoordenModel $woonoordenModel) {
+	public function __construct(WoonoordenRepository $woonoordenModel) {
 		parent::__construct($woonoordenModel);
 	}
 }

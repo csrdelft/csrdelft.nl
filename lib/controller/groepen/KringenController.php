@@ -4,7 +4,7 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\groepen\Kring;
-use CsrDelft\repository\groepen\KringenModel;
+use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +16,10 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor kringen.
  *
- * @property KringenModel $model
+ * @property KringenRepository $model
  */
 class KringenController extends AbstractGroepenController {
-	public function __construct(KringenModel $kringenModel) {
+	public function __construct(KringenRepository $kringenModel) {
 		parent::__construct($kringenModel);
 	}
 

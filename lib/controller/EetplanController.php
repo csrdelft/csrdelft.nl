@@ -12,8 +12,8 @@ use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\groepen\Woonoord;
-use CsrDelft\repository\groepen\LichtingenModel;
-use CsrDelft\repository\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -42,16 +42,16 @@ class EetplanController extends AbstractController {
 	private $eetplanRepository;
 	/** @var EetplanBekendenRepository */
 	private $eetplanBekendenRepository;
-	/** @var WoonoordenModel */
+	/** @var WoonoordenRepository */
 	private $woonoordenModel;
 
 	public function __construct(
-		EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenModel, WoonoordenModel $woonoordenModel
+		EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenModel, WoonoordenRepository $woonoordenModel
 	) {
 		$this->eetplanRepository = $eetplanRepository;
 		$this->eetplanBekendenRepository = $eetplanBekendenModel;
 		$this->woonoordenModel = $woonoordenModel;
-		$this->lichting = substr((string)LichtingenModel::getJongsteLidjaar(), 2, 2);
+		$this->lichting = substr((string)LichtingenRepository::getJongsteLidjaar(), 2, 2);
 	}
 
 	public function view() {
@@ -84,7 +84,7 @@ class EetplanController extends AbstractController {
 		}
 
 		return view('eetplan.huis', [
-			'woonoord' => ContainerFacade::getContainer()->get(WoonoordenModel::class)->get($id),
+			'woonoord' => ContainerFacade::getContainer()->get(WoonoordenRepository::class)->get($id),
 			'eetplan' => $eetplan,
 		]);
 	}

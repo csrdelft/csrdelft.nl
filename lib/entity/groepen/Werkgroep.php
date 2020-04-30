@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\leden\WerkgroepDeelnemersModel;
+use CsrDelft\repository\groepen\leden\WerkgroepDeelnemersRepository;
 use CsrDelft\model\security\LoginModel;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,11 +13,42 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WerkgroepenModel")
+ * @ORM\Entity(repositoryClass="WerkgroepenRepository")
+ * @ORM\Table("werkgroepen")
  */
-class Werkgroep extends Ketzer {
+class Werkgroep extends AbstractGroep {
+	/**
+	 * Maximaal aantal groepsleden
+	 * @var string
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $aanmeld_limiet;
+	/**
+	 * Datum en tijd aanmeldperiode begin
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="datetime")
+	 */
+	public $aanmelden_vanaf;
+	/**
+	 * Datum en tijd aanmeldperiode einde
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="datetime")
+	 */
+	public $aanmelden_tot;
+	/**
+	 * Datum en tijd aanmelding bewerken toegestaan
+	 * @var \DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	public $bewerken_tot;
+	/**
+	 * Datum en tijd afmelden toegestaan
+	 * @var \DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	public $afmelden_tot;
 
-	const LEDEN = WerkgroepDeelnemersModel::class;
+	const LEDEN = WerkgroepDeelnemersRepository::class;
 
 	/**
 	 * Database table name

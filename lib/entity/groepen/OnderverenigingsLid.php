@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een lid van een ondervereniging.
  *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\OnderverenigingsLedenModel")
+ * @ORM\Entity(repositoryClass="OnderverenigingsLedenRepository")
  * @ORM\Table("ondervereniging_leden")
  */
 class OnderverenigingsLid extends AbstractGroepLid {

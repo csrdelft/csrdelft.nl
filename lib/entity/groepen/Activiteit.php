@@ -7,7 +7,7 @@ use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersModel;
+use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenModel")
+ * @ORM\Entity(repositoryClass="ActiviteitenRepository")
  * @ORM\Table("activiteiten")
  */
 class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet {
@@ -26,7 +26,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
 
-	const LEDEN = ActiviteitDeelnemersModel::class;
+	const LEDEN = ActiviteitDeelnemersRepository::class;
 	/**
 	 * Maximaal aantal groepsleden
 	 * @var string

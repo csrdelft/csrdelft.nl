@@ -318,7 +318,7 @@
 								(leider)
 							@elseif($profiel->kringcoach)
 								<span
-									title="Kringcoach van verticale {{\CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\repository\groepen\VerticalenModel::class)->get($profiel->verticale)->naam}}">(kringcoach)</span>
+									title="Kringcoach van verticale {{\CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\repository\groepen\VerticalenRepository::class)->get($profiel->verticale)->naam}}">(kringcoach)</span>
 							@endif
 						</a>
 					</dd>

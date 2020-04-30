@@ -4,7 +4,7 @@ namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
-use CsrDelft\repository\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\model\security\LoginModel;
 
 /**
@@ -17,11 +17,11 @@ use CsrDelft\model\security\LoginModel;
  */
 class BbVerticale extends BbTag {
 	/**
-	 * @var VerticalenModel
+	 * @var VerticalenRepository
 	 */
 	private $verticalenModel;
 
-	public function __construct(VerticalenModel $verticalenModel) {
+	public function __construct(VerticalenRepository $verticalenModel) {
 		$this->verticalenModel = $verticalenModel;
 	}
 

@@ -9,7 +9,7 @@ use CsrDelft\model\security\AccessModel;
 use Doctrine\Persistence\ManagerRegistry;
 
 
-class ActiviteitenModel extends KetzersModel {
+class ActiviteitenRepository extends KetzersRepository {
 	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
 		parent::__construct($accessModel, $registry, Activiteit::class);
 	}
