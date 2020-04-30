@@ -11,13 +11,12 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\SaldoGrafiekModel;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\groepen\BesturenModel;
-use CsrDelft\model\groepen\CommissiesModel;
-use CsrDelft\model\groepen\KetzersModel;
-use CsrDelft\model\groepen\OnderverenigingenModel;
-use CsrDelft\model\groepen\RechtenGroepenModel;
-use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\repository\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\BesturenModel;
+use CsrDelft\repository\groepen\KetzersModel;
+use CsrDelft\repository\groepen\OnderverenigingenModel;
+use CsrDelft\repository\groepen\RechtenGroepenModel;
+use CsrDelft\repository\groepen\WerkgroepenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
@@ -30,6 +29,7 @@ use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
+use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
@@ -72,7 +72,7 @@ class ProfielController extends AbstractController {
 	 */
 	private $besturenModel;
 	/**
-	 * @var CommissiesModel
+	 * @var CommissiesRepository
 	 */
 	private $commissiesModel;
 	/**
@@ -162,7 +162,7 @@ class ProfielController extends AbstractController {
 		CiviBestellingModel $civiBestellingModel,
 		CommissieVoorkeurRepository $commissieVoorkeurRepository,
 		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
-		CommissiesModel $commissiesModel,
+		CommissiesRepository $commissiesModel,
 		CorveeTakenRepository $corveeTakenRepository,
 		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
 		ForumPostsRepository $forumPostsRepository,

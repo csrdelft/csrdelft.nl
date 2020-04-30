@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\repository\groepen\BesturenModel;
 
 /**
  * BesturenController.class.php

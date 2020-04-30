@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenModel;
 
 
 /**

@@ -1,6 +1,6 @@
 /**
  * NIET AANPASSEN.
- * Gegenereerde code voor CsrDelft\model\entity\groepen\GroepKeuzeType.
+ * Gegenereerde code voor CsrDelft\entity\groepen\GroepKeuzeType.
  *
  * Zie bin/dev/generator.enum.php voor generator.
  */

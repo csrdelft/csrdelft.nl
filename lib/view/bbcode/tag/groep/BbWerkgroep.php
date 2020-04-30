@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\bbcode\tag\groep;
 
-use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\repository\groepen\WerkgroepenModel;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

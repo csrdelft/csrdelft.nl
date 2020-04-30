@@ -4,7 +4,7 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ChangeLogRepository;
 use Jacwright\RestServer\RestException;

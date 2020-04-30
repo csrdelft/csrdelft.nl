@@ -8,7 +8,7 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;

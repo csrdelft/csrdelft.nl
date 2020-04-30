@@ -8,8 +8,8 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\model\entity\groepen\GroepTab;
-use CsrDelft\model\entity\groepen\Verticale;
+use CsrDelft\entity\groepen\GroepTab;
+use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;

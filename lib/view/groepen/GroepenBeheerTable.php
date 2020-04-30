@@ -3,7 +3,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\datatable\DataTable;
@@ -23,7 +23,7 @@ class GroepenBeheerTable extends DataTable {
 	private $naam;
 	private $pagina;
 
-	public function __construct(AbstractGroepenModel $model) {
+	public function __construct(AbstractGroepenRepository $model) {
 		parent::__construct($model::ORM, $model->getUrl() . '/beheren', null);
 
 		$this->selectEnabled = false;

@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\groepen;
 
+use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\Geslacht;
-use CsrDelft\model\entity\groepen\AbstractGroep;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;

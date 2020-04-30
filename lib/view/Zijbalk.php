@@ -3,7 +3,7 @@
 namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\repository\groepen\LichtingenModel;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;

@@ -13,46 +13,30 @@ use CsrDelft\model\entity\profiel\ProfielLogValueChangeCensuur;
 use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\profiel\UnparsedProfielLogGroup;
-use CsrDelft\Orm\JsonSerializer\SafeJsonSerializer;
 use DateTime;
 use DateTimeImmutable;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Type;
 
-class ChangeLogType extends Type {
-	const ACCEPTED_TYPES = [
-		ProfielLogGroup::class,
-		ProfielCreateLogGroup::class,
-		ProfielLogVeldenVerwijderChange::class,
-		ProfielLogCoveeTakenVerwijderChange::class,
-		ProfielLogTextEntry::class,
-		ProfielLogValueChangeCensuur::class,
-		ProfielLogValueChange::class,
-		ProfielUpdateLogGroup::class,
-		UnparsedProfielLogGroup::class,
-		DateTime::class,
-		DateTimeImmutable::class
-	];
-	/**
-	 * @inheritDoc
-	 */
-	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
-		return 'TEXT';
-	}
-	public function convertToPHPValue($value, AbstractPlatform $platform) {
-		$serializer = new SafeJsonSerializer(self::ACCEPTED_TYPES);
-		return $serializer->unserialize($value);
-	}
-
-	public function convertToDatabaseValue($value, AbstractPlatform $platform) {
-		$serializer = new SafeJsonSerializer(self::ACCEPTED_TYPES);
-		return $serializer->serialize($value);
-	}
-
+class ChangeLogType extends SafeJsonType {
 	/**
 	 * @inheritDoc
 	 */
 	public function getName() {
 		return 'changelog';
+	}
+
+	protected function getAcceptedTypes() {
+		return [
+			ProfielLogGroup::class,
+			ProfielCreateLogGroup::class,
+			ProfielLogVeldenVerwijderChange::class,
+			ProfielLogCoveeTakenVerwijderChange::class,
+			ProfielLogTextEntry::class,
+			ProfielLogValueChangeCensuur::class,
+			ProfielLogValueChange::class,
+			ProfielUpdateLogGroup::class,
+			UnparsedProfielLogGroup::class,
+			DateTime::class,
+			DateTimeImmutable::class
+		];
 	}
 }

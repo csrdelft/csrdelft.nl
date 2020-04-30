@@ -3,8 +3,8 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\groepen\Verticale;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\entity\groepen\Verticale;
+use CsrDelft\repository\groepen\VerticalenModel;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

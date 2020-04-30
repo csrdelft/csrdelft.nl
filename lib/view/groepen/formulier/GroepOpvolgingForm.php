@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

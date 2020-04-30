@@ -4,11 +4,11 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\agenda\AgendaItem;
-use CsrDelft\model\entity\groepen\Activiteit;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
+use CsrDelft\repository\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;

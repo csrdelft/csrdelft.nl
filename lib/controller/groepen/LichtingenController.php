@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\repository\groepen\LichtingenModel;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

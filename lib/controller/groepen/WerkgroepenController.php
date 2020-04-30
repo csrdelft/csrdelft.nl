@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\repository\groepen\WerkgroepenModel;
 
 
 /**

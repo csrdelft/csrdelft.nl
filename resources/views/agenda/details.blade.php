@@ -48,7 +48,7 @@
 						@icon('date_go')
 					</a>
 
-					@if($item instanceof \CsrDelft\model\entity\groepen\AbstractGroep && $item->mag(\CsrDelft\model\entity\security\AccessAction::Wijzigen))
+					@if($item instanceof \CsrDelft\entity\groepen\AbstractGroep && $item->mag(\CsrDelft\model\entity\security\AccessAction::Wijzigen))
 						<a href="{{$item->getUrl()}}/wijzigen" class="beheren btn" title="Wijzig {{$item->naam}}">
 							@icon('bewerken')
 						</a>

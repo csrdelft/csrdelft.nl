@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\repository\groepen\KetzersModel;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

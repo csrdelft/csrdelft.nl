@@ -4,7 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\SavedQueryResult;
+use CsrDelft\entity\SavedQueryResult;
 use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\SavedQueryContent;

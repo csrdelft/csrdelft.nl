@@ -4,7 +4,7 @@ namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenModel;
 use CsrDelft\service\ProfielService;
 
 /**

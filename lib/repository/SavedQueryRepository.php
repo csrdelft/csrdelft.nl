@@ -7,10 +7,9 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\SavedQuery;
-use CsrDelft\model\entity\SavedQueryResult;
+use CsrDelft\entity\SavedQueryResult;
 use Doctrine\DBAL\DBALException;
 use Doctrine\Persistence\ManagerRegistry;
-use PDOException;
 
 /**
  * Class SavedQueryRepository

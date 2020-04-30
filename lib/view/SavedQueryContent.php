@@ -3,7 +3,7 @@
 namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\SavedQueryResult;
+use CsrDelft\entity\SavedQueryResult;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\SavedQueryRepository;
 

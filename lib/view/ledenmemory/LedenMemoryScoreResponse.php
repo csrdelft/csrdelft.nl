@@ -3,7 +3,7 @@
 namespace CsrDelft\view\ledenmemory;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 

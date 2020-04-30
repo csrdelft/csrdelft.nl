@@ -4,7 +4,7 @@ namespace CsrDelft\repository\eetplan;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\eetplan\Eetplan;
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\WoonoordenModel;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;

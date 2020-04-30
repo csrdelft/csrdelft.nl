@@ -6,17 +6,17 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\AbstractGroepLid;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\GroepKeuzeSelectie;
+use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\AbstractGroepenModel;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\AbstractGroepLid;
-use CsrDelft\model\entity\groepen\Activiteit;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
-use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
@@ -57,7 +57,7 @@ use Symfony\Component\Routing\RouteCollection;
 abstract class AbstractGroepenController extends AbstractController implements RouteLoaderInterface {
 	/** @var DataTable */
 	protected $table;
-	/** @var AbstractGroepenModel */
+	/** @var AbstractGroepenRepository */
 	protected $model;
 	/**
 	 * @var ChangeLogRepository
@@ -406,7 +406,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$form = new GroepConverteerForm($groep, $this->model);
 		if ($form->validate()) {
 			$values = $form->getValues();
-			/** @var AbstractGroepenModel $model */
+			/** @var AbstractGroepenRepository $model */
 			$model = \CsrDelft\common\ContainerFacade::getContainer()->get($values['model']);
 			$converteer = get_class($model) !== get_class($this->model);
 			$response = [];

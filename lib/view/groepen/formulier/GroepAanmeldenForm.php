@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\AbstractGroepLid;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\AbstractGroepLid;
 
 class GroepAanmeldenForm extends GroepBewerkenForm {
 

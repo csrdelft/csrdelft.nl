@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\repository\groepen\RechtenGroepenModel;
 
 /**
  * RechtengroepenController.class.php

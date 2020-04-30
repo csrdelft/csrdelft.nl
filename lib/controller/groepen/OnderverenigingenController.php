@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\repository\groepen\OnderverenigingenModel;
 
 /**
  * OnderverenigingenController.class.php

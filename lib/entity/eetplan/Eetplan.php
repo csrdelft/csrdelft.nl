@@ -4,9 +4,9 @@ namespace CsrDelft\entity\eetplan;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\datatable\DataTableEntry;
-use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\WoonoordenModel;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 

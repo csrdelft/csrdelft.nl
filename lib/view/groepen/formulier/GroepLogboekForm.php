@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
 use CsrDelft\view\formulier\ModalForm;
 use CsrDelft\view\groepen\GroepLogboekTable;

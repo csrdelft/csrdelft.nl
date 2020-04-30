@@ -3,11 +3,11 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\AbstractGroepenModel;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\GroepTab;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\repository\groepen\BesturenModel;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\Icon;
@@ -26,7 +26,7 @@ class GroepenView implements View {
 	private $pagina;
 
 	public function __construct(
-		AbstractGroepenModel $model,
+		AbstractGroepenRepository $model,
 		$groepen,
 		$soort = null,
 		$geschiedenis = false

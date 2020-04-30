@@ -1,16 +1,16 @@
 <?php
 
-use CsrDelft\model\entity\groepen\Activiteit;
-use CsrDelft\model\entity\groepen\Bestuur;
-use CsrDelft\model\entity\groepen\Commissie;
-use CsrDelft\model\entity\groepen\Ketzer;
-use CsrDelft\model\entity\groepen\Kring;
-use CsrDelft\model\entity\groepen\Lichting;
-use CsrDelft\model\entity\groepen\Ondervereniging;
-use CsrDelft\model\entity\groepen\RechtenGroep;
-use CsrDelft\model\entity\groepen\Verticale;
-use CsrDelft\model\entity\groepen\Werkgroep;
-use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\Commissie;
+use CsrDelft\entity\groepen\Bestuur;
+use CsrDelft\entity\groepen\Ketzer;
+use CsrDelft\entity\groepen\Kring;
+use CsrDelft\entity\groepen\Lichting;
+use CsrDelft\entity\groepen\Ondervereniging;
+use CsrDelft\entity\groepen\RechtenGroep;
+use CsrDelft\entity\groepen\Verticale;
+use CsrDelft\entity\groepen\Werkgroep;
+use CsrDelft\entity\groepen\Woonoord;
 use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\WoonoordenModel;
 
 /**
  * WoonoordenController.class.php

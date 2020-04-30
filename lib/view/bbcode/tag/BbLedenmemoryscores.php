@@ -3,10 +3,10 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\Lichting;
-use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Lichting;
+use CsrDelft\repository\groepen\LichtingenModel;
+use CsrDelft\repository\groepen\VerticalenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;

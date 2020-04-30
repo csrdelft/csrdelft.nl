@@ -1,7 +1,7 @@
 <?php
 
+use CsrDelft\entity\groepen\GroepKeuzeType;
 use CsrDelft\model\entity\Geslacht;
-use CsrDelft\model\entity\groepen\GroepKeuzeType;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\security\AccessAction;
 

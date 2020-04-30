@@ -4,7 +4,7 @@ namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenModel;
 use CsrDelft\model\security\LoginModel;
 
 /**

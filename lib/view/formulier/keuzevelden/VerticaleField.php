@@ -3,7 +3,7 @@
 namespace CsrDelft\view\formulier\keuzevelden;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenModel;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>

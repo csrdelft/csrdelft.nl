@@ -3,8 +3,8 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\groepen\Kring;
-use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\entity\groepen\Kring;
+use CsrDelft\repository\groepen\KringenModel;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

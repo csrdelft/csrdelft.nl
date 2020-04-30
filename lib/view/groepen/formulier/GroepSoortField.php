@@ -3,19 +3,19 @@
 namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\entity\groepen\CommissieSoort;
-use CsrDelft\model\entity\groepen\HuisStatus;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\CommissieSoort;
+use CsrDelft\entity\groepen\ActiviteitSoort;
+use CsrDelft\entity\groepen\HuisStatus;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\groepen\BesturenModel;
-use CsrDelft\model\groepen\CommissiesModel;
-use CsrDelft\model\groepen\KetzersModel;
-use CsrDelft\model\groepen\OnderverenigingenModel;
-use CsrDelft\model\groepen\RechtenGroepenModel;
-use CsrDelft\model\groepen\WerkgroepenModel;
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\BesturenModel;
+use CsrDelft\repository\groepen\KetzersModel;
+use CsrDelft\repository\groepen\OnderverenigingenModel;
+use CsrDelft\repository\groepen\RechtenGroepenModel;
+use CsrDelft\repository\groepen\WerkgroepenModel;
+use CsrDelft\repository\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use function common\short_class;
@@ -72,7 +72,7 @@ JS;
 			OnderverenigingenModel::class => short_class(OnderverenigingenModel::ORM),
 			WoonoordenModel::class => short_class(WoonoordenModel::ORM),
 			BesturenModel::class => short_class(BesturenModel::ORM),
-			CommissiesModel::class => $this->commissie
+			CommissiesRepository::class => $this->commissie
 		];
 	}
 
@@ -104,7 +104,7 @@ JS;
 		if (!$orm::magAlgemeen(AccessAction::Beheren, null, $soort)) {
 			if ($model instanceof ActiviteitenModel) {
 				$naam = ActiviteitSoort::getDescription($soort);
-			} elseif ($model instanceof CommissiesModel) {
+			} elseif ($model instanceof CommissiesRepository) {
 				$naam = CommissieSoort::getDescription($soort);
 			} elseif ($model instanceof WoonoordenModel) {
 				$naam = HuisStatus::getDescription($soort);

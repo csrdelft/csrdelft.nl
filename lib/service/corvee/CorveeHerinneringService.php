@@ -4,6 +4,7 @@ namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeTaak;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;

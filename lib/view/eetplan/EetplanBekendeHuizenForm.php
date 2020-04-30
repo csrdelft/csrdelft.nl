@@ -4,7 +4,7 @@ namespace CsrDelft\view\eetplan;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\eetplan\Eetplan;
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\WoonoordenModel;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLidField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;

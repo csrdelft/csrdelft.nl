@@ -18,6 +18,8 @@ doctrine:
           datetime: CsrDelft\common\Doctrine\Type\DateTimeImmutableType
           datetimetz: CsrDelft\common\Doctrine\Type\DateTimeTzImmutableType
           changelog: CsrDelft\common\Doctrine\Type\ChangeLogType
+          groepkeuze: CsrDelft\common\Doctrine\Type\GroepKeuzeType
+          groepkeuzeselectie: CsrDelft\common\Doctrine\Type\GroepKeuzeSelectieType
           longtext: CsrDelft\common\Doctrine\Type\LongTextType
           uid: CsrDelft\common\Doctrine\Type\UidType
           stringkey: CsrDelft\common\Doctrine\Type\StringKeyType
@@ -25,6 +27,7 @@ doctrine:
           enumboekexemplaarstatus: CsrDelft\common\Doctrine\Type\BoekExemplaarStatusType
           enumcourantcategorie: CsrDelft\common\Doctrine\Type\CourantCategorieType
           enumforumdraadmeldingniveau: CsrDelft\common\Doctrine\Type\ForumDraadMeldingNiveauType
+          enumgroepstatus: CsrDelft\common\Doctrine\Type\GroepStatusType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

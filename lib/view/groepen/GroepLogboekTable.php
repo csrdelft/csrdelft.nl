@@ -3,7 +3,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\entity\ChangeLogEntry;
-use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\view\datatable\DataTable;
 
 class GroepLogboekTable extends DataTable {

@@ -9,7 +9,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\OrmMemcache;

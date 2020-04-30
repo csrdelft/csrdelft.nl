@@ -14,7 +14,7 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenModel;
 use CsrDelft\model\security\CliLoginModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
@@ -180,9 +180,6 @@ switch (MODE) {
 		$container->get(LoginModel::class)->authenticate();
 
 		$container->get(LogRepository::class)->log();
-
-		// Prefetch
-		$container->get(VerticalenModel::class)->prefetch();
 
 		// Database modus meldingen
 		if (DB_MODIFY OR DB_DROP) {

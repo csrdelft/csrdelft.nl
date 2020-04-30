@@ -4,7 +4,7 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\repository\groepen\LichtingenModel;
 use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToResponse;

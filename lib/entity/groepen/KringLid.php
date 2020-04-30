@@ -1,0 +1,19 @@
+<?php
+
+namespace CsrDelft\entity\groepen;
+
+use CsrDelft\entity\groepen\AbstractGroepLid;
+
+/**
+ * KringLid.class.php
+ *
+ * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * Een lid van een kring.
+ *
+ */
+class KringLid extends AbstractGroepLid {
+
+	protected static $table_name = 'kring_leden';
+
+}

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\ledenmemory;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\view\datatable\DataTable;
 

@@ -9,7 +9,7 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\repository\groepen\LichtingenModel;
 use CsrDelft\view\View;
 
 class FotoAlbumZijbalkView implements View {

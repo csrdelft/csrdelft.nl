@@ -3,11 +3,11 @@
 namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\repository\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\KetzersModel;
 
 class KetzerSoortField extends GroepSoortField {
 
