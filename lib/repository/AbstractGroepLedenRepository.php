@@ -33,7 +33,7 @@ abstract class AbstractGroepLedenRepository extends AbstractRepository {
 	 * @var boolean
 	 */
 	protected $memcache_prefetch = true;
-	private $entityClass;
+	public $entityClass;
 
 	public function __construct(ManagerRegistry $registry, $entityClass) {
 		parent::__construct($registry, $entityClass);

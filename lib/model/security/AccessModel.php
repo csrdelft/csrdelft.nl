@@ -4,8 +4,11 @@ namespace CsrDelft\model\security;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
+use CsrDelft\entity\groepen\Bestuur;
+use CsrDelft\entity\groepen\BestuursLid;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\CommissieFunctie;
+use CsrDelft\entity\groepen\CommissieLid;
 use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\LidStatus;
@@ -769,17 +772,18 @@ class AccessModel extends CachedPersistenceModel {
 				$role = strtolower($role);
 				// Alleen als GroepStatus is opgegeven, anders: fall through
 				if (in_array($role, GroepStatus::getEnumValues())) {
+					$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
 					switch ($prefix) {
 
 						case self::PREFIX_BESTUUR:
-							$l = ContainerFacade::getContainer()->get(BestuursLedenModel::class)->getTableName();
-							$g = ContainerFacade::getContainer()->get(BesturenModel::class)->getTableName();
+							$l = $em->getClassMetadata(BestuursLid::class)->getTableName();
+							$g = $em->getClassMetadata(Bestuur::class)->getTableName();
 							break;
 
 						case self::PREFIX_COMMISSIE:
-							$l = ContainerFacade::getContainer()->get(CommissieLedenRepository::class)->getTableName();
-							$g = ContainerFacade::getContainer()->get(CommissiesRepository::class)->getTableName();
+							$l = $em->getClassMetadata(CommissieLid::class)->getTableName();
+							$g = $em->getClassMetadata(Commissie::class)->getTableName();
 							break;
 					}
 					return ContainerFacade::getContainer()->get(Database::class)->sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', [$role, $gevraagd, $profiel->uid]);

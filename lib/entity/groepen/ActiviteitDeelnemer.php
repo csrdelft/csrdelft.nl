@@ -4,6 +4,7 @@ namespace CsrDelft\entity\groepen;
 
 
 use CsrDelft\entity\groepen\KetzerDeelnemer;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ActiviteitDeelnemer.class.php
@@ -12,6 +13,8 @@ use CsrDelft\entity\groepen\KetzerDeelnemer;
  *
  * Een deelnemer van een activiteit.
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\ActiviteitDeelnemersModel")
+ * @ORM\Table("activiteit_deelnemers")
  */
 class ActiviteitDeelnemer extends KetzerDeelnemer {
 

@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Een lid van een commissie.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\CommissieLedenRepository")
+ * @ORM\Table("commissie_leden")
  */
 class CommissieLid extends AbstractGroepLid {
 

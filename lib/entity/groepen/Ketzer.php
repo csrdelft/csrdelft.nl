@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Een ketzer is een aanmeldbare groep.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KetzersModel")
+ * @ORM\Table("ketzers")
  */
 class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 
@@ -27,26 +28,31 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	/**
 	 * Maximaal aantal groepsleden
 	 * @var string
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $aanmeld_limiet;
 	/**
 	 * Datum en tijd aanmeldperiode begin
-	 * @var string
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="datetime")
 	 */
 	public $aanmelden_vanaf;
 	/**
 	 * Datum en tijd aanmeldperiode einde
-	 * @var string
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="datetime")
 	 */
 	public $aanmelden_tot;
 	/**
 	 * Datum en tijd aanmelding bewerken toegestaan
-	 * @var string
+	 * @var \DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $bewerken_tot;
 	/**
 	 * Datum en tijd afmelden toegestaan
-	 * @var string
+	 * @var \DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $afmelden_tot;
 	/**

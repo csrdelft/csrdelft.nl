@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\entity\groepen\AbstractGroepLid;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * OnderverenigingsLid.class.php
@@ -11,6 +12,8 @@ use CsrDelft\entity\groepen\AbstractGroepLid;
  *
  * Een lid van een ondervereniging.
  *
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\OnderverenigingsLedenModel")
+ * @ORM\Table("ondervereniging_leden")
  */
 class OnderverenigingsLid extends AbstractGroepLid {
 

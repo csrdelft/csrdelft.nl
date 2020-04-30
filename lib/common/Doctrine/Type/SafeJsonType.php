@@ -18,6 +18,9 @@ abstract class SafeJsonType extends Type {
 		return 'TEXT';
 	}
 	public function convertToPHPValue($value, AbstractPlatform $platform) {
+		if (!$value) {
+			return $value;
+		}
 		$serializer = new SafeJsonSerializer($this->getAcceptedTypes());
 		return $serializer->unserialize($value);
 	}

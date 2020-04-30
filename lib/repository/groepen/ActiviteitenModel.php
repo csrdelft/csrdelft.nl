@@ -11,7 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ActiviteitenModel extends KetzersModel {
 	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Ketzer::class);
+		parent::__construct($accessModel, $registry, Activiteit::class);
 	}
 
 	const ORM = Activiteit::class;

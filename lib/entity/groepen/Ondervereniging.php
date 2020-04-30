@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\OnderverenigingenModel")
+ * @ORM\Table("onderverenigingen")
  */
 class Ondervereniging extends AbstractGroep {
 

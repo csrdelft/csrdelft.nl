@@ -170,7 +170,11 @@ abstract class AbstractGroep {
 		if (!LoginModel::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
 			return false;
 		}
-		$aangemeld = ContainerFacade::getContainer()->get(Database::class)->sqlExists(static::getLedenModel()->getTableName(), 'groep_id = ? AND uid = ?', [$this->id, LoginModel::getUid()]);
+		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+
+		$ledenMeta = $em->getClassMetadata(static::getLedenModel()->entityClass);
+
+		$aangemeld = ContainerFacade::getContainer()->get(Database::class)->sqlExists($ledenMeta->getTableName(), 'groep_id = ? AND uid = ?', [$this->id, LoginModel::getUid()]);
 		switch ($action) {
 
 			case AccessAction::Aanmelden:

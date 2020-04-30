@@ -26,9 +26,7 @@ class VerticalenModel extends AbstractGroepenRepository {
 	protected $default_order = 'letter ASC';
 
 	public function get($letter) {
-		$verticalen = $this->prefetch('letter = ?', array($letter), null, null, 1);
-		$verticale = reset($verticalen);
-		if (!empty($verticale)) {
+		if ($verticale = $this->findOneBy(['letter' => $letter])) {
 			return $verticale;
 		}
 

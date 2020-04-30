@@ -176,9 +176,11 @@ class AgendaRepository extends AbstractRepository {
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (
-		    (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)
-		  )', array(date_format_intl($van, DATETIME_FORMAT), date_format_intl($tot, DATETIME_FORMAT), date_format_intl($van, DATETIME_FORMAT), date_format_intl($tot, DATETIME_FORMAT)));
+		$activiteiten = $this->activiteitenModel->createQueryBuilder('a')
+			->where("a.in_agenda = true and (a.begin_moment >= :van and a.begin_moment <= :tot) or (a.eind_moment >= :van and a.eind_moment <= :tot)")
+			->setParameter('van', $van)
+			->setParameter('tot', $tot)
+			->getQuery()->getResult();
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
 			if (in_array($activiteit->soort, [ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES]) OR $activiteit->mag(AccessAction::Bekijken, $auth)) {

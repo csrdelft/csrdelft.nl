@@ -5,6 +5,7 @@ namespace CsrDelft\entity\groepen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\Ketzer;
+use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersModel;
 use CsrDelft\model\security\LoginModel;
@@ -20,16 +21,47 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenModel")
  * @ORM\Table("activiteiten")
  */
-class Activiteit extends Ketzer implements Agendeerbaar {
+class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet {
 	public function getUUID() {
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
 
 	const LEDEN = ActiviteitDeelnemersModel::class;
+	/**
+	 * Maximaal aantal groepsleden
+	 * @var string
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	public $aanmeld_limiet;
+	/**
+	 * Datum en tijd aanmeldperiode begin
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="datetime")
+	 */
+	public $aanmelden_vanaf;
+	/**
+	 * Datum en tijd aanmeldperiode einde
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="datetime")
+	 */
+	public $aanmelden_tot;
+	/**
+	 * Datum en tijd aanmelding bewerken toegestaan
+	 * @var \DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	public $bewerken_tot;
+	/**
+	 * Datum en tijd afmelden toegestaan
+	 * @var \DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	public $afmelden_tot;
 
 	/**
 	 * Intern / Extern / SjaarsActie / etc.
 	 * @var ActiviteitSoort
+	 * @ORM\Column(type="string")
 	 */
 	public $soort;
 	/**
@@ -45,6 +77,7 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	/**
 	 * Tonen in agenda
 	 * @var boolean
+	 * @ORM\Column(type="boolean")
 	 */
 	public $in_agenda;
 	/**
@@ -122,12 +155,12 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 	// Agendeerbaar:
 
 	public function getBeginMoment() {
-		return strtotime($this->begin_moment);
+		return $this->begin_moment->getTimestamp();
 	}
 
 	public function getEindMoment() {
 		if ($this->eind_moment AND $this->eind_moment !== $this->begin_moment) {
-			return strtotime($this->eind_moment);
+			return $this->eind_moment->getTimestamp();
 		}
 		return $this->getBeginMoment() + 1800;
 	}
@@ -155,5 +188,9 @@ class Activiteit extends Ketzer implements Agendeerbaar {
 		return lid_instelling('agenda', 'transparantICal') === 'ja' ||
 			$this->isHeledag() ||
 			$this->getLid(LoginModel::getUid()) === false;
+	}
+
+	public function getAanmeldLimiet() {
+		return $this->aanmeld_limiet;
 	}
 }

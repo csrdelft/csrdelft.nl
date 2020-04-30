@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenModel")
+ * @ORM\Table("verticalen")
  */
 class Verticale extends AbstractGroep {
 
@@ -24,6 +25,7 @@ class Verticale extends AbstractGroep {
 	/**
 	 * Primary key
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $letter;
 	/**
