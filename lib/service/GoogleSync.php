@@ -72,22 +72,10 @@ class GoogleSync {
 	private $client;
 
 	/**
-	 * Get singleton instance of class.
-	 *
-	 * @return GoogleSync
-	 */
-	public static function instance() {
-		if (!isset(self::$instance)) {
-			self::$instance = new GoogleSync();
-		}
-		return self::$instance;
-	}
-
-	/**
 	 * GoogleSync constructor.
 	 * @throws CsrException
 	 */
-	private function __construct() {
+	public function __construct() {
 		$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
 		$google_token = $googleTokenRepository->find(LoginModel::getUid());
 		if ($google_token === false) {
