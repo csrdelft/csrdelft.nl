@@ -45,9 +45,7 @@ class CorveeVoorkeurenRepository extends AbstractRepository {
 	public function setEetwens(Profiel $profiel, $eetwens) {
 		if ($profiel->eetwens === $eetwens) return;
 		$profiel->eetwens = $eetwens;
-		if (ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel) !== 1) {
-			throw new CsrException('Eetwens opslaan mislukt');
-		}
+		ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel);
 	}
 
 	/**
