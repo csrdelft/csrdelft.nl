@@ -59,7 +59,7 @@ class VerjaardagenService {
 		$qb = $this->profielRepository->createQueryBuilder('p')
 			->where('p.status in (:lidstatus) and not p.gebdatum = \'0000-00-00\'')
 			->setParameter('lidstatus', array_merge(LidStatus::getLidLike(), [LidStatus::Kringel]))
-			->orderBy('MOD(DAYOFYEAR(p.gebdatum) - DAYOFYEAR(NOW()) + 365, 365)')
+			->orderBy('MOD(DAYOFYEAR(p.gebdatum) - DAYOFYEAR(NOW()) + 366, 366)')
 			->setMaxResults($aantal);
 
 		if (!LoginModel::mag(P_LEDEN_MOD)) {
@@ -92,7 +92,7 @@ class VerjaardagenService {
 			->where('p.status in (:lidstatus) and not p.gebdatum = \'0000-00-00\' and p.gebdatum <= :gebdatum')
 			->setParameter('lidstatus', array_merge(LidStatus::getLidLike(), [LidStatus::Kringel]))
 			->setParameter('gebdatum', $tot)
-			->orderBy('MOD(DAYOFYEAR(p.gebdatum) - DAYOFYEAR(NOW()) + 365, 365)')
+			->orderBy('MOD(DAYOFYEAR(p.gebdatum) - DAYOFYEAR(NOW()) + 366, 366)')
 		->setMaxResults($limiet);
 
 		if ($vanDag > $totDag) { // van en tot spannen over nieuw jaar
