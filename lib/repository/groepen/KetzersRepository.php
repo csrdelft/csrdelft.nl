@@ -12,8 +12,6 @@ class KetzersRepository extends AbstractGroepenRepository {
 		parent::__construct($accessModel, $registry, $entityClass);
 	}
 
-	const ORM = Ketzer::class;
-
 	public function nieuw($soort = null) {
 		/** @var Ketzer $ketzer */
 		$ketzer = parent::nieuw();

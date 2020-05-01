@@ -18,4 +18,16 @@ class VerticaleLid extends AbstractGroepLid {
 
 	protected static $table_name = 'verticale_leden';
 
+	/**
+	 * @var Verticale
+	 * @ORM\ManyToOne(targetEntity="Verticale", inversedBy="leden")
+	 */
+	public $groep;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getGroep() {
+		return $this->groep;
+	}
 }

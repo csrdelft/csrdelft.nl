@@ -18,4 +18,16 @@ class CommissieLid extends AbstractGroepLid {
 
 	protected static $table_name = 'commissie_leden';
 
+	/**
+	 * @var Commissie
+	 * @ORM\ManyToOne(targetEntity="Commissie", inversedBy="leden")
+	 */
+	public $groep;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getGroep() {
+		return $this->groep;
+	}
 }

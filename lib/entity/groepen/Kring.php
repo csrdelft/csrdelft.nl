@@ -21,13 +21,22 @@ class Kring extends AbstractGroep {
 	/**
 	 * Verticaleletter
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $verticale;
 	/**
 	 * Kringnummer
 	 * @var int
+	 * @ORM\Column(type="integer")
 	 */
 	public $kring_nummer;
+
+	/**
+	 * @var KringLid[]
+	 * @ORM\OneToMany(targetEntity="KringLid", mappedBy="groep")
+	 */
+	public $leden;
+
 	/**
 	 * Database table columns
 	 * @var array
@@ -44,6 +53,17 @@ class Kring extends AbstractGroep {
 
 	public function getUrl() {
 		return '/groepen/kringen/' . $this->verticale . '.' . $this->kring_nummer;
+	}
+
+	/**
+	 * @return KringLid[]
+	 */
+	public function getLeden(){
+		return $this->leden;
+	}
+
+	public function getLidType() {
+		returN KringLid::class;
 	}
 
 }

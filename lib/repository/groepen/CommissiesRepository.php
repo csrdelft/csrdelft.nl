@@ -22,5 +22,4 @@ class CommissiesRepository extends AbstractGroepenRepository {
 		$commissie->soort = $soort;
 		return $commissie;
 	}
-
 }

@@ -55,6 +55,21 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $afmelden_tot;
+
+	/**
+	 * @var KetzerDeelnemer
+	 * @ORM\OneToMany(targetEntity="KetzerDeelnemer", mappedBy="groep")
+	 */
+	public $leden;
+
+	public function getLeden() {
+		return $this->leden;
+	}
+
+	public function getLidType() {
+		return KetzerDeelnemer::class;
+	}
+
 	/**
 	 * Database table columns
 	 * @var array

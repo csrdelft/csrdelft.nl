@@ -6,6 +6,7 @@ use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use function common\short_class;
 
 
 /**
@@ -18,6 +19,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperclass()
  */
 abstract class AbstractGroepLid {
+
+	public function getUUID() {
+		return $this->groep_id . '.' . $this->uid . '@' . strtolower(short_class($this)) . '.csrdelft.nl';
+	}
 	protected static $computed_attributes = [
 		'link' => [T::String],
 	];
@@ -65,4 +70,9 @@ abstract class AbstractGroepLid {
 	public function getLink() {
 		return ProfielRepository::getLink($this->uid);
 	}
+
+	/**
+	 * @return AbstractGroep
+	 */
+	abstract public function getGroep();
 }

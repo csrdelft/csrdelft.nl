@@ -35,6 +35,21 @@ class Woonoord extends AbstractGroep {
 	 * @ORM\Column(type="boolean")
 	 */
 	public $eetplan;
+
+	/**
+	 * @var Bewoner[]
+	 * @ORM\OneToMany(targetEntity="Bewoner", mappedBy="groep")
+	 */
+	public $leden;
+
+	public function getLeden() {
+		return $this->leden;
+	}
+
+	public function getLidType() {
+		return Bewoner::class;
+	}
+
 	/**
 	 * Database table columns
 	 * @var array

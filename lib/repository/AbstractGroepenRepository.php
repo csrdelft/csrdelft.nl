@@ -10,7 +10,6 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use Doctrine\Persistence\ManagerRegistry;
-use PDO;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -132,7 +131,7 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 				$this->_em->persist($newgroep);
 
 				// leden converteren
-				$ledenmodel = $newgroep::getLedenModel();
+				$ledenmodel = $this->_em->getRepository($newgroep->getLidType());
 				foreach ($oldgroep->getLeden() as $oldlid) {
 					$newlid = $ledenmodel->nieuw($newgroep, $oldlid->uid);
 					$oldlidRc = new ReflectionClass($oldlid);
@@ -189,19 +188,11 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @return AbstractGroep[]
 	 */
 	public function getGroepenVoorLid($uid, $status = null) {
-
-		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
-		/** @var AbstractGroepLedenRepository $ledenModel */
-		$ledenModel = ContainerFacade::getContainer()->get($this->entityClass::LEDEN);
-
-		$ids = $this->database->sqlSelect(['DISTINCT groep_id'], $em->getClassMetadata($ledenModel->entityClass)->getTableName(), 'uid = ?', [$uid])->fetchAll(PDO::FETCH_COLUMN);
-		if (empty($ids)) {
-			return [];
-		}
-
 		$qb = $this->createQueryBuilder('ag')
-			->where('ag.id in (:ids)')
-			->setParameter('ids', $ids);
+			->orderBy('ag.begin_moment', 'DESC')
+			->join('ag.leden', 'l')
+			->where('l.uid = :uid')
+			->setParameter('uid', $uid);
 
 		if (is_array($status)) {
 			$qb->andWhere('ag.status in (:status)')

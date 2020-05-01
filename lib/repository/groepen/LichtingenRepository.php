@@ -14,8 +14,6 @@ class LichtingenRepository extends AbstractGroepenRepository {
 		parent::__construct($accessModel, $registry, Lichting::class);
 	}
 
-	const ORM = Lichting::class;
-
 	public function get($lidjaar) {
 		return $this->nieuw($lidjaar);
 	}

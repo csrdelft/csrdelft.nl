@@ -20,6 +20,19 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("commissies")
  */
 class Commissie extends AbstractGroep {
+	/**
+	 * @var CommissieLid[]
+	 * @ORM\OneToMany(targetEntity="CommissieLid", mappedBy="groep")
+	 */
+	public $leden;
+
+	public function getLeden() {
+		return $this->leden;
+	}
+
+	public function getLidType() {
+		return CommissieLid::class;
+	}
 
 	const LEDEN = CommissieLedenRepository::class;
 

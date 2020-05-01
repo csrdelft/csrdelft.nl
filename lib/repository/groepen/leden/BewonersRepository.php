@@ -12,7 +12,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BewonersRepository extends AbstractGroepLedenRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {
-		parent::__construct($managerRegistry, self::ORM);
+		parent::__construct($managerRegistry, Bewoner::class);
 	}
-	const ORM = Bewoner::class;
 }

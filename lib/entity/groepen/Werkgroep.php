@@ -49,6 +49,20 @@ class Werkgroep extends AbstractGroep {
 	 */
 	public $afmelden_tot;
 
+	/**
+	 * @var WerkgroepDeelnemer[]
+	 * @ORM\OneToMany(targetEntity="WerkgroepDeelnemer", mappedBy="groep")
+	 */
+	public $leden;
+
+	public function getLeden() {
+		return $this->leden;
+	}
+
+	public function getLidType() {
+		return WerkgroepDeelnemer::class;
+	}
+
 	const LEDEN = WerkgroepDeelnemersRepository::class;
 
 	/**

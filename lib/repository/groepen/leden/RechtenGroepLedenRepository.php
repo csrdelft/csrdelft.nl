@@ -8,7 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class RechtenGroepLedenRepository extends AbstractGroepLedenRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {
-		parent::__construct($managerRegistry, self::ORM);
+		parent::__construct($managerRegistry, RechtenGroepLid::class);
 	}
-	const ORM = RechtenGroepLid::class;
 }

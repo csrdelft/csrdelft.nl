@@ -13,8 +13,6 @@ class KetzerSelectorsRepository extends AbstractGroepenRepository {
 		parent::__construct($accessModel, $managerRegistry, KetzerSelector::class);
 	}
 
-	const ORM = KetzerSelector::class;
-
 	public function getSelectorsVoorKetzer(Ketzer $ketzer) {
 		return $this->findBy(['ketzer_id' => $ketzer->id]);
 	}

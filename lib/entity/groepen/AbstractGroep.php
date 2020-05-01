@@ -3,13 +3,16 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Eisen;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractGroepLedenRepository;
+use CsrDelft\service\GroepenService;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use PDO;
 
@@ -105,17 +108,14 @@ abstract class AbstractGroep {
 	abstract public function getUrl();
 
 	/**
-	 * Model voor leden van deze groep.
-	 * @var AbstractGroepLedenRepository
+	 * @return AbstractGroepLid[]|ArrayCollection
 	 */
-	const LEDEN = null;
+	abstract public function getLeden();
 
 	/**
-	 * @return AbstractGroepLedenRepository
+	 * @return string|AbstractGroepLid
 	 */
-	public static function getLedenModel() {
-		return ContainerFacade::getContainer()->get(static::LEDEN);
-	}
+	abstract public function getLidType();
 
 	/**
 	 * Is lid van deze groep?
@@ -124,24 +124,15 @@ abstract class AbstractGroep {
 	 * @return AbstractGroepLid
 	 */
 	public function getLid($uid) {
-		return ContainerFacade::getContainer()->get(static::LEDEN)->get($this, $uid);
-	}
-
-	/**
-	 * Lazy loading by foreign key.
-	 *
-	 * @return AbstractGroepLid[]
-	 */
-	public function getLeden() {
-		return static::getLedenModel()->getLedenVoorGroep($this);
+		return $this->getLeden()->matching(Eisen::voorGebruiker($uid))->first();
 	}
 
 	public function aantalLeden() {
-		return static::getLedenModel()->count(['groep_id' => $this->id]);
+		return $this->getLeden()->count();
 	}
 
 	public function getStatistieken() {
-		return static::getLedenModel()->getStatistieken($this);
+		return GroepenService::getStatistieken($this);
 	}
 
 	public function getFamilieSuggesties() {
@@ -158,11 +149,7 @@ abstract class AbstractGroep {
 		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getTypeOptions();
 		} else {
-			$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
-
-			$tableName = $em->getClassMetadata(static::getLedenModel()->entityClass)->getTableName();
-
-			$suggesties = ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT opmerking'], $tableName, 'groep_id = ?', [$this->id])->fetchAll(PDO::FETCH_COLUMN);
+			$suggesties = array_unique($this->getLeden()->map(function(AbstractGroepLid $lid) { return $lid->opmerking; })->toArray());
 		}
 		return $suggesties;
 	}
@@ -178,11 +165,8 @@ abstract class AbstractGroep {
 		if (!LoginModel::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
 			return false;
 		}
-		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
-		$ledenMeta = $em->getClassMetadata(static::getLedenModel()->entityClass);
-
-		$aangemeld = ContainerFacade::getContainer()->get(Database::class)->sqlExists($ledenMeta->getTableName(), 'groep_id = ? AND uid = ?', [$this->id, LoginModel::getUid()]);
+		$aangemeld = $this->getLid(LoginModel::getUid()) != null;
 		switch ($action) {
 
 			case AccessAction::Aanmelden:

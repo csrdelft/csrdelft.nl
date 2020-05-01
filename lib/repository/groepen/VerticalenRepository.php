@@ -12,13 +12,6 @@ class VerticalenRepository extends AbstractGroepenRepository {
 		parent::__construct($accessModel, $registry, Verticale::class);
 	}
 
-	const ORM = Verticale::class;
-
-	/**
-	 * Store verticalen array as a whole in memcache
-	 * @var boolean
-	 */
-	protected $memcache_prefetch = true;
 	/**
 	 * Default ORDER BY
 	 * @var string

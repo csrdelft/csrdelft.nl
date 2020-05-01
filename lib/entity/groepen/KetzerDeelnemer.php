@@ -18,4 +18,16 @@ class KetzerDeelnemer extends AbstractGroepLid {
 
 	protected static $table_name = 'ketzer_deelnemers';
 
+	/**
+	 * @var Ketzer
+	 * @ORM\ManyToOne(targetEntity="Ketzer", inversedBy="leden")
+	 */
+	public $groep;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getGroep() {
+		// TODO: Implement getGroep() method.
+	}
 }

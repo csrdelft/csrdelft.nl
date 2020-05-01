@@ -24,8 +24,24 @@ class RechtenGroep extends AbstractGroep {
 	/**
 	 * Rechten benodigd voor aanmelden
 	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $rechten_aanmelden;
+
+	/**
+	 * @var RechtenGroepLid[]
+	 * @ORM\OneToMany(targetEntity="RechtenGroepLid", mappedBy="groep")
+	 */
+	public $leden;
+
+	public function getLeden() {
+		return $this->leden;
+	}
+
+	public function getLidType() {
+		return RechtenGroepLid::class;
+	}
+
 	/**
 	 * Database table columns
 	 * @var array

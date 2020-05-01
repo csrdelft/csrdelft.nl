@@ -7,7 +7,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\AbstractGroepLid;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\GroepKeuzeSelectie;
@@ -540,24 +539,24 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		}
 	}
 
-	public function leden(Request $request, $id) {
+	public function leden(Request $request, EntityManagerInterface $em, $id) {
 		$groep = $this->model->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			throw new CsrToegangException();
 		}
 		if ($request->getMethod() == 'POST') {
-			return new GroepLedenData($groep::getLedenModel()->getLedenVoorGroep($groep));
+			return new GroepLedenData($groep->getLeden());
 		} else {
-			return new GroepLedenTable($groep::getLedenModel(), $groep);
+			return new GroepLedenTable($em->getRepository($groep->getLidType()), $groep);
 		}
 	}
 
 	/*
 	 * Voor groepen V2
 	 */
-	public function aanmelden2(Request $request, $id, $uid) {
+	public function aanmelden2(Request $request, EntityManagerInterface $em, $id, $uid) {
 		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+		$model = $em->getRepository($groep->getLidType());
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
 			throw new CsrToegangException();
@@ -583,30 +582,31 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		return new JsonResponse(['success' => true]);
 	}
 
-	public function ketzer_aanmelden($id) {
+	public function ketzer_aanmelden(EntityManagerInterface $em, $id) {
 		$uid = LoginModel::getUid();
 		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
 			throw new CsrToegangException();
 		}
 
-		$lid = $model->nieuw($groep, $uid);
+		$lid = $em->getRepository($groep->getLidType())->nieuw($groep, $uid);
+
 		$form = new GroepAanmeldenForm($lid, $groep);
 
 		if ($form->validate()) {
 			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
-			$model->save($lid);
+			$em->persist($lid);
+			$em->flush();
 			return new GroepPasfotosView($groep);
 		} else {
 			return $form;
 		}
 	}
 
-	public function aanmelden($id) {
+	public function aanmelden(EntityManagerInterface $em, $id) {
 		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+		$model = $em->getRepository($groep->getLidType());
 
 		if (!$groep->mag(AccessAction::Beheren)) {
 			throw new CsrToegangException();
@@ -625,35 +625,33 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		}
 	}
 
-	public function ketzer_bewerken($id) {
+	public function ketzer_bewerken(EntityManagerInterface $em, $id) {
 		$uid = LoginModel::getUid();
 		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Bewerken)) {
 			throw new CsrToegangException();
 		}
-		$lid = $model->get($groep, $uid);
+		$lid = $groep->getLid($uid);
 		$form = new GroepBewerkenForm($lid, $groep);
 
 		if ($form->validate()) {
 			$this->changeLogRepository->logChanges($form->diff());
-			$model->save($lid);
+			$em->persist($lid);
+			$em->flush();
 		}
 
 		return $form;
 	}
 
-	public function bewerken($id, $uid = null) {
+	public function bewerken(EntityManagerInterface $em, $id, $uid = null) {
 		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
 
 		if (!$uid) {
 			$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
 		}
 
-		/** @var AbstractGroepLid $lid */
-		$lid = $model->get($groep, $uid);
+		$lid = $groep->getLid($uid);
 
 		if (!$lid) {
 			throw new CsrToegangException();
@@ -667,51 +665,51 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 		if ($form->validate()) {
 			$this->changeLogRepository->logChanges($form->diff());
-			$model->save($lid);
+			$em->persist($lid);
+			$em->flush();
 			return new GroepLedenData([$lid]);
 		} else {
 			return $form;
 		}
 	}
 
-	public function ketzer_afmelden($id) {
+	public function ketzer_afmelden(EntityManagerInterface $em, $id) {
 		$uid = LoginModel::getUid();
 		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Afmelden) && !$groep->mag(AccessAction::Beheren)) { // A::Beheren voor afmelden via context-menu
 			throw new CsrToegangException();
 		}
 
-		$lid = $model->get($groep, $uid);
+		$lid = $groep->getLid($uid);
 
 		if (!$lid) {
 			throw new CsrToegangException('Niet aangemeld');
 		}
 
 		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
-		$model->save($lid);
+		$em->persist($lid);
+		$em->flush();
 
 		return new GroepView($groep);
 	}
 
-	public function afmelden($id, $uid) {
+	public function afmelden(EntityManagerInterface $em, $id, $uid) {
 		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
 
 		if (!$groep->mag(AccessAction::Beheren)) {
 			throw new CsrToegangException();
 		}
 
-		$lid = $model->get($groep, $uid);
+		$lid = $groep->getLid($uid);
 		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
-		$model->remove($lid);
+		$em->remove($lid);
+		$em->flush();
 		return new RemoveRowsResponse([$lid]);
 	}
 
 	public function naar_ot(EntityManagerInterface $em, $id, $uid = null) {
 		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
 
 		// Vind de groep uit deze familie met het laatste eind_moment
 		$ot_groep_statement = $this->model->findOneBy(["familie" => $groep->familie,  'status' => 'ot'], ['eind_moment',  'DESC']);
@@ -730,13 +728,15 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			if (!$groep->mag(AccessAction::Afmelden) AND !$groep->mag(AccessAction::Beheren) AND !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
 				throw new CsrGebruikerException();
 			}
-			$em->transactional(function () use ($groep, $ot_groep, $uid, $model) {
-				$lid = $model->get($groep, $uid);
+			$em->transactional(function () use ($groep, $ot_groep, $uid, $em) {
+				$lid = $groep->getLid($uid);
 				$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
 				$this->changeLogRepository->log($ot_groep, 'aanmelden', $lid->uid, null);
-				$model->remove($lid);
+				$em->remove($lid);
+				$em->flush();
 				$lid->groep_id = $ot_groep->id;
-				$model->save($lid);
+				$em->persist($lid);
+				$em->flush();
 				$lid->groep_id = $groep->id; // Terugspelen naar gebruiker dat dit lid is verwijderd
 			});
 			return new GroepView($groep);
@@ -746,24 +746,31 @@ abstract class AbstractGroepenController extends AbstractController implements R
 				throw new CsrGebruikerException();
 			}
 
-			$response = $em->transactional(function () use ($selection, $groep, $ot_groep, $model) {
+			$response = $em->transactional(function () use ($selection, $groep, $ot_groep, $em) {
 				$response = [];
 				foreach ($selection as $UUID) {
 					if (!$groep->mag(AccessAction::Beheren)) {
 						throw new CsrGebruikerException();
 					}
-					/** @var AbstractGroepLid $lid */
-					$lid = $model->retrieveByUUID($UUID);
+
+					[$id, $rest] = explode("@", $UUID);
+					[$groep_id, $uid] = explode(".", $id);
+
+					$lid = $groep->getLid($uid);
+
 					if ($ot_groep->getLid($lid->uid)) {
 						throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
 					}
+
 					$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
 					$this->changeLogRepository->log($ot_groep, 'aanmelden', $lid->uid, null);
-					$model->remove($lid);
+					$em->remove($lid);
+					$em->flush();
 					$lid->groep_id = $ot_groep->id;
 					$lid->lid_sinds = getDateTime();
 					$lid->door_uid = LoginModel::getUid();
-					$model->save($lid);
+					$em->persist($lid);
+					$em->flush();
 					$lid->groep_id = $groep->id;
 
 					$response[] = $lid;

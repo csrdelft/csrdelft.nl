@@ -8,7 +8,7 @@ use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class KetzerOptiesModel extends AbstractGroepenRepository {
+class KetzerOptiesRepository extends AbstractGroepenRepository {
 	public function __construct(AccessModel $accessModel, ManagerRegistry $managerRegistry) {
 		parent::__construct($accessModel, $managerRegistry, KetzerOptie::class);
 	}
@@ -18,5 +18,4 @@ class KetzerOptiesModel extends AbstractGroepenRepository {
 	public function getOptiesVoorSelect(KetzerSelector $select) {
 		return $this->findBy(['select_id' => $select->select_id]);
 	}
-
 }

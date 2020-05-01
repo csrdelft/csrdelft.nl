@@ -8,7 +8,7 @@ use CsrDelft\view\datatable\DataTableResponse;
 class GroepLedenData extends DataTableResponse {
 
 	public function renderElement($lid) {
-		$array = $lid->jsonSerialize();
+		$array = (array)$lid;
 
 		$array['lid'] = ProfielRepository::getLink($array['uid'], 'civitas');
 		$array['door_uid'] = ProfielRepository::getLink($array['door_uid'], 'civitas');

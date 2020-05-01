@@ -12,8 +12,6 @@ class BesturenRepository extends AbstractGroepenRepository {
 		parent::__construct($accessModel, $registry, Bestuur::class);
 	}
 
-	const ORM = Bestuur::class;
-
 	public function nieuw($soort = null) {
 		/** @var Bestuur $bestuur */
 		$bestuur = parent::nieuw();

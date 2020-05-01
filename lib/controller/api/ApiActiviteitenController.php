@@ -7,6 +7,7 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
 use Jacwright\RestServer\RestException;
 
 class ApiActiviteitenController {
@@ -14,12 +15,22 @@ class ApiActiviteitenController {
 	private $changeLogRepository;
 	/** @var ActiviteitenRepository  */
 	private $activiteitenModel;
+	/**
+	 * @var \Doctrine\ORM\EntityManager
+	 */
+	private $em;
+	/**
+	 * @var ActiviteitDeelnemersRepository
+	 */
+	private $activiteitDeelnemersModel;
 
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 
 		$this->activiteitenModel = $container->get(ActiviteitenRepository::class);
+		$this->activiteitDeelnemersModel = $container->get(ActiviteitDeelnemersRepository::class);
 		$this->changeLogRepository = $container->get(ChangeLogRepository::class);
+		$this->em = $container->get('doctrine.orm.entity_manager');
 	}
 
 	/**
@@ -44,11 +55,11 @@ class ApiActiviteitenController {
 			throw new RestException(403, 'Aanmelden niet mogelijk');
 		}
 
-		$model = $activiteit::getLedenModel();
-		$lid = $model->nieuw($activiteit, $_SESSION['_uid']);
+		$lid = $this->activiteitDeelnemersModel->nieuw($activiteit, $_SESSION['_uid']);
 
 		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
-		$model->create($lid);
+		$this->em->persist($lid);
+		$this->em->flush();
 
 		return array('data' => $activiteit);
 	}
@@ -68,10 +79,10 @@ class ApiActiviteitenController {
 			throw new RestException(403, 'Afmelden niet mogelijk');
 		}
 
-		$model = $activiteit::getLedenModel();
-		$lid = $model->get($activiteit, $_SESSION['_uid']);
+		$lid = $activiteit->getLid($_SESSION['_uid']);
 		$this->changeLogRepository->log($activiteit, 'afmelden', $lid->uid, null);
-		$model->delete($lid);
+		$this->em->remove($lid);
+		$this->em->flush();
 
 		return array('data' => $activiteit);
 	}

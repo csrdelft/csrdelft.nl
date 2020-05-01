@@ -15,8 +15,17 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository")
  * @ORM\Table("activiteit_deelnemers")
  */
-class ActiviteitDeelnemer extends KetzerDeelnemer {
+class ActiviteitDeelnemer extends AbstractGroepLid {
 
 	protected static $table_name = 'activiteit_deelnemers';
 
+	/**
+	 * @var Activiteit
+	 * @ORM\ManyToOne(targetEntity="Activiteit", inversedBy="leden")
+	 */
+	public $groep;
+
+	public function getGroep() {
+		return $this->groep;
+	}
 }

@@ -79,6 +79,21 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * @ORM\Column(type="boolean")
 	 */
 	public $in_agenda;
+
+	/**
+	 * @var ActiviteitDeelnemer[]
+	 * @ORM\OneToMany(targetEntity="ActiviteitDeelnemer", mappedBy="groep")
+	 */
+	public $leden;
+
+	public function getLeden() {
+		return $this->leden;
+	}
+
+	public function getLidType() {
+		return ActiviteitDeelnemer::class;
+	}
+
 	/**
 	 * Database table columns
 	 * @var array

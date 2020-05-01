@@ -22,8 +22,24 @@ class Ondervereniging extends AbstractGroep {
 	/**
 	 * (Adspirant-)Ondervereniging
 	 * @var OnderverenigingStatus
+	 * @ORM\Column(type="string")
 	 */
 	public $soort;
+
+	/**
+	 * @var OnderverenigingsLid[]
+	 * @ORM\OneToMany(targetEntity="OnderverenigingsLid", mappedBy="groep")
+	 */
+	public $leden;
+
+	public function getLeden() {
+		return $this->leden;
+	}
+
+	public function getLidType() {
+		return OnderverenigingsLid::class;
+	}
+
 	/**
 	 * Database table columns
 	 * @var array

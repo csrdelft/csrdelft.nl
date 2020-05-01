@@ -2,7 +2,6 @@
 
 namespace CsrDelft\repository\groepen\leden;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\entity\groepen\LichtingsLid;
@@ -16,10 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class LichtingLedenRepository extends AbstractGroepLedenRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {
-		parent::__construct($managerRegistry, self::ORM);
+		parent::__construct($managerRegistry, LichtingsLid::class);
 	}
-
-	const ORM = LichtingsLid::class;
 
 	/**
 	 * Create LichtingLid on the fly.
@@ -37,23 +34,5 @@ class LichtingLedenRepository extends AbstractGroepLedenRepository {
 			return $lid;
 		}
 		return false;
-	}
-
-	/**
-	 * Return leden van lichting.
-	 *
-	 * @param Lichting $lichting
-	 * @return LichtingsLid[]
-	 */
-	public function getLedenVoorGroep(AbstractGroep $lichting) {
-		$leden = [];
-		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
-		foreach ($profielRepository->findBy(['lidjaar' => $lichting->lidjaar]) as $profiel) {
-			$lid = $this->get($lichting, $profiel->uid);
-			if ($lid) {
-				$leden[] = $lid;
-			}
-		}
-		return $leden;
 	}
 }

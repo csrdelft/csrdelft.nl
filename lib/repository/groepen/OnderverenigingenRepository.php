@@ -14,8 +14,6 @@ class OnderverenigingenRepository extends AbstractGroepenRepository {
 		parent::__construct($accessModel, $registry, Ondervereniging::class);
 	}
 
-	const ORM = Ondervereniging::class;
-
 	public function nieuw($soort = null) {
 		/** @var Ondervereniging $ondervereniging */
 		$ondervereniging = parent::nieuw();
@@ -23,5 +21,4 @@ class OnderverenigingenRepository extends AbstractGroepenRepository {
 		$ondervereniging->status_historie = '[div]Aangemaakt als ' . OnderverenigingStatus::getDescription($ondervereniging->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $ondervereniging;
 	}
-
 }

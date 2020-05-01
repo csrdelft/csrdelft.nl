@@ -7,8 +7,7 @@ use CsrDelft\repository\AbstractGroepLedenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class KetzerDeelnemersRepository extends AbstractGroepLedenRepository {
-	public function __construct(ManagerRegistry $managerRegistry, $entityClass = self::ORM) {
+	public function __construct(ManagerRegistry $managerRegistry, $entityClass = KetzerDeelnemer::class) {
 		parent::__construct($managerRegistry, $entityClass);
 	}
-	const ORM = KetzerDeelnemer::class;
 }

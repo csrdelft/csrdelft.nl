@@ -18,4 +18,16 @@ class Bewoner extends AbstractGroepLid {
 
 	protected static $table_name = 'bewoners';
 
+	/**
+	 * @var Woonoord
+	 * @ORM\ManyToOne(targetEntity="Woonoord", inversedBy="leden")
+	 */
+	public $groep;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getGroep() {
+		return $this->groep;
+	}
 }

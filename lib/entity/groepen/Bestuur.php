@@ -20,9 +20,17 @@ class Bestuur extends AbstractGroep {
 
 	/**
 	 * @var BestuursLid[]
-	 * @ORM\OneToMany(targetEntity="BestuursLid")
+	 * @ORM\OneToMany(targetEntity="BestuursLid", mappedBy="groep")
 	 */
 	public $leden;
+
+	public function getLeden() {
+		return $this->leden;
+	}
+
+	public function getLidType() {
+		return BestuursLid::class;
+	}
 
 	/**
 	 * Bestuurstekst

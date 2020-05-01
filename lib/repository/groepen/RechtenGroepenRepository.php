@@ -26,8 +26,6 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 		$this->commissieLedenModel = $commissieLedenModel;
 	}
 
-	const ORM = RechtenGroep::class;
-
 	public function nieuw($soort = null) {
 		/** @var RechtenGroep $groep */
 		$groep = parent::nieuw();

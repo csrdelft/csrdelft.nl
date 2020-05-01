@@ -22,4 +22,16 @@ class RechtenGroepLid extends AbstractGroepLid {
 	 */
 	protected static $table_name = 'groep_leden';
 
+	/**
+	 * @var RechtenGroep
+	 * @ORM\ManyToOne(targetEntity="RechtenGroep", inversedBy="leden")
+	 */
+	public $groep;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getGroep() {
+		return $this->groep;
+	}
 }

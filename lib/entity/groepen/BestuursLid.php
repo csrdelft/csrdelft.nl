@@ -21,8 +21,13 @@ class BestuursLid extends AbstractGroepLid {
 	/**
 	 * @var Bestuur
 	 * @ORM\ManyToOne(targetEntity="Bestuur", inversedBy="leden")
-	 * @ORM\JoinColumn(name="groep_id")
 	 */
-	public $bestuur;
+	public $groep;
 
+	/**
+	 * @inheritDoc
+	 */
+	public function getGroep() {
+		return $this->groep;
+	}
 }

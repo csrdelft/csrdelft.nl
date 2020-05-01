@@ -18,4 +18,16 @@ class OnderverenigingsLid extends AbstractGroepLid {
 
 	protected static $table_name = 'ondervereniging_leden';
 
+	/**
+	 * @var Ondervereniging
+	 * @ORM\ManyToOne(targetEntity="Ondervereniging", inversedBy="leden")
+	 */
+	public $groep;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getGroep() {
+		return $this->groep;
+	}
 }

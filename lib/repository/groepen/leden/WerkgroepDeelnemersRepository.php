@@ -7,7 +7,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class WerkgroepDeelnemersRepository extends KetzerDeelnemersRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {
-		parent::__construct($managerRegistry, self::ORM);
+		parent::__construct($managerRegistry, WerkgroepDeelnemer::class);
 	}
-	const ORM = WerkgroepDeelnemer::class;
 }

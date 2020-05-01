@@ -11,5 +11,4 @@ class WerkgroepenRepository extends KetzersRepository {
 	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
 		parent::__construct($accessModel, $registry, Werkgroep::class);
 	}
-	const ORM = Werkgroep::class;
 }

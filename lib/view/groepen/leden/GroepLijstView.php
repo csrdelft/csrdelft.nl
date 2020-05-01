@@ -20,10 +20,12 @@ use CsrDelft\view\Icon;
 class GroepLijstView extends GroepTabView {
 
 	public function getTabContent() {
+		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+
 		$html = '<table class="groep-lijst"><tbody>';
 		if ($this->groep->mag(AccessAction::Aanmelden)) {
 			$html .= '<tr><td colspan="2">';
-			$lid = $this->groep::getLedenModel()->nieuw($this->groep, LoginModel::getUid());
+			$lid = $em->getRepository($this->groep->getLidType())->nieuw($this->groep, LoginModel::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep, false);
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';

@@ -14,8 +14,6 @@ class WoonoordenRepository extends AbstractGroepenRepository {
 		parent::__construct($accessModel, $registry, Woonoord::class);
 	}
 
-	const ORM = Woonoord::class;
-
 	public function nieuw($soort = null) {
 		/** @var Woonoord $woonoord */
 		$woonoord = parent::nieuw();

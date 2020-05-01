@@ -13,8 +13,6 @@ class ActiviteitenRepository extends KetzersRepository {
 		parent::__construct($accessModel, $registry, Activiteit::class);
 	}
 
-	const ORM = Activiteit::class;
-
 	public function nieuw($soort = null) {
 		if (!in_array($soort, ActiviteitSoort::getTypeOptions())) {
 			$soort = ActiviteitSoort::SjaarsActie;

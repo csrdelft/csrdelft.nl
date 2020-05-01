@@ -12,7 +12,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class KringLedenRepository extends AbstractGroepLedenRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {
-		parent::__construct($managerRegistry, self::ORM);
+		parent::__construct($managerRegistry, KringLid::class);
 	}
-	const ORM = KringLid::class;
 }

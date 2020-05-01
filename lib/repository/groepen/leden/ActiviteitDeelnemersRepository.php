@@ -12,6 +12,4 @@ class ActiviteitDeelnemersRepository extends KetzerDeelnemersRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, ActiviteitDeelnemer::class);
 	}
-
-	const ORM = ActiviteitDeelnemer::class;
 }
