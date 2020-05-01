@@ -57,7 +57,7 @@ class BbLedenmemoryscores extends BbTag {
 		if (isset($arguments['verticale'])) {
 			$v = filter_var($arguments['verticale'], FILTER_SANITIZE_STRING);
 			if (strlen($v) > 1) {
-				$verticale = $this->verticalenRepository->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+				$verticale = $this->verticalenRepository->searchByNaam($v);
 			} else {
 				$verticale = $this->verticalenRepository->get($v);
 			}

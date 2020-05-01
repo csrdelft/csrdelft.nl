@@ -26,6 +26,19 @@ class VerticalenRepository extends AbstractGroepenRepository {
 		return parent::get($letter);
 	}
 
+	/**
+	 * @param $naam
+	 * @return Verticale|null
+	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 */
+	public function searchByNaam($naam) {
+		return $this->createQueryBuilder('v')
+			->where('v.naam LIKE :naam')
+			->setParameter('naam', sql_contains($naam))
+			->setMaxResults(1)
+			->getQuery()->getOneOrNullResult();
+	}
+
 	public function nieuw($soort = null) {
 		/** @var Verticale $verticale */
 		$verticale = parent::nieuw();
