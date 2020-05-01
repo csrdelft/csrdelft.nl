@@ -258,7 +258,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$qb->setParameter('forum_id', $deel->forum_id);
 
 		if (!LoginModel::mag(P_LOGGED_IN)) {
-			$qb->andWhere('d.gesloten = false or d.laatst_gewijzigd >= :laatst_gewijzigd');
+			$qb->andWhere('d.gesloten = false and d.laatst_gewijzigd >= :laatst_gewijzigd');
 			$qb->setParameter('laatst_gewijzigd', date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')));
 		}
 
