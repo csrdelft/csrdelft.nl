@@ -17,9 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\LichtingenRepository")
  */
 class Lichting extends AbstractGroep {
-
-	const LEDEN = LichtingLedenRepository::class;
-
 	/**
 	 * Lidjaar
 	 * @var int
@@ -52,19 +49,6 @@ class Lichting extends AbstractGroep {
 		return LichtingsLid::class;
 	}
 
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'lidjaar' => array(T::Integer)
-	);
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'lichtingen';
-
 	public function getUrl() {
 		return '/groepen/lichtingen/' . $this->lidjaar;
 	}
@@ -83,9 +67,10 @@ class Lichting extends AbstractGroep {
 	 * Read-only: generated group
 	 * @param $action
 	 * @param null $allowedAuthenticationMethods
+	 * @param null $soort
 	 * @return bool
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
 		return $action === AccessAction::Bekijken;
 	}
 

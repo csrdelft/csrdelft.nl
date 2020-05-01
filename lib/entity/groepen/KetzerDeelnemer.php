@@ -15,9 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("ketzer_deelnemers")
  */
 class KetzerDeelnemer extends AbstractGroepLid {
-
-	protected static $table_name = 'ketzer_deelnemers';
-
 	/**
 	 * @var Ketzer
 	 * @ORM\ManyToOne(targetEntity="Ketzer", inversedBy="leden")
@@ -28,6 +25,6 @@ class KetzerDeelnemer extends AbstractGroepLid {
 	 * @inheritDoc
 	 */
 	public function getGroep() {
-		// TODO: Implement getGroep() method.
+		return $this->groep;
 	}
 }

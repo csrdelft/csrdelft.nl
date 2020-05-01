@@ -8,10 +8,10 @@ use CsrDelft\entity\bibliotheek\BoekExemplaarStatus;
 
 class BoekExemplaarStatusType extends EnumType {
 	public function getEnumClass() {
-		return 'enumboekexemplaarstatus';
+		return BoekExemplaarStatus::class;
 	}
 
 	public function getName() {
-		return BoekExemplaarStatus::class;
+		return 'enumboekexemplaarstatus';
 	}
 }

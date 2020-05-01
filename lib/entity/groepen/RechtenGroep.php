@@ -3,9 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\leden\RechtenGroepLedenRepository;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,9 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("groepen")
  */
 class RechtenGroep extends AbstractGroep {
-
-	const LEDEN = RechtenGroepLedenRepository::class;
-
 	/**
 	 * Rechten benodigd voor aanmelden
 	 * @var string
@@ -41,19 +36,6 @@ class RechtenGroep extends AbstractGroep {
 	public function getLidType() {
 		return RechtenGroepLid::class;
 	}
-
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'rechten_aanmelden' => [T::String]
-	];
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'groepen';
 
 	public function getUrl() {
 		return '/groepen/overig/' . $this->id;
@@ -86,9 +68,10 @@ class RechtenGroep extends AbstractGroep {
 	 *
 	 * @param string $action
 	 * @param null $allowedAuthenticationMethods
+	 * @param null $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
 		switch ($action) {
 			case AccessAction::Aanmaken:
 			case AccessAction::Aanmelden:
@@ -96,7 +79,7 @@ class RechtenGroep extends AbstractGroep {
 			case AccessAction::Afmelden:
 				return true;
 		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
 	}
 
 }

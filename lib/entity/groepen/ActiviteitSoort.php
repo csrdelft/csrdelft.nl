@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\common\Enum;
 
 /**

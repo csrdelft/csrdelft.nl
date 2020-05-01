@@ -69,7 +69,7 @@ class GroepenView implements View {
 		$model = $this->model;
 		$orm = $model->entityClass;
 		if ($orm::magAlgemeen(AccessAction::Aanmaken, null, $this->soort)) {
-			echo '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort->getValue() . '">' . Icon::getTag('add') . ' Toevoegen</a>';
+			echo '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . ($this->soort == null ? "": $this->soort->getValue()) . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
 		echo '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
 		if ($this->geschiedenis) {

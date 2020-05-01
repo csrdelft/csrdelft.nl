@@ -36,28 +36,12 @@ class Commissie extends AbstractGroep implements HeeftSoort {
 		return CommissieLid::class;
 	}
 
-	const LEDEN = CommissieLedenRepository::class;
-
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
 	 * @var CommissieSoort
 	 * @ORM\Column(type="enumcommissiesoort")
 	 */
 	public $soort;
-
-
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'soort' => [T::Enumeration, false, CommissieSoort::class],
-	];
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'commissies';
 
 	public function getUrl() {
 		return '/groepen/commissies/' . $this->id;
@@ -74,13 +58,13 @@ class Commissie extends AbstractGroep implements HeeftSoort {
 	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
 		switch ($soort) {
 
-			case CommissieSoort::SjaarCie:
+			case CommissieSoort::SjaarCie():
 				if (LoginModel::mag('commissie:NovCie')) {
 					return true;
 				}
 				break;
 		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
 	}
 
 	public function getSoort() {

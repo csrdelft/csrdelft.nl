@@ -36,9 +36,4 @@ class KringenRepository extends AbstractGroepenRepository {
 		$kring->verticale = $letter;
 		return $kring;
 	}
-
-	public function getKringenVoorVerticale(Verticale $verticale) {
-		return $this->findBy(['verticale' => $verticale->letter]);
-	}
-
 }

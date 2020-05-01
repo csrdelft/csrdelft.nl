@@ -16,9 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("werkgroep_deelnemers")
  */
 class WerkgroepDeelnemer extends AbstractGroepLid {
-
-	protected static $table_name = 'werkgroep_deelnemers';
-
 	/**
 	 * @var Werkgroep
 	 * @ORM\ManyToOne(targetEntity="Werkgroep", inversedBy="leden")

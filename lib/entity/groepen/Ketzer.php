@@ -20,9 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("ketzers")
  */
 class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
-
-	const LEDEN = KetzerDeelnemersRepository::class;
-
 	/**
 	 * Maximaal aantal groepsleden
 	 * @var string
@@ -67,23 +64,6 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	public function getLidType() {
 		return KetzerDeelnemer::class;
 	}
-
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'aanmeld_limiet' => [T::Integer, true],
-		'aanmelden_vanaf' => [T::DateTime],
-		'aanmelden_tot' => [T::DateTime],
-		'bewerken_tot' => [T::DateTime, true],
-		'afmelden_tot' => [T::DateTime, true]
-	];
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'ketzers';
 
 	public function getUrl() {
 		return '/groepen/ketzers/' . $this->id;
@@ -133,7 +113,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
 		switch ($action) {
 
 			case AccessAction::Aanmaken:
@@ -142,7 +122,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 			case AccessAction::Afmelden:
 				return true;
 		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
 	}
 
 	function getAanmeldLimiet() {

@@ -7,9 +7,7 @@ use CsrDelft\common\Eisen;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\repository\AbstractGroepLedenRepository;
 use CsrDelft\service\GroepenService;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -97,10 +95,6 @@ abstract class AbstractGroep {
 	 */
 	public $keuzelijst2;
 
-	protected static $computed_attributes = [
-		'leden' => [T::String],
-	];
-
 	/**
 	 * De URL van de groep
 	 * @return string
@@ -147,7 +141,7 @@ abstract class AbstractGroep {
 		if (isset($this->keuzelijst)) {
 			$suggesties = [];
 		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
-			$suggesties = CommissieFunctie::getTypeOptions();
+			$suggesties = CommissieFunctie::getEnumValues();
 		} else {
 			$suggesties = array_unique($this->getLeden()->map(function(AbstractGroepLid $lid) { return $lid->opmerking; })->toArray());
 		}
@@ -199,7 +193,7 @@ abstract class AbstractGroep {
 	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
 		switch ($action) {
 
 			case AccessAction::Bekijken:

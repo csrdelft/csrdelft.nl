@@ -13,7 +13,7 @@ use CsrDelft\common\Enum;
  * De verschillende tabbladen om een groep weer te geven.
  *
  */
-abstract class GroepTab extends Enum {
+class GroepTab extends Enum {
 
 	/**
 	 * GroepTab opties.

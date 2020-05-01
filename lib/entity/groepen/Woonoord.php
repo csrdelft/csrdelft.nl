@@ -2,12 +2,9 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\common\Enum;
 use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\leden\BewonersRepository;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -22,9 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("woonoorden")
  */
 class Woonoord extends AbstractGroep implements HeeftSoort {
-
-	const LEDEN = BewonersRepository::class;
-
 	/**
 	 * Woonoord / Huis
 	 * @var HuisStatus
@@ -51,21 +45,6 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	public function getLidType() {
 		return Bewoner::class;
 	}
-
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'soort' => [T::Enumeration, false, HuisStatus::class],
-		'eetplan' => [T::Boolean]
-	];
-
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'woonoorden';
 
 	public function getUrl() {
 		return '/groepen/woonoorden/' . $this->id;

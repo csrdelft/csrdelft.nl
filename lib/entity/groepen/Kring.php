@@ -2,8 +2,6 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\repository\groepen\leden\KringLedenRepository;
-use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,9 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("kringen")
  */
 class Kring extends AbstractGroep {
-
-	const LEDEN = KringLedenRepository::class;
-
 	/**
 	 * Verticaleletter
 	 * @var string
@@ -37,20 +32,6 @@ class Kring extends AbstractGroep {
 	 */
 	public $leden;
 
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'verticale' => [T::Char],
-		'kring_nummer' => [T::Integer]
-	];
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'kringen';
-
 	public function getUrl() {
 		return '/groepen/kringen/' . $this->verticale . '.' . $this->kring_nummer;
 	}
@@ -65,5 +46,4 @@ class Kring extends AbstractGroep {
 	public function getLidType() {
 		returN KringLid::class;
 	}
-
 }

@@ -63,14 +63,6 @@ class Werkgroep extends AbstractGroep {
 		return WerkgroepDeelnemer::class;
 	}
 
-	const LEDEN = WerkgroepDeelnemersRepository::class;
-
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'werkgroepen';
-
 	public function getUrl() {
 		return '/groepen/werkgroepen/' . $this->id;
 	}
@@ -82,11 +74,11 @@ class Werkgroep extends AbstractGroep {
 	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
 		if ($action === AccessAction::Aanmaken AND !LoginModel::mag(P_LEDEN_MOD)) {
 			return false;
 		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
 	}
 
 }

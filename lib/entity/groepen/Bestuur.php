@@ -15,9 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("besturen")
  */
 class Bestuur extends AbstractGroep {
-
-	const LEDEN = BestuursLedenRepository::class;
-
 	/**
 	 * @var BestuursLid[]
 	 * @ORM\OneToMany(targetEntity="BestuursLid", mappedBy="groep")
@@ -38,18 +35,6 @@ class Bestuur extends AbstractGroep {
 	 * @ORM\Column(type="text")
 	 */
 	public $bijbeltekst;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = [
-		'bijbeltekst' => [T::Text]
-	];
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'besturen';
 
 	public function getUrl() {
 		return '/groepen/besturen/' . $this->id;

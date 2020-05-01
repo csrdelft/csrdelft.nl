@@ -27,7 +27,6 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
 
-	const LEDEN = ActiviteitDeelnemersRepository::class;
 	/**
 	 * Maximaal aantal groepsleden
 	 * @var string
@@ -96,22 +95,6 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 		return ActiviteitDeelnemer::class;
 	}
 
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'soort' => array(T::Enumeration, false, ActiviteitSoort::class),
-		'rechten_aanmelden' => array(T::String, true),
-		'locatie' => array(T::String, true),
-		'in_agenda' => array(T::Boolean)
-	);
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'activiteiten';
-
 	public function getUrl() {
 		return '/groepen/activiteiten/' . $this->id;
 	}
@@ -147,25 +130,25 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
 		switch ($soort) {
 
-			case ActiviteitSoort::OWee:
+			case ActiviteitSoort::OWee():
 				if (LoginModel::mag('commissie:OWeeCie', $allowedAuthenticationMethods)) {
 					return true;
 				}
 				break;
 
-			case ActiviteitSoort::Dies:
+			case ActiviteitSoort::Dies():
 				if (LoginModel::mag('commissie:DiesCie', $allowedAuthenticationMethods)) {
 					return true;
 				}
 				break;
 
-			case ActiviteitSoort::Lustrum:
+			case ActiviteitSoort::Lustrum():
 				if (LoginModel::mag('commissie:LustrumCie', $allowedAuthenticationMethods)) {
 					return true;
 				}
 				break;
 		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
 	}
 
 	// Agendeerbaar:
