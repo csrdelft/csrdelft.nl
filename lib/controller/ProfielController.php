@@ -70,15 +70,15 @@ class ProfielController extends AbstractController {
 	/**
 	 * @var BesturenRepository
 	 */
-	private $besturenModel;
+	private $besturenRepository;
 	/**
 	 * @var CommissiesRepository
 	 */
-	private $commissiesModel;
+	private $commissiesRepository;
 	/**
 	 * @var BoekRecensieRepository
 	 */
-	private $boekRecensieModel;
+	private $boekRecensieRepository;
 	/**
 	 * @var MaaltijdAbonnementenRepository
 	 */
@@ -90,7 +90,7 @@ class ProfielController extends AbstractController {
 	/**
 	 * @var BoekExemplaarRepository
 	 */
-	private $boekExemplaarModel;
+	private $boekExemplaarRepository;
 	/**
 	 * @var ForumPostsRepository
 	 */
@@ -118,23 +118,23 @@ class ProfielController extends AbstractController {
 	/**
 	 * @var ActiviteitenRepository
 	 */
-	private $activiteitenModel;
+	private $activiteitenRepository;
 	/**
 	 * @var KetzersRepository
 	 */
-	private $ketzersModel;
+	private $ketzersRepository;
 	/**
 	 * @var RechtenGroepenRepository
 	 */
-	private $rechtenGroepenModel;
+	private $rechtenGroepenRepository;
 	/**
 	 * @var OnderverenigingenRepository
 	 */
-	private $onderverenigingenModel;
+	private $onderverenigingenRepository;
 	/**
 	 * @var WerkgroepenRepository
 	 */
-	private $werkgroepenModel;
+	private $werkgroepenRepository;
 	/**
 	 * @var LidToestemmingRepository
 	 */
@@ -155,55 +155,55 @@ class ProfielController extends AbstractController {
 	public function __construct(
 		ProfielRepository $profielRepository,
 		AccountRepository $accountRepository,
-		ActiviteitenRepository $activiteitenModel,
-		BesturenRepository $besturenModel,
-		BoekExemplaarRepository $boekExemplaarModel,
-		BoekRecensieRepository $boekRecensieModel,
+		ActiviteitenRepository $activiteitenRepository,
+		BesturenRepository $besturenRepository,
+		BoekExemplaarRepository $boekExemplaarRepository,
+		BoekRecensieRepository $boekRecensieRepository,
 		CiviBestellingModel $civiBestellingModel,
 		CommissieVoorkeurRepository $commissieVoorkeurRepository,
 		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
-		CommissiesRepository $commissiesModel,
+		CommissiesRepository $commissiesRepository,
 		CorveeTakenRepository $corveeTakenRepository,
 		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
 		ForumPostsRepository $forumPostsRepository,
 		FotoRepository $fotoRepository,
 		FotoTagsRepository $fotoTagsRepository,
-		KetzersRepository $ketzersModel,
+		KetzersRepository $ketzersRepository,
 		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
 		LidToestemmingRepository $lidToestemmingRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-		OnderverenigingenRepository $onderverenigingenModel,
-		RechtenGroepenRepository $rechtenGroepenModel,
+		OnderverenigingenRepository $onderverenigingenRepository,
+		RechtenGroepenRepository $rechtenGroepenRepository,
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
-		WerkgroepenRepository $werkgroepenModel,
+		WerkgroepenRepository $werkgroepenRepository,
 		SaldoGrafiekModel $saldoGrafiekModel,
 		VerjaardagenService $verjaardagenService
 	) {
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
-		$this->activiteitenModel = $activiteitenModel;
-		$this->besturenModel = $besturenModel;
-		$this->boekExemplaarModel = $boekExemplaarModel;
-		$this->boekRecensieModel = $boekRecensieModel;
+		$this->activiteitenRepository = $activiteitenRepository;
+		$this->besturenRepository = $besturenRepository;
+		$this->boekExemplaarRepository = $boekExemplaarRepository;
+		$this->boekRecensieRepository = $boekRecensieRepository;
 		$this->civiBestellingModel = $civiBestellingModel;
 		$this->commissieVoorkeurRepository = $commissieVoorkeurRepository;
-		$this->commissiesModel = $commissiesModel;
+		$this->commissiesRepository = $commissiesRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->fotoRepository = $fotoRepository;
 		$this->fotoTagsRepository = $fotoTagsRepository;
-		$this->ketzersModel = $ketzersModel;
+		$this->ketzersRepository = $ketzersRepository;
 		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
-		$this->onderverenigingenModel = $onderverenigingenModel;
-		$this->rechtenGroepenModel = $rechtenGroepenModel;
+		$this->onderverenigingenRepository = $onderverenigingenRepository;
+		$this->rechtenGroepenRepository = $rechtenGroepenRepository;
 		$this->voorkeurOpmerkingRepository = $voorkeurOpmerkingRepository;
-		$this->werkgroepenModel = $werkgroepenModel;
+		$this->werkgroepenRepository = $werkgroepenRepository;
 		$this->saldoGrafiekModel = $saldoGrafiekModel;
 		$this->verjaardagenService = $verjaardagenService;
 	}
@@ -245,13 +245,13 @@ class ProfielController extends AbstractController {
 
 		return view('profiel.profiel', [
 			'profiel' => $profiel,
-			'besturen' => $this->besturenModel->getGroepenVoorLid($uid),
-			'commissies' => $this->commissiesModel->getGroepenVoorLid($uid),
-			'werkgroepen' => $this->werkgroepenModel->getGroepenVoorLid($uid),
-			'onderverenigingen' => $this->onderverenigingenModel->getGroepenVoorLid($uid),
-			'groepen' => $this->rechtenGroepenModel->getGroepenVoorLid($uid),
-			'ketzers' => $this->ketzersModel->getGroepenVoorLid($uid),
-			'activiteiten' => $this->activiteitenModel->getGroepenVoorLid($uid),
+			'besturen' => $this->besturenRepository->getGroepenVoorLid($uid),
+			'commissies' => $this->commissiesRepository->getGroepenVoorLid($uid),
+			'werkgroepen' => $this->werkgroepenRepository->getGroepenVoorLid($uid),
+			'onderverenigingen' => $this->onderverenigingenRepository->getGroepenVoorLid($uid),
+			'groepen' => $this->rechtenGroepenRepository->getGroepenVoorLid($uid),
+			'ketzers' => $this->ketzersRepository->getGroepenVoorLid($uid),
+			'activiteiten' => $this->activiteitenRepository->getGroepenVoorLid($uid),
 			'bestellinglog' => $this->civiBestellingModel->getBeschrijving($this->civiBestellingModel->getBestellingenVoorLid($uid, 10)->fetchAll()),
 			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginModel::getUid() === $uid ? '' : '/' . $uid),
 			'corveetaken' => $this->corveeTakenRepository->getTakenVoorLid($uid),
@@ -260,10 +260,10 @@ class ProfielController extends AbstractController {
 			'corveekwalificaties' => $this->corveeKwalificatiesRepository->getKwalificatiesVanLid($uid),
 			'forumpostcount' => $this->forumPostsRepository->getAantalForumPostsVoorLid($uid),
 			'forumrecent' => $this->forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
-			'boeken' => $this->boekExemplaarModel->getEigendom($uid),
+			'boeken' => $this->boekExemplaarRepository->getEigendom($uid),
 			'recenteAanmeldingen' => $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($uid, date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))),
 			'abos' => $this->maaltijdAbonnementenRepository->getAbonnementenVoorLid($uid),
-			'gerecenseerdeboeken' => $this->boekRecensieModel->getVoorLid($uid),
+			'gerecenseerdeboeken' => $this->boekRecensieRepository->getVoorLid($uid),
 			'fotos' => $fotos
 		]);
 	}

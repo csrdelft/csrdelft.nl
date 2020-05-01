@@ -12,7 +12,7 @@ use CsrDelft\repository\groepen\CommissiesRepository;
  * Controller voor commissies.
  */
 class CommissiesController extends AbstractGroepenController {
-	public function __construct(CommissiesRepository $commissiesModel) {
-		parent::__construct($commissiesModel);
+	public function __construct(CommissiesRepository $commissiesRepository) {
+		parent::__construct($commissiesRepository);
 	}
 }

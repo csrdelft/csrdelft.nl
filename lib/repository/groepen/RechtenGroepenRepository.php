@@ -12,18 +12,18 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class RechtenGroepenRepository extends AbstractGroepenRepository {
 	/** @var BesturenRepository */
-	private $besturenModel;
+	private $besturenRepository;
 	/** @var CommissieLedenRepository */
-	private $commissieLedenModel;
+	private $commissieLedenRepository;
 	/** @var CommissiesRepository */
-	private $commissiesModel;
+	private $commissiesRepository;
 
-	public function __construct(BesturenRepository $besturenModel, CommissiesRepository $commissiesModel, CommissieLedenRepository $commissieLedenModel, AccessModel $accessModel, ManagerRegistry $registry) {
+	public function __construct(BesturenRepository $besturenRepository, CommissiesRepository $commissiesRepository, CommissieLedenRepository $commissieLedenRepository, AccessModel $accessModel, ManagerRegistry $registry) {
 		parent::__construct($accessModel, $registry, RechtenGroep::class);
 
-		$this->besturenModel = $besturenModel;
-		$this->commissiesModel = $commissiesModel;
-		$this->commissieLedenModel = $commissieLedenModel;
+		$this->besturenRepository = $besturenRepository;
+		$this->commissiesRepository = $commissiesRepository;
+		$this->commissieLedenRepository = $commissieLedenRepository;
 	}
 
 	public function nieuw($soort = null) {
@@ -53,14 +53,14 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 			$result[] = 'htleden-oudleden';
 		}
 		// 1 generatie vooruit en 1 achteruit (default order by)
-		$ft = $this->besturenModel->findOneBy(['status' => GroepStatus::FT()]);
-		$ht = $this->besturenModel->findOneBy(['status' => GroepStatus::HT()]);
-		$ot = $this->besturenModel->findOneBy(['status' => GroepStatus::OT()]);
+		$ft = $this->besturenRepository->findOneBy(['status' => GroepStatus::FT()]);
+		$ht = $this->besturenRepository->findOneBy(['status' => GroepStatus::HT()]);
+		$ot = $this->besturenRepository->findOneBy(['status' => GroepStatus::OT()]);
 		if (($ft && $ft->getLid($uid)) || ($ht && $ht->getLid($uid)) || ($ot && $ot->getLid($uid))) {
 			$result[] = 'bestuur';
 		}
-		foreach ($this->commissieLedenModel->findBy(['uid' => $uid]) as $commissielid) {
-			$commissie = $this->commissiesModel->get($commissielid->groep_id);
+		foreach ($this->commissieLedenRepository->findBy(['uid' => $uid]) as $commissielid) {
+			$commissie = $this->commissiesRepository->get($commissielid->groep_id);
 			if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
 				$result[] = $commissie->familie;
 			}

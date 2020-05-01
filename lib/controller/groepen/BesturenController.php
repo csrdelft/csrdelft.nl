@@ -12,7 +12,7 @@ use CsrDelft\repository\groepen\BesturenRepository;
  * Controller voor besturen.
  */
 class BesturenController extends AbstractGroepenController {
-	public function __construct(BesturenRepository $besturenModel) {
-		parent::__construct($besturenModel);
+	public function __construct(BesturenRepository $besturenRepository) {
+		parent::__construct($besturenRepository);
 	}
 }

@@ -17,8 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
  * @property LichtingenRepository $model
  */
 class LichtingenController extends AbstractGroepenController {
-	public function __construct(LichtingenRepository $lichtingenModel) {
-		parent::__construct($lichtingenModel);
+	public function __construct(LichtingenRepository $lichtingenRepository) {
+		parent::__construct($lichtingenRepository);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {

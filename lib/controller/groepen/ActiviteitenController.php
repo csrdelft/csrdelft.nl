@@ -13,7 +13,7 @@ use CsrDelft\repository\groepen\ActiviteitenRepository;
  * Controller voor activiteiten.
  */
 class ActiviteitenController extends KetzersController {
-	public function __construct(ActiviteitenRepository $activiteitenModel) {
-		parent::__construct($activiteitenModel);
+	public function __construct(ActiviteitenRepository $activiteitenRepository) {
+		parent::__construct($activiteitenRepository);
 	}
 }

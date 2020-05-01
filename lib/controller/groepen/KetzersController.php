@@ -18,8 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
  * @property KetzersRepository $model
  */
 class KetzersController extends AbstractGroepenController {
-	public function __construct(KetzersRepository $ketzersModel) {
-		parent::__construct($ketzersModel);
+	public function __construct(KetzersRepository $ketzersRepository) {
+		parent::__construct($ketzersRepository);
 	}
 
 	public function nieuw(Request $request, $id = null, $soort = null) {

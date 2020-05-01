@@ -366,10 +366,10 @@ class ToolsController extends AbstractController {
 	/**
 	 * Voor patronaat 2019 kan september 2019 verwijderd worden.
 	 *
-	 * @param ActiviteitenRepository $activiteitenModel
+	 * @param ActiviteitenRepository $activiteitenRepository
 	 * @return View
 	 */
-	public function patronaat(ActiviteitenRepository $activiteitenModel) {
-		return view('patronaat', ['groep' => $activiteitenModel->get(1754)]);
+	public function patronaat(ActiviteitenRepository $activiteitenRepository) {
+		return view('patronaat', ['groep' => $activiteitenRepository->get(1754)]);
 	}
 }

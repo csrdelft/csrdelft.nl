@@ -31,12 +31,12 @@ class LedenMemoryController {
 	/**
 	 * @var VerticalenRepository
 	 */
-	private $verticalenModel;
+	private $verticalenRepository;
 
-	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielRepository $profielRepository, VerticalenRepository $verticalenModel) {
+	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielRepository $profielRepository, VerticalenRepository $verticalenRepository) {
 		$this->ledenMemoryScoresModel = $ledenMemoryScoresModel;
 		$this->profielRepository = $profielRepository;
-		$this->verticalenModel = $verticalenModel;
+		$this->verticalenRepository = $verticalenRepository;
 	}
 
 	public function memory() {
@@ -88,7 +88,7 @@ class LedenMemoryController {
 		if (isset($parts[0], $parts[1])) {
 			switch ($parts[1]) {
 				case 'verticale.csrdelft.nl':
-					$groep = $this->verticalenModel->retrieveByUUID($groep);
+					$groep = $this->verticalenRepository->retrieveByUUID($groep);
 					break;
 				case 'lichting.csrdelft.nl':
 					$groep = ContainerFacade::getContainer()->get(LichtingenRepository::class)->get($parts[0]);
@@ -159,10 +159,10 @@ class LedenMemoryController {
 		}
 		$verticale = false;
 		if (strlen($v) == 1) {
-			$verticale = $this->verticalenModel->get($v);
+			$verticale = $this->verticalenRepository->get($v);
 		}
 		if (!$verticale) {
-			$verticale = $this->verticalenModel->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+			$verticale = $this->verticalenRepository->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
 		}
 		return $verticale ? $verticale : null;
 	}

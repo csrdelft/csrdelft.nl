@@ -43,14 +43,14 @@ class EetplanController extends AbstractController {
 	/** @var EetplanBekendenRepository */
 	private $eetplanBekendenRepository;
 	/** @var WoonoordenRepository */
-	private $woonoordenModel;
+	private $woonoordenRepository;
 
 	public function __construct(
-		EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenModel, WoonoordenRepository $woonoordenModel
+		EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenRepository, WoonoordenRepository $woonoordenRepository
 	) {
 		$this->eetplanRepository = $eetplanRepository;
-		$this->eetplanBekendenRepository = $eetplanBekendenModel;
-		$this->woonoordenModel = $woonoordenModel;
+		$this->eetplanBekendenRepository = $eetplanBekendenRepository;
+		$this->woonoordenRepository = $woonoordenRepository;
 		$this->lichting = substr((string)LichtingenRepository::getJongsteLidjaar(), 2, 2);
 	}
 
@@ -95,14 +95,14 @@ class EetplanController extends AbstractController {
 			$woonoorden = [];
 			foreach ($selection as $woonoord) {
 				/** @var Woonoord $woonoord */
-				$woonoord = $this->woonoordenModel->retrieveByUUID($woonoord);
+				$woonoord = $this->woonoordenRepository->retrieveByUUID($woonoord);
 				$woonoord->eetplan = !$woonoord->eetplan;
-				$this->woonoordenModel->update($woonoord);
+				$this->woonoordenRepository->update($woonoord);
 				$woonoorden[] = $woonoord;
 			}
 			return new EetplanHuizenResponse($woonoorden);
 		} else {
-			$woonoorden = $this->woonoordenModel->find('status = ?', array(GroepStatus::HT));
+			$woonoorden = $this->woonoordenRepository->find('status = ?', array(GroepStatus::HT));
 			return new EetplanHuizenResponse($woonoorden);
 		}
 	}
@@ -158,7 +158,7 @@ class EetplanController extends AbstractController {
 	public function bekendehuizen_zoeken(Request $request) {
 		$huisnaam = $request->query->get('q');
 		$huisnaam = '%' . $huisnaam . '%';
-		$woonoorden = $this->woonoordenModel->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
+		$woonoorden = $this->woonoordenRepository->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
 		return new EetplanHuizenZoekenResponse($woonoorden);
 	}
 

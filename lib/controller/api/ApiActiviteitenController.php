@@ -14,7 +14,7 @@ class ApiActiviteitenController {
 	/** @var ChangeLogRepository  */
 	private $changeLogRepository;
 	/** @var ActiviteitenRepository  */
-	private $activiteitenModel;
+	private $activiteitenRepository;
 	/**
 	 * @var \Doctrine\ORM\EntityManager
 	 */
@@ -22,13 +22,13 @@ class ApiActiviteitenController {
 	/**
 	 * @var ActiviteitDeelnemersRepository
 	 */
-	private $activiteitDeelnemersModel;
+	private $activiteitDeelnemersRepository;
 
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 
-		$this->activiteitenModel = $container->get(ActiviteitenRepository::class);
-		$this->activiteitDeelnemersModel = $container->get(ActiviteitDeelnemersRepository::class);
+		$this->activiteitenRepository = $container->get(ActiviteitenRepository::class);
+		$this->activiteitDeelnemersRepository = $container->get(ActiviteitDeelnemersRepository::class);
 		$this->changeLogRepository = $container->get(ChangeLogRepository::class);
 		$this->em = $container->get('doctrine.orm.entity_manager');
 	}
@@ -45,7 +45,7 @@ class ApiActiviteitenController {
 	 */
 	public function activiteitAanmelden($id) {
 
-		$activiteit = $this->activiteitenModel->get($id);
+		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
@@ -55,7 +55,7 @@ class ApiActiviteitenController {
 			throw new RestException(403, 'Aanmelden niet mogelijk');
 		}
 
-		$lid = $this->activiteitDeelnemersModel->nieuw($activiteit, $_SESSION['_uid']);
+		$lid = $this->activiteitDeelnemersRepository->nieuw($activiteit, $_SESSION['_uid']);
 
 		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
 		$this->em->persist($lid);
@@ -69,7 +69,7 @@ class ApiActiviteitenController {
 	 */
 	public function activiteitAfmelden($id) {
 
-		$activiteit = $this->activiteitenModel->get($id);
+		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');

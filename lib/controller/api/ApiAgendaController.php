@@ -17,11 +17,11 @@ use Jacwright\RestServer\RestException;
 
 class ApiAgendaController {
 	/** @var ActiviteitenRepository */
-	private $activiteitenModel;
+	private $activiteitenRepository;
 	/** @var AgendaRepository */
 	private $agendaRepository;
 	/** @var ActiviteitDeelnemersRepository */
-	private $activiteitDeelnemersModel;
+	private $activiteitDeelnemersRepository;
 	/** @var MaaltijdenRepository */
 	private $maaltijdenRepository;
 	/** @var MaaltijdAanmeldingenRepository */
@@ -30,10 +30,10 @@ class ApiAgendaController {
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 		$this->agendaRepository = $container->get(AgendaRepository::class);
-		$this->activiteitenModel = $container->get(ActiviteitenRepository::class);
+		$this->activiteitenRepository = $container->get(ActiviteitenRepository::class);
 		$this->maaltijdAanmeldingenRepository = $container->get(MaaltijdAanmeldingenRepository::class);
 		$this->maaltijdenRepository = $container->get(MaaltijdenRepository::class);
-		$this->activiteitDeelnemersModel = $container->get(ActiviteitDeelnemersRepository::class);
+		$this->activiteitDeelnemersRepository = $container->get(ActiviteitDeelnemersRepository::class);
 	}
 
 	/**
@@ -81,7 +81,7 @@ class ApiAgendaController {
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (' . $query . ')', $find);
+		$activiteiten = $this->activiteitenRepository->find('in_agenda = TRUE AND (' . $query . ')', $find);
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
 			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
@@ -93,7 +93,7 @@ class ApiAgendaController {
 		// Activiteit aanmeldingen
 		$activiteitAanmeldingen = array();
 		foreach ($activiteitenFiltered as $activiteit) {
-			$deelnemer = $this->activiteitDeelnemersModel->get($activiteit, $_SESSION['_uid']);
+			$deelnemer = $this->activiteitDeelnemersRepository->get($activiteit, $_SESSION['_uid']);
 			if ($deelnemer) {
 				$activiteitAanmeldingen[] = $deelnemer->groep_id;
 			}

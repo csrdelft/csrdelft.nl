@@ -19,8 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
  * @property KringenRepository $model
  */
 class KringenController extends AbstractGroepenController {
-	public function __construct(KringenRepository $kringenModel) {
-		parent::__construct($kringenModel);
+	public function __construct(KringenRepository $kringenRepository) {
+		parent::__construct($kringenRepository);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {

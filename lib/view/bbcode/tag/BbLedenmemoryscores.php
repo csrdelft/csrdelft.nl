@@ -25,15 +25,15 @@ class BbLedenmemoryscores extends BbTag {
 	/**
 	 * @var VerticalenRepository
 	 */
-	private $verticalenModel;
+	private $verticalenRepository;
 	/**
 	 * @var LichtingenRepository
 	 */
-	private $lichtingenModel;
+	private $lichtingenRepository;
 
-	public function __construct(VerticalenRepository $verticalenModel, LichtingenRepository $lichtingenModel) {
-		$this->verticalenModel = $verticalenModel;
-		$this->lichtingenModel = $lichtingenModel;
+	public function __construct(VerticalenRepository $verticalenRepository, LichtingenRepository $lichtingenRepository) {
+		$this->verticalenRepository = $verticalenRepository;
+		$this->lichtingenRepository = $lichtingenRepository;
 	}
 
 	public static function getTagName() {
@@ -57,9 +57,9 @@ class BbLedenmemoryscores extends BbTag {
 		if (isset($arguments['verticale'])) {
 			$v = filter_var($arguments['verticale'], FILTER_SANITIZE_STRING);
 			if (strlen($v) > 1) {
-				$verticale = $this->verticalenModel->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+				$verticale = $this->verticalenRepository->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
 			} else {
-				$verticale = $this->verticalenModel->get($v);
+				$verticale = $this->verticalenRepository->get($v);
 			}
 			if ($verticale) {
 				$titel = ' Verticale ' . $verticale->naam;
@@ -70,7 +70,7 @@ class BbLedenmemoryscores extends BbTag {
 			if ($l < 1950) {
 				$l = LichtingenRepository::getJongsteLidjaar();
 			}
-			$lichting = $this->lichtingenModel->get($l);
+			$lichting = $this->lichtingenRepository->get($l);
 			if ($lichting) {
 				$titel = ' Lichting ' . $lichting->lidjaar;
 				$groep = $lichting;

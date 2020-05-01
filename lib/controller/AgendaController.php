@@ -45,7 +45,7 @@ class AgendaController {
 	/**
 	 * @var ActiviteitenRepository
 	 */
-	private $activiteitenModel;
+	private $activiteitenRepository;
 	/**
 	 * @var CorveeTakenRepository
 	 */
@@ -62,14 +62,14 @@ class AgendaController {
 	public function __construct(
 		AgendaRepository $agendaRepository,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenRepository $activiteitenModel,
+		ActiviteitenRepository $activiteitenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdenRepository $maaltijdenRepository,
 		ProfielRepository $profielRepository
 	) {
 		$this->agendaRepository = $agendaRepository;
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
-		$this->activiteitenModel = $activiteitenModel;
+		$this->activiteitenRepository = $activiteitenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->profielRepository = $profielRepository;
@@ -250,7 +250,7 @@ class AgendaController {
 				break;
 
 			case 'activiteit':
-				$item = $this->activiteitenModel->retrieveByUUID($refuuid);
+				$item = $this->activiteitenRepository->retrieveByUUID($refuuid);
 				break;
 
 			case 'agendaitem':

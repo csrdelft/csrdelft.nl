@@ -21,9 +21,9 @@ class VoorkeurCommissieRepository extends ServiceEntityRepository {
 	 */
 	private $voorkeurCommissieCategorieModel;
 
-	public function __construct(VoorkeurCommissieCategorieRepository $voorkeurCommissieCategorieModel, ManagerRegistry $registry) {
+	public function __construct(VoorkeurCommissieCategorieRepository $voorkeurCommissieCategorieRepository, ManagerRegistry $registry) {
 		parent::__construct($registry, VoorkeurCommissie::class);
-		$this->voorkeurCommissieCategorieModel = $voorkeurCommissieCategorieModel;
+		$this->voorkeurCommissieCategorieModel = $voorkeurCommissieCategorieRepository;
 	}
 
 	public function getByCategorie() {

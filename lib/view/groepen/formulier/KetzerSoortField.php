@@ -26,8 +26,8 @@ class KetzerSoortField extends GroepSoortField {
 			$this->options[ActiviteitenRepository::class . '_' . $soort] = $label;
 		}
 		$this->options[KetzersRepository::class] = 'Aanschafketzer';
-		//$this->options['WerkgroepenModel'] = WerkgroepenModel::ORM;
-		//$this->options['RechtenGroepenModel'] = 'Groep (overig)';
+		//$this->options['WerkgroepenRepository'] = 'Werkgroep';
+		//$this->options['RechtenGroepenRepository'] = 'Groep (overig)';
 	}
 
 	/**

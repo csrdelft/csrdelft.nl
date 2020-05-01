@@ -45,7 +45,7 @@ class AgendaRepository extends AbstractRepository {
 	/**
 	 * @var ActiviteitenRepository
 	 */
-	private $activiteitenModel;
+	private $activiteitenRepository;
 	/**
 	 * @var CorveeTakenRepository
 	 */
@@ -62,7 +62,7 @@ class AgendaRepository extends AbstractRepository {
 	public function __construct(
 		ManagerRegistry $registry,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenRepository $activiteitenModel,
+		ActiviteitenRepository $activiteitenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdenRepository $maaltijdenRepository,
 		VerjaardagenService $verjaardagenService
@@ -70,7 +70,7 @@ class AgendaRepository extends AbstractRepository {
 		parent::__construct($registry, AgendaItem::class);
 
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
-		$this->activiteitenModel = $activiteitenModel;
+		$this->activiteitenRepository = $activiteitenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->verjaardagenService = $verjaardagenService;
@@ -176,7 +176,7 @@ class AgendaRepository extends AbstractRepository {
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenModel->createQueryBuilder('a')
+		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
 			->where("a.in_agenda = true and (a.begin_moment >= :van and a.begin_moment <= :tot) or (a.eind_moment >= :van and a.eind_moment <= :tot)")
 			->setParameter('van', $van)
 			->setParameter('tot', $tot)
