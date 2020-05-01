@@ -104,7 +104,7 @@
 	@elseif($draad->gesloten)
 		<div class="draad-gesloten">
 			U kunt hier niet meer reageren omdat dit onderwerp gesloten is.
-			@if($draad->deel->isOpenbaar() && strtotime($draad->laatst_gewijzigd) < strtotime(instelling('forum', 'externen_geentoegang_gesloten')))
+			@if($draad->deel->isOpenbaar() && $draad->laatst_gewijzigd < date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')))
 				<div class="dikgedrukt">Dit externe onderwerp is niet meer toegankelijk voor externen en zoekmachines.</div>
 			@endif
 		</div>
