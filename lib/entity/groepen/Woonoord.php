@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\common\Enum;
+use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\leden\BewonersRepository;
 use CsrDelft\model\security\LoginModel;
@@ -19,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WoonoordenRepository")
  * @ORM\Table("woonoorden")
  */
-class Woonoord extends AbstractGroep {
+class Woonoord extends AbstractGroep implements HeeftSoort {
 
 	const LEDEN = BewonersRepository::class;
 
@@ -92,4 +94,11 @@ class Woonoord extends AbstractGroep {
 		return parent::mag($action);
 	}
 
+	public function getSoort() {
+		return $this->soort;
+	}
+
+	public function setSoort($soort) {
+		$this->soort = $soort;
+	}
 }

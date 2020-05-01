@@ -2,8 +2,10 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\common\Enum;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
 use CsrDelft\model\security\LoginModel;
@@ -20,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenRepository")
  * @ORM\Table("activiteiten")
  */
-class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet {
+class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort {
 	public function getUUID() {
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
@@ -206,5 +208,13 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 
 	public function getAanmeldLimiet() {
 		return $this->aanmeld_limiet;
+	}
+
+	public function getSoort() {
+		return $this->soort;
+	}
+
+	public function setSoort($soort) {
+		$this->soort = $soort;
 	}
 }

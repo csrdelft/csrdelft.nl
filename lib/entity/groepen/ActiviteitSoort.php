@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
 /**
  * ActiviteitSoort.enum.php
@@ -13,7 +13,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * Algemene en specifieke activiteitsoorten.
  *
  */
-abstract class ActiviteitSoort extends PersistentEnum {
+class ActiviteitSoort extends Enum {
 
 	/**
 	 * ActiviteitSoort opties.
@@ -31,23 +31,53 @@ abstract class ActiviteitSoort extends PersistentEnum {
 	const IFES = 'ifes';
 	const Extern = 'extern';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::Vereniging => self::Vereniging,
-		self::Lustrum => self::Lustrum,
-		self::Dies => self::Dies,
-		self::OWee => self::OWee,
-		self::SjaarsActie => self::SjaarsActie,
-		self::Lichting => self::Lichting,
-		self::Verticale => self::Verticale,
-		self::Kring => self::Kring,
-		self::Huis => self::Huis,
-		self::Ondervereniging => self::Ondervereniging,
-		self::IFES => self::IFES,
-		self::Extern => self::Extern,
-	];
+	public static function Vereniging() {
+		return static::from(self::Vereniging);
+	}
+
+	public static function Lustrum() {
+		return static::from(self::Lustrum);
+	}
+
+	public static function Dies() {
+		return static::from(self::Dies);
+	}
+
+	public static function OWee() {
+		return static::from(self::OWee);
+	}
+
+	public static function SjaarsActie() {
+		return static::from(self::SjaarsActie);
+	}
+
+	public static function Lichting() {
+		return static::from(self::Lichting);
+	}
+
+	public static function Verticale() {
+		return static::from(self::Verticale);
+	}
+
+	public static function Kring() {
+		return static::from(self::Kring);
+	}
+
+	public static function Huis() {
+		return static::from(self::Huis);
+	}
+
+	public static function Ondervereniging() {
+		return static::from(self::Ondervereniging);
+	}
+
+	public static function IFES() {
+		return static::from(self::IFES);
+	}
+
+	public static function Extern() {
+		return static::from(self::Extern);
+	}
 
 	/**
 	 * @var string[]
@@ -66,18 +96,4 @@ abstract class ActiviteitSoort extends PersistentEnum {
 		self::IFES => 'Activiteit van IFES',
 		self::Extern => 'Externe activiteit',
 	];
-
-	/**
-	 * @param string $option
-	 * @return string
-	 * @throws CsrException
-	 */
-	public static function getChar($option) {
-		if (isset(static::$supportedChoices[$option])) {
-			return strtoupper(substr($option, 0, 2));
-		} else {
-			throw new CsrException('ActiviteitSoort onbekend');
-		}
-	}
-
 }

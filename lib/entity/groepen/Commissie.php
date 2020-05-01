@@ -2,6 +2,8 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\common\Enum;
+use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
@@ -19,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\CommissiesRepository")
  * @ORM\Table("commissies")
  */
-class Commissie extends AbstractGroep {
+class Commissie extends AbstractGroep implements HeeftSoort {
 	/**
 	 * @var CommissieLid[]
 	 * @ORM\OneToMany(targetEntity="CommissieLid", mappedBy="groep")
@@ -39,9 +41,11 @@ class Commissie extends AbstractGroep {
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
 	 * @var CommissieSoort
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="enumcommissiesoort")
 	 */
 	public $soort;
+
+
 	/**
 	 * Database table columns
 	 * @var array
@@ -79,4 +83,11 @@ class Commissie extends AbstractGroep {
 		return parent::magAlgemeen($action, $allowedAuthenticationMethods);
 	}
 
+	public function getSoort() {
+		return $this->soort;
+	}
+
+	public function setSoort($soort) {
+		$this->soort = $soort;
+	}
 }

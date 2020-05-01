@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\common\Enum;
 use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
@@ -11,7 +12,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  *
  * (Bestuurs-)Commissie / SjaarCie.
  */
-abstract class CommissieSoort extends PersistentEnum {
+class CommissieSoort extends Enum {
 
 	/**
 	 * Commissie soorten.
@@ -20,6 +21,22 @@ abstract class CommissieSoort extends PersistentEnum {
 	const SjaarCie = 's';
 	const BestuursCommissie = 'b';
 	const Extern = 'e';
+
+	public static function Commissie() {
+		return static::from(self::Commissie);
+	}
+
+	public static function SjaarCie() {
+		return static::from(self::SjaarCie);
+	}
+
+	public static function BestuursCommissie() {
+		return static::from(self::BestuursCommissie);
+	}
+
+	public static function Extern() {
+		return static::from(self::Extern);
+	}
 
 	/**
 	 * @var string[]

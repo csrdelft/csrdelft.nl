@@ -12,6 +12,7 @@ use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractGroepenRepository;
@@ -134,7 +135,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 	public function overzicht($soort = null) {
 		if ($soort) {
-			$groepen = $this->model->findBy(['status' => GroepStatus::HT(), 'soort' => $soort]);
+			$groepen = $this->model->findBy(['status' => GroepStatus::HT(), 'soort' => $soort], ['begin_moment' => 'DESC']);
 		} else {
 			$groepen = $this->model->findBy(['status' => GroepStatus::HT()], ['begin_moment' => 'DESC']);
 		}
@@ -145,8 +146,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function bekijken($id) {
 		$groep = $this->model->get($id);
 		$groepen = $this->model->findBy(['familie' => $groep->familie], ['begin_moment' => 'DESC']);
-		if (property_exists($groep, 'soort')) {
-			$soort = $groep->soort;
+		if ($groep instanceof HeeftSoort) {
+			$soort = $groep->getSoort();
 		} else {
 			$soort = null;
 		}
@@ -469,9 +470,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					if ($nieuw) {
 						$response[] = $groep;
 					}
-				} elseif (property_exists($groep, 'soort')) {
-					$this->changeLogRepository->log($groep, 'soort', $groep->soort, $values['soort']);
-					$groep->soort = $values['soort'];
+				} elseif ($groep instanceof HeeftSoort) {
+					$this->changeLogRepository->log($groep, 'soort', $groep->getSoort(), $values['soort']);
+					$groep->setSoort($values['soort']);
 					$this->model->update($groep);
 					$response[] = $groep;
 				}

@@ -3,6 +3,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Enum;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
@@ -20,6 +21,9 @@ class GroepenView implements View {
 	 * @var AbstractGroep[]
 	 */
 	private $groepen;
+	/**
+	 * @var Enum|null
+	 */
 	private $soort;
 	private $geschiedenis;
 	private $tab;
@@ -28,7 +32,7 @@ class GroepenView implements View {
 	public function __construct(
 		AbstractGroepenRepository $model,
 		$groepen,
-		$soort = null,
+		Enum $soort = null,
 		$geschiedenis = false
 	) {
 		$this->model = $model;
@@ -65,7 +69,7 @@ class GroepenView implements View {
 		$model = $this->model;
 		$orm = $model->entityClass;
 		if ($orm::magAlgemeen(AccessAction::Aanmaken, null, $this->soort)) {
-			echo '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
+			echo '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort->getValue() . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
 		echo '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
 		if ($this->geschiedenis) {

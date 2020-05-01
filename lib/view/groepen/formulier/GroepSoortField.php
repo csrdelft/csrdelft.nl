@@ -3,10 +3,13 @@
 namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Enum;
 use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\CommissieSoort;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\HuisStatus;
+use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
@@ -26,6 +29,10 @@ class GroepSoortField extends RadioField {
 	public $columns = 1;
 	protected $activiteit;
 	protected $commissie;
+	/**
+	 * @var AbstractGroep
+	 */
+	private $groep;
 
 	public function __construct(
 		$name,
@@ -35,55 +42,48 @@ class GroepSoortField extends RadioField {
 	) {
 		parent::__construct($name, $value, $description, array());
 
-		$activiteiten = array();
-		foreach (ActiviteitSoort::getTypeOptions() as $soort) {
-			$activiteiten[$soort] = ActiviteitSoort::getDescription($soort);
-		}
-		if (property_exists($groep, 'soort') AND in_array($groep->soort, $activiteiten)) {
-			$default = $groep->soort;
+		if ($groep instanceof HeeftSoort && $groep->getSoort() instanceof ActiviteitSoort) {
+			$default = $groep->getSoort() ?? ActiviteitSoort::Vereniging();
 		} else {
-			$default = ActiviteitSoort::Vereniging;
+			$default = ActiviteitSoort::Vereniging();
 		}
 		$this->activiteit = new EnumSelectField('activiteit', $default, null, ActiviteitSoort::class);
 		$this->activiteit->onclick = <<<JS
 
-$('#{$this->getId()}Option_ActiviteitenModel').click();
+$('#{$this->getId()}Option_ActiviteitenRepository').click();
 JS;
 
-		$commissies = array();
-		foreach (CommissieSoort::getTypeOptions() as $soort) {
-			$commissies[$soort] = CommissieSoort::getDescription($soort);
-		}
-		if (property_exists($groep, 'soort') AND in_array($groep->soort, $commissies)) {
-			$default = $groep->soort;
+		if ($groep instanceof Commissie) {
+			$default = $groep->soort ?? CommissieSoort::Commissie();
 		} else {
-			$default = CommissieSoort::Commissie;
+			$default = CommissieSoort::Commissie();
 		}
-		$this->commissie = new SelectField('commissie', $default, null, $commissies);
+		$this->commissie = new EnumSelectField('commissie', $default, null, CommissieSoort::class);
 		$this->commissie->onclick = <<<JS
 
-$('#{$this->getId()}Option_CommissiesModel').click();
+$('#{$this->getId()}Option_CommissiesRepository').click();
 JS;
 
 		$this->options = [
 			ActiviteitenRepository::class => $this->activiteit,
 			KetzersRepository::class => 'Aanschafketzer',
-			WerkgroepenRepository::class => short_class(WerkgroepenRepository::ORM),
+			WerkgroepenRepository::class => 'Werkgroep',
 			RechtenGroepenRepository::class => 'Groep (overig)',
-			OnderverenigingenRepository::class => short_class(OnderverenigingenRepository::ORM),
-			WoonoordenRepository::class => short_class(WoonoordenRepository::ORM),
-			BesturenRepository::class => short_class(BesturenRepository::ORM),
+			OnderverenigingenRepository::class => 'Ondervereniging',
+			WoonoordenRepository::class => 'Woonoord',
+			BesturenRepository::class => 'Bestuur',
 			CommissiesRepository::class => $this->commissie
 		];
+		$this->groep = $groep;
 	}
 
 	public function getSoort() {
 		switch (parent::getValue()) {
 
-			case 'ActiviteitenModel':
+			case 'ActiviteitenRepository':
 				return $this->activiteit->getValue();
 
-			case 'CommissiesModel':
+			case 'CommissiesRepository':
 				return $this->commissie->getValue();
 
 			default:
@@ -97,18 +97,18 @@ JS;
 		}
 		$class = $this->value;
 		$model = ContainerFacade::getContainer()->get($class);
-		$orm = $model::ORM;
+		/** @var Enum $soort */
 		$soort = $this->getSoort();
 		/**
 		 * @Warning: Duplicate function in GroepForm->validate()
 		 */
-		if (!$orm::magAlgemeen(AccessAction::Beheren, null, $soort)) {
+		if (!$this->groep->magAlgemeen(AccessAction::Beheren, null, $soort)) {
 			if ($model instanceof ActiviteitenRepository) {
-				$naam = ActiviteitSoort::getDescription($soort);
+				$naam = $soort->getDescription();
 			} elseif ($model instanceof CommissiesRepository) {
-				$naam = CommissieSoort::getDescription($soort);
+				$naam = $soort->getDescription();
 			} elseif ($model instanceof WoonoordenRepository) {
-				$naam = HuisStatus::getDescription($soort);
+				$naam = $soort->getDescription();
 			} else {
 				$naam = $model->getNaam();
 			}
