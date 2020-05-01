@@ -149,7 +149,8 @@ class LedenMemoryController {
 	}
 
 	/**
-	 * @return AbstractGroep|null
+	 * @return Verticale|null
+	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
 	private function getVerticale()
 	{
@@ -162,7 +163,11 @@ class LedenMemoryController {
 			$verticale = $this->verticalenRepository->get($v);
 		}
 		if (!$verticale) {
-			$verticale = $this->verticalenRepository->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+			$verticale = $this->verticalenRepository->createQueryBuilder('v')
+				->where('v.naam LIKE :naam')
+				->setParameter('naam', sql_contains($v))
+				->setMaxResults(1)
+				->getQuery()->getOneOrNullResult();
 		}
 		return $verticale ? $verticale : null;
 	}

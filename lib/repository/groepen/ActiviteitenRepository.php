@@ -14,8 +14,8 @@ class ActiviteitenRepository extends KetzersRepository {
 	}
 
 	public function nieuw($soort = null) {
-		if (!in_array($soort, ActiviteitSoort::getTypeOptions())) {
-			$soort = ActiviteitSoort::SjaarsActie;
+		if ($soort == null) {
+			$soort = ActiviteitSoort::SjaarsActie();
 		}
 		/** @var Activiteit $activiteit */
 		$activiteit = parent::nieuw();

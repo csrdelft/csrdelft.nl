@@ -125,10 +125,6 @@ abstract class AbstractGroep {
 		return $this->getLeden()->count();
 	}
 
-	public function getStatistieken() {
-		return GroepenService::getStatistieken($this);
-	}
-
 	public function getFamilieSuggesties() {
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 

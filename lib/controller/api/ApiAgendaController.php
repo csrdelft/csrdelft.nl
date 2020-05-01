@@ -81,10 +81,14 @@ class ApiAgendaController {
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenRepository->find('in_agenda = TRUE AND (' . $query . ')', $find);
+		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
+			->where('a.in_agenda = true and (a.begin_moment >= :begin and a.begin_moment <= :eind')
+			->setParameter('begin', date_create_immutable("@$from"))
+			->setParameter('eind', date_create_immutable("@$to"))
+			->getQuery()->getResult();
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
+			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern(), ActiviteitSoort::OWee(), ActiviteitSoort::IFES())) OR $activiteit->mag(AccessAction::Bekijken)) {
 				$activiteitenFiltered[] = $activiteit;
 			}
 		}

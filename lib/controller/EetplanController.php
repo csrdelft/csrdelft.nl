@@ -102,7 +102,7 @@ class EetplanController extends AbstractController {
 			}
 			return new EetplanHuizenResponse($woonoorden);
 		} else {
-			$woonoorden = $this->woonoordenRepository->find('status = ?', array(GroepStatus::HT));
+			$woonoorden = $this->woonoordenRepository->findBy(['status' => GroepStatus::HT()]);
 			return new EetplanHuizenResponse($woonoorden);
 		}
 	}
@@ -158,7 +158,12 @@ class EetplanController extends AbstractController {
 	public function bekendehuizen_zoeken(Request $request) {
 		$huisnaam = $request->query->get('q');
 		$huisnaam = '%' . $huisnaam . '%';
-		$woonoorden = $this->woonoordenRepository->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
+		/** @var Woonoord[] $woonoorden */
+		$woonoorden = $this->woonoordenRepository->createQueryBuilder('w')
+			->where('w.status = :status and w.naam LIKE :naam')
+			->setParameter('status', GroepStatus::HT())
+			->setParameter('naam', $huisnaam)
+			->getQuery()->getResult();
 		return new EetplanHuizenZoekenResponse($woonoorden);
 	}
 
