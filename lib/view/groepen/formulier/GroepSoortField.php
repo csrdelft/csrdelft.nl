@@ -16,6 +16,7 @@ use CsrDelft\repository\groepen\RechtenGroepenRepository;
 use CsrDelft\repository\groepen\WerkgroepenRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\groepen\CommissiesRepository;
+use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use function common\short_class;
@@ -43,7 +44,7 @@ class GroepSoortField extends RadioField {
 		} else {
 			$default = ActiviteitSoort::Vereniging;
 		}
-		$this->activiteit = new SelectField('activiteit', $default, null, $activiteiten);
+		$this->activiteit = new EnumSelectField('activiteit', $default, null, ActiviteitSoort::class);
 		$this->activiteit->onclick = <<<JS
 
 $('#{$this->getId()}Option_ActiviteitenModel').click();

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
 /**
  * OnderverenigingStatus.enum.php
@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  *
  * De status van een ondervereniging.
  */
-abstract class OnderverenigingStatus extends PersistentEnum {
+abstract class OnderverenigingStatus extends Enum {
 
 	/**
 	 * OnderverenigingStatus opties.
@@ -20,14 +20,17 @@ abstract class OnderverenigingStatus extends PersistentEnum {
 	const Ondervereniging = 'o';
 	const VoormaligOndervereniging = 'v';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::AdspirantOndervereniging => self::AdspirantOndervereniging,
-		self::Ondervereniging => self::Ondervereniging,
-		self::VoormaligOndervereniging => self::VoormaligOndervereniging,
-	];
+	public static function AdspirantOndervereniging() {
+		return static::from(self::AdspirantOndervereniging);
+	}
+
+	public static function Ondervereniging() {
+		return static::from(self::Ondervereniging);
+	}
+
+	public static function VoormaligeOndervereniging() {
+		return static::from(self::VoormaligOndervereniging);
+	}
 
 	/**
 	 * @var string[]

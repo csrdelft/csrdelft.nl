@@ -2,7 +2,8 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+
+use CsrDelft\common\Enum;
 
 /**
  * GroepTab.enum.php
@@ -12,7 +13,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * De verschillende tabbladen om een groep weer te geven.
  *
  */
-abstract class GroepTab extends PersistentEnum {
+abstract class GroepTab extends Enum {
 
 	/**
 	 * GroepTab opties.
@@ -23,16 +24,25 @@ abstract class GroepTab extends PersistentEnum {
 	const Emails = 'emails';
 	const Eetwens = 'eetwens';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::Lijst => self::Lijst,
-		self::Pasfotos => self::Pasfotos,
-		self::Statistiek => self::Statistiek,
-		self::Emails => self::Emails,
-		self::Eetwens => self::Eetwens,
-	];
+	public static function Lijst() {
+		return static::from(self::Lijst);
+	}
+
+	public static function Pasfotos() {
+		return static::from(self::Pasfotos);
+	}
+
+	public static function Statistiek() {
+		return static::from(self::Statistiek);
+	}
+
+	public static function Emails() {
+		return static::from(self::Emails);
+	}
+
+	public static function Eetwens() {
+		return static::from(self::Eetwens);
+	}
 
 	/**
 	 * @var string[]

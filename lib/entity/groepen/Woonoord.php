@@ -26,7 +26,7 @@ class Woonoord extends AbstractGroep {
 	/**
 	 * Woonoord / Huis
 	 * @var HuisStatus
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="enumhuisstatus")
 	 */
 	public $soort;
 

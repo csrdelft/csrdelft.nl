@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
 /**
  * HuisStatus.enum.php
@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  *
  * De status van een huis / woonoord.
  */
-abstract class HuisStatus extends PersistentEnum {
+class HuisStatus extends Enum {
 
 	/**
 	 * HuisStatus opties.
@@ -19,13 +19,13 @@ abstract class HuisStatus extends PersistentEnum {
 	const Woonoord = 'w';
 	const Huis = 'h';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::Woonoord => self::Woonoord,
-		self::Huis => self::Huis,
-	];
+	public static function Woonoord() {
+		return static::from(self::Woonoord);
+	}
+
+	public static function Huis() {
+		return static::from(self::Huis);
+	}
 
 	/**
 	 * @var string[]

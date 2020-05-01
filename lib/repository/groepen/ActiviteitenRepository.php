@@ -25,5 +25,4 @@ class ActiviteitenRepository extends KetzersRepository {
 		$activiteit->in_agenda = false;
 		return $activiteit;
 	}
-
 }

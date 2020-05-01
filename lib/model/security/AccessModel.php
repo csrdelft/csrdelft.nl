@@ -807,7 +807,7 @@ class AccessModel extends CachedPersistenceModel {
 				switch ($prefix) {
 
 					case self::PREFIX_BESTUUR:
-						if (in_array($gevraagd, CommissieFunctie::getTypeOptions())) {
+						if (in_array($gevraagd, CommissieFunctie::getEnumValues())) {
 							$gevraagd = false;
 							$role = $gevraagd;
 						}

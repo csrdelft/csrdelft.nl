@@ -16,6 +16,8 @@ abstract class EnumType extends Type {
 	 */
 	protected $enumClass;
 
+	abstract public function getEnumClass();
+
 	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
 		$values = array_map(function ($val) {
 			return "'" . $val . "'";
@@ -25,20 +27,17 @@ abstract class EnumType extends Type {
 	}
 
 	public function convertToPHPValue($value, AbstractPlatform $platform) {
-		$enumClass = $this->enumClass;
+		$enumClass = $this->getEnumClass();
 		return $enumClass::from($value);
 	}
 
 	public function convertToDatabaseValue($value, AbstractPlatform $platform) {
-		if ($value instanceof $this->enumClass) {
+		$enumClass = $this->getEnumClass();
+		if ($value instanceof $enumClass) {
 			return $value->getValue();
 		} else {
 			throw new \InvalidArgumentException("Value is not a " . $this->enumClass);
 		}
-	}
-
-	public function getName() {
-		return $this->name;
 	}
 
 	public function requiresSQLCommentHint(AbstractPlatform $platform) {

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
 /**
  * CommissieFunctie.enum.php
@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  *
  * Standaard functies binnen het bestuur en commissies.
  */
-abstract class CommissieFunctie extends PersistentEnum {
+abstract class CommissieFunctie extends Enum {
 
 	/**
 	 * Bestuurs functies.
@@ -35,21 +35,41 @@ abstract class CommissieFunctie extends PersistentEnum {
 	const Statisticus = 'Statisticus';
 	const Fotocommissaris = 'Fotocommissaris';
 
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::Praeses => self::Praeses,
-		self::Abactis => self::Abactis,
-		self::Fiscus => self::Fiscus,
-		self::VicePraeses => self::VicePraeses,
-		self::ViceAbactis => self::ViceAbactis,
-		self::QQ => self::QQ,
-		self::Bibliothecarus => self::Bibliothecarus,
-		self::Archivarus => self::Archivarus,
-		self::Statisticus => self::Statisticus,
-		self::Fotocommissaris => self::Fotocommissaris,
-	];
+	public static function Praeses() {
+		return static::from(self::Praeses);
+	}
+
+	public static function Abactis() {
+		return static::from(self::Abactis);
+	}
+
+	public static function Fiscus() {
+		return static::from(self::Fiscus);
+	}
+
+	public static function VicePraeses() {
+		return static::from(self::VicePraeses);
+	}
+
+	public static function ViceAbactis() {
+		return static::from(self::ViceAbactis);
+	}
+
+	public static function QQ() {
+		return static::from(self::QQ);
+	}
+
+	public static function Bibliothecarus() {
+		return static::from(self::Bibliothecarus);
+	}
+
+	public static function Statisticus() {
+		return static::from(self::Statisticus);
+	}
+
+	public static function Fotocommissaris() {
+		return static::from(self::Fotocommissaris);
+	}
 
 	/**
 	 * @var string[]

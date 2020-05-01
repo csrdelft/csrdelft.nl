@@ -2,10 +2,8 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\KetzerSelectorsRepository;
 use CsrDelft\repository\groepen\leden\KetzerDeelnemersRepository;
 use CsrDelft\Orm\Entity\T;
 use DateTimeImmutable;
@@ -89,15 +87,6 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 
 	public function getUrl() {
 		return '/groepen/ketzers/' . $this->id;
-	}
-
-	/**
-	 * Lazy loading by foreign key.
-	 *
-	 * @return KetzerSelector[]
-	 */
-	public function getSelectors() {
-		return ContainerFacade::getContainer()->get(KetzerSelectorsRepository::class)->getSelectorsVoorKetzer($this);
 	}
 
 	/**

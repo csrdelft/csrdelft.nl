@@ -22,5 +22,4 @@ class KetzersRepository extends AbstractGroepenRepository {
 		$ketzer->afmelden_tot = null;
 		return $ketzer;
 	}
-
 }

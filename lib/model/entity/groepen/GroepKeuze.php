@@ -10,7 +10,7 @@ use CsrDelft\entity\groepen\GroepKeuzeType;
  */
 class GroepKeuze {
 	public function __wakeup() {
-		assert(in_array($this->type, GroepKeuzeType::getTypeOptions()));
+		assert(in_array($this->type, GroepKeuzeType::getEnumValues()));
 	}
 
   public $naam;

@@ -14,7 +14,6 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
-use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\model\security\CliLoginModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
