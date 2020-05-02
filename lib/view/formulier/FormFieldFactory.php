@@ -4,6 +4,7 @@ namespace CsrDelft\view\formulier;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
 use CsrDelft\common\Doctrine\Type\EnumType;
 use CsrDelft\common\Doctrine\Type\LongTextType;
 use CsrDelft\common\Doctrine\Type\SafeJsonType;
@@ -22,7 +23,6 @@ use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\TimeObjectField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
 use Doctrine\DBAL\Types\BooleanType;
-use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Doctrine\DBAL\Types\FloatType;
 use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\DBAL\Types\StringType;
