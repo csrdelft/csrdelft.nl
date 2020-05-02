@@ -170,7 +170,7 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 		$groep = new $orm();
 		$groep->naam = null;
 		$groep->familie = null;
-		$groep->status = GroepStatus::HT;
+		$groep->status = GroepStatus::HT();
 		$groep->samenvatting = '';
 		$groep->omschrijving = null;
 		$groep->begin_moment = null;

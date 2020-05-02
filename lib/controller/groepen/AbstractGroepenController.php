@@ -255,7 +255,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @throws OptimisticLockException
 	 */
 	public function nieuw(Request $request, $id = null, $soort = null) {
-		return $this->aanmaken($request, $id, $soort);
+		return $this->aanmaken($request, $soort);
 	}
 
 	/**
@@ -343,7 +343,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			} else {
 				$groepen = $this->model->findAll();
 			}
-			return new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
+			return $this->tableData($groepen);
+//			return new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
 		} else {
 			$table = new GroepenBeheerTable($this->model);
 			$this->table = $table;

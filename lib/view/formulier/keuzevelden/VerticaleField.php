@@ -17,7 +17,7 @@ class VerticaleField extends SelectField {
 
 	public function __construct($name, $value, $description) {
 		$verticalen = array();
-		foreach (ContainerFacade::getContainer()->get(VerticalenRepository::class)->prefetch() as $v) {
+		foreach (ContainerFacade::getContainer()->get(VerticalenRepository::class)->findAll() as $v) {
 			$verticalen[$v->letter] = $v->naam;
 		}
 		parent::__construct($name, $value, $description, $verticalen);

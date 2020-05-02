@@ -175,8 +175,8 @@ class MaaltijdenRepository extends AbstractRepository {
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
 			->where('m.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum')
-			->setParameter('van_datum', date_create("@$van"))
-			->setParameter('tot_datum', date_create("@$tot"))
+			->setParameter('van_datum', date_create_immutable("@$van"))
+			->setParameter('tot_datum', date_create_immutable("@$tot"))
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
 			->getQuery()->getResult();

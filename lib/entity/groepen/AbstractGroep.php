@@ -8,11 +8,11 @@ use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\service\GroepenService;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use PDO;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 
 /**
@@ -28,48 +28,56 @@ abstract class AbstractGroep {
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
+	 * @Serializer\Groups("datatable")
 	 */
 	public $id;
 	/**
 	 * Naam
 	 * @var string
 	 * @ORM\Column(type="stringkey")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $naam;
 	/**
 	 * Naam voor opvolging
 	 * @var string
 	 * @ORM\Column(type="stringkey")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $familie;
 	/**
 	 * Datum en tijd begin
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $begin_moment;
 	/**
 	 * Datum en tijd einde
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $eind_moment;
 	/**
 	 * o.t. / h.t. / f.t.
 	 * @var GroepStatus
 	 * @ORM\Column(type="enumgroepstatus")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $status;
 	/**
 	 * Korte omschrijving
 	 * @var string
 	 * @ORM\Column(type="text")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $samenvatting;
 	/**
 	 * Lange omschrijving
 	 * @var string
 	 * @ORM\Column(type="text", nullable=true)
+	 * @Serializer\Groups("datatable")
 	 */
 	public $omschrijving;
 	/**
@@ -87,6 +95,7 @@ abstract class AbstractGroep {
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $versie = GroepVersie::V1;
 	/**
@@ -102,33 +111,23 @@ abstract class AbstractGroep {
 	abstract public function getUrl();
 
 	/**
-	 * @return AbstractGroepLid[]|ArrayCollection
-	 */
-	abstract public function getLeden();
-
-	/**
 	 * @return string|AbstractGroepLid
 	 */
 	abstract public function getLidType();
-
-	/**
-	 * Is lid van deze groep?
-	 *
-	 * @param string $uid
-	 * @return AbstractGroepLid
-	 */
-	public function getLid($uid) {
-		return $this->getLeden()->matching(Eisen::voorGebruiker($uid))->first();
-	}
 
 	public function aantalLeden() {
 		return $this->getLeden()->count();
 	}
 
+	/**
+	 * @return AbstractGroepLid[]|ArrayCollection
+	 */
+	abstract public function getLeden();
+
 	public function getFamilieSuggesties() {
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
-		$tableName = $em->getClassMetadata($this)->getTableName();
+		$tableName = $em->getClassMetadata(get_class($this))->getTableName();
 
 		return ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT familie'], $tableName)->fetchAll(PDO::FETCH_COLUMN);
 	}
@@ -136,10 +135,12 @@ abstract class AbstractGroep {
 	public function getOpmerkingSuggesties() {
 		if (isset($this->keuzelijst)) {
 			$suggesties = [];
-		} elseif ($this instanceof Commissie OR $this instanceof Bestuur) {
+		} elseif ($this instanceof Commissie or $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getEnumValues();
 		} else {
-			$suggesties = array_unique($this->getLeden()->map(function(AbstractGroepLid $lid) { return $lid->opmerking; })->toArray());
+			$suggesties = array_unique($this->getLeden()->map(function (AbstractGroepLid $lid) {
+				return $lid->opmerking;
+			})->toArray());
 		}
 		return $suggesties;
 	}
@@ -180,6 +181,16 @@ abstract class AbstractGroep {
 				break;
 		}
 		return static::magAlgemeen($action, $allowedAuthenticationMethods);
+	}
+
+	/**
+	 * Is lid van deze groep?
+	 *
+	 * @param string $uid
+	 * @return AbstractGroepLid
+	 */
+	public function getLid($uid) {
+		return $this->getLeden()->matching(Eisen::voorGebruiker($uid))->first();
 	}
 
 	/**

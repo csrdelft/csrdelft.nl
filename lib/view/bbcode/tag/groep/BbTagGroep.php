@@ -83,7 +83,7 @@ abstract class BbTagGroep extends BbTag {
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		if ($groep->versie == GroepVersie::V2) {
+		if ($groep->versie == GroepVersie::V2()) {
 			$uid = LoginModel::getUid();
 			$settings = [
 				'mijn_uid' => $uid,

@@ -9,6 +9,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 
 /**
@@ -40,6 +41,7 @@ class Commissie extends AbstractGroep implements HeeftSoort {
 	 * (Bestuurs-)Commissie / SjaarCie
 	 * @var CommissieSoort
 	 * @ORM\Column(type="enumcommissiesoort")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $soort;
 

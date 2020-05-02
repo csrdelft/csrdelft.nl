@@ -1,9 +1,10 @@
 <?php
 
 
-namespace CsrDelft\common\datatable;
+namespace CsrDelft\common\Serializer\Normalizer;
 
 
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -14,7 +15,7 @@ use function common\short_class;
  *
  * @package CsrDelft\common
  */
-class DataTableEntryNormalizer implements ContextAwareNormalizerInterface {
+class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface {
 	/**
 	 * @var EntityManagerInterface
 	 */
@@ -29,17 +30,25 @@ class DataTableEntryNormalizer implements ContextAwareNormalizerInterface {
 		$this->normalizer = $normalizer;
 	}
 
-	public function normalize($topic, string $format = null, array $context = []) {
-		$metadata = $this->entityManager->getClassMetadata(get_class($topic));
+	/**
+	 * @param RemoveDataTableEntry $removed
+	 * @param string|null $format
+	 * @param array $context
+	 * @return array|\ArrayObject|bool|float|int|string|null
+	 */
+	public function normalize($removed, string $format = null, array $context = []) {
+		$id = $removed->getId();
 
-		$data = $this->normalizer->normalize($topic, $format, $context);
-
-		$data['UUID'] = strtolower(sprintf('%s@%s.csrdelft.nl', implode('.', $metadata->getIdentifierValues($topic)), short_class($topic)));
-
-		return $data;
+		if (!is_array($id)) {
+			$id = [$id];
+		}
+		return [
+			'UUID' => strtolower(sprintf('%s@%s.csrdelft.nl', implode('.', $id), short_class($removed->getClass()))),
+			'remove' => true,
+		];
 	}
 
 	public function supportsNormalization($data, string $format = null, array $context = []) {
-		return $data instanceof DataTableEntry;
+		return $data instanceof RemoveDataTableEntry;
 	}
 }
