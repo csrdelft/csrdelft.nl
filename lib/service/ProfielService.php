@@ -90,7 +90,7 @@ class ProfielService {
 					->setParameter('uid', $zoekterm . '__');
 			} else {
 				$queryBuilder
-					->where("{$zoekveld} LIKE :containsZoekterm")
+					->where("p.{$zoekveld} LIKE :containsZoekterm")
 					->setParameter('containsZoekterm', sql_contains($zoekterm));
 			}
 		}
