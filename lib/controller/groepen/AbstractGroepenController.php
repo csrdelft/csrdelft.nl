@@ -8,6 +8,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\AbstractGroepLid;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\GroepKeuzeSelectie;
@@ -608,7 +609,10 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			throw new CsrToegangException();
 		}
 
+		/** @var AbstractGroepLid $lid */
 		$lid = $model->nieuw($groep, null);
+		$lid->groep = $groep;
+		$lid->groep_id = $groep->id;
 		$leden = group_by_distinct('uid', $groep->getLeden());
 		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
 

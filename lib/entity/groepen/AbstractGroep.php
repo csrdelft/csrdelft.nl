@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\common\Eisen;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\security\AccessAction;
@@ -21,7 +22,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Een groep met leden.
  * @ORM\MappedSuperclass()
  */
-abstract class AbstractGroep {
+abstract class AbstractGroep implements DataTableEntry {
 	/**
 	 * Primary key
 	 * @var int

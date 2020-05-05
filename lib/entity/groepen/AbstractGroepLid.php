@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
@@ -19,7 +20,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\MappedSuperclass()
  */
-abstract class AbstractGroepLid {
+abstract class AbstractGroepLid implements DataTableEntry {
 
 	public function getUUID() {
 		return $this->groep_id . '.' . $this->uid . '@' . strtolower(short_class($this)) . '.csrdelft.nl';
@@ -50,11 +51,13 @@ abstract class AbstractGroepLid {
 	 * CommissieFunctie of opmerking bij lidmaatschap
 	 * @var CommissieFunctie
 	 * @ORM\Column(type="string", nullable=true)
+	 * @Serializer\Groups("datatable")
 	 */
 	public $opmerking;
 	/**
 	 * @var GroepKeuzeSelectie[]
 	 * @ORM\Column(type="groepkeuzeselectie", nullable=true)
+	 * @Serializer\Groups("datatable")
 	 */
 	public $opmerking2;
 	/**

@@ -20,7 +20,7 @@ use CsrDelft\view\datatable\Multiplicity;
 class GroepLedenTable extends DataTable {
 
 	public function __construct(AbstractGroep $groep) {
-		parent::__construct(get_class($groep), $groep->getUrl() . '/leden', 'Leden van ' . $groep->naam, 'status');
+		parent::__construct($groep->getLidType(), $groep->getUrl() . '/leden', 'Leden van ' . $groep->naam, 'status');
 		$this->addColumn('lid', 'opmerking');
 		$this->searchColumn('lid');
 		$this->setColumnTitle('lid', 'Lidnaam');
