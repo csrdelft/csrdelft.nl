@@ -2,9 +2,11 @@
 
 namespace CsrDelft\repository;
 
+use CsrDelft\common\Enum;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -35,7 +37,7 @@ class ChangeLogRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param string $subject
+	 * @param string|mixed $subject
 	 * @param string $property
 	 * @param string $old
 	 * @param string $new
@@ -45,11 +47,19 @@ class ChangeLogRepository extends AbstractRepository {
 	public function nieuw($subject, $property, $old, $new) {
 		$change = new ChangeLogEntry();
 		$change->moment = date_create_immutable();
-		if ($subject instanceof PersistentEntity) {
-			$change->subject = $subject->getUUID();
-		} else {
-			$change->subject = $subject;
+		try {
+			$meta = $this->_em->getClassMetadata(get_class($subject));
+
+			$change->subject = $meta->getName() . print_r($meta->getIdentifierValues($subject), true);
+		} catch (MappingException $ex) {
+			// ignore
+			if ($subject instanceof PersistentEntity) {
+				$change->subject = $subject->getUUID();
+			} else {
+				$change->subject = $subject;
+			}
 		}
+
 		$change->property = $property;
 		$change->old_value = $old;
 		$change->new_value = $new;

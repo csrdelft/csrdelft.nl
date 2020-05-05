@@ -8,6 +8,7 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -23,6 +24,10 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Table("commissies")
  */
 class Commissie extends AbstractGroep implements HeeftSoort {
+	public function __construct() {
+		$this->leden = new ArrayCollection();
+	}
+
 	/**
 	 * @var CommissieLid[]
 	 * @ORM\OneToMany(targetEntity="CommissieLid", mappedBy="groep")

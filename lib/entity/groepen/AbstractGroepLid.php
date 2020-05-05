@@ -7,6 +7,7 @@ use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use function common\short_class;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 
 /**
@@ -32,6 +33,7 @@ abstract class AbstractGroepLid {
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
+	 * @Serializer\Groups("datatable")
 	 */
 	public $groep_id;
 	/**
@@ -41,6 +43,7 @@ abstract class AbstractGroepLid {
 	 * @var string
 	 * @ORM\Column(type="uid")
 	 * @ORM\Id()
+	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;
 	/**
@@ -58,6 +61,7 @@ abstract class AbstractGroepLid {
 	 * Datum en tijd van aanmelden
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $lid_sinds;
 	/**
@@ -66,6 +70,24 @@ abstract class AbstractGroepLid {
 	 * @ORM\Column(type="uid")
 	 */
 	public $door_uid;
+
+	/**
+	 * @return string|null
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("lid")
+	 */
+	public function getDatatableLid() {
+		return ProfielRepository::getLink($this->uid);
+	}
+
+	/**
+	 * @return string|null
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("door_uid")
+	 */
+	public function getDatatableDoorUid() {
+		return ProfielRepository::getLink($this->door_uid);
+	}
 
 	public function getLink() {
 		return ProfielRepository::getLink($this->uid);

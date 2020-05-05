@@ -115,6 +115,15 @@ abstract class AbstractGroep {
 	 */
 	abstract public function getLidType();
 
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("detailSource")
+	 */
+	public function getDetailSource() {
+		return $this->getUrl() . '/leden';
+	}
+
 	public function aantalLeden() {
 		return $this->getLeden()->count();
 	}
@@ -190,6 +199,10 @@ abstract class AbstractGroep {
 	 * @return AbstractGroepLid
 	 */
 	public function getLid($uid) {
+		if ($this->getLeden() == null) {
+			return null;
+		}
+
 		return $this->getLeden()->matching(Eisen::voorGebruiker($uid))->first();
 	}
 

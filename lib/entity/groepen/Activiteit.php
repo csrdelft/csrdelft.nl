@@ -2,14 +2,11 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\common\Enum;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\T;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 

@@ -5,6 +5,7 @@ namespace CsrDelft\controller\groepen;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Activiteit;
@@ -19,7 +20,6 @@ use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
-use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\groepen\formulier\GroepConverteerForm;
@@ -28,14 +28,12 @@ use CsrDelft\view\groepen\formulier\GroepLidBeheerForm;
 use CsrDelft\view\groepen\formulier\GroepLogboekForm;
 use CsrDelft\view\groepen\formulier\GroepOpvolgingForm;
 use CsrDelft\view\groepen\formulier\GroepPreviewForm;
-use CsrDelft\view\groepen\GroepenBeheerData;
 use CsrDelft\view\groepen\GroepenBeheerTable;
 use CsrDelft\view\groepen\GroepenDeelnameGrafiek;
 use CsrDelft\view\groepen\GroepenView;
 use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\groepen\leden\GroepEetwensView;
 use CsrDelft\view\groepen\leden\GroepEmailsView;
-use CsrDelft\view\groepen\leden\GroepLedenData;
 use CsrDelft\view\groepen\leden\GroepLedenTable;
 use CsrDelft\view\groepen\leden\GroepLijstView;
 use CsrDelft\view\groepen\leden\GroepOmschrijvingView;
@@ -250,7 +248,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @param Request $request
 	 * @param null $id
 	 * @param null $soort
-	 * @return GroepForm|GroepPreviewForm|GroepenBeheerData|TemplateView
+	 * @return GroepForm|GroepPreviewForm|TemplateView
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -262,7 +260,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @param Request $request
 	 * @param null $id
 	 * @param null $soort
-	 * @return GroepForm|GroepPreviewForm|GroepenBeheerData|TemplateView
+	 * @return GenericDataTableResponse|GroepForm|TemplateView
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -326,7 +324,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 				$this->model->update($old);
 				$response[] = $old;
 			}
-			$view = new GroepenBeheerData($response);
+			$view = $this->tableData($response);
 			setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
 			$form = new GroepPreviewForm($groep);
 			$view->modal = $form->getHtml();
@@ -344,7 +342,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 				$groepen = $this->model->findAll();
 			}
 			return $this->tableData($groepen);
-//			return new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
 		} else {
 			$table = new GroepenBeheerTable($this->model);
 			$this->table = $table;
@@ -355,7 +352,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	/**
 	 * @param Request $request
 	 * @param null $id
-	 * @return GroepForm|GroepenBeheerData|TemplateView
+	 * @return GenericDataTableResponse|GroepForm|TemplateView
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -374,7 +371,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			} elseif ($form->validate()) {
 				$this->changeLogRepository->logChanges($form->diff());
 				$this->model->update($groep);
-				return new GroepenBeheerData([$groep]);
+				return $this->tableData([$groep]);
 			} else {
 				return $form;
 			}
@@ -393,7 +390,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			if ($form->validate()) {
 				$this->changeLogRepository->logChanges($form->diff());
 				$this->model->update($groep);
-				return new GroepenBeheerData([$groep]);
+				return $this->tableData([$groep]);
 			} else {
 				return $form;
 			}
@@ -402,7 +399,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 	/**
 	 * @param $id
-	 * @return RemoveRowsResponse
+	 * @return GenericDataTableResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -412,15 +409,15 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groep = $this->model->retrieveByUUID($id);
 		if ($groep && $groep->mag(AccessAction::Verwijderen) && count($groep->getLeden()) === 0) {
 			$this->changeLogRepository->log($groep, 'delete', print_r($groep, true), null);
+			$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));
 			$this->model->delete($groep);
-			$response[] = $groep;
 		}
-		return new RemoveRowsResponse($response);
+		return $this->tableData($response);
 	}
 
 	/**
 	 * @param $id
-	 * @return GroepOpvolgingForm|GroepenBeheerData
+	 * @return GenericDataTableResponse|GroepOpvolgingForm
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -441,7 +438,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 				$this->model->update($groep);
 				$response[] = $groep;
 			}
-			return new GroepenBeheerData($response);
+			return $this->tableData($response);
 		} else {
 			return $form;
 		}
@@ -449,7 +446,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 	/**
 	 * @param $id
-	 * @return RemoveRowsResponse|GroepConverteerForm|GroepenBeheerData
+	 * @return GenericDataTableResponse|GroepConverteerForm
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -469,6 +466,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					$this->changeLogRepository->log($groep, 'class', get_class($groep), $model::ORM);
 					$nieuw = $model->converteer($groep, $this->model, $values['soort']);
 					if ($nieuw) {
+						$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));
 						$response[] = $groep;
 					}
 				} elseif ($groep instanceof HeeftSoort) {
@@ -478,11 +476,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					$response[] = $groep;
 				}
 			}
-			if ($converteer) {
-				return new RemoveRowsResponse($response);
-			} else {
-				return new GroepenBeheerData($response);
-			}
+			return $this->tableData($response);
 		} else {
 			return $form;
 		}
@@ -490,7 +484,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 	/**
 	 * @param $id
-	 * @return GroepenBeheerData
+	 * @return GenericDataTableResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -504,7 +498,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$this->model->update($groep);
 			$response[] = $groep;
 		}
-		return new GroepenBeheerData($response);
+		return $this->tableData($response);
 	}
 
 	public function voorbeeld($id) {
@@ -541,15 +535,15 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		}
 	}
 
-	public function leden(Request $request, EntityManagerInterface $em, $id) {
+	public function leden(Request $request, $id) {
 		$groep = $this->model->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			throw new CsrToegangException();
 		}
 		if ($request->getMethod() == 'POST') {
-			return new GroepLedenData($groep->getLeden());
+			return $this->tableData($groep->getLeden());
 		} else {
-			return new GroepLedenTable($em->getRepository($groep->getLidType()), $groep);
+			return new GroepLedenTable($groep);
 		}
 	}
 
@@ -621,7 +615,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if ($form->validate()) {
 			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
 			$model->save($lid);
-			return new GroepLedenData([$lid]);
+			return $this->tableData([$lid]);
 		} else {
 			return $form;
 		}
@@ -669,7 +663,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$this->changeLogRepository->logChanges($form->diff());
 			$em->persist($lid);
 			$em->flush();
-			return new GroepLedenData([$lid]);
+			return $this->tableData([$lid]);
 		} else {
 			return $form;
 		}
@@ -705,9 +699,11 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 		$lid = $groep->getLid($uid);
 		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
+		$response = new RemoveDataTableEntry(['groep_id' => $id, 'uid' => $uid], get_class($lid));
 		$em->remove($lid);
 		$em->flush();
-		return new RemoveRowsResponse([$lid]);
+
+		return $this->tableData([$response]);
 	}
 
 	public function naar_ot(EntityManagerInterface $em, $id, $uid = null) {
@@ -775,12 +771,12 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					$em->flush();
 					$lid->groep_id = $groep->id;
 
-					$response[] = $lid;
+					$response[] = new RemoveDataTableEntry(['groep_id' => $groep->id, 'uid' => $lid->uid], get_class($lid));
 				}
 
 				return $response;
 			});
-			return new RemoveRowsResponse($response);
+			return $this->tableData($response);
 		}
 
 	}
