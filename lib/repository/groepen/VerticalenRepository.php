@@ -12,12 +12,6 @@ class VerticalenRepository extends AbstractGroepenRepository {
 		parent::__construct($accessModel, $registry, Verticale::class);
 	}
 
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'letter ASC';
-
 	public function get($letter) {
 		if ($verticale = $this->findOneBy(['letter' => $letter])) {
 			return $verticale;

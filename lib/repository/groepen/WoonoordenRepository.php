@@ -17,8 +17,8 @@ class WoonoordenRepository extends AbstractGroepenRepository {
 	public function nieuw($soort = null) {
 		/** @var Woonoord $woonoord */
 		$woonoord = parent::nieuw();
-		$woonoord->status = HuisStatus::Woonoord;
-		$woonoord->status_historie = '[div]Aangemaakt als ' . HuisStatus::getDescription($woonoord->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
+		$woonoord->status = HuisStatus::Woonoord();
+		$woonoord->status_historie = '[div]Aangemaakt als ' . HuisStatus::Woonoord()->getDescription() . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $woonoord;
 	}
 }

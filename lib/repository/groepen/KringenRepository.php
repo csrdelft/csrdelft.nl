@@ -14,13 +14,9 @@ class KringenRepository extends AbstractGroepenRepository {
 		parent::__construct($accessModel, $registry, Kring::class);
 	}
 
-	const ORM = Kring::class;
-
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'verticale ASC, kring_nummer ASC';
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
+		return parent::findBy($criteria, ['verticale' => 'ASC', 'kring_nummer' => 'ASC'] + ($orderBy ?? []), $limit, $offset);
+	}
 
 	public function get($id) {
 		if (is_numeric($id)) {
