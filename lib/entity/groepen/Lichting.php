@@ -5,6 +5,7 @@ namespace CsrDelft\entity\groepen;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\ProfielRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -54,7 +55,7 @@ class Lichting extends AbstractGroep {
 			$lid->lid_sinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
 			$leden[] = $lid;
 		}
-		return $leden;
+		return new ArrayCollection($leden);
 	}
 
 	public function getLidType() {

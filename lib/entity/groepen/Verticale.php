@@ -10,6 +10,7 @@ use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\repository\groepen\leden\VerticaleLedenRepository;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +49,7 @@ class Verticale extends AbstractGroep {
 		$model = $em->getRepository($this->getLidType());
 		foreach ($profielen as $profiel) {
 			if ($profiel AND $profiel->verticale === $this->letter) {
+				/** @var VerticaleLid $lid */
 				$lid = $model->nieuw($this, $profiel->uid);
 				if ($profiel->verticaleleider) {
 					$lid->opmerking = 'Leider';
@@ -55,11 +57,11 @@ class Verticale extends AbstractGroep {
 					$lid->opmerking = 'Kringcoach';
 				}
 				$lid->door_uid = null;
-				$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
+				$lid->lid_sinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
 				$leden[] = $lid;
 			}
 		}
-		return $leden;
+		return new ArrayCollection($leden);
 	}
 
 	public function getLidType() {
