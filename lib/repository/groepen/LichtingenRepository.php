@@ -42,26 +42,6 @@ class LichtingenRepository extends AbstractGroepenRepository {
 		return $lichtingen;
 	}
 
-//	/**
-//	 * Override normal behaviour.
-//	 * @param string|null $criteria
-//	 * @param array $criteria_params
-//	 * @param string|null $groupby
-//	 * @param string|null $orderby
-//	 * @param int|null $limit
-//	 * @param int $start
-//	 * @return array
-//	 */
-//	public function find($criteria = null, array $criteria_params = [], $groupby = null, $orderby = null, $limit = null, $start = 0) {
-//		$jongste = static::getJongsteLidjaar();
-//		$oudste = static::getOudsteLidjaar();
-//		$lichtingen = [];
-//		for ($lidjaar = $jongste; $lidjaar >= $oudste; $lidjaar--) {
-//			$lichtingen[] = $this->nieuw($lidjaar);
-//		}
-//		return $lichtingen;
-//	}
-
 	public static function getHuidigeJaargang() {
 		$jaar = (int)date('Y');
 		$maand = (int)date('m');
