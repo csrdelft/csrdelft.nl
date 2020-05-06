@@ -4,8 +4,6 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\leden\LichtingLedenRepository;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,18 +29,32 @@ class Lichting extends AbstractGroep {
 	public $leden;
 
 	// Stiekem hebben we helemaal geen leden
+
+	/**
+	 * Read-only: generated group
+	 * @param $action
+	 * @param null $allowedAuthenticationMethods
+	 * @param null $soort
+	 * @return bool
+	 */
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
+		return $action === AccessAction::Bekijken;
+	}
+
 	public function getLeden() {
 		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 		$model = $em->getRepository($this->getLidType());
+		$leden = [];
 
 		foreach ($profielRepository->findBy(['lidjaar' => $this->lidjaar]) as $profiel) {
-				$lid = $model->nieuw($this->lidjaar, $profiel->uid);
-				$lid->door_uid = null;
-				$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
-				$leden[] = $lid;
+			/** @var LichtingsLid $lid */
+			$lid = $model->nieuw($this, $profiel->uid);
+			$lid->door_uid = null;
+			$lid->lid_sinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
+			$leden[] = $lid;
 		}
-		return $this->leden;
+		return $leden;
 	}
 
 	public function getLidType() {
@@ -60,17 +72,6 @@ class Lichting extends AbstractGroep {
 	 * @return bool
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
-		return $action === AccessAction::Bekijken;
-	}
-
-	/**
-	 * Read-only: generated group
-	 * @param $action
-	 * @param null $allowedAuthenticationMethods
-	 * @param null $soort
-	 * @return bool
-	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
 		return $action === AccessAction::Bekijken;
 	}
 

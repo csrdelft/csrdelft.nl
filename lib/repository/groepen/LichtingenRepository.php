@@ -32,6 +32,16 @@ class LichtingenRepository extends AbstractGroepenRepository {
 		return $lichting;
 	}
 
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
+		$jongste = static::getJongsteLidjaar();
+		$oudste = static::getOudsteLidjaar();
+		$lichtingen = [];
+		for ($lidjaar = $jongste; $lidjaar >= $oudste; $lidjaar--) {
+			$lichtingen[] = $this->nieuw($lidjaar);
+		}
+		return $lichtingen;
+	}
+
 //	/**
 //	 * Override normal behaviour.
 //	 * @param string|null $criteria
