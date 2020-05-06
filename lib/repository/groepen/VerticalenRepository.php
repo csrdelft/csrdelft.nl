@@ -26,6 +26,10 @@ class VerticalenRepository extends AbstractGroepenRepository {
 		return parent::get($letter);
 	}
 
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
+		return parent::findBy($criteria, ['letter' => 'ASC'] + ($orderBy ?? []), $limit, $offset);
+	}
+
 	/**
 	 * @param $naam
 	 * @return Verticale|null
