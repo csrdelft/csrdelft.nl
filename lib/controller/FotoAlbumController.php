@@ -256,7 +256,8 @@ class FotoAlbumController extends AbstractController {
 			}
 		}
 		$filename = $request->request->get('foto');
-		$foto = new Foto($filename, $album);
+
+		$foto = $this->fotoRepository->get($album->subdir, $filename);
 		if ($this->fotoRepository->verwijderFoto($foto)) {
 			echo '<div id="' . md5($filename) . '" class="remove"></div>';
 			exit;

@@ -11,6 +11,14 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * Class FotoRepository
+ * @package CsrDelft\repository\fotoalbum
+ * @method Foto|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Foto|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Foto[]    findAll()
+ * @method Foto[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
 class FotoRepository extends AbstractRepository {
 	use RetrieveByUuidTrait;
 
@@ -33,6 +41,15 @@ class FotoRepository extends AbstractRepository {
 		$path = explode('/', $parts[0]);
 		$filename = array_pop($path);
 		$subdir = implode('/', $path);
+		return $this->find(['subdir' => $subdir, 'filename' => $filename]);
+	}
+
+	/**
+	 * @param $subdir
+	 * @param $filename
+	 * @return Foto|null
+	 */
+	public function get($subdir, $filename) {
 		return $this->find(['subdir' => $subdir, 'filename' => $filename]);
 	}
 
