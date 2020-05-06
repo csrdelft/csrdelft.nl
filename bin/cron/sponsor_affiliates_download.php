@@ -32,6 +32,10 @@ foreach ($webshops as $webshop) {
         continue;
     }
 
+    if ($webshop->orig_url == "") {
+    	continue;
+		}
+
     preg_match('/shop_id=(\d+)/', $webshop->link, $shopId);
 	$entry = [
 	    "shop_name" => $webshop->name_short,
