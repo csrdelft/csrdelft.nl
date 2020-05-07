@@ -20,14 +20,8 @@ use ReflectionProperty;
  * @method AbstractGroep|null find($id, $lockMode = null, $lockVersion = null)
  * @method AbstractGroep|null findOneBy(array $criteria, array $orderBy = null)
  * @method AbstractGroep[]    findAll()
- * @method AbstractGroep[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 abstract class AbstractGroepenRepository extends AbstractRepository {
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'begin_moment DESC';
 	/**
 	 * @var AccessModel
 	 */
@@ -54,6 +48,10 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 		$this->entityClass = $entityClass;
 
 		$this->database = ContainerFacade::getContainer()->get(Database::class);
+	}
+
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
+		return parent::findBy($criteria, ['begin_moment' => 'DESC'] + ($orderBy ?? []), $limit, $offset);
 	}
 
 	public static function getUrl() {

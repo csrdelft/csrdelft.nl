@@ -16,7 +16,7 @@ class KetzersRepository extends AbstractGroepenRepository {
 		/** @var Ketzer $ketzer */
 		$ketzer = parent::nieuw();
 		$ketzer->aanmeld_limiet = null;
-		$ketzer->aanmelden_vanaf = getDateTime();
+		$ketzer->aanmelden_vanaf = date_create_immutable();
 		$ketzer->aanmelden_tot = null;
 		$ketzer->bewerken_tot = null;
 		$ketzer->afmelden_tot = null;

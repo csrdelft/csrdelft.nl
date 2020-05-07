@@ -4,8 +4,6 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\leden\KetzerDeelnemersRepository;
-use CsrDelft\Orm\Entity\T;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -57,6 +55,25 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 */
 	public $leden;
 
+	/**
+	 * Rechten voor de gehele klasse of soort groep?
+	 *
+	 * @param string $action
+	 * @param null $allowedAuthenticationMethods
+	 * @return boolean
+	 */
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
+		switch ($action) {
+
+			case AccessAction::Aanmaken:
+			case AccessAction::Aanmelden:
+			case AccessAction::Bewerken:
+			case AccessAction::Afmelden:
+				return true;
+		}
+		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
+	}
+
 	public function getLeden() {
 		return $this->leden;
 	}
@@ -77,52 +94,35 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 * @return boolean
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
+		$nu = date_create_immutable();
+
 		switch ($action) {
 			case AccessAction::Aanmelden:
 				// Controleer maximum leden
-				if (isset($this->aanmeld_limiet) AND $this->aantalLeden() >= $this->aanmeld_limiet) {
+				if (isset($this->aanmeld_limiet) and $this->aantalLeden() >= $this->aanmeld_limiet) {
 					return false;
 				}
 				// Controleer aanmeldperiode
-				if (time() > strtotime($this->aanmelden_tot) OR time() < strtotime($this->aanmelden_vanaf)) {
+				if ($nu > $this->aanmelden_tot || $nu < $this->aanmelden_vanaf) {
 					return false;
 				}
 				break;
 
 			case AccessAction::Bewerken:
 				// Controleer bewerkperiode
-				if (time() > strtotime($this->bewerken_tot)) {
+				if ( $nu > $this->bewerken_tot) {
 					return false;
 				}
 				break;
 
 			case AccessAction::Afmelden:
 				// Controleer afmeldperiode
-				if (time() > strtotime($this->afmelden_tot)) {
+				if ($nu > $this->afmelden_tot) {
 					return false;
 				}
 				break;
 		}
 		return parent::mag($action, $allowedAuthenticationMethods);
-	}
-
-	/**
-	 * Rechten voor de gehele klasse of soort groep?
-	 *
-	 * @param string $action
-	 * @param null $allowedAuthenticationMethods
-	 * @return boolean
-	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
-		switch ($action) {
-
-			case AccessAction::Aanmaken:
-			case AccessAction::Aanmelden:
-			case AccessAction::Bewerken:
-			case AccessAction::Afmelden:
-				return true;
-		}
-		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
 	}
 
 	function getAanmeldLimiet() {

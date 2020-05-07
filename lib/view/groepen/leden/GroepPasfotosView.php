@@ -17,9 +17,9 @@ use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 class GroepPasfotosView extends GroepTabView {
 
 	protected function getTabContent() {
-		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 		$html = '';
 		if ($this->groep->mag(AccessAction::Aanmelden)) {
+			$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 			$lid = $em->getRepository($this->groep->getLidType())->nieuw($this->groep, LoginModel::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep);
 			$form->css_classes[] = 'pasfotos';

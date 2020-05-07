@@ -134,9 +134,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 	public function overzicht($soort = null) {
 		if ($soort) {
-			$groepen = $this->model->findBy(['status' => GroepStatus::HT(), 'soort' => $soort], ['begin_moment' => 'DESC']);
+			$groepen = $this->model->findBy(['status' => GroepStatus::HT(), 'soort' => $soort]);
 		} else {
-			$groepen = $this->model->findBy(['status' => GroepStatus::HT()], ['begin_moment' => 'DESC']);
+			$groepen = $this->model->findBy(['status' => GroepStatus::HT()]);
 		}
 		$body = new GroepenView($this->model, $groepen, $soort); // controleert rechten bekijken per groep
 		return view('default', ['content' => $body]);
@@ -493,8 +493,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$response = [];
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($id);
-		if ($groep and property_exists($groep, 'aanmelden_tot') and time() <= strtotime($groep->aanmelden_tot) and $groep->mag(AccessAction::Wijzigen)) {
-			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, getDateTime());
+		if ($groep and property_exists($groep, 'aanmelden_tot') && date_create_immutable() <= $groep->aanmelden_tot && $groep->mag(AccessAction::Wijzigen)) {
+			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, date_create_immutable());
 			$groep->aanmelden_tot = date_create_immutable();
 			$this->model->update($groep);
 			$response[] = $groep;
@@ -587,6 +587,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			throw new CsrToegangException();
 		}
 
+		/** @var AbstractGroepLid $lid */
 		$lid = $em->getRepository($groep->getLidType())->nieuw($groep, $uid);
 
 		$form = new GroepAanmeldenForm($lid, $groep);
@@ -688,7 +689,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		}
 
 		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
-		$em->persist($lid);
+		$em->remove($lid);
 		$em->flush();
 
 		return new GroepView($groep);

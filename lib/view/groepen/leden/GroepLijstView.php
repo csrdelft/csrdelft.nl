@@ -34,27 +34,18 @@ class GroepLijstView extends GroepTabView {
 		if (empty($leden)) {
 			return $html . '</tbody></table>';
 		}
-		// sorteren op achernaam
-		$uids = array_keys($leden);
-		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
-		/** @var Profiel[] $profielen */
-		$profielen = $profielRepository->createQueryBuilder('p')
-			->where('p.uid in (:uids)')
-			->setParameter('uids', $uids)
-			->orderBy('p.achternaam')
-			->getQuery()->getResult();
-		foreach ($profielen as $profiel) {
+		foreach ($this->groep->getLeden() as $lid) {
 			$html .= '<tr><td>';
-			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::Afmelden)) {
+			if ($lid->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::Afmelden)) {
 				$html .= '<a href="' . $this->groep->getUrl() . '/ketzer/afmelden" class="post confirm float-left" title="Afmelden">' . Icon::getTag('bullet_delete') . '</a>';
 			}
-			$html .= $profiel->getLink('civitas');
+			$html .= ProfielRepository::getLink($lid->uid, 'civitas');
 			$html .= '</td><td>';
-			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::Bewerken)) {
-				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep);
+			if ($lid->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::Bewerken)) {
+				$form = new GroepBewerkenForm($lid, $this->groep);
 				$html .= $form->getHtml();
 			} else {
-				$html .= $leden[$profiel->uid]->opmerking;
+				$html .= $lid->opmerking;
 			}
 			$html .= '</td></tr>';
 		}

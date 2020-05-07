@@ -9,6 +9,7 @@ use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 
 /**
@@ -28,30 +29,35 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * Maximaal aantal groepsleden
 	 * @var string
 	 * @ORM\Column(type="integer", nullable=true)
+	 * @Serializer\Groups("datatable")
 	 */
 	public $aanmeld_limiet;
 	/**
 	 * Datum en tijd aanmeldperiode begin
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $aanmelden_vanaf;
 	/**
 	 * Datum en tijd aanmeldperiode einde
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $aanmelden_tot;
 	/**
 	 * Datum en tijd aanmelding bewerken toegestaan
 	 * @var DateTimeImmutable|null
 	 * @ORM\Column(type="datetime", nullable=true)
+	 * @Serializer\Groups("datatable")
 	 */
 	public $bewerken_tot;
 	/**
 	 * Datum en tijd afmelden toegestaan
 	 * @var DateTimeImmutable|null
 	 * @ORM\Column(type="datetime", nullable=true)
+	 * @Serializer\Groups("datatable")
 	 */
 	public $afmelden_tot;
 
@@ -59,6 +65,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * Intern / Extern / SjaarsActie / etc.
 	 * @var ActiviteitSoort
 	 * @ORM\Column(type="string")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $soort;
 	/**
@@ -75,6 +82,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * Tonen in agenda
 	 * @var boolean
 	 * @ORM\Column(type="boolean")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $in_agenda;
 
@@ -113,6 +121,33 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 				}
 				break;
 		}
+		$nu = date_create_immutable();
+		switch ($action) {
+			case AccessAction::Aanmelden:
+				// Controleer maximum leden
+				if (isset($this->aanmeld_limiet) and $this->aantalLeden() >= $this->aanmeld_limiet) {
+					return false;
+				}
+				// Controleer aanmeldperiode
+				if ($nu > $this->aanmelden_tot || $nu < $this->aanmelden_vanaf) {
+					return false;
+				}
+				break;
+
+			case AccessAction::Bewerken:
+				// Controleer bewerkperiode
+				if ( $nu > $this->bewerken_tot) {
+					return false;
+				}
+				break;
+
+			case AccessAction::Afmelden:
+				// Controleer afmeldperiode
+				if ($nu > $this->afmelden_tot) {
+					return false;
+				}
+				break;
+		}
 		return parent::mag($action, $allowedAuthenticationMethods);
 	}
 
@@ -144,6 +179,14 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 					return true;
 				}
 				break;
+		}
+		switch ($action) {
+
+			case AccessAction::Aanmaken:
+			case AccessAction::Aanmelden:
+			case AccessAction::Bewerken:
+			case AccessAction::Afmelden:
+				return true;
 		}
 		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
 	}

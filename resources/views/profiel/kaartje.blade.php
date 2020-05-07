@@ -21,22 +21,20 @@
 				{{$profiel->getVerticale()->naam}}
 			@endif
 		</p>
-		@php($bestuurslid = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\leden\BestuursLedenRepository::class)->find('uid = ?', array($profiel->uid), null, null, 1)->fetch())
+		@php($bestuurslid = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\leden\BestuursLedenRepository::class)->findOneBy(['uid' => $profiel->uid]))
 		@if($bestuurslid)
-			@php($bestuur = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\BesturenRepository::class)->get($bestuurslid->groep_id))
 			<p><a
-					href="{{$bestuur->getUrl()}}">{{\CsrDelft\entity\groepen\GroepStatus::getChar($bestuur->status)}} {{$bestuurslid->opmerking}}</a>
+					href="{{$bestuurslid->groep->getUrl()}}">{{$bestuurslid->groep->status->getDescription()}} {{$bestuurslid->opmerking}}</a>
 			</p>
 		@endif
 
-		@foreach (\CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\leden\CommissieLedenRepository::class)->find('uid = ?', array($profiel->uid), null, 'lid_sinds DESC') as $commissielid)
-			@php($commissie = \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\CommissiesRepository::class)->get($commissielid->groep_id))
-			@if ($commissie->status === CsrDelft\entity\groepen\GroepStatus::HT)
+		@foreach (\CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\leden\CommissieLedenRepository::class)->findBy(['uid' => $profiel->uid], ['lid_sinds' => 'DESC']) as $commissielid)
+			@if ($commissielid->groep->status === CsrDelft\entity\groepen\GroepStatus::HT())
 				<p>
 					@if (!empty($commissielid->opmerking))
 						{{$commissielid->opmerking}} <br/>
 					@endif
-					<a href="{{$commissie->getUrl()}}">{{$commissie->naam}}</a></p>
+					<a href="{{$commissielid->groep->getUrl()}}">{{$commissielid->groep->naam}}</a></p>
 			@endif
 		@endforeach
 

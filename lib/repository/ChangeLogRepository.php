@@ -2,12 +2,12 @@
 
 namespace CsrDelft\repository;
 
-use CsrDelft\common\Enum;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
+use function common\short_class;
 
 /**
  * ChangeLogModel.class.php
@@ -37,6 +37,20 @@ class ChangeLogRepository extends AbstractRepository {
 	}
 
 	/**
+	 * @param string $subject
+	 * @param string $property
+	 * @param string $old
+	 * @param string $new
+	 *
+	 * @return ChangeLogEntry
+	 */
+	public function log($subject, $property, $old, $new) {
+		$change = $this->nieuw($subject, $property, $old, $new);
+		$this->create($change);
+		return $change;
+	}
+
+	/**
 	 * @param string|mixed $subject
 	 * @param string $property
 	 * @param string $old
@@ -49,8 +63,7 @@ class ChangeLogRepository extends AbstractRepository {
 		$change->moment = date_create_immutable();
 		try {
 			$meta = $this->_em->getClassMetadata(get_class($subject));
-
-			$change->subject = $meta->getName() . print_r($meta->getIdentifierValues($subject), true);
+			$change->subject = implode(".", $meta->getIdentifierValues($subject)) . '@' . strtolower(short_class(get_class($subject))) . '.csrdelft.nl';
 		} catch (MappingException $ex) {
 			// ignore
 			if ($subject instanceof PersistentEntity) {
@@ -78,20 +91,6 @@ class ChangeLogRepository extends AbstractRepository {
 	public function create(ChangeLogEntry $change) {
 		$this->getEntityManager()->persist($change);
 		$this->getEntityManager()->flush();
-	}
-
-	/**
-	 * @param string $subject
-	 * @param string $property
-	 * @param string $old
-	 * @param string $new
-	 *
-	 * @return ChangeLogEntry
-	 */
-	public function log($subject, $property, $old, $new) {
-		$change = $this->nieuw($subject, $property, $old, $new);
-		$this->create($change);
-		return $change;
 	}
 
 	/**

@@ -43,6 +43,7 @@ abstract class AbstractGroepLedenRepository extends AbstractRepository {
 		$orm = $this->_entityName;
 		/** @var AbstractGroepLid $lid */
 		$lid = new $orm();
+		$lid->groep = $groep;
 		$lid->groep_id = $groep->id;
 		$lid->uid = $uid;
 		$lid->door_uid = LoginModel::getUid();
