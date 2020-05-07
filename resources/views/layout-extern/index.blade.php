@@ -96,49 +96,50 @@
 					<h2 class="major">Foto's</h2>
 					<noscript class="lazy-load">
 						<div class="grid">
-							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic01.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr1.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="" src="/fotoalbum/Publiek/Voorpagina/_resized/pic01.jpg"/>
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr1.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr1.jpg"/>
 							</a>
-							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic02.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr2.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic02.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic02.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr2.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr2.jpg">
 							</a>
-							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic03.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr3.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic03.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic03.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr3.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr3.jpg">
 							</a>
-							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic04.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr4.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic04.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic04.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr4.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr4.jpg">
 							</a>
-							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic05.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr5.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic05.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic05.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr5.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr5.jpg">
 							</a>
-							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic06.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr6.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic06.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic06.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr6.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr6.jpg">
 							</a>
-							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic07.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr7.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic07.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic07.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr7.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr7.jpg">
 							</a>
-							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic08.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr8.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic08.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic08.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr8.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr8.jpg">
 							</a>
-							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/pic09.jpg"
+							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr9.jpg"
 								 data-lightbox="page-lightbox">
-								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/pic09.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/pic09.jpg">
+								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr9.jpg"
+										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr9.jpg">
 							</a>
 						</div>
 					</noscript>
@@ -160,8 +161,8 @@
 					</li>
 					<li class="fa-phone">06-19470413</li>
 					<li class="fa-envelope"><a href="mailto:{{env('EMAIL_ABACTIS')}}">{{env('EMAIL_ABACTIS')}}</a></li>
-					<li class="fa-facebook"><a href="https://www.facebook.com/OWee-CSR-Delft-1570871723180451/?fref=ts">Like
-							de Facebookpagina om de laatste updates te ontvangen</a></li>
+					<li class="fa-instagram"><a href="https://www.instagram.com/csrdelft/" target="_blank">Like
+							onze foto's op Instagram en volg de laatste posts</a></li>
 					<li class="fa-map-marker">
 						<noscript class="lazy-load">
 							<iframe title="Confide op Google Maps" height="300" frameborder="0" style="border:0"
