@@ -23,7 +23,7 @@
 		<!-- One -->
 		<section id="one" class="wrapper kleur1">
 			<div class="inner">
-				<span class="image"><img src="/images/vereniging.jpg" alt="Foto vereniging"/></span>
+				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
 				<div class="content">
 					<h2 class="major">C.S.R. Delft</h2>
 					<p style="color:red;">
@@ -48,7 +48,7 @@
 		<section id="two" class="wrapper alt kleur2">
 			<div class="inner">
 				<noscript class="lazy-load">
-					<span class="image"><img src="/images/podium.jpg" alt="Sfeerfoto buiten"/></span>
+					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_in_de_OWee.jpg" alt="Sfeerfoto buiten"/></span>
 				</noscript>
 				<div class="content">
 					<h2 class="major">C.S.R. in de OWee</h2>
@@ -72,7 +72,7 @@
 		<section id="three" class="wrapper kleur3">
 			<div class="inner">
 				<noscript class="lazy-load">
-					<span class="image"><img src="/images/OC-2017.jpg" alt="Owee Commissie"/></span>
+					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/Interesse_vragen.jpg" alt="Owee Commissie"/></span>
 				</noscript>
 				<div class="content">
 					<h2 class="major">Interesse/vragen</h2>
