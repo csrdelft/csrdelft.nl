@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use PDO;
 use Symfony\Component\Serializer\Annotation as Serializer;
+use function common\short_class;
 
 
 /**
@@ -249,4 +250,7 @@ abstract class AbstractGroep implements DataTableEntry {
 		return count($keuzes) == count($correct);
 	}
 
+	public function getUUID() {
+		return $this->id . '@' . short_class($this) . '.csrdelft.nl';
+	}
 }
