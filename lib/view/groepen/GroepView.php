@@ -8,8 +8,8 @@
 
 namespace CsrDelft\view\groepen;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\GroepTab;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;

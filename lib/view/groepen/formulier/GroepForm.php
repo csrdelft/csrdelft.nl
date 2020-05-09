@@ -2,16 +2,15 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\Activiteit;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\entity\groepen\Commissie;
-use CsrDelft\model\entity\groepen\CommissieSoort;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\Commissie;
+use CsrDelft\entity\groepen\GroepVersie;
+use CsrDelft\entity\groepen\Ketzer;
+use CsrDelft\entity\groepen\Kring;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\model\entity\groepen\GroepKeuze;
-use CsrDelft\model\entity\groepen\GroepVersie;
-use CsrDelft\model\entity\groepen\Ketzer;
-use CsrDelft\model\entity\groepen\Kring;
-use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\FormFieldFactory;
@@ -87,35 +86,34 @@ class GroepForm extends ModalForm {
 		 * @var AbstractGroep $groep
 		 */
 		$groep = $this->getModel();
-		if (property_exists($groep, 'soort')) {
-			$soort = $groep->soort;
+		if ($groep instanceof HeeftSoort) {
+			$soort = $groep->getSoort();
 		} else {
 			$soort = null;
 		}
 		/**
 		 * @Notice: Similar function in GroepSoortField->validate()
 		 */
-		if (!$groep::magAlgemeen($this->mode, null, $soort)) {
+		if (!$groep->magAlgemeen($this->mode, null, $soort)) {
 			if (!$groep->mag($this->mode)) {
 				// beide aanroepen vanwege niet doorsturen van param $soort door mag() naar magAlgemeen()
 				if ($groep instanceof Activiteit) {
-					$naam = ActiviteitSoort::getDescription($soort);
+					$naam = $soort->getDescription();
 				} elseif ($groep instanceof Commissie) {
-					$naam = CommissieSoort::getDescription($soort);
+					$naam = $soort->getDescription();
 				} else {
 					$naam = classNameZonderNamespace(get_class($groep));
 				}
 				setMelding('U mag geen ' . $naam . ' aanmaken', -1);
 				return false;
-			}
-			/**
+			} /**
 			 * Omdat wijzigen wel is toegestaan met hetzelfde formulier
 			 * en groep->mag() @runtime niet weet wat de orig value was (door form auto property set)
 			 * op moment van uitvoeren van deze funtie, hier een extra check:
 			 *
 			 * N.B.: Deze check staat binnen de !magAlgemeen zodat P_LEDEN_MOD deze check overslaat
 			 */
-			elseif ($this->mode === AccessAction::Wijzigen AND $groep instanceof Woonoord) {
+			elseif ($this->mode === AccessAction::Wijzigen and $groep instanceof Woonoord) {
 
 				$origvalue = $this->findByName('soort')->getOrigValue();
 				if ($origvalue !== $soort) {
@@ -126,14 +124,14 @@ class GroepForm extends ModalForm {
 		}
 
 		$fields = $this->getFields();
-		if ($fields['eind_moment']->getValue() !== null AND strtotime($fields['eind_moment']->getValue()) < strtotime($fields['begin_moment']->getValue())) {
+		if ($fields['eind_moment']->getValue() !== null and strtotime($fields['eind_moment']->getValue()) < strtotime($fields['begin_moment']->getValue())) {
 			$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
 		if ($groep instanceof Ketzer) {
-			if ($fields['afmelden_tot']->getValue() !== null AND strtotime($fields['afmelden_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
+			if ($fields['afmelden_tot']->getValue() !== null and strtotime($fields['afmelden_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
 				$fields['afmelden_tot']->error = 'Afmeldperiode moet eindigen na begin aanmeldperiode';
 			}
-			if ($fields['bewerken_tot']->getValue() !== null AND strtotime($fields['bewerken_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
+			if ($fields['bewerken_tot']->getValue() !== null and strtotime($fields['bewerken_tot']->getValue()) < strtotime($fields['aanmelden_vanaf']->getValue())) {
 				$fields['bewerken_tot']->error = 'Bewerkenperiode moet eindigen na begin aanmeldperiode';
 			}
 		}

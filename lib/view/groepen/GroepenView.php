@@ -3,11 +3,12 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\AbstractGroepenModel;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\GroepTab;
+use CsrDelft\common\Enum;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\BesturenModel;
+use CsrDelft\repository\groepen\BesturenRepository;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\Icon;
@@ -20,22 +21,25 @@ class GroepenView implements View {
 	 * @var AbstractGroep[]
 	 */
 	private $groepen;
+	/**
+	 * @var Enum|null
+	 */
 	private $soort;
 	private $geschiedenis;
 	private $tab;
 	private $pagina;
 
 	public function __construct(
-		AbstractGroepenModel $model,
+		AbstractGroepenRepository $model,
 		$groepen,
-		$soort = null,
+		Enum $soort = null,
 		$geschiedenis = false
 	) {
 		$this->model = $model;
 		$this->groepen = $groepen;
 		$this->soort = $soort;
 		$this->geschiedenis = $geschiedenis;
-		if ($model instanceof BesturenModel) {
+		if ($model instanceof BesturenRepository) {
 			$this->tab = GroepTab::Lijst;
 		} else {
 			$this->tab = GroepTab::Pasfotos;
@@ -63,9 +67,9 @@ class GroepenView implements View {
 
 	public function view() {
 		$model = $this->model;
-		$orm = $model::ORM;
+		$orm = $model->entityClass;
 		if ($orm::magAlgemeen(AccessAction::Aanmaken, null, $this->soort)) {
-			echo '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
+			echo '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . ($this->soort == null ? "": $this->soort->getValue()) . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
 		echo '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
 		if ($this->geschiedenis) {

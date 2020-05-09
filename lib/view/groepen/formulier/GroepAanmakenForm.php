@@ -2,14 +2,14 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
 class GroepAanmakenForm extends ModalForm {
 
 	public function __construct(
-		AbstractGroepenModel $huidig,
+		AbstractGroepenRepository $huidig,
 		$soort = null
 	) {
 		$groep = $huidig->nieuw($soort);

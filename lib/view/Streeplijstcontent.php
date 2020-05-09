@@ -4,7 +4,7 @@ namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\service\ProfielService;
 
 /**
@@ -183,7 +183,7 @@ class Streeplijstcontent implements View, ToResponse {
 			if ($letter == 'alle') {
 				echo $letter;
 			} else {
-				echo ContainerFacade::getContainer()->get(VerticalenModel::class)->get($letter)->naam;
+				echo ContainerFacade::getContainer()->get(VerticalenRepository::class)->get($letter)->naam;
 			}
 			echo '</label>';
 		}

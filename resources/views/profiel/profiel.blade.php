@@ -1,13 +1,13 @@
 <?php
 /**
  * @var \CsrDelft\entity\profiel\Profiel $profiel
- * @var \CsrDelft\model\entity\groepen\Bestuur[] $besturen
- * @var \CsrDelft\model\entity\groepen\Commissie[] $commissies
- * @var \CsrDelft\model\entity\groepen\Werkgroep[] $werkgroepen
- * @var \CsrDelft\model\entity\groepen\Ondervereniging[] $onderverenigingen
- * @var \CsrDelft\model\entity\groepen\RechtenGroep[] $groepen
- * @var \CsrDelft\model\entity\groepen\Ketzer[] $ketzers
- * @var \CsrDelft\model\entity\groepen\Activiteit[] $activiteiten
+ * @var \CsrDelft\entity\groepen\Bestuur[] $besturen
+ * @var \CsrDelft\entity\groepen\Commissie[] $commissies
+ * @var \CsrDelft\entity\groepen\Werkgroep[] $werkgroepen
+ * @var \CsrDelft\entity\groepen\Ondervereniging[] $onderverenigingen
+ * @var \CsrDelft\entity\groepen\RechtenGroep[] $groepen
+ * @var \CsrDelft\entity\groepen\Ketzer[] $ketzers
+ * @var \CsrDelft\entity\groepen\Activiteit[] $activiteiten
  * @var object[] bestellinglog
  * @var string $bestellingenlink
  * @var \CsrDelft\entity\corvee\CorveeTaak[] $corveetaken
@@ -318,7 +318,7 @@
 								(leider)
 							@elseif($profiel->kringcoach)
 								<span
-									title="Kringcoach van verticale {{\CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\model\groepen\VerticalenModel::class)->get($profiel->verticale)->naam}}">(kringcoach)</span>
+									title="Kringcoach van verticale {{\CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\repository\groepen\VerticalenRepository::class)->get($profiel->verticale)->naam}}">(kringcoach)</span>
 							@endif
 						</a>
 					</dd>

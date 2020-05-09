@@ -7,11 +7,11 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\groepen\Activiteit;
-use CsrDelft\model\entity\groepen\Ketzer;
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\entity\groepen\Ketzer;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\agenda\AgendaVerbergenRepository;
@@ -43,9 +43,9 @@ class AgendaController {
 	 */
 	private $agendaVerbergenRepository;
 	/**
-	 * @var ActiviteitenModel
+	 * @var ActiviteitenRepository
 	 */
-	private $activiteitenModel;
+	private $activiteitenRepository;
 	/**
 	 * @var CorveeTakenRepository
 	 */
@@ -62,14 +62,14 @@ class AgendaController {
 	public function __construct(
 		AgendaRepository $agendaRepository,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenModel $activiteitenModel,
+		ActiviteitenRepository $activiteitenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdenRepository $maaltijdenRepository,
 		ProfielRepository $profielRepository
 	) {
 		$this->agendaRepository = $agendaRepository;
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
-		$this->activiteitenModel = $activiteitenModel;
+		$this->activiteitenRepository = $activiteitenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->profielRepository = $profielRepository;
@@ -250,7 +250,7 @@ class AgendaController {
 				break;
 
 			case 'activiteit':
-				$item = $this->activiteitenModel->retrieveByUUID($refuuid);
+				$item = $this->activiteitenRepository->retrieveByUUID($refuuid);
 				break;
 
 			case 'agendaitem':

@@ -9,7 +9,7 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\OrmMemcache;
@@ -366,10 +366,10 @@ class ToolsController extends AbstractController {
 	/**
 	 * Voor patronaat 2019 kan september 2019 verwijderd worden.
 	 *
-	 * @param ActiviteitenModel $activiteitenModel
+	 * @param ActiviteitenRepository $activiteitenRepository
 	 * @return View
 	 */
-	public function patronaat(ActiviteitenModel $activiteitenModel) {
-		return view('patronaat', ['groep' => $activiteitenModel->get(1754)]);
+	public function patronaat(ActiviteitenRepository $activiteitenRepository) {
+		return view('patronaat', ['groep' => $activiteitenRepository->get(1754)]);
 	}
 }

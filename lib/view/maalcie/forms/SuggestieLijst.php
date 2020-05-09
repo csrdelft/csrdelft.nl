@@ -4,7 +4,7 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToResponse;
@@ -42,7 +42,7 @@ class SuggestieLijst implements ToResponse, FormElement {
 	public function getHtml() {
 		return view('maaltijden.corveetaak.suggesties_lijst', [
 			'suggesties' => $this->suggesties,
-			'jongsteLichting' => LichtingenModel::getJongsteLidjaar(),
+			'jongsteLichting' => LichtingenRepository::getJongsteLidjaar(),
 			'voorkeur' => $this->voorkeur,
 			'recent' => $this->recent,
 			'voorkeurbaar' => $this->voorkeurbaar,

@@ -9,14 +9,14 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
+use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\groepen\GroepStatus;
-use CsrDelft\model\entity\groepen\Woonoord;
-use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\entity\groepen\Woonoord;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenForm;
 use CsrDelft\view\eetplan\EetplanBekendeHuizenTable;
 use CsrDelft\view\eetplan\EetplanBekendenForm;
@@ -42,16 +42,16 @@ class EetplanController extends AbstractController {
 	private $eetplanRepository;
 	/** @var EetplanBekendenRepository */
 	private $eetplanBekendenRepository;
-	/** @var WoonoordenModel */
-	private $woonoordenModel;
+	/** @var WoonoordenRepository */
+	private $woonoordenRepository;
 
 	public function __construct(
-		EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenModel, WoonoordenModel $woonoordenModel
+		EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenRepository, WoonoordenRepository $woonoordenRepository
 	) {
 		$this->eetplanRepository = $eetplanRepository;
-		$this->eetplanBekendenRepository = $eetplanBekendenModel;
-		$this->woonoordenModel = $woonoordenModel;
-		$this->lichting = substr((string)LichtingenModel::getJongsteLidjaar(), 2, 2);
+		$this->eetplanBekendenRepository = $eetplanBekendenRepository;
+		$this->woonoordenRepository = $woonoordenRepository;
+		$this->lichting = substr((string)LichtingenRepository::getJongsteLidjaar(), 2, 2);
 	}
 
 	public function view() {
@@ -84,7 +84,7 @@ class EetplanController extends AbstractController {
 		}
 
 		return view('eetplan.huis', [
-			'woonoord' => ContainerFacade::getContainer()->get(WoonoordenModel::class)->get($id),
+			'woonoord' => ContainerFacade::getContainer()->get(WoonoordenRepository::class)->get($id),
 			'eetplan' => $eetplan,
 		]);
 	}
@@ -95,14 +95,14 @@ class EetplanController extends AbstractController {
 			$woonoorden = [];
 			foreach ($selection as $woonoord) {
 				/** @var Woonoord $woonoord */
-				$woonoord = $this->woonoordenModel->retrieveByUUID($woonoord);
+				$woonoord = $this->woonoordenRepository->retrieveByUUID($woonoord);
 				$woonoord->eetplan = !$woonoord->eetplan;
-				$this->woonoordenModel->update($woonoord);
+				$this->woonoordenRepository->update($woonoord);
 				$woonoorden[] = $woonoord;
 			}
 			return new EetplanHuizenResponse($woonoorden);
 		} else {
-			$woonoorden = $this->woonoordenModel->find('status = ?', array(GroepStatus::HT));
+			$woonoorden = $this->woonoordenRepository->findBy(['status' => GroepStatus::HT()]);
 			return new EetplanHuizenResponse($woonoorden);
 		}
 	}
@@ -158,7 +158,12 @@ class EetplanController extends AbstractController {
 	public function bekendehuizen_zoeken(Request $request) {
 		$huisnaam = $request->query->get('q');
 		$huisnaam = '%' . $huisnaam . '%';
-		$woonoorden = $this->woonoordenModel->find('status = ? AND naam LIKE ?', array(GroepStatus::HT, $huisnaam))->fetchAll();
+		/** @var Woonoord[] $woonoorden */
+		$woonoorden = $this->woonoordenRepository->createQueryBuilder('w')
+			->where('w.status = :status and w.naam LIKE :naam')
+			->setParameter('status', GroepStatus::HT())
+			->setParameter('naam', $huisnaam)
+			->getQuery()->getResult();
 		return new EetplanHuizenZoekenResponse($woonoorden);
 	}
 

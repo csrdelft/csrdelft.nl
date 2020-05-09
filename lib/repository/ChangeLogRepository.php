@@ -5,7 +5,9 @@ namespace CsrDelft\repository;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
+use function common\short_class;
 
 /**
  * ChangeLogModel.class.php
@@ -42,14 +44,35 @@ class ChangeLogRepository extends AbstractRepository {
 	 *
 	 * @return ChangeLogEntry
 	 */
+	public function log($subject, $property, $old, $new) {
+		$change = $this->nieuw($subject, $property, $old, $new);
+		$this->create($change);
+		return $change;
+	}
+
+	/**
+	 * @param string|mixed $subject
+	 * @param string $property
+	 * @param string $old
+	 * @param string $new
+	 *
+	 * @return ChangeLogEntry
+	 */
 	public function nieuw($subject, $property, $old, $new) {
 		$change = new ChangeLogEntry();
 		$change->moment = date_create_immutable();
-		if ($subject instanceof PersistentEntity) {
-			$change->subject = $subject->getUUID();
-		} else {
-			$change->subject = $subject;
+		try {
+			$meta = $this->_em->getClassMetadata(get_class($subject));
+			$change->subject = implode(".", $meta->getIdentifierValues($subject)) . '@' . strtolower(short_class(get_class($subject))) . '.csrdelft.nl';
+		} catch (MappingException $ex) {
+			// ignore
+			if ($subject instanceof PersistentEntity) {
+				$change->subject = $subject->getUUID();
+			} else {
+				$change->subject = $subject;
+			}
 		}
+
 		$change->property = $property;
 		$change->old_value = $old;
 		$change->new_value = $new;
@@ -68,20 +91,6 @@ class ChangeLogRepository extends AbstractRepository {
 	public function create(ChangeLogEntry $change) {
 		$this->getEntityManager()->persist($change);
 		$this->getEntityManager()->flush();
-	}
-
-	/**
-	 * @param string $subject
-	 * @param string $property
-	 * @param string $old
-	 * @param string $new
-	 *
-	 * @return ChangeLogEntry
-	 */
-	public function log($subject, $property, $old, $new) {
-		$change = $this->nieuw($subject, $property, $old, $new);
-		$this->create($change);
-		return $change;
 	}
 
 	/**

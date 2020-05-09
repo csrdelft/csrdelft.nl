@@ -5,17 +5,17 @@ namespace CsrDelft\entity\profiel;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\Geslacht;
-use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\ProfielLogGroup;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\groepen\KringenModel;
-use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\KringenRepository;
+use CsrDelft\repository\groepen\VerticalenRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\GoogleSync;
@@ -823,7 +823,7 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getWoonoord() {
-		$woonoorden = ContainerFacade::getContainer()->get(WoonoordenModel::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		$woonoorden = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($woonoorden)) {
 			return false;
 		}
@@ -831,11 +831,11 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getVerticale() {
-		return ContainerFacade::getContainer()->get(VerticalenModel::class)->get($this->verticale);
+		return ContainerFacade::getContainer()->get(VerticalenRepository::class)->get($this->verticale);
 	}
 
 	public function getKring() {
-		$kringen = ContainerFacade::getContainer()->get(KringenModel::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		$kringen = ContainerFacade::getContainer()->get(KringenRepository::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($kringen)) {
 			return false;
 		}

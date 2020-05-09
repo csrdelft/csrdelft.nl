@@ -9,7 +9,7 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\view\View;
 
 class FotoAlbumZijbalkView implements View {
@@ -31,7 +31,7 @@ class FotoAlbumZijbalkView implements View {
 
 	public function view() {
 		echo '<div id="zijbalk_fotoalbum">';
-		echo '<div class="zijbalk-kopje"><a href="/fotoalbum/' . LichtingenModel::getHuidigeJaargang() . '">Fotoalbum</a></div>';
+		echo '<div class="zijbalk-kopje"><a href="/fotoalbum/' . LichtingenRepository::getHuidigeJaargang() . '">Fotoalbum</a></div>';
 		echo '<div class="item">';
 		echo '<p><a href="' . $this->model->getUrl() . '">' . $this->model->dirname . '</a></p>';
 		echo '<div class="fotos">';

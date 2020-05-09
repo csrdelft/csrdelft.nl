@@ -32,11 +32,11 @@ class PeilingenRepository extends AbstractRepository {
 	 */
 	private $peilingStemmenModel;
 
-	public function __construct(PeilingOptiesRepository $peilingOptiesModel, PeilingStemmenRepository $peilingStemmenModel, ManagerRegistry $registry) {
+	public function __construct(PeilingOptiesRepository $peilingOptiesRepository, PeilingStemmenRepository $peilingStemmenRepository, ManagerRegistry $registry) {
 		parent::__construct($registry, Peiling::class);
 
-		$this->peilingOptiesModel = $peilingOptiesModel;
-		$this->peilingStemmenModel = $peilingStemmenModel;
+		$this->peilingOptiesModel = $peilingOptiesRepository;
+		$this->peilingStemmenModel = $peilingStemmenRepository;
 	}
 
 	/**

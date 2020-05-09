@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\repository\groepen\CommissiesRepository;
 
 /**
  * CommissiesController.class.php
@@ -12,7 +12,7 @@ use CsrDelft\model\groepen\CommissiesModel;
  * Controller voor commissies.
  */
 class CommissiesController extends AbstractGroepenController {
-	public function __construct(CommissiesModel $commissiesModel) {
-		parent::__construct($commissiesModel);
+	public function __construct(CommissiesRepository $commissiesRepository) {
+		parent::__construct($commissiesRepository);
 	}
 }

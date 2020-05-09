@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\model\entity\LedenMemoryScore;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\PersistenceModel;

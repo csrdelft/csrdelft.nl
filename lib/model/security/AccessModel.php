@@ -4,30 +4,34 @@ namespace CsrDelft\model\security;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
+use CsrDelft\entity\groepen\Bestuur;
+use CsrDelft\entity\groepen\BestuursLid;
+use CsrDelft\entity\groepen\Commissie;
+use CsrDelft\entity\groepen\CommissieFunctie;
+use CsrDelft\entity\groepen\CommissieLid;
+use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\security\Account;
-use CsrDelft\model\entity\groepen\CommissieFunctie;
-use CsrDelft\model\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\groepen\BesturenModel;
-use CsrDelft\model\groepen\CommissiesModel;
-use CsrDelft\model\groepen\KetzersModel;
-use CsrDelft\model\groepen\KringenModel;
-use CsrDelft\model\groepen\leden\BestuursLedenModel;
-use CsrDelft\model\groepen\leden\CommissieLedenModel;
-use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\groepen\OnderverenigingenModel;
-use CsrDelft\model\groepen\RechtenGroepenModel;
-use CsrDelft\model\groepen\WerkgroepenModel;
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\groepen\BesturenRepository;
+use CsrDelft\repository\groepen\KetzersRepository;
+use CsrDelft\repository\groepen\KringenRepository;
+use CsrDelft\repository\groepen\leden\BestuursLedenRepository;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\OnderverenigingenRepository;
+use CsrDelft\repository\groepen\RechtenGroepenRepository;
+use CsrDelft\repository\groepen\WerkgroepenRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\Orm\CachedPersistenceModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
+use CsrDelft\repository\groepen\CommissiesRepository;
+use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -224,13 +228,13 @@ class AccessModel extends CachedPersistenceModel {
 	 * @return array
 	 */
 	public function getTree($environment, $resource) {
-		if ($environment === ActiviteitenModel::ORM) {
-			$activiteit = ContainerFacade::getContainer()->get(ActiviteitenModel::class)->get($resource);
+		if ($environment === ActiviteitenRepository::ORM) {
+			$activiteit = ContainerFacade::getContainer()->get(ActiviteitenRepository::class)->get($resource);
 			if ($activiteit) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', [$environment, $resource, $activiteit->soort, '*']);
 			}
-		} elseif ($environment === CommissiesModel::ORM) {
-			$commissie = ContainerFacade::getContainer()->get(CommissiesModel::class)->get($resource);
+		} elseif ($environment === Commissie::class) {
+			$commissie = ContainerFacade::getContainer()->get(CommissiesRepository::class)->get($resource);
 			if ($commissie) {
 				return $this->prefetch('environment = ? AND (resource = ? OR resource = ? OR resource = ?)', [$environment, $resource, $commissie->soort, '*']);
 			}
@@ -734,13 +738,13 @@ class AccessModel extends CachedPersistenceModel {
 				return (string)$profiel->lidjaar === $gevraagd;
 
 			case self::PREFIX_EERSTEJAARS:
-				if ($profiel->lidjaar === LichtingenModel::getJongsteLidjaar()) {
+				if ($profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
 					return true;
 				}
 				return false;
 
 			case self::PREFIX_OUDEREJAARS:
-				if ($profiel->lidjaar === LichtingenModel::getJongsteLidjaar()) {
+				if ($profiel->lidjaar === LichtingenRepository::getJongsteLidjaar()) {
 					return false;
 				}
 				return true;
@@ -767,17 +771,19 @@ class AccessModel extends CachedPersistenceModel {
 			case self::PREFIX_COMMISSIE:
 				$role = strtolower($role);
 				// Alleen als GroepStatus is opgegeven, anders: fall through
-				if (in_array($role, GroepStatus::getTypeOptions())) {
+				if (in_array($role, GroepStatus::getEnumValues())) {
+					$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+
 					switch ($prefix) {
 
 						case self::PREFIX_BESTUUR:
-							$l = ContainerFacade::getContainer()->get(BestuursLedenModel::class)->getTableName();
-							$g = ContainerFacade::getContainer()->get(BesturenModel::class)->getTableName();
+							$l = $em->getClassMetadata(BestuursLid::class)->getTableName();
+							$g = $em->getClassMetadata(Bestuur::class)->getTableName();
 							break;
 
 						case self::PREFIX_COMMISSIE:
-							$l = ContainerFacade::getContainer()->get(CommissieLedenModel::class)->getTableName();
-							$g = ContainerFacade::getContainer()->get(CommissiesModel::class)->getTableName();
+							$l = $em->getClassMetadata(CommissieLid::class)->getTableName();
+							$g = $em->getClassMetadata(Commissie::class)->getTableName();
 							break;
 					}
 					return ContainerFacade::getContainer()->get(Database::class)->sqlExists($l . ' AS l LEFT JOIN ' . $g . ' AS g ON l.groep_id = g.id', 'g.status = ? AND g.familie = ? AND l.uid = ?', [$role, $gevraagd, $profiel->uid]);
@@ -801,48 +807,48 @@ class AccessModel extends CachedPersistenceModel {
 				switch ($prefix) {
 
 					case self::PREFIX_BESTUUR:
-						if (in_array($gevraagd, CommissieFunctie::getTypeOptions())) {
+						if (in_array($gevraagd, CommissieFunctie::getEnumValues())) {
 							$gevraagd = false;
 							$role = $gevraagd;
 						}
 						if ($gevraagd) {
-							$groep = ContainerFacade::getContainer()->get(BesturenModel::class)->get($gevraagd);
+							$groep = ContainerFacade::getContainer()->get(BesturenRepository::class)->get($gevraagd);
 						} else {
-							$groep = ContainerFacade::getContainer()->get(BesturenModel::class)->get('bestuur'); // h.t.
+							$groep = ContainerFacade::getContainer()->get(BesturenRepository::class)->get('bestuur'); // h.t.
 						}
 						break;
 
 					case self::PREFIX_COMMISSIE:
-						$groep = ContainerFacade::getContainer()->get(CommissiesModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(CommissiesRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_KRING:
-						$groep = ContainerFacade::getContainer()->get(KringenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(KringenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_ONDERVERENIGING:
-						$groep = ContainerFacade::getContainer()->get(OnderverenigingenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(OnderverenigingenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_WOONOORD:
-						$groep = ContainerFacade::getContainer()->get(WoonoordenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_ACTIVITEIT:
-						$groep = ContainerFacade::getContainer()->get(ActiviteitenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(ActiviteitenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_KETZER:
-						$groep = ContainerFacade::getContainer()->get(KetzersModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(KetzersRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_WERKGROEP:
-						$groep = ContainerFacade::getContainer()->get(WerkgroepenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(WerkgroepenRepository::class)->get($gevraagd);
 						break;
 
 					case self::PREFIX_GROEP:
 					default:
-						$groep = ContainerFacade::getContainer()->get(RechtenGroepenModel::class)->get($gevraagd);
+						$groep = ContainerFacade::getContainer()->get(RechtenGroepenRepository::class)->get($gevraagd);
 						break;
 				}
 

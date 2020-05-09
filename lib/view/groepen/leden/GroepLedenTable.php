@@ -2,10 +2,10 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\model\AbstractGroepLedenModel;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\repository\AbstractGroepLedenRepository;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
@@ -19,8 +19,8 @@ use CsrDelft\view\datatable\Multiplicity;
  */
 class GroepLedenTable extends DataTable {
 
-	public function __construct(AbstractGroepLedenModel $model, AbstractGroep $groep) {
-		parent::__construct($model::ORM, $groep->getUrl() . '/leden', 'Leden van ' . $groep->naam, 'status');
+	public function __construct(AbstractGroep $groep) {
+		parent::__construct($groep->getLidType(), $groep->getUrl() . '/leden', 'Leden van ' . $groep->naam, 'status');
 		$this->addColumn('lid', 'opmerking');
 		$this->searchColumn('lid');
 		$this->setColumnTitle('lid', 'Lidnaam');

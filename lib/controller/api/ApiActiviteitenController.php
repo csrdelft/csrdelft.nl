@@ -4,22 +4,33 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
 use Jacwright\RestServer\RestException;
 
 class ApiActiviteitenController {
 	/** @var ChangeLogRepository  */
 	private $changeLogRepository;
-	/** @var ActiviteitenModel  */
-	private $activiteitenModel;
+	/** @var ActiviteitenRepository  */
+	private $activiteitenRepository;
+	/**
+	 * @var \Doctrine\ORM\EntityManager
+	 */
+	private $em;
+	/**
+	 * @var ActiviteitDeelnemersRepository
+	 */
+	private $activiteitDeelnemersRepository;
 
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 
-		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
+		$this->activiteitenRepository = $container->get(ActiviteitenRepository::class);
+		$this->activiteitDeelnemersRepository = $container->get(ActiviteitDeelnemersRepository::class);
 		$this->changeLogRepository = $container->get(ChangeLogRepository::class);
+		$this->em = $container->get('doctrine.orm.entity_manager');
 	}
 
 	/**
@@ -34,7 +45,7 @@ class ApiActiviteitenController {
 	 */
 	public function activiteitAanmelden($id) {
 
-		$activiteit = $this->activiteitenModel->get($id);
+		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
@@ -44,11 +55,11 @@ class ApiActiviteitenController {
 			throw new RestException(403, 'Aanmelden niet mogelijk');
 		}
 
-		$model = $activiteit::getLedenModel();
-		$lid = $model->nieuw($activiteit, $_SESSION['_uid']);
+		$lid = $this->activiteitDeelnemersRepository->nieuw($activiteit, $_SESSION['_uid']);
 
 		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
-		$model->create($lid);
+		$this->em->persist($lid);
+		$this->em->flush();
 
 		return array('data' => $activiteit);
 	}
@@ -58,7 +69,7 @@ class ApiActiviteitenController {
 	 */
 	public function activiteitAfmelden($id) {
 
-		$activiteit = $this->activiteitenModel->get($id);
+		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
 			throw new RestException(404, 'Activiteit bestaat niet');
@@ -68,10 +79,10 @@ class ApiActiviteitenController {
 			throw new RestException(403, 'Afmelden niet mogelijk');
 		}
 
-		$model = $activiteit::getLedenModel();
-		$lid = $model->get($activiteit, $_SESSION['_uid']);
+		$lid = $activiteit->getLid($_SESSION['_uid']);
 		$this->changeLogRepository->log($activiteit, 'afmelden', $lid->uid, null);
-		$model->delete($lid);
+		$this->em->remove($lid);
+		$this->em->flush();
 
 		return array('data' => $activiteit);
 	}

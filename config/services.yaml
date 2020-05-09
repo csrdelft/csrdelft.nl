@@ -11,7 +11,7 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     public: false       # Allows optimizing the container by removing unused services; this also means
-      # fetching services directly from the container via $container->get() won't work.
+    # fetching services directly from the container via $container->get() won't work.
     # The best practice is to be explicit about your dependencies anyway.
 
   CsrDelft\:
@@ -42,6 +42,11 @@ services:
     resource: '../lib/service'
     public: true
 
+  CsrDelft\common\Serializer\Normalizer\:
+    resource: '../lib/common/Serializer/Normalizer'
+    tags:
+      - { name: serializer.normalizer }
+
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
   CsrDelft\events\ViewEventListener:
@@ -56,10 +61,4 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
-  CsrDelft\common\datatable\DataTableEntryNormalizer:
-    tags:
-      - { name: serializer.normalizer }
 
-  CsrDelft\common\datatable\RemoveDataTableEntryNormalizer:
-    tags:
-      - { name: serializer.normalizer }

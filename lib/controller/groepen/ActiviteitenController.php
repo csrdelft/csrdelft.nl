@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 
 
 /**
@@ -13,7 +13,7 @@ use CsrDelft\model\groepen\ActiviteitenModel;
  * Controller voor activiteiten.
  */
 class ActiviteitenController extends KetzersController {
-	public function __construct(ActiviteitenModel $activiteitenModel) {
-		parent::__construct($activiteitenModel);
+	public function __construct(ActiviteitenRepository $activiteitenRepository) {
+		parent::__construct($activiteitenRepository);
 	}
 }

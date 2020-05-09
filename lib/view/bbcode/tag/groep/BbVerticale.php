@@ -4,7 +4,7 @@ namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\model\security\LoginModel;
 
 /**
@@ -17,12 +17,12 @@ use CsrDelft\model\security\LoginModel;
  */
 class BbVerticale extends BbTag {
 	/**
-	 * @var VerticalenModel
+	 * @var VerticalenRepository
 	 */
-	private $verticalenModel;
+	private $verticalenRepository;
 
-	public function __construct(VerticalenModel $verticalenModel) {
-		$this->verticalenModel = $verticalenModel;
+	public function __construct(VerticalenRepository $verticalenRepository) {
+		$this->verticalenRepository = $verticalenRepository;
 	}
 
 	public static function getTagName() {
@@ -35,7 +35,7 @@ class BbVerticale extends BbTag {
 
 	public function render() {
 		try {
-			$verticale = $this->verticalenModel->get($this->content);
+			$verticale = $this->verticalenRepository->get($this->content);
 			return '<a href="/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
 		} catch (CsrException $e) {
 			return 'Verticale met letter=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="/verticalen">Zoeken</a>';

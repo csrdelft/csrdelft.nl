@@ -2,13 +2,15 @@
 
 namespace CsrDelft\model\entity\groepen;
 
+use CsrDelft\entity\groepen\GroepKeuzeType;
+
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/04/2019
  */
 class GroepKeuze {
 	public function __wakeup() {
-		assert(in_array($this->type, GroepKeuzeType::getTypeOptions()));
+		assert(in_array($this->type, GroepKeuzeType::getEnumValues()));
 	}
 
   public $naam;

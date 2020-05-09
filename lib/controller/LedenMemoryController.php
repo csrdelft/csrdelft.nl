@@ -6,13 +6,13 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\Lichting;
-use CsrDelft\model\entity\groepen\Verticale;
-use CsrDelft\model\entity\LidStatus;
+use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\entity\groepen\Lichting;
+use CsrDelft\entity\groepen\Verticale;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\JsonResponse;
@@ -29,14 +29,14 @@ class LedenMemoryController {
 	 */
 	private $profielRepository;
 	/**
-	 * @var VerticalenModel
+	 * @var VerticalenRepository
 	 */
-	private $verticalenModel;
+	private $verticalenRepository;
 
-	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielRepository $profielRepository, VerticalenModel $verticalenModel) {
+	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielRepository $profielRepository, VerticalenRepository $verticalenRepository) {
 		$this->ledenMemoryScoresModel = $ledenMemoryScoresModel;
 		$this->profielRepository = $profielRepository;
-		$this->verticalenModel = $verticalenModel;
+		$this->verticalenRepository = $verticalenRepository;
 	}
 
 	public function memory() {
@@ -88,10 +88,10 @@ class LedenMemoryController {
 		if (isset($parts[0], $parts[1])) {
 			switch ($parts[1]) {
 				case 'verticale.csrdelft.nl':
-					$groep = $this->verticalenModel->retrieveByUUID($groep);
+					$groep = $this->verticalenRepository->retrieveByUUID($groep);
 					break;
 				case 'lichting.csrdelft.nl':
-					$groep = ContainerFacade::getContainer()->get(LichtingenModel::class)->get($parts[0]);
+					$groep = ContainerFacade::getContainer()->get(LichtingenRepository::class)->get($parts[0]);
 					break;
 			}
 		}
@@ -139,17 +139,18 @@ class LedenMemoryController {
 	private function getLichting()
 	{
 		$l = (int)filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
-		$min = LichtingenModel::getOudsteLidjaar();
-		$max = LichtingenModel::getJongsteLidjaar();
+		$min = LichtingenRepository::getOudsteLidjaar();
+		$max = LichtingenRepository::getJongsteLidjaar();
 		if ($l < $min OR $l > $max) {
 			$l = $max;
 		}
-		$lichting = ContainerFacade::getContainer()->get(LichtingenModel::class)->get($l);
+		$lichting = ContainerFacade::getContainer()->get(LichtingenRepository::class)->get($l);
 		return $lichting ? $lichting : null;
 	}
 
 	/**
-	 * @return AbstractGroep|null
+	 * @return Verticale|null
+	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
 	private function getVerticale()
 	{
@@ -159,10 +160,14 @@ class LedenMemoryController {
 		}
 		$verticale = false;
 		if (strlen($v) == 1) {
-			$verticale = $this->verticalenModel->get($v);
+			$verticale = $this->verticalenRepository->get($v);
 		}
 		if (!$verticale) {
-			$verticale = $this->verticalenModel->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+			$verticale = $this->verticalenRepository->createQueryBuilder('v')
+				->where('v.naam LIKE :naam')
+				->setParameter('naam', sql_contains($v))
+				->setMaxResults(1)
+				->getQuery()->getOneOrNullResult();
 		}
 		return $verticale ? $verticale : null;
 	}

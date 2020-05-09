@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\RechtenGroepenModel;
+use CsrDelft\repository\groepen\RechtenGroepenRepository;
 
 /**
  * RechtengroepenController.class.php
@@ -12,7 +12,7 @@ use CsrDelft\model\groepen\RechtenGroepenModel;
  * Controller voor rechten-groepen. Kleine letter g vanwege groepen-router.
  */
 class RechtengroepenController extends AbstractGroepenController {
-	public function __construct(RechtenGroepenModel $rechtenGroepenModel) {
-		parent::__construct($rechtenGroepenModel);
+	public function __construct(RechtenGroepenRepository $rechtenGroepenRepository) {
+		parent::__construct($rechtenGroepenRepository);
 	}
 }

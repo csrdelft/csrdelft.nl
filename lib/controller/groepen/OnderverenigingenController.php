@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\repository\groepen\OnderverenigingenRepository;
 
 /**
  * OnderverenigingenController.class.php
@@ -12,7 +12,7 @@ use CsrDelft\model\groepen\OnderverenigingenModel;
  * Controller voor onderverenigingen.
  */
 class OnderverenigingenController extends AbstractGroepenController {
-	public function __construct(OnderverenigingenModel $onderverenigingenModel) {
-		parent::__construct($onderverenigingenModel);
+	public function __construct(OnderverenigingenRepository $onderverenigingenRepository) {
+		parent::__construct($onderverenigingenRepository);
 	}
 }

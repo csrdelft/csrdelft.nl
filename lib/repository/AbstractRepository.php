@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
  */
 abstract class AbstractRepository extends ServiceEntityRepository {
 	public function retrieveByUuid($UUID) {
-		/** @var ClassMetadata $metadata */
 		$metadata = $this->getClassMetadata();
 
 		$parts = explode('@', $UUID, 2);

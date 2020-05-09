@@ -3,10 +3,10 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\Lichting;
-use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\groepen\VerticalenModel;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Lichting;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
@@ -23,17 +23,17 @@ class BbLedenmemoryscores extends BbTag {
 	private $groep;
 	private $titel;
 	/**
-	 * @var VerticalenModel
+	 * @var VerticalenRepository
 	 */
-	private $verticalenModel;
+	private $verticalenRepository;
 	/**
-	 * @var LichtingenModel
+	 * @var LichtingenRepository
 	 */
-	private $lichtingenModel;
+	private $lichtingenRepository;
 
-	public function __construct(VerticalenModel $verticalenModel, LichtingenModel $lichtingenModel) {
-		$this->verticalenModel = $verticalenModel;
-		$this->lichtingenModel = $lichtingenModel;
+	public function __construct(VerticalenRepository $verticalenRepository, LichtingenRepository $lichtingenRepository) {
+		$this->verticalenRepository = $verticalenRepository;
+		$this->lichtingenRepository = $lichtingenRepository;
 	}
 
 	public static function getTagName() {
@@ -57,9 +57,9 @@ class BbLedenmemoryscores extends BbTag {
 		if (isset($arguments['verticale'])) {
 			$v = filter_var($arguments['verticale'], FILTER_SANITIZE_STRING);
 			if (strlen($v) > 1) {
-				$verticale = $this->verticalenModel->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+				$verticale = $this->verticalenRepository->searchByNaam($v);
 			} else {
-				$verticale = $this->verticalenModel->get($v);
+				$verticale = $this->verticalenRepository->get($v);
 			}
 			if ($verticale) {
 				$titel = ' Verticale ' . $verticale->naam;
@@ -68,9 +68,9 @@ class BbLedenmemoryscores extends BbTag {
 		} elseif (isset($arguments['lichting'])) {
 			$l = (int)filter_var($arguments['lichting'], FILTER_SANITIZE_NUMBER_INT);
 			if ($l < 1950) {
-				$l = LichtingenModel::getJongsteLidjaar();
+				$l = LichtingenRepository::getJongsteLidjaar();
 			}
-			$lichting = $this->lichtingenModel->get($l);
+			$lichting = $this->lichtingenRepository->get($l);
 			if ($lichting) {
 				$titel = ' Lichting ' . $lichting->lidjaar;
 				$groep = $lichting;

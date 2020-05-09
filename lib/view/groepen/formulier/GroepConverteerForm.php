@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\AbstractGroepenModel;
-use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -11,7 +11,7 @@ class GroepConverteerForm extends ModalForm {
 
 	public function __construct(
 		AbstractGroep $groep,
-		AbstractGroepenModel $huidig
+		AbstractGroepenRepository $huidig
 	) {
 		parent::__construct($groep, $huidig->getUrl() . '/converteren', $huidig::ORM . ' converteren', true);
 

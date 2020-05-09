@@ -4,9 +4,9 @@ namespace CsrDelft\entity\eetplan;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\datatable\DataTableEntry;
-use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -56,7 +56,7 @@ class Eetplan implements DataTableEntry {
 	 * @return Woonoord|false|mixed
 	 */
 	public function getWoonoord() {
-		return ContainerFacade::getContainer()->get(WoonoordenModel::class)->get($this->woonoord_id);
+		return ContainerFacade::getContainer()->get(WoonoordenRepository::class)->get($this->woonoord_id);
 	}
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\repository\groepen\WerkgroepenRepository;
 
 
 /**
@@ -15,7 +15,7 @@ use CsrDelft\model\groepen\WerkgroepenModel;
  * N.B. Een Werkgroep extends Ketzer, maar de controller niet om de "nieuwe ketzer"-wizard te vermijden.
  */
 class WerkgroepenController extends AbstractGroepenController {
-	public function __construct(WerkgroepenModel $werkgroepenModel) {
-		parent::__construct($werkgroepenModel);
+	public function __construct(WerkgroepenRepository $werkgroepenRepository) {
+		parent::__construct($werkgroepenRepository);
 	}
 }

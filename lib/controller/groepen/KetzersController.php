@@ -3,7 +3,8 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\entity\groepen\Ketzer;
+use CsrDelft\repository\groepen\KetzersRepository;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,11 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor ketzers.
  *
- * @property KetzersModel $model
+ * @property KetzersRepository $model
  */
 class KetzersController extends AbstractGroepenController {
-	public function __construct(KetzersModel $ketzersModel) {
-		parent::__construct($ketzersModel);
+	public function __construct(KetzersRepository $ketzersRepository, $entity = Ketzer::class) {
+		parent::__construct($ketzersRepository, $entity);
 	}
 
 	public function nieuw(Request $request, $id = null, $soort = null) {

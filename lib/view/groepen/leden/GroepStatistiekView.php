@@ -3,6 +3,7 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\service\GroepenService;
 use DateTime;
 use function array_key_first;
 use function array_key_last;
@@ -100,7 +101,7 @@ class GroepStatistiekView extends GroepTabView {
 	 * @throws CsrException
 	 */
 	public function getTabContent() {
-		$statistieken = $this->groep->getStatistieken();
+		$statistieken = GroepenService::getStatistieken($this->groep);
 
 		$verticale = $this->verticale($statistieken->verticale);
 		$geslacht = $this->geslacht($statistieken->geslacht);

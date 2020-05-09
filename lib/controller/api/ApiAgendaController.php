@@ -4,11 +4,11 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\agenda\AgendaItem;
-use CsrDelft\model\entity\groepen\Activiteit;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
@@ -16,12 +16,12 @@ use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Jacwright\RestServer\RestException;
 
 class ApiAgendaController {
-	/** @var ActiviteitenModel */
-	private $activiteitenModel;
+	/** @var ActiviteitenRepository */
+	private $activiteitenRepository;
 	/** @var AgendaRepository */
 	private $agendaRepository;
-	/** @var ActiviteitDeelnemersModel */
-	private $activiteitDeelnemersModel;
+	/** @var ActiviteitDeelnemersRepository */
+	private $activiteitDeelnemersRepository;
 	/** @var MaaltijdenRepository */
 	private $maaltijdenRepository;
 	/** @var MaaltijdAanmeldingenRepository */
@@ -30,10 +30,10 @@ class ApiAgendaController {
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 		$this->agendaRepository = $container->get(AgendaRepository::class);
-		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
+		$this->activiteitenRepository = $container->get(ActiviteitenRepository::class);
 		$this->maaltijdAanmeldingenRepository = $container->get(MaaltijdAanmeldingenRepository::class);
 		$this->maaltijdenRepository = $container->get(MaaltijdenRepository::class);
-		$this->activiteitDeelnemersModel = $container->get(ActiviteitDeelnemersModel::class);
+		$this->activiteitDeelnemersRepository = $container->get(ActiviteitDeelnemersRepository::class);
 	}
 
 	/**
@@ -81,10 +81,14 @@ class ApiAgendaController {
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (' . $query . ')', $find);
+		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
+			->where('a.in_agenda = true and (a.begin_moment >= :begin and a.begin_moment <= :eind')
+			->setParameter('begin', date_create_immutable("@$from"))
+			->setParameter('eind', date_create_immutable("@$to"))
+			->getQuery()->getResult();
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
+			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern(), ActiviteitSoort::OWee(), ActiviteitSoort::IFES())) OR $activiteit->mag(AccessAction::Bekijken)) {
 				$activiteitenFiltered[] = $activiteit;
 			}
 		}
@@ -93,7 +97,7 @@ class ApiAgendaController {
 		// Activiteit aanmeldingen
 		$activiteitAanmeldingen = array();
 		foreach ($activiteitenFiltered as $activiteit) {
-			$deelnemer = $this->activiteitDeelnemersModel->get($activiteit, $_SESSION['_uid']);
+			$deelnemer = $this->activiteitDeelnemersRepository->get($activiteit, $_SESSION['_uid']);
 			if ($deelnemer) {
 				$activiteitAanmeldingen[] = $deelnemer->groep_id;
 			}

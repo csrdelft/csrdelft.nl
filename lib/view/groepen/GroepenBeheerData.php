@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\groepen;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 
@@ -15,7 +15,7 @@ class GroepenBeheerData extends DataTableResponse {
 	 * @throws Exception
 	 */
 	public function renderElement($groep) {
-		$array = $groep->jsonSerialize();
+		$array = (array)$groep;
 
 		$array['detailSource'] = $groep->getUrl() . '/leden';
 
@@ -27,7 +27,7 @@ class GroepenBeheerData extends DataTableResponse {
 			}
 		}
 		$array['naam'] = '<span title="' . $title . '">' . $groep->naam . '</span>';
-		$array['status'] = GroepStatus::getChar($groep->status);
+		$array['status'] = $groep->status->getDescription();
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;

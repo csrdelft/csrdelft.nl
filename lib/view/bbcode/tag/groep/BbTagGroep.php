@@ -4,11 +4,11 @@ namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\AbstractGroepenModel;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\GroepVersie;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\GroepVersie;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\groepen\GroepView;
@@ -20,11 +20,11 @@ use CsrDelft\view\groepen\GroepView;
 abstract class BbTagGroep extends BbTag {
 
 	/**
-	 * @var AbstractGroepenModel
+	 * @var AbstractGroepenRepository
 	 */
 	private $model;
 
-	public function __construct(AbstractGroepenModel $model) {
+	public function __construct(AbstractGroepenRepository $model) {
 		$this->model = $model;
 	}
 
@@ -83,7 +83,7 @@ abstract class BbTagGroep extends BbTag {
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		if ($groep->versie == GroepVersie::V2) {
+		if ($groep->versie == GroepVersie::V2()) {
 			$uid = LoginModel::getUid();
 			$settings = [
 				'mijn_uid' => $uid,

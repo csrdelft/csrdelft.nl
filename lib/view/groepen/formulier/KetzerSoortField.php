@@ -3,11 +3,11 @@
 namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\groepen\KetzersRepository;
 
 class KetzerSoortField extends GroepSoortField {
 
@@ -23,11 +23,11 @@ class KetzerSoortField extends GroepSoortField {
 
 		$this->options = array();
 		foreach ($this->activiteit->getOptions() as $soort => $label) {
-			$this->options[ActiviteitenModel::class . '_' . $soort] = $label;
+			$this->options[ActiviteitenRepository::class . '_' . $soort] = $label;
 		}
-		$this->options[KetzersModel::class] = 'Aanschafketzer';
-		//$this->options['WerkgroepenModel'] = WerkgroepenModel::ORM;
-		//$this->options['RechtenGroepenModel'] = 'Groep (overig)';
+		$this->options[KetzersRepository::class] = 'Aanschafketzer';
+		//$this->options['WerkgroepenRepository'] = 'Werkgroep';
+		//$this->options['RechtenGroepenRepository'] = 'Groep (overig)';
 	}
 
 	/**
@@ -37,9 +37,9 @@ class KetzerSoortField extends GroepSoortField {
 	public function validate() {
 		$class = explode('_', $this->value, 2);
 
-		if ($class[0] === ActiviteitenModel::class) {
+		if ($class[0] === ActiviteitenRepository::class) {
 			$soort = $class[1];
-		} elseif ($class[0] === KetzersModel::class) {
+		} elseif ($class[0] === KetzersRepository::class) {
 			$soort = null;
 		} else {
 			$this->error = 'Onbekende optie gekozen';
@@ -49,7 +49,7 @@ class KetzerSoortField extends GroepSoortField {
 		$model = ContainerFacade::getContainer()->get($class[0]); // require once
 		$orm = $model::ORM;
 		if (!$orm::magAlgemeen(AccessAction::Aanmaken, $soort)) {
-			if ($model instanceof ActiviteitenModel) {
+			if ($model instanceof ActiviteitenRepository) {
 				$naam = ActiviteitSoort::getDescription($soort);
 			} else {
 				$naam = $model->getNaam();

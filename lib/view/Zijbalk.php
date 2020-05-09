@@ -3,7 +3,7 @@
 namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\groepen\LichtingenModel;
+use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
@@ -81,8 +81,8 @@ abstract class Zijbalk {
 		}
 		// Ledenmemory topscores
 		if (LoginModel::mag(P_LEDEN_READ) AND lid_instelling('zijbalk', 'ledenmemory_topscores') > 0) {
-			$lidjaar = LichtingenModel::getJongsteLidjaar();
-			$lichting = ContainerFacade::getContainer()->get(LichtingenModel::class)->get($lidjaar);
+			$lidjaar = LichtingenRepository::getJongsteLidjaar();
+			$lichting = ContainerFacade::getContainer()->get(LichtingenRepository::class)->get($lidjaar);
 			$scores = ContainerFacade::getContainer()->get(LedenMemoryScoresModel::class)->getGroepTopScores($lichting, (int)lid_instelling('zijbalk', 'ledenmemory_topscores'));
 			$zijbalk[] = new LedenMemoryZijbalkView($scores, $lidjaar);
 		}

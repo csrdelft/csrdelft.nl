@@ -5,18 +5,17 @@ namespace CsrDelft\repository\agenda;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
-use CsrDelft\model\entity\groepen\Activiteit;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\VerjaardagenService;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use PDOStatement;
 
@@ -44,9 +43,9 @@ class AgendaRepository extends AbstractRepository {
 	 */
 	private $agendaVerbergenRepository;
 	/**
-	 * @var ActiviteitenModel
+	 * @var ActiviteitenRepository
 	 */
-	private $activiteitenModel;
+	private $activiteitenRepository;
 	/**
 	 * @var CorveeTakenRepository
 	 */
@@ -63,7 +62,7 @@ class AgendaRepository extends AbstractRepository {
 	public function __construct(
 		ManagerRegistry $registry,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
-		ActiviteitenModel $activiteitenModel,
+		ActiviteitenRepository $activiteitenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
 		MaaltijdenRepository $maaltijdenRepository,
 		VerjaardagenService $verjaardagenService
@@ -71,7 +70,7 @@ class AgendaRepository extends AbstractRepository {
 		parent::__construct($registry, AgendaItem::class);
 
 		$this->agendaVerbergenRepository = $agendaVerbergenRepository;
-		$this->activiteitenModel = $activiteitenModel;
+		$this->activiteitenRepository = $activiteitenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->verjaardagenService = $verjaardagenService;
@@ -177,9 +176,11 @@ class AgendaRepository extends AbstractRepository {
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (
-		    (begin_moment >= ? AND begin_moment <= ?) OR (eind_moment >= ? AND eind_moment <= ?)
-		  )', array(date_format_intl($van, DATETIME_FORMAT), date_format_intl($tot, DATETIME_FORMAT), date_format_intl($van, DATETIME_FORMAT), date_format_intl($tot, DATETIME_FORMAT)));
+		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
+			->where("a.in_agenda = true and (a.begin_moment >= :van and a.begin_moment <= :tot) or (a.eind_moment >= :van and a.eind_moment <= :tot)")
+			->setParameter('van', $van)
+			->setParameter('tot', $tot)
+			->getQuery()->getResult();
 		foreach ($activiteiten as $activiteit) {
 			// Alleen bekijken in agenda (leden bekijken mag dus niet)
 			if (in_array($activiteit->soort, [ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES]) OR $activiteit->mag(AccessAction::Bekijken, $auth)) {
