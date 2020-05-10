@@ -71,6 +71,8 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	/**
 	 * Rechten benodigd voor aanmelden
 	 * @var string
+	 * @ORM\Column(type="string")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $rechten_aanmelden;
 	/**
