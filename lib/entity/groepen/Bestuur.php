@@ -2,9 +2,8 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\repository\groepen\leden\BestuursLedenRepository;
-use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * Bestuur.class.php
@@ -33,6 +32,7 @@ class Bestuur extends AbstractGroep {
 	 * Bestuurstekst
 	 * @var string
 	 * @ORM\Column(type="text")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $bijbeltekst;
 
