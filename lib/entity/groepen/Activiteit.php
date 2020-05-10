@@ -160,25 +160,27 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
-		switch ($soort) {
+		if ($soort) {
+			switch (ActiviteitSoort::from($soort)) {
 
-			case ActiviteitSoort::OWee():
-				if (LoginModel::mag('commissie:OWeeCie', $allowedAuthenticationMethods)) {
-					return true;
-				}
-				break;
+				case ActiviteitSoort::OWee():
+					if (LoginModel::mag('commissie:OWeeCie', $allowedAuthenticationMethods)) {
+						return true;
+					}
+					break;
 
-			case ActiviteitSoort::Dies():
-				if (LoginModel::mag('commissie:DiesCie', $allowedAuthenticationMethods)) {
-					return true;
-				}
-				break;
+				case ActiviteitSoort::Dies():
+					if (LoginModel::mag('commissie:DiesCie', $allowedAuthenticationMethods)) {
+						return true;
+					}
+					break;
 
-			case ActiviteitSoort::Lustrum():
-				if (LoginModel::mag('commissie:LustrumCie', $allowedAuthenticationMethods)) {
-					return true;
-				}
-				break;
+				case ActiviteitSoort::Lustrum():
+					if (LoginModel::mag('commissie:LustrumCie', $allowedAuthenticationMethods)) {
+						return true;
+					}
+					break;
+			}
 		}
 		switch ($action) {
 
