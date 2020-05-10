@@ -138,7 +138,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		} else {
 			$groepen = $this->model->findBy(['status' => GroepStatus::HT()]);
 		}
-		$body = new GroepenView($this->model, $groepen, $soort); // controleert rechten bekijken per groep
+		$body = new GroepenView($this->model, $groepen, $soort == null ? null : ActiviteitSoort::from($soort)); // controleert rechten bekijken per groep
 		return view('default', ['content' => $body]);
 	}
 
