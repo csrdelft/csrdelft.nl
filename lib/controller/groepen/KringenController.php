@@ -36,7 +36,12 @@ class KringenController extends AbstractGroepenController {
 			$limit = $request->query->getInt('limit');
 		}
 		$result = array();
-		foreach ($this->model->find('naam LIKE ?', array($zoekterm), null, null, $limit) as $kring) {
+		$kringen = $this->model->createQueryBuilder('k')
+			->where('k.naam LIKE :zoekterm')
+			->setParameter('zoekterm', sql_contains($zoekterm))
+			->setMaxResults($limit)
+			->getQuery()->getResult();
+		foreach ($kringen as $kring) {
 			/** @var Kring $kring */
 			$result[] = array(
 				'url' => $kring->getUrl() . '#' . $kring->id,
