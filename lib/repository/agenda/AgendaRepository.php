@@ -177,7 +177,7 @@ class AgendaRepository extends AbstractRepository {
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
 		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
-			->where("a.in_agenda = true and (a.begin_moment >= :van and a.begin_moment <= :tot) or (a.eind_moment >= :van and a.eind_moment <= :tot)")
+			->where("a.in_agenda = true and ((a.begin_moment >= :van and a.begin_moment <= :tot) or (a.eind_moment >= :van and a.eind_moment <= :tot))")
 			->setParameter('van', $van)
 			->setParameter('tot', $tot)
 			->getQuery()->getResult();
