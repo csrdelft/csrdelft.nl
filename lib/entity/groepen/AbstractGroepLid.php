@@ -3,12 +3,13 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use function common\short_class;
 use Symfony\Component\Serializer\Annotation as Serializer;
+use function common\short_class;
 
 
 /**

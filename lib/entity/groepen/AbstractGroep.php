@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\common\Eisen;
 use CsrDelft\model\entity\groepen\GroepKeuze;
+use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;

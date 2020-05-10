@@ -4,7 +4,7 @@
 namespace CsrDelft\common\Doctrine\Type;
 
 
-use CsrDelft\entity\groepen\GroepKeuzeSelectie;
+use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 
 class GroepKeuzeSelectieType extends SafeJsonType {
 	/**

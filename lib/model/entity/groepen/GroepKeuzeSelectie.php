@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\entity\groepen;
+namespace CsrDelft\model\entity\groepen;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
