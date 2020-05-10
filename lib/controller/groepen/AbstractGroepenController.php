@@ -157,7 +157,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function deelnamegrafiek($id) {
 		$groep = $this->model->get($id);
 		/** @var AbstractGroep[] $groepen */
-		$groepen = $this->model->find('familie = ?', [$groep->familie]);
+		$groepen = $this->model->findBy(['familie' => $groep->familie]);
 		return new GroepenDeelnameGrafiek($groepen); // controleert GEEN rechten bekijken
 	}
 
