@@ -4,11 +4,9 @@
 namespace CsrDelft\model\entity\interfaces;
 
 
-use CsrDelft\common\Enum;
-
 interface HeeftSoort {
 	/**
-	 * @return Enum
+	 * @return string
 	 */
 	public function getSoort();
 

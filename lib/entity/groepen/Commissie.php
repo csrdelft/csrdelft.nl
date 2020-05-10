@@ -45,7 +45,7 @@ class Commissie extends AbstractGroep implements HeeftSoort {
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
 	 * @var CommissieSoort
-	 * @ORM\Column(type="enumcommissiesoort")
+	 * @ORM\Column(type="string")
 	 * @Serializer\Groups("datatable")
 	 */
 	public $soort;

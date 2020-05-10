@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\KetzersRepository;
 
@@ -46,11 +47,12 @@ class KetzerSoortField extends GroepSoortField {
 			return false;
 		}
 
+		/** @var AbstractGroepenRepository $model */
 		$model = ContainerFacade::getContainer()->get($class[0]); // require once
-		$orm = $model::ORM;
+		$orm = $model->entityClass;
 		if (!$orm::magAlgemeen(AccessAction::Aanmaken, $soort)) {
 			if ($model instanceof ActiviteitenRepository) {
-				$naam = ActiviteitSoort::getDescription($soort);
+				$naam = ActiviteitSoort::from($soort)->getDescription();
 			} else {
 				$naam = $model->getNaam();
 			}

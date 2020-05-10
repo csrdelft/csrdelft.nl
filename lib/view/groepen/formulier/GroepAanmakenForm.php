@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -17,8 +18,8 @@ class GroepAanmakenForm extends ModalForm {
 		$this->css_classes[] = 'redirect';
 
 		$default = get_class($huidig);
-		if (property_exists($groep, 'soort')) {
-			$default .= '_' . $groep->soort;
+		if ($groep instanceof HeeftSoort) {
+			$default .= '_' . $groep->getSoort();
 		}
 
 		$fields = [];

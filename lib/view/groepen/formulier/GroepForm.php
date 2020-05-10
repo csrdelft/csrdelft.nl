@@ -4,7 +4,9 @@ namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\Commissie;
+use CsrDelft\entity\groepen\CommissieSoort;
 use CsrDelft\entity\groepen\GroepVersie;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
@@ -98,9 +100,9 @@ class GroepForm extends ModalForm {
 			if (!$groep->mag($this->mode)) {
 				// beide aanroepen vanwege niet doorsturen van param $soort door mag() naar magAlgemeen()
 				if ($groep instanceof Activiteit) {
-					$naam = $soort->getDescription();
+					$naam = ActiviteitSoort::from($soort)->getDescription();
 				} elseif ($groep instanceof Commissie) {
-					$naam = $soort->getDescription();
+					$naam = CommissieSoort::from($soort)->getDescription();
 				} else {
 					$naam = classNameZonderNamespace(get_class($groep));
 				}
