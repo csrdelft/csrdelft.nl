@@ -37,6 +37,7 @@ class GroepenService {
 				$tijd[$time] = 1;
 			}
 		}
+		ksort($tijd);
 		$totaal = $count;
 		if ($groep instanceof HeeftAanmeldLimiet) {
 			if ($groep->getAanmeldLimiet() === null) {
