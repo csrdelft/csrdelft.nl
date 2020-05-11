@@ -114,7 +114,7 @@
 	</table>
 
 	<h3>Corveevrijstelling</h3>
-	@if($vrijstelling === false)
+	@if(!$vrijstelling)
 		<p>U heeft geen vrijstelling.</p>
 	@else
 		<p>
