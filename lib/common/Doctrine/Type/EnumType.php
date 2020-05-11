@@ -36,7 +36,7 @@ abstract class EnumType extends Type {
 		if ($value instanceof $enumClass) {
 			return $value->getValue();
 		} else {
-			throw new \InvalidArgumentException("Value is not a " . $this->enumClass);
+			throw new \InvalidArgumentException(print_r($value, true) . " is not a " . $this->enumClass);
 		}
 	}
 
