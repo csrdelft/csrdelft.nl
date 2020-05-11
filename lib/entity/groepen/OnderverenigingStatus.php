@@ -11,7 +11,7 @@ use CsrDelft\common\Enum;
  *
  * De status van een ondervereniging.
  */
-abstract class OnderverenigingStatus extends Enum {
+class OnderverenigingStatus extends Enum {
 
 	/**
 	 * OnderverenigingStatus opties.
