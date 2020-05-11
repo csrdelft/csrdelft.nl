@@ -4,6 +4,7 @@ namespace CsrDelft\entity\groepen;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * Ondervereniging.class.php
@@ -18,6 +19,7 @@ class Ondervereniging extends AbstractGroep {
 	 * (Adspirant-)Ondervereniging
 	 * @var OnderverenigingStatus
 	 * @ORM\Column(type="string")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $soort;
 
