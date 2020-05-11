@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -15,6 +16,10 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Table("onderverenigingen")
  */
 class Ondervereniging extends AbstractGroep {
+	public function __construct() {
+		$this->leden = new ArrayCollection();
+	}
+
 	/**
 	 * (Adspirant-)Ondervereniging
 	 * @var OnderverenigingStatus
