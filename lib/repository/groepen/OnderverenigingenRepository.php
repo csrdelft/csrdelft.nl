@@ -17,8 +17,8 @@ class OnderverenigingenRepository extends AbstractGroepenRepository {
 	public function nieuw($soort = null) {
 		/** @var Ondervereniging $ondervereniging */
 		$ondervereniging = parent::nieuw();
-		$ondervereniging->status = OnderverenigingStatus::AdspirantOndervereniging;
-		$ondervereniging->status_historie = '[div]Aangemaakt als ' . OnderverenigingStatus::getDescription($ondervereniging->status) . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
+		$ondervereniging->status = OnderverenigingStatus::AdspirantOndervereniging();
+		$ondervereniging->status_historie = '[div]Aangemaakt als ' . $ondervereniging->status->getDescription() . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $ondervereniging;
 	}
 }
