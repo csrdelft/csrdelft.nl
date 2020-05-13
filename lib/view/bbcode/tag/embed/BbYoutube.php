@@ -44,22 +44,19 @@ class BbYoutube extends BbTag {
 	 */
 	public function render() {
 		$this->assertId($this->content);
-		$attributes = [];
-		$attributes['width'] = 570;
-		$attributes['height'] = 360;
-		$attributes['iframe'] = true;
 
-		$attributes['src'] = '//www.youtube.com/embed/' . $this->content . '?autoplay=1';
-		$previewthumb = 'https://img.youtube.com/vi/' . $this->content . '/0.jpg';
-
-		$params = json_encode($attributes);
+		$src = '//www.youtube-nocookie.com/embed/' . $this->content . '?modestbranding=1';
 
 		return <<<HTML
 <div class="bb-video">
-	<div class="bb-video-preview" onclick="event.preventDefault();window.bbcode.bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
-		<div class="play-button fa fa-play-circle fa-5x"></div>
-		<div class="bb-img-loading" src="{$previewthumb}"></div>
-	</div>
+<iframe
+	width="560"
+	height="315"
+	src="$src"
+	frameborder="0"
+	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+	allowfullscreen
+></iframe>
 </div>
 HTML;
 	}

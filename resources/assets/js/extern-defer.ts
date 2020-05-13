@@ -3,7 +3,6 @@
  */
 import axios from 'axios';
 import $ from 'jquery';
-import {bbvideoDisplay} from './bbcode';
 import {init} from './ctx';
 import './formulier';
 import './fotoalbum/main';
@@ -26,10 +25,6 @@ declare global {
 		bbcode: any;
 	}
 }
-
-window.bbcode = {
-	bbvideoDisplay,
-};
 
 const $window = $(window);
 const $header = $('#header');

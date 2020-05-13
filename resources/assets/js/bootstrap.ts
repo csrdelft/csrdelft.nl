@@ -8,7 +8,6 @@ import $ from 'jquery';
 import Popper from 'popper.js';
 import Vue from 'vue';
 import {ketzerAjax} from './ajax';
-import {bbvideoDisplay} from './bbcode';
 import {domUpdate} from './context';
 import {importAgenda} from './courant';
 import ctx, {init} from './ctx';
@@ -66,10 +65,6 @@ $.extend(window, {
 	Bloodhound,
 	Dropzone,
 	docReady,
-	bbcode: {
-		// See view/bbcode/CsrBB.class.php
-		bbvideoDisplay,
-	},
 	context: {
 		// See view/groepen/leden/GroepTabView.class.php
 		domUpdate,

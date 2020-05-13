@@ -38,89 +38,58 @@ class BbVideo extends BbTag {
 	 * @throws BbException
 	 */
 	public function render() {
-		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
+		list($src, $type) = $this->processVideo();
 
 		// Als er geen type is, laat dan het bestand zien.
 		if ($type == null) {
 			return <<<HTML
-<video class="w-100" controls preload="metadata" src="$content"></video>
+<video class="w-100" controls preload="metadata" src="$src"></video>
 HTML;
 		}
 
-		$this->assertId($type, $id, $content);
-
-		$params = json_encode($params);
-
 		return <<<HTML
 <div class="bb-video">
-	<div class="bb-video-preview" onclick="event.preventDefault();window.bbcode.bbvideoDisplay(this);" data-params='{$params}' title="Klik om de video af te spelen">
-		<div class="play-button fa fa-play-circle fa-5x"></div>
-		<div class="bb-img-loading" src="{$previewthumb}"></div>
-	</div>
+	<iframe
+		width="560"
+		height="315"
+		src="$src"
+		frameborder="0"
+		allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+		allowfullscreen
+	></iframe>
 </div>
 HTML;
 	}
 
 	/**
 	 * @return array
+	 * @throws BbException
 	 */
 	private function processVideo(): array {
 		$content = $this->content;
-
-		$params = [];
-		$params['width'] = 570;
-		$params['height'] = 360;
-		$params['iframe'] = true;
-		$previewthumb = '';
-
-		$type = null;
-		$id = null;
 		$matches = array();
 
 		//match type and id
 		if (strstr($content, 'youtube.com') || strstr($content, 'youtu.be')) {
-			$type = 'YouTube';
 			if (preg_match('#(?:youtube\.com/watch\?v=|youtu.be/)([0-9a-zA-Z\-_]{11})#', $content, $matches) > 0) {
-				$id = $matches[1];
+				return ['//www.youtube-nocookie.com/embed/' . $matches[1] . '?modestbranding=1', 'YouTube'];
 			}
-			$params['src'] = '//www.youtube.com/embed/' . $id . '?autoplay=1';
-			$previewthumb = 'https://img.youtube.com/vi/' . $id . '/0.jpg';
+			throw new BbException('Geen geldige YouTube url: ' . $content);
 		} elseif (strstr($content, 'vimeo')) {
-			$type = 'Vimeo';
 			if (preg_match('#vimeo\.com/(?:clip\:)?(\d+)#', $content, $matches) > 0) {
-				$id = $matches[1];
+				return ['//player.vimeo.com/video/' . $matches[1], 'Vimeo'];
 			}
-			$params['src'] = '//player.vimeo.com/video/' . $id . '?autoplay=1';
 
-			$videodataurl = 'https://vimeo.com/api/v2/video/' . $id . '.php';
-			$data = '';
-			$downloader = new UrlDownloader;
-			if ($downloader->isAvailable()) {
-				$data = $downloader->file_get_contents($videodataurl);
-			}
-			if ($data) {
-				$data = unserialize($data);
-				$previewthumb = $data[0]['thumbnail_medium'];
-			}
+			throw new BbException('Geen geldige Vimeo url: ' . $content);
 		} elseif (strstr($content, 'dailymotion')) {
-			$type = 'DailyMotion';
 			if (preg_match('#dailymotion\.com/video/([a-z0-9]+)#', $content, $matches) > 0) {
-				$id = $matches[1];
+				return ['//dailymotion.com/embed/video/' . $matches[1], 'DailyMotion'];
 			}
-			$params['src'] = '//www.dailymotion.com/embed/video/' . $id . '?autoPlay=1';
-			$previewthumb = 'https://www.dailymotion.com/thumbnail/video/' . $id;
-		} elseif (strstr($content, 'godtube')) {
-			$type = 'GodTube';
-			if (preg_match('#godtube\.com/watch/\?v=([a-zA-Z0-9]+)#', $content, $matches) > 0) {
-				$id = $matches[1];
-			}
-			$params['id'] = $id;
-			$params['iframe'] = false;
 
-			$previewthumb = 'https://www.godtube.com/resource/mediaplayer/' . $id . '.jpg';
+			throw new BbException('Geen geldige DailyMotion url: ' . $content);
 		}
 
-		return [$content, $params, $previewthumb, $type, $id];
+		return [$content, null];
 	}
 
 	/**
