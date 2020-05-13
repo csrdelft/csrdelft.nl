@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een lid van een rechten-groep.
  *
- * @ORM\Entity(repositoryClass="CsrDelft\repository\AbstractGroepLedenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\RechtenGroepLedenRepository")
  * @ORM\Table("groep_leden")
  */
 class RechtenGroepLid extends AbstractGroepLid {
