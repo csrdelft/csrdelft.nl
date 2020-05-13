@@ -27,31 +27,21 @@
 	<!-- Header -->
 	<header id="header" class="alt">
 		<nav>
-{{--			<a class="nav-link" href="/owee">Owee</a>--}}
-			<span class="dropdown-menu">
-				<a href="/vereniging" class="nav-link dropdown-link">Vereniging</a>
-				<span class="dropdown">
-					<a href="/vereniging/geloof">Geloof</a>
-					<a href="/vereniging/vorming">Vorming</a>
-					<a href="/vereniging/gezelligheid">Gezelligheid</a>
-					<a href="/vereniging/sport">Sport</a>
-					<a href="/vereniging/ontspanning">Ontspanning</a>
-				</span>
-			</span>
-			<a class="nav-link" href="/fotoalbum/Publiek">Foto's</a>
-			<span class="dropdown-menu">
-			<a class="nav-link" href="/forum">Forum</a>
-				<span class="dropdown">
-					<a href="/forum/deel/12">Kamers zoeken en aanbieden</a>
-				</span>
-			</span>
-			<a class="nav-link" href="/lidworden">Lid worden?</a>
-			<span class="dropdown-menu">
-			<a class="nav-link" href="/contact">Contact</a>
-				<span class="dropdown">
-					<a href="/contact/bedrijven">Bedrijven</a>
-				</span>
-			</span>
+			{{--			<a class="nav-link" href="/owee">Owee</a>--}}
+			@foreach(get_menu('extern', true)->children as $menuItem)
+				@if(count($menuItem->children) > 0)
+					<span class="dropdown-menu">
+						<a href="{{$menuItem->link}}" class="nav-link dropdown-link">{{$menuItem->tekst}}</a>
+						<span class="dropdown">
+							@foreach($menuItem->children as $childMenuItem)
+								<a href="{{$childMenuItem->link}}">{{$childMenuItem->tekst}}</a>
+							@endforeach
+						</span>
+					</span>
+				@else
+					<a class="nav-link" href="{{$menuItem->link}}">{{$menuItem->tekst}}</a>
+				@endif
+			@endforeach
 		</nav>
 		<nav>
 			@section('loginbutton')

@@ -442,7 +442,15 @@ function toestemming_form() {
 	return new ToestemmingModalForm(ContainerFacade::getContainer()->get(LidToestemmingRepository::class));
 }
 
-function get_menu($name) {
+/**
+ * @param $name
+ * @return \CsrDelft\entity\MenuItem|null
+ */
+function get_menu($name, $root = false) {
+	if ($root) {
+		return ContainerFacade::getContainer()->get(MenuItemRepository::class)->getMenuRoot($name);
+	}
+
 	return ContainerFacade::getContainer()->get(MenuItemRepository::class)->getMenu($name);
 }
 
