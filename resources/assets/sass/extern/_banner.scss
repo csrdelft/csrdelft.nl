@@ -2,36 +2,6 @@
 
 /* Banner */
 
-#banner-small {
-	margin-top: 3em;
-	z-index: 10;
-
-	.inner {
-		margin: 0 auto -4em;
-		width: 55em;
-	}
-
-	a {
-		color: black;
-		text-align: center;
-		position: relative;
-		border-bottom: none;
-		display: inline-block;
-
-		&:hover {
-			color: $donkerblauw;
-		}
-	}
-
-	img {
-		margin: 1em 1em 0 1em;
-	}
-
-	h2 {
-		font-size: 1em;
-	}
-}
-
 #banner {
 	margin-top: 3em;
 	z-index: 10;
@@ -60,43 +30,24 @@
 }
 
 @media screen and (max-width: $scherm-extrabreed) {
-
-	#banner-small {
-		padding: 0 0 5em 0;
-		margin-bottom: -5.5em;
-	}
-
 	#banner {
 		padding: 2em 0 5em 0;
 		margin-bottom: -6.5em;
 	}
-
 }
 
 @media screen and (max-width: $scherm-breed) {
-
-	#banner-small {
-		padding: 0 3em 5em 2em;
-		margin-bottom: -5.5em;
-	}
-
 	#banner {
 		padding: 2em 3em 5em 2em;
 		margin-bottom: -6.5em;
 	}
 
-	#banner .inner, #banner-small .inner {
+	#banner .inner {
 		width: 100%;
 	}
 }
 
 @media screen and (max-width: $scherm-middel) {
-
-	#banner-small {
-		padding: 0 2em 3em 2em;
-		margin-bottom: -1.5em;
-	}
-
 	#banner {
 		padding: 5em 2em 3em 2em;
 		margin-bottom: -2.5em;

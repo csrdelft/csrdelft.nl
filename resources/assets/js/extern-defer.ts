@@ -31,10 +31,6 @@ const $window = $(window);
 const $header = $('#header');
 let $banner = $('#banner');
 
-if (typeof $banner[0] === 'undefined') {
-	$banner = $('#banner-small');
-}
-
 $window.on('load', () => {
 	// Lazy load cms pages, these should be loaded always, not on scroll
 	setTimeout(() => {
