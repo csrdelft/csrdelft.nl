@@ -4,7 +4,7 @@
   list-style: none;
 }
 
-#menu, #login {
+#login {
 	display:flex;
   z-index: 10001;
   align-items: center;
@@ -110,7 +110,7 @@
 
 @media screen and (max-width: $scherm-middel) {
 
-  #menu, #login {
+  #login {
     .inner {
       max-height: 100%;
       overflow-y: auto;

@@ -26,12 +26,12 @@
 
 	<!-- Header -->
 	<header id="header" class="alt">
-		<nav>
+		<nav id="menu">
 			{{--			<a class="nav-link" href="/owee">Owee</a>--}}
 			@foreach(get_menu('extern', true)->children as $menuItem)
 				@if(count($menuItem->children) > 0)
 					<span class="dropdown-menu">
-						<a href="{{$menuItem->link}}" class="nav-link dropdown-link">{{$menuItem->tekst}}</a>
+						<a href="{{$menuItem->link}}" class="nav-link dropdown-link">{{$menuItem->tekst}} <span class="expand-dropdown"><i class="fa fa-plus"></i></span></a>
 						<span class="dropdown">
 							@foreach($menuItem->children as $childMenuItem)
 								<a href="{{$childMenuItem->link}}">{{$childMenuItem->tekst}}</a>
@@ -43,10 +43,12 @@
 				@endif
 			@endforeach
 		</nav>
-		<nav>
+		<nav class="nav-login">
 			@section('loginbutton')
+				<a class="login-knop" href="#login"><i class="fa fa-2x fa-fw fa-user"></i></a>
 				<a class="nav-link inloggen" href="#login">Inloggen</a>
 			@show
+			<a href="#menu" class="menu-knop"><i class="fa fa-2x fa-fw fa-bars"></i></a>
 		</nav>
 	</header>
 
@@ -61,24 +63,6 @@
 			</div>
 		</nav>
 @show
-
-<!-- Menu -->
-	<nav id="menu">
-		<a href="#_" class="overlay"></a>
-		<div class="inner">
-			<h2>Menu</h2>
-			<ul class="links">
-				<li><a href="/">Begin</a></li>
-				<li><a href="/vereniging">Informatie over C.S.R.</a></li>
-				<li><a href="/fotoalbum">Fotoalbum</a></li>
-				<li><a href="/forum">Forum</a></li>
-				<li><a href="/forum/deel/12">Kamers zoeken/aanbieden</a></li>
-				<li><a href="/contact">Contactinformatie</a></li>
-				<li><a href="/contact/bedrijven">Bedrijven</a></li>
-			</ul>
-			<a href="#_" class="close">Close</a>
-		</div>
-	</nav>
 
 @section('body')
 	<!-- Banner -->

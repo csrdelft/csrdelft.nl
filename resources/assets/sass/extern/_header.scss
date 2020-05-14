@@ -3,7 +3,6 @@
 
 #header {
 	transition: background-color 0.5s ease-in-out;
-	background-color: $headerkleur;
 	left: 0;
 	padding: .25em 1.25em;
 	position: fixed;
@@ -38,6 +37,14 @@
 		display: flex;
 
 		align-items: flex-start;
+
+		.login-knop, .menu-knop {
+			display: none;
+		}
+
+		.expand-dropdown {
+			display: none;
+		}
 
 		.dropdown-menu {
 			position: relative;
@@ -92,31 +99,6 @@
 			border-radius: 15px;
 			padding: .8em 1.35em;
 			background: $button-bg;
-
-			&[href="#menu"] {
-				text-decoration: none;
-				border-radius: 5px;
-				padding: 0 1.35em;
-				background: $button-bg;
-
-				&:before {
-					-moz-osx-font-smoothing: grayscale;
-					-webkit-font-smoothing: antialiased;
-					font-family: 'Font Awesome 5 Free';
-					font-style: normal;
-					font-weight: 900;
-					text-transform: none !important;
-					content: fa-content($fa-var-bars);
-				}
-
-				&:hover {
-					background-color: $button-bg-hover;
-				}
-
-				&:active {
-					background-color: $button-bg-hover;
-				}
-			}
 		}
 	}
 
@@ -154,43 +136,82 @@
 
 }
 
-@media screen and (max-width: $scherm-smal) {
+@media screen and (max-width: $scherm-middelsmal) {
 	#header {
-		flex-direction: column;
-		position: relative;
-		height: auto;
-	}
+		line-height: initial;
+		flex-direction: column-reverse;
 
-	#header nav {
-		flex-direction: column;
 		height: auto;
+		padding: .25em 1.5em;
 
-		.dropdown-menu {
-			width: 100%;
+		.nav-login {
+			display: flex;
+			justify-content: flex-end;
+			flex-direction: row;
 		}
 
-		.nav-link {
-			width: 100%;
+		nav {
+			.login-knop, .menu-knop {
+				display: block;
+				color: $geel;
+				padding: 0.5em;
+			}
+
+			a.inloggen {
+				display: none;
+			}
+		}
+
+		nav#menu {
+			display: none;
+			flex-direction: column;
+			height: auto;
+
+			.expand-dropdown {
+				display: block;
+				padding: 0 0.5em;
+			}
+
+			&.show {
+				display: flex;
+			}
+
+			.dropdown-menu {
+				width: 100%;
+
+				&:hover .dropdown {
+					display: none;
+
+					&.show {
+						display: flex;
+					}
+				}
+
+				.dropdown {
+					&.show {
+						display: flex;
+					}
+
+					a {
+						padding: 1em;
+						text-align: left;
+					}
+
+					position: relative;
+					width: 100%;
+					margin-left: 0;
+					margin-right: 0;
+				}
+			}
+
+			.nav-link {
+				padding: 1em;
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+
+				margin: 0.1em 0;
+			}
 		}
 	}
-
-
-	#header nav a[href="#menu"] {
-		width: 4em;
-		white-space: nowrap;
-		text-indent: 4em;
-		position: relative;
-	}
-
-	#header nav a[href="#menu"]:before {
-		width: inherit;
-		position: absolute;
-		top: 0;
-		left: 0;
-		text-indent: 0;
-		text-align: right;
-		margin-left: 0;
-		padding-right: 1.25em;
-	}
-
 }
