@@ -1,8 +1,6 @@
 import axios from 'axios';
-import $ from 'jquery';
 import './bbcode-hints';
 import ctx, {init} from './ctx';
-import {singleLineString} from './util';
 
 /**
  * Preview button, update bbcode als op de knop geklikt wordt.

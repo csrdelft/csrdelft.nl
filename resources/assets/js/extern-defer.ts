@@ -3,6 +3,7 @@
  */
 import axios from 'axios';
 import $ from 'jquery';
+import './bbcode';
 import {init} from './ctx';
 import './formulier';
 import './fotoalbum/main';

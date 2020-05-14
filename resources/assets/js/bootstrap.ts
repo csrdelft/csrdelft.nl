@@ -8,6 +8,7 @@ import $ from 'jquery';
 import Popper from 'popper.js';
 import Vue from 'vue';
 import {ketzerAjax} from './ajax';
+import './bbcode';
 import {domUpdate} from './context';
 import {importAgenda} from './courant';
 import ctx, {init} from './ctx';
