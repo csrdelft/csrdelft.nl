@@ -3,34 +3,31 @@
 // Afbeeldingen op de voorpagina
 
 .grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-auto-rows: 1fr;
+
   a {
     padding: 5px;
-    width: 33%;
     border: 0;
   }
   img {
     vertical-align: bottom;
     width: 100%;
+		height: 100%;
+		object-fit: cover;
     border-radius: 5px;
   }
 }
 
 @media screen and (max-width: $scherm-middel) {
   .grid {
-    a {
-      width: 50%;
-    }
+		grid-template-columns: 1fr 1fr;
   }
 }
 
 @media screen and (max-width: $scherm-smal) {
   .grid {
-    a {
-      width: 100%;
-    }
+		grid-template-columns: 1fr;
   }
 }
