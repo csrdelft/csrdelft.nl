@@ -11,17 +11,15 @@
 	<section id="banner">
 		<div class="inner">
 			<img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging">
+			<h1>C.S.R. Delft</h1>
 		</div>
-		<h1 class="inner">
-			C.S.R. Delft
-		</h1>
 	</section>
 
 	<!-- Wrapper -->
 	<section id="wrapper">
 
 		<!-- One -->
-		<section id="one" class="wrapper kleur1">
+		<section id="one" class="wrapper first">
 			<div class="inner">
 				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
 				<div class="content">

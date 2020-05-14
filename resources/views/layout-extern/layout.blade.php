@@ -66,16 +66,18 @@
 
 @section('body')
 	<!-- Banner -->
-		<section id="banner-small">
+		<section id="banner">
 			<div class="inner">
-				<a href="/"><img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging" height="140">
-					<h2>C.S.R. Delft</h2></a>
+				<a href="/">
+					<img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging">
+					<h1>C.S.R. Delft</h1>
+				</a>
 			</div>
 		</section>
 
 		<!-- Wrapper -->
 		<section id="wrapper">
-			<section class="wrapper detail kleur1">
+			<section class="wrapper detail first">
 				<div class="inner">
 					<div class="content">
 						@yield('content')
