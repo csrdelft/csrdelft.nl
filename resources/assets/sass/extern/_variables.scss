@@ -1,7 +1,8 @@
-$donkerblauw: #05131E;
-$lichtblauw: #11273A;
-$geel: #E59200;
-$grijs: #E8E8E8;
+$donkerblauw: #11273a;
+$middenblauw: #043763;
+$lichtblauw: #4e698b;
+$geel: #e59200;
+$grijs: #e8e8e8;
 
 $basiskleur: $grijs;
 
@@ -12,14 +13,14 @@ $text: #fff;
 
 $kleur1: $donkerblauw;
 $kleur2: $lichtblauw;
-$kleur3: $donkerblauw;
+$kleur3: $middenblauw;
 $kleur4: $lichtblauw;
 
 $menu-bg: $lichtblauw;
 $button-bg: $donkerblauw;
 $button-bg-hover: $lichtblauw;
 $tekstlicht: #FFFFFF;
-$tekstdonker: #353670;
+$tekstdonker: $donkerblauw;
 
 $scherm-extrabreed: 1280px;
 $scherm-breed: 980px;
