@@ -471,3 +471,16 @@ function date_format_intl(DateTimeInterface $date, $format) {
 
 	return $fmt->format($date);
 }
+
+/**
+ * Reken uit hoe oud de vereniging is.
+ *
+ * @return int
+ */
+function vereniging_leeftijd() {
+	$oprichting = date_create_immutable('1961-06-16');
+
+	$leeftijd = date_create_immutable()->diff($oprichting);
+
+	return $leeftijd->y;
+}
