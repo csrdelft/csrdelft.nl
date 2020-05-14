@@ -29,7 +29,7 @@ declare global {
 
 const $window = $(window);
 const $header = $('#header');
-let $banner = $('#banner');
+const $banner = $('#banner');
 
 $window.on('load', () => {
 	// Lazy load cms pages, these should be loaded always, not on scroll
