@@ -18,8 +18,8 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 	/** @var CommissiesRepository */
 	private $commissiesRepository;
 
-	public function __construct(BesturenRepository $besturenRepository, CommissiesRepository $commissiesRepository, CommissieLedenRepository $commissieLedenRepository, AccessRepository $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, RechtenGroep::class);
+	public function __construct(BesturenRepository $besturenRepository, CommissiesRepository $commissiesRepository, CommissieLedenRepository $commissieLedenRepository, AccessRepository $accessRepository, ManagerRegistry $registry) {
+		parent::__construct($accessRepository, $registry, RechtenGroep::class);
 
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;

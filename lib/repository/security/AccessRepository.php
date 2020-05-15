@@ -16,16 +16,12 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * AccessModel.class.php
- *
  * @method AccessControl|null find($id, $lockMode = null, $lockVersion = null)
  * @method AccessControl|null findOneBy(array $criteria, array $orderBy = null)
  * @method AccessControl[]    findAll()
  * @method AccessControl[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AccessRepository extends AbstractRepository {
-
-	const ORM = AccessControl::class;
 
 	/**
 	 * @var CacheInterface
@@ -37,7 +33,6 @@ class AccessRepository extends AbstractRepository {
 	private $em;
 
 	/**
-	 * AccessModel constructor.
 	 * @param ManagerRegistry $registry
 	 * @param CacheInterface $cache
 	 * @param EntityManagerInterface $em

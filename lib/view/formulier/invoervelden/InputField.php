@@ -18,7 +18,7 @@ use CsrDelft\view\Validator;
  *
  *    - TextField                        Simpele input
  *        * DateTimeField                Datum & tijdstip
- *        * RechtenField                Rechten, zie AccessModel
+ *        * RechtenField                Rechten, zie AccessRepository
  *        * LandField                    Landen
  *        * StudieField                Opleidingen
  *        * EmailField                Email adressen
@@ -516,7 +516,7 @@ JS;
 			} else {
 				$js .= <<<JS
 
-	remote: { 
+	remote: {
     	url:"{$source}%QUERY",
 		wildcard: '%QUERY'
 	}

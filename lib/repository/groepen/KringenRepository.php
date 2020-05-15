@@ -8,8 +8,8 @@ use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class KringenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Kring::class);
+	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
+		parent::__construct($accessRepository, $registry, Kring::class);
 	}
 
 	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {

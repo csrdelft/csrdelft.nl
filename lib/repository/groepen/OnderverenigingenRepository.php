@@ -11,8 +11,8 @@ use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class OnderverenigingenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Ondervereniging::class);
+	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
+		parent::__construct($accessRepository, $registry, Ondervereniging::class);
 	}
 
 	public function nieuw($soort = null) {

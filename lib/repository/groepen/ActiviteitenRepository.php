@@ -9,8 +9,8 @@ use Doctrine\Persistence\ManagerRegistry;
 
 
 class ActiviteitenRepository extends KetzersRepository {
-	public function __construct(AccessRepository $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Activiteit::class);
+	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
+		parent::__construct($accessRepository, $registry, Activiteit::class);
 	}
 
 	public function nieuw($soort = null) {

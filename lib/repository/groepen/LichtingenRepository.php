@@ -10,8 +10,8 @@ use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class LichtingenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Lichting::class);
+	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
+		parent::__construct($accessRepository, $registry, Lichting::class);
 	}
 
 	public function get($lidjaar) {

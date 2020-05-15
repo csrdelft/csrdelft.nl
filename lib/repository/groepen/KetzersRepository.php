@@ -8,8 +8,8 @@ use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class KetzersRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessModel, ManagerRegistry $registry, $entityClass = Ketzer::class) {
-		parent::__construct($accessModel, $registry, $entityClass);
+	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry, $entityClass = Ketzer::class) {
+		parent::__construct($accessRepository, $registry, $entityClass);
 	}
 
 	public function nieuw($soort = null) {

@@ -22,27 +22,27 @@ class RechtenController {
 	/**
 	 * @var AccessRepository
 	 */
-	private $accessModel;
+	private $accessRepository;
 
-	public function __construct(AccessRepository $accessModel) {
-		$this->accessModel = $accessModel;
+	public function __construct(AccessRepository $accessRepository) {
+		$this->accessRepository = $accessRepository;
 	}
 
 	public function bekijken($environment = null, $resource = null) {
 		return view('default', [
-			'content' => new RechtenTable($this->accessModel, $environment, $resource)
+			'content' => new RechtenTable($this->accessRepository, $environment, $resource)
 		]);
 	}
 
 	public function data($environment = null, $resource = null) {
-		return new RechtenData($this->accessModel->getTree($environment, $resource));
+		return new RechtenData($this->accessRepository->getTree($environment, $resource));
 	}
 
 	public function aanmaken($environment = null, $resource = null) {
-		$ac = $this->accessModel->nieuw($environment, $resource);
+		$ac = $this->accessRepository->nieuw($environment, $resource);
 		$form = new RechtenForm($ac, 'aanmaken');
 		if ($form->validate()) {
-			$this->accessModel->setAcl($ac->environment, $ac->resource, array(
+			$this->accessRepository->setAcl($ac->environment, $ac->resource, array(
 				$ac->action => $ac->subject
 			));
 			return new RechtenData(array($ac));
@@ -57,10 +57,10 @@ class RechtenController {
 			throw new CsrToegangException();
 		}
 		/** @var AccessControl $ac */
-		$ac = $this->accessModel->retrieveByUUID($selection[0]);
+		$ac = $this->accessRepository->retrieveByUUID($selection[0]);
 		$form = new RechtenForm($ac, 'wijzigen');
 		if ($form->validate()) {
-			$this->accessModel->setAcl($ac->environment, $ac->resource, array(
+			$this->accessRepository->setAcl($ac->environment, $ac->resource, array(
 				$ac->action => $ac->subject
 			));
 			return new RechtenData(array($ac));
@@ -74,8 +74,8 @@ class RechtenController {
 		$response = array();
 		foreach ($selection as $UUID) {
 			/** @var AccessControl $ac */
-			$ac = $this->accessModel->retrieveByUUID($UUID);
-			$this->accessModel->setAcl($ac->environment, $ac->resource, array(
+			$ac = $this->accessRepository->retrieveByUUID($UUID);
+			$this->accessRepository->setAcl($ac->environment, $ac->resource, array(
 				$ac->action => null
 			));
 			$response[] = $ac;

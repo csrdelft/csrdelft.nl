@@ -9,8 +9,8 @@ use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class CommissiesRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Commissie::class);
+	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
+		parent::__construct($accessRepository, $registry, Commissie::class);
 	}
 
 	public function nieuw($soort = null) {

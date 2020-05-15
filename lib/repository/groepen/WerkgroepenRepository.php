@@ -8,7 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 
 class WerkgroepenRepository extends KetzersRepository {
-	public function __construct(AccessRepository $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Werkgroep::class);
+	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
+		parent::__construct($accessRepository, $registry, Werkgroep::class);
 	}
 }

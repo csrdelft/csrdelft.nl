@@ -25,7 +25,7 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	/**
 	 * @var AccessRepository
 	 */
-	private $accessModel;
+	private $accessRepository;
 	/**
 	 * @var AbstractGroep
 	 */
@@ -37,14 +37,14 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 
 	/**
 	 * AbstractGroepenModel constructor.
-	 * @param AccessRepository $accessModel
+	 * @param AccessRepository $accessRepository
 	 * @param ManagerRegistry $managerRegistry
 	 * @param $entityClass
 	 */
-	public function __construct(AccessRepository $accessModel, ManagerRegistry $managerRegistry, $entityClass) {
+	public function __construct(AccessRepository $accessRepository, ManagerRegistry $managerRegistry, $entityClass) {
 		parent::__construct($managerRegistry, $entityClass);
 
-		$this->accessModel = $accessModel;
+		$this->accessRepository = $accessRepository;
 		$this->entityClass = $entityClass;
 
 		$this->database = ContainerFacade::getContainer()->get(Database::class);
