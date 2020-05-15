@@ -8,8 +8,8 @@
 
 namespace CsrDelft\view;
 
+use CsrDelft\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;

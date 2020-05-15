@@ -4,7 +4,6 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\groepen\RechtenGroep;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -18,8 +17,8 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 	/** @var CommissiesRepository */
 	private $commissiesRepository;
 
-	public function __construct(BesturenRepository $besturenRepository, CommissiesRepository $commissiesRepository, CommissieLedenRepository $commissieLedenRepository, AccessModel $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, RechtenGroep::class);
+	public function __construct(BesturenRepository $besturenRepository, CommissiesRepository $commissiesRepository, CommissieLedenRepository $commissieLedenRepository, ManagerRegistry $registry) {
+		parent::__construct($registry, RechtenGroep::class);
 
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;

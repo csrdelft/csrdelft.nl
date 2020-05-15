@@ -5,14 +5,13 @@ namespace CsrDelft\repository\groepen;
 use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\groepen\Ondervereniging;
 use CsrDelft\entity\groepen\OnderverenigingStatus;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class OnderverenigingenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Ondervereniging::class);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Ondervereniging::class);
 	}
 
 	public function nieuw($soort = null) {

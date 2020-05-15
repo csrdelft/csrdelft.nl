@@ -4,14 +4,13 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\HuisStatus;
 use CsrDelft\entity\groepen\Woonoord;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class WoonoordenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Woonoord::class);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Woonoord::class);
 	}
 
 	public function nieuw($soort = null) {

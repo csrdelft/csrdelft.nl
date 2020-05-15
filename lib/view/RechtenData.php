@@ -8,8 +8,8 @@
 
 namespace CsrDelft\view;
 
+use CsrDelft\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\entity\security\AccessControl;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 
@@ -20,7 +20,7 @@ class RechtenData extends DataTableResponse {
 	 * @throws Exception
 	 */
 	public function renderElement($ac) {
-		$array = $ac->jsonSerialize();
+		$array = (array)$ac;
 
 		$array['action'] = AccessAction::getDescription($ac->action);
 

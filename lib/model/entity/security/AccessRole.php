@@ -3,6 +3,7 @@
 namespace CsrDelft\model\entity\security;
 
 use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\repository\security\AccessRepository;
 
 /**
  * AccessRole.enum.php
@@ -11,7 +12,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  *
  * RBAC MAC roles.
  *
- * @see AccessModel
+ * @see AccessRepository
  */
 abstract class AccessRole extends PersistentEnum {
 

@@ -4,14 +4,13 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\Lichting;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class LichtingenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
-		parent::__construct($accessModel, $registry, Lichting::class);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Lichting::class);
 	}
 
 	public function get($lidjaar) {

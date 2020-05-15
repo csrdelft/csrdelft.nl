@@ -3,8 +3,8 @@
 namespace CsrDelft\entity\commissievoorkeuren;
 
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\security\AccessModel;
-use DateTime;
+use CsrDelft\repository\security\AccessRepository;
+use CsrDelft\service\AccessService;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -83,6 +83,6 @@ class VoorkeurVoorkeur {
 	}
 
 	public function heeftGedaan() {
-		return AccessModel::mag($this->profiel->account, 'commissie:' . $this->commissie->naam . ',commissie:' . $this->commissie->naam . ':ot');
+		return AccessService::mag($this->profiel->account, 'commissie:' . $this->commissie->naam . ',commissie:' . $this->commissie->naam . ':ot');
 	}
 }

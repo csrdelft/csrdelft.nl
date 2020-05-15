@@ -3,10 +3,11 @@
 namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
+use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
@@ -20,15 +21,15 @@ use CsrDelft\view\datatable\Multiplicity;
  */
 class RechtenTable extends DataTable {
 
-	public function __construct(AccessModel $model, $environment, $resource) {
-		parent::__construct($model::ORM, '/rechten/bekijken/' . $environment . '/' . $resource, 'Rechten voor ' . $environment . ' ' . $resource, 'resource');
+	public function __construct(AccessRepository $model, $environment, $resource) {
+		parent::__construct(AccessControl::class, '/rechten/bekijken/' . $environment . '/' . $resource, 'Rechten voor ' . $environment . ' ' . $resource, 'resource');
 
 		$this->hideColumn('action', false);
 		$this->searchColumn('aciton');
 
 		// Has permission to change permissions?
 		if (!LoginModel::mag(P_ADMIN)) {
-			$rechten = $model::getSubject($environment, AccessAction::Rechten, $resource);
+			$rechten = $model->getSubject($environment, AccessAction::Rechten, $resource);
 			if (!$rechten OR !LoginModel::mag($rechten)) {
 				return;
 			}

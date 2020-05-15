@@ -5,10 +5,11 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
+use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccessService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
 
@@ -79,7 +80,7 @@ class AccountController extends AbstractController {
 			setMelding('Account bestaat niet', -1);
 			throw new CsrToegangException();
 		}
-		if (!AccessModel::mag($account, P_LOGGED_IN)) {
+		if (!AccessService::mag($account, P_LOGGED_IN)) {
 			setMelding('Account mag niet inloggen', 2);
 		}
 		$form = new AccountForm($account);

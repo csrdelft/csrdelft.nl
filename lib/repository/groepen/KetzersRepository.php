@@ -3,13 +3,12 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Ketzer;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class KetzersRepository extends AbstractGroepenRepository {
-	public function __construct(AccessModel $accessModel, ManagerRegistry $registry, $entityClass = Ketzer::class) {
-		parent::__construct($accessModel, $registry, $entityClass);
+	public function __construct(ManagerRegistry $registry, $entityClass = Ketzer::class) {
+		parent::__construct($registry, $entityClass);
 	}
 
 	public function nieuw($soort = null) {

@@ -7,9 +7,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\AccessService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -25,8 +25,14 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AccountRepository extends AbstractRepository {
 
-	public function __construct(ManagerRegistry $registry) {
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
+
+	public function __construct(ManagerRegistry $registry, AccessService $accessService) {
 		parent::__construct($registry, Account::class);
+		$this->accessService = $accessService;
 	}
 
 	const ORM = Account::class;
@@ -114,7 +120,7 @@ class AccountRepository extends AbstractRepository {
 		$account->pass_hash = '';
 		$account->pass_since = date_create_immutable();
 		$account->failed_login_attempts = 0;
-		$account->perm_role = ContainerFacade::getContainer()->get(AccessModel::class)->getDefaultPermissionRole($profiel->status);
+		$account->perm_role = $this->accessService->getDefaultPermissionRole($profiel->status);
 		$this->_em->persist($account);
 		$this->_em->flush();
 		return $account;

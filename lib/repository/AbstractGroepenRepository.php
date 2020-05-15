@@ -5,7 +5,6 @@ namespace CsrDelft\repository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\GroepStatus;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
@@ -23,10 +22,6 @@ use ReflectionProperty;
  */
 abstract class AbstractGroepenRepository extends AbstractRepository {
 	/**
-	 * @var AccessModel
-	 */
-	private $accessModel;
-	/**
 	 * @var AbstractGroep
 	 */
 	public $entityClass;
@@ -37,14 +32,12 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 
 	/**
 	 * AbstractGroepenModel constructor.
-	 * @param AccessModel $accessModel
 	 * @param ManagerRegistry $managerRegistry
 	 * @param $entityClass
 	 */
-	public function __construct(AccessModel $accessModel, ManagerRegistry $managerRegistry, $entityClass) {
+	public function __construct(ManagerRegistry $managerRegistry, $entityClass) {
 		parent::__construct($managerRegistry, $entityClass);
 
-		$this->accessModel = $accessModel;
 		$this->entityClass = $entityClass;
 
 		$this->database = ContainerFacade::getContainer()->get(Database::class);
