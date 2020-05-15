@@ -11,6 +11,7 @@ use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
@@ -47,7 +48,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		if (MODE === 'CLI') {
 			return CliLoginModel::getUid();
 		}
-		return $_SESSION['_uid'];
+		return $_SESSION['_uid'] ?? self::UID_EXTERN;
 	}
 
 	/**
@@ -78,7 +79,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return bool
 	 */
 	public static function mag($permission, array $allowedAuthenticationMethods = null) {
-		return AccessModel::mag(static::getAccount(), $permission, $allowedAuthenticationMethods);
+		return AccessRepository::mag(static::getAccount(), $permission, $allowedAuthenticationMethods);
 	}
 
 	/**
@@ -445,7 +446,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		$suedFrom = static::getSuedFrom();
-		return $suedFrom AND AccessModel::mag($suedFrom, P_ADMIN);
+		return $suedFrom AND AccessRepository::mag($suedFrom, P_ADMIN);
 	}
 
 	/**
@@ -480,7 +481,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return bool
 	 */
 	public function maySuTo(Account $suNaar) {
-		return LoginModel::mag(P_ADMIN) AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessModel::mag($suNaar, P_LOGGED_IN);
+		return LoginModel::mag(P_ADMIN) AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessRepository::mag($suNaar, P_LOGGED_IN);
 	}
 
 	/**
@@ -493,9 +494,9 @@ class LoginModel extends PersistenceModel implements Validator {
 	/**
 	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
-	 * @see AccessModel::mag()
-	 *
 	 * @return string|null uit AuthenticationMethod
+	 *@see AccessRepository::mag()
+	 *
 	 */
 	public function getAuthenticationMethod() {
 		if (!isset($_SESSION['_authenticationMethod'])) {

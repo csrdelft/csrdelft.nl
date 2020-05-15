@@ -10,9 +10,9 @@ use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
 use DateTimeInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -123,7 +123,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		if (empty($filter)) {
 			return true;
 		}
-		return AccessModel::mag($account, $filter);
+		return AccessRepository::mag($account, $filter);
 	}
 
 	public function getIsAangemeld($mid, $uid) {

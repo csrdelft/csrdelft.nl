@@ -226,8 +226,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groepen = $this->model->createQueryBuilder('g')
 			->where('g.familie LIKE :familie and (g.status = :ht or g.status = :ft)')
 			->setParameter('familie', $zoekterm)
-			->setParameter('ht', GroepStatus::HT())
-			->setParameter('ft', GroepStatus::FT())
+			->setParameter('ht', GroepStatus::HT)
+			->setParameter('ft', GroepStatus::FT)
 			->setMaxResults($limit)
 			->getQuery()->getResult();
 		foreach ($groepen as $groep) {

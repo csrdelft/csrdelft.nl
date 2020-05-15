@@ -79,7 +79,7 @@ class EetplanRepository extends AbstractRepository {
 			->where('e.uid like :uid and e.avond is not null')
 			->setParameter('uid', $lichting . '%')
 			->orderBy('e.avond', 'DESC')
-			->getQuery()->getArrayResult();
+			->getQuery()->getResult();
 		$eetplanFeut = [];
 		$avonden = [];
 		foreach ($eetplan as $sessie) {

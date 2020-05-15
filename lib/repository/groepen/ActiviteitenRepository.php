@@ -4,12 +4,12 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\security\AccessModel;
+use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 
 class ActiviteitenRepository extends KetzersRepository {
-	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
+	public function __construct(AccessRepository $accessModel, ManagerRegistry $registry) {
 		parent::__construct($accessModel, $registry, Activiteit::class);
 	}
 

@@ -3,8 +3,8 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\security\AccessControl;
-use CsrDelft\model\security\AccessModel;
+use CsrDelft\entity\security\AccessControl;
+use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\RechtenData;
 use CsrDelft\view\RechtenForm;
@@ -20,11 +20,11 @@ use CsrDelft\view\RechtenTable;
  */
 class RechtenController {
 	/**
-	 * @var AccessModel
+	 * @var AccessRepository
 	 */
 	private $accessModel;
 
-	public function __construct(AccessModel $accessModel) {
+	public function __construct(AccessRepository $accessModel) {
 		$this->accessModel = $accessModel;
 	}
 

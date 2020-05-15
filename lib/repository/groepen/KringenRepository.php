@@ -3,14 +3,12 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Kring;
-use CsrDelft\entity\groepen\Verticale;
-use CsrDelft\model\security\AccessModel;
 use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\expr;
 
 class KringenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessModel $accessModel, ManagerRegistry $registry) {
+	public function __construct(AccessRepository $accessModel, ManagerRegistry $registry) {
 		parent::__construct($accessModel, $registry, Kring::class);
 	}
 
