@@ -86,7 +86,7 @@ class AccessRepository extends AbstractRepository {
 	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
 		if (!LoginModel::mag(P_ADMIN)) {
-			$rechten = self::getSubject($environment, AccessAction::Rechten, $resource);
+			$rechten = $this->getSubject($environment, AccessAction::Rechten, $resource);
 			if (!$rechten or !LoginModel::mag($rechten)) {
 				return false;
 			}
@@ -142,9 +142,8 @@ class AccessRepository extends AbstractRepository {
 	 *
 	 * @return null|string
 	 */
-	public static function getSubject($environment, $action, $resource) {
-		/** @var AccessControl $ac */
-		$ac = ContainerFacade::getContainer()->get(self::class)->find(['environment' => $environment, 'action' => $action, 'resource' => $resource]);
+	public function getSubject($environment, $action, $resource) {
+		$ac = $this->find(['environment' => $environment, 'action' => $action, 'resource' => $resource]);
 		if ($ac) {
 			return $ac->subject;
 		}
