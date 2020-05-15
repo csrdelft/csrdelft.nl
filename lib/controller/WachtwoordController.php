@@ -41,7 +41,7 @@ class WachtwoordController extends AbstractController {
 	public function wijzigen() {
 		$account = LoginModel::getAccount();
 		// mag inloggen?
-		if (!$account OR !AccessService::mag($account, P_LOGGED_IN)) {
+		if (!$account || !AccessService::mag($account, P_LOGGED_IN)) {
 			throw new CsrToegangException();
 		}
 		$form = new WachtwoordWijzigenForm($account, 'wijzigen');

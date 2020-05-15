@@ -396,11 +396,11 @@ class AccessService {
 
 		// splits permissie in type, waarde en rol
 		$p = explode(':', $permission);
-		if (in_array($p[0], self::$prefix) and sizeof($p) <= 3) {
-			if (isset($p[1]) and $p[1] == '') {
+		if (in_array($p[0], self::$prefix) && sizeof($p) <= 3) {
+			if (isset($p[1]) && $p[1] == '') {
 				return false;
 			}
-			if (isset($p[2]) and $p[2] == '') {
+			if (isset($p[2]) && $p[2] == '') {
 				return false;
 			}
 			return true;
@@ -485,7 +485,7 @@ class AccessService {
 	private function mandatoryAccessControl(Account $subject, $permission) {
 
 		if (isset($_SESSION['password_unsafe'])) {
-			if (in_array_i($permission, self::$ledenRead) or in_array_i($permission, self::$ledenWrite)) {
+			if (in_array_i($permission, self::$ledenRead) || in_array_i($permission, self::$ledenWrite)) {
 				setMelding('U mag geen ledengegevens opvragen want uw wachtwoord is onveilig', 2);
 				return false;
 			}
@@ -615,9 +615,9 @@ class AccessService {
 				$gevraagd = 'S_' . $gevraagd;
 				if ($gevraagd == $profiel->status) {
 					return true;
-				} elseif ($gevraagd == LidStatus::Lid and LidStatus::isLidLike($profiel->status)) {
+				} elseif ($gevraagd == LidStatus::Lid && LidStatus::isLidLike($profiel->status)) {
 					return true;
-				} elseif ($gevraagd == LidStatus::Oudlid and LidStatus::isOudlidLike($profiel->status)) {
+				} elseif ($gevraagd == LidStatus::Oudlid && LidStatus::isOudlidLike($profiel->status)) {
 					return true;
 				}
 
@@ -651,7 +651,7 @@ class AccessService {
 				} elseif ($profiel->verticale === $gevraagd || $gevraagd == strtoupper($profiel->getVerticale()->naam)) {
 					if (!$role) {
 						return true;
-					} elseif ($role === 'LEIDER' and $profiel->verticaleleider) {
+					} elseif ($role === 'LEIDER' && $profiel->verticaleleider) {
 						return true;
 					}
 				}
@@ -754,10 +754,8 @@ class AccessService {
 				}
 
 				// wordt er een functie gevraagd?
-				if ($role) {
-					if ($role !== strtoupper($lid->opmerking)) {
-						return false;
-					}
+				if ($role && $role !== strtoupper($lid->opmerking)) {
+					return false;
 				}
 				return true;
 
@@ -770,7 +768,7 @@ class AccessService {
 					return false;
 				}
 				// Aangemeld voor maaltijd?
-				if (!$role and $this->em->getRepository(MaaltijdAanmelding::class)->getIsAangemeld((int)$gevraagd, $profiel->uid)) {
+				if (!$role && $this->em->getRepository(MaaltijdAanmelding::class)->getIsAangemeld((int)$gevraagd, $profiel->uid)) {
 					return true;
 				} // Mag maaltijd sluiten?
 				elseif ($role === 'SLUITEN') {
@@ -779,7 +777,7 @@ class AccessService {
 					}
 					try {
 						$maaltijd = $this->em->getRepository(Maaltijd::class)->getMaaltijd((int)$gevraagd);
-						if ($maaltijd and $maaltijd->magSluiten($profiel->uid)) {
+						if ($maaltijd && $maaltijd->magSluiten($profiel->uid)) {
 							return true;
 						}
 					} catch (CsrException $e) {

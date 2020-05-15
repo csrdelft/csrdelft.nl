@@ -87,7 +87,7 @@ class AccessRepository extends AbstractRepository {
 		// Has permission to change permissions?
 		if (!LoginModel::mag(P_ADMIN)) {
 			$rechten = $this->getSubject($environment, AccessAction::Rechten, $resource);
-			if (!$rechten or !LoginModel::mag($rechten)) {
+			if (!$rechten || !LoginModel::mag($rechten)) {
 				return false;
 			}
 		}

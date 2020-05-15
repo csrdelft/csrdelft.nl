@@ -166,17 +166,17 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		// Controleer of sessie is verlopen
-		if ($this->current_session->expire AND strtotime($this->current_session->expire) <= time()) {
+		if ($this->current_session->expire && strtotime($this->current_session->expire) <= time()) {
 			return false;
 		}
 		// Controleer gekoppeld ip
-		if ($this->current_session->lock_ip AND $this->current_session->ip !== $_SERVER['REMOTE_ADDR']) {
+		if ($this->current_session->lock_ip && $this->current_session->ip !== $_SERVER['REMOTE_ADDR']) {
 			return false;
 		}
 		// Controleer switch user status
 		if (isset($_SESSION['_suedFrom'])) {
 			$suedFrom = static::getSuedFrom();
-			if (!$suedFrom OR $this->current_session->uid !== $suedFrom->uid) {
+			if (!$suedFrom || $this->current_session->uid !== $suedFrom->uid) {
 				return false;
 			}
 			// Controleer of account bestaat
@@ -187,7 +187,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		// Controleer of sessie van gebruiker is
 		$account = static::getAccount();
-		if (!$account OR $this->current_session->uid !== $account->uid) {
+		if (!$account || $this->current_session->uid !== $account->uid) {
 			return false;
 		}
 		// Controleer of wachtwoord is verlopen
@@ -196,15 +196,15 @@ class LoginModel extends PersistenceModel implements Validator {
 		$waarschuwing_vooraf = strtotime(instelling('beveiliging', 'wachtwoorden_verlopen_waarschuwing_vooraf'), $verloop_na);
 		if ($pass_since < $verloop_na) {
 			if (!startsWith(REQUEST_URI, '/wachtwoord')
-				AND !startsWith(REQUEST_URI, '/verify/')
-				AND !startsWith(REQUEST_URI, '/styles/')
-				AND !startsWith(REQUEST_URI, '/scripts/')
-				AND REQUEST_URI !== '/endsu'
-			  AND REQUEST_URI !== '/logout') {
+				&& !startsWith(REQUEST_URI, '/verify/')
+				&& !startsWith(REQUEST_URI, '/styles/')
+				&& !startsWith(REQUEST_URI, '/scripts/')
+				&& REQUEST_URI !== '/endsu'
+			  && REQUEST_URI !== '/logout') {
 				setMelding('Uw wachtwoord is verlopen', 2);
 				redirect('/wachtwoord/verlopen');
 			}
-		} elseif (REQUEST_URI == '' AND $pass_since < $waarschuwing_vooraf) {
+		} elseif (REQUEST_URI == '' && $pass_since < $waarschuwing_vooraf) {
 			$uren = ($waarschuwing_vooraf - $pass_since) / 3600;
 			if ($uren < 24) {
 				setMelding('Uw wachtwoord verloopt binnen ' . $uren . ' uur', 2);
@@ -447,7 +447,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		$suedFrom = static::getSuedFrom();
-		return $suedFrom AND AccessService::mag($suedFrom, P_ADMIN);
+		return $suedFrom && AccessService::mag($suedFrom, P_ADMIN);
 	}
 
 	/**
@@ -482,7 +482,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return bool
 	 */
 	public function maySuTo(Account $suNaar) {
-		return LoginModel::mag(P_ADMIN) AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessService::mag($suNaar, P_LOGGED_IN);
+		return LoginModel::mag(P_ADMIN) && !$this->isSued() && $suNaar->uid !== static::getUid() && AccessService::mag($suNaar, P_LOGGED_IN);
 	}
 
 	/**
@@ -504,7 +504,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		$method = $_SESSION['_authenticationMethod'];
 		if ($method === AuthenticationMethod::password_login) {
-			if ($this->current_session AND $this->current_session->isRecent()) {
+			if ($this->current_session && $this->current_session->isRecent()) {
 				return AuthenticationMethod::recent_password_login;
 			}
 		}
