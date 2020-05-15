@@ -6,12 +6,11 @@ use CsrDelft\entity\groepen\HuisStatus;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractGroepenRepository;
-use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class WoonoordenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
-		parent::__construct($accessRepository, $registry, Woonoord::class);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Woonoord::class);
 	}
 
 	public function nieuw($soort = null) {

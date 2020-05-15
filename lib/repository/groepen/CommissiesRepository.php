@@ -5,12 +5,11 @@ namespace CsrDelft\repository\groepen;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\CommissieSoort;
 use CsrDelft\repository\AbstractGroepenRepository;
-use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class CommissiesRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
-		parent::__construct($accessRepository, $registry, Commissie::class);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Commissie::class);
 	}
 
 	public function nieuw($soort = null) {

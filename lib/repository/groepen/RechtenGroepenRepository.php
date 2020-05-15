@@ -7,7 +7,6 @@ use CsrDelft\entity\groepen\RechtenGroep;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class RechtenGroepenRepository extends AbstractGroepenRepository {
@@ -18,8 +17,8 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 	/** @var CommissiesRepository */
 	private $commissiesRepository;
 
-	public function __construct(BesturenRepository $besturenRepository, CommissiesRepository $commissiesRepository, CommissieLedenRepository $commissieLedenRepository, AccessRepository $accessRepository, ManagerRegistry $registry) {
-		parent::__construct($accessRepository, $registry, RechtenGroep::class);
+	public function __construct(BesturenRepository $besturenRepository, CommissiesRepository $commissiesRepository, CommissieLedenRepository $commissieLedenRepository, ManagerRegistry $registry) {
+		parent::__construct($registry, RechtenGroep::class);
 
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;

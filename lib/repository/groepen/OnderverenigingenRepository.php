@@ -7,12 +7,11 @@ use CsrDelft\entity\groepen\Ondervereniging;
 use CsrDelft\entity\groepen\OnderverenigingStatus;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractGroepenRepository;
-use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class OnderverenigingenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
-		parent::__construct($accessRepository, $registry, Ondervereniging::class);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Ondervereniging::class);
 	}
 
 	public function nieuw($soort = null) {

@@ -6,12 +6,11 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractGroepenRepository;
-use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class LichtingenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
-		parent::__construct($accessRepository, $registry, Lichting::class);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Lichting::class);
 	}
 
 	public function get($lidjaar) {

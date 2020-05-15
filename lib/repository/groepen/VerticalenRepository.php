@@ -4,12 +4,11 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\repository\AbstractGroepenRepository;
-use CsrDelft\repository\security\AccessRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class VerticalenRepository extends AbstractGroepenRepository {
-	public function __construct(AccessRepository $accessRepository, ManagerRegistry $registry) {
-		parent::__construct($accessRepository, $registry, Verticale::class);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Verticale::class);
 	}
 
 	public function get($letter) {
