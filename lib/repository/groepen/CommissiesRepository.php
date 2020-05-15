@@ -14,8 +14,8 @@ class CommissiesRepository extends AbstractGroepenRepository {
 	}
 
 	public function nieuw($soort = null) {
-		if (!$soort || !in_array($soort->getValue(), CommissieSoort::getEnumValues())) {
-			$soort = CommissieSoort::Commissie();
+		if (!$soort || !in_array($soort, CommissieSoort::getEnumValues())) {
+			$soort = CommissieSoort::Commissie;
 		}
 		/** @var Commissie $commissie */
 		$commissie = parent::nieuw();
