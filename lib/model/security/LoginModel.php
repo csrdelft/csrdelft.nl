@@ -14,6 +14,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
+use CsrDelft\service\AccessService;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use CsrDelft\view\Validator;
 
@@ -79,7 +80,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return bool
 	 */
 	public static function mag($permission, array $allowedAuthenticationMethods = null) {
-		return AccessRepository::mag(static::getAccount(), $permission, $allowedAuthenticationMethods);
+		return AccessService::mag(static::getAccount(), $permission, $allowedAuthenticationMethods);
 	}
 
 	/**
@@ -446,7 +447,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			return false;
 		}
 		$suedFrom = static::getSuedFrom();
-		return $suedFrom AND AccessRepository::mag($suedFrom, P_ADMIN);
+		return $suedFrom AND AccessService::mag($suedFrom, P_ADMIN);
 	}
 
 	/**
@@ -481,7 +482,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * @return bool
 	 */
 	public function maySuTo(Account $suNaar) {
-		return LoginModel::mag(P_ADMIN) AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessRepository::mag($suNaar, P_LOGGED_IN);
+		return LoginModel::mag(P_ADMIN) AND !$this->isSued() AND $suNaar->uid !== static::getUid() AND AccessService::mag($suNaar, P_LOGGED_IN);
 	}
 
 	/**
@@ -495,8 +496,7 @@ class LoginModel extends PersistenceModel implements Validator {
 	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
 	 * worden Permissies hierdoor beperkt voor de veiligheid.
 	 * @return string|null uit AuthenticationMethod
-	 *@see AccessRepository::mag()
-	 *
+	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod() {
 		if (!isset($_SESSION['_authenticationMethod'])) {

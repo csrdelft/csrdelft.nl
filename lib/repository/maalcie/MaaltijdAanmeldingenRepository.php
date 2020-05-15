@@ -14,6 +14,7 @@ use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccessService;
 use DateTimeInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -123,7 +124,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		if (empty($filter)) {
 			return true;
 		}
-		return AccessRepository::mag($account, $filter);
+		return AccessService::mag($account, $filter);
 	}
 
 	public function getIsAangemeld($mid, $uid) {

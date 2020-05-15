@@ -10,6 +10,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
+use CsrDelft\service\AccessService;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
 
@@ -40,7 +41,7 @@ class WachtwoordController extends AbstractController {
 	public function wijzigen() {
 		$account = LoginModel::getAccount();
 		// mag inloggen?
-		if (!$account OR !AccessRepository::mag($account, P_LOGGED_IN)) {
+		if (!$account OR !AccessService::mag($account, P_LOGGED_IN)) {
 			throw new CsrToegangException();
 		}
 		$form = new WachtwoordWijzigenForm($account, 'wijzigen');
@@ -94,7 +95,7 @@ class WachtwoordController extends AbstractController {
 			$account = $this->accountRepository->findOneByEmail($values['mail']);
 			// mag wachtwoord reset aanvragen?
 			// (mag ook als na verify($tokenString) niet ingelogd is met wachtwoord en dus AuthenticationMethod::url_token is)
-			if (!$account || !AccessRepository::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions())) {
+			if (!$account || !AccessService::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions())) {
 				setMelding('E-mailadres onjuist', -1);
 			} else {
 				if ($this->oneTimeTokensRepository->hasToken($account->uid, '/wachtwoord/reset')) {
