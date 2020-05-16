@@ -1,11 +1,13 @@
 <?php
 
-namespace CsrDelft\model\fiscaat;
+namespace CsrDelft\service\fiscaat;
 
+use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\model\security\LoginModel;
 use DateTime;
 
-class SaldoGrafiekModel {
+class SaldoGrafiekService {
 	/**
 	 * @var CiviSaldoModel
 	 */
