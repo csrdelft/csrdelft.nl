@@ -33,7 +33,7 @@ docReady(() => {
 
 	document.body.addEventListener('click', (e) => {
 		if (!menu.contains(e.target as Node) && !menuKnop.contains(e.target as Node)) {
-			menu.classList.toggle('show');
+			menu.classList.remove('show');
 		}
 	});
 
