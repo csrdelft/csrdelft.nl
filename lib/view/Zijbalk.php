@@ -3,13 +3,13 @@
 namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\repository\groepen\LichtingenRepository;
-use CsrDelft\model\LedenMemoryScoresModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\LedenMemoryScoresRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
@@ -78,13 +78,6 @@ abstract class Zijbalk {
 		if (lid_instelling('zijbalk', 'forum_zelf') > 0) {
 			$posts = $forumPostsRepository->getRecenteForumPostsVanLid(LoginModel::getUid(), (int)lid_instelling('zijbalk', 'forum_zelf'), true);
 			$zijbalk[] = view('forum.partial.post_zijbalk', ['posts' => $posts]);
-		}
-		// Ledenmemory topscores
-		if (LoginModel::mag(P_LEDEN_READ) AND lid_instelling('zijbalk', 'ledenmemory_topscores') > 0) {
-			$lidjaar = LichtingenRepository::getJongsteLidjaar();
-			$lichting = ContainerFacade::getContainer()->get(LichtingenRepository::class)->get($lidjaar);
-			$scores = ContainerFacade::getContainer()->get(LedenMemoryScoresModel::class)->getGroepTopScores($lichting, (int)lid_instelling('zijbalk', 'ledenmemory_topscores'));
-			$zijbalk[] = new LedenMemoryZijbalkView($scores, $lidjaar);
 		}
 		// Nieuwste fotoalbum
 		if (lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
