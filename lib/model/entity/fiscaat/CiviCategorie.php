@@ -4,6 +4,7 @@ namespace CsrDelft\model\entity\fiscaat;
 
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class CiviCategorie
@@ -13,23 +14,35 @@ use CsrDelft\Orm\Entity\T;
  * Als er veel gebruik gemaakt gaat worden van categorien en commissies moet hier uitgebreid worden.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviCategorieRepository")
+ * @ORM\Table("CiviCategorie")
  */
-class CiviCategorie extends PersistentEntity {
+class CiviCategorie {
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 */
 	public $id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
 	public $type;
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer")
+	 */
 	public $status;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 * TODO Dit is een CiviSaldoCommissieEnum
+	 */
 	public $cie;
 
 	public function getBeschrijving() {
 		return sprintf('%s (%s)', $this->type, $this->cie);
 	}
-
-	protected static $table_name = 'CiviCategorie';
-	protected static $persistent_attributes = array(
-		'id' => array(T::Integer, false, 'auto_increment'),
-		'type' => array(T::String),
-		'status' => array(T::Integer),
-		'cie' => array(T::Enumeration, false, CiviSaldoCommissieEnum::class)
-	);
-	protected static $primary_key = array('id');
 }

@@ -4,7 +4,7 @@ namespace CsrDelft\view\fiscaat\producten;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\fiscaat\CiviProduct;
-use CsrDelft\model\fiscaat\CiviCategorieModel;
+use CsrDelft\repository\fiscaat\CiviCategorieRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
 /**
@@ -23,7 +23,7 @@ class CiviProductTableResponse extends DataTableResponse {
 			'status' => $entity->status,
 			'beschrijving' => $entity->beschrijving,
 			'beheer' => $entity->beheer,
-			'categorie' => ContainerFacade::getContainer()->get(CiviCategorieModel::class)->get($entity->categorie_id)->getBeschrijving(),
+			'categorie' => $entity->categorie->getBeschrijving(),
 			'prijs' => $entity->prijs,
 			'prioriteit' => $entity->prioriteit,
 		];
