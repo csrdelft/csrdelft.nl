@@ -19,7 +19,7 @@ window.docReady = docReady;
 // Versimpelde versie van formSubmit in formulier.js
 window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).form.submit()};
 
-window.docReady(() => {
+docReady(() => {
 	setTimeout(() => document.body.classList.remove('is-loading'));
 	import('jquery').then(($) => {
 		window.$ = window.jQuery = $.default;
@@ -27,8 +27,15 @@ window.docReady(() => {
 		import(/* webpackChunkName: "extern-defer" */ './extern-defer');
 	});
 
-	const menuKnop = document.querySelector('.menu-knop')!;
 	const menu = document.querySelector('#menu') as HTMLDivElement;
+	const menuKnop = document.querySelector('.menu-knop')!;
+	const dropdownKnoppen = document.querySelectorAll('.expand-dropdown');
+
+	document.body.addEventListener('click', (e) => {
+		if (!menu.contains(e.target as Node) && !menuKnop.contains(e.target as Node)) {
+			menu.classList.toggle('show');
+		}
+	});
 
 	menuKnop.addEventListener('click', (e) => {
 		e.preventDefault();
@@ -37,8 +44,6 @@ window.docReady(() => {
 
 		return false;
 	});
-
-	const dropdownKnoppen = document.querySelectorAll('.expand-dropdown');
 
 	dropdownKnoppen.forEach((knop) => {
 		knop.addEventListener('click', (e) => {
