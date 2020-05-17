@@ -45,7 +45,7 @@ class GroepenView implements View {
 			$this->tab = GroepTab::Pasfotos;
 		}
 		$cmsPaginaRepository = ContainerFacade::getContainer()->get(CmsPaginaRepository::class);
-		$this->pagina = $cmsPaginaRepository->find($model->getNaam());
+		$this->pagina = $cmsPaginaRepository->find('groepsbeschrijving_' . $model->getNaam());
 		if (!$this->pagina) {
 			$this->pagina = $cmsPaginaRepository->find('');
 		}

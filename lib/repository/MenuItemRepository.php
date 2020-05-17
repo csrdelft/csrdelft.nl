@@ -48,7 +48,7 @@ class MenuItemRepository extends AbstractRepository {
 
 		return $this->cache->get($this->createCacheKey($naam), function () use ($naam) {
 			try {
-				$root = $this->findOneBy(['tekst' => $naam]);
+				$root = $this->findOneBy(['tekst' => $naam, 'parent_id' => 0]);
 
 				if ($root == null) {
 					return null;

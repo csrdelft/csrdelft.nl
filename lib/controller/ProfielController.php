@@ -10,13 +10,6 @@ use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\fiscaat\SaldoGrafiekModel;
-use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\repository\groepen\BesturenRepository;
-use CsrDelft\repository\groepen\KetzersRepository;
-use CsrDelft\repository\groepen\OnderverenigingenRepository;
-use CsrDelft\repository\groepen\RechtenGroepenRepository;
-use CsrDelft\repository\groepen\WerkgroepenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
@@ -29,12 +22,19 @@ use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\repository\groepen\CommissiesRepository;
+use CsrDelft\repository\groepen\KetzersRepository;
+use CsrDelft\repository\groepen\OnderverenigingenRepository;
+use CsrDelft\repository\groepen\RechtenGroepenRepository;
+use CsrDelft\repository\groepen\WerkgroepenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\fiscaat\SaldoGrafiekService;
 use CsrDelft\service\GoogleSync;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
@@ -144,7 +144,7 @@ class ProfielController extends AbstractController {
 	 */
 	private $accountRepository;
 	/**
-	 * @var SaldoGrafiekModel
+	 * @var SaldoGrafiekService
 	 */
 	private $saldoGrafiekModel;
 	/**
@@ -177,7 +177,7 @@ class ProfielController extends AbstractController {
 		RechtenGroepenRepository $rechtenGroepenRepository,
 		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
 		WerkgroepenRepository $werkgroepenRepository,
-		SaldoGrafiekModel $saldoGrafiekModel,
+		SaldoGrafiekService $saldoGrafiekModel,
 		VerjaardagenService $verjaardagenService
 	) {
 		$this->profielRepository = $profielRepository;
