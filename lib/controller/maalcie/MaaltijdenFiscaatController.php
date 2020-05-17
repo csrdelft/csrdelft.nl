@@ -23,10 +23,6 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class MaaltijdenFiscaatController {
 	/**
-	 * @var CiviProductRepository
-	 */
-	private $civiProductRepository;
-	/**
 	 * @var MaaltijdenRepository
 	 */
 	private $maaltijdenRepository;
@@ -44,13 +40,11 @@ class MaaltijdenFiscaatController {
 	private $civiSaldoModel;
 
 	public function __construct(
-        CiviProductRepository $civiProductRepository,
         MaaltijdenRepository $maaltijdenRepository,
         MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
         CiviBestellingModel $civiBestellingModel,
         CiviSaldoModel $civiSaldoModel
 	) {
-		$this->civiProductRepository = $civiProductRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->civiBestellingModel = $civiBestellingModel;
