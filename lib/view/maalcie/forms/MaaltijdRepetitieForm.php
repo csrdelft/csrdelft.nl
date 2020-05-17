@@ -2,13 +2,11 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\entity\fiscaat\CiviProduct;
-use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredEntityField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredDoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
@@ -42,11 +40,6 @@ class MaaltijdRepetitieForm extends ModalForm {
 			$this->css_classes[] = 'PreventUnchanged';
 		}
 
-		$product = ContainerFacade::getContainer()->get(CiviProductModel::class)->find('id = ?', array($model->product_id))->current();
-		if ($product == false) {
-			$product = new CiviProduct();
-		}
-
 		$fields = [];
 		$fields[] = new RequiredTextField('standaard_titel', $model->standaard_titel, 'Standaard titel', 255);
 		$fields[] = new TimeObjectField('standaard_tijd', $model->standaard_tijd, 'Standaard tijd', 15);
@@ -57,7 +50,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 		if ($model->mlt_repetitie_id !== 0) {
 			$fields['abo']->onchange = "if (!this.checked && $(this).attr('origvalue') == 1) if (!confirm('Alle abonnementen zullen worden verwijderd!')) this.checked = true;";
 		}
-		$fields[] = new RequiredEntityField('product', 'beschrijving', 'Product', ContainerFacade::getContainer()->get(CiviProductModel::class), '/fiscaat/producten/suggesties?q=', $product);
+		$fields[] = new RequiredDoctrineEntityField('product', $model->product, 'Product', CiviProduct::class, '/fiscaat/producten/suggesties?q=');
 		$fields[] = new IntField('standaard_limiet', $model->standaard_limiet, 'Standaard limiet', 0, 200);
 		$fields[] = new RechtenField('abonnement_filter', $model->abonnement_filter, 'Aanmeldrestrictie');
 

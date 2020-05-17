@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller\fiscaat;
 
-use CsrDelft\model\fiscaat\CiviCategorieModel;
+use CsrDelft\repository\fiscaat\CiviCategorieRepository;
 use CsrDelft\view\fiscaat\CiviCategorieSuggestiesResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -11,15 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class BeheerCiviCategorienController {
-	/** @var CiviCategorieModel */
-	private $civiCategorieModel;
+	/** @var CiviCategorieRepository */
+	private $civiCategorieRepository;
 
-	public function __construct(CiviCategorieModel $civiCategorieModel) {
-		$this->civiCategorieModel = $civiCategorieModel;
+	public function __construct(CiviCategorieRepository $civiCategorieRepository) {
+		$this->civiCategorieRepository = $civiCategorieRepository;
 	}
 
 	public function suggesties(Request $request) {
-		$query = '%' . $request->query->get('q') . '%';
-		return new CiviCategorieSuggestiesResponse($this->civiCategorieModel->find('type LIKE ?', [$query]));
+		$suggesties = $this->civiCategorieRepository->suggesties(sql_contains($request->query->get('q')));
+
+		return new CiviCategorieSuggestiesResponse($suggesties);
 	}
 }

@@ -7,8 +7,8 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
@@ -64,6 +64,11 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $product_id;
+	/**
+	 * @var CiviProduct
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\fiscaat\CiviProduct")
+	 */
+	public $product;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
@@ -141,7 +146,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @Serializer\Groups("datatable")
 	 */
 	public function getPrijs() {
-		return ContainerFacade::getContainer()->get(CiviProductModel::class)->getPrijs(ContainerFacade::getContainer()->get(CiviProductModel::class)->getProduct($this->product_id))->prijs;
+		return $this->product->getPrijsInt();
 	}
 
 	/**

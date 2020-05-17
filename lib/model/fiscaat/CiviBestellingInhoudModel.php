@@ -4,6 +4,7 @@ namespace CsrDelft\model\fiscaat;
 
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -15,14 +16,14 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	const ORM = CiviBestellingInhoud::class;
 
 	/**
-	 * @var CiviProductModel
+	 * @var CiviProductRepository
 	 */
-	private $civiProductModel;
+	private $civiProductRepository;
 
-	public function __construct(CiviProductModel $civiProductModel) {
+	public function __construct(CiviProductRepository $civiProductRepository) {
 		parent::__construct();
 
-		$this->civiProductModel = $civiProductModel;
+		$this->civiProductRepository = $civiProductRepository;
 	}
 
 	/**
@@ -31,9 +32,9 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	 * @return int
 	 */
 	public function getPrijs(CiviBestellingInhoud $inhoud) {
-		$product = $this->civiProductModel->getProduct($inhoud->product_id);
+		$product = $this->civiProductRepository->getProduct($inhoud->product_id);
 
-		return $product->prijs * $inhoud->aantal;
+		return $product->tmpPrijs * $inhoud->aantal;
 	}
 
 	/**
@@ -42,7 +43,7 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	 * @return string
 	 */
 	public function getBeschrijving(CiviBestellingInhoud $inhoud) {
-		$product = $this->civiProductModel->getProduct($inhoud->product_id);
+		$product = $this->civiProductRepository->getProduct($inhoud->product_id);
 		return sprintf("%d %s", $inhoud->aantal, $product->beschrijving);
 	}
 

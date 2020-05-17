@@ -4,6 +4,7 @@ namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\security\LoginModel;
@@ -83,7 +84,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	public function vanRepetitie(MaaltijdRepetitie $repetitie, DateTimeInterface $datum) {
 		$maaltijd = new Maaltijd();
 		$maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
-		$maaltijd->product_id = $repetitie->product_id;
+		$maaltijd->product = $repetitie->product;
 		$maaltijd->titel = $repetitie->standaard_titel;
 		$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
 		$maaltijd->datum = $datum;
@@ -523,7 +524,7 @@ class MaaltijdenRepository extends AbstractRepository {
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
 				$maaltijd->tijd = $repetitie->standaard_tijd;
-				$maaltijd->product_id = $repetitie->product_id;
+				$maaltijd->product = $repetitie->product;
 				$maaltijd->aanmeld_filter = $filter;
 				try {
 					$this->_em->persist($maaltijden);
@@ -561,7 +562,7 @@ class MaaltijdenRepository extends AbstractRepository {
 				$beginDatum = $beginDatum->add(DateInterval::createFromDateString("+{$shift} days"));
 			}
 			$datum = $beginDatum;
-			$corveerepetities = $this->corveeRepetitiesRepository->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id)->fetchAll();
+			$corveerepetities = $this->corveeRepetitiesRepository->getRepetitiesVoorMaaltijdRepetitie($repetitie->mlt_repetitie_id);
 			$maaltijden = [];
 			while ($datum <= $eindDatum) { // break after one
 

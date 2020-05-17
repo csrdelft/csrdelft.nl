@@ -3,17 +3,16 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
-use CsrDelft\model\entity\fiscaat\CiviProduct;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
-use CsrDelft\model\fiscaat\CiviPrijsModel;
-use CsrDelft\model\fiscaat\CiviProductModel;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\datatable\RemoveRowsResponse;
+use CsrDelft\repository\fiscaat\CiviPrijsRepository;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\view\fiscaat\producten\CiviProductForm;
 use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
-use CsrDelft\view\fiscaat\producten\CiviProductTableResponse;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -21,31 +20,40 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class BeheerCiviProductenController extends AbstractController {
 	/**
-	 * @var CiviProductModel
+	 * @var CiviProductRepository
 	 */
-	private $civiProductModel;
+	private $civiProductRepository;
 	/**
 	 * @var CiviBestellingInhoudModel
 	 */
 	private $civiBestellingInhoudModel;
 	/**
-	 * @var CiviPrijsModel
+	 * @var CiviPrijsRepository
 	 */
-	private $civiPrijsModel;
+	private $civiPrijsRepository;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
 
-	public function __construct(CiviProductModel $civiProductModel, CiviBestellingInhoudModel $civiBestellingInhoudModel, CiviPrijsModel $civiPrijsModel) {
-		$this->civiProductModel = $civiProductModel;
+	public function __construct(
+		CiviProductRepository $civiProductRepository,
+		CiviBestellingInhoudModel $civiBestellingInhoudModel,
+		CiviPrijsRepository $civiPrijsRepository,
+		EntityManagerInterface $em
+	) {
+		$this->civiProductRepository = $civiProductRepository;
 		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
-		$this->civiPrijsModel = $civiPrijsModel;
+		$this->civiPrijsRepository = $civiPrijsRepository;
+		$this->em = $em;
 	}
 
 	public function suggesties(Request $request) {
-		$query = sql_contains($request->query->get('q'));
-		return new CiviProductSuggestiesResponse($this->civiProductModel->find('beschrijving LIKE ?', [$query]));
+		return new CiviProductSuggestiesResponse($this->civiProductRepository->getSuggesties(sql_contains($request->query->get('q'))));
 	}
 
 	public function lijst() {
-		return new CiviProductTableResponse($this->civiProductModel->find());
+		return $this->tableData($this->civiProductRepository->findAll());
 	}
 
 	public function overzicht() {
@@ -63,56 +71,61 @@ class BeheerCiviProductenController extends AbstractController {
 		}
 
 		/** @var CiviProduct $product */
-		$product = $this->civiProductModel->retrieveByUUID($selection[0]);
-		$product->prijs = $this->civiProductModel->getPrijs($product)->prijs;
+		$product = $this->civiProductRepository->retrieveByUUID($selection[0]);
+		$product->tmpPrijs = $product->getPrijs()->prijs;
 		return new CiviProductForm($product);
 	}
 
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
 
-		list($removed, $existingOrders) = Database::transaction(function () use ($selection) {
+		$removed = $this->em->transactional(function () use ($selection) {
 			$removed = array();
-			$existingOrders = array();
 			foreach ($selection as $uuid) {
 				/** @var CiviProduct $product */
-				$product = $this->civiProductModel->retrieveByUUID($uuid);
+				$product = $this->civiProductRepository->retrieveByUUID($uuid);
 
 				if ($product) {
 					if ($this->civiBestellingInhoudModel->count('product_id = ?', array($product->id)) == 0) {
-						$this->civiPrijsModel->verwijderVoorProduct($product);
-						$this->civiProductModel->delete($product);
-						$removed[] = $product;
+						$this->civiPrijsRepository->verwijderVoorProduct($product);
+						$removed[] = new RemoveDataTableEntry($product->id, CiviProduct::class);
+						$this->em->remove($product);
+						$this->em->flush();
 					} else {
-						$existingOrders[] = $product;
+						throw new CsrGebruikerException('Mag product niet verwijderen, het is al eens besteld');
 					}
 				}
 			}
 
-			return [$removed, $existingOrders];
+			return $removed;
 		});
 
-		if (!empty($removed)) {
-			return new RemoveRowsResponse($removed);
-		} elseif (!empty($existingOrders)) {
-			throw new CsrGebruikerException('Mag product niet verwijderen, het is al eens besteld');
+		if (empty($removed)) {
+			throw new CsrGebruikerException('Geen product verwijderd');
 		}
 
-		throw new CsrGebruikerException('Geen product verwijderd');
+		return $this->tableData($removed);
 	}
 
-	public function opslaan() {
-		$product = new CiviProduct();
+	public function opslaan(Request $request) {
+		$id = $request->request->getInt('id');
+
+		if (!$id) {
+			$product = new CiviProduct();
+		} else {
+			$product = $this->civiProductRepository->getProduct($id);
+		}
+
 		$form = new CiviProductForm($product);
 
 		if ($form->isPosted() && $form->validate()) {
 			if ($product->id) {
-				$this->civiProductModel->update($product);
+				$this->civiProductRepository->update($product);
 			} else {
-				$this->civiProductModel->create($product);
+				$this->civiProductRepository->create($product);
 			}
 
-			return new CiviProductTableResponse([$product]);
+			return $this->tableData([$product]);
 		}
 
 		return $form;
