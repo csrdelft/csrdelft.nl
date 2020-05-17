@@ -34,15 +34,6 @@
       width: 100%;
     }
 
-    form {
-      margin: 0 3em 0 0;
-      width: calc(50% - 1.5em);
-    }
-
-    .contact {
-      width: calc(50% - 1.5em);
-    }
-
     .copyright,.sponsors {
       border-top: solid 2px $geel;
       list-style: none;
@@ -100,19 +91,6 @@
       padding: 3em 3em 1em 3em;
       display: block;
       width: 100%;
-      form {
-        width: 100%;
-        margin: 0 0 4em 0;
-      }
-
-      .contact {
-        width: 100%;
-        margin: 0 0 4em 0;
-      }
-
-      .copyright,.sponsors {
-        margin: 4em 0 2em 0;
-      }
     }
   }
 }
@@ -123,16 +101,8 @@
     margin-top: -2.5em;
     padding-top: 2.5em;
     .inner {
-      padding: 2em 2em 0.1em 2em;
-    }
-
-    form {
-      margin: 0 0 3em 0;
-    }
-
-    .contact {
-      margin: 0 0 3em 0;
-    }
+			padding: 2em 2em 0.1em 2em;
+		}
   }
 
 }

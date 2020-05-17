@@ -149,8 +149,7 @@
 		<!-- Footer -->
 		<section id="footer">
 			<div class="inner">
-				<h2 class="major">Interesseformulier</h2>
-				@include('layout-extern.form')
+				<h2 class="major">Contactgegevens</h2>
 				<ul class="contact">
 					<li class="fa-home">
 						Soci&euml;teit Confide <br/>

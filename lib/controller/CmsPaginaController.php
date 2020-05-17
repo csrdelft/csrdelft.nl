@@ -52,6 +52,8 @@ class CmsPaginaController extends AbstractController {
 				$tmpl = 'index';
 			} elseif ($naam === 'vereniging') {
 				$menu = true;
+			} elseif ($pagina->naam === 'lidworden') {
+				$tmpl = 'lidworden';
 			}
 			return view('layout-extern.' . $tmpl, [
 				'titel' => $body->getTitel(),
