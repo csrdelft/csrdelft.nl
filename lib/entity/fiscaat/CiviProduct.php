@@ -92,7 +92,11 @@ class CiviProduct implements DataTableEntry {
 	 * @Serializer\SerializedName("prijs")
 	 */
 	public function getPrijsInt() {
-		return $this->getPrijs()->prijs;
+		if ($prijs = $this->getPrijs()) {
+			return $prijs->prijs;
+		}
+
+		return null;
 	}
 
 	/**

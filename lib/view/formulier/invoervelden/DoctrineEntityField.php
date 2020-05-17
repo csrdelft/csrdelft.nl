@@ -68,7 +68,11 @@ class DoctrineEntityField extends InputField {
 	}
 
 	public function getFormattedValue() {
-		return $this->em->getReference($this->entityType, $this->getValue());
+		$value = $this->getValue();
+		if ($value == null) {
+			return null;
+		}
+		return $this->em->getReference($this->entityType, $value);
 	}
 
 	public function getName() {

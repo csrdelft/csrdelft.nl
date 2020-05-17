@@ -69,13 +69,14 @@ class CiviProductRepository extends AbstractRepository {
 	public function create(CiviProduct $product) {
 		return $this->_em->transactional(function () use ($product) {
 			$this->_em->persist($product);
-			$this->_em->flush();
 
 			$prijs = new CiviPrijs();
 			$prijs->product = $product;
 			$prijs->van = date_create_immutable('now');
 			$prijs->tot = NULL;
 			$prijs->prijs = $product->tmpPrijs;
+
+			$product->prijzen->add($prijs);
 
 			$this->_em->persist($prijs);
 

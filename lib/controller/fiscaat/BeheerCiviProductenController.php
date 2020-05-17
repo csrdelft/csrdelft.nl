@@ -108,7 +108,14 @@ class BeheerCiviProductenController extends AbstractController {
 	}
 
 	public function opslaan(Request $request) {
-		$product = $this->civiProductRepository->getProduct($request->request->getInt('id'));
+		$id = $request->request->getInt('id');
+
+		if (!$id) {
+			$product = new CiviProduct();
+		} else {
+			$product = $this->civiProductRepository->getProduct($id);
+		}
+
 		$form = new CiviProductForm($product);
 
 		if ($form->isPosted() && $form->validate()) {
