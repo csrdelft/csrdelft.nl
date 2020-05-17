@@ -30,12 +30,9 @@
 						</em>
 						<strong>Heb je interesse om lid te worden bij C.S.R.? Stuur een appje/maak een praatje met Maartje (06 3327 1913) of mail promocie@csrdelft.nl.</strong>
 					</p>
-					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
-						Delft, rijk aan tradities die zijn ontstaan in haar {{vereniging_leeftijd()}}-jarig bestaan. Het is een breed gezelschap
-						van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
-						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
-						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
-						uithalen.
+					<p>De Civitas Studiosorum Reformatorum is een actieve, christelijke studentenvereniging in Delft, rijk aan tradities die zijn ontstaan in haar {{vereniging_leeftijd()}}-jarig bestaan.
+						Het is een breed gezelschap van zo'n 260 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke eenheid door het christelijk geloof.
+						C.S.R. is de plek waar al tientallen jaren studenten goede vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen uithalen.
 					</p>
 					<a href="/vereniging" class="special">Lees meer over C.S.R.</a>
 				</div>

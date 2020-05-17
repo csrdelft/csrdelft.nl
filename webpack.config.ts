@@ -198,7 +198,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 					},
 					{
 						loader: 'resolve-url-loader',
-						options: {},
+						options: {removeCR: true,},
 					},
 					{
 						loader: 'sass-loader',
