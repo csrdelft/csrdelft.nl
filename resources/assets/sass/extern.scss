@@ -321,3 +321,30 @@ optgroup {
 	background-color: #414262;
 }
 
+/**
+Lid worden pagina content en interesse formulier css
+ */
+#lid-worden-tekst {
+	float: left;
+	width: calc(50% - 1.5em);
+	margin-right: 3em;
+}
+
+#interesse-formulier {
+	float: right;
+	width: calc(50% - 1.5em);
+	padding: 10px;
+	border-radius: 5px;
+	z-index: 4;
+}
+
+@media screen and (max-width: $scherm-middel) {
+
+	#lid-worden-tekst, #interesse-formulier {
+		float: none;
+		width: 100%;
+		margin: 0 0 2em 0;
+		padding: 0;
+	}
+
+}
