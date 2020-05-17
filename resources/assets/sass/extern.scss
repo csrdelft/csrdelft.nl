@@ -336,6 +336,10 @@ Lid worden pagina content en interesse formulier css
 	padding: 10px;
 	border-radius: 5px;
 	z-index: 4;
+
+	h2 {
+		margin-top: 1.5em;
+	}
 }
 
 @media screen and (max-width: $scherm-middel) {

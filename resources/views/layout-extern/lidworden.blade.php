@@ -14,7 +14,7 @@
 		@php($body->view())
 	</div>
 	<div id="interesse-formulier">
-		<h2 class="major" style="margin-top:1.5em;">Interesse Formulier</h2>
+		<h2 class="major">Interesse Formulier</h2>
 		@include('layout-extern.form')
 	</div>
 @endsection
