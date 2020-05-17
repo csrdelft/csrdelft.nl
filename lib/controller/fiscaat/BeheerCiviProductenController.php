@@ -22,7 +22,7 @@ class BeheerCiviProductenController extends AbstractController {
 	/**
 	 * @var CiviProductRepository
 	 */
-	private $civiProductModel;
+	private $civiProductRepository;
 	/**
 	 * @var CiviBestellingInhoudModel
 	 */
@@ -30,30 +30,30 @@ class BeheerCiviProductenController extends AbstractController {
 	/**
 	 * @var CiviPrijsRepository
 	 */
-	private $civiPrijsModel;
+	private $civiPrijsRepository;
 	/**
 	 * @var EntityManagerInterface
 	 */
 	private $em;
 
 	public function __construct(
-		CiviProductRepository $civiProductModel,
+		CiviProductRepository $civiProductRepository,
 		CiviBestellingInhoudModel $civiBestellingInhoudModel,
-		CiviPrijsRepository $civiPrijsModel,
+		CiviPrijsRepository $civiPrijsRepository,
 		EntityManagerInterface $em
 	) {
-		$this->civiProductModel = $civiProductModel;
+		$this->civiProductRepository = $civiProductRepository;
 		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
-		$this->civiPrijsModel = $civiPrijsModel;
+		$this->civiPrijsRepository = $civiPrijsRepository;
 		$this->em = $em;
 	}
 
 	public function suggesties(Request $request) {
-		return new CiviProductSuggestiesResponse($this->civiProductModel->getSuggesties(sql_contains($request->query->get('q'))));
+		return new CiviProductSuggestiesResponse($this->civiProductRepository->getSuggesties(sql_contains($request->query->get('q'))));
 	}
 
 	public function lijst() {
-		return $this->tableData($this->civiProductModel->findAll());
+		return $this->tableData($this->civiProductRepository->findAll());
 	}
 
 	public function overzicht() {
@@ -71,7 +71,7 @@ class BeheerCiviProductenController extends AbstractController {
 		}
 
 		/** @var CiviProduct $product */
-		$product = $this->civiProductModel->retrieveByUUID($selection[0]);
+		$product = $this->civiProductRepository->retrieveByUUID($selection[0]);
 		$product->tmpPrijs = $product->getPrijs()->prijs;
 		return new CiviProductForm($product);
 	}
@@ -83,11 +83,11 @@ class BeheerCiviProductenController extends AbstractController {
 			$removed = array();
 			foreach ($selection as $uuid) {
 				/** @var CiviProduct $product */
-				$product = $this->civiProductModel->retrieveByUUID($uuid);
+				$product = $this->civiProductRepository->retrieveByUUID($uuid);
 
 				if ($product) {
 					if ($this->civiBestellingInhoudModel->count('product_id = ?', array($product->id)) == 0) {
-						$this->civiPrijsModel->verwijderVoorProduct($product);
+						$this->civiPrijsRepository->verwijderVoorProduct($product);
 						$removed[] = new RemoveDataTableEntry($product->id, CiviProduct::class);
 						$this->em->remove($product);
 						$this->em->flush();
@@ -108,14 +108,14 @@ class BeheerCiviProductenController extends AbstractController {
 	}
 
 	public function opslaan(Request $request) {
-		$product = $this->civiProductModel->getProduct($request->request->getInt('id'));
+		$product = $this->civiProductRepository->getProduct($request->request->getInt('id'));
 		$form = new CiviProductForm($product);
 
 		if ($form->isPosted() && $form->validate()) {
 			if ($product->id) {
-				$this->civiProductModel->update($product);
+				$this->civiProductRepository->update($product);
 			} else {
-				$this->civiProductModel->create($product);
+				$this->civiProductRepository->create($product);
 			}
 
 			return $this->tableData([$product]);

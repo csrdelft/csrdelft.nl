@@ -25,7 +25,7 @@ class MaaltijdenFiscaatController {
 	/**
 	 * @var CiviProductRepository
 	 */
-	private $civiProductModel;
+	private $civiProductRepository;
 	/**
 	 * @var MaaltijdenRepository
 	 */
@@ -44,13 +44,13 @@ class MaaltijdenFiscaatController {
 	private $civiSaldoModel;
 
 	public function __construct(
-        CiviProductRepository $civiProductModel,
+        CiviProductRepository $civiProductRepository,
         MaaltijdenRepository $maaltijdenRepository,
         MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
         CiviBestellingModel $civiBestellingModel,
         CiviSaldoModel $civiSaldoModel
 	) {
-		$this->civiProductModel = $civiProductModel;
+		$this->civiProductRepository = $civiProductRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->civiBestellingModel = $civiBestellingModel;

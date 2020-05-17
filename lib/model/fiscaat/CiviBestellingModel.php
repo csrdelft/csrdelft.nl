@@ -31,7 +31,7 @@ class CiviBestellingModel extends PersistenceModel {
 	/**
 	 * @var CiviProductRepository
 	 */
-	private $civiProductModel;
+	private $civiProductRepository;
 	/**
 	 * @var CiviSaldoModel
 	 */
@@ -40,18 +40,18 @@ class CiviBestellingModel extends PersistenceModel {
 	/**
 	 * CiviBestellingModel constructor.
 	 * @param CiviBestellingInhoudModel $civiBestellingInhoudModel
-	 * @param CiviProductRepository $civiProductModel
+	 * @param CiviProductRepository $civiProductRepository
 	 * @param CiviSaldoModel $civiSaldoModel
 	 */
 	public function __construct(
 		CiviBestellingInhoudModel $civiBestellingInhoudModel,
-		CiviProductRepository $civiProductModel,
+		CiviProductRepository $civiProductRepository,
 		CiviSaldoModel $civiSaldoModel
 	) {
 		parent::__construct();
 
 		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
-		$this->civiProductModel = $civiProductModel;
+		$this->civiProductRepository = $civiProductRepository;
 		$this->civiSaldoModel = $civiSaldoModel;
 	}
 
@@ -208,7 +208,7 @@ class CiviBestellingModel extends PersistenceModel {
 		$inhoud->product_id = CiviProductTypeEnum::OVERGEMAAKT;
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = $this->civiProductModel->getProduct($inhoud->product_id)->tmpPrijs * -$bedrag;
+		$bestelling->totaal = $this->civiProductRepository->getProduct($inhoud->product_id)->tmpPrijs * -$bedrag;
 
 		return $bestelling;
 	}

@@ -18,12 +18,12 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	/**
 	 * @var CiviProductRepository
 	 */
-	private $civiProductModel;
+	private $civiProductRepository;
 
-	public function __construct(CiviProductRepository $civiProductModel) {
+	public function __construct(CiviProductRepository $civiProductRepository) {
 		parent::__construct();
 
-		$this->civiProductModel = $civiProductModel;
+		$this->civiProductRepository = $civiProductRepository;
 	}
 
 	/**
@@ -32,7 +32,7 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	 * @return int
 	 */
 	public function getPrijs(CiviBestellingInhoud $inhoud) {
-		$product = $this->civiProductModel->getProduct($inhoud->product_id);
+		$product = $this->civiProductRepository->getProduct($inhoud->product_id);
 
 		return $product->tmpPrijs * $inhoud->aantal;
 	}
@@ -43,7 +43,7 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	 * @return string
 	 */
 	public function getBeschrijving(CiviBestellingInhoud $inhoud) {
-		$product = $this->civiProductModel->getProduct($inhoud->product_id);
+		$product = $this->civiProductRepository->getProduct($inhoud->product_id);
 		return sprintf("%d %s", $inhoud->aantal, $product->beschrijving);
 	}
 
