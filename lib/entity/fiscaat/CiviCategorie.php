@@ -1,9 +1,8 @@
 <?php
 
-namespace CsrDelft\model\entity\fiscaat;
+namespace CsrDelft\entity\fiscaat;
 
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviCategorieRepository")
  * @ORM\Table("CiviCategorie")
  */
-class CiviCategorie {
+class CiviCategorie implements DisplayEntity {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -44,5 +43,13 @@ class CiviCategorie {
 
 	public function getBeschrijving() {
 		return sprintf('%s (%s)', $this->type, $this->cie);
+	}
+
+	function getId() {
+		return $this->id;
+	}
+
+	function getWeergave(): string {
+		return $this->getBeschrijving();
 	}
 }

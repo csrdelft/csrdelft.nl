@@ -2,7 +2,7 @@
 
 namespace CsrDelft\repository\fiscaat;
 
-use CsrDelft\model\entity\fiscaat\CiviCategorie;
+use CsrDelft\entity\fiscaat\CiviCategorie;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

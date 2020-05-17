@@ -7,6 +7,7 @@ use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 use DateTime;
 use Exception;
 use Generator;
@@ -28,7 +29,7 @@ class CiviBestellingModel extends PersistenceModel {
 	private $civiBestellingInhoudModel;
 
 	/**
-	 * @var CiviProductModel
+	 * @var CiviProductRepository
 	 */
 	private $civiProductModel;
 	/**
@@ -39,12 +40,12 @@ class CiviBestellingModel extends PersistenceModel {
 	/**
 	 * CiviBestellingModel constructor.
 	 * @param CiviBestellingInhoudModel $civiBestellingInhoudModel
-	 * @param CiviProductModel $civiProductModel
+	 * @param CiviProductRepository $civiProductModel
 	 * @param CiviSaldoModel $civiSaldoModel
 	 */
 	public function __construct(
 		CiviBestellingInhoudModel $civiBestellingInhoudModel,
-		CiviProductModel $civiProductModel,
+		CiviProductRepository $civiProductModel,
 		CiviSaldoModel $civiSaldoModel
 	) {
 		parent::__construct();
@@ -207,7 +208,7 @@ class CiviBestellingModel extends PersistenceModel {
 		$inhoud->product_id = CiviProductTypeEnum::OVERGEMAAKT;
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = $this->civiProductModel->getProduct($inhoud->product_id)->prijs * -$bedrag;
+		$bestelling->totaal = $this->civiProductModel->getProduct($inhoud->product_id)->tmpPrijs * -$bedrag;
 
 		return $bestelling;
 	}

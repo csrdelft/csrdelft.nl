@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\fiscaat\producten;
 
-use CsrDelft\model\entity\fiscaat\CiviCategorie;
-use CsrDelft\model\entity\fiscaat\CiviProduct;
+use CsrDelft\entity\fiscaat\CiviCategorie;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredBedragField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
@@ -28,7 +28,7 @@ class CiviProductForm extends ModalForm {
 		$fields[] = new RequiredTextField('beschrijving', $model->beschrijving, 'Beschrijving');
 		$fields[] = new RequiredIntField('prioriteit', $model->prioriteit, 'Prioriteit');
 		$fields[] = new RequiredJaNeeField('beheer', $model->beheer, 'Beheer');
-		$fields[] = new RequiredBedragField('prijs', $model->prijs, 'Prijs', '€', 0, 50, 0.50);
+		$fields[] = new RequiredBedragField('tmpPrijs', $model->tmpPrijs, 'Prijs', '€', 0, 50, 0.50);
 		$fields['cat'] = new DoctrineEntityField('categorie', $model->categorie, 'Categorie', CiviCategorie::class, '/fiscaat/categorien/suggesties?q=');
 		$fields['cat']->required = true;
 

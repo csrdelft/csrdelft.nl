@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\producten;
 
-use CsrDelft\model\entity\fiscaat\CiviProduct;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;

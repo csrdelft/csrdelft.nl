@@ -5,7 +5,7 @@ namespace CsrDelft\view\fiscaat\bestellingen;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
-use CsrDelft\model\fiscaat\CiviProductModel;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
 /**
@@ -18,7 +18,7 @@ class CiviBestellingInhoudTableResponse extends DataTableResponse {
 	 * @return string
 	 */
 	public function renderElement($entity) {
-		$civiProduct = ContainerFacade::getContainer()->get(CiviProductModel::class)->getProduct($entity->product_id);
+		$civiProduct = ContainerFacade::getContainer()->get(CiviProductRepository::class)->getProduct($entity->product_id);
 		return [
 			'bestelling_id' => $entity->bestelling_id,
 			'product_id' => $entity->product_id,

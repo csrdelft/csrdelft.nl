@@ -4,6 +4,7 @@ namespace CsrDelft\model\fiscaat;
 
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -15,11 +16,11 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	const ORM = CiviBestellingInhoud::class;
 
 	/**
-	 * @var CiviProductModel
+	 * @var CiviProductRepository
 	 */
 	private $civiProductModel;
 
-	public function __construct(CiviProductModel $civiProductModel) {
+	public function __construct(CiviProductRepository $civiProductModel) {
 		parent::__construct();
 
 		$this->civiProductModel = $civiProductModel;
@@ -33,7 +34,7 @@ class CiviBestellingInhoudModel extends PersistenceModel {
 	public function getPrijs(CiviBestellingInhoud $inhoud) {
 		$product = $this->civiProductModel->getProduct($inhoud->product_id);
 
-		return $product->prijs * $inhoud->aantal;
+		return $product->tmpPrijs * $inhoud->aantal;
 	}
 
 	/**

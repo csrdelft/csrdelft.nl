@@ -8,11 +8,10 @@ use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
-use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use DateTimeInterface;
@@ -388,7 +387,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$inhoud->product_id = $aanmelding->getMaaltijd()->product_id;
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = ContainerFacade::getContainer()->get(CiviProductModel::class)->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
+		$bestelling->totaal = ContainerFacade::getContainer()->get(CiviProductRepository::class)->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
 
 		return $bestelling;
 	}

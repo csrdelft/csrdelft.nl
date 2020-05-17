@@ -2,8 +2,10 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\CsrException;
+use CsrDelft\view\formulier\DisplayEntity;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -14,58 +16,63 @@ use CsrDelft\Orm\PersistenceModel;
  * NOTE: support alleen entities met een enkele primary key.
  */
 class DoctrineEntityField extends InputField {
+	/**
+	 * @var string
+	 */
 	private $show_value;
 	/**
-	 * @var  PersistentEntity
+	 * @var  DisplayEntity
 	 */
 	private $entity;
 	/**
-	 * @var  PersistentEntity
+	 * @var string
 	 */
-	private $orm;
+	private $idField;
 	/**
-	 * @var PersistenceModel
+	 * @var EntityManagerInterface
 	 */
-	protected $model;
+	private $em;
+	/**
+	 * @var string
+	 */
+	private $entityType;
 
 	/**
 	 * EntityField constructor.
 	 * @param $name string Prefix van de input
-	 * @param $show string Attribuut van $model om in de input weer te geven
+	 * @param DisplayEntity|null $value
 	 * @param $description string Beschrijvijng van de input
-	 * @param PersistentEntity $entity
-	 * @param PersistenceModel $model Model
+	 * @param $type
 	 * @param $url string Url waar aanvullingen te vinden zijn
 	 */
 	public function __construct($name, $value, $description, $type, $url) {
-//		$this->orm = $model::ORM;
-//		$this->entity = $entity;
-//		if ($entity === null) {
-//			$this->entity = new $this->orm();
-//		}
-		foreach ($this->entity->getPrimaryKey() as $key) {
-			$input_key = filter_input(INPUT_POST, $name . '_' . $key, FILTER_DEFAULT);
-			if (null != $input_key AND false != $input_key) {
-				$this->entity->$key = $input_key;
-			}
+		if (!is_a($type, DisplayEntity::class, true)) {
+			throw new CsrException($type . ' moet DisplayEntity implementeren voor DoctrineEntityField');
+		}
+		$this->em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+
+		$meta = $this->em->getClassMetadata($type);
+
+		if (count($meta->getIdentifier()) !== 1) {
+			throw new CsrException('DoctrineEntityField ondersteund geen entities met een composite primary key');
 		}
 
-//		parent::__construct($name, $this->entity->$show, $description, $model);
+		$this->idField = $meta->getIdentifier()[0];
+		$this->entityType = $type;
+		$this->entity = $value ?? new $type();
 		$this->suggestions[] = $url;
-//		$this->show_value = $show;
-		$this->origvalue = $this->entity->$key;
-		$this->value = $this->getValue();
+		$this->show_value = $this->entity->getWeergave();
+		$this->origvalue = $this->entity->getId();
+
+		parent::__construct($name, $value ? $value->getId() : null, $description);
+	}
+
+	public function getFormattedValue() {
+		return $this->em->getReference($this->entityType, $this->getValue());
 	}
 
 	public function getName() {
-		// TODO: Dit moet de volledige pk kunnen zijn.
-		return $this->name . '_' . $this->entity->getPrimaryKey()[0];
-	}
-
-	public function getValue() {
-		// TODO: Dit moet de volledige pk kunnen zijn.
-		$key = $this->entity->getPrimaryKey()[0];
-		return $this->entity->$key;
+		return $this->name;
 	}
 
 	public function validate() {
@@ -77,48 +84,38 @@ class DoctrineEntityField extends InputField {
 			return true;
 		}
 
-		if (!$this->model->exists($this->entity)) {
-			$this->error = 'Niet gevonden';
-		}
+//		if (!$this->model->exists($this->entity)) {
+//			$this->error = 'Niet gevonden';
+//		}
 
 		return $this->error === '';
 	}
 
+	public function getHtml() {
+		$html = '<input name="' . $this->name . '_show" value="' . $this->entity->getWeergave() . '" origvalue="' . $this->entity->getWeergave() . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+
+		$id = $this->getId() . '_' . $this->idField;
+		$this->typeahead_selected .= '$("#' . $id . '").val(suggestion["' . $this->idField . '"]);';
+		$html .= '<input type="hidden" name="' . $this->name . '" id="' . $id . '" value="' . $this->entity->getId() . '" />';
+
+		return $html;
+	}
+
 	/**
-	 * Dit veld is gepost als show en de hele pk is gepost.
+	 * Dit veld is gepost als show en de pk is gepost.
 	 *
 	 * @return bool Of alles gepost is
 	 */
 	public function isPosted() {
-		$input_show = filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT);
-		if (false == $input_show OR null == $input_show) {
+		if (!filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
 			return false;
 		}
 
-		foreach ($this->entity->getPrimaryKey() as $key) {
-			$input_key = filter_input(INPUT_POST, $this->name . '_' . $key, FILTER_DEFAULT);
-			if (false === $input_key OR null === $input_key) {
-				return false;
-			}
+		if (!filter_input(INPUT_POST, $this->name, FILTER_DEFAULT)) {
+			return false;
 		}
 
 		return true;
-	}
-
-	public function getHtml() {
-		if ($this->isPosted()) {
-			$this->value = filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT);
-		}
-
-		$html = '<input name="' . $this->name . '_show" value="' . $this->value . '" origvalue="' . $this->value . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
-
-		foreach ($this->entity->getPrimaryKey() as $i => $key) {
-			$id = $this->getId() . '_' . $key;
-			$name = $this->name . '_' . $key;
-			$this->typeahead_selected .= '$("#' . $id . '").val(suggestion["' . $key . '"]);';
-			$html .= '<input type="hidden" name="' . $name . '" id="' . $id . '" value="' . $this->entity->$key . '" />';
-		}
-		return $html;
 	}
 
 }

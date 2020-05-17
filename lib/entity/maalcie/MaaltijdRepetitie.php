@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\fiscaat\CiviProductModel;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Monolog\DateTimeImmutable;
 
@@ -87,7 +87,7 @@ class MaaltijdRepetitie {
 	public $abonnement_filter;
 
 	public function getStandaardPrijs() {
-		return ContainerFacade::getContainer()->get(CiviProductModel::class)->getPrijs(ContainerFacade::getContainer()->get(CiviProductModel::class)->getProduct($this->product_id))->prijs;
+		return ContainerFacade::getContainer()->get(CiviProductRepository::class)->getPrijs(ContainerFacade::getContainer()->get(CiviProductRepository::class)->getProduct($this->product_id))->prijs;
 	}
 
 	public function getDagVanDeWeekText() {

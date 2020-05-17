@@ -6,8 +6,8 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\fiscaat\CiviProductModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
@@ -23,7 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class MaaltijdenFiscaatController {
 	/**
-	 * @var CiviProductModel
+	 * @var CiviProductRepository
 	 */
 	private $civiProductModel;
 	/**
@@ -44,7 +44,7 @@ class MaaltijdenFiscaatController {
 	private $civiSaldoModel;
 
 	public function __construct(
-        CiviProductModel $civiProductModel,
+        CiviProductRepository $civiProductModel,
         MaaltijdenRepository $maaltijdenRepository,
         MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
         CiviBestellingModel $civiBestellingModel,

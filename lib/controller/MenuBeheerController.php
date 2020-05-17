@@ -26,7 +26,7 @@ class MenuBeheerController {
 		if ($menu_name != LoginModel::getUid() && !LoginModel::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
-		$root = $this->menuItemRepository->getMenu($menu_name);
+		$root = $this->menuItemRepository->getMenu($menu_name, true);
 		if (!$root || !$root->magBeheren()) {
 			throw new CsrToegangException();
 		}
