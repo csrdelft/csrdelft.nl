@@ -7,7 +7,6 @@ use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\entity\fiscaat\CiviBestelling;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;

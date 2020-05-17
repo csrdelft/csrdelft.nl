@@ -45,11 +45,11 @@ class CiviCategorie implements DisplayEntity {
 		return sprintf('%s (%s)', $this->type, $this->cie);
 	}
 
-	function getId() {
+	public function getId() {
 		return $this->id;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		return $this->getBeschrijving();
 	}
 }

@@ -88,10 +88,6 @@ class DoctrineEntityField extends InputField {
 			return true;
 		}
 
-//		if (!$this->model->exists($this->entity)) {
-//			$this->error = 'Niet gevonden';
-//		}
-
 		return $this->error === '';
 	}
 

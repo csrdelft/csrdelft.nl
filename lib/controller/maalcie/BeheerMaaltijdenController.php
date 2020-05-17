@@ -4,6 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\security\LoginModel;
@@ -167,7 +168,7 @@ class BeheerMaaltijdenController extends AbstractController {
 				return new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {
 				$maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
-				$maaltijd->product_id = $repetitie->product_id;
+				$maaltijd->product = $this->get('doctrine.orm.entity_manager')->getReference(CiviProduct::class, $repetitie->product_id);
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;
 				$maaltijd->tijd = $repetitie->standaard_tijd;

@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\fiscaat;
 
 use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -16,7 +17,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviProductRepository")
  * @ORM\Table("CiviProduct")
  */
-class CiviProduct implements DataTableEntry {
+class CiviProduct implements DataTableEntry, DisplayEntity {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -109,6 +110,14 @@ class CiviProduct implements DataTableEntry {
 	}
 
 	public function getBeschrijvingFormatted() {
-		return sprintf("%s (€%.2f)", $this->beschrijving, $this->tmpPrijs / 100);
+		return sprintf("%s (€%.2f)", $this->beschrijving, $this->getPrijsInt() / 100);
+	}
+
+	public function getId() {
+		return $this->id;
+	}
+
+	public function getWeergave(): string {
+		return $this->getBeschrijvingFormatted();
 	}
 }
