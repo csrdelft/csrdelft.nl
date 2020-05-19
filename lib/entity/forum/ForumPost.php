@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\forum;
 
 use CsrDelft\model\security\LoginModel;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,13 +46,13 @@ class ForumPost {
 	public $tekst;
 	/**
 	 * Datum en tijd van aanmaken
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;
 	/**
 	 * Datum en tijd van laatste bewerking
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $laatst_gewijzigd;

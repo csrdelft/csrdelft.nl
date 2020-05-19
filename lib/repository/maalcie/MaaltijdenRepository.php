@@ -4,7 +4,6 @@ namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\model\security\LoginModel;
@@ -17,6 +16,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Throwable;
 
 /**
  * MaaltijdenRepository  |  P.W.G. Brussee (brussee@live.nl)
@@ -500,7 +500,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @param MaaltijdRepetitie $repetitie
 	 * @param $verplaats
 	 * @return bool|mixed
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	public function updateRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $verplaats) {
 		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
@@ -547,7 +547,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @param DateTimeInterface $eindDatum
 	 *
 	 * @return Maaltijd[]
-	 * @throws \Throwable
+	 * @throws Throwable
 	 */
 	public function maakRepetitieMaaltijden(MaaltijdRepetitie $repetitie, DateTimeInterface $beginDatum, DateTimeInterface $eindDatum) {
 		return $this->_em->transactional(function () use ($repetitie, $beginDatum, $eindDatum) {

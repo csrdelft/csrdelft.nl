@@ -7,7 +7,6 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
-use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\view\JsonResponse;

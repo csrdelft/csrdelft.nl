@@ -3,7 +3,6 @@
 namespace CsrDelft\view\maalcie\corvee\functies;
 
 use CsrDelft\entity\corvee\CorveeKwalificatie;
-use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;

@@ -21,6 +21,7 @@ use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\GoogleSync;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
@@ -104,12 +105,12 @@ class Profiel implements Agendeerbaar {
 	public $geslacht;
 	/**
 	 * @ORM\Column(type="date")
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 */
 	public $gebdatum;
 	/**
 	 * @ORM\Column(type="date")
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 */
 	public $sterfdatum;
 	/**
@@ -235,7 +236,7 @@ class Profiel implements Agendeerbaar {
 	public $lidjaar;
 	/**
 	 * @ORM\Column(type="date", nullable=true)
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 */
 	public $lidafdatum;
 	/**

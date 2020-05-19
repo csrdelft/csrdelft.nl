@@ -9,7 +9,6 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\model\security\LoginModel;

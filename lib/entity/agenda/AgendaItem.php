@@ -4,6 +4,7 @@ namespace CsrDelft\entity\agenda;
 
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\LoginModel;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use function common\short_class;
 
@@ -43,13 +44,13 @@ class AgendaItem implements Agendeerbaar {
 	/**
 	 * DateTime begin
 	 * @ORM\Column(type="datetime")
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 */
 	public $begin_moment;
 	/**
 	 * DateTime eind
 	 * @ORM\Column(type="datetime")
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 */
 	public $eind_moment;
 	/**

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use DateTime;
+use DateTimeInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -15,7 +15,7 @@ use DateTime;
  */
 class DateObjectField extends DateField {
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
-		if ($value instanceof \DateTimeInterface) {
+		if ($value instanceof DateTimeInterface) {
 			$value = date_format_intl($value, DATE_FORMAT);
 		}
 		parent::__construct($name, $value, $description);

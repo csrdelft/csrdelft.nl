@@ -7,6 +7,7 @@ namespace CsrDelft\common\Doctrine\Type;
 use CsrDelft\common\Enum;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use InvalidArgumentException;
 
 abstract class EnumType extends Type {
 	protected $name;
@@ -36,7 +37,7 @@ abstract class EnumType extends Type {
 		if ($value instanceof $enumClass) {
 			return $value->getValue();
 		} else {
-			throw new \InvalidArgumentException(print_r($value, true) . " is not a " . $this->enumClass);
+			throw new InvalidArgumentException(print_r($value, true) . " is not a " . $this->enumClass);
 		}
 	}
 

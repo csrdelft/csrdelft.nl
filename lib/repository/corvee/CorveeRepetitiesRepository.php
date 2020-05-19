@@ -4,7 +4,6 @@ namespace CsrDelft\repository\corvee;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;

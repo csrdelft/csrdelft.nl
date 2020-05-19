@@ -3,9 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekRepository;
 use CsrDelft\view\bbcode\BbHelper;

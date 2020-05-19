@@ -2,12 +2,9 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\common\Enum;
 use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\T;
-use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;

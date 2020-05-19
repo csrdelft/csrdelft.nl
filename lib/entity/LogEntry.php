@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,7 +42,7 @@ class LogEntry {
 	public $locatie;
 	/**
 	 * DateTime
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $moment;

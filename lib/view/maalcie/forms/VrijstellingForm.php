@@ -4,9 +4,7 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\view\formulier\getalvelden\IntField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredLidField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLidObjectField;
-use CsrDelft\view\formulier\keuzevelden\DateField;
 use CsrDelft\view\formulier\keuzevelden\DateObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;

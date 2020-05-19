@@ -8,6 +8,8 @@ use CsrDelft\model\security\LoginModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -72,7 +74,7 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 	/**
 	 * @param string $uid
 	 * @param string $url
-	 * @throws \Doctrine\ORM\ORMException
+	 * @throws ORMException
 	 */
 	public function discardToken($uid, $url) {
 		$this->getEntityManager()->remove($this->getEntityManager()->getReference(OneTimeToken::class, ['uid' => $uid, 'url' => $url]));
@@ -84,8 +86,8 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 	 * @param string $url
 	 *
 	 * @return array
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function createToken($uid, $url) {
 		$rand = crypto_rand_token(255);

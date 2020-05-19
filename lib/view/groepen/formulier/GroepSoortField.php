@@ -8,7 +8,6 @@ use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\CommissieSoort;
 use CsrDelft\entity\groepen\ActiviteitSoort;
-use CsrDelft\entity\groepen\HuisStatus;
 use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
@@ -21,8 +20,6 @@ use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
-use function common\short_class;
 
 class GroepSoortField extends RadioField {
 

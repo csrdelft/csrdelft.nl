@@ -13,6 +13,7 @@ use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
+use DateInterval;
 use DateTimeInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -581,9 +582,9 @@ class CorveeTakenRepository extends AbstractRepository {
 				if ($verplaats) {
 					$shift = $repetitie->dag_vd_week - $datum->format('w');
 					if ($shift > 0) {
-						$datum = $datum->add(\DateInterval::createFromDateString('+' . $shift . ' days'));
+						$datum = $datum->add(DateInterval::createFromDateString('+' . $shift . ' days'));
 					} elseif ($shift < 0) {
-						$datum = $datum->add(\DateInterval::createFromDateString($shift . ' days'));
+						$datum = $datum->add(DateInterval::createFromDateString($shift . ' days'));
 					}
 					if ($shift !== 0) {
 						$taak->datum = $datum;

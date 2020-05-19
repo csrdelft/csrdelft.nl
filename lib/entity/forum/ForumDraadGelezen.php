@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\forum;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,7 +34,7 @@ class ForumDraadGelezen {
 	public $uid;
 	/**
 	 * Datum en tijd van laatst gelezen
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;

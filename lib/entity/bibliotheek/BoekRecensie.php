@@ -5,6 +5,7 @@ namespace CsrDelft\entity\bibliotheek;
 
 
 use CsrDelft\model\security\LoginModel;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,12 +37,12 @@ class BoekRecensie {
 	 */
 	public $beschrijving;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $bewerkdatum;

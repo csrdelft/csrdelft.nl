@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\Enum;
-use CsrDelft\Orm\Entity\PersistentEnum;
 
 /**
  * CommissieSoort.enum.php

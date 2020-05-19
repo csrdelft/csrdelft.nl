@@ -2,7 +2,6 @@
 
 namespace CsrDelft\repository\security;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\security\AccessControl;

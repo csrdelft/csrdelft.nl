@@ -8,9 +8,12 @@ use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use ReflectionClass;
 use ReflectionProperty;
+use Throwable;
 
 /**
  * AbstractGroepenModel.class.php
@@ -71,8 +74,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 *
 	 * @param PersistentEntity|AbstractGroep $groep
 	 * @return void
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function create(AbstractGroep $groep) {
 		$this->_em->persist($groep);
@@ -81,8 +84,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 
 	/**
 	 * @param AbstractGroep $groep
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function update(AbstractGroep $groep) {
 		$this->_em->persist($groep);
@@ -91,8 +94,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 
 	/**
 	 * @param AbstractGroep $groep
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function delete(AbstractGroep $groep) {
 		$this->_em->remove($groep);
@@ -146,7 +149,7 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 
 				return $newgroep;
 			});
-		} catch (\Throwable $ex) {
+		} catch (Throwable $ex) {
 			setMelding($ex->getMessage(), -1);
 			return false;
 		}

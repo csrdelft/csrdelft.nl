@@ -2,12 +2,10 @@
 
 namespace CsrDelft\repository\documenten;
 
-use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\model\OrmTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use PDOStatement;
 
 /**
  * Class DocumentCategorieModel.

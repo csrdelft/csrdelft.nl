@@ -4,11 +4,11 @@ namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
+use DateInterval;
 
 /**
  * CorveeHerinneringenModel.class.php
@@ -74,7 +74,7 @@ class CorveeHerinneringService {
 	public function stuurHerinneringen() {
 		$vooraf = str_replace('-', '+', instelling('corvee', 'herinnering_1e_mail'));
 		$van = date_create();
-		$tot = date_create_immutable()->add(\DateInterval::createFromDateString($vooraf));
+		$tot = date_create_immutable()->add(DateInterval::createFromDateString($vooraf));
 		$taken = $this->corveeTakenRepository->getTakenVoorAgenda($van, $tot, true);
 		$verzonden = array();
 		$errors = array();

@@ -4,6 +4,7 @@ namespace CsrDelft\entity\security;
 
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\view\Icon;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -40,7 +41,7 @@ class RememberLogin implements DataTableEntry {
 	public $uid;
 	/**
 	 * DateTime
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $remember_since;

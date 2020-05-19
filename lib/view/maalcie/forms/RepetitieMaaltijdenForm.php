@@ -4,7 +4,6 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\view\formulier\elementen\HtmlComment;
-use CsrDelft\view\formulier\keuzevelden\DateField;
 use CsrDelft\view\formulier\keuzevelden\DateObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;

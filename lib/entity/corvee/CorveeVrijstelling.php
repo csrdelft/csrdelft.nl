@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\corvee;
 
 use CsrDelft\entity\profiel\Profiel;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,12 +28,12 @@ class CorveeVrijstelling {
 	 */
 	public $uid;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $begin_datum;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $eind_datum;

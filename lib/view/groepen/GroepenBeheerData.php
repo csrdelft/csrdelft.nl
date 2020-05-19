@@ -3,7 +3,6 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 

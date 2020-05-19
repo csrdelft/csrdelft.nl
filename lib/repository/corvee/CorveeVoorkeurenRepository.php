@@ -3,7 +3,6 @@
 namespace CsrDelft\repository\corvee;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeVoorkeur;
 use CsrDelft\entity\corvee\CorveeVoorkeurMatrixDTO;

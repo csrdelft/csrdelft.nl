@@ -2,11 +2,7 @@
 
 namespace CsrDelft\repository\pin;
 use CsrDelft\common\CsrException;
-use CsrDelft\entity\pin\PinTransactie;
 use CsrDelft\entity\pin\PinTransactieMatch;
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
-use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;

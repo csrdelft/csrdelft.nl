@@ -13,6 +13,8 @@ use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -89,12 +91,12 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $aanmeld_limiet;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="date")
 	 */
 	public $datum;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="time")
 	 */
 	public $tijd;
@@ -105,7 +107,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $gesloten = false;
 	/**
-	 * @var \DateTimeInterface
+	 * @var DateTimeInterface
 	 * @ORM\Column(type="datetime")
 	 * @Serializer\Groups("datatable")
 	 */

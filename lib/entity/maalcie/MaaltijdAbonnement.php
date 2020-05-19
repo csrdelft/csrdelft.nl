@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\maalcie;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,7 +46,7 @@ class MaaltijdAbonnement {
 	 */
 	public $uid;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $wanneer_ingeschakeld; # datetime

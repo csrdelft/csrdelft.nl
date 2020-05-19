@@ -7,6 +7,7 @@ use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\groepen\WoonoordenRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -32,7 +33,7 @@ class Eetplan implements DataTableEntry {
 
 	/**
 	 * @ORM\Column(type="date", nullable=true)
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 */
 	public $avond;
 

@@ -6,6 +6,7 @@ namespace CsrDelft\entity;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\Afbeelding;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,7 +29,7 @@ class ForumPlaatje {
 	 */
 	public $access_key;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_toegevoegd;

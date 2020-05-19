@@ -3,7 +3,6 @@
 namespace CsrDelft\entity;
 
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
 

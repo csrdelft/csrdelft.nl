@@ -4,7 +4,6 @@
 namespace CsrDelft\controller;
 
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Lichting;
@@ -18,6 +17,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
+use Doctrine\ORM\NonUniqueResultException;
 
 class LedenMemoryController {
 	/**
@@ -84,7 +84,7 @@ class LedenMemoryController {
 
 	/**
 	 * @return Verticale|null
-	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 * @throws NonUniqueResultException
 	 */
 	private function getVerticale() {
 		$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);

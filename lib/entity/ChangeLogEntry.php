@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -25,7 +26,7 @@ class ChangeLogEntry {
 	public $id;
 	/**
 	 * The moment it changed
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 * @Serializer\Groups("datatable")
 	 */

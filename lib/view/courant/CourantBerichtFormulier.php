@@ -13,7 +13,6 @@ use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredBBCodeField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
 class CourantBerichtFormulier extends Formulier {

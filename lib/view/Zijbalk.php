@@ -8,12 +8,9 @@ use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
-use CsrDelft\repository\groepen\LichtingenRepository;
-use CsrDelft\repository\LedenMemoryScoresRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
-use CsrDelft\view\ledenmemory\LedenMemoryZijbalkView;
 
 /**
  * Zijbalk.static.php

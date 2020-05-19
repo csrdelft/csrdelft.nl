@@ -16,6 +16,8 @@ use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\VerjaardagenService;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use PDOStatement;
 
@@ -129,13 +131,13 @@ class AgendaRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param \DateTimeImmutable $van
-	 * @param \DateTimeImmutable $tot
+	 * @param DateTimeImmutable $van
+	 * @param DateTimeImmutable $tot
 	 * @param $query
 	 * @param $limiet
 	 * @return AgendaItem[]
 	 */
-	public function zoeken(\DateTimeImmutable $van, \DateTimeImmutable $tot, $query, $limiet) {
+	public function zoeken(DateTimeImmutable $van, DateTimeImmutable $tot, $query, $limiet) {
 		return $this->createQueryBuilder('a')
 			->where('a.eind_moment >= :van and a.begin_moment <= :tot')
 			->andWhere('a.titel like :query or a.beschrijving like :query or a.locatie like :query')
@@ -149,13 +151,13 @@ class AgendaRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param \DateTimeImmutable $van
-	 * @param \DateTimeImmutable $tot
+	 * @param DateTimeImmutable $van
+	 * @param DateTimeImmutable $tot
 	 * @param bool $ical
 	 * @param bool $zijbalk
 	 * @return Agendeerbaar[]
 	 */
-	public function getAllAgendeerbaar(\DateTimeImmutable $van, \DateTimeImmutable $tot, $ical = false, $zijbalk = false) {
+	public function getAllAgendeerbaar(DateTimeImmutable $van, DateTimeImmutable $tot, $ical = false, $zijbalk = false) {
 		$result = array();
 
 		// AgendaItems
@@ -164,7 +166,7 @@ class AgendaRepository extends AbstractRepository {
 			->where('a.begin_moment >= :begin_moment and a.begin_moment < :eind_moment')
 			->orWhere('a.eind_moment >= :begin_moment and a.eind_moment < :eind_moment')
 			->setParameter('begin_moment', $van)
-			->setParameter('eind_moment', $tot->add(\DateInterval::createFromDateString('1 day')))
+			->setParameter('eind_moment', $tot->add(DateInterval::createFromDateString('1 day')))
 			->getQuery()->getResult();
 		foreach ($items as $item) {
 			if ($item->magBekijken($ical)) {
@@ -233,7 +235,7 @@ class AgendaRepository extends AbstractRepository {
 		return null;
 	}
 
-	public function getItemsByDay(\DateTimeImmutable $dag) {
+	public function getItemsByDay(DateTimeImmutable $dag) {
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 

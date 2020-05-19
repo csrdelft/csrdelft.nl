@@ -5,7 +5,6 @@ namespace CsrDelft\view\bbcode\tag;
 
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDelenRepository;

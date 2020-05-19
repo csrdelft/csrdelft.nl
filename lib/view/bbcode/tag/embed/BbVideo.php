@@ -5,7 +5,6 @@ namespace CsrDelft\view\bbcode\tag\embed;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\view\bbcode\BbHelper;
-use CsrDelft\view\formulier\UrlDownloader;
 
 /**
  * Universele videotag, gewoon urls erin stoppen. Ik heb een poging

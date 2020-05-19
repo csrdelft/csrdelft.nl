@@ -3,7 +3,6 @@
 namespace CsrDelft\view\profiel;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Doctrine\Type\OntvangtContactueelType;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;

@@ -8,6 +8,7 @@ use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
+use Doctrine\ORM\EntityManager;
 use Jacwright\RestServer\RestException;
 
 class ApiActiviteitenController {
@@ -16,7 +17,7 @@ class ApiActiviteitenController {
 	/** @var ActiviteitenRepository  */
 	private $activiteitenRepository;
 	/**
-	 * @var \Doctrine\ORM\EntityManager
+	 * @var EntityManager
 	 */
 	private $em;
 	/**

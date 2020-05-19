@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\commissievoorkeuren;
 
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

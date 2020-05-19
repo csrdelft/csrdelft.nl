@@ -6,6 +6,7 @@ use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\datatable\DataTableColumn;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -79,7 +80,7 @@ class Peiling implements DataTableEntry {
 	 */
 	public $rechten_mod;
 	/**
-	 * @var \DateTimeImmutable|null
+	 * @var DateTimeImmutable|null
 	 * @ORM\Column(type="datetime", nullable=true)
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */

@@ -6,7 +6,6 @@ use CsrDelft\entity\documenten\Document;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use PDOStatement;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

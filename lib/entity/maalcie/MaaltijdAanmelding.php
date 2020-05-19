@@ -2,10 +2,9 @@
 
 namespace CsrDelft\entity\maalcie;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,7 +65,7 @@ class MaaltijdAanmelding {
 	 */
 	public $door_uid;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $laatst_gewijzigd;

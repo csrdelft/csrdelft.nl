@@ -7,7 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\Icon;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,7 +39,7 @@ class Document extends Bestand {
 	 */
 	public $categorie_id;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;

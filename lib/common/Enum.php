@@ -3,6 +3,7 @@
 
 namespace CsrDelft\common;
 
+use InvalidArgumentException;
 use ReflectionClass;
 
 abstract class Enum {
@@ -23,7 +24,7 @@ abstract class Enum {
 	 */
 	private function __construct($value) {
 		if (!static::isValidValue($value)) {
-			throw new \InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
+			throw new InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
 		}
 		$this->value = $value;
 	}
@@ -34,7 +35,7 @@ abstract class Enum {
 	 */
 	public static function from($value) {
 		if (!static::isValidValue($value)) {
-			throw new \InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
+			throw new InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
 		}
 
 		$calledClass = get_called_class();

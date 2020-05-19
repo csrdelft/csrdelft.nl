@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\security;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,7 +41,7 @@ class OneTimeToken {
 	public $token;
 	/**
 	 * Moment of expiration
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $expire;

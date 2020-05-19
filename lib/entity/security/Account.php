@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\security;
 
 use CsrDelft\entity\profiel\Profiel;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,19 +47,19 @@ class Account {
 	public $pass_hash;
 	/**
 	 * DateTime last change
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $pass_since;
 	/**
 	 * DateTime last successful login
-	 * @var \DateTimeImmutable|null
+	 * @var DateTimeImmutable|null
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $last_login_success;
 	/**
 	 * DateTime last login attempt
-	 * @var \DateTimeImmutable|null
+	 * @var DateTimeImmutable|null
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $last_login_attempt;
@@ -88,7 +89,7 @@ class Account {
 	public $private_token;
 	/**
 	 * DateTime last change
-	 * @var \DateTimeImmutable|null
+	 * @var DateTimeImmutable|null
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $private_token_since;

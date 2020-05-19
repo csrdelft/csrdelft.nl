@@ -3,9 +3,7 @@
 namespace CsrDelft\repository\eetplan;
 
 use CsrDelft\entity\eetplan\EetplanBekenden;
-use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\AbstractRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

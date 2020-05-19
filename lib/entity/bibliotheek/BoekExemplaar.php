@@ -6,6 +6,7 @@ namespace CsrDelft\entity\bibliotheek;
 
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,7 +46,7 @@ class BoekExemplaar extends PersistentEntity {
 	public $uitgeleend_uid;
 
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;
@@ -57,7 +58,7 @@ class BoekExemplaar extends PersistentEntity {
 	public $status;
 
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $uitleendatum;

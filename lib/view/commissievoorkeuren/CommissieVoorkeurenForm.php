@@ -13,7 +13,6 @@ use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
-use CsrDelft\view\formulier\keuzevelden\EntitySelectField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 

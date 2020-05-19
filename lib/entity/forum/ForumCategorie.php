@@ -2,12 +2,9 @@
 
 namespace CsrDelft\entity\forum;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\forum\ForumDelenRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 
 /**
  * ForumCategorie.class.php

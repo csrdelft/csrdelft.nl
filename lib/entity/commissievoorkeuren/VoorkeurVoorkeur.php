@@ -3,8 +3,8 @@
 namespace CsrDelft\entity\commissievoorkeuren;
 
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\service\AccessService;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,7 +35,7 @@ class VoorkeurVoorkeur {
 	public $voorkeur;
 
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $timestamp;
@@ -45,7 +45,7 @@ class VoorkeurVoorkeur {
 	 */
 	public function setTimestamp()
 	{
-		$this->timestamp = new \DateTimeImmutable();
+		$this->timestamp = new DateTimeImmutable();
 	}
 
 	/**

@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\forum;
 
-use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

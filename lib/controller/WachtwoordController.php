@@ -7,7 +7,6 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\AccessService;

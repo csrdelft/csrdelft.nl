@@ -6,7 +6,6 @@ namespace CsrDelft\model;
 use CsrDelft\Orm\Persistence\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**

@@ -6,7 +6,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;

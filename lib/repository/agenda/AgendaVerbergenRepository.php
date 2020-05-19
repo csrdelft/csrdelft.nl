@@ -7,7 +7,6 @@ use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\OrmTrait;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

@@ -3,7 +3,6 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\leden\WerkgroepDeelnemersRepository;
 use CsrDelft\model\security\LoginModel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;

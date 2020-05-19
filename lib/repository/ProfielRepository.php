@@ -24,6 +24,7 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\security\AccountRepository;
 use DateTime;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -129,7 +130,7 @@ class ProfielRepository extends AbstractRepository {
 
 	/**
 	 * @param Profiel $profiel
-	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 * @throws NonUniqueResultException
 	 */
 	public function create(Profiel $profiel) {
 		// Lichting zijn de laatste 2 cijfers van lidjaar

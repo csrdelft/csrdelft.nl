@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\view\groepen\GroepenView;
 

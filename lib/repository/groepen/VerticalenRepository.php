@@ -4,6 +4,7 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\repository\AbstractGroepenRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class VerticalenRepository extends AbstractGroepenRepository {
@@ -26,7 +27,7 @@ class VerticalenRepository extends AbstractGroepenRepository {
 	/**
 	 * @param $naam
 	 * @return Verticale|null
-	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 * @throws NonUniqueResultException
 	 */
 	public function searchByNaam($naam) {
 		return $this->createQueryBuilder('v')

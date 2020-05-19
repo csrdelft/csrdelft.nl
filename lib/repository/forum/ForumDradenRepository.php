@@ -15,6 +15,7 @@ use Doctrine\DBAL\Exception\SyntaxErrorException;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -417,7 +418,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 			$this->getEntityManager()->flush();
 
 			return 1;
-		} catch (\Exception $ex) {
+		} catch (Exception $ex) {
 			return 0;
 		}
 	}

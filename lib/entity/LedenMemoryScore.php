@@ -3,6 +3,7 @@
 namespace CsrDelft\entity;
 
 use CsrDelft\common\datatable\DataTableEntry;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -62,7 +63,7 @@ class LedenMemoryScore implements DataTableEntry {
 	public $door_uid;
 	/**
 	 * Behaald op datum en tijd
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $wanneer;

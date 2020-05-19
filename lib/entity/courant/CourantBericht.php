@@ -5,7 +5,7 @@ namespace CsrDelft\entity\courant;
 
 
 use CsrDelft\model\security\LoginModel;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,7 +48,7 @@ class CourantBericht {
 	 */
 	public $uid;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime", name="datumTijd")
 	 */
 	public $datumTijd;

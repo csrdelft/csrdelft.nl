@@ -4,7 +4,6 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\view\bbcode\BbHelper;

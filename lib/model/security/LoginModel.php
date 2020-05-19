@@ -11,7 +11,6 @@ use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\AccessService;

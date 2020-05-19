@@ -6,6 +6,7 @@ use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,7 +38,7 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 	 * Ga na welke posts op de huidige pagina het laatst is geplaatst of gewijzigd.
 	 *
 	 * @param ForumDraad $draad
-	 * @param \DateTime $moment
+	 * @param DateTime $moment
 	 */
 	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null) {
 		$gelezen = $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginModel::getUid()]);

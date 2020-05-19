@@ -3,7 +3,6 @@
 namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\service\AccessService;
 
 /**

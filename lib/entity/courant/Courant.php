@@ -4,7 +4,7 @@
 namespace CsrDelft\entity\courant;
 
 
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,7 +22,7 @@ class Courant {
 	 */
 	public $id;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime", name="verzendMoment")
 	 */
 	public $verzendMoment;

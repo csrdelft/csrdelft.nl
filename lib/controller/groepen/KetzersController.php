@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\repository\groepen\KetzersRepository;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
 use CsrDelft\view\JsonResponse;

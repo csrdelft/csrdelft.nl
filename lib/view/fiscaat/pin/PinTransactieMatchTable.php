@@ -3,7 +3,6 @@
 namespace CsrDelft\view\fiscaat\pin;
 
 use CsrDelft\entity\pin\PinTransactieMatch;
-use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\CollectionDataTableKnop;
 use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;

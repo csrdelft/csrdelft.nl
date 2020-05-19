@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -56,13 +57,13 @@ class ForumDraad {
 	public $titel;
 	/**
 	 * Datum en tijd van aanmaken
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;
 	/**
 	 * Datum en tijd van laatst geplaatste of gewijzigde post
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $laatst_gewijzigd;

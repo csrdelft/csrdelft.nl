@@ -4,7 +4,6 @@ namespace CsrDelft\repository\peilingen;
 
 use CsrDelft\entity\peilingen\PeilingStem;
 use CsrDelft\repository\AbstractRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

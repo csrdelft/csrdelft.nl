@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\fiscaat;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,12 +24,12 @@ class CiviPrijs {
 	 */
 	public $id;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $van;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $tot;
