@@ -20,7 +20,6 @@ use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\service\security\CliLoginService;
 use CsrDelft\service\security\LoginService;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
@@ -135,12 +134,11 @@ switch (MODE) {
 		break;
 	case 'CLI':
 		// Override LoginModel in container to use the Cli version
-		$cliLoginModel = $container->get(CliLoginService::class);
-		$container->set(LoginService::class, $cliLoginModel);
+		$cliLoginModel = $container->get(LoginService::class);
 
-		$cliLoginModel->authenticate();
+		$cliLoginModel->validateCron();
 
-		if (!$cliLoginModel::mag(P_ADMIN)) {
+		if (!LoginService::mag(P_ADMIN)) {
 			die('access denied');
 		}
 		break;

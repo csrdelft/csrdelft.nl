@@ -15,19 +15,21 @@ use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
+use DateInterval;
 
 /**
  * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.
  *
  * @package CsrDelft\service
  */
-class LoginService implements ILoginService {
+class LoginService {
 	public const UID_EXTERN = 'x999';
 	public const SESS_AUTH_ERROR = 'auth_error';
 	const SESS_UID = '_uid';
 	const SESS_AUTHENTICATION_METHOD = '_authenticationMethod';
 	const COOKIE_REMEMBER = 'remember';
 	const SESS_SUED_FROM = '_suedFrom';
+	private static $uid = 'x999';
 	/**
 	 * @var LoginSession
 	 */
@@ -73,7 +75,7 @@ class LoginService implements ILoginService {
 	 */
 	public static function getUid() {
 		if (MODE === 'CLI') {
-			return CliLoginService::getUid();
+			return static::$uid;
 		}
 		return $_SESSION[self::SESS_UID] ?? self::UID_EXTERN;
 	}
@@ -371,6 +373,10 @@ class LoginService implements ILoginService {
 	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod() {
+		if (MODE == 'CLI') {
+			return AuthenticationMethod::password_login;
+		}
+
 		if (!isset($_SESSION[self::SESS_AUTHENTICATION_METHOD])) {
 			return null;
 		}
@@ -402,5 +408,58 @@ class LoginService implements ILoginService {
 	 */
 	public function hasError() {
 		return isset($_SESSION[self::SESS_AUTH_ERROR]);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function validateCron() {
+		return $this->loginCron(env('CRON_USER'), env('CRON_PASS'));
+	}
+
+	public function loginCron($user, $pass_plain) {
+		$user = filter_var($user, FILTER_SANITIZE_STRING);
+		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
+
+		// Inloggen met lidnummer of gebruikersnaam
+		$account = $this->accountRepository->get($user);
+
+		// Onbekende gebruiker
+		if (!$account) {
+			die('Cron user bestaat niet!');
+		}
+
+		// Clear session
+		session_unset();
+
+		// Check password
+		if ($this->accountRepository->controleerWachtwoord($account, $pass_plain)) {
+			$this->accountRepository->successfulLoginAttempt($account);
+		} // Wrong password
+		else {
+			$this->accountRepository->failedLoginAttempt($account);
+			die('Cron wachtwoord onjuist');
+		}
+
+		static::$uid = $account->uid;
+
+		$this->current_session = $this->loginRepository->find(hash('sha512', session_id()));
+
+		if (!$this->current_session) {
+			$this->current_session = new LoginSession();
+		}
+
+		// Login sessie aanmaken in database
+		$this->current_session->session_hash = hash('sha512', session_id());
+		$this->current_session->uid = $account->uid;
+		$this->current_session->login_moment = date_create_immutable();
+		$this->current_session->expire = date_create_immutable()->add(new DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
+		$this->current_session->user_agent = MODE;
+		$this->current_session->ip = '';
+		$this->current_session->lock_ip = true; // sessie koppelen aan ip?
+		$this->current_session->authentication_method = AuthenticationMethod::password_login;
+		$this->loginRepository->update($this->current_session);
+
+		return true;
 	}
 }

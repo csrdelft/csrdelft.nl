@@ -307,7 +307,7 @@ class AccessService {
 		}
 
 		// case insensitive
-		return ContainerFacade::getContainer()->get(self::class)->hasPermission($subject, strtoupper($permission));
+		return ContainerFacade::getContainer()->get(AccessService::class)->hasPermission($subject, strtoupper($permission));
 	}
 
 	/**
