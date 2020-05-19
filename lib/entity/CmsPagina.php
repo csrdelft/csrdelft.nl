@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity;
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -65,28 +65,28 @@ class CmsPagina {
 	 * @return bool
 	 */
 	public function magBekijken() {
-		return LoginModel::mag($this->rechten_bekijken);
+		return LoginService::mag($this->rechten_bekijken);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function magBewerken() {
-		return LoginModel::mag($this->rechten_bewerken);
+		return LoginService::mag($this->rechten_bewerken);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function magRechtenWijzigen() {
-		return LoginModel::mag(P_ADMIN);
+		return LoginService::mag(P_ADMIN);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function magVerwijderen() {
-		return LoginModel::mag(P_ADMIN);
+		return LoginService::mag(P_ADMIN);
 	}
 
 }

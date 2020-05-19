@@ -18,11 +18,11 @@ use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\OrmTrait;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\security\LoginService;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -124,7 +124,7 @@ class ProfielRepository extends AbstractRepository {
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
 		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee();
-		$profiel->changelog = [new ProfielCreateLogGroup(LoginModel::getUid(), new DateTime())];
+		$profiel->changelog = [new ProfielCreateLogGroup(LoginService::getUid(), new DateTime())];
 		return $profiel;
 	}
 
@@ -312,7 +312,7 @@ class ProfielRepository extends AbstractRepository {
 				'OUD' => $oudestatus,
 				'NIEUW' => $profiel->status,
 				'CHANGE' => $change->toHtml(),
-				'ADMIN' => LoginModel::getProfiel()->getNaam()
+				'ADMIN' => LoginService::getProfiel()->getNaam()
 			);
 			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
 			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
@@ -341,7 +341,7 @@ class ProfielRepository extends AbstractRepository {
 			'OUD' => $oudestatus,
 			'NIEUW' => $profiel->status,
 			'SALDI' => $saldi,
-			'ADMIN' => LoginModel::getProfiel()->getNaam()
+			'ADMIN' => LoginService::getProfiel()->getNaam()
 		);
 		$to = array(
 			'fiscus@csrdelft.nl' => 'Fiscus C.S.R.',
@@ -414,7 +414,7 @@ class ProfielRepository extends AbstractRepository {
 			'NIEUW' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
 			'CSRLIJST' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
 			'LEDENLIJST' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
-			'ADMIN' => LoginModel::getProfiel()->getNaam()
+			'ADMIN' => LoginService::getProfiel()->getNaam()
 		);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
@@ -457,7 +457,7 @@ class ProfielRepository extends AbstractRepository {
 		$changes = $this->verwijderVelden($profiel);
 		if (sizeof($changes) == 0)
 			return false;
-		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginModel::getUid(), new DateTime(), $changes);
+		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginService::getUid(), new DateTime(), $changes);
 		$this->update($profiel);
 		return true;
 	}

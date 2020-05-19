@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\forum;
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -93,7 +93,7 @@ class ForumPost {
 	public $draad;
 
 	public function magCiteren() {
-		return LoginModel::mag(P_LOGGED_IN) && $this->draad->magPosten();
+		return LoginService::mag(P_LOGGED_IN) && $this->draad->magPosten();
 	}
 
 	public function magBewerken() {
@@ -104,7 +104,7 @@ class ForumPost {
 		if (!$draad->magPosten()) {
 			return false;
 		}
-		return $this->uid === LoginModel::getUid() && LoginModel::mag(P_LOGGED_IN);
+		return $this->uid === LoginService::getUid() && LoginService::mag(P_LOGGED_IN);
 	}
 
 	public function getGelezenPercentage() {

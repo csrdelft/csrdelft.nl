@@ -3,12 +3,12 @@
 namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\repository\MenuItemRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
 
@@ -23,8 +23,8 @@ abstract class Zijbalk {
 	public static function addStandaardZijbalk(array $zijbalk) {
 		$menuItemRepository = ContainerFacade::getContainer()->get(MenuItemRepository::class);
 		// Favorieten menu
-		if (LoginModel::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'favorieten') == 'ja') {
-			$menu = $menuItemRepository->getMenu(LoginModel::getUid());
+		if (LoginService::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'favorieten') == 'ja') {
+			$menu = $menuItemRepository->getMenu(LoginService::getUid());
 			$menu->tekst = 'Favorieten';
 			array_unshift($zijbalk, view('menu.block', ['root' => $menu]));
 		}
@@ -34,7 +34,7 @@ abstract class Zijbalk {
 		}
 
 		// Sponsors
-		if (LoginModel::mag(P_LOGGED_IN)) {
+		if (LoginService::mag(P_LOGGED_IN)) {
 			$sponsor_menu = $menuItemRepository->getMenu("sponsors");
 			if ($sponsor_menu) {
 				$sponsor_menu->tekst = 'Mogelijkheden';
@@ -43,7 +43,7 @@ abstract class Zijbalk {
 		}
 
 		// Agenda
-		if (LoginModel::mag(P_AGENDA_READ) && lid_instelling('zijbalk', 'agendaweken') > 0 && lid_instelling('zijbalk', 'agenda_max') > 0) {
+		if (LoginService::mag(P_AGENDA_READ) && lid_instelling('zijbalk', 'agendaweken') > 0 && lid_instelling('zijbalk', 'agenda_max') > 0) {
 			$aantalWeken = lid_instelling('zijbalk', 'agendaweken');
 			$agendaRepository = ContainerFacade::getContainer()->get(AgendaRepository::class);
 			$items = $agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + ' . $aantalWeken . ' weeks'), false, true);
@@ -73,7 +73,7 @@ abstract class Zijbalk {
 		}
 		// Zelfgeposte forumberichten
 		if (lid_instelling('zijbalk', 'forum_zelf') > 0) {
-			$posts = $forumPostsRepository->getRecenteForumPostsVanLid(LoginModel::getUid(), (int)lid_instelling('zijbalk', 'forum_zelf'), true);
+			$posts = $forumPostsRepository->getRecenteForumPostsVanLid(LoginService::getUid(), (int)lid_instelling('zijbalk', 'forum_zelf'), true);
 			$zijbalk[] = view('forum.partial.post_zijbalk', ['posts' => $posts]);
 		}
 		// Nieuwste fotoalbum
@@ -84,7 +84,7 @@ abstract class Zijbalk {
 			}
 		}
 		// Komende verjaardagen
-		if (LoginModel::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'verjaardagen') > 0) {
+		if (LoginService::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'verjaardagen') > 0) {
 			$verjaardagenService = ContainerFacade::getContainer()->get(VerjaardagenService::class);
 			$zijbalk[] = view('verjaardagen.komende', [
 				'verjaardagen' => $verjaardagenService->getKomende((int)lid_instelling('zijbalk', 'verjaardagen')),

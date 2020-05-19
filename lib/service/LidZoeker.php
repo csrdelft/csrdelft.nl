@@ -6,9 +6,9 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\VerticalenRepository;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
@@ -81,7 +81,7 @@ class LidZoeker {
 		$this->allowStatus = LidStatus::getTypeOptions();
 
 		//wat extra velden voor moderators.
-		if (LoginModel::mag(P_LEDEN_MOD)) {
+		if (LoginService::mag(P_LEDEN_MOD)) {
 			$this->allowVelden = array_merge($this->allowVelden, $this->allowVeldenLEDENMOD);
 		}
 
@@ -99,7 +99,7 @@ class LidZoeker {
 		$this->rawQuery = $query;
 
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch ook in de oudleden.
-		if (!isset($query['status']) && LoginModel::getProfiel()->isOudlid()) {
+		if (!isset($query['status']) && LoginService::getProfiel()->isOudlid()) {
 			$this->rawQuery['status'] = 'LEDEN|OUDLEDEN';
 		}
 
@@ -264,7 +264,7 @@ class LidZoeker {
 				->add('p.email LIKE :zoekterm')
 			;
 
-			if (LoginModel::mag(P_LEDEN_MOD)) {
+			if (LoginService::mag(P_LEDEN_MOD)) {
 				$zoekExpr->add('p.eetwens LIKE :zoekterm');
 			}
 

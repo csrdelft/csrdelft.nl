@@ -3,7 +3,7 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\courant\Courant;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\courant\CourantView;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -28,17 +28,17 @@ class CourantRepository extends ServiceEntityRepository {
 	}
 
 	public function magBeheren() {
-		return LoginModel::mag(P_MAIL_COMPOSE);
+		return LoginService::mag(P_MAIL_COMPOSE);
 	}
 
 	public function magVerzenden() {
-		return LoginModel::mag(P_MAIL_SEND);
+		return LoginService::mag(P_MAIL_SEND);
 	}
 
 	public function nieuwCourant() {
 		$courant = new Courant();
 		$courant->verzendMoment = new DateTime();
-		$courant->verzender = LoginModel::getUid();
+		$courant->verzender = LoginService::getUid();
 
 		return $courant;
 	}

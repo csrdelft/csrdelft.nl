@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\forum;
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -59,7 +59,7 @@ class ForumCategorie {
 
 
 	public function magLezen() {
-		return LoginModel::mag($this->rechten_lezen);
+		return LoginService::mag($this->rechten_lezen);
 	}
 
 	/**

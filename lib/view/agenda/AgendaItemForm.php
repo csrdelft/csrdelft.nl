@@ -3,7 +3,7 @@
 namespace CsrDelft\view\agenda;
 
 use CsrDelft\entity\agenda\AgendaItem;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
@@ -39,7 +39,7 @@ class AgendaItemForm extends ModalForm {
 
 
 		$fields['r'] = new RequiredRechtenField('rechten_bekijken', $item->rechten_bekijken, 'Zichtbaar voor');
-		$fields['r']->readonly = !LoginModel::mag(P_AGENDA_MOD);
+		$fields['r']->readonly = !LoginService::mag(P_AGENDA_MOD);
 
 
 		$fields['l'] = new TextField('locatie', $item->locatie, 'Locatie');

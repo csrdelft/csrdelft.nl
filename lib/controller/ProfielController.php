@@ -10,7 +10,6 @@ use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
 use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
@@ -36,6 +35,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\fiscaat\SaldoGrafiekService;
 use CsrDelft\service\GoogleSync;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\fotoalbum\FotoBBView;
@@ -225,7 +225,7 @@ class ProfielController extends AbstractController {
 
 	public function profiel($uid) {
 		if ($uid == null) {
-			$uid = LoginModel::getUid();
+			$uid = LoginService::getUid();
 		}
 
 		$profiel = $this->profielRepository->get($uid);
@@ -253,7 +253,7 @@ class ProfielController extends AbstractController {
 			'ketzers' => $this->ketzersRepository->getGroepenVoorLid($uid),
 			'activiteiten' => $this->activiteitenRepository->getGroepenVoorLid($uid),
 			'bestellinglog' => $this->civiBestellingModel->getBeschrijving($this->civiBestellingModel->getBestellingenVoorLid($uid, 10)->fetchAll()),
-			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginModel::getUid() === $uid ? '' : '/' . $uid),
+			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginService::getUid() === $uid ? '' : '/' . $uid),
 			'corveetaken' => $this->corveeTakenRepository->getTakenVoorLid($uid),
 			'corveevoorkeuren' => $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid($uid),
 			'corveevrijstelling' => $this->corveeVrijstellingenRepository->getVrijstelling($uid),
@@ -275,7 +275,7 @@ class ProfielController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		// NovCie mag novieten aanmaken
-		if ($lidstatus !== LidStatus::Noviet && !LoginModel::mag(P_LEDEN_MOD)) {
+		if ($lidstatus !== LidStatus::Noviet && !LoginService::mag(P_LEDEN_MOD)) {
 			throw new CsrToegangException();
 		}
 		// Maak nieuw profiel zonder op te slaan
@@ -296,7 +296,7 @@ class ProfielController extends AbstractController {
 				setMelding('Geen wijzigingen', 0);
 			} else {
 				$nieuw = !$this->profielRepository->exists($profiel);
-				$changeEntry = ProfielRepository::changelog($diff, LoginModel::getUid());
+				$changeEntry = ProfielRepository::changelog($diff, LoginService::getUid());
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
 						array_push($changeEntry->entries, ...$this->profielRepository->wijzig_lidstatus($profiel, $change->old_value));
@@ -403,7 +403,7 @@ class ProfielController extends AbstractController {
 
 	public function stamboom($uid = null) {
 		return view('profiel.stamboom', [
-			'profiel' => ProfielRepository::get($uid) ?? LoginModel::getProfiel(),
+			'profiel' => ProfielRepository::get($uid) ?? LoginService::getProfiel(),
 		]);
 	}
 
@@ -441,6 +441,6 @@ class ProfielController extends AbstractController {
 	}
 
 	public function redirectWithUid($route) {
-		return $this->redirectToRoute($route, ['uid' => LoginModel::getUid()]);
+		return $this->redirectToRoute($route, ['uid' => LoginService::getUid()]);
 	}
 }

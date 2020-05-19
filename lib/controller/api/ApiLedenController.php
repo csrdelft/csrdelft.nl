@@ -3,9 +3,9 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\LidZoeker;
+use CsrDelft\service\security\LoginService;
 use Jacwright\RestServer\RestException;
 
 class ApiLedenController {
@@ -14,7 +14,7 @@ class ApiLedenController {
 	 * @return boolean
 	 */
 	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag(P_OUDLEDEN_READ);
+		return ApiAuthController::isAuthorized() && LoginService::mag(P_OUDLEDEN_READ);
 	}
 
 	/**

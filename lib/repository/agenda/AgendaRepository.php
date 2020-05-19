@@ -9,12 +9,12 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\model\OrmTrait;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use DateInterval;
 use DateTimeImmutable;
@@ -119,7 +119,7 @@ class AgendaRepository extends AbstractRepository {
 			/** @var AgendaVerbergen[] $verborgen */
 			$verborgen = $this->agendaVerbergenRepository->createQueryBuilder('av')
 				->where('av.uid = :uid and av.refuuid in (:uuids)')
-				->setParameter('uid', LoginModel::getUid())
+				->setParameter('uid', LoginService::getUid())
 				->setParameter('uuids', array_keys($itemsByUUID))
 				->getQuery()->getResult();
 
@@ -204,7 +204,7 @@ class AgendaRepository extends AbstractRepository {
 
 		// Verjaardagen
 		$toonVerjaardagen = ($ical ? 'toonVerjaardagenICal' : 'toonVerjaardagen');
-		if (!$zijbalk && LoginModel::mag(P_VERJAARDAGEN, $auth) AND lid_instelling('agenda', $toonVerjaardagen) === 'ja') {
+		if (!$zijbalk && LoginService::mag(P_VERJAARDAGEN, $auth) AND lid_instelling('agenda', $toonVerjaardagen) === 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
@@ -246,10 +246,10 @@ class AgendaRepository extends AbstractRepository {
 		}
 		$item->begin_moment = date_create_immutable(getDateTime(strtotime($datum) + 72000));
 		$item->eind_moment = date_create_immutable(getDateTime(strtotime($datum) + 79200));
-		if (LoginModel::mag(P_AGENDA_MOD)) {
+		if (LoginService::mag(P_AGENDA_MOD)) {
 			$item->rechten_bekijken = instelling('agenda', 'standaard_rechten');
 		} else {
-			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
+			$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
 		}
 		return $item;
 	}

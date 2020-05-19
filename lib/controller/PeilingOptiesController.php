@@ -6,9 +6,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingOptie;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
 use CsrDelft\service\PeilingenService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieTable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -56,7 +56,7 @@ class PeilingOptiesController extends AbstractController {
 		if ($form->isPosted() && $form->validate()) {
 			/** @var PeilingOptie $optie */
 			$optie = $form->getModel();
-			$optie->ingebracht_door = LoginModel::getUid();
+			$optie->ingebracht_door = LoginService::getUid();
 			$optie->peiling = $em->getReference(Peiling::class, $id);
 
 			$this->getDoctrine()->getManager()->persist($optie);

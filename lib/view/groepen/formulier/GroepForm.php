@@ -14,7 +14,7 @@ use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\FormFieldFactory;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -69,7 +69,7 @@ class GroepForm extends ModalForm {
 		}
 
 		// GROEPEN_V2
-		if (!LoginModel::mag(P_ADMIN)) {
+		if (!LoginService::mag(P_ADMIN)) {
 			$fields['versie']->hidden = true;
 			$fields['keuzelijst2']->hidden = true;
 		} else {
@@ -77,7 +77,7 @@ class GroepForm extends ModalForm {
 			$fields['keuzelijst2']->title = 'Formaat: naam:type:default:description:optie,optie,optie|naam:type:default:description:|...';
 		}
 
-		$fields['maker_uid']->readonly = !LoginModel::mag(P_ADMIN);
+		$fields['maker_uid']->readonly = !LoginService::mag(P_ADMIN);
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);

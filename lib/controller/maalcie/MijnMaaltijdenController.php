@@ -4,11 +4,11 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
@@ -57,10 +57,10 @@ class MijnMaaltijdenController {
 	 * @throws OptimisticLockException
 	 */
 	public function ketzer() {
-		$maaltijden = $this->maaltijdenRepository->getKomendeMaaltijdenVoorLid(LoginModel::getUid());
-		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($maaltijden, LoginModel::getUid());
+		$maaltijden = $this->maaltijdenRepository->getKomendeMaaltijdenVoorLid(LoginService::getUid());
+		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($maaltijden, LoginService::getUid());
 		$timestamp = date_create_immutable(instelling('maaltijden', 'beoordeling_periode'));
-		$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(LoginModel::getUid(), $timestamp);
+		$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(LoginService::getUid(), $timestamp);
 		$beoordelen = [];
 		$kwantiteit_forms = [];
 		$kwaliteit_forms = [];
@@ -74,7 +74,7 @@ class MijnMaaltijdenController {
 			$maaltijd = $aanmelding->maaltijd;
 			$mid = $aanmelding->maaltijd_id;
 			$beoordelen[$mid] = $maaltijd;
-			$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $mid, 'uid' => LoginModel::getUid()]);
+			$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $mid, 'uid' => LoginService::getUid()]);
 			if (!$beoordeling) {
 				$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);
 			}
@@ -93,7 +93,7 @@ class MijnMaaltijdenController {
 
 	public function lijst($mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid, true);
-		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND !LoginModel::mag(P_MAAL_MOD)) {
+		if (!$maaltijd->magSluiten(LoginService::getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
 			throw new CsrToegangException();
 		}
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorMaaltijd($maaltijd);
@@ -118,7 +118,7 @@ class MijnMaaltijdenController {
 	 */
 	public function sluit($mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
-		if (!$maaltijd->magSluiten(LoginModel::getUid()) AND !LoginModel::mag(P_MAAL_MOD)) {
+		if (!$maaltijd->magSluiten(LoginService::getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
 			throw new CsrToegangException();
 		}
 		$this->maaltijdenRepository->sluitMaaltijd($maaltijd);
@@ -135,7 +135,7 @@ class MijnMaaltijdenController {
 	 */
 	public function aanmelden(Request $request, $mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
-		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, LoginModel::getUid(), LoginModel::getUid());
+		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, LoginService::getUid(), LoginService::getUid());
 		if ($request->getMethod() == 'POST') {
 			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
 				'maaltijd' => $aanmelding->maaltijd,
@@ -156,7 +156,7 @@ class MijnMaaltijdenController {
 	 */
 	public function afmelden(Request $request, $mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
-		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, LoginModel::getUid());
+		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, LoginService::getUid());
 		if ($request->getMethod() == 'POST') {
 			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
 				'maaltijd' => $maaltijd,
@@ -175,7 +175,7 @@ class MijnMaaltijdenController {
 	 */
 	public function gasten($mid) {
 		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
-		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($mid, LoginModel::getUid(), $gasten);
+		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($mid, LoginService::getUid(), $gasten);
 		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
@@ -187,7 +187,7 @@ class MijnMaaltijdenController {
 	 */
 	public function opmerking($mid) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
-		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens($mid, LoginModel::getUid(), $opmerking);
+		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens($mid, LoginService::getUid(), $opmerking);
 		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
@@ -199,7 +199,7 @@ class MijnMaaltijdenController {
 	 */
 	public function beoordeling($mid) {
 		$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
-		$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $mid, 'uid' => LoginModel::getUid()]);
+		$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $mid, 'uid' => LoginService::getUid()]);
 		if (!$beoordeling) {
 			$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);
 		}

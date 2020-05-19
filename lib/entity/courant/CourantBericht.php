@@ -4,7 +4,7 @@
 namespace CsrDelft\entity\courant;
 
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -68,6 +68,6 @@ class CourantBericht {
 	}
 
 	public function magBeheren() {
-		return LoginModel::mag(P_MAIL_COMPOSE) OR LoginModel::mag($this->uid);
+		return LoginService::mag(P_MAIL_COMPOSE) OR LoginService::mag($this->uid);
 	}
 }

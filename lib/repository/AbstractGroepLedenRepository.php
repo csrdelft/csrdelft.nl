@@ -4,7 +4,7 @@ namespace CsrDelft\repository;
 
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\AbstractGroepLid;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 
 /**
  * AbstractGroepLedenModel.php
@@ -46,7 +46,7 @@ abstract class AbstractGroepLedenRepository extends AbstractRepository {
 		$lid->groep = $groep;
 		$lid->groep_id = $groep->id;
 		$lid->uid = $uid;
-		$lid->door_uid = LoginModel::getUid();
+		$lid->door_uid = LoginService::getUid();
 		$lid->lid_sinds = date_create_immutable();
 		$lid->opmerking = null;
 		return $lid;

@@ -25,10 +25,10 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\security\AccessRole;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -294,15 +294,15 @@ class AccessService {
 	public static function mag(Account $subject, $permission, array $allowedAuthenticationMethods = null) {
 
 		// Als voor het ingelogde lid een permissie gevraagd wordt
-		if ($subject->uid == LoginModel::getUid()) {
+		if ($subject->uid == LoginService::getUid()) {
 			// Controlleer hoe de gebruiker ge-authenticeerd is
-			$method = ContainerFacade::getContainer()->get(LoginModel::class)->getAuthenticationMethod();
+			$method = ContainerFacade::getContainer()->get(LoginService::class)->getAuthenticationMethod();
 			if ($allowedAuthenticationMethods == null) {
 				$allowedAuthenticationMethods = self::$defaultAllowedAuthenticationMethods;
 			}
 			// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
 			if (!in_array($method, $allowedAuthenticationMethods)) {
-				$subject = AccountRepository::get(LoginModel::UID_EXTERN);
+				$subject = AccountRepository::get(LoginService::UID_EXTERN);
 			}
 		}
 

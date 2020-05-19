@@ -3,8 +3,8 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\MenuItemRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\MeldingResponse;
 use CsrDelft\view\menubeheer\MenuItemForm;
@@ -23,7 +23,7 @@ class MenuBeheerController {
 	}
 
 	public function beheer($menu_name = 'main') {
-		if ($menu_name != LoginModel::getUid() && !LoginModel::mag(P_ADMIN)) {
+		if ($menu_name != LoginService::getUid() && !LoginService::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
 		$root = $this->menuItemRepository->getMenu($menu_name);
@@ -38,7 +38,7 @@ class MenuBeheerController {
 
 	public function toevoegen($parent_id) {
 		if ($parent_id == 'favoriet') {
-			$parent = $this->menuItemRepository->getMenuRoot(LoginModel::getUid());
+			$parent = $this->menuItemRepository->getMenuRoot(LoginService::getUid());
 		} else {
 			$parent = $this->menuItemRepository->getMenuItem((int)$parent_id);
 		}

@@ -1,28 +1,38 @@
 <?php
 
-namespace CsrDelft\model\security;
+namespace CsrDelft\service\security;
 
+use CsrDelft\entity\security\LoginSession;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\entity\security\LoginSession;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
+use DateInterval;
 
 
 /**
- * CliLoginModel.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Model van het huidige ingeloggede account in CLI modus.
- *
  */
-class CliLoginModel extends LoginModel {
-
+class CliLoginService implements ILoginService {
 	/**
 	 * @var string
 	 */
-	protected static $uid = LoginModel::UID_EXTERN;
+	protected static $uid = LoginService::UID_EXTERN;
+	/**
+	 * @var AccountRepository
+	 */
+	private $accountRepository;
+	/**
+	 * @var RememberLoginRepository
+	 */
+	private $rememberLoginRepository;
+	/**
+	 * @var LoginSessionRepository
+	 */
+	private $loginRepository;
 
 	/**
 	 * @return string
@@ -32,20 +42,15 @@ class CliLoginModel extends LoginModel {
 	}
 
 	/**
-	 * @return bool
-	 */
-	public static function getSuedFrom() {
-		return false;
-	}
-
-	/**
 	 * CliLoginModel constructor.
 	 * @param AccountRepository $accountRepository
+	 * @param LoginSessionRepository $loginRepository
 	 * @param RememberLoginRepository $rememberLoginRepository
 	 */
-	public function __construct(AccountRepository $accountRepository, RememberLoginRepository $rememberLoginRepository) {
-		parent::__static();
-		parent::__construct($accountRepository, $rememberLoginRepository);
+	public function __construct(AccountRepository $accountRepository, LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository) {
+		$this->accountRepository = $accountRepository;
+		$this->rememberLoginRepository = $rememberLoginRepository;
+		$this->loginRepository = $loginRepository;
 	}
 
 	public function authenticate() {
@@ -59,13 +64,6 @@ class CliLoginModel extends LoginModel {
 	 */
 	public function validate() {
 		return $this->login(env('CRON_USER'), env('CRON_PASS'));
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasError() {
-		return false;
 	}
 
 	/**
@@ -120,17 +118,13 @@ class CliLoginModel extends LoginModel {
 		$session = new LoginSession();
 		$session->session_hash = hash('sha512', session_id());
 		$session->uid = $account->uid;
-		$session->login_moment = getDateTime();
-		$session->expire = getDateTime(time() + (int)instelling('beveiliging', 'session_lifetime_seconds'));
+		$session->login_moment = date_create_immutable();
+		$session->expire = date_create_immutable()->add(new DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 		$session->user_agent = MODE;
 		$session->ip = '';
 		$session->lock_ip = true; // sessie koppelen aan ip?
 		$session->authentication_method = $this->getAuthenticationMethod();
-		if ($this->exists($session)) {
-			$this->update($session);
-		} else {
-			$this->create($session);
-		}
+		$this->loginRepository->update($session);
 
 		return true;
 	}
@@ -138,14 +132,7 @@ class CliLoginModel extends LoginModel {
 	/**
 	 */
 	public function logout() {
-		self::$uid = LoginModel::UID_EXTERN;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isSued() {
-		return false;
+		self::$uid = LoginService::UID_EXTERN;
 	}
 
 	/**

@@ -4,7 +4,7 @@ namespace CsrDelft\service\fiscaat;
 
 use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use DateTime;
 
 class SaldoGrafiekService {
@@ -79,6 +79,6 @@ class SaldoGrafiekService {
 	 */
 	public function magGrafiekZien($uid) {
 		//mogen we uberhaupt een grafiek zien?
-		return LoginModel::getUid() === $uid OR LoginModel::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
+		return LoginService::getUid() === $uid OR LoginService::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
 	}
 }

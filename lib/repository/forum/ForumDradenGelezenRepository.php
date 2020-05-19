@@ -4,8 +4,8 @@ namespace CsrDelft\repository\forum;
 
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadGelezen;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -29,7 +29,7 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 		$gelezen = new ForumDraadGelezen();
 		$gelezen->draad = $draad;
 		$gelezen->draad_id = $draad->draad_id; // Set pk
-		$gelezen->uid = LoginModel::getUid();
+		$gelezen->uid = LoginService::getUid();
 		$gelezen->datum_tijd = date_create_immutable();
 		return $gelezen;
 	}
@@ -41,7 +41,7 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 	 * @param DateTime $moment
 	 */
 	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null) {
-		$gelezen = $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginModel::getUid()]);
+		$gelezen = $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginService::getUid()]);
 		if (!$gelezen) {
 			$gelezen = $this->maakForumDraadGelezen($draad);
 		}

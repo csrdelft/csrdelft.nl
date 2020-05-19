@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\InputField;
 
 /**
@@ -54,7 +54,7 @@ class CheckboxField extends InputField {
 
 	public function validate() {
 		if (!$this->value AND $this->required) {
-			if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
+			if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
 				// exception for leden mod
 			} else {
 				$this->error = 'Dit is een verplicht veld';

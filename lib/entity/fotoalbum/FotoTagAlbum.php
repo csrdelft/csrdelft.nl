@@ -3,10 +3,10 @@
 namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 
 /**
  * FotoTagAlbum.class.php
@@ -73,11 +73,11 @@ class FotoTagAlbum extends FotoAlbum {
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag(P_LEDEN_READ);
+		return LoginService::mag(P_LEDEN_READ);
 	}
 
 	public function isOwner() {
-		return $this->uid === LoginModel::getUid();
+		return $this->uid === LoginService::getUid();
 	}
 
 }

@@ -3,10 +3,12 @@
 namespace CsrDelft\repository\security;
 
 use CsrDelft\entity\security\RememberLogin;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -29,6 +31,8 @@ class RememberLoginRepository extends AbstractRepository {
 	 *
 	 * @return bool|RememberLogin
 	 * @throws NonUniqueResultException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function verifyToken($rand) {
 		if (isset($_SERVER['REMOTE_ADDR'])) {
@@ -53,6 +57,8 @@ class RememberLoginRepository extends AbstractRepository {
 
 	/**
 	 * @param RememberLogin $remember
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function rememberLogin(RememberLogin $remember) {
 		$rand = crypto_rand_token(255);
@@ -69,7 +75,7 @@ class RememberLoginRepository extends AbstractRepository {
 	 */
 	public function nieuw() {
 		$remember = new RememberLogin();
-		$remember->uid = LoginModel::getUid();
+		$remember->uid = LoginService::getUid();
 		$remember->remember_since = date_create_immutable();
 		if (isset($_SERVER['HTTP_USER_AGENT'])) {
 			$remember->device_name = $_SERVER['HTTP_USER_AGENT'];
@@ -85,6 +91,11 @@ class RememberLoginRepository extends AbstractRepository {
 		return $remember;
 	}
 
+	/**
+	 * @param $token
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function verwijder($token) {
 		$rememberLogin = $this->findOneBy(['token' => $token]);
 		if ($rememberLogin) {

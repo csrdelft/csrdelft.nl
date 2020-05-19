@@ -3,7 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 
 /**
  * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
@@ -23,7 +23,7 @@ class BbPrive extends BbTag {
 
 	public function isAllowed()
 	{
-		return LoginModel::mag($this->permissie);
+		return LoginService::mag($this->permissie);
 	}
 
 	public static function getTagName() {

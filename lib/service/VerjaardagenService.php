@@ -4,8 +4,8 @@ namespace CsrDelft\service;
 
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
@@ -34,7 +34,7 @@ class VerjaardagenService {
 		$this->profielRepository = $profielRepository;
 		$this->em = $em;
 
-		$this->filterByToestemingSql = LoginModel::mag(P_LEDEN_MOD) ? "" : self::FILTER_BY_TOESTEMMING;
+		$this->filterByToestemingSql = LoginService::mag(P_LEDEN_MOD) ? "" : self::FILTER_BY_TOESTEMMING;
 	}
 
 	/**
@@ -56,7 +56,7 @@ class VerjaardagenService {
 			->setParameter('maand', $maand)
 			->orderBy('DAY(p.gebdatum)');
 
-		if (!LoginModel::mag(P_LEDEN_MOD)) {
+		if (!LoginService::mag(P_LEDEN_MOD)) {
 			static::filterByToestemming($qb, 'profiel', 'gebdatum');
 		}
 

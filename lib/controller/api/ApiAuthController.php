@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
+use CsrDelft\service\security\LoginService;
 use Exception;
 use Firebase\JWT\JWT;
 use Jacwright\RestServer\RestException;
@@ -43,8 +44,8 @@ class ApiAuthController {
 			throw new RestException(401);
 		}
 
-		$_SESSION['_uid'] = $token->data->userId;
-		$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
+		$_SESSION[LoginService::SESS_UID] = $token->data->userId;
+		$_SESSION[LoginService::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::cookie_token;
 
 		return true;
 	}
@@ -114,7 +115,7 @@ class ApiAuthController {
 		$token = JWT::encode($data, env('JWT_SECRET'), 'HS512');
 
 		// Register uid for this session
-		$_SESSION['_uid'] = $account->uid;
+		$_SESSION[LoginService::SESS_UID] = $account->uid;
 
 		// Generate a refresh token
 		$rand = crypto_rand_token(255);

@@ -11,7 +11,7 @@ namespace CsrDelft\view\groepen\leden;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 
 class GroepPasfotosView extends GroepTabView {
@@ -20,7 +20,7 @@ class GroepPasfotosView extends GroepTabView {
 		$html = '';
 		if ($this->groep->mag(AccessAction::Aanmelden)) {
 			$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
-			$lid = $em->getRepository($this->groep->getLidType())->nieuw($this->groep, LoginModel::getUid());
+			$lid = $em->getRepository($this->groep->getLidType())->nieuw($this->groep, LoginService::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep);
 			$form->css_classes[] = 'pasfotos';
 			$html .= $form->getHtml();

@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -55,7 +55,7 @@ class RechtenGroep extends AbstractGroep {
 			case AccessAction::Aanmelden:
 			case AccessAction::Bewerken:
 			case AccessAction::Afmelden:
-				if (!LoginModel::mag($this->rechten_aanmelden)) {
+				if (!LoginService::mag($this->rechten_aanmelden)) {
 					return false;
 				}
 				break;

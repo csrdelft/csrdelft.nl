@@ -3,9 +3,9 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\security\LoginService;
 use Exception;
 use Jacwright\RestServer\RestException;
 
@@ -24,7 +24,7 @@ class ApiMaaltijdenController {
 	 * @return boolean
 	 */
 	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag(P_MAAL_IK);
+		return ApiAuthController::isAuthorized() && LoginService::mag(P_MAAL_IK);
 	}
 
 	/**

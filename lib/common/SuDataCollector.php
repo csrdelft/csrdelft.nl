@@ -4,7 +4,8 @@
 namespace CsrDelft\common;
 
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -20,9 +21,9 @@ class SuDataCollector extends DataCollector {
 	 */
 	public function collect(Request $request, Response $response, Throwable $exception = null) {
 		$this->data = [
-			'can_su' => LoginModel::mag(P_ADMIN) || ContainerFacade::getContainer()->get(LoginModel::class)->isSued(),
-			'is_sued' => ContainerFacade::getContainer()->get(LoginModel::class)->isSued(),
-			'profiel' => LoginModel::getProfiel(),
+			'can_su' => LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued(),
+			'is_sued' => ContainerFacade::getContainer()->get(SuService::class)->isSued(),
+			'profiel' => LoginService::getProfiel(),
 		];
 	}
 

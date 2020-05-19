@@ -3,7 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\IsHetAlView;
 
 class BbIsHetAl extends BbTag {
@@ -13,7 +13,7 @@ class BbIsHetAl extends BbTag {
 	}
 
 	public function isAllowed() {
-		return LoginModel::mag(P_LOGGED_IN);
+		return LoginService::mag(P_LOGGED_IN);
 	}
 
 	/**

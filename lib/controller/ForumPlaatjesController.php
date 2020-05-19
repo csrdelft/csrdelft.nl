@@ -4,8 +4,8 @@
 namespace CsrDelft\controller;
 
 
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ForumPlaatjeRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\plaatjes\PlaatjesUploadModalForm;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -22,7 +22,7 @@ class ForumPlaatjesController {
 	public function upload() {
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
-			$plaatje = $this->forumPlaatjeRepository->fromUploader($form->uploader, LoginModel::getUid());
+			$plaatje = $this->forumPlaatjeRepository->fromUploader($form->uploader, LoginService::getUid());
 			return view('forum.insert_plaatje', ['plaatje' => $plaatje]);
 		} else {
 			return $form;

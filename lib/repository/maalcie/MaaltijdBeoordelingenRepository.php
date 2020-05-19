@@ -5,9 +5,9 @@ namespace CsrDelft\repository\maalcie;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -35,7 +35,7 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 	public function nieuw(Maaltijd $maaltijd) {
 		$b = new MaaltijdBeoordeling();
 		$b->maaltijd_id = $maaltijd->maaltijd_id;
-		$b->uid = LoginModel::getUid();
+		$b->uid = LoginService::getUid();
 		$b->kwantiteit = null;
 		$b->kwaliteit = null;
 		$this->_em->persist($b);

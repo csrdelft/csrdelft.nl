@@ -6,10 +6,10 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTimeInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -181,7 +181,7 @@ class MaaltijdenRepository extends AbstractRepository {
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
 			->getQuery()->getResult();
-		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, LoginModel::getUid());
+		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, LoginService::getUid());
 		return $maaltijden;
 	}
 
@@ -239,7 +239,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	 */
 	public function getMaaltijdVoorKetzer($mid) {
 		$maaltijden = array($this->getMaaltijd($mid));
-		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, LoginModel::getUid());
+		$maaltijden = $this->filterMaaltijdenVoorLid($maaltijden, LoginService::getUid());
 		if (!empty($maaltijden)) {
 			return reset($maaltijden);
 		}

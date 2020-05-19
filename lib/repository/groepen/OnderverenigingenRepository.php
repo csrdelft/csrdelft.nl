@@ -5,8 +5,8 @@ namespace CsrDelft\repository\groepen;
 use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\groepen\Ondervereniging;
 use CsrDelft\entity\groepen\OnderverenigingStatus;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
 class OnderverenigingenRepository extends AbstractGroepenRepository {
@@ -19,7 +19,7 @@ class OnderverenigingenRepository extends AbstractGroepenRepository {
 		$ondervereniging = parent::nieuw();
 		$ondervereniging->status = GroepStatus::FT();
 		$ondervereniging->soort = OnderverenigingStatus::AdspirantOndervereniging;
-		$ondervereniging->status_historie = '[div]Aangemaakt als ' . $ondervereniging->status->getDescription() . ' door [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
+		$ondervereniging->status_historie = '[div]Aangemaakt als ' . $ondervereniging->status->getDescription() . ' door [lid=' . LoginService::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $ondervereniging;
 	}
 }

@@ -9,11 +9,12 @@ use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -33,7 +34,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	}
 
 	public function setNiveauVoorLid(ForumDraad $draad, ForumDraadMeldingNiveau $niveau) {
-		$uid = LoginModel::getUid();
+		$uid = LoginService::getUid();
 		$voorkeur = $this->find(['draad_id' => $draad->draad_id, 'uid' => $uid]);
 		if ($voorkeur) {
 			$voorkeur->niveau = $niveau;
@@ -122,7 +123,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		);
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		ContainerFacade::getContainer()->get(LoginModel::class)->overrideUid($ontvanger->uid);
+		ContainerFacade::getContainer()->get(SuService::class)->overrideUid($ontvanger->uid);
 
 		// Verzend mail
 		try {
@@ -132,7 +133,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 			$mail->send();
 		} finally {
 			// Zet UID terug in sessie
-			ContainerFacade::getContainer()->get(LoginModel::class)->resetUid();
+			ContainerFacade::getContainer()->get(SuService::class)->resetUid();
 		}
 	}
 
@@ -158,11 +159,11 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 			}
 
 			// Controleer of lid bij draad mag, stel hiervoor tijdelijk de ingelogde gebruiker in op gegeven lid
-			ContainerFacade::getContainer()->get(LoginModel::class)->overrideUid($genoemde->uid);
+			ContainerFacade::getContainer()->get(SuService::class)->overrideUid($genoemde->uid);
 			try {
 				$magMeldingKrijgen = $draad->magMeldingKrijgen();
 			} finally {
-				ContainerFacade::getContainer()->get(LoginModel::class)->resetUid();
+				ContainerFacade::getContainer()->get(SuService::class)->resetUid();
 			}
 
 			if (!$magMeldingKrijgen) {
@@ -187,7 +188,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	}
 
 	public function getNiveauVoorLid(ForumDraad $draad, $uid = null) {
-		if ($uid === null) $uid = LoginModel::getUid();
+		if ($uid === null) $uid = LoginService::getUid();
 
 		$voorkeur = $this->find(['draad_id' => $draad->draad_id, 'uid' => $uid]);
 		if ($voorkeur) {

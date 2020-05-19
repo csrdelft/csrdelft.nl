@@ -3,8 +3,8 @@
 namespace CsrDelft\events;
 
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\service\CsrfService;
+use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 /**
@@ -45,7 +45,7 @@ class AccessControlEventListener {
 		}
 
 		$mag = $event->getRequest()->get('_mag');
-		if (!$mag || !LoginModel::mag($mag)) {
+		if (!$mag || !LoginService::mag($mag)) {
 			if (DEBUG) {
 				throw new CsrToegangException("Geen toegang tot " . $controller . ", ten minste " . $mag . " nodig.");
 			} else {

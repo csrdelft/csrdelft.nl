@@ -8,13 +8,14 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\service\CsrfService;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
 
@@ -362,7 +363,7 @@ function isGeldigeDatum($datum) {
  * @param string $cssID
  */
 function debugprint($sString, $cssID = 'pubcie_debug') {
-	if (DEBUG || LoginModel::mag(P_ADMIN) || ContainerFacade::getContainer()->get(LoginModel::class)->isSued()) {
+	if (DEBUG || LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued()) {
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
 }
@@ -542,7 +543,7 @@ function getMaximumFileUploadSize() {
 
 function printDebug() {
 	$enableDebug = filter_input(INPUT_GET, 'debug') !== null;
-	if ($enableDebug && (DEBUG || (LoginModel::mag(P_ADMIN) || ContainerFacade::getContainer()->get(LoginModel::class)->isSued()))) {
+	if ($enableDebug && (DEBUG || (LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued()))) {
 		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
 		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
@@ -975,7 +976,7 @@ function checkMimetype($filename, $mime) {
  * @return bool
  */
 function mag($permission, array $allowedAuthenticationMethods = null) {
-	return LoginModel::mag($permission, $allowedAuthenticationMethods);
+	return LoginService::mag($permission, $allowedAuthenticationMethods);
 }
 
 /**
@@ -985,7 +986,7 @@ function mag($permission, array $allowedAuthenticationMethods = null) {
  * @return bool
  */
 function is_ingelogd_account($uid) {
-	return LoginModel::getUid() == $uid;
+	return LoginService::getUid() == $uid;
 }
 
 /**

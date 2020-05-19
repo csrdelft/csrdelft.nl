@@ -6,9 +6,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\service\PeilingenService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
@@ -70,7 +70,7 @@ class PeilingenController extends AbstractController {
 
 		if ($form->isPosted() && $form->validate()) {
 			$peiling = $form->getModel();
-			$peiling->eigenaarProfiel = $em->getReference(Profiel::class, LoginModel::getUid());
+			$peiling->eigenaarProfiel = $em->getReference(Profiel::class, LoginService::getUid());
 			$peiling->mag_bewerken = false;
 
 			$this->getDoctrine()->getManager()->persist($peiling);
@@ -133,7 +133,7 @@ class PeilingenController extends AbstractController {
 	public function stem(Request $request, $id) {
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);
 
-		if($this->peilingenService->stem($id, $ids, LoginModel::getUid())) {
+		if($this->peilingenService->stem($id, $ids, LoginService::getUid())) {
 			return new JsonResponse(true);
 		} else {
 			return new JsonResponse(false, 400);

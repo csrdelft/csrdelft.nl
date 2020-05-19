@@ -5,7 +5,7 @@ namespace CsrDelft\entity\documenten;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\model\entity\Bestand;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\Icon;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -95,19 +95,19 @@ class Document extends Bestand {
 	}
 
 	public function isEigenaar() {
-		return LoginModel::getUid() === $this->eigenaar;
+		return LoginService::getUid() === $this->eigenaar;
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag($this->leesrechten) && LoginModel::mag(P_LOGGED_IN);
+		return LoginService::mag($this->leesrechten) && LoginService::mag(P_LOGGED_IN);
 	}
 
 	public function magBewerken() {
-		return $this->isEigenaar() OR LoginModel::mag(P_DOCS_MOD);
+		return $this->isEigenaar() OR LoginService::mag(P_DOCS_MOD);
 	}
 
 	public function magVerwijderen() {
-		return LoginModel::mag(P_DOCS_MOD);
+		return LoginService::mag(P_DOCS_MOD);
 	}
 
 	/**

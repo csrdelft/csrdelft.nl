@@ -4,7 +4,7 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -64,7 +64,7 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 			case AccessAction::Beheren:
 			case AccessAction::Wijzigen:
 				// Huidige bewoners mogen beheren
-				if (LoginModel::mag('woonoord:' . $this->familie)) {
+				if (LoginService::mag('woonoord:' . $this->familie)) {
 					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()
 					return true;
 				}

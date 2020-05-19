@@ -4,10 +4,10 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManager;
 use Jacwright\RestServer\RestException;
 
@@ -38,7 +38,7 @@ class ApiActiviteitenController {
 	 * @return boolean
 	 */
 	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag(P_LEDEN_READ);
+		return ApiAuthController::isAuthorized() && LoginService::mag(P_LEDEN_READ);
 	}
 
 	/**
@@ -56,7 +56,7 @@ class ApiActiviteitenController {
 			throw new RestException(403, 'Aanmelden niet mogelijk');
 		}
 
-		$lid = $this->activiteitDeelnemersRepository->nieuw($activiteit, $_SESSION['_uid']);
+		$lid = $this->activiteitDeelnemersRepository->nieuw($activiteit, $_SESSION[LoginService::SESS_UID]);
 
 		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
 		$this->em->persist($lid);

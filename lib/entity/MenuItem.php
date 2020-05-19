@@ -4,8 +4,8 @@ namespace CsrDelft\entity;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDradenRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -98,11 +98,11 @@ class MenuItem {
 	}
 
 	public function magBekijken() {
-		return $this->zichtbaar && LoginModel::mag($this->rechten_bekijken);
+		return $this->zichtbaar && LoginService::mag($this->rechten_bekijken);
 	}
 
 	public function magBeheren() {
-		return $this->rechten_bekijken == LoginModel::getUid() || LoginModel::mag(P_ADMIN);
+		return $this->rechten_bekijken == LoginService::getUid() || LoginService::mag(P_ADMIN);
 	}
 
 	public function isOngelezen() {

@@ -5,8 +5,8 @@ namespace CsrDelft\repository\forum;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadReageren;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -27,7 +27,7 @@ class ForumDradenReagerenRepository extends AbstractRepository {
 		$reageren = new ForumDraadReageren();
 		$reageren->forum_id = $deel->forum_id;
 		$reageren->draad_id = (int)$draad_id;
-		$reageren->uid = LoginModel::getUid();
+		$reageren->uid = LoginService::getUid();
 		$reageren->datum_tijd = date_create_immutable();
 		$reageren->concept = $concept;
 		$reageren->titel = $titel;
@@ -44,20 +44,20 @@ class ForumDradenReagerenRepository extends AbstractRepository {
 	 * @return ForumDraadReageren
 	 */
 	protected function getReagerenDoorLid(ForumDeel $deel, $draad_id = null) {
-		return $this->find(['forum_id' => (int) $deel->forum_id, 'draad_id' => (int) $draad_id, 'uid' => LoginModel::getUid()]);
+		return $this->find(['forum_id' => (int) $deel->forum_id, 'draad_id' => (int) $draad_id, 'uid' => LoginService::getUid()]);
 	}
 
 	public function getReagerenVoorDraad(ForumDraad $draad) {
 		return $this->createQueryBuilder('r')
 			->where('r.draad_id = :draad_id and r.uid != :uid and r.datum_tijd > :datum_tijd')
-			->setParameters(['draad_id' => $draad->draad_id, 'uid' => LoginModel::getUid(), 'datum_tijd' => date_create_immutable(instelling('forum', 'reageren_tijd'))])
+			->setParameters(['draad_id' => $draad->draad_id, 'uid' => LoginService::getUid(), 'datum_tijd' => date_create_immutable(instelling('forum', 'reageren_tijd'))])
 			->getQuery()->getResult();
 	}
 
 	public function getReagerenVoorDeel(ForumDeel $deel) {
 		return $this->createQueryBuilder('r')
 			->where('r.forum_id = :forum_id and r.draad_id = 0 and r.uid != :uid and r.datum_tijd > :datum_tijd')
-			->setParameters(['forum_id' => $deel->forum_id, 'uid' => LoginModel::getUid(), 'datum_tijd' => date_create_immutable(instelling('forum', 'reageren_tijd'))])
+			->setParameters(['forum_id' => $deel->forum_id, 'uid' => LoginService::getUid(), 'datum_tijd' => date_create_immutable(instelling('forum', 'reageren_tijd'))])
 			->getQuery()->getResult();
 	}
 

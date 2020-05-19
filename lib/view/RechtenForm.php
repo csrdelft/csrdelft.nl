@@ -10,7 +10,7 @@ namespace CsrDelft\view;
 
 use CsrDelft\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
@@ -35,7 +35,7 @@ class RechtenForm extends ModalForm {
 
 		if ($action === 'aanmaken') {
 
-			if (LoginModel::mag(P_ADMIN)) {
+			if (LoginService::mag(P_ADMIN)) {
 				$fields[] = new RequiredTextField('environment', $ac->environment, 'Klasse');
 				$fields[] = new RequiredTextField('resource', $ac->resource, 'Object');
 			}

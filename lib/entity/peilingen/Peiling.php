@@ -4,7 +4,7 @@ namespace CsrDelft\entity\peilingen;
 
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\DataTableColumn;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -132,7 +132,7 @@ class Peiling implements DataTableEntry {
 		}
 
 		foreach ($this->stemmen as $stem) {
-			if ($stem->uid == LoginModel::getUid()) {
+			if ($stem->uid == LoginService::getUid()) {
 				return true;
 			}
 		}
@@ -146,7 +146,7 @@ class Peiling implements DataTableEntry {
 	 */
 	public function getMagBewerken() {
 		//Elk BASFCie-lid heeft voorlopig peilingbeheerrechten.
-		return LoginModel::mag(P_ADMIN . ',bestuur,commissie:BASFCie');
+		return LoginService::mag(P_ADMIN . ',bestuur,commissie:BASFCie');
 	}
 
 	/**
@@ -154,7 +154,7 @@ class Peiling implements DataTableEntry {
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public function getIsMod() {
-		return LoginModel::mag(P_PEILING_MOD) || LoginModel::getUid() == $this->eigenaar;
+		return LoginService::mag(P_PEILING_MOD) || LoginService::getUid() == $this->eigenaar;
 	}
 
 	/**
@@ -162,7 +162,7 @@ class Peiling implements DataTableEntry {
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public function getMagStemmen() {
-		return LoginModel::mag(P_PEILING_VOTE) && ($this->eigenaar == LoginModel::getUid() || empty(trim($this->rechten_stemmen)) || LoginModel::mag($this->rechten_stemmen))
+		return LoginService::mag(P_PEILING_VOTE) && ($this->eigenaar == LoginService::getUid() || empty(trim($this->rechten_stemmen)) || LoginService::mag($this->rechten_stemmen))
 			&& $this->isPeilingOpen();
 	}
 
@@ -195,7 +195,7 @@ class Peiling implements DataTableEntry {
 	 * @return bool
 	 */
 	public function magBekijken() {
-		return LoginModel::mag(P_LOGGED_IN);
+		return LoginService::mag(P_LOGGED_IN);
 	}
 
 }

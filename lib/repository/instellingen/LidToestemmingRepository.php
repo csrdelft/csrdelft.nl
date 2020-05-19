@@ -7,7 +7,7 @@ use CsrDelft\common\instellingen\InstellingConfiguration;
 use CsrDelft\common\instellingen\InstellingType;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\LidToestemming;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -94,7 +94,7 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 			return true;
 		}
 
-		$uid = LoginModel::getUid();
+		$uid = LoginService::getUid();
 
 		$modules = [self::MODULE_ALGEMEEN, self::MODULE_INTERN, self::MODULE_PROFIEL];
 
@@ -110,15 +110,15 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 	}
 
 	public function toestemming($profiel, $id, $cat = 'profiel', $except = P_LEDEN_MOD) {
-		if (!LoginModel::mag(P_LEDEN_READ)) {
+		if (!LoginService::mag(P_LEDEN_READ)) {
 			return false;
 		}
 
-		if ($profiel->uid == LoginModel::getUid()) {
+		if ($profiel->uid == LoginService::getUid()) {
 			return true;
 		}
 
-		if (LoginModel::mag($except)) {
+		if (LoginService::mag($except)) {
 			return true;
 		}
 
@@ -132,11 +132,11 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 	}
 
 	public function toestemmingUid($uid, $id, $except = P_LEDEN_MOD) {
-		if ($uid == LoginModel::getUid()) {
+		if ($uid == LoginService::getUid()) {
 			return true;
 		}
 
-		if (LoginModel::mag($except)) {
+		if (LoginService::mag($except)) {
 			return true;
 		}
 
@@ -191,7 +191,7 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 
 	protected function getInstelling($module, $id, $uid = null) {
 		if ($uid == null) {
-			$uid = LoginModel::getUid();
+			$uid = LoginService::getUid();
 		}
 		$instelling = $this->find([self::FIELD_MODULE => $module, self::FIELD_INSTELLING_ID => $id, self::FIELD_UID => $uid]);
 		if ($this->hasKey($module, $id)) {

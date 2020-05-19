@@ -4,8 +4,8 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\CmsPagina;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaForm;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\JsonResponse;
@@ -45,7 +45,7 @@ class CmsPaginaController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		$body = new CmsPaginaView($pagina);
-		if (!LoginModel::mag(P_LOGGED_IN)) { // nieuwe layout altijd voor uitgelogde bezoekers
+		if (!LoginService::mag(P_LOGGED_IN)) { // nieuwe layout altijd voor uitgelogde bezoekers
 			$tmpl = 'content';
 			$menu = false;
 			if ($pagina->naam === 'thuis') {

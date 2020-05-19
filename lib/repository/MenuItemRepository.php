@@ -6,9 +6,9 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\MenuItem;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -148,7 +148,7 @@ class MenuItemRepository extends AbstractRepository {
 		$item->parent = $parent;
 		$item->parent_id = $parent->item_id;
 		$item->volgorde = 0;
-		$item->rechten_bekijken = LoginModel::getUid();
+		$item->rechten_bekijken = LoginService::getUid();
 		$item->zichtbaar = true;
 		return $item;
 	}
@@ -190,7 +190,7 @@ class MenuItemRepository extends AbstractRepository {
 	 * @return MenuItem[]|false
 	 */
 	public function getMenuBeheerLijst() {
-		if (LoginModel::mag(P_ADMIN)) {
+		if (LoginService::mag(P_ADMIN)) {
 			return $this->findBy(['parent_id' => 0]);
 		} else {
 			return false;

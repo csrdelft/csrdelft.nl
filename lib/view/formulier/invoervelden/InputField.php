@@ -4,7 +4,7 @@ namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
 use CsrDelft\view\Validator;
@@ -160,7 +160,7 @@ abstract class InputField implements FormElement, Validator {
 			$this->error = 'Dit veld mag niet worden aangepast';
 		} elseif ($this->value == '' AND $this->required) {
 			// vallen over lege velden als dat aangezet is voor het veld
-			if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
+			if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
 				// tenzij gebruiker P_LEDEN_MOD heeft en deze optie aan staat voor dit veld
 			} else {
 				$this->error = 'Dit is een verplicht veld';
@@ -243,7 +243,7 @@ abstract class InputField implements FormElement, Validator {
 		if (!empty($this->description)) {
 			$required = '';
 			if ($this->required) {
-				if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
+				if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
 					// exception for leden mod
 				} else {
 					$required = '<span class="field-required">*</span>';
@@ -280,7 +280,7 @@ abstract class InputField implements FormElement, Validator {
 	 */
 	protected function getCssClasses() {
 		if ($this->required) {
-			if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
+			if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
 				// exception for leden mod
 			} else {
 				$this->css_classes[] = 'required';

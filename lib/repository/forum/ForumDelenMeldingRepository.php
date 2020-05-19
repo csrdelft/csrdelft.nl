@@ -9,9 +9,10 @@ use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -49,7 +50,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	 * @param string $uid uid van lid, standaard huidig ingelogd lid
 	 */
 	public function setMeldingVoorLid(ForumDeel $deel, $actief, $uid = null) {
-		if ($uid === null) $uid = LoginModel::getUid();
+		if ($uid === null) $uid = LoginService::getUid();
 
 		$lidWilMeldingVoorDeel = $deel->lidWilMeldingVoorDeel($uid);
 		if ($lidWilMeldingVoorDeel && !$actief) {
@@ -117,7 +118,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 		);
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		ContainerFacade::getContainer()->get(LoginModel::class)->overrideUid($ontvanger->uid);
+		ContainerFacade::getContainer()->get(SuService::class)->overrideUid($ontvanger->uid);
 
 		// Verzend mail
 		try {
@@ -129,7 +130,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 			}
 		} finally {
 			// Zet UID terug in sessie
-			ContainerFacade::getContainer()->get(LoginModel::class)->resetUid();
+			ContainerFacade::getContainer()->get(SuService::class)->resetUid();
 		}
 	}
 

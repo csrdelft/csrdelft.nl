@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\knoppen;
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -18,7 +18,7 @@ class PasfotoAanmeldenKnop extends SubmitKnop {
 		$this->css_classes[] = 'lidLink';
 		$this->label = null;
 		$this->icon = false;
-		$img = '<img class="pasfoto float-none" src="/plaetjes/groepen/aanmelden.jpg" onmouseout="this.src=\'/plaetjes/groepen/aanmelden.jpg\'" onmouseover="this.src=\'' . LoginModel::getProfiel()->getPasfotoPath() . '\'" title="Klik om u aan te melden" style="cursor:pointer;">';
+		$img = '<img class="pasfoto float-none" src="/plaetjes/groepen/aanmelden.jpg" onmouseout="this.src=\'/plaetjes/groepen/aanmelden.jpg\'" onmouseover="this.src=\'' . LoginService::getProfiel()->getPasfotoPath() . '\'" title="Klik om u aan te melden" style="cursor:pointer;">';
 		return str_replace('</a>', $img . '</a>', parent::getHtml());
 	}
 

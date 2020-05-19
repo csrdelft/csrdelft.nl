@@ -2,9 +2,10 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use CsrDelft\view\login\LoginForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,17 +19,22 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LoginController extends AbstractController {
 	/**
-	 * @var LoginModel
+	 * @var LoginService
 	 */
-	private $loginModel;
+	private $loginService;
 	/**
 	 * @var RememberLoginRepository
 	 */
 	private $rememberLoginRepository;
+	/**
+	 * @var SuService
+	 */
+	private $suService;
 
-	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository) {
+	public function __construct(LoginService $loginService, SuService $suService, RememberLoginRepository $rememberLoginRepository) {
 		$this->rememberLoginRepository = $rememberLoginRepository;
-		$this->loginModel = $loginModel;
+		$this->loginService = $loginService;
+		$this->suService = $suService;
 	}
 
 	public function loginForm (Request $request) {
@@ -46,7 +52,7 @@ class LoginController extends AbstractController {
 		$form = new LoginForm(); // fetches POST values itself
 		$values = $form->getValues();
 
-		if ($form->validate() && $this->loginModel->login($values['user'], $values['pass'])) {
+		if ($form->validate() && $this->loginService->login($values['user'], $values['pass'])) {
 			if ($values['remember']) {
 				$remember = $this->rememberLoginRepository->nieuw();
 				$this->rememberLoginRepository->rememberLogin($remember);
@@ -66,21 +72,21 @@ class LoginController extends AbstractController {
 	}
 
 	public function logout() {
-		$this->loginModel->logout();
+		$this->loginService->logout();
 		return $this->redirectToRoute('default');
 	}
 
 	public function su($uid = null) {
-		$this->loginModel->switchUser($uid);
+		$this->suService->switchUser($uid);
 		setMelding('U bekijkt de webstek nu als ' . ProfielRepository::getNaam($uid, 'volledig') . '!', 1);
 		return $this->csrRedirect(HTTP_REFERER);
 	}
 
 	public function endsu() {
-		if (!$this->loginModel->isSued()) {
+		if (!$this->suService->isSued()) {
 			setMelding('Niet gesued!', -1);
 		} else {
-			$this->loginModel->endSwitchUser();
+			$this->suService->endSwitchUser();
 			setMelding('Switch-useractie is beëindigd.', 1);
 		}
 		return $this->csrRedirect(HTTP_REFERER);

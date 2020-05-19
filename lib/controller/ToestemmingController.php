@@ -4,10 +4,10 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\LidStatus;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\CmsPaginaRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\toestemming\ToestemmingLijstResponse;
 use CsrDelft\view\toestemming\ToestemmingLijstTable;
@@ -67,9 +67,9 @@ class ToestemmingController extends AbstractController {
 	}
 
 	public function lijst(Request $request) {
-		if (LoginModel::mag('P_LEDEN_MOD')) {
+		if (LoginService::mag('P_LEDEN_MOD')) {
 			$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];
-		} else if (LoginModel::mag(P_ALBUM_MOD)) {
+		} else if (LoginService::mag(P_ALBUM_MOD)) {
 			$ids = ['foto_intern', 'foto_extern'];
 		} else {
 			throw new CsrToegangException('Geen toegang');

@@ -5,10 +5,10 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
 
@@ -26,14 +26,14 @@ class AccountController extends AbstractController {
 	 */
 	private $accountRepository;
 	/**
-	 * @var LoginModel
+	 * @var LoginService
 	 */
-	private $loginModel;
+	private $loginService;
 
-	public function __construct(AccountRepository $accountRepository, LoginModel $loginModel, CmsPaginaRepository $cmsPaginaRepository) {
+	public function __construct(AccountRepository $accountRepository, LoginService $loginService, CmsPaginaRepository $cmsPaginaRepository) {
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->accountRepository = $accountRepository;
-		$this->loginModel = $loginModel;
+		$this->loginService = $loginService;
 	}
 
 	public function aanvragen() {
@@ -41,11 +41,11 @@ class AccountController extends AbstractController {
 	}
 
 	public function aanmaken($uid = null) {
-		if (!LoginModel::mag(P_ADMIN)) {
+		if (!LoginService::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
 		if ($uid == null) {
-			$uid = $this->loginModel->getUid();
+			$uid = $this->loginService->getUid();
 		}
 		if ($this->accountRepository->get($uid)) {
 			setMelding('Account bestaat al', 0);
@@ -62,15 +62,15 @@ class AccountController extends AbstractController {
 
 	public function bewerken($uid = null) {
 		if ($uid == null) {
-			$uid = $this->loginModel->getUid();
+			$uid = $this->loginService->getUid();
 		}
-		if ($uid === LoginModel::UID_EXTERN) {
+		if ($uid === LoginService::UID_EXTERN) {
 			return $this->aanvragen();
 		}
-		if ($uid !== $this->loginModel->getUid() && !LoginModel::mag(P_ADMIN)) {
+		if ($uid !== $this->loginService->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
-		if ($this->loginModel->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
+		if ($this->loginService->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
 			setMelding('U mag geen account wijzigen want u bent niet recent met wachtwoord ingelogd', 2);
 			throw new CsrToegangException();
 		}
@@ -97,9 +97,9 @@ class AccountController extends AbstractController {
 
 	public function verwijderen($uid = null) {
 		if ($uid == null) {
-			$uid = $this->loginModel->getUid();
+			$uid = $this->loginService->getUid();
 		}
-		if ($uid !== $this->loginModel->getUid() && !LoginModel::mag(P_ADMIN)) {
+		if ($uid !== $this->loginService->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
 		$account = $this->accountRepository->get($uid);

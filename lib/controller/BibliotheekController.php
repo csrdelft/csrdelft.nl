@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekRecensie;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BiebRubriekRepository;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
@@ -13,6 +12,7 @@ use CsrDelft\repository\bibliotheek\BoekRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\BoekImporter;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatable;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableResponse;
 use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
@@ -66,7 +66,7 @@ class BibliotheekController extends AbstractController {
 	}
 
 	public function recensie($boek_id) {
-		$recensie = $this->boekRecensieRepository->get($boek_id, LoginModel::getUid());
+		$recensie = $this->boekRecensieRepository->get($boek_id, LoginService::getUid());
 		$formulier = new RecensieFormulier($recensie);
 		if ($formulier->validate()) {
 			if (!$recensie->magBewerken()) {
@@ -153,7 +153,7 @@ class BibliotheekController extends AbstractController {
 			}
 		}
 		foreach ($alleRecensies as $recensie) {
-			if ($recensie->schrijver_uid == LoginModel::getUid()) {
+			if ($recensie->schrijver_uid == LoginService::getUid()) {
 				$mijnRecensie = $recensie;
 			}
 			$andereRecensies[] = $recensie;
@@ -249,9 +249,9 @@ class BibliotheekController extends AbstractController {
 			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
 		}
 		if ($uid == null) {
-			$uid = LoginModel::getUid();
+			$uid = LoginService::getUid();
 		}
-		if ($uid != LoginModel::getUid() && !($uid == 'x222' && LoginModel::mag(P_BIEB_MOD))) {
+		if ($uid != LoginService::getUid() && !($uid == 'x222' && LoginService::mag(P_BIEB_MOD))) {
 			throw new CsrToegangException('Mag deze eigenaar niet kiezen');
 		}
 		$this->boekExemplaarRepository->addExemplaar($boek, $uid);
@@ -349,7 +349,7 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function exemplaarlenen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
-		if (!$this->boekExemplaarRepository->leen($exemplaar, LoginModel::getUid())) {
+		if (!$this->boekExemplaarRepository->leen($exemplaar, LoginService::getUid())) {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
@@ -366,7 +366,7 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function exemplaarteruggegeven($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
-		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == LoginModel::getUid()) {
+		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == LoginService::getUid()) {
 			if ($this->boekExemplaarRepository->terugGegeven($exemplaar)) {
 				setMelding('Exemplaar is teruggegeven.', 1);
 			} else {

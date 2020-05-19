@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 
 /**
  * @author Gerrit Uitslag <klapinklapin@gmail.com>
@@ -34,7 +34,7 @@ abstract class CompressedLayout extends HtmlPage {
 	public static function getUserModules() {
 		$modules = [];
 
-		if (!LoginModel::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			return [];
 		}
 

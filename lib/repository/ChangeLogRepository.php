@@ -3,8 +3,9 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\ChangeLogEntry;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
 use function common\short_class;
@@ -21,19 +22,19 @@ use function common\short_class;
  */
 class ChangeLogRepository extends AbstractRepository {
 	/**
-	 * @var LoginModel
+	 * @var SuService
 	 */
-	private $loginModel;
+	private $suService;
 
 	/**
 	 * ChangeLogModel constructor.
 	 * @param ManagerRegistry $registry
-	 * @param LoginModel $loginModel
+	 * @param SuService $suService
 	 */
-	public function __construct(ManagerRegistry $registry, LoginModel $loginModel) {
+	public function __construct(ManagerRegistry $registry, SuService $suService) {
 		parent::__construct($registry, ChangeLogEntry::class);
 
-		$this->loginModel = $loginModel;
+		$this->suService = $suService;
 	}
 
 	/**
@@ -76,10 +77,10 @@ class ChangeLogRepository extends AbstractRepository {
 		$change->property = $property;
 		$change->old_value = $old;
 		$change->new_value = $new;
-		if ($this->loginModel->isSued()) {
-			$change->uid = $this->loginModel::getSuedFrom()->uid;
+		if ($this->suService->isSued()) {
+			$change->uid = $this->suService::getSuedFrom()->uid;
 		} else {
-			$change->uid = $this->loginModel::getUid();
+			$change->uid = LoginService::getUid();
 		}
 		return $change;
 	}

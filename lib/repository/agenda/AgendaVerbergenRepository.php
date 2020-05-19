@@ -5,8 +5,8 @@ namespace CsrDelft\repository\agenda;
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\model\OrmTrait;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -25,10 +25,10 @@ class AgendaVerbergenRepository extends AbstractRepository {
 	}
 
 	public function toggleVerbergen(Agendeerbaar $item) {
-		$verborgen = $this->find(['uid' => LoginModel::getUid(), 'refuuid' => $item->getUUID()]);
+		$verborgen = $this->find(['uid' => LoginService::getUid(), 'refuuid' => $item->getUUID()]);
 		if (!$verborgen) {
 			$verborgen = new AgendaVerbergen();
-			$verborgen->uid = LoginModel::getUid();
+			$verborgen->uid = LoginService::getUid();
 			$verborgen->refuuid = $item->getUUID();
 			$this->save($verborgen);
 		} else {
@@ -37,7 +37,7 @@ class AgendaVerbergenRepository extends AbstractRepository {
 	}
 
 	public function isVerborgen(Agendeerbaar $item) {
-		return $this->find(['uid' => LoginModel::getUid(), 'refuuid' => $item->getUUID()]);
+		return $this->find(['uid' => LoginService::getUid(), 'refuuid' => $item->getUUID()]);
 	}
 
 }

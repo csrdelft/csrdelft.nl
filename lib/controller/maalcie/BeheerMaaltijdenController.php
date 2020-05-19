@@ -6,11 +6,11 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
@@ -253,7 +253,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		$form = new AanmeldingForm($maaltijd, true); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], LoginModel::getUid(), $values['aantal_gasten'], true);
+			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], LoginService::getUid(), $values['aantal_gasten'], true);
 			return $this->tableData([$maaltijd]);
 		} else {
 			return $form;
@@ -301,11 +301,11 @@ class BeheerMaaltijdenController extends AbstractController {
 	 */
 	public function POST_beoordelingen() {
         $maaltijden = $this->maaltijdenRepository->getMaaltijdenHistorie();
-        if (!LoginModel::mag(P_MAAL_MOD)) {
+        if (!LoginService::mag(P_MAAL_MOD)) {
         	// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
 					$maaltijden = array_filter($maaltijden, function ($maaltijd) {
 						/** @var Maaltijd $maaltijd */
-						return $maaltijd->magSluiten(LoginModel::getUid());
+						return $maaltijd->magSluiten(LoginService::getUid());
 					});
 				}
         return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);

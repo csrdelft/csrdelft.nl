@@ -18,12 +18,12 @@
  */
 
 use CsrDelft\Kernel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\LogRepository;
+use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\corvee\CorveeHerinneringService;
 
@@ -37,7 +37,7 @@ $start = microtime(true);
 
 $debugLogRepository = $container->get(DebugLogRepository::class);
 $logModel = $container->get(LogRepository::class);
-$loginModel = $container->get(LoginModel::class);
+$loginSessionRepository = $container->get(LoginSessionRepository::class);
 $oneTimeTokensModel = $container->get(OneTimeTokensRepository::class);
 $instellingenRepository = $container->get(InstellingenRepository::class);
 $lidInstellingenRepository = $container->get(LidInstellingenRepository::class);
@@ -60,7 +60,7 @@ try {
 
 // LoginModel
 try {
-	$loginModel->opschonen();
+	$loginSessionRepository->opschonen();
 } catch (Exception $e) {
 	$debugLogRepository->log('cron.php', 'LoginModel::opschonen()', array(), $e);
 }

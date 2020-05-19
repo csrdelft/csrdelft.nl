@@ -5,9 +5,9 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\courant\CourantBericht;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CourantBerichtRepository;
 use CsrDelft\repository\CourantRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\courant\CourantBerichtFormulier;
 use CsrDelft\view\courant\CourantView;
 use CsrDelft\view\PlainView;
@@ -56,7 +56,7 @@ class CourantController extends AbstractController {
 	public function toevoegen() {
 		$bericht = new CourantBericht();
 		$bericht->datumTijd = new DateTime();
-		$bericht->uid = LoginModel::getUid();
+		$bericht->uid = LoginService::getUid();
 
 		$form = new CourantBerichtFormulier($bericht, '/courant');
 
