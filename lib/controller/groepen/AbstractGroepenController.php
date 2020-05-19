@@ -254,7 +254,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @throws OptimisticLockException
 	 */
 	public function nieuw(Request $request, $id = null, $soort = null) {
-		return $this->aanmaken($request, $soort);
+		return $this->aanmaken($request, $id, $soort);
 	}
 
 	/**
@@ -266,7 +266,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @throws OptimisticLockException
 	 */
 	public function aanmaken(Request $request, $id = null, $soort = null) {
-		if (empty($id)) {
+		if (!$id) {
 			$old = null;
 			$groep = $this->model->nieuw($soort);
 			/**

@@ -6,6 +6,7 @@ use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 
 /**
@@ -23,12 +24,14 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	 * Woonoord / Huis
 	 * @var HuisStatus
 	 * @ORM\Column(type="enumhuisstatus")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $soort;
 
 	/**
 	 * Doet mee met Eetplan
 	 * @ORM\Column(type="boolean")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $eetplan;
 
