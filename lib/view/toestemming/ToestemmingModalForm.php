@@ -5,7 +5,7 @@ namespace CsrDelft\view\toestemming;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -41,7 +41,7 @@ class ToestemmingModalForm extends ModalForm {
 
 		$akkoord = '';
 
-		$instellingen = $lidToestemmingRepository->getRelevantToestemmingCategories(LoginModel::getProfiel()->isLid());
+		$instellingen = $lidToestemmingRepository->getRelevantToestemmingCategories(LoginService::getProfiel()->isLid());
 
 		foreach ($instellingen as $module => $instelling) {
 			foreach ($instelling as $id) {

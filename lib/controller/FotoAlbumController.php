@@ -8,10 +8,10 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\Afbeelding;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
 use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
@@ -53,7 +53,7 @@ class FotoAlbumController extends AbstractController {
 	}
 
 	public function bekijken($dir) {
-		if ($dir == "" && !LoginModel::mag(P_ALBUM_READ)) {
+		if ($dir == "" && !LoginService::mag(P_ALBUM_READ)) {
 			$dir = 'Publiek';
 		}
 
@@ -344,7 +344,7 @@ class FotoAlbumController extends AbstractController {
 	public function removetag(Request $request) {
 		$refuuid = $request->request->get('refuuid');
 		$keyword = $request->request->get('keyword');
-		if (!LoginModel::mag(P_ALBUM_MOD) && !LoginModel::mag($keyword)) {
+		if (!LoginService::mag(P_ALBUM_MOD) && !LoginService::mag($keyword)) {
 			throw new CsrToegangException();
 		}
 		$this->fotoTagsRepository->removeTag($refuuid, $keyword);

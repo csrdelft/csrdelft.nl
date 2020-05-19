@@ -7,12 +7,12 @@ use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\security\LoginService;
 use Jacwright\RestServer\RestException;
 
 class ApiAgendaController {
@@ -40,7 +40,7 @@ class ApiAgendaController {
 	 * @return boolean
 	 */
 	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag('P_AGENDA_READ');
+		return ApiAuthController::isAuthorized() && LoginService::mag('P_AGENDA_READ');
 	}
 
 	/**

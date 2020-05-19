@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\lid;
 
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\service\LidZoeker;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\View;
 
 /**
@@ -84,7 +84,7 @@ class LedenlijstContent implements View {
 			echo '<a href="' . $url . '" class="btn float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
 		}
 		echo getMelding();
-		echo '<h1>' . (LoginModel::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
+		echo '<h1>' . (LoginService::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		echo '<form id="zoekform" method="get">';
 		echo '<div class="input-group">';
 		echo '<input type="text" class="form-control" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';

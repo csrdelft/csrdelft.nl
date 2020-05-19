@@ -5,8 +5,9 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\security\RememberLogin;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\LoginSessionsData;
@@ -18,7 +19,7 @@ use CsrDelft\view\login\RememberLoginForm;
  */
 class SessionController extends AbstractController {
 	/**
-	 * @var LoginModel
+	 * @var LoginSessionRepository
 	 */
 	private $loginModel;
 	/**
@@ -26,19 +27,19 @@ class SessionController extends AbstractController {
 	 */
 	private $rememberLoginRepository;
 
-	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository) {
+	public function __construct(LoginSessionRepository $loginModel, RememberLoginRepository $rememberLoginRepository) {
 		$this->loginModel = $loginModel;
 		$this->rememberLoginRepository = $rememberLoginRepository;
 	}
 
 	public function sessionsdata() {
-		return new LoginSessionsData($this->loginModel->find('uid = ?', array(LoginModel::getUid())));
+		return new LoginSessionsData($this->loginModel->find('uid = ?', array(LoginService::getUid())));
 	}
 
 	public function endsession($session_hash = null) {
 		$session = false;
 		if ($session_hash) {
-			$session = $this->loginModel->find('session_hash = ? AND uid = ?', array($session_hash, LoginModel::getUid()), null, null, 1)->fetch();
+			$session = $this->loginModel->find('session_hash = ? AND uid = ?', array($session_hash, LoginService::getUid()), null, null, 1)->fetch();
 		}
 		if (!$session) {
 			throw new CsrToegangException();
@@ -57,7 +58,7 @@ class SessionController extends AbstractController {
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
 			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
-			if (!$remember || $remember->uid !== LoginModel::getUid()) {
+			if (!$remember || $remember->uid !== LoginService::getUid()) {
 				throw new CsrToegangException();
 			}
 			$remember->lock_ip = !$remember->lock_ip;
@@ -69,7 +70,7 @@ class SessionController extends AbstractController {
 	}
 
 	public function rememberdata() {
-		return $this->tableData($this->rememberLoginRepository->findBy(['uid' => LoginModel::getUid()]));
+		return $this->tableData($this->rememberLoginRepository->findBy(['uid' => LoginService::getUid()]));
 	}
 
 	public function remember() {
@@ -79,7 +80,7 @@ class SessionController extends AbstractController {
 		} else {
 			$remember = $this->rememberLoginRepository->nieuw();
 		}
-		if (!$remember || $remember->uid !== LoginModel::getUid()) {
+		if (!$remember || $remember->uid !== LoginService::getUid()) {
 			throw new CsrToegangException();
 		}
 		$form = new RememberLoginForm($remember);
@@ -103,7 +104,7 @@ class SessionController extends AbstractController {
 	}
 
 	public function forgetAll() {
-		$remembers = $this->rememberLoginRepository->findBy(['uid' => LoginModel::getUid()]);
+		$remembers = $this->rememberLoginRepository->findBy(['uid' => LoginService::getUid()]);
 
 		$response = [];
 		$manager = $this->getDoctrine()->getManager();
@@ -126,7 +127,7 @@ class SessionController extends AbstractController {
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
 			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
-			if (!$remember || $remember->uid !== LoginModel::getUid()) {
+			if (!$remember || $remember->uid !== LoginService::getUid()) {
 				throw new CsrToegangException();
 			}
 			$manager->remove($remember);

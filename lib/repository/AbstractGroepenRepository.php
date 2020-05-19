@@ -5,9 +5,9 @@ namespace CsrDelft\repository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\GroepStatus;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -170,7 +170,7 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 		$groep->begin_moment = null;
 		$groep->eind_moment = null;
 		$groep->website = null;
-		$groep->maker_uid = LoginModel::getUid();
+		$groep->maker_uid = LoginService::getUid();
 		return $groep;
 	}
 

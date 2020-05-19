@@ -9,10 +9,10 @@ use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\model\RetrieveByUuidTrait;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
+use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTimeInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -186,7 +186,7 @@ class CorveeTakenRepository extends AbstractRepository {
 		$qb->setParameter('tot_datum', $tot);
 		if (!$iedereen) {
 			$qb->andWhere('ct.uid = :uid');
-			$qb->setParameter('uid', LoginModel::getUid());
+			$qb->setParameter('uid', LoginService::getUid());
 		}
 		return $qb->getQuery()->getResult();
 	}

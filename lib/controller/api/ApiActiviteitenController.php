@@ -4,10 +4,10 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManager;
 use Jacwright\RestServer\RestException;
 
@@ -38,7 +38,7 @@ class ApiActiviteitenController {
 	 * @return boolean
 	 */
 	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag(P_LEDEN_READ);
+		return ApiAuthController::isAuthorized() && LoginService::mag(P_LEDEN_READ);
 	}
 
 	/**

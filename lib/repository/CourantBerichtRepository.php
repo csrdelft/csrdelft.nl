@@ -5,7 +5,7 @@ namespace CsrDelft\repository;
 
 
 use CsrDelft\entity\courant\CourantBericht;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,10 +22,10 @@ class CourantBerichtRepository extends ServiceEntityRepository {
 
 	public function getBerichtenVoorGebruiker() {
 		//mods en bestuur zien alle berichten
-		if (LoginModel::mag(P_MAIL_COMPOSE) || LoginModel::mag('bestuur')) {
+		if (LoginService::mag(P_MAIL_COMPOSE) || LoginService::mag('bestuur')) {
 			return $this->findAll();
 		} else {
-			return $this->findBy(['uid' => LoginModel::getUid()], ['volgorde' => 'ASC']);
+			return $this->findBy(['uid' => LoginService::getUid()], ['volgorde' => 'ASC']);
 		}
 	}
 

@@ -7,7 +7,7 @@ use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 
@@ -41,7 +41,7 @@ class BbLedenmemoryscores extends BbTag {
 	}
 
 	public function isAllowed() {
-		LoginModel::mag(P_LOGGED_IN);
+		return LoginService::mag(P_LOGGED_IN);
 	}
 
 	public function renderLight() {

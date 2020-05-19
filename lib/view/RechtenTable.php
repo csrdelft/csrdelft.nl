@@ -5,9 +5,9 @@ namespace CsrDelft\view;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccessRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
@@ -28,9 +28,9 @@ class RechtenTable extends DataTable {
 		$this->searchColumn('aciton');
 
 		// Has permission to change permissions?
-		if (!LoginModel::mag(P_ADMIN)) {
+		if (!LoginService::mag(P_ADMIN)) {
 			$rechten = $model->getSubject($environment, AccessAction::Rechten, $resource);
-			if (!$rechten OR !LoginModel::mag($rechten)) {
+			if (!$rechten OR !LoginService::mag($rechten)) {
 				return;
 			}
 		}

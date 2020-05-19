@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -74,7 +74,7 @@ class Werkgroep extends AbstractGroep {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
-		if ($action === AccessAction::Aanmaken AND !LoginModel::mag(P_LEDEN_MOD)) {
+		if ($action === AccessAction::Aanmaken AND !LoginService::mag(P_LEDEN_MOD)) {
 			return false;
 		}
 		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);

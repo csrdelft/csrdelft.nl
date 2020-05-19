@@ -6,9 +6,9 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\GoogleTokenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use DOMDocument;
 use DOMText;
 use Exception;
@@ -77,7 +77,7 @@ class GoogleSync {
 	 */
 	public function __construct() {
 		$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
-		$google_token = $googleTokenRepository->find(LoginModel::getUid());
+		$google_token = $googleTokenRepository->find(LoginService::getUid());
 		if ($google_token === false) {
 			throw new CsrException('Authsub token not available, use doRequestToken.');
 		}
@@ -619,7 +619,7 @@ class GoogleSync {
 
 
 		//last updated
-		if (LoginModel::mag(P_ADMIN)) {
+		if (LoginService::mag(P_ADMIN)) {
 			$update = $doc->createElement('gContact:userDefinedField');
 			$update->setAttribute('key', 'update');
 			$update->setAttribute('value', getDateTime());
@@ -647,7 +647,7 @@ class GoogleSync {
 	 */
 	public static function isAuthenticated() {
 		$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
-		return $googleTokenRepository->exists(LoginModel::getUid());
+		return $googleTokenRepository->exists(LoginService::getUid());
 	}
 
 	/**

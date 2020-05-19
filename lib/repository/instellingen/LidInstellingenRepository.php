@@ -8,8 +8,8 @@ use CsrDelft\common\instellingen\InstellingConfiguration;
 use CsrDelft\common\instellingen\InstellingType;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\instellingen\LidInstelling;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
@@ -101,7 +101,7 @@ class LidInstellingenRepository extends AbstractRepository {
 	}
 
 	private function getUid() {
-		return LoginModel::getUid();
+		return LoginService::getUid();
 	}
 
 	protected function newInstelling($module, $id, $uid) {

@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\agenda;
 
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use function common\short_class;
@@ -107,16 +107,16 @@ class AgendaItem implements Agendeerbaar {
 
 	public function magBekijken($ical = false) {
 		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
-		return LoginModel::mag($this->rechten_bekijken, $auth);
+		return LoginService::mag($this->rechten_bekijken, $auth);
 	}
 
 	public function magBeheren($ical = false) {
 		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
-		if (LoginModel::mag(P_AGENDA_MOD, $auth)) {
+		if (LoginService::mag(P_AGENDA_MOD, $auth)) {
 			return true;
 		}
-		$verticale = 'verticale:' . LoginModel::getProfiel()->verticale;
-		if ($this->rechten_bekijken === $verticale AND LoginModel::getProfiel()->verticaleleider) {
+		$verticale = 'verticale:' . LoginService::getProfiel()->verticale;
+		if ($this->rechten_bekijken === $verticale AND LoginService::getProfiel()->verticaleleider) {
 			return true;
 		}
 		return false;

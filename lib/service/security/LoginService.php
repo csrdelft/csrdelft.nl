@@ -1,75 +1,46 @@
 <?php
 
-namespace CsrDelft\model\security;
 
-use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrGebruikerException;
+namespace CsrDelft\service\security;
+
+
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
+use CsrDelft\entity\security\LoginSession;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\entity\security\LoginSession;
-use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
-use CsrDelft\view\Validator;
 
 /**
- * LoginModel.class.php
+ * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.
  *
- * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
- * @author P.W.G. Brussee <brussee@live.nl>
- *
- * Model van het huidige ingeloggede account voor inloggen, uitloggen, su'en etc.
- *
- * @see AccountRepository
+ * @package CsrDelft\service
  */
-class LoginModel extends PersistenceModel implements Validator {
-
-	const ORM = LoginSession::class;
+class LoginService {
 	public const UID_EXTERN = 'x999';
-	private $tempSwitchUid;
+	protected $current_session;
 	/**
-	 * @var AccountRepository
+	 * @var LoginSessionRepository
 	 */
-	protected $accountRepository;
+	private $loginRepository;
 	/**
 	 * @var RememberLoginRepository
 	 */
 	private $rememberLoginRepository;
-
 	/**
-	 * @return string
+	 * @var AccountRepository
 	 */
-	public static function getUid() {
-		if (MODE === 'CLI') {
-			return CliLoginModel::getUid();
-		}
-		return $_SESSION['_uid'] ?? self::UID_EXTERN;
-	}
+	private $accountRepository;
 
-	/**
-	 * @return Account|false
-	 */
-	public static function getSuedFrom() {
-		return AccountRepository::get($_SESSION['_suedFrom']);
-	}
-
-	/**
-	 * @return Account|false
-	 */
-	public static function getAccount() {
-		return AccountRepository::get(static::getUid());
-	}
-
-	/**
-	 * @return Profiel|false
-	 */
-	public static function getProfiel() {
-		return ProfielRepository::get(static::getUid());
+	public function __construct(LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
+		$this->loginRepository = $loginRepository;
+		$this->rememberLoginRepository = $rememberLoginRepository;
+		$this->accountRepository = $accountRepository;
 	}
 
 	/**
@@ -83,20 +54,27 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	/**
-	 * @var LoginSession|false
+	 * @return Account|false
 	 */
-	private $current_session;
+	public static function getAccount() {
+		return AccountRepository::get(static::getUid());
+	}
 
 	/**
-	 * LoginModel constructor.
-	 * @param AccountRepository $accountRepository
-	 * @param RememberLoginRepository $rememberLoginRepository
+	 * @return string
 	 */
-	public function __construct(AccountRepository $accountRepository, RememberLoginRepository $rememberLoginRepository) {
-		parent::__construct();
+	public static function getUid() {
+		if (MODE === 'CLI') {
+			return CliLoginService::getUid();
+		}
+		return $_SESSION['_uid'] ?? self::UID_EXTERN;
+	}
 
-		$this->accountRepository = $accountRepository;
-		$this->rememberLoginRepository = $rememberLoginRepository;
+	/**
+	 * @return Profiel|false
+	 */
+	public static function getProfiel() {
+		return ProfielRepository::get(static::getUid());
 	}
 
 	public function authenticate() {
@@ -109,8 +87,8 @@ class LoginModel extends PersistenceModel implements Validator {
 		if ($this->validate()) {
 			// Public gebruiker heeft geen DB sessie
 			if ($_SESSION['_uid'] != self::UID_EXTERN) {
-				$this->current_session->expire = getDateTime(time() + getSessionMaxLifeTime());
-				$this->update($this->current_session);
+				$this->current_session->expire = date_create_immutable('@' . (time() + getSessionMaxLifeTime()));
+				$this->loginRepository->update($this->current_session);
 			}
 		} else {
 			// Subject assignment:
@@ -125,7 +103,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 			}
 		}
-		if ($_SESSION['_uid'] == self::UID_EXTERN)  {
+		if ($_SESSION['_uid'] == self::UID_EXTERN) {
 			/**
 			 * Als we x999 zijn checken we of er misschien een private token in de $_GET staat.
 			 * Deze staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
@@ -144,6 +122,13 @@ class LoginModel extends PersistenceModel implements Validator {
 			http_response_code(503);
 			die('<h1>503 Service Unavailable</h1>');
 		}
+	}
+
+	/**
+	 * @return LoginSession|null
+	 */
+	protected function getCurrentSession() {
+		return $this->loginRepository->find(hash('sha512', session_id()));
 	}
 
 	/**
@@ -174,7 +159,7 @@ class LoginModel extends PersistenceModel implements Validator {
 		}
 		// Controleer switch user status
 		if (isset($_SESSION['_suedFrom'])) {
-			$suedFrom = static::getSuedFrom();
+			$suedFrom = SuService::getSuedFrom();
 			if (!$suedFrom || $this->current_session->uid !== $suedFrom->uid) {
 				return false;
 			}
@@ -199,7 +184,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				&& !startsWith(REQUEST_URI, '/styles/')
 				&& !startsWith(REQUEST_URI, '/scripts/')
 				&& REQUEST_URI !== '/endsu'
-			  && REQUEST_URI !== '/logout') {
+				&& REQUEST_URI !== '/logout') {
 				setMelding('Uw wachtwoord is verlopen', 2);
 				redirect('/wachtwoord/verlopen');
 			}
@@ -216,27 +201,6 @@ class LoginModel extends PersistenceModel implements Validator {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasError() {
-		return isset($_SESSION['auth_error']);
-	}
-
-	/**
-	 * Na opvragen resetten.
-	 *
-	 * @return mixed null or string
-	 */
-	public function getError() {
-		if (!$this->hasError()) {
-			return null;
-		}
-		$error = $_SESSION['auth_error'];
-		unset($_SESSION['auth_error']);
-		return $error;
 	}
 
 	/**
@@ -356,11 +320,7 @@ class LoginModel extends PersistenceModel implements Validator {
 			$this->current_session->ip = $remote_addr;
 			$this->current_session->lock_ip = $lockIP; // sessie koppelen aan ip?
 			$this->current_session->authentication_method = $_SESSION['_authenticationMethod'];
-			if ($this->exists($this->current_session)) {
-				$this->update($this->current_session);
-			} else {
-				$this->create($this->current_session);
-			}
+			$this->loginRepository->update($this->current_session);
 
 			if ($remember) {
 				setMelding('Welkom ' . ProfielRepository::getNaam($account->uid, 'civitas') . '! U bent <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">automatisch ingelogd</a>.', 0);
@@ -377,7 +337,7 @@ class LoginModel extends PersistenceModel implements Validator {
 				}
 
 				// Welcome message
-				setMelding('Welkom ' . ProfielRepository::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">' . $this->count('uid = ? AND expire > NOW()', array($account->uid)) . 'x ingelogd</a>.', 0);
+				setMelding('Welkom ' . ProfielRepository::getNaam($account->uid, 'civitas') . '! U bent momenteel <a href="/instellingen#table-automatisch-inloggen" style="text-decoration: underline;">' . $this->loginRepository->getActiveSessionCount($account->uid) . 'x ingelogd</a>.', 0);
 			}
 		}
 		return true;
@@ -392,103 +352,8 @@ class LoginModel extends PersistenceModel implements Validator {
 			setRememberCookie(null);
 		}
 		// Destroy login session
-		$this->deleteByPrimaryKey(array(hash('sha512', session_id())));
+		$this->loginRepository->removeByHash(hash('sha512', session_id()));
 		session_destroy();
-	}
-
-	/**
-	 * @param string $uid
-	 *
-	 * @throws CsrGebruikerException
-	 */
-	public function switchUser($uid) {
-		if ($this->isSued()) {
-			throw new CsrGebruikerException('Geneste su niet mogelijk!');
-		}
-		$suNaar = $this->accountRepository->get($uid);
-		if (!$this->maySuTo($suNaar)) {
-			throw new CsrGebruikerException('Deze gebruiker mag niet inloggen!');
-		}
-		$suedFrom = static::getAccount();
-		// Keep authentication method
-		$authMethod = $this->getAuthenticationMethod();
-
-		// Clear session
-		session_unset();
-
-		// Subject assignment:
-		$_SESSION['_suedFrom'] = $suedFrom->uid;
-		$_SESSION['_uid'] = $suNaar->uid;
-		$_SESSION['_authenticationMethod'] = $authMethod;
-	}
-
-	/**
-	 */
-	public function endSwitchUser() {
-		$suedFrom = static::getSuedFrom();
-		// Keep authentication method
-		$authMethod = $this->getAuthenticationMethod();
-
-		// Clear session
-		session_unset();
-
-		// Subject assignment:
-		$_SESSION['_uid'] = $suedFrom->uid;
-		$_SESSION['_suedFrom'] = null;
-		$_SESSION['_authenticationMethod'] = $authMethod;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isSued() {
-		if (!isset($_SESSION['_suedFrom'])) {
-			return false;
-		}
-		$suedFrom = static::getSuedFrom();
-		return $suedFrom && AccessService::mag($suedFrom, P_ADMIN);
-	}
-
-	/**
-	 * Schakel tijdelijk naar een lid om gedrag van functies te simuleren alsof dit lid is ingelogd.
-	 * Moet z.s.m. (binnen dit request) weer ongedaan worden met `endTempSwitchUser()`
-	 * @param string $uid Uid van lid waarnaartoe geschakeld moet worden
-	 * @throws CsrException als er al een tijdelijke schakeling actief is.
-	 */
-	public function overrideUid($uid) {
-		if (isset($this->tempSwitchUid)) {
-			throw new CsrException("Er is al een tijdelijke schakeling actief, beëindig deze eerst.");
-		}
-		$this->tempSwitchUid = $_SESSION['_uid'];
-		$_SESSION['_uid'] = $uid;
-	}
-
-	/**
-	 * Beëindig tijdelijke schakeling naar lid.
-	 * @throws CsrException als er geen tijdelijke schakeling actief is.
-	 */
-	public function resetUid() {
-		if (!isset($this->tempSwitchUid)) {
-			throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
-		}
-		$_SESSION['_uid'] = $this->tempSwitchUid;
-		$this->tempSwitchUid = null;
-	}
-
-	/**
-	 * @param Account $suNaar
-	 *
-	 * @return bool
-	 */
-	public function maySuTo(Account $suNaar) {
-		return LoginModel::mag(P_ADMIN) && !$this->isSued() && $suNaar->uid !== static::getUid() && AccessService::mag($suNaar, P_LOGGED_IN);
-	}
-
-	/**
-	 * @return LoginSession|false
-	 */
-	protected function getCurrentSession() {
-		return $this->retrieveByPrimaryKey(array(hash('sha512', session_id())));
 	}
 
 	/**
@@ -511,11 +376,23 @@ class LoginModel extends PersistenceModel implements Validator {
 	}
 
 	/**
+	 * Na opvragen resetten.
+	 *
+	 * @return mixed null or string
 	 */
-	public function opschonen() {
-		foreach ($this->find('expire <= ?', array(getDateTime())) as $this->current_session) {
-			$this->delete($this->current_session);
+	public function getError() {
+		if (!$this->hasError()) {
+			return null;
 		}
+		$error = $_SESSION['auth_error'];
+		unset($_SESSION['auth_error']);
+		return $error;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function hasError() {
+		return isset($_SESSION['auth_error']);
+	}
 }

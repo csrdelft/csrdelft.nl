@@ -6,10 +6,10 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\ProfielService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
@@ -17,12 +17,12 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
+use CsrDelft\view\formulier\invoervelden\EmailField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\IBANField;
 use CsrDelft\view\formulier\invoervelden\LandField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
-use CsrDelft\view\formulier\invoervelden\EmailField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLandField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\StudieField;
@@ -57,7 +57,7 @@ class ProfielForm extends Formulier {
 			parent::__construct($profiel, '/profiel/' . $profiel->lidjaar . '/nieuw/' . strtolower(substr($profiel->status, 2)));
 		}
 
-		$admin = LoginModel::mag(P_LEDEN_MOD);
+		$admin = LoginService::mag(P_LEDEN_MOD);
 		$inschrijven = !$profiel->account;
 
 		$fields = [];
@@ -239,7 +239,7 @@ class ProfielForm extends Formulier {
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
-		if (($admin OR LoginModel::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
+		if (($admin OR LoginService::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
 
 			if ($inschrijven) {

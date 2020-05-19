@@ -10,7 +10,6 @@ use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumZoeken;
 use CsrDelft\entity\security\Account;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
@@ -21,6 +20,7 @@ use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -135,7 +135,7 @@ class ForumController extends AbstractController {
 		 */
 		return view('forum.rss', [
 			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
-			'privatelink' => LoginModel::getAccount()->getRssLink()
+			'privatelink' => LoginService::getAccount()->getRssLink()
 		]);
 	}
 
@@ -162,7 +162,7 @@ class ForumController extends AbstractController {
 		$forumZoeken->zoekterm = $query;
 		$zoekform = new ForumZoekenForm($forumZoeken);
 
-		if (!LoginModel::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			// Reset de waarden waarbinnen een externe gebruiker mag zoeken.
 			$override = new ForumZoeken();
 			$override->zoekterm = $forumZoeken->zoekterm;
@@ -318,7 +318,7 @@ class ForumController extends AbstractController {
 		if (!$draad->magLezen()) {
 			throw new CsrToegangException();
 		}
-		if (LoginModel::mag(P_LOGGED_IN)) {
+		if (LoginService::mag(P_LOGGED_IN)) {
 			$gelezen = $draad->getWanneerGelezen();
 		} else {
 			$gelezen = null;
@@ -351,7 +351,7 @@ class ForumController extends AbstractController {
 			'gelezen_moment' => $gelezen ? $gelezen->datum_tijd : false,
 		]);
 
-		if (LoginModel::mag(P_LOGGED_IN)) {
+		if (LoginService::mag(P_LOGGED_IN)) {
 			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
 		}
 
@@ -457,7 +457,7 @@ class ForumController extends AbstractController {
 	 */
 	public function toonalles() {
 		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
-		$this->forumDradenVerbergenRepository->toonAllesVoorLid(LoginModel::getUid());
+		$this->forumDradenVerbergenRepository->toonAllesVoorLid(LoginService::getUid());
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		return new JsonResponse(true);
 	}
@@ -539,7 +539,7 @@ class ForumController extends AbstractController {
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'eerste_post_plakkerig', 'pagina_per_post'))) {
 			$value = !$draad->$property;
-			if ($property === 'belangrijk' && !LoginModel::mag(P_FORUM_BELANGRIJK)) {
+			if ($property === 'belangrijk' && !LoginService::mag(P_FORUM_BELANGRIJK)) {
 				throw new CsrToegangException();
 			}
 		} elseif ($property === 'forum_id' || $property === 'gedeeld_met') {
@@ -649,7 +649,7 @@ class ForumController extends AbstractController {
 		// externen checks
 		$mailadres = null;
 		$wacht_goedkeuring = false;
-		if (!LoginModel::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
@@ -704,7 +704,7 @@ class ForumController extends AbstractController {
 		}
 
 		// markeer als gelezen
-		if (LoginModel::mag(P_LOGGED_IN)) {
+		if (LoginService::mag(P_LOGGED_IN)) {
 			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
 		}
 

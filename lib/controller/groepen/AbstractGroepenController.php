@@ -16,9 +16,9 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
@@ -272,7 +272,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			/**
 			 * @var Profiel $profiel
 			 */
-			$profiel = LoginModel::getProfiel();
+			$profiel = LoginService::getProfiel();
 			if ($groep instanceof Activiteit AND empty($groep->rechten_aanmelden)) {
 				switch ($groep->soort) {
 
@@ -580,7 +580,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	public function ketzer_aanmelden(EntityManagerInterface $em, $id) {
-		$uid = LoginModel::getUid();
+		$uid = LoginService::getUid();
 		$groep = $this->model->get($id);
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
@@ -627,7 +627,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	public function ketzer_bewerken(EntityManagerInterface $em, $id) {
-		$uid = LoginModel::getUid();
+		$uid = LoginService::getUid();
 		$groep = $this->model->get($id);
 
 		if (!$groep->mag(AccessAction::Bewerken)) {
@@ -675,7 +675,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	public function ketzer_afmelden(EntityManagerInterface $em, $id) {
-		$uid = LoginModel::getUid();
+		$uid = LoginService::getUid();
 		$groep = $this->model->get($id);
 
 		if (!$groep->mag(AccessAction::Afmelden) && !$groep->mag(AccessAction::Beheren)) { // A::Beheren voor afmelden via context-menu
@@ -771,7 +771,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					$em->flush();
 					$lid->groep_id = $ot_groep->id;
 					$lid->lid_sinds = getDateTime();
-					$lid->door_uid = LoginModel::getUid();
+					$lid->door_uid = LoginService::getUid();
 					$em->persist($lid);
 					$em->flush();
 					$lid->groep_id = $groep->id;

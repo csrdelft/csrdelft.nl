@@ -4,9 +4,9 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\GoogleToken;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\GoogleTokenRepository;
 use CsrDelft\service\GoogleSync;
+use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -33,7 +33,7 @@ class GoogleController extends AbstractController {
 			$client->fetchAccessTokenWithAuthCode($code);
 
 			$googleToken = new GoogleToken();
-			$googleToken->uid = LoginModel::getUid();
+			$googleToken->uid = LoginService::getUid();
 			$googleToken->token = $client->getRefreshToken();
 
 			$manager = $this->getDoctrine()->getManager();

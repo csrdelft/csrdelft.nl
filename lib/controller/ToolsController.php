@@ -9,16 +9,17 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\OrmMemcache;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\service\ProfielService;
 use CsrDelft\service\Roodschopper;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
@@ -45,7 +46,7 @@ class ToolsController extends AbstractController {
 	 */
 	private $profielRepository;
 	/**
-	 * @var LoginModel
+	 * @var LoginSessionRepository
 	 */
 	private $loginModel;
 	/**
@@ -61,7 +62,7 @@ class ToolsController extends AbstractController {
 	 */
 	private $profielService;
 
-	public function __construct(AccountRepository $accountRepository, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogRepository $logRepository, SavedQueryRepository $savedQueryRepository) {
+	public function __construct(AccountRepository $accountRepository, ProfielRepository $profielRepository, ProfielService $profielService, LoginSessionRepository $loginModel, LogRepository $logRepository, SavedQueryRepository $savedQueryRepository) {
 		$this->savedQueryRepository = $savedQueryRepository;
 		$this->accountRepository = $accountRepository;
 		$this->profielRepository = $profielRepository;
@@ -139,7 +140,7 @@ class ToolsController extends AbstractController {
 	}
 
 	public function syncldap() {
-		if (DEBUG || LoginModel::mag(P_ADMIN) || $this->loginModel->isSued()) {
+		if (DEBUG || LoginService::mag(P_ADMIN) || $this->loginModel->isSued()) {
 			$ldap = new LDAP();
 			foreach ($this->profielRepository->findAll() as $profiel) {
 				$this->profielRepository->save_ldap($profiel, $ldap);
@@ -314,7 +315,7 @@ class ToolsController extends AbstractController {
 	}
 
 	public function memcachestats() {
-		if (DEBUG || LoginModel::mag(P_ADMIN) || $this->loginModel->isSued()) {
+		if (DEBUG || LoginService::mag(P_ADMIN) || $this->loginModel->isSued()) {
 			ob_start();
 
 			echo getMelding();

@@ -8,7 +8,7 @@
 		@if($maaltijd->aanmeld_limiet === 0 or ($maaltijd->gesloten and ! $aanmelding)) class="taak-grijs" @endif >
 	<td>
 		{{date_format_intl($maaltijd->datum, LONG_DATE_FORMAT)}} {{date_format_intl($maaltijd->tijd, TIME_FORMAT)}}
-		@if($maaltijd->magBekijken(CsrDelft\model\security\LoginModel::getUid()))
+		@if($maaltijd->magBekijken(\CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getUid()))
 			<div class="float-right">
 				@icon("paintcan", null, $maaltijd->maaltijdcorvee->corveeFunctie->naam)
 			</div>
@@ -35,7 +35,7 @@
 	</td>
 	<td class="text-center">
 		{{$maaltijd->getAantalAanmeldingen()}} ({{$maaltijd->aanmeld_limiet}})
-		@if($maaltijd->magSluiten(CsrDelft\model\security\LoginModel::getUid()))
+		@if($maaltijd->magSluiten(\CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getUid()))
 			<div class="float-right">
 				<a href="/maaltijden/lijst/{{$maaltijd->maaltijd_id}}" title="Toon maaltijdlijst" class="btn">@icon("table")</a>
 			</div>

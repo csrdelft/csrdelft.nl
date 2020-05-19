@@ -8,16 +8,16 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\entity\groepen\Ketzer;
-use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\agenda\AgendaVerbergenRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\agenda\AgendaItemForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
@@ -94,7 +94,7 @@ class AgendaController {
 		return view('agenda.maand', [
 			'maand' => $maand,
 			'jaar' => $jaar,
-			'creator' => LoginModel::mag(P_AGENDA_ADD) || LoginModel::getProfiel()->verticaleleider,
+			'creator' => LoginService::mag(P_AGENDA_ADD) || LoginService::getProfiel()->verticaleleider,
 		]);
 	}
 
@@ -154,18 +154,18 @@ class AgendaController {
 	}
 
 	public function toevoegen($datum = null) {
-		if (!LoginModel::mag(P_AGENDA_ADD) && !LoginModel::getProfiel()->verticaleleider) {
+		if (!LoginService::mag(P_AGENDA_ADD) && !LoginService::getProfiel()->verticaleleider) {
 			throw new CsrToegangException('Mag geen gebeurtenis toevoegen.');
 		}
 
 		$item = $this->agendaRepository->nieuw($datum);
-		if (LoginModel::getProfiel()->verticaleleider && !LoginModel::mag(P_AGENDA_ADD)) {
-			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
+		if (LoginService::getProfiel()->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+			$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
 		}
 		$form = new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 		if ($form->validate()) {
-			if (LoginModel::getProfiel()->verticaleleider && !LoginModel::mag(P_AGENDA_ADD)) {
-				$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
+			if (LoginService::getProfiel()->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+				$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
 			}
 			$item->item_id = (int)$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {

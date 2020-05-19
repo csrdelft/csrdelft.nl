@@ -4,7 +4,7 @@
 namespace CsrDelft\entity\bibliotheek;
 
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -75,11 +75,11 @@ class BoekRecensie {
 	}
 
 	public function isSchrijver($uid = null) {
-		if (!LoginModel::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			return false;
 		}
 		if ($uid === null) {
-			$uid = LoginModel::getUid();
+			$uid = LoginService::getUid();
 		}
 		return $this->schrijver_uid == $uid;
 	}

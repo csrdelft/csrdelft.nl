@@ -6,10 +6,10 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\AccessService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
 
@@ -19,7 +19,7 @@ use CsrDelft\view\login\WachtwoordWijzigenForm;
  */
 class WachtwoordController extends AbstractController {
 	/**
-	 * @var LoginModel
+	 * @var LoginService
 	 */
 	private $loginModel;
 	/**
@@ -31,14 +31,14 @@ class WachtwoordController extends AbstractController {
 	 */
 	private $oneTimeTokensRepository;
 
-	public function __construct(LoginModel $loginModel, AccountRepository $accountRepository, OneTimeTokensRepository $oneTimeTokensRepository) {
-		$this->loginModel = $loginModel;
+	public function __construct(LoginService $loginService, AccountRepository $accountRepository, OneTimeTokensRepository $oneTimeTokensRepository) {
+		$this->loginModel = $loginService;
 		$this->accountRepository = $accountRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 	}
 
 	public function wijzigen() {
-		$account = LoginModel::getAccount();
+		$account = LoginService::getAccount();
 		// mag inloggen?
 		if (!$account || !AccessService::mag($account, P_LOGGED_IN)) {
 			throw new CsrToegangException();

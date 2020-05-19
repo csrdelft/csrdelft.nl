@@ -5,7 +5,7 @@ namespace CsrDelft\controller\fiscaat;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
 use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingInhoudTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTableResponse;
@@ -36,7 +36,7 @@ class BeheerCiviBestellingController {
 
 	public function lijst(Request $request, $uid = null) {
 		$this->checkToegang($uid);
-		$uid = $uid == null ? LoginModel::getUid() : $uid;
+		$uid = $uid == null ? LoginService::getUid() : $uid;
 		if ($request->query->get("deleted") == "true") {
 			$data = $this->civiBestellingModel->find('uid = ?', array($uid));
 		} else {
@@ -57,7 +57,7 @@ class BeheerCiviBestellingController {
 	 * @param string $uid
 	 */
 	private function checkToegang($uid) {
-		if (!LoginModel::mag(P_FISCAAT_READ) && $uid) {
+		if (!LoginService::mag(P_FISCAAT_READ) && $uid) {
 			throw new CsrToegangException();
 		}
 	}

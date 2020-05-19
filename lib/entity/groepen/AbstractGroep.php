@@ -8,8 +8,8 @@ use CsrDelft\common\Eisen;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -165,11 +165,11 @@ abstract class AbstractGroep implements DataTableEntry {
 	 * @return boolean
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
-		if (!LoginModel::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
+		if (!LoginService::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
 			return false;
 		}
 
-		$aangemeld = $this->getLid(LoginModel::getUid()) != null;
+		$aangemeld = $this->getLid(LoginService::getUid()) != null;
 		switch ($action) {
 
 			case AccessAction::Aanmelden:
@@ -187,7 +187,7 @@ abstract class AbstractGroep implements DataTableEntry {
 
 			default:
 				// Maker van groep mag alles
-				if ($this->maker_uid === LoginModel::getUid()) {
+				if ($this->maker_uid === LoginService::getUid()) {
 					return true;
 				}
 				break;
@@ -220,7 +220,7 @@ abstract class AbstractGroep implements DataTableEntry {
 		switch ($action) {
 
 			case AccessAction::Bekijken:
-				return LoginModel::mag(P_LEDEN_READ, $allowedAuthenticationMethods);
+				return LoginService::mag(P_LEDEN_READ, $allowedAuthenticationMethods);
 
 			// Voorkom dat moderators overal een normale aanmeldknop krijgen
 			case AccessAction::Aanmelden:
@@ -229,7 +229,7 @@ abstract class AbstractGroep implements DataTableEntry {
 				return false;
 		}
 		// Moderators mogen alles
-		return LoginModel::mag(P_LEDEN_MOD . ',groep:P_GROEP:_MOD', $allowedAuthenticationMethods);
+		return LoginService::mag(P_LEDEN_MOD . ',groep:P_GROEP:_MOD', $allowedAuthenticationMethods);
 	}
 
 	/**

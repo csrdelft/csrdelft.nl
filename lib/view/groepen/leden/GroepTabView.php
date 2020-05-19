@@ -12,7 +12,7 @@ use CsrDelft\entity\groepen\GroepTab;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 
 abstract class GroepTabView extends GroepOmschrijvingView {
 
@@ -95,7 +95,7 @@ JS;
 					$color = ' progress-bar-success';
 				}
 			} // Bewerken mogelijk?
-			elseif ($this->groep->getLid(LoginModel::getUid()) && date_create_immutable() < $this->groep->bewerken_tot) {
+			elseif ($this->groep->getLid(LoginService::getUid()) && date_create_immutable() < $this->groep->bewerken_tot) {
 				$title = 'Inschrijvingen gesloten! Inschrijving bewerken is nog wel toegestaan.';
 				$color = ' progress-bar-warning';
 			} else {

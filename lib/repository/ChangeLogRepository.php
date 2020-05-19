@@ -3,8 +3,8 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\ChangeLogEntry;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\repository\security\LoginSessionRepository;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
 use function common\short_class;
@@ -21,16 +21,16 @@ use function common\short_class;
  */
 class ChangeLogRepository extends AbstractRepository {
 	/**
-	 * @var LoginModel
+	 * @var LoginSessionRepository
 	 */
 	private $loginModel;
 
 	/**
 	 * ChangeLogModel constructor.
 	 * @param ManagerRegistry $registry
-	 * @param LoginModel $loginModel
+	 * @param LoginSessionRepository $loginModel
 	 */
-	public function __construct(ManagerRegistry $registry, LoginModel $loginModel) {
+	public function __construct(ManagerRegistry $registry, LoginSessionRepository $loginModel) {
 		parent::__construct($registry, ChangeLogEntry::class);
 
 		$this->loginModel = $loginModel;

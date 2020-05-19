@@ -4,7 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\repository\instellingen\InstellingenRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 
 
 /**
@@ -32,13 +32,13 @@ class InstellingenBeheerController {
 		if ($module) {
 			switch ($module) {
 				case 'agenda':
-					return LoginModel::mag(P_AGENDA_MOD);
+					return LoginService::mag(P_AGENDA_MOD);
 				case 'corvee':
-					return LoginModel::mag(P_CORVEE_MOD);
+					return LoginService::mag(P_CORVEE_MOD);
 				case 'maaltijden':
-					return LoginModel::mag(P_MAAL_MOD);
+					return LoginService::mag(P_MAAL_MOD);
 				default:
-					return LoginModel::mag(P_ADMIN);
+					return LoginService::mag(P_ADMIN);
 			}
 		}
 		return true; // hoofdpagina: geen module

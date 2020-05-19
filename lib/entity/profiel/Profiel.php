@@ -16,9 +16,9 @@ use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\GoogleSync;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use DateTimeImmutable;
@@ -404,16 +404,16 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function magBewerken() {
-		if (LoginModel::mag(P_LEDEN_MOD)) {
+		if (LoginService::mag(P_LEDEN_MOD)) {
 			return true;
 		}
-		if ($this->uid == LoginModel::UID_EXTERN) {
+		if ($this->uid == LoginService::UID_EXTERN) {
 			return false;
 		}
-		if ($this->uid === LoginModel::getUid()) {
+		if ($this->uid === LoginService::getUid()) {
 			return true;
 		}
-		if ($this->status === LidStatus::Noviet AND LoginModel::mag('commissie:NovCie')) {
+		if ($this->status === LidStatus::Noviet AND LoginService::mag('commissie:NovCie')) {
 			return true;
 		}
 		return false;
@@ -565,8 +565,8 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getLink($vorm = 'civitas') {
-		if (!LoginModel::mag(P_LEDEN_READ) OR in_array($this->uid, array(LoginModel::UID_EXTERN, 'x101', 'x027', 'x222', '4444'))) {
-			if ($vorm === 'pasfoto' AND LoginModel::mag(P_LEDEN_READ)) {
+		if (!LoginService::mag(P_LEDEN_READ) OR in_array($this->uid, array(LoginService::UID_EXTERN, 'x101', 'x027', 'x222', '4444'))) {
+			if ($vorm === 'pasfoto' AND LoginService::mag(P_LEDEN_READ)) {
 				return $this->getPasfotoTag();
 			}
 			return $this->getNaam();
@@ -609,7 +609,7 @@ class Profiel implements Agendeerbaar {
 		if ($vorm === 'user') {
 			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
-		if ($vorm != 'civitas' AND !$force AND !LoginModel::mag(P_LOGGED_IN)) {
+		if ($vorm != 'civitas' AND !$force AND !LoginService::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
@@ -669,7 +669,7 @@ class Profiel implements Agendeerbaar {
 					}
 				} elseif ($this->isLid() OR $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
-					if (LoginModel::getProfiel()->status === LidStatus::Noviet) {
+					if (LoginService::getProfiel()->status === LidStatus::Noviet) {
 						$naam = ($this->geslacht === Geslacht::Vrouw) ? 'Mevr. ' : 'Dhr. ';
 					} else {
 						$naam = ($this->geslacht === Geslacht::Vrouw) ? 'Ama. ' : 'Am. ';
@@ -687,7 +687,7 @@ class Profiel implements Agendeerbaar {
 					}
 				} // geen lid
 				else {
-					if (LoginModel::mag(P_LEDEN_READ)) {
+					if (LoginService::mag(P_LEDEN_READ)) {
 						$naam = $this->voornaam . ' ';
 					} else {
 						$naam = $this->voorletters . ' ';
@@ -735,7 +735,7 @@ class Profiel implements Agendeerbaar {
 
 	public function getPasfotoInternalPath($vierkant = false, $vorm = 'user') {
 		$path = null;
-		if (LoginModel::mag(P_OUDLEDEN_READ)) {
+		if (LoginService::mag(P_OUDLEDEN_READ)) {
 			// in welke (sub)map moeten we zoeken?
 			if ($vorm == 'vierkant') {
 				$folders = [''];

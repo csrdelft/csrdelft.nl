@@ -14,14 +14,14 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
-use CsrDelft\model\security\CliLoginModel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\DependencyManager;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\security\CliLoginService;
+use CsrDelft\service\security\LoginService;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -135,8 +135,8 @@ switch (MODE) {
 		break;
 	case 'CLI':
 		// Override LoginModel in container to use the Cli version
-		$cliLoginModel = $container->get(CliLoginModel::class);
-		$container->set(LoginModel::class, $cliLoginModel);
+		$cliLoginModel = $container->get(CliLoginService::class);
+		$container->set(LoginService::class, $cliLoginModel);
 
 		$cliLoginModel->authenticate();
 
@@ -176,7 +176,7 @@ switch (MODE) {
 			session_regenerate_id(true);
 		}
 		// Validate login
-		$container->get(LoginModel::class)->authenticate();
+		$container->get(LoginService::class)->authenticate();
 
 		$container->get(LogRepository::class)->log();
 
@@ -186,7 +186,7 @@ switch (MODE) {
 				if (DB_DROP) {
 					setMelding('DB_DROP enabled', 2);
 				}
-			} elseif (!LoginModel::mag(P_ADMIN)) {
+			} elseif (!LoginService::mag(P_ADMIN)) {
 				redirect('/onderhoud.html');
 			} elseif (DB_DROP) {
 				setMelding('DB_DROP enabled', 2);

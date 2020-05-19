@@ -4,8 +4,7 @@ namespace CsrDelft\repository;
 
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\LedenMemoryScore;
-use CsrDelft\model\security\LoginModel;
-use Doctrine\Persistence\ManagerRegistry;
+use CsrDelft\service\security\LoginService;use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * LedenMemoryScoresModel.class.php
@@ -32,7 +31,7 @@ class LedenMemoryScoresRepository extends AbstractRepository {
 
 	public function nieuw() {
 		$score = new LedenMemoryScore();
-		$score->door_uid = LoginModel::getUid();
+		$score->door_uid = LoginService::getUid();
 		$score->wanneer = getDateTime();
 		return $score;
 	}

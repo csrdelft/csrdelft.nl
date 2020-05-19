@@ -4,7 +4,7 @@ namespace CsrDelft\repository\security;
 
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\OneTimeToken;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -66,7 +66,7 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 	public function isVerified($uid, $url) {
 		$token = $this->find(['uid' => $uid, 'url' => $url]);
 		if ($token) {
-			return $token->verified AND LoginModel::getUid() === $token->uid AND strtotime($token->expire) > time();
+			return $token->verified AND LoginService::getUid() === $token->uid AND strtotime($token->expire) > time();
 		}
 		return false;
 	}

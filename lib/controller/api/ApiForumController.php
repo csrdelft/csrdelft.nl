@@ -5,11 +5,11 @@ namespace CsrDelft\controller\api;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 use Jacwright\RestServer\RestException;
@@ -31,7 +31,7 @@ class ApiForumController {
 	 * @return boolean
 	 */
 	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag(P_OUDLEDEN_READ);
+		return ApiAuthController::isAuthorized() && LoginService::mag(P_OUDLEDEN_READ);
 	}
 
 	/**

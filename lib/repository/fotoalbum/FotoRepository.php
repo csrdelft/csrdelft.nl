@@ -5,8 +5,8 @@ namespace CsrDelft\repository\fotoalbum;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\model\RetrieveByUuidTrait;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -64,7 +64,7 @@ class FotoRepository extends AbstractRepository {
 			$foto = $dbFoto;
 		}
 
-		$foto->owner = LoginModel::getUid();
+		$foto->owner = LoginService::getUid();
 		$foto->rotation = 0;
 
 		$this->getEntityManager()->persist($foto);

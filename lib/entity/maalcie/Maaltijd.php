@@ -10,9 +10,9 @@ use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -248,7 +248,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 
 	public function isTransparant() {
 		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
-		return lid_instelling('agenda', 'transparantICal') === 'ja' || !$this->getIsAangemeld(LoginModel::getUid());
+		return lid_instelling('agenda', 'transparantICal') === 'ja' || !$this->getIsAangemeld(LoginService::getUid());
 	}
 
 	// Controller ############################################################

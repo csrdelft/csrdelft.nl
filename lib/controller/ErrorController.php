@@ -5,7 +5,7 @@ namespace CsrDelft\controller;
 
 
 use CsrDelft\common\ShutdownHandler;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -37,7 +37,7 @@ class ErrorController {
 			}
 			case Response::HTTP_FORBIDDEN:
 			{
-				if (LoginModel::getUid() == LoginModel::UID_EXTERN) {
+				if (LoginService::getUid() == LoginService::UID_EXTERN) {
 					$requestUri = $request->getRequestUri();
 					$router = $container->get('router');
 

@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use Exception;
 
@@ -24,7 +24,7 @@ class LidInstellingenController extends AbstractController {
 	public function beheer() {
 		return view('instellingen.lidinstellingen', [
 			'defaultInstellingen' => $this->lidInstellingenRepository->getAll(),
-			'instellingen' => $this->lidInstellingenRepository->getAllForLid(LoginModel::getUid())
+			'instellingen' => $this->lidInstellingenRepository->getAllForLid(LoginService::getUid())
 		]);
 	}
 

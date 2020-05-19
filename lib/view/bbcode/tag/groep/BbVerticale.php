@@ -5,7 +5,7 @@ namespace CsrDelft\view\bbcode\tag\groep;
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\groepen\VerticalenRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 
 /**
  * Geeft een link naar de verticale.
@@ -30,7 +30,7 @@ class BbVerticale extends BbTag {
 	}
 
 	public function isAllowed() {
-		return LoginModel::mag(P_LOGGED_IN);
+		return LoginService::mag(P_LOGGED_IN);
 	}
 
 	public function render() {

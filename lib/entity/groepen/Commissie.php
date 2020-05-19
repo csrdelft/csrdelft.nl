@@ -4,7 +4,7 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\model\entity\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -63,7 +63,7 @@ class Commissie extends AbstractGroep implements HeeftSoort {
 		switch ($soort) {
 
 			case CommissieSoort::SjaarCie():
-				if (LoginModel::mag('commissie:NovCie')) {
+				if (LoginService::mag('commissie:NovCie')) {
 					return true;
 				}
 				break;

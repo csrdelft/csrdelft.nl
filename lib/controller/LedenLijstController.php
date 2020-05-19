@@ -6,16 +6,16 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleSync;
 use CsrDelft\service\LidZoeker;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
 
 class LedenLijstController extends AbstractController {
 	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoeker $lidZoeker) {
-		if (!LoginModel::mag(P_OUDLEDEN_READ)) {
+		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
 			return view('default', ['content' => $body]);
@@ -62,7 +62,7 @@ class LedenLijstController extends AbstractController {
 					'<h3>Google-sync-resultaat:</h3>' . $message . '<br />' .
 					'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q'] ?? '') . '">Terug naar de ledenlijst...</a>', 0);
 
-				if (LoginModel::mag(P_ADMIN)) {
+				if (LoginService::mag(P_ADMIN)) {
 					setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
 				}
 			} catch (CsrGebruikerException $e) {

@@ -6,10 +6,10 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingStem;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
 use CsrDelft\repository\peilingen\PeilingStemmenRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 
@@ -53,7 +53,7 @@ class PeilingenService {
 			return true;
 		}
 
-		if ($this->peilingStemmenRepository->heeftGestemd($peilingId, LoginModel::getUid())) {
+		if ($this->peilingStemmenRepository->heeftGestemd($peilingId, LoginService::getUid())) {
 			return false;
 		}
 
@@ -61,7 +61,7 @@ class PeilingenService {
 			return false;
 		}
 
-		$aantalVoorgesteld = $this->peilingOptiesRepository->count(['peiling_id' => $peilingId, 'ingebracht_door' => LoginModel::getUid()]);
+		$aantalVoorgesteld = $this->peilingOptiesRepository->count(['peiling_id' => $peilingId, 'ingebracht_door' => LoginService::getUid()]);
 		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
 	}
 

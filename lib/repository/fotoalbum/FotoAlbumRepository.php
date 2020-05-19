@@ -8,10 +8,10 @@ use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -80,7 +80,7 @@ class FotoAlbumRepository extends AbstractRepository {
 				throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars($album->path));
 			}
 		}
-		$album->owner = LoginModel::getUid();
+		$album->owner = LoginService::getUid();
 
 		$this->getEntityManager()->persist($album);
 		$this->getEntityManager()->flush();

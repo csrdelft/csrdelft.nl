@@ -4,8 +4,8 @@ namespace CsrDelft\service;
 
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -124,7 +124,7 @@ class ProfielService {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-				(LoginModel::mag(P_LEDEN_READ) && !LoginModel::mag(P_OUDLEDEN_READ)) || (LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ) && $zoekstatus != 'oudleden')
+				(LoginService::mag(P_LEDEN_READ) && !LoginService::mag(P_OUDLEDEN_READ)) || (LoginService::mag(P_LEDEN_READ) && LoginService::mag(P_OUDLEDEN_READ) && $zoekstatus != 'oudleden')
 			) {
 				$statussen[] = LidStatus::Lid;
 				$statussen[] = LidStatus::Gastlid;
@@ -135,19 +135,19 @@ class ProfielService {
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-				(!LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ)) || (LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ) && $zoekstatus != 'leden')
+				(!LoginService::mag(P_LEDEN_READ) && LoginService::mag(P_OUDLEDEN_READ)) || (LoginService::mag(P_LEDEN_READ) && LoginService::mag(P_OUDLEDEN_READ) && $zoekstatus != 'leden')
 			) {
 				$statussen[] = LidStatus::Oudlid;
 				$statussen[] = LidStatus::Erelid;
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if ($zoekstatus === 'nobodies' && LoginModel::mag(P_LEDEN_MOD)) {
+			if ($zoekstatus === 'nobodies' && LoginService::mag(P_LEDEN_MOD)) {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
 				$statussen = [LidStatus::Nobody, LidStatus::Exlid];
 			}
 
-			if (LoginModel::mag(P_LEDEN_READ) && $zoekstatus === 'novieten') {
+			if (LoginService::mag(P_LEDEN_READ) && $zoekstatus === 'novieten') {
 				$statussen = [LidStatus::Noviet];
 			}
 		}

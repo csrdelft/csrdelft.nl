@@ -4,8 +4,8 @@
 namespace CsrDelft\entity\bibliotheek;
 
 
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -80,9 +80,9 @@ class BoekExemplaar extends PersistentEntity {
 	}
 
 	public function isEigenaar() : bool {
-		if ($this->eigenaar_uid == LoginModel::getUid()) {
+		if ($this->eigenaar_uid == LoginService::getUid()) {
 			return true;
-		} elseif ($this->isBiebBoek() && LoginModel::mag(P_BIEB_MOD)) {
+		} elseif ($this->isBiebBoek() && LoginService::mag(P_BIEB_MOD)) {
 			return true;
 		}
 		return false;
@@ -100,7 +100,7 @@ class BoekExemplaar extends PersistentEntity {
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag(P_BIEB_READ) || $this->magBewerken();
+		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
 
 	public function isBeschikbaar() {

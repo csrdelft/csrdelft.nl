@@ -10,9 +10,9 @@ use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadGelezen;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\forum\ForumZoeken;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\Paging;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use DateInterval;
 use Doctrine\ORM\ORMException;
@@ -235,7 +235,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 			->setMaxResults($this->per_pagina)
 			->setFirstResult(($this->pagina - 1) * $this->per_pagina);
 
-		if (!LoginModel::mag(P_FORUM_MOD)) {
+		if (!LoginService::mag(P_FORUM_MOD)) {
 			$qb->andWhere('fp.wacht_goedkeuring = false');
 		}
 
@@ -279,7 +279,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		}
 		$count = count($draden_ids);
 		if ($count > 0) {
-			array_unshift($draden_ids, LoginModel::getUid());
+			array_unshift($draden_ids, LoginService::getUid());
 		}
 		return $posts;
 	}
@@ -287,7 +287,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	public function maakForumPost($draad, $tekst, $ip, $wacht_goedkeuring, $email) {
 		$post = new ForumPost();
 		$post->draad = $draad;
-		$post->uid = LoginModel::getUid();
+		$post->uid = LoginService::getUid();
 		$post->tekst = $tekst;
 		$post->datum_tijd = date_create_immutable();
 		$post->laatst_gewijzigd = $post->datum_tijd;
@@ -328,7 +328,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		similar_text($post->tekst, $nieuwe_tekst, $gelijkheid);
 		$post->tekst = $nieuwe_tekst;
 		$post->laatst_gewijzigd = date_create_immutable();
-		$bewerkt = 'bewerkt door [lid=' . LoginModel::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]';
+		$bewerkt = 'bewerkt door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]';
 		if ($reden !== '') {
 			$bewerkt .= ': [tekst]' . CsrBB::escapeUbbOff($reden) . '[/tekst]';
 		}
@@ -357,7 +357,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		$oudeDraad = $post->draad;
 		$post->draad = $nieuwDraad;
 		$post->laatst_gewijzigd = date_create_immutable();
-		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginModel::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]' . "\n";
+		$post->bewerkt_tekst .= 'verplaatst door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]' . "\n";
 		try {
 			$this->getEntityManager()->persist($post);
 			$this->getEntityManager()->flush();
@@ -377,7 +377,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_gewijzigd = date_create_immutable();
-		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginModel::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]' . "\n";
+		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginService::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]' . "\n";
 		try {
 			$this->getEntityManager()->persist($post);
 			$this->getEntityManager()->flush();
@@ -390,7 +390,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		if ($post->wacht_goedkeuring) {
 			$post->wacht_goedkeuring = false;
 			$post->laatst_gewijzigd = date_create_immutable();
-			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginModel::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate][/prive]' . "\n";
+			$post->bewerkt_tekst .= '[prive=P_FORUM_MOD]Goedgekeurd door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate][/prive]' . "\n";
 			try {
 				$this->getEntityManager()->persist($post);
 				$this->getEntityManager()->flush();

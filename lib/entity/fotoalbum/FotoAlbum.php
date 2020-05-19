@@ -5,8 +5,8 @@ namespace CsrDelft\entity\fotoalbum;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\model\entity\Map;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -219,14 +219,14 @@ class FotoAlbum extends Map {
 			return false;
 		}
 		if ($this->isPubliek()) {
-			return LoginModel::mag(P_ALBUM_PUBLIC_READ);
+			return LoginService::mag(P_ALBUM_PUBLIC_READ);
 		} else {
-			return LoginModel::mag(P_ALBUM_READ);
+			return LoginService::mag(P_ALBUM_READ);
 		}
 	}
 
 	public function isOwner() {
-		return LoginModel::mag($this->owner);
+		return LoginService::mag($this->owner);
 	}
 
 	/**
@@ -286,37 +286,37 @@ class FotoAlbum extends Map {
 			return true;
 		}
 		if($this->isPubliek()) {
-			return LoginModel::mag(P_ALBUM_PUBLIC_DEL);
+			return LoginService::mag(P_ALBUM_PUBLIC_DEL);
 		}
 		else{
-			return LoginModel::mag(P_ALBUM_DEL);
+			return LoginService::mag(P_ALBUM_DEL);
 		}
 	}
 
 	public function magToevoegen() {
 		if($this->isPubliek()) {
-			return LoginModel::mag(P_ALBUM_PUBLIC_ADD);
+			return LoginService::mag(P_ALBUM_PUBLIC_ADD);
 		}
 		else{
-			return LoginModel::mag(P_ALBUM_ADD);
+			return LoginService::mag(P_ALBUM_ADD);
 		}
 	}
 
 	public function magAanpassen() {
 		if($this->isPubliek()) {
-			return LoginModel::mag(P_ALBUM_PUBLIC_MOD);
+			return LoginService::mag(P_ALBUM_PUBLIC_MOD);
 		}
 		else{
-			return LoginModel::mag(P_ALBUM_MOD) || $this->isOwner();
+			return LoginService::mag(P_ALBUM_MOD) || $this->isOwner();
 		}
 	}
 
 	public function magDownloaden() {
 		if($this->isPubliek()) {
-			return LoginModel::mag(P_ALBUM_PUBLIC_DOWN);
+			return LoginService::mag(P_ALBUM_PUBLIC_DOWN);
 		}
 		else{
-			return LoginModel::mag(P_ALBUM_DOWN);
+			return LoginService::mag(P_ALBUM_DOWN);
 		}
 	}
 

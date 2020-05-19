@@ -6,8 +6,8 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingStem;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -98,7 +98,7 @@ class PeilingenRepository extends AbstractRepository {
 
 			$stem = new PeilingStem();
 			$stem->peiling_id = $peiling->id;
-			$stem->uid = LoginModel::getUid();
+			$stem->uid = LoginService::getUid();
 
 			$manager = $this->getEntityManager();
 
@@ -144,18 +144,18 @@ class PeilingenRepository extends AbstractRepository {
 	public function getPeilingenVoorBeheer() {
 
 		$peilingen = $this->findAll();
-		if (LoginModel::mag(P_PEILING_MOD)) {
+		if (LoginService::mag(P_PEILING_MOD)) {
 			return $peilingen;
 		} else {
-			$zichtbarePeilingen = $this->findBy(['eigenaar' => LoginModel::getUid()]);
+			$zichtbarePeilingen = $this->findBy(['eigenaar' => LoginService::getUid()]);
 			$peilingenMetRechten = $this->createQueryBuilder('p')
 				->andWhere('p.eigenaar <> :uid')
 				->andWhere('p.rechten_mod <> :rechten')
-				->setParameter('uid', LoginModel::getUid())
+				->setParameter('uid', LoginService::getUid())
 				->setParameter('rechten', '')
 				->getQuery()->getResult();
 			foreach ($peilingenMetRechten as $peiling) {
-				if (LoginModel::mag($peiling->rechten_mod)) {
+				if (LoginService::mag($peiling->rechten_mod)) {
 					$zichtbarePeilingen[] = $peiling;
 				}
 			}
@@ -165,9 +165,9 @@ class PeilingenRepository extends AbstractRepository {
 	}
 
 	public function magBewerken($peiling) {
-		if (LoginModel::mag(P_PEILING_MOD)
-			|| $peiling->eigenaar == LoginModel::getUid()
-			|| LoginModel::mag($peiling->rechten_mod)) {
+		if (LoginService::mag(P_PEILING_MOD)
+			|| $peiling->eigenaar == LoginService::getUid()
+			|| LoginService::mag($peiling->rechten_mod)) {
 			return $peiling;
 		}
 

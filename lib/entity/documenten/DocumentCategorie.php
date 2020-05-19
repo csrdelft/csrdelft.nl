@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\documenten;
 
 use CsrDelft\entity\ISelectEntity;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -44,7 +44,7 @@ class DocumentCategorie implements ISelectEntity {
 	public $documenten;
 
 	public function magBekijken() {
-		return LoginModel::mag($this->leesrechten);
+		return LoginService::mag($this->leesrechten);
 	}
 
 	public function getValue() {

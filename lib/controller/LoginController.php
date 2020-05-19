@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\view\login\LoginForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LoginController extends AbstractController {
 	/**
-	 * @var LoginModel
+	 * @var LoginSessionRepository
 	 */
 	private $loginModel;
 	/**
@@ -26,7 +26,7 @@ class LoginController extends AbstractController {
 	 */
 	private $rememberLoginRepository;
 
-	public function __construct(LoginModel $loginModel, RememberLoginRepository $rememberLoginRepository) {
+	public function __construct(LoginSessionRepository $loginModel, RememberLoginRepository $rememberLoginRepository) {
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->loginModel = $loginModel;
 	}

@@ -6,9 +6,9 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\entity\forum\ForumDeel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
+use CsrDelft\service\security\LoginService;
 use Exception;
 
 class BbForum extends BbTag {
@@ -37,7 +37,7 @@ class BbForum extends BbTag {
 
 	public function isAllowed() {
 		if ($this->content == 'recent' || $this->content == 'belangrijk') {
-			return LoginModel::mag(P_LOGGED_IN);
+			return LoginService::mag(P_LOGGED_IN);
 		}
 
 		return $this->deel->magLezen();
@@ -48,7 +48,7 @@ class BbForum extends BbTag {
 	 * @throws Exception
 	 */
 	public function render() {
-		if (!LoginModel::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			return 'Geen toegang';
 		}
 

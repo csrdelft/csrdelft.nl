@@ -6,8 +6,8 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\security\AccessControl;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -84,9 +84,9 @@ class AccessRepository extends AbstractRepository {
 	 */
 	public function setAcl($environment, $resource, array $acl) {
 		// Has permission to change permissions?
-		if (!LoginModel::mag(P_ADMIN)) {
+		if (!LoginService::mag(P_ADMIN)) {
 			$rechten = $this->getSubject($environment, AccessAction::Rechten, $resource);
-			if (!$rechten || !LoginModel::mag($rechten)) {
+			if (!$rechten || !LoginService::mag($rechten)) {
 				return false;
 			}
 		}

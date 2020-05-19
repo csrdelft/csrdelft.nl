@@ -4,8 +4,8 @@ namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -178,7 +178,7 @@ class ForumDraad {
 	}
 
 	public function magStatistiekBekijken() {
-		return $this->magModereren() || ($this->uid != LoginModel::UID_EXTERN && $this->uid === LoginModel::getUid());
+		return $this->magModereren() || ($this->uid != LoginService::UID_EXTERN && $this->uid === LoginService::getUid());
 	}
 
 	public function magModereren() {
@@ -186,7 +186,7 @@ class ForumDraad {
 	}
 
 	public function magVerbergen() {
-		return !$this->belangrijk && LoginModel::mag(P_LOGGED_IN);
+		return !$this->belangrijk && LoginService::mag(P_LOGGED_IN);
 	}
 
 	public function magMeldingKrijgen() {
@@ -197,7 +197,7 @@ class ForumDraad {
 		if ($this->verwijderd && !$this->magModereren()) {
 			return false;
 		}
-		if (!LoginModel::mag(P_LOGGED_IN) && $this->gesloten && $this->laatst_gewijzigd < date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten'))) {
+		if (!LoginService::mag(P_LOGGED_IN) && $this->gesloten && $this->laatst_gewijzigd < date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten'))) {
 			return false;
 		}
 		return $this->deel->magLezen() || ($this->isGedeeld() && $this->gedeeld_met_deel->magLezen());

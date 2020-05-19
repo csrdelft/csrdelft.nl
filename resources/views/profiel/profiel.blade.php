@@ -115,7 +115,7 @@
 				<dd>{{$profiel->getNaam('civitas')}}</dd>
 				<dt>Lidnummer</dt>
 				<dd>
-					@if($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\model\security\LoginModel::class)->maySuTo($profiel->account))
+					@if($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\service\security\SuService::class)->maySuTo($profiel->account))
 						<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 					@else
 						{{$profiel->uid}}

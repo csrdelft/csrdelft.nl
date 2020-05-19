@@ -3,9 +3,9 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\entity\corvee\CorveeVoorkeur;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\maalcie\forms\EetwensForm;
 use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
@@ -25,7 +25,7 @@ class MijnVoorkeurenController {
 	}
 
 	public function mijn() {
-		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid(LoginModel::getUid(), true);
+		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid(LoginService::getUid(), true);
 		return view('maaltijden.voorkeuren.mijn_voorkeuren', [
 			'voorkeuren' => $voorkeuren,
 			'eetwens' => new EetwensForm(),
@@ -41,7 +41,7 @@ class MijnVoorkeurenController {
 	 */
 	public function inschakelen(CorveeRepetitiesRepository $corveeRepetitiesRepository, $crid) {
 		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->setProfiel(LoginModel::getProfiel());
+		$voorkeur->setProfiel(LoginService::getProfiel());
 		$voorkeur->setCorveeRepetitie($corveeRepetitiesRepository->find($crid));
 
 		$this->corveeVoorkeurenRepository->inschakelenVoorkeur($voorkeur);
@@ -59,7 +59,7 @@ class MijnVoorkeurenController {
 	 * @throws OptimisticLockException
 	 */
 	public function uitschakelen($crid) {
-		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur($crid, LoginModel::getUid());
+		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur($crid, LoginService::getUid());
 		$this->corveeVoorkeurenRepository->uitschakelenVoorkeur($voorkeur);
 
 		return view('maaltijden.voorkeuren.mijn_voorkeur_veld', [
@@ -71,7 +71,7 @@ class MijnVoorkeurenController {
 	public function eetwens() {
 		$form = new EetwensForm();
 		if ($form->validate()) {
-			$this->corveeVoorkeurenRepository->setEetwens(LoginModel::getProfiel(), $form->getField()->getValue());
+			$this->corveeVoorkeurenRepository->setEetwens(LoginService::getProfiel(), $form->getField()->getValue());
 		}
 		return $form;
 	}

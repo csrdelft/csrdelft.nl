@@ -48,7 +48,7 @@
 	@if($album->hasFotos())
 		<div class="fotoalbum disable-swipe"
 				 data-fotos="{!! htmlspecialchars(json_encode($album->getAlbumArrayRecursive())) !!}"
-				 data-is-logged-in="{{ json_encode(\CsrDelft\model\security\LoginModel::mag(P_LOGGED_IN)) }}"
+				 data-is-logged-in="{{ json_encode(\CsrDelft\repository\security\\CsrDelft\service\security\LoginService::mag(P_LOGGED_IN)) }}"
 				 data-mag-aanpassen="{{ json_encode($album->magAanpassen()) }}"
 				 data-root="{{ CSR_ROOT . '/fotoalbum' }}"
 				 data-slideshow-interval="{{ instelling('fotoalbum', 'slideshow_interval') }}">
