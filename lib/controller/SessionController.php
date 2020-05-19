@@ -10,7 +10,6 @@ use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\login\LoginSessionsData;
 use CsrDelft\view\login\RememberLoginForm;
 
 /**
@@ -34,7 +33,7 @@ class SessionController extends AbstractController {
 
 	public function sessionsdata() {
 		$loginSession = $this->loginSessionRepository->findBy(['uid' => LoginService::getUid()]);
-		return new LoginSessionsData($loginSession);
+		return $this->tableData($loginSession);
 	}
 
 	public function endsession($session_hash) {

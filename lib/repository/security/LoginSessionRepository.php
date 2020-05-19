@@ -48,7 +48,7 @@ class LoginSessionRepository extends AbstractRepository {
 	 * @throws NonUniqueResultException
 	 */
 	public function getActiveSessionCount($uid) {
-		return (int) $this->createQueryBuilder('login')
+		return (int)$this->createQueryBuilder('login')
 			->select('COUNT(login.session_hash)')
 			->where('login.uid = :uid AND login.expire > NOW()')
 			->setParameter('uid', $uid)
@@ -68,7 +68,8 @@ class LoginSessionRepository extends AbstractRepository {
 	public function removeByHash($hash) {
 		$this->createQueryBuilder('l')
 			->delete()
-			->where('l.session_hash', $hash)
+			->where('l.session_hash = :hash')
+			->setParameter('hash', $hash)
 			->getQuery()->execute();
 	}
 }

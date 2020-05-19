@@ -3,6 +3,7 @@
 namespace CsrDelft\view\login;
 
 use CsrDelft\entity\security\LoginSession;
+use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\DataTable;
 
 /**
@@ -20,6 +21,7 @@ class LoginSessionsTable extends DataTable {
 		$this->hideColumn('uid');
 		$this->searchColumn('login_moment');
 		$this->searchColumn('user_agent');
+		$this->addColumn('lock_ip', null, null, CellRender::Check());
 	}
 
 	public function getType() {
