@@ -4,9 +4,9 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\LDAP;
+use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\profiel\AbstractProfielLogEntry;
@@ -389,7 +389,7 @@ class ProfielRepository extends AbstractRepository {
 			}
 		}
 		// Kopjes
-		$mv = ($profiel->geslacht == Geslacht::Man ? 'hem' : 'haar');
+		$mv = ($profiel->geslacht == Geslacht::Man() ? 'hem' : 'haar');
 		$enkelvoud = "Het volgende boek is nog door {$mv} geleend";
 		$meervoud = "De volgende boeken zijn nog door {$mv} geleend";
 		if ($bkncsr['aantal'])

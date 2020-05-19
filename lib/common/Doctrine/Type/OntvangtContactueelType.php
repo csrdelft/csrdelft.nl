@@ -12,6 +12,6 @@ class OntvangtContactueelType extends EnumType {
 	}
 
 	public function getName() {
-		return 'enumontvangtcontactueel';
+		return 'enumOntvangtContactueel';
 	}
 }

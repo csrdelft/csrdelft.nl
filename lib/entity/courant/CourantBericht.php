@@ -29,7 +29,7 @@ class CourantBericht {
 	public $titel;
 	/**
 	 * @var CourantCategorie
-	 * @ORM\Column(type="enumcourantcategorie")
+	 * @ORM\Column(type="enumCourantCategorie")
 	 */
 	public $cat;
 	/**

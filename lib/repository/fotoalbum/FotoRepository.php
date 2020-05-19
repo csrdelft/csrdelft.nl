@@ -4,7 +4,6 @@ namespace CsrDelft\repository\fotoalbum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\fotoalbum\Foto;
-use CsrDelft\model\RetrieveByUuidTrait;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
@@ -20,8 +19,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Foto[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class FotoRepository extends AbstractRepository {
-	use RetrieveByUuidTrait;
-
 	/**
 	 * @var FotoTagsRepository
 	 */

@@ -12,6 +12,6 @@ class GroepStatusType extends EnumType {
 	}
 
 	public function getName() {
-		return 'enumgroepstatus';
+		return 'enumGroepStatus';
 	}
 }

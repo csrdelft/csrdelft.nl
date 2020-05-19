@@ -65,7 +65,7 @@ abstract class AbstractGroep implements DataTableEntry {
 	/**
 	 * o.t. / h.t. / f.t.
 	 * @var GroepStatus
-	 * @ORM\Column(type="enumgroepstatus")
+	 * @ORM\Column(type="enumGroepStatus")
 	 * @Serializer\Groups("datatable")
 	 */
 	public $status;

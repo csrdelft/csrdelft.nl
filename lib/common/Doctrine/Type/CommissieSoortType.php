@@ -13,6 +13,6 @@ class CommissieSoortType extends EnumType {
 	}
 
 	public function getName() {
-		return 'enumcommissiesoort';
+		return 'enumCommissieSoort';
 	}
 }

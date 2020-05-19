@@ -53,7 +53,7 @@ class BoekExemplaar extends PersistentEntity {
 
 	/**
 	 * @var BoekExemplaarStatus
-	 * @ORM\Column(type="enumboekexemplaarstatus")
+	 * @ORM\Column(type="enumBoekExemplaarStatus")
 	 */
 	public $status;
 

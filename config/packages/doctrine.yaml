@@ -24,13 +24,14 @@ doctrine:
           longtext: CsrDelft\common\Doctrine\Type\LongTextType
           uid: CsrDelft\common\Doctrine\Type\UidType
           stringkey: CsrDelft\common\Doctrine\Type\StringKeyType
-          enumontvangtcontactueel: CsrDelft\common\Doctrine\Type\OntvangtContactueelType
-          enumboekexemplaarstatus: CsrDelft\common\Doctrine\Type\BoekExemplaarStatusType
-          enumcourantcategorie: CsrDelft\common\Doctrine\Type\CourantCategorieType
-          enumforumdraadmeldingniveau: CsrDelft\common\Doctrine\Type\ForumDraadMeldingNiveauType
-          enumgroepstatus: CsrDelft\common\Doctrine\Type\GroepStatusType
-          enumhuisstatus: CsrDelft\common\Doctrine\Type\HuisStatusType
-          enumcommissiesoort: CsrDelft\common\Doctrine\Type\CommissieSoortType
+          enumOntvangtContactueel: CsrDelft\common\Doctrine\Type\OntvangtContactueelType
+          enumBoekExemplaarStatus: CsrDelft\common\Doctrine\Type\BoekExemplaarStatusType
+          enumCourantCategorie: CsrDelft\common\Doctrine\Type\CourantCategorieType
+          enumForumDraadMeldingNiveau: CsrDelft\common\Doctrine\Type\ForumDraadMeldingNiveauType
+          enumGroepStatus: CsrDelft\common\Doctrine\Type\GroepStatusType
+          enumHuisStatus: CsrDelft\common\Doctrine\Type\HuisStatusType
+          enumCommissieSoort: CsrDelft\common\Doctrine\Type\CommissieSoortType
+          enumGeslacht: CsrDelft\common\Doctrine\Type\Enum\GeslachtType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

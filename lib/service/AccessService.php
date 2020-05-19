@@ -599,7 +599,7 @@ class AccessService {
 			 * Is lid man of vrouw?
 			 */
 			case self::PREFIX_GESLACHT:
-				if ($gevraagd == strtoupper($profiel->geslacht)) {
+				if ($gevraagd == strtoupper($profiel->geslacht->getValue())) {
 					// Niet ingelogd heeft geslacht m dus check of ingelogd
 					if ($this->hasPermission($subject, P_LOGGED_IN)) {
 						return true;

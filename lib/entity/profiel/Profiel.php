@@ -5,11 +5,11 @@ namespace CsrDelft\entity\profiel;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\security\Account;
-use CsrDelft\model\entity\Geslacht;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\ProfielLogGroup;
 use CsrDelft\model\fiscaat\CiviSaldoModel;
@@ -99,8 +99,8 @@ class Profiel implements Agendeerbaar {
 	public $duckname;
 	// fysiek
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="enumGeslacht")
+	 * @var Geslacht
 	 */
 	public $geslacht;
 	/**
@@ -130,7 +130,7 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $adresseringechtpaar;
 	/**
-	 * @ORM\Column(type="enumontvangtcontactueel")
+	 * @ORM\Column(type="enumOntvangtContactueel")
 	 * @var OntvangtContactueel
 	 */
 	public $ontvangtcontactueel;
@@ -670,9 +670,9 @@ class Profiel implements Agendeerbaar {
 				} elseif ($this->isLid() OR $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
 					if (LoginService::getProfiel()->status === LidStatus::Noviet) {
-						$naam = ($this->geslacht === Geslacht::Vrouw) ? 'Mevr. ' : 'Dhr. ';
+						$naam = ($this->geslacht === Geslacht::Vrouw()) ? 'Mevr. ' : 'Dhr. ';
 					} else {
-						$naam = ($this->geslacht === Geslacht::Vrouw) ? 'Ama. ' : 'Am. ';
+						$naam = ($this->geslacht === Geslacht::Vrouw()) ? 'Ama. ' : 'Am. ';
 					}
 					if (!empty($this->tussenvoegsel)) {
 						$naam .= ucfirst($this->tussenvoegsel) . ' ';

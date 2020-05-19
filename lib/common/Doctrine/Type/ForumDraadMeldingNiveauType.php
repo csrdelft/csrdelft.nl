@@ -12,6 +12,6 @@ class ForumDraadMeldingNiveauType extends EnumType {
 	}
 
 	public function getName() {
-		return 'enumforumdraadmeldingniveau';
+		return 'enumForumDraadMeldingNiveau';
 	}
 }

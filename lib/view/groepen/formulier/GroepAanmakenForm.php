@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\entity\interfaces\HeeftSoort;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;

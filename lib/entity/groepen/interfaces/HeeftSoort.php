@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\model\entity\interfaces;
+namespace CsrDelft\entity\groepen\interfaces;
 
 
 interface HeeftSoort {

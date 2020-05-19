@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\model\entity\interfaces\HeeftSoort;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +23,7 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	/**
 	 * Woonoord / Huis
 	 * @var HuisStatus
-	 * @ORM\Column(type="enumhuisstatus")
+	 * @ORM\Column(type="enumHuisStatus")
 	 * @Serializer\Groups("datatable")
 	 */
 	public $soort;

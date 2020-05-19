@@ -8,7 +8,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\maalcie\Maaltijd;
-use CsrDelft\model\RetrieveByUuidTrait;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
@@ -30,7 +29,6 @@ use Throwable;
  * @method CorveeTaak[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CorveeTakenRepository extends AbstractRepository {
-	use RetrieveByUuidTrait;
 
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, CorveeTaak::class);

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\model\entity\interfaces\HeeftSoort;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;

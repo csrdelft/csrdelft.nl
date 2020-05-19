@@ -163,7 +163,7 @@ class LedenMemoryController {
 				'achternaam' => $profiel->achternaam,
 				'lichting' => $profiel->lidjaar,
 				'verticale' => $profiel->verticale ? $profiel->getVerticale()->naam : 'Geen',
-				'geslacht' => $profiel->geslacht,
+				'geslacht' => $profiel->geslacht->getValue(),
 				'studie' => $profiel->studie,
 			];
 		}, array_filter($profielen, function ($profiel) {

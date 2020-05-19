@@ -9,8 +9,8 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\entity\groepen\GroepTab;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\Verticale;
-use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\service\security\LoginService;
 

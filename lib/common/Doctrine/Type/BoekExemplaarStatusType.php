@@ -12,6 +12,6 @@ class BoekExemplaarStatusType extends EnumType {
 	}
 
 	public function getName() {
-		return 'enumboekexemplaarstatus';
+		return 'enumBoekExemplaarStatus';
 	}
 }

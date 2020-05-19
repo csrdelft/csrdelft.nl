@@ -40,7 +40,7 @@ class ForumDraadMelding {
 	/**
 	 * Volgniveau
 	 * @var ForumDraadMeldingNiveau
-	 * @ORM\Column(type="enumforumdraadmeldingniveau")
+	 * @ORM\Column(type="enumForumDraadMeldingNiveau")
 	 */
 	public $niveau;
 

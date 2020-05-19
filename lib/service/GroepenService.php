@@ -8,7 +8,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\AbstractGroepLid;
 use CsrDelft\entity\groepen\GroepStatistiek;
-use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\Orm\Persistence\Database;
 
 class GroepenService {

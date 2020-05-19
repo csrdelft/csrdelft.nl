@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\groepen;
 
+use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\Geslacht;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
@@ -29,7 +29,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 
 			foreach ($groep->getLeden() as $lid) {
 				$profiel = ProfielRepository::get($lid->uid);
-				if ($profiel->geslacht === Geslacht::Man) {
+				if ($profiel->geslacht === Geslacht::Man()) {
 					$mannen += 1;
 				} else {
 					$vrouwen += 1;

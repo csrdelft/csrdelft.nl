@@ -3,8 +3,8 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\entity\agenda\Agendeerbaar;
-use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\model\entity\interfaces\HeeftSoort;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
