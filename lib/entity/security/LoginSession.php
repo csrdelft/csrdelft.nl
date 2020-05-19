@@ -4,7 +4,6 @@ namespace CsrDelft\entity\security;
 
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\view\Icon;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
@@ -74,14 +73,6 @@ class LoginSession implements DataTableEntry {
 	 * TODO is eigenlijk Authenticationmethod
 	 */
 	public $authentication_method;
-
-	/**
-	 * @return string
-	 * @Serializer\Groups("datatable")
-	 */
-	public function getDetails() {
-		return '<a href="/session/endsession/' . $this->session_hash . '" class="post DataTableResponse SingleRow" title="Log uit">' . Icon::getTag('door_in') . '</a>';
-	}
 
 	/**
 	 * @return string

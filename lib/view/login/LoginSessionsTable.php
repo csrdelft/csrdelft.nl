@@ -5,6 +5,7 @@ namespace CsrDelft\view\login;
 use CsrDelft\entity\security\LoginSession;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\DataTable;
+use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 
 /**
  * LoginSessionsTable.php
@@ -22,6 +23,8 @@ class LoginSessionsTable extends DataTable {
 		$this->searchColumn('login_moment');
 		$this->searchColumn('user_agent');
 		$this->addColumn('lock_ip', null, null, CellRender::Check());
+
+		$this->addRowKnop(new DataTableRowKnop('/session/endsession/:session_hash', 'Log uit', 'door_in'));
 	}
 
 	public function getType() {
