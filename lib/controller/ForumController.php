@@ -610,15 +610,6 @@ class ForumController extends AbstractController {
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 
-		// spam controle
-		$filter = new SimpleSpamfilter();
-		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
-		if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || (isset($titel) && $titel && $filter->isSpam($titel))) {
-			$this->debugLogRepository->log(static::class, 'posten', [$forum_id, $draad_id], 'SPAM ' . $tekst);
-			setMelding('SPAM', -1);
-			throw new CsrToegangException("");
-		}
-
 		if (empty($tekst)) {
 			setMelding('Bericht mag niet leeg zijn', -1);
 			return $redirect;
@@ -638,11 +629,13 @@ class ForumController extends AbstractController {
 			return $redirect;
 		}
 
-		// concept opslaan
-		if ($draad == null) {
-			$this->forumDradenReagerenRepository->setConcept($deel, null, $tekst, $titel);
-		} else {
-			$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id, $tekst);
+		if (LoginService::mag(P_LOGGED_IN)) {
+			// concept opslaan
+			if ($draad == null) {
+				$this->forumDradenReagerenRepository->setConcept($deel, null, $tekst, $titel);
+			} else {
+				$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id, $tekst);
+			}
 		}
 
 
@@ -650,6 +643,15 @@ class ForumController extends AbstractController {
 		$mailadres = null;
 		$wacht_goedkeuring = false;
 		if (!LoginService::mag(P_LOGGED_IN)) {
+			$filter = new SimpleSpamfilter();
+			$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
+
+			if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || (isset($titel) && $titel && $filter->isSpam($titel))) {
+				$this->debugLogRepository->log(static::class, 'posten', [$forum_id, $draad_id], 'SPAM ' . $tekst);
+				setMelding('SPAM', -1);
+				throw new CsrToegangException("");
+			}
+
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
