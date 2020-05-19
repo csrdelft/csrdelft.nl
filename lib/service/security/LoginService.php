@@ -21,7 +21,7 @@ use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
  *
  * @package CsrDelft\service
  */
-class LoginService {
+class LoginService implements ILoginService {
 	public const UID_EXTERN = 'x999';
 	public const SESS_AUTH_ERROR = 'auth_error';
 	const SESS_UID = '_uid';

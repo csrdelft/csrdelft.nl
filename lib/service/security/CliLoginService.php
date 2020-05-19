@@ -8,18 +8,15 @@ use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
+use DateInterval;
 
 
 /**
- * CliLoginModel.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Model van het huidige ingeloggede account in CLI modus.
- *
  */
-class CliLoginService {
-
+class CliLoginService implements ILoginService {
 	/**
 	 * @var string
 	 */
@@ -67,13 +64,6 @@ class CliLoginService {
 	 */
 	public function validate() {
 		return $this->login(env('CRON_USER'), env('CRON_PASS'));
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasError() {
-		return false;
 	}
 
 	/**
@@ -129,7 +119,7 @@ class CliLoginService {
 		$session->session_hash = hash('sha512', session_id());
 		$session->uid = $account->uid;
 		$session->login_moment = date_create_immutable();
-		$session->expire = date_create_immutable()->add(new \DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
+		$session->expire = date_create_immutable()->add(new DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 		$session->user_agent = MODE;
 		$session->ip = '';
 		$session->lock_ip = true; // sessie koppelen aan ip?
@@ -143,13 +133,6 @@ class CliLoginService {
 	 */
 	public function logout() {
 		self::$uid = LoginService::UID_EXTERN;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isSued() {
-		return false;
 	}
 
 	/**
