@@ -294,7 +294,7 @@ class AccessService {
 	public static function mag(Account $subject, $permission, array $allowedAuthenticationMethods = null) {
 
 		// Als voor het ingelogde lid een permissie gevraagd wordt
-		if ($subject->uid == \CsrDelft\service\security\LoginService::getUid()) {
+		if ($subject->uid == LoginService::getUid()) {
 			// Controlleer hoe de gebruiker ge-authenticeerd is
 			$method = ContainerFacade::getContainer()->get(LoginService::class)->getAuthenticationMethod();
 			if ($allowedAuthenticationMethods == null) {

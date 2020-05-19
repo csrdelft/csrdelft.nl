@@ -23,6 +23,11 @@ use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
  */
 class LoginService {
 	public const UID_EXTERN = 'x999';
+	public const SESS_AUTH_ERROR = 'auth_error';
+	const SESS_UID = '_uid';
+	const SESS_AUTHENTICATION_METHOD = '_authenticationMethod';
+	const COOKIE_REMEMBER = 'remember';
+	const SESS_SUED_FROM = '_suedFrom';
 	/**
 	 * @var LoginSession
 	 */
@@ -70,7 +75,7 @@ class LoginService {
 		if (MODE === 'CLI') {
 			return CliLoginService::getUid();
 		}
-		return $_SESSION['_uid'] ?? self::UID_EXTERN;
+		return $_SESSION[self::SESS_UID] ?? self::UID_EXTERN;
 	}
 
 	/**
@@ -89,24 +94,24 @@ class LoginService {
 		$this->current_session = $this->getCurrentSession();
 		if ($this->validate()) {
 			// Public gebruiker heeft geen DB sessie
-			if ($_SESSION['_uid'] != self::UID_EXTERN) {
+			if ($_SESSION[self::SESS_UID] != self::UID_EXTERN) {
 				$this->current_session->expire = date_create_immutable()->add(new \DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 				$this->loginRepository->update($this->current_session);
 			}
 		} else {
 			// Subject assignment:
-			$_SESSION['_uid'] = self::UID_EXTERN;
-			$_SESSION['_authenticationMethod'] = null;
+			$_SESSION[self::SESS_UID] = self::UID_EXTERN;
+			$_SESSION[self::SESS_AUTHENTICATION_METHOD] = null;
 
 			// Remember login
-			if (isset($_COOKIE['remember'])) {
-				$remember = $this->rememberLoginRepository->verifyToken($_COOKIE['remember']);
+			if (isset($_COOKIE[self::COOKIE_REMEMBER])) {
+				$remember = $this->rememberLoginRepository->verifyToken($_COOKIE[self::COOKIE_REMEMBER]);
 				if ($remember) {
 					$this->login($remember->uid, null, false, $remember, $remember->lock_ip);
 				}
 			}
 		}
-		if ($_SESSION['_uid'] == self::UID_EXTERN) {
+		if ($_SESSION[self::SESS_UID] == self::UID_EXTERN) {
 			/**
 			 * Als we x999 zijn checken we of er misschien een private token in de $_GET staat.
 			 * Deze staat toe zonder wachtwoord gelimiteerde rechten te krijgen op iemands naam.
@@ -141,11 +146,11 @@ class LoginService {
 	 */
 	public function validate() {
 		// Er is geen _uid gezet in $_SESSION dus er is nog niemand ingelogd
-		if (!isset($_SESSION['_uid'])) {
+		if (!isset($_SESSION[self::SESS_UID])) {
 			return false;
 		}
 		// Public gebruiker vereist geen authenticatie
-		if ($_SESSION['_uid'] === self::UID_EXTERN) {
+		if ($_SESSION[self::SESS_UID] === self::UID_EXTERN) {
 			return true;
 		}
 		// Controleer of sessie niet gesloten is door gebruiker
@@ -161,7 +166,7 @@ class LoginService {
 			return false;
 		}
 		// Controleer switch user status
-		if (isset($_SESSION['_suedFrom'])) {
+		if (isset($_SESSION[self::SESS_SUED_FROM])) {
 			$suedFrom = SuService::getSuedFrom();
 			if (!$suedFrom || $this->current_session->uid !== $suedFrom->uid) {
 				return false;
@@ -248,7 +253,7 @@ class LoginService {
 
 		// Onbekende gebruiker
 		if (!$account) {
-			$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
+			$_SESSION[self::SESS_AUTH_ERROR] = 'Inloggen niet geslaagd';
 			return false;
 		}
 
@@ -257,38 +262,38 @@ class LoginService {
 
 		// Autologin
 		if ($remember) {
-			$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
+			$_SESSION[self::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::cookie_token;
 		} // Previously(!) verified private token or OneTimeToken
 		elseif ($alreadyAuthenticatedByUrlToken) {
-			$_SESSION['_authenticationMethod'] = AuthenticationMethod::url_token;
+			$_SESSION[self::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::url_token;
 		} else {
 			// Moet eventueel wachten?
 			if ($evtWachten) {
 				// Check timeout
 				$timeout = $this->accountRepository->moetWachten($account);
 				if ($timeout > 0) {
-					$_SESSION['auth_error'] = 'Wacht ' . $timeout . ' seconden';
+					$_SESSION[self::SESS_AUTH_ERROR] = 'Wacht ' . $timeout . ' seconden';
 					return false;
 				}
 			}
 
 			if (!empty($account->blocked_reason)) {
-				$_SESSION['auth_error'] = 'Dit account is geblokkeerd: ' . $account->blocked_reason;
+				$_SESSION[self::SESS_AUTH_ERROR] = 'Dit account is geblokkeerd: ' . $account->blocked_reason;
 				return false;
 			}
 
 			// Check password
 			if ($this->accountRepository->controleerWachtwoord($account, $pass_plain)) {
 				$this->accountRepository->successfulLoginAttempt($account);
-				$_SESSION['_authenticationMethod'] = AuthenticationMethod::password_login;
+				$_SESSION[self::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::password_login;
 			} // Wrong password
 			else {
 				// Password deleted (by admin)
 				if ($account->pass_hash == '') {
-					$_SESSION['auth_error'] = 'Gebruik wachtwoord vergeten of mail de PubCie';
+					$_SESSION[self::SESS_AUTH_ERROR] = 'Gebruik wachtwoord vergeten of mail de PubCie';
 				} // Regular failed username+password
 				else {
-					$_SESSION['auth_error'] = 'Inloggen niet geslaagd';
+					$_SESSION[self::SESS_AUTH_ERROR] = 'Inloggen niet geslaagd';
 					$this->accountRepository->failedLoginAttempt($account);
 				}
 				return false;
@@ -296,7 +301,7 @@ class LoginService {
 		}
 
 		// Subject assignment:
-		$_SESSION['_uid'] = $account->uid;
+		$_SESSION[self::SESS_UID] = $account->uid;
 
 		if ($account->uid !== self::UID_EXTERN) {
 			// Permissions change: delete old session
@@ -322,7 +327,7 @@ class LoginService {
 			$this->current_session->user_agent = $user_agent;
 			$this->current_session->ip = $remote_addr;
 			$this->current_session->lock_ip = $lockIP; // sessie koppelen aan ip?
-			$this->current_session->authentication_method = $_SESSION['_authenticationMethod'];
+			$this->current_session->authentication_method = $_SESSION[self::SESS_AUTHENTICATION_METHOD];
 			$this->loginRepository->update($this->current_session);
 
 			if ($remember) {
@@ -350,8 +355,8 @@ class LoginService {
 	 */
 	public function logout() {
 		// Forget autologin
-		if (isset($_COOKIE['remember'])) {
-			$this->rememberLoginRepository->verwijder(hash('sha512', $_COOKIE['remember']));
+		if (isset($_COOKIE[self::COOKIE_REMEMBER])) {
+			$this->rememberLoginRepository->verwijder(hash('sha512', $_COOKIE[self::COOKIE_REMEMBER]));
 			setRememberCookie(null);
 		}
 		// Destroy login session
@@ -366,10 +371,10 @@ class LoginService {
 	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod() {
-		if (!isset($_SESSION['_authenticationMethod'])) {
+		if (!isset($_SESSION[self::SESS_AUTHENTICATION_METHOD])) {
 			return null;
 		}
-		$method = $_SESSION['_authenticationMethod'];
+		$method = $_SESSION[self::SESS_AUTHENTICATION_METHOD];
 		if ($method === AuthenticationMethod::password_login) {
 			if ($this->current_session && $this->current_session->isRecent()) {
 				return AuthenticationMethod::recent_password_login;
@@ -387,8 +392,8 @@ class LoginService {
 		if (!$this->hasError()) {
 			return null;
 		}
-		$error = $_SESSION['auth_error'];
-		unset($_SESSION['auth_error']);
+		$error = $_SESSION[self::SESS_AUTH_ERROR];
+		unset($_SESSION[self::SESS_AUTH_ERROR]);
 		return $error;
 	}
 
@@ -396,6 +401,6 @@ class LoginService {
 	 * @return bool
 	 */
 	public function hasError() {
-		return isset($_SESSION['auth_error']);
+		return isset($_SESSION[self::SESS_AUTH_ERROR]);
 	}
 }

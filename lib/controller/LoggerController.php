@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\service\security\LoginService;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +48,7 @@ $error
 • Bestand `$url`
 • Positie `$line:$col`
 • Pagina `$pagina`
-• Veroorzaakt door `{$_SESSION['_uid']}`
+• Veroorzaakt door `{$_SESSION[LoginService::SESS_UID]}`
 • Browser `{$_SERVER['HTTP_USER_AGENT']}`
 MD
 			);

@@ -56,7 +56,7 @@ class ApiActiviteitenController {
 			throw new RestException(403, 'Aanmelden niet mogelijk');
 		}
 
-		$lid = $this->activiteitDeelnemersRepository->nieuw($activiteit, $_SESSION['_uid']);
+		$lid = $this->activiteitDeelnemersRepository->nieuw($activiteit, $_SESSION[LoginService::SESS_UID]);
 
 		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
 		$this->em->persist($lid);

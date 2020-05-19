@@ -48,9 +48,9 @@ class SuService {
 		session_unset();
 
 		// Subject assignment:
-		$_SESSION['_suedFrom'] = $suedFrom->uid;
-		$_SESSION['_uid'] = $suNaar->uid;
-		$_SESSION['_authenticationMethod'] = $authMethod;
+		$_SESSION[LoginService::SESS_SUED_FROM] = $suedFrom->uid;
+		$_SESSION[LoginService::SESS_UID] = $suNaar->uid;
+		$_SESSION[LoginService::SESS_AUTHENTICATION_METHOD] = $authMethod;
 	}
 
 	/**
@@ -64,15 +64,15 @@ class SuService {
 		session_unset();
 
 		// Subject assignment:
-		$_SESSION['_uid'] = $suedFrom->uid;
-		$_SESSION['_suedFrom'] = null;
-		$_SESSION['_authenticationMethod'] = $authMethod;
+		$_SESSION[LoginService::SESS_UID] = $suedFrom->uid;
+		$_SESSION[LoginService::SESS_SUED_FROM] = null;
+		$_SESSION[LoginService::SESS_AUTHENTICATION_METHOD] = $authMethod;
 	}
 	/**
 	 * @return bool
 	 */
 	public function isSued() {
-		if (!isset($_SESSION['_suedFrom'])) {
+		if (!isset($_SESSION[LoginService::SESS_SUED_FROM])) {
 			return false;
 		}
 		$suedFrom = static::getSuedFrom();
@@ -89,8 +89,8 @@ class SuService {
 		if (isset($this->tempSwitchUid)) {
 			throw new CsrException("Er is al een tijdelijke schakeling actief, beëindig deze eerst.");
 		}
-		$this->tempSwitchUid = $_SESSION['_uid'];
-		$_SESSION['_uid'] = $uid;
+		$this->tempSwitchUid = $_SESSION[LoginService::SESS_UID];
+		$_SESSION[LoginService::SESS_UID] = $uid;
 	}
 
 	/**
@@ -101,7 +101,7 @@ class SuService {
 		if (!isset($this->tempSwitchUid)) {
 			throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
 		}
-		$_SESSION['_uid'] = $this->tempSwitchUid;
+		$_SESSION[LoginService::SESS_UID] = $this->tempSwitchUid;
 		$this->tempSwitchUid = null;
 	}
 
@@ -120,7 +120,7 @@ class SuService {
 	 * @return Account|null
 	 */
 	public static function getSuedFrom() {
-		return AccountRepository::get($_SESSION['_suedFrom']);
+		return AccountRepository::get($_SESSION[LoginService::SESS_SUED_FROM]);
 	}
 
 }
