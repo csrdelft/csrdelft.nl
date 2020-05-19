@@ -128,8 +128,8 @@ class CliLoginService {
 		$session = new LoginSession();
 		$session->session_hash = hash('sha512', session_id());
 		$session->uid = $account->uid;
-		$session->login_moment = getDateTime();
-		$session->expire = getDateTime(time() + (int)instelling('beveiliging', 'session_lifetime_seconds'));
+		$session->login_moment = date_create_immutable();
+		$session->expire = date_create_immutable()->add(new \DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 		$session->user_agent = MODE;
 		$session->ip = '';
 		$session->lock_ip = true; // sessie koppelen aan ip?

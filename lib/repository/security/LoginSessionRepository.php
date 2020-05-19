@@ -49,7 +49,7 @@ class LoginSessionRepository extends AbstractRepository {
 	 */
 	public function getActiveSessionCount($uid) {
 		return (int) $this->createQueryBuilder('login')
-			->select('COUNT(l.session_hash)')
+			->select('COUNT(login.session_hash)')
 			->where('login.uid = :uid AND login.expire > NOW()')
 			->setParameter('uid', $uid)
 			->getQuery()->getSingleScalarResult();

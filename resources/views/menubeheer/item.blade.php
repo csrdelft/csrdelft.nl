@@ -17,7 +17,7 @@
 			@endcan
 		</div>
 		<div class="col-auto">
-			@if ($item->rechten_bekijken !== P_PUBLIC && $item->rechten_bekijken != \CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getUid())
+			@if ($item->rechten_bekijken !== P_PUBLIC && $item->rechten_bekijken != \CsrDelft\service\security\LoginService::getUid())
 				<button class="btn btn-sm"
 								disabled>@icon('group_key', null, 'Rechten bekijken: &#013; ' . $item->rechten_bekijken)</button>
 			@endif

@@ -13,17 +13,17 @@
 					@endif
 				</h6>
 				op {{date_format_intl($maaltijd->datum, LONG_DATE_FORMAT)}} om {{ date_format_intl($maaltijd->tijd, TIME_FORMAT) }}
-				@if($maaltijd->magBekijken(\CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getUid()))
+				@if($maaltijd->magBekijken(\CsrDelft\service\security\LoginService::getUid()))
 					<div class="float-right">
 						@icon("paintcan", null, $maaltijd->maaltijdcorvee->corveeFunctie->naam)
 					</div>
 				@endif
 				<div class="small">
-					@if($maaltijd->magSluiten(\CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getUid()))
+					@if($maaltijd->magSluiten(\CsrDelft\service\security\LoginService::getUid()))
 						<a href="/maaltijden/lijst/{{$maaltijd->maaltijd_id}}" title="Toon maaltijdlijst">
 							@endif
 							Inschrijvingen: <em>{{$maaltijd->getAantalAanmeldingen()}}</em> van <em>{{$maaltijd->aanmeld_limiet}}</em>
-							@if($maaltijd->magSluiten(\CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getUid()))
+							@if($maaltijd->magSluiten(\CsrDelft\service\security\LoginService::getUid()))
 						</a>
 						@if ($maaltijd->getEindMoment() < time())
 							<br><a href="/maaltijden/beheer/beoordelingen" title="Toon beoordelingen">Bekijk beoordelingen</a>

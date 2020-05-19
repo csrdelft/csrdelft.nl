@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Table("login_sessions")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\security\LoginSessionRepository")
  */
 class LoginSession {
 	/**
@@ -29,13 +30,13 @@ class LoginSession {
 	public $uid;
 	/**
 	 * DateTime
-	 * @var string
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $login_moment;
 	/**
 	 * DateTime
-	 * @var string
+	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $expire;
@@ -91,7 +92,7 @@ class LoginSession {
 
 	public function isRecent() {
 		$recent = (int)instelling('beveiliging', 'recent_login_seconds');
-		if (time() - strtotime($this->login_moment) < $recent) {
+		if (time() - $this->login_moment->getTimestamp() < $recent) {
 			return true;
 		}
 		return false;

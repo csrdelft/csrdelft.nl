@@ -1,7 +1,7 @@
 <div class="menu-item-row row">
 	<div class="col">
 <span>
-	@if($root->tekst == \CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getUid())
+	@if($root->tekst == \CsrDelft\service\security\LoginService::getUid())
 		Favorieten
 	@else
 		{{$root->tekst}}

@@ -23,6 +23,9 @@ use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
  */
 class LoginService {
 	public const UID_EXTERN = 'x999';
+	/**
+	 * @var LoginSession
+	 */
 	protected $current_session;
 	/**
 	 * @var LoginSessionRepository
@@ -87,7 +90,7 @@ class LoginService {
 		if ($this->validate()) {
 			// Public gebruiker heeft geen DB sessie
 			if ($_SESSION['_uid'] != self::UID_EXTERN) {
-				$this->current_session->expire = date_create_immutable('@' . (time() + getSessionMaxLifeTime()));
+				$this->current_session->expire = date_create_immutable()->add(new \DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 				$this->loginRepository->update($this->current_session);
 			}
 		} else {
@@ -150,7 +153,7 @@ class LoginService {
 			return false;
 		}
 		// Controleer of sessie is verlopen
-		if ($this->current_session->expire && strtotime($this->current_session->expire) <= time()) {
+		if ($this->current_session->expire && $this->current_session->expire <= date_create_immutable()) {
 			return false;
 		}
 		// Controleer gekoppeld ip
@@ -314,8 +317,8 @@ class LoginService {
 			$this->current_session = new LoginSession();
 			$this->current_session->session_hash = hash('sha512', session_id());
 			$this->current_session->uid = $account->uid;
-			$this->current_session->login_moment = getDateTime();
-			$this->current_session->expire = $expire ? $expire : getDateTime(time() + getSessionMaxLifeTime());
+			$this->current_session->login_moment = date_create_immutable();
+			$this->current_session->expire = $expire ? $expire : date_create_immutable()->add(new \DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 			$this->current_session->user_agent = $user_agent;
 			$this->current_session->ip = $remote_addr;
 			$this->current_session->lock_ip = $lockIP; // sessie koppelen aan ip?

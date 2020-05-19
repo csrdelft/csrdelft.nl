@@ -1,10 +1,10 @@
 <li class="nav-item d-md-block d-none ml-3">
-	<img src="{{\CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getProfiel()->getPasfotoPath('vierkant')}}" alt="Pasfoto" class="pasfoto-menu"/>
+	<img src="{{\CsrDelft\service\security\LoginService::getProfiel()->getPasfotoPath('vierkant')}}" alt="Pasfoto" class="pasfoto-menu"/>
 </li>
 <li class="nav-item dropdown">
 	<a class="nav-link dropdown-toggle pl-2" href="#" id="menu-personal" role="button" data-toggle="dropdown"
 		 aria-haspopup="true" aria-expanded="false">
-		{{ \CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getProfiel()->getNaam('volledig') }}
+		{{ \CsrDelft\service\security\LoginService::getProfiel()->getNaam('volledig') }}
 	</a>
 	<ul class="dropdown-menu" aria-labelledby="menu-personal">
 		@if(\CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\service\security\SuService::class)->isSued())

@@ -198,7 +198,7 @@
 												 onclick="return confirm('U wilt dit boek van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} lenen?')">@icon("lorry")
 												Exemplaar lenen</a>
 										@endif
-									@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::uitgeleend() && \CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getUid()==$exemplaar->uitgeleend_uid && $exemplaar->uitgeleend_uid!=$exemplaar->eigenaar_uid)
+									@elseif($exemplaar->status===\CsrDelft\entity\bibliotheek\BoekExemplaarStatus::uitgeleend() && \CsrDelft\service\security\LoginService::getUid()==$exemplaar->uitgeleend_uid && $exemplaar->uitgeleend_uid!=$exemplaar->eigenaar_uid)
 										<a class="btn post ReloadPage" href="/bibliotheek/exemplaarteruggegeven/{{$exemplaar->id}}"
 											 title="Boek heb ik teruggegeven"
 											 onclick="return confirm('U heeft dit exemplaar van {{\CsrDelft\repository\ProfielRepository::getNaam($exemplaar->eigenaar_uid)}} teruggegeven?')">@icon("lorry_go")
@@ -276,7 +276,7 @@
 								{{-- knopjes bij elke post --}}
 								@if($beschrijving->magVerwijderen())
 									<a
-										href="/bibliotheek/verwijderbeschrijving/{{$boek->id}}/{{\CsrDelft\repository\security\\CsrDelft\service\security\LoginService::getUid()}}"
+										href="/bibliotheek/verwijderbeschrijving/{{$boek->id}}/{{\CsrDelft\service\security\LoginService::getUid()}}"
 										class="post ReloadPage"
 										onclick="return confirm('Weet u zeker dat u deze beschrijving wilt verwijderen?')"><span
 											class="ico cross  " title="Verwijderen"></span> Verwijderen</a>
