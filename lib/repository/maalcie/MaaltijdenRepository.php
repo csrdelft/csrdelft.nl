@@ -83,7 +83,7 @@ class MaaltijdenRepository extends AbstractRepository {
 
 	public function vanRepetitie(MaaltijdRepetitie $repetitie, DateTimeInterface $datum) {
 		$maaltijd = new Maaltijd();
-		$maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+		$maaltijd->repetitie = $repetitie;
 		$maaltijd->product = $repetitie->product;
 		$maaltijd->titel = $repetitie->standaard_titel;
 		$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;

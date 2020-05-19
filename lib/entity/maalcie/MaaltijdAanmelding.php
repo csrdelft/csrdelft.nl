@@ -29,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Zie ook MaaltijdAbonnement.class.php
  *
- * @ORM\Entity(repositoryClass="MaaltijdAanmeldingenRepository")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository")
  * @ORM\Table("mlt_aanmeldingen")
  */
 class MaaltijdAanmelding {
@@ -70,8 +70,11 @@ class MaaltijdAanmelding {
 	 * @ORM\Column(type="datetime")
 	 */
 	public $laatst_gewijzigd;
-
-	/** @var Maaltijd */
+	/**
+	 * @var Maaltijd
+	 * @ORM\ManyToOne(targetEntity="Maaltijd", inversedBy="aanmeldingen")
+	 * @ORM\JoinColumn(name="maaltijd_id", referencedColumnName="maaltijd_id")
+	 */
 	public $maaltijd;
 
 	/**
@@ -81,10 +84,6 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldo() {
 		return ProfielRepository::get($this->uid)->getCiviSaldo();
-	}
-
-	public function getMaaltijd() {
-		return ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd($this->maaltijd_id);
 	}
 
 	/**
@@ -104,7 +103,7 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldoStatus() {
 		$saldo = $this->getSaldo();
-		$prijs = $this->getMaaltijd()->getPrijsFloat();
+		$prijs = $this->maaltijd->getPrijsFloat();
 
 		if ($saldo > $prijs) { // saldo meer dan genoeg
 			return 3;
@@ -126,7 +125,7 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldoMelding() {
 		$status = $this->getSaldoStatus();
-		$prijs = sprintf('%.2f', $this->getMaaltijd()->getPrijsFloat());
+		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
 		switch ($status) {
 			case 3:
 				return 'ok';

@@ -166,7 +166,7 @@ class BeheerMaaltijdenController extends AbstractController {
 			if ($repetitie->periode_in_dagen > 0) {
 				return new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 			} else {
-				$maaltijd->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+				$maaltijd->repetitie = $repetitie;
 				$maaltijd->product = $repetitie->product;
 				$maaltijd->titel = $repetitie->standaard_titel;
 				$maaltijd->aanmeld_limiet = $repetitie->standaard_limiet;

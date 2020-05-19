@@ -60,7 +60,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			$this->assertMagAanmelden($maaltijd, $uid);
 		}
 
-		if ($this->getIsAangemeld($maaltijd->maaltijd_id, $uid)) {
+		if ($maaltijd->getIsAangemeld($uid)) {
 			if (!$beheer) {
 				throw new CsrGebruikerException('Al aangemeld');
 			}
@@ -279,11 +279,11 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		if (!is_numeric($mid) || $mid <= 0) {
 			throw new CsrGebruikerException('Save gasten eetwens faalt: Invalid $mid =' . $mid);
 		}
-		if (!$this->getIsAangemeld($mid, $uid)) {
+		$maaltijd = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd($mid);
+		if (!$maaltijd->getIsAangemeld($uid)) {
 			throw new CsrGebruikerException('Niet aangemeld');
 		}
 
-		$maaltijd = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd($mid);
 		if ($maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is gesloten');
 		}
@@ -380,11 +380,11 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$bestelling->uid = $aanmelding->uid;
 		$bestelling->deleted = false;
 		$bestelling->moment = getDateTime();
-		$bestelling->comment = sprintf('Datum maaltijd: %s', date('Y-M-d', $aanmelding->getMaaltijd()->getBeginMoment()));
+		$bestelling->comment = sprintf('Datum maaltijd: %s', date('Y-M-d', $aanmelding->maaltijd->getBeginMoment()));
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = 1 + $aanmelding->aantal_gasten;
-		$inhoud->product_id = $aanmelding->getMaaltijd()->product_id;
+		$inhoud->product_id = $aanmelding->maaltijd->product_id;
 
 		$bestelling->inhoud[] = $inhoud;
 		$bestelling->totaal = ContainerFacade::getContainer()->get(CiviProductRepository::class)->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);

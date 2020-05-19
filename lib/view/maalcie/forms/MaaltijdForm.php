@@ -5,9 +5,11 @@ namespace CsrDelft\view\maalcie\forms;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;
+use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredDoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
@@ -49,7 +51,7 @@ class MaaltijdForm extends ModalForm {
 		}
 
 		$fields = [];
-		$fields['mrid'] = new IntField('mlt_repetitie_id', $maaltijd->mlt_repetitie_id, null);
+		$fields['mrid'] = new DoctrineEntityField('repetitie', $maaltijd->repetitie, null, MaaltijdRepetitie::class, '');
 		$fields['mrid']->hidden = true;
 		$fields[] = new RequiredTextField('titel', $maaltijd->titel, 'Titel', 255, 5);
 		$fields[] = new RequiredDateObjectField('datum', $maaltijd->datum, 'Datum', date('Y') + 2, date('Y') - 2);

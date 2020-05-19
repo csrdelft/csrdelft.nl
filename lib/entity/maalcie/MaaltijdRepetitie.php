@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\entity\fiscaat\CiviProduct;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Monolog\DateTimeImmutable;
 
@@ -29,7 +30,7 @@ use Monolog\DateTimeImmutable;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository")
  * @ORM\Table("mlt_repetities")
  */
-class MaaltijdRepetitie {
+class MaaltijdRepetitie implements DisplayEntity {
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -127,5 +128,13 @@ class MaaltijdRepetitie {
 			$datum = strtotime('+' . $shift . ' days', $datum);
 		}
 		return date('Y-m-d', $datum);
+	}
+
+	public function getId() {
+		return $this->mlt_repetitie_id;
+	}
+
+	function getWeergave(): string {
+		return $this->standaard_titel;
 	}
 }
