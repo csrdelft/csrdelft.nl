@@ -4,11 +4,11 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\entity\security\LoginSession;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\LoginSessionsData;
 use CsrDelft\view\login\RememberLoginForm;
@@ -21,31 +21,33 @@ class SessionController extends AbstractController {
 	/**
 	 * @var LoginSessionRepository
 	 */
-	private $loginModel;
+	private $loginSessionRepository;
 	/**
 	 * @var RememberLoginRepository
 	 */
 	private $rememberLoginRepository;
 
-	public function __construct(LoginSessionRepository $loginModel, RememberLoginRepository $rememberLoginRepository) {
-		$this->loginModel = $loginModel;
+	public function __construct(LoginSessionRepository $loginSessionRepository, RememberLoginRepository $rememberLoginRepository) {
+		$this->loginSessionRepository = $loginSessionRepository;
 		$this->rememberLoginRepository = $rememberLoginRepository;
 	}
 
 	public function sessionsdata() {
-		return new LoginSessionsData($this->loginModel->find('uid = ?', array(LoginService::getUid())));
+		$loginSession = $this->loginSessionRepository->findBy(['uid' => LoginService::getUid()]);
+		return new LoginSessionsData($loginSession);
 	}
 
-	public function endsession($session_hash = null) {
-		$session = false;
-		if ($session_hash) {
-			$session = $this->loginModel->find('session_hash = ? AND uid = ?', array($session_hash, LoginService::getUid()), null, null, 1)->fetch();
-		}
-		if (!$session) {
+	public function endsession($session_hash) {
+		$session = $this->loginSessionRepository->find($session_hash);
+		$removed = new RemoveDataTableEntry($session_hash, LoginSession::class);
+
+		if (!$session || $session->uid !== LoginService::getUid()) {
 			throw new CsrToegangException();
 		}
-		$deleted = $this->loginModel->delete($session);
-		return new RemoveRowsResponse([$session], $deleted === 1 ? 200 : 404);
+
+		$this->loginSessionRepository->removeByHash($session_hash);
+
+		return $this->tableData([$removed]);
 	}
 
 	public function lockip() {

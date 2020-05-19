@@ -2,12 +2,10 @@
 
 namespace CsrDelft\entity\security;
 
-use CsrDelft\Orm\Entity\T;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * LoginSession.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Table("login_sessions")
@@ -30,13 +28,13 @@ class LoginSession {
 	public $uid;
 	/**
 	 * DateTime
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $login_moment;
 	/**
 	 * DateTime
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $expire;
@@ -65,30 +63,6 @@ class LoginSession {
 	 * TODO is eigenlijk Authenticationmethod
 	 */
 	public $authentication_method;
-	/**
-	 * Database table columns
-	 * @var array
-	 */
-	protected static $persistent_attributes = array(
-		'session_hash' => array(T::StringKey),
-		'uid' => array(T::UID),
-		'login_moment' => array(T::DateTime),
-		'expire' => array(T::DateTime),
-		'user_agent' => array(T::String),
-		'ip' => array(T::String),
-		'lock_ip' => array(T::Boolean),
-		'authentication_method' => array(T::Enumeration, false, AuthenticationMethod::class)
-	);
-	/**
-	 * Database primary key
-	 * @var array
-	 */
-	protected static $primary_key = array('session_hash');
-	/**
-	 * Database table name
-	 * @var string
-	 */
-	protected static $table_name = 'login_sessions';
 
 	public function isRecent() {
 		$recent = (int)instelling('beveiliging', 'recent_login_seconds');
