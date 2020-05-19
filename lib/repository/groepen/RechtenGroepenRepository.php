@@ -60,7 +60,7 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 		}
 		foreach ($this->commissieLedenRepository->findBy(['uid' => $uid]) as $commissielid) {
 			$commissie = $this->commissiesRepository->get($commissielid->groep_id);
-			if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
+			if ($commissie->status === GroepStatus::HT() OR $commissie->status === GroepStatus::FT()) {
 				$result[] = $commissie->familie;
 			}
 		}
