@@ -21,7 +21,7 @@ class WachtwoordController extends AbstractController {
 	/**
 	 * @var LoginService
 	 */
-	private $loginModel;
+	private $loginService;
 	/**
 	 * @var AccountRepository
 	 */
@@ -32,7 +32,7 @@ class WachtwoordController extends AbstractController {
 	private $oneTimeTokensRepository;
 
 	public function __construct(LoginService $loginService, AccountRepository $accountRepository, OneTimeTokensRepository $oneTimeTokensRepository) {
-		$this->loginModel = $loginService;
+		$this->loginService = $loginService;
 		$this->accountRepository = $accountRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 	}
@@ -71,7 +71,7 @@ class WachtwoordController extends AbstractController {
 			// (pas na wachtwoord opslaan om meedere pogingen toe te staan als wachtwoord niet aan eisen voldoet)
 			$this->oneTimeTokensRepository->discardToken($account->uid, '/wachtwoord/reset');
 			// inloggen alsof gebruiker wachtwoord heeft ingevoerd
-			$loggedin = $this->loginModel->login($account->uid, $pass_plain, false);
+			$loggedin = $this->loginService->login($account->uid, $pass_plain, false);
 			if (!$loggedin) {
 				throw new CsrGebruikerException('Inloggen met nieuw wachtwoord mislukt');
 			}
