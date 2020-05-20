@@ -34,17 +34,21 @@
       width: 100%;
     }
 
+		.contact {
+			margin-bottom: 1em;
+
+			.major {
+				border-bottom: solid 4px black;
+				margin-right: 2.5em;
+			}
+		}
+
     form {
       margin: 0 3em 0 0;
-      width: calc(50% - 1.5em);
-    }
-
-    .contact {
-      width: calc(50% - 1.5em);
     }
 
     .copyright,.sponsors {
-      border-top: solid 2px $geel;
+      border-top: solid 4px $geel;
       list-style: none;
       margin: 2em 0 1em 0;
       padding: 2em 0 0 0;

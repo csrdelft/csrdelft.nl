@@ -1,0 +1,25 @@
+@import "variables";
+
+// Afbeeldingen op de voorpagina
+
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+
+	.col {
+		flex: 1;
+		margin: 0 0.75em;
+	}
+}
+
+//@media screen and (max-width: $scherm-middel) {
+//	.flex {
+//
+//	}
+//}
+//
+//@media screen and (max-width: $scherm-smal) {
+//	.flex {
+//
+//	}
+//}
