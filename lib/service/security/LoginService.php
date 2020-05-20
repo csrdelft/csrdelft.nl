@@ -16,6 +16,7 @@ use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use DateInterval;
+use DateTimeImmutable;
 
 /**
  * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.
@@ -236,7 +237,7 @@ class LoginService {
 	 * @param RememberLogin $remember
 	 * @param boolean $lockIP
 	 * @param boolean $alreadyAuthenticatedByUrlToken
-	 * @param string $expire
+	 * @param DateTimeImmutable $expire
 	 * @return boolean
 	 */
 	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $alreadyAuthenticatedByUrlToken = false, $expire = null) {
