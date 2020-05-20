@@ -6,6 +6,7 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Entity\T;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * CiviSaldo.class.php
@@ -20,11 +21,36 @@ use CsrDelft\Orm\Entity\T;
  * @property-read Profiel $profiel
  */
 class CiviSaldo extends PersistentEntity {
+	/**
+	 * @var integer
+	 * @Serializer\Groups("log")
+	 */
 	public $id;
+	/**
+	 * @var string
+	 * @Serializer\Groups("log")
+	 */
 	public $uid;
+	/**
+	 * @var string
+	 * @Serializer\Groups("log")
+	 */
 	public $naam;
+	/**
+	 * @var integer
+	 * @Serializer\Groups("log")
+	 */
 	public $saldo;
+	/**
+	 * @var integer
+	 * @Serializer\Groups("log")
+	 */
 	public $laatst_veranderd;
+	/**
+	 * @var bool
+	 * @Serializer\Groups("log")
+	 *
+	 */
 	public $deleted = false;
 
 	protected static $persistent_attributes = [

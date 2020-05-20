@@ -17,6 +17,7 @@ use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
 use CsrDelft\view\JsonResponse;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -56,7 +57,7 @@ class BeheerCiviSaldoController {
 		return new CiviSaldoTableResponse($this->civiSaldoModel->find('deleted = false'));
 	}
 
-	public function inleggen() {
+	public function inleggen(EntityManagerInterface $em) {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 
 		/** @var CiviSaldo $civisaldo */
@@ -67,7 +68,7 @@ class BeheerCiviSaldoController {
 			$values = $form->getValues();
 			if ($form->validate() AND $values['inleg'] !== 0 AND $values['saldo'] == $civisaldo->saldo) {
 				$inleg = $values['inleg'];
-				Database::transaction(function () use ($inleg, $civisaldo) {
+				$em->transactional(function () use ($inleg, $civisaldo) {
 					$bestelling = $this->civiBestellingModel->vanBedragInCenten($inleg, $civisaldo->uid);
 					$this->civiBestellingModel->create($bestelling);
 

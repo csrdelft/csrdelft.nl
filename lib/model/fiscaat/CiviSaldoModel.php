@@ -8,6 +8,7 @@ use CsrDelft\model\entity\fiscaat\CiviSaldo;
 use CsrDelft\model\entity\fiscaat\CiviSaldoLogEnum;
 use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\repository\fiscaat\CiviSaldoLogRepository;
 use DateTime;
 
 /**
@@ -17,20 +18,20 @@ class CiviSaldoModel extends PersistenceModel {
 	const ORM = CiviSaldo::class;
 
 	/**
-	 * @var CiviSaldoLogModel
+	 * @var CiviSaldoLogRepository
 	 */
-	private $civiSaldoLogModel;
+	private $civiSaldoLogRepository;
 
 	/**
 	 * CiviSaldoModel constructor.
-	 * @param CiviSaldoLogModel $civiSaldoLogModel
+	 * @param CiviSaldoLogRepository $civiSaldoLogRepository
 	 */
 	public function __construct(
-		CiviSaldoLogModel $civiSaldoLogModel
+		CiviSaldoLogRepository $civiSaldoLogRepository
 	) {
 		parent::__construct();
 
-		$this->civiSaldoLogModel = $civiSaldoLogModel;
+		$this->civiSaldoLogRepository = $civiSaldoLogRepository;
 	}
 
 	/**
@@ -139,7 +140,7 @@ class CiviSaldoModel extends PersistenceModel {
 		if ($entity->saldo !== 0) {
 			throw new CsrGebruikerException("Kan CiviSaldo niet verwijderen: Saldo ongelijk aan nul.");
 		}
-		$this->civiSaldoLogModel->log(CiviSaldoLogEnum::DELETE_SALDO, $entity);
+		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::DELETE_SALDO, $entity);
 		return parent::delete($entity);
 	}
 
@@ -149,7 +150,7 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @return string
 	 */
 	public function create(PersistentEntity $entity) {
-		$this->civiSaldoLogModel->log(CiviSaldoLogEnum::CREATE_SALDO, $entity);
+		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::CREATE_SALDO, $entity);
 		return parent::create($entity);
 	}
 
@@ -159,7 +160,7 @@ class CiviSaldoModel extends PersistenceModel {
 	 * @return int
 	 */
 	public function update(PersistentEntity $entity) {
-		$this->civiSaldoLogModel->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
+		$this->civiSaldoLogRepository->log(CiviSaldoLogEnum::UPDATE_SALDO, $entity);
 		return parent::update($entity);
 	}
 
