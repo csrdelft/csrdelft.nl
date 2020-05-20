@@ -4,7 +4,6 @@ namespace CsrDelft\service\pin;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\fiscaat\CiviBestelling;
-use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\pin\PinTransactie;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
@@ -67,7 +66,7 @@ class PinTransactieMatcher {
 	/**
 	 */
 	public function clean() {
-		$ids = array_map(function (CiviBestellingInhoud $inhoud) { return $inhoud->bestelling_id; }, $this->pinBestellingen);
+		$ids = array_map(function (CiviBestelling $inhoud) { return $inhoud->id; }, $this->pinBestellingen);
 		$this->pinTransactieMatchModel->cleanByBestellingIds($ids);
 	}
 
@@ -251,7 +250,7 @@ class PinTransactieMatcher {
 	}
 
 	private function matchCost($i, $j) {
-		if ($this->pinTransacties[$i]->getBedragInCenten() == $this->pinBestellingen[$j]->aantal) {
+		if ($this->pinTransacties[$i]->getBedragInCenten() == $this->pinBestellingen[$j]->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal) {
 			return 0;
 		} else {
 			return self::COST_VERKEERD_BEDRAG;

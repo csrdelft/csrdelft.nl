@@ -22,15 +22,15 @@ const DURATION_DAY_IN_SECONDS = 86400;
 require_once __DIR__ . '/../../lib/configuratie.include.php';
 
 if (isset($argv[1])) {
-	$moment = strtotime($argv[1]);
+	$moment = date_create_immutable($argv[1]);
 	$interactive = true;
 } else {
-	$moment = time() - DURATION_DAY_IN_SECONDS;
+	$moment = date_create_immutable()->sub(new DateInterval('P1D'));
 	$interactive = false;
 }
 
-$from = date(DATE_FORMAT . ' 12:00:00', $moment - DURATION_DAY_IN_SECONDS);
-$to = date(DATE_FORMAT . ' 12:00:00', $moment);
+$from = date_format_intl($moment->sub(new DateInterval('P1D')), DATE_FORMAT) . ' 12:00:00';
+$to = date_format_intl($moment, DATE_FORMAT) . ' 12:00:00';
 
 $container = ContainerFacade::getContainer();
 $pinTransactieRepository = $container->get(PinTransactieRepository::class);

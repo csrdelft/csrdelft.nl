@@ -81,7 +81,7 @@ class CiviBestellingRepository extends AbstractRepository {
 		foreach ($bestellingen as $bestelling) {
 			foreach ($bestelling->inhoud as $item) {
 				if ($item->product_id == CiviProductTypeEnum::PINTRANSACTIE) {
-					$pinBestellingen[] = $item;
+					$pinBestellingen[] = $bestelling;
 				}
 			}
 		}

@@ -84,6 +84,6 @@ class SaldoGrafiekService {
 	 */
 	public function magGrafiekZien($uid) {
 		//mogen we uberhaupt een grafiek zien?
-		return LoginService::getUid() === $uid or LoginService::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
+		return LoginService::getUid() === $uid || LoginService::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
 	}
 }
