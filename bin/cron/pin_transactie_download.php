@@ -8,7 +8,7 @@
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
 use CsrDelft\service\pin\PinTransactieDownloader;
@@ -22,22 +22,22 @@ const DURATION_DAY_IN_SECONDS = 86400;
 require_once __DIR__ . '/../../lib/configuratie.include.php';
 
 if (isset($argv[1])) {
-	$moment = strtotime($argv[1]);
+	$moment = date_create_immutable($argv[1]);
 	$interactive = true;
 } else {
-	$moment = time() - DURATION_DAY_IN_SECONDS;
+	$moment = date_create_immutable()->sub(new DateInterval('P1D'));
 	$interactive = false;
 }
 
-$from = date(DATE_FORMAT . ' 12:00:00', $moment - DURATION_DAY_IN_SECONDS);
-$to = date(DATE_FORMAT . ' 12:00:00', $moment);
+$from = date_format_intl($moment->sub(new DateInterval('P1D')), DATE_FORMAT) . ' 12:00:00';
+$to = date_format_intl($moment, DATE_FORMAT) . ' 12:00:00';
 
 $container = ContainerFacade::getContainer();
 $pinTransactieRepository = $container->get(PinTransactieRepository::class);
 $pinTransactieMatchRepository = $container->get(PinTransactieMatchRepository::class);
 $pinTransactieMatcher = $container->get(PinTransactieMatcher::class);
 $pinTransactieDownloader = $container->get(PinTransactieDownloader::class);
-$civiBestellingModel = $container->get(CiviBestellingModel::class);
+$civiBestellingRepository = $container->get(CiviBestellingRepository::class);
 
 // Verwijder eerdere download.
 $vorigePinTransacties = $pinTransactieRepository->getPinTransactieInMoment($from, $to);
@@ -49,7 +49,7 @@ $pinTransactieRepository->clean($vorigePinTransacties);
 $pintransacties = $pinTransactieDownloader->download($from, env('PIN_URL'), env('PIN_STORE'), env('PIN_USERNAME'), env('PIN_PASSWORD'));
 
 // Haal pinbestellingen op.
-$pinbestellingen = $civiBestellingModel->getPinBestellingInMoment($from, $to);
+$pinbestellingen = $civiBestellingRepository->getPinBestellingInMoment($from, $to);
 
 try {
 	$pinTransactieMatcher->setPinTransacties($pintransacties);

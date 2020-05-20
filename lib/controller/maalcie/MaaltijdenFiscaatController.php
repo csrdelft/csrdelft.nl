@@ -3,10 +3,10 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\maalcie\Maaltijd;
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\datatable\RemoveRowsResponse;
@@ -30,24 +30,24 @@ class MaaltijdenFiscaatController {
 	 */
 	private $maaltijdAanmeldingenRepository;
 	/**
-	 * @var CiviBestellingModel
+	 * @var CiviBestellingRepository
 	 */
-	private $civiBestellingModel;
+	private $civiBestellingRepository;
 	/**
-	 * @var CiviSaldoModel
+	 * @var CiviSaldoRepository
 	 */
-	private $civiSaldoModel;
+	private $civiSaldoRepository;
 
 	public function __construct(
-        MaaltijdenRepository $maaltijdenRepository,
-        MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-        CiviBestellingModel $civiBestellingModel,
-        CiviSaldoModel $civiSaldoModel
+		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		CiviBestellingRepository $civiBestellingRepository,
+		CiviSaldoRepository $civiSaldoRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->civiBestellingModel = $civiBestellingModel;
-		$this->civiSaldoModel = $civiSaldoModel;
+		$this->civiBestellingRepository = $civiBestellingRepository;
+		$this->civiSaldoRepository = $civiSaldoRepository;
 	}
 
 	public function GET_overzicht() {
@@ -98,8 +98,8 @@ class MaaltijdenFiscaatController {
 
 			# Reken de bestelling af
 			foreach ($bestellingen as $bestelling) {
-				$this->civiBestellingModel->create($bestelling);
-				$this->civiSaldoModel->verlagen($bestelling->uid, $bestelling->totaal);
+				$this->civiBestellingRepository->create($bestelling);
+				$this->civiSaldoRepository->verlagen($bestelling->uid, $bestelling->totaal);
 			}
 
 			# Zet de maaltijd op verwerkt

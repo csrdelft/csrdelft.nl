@@ -5,7 +5,7 @@ namespace CsrDelft\view\fiscaat\pin;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
-use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
 use CsrDelft\view\datatable\DataTableResponse;
@@ -21,36 +21,27 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 	 * @throws Exception
 	 */
 	public function renderElement($entity) {
-		$container = ContainerFacade::getContainer();
-		$pinTransactieRepository = $container->get(PinTransactieRepository::class);
-		$pinTransactieMatchRepository = $container->get(PinTransactieMatchRepository::class);
-		$civiBestellingModel = $container->get(CiviBestellingModel::class);
-
 		if ($entity instanceof PinTransactieMatch) {
-			if ($entity->bestelling_id !== null) {
-				$bestelling = $civiBestellingModel->get($entity->bestelling_id);
-				$bestellingBeschrijving = $civiBestellingModel->getPinBeschrijving($bestelling);
+			if ($entity->bestelling !== null) {
+				$bestellingBeschrijving = $entity->bestelling->getPinBeschrijving();
 			} else {
 				$bestellingBeschrijving = '-';
 			}
 
-			if ($entity->transactie_id !== null) {
-				$pinTransactie = $pinTransactieRepository->get($entity->transactie_id);
-				$transactieBeschrijving = $pinTransactieRepository->getKorteBeschrijving($pinTransactie);
+			if ($entity->transactie !== null) {
+				$transactieBeschrijving = $entity->transactie->getKorteBeschrijving();
 			} else {
 				$transactieBeschrijving = '-';
 			}
-
-			$moment = $pinTransactieMatchRepository->getMoment($entity);
 
 			return [
 				'UUID' => $entity->getUUID(),
 				'id' => $entity->id,
 				'status' => PinTransactieMatchStatusEnum::getDescription($entity->status),
-				'moment' => $moment,
-				'transactie_id' => $entity->transactie_id,
+				'moment' => date_format_intl($entity->getMoment(), DATETIME_FORMAT),
+				'transactie_id' => $entity->transactie->id ?? null,
 				'transactie' => $transactieBeschrijving,
-				'bestelling_id' => $entity->bestelling_id,
+				'bestelling_id' => $entity->bestelling->id ?? null,
 				'bestelling' => $bestellingBeschrijving,
 			];
 		} else {

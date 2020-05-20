@@ -2,59 +2,64 @@
 
 namespace CsrDelft\service\fiscaat;
 
-use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\service\security\LoginService;
+use DateInterval;
 use DateTime;
+use Exception;
 
 class SaldoGrafiekService {
 	/**
-	 * @var CiviSaldoModel
+	 * @var CiviSaldoRepository
 	 */
-	private $civiSaldoModel;
+	private $civiSaldoRepository;
 	/**
-	 * @var CiviBestellingModel
+	 * @var CiviBestellingRepository
 	 */
-	private $civiBestellingModel;
+	private $civiBestellingRepository;
 
-	public function __construct(CiviSaldoModel $civiSaldoModel, CiviBestellingModel $civiBestellingModel) {
-		$this->civiSaldoModel = $civiSaldoModel;
-		$this->civiBestellingModel = $civiBestellingModel;
+	public function __construct(CiviSaldoRepository $civiSaldoRepository, CiviBestellingRepository $civiBestellingRepository) {
+		$this->civiSaldoRepository = $civiSaldoRepository;
+		$this->civiBestellingRepository = $civiBestellingRepository;
 	}
 
 	/**
 	 * @param string $uid
 	 * @param int $timespan
 	 * @return array|null
+	 * @throws Exception
 	 */
 	public function getDataPoints($uid, $timespan) {
 		if (!$this->magGrafiekZien($uid)) {
 			return null;
 		}
-		$klant = $this->civiSaldoModel->find('uid = ?', array($uid), null, null, 1)->fetch();
+		$klant = $this->civiSaldoRepository->getSaldo($uid);
 		if (!$klant) {
 			return null;
 		}
 		$saldo = $klant->saldo;
 		// Teken het huidige saldo
 		$data = [['t' => date(DateTime::RFC2822), 'y' => $saldo]];
-		$bestellingen = $this->civiBestellingModel->find(
-			'uid = ? AND deleted = FALSE AND moment>(NOW() - INTERVAL ? DAY)',
-			[$klant->uid, $timespan],
-			null,
-			'moment DESC'
-		);
+		$bestellingen = $this->civiBestellingRepository->createQueryBuilder('b')
+			->where('b.uid = :uid and b.deleted = false and b.moment > :moment')
+			->setParameter('uid', $klant->uid)
+			->setParameter('moment', date_create_immutable()->sub(new DateInterval('PT' . $timespan . 'D')))
+			->orderBy('b.moment', 'DESC')
+			->getQuery()->getResult();
+
+		if (count($bestellingen) == 0) {
+			return null;
+		}
 
 		foreach ($bestellingen as $bestelling) {
-			$data[] = ['t' => date(DateTime::RFC2822, strtotime($bestelling->moment)), 'y' => $saldo];
+			$data[] = ['t' => $bestelling->moment->format(DateTime::RFC2822), 'y' => $saldo];
 			$saldo += $bestelling->totaal;
 		}
 
-		if (!empty($data)) {
-			$row = end($data);
-			$time = date(DateTime::RFC2822, strtotime($timespan - 1 . ' days 23 hours ago'));
-			array_push($data, ["t" => $time, 'y' => $row['y']]);
-		}
+		$row = end($data);
+		$time = date(DateTime::RFC2822, strtotime($timespan - 1 . ' days 23 hours ago'));
+		array_push($data, ["t" => $time, 'y' => $row['y']]);
 
 		return [
 			"labels" => [$time, date(DateTime::RFC2822)],
@@ -79,6 +84,6 @@ class SaldoGrafiekService {
 	 */
 	public function magGrafiekZien($uid) {
 		//mogen we uberhaupt een grafiek zien?
-		return LoginService::getUid() === $uid OR LoginService::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
+		return LoginService::getUid() === $uid || LoginService::mag(P_LEDEN_MOD . ',commissie:SocCie,commissie:MaalCie');
 	}
 }

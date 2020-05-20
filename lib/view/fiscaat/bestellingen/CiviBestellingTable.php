@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\bestellingen;
 
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;

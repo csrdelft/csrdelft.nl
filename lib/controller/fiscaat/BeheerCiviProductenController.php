@@ -6,7 +6,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviProduct;
-use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
+use CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository;
 use CsrDelft\repository\fiscaat\CiviPrijsRepository;
 use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\view\fiscaat\producten\CiviProductForm;
@@ -24,9 +24,9 @@ class BeheerCiviProductenController extends AbstractController {
 	 */
 	private $civiProductRepository;
 	/**
-	 * @var CiviBestellingInhoudModel
+	 * @var CiviBestellingInhoudRepository
 	 */
-	private $civiBestellingInhoudModel;
+	private $civiBestellingInhoudRepository;
 	/**
 	 * @var CiviPrijsRepository
 	 */
@@ -38,12 +38,12 @@ class BeheerCiviProductenController extends AbstractController {
 
 	public function __construct(
 		CiviProductRepository $civiProductRepository,
-		CiviBestellingInhoudModel $civiBestellingInhoudModel,
+		CiviBestellingInhoudRepository $civiBestellingInhoudRepository,
 		CiviPrijsRepository $civiPrijsRepository,
 		EntityManagerInterface $em
 	) {
 		$this->civiProductRepository = $civiProductRepository;
-		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
+		$this->civiBestellingInhoudRepository = $civiBestellingInhoudRepository;
 		$this->civiPrijsRepository = $civiPrijsRepository;
 		$this->em = $em;
 	}
@@ -86,7 +86,7 @@ class BeheerCiviProductenController extends AbstractController {
 				$product = $this->civiProductRepository->retrieveByUUID($uuid);
 
 				if ($product) {
-					if ($this->civiBestellingInhoudModel->count('product_id = ?', array($product->id)) == 0) {
+					if (count($this->civiBestellingInhoudRepository->findBy(['product_id' => $product->id])) == 0) {
 						$this->civiPrijsRepository->verwijderVoorProduct($product);
 						$removed[] = new RemoveDataTableEntry($product->id, CiviProduct::class);
 						$this->em->remove($product);

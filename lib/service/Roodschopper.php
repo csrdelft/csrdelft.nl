@@ -17,7 +17,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 
@@ -78,7 +78,7 @@ h.t. Fiscus.';
 			$status = LidStatus::getFiscaalLidLike();
 		}
 
-		$saldi = ContainerFacade::getContainer()->get(CiviSaldoModel::class)->find('saldo < ?', [$this->saldogrens]);
+		$saldi = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->getRoodstaandeLeden($this->saldogrens);
 
 		$return = [];
 		foreach ($saldi as $saldo) {

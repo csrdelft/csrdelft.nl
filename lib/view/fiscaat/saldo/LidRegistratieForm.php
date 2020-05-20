@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\saldo;
 
-use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\TextField;

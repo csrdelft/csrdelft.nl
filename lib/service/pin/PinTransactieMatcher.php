@@ -3,15 +3,12 @@
 namespace CsrDelft\service\pin;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\pin\PinTransactie;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
-use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
-use CsrDelft\model\fiscaat\CiviBestellingInhoudModel;
-use CsrDelft\model\fiscaat\CiviBestellingModel;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
-use CsrDelft\repository\pin\PinTransactieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -26,7 +23,6 @@ class PinTransactieMatcher {
 	 */
 	const COST_VERKEERD_BEDRAG = 3;
 	const COST_MISSING = 2;
-	const TIME_FORMAT = 'H:m:s';
 
 	/**
 	 * @var PinTransactie[]
@@ -34,7 +30,7 @@ class PinTransactieMatcher {
 	private $pinTransacties;
 
 	/**
-	 * @var CiviBestellingInhoud[]
+	 * @var CiviBestelling[]
 	 */
 	private $pinBestellingen;
 
@@ -47,33 +43,15 @@ class PinTransactieMatcher {
 	 */
 	private $pinTransactieMatchModel;
 	/**
-	 * @var CiviBestellingModel
-	 */
-	private $civiBestellingModel;
-	/**
-	 * @var CiviBestellingInhoudModel
-	 */
-	private $civiBestellingInhoudModel;
-	/**
-	 * @var PinTransactieRepository
-	 */
-	private $pinTransactieModel;
-	/**
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
-		PinTransactieMatchRepository $pinTransactieMatchModel,
-		CiviBestellingModel $civiBestellingModel,
-		CiviBestellingInhoudModel $civiBestellingInhoudModel,
-		PinTransactieRepository $pinTransactieModel
+		PinTransactieMatchRepository $pinTransactieMatchModel
 	) {
 		$this->pinTransactieMatchModel = $pinTransactieMatchModel;
-		$this->civiBestellingModel = $civiBestellingModel;
-		$this->civiBestellingInhoudModel = $civiBestellingInhoudModel;
-		$this->pinTransactieModel = $pinTransactieModel;
 		$this->entityManager = $entityManager;
 	}
 
@@ -88,13 +66,13 @@ class PinTransactieMatcher {
 	/**
 	 */
 	public function clean() {
-		$ids = array_map(function (CiviBestellingInhoud $inhoud) { return $inhoud->bestelling_id; }, $this->pinBestellingen);
+		$ids = array_map(function (CiviBestelling $inhoud) { return $inhoud->id; }, $this->pinBestellingen);
 		$this->pinTransactieMatchModel->cleanByBestellingIds($ids);
 	}
 
 	/**
 	 * @param PinTransactie[] $pinTransacties
-	 * @param CiviBestellingInhoud[] $pinBestellingen Pin bestellingen
+	 * @param CiviBestelling[] $pinBestellingen Pin bestellingen
 	 * @return int[][]
 	 * @throws CsrException
 	 */
@@ -214,31 +192,30 @@ class PinTransactieMatcher {
 
 			switch ($match->status) {
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
-					$pinTransactie = $this->pinTransactieModel->get($match->transactie_id);
+					$pinTransactie = $match->transactie;
 					$verschil += $pinTransactie->getBedragInCenten();
-					$moment = date(self::TIME_FORMAT, strtotime($pinTransactie->datetime));
+					$moment = date_format_intl($pinTransactie->datetime, DATETIME_FORMAT);
 
-					printf("%s - Missende bestelling voor pintransactie %d om %s van %s.\n", $moment, $pinTransactie->STAN, $pinTransactie->datetime, $pinTransactie->amount);
+					printf("%s - Missende bestelling voor pintransactie %d om %s van %s.\n", $moment, $pinTransactie->STAN, $moment, $pinTransactie->amount);
 					break;
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE:
-					$pinBestelling = $this->civiBestellingModel->get($match->bestelling_id);
-					$pinBestellingInhoud = $this->civiBestellingInhoudModel->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
+					$pinBestelling = $match->bestelling;
+					$pinBestellingInhoud = $pinBestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 					$verschil -= $pinBestellingInhoud->aantal;
-					$moment = date(self::TIME_FORMAT, strtotime($pinBestelling->moment));
+					$moment = date_format_intl($pinBestelling->moment, DATETIME_FORMAT);
 
-					printf("%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n", $moment, $pinBestelling->id, $pinBestelling->moment, $pinBestellingInhoud->aantal / 100, $pinBestelling->uid);
+					printf("%s - Missende transactie voor bestelling %d om %s van EUR %.2f door %d.\n", $moment, $pinBestelling->id, $moment, $pinBestellingInhoud->aantal / 100, $pinBestelling->uid);
 					break;
 				case PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG:
-					$pinTransactie = $this->pinTransactieModel->get($match->transactie_id);
-					$pinBestelling = $this->civiBestellingModel->get($match->bestelling_id);
-
-					$pinBestellingInhoud = $this->civiBestellingInhoudModel->getVoorBestellingEnProduct($match->bestelling_id, CiviProductTypeEnum::PINTRANSACTIE);
+					$pinTransactie = $match->transactie;
+					$pinBestelling = $match->bestelling;
+					$pinBestellingInhoud = $pinBestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 
 					$verschil += $pinTransactie->getBedragInCenten() - $pinBestellingInhoud->aantal;
-					$moment = date(self::TIME_FORMAT, strtotime($pinTransactie->datetime));
+					$moment = date_format_intl($pinTransactie->datetime, DATETIME_FORMAT);
 
 					printf("%s - Bestelling en transactie hebben geen overeenkomend bedrag.\n", $moment);
-					printf(" - %s Transactie %d om %s.\n", $pinTransactie->amount, $pinTransactie->STAN, $pinTransactie->datetime);
+					printf(" - %s Transactie %d om %s.\n", $pinTransactie->amount, $pinTransactie->STAN, date_format_intl($pinTransactie->datetime, DATETIME_FORMAT));
 					printf(" - EUR %.2f Bestelling %d om %s door %s.\n", $pinBestellingInhoud->aantal / 100, $pinBestelling->id, $pinBestelling->moment, $pinBestelling->uid);
 					break;
 				default:
@@ -273,7 +250,7 @@ class PinTransactieMatcher {
 	}
 
 	private function matchCost($i, $j) {
-		if ($this->pinTransacties[$i]->getBedragInCenten() == $this->pinBestellingen[$j]->aantal) {
+		if ($this->pinTransacties[$i]->getBedragInCenten() == $this->pinBestellingen[$j]->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal) {
 			return 0;
 		} else {
 			return self::COST_VERKEERD_BEDRAG;

@@ -3,8 +3,8 @@
 namespace CsrDelft\command;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -18,14 +18,14 @@ use Symfony\Component\Console\Question\Question;
 class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 	/** @var MaaltijdenRepository */
 	private $maaltijdenRepository;
-	/** @var CiviBestellingModel */
-	private $civiBestellingModel;
+	/** @var CiviBestellingRepository */
+	private $civiBestellingRepository;
 	/** @var EntityManagerInterface */
 	private $em;
 
-	public function __construct(MaaltijdenRepository $maaltijdenRepository, CiviBestellingModel $civiBestellingModel, EntityManagerInterface $em) {
+	public function __construct(MaaltijdenRepository $maaltijdenRepository, CiviBestellingRepository $civiBestellingRepository, EntityManagerInterface $em) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->civiBestellingModel = $civiBestellingModel;
+		$this->civiBestellingRepository = $civiBestellingRepository;
 		$this->em = $em;
 
 		parent::__construct();
@@ -71,7 +71,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 
 		// Haal bestellingen op
 		$comment = sprintf('Datum maaltijd: %s', $datum->format('Y-M-d'));
-		$bestellingen = $this->civiBestellingModel->find('cie = "maalcie" AND comment = ? AND deleted = 0', [$comment])->fetchAll();
+		$bestellingen = $this->civiBestellingRepository->findBy(['cie' => 'maalcie', 'comment' => $comment, 'deleted' => false]);
 		$leden = [];
 		$som = 0;
 		foreach ($bestellingen as $bestelling) {
@@ -103,7 +103,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 			$this->em->transactional(function () use ($bestellingen, $progress, $maaltijden) {
 				reset($bestellingen);
 				foreach ($bestellingen as $bestelling) {
-					$this->civiBestellingModel->revert($bestelling);
+					$this->civiBestellingRepository->revert($bestelling);
 					$progress->advance();
 				}
 

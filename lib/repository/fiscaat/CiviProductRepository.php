@@ -32,14 +32,6 @@ class CiviProductRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param CiviProduct $product
-	 * @return CiviPrijs
-	 */
-	public function getPrijs($product) {
-		return $this->civiPrijsRepository->findOneBy(['product_id' => $product->id], ['van' => 'DESC']);
-	}
-
-	/**
 	 * @param int $id
 	 *
 	 * @return CiviProduct
