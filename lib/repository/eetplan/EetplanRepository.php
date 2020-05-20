@@ -121,7 +121,7 @@ class EetplanRepository extends AbstractRepository {
 		$factory->setBekenden($bekenden);
 
 		$bezocht = $this->createQueryBuilder('e')
-			->where("uid like :uid")
+			->where("e.uid like :uid")
 			->setParameter('uid', $lichting . '%')
 			->getQuery()->getResult();
 		$factory->setBezocht($bezocht);
