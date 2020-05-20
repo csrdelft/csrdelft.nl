@@ -7,9 +7,7 @@ use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\view\fiscaat\bestellingen\CiviBestellingInhoudTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
-use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTableResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

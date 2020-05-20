@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\fiscaat;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * Class CiviBestellingInhoud
@@ -18,6 +19,7 @@ class CiviBestellingInhoud {
 	 * @var integer
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
+	 * @Serializer\Groups("datatable")
 	 */
 	public $bestelling_id;
 	/**
@@ -29,6 +31,7 @@ class CiviBestellingInhoud {
 	 * @var integer
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
+	 * @Serializer\Groups("datatable")
 	 */
 	public $product_id;
 	/**
@@ -39,6 +42,7 @@ class CiviBestellingInhoud {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $aantal;
 
@@ -60,7 +64,31 @@ class CiviBestellingInhoud {
 	 * @return int
 	 */
 	public function getPrijs() {
-		return $this->product->tmpPrijs * $this->aantal;
+		return $this->product->getPrijsInt() * $this->aantal;
 	}
 
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 */
+	public function getStukprijs() {
+		return sprintf('€%.2f', $this->product->getPrijsInt() / 100);
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 */
+	public function getTotaalprijs() {
+		return sprintf('€%.2f', $this->getPrijs() / 100);
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("product")
+	 */
+	public function getDataTableProduct() {
+		return $this->product->beschrijving;
+	}
 }
