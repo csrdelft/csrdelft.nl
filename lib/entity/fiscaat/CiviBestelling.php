@@ -75,15 +75,6 @@ class CiviBestelling {
 	}
 
 	/**
-	 * @return string[]
-	 */
-	public function jsonSerialize() {
-		$data = parent::jsonSerialize();
-		$data['inhoud'] = $this->getInhoudTekst();
-		return $data;
-	}
-
-	/**
 	 * @return string
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("inhoud")
@@ -100,13 +91,13 @@ class CiviBestelling {
 	 * @return string
 	 */
 	public function getPinBeschrijving() {
-		$inhoud = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
+		$pinProduct = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 
-		if ($inhoud === false) {
+		if ($pinProduct === false) {
 			return "";
 		}
 
-		$beschrijving = sprintf('€%.2f PIN', $inhoud->aantal / 100);
+		$beschrijving = sprintf('€%.2f PIN', $pinProduct->aantal / 100);
 
 		$aantalInhoud = count($this->inhoud);
 
