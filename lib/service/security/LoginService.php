@@ -122,7 +122,7 @@ class LoginService {
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$account = $this->accountRepository->findOneBy(['private_token' => $token]);
 				if ($account) {
-					$this->login($account->uid, null, false, null, true, true, getDateTime());
+					$this->login($account->uid, null, false, null, true, true, date_create_immutable());
 				}
 			}
 		}
