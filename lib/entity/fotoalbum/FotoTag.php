@@ -16,7 +16,7 @@ use JsonSerializable;
  */
 class FotoTag implements JsonSerializable {
 	/**
-	 * @see PersistentEntity Unique Universal Identifier
+	 * Unique Universal Identifier
 	 * @var string
 	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()

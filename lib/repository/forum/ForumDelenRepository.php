@@ -9,7 +9,6 @@ use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\forum\ForumZoeken;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -53,7 +52,7 @@ class ForumDelenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param PersistentEntity|ForumDeel $entity
+	 * @param ForumDeel $entity
 	 * @return int
 	 */
 	public function create(ForumDeel $entity) {

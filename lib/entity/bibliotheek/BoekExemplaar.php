@@ -4,7 +4,6 @@
 namespace CsrDelft\entity\bibliotheek;
 
 
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BoekExemplaarRepository")
  * @ORM\Table("biebexemplaar")
  */
-class BoekExemplaar extends PersistentEntity {
+class BoekExemplaar {
 
 	/**
 	 * @var int

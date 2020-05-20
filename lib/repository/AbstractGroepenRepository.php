@@ -5,7 +5,6 @@ namespace CsrDelft\repository;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\GroepStatus;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
@@ -72,7 +71,7 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	/**
 	 * Set primary key.
 	 *
-	 * @param PersistentEntity|AbstractGroep $groep
+	 * @param AbstractGroep $groep
 	 * @return void
 	 * @throws ORMException
 	 * @throws OptimisticLockException
