@@ -47,11 +47,20 @@
       margin: 0 3em 0 0;
     }
 
+		.sponsors {
+			border-bottom: solid 4px $geel;
+			margin-bottom: 2em;
+			padding: 2em 0;
+		}
+
+		.copyright {
+			border-top: solid 4px black;
+			margin: 2em 0 1em 0;
+			padding: 2em 0 0 0;
+		}
+
     .copyright,.sponsors {
-      border-top: solid 4px $geel;
       list-style: none;
-      margin: 2em 0 1em 0;
-      padding: 2em 0 0 0;
       width: 100%;
       text-align: center;
 
@@ -59,8 +68,8 @@
         display: block;
         font-size: 0.9em;
         line-height: 1;
-        margin-left: 1em;
-        padding: 0 0 0 1em;
+        //margin-left: 1em;
+        //padding: 0 0 0 1em;
         margin-bottom: 2em;
 
         &:first-child {
