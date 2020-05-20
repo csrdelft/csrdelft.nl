@@ -8,7 +8,7 @@
  * @var \CsrDelft\entity\groepen\RechtenGroep[] $groepen
  * @var \CsrDelft\entity\groepen\Ketzer[] $ketzers
  * @var \CsrDelft\entity\groepen\Activiteit[] $activiteiten
- * @var object[] bestellinglog
+ * @var \CsrDelft\entity\fiscaat\CiviBestelling[] $bestellinglog
  * @var string $bestellingenlink
  * @var \CsrDelft\entity\corvee\CorveeTaak[] $corveetaken
  * @var \CsrDelft\entity\corvee\CorveeVoorkeur[] $corveevoorkeuren
@@ -436,9 +436,9 @@
 							<table class="table table-sm table-striped">
 								@foreach($bestellinglog as $bestelling)
 									<tr>
-										<td>{{implode(", ", $bestelling->inhoud)}}</td>
+										<td>{{$bestelling->getInhoudTekst()}}</td>
 										<td>{{format_bedrag($bestelling->totaal)}}</td>
-										<td>({{strftime('%D', strtotime($bestelling->moment))}})</td>
+										<td>({{date_format_intl($bestelling->moment, DATETIME_FORMAT)}})</td>
 									</tr>
 								@endforeach
 							</table>

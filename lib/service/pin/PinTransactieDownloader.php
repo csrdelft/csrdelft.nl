@@ -113,7 +113,7 @@ class PinTransactieDownloader
 			$labels = $xpath->query('td/label', $row);
 
 			$pinTransactie = new PinTransactie();
-			$pinTransactie->datetime = date(self::DATETIME_FORMAT, strtotime($labels->item(0)->nodeValue));
+			$pinTransactie->datetime = date_create_immutable($labels->item(0)->nodeValue);
 			$pinTransactie->brand = $labels->item(1)->nodeValue;
 			$pinTransactie->merchant = $labels->item(2)->nodeValue;
 			$pinTransactie->store = $labels->item(3)->nodeValue;

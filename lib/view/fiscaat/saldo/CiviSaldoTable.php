@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\saldo;
 
-use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;

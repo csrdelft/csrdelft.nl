@@ -1,10 +1,11 @@
 <?php
 
 namespace CsrDelft\view\fiscaat\pin;
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingInhoudTable;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\keuzevelden\DateTimeField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
 use CsrDelft\view\formulier\knoppen\ModalCloseButtons;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -22,7 +23,7 @@ class PinBestellingInfoForm extends ModalForm {
 		$fields = [];
 		$fields['lid'] = new LidField('uid', $pinBestelling->uid, 'Lid');
 		$fields['lid']->readonly = true;
-		$fields['moment'] = new DateTimeField('moment', $pinBestelling->moment, 'Moment');
+		$fields['moment'] = new DateTimeObjectField('moment', $pinBestelling->moment, 'Moment');
 		$fields['moment']->readonly = true;
 		$fields[] = new CiviBestellingInhoudTable($pinBestelling);
 

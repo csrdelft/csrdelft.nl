@@ -8,7 +8,7 @@
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\Mail;
-use CsrDelft\model\fiscaat\CiviBestellingModel;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
 use CsrDelft\service\pin\PinTransactieDownloader;
@@ -37,7 +37,7 @@ $pinTransactieRepository = $container->get(PinTransactieRepository::class);
 $pinTransactieMatchRepository = $container->get(PinTransactieMatchRepository::class);
 $pinTransactieMatcher = $container->get(PinTransactieMatcher::class);
 $pinTransactieDownloader = $container->get(PinTransactieDownloader::class);
-$civiBestellingModel = $container->get(CiviBestellingModel::class);
+$civiBestellingRepository = $container->get(CiviBestellingRepository::class);
 
 // Verwijder eerdere download.
 $vorigePinTransacties = $pinTransactieRepository->getPinTransactieInMoment($from, $to);
@@ -49,7 +49,7 @@ $pinTransactieRepository->clean($vorigePinTransacties);
 $pintransacties = $pinTransactieDownloader->download($from, env('PIN_URL'), env('PIN_STORE'), env('PIN_USERNAME'), env('PIN_PASSWORD'));
 
 // Haal pinbestellingen op.
-$pinbestellingen = $civiBestellingModel->getPinBestellingInMoment($from, $to);
+$pinbestellingen = $civiBestellingRepository->getPinBestellingInMoment($from, $to);
 
 try {
 	$pinTransactieMatcher->setPinTransacties($pintransacties);

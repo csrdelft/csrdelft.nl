@@ -12,7 +12,7 @@ use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\ProfielLogGroup;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
@@ -849,7 +849,7 @@ class Profiel implements Agendeerbaar {
 	 * @return float
 	 */
 	public function getCiviSaldo() {
-		$saldo = ContainerFacade::getContainer()->get(CiviSaldoModel::class)->getSaldo($this->uid);
+		$saldo = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->getSaldo($this->uid);
 		if ($saldo) {
 			return $saldo->saldo / (float) 100;
 		}

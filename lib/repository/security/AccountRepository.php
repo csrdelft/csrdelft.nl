@@ -6,8 +6,8 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\security\AccessRole;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\AccessService;
 use Doctrine\Persistence\ManagerRegistry;
@@ -108,9 +108,9 @@ class AccountRepository extends AbstractRepository {
 		if (!$profiel) {
 			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
-		if (ContainerFacade::getContainer()->get(CiviSaldoModel::class)->find('uid = ?', array($uid))->rowCount() === 0){
+		if (ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->find('uid = ?', array($uid))->rowCount() === 0){
 			// Maak een CiviSaldo voor dit account
-			ContainerFacade::getContainer()->get(CiviSaldoModel::class)->maakSaldo($uid);
+			ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->maakSaldo($uid);
 		}
 
 		$account = new Account();

@@ -4,13 +4,13 @@ namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\fiscaat\CiviProductRepository;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
@@ -95,7 +95,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @throws CsrGebruikerException
 	 */
 	protected function assertMagAanmelden(Maaltijd $maaltijd, $uid) {
-		if (ContainerFacade::getContainer()->get(CiviSaldoModel::class)->getSaldo($uid) === false) {
+		if (ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->getSaldo($uid) === false) {
 			throw new CsrGebruikerException('Aanmelden voor maaltijden niet toegestaan, geen CiviSaldo.');
 		}
 		if (!$this->checkAanmeldFilter($uid, $maaltijd->aanmeld_filter)) {

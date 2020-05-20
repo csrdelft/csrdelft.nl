@@ -20,8 +20,8 @@ class PinTransactie {
 	 */
 	public $id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var \DateTimeImmutable
+	 * @ORM\Column(type="datetime")
 	 */
 	public $datetime;
 	/**
@@ -94,5 +94,13 @@ class PinTransactie {
 		$centen = ltrim(str_replace(',', '', $bedrag), '0');
 
 		return intval($centen);
+	}
+
+	/**
+	 * @return string
+	 * @throws CsrException
+	 */
+	public function getKorteBeschrijving() {
+		return sprintf('€%.2f',$this->getBedragInCenten()/100);
 	}
 }

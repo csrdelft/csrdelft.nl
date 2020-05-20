@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\saldo;
 
-use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\formulier\getalvelden\BedragField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
