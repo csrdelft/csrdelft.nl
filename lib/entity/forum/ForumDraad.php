@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\CsrBB;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -74,6 +75,12 @@ class ForumDraad {
 	 */
 	public $laatste_post_id;
 	/**
+	 * @var ForumPost
+	 * @ORM\OneToOne(targetEntity="ForumPost")
+	 * @ORM\JoinColumn(name="laatste_post_id", referencedColumnName="post_id")
+	 */
+	public $laatste_post;
+	/**
 	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
 	 * @var string
 	 * @ORM\Column(type="uid", nullable=true)
@@ -124,7 +131,7 @@ class ForumDraad {
 	/**
 	 * Lijst van lezers (wanneer)
 	 * @var PersistentCollection|ForumDraadGelezen[]
-	 * @ORM\OneToMany(targetEntity="ForumDraadGelezen", mappedBy="draad", fetch="LAZY")
+	 * @ORM\OneToMany(targetEntity="ForumDraadGelezen", mappedBy="draad")
 	 */
 	public $lezers;
 	/**
@@ -140,8 +147,9 @@ class ForumDraad {
 	 */
 	public $gedeeld_met_deel;
 	/**
-	 * Forumposts
-	 * @var ForumPost[]
+	 * ForumPosts
+	 * @var PersistentCollection|ForumPost[]
+	 * @ORM\OneToMany(targetEntity="ForumPost", mappedBy="draad")
 	 */
 	private $forum_posts;
 	/**
@@ -163,8 +171,8 @@ class ForumDraad {
 	public function __construct() {
 		$this->verbergen = new ArrayCollection();
 		$this->meldingen = new ArrayCollection();
+		$this->forum_posts = new ArrayCollection();
 	}
-
 
 	public function magPosten() {
 		if ($this->verwijderd || $this->gesloten) {
@@ -231,7 +239,6 @@ class ForumDraad {
 	}
 
 	public function hasForumPosts() {
-		$this->getForumPosts();
 		return !empty($this->forum_posts);
 	}
 
@@ -241,10 +248,16 @@ class ForumDraad {
 	 * @return ForumPost[]
 	 */
 	public function getForumPosts() {
-		if (!isset($this->forum_posts)) {
-			$this->setForumPosts(ContainerFacade::getContainer()->get(ForumPostsRepository::class)->getForumPostsVoorDraad($this));
-		}
 		return $this->forum_posts;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLaatstePostSamenvatting() {
+		$laatste = $this->laatste_post;
+		$parseMail = CsrBB::parseMail($laatste->tekst);
+		return truncate($parseMail, 100);
 	}
 
 	/**
