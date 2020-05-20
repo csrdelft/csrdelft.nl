@@ -177,7 +177,7 @@ class EetplanRepository extends AbstractRepository {
 	 */
 	public function getBekendeHuizen($lichting) {
 		return $this->createQueryBuilder('e')
-			->where('e.uid like :uid and avond is null')
+			->where('e.uid like :uid and e.avond is null')
 			->setParameter('uid', $lichting . '%')
 			->getQuery()->getResult();
 	}
