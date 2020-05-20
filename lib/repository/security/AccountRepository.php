@@ -29,10 +29,15 @@ class AccountRepository extends AbstractRepository {
 	 * @var AccessService
 	 */
 	private $accessService;
+	/**
+	 * @var CiviSaldoRepository
+	 */
+	private $civiSaldoRepository;
 
-	public function __construct(ManagerRegistry $registry, AccessService $accessService) {
+	public function __construct(ManagerRegistry $registry, AccessService $accessService, CiviSaldoRepository $civiSaldoRepository) {
 		parent::__construct($registry, Account::class);
 		$this->accessService = $accessService;
+		$this->civiSaldoRepository = $civiSaldoRepository;
 	}
 
 	const ORM = Account::class;
@@ -108,9 +113,10 @@ class AccountRepository extends AbstractRepository {
 		if (!$profiel) {
 			throw new CsrGebruikerException('Profiel bestaat niet');
 		}
-		if (ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->find('uid = ?', array($uid))->rowCount() === 0){
+
+		if (!$this->civiSaldoRepository->getSaldo($uid)) {
 			// Maak een CiviSaldo voor dit account
-			ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->maakSaldo($uid);
+			$this->civiSaldoRepository->maakSaldo($uid);
 		}
 
 		$account = new Account();

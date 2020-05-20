@@ -78,7 +78,7 @@ h.t. Fiscus.';
 			$status = LidStatus::getFiscaalLidLike();
 		}
 
-		$saldi = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->find('saldo < ?', [$this->saldogrens]);
+		$saldi = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->getRoodstaandeLeden($this->saldogrens);
 
 		$return = [];
 		foreach ($saldi as $saldo) {

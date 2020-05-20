@@ -45,12 +45,12 @@ class PinTransactieController extends AbstractController {
 
 	public function __construct(
 		EntityManagerInterface $em,
-		CiviBestellingRepository $civiBestellingModel,
+		CiviBestellingRepository $civiBestellingRepository,
 		CiviSaldoRepository $civiSaldoRepository,
 		PinTransactieMatchRepository $pinTransactieMatchRepository,
 		PinTransactieRepository $pinTransactieRepository
 	) {
-		$this->civiBestellingModel = $civiBestellingModel;
+		$this->civiBestellingModel = $civiBestellingRepository;
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->pinTransactieMatchRepository = $pinTransactieMatchRepository;
 		$this->pinTransactieRepository = $pinTransactieRepository;
@@ -160,7 +160,7 @@ class PinTransactieController extends AbstractController {
 
 				$manager->remove($pinTransactieMatch);
 
-				$nieuwePinTransactieMatch = PinTransactieMatch::match($pinTransactie, $bestellingInhoud);
+				$nieuwePinTransactieMatch = PinTransactieMatch::match($pinTransactie, $bestelling);
 
 				$manager->persist($nieuwePinTransactieMatch);
 				$manager->flush();
@@ -272,9 +272,10 @@ class PinTransactieController extends AbstractController {
 	private function koppelMatches($missendeTransactie, $missendeBestelling) {
 		return $this->em->transactional(function () use ($missendeTransactie, $missendeBestelling) {
 			$bestelling = $missendeTransactie->bestelling;
+			$bestellingInhoud = $bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 			$transactie = $missendeBestelling->transactie;
 
-			if ($bestelling->aantal === $transactie->getBedragInCenten()) {
+			if ($bestellingInhoud->aantal === $transactie->getBedragInCenten()) {
 				$pinTransactieMatch = PinTransactieMatch::match($transactie, $bestelling);
 			} else {
 				$pinTransactieMatch = PinTransactieMatch::verkeerdBedrag($transactie, $bestelling);
@@ -423,16 +424,15 @@ class PinTransactieController extends AbstractController {
 	 */
 	public function verwijder_transactie() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$model = $this->pinTransactieMatchRepository;
 
-		$updated = $this->em->transactional(function () use ($selection, $model) {
+		$updated = $this->em->transactional(function () use ($selection) {
 			$updated = [];
 
 			$manager = $this->getDoctrine()->getManager();
 
 			foreach ($selection as $uuid) {
 				/** @var PinTransactieMatch $pinTransactieMatch */
-				$pinTransactieMatch = $model->retrieveByUUID($uuid);
+				$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUUID($uuid);
 
 				$bestelling = $pinTransactieMatch->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 

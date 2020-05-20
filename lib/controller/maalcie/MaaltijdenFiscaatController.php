@@ -41,12 +41,12 @@ class MaaltijdenFiscaatController {
 	public function __construct(
 		MaaltijdenRepository $maaltijdenRepository,
 		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		CiviBestellingRepository $civiBestellingModel,
+		CiviBestellingRepository $civiBestellingRepository,
 		CiviSaldoRepository $civiSaldoRepository
 	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->civiBestellingRepository = $civiBestellingModel;
+		$this->civiBestellingRepository = $civiBestellingRepository;
 		$this->civiSaldoRepository = $civiSaldoRepository;
 	}
 

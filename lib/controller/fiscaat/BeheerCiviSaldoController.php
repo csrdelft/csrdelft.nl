@@ -11,9 +11,7 @@ use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\ProfielService;
-use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
-use CsrDelft\view\fiscaat\saldo\CiviSaldoTableResponse;
 use CsrDelft\view\fiscaat\saldo\InleggenForm;
 use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
@@ -42,10 +40,10 @@ class BeheerCiviSaldoController extends AbstractController {
 	 */
 	private $profielService;
 
-	public function __construct(CiviSaldoRepository $civiSaldoRepository, CiviBestellingRepository $civiBestellingModel, ProfielService $profielService) {
+	public function __construct(CiviSaldoRepository $civiSaldoRepository, CiviBestellingRepository $civiBestellingRepository, ProfielService $profielService) {
 		$this->profielService = $profielService;
 		$this->civiSaldoRepository = $civiSaldoRepository;
-		$this->civiBestellingRepository = $civiBestellingModel;
+		$this->civiBestellingRepository = $civiBestellingRepository;
 	}
 
 	public function overzicht() {
