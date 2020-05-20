@@ -258,7 +258,7 @@
 				<dl class="col-md-6">
 					@if($profiel->getPatroonProfiel())
 						<dt>
-							@if($profiel->getPatroonProfiel()->geslacht === \CsrDelft\entity\Geslacht::Vrouw())
+							@if($profiel->getPatroonProfiel()->geslacht->getValue() === \CsrDelft\entity\Geslacht::Vrouw)
 								Matroon
 							@else
 								Patroon

@@ -51,17 +51,6 @@ abstract class Enum {
 		return static::$mapChoiceToDescription;
 	}
 
-	public static function isValidName($name, $strict = false) {
-		$constants = self::getConstants();
-
-		if ($strict) {
-			return array_key_exists($name, $constants);
-		}
-
-		$keys = array_map('strtolower', array_keys($constants));
-		return in_array(strtolower($name), $keys);
-	}
-
 	/**
 	 * Returns a value when called statically like so: MyEnum::SOME_VALUE() given SOME_VALUE is a class constant
 	 *
@@ -73,7 +62,12 @@ abstract class Enum {
 	 * @throws \BadMethodCallException
 	 */
 	public static function __callStatic($name, $arguments) {
-		return static::from($name);
+		if (isset(self::getConstants()[$name])) {
+			$value = self::getConstants()[$name];
+			return static::from($value);
+		}
+
+		throw new \BadMethodCallException("Enum " . static::class . '::' . $name . ' bestaat niet.');
 	}
 
 	/**

@@ -29,7 +29,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 
 			foreach ($groep->getLeden() as $lid) {
 				$profiel = ProfielRepository::get($lid->uid);
-				if ($profiel->geslacht === Geslacht::Man()) {
+				if ($profiel->geslacht->getValue() === Geslacht::Man) {
 					$mannen += 1;
 				} else {
 					$vrouwen += 1;

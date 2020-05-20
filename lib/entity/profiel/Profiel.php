@@ -670,9 +670,9 @@ class Profiel implements Agendeerbaar {
 				} elseif ($this->isLid() OR $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
 					if (LoginService::getProfiel()->status === LidStatus::Noviet) {
-						$naam = ($this->geslacht === Geslacht::Vrouw()) ? 'Mevr. ' : 'Dhr. ';
+						$naam = ($this->geslacht->getValue() === Geslacht::Vrouw) ? 'Mevr. ' : 'Dhr. ';
 					} else {
-						$naam = ($this->geslacht === Geslacht::Vrouw()) ? 'Ama. ' : 'Am. ';
+						$naam = ($this->geslacht->getValue() === Geslacht::Vrouw) ? 'Ama. ' : 'Am. ';
 					}
 					if (!empty($this->tussenvoegsel)) {
 						$naam .= ucfirst($this->tussenvoegsel) . ' ';

@@ -389,7 +389,7 @@ class ProfielRepository extends AbstractRepository {
 			}
 		}
 		// Kopjes
-		$mv = ($profiel->geslacht == Geslacht::Man() ? 'hem' : 'haar');
+		$mv = ($profiel->geslacht->getValue() === Geslacht::Man ? 'hem' : 'haar');
 		$enkelvoud = "Het volgende boek is nog door {$mv} geleend";
 		$meervoud = "De volgende boeken zijn nog door {$mv} geleend";
 		if ($bkncsr['aantal'])

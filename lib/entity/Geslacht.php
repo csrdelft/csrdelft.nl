@@ -6,6 +6,9 @@ use CsrDelft\common\Enum;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
+ *
+ * @method static Geslacht Man()
+ * @method static Geslacht Vrouw()
  */
 class Geslacht extends Enum {
 	/**
@@ -13,14 +16,6 @@ class Geslacht extends Enum {
 	 */
 	const Man = 'm';
 	const Vrouw = 'v';
-
-	public static function Man() {
-		return static::from(self::Man);
-	}
-
-	public static function Vrouw() {
-		return static::from(self::Vrouw);
-	}
 
 	/**
 	 * @var string[]
