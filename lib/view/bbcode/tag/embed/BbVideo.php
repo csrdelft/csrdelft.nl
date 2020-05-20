@@ -26,10 +26,9 @@ class BbVideo extends BbTag {
 	}
 
 	public function renderLight() {
-		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
-		$this->assertId($type, $id, $content);
+		list($src, $type) = $this->processVideo();
 
-		return BbHelper::lightLinkBlock('video', $content, $type . ' video', '', $previewthumb);
+		return BbHelper::lightLinkBlock('video', $src, $type . ' video', '');
 	}
 
 	/**
