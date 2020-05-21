@@ -4,7 +4,9 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\GroepStatistiek;
 use CsrDelft\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
@@ -198,4 +200,65 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 		return $qb->getQuery()->getResult();
 	}
 
+	/**
+	 * Bereken statistieken van de groepleden.
+	 *
+	 * @param AbstractGroep $groep
+	 * @return GroepStatistiek
+	 */
+	public function getStatistieken(AbstractGroep $groep) {
+		if ($groep->aantalLeden() == 0) {
+			return new GroepStatistiek(0, [], [], [], []);
+		}
+
+		$tijd = [];
+		foreach ($groep->getLeden() as $groeplid) {
+			$time = $groeplid->lid_sinds->getTimestamp();
+			if (isset($tijd[$time])) {
+				$tijd[$time] += 1;
+			} else {
+				$tijd[$time] = 1;
+			}
+		}
+		ksort($tijd);
+
+		$totaal = $groep->aantalLeden();
+		if ($groep instanceof HeeftAanmeldLimiet) {
+			if ($groep->getAanmeldLimiet() === null) {
+				$totaal .= ' (geen limiet)';
+			} else {
+				$totaal .= ' van ' . $groep->getAanmeldLimiet();
+			}
+		}
+
+		$verticalen = $this->createQueryBuilder('g')
+			->where('g.id = :id')
+			->setParameter('id', $groep->id)
+			->select('v.naam, count(p.uid) as aantal')
+			->innerJoin('g.leden', 'l')
+			->innerJoin('l.profiel', 'p')
+			->innerJoin('p.verticale_groep', 'v')
+			->groupBy('v.naam')
+			->getQuery()->getArrayResult();
+
+		$geslachten = $this->createQueryBuilder('g')
+			->where('g.id = :id')
+			->setParameter('id', $groep->id)
+			->select('p.geslacht, COUNT(p.uid) as aantal')
+			->innerJoin('g.leden', 'l')
+			->innerJoin('l.profiel', 'p')
+			->groupBy('p.geslacht')
+			->getQuery()->getArrayResult();
+
+		$lidjaren = $this->createQueryBuilder('g')
+			->where('g.id = :id')
+			->setParameter('id', $groep->id)
+			->select('p.lidjaar, count(p.uid) as aantal')
+			->innerJoin('g.leden', 'l')
+			->innerJoin('l.profiel', 'p')
+			->groupBy('p.lidjaar')
+			->getQuery()->getArrayResult();
+
+		return new GroepStatistiek($totaal, $verticalen, $geslachten, $lidjaren, $tijd);
+	}
 }

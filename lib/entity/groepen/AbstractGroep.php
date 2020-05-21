@@ -8,7 +8,7 @@ use CsrDelft\common\Eisen;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -139,9 +139,16 @@ abstract class AbstractGroep implements DataTableEntry {
 	public function getFamilieSuggesties() {
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
-		$tableName = $em->getClassMetadata(get_class($this))->getTableName();
+		/** @var AbstractGroepenRepository $repo */
+		$repo = $em->getRepository(get_class($this));
 
-		return ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT familie'], $tableName)->fetchAll(PDO::FETCH_COLUMN);
+		$result = $repo->createQueryBuilder('g')
+			->select('DISTINCT g.familie')
+			->getQuery()->getScalarResult();
+
+		return array_map(function ($e) {
+			return $e['familie'];
+		}, $result);
 	}
 
 	public function getOpmerkingSuggesties() {

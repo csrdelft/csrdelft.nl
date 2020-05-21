@@ -7,6 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\security\Account;
@@ -266,6 +267,12 @@ class Profiel implements Agendeerbaar {
 	 * @var string
 	 */
 	public $verticale;
+	/**
+	 * @var Verticale
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\groepen\Verticale")
+	 * @ORM\JoinColumn(name="verticale", referencedColumnName="letter")
+	 */
+	public $verticale_groep;
 	/**
 	 * @ORM\Column(type="boolean")
 	 * @var boolean

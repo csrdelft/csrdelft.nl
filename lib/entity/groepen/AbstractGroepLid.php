@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
@@ -44,6 +45,12 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 	/**
 	 * CommissieFunctie of opmerking bij lidmaatschap
 	 * @var CommissieFunctie

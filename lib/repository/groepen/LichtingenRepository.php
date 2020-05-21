@@ -4,7 +4,6 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\Lichting;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;

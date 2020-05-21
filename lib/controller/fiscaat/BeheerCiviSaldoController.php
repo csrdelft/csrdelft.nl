@@ -6,7 +6,6 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviSaldo;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -151,13 +150,11 @@ class BeheerCiviSaldoController extends AbstractController {
 		]);
 	}
 
-	public function zoek(Request $request, Database $database) {
+	public function zoek(Request $request) {
 		$zoekterm = $request->query->get('q');
 
-		$pdo = $database->getDatabase();
-
 		$leden = $this->profielService->zoekLeden($zoekterm, 'naam', 'alle', 'achternaam');
-		$uids = array_map(function ($profiel) use ($pdo) { return $pdo->quote($profiel->uid); }, $leden);
+		$uids = array_map(function ($profiel) { return $profiel->uid; }, $leden);
 
 		$civiSaldi = $this->civiSaldoRepository->zoeken($uids, $zoekterm);
 

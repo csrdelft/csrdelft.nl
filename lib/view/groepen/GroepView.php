@@ -8,9 +8,11 @@
 
 namespace CsrDelft\view\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\GroepTab;
 use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\groepen\leden\GroepEetwensView;
@@ -43,7 +45,10 @@ class GroepView implements FormElement, ToResponse {
 				break;
 
 			case GroepTab::Statistiek:
-				$this->leden = new GroepStatistiekView($groep);
+				/** @var AbstractGroepenRepository $repository */
+				$repository = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager')->getRepository(get_class($groep));
+				$statistiek = $repository->getStatistieken($groep);
+				$this->leden = new GroepStatistiekView($groep, $statistiek);
 				break;
 
 			case GroepTab::Emails:

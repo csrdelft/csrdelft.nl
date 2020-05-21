@@ -190,7 +190,10 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if (!$groep->mag(AccessAction::Bekijken)) {
 			throw new CsrToegangException();
 		}
-		return new GroepStatistiekView($groep);
+
+		$statistieken = $this->model->getStatistieken($groep);
+
+		return new GroepStatistiekView($groep, $statistieken);
 	}
 
 	public function emails($id) {
