@@ -148,8 +148,7 @@ class ForumDraad {
 	public $gedeeld_met_deel;
 	/**
 	 * ForumPosts
-	 * @var PersistentCollection|ForumPost[]
-	 * @ORM\OneToMany(targetEntity="ForumPost", mappedBy="draad")
+	 * @var ForumPost[]
 	 */
 	private $forum_posts;
 	/**
@@ -171,7 +170,6 @@ class ForumDraad {
 	public function __construct() {
 		$this->verbergen = new ArrayCollection();
 		$this->meldingen = new ArrayCollection();
-		$this->forum_posts = new ArrayCollection();
 	}
 
 	public function magPosten() {
@@ -239,7 +237,7 @@ class ForumDraad {
 	}
 
 	public function hasForumPosts() {
-		return !empty($this->forum_posts);
+		return !empty($this->getForumPosts());
 	}
 
 	/**
@@ -248,6 +246,9 @@ class ForumDraad {
 	 * @return ForumPost[]
 	 */
 	public function getForumPosts() {
+		if (!isset($this->forum_posts)) {
+			$this->setForumPosts(ContainerFacade::getContainer()->get(ForumPostsRepository::class)->getForumPostsVoorDraad($this));
+		}
 		return $this->forum_posts;
 	}
 

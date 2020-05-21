@@ -87,7 +87,7 @@ class ForumPost {
 	private $aantal_gelezen;
 	/**
 	 * @var ForumDraad
-	 * @ORM\ManyToOne(targetEntity="ForumDraad", inversedBy="forum_posts")
+	 * @ORM\ManyToOne(targetEntity="ForumDraad")
 	 * @ORM\JoinColumn(name="draad_id", referencedColumnName="draad_id")
 	 */
 	public $draad;
