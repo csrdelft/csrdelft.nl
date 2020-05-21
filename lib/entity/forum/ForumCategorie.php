@@ -58,8 +58,8 @@ class ForumCategorie {
 	}
 
 
-	public function magLezen() {
-		return LoginService::mag($this->rechten_lezen);
+	public function magLezen($auth = null) {
+		return LoginService::mag($this->rechten_lezen, $auth);
 	}
 
 	/**
