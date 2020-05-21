@@ -48,10 +48,6 @@ class SaldoGrafiekService {
 			->orderBy('b.moment', 'DESC')
 			->getQuery()->getResult();
 
-		if (count($bestellingen) == 0) {
-			return null;
-		}
-
 		foreach ($bestellingen as $bestelling) {
 			$data[] = ['t' => $bestelling->moment->format(DateTime::RFC2822), 'y' => $saldo];
 			$saldo += $bestelling->totaal;
