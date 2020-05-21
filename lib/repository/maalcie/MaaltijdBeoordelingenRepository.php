@@ -2,10 +2,8 @@
 
 namespace CsrDelft\repository\maalcie;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
