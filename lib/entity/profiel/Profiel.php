@@ -268,12 +268,6 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $verticale;
 	/**
-	 * @var Verticale
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\groepen\Verticale")
-	 * @ORM\JoinColumn(name="verticale", referencedColumnName="letter")
-	 */
-	public $verticale_groep;
-	/**
 	 * @ORM\Column(type="boolean")
 	 * @var boolean
 	 */
