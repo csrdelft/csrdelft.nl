@@ -2,11 +2,9 @@
 
 namespace CsrDelft\entity\eetplan;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\groepen\WoonoordenRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -30,6 +28,11 @@ class Eetplan implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $woonoord_id;
+	/**
+	 * @var Woonoord
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\groepen\Woonoord")
+	 */
+	public $woonoord;
 
 	/**
 	 * @ORM\Column(type="date", nullable=true)
@@ -54,19 +57,12 @@ class Eetplan implements DataTableEntry {
 	public $noviet;
 
 	/**
-	 * @return Woonoord|false|mixed
-	 */
-	public function getWoonoord() {
-		return ContainerFacade::getContainer()->get(WoonoordenRepository::class)->get($this->woonoord_id);
-	}
-
-	/**
 	 * @return string
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("woonoord")
 	 */
 	public function getDataTableWoonoord() {
-		return $this->getWoonoord()->naam;
+		return $this->woonoord->naam;
 	}
 
 	/**

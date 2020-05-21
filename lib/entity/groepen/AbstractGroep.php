@@ -10,10 +10,10 @@ use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use PDO;
 use Symfony\Component\Serializer\Annotation as Serializer;
 use function common\short_class;
 
@@ -24,7 +24,7 @@ use function common\short_class;
  * Een groep met leden.
  * @ORM\MappedSuperclass()
  */
-abstract class AbstractGroep implements DataTableEntry {
+abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	/**
 	 * Primary key
 	 * @var int
@@ -260,5 +260,13 @@ abstract class AbstractGroep implements DataTableEntry {
 
 	public function getUUID() {
 		return $this->id . '@' . short_class($this) . '.csrdelft.nl';
+	}
+
+	public function getId() {
+		return $this->id;
+	}
+
+	public function getWeergave(): string {
+		return $this->naam;
 	}
 }

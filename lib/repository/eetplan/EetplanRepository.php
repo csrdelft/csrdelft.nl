@@ -94,7 +94,7 @@ class EetplanRepository extends AbstractRepository {
 			$eetplanFeut[$sessie->uid]['avonden'][] = [
 				'datum' => $sessie->avond,
 				'woonoord_id' => $sessie->woonoord_id,
-				'woonoord' => $sessie->getWoonoord()->naam
+				'woonoord' => $sessie->woonoord->naam
 			];
 
 			if (!isset($avonden[date_format_intl($sessie->avond, self::FMT_DATE)])) {

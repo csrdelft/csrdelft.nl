@@ -219,7 +219,7 @@ class EetplanFactory {
 			$nieuweetplan = new Eetplan();
 			$nieuweetplan->avond = date_create_immutable($avond);
 			$nieuweetplan->uid = $uid;
-			$nieuweetplan->woonoord_id = $huis_id;
+			$nieuweetplan->woonoord = $this->huizen[$huis_index];
 
 			$eetplan[] = $nieuweetplan;
 
