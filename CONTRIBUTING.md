@@ -102,26 +102,23 @@ source <repo root>\data\###.sql (Met ### voor de data file);
 ```
 
 #### Dependencies
-Download en installeer [Composer](https://getcomposer.org/). Dit wordt gebruikt om de dependencies te installeren.
-Open vervolgens een terminal in de projectmap en voer het volgende commando uit.
+Download en installeer [Composer](https://getcomposer.org/) en [Yarn](https://classic.yarnpkg.com/en/docs/install).
+Deze tools worden gebruikt om respectievelijk PHP en Javascript dependencies te installeren.
+
+Open een terminal en voer het volgende commando uit:
 
 ```bash
-composer install
-composer migrate (als de csrdelft database al is aangemaakt en de data dump staat erin)
+composer update-dev
 ```
 
-Download en installeer [Yarn](https://classic.yarnpkg.com/en/docs/install). Dit wordt gebruikt om JavaScript dependencies te installeren en om JavaScript te builden.
+(Kijk in `composer.json` om te zien wat er precies gebeurt als je dit doet).
+
+Tip: als je met javascript aan de gang gaat is het fijn om automatisch je javascript bestanden te builden, gebruik hier voor het volgende commando:
 
 ```bash
-# Installeer dependencies
-$ yarn
-
-# Run build
-$ yarn run dev
-
 # Run build en blijf watchen
 $ yarn run watch
-# of
+# of (als de eerste niet goed werkt, dat kan op sommige systemen)
 $ yarn run watch-poll
 ```
 
@@ -130,8 +127,7 @@ Download en installeer [ImageMagick](https://imagemagick.org/script/download.php
 #### Klaar
 Ga nu naar `http://dev-csrdelft.nl`
 
-P.S. Iedere keer als je wil gaan programmeren aan de stek, moet je weer `yarn run watch` uitvoeren.  
-P.P.S `composer install` telkens runnen is ook wel handig.
+Als je verse code hebt gepulld kan het handig zijn om `composer update-dev` nog een keer uit te voeren.
 
 #### Cache (geavanceerd)
 
