@@ -3,14 +3,13 @@
 namespace CsrDelft\view\datatable;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\common\datatable\CustomDataTableEntry;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
-use Doctrine\Common\Persistence\Mapping\MappingException;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl
@@ -74,7 +73,7 @@ class DataTable implements View, FormElement, ToResponse {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
-		$this->dataTableId = uniqid_safe(classNameZonderNamespace(get_class($this->model)));
+		$this->dataTableId = uniqid_safe(classNameZonderNamespace($orm));
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column
@@ -88,17 +87,18 @@ class DataTable implements View, FormElement, ToResponse {
 			'defaultContent' => ''
 		);
 
-		$metadata = null;
-		if (!is_subclass_of($orm, PersistentEntity::class)) { // Deze klasse is in doctrine.
-			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
-			try {
-				$metadata = $manager->getClassMetaData($orm);
-			} catch (MappingException $ex) {
-				// ignore deze klasse is niet in doctrine
+		if (is_a($orm, CustomDataTableEntry::class, true)) {
+			foreach ($orm::getFieldNames() as $attribute) {
+				$this->addColumn($attribute);
 			}
-		}
 
-		if ($metadata) {
+			foreach ($orm::getIdentifierFieldNames() as $attribute) {
+				$this->hideColumn($attribute);
+			}
+		} else {
+			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
+			$metadata = $manager->getClassMetaData($orm);
+
 			// generate columns from entity attributes
 			foreach ($metadata->getFieldNames() as $attribute) {
 				$this->addColumn($attribute);
@@ -108,17 +108,6 @@ class DataTable implements View, FormElement, ToResponse {
 			foreach ($metadata->getIdentifierFieldNames() as $attribute) {
 				$this->hideColumn($attribute);
 			}
-		} else {
-			// generate columns from entity attributes
-			foreach ($this->model->getAttributes() as $attribute) {
-				$this->addColumn($attribute);
-			}
-
-			// hide primary key columns
-			foreach ($this->model->getPrimaryKey() as $attribute) {
-				$this->hideColumn($attribute);
-			}
-
 		}
 	}
 
