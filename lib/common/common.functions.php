@@ -8,8 +8,6 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
@@ -550,8 +548,7 @@ function printDebug() {
 }
 
 function getDebug(
-	$get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true, $sql = true,
-	$sqltrace = true
+	$get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true
 ) {
 	$debug = '';
 	if ($get) {
@@ -571,12 +568,6 @@ function getDebug(
 	}
 	if ($server) {
 		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
-	}
-	if ($sql) {
-		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => ContainerFacade::getContainer()->get(DatabaseAdmin::class)->getQueries(), "PDO" => ContainerFacade::getContainer()->get(Database::class)->getQueries()), true));
-	}
-	if ($sqltrace) {
-		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(ContainerFacade::getContainer()->get(Database::class)->getTrace(), true));
 	}
 	return $debug;
 }

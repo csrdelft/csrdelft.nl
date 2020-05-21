@@ -9,10 +9,11 @@ use CsrDelft\entity\corvee\CorveePuntenOverzichtDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\corvee\CorveeVrijstelling;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * CorveePuntenService  |  P.W.G. Brussee (brussee@live.nl)
@@ -26,14 +27,24 @@ class CorveePuntenService {
 	 * @var CorveeTakenRepository
 	 */
 	private $corveeTakenRepository;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
 
-	public function __construct(CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeTakenRepository $corveeTakenRepository) {
+	public function __construct(EntityManagerInterface $entityManager, ProfielRepository $profielRepository, CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeTakenRepository $corveeTakenRepository) {
 		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
+		$this->entityManager = $entityManager;
+		$this->profielRepository = $profielRepository;
 	}
 
 	public function resetCorveejaar() {
-		return Database::transaction(function () {
+		return $this->entityManager->transactional(function () {
 			$aantal = 0;
 			$errors = array();
 			/** @var CorveeVrijstelling[] $vrijstellingen */
@@ -56,7 +67,7 @@ class CorveePuntenService {
 							$aantal++;
 						} else { // niet dubbel toekennen
 							$vrijstelling->percentage = 0;
-							$this->corveeVrijstellingenRepository->saveVrijstelling($vrijstelling->uid, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
+							$this->corveeVrijstellingenRepository->saveVrijstelling($vrijstelling->profiel, $vrijstelling->begin_datum, $vrijstelling->eind_datum, $vrijstelling->percentage);
 						}
 					}
 					$punten -= intval(instelling('corvee', 'punten_per_jaar'));
@@ -104,28 +115,12 @@ class CorveePuntenService {
 	}
 
 	public function loadPuntenTotaalVoorAlleLeden() {
-		return $this->loadPuntenTotaal('status IN("S_LID", "S_GASTLID", "S_NOVIET")');
-	}
-
-	private function loadPuntenTotaal($where = null, $values = array(), $limit = null) {
-		$sql = 'SELECT uid, corvee_punten, corvee_punten_bonus';
-		$sql .= ' FROM profielen';
-		if ($where !== null) {
-			$sql .= ' WHERE ' . $where;
-		}
-		$sql .= ' ORDER BY achternaam, voornaam ASC';
-		if (is_int($limit) && $limit > 0) {
-			$sql .= ' LIMIT ' . $limit;
-		}
-		$db = ContainerFacade::getContainer()->get(Database::class);
-		$query = $db->getDatabase()->prepare($sql);
-		$query->execute($values);
-		$result = $query->fetchAll();
+		$leden = $this->profielRepository->findByLidStatus([LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet]);
 		$totalen = array();
-		foreach ($result as $row) {
-			$totalen[$row['uid']] = array(
-				'puntenTotaal' => (int)$row['corvee_punten'],
-				'bonusTotaal' => (int)$row['corvee_punten_bonus']
+		foreach ($leden as $lid) {
+			$totalen[$lid->uid] = array(
+				'puntenTotaal' => (int)$lid->corvee_punten,
+				'bonusTotaal' => (int)$lid->corvee_punten_bonus,
 			);
 		}
 		return $totalen;
@@ -137,22 +132,17 @@ class CorveePuntenService {
 	 */
 	public function loadPuntenVoorAlleLeden($functies = null) {
 		$taken = $this->corveeTakenRepository->getAlleTaken(true); // grouped by uid
-		$vrijstellingen = $this->corveeVrijstellingenRepository->getAlleVrijstellingen(true); // grouped by uid
 		$matrix = $this->loadPuntenTotaalVoorAlleLeden();
-		foreach ($matrix as $uid => $totalen) {
-			$profiel = ProfielRepository::get($uid); // false if lid does not exist
-			if (!$profiel) {
-				throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
-			}
+
+		$vrijstellingen = $this->corveeVrijstellingenRepository->findAll();
+
+		foreach ($vrijstellingen as $vrijstelling) {
+			$profiel = $vrijstelling->profiel;
 			$lidtaken = array();
-			if (array_key_exists($uid, $taken)) {
-				$lidtaken = $taken[$uid];
+			if (array_key_exists($profiel->uid, $taken)) {
+				$lidtaken = $taken[$profiel->uid];
 			}
-			$vrijstelling = false;
-			if (array_key_exists($uid, $vrijstellingen)) {
-				$vrijstelling = $vrijstellingen[$uid];
-			}
-			$matrix[$uid] = $this->loadPuntenVoorLid($profiel, $functies, $lidtaken, $vrijstelling);
+			$matrix[$profiel->uid] = $this->loadPuntenVoorLid($profiel, $functies, $lidtaken, $vrijstelling);
 		}
 		return $matrix;
 	}

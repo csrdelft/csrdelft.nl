@@ -2,16 +2,13 @@
 
 namespace CsrDelft\repository\forum;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDraad;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\repository\security\AccountRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use PDO;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -129,16 +126,16 @@ class ForumCategorieRepository extends AbstractRepository {
 			->getQuery()->execute();
 
 		// Voor alle ex-leden settings opschonen
-		$uids = ContainerFacade::getContainer()->get(Database::class)->sqlSelect(array('uid'), 'profielen', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
-		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
-		foreach ($uids as $uid) {
-			if (AccountRepository::isValidUid($uid)) {
-				$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLid($uid);
-				$this->forumDradenVerbergenRepository->toonAllesVoorLid($uid);
-				$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($uid);
-				$this->forumDelenMeldingRepository->stopAlleMeldingenVoorLid($uid);
-				$this->forumDradenReagerenRepository->verwijderReagerenVoorLid($uid);
-			}
+		$profielen = $this->_em->getRepository(Profiel::class)->createQueryBuilder('p')
+			->where('p.status in (:status)')
+			->setParameter('status', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden))
+			->getQuery()->getResult();
+		foreach ($profielen as $profiel) {
+			$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLid($profiel->uid);
+			$this->forumDradenVerbergenRepository->toonAllesVoorLid($profiel->uid);
+			$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($profiel->uid);
+			$this->forumDelenMeldingRepository->stopAlleMeldingenVoorLid($profiel->uid);
+			$this->forumDradenReagerenRepository->verwijderReagerenVoorLid($profiel->uid);
 		}
 
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen

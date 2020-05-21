@@ -7,7 +7,7 @@
 		}
 	],
 	"require": {
-		"csrdelft/bb": "1.1.8",
+		"csrdelft/bb": "1.1.9",
 		"csrdelft/orm": "^1.9",
 		"easyrdf/easyrdf": "^0.9.1",
 		"eftec/bladeone": "3.21",
@@ -92,6 +92,12 @@
 			"@flushcache",
 			"rm .onderhoud",
 			"@console cache:warmup"
+		],
+		"update-dev": [
+			"@composer install",
+			"@migrate",
+			"yarn",
+			"yarn dev"
 		],
 		"auto-scripts": {
 			"cache:clear": "symfony-cmd",

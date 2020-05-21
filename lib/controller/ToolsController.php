@@ -2,15 +2,12 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -28,6 +25,7 @@ use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
 use CsrDelft\view\View;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -173,7 +171,7 @@ class ToolsController extends AbstractController {
 	 */
 	public function novieten() {
 		return view('tools.novieten', [
-			'novieten' => ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['*'], 'profielen', 'status = ? AND lidjaar = ?', ['S_NOVIET', date('Y')])
+			'novieten' => $this->profielRepository->findBy(['status' => LidStatus::Noviet, 'lidjaar' => date('Y')])
 		]);
 	}
 
@@ -314,13 +312,13 @@ class ToolsController extends AbstractController {
 		return new JsonResponse($result);
 	}
 
-	public function memcachestats() {
+	public function memcachestats(ContainerInterface $container) {
 		if (DEBUG || LoginService::mag(P_ADMIN) || $this->suService->isSued()) {
 			ob_start();
 
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
-			debugprint(ContainerFacade::getContainer()->get(OrmMemcache::class)->getCache()->getStats());
+			debugprint($container->get('stek.cache.memcache')->getStats());
 
 			return new PlainView(ob_get_clean());
 		}

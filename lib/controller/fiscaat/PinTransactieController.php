@@ -11,7 +11,6 @@ use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
 use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
 use CsrDelft\model\entity\fiscaat\CiviSaldoCommissieEnum;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
@@ -237,7 +236,7 @@ class PinTransactieController extends AbstractController {
 			/** @var PinTransactieMatch $pinTransactieMatch2 */
 			$pinTransactieMatch2 = $this->pinTransactieMatchRepository->retrieveByUUID($selection[1]);
 
-			$nieuwePinTransactieMatch = Database::transaction(function () use ($pinTransactieMatch1, $pinTransactieMatch2) {
+			$nieuwePinTransactieMatch = $this->em->transactional(function () use ($pinTransactieMatch1, $pinTransactieMatch2) {
 				if ($pinTransactieMatch1->bestelling === null && $pinTransactieMatch2->transactie === null) {
 					$nieuwePinTransactieMatch = $this->koppelMatches($pinTransactieMatch2, $pinTransactieMatch1);
 				} elseif ($pinTransactieMatch2->bestelling === null && $pinTransactieMatch1->transactie === null) {

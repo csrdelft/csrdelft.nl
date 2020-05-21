@@ -3,19 +3,30 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\service\GroepenService;
+use CsrDelft\entity\Geslacht;
+use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\GroepStatistiek;
 use DateTime;
 use function array_key_first;
 use function array_key_last;
 
 class GroepStatistiekView extends GroepTabView {
+	/**
+	 * @var GroepStatistiek
+	 */
+	private $statistiek;
+
+	public function __construct(AbstractGroep $groep, GroepStatistiek $statistiek) {
+		parent::__construct($groep);
+		$this->statistiek = $statistiek;
+	}
 
 	private function verticale($data) {
 		$verticalen = [];
 		$deelnemers = [];
 		foreach ($data as $row) {
-			$verticalen[] = $row[0];
-			$deelnemers[] = $row[1];
+			$verticalen[] = $row['naam'];
+			$deelnemers[] = $row['aantal'];
 		}
 
 		return htmlentities(json_encode([
@@ -33,12 +44,12 @@ class GroepStatistiekView extends GroepTabView {
 		$mannen = 0;
 		$vrouwen = 0;
 		foreach ($data as $row) {
-			switch ($row[0]) {
-				case 'm':
-					$mannen = $row[1];
+			switch ($row['geslacht']->getValue()) {
+				case Geslacht::Man:
+					$mannen = $row['aantal'];
 					break;
-				case 'v':
-					$vrouwen = $row[1];
+				case Geslacht::Vrouw:
+					$vrouwen = $row['aantal'];
 					break;
 			}
 		}
@@ -58,8 +69,8 @@ class GroepStatistiekView extends GroepTabView {
 		$aantal = [];
 		$lichting = [];
 		foreach ($data as $row) {
-			$aantal[] = (int)$row[1];
-			$lichting[] = (int)$row[0];
+			$aantal[] = (int)$row['aantal'];
+			$lichting[] = (int)$row['lidjaar'];
 		}
 
 		return htmlentities(json_encode([
@@ -101,13 +112,11 @@ class GroepStatistiekView extends GroepTabView {
 	 * @throws CsrException
 	 */
 	public function getTabContent() {
-		$statistieken = GroepenService::getStatistieken($this->groep);
-
-		$verticale = $this->verticale($statistieken->verticale);
-		$geslacht = $this->geslacht($statistieken->geslacht);
-		$lichting = $this->lichting($statistieken->lichting);
-		$tijd = $this->tijd($statistieken->tijd);
-		$totaal = $statistieken->totaal;
+		$verticale = $this->verticale($this->statistiek->verticale);
+		$geslacht = $this->geslacht($this->statistiek->geslacht);
+		$lichting = $this->lichting($this->statistiek->lichting);
+		$tijd = $this->tijd($this->statistiek->tijd);
+		$totaal = $this->statistiek->totaal;
 
 		return <<<HTML
 <h4>Verticale</h4>

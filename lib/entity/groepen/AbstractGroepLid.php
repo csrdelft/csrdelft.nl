@@ -3,8 +3,8 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,9 +26,6 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	public function getUUID() {
 		return $this->groep_id . '.' . $this->uid . '@' . strtolower(short_class($this)) . '.csrdelft.nl';
 	}
-	protected static $computed_attributes = [
-		'link' => [T::String],
-	];
 	/**
 	 * Shared primary key
 	 * Foreign key
@@ -48,6 +45,12 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 	/**
 	 * CommissieFunctie of opmerking bij lidmaatschap
 	 * @var CommissieFunctie

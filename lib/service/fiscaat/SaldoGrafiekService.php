@@ -44,13 +44,9 @@ class SaldoGrafiekService {
 		$bestellingen = $this->civiBestellingRepository->createQueryBuilder('b')
 			->where('b.uid = :uid and b.deleted = false and b.moment > :moment')
 			->setParameter('uid', $klant->uid)
-			->setParameter('moment', date_create_immutable()->sub(new DateInterval('PT' . $timespan . 'D')))
+			->setParameter('moment', date_create_immutable()->sub(new DateInterval('P' . $timespan . 'D')))
 			->orderBy('b.moment', 'DESC')
 			->getQuery()->getResult();
-
-		if (count($bestellingen) == 0) {
-			return null;
-		}
 
 		foreach ($bestellingen as $bestelling) {
 			$data[] = ['t' => $bestelling->moment->format(DateTime::RFC2822), 'y' => $saldo];
