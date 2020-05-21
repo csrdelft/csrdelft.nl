@@ -9,7 +9,6 @@ use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumZoeken;
-use CsrDelft\entity\security\Account;
 use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\forum\ForumDelenMeldingRepository;
@@ -30,6 +29,7 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -129,14 +129,12 @@ class ForumController extends AbstractController {
 	 * RSS feed van recente draadjes tonen.
 	 */
 	public function rss() {
-		header('Content-Type: application/rss+xml; charset=UTF-8');
-		/**
-		 * @var Account $account
-		 */
-		return view('forum.rss', [
+		$response = new Response(view('forum.rss', [
 			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
 			'privatelink' => LoginService::getAccount()->getRssLink()
-		]);
+		]));
+		$response->headers->set('Content-Type', 'application/rss+xml; charset=UTF-8');
+		return $response;
 	}
 
 	/**
