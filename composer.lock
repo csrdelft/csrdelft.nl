@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b48d61c4834356083d97d7b42aaee68",
+    "content-hash": "4aad40434af1c9d21a105c93c2f831a5",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -398,16 +398,16 @@
         },
         {
             "name": "csrdelft/bb",
-            "version": "v1.1.8",
+            "version": "v1.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/bb.git",
-                "reference": "d474bf45fbcea5abafc35185051e552e302f5239"
+                "reference": "fea37a4c6cc65e721a27f014ecbb8e3e1460e090"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/bb/zipball/d474bf45fbcea5abafc35185051e552e302f5239",
-                "reference": "d474bf45fbcea5abafc35185051e552e302f5239",
+                "url": "https://api.github.com/repos/csrdelft/bb/zipball/fea37a4c6cc65e721a27f014ecbb8e3e1460e090",
+                "reference": "fea37a4c6cc65e721a27f014ecbb8e3e1460e090",
                 "shasum": ""
             },
             "require": {
@@ -435,7 +435,7 @@
             ],
             "description": "C.S.R. BB Parser",
             "homepage": "https://csrdelft.github.io/bb",
-            "time": "2020-04-23T15:33:01+00:00"
+            "time": "2020-05-21T08:17:18+00:00"
         },
         {
             "name": "csrdelft/orm",
