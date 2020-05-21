@@ -93,6 +93,12 @@
 			"rm .onderhoud",
 			"@console cache:warmup"
 		],
+		"update-dev": [
+			"@composer install",
+			"@migrate",
+			"yarn",
+			"yarn dev"
+		],
 		"auto-scripts": {
 			"cache:clear": "symfony-cmd",
 			"assets:install %PUBLIC_DIR%": "symfony-cmd"
