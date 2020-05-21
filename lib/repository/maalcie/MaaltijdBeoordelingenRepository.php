@@ -56,21 +56,23 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 		$kwaliteitAantal = 0;
 		foreach ($beoordelingen as $b) {
 			// Haal gemiddelde beoordeling van lid op
-			$userAverage = ContainerFacade::getContainer()->get(Database::class)->sqlSelect(array('AVG(kwantiteit)', 'AVG(kwaliteit)'), 'mlt_beoordelingen', 'uid = ?', array($b->uid));
-			$userAverage->execute();
-			$avg = $userAverage->fetchAll();
+			$avg = $this->createQueryBuilder('mb')
+				->select('avg(mb.kwantiteit) as kwantiteit, avg(mb.kwaliteit) as kwaliteit')
+				->where('mb.uid = :uid')
+				->setParameter('uid', $b->uid)
+				->getQuery()->getArrayResult();
 
 			// Alleen als waarde is ingevuld
 			if (!is_null($b->kwantiteit)) {
 				$kwantiteit += $b->kwantiteit;
 				// Bepaal afwijking en tel op
-				$kwantiteitAfwijking += $b->kwantiteit - $avg[0][0];
+				$kwantiteitAfwijking += $b->kwantiteit - $avg[0]['kwantiteit'];
 				$kwantiteitAantal++;
 			}
 			if (!is_null($b->kwaliteit)) {
 				$kwaliteit += $b->kwaliteit;
 				// Bepaal afwijking en tel op
-				$kwaliteitAfwijking += $b->kwaliteit - $avg[0][1];
+				$kwaliteitAfwijking += $b->kwaliteit - $avg[0]['kwaliteit'];
 				$kwaliteitAantal++;
 			}
 		}

@@ -17,7 +17,7 @@ class BeheerMaaltijdenBeoordelingenTable extends DataTable {
 		$this->hidecolumn('product_id');
 		$this->hideColumn('aanmeld_limiet');
 		$this->hideColumn('gesloten');
-		$this->hideColumn('laatst_gesloten');
+		$this->deleteColumn('laatst_gesloten');
 		$this->hideColumn('verwijderd');
 		$this->hideColumn('aanmeld_filter');
 		$this->hideColumn('omschrijving');

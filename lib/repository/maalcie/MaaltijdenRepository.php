@@ -144,7 +144,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	 */
 	public function getMaaltijdenHistorie() {
 		return $this->createQueryBuilder('m')
-			->where('m.verwijderd = false and m.datum <= CURDATE()')
+			->where('m.verwijderd = false and m.datum <= NOW()')
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
 			->getQuery()->getResult();
