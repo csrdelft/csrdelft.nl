@@ -4,7 +4,6 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,9 +25,6 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	public function getUUID() {
 		return $this->groep_id . '.' . $this->uid . '@' . strtolower(short_class($this)) . '.csrdelft.nl';
 	}
-	protected static $computed_attributes = [
-		'link' => [T::String],
-	];
 	/**
 	 * Shared primary key
 	 * Foreign key

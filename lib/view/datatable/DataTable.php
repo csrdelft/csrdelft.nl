@@ -4,7 +4,6 @@ namespace CsrDelft\view\datatable;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\PersistenceModel;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\formulier\FormElement;
@@ -27,7 +26,6 @@ class DataTable implements View, FormElement, ToResponse {
 	use ToHtmlResponse;
 	const POST_SELECTION = 'DataTableSelection';
 
-	/** @var PersistenceModel */
 	public $model;
 
 	protected $dataUrl;

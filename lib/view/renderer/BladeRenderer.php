@@ -1,7 +1,6 @@
 <?php
 namespace CsrDelft\view\renderer;
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\Orm\DependencyManager;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\Icon;
 use eftec\bladeone\BladeOne;
@@ -23,10 +22,9 @@ class BladeRenderer implements Renderer {
 		// Tijden compilen doet dit er niet toe.
 		if (MODE !== 'TRAVIS') {
 			$this->bladeOne->setInjectResolver(function ($className) {
-				if (is_a($className, DependencyManager::class, true)) {
-					/** @var $className DependencyManager */
+				try {
 					return ContainerFacade::getContainer()->get($className);
-				} else {
+				} catch (Exception $e) {
 					return new $className();
 				}
 			});
