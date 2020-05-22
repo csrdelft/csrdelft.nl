@@ -11,8 +11,6 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
-use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
-use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
@@ -52,90 +50,6 @@ class ProfielController extends AbstractController {
 	 */
 	private $profielRepository;
 	/**
-	 * @var VoorkeurOpmerkingRepository
-	 */
-	private $voorkeurOpmerkingRepository;
-	/**
-	 * @var CommissieVoorkeurRepository
-	 */
-	private $commissieVoorkeurRepository;
-	/**
-	 * @var FotoTagsRepository
-	 */
-	private $fotoTagsRepository;
-	/**
-	 * @var FotoRepository
-	 */
-	private $fotoRepository;
-	/**
-	 * @var BesturenRepository
-	 */
-	private $besturenRepository;
-	/**
-	 * @var CommissiesRepository
-	 */
-	private $commissiesRepository;
-	/**
-	 * @var BoekRecensieRepository
-	 */
-	private $boekRecensieRepository;
-	/**
-	 * @var MaaltijdAbonnementenRepository
-	 */
-	private $maaltijdAbonnementenRepository;
-	/**
-	 * @var MaaltijdAanmeldingenRepository
-	 */
-	private $maaltijdAanmeldingenRepository;
-	/**
-	 * @var BoekExemplaarRepository
-	 */
-	private $boekExemplaarRepository;
-	/**
-	 * @var ForumPostsRepository
-	 */
-	private $forumPostsRepository;
-	/**
-	 * @var CorveeKwalificatiesRepository
-	 */
-	private $corveeKwalificatiesRepository;
-	/**
-	 * @var CorveeVrijstellingenRepository
-	 */
-	private $corveeVrijstellingenRepository;
-	/**
-	 * @var CorveeVoorkeurenRepository
-	 */
-	private $corveeVoorkeurenRepository;
-	/**
-	 * @var CorveeTakenRepository
-	 */
-	private $corveeTakenRepository;
-	/**
-	 * @var CiviBestellingRepository
-	 */
-	private $civiBestellingRepository;
-	/**
-	 * @var ActiviteitenRepository
-	 */
-	private $activiteitenRepository;
-	/**
-	 * @var KetzersRepository
-	 */
-	private $ketzersRepository;
-	/**
-	 * @var RechtenGroepenRepository
-	 */
-	private $rechtenGroepenRepository;
-	/**
-	 * @var OnderverenigingenRepository
-	 */
-	private $onderverenigingenRepository;
-	/**
-	 * @var WerkgroepenRepository
-	 */
-	private $werkgroepenRepository;
-	/**
 	 * @var LidToestemmingRepository
 	 */
 	private $lidToestemmingRepository;
@@ -143,75 +57,21 @@ class ProfielController extends AbstractController {
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
-	/**
-	 * @var SaldoGrafiekService
-	 */
-	private $saldoGrafiekModel;
-	/**
-	 * @var VerjaardagenService
-	 */
-	private $verjaardagenService;
 
 	public function __construct(
 		ProfielRepository $profielRepository,
 		AccountRepository $accountRepository,
-		ActiviteitenRepository $activiteitenRepository,
-		BesturenRepository $besturenRepository,
-		BoekExemplaarRepository $boekExemplaarRepository,
-		BoekRecensieRepository $boekRecensieRepository,
-		CiviBestellingRepository $civiBestellingRepository,
-		CommissieVoorkeurRepository $commissieVoorkeurRepository,
-		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
-		CommissiesRepository $commissiesRepository,
-		CorveeTakenRepository $corveeTakenRepository,
-		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
-		ForumPostsRepository $forumPostsRepository,
-		FotoRepository $fotoRepository,
-		FotoTagsRepository $fotoTagsRepository,
-		KetzersRepository $ketzersRepository,
-		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
-		LidToestemmingRepository $lidToestemmingRepository,
-		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
-		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
-		OnderverenigingenRepository $onderverenigingenRepository,
-		RechtenGroepenRepository $rechtenGroepenRepository,
-		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
-		WerkgroepenRepository $werkgroepenRepository,
-		SaldoGrafiekService $saldoGrafiekModel,
-		VerjaardagenService $verjaardagenService
+		LidToestemmingRepository $lidToestemmingRepository
 	) {
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
-		$this->activiteitenRepository = $activiteitenRepository;
-		$this->besturenRepository = $besturenRepository;
-		$this->boekExemplaarRepository = $boekExemplaarRepository;
-		$this->boekRecensieRepository = $boekRecensieRepository;
-		$this->civiBestellingRepository = $civiBestellingRepository;
-		$this->commissieVoorkeurRepository = $commissieVoorkeurRepository;
-		$this->commissiesRepository = $commissiesRepository;
-		$this->corveeTakenRepository = $corveeTakenRepository;
-		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
-		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
-		$this->forumPostsRepository = $forumPostsRepository;
-		$this->fotoRepository = $fotoRepository;
-		$this->fotoTagsRepository = $fotoTagsRepository;
-		$this->ketzersRepository = $ketzersRepository;
-		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
-		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
-		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
-		$this->onderverenigingenRepository = $onderverenigingenRepository;
-		$this->rechtenGroepenRepository = $rechtenGroepenRepository;
-		$this->voorkeurOpmerkingRepository = $voorkeurOpmerkingRepository;
-		$this->werkgroepenRepository = $werkgroepenRepository;
-		$this->saldoGrafiekModel = $saldoGrafiekModel;
-		$this->verjaardagenService = $verjaardagenService;
 	}
 
 	public function resetPrivateToken($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
-		if ($profiel === false) {
+		if (!$profiel) {
 			throw new CsrNotFoundException();
 		}
 
@@ -220,10 +80,32 @@ class ProfielController extends AbstractController {
 		}
 
 		$this->accountRepository->resetPrivateToken($profiel->account);
-		return $this->profiel($uid);
+
+		return $this->redirectToRoute('profiel-profiel', ['uid' => $uid]);
 	}
 
-	public function profiel($uid) {
+	public function profiel(
+		$uid,
+		BesturenRepository $besturenRepository,
+		CommissiesRepository $commissiesRepository,
+		WerkgroepenRepository $werkgroepenRepository,
+		OnderverenigingenRepository $onderverenigingenRepository,
+		RechtenGroepenRepository $rechtenGroepenRepository,
+		KetzersRepository $ketzersRepository,
+		ActiviteitenRepository $activiteitenRepository,
+		CiviBestellingRepository $civiBestellingRepository,
+		CorveeTakenRepository $corveeTakenRepository,
+		CorveeVoorkeurenRepository $corveeVoorkeurenRepository,
+		BoekExemplaarRepository $boekExemplaarRepository,
+		BoekRecensieRepository $boekRecensieRepository,
+		FotoRepository $fotoRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		CorveeVrijstellingenRepository $corveeVrijstellingenRepository,
+		ForumPostsRepository $forumPostsRepository,
+		FotoTagsRepository $fotoTagsRepository,
+		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
+		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
+	) {
 		if ($uid == null) {
 			$uid = LoginService::getUid();
 		}
@@ -235,9 +117,9 @@ class ProfielController extends AbstractController {
 		}
 
 		$fotos = [];
-		foreach ($this->fotoTagsRepository->findBy(['keyword' => $uid], null, 3) as $tag) {
+		foreach ($fotoTagsRepository->findBy(['keyword' => $uid], null, 3) as $tag) {
 			/** @var Foto $foto */
-			$foto = $this->fotoRepository->retrieveByUUID($tag->refuuid);
+			$foto = $fotoRepository->retrieveByUUID($tag->refuuid);
 			if ($foto) {
 				$fotos[] = new FotoBBView($foto);
 			}
@@ -245,25 +127,25 @@ class ProfielController extends AbstractController {
 
 		return view('profiel.profiel', [
 			'profiel' => $profiel,
-			'besturen' => $this->besturenRepository->getGroepenVoorLid($uid),
-			'commissies' => $this->commissiesRepository->getGroepenVoorLid($uid),
-			'werkgroepen' => $this->werkgroepenRepository->getGroepenVoorLid($uid),
-			'onderverenigingen' => $this->onderverenigingenRepository->getGroepenVoorLid($uid),
-			'groepen' => $this->rechtenGroepenRepository->getGroepenVoorLid($uid),
-			'ketzers' => $this->ketzersRepository->getGroepenVoorLid($uid),
-			'activiteiten' => $this->activiteitenRepository->getGroepenVoorLid($uid),
-			'bestellinglog' => $this->civiBestellingRepository->getBestellingenVoorLid($uid, 10),
+			'besturen' => $besturenRepository->getGroepenVoorLid($uid),
+			'commissies' => $commissiesRepository->getGroepenVoorLid($uid),
+			'werkgroepen' => $werkgroepenRepository->getGroepenVoorLid($uid),
+			'onderverenigingen' => $onderverenigingenRepository->getGroepenVoorLid($uid),
+			'groepen' => $rechtenGroepenRepository->getGroepenVoorLid($uid),
+			'ketzers' => $ketzersRepository->getGroepenVoorLid($uid),
+			'activiteiten' => $activiteitenRepository->getGroepenVoorLid($uid),
+			'bestellinglog' => $civiBestellingRepository->getBestellingenVoorLid($uid, 10),
 			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginService::getUid() === $uid ? '' : '/' . $uid),
-			'corveetaken' => $this->corveeTakenRepository->getTakenVoorLid($uid),
-			'corveevoorkeuren' => $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid($uid),
-			'corveevrijstelling' => $this->corveeVrijstellingenRepository->getVrijstelling($uid),
-			'corveekwalificaties' => $this->corveeKwalificatiesRepository->getKwalificatiesVanLid($uid),
-			'forumpostcount' => $this->forumPostsRepository->getAantalForumPostsVoorLid($uid),
-			'forumrecent' => $this->forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
-			'boeken' => $this->boekExemplaarRepository->getEigendom($uid),
-			'recenteAanmeldingen' => $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($uid, date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))),
-			'abos' => $this->maaltijdAbonnementenRepository->getAbonnementenVoorLid($uid),
-			'gerecenseerdeboeken' => $this->boekRecensieRepository->getVoorLid($uid),
+			'corveetaken' => $corveeTakenRepository->getTakenVoorLid($uid),
+			'corveevoorkeuren' => $corveeVoorkeurenRepository->getVoorkeurenVoorLid($uid),
+			'corveevrijstelling' => $corveeVrijstellingenRepository->getVrijstelling($uid),
+			'corveekwalificaties' => $corveeKwalificatiesRepository->getKwalificatiesVanLid($uid),
+			'forumpostcount' => $forumPostsRepository->getAantalForumPostsVoorLid($uid),
+			'forumrecent' => $forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
+			'boeken' => $boekExemplaarRepository->getEigendom($uid),
+			'recenteAanmeldingen' => $maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($uid, date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))),
+			'abos' => $maaltijdAbonnementenRepository->getAbonnementenVoorLid($uid),
+			'gerecenseerdeboeken' => $boekRecensieRepository->getVoorLid($uid),
 			'fotos' => $fotos
 		]);
 	}
@@ -402,42 +284,42 @@ class ProfielController extends AbstractController {
 
 
 	public function stamboom($uid = null) {
+		$profiel = $uid ? $this->profielRepository->get($uid) : LoginService::getProfiel();
+
 		return view('profiel.stamboom', [
-			'profiel' => ProfielRepository::get($uid) ?? LoginService::getProfiel(),
+			'profiel' => $profiel,
 		]);
 	}
 
-	public function verjaardagen() {
+	public function verjaardagen(VerjaardagenService $verjaardagenService) {
 		$nu = time();
 		return view('verjaardagen.alle', [
 			'dezemaand' => date('n', $nu),
 			'dezedag' => date('d', $nu),
-			'verjaardagen' => $this->verjaardagenService->getJaar(),
+			'verjaardagen' => $verjaardagenService->getJaar(),
 		]);
 	}
 
-	public function saldo($uid, $timespan) {
-		if ($this->saldoGrafiekModel->magGrafiekZien($uid)) {
-			return new JsonResponse($this->saldoGrafiekModel->getDataPoints($uid, $timespan));
+	public function saldo($uid, $timespan, SaldoGrafiekService $saldoGrafiekService) {
+		if ($saldoGrafiekService->magGrafiekZien($uid)) {
+			return new JsonResponse($saldoGrafiekService->getDataPoints($uid, $timespan));
 		} else {
 			throw new CsrToegangException();
 		}
 	}
 
 	public function vcard($uid) {
-		$profiel = ProfielRepository::get($uid);
+		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
 			throw new CsrNotFoundException();
 		}
 
-		return new VcardResponse(view('profiel.vcard', [
-			'profiel' => $profiel,
-		])->toString());
+		return new VcardResponse(view('profiel.vcard', ['profiel' => $profiel])->toString());
 	}
 
 	public function kaartje($uid) {
-		return view('profiel.kaartje', ['profiel' => ProfielRepository::get($uid)]);
+		return view('profiel.kaartje', ['profiel' => $this->profielRepository->get($uid)]);
 	}
 
 	public function redirectWithUid($route) {
