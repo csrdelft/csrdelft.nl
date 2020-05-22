@@ -9,6 +9,7 @@ use CsrDelft\entity\peilingen\PeilingOptie;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
 use CsrDelft\service\PeilingenService;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieTable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,7 +44,7 @@ class PeilingOptiesController extends AbstractController {
 	/**
 	 * @param EntityManagerInterface $em
 	 * @param $id
-	 * @return PeilingOptieForm|Response
+	 * @return GenericDataTableResponse|PeilingOptieForm
 	 * @throws ORMException
 	 */
 	public function toevoegen(EntityManagerInterface $em, $id) {
@@ -68,8 +69,8 @@ class PeilingOptiesController extends AbstractController {
 	}
 
 	/**
-	 * @return Response
 	 * @throws CsrGebruikerException
+	 * @return GenericDataTableResponse
 	 */
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
