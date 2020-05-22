@@ -17,7 +17,9 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\AbstractGroepLedenRepository;
 use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
@@ -590,8 +592,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			throw new CsrToegangException();
 		}
 
-		/** @var AbstractGroepLid $lid */
-		$lid = $em->getRepository($groep->getLidType())->nieuw($groep, $uid);
+		/** @var AbstractGroepLedenRepository $repository */
+		$repository = $em->getRepository($groep->getLidType());
+		$lid = $repository->nieuw($groep, $uid);
 
 		$form = new GroepAanmeldenForm($lid, $groep);
 
@@ -607,6 +610,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 	public function aanmelden(EntityManagerInterface $em, $id) {
 		$groep = $this->model->get($id);
+		/** @var AbstractGroepLedenRepository $model */
 		$model = $em->getRepository($groep->getLidType());
 
 		if (!$groep->mag(AccessAction::Beheren)) {
@@ -622,6 +626,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 		if ($form->validate()) {
 			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
+			$lid->profiel = ProfielRepository::get($lid->uid);
 			$model->save($lid);
 			return $this->tableData([$lid]);
 		} else {
