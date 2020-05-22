@@ -52,6 +52,8 @@ use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * AbstractGroepenController.php
@@ -278,7 +280,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			 * @var Profiel $profiel
 			 */
 			$profiel = LoginService::getProfiel();
-			if ($groep instanceof Activiteit AND empty($groep->rechten_aanmelden)) {
+			if ($groep instanceof Activiteit && empty($groep->rechten_aanmelden)) {
 				switch ($groep->soort) {
 
 					case ActiviteitSoort::Lichting:
@@ -389,7 +391,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			}
 			/** @var AbstractGroep $groep */
 			$groep = $this->model->retrieveByUUID($selection[0]);
-			if (!$groep OR !$groep->mag(AccessAction::Wijzigen)) {
+			if (!$groep || !$groep->mag(AccessAction::Wijzigen)) {
 				throw new CsrToegangException();
 			}
 			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
@@ -404,17 +406,22 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	/**
+	 * @param SerializerInterface $serializer
 	 * @param $id
 	 * @return GenericDataTableResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderen($id) {
+	public function verwijderen(SerializerInterface $serializer, $id) {
 		$response = [];
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($id);
 		if ($groep && $groep->mag(AccessAction::Verwijderen) && count($groep->getLeden()) === 0) {
-			$this->changeLogRepository->log($groep, 'delete', print_r($groep, true), null);
+			$old = $serializer->serialize($groep, 'json', [
+				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($obj) { return $obj->id ?? ""; },
+				AbstractNormalizer::IGNORED_ATTRIBUTES => ['familieSuggesties'],
+			]);
+			$this->changeLogRepository->log($groep, 'delete', $old, null);
 			$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));
 			$this->model->delete($groep);
 		}
@@ -510,7 +517,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function voorbeeld($id) {
 		/** @var AbstractGroep $groep */
 		$groep = $this->model->retrieveByUUID($id);
-		if (!$groep OR !$groep->mag(AccessAction::Bekijken)) {
+		if (!$groep or !$groep->mag(AccessAction::Bekijken)) {
 			throw new CsrToegangException();
 		}
 		return new GroepPreviewForm($groep);
@@ -723,7 +730,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groep = $this->model->get($id);
 
 		// Vind de groep uit deze familie met het laatste eind_moment
-		$ot_groep_statement = $this->model->findOneBy(["familie" => $groep->familie,  'status' => 'ot'], ['eind_moment',  'DESC']);
+		$ot_groep_statement = $this->model->findOneBy(["familie" => $groep->familie, 'status' => 'ot'], ['eind_moment', 'DESC']);
 
 		if ($ot_groep_statement) {
 			throw new CsrGebruikerException('Geen o.t. groep gevonden');
@@ -736,7 +743,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			if ($ot_groep->getLid($uid)) {
 				throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
 			}
-			if (!$groep->mag(AccessAction::Afmelden) AND !$groep->mag(AccessAction::Beheren) AND !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
+			if (!$groep->mag(AccessAction::Afmelden) and !$groep->mag(AccessAction::Beheren) and !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
 				throw new CsrGebruikerException();
 			}
 			$em->transactional(function () use ($groep, $ot_groep, $uid, $em) {

@@ -5,6 +5,7 @@ namespace CsrDelft\entity\groepen;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\model\entity\security\AccessAction;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,12 +49,15 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $afmelden_tot;
-
 	/**
 	 * @var KetzerDeelnemer
 	 * @ORM\OneToMany(targetEntity="KetzerDeelnemer", mappedBy="groep")
 	 */
 	public $leden;
+
+	public function __construct() {
+		$this->leden = new ArrayCollection();
+	}
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
@@ -110,7 +114,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 
 			case AccessAction::Bewerken:
 				// Controleer bewerkperiode
-				if ( $nu > $this->bewerken_tot) {
+				if ($nu > $this->bewerken_tot) {
 					return false;
 				}
 				break;
