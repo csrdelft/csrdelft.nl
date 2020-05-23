@@ -94,7 +94,7 @@ class WachtwoordController extends AbstractController {
 			$account = $this->accountRepository->findOneByEmail($values['mail']);
 			// mag wachtwoord reset aanvragen?
 			// (mag ook als na verify($tokenString) niet ingelogd is met wachtwoord en dus AuthenticationMethod::url_token is)
-			if (!$account || !AccessService::mag($account, P_LOGGED_IN, AuthenticationMethod::getTypeOptions())) {
+			if (!$account || !AccessService::mag($account, P_LOGGED_IN, AuthenticationMethod::getEnumValues())) {
 				setMelding('E-mailadres onjuist', -1);
 			} else {
 				if ($this->oneTimeTokensRepository->hasToken($account->uid, '/wachtwoord/reset')) {

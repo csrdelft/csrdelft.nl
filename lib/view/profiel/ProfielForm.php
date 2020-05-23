@@ -85,8 +85,8 @@ class ProfielForm extends Formulier {
 
 		if ($admin) {
 			$statussen = array();
-			foreach (LidStatus::getTypeOptions() as $optie) {
-				$statussen[$optie] = LidStatus::getDescription($optie);
+			foreach (LidStatus::getEnumValues() as $optie) {
+				$statussen[$optie] = LidStatus::from($optie)->getDescription();
 			}
 			$fields[] = new SelectField('status', $profiel->status, 'Lidstatus', $statussen);
 			$fields[] = new HtmlComment('<p>Bij het wijzigen van de lidstatus worden overbodige <span class="waarschuwing">gegevens verwijderd</span>, onomkeerbaar, opletten dus!</p>');

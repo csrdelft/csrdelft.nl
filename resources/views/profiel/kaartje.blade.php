@@ -12,7 +12,7 @@
 		@endif
 		<p class="naam">
 			<a href="/profiel/{{$profiel->uid}}" class="lidLink {{$profiel->status}}">
-				{{$profiel->getNaam('volledig')}} &nbsp; {{CsrDelft\model\entity\LidStatus::getChar($profiel->status)}}
+				{{$profiel->getNaam('volledig')}} &nbsp; {{CsrDelft\model\entity\LidStatus::from($profiel->status)->getChar()}}
 			</a>
 		</p>
 		<p>

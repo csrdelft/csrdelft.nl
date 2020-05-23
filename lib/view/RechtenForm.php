@@ -41,12 +41,12 @@ class RechtenForm extends ModalForm {
 			}
 
 			$acties = array();
-			foreach (AccessAction::getTypeOptions() as $option) {
-				$acties[$option] = AccessAction::getDescription($option);
+			foreach (AccessAction::getEnumValues() as $option) {
+				$acties[$option] = AccessAction::from($option)->getDescription();
 			}
 			$fields[] = new SelectField('action', $ac->action, 'Actie', $acties);
 		} else {
-			$fields[] = new HtmlComment('<label>Actie</label><div class="dikgedrukt">' . AccessAction::getDescription($ac->action) . '</div>');
+			$fields[] = new HtmlComment('<label>Actie</label><div class="dikgedrukt">' . AccessAction::from($ac->action)->getDescription() . '</div>');
 		}
 		$fields[] = new RequiredRechtenField('subject', $ac->subject, 'Toegestaan voor');
 

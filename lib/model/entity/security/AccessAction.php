@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\security;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
 /**
  * AccessAction.php
@@ -11,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  *
  * CRUD + groepen-acties.
  */
-abstract class AccessAction extends PersistentEnum {
+class AccessAction extends Enum {
 
 	// lezen
 	/**
@@ -39,22 +39,6 @@ abstract class AccessAction extends PersistentEnum {
 	 */
 	const Beheren = 'm'; // manage
 	const Rechten = 'p'; // permissions\
-
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::Bekijken => self::Bekijken,
-		self::Aanmelden => self::Aanmelden,
-		self::Bewerken => self::Bewerken,
-		self::Afmelden => self::Afmelden,
-		self::Opvolging => self::Opvolging,
-		self::Aanmaken => self::Aanmaken,
-		self::Wijzigen => self::Wijzigen,
-		self::Verwijderen => self::Verwijderen,
-		self::Beheren => self::Beheren,
-		self::Rechten => self::Rechten,
-	];
 
 	/**
 	 * @var string[]

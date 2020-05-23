@@ -106,12 +106,12 @@ class AgendaItem implements Agendeerbaar {
 	}
 
 	public function magBekijken($ical = false) {
-		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
+		$auth = ($ical ? AuthenticationMethod::getEnumValues() : null);
 		return LoginService::mag($this->rechten_bekijken, $auth);
 	}
 
 	public function magBeheren($ical = false) {
-		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
+		$auth = ($ical ? AuthenticationMethod::getEnumValues() : null);
 		if (LoginService::mag(P_AGENDA_MOD, $auth)) {
 			return true;
 		}

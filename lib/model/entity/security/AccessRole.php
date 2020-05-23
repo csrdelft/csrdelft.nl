@@ -2,19 +2,17 @@
 
 namespace CsrDelft\model\entity\security;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 use CsrDelft\repository\security\AccessRepository;
 
 /**
- * AccessRole.enum.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * RBAC MAC roles.
  *
  * @see AccessRepository
  */
-abstract class AccessRole extends PersistentEnum {
+class AccessRole extends Enum {
 
 	/**
 	 * AccessRole opties.
@@ -38,22 +36,6 @@ abstract class AccessRole extends PersistentEnum {
 	/**
 	 * @var string[]
 	 */
-	protected static $supportedChoices = [
-		self::Nobody => self::Nobody,
-		self::Eter => self::Eter,
-		self::Oudlid => self::Oudlid,
-		self::Lid => self::Lid,
-		self::BASFCie => self::BASFCie,
-		self::MaalCie => self::MaalCie,
-		self::Bestuur => self::Bestuur,
-		self::PubCie => self::PubCie,
-		self::Fiscaat => self::Fiscaat,
-		self::ForumModerator => self::ForumModerator,
-	];
-
-	/**
-	 * @var string[]
-	 */
 	protected static $mapChoiceToDescription = [
 		self::Nobody => 'Ex-lid/Nobody',
 		self::Eter => 'Eter (inlog voor abo\'s)',
@@ -68,28 +50,12 @@ abstract class AccessRole extends PersistentEnum {
 	];
 
 	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToChar = [
-		self::Nobody => 'N',
-		self::Eter => 'E',
-		self::Oudlid => 'O',
-		self::Lid => 'L',
-		self::BASFCie => 'BASF',
-		self::MaalCie => 'M',
-		self::Bestuur => 'B',
-		self::PubCie => 'P',
-		self::Fiscaat => 'F',
-		self::ForumModerator => 'FM',
-	];
-
-	/**
 	 * @param string $from
 	 * @return string[]
 	 */
 	public static function canChangeAccessRoleTo($from) {
 		if ($from === self::PubCie) {
-			return static::getTypeOptions();
+			return static::getEnumValues();
 		} elseif ($from === self::Bestuur) {
 			return [self::Nobody, self::Eter, self::Oudlid, self::Lid];
 		} else {

@@ -37,7 +37,7 @@ class PinTransactieMatchTableResponse extends DataTableResponse {
 			return [
 				'UUID' => $entity->getUUID(),
 				'id' => $entity->id,
-				'status' => PinTransactieMatchStatusEnum::getDescription($entity->status),
+				'status' => PinTransactieMatchStatusEnum::from($entity->status)->getDescription(),
 				'moment' => date_format_intl($entity->getMoment(), DATETIME_FORMAT),
 				'transactie_id' => $entity->transactie->id ?? null,
 				'transactie' => $transactieBeschrijving,

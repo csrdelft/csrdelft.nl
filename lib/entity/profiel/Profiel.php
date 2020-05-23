@@ -684,7 +684,7 @@ class Profiel implements Agendeerbaar {
 					}
 					// status char weergeven bij oudleden en ereleden
 					if ($this->isOudlid()) {
-						$naam .= ' ' . LidStatus::getChar($this->status);
+						$naam .= ' ' . LidStatus::from($this->status)->getChar();
 					}
 				} // geen lid
 				else {
@@ -699,7 +699,7 @@ class Profiel implements Agendeerbaar {
 					$naam .= $this->achternaam;
 					// status char weergeven bij kringels
 					if ($this->status === LidStatus::Kringel) {
-						$naam .= ' ' . LidStatus::getChar($this->status);
+						$naam .= ' ' . LidStatus::from($this->status)->getChar();
 					}
 				}
 

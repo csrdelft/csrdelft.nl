@@ -82,7 +82,7 @@ class ToestemmingController extends AbstractController {
 		        'leden' => LidStatus::getLidLike(),
                 'oudleden' => LidStatus::getOudlidLike(),
                 'ledenoudleden' => array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike()),
-                'iedereen' => LidStatus::getTypeOptions(),
+                'iedereen' => LidStatus::getEnumValues(),
             ];
 
             $toestemming = group_by('uid', $this->lidToestemmingRepository->getToestemmingForIds($ids));

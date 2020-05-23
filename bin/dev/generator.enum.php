@@ -25,7 +25,6 @@ function generateEnums() {
 }
 
 /**
- * @param \CsrDelft\Orm\Entity\PersistentEnum $enum
  * @throws Exception
  */
 function generateTypescript($enum) {

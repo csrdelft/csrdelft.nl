@@ -2,8 +2,7 @@
 
 namespace CsrDelft\model\entity\security;
 
-use CsrDelft\common\CsrException;
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
 /**
  * AuthenticationMethod.enum.php
@@ -12,7 +11,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  *
  * Authentication methods for LoginSession.
  */
-abstract class AuthenticationMethod extends PersistentEnum {
+class AuthenticationMethod extends Enum {
 
 	/**
 	 * AuthenticationMethod opties.
@@ -26,17 +25,6 @@ abstract class AuthenticationMethod extends PersistentEnum {
 	/**
 	 * @var string[]
 	 */
-	protected static $supportedChoices = [
-		self::url_token => self::url_token,
-		self::cookie_token => self::cookie_token,
-		self::password_login => self::password_login,
-		self::recent_password_login => self::recent_password_login,
-		self::password_login_and_one_time_token => self::password_login_and_one_time_token,
-	];
-
-	/**
-	 * @var string[]
-	 */
 	protected static $mapChoiceToDescription = [
 		self::url_token => 'Private url',
 		self::cookie_token => 'Auto-login',
@@ -44,19 +32,5 @@ abstract class AuthenticationMethod extends PersistentEnum {
 		self::recent_password_login => 'Confirm password',
 		self::password_login_and_one_time_token => 'Two-step verification (2SV)',
 	];
-
-	/**
-	 * @param string $option
-	 * @return string
-	 * @throws CsrException
-	 */
-	public static function getChar($option) {
-		if (isset(static::$supportedChoices[$option])) {
-			return strtoupper($option);
-		} else {
-			throw new CsrException('AuthenticationMethod onbekend');
-		}
-	}
-
 }
 

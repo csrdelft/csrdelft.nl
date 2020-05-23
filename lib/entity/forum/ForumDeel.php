@@ -92,7 +92,7 @@ class ForumDeel {
 	}
 
 	public function magLezen($rss = false) {
-		$auth = ($rss ? AuthenticationMethod::getTypeOptions() : null);
+		$auth = ($rss ? AuthenticationMethod::getEnumValues() : null);
 		return LoginService::mag(P_FORUM_READ, $auth) AND LoginService::mag($this->rechten_lezen, $auth) AND $this->categorie->magLezen($auth);
 	}
 
