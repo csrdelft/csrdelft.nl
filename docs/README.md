@@ -4,6 +4,7 @@ Welkom bij de webstek documentatie
 
 ## Pagina's
 
+- [Configuratie](configuratie.md)
 - [Request](request.md): Lees over hoe een request van begin tot eind wordt verwerkt.
 - [Blade](blade.md)
 - [Caching](caching.md)

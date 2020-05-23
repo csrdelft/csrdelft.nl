@@ -22,7 +22,7 @@ update: Er zijn er nog veel meer, en het wordt via strings gedaan voor meer leve
 De rechten zijn cumulatief en octaal
 
 Een paar voorbeelden (de namen en de toewijzing van permissies zijn inmiddels gewijzigd, zie code voor actuele staat)
-	
+
  * `P_PUBLIC` - Iedereen op het Internet
  * `P_LOGGED_IN` - Leden-menu, eigen profiel raadplegen
  * `P_ADMIN` - Admin dingen algemeen...
@@ -49,26 +49,26 @@ Sommige rollen zijn uitbreiding van andere rollen:
  * `R_VAB` = R_BESTUUR, R_OUDLEDEN_MOD
  * `R_KNORRIE` = R_LID, R_MAAL_MOD
 
-Dit is een afgeleide van source:/trunk/lib/MVC/model/LoginModel.class.php#L353
+Kijk in `AccessService` voor de volledige implementatie van rechten.
 
-## Andere manieren van toegang 
-Naast permissies zijn veel andere eenheden geschikt voor geven van toegang. 
+## Andere manieren van toegang
+Naast permissies zijn veel andere eenheden geschikt voor geven van toegang.
 
-### Lidnummers 
+### Lidnummers
  * `4444` of `x101` lidnummers zoals te vinden in profiel
 
-### groepen 
+### groepen
  * `groep:kortegroepnaam` - Selecteert de ht groep . bijvoorbeeld: groep:AcqCie
  * `groep:groepsnummer` - bijv: groep:104
 
-### verticalen 
- * `verticale:letter` 
+### verticalen
+ * `verticale:letter`
    * Selecteert verticale:letter, waarvoor letter A t/m H mogelijk is. bijvoorbeeld: verticale:A
    * Selecteert nummer. Bijv. verticale:3
    * Selecteert naam. Bijv. verticale:Securis
 
 
-# Uitleg van bitwise vergelijken 
+# Uitleg van bitwise vergelijken
 Een permissie bestaat uit een rij van toegangslevels die elk gekoppeld zijn aan een onderdeel. De toegangslevels zijn integer waardes, het onderdeel wordt bepaald door de positie van die integer waarde in de rij.
 
 De integers in \_permissions kunnen octaal opgeslagen worden. Dan worden geprefixt met een nul: `0![0-7]+`.
@@ -116,8 +116,8 @@ binair: 0010
 binair: 0011
 3&0 = 0
 3&1 = 1, (binair: 0011&0001 = 0001)
-3&2 = 2, 
-3&3 = 3, 
+3&2 = 2,
+3&3 = 3,
 3&4 = 0
 3&5 = 1
 3&6 = 2
@@ -129,8 +129,8 @@ binair: 0011
 binair: 0100
 4&0 = 0
 4&1 = 0, (binair: 0100&0001 = 0000)
-4&2 = 0, 
-4&3 = 0, 
+4&2 = 0,
+4&3 = 0,
 4&4 = 1
 4&5 = 1
 4&6 = 1
@@ -142,8 +142,8 @@ binair: 0100
 binair: 0101
 5&0 = 0
 5&1 = 1, (binair: 0101&0001 = 0001)
-5&2 = 0, 
-5&3 = 1, 
+5&2 = 0,
+5&3 = 1,
 5&4 = 4
 5&5 = 5
 5&6 = 4
@@ -155,8 +155,8 @@ binair: 0101
 binair: 0110
 6&0 = 0
 6&1 = 0, (binair: 0100&0001 = 0000)
-6&2 = 2, 
-6&3 = 2, 
+6&2 = 2,
+6&3 = 2,
 6&4 = 4
 6&5 = 4
 6&6 = 6
@@ -168,8 +168,8 @@ binair: 0110
 binair: 0111
 7&0 = 0
 7&1 = 1, (binair: 0111&0001 = 0001)
-7&2 = 2, 
-7&3 = 3, 
+7&2 = 2,
+7&3 = 3,
 7&4 = 4
 7&5 = 5
 7&6 = 6
@@ -182,8 +182,8 @@ Als we met octalen werken, is dit onzin...:
 binair: 1000
 8&0 = 0
 8&1 = 0, (binair: 1000&0001 = 0000)
-8&2 = 0, 
-8&3 = 0, 
+8&2 = 0,
+8&3 = 0,
 8&4 = 0
 8&5 = 0
 8&6 = 0
@@ -195,8 +195,8 @@ binair: 1000
 binair: 1001
 9&0 = 0
 9&1 = 1, (binair: 1001&0001 = 0001)
-9&2 = 0, 
-9&3 = 1, 
+9&2 = 0,
+9&3 = 1,
 9&4 = 0
 9&5 = 1
 9&6 = 0
@@ -222,7 +222,7 @@ Namelijk:
  * als je 3 vraagt ergens, zal je met een role die 5 heeft geen toegang krijgen.
  * een role met 5 staat dus naast een role met 3, niet daarboven!!
 
-## Strings i.p.v. Octalen voor opslaan permissie 
+## Strings i.p.v. Octalen voor opslaan permissie
 
 De webstek gebruikte eerst octalen. Deze zijn beperkt tot een integere waarde van 7 per positie. Integers kunnen hetzelfde, maar gaan tot een veel hogere ASCII-waarde. Nadeel is dat leesbaarheid slechter is, maar door bij genereren integers te gebruiken, die via een functie worden omgezet in de bijhorende ASCII-tekens is dat geen echt probleem. Als we strings gebruiken gaat PHP kijken naar de ASCII waardes. De ascii-waardes staan voor allerlei gewone én ook niet-gewone symbolen, die dus niet altijd leesbaar zijn... (bijvoorbeeld 8###backspace), maar dat hebben we over voor veel meer waardes!
 

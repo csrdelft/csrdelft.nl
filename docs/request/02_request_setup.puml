@@ -4,7 +4,7 @@ index -> configuratie.include ++
 configuratie.include -> bootstrap ++
 note over bootstrap
 Laad "".env"", "".env.local"", "".env.dev"", etc.
-Zie symfony/dotenvsymfon
+Zie symfony/dotenv
 end note
 return
 configuratie.include -> configuratie.include : Laad error handlers

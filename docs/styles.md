@@ -1,6 +1,6 @@
 # Styles
 
-_Zie ook [Themas maken](Themas-maken.md)_
+_Zie ook [Themas maken](themas-maken.md)_
 
 We gebruiken [scss](https://sass-lang.com/) voor de styles. Deze worden door webpack verwerkt naar css. Ieder .scss bestand zonder `_` aan het begin wordt door webpack opgepikt. Een scss bestand in een submap krijgt de volgende vorm:
 

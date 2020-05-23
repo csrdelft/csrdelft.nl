@@ -1,10 +1,30 @@
-# JavaScript
+# Typescript
 
-De JavaScript van de stek wordt door [babel](https://babeljs.io/) getrokken voordat de eindegbruiker het ziet. Hierdoor is het mogelijk om je code in es6 te schrijven. Het is ook mogelijk om code in TypeScript te schrijven.
+De Typescript van de stek wordt door [babel](https://babeljs.io/) getrokken voordat de eindegbruiker het ziet. Hierdoor is het mogelijk om je code in es6 te schrijven en typescript te gebruiken.
 
+Het bestand `app.ts` is het aanspreekpunt van de Typescript, vanaf hier wordt alles ingeladen. Er zijn nog een aantal andere losse bestanden die worden gebruikt om de javascript op te splitsen, kijk in `webpack.config.ts` voor alle javascript en sass bestanden die aanspreekpunt zijn.
+
+## Typescript & PHP laten samenwerken
+
+Een voorbeeld waar PHP een stuk javascript opstart is te zien in `GroepStatistiekView`. Hier hebben de verschillende grafieken een specifieke klassenaam en een data attribuut met alle informatie die interessant is voor de grafiek.
+
+In het bestand `grafiek.ts` wordt er een handler aan `ctx` toegevoegd als volgt:
+
+```typescript
+ctx.addHandlers({
+	'.ctx-graph-pie': initPie,
+});
+```
+
+Hier wordt een handler gecreeerd voor de selector `.ctx-graph-pie` met de handler `initPie`. Dit zorgt ervoor dat iedere keer als de 'context' geladen wordt en een node met klasse `ctx-graph-pie` wordt gevonden de `initPie` functie wordt aangeroepen met als argument die specifieke node.
+
+De 'context' wordt voor ieder nieuw blokje html dat wordt ingeladen uitgevoerd. Bijvoorbeeld als er een modal wordt geladen, dan wordt de context geinitializeerd en wordt voor alle handlers in de context gecontroleerd of er iets te laden valt.
+
+Met deze aanpak hoef je in je templates geen Javascript code te schrijven. Dit kan op de lange termijn er voor zorgen dat we CSP (Content Security Policy) kunnen instellen waardoor de stek nog een stuk veiliger wordt.
 
 ## Javascript voor specifieke routes
-Het is nu mogelijk om javascript voor specifieke routes uit te voeren. De javascript voor deze routes wordt los opgehaald van de server. De code in de bestanden achter routes wordt in principe voor page-load uitgevoerd, dus het kan handig zijn om nog een `document.ready` er in te gooien. 
+Het is mogelijk om javascript voor specifieke routes uit te voeren. De javascript voor deze routes wordt los opgehaald van de server. De code in de bestanden achter routes wordt in principe voor page-load uitgevoerd, dus het kan handig zijn om nog een `document.ready` er in te gooien.
+
 ```javascript
 // resources/assets/js/router.js
 
@@ -14,7 +34,7 @@ import {route} from './util';
 route('/instellingen', () => import('./instellingen'));
 route('/eetplan', () => import('./eetplan'));
 ```
-Ik weet nog niet zeker of dit de manier is waarop het blijft werken. Voor het lidinstellingen overzicht had ik nog geen zin om een generieke oplossing te verzinnen (die er misschien wel een keer moet komen, maar misschien niet nodig is), daarom had ik iets van gebasseerd op route laden nodig. 
+Ik weet nog niet zeker of dit de manier is waarop het blijft werken. Voor het lidinstellingen overzicht had ik nog geen zin om een generieke oplossing te verzinnen (die er misschien wel een keer moet komen, maar misschien niet nodig is), daarom had ik iets van gebasseerd op route laden nodig.
 
 Als je op een andere plek `import(module)` gebruikt wordt ook een los bestand gemaakt voor de te importeren code (zolang het niet al op een andere plek geimport wordt).  Hier is `import` een synoniem van `require`, maar de laatste is _eigenlijk_ commonJS terwijl de eerste Harmony is (wat we prefereren).
 

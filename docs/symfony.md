@@ -1,6 +1,6 @@
 # Symfony
 
-De stek draait op de Symfony stack.
+De stek draait op de Symfony stack. Kijk op https://symfony.com voor meer informatie over Symfony.
 
 ## Kernel
 
@@ -18,4 +18,4 @@ Alles is omgebouwd naar de router van symfony, zie `config/routes`
 
 ## ORM
 
-Doctrine is al ingebouwd, wordt nog maar op een paar plekken gebruikt (eetplan)
+Voor alle onderdelen (behalve het Barsysteem) wordt Doctrine gebruikt als ORM.
