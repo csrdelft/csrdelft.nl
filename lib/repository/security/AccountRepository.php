@@ -40,7 +40,6 @@ class AccountRepository extends AbstractRepository {
 		$this->civiSaldoRepository = $civiSaldoRepository;
 	}
 
-	const ORM = Account::class;
 	const PASSWORD_HASH_ALGORITHM = PASSWORD_DEFAULT;
 
 	/**

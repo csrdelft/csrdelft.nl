@@ -17,10 +17,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CiviProductRepository extends AbstractRepository {
 	/**
-	 * ORM class.
-	 */
-	const ORM = CiviProduct::class;
-	/**
 	 * @var CiviPrijsRepository
 	 */
 	private $civiPrijsRepository;

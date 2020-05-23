@@ -4,8 +4,8 @@ namespace CsrDelft\repository\security;
 
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\OneTimeToken;
+use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -23,7 +23,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method OneTimeToken[]    findAll()
  * @method OneTimeToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OneTimeTokensRepository extends ServiceEntityRepository {
+class OneTimeTokensRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, OneTimeToken::class);
 	}

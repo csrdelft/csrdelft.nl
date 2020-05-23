@@ -7,9 +7,9 @@ use CsrDelft\common\instellingen\InstellingConfiguration;
 use CsrDelft\common\instellingen\InstellingType;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\LidToestemming;
+use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
@@ -27,7 +27,7 @@ use Symfony\Component\Config\Exception\LoaderLoadException;
  * @method LidToestemming[]    findAll()
  * @method LidToestemming[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LidToestemmingRepository extends ServiceEntityRepository {
+class LidToestemmingRepository extends AbstractRepository {
 	use YamlInstellingen;
 
 	const FIELD_MODULE = 'module';

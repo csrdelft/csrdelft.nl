@@ -5,7 +5,7 @@ namespace CsrDelft\repository\commissievoorkeuren;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\entity\profiel\Profiel;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method VoorkeurVoorkeur[]    findAll()
  * @method VoorkeurVoorkeur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CommissieVoorkeurRepository extends ServiceEntityRepository {
+class CommissieVoorkeurRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, VoorkeurVoorkeur::class);
 	}

@@ -75,9 +75,7 @@ class RechtenController {
 		foreach ($selection as $UUID) {
 			/** @var AccessControl $ac */
 			$ac = $this->accessRepository->retrieveByUUID($UUID);
-			$this->accessRepository->setAcl($ac->environment, $ac->resource, array(
-				$ac->action => null
-			));
+			$this->accessRepository->setAcl($ac->environment, $ac->resource, [$ac->action => null]);
 			$response[] = $ac;
 		}
 		return new RemoveRowsResponse($response);

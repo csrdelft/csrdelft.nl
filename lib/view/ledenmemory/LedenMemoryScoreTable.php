@@ -3,6 +3,7 @@
 namespace CsrDelft\view\ledenmemory;
 
 use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\LedenMemoryScore;
 use CsrDelft\repository\LedenMemoryScoresRepository;
 use CsrDelft\view\datatable\DataTable;
 
@@ -12,7 +13,7 @@ class LedenMemoryScoreTable extends DataTable {
 		AbstractGroep $groep = null,
 		$titel = null
 	) {
-		parent::__construct(LedenMemoryScoresRepository::ORM, '/leden/memoryscores' . ($groep ? '/' . $groep->getUUID() : null), 'Topscores Ledenmemory' . $titel, 'groep');
+		parent::__construct(LedenMemoryScore::class, '/leden/memoryscores' . ($groep ? '/' . $groep->getUUID() : null), 'Topscores Ledenmemory' . $titel, 'groep');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->settings['dom'] = 'rtpli';
 

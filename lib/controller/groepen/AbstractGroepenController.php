@@ -476,7 +476,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$groep = $this->model->retrieveByUUID($id);
 			if ($groep and $groep->mag(AccessAction::Wijzigen)) {
 				if ($converteer) {
-					$this->changeLogRepository->log($groep, 'class', get_class($groep), $model::ORM);
+					$this->changeLogRepository->log($groep, 'class', get_class($groep), $model->entityClass);
 					$nieuw = $model->converteer($groep, $this->model, $values['soort']);
 					if ($nieuw) {
 						$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));

@@ -70,13 +70,4 @@ trait OrmTrait {
 			->setParameters($criteria_params)
 			->getResult();
 	}
-
-	public function retrieveByUuid($UUID) {
-		/** @var ClassMetadata $metadata */
-		$metadata = $this->getClassMetadata();
-
-		$parts = explode('@', $UUID, 2);
-		$primary_key_values = explode('.', $parts[0]);
-		return $this->findOneBy(array_combine($metadata->getIdentifierFieldNames(), $primary_key_values));
-	}
 }

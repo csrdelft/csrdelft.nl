@@ -22,7 +22,6 @@ use Throwable;
  * @method MaaltijdAbonnement[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class MaaltijdAbonnementenRepository extends AbstractRepository {
-	const ORM = MaaltijdAbonnement::class;
 	/**
 	 * @var MaaltijdAanmeldingenRepository
 	 */

@@ -27,8 +27,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumDraadMelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ForumDradenMeldingRepository extends AbstractRepository {
-	const ORM = ForumDraadMelding::class;
-
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, ForumDraadMelding::class);
 	}

@@ -6,7 +6,7 @@ use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekExemplaar;
 use CsrDelft\entity\bibliotheek\BoekExemplaarStatus;
 use CsrDelft\entity\profiel\Profiel;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,7 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BoekExemplaar[]    findAll()
  * @method BoekExemplaar[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoekExemplaarRepository extends ServiceEntityRepository {
+class BoekExemplaarRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, BoekExemplaar::class);
 	}

@@ -6,7 +6,6 @@ use CsrDelft\entity\courant\Courant;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\courant\CourantView;
 use DateTime;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,7 +21,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Courant[]    findAll()
  * @method Courant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CourantRepository extends ServiceEntityRepository {
+class CourantRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Courant::class);
 	}

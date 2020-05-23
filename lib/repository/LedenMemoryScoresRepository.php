@@ -21,8 +21,6 @@ class LedenMemoryScoresRepository extends AbstractRepository {
 		parent::__construct($registry, LedenMemoryScore::class);
 	}
 
-	const ORM = LedenMemoryScore::class;
-
 	/**
 	 * Default ORDER BY
 	 * @var string

@@ -33,8 +33,6 @@ use PDOStatement;
  */
 class AgendaRepository extends AbstractRepository {
 	use OrmTrait;
-
-	const ORM = AgendaItem::class;
 	/**
 	 * Default ORDER BY
 	 * @var string

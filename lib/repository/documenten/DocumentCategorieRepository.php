@@ -4,7 +4,7 @@ namespace CsrDelft\repository\documenten;
 
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\model\OrmTrait;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method DocumentCategorie[]    findAll()
  * @method DocumentCategorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DocumentCategorieRepository extends ServiceEntityRepository {
+class DocumentCategorieRepository extends AbstractRepository {
 	use OrmTrait;
 
 	/**
