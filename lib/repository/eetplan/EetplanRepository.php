@@ -6,7 +6,6 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\groepen\GroepStatus;
 use CsrDelft\repository\groepen\WoonoordenRepository;
-use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\EetplanFactory;
@@ -22,9 +21,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Eetplan|null findOneBy(array $criteria, array $orderBy = null)
  * @method Eetplan[]    findAll()
  * @method Eetplan[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Eetplan|null retrieveByUuid($UUID)
  */
 class EetplanRepository extends AbstractRepository {
-	use OrmTrait;
 	const FMT_DATE = "dd-MM-Y";
 
 	/**

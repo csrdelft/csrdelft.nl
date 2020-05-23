@@ -9,7 +9,6 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
@@ -19,7 +18,6 @@ use CsrDelft\service\VerjaardagenService;
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
-use PDOStatement;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -29,15 +27,8 @@ use PDOStatement;
  *
  * @method AgendaItem find($id, $lockMode = null, $lockVersion = null)
  * @method AgendaItem[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method AgendaItem[]|PDOStatement ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
  */
 class AgendaRepository extends AbstractRepository {
-	use OrmTrait;
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'begin_moment ASC, titel ASC';
 	/**
 	 * @var AgendaVerbergenRepository
 	 */
@@ -239,7 +230,7 @@ class AgendaRepository extends AbstractRepository {
 
 	public function nieuw($datum) {
 		$item = new AgendaItem();
-		if (!preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
+		if (!preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
 			$datum = strtotime('Y-m-d');
 		}
 		$item->begin_moment = date_create_immutable(getDateTime(strtotime($datum) + 72000));

@@ -17,7 +17,6 @@ use CsrDelft\model\entity\profiel\ProfielLogValueChange;
 use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
 use CsrDelft\model\entity\security\AccessRole;
-use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
@@ -40,7 +39,6 @@ use Exception;
  * @method Profiel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ProfielRepository extends AbstractRepository {
-	use OrmTrait;
 	/**
 	 * @var MaaltijdAbonnementenRepository
 	 */

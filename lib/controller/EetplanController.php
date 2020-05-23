@@ -116,7 +116,7 @@ class EetplanController extends AbstractController {
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/toevoegen');
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanRepository->exists($eetplan)) {
+		} elseif ($this->eetplanRepository->find(['uid' => $eetplan->uid, 'woonoord_id' => $eetplan->woonoord_id]) != null) {
 			setMelding('Deze noviet is al eens op dit huis geweest', -1);
 			return $form;
 		} else {
