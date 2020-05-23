@@ -4,4 +4,4 @@ Welkom bij de webstek documentatie
 
 ## Pagina's
 
-- [Request](/request)
+- [Request](./request)
