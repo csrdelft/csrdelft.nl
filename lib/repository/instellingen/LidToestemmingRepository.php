@@ -7,6 +7,7 @@ use CsrDelft\common\instellingen\InstellingConfiguration;
 use CsrDelft\common\instellingen\InstellingType;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\LidToestemming;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -77,6 +78,7 @@ class LidToestemmingRepository extends ServiceEntityRepository {
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->uid = $uid;
+		$instelling->profiel = ProfielRepository::get($uid);
 		return $instelling;
 	}
 
