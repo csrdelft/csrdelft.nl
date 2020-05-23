@@ -22,7 +22,7 @@ class AccountForm extends Formulier {
 		if (LoginService::mag(P_LEDEN_MOD)) {
 			$roles = array();
 			foreach (AccessRole::canChangeAccessRoleTo(LoginService::getAccount()->perm_role) as $optie) {
-				$roles[$optie] = AccessRole::getDescription($optie);
+				$roles[$optie] = AccessRole::from($optie)->getDescription();
 			}
 			$fields[] = new SelectField('perm_role', $account->perm_role, 'Rechten', $roles);
 		}

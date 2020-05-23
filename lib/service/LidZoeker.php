@@ -78,7 +78,7 @@ class LidZoeker {
 	private $profielRepository;
 
 	public function __construct(ProfielRepository $profielRepository) {
-		$this->allowStatus = LidStatus::getTypeOptions();
+		$this->allowStatus = LidStatus::getEnumValues();
 
 		//wat extra velden voor moderators.
 		if (LoginService::mag(P_LEDEN_MOD)) {

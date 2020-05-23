@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\fiscaat;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
 /**
  * CiviSaldoLogEnum.class.php
@@ -10,7 +10,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @date 07/04/2017
  */
-class CiviSaldoLogEnum extends PersistentEnum {
+class CiviSaldoLogEnum extends Enum {
 
 	/** Maken van een bestelling */
 	const INSERT_BESTELLING = 'insert';
@@ -23,23 +23,4 @@ class CiviSaldoLogEnum extends PersistentEnum {
 	const UPDATE_SALDO = 'update';
 	/** Verwijderen van een saldo */
 	const DELETE_SALDO = 'delete';
-
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::INSERT_BESTELLING => self::INSERT_BESTELLING,
-		self::REMOVE_BESTELLING => self::REMOVE_BESTELLING,
-		self::CREATE_SALDO => self::CREATE_SALDO,
-		self::UPDATE_SALDO => self::UPDATE_SALDO,
-		self::DELETE_SALDO => self::DELETE_SALDO,
-	];
-
-	/**
-	 * @param string $option
-	 * @return string
-	 */
-	public static function getDescription($option) {
-		return sprintf('Log van type : %s', $option);
-	}
 }

@@ -174,7 +174,7 @@ class AgendaRepository extends AbstractRepository {
 			}
 		}
 
-		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
+		$auth = ($ical ? AuthenticationMethod::getEnumValues() : null);
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */

@@ -22,7 +22,7 @@ class RechtenData extends DataTableResponse {
 	public function renderElement($ac) {
 		$array = (array)$ac;
 
-		$array['action'] = AccessAction::getDescription($ac->action);
+		$array['action'] = AccessAction::from($ac->action)->getDescription();
 
 		if ($ac->resource === '*') {
 			$array['resource'] = 'Elke ' . lcfirst($ac->environment);

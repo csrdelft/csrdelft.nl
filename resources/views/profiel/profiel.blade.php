@@ -40,10 +40,10 @@
 	<div id="profiel" class="container {{$profiel->getProfielClasses()}}">
 		<div id="profielregel">
 			<div class="row">
-				<h1 class="col" title="Lid-status: {{CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}}">
-					@if(\CsrDelft\model\entity\LidStatus::getChar($profiel->status) !== '')
+				<h1 class="col" title="Lid-status: {{CsrDelft\model\entity\LidStatus::from($profiel->status)->getDescription()}}">
+					@if(\CsrDelft\model\entity\LidStatus::from($profiel->status)->getChar() !== '')
 						<span class="status">
-						{{ CsrDelft\model\entity\LidStatus::getChar($profiel->status) }}&nbsp;
+						{{ CsrDelft\model\entity\LidStatus::from($profiel->status)->getChar() }}&nbsp;
 					</span>
 					@endif
 					{{$profiel->getNaam('volledig')}}
@@ -248,7 +248,7 @@
 					@endif
 				</dd>
 				<dt>Status</dt>
-				<dd>{{\CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}}</dd>
+				<dd>{{\CsrDelft\model\entity\LidStatus::from($profiel->status)->getDescription()}}</dd>
 				@if($profiel->beroep && $profiel->isOudlid())
 					<dt>Beroep/werk</dt>
 					<dd>{{$profiel->beroep}}</dd>
