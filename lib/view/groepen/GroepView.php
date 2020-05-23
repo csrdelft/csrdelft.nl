@@ -10,8 +10,8 @@ namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\GroepTab;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\groepen\enum\GroepTab;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;

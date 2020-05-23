@@ -3,12 +3,12 @@
 namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Mail;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMelding;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\ProfielRepository;

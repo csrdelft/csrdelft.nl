@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity\security;
+namespace CsrDelft\entity\security\enum;
 
 use CsrDelft\common\Enum;
 

@@ -20,7 +20,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * de array's die in deze class staan bepalen wat er in het formulier te zien is.
  */
-class LidZoeker {
+class LidZoekerService {
 	//velden die door gewone leden geselecteerd mogen worden.
 	private $allowVelden = array(
 		'pasfoto', 'uid', 'naam', 'voorletters', 'voornaam', 'tussenvoegsel', 'achternaam', 'nickname', 'geslacht',

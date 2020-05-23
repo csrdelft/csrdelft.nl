@@ -7,7 +7,7 @@
  */
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\Mail;
+use CsrDelft\common\Mail;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;

@@ -3,8 +3,8 @@
 namespace CsrDelft\service\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Mail;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;

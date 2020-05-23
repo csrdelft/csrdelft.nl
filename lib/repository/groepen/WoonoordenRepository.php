@@ -2,7 +2,7 @@
 
 namespace CsrDelft\repository\groepen;
 
-use CsrDelft\entity\groepen\HuisStatus;
+use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\service\security\LoginService;

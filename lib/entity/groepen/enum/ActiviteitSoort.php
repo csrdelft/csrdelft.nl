@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\entity\groepen;
+namespace CsrDelft\entity\groepen\enum;
 
 use CsrDelft\common\Enum;
 
@@ -11,6 +11,18 @@ use CsrDelft\common\Enum;
  *
  * Algemene en specifieke activiteitsoorten.
  *
+ * @method static static Vereniging
+ * @method static static Lustrum
+ * @method static static Dies
+ * @method static static OWee
+ * @method static static SjaarsActie
+ * @method static static Lichting
+ * @method static static Verticale
+ * @method static static Kring
+ * @method static static Huis
+ * @method static static Ondervereniging
+ * @method static static IFES
+ * @method static static Extern
  */
 class ActiviteitSoort extends Enum {
 
@@ -29,54 +41,6 @@ class ActiviteitSoort extends Enum {
 	const Ondervereniging = 'ondervereniging';
 	const IFES = 'ifes';
 	const Extern = 'extern';
-
-	public static function Vereniging() {
-		return static::from(self::Vereniging);
-	}
-
-	public static function Lustrum() {
-		return static::from(self::Lustrum);
-	}
-
-	public static function Dies() {
-		return static::from(self::Dies);
-	}
-
-	public static function OWee() {
-		return static::from(self::OWee);
-	}
-
-	public static function SjaarsActie() {
-		return static::from(self::SjaarsActie);
-	}
-
-	public static function Lichting() {
-		return static::from(self::Lichting);
-	}
-
-	public static function Verticale() {
-		return static::from(self::Verticale);
-	}
-
-	public static function Kring() {
-		return static::from(self::Kring);
-	}
-
-	public static function Huis() {
-		return static::from(self::Huis);
-	}
-
-	public static function Ondervereniging() {
-		return static::from(self::Ondervereniging);
-	}
-
-	public static function IFES() {
-		return static::from(self::IFES);
-	}
-
-	public static function Extern() {
-		return static::from(self::Extern);
-	}
 
 	/**
 	 * @var string[]

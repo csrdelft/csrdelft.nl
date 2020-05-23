@@ -9,7 +9,7 @@
 namespace CsrDelft\view;
 
 use CsrDelft\entity\security\AccessControl;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;

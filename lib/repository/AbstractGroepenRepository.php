@@ -3,8 +3,8 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\GroepStatistiek;
-use CsrDelft\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\GroepStatistiekDTO;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
@@ -197,11 +197,11 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * Bereken statistieken van de groepleden.
 	 *
 	 * @param AbstractGroep $groep
-	 * @return GroepStatistiek
+	 * @return GroepStatistiekDTO
 	 */
 	public function getStatistieken(AbstractGroep $groep) {
 		if ($groep->aantalLeden() == 0) {
-			return new GroepStatistiek(0, [], [], [], []);
+			return new GroepStatistiekDTO(0, [], [], [], []);
 		}
 
 		$tijd = [];
@@ -253,6 +253,6 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 			->groupBy('p.lidjaar')
 			->getQuery()->getArrayResult();
 
-		return new GroepStatistiek($totaal, $verticalen, $geslachten, $lidjaren, $tijd);
+		return new GroepStatistiekDTO($totaal, $verticalen, $geslachten, $lidjaren, $tijd);
 	}
 }

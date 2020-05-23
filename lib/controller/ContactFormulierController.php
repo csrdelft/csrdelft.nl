@@ -4,8 +4,8 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\Mail;
 use CsrDelft\common\SimpleSpamFilter;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\view\PlainView;
 
 /**

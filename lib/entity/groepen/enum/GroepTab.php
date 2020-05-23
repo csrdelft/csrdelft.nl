@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\entity\groepen;
+namespace CsrDelft\entity\groepen\enum;
 
 
 use CsrDelft\common\Enum;
@@ -12,6 +12,11 @@ use CsrDelft\common\Enum;
  *
  * De verschillende tabbladen om een groep weer te geven.
  *
+ * @method static static Lijst
+ * @method static static Pasfotos
+ * @method static static Statistiek
+ * @method static static Emails
+ * @method static static Eetwens
  */
 class GroepTab extends Enum {
 
@@ -23,26 +28,6 @@ class GroepTab extends Enum {
 	const Statistiek = 'stats';
 	const Emails = 'emails';
 	const Eetwens = 'eetwens';
-
-	public static function Lijst() {
-		return static::from(self::Lijst);
-	}
-
-	public static function Pasfotos() {
-		return static::from(self::Pasfotos);
-	}
-
-	public static function Statistiek() {
-		return static::from(self::Statistiek);
-	}
-
-	public static function Emails() {
-		return static::from(self::Emails);
-	}
-
-	public static function Eetwens() {
-		return static::from(self::Eetwens);
-	}
 
 	/**
 	 * @var string[]

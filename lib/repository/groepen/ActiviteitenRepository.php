@@ -3,7 +3,7 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\groepen\ActiviteitSoort;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use Doctrine\Persistence\ManagerRegistry;
 
 

@@ -4,9 +4,9 @@ namespace CsrDelft\repository\eetplan;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\eetplan\Eetplan;
-use CsrDelft\entity\groepen\GroepStatus;
-use CsrDelft\repository\groepen\WoonoordenRepository;
+use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\EetplanFactory;
 use Doctrine\Persistence\ManagerRegistry;

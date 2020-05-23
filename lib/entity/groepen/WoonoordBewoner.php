@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\BewonersRepository")
  * @ORM\Table("bewoners")
  */
-class Bewoner extends AbstractGroepLid {
+class WoonoordBewoner extends AbstractGroepLid {
 	/**
 	 * @var Woonoord
 	 * @ORM\ManyToOne(targetEntity="Woonoord", inversedBy="leden")

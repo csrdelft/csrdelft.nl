@@ -5,8 +5,8 @@ namespace CsrDelft\view\bbcode\tag\groep;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\GroepVersie;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
@@ -83,7 +83,7 @@ abstract class BbTagGroep extends BbTag {
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		if ($groep->versie == GroepVersie::V2()) {
+		if ($groep->versie == GroepVersie::V2()->getValue()) {
 			$uid = LoginService::getUid();
 			$settings = [
 				'mijn_uid' => $uid,

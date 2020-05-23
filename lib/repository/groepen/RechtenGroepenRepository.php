@@ -2,7 +2,7 @@
 
 namespace CsrDelft\repository\groepen;
 
-use CsrDelft\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\RechtenGroep;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\groepen\leden\CommissieLedenRepository;

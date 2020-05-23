@@ -2,7 +2,7 @@
 
 namespace CsrDelft\repository\groepen\leden;
 
-use CsrDelft\entity\groepen\Bewoner;
+use CsrDelft\entity\groepen\WoonoordBewoner;
 use CsrDelft\repository\AbstractGroepLedenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -12,6 +12,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BewonersRepository extends AbstractGroepLedenRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {
-		parent::__construct($managerRegistry, Bewoner::class);
+		parent::__construct($managerRegistry, WoonoordBewoner::class);
 	}
 }

@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\security;
 
 use CsrDelft\common\datatable\DataTableEntry;
-use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;

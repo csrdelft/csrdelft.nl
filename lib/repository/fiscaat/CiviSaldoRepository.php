@@ -5,7 +5,7 @@ namespace CsrDelft\repository\fiscaat;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\fiscaat\CiviSaldo;
-use CsrDelft\model\entity\fiscaat\CiviSaldoLogEnum;
+use CsrDelft\entity\fiscaat\enum\CiviSaldoLogEnum;
 use CsrDelft\repository\AbstractRepository;
 use DateTime;
 use Doctrine\ORM\OptimisticLockException;

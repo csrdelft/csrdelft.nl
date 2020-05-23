@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\ProfielRepository;

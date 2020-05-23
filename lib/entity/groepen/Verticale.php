@@ -4,8 +4,8 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;

@@ -2,9 +2,9 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\entity\groepen\enum\OnderverenigingStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**

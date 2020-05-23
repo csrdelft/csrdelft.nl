@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\entity\groepen;
+namespace CsrDelft\entity\groepen\enum;
 
 use CsrDelft\common\Enum;
 
@@ -10,6 +10,10 @@ use CsrDelft\common\Enum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * De status van een ondervereniging.
+ *
+ * @method static static AdspirantOndervereniging
+ * @method static static Ondervereniging
+ * @method static static VoormaligOndervereniging
  */
 class OnderverenigingStatus extends Enum {
 
@@ -19,18 +23,6 @@ class OnderverenigingStatus extends Enum {
 	const AdspirantOndervereniging = 'a';
 	const Ondervereniging = 'o';
 	const VoormaligOndervereniging = 'v';
-
-	public static function AdspirantOndervereniging() {
-		return static::from(self::AdspirantOndervereniging);
-	}
-
-	public static function Ondervereniging() {
-		return static::from(self::Ondervereniging);
-	}
-
-	public static function VoormaligeOndervereniging() {
-		return static::from(self::VoormaligOndervereniging);
-	}
 
 	/**
 	 * @var string[]

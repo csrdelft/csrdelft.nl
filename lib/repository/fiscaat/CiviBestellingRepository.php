@@ -4,7 +4,7 @@ namespace CsrDelft\repository\fiscaat;
 
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
-use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
+use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\repository\AbstractRepository;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;

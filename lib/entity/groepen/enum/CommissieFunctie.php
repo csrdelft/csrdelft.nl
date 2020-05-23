@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\entity\groepen;
+namespace CsrDelft\entity\groepen\enum;
 
 use CsrDelft\common\Enum;
 
@@ -10,8 +10,19 @@ use CsrDelft\common\Enum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Standaard functies binnen het bestuur en commissies.
- */
-abstract class CommissieFunctie extends Enum {
+ *
+ * @method static static Praeses
+ * @method static static Abactis
+ * @method static static Fiscus
+ * @method static static VicePraeses
+ * @method static static ViceAbactis
+ * @method static static QQ
+ * @method static static Bibliothecarus
+ * @method static static Archivarus
+ * @method static static Statisticus
+ * @method static static Fotocommissaris
+*/
+class CommissieFunctie extends Enum {
 
 	/**
 	 * Bestuurs functies.
@@ -34,42 +45,6 @@ abstract class CommissieFunctie extends Enum {
 	const Archivarus = 'Archivarus';
 	const Statisticus = 'Statisticus';
 	const Fotocommissaris = 'Fotocommissaris';
-
-	public static function Praeses() {
-		return static::from(self::Praeses);
-	}
-
-	public static function Abactis() {
-		return static::from(self::Abactis);
-	}
-
-	public static function Fiscus() {
-		return static::from(self::Fiscus);
-	}
-
-	public static function VicePraeses() {
-		return static::from(self::VicePraeses);
-	}
-
-	public static function ViceAbactis() {
-		return static::from(self::ViceAbactis);
-	}
-
-	public static function QQ() {
-		return static::from(self::QQ);
-	}
-
-	public static function Bibliothecarus() {
-		return static::from(self::Bibliothecarus);
-	}
-
-	public static function Statisticus() {
-		return static::from(self::Statisticus);
-	}
-
-	public static function Fotocommissaris() {
-		return static::from(self::Fotocommissaris);
-	}
 
 	/**
 	 * @var string[]

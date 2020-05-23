@@ -14,9 +14,9 @@ namespace CsrDelft\service;
  */
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Mail;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;

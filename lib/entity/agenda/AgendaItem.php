@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\agenda;
 
-use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;

@@ -2,8 +2,9 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -36,8 +37,8 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	public $eetplan;
 
 	/**
-	 * @var Bewoner[]
-	 * @ORM\OneToMany(targetEntity="Bewoner", mappedBy="groep")
+	 * @var WoonoordBewoner[]
+	 * @ORM\OneToMany(targetEntity="WoonoordBewoner", mappedBy="groep")
 	 */
 	public $leden;
 
@@ -46,7 +47,7 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	}
 
 	public function getLidType() {
-		return Bewoner::class;
+		return WoonoordBewoner::class;
 	}
 
 	public function getUrl() {

@@ -4,8 +4,8 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\Mail;
-use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\common\Mail;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\AccessService;

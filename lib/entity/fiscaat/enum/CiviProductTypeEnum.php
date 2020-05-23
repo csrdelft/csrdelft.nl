@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\model\entity\fiscaat;
+namespace CsrDelft\entity\fiscaat\enum;
 
 use CsrDelft\common\Enum;
 

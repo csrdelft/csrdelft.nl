@@ -4,10 +4,10 @@ namespace CsrDelft\service\pin;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\entity\pin\PinTransactie;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
-use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use Doctrine\ORM\EntityManagerInterface;
 

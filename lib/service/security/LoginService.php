@@ -6,9 +6,9 @@ namespace CsrDelft\service\security;
 
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\entity\security\LoginSession;
 use CsrDelft\entity\security\RememberLogin;
-use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\LoginSessionRepository;

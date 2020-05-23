@@ -8,13 +8,13 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleSync;
-use CsrDelft\service\LidZoeker;
+use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
 
 class LedenLijstController extends AbstractController {
-	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoeker $lidZoeker) {
+	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker) {
 		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));

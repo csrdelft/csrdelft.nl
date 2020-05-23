@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\entity\groepen;
+namespace CsrDelft\entity\groepen\enum;
 
 use CsrDelft\common\Enum;
 
@@ -11,6 +11,9 @@ use CsrDelft\common\Enum;
  *
  * De status van een groep of lid in een groep.
  *
+ * @method static static FT
+ * @method static static HT
+ * @method static static OT
  */
 class GroepStatus extends Enum {
 	/**
@@ -19,18 +22,6 @@ class GroepStatus extends Enum {
 	const FT = 'ft';
 	const HT = 'ht';
 	const OT = 'ot';
-
-	public static function FT() {
-		return static::from(self::FT);
-	}
-
-	public static function HT() {
-		return static::from(self::HT);
-	}
-
-	public static function OT() {
-		return static::from(self::OT);
-	}
 
 	/**
 	 * @var string[]

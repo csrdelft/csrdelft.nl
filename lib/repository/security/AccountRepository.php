@@ -5,7 +5,7 @@ namespace CsrDelft\repository\security;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\security\Account;
-use CsrDelft\model\entity\security\AccessRole;
+use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;

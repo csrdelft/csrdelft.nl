@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\entity\pin\PinTransactie;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
-use CsrDelft\model\entity\fiscaat\CiviProductTypeEnum;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\service\pin\PinTransactieMatcher;
 use Doctrine\ORM\EntityManagerInterface;

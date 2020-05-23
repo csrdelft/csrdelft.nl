@@ -4,7 +4,7 @@ namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
-use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;

@@ -1,15 +1,16 @@
 <?php
 
-namespace CsrDelft\entity\groepen;
+namespace CsrDelft\entity\groepen\enum;
 
 use CsrDelft\common\Enum;
 
 /**
- * HuisStatus.enum.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * De status van een huis / woonoord.
+ *
+ * @method static static Woonoord
+ * @method static static Huis
  */
 class HuisStatus extends Enum {
 
@@ -18,14 +19,6 @@ class HuisStatus extends Enum {
 	 */
 	const Woonoord = 'w';
 	const Huis = 'h';
-
-	public static function Woonoord() {
-		return static::from(self::Woonoord);
-	}
-
-	public static function Huis() {
-		return static::from(self::Huis);
-	}
 
 	/**
 	 * @var string[]

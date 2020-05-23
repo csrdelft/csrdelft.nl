@@ -1,9 +1,7 @@
 <?php
 
-namespace CsrDelft\model\entity;
+namespace CsrDelft\common;
 
-use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\view\bbcode\CsrBB;
 
 /**
