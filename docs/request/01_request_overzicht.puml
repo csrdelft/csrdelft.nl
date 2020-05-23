@@ -1,0 +1,18 @@
+@startuml
+title: Request flow op hoog niveau
+Actor Browser
+Browser -> index ++
+index -> index : setup
+note right
+Zie ""02_request_setup.png""
+end note
+index -> index : handle
+note right
+Zie ""03_request_handle.png""
+end note
+return send
+note right
+Zie ""04_request_send.png""
+end note
+index -> index -- : terminate
+@enduml
