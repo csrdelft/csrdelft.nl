@@ -8,7 +8,7 @@ _Alle commando's worden vanuit de hoofdmap uitgevoerd_
 
 Zodra je bent ingelogd op Syrinx met SSH kun je het volgende commando uitvoeren om een nieuwe versie van de stek neer te zetten.
 
-```shell script
+```bash
 composer update-prod
 ```
 
@@ -30,7 +30,7 @@ Als je een hele kleine verandering hebt gemaakt, zoals een verandering in de sty
 
 Voor een snelle deploy voer je het volgende commando uit:
 
-```shell script
+```bash
 git pull
 ```
 
