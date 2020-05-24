@@ -40,7 +40,7 @@ Onderhoudsmodus is handig bij updaten, want nu worden alle bezoekers naar de ond
 
 Onderhoudsmodus staat aan als het bestand `.onderhoud` bestaat en zorgt ervoor dat `htdocs/index.php` vroegtijdig afbreekt. Andere scripts werken wel gewoon.
 
-```shell script
+```bash
 # Onderhoudsmodus aan:
 touch .onderhoud
 
