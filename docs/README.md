@@ -20,6 +20,7 @@ Welkom bij de webstek documentatie
 
 Lees hier meer over specifieke onderdelen van de stek
 
+- [Submodule](submodule.md): externe projecten die in de stek zijn geladen.
 - [DataTables](datatables.md)
 - [Caching](caching.md)
 - [Themas maken](themas-maken.md)
@@ -30,3 +31,5 @@ Lees hier meer over specifieke onderdelen van de stek
 
 - [Status](status.md): De status van ontwikkelingen van verschillende onderdelen van de stek.
 - [Docker](installatie-docker.md)
+- [Travis](ci.md)
+- [Wiki](wiki.md)
