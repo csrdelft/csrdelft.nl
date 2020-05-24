@@ -14,7 +14,7 @@ Met de `CsrDelft\common\ContainerFacade` kun je te pas en te onpas de container 
 
 ## Router
 
-Alles is omgebouwd naar de router van symfony, zie `config/routes`
+De router van Symfony wordt gebruikt om routes te resolven. De YAML configuratie wordt hier voor gebruikt. Zie de YAML bestanden in de `config/routes` map.
 
 ## ORM
 
