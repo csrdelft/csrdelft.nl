@@ -25,6 +25,7 @@ composer run-script production
 # Verwijder dev dependencies en optimize autoloader
 composer install --no-dev --optimize-autoloader
 
+# Versions.php update bij iedere build, dit is vervelend. Het volgende commando verwijderd de regel die sowieso nieuw is.
 sed -i "/csr\/csrdelft.nl' =>/d" vendor/ocramius/package-versions/src/PackageVersions/Versions.php
 
 fi;

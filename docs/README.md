@@ -29,7 +29,8 @@ Lees hier meer over specifieke onderdelen van de stek
 
 ## Overig
 
-- [Status](status.md): De status van ontwikkelingen van verschillende onderdelen van de stek.
+- [Status](status.md) van ontwikkelingen van verschillende onderdelen van de stek.
 - [Docker](installatie-docker.md)
 - [Travis](ci.md)
 - [Wiki](wiki.md)
+- [Deploy](deploy.md) op Syrinx
