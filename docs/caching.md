@@ -18,8 +18,8 @@ De `cache.app` cache is vrij te gebruiken en in te laden door `Symfony\Contracts
 
 Er is geen build van de laatste versie van Memcached voor windows beschikbaar, maar een oude versie is prima. Op Syrinx draait ook een best wel oude versie.
 
-http://downloads.northscale.com/memcached-1.4.5-x86.zip
-http://downloads.northscale.com/memcached-1.4.5-amd64.zip
+* [downloads.northscale.com/memcached-1.4.5-x86.zip](http://downloads.northscale.com/memcached-1.4.5-x86.zip)
+* [downloads.northscale.com/memcached-1.4.5-amd64.zip](http://downloads.northscale.com/memcached-1.4.5-amd64.zip)
 
 Je kan de executable uitvoeren en dan draait er een Memcached server op `localhost:11211`, zo simpel is het. Op Syrinx is memcached beschikbaar als unix socket in de data map, maar dit werkt niet echt op Windows.
 
@@ -31,7 +31,7 @@ Met [NSSM](https://nssm.cc) kun je een executable als Windows service installere
 
 Er zijn twee PHP extensies voor Memcached, namelijk [Memcached](https://www.php.net/manual/en/book.memcached.php) en [Memcache](https://www.php.net/manual/en/book.memcache.php). Memcached is nieuwer, maar op Syrinx is alleen Memcache geinstalleerd. Hier voor is de [`MemcacheCache`](https://github.com/csrdelft/csrdelft.nl/blob/master/lib/common/cache/MemcacheCache.php) CacheProvider gemaakt, deze zorgt voor goede interactie.
 
-Download de laatste `php_memcache.dll` van PECL: https://pecl.php.net/package/memcache
+Download de laatste `php_memcache.dll` van PECL: [pecl.php.net/package/memcache](https://pecl.php.net/package/memcache)
 
 Drop de dll in de `ext` map in je php installatie (`C:\xampp\php\ext`, `C:\wamp64\bin\php7.x.x\ext`) en voeg in php.ini (`C:\xampp\php\php.ini`, `C:\wamp64\bin\php7.x.x\php.ini`, ...) een regel toe:
 

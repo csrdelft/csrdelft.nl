@@ -47,20 +47,20 @@ Er staan veel bestanden in `/`, ze zijn hier met allerlei redenen en kunnen vaak
 * `.gitignore`: Geeft aan welke bestanden niet op GitHub terecht moeten komen.
 * `.gitmodules`: Git [Submodules](submodule.md)
 * `.travis.yml`: Configuratie voor [Travis CI](ci.md)
-* `composer.json`: Definieert PHP dependencies (Zie https://getcomposer.org)
+* `composer.json`: Definieert PHP dependencies (Zie [getcomposer.org](https://getcomposer.org/))
 * `composer.lock`: Zet de PHP dependencies op een specifieke versie (automatisch gegenereerd)
 * `CONTRIBUTING.md`: Lees meer over hoe je bijdraagt aan de stek
 * `docker-compose.yml`: Configuratie voor [Docker](installatie-docker.md)
-* `package.json`: Defineert JavaScript dependencies (Zie https://yarnpkg.com en https://npmjs.org)
-* `phinx.php`: Configuratie voor Phinx migraties (Zie https://phinx.org/)
-* `phpstan.autoload.php` / `phpstan.neon`: Configuratie voor phpstand static analysis (Zie https://phpstan.org/)
-* `phpunit.init.php`: Configuratie van phpunit, de test tool (Zie https://phpunit.de/)
+* `package.json`: Defineert JavaScript dependencies (Zie [yarnpkg.com](https://yarnpkg.com/) en [npmjs.org](https://npmjs.org/))
+* `phinx.php`: Configuratie voor Phinx migraties (Zie [phinx.org](https://phinx.org/))
+* `phpstan.autoload.php` / `phpstan.neon`: Configuratie voor phpstand static analysis (Zie [phpstan.org](https://phpstan.org/))
+* `phpunit.init.php`: Configuratie van phpunit, de test tool (Zie [phpunit.de](https://phpunit.de/))
 * `README.md`: LEES MIJ
 * `sonar-project.properties`: Configuratie van [SonarCloud.io](https://sonarcloud.io/dashboard?id=csrdelft_csrdelft.nl)
 * `symfony.lock`: Symfony variant van composer.lock
 * `tsconfig.json`: Configuratie van [Typescript](typescript.md)
 * `tsconfig-for-webpack-config.json`: Configuratie van de Typescript gebruikt in webpack.config.ts, deze is net ietsje anders dan de normale configuratie. (Helaas)
 * `tslint.json`: Configuratie van de Typescript style
-* `webpack.config.ts`: Configuratie van Webpack, de build tool van de frontend. (Zie https://webpack.js.org/)
+* `webpack.config.ts`: Configuratie van Webpack, de build tool van de frontend. (Zie [webpack.js.org](https://webpack.js.org/))
 * `yarn.lock`: Zet de JavaScript dependencies op een specifieke versie (automatisch gegenereerd)
 

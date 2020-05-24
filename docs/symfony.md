@@ -1,6 +1,6 @@
 # Symfony
 
-De stek draait op de Symfony stack. Kijk op https://symfony.com voor meer informatie over Symfony.
+De stek draait op de Symfony stack. Kijk op [symfony.com](https://symfony.com) voor meer informatie over Symfony.
 
 ## Kernel
 

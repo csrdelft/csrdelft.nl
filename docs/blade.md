@@ -1,6 +1,6 @@
 # Blade
 
-Zie https://laravel.com/docs/5.6/blade voor de officiele documentatie van Laravel en https://github.com/EFTEC/BladeOne voor de documentatie van het smaakje dat wij gebruiken.
+Zie [laravel.com/docs/5.6/blade](https://laravel.com/docs/5.6/blade) voor de officiele documentatie van Laravel en [EFTEC/BladeOne](https://github.com/EFTEC/BladeOne) voor de documentatie van het smaakje dat wij gebruiken.
 
 ## Custom Blade Directives
 
@@ -16,7 +16,7 @@ Te gebruiken in een Blade `@foreach`, gebruik om waarden af te wisselen. Iedere 
 
 ### `@link`
 
-Shortcut voor `link_for` in `common.view.functions.php`, accepteert de volgende argumenten: 
+Shortcut voor `link_for` in `common.view.functions.php`, accepteert de volgende argumenten:
  * `title`: De tekst van de link
  * `href`: De url van de link
  * `class`: De className van de link
@@ -26,7 +26,7 @@ Bijvoorbeeld `@link('Overzicht', '/fiscaat', 'nav-link', 'active')`
 
 ### `@stylesheet`
 
-Wordt bij het compileren voor productie vervangen door de html van de juiste stylesheet, dan hoeft dit op een later moment niet meer te gebeuren. 
+Wordt bij het compileren voor productie vervangen door de html van de juiste stylesheet, dan hoeft dit op een later moment niet meer te gebeuren.
 
 ### `@script`
 
