@@ -25,4 +25,6 @@ composer run-script production
 # Verwijder dev dependencies en optimize autoloader
 composer install --no-dev --optimize-autoloader
 
+sed -i '/csr\/csrdelft.nl/d' vendor/ocramius/package-versions/src/PackageVersions/Versions.php
+
 fi;
