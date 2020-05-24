@@ -1,6 +1,20 @@
+# Caching
+
 Met Memcached kun je de stek best wel wat versnellen. Hier wordt uitgelegd hoe je dit op Windows kan instellen. Voor linux kun je het waarschijnlijk zelf wel en anders kun je in de Docker configuratie kijken.
 
-# Installeren van Memcached
+## Werking van de cache
+
+Er zijn twee caches `cache.app` en `doctrine.orm.second_level_cache`, de eerste is in code te gebruiken en de tweede is intern voor Doctrine. De caches zijn geconfigureerd in `config/custom/memcache.yaml` en de configuratie wordt dus alleen ingeladen als memcache ondersteund wordt en geconfigureerd is.
+
+Lees meer over de Doctrine Second Level Cache in de [docs](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/second-level-cache.html#the-second-level-cache). Het komt er op neer dat je een `@ORM\Cache(usage="NONSTRICT_READ_WRITE")` annotatie toevoegt aan een entity en dat dan alles automagisch werkt. Alleen de meest simpele case is geconfigureerd op dit moment (12-3-2020), dus geen regions, locks, etc.
+
+De `cache.app` cache is vrij te gebruiken en in te laden door `Symfony\Contracts\Cache\CacheInterface` in de dependencies van je service te zetten, of door `cache.app` uit de service container te plukken. Zie `MenuItemRepository` voor een voorbeeld in het gebruik van de cache. De api is op zich best wel simpel, de uitdaging zit 'm in het netjes legen van de cache wanneer dat nodig is.
+
+> There are only two hard things in Computer Science: cache invalidation and naming things.
+>
+> -- Phil Karlton
+
+## Installeren van Memcached
 
 Er is geen build van de laatste versie van Memcached voor windows beschikbaar, maar een oude versie is prima. Op Syrinx draait ook een best wel oude versie.
 
@@ -13,7 +27,7 @@ Het kan handig zijn om Memcached als service te draaien, dan staat ie altijd aan
 
 Met [NSSM](https://nssm.cc) kun je een executable als Windows service installeren. Dit werkt heel goed met Memcached.
 
-# Installeren van Memcache in PHP
+## Installeren van Memcache in PHP
 
 Er zijn twee PHP extensies voor Memcached, namelijk [Memcached](https://www.php.net/manual/en/book.memcached.php) en [Memcache](https://www.php.net/manual/en/book.memcache.php). Memcached is nieuwer, maar op Syrinx is alleen Memcache geinstalleerd. Hier voor is de [`MemcacheCache`](https://github.com/csrdelft/csrdelft.nl/blob/master/lib/common/cache/MemcacheCache.php) CacheProvider gemaakt, deze zorgt voor goede interactie.
 
@@ -27,7 +41,7 @@ extension=memcache
 
 Start hierna Apache opnieuw op.
 
-# Configureren van de cache
+## Configureren van de cache
 
 Voeg de volgende regels toe aan `.env.local`:
 
@@ -47,11 +61,3 @@ Geen cache ingesteld
 ![Wel een cache](https://i.imgur.com/r7LmBAF.png)
 
 Wel een cache ingesteld
-
-# Werking van de cache
-
-Er zijn twee caches `cache.app` en `doctrine.orm.second_level_cache`, de eerste is in code te gebruiken en de tweede is intern voor Doctrine. De caches zijn geconfigureerd in `config/custom/memcache.yaml` en de configuratie wordt dus alleen ingeladen als memcache ondersteund wordt en geconfigureerd is. 
-
-Lees meer over de Doctrine Second Level Cache in de [docs](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/second-level-cache.html#the-second-level-cache). Het komt er op neer dat je een `@ORM\Cache(usage="NONSTRICT_READ_WRITE")` annotatie toevoegt aan een entity en dat dan alles automagisch werkt. Alleen de meest simpele case is geconfigureerd op dit moment (12-3-2020), dus geen regions, locks, etc.
-
-De `cache.app` cache is vrij te gebruiken en in te laden door `Symfony\Contracts\Cache\CacheInterface` in de dependencies van je service te zetten, of door `cache.app` uit de service container te plukken. Zie `MenuItemRepository` voor een voorbeeld in het gebruik van de cache. De api is op zich best wel simpel, de uitdaging zit 'm in het netjes legen van de cache wanneer dat nodig is.
