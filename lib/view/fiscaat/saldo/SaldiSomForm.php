@@ -9,7 +9,7 @@ use DateTime;
 
 /**
  * @author J. Rijsdijk <jorairijsdijk@gmail.com>
- * @date 25/10/2017
+ * @since 25/10/2017
  *
  * Maakt het mogelijk om een datum en tijd te selecteren en de saldisommen op dat moment op te vragen.
  */

@@ -12,7 +12,7 @@ use CsrDelft\view\datatable\Multiplicity;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/04/2017
+ * @since 07/04/2017
  */
 class CiviSaldoTable extends DataTable {
 	public function __construct() {

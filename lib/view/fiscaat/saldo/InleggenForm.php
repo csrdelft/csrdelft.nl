@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\ModalForm;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 class InleggenForm extends ModalForm {
 	public function __construct(Civisaldo $model) {

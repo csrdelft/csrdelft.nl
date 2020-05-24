@@ -8,7 +8,7 @@ use CsrDelft\common\Enum;
  * Maak onderscheid tussen verschillende commissies die uit hetzelfde potje geld halen.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/04/2017
+ * @since 07/04/2017
  */
 class CiviSaldoCommissieEnum extends Enum {
 	/**

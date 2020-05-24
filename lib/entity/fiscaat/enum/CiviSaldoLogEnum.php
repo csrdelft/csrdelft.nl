@@ -8,7 +8,7 @@ use CsrDelft\common\Enum;
  * CiviSaldoLogEnum.class.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/04/2017
+ * @since 07/04/2017
  */
 class CiviSaldoLogEnum extends Enum {
 

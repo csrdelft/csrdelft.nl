@@ -9,7 +9,7 @@ use CsrDelft\service\ProfielService;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  */
 class CivisaldoField extends TextField {
 

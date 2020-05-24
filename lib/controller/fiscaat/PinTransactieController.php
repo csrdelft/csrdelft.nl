@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 19/09/2017
+ * @since 19/09/2017
  */
 class PinTransactieController extends AbstractController {
 	/** @var CiviBestellingRepository */

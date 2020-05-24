@@ -6,7 +6,7 @@ use CsrDelft\Orm\Entity\PersistentEntity;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 class RemoveRowsResponse extends DataTableResponse {
 
