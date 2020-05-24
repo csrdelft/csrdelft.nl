@@ -13,7 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ForumPlaatje
  * @package CsrDelft\entity
  * @ORM\Entity(repositoryClass="CsrDelft\repository\ForumPlaatjeRepository")
- * @ORM\Table("forumplaatjes")
+ * @ORM\Table("forumplaatjes", indexes={
+ *   @ORM\Index(name="access_key", columns={"access_key"})
+ * })
  */
 class ForumPlaatje {
 	/**

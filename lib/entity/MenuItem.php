@@ -18,7 +18,9 @@ use Doctrine\ORM\PersistentCollection;
  * en heeft daarom een parent.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\MenuItemRepository")
- * @ORM\Table("menus")
+ * @ORM\Table("menus", indexes={
+ *   @ORM\Index(name="prioriteit", columns={"volgorde"})
+ * })
  */
 class MenuItem {
 	/**

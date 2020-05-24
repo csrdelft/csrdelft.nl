@@ -14,7 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een forum categorie bevat deelfora.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumCategorieRepository")
- * @ORM\Table("forum_categorien")
+ * @ORM\Table("forum_categorien", indexes={
+ *   @ORM\Index(name="volgorde", columns={"volgorde"})
+ * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class ForumCategorie {

@@ -17,7 +17,10 @@ use function common\short_class;
  * AgendaItems worden door de agenda getoont samen met andere Agendeerbare dingen.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\agenda\AgendaRepository")
- * @ORM\Table("agenda")
+ * @ORM\Table("agenda", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="eind_moment", columns={"eind_moment"})
+ * })
  */
 class AgendaItem implements Agendeerbaar {
 
