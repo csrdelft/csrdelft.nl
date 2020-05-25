@@ -12,7 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Table("Document")
+ * @ORM\Table("Document", indexes={
+ *   @ORM\Index(name="eigenaar", columns={"eigenaar"}),
+ *   @ORM\Index(name="Zoeken", columns={"naam", "filename"}),
+ *   @ORM\Index(name="toegevoegd", columns={"toegevoegd"})
+ * })
  * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentRepository")
  */
 class Document extends Bestand {
