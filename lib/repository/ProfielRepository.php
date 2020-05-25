@@ -305,7 +305,7 @@ class ProfielRepository extends AbstractRepository {
 			$bericht = file_get_contents(TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
-				'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
+				'NAAM' => $profiel->getNaam('volledig'),
 				'UID' => $profiel->uid,
 				'OUD' => $oudestatus,
 				'NIEUW' => $profiel->status,
@@ -382,7 +382,7 @@ class ProfielRepository extends AbstractRepository {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
 				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
-				$naam = ProfielRepository::getNaam($exemplaar->eigenaar_uid, 'volledig');
+				$naam = $exemplaar->eigenaar->getNaam('volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
 		}
@@ -406,7 +406,7 @@ class ProfielRepository extends AbstractRepository {
 		);
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
 		$values = array(
-			'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
+			'NAAM' => $profiel->getNaam('volledig'),
 			'UID' => $profiel->uid,
 			'OUD' => substr($oudestatus, 2),
 			'NIEUW' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),

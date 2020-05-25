@@ -9,6 +9,7 @@ use CsrDelft\entity\peilingen\PeilingStem;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
 use CsrDelft\repository\peilingen\PeilingStemmenRepository;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
@@ -82,6 +83,7 @@ class PeilingenService {
 				$stem = new PeilingStem();
 				$stem->peiling_id = $peilingId;
 				$stem->peiling = $this->entityManager->getReference(Peiling::class, $peilingId);
+				$stem->profiel = ProfielRepository::get($uid);
 				$stem->uid = $uid;
 				$stem->aantal = count($opties);
 				$this->entityManager->persist($stem);

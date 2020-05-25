@@ -7,6 +7,7 @@ use CsrDelft\entity\bibliotheek\BoekExemplaar;
 use CsrDelft\entity\bibliotheek\BoekExemplaarStatus;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -54,6 +55,7 @@ class BoekExemplaarRepository extends AbstractRepository {
 		} else {
 			$exemplaar->status = BoekExemplaarStatus::uitgeleend();
 			$exemplaar->uitgeleend_uid = $uid;
+			$exemplaar->uitgeleend = ProfielRepository::get($uid);
 			$this->getEntityManager()->persist($exemplaar);
 			$this->getEntityManager()->flush();
 			return true;
@@ -63,6 +65,7 @@ class BoekExemplaarRepository extends AbstractRepository {
 	public function addExemplaar(Boek $boek, string $uid) {
 		$exemplaar = new BoekExemplaar();
 		$exemplaar->boek = $boek;
+		$exemplaar->eigenaar = ProfielRepository::get($uid);
 		$exemplaar->eigenaar_uid = $uid;
 		$exemplaar->status = BoekExemplaarStatus::beschikbaar();
 		$exemplaar->toegevoegd = date_create_immutable();

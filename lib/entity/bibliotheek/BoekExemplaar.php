@@ -4,6 +4,7 @@
 namespace CsrDelft\entity\bibliotheek;
 
 
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("biebexemplaar")
  */
 class BoekExemplaar {
-
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -33,6 +33,12 @@ class BoekExemplaar {
 	 */
 	public $eigenaar_uid;
 	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="eigenaar_uid", referencedColumnName="uid")
+	 */
+	public $eigenaar;
+	/**
 	 * @var string
 	 * @ORM\Column(type="text")
 	 */
@@ -43,19 +49,22 @@ class BoekExemplaar {
 	 * @ORM\Column(type="stringkey", nullable=true)
 	 */
 	public $uitgeleend_uid;
-
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uitgeleend_uid", referencedColumnName="uid")
+	 */
+	public $uitgeleend;
 	/**
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;
-
 	/**
 	 * @var BoekExemplaarStatus
 	 * @ORM\Column(type="enumBoekExemplaarStatus")
 	 */
 	public $status;
-
 	/**
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
@@ -70,7 +79,6 @@ class BoekExemplaar {
 	/**
 	 * @var Boek
 	 * @ORM\ManyToOne(targetEntity="Boek", inversedBy="exemplaren")
-	 * @ORM\JoinColumn(name="boek_id", referencedColumnName="id")
 	 */
 	public $boek;
 
