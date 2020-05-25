@@ -4,6 +4,7 @@ namespace CsrDelft\repository\bibliotheek;
 
 use CsrDelft\entity\bibliotheek\BoekRecensie;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -24,6 +25,7 @@ class BoekRecensieRepository extends AbstractRepository {
 			$recensie = new BoekRecensie();
 			$recensie->boek_id = $boek_id;
 			$recensie->schrijver_uid = $uid;
+			$recensie->schrijver = ProfielRepository::get($uid);
 			$recensie->toegevoegd = getDateTime();
 		}
 

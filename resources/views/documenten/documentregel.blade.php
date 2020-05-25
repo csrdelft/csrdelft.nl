@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var $document \CsrDelft\entity\documenten\Document
+ */
+?>
 <tr class="document" id="document-{{ $document->id }}">
 	<td>
 		@if($document->hasFile())
@@ -22,6 +27,6 @@
 	<td class="size">{{$document->filesize}}</td>
 	<td title="{{$document->mimetype}}">{!! $document->getMimetypeIcon() !!}</td>
 	<td>{!! reldate($document->toegevoegd) !!}</td>
-	<td>{!! \CsrDelft\repository\ProfielRepository::getLink($document->eigenaar, 'civitas') !!}</td>
+	<td>{!! $document->eigenaar_profiel->getLink('civitas') !!}</td>
 </tr>
 

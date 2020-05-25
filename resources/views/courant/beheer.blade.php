@@ -51,7 +51,7 @@
 					<span
 						class="onderstreept">{{$bericht->cat ? $bericht->cat->getDescription() : 'Geen categorie'}}</span>
 					@if($magBeheren)
-						{!! \CsrDelft\repository\ProfielRepository::getLink($bericht->uid, 'civitas') !!}
+						{!! $bericht->schrijver->getLink('civitas') !!}
 					@endif
 					<span class="dikgedrukt">{{$bericht->titel}}</span>
 					@if($bericht->magBeheren())

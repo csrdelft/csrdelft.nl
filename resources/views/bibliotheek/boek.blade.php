@@ -4,6 +4,7 @@
  * @var $boekFormulier \CsrDelft\view\bibliotheek\BoekFormulier
  * @var $exemplaarFormulieren \CsrDelft\view\bibliotheek\BoekExemplaarFormulier[]
  * @var $recensieFormulier \CsrDelft\view\bibliotheek\RecensieFormulier
+ * @var $recensies \CsrDelft\entity\bibliotheek\BoekRecensie[]
  */
 ?>
 @extends('layout')
@@ -270,7 +271,7 @@
 						<tr>
 							<td class="linkerkolom recensist">
 							<span
-								class="recensist">{!! \CsrDelft\repository\ProfielRepository::getLink($beschrijving->schrijver_uid, 'civitas') !!}</span><br/>
+								class="recensist">{!! $beschrijving->schrijver->getLink('civitas') !!}</span><br/>
 								<span class="moment">{!! reldate($beschrijving->toegevoegd) !!}</span><br/>
 
 								{{-- knopjes bij elke post --}}

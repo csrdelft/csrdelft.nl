@@ -325,6 +325,7 @@ class LoginService {
 			$this->current_session = new LoginSession();
 			$this->current_session->session_hash = hash('sha512', session_id());
 			$this->current_session->uid = $account->uid;
+			$this->current_session->profiel = $account->profiel;
 			$this->current_session->login_moment = date_create_immutable();
 			$this->current_session->expire = $expire ? $expire : date_create_immutable()->add(new \DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 			$this->current_session->user_agent = $user_agent;
@@ -453,6 +454,7 @@ class LoginService {
 		// Login sessie aanmaken in database
 		$this->current_session->session_hash = hash('sha512', session_id());
 		$this->current_session->uid = $account->uid;
+		$this->current_session->uid = $account->profiel;
 		$this->current_session->login_moment = date_create_immutable();
 		$this->current_session->expire = date_create_immutable()->add(new DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 		$this->current_session->user_agent = MODE;

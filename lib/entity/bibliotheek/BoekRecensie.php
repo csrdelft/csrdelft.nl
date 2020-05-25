@@ -4,6 +4,7 @@
 namespace CsrDelft\entity\bibliotheek;
 
 
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,9 +29,15 @@ class BoekRecensie {
 	public $boek_id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="stringkey")
+	 * @ORM\Column(type="uid")
 	 */
 	public $schrijver_uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="schrijver_uid", referencedColumnName="uid")
+	 */
+	public $schrijver;
 	/**
 	 * @var string
 	 * @ORM\Column(type="text")

@@ -4,6 +4,7 @@
 namespace CsrDelft\entity\courant;
 
 
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -47,6 +48,12 @@ class CourantBericht {
 	 * @ORM\Column(type="uid")
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $schrijver;
 	/**
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime", name="datumTijd")

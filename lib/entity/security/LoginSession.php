@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\security;
 
 use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,6 +33,12 @@ class LoginSession implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 	/**
 	 * DateTime
 	 * @var DateTimeImmutable
@@ -90,7 +97,7 @@ class LoginSession implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 */
 	public function getDataTableAuthenticationMethod() {
-		return AuthenticationMethod::getDescription($this->authentication_method);
+		return AuthenticationMethod::from($this->authentication_method)->getDescription();
 	}
 
 	public function isRecent() {

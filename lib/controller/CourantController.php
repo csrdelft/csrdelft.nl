@@ -57,6 +57,7 @@ class CourantController extends AbstractController {
 		$bericht = new CourantBericht();
 		$bericht->datumTijd = new DateTime();
 		$bericht->uid = LoginService::getUid();
+		$bericht->schrijver = LoginService::getProfiel();
 
 		$form = new CourantBerichtFormulier($bericht, '/courant');
 

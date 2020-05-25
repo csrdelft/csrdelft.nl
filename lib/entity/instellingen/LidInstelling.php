@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\instellingen;
 
+use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,4 +44,10 @@ class LidInstelling {
 	 * @ORM\Column(type="text")
 	 */
 	public $waarde;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 }

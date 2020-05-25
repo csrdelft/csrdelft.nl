@@ -4,6 +4,7 @@ namespace CsrDelft\entity\documenten;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\Icon;
@@ -13,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Table("Document", indexes={
- *   @ORM\Index(name="eigenaar", columns={"eigenaar"}),
  *   @ORM\Index(name="Zoeken", columns={"naam", "filename"}),
  *   @ORM\Index(name="toegevoegd", columns={"toegevoegd"})
  * })
@@ -52,6 +52,12 @@ class Document extends Bestand {
 	 * @ORM\Column(type="string")
 	 */
 	public $eigenaar;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="eigenaar", referencedColumnName="uid")
+	 */
+	public $eigenaar_profiel;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")

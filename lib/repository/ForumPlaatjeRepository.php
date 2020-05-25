@@ -24,6 +24,7 @@ class ForumPlaatjeRepository extends AbstractRepository {
 	public function fromUploader(ImageField $uploader, $uid) {
 		$plaatje = static::generate();
 		$plaatje->maker = $uid;
+		$plaatje->maker_profiel = ProfielRepository::get($uid);
 
 		$this->getEntityManager()->persist($plaatje);
 		$this->getEntityManager()->flush();
