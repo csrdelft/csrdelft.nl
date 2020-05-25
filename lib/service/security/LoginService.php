@@ -17,6 +17,7 @@ use CsrDelft\service\AccessService;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use DateInterval;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.
@@ -47,11 +48,16 @@ class LoginService {
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
 
-	public function __construct(LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
+	public function __construct(EntityManagerInterface $entityManager, LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
 		$this->loginRepository = $loginRepository;
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->accountRepository = $accountRepository;
+		$this->entityManager = $entityManager;
 	}
 
 	/**
@@ -449,19 +455,21 @@ class LoginService {
 
 		if (!$this->current_session) {
 			$this->current_session = new LoginSession();
+			$this->entityManager->persist($this->current_session);
 		}
 
 		// Login sessie aanmaken in database
 		$this->current_session->session_hash = hash('sha512', session_id());
 		$this->current_session->uid = $account->uid;
-		$this->current_session->uid = $account->profiel;
+		$this->current_session->profiel = $account->profiel;
 		$this->current_session->login_moment = date_create_immutable();
 		$this->current_session->expire = date_create_immutable()->add(new DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 		$this->current_session->user_agent = MODE;
 		$this->current_session->ip = '';
 		$this->current_session->lock_ip = true; // sessie koppelen aan ip?
 		$this->current_session->authentication_method = AuthenticationMethod::password_login;
-		$this->loginRepository->update($this->current_session);
+
+		$this->entityManager->flush();
 
 		return true;
 	}
