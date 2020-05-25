@@ -106,7 +106,7 @@ class WachtwoordController extends AbstractController {
 				$profiel = $account->profiel;
 				$url =  CSR_ROOT ."/wachtwoord/reset?token=". rawurlencode($token[0]);
 				$bericht = "Geachte " . $profiel->getNaam('civitas') .
-					",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . $token[1]->format(DATETIME_FORMAT) .
+					",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . date_format_intl($token[1], DATETIME_FORMAT) .
 					".\n\n[url=". $url  .
 					"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
 				$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
