@@ -218,7 +218,7 @@ declare global {
 		}
 
 		interface Settings {
-			columnGroup: any;
+			columnGroup?: any;
 		}
 	}
 }

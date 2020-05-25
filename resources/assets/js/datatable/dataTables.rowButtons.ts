@@ -76,7 +76,7 @@ declare global {
 		}
 
 		interface Settings {
-			rowButtons: any;
+			rowButtons?: any;
 		}
 	}
 }
