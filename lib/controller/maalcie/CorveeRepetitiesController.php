@@ -119,8 +119,8 @@ class CorveeRepetitiesController {
 		exit;
 	}
 
-	public function bijwerken($crid) {
-		$view = $this->opslaan($crid);
+	public function bijwerken(EntityManagerInterface $em, $crid) {
+		$view = $this->opslaan($em, $crid);
 		if ($this->repetitie) { // Opslaan gelukt
 			$verplaats = isset($_POST['verplaats_dag']);
 			$aantal = $this->corveeTakenRepository->updateRepetitieTaken($this->repetitie, $verplaats);

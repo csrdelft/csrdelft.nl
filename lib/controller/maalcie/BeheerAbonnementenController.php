@@ -81,7 +81,8 @@ class BeheerAbonnementenController {
 	 */
 	public function novieten() {
 		$mrid = filter_input(INPUT_POST, 'mrid', FILTER_SANITIZE_NUMBER_INT);
-		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnementVoorNovieten((int)$mrid);
+		$repetitie = $this->maaltijdRepetitiesRepository->find($mrid);
+		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnementVoorNovieten($repetitie);
 		$matrix = $this->maaltijdAbonnementenRepository->getAbonnementenVanNovieten();
 		$novieten = sizeof($matrix);
 		setMelding(
@@ -101,6 +102,7 @@ class BeheerAbonnementenController {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat nie.', $uid));
 		}
 		$abo = new MaaltijdAbonnement();
+		$abo->maaltijd_repetitie = $this->maaltijdRepetitiesRepository->find($mrid);
 		$abo->mlt_repetitie_id = $mrid;
 		$abo->uid = $uid;
 		$aantal = $this->maaltijdAbonnementenRepository->inschakelenAbonnement($abo);
@@ -121,7 +123,8 @@ class BeheerAbonnementenController {
 		if (!ProfielRepository::existsUid($uid)) {
 			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 		}
-		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement((int)$mrid, $uid);
+		$repetitie = $this->maaltijdRepetitiesRepository->find($mrid);
+		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement($repetitie, $uid);
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);

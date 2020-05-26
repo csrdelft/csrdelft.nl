@@ -6,6 +6,7 @@ use CsrDelft\service\security\LoginService;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

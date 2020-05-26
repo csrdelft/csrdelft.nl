@@ -395,7 +395,7 @@ class MaaltijdenRepository extends AbstractRepository {
 			$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorRepetitie($maaltijd->mlt_repetitie_id);
 			foreach ($abonnementen as $abo) {
 				if ($this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $maaltijd->aanmeld_filter)) {
-					if ($this->maaltijdAanmeldingenRepository->aanmeldenDoorAbonnement($maaltijd, $abo->mlt_repetitie_id, $abo->uid)) {
+					if ($this->maaltijdAanmeldingenRepository->aanmeldenDoorAbonnement($maaltijd, $abo->maaltijd_repetitie, $abo->uid)) {
 						$aantal++;
 					}
 				}
@@ -463,7 +463,7 @@ class MaaltijdenRepository extends AbstractRepository {
 	 */
 	public function getKomendeOpenRepetitieMaaltijden($mrid) {
 		return $this->createQueryBuilder('m')
-			->where('m.mlt_repetitie_id = :repetitie and gesloten = false and verwijderd = false and datum >= :datum')
+			->where('m.mlt_repetitie_id = :repetitie and m.gesloten = false and m.verwijderd = false and m.datum >= :datum')
 			->setParameter('repetitie', $mrid)
 			->setParameter('datum', date_create())
 			->orderBy('m.datum', 'ASC')

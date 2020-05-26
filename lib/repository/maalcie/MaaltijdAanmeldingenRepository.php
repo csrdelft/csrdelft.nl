@@ -8,6 +8,7 @@ use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
@@ -146,16 +147,16 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	/**
 	 * Called when a MaaltijdAbonnement is being deleted (turned off) or a MaaltijdRepetitie is being deleted.
 	 *
-	 * @param int $mrid id van de betreffede MaaltijdRepetitie
+	 * @param MaaltijdRepetitie $repetitie
 	 * @param string $uid Lid voor wie het MaaltijdAbonnement wordt uitschakeld
 	 *
 	 * @return int|null
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function afmeldenDoorAbonnement($mrid, $uid) {
+	public function afmeldenDoorAbonnement(MaaltijdRepetitie $repetitie, $uid) {
 		// afmelden bij maaltijden waarbij dit abonnement de aanmelding heeft gedaan
-		$maaltijden = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getKomendeOpenRepetitieMaaltijden($mrid);
+		$maaltijden = ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getKomendeOpenRepetitieMaaltijden($repetitie->mlt_repetitie_id);
 		if (empty($maaltijden)) {
 			return 0;
 		}
@@ -168,7 +169,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$aanmeldingen = $this->getAanmeldingenVoorLid($byMid, $uid);
 		$aantal = 0;
 		foreach ($aanmeldingen as $mid => $aanmelding) {
-			if ($mrid === $aanmelding->door_abonnement) {
+			if ($repetitie->mlt_repetitie_id === $aanmelding->door_abonnement) {
 				$this->getEntityManager()->remove($aanmelding);
 				$aantal++;
 			}
@@ -397,14 +398,13 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	/**
 	 * Alleen aanroepen voor inschakelen abonnement!
 	 *
-	 * @param int $mrid
+	 * @param MaaltijdRepetitie $repetitie
 	 * @param string $uid
 	 * @return int|false aantal aanmeldingen or false
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $uid) {
-		$repetitie = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($mrid);
+	public function aanmeldenVoorKomendeRepetitieMaaltijden(MaaltijdRepetitie $repetitie, $uid) {
 		if (!$this->checkAanmeldFilter($uid, $repetitie->abonnement_filter)) {
 			throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
 		}
@@ -415,7 +415,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $maaltijdenRepository->createQueryBuilder('m')
 			->where('m.mlt_repetitie_id = :repetitie and m.gesloten = false and m.verwijderd = false and m.datum >= :datum')
-			->setParameter('repetitie', $mrid)
+			->setParameter('repetitie', $repetitie->mlt_repetitie_id)
 			->setParameter('datum', date_create())
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')
@@ -423,7 +423,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 
 		foreach ($maaltijden as $maaltijd) {
 			if (!$this->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => $uid])) {
-				if ($this->aanmeldenDoorAbonnement($maaltijd, $mrid, $uid)) {
+				if ($this->aanmeldenDoorAbonnement($maaltijd, $repetitie, $uid)) {
 					$aantal++;
 				}
 			}
@@ -433,22 +433,23 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 
 	/**
 	 * @param Maaltijd $maaltijd
-	 * @param int $mrid
+	 * @param MaaltijdRepetitie $repetitie
 	 * @param string $uid
 	 * @return bool
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function aanmeldenDoorAbonnement(Maaltijd $maaltijd, $mrid, $uid) {
+	public function aanmeldenDoorAbonnement(Maaltijd $maaltijd, MaaltijdRepetitie $repetitie, $uid) {
 		if (!$this->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => $uid])) {
 			try {
 				$this->assertMagAanmelden($maaltijd, $uid);
 
 				$aanmelding = new MaaltijdAanmelding();
+				$aanmelding->maaltijd = $maaltijd;
 				$aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
 				$aanmelding->uid = $uid;
 				$aanmelding->door_uid = $uid;
-				$aanmelding->door_abonnement = $mrid;
+				$aanmelding->door_abonnement = $repetitie->mlt_repetitie_id;
 				$aanmelding->laatst_gewijzigd = date_create_immutable();
 				$aanmelding->gasten_eetwens = '';
 

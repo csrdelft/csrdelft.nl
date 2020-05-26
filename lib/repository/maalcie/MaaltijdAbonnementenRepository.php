@@ -5,9 +5,9 @@ namespace CsrDelft\repository\maalcie;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -92,17 +92,6 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	public function getAbonnementenAbonneerbaarMatrix() {
 		return $this->_em->transactional(function () {
 			$repById = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities(true); // grouped by mrid
-			$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
-			$sql .= ' r.abonnement_filter AS filter,'; // controleer later
-			$sql .= ' (r.abonneerbaar = false) AS abo_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
-			$sql .= ' (EXISTS ( SELECT * FROM mlt_abonnementen AS a WHERE a.mlt_repetitie_id = mrid AND a.uid = van )) AS abo';
-			$sql .= ' FROM profielen AS lid, mlt_repetities AS r';
-			$values = array();
-			$sql .= ' WHERE lid.status IN("S_LID", "S_GASTLID", "S_NOVIET")';
-			$sql .= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-			$db = ContainerFacade::getContainer()->get(Database::class)->getDatabase();
-			$query = $db->prepare($sql);
-			$query->execute($values);
 
 			/** @var Profiel[] $leden */
 			$leden = ContainerFacade::getContainer()->get(ProfielRepository::class)->createQueryBuilder('p')
@@ -112,10 +101,9 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 
 			$matrix = array();
 			foreach ($leden as $lid) {
-				$abos = $this->findBy(["uid" => $lid->uid]);
+				$abos = $this->findBy(['uid' => $lid->uid]);
 				foreach ($abos as $abo) {
 					$rep = $repById[$abo->mlt_repetitie_id];
-					$abo->maaltijd_repetitie = $rep;
 					if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($lid->uid, $rep->abonnement_filter)) {
 						$abo->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $rep->abonnement_filter;
 					}
@@ -135,44 +123,41 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 */
 	public function getAbonnementenMatrix() {
 		return $this->_em->transactional(function () {
+			/** @var MaaltijdRepetitie[] $repById */
 			$repById = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities(true); // grouped by mrid
-			$sql = 'SELECT lid.uid AS van, r.mlt_repetitie_id AS mrid,';
-			$sql .= ' r.abonnement_filter AS filter,'; // controleer later
-			$sql .= ' (r.abonneerbaar = false) AS abo_err, (lid.status NOT IN("S_LID", "S_GASTLID", "S_NOVIET")) AS status_err,';
-			$sql .= ' (EXISTS ( SELECT * FROM mlt_abonnementen AS a WHERE a.mlt_repetitie_id = mrid AND a.uid = van )) AS abo';
-			$sql .= ' FROM profielen AS lid, mlt_repetities AS r';
-			$sql .= ' HAVING abo = true';
-			$sql .= ' ORDER BY lid.achternaam, lid.voornaam ASC';
-			$db = ContainerFacade::getContainer()->get(Database::class)->getDatabase();
-			$query = $db->prepare($sql);
-			$query->execute();
-			$abos = $query->fetchAll();
 
-			$matrix = array();
-			foreach ($abos as $abo) { // build matrix
-				$mrid = $abo['mrid'];
-				$uid = $abo['van'];
-				if ($abo['abo']) { // ingeschakelde abonnementen
-					$abonnement = new MaaltijdAbonnement();
-					$abonnement->mlt_repetitie_id = $mrid;
-					$abonnement->uid = $uid;
-				} else { // uitgeschakelde abonnementen
-					$abonnement = new MaaltijdAbonnement();
-					$abonnement->mlt_repetitie_id = $mrid;
+			/** @var Profiel[] $profielen */
+			$profielen = ContainerFacade::getContainer()->get(ProfielRepository::class)->findAll();
+
+			$matrix = [];
+			foreach($profielen as $profiel) {
+				// Skip oudleden
+				if (!LidStatus::isLidLike($profiel->status) && $this->count(['uid' => $profiel->uid]) == 0) {
+					continue;
 				}
-				$abonnement->van_uid = $uid;
-				$abonnement->maaltijd_repetitie = $repById[$mrid];
-				// toon waarschuwingen
-				if ($abo['abo_err']) {
-					$abonnement->foutmelding = 'Niet abonneerbaar';
-				} elseif ($abo['status_err']) {
-					$abonnement->waarschuwing = 'Geen huidig lid';
-				} elseif (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($uid, $abo['filter'])) {
-					$abonnement->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $abo['filter'];
+
+				$matrix[$profiel->uid] = [];
+
+				foreach ($repById as $rep) {
+					$abo = $this->find(['uid' => $profiel->uid, 'mlt_repetitie_id' => $rep->mlt_repetitie_id]);
+
+					if (!$abo) {
+						$abo = new MaaltijdAbonnement();
+						$abo->mlt_repetitie_id = $rep->mlt_repetitie_id;
+						$abo->maaltijd_repetitie = $rep;
+					} elseif (!$rep->abonneerbaar) {
+						$abo->foutmelding = 'Niet abonneerbaar';
+					} elseif (!LidStatus::isLidLike($profiel->status)) {
+						$abo->foutmelding = 'Geen huidig lid';
+					} elseif (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($profiel->uid, $rep->abonnement_filter)) {
+						$abo->foutmelding = 'Niet toegestaan vanwege aanmeldrestrictie: ' . $rep->abonnement_filter;
+					}
+
+					$matrix[$profiel->uid][$rep->mlt_repetitie_id] = $abo;
 				}
-				$matrix[$uid][$mrid] = $abonnement;
 			}
-			return $this->fillHoles($matrix, $repById, true);
+
+			return [$matrix, $repById];
 		});
 	}
 
@@ -203,15 +188,14 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 */
 	public function inschakelenAbonnement($abo) {
 		return $this->_em->transactional(function () use ($abo) {
-			$repetitie = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($abo->mlt_repetitie_id);
-			if (!$repetitie->abonneerbaar) {
+			if (!$abo->maaltijd_repetitie->abonneerbaar) {
 				throw new CsrGebruikerException('Niet abonneerbaar');
 			}
 			if ($this->find(['mlt_repetitie_id' => $abo->mlt_repetitie_id, 'uid' => $abo->uid])) {
 				throw new CsrGebruikerException('Abonnement al ingeschakeld');
 			}
-			if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $repetitie->abonnement_filter)) {
-				throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $repetitie->abonnement_filter);
+			if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($abo->uid, $abo->maaltijd_repetitie->abonnement_filter)) {
+				throw new CsrGebruikerException('Niet toegestaan vanwege aanmeldrestrictie: ' . $abo->maaltijd_repetitie->abonnement_filter);
 			}
 
 			$abo->van_uid = $abo->uid;
@@ -219,28 +203,28 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 			$this->_em->persist($abo);
 			$this->_em->flush();
 
-			return $this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden($abo->mlt_repetitie_id, $abo->uid);
+			return $this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden($abo->maaltijd_repetitie, $abo->uid);
 		});
 	}
 
 	/**
-	 * @param $mrid
+	 * @param MaaltijdRepetitie $repetitie
 	 * @return bool|mixed
 	 * @throws Throwable
 	 */
-	public function inschakelenAbonnementVoorNovieten($mrid) {
-		return $this->_em->transactional(function () use ($mrid) {
+	public function inschakelenAbonnementVoorNovieten(MaaltijdRepetitie $repetitie) {
+		return $this->_em->transactional(function () use ($repetitie) {
 			$novieten = ContainerFacade::getContainer()->get(ProfielRepository::class)->findBy(['status' => LidStatus::Noviet]);
 
 			$aantal = 0;
 			foreach ($novieten as $noviet) {
-				$repetitie = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($mrid);
 				if (!$this->maaltijdAanmeldingenRepository->checkAanmeldFilter($noviet->uid, $repetitie->abonnement_filter)) {
 					continue;
 				}
 
 				$abo = new MaaltijdAbonnement();
-				$abo->mlt_repetitie_id = $mrid;
+				$abo->maaltijd_repetitie = $repetitie;
+				$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
 				$abo->uid = $noviet->uid;
 				$abo->wanneer_ingeschakeld = date('Y-m-d H:i');
 
@@ -248,7 +232,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 					continue;
 				}
 				$this->_em->persist($abo);
-				$this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden($mrid, $noviet->uid);
+				$this->maaltijdAanmeldingenRepository->aanmeldenVoorKomendeRepetitieMaaltijden($repetitie, $noviet->uid);
 				$aantal += 1;
 			}
 
@@ -259,25 +243,29 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param $mrid
+	 * @param MaaltijdRepetitie $repetitie
 	 * @param $uid
 	 * @return bool|mixed
 	 * @throws Throwable
 	 */
-	public function uitschakelenAbonnement($mrid, $uid) {
-		return $this->_em->transactional(function () use ($mrid, $uid) {
-			if (!$this->getHeeftAbonnement($mrid, $uid)) {
+	public function uitschakelenAbonnement(MaaltijdRepetitie $repetitie, $uid) {
+		return $this->_em->transactional(function () use ($repetitie, $uid) {
+			if (!$this->getHeeftAbonnement($repetitie->mlt_repetitie_id, $uid)) {
 				throw new CsrGebruikerException('Abonnement al uitgeschakeld');
 			}
 
-			$abo = $this->find(['mlt_repetitie_id' => $mrid, 'uid' => $uid]);
+			$abo = $this->find(['mlt_repetitie_id' => $repetitie->mlt_repetitie_id, 'uid' => $uid]);
+			$rep = $abo->maaltijd_repetitie;
 			$this->_em->remove($abo);
 			$this->_em->flush();
+
 			$abo = new MaaltijdAbonnement();
-			$abo->mlt_repetitie_id = $mrid;
+			$abo->maaltijd_repetitie = $repetitie;
+			$abo->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+			$abo->maaltijd_repetitie = $rep;
 			$abo->van_uid = $uid;
 
-			$aantal = $this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement($mrid, $uid);
+			$aantal = $this->maaltijdAanmeldingenRepository->afmeldenDoorAbonnement($repetitie, $uid);
 			return array($abo, $aantal);
 		});
 	}
@@ -297,7 +285,6 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	 */
 	public function verwijderAbonnementen($mrid) {
 		return $this->_em->transactional(function () use ($mrid) {
-			/** @var MaaltijdAbonnement[] $abos */
 			$abos = $this->findBy(['mlt_repetitie_id' => $mrid]);
 			$aantal = count($abos);
 			foreach ($abos as $abo) {

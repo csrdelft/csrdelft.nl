@@ -4,6 +4,7 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\renderer\TemplateView;
 use Throwable;
@@ -16,9 +17,14 @@ use Throwable;
 class MijnAbonnementenController {
 	/** @var MaaltijdAbonnementenRepository  */
 	private $maaltijdAbonnementenRepository;
+	/**
+	 * @var MaaltijdRepetitiesRepository
+	 */
+	private $maaltijdRepetitiesRepository;
 
-	public function __construct(MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository) {
+	public function __construct(MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository) {
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
+		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 	}
 
 	/**
@@ -53,7 +59,8 @@ class MijnAbonnementenController {
 	 * @throws Throwable
 	 */
 	public function uitschakelen($mrid) {
-		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement((int)$mrid, LoginService::getUid());
+		$repetitie = $this->maaltijdRepetitiesRepository->find($mrid);
+		$abo_aantal = $this->maaltijdAbonnementenRepository->uitschakelenAbonnement($repetitie, LoginService::getUid());
 		if ($abo_aantal[1] > 0) {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);
