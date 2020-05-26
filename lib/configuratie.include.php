@@ -14,10 +14,6 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
-use CsrDelft\Orm\DependencyManager;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Persistence\DatabaseAdmin;
-use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
@@ -97,12 +93,6 @@ $container = $kernel->getContainer();
 // Gebruik de PDO connectie van doctrine
 $pdo = $container->get('doctrine.dbal.default_connection')->getWrappedConnection();
 
-// Set csrdelft/orm parts of the container
-$container->set(OrmMemcache::class, new OrmMemcache(env('CACHE_HOST'), (int)env('CACHE_PORT')));
-$container->set(Database::class, new Database($pdo));
-$container->set(DatabaseAdmin::class, new DatabaseAdmin($pdo));
-
-DependencyManager::setContainer($container);
 ContainerFacade::init($container);
 
 // ---
