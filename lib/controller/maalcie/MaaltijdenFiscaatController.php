@@ -3,13 +3,14 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
-use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
@@ -20,7 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MaaltijdenFiscaatController {
+class MaaltijdenFiscaatController extends AbstractController {
 	/**
 	 * @var MaaltijdenRepository
 	 */
@@ -107,10 +108,12 @@ class MaaltijdenFiscaatController {
 
 			$this->maaltijdenRepository->update($maaltijd);
 
-			return [$maaltijd];
+			$verwijderd = new RemoveDataTableEntry($maaltijd->maaltijd_id, Maaltijd::class);
+
+			return [$verwijderd];
 		});
 
-		return new RemoveRowsResponse($maaltijden);
+		return $this->tableData($maaltijden);
 	}
 
 }

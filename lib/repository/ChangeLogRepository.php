@@ -3,7 +3,6 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\ChangeLogEntry;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Doctrine\ORM\Mapping\MappingException;
@@ -67,11 +66,7 @@ class ChangeLogRepository extends AbstractRepository {
 			$change->subject = implode(".", $meta->getIdentifierValues($subject)) . '@' . strtolower(short_class(get_class($subject))) . '.csrdelft.nl';
 		} catch (MappingException $ex) {
 			// ignore
-			if ($subject instanceof PersistentEntity) {
-				$change->subject = $subject->getUUID();
-			} else {
-				$change->subject = $subject;
-			}
+			$change->subject = $subject;
 		}
 
 		$change->property = $property;

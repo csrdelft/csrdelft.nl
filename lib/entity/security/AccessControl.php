@@ -2,7 +2,9 @@
 
 namespace CsrDelft\entity\security;
 
+use CsrDelft\entity\security\enum\AccessAction;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * AccessControl.class.php
@@ -16,10 +18,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccessControl {
 	/**
-	 * AclController / PersistentEntity / View / etc.
+	 * AclController / View / etc.
 	 * @var string
 	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
+	 * @Serializer\Groups("datatable")
 	 */
 	public $environment;
 	/**
@@ -40,6 +43,29 @@ class AccessControl {
 	 * Benodigde rechten
 	 * @var string
 	 * @ORM\Column(type="string")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $subject;
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("action")
+	 */
+	public function getDataTableAction() {
+		return AccessAction::from($this->action)->getDescription();
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("resource")
+	 */
+	public function getDataTableResource() {
+		if ($this->resource === '*') {
+			return 'Elke ' . lcfirst($this->environment);
+		} else {
+			return 'Deze ' . lcfirst($this->environment);
+		}
+	}
 }

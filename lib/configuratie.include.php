@@ -177,21 +177,6 @@ switch (MODE) {
 		$container->get(LoginService::class)->authenticate();
 
 		$container->get(LogRepository::class)->log();
-
-		// Database modus meldingen
-		if (DB_MODIFY OR DB_DROP) {
-			if (DEBUG) {
-				if (DB_DROP) {
-					setMelding('DB_DROP enabled', 2);
-				}
-			} elseif (!LoginService::mag(P_ADMIN)) {
-				redirect('/onderhoud.html');
-			} elseif (DB_DROP) {
-				setMelding('DB_DROP enabled', 2);
-			} elseif (DB_MODIFY) {
-				setMelding('DB_MODIFY enabled', 2);
-			}
-		}
 		break;
 
 	default:

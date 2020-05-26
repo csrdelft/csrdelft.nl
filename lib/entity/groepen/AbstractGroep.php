@@ -8,6 +8,7 @@ use CsrDelft\common\Eisen;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
@@ -98,6 +99,12 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @ORM\Column(type="uid")
 	 */
 	public $maker_uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="maker_uid", referencedColumnName="uid")
+	 */
+	public $maker;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")

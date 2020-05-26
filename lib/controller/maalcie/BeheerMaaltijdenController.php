@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -12,7 +13,6 @@ use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
-use CsrDelft\view\datatable\RemoveRowsResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenTable;
@@ -207,7 +207,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	/**
-	 * @return RemoveRowsResponse
+	 * @return GenericDataTableResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -216,6 +216,8 @@ class BeheerMaaltijdenController extends AbstractController {
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
+		$removed = new RemoveDataTableEntry($maaltijd->maaltijd_id, Maaltijd::class);
+
 		if ($maaltijd->verwijderd) {
 			$this->maaltijdenRepository->delete($maaltijd);
 		} else {
@@ -223,11 +225,11 @@ class BeheerMaaltijdenController extends AbstractController {
 			$this->maaltijdenRepository->update($maaltijd);
 		}
 
-		return new RemoveRowsResponse(array($maaltijd));
+		return $this->tableData([$removed]);
 	}
 
 	/**
-	 * @return RemoveRowsResponse
+	 * @return GenericDataTableResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -236,9 +238,12 @@ class BeheerMaaltijdenController extends AbstractController {
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
+		$verwijderd = new RemoveDataTableEntry($maaltijd->maaltijd_id, Maaltijd::class);
+
 		$maaltijd->verwijderd = false;
 		$this->maaltijdenRepository->update($maaltijd);
-		return new RemoveRowsResponse(array($maaltijd)); // Verwijder uit prullenbak
+
+		return $this->tableData([$verwijderd]);
 	}
 
 	/**

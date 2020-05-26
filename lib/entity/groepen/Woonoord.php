@@ -18,7 +18,11 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Een woonoord is waar C.S.R.-ers bij elkaar wonen.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WoonoordenRepository")
- * @ORM\Table("woonoorden")
+ * @ORM\Table("woonoorden", indexes={
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"})
+ * })
  */
 class Woonoord extends AbstractGroep implements HeeftSoort {
 	/**
