@@ -90,9 +90,6 @@ $kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
 $kernel->boot();
 $container = $kernel->getContainer();
 
-// Gebruik de PDO connectie van doctrine
-$pdo = $container->get('doctrine.dbal.default_connection')->getWrappedConnection();
-
 ContainerFacade::init($container);
 
 // ---
