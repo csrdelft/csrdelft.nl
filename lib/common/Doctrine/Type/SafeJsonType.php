@@ -4,7 +4,7 @@
 namespace CsrDelft\common\Doctrine\Type;
 
 
-use CsrDelft\Orm\JsonSerializer\SafeJsonSerializer;
+use CsrDelft\common\Doctrine\Type\Serializer\SafeJsonSerializer;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

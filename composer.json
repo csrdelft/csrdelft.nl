@@ -8,7 +8,6 @@
 	],
 	"require": {
 		"csrdelft/bb": "1.1.9",
-		"csrdelft/orm": "^1.9",
 		"easyrdf/easyrdf": "^0.9.1",
 		"eftec/bladeone": "3.21",
 		"ext-PDO": "*",
@@ -49,7 +48,8 @@
 		"symfony/serializer-pack": "^1.0",
 		"symfony/cache": "^5.0",
 		"beberlei/doctrineextensions": "^1.2",
-		"symfony/var-dumper": "^5.0"
+		"symfony/var-dumper": "^5.0",
+		"zumba/json-serializer": "^2.2"
     },
 	"config": {
 		"platform": {
