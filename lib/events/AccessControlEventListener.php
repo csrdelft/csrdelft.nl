@@ -2,7 +2,7 @@
 
 namespace CsrDelft\events;
 
-use CsrDelft\common\Auth;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\service\CsrfService;

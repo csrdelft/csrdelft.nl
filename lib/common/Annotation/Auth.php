@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\common;
+namespace CsrDelft\common\Annotation;
 
 
 use CsrDelft\events\AccessControlEventListener;

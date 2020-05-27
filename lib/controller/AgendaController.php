@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\Auth;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
