@@ -40,11 +40,14 @@ use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ProfielForm;
+use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 class ProfielController extends AbstractController {
 	/**
@@ -70,6 +73,12 @@ class ProfielController extends AbstractController {
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
 	}
 
+	/**
+	 * @param $uid
+	 * @return RedirectResponse
+	 * @Route("/profiel/{uid}/resetPrivateToken", methods={"GET"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_PROFIEL_EDIT)
+	 */
 	public function resetPrivateToken($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
@@ -86,6 +95,32 @@ class ProfielController extends AbstractController {
 		return $this->redirectToRoute('profiel-profiel', ['uid' => $uid]);
 	}
 
+	/**
+	 * @param $uid
+	 * @param BesturenRepository $besturenRepository
+	 * @param CommissiesRepository $commissiesRepository
+	 * @param WerkgroepenRepository $werkgroepenRepository
+	 * @param OnderverenigingenRepository $onderverenigingenRepository
+	 * @param RechtenGroepenRepository $rechtenGroepenRepository
+	 * @param KetzersRepository $ketzersRepository
+	 * @param ActiviteitenRepository $activiteitenRepository
+	 * @param CiviBestellingRepository $civiBestellingRepository
+	 * @param CorveeTakenRepository $corveeTakenRepository
+	 * @param CorveeVoorkeurenRepository $corveeVoorkeurenRepository
+	 * @param BoekExemplaarRepository $boekExemplaarRepository
+	 * @param BoekRecensieRepository $boekRecensieRepository
+	 * @param FotoRepository $fotoRepository
+	 * @param MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+	 * @param CorveeVrijstellingenRepository $corveeVrijstellingenRepository
+	 * @param ForumPostsRepository $forumPostsRepository
+	 * @param FotoTagsRepository $fotoTagsRepository
+	 * @param CorveeKwalificatiesRepository $corveeKwalificatiesRepository
+	 * @param MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
+	 * @return TemplateView
+	 * @throws Throwable
+	 * @Route("/profiel/{uid}", methods={"GET"}, defaults={"uid": null}, requirements={"uid": ".{4}"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function profiel(
 		$uid,
 		BesturenRepository $besturenRepository,
@@ -152,6 +187,13 @@ class ProfielController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @param $lidjaar
+	 * @param $status
+	 * @return TemplateView|RedirectResponse
+	 * @Route("/profiel/{lidjaar}/nieuw/{status}", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
+	 */
 	public function nieuw($lidjaar, $status) {
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
@@ -231,6 +273,12 @@ class ProfielController extends AbstractController {
 		return view('default', ['content' => $form]);
 	}
 
+	/**
+	 * @param $uid
+	 * @return TemplateView|RedirectResponse
+	 * @Route("/profiel/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_PROFIEL_EDIT)
+	 */
 	public function bewerken($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
@@ -241,6 +289,12 @@ class ProfielController extends AbstractController {
 		return $this->profielBewerken($profiel);
 	}
 
+	/**
+	 * @param $uid
+	 * @return TemplateView
+	 * @Route("/profiel/{uid}/voorkeuren", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_PROFIEL_EDIT)
+	 */
 	public function voorkeuren($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
@@ -261,12 +315,27 @@ class ProfielController extends AbstractController {
 			$manager->persist($opmerking);
 			$manager->flush();
 			setMelding('Voorkeuren opgeslagen', 1);
-			$this->redirectToRoute('profiel-voorkeuren', ['uid' => $uid]);
+			$this->redirectToRoute('csrdelft_profiel_voorkeuren', ['uid' => $uid]);
 
 		}
 		return view('default', ['content' => $form]);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/profiel/voorkeuren", methods={"GET"})
+	 * @Auth(P_PROFIEL_EDIT)
+	 */
+	public function voorkeurenNoUid() {
+		return $this->voorkeuren(LoginService::getUid());
+	}
+
+	/**
+	 * @param $uid
+	 * @return RedirectResponse
+	 * @Route("/profiel/{uid}/addToGoogleContacts", methods={"GET"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function addToGoogleContacts($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
@@ -285,6 +354,12 @@ class ProfielController extends AbstractController {
 	}
 
 
+	/**
+	 * @param null $uid
+	 * @return TemplateView
+	 * @Route("/profiel/{uid}/stamboom", methods={"GET"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function stamboom($uid = null) {
 		$profiel = $uid ? $this->profielRepository->get($uid) : LoginService::getProfiel();
 
@@ -295,7 +370,7 @@ class ProfielController extends AbstractController {
 
 	/**
 	 * @param VerjaardagenService $verjaardagenService
-	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @return TemplateView
 	 * @Route("/leden/verjaardagen", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
@@ -308,6 +383,15 @@ class ProfielController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @param $uid
+	 * @param $timespan
+	 * @param SaldoGrafiekService $saldoGrafiekService
+	 * @return JsonResponse
+	 * @throws Exception
+	 * @Route("/profiel/{uid}/saldo/{timespan}", methods={"POST"}, requirements={"uid": ".{4}", "timespan": "\d+"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function saldo($uid, $timespan, SaldoGrafiekService $saldoGrafiekService) {
 		if ($saldoGrafiekService->magGrafiekZien($uid)) {
 			return new JsonResponse($saldoGrafiekService->getDataPoints($uid, $timespan));
@@ -316,6 +400,12 @@ class ProfielController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @param $uid
+	 * @return VcardResponse
+	 * @Route("/profiel/{uid}.vcf", methods={"GET"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function vcard($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
@@ -326,11 +416,13 @@ class ProfielController extends AbstractController {
 		return new VcardResponse(view('profiel.vcard', ['profiel' => $profiel])->toString());
 	}
 
+	/**
+	 * @param $uid
+	 * @return TemplateView
+	 * @Route("/profiel/{uid}/kaartje", methods={"GET"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function kaartje($uid) {
 		return view('profiel.kaartje', ['profiel' => $this->profielRepository->get($uid)]);
-	}
-
-	public function redirectWithUid($route) {
-		return $this->redirectToRoute($route, ['uid' => LoginService::getUid()]);
 	}
 }

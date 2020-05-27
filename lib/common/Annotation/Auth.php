@@ -24,7 +24,11 @@ class Auth {
 
 	public function __construct(array $data) {
 		if (isset($data['value'])) {
-			$data['mag'] = $data['value'];
+			if (is_array($data['value'])) {
+				$data['mag'] = implode(',', $data['value']);
+			} else {
+				$data['mag'] = $data['value'];
+			}
 			unset($data['value']);
 		}
 

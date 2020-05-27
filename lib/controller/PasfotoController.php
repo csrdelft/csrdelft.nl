@@ -4,9 +4,11 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\repository\ProfielRepository;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 class PasfotoController extends AbstractController {
 	/**
@@ -18,6 +20,14 @@ class PasfotoController extends AbstractController {
 		$this->profielRepository = $profielRepository;
 	}
 
+	/**
+	 * @param $uid
+	 * @param string $vorm
+	 * @return BinaryFileResponse|\Symfony\Component\HttpFoundation\RedirectResponse
+	 * @Route("/profiel/pasfoto/{uid}.jpg", methods={"GET"}, requirements={"uid": ".{4}"}, defaults={"vorm": "civitas"})
+	 * @Route("/profiel/pasfoto/{uid}.{vorm}.jpg", methods={"GET"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function pasfoto($uid, $vorm = 'civitas') {
 		$profiel = $this->profielRepository::get($uid);
 		if (!$profiel) {
