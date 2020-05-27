@@ -31,7 +31,7 @@ class GoogleController extends AbstractController {
 	 * @param Request $request
 	 * @return RedirectResponse
 	 * @Route("/google/callback", methods={"GET", "POST"})
-	 * @Auth(P_LOGED_IN)
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function callback(Request $request) {
 		$state = $request->query->get('state', null);
