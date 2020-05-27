@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
@@ -11,6 +12,7 @@ use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -36,10 +38,21 @@ class AccountController extends AbstractController {
 		$this->loginService = $loginService;
 	}
 
+	/**
+	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @Route("/account/{uid}/aanvragen", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_PUBLIC)
+	 */
 	public function aanvragen() {
 		return view('default', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
 	}
 
+	/**
+	 * @param null $uid
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @Route("/account/{uid}/aanmaken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_ADMIN)
+	 */
 	public function aanmaken($uid = null) {
 		if (!LoginService::mag(P_ADMIN)) {
 			throw new CsrToegangException();
@@ -60,6 +73,12 @@ class AccountController extends AbstractController {
 		return $this->redirectToRoute('account-bewerken', ['uid' => $uid]);
 	}
 
+	/**
+	 * @param null $uid
+	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @Route("/account/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function bewerken($uid = null) {
 		if ($uid == null) {
 			$uid = $this->loginService->getUid();
@@ -95,6 +114,12 @@ class AccountController extends AbstractController {
 		return view('default', ['content' => $form]);
 	}
 
+	/**
+	 * @param null $uid
+	 * @return JsonResponse
+	 * @Route("/account/{uid}/verwijderen", methods={"POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function verwijderen($uid = null) {
 		if ($uid == null) {
 			$uid = $this->loginService->getUid();

@@ -20,6 +20,7 @@ class AccessControlEventListener {
 		'error_controller' => true,
 		'CsrDelft\controller\ErrorController::handleException' => true,
 		'twig.controller.exception::showAction' => true,
+		'Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction' => true,
 	];
 	/**
 	 * @var CsrfService
@@ -51,7 +52,6 @@ class AccessControlEventListener {
 		if (isset(self::EXCLUDED_CONTROLLERS[$controller])){
 			return;
 		}
-
 
 		$reflectionMethod = new \ReflectionMethod($event->getController()[0], $event->getController()[1]);
 
