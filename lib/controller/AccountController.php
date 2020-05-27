@@ -70,7 +70,7 @@ class AccountController extends AbstractController {
 				throw new CsrGebruikerException('Account aanmaken gefaald');
 			}
 		}
-		return $this->redirectToRoute('account-bewerken', ['uid' => $uid]);
+		return $this->redirectToRoute('csrdelft_account_bewerken', ['uid' => $uid]);
 	}
 
 	/**

@@ -92,7 +92,7 @@ class ProfielController extends AbstractController {
 
 		$this->accountRepository->resetPrivateToken($profiel->account);
 
-		return $this->redirectToRoute('profiel-profiel', ['uid' => $uid]);
+		return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $uid]);
 	}
 
 	/**
@@ -265,7 +265,7 @@ class ProfielController extends AbstractController {
 					setMelding('Opslaan van ' . count($diff) . ' wijziging(en) mislukt', -1);
 				}
 			}
-			return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
+			return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
 		}
 		if ($alleenFormulier) {
 			return view('plain', ['titel' => 'Noviet toevoegen', 'content' => $form]);
@@ -350,7 +350,7 @@ class ProfielController extends AbstractController {
 		} catch (CsrException $e) {
 			setMelding("Opslaan in Google Contacts mislukt: " . $e->getMessage(), -1);
 		}
-		return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
+		return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
 	}
 
 

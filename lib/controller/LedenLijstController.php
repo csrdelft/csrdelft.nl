@@ -83,7 +83,7 @@ class LedenLijstController extends AbstractController {
 			if ($lidZoeker->count() == 1) {
 				$leden = $lidZoeker->getLeden();
 				$profiel = $leden[0];
-				return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
+				return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
 			}
 		}
 

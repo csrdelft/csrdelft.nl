@@ -87,7 +87,7 @@ class BibliotheekController extends AbstractController {
 				setMelding("Recensie opgeslagen", 0);
 			}
 		}
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek_id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek_id]);
 	}
 
 	/**
@@ -161,7 +161,7 @@ class BibliotheekController extends AbstractController {
 				$manager->persist($boek);
 				$manager->flush();
 
-				return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
+				return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 			}
 		}
 
@@ -208,7 +208,7 @@ class BibliotheekController extends AbstractController {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($boek);
 			$manager->flush();
-			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
+			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 		}
 	}
 
@@ -246,7 +246,7 @@ class BibliotheekController extends AbstractController {
 
 		if (!$boek->magVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving', -1);
-			return $this->redirectToRoute('bibliotheek-overzicht');
+			return $this->redirectToRoute('csrdelft_bibliotheek_catalogustonen');
 		} else {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($boek);
@@ -288,7 +288,7 @@ class BibliotheekController extends AbstractController {
 		$boek = $this->boekRepository->find($boek_id);
 		if (!$boek->magBekijken()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()', -1);
-			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
+			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 		}
 		if ($uid == null) {
 			$uid = LoginService::getUid();
@@ -299,7 +299,7 @@ class BibliotheekController extends AbstractController {
 		$this->boekExemplaarRepository->addExemplaar($boek, $uid);
 
 		setMelding('Exemplaar met succes toegevoegd.', 1);
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 	}
 
 	/**
@@ -320,7 +320,7 @@ class BibliotheekController extends AbstractController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 	/**
@@ -343,7 +343,7 @@ class BibliotheekController extends AbstractController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 	/**
@@ -382,12 +382,12 @@ class BibliotheekController extends AbstractController {
 		} else if (!ProfielRepository::existsUid($uid)) {
 			setMelding('Incorrecte lener', -1);
 		} else if ($this->boekExemplaarRepository->leen($exemplaar, $uid)) {
-			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
+			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
 		} else {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 
@@ -403,7 +403,7 @@ class BibliotheekController extends AbstractController {
 		if (!$this->boekExemplaarRepository->leen($exemplaar, LoginService::getUid())) {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
 	}
 
 
