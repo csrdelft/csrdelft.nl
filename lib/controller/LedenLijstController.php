@@ -4,6 +4,7 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\repository\CmsPaginaRepository;
@@ -12,8 +13,16 @@ use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
+use Symfony\Component\Routing\Annotation\Route;
 
 class LedenLijstController extends AbstractController {
+	/**
+	 * @param CmsPaginaRepository $cmsPaginaRepository
+	 * @param LidZoekerService $lidZoeker
+	 * @return \CsrDelft\view\renderer\TemplateView|\Symfony\Component\HttpFoundation\RedirectResponse
+	 * @Route("/ledenlijst", methods={"GET", "POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker) {
 		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten

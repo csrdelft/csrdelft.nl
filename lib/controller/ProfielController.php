@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
@@ -43,6 +44,7 @@ use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
 use Exception;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ProfielController extends AbstractController {
 	/**
@@ -291,6 +293,12 @@ class ProfielController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @param VerjaardagenService $verjaardagenService
+	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @Route("/leden/verjaardagen", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function verjaardagen(VerjaardagenService $verjaardagenService) {
 		$nu = time();
 		return view('verjaardagen.alle', [
