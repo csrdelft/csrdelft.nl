@@ -44,6 +44,7 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 		$gelezen = $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginService::getUid()]);
 		if (!$gelezen) {
 			$gelezen = $this->maakForumDraadGelezen($draad);
+			$this->getEntityManager()->persist($gelezen);
 		}
 		if ($moment) {
 			$gelezen->datum_tijd = $moment;
@@ -55,8 +56,9 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 			}
 		}
 
-		$this->getEntityManager()->persist($gelezen);
 		$this->getEntityManager()->flush();
+
+		$this->getEntityManager()->clear();
 	}
 
 	public function verwijderDraadGelezen(ForumDraad $draad) {
