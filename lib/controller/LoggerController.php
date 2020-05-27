@@ -19,6 +19,11 @@ class LoggerController {
 	const LOG_TIMEOUT = 1800;
 	const LAATSTE_LOG_MELDING = 'laatste_log_melding';
 
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/logger", methods={"GET", "POST"}, defaults={"_mag": "P_LOGGED_IN"})
+	 */
 	public function log(Request $request) {
 		if (!isset($_SESSION[self::LAATSTE_LOG_MELDING])) $_SESSION[self::LAATSTE_LOG_MELDING] = 0;
 

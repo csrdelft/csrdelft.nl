@@ -11,6 +11,7 @@ use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
+use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
@@ -108,6 +109,8 @@ class DataTable implements View, FormElement, ToResponse {
 				$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
 				if ($type instanceof DateTimeImmutableType) {
 					$this->addColumn($attribute, null, null, CellRender::DateTime());
+				} elseif ($type instanceof BooleanType) {
+					$this->addColumn($attribute, null, null, CellRender::Check());
 				} else {
 					$this->addColumn($attribute);
 				}
