@@ -6,7 +6,6 @@ use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use function common\short_class;
 
 /**
  * AgendaItem.class.php

@@ -7,7 +7,6 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
-use function common\short_class;
 
 /**
  * ChangeLogModel.class.php

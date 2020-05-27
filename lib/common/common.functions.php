@@ -1170,3 +1170,14 @@ function as_array($value) {
 	}
 	throw new CsrException("Geen array of iterable");
 }
+
+/**
+ * Get the short name for a class
+ *
+ * @param object|string $class
+ *
+ * @return string
+ */
+function short_class($class) {
+	return (new \ReflectionClass($class))->getShortName();
+}

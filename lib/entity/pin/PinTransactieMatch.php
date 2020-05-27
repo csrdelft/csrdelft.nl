@@ -5,7 +5,6 @@ namespace CsrDelft\entity\pin;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use Doctrine\ORM\Mapping as ORM;
-use function common\short_class;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
 
