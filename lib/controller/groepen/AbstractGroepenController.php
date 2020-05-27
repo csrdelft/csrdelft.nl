@@ -632,8 +632,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
 
 		if ($form->validate()) {
-			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
-			$lid->profiel = ProfielRepository::get($lid->uid);
+			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->profiel->uid);
+			$lid->groep_id = $lid->groep->id;
+			$lid->uid = $lid->profiel->uid;
 			$model->save($lid);
 			return $this->tableData([$lid]);
 		} else {
@@ -681,6 +682,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 		if ($form->validate()) {
 			$this->changeLogRepository->logChanges($form->diff());
+			$lid->groep_id = $lid->groep->id;
+			$lid->uid = $lid->profiel->uid;
 			$em->persist($lid);
 			$em->flush();
 			return $this->tableData([$lid]);

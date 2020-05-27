@@ -65,6 +65,18 @@ class DoctrineEntityField extends InputField {
 		$this->origvalue = $this->entity->getId();
 
 		parent::__construct($name, $value ? $value->getId() : null, $description);
+
+		$this->autoselect = true;
+	}
+
+	public function getValue() {
+		$this->value = parent::getValue();
+
+		if ((int)$this->value == $this->value) {
+			$this->value = (int) $this->value;
+		}
+
+		return $this->value;
 	}
 
 	public function getFormattedValue() {

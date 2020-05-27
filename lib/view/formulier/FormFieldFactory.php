@@ -79,13 +79,15 @@ class FormFieldFactory {
 				throw new CsrException('Compound joinColumns worden niet ondersteund voor veld ' . $fieldName . ' in class ' . get_class($model));
 			}
 
+			unset($fields[$fieldName]);
+
 			$targetEntity = $associationMapping['targetEntity'];
 
 			$field = new DoctrineEntityField($fieldName, $model->$fieldName, ucfirst(str_replace('_', ' ', $fieldName)), $targetEntity, '');
 
 			$joinColumn = $associationMapping['joinColumns'][0];
 
-			if (!$joinColumn['nullable']) {
+			if (isset($joinColumn['nullable']) && !$joinColumn['nullable']) {
 				$field->required = true;
 			}
 

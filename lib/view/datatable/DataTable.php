@@ -4,12 +4,15 @@ namespace CsrDelft\view\datatable;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\datatable\CustomDataTableEntry;
+use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl
@@ -97,11 +100,17 @@ class DataTable implements View, FormElement, ToResponse {
 			}
 		} else {
 			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
+			/** @var ClassMetadata $metadata */
 			$metadata = $manager->getClassMetaData($orm);
 
 			// generate columns from entity attributes
 			foreach ($metadata->getFieldNames() as $attribute) {
-				$this->addColumn($attribute);
+				$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
+				if ($type instanceof DateTimeImmutableType) {
+					$this->addColumn($attribute, null, null, CellRender::DateTime());
+				} else {
+					$this->addColumn($attribute);
+				}
 			}
 
 			// hide primary key columns

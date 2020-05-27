@@ -50,6 +50,11 @@ class GroepenBeheerTable extends DataTable {
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
 
+		$this->hideColumn('versie');
+		$this->hideColumn('afmelden_tot');
+		$this->hideColumn('bewerken_tot');
+		$this->hideColumn('eind_moment');
+
 		$this->deleteColumn('keuzelijst2');
 
 		$this->setOrder(['id' => 'desc']);

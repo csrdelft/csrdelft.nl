@@ -3,7 +3,7 @@ In de stek worden op allerlei plekken datatables gebruikt, datatables is een jQu
 
 Er is een php wrapper voor datatables gebouwd om deze met php te kunnen op bouwen met behulp van het framework.
 
-Zie [`initDataTable`](https://github.com/csrdelft/csrdelft.nl/blob/master/resources/assets/js/context.js#L110) voor de initializatie code van DataTables. Deze ontvangt een settings object vanuit de php, dit settingsobject wordt gemaakt in de [`DataTable`](https://github.com/csrdelft/csrdelft.nl/blob/master/lib/view/datatable/DataTable.php) klasse. De datatables api is heel erg declaratief waardoor dit op een elegante manier kan gebeuren.
+Zie `initDataTable` in `datatable/api.ts` voor de initializatie code van DataTables. Deze ontvangt een settings object vanuit de php, dit settingsobject wordt gemaakt in de [`DataTable`](https://github.com/csrdelft/csrdelft.nl/blob/master/lib/view/datatable/DataTable.php) klasse. De datatables api is heel erg declaratief waardoor dit op een elegante manier kan gebeuren.
 
 ## API
 
