@@ -4,7 +4,7 @@ doctrine:
         # use postgresql for PostgreSQL
         # use sqlite for SQLite
         driver: 'mysql'
-        server_version: '5.7'
+        server_version: '5.6'
 
         # only needed for MySQL
         charset: utf8mb4
