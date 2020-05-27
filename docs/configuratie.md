@@ -28,10 +28,6 @@ Deze velden zijn van Doctrine, specifiek kun je hier de database url aanpassen a
 
 Met deze velden kun je er voor zorgen dat GoogleSync werkt.
 
-### cron
-
-Vul hier de gegevens van de cron gebruiker in om dingen te testen met de cron (periodieke scripts)
-
 ### csrmail
 
 Hier gaat het wachtwoord van de maillijsten, deze heb je lokaal nooit nodig.

@@ -102,9 +102,10 @@ if (FORCE_HTTPS) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-			$account = $container->get(AccountRepository::class)->find('private_token = ?', array($token), null, null, 1)->fetch();
-			// Reset private token, user has to get a new one
-			$container->get(AccountRepository::class)->resetPrivateToken($account);
+			if ($account = $container->get(AccountRepository::class)->findOneBy(['private_token' => $token])) {
+				// Reset private token, user has to get a new one
+				$container->get(AccountRepository::class)->resetPrivateToken($account);
+			}
 			// TODO: Log dit
 		}
 		// redirect to https
@@ -120,13 +121,10 @@ switch (MODE) {
 		if (isSyrinx()) die("Syrinx is geen Travis!");
 		break;
 	case 'CLI':
-		// Override LoginModel in container to use the Cli version
-		$cliLoginModel = $container->get(LoginService::class);
-
-		$cliLoginModel->validateCron();
+		$container->get(LoginService::class)->loginCli();
 
 		if (!LoginService::mag(P_ADMIN)) {
-			die('access denied');
+			die('Cron user heeft geen admin rechten.');
 		}
 		break;
 
