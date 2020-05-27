@@ -45,6 +45,7 @@ use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
@@ -96,7 +97,7 @@ class ProfielController extends AbstractController {
 	}
 
 	/**
-	 * @param $uid
+	 * @param Profiel $profiel
 	 * @param BesturenRepository $besturenRepository
 	 * @param CommissiesRepository $commissiesRepository
 	 * @param WerkgroepenRepository $werkgroepenRepository
@@ -118,11 +119,12 @@ class ProfielController extends AbstractController {
 	 * @param MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
 	 * @return TemplateView
 	 * @throws Throwable
+	 *
 	 * @Route("/profiel/{uid}", methods={"GET"}, defaults={"uid": null}, requirements={"uid": ".{4}"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function profiel(
-		$uid,
+		Profiel $profiel,
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
 		WerkgroepenRepository $werkgroepenRepository,
@@ -143,18 +145,8 @@ class ProfielController extends AbstractController {
 		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
 	) {
-		if ($uid == null) {
-			$uid = LoginService::getUid();
-		}
-
-		$profiel = $this->profielRepository->get($uid);
-
-		if ($profiel === false) {
-			throw new CsrNotFoundException();
-		}
-
 		$fotos = [];
-		foreach ($fotoTagsRepository->findBy(['keyword' => $uid], null, 3) as $tag) {
+		foreach ($fotoTagsRepository->findBy(['keyword' => $profiel->uid], null, 3) as $tag) {
 			/** @var Foto $foto */
 			$foto = $fotoRepository->retrieveByUUID($tag->refuuid);
 			if ($foto) {
@@ -164,25 +156,25 @@ class ProfielController extends AbstractController {
 
 		return view('profiel.profiel', [
 			'profiel' => $profiel,
-			'besturen' => $besturenRepository->getGroepenVoorLid($uid),
-			'commissies' => $commissiesRepository->getGroepenVoorLid($uid),
-			'werkgroepen' => $werkgroepenRepository->getGroepenVoorLid($uid),
-			'onderverenigingen' => $onderverenigingenRepository->getGroepenVoorLid($uid),
-			'groepen' => $rechtenGroepenRepository->getGroepenVoorLid($uid),
-			'ketzers' => $ketzersRepository->getGroepenVoorLid($uid),
-			'activiteiten' => $activiteitenRepository->getGroepenVoorLid($uid),
-			'bestellinglog' => $civiBestellingRepository->getBestellingenVoorLid($uid, 10),
-			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginService::getUid() === $uid ? '' : '/' . $uid),
-			'corveetaken' => $corveeTakenRepository->getTakenVoorLid($uid),
-			'corveevoorkeuren' => $corveeVoorkeurenRepository->getVoorkeurenVoorLid($uid),
-			'corveevrijstelling' => $corveeVrijstellingenRepository->getVrijstelling($uid),
-			'corveekwalificaties' => $corveeKwalificatiesRepository->getKwalificatiesVanLid($uid),
-			'forumpostcount' => $forumPostsRepository->getAantalForumPostsVoorLid($uid),
-			'forumrecent' => $forumPostsRepository->getRecenteForumPostsVanLid($uid, (int)lid_instelling('forum', 'draden_per_pagina')),
-			'boeken' => $boekExemplaarRepository->getEigendom($uid),
-			'recenteAanmeldingen' => $maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($uid, date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))),
-			'abos' => $maaltijdAbonnementenRepository->getAbonnementenVoorLid($uid),
-			'gerecenseerdeboeken' => $boekRecensieRepository->getVoorLid($uid),
+			'besturen' => $besturenRepository->getGroepenVoorLid($profiel->uid),
+			'commissies' => $commissiesRepository->getGroepenVoorLid($profiel->uid),
+			'werkgroepen' => $werkgroepenRepository->getGroepenVoorLid($profiel->uid),
+			'onderverenigingen' => $onderverenigingenRepository->getGroepenVoorLid($profiel->uid),
+			'groepen' => $rechtenGroepenRepository->getGroepenVoorLid($profiel->uid),
+			'ketzers' => $ketzersRepository->getGroepenVoorLid($profiel->uid),
+			'activiteiten' => $activiteitenRepository->getGroepenVoorLid($profiel->uid),
+			'bestellinglog' => $civiBestellingRepository->getBestellingenVoorLid($profiel->uid, 10),
+			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginService::getUid() === $profiel->uid ? '' : '/' . $profiel->uid),
+			'corveetaken' => $corveeTakenRepository->getTakenVoorLid($profiel->uid),
+			'corveevoorkeuren' => $corveeVoorkeurenRepository->getVoorkeurenVoorLid($profiel->uid),
+			'corveevrijstelling' => $corveeVrijstellingenRepository->getVrijstelling($profiel->uid),
+			'corveekwalificaties' => $corveeKwalificatiesRepository->getKwalificatiesVanLid($profiel->uid),
+			'forumpostcount' => $forumPostsRepository->getAantalForumPostsVoorLid($profiel->uid),
+			'forumrecent' => $forumPostsRepository->getRecenteForumPostsVanLid($profiel->uid, (int)lid_instelling('forum', 'draden_per_pagina')),
+			'boeken' => $boekExemplaarRepository->getEigendom($profiel->uid),
+			'recenteAanmeldingen' => $maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($profiel->uid, date_create_immutable(instelling('maaltijden', 'recent_lidprofiel'))),
+			'abos' => $maaltijdAbonnementenRepository->getAbonnementenVoorLid($profiel->uid),
+			'gerecenseerdeboeken' => $boekRecensieRepository->getVoorLid($profiel->uid),
 			'fotos' => $fotos
 		]);
 	}
