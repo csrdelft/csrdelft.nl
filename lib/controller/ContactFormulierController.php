@@ -2,17 +2,24 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Mail;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\view\PlainView;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/12/2018
  */
 class ContactFormulierController {
+	/**
+	 * @return PlainView
+	 * @Route("/contactformulier/interesse", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 */
 	public function interesse() {
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 

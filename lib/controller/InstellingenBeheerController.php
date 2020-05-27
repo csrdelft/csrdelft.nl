@@ -2,9 +2,12 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -44,6 +47,13 @@ class InstellingenBeheerController {
 		return true; // hoofdpagina: geen module
 	}
 
+	/**
+	 * @param null $module
+	 * @return TemplateView
+	 * @Route("/instellingenbeheer", methods={"GET"})
+	 * @Route("/instellingenbeheer/module/{module}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function module($module = null) {
 		$this->assertToegang($module);
 
@@ -61,6 +71,13 @@ class InstellingenBeheerController {
 		]);
 	}
 
+	/**
+	 * @param $module
+	 * @param $id
+	 * @return TemplateView
+	 * @Route("/instellingenbeheer/opslaan/{module}/{id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function opslaan($module, $id) {
 		$this->assertToegang($module);
 
@@ -74,6 +91,13 @@ class InstellingenBeheerController {
 		]);
 	}
 
+	/**
+	 * @param $module
+	 * @param $id
+	 * @return TemplateView
+	 * @Route("/instellingenbeheer/reset/{module/{id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function reset($module, $id) {
 		$this->assertToegang($module);
 
@@ -85,5 +109,4 @@ class InstellingenBeheerController {
 			'module' => $instelling->module,
 		]);
 	}
-
 }

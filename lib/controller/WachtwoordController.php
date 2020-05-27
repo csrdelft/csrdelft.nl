@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Mail;
@@ -12,6 +13,13 @@ use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -37,6 +45,12 @@ class WachtwoordController extends AbstractController {
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/wachtwoord/wijzigen", methods={"GET", "POST"})
+	 * @Route("/wachtwoord/verlopen", methods={"GET", "POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function wijzigen() {
 		$account = LoginService::getAccount();
 		// mag inloggen?
@@ -53,6 +67,14 @@ class WachtwoordController extends AbstractController {
 		return view('default', ['content' => $form]);
 	}
 
+	/**
+	 * @return TemplateView|RedirectResponse
+	 * @throws NonUniqueResultException
+	 * @throws ORMException
+	 * @throws Exception
+	 * @Route("/wachtwoord/reset")
+	 * @Auth(P_PUBLIC)
+	 */
 	public function reset() {
 		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
 		$account = $this->oneTimeTokensRepository->verifyToken('/wachtwoord/reset', $token);
@@ -87,6 +109,13 @@ class WachtwoordController extends AbstractController {
 		return view('default', ['content' => $form]);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/wachtwoord/vergeten", methods={"GET", "POST"})
+	 * @Auth(P_PUBLIC)
+	 */
 	public function vergeten() {
 		$form = new WachtwoordVergetenForm();
 		if ($form->validate()) {

@@ -13,13 +13,15 @@ use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
+use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LedenLijstController extends AbstractController {
 	/**
 	 * @param CmsPaginaRepository $cmsPaginaRepository
 	 * @param LidZoekerService $lidZoeker
-	 * @return \CsrDelft\view\renderer\TemplateView|\Symfony\Component\HttpFoundation\RedirectResponse
+	 * @return TemplateView|RedirectResponse
 	 * @Route("/ledenlijst", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */

@@ -2,12 +2,15 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\GoogleToken;
 use CsrDelft\repository\GoogleTokenRepository;
 use CsrDelft\service\GoogleSync;
 use CsrDelft\service\security\LoginService;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class GoogleController.
@@ -24,6 +27,12 @@ class GoogleController extends AbstractController {
 		$this->googleTokenModel = $googleTokenModel;
 	}
 
+	/**
+	 * @param Request $request
+	 * @return RedirectResponse
+	 * @Route("/google/callback", methods={"GET", "POST"})
+	 * @Auth(P_LOGED_IN)
+	 */
 	public function callback(Request $request) {
 		$state = $request->query->get('state', null);
 		$code = $request->query->get('code', null);

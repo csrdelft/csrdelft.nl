@@ -4,6 +4,7 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\groepen\AbstractGroepenController;
 use CsrDelft\controller\groepen\CommissiesController;
 use CsrDelft\controller\groepen\KringenController;
@@ -13,8 +14,27 @@ use CsrDelft\controller\groepen\WerkgroepenController;
 use CsrDelft\controller\groepen\WoonoordenController;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ZoekController {
+	/**
+	 * @param Request $request
+	 * @param DocumentenController $documentenController
+	 * @param AgendaController $agendaController
+	 * @param ToolsController $toolsController
+	 * @param ForumController $forumController
+	 * @param FotoAlbumController $fotoAlbumController
+	 * @param BibliotheekController $bibliotheekController
+	 * @param CommissiesController $commissiesController
+	 * @param KringenController $kringenController
+	 * @param OnderverenigingenController $onderverenigingenController
+	 * @param WerkgroepenController $werkgroepenController
+	 * @param WoonoordenController $woonoordenController
+	 * @param RechtengroepenController $rechtengroepenController
+	 * @return JsonResponse
+	 * @Route("/zoeken", methods={"GET", "POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function zoeken(
 		Request $request,
 		DocumentenController $documentenController,
@@ -35,7 +55,7 @@ class ZoekController {
 
 		$instelling = lid_instelling('zoeken', 'leden');
 		if ($instelling !== 'nee') {
-			$resultaat['Leden'] = $toolsController->naamsuggesties('leden', 'instelling', $zoekterm)->getModel();
+			$resultaat['Leden'] = $toolsController->naamsuggesties('leden', $zoekterm)->getModel();
 		}
 
 		/** @var AbstractGroepenController[] $groepen */
