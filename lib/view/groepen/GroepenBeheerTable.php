@@ -42,7 +42,7 @@ class GroepenBeheerTable extends DataTable {
 		$this->hideColumn('id', false);
 		$this->deleteColumn('samenvatting');
 		$this->deleteColumn('omschrijving');
-		$this->deleteColumn('maker_uid');
+		$this->deleteColumn('maker');
 		$this->deleteColumn('keuzelijst');
 		$this->deleteColumn('rechten_aanmelden');
 		$this->deleteColumn('status_historie');

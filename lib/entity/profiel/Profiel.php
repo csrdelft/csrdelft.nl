@@ -21,6 +21,7 @@ use CsrDelft\service\GoogleSync;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
+use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityNotFoundException;
@@ -41,11 +42,12 @@ use GuzzleHttp\Exception\RequestException;
  *   @ORM\Index(name="voornaam", columns={"voornaam"}),
  *   @ORM\Index(name="achternaam", columns={"achternaam"}),
  *   @ORM\Index(name="verticale", columns={"verticale"}),
- *   @ORM\Index(name="nickname", columns={"nickname"})
+ *   @ORM\Index(name="nickname", columns={"nickname"}),
+ *   @ORM\Index(name="status", columns={"status"})
  * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class Profiel implements Agendeerbaar {
+class Profiel implements Agendeerbaar, DisplayEntity {
 	public function __construct() {
 		$this->kinderen = new ArrayCollection();
 	}
@@ -891,5 +893,13 @@ class Profiel implements Agendeerbaar {
 
 	public function getDataTableColumn() {
 		return new DataTableColumn($this->getLink('volledig'), $this->achternaam, $this->getNaam('volledig'));
+	}
+
+	public function getId() {
+		return $this->uid;
+	}
+
+	function getWeergave(): string {
+		return $this->getNaam('volledig');
 	}
 }

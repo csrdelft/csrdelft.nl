@@ -7,6 +7,9 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * ChangeLogModel.class.php
@@ -23,16 +26,22 @@ class ChangeLogRepository extends AbstractRepository {
 	 * @var SuService
 	 */
 	private $suService;
+	/**
+	 * @var SerializerInterface
+	 */
+	private $serializer;
 
 	/**
 	 * ChangeLogModel constructor.
 	 * @param ManagerRegistry $registry
+	 * @param SerializerInterface $serializer
 	 * @param SuService $suService
 	 */
-	public function __construct(ManagerRegistry $registry, SuService $suService) {
+	public function __construct(ManagerRegistry $registry, SerializerInterface $serializer, SuService $suService) {
 		parent::__construct($registry, ChangeLogEntry::class);
 
 		$this->suService = $suService;
+		$this->serializer = $serializer;
 	}
 
 	/**
@@ -47,6 +56,10 @@ class ChangeLogRepository extends AbstractRepository {
 		$change = $this->nieuw($subject, $property, $old, $new);
 		$this->create($change);
 		return $change;
+	}
+
+	public function serialize($value) {
+		return $this->serializer->serialize($value, 'json', ['groups' => 'log']);
 	}
 
 	/**

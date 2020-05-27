@@ -12,13 +12,13 @@ export function modalOpen(htmlString = '') {
 		modalBackdrop.remove();
 	}
 
-	modal.modal('show');
-	$(document.body).trigger('modalOpen');
-
 	if (htmlString !== '') {
-		modal.html(htmlString);
+		modal.replaceWith(htmlString);
 		modal.find('input:visible:first').trigger('focus');
 	}
+
+	modal.modal('show');
+	$(document.body).trigger('modalOpen');
 
 	return true;
 }

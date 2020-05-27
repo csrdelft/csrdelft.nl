@@ -33,7 +33,13 @@ class VerticalenController extends AbstractGroepenController {
 			$limit = $request->query->getInt('limit');
 		}
 		$result = [];
-		foreach ($this->model->find('naam LIKE ?', [$zoekterm], null, null, $limit) as $verticale) {
+		$verticales = $this->model->createQueryBuilder('v')
+			->where('v.naam LIKE :zoekterm')
+			->setParameter('zoekterm', $zoekterm)
+			->setMaxResults($limit)
+			->getQuery()->getResult();
+
+		foreach ($verticales as $verticale) {
 			/** @var Verticale $verticale */
 			$result[] = [
 				'url' => $verticale->getUrl() . '#' . $verticale->id,

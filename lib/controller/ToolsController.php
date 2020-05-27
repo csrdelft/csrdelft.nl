@@ -306,6 +306,7 @@ class ToolsController extends AbstractController {
 				'url' => '/profiel/' . $profiel->uid,
 				'label' => $profiel->uid,
 				'value' => $profiel->getNaam($vorm),
+				'uid' => $profiel->uid,
 			);
 		}
 

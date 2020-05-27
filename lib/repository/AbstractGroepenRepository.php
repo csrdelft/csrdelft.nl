@@ -164,7 +164,7 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 		$groep->begin_moment = null;
 		$groep->eind_moment = null;
 		$groep->website = null;
-		$groep->maker_uid = LoginService::getUid();
+		$groep->maker = LoginService::getProfiel();
 		return $groep;
 	}
 

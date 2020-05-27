@@ -34,11 +34,11 @@ class LoginSession implements DataTableEntry {
 	 */
 	public $uid;
 	/**
-	 * @var Profiel
-	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @var Account
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\security\Account")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
-	public $profiel;
+	public $account;
 	/**
 	 * DateTime
 	 * @var DateTimeImmutable

@@ -233,8 +233,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groepen = $this->model->createQueryBuilder('g')
 			->where('g.familie LIKE :familie and (g.status = :ht or g.status = :ft)')
 			->setParameter('familie', $zoekterm)
-			->setParameter('ht', GroepStatus::HT())
-			->setParameter('ft', GroepStatus::FT())
+			->setParameter('ht', GroepStatus::HT)
+			->setParameter('ft', GroepStatus::FT)
 			->setMaxResults($limit)
 			->getQuery()->getResult();
 		foreach ($groepen as $groep) {
@@ -324,7 +324,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$form->setDataTableId($this->table->getDataTableId());
 			return view('default', ['content' => $this->table, 'modal' => $form]);
 		} elseif ($form->validate()) {
-			$this->changeLogRepository->log($groep, 'create', null, print_r($groep, true));
+			$this->changeLogRepository->log($groep, 'create', null, $this->changeLogRepository->serialize($groep));
 			$this->model->create($groep);
 			$response[] = $groep;
 			if ($old) {
@@ -335,7 +335,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$view = $this->tableData($response);
 			setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
 			$form = new GroepPreviewForm($groep);
-			$view->modal = $form->getHtml();
+			$view->modal = $form->toString();
 			return $view;
 		} else {
 			return $form;

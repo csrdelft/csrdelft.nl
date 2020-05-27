@@ -64,8 +64,7 @@ function knopAjax(knop: JQuery, type: string) {
 			if (typeof response === 'object') { // JSON
 				fnUpdateDataTable('#' + dataTableId, response);
 				if (response.modal) {
-					modalOpen(response.modal);
-					init(document.querySelector('#modal')!);
+					domUpdate(response.modal);
 				} else {
 					modalClose();
 				}
@@ -93,8 +92,7 @@ function knopAjax(knop: JQuery, type: string) {
 			if (typeof response === 'object') { // JSON
 				fnUpdateDataTable('#' + tableId, response);
 				if (response.modal) {
-					modalOpen(response.modal);
-					init(document.querySelector('#modal')!);
+					domUpdate(response.modal);
 				} else {
 					modalClose();
 				}

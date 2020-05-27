@@ -37,6 +37,7 @@ class CourantRepository extends AbstractRepository {
 	public function nieuwCourant() {
 		$courant = new Courant();
 		$courant->verzendMoment = new DateTime();
+		$courant->verzender_profiel = LoginService::getProfiel();
 		$courant->verzender = LoginService::getUid();
 
 		return $courant;

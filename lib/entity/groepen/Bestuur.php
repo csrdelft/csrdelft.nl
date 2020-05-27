@@ -11,7 +11,11 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\BesturenRepository")
- * @ORM\Table("besturen")
+ * @ORM\Table("besturen", indexes={
+ *   @ORM\Index(name="status", columns={"status"}),
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="familie", columns={"familie"})
+ * })
  */
 class Bestuur extends AbstractGroep {
 	/**

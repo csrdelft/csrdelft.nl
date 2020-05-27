@@ -33,10 +33,11 @@ class GenericDataTableResponse implements ToResponse {
 	public function toResponse(): Response {
 		$serialized = $this->serializer->serialize($this->data, 'json', ['groups' => ['datatable']]);
 		$autoUpdateString = $this->autoUpdate ? "true" : "false";
+		$modalHtml = json_encode($this->modal);
 
 		$responseText = <<<JSON
 {
-    "modal": "{$this->modal}",
+    "modal": {$modalHtml},
     "autoUpdate": {$autoUpdateString},
     "lastUpdate": {$this->lastUpdate},
     "data": $serialized

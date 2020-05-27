@@ -77,7 +77,8 @@ class GroepForm extends ModalForm {
 			$fields['keuzelijst2']->title = 'Formaat: naam:type:default:description:optie,optie,optie|naam:type:default:description:|...';
 		}
 
-		$fields['maker_uid']->readonly = !LoginService::mag(P_ADMIN);
+		$fields['maker']->readonly = !LoginService::mag(P_ADMIN);
+		$fields['maker']->suggestions = ['/tools/naamsuggesties?zoekin=leden&q='];
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);

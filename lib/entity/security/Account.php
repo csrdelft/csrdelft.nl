@@ -14,9 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Login account.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\security\AccountRepository")
- * @ORM\Table("accounts", indexes={
- *   @ORM\Index(name="username", columns={"username"})
- * })
+ * @ORM\Table("accounts")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Account {
@@ -32,7 +30,7 @@ class Account {
 	/**
 	 * Gebruikersnaam
 	 * @var string
-	 * @ORM\Column(type="stringkey")
+	 * @ORM\Column(type="stringkey", unique=true)
 	 */
 	public $username;
 	/**

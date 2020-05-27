@@ -12,6 +12,7 @@ use CsrDelft\common\Doctrine\Type\StringKeyType;
 use CsrDelft\common\Doctrine\Type\UidType;
 use CsrDelft\view\formulier\getalvelden\FloatField;
 use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
@@ -29,6 +30,7 @@ use Doctrine\DBAL\Types\StringType;
 use Doctrine\DBAL\Types\TextType;
 use Doctrine\DBAL\Types\TimeImmutableType;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Exception;
 
 /**
@@ -44,6 +46,7 @@ class FormFieldFactory {
 	public static function generateFields($model) {
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
+		/** @var ClassMetadata $meta */
 		$meta = $em->getClassMetadata(get_class($model));
 
 		$fields = array();
@@ -56,6 +59,37 @@ class FormFieldFactory {
 			}
 
 			if ($meta->isIdentifier($fieldName)) {
+				$field->readonly = true;
+				$field->hidden = true;
+				$field->required = false;
+			}
+
+			$fields[$fieldName] = $field;
+		}
+
+		foreach ($meta->getAssociationMappings() as $associationMapping) {
+			// We supporten alleen als de key in dit entity zit.
+			if (!$associationMapping['isOwningSide']) {
+				continue;
+			}
+
+			$fieldName = $associationMapping['fieldName'];
+
+			if (count($associationMapping['joinColumns']) !== 1) {
+				throw new CsrException('Compound joinColumns worden niet ondersteund voor veld ' . $fieldName . ' in class ' . get_class($model));
+			}
+
+			$targetEntity = $associationMapping['targetEntity'];
+
+			$field = new DoctrineEntityField($fieldName, $model->$fieldName, ucfirst(str_replace('_', ' ', $fieldName)), $targetEntity, '');
+
+			$joinColumn = $associationMapping['joinColumns'][0];
+
+			if (!$joinColumn['nullable']) {
+				$field->required = true;
+			}
+
+			if ($meta->isIdentifier($joinColumn['name'])) {
 				$field->readonly = true;
 				$field->hidden = true;
 				$field->required = false;

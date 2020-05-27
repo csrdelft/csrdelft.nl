@@ -34,56 +34,56 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $id;
 	/**
 	 * Naam
 	 * @var string
 	 * @ORM\Column(type="stringkey")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $naam;
 	/**
 	 * Naam voor opvolging
 	 * @var string
 	 * @ORM\Column(type="stringkey")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $familie;
 	/**
 	 * Datum en tijd begin
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $begin_moment;
 	/**
 	 * Datum en tijd einde
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $eind_moment;
 	/**
 	 * o.t. / h.t. / f.t.
 	 * @var GroepStatus
 	 * @ORM\Column(type="enumGroepStatus")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $status;
 	/**
 	 * Korte omschrijving
 	 * @var string
 	 * @ORM\Column(type="text")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $samenvatting;
 	/**
 	 * Lange omschrijving
 	 * @var string
 	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $omschrijving;
 	/**
@@ -93,21 +93,15 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 */
 	public $keuzelijst;
 	/**
-	 * Lidnummer van aanmaker
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 */
-	public $maker_uid;
-	/**
 	 * @var Profiel
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="maker_uid", referencedColumnName="uid")
+	 * @ORM\JoinColumn(name="maker_uid", referencedColumnName="uid", nullable=false)
 	 */
 	public $maker;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $versie = GroepVersie::V1;
 	/**
@@ -203,7 +197,7 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 
 			default:
 				// Maker van groep mag alles
-				if ($this->maker_uid === LoginService::getUid()) {
+				if ($this->maker->uid === LoginService::getUid()) {
 					return true;
 				}
 				break;

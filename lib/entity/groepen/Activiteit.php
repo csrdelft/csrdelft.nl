@@ -9,6 +9,7 @@ use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -22,6 +23,10 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Table("activiteiten")
  */
 class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort {
+	public function __construct() {
+		$this->leden = new ArrayCollection();
+	}
+
 	public function getUUID() {
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
