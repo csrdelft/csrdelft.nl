@@ -123,7 +123,6 @@ class ProfielController extends AbstractController {
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function profiel(
-		Profiel $profiel,
 		BesturenRepository $besturenRepository,
 		CommissiesRepository $commissiesRepository,
 		WerkgroepenRepository $werkgroepenRepository,
@@ -142,8 +141,12 @@ class ProfielController extends AbstractController {
 		ForumPostsRepository $forumPostsRepository,
 		FotoTagsRepository $fotoTagsRepository,
 		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
-		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
+		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+		Profiel $profiel = null
 	) {
+		if (!$profiel) {
+			$profiel = LoginService::getProfiel();
+		}
 		$fotos = [];
 		foreach ($fotoTagsRepository->findBy(['keyword' => $profiel->uid], null, 3) as $tag) {
 			/** @var Foto $foto */
