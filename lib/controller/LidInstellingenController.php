@@ -64,7 +64,7 @@ class LidInstellingenController extends AbstractController {
 	public function opslaan() {
 		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
 		setMelding('Instellingen opgeslagen', 1);
-		return $this->redirectToRoute('lidinstellingen-beheer');
+		return $this->redirectToRoute('csrdelft_lidinstellingen_beheer');
 	}
 
 	/**
