@@ -2,10 +2,12 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use Exception;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -21,6 +23,11 @@ class LidInstellingenController extends AbstractController {
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
+	/**
+	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @Route("/instellingen", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function beheer() {
 		return view('instellingen.lidinstellingen', [
 			'defaultInstellingen' => $this->lidInstellingenRepository->getAll(),
@@ -28,6 +35,14 @@ class LidInstellingenController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @param $module
+	 * @param $instelling
+	 * @param null $waarde
+	 * @return JsonResponse
+	 * @Route("/instellingen/update/{module}/{instelling}/{waarde}", methods={"POST"}, defaults={"waarde": null})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function update($module, $instelling, $waarde = null) {
 		if ($waarde === null) {
 			$waarde = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_STRING);
@@ -43,6 +58,8 @@ class LidInstellingenController extends AbstractController {
 
 	/**
 	 * @throws Exception
+	 * @Route("/instellingen/opslaan", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function opslaan() {
 		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
@@ -50,6 +67,13 @@ class LidInstellingenController extends AbstractController {
 		return $this->redirectToRoute('lidinstellingen-beheer');
 	}
 
+	/**
+	 * @param $module
+	 * @param $key
+	 * @return JsonResponse
+	 * @Route("/instellingen/reset/{module}/{key}", methods={"POST"})
+	 * @Auth(P_ADMIN)
+	 */
 	public function reset($module, $key) {
 		$this->lidInstellingenRepository->resetForAll($module, $key);
 		setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
