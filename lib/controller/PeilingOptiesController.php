@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
@@ -12,9 +13,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieTable;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMException;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -33,24 +32,36 @@ class PeilingOptiesController extends AbstractController {
 		$this->peilingenService = $peilingenService;
 	}
 
+	/**
+	 * @param $id
+	 * @return PeilingOptieTable
+	 * @Route("/peilingen/opties/{id}", methods={"GET"}, requirements={"id": "\d+"})
+	 * @Auth(P_PEILING_EDIT)
+	 */
 	public function table($id) {
 		return new PeilingOptieTable($id);
 	}
 
+	/**
+	 * @param $id
+	 * @return GenericDataTableResponse
+	 * @Route("/peilingen/opties/{id}", methods={"POST"}, requirements={"id": "\d+"})
+	 * @Auth(P_PEILING_EDIT)
+	 */
 	public function lijst($id) {
 		return $this->tableData($this->peilingOptiesRepository->findBy(['peiling_id' => $id]));
 	}
 
 	/**
-	 * @param EntityManagerInterface $em
-	 * @param $id
+	 * @param Peiling $peiling
 	 * @return GenericDataTableResponse|PeilingOptieForm
-	 * @throws ORMException
+	 * @Route("/peilingen/opties/{id}/toevoegen", methods={"POST"}, requirements={"id": "\d+"})
+	 * @Auth(P_PEILING_VOTE)
 	 */
-	public function toevoegen(EntityManagerInterface $em, $id) {
-		$form = new PeilingOptieForm(new PeilingOptie(), $id);
+	public function toevoegen(Peiling $peiling) {
+		$form = new PeilingOptieForm(new PeilingOptie(), $peiling->id);
 
-		if (!$this->peilingenService->magOptieToevoegen($id)) {
+		if (!$this->peilingenService->magOptieToevoegen($peiling)) {
 			throw new CsrGebruikerException("Mag geen opties meer toevoegen!");
 		}
 
@@ -58,7 +69,7 @@ class PeilingOptiesController extends AbstractController {
 			/** @var PeilingOptie $optie */
 			$optie = $form->getModel();
 			$optie->ingebracht_door = LoginService::getUid();
-			$optie->peiling = $em->getReference(Peiling::class, $id);
+			$optie->peiling = $peiling;
 
 			$this->getDoctrine()->getManager()->persist($optie);
 			$this->getDoctrine()->getManager()->flush();
@@ -71,6 +82,8 @@ class PeilingOptiesController extends AbstractController {
 	/**
 	 * @throws CsrGebruikerException
 	 * @return GenericDataTableResponse
+	 * @Route("/peilingen/opties/verwijderen", methods={"POST"})
+	 * @Auth(P_PEILING_EDIT)
 	 */
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();

@@ -19,7 +19,6 @@ use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\AbstractGroepLedenRepository;
 use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;

@@ -48,13 +48,12 @@ class PeilingenService {
 		$this->entityManager = $entityManager;
 	}
 
-	public function magOptieToevoegen($peilingId) {
-		$peiling = $this->peilingenRepository->getPeilingById($peilingId);
+	public function magOptieToevoegen(Peiling $peiling) {
 		if ($this->peilingenRepository->magBewerken($peiling)) {
 			return true;
 		}
 
-		if ($this->peilingStemmenRepository->heeftGestemd($peilingId, LoginService::getUid())) {
+		if ($this->peilingStemmenRepository->heeftGestemd($peiling->id, LoginService::getUid())) {
 			return false;
 		}
 
@@ -62,7 +61,7 @@ class PeilingenService {
 			return false;
 		}
 
-		$aantalVoorgesteld = $this->peilingOptiesRepository->count(['peiling_id' => $peilingId, 'ingebracht_door' => LoginService::getUid()]);
+		$aantalVoorgesteld = $this->peilingOptiesRepository->count(['peiling_id' => $peiling->id, 'ingebracht_door' => LoginService::getUid()]);
 		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
 	}
 

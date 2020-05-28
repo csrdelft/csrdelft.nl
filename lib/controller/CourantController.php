@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\entity\courant\CourantBericht;
@@ -16,6 +15,7 @@ use CsrDelft\view\PlainView;
 use CsrDelft\view\renderer\TemplateView;
 use DateTime;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ConnectionException;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,7 +90,7 @@ class CourantController extends AbstractController {
 			$manager->flush();
 			setMelding('Uw bericht is opgenomen in ons databeest, en het zal in de komende C.S.R.-courant verschijnen.', 1);
 
-			return $this->redirectToRoute('courant-toevoegen');
+			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
 
 		return view('courant.beheer', [
@@ -113,7 +113,7 @@ class CourantController extends AbstractController {
 		if ($form->isPosted() && $form->validate()) {
 			$this->getDoctrine()->getManager()->flush();
 			setMelding('Bericht is bewerkt', 1);
-			return $this->redirectToRoute('courant-toevoegen');
+			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
 
 		return view('courant.beheer', [
@@ -144,20 +144,20 @@ class CourantController extends AbstractController {
 		} catch (Exception $exception) {
 			setMelding('Uw bericht is niet verwijderd.', -1);
 		}
-		return $this->redirectToRoute('courant-toevoegen');
+		return $this->redirectToRoute('csrdelft_courant_toevoegen');
 	}
 
 	/**
 	 * @param null $iedereen
 	 * @return PlainView|RedirectResponse
-	 * @throws \Doctrine\DBAL\ConnectionException
+	 * @throws ConnectionException
 	 * @Route("/courant/verzenden/{iedereen}", methods={"POST"}, defaults={"iedereen": null})
 	 * @Auth(P_MAIL_SEND)
 	 */
 	public function verzenden($iedereen = null) {
 		if (count($this->courantBerichtRepository->findAll()) < 1) {
 			setMelding('Lege courant kan niet worden verzonden', 0);
-			return $this->redirectToRoute('courant-toevoegen');
+			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
 
 		$courant = $this->courantRepository->nieuwCourant();

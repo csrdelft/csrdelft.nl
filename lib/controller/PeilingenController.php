@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
@@ -9,6 +10,7 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\service\PeilingenService;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
@@ -16,7 +18,7 @@ use CsrDelft\view\View;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -33,15 +35,15 @@ class PeilingenController extends AbstractController {
 	}
 
 	/**
-	 * @param null $id
+	 * @param Peiling|null $peiling
 	 * @return View
-	 * @throws CsrGebruikerException
+	 * @Route("/peilingen/beheer/{id}", methods={"GET"}, requirements={"id": "\d+"}, defaults={"id": null})
+	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function table($id = null) {
+	public function table(Peiling $peiling = null) {
 		// Laat een modal zien als een specifieke peiling bewerkt wordt
-		if ($id) {
+		if ($peiling) {
 			$table = new PeilingTable();
-			$peiling = $this->peilingenRepository->find($id);
 			$table->setSearch($peiling->titel);
 			$form = new PeilingForm($peiling, false);
 			$form->setDataTableId($table->getDataTableId());
@@ -53,7 +55,9 @@ class PeilingenController extends AbstractController {
 	}
 
 	/**
-	 * @return Response
+	 * @return GenericDataTableResponse
+	 * @Route("/peilingen/beheer", methods={"POST"})
+	 * @Auth(P_PEILING_EDIT)
 	 */
 	public function lijst() {
 		return $this->tableData($this->peilingenRepository->getPeilingenVoorBeheer());
@@ -61,8 +65,10 @@ class PeilingenController extends AbstractController {
 
 	/**
 	 * @param EntityManagerInterface $em
-	 * @return Response|View
+	 * @return GenericDataTableResponse|PeilingForm
 	 * @throws ORMException
+	 * @Route("/peilingen/nieuw", methods={"POST"})
+	 * @Auth(P_PEILING_EDIT)
 	 */
 	public function nieuw(EntityManagerInterface $em) {
 		$peiling = new Peiling();
@@ -83,8 +89,10 @@ class PeilingenController extends AbstractController {
 	}
 
 	/**
-	 * @return Response|View
+	 * @return GenericDataTableResponse|PeilingForm
 	 * @throws CsrGebruikerException
+	 * @Route("/peilingen/bewerken", methods={"POST"})
+	 * @Auth(P_PEILING_EDIT)
 	 */
 	public function bewerken() {
 		$selection = $this->getDataTableSelection();
@@ -113,7 +121,9 @@ class PeilingenController extends AbstractController {
 	}
 
 	/**
-	 * @return Response
+	 * @return GenericDataTableResponse
+	 * @Route("/peilingen/verwijderen", methods={"GET", "POST"})
+	 * @Auth(P_PEILING_MOD)
 	 */
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
@@ -129,6 +139,8 @@ class PeilingenController extends AbstractController {
 	 * @param Request $request
 	 * @param int $id
 	 * @return View
+	 * @Route("/peilingen/stem/{id}", methods={"POST"}, requirements={"id": "\d+"})
+	 * @Auth(P_PEILING_VOTE)
 	 */
 	public function stem(Request $request, $id) {
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);

@@ -45,7 +45,6 @@ use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
 use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
