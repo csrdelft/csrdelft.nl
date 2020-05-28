@@ -43,6 +43,10 @@ export default {
 			return '';
 		}
 
+		if (date.substr(0, 5) === '<time') {
+			return date;
+		}
+
 		return moment(date).format('L LT');
 	},
 	timeago(data, type, row, meta) {
