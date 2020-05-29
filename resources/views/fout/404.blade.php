@@ -6,7 +6,7 @@
 
 @section('content')
 	<h1>404: Pagina niet gevonden</h1>
-	@if(isset($bericht))
+	@if(\CsrDelft\service\security\LoginService::mag(P_ADMIN) && isset($bericht))
 		<p>{{$bericht}}</p>
 	@endif
 	<p>
