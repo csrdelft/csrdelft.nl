@@ -216,6 +216,6 @@ class CommissieVoorkeurenController extends AbstractController {
 			$manager->flush();
 		}
 
-		return $this->redirectToRoute('csrdelft_commissievoorkeuren_lidpagina');
+		return $this->redirectToRoute('csrdelft_commissievoorkeuren_lidpagina', ['uid' => $uid]);
 	}
 }
