@@ -100,7 +100,7 @@ class CmsPaginaController extends AbstractController {
 			$manager->persist($pagina);
 			$manager->flush();
 			setMelding('Bijgewerkt: ' . $pagina->naam, 1);
-			return $this->redirectToRoute('cms-bekijken', ['naam' => $pagina->naam]);
+			return $this->redirectToRoute('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]);
 		} else {
 			return view('default', ['content' => $form]);
 		}
