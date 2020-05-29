@@ -94,26 +94,22 @@ class MaaltijdRepetitiesRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param $mrid
+	 * @param MaaltijdRepetitie $repetitie
 	 * @return int
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @throws Throwable
 	 */
-	public function verwijderRepetitie($mrid) {
-		if (!is_numeric($mrid) || $mrid <= 0) {
-			throw new CsrGebruikerException('Verwijder maaltijd-repetitie faalt: Invalid $mrid =' . $mrid);
-		}
-		if (ContainerFacade::getContainer()->get(CorveeRepetitiesRepository::class)->existMaaltijdRepetitieCorvee($mrid)) {
+	public function verwijderRepetitie(MaaltijdRepetitie $repetitie) {
+		if (ContainerFacade::getContainer()->get(CorveeRepetitiesRepository::class)->existMaaltijdRepetitieCorvee($repetitie->mlt_repetitie_id)) {
 			throw new CsrGebruikerException('Ontkoppel of verwijder eerst de bijbehorende corvee-repetities!');
 		}
 		$maaltijdenRepository = ContainerFacade::getContainer()->get(MaaltijdenRepository::class);
-		if ($maaltijdenRepository->existRepetitieMaaltijden($mrid)) {
-			$maaltijdenRepository->verwijderRepetitieMaaltijden($mrid); // delete maaltijden first (foreign key)
+		if ($maaltijdenRepository->existRepetitieMaaltijden($repetitie->mlt_repetitie_id)) {
+			$maaltijdenRepository->verwijderRepetitieMaaltijden($repetitie->mlt_repetitie_id); // delete maaltijden first (foreign key)
 			throw new CsrGebruikerException('Alle bijbehorende maaltijden zijn naar de prullenbak verplaatst. Verwijder die eerst!');
 		}
-		$aantalAbos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($mrid);
-		$this->_em->remove($this->_em->getReference(MaaltijdRepetitie::class, $mrid));
+		$aantalAbos = ContainerFacade::getContainer()->get(MaaltijdAbonnementenRepository::class)->verwijderAbonnementen($repetitie->mlt_repetitie_id);
+		$this->_em->remove($repetitie);
 		$this->_em->flush();
 		return $aantalAbos;
 	}
