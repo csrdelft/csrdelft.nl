@@ -258,20 +258,13 @@ class MaaltijdenRepository extends AbstractRepository {
 	 * @throws CsrGebruikerException
 	 */
 	public function getMaaltijd($mid, $verwijderd = false) {
-		$maaltijd = $this->loadMaaltijd($mid);
+		$maaltijd = $this->find($mid);
+		if (!$maaltijd) {
+			throw new CsrGebruikerException('Maaltijd bestaat niet: ' . $mid);
+		}
 		if (!$verwijderd && $maaltijd->verwijderd) {
 			throw new CsrGebruikerException('Maaltijd is verwijderd');
 		}
-		return $maaltijd;
-	}
-
-	/**
-	 * @param int $mid
-	 * @return Maaltijd
-	 */
-	private function loadMaaltijd($mid) {
-		$maaltijd = $this->find($mid);
-		if (!$maaltijd) throw new CsrGebruikerException('Maaltijd bestaat niet: ' . $mid);
 		return $maaltijd;
 	}
 
@@ -312,7 +305,7 @@ class MaaltijdenRepository extends AbstractRepository {
 		$maaltijden = $this->getVerwijderdeMaaltijden();
 		foreach ($maaltijden as $maaltijd) {
 			try {
-				$this->verwijderMaaltijd($maaltijd->maaltijd_id);
+				$this->verwijderMaaltijd($maaltijd);
 				$aantal++;
 			} catch (CsrGebruikerException $e) {
 				setMelding($e->getMessage(), -1);
@@ -322,18 +315,17 @@ class MaaltijdenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param int $mid
+	 * @param Maaltijd $maaltijd
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function verwijderMaaltijd($mid) {
-		$maaltijd = $this->loadMaaltijd($mid);
-		$this->corveeTakenRepository->verwijderMaaltijdCorvee($mid); // delete corveetaken first (foreign key)
+	public function verwijderMaaltijd(Maaltijd $maaltijd) {
+		$this->corveeTakenRepository->verwijderMaaltijdCorvee($maaltijd->maaltijd_id); // delete corveetaken first (foreign key)
 		if ($maaltijd->verwijderd) {
-			if ($this->corveeTakenRepository->existMaaltijdCorvee($mid)) {
+			if ($this->corveeTakenRepository->existMaaltijdCorvee($maaltijd->maaltijd_id)) {
 				throw new CsrGebruikerException('Er zitten nog bijbehorende corveetaken in de prullenbak. Verwijder die eerst definitief!');
 			}
-			$this->maaltijdAanmeldingenRepository->deleteAanmeldingenVoorMaaltijd($mid);
+			$this->maaltijdAanmeldingenRepository->deleteAanmeldingenVoorMaaltijd($maaltijd->maaltijd_id);
 			$this->_em->remove($maaltijd);
 			$this->_em->flush();
 		} else {
@@ -344,13 +336,12 @@ class MaaltijdenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param $mid
+	 * @param Maaltijd $maaltijd
 	 * @return Maaltijd|null
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function herstelMaaltijd($mid) {
-		$maaltijd = $this->loadMaaltijd($mid);
+	public function herstelMaaltijd(Maaltijd $maaltijd) {
 		if (!$maaltijd->verwijderd) {
 			throw new CsrGebruikerException('Maaltijd is niet verwijderd');
 		}

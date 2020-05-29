@@ -75,6 +75,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
 		} else {
 			$aanmelding = new MaaltijdAanmelding();
+			$aanmelding->maaltijd = $maaltijd;
 			$aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
 			$aanmelding->uid = $uid;
 			$aanmelding->door_uid = $doorUid;
