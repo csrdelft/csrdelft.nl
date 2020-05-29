@@ -2,11 +2,3 @@ default:
   path: /{naam}/{subnaam}
   controller: CsrDelft\controller\CmsPaginaController::bekijken
   defaults: { naam: thuis, subnaam: "", _mag: P_PUBLIC }
-
-remove_trailing_slash:
-  path: /{url}
-  defaults:
-    _controller: CsrDelft\controller\RedirectingController::removeTrailingSlashAction
-    _mag: P_PUBLIC
-  requirements:
-    url: .*/$
