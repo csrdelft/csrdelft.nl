@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
@@ -11,10 +12,13 @@ use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
+use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * MaaltijdenFiscaatController.class.php
@@ -51,6 +55,11 @@ class MaaltijdenFiscaatController extends AbstractController {
 		$this->civiSaldoRepository = $civiSaldoRepository;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/maaltijden/fiscaat", methods={"GET"})
+	 * @Auth(P_MAAL_MOD)
+	 */
 	public function GET_overzicht() {
 		return view('maaltijden.pagina', [
 			'titel' => 'Overzicht verwerkte maaltijden',
@@ -58,11 +67,21 @@ class MaaltijdenFiscaatController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @return FiscaatMaaltijdenOverzichtResponse
+	 * @Route("/maaltijden/fiscaat", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
+	 */
 	public function POST_overzicht() {
 		$data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
 		return new FiscaatMaaltijdenOverzichtResponse($data);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/maaltijden/fiscaat/onverwerkt", methods={"GET"})
+	 * @Auth(P_MAAL_MOD)
+	 */
 	public function GET_onverwerkt() {
 		return view('maaltijden.pagina', [
 			'titel' => 'Onverwerkte Maaltijden',
@@ -70,6 +89,12 @@ class MaaltijdenFiscaatController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @param EntityManagerInterface $em
+	 * @return GenericDataTableResponse
+	 * @Route("/maaltijden/fiscaat/verwerk", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
+	 */
 	public function POST_verwerk(EntityManagerInterface $em) {
 		# Haal maaltijd op
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
