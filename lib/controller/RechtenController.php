@@ -2,12 +2,14 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\security\AccessControl;
 use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\view\RechtenForm;
 use CsrDelft\view\RechtenTable;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -27,16 +29,39 @@ class RechtenController extends AbstractController {
 		$this->accessRepository = $accessRepository;
 	}
 
+	/**
+	 * @param null $environment
+	 * @param null $resource
+	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"GET"}, defaults={"environment"=null,"resource"=null})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function bekijken($environment = null, $resource = null) {
 		return view('default', [
 			'content' => new RechtenTable($this->accessRepository, $environment, $resource)
 		]);
 	}
 
+	/**
+	 * @param null $environment
+	 * @param null $resource
+	 * @return \CsrDelft\view\datatable\GenericDataTableResponse
+	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function data($environment = null, $resource = null) {
 		return $this->tableData($this->accessRepository->getTree($environment, $resource));
 	}
 
+	/**
+	 * @param null $environment
+	 * @param null $resource
+	 * @return \CsrDelft\view\datatable\GenericDataTableResponse|RechtenForm
+	 * @throws \Doctrine\ORM\ORMException
+	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @Route("/rechten/aanmaken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function aanmaken($environment = null, $resource = null) {
 		$ac = $this->accessRepository->nieuw($environment, $resource);
 		$form = new RechtenForm($ac, 'aanmaken');
@@ -48,6 +73,13 @@ class RechtenController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @return \CsrDelft\view\datatable\GenericDataTableResponse|RechtenForm
+	 * @throws \Doctrine\ORM\ORMException
+	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @Route("/rechten/wijzigen", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function wijzigen() {
 		$selection = $this->getDataTableSelection();
 
@@ -69,6 +101,13 @@ class RechtenController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @return \CsrDelft\view\datatable\GenericDataTableResponse
+	 * @throws \Doctrine\ORM\ORMException
+	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @Route("/rechten/verwijderen", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
 		$response = [];
