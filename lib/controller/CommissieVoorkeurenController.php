@@ -2,19 +2,23 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissieCategorie;
 use CsrDelft\entity\commissievoorkeuren\VoorkeurOpmerking;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository;
 use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\commissievoorkeuren\AddCategorieFormulier;
 use CsrDelft\view\commissievoorkeuren\AddCommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\CommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
+use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -49,6 +53,11 @@ class CommissieVoorkeurenController extends AbstractController {
 		$this->voorkeurOpmerkingRepository = $voorkeurOpmerkingRepository;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/commissievoorkeuren", methods={"GET"})
+	 * @Auth({"bestuur",P_ADMIN})
+	 */
 	public function overzicht() {
 		return view('commissievoorkeuren.overzicht', [
 			'categorien' => $this->voorkeurCommissieRepository->getByCategorie(),
@@ -57,9 +66,13 @@ class CommissieVoorkeurenController extends AbstractController {
 		]);
 	}
 
-	public function commissie($commissieId) {
-		$commissie = $this->getDoctrine()->getRepository(VoorkeurCommissie::class)->find($commissieId);
-
+	/**
+	 * @param VoorkeurCommissie $commissie
+	 * @return TemplateView
+	 * @Route("/commissievoorkeuren/overzicht/{id}", methods={"GET"})
+	 * @Auth({"bestuur",P_ADMIN})
+	 */
+	public function commissie(VoorkeurCommissie $commissie) {
 		return view('commissievoorkeuren.commissie', [
 			'voorkeuren' => $this->commissieVoorkeurRepository->getVoorkeurenVoorCommissie($commissie),
 			'commissie' => $commissie,
@@ -67,8 +80,13 @@ class CommissieVoorkeurenController extends AbstractController {
 		]);
 	}
 
-	public function updatecommissie($commissieId) {
-		$commissie = $this->getDoctrine()->getRepository(VoorkeurCommissie::class)->find($commissieId);
+	/**
+	 * @param VoorkeurCommissie $commissie
+	 * @return RedirectResponse
+	 * @Route("/commissievoorkeuren/overzicht/{id}", methods={"POST"})
+	 * @Auth({"bestuur",P_ADMIN})
+	 */
+	public function updatecommissie(VoorkeurCommissie $commissie) {
 		$body = new CommissieFormulier($commissie);
 		if ($body->validate()) {
 			$manager = $this->getDoctrine()->getManager();
@@ -77,9 +95,16 @@ class CommissieVoorkeurenController extends AbstractController {
 
 			setMelding('Aanpassingen commissie opgeslagen', 1);
 		}
-		return $this->redirectToRoute('commissievoorkeuren-updatecommissie', ['commissieId' => $commissieId]);
+		return $this->redirectToRoute('csrdelft_commissievoorkeuren_updatecommissie', ['commissieId' => $commissie->id]);
 	}
 
+	/**
+	 * @param EntityManagerInterface $em
+	 * @return TemplateView|RedirectResponse
+	 * @throws ORMException
+	 * @Route("/commissievoorkeuren/nieuwecommissie", methods={"POST"})
+	 * @Auth({"bestuur",P_ADMIN})
+	 */
 	public function nieuwecommissie(EntityManagerInterface $em) {
 		$model = new VoorkeurCommissie();
 		$form = new AddCommissieFormulier($model);
@@ -90,7 +115,7 @@ class CommissieVoorkeurenController extends AbstractController {
 			$manager->persist($model);
 			$manager->flush();
 
-			return $this->redirectToRoute('commissievoorkeuren-commissie', ['commissieId' => $model->id]);
+			return $this->redirectToRoute('csrdelft_commissievoorkeuren_commissie', ['commissieId' => $model->id]);
 		}
 
 		return view('commissievoorkeuren.overzicht', [
@@ -100,6 +125,11 @@ class CommissieVoorkeurenController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @return TemplateView|RedirectResponse
+	 * @Route("/commissievoorkeuren/nieuwecommissie", methods={"POST"})
+	 * @Auth({"bestuur",P_ADMIN})
+	 */
 	public function nieuwecategorie() {
 		$model = new VoorkeurCommissieCategorie();
 		$form = new AddCategorieFormulier($model);
@@ -107,7 +137,7 @@ class CommissieVoorkeurenController extends AbstractController {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($model);
 			$manager->flush();
-			return $this->redirectToRoute('commissievoorkeuren'); // Prevent resubmit
+			return $this->redirectToRoute('csrdelft_commissievoorkeuren_overzicht'); // Prevent resubmit
 		}
 
 		return view('commissievoorkeuren.overzicht', [
@@ -117,29 +147,33 @@ class CommissieVoorkeurenController extends AbstractController {
 		]);
 	}
 
-	public function verwijdercategorie($categorieId) {
-		$model = $this->getDoctrine()->getRepository(VoorkeurCommissieCategorie::class)->find($categorieId);
-
-		if (count($model->commissies) == 0) {
+	/**
+	 * @param VoorkeurCommissieCategorie $categorie
+	 * @return RedirectResponse
+	 * @Route("/commissievoorkeuren/verwijdercategorie/{id}", methods={"POST"})
+	 * @Auth({"bestuur",P_ADMIN})
+	 */
+	public function verwijdercategorie(VoorkeurCommissieCategorie $categorie) {
+		if (count($categorie->commissies) == 0) {
 			$manager = $this->getDoctrine()->getManager();
-			$manager->remove($model);
+			$manager->remove($categorie);
 			$manager->flush();
-			setMelding("Categorie '{$model->naam}' succesvol verwijderd", 1);
+			setMelding("Categorie '{$categorie->naam}' succesvol verwijderd", 1);
 
 		} else {
 			setMelding('Kan categorie niet verwijderen: is niet leeg', 2);
 		}
 
-		return $this->redirectToRoute('commissievoorkeuren');
+		return $this->redirectToRoute('csrdelft_commissievoorkeuren_overzicht');
 	}
 
-	public function lidpagina($uid) {
-		if (!ProfielRepository::existsUid($uid)) {
-			throw new CsrToegangException();
-		}
-
-		$profiel = ProfielRepository::get($uid);
-
+	/**
+	 * @param Profiel $profiel
+	 * @return TemplateView
+	 * @Route("/commissievoorkeuren/lidpagina/{uid}", methods={"GET"})
+	 * @Auth({"bestuur",P_ADMIN})
+	 */
+	public function lidpagina(Profiel $profiel) {
 		$voorkeuren = $this->commissieVoorkeurRepository->getVoorkeurenVoorLid($profiel);
 		$voorkeurenMap = [];
 		$commissies = $this->voorkeurCommissieRepository->findBy(['zichtbaar' => 'true']);
@@ -161,9 +195,14 @@ class CommissieVoorkeurenController extends AbstractController {
 		]);
 	}
 
-	public function lidpaginaopmerking($uid) {
-		$opmerking = $this->getDoctrine()->getRepository(VoorkeurOpmerking::class)->find($uid);
-
+	/**
+	 * @param $uid
+	 * @param VoorkeurOpmerking $opmerking
+	 * @return RedirectResponse
+	 * @Route("/commissievoorkeuren/lidpagina/{uid}", methods={"POST"})
+	 * @Auth({"bestuur",P_ADMIN})
+	 */
+	public function lidpaginaopmerking($uid, VoorkeurOpmerking $opmerking = null) {
 		if (!$opmerking) {
 			$opmerking = new VoorkeurOpmerking();
 			$opmerking->uid = $uid;
@@ -177,6 +216,6 @@ class CommissieVoorkeurenController extends AbstractController {
 			$manager->flush();
 		}
 
-		return $this->redirectToRoute('commissievoorkeuren-lidpagina-lijst');
+		return $this->redirectToRoute('csrdelft_commissievoorkeuren_lidpagina');
 	}
 }
