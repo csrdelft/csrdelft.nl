@@ -80,13 +80,13 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 */
 	public function loadRoutes() {
 		$routes = new RouteCollection();
-		$prefix = 'groep-' . $this->model::getNaam();
+		$prefix = 'csrdelft_groep_' . $this->model::getNaam();
 
 		$className = get_class($this);
 
 		$route = function ($path, $func, $methods, $defaults = [], $requirements = [], $overrideName = null) use ($routes, $prefix, $className) {
 			$routes->add(
-				$prefix . '-' . ($overrideName ?? $func),
+				$prefix . '_' . ($overrideName ?? $func),
 				(new Route($path))
 					->setDefaults($defaults + [
 							'_mag' => P_LOGGED_IN,

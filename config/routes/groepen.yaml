@@ -1,4 +1,4 @@
-groep-overzicht:
+csrdelft_groep_overzicht:
   path: /groepen
   controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
   defaults:
