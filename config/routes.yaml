@@ -1,3 +1,14 @@
+# De controller/api routes moeten expliciet niet geladen worden
+# Want deze bevatten annotaties van RestServer die niet door Symfony worden begrepen.
+app-controller:
+  resource: ../lib/controller/*.php
+  type: annotation
+
+app-controller-sub:
+  resource: ../lib/controller/{fiscaat,maalcie}/
+  type: annotation
+
+# Deze route is een catch-all als allerlaatste
 default:
   path: /{naam}/{subnaam}
   controller: CsrDelft\controller\CmsPaginaController::bekijken

@@ -2,8 +2,10 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\documenten\Document;
+use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\service\security\LoginService;
@@ -12,10 +14,12 @@ use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
+use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -33,18 +37,21 @@ class DocumentenController extends AbstractController {
 
 	/**
 	 * Recente documenten uit alle categorieën tonen
+	 * @Route("/documenten", methods={"GET"})
+	 * @Auth(P_DOCS_READ)
 	 */
 	public function recenttonen() {
 		return view('documenten.documenten', ['categorieen' => $this->documentCategorieRepository->findAll()]);
 	}
 
-	public function verwijderen($id) {
-		$document = $this->documentRepository->get($id);
-
-		if (!$document) {
-			setMelding('Document bestaat niet!', -1);
-			return $this->redirectToRoute('documenten');
-		} elseif ($document->magVerwijderen()) {
+	/**
+	 * @param Document $document
+	 * @return JsonResponse|PlainView|RedirectResponse
+	 * @Route("/doucmenten/verwijderen/{id}", methods={"POST"})
+	 * @Auth(P_DOCS_MOD)
+	 */
+	public function verwijderen(Document $document) {
+		if ($document->magVerwijderen()) {
 			$this->documentRepository->remove($document);
 		} else {
 			setMelding('Mag document niet verwijderen', -1);
@@ -54,13 +61,13 @@ class DocumentenController extends AbstractController {
 		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $document->id));
 	}
 
-	public function bekijken($id) {
-		$document = $this->documentRepository->get($id);
-
-		if (!$document) {
-			throw new NotFoundHttpException();
-		}
-
+	/**
+	 * @param Document $document
+	 * @return BinaryFileResponse|RedirectResponse
+	 * @Route("/documenten/bekijken/{id}/{bestandsnaam}", methods={"GET"})
+	 * @Auth(P_DOCS_READ)
+	 */
+	public function bekijken(Document $document) {
 		if (!$document->magBekijken()) {
 			throw new CsrToegangException();
 		}
@@ -69,62 +76,65 @@ class DocumentenController extends AbstractController {
 		//We do not allow serving javascript files because they can increase the impact of XSS by registering a service worker.
 		if ($document->mimetype == "text/html" || $document->mimetype == "text/javascript" || !checkMimetype($document->filename, $document->mimetype)) {
 			setMelding('Dit type bestand kan niet worden getoond', -1);
-			return $this->redirectToRoute('documenten');
+			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
 
 		if ($document->hasFile()) {
 			return new BinaryFileResponse($document->getFullPath());
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
-			return $this->redirectToRoute('documenten');
+			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
 	}
 
-	public function download($id) {
-		$document = $this->documentRepository->get($id);
-
-		if (!$document) {
-			throw new NotFoundHttpException();
-		}
-
+	/**
+	 * @param Document $document
+	 * @return BinaryFileResponse|RedirectResponse
+	 * @Route("/documenten/download/{id}/{bestandsnaam}", methods={"GET"})
+	 * @Auth(P_DOCS_READ)
+	 */
+	public function download(Document $document) {
 		if (!$document->magBekijken()) {
 			throw new CsrToegangException();
 		}
+
 		if ($document->hasFile()) {
 			$response = new BinaryFileResponse($document->getFullPath());
 			$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $document->filename);
 			return $response;
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
-			return $this->redirectToRoute('documenten');
+			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
 	}
 
-	public function categorie($id) {
-		$categorie = $this->documentCategorieRepository->find($id);
-		if (!$categorie) {
-			setMelding('Categorie bestaat niet!', -1);
-			return $this->redirectToRoute('documenten');
-		} elseif (!$categorie->magBekijken()) {
+	/**
+	 * @param DocumentCategorie $categorie
+	 * @return TemplateView|RedirectResponse
+	 * @Route("/documenten/categorie/{id}", methods={"GET"})
+	 * @Auth(P_DOCS_READ)
+	 */
+	public function categorie(DocumentCategorie $categorie) {
+		if (!$categorie->magBekijken()) {
 			throw new CsrToegangException('Mag deze categorie niet bekijken');
 		} else {
 			return view('documenten.categorie', ['categorie' => $categorie]);
 		}
 	}
 
-	public function bewerken($id) {
-		$document = $this->documentRepository->get($id);
-
-		if (!$document) {
-			setMelding('Document niet gevonden', 2);
-			return $this->redirectToRoute('documenten');
-		}
-
+	/**
+	 * @param Document $document
+	 * @return TemplateView|RedirectResponse
+	 * @Route("/documenten/bewerken/{id}", methods={"GET","POST"})
+	 * @Auth(P_DOCS_MOD)
+	 */
+	public function bewerken(Document $document) {
 		$form = new DocumentBewerkenForm($document, $this->documentCategorieRepository->getCategorieNamen());
+
 		if ($form->isPosted() && $form->validate()) {
 			$this->documentRepository->save($document);
 
-			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie->id]);
+			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {
 			return view('default', [
 				'titel' => 'Document bewerken',
@@ -134,6 +144,11 @@ class DocumentenController extends AbstractController {
 
 	}
 
+	/**
+	 * @return TemplateView|RedirectResponse
+	 * @Route("/documenten/toevoegen", methods={"GET","POST"})
+	 * @Auth(P_DOCS_MOD)
+	 */
 	public function toevoegen() {
 		$form = new DocumentToevoegenForm($this->documentCategorieRepository->getCategorieNamen());
 
@@ -159,7 +174,7 @@ class DocumentenController extends AbstractController {
 
 			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
 
-			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie->id]);
+			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {
 			return view('default', [
 				'titel' => 'Document toevoegen',
@@ -168,6 +183,13 @@ class DocumentenController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @param null $zoekterm
+	 * @return JsonResponse
+	 * @Route("/documenten/zoeken", methods={"GET","POST"})
+	 * @Auth(P_DOCS_READ)
+	 */
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw new CsrToegangException();
