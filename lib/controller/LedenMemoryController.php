@@ -4,6 +4,7 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Lichting;
@@ -17,7 +18,9 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
+use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\Routing\Annotation\Route;
 
 class LedenMemoryController {
 	/**
@@ -49,6 +52,12 @@ class LedenMemoryController {
 		$this->lichtingenRepository = $lichtingenRepository;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @throws NonUniqueResultException
+	 * @Route("/leden/memory", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function memory() {
 		$lidstatus = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$lidstatus[] = LidStatus::Overleden;
@@ -120,6 +129,11 @@ class LedenMemoryController {
 		return $this->lichtingenRepository->get($l);
 	}
 
+	/**
+	 * @return JsonResponse
+	 * @Route("/leden/memoryscore", methods={"POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function memoryscore() {
 		$score = $this->ledenMemoryScoresModel->nieuw();
 		$form = new LedenMemoryScoreForm($score);
@@ -129,6 +143,12 @@ class LedenMemoryController {
 		return new JsonResponse($score);
 	}
 
+	/**
+	 * @param null $groep
+	 * @return LedenMemoryScoreResponse
+	 * @Route("/leden/memoryscores/{groep}", methods={"POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function memoryscores($groep = null) {
 		$parts = explode('@', $groep);
 		if (isset($parts[0], $parts[1])) {
@@ -149,6 +169,11 @@ class LedenMemoryController {
 		return new LedenMemoryScoreResponse($data);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/leden/namen-leren", methods={"GET"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function namenleren() {
 		// Haal alle (adspirant-/gast-)leden op.
 		$profielen = $this->profielRepository->findByLidStatus(LidStatus::getLidLike());
@@ -167,7 +192,6 @@ class LedenMemoryController {
 				'studie' => $profiel->studie,
 			];
 		}, array_filter($profielen, function ($profiel) {
-			/** @var Profiel $profiel */
 			$path = $profiel->getPasfotoInternalPath();
 			return
 				is_zichtbaar($profiel, 'profielfoto', 'intern') &&
