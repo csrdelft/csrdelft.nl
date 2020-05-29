@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\renderer\TemplateView;
 use Exception;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -24,7 +25,7 @@ class LidInstellingenController extends AbstractController {
 	}
 
 	/**
-	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @return TemplateView
 	 * @Route("/instellingen", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -68,8 +69,8 @@ class LidInstellingenController extends AbstractController {
 	}
 
 	/**
-	 * @param $module
-	 * @param $key
+	 * @param string $module
+	 * @param string $key
 	 * @return JsonResponse
 	 * @Route("/instellingen/reset/{module}/{key}", methods={"POST"})
 	 * @Auth(P_ADMIN)
