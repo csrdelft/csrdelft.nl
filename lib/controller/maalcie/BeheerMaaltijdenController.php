@@ -334,7 +334,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	public function leegmaken() {
 		$aantal = $this->maaltijdenRepository->prullenbakLeegmaken();
 		setMelding($aantal . ($aantal === 1 ? ' maaltijd' : ' maaltijden') . ' definitief verwijderd.', ($aantal === 0 ? 0 : 1));
-		return $this->redirectToRoute('maalcie-beheer-maaltijden-prullenbak');
+		return $this->redirectToRoute('csrdelft_maalcie_beheermaaltijden_get_prullenbak');
 	}
 
 	/**
