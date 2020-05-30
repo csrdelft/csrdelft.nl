@@ -23,13 +23,42 @@
 			<div class="inner">
 				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
 				<div class="content">
-					<h2 class="major">C.S.R. Delft</h2>
-					<p>
+					<p class="major" style="padding-bottom: 1em;border-bottom: solid 4px #e59200;">
 						<em style="color:red;">
 							Vanwege de recente maatregelen omtrent de verspreiding van het coronavirus, is besloten per direct alle verenigingsactiviteiten af te lassen en is onze sociëteit gesloten. Als u hierover vragen heeft of het bestuur wil bereiken kunt u het bestuur mailen (bestuur@csrdelft.nl).<br>
 						</em>
 						<strong>Heb je interesse om lid te worden bij C.S.R.? Stuur een appje/maak een praatje met Maartje (06 3327 1913) of mail promocie@csrdelft.nl.</strong>
 					</p>
+
+					<div class="een-minuut">
+						<div id="hero">
+							<h2>C.S.R. IN 1 MINUUT</h2>
+							<iframe src="https://www.youtube.com/embed/AE8RE8e5qI4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						</div>
+						<div class="sociaal">
+							<div class="youtube">
+								<p>Wil je zien hoe de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
+								<iframe width="100%" height="auto" src="https://www.youtube.com/embed/a7hhtoo_kzY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+							<div class="instagram">
+								<p>Bekijk en volg ook ons instagram account voor meer van onze vereniging!</p>
+								<a href="https://www.instagram.com/csrdelft/">[Instagram foto]</a>
+							</div>
+						</div>
+
+						<p>
+							De OWee gaat er anders uitzien, voor meer informatie zie <a href="https://owee.nl">https://owee.nl/</a>.<br>
+							Maar wij willen je wel vast digitaal een beetje van C.S.R. laten zien.
+							We willen jou daar goede handvaten voor geven. De belangrijkste informatie wordt gedeeld via deze website dus kijk even rond.
+							Wil je meer weten? Kijk op ons <a href="https://www.youtube.com/user/CivitasFilms">youtube kanaal</a>,
+							onze <a href="https://www.instagram.com/csrdelft">instagram pagina</a> en vul het interesse formulier onder aan deze pagina in, dan houden wij je op de hoogte.
+						</p>
+						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
+						<p>Liefs,<br>OWeeCie en PromoCie</p>
+					</div>
+
+
+					<h2 class="major">C.S.R. Delft</h2>
 					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
 						Delft, rijk aan tradities die zijn ontstaan in haar {{vereniging_leeftijd()}}-jarig bestaan. Het is een breed gezelschap
 						van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
