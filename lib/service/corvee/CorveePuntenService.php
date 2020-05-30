@@ -118,10 +118,11 @@ class CorveePuntenService {
 		$leden = $this->profielRepository->findByLidStatus([LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet]);
 		$totalen = array();
 		foreach ($leden as $lid) {
-			$totalen[$lid->uid] = array(
-				'puntenTotaal' => (int)$lid->corvee_punten,
-				'bonusTotaal' => (int)$lid->corvee_punten_bonus,
-			);
+			$overzicht = new CorveePuntenOverzichtDTO();
+			$overzicht->puntenTotaal = (int)$lid->corvee_punten;
+			$overzicht->bonusTotaal = (int)$lid->corvee_punten_bonus;
+			$overzicht->lid = $lid;
+			$totalen[$lid->uid] = $overzicht;
 		}
 		return $totalen;
 	}
@@ -132,18 +133,14 @@ class CorveePuntenService {
 	 */
 	public function loadPuntenVoorAlleLeden($functies = null) {
 		$taken = $this->corveeTakenRepository->getAlleTaken(true); // grouped by uid
-		$matrix = $this->loadPuntenTotaalVoorAlleLeden();
+		$leden = $this->profielRepository->findByLidStatus([LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet]);
+		$matrix = [];
 
-		$vrijstellingen = $this->corveeVrijstellingenRepository->findAll();
-
-		foreach ($vrijstellingen as $vrijstelling) {
-			$profiel = $vrijstelling->profiel;
-			$lidtaken = array();
-			if (array_key_exists($profiel->uid, $taken)) {
-				$lidtaken = $taken[$profiel->uid];
-			}
-			$matrix[$profiel->uid] = $this->loadPuntenVoorLid($profiel, $functies, $lidtaken, $vrijstelling);
+		foreach ($leden as $lid) {
+			$vrijstelling = $this->corveeVrijstellingenRepository->find($lid->uid);
+			$matrix[$lid->uid] = $this->loadPuntenVoorLid($lid, $functies, $taken[$lid->uid] ?? [], $vrijstelling);
 		}
+
 		return $matrix;
 	}
 
@@ -217,7 +214,7 @@ class CorveePuntenService {
 			$sumPrognose += $taak->getPuntenPrognose();
 		}
 		$suggestie = new CorveePuntenOverzichtDTO();
-		$suggestie->aantal = $sumAantal;
+		$suggestie->aantallen = $sumAantal;
 		$suggestie->punten = $sumPunten;
 		$suggestie->bonus = $sumBonus;
 		$suggestie->prognose = $sumPrognose;

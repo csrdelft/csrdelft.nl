@@ -5,7 +5,7 @@
 ?>
 <tr id="punten-row-{{$puntenlijst->lid->uid}}">
 	<td>{{$puntenlijst->lid->getNaam(instelling('corvee', 'weergave_ledennamen_beheer'))}}</td>
-	@foreach($puntenlijst->aantal as $fid => $aantal)
+	@foreach($puntenlijst->aantallen as $fid => $aantal)
 	<td>
 		@if($aantal !== 0)
 		{{$puntenlijst->punten[$fid]}}
