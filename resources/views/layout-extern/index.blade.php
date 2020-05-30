@@ -33,12 +33,16 @@
 					<div class="een-minuut">
 						<div id="hero">
 							<h2>C.S.R. IN 1 MINUUT</h2>
-							<iframe src="https://www.youtube.com/embed/AE8RE8e5qI4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							<div class="bb-video">
+								<iframe src="https://www.youtube.com/embed/AE8RE8e5qI4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
 						</div>
 						<div class="sociaal">
 							<div class="youtube">
 								<p>Wil je zien hoe de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
-								<iframe width="100%" height="auto" src="https://www.youtube.com/embed/a7hhtoo_kzY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								<div bb-video>
+									<iframe src="https://www.youtube.com/embed/a7hhtoo_kzY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</div>
 							</div>
 							<div class="instagram">
 								<p>Bekijk en volg ook ons instagram account voor meer van onze vereniging!</p>
@@ -56,7 +60,6 @@
 						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
 						<p>Liefs,<br>OWeeCie en PromoCie</p>
 					</div>
-
 
 					<h2 class="major">C.S.R. Delft</h2>
 					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
