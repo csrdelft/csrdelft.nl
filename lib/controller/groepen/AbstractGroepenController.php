@@ -84,16 +84,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$className = get_class($this);
 
 		$route = function ($path, $func, $methods, $defaults = [], $requirements = [], $overrideName = null) use ($routes, $prefix, $className) {
-			$routes->add(
-				$prefix . '_' . ($overrideName ?? $func),
-				(new Route($path))
-					->setDefaults($defaults + [
-							'_mag' => P_LOGGED_IN,
-							'_controller' => $className . '::' . $func,
-						])
-					->setRequirements($requirements)
-					->setMethods($methods)
-			);
+			$name = $prefix . '_' . ($overrideName ?? $func);
+			$controller = "$className::$func";
+			$routes->add($name, new Route($path, $defaults + ['_mag' => P_LOGGED_IN, '_controller' => $controller], $requirements, [], '', [], $methods));
 		};
 
 		// Let op, als je meerdere routes naar dezelfde functie hebt, gebruik dan overrideName om de naam van de route goed te zetten.
