@@ -428,6 +428,11 @@ class LoginService {
 		return $method;
 	}
 
+	public function resetLoginMoment() {
+		$this->current_session->login_moment = date_create_immutable();
+		$this->entityManager->flush();
+	}
+
 	/**
 	 * Na opvragen resetten.
 	 *
