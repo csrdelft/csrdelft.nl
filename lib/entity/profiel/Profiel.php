@@ -871,10 +871,12 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	 */
 	public function isInGoogleContacts() {
 		try {
-			if (!GoogleSync::isAuthenticated()) {
+			$googleSync = ContainerFacade::getContainer()->get(GoogleSync::class);
+			if (!$googleSync->isAuthenticated()) {
 				return false;
 			}
-			return !is_null(ContainerFacade::getContainer()->get(GoogleSync::class)->existsInGoogleContacts($this));
+			$googleSync->init();
+			return !is_null($googleSync->existsInGoogleContacts($this));
 		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), 0);
 			return false;

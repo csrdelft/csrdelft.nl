@@ -69,7 +69,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 	public function __construct(ChangeLogRepository $changeLogRepository, AbstractGroepenRepository $repository) {
 		$this->repository = $repository;
-		$this->changeLogRepository = ContainerFacade::getContainer()->get(ChangeLogRepository::class);
 		$this->changeLogRepository = $changeLogRepository;
 	}
 

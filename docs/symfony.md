@@ -2,6 +2,8 @@
 
 De stek draait op de Symfony stack. Kijk op [symfony.com](https://symfony.com) voor meer informatie over Symfony.
 
+Kijk naar de [Best Practices](https://symfony.com/doc/current/best_practices.html) op de Symfony website.
+
 ## Kernel
 
 Alle requests worden door de Kernel van Symfony verwerkt. Zie `lib/Kernel.php` voor de details, het is niet heel anders dan een normale Symfony installatie.

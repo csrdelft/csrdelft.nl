@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleSync;
@@ -21,11 +20,12 @@ class LedenLijstController extends AbstractController {
 	/**
 	 * @param CmsPaginaRepository $cmsPaginaRepository
 	 * @param LidZoekerService $lidZoeker
+	 * @param GoogleSync $googleSync
 	 * @return TemplateView|RedirectResponse
 	 * @Route("/ledenlijst", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker) {
+	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync) {
 		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
@@ -61,12 +61,10 @@ class LedenLijstController extends AbstractController {
 
 		if (isset($_GET['addToGoogleContacts'])) {
 			try {
-				GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
-
-				$gSync = ContainerFacade::getContainer()->get(GoogleSync::class);
+				$googleSync->doRequestToken(CSR_ROOT . REQUEST_URI);
 
 				$start = microtime(true);
-				$message = $gSync->syncLidBatch($lidZoeker->getLeden());
+				$message = $googleSync->syncLidBatch($lidZoeker->getLeden());
 				$elapsed = microtime(true) - $start;
 
 				setMelding(

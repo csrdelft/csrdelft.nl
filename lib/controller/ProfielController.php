@@ -62,15 +62,21 @@ class ProfielController extends AbstractController {
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
+	/**
+	 * @var GoogleSync
+	 */
+	private $googleSync;
 
 	public function __construct(
 		ProfielRepository $profielRepository,
 		AccountRepository $accountRepository,
-		LidToestemmingRepository $lidToestemmingRepository
+		LidToestemmingRepository $lidToestemmingRepository,
+		GoogleSync $googleSync
 	) {
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
+		$this->googleSync = $googleSync;
 	}
 
 	/**
@@ -337,9 +343,8 @@ class ProfielController extends AbstractController {
 			throw new CsrNotFoundException();
 		}
 		try {
-			GoogleSync::doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
-			$gSync = ContainerFacade::getContainer()->get(GoogleSync::class);
-			$msg = $gSync->syncLid($profiel);
+			$this->googleSync->doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
+			$msg = $this->googleSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
 		} catch (CsrException $e) {
 			setMelding("Opslaan in Google Contacts mislukt: " . $e->getMessage(), -1);
