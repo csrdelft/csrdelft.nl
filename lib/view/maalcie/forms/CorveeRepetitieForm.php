@@ -24,6 +24,7 @@ use CsrDelft\view\formulier\ModalForm;
  *
  * Formulier voor een nieuwe of te bewerken corvee-repetitie.
  *
+ * @method CorveeRepetitie getModel()
  */
 class CorveeRepetitieForm extends ModalForm {
 

@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeRepetitie;
+use CsrDelft\entity\corvee\RepetitieTakenUpdateDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\repository\AbstractRepository;
@@ -545,13 +546,12 @@ class CorveeTakenRepository extends AbstractRepository {
 	/**
 	 * @param CorveeRepetitie $repetitie
 	 * @param $verplaats
-	 * @return bool|mixed
+	 * @return RepetitieTakenUpdateDTO
 	 * @throws Throwable
 	 */
 	public function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
 		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
 			$taken = $this->findBy(['verwijderd' => false, 'crv_repetitie_id' => $repetitie->crv_repetitie_id]);
-			/** @var CorveeTaak $taak */
 
 			foreach ($taken as $taak) {
 				$taak->functie_id = $repetitie->corveeFunctie->functie_id;
@@ -619,7 +619,7 @@ class CorveeTakenRepository extends AbstractRepository {
 				$maaltijdcount += $verschil;
 			}
 			$this->_em->flush();
-			return array('update' => $updatecount, 'day' => $daycount, 'datum' => $datumcount, 'maaltijd' => $maaltijdcount);
+			return new RepetitieTakenUpdateDTO($updatecount, $daycount, $datumcount, $maaltijdcount);
 		});
 	}
 

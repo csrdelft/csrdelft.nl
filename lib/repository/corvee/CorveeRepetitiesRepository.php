@@ -5,6 +5,7 @@ namespace CsrDelft\repository\corvee;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeRepetitie;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -28,10 +29,10 @@ class CorveeRepetitiesRepository extends AbstractRepository {
 		$this->corveeTakenRepository = $corveeTakenRepository;
 	}
 
-	public function nieuw($mrid) {
+	public function nieuw(MaaltijdRepetitie $maaltijdRepetitie = null) {
 		$repetitie = new CorveeRepetitie();
 		$repetitie->crv_repetitie_id = null;
-		$repetitie->mlt_repetitie_id = $mrid;
+		$repetitie->mlt_repetitie_id = $maaltijdRepetitie->mlt_repetitie_id ?? null;
 		$repetitie->dag_vd_week = intval(instelling('corvee', 'standaard_repetitie_weekdag'));
 		$repetitie->periode_in_dagen = intval(instelling('corvee', 'standaard_repetitie_periode'));
 		$repetitie->corveeFunctie = null;
