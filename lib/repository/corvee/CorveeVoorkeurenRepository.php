@@ -2,11 +2,9 @@
 
 namespace CsrDelft\repository\corvee;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeVoorkeur;
 use CsrDelft\entity\corvee\CorveeVoorkeurMatrixDTO;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -35,16 +33,6 @@ class CorveeVoorkeurenRepository extends AbstractRepository {
 		parent::__construct($registry, CorveeVoorkeur::class);
 		$this->corveeRepetitiesRepository = $corveeRepetitiesRepository;
 		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
-	}
-
-	public function getEetwens(Profiel $profiel) {
-		return $profiel->eetwens;
-	}
-
-	public function setEetwens(Profiel $profiel, $eetwens) {
-		if ($profiel->eetwens === $eetwens) return;
-		$profiel->eetwens = $eetwens;
-		ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel);
 	}
 
 	/**

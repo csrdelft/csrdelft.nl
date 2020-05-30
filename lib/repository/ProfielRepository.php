@@ -479,4 +479,10 @@ class ProfielRepository extends AbstractRepository {
 			->getQuery()->getResult();
 	}
 
+	public function setEetwens(Profiel $profiel, $eetwens) {
+		if ($profiel->eetwens === $eetwens) return;
+		$profiel->eetwens = $eetwens;
+		$this->update($profiel);
+	}
+
 }
