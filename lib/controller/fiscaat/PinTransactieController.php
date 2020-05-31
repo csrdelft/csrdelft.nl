@@ -26,6 +26,9 @@ use CsrDelft\view\fiscaat\pin\PinBestellingCrediterenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchNegerenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
 use CsrDelft\view\formulier\FoutmeldingForm;
+use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableResponse;
+use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableType;
+use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -80,7 +83,7 @@ class PinTransactieController extends AbstractController {
 	public function overzicht() {
 		return $this->render('fiscaat/pin.html.twig', [
 			'titel' => 'Pin transacties beheer',
-			'table' => new PinTransactieMatchTable(),
+			'table' => $this->createDataTableWithType(PinTransactieMatchTableType::class),
 		]);
 	}
 

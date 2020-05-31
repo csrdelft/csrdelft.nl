@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\fiscaat;
 
-use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;

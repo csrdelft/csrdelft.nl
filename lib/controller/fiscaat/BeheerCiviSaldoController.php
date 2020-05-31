@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;

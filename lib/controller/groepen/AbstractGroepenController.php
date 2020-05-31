@@ -4,7 +4,7 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\Component\DataTable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\ChangeLogEntry;
 use CsrDelft\entity\groepen\Activiteit;

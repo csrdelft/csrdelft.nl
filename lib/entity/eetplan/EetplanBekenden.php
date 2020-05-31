@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\eetplan;
 
-use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\datatable\DataTableColumn;
 use Doctrine\ORM\Mapping as ORM;

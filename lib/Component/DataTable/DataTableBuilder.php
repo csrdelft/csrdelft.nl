@@ -1,17 +1,12 @@
 <?php
 
-namespace CsrDelft\view\datatable;
+namespace CsrDelft\Component\DataTable;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
-use CsrDelft\Component\DataTable\CustomDataTableEntry;
+use CsrDelft\view\datatable\CellRender;
+use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
-use CsrDelft\view\formulier\FormElement;
-use CsrDelft\view\ToHtmlResponse;
-use CsrDelft\view\ToResponse;
-use CsrDelft\view\View;
-use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -26,16 +21,16 @@ use Doctrine\ORM\Mapping\ClassMetadata;
  * @see http://www.datatables.net/
  *
  */
-class DataTable implements View, FormElement, ToResponse {
-	use ToHtmlResponse;
+class DataTableBuilder {
 	const POST_SELECTION = 'DataTableSelection';
+
+	public $model;
 
 	protected $dataUrl;
 	protected $titel;
 	protected $dataTableId;
 	protected $defaultLength = 10;
 	protected $selectEnabled = true;
-	protected $vliegendeKnoppen = false;
 	protected $settings = [
 		'dom' => 'Bfrtpli',
 		'buttons' => [
@@ -72,27 +67,27 @@ class DataTable implements View, FormElement, ToResponse {
 	private $columns = array();
 	private $groupByColumn;
 
-	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null, $loadColumns = true) {
-		$this->titel = $titel;
+	public function __construct() {
+	}
 
-		$this->dataUrl = $dataUrl;
-		$this->dataTableId = uniqid_safe(classNameZonderNamespace($orm));
-		$this->groupByColumn = $groupByColumn;
-
-		// create group expand / collapse column
-		$this->columns['details'] = array(
-			'name' => 'details',
-			'data' => 'details',
-			'title' => '',
-			'type' => 'string',
-			'orderable' => false,
-			'searchable' => false,
-			'defaultContent' => ''
-		);
-
-		if ($loadColumns) {
-			$this->loadColumns($orm);
+	public function loadFromMetadata(ClassMetadata $metadata) {
+		// generate columns from entity attributes
+		foreach ($metadata->getFieldNames() as $attribute) {
+			$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
+			if ($type instanceof DateTimeImmutableType) {
+				$this->addColumn($attribute, null, null, CellRender::DateTime());
+			} elseif ($type instanceof BooleanType) {
+				$this->addColumn($attribute, null, null, CellRender::Check());
+			} else {
+				$this->addColumn($attribute);
+			}
 		}
+
+		// hide primary key columns
+		foreach ($metadata->getIdentifierFieldNames() as $attribute) {
+			$this->hideColumn($attribute);
+		}
+
 	}
 
 	/**
@@ -104,45 +99,6 @@ class DataTable implements View, FormElement, ToResponse {
 
 	public function setSearch($searchString) {
 		$this->settings['search'] = ['search' => $searchString];
-	}
-
-	/**
-	 * @param $orm
-	 * @throws Exception
-	 */
-	public function loadColumns($orm): void
-	{
-		if (is_a($orm, CustomDataTableEntry::class, true)) {
-			foreach ($orm::getFieldNames() as $attribute) {
-				$this->addColumn($attribute);
-			}
-
-			foreach ($orm::getIdentifierFieldNames() as $attribute) {
-				$this->hideColumn($attribute);
-			}
-		} else {
-			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
-			/** @var ClassMetadata $metadata */
-			$metadata = $manager->getClassMetaData($orm);
-
-			// generate columns from entity attributes
-			foreach ($metadata->getFieldNames() as $attribute) {
-				$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
-				$columnName = $metadata->getColumnName($attribute);
-				if ($type instanceof DateTimeImmutableType) {
-					$this->addColumn($columnName, null, null, CellRender::DateTime());
-				} elseif ($type instanceof BooleanType) {
-					$this->addColumn($columnName, null, null, CellRender::Check());
-				} else {
-					$this->addColumn($columnName);
-				}
-			}
-
-			// hide primary key columns
-			foreach ($metadata->getIdentifierColumnNames() as $attribute) {
-				$this->hideColumn($attribute);
-			}
-		}
 	}
 
 	/**
@@ -261,22 +217,21 @@ class DataTable implements View, FormElement, ToResponse {
 	}
 
 	protected function getSettings() {
-		$settings = $this->settings;
 
 		// set view modus: paging or scrolling
 		if ($this->defaultLength > 0) {
-			$settings['paging'] = true;
-			$settings['pageLength'] = $this->defaultLength;
+			$this->settings['paging'] = true;
+			$this->settings['pageLength'] = $this->defaultLength;
 		} else {
-			$settings['paging'] = false;
-			$settings['dom'] = str_replace('i', '', $this->settings['dom']);
+			$this->settings['paging'] = false;
+			$this->settings['dom'] = str_replace('i', '', $this->settings['dom']);
 		}
 
-		$settings['select'] = $this->selectEnabled;
+		$this->settings['select'] = $this->selectEnabled;
 
 		// set ajax url
 		if ($this->dataUrl) {
-			$settings['ajax'] = array(
+			$this->settings['ajax'] = array(
 				'url' => $this->dataUrl,
 				'type' => 'POST',
 				'data' => array(
@@ -293,13 +248,13 @@ class DataTable implements View, FormElement, ToResponse {
 			$this->searchColumn($this->groupByColumn);
 
 			$groupByColumnPosition = $this->columnPosition($this->groupByColumn);
-			$settings['columnGroup'] = ['column' => $groupByColumnPosition];
-			$settings['orderFixed'] = [
+			$this->settings['columnGroup'] = ['column' => $groupByColumnPosition];
+			$this->settings['orderFixed'] = [
 				[$groupByColumnPosition, 'asc']
 			];
 		}
 
-		if (count($settings['rowButtons']) > 0) {
+		if (count($this->settings['rowButtons']) > 0) {
 			$this->columns['actionButtons'] = [
 				'name' => 'actionButtons',
 				'searchable' => false,
@@ -308,18 +263,18 @@ class DataTable implements View, FormElement, ToResponse {
 			];
 		} else {
 			// Client checkt of rowButtons bestaat
-			unset($settings['rowButtons']);
+			unset($this->settings['rowButtons']);
 		}
 
 		// create visible columns index array and default order
 		$index = 0;
 		$visibleIndex = 0;
 		foreach ($this->columns as $name => $def) {
-			if (!isset($def['visible']) || $def['visible'] === true) {
+			if (!isset($def['visible']) OR $def['visible'] === true) {
 
 				// default order by first visible orderable column
-				if (!isset($settings['order']) && !(isset($def['orderable']) && $def['orderable'] === false)) {
-					$settings['order'] = array(
+				if (!isset($this->settings['order']) AND !(isset($def['orderable']) AND $def['orderable'] === false)) {
+					$this->settings['order'] = array(
 						array($index, 'asc')
 					);
 				}
@@ -330,16 +285,12 @@ class DataTable implements View, FormElement, ToResponse {
 		}
 
 		// translate columns index
-		$settings['columns'] = array_values($this->columns);
+		$this->settings['columns'] = array_values($this->columns);
 
 		// Voeg nieuwe knoppen toe
-		$settings['buttons'] = array_merge($settings['userButtons'], $settings['buttons']);
+		$this->settings['buttons'] = array_merge($this->settings['userButtons'], $this->settings['buttons']);
 
-		return $settings;
-	}
-
-	public function __toString() {
-		return $this->getHtml();
+		return $this->settings;
 	}
 
 	public function getTitel() {
@@ -354,28 +305,41 @@ class DataTable implements View, FormElement, ToResponse {
 	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
 	 */
 	public function getModel() {
-		return null;
+		return $this->model;
 	}
 
 	public function getType() {
 		return classNameZonderNamespace(get_class($this));
 	}
 
-	public function getHtml() {
-		$id = str_replace(' ', '-', strtolower($this->getTitel()));
-
-		$settingsJson = htmlspecialchars(json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0));
-		$vliegendeKnoppenClass = $this->vliegendeKnoppen ? 'vliegende-knoppen' : '';
-
-		return <<<HTML
-<h2 id="table-{$id}" class="Titel {$vliegendeKnoppenClass}">{$this->getTitel()}</h2>
-
-<table id="{$this->dataTableId}" class="ctx-datatable display" data-settings="{$settingsJson}"></table>
-HTML;
+	public function getTable() {
+		return new DataTableInstance($this->getTitel(), $this->getDataTableId(), $this->getSettings());
 	}
 
-	public function getJavascript() {
-		//Nothing should be returned here because the script is already embedded in getView
-		return "";
+	public function setTitel($titel) {
+		$this->titel = $titel;
 	}
+
+	// create group expand / collapse column
+	public function addDefaultDetailsColumn() {
+		$this->columns['details'] = array(
+			'name' => 'details',
+			'data' => 'details',
+			'title' => '',
+			'type' => 'string',
+			'orderable' => false,
+			'searchable' => false,
+			'defaultContent' => ''
+		);
+	}
+
+	public function setTableId($tableId) {
+		$this->dataTableId = $tableId;
+	}
+
+	public function setDataUrl($dataUrl) {
+		$this->dataUrl = $dataUrl;
+	}
+
+
 }
