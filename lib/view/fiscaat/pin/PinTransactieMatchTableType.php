@@ -31,14 +31,14 @@ class PinTransactieMatchTableType extends AbstractDataTableType {
 	}
 
 	public function createDataTable(DataTableBuilder $builder, array $options): void {
-		$builder->setDataUrl($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_lijst', ['filter' => 'metFout']));
+		$builder->setDataUrl($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'metFout']));
 		$builder->setTitel('Overzicht van pintransacties matches');
 
 		$builder->loadFromMetadata($this->entityManager->getClassMetadata(PinTransactieMatch::class));
 
 		$weergave = new CollectionDataTableKnop(Multiplicity::None(), 'Weergave', 'Weergave van de tabel', 'cart');
-		$weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_lijst', ['filter' => 'metFout']), 'Met fouten', 'Fouten weergeven', 'cart_error'));
-		$weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_lijst', ['filter' => 'alles']), 'Alles', 'Alles weergeven', 'cart'));
+		$weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'metFout']), 'Met fouten', 'Fouten weergeven', 'cart_error'));
+		$weergave->addKnop(new SourceChangeDataTableKnop($this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_overzicht', ['filter' => 'alles']), 'Alles', 'Alles weergeven', 'cart'));
 		$builder->addKnop($weergave);
 
 		$builder->addKnop(new DataTableKnop(Multiplicity::One(), $this->urlGenerator->generate('csrdelft_fiscaat_pintransactie_verwerk'),  'Verwerk', 'Dit probleem verwerken', 'cart_edit'));
