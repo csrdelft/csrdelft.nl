@@ -599,6 +599,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
 			$em->persist($lid);
 			$em->flush();
+			$groep->getLeden()->add($lid);
 			return new GroepPasfotosView($groep);
 		} else {
 			return $form;
@@ -678,6 +679,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$em->flush();
 			return $this->tableData([$lid]);
 		} else {
+			$em->clear(); // Voorkom opslaan
 			return $form;
 		}
 	}
