@@ -338,15 +338,8 @@ optgroup {
 	}
 
 	.sociaal {
-		display: flex;
-		flex-direction: row;
-
-		.youtube {
-			margin-right: 1em;
-		}
-
-		.instagram {
-			margin-left: 1em;
-		}
+		display:grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 1em;
 	}
 }
