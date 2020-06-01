@@ -23,7 +23,7 @@
 			<div class="inner">
 				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
 				<div class="content">
-					<p style="padding-bottom: 1em;border-bottom: solid 4px #e59200;">
+					<p>
 						<em style="color:red;">
 							Vanwege de recente maatregelen omtrent de verspreiding van het coronavirus, is besloten per direct alle verenigingsactiviteiten af te lassen en is onze sociëteit gesloten. Als u hierover vragen heeft of het bestuur wil bereiken kunt u het bestuur mailen (bestuur@csrdelft.nl).<br>
 						</em>
@@ -32,7 +32,7 @@
 
 					<div class="een-minuut">
 						<div id="hero">
-							<h2>C.S.R. IN 1 MINUUT</h2>
+							<h1 class="major">C.S.R. IN 1 MINUUT</h1>
 							<div class="bb-video">
 								<iframe src="https://www.youtube.com/embed/AE8RE8e5qI4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 							</div>

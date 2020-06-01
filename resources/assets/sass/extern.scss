@@ -220,6 +220,10 @@ h6 {
 		font-size: 0.8em;
 	}
 
+	.een-minuut #hero h1 {
+		font-size: 2em;
+	}
+
 }
 
 sub {
@@ -333,11 +337,17 @@ optgroup {
 	#hero {
 		margin-bottom: 2em;
 
-		h2 {
-			font-size: 3vw;
+		h1 {
+			font-size: 3em;
 			font-weight: bold;
 			text-align: center;
 			margin: 0;
+
+			&.major {
+				border-top: solid 4px #e59200;
+				border-bottom: 0;
+				padding-bottom: 0;
+			}
 		}
 	}
 
