@@ -62,21 +62,11 @@ class DoctrineEntityField extends InputField {
 		$this->entity = $value ?? new $type();
 		$this->suggestions[] = $url;
 		$this->show_value = $this->entity->getWeergave();
-		$this->origvalue = $this->entity->getId();
+		$this->origvalue = (string) $this->entity->getId();
 
-		parent::__construct($name, $value ? $value->getId() : null, $description);
+		parent::__construct($name, $value ? (string) $value->getId() : null, $description);
 
 		$this->autoselect = true;
-	}
-
-	public function getValue() {
-		$this->value = parent::getValue();
-
-		if ((int)$this->value == $this->value) {
-			$this->value = (int) $this->value;
-		}
-
-		return $this->value;
 	}
 
 	public function getFormattedValue() {
