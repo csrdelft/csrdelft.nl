@@ -41,7 +41,7 @@
 							<div class="youtube">
 								<p>Wil je zien hoe
 									de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
-								<div bb-video>
+								<div class="bb-video">
 									<iframe src="https://www.youtube.com/embed/a7hhtoo_kzY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 								</div>
 							</div>
