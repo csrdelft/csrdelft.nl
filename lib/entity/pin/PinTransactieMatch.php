@@ -329,4 +329,20 @@ class PinTransactieMatch implements DataTableEntry {
 
 		return $bestellingInhoud;
 	}
+
+	public function getTransactie() {
+		if ($this->transactie) {
+			return $this->transactie->getKorteBeschrijving();
+		}
+
+		return '-';
+	}
+
+	public function getBestelling() {
+		if ($this->bestelling) {
+			return $this->bestelling->getPinBeschrijving();
+		}
+
+		return '-';
+	}
 }

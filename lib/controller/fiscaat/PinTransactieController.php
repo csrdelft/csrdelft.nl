@@ -31,7 +31,9 @@ use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableType;
 use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -76,38 +78,37 @@ class PinTransactieController extends AbstractController {
 	}
 
 	/**
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 * @Route("/fiscaat/pin", methods={"GET"})
-	 * @Auth(P_FISCAAT_READ)
-	 */
-	public function overzicht() {
-		return $this->render('fiscaat/pin.html.twig', [
-			'titel' => 'Pin transacties beheer',
-			'table' => $this->createDataTableWithType(PinTransactieMatchTableType::class),
-		]);
-	}
-
-	/**
 	 * @param Request $request
-	 * @Route("/fiscaat/pin", methods={"POST"})
+	 * @return Response
+	 * @throws ExceptionInterface
+	 * @Route("/fiscaat/pin", methods={"GET", "POST"})
 	 * @Auth(P_FISCAAT_READ)
 	 * @return GenericDataTableResponse
 	 */
-	public function lijst(Request $request) {
-		$filter = $request->query->get('filter', '');
+	public function overzicht(Request $request) {
+		$table = $this->createDataTableWithType(PinTransactieMatchTableType::class);
 
-		switch ($filter) {
-			case 'metFout':
-				$data = $this->pinTransactieMatchRepository->metFout();
-				break;
+		if ($request->isMethod("POST")) {
+			$filter = $request->query->get('filter', '');
 
-			case 'alles':
-			default:
-				$data = $this->pinTransactieMatchRepository->findAll();
-				break;
+			switch ($filter) {
+				case 'metFout':
+					$data = $this->pinTransactieMatchRepository->metFout();
+					break;
+
+				case 'alles':
+				default:
+					$data = $this->pinTransactieMatchRepository->findAll();
+					break;
+			}
+
+			return $table->createData($data);
 		}
 
-		return $this->tableData($data);
+		return $this->render('fiscaat/pin.html.twig', [
+			'titel' => 'Pin transacties beheer',
+			'table' => $table->createView(),
+		]);
 	}
 
 	/**

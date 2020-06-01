@@ -10,6 +10,8 @@ use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl
@@ -66,8 +68,18 @@ class DataTableBuilder {
 
 	private $columns = array();
 	private $groupByColumn;
+	/**
+	 * @var SerializerInterface
+	 */
+	private $serializer;
+	/**
+	 * @var NormalizerInterface
+	 */
+	private $normalizer;
 
-	public function __construct() {
+	public function __construct(SerializerInterface $serializer, NormalizerInterface $normalizer) {
+		$this->serializer = $serializer;
+		$this->normalizer = $normalizer;
 	}
 
 	public function loadFromMetadata(ClassMetadata $metadata) {
@@ -313,7 +325,7 @@ class DataTableBuilder {
 	}
 
 	public function getTable() {
-		return new DataTableInstance($this->getTitel(), $this->getDataTableId(), $this->getSettings());
+		return new DataTableInstance($this->serializer, $this->normalizer, $this->getTitel(), $this->getDataTableId(), $this->getSettings());
 	}
 
 	public function setTitel($titel) {
@@ -340,6 +352,4 @@ class DataTableBuilder {
 	public function setDataUrl($dataUrl) {
 		$this->dataUrl = $dataUrl;
 	}
-
-
 }

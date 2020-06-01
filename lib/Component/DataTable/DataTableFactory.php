@@ -5,16 +5,24 @@ namespace CsrDelft\Component\DataTable;
 
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ServiceLocator;
 
 class DataTableFactory {
 	/** @var ContainerInterface */
 	private $registry;
+	/**
+	 * @var DataTableBuilder
+	 */
+	private $builder;
 
-	public function __construct($registry) {
+	public function __construct($registry, DataTableBuilder $builder) {
 		$this->registry = $registry;
+		$this->builder = $builder;
 	}
 
+	/**
+	 * @param $type
+	 * @return DataTableTypeInterface|object
+	 */
 	private function getType($type) {
 		if ($this->registry->has($type)) {
 			return $this->registry->get($type);
@@ -39,16 +47,13 @@ class DataTableFactory {
 	 * @return DataTableBuilder
 	 */
 	public function createWithType($type, $entityType = null, $dataUrl = null) {
-		/** @var DataTableTypeInterface $type */
-		$type = $this->registry->get($type);
+		$type = $this->getType($type);
 
-		$builder = new DataTableBuilder();
-
-		$type->createDataTable($builder, [
+		$type->createDataTable($this->builder, [
 			AbstractDataTableType::OPTION_ENTITY_TYPE => $entityType,
 			AbstractDataTableType::OPTION_DATA_URL => $dataUrl,
 		]);
 
-		return $builder;
+		return $this->builder;
 	}
 }
