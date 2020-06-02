@@ -59,7 +59,12 @@ class DataTableInstance {
 	 * @throws ExceptionInterface
 	 */
 	public function createData($data, $modal = null, $autoUpdate = false) {
-		$columns = array_map(function ($col) { return $col['name']; }, $this->settings['columns']);
+		$columns = [];
+		foreach ($this->settings['columns'] as $col) {
+			// Camel & snake case voor de serializer...
+			$columns[] = $col['name'];
+			$columns[] = lcfirst(str_replace('_', '', ucwords($col['name'], '_')));
+		}
 
 		$normalizedData = $this->normalizer->normalize($data, 'json', [AbstractNormalizer::ATTRIBUTES => $columns]);
 

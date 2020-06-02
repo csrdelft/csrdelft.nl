@@ -124,9 +124,11 @@ class AbstractController extends BaseController {
 	}
 
 	/**
+	 * @param $type
+	 * @param array $options
 	 * @return DataTableInstance
 	 */
-	protected function createDataTableWithType($type) {
-		return $this->container->get('csr.table.factory')->createWithType($type)->getTable();
+	protected function createDataTableWithType($type, $options = []) {
+		return $this->container->get('csr.table.factory')->createWithType($type, $options)->getTable();
 	}
 }

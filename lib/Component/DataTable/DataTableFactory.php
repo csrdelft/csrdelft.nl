@@ -37,22 +37,21 @@ class DataTableFactory {
 	 * @return DataTableBuilder
 	 */
 	public function create($entityType, $dataUrl) {
-		return $this->createWithType(DefaultDataTableType::class, $entityType, $dataUrl);
+		return $this->createWithType(DefaultDataTableType::class, [
+			AbstractDataTableType::OPTION_ENTITY_TYPE => $entityType,
+			AbstractDataTableType::OPTION_DATA_URL => $dataUrl
+		]);
 	}
 
 	/**
 	 * @param $type
-	 * @param $entityType
-	 * @param $dataUrl
+	 * @param $options
 	 * @return DataTableBuilder
 	 */
-	public function createWithType($type, $entityType = null, $dataUrl = null) {
+	public function createWithType($type, $options) {
 		$type = $this->getType($type);
 
-		$type->createDataTable($this->builder, [
-			AbstractDataTableType::OPTION_ENTITY_TYPE => $entityType,
-			AbstractDataTableType::OPTION_DATA_URL => $dataUrl,
-		]);
+		$type->createDataTable($this->builder, $options);
 
 		return $this->builder;
 	}

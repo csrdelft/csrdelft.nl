@@ -21,7 +21,8 @@ services:
     resource: '../lib'
     exclude: '../lib/{common,Kernel.php}'
 
-  CsrDelft\view\fiscaat\pin\PinTransactieMatchTableType:
+  CsrDelft\view\table\:
+    resource: '../lib/view/table'
 
   # controllers are imported separately to make sure services can be injected
   # as action arguments even if you don't extend any base controller class

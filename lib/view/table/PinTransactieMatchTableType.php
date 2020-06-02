@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\view\fiscaat\pin;
+namespace CsrDelft\view\table;
 
 
 use CsrDelft\Component\DataTable\AbstractDataTableType;
