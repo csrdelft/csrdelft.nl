@@ -287,6 +287,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 							$groep->rechten_aanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer;
 						}
 						break;
+					default:
+						$groep->rechten_aanmelden = P_LOGGED_IN;
+						break;
 				}
 			}
 		} // opvolger
