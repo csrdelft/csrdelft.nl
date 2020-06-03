@@ -133,7 +133,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		}
 
 		$repetities = $this->maaltijdRepetitiesRepository->findAll();
-		$table = $this->createDataTableWithType(BeheerMaaltijdenTableType::class, ['repetities' => $repetities]);
+		$table = $this->createDataTableWithType(BeheerMaaltijdenTableType::class, [BeheerMaaltijdenTableType::OPTION_REPETITIES => $repetities]);
 
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Maaltijdenbeheer',

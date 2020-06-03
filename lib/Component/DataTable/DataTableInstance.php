@@ -61,7 +61,9 @@ class DataTableInstance {
 	public function createData($data, $modal = null, $autoUpdate = false) {
 		$columns = [];
 		foreach ($this->settings['columns'] as $col) {
-			// Camel & snake case voor de serializer...
+			// Camel & snake case voor de serializer
+			// Omdat alle field names in onze modellen underscores hebben en de getters niet zorgt dit voor wat
+			// verwarring in de serializer.
 			$columns[] = $col['name'];
 			$columns[] = lcfirst(str_replace('_', '', ucwords($col['name'], '_')));
 		}
