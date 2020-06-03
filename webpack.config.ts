@@ -28,6 +28,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'common': './sass/common.scss',
 		'extern-forum': './sass/extern-forum.scss',
 		'extern-fotoalbum': './sass/extern-fotoalbum.scss',
+		'extern-owee': ['./js/extern-owee.ts', './sass/extern-owee.scss'],
 		'maaltijdlijst': './sass/maaltijdlijst.scss',
 		'thema-civitasia': './sass/thema/civitasia.scss',
 		'thema-dies': './sass/thema/dies.scss',
