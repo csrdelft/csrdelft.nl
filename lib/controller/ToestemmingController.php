@@ -90,7 +90,7 @@ class ToestemmingController extends AbstractController {
 	 * @param Request $request
 	 * @return \CsrDelft\view\renderer\TemplateView|ToestemmingLijstResponse
 	 * @Route("/toestemming/lijst", methods={"GET","POST"})
-	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD})
+	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
 	 */
 	public function lijst(Request $request) {
 		if (LoginService::mag(P_LEDEN_MOD)) {
