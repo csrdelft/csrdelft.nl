@@ -97,6 +97,8 @@ class ToestemmingController extends AbstractController {
 			$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];
 		} else if (LoginService::mag(P_ALBUM_MOD)) {
 			$ids = ['foto_intern', 'foto_extern'];
+		} else if (LoginService::mag('commissie:promocie:ht')) {
+			$ids = ['foto_intern', 'foto_extern'];
 		} else {
 			throw new CsrToegangException('Geen toegang');
 		}
