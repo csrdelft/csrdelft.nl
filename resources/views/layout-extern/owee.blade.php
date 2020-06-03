@@ -12,10 +12,40 @@
 	<!-- Banner -->
 	<section id="banner">
 		<div class="inner">
-			<img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging">
-			<h1>C.S.R. Delft</h1>
+			<a href="/">
+				<img src="/images/c.s.r.logo.svg" alt="Beeldmerk van de vereniging">
+				<h1>C.S.R. Delft</h1>
+			</a>
 		</div>
 	</section>
+
+	<div class="owee">
+		<div class="bbl atl hero">
+			<div class="content"></div>
+		</div>
+
+		<div class="content">
+
+		</div>
+
+		<div class="bbl atl buttons">
+			<div class="content"></div>
+		</div>
+
+		<div class="content"></div>
+
+		<div class="bbl atl interest">
+			<div class="content"></div>
+		</div>
+
+		<div class="content">
+
+		</div>
+
+		<div class="bbl atl notes">
+			<div class="content"></div>
+		</div>
+	</div>
 
 	<!-- Footer -->
 	<div id="wrapper">

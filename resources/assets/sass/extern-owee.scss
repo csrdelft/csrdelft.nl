@@ -1,9 +1,91 @@
 @import "extern/variables";
+
 $primary: #7A4593;
 $secondary: #92C7ED;
 $tertiary: #713E89;
 $accent: #FBE47E;
 
-body {
-	background: red;
+@mixin triangle($kleur, $top, $left) {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	display: block;
+
+	@if $top and $left {
+		border-width: 7vw 0 0 100vw;
+		border-color: transparent transparent transparent $kleur;
+	} @else if $top and not $left {
+		border-width: 7vw 100vw 0 0;
+		border-color: $kleur transparent transparent transparent;
+	} @else if not $top and $left {
+		border-width: 0 0 7vw 100vw;
+		border-color: transparent transparent $kleur transparent;
+	} @else if not $top and not $left {
+		border-width: 0 100vw 7vw 0;
+		border-color: transparent $kleur transparent transparent;
+	}
+
+	&:before {
+		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:#{escape-color($kleur)}' /%3E%3C/svg%3E");
+	}
+}
+
+@mixin triangle-before($kleur, $left, $top) {
+	&:before {
+		content: '';
+		@include triangle($kleur, $left, $top);
+	}
+	.content {
+		margin-top: -7vw;
+		padding-top: 7vw;
+	}
+}
+
+@mixin triangle-after($kleur, $left, $top) {
+	&:after {
+		content: '';
+		@include triangle($kleur, $left, $top);
+	}
+	.content {
+		margin-bottom: -7vw;
+		padding-bottom: 7vw;
+	}
+}
+
+.owee {
+	font-size: 0;
+}
+
+.btl { @include triangle-before($basiskleur, true, true); }
+.btr { @include triangle-before($basiskleur, false, true); }
+.bbl { @include triangle-before($basiskleur, true, false); }
+.bbr { @include triangle-before($basiskleur, false, false); }
+.atl { @include triangle-after($basiskleur, true, true); }
+.atr { @include triangle-after($basiskleur, false, true); }
+.abl { @include triangle-after($basiskleur, true, false); }
+.abr { @include triangle-after($basiskleur, false, false); }
+
+.content {
+	height: 400px;
+	box-sizing: content-box;
+}
+
+.hero {
+	background: $primary;
+}
+
+.buttons {
+	background: $primary;
+}
+
+.interest {
+	background: $secondary;
+}
+
+.notes {
+	background: $tertiary;
+}
+
+#footer .inner {
+	padding-top: 0;
 }
