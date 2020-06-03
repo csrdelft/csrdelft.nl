@@ -4,6 +4,15 @@ $primary: #7A4593;
 $secondary: #92C7ED;
 $tertiary: #713E89;
 $accent: #FBE47E;
+$headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
+
+@font-face {
+	font-family: 'adam.cg_proregular';
+	src: url('../fonts/owee/adam.cg_pro-webfont.woff2') format('woff2'),
+	url('../fonts/owee/adam.cg_pro-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
 
 @mixin triangle($kleur, $top, $left) {
 	width: 0;
@@ -23,10 +32,6 @@ $accent: #FBE47E;
 	} @else if not $top and not $left {
 		border-width: 0 100vw 7vw 0;
 		border-color: transparent $kleur transparent transparent;
-	}
-
-	&:before {
-		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:#{escape-color($kleur)}' /%3E%3C/svg%3E");
 	}
 }
 
@@ -54,36 +59,137 @@ $accent: #FBE47E;
 
 .owee {
 	font-size: 0;
-}
+	@import "~bootstrap/scss/bootstrap";
 
-.btl { @include triangle-before($basiskleur, true, true); }
-.btr { @include triangle-before($basiskleur, false, true); }
-.bbl { @include triangle-before($basiskleur, true, false); }
-.bbr { @include triangle-before($basiskleur, false, false); }
-.atl { @include triangle-after($basiskleur, true, true); }
-.atr { @include triangle-after($basiskleur, false, true); }
-.abl { @include triangle-after($basiskleur, true, false); }
-.abr { @include triangle-after($basiskleur, false, false); }
+	.btl {
+		@include triangle-before($basiskleur, true, true);
+	}
 
-.content {
-	height: 400px;
-	box-sizing: content-box;
-}
+	.btr {
+		@include triangle-before($basiskleur, false, true);
+	}
 
-.hero {
-	background: $primary;
-}
+	.bbl {
+		@include triangle-before($basiskleur, true, false);
+	}
 
-.buttons {
-	background: $primary;
-}
+	.bbr {
+		@include triangle-before($basiskleur, false, false);
+	}
 
-.interest {
-	background: $secondary;
-}
+	.atl {
+		@include triangle-after($basiskleur, true, true);
+	}
 
-.notes {
-	background: $tertiary;
+	.atr {
+		@include triangle-after($basiskleur, false, true);
+	}
+
+	.abl {
+		@include triangle-after($basiskleur, true, false);
+	}
+
+	.abr {
+		@include triangle-after($basiskleur, false, false);
+	}
+
+	.content {
+		@extend .container;
+	}
+
+	h1, h2 {
+		color: $primary;
+		font-size: 1.5rem;
+		text-transform: uppercase;
+		font-family: $headingFont;
+		margin-bottom: 1rem;
+	}
+
+	p {
+		font-weight: 300;
+		font-size: 1.2rem;
+		line-height: 140%;
+		color: black;
+	}
+
+	.iframe-container {
+		position: relative;
+		padding-top: 56.25%;
+
+		iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.button-group {
+
+	}
+
+	.cta {
+		&.primary {
+			background: $primary;
+			color: white;
+
+			&:hover {
+				background: darken($primary, 10%);
+			}
+		}
+
+		&.secondary {
+			background: $secondary;
+			color: white;
+
+			&:hover {
+				background: darken($secondary, 10%);
+			}
+		}
+
+		&:hover {
+			text-decoration: none;
+		}
+
+		transition: background-color 0.2s ease-in-out;
+		font-family: $headingFont;
+		font-size: 0.9rem;
+		line-height: 250%;
+		padding: 0 22px;
+		border: none;
+		display: inline-block;
+		margin-right: 8px;
+		margin-bottom: 8px;
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+
+	.hero {
+		background: url('../images/owee2020-achtergrond.jpg') no-repeat center bottom;
+		background-size: cover;
+
+		img {
+			max-height: 70vh;
+			margin: -8vh auto 3vh auto;
+			display: block;
+			max-width: 60vw;
+		}
+	}
+
+	.buttons {
+		background: $primary;
+	}
+
+	.interest {
+		background: $secondary;
+	}
+
+	.notes {
+		background: $tertiary;
+	}
 }
 
 #footer .inner {
