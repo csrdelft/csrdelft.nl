@@ -32,7 +32,7 @@ class DataTableBuilder {
 	protected $titel;
 	protected $dataTableId;
 	protected $defaultLength = 10;
-	protected $selectEnabled = true;
+	public $selectEnabled = true;
 	protected $settings = [
 		'dom' => 'Bfrtpli',
 		'buttons' => [

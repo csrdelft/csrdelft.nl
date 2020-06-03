@@ -69,4 +69,11 @@ class DataTableInstance {
 
 		return new Response($this->serializer->serialize($model, 'json'), 200, ['Content-Type' => 'application/json']);
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getTableId(): string {
+		return $this->tableId;
+	}
 }

@@ -19,10 +19,13 @@ use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\GroepRepository;
+use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
+use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\groepen\formulier\GroepConverteerForm;
@@ -37,18 +40,18 @@ use CsrDelft\view\groepen\GroepenView;
 use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\groepen\leden\GroepEetwensView;
 use CsrDelft\view\groepen\leden\GroepEmailsView;
-use CsrDelft\view\groepen\leden\GroepLedenTable;
 use CsrDelft\view\groepen\leden\GroepLijstView;
 use CsrDelft\view\groepen\leden\GroepOmschrijvingView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\Icon;
+use CsrDelft\view\JsonResponse;
+use CsrDelft\view\table\GroepLedenTable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -380,7 +383,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		}
 	}
 
-	public function beheren(Request $request, $soort = null)
+	public function beheren(Request $request, $soort = null, $modal = null)
 	{
 		if ($request->getMethod() == 'POST') {
 			$soortEnum = $this->repository->parseSoort($soort);
@@ -391,8 +394,22 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			}
 			return $this->tableData($groepen);
 		} else {
-			$this->table = new GroepenBeheerTable($this->repository);
-			return $this->render('default.html.twig', ['content' => $this->table]);
+			$table = $this->createDataTable(GroepenBeheerTable::class, ['repository' => $this->repository]);
+
+			if ($modal instanceof Formulier) {
+				$modal->setDataTableId($table->getTableId());
+			}
+
+			$cmsPaginaRepository = ContainerFacade::getContainer()->get(CmsPaginaRepository::class);
+
+			$pagina = $cmsPaginaRepository->find($this->repository->getNaam());
+			if (!$pagina) {
+				$pagina = $cmsPaginaRepository->find('');
+			}
+
+			$paginaview = new CmsPaginaView($pagina);
+
+			return view('default', ['content' => $paginaview->toString() . $table->createView(), 'modal' => $modal]);
 		}
 	}
 
@@ -403,30 +420,41 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function wijzigen(Request $request, $id)
-	{
-		$groep = $this->repository->get($id);
-
-		if (!$groep) {
-			throw $this->createNotFoundException();
-		}
-
-		if (!$groep->mag(AccessAction::Wijzigen())) {
-			throw $this->createAccessDeniedException();
-		}
-		// checks rechten wijzigen
-		$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen());
-		if ($request->getMethod() == 'GET') {
-			$this->beheren($request);
-			$this->table->filter = $groep->naam;
-			$form->setDataTableId($this->table->getDataTableId());
-			return $this->render('default.html.twig', ['content' => $this->table, 'modal' => $form]);
-		} elseif ($form->validate()) {
-			$this->changeLogRepository->logChanges($form->diff());
-			$this->repository->update($groep);
-			return $this->tableData([$groep]);
-		} else {
-			return $form;
+	public function wijzigen(Request $request, $id = null) {
+		if ($id) {
+			$groep = $this->repository->get($id);
+			if (!$groep->mag(AccessAction::Wijzigen)) {
+				throw new CsrToegangException();
+			}
+			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
+			if ($request->getMethod() == 'GET') {
+				return $this->beheren($request, null, $form);
+			} elseif ($form->validate()) {
+				$this->changeLogRepository->logChanges($form->diff());
+				$this->repository->update($groep);
+				return $this->tableData([$groep]);
+			} else {
+				return $form;
+			}
+		} // beheren
+		else {
+			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			if (empty($selection)) {
+				throw new CsrToegangException();
+			}
+			/** @var AbstractGroep $groep */
+			$groep = $this->repository->retrieveByUUID($selection[0]);
+			if (!$groep || !$groep->mag(AccessAction::Wijzigen)) {
+				throw new CsrToegangException();
+			}
+			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
+			if ($form->validate()) {
+				$this->changeLogRepository->logChanges($form->diff());
+				$this->repository->update($groep);
+				return $this->tableData([$groep]);
+			} else {
+				return $form;
+			}
 		}
 	}
 
@@ -585,10 +613,13 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if (!$groep->mag(AccessAction::Bekijken())) {
 			throw $this->createAccessDeniedException();
 		}
+
+		$table = $this->createDataTable(GroepLedenTable::class, [GroepLedenTable::OPTION_GROEP => $groep]);
+
 		if ($request->getMethod() == 'POST') {
-			return $this->tableData($groep->getLeden());
+			return $table->createData($groep->getLeden());
 		} else {
-			return new GroepLedenTable($groep);
+			return new Response($table->createView());
 		}
 	}
 

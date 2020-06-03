@@ -9,8 +9,6 @@ use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation as Serializer;
-
 /**
  * Class GroepLid
  * @package CsrDelft\entity\groepen2
@@ -35,7 +33,6 @@ class GroepLid
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
 	 */
 	public $groepId;
 	/**
@@ -58,7 +55,6 @@ class GroepLid
 	 * CommissieFunctie of opmerking bij lidmaatschap
 	 * @var CommissieFunctie|string
 	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups("datatable")
 	 */
 	public $opmerking;
 	/**
@@ -71,7 +67,6 @@ class GroepLid
 	 * Datum en tijd van aanmelden
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
 	 */
 	public $lidSinds;
 	/**
@@ -94,19 +89,15 @@ class GroepLid
 	public $groep;
 	/**
 	 * @return string|null
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("lid")
 	 */
-	public function getDatatableLid() {
+	public function getLid() {
 		return ProfielRepository::getLink($this->uid);
 	}
 
 	/**
 	 * @return string|null
-	 * @Serializer\Groups("datatable")
-	 * @Serializer\SerializedName("door_uid")
 	 */
-	public function getDatatableDoorUid() {
+	public function getDoorUid() {
 		return $this->doorProfiel->getLink();
 	}
 

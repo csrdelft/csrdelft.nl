@@ -29,7 +29,7 @@ class KetzersController extends AbstractGroepenController {
 	public function nieuw(Request $request, $id = null, $soort = null) {
 		$form = new GroepAanmakenForm($this->repository, $soort);
 		if ($request->getMethod() == 'GET') {
-			return $this->beheren($request);
+			return $this->beheren($request, null, $form);
 		} elseif ($form->validate()) {
 			$values = $form->getValues();
 			$redirect = ContainerFacade::getContainer()->get($values['model'])->getUrl() . '/aanmaken/' . $values['soort'];
