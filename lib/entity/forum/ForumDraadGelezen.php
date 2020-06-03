@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\forum;
 
+use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,6 +33,12 @@ class ForumDraadGelezen {
 	 * @ORM\Id()
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 	/**
 	 * Datum en tijd van laatst gelezen
 	 * @var DateTimeImmutable

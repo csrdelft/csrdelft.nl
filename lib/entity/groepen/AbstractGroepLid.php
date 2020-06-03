@@ -47,7 +47,7 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	public $uid;
 	/**
 	 * @var Profiel
-	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
 	public $profiel;

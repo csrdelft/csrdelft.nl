@@ -56,7 +56,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $maaltijd_id;
 	/**
-	 * @var integer
+	 * @var integer|null
 	 * @ORM\Column(type="integer", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
@@ -64,7 +64,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	/**
 	 * @var MaaltijdRepetitie|null
 	 * @ORM\ManyToOne(targetEntity="MaaltijdRepetitie")
-	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id")
+	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id", nullable=true)
 	 */
 	public $repetitie;
 	/**
@@ -107,8 +107,8 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $gesloten = false;
 	/**
-	 * @var DateTimeInterface
-	 * @ORM\Column(type="datetime")
+	 * @var DateTimeInterface|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $laatst_gesloten;
@@ -119,14 +119,14 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $verwijderd = false;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $aanmeld_filter;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text")
+	 * @var string|null
+	 * @ORM\Column(type="text", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $omschrijving;

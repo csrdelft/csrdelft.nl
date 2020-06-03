@@ -30,6 +30,7 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 		$gelezen->draad = $draad;
 		$gelezen->draad_id = $draad->draad_id; // Set pk
 		$gelezen->uid = LoginService::getUid();
+		$gelezen->profiel = LoginService::getProfiel();
 		$gelezen->datum_tijd = date_create_immutable();
 		return $gelezen;
 	}

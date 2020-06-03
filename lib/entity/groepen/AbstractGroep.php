@@ -60,8 +60,8 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	public $begin_moment;
 	/**
 	 * Datum en tijd einde
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
+	 * @var DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $eind_moment;

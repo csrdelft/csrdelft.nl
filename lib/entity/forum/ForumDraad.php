@@ -84,7 +84,7 @@ class ForumDraad {
 	/**
 	 * @var ForumPost
 	 * @ORM\OneToOne(targetEntity="ForumPost")
-	 * @ORM\JoinColumn(name="laatste_post_id", referencedColumnName="post_id")
+	 * @ORM\JoinColumn(name="laatste_post_id", referencedColumnName="post_id", nullable=true)
 	 */
 	public $laatste_post;
 	/**

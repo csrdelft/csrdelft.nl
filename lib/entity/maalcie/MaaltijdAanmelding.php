@@ -50,18 +50,18 @@ class MaaltijdAanmelding {
 	 */
 	public $aantal_gasten = 0;
 	/**
-	 * @var string
+	 * @var string|null
 	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $gasten_eetwens;
 	/**
-	 * @var integer
+	 * @var integer|null
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $door_abonnement;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
+	 * @var string|null
+	 * @ORM\Column(type="uid", nullable=true)
 	 */
 	public $door_uid;
 	/**

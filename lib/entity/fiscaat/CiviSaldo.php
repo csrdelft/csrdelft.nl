@@ -32,7 +32,7 @@ class CiviSaldo implements DataTableEntry {
 	public $id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="uid")
+	 * @ORM\Column(type="uid", unique=true)
 	 * @Serializer\Groups({"log", "datatable"})
 	 */
 	public $uid;
