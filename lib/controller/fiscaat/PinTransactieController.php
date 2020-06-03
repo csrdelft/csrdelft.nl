@@ -84,7 +84,7 @@ class PinTransactieController extends AbstractController {
 	 * @return GenericDataTableResponse
 	 */
 	public function overzicht(Request $request) {
-		$table = $this->createDataTableWithType(PinTransactieMatchTableType::class);
+		$table = $this->createDataTable(PinTransactieMatchTableType::class);
 
 		if ($request->isMethod("POST")) {
 			$filter = $request->query->get('filter', '');

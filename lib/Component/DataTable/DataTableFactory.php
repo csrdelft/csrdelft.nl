@@ -32,23 +32,11 @@ class DataTableFactory {
 	}
 
 	/**
-	 * @param $entityType
-	 * @param $dataUrl
-	 * @return DataTableBuilder
-	 */
-	public function create($entityType, $dataUrl) {
-		return $this->createWithType(DefaultDataTableType::class, [
-			AbstractDataTableType::OPTION_ENTITY_TYPE => $entityType,
-			AbstractDataTableType::OPTION_DATA_URL => $dataUrl
-		]);
-	}
-
-	/**
 	 * @param $type
 	 * @param $options
 	 * @return DataTableBuilder
 	 */
-	public function createWithType($type, $options) {
+	public function create($type, $options) {
 		$type = $this->getType($type);
 
 		$type->createDataTable($this->builder, $options);

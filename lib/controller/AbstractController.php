@@ -119,16 +119,12 @@ class AbstractController extends BaseController {
 		return $this->container->get('csr.formulier.factory')->create($type, $data, $options);
 	}
 
-	protected function createDataTable($entityType, $dataUrl) {
-		return $this->container->get('csr.table.factory')->create($entityType, $dataUrl)->getTable();
-	}
-
 	/**
 	 * @param $type
 	 * @param array $options
 	 * @return DataTableInstance
 	 */
-	protected function createDataTableWithType($type, $options = []) {
-		return $this->container->get('csr.table.factory')->createWithType($type, $options)->getTable();
+	protected function createDataTable($type, $options = []) {
+		return $this->container->get('csr.table.factory')->create($type, $options)->getTable();
 	}
 }

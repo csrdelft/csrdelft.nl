@@ -11,25 +11,15 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DataTableInstance {
-	/**
-	 * @var array
-	 */
+	/** @var array */
 	private $settings;
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $titel;
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $tableId;
-	/**
-	 * @var SerializerInterface
-	 */
+	/** @var SerializerInterface */
 	private $serializer;
-	/**
-	 * @var NormalizerInterface
-	 */
+	/** @var NormalizerInterface */
 	private $normalizer;
 
 	public function __construct(SerializerInterface $serializer, NormalizerInterface $normalizer, $titel, $tableId, array $settings) {

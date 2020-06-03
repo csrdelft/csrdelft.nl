@@ -113,7 +113,7 @@ class BeheerMaaltijdenController extends AbstractController {
 				break;
 		}
 		$repetities = $this->maaltijdRepetitiesRepository->findAll();
-		$table = $this->createDataTableWithType(BeheerMaaltijdenTableType::class, ['repetities' => $repetities]);
+		$table = $this->createDataTable(BeheerMaaltijdenTableType::class, ['repetities' => $repetities]);
 
 		return $table->createData($data);
 	}
@@ -133,7 +133,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		}
 
 		$repetities = $this->maaltijdRepetitiesRepository->findAll();
-		$table = $this->createDataTableWithType(BeheerMaaltijdenTableType::class, [BeheerMaaltijdenTableType::OPTION_REPETITIES => $repetities]);
+		$table = $this->createDataTable(BeheerMaaltijdenTableType::class, [BeheerMaaltijdenTableType::OPTION_REPETITIES => $repetities]);
 
 		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Maaltijdenbeheer',
@@ -235,9 +235,10 @@ class BeheerMaaltijdenController extends AbstractController {
 
 	/**
 	 * @param Maaltijd|null $maaltijd
-	 * @return GenericDataTableResponse|MaaltijdForm
+	 * @return MaaltijdForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 * @throws ExceptionInterface
 	 * @Route("/maaltijden/beheer/bewerk/{maaltijd_id}", methods={"POST"}, defaults={"maaltijd_id"=null})
 	 * @Auth(P_MAAL_MOD)
 	 */
@@ -253,16 +254,16 @@ class BeheerMaaltijdenController extends AbstractController {
 		$form = new MaaltijdForm($maaltijd, 'bewerk');
 		if ($form->validate()) {
 			$this->maaltijdenRepository->update($maaltijd);
-			return $this->tableData([$maaltijd]);
+			return $this->createDataTable(BeheerMaaltijdenTableType::class)->createData([$maaltijd]);
 		} else {
 			return $form;
 		}
 	}
 
 	/**
-	 * @return GenericDataTableResponse
+	 * @return Response
 	 * @throws ORMException
-	 * @throws OptimisticLockException
+	 * @throws ExceptionInterface
 	 * @Route("/maaltijden/beheer/verwijder", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
@@ -280,13 +281,14 @@ class BeheerMaaltijdenController extends AbstractController {
 			$this->maaltijdenRepository->update($maaltijd);
 		}
 
-		return $this->tableData([$removed]);
+		return $this->createDataTable(BeheerMaaltijdenTableType::class)->createData([$removed]);
 	}
 
 	/**
-	 * @return GenericDataTableResponse
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 * @throws ExceptionInterface
 	 * @Route("/maaltijden/beheer/herstel", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
@@ -300,7 +302,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		$maaltijd->verwijderd = false;
 		$this->maaltijdenRepository->update($maaltijd);
 
-		return $this->tableData([$verwijderd]);
+		return $this->createDataTable(BeheerMaaltijdenTableType::class)->createData([$verwijderd]);
 	}
 
 	/**

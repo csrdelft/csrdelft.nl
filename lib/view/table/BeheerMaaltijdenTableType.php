@@ -66,8 +66,10 @@ class BeheerMaaltijdenTableType extends AbstractDataTableType {
 
 		$nieuw = new CollectionDataTableKnop(Multiplicity::None(),'Nieuw', 'Nieuwe maaltijd aanmaken', 'add');
 
-		foreach ($options[self::OPTION_REPETITIES] as $repetitie) {
-			$nieuw->addKnop(new DataTableKnop(Multiplicity::None(), $this->urlGenerator->generate('csrdelft_maalcie_beheermaaltijden_nieuw', ['mlt_repetitie_id' => $repetitie->mlt_repetitie_id]), $repetitie->standaard_titel, "Nieuwe $repetitie->standaard_titel aanmaken"));
+		if (isset($options[self::OPTION_REPETITIES])) {
+			foreach ($options[self::OPTION_REPETITIES] as $repetitie) {
+				$nieuw->addKnop(new DataTableKnop(Multiplicity::None(), $this->urlGenerator->generate('csrdelft_maalcie_beheermaaltijden_nieuw', ['mlt_repetitie_id' => $repetitie->mlt_repetitie_id]), $repetitie->standaard_titel, "Nieuwe $repetitie->standaard_titel aanmaken"));
+			}
 		}
 
 		$nieuw->addKnop(new DataTableKnop(Multiplicity::None(), $this->urlGenerator->generate('csrdelft_maalcie_beheermaaltijden_nieuw'), 'Anders', 'Maaltijd zonder repetitie aanmaken', 'calendar_edit'));
