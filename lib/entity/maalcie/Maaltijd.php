@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Eisen;
+use CsrDelft\Component\DataTable\DataTableEntry;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\fiscaat\CiviProduct;
@@ -47,7 +48,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdenRepository")
  * @ORM\Table("mlt_maaltijden")
  */
-class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
+class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DataTableEntry, Displayentity {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")

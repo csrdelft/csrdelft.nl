@@ -59,7 +59,7 @@ class DataTableInstance {
 	 * @throws ExceptionInterface
 	 */
 	public function createData($data, $modal = null, $autoUpdate = false) {
-		$columns = [];
+		$columns = ['UUID'];
 		foreach ($this->settings['columns'] as $col) {
 			// Camel & snake case voor de serializer
 			// Omdat alle field names in onze modellen underscores hebben en de getters niet zorgt dit voor wat
