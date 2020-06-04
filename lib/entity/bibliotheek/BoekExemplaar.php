@@ -29,7 +29,7 @@ class BoekExemplaar {
 	public $boek_id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="stringkey")
+	 * @ORM\Column(type="uid")
 	 */
 	public $eigenaar_uid;
 	/**
@@ -46,7 +46,7 @@ class BoekExemplaar {
 
 	/**
 	 * @var string
-	 * @ORM\Column(type="stringkey", nullable=true)
+	 * @ORM\Column(type="uid", nullable=true)
 	 */
 	public $uitgeleend_uid;
 	/**
@@ -66,8 +66,8 @@ class BoekExemplaar {
 	 */
 	public $status;
 	/**
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
+	 * @var DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $uitleendatum;
 	/**

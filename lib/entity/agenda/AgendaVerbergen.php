@@ -19,7 +19,7 @@ class AgendaVerbergen {
 	 * Lidnummer
 	 * Shared primary key
 	 * @ORM\Id()
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="uid")
 	 * @var string
 	 */
 	public $uid;
