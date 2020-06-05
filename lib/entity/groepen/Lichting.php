@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\LichtingenRepository")
+ * @ORM\Table("lichtingen")
  */
 class Lichting extends AbstractGroep {
 	/**
