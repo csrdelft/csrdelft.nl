@@ -12,6 +12,6 @@ class HuisStatusType extends EnumType {
 	}
 
 	public function getName() {
-		return 'enumstatus';
+		return 'enumHuisStatus';
 	}
 }

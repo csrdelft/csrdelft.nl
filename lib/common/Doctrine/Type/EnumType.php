@@ -4,7 +4,6 @@
 namespace CsrDelft\common\Doctrine\Type;
 
 
-use CsrDelft\common\Enum;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
@@ -19,7 +18,7 @@ abstract class EnumType extends Type {
 			return "'" . $val . "'";
 		}, $this->getEnumClass()::getEnumValues());
 
-		return "ENUM(" . implode(", ", $values) . ")";
+		return sprintf('ENUM(%s) COMMENT \'(DC2Type:%s)\'', implode(", ", $values), $this->getName());
 	}
 
 	public function convertToPHPValue($value, AbstractPlatform $platform) {

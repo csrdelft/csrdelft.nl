@@ -21,7 +21,7 @@ class Kring extends AbstractGroep {
 	/**
 	 * Verticaleletter
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", length=1, options={"fixed"=true})
 	 */
 	public $verticale;
 	/**

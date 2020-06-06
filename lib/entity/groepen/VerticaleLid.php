@@ -12,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een lid van een verticale.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\VerticaleLedenRepository")
- * @ORM\Table("verticale_leden")
+ * @ORM\Table("verticale_leden", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
 class VerticaleLid extends AbstractGroepLid {
 	/**

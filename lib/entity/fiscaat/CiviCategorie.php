@@ -14,7 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviCategorieRepository")
- * @ORM\Table("CiviCategorie")
+ * @ORM\Table("CiviCategorie", indexes={
+ *   @ORM\Index(name="cie", columns={"cie"})
+ * })
  */
 class CiviCategorie implements DisplayEntity {
 	/**

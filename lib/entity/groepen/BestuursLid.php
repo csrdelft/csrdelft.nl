@@ -12,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een lid van een bestuur.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\BestuursLedenRepository")
- * @ORM\Table("bestuurs_leden")
+ * @ORM\Table("bestuurs_leden", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
 class BestuursLid extends AbstractGroepLid {
 	/**
