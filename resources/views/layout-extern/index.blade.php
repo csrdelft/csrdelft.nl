@@ -20,15 +20,33 @@
 
 		<!-- One -->
 		<section id="one" class="wrapper first kleur1">
+			<div id="corona-bericht" style="margin: 0 auto;width: 55em;">
+				<p>
+					<em style="color:red;">
+						Vanwege de recente maatregelen omtrent de verspreiding van het coronavirus, is besloten per direct alle verenigingsactiviteiten af te lassen en is onze sociëteit gesloten. Als u hierover vragen heeft of het bestuur wil bereiken kunt u het bestuur mailen (bestuur@csrdelft.nl).<br>
+					</em>
+				</p>
+			</div>
+			<div class="inner">
+				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
+				<div class="content">
+					<h2 class="major">C.S.R. Delft</h2>
+					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
+						Delft, rijk aan tradities die zijn ontstaan in haar {{vereniging_leeftijd()}}-jarig bestaan. Het is een breed gezelschap
+						van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
+						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
+						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
+						uithalen.
+					</p>
+					<a href="/vereniging" class="special">Lees meer over C.S.R.</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- Two -->
+		<section id="two" class="wrapper alt kleur2">
 			<div class="inner">
 				<div class="content">
-					<p>
-						<em style="color:red;">
-							Vanwege de recente maatregelen omtrent de verspreiding van het coronavirus, is besloten per direct alle verenigingsactiviteiten af te lassen en is onze sociëteit gesloten. Als u hierover vragen heeft of het bestuur wil bereiken kunt u het bestuur mailen (bestuur@csrdelft.nl).<br>
-						</em>
-						<strong>Heb je interesse om lid te worden bij C.S.R.? Stuur een appje/maak een praatje met Maartje (06 3327 1913) of mail promocie@csrdelft.nl.</strong>
-					</p>
-
 					<div class="een-minuut">
 						<div id="hero">
 							<h1 class="major">C.S.R. IN 1 MINUUT</h1>
@@ -60,24 +78,6 @@
 						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
 						<p>Liefs,<br>OWeeCie en PromoCie</p>
 					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- Two -->
-		<section id="two" class="wrapper alt kleur2">
-			<div class="inner">
-				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
-				<div class="content">
-					<h2 class="major">C.S.R. Delft</h2>
-					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
-						Delft, rijk aan tradities die zijn ontstaan in haar {{vereniging_leeftijd()}}-jarig bestaan. Het is een breed gezelschap
-						van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
-						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
-						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
-						uithalen.
-					</p>
-					<a href="/vereniging" class="special">Lees meer over C.S.R.</a>
 				</div>
 			</div>
 		</section>
