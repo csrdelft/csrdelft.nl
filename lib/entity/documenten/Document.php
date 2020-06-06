@@ -49,7 +49,7 @@ class Document extends Bestand {
 	public $toegevoegd;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="uid")
 	 */
 	public $eigenaar;
 	/**

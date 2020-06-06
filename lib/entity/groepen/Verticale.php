@@ -28,7 +28,7 @@ class Verticale extends AbstractGroep {
 	/**
 	 * Primary key
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", length=1, options={"fixed"=true})
 	 */
 	public $letter;
 
