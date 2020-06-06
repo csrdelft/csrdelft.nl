@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,7 +29,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Zie ook MaaltijdAbonnement.class.php
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository")
- * @ORM\Table("mlt_aanmeldingen")
+ * @ORM\Table("mlt_aanmeldingen", indexes={
+ *   @ORM\Index(name="door_abonnement", columns={"door_abonnement"}),
+ * })
  */
 class MaaltijdAanmelding {
 	/**
@@ -44,6 +46,12 @@ class MaaltijdAanmelding {
 	 * @ORM\Id()
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -75,6 +83,12 @@ class MaaltijdAanmelding {
 	 * @ORM\JoinColumn(name="maaltijd_id", referencedColumnName="maaltijd_id")
 	 */
 	public $maaltijd;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
+	 */
+	public $door_profiel;
 
 	/**
 	 * Haal het MaalCie saldo op van het lid van deze aanmelding.
@@ -82,7 +96,7 @@ class MaaltijdAanmelding {
 	 * @return float if lid exists, false otherwise
 	 */
 	public function getSaldo() {
-		return ProfielRepository::get($this->uid)->getCiviSaldo();
+		return $this->profiel->getCiviSaldo();
 	}
 
 	/**
