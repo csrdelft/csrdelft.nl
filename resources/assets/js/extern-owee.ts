@@ -2,6 +2,8 @@ import './ajax-csrf';
 import './bootstrap';
 import {docReady} from './util';
 
+import axios from 'axios';
+
 declare global {
 	interface Window {
 		$: JQueryStatic;
@@ -13,5 +15,35 @@ declare global {
 window.docReady = docReady;
 
 docReady(() => {
-	console.log('loaded');
+	const oweeForm = document.querySelector('#owee-form') as HTMLFormElement;
+
+	if (oweeForm) {
+		const errorContainer = document.querySelector('#melding') as HTMLElement;
+		const submitButton = oweeForm.submitButton as HTMLButtonElement;
+		const formulierVelden = document.querySelector('#formulierVelden') as HTMLElement;
+
+		oweeForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			errorContainer.innerHTML = '';
+			submitButton.disabled = true;
+			const formData = new FormData(oweeForm);
+			axios.post('/contactformulier/owee', formData)
+				.then((response) => {
+					oweeForm.reset();
+					submitButton.disabled = false;
+					errorContainer.innerHTML = '<div class="alert alert-success">' +
+						'<span class="ico accept"></span>' + response.data +
+						'</div>';
+					formulierVelden.style.display = 'none';
+				})
+				.catch((error) => {
+					submitButton.disabled = false;
+					errorContainer.innerHTML = '<div class="alert alert-danger">' +
+						'<span class="ico exclamation"></span>' + error.response.data +
+						'</div>';
+				});
+
+			return false;
+		});
+	}
 });

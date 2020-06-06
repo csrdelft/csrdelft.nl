@@ -123,7 +123,28 @@
 					</a>
 				</div>
 				<div class="col-md-7 col-lg-8">
-					<form action="" class="formulieren">
+					<script type="text/javascript">
+						var captchaLoaded = false;
+
+						function checkVisible(elm) {
+							var rect = elm.getBoundingClientRect();
+							var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+							return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+						}
+
+						var onloadCallback = function() {
+							window.addEventListener('scroll', function () {
+
+								if (checkVisible(document.getElementById('captcha')) && !captchaLoaded) {
+									captchaLoaded = true;
+									grecaptcha.render('captcha', {
+										'sitekey': '6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX'
+									});
+								}
+							})
+						};
+					</script>
+					<form action="" class="formulieren" id="owee-form">
 						@csrf
 						<label for="lid-worden" class="owee"><span class="d-none d-sm-inline">Ik wil </span>lid worden</label>
 						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden">
@@ -133,7 +154,8 @@
 							<p class="lid-worden">Normaal gesproken kan je tijdens de OWee in onze sociëteit langskomen om je in te schrijven, maar vanwege de bijzondere omstandigheden zal een deel van de inschrijvingen dit jaar digitaal plaatsvinden. Wanneer je hieronder je gegevens achterlaat wordt er tijdens de OWee direct contact met je opgenomen om je inschrijving af te ronden. Hiermee verzeker je jezelf dus van een plekje op onze aankomende ledenlijst.</p>
 							<p class="lid-spreken">Wil je meer weten over de vereniging? Een gesprek met een lid kan helpen, je kan al je vragen kwijt en erachter komen of de vereniging bij jou past. Laat je gegevens hier achter, we zullen dan zo snel mogelijk (binnen 1-2 dagen) contact met je opnemen!</p>
 
-							<div class="velden">
+							<div id="melding"></div>
+							<div class="velden" id="formulierVelden">
 								<label for="naam" class="owee">Je naam</label>
 								<input type="text" id="naam" name="naam">
 
@@ -143,12 +165,12 @@
 								<label for="telefoon" class="owee">Je mobiele telefoonnummer</label>
 								<input type="tel" id="telefoon" name="telefoon">
 
-								<p>Met het verzenden van dit formulier ga je akkoord met de <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf" target="_blank">privacyverklaring van C.S.R. Delft</a>.</p>
-
 								<div class="field" id="captcha"></div>
 
-								<input class="lid-worden" type="submit" value="Inschrijven">
-								<input class="lid-spreken" type="submit" value="Verzenden">
+								<p>Met het verzenden van dit formulier ga je akkoord met de <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf" target="_blank">privacyverklaring van C.S.R. Delft</a>.</p>
+
+								<input class="lid-worden" type="submit" id="submitButton" value="Inschrijven">
+								<input class="lid-spreken" type="submit" id="submitButton" value="Verzenden">
 							</div>
 						</div>
 					</form>
