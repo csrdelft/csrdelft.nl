@@ -40,19 +40,8 @@
 }
 
 body {
-	-ms-overflow-style: scrollbar;
-}
-
-@media screen and (max-width: $scherm-middelsmal) {
-
-	html, body {
-		min-width: 320px;
-	}
-
-}
-
-body {
 	background-color: $basiskleur;
+	-ms-overflow-style: scrollbar;
 
 	&.is-loading {
 		*, *:before, *:after {
@@ -70,22 +59,6 @@ body, input, select, textarea {
 	font-size: 16.5pt;
 	font-weight: 300;
 	line-height: 1.65;
-}
-
-@media screen and (max-width: $scherm-extrabreed) {
-
-	body, input, select, textarea {
-		font-size: 13pt;
-	}
-
-}
-
-@media screen and (max-width: $scherm-smal) {
-
-	body, input, select, textarea {
-		font-size: 12pt;
-	}
-
 }
 
 #wrapper {
@@ -208,22 +181,6 @@ h5 {
 
 h6 {
 	font-size: 0.7em;
-}
-
-@media screen and (max-width: $scherm-middel) {
-
-	h2 {
-		font-size: 1em;
-	}
-
-	h3 {
-		font-size: 0.8em;
-	}
-
-	.een-minuut #hero h1 {
-		font-size: 2em;
-	}
-
 }
 
 sub {
@@ -373,4 +330,47 @@ optgroup {
 			width: 55%;
 		}
 	}
+}
+
+/*
+ MEDIA QUERIES
+*/
+@media screen and (max-width: $scherm-extrabreed) {
+
+	body, input, select, textarea {
+		font-size: 13pt;
+	}
+
+}
+
+@media screen and (max-width: $scherm-middel) {
+
+	h2 {
+		font-size: 1em;
+	}
+
+	h3 {
+		font-size: 0.8em;
+	}
+
+	.een-minuut #hero h1 {
+		font-size: 2em;
+	}
+
+}
+
+@media screen and (max-width: $scherm-middelsmal) {
+
+	html, body {
+		min-width: 320px;
+	}
+
+}
+
+@media screen and (max-width: $scherm-smal) {
+
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+
 }
