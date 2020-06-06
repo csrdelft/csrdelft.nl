@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\fiscaat;
 
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
+use CsrDelft\entity\profiel\Profiel;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,6 +34,12 @@ class CiviBestelling {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")

@@ -6,6 +6,7 @@ use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -140,6 +141,7 @@ class CiviBestellingRepository extends AbstractRepository {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'anders';
 		$bestelling->uid = $uid;
+		$bestelling->profiel = ProfielRepository::get($uid);
 		$bestelling->deleted = false;
 		$bestelling->moment = date_create_immutable();
 
