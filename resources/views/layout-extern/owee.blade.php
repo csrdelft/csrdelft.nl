@@ -33,8 +33,8 @@
 					<p>C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die de vereniging biedt. Het betekent dat je je geloof blijft voeden en je kan verdiepen met kringen, bidgroepjes en zangavonden. Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven lang niet gaat vergeten!</p>
 
 					<div class="mt-4">
-						<a href="#" class="cta primary">Ik wil lid worden</a>
-						<a href="#" class="cta secondary">Eerst een lid spreken</a>
+						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">Ik wil lid worden</a>
+						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">Eerst een lid spreken</a>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -113,6 +113,7 @@
 			</div>
 		</div>
 
+		<a id="contact"></a>
 		<div class="content pt-4 pb-4">
 			<div class="row">
 				<div class="col-md-5 col-lg-4 mb-4 mb-md-0">
