@@ -20,7 +20,7 @@
 
 		<!-- One -->
 		<section id="one" class="wrapper first kleur1">
-			<div id="corona-bericht" style="margin: 0 auto;width: 55em;">
+			<div id="corona-bericht">
 				<p>
 					<em style="color:red;">
 						Vanwege de recente maatregelen omtrent de verspreiding van het coronavirus, is besloten per direct alle verenigingsactiviteiten af te lassen en is onze sociëteit gesloten. Als u hierover vragen heeft of het bestuur wil bereiken kunt u het bestuur mailen (bestuur@csrdelft.nl).<br>
