@@ -77,7 +77,12 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	 * @ORM\Column(type="uid")
 	 */
 	public $door_uid;
-
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
+	 */
+	public $door_profiel;
 	/**
 	 * @return string|null
 	 * @Serializer\Groups("datatable")

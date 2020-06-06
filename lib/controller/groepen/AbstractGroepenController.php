@@ -785,6 +785,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					$lid->groep_id = $ot_groep->id;
 					$lid->lid_sinds = getDateTime();
 					$lid->door_uid = LoginService::getUid();
+					$lid->door_profiel = LoginService::getProfiel();
 					$em->persist($lid);
 					$em->flush();
 					$lid->groep_id = $groep->id;

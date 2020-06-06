@@ -20,7 +20,13 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenRepository")
- * @ORM\Table("activiteiten")
+ * @ORM\Table("activiteiten", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="soort", columns={"soort"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="in_agenda", columns={"in_agenda"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ * })
  */
 class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort {
 	public function __construct() {

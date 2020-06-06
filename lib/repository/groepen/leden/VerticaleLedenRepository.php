@@ -35,6 +35,7 @@ class VerticaleLedenRepository extends AbstractGroepLedenRepository {
 				$lid->opmerking = 'Kringcoach';
 			}
 			$lid->door_uid = null;
+			$lid->door_profiel = null;
 			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
 			return $lid;
 		}

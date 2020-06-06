@@ -16,7 +16,11 @@ use Doctrine\ORM\Mapping as ORM;
  * Een ketzer is een aanmeldbare groep.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KetzersRepository")
- * @ORM\Table("ketzers")
+ * @ORM\Table("ketzers", indexes={
+ *   @ORM\Index(name="status", columns={"status"}),
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ * })
  */
 class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	/**

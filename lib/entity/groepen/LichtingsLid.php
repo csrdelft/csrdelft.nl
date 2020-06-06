@@ -13,7 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een lid van een lichting.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\LichtingLedenRepository")
- * @ORM\Table("lichting_leden")
+ * @ORM\Table("lichting_leden", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
 class LichtingsLid extends AbstractGroepLid {
 	/**

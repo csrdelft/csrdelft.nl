@@ -14,7 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WerkgroepenRepository")
- * @ORM\Table("werkgroepen")
+ * @ORM\Table("werkgroepen", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ * })
  */
 class Werkgroep extends AbstractGroep {
 	/**

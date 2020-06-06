@@ -12,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een lid van een kring.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\KringLedenRepository")
- * @ORM\Table("kring_leden")
+ * @ORM\Table("kring_leden", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
 class KringLid extends AbstractGroepLid {
 	/**

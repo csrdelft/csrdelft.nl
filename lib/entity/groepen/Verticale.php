@@ -16,7 +16,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenRepository")
- * @ORM\Table("verticalen")
+ * @ORM\Table("verticalen", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="letter", columns={"letter"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ *   @ORM\Index(name="naam", columns={"naam"}),
+ * })
  */
 class Verticale extends AbstractGroep {
 	/**
@@ -54,6 +60,7 @@ class Verticale extends AbstractGroep {
 					$lid->opmerking = 'Kringcoach';
 				}
 				$lid->door_uid = null;
+				$lid->door_profiel = null;
 				$lid->lid_sinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
 				$leden[] = $lid;
 			}

@@ -62,6 +62,7 @@ class FotoRepository extends AbstractRepository {
 		}
 
 		$foto->owner = LoginService::getUid();
+		$foto->owner_profiel = LoginService::getProfiel();
 		$foto->rotation = 0;
 
 		$this->getEntityManager()->persist($foto);
