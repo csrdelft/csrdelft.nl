@@ -106,7 +106,7 @@
 
 		<div class="bbl atl interest">
 			<div class="content">
-				<div class="pt-5 pt-sm-2">
+				<div class="pt-5 pt-md-4 pb-4 pb-sm-2">
 					<h2>Interesse in C.S.R.?</h2>
 					<p>Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden komend jaar, kan je hieronder ook je gegevens achterlaten voor je voorinschrijving.</p>
 				</div>
@@ -115,7 +115,7 @@
 
 		<div class="content pt-4 pb-4">
 			<div class="row">
-				<div class="col-md-5 col-lg-4">
+				<div class="col-md-5 col-lg-4 mb-4 mb-md-0">
 					<a class="whatsapp" href="https://wa.me/31633271913" target="_blank">
 						<i class="fab fa-whatsapp mr-3 mr-md-0"></i>
 						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Maartje</div>
@@ -123,7 +123,36 @@
 					</a>
 				</div>
 				<div class="col-md-7 col-lg-8">
-					<div class="interesseformulier"></div>
+					<form action="" class="formulieren">
+						@csrf
+						<label for="lid-worden" class="owee"><span class="d-none d-sm-inline">Ik wil </span>lid worden</label>
+						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden">
+						<label for="lid-spreken" class="owee"><span class="d-none d-sm-inline">Eerst een </span>lid spreken</label>
+						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken" checked>
+						<div class="interesseformulier">
+							<p class="lid-worden">Normaal gesproken kan je tijdens de OWee in onze sociëteit langskomen om je in te schrijven, maar vanwege de bijzondere omstandigheden zal een deel van de inschrijvingen dit jaar digitaal plaatsvinden. Wanneer je hieronder je gegevens achterlaat wordt er tijdens de OWee direct contact met je opgenomen om je inschrijving af te ronden. Hiermee verzeker je jezelf dus van een plekje op onze aankomende ledenlijst.</p>
+							<p class="lid-spreken">Wil je meer weten over de vereniging? Een gesprek met een lid kan helpen, je kan al je vragen kwijt en erachter komen of de vereniging bij jou past. Laat je gegevens hier achter, we zullen dan zo snel mogelijk (binnen 1-2 dagen) contact met je opnemen!</p>
+
+							<div class="velden">
+								<label for="naam" class="owee">Je naam</label>
+								<input type="text" id="naam" name="naam">
+
+								<label for="email" class="owee">Je e-mailadres</label>
+								<input type="text" id="email" name="email">
+
+								<label for="telefoon" class="owee">Je mobiele telefoonnummer</label>
+								<input type="tel" id="telefoon" name="telefoon">
+
+								<p>Met het verzenden van dit formulier ga je akkoord met de <a href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf" target="_blank">privacyverklaring van C.S.R. Delft</a>.</p>
+
+								<div class="field" id="captcha"></div>
+
+								<input class="lid-worden" type="submit" value="Inschrijven">
+								<input class="lid-spreken" type="submit" value="Verzenden">
+							</div>
+						</div>
+					</form>
+					<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 				</div>
 			</div>
 		</div>

@@ -296,6 +296,7 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 		background: $whatsappGreen;
 		min-height: 100%;
 		padding: 2rem;
+		position: relative;
 
 		@include media-breakpoint-down(sm) {
 			padding: 1rem 2rem;
@@ -330,10 +331,19 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 		.cta {
 			background: white;
 			color: $whatsappGreen;
-			width: 100%;
 			text-align: center;
 			font-size: 1.1rem;
-			line-height: 225%;
+			line-height: 44px;
+			position: absolute;
+			width: calc(100% - 4rem);
+			bottom: 2rem;
+			margin-bottom: 0;
+
+			@include media-breakpoint-down(sm) {
+				width: 100%;
+				position: relative;
+				bottom: 0;
+			}
 
 			&:hover {
 				background: rgba(white, 0.8);
@@ -341,9 +351,111 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 		}
 	}
 
-	.interesseformulier {
-		background: $primary;
-		min-height: 100%;
+	.formulieren {
+		& > label {
+			font-family: $headingFont;
+			font-size: 1rem;
+			cursor: pointer;
+			margin-bottom: 0;
+			padding: 0.5rem 2rem;
+
+			@include media-breakpoint-down(xs) {
+				padding-left: 1rem;
+				padding-right: 1rem;
+			}
+
+			&[for="lid-worden"] {
+				background: $secondary;
+			}
+
+			&[for="lid-spreken"] {
+				background: $primary;
+			}
+		}
+
+		input[type=radio] {
+			display: none;
+		}
+
+		.interesseformulier {
+			padding: 2rem;
+			color: white;
+
+			p {
+				font-size: 1.1rem;
+				color: white;
+
+				a {
+					color: white;
+				}
+			}
+
+			label {
+				font-size: 1.1rem;
+				font-weight: 600;
+				margin-bottom: 0.2rem;
+			}
+
+			input {
+				background-color: rgba($tertiary, .20);
+				font-size: 1rem;
+				border: none;
+				border-radius: 0;
+				margin-bottom: 1rem;
+
+				&[type=submit] {
+					display: block;
+					width: 100%;
+					border: none;
+					outline: none;
+					box-shadow: none;
+					height: auto;
+					line-height: 44px;
+					font-family: $headingFont;
+					margin-bottom: 0;
+				}
+			}
+		}
+
+		#lid-worden:checked + label + input + .interesseformulier {
+			background: $secondary;
+
+			.lid-spreken {
+				display: none;
+			}
+
+			input {
+				background: rgba(#713E89, .20);
+
+				&[type=submit] {
+					background: $primary;
+
+					&:hover {
+						background: rgba($primary, 0.8);
+					}
+				}
+			}
+		}
+
+		#lid-spreken:checked + .interesseformulier {
+			background: $primary;
+
+			.lid-worden {
+				display: none;
+			}
+
+			input {
+				background: rgba(#FFFFFF, .12);
+
+				&[type=submit] {
+					background: $secondary;
+
+					&:hover {
+						background: rgba($secondary, 0.8);
+					}
+				}
+			}
+		}
 	}
 
 	.notes {
