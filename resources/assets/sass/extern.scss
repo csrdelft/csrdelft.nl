@@ -325,7 +325,13 @@ optgroup {
 	background-color: #414262;
 }
 
+.include-instagram {
+	background-image: url(../images/social/instagram.svg);
+}
+
 .een-minuut {
+	margin-bottom: 2em;
+
 	p {
 		margin-bottom: 1em;
 	}
@@ -349,11 +355,25 @@ optgroup {
 				padding-bottom: 0;
 			}
 		}
+
+		.bb-video {
+			max-width: 70%;
+			margin-left: auto;
+			margin-right: auto;
+		}
 	}
 
 	.sociaal {
-		display:grid;
+		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-gap: 2em;
+		margin-bottom: 1em;
+
+		img {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			width: 55%;
+		}
 	}
 }

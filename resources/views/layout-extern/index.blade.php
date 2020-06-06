@@ -19,9 +19,8 @@
 	<section id="wrapper">
 
 		<!-- One -->
-		<section id="one" class="wrapper first">
+		<section id="one" class="wrapper first kleur1">
 			<div class="inner">
-				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
 				<div class="content">
 					<p>
 						<em style="color:red;">
@@ -47,7 +46,7 @@
 							</div>
 							<div class="instagram">
 								<p>Bekijk en volg ook ons Instagram account voor meer van onze vereniging!</p>
-								<a href="https://www.instagram.com/csrdelft/">[Instagram foto]</a>
+								<a href="https://www.instagram.com/csrdelft/"><img src="/dist/images/instagram.svg"></a>
 							</div>
 						</div>
 
@@ -61,7 +60,15 @@
 						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
 						<p>Liefs,<br>OWeeCie en PromoCie</p>
 					</div>
+				</div>
+			</div>
+		</section>
 
+		<!-- Two -->
+		<section id="two" class="wrapper alt kleur2">
+			<div class="inner">
+				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
+				<div class="content">
 					<h2 class="major">C.S.R. Delft</h2>
 					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
 						Delft, rijk aan tradities die zijn ontstaan in haar {{vereniging_leeftijd()}}-jarig bestaan. Het is een breed gezelschap
@@ -75,8 +82,7 @@
 			</div>
 		</section>
 
-		<!-- Two -->
-		<section id="two" class="wrapper alt kleur2">
+		<section id="three" class="wrapper kleur3">
 			<div class="inner">
 				<noscript class="lazy-load">
 					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_in_de_OWee.jpg" alt="Sfeerfoto buiten"/></span>
@@ -93,14 +99,8 @@
 			</div>
 		</section>
 
-		<!--
-		<section id="two" class="wrapper-img">
-			<img src="/images/vereniging.jpg"/>
-		</section>
-		-->
-
-		<!-- Three -->
-		<section id="three" class="wrapper kleur3">
+		<!-- Four -->
+		<section id="four" class="wrapper alt kleur4">
 			<div class="inner">
 				<noscript class="lazy-load">
 					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/Interesse_vragen.jpg" alt="Owee Commissie"/></span>
@@ -120,8 +120,8 @@
 			</div>
 		</section>
 
-		<!-- Four -->
-		<section id="four" class="wrapper alt kleur4">
+		<!-- Five -->
+		<section id="five" class="wrapper kleur5">
 			<div class="inner">
 				<div class="content">
 					<h2 class="major">Foto's</h2>
