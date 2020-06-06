@@ -6,5 +6,5 @@
 	<li class="rotate"><a href="/vereniging/ontspanning">Ontspanning</a></li>
 	<!--li class="rotate"><a href="/vereniging/maaltijden">Maaltijden</a></li-->
 	<li class="rotate"><a href="/vereniging/societeit">Sociëteit</a></li>
-	<li class="rotate"><a href="/vereniging/officieel">Officieel</a></li>
+	<li class="rotate"><a href="/vereniging/algemeen">Algemeen</a></li>
 </ul>
