@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\corvee;
 
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,6 +47,12 @@ class CorveeRepetitie {
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $mlt_repetitie_id;
+	/**
+	 * @var MaaltijdRepetitie|null
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\MaaltijdRepetitie")
+	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id", nullable=true)
+	 */
+	public $maaltijdRepetitie;
 	/**
 	 * 0: zondag
 	 * 6: zaterdag

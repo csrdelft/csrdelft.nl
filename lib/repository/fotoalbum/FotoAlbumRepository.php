@@ -81,6 +81,7 @@ class FotoAlbumRepository extends AbstractRepository {
 			}
 		}
 		$album->owner = LoginService::getUid();
+		$album->owner_profiel = LoginService::getProfiel();
 
 		$this->getEntityManager()->persist($album);
 		$this->getEntityManager()->flush();

@@ -39,7 +39,7 @@ class RadioField extends SelectField {
 
 	protected function getOptionHtml($value, $description) {
 		$id = $this->getId() . 'Option_' . $value;
-		$html = '<div class="form-check form-check-inline">';
+		$html = '<div class="form-check form-check-inline" id="' . $this->getId() . '">';
 		$html .= '<input id="' . $id . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'origvalue', 'disabled', 'readonly', 'onclick'));
 		if ($value === $this->value) {
 			$html .= ' checked="checked"';

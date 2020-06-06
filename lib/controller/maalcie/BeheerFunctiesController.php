@@ -7,6 +7,7 @@ use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeKwalificatie;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
+use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
 use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
@@ -14,6 +15,7 @@ use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,6 +35,16 @@ class BeheerFunctiesController {
 		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
 		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
 		$this->entityManager = $entityManager;
+	}
+
+	/**
+	 * @param Request $request
+	 * @return GenericSuggestiesResponse
+	 * @Route("/corvee/functies/suggesties", methods={"GET"}, options={"priority"=1})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function suggesties(Request $request) {
+		return new GenericSuggestiesResponse($this->corveeFunctiesRepository->getSuggesties($request->query->get('q')));
 	}
 
 	/**
@@ -81,7 +93,7 @@ class BeheerFunctiesController {
 			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 		} else {
 			// Voorkom opslaan
-			$this->entityManager->clear($functie);
+			$this->entityManager->clear();
 			return $form;
 		}
 	}
@@ -133,5 +145,4 @@ class BeheerFunctiesController {
 
 		return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 	}
-
 }

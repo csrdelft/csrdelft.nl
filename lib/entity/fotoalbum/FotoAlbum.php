@@ -4,6 +4,7 @@ namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrNotFoundException;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Map;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\service\security\LoginService;
@@ -47,6 +48,12 @@ class FotoAlbum extends Map {
 	 * @ORM\Column(type="uid")
 	 */
 	public $owner;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="owner", referencedColumnName="uid")
+	 */
+	public $owner_profiel;
 
 	public function __construct($path = null, $absolute = false) {
 		if ($path === null) { // called from PersistenceModel
