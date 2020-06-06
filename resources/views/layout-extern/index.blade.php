@@ -64,7 +64,7 @@
 							</div>
 							<div class="instagram">
 								<p>Bekijk en volg ook ons Instagram account voor meer van onze vereniging!</p>
-								<a href="https://www.instagram.com/csrdelft/"><img src="/dist/images/instagram.svg"></a>
+								<a href="https://www.instagram.com/csrdelft/"><img src="/dist/images/instagram.svg" alt="Instagram logo in C.S.R. kleuren"></a>
 							</div>
 						</div>
 
