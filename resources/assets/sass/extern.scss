@@ -334,11 +334,18 @@ optgroup {
 		grid-gap: 2em;
 		margin-bottom: 1em;
 
-		img {
-			display: block;
-			margin-left: auto;
-			margin-right: auto;
-			width: 55%;
+		.instagram .insta-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			align-items: center;
+
+			#insta-tag {
+				font-size: 3em;
+				font-weight: bold;
+				color: $donkerblauw;
+				-webkit-text-stroke-width: 2px;
+				-webkit-text-stroke-color: $geel;
+			}
 		}
 	}
 }
@@ -350,6 +357,15 @@ optgroup {
 
 	body, input, select, textarea {
 		font-size: 13pt;
+	}
+
+}
+
+@media screen and (max-width: $scherm-breed) {
+
+	.een-minuut .sociaal .instagram .insta-grid #insta-tag {
+		font-size: 2em;
+		-webkit-text-stroke-width: 1px;
 	}
 
 }
@@ -374,6 +390,12 @@ optgroup {
 
 	html, body {
 		min-width: 320px;
+	}
+
+	.een-minuut .sociaal .instagram .insta #insta-tag {
+		font-size: 1em;
+		-webkit-text-stroke-width: 0px;
+		color: $geel;
 	}
 
 }
