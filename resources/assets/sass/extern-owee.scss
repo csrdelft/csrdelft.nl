@@ -233,9 +233,7 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 			display: block;
 
 			.youtube-container {
-				@include media-breakpoint-down(md) {
-					padding-top: 0;
-					height: 100px;
+				@include media-breakpoint-down(lg) {
 
 					.youtube div {
 						display: flex;
@@ -247,6 +245,11 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 							margin-right: 1rem;
 						}
 					}
+				}
+
+				@include media-breakpoint-down(sm) {
+					padding-top: 0;
+					height: 100px;
 				}
 			}
 
@@ -381,6 +384,10 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 			padding: 2rem;
 			color: white;
 
+			@include media-breakpoint-down(xs) {
+				padding: 1.5rem 1rem;
+			}
+
 			p {
 				font-size: 1.1rem;
 				color: white;
@@ -460,6 +467,22 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 
 	.notes {
 		background: $tertiary;
+
+		h2 {
+			color: white;
+		}
+
+		p {
+			color: white;
+		}
+
+		ul {
+			font-size: 1.1rem;
+
+			a {
+				color: white;
+			}
+		}
 	}
 }
 

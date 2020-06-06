@@ -118,7 +118,7 @@
 				<div class="col-md-5 col-lg-4 mb-4 mb-md-0">
 					<a class="whatsapp" href="https://wa.me/31633271913" target="_blank">
 						<i class="fab fa-whatsapp mr-3 mr-md-0"></i>
-						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Maartje</div>
+						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Maartje!</div>
 						<div class="cta">0633271913</div>
 					</a>
 				</div>
@@ -158,7 +158,32 @@
 		</div>
 
 		<div class="bbl atl notes">
-			<div class="content">Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek (ook wel de kennismakingstijd, afgekort KMT). Deze tijd zal plaatsvinden na de OWee (25 augustus t/m 29 augustus 2020), in deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</div>
+			<div class="content">
+				<div class="row pt-5 pb-4">
+					<div class="col-md-6 mb-4 mb-md-0">
+						<h2>Novitaatsweek</h2>
+						<p>Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek
+							(ook wel de kennismakingstijd, afgekort KMT). Deze tijd zal plaatsvinden
+							na de OWee (25 augustus t/m 29 augustus 2020), in deze week zal je elkaar,
+							de vereniging en haar leden leren kennen. De activiteiten die tijdens
+							de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</p>
+					</div>
+					<div class="col-md-6">
+						<h2>Documenten</h2>
+						<p>C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,
+							Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
+							afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe
+							we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
+							KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
+							afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.</p>
+							<ul>
+								<li><a href="https://csrdelft.nl/download/Code%20of%20Ethics%202016-2017.pdf" target="_blank">Code Of Ethics</a></li>
+								<li><a href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/Communicatieconvenant%20TU%20Delft%20--getekende%20versie-website.pdf" target="_blank">Communicatieconvenant</a></li>
+								<li><a href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/gedragsovereenkomst%20TU%20Delft%20en%20de%20vijf%20grote%20verenigingen%20getekende%20versie%20website.pdf" target="_blank">Gedragsovereenkomst</a></li>
+							</ul>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
