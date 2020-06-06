@@ -4,6 +4,7 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\groepen\Kring;
+use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
@@ -16,11 +17,11 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor kringen.
  *
- * @property KringenRepository $model
+ * @property KringenRepository $repository
  */
 class KringenController extends AbstractGroepenController {
-	public function __construct(KringenRepository $kringenRepository) {
-		parent::__construct($kringenRepository);
+	public function __construct(ChangeLogRepository $changeLogRepository, KringenRepository $kringenRepository) {
+		parent::__construct($changeLogRepository, $kringenRepository);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {
@@ -36,7 +37,7 @@ class KringenController extends AbstractGroepenController {
 			$limit = $request->query->getInt('limit');
 		}
 		$result = array();
-		$kringen = $this->model->createQueryBuilder('k')
+		$kringen = $this->repository->createQueryBuilder('k')
 			->where('k.naam LIKE :zoekterm')
 			->setParameter('zoekterm', sql_contains($zoekterm))
 			->setMaxResults($limit)

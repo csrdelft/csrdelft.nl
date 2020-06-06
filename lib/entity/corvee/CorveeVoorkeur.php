@@ -17,25 +17,23 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CorveeVoorkeur {
 	/**
+	 * @var string
+	 * @ORM\Column(type="uid")
+	 * @ORM\Id()
+	 */
+	public $uid;
+	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 */
 	public $crv_repetitie_id;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 */
-	public $uid;
-
-	/**
 	 * @var CorveeRepetitie
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\corvee\CorveeRepetitie")
 	 * @ORM\JoinColumn(name="crv_repetitie_id", referencedColumnName="crv_repetitie_id")
 	 */
 	public $corveeRepetitie;
-
 	/**
 	 * @var Profiel
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")

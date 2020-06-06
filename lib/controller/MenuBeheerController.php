@@ -2,12 +2,17 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\MenuItemRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\MeldingResponse;
 use CsrDelft\view\menubeheer\MenuItemForm;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -22,8 +27,14 @@ class MenuBeheerController {
 		$this->menuItemRepository = $menuItemRepository;
 	}
 
+	/**
+	 * @param string $menu_name
+	 * @return TemplateView
+	 * @Route("/menubeheer/beheer/{menu_name}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function beheer($menu_name = 'main') {
-		if ($menu_name != LoginModel::getUid() && !LoginModel::mag(P_ADMIN)) {
+		if ($menu_name != LoginService::getUid() && !LoginService::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
 		$root = $this->menuItemRepository->getMenu($menu_name);
@@ -36,9 +47,17 @@ class MenuBeheerController {
 		]);
 	}
 
+	/**
+	 * @param $parent_id
+	 * @return MeldingResponse|MenuItemForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/menubeheer/toevoegen/{parent_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function toevoegen($parent_id) {
 		if ($parent_id == 'favoriet') {
-			$parent = $this->menuItemRepository->getMenuRoot(LoginModel::getUid());
+			$parent = $this->menuItemRepository->getMenuRoot(LoginService::getUid());
 		} else {
 			$parent = $this->menuItemRepository->getMenuItem((int)$parent_id);
 		}
@@ -59,6 +78,14 @@ class MenuBeheerController {
 		}
 	}
 
+	/**
+	 * @param $item_id
+	 * @return JsonResponse|MenuItemForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/menubeheer/bewerken/{item_id}", methods={"POST"}, requirements={"item_id": "\d+"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function bewerken($item_id) {
 		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
 		if (!$item || !$item->magBeheren()) {
@@ -78,6 +105,12 @@ class MenuBeheerController {
 		}
 	}
 
+	/**
+	 * @param $item_id
+	 * @return JsonResponse
+	 * @Route("/menubeheer/verwijderen/{item_id}", methods={"POST"}, requirements={"item_id": "\d+"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function verwijderen($item_id) {
 		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
 		if (!$item || !$item->magBeheren()) {
@@ -91,6 +124,14 @@ class MenuBeheerController {
 		return new JsonResponse(true);
 	}
 
+	/**
+	 * @param $item_id
+	 * @return JsonResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/menubeheer/zichtbaar/{item_id}", methods={"POST"}, requirements={"item_id": "\d+"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function zichtbaar($item_id) {
 		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
 		if (!$item || !$item->magBeheren()) {

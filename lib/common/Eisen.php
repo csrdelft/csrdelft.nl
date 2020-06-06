@@ -4,7 +4,7 @@
 namespace CsrDelft\common;
 
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\Criteria;
 
 /**
@@ -21,7 +21,7 @@ class Eisen {
 	 * @return Criteria
 	 */
 	public static function voorIngelogdeGebruiker($veld = 'uid') {
-		return self::voorGebruiker(LoginModel::getUid(), $veld);
+		return self::voorGebruiker(LoginService::getUid(), $veld);
 	}
 
 	public static function voorGebruiker($uid, $veld = 'uid') {

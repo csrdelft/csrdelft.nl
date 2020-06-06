@@ -4,7 +4,6 @@ namespace CsrDelft\view\maalcie\beheer;
 
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;

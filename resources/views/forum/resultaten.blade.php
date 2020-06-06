@@ -76,7 +76,7 @@
 									@endif
 								</span>
 								@auth
-									@if($post->uid !== \CsrDelft\model\security\LoginModel::UID_EXTERN)
+									@if($post->uid !== \CsrDelft\service\security\LoginService::UID_EXTERN)
 										<div class="forumpasfoto">{!! \CsrDelft\repository\ProfielRepository::getLink($post->uid, 'pasfoto') !!}</div>
 									@endif
 								@endauth

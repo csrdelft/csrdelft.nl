@@ -37,7 +37,7 @@
 					 title="Verwijder bericht of draad">@icon('cross')</a>
 				@if($post->magBewerken())
 					<a href="#{{$post->post_id}}"
-						 class="@if($post->uid !== CsrDelft\model\security\LoginModel::getUid() && !$post->wacht_goedkeuring)forummodknop @endif"
+						 class="@if($post->uid !== \CsrDelft\service\security\LoginService::getUid() && !$post->wacht_goedkeuring)forummodknop @endif"
 						 onclick="window.forum.forumBewerken({{$post->post_id}});" title="Bewerk bericht">@icon('pencil')</a>
 				@endif
 			@else
@@ -52,7 +52,7 @@
 				@endif
 				@if($post->magBewerken())
 					<a href="#{{$post->post_id}}"
-						 class="@if($post->uid !== CsrDelft\model\security\LoginModel::getUid() && !$post->wacht_goedkeuring)forummodknop @endif"
+						 class="@if($post->uid !== \CsrDelft\service\security\LoginService::getUid() && !$post->wacht_goedkeuring)forummodknop @endif"
 						 onclick="window.forum.forumBewerken({{$post->post_id}});" title="Bewerk bericht">@icon('pencil')</a>
 				@endif
 				@auth
@@ -78,7 +78,7 @@
 		</div>
 
 		@auth
-			@if($post->uid !== \CsrDelft\model\security\LoginModel::UID_EXTERN)
+			@if($post->uid !== \CsrDelft\service\security\LoginService::UID_EXTERN)
 				<div class="forumpasfoto">{!! \CsrDelft\repository\ProfielRepository::getLink($post->uid, 'pasfoto') !!}</div>
 			@endif
 		@endauth

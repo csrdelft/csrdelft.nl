@@ -3,6 +3,7 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\LogEntry;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,10 +23,10 @@ class LogRepository extends AbstractRepository {
 
 	public function log() {
 		$entry = new LogEntry();
-		if (isset($_SESSION['_suedFrom'])) {
-			$entry->uid = $_SESSION['_suedFrom'];
-		} elseif (isset($_SESSION['_uid'])) {
-			$entry->uid = $_SESSION['_uid'];
+		if (isset($_SESSION[LoginService::SESS_SUED_FROM])) {
+			$entry->uid = $_SESSION[LoginService::SESS_SUED_FROM];
+		} elseif (isset($_SESSION[LoginService::SESS_UID])) {
+			$entry->uid = $_SESSION[LoginService::SESS_UID];
 		} else {
 			$entry->uid = 'fout';
 		}

@@ -14,12 +14,12 @@ namespace CsrDelft\service;
  */
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Mail;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Mail;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 
 class Roodschopper {
 
@@ -49,7 +49,7 @@ Uw CiviSaldo is SALDO, dat is negatief. Inleggen met je hoofd.
 
 Bij voorbaat dank,
 h.t. Fiscus.';
-		$return->bcc = LoginModel::getProfiel()->getPrimaryEmail();
+		$return->bcc = LoginService::getProfiel()->getPrimaryEmail();
 		$return->uitsluiten = 'x101';
 		return $return;
 	}
@@ -78,7 +78,7 @@ h.t. Fiscus.';
 			$status = LidStatus::getFiscaalLidLike();
 		}
 
-		$saldi = ContainerFacade::getContainer()->get(CiviSaldoModel::class)->find('saldo < ?', [$this->saldogrens]);
+		$saldi = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->getRoodstaandeLeden($this->saldogrens);
 
 		$return = [];
 		foreach ($saldi as $saldo) {

@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\forum;
 
-use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,7 +40,7 @@ class ForumDraadMelding {
 	/**
 	 * Volgniveau
 	 * @var ForumDraadMeldingNiveau
-	 * @ORM\Column(type="enumforumdraadmeldingniveau")
+	 * @ORM\Column(type="enumForumDraadMeldingNiveau")
 	 */
 	public $niveau;
 

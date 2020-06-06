@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity\groepen;
 
-use CsrDelft\entity\groepen\GroepKeuzeType;
+use CsrDelft\entity\groepen\enum\GroepKeuzeType;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>

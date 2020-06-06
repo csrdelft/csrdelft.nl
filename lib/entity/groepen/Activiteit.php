@@ -3,11 +3,13 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\entity\agenda\Agendeerbaar;
-use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\model\entity\interfaces\HeeftSoort;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
+use CsrDelft\entity\security\enum\AccessAction;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -18,9 +20,19 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenRepository")
- * @ORM\Table("activiteiten")
+ * @ORM\Table("activiteiten", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="soort", columns={"soort"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="in_agenda", columns={"in_agenda"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ * })
  */
 class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort {
+	public function __construct() {
+		$this->leden = new ArrayCollection();
+	}
+
 	public function getUUID() {
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
@@ -70,14 +82,15 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	public $soort;
 	/**
 	 * Rechten benodigd voor aanmelden
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $rechten_aanmelden;
 	/**
 	 * Locatie
 	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $locatie;
 	/**
@@ -91,6 +104,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	/**
 	 * @var ActiviteitDeelnemer[]
 	 * @ORM\OneToMany(targetEntity="ActiviteitDeelnemer", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="DESC"})
 	 */
 	public $leden;
 
@@ -118,7 +132,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 
 			case AccessAction::Bekijken:
 			case AccessAction::Aanmelden:
-				if (!empty($this->rechten_aanmelden) AND !LoginModel::mag($this->rechten_aanmelden, $allowedAuthenticationMethods)) {
+				if (!empty($this->rechten_aanmelden) AND !LoginService::mag($this->rechten_aanmelden, $allowedAuthenticationMethods)) {
 					return false;
 				}
 				break;
@@ -166,19 +180,19 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 			switch (ActiviteitSoort::from($soort)) {
 
 				case ActiviteitSoort::OWee():
-					if (LoginModel::mag('commissie:OWeeCie', $allowedAuthenticationMethods)) {
+					if (LoginService::mag('commissie:OWeeCie', $allowedAuthenticationMethods)) {
 						return true;
 					}
 					break;
 
 				case ActiviteitSoort::Dies():
-					if (LoginModel::mag('commissie:DiesCie', $allowedAuthenticationMethods)) {
+					if (LoginService::mag('commissie:DiesCie', $allowedAuthenticationMethods)) {
 						return true;
 					}
 					break;
 
 				case ActiviteitSoort::Lustrum():
-					if (LoginModel::mag('commissie:LustrumCie', $allowedAuthenticationMethods)) {
+					if (LoginService::mag('commissie:LustrumCie', $allowedAuthenticationMethods)) {
 						return true;
 					}
 					break;
@@ -230,7 +244,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
 		return lid_instelling('agenda', 'transparantICal') === 'ja' ||
 			$this->isHeledag() ||
-			$this->getLid(LoginModel::getUid()) === false;
+			$this->getLid(LoginService::getUid()) === false;
 	}
 
 	public function getAanmeldLimiet() {

@@ -4,10 +4,9 @@ namespace CsrDelft\repository\eetplan;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\eetplan\Eetplan;
-use CsrDelft\entity\groepen\GroepStatus;
-use CsrDelft\repository\groepen\WoonoordenRepository;
-use CsrDelft\model\OrmTrait;
+use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\EetplanFactory;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,9 +21,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Eetplan|null findOneBy(array $criteria, array $orderBy = null)
  * @method Eetplan[]    findAll()
  * @method Eetplan[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Eetplan|null retrieveByUuid($UUID)
  */
 class EetplanRepository extends AbstractRepository {
-	use OrmTrait;
 	const FMT_DATE = "dd-MM-Y";
 
 	/**
@@ -94,7 +93,7 @@ class EetplanRepository extends AbstractRepository {
 			$eetplanFeut[$sessie->uid]['avonden'][] = [
 				'datum' => $sessie->avond,
 				'woonoord_id' => $sessie->woonoord_id,
-				'woonoord' => $sessie->getWoonoord()->naam
+				'woonoord' => $sessie->woonoord->naam
 			];
 
 			if (!isset($avonden[date_format_intl($sessie->avond, self::FMT_DATE)])) {
@@ -121,7 +120,7 @@ class EetplanRepository extends AbstractRepository {
 		$factory->setBekenden($bekenden);
 
 		$bezocht = $this->createQueryBuilder('e')
-			->where("uid like :uid")
+			->where("e.uid like :uid")
 			->setParameter('uid', $lichting . '%')
 			->getQuery()->getResult();
 		$factory->setBezocht($bezocht);
@@ -177,7 +176,7 @@ class EetplanRepository extends AbstractRepository {
 	 */
 	public function getBekendeHuizen($lichting) {
 		return $this->createQueryBuilder('e')
-			->where('e.uid like :uid and avond is null')
+			->where('e.uid like :uid and e.avond is null')
 			->setParameter('uid', $lichting . '%')
 			->getQuery()->getResult();
 	}

@@ -5,8 +5,8 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -33,7 +33,7 @@ class BbLid extends BbTag {
 	}
 
 	public function isAllowed() {
-		return LoginModel::mag(P_LEDEN_READ . "," . P_OUDLEDEN_READ);
+		return LoginService::mag(P_LEDEN_READ . "," . P_OUDLEDEN_READ);
 	}
 
 	public function renderLight() {

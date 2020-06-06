@@ -4,15 +4,19 @@ namespace CsrDelft\entity\documenten;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Bestand;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\Icon;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Table("Document")
+ * @ORM\Table("Document", indexes={
+ *   @ORM\Index(name="Zoeken", columns={"naam", "filename"}),
+ *   @ORM\Index(name="toegevoegd", columns={"toegevoegd"})
+ * })
  * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentRepository")
  */
 class Document extends Bestand {
@@ -39,15 +43,21 @@ class Document extends Bestand {
 	 */
 	public $categorie_id;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="uid")
 	 */
 	public $eigenaar;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="eigenaar", referencedColumnName="uid")
+	 */
+	public $eigenaar_profiel;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
@@ -95,19 +105,19 @@ class Document extends Bestand {
 	}
 
 	public function isEigenaar() {
-		return LoginModel::getUid() === $this->eigenaar;
+		return LoginService::getUid() === $this->eigenaar;
 	}
 
 	public function magBekijken() {
-		return LoginModel::mag($this->leesrechten) && LoginModel::mag(P_LOGGED_IN);
+		return LoginService::mag($this->leesrechten) && LoginService::mag(P_LOGGED_IN);
 	}
 
 	public function magBewerken() {
-		return $this->isEigenaar() OR LoginModel::mag(P_DOCS_MOD);
+		return $this->isEigenaar() OR LoginService::mag(P_DOCS_MOD);
 	}
 
 	public function magVerwijderen() {
-		return LoginModel::mag(P_DOCS_MOD);
+		return LoginService::mag(P_DOCS_MOD);
 	}
 
 	/**

@@ -1,8 +1,7 @@
 <?php
 namespace CsrDelft\view\renderer;
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\DependencyManager;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\Icon;
 use eftec\bladeone\BladeOne;
 use Exception;
@@ -23,19 +22,18 @@ class BladeRenderer implements Renderer {
 		// Tijden compilen doet dit er niet toe.
 		if (MODE !== 'TRAVIS') {
 			$this->bladeOne->setInjectResolver(function ($className) {
-				if (is_a($className, DependencyManager::class, true)) {
-					/** @var $className DependencyManager */
+				try {
 					return ContainerFacade::getContainer()->get($className);
-				} else {
+				} catch (Exception $e) {
 					return new $className();
 				}
 			});
 
 			// @auth en @guest maken puur onderscheid tussen ingelogd of niet.
-			if (LoginModel::mag(P_LOGGED_IN)) {
-				$this->bladeOne->setAuth(LoginModel::getUid());
+			if (LoginService::mag(P_LOGGED_IN)) {
+				$this->bladeOne->setAuth(LoginService::getUid());
 			}
-			$this->bladeOne->authCallBack = [LoginModel::class, 'mag'];
+			$this->bladeOne->authCallBack = [LoginService::class, 'mag'];
 		}
 		// In mode fast (productie) wordt de stylesheet in de html gehangen,
 		// in andere modi wordt een aanroep naar asset gedaan.

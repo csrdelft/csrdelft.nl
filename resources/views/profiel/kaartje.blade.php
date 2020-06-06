@@ -5,14 +5,14 @@
 ?>
 <div class="card visitekaartje flex-row">
 	<div class="card-body @if($profiel->isJarig()) jarig @endif ">
-		@if ($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\model\security\LoginModel::class)->maySuTo($profiel->account))
+		@if ($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\service\security\SuService::class)->maySuTo($profiel->account))
 			<div class="float-right">
 				<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 			</div>
 		@endif
 		<p class="naam">
 			<a href="/profiel/{{$profiel->uid}}" class="lidLink {{$profiel->status}}">
-				{{$profiel->getNaam('volledig')}} &nbsp; {{CsrDelft\model\entity\LidStatus::getChar($profiel->status)}}
+				{{$profiel->getNaam('volledig')}} &nbsp; {{CsrDelft\model\entity\LidStatus::from($profiel->status)->getChar()}}
 			</a>
 		</p>
 		<p>
@@ -29,7 +29,7 @@
 		@endif
 
 		@foreach (\CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\leden\CommissieLedenRepository::class)->findBy(['uid' => $profiel->uid], ['lid_sinds' => 'DESC']) as $commissielid)
-			@if ($commissielid->groep->status === CsrDelft\entity\groepen\GroepStatus::HT())
+			@if ($commissielid->groep->status === \CsrDelft\entity\groepen\enum\GroepStatus::HT())
 				<p>
 					@if (!empty($commissielid->opmerking))
 						{{$commissielid->opmerking}} <br/>

@@ -3,7 +3,8 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\DebugLogEntry;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
@@ -12,14 +13,14 @@ use Exception;
  */
 class DebugLogRepository extends AbstractRepository {
 	/**
-	 * @var LoginModel
+	 * @var SuService
 	 */
-	private $loginModel;
+	private $suService;
 
-	public function __construct(ManagerRegistry $registry, LoginModel $loginModel) {
+	public function __construct(ManagerRegistry $registry, SuService $suService) {
 		parent::__construct($registry, DebugLogEntry::class);
 
-		$this->loginModel = $loginModel;
+		$this->suService = $suService;
 	}
 
 	/**
@@ -47,9 +48,9 @@ class DebugLogRepository extends AbstractRepository {
 		$exception = new Exception();
 		$entry->call_trace = $exception->getTraceAsString();
 		$entry->moment = date_create_immutable();
-		$entry->uid = LoginModel::getUid();
-		if ($this->loginModel->isSued()) {
-			$entry->su_uid = LoginModel::getSuedFrom()->uid;
+		$entry->uid = LoginService::getUid();
+		if ($this->suService->isSued()) {
+			$entry->su_uid = SuService::getSuedFrom()->uid;
 		}
 		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
 		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';

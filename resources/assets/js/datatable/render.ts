@@ -1,6 +1,7 @@
+import FunctionColumnRender = DataTables.FunctionColumnRender;
+import moment from 'moment';
 import {formatBedrag, formatFilesize} from '../util';
 import {getApiFromSettings} from './api';
-import FunctionColumnRender = DataTables.FunctionColumnRender;
 
 /**
  * Standaard gedefinieerde render functies.
@@ -31,6 +32,22 @@ export default {
 	},
 	totaalPrijs(data, type, row) {
 		return formatBedrag(row.aantal_aanmeldingen * parseInt(row.prijs, 10));
+	},
+	datetime(date, type, row) {
+		// tslint:disable-next-line:triple-equals
+		if (Number(date) == date) {
+			return moment(date * 1000).format('L LT');
+		}
+
+		if (!date) {
+			return '';
+		}
+
+		if (date.substr(0, 5) === '<time') {
+			return date;
+		}
+
+		return moment(date).format('L LT');
 	},
 	timeago(data, type, row, meta) {
 		const api = getApiFromSettings(meta.settings);

@@ -4,10 +4,12 @@ namespace CsrDelft\repository\security;
 
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\OneTimeToken;
-use CsrDelft\model\security\LoginModel;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,7 +23,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method OneTimeToken[]    findAll()
  * @method OneTimeToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OneTimeTokensRepository extends ServiceEntityRepository {
+class OneTimeTokensRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, OneTimeToken::class);
 	}
@@ -64,7 +66,7 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 	public function isVerified($uid, $url) {
 		$token = $this->find(['uid' => $uid, 'url' => $url]);
 		if ($token) {
-			return $token->verified AND LoginModel::getUid() === $token->uid AND strtotime($token->expire) > time();
+			return $token->verified AND LoginService::getUid() === $token->uid AND strtotime($token->expire) > time();
 		}
 		return false;
 	}
@@ -72,7 +74,7 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 	/**
 	 * @param string $uid
 	 * @param string $url
-	 * @throws \Doctrine\ORM\ORMException
+	 * @throws ORMException
 	 */
 	public function discardToken($uid, $url) {
 		$this->getEntityManager()->remove($this->getEntityManager()->getReference(OneTimeToken::class, ['uid' => $uid, 'url' => $url]));
@@ -84,8 +86,8 @@ class OneTimeTokensRepository extends ServiceEntityRepository {
 	 * @param string $url
 	 *
 	 * @return array
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function createToken($uid, $url) {
 		$rand = crypto_rand_token(255);

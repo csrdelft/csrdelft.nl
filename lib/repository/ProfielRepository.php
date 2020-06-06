@@ -4,11 +4,12 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\LDAP;
+use CsrDelft\common\Mail;
+use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\Geslacht;
+use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\profiel\AbstractProfielLogEntry;
 use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
 use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
@@ -16,14 +17,13 @@ use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
 use CsrDelft\model\entity\profiel\ProfielLogValueChange;
 use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
-use CsrDelft\model\entity\security\AccessRole;
-use CsrDelft\model\OrmTrait;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\security\LoginService;
 use DateTime;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -39,7 +39,6 @@ use Exception;
  * @method Profiel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ProfielRepository extends AbstractRepository {
-	use OrmTrait;
 	/**
 	 * @var MaaltijdAbonnementenRepository
 	 */
@@ -123,13 +122,13 @@ class ProfielRepository extends AbstractRepository {
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
 		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee();
-		$profiel->changelog = [new ProfielCreateLogGroup(LoginModel::getUid(), new DateTime())];
+		$profiel->changelog = [new ProfielCreateLogGroup(LoginService::getUid(), new DateTime())];
 		return $profiel;
 	}
 
 	/**
 	 * @param Profiel $profiel
-	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 * @throws NonUniqueResultException
 	 */
 	public function create(Profiel $profiel) {
 		// Lichting zijn de laatste 2 cijfers van lidjaar
@@ -306,12 +305,12 @@ class ProfielRepository extends AbstractRepository {
 			$bericht = file_get_contents(TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
-				'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
+				'NAAM' => $profiel->getNaam('volledig'),
 				'UID' => $profiel->uid,
 				'OUD' => $oudestatus,
 				'NIEUW' => $profiel->status,
 				'CHANGE' => $change->toHtml(),
-				'ADMIN' => LoginModel::getProfiel()->getNaam()
+				'ADMIN' => LoginService::getProfiel()->getNaam()
 			);
 			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
 			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
@@ -340,7 +339,7 @@ class ProfielRepository extends AbstractRepository {
 			'OUD' => $oudestatus,
 			'NIEUW' => $profiel->status,
 			'SALDI' => $saldi,
-			'ADMIN' => LoginModel::getProfiel()->getNaam()
+			'ADMIN' => LoginService::getProfiel()->getNaam()
 		);
 		$to = array(
 			'fiscus@csrdelft.nl' => 'Fiscus C.S.R.',
@@ -383,12 +382,12 @@ class ProfielRepository extends AbstractRepository {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
 				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
-				$naam = ProfielRepository::getNaam($exemplaar->eigenaar_uid, 'volledig');
+				$naam = $exemplaar->eigenaar->getNaam('volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
 		}
 		// Kopjes
-		$mv = ($profiel->geslacht == Geslacht::Man ? 'hem' : 'haar');
+		$mv = ($profiel->geslacht->getValue() === Geslacht::Man ? 'hem' : 'haar');
 		$enkelvoud = "Het volgende boek is nog door {$mv} geleend";
 		$meervoud = "De volgende boeken zijn nog door {$mv} geleend";
 		if ($bkncsr['aantal'])
@@ -407,13 +406,13 @@ class ProfielRepository extends AbstractRepository {
 		);
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
 		$values = array(
-			'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
+			'NAAM' => $profiel->getNaam('volledig'),
 			'UID' => $profiel->uid,
 			'OUD' => substr($oudestatus, 2),
 			'NIEUW' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
 			'CSRLIJST' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
 			'LEDENLIJST' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
-			'ADMIN' => LoginModel::getProfiel()->getNaam()
+			'ADMIN' => LoginService::getProfiel()->getNaam()
 		);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
@@ -456,7 +455,7 @@ class ProfielRepository extends AbstractRepository {
 		$changes = $this->verwijderVelden($profiel);
 		if (sizeof($changes) == 0)
 			return false;
-		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginModel::getUid(), new DateTime(), $changes);
+		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginService::getUid(), new DateTime(), $changes);
 		$this->update($profiel);
 		return true;
 	}
@@ -478,6 +477,12 @@ class ProfielRepository extends AbstractRepository {
 			->where('p.status in (:toegestaan)')
 			->setParameter('toegestaan', $toegestaan)
 			->getQuery()->getResult();
+	}
+
+	public function setEetwens(Profiel $profiel, $eetwens) {
+		if ($profiel->eetwens === $eetwens) return;
+		$profiel->eetwens = $eetwens;
+		$this->update($profiel);
 	}
 
 }

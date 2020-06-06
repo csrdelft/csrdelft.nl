@@ -2,9 +2,10 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\security\enum\AccessAction;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,7 +16,11 @@ use Doctrine\ORM\Mapping as ORM;
  * Een ketzer is een aanmeldbare groep.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KetzersRepository")
- * @ORM\Table("ketzers")
+ * @ORM\Table("ketzers", indexes={
+ *   @ORM\Index(name="status", columns={"status"}),
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ * })
  */
 class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	/**
@@ -48,12 +53,15 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $afmelden_tot;
-
 	/**
 	 * @var KetzerDeelnemer
 	 * @ORM\OneToMany(targetEntity="KetzerDeelnemer", mappedBy="groep")
 	 */
 	public $leden;
+
+	public function __construct() {
+		$this->leden = new ArrayCollection();
+	}
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
@@ -110,7 +118,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 
 			case AccessAction::Bewerken:
 				// Controleer bewerkperiode
-				if ( $nu > $this->bewerken_tot) {
+				if ($nu > $this->bewerken_tot) {
 					return false;
 				}
 				break;

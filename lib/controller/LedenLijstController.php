@@ -4,18 +4,29 @@
 namespace CsrDelft\controller;
 
 
-use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleSync;
-use CsrDelft\service\LidZoeker;
+use CsrDelft\service\LidZoekerService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
+use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 class LedenLijstController extends AbstractController {
-	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoeker $lidZoeker) {
-		if (!LoginModel::mag(P_OUDLEDEN_READ)) {
+	/**
+	 * @param CmsPaginaRepository $cmsPaginaRepository
+	 * @param LidZoekerService $lidZoeker
+	 * @param GoogleSync $googleSync
+	 * @return TemplateView|RedirectResponse
+	 * @Route("/ledenlijst", methods={"GET", "POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
+	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync) {
+		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
 			return view('default', ['content' => $body]);
@@ -50,19 +61,17 @@ class LedenLijstController extends AbstractController {
 
 		if (isset($_GET['addToGoogleContacts'])) {
 			try {
-				GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
-
-				$gSync = ContainerFacade::getContainer()->get(GoogleSync::class);
+				$googleSync->doRequestToken(CSR_ROOT . REQUEST_URI);
 
 				$start = microtime(true);
-				$message = $gSync->syncLidBatch($lidZoeker->getLeden());
+				$message = $googleSync->syncLidBatch($lidZoeker->getLeden());
 				$elapsed = microtime(true) - $start;
 
 				setMelding(
 					'<h3>Google-sync-resultaat:</h3>' . $message . '<br />' .
 					'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q'] ?? '') . '">Terug naar de ledenlijst...</a>', 0);
 
-				if (LoginModel::mag(P_ADMIN)) {
+				if (LoginService::mag(P_ADMIN)) {
 					setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
 				}
 			} catch (CsrGebruikerException $e) {
@@ -74,7 +83,7 @@ class LedenLijstController extends AbstractController {
 			if ($lidZoeker->count() == 1) {
 				$leden = $lidZoeker->getLeden();
 				$profiel = $leden[0];
-				return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
+				return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
 			}
 		}
 

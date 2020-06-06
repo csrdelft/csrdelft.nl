@@ -2,8 +2,8 @@
 
 namespace CsrDelft\entity\maalcie;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\fiscaat\CiviProductModel;
+use CsrDelft\entity\fiscaat\CiviProduct;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Monolog\DateTimeImmutable;
 
@@ -30,7 +30,7 @@ use Monolog\DateTimeImmutable;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository")
  * @ORM\Table("mlt_repetities")
  */
-class MaaltijdRepetitie {
+class MaaltijdRepetitie implements DisplayEntity {
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -43,6 +43,11 @@ class MaaltijdRepetitie {
 	 * @ORM\Column(type="integer")
 	 */
 	public $product_id;
+	/**
+	 * @var CiviProduct
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\fiscaat\CiviProduct")
+	 */
+	public $product;
 	/**
 	 * 0: Sunday
 	 * 6: Saturday
@@ -87,7 +92,7 @@ class MaaltijdRepetitie {
 	public $abonnement_filter;
 
 	public function getStandaardPrijs() {
-		return ContainerFacade::getContainer()->get(CiviProductModel::class)->getPrijs(ContainerFacade::getContainer()->get(CiviProductModel::class)->getProduct($this->product_id))->prijs;
+		return $this->product->getPrijsInt();
 	}
 
 	public function getDagVanDeWeekText() {
@@ -123,5 +128,13 @@ class MaaltijdRepetitie {
 			$datum = strtotime('+' . $shift . ' days', $datum);
 		}
 		return date('Y-m-d', $datum);
+	}
+
+	public function getId() {
+		return $this->mlt_repetitie_id;
+	}
+
+	function getWeergave(): string {
+		return $this->standaard_titel;
 	}
 }

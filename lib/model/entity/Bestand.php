@@ -2,15 +2,13 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\Orm\Entity\PersistentEntity;
-
 
 /**
  * Bestand.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class Bestand extends PersistentEntity {
+class Bestand {
 
 	/**
 	 * Bestandsnaam

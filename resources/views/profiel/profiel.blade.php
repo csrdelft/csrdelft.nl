@@ -8,7 +8,7 @@
  * @var \CsrDelft\entity\groepen\RechtenGroep[] $groepen
  * @var \CsrDelft\entity\groepen\Ketzer[] $ketzers
  * @var \CsrDelft\entity\groepen\Activiteit[] $activiteiten
- * @var object[] bestellinglog
+ * @var \CsrDelft\entity\fiscaat\CiviBestelling[] $bestellinglog
  * @var string $bestellingenlink
  * @var \CsrDelft\entity\corvee\CorveeTaak[] $corveetaken
  * @var \CsrDelft\entity\corvee\CorveeVoorkeur[] $corveevoorkeuren
@@ -40,10 +40,10 @@
 	<div id="profiel" class="container {{$profiel->getProfielClasses()}}">
 		<div id="profielregel">
 			<div class="row">
-				<h1 class="col" title="Lid-status: {{CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}}">
-					@if(\CsrDelft\model\entity\LidStatus::getChar($profiel->status) !== '')
+				<h1 class="col" title="Lid-status: {{CsrDelft\model\entity\LidStatus::from($profiel->status)->getDescription()}}">
+					@if(\CsrDelft\model\entity\LidStatus::from($profiel->status)->getChar() !== '')
 						<span class="status">
-						{{ CsrDelft\model\entity\LidStatus::getChar($profiel->status) }}&nbsp;
+						{{ CsrDelft\model\entity\LidStatus::from($profiel->status)->getChar() }}&nbsp;
 					</span>
 					@endif
 					{{$profiel->getNaam('volledig')}}
@@ -115,7 +115,7 @@
 				<dd>{{$profiel->getNaam('civitas')}}</dd>
 				<dt>Lidnummer</dt>
 				<dd>
-					@if($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\model\security\LoginModel::class)->maySuTo($profiel->account))
+					@if($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\service\security\SuService::class)->maySuTo($profiel->account))
 						<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 					@else
 						{{$profiel->uid}}
@@ -144,7 +144,7 @@
 				@php($echtgenoot = \CsrDelft\repository\ProfielRepository::get($profiel->echtgenoot))
 				@if($echtgenoot)
 					<dt>
-						@if($echtgenoot->geslacht === \CsrDelft\model\entity\Geslacht::Vrouw)
+						@if($echtgenoot->geslacht === \CsrDelft\entity\Geslacht::Vrouw())
 							Echtgenote @else Echtgenoot
 						@endif
 					</dt>
@@ -248,7 +248,7 @@
 					@endif
 				</dd>
 				<dt>Status</dt>
-				<dd>{{\CsrDelft\model\entity\LidStatus::getDescription($profiel->status)}}</dd>
+				<dd>{{\CsrDelft\model\entity\LidStatus::from($profiel->status)->getDescription()}}</dd>
 				@if($profiel->beroep && $profiel->isOudlid())
 					<dt>Beroep/werk</dt>
 					<dd>{{$profiel->beroep}}</dd>
@@ -258,7 +258,7 @@
 				<dl class="col-md-6">
 					@if($profiel->getPatroonProfiel())
 						<dt>
-							@if($profiel->getPatroonProfiel()->geslacht === \CsrDelft\model\entity\Geslacht::Vrouw)
+							@if($profiel->getPatroonProfiel()->geslacht->getValue() === \CsrDelft\entity\Geslacht::Vrouw)
 								Matroon
 							@else
 								Patroon
@@ -436,9 +436,9 @@
 							<table class="table table-sm table-striped">
 								@foreach($bestellinglog as $bestelling)
 									<tr>
-										<td>{{implode(", ", $bestelling->inhoud)}}</td>
+										<td>{{$bestelling->getInhoudTekst()}}</td>
 										<td>{{format_bedrag($bestelling->totaal)}}</td>
-										<td>({{strftime('%D', strtotime($bestelling->moment))}})</td>
+										<td>({{date_format_intl($bestelling->moment, DATETIME_FORMAT)}})</td>
 									</tr>
 								@endforeach
 							</table>

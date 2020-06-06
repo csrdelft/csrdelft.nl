@@ -4,8 +4,9 @@ namespace CsrDelft\repository\forum;
 
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadGelezen;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -13,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  * @method ForumDraadGelezen|null find($id, $lockMode = null, $lockVersion = null)
  * @method ForumDraadGelezen|null findOneBy(array $criteria, array $orderBy = null)
  * @method ForumDraadGelezen[]    findAll()
@@ -28,7 +29,8 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 		$gelezen = new ForumDraadGelezen();
 		$gelezen->draad = $draad;
 		$gelezen->draad_id = $draad->draad_id; // Set pk
-		$gelezen->uid = LoginModel::getUid();
+		$gelezen->uid = LoginService::getUid();
+		$gelezen->profiel = LoginService::getProfiel();
 		$gelezen->datum_tijd = date_create_immutable();
 		return $gelezen;
 	}
@@ -37,12 +39,13 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 	 * Ga na welke posts op de huidige pagina het laatst is geplaatst of gewijzigd.
 	 *
 	 * @param ForumDraad $draad
-	 * @param \DateTime $moment
+	 * @param DateTime $moment
 	 */
 	public function setWanneerGelezenDoorLid(ForumDraad $draad, $moment = null) {
-		$gelezen = $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginModel::getUid()]);
+		$gelezen = $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginService::getUid()]);
 		if (!$gelezen) {
 			$gelezen = $this->maakForumDraadGelezen($draad);
+			$this->getEntityManager()->persist($gelezen);
 		}
 		if ($moment) {
 			$gelezen->datum_tijd = $moment;
@@ -54,8 +57,9 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 			}
 		}
 
-		$this->getEntityManager()->persist($gelezen);
 		$this->getEntityManager()->flush();
+
+		$this->getEntityManager()->clear();
 	}
 
 	public function verwijderDraadGelezen(ForumDraad $draad) {

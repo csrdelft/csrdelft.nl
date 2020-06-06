@@ -4,7 +4,7 @@
 namespace CsrDelft\common\Doctrine\Type;
 
 
-use CsrDelft\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\enum\GroepStatus;
 
 class GroepStatusType extends EnumType {
 	public function getEnumClass() {
@@ -12,6 +12,6 @@ class GroepStatusType extends EnumType {
 	}
 
 	public function getName() {
-		return 'enumgroepstatus';
+		return 'enumGroepStatus';
 	}
 }

@@ -3,14 +3,14 @@
 namespace CsrDelft\view\profiel;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Doctrine\Type\OntvangtContactueelType;
+use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\ProfielService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
@@ -18,12 +18,12 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
+use CsrDelft\view\formulier\invoervelden\EmailField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\IBANField;
 use CsrDelft\view\formulier\invoervelden\LandField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
-use CsrDelft\view\formulier\invoervelden\EmailField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLandField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\StudieField;
@@ -34,7 +34,7 @@ use CsrDelft\view\formulier\keuzevelden\DateObjectField;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredGeslachtField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -58,7 +58,7 @@ class ProfielForm extends Formulier {
 			parent::__construct($profiel, '/profiel/' . $profiel->lidjaar . '/nieuw/' . strtolower(substr($profiel->status, 2)));
 		}
 
-		$admin = LoginModel::mag(P_LEDEN_MOD);
+		$admin = LoginService::mag(P_LEDEN_MOD);
 		$inschrijven = !$profiel->account;
 
 		$fields = [];
@@ -85,8 +85,8 @@ class ProfielForm extends Formulier {
 
 		if ($admin) {
 			$statussen = array();
-			foreach (LidStatus::getTypeOptions() as $optie) {
-				$statussen[$optie] = LidStatus::getDescription($optie);
+			foreach (LidStatus::getEnumValues() as $optie) {
+				$statussen[$optie] = LidStatus::from($optie)->getDescription();
 			}
 			$fields[] = new SelectField('status', $profiel->status, 'Lidstatus', $statussen);
 			$fields[] = new HtmlComment('<p>Bij het wijzigen van de lidstatus worden overbodige <span class="waarschuwing">gegevens verwijderd</span>, onomkeerbaar, opletten dus!</p>');
@@ -136,7 +136,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new TextField('tussenvoegsel', $profiel->tussenvoegsel, 'Tussenvoegsel', 15);
 			$fields[] = new RequiredTextField('achternaam', $profiel->achternaam, 'Achternaam', 50);
 			if ($admin OR $inschrijven) {
-				$fields[] = new RequiredGeslachtField('geslacht', $profiel->geslacht, 'Geslacht');
+				$fields[] = new RequiredEnumSelectField('geslacht', $profiel->geslacht, 'Geslacht', Geslacht::class);
 				$fields[] = new TextField('voornamen', $profiel->voornamen, 'Voornamen', 100);
 				if (!$inschrijven) {
 					$fields[] = new TextField('postfix', $profiel->postfix, 'Postfix', 7);
@@ -240,7 +240,7 @@ class ProfielForm extends Formulier {
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
-		if (($admin OR LoginModel::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
+		if (($admin OR LoginService::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
 
 			if ($inschrijven) {

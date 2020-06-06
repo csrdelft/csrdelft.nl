@@ -4,9 +4,9 @@ namespace CsrDelft\view\formulier;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\ChangeLogEntry;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
@@ -320,7 +320,7 @@ HTML;
 	public function changelog(array $diff) {
 		$changelog = '';
 		if (!empty($diff)) {
-			$changelog .= '[div]Bewerking van [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
+			$changelog .= '[div]Bewerking van [lid=' . LoginService::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
 			foreach ($diff as $change) {
 				$changelog .= '(' . $change->property . ') ' . $change->old_value . ' => ' . $change->new_value . '[br]';
 			}

@@ -6,14 +6,13 @@ namespace CsrDelft\view\courant;
 
 use CsrDelft\entity\courant\CourantBericht;
 use CsrDelft\entity\courant\CourantCategorie;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredBBCodeField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
 class CourantBerichtFormulier extends Formulier {
@@ -38,7 +37,7 @@ class CourantBerichtFormulier extends Formulier {
 		$bbId = $fields['bb']->getId();
 		$sponsorlink = 'https://www.csrdelft.nl/plaetjes/banners/' . instelling('courant', 'sponsor');
 
-		if (LoginModel::mag(P_MAIL_COMPOSE)) {
+		if (LoginService::mag(P_MAIL_COMPOSE)) {
 			$fields[] = new HtmlComment(<<<HTML
 <div>
 	<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda('${bbId}');" class="btn btn-primary" />

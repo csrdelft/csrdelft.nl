@@ -2,8 +2,8 @@
 
 namespace CsrDelft\common;
 
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\DebugLogRepository;
+use CsrDelft\service\security\LoginService;
 use Exception;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
@@ -189,7 +189,7 @@ MD
 	 */
 	public static function stacktraceHandler($exception = null) {
 		if ($exception instanceof Exception) {
-			if ((defined('DEBUG') && DEBUG) || LoginModel::mag(P_LOGGED_IN)) {
+			if ((defined('DEBUG') && DEBUG) || LoginService::mag(P_LOGGED_IN)) {
 				echo str_replace('#', '<br />#', $exception); // stacktrace
 				printDebug();
 			}

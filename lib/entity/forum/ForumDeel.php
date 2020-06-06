@@ -4,9 +4,9 @@ namespace CsrDelft\entity\forum;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
-use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\forum\ForumDradenRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -16,7 +16,9 @@ use Doctrine\ORM\PersistentCollection;
  *
  * Een deelforum zit in een forumcategorie bevat ForumDraden.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDelenRepository")
- * @ORM\Table("forum_delen")
+ * @ORM\Table("forum_delen", indexes={
+ *   @ORM\Index(name="volgorde", columns={"volgorde"}),
+ * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class ForumDeel {
@@ -92,16 +94,16 @@ class ForumDeel {
 	}
 
 	public function magLezen($rss = false) {
-		$auth = ($rss ? AuthenticationMethod::getTypeOptions() : null);
-		return LoginModel::mag(P_FORUM_READ, $auth) AND LoginModel::mag($this->rechten_lezen, $auth) AND $this->categorie->magLezen();
+		$auth = ($rss ? AuthenticationMethod::getEnumValues() : null);
+		return LoginService::mag(P_FORUM_READ, $auth) AND LoginService::mag($this->rechten_lezen, $auth) AND $this->categorie->magLezen($auth);
 	}
 
 	public function magPosten() {
-		return LoginModel::mag($this->rechten_posten);
+		return LoginService::mag($this->rechten_posten);
 	}
 
 	public function magModereren() {
-		return LoginModel::mag($this->rechten_modereren);
+		return LoginService::mag($this->rechten_modereren);
 	}
 
 	public function magMeldingKrijgen() {
@@ -139,7 +141,7 @@ class ForumDeel {
 	}
 
 	public function lidWilMeldingVoorDeel($uid = null) {
-		if ($uid === null) $uid = LoginModel::getUid();
+		if ($uid === null) $uid = LoginService::getUid();
 
 		return $this->meldingen->matching(Eisen::voorGebruiker($uid))->first() != null;
 	}

@@ -4,8 +4,9 @@
 namespace CsrDelft\entity\courant;
 
 
-use CsrDelft\model\security\LoginModel;
-use DateTime;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,7 +30,7 @@ class CourantBericht {
 	public $titel;
 	/**
 	 * @var CourantCategorie
-	 * @ORM\Column(type="enumcourantcategorie")
+	 * @ORM\Column(type="enumCourantCategorie")
 	 */
 	public $cat;
 	/**
@@ -48,7 +49,13 @@ class CourantBericht {
 	 */
 	public $uid;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $schrijver;
+	/**
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime", name="datumTijd")
 	 */
 	public $datumTijd;
@@ -68,6 +75,6 @@ class CourantBericht {
 	}
 
 	public function magBeheren() {
-		return LoginModel::mag(P_MAIL_COMPOSE) OR LoginModel::mag($this->uid);
+		return LoginService::mag(P_MAIL_COMPOSE) OR LoginService::mag($this->uid);
 	}
 }

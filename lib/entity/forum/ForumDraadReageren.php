@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\forum;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,7 +42,7 @@ class ForumDraadReageren {
 	public $uid;
 	/**
 	 * Datum en tijd van start reageren
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;

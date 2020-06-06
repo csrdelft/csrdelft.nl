@@ -4,6 +4,7 @@ namespace CsrDelft\view\lid;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
+use DateTimeInterface;
 use Exception;
 
 /**
@@ -106,7 +107,7 @@ class LLLijst extends LLWeergave {
 					break;
 
 				case 'status':
-					echo LidStatus::getDescription($profiel->status);
+					echo LidStatus::from($profiel->status)->getDescription();
 					break;
 
 				case 'verticale':
@@ -128,7 +129,7 @@ class LLLijst extends LLWeergave {
 
 				default:
 					try {
-						if ($profiel->$veld instanceof \DateTimeInterface) {
+						if ($profiel->$veld instanceof DateTimeInterface) {
 							echo date_format_intl($profiel->$veld, DATE_FORMAT);
 						} else {
 							echo htmlspecialchars($profiel->$veld);

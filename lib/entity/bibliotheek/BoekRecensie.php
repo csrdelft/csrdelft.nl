@@ -4,7 +4,9 @@
 namespace CsrDelft\entity\bibliotheek;
 
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,21 +29,27 @@ class BoekRecensie {
 	public $boek_id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="stringkey")
+	 * @ORM\Column(type="uid")
 	 */
 	public $schrijver_uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="schrijver_uid", referencedColumnName="uid")
+	 */
+	public $schrijver;
 	/**
 	 * @var string
 	 * @ORM\Column(type="text")
 	 */
 	public $beschrijving;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $bewerkdatum;
@@ -74,11 +82,11 @@ class BoekRecensie {
 	}
 
 	public function isSchrijver($uid = null) {
-		if (!LoginModel::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			return false;
 		}
 		if ($uid === null) {
-			$uid = LoginModel::getUid();
+			$uid = LoginService::getUid();
 		}
 		return $this->schrijver_uid == $uid;
 	}

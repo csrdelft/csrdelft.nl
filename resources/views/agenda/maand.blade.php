@@ -18,12 +18,12 @@
 		<div class="input-group-prepend">
 			<label class="input-group-text" for="ical-link"><img src="/images/ical.gif" alt="ICAL"/></label>
 		</div>
-		@if(CsrDelft\model\security\LoginModel::getUid() == \CsrDelft\model\security\LoginModel::UID_EXTERN OR CsrDelft\model\security\LoginModel::getAccount()->hasPrivateToken())
+		@if(\CsrDelft\service\security\LoginService::getUid() == \CsrDelft\service\security\LoginService::UID_EXTERN OR \CsrDelft\service\security\LoginService::getAccount()->hasPrivateToken())
 			<input class="form-control" type="text" id="ical-link"
-						 value="{{CsrDelft\model\security\LoginModel::getAccount()->getICalLink()}}"
+						 value="{{\CsrDelft\service\security\LoginService::getAccount()->getICalLink()}}"
 						 size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 		@else
-			<a class="input-group-text" href="/profiel/{{CsrDelft\model\security\LoginModel::getUid()}}#tokenaanvragen">
+			<a class="input-group-text" href="/profiel/{{\CsrDelft\service\security\LoginService::getUid()}}#tokenaanvragen">
 				Privé url aanvragen
 			</a>
 		@endif

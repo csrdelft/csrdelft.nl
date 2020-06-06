@@ -4,7 +4,6 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;

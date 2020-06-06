@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\fiscaat\bestellingen;
 
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\view\datatable\DataTable;
 
 /**

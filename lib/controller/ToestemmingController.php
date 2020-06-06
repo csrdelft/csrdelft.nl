@@ -2,18 +2,20 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\LidStatus;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\CmsPaginaRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\toestemming\ToestemmingLijstResponse;
 use CsrDelft\view\toestemming\ToestemmingLijstTable;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -36,6 +38,8 @@ class ToestemmingController extends AbstractController {
 
 	/**
 	 * @throws Exception
+	 * @Route("/toestemming", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function POST_overzicht() {
 		$form = new ToestemmingModalForm($this->lidToestemmingRepository);
@@ -50,26 +54,50 @@ class ToestemmingController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @throws Exception
+	 * @Route("/toestemming", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function GET_overzicht() {
 		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')), 'modal' => new ToestemmingModalForm($this->lidToestemmingRepository)]);
 	}
 
+	/**
+	 * @return CmsPaginaView
+	 * @Route("/toestemming/annuleren", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function POST_annuleren() {
 		$_SESSION['stop_nag'] = time();
 
 		return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
 	}
 
+	/**
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @Route("/toestemming/annuleren", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function GET_annuleren() {
 		$_SESSION['stop_nag'] = time();
 
 		return $this->redirectToRoute('default');
 	}
 
+	/**
+	 * @param Request $request
+	 * @return \CsrDelft\view\renderer\TemplateView|ToestemmingLijstResponse
+	 * @Route("/toestemming/lijst", methods={"GET","POST"})
+	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
+	 */
 	public function lijst(Request $request) {
-		if (LoginModel::mag('P_LEDEN_MOD')) {
+		if (LoginService::mag(P_LEDEN_MOD)) {
 			$ids = ['foto_intern', 'foto_extern', 'vereniging', 'bijzonder'];
-		} else if (LoginModel::mag(P_ALBUM_MOD)) {
+		} else if (LoginService::mag(P_ALBUM_MOD)) {
+			$ids = ['foto_intern', 'foto_extern'];
+		} else if (LoginService::mag('commissie:promocie:ht')) {
 			$ids = ['foto_intern', 'foto_extern'];
 		} else {
 			throw new CsrToegangException('Geen toegang');
@@ -78,31 +106,31 @@ class ToestemmingController extends AbstractController {
 		if ($request->getMethod() === 'POST') {
 			$filter = $request->query->get('filter', 'leden');
 
-		    $filterStatus = [
-		        'leden' => LidStatus::getLidLike(),
-                'oudleden' => LidStatus::getOudlidLike(),
-                'ledenoudleden' => array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike()),
-                'iedereen' => LidStatus::getTypeOptions(),
-            ];
+			$filterStatus = [
+				'leden' => LidStatus::getLidLike(),
+				'oudleden' => LidStatus::getOudlidLike(),
+				'ledenoudleden' => array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike()),
+				'iedereen' => LidStatus::getEnumValues(),
+			];
 
-            $toestemming = group_by('uid', $this->lidToestemmingRepository->getToestemmingForIds($ids));
+			$toestemming = group_by('uid', $this->lidToestemmingRepository->getToestemmingForIds($ids));
 
-            $toestemmingFiltered = [];
-            foreach ($toestemming as $uid => $toestemmingen) {
-                $profiel = ProfielRepository::get($uid);
+			$toestemmingFiltered = [];
+			foreach ($toestemming as $uid => $toestemmingen) {
+				$profiel = ProfielRepository::get($uid);
 
-                if (in_array($profiel->status, $filterStatus[$filter])) {
-                    $toestemmingFiltered[] = $toestemmingen;
-                }
-            }
+				if (in_array($profiel->status, $filterStatus[$filter])) {
+					$toestemmingFiltered[] = $toestemmingen;
+				}
+			}
 
-            return new ToestemmingLijstResponse($toestemmingFiltered, $ids);
-        } else {
-            return view('pagina', [
-                'titel' => 'Lid toestemming',
-                'breadcrumbs' => 'Lid toestemmingen',
-                'body' => new ToestemmingLijstTable($ids)
-            ]);
-        }
+			return new ToestemmingLijstResponse($toestemmingFiltered, $ids);
+		} else {
+			return view('pagina', [
+				'titel' => 'Lid toestemming',
+				'breadcrumbs' => 'Lid toestemmingen',
+				'body' => new ToestemmingLijstTable($ids)
+			]);
+		}
 	}
 }

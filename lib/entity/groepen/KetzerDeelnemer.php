@@ -12,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een deelnemer van een ketzer.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\KetzerDeelnemersRepository")
- * @ORM\Table("ketzer_deelnemers")
+ * @ORM\Table("ketzer_deelnemers", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
 class KetzerDeelnemer extends AbstractGroepLid {
 	/**

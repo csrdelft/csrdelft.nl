@@ -3,13 +3,13 @@
 namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\ProfielService;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  */
 class CivisaldoField extends TextField {
 
@@ -48,7 +48,7 @@ class CivisaldoField extends TextField {
 		}
 		$value = parent::getValue();
 		// geldig uid?
-		if (AccountRepository::isValidUid($value) AND ContainerFacade::getContainer()->get(CiviSaldoModel::class)->existsByUid($value)) {
+		if (AccountRepository::isValidUid($value) AND ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->existsByUid($value)) {
 			return true;
 		}
 		$this->error = 'Geen geldig lid';

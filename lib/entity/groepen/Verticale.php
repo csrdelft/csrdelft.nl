@@ -4,11 +4,8 @@ namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\KringenRepository;
-use CsrDelft\repository\groepen\leden\VerticaleLedenRepository;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,13 +16,19 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenRepository")
- * @ORM\Table("verticalen")
+ * @ORM\Table("verticalen", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="letter", columns={"letter"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ *   @ORM\Index(name="naam", columns={"naam"}),
+ * })
  */
 class Verticale extends AbstractGroep {
 	/**
 	 * Primary key
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", length=1, options={"fixed"=true})
 	 */
 	public $letter;
 
@@ -57,6 +60,7 @@ class Verticale extends AbstractGroep {
 					$lid->opmerking = 'Kringcoach';
 				}
 				$lid->door_uid = null;
+				$lid->door_profiel = null;
 				$lid->lid_sinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
 				$leden[] = $lid;
 			}

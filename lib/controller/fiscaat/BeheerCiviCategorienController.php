@@ -2,24 +2,33 @@
 
 namespace CsrDelft\controller\fiscaat;
 
-use CsrDelft\model\fiscaat\CiviCategorieModel;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\repository\fiscaat\CiviCategorieRepository;
 use CsrDelft\view\fiscaat\CiviCategorieSuggestiesResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class BeheerCiviCategorienController {
-	/** @var CiviCategorieModel */
-	private $civiCategorieModel;
+	/** @var CiviCategorieRepository */
+	private $civiCategorieRepository;
 
-	public function __construct(CiviCategorieModel $civiCategorieModel) {
-		$this->civiCategorieModel = $civiCategorieModel;
+	public function __construct(CiviCategorieRepository $civiCategorieRepository) {
+		$this->civiCategorieRepository = $civiCategorieRepository;
 	}
 
+	/**
+	 * @param Request $request
+	 * @return CiviCategorieSuggestiesResponse
+	 * @Route("/fiscaat/categorien/suggesties", methods={"GET"})
+	 * @Auth(P_FISCAAT_READ)
+	 */
 	public function suggesties(Request $request) {
-		$query = '%' . $request->query->get('q') . '%';
-		return new CiviCategorieSuggestiesResponse($this->civiCategorieModel->find('type LIKE ?', [$query]));
+		$suggesties = $this->civiCategorieRepository->suggesties(sql_contains($request->query->get('q')));
+
+		return new CiviCategorieSuggestiesResponse($suggesties);
 	}
 }

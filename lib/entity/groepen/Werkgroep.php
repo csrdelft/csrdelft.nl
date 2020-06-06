@@ -2,9 +2,8 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\repository\groepen\leden\WerkgroepDeelnemersRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\security\enum\AccessAction;
+use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,7 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WerkgroepenRepository")
- * @ORM\Table("werkgroepen")
+ * @ORM\Table("werkgroepen", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ * })
  */
 class Werkgroep extends AbstractGroep {
 	/**
@@ -75,7 +78,7 @@ class Werkgroep extends AbstractGroep {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
-		if ($action === AccessAction::Aanmaken AND !LoginModel::mag(P_LEDEN_MOD)) {
+		if ($action === AccessAction::Aanmaken AND !LoginService::mag(P_LEDEN_MOD)) {
 			return false;
 		}
 		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);

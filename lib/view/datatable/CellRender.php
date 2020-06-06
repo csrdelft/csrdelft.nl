@@ -19,6 +19,7 @@ class CellRender {
 	const TOTAAL_PRIJS = 'totaalPrijs';
 	const TIMEAGO = 'timeago';
 	const FILESIZE = 'filesize';
+	const DATETIME = 'datetime';
 
 	/** @var string */
 	protected $choice;
@@ -91,5 +92,9 @@ class CellRender {
 	 */
 	public static function Filesize() {
 		return new static(self::FILESIZE);
+	}
+
+	public static function DateTime() {
+		return new static(self::DATETIME);
 	}
 }

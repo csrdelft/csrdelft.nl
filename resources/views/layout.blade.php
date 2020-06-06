@@ -7,7 +7,7 @@
 @php(view('menu.main', [
   'root' => get_menu('main'),
   'personal' => get_menu('Personal'),
-  'favorieten' => get_menu(\CsrDelft\model\security\LoginModel::getUid()),
+  'favorieten' => get_menu(\CsrDelft\service\security\LoginService::getUid()),
 ])->view())
 <nav id="zijbalk">
 	@php($zijbalk = \CsrDelft\view\Zijbalk::addStandaardZijbalk(isset($zijbalk) ? $zijbalk : []))

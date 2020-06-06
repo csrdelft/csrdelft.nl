@@ -2,10 +2,10 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekRecensie;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BiebRubriekRepository;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
@@ -13,6 +13,7 @@ use CsrDelft\repository\bibliotheek\BoekRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\BoekImporter;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatable;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableResponse;
 use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
@@ -24,6 +25,7 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * BibliotheekController.class.php  |  Gerrit Uitslag (klapinklapin@gmail.com)
@@ -65,8 +67,14 @@ class BibliotheekController extends AbstractController {
 		$this->biebRubriekRepository = $biebRubriekRepository;
 	}
 
+	/**
+	 * @param $boek_id
+	 * @return RedirectResponse
+	 * @Route("/bibliotheek/boek/{boek_id}/recensie", methods={"POST"}, requirements={"boek_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
+	 */
 	public function recensie($boek_id) {
-		$recensie = $this->boekRecensieRepository->get($boek_id, LoginModel::getUid());
+		$recensie = $this->boekRecensieRepository->get($boek_id, LoginService::getUid());
 		$formulier = new RecensieFormulier($recensie);
 		if ($formulier->validate()) {
 			if (!$recensie->magBewerken()) {
@@ -79,28 +87,41 @@ class BibliotheekController extends AbstractController {
 				setMelding("Recensie opgeslagen", 0);
 			}
 		}
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek_id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek_id]);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/bibliotheek/rubrieken", methods={"GET"})
+	 * @Auth(P_BIEB_READ)
+	 */
 	public function rubrieken() {
 		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('rubrieken'))]);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/bibliotheek/wenslijst", methods={"GET"})
+	 * @Auth(P_BIEB_READ)
+	 */
 	public function wenslijst() {
 		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('wenslijst'))]);
 	}
 
+	/**
+	 * @Route("/bibliotheek", methods={"GET"})
+	 * @Auth(P_BIEB_READ)
+	 */
 	public function catalogustonen() {
 		return view('default', ['content' => new BibliotheekCatalogusDatatable()]);
 	}
 
 	/**
 	 * Inhoud voor tabel op de cataloguspagina ophalen
+	 * @Route("/bibliotheek/catalogusdata", methods={"POST"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function catalogusdata() {
-		/**
-		 * @var Boek[] $data
-		 */
 		$data = $this->boekRepository->findAll();
 		$uid = filter_input(INPUT_GET, "eigenaar", FILTER_SANITIZE_STRING);
 		$results = [];
@@ -120,6 +141,8 @@ class BibliotheekController extends AbstractController {
 	 * Boek weergeven
 	 * @param $boek_id
 	 * @return TemplateView|RedirectResponse
+	 * @Route("/bibliotheek/boek/{boek_id}", methods={"GET", "POST"}, defaults={"boek_id": null}, requirements={"boek_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function boek($boek_id = null) {
 		if ($boek_id == null) {
@@ -138,7 +161,7 @@ class BibliotheekController extends AbstractController {
 				$manager->persist($boek);
 				$manager->flush();
 
-				return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
+				return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 			}
 		}
 
@@ -153,7 +176,7 @@ class BibliotheekController extends AbstractController {
 			}
 		}
 		foreach ($alleRecensies as $recensie) {
-			if ($recensie->schrijver_uid == LoginModel::getUid()) {
+			if ($recensie->schrijver_uid == LoginService::getUid()) {
 				$mijnRecensie = $recensie;
 			}
 			$andereRecensies[] = $recensie;
@@ -169,6 +192,12 @@ class BibliotheekController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @param $boek_id
+	 * @return RedirectResponse
+	 * @Route("/bibliotheek/import/{boek_id}", methods={"POST"}, requirements={"boek_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
+	 */
 	public function import($boek_id) {
 		$boek = $this->boekRepository->find($boek_id);
 		if (!$boek->isEigenaar()) {
@@ -179,11 +208,16 @@ class BibliotheekController extends AbstractController {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($boek);
 			$manager->flush();
-			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
+			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 		}
 	}
 
-
+	/**
+	 * @param $boek_id
+	 * @param $uid
+	 * @Route("/bibliotheek/verwijderbeschrijving/{boek_id}/{uid}", methods={"POST"}, requirements={"boek_id": "\d+", "uid": ".{4}"})
+	 * @Auth(P_BIEB_READ)
+	 */
 	public function verwijderbeschrijving($boek_id, $uid) {
 		$recensie = $this->boekRecensieRepository->get($boek_id, $uid);
 		if (!$recensie->magVerwijderen()) {
@@ -202,25 +236,32 @@ class BibliotheekController extends AbstractController {
 	/**
 	 * Verwijder boek
 	 *
-	 * /verwijderboek/id
 	 * @param $boek_id
 	 * @return RedirectResponse
+	 * @Route("/bibliotheek/verwijderboek/{boek_id}", methods={"POST"}, requirements={"boek_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function verwijderboek($boek_id) {
 		$boek = $this->boekRepository->find($boek_id);
 
 		if (!$boek->magVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addbeschrijving', -1);
-			return $this->redirectToRoute('bibliotheek-overzicht');
+			return $this->redirectToRoute('csrdelft_bibliotheek_catalogustonen');
 		} else {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($boek);
 			$manager->flush();
 			setMelding('Boek met succes verwijderd.', 1);
-			return $this->redirectToRoute('bibliotheek-overzicht');
+			return $this->redirectToRoute('csrdelft_bibliotheek_catalogustonen');
 		}
 	}
 
+	/**
+	 * @param $exemplaar_id
+	 * @return RedirectResponse
+	 * @Route("/bibliotheek/exemplaar/{exemplaar_id}", methods={"POST"}, requirements={"exemplaar_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
+	 */
 	public function exemplaar($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
 		if (!$exemplaar->magBewerken()) {
@@ -232,32 +273,33 @@ class BibliotheekController extends AbstractController {
 			$manager->persist($exemplaar);
 			$manager->flush();
 		}
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 	/**
 	 * Exemplaar toevoegen
-	 * /addexemplaar/$boekid[/$eigenaarid]
 	 * @param string $boek_id
 	 * @param string|null $uid
 	 * @return RedirectResponse
+	 * @Route("/bibliotheek/addexemplaar/{boek_id}/{uid}", methods={"POST"}, defaults={"uid": null}, requirements={"boek_id": "\d+", "uid": ".{4}"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function addexemplaar($boek_id, $uid = null) {
 		$boek = $this->boekRepository->find($boek_id);
 		if (!$boek->magBekijken()) {
 			setMelding('Onvoldoende rechten voor deze actie. Biebcontrllr::addexemplaar()', -1);
-			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
+			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 		}
 		if ($uid == null) {
-			$uid = LoginModel::getUid();
+			$uid = LoginService::getUid();
 		}
-		if ($uid != LoginModel::getUid() && !($uid == 'x222' && LoginModel::mag(P_BIEB_MOD))) {
+		if ($uid != LoginService::getUid() && !($uid == 'x222' && LoginService::mag(P_BIEB_MOD))) {
 			throw new CsrToegangException('Mag deze eigenaar niet kiezen');
 		}
 		$this->boekExemplaarRepository->addExemplaar($boek, $uid);
 
 		setMelding('Exemplaar met succes toegevoegd.', 1);
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $boek->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 	}
 
 	/**
@@ -265,6 +307,8 @@ class BibliotheekController extends AbstractController {
 	 * /deleteexemplaar/$exemplaarid
 	 * @param $exemplaar_id
 	 * @return RedirectResponse
+	 * @Route("/bibliotheek/verwijderexemplaar/{exemplaar_id}", methods={"POST"}, requirements={"exemplaar_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function verwijderexemplaar($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
@@ -276,7 +320,7 @@ class BibliotheekController extends AbstractController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 	/**
@@ -284,6 +328,8 @@ class BibliotheekController extends AbstractController {
 	 * /exemplaarvermist/[id]
 	 * @param $exemplaar_id
 	 * @return RedirectResponse
+	 * @Route("/bibliotheek/exemplaarvermist/{exemplaar_id}", methods={"POST"}, requirements={"exemplaar_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function exemplaarvermist($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
@@ -297,7 +343,7 @@ class BibliotheekController extends AbstractController {
 		} else {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
 		}
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 	/**
@@ -305,6 +351,8 @@ class BibliotheekController extends AbstractController {
 	 * /exemplaargevonden/[id]
 	 * @param $exemplaar_id
 	 * @return JsonResponse
+	 * @Route("/bibliotheek/exemplaargevonden/{exemplaar_id}", methods={"POST"}, requirements={"exemplaar_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function exemplaargevonden($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
@@ -324,6 +372,7 @@ class BibliotheekController extends AbstractController {
 	 * /exemplaaruitlenen/[exemplaarid]
 	 * @param $exemplaar_id
 	 * @return RedirectResponse
+	 * TODO Deze methode wordt niet gebruikt, waarom?
 	 */
 	public function exemplaaruitlenen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
@@ -333,12 +382,12 @@ class BibliotheekController extends AbstractController {
 		} else if (!ProfielRepository::existsUid($uid)) {
 			setMelding('Incorrecte lener', -1);
 		} else if ($this->boekExemplaarRepository->leen($exemplaar, $uid)) {
-			return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
+			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
 		} else {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id]);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id]);
 	}
 
 
@@ -346,13 +395,15 @@ class BibliotheekController extends AbstractController {
 	 * /exemplaarlenen/[exemplaarid]
 	 * @param $exemplaar_id
 	 * @return RedirectResponse
+	 * @Route("/bibliotheek/exemplaarlenen/{exemplaar_id}", methods={"POST"}, requirements={"exemplaar_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function exemplaarlenen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
-		if (!$this->boekExemplaarRepository->leen($exemplaar, LoginModel::getUid())) {
+		if (!$this->boekExemplaarRepository->leen($exemplaar, LoginService::getUid())) {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
-		return $this->redirectToRoute('bibliotheek-boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
+		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
 	}
 
 
@@ -363,10 +414,12 @@ class BibliotheekController extends AbstractController {
 	 * /exemplaarteruggegeven/[exemplaarid]
 	 * @param $exemplaar_id
 	 * @return JsonResponse
+	 * @Route("/bibliotheek/exemplaarteruggegeven/{exemplaar_id}", methods={"POST"}, requirements={"exemplaar_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function exemplaarteruggegeven($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
-		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == LoginModel::getUid()) {
+		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == LoginService::getUid()) {
 			if ($this->boekExemplaarRepository->terugGegeven($exemplaar)) {
 				setMelding('Exemplaar is teruggegeven.', 1);
 			} else {
@@ -385,6 +438,8 @@ class BibliotheekController extends AbstractController {
 	 * /exemplaarterugontvangen/exemplaarid
 	 * @param $exemplaar_id
 	 * @return JsonResponse
+	 * @Route("/bibliotheek/exemplaarterugontvangen/{exemplaar_id}", methods={"POST"}, requirements={"exemplaar_id": "\d+"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function exemplaarterugontvangen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
@@ -407,6 +462,8 @@ class BibliotheekController extends AbstractController {
 	 * /autocomplete/auteur
 	 * @param $zoekveld
 	 * @return JsonResponse
+	 * @Route("/bibliotheek/autocomplete/{zoekveld}", methods={"GET"})
+	 * @Auth(P_BIEB_READ)
 	 */
 	public function autocomplete($zoekveld) {
 		if (isset($_GET['q'])) {
@@ -423,6 +480,13 @@ class BibliotheekController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @param null $zoekterm
+	 * @return JsonResponse
+	 * @Route("/bibliotheek/zoeken", methods={"POST"})
+	 * @Auth(P_BIEB_READ)
+	 */
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw new CsrToegangException();

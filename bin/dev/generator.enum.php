@@ -1,9 +1,9 @@
 <?php
 
-use CsrDelft\entity\groepen\GroepKeuzeType;
-use CsrDelft\model\entity\Geslacht;
+use CsrDelft\entity\Geslacht;
+use CsrDelft\entity\groepen\enum\GroepKeuzeType;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\security\AccessAction;
 
 require_once __DIR__ . '/../../lib/configuratie.include.php';
 
@@ -25,7 +25,6 @@ function generateEnums() {
 }
 
 /**
- * @param \CsrDelft\Orm\Entity\PersistentEnum $enum
  * @throws Exception
  */
 function generateTypescript($enum) {

@@ -6,18 +6,18 @@ use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\model\OrmTrait;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
+use CsrDelft\entity\security\enum\AccessAction;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
-use PDOStatement;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -27,17 +27,8 @@ use PDOStatement;
  *
  * @method AgendaItem find($id, $lockMode = null, $lockVersion = null)
  * @method AgendaItem[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method AgendaItem[]|PDOStatement ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
  */
 class AgendaRepository extends AbstractRepository {
-	use OrmTrait;
-
-	const ORM = AgendaItem::class;
-	/**
-	 * Default ORDER BY
-	 * @var string
-	 */
-	protected $default_order = 'begin_moment ASC, titel ASC';
 	/**
 	 * @var AgendaVerbergenRepository
 	 */
@@ -117,7 +108,7 @@ class AgendaRepository extends AbstractRepository {
 			/** @var AgendaVerbergen[] $verborgen */
 			$verborgen = $this->agendaVerbergenRepository->createQueryBuilder('av')
 				->where('av.uid = :uid and av.refuuid in (:uuids)')
-				->setParameter('uid', LoginModel::getUid())
+				->setParameter('uid', LoginService::getUid())
 				->setParameter('uuids', array_keys($itemsByUUID))
 				->getQuery()->getResult();
 
@@ -129,13 +120,13 @@ class AgendaRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param \DateTimeImmutable $van
-	 * @param \DateTimeImmutable $tot
+	 * @param DateTimeImmutable $van
+	 * @param DateTimeImmutable $tot
 	 * @param $query
 	 * @param $limiet
 	 * @return AgendaItem[]
 	 */
-	public function zoeken(\DateTimeImmutable $van, \DateTimeImmutable $tot, $query, $limiet) {
+	public function zoeken(DateTimeImmutable $van, DateTimeImmutable $tot, $query, $limiet) {
 		return $this->createQueryBuilder('a')
 			->where('a.eind_moment >= :van and a.begin_moment <= :tot')
 			->andWhere('a.titel like :query or a.beschrijving like :query or a.locatie like :query')
@@ -149,13 +140,13 @@ class AgendaRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param \DateTimeImmutable $van
-	 * @param \DateTimeImmutable $tot
+	 * @param DateTimeImmutable $van
+	 * @param DateTimeImmutable $tot
 	 * @param bool $ical
 	 * @param bool $zijbalk
 	 * @return Agendeerbaar[]
 	 */
-	public function getAllAgendeerbaar(\DateTimeImmutable $van, \DateTimeImmutable $tot, $ical = false, $zijbalk = false) {
+	public function getAllAgendeerbaar(DateTimeImmutable $van, DateTimeImmutable $tot, $ical = false, $zijbalk = false) {
 		$result = array();
 
 		// AgendaItems
@@ -164,7 +155,7 @@ class AgendaRepository extends AbstractRepository {
 			->where('a.begin_moment >= :begin_moment and a.begin_moment < :eind_moment')
 			->orWhere('a.eind_moment >= :begin_moment and a.eind_moment < :eind_moment')
 			->setParameter('begin_moment', $van)
-			->setParameter('eind_moment', $tot->add(\DateInterval::createFromDateString('1 day')))
+			->setParameter('eind_moment', $tot->add(DateInterval::createFromDateString('1 day')))
 			->getQuery()->getResult();
 		foreach ($items as $item) {
 			if ($item->magBekijken($ical)) {
@@ -172,7 +163,7 @@ class AgendaRepository extends AbstractRepository {
 			}
 		}
 
-		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
+		$auth = ($ical ? AuthenticationMethod::getEnumValues() : null);
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
@@ -202,7 +193,7 @@ class AgendaRepository extends AbstractRepository {
 
 		// Verjaardagen
 		$toonVerjaardagen = ($ical ? 'toonVerjaardagenICal' : 'toonVerjaardagen');
-		if (!$zijbalk && LoginModel::mag(P_VERJAARDAGEN, $auth) AND lid_instelling('agenda', $toonVerjaardagen) === 'ja') {
+		if (!$zijbalk && LoginService::mag(P_VERJAARDAGEN, $auth) AND lid_instelling('agenda', $toonVerjaardagen) === 'ja') {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
@@ -233,21 +224,21 @@ class AgendaRepository extends AbstractRepository {
 		return null;
 	}
 
-	public function getItemsByDay(\DateTimeImmutable $dag) {
+	public function getItemsByDay(DateTimeImmutable $dag) {
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
 	public function nieuw($datum) {
 		$item = new AgendaItem();
-		if (!preg_match('/^[0-9]{4}\-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
+		if (!preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
 			$datum = strtotime('Y-m-d');
 		}
 		$item->begin_moment = date_create_immutable(getDateTime(strtotime($datum) + 72000));
 		$item->eind_moment = date_create_immutable(getDateTime(strtotime($datum) + 79200));
-		if (LoginModel::mag(P_AGENDA_MOD)) {
+		if (LoginService::mag(P_AGENDA_MOD)) {
 			$item->rechten_bekijken = instelling('agenda', 'standaard_rechten');
 		} else {
-			$item->rechten_bekijken = 'verticale:' . LoginModel::getProfiel()->verticale;
+			$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
 		}
 		return $item;
 	}

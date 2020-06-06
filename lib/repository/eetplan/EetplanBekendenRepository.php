@@ -3,14 +3,12 @@
 namespace CsrDelft\repository\eetplan;
 
 use CsrDelft\entity\eetplan\EetplanBekenden;
-use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\AbstractRepository;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * @method EetplanBekenden|null find($id, $lockMode = null, $lockVersion = null)
  * @method EetplanBekenden|null findOneBy(array $criteria, array $orderBy = null)

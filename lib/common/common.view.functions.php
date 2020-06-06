@@ -2,6 +2,7 @@
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
+use CsrDelft\entity\MenuItem;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\bbcode\CsrBB;
@@ -444,7 +445,7 @@ function toestemming_form() {
 
 /**
  * @param $name
- * @return \CsrDelft\entity\MenuItem|null
+ * @return MenuItem|null
  */
 function get_menu($name, $root = false) {
 	if ($root) {

@@ -5,11 +5,11 @@ namespace CsrDelft\view\bbcode\tag\groep;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\GroepVersie;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\groepen\GroepView;
 
@@ -83,8 +83,8 @@ abstract class BbTagGroep extends BbTag {
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		if ($groep->versie == GroepVersie::V2()) {
-			$uid = LoginModel::getUid();
+		if ($groep->versie == GroepVersie::V2()->getValue()) {
+			$uid = LoginService::getUid();
 			$settings = [
 				'mijn_uid' => $uid,
 				'mijn_link' => ProfielRepository::getLink($uid),

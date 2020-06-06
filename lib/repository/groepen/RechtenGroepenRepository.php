@@ -2,7 +2,7 @@
 
 namespace CsrDelft\repository\groepen;
 
-use CsrDelft\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\RechtenGroep;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
@@ -60,7 +60,7 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 		}
 		foreach ($this->commissieLedenRepository->findBy(['uid' => $uid]) as $commissielid) {
 			$commissie = $this->commissiesRepository->get($commissielid->groep_id);
-			if ($commissie->status === GroepStatus::HT OR $commissie->status === GroepStatus::FT) {
+			if ($commissie->status === GroepStatus::HT() OR $commissie->status === GroepStatus::FT()) {
 				$result[] = $commissie->familie;
 			}
 		}

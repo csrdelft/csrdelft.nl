@@ -5,14 +5,17 @@ namespace CsrDelft\entity\maalcie;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Eisen;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\model\fiscaat\CiviProductModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\fiscaat\CiviProduct;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
-use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
+use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -53,17 +56,28 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $maaltijd_id;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
+	 * @var integer|null
+	 * @ORM\Column(type="integer", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $mlt_repetitie_id;
+	/**
+	 * @var MaaltijdRepetitie|null
+	 * @ORM\ManyToOne(targetEntity="MaaltijdRepetitie")
+	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id", nullable=true)
+	 */
+	public $repetitie;
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
 	 * @Serializer\Groups("datatable")
 	 */
 	public $product_id;
+	/**
+	 * @var CiviProduct
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\fiscaat\CiviProduct")
+	 */
+	public $product;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
@@ -77,12 +91,12 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $aanmeld_limiet;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="date")
 	 */
 	public $datum;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="time")
 	 */
 	public $tijd;
@@ -93,8 +107,8 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $gesloten = false;
 	/**
-	 * @var \DateTimeInterface
-	 * @ORM\Column(type="datetime")
+	 * @var DateTimeInterface|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $laatst_gesloten;
@@ -105,14 +119,14 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 */
 	public $verwijderd = false;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $aanmeld_filter;
 	/**
-	 * @var string
-	 * @ORM\Column(type="text")
+	 * @var string|null
+	 * @ORM\Column(type="text", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $omschrijving;
@@ -126,6 +140,11 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $verwerkt = false;
+	/**
+	 * @var MaaltijdAanmelding[]|ArrayCollection
+	 * @ORM\OneToMany(targetEntity="MaaltijdAanmelding", mappedBy="maaltijd")
+	 */
+	public $aanmeldingen;
 	/**
 	 * De taak die rechten geeft voor het bekijken en sluiten van de maaltijd(-lijst)
 	 * @var CorveeTaak
@@ -141,7 +160,11 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @Serializer\Groups("datatable")
 	 */
 	public function getPrijs() {
-		return ContainerFacade::getContainer()->get(CiviProductModel::class)->getPrijs(ContainerFacade::getContainer()->get(CiviProductModel::class)->getProduct($this->product_id))->prijs;
+		return $this->product->getPrijsInt();
+	}
+
+	public function getIsAangemeld($uid) {
+		return $this->aanmeldingen->matching(Eisen::voorGebruiker($uid))->count() == 1;
 	}
 
 	/**
@@ -225,8 +248,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 
 	public function isTransparant() {
 		// Toon als transparant (vrij) als lid dat wil of lid niet ingeketzt is
-		$aangemeld = ContainerFacade::getContainer()->get(MaaltijdAanmeldingenRepository::class)->getIsAangemeld($this->maaltijd_id, LoginModel::getUid());
-		return lid_instelling('agenda', 'transparantICal') === 'ja' || !$aangemeld;
+		return lid_instelling('agenda', 'transparantICal') === 'ja' || !$this->getIsAangemeld(LoginService::getUid());
 	}
 
 	// Controller ############################################################
@@ -275,7 +297,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 		$json = (array) $this;
 		$json['datum'] = date_format_intl($this->datum, DATE_FORMAT);
 		$json['tijd'] = date_format_intl($this->tijd, TIME_FORMAT);
-		$json['repetitie_naam'] = is_int($this->mlt_repetitie_id) ? ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
+		$json['repetitie_naam'] = $this->repetitie ? $this->repetitie->standaard_titel : null;
 		$json['tijd'] = date('G:i', strtotime($json['tijd']));
 		$json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
 		$json['prijs'] = strval($this->getPrijs());
@@ -288,7 +310,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 	 * @Serializer\Groups("datatable")
 	 */
 	public function getRepetitieNaam() {
-		return is_int($this->mlt_repetitie_id) ? ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getRepetitie($this->mlt_repetitie_id)->standaard_titel : '';
+		return $this->repetitie ? $this->repetitie->standaard_titel : null;
 	}
 
 	/**

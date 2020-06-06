@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\corvee;
 
 use CsrDelft\entity\profiel\Profiel;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,7 +35,7 @@ class CorveeKwalificatie {
 	public $functie_id;
 	/**
 	 * Datum en tijd
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $wanneer_toegewezen;

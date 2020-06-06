@@ -20,6 +20,10 @@ class CorveePuntenOverzichtDTO {
 	 */
 	public $aantal;
 	/**
+	 * @var integer[]
+	 */
+	public $aantallen = [];
+	/**
 	 * @var integer
 	 */
 	public $relatief;

@@ -2,12 +2,9 @@
 
 namespace CsrDelft\entity\forum;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\forum\ForumDelenRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 
 /**
  * ForumCategorie.class.php
@@ -17,7 +14,9 @@ use Doctrine\ORM\PersistentCollection;
  * Een forum categorie bevat deelfora.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumCategorieRepository")
- * @ORM\Table("forum_categorien")
+ * @ORM\Table("forum_categorien", indexes={
+ *   @ORM\Index(name="volgorde", columns={"volgorde"})
+ * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class ForumCategorie {
@@ -61,8 +60,8 @@ class ForumCategorie {
 	}
 
 
-	public function magLezen() {
-		return LoginModel::mag($this->rechten_lezen);
+	public function magLezen($auth = null) {
+		return LoginService::mag($this->rechten_lezen, $auth);
 	}
 
 	/**

@@ -6,7 +6,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\instellingen\InstellingConfiguration;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\Instelling;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
@@ -21,10 +21,8 @@ use Symfony\Component\Config\Exception\LoaderLoadException;
  * @method Instelling|null find($id, $lockMode = null, $lockVersion = null)
  * @method Instelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class InstellingenRepository extends ServiceEntityRepository {
+class InstellingenRepository extends AbstractRepository {
 	use YamlInstellingen;
-
-	const ORM = Instelling::class;
 
 	/**
 	 * InstellingenModel constructor.

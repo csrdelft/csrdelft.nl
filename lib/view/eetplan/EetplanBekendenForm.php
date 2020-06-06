@@ -3,7 +3,6 @@
 namespace CsrDelft\view\eetplan;
 
 use CsrDelft\entity\eetplan\EetplanBekenden;
-use CsrDelft\view\formulier\invoervelden\required\RequiredLidField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLidObjectField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

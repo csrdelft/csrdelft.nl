@@ -3,7 +3,7 @@
 namespace CsrDelft\repository\commissievoorkeuren;
 
 use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method VoorkeurCommissie[]    findAll()
  * @method VoorkeurCommissie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VoorkeurCommissieRepository extends ServiceEntityRepository {
+class VoorkeurCommissieRepository extends AbstractRepository {
 
 	/**
 	 * @var VoorkeurCommissieCategorieRepository

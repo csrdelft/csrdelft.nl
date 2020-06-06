@@ -11,7 +11,6 @@ use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\datatable\Multiplicity;
-use Doctrine\ORM\EntityManagerInterface;
 
 
 /**
@@ -43,13 +42,18 @@ class GroepenBeheerTable extends DataTable {
 		$this->hideColumn('id', false);
 		$this->deleteColumn('samenvatting');
 		$this->deleteColumn('omschrijving');
-		$this->deleteColumn('maker_uid');
+		$this->deleteColumn('maker');
 		$this->deleteColumn('keuzelijst');
 		$this->deleteColumn('rechten_aanmelden');
 		$this->deleteColumn('status_historie');
 		$this->searchColumn('naam');
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
+
+		$this->hideColumn('versie');
+		$this->hideColumn('afmelden_tot');
+		$this->hideColumn('bewerken_tot');
+		$this->hideColumn('eind_moment');
 
 		$this->deleteColumn('keuzelijst2');
 

@@ -1,5 +1,0 @@
-google-callback:
-  path: /google/callback
-  controller: CsrDelft\controller\GoogleController::callback
-  methods: [GET,POST]
-  defaults: { _mag: P_LOGGED_IN }

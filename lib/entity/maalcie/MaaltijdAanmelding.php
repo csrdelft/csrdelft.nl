@@ -2,10 +2,9 @@
 
 namespace CsrDelft\entity\maalcie;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\repository\maalcie\MaaltijdenRepository;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\entity\profiel\Profiel;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,8 +28,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Zie ook MaaltijdAbonnement.class.php
  *
- * @ORM\Entity(repositoryClass="MaaltijdAanmeldingenRepository")
- * @ORM\Table("mlt_aanmeldingen")
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository")
+ * @ORM\Table("mlt_aanmeldingen", indexes={
+ *   @ORM\Index(name="door_abonnement", columns={"door_abonnement"}),
+ * })
  */
 class MaaltijdAanmelding {
 	/**
@@ -46,33 +47,48 @@ class MaaltijdAanmelding {
 	 */
 	public $uid;
 	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
+	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 */
 	public $aantal_gasten = 0;
 	/**
-	 * @var string
+	 * @var string|null
 	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $gasten_eetwens;
 	/**
-	 * @var integer
+	 * @var integer|null
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $door_abonnement;
 	/**
-	 * @var string
-	 * @ORM\Column(type="uid")
+	 * @var string|null
+	 * @ORM\Column(type="uid", nullable=true)
 	 */
 	public $door_uid;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $laatst_gewijzigd;
-
-	/** @var Maaltijd */
+	/**
+	 * @var Maaltijd
+	 * @ORM\ManyToOne(targetEntity="Maaltijd", inversedBy="aanmeldingen")
+	 * @ORM\JoinColumn(name="maaltijd_id", referencedColumnName="maaltijd_id")
+	 */
 	public $maaltijd;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
+	 */
+	public $door_profiel;
 
 	/**
 	 * Haal het MaalCie saldo op van het lid van deze aanmelding.
@@ -80,11 +96,7 @@ class MaaltijdAanmelding {
 	 * @return float if lid exists, false otherwise
 	 */
 	public function getSaldo() {
-		return ProfielRepository::get($this->uid)->getCiviSaldo();
-	}
-
-	public function getMaaltijd() {
-		return ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd($this->maaltijd_id);
+		return $this->profiel->getCiviSaldo();
 	}
 
 	/**
@@ -104,7 +116,7 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldoStatus() {
 		$saldo = $this->getSaldo();
-		$prijs = $this->getMaaltijd()->getPrijsFloat();
+		$prijs = $this->maaltijd->getPrijsFloat();
 
 		if ($saldo > $prijs) { // saldo meer dan genoeg
 			return 3;
@@ -126,7 +138,7 @@ class MaaltijdAanmelding {
 	 */
 	public function getSaldoMelding() {
 		$status = $this->getSaldoStatus();
-		$prijs = sprintf('%.2f', $this->getMaaltijd()->getPrijsFloat());
+		$prijs = sprintf('%.2f', $this->maaltijd->getPrijsFloat());
 		switch ($status) {
 			case 3:
 				return 'ok';

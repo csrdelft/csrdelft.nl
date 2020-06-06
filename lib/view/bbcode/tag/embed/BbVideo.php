@@ -5,7 +5,6 @@ namespace CsrDelft\view\bbcode\tag\embed;
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
 use CsrDelft\view\bbcode\BbHelper;
-use CsrDelft\view\formulier\UrlDownloader;
 
 /**
  * Universele videotag, gewoon urls erin stoppen. Ik heb een poging
@@ -27,10 +26,9 @@ class BbVideo extends BbTag {
 	}
 
 	public function renderLight() {
-		list($content, $params, $previewthumb, $type, $id) = $this->processVideo();
-		$this->assertId($type, $id, $content);
+		list($src, $type) = $this->processVideo();
 
-		return BbHelper::lightLinkBlock('video', $content, $type . ' video', '', $previewthumb);
+		return BbHelper::lightLinkBlock('video', $src, $type . ' video', '');
 	}
 
 	/**

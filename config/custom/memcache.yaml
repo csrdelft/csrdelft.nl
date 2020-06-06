@@ -16,6 +16,7 @@ framework:
 
 services:
   stek.cache.memcache:
+    public: true
     class: Memcache
     calls:
       - [connect, ["%env(CACHE_HOST)%", "%env(CACHE_PORT)%"]]

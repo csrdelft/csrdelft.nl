@@ -2,12 +2,12 @@
 
 namespace CsrDelft\view\fiscaat\producten;
 
-use CsrDelft\model\entity\fiscaat\CiviProduct;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\view\JsonLijstResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 04/04/2017
+ * @since 04/04/2017
  */
 class CiviProductSuggestiesResponse extends JsonLijstResponse {
 	/**

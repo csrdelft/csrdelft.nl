@@ -2,9 +2,12 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\repository\instellingen\InstellingenRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -32,18 +35,25 @@ class InstellingenBeheerController {
 		if ($module) {
 			switch ($module) {
 				case 'agenda':
-					return LoginModel::mag(P_AGENDA_MOD);
+					return LoginService::mag(P_AGENDA_MOD);
 				case 'corvee':
-					return LoginModel::mag(P_CORVEE_MOD);
+					return LoginService::mag(P_CORVEE_MOD);
 				case 'maaltijden':
-					return LoginModel::mag(P_MAAL_MOD);
+					return LoginService::mag(P_MAAL_MOD);
 				default:
-					return LoginModel::mag(P_ADMIN);
+					return LoginService::mag(P_ADMIN);
 			}
 		}
 		return true; // hoofdpagina: geen module
 	}
 
+	/**
+	 * @param null $module
+	 * @return TemplateView
+	 * @Route("/instellingenbeheer", methods={"GET"})
+	 * @Route("/instellingenbeheer/module/{module}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function module($module = null) {
 		$this->assertToegang($module);
 
@@ -61,6 +71,13 @@ class InstellingenBeheerController {
 		]);
 	}
 
+	/**
+	 * @param $module
+	 * @param $id
+	 * @return TemplateView
+	 * @Route("/instellingenbeheer/opslaan/{module}/{id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function opslaan($module, $id) {
 		$this->assertToegang($module);
 
@@ -74,6 +91,13 @@ class InstellingenBeheerController {
 		]);
 	}
 
+	/**
+	 * @param $module
+	 * @param $id
+	 * @return TemplateView
+	 * @Route("/instellingenbeheer/reset/{module/{id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function reset($module, $id) {
 		$this->assertToegang($module);
 
@@ -85,5 +109,4 @@ class InstellingenBeheerController {
 			'module' => $instelling->module,
 		]);
 	}
-
 }

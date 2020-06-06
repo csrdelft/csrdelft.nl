@@ -2,10 +2,12 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\model\entity\interfaces\HeeftSoort;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\groepen\enum\HuisStatus;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
+use CsrDelft\entity\security\enum\AccessAction;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 
 /**
@@ -16,25 +18,32 @@ use Doctrine\ORM\Mapping as ORM;
  * Een woonoord is waar C.S.R.-ers bij elkaar wonen.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WoonoordenRepository")
- * @ORM\Table("woonoorden")
+ * @ORM\Table("woonoorden", indexes={
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"})
+ * })
  */
 class Woonoord extends AbstractGroep implements HeeftSoort {
 	/**
 	 * Woonoord / Huis
 	 * @var HuisStatus
-	 * @ORM\Column(type="enumhuisstatus")
+	 * @ORM\Column(type="enumHuisStatus")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $soort;
 
 	/**
 	 * Doet mee met Eetplan
 	 * @ORM\Column(type="boolean")
+	 * @Serializer\Groups("datatable")
 	 */
 	public $eetplan;
 
 	/**
-	 * @var Bewoner[]
-	 * @ORM\OneToMany(targetEntity="Bewoner", mappedBy="groep")
+	 * @var WoonoordBewoner[]
+	 * @ORM\OneToMany(targetEntity="WoonoordBewoner", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="DESC"})
 	 */
 	public $leden;
 
@@ -43,7 +52,7 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	}
 
 	public function getLidType() {
-		return Bewoner::class;
+		return WoonoordBewoner::class;
 	}
 
 	public function getUrl() {
@@ -64,7 +73,7 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 			case AccessAction::Beheren:
 			case AccessAction::Wijzigen:
 				// Huidige bewoners mogen beheren
-				if (LoginModel::mag('woonoord:' . $this->familie)) {
+				if (LoginService::mag('woonoord:' . $this->familie)) {
 					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()
 					return true;
 				}

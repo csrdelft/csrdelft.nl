@@ -9,7 +9,7 @@ N;CHARSET=UTF-8:{!!escape_ical(($profiel->tussenvoegsel?$profiel->tussenvoegsel.
 NICKNAME;CHARSET=UTF-8:{!!escape_ical($profiel->nickname, 0)!!}
 @endif
 @if(is_zichtbaar($profiel, 'geslacht'))
-GENDER:{!!escape_ical(['m' => 'M', 'v' => 'F'][$profiel->geslacht], 0)!!}
+GENDER:{!!escape_ical(['m' => 'M', 'v' => 'F'][$profiel->geslacht->getValue()], 0)!!}
 @endif
 UID;CHARSET=UTF-8:{!!escape_ical($profiel->uid, 0)!!}
 @if(is_zichtbaar($profiel, 'gebdatum'))

@@ -4,9 +4,9 @@ namespace CsrDelft\view;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\agenda\AgendaItem;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\service\security\LoginService;
 
 class IsHetAlView implements View {
 	/**
@@ -75,7 +75,7 @@ class IsHetAlView implements View {
 				break;
 
 			case 'jarig':
-				$this->ja = LoginModel::getProfiel()->getJarigOver();
+				$this->ja = LoginService::getProfiel()->getJarigOver();
 				break;
 
 			case 'lunch':

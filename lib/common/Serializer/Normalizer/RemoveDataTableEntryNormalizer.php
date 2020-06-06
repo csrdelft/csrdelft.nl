@@ -4,11 +4,11 @@
 namespace CsrDelft\common\Serializer\Normalizer;
 
 
+use ArrayObject;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use function common\short_class;
 
 /**
  * Als er een object genormalizeerd wordt met interface DataTableEntry, voeg dan het veld UUID toe.
@@ -34,7 +34,7 @@ class RemoveDataTableEntryNormalizer implements ContextAwareNormalizerInterface 
 	 * @param RemoveDataTableEntry $removed
 	 * @param string|null $format
 	 * @param array $context
-	 * @return array|\ArrayObject|bool|float|int|string|null
+	 * @return array|ArrayObject|bool|float|int|string|null
 	 */
 	public function normalize($removed, string $format = null, array $context = []) {
 		$id = $removed->getId();

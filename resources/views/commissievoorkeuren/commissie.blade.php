@@ -1,3 +1,10 @@
+<?php
+/**
+ * @var $voorkeuren \CsrDelft\entity\commissievoorkeuren\VoorkeurVoorkeur[]
+ * @var $commissieFormulier \CsrDelft\view\commissievoorkeuren\CommissieFormulier
+ * @var $opties string[]
+ */
+?>
 @extends('layout')
 
 @section('breadcrumbs')
@@ -19,10 +26,9 @@
 			</tr>
 			@php($opties = ['', 'nee', 'misschien', 'ja'])
 			@foreach($voorkeuren as $voorkeur)
-				@php($profiel = $voorkeur->profiel)
-				@if($profiel->isLid() && $voorkeur->voorkeur >= 2)
+				@if($voorkeur->profiel->isLid() && $voorkeur->voorkeur >= 2)
 					<tr @if($voorkeur->heeftGedaan()) style="opacity: .50" @endif >
-						<td><a href="/commissievoorkeuren/lidpagina/{{$voorkeur->uid}}">{{$profiel->getNaam()}}</a>
+						<td><a href="/commissievoorkeuren/lidpagina/{{$voorkeur->uid}}">{{$voorkeur->profiel->getNaam()}}</a>
 						</td>
 						<td>{{$opties[$voorkeur->voorkeur]}}</td>
 					</tr>

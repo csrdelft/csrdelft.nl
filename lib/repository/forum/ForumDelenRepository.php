@@ -9,14 +9,13 @@ use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\forum\ForumZoeken;
-use CsrDelft\Orm\Entity\PersistentEntity;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  * @method ForumDeel|null find($id, $lockMode = null, $lockVersion = null)
  * @method ForumDeel|null findOneBy(array $criteria, array $orderBy = null)
  * @method ForumDeel[]    findAll()
@@ -53,7 +52,7 @@ class ForumDelenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param PersistentEntity|ForumDeel $entity
+	 * @param ForumDeel $entity
 	 * @return int
 	 */
 	public function create(ForumDeel $entity) {

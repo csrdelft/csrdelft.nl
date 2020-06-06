@@ -2,8 +2,6 @@
 
 namespace CsrDelft\entity\corvee;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

@@ -6,7 +6,7 @@ use CsrDelft\view\JsonLijstResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 abstract class DataTableResponse extends JsonLijstResponse {
 

@@ -6,7 +6,8 @@ use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekExemplaar;
 use CsrDelft\entity\bibliotheek\BoekExemplaarStatus;
 use CsrDelft\entity\profiel\Profiel;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BoekExemplaar[]    findAll()
  * @method BoekExemplaar[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoekExemplaarRepository extends ServiceEntityRepository {
+class BoekExemplaarRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, BoekExemplaar::class);
 	}
@@ -54,6 +55,7 @@ class BoekExemplaarRepository extends ServiceEntityRepository {
 		} else {
 			$exemplaar->status = BoekExemplaarStatus::uitgeleend();
 			$exemplaar->uitgeleend_uid = $uid;
+			$exemplaar->uitgeleend = ProfielRepository::get($uid);
 			$this->getEntityManager()->persist($exemplaar);
 			$this->getEntityManager()->flush();
 			return true;
@@ -63,6 +65,7 @@ class BoekExemplaarRepository extends ServiceEntityRepository {
 	public function addExemplaar(Boek $boek, string $uid) {
 		$exemplaar = new BoekExemplaar();
 		$exemplaar->boek = $boek;
+		$exemplaar->eigenaar = ProfielRepository::get($uid);
 		$exemplaar->eigenaar_uid = $uid;
 		$exemplaar->status = BoekExemplaarStatus::beschikbaar();
 		$exemplaar->toegevoegd = date_create_immutable();

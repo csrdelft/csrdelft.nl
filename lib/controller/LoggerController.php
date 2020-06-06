@@ -2,9 +2,11 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\service\security\LoginService;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -17,6 +19,11 @@ class LoggerController {
 	const LOG_TIMEOUT = 1800;
 	const LAATSTE_LOG_MELDING = 'laatste_log_melding';
 
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/logger", methods={"GET", "POST"}, defaults={"_mag": "P_LOGGED_IN"})
+	 */
 	public function log(Request $request) {
 		if (!isset($_SESSION[self::LAATSTE_LOG_MELDING])) $_SESSION[self::LAATSTE_LOG_MELDING] = 0;
 
@@ -47,7 +54,7 @@ $error
 • Bestand `$url`
 • Positie `$line:$col`
 • Pagina `$pagina`
-• Veroorzaakt door `{$_SESSION['_uid']}`
+• Veroorzaakt door `{$_SESSION[LoginService::SESS_UID]}`
 • Browser `{$_SERVER['HTTP_USER_AGENT']}`
 MD
 			);

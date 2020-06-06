@@ -2,10 +2,13 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
+use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * BeheerPuntenController.class.php
@@ -28,17 +31,24 @@ class BeheerPuntenController {
 		$this->corveePuntenService = $corveePuntenService;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/corvee/punten", methods={"GET"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
 	public function beheer() {
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$matrix = $this->corveePuntenService->loadPuntenVoorAlleLeden($functies);
 		return view('maaltijden.corveepunt.beheer_punten', ['matrix' => $matrix, 'functies' => $functies]);
 	}
 
-	public function wijzigpunten($uid) {
-		$profiel = ProfielRepository::get($uid); // false if lid does not exist
-		if (!$profiel) {
-			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
-		}
+	/**
+	 * @param Profiel $profiel
+	 * @return TemplateView
+	 * @Route("/corvee/punten/wijzigpunten/{uid}", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
+	public function wijzigpunten(Profiel $profiel) {
 		$punten = (int)filter_input(INPUT_POST, 'totaal_punten', FILTER_SANITIZE_NUMBER_INT);
 		$this->corveePuntenService->savePuntenVoorLid($profiel, $punten, null);
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
@@ -46,11 +56,13 @@ class BeheerPuntenController {
 		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $corveePuntenOverzicht]);
 	}
 
-	public function wijzigbonus($uid) {
-		$profiel = ProfielRepository::get($uid); // false if lid does not exist
-		if (!$profiel) {
-			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
-		}
+	/**
+	 * @param Profiel $profiel
+	 * @return TemplateView
+	 * @Route("/corvee/punten/wijzigbonus/{uid}", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
+	public function wijzigbonus(Profiel $profiel) {
 		$bonus = (int)filter_input(INPUT_POST, 'totaal_bonus', FILTER_SANITIZE_NUMBER_INT);
 		$this->corveePuntenService->savePuntenVoorLid($profiel, null, $bonus);
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
@@ -58,6 +70,11 @@ class BeheerPuntenController {
 		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $corveePuntenOverzicht]);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/corvee/punten/resetjaar", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
 	public function resetjaar() {
 		/**
 		 * @var int $aantal

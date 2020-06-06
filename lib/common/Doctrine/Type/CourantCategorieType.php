@@ -12,6 +12,6 @@ class CourantCategorieType extends EnumType {
 	}
 
 	public function getName() {
-		return 'enumcourantcategorie';
+		return 'enumCourantCategorie';
 	}
 }

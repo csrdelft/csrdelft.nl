@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
@@ -9,22 +10,17 @@ use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
 use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
- * MaaltijdRepetitiesController.class.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class MaaltijdRepetitiesController {
 	private $repetitie = null;
-	/**
-	 * @var MaaltijdRepetitiesRepository
-	 */
+	/** @var MaaltijdRepetitiesRepository */
 	private $maaltijdRepetitiesRepository;
-	/**
-	 * @var MaaltijdenRepository
-	 */
+	/** @var MaaltijdenRepository */
 	private $maaltijdenRepository;
 
 	public function __construct(MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, MaaltijdenRepository $maaltijdenRepository) {
@@ -32,36 +28,52 @@ class MaaltijdRepetitiesController {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 	}
 
-	public function beheer($mrid = null) {
-		$modal = null;
-		if (is_numeric($mrid) && $mrid > 0) {
-			$modal = $this->bewerk($mrid);
-		}
+	/**
+	 * @param MaaltijdRepetitie|null $repetitie
+	 * @return TemplateView
+	 * @Route("/maaltijden/repetities/{mlt_repetitie_id}", methods={"GET"}, defaults={"mlt_repetitie_id"=null})
+	 * @Auth(P_MAAL_MOD)
+	 */
+	public function beheer(MaaltijdRepetitie $repetitie = null) {
 		return view('maaltijden.maaltijdrepetitie.beheer_maaltijd_repetities', [
 			'repetities' => $this->maaltijdRepetitiesRepository->getAlleRepetities(),
-			'modal' => $modal
+			'modal' => $repetitie ? $this->bewerk($repetitie) : null
 		]);
 	}
 
+	/**
+	 * @return MaaltijdRepetitieForm
+	 * @Route("/maaltijden/repetities/nieuw", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
+	 */
 	public function nieuw() {
 		return new MaaltijdRepetitieForm(new MaaltijdRepetitie()); // fetches POST values itself
 	}
 
-	public function bewerk($mrid) {
-		return new MaaltijdRepetitieForm($this->maaltijdRepetitiesRepository->getRepetitie($mrid)); // fetches POST values itself
+	/**
+	 * @param MaaltijdRepetitie $repetitie
+	 * @return MaaltijdRepetitieForm
+	 * @Route("/maaltijden/repetities/bewerk/{mlt_repetitie_id}", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
+	 */
+	public function bewerk(MaaltijdRepetitie $repetitie) {
+		return new MaaltijdRepetitieForm($repetitie); // fetches POST values itself
 	}
 
 	/**
-	 * @param $mrid
+	 * @param MaaltijdRepetitie|null $repetitie
 	 * @return MaaltijdRepetitieForm|TemplateView
 	 * @throws Throwable
+	 * @Route("/maaltijden/repetities/opslaan/{mlt_repetitie_id}", methods={"POST"}, defaults={"mlt_repetitie_id"=null})
+	 * @Auth(P_MAAL_MOD)
 	 */
-	public function opslaan($mrid) {
-		if ($mrid > 0) {
-			$view = $this->bewerk($mrid);
+	public function opslaan(MaaltijdRepetitie $repetitie = null) {
+		if ($repetitie) {
+			$view = $this->bewerk($repetitie);
 		} else {
 			$view = $this->nieuw();
 		}
+
 		if ($view->validate()) {
 			$repetitie = $view->getModel();
 
@@ -77,28 +89,35 @@ class MaaltijdRepetitiesController {
 	}
 
 	/**
-	 * @param int $mrid
+	 * @param MaaltijdRepetitie $repetitie
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @throws Throwable
+	 * @Route("/maaltijden/repetities/verwijder/{mlt_repetitie_id}", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
 	 */
-	public function verwijder($mrid) {
-		$aantal = $this->maaltijdRepetitiesRepository->verwijderRepetitie($mrid);
+	public function verwijder(MaaltijdRepetitie $repetitie) {
+		$aantal = $this->maaltijdRepetitiesRepository->verwijderRepetitie($repetitie);
+
 		if ($aantal > 0) {
 			setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 		}
+
 		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
-		echo '<tr id="repetitie-row-' . $mrid . '" class="remove"></tr>';
+		echo '<tr id="repetitie-row-' . $repetitie->mlt_repetitie_id . '" class="remove"></tr>';
 		exit;
 	}
 
 	/**
-	 * @param int $mrid
+	 * @param MaaltijdRepetitie $repetitie
 	 * @return MaaltijdRepetitieForm|TemplateView
 	 * @throws Throwable
+	 * @Route("/maaltijden/repetities/bijwerken/{mlt_repetitie_id}", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
 	 */
-	public function bijwerken($mrid) {
-		$view = $this->opslaan($mrid);
+	public function bijwerken(MaaltijdRepetitie $repetitie) {
+		$view = $this->opslaan($repetitie);
+
 		if ($this->repetitie) { // opslaan succesvol
 			$verplaats = isset($_POST['verplaats_dag']);
 			$updated_aanmeldingen = $this->maaltijdenRepository->updateRepetitieMaaltijden($this->repetitie, $verplaats);

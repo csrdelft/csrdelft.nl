@@ -3,18 +3,17 @@
 
 namespace CsrDelft\common;
 
+use InvalidArgumentException;
 use ReflectionClass;
 
 abstract class Enum {
-	private static $constCacheArray = NULL;
-	private static $instanceCacheArray = [];
-
-	private $value;
-
 	/**
 	 * @var string[]
 	 */
 	protected static $mapChoiceToDescription = [];
+	private static $constCacheArray = NULL;
+	private static $instanceCacheArray = [];
+	private $value;
 
 	/**
 	 * Gebruik de from methode om een enum te maken.
@@ -23,39 +22,9 @@ abstract class Enum {
 	 */
 	private function __construct($value) {
 		if (!static::isValidValue($value)) {
-			throw new \InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
+			throw new InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
 		}
 		$this->value = $value;
-	}
-
-	/**
-	 * @param $value
-	 * @return static
-	 */
-	public static function from($value) {
-		if (!static::isValidValue($value)) {
-			throw new \InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
-		}
-
-		$calledClass = get_called_class();
-
-		if (!isset(self::$instanceCacheArray[$calledClass])) {
-			self::$instanceCacheArray[$calledClass] = [];
-		}
-
-		if (!isset(self::$instanceCacheArray[$calledClass][$value])) {
-			self::$instanceCacheArray[$calledClass][$value] = new static($value);
-		}
-
-		return self::$instanceCacheArray[$calledClass][$value];
-	}
-
-	public static function getEnumValues() {
-		return array_values(self::getConstants());
-	}
-
-	public static function getEnumDescriptions() {
-		return static::$mapChoiceToDescription;
 	}
 
 	public static function isValidValue($value) {
@@ -67,23 +36,58 @@ abstract class Enum {
 		if (self::$constCacheArray == NULL) {
 			self::$constCacheArray = [];
 		}
-		$calledClass = get_called_class();
-		if (!array_key_exists($calledClass, self::$constCacheArray)) {
-			$reflect = new ReflectionClass($calledClass);
-			self::$constCacheArray[$calledClass] = $reflect->getConstants();
+		if (!array_key_exists(static::class, self::$constCacheArray)) {
+			$reflect = new ReflectionClass(static::class);
+			self::$constCacheArray[static::class] = $reflect->getConstants();
 		}
-		return self::$constCacheArray[$calledClass];
+		return self::$constCacheArray[static::class];
 	}
 
-	public static function isValidName($name, $strict = false) {
-		$constants = self::getConstants();
+	public static function getEnumValues() {
+		return array_values(self::getConstants());
+	}
 
-		if ($strict) {
-			return array_key_exists($name, $constants);
+	public static function getEnumDescriptions() {
+		return static::$mapChoiceToDescription;
+	}
+
+	/**
+	 * Returns a value when called statically like so: MyEnum::SOME_VALUE() given SOME_VALUE is a class constant
+	 *
+	 * @param string $name
+	 * @param array $arguments
+	 *
+	 * @return static
+	 * @psalm-pure
+	 * @throws \BadMethodCallException
+	 */
+	public static function __callStatic($name, $arguments) {
+		if (isset(self::getConstants()[$name])) {
+			$value = self::getConstants()[$name];
+			return static::from($value);
 		}
 
-		$keys = array_map('strtolower', array_keys($constants));
-		return in_array(strtolower($name), $keys);
+		throw new \BadMethodCallException("Enum " . static::class . '::' . $name . ' bestaat niet.');
+	}
+
+	/**
+	 * @param $value
+	 * @return static
+	 */
+	public static function from($value) {
+		if (!static::isValidValue($value)) {
+			throw new InvalidArgumentException("Invalid enum value: " . $value . ' in ' . get_class(static::class));
+		}
+
+		if (!isset(self::$instanceCacheArray[static::class])) {
+			self::$instanceCacheArray[static::class] = [];
+		}
+
+		if (!isset(self::$instanceCacheArray[static::class][$value])) {
+			self::$instanceCacheArray[static::class][$value] = new static($value);
+		}
+
+		return self::$instanceCacheArray[static::class][$value];
 	}
 
 	public function getValue() {

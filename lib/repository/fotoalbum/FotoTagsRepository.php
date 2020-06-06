@@ -5,9 +5,9 @@ namespace CsrDelft\repository\fotoalbum;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoTag;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -54,7 +54,7 @@ class FotoTagsRepository extends AbstractRepository {
 
 		$tag->refuuid = $foto->getUUID();
 		$tag->keyword = $uid;
-		$tag->door = LoginModel::getUid();
+		$tag->door = LoginService::getUid();
 		$tag->wanneer = date_create_immutable();
 		$tag->x = (int)$x;
 		$tag->y = (int)$y;

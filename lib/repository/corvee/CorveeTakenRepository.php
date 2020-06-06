@@ -6,13 +6,14 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeRepetitie;
+use CsrDelft\entity\corvee\RepetitieTakenUpdateDTO;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\maalcie\Maaltijd;
-use CsrDelft\model\RetrieveByUuidTrait;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
+use CsrDelft\service\security\LoginService;
+use DateInterval;
 use DateTimeInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -29,7 +30,6 @@ use Throwable;
  * @method CorveeTaak[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CorveeTakenRepository extends AbstractRepository {
-	use RetrieveByUuidTrait;
 
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, CorveeTaak::class);
@@ -162,7 +162,6 @@ class CorveeTakenRepository extends AbstractRepository {
 	public function getTaak($tid) {
 		$taak = $this->find($tid);
 
-		/** @var CorveeTaak $taak */
 		if ($taak->verwijderd) {
 			throw new CsrGebruikerException('Maaltijd is verwijderd');
 		}
@@ -185,7 +184,7 @@ class CorveeTakenRepository extends AbstractRepository {
 		$qb->setParameter('tot_datum', $tot);
 		if (!$iedereen) {
 			$qb->andWhere('ct.uid = :uid');
-			$qb->setParameter('uid', LoginModel::getUid());
+			$qb->setParameter('uid', LoginService::getUid());
 		}
 		return $qb->getQuery()->getResult();
 	}
@@ -239,7 +238,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	 */
 	public function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
 		return $this->_em->transactional(function () use ($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
-			if ($tid === 0) {
+			if ($tid === null) {
 				$taak = $this->newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus);
 			} else {
 				$taak = $this->getTaak($tid);
@@ -259,23 +258,6 @@ class CorveeTakenRepository extends AbstractRepository {
 
 			return $taak;
 		});
-	}
-
-	/**
-	 * @param $tid
-	 * @return CorveeTaak|null
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function herstelTaak($tid) {
-		$taak = $this->find($tid);
-		if (!$taak->verwijderd) {
-			throw new CsrGebruikerException('Corveetaak is niet verwijderd');
-		}
-		$taak->verwijderd = false;
-		$this->_em->persist($taak);
-		$this->_em->flush();
-		return $taak;
 	}
 
 	/**
@@ -329,22 +311,6 @@ class CorveeTakenRepository extends AbstractRepository {
 		}
 		$this->_em->flush();
 		return count($taken);
-	}
-
-	/**
-	 * @param $tid
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function verwijderTaak($tid) {
-		$taak = $this->find($tid);
-		if ($taak->verwijderd) {
-			$this->_em->remove($taak);
-		} else {
-			$taak->verwijderd = true;
-			$this->_em->persist($taak);
-		}
-		$this->_em->flush();
 	}
 
 	public function vanRepetitie(CorveeRepetitie $repetitie, $datum, $mid = null, $uid = null, $bonus_malus = 0) {
@@ -546,13 +512,12 @@ class CorveeTakenRepository extends AbstractRepository {
 	/**
 	 * @param CorveeRepetitie $repetitie
 	 * @param $verplaats
-	 * @return bool|mixed
+	 * @return RepetitieTakenUpdateDTO
 	 * @throws Throwable
 	 */
 	public function updateRepetitieTaken(CorveeRepetitie $repetitie, $verplaats) {
 		return $this->_em->transactional(function () use ($repetitie, $verplaats) {
 			$taken = $this->findBy(['verwijderd' => false, 'crv_repetitie_id' => $repetitie->crv_repetitie_id]);
-			/** @var CorveeTaak $taak */
 
 			foreach ($taken as $taak) {
 				$taak->functie_id = $repetitie->corveeFunctie->functie_id;
@@ -581,9 +546,9 @@ class CorveeTakenRepository extends AbstractRepository {
 				if ($verplaats) {
 					$shift = $repetitie->dag_vd_week - $datum->format('w');
 					if ($shift > 0) {
-						$datum = $datum->add(\DateInterval::createFromDateString('+' . $shift . ' days'));
+						$datum = $datum->add(DateInterval::createFromDateString('+' . $shift . ' days'));
 					} elseif ($shift < 0) {
-						$datum = $datum->add(\DateInterval::createFromDateString($shift . ' days'));
+						$datum = $datum->add(DateInterval::createFromDateString($shift . ' days'));
 					}
 					if ($shift !== 0) {
 						$taak->datum = $datum;
@@ -620,7 +585,7 @@ class CorveeTakenRepository extends AbstractRepository {
 				$maaltijdcount += $verschil;
 			}
 			$this->_em->flush();
-			return array('update' => $updatecount, 'day' => $daycount, 'datum' => $datumcount, 'maaltijd' => $maaltijdcount);
+			return new RepetitieTakenUpdateDTO($updatecount, $daycount, $datumcount, $maaltijdcount);
 		});
 	}
 

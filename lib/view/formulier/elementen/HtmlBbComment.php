@@ -10,7 +10,7 @@ use CsrDelft\view\bbcode\CsrBB;
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * Html en eventuele bbcode wordt geparsed.
  */

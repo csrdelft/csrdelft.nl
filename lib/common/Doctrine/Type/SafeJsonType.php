@@ -4,7 +4,7 @@
 namespace CsrDelft\common\Doctrine\Type;
 
 
-use CsrDelft\Orm\JsonSerializer\SafeJsonSerializer;
+use CsrDelft\common\Doctrine\Type\Serializer\SafeJsonSerializer;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
@@ -15,7 +15,7 @@ abstract class SafeJsonType extends Type {
 	 * @inheritDoc
 	 */
 	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
-		return 'TEXT';
+		return sprintf('TEXT COMMENT \'(DC2Type:%s)\'', $this->getName());
 	}
 	public function convertToPHPValue($value, AbstractPlatform $platform) {
 		if (!$value) {

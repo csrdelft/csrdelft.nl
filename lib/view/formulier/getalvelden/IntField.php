@@ -3,14 +3,14 @@
 namespace CsrDelft\view\formulier\getalvelden;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\InputField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * Invoeren van een integer. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
@@ -65,7 +65,7 @@ class IntField extends InputField {
 			$this->error = 'Alleen gehele getallen toegestaan';
 		} elseif (is_int($this->max) AND $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
+		} elseif ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
 			// exception for leden mod
 		} elseif (is_int($this->min) AND $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';

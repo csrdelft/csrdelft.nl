@@ -45,7 +45,7 @@ class CorveeTaak implements Agendeerbaar {
 	public $taak_id;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", columnDefinition="")
 	 */
 	public $functie_id;
 	/**

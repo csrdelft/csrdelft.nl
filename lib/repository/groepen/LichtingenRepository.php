@@ -4,8 +4,8 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\Lichting;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class LichtingenRepository extends AbstractGroepenRepository {
@@ -27,7 +27,7 @@ class LichtingenRepository extends AbstractGroepenRepository {
 		$lichting->id = $lichting->lidjaar;
 		$lichting->naam = 'Lichting ' . $lichting->lidjaar;
 		$lichting->familie = 'Lichting';
-		$lichting->begin_moment = $lichting->lidjaar . '-09-01 00:00:00';
+		$lichting->begin_moment = date_create_immutable($lichting->lidjaar . '-09-01 00:00:00');
 		return $lichting;
 	}
 
@@ -51,11 +51,19 @@ class LichtingenRepository extends AbstractGroepenRepository {
 	}
 
 	public static function getJongsteLidjaar() {
-		return (int)ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['MAX(lidjaar)'], 'profielen')->fetchColumn();
+		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
+		return (int)$profielRepository->createQueryBuilder('p')
+			->select('MAX(p.lidjaar)')
+			->getQuery()->getSingleScalarResult();
 	}
 
 	public static function getOudsteLidjaar() {
-		return (int)ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['MIN(lidjaar)'], 'profielen', 'lidjaar > 0')->fetchColumn();
+		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
+
+		return (int)$profielRepository->createQueryBuilder('p')
+			->select('MIN(p.lidjaar)')
+			->where('p.lidjaar > 0')
+			->getQuery()->getSingleScalarResult();
 	}
 
 }

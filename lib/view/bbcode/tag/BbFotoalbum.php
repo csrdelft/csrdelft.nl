@@ -4,12 +4,11 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 
@@ -62,7 +61,7 @@ class BbFotoalbum extends BbTag {
 	}
 	public function isAllowed()
 	{
-		return ($this->album != null && $this->album->magBekijken()) || ($this->album == null && LoginModel::mag(P_LOGGED_IN));
+		return ($this->album != null && $this->album->magBekijken()) || ($this->album == null && LoginService::mag(P_LOGGED_IN));
 	}
 
 	public function renderLight() {

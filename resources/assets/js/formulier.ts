@@ -159,8 +159,7 @@ export function formSubmit(event: Event) {
 				if (typeof response === 'object') { // JSON
 					fnUpdateDataTable('#' + tableId, response);
 					if (response.modal) {
-						modalOpen(response.modal);
-						init(document.querySelector('#modal')!);
+						domUpdate(response.modal);
 					} else {
 						modalClose();
 					}

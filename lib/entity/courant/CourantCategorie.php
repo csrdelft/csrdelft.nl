@@ -6,6 +6,14 @@ namespace CsrDelft\entity\courant;
 
 use CsrDelft\common\Enum;
 
+/**
+ * Class CourantCategorie
+ * @package CsrDelft\entity\courant
+ * @method static static VOORWOORD
+ * @method static static CSR
+ * @method static static OVERIG
+ * @method static static SPONSOR
+ */
 class CourantCategorie extends Enum {
 	const VOORWOORD = 'voorwoord';
 	const BESTUUR = 'bestuur';
@@ -28,28 +36,4 @@ class CourantCategorie extends Enum {
 		self::OVERIG => 'Overig',
 		self::SPONSOR => 'Sponsor',
 	];
-
-	public static function getSelectOptions() {
-		return static::$mapChoiceToDescription;
-	}
-
-	public function VOORWOORD() {
-		return static::from(self::VOORWOORD);
-	}
-
-	public function BESTUUR() {
-		return static::from(self::BESTUUR);
-	}
-
-	public function CSR() {
-		return static::from(self::CSR);
-	}
-
-	public function OVERIG() {
-		return static::from(self::OVERIG);
-	}
-
-	public function SPONSOR() {
-		return static::from(self::SPONSOR);
-	}
 }

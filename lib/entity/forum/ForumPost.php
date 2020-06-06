@@ -2,7 +2,8 @@
 
 namespace CsrDelft\entity\forum;
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een forumpost zit in een ForumDraad.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumPostsRepository")
- * @ORM\Table("forum_posts")
+ * @ORM\Table("forum_posts", indexes={
+ *   @ORM\Index(name="verwijderd", columns={"verwijderd"}),
+ *   @ORM\Index(name="tekst", columns={"tekst"}),
+ *   @ORM\Index(name="lid_id", columns={"uid"}),
+ *   @ORM\Index(name="datum_tijd", columns={"datum_tijd"}),
+ *   @ORM\Index(name="wacht_goedkeuring", columns={"wacht_goedkeuring"}),
+ * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class ForumPost {
@@ -45,13 +52,13 @@ class ForumPost {
 	public $tekst;
 	/**
 	 * Datum en tijd van aanmaken
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $datum_tijd;
 	/**
 	 * Datum en tijd van laatste bewerking
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $laatst_gewijzigd;
@@ -92,7 +99,7 @@ class ForumPost {
 	public $draad;
 
 	public function magCiteren() {
-		return LoginModel::mag(P_LOGGED_IN) && $this->draad->magPosten();
+		return LoginService::mag(P_LOGGED_IN) && $this->draad->magPosten();
 	}
 
 	public function magBewerken() {
@@ -103,7 +110,7 @@ class ForumPost {
 		if (!$draad->magPosten()) {
 			return false;
 		}
-		return $this->uid === LoginModel::getUid() && LoginModel::mag(P_LOGGED_IN);
+		return $this->uid === LoginService::getUid() && LoginService::mag(P_LOGGED_IN);
 	}
 
 	public function getGelezenPercentage() {

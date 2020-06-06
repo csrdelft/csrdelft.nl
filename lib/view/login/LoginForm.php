@@ -3,7 +3,7 @@
 namespace CsrDelft\view\login;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
@@ -29,8 +29,8 @@ class LoginForm extends Formulier {
 		$fields['pass'] = new WachtwoordField('pass', null, null);
 		$fields['pass']->placeholder = 'Wachtwoord';
 
-		if (ContainerFacade::getContainer()->get(LoginModel::class)->hasError()) {
-			$fields[] = new HtmlComment('<p class="error">' . ContainerFacade::getContainer()->get(LoginModel::class)->getError() . '</p>');
+		if (ContainerFacade::getContainer()->get(LoginService::class)->hasError()) {
+			$fields[] = new HtmlComment('<p class="error">' . ContainerFacade::getContainer()->get(LoginService::class)->getError() . '</p>');
 		} else {
 			$fields[] = new HtmlComment('<div class="float-left">');
 			$fields[] = new HtmlComment('</div>');

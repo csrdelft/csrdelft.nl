@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\profiel\Profiel[] $novieten
+ */
+?>
 @extends('layout')
 
 @section('titel', 'Novieten')
@@ -15,13 +20,13 @@
 		</tr>
 		@foreach($novieten as $noviet)
 			<tr>
-				<td><a href="/profiel/{{$noviet['uid']}}">{{$noviet['uid']}}</a></td>
-				<td>{{$noviet['voornaam']}}</td>
-				<td>{{$noviet['tussenvoegsel']}}</td>
-				<td>{{$noviet['achternaam']}}</td>
-				<td>{{$noviet['mobiel']}}</td>
-				<td>{{$noviet['studie']}}</td>
-				<td>@if($noviet['novietSoort'] == '1') @icon('tick') @else @icon('cross') @endif </td>
+				<td><a href="/profiel/{{$noviet->uid}}">{{$noviet->uid}}</a></td>
+				<td>{{$noviet->voornaam}}</td>
+				<td>{{$noviet->tussenvoegsel}}</td>
+				<td>{{$noviet->achternaam}}</td>
+				<td>{{$noviet->mobiel}}</td>
+				<td>{{$noviet->studie}}</td>
+				<td>@if($noviet->novietSoort == '1') @icon('tick') @else @icon('cross') @endif </td>
 			</tr>
 		@endforeach
 	</table>

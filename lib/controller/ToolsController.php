@@ -2,7 +2,7 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
@@ -10,24 +10,27 @@ use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\ProfielService;
 use CsrDelft\service\Roodschopper;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
+use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
 use CsrDelft\view\View;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Deze controller bevat een aantal beheertools die niet direct onder een andere controller geschaard kunnen worden.
@@ -45,9 +48,9 @@ class ToolsController extends AbstractController {
 	 */
 	private $profielRepository;
 	/**
-	 * @var LoginModel
+	 * @var SuService
 	 */
-	private $loginModel;
+	private $suService;
 	/**
 	 * @var LogRepository
 	 */
@@ -61,15 +64,20 @@ class ToolsController extends AbstractController {
 	 */
 	private $profielService;
 
-	public function __construct(AccountRepository $accountRepository, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogRepository $logRepository, SavedQueryRepository $savedQueryRepository) {
+	public function __construct(AccountRepository $accountRepository, ProfielRepository $profielRepository, ProfielService $profielService, SuService $suService, LogRepository $logRepository, SavedQueryRepository $savedQueryRepository) {
 		$this->savedQueryRepository = $savedQueryRepository;
 		$this->accountRepository = $accountRepository;
 		$this->profielRepository = $profielRepository;
-		$this->loginModel = $loginModel;
+		$this->suService = $suService;
 		$this->logRepository = $logRepository;
 		$this->profielService = $profielService;
 	}
 
+	/**
+	 * @return PlainView|TemplateView
+	 * @Route("/tools/streeplijst", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function streeplijst() {
 		$body = new Streeplijstcontent();
 
@@ -81,6 +89,12 @@ class ToolsController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @return TemplateView
+	 * @Route("/tools/stats", methods={"GET"})
+	 * @Auth(P_ADMIN)
+	 */
 	public function stats(Request $request) {
 		if ($request->query->has('uid')) {
 			$by = ['uid' => $request->query->get('uid')];
@@ -95,6 +109,11 @@ class ToolsController extends AbstractController {
 		return view('stats.stats', ['log' => $log]);
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/tools/verticalelijsten", methods={"GET"})
+	 * @Auth(P_ADMIN)
+	 */
 	public function verticalelijsten() {
 		return view('tools.verticalelijst', [
 			'verticalen' => array_reduce(
@@ -112,6 +131,12 @@ class ToolsController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @param Request $request
+	 * @return TemplateView|RedirectResponse
+	 * @Route("/tools/roodschopper", methods={"GET", "POST"})
+	 * @Auth(P_FISCAAT_MOD)
+	 */
 	public function roodschopper(Request $request) {
 		if ($request->query->has('verzenden')) {
 			return view('roodschopper.roodschopper', [
@@ -138,8 +163,13 @@ class ToolsController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @return PlainView
+	 * @Route("/tools/syncldap", methods={"GET"})
+	 * @Auth(P_PUBLIC)
+	 */
 	public function syncldap() {
-		if (DEBUG || LoginModel::mag(P_ADMIN) || $this->loginModel->isSued()) {
+		if (DEBUG || LoginService::mag(P_ADMIN) || $this->suService->isSued()) {
 			$ldap = new LDAP();
 			foreach ($this->profielRepository->findAll() as $profiel) {
 				$this->profielRepository->save_ldap($profiel, $ldap);
@@ -153,12 +183,22 @@ class ToolsController extends AbstractController {
 		throw new CsrToegangException();
 	}
 
+	/**
+	 * @return PlainView
+	 * @Route("/tools/phpinfo", methods={"GET"})
+	 * @Auth(P_ADMIN)
+	 */
 	public function phpinfo() {
 		ob_start();
 		phpinfo();
 		return new PlainView(ob_get_clean());
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/tools/admins", methods={"GET"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function admins() {
 		return view('tools.admins', [
 			'accounts' => $this->accountRepository->findAdmins(),
@@ -169,13 +209,20 @@ class ToolsController extends AbstractController {
 	 * Voor de NovCie, zorgt ervoor dat novieten bekeken kunnen worden als dat afgeschermd is op de rest van de stek.
 	 *
 	 * @return View
+	 * @Route("/tools/novieten", methods={"GET"})
+	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
 	public function novieten() {
 		return view('tools.novieten', [
-			'novieten' => ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['*'], 'profielen', 'status = ? AND lidjaar = ?', ['S_NOVIET', date('Y')])
+			'novieten' => $this->profielRepository->findBy(['status' => LidStatus::Noviet, 'lidjaar' => date('Y')])
 		]);
 	}
 
+	/**
+	 * @return JsonResponse
+	 * @Route("/tools/dragobject", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function dragobject() {
 		$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
 		$coords = filter_input(INPUT_POST, 'coords', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
@@ -185,6 +232,11 @@ class ToolsController extends AbstractController {
 		return new JsonResponse(null);
 	}
 
+	/**
+	 * @return PlainView
+	 * @Route("/tools/naamlink", methods={"GET", "POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function naamlink() {
 //is er een uid gegeven?
 		$given = 'uid';
@@ -244,7 +296,14 @@ class ToolsController extends AbstractController {
 		throw new CsrNotFoundException();
 	}
 
-	public function naamsuggesties($zoekin = null, $status = null, $query = '') {
+	/**
+	 * @param null $zoekin
+	 * @param string $query
+	 * @return JsonResponse
+	 * @Route("/tools/naamsuggesties", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
+	public function naamsuggesties($zoekin = null, $query = '') {
 		//welke subset van leden?
 		if (empty($zoekin)) {
 			$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
@@ -307,19 +366,26 @@ class ToolsController extends AbstractController {
 				'url' => '/profiel/' . $profiel->uid,
 				'label' => $profiel->uid,
 				'value' => $profiel->getNaam($vorm),
+				'uid' => $profiel->uid,
 			);
 		}
 
 		return new JsonResponse($result);
 	}
 
-	public function memcachestats() {
-		if (DEBUG || LoginModel::mag(P_ADMIN) || $this->loginModel->isSued()) {
+	/**
+	 * @param ContainerInterface $container
+	 * @return PlainView
+	 * @Route("/tools/memcachestats", methods={"GET"})
+	 * @Auth(P_ADMIN)
+	 */
+	public function memcachestats(ContainerInterface $container) {
+		if (DEBUG || LoginService::mag(P_ADMIN) || $this->suService->isSued()) {
 			ob_start();
 
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
-			debugprint(ContainerFacade::getContainer()->get(OrmMemcache::class)->getCache()->getStats());
+			debugprint($container->get('stek.cache.memcache')->getStats());
 
 			return new PlainView(ob_get_clean());
 		}
@@ -327,6 +393,12 @@ class ToolsController extends AbstractController {
 		throw new CsrToegangException();
 	}
 
+	/**
+	 * @param Request $request
+	 * @return TemplateView
+	 * @Route("/tools/query", methods={"GET"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function query(Request $request) {
 		if ($request->query->has('id')) {
 			$id = $request->query->getInt('id');
@@ -340,6 +412,11 @@ class ToolsController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @return PlainView
+	 * @Route("/tools/bbcode", methods={"GET", "POST"})
+	 * @Auth(P_PUBLIC)
+	 */
 	public function bbcode() {
 		$inputJSON = file_get_contents('php://input');
 		$input = json_decode($inputJSON, TRUE);
@@ -368,6 +445,8 @@ class ToolsController extends AbstractController {
 	 *
 	 * @param ActiviteitenRepository $activiteitenRepository
 	 * @return View
+	 * @Route("/tools/patronaat", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function patronaat(ActiviteitenRepository $activiteitenRepository) {
 		return view('patronaat', ['groep' => $activiteitenRepository->get(1754)]);

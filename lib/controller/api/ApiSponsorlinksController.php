@@ -5,7 +5,7 @@ namespace CsrDelft\controller\api;
 
 /**
  * @author J. Rijsdijk <jorairijsdijk@gmail.com>
- * @date 04/11/2017
+ * @since 04/11/2017
  */
 class ApiSponsorlinksController {
 	/**

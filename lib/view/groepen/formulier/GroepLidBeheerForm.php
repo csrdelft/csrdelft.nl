@@ -17,15 +17,21 @@ class GroepLidBeheerForm extends ModalForm {
 		parent::__construct($lid, $action, 'Aanmelding bewerken', true);
 		$fields = FormFieldFactory::generateFields($this->model);
 
+		unset($fields['uid']);
+		unset($fields['groep_id']);
+
 		if ($blacklist !== null) {
-			$fields['uid']->blacklist = $blacklist;
-			$fields['uid']->required = true;
-			$fields['uid']->readonly = false;
+			$fields['profiel']->blacklist = $blacklist;
+			$fields['profiel']->required = true;
+			$fields['profiel']->readonly = false;
 		}
-		$fields['uid']->hidden = false;
+		$fields['profiel']->hidden = false;
 		$fields['door_uid']->required = true;
 		$fields['door_uid']->readonly = true;
 		$fields['door_uid']->hidden = true;
+
+		$fields['profiel']->readonly = false;
+		$fields['profiel']->suggestions = ['/tools/naamsuggesties?zoekin=alleleden&q='];
 
 		$this->addFields($fields);
 

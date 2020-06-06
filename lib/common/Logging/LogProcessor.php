@@ -4,7 +4,7 @@
 namespace CsrDelft\common\Logging;
 
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class LogProcessor {
@@ -19,7 +19,7 @@ class LogProcessor {
 
 		if ($request) {
 			$record['extra']['url'] = $request->getRequestUri();
-			$record['extra']['uid'] = LoginModel::getUid();
+			$record['extra']['uid'] = LoginService::getUid();
 		}
 
 		return $record;

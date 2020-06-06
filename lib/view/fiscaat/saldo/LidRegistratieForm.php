@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\saldo;
 
-use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\TextField;
@@ -11,7 +11,7 @@ use CsrDelft\view\formulier\ModalForm;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  *
  * Maak het mogelijk om een lid te registreren, wordt uiteindelijk samengetrokken met het aanmaken van een lid.
  */

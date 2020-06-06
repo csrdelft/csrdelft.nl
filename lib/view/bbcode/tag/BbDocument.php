@@ -3,7 +3,6 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\bbcode\BbHelper;

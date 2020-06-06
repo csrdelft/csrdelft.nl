@@ -6,23 +6,20 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Commissie;
-use CsrDelft\entity\groepen\CommissieSoort;
-use CsrDelft\entity\groepen\ActiviteitSoort;
-use CsrDelft\entity\groepen\HuisStatus;
-use CsrDelft\model\entity\interfaces\HeeftSoort;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
+use CsrDelft\entity\groepen\enum\CommissieSoort;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
+use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\repository\groepen\KetzersRepository;
 use CsrDelft\repository\groepen\OnderverenigingenRepository;
 use CsrDelft\repository\groepen\RechtenGroepenRepository;
 use CsrDelft\repository\groepen\WerkgroepenRepository;
 use CsrDelft\repository\groepen\WoonoordenRepository;
-use CsrDelft\repository\groepen\CommissiesRepository;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
-use function common\short_class;
 
 class GroepSoortField extends RadioField {
 

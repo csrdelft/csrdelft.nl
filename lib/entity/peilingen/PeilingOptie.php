@@ -10,7 +10,9 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\peilingen\PeilingOptiesRepository")
- * @ORM\Table("peiling_optie")
+ * @ORM\Table("peiling_optie", indexes={
+ *   @ORM\Index(name="optie", columns={"titel"})
+ * })
  */
 class PeilingOptie implements DataTableEntry {
 	/**

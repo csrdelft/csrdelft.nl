@@ -4,17 +4,17 @@ namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\Commissie;
-use CsrDelft\entity\groepen\CommissieSoort;
-use CsrDelft\entity\groepen\GroepVersie;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
+use CsrDelft\entity\groepen\enum\CommissieSoort;
+use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\entity\groepen\Woonoord;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuze;
-use CsrDelft\model\entity\interfaces\HeeftSoort;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\FormFieldFactory;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -69,7 +69,7 @@ class GroepForm extends ModalForm {
 		}
 
 		// GROEPEN_V2
-		if (!LoginModel::mag(P_ADMIN)) {
+		if (!LoginService::mag(P_ADMIN)) {
 			$fields['versie']->hidden = true;
 			$fields['keuzelijst2']->hidden = true;
 		} else {
@@ -77,7 +77,8 @@ class GroepForm extends ModalForm {
 			$fields['keuzelijst2']->title = 'Formaat: naam:type:default:description:optie,optie,optie|naam:type:default:description:|...';
 		}
 
-		$fields['maker_uid']->readonly = !LoginModel::mag(P_ADMIN);
+		$fields['maker']->readonly = !LoginService::mag(P_ADMIN);
+		$fields['maker']->suggestions = ['/tools/naamsuggesties?zoekin=leden&q='];
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);

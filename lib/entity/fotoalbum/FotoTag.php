@@ -3,7 +3,9 @@
 namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\repository\ProfielRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 
 /**
@@ -12,9 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fotoalbum\FotoTagsRepository")
  * @ORM\Table("foto_tags")
  */
-class FotoTag implements \JsonSerializable {
+class FotoTag implements JsonSerializable {
 	/**
-	 * @see PersistentEntity Unique Universal Identifier
+	 * Unique Universal Identifier
 	 * @var string
 	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
@@ -35,7 +37,7 @@ class FotoTag implements \JsonSerializable {
 	public $door;
 	/**
 	 * Gemaakt op datum en tijd
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $wanneer;

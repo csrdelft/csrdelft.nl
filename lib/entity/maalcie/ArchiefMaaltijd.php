@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\maalcie;
 
 use CsrDelft\entity\agenda\Agendeerbaar;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -41,12 +42,12 @@ class ArchiefMaaltijd implements Agendeerbaar {
 	 */
 	public $titel;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="date")
 	 */
 	public $datum;
 	/**
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="time")
 	 */
 	public $tijd;

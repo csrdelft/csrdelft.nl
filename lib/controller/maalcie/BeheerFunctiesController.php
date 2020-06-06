@@ -2,88 +2,112 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\entity\corvee\CorveeFunctie;
+use CsrDelft\entity\corvee\CorveeKwalificatie;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
 use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
 use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class BeheerFunctiesController {
-	/**
-	 * @var CorveeFunctiesRepository
-	 */
+	/** @var CorveeFunctiesRepository */
 	private $corveeFunctiesRepository;
-	/**
-	 * @var CorveeKwalificatiesRepository
-	 */
+	/** @var CorveeKwalificatiesRepository */
 	private $corveeKwalificatiesRepository;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
 
-	public function __construct(CorveeFunctiesRepository $corveeFunctiesRepository, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
+	public function __construct(EntityManagerInterface $entityManager, CorveeFunctiesRepository $corveeFunctiesRepository, CorveeKwalificatiesRepository $corveeKwalificatiesRepository) {
 		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
 		$this->corveeKwalificatiesRepository = $corveeKwalificatiesRepository;
+		$this->entityManager = $entityManager;
 	}
 
-	public function beheer($fid = null) {
-		$fid = (int)$fid;
-		$modal = null;
-		if ($fid > 0) {
-			$modal = $this->bewerken($fid);
-		}
+	/**
+	 * @param CorveeFunctie|null $functie
+	 * @return TemplateView
+	 * @Route("/corvee/functies/{functie_id}", methods={"GET"}, defaults={"functie_id"=null})
+	 * @Auth(P_CORVEE_MOD)
+	 */
+	public function beheer(CorveeFunctie $functie = null) {
+		$modal = $functie ? $this->bewerken($functie) : null;
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		return view('maaltijden.functie.beheer_functies', ['functies' => $functies, 'modal' => $modal]);
 	}
 
+	/**
+	 * @return FunctieForm|TemplateView
+	 * @Route("/corvee/functies/toevoegen", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
 	public function toevoegen() {
 		$functie = $this->corveeFunctiesRepository->nieuw();
 		$form = new FunctieForm($functie, 'toevoegen'); // fetches POST values itself
 		if ($form->validate()) {
-			$id = $this->corveeFunctiesRepository->save($functie);
-			$functie->functie_id = (int)$id;
+			$this->entityManager->persist($functie);
+			$this->entityManager->flush();
+
 			setMelding('Toegevoegd', 1);
+
 			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 		} else {
 			return $form;
 		}
-	}
-
-	public function bewerken($fid) {
-		$functie = $this->corveeFunctiesRepository->get((int)$fid);
-		$form = new FunctieForm($functie, 'bewerken'); // fetches POST values itself
-		if ($form->validate()) {
-			$rowCount = $this->corveeFunctiesRepository->save($functie);
-			if ($rowCount > 0) {
-				setMelding('Bijgewerkt', 1);
-			} else {
-				setMelding('Geen wijzigingen', 0);
-			}
-			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
-		} else {
-			return $form;
-		}
-	}
-
-	public function verwijderen($fid) {
-		$functie = $this->corveeFunctiesRepository->get((int)$fid);
-		$this->corveeFunctiesRepository->removeFunctie($functie);
-		setMelding('Verwijderd', 1);
-		return new FunctieDeleteView($fid);
 	}
 
 	/**
-	 * @param $fid
+	 * @param CorveeFunctie $functie
+	 * @return FunctieForm|TemplateView
+	 * @Route("/corvee/functies/bewerken/{functie_id}", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
+	public function bewerken(CorveeFunctie $functie) {
+		$form = new FunctieForm($functie, 'bewerken'); // fetches POST values itself
+		if ($form->validate()) {
+			$this->entityManager->flush();
+			setMelding('Bijgewerkt', 1);
+			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
+		} else {
+			// Voorkom opslaan
+			$this->entityManager->clear($functie);
+			return $form;
+		}
+	}
+
+	/**
+	 * @param CorveeFunctie $functie
+	 * @return FunctieDeleteView
+	 * @Route("/corvee/functies/verwijderen/{functie_id}", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
+	public function verwijderen(CorveeFunctie $functie) {
+		$functieId = $functie->functie_id;
+		$this->corveeFunctiesRepository->removeFunctie($functie);
+		setMelding('Verwijderd', 1);
+		return new FunctieDeleteView($functieId);
+	}
+
+	/**
+	 * @param $functie_id
 	 * @return KwalificatieForm|TemplateView
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 * @Route("/corvee/functies/kwalificeer/{functie_id}", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function kwalificeer($fid) {
-		$functie = $this->corveeFunctiesRepository->get((int)$fid);
+	public function kwalificeer(CorveeFunctie $functie) {
 		$kwalificatie = $this->corveeKwalificatiesRepository->nieuw($functie);
 		$form = new KwalificatieForm($kwalificatie); // fetches POST values itself
 		if ($form->validate()) {
@@ -95,22 +119,19 @@ class BeheerFunctiesController {
 	}
 
 	/**
-	 * @param $fid
-	 * @param $uid
+	 * @param CorveeKwalificatie $kwalificatie
 	 * @return TemplateView
 	 * @throws ORMException
 	 * @throws OptimisticLockException
+	 * @Route("/corvee/functies/dekwalificeer/{functie_id}/{uid}", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
 	 */
-	public function dekwalificeer($fid, $uid) {
-		$kwalificatie = $this->corveeKwalificatiesRepository->getKwalificatie($uid, $fid);
+	public function dekwalificeer(CorveeKwalificatie $kwalificatie) {
+		$functie = $kwalificatie->corveeFunctie;
+		$this->entityManager->remove($kwalificatie);
+		$this->entityManager->flush();
 
-		if (!$kwalificatie) {
-			throw new CsrGebruikerException("Niet gekwalificeerd");
-		}
-
-		$this->corveeKwalificatiesRepository->kwalificatieIntrekken($kwalificatie);
-
-		return view('maaltijden.functie.beheer_functie', ['functie' => $kwalificatie->corveeFunctie]);
+		return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
 	}
 
 }

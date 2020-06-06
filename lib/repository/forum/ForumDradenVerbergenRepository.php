@@ -4,14 +4,14 @@ namespace CsrDelft\repository\forum;
 
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadVerbergen;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  * @method ForumDraadVerbergen|null find($id, $lockMode = null, $lockVersion = null)
  * @method ForumDraadVerbergen|null findOneBy(array $criteria, array $orderBy = null)
  * @method ForumDraadVerbergen[]    findAll()
@@ -26,18 +26,18 @@ class ForumDradenVerbergenRepository extends AbstractRepository {
 		$verbergen = new ForumDraadVerbergen();
 		$verbergen->draad = $draad;
 		$verbergen->draad_id = $draad->draad_id;
-		$verbergen->uid = LoginModel::getUid();
+		$verbergen->uid = LoginService::getUid();
 		$this->getEntityManager()->persist($verbergen);
 		$this->getEntityManager()->flush();
 		return $verbergen;
 	}
 
 	public function getAantalVerborgenVoorLid() {
-		return count($this->findBy(['uid' => LoginModel::getUid()]));
+		return count($this->findBy(['uid' => LoginService::getUid()]));
 	}
 
 	public function getVerbergenVoorLid(ForumDraad $draad) {
-		return $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginModel::getUid()]);
+		return $this->find(['draad_id' => $draad->draad_id, 'uid' => LoginService::getUid()]);
 	}
 
 	public function setVerbergenVoorLid(ForumDraad $draad, $verbergen = true) {

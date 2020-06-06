@@ -2,10 +2,13 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\renderer\TemplateView;
 use Exception;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -21,13 +24,26 @@ class LidInstellingenController extends AbstractController {
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/instellingen", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function beheer() {
 		return view('instellingen.lidinstellingen', [
 			'defaultInstellingen' => $this->lidInstellingenRepository->getAll(),
-			'instellingen' => $this->lidInstellingenRepository->getAllForLid(LoginModel::getUid())
+			'instellingen' => $this->lidInstellingenRepository->getAllForLid(LoginService::getUid())
 		]);
 	}
 
+	/**
+	 * @param $module
+	 * @param $instelling
+	 * @param null $waarde
+	 * @return JsonResponse
+	 * @Route("/instellingen/update/{module}/{instelling}/{waarde}", methods={"POST"}, defaults={"waarde": null})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function update($module, $instelling, $waarde = null) {
 		if ($waarde === null) {
 			$waarde = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_STRING);
@@ -43,13 +59,22 @@ class LidInstellingenController extends AbstractController {
 
 	/**
 	 * @throws Exception
+	 * @Route("/instellingen/opslaan", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function opslaan() {
 		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
 		setMelding('Instellingen opgeslagen', 1);
-		return $this->redirectToRoute('lidinstellingen-beheer');
+		return $this->redirectToRoute('csrdelft_lidinstellingen_beheer');
 	}
 
+	/**
+	 * @param string $module
+	 * @param string $key
+	 * @return JsonResponse
+	 * @Route("/instellingen/reset/{module}/{key}", methods={"POST"})
+	 * @Auth(P_ADMIN)
+	 */
 	public function reset($module, $key) {
 		$this->lidInstellingenRepository->resetForAll($module, $key);
 		setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);

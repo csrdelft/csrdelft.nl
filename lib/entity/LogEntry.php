@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,7 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\LogRepository")
- * @ORM\Table("log")
+ * @ORM\Table("log", indexes={
+ *   @ORM\Index(name="uid", columns={"uid"}),
+ *   @ORM\Index(name="moment", columns={"moment"})
+ * })
  */
 class LogEntry {
 
@@ -41,7 +45,7 @@ class LogEntry {
 	public $locatie;
 	/**
 	 * DateTime
-	 * @var \DateTimeImmutable
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $moment;

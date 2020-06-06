@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor lichtingen.
  *
- * @property LichtingenRepository $model
+ * @property LichtingenRepository $repository
  */
 class LichtingenController extends AbstractGroepenController {
-	public function __construct(LichtingenRepository $lichtingenRepository) {
-		parent::__construct($lichtingenRepository);
+	public function __construct(ChangeLogRepository $changeLogRepository, LichtingenRepository $lichtingenRepository) {
+		parent::__construct($changeLogRepository, $lichtingenRepository);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {
@@ -31,7 +32,7 @@ class LichtingenController extends AbstractGroepenController {
 		$result = array();
 		if (is_numeric($zoekterm)) {
 
-			$data = range($this->model->getJongsteLidjaar(), $this->model->getOudsteLidjaar());
+			$data = range($this->repository->getJongsteLidjaar(), $this->repository->getOudsteLidjaar());
 			$found = preg_grep('/' . (int)$zoekterm . '/', $data);
 
 			foreach ($found as $lidjaar) {

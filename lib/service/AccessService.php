@@ -11,8 +11,8 @@ use CsrDelft\entity\corvee\CorveeKwalificatie;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\entity\groepen\Commissie;
-use CsrDelft\entity\groepen\CommissieFunctie;
-use CsrDelft\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\enum\CommissieFunctie;
+use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\entity\groepen\Ondervereniging;
@@ -22,13 +22,13 @@ use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\entity\security\Account;
+use CsrDelft\entity\security\enum\AccessRole;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\security\AccessRole;
-use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -294,20 +294,20 @@ class AccessService {
 	public static function mag(Account $subject, $permission, array $allowedAuthenticationMethods = null) {
 
 		// Als voor het ingelogde lid een permissie gevraagd wordt
-		if ($subject->uid == LoginModel::getUid()) {
+		if ($subject->uid == LoginService::getUid()) {
 			// Controlleer hoe de gebruiker ge-authenticeerd is
-			$method = ContainerFacade::getContainer()->get(LoginModel::class)->getAuthenticationMethod();
+			$method = ContainerFacade::getContainer()->get(LoginService::class)->getAuthenticationMethod();
 			if ($allowedAuthenticationMethods == null) {
 				$allowedAuthenticationMethods = self::$defaultAllowedAuthenticationMethods;
 			}
 			// Als de methode niet toegestaan is testen we met de permissies van niet-ingelogd
 			if (!in_array($method, $allowedAuthenticationMethods)) {
-				$subject = AccountRepository::get(LoginModel::UID_EXTERN);
+				$subject = AccountRepository::get(LoginService::UID_EXTERN);
 			}
 		}
 
 		// case insensitive
-		return ContainerFacade::getContainer()->get(self::class)->hasPermission($subject, strtoupper($permission));
+		return ContainerFacade::getContainer()->get(AccessService::class)->hasPermission($subject, strtoupper($permission));
 	}
 
 	/**
@@ -599,7 +599,7 @@ class AccessService {
 			 * Is lid man of vrouw?
 			 */
 			case self::PREFIX_GESLACHT:
-				if ($gevraagd == strtoupper($profiel->geslacht)) {
+				if ($gevraagd == strtoupper($profiel->geslacht->getValue())) {
 					// Niet ingelogd heeft geslacht m dus check of ingelogd
 					if ($this->hasPermission($subject, P_LOGGED_IN)) {
 						return true;

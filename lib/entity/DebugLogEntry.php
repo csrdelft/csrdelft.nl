@@ -2,8 +2,6 @@
 
 namespace CsrDelft\entity;
 
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\Entity\T;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

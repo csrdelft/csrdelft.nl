@@ -11,7 +11,6 @@ use CsrDelft\view\formulier\invoervelden\HiddenObjectField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredBBCodeField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
-use CsrDelft\view\formulier\keuzevelden\DateTimeField;
 use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

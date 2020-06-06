@@ -3,10 +3,9 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\courant\Courant;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\courant\CourantView;
 use DateTime;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,23 +21,24 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Courant[]    findAll()
  * @method Courant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CourantRepository extends ServiceEntityRepository {
+class CourantRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Courant::class);
 	}
 
 	public function magBeheren() {
-		return LoginModel::mag(P_MAIL_COMPOSE);
+		return LoginService::mag(P_MAIL_COMPOSE);
 	}
 
 	public function magVerzenden() {
-		return LoginModel::mag(P_MAIL_SEND);
+		return LoginService::mag(P_MAIL_SEND);
 	}
 
 	public function nieuwCourant() {
 		$courant = new Courant();
 		$courant->verzendMoment = new DateTime();
-		$courant->verzender = LoginModel::getUid();
+		$courant->verzender_profiel = LoginService::getProfiel();
+		$courant->verzender = LoginService::getUid();
 
 		return $courant;
 	}

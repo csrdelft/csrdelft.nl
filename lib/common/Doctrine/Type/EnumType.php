@@ -4,26 +4,21 @@
 namespace CsrDelft\common\Doctrine\Type;
 
 
-use CsrDelft\common\Enum;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use InvalidArgumentException;
 
 abstract class EnumType extends Type {
 	protected $name;
-
-	/**
-	 * @var Enum
-	 */
-	protected $enumClass;
 
 	abstract public function getEnumClass();
 
 	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
 		$values = array_map(function ($val) {
 			return "'" . $val . "'";
-		}, $this->enumClass::getEnumValues());
+		}, $this->getEnumClass()::getEnumValues());
 
-		return "ENUM(" . implode(", ", $values) . ")";
+		return sprintf('ENUM(%s) COMMENT \'(DC2Type:%s)\'', implode(", ", $values), $this->getName());
 	}
 
 	public function convertToPHPValue($value, AbstractPlatform $platform) {
@@ -36,7 +31,7 @@ abstract class EnumType extends Type {
 		if ($value instanceof $enumClass) {
 			return $value->getValue();
 		} else {
-			throw new \InvalidArgumentException(print_r($value, true) . " is not a " . $this->enumClass);
+			throw new InvalidArgumentException(print_r($value, true) . " is not a " . $this->getEnumClass());
 		}
 	}
 

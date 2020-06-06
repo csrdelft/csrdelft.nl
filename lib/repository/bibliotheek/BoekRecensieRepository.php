@@ -3,7 +3,8 @@
 namespace CsrDelft\repository\bibliotheek;
 
 use CsrDelft\entity\bibliotheek\BoekRecensie;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -12,7 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BoekRecensie[]    findAll()
  * @method BoekRecensie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoekRecensieRepository extends ServiceEntityRepository {
+class BoekRecensieRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, BoekRecensie::class);
 	}
@@ -24,6 +25,7 @@ class BoekRecensieRepository extends ServiceEntityRepository {
 			$recensie = new BoekRecensie();
 			$recensie->boek_id = $boek_id;
 			$recensie->schrijver_uid = $uid;
+			$recensie->schrijver = ProfielRepository::get($uid);
 			$recensie->toegevoegd = getDateTime();
 		}
 

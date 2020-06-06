@@ -4,6 +4,7 @@ namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Afbeelding;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -20,19 +21,18 @@ class Foto extends Afbeelding {
 	const RESIZED_DIR = '_resized';
 
 	/**
-	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
-	 */
-	public $filename;
-
-	/**
 	 * Relatief pad in fotoalbum
 	 * @var string
 	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
 	 */
 	public $subdir;
+	/**
+	 * @var string
+	 * @ORM\Column(type="stringkey")
+	 * @ORM\Id()
+	 */
+	public $filename;
 	/**
 	 * Degrees of rotation
 	 * @var int
@@ -45,6 +45,12 @@ class Foto extends Afbeelding {
 	 * @ORM\Column(type="uid")
 	 */
 	public $owner;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="owner", referencedColumnName="uid")
+	 */
+	public $owner_profiel;
 
 	public function __construct($filename = null, FotoAlbum $album = null, $parse = false) {
 		if ($filename === true) { // called from PersistenceModel

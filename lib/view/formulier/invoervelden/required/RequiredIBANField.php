@@ -6,7 +6,7 @@ use CsrDelft\view\formulier\invoervelden\IBANField;
 
 /**
  * @author Jorai Rijsdijk <jorairijsdijk@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * @see IBANField
  */

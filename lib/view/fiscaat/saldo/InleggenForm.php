@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\saldo;
 
-use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\formulier\getalvelden\BedragField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\ModalForm;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 class InleggenForm extends ModalForm {
 	public function __construct(Civisaldo $model) {

@@ -3,11 +3,9 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
-use CsrDelft\entity\bibliotheek\Boek;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -34,7 +32,7 @@ class BbBoek extends BbTag {
 	}
 	public function isAllowed()
 	{
-		LoginModel::mag(P_BIEB_READ);
+		return LoginService::mag(P_BIEB_READ);
 	}
 
 	public function renderLight() {

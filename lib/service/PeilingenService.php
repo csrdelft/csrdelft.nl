@@ -6,10 +6,11 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingStem;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
 use CsrDelft\repository\peilingen\PeilingStemmenRepository;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 
@@ -47,13 +48,12 @@ class PeilingenService {
 		$this->entityManager = $entityManager;
 	}
 
-	public function magOptieToevoegen($peilingId) {
-		$peiling = $this->peilingenRepository->getPeilingById($peilingId);
+	public function magOptieToevoegen(Peiling $peiling) {
 		if ($this->peilingenRepository->magBewerken($peiling)) {
 			return true;
 		}
 
-		if ($this->peilingStemmenRepository->heeftGestemd($peilingId, LoginModel::getUid())) {
+		if ($this->peilingStemmenRepository->heeftGestemd($peiling->id, LoginService::getUid())) {
 			return false;
 		}
 
@@ -61,7 +61,7 @@ class PeilingenService {
 			return false;
 		}
 
-		$aantalVoorgesteld = $this->peilingOptiesRepository->count(['peiling_id' => $peilingId, 'ingebracht_door' => LoginModel::getUid()]);
+		$aantalVoorgesteld = $this->peilingOptiesRepository->count(['peiling_id' => $peiling->id, 'ingebracht_door' => LoginService::getUid()]);
 		return $aantalVoorgesteld < $peiling->aantal_voorstellen;
 	}
 
@@ -82,6 +82,7 @@ class PeilingenService {
 				$stem = new PeilingStem();
 				$stem->peiling_id = $peilingId;
 				$stem->peiling = $this->entityManager->getReference(Peiling::class, $peilingId);
+				$stem->profiel = ProfielRepository::get($uid);
 				$stem->uid = $uid;
 				$stem->aantal = count($opties);
 				$this->entityManager->persist($stem);

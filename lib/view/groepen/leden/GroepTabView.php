@@ -3,16 +3,16 @@
  * GroepTabView.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\entity\groepen\GroepTab;
+use CsrDelft\entity\groepen\enum\GroepTab;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\Verticale;
-use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\security\enum\AccessAction;
+use CsrDelft\service\security\LoginService;
 
 abstract class GroepTabView extends GroepOmschrijvingView {
 
@@ -95,7 +95,7 @@ JS;
 					$color = ' progress-bar-success';
 				}
 			} // Bewerken mogelijk?
-			elseif ($this->groep->getLid(LoginModel::getUid()) && date_create_immutable() < $this->groep->bewerken_tot) {
+			elseif ($this->groep->getLid(LoginService::getUid()) && date_create_immutable() < $this->groep->bewerken_tot) {
 				$title = 'Inschrijvingen gesloten! Inschrijving bewerken is nog wel toegestaan.';
 				$color = ' progress-bar-warning';
 			} else {

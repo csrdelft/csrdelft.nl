@@ -30,13 +30,13 @@ class EetplanBekenden implements DataTableEntry {
 	public $uid2;
 	/**
 	 * @var Profiel
-	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
 	 * @ORM\JoinColumn(name="uid1", referencedColumnName="uid")
 	 */
 	public $noviet1;
 	/**
 	 * @var Profiel
-	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
 	 * @ORM\JoinColumn(name="uid2", referencedColumnName="uid")
 	 */
 	public $noviet2;
