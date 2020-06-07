@@ -83,6 +83,49 @@ De PubCie.
 
 		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
 	}
+	/**
+	 * @return PlainView
+	 * @Route("/contactformulier/owee", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function owee() {
+		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
+
+		if (!$resp['success']) {
+			throw new CsrToegangException("Geen toegang");
+		}
+
+		$type = filter_input(INPUT_POST, "optie", FILTER_SANITIZE_STRING);
+		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
+		$email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_STRING);
+		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
+
+		if ($this->isSpam($naam, $email, $telefoon)) {
+			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
+		}
+
+		$typeaanduiding = $type === 'lid-worden' ? 'Ik wil lid worden' : 'Eerst een lid spreken';
+
+		$bericht = "
+Beste OweeCie,
+
+Het formulier op de OWee-pagina is ingevuld:
+
+Type: $typeaanduiding
+Naam: $naam
+E-mail: $email
+Telefoon: $telefoon
+
+Met vriendelijke groeten,
+De PubCie.
+";
+
+		$mail = new Mail([env('EMAIL_OWEECIE') => "OweeCie"], "OWee formulier", $bericht);
+		$mail->setFrom(env('EMAIL_PUBCIE'));
+		$mail->send();
+
+		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
+	}
 
 	private function isSpam(...$input) {
 		$filter = new SimpleSpamFilter();
