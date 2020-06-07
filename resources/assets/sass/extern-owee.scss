@@ -63,6 +63,8 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 
 .owee {
 	font-size: 0;
+	width: 100%;
+	overflow-x: hidden;
 	@import "~bootstrap/scss/bootstrap";
 
 	.btl {
