@@ -61,10 +61,13 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 	}
 }
 
-.owee {
-	font-size: 0;
+body {
 	width: 100%;
 	overflow-x: hidden;
+}
+
+.owee-pagina {
+	font-size: 0;
 	@import "~bootstrap/scss/bootstrap";
 
 	.btl {
@@ -129,10 +132,6 @@ $headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
 			width: 100%;
 			height: 100%;
 		}
-	}
-
-	.button-group {
-
 	}
 
 	.cta {

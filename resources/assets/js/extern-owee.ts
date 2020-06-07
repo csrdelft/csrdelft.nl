@@ -25,19 +25,22 @@ docReady(() => {
 		oweeForm.addEventListener('submit', (event) => {
 			event.preventDefault();
 			errorContainer.innerHTML = '';
-			submitButton.disabled = true;
+			submitButton[0].disabled = true;
+			submitButton[1].disabled = true;
 			const formData = new FormData(oweeForm);
 			axios.post('/contactformulier/owee', formData)
 				.then((response) => {
 					oweeForm.reset();
-					submitButton.disabled = false;
+					submitButton[0].disabled = false;
+					submitButton[1].disabled = false;
 					errorContainer.innerHTML = '<div class="alert alert-success">' +
 						'<span class="ico accept"></span>' + response.data +
 						'</div>';
 					formulierVelden.style.display = 'none';
 				})
 				.catch((error) => {
-					submitButton.disabled = false;
+					submitButton[0].disabled = false;
+					submitButton[1].disabled = false;
 					errorContainer.innerHTML = '<div class="alert alert-danger">' +
 						'<span class="ico exclamation"></span>' + error.response.data +
 						'</div>';

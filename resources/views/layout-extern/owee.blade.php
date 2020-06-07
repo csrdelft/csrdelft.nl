@@ -19,7 +19,7 @@
 		</div>
 	</section>
 
-	<div class="owee">
+	<div class="owee-pagina">
 		<div class="bbl atl hero">
 			<div class="content">
 				<img src="/images/owee/owee2020.svg" alt="C.S.R. - Machtig Mooi">
