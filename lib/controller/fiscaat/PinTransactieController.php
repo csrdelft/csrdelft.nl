@@ -160,7 +160,6 @@ class PinTransactieController extends AbstractController {
 				$bestelling->moment = $pinTransactie->datetime;
 				$bestelling->uid = $values['uid'];
 				$bestelling->profiel = ProfielRepository::get($values['uid']);
-				$bestelling->civiSaldo = $this->civiSaldoRepository->findOneBy(['uid' => $values['uid']]);
 				$bestelling->totaal = $pinTransactie->getBedragInCenten() * -1;
 				$bestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
 				$bestelling->deleted = false;
@@ -356,7 +355,6 @@ class PinTransactieController extends AbstractController {
 					$nieuweBestelling->inhoud = $nieuweBestellingInhoud;
 					$nieuweBestelling->uid = $oudeBestelling->uid;
 					$nieuweBestelling->profiel = $oudeBestelling->profiel;
-					$nieuweBestelling->civiSaldo = $oudeBestelling->civiSaldo;
 					$nieuweBestelling->moment = $oudeBestelling->moment;
 					$nieuweBestelling->cie = $oudeBestelling->cie;
 					$nieuweBestelling->totaal = $oudeBestelling->totaal - $pinBestellingInhoud->aantal;

@@ -142,7 +142,6 @@ class CiviBestellingRepository extends AbstractRepository {
 		$bestelling->cie = 'anders';
 		$bestelling->uid = $uid;
 		$bestelling->profiel = ProfielRepository::get($uid);
-		$bestelling->civiSaldo = $this->civiSaldoRepository->findOneBy(['uid' => $uid]);
 		$bestelling->deleted = false;
 		$bestelling->moment = date_create_immutable();
 
