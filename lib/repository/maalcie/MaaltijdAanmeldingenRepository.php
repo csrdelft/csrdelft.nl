@@ -384,6 +384,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'maalcie';
 		$bestelling->uid = $aanmelding->uid;
+		$bestelling->civiSaldo = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->findOneBy(['uid' => $aanmelding->uid]);
 		$bestelling->profiel = $aanmelding->profiel;
 		$bestelling->deleted = false;
 		$bestelling->moment = getDateTime();

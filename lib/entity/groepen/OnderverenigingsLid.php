@@ -12,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een lid van een ondervereniging.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\OnderverenigingsLedenRepository")
- * @ORM\Table("ondervereniging_leden")
+ * @ORM\Table("ondervereniging_leden", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
 class OnderverenigingsLid extends AbstractGroepLid {
 	/**

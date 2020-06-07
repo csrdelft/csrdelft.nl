@@ -41,6 +41,12 @@ class CiviBestelling {
 	 */
 	public $profiel;
 	/**
+	 * @var CiviSaldo
+	 * @ORM\ManyToOne(targetEntity="CiviSaldo")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $civiSaldo;
+	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @Serializer\Groups("datatable")
