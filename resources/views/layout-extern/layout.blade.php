@@ -24,6 +24,8 @@
 <!-- Page Wrapper -->
 <div id="page-wrapper">
 
+	@yield('oweebanner')
+
 	<!-- Header -->
 	<header id="header" class="alt">
 		<nav id="menu">
