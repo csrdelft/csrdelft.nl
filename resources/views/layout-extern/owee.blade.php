@@ -139,7 +139,8 @@
 								if (checkVisible(document.getElementById('captcha')) && !captchaLoaded) {
 									captchaLoaded = true;
 									grecaptcha.render('captcha', {
-										'sitekey': '6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX'
+										'sitekey': '6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX',
+										'hl': 'nl',
 									});
 								}
 							})
