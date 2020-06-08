@@ -39,7 +39,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="iframe-container">
-						<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 					</div>
 				</div>
 			</div>
@@ -83,12 +83,12 @@
 				</div>
 				<div class="col-12 col-sm-6 col-md-4 mb-4">
 					<div class="iframe-container">
-						<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi&hl=nl" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 					</div>
 				</div>
 				<div class="col-12 col-sm-6 col-md-4 mb-4">
 					<div class="iframe-container">
-						<iframe src="https://www.youtube-nocookie.com/embed/01kzRDhdcYw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<iframe src="https://www.youtube-nocookie.com/embed/01kzRDhdcYw?hl=nl" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 					</div>
 				</div>
 				<a class="col-12 col-md-4 mb-4" href="https://www.youtube.com/user/CivitasFilms" target="_blank">
