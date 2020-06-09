@@ -12,7 +12,7 @@ class GenericSuggestiesResponse extends JsonLijstResponse {
 	public function renderElement($entity) {
 		return [
 			'value' => $entity->getWeergave(),
-			'label' => $entity->getWeergave(),
+			'label' => $entity->getId(),
 			'id' => $entity->getId(),
 		];
 	}

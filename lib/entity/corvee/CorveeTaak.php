@@ -4,6 +4,8 @@ namespace CsrDelft\entity\corvee;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use DateInterval;
 use DateTimeImmutable;
@@ -54,15 +56,23 @@ class CorveeTaak implements Agendeerbaar {
 	 */
 	public $uid;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer", nullable=true)
+	 * @var Profiel|null
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=true)
 	 */
-	public $crv_repetitie_id;
+	public $profiel;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer", nullable=true)
+	 * @var CorveeRepetitie|null
+	 * @ORM\ManyToOne(targetEntity="CorveeRepetitie")
+	 * @ORM\JoinColumn(name="crv_repetitie_id", referencedColumnName="crv_repetitie_id", nullable=true)
 	 */
-	public $maaltijd_id;
+	public $corveeRepetitie;
+	/**
+	 * @var Maaltijd|null
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\Maaltijd")
+	 * @ORM\JoinColumn(name="maaltijd_id", referencedColumnName="maaltijd_id", nullable=true)
+	 */
+	public $maaltijd;
 	/**
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="date")
@@ -193,6 +203,7 @@ class CorveeTaak implements Agendeerbaar {
 			throw new CsrGebruikerException('Geen lid: set lid id');
 		}
 		$this->uid = $uid;
+		$this->profiel = ProfielRepository::get($uid);
 	}
 
 	public function setWanneerGemaild($datumtijd) {
@@ -220,14 +231,14 @@ class CorveeTaak implements Agendeerbaar {
 	}
 
 	public function getTitel() {
-		if ($this->uid) {
-			return $this->corveeFunctie->naam . ' ' . ProfielRepository::getNaam($this->uid, 'civitas');
+		if ($this->profiel) {
+			return $this->corveeFunctie->naam . ' ' . $this->profiel->getNaam('civitas');
 		}
 		return 'Corvee vacature (' . $this->corveeFunctie->naam . ')';
 	}
 
 	public function getBeschrijving() {
-		if ($this->uid) {
+		if ($this->profiel) {
 			return $this->corveeFunctie->naam;
 		}
 		return 'Nog niet ingedeeld';

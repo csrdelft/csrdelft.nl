@@ -13,6 +13,7 @@ use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -46,7 +47,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdenRepository")
  * @ORM\Table("mlt_maaltijden")
  */
-class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
+class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -346,5 +347,18 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet {
 
 	public function getMoment() {
 		return $this->datum->setTime($this->tijd->format('H'), $this->tijd->format('i'), $this->tijd->format('s'));
+	}
+
+
+	function getId() {
+		return $this->maaltijd_id;
+	}
+
+	function getWeergave(): string {
+		if ($this->datum) {
+			return $this->titel . ' op ' . date_format_intl($this->datum, DATE_FORMAT) . ' om ' . date_format_intl($this->getMoment(), TIME_FORMAT);
+		} else {
+			return $this->titel ?? '';
+		}
 	}
 }

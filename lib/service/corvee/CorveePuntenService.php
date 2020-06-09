@@ -81,24 +81,21 @@ class CorveePuntenService {
 		});
 	}
 
-	public function puntenToekennen($uid, $punten, $bonus_malus) {
+	public function puntenToekennen(Profiel $profiel, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
 		}
-		$profiel = ProfielRepository::get($uid); // false if lid does not exist
-		if (!$profiel) {
-			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
-		}
+
 		if ($punten !== 0 OR $bonus_malus !== 0) {
 			$this->savePuntenVoorLid($profiel, (int)$profiel->corvee_punten + $punten, (int)$profiel->corvee_punten_bonus + $bonus_malus);
 		}
 	}
 
-	public function puntenIntrekken($uid, $punten, $bonus_malus) {
+	public function puntenIntrekken(Profiel $profiel, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten intrekken faalt: geen integer');
 		}
-		$this->puntenToekennen($uid, -$punten, -$bonus_malus);
+		$this->puntenToekennen($profiel, -$punten, -$bonus_malus);
 	}
 
 	public function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {

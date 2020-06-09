@@ -24,7 +24,7 @@
 				&nbsp;{{$taak->corveeFunctie->afkorting}}:&nbsp;
 			</span>
 					@endif
-					@if($taak->uid) {{-- ingedeelde taak van functie: teller++ --}}
+					@if($taak->profiel) {{-- ingedeelde taak van functie: teller++ --}}
 					@php($count = $count + 1)
 					@endif
 					@if($loop->last) {{-- laatste taak van functie: toon ingedeeld-teller en totaal aantal taken van deze functie --}}

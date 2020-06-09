@@ -17,26 +17,26 @@
 		@else
 			<a href="/corvee/beheer/bewerk/{{$taak->taak_id}}" title="Taak wijzigen"
 				 class="btn post popup">@icon("pencil")</a>
-			@if($taak->crv_repetitie_id)
-				<a href="/corvee/repetities/{{$taak->crv_repetitie_id}}" title="Wijzig gekoppelde corveerepetitie"
+			@if($taak->corveeRepetitie)
+				<a href="/corvee/repetities/{{$taak->corveeRepetitie->crv_repetitie_id}}" title="Wijzig gekoppelde corveerepetitie"
 					 class="btn popup">@icon("calendar_edit")</a>
 			@else
 				<div class="inline" style="width: 28px;"></div>
 			@endif
 		@endif
-		@if(empty($maaltijd) and $taak->maaltijd_id)
-			<a href="/corvee/beheer/maaltijd/{{$taak->maaltijd_id}}" title="Beheer maaltijdcorvee" class="btn">@icon("cup_link")</a>
+		@if(empty($maaltijd) and $taak->maaltijd)
+			<a href="/corvee/beheer/maaltijd/{{$taak->maaltijd->maaltijd_id}}" title="Beheer maaltijdcorvee" class="btn">@icon("cup_link")</a>
 		@endif
 	</td>
 	<td class="text-center" style="width: 50px;">
 		@php($aantal = $taak->getAantalKeerGemaild())
 		@if(!$taak->verwijderd and (empty($maaltijd) or !$maaltijd->verwijderd))
 			@php($wijzigbaar = true)
-			@if($taak->uid)
+			@if($taak->profiel)
 				{{$aantal}}x
 			@endif
 			<div class="float-right">
-				@if($taak->uid)
+				@if($taak->profiel)
 					<a href="/corvee/beheer/email/{{$taak->taak_id}}" title="Verstuur een (extra) herinnering voor deze taak"
 						 class="btn post confirm">
 						@endif
@@ -44,7 +44,7 @@
 						@if($taak->getIsTelaatGemaild())
 							@icon("email_error", null, "Laatste herinnering te laat verstuurd!&#013;" . $taak->wanneer_gemaild . "")
 						@elseif($aantal < 1)
-							@if($taak->uid)
+							@if($taak->profiel)
 								@icon("email", null, "Niet gemaild")
 							@endif
 						@elseif($aantal === 1)
@@ -53,7 +53,7 @@
 							@icon("email_open", null, $taak->wanneer_gemaild)
 						@endif
 						@if(!empty($wijzigbaar))
-							@if($taak->uid)
+							@if($taak->profiel)
 					</a>
 				@endif
 			</div>
@@ -63,7 +63,7 @@
 	<td style="width: 100px;">{{$taak->corveeFunctie->naam}}</td>
 	<td
 		class="niet-dik
-@if($taak->uid)
+@if($taak->profiel)
 			taak-toegewezen
 @elseif($taak->datum < date_create_immutable(instelling('corvee', 'waarschuwing_taaktoewijzing_vooraf')))
 			taak-warning
@@ -73,15 +73,15 @@
 		@if(!empty($wijzigbaar))
 			<a href="/corvee/beheer/toewijzen/{{$taak->taak_id}}" id="taak-{{$taak->taak_id}}"
 				 title="Deze taak toewijzen aan een lid&#013;Sleep om te ruilen" class="btn post popup dragobject ruilen"
-				 style="position: static;" @if($taak->uid)  uid="{{$taak->uid}}">
+				 style="position: static;" @if($taak->profiel)  uid="{{$taak->profiel->uid}}">
 				@icon("user_green")
 				@else
 					> @icon("user_red")
 				@endif
 			</a>
 		@endif
-		@if($taak->uid)
-			&nbsp;{!! \CsrDelft\repository\ProfielRepository::getLink($taak->uid,instelling('corvee', 'weergave_ledennamen_beheer')) !!}
+		@if($taak->profiel)
+			&nbsp;{!! $taak->profiel->getLink(instelling('corvee', 'weergave_ledennamen_beheer')) !!}
 		@endif
 	</td>
 	<td
@@ -102,7 +102,7 @@
 	@if($taak->bonus_malus !== 0)
 		{{$taak->bonus_malus}}
 	@endif
-	@if(!empty($wijzigbaar) and $taak->uid)
+	@if(!empty($wijzigbaar) and $taak->profiel)
 		<div class="float-right">
 			@if($taak->wanneer_toegekend)
 				<a href="/corvee/beheer/puntenintrekken/{{$taak->taak_id}}" title="Punten intrekken" class="btn post">@icon("medal_silver_delete")</a>

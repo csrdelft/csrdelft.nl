@@ -156,7 +156,7 @@ abstract class InputField implements FormElement, Validator {
 	public function validate() {
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif ($this->readonly AND $this->value !== $this->origvalue) {
+		} elseif ($this->readonly AND $this->value != $this->origvalue) {
 			$this->error = 'Dit veld mag niet worden aangepast';
 		} elseif ($this->value == '' AND $this->required) {
 			// vallen over lege velden als dat aangezet is voor het veld

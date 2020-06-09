@@ -4,12 +4,17 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\CorveeTaak;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
+use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -48,35 +53,21 @@ class TaakForm extends ModalForm {
 		$fields = [];
 		$fields['fid'] = new RequiredSelectField('functie_id', $taak->functie_id, 'Functie', $functieNamen);
 		$fields['fid']->onchange = $functiePunten . "$('.punten_field').val(punten[this.value]);";
-		$fields['lid'] = new LidField('uid', $taak->uid, 'Naam of lidnummer');
+		$fields['lid'] = new LidObjectField('profiel', $taak->profiel, 'Naam');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$fields[] = new RequiredDateObjectField('datum', $taak->datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields['ptn'] = new RequiredIntField('punten', $taak->punten, 'Punten', 0, 10);
 		$fields['ptn']->css_classes[] = 'punten_field';
 		$fields[] = new RequiredIntField('bonus_malus', $taak->bonus_malus, 'Bonus/malus', -10, 10);
-		$fields['crid'] = new IntField('crv_repetitie_id', $taak->crv_repetitie_id, null);
+		$fields['crid'] = new DoctrineEntityField('corveeRepetitie', $taak->corveeRepetitie, '', CorveeRepetitie::class, '');
 		$fields['crid']->readonly = true;
 		$fields['crid']->hidden = true;
-		$fields['mid'] = new IntField('maaltijd_id', $taak->maaltijd_id, 'Gekoppelde maaltijd', 0);
-		$fields['mid']->title = 'Het ID van de maaltijd waar deze taak bij hoort.';
+		$fields['mid'] = new DoctrineEntityField('maaltijd', $taak->maaltijd, 'Gekoppelde maaltijd', Maaltijd::class, '/maaltijden/beheer/suggesties?q=');
+		$fields['mid']->title = 'De maaltijd waar deze taak bij hoort.';
 
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen();
-	}
-
-	public function validate() {
-		$valid = parent::validate();
-		$fields = $this->getFields();
-		if (is_numeric($fields['mid']->getValue())) {
-			try {
-				ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->getMaaltijd($fields['mid']->getValue(), true);
-			} catch (CsrGebruikerException $e) {
-				$fields['mid']->error = 'Maaltijd bestaat niet.';
-				$valid = false;
-			}
-		}
-		return $valid;
 	}
 
 }

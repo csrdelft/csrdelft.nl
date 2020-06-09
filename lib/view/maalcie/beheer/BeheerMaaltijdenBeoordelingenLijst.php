@@ -30,7 +30,7 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 		$kokTaken = $maaltijd->getCorveeTaken(CorveeFunctie::KWALIKOK_FUNCTIE_ID);
 		$data['koks'] = "";
 		for ($i = 0; $i < count($kokTaken); $i++) {
-			$data['koks'] .= ProfielRepository::getLink($kokTaken[$i]->uid);
+			$data['koks'] .= $kokTaken[$i]->profiel->getLink();
 			if ($i < count($kokTaken) - 1) $data['koks'] .= '<br>';
 		}
 
