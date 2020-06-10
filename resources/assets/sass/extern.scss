@@ -384,9 +384,10 @@ optgroup {
 
 	.een-minuut .sociaal .instagram .insta-grid {
 		grid-template-columns: 1fr 0px;
+		justify-items: center;
 
 		img {
-			width: 70%;
+			width: 100%;
 		}
 
 		#insta-tag {

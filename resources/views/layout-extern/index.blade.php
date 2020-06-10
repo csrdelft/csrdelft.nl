@@ -60,7 +60,7 @@
 						<div id="hero">
 							<h1 class="major">C.S.R. IN 1 MINUUT</h1>
 							<div class="bb-video">
-								<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4" title="C.S.R. Delft in 1 minuut" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl" title="C.S.R. Delft in 1 minuut" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 							</div>
 						</div>
 						<div class="sociaal">
@@ -68,7 +68,7 @@
 								<p>Wil je zien hoe
 									de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
 								<div class="bb-video">
-									<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY" title="Delft studie is maar de helft! Aflevering 1 uit 3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY?hl=nl" title="Delft studie is maar de helft! Aflevering 1 uit 3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 								</div>
 							</div>
 							<div class="instagram">
