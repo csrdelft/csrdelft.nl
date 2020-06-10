@@ -70,7 +70,7 @@ HTML;
 		//match type and id
 		if (strstr($content, 'youtube.com') || strstr($content, 'youtu.be')) {
 			if (preg_match('#(?:youtube\.com/watch\?v=|youtu.be/)([0-9a-zA-Z\-_]{11})#', $content, $matches) > 0) {
-				return ['//www.youtube-nocookie.com/embed/' . $matches[1] . '?modestbranding=1', 'YouTube'];
+				return ['//www.youtube-nocookie.com/embed/' . $matches[1] . '?modestbranding=1&hl=nl', 'YouTube'];
 			}
 			throw new BbException('Geen geldige YouTube url: ' . $content);
 		} elseif (strstr($content, 'vimeo')) {

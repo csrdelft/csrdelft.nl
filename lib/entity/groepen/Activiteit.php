@@ -20,7 +20,13 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenRepository")
- * @ORM\Table("activiteiten")
+ * @ORM\Table("activiteiten", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="soort", columns={"soort"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="in_agenda", columns={"in_agenda"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ * })
  */
 class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort {
 	public function __construct() {
@@ -76,14 +82,15 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	public $soort;
 	/**
 	 * Rechten benodigd voor aanmelden
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $rechten_aanmelden;
 	/**
 	 * Locatie
 	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $locatie;
 	/**
@@ -97,6 +104,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	/**
 	 * @var ActiviteitDeelnemer[]
 	 * @ORM\OneToMany(targetEntity="ActiviteitDeelnemer", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="DESC"})
 	 */
 	public $leden;
 

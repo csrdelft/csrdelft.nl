@@ -6,6 +6,22 @@
 	@stylesheet('extern.css')
 @endsection
 
+@section('oweebanner')
+	<a href="/lidworden" class="owee-banner">
+		<div class="logo">
+			<img src="/images/owee/owee2020.svg" alt="C.S.R. - Machtig Mooi">
+		</div>
+		<div class="tekst">
+			<p>Kom je volgend jaar in Delft studeren?
+				<br>Lees hier alles over de OWee en lid worden bij C.S.R.</p>
+			<div><span>Alles over de </span>OWee & lid worden</div>
+		</div>
+	</a>
+	<script>
+		document.body.className += ' ' + 'met-owee-banner';
+	</script>
+@endsection
+
 @section('body')
 	<!-- Banner -->
 	<section id="banner">
@@ -131,49 +147,49 @@
 					<noscript class="lazy-load">
 						<div class="grid">
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr1.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr1.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr1.jpg"/>
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr1.jpg"/>
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr2.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr2.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr2.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr2.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr3.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr3.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr3.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr3.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr4.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr4.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr4.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr4.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr5.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr5.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr5.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr5.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr6.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr6.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr6.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr6.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr7.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr7.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr7.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr7.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr8.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr8.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr8.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr8.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr9.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr9.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr9.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr9.jpg">
 							</a>
 						</div>
 					</noscript>
@@ -200,7 +216,7 @@
 					<li class="fa-map-marker">
 						<noscript class="lazy-load">
 							<iframe title="Confide op Google Maps" height="300" frameborder="0" style="border:0"
-								src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2456.0445350385166!2d4.360246300000008!3d52.0060664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5b5c03dabb5b3%3A0xea6a437036970629!2sOude+Delft+9!5e0!3m2!1sen!2s!4v1404470858468">
+									src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2456.0445350385166!2d4.360246300000008!3d52.0060664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5b5c03dabb5b3%3A0xea6a437036970629!2sOude+Delft+9!5e0!3m2!1sen!2s!4v1404470858468">
 							</iframe>
 						</noscript>
 					</li>
@@ -240,7 +256,7 @@
 						<li>
 							<a href="https://www.geld.nl/">
 								<img src="https://csrdelft.nl/plaetjes/banners/geld.png"
-										 alt="Geld.nl Vergelijk website">
+									 alt="Geld.nl Vergelijk website">
 							</a>
 						</li>
 						<li>
@@ -251,7 +267,7 @@
 						<li>
 							<a href="http://www.tudelft.nl/">
 								<img src="https://csrdelft.nl/plaetjes/banners/TU_Delft_logo_White.png"
-										 alt="TUDelft">
+									 alt="TUDelft">
 							</a>
 						</li>
 					</ul>

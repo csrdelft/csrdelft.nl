@@ -13,7 +13,12 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\OnderverenigingenRepository")
- * @ORM\Table("onderverenigingen")
+ * @ORM\Table("onderverenigingen", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="soort", columns={"soort"}),
+ * })
  */
 class Ondervereniging extends AbstractGroep {
 	public function __construct() {

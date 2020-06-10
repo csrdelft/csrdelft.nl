@@ -8,8 +8,8 @@ use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
-use CsrDelft\view\formulier\keuzevelden\EntitySelectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\WeekdagField;
@@ -29,7 +29,7 @@ use CsrDelft\view\formulier\ModalForm;
 class CorveeRepetitieForm extends ModalForm {
 
 	public function __construct(CorveeRepetitie $repetitie) {
-		parent::__construct($repetitie, '/corvee/repetities/opslaan/' . $repetitie->crv_repetitie_id);
+		parent::__construct($repetitie, '/corvee/repetities/opslaan' . ($repetitie->crv_repetitie_id ? '/' . $repetitie->crv_repetitie_id : ''));
 
 		if ($repetitie->crv_repetitie_id) {
 			$this->titel = 'Corveerepetitie wijzigen';
@@ -55,7 +55,7 @@ class CorveeRepetitieForm extends ModalForm {
 		}
 
 		$fields = [];
-		$fields['fid'] = new EntitySelectField('corveeFunctie', $repetitie->corveeFunctie, 'Functie', CorveeFunctie::class);
+		$fields['fid'] = new DoctrineEntityField('corveeFunctie', $repetitie->corveeFunctie, 'Functie', CorveeFunctie::class, '/corvee/functies/suggesties?q=');
 		$fields['fid']->onchange = $functiePunten . "$('#field_standaard_punten').val(punten[this.value]);";
 		$fields[] = new WeekdagField('dag_vd_week', $repetitie->dag_vd_week, 'Dag v/d week');
 		$fields['dag'] = new IntField('periode_in_dagen', $repetitie->periode_in_dagen, 'Periode (in dagen)', 0, 183);

@@ -69,4 +69,11 @@ class CorveeFunctiesRepository extends AbstractRepository {
 		$this->_em->remove($functie);
 		$this->_em->flush();
 	}
+
+	public function getSuggesties($query) {
+		return $this->createQueryBuilder('f')
+			->where('f.naam LIKE :query')
+			->setParameter('query', sql_contains($query))
+			->getQuery()->getResult();
+	}
 }

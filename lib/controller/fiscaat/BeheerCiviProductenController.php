@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
@@ -9,11 +10,14 @@ use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository;
 use CsrDelft\repository\fiscaat\CiviPrijsRepository;
 use CsrDelft\repository\fiscaat\CiviProductRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductForm;
 use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
+use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -48,14 +52,30 @@ class BeheerCiviProductenController extends AbstractController {
 		$this->em = $em;
 	}
 
+	/**
+	 * @param Request $request
+	 * @return CiviProductSuggestiesResponse
+	 * @Route("/fiscaat/producten/suggesties", methods={"GET"})
+	 * @Auth(P_FISCAAT_READ)
+	 */
 	public function suggesties(Request $request) {
 		return new CiviProductSuggestiesResponse($this->civiProductRepository->getSuggesties(sql_contains($request->query->get('q'))));
 	}
 
+	/**
+	 * @return GenericDataTableResponse
+	 * @Route("/fiscaat/producten", methods={"POST"})
+	 * @Auth(P_FISCAAT_READ)
+	 */
 	public function lijst() {
 		return $this->tableData($this->civiProductRepository->findAll());
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/fiscaat/producten", methods={"GET"})
+	 * @Auth(P_FISCAAT_READ)
+	 */
 	public function overzicht() {
 		return view('fiscaat.pagina', [
 			'titel' => 'Producten beheer',
@@ -63,6 +83,11 @@ class BeheerCiviProductenController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @return CiviProductForm
+	 * @Route("/fiscaat/producten/bewerken", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
+	 */
 	public function bewerken() {
 		$selection = $this->getDataTableSelection();
 
@@ -76,6 +101,11 @@ class BeheerCiviProductenController extends AbstractController {
 		return new CiviProductForm($product);
 	}
 
+	/**
+	 * @return GenericDataTableResponse
+	 * @Route("/fiscaat/producten/verwijderen", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
+	 */
 	public function verwijderen() {
 		$selection = $this->getDataTableSelection();
 
@@ -107,6 +137,12 @@ class BeheerCiviProductenController extends AbstractController {
 		return $this->tableData($removed);
 	}
 
+	/**
+	 * @param Request $request
+	 * @return GenericDataTableResponse|CiviProductForm
+	 * @Route("/fiscaat/producten/opslaan", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
+	 */
 	public function opslaan(Request $request) {
 		$id = $request->request->getInt('id');
 

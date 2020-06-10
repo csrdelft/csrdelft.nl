@@ -13,7 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een forumpost zit in een ForumDraad.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumPostsRepository")
- * @ORM\Table("forum_posts")
+ * @ORM\Table("forum_posts", indexes={
+ *   @ORM\Index(name="verwijderd", columns={"verwijderd"}),
+ *   @ORM\Index(name="tekst", columns={"tekst"}),
+ *   @ORM\Index(name="lid_id", columns={"uid"}),
+ *   @ORM\Index(name="datum_tijd", columns={"datum_tijd"}),
+ *   @ORM\Index(name="wacht_goedkeuring", columns={"wacht_goedkeuring"}),
+ * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class ForumPost {

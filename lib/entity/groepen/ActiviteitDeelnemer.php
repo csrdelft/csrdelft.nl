@@ -13,7 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een deelnemer van een activiteit.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository")
- * @ORM\Table("activiteit_deelnemers")
+ * @ORM\Table("activiteit_deelnemers", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
 class ActiviteitDeelnemer extends AbstractGroepLid {
 	/**

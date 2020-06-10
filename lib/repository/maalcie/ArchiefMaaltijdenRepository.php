@@ -40,7 +40,7 @@ class ArchiefMaaltijdenRepository extends AbstractRepository {
 		$archief->prijs = $maaltijd->getPrijs();
 		$archief->aanmeldingen = '';
 		foreach ($this->maaltijdAanmeldingenRepository->getAanmeldingenVoorMaaltijd($maaltijd) as $aanmelding) {
-			if ($aanmelding->uid === '') {
+			if (!$aanmelding->uid) {
 				$archief->aanmeldingen .= 'gast';
 			} else {
 				$archief->aanmeldingen .= $aanmelding->uid;

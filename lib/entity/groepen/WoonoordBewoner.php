@@ -12,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een bewoner van een woonoord / huis.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\BewonersRepository")
- * @ORM\Table("bewoners")
+ * @ORM\Table("bewoners", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
 class WoonoordBewoner extends AbstractGroepLid {
 	/**

@@ -22,7 +22,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Table("commissies", indexes={
  *   @ORM\Index(name="status", columns={"status"}),
  *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="familie", columns={"familie"})
+ *   @ORM\Index(name="soort", columns={"soort"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
  * })
  */
 class Commissie extends AbstractGroep implements HeeftSoort {

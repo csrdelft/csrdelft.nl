@@ -2,13 +2,17 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
+use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -24,6 +28,12 @@ class BeheerCiviBestellingController extends AbstractController {
 		$this->civiBestellingRepository = $civiBestellingRepository;
 	}
 
+	/**
+	 * @param null $uid
+	 * @return TemplateView
+	 * @Route("/fiscaat/bestellingen/{uid}", methods={"GET"}, defaults={"uid"=null})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function overzicht($uid = null) {
 		$this->checkToegang($uid);
 
@@ -33,6 +43,13 @@ class BeheerCiviBestellingController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @param Request $request
+	 * @param null $uid
+	 * @return GenericDataTableResponse
+	 * @Route("/fiscaat/bestellingen/{uid}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function lijst(Request $request, $uid = null) {
 		$this->checkToegang($uid);
 		$uid = $uid == null ? LoginService::getUid() : $uid;
@@ -44,6 +61,12 @@ class BeheerCiviBestellingController extends AbstractController {
 		return $this->tableData($data);
 	}
 
+	/**
+	 * @param $bestelling_id
+	 * @return GenericDataTableResponse
+	 * @Route("/fiscaat/bestellingen/inhoud/{bestelling_id}", methods={"POST"})
+	 * @Auth(P_FISCAAT_READ)
+	 */
 	public function inhoud($bestelling_id) {
 		$data = $this->civiBestellingInhoudRepository->findBy(['bestelling_id' => $bestelling_id]);
 

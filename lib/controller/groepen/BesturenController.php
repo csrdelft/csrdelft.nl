@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\view\groepen\GroepenView;
 
@@ -13,13 +14,13 @@ use CsrDelft\view\groepen\GroepenView;
  * Controller voor besturen.
  */
 class BesturenController extends AbstractGroepenController {
-	public function __construct(BesturenRepository $besturenRepository) {
-		parent::__construct($besturenRepository);
+	public function __construct(ChangeLogRepository $changeLogRepository, BesturenRepository $besturenRepository) {
+		parent::__construct($changeLogRepository, $besturenRepository);
 	}
 
 	public function overzicht($soort = null) {
-		$groepen = $this->model->findBy([]);
-		$body = new GroepenView($this->model, $groepen, $soort); // controleert rechten bekijken per groep
+		$groepen = $this->repository->findBy([]);
+		$body = new GroepenView($this->repository, $groepen, $soort); // controleert rechten bekijken per groep
 		return view('default', ['content' => $body]);
 	}
 }

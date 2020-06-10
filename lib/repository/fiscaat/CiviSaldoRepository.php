@@ -7,6 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoLogEnum;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
 use DateTime;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -56,6 +57,7 @@ class CiviSaldoRepository extends AbstractRepository {
 	public function maakSaldo($uid) {
 		$saldo = new Civisaldo();
 		$saldo->uid = $uid;
+		$saldo->profiel = ProfielRepository::get($uid);
 		$saldo->naam = '';
 		$saldo->saldo = 0;
 		$saldo->laatst_veranderd = date_create_immutable();

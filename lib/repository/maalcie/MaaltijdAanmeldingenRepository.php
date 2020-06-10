@@ -74,11 +74,14 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			$this->getEntityManager()->flush();
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
 		} else {
+			$profiel = ProfielRepository::get($uid);
 			$aanmelding = new MaaltijdAanmelding();
 			$aanmelding->maaltijd = $maaltijd;
 			$aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
 			$aanmelding->uid = $uid;
+			$aanmelding->profiel = $profiel;
 			$aanmelding->door_uid = $doorUid;
+			$aanmelding->door_profiel = $profiel;
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->gasten_eetwens = $gastenEetwens;
 			$aanmelding->laatst_gewijzigd = date_create_immutable();
@@ -309,11 +312,12 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$lijst = array();
 		foreach ($aanmeldingen as $aanmelding) {
 			$aanmelding->maaltijd = $maaltijd;
-			$naam = ProfielRepository::getNaam($aanmelding->uid, 'streeplijst');
+			$naam = $aanmelding->profiel->getNaam('streeplijst');
 			$lijst[$naam] = $aanmelding;
 			for ($i = $aanmelding->aantal_gasten; $i > 0; $i--) {
 				$gast = new MaaltijdAanmelding();
-				$gast->door_uid = ($aanmelding->uid);
+				$gast->door_uid = $aanmelding->profiel->uid;
+				$gast->door_profiel = $aanmelding->profiel;
 				$lijst[$naam . 'gast' . $i] = $gast;
 			}
 		}
@@ -380,6 +384,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'maalcie';
 		$bestelling->uid = $aanmelding->uid;
+		$bestelling->profiel = $aanmelding->profiel;
 		$bestelling->deleted = false;
 		$bestelling->moment = getDateTime();
 		$bestelling->comment = sprintf('Datum maaltijd: %s', date('Y-M-d', $aanmelding->maaltijd->getBeginMoment()));
@@ -445,11 +450,14 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			try {
 				$this->assertMagAanmelden($maaltijd, $uid);
 
+				$profiel = ProfielRepository::get($uid);
 				$aanmelding = new MaaltijdAanmelding();
 				$aanmelding->maaltijd = $maaltijd;
 				$aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
 				$aanmelding->uid = $uid;
+				$aanmelding->profiel = $profiel;
 				$aanmelding->door_uid = $uid;
+				$aanmelding->door_profiel = $profiel;
 				$aanmelding->door_abonnement = $repetitie->mlt_repetitie_id;
 				$aanmelding->laatst_gewijzigd = date_create_immutable();
 				$aanmelding->gasten_eetwens = '';

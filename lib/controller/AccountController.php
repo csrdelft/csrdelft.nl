@@ -8,10 +8,12 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
+use CsrDelft\view\login\UpdateLoginForm;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -31,11 +33,16 @@ class AccountController extends AbstractController {
 	 * @var LoginService
 	 */
 	private $loginService;
+	/**
+	 * @var LoginSessionRepository
+	 */
+	private $loginSessionRepository;
 
-	public function __construct(AccountRepository $accountRepository, LoginService $loginService, CmsPaginaRepository $cmsPaginaRepository) {
+	public function __construct(AccountRepository $accountRepository, LoginService $loginService, CmsPaginaRepository $cmsPaginaRepository, LoginSessionRepository $loginSessionRepository) {
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->accountRepository = $accountRepository;
 		$this->loginService = $loginService;
+		$this->loginSessionRepository = $loginSessionRepository;
 	}
 
 	/**
@@ -77,6 +84,7 @@ class AccountController extends AbstractController {
 	 * @param null $uid
 	 * @return \CsrDelft\view\renderer\TemplateView
 	 * @Route("/account/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function bewerken($uid = null) {
@@ -89,14 +97,21 @@ class AccountController extends AbstractController {
 		if ($uid !== $this->loginService->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw new CsrToegangException();
 		}
-		if ($this->loginService->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
-			setMelding('U mag geen account wijzigen want u bent niet recent met wachtwoord ingelogd', 2);
-			throw new CsrToegangException();
-		}
 		$account = $this->accountRepository->get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 			throw new CsrToegangException();
+		}
+		if ($this->loginService->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
+			$form = new UpdateLoginForm();
+
+			// Reset loginmoment naar nu als de gebruiker zijn wachtwoord geeft.
+			if ($form->validate() && $this->accountRepository->controleerWachtwoord($account, $form->getValues()['pass'])) {
+				$this->loginService->resetLoginMoment();
+			} else {
+				setMelding('U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.', 2);
+				return view('default', ['content' => new UpdateLoginForm()]);
+			}
 		}
 		if (!AccessService::mag($account, P_LOGGED_IN)) {
 			setMelding('Account mag niet inloggen', 2);

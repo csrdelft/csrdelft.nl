@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\OnderverenigingenRepository;
 
 /**
@@ -12,7 +13,7 @@ use CsrDelft\repository\groepen\OnderverenigingenRepository;
  * Controller voor onderverenigingen.
  */
 class OnderverenigingenController extends AbstractGroepenController {
-	public function __construct(OnderverenigingenRepository $onderverenigingenRepository) {
-		parent::__construct($onderverenigingenRepository);
+	public function __construct(ChangeLogRepository $changeLogRepository, OnderverenigingenRepository $onderverenigingenRepository) {
+		parent::__construct($changeLogRepository, $onderverenigingenRepository);
 	}
 }

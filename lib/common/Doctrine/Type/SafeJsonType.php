@@ -15,7 +15,7 @@ abstract class SafeJsonType extends Type {
 	 * @inheritDoc
 	 */
 	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
-		return 'TEXT';
+		return sprintf('TEXT COMMENT \'(DC2Type:%s)\'', $this->getName());
 	}
 	public function convertToPHPValue($value, AbstractPlatform $platform) {
 		if (!$value) {

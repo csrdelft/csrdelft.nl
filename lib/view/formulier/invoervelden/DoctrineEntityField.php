@@ -62,21 +62,11 @@ class DoctrineEntityField extends InputField {
 		$this->entity = $value ?? new $type();
 		$this->suggestions[] = $url;
 		$this->show_value = $this->entity->getWeergave();
-		$this->origvalue = $this->entity->getId();
+		$this->origvalue = (string) $this->entity->getId();
 
-		parent::__construct($name, $value ? $value->getId() : null, $description);
+		parent::__construct($name, $value ? (string) $value->getId() : null, $description);
 
 		$this->autoselect = true;
-	}
-
-	public function getValue() {
-		$this->value = parent::getValue();
-
-		if ((int)$this->value == $this->value) {
-			$this->value = (int) $this->value;
-		}
-
-		return $this->value;
 	}
 
 	public function getFormattedValue() {
@@ -107,7 +97,7 @@ class DoctrineEntityField extends InputField {
 		$html = '<input name="' . $this->name . '_show" value="' . $this->entity->getWeergave() . '" origvalue="' . $this->entity->getWeergave() . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 
 		$id = $this->getId() . '_' . $this->idField;
-		$this->typeahead_selected .= '$("#' . $id . '").val(suggestion["' . $this->idField . '"]);';
+		$this->typeahead_selected .= '$("#' . $id . '").val(suggestion["id"]);';
 		$html .= '<input type="hidden" name="' . $this->name . '" id="' . $id . '" value="' . $this->entity->getId() . '" />';
 
 		return $html;

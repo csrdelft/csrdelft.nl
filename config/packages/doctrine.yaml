@@ -4,7 +4,10 @@ doctrine:
         # use postgresql for PostgreSQL
         # use sqlite for SQLite
         driver: 'mysql'
-        server_version: '5.6'
+        server_version: 'mariadb-10.3.20'
+
+        # Tabellen die niet in het schema zitten, maar toch niet weggegooid moeten worden.
+        schema_filter: /^(?!(biebauteur|groep|groeptype|bijbelrooster|bijbelrooster_old|geolocations|logaggregated|phinxlog|saldolog|soccie.*)$).*/
 
         # only needed for MySQL
         charset: utf8mb4

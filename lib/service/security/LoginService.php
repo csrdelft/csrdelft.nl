@@ -428,6 +428,11 @@ class LoginService {
 		return $method;
 	}
 
+	public function resetLoginMoment() {
+		$this->current_session->login_moment = date_create_immutable();
+		$this->entityManager->flush();
+	}
+
 	/**
 	 * Na opvragen resetten.
 	 *
@@ -473,7 +478,6 @@ class LoginService {
 
 		if (!$this->current_session) {
 			$this->current_session = new LoginSession();
-			$this->entityManager->persist($this->current_session);
 		}
 
 		// Login sessie aanmaken in database
@@ -487,6 +491,7 @@ class LoginService {
 		$this->current_session->lock_ip = true; // sessie koppelen aan ip?
 		$this->current_session->authentication_method = AuthenticationMethod::password_login;
 
+		$this->entityManager->persist($this->current_session);
 		$this->entityManager->flush();
 
 		return true;

@@ -82,7 +82,7 @@ form {
   border: 1px solid #ebccd1;
 }
 
-label {
+label:not(.owee) {
   color: #ffffff;
   display: block;
   font-size: 0.8em;
@@ -140,6 +140,7 @@ input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="number"],
+input[type="tel"],
 select {
   height: 2.75em;
 }
@@ -149,7 +150,7 @@ textarea {
 }
 
 input[type="checkbox"],
-input[type="radio"] {
+input[type="radio"]:not(.owee) {
   appearance: none;
   display: block;
   float: left;

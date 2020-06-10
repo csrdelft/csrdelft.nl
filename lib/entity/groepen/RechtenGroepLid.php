@@ -12,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Een lid van een rechten-groep.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\leden\RechtenGroepLedenRepository")
- * @ORM\Table("groep_leden")
+ * @ORM\Table("groep_leden", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
 class RechtenGroepLid extends AbstractGroepLid {
 	/**

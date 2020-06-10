@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\fiscaat;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\controller\AbstractController;
@@ -15,14 +16,17 @@ use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVerwijderenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTableResponse;
+use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -56,6 +60,11 @@ class PinTransactieController extends AbstractController {
 		$this->em = $em;
 	}
 
+	/**
+	 * @return TemplateView
+	 * @Route("/fiscaat/pin", methods={"GET"})
+	 * @Auth(P_FISCAAT_READ)
+	 */
 	public function overzicht() {
 		return view('fiscaat.pagina', [
 			'titel' => 'Pin transacties beheer',
@@ -63,6 +72,12 @@ class PinTransactieController extends AbstractController {
 		]);
 	}
 
+	/**
+	 * @param Request $request
+	 * @return PinTransactieMatchTableResponse
+	 * @Route("/fiscaat/pin", methods={"POST"})
+	 * @Auth(P_FISCAAT_READ)
+	 */
 	public function lijst(Request $request) {
 		$filter = $request->query->get('filter', '');
 
@@ -82,6 +97,8 @@ class PinTransactieController extends AbstractController {
 
 	/**
 	 * @throws CsrException
+	 * @Route("/fiscaat/pin/verwerk", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function verwerk() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -116,6 +133,8 @@ class PinTransactieController extends AbstractController {
 	/**
 	 * @throws CsrGebruikerException
 	 * @throws CsrException
+	 * @Route("/fiscaat/ipin/aanmaken", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function aanmaken() {
 		$form = new PinBestellingAanmakenForm();
@@ -140,6 +159,7 @@ class PinTransactieController extends AbstractController {
 				$bestelling = new CiviBestelling();
 				$bestelling->moment = $pinTransactie->datetime;
 				$bestelling->uid = $values['uid'];
+				$bestelling->profiel = ProfielRepository::get($values['uid']);
 				$bestelling->totaal = $pinTransactie->getBedragInCenten() * -1;
 				$bestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
 				$bestelling->deleted = false;
@@ -182,6 +202,8 @@ class PinTransactieController extends AbstractController {
 
 	/**
 	 * @throws CsrGebruikerException
+	 * @Route("/fiscaat/pin/ontkoppel", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function ontkoppel() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -224,6 +246,8 @@ class PinTransactieController extends AbstractController {
 
 	/**
 	 * @throws CsrException
+	 * @Route("/fiscaat/pin/koppel", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function koppel() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -293,6 +317,8 @@ class PinTransactieController extends AbstractController {
 	/**
 	 * Verwijder een pin bestelling. Als er nog andere onderdelen aan deze bestelling zijn, maak dan een nieuwe
 	 * bestelling aan hiervoor.
+	 * @Route("/fiscaat/pin/verwijder", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function verwijder() {
 		$form = new PinBestellingVerwijderenForm(new PinTransactieMatch());
@@ -328,6 +354,7 @@ class PinTransactieController extends AbstractController {
 					$nieuweBestelling = new CiviBestelling();
 					$nieuweBestelling->inhoud = $nieuweBestellingInhoud;
 					$nieuweBestelling->uid = $oudeBestelling->uid;
+					$nieuweBestelling->profiel = $oudeBestelling->profiel;
 					$nieuweBestelling->moment = $oudeBestelling->moment;
 					$nieuweBestelling->cie = $oudeBestelling->cie;
 					$nieuweBestelling->totaal = $oudeBestelling->totaal - $pinBestellingInhoud->aantal;
@@ -353,6 +380,8 @@ class PinTransactieController extends AbstractController {
 
 	/**
 	 * Verander het bedrag in de bestelling.
+	 * @Route("/fiscaat/pin/update", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function update() {
 		$form = new PinBestellingVeranderenForm(new PinTransactieMatch());
@@ -399,6 +428,8 @@ class PinTransactieController extends AbstractController {
 
 	/**
 	 * @throws CsrGebruikerException
+	 * @Route("/fiscaat/pin/info", methods={"POST"})
+	 * @Auth(P_FISCAAT_READ)
 	 */
 	public function info() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -420,6 +451,8 @@ class PinTransactieController extends AbstractController {
 
 	/**
 	 * Markeer een match als verwijderd, deze transactie is niet relevant en al op een andere manier verwerkt.
+	 * @Route("/fiscaat/pin/verwijder_transactie", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function verwijder_transactie() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
@@ -460,6 +493,8 @@ class PinTransactieController extends AbstractController {
 	/**
 	 * Verwijder matches die geen bestelling en transactie hebben. Dit kan gebeuren als een probleem binnen het
 	 * socciesysteem wordt opgelost.
+	 * @Route("/fiscaat/pin/heroverweeg", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function heroverweeg() {
 		$deleted = $this->em->transactional(function () {

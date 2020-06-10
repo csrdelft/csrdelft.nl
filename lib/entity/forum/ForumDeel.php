@@ -16,7 +16,9 @@ use Doctrine\ORM\PersistentCollection;
  *
  * Een deelforum zit in een forumcategorie bevat ForumDraden.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDelenRepository")
- * @ORM\Table("forum_delen")
+ * @ORM\Table("forum_delen", indexes={
+ *   @ORM\Index(name="volgorde", columns={"volgorde"}),
+ * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class ForumDeel {

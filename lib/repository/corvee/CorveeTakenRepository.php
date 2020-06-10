@@ -162,7 +162,6 @@ class CorveeTakenRepository extends AbstractRepository {
 	public function getTaak($tid) {
 		$taak = $this->find($tid);
 
-		/** @var CorveeTaak $taak */
 		if ($taak->verwijderd) {
 			throw new CsrGebruikerException('Maaltijd is verwijderd');
 		}
@@ -239,7 +238,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	 */
 	public function saveTaak($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
 		return $this->_em->transactional(function () use ($tid, $fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus) {
-			if ($tid === 0) {
+			if ($tid === null) {
 				$taak = $this->newTaak($fid, $uid, $crid, $mid, $datum, $punten, $bonus_malus);
 			} else {
 				$taak = $this->getTaak($tid);
@@ -259,23 +258,6 @@ class CorveeTakenRepository extends AbstractRepository {
 
 			return $taak;
 		});
-	}
-
-	/**
-	 * @param $tid
-	 * @return CorveeTaak|null
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function herstelTaak($tid) {
-		$taak = $this->find($tid);
-		if (!$taak->verwijderd) {
-			throw new CsrGebruikerException('Corveetaak is niet verwijderd');
-		}
-		$taak->verwijderd = false;
-		$this->_em->persist($taak);
-		$this->_em->flush();
-		return $taak;
 	}
 
 	/**
@@ -329,22 +311,6 @@ class CorveeTakenRepository extends AbstractRepository {
 		}
 		$this->_em->flush();
 		return count($taken);
-	}
-
-	/**
-	 * @param $tid
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function verwijderTaak($tid) {
-		$taak = $this->find($tid);
-		if ($taak->verwijderd) {
-			$this->_em->remove($taak);
-		} else {
-			$taak->verwijderd = true;
-			$this->_em->persist($taak);
-		}
-		$this->_em->flush();
 	}
 
 	public function vanRepetitie(CorveeRepetitie $repetitie, $datum, $mid = null, $uid = null, $bonus_malus = 0) {

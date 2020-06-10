@@ -29,13 +29,13 @@
 				<div class="row no-gutters py-1" style="border-bottom: 1px solid #999;">
 					@if($aanmelding->uid)
 						<div class="col">
-							{!! \CsrDelft\repository\ProfielRepository::getLink($aanmelding->uid, instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
+							{!! $aanmelding->profiel->getLink(instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
 							<br/>
-							@php($eetwens = \CsrDelft\repository\ProfielRepository::get($aanmelding->uid)->eetwens)
+							@php($eetwens = $aanmelding->profiel->eetwens)
 							@if($eetwens !== '')
 								<strong class="eetwens">{{$eetwens}}</strong>
 							@endif
-							@if(! \CsrDelft\repository\ProfielRepository::get($aanmelding->uid)->propertyMogelijk("eetwens") )
+							@if(! $aanmelding->profiel->propertyMogelijk("eetwens") )
 								<strong class="geeneetwens">Let op!</strong> Van deze gast is geen eetwens of allergie bekend (vanwege
 								de
 								lidstatus). Neem contact met deze persoon op voor informatie.
@@ -51,7 +51,7 @@
 						<div class="col-auto">{{$aanmelding->getSaldoMelding()}}</div>
 					@elseif($aanmelding->door_uid)
 						<div class="col">Gast
-							van {!! \CsrDelft\repository\ProfielRepository::getLink($aanmelding->door_uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}</div>
+							van {!! $aanmelding->door_profiel->getLink(instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}</div>
 						<div class="col-auto">-</div>
 					@else
 						<div class="col" style="line-height: 2.2em;">&nbsp;</div>

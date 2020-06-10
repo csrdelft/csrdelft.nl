@@ -4,6 +4,7 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\groepen\Verticale;
+use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,8 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Controller voor verticalen.
  */
 class VerticalenController extends AbstractGroepenController {
-	public function __construct(VerticalenRepository $verticalenRepository) {
-		parent::__construct($verticalenRepository);
+	public function __construct(ChangeLogRepository $changeLogRepository, VerticalenRepository $verticalenRepository) {
+		parent::__construct($changeLogRepository, $verticalenRepository);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {
@@ -33,7 +34,7 @@ class VerticalenController extends AbstractGroepenController {
 			$limit = $request->query->getInt('limit');
 		}
 		$result = [];
-		$verticales = $this->model->createQueryBuilder('v')
+		$verticales = $this->repository->createQueryBuilder('v')
 			->where('v.naam LIKE :zoekterm')
 			->setParameter('zoekterm', $zoekterm)
 			->setMaxResults($limit)
