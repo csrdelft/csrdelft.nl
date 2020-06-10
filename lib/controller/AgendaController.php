@@ -280,7 +280,7 @@ class AgendaController {
 	/**
 	 * @param null $refuuid
 	 * @return JsonResponse
-	 * @Route("/agenda/verbergen/refuuid", methods={"POST"}, defaults={"refuuid": null})
+	 * @Route("/agenda/verbergen/{refuuid}", methods={"POST"}, defaults={"refuuid": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function verbergen($refuuid = null) {
