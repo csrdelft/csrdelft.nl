@@ -36,13 +36,6 @@
 
 		<!-- One -->
 		<section id="one" class="wrapper first kleur1">
-			<div id="corona-bericht">
-				<p>
-					<em style="color:red;">
-						Vanwege de recente maatregelen omtrent de verspreiding van het coronavirus, is besloten per direct alle verenigingsactiviteiten af te lassen en is onze sociëteit gesloten. Als u hierover vragen heeft of het bestuur wil bereiken kunt u het bestuur mailen (bestuur@csrdelft.nl).<br>
-					</em>
-				</p>
-			</div>
 			<div class="inner">
 				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
 				<div class="content">
