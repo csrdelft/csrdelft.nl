@@ -104,10 +104,18 @@ De PubCie.
 			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
 		}
 
-		$typeaanduiding = $type === 'lid-worden' ? 'Ik wil lid worden' : 'Eerst een lid spreken';
+		if ($type === 'lid-worden') {
+			$typeaanduiding = 'Ik wil lid worden';
+			$commissie = "PromoCie";
+			$bestemming = [env('EMAIL_PROMOCIE') => $commissie];
+		} else {
+			$typeaanduiding = 'Eerst een lid spreken';
+			$commissie = "OweeCie";
+			$bestemming = [env('EMAIL_OWEECIE') => $commissie];
+		}
 
 		$bericht = "
-Beste OweeCie,
+Beste $commissie,
 
 Het formulier op de OWee-pagina is ingevuld:
 
@@ -120,7 +128,7 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-		$mail = new Mail([env('EMAIL_OWEECIE') => "OweeCie"], "OWee formulier", $bericht);
+		$mail = new Mail($bestemming, "OWee formulier", $bericht);
 		$mail->setFrom(env('EMAIL_PUBCIE'));
 		$mail->send();
 
