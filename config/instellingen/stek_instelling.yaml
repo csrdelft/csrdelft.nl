@@ -60,7 +60,10 @@ instellingen:
     reageren_tijd: '-2 minutes'
     grafiek_draad_recent: '-1 month'
     grafiek_stats_periode: '-6 months'
+    # Hoe lang het duurt voordat een gesloten bericht onzichtbaar wordt
     externen_geentoegang_gesloten: '-1 year'
+    # Hoe lang het duurt voordat een open bericht onzichtbaar wordt
+    externen_geentoegang_open: '-1 year'
   'fotoalbum':
     'slideshow_interval': '3s'
   'gesprekken':
