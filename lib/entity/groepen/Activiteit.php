@@ -176,7 +176,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
-		if ($soort) {
+		if ($soort && ActiviteitSoort::isValidValue($soort)) {
 			switch (ActiviteitSoort::from($soort)) {
 
 				case ActiviteitSoort::OWee():
