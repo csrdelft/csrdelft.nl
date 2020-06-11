@@ -321,6 +321,8 @@ body {
 			font-weight: 600;
 			color: white;
 			line-height: 130%;
+			position: relative;
+			z-index: 1;
 
 			@include media-breakpoint-down(sm) {
 				font-size: 1.5rem;
@@ -330,6 +332,24 @@ body {
 
 		&:hover {
 			text-decoration: none;
+		}
+
+		.maartje {
+			position: absolute;
+			bottom: calc(2rem + 44px);
+			left: 2rem;
+			right: 2rem;
+			height: 240px;
+			background: url('../images/owee2020-maartje.png') no-repeat bottom center;
+			background-size: contain;
+
+			@include media-breakpoint-down(md) {
+				right: 2rem;
+				left: auto;
+				width: 130px;
+				bottom: calc(1rem + 44px);
+				height: calc(100% - 3rem);
+			}
 		}
 
 		.cta {
