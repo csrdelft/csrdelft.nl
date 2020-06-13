@@ -5,6 +5,7 @@ namespace CsrDelft\controller\fiscaat;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
@@ -503,13 +504,13 @@ class PinTransactieController extends AbstractController {
 			$manager = $this->getDoctrine()->getManager();
 
 			foreach ($alleMatches as $match) {
+				if (!$match->bestelling) {
+					continue;
+				}
 				$bestelling = $match->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 				if (!$bestelling && $match->transactie == null) {
+					$deleted[] = new RemoveDataTableEntry($match->id, PinTransactieMatch::class);
 					$manager->remove($match);
-					$deleted[] = [
-						'UUID' => $match->getUUID(),
-						'remove' => true,
-					];
 				}
 			}
 
@@ -518,6 +519,6 @@ class PinTransactieController extends AbstractController {
 			return $deleted;
 		});
 
-		return new PinTransactieMatchTableResponse($deleted);
+		return $this->tableData($deleted === true ? [] : $deleted);
 	}
 }
