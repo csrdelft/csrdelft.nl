@@ -6,7 +6,7 @@
  * Time: 16:38
  * To change this template use File | Settings | File Templates.
  */
-require_once dirname(__DIR__, 2) . '/../lib/configuratie.include.php';
+require_once dirname(__DIR__) . '/../lib/configuratie.include.php';
 require_once 'controller/Barsysteem.class.php';
 
 $barsysteem = new Barsysteem();
