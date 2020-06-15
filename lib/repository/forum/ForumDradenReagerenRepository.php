@@ -69,18 +69,18 @@ class ForumDradenReagerenRepository extends AbstractRepository {
 			->getQuery()->execute();
 	}
 
-	public function verwijderReagerenVoorDraad(ForumDraad $draad) {
+	public function verwijderReagerenVoorDraad(array $draadIds) {
 		$this->createQueryBuilder('r')
-			->where('r.draad_id = :draad_id')
-			->setParameter('draad_id', $draad->draad_id)
+			->where('r.draad_id in (:draad_ids)')
+			->setParameter('draad_ids', $draadIds)
 			->delete()
 			->getQuery()->execute();
 	}
 
-	public function verwijderReagerenVoorLid($uid) {
+	public function verwijderReagerenVoorLeden($uids) {
 		$this->createQueryBuilder('r')
-			->where('r.uid = :uid')
-			->setParameter('uid', $uid)
+			->where('r.uid in (:uids)')
+			->setParameter('uids', $uids)
 			->delete()
 			->getQuery()->execute();
 	}

@@ -255,12 +255,18 @@ class LidInstellingenRepository extends AbstractRepository {
 	/**
 	 */
 	public function opschonen() {
-		foreach ($this->findAll() as $instelling) {
-			if (!$this->hasKey($instelling->module, $instelling->instelling_id)) {
-				$this->getEntityManager()->remove($instelling);
+		$instellingen = [];
+		foreach ($this->getModules() as $module) {
+			foreach ($this->getModuleKeys($module) as $instelling) {
+				$instellingen[] = $instelling;
 			}
 		}
 
-		$this->getEntityManager()->flush();
+		$this->createQueryBuilder('i')
+			->delete()
+			->where('i.module not in (:modules) or i.instelling_id not in (:instellingen)')
+			->setParameter('modules', $this->getModules())
+			->setParameter('instellingen', $instellingen)
+			->getQuery()->execute();
 	}
 }

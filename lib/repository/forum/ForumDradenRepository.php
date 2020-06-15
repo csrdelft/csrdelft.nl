@@ -367,14 +367,14 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$this->getEntityManager()->flush();
 
 		if ($property === 'belangrijk') {
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
+			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([$draad->draad_id]);
 		} elseif ($property === 'gesloten') {
-			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen($draad);
+			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([$draad->draad_id]);
 		} elseif ($property === 'verwijderd') {
-			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen($draad);
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
-			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
-			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
+			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([$draad->draad_id]);
+			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([$draad->draad_id]);
+			$this->forumDradenGelezenRepository->verwijderDraadGelezen([$draad->draad_id]);
+			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad([$draad->draad_id]);
 			$this->forumPostsRepository->verwijderForumPostsVoorDraad($draad);
 		}
 	}

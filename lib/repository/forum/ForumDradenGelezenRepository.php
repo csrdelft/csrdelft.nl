@@ -62,20 +62,20 @@ class ForumDradenGelezenRepository extends AbstractRepository {
 		$this->getEntityManager()->clear();
 	}
 
-	public function verwijderDraadGelezen(ForumDraad $draad) {
-		$manager = $this->getEntityManager();
-		foreach ($this->findBy(['draad_id' => $draad->draad_id]) as $gelezen) {
-			$manager->remove($gelezen);
-		}
-		$manager->flush();
+	public function verwijderDraadGelezen(array $draadIds) {
+		$this->createQueryBuilder('fdg')
+			->delete()
+			->where('fdg.draad_id in (:draad_ids)')
+			->setParameter('draad_ids', $draadIds)
+			->getQuery()->execute();
 	}
 
-	public function verwijderDraadGelezenVoorLid($uid) {
-		$manager = $this->getEntityManager();
-		foreach ($this->findBy(['uid' => $uid]) as $gelezen) {
-			$manager->remove($gelezen);
-		}
-		$manager->flush();
+	public function verwijderDraadGelezenVoorLeden(array $uids) {
+		$this->createQueryBuilder('fdg')
+			->delete()
+			->where('fdg.uid in (:uids)')
+			->setParameter('uids', $uids)
+			->getQuery()->execute();
 	}
 
 }

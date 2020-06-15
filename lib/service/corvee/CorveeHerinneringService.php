@@ -40,9 +40,12 @@ class CorveeHerinneringService {
 	public function stuurHerinnering(CorveeTaak $taak) {
 		$datum = date_format_intl($taak->datum, DATE_FORMAT);
 		$uid = $taak->uid;
+		if (!$uid) {
+			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!');
+		}
 		$profiel = $this->profielRepository->find($uid);
 		if (!$profiel) {
-			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!' . (!empty($uid) ? ' ($uid =' . $uid . ')' : ''));
+			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen! ($uid =' . $uid . ')');
 		}
 		$lidnaam = $profiel->getNaam('civitas');
 		$to = array($profiel->getPrimaryEmail() => $lidnaam);

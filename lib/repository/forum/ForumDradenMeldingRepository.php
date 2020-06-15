@@ -55,18 +55,18 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		return $melding;
 	}
 
-	public function stopAlleMeldingenVoorLid(string $uid) {
+	public function stopAlleMeldingenVoorLeden(array $uids) {
 		$this->createQueryBuilder('m')
-			->where('m.uid = :uid')
-			->setParameter('uid', $uid)
+			->where('m.uid in (:uids)')
+			->setParameter('uids', $uids)
 			->delete()
 			->getQuery()->execute();
 	}
 
-	public function stopMeldingenVoorIedereen(ForumDraad $draad) {
+	public function stopMeldingenVoorIedereen(array $draadIds) {
 		$this->createQueryBuilder('m')
-			->where('m.draad_id = :draad_id')
-			->setParameter('draad_id', $draad->draad_id)
+			->where('m.draad_id in (:draad_ids)')
+			->setParameter('draad_ids', $draadIds)
 			->delete()
 			->getQuery()->execute();
 	}

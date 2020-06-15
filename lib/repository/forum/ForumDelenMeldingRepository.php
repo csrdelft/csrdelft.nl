@@ -66,14 +66,14 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 
 	/**
 	 * Verwijder alle te ontvangen meldingen voor gegeven lid
-	 * @param string $uid
+	 * @param $uids
 	 */
-	public function stopAlleMeldingenVoorLid($uid) {
-		$manager = $this->getEntityManager();
-		foreach ($this->findBy(['uid' => $uid]) as $melding) {
-			$manager->remove($melding);
-		}
-		$manager->flush();
+	public function stopAlleMeldingenVoorLeden($uids) {
+		$this->createQueryBuilder('fdm')
+			->delete()
+			->where('fdm.uid in (:uids)')
+			->setParameter('uids', $uids)
+			->getQuery()->execute();
 	}
 
 	/**

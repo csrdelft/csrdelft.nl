@@ -478,7 +478,7 @@ class ForumController extends AbstractController {
 	 */
 	public function toonalles() {
 		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
-		$this->forumDradenVerbergenRepository->toonAllesVoorLid(LoginService::getUid());
+		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([LoginService::getUid()]);
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		return new JsonResponse(true);
 	}
