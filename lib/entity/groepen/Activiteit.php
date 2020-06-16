@@ -91,6 +91,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * Locatie
 	 * @var string
 	 * @ORM\Column(type="string", nullable=true)
+	 * @Serializer\Groups("datatable")
 	 */
 	public $locatie;
 	/**
