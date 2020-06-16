@@ -36,6 +36,10 @@ class DoctrineEntityField extends InputField {
 	 * @var string
 	 */
 	private $entityType;
+	/**
+	 * @var string
+	 */
+	public $suggestieIdField = 'id';
 
 	/**
 	 * EntityField constructor.
@@ -97,7 +101,7 @@ class DoctrineEntityField extends InputField {
 		$html = '<input name="' . $this->name . '_show" value="' . $this->entity->getWeergave() . '" origvalue="' . $this->entity->getWeergave() . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 
 		$id = $this->getId() . '_' . $this->idField;
-		$this->typeahead_selected .= '$("#' . $id . '").val(suggestion["id"]);';
+		$this->typeahead_selected .= '$("#' . $id . '").val(suggestion["'.$this->suggestieIdField.'"]);';
 		$html .= '<input type="hidden" name="' . $this->name . '" id="' . $id . '" value="' . $this->entity->getId() . '" />';
 
 		return $html;
