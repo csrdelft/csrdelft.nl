@@ -3,12 +3,12 @@ import $ from 'jquery';
 import {ajaxRequest} from './ajax';
 import {bbCodeSet} from './bbcode-set';
 import {domUpdate} from './context';
-import ctx, {init} from './ctx';
+import ctx from './ctx';
 import {DatatableResponse, fnGetSelection, fnUpdateDataTable} from './datatable/api';
 
-import {modalClose, modalOpen} from './modal';
+import {modalClose} from './modal';
 
-import {redirect, reload} from './util';
+import {redirect, reload} from './reload';
 
 ctx.addHandlers({
 	'.InlineFormToggle': (el) => el.addEventListener('click', (event) => formToggle(el, event)),

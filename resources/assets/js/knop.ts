@@ -5,8 +5,8 @@ import ctx, {init} from './ctx';
 import {fnGetSelection, fnUpdateDataTable} from './datatable/api';
 import {takenSelectRange, takenSubmitRange} from './maalcie';
 
-import {modalClose, modalOpen} from './modal';
-import {redirect, reload} from './util';
+import {modalClose} from './modal';
+import {redirect, reload} from './reload';
 
 ctx.addHandlers({
 	'.get': (el) => el.addEventListener('click', knopGet),

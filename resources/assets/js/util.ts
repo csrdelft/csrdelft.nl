@@ -1,5 +1,3 @@
-import {domUpdate} from './context';
-
 /**
  * Selecteer de tekst van een DOM-element.
  * @source http://stackoverflow.com/questions/985272/
@@ -60,22 +58,6 @@ export function basename(path: string, suffix: string = '') {
 	}
 
 	return base;
-}
-
-export function reload(htmlString: string | object | boolean) {
-	if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {
-		domUpdate(htmlString);
-		return;
-	}
-	location.reload();
-}
-
-export function redirect(htmlString: string) {
-	if (htmlString.substring(0, 16) === '<div id="modal" ') {
-		domUpdate(htmlString);
-		return;
-	}
-	window.location.href = htmlString;
 }
 
 export function route(path: string, cb: () => void) {
