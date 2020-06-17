@@ -19,7 +19,7 @@ class BladeRenderer implements Renderer {
 		$this->bladeOne = new CustomBladeOne(TEMPLATE_PATH, BLADE_CACHE_PATH, BladeOne::MODE_AUTO);
 		$this->data = $variables;
 
-		// Tijden compilen doet dit er niet toe.
+		// Specifieke code voor development / Travis
 		if (MODE !== 'TRAVIS') {
 			$this->bladeOne->setInjectResolver(function ($className) {
 				try {
@@ -34,10 +34,16 @@ class BladeRenderer implements Renderer {
 				$this->bladeOne->setAuth(LoginService::getUid());
 			}
 			$this->bladeOne->authCallBack = [LoginService::class, 'mag'];
-		}
-		// In mode fast (productie) wordt de stylesheet in de html gehangen,
-		// in andere modi wordt een aanroep naar asset gedaan.
-		if ($this->bladeOne->getMode() === BladeOne::MODE_FAST) {
+
+			$this->bladeOne->directive('stylesheet', function ($expr) {
+				return '<?php echo css_asset' . $expr . '; ?>';
+			});
+			$this->bladeOne->directive('script', function ($expr) {
+				return '<?php echo js_asset' . $expr . '; ?>';
+			});
+		} else {
+			// In productie wordt de stylesheet in de html gehangen,
+			// in andere modi wordt een aanroep naar asset gedaan.
 			$this->bladeOne->directive('stylesheet', function ($expr) {
 				$asset = trim(trim($expr, "()"), "\"'");
 				return css_asset($asset);
@@ -45,13 +51,6 @@ class BladeRenderer implements Renderer {
 			$this->bladeOne->directive('script', function ($expr) {
 				$asset = trim(trim($expr, "()"), "\"'");
 				return js_asset($asset);
-			});
-		} else {
-			$this->bladeOne->directive('stylesheet', function ($expr) {
-				return '<?php echo css_asset' . $expr . '; ?>';
-			});
-			$this->bladeOne->directive('script', function ($expr) {
-				return '<?php echo js_asset' . $expr . '; ?>';
 			});
 		}
 
