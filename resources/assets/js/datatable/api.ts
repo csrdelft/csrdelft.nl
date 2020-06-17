@@ -32,7 +32,7 @@ ctx.addHandler('.ctx-datatable', initDataTable);
 ctx.addHandler('.ctx-offline-datatable', initOfflineDataTable);
 
 async function initDataTable(el: HTMLElement) {
-	await import('./bootstrap');
+	await import(/*webpackChunkName: "bootstrap"*/'./bootstrap');
 
 	const $el = $(el);
 
@@ -57,7 +57,7 @@ async function initDataTable(el: HTMLElement) {
 }
 
 async function initOfflineDataTable(el: HTMLElement) {
-	await import('./bootstrap');
+	await import(/*webpackChunkName: "bootstrap"*/'./bootstrap');
 
 	$(el).DataTable(parseData(el));
 }

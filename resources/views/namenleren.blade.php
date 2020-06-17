@@ -3,7 +3,7 @@
 @section('titel', 'Namen leren')
 
 @push('styles')
-	@stylesheet('app.css')
+	@stylesheet('app')
 @endpush
 
 @section('content')

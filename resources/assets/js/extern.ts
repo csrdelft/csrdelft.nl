@@ -21,7 +21,7 @@ window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).for
 
 docReady(() => {
 	setTimeout(() => document.body.classList.remove('is-loading'));
-	import('jquery').then(($) => {
+	import(/* webpackChunkName: "jquery" */'jquery').then(($) => {
 		window.$ = window.jQuery = $.default;
 
 		import(/* webpackChunkName: "extern-defer" */ './extern-defer');

@@ -20,12 +20,12 @@
 <link rel="shortcut icon" href="{{CSR_ROOT}}/images/favicon.ico" />
 <link rel="manifest" href="/manifest.json">
 <link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{{CSR_ROOT}}/forum/rss.xml" />
-@stylesheet('common.css')
+@stylesheet('common')
 @foreach(\CsrDelft\view\CompressedLayout::getUserModules() as $sheet)
-<link rel="stylesheet" href="{{asset("$sheet.css")}}" type="text/css" />
+	{!! css_asset($sheet) !!}
 @endforeach
 @stack('styles')
-@script('app.js')
+@script('app')
 @stack('scripts')
 <!-- Google Analytics -->
 <script>

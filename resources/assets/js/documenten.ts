@@ -6,7 +6,7 @@ import CellMetaSettings = DataTables.CellMetaSettings;
  * Documentenketzerjavascriptcode.
  */
 $(async () => {
-	await import('./datatable/bootstrap');
+	await import(/*webpackChunkName: "datatable"*/'./datatable/bootstrap');
 
 	const $documenten = $('#documenten');
 
