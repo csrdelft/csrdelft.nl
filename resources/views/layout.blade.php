@@ -83,6 +83,8 @@
 	@include('effect.civisaldo')
 @elseif(lid_instelling('layout', 'fx') == 'wolken')
 	@script('fxclouds.js')
+@elseif(lid_instelling('layout', 'fx') == 'sneeuw')
+	@script('fxsneeuw.js')
 @endif
 @if(lid_instelling('layout', 'trein') !== 'nee')
 	@include('effect.trein')
