@@ -1,6 +1,5 @@
 import axios from 'axios';
-import {domUpdate} from './context';
-import {modalOpen} from './modal';
+import {domUpdate} from './domUpdate';
 import {isLoggedIn} from './util';
 
 // ----------------------------------------------------------------------------

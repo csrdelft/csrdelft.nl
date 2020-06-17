@@ -1,6 +1,6 @@
 import './ajax-csrf';
 import './bootstrap';
-import {docReady} from './util';
+import {docReady} from './lib/util';
 
 import axios from 'axios';
 

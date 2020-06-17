@@ -82,7 +82,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 				test: /\.(js|jsx)$/,
 				exclude: [
 					/node_modules/,
-					/lib/,
+					/lib\/external/,
 				],
 				use: 'eslint-loader',
 			},

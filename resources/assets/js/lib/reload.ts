@@ -1,4 +1,4 @@
-import {domUpdate} from './context';
+import {domUpdate} from './domUpdate';
 
 export function reload(htmlString: string | object | boolean) {
 	if (typeof htmlString === 'string' && htmlString.substring(0, 16) === '<div id="modal" ') {

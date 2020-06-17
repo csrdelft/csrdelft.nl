@@ -6,7 +6,7 @@ import AlbumItem from 'jgallery/types/album-item';
 import {GalleryDecorator} from 'jgallery/types/gallery';
 import Params from 'jgallery/types/gallery/parameters';
 import $ from 'jquery';
-import {basename, dirname} from '../util';
+import {basename, dirname} from '../lib/util';
 
 interface Position {
 	x: number;

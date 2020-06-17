@@ -1,11 +1,9 @@
 import './bootstrap';
-import './csrdelft';
 import './ctx';
 import './dragobject';
 import './formulier';
 import './forum';
 import './grafiek';
-import './knop';
 import './logger';
 import './maalcie';
 import './main-menu';

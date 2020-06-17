@@ -1,6 +1,6 @@
 import Hammer from 'hammerjs';
 import $ from 'jquery';
-import {docReady} from './util';
+import {docReady} from './lib/util';
 
 declare global {
 	// Hammer kan een Document als element krijgen, dit zorgt ervoor dat horizontale scroll mogelijk is op mobiel.

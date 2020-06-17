@@ -1,30 +1,12 @@
 import $ from 'jquery';
+import {fnGetSelection, fnUpdateDataTable} from '../datatable/api';
+import {takenSelectRange} from '../maalcie';
 import {ajaxRequest} from './ajax';
-import {domUpdate} from './context';
-import ctx, {init} from './ctx';
-import {fnGetSelection, fnUpdateDataTable} from './datatable/api';
-import {takenSelectRange, takenSubmitRange} from './maalcie';
 
+import {domUpdate} from './domUpdate';
 import {modalClose} from './modal';
 import {redirect, reload} from './reload';
-
-ctx.addHandlers({
-	'.get': (el) => el.addEventListener('click', knopGet),
-	'.post': (el) => el.addEventListener('click', knopPost),
-	'.vergroot': (el) => el.addEventListener('click', knopVergroot),
-	'[data-buttons=radio]': (el) => {
-		for (const btn of Array.from(el.querySelectorAll('a.btn'))) {
-			btn.addEventListener('click',
-				(event) => {
-					for (const active of Array.from(el.querySelectorAll('.active'))) {
-						active.classList.remove('active');
-					}
-					(event.target as Element).classList.add('active');
-				},
-			);
-		}
-	},
-});
+import {takenSubmitRange} from "./maalcie";
 
 function knopAjax(knop: JQuery, type: string) {
 	if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
@@ -129,13 +111,13 @@ export function knopPost(this: HTMLElement, event: Event) {
 	return false;
 }
 
-function knopGet(this: HTMLElement, event: Event) {
+export function knopGet(this: HTMLElement, event: Event) {
 	event.preventDefault();
 	knopAjax($(this), 'GET');
 	return false;
 }
 
-function knopVergroot(this: HTMLElement, event: Event) {
+export function knopVergroot(this: HTMLElement, event: Event) {
 	const knop = $(this);
 	const id = knop.attr('data-vergroot')!;
 	const oud = knop.attr('data-vergroot-oud')!;

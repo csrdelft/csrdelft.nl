@@ -1,19 +1,7 @@
 import axios from 'axios';
 import Chart, {ChartData, ChartOptions} from 'chart.js';
 import palette from 'google-palette';
-import moment from 'moment';
-import ctx from './ctx';
-import {formatBedrag, html} from './util';
-
-moment.locale('nl');
-
-ctx.addHandlers({
-	'.ctx-deelnamegrafiek': initDeelnamegrafiek,
-	'.ctx-graph-bar': initBar,
-	'.ctx-graph-line': initLine,
-	'.ctx-graph-pie': initPie,
-	'.ctx-saldografiek': initSaldoGrafiek,
-});
+import {formatBedrag, html} from './lib/util';
 
 function createCanvas(parent: HTMLElement) {
 	const canvas = html`<canvas style="width: 100%; height: 100%"/>` as HTMLCanvasElement;
@@ -21,7 +9,7 @@ function createCanvas(parent: HTMLElement) {
 	return canvas;
 }
 
-function initPie(el: HTMLElement) {
+export function initPie(el: HTMLElement) {
 	let data = JSON.parse(el.dataset.data!) as ChartData;
 
 	data = defaultKleuren(data);
@@ -29,7 +17,7 @@ function initPie(el: HTMLElement) {
 	return new Chart(createCanvas(el), {data, type: 'pie'});
 }
 
-async function initLine(el: HTMLElement) {
+export async function initLine(el: HTMLElement) {
 	let data: ChartData;
 	if (el.dataset.data) {
 		data = JSON.parse(el.dataset.data);
@@ -52,7 +40,7 @@ async function initLine(el: HTMLElement) {
 						tooltipFormat: 'D MMM H:mm ',
 					},
 					type: 'time',
-				}],
+				} as any],
 				yAxes: [{
 					stacked: true,
 					ticks: {
@@ -86,7 +74,7 @@ function defaultKleuren(data: ChartData) {
 	return data;
 }
 
-function initBar(el: HTMLElement) {
+export function initBar(el: HTMLElement) {
 	let data = JSON.parse(el.dataset.data!) as ChartData;
 	data = defaultKleuren(data);
 
@@ -104,7 +92,7 @@ function initBar(el: HTMLElement) {
 	return new Chart(createCanvas(el), {data, type: 'bar', options});
 }
 
-function initDeelnamegrafiek(el: HTMLElement) {
+export function initDeelnamegrafiek(el: HTMLElement) {
 	const data = JSON.parse(el.dataset.data!) as any;
 	const options: ChartOptions = {
 		scales: {
@@ -123,7 +111,7 @@ function initDeelnamegrafiek(el: HTMLElement) {
 		},
 		tooltips: {
 			callbacks: {
-				title: (t, d) => d.labels![t[0].index!],
+				title: (t, d) => String(d.labels![t[0].index!]),
 			},
 			intersect: false,
 			mode: 'index',
@@ -177,7 +165,7 @@ Chart.controllers.NegativeTransparentLine = Chart.controllers.line.extend({
 	},
 });
 
-function initSaldoGrafiek(el: HTMLElement) {
+export function initSaldoGrafiek(el: HTMLElement) {
 	const closed = el.dataset.closed === 'true';
 	const uid = el.dataset.uid!;
 	let timespan = 11;

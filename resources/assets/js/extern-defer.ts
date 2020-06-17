@@ -3,17 +3,19 @@
  */
 import axios from 'axios';
 import $ from 'jquery';
-import './bbcode';
+import {registerBbContext, registerFormulierContext} from './context';
 import {init} from './ctx';
-import './formulier';
 import './fotoalbum/main';
 
 require('lightbox2');
-require('./lib/jquery.markitup');
+require('./lib/external/jquery.markitup');
 require('jquery-ui/ui/widgets/tooltip');
 require('jquery-hoverintent');
 
 require('timeago');
+
+registerFormulierContext();
+registerBbContext();
 
 declare global {
 	// Deze functie heeft geen type...

@@ -9,7 +9,7 @@ import {
 	TextureLoader,
 	WebGLRenderer,
 } from 'three';
-import Detector from '../lib/three.detector';
+import Detector from '../lib/external/three.detector';
 
 (() => {
 	if (!Detector.webgl) {

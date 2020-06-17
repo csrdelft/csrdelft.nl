@@ -4,8 +4,8 @@ import withTooltip from 'jgallery/src/utils/with-tooltip';
 import AlbumItem from 'jgallery/types/album-item';
 import {GalleryDecorator} from 'jgallery/types/gallery';
 import Params from 'jgallery/types/gallery/parameters';
-import {redirect, reload} from '../reload';
-import {basename, dirname} from '../util';
+import {redirect, reload} from '../lib/reload';
+import {basename, dirname} from '../lib/util';
 
 const withAdminButtons: GalleryDecorator = (constructor) =>
 	class extends constructor {

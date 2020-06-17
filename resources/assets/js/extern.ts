@@ -1,5 +1,5 @@
 import './ajax-csrf';
-import {docReady} from './util';
+import {docReady} from './lib/util';
 
 declare global {
 	interface Window {
