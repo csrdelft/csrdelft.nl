@@ -12,6 +12,8 @@ function compileBlade() {
 
 	echo "Compiling blade templates in " . TEMPLATE_PATH . PHP_EOL;
 
+	echo "BladeOne mode: " . BLADEONE_MODE . PHP_EOL;
+
 	foreach ($files as $file) {
 		if (endsWith($file, $bladeExtension)) {
 			$file = str_replace(TEMPLATE_PATH, '', $file);
