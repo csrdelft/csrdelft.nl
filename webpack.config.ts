@@ -1,12 +1,5 @@
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import path from 'path';
-import TerserPlugin from 'terser-webpack-plugin';
-import {VueLoaderPlugin} from 'vue-loader';
 import webpack from 'webpack';
-import ManifestPlugin from 'webpack-manifest-plugin';
-
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const contextPath = path.resolve(__dirname, 'resources/assets');
 
@@ -49,7 +42,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		path: path.resolve(__dirname, 'htdocs/dist'),
 		// Alle javascript bestanden worden in de map js geplaatst.
 		filename: argv.mode !== 'production' ? 'js/[name].bundle.js' : 'js/[name].[contenthash].bundle.js',
-		chunkFilename: argv.mode !== 'production' ? 'js/[name].chunk.js' : 'js/[name].[chunkhash].chunk.js',
+		chunkFilename: argv.mode !== 'production' ? 'js/[name].chunk.js' : 'js/[name].[contenthash].chunk.js',
 		publicPath: '/dist/',
 	},
 	devtool: 'source-map',
@@ -62,23 +55,24 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 	},
 	optimization: {
 		minimizer: [
-			new OptimizeCSSAssetsPlugin({}),
-			new TerserPlugin(),
+			new (require('optimize-css-assets-webpack-plugin'))({}),
+			new (require('terser-webpack-plugin'))(),
 		],
 		splitChunks: {
 			chunks: 'all',
 		},
 	},
 	plugins: [
-		new MiniCssExtractPlugin({
+		new (require('mini-css-extract-plugin'))({
 			// Css bestanden komen in de map css terecht.
 			filename: argv.mode !== 'production' ? 'css/[name].css' : 'css/[name].[contenthash].css',
 		}),
-		new VueLoaderPlugin(),
-		new ManifestPlugin(),
-		new MomentLocalesPlugin({
+		new (require('vue-loader').VueLoaderPlugin)(),
+		new (require('webpack-manifest-plugin'))(),
+		new (require('moment-locales-webpack-plugin'))({
 			localesToKeep: ['nl'],
 		}),
+		new (require('./bin/dev/css-cleanup-webpack-plugin'))(),
 	],
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
@@ -177,11 +171,12 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 			// `MiniCssExtractPlugin` >
 			// Normaal slaat webpack css op in javascript bestanden, zodat je ze makkelijk specifiek kan opvragen
 			// hier zorgen we ervoor dat de css eruit wordt getrokken en in een los .css bestand wordt gestopt.
+			// css-cleanup-webpack-plugin is verantwoordelijk voor het verwijderen van leeggetrokken js bestanden.
 			{
 				test: /\.scss$/,
 				use: [
 					{
-						loader: MiniCssExtractPlugin.loader as string, // Om ts tevreden te houden.
+						loader: require('mini-css-extract-plugin').loader as string, // Om ts tevreden te houden.
 						options: {
 							// De css bestanden zitten in de css map, / is dus te vinden op ../
 							publicPath: '../',
