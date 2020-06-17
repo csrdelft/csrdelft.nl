@@ -3,8 +3,8 @@
 @section('titel', $titel)
 
 @section('styles')
-	@stylesheet('extern')
-	@stylesheet('extern-fotoalbum')
+	@stylesheet('extern.css')
+	@stylesheet('extern-fotoalbum.css')
 @endsection
 
 @section('content')

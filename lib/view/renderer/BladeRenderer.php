@@ -36,21 +36,22 @@ class BladeRenderer implements Renderer {
 			$this->bladeOne->authCallBack = [LoginService::class, 'mag'];
 
 			$this->bladeOne->directive('stylesheet', function ($expr) {
-				return '<?php echo css_asset' . $expr . '; ?>';
+				return '<link rel="stylesheet" href="<?php echo asset' . $expr . '; ?>" type="text/css"/>';
 			});
 			$this->bladeOne->directive('script', function ($expr) {
 				return '<?php echo js_asset' . $expr . '; ?>';
+				return '<script type="text/javascript" src="<?php echo asset' . $expr . '?>"></script>';
 			});
 		} else {
 			// In productie wordt de stylesheet in de html gehangen,
 			// in andere modi wordt een aanroep naar asset gedaan.
 			$this->bladeOne->directive('stylesheet', function ($expr) {
 				$asset = trim(trim($expr, "()"), "\"'");
-				return css_asset($asset);
+				return '<link rel="stylesheet" href="' . asset($asset) . '" type="text/css"/>';
 			});
 			$this->bladeOne->directive('script', function ($expr) {
 				$asset = trim(trim($expr, "()"), "\"'");
-				return js_asset($asset);
+				return '<script type="text/javascript" src="' . asset($asset) . '"></script>';
 			});
 		}
 

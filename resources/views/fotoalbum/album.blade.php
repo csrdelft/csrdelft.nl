@@ -5,8 +5,8 @@
 	@extends('layout-extern.layout')
 
 @section('styles')
-	@stylesheet('extern')
-	@stylesheet('extern-fotoalbum')
+	@stylesheet('extern.css')
+	@stylesheet('extern-fotoalbum.css')
 @endsection
 @endguest
 

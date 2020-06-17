@@ -1,2 +1,2 @@
-@script('fxraket')
-@stylesheet('fxraket')
+@script('fxraket.js')
+@stylesheet('fxraket.css')

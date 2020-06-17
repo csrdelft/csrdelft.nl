@@ -51,42 +51,18 @@ function crlf_endings(string $input) {
  * @param string $asset
  * @return string
  */
-function css_asset(string $module) {
-	$assetString = '';
-
-	foreach (module_asset($module, 'css') as $asset) {
-		$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\"/>\n";
-	}
-
-	return $assetString;
-}
-
-function js_asset(string $module) {
-	$assetString = '';
-
-	foreach (module_asset($module, 'js') as $asset) {
-		$assetString .= "<script type=\"text/javascript\" src=\"{$asset}\"></script>\n";
-	}
-
-	return $assetString;
-}
-
-function module_asset(string $module, string $extension) {
+function asset(string $asset) {
 	if (!file_exists(HTDOCS_PATH . 'dist/manifest.json')) {
 		throw new CsrException('htdocs/dist/manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
 	}
 
 	$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/manifest.json'), true);
 
-	$relevantAssets = [];
-
-	foreach ($manifest as $asset => $resource) {
-		if (preg_match('/(^|~)('.$module.')([.~])/', $asset) && endsWith($asset, $extension)) {
-			$relevantAssets[] = $resource;
-		}
+	if (isset($manifest[$asset])) {
+		return $manifest[$asset];
+	} else {
+		return '';
 	}
-
-	return ($relevantAssets);
 }
 
 /**

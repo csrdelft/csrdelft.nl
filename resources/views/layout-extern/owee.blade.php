@@ -3,9 +3,9 @@
 @section('titel', 'Machtig mooi - OWee 2020')
 
 @section('styles')
-	@stylesheet('extern')
-	@stylesheet('extern-owee')
-	@script('extern-owee')
+	@stylesheet('extern.css')
+	@stylesheet('extern-owee.css')
+	@script('extern-owee.js')
 @endsection
 
 @section('body')

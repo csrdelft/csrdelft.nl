@@ -5,6 +5,6 @@
 	@extends('layout-extern.layout')
 
 @section('styles')
-	@stylesheet('extern')
+	@stylesheet('extern.css')
 @endsection
 @endguest

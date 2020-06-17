@@ -7,5 +7,5 @@
 	<div class="layer" data-depth="0.80" style="background-image: url('/images/onontdekt/laag5.png')"></div>
 </div>
 </div>
-@stylesheet('fxonontdekt')
-@script('fxonontdekt')
+@stylesheet('fxonontdekt.css')
+@script('fxonontdekt.js')

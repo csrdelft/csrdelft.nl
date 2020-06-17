@@ -3,7 +3,7 @@
 @section('titel', $titel)
 
 @section('styles')
-	@stylesheet('extern')
+	@stylesheet('extern.css')
 @endsection
 
 @section('content')
