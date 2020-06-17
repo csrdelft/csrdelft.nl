@@ -18,6 +18,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'app': './js/app.ts',
 		'ledenmemory': './js/ledenmemory.ts',
 		'fxclouds': './js/effect/fxclouds.ts',
+		'fxsneeuw': './js/effect/fxsneeuw.ts',
 		'fxonontdekt': './js/effect/fxonontdekt.ts',
 		'fxtrein': './js/effect/fxtrein.ts',
 		'fxraket': './js/effect/fxraket.ts',
