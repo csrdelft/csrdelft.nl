@@ -9,8 +9,8 @@
      - Wave on the coat.
      - Animation when changing the clothes.
 -->
-@stylesheet('fxminion.css')
-@script('fxminion.js')
+@stylesheet('fxminion')
+@script('fxminion')
 @php($minioncoords = \CsrDelft\service\DragObjectService::getCoords('minion', 40, 40))
 <div id="minion" class="dragobject savepos" style="top: {{$minioncoords["top"]}}px; left: {{$minioncoords["left"]}}px;">
 	<ul class="hair hair-left">

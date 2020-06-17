@@ -82,7 +82,9 @@
 @elseif(lid_instelling('layout', 'fx') == 'civisaldo')
 	@include('effect.civisaldo')
 @elseif(lid_instelling('layout', 'fx') == 'wolken')
-	@script('fxclouds.js')
+	@script('fxclouds')
+@elseif(lid_instelling('layout', 'fx') == 'sneeuw')
+	@script('fxsneeuw')
 @endif
 @if(lid_instelling('layout', 'trein') !== 'nee')
 	@include('effect.trein')
@@ -96,7 +98,7 @@
 		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
 		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden')}}';
 	</script>
-	@script('fxclippy.js')
+	@script('fxclippy')
 @endif
 </body>
 </html>

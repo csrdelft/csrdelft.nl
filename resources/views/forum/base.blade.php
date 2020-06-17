@@ -5,7 +5,7 @@
 	@extends('layout-extern.layout')
 
 	@section('styles')
-		@stylesheet('extern.css')
-		@stylesheet('extern-forum.css')
+		@stylesheet('extern')
+		@stylesheet('extern-forum')
 	@endsection
 @endguest

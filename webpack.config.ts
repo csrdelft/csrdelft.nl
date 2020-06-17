@@ -47,8 +47,8 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		// De map waarin alle bestanden geplaatst worden.
 		path: path.resolve(__dirname, 'htdocs/dist'),
 		// Alle javascript bestanden worden in de map js geplaatst.
-		filename: argv.mode !== 'production' ? 'js/[name].js' : 'js/[name].[contenthash].js',
-		chunkFilename: argv.mode !== 'production' ? 'js/[name].js' : 'js/[id].[contenthash].js',
+		filename: argv.mode !== 'production' ? 'js/[name].bundle.js' : 'js/[name].[contenthash].js',
+		chunkFilename: argv.mode !== 'production' ? 'js/[name].chunk.js' : 'js/[name].[chunkhash].js',
 		publicPath: '/dist/',
 	},
 	devtool: 'source-map',
@@ -64,6 +64,9 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 			new OptimizeCSSAssetsPlugin({}),
 			new TerserPlugin(),
 		],
+		splitChunks: {
+			chunks: 'all',
+		},
 	},
 	plugins: [
 		new MiniCssExtractPlugin({

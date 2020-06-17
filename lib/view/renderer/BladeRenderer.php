@@ -40,18 +40,18 @@ class BladeRenderer implements Renderer {
 		if ($this->bladeOne->getMode() === BladeOne::MODE_FAST) {
 			$this->bladeOne->directive('stylesheet', function ($expr) {
 				$asset = trim(trim($expr, "()"), "\"'");
-				return '<link rel="stylesheet" href="' . asset($asset) . '" type="text/css"/>';
+				return css_asset($asset);
 			});
 			$this->bladeOne->directive('script', function ($expr) {
 				$asset = trim(trim($expr, "()"), "\"'");
-				return '<script type="text/javascript" src="' . asset($asset) . '"></script>';
+				return js_asset($asset);
 			});
 		} else {
 			$this->bladeOne->directive('stylesheet', function ($expr) {
-				return '<link rel="stylesheet" href="<?php echo asset' . $expr . '; ?>" type="text/css"/>';
+				return '<?php echo css_asset' . $expr . '; ?>';
 			});
 			$this->bladeOne->directive('script', function ($expr) {
-				return '<script type="text/javascript" src="<?php echo asset' . $expr . '?>"></script>';
+				return '<?php echo js_asset' . $expr . '; ?>';
 			});
 		}
 
