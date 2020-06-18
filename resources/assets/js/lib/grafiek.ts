@@ -1,19 +1,7 @@
 import axios from 'axios';
 import Chart, {ChartData, ChartOptions} from 'chart.js';
 import palette from 'google-palette';
-import moment from 'moment';
-import ctx from './ctx';
 import {formatBedrag, html} from './util';
-
-moment.locale('nl');
-
-ctx.addHandlers({
-	'.ctx-deelnamegrafiek': initDeelnamegrafiek,
-	'.ctx-graph-bar': initBar,
-	'.ctx-graph-line': initLine,
-	'.ctx-graph-pie': initPie,
-	'.ctx-saldografiek': initSaldoGrafiek,
-});
 
 function createCanvas(parent: HTMLElement) {
 	const canvas = html`<canvas style="width: 100%; height: 100%"/>` as HTMLCanvasElement;
@@ -21,7 +9,7 @@ function createCanvas(parent: HTMLElement) {
 	return canvas;
 }
 
-function initPie(el: HTMLElement) {
+export function initPie(el: HTMLElement) {
 	let data = JSON.parse(el.dataset.data!) as ChartData;
 
 	data = defaultKleuren(data);
@@ -29,7 +17,7 @@ function initPie(el: HTMLElement) {
 	return new Chart(createCanvas(el), {data, type: 'pie'});
 }
 
-async function initLine(el: HTMLElement) {
+export async function initLine(el: HTMLElement) {
 	let data: ChartData;
 	if (el.dataset.data) {
 		data = JSON.parse(el.dataset.data);
@@ -52,7 +40,7 @@ async function initLine(el: HTMLElement) {
 						tooltipFormat: 'D MMM H:mm ',
 					},
 					type: 'time',
-				}],
+				} as any],
 				yAxes: [{
 					stacked: true,
 					ticks: {
@@ -86,7 +74,7 @@ function defaultKleuren(data: ChartData) {
 	return data;
 }
 
-function initBar(el: HTMLElement) {
+export function initBar(el: HTMLElement) {
 	let data = JSON.parse(el.dataset.data!) as ChartData;
 	data = defaultKleuren(data);
 
@@ -104,7 +92,7 @@ function initBar(el: HTMLElement) {
 	return new Chart(createCanvas(el), {data, type: 'bar', options});
 }
 
-function initDeelnamegrafiek(el: HTMLElement) {
+export function initDeelnamegrafiek(el: HTMLElement) {
 	const data = JSON.parse(el.dataset.data!) as any;
 	const options: ChartOptions = {
 		scales: {
@@ -123,7 +111,7 @@ function initDeelnamegrafiek(el: HTMLElement) {
 		},
 		tooltips: {
 			callbacks: {
-				title: (t, d) => d.labels![t[0].index!],
+				title: (t, d) => String(d.labels![t[0].index!]),
 			},
 			intersect: false,
 			mode: 'index',
@@ -133,51 +121,55 @@ function initDeelnamegrafiek(el: HTMLElement) {
 	return new Chart(createCanvas(el), {data, type: 'bar', options});
 }
 
-Chart.defaults.NegativeTransparentLine = Chart.helpers.clone(Chart.defaults.line);
-Chart.controllers.NegativeTransparentLine = Chart.controllers.line.extend({
-	update() {
-		if (this.chart.data.datasets.length) {
-			// get the min and max values
-			const min = this.chart.data.datasets[0].data
-				.reduce((mininum: number, p: any) => p.y < mininum ? p.y : mininum, this.chart.data.datasets[0].data[0].y);
+function createNegativetransparentLineChartController() {
+	if (Chart.defaults.NegativeTransparentLine) { return; }
 
-			if (min >= 0) {
-				this.chart.data.datasets[0].borderColor = 'green';
-				return Chart.controllers.line.prototype.update.apply(this, arguments);
+	Chart.defaults.NegativeTransparentLine = Chart.helpers.clone(Chart.defaults.line);
+	Chart.controllers.NegativeTransparentLine = Chart.controllers.line.extend({
+		update() {
+			if (this.chart.data.datasets.length) {
+				// get the min and max values
+				const min = this.chart.data.datasets[0].data
+					.reduce((mininum: number, p: any) => p.y < mininum ? p.y : mininum, this.chart.data.datasets[0].data[0].y);
+
+				if (min >= 0) {
+					this.chart.data.datasets[0].borderColor = 'green';
+					return Chart.controllers.line.prototype.update.apply(this, arguments);
+				}
+
+				const max = this.chart.data.datasets[0].data
+					.reduce((maximum: number, p: any) => p.y > maximum ? p.y : maximum, this.chart.data.datasets[0].data[0].y);
+
+				if (max <= 0) {
+					this.chart.data.datasets[0].borderColor = 'red';
+					return Chart.controllers.line.prototype.update.apply(this, arguments);
+				}
+
+				const yScale = this.getScaleForId(this.getMeta().yAxisID);
+
+				// figure out the pixels for these and the value 0
+				const top = yScale.getPixelForValue(max);
+				const zero = yScale.getPixelForValue(0);
+				const bottom = yScale.getPixelForValue(min);
+
+				// build a gradient that switches color at the 0 point
+				const context = this.chart.chart.ctx;
+				const gradient = context.createLinearGradient(0, top, 0, bottom);
+				const ratio = Math.min((zero - top) / (bottom - top), 1);
+				gradient.addColorStop(0, 'green');
+				gradient.addColorStop(ratio, 'green');
+				gradient.addColorStop(ratio, 'red');
+				gradient.addColorStop(1, 'red');
+				this.chart.data.datasets[0].borderColor = gradient;
 			}
 
-			const max = this.chart.data.datasets[0].data
-				.reduce((maximum: number, p: any) => p.y > maximum ? p.y : maximum, this.chart.data.datasets[0].data[0].y);
+			// noinspection JSPotentiallyInvalidConstructorUsage
+			return Chart.controllers.line.prototype.update.apply(this, arguments);
+		},
+	});
+}
 
-			if (max <= 0) {
-				this.chart.data.datasets[0].borderColor = 'red';
-				return Chart.controllers.line.prototype.update.apply(this, arguments);
-			}
-
-			const yScale = this.getScaleForId(this.getMeta().yAxisID);
-
-			// figure out the pixels for these and the value 0
-			const top = yScale.getPixelForValue(max);
-			const zero = yScale.getPixelForValue(0);
-			const bottom = yScale.getPixelForValue(min);
-
-			// build a gradient that switches color at the 0 point
-			const context = this.chart.chart.ctx;
-			const gradient = context.createLinearGradient(0, top, 0, bottom);
-			const ratio = Math.min((zero - top) / (bottom - top), 1);
-			gradient.addColorStop(0, 'green');
-			gradient.addColorStop(ratio, 'green');
-			gradient.addColorStop(ratio, 'red');
-			gradient.addColorStop(1, 'red');
-			this.chart.data.datasets[0].borderColor = gradient;
-		}
-
-		// noinspection JSPotentiallyInvalidConstructorUsage
-		return Chart.controllers.line.prototype.update.apply(this, arguments);
-	},
-});
-
-function initSaldoGrafiek(el: HTMLElement) {
+export function initSaldoGrafiek(el: HTMLElement) {
 	const closed = el.dataset.closed === 'true';
 	const uid = el.dataset.uid!;
 	let timespan = 11;
@@ -205,6 +197,8 @@ function initSaldoGrafiek(el: HTMLElement) {
 			},
 		},
 	};
+
+	createNegativetransparentLineChartController();
 
 	const chart = new Chart(createCanvas(el), {data: {}, type: 'NegativeTransparentLine', options});
 

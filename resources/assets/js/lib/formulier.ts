@@ -1,25 +1,10 @@
 import axios from 'axios';
 import $ from 'jquery';
+import {DatatableResponse, fnGetSelection, fnUpdateDataTable} from '../datatable/api';
 import {ajaxRequest} from './ajax';
-import {bbCodeSet} from './bbcode-set';
-import {domUpdate} from './context';
-import ctx from './ctx';
-import {DatatableResponse, fnGetSelection, fnUpdateDataTable} from './datatable/api';
-
+import {domUpdate} from './domUpdate';
 import {modalClose} from './modal';
-
 import {redirect, reload} from './reload';
-
-ctx.addHandlers({
-	'.InlineFormToggle': (el) => el.addEventListener('click', (event) => formToggle(el, event)),
-	'.SubmitChange': (el) => el.addEventListener('change', formSubmit),
-	'.cancel': (el) => el.addEventListener('click', formCancel),
-	'.reset': (el) => el.addEventListener('click', formReset),
-	'.submit': (el) => el.addEventListener('click', formSubmit),
-	'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
-	'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
-	'time.timeago': (el) => $(el).timeago(),
-});
 
 export function formIsChanged(form: JQuery<EventTarget>) {
 	let changed = false;
@@ -220,6 +205,6 @@ export function formCancel(event: Event) {
 	return true;
 }
 
-(window as any).insertPlaatje = (id: string) => {
-	$.markItUp({ replaceWith: '[plaatje]' + id + '[/plaatje]' });
-};
+export function insertPlaatje(id: string) {
+	$.markItUp({replaceWith: '[plaatje]' + id + '[/plaatje]'});
+}

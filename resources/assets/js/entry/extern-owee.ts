@@ -1,8 +1,6 @@
-import './ajax-csrf';
-import './bootstrap';
-import {docReady} from './util';
-
 import axios from 'axios';
+import '../ajax-csrf';
+import {docReady} from '../lib/util';
 
 declare global {
 	interface Window {

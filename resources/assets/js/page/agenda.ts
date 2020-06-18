@@ -10,10 +10,10 @@ import axios from 'axios';
 import $ from 'jquery';
 import moment from 'moment';
 import Popper from 'popper.js';
-import {ajaxRequest} from './ajax';
-import {domUpdate} from './context';
-import ctx from './ctx';
-import {htmlParse} from './util';
+import ctx from '../ctx';
+import {ajaxRequest} from '../lib/ajax';
+import {domUpdate} from '../lib/domUpdate';
+import {htmlParse} from '../lib/util';
 
 const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss';
 
@@ -145,6 +145,9 @@ const options: OptionsInput = {
 	},
 };
 
+ctx.addHandler('.ReloadAgenda', (el: Element) =>
+	el.addEventListener('click', () => setTimeout(() => calendar.refetchEvents())));
+
 // Creator krijgt nieuw knoppen
 if (creator === 'true') {
 	const header = options.header as ToolbarInput;
@@ -153,8 +156,5 @@ if (creator === 'true') {
 
 const calendar = new Calendar(calendarEl, options);
 calendar.render();
-
-ctx.addHandler('.ReloadAgenda',
-	(el) => el.addEventListener('click', () => setTimeout(() => calendar.refetchEvents())));
 
 $(document.body).on('modalClose', () => calendar.refetchEvents());

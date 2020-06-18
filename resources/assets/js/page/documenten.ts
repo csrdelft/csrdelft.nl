@@ -1,12 +1,12 @@
 import $ from 'jquery';
-import render from './datatable/render';
+import render from '../datatable/render';
 import CellMetaSettings = DataTables.CellMetaSettings;
 
 /**
  * Documentenketzerjavascriptcode.
  */
 $(async () => {
-	await import(/*webpackChunkName: "datatable"*/'./datatable/bootstrap');
+	await import(/*webpackChunkName: "datatable"*/'../datatable/bootstrap');
 
 	const $documenten = $('#documenten');
 

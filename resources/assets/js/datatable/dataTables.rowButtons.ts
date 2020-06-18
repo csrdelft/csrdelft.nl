@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import {init} from '../ctx';
-import {html} from '../util';
+import {html} from '../lib/util';
 import {replacePlaceholders} from './api';
 
 interface RowButtonsConfig {

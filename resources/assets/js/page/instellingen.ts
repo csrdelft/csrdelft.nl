@@ -9,7 +9,7 @@ function instellingVeranderd() {
 }
 
 function instellingOpslaan(ev: JQuery.ChangeEvent) {
-	if (ev.target!.checkValidity()) {
+	if (ev.target.checkValidity()) {
 		const input = $(ev.target);
 
 		const href = input.data('href');

@@ -22,14 +22,14 @@ const withFullSizePreview: GalleryDecorator = (constructor) =>
 		protected async updateImage(size: Size) {
 			const content = this.preview.getElement().querySelector<HTMLDivElement>('.j-gallery-preview-content')!;
 			if (size === Size.auto) {
-				await load(this.currentItem.fullUrl!);
+				await load(this.currentItem.fullUrl);
 
 				const img = new Image();
-				img.src = this.currentItem.fullUrl!;
-				content.style.backgroundImage = `url(${this.currentItem.fullUrl!})`;
+				img.src = this.currentItem.fullUrl;
+				content.style.backgroundImage = `url(${this.currentItem.fullUrl})`;
 				content.style.backgroundSize = `${Math.min(3000, img.width)}px`;
 			} else {
-				content.style.backgroundImage = `url(${this.currentItem.url!})`;
+				content.style.backgroundImage = `url(${this.currentItem.url})`;
 			}
 		}
 	};

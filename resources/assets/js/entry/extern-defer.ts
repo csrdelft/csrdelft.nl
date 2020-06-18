@@ -3,17 +3,19 @@
  */
 import axios from 'axios';
 import $ from 'jquery';
-import './bbcode';
-import {init} from './ctx';
-import './formulier';
-import './fotoalbum/main';
+import {registerBbContext} from '../context';
+import {init} from '../ctx';
+import {route} from '../lib/util';
 
 require('lightbox2');
-require('./lib/jquery.markitup');
-require('jquery-ui/ui/widgets/tooltip');
+require('../lib/external/jquery.markitup');
 require('jquery-hoverintent');
 
 require('timeago');
+
+registerBbContext();
+
+route('/fotoalbum', () => import(/* webpackChunkName: "fotoalbum" */'../page/fotoalbum'));
 
 declare global {
 	// Deze functie heeft geen type...
