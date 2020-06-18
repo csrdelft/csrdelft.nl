@@ -1,5 +1,5 @@
-import './ajax-csrf';
-import {docReady} from './lib/util';
+import '../ajax-csrf';
+import {docReady} from '../lib/util';
 
 declare global {
 	interface Window {
@@ -19,13 +19,13 @@ window.docReady = docReady;
 // Versimpelde versie van formSubmit in formulier.js
 window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).form.submit()};
 
-docReady(() => {
+docReady(async () => {
 	setTimeout(() => document.body.classList.remove('is-loading'));
-	import(/* webpackChunkName: "jquery" */'jquery').then(($) => {
-		window.$ = window.jQuery = $.default;
+	const {default: $} = await import(/* webpackChunkName: "jquery" */'jquery');
 
-		import(/* webpackChunkName: "extern-defer" */ './extern-defer');
-	});
+	window.$ = window.jQuery = $;
+
+	import(/* webpackChunkName: "extern-defer" */ './extern-defer');
 
 	const menu = document.querySelector('#menu') as HTMLDivElement;
 	const menuKnop = document.querySelector('.menu-knop')!;

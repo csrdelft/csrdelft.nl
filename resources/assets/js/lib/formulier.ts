@@ -1,12 +1,10 @@
 import axios from 'axios';
 import $ from 'jquery';
-import {DatatableResponse, fnGetSelection, fnUpdateDataTable} from './datatable/api';
-import {ajaxRequest} from './lib/ajax';
-
-import {modalClose} from './lib/modal';
-
-import {domUpdate} from './lib/domUpdate';
-import {redirect, reload} from './lib/reload';
+import {DatatableResponse, fnGetSelection, fnUpdateDataTable} from '../datatable/api';
+import {ajaxRequest} from './ajax';
+import {domUpdate} from './domUpdate';
+import {modalClose} from './modal';
+import {redirect, reload} from './reload';
 
 export function formIsChanged(form: JQuery<EventTarget>) {
 	let changed = false;
@@ -207,6 +205,6 @@ export function formCancel(event: Event) {
 	return true;
 }
 
-(window as any).insertPlaatje = (id: string) => {
-	$.markItUp({ replaceWith: '[plaatje]' + id + '[/plaatje]' });
-};
+export function insertPlaatje(id: string) {
+	$.markItUp({replaceWith: '[plaatje]' + id + '[/plaatje]'});
+}

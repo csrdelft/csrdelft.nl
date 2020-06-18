@@ -59,26 +59,30 @@
 					<div class="een-minuut">
 						<div id="hero">
 							<h1 class="major">C.S.R. IN 1 MINUUT</h1>
+							<noscript class="lazy-load">
 							<div class="bb-video">
 								<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl" title="C.S.R. Delft in 1 minuut" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 							</div>
+							</noscript>
 						</div>
-						<div class="sociaal">
-							<div class="youtube">
-								<p>Wil je zien hoe
-									de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
-								<div class="bb-video">
-									<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY?hl=nl" title="Delft studie is maar de helft! Aflevering 1 uit 3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<noscript class="lazy-load">
+							<div class="sociaal">
+								<div class="youtube">
+									<p>Wil je zien hoe
+										de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
+									<div class="bb-video">
+										<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY?hl=nl" title="Delft studie is maar de helft! Aflevering 1 uit 3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									</div>
+								</div>
+								<div class="instagram">
+									<p>Bekijk en volg ook ons Instagram account voor meer van onze vereniging!</p>
+									<div class="insta-grid">
+										<a href="https://www.instagram.com/csrdelft/"><img src="/dist/images/instagram.svg" alt="Instagram logo in C.S.R. kleuren"></a>
+										<p id="insta-tag">@csrdelft</p>
+									</div>
 								</div>
 							</div>
-							<div class="instagram">
-								<p>Bekijk en volg ook ons Instagram account voor meer van onze vereniging!</p>
-								<div class="insta-grid">
-									<a href="https://www.instagram.com/csrdelft/"><img src="/dist/images/instagram.svg" alt="Instagram logo in C.S.R. kleuren"></a>
-									<p id="insta-tag">@csrdelft</p>
-								</div>
-							</div>
-						</div>
+						</noscript>
 
 						<p>
 							De OWee gaat er anders uitzien, voor meer informatie zie de <a href="https://owee.nl">OWee website</a>.<br>

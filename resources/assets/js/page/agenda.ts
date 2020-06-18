@@ -145,8 +145,8 @@ const options: OptionsInput = {
 	},
 };
 
-export const reloadAgendaHandler =
-	(el: Element) => el.addEventListener('click', () => setTimeout(() => calendar.refetchEvents()));
+ctx.addHandler('.ReloadAgenda', (el: Element) =>
+	el.addEventListener('click', () => setTimeout(() => calendar.refetchEvents())));
 
 // Creator krijgt nieuw knoppen
 if (creator === 'true') {

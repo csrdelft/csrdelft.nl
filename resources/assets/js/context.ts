@@ -1,14 +1,4 @@
-import $ from 'jquery';
-import Vue from 'vue';
 import ctx from './ctx';
-import {initDataTable, initOfflineDataTable} from './datatable/api';
-import {formCancel, formReset, formSubmit, formToggle} from './formulier';
-import {initKaartjes} from './kaartje';
-import {initBbPreview, initBbPreviewBtn, loadBbImage} from './lib/bbcode';
-import {activeerLidHints} from './lib/bbcode-hints';
-import {bbCodeSet} from './lib/bbcode-set';
-import {knopGet, knopPost, knopVergroot} from './lib/knop';
-import {reloadAgendaHandler} from './page/agenda';
 
 export const registerGrafiekContext = async () => {
 	const {
@@ -17,7 +7,7 @@ export const registerGrafiekContext = async () => {
 		initLine,
 		initPie,
 		initSaldoGrafiek,
-	} = await import(/* webpackChunkName: "grafiek" */'./grafiek');
+	} = await import(/* webpackChunkName: "grafiek" */'./lib/grafiek');
 
 	ctx.addHandlers({
 		'.ctx-deelnamegrafiek': initDeelnamegrafiek,
@@ -29,6 +19,13 @@ export const registerGrafiekContext = async () => {
 };
 
 export const registerBbContext = async () => {
+	const {
+		activeerLidHints,
+		initBbPreview,
+		initBbPreviewBtn,
+		loadBbImage,
+	} = await import(/* webpackChunkName: "bbcode" */'./lib/bbcode');
+
 	ctx.addHandlers({
 		'div.bb-img-loading': loadBbImage,
 		'[data-bbpreview-btn]': initBbPreviewBtn,
@@ -38,6 +35,11 @@ export const registerBbContext = async () => {
 };
 
 export const registerDataTableContext = async () => {
+	const {
+		initDataTable,
+		initOfflineDataTable,
+	} = await import(/* webpackChunkName: "datatable-api" */'./datatable/api');
+
 	ctx.addHandlers({
 		'.ctx-datatable': initDataTable,
 		'.ctx-offline-datatable': initOfflineDataTable,
@@ -45,6 +47,12 @@ export const registerDataTableContext = async () => {
 };
 
 export const registerKnopContext = async () => {
+	const {
+		knopGet,
+		knopPost,
+		knopVergroot,
+	} = await import(/* webpackChunkName: "knop" */'./lib/knop');
+
 	ctx.addHandlers({
 		'.get': (el) => el.addEventListener('click', knopGet),
 		'.post': (el) => el.addEventListener('click', knopPost),
@@ -65,11 +73,15 @@ export const registerKnopContext = async () => {
 
 };
 
-export const registerAgendaContext = async () => {
-	ctx.addHandler('.ReloadAgenda', reloadAgendaHandler);
-};
-
 export const registerFormulierContext = async () => {
+	const {
+		formCancel,
+		formReset,
+		formSubmit,
+		formToggle,
+	} = await import(/* webpackChunkName: "formulier" */'./lib/formulier');
+	const {bbCodeSet} = await import(/* webpackChunkName: "bbcode-set" */'./lib/bbcode-set');
+
 	ctx.addHandlers({
 		'.InlineFormToggle': (el) => el.addEventListener('click', (event) => formToggle(el, event)),
 		'.SubmitChange': (el) => el.addEventListener('change', formSubmit),
@@ -83,6 +95,10 @@ export const registerFormulierContext = async () => {
 };
 
 export const registerGlobalContext = async () => {
+	const {initKaartjes} = await import(/* webpackChunkName: "kaartje" */'./lib/kaartje');
+	const {default: Vue} = await import(/* webpackChunkName: "vue" */'vue');
+	const {default: $} = await import(/* webpackChunkName: "jquery" */'jquery');
+
 	ctx.addHandlers({
 		'.hoverIntent': (el) => $(el).hoverIntent({
 			over() {

@@ -6,7 +6,7 @@ import Dropzone from 'dropzone';
 import $ from 'jquery';
 import moment from 'moment';
 import {
-	registerAgendaContext,
+	registerBbContext,
 	registerDataTableContext,
 	registerFormulierContext,
 	registerGlobalContext,
@@ -14,26 +14,16 @@ import {
 	registerKnopContext,
 } from './context';
 import {init} from './ctx';
-import {formCancel, formInlineToggle, formSubmit} from './formulier';
-import {forumBewerken} from './forum';
 import {ketzerAjax} from './lib/ajax';
-import './lib/bbcode';
 import {importAgenda} from './lib/courant';
 import {initSluitMeldingen} from './lib/csrdelft';
 import {domUpdate} from './lib/domUpdate';
-import {saveConceptForumBericht} from './lib/forum';
+import {formCancel, formInlineToggle, formSubmit, insertPlaatje} from './lib/formulier';
+import {forumBewerken, saveConceptForumBericht} from './lib/forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './lib/maalcie';
 import {docReady} from './lib/util';
 
 moment.locale('nl');
-
-registerGrafiekContext();
-registerFormulierContext();
-registerGlobalContext();
-registerFormulierContext();
-registerKnopContext();
-registerDataTableContext();
-registerAgendaContext();
 
 declare global {
 	interface JQueryStatic {
@@ -104,6 +94,7 @@ $.extend(window, {
 		// See view/formulier/invoervelden/InputField.abstract.php
 		// See view/formulier/invoervelden/ZoekField.class.php
 		formSubmit,
+		insertPlaatje,
 	},
 	forum: {
 		// See blade_templates/forum/partial/post_lijst.blade.php
@@ -149,13 +140,21 @@ $.timeago.settings.strings = {
 	years: '%d jaar',
 };
 
-docReady(() => {
+(async () => {
+	await registerGrafiekContext();
+	await registerFormulierContext();
+	await registerGlobalContext();
+	await registerKnopContext();
+	await registerDataTableContext();
+	await registerBbContext();
 
-	initSluitMeldingen();
-	init(document.body);
+	docReady(() => {
+		initSluitMeldingen();
+		init(document.body);
 
-	const modal = $('#modal');
-	if (modal.html() !== '') {
-		modal.modal();
-	}
-});
+		const modal = $('#modal');
+		if (modal.html() !== '') {
+			modal.modal();
+		}
+	});
+})();

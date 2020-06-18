@@ -196,7 +196,7 @@ export function ontstuiter(func: any, wait: number, immediate: boolean) {
 }
 
 export function docReady(fn: () => void): void {
-	if (document.readyState === 'complete') {
+	if (document.readyState === 'complete' || document.readyState === 'interactive') {
 		fn();
 	} else {
 		document.addEventListener('DOMContentLoaded', fn);

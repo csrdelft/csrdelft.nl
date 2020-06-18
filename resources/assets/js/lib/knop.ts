@@ -1,12 +1,11 @@
 import $ from 'jquery';
 import {fnGetSelection, fnUpdateDataTable} from '../datatable/api';
-import {takenSelectRange} from '../maalcie';
 import {ajaxRequest} from './ajax';
 
 import {domUpdate} from './domUpdate';
+import {takenSelectRange, takenSubmitRange} from './maalcie';
 import {modalClose} from './modal';
 import {redirect, reload} from './reload';
-import {takenSubmitRange} from "./maalcie";
 
 function knopAjax(knop: JQuery, type: string) {
 	if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
