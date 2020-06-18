@@ -3,7 +3,7 @@
  */
 import axios from 'axios';
 import $ from 'jquery';
-import {registerBbContext} from '../context';
+import {registerBbContext, registerFormulierContext} from '../context';
 import {init} from '../ctx';
 import {route} from '../lib/util';
 
@@ -15,6 +15,10 @@ require('timeago');
 
 registerBbContext();
 
+route('/forum', async () => {
+	await registerFormulierContext();
+	init(document.body);
+});
 route('/fotoalbum', () => import(/* webpackChunkName: "fotoalbum" */'../page/fotoalbum'));
 
 declare global {
