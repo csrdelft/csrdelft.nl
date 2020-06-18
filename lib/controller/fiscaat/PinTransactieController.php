@@ -464,12 +464,9 @@ class PinTransactieController extends AbstractController {
 			$manager = $this->getDoctrine()->getManager();
 
 			foreach ($selection as $uuid) {
-				/** @var PinTransactieMatch $pinTransactieMatch */
 				$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUUID($uuid);
 
-				$bestelling = $pinTransactieMatch->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
-
-				if ($bestelling != false) {
+				if ($pinTransactieMatch->bestelling && $pinTransactieMatch->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE)) {
 					throw new CsrGebruikerException("Match kan niet verwijderd worden, er hangt een bestelling aan.");
 				}
 
