@@ -6,7 +6,7 @@ import {init} from '../ctx';
 import {html, preloadImage} from './util';
 
 export const initBbPreviewBtn = (el: HTMLElement) => {
-	const previewId = el.dataset!.bbpreviewBtn!;
+	const previewId = el.dataset.bbpreviewBtn!;
 	const source = document.querySelector<HTMLTextAreaElement>('#' + previewId);
 	const target = document.querySelector<HTMLElement>('#preview_' + previewId);
 
@@ -17,7 +17,7 @@ export const initBbPreviewBtn = (el: HTMLElement) => {
 	el.addEventListener('click', () => CsrBBPreviewEl(source, target));
 };
 export const initBbPreview = (el: HTMLTextAreaElement) => {
-	const previewId = el.dataset!.bbpreview!;
+	const previewId = el.dataset.bbpreview!;
 	const target = document.querySelector<HTMLElement>('#preview_' + previewId);
 
 	if (!target) {

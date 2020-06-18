@@ -31,7 +31,7 @@ let parameters: Array<{ color: number[]; sprite: Texture; size: number; }>;
 docReady(() => {
 	let lightTheme = false;
 
-	const bgColor = window.getComputedStyle(document.querySelector('.container')!).backgroundColor!;
+	const bgColor = window.getComputedStyle(document.querySelector('.container')!).backgroundColor;
 
 	const sep = bgColor.indexOf(',') > -1 ? ',' : ' ';
 	const rgb = bgColor.substr(4).split(')')[0].split(sep);

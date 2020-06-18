@@ -4,7 +4,7 @@ import Popper from 'popper.js';
 const kaartjes = {};
 
 export const initKaartjes = (el: HTMLElement) => {
-	const uid = el.dataset!.visite as string;
+	const uid = el.dataset.visite!;
 	if (!kaartjes.hasOwnProperty(uid)) {
 		kaartjes[uid] = document.createElement('div');
 		kaartjes[uid].style.zIndex = '1000';
@@ -22,7 +22,7 @@ export const initKaartjes = (el: HTMLElement) => {
 
 		loading = true;
 		if (!loaded) {
-			const kaartje = await axios.get(`/profiel/${el.dataset!.visite}/kaartje`);
+			const kaartje = await axios.get(`/profiel/${el.dataset.visite}/kaartje`);
 			kaartjes[uid].innerHTML = kaartje.data;
 			loaded = true;
 		}
