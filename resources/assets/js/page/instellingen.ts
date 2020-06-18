@@ -1,35 +1,48 @@
-import $ from 'jquery';
+import axios from 'axios';
+import {docReady} from '../lib/util';
 
 /**
  * Code voor de /instellingen pagina
  */
+const instellingVeranderd = () => {
+	document.querySelectorAll('.instellingen-bericht')
+		.forEach((el) => el.classList.remove('d-none'));
+};
 
-function instellingVeranderd() {
-	$('.instellingen-bericht').removeClass('d-none');
-}
+const instellingOpslaan = async (ev: Event) => {
+	ev.preventDefault();
 
-function instellingOpslaan(ev: JQuery.ChangeEvent) {
-	if (ev.target.checkValidity()) {
-		const input = $(ev.target);
+	const input = ev.target as HTMLElement;
 
-		const href = input.data('href');
+	let href = '';
+	let waarde = '';
 
-		input.addClass('loading');
+	input.classList.add('loading');
 
-		$.ajax({
-			data: {
-				waarde: input.val(),
-			},
-			method: 'POST',
-			url: href,
-		}).then(() => {
-			instellingVeranderd();
-			input.removeClass('loading');
-		});
+	if (input instanceof HTMLInputElement || input instanceof HTMLSelectElement) {
+		if (!input.checkValidity()) {
+			return false;
+		}
+
+		href = input.dataset.href!;
+		waarde = input.value;
+	} else if (input instanceof HTMLAnchorElement) {
+		href = input.href;
 	}
-}
 
-$(() => {
-	$('.instellingKnop').on('click', instellingVeranderd);
-	$('.change-opslaan').on('change', (ev) => instellingOpslaan(ev));
+	await axios.post(href, {waarde});
+
+	instellingVeranderd();
+
+	input.classList.remove('loading');
+
+	return false;
+};
+
+docReady(() => {
+	document.querySelectorAll('.instellingKnop')
+		.forEach((el) => el.addEventListener('click', instellingOpslaan));
+
+	document.querySelectorAll('.change-opslaan')
+		.forEach((el) => el.addEventListener('change', instellingOpslaan));
 });
