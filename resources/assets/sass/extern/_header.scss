@@ -38,6 +38,10 @@
 
 		align-items: flex-start;
 
+		& > .nav-link {
+			white-space: nowrap;
+		}
+
 		.login-knop, .menu-knop {
 			display: none;
 		}
