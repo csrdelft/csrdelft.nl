@@ -85,6 +85,8 @@
 	@script('fxclouds')
 @elseif(lid_instelling('layout', 'fx') == 'sneeuw')
 	@script('fxsneeuw')
+@elseif(lid_instelling('layout', 'fx') == 'space')
+	@script('fxspace')
 @endif
 @if(lid_instelling('layout', 'trein') !== 'nee')
 	@include('effect.trein')

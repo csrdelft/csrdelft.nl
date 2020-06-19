@@ -17,6 +17,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'fxraket': './js/entry/fxraket.ts',
 		'fxminion': './js/entry/fxminion.ts',
 		'fxclippy': './js/entry/fxclippy.ts',
+		'fxspace': './js/entry/fxspace.ts',
 		'extern': ['./js/entry/extern.ts', './sass/extern.scss'],
 		'bredeletters': './sass/bredeletters.scss',
 		'common': './sass/common.scss',
@@ -34,7 +35,6 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'thema-koevoet': './sass/thema/Koevoet.scss',
 		'thema-sineregno': './sass/thema/sineregno.scss',
 		'effect-civisaldo': './sass/effect/civisaldo.scss',
-		'effect-space': './sass/effect/space.scss',
 	},
 	output: {
 		// De map waarin alle bestanden geplaatst worden.

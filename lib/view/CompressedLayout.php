@@ -46,9 +46,7 @@ abstract class CompressedLayout extends HtmlPage {
 		if (lid_instelling('layout', 'toegankelijk') == 'bredere letters') {
 			$modules[] = 'bredeletters';
 		}
-		if (lid_instelling('layout', 'fx') == 'space') {
-			$modules[] = 'effect-space';
-		} elseif (lid_instelling('layout', 'fx') == 'civisaldo') {
+		if (lid_instelling('layout', 'fx') == 'civisaldo') {
 			$modules[] = 'effect-civisaldo';
 		}
 
