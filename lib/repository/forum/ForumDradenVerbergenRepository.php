@@ -51,19 +51,19 @@ class ForumDradenVerbergenRepository extends AbstractRepository {
 		}
 	}
 
-	public function toonAllesVoorLid($uid) {
+	public function toonAllesVoorLeden(array $uids) {
 		$this->createQueryBuilder('v')
 			->delete()
-			->where('v.uid = :uid')
-			->setParameter('uid', $uid)
+			->where('v.uid in (:uids)')
+			->setParameter('uids', $uids)
 			->getQuery()->execute();
 	}
 
-	public function toonDraadVoorIedereen(ForumDraad $draad) {
+	public function toonDraadVoorIedereen(array $draadIds) {
 		$this->createQueryBuilder('v')
 			->delete()
-			->where('v.draad_id = :draad_id')
-			->setParameter('draad_id', $draad->draad_id)
+			->where('v.draad_id in (:draad_ids)')
+			->setParameter('draad_ids', $draadIds)
 			->getQuery()->execute();
 	}
 

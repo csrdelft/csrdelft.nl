@@ -32,6 +32,10 @@ body {
 	height: auto;
 	position: relative;
 	margin-left: 200px;
+
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
 main {

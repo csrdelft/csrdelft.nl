@@ -3,9 +3,9 @@
 @section('titel', 'Machtig mooi - OWee 2020')
 
 @section('styles')
-	@stylesheet('extern.css')
-	@stylesheet('extern-owee.css')
-	@script('extern-owee.js')
+	@stylesheet('extern')
+	@stylesheet('extern-owee')
+	@script('extern-owee')
 @endsection
 
 @section('body')
@@ -120,6 +120,7 @@
 					<a class="whatsapp" href="https://wa.me/31633271913" target="_blank">
 						<i class="fab fa-whatsapp mr-3 mr-md-0"></i>
 						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Maartje!</div>
+						<div class="maartje"></div>
 						<div class="cta">0633271913</div>
 					</a>
 				</div>

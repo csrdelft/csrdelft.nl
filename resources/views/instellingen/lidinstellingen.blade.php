@@ -42,8 +42,8 @@
 								@if(count($opties) > 8)
 									<select name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" class="form-control change-opslaan"
 													data-href="/instellingen/update/{{$module}}/{{$id}}">
-										@foreach($opties as $optie)
-											<option value="{{$optie}}" @if($optie === $keuze) selected @endif>{{ucfirst($optie)}}</option>
+										@foreach($opties as $optieId => $optie)
+											<option value="{{$optieId}}" @if($optieId === $keuze) selected @endif>{{ucfirst($optie)}}</option>
 										@endforeach
 									</select>
 								@else
@@ -51,7 +51,7 @@
 									<div class="btn-group-vertical btn-group-toggle d-inline-flex d-sm-none" data-buttons="radio">
 										@foreach($opties as $optieId => $optie)
 											@php($optieId = is_int($optieId) ? $optie : $optieId)
-											<a class="post noanim instellingKnop btn btn-secondary @if($optie === $keuze) active @endif"
+											<a class="noanim instellingKnop btn btn-secondary @if($optie === $keuze) active @endif"
 												 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
 										@endforeach
 									</div>
@@ -60,7 +60,7 @@
 											 data-buttons="radio">
 										@foreach($opties as $optieId => $optie)
 											@php($optieId = is_int($optieId) ? $optie : $optieId)
-											<a class="post noanim instellingKnop btn btn-secondary @if($optieId === $keuze) active @endif"
+											<a class="noanim instellingKnop btn btn-secondary @if($optieId === $keuze) active @endif"
 												 href="/instellingen/update/{{$module}}/{{$id}}/{{$optieId}}">{{ucfirst($optie)}}</a>
 										@endforeach
 									</div>

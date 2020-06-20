@@ -13,6 +13,12 @@ interface ContextHandlers {
 	[selector: string]: ContextHandlerFunction;
 }
 
+declare global {
+	interface Window {
+		_stek_context: Context;
+	}
+}
+
 type ContextHandlerFunction = (el: Element) => void;
 
 class Context {
@@ -45,11 +51,7 @@ class Context {
 	}
 }
 
-/**
- * Singleton Context.
- */
-const ctx = new Context();
+window._stek_context = new Context();
 
-export default ctx;
-
-export const init = (parent: Element) => ctx.init(parent);
+export default window._stek_context;
+export const init = (parent: Element) => window._stek_context.init(parent);

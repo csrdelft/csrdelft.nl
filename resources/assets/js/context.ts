@@ -1,87 +1,115 @@
-import $ from 'jquery';
-import ctx, {init} from './ctx';
-import {modalClose, modalOpen} from './modal';
-import {html, htmlParse, preloadImage} from './util';
+import ctx from './ctx';
 
-ctx.addHandler('div.bb-img-loading', (el: HTMLElement) => {
-	const content = html`<img
-													class="bb-img"
-													alt="${el.getAttribute('title')!}"
-													style="${el.getAttribute('style')!}"
-													src="${el.getAttribute('src')!}"/>`;
-	content.onerror = () => {
-		el.setAttribute('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
-		el.setAttribute('src', '/plaetjes/famfamafm/picture_error.png');
-		el.style.width = '16px';
-		el.style.height = '16px';
-		el.classList.replace('bb-img-loading', 'bb-img');
-	};
+export const registerGrafiekContext = async () => {
+	const {
+		initBar,
+		initDeelnamegrafiek,
+		initLine,
+		initPie,
+		initSaldoGrafiek,
+	} = await import(/* webpackChunkName: "grafiek" */'./lib/grafiek');
 
-	preloadImage(el.getAttribute('src')!, () => {
-		const foto = content.getAttribute('src')!.indexOf('/plaetjes/fotoalbum/') >= 0;
-		const video = $(el).parent().parent().hasClass('bb-video-preview');
-		const hasAnchor = $(el).closest('a').length !== 0;
-		const parent = el.parentElement!;
-		if (foto || video || hasAnchor) {
-			parent.replaceChild(content, el);
-		} else {
-			const targetUrl = el.getAttribute('bb-href') == null ? el.getAttribute('src') : el.getAttribute('bb-href');
-			const link = html`<a class="lightbox-link" href="${targetUrl!}" data-lightbox="page-lightbox"></a>`;
-			link.appendChild(content);
-			parent.replaceChild(link, el);
-		}
+	ctx.addHandlers({
+		'.ctx-deelnamegrafiek': initDeelnamegrafiek,
+		'.ctx-graph-bar': initBar,
+		'.ctx-graph-line': initLine,
+		'.ctx-graph-pie': initPie,
+		'.ctx-saldografiek': initSaldoGrafiek,
 	});
-});
+};
 
-export function domUpdate(this: HTMLElement | void, htmlString: string|object) {
-	if (typeof htmlString !== 'string') {
-		return;
-	}
+export const registerBbContext = async () => {
+	const {
+		activeerLidHints,
+		initBbPreview,
+		initBbPreviewBtn,
+		loadBbImage,
+	} = await import(/* webpackChunkName: "bbcode" */'./lib/bbcode');
 
-	htmlString = $.trim(htmlString);
-	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
-		alert('response error');
-		document.write(htmlString);
-	}
-	const elements = htmlParse(htmlString);
-	$(elements).each(function (index, element) {
-		if (!(element instanceof Element)) {
-			// element kan ook een stuk tekst zijn, hier kunnen we niets mee.
-			return;
-		}
-
-		const $element = $(element);
-		const id = $(element).attr('id');
-		const parentId = $(element).attr('parentid');
-
-		const target = $('#' + id);
-		const targetParent = $('#' + parentId);
-		if (target.length === 1) {
-			if ($element.hasClass('remove')) {
-				target.effect('fade', {}, 400, () => {
-					target.remove();
-				});
-			} else {
-				target.replaceWith($element.show().get()).effect('highlight');
-			}
-		} else if (targetParent.length === 1) {
-			targetParent.append($element.show());
-		} else if (element instanceof HTMLScriptElement) {
-			$('head').append($element);
-		} else {
-			const parentid = $(this).attr('parentid');
-			if (parentid) {
-				$(this).prependTo(`#${parentid}`).show().effect('highlight');
-			} else {
-				$(this).prependTo('#maalcie-tabel tbody:visible:first').show().effect('highlight'); // FIXME: make generic
-			}
-		}
-		init(element);
-
-		if (id === 'modal') {
-			modalOpen();
-		} else {
-			modalClose();
-		}
+	ctx.addHandlers({
+		'div.bb-img-loading': loadBbImage,
+		'[data-bbpreview-btn]': initBbPreviewBtn,
+		'[data-bbpreview]': initBbPreview,
+		'textarea.BBCodeField': activeerLidHints,
 	});
-}
+};
+
+export const registerDataTableContext = async () => {
+	const {
+		initDataTable,
+		initOfflineDataTable,
+	} = await import(/* webpackChunkName: "datatable-api" */'./datatable/api');
+
+	ctx.addHandlers({
+		'.ctx-datatable': initDataTable,
+		'.ctx-offline-datatable': initOfflineDataTable,
+	});
+};
+
+export const registerKnopContext = async () => {
+	const {
+		knopGet,
+		knopPost,
+		knopVergroot,
+	} = await import(/* webpackChunkName: "knop" */'./lib/knop');
+
+	ctx.addHandlers({
+		'.get': (el) => el.addEventListener('click', knopGet),
+		'.post': (el) => el.addEventListener('click', knopPost),
+		'.vergroot': (el) => el.addEventListener('click', knopVergroot),
+		'[data-buttons=radio]': (el) => {
+			for (const btn of Array.from(el.querySelectorAll('a.btn'))) {
+				btn.addEventListener('click',
+					(event) => {
+						for (const active of Array.from(el.querySelectorAll('.active'))) {
+							active.classList.remove('active');
+						}
+						(event.target as Element).classList.add('active');
+					},
+				);
+			}
+		},
+	});
+
+};
+
+export const registerFormulierContext = async () => {
+	const {
+		formCancel,
+		formReset,
+		formSubmit,
+		formToggle,
+	} = await import(/* webpackChunkName: "formulier" */'./lib/formulier');
+	const {bbCodeSet} = await import(/* webpackChunkName: "bbcode-set" */'./lib/bbcode-set');
+
+	ctx.addHandlers({
+		'.InlineFormToggle': (el) => el.addEventListener('click', (event) => formToggle(el, event)),
+		'.SubmitChange': (el) => el.addEventListener('change', formSubmit),
+		'.cancel': (el) => el.addEventListener('click', formCancel),
+		'.reset': (el) => el.addEventListener('click', formReset),
+		'.submit': (el) => el.addEventListener('click', formSubmit),
+		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
+		'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
+		'time.timeago': (el) => $(el).timeago(),
+	});
+};
+
+export const registerGlobalContext = async () => {
+	const {initKaartjes} = await import(/* webpackChunkName: "kaartje" */'./lib/kaartje');
+	const {default: Vue} = await import(/* webpackChunkName: "vue" */'vue');
+	const {default: $} = await import(/* webpackChunkName: "jquery" */'jquery');
+
+	ctx.addHandlers({
+		'.hoverIntent': (el) => $(el).hoverIntent({
+			over() {
+				$(this).find('.hoverIntentContent').fadeIn();
+			},
+			out() {
+				$(this).find('.hoverIntentContent').fadeOut();
+			},
+			timeout: 250,
+		}),
+		'.vue-context': (el) => new Vue({el}),
+		'[data-visite]': initKaartjes,
+	});
+};

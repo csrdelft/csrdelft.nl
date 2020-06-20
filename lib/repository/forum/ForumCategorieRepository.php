@@ -127,44 +127,38 @@ class ForumCategorieRepository extends AbstractRepository {
 
 		// Voor alle ex-leden settings opschonen
 		$profielen = $this->_em->getRepository(Profiel::class)->createQueryBuilder('p')
+			->select('p.uid')
 			->where('p.status in (:status)')
 			->setParameter('status', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden))
-			->getQuery()->getResult();
-		foreach ($profielen as $profiel) {
-			$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLid($profiel->uid);
-			$this->forumDradenVerbergenRepository->toonAllesVoorLid($profiel->uid);
-			$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($profiel->uid);
-			$this->forumDelenMeldingRepository->stopAlleMeldingenVoorLid($profiel->uid);
-			$this->forumDradenReagerenRepository->verwijderReagerenVoorLid($profiel->uid);
-		}
+			->getQuery()->getArrayResult();
+
+		$uids = array_column($profielen, 'uid');
+		$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLeden($uids);
+		$this->forumDradenVerbergenRepository->toonAllesVoorLeden($uids);
+		$this->forumDradenMeldingModel->stopAlleMeldingenVoorLeden($uids);
+		$this->forumDelenMeldingRepository->stopAlleMeldingenVoorLeden($uids);
+		$this->forumDradenReagerenRepository->verwijderReagerenVoorLeden($uids);
 
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
 		/** @var ForumDraad[] $draden */
 		$draden = $this->forumDradenRepository->createQueryBuilder('fd')
+			->select('fd.draad_id')
 			->where('fd.verwijderd = true or (fd.gesloten = true and (fd.laatst_gewijzigd is null or fd.laatst_gewijzigd < :laatst_gewijzigd))')
 			->setParameter('laatst_gewijzigd', date_create_immutable('-1 year'))
-			->getQuery()->getResult();
-		foreach ($draden as $draad) {
+			->getQuery()->getArrayResult();
+		$draadIds = array_column($draden, 'draad_id');
 
-			// Settings verwijderen
-			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
-			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
-			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
+		// Settings verwijderen
+		$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draadIds);
+		$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draadIds);
+		$this->forumDradenGelezenRepository->verwijderDraadGelezen($draadIds);
+		$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draadIds);
 
-			// Oude verwijderde posts definitief verwijderen
-			$this->forumPostsRepository->createQueryBuilder('fp')
-				->delete()
-				->where('fp.verwijderd = true and fp.draad_id = :draad_id')
-				->setParameter('draad_id', $draad->draad_id)
-				->getQuery()->execute();
-
-			if ($draad->verwijderd) {
-				// Als het goed is zijn er nooit niet-verwijderde posts in een verwijderd draadje
-				$this->getEntityManager()->remove($draad);
-				$this->getEntityManager()->flush();
-			}
-		}
+		// Oude verwijderde posts definitief verwijderen
+		$this->forumPostsRepository->createQueryBuilder('fp')
+			->delete()
+			->where('fp.verwijderd = true and fp.draad_id in (:draad_ids)')
+			->setParameter('draad_ids', $draadIds)
+			->getQuery()->execute();
 	}
-
 }

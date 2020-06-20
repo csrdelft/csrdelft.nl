@@ -95,7 +95,7 @@ class InstellingenBeheerController {
 	 * @param $module
 	 * @param $id
 	 * @return TemplateView
-	 * @Route("/instellingenbeheer/reset/{module/{id}", methods={"POST"})
+	 * @Route("/instellingenbeheer/reset/{module}/{id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function reset($module, $id) {

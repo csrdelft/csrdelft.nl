@@ -8,6 +8,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\renderer\TemplateView;
 use Exception;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -37,6 +38,7 @@ class LidInstellingenController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @param $module
 	 * @param $instelling
 	 * @param null $waarde
@@ -44,9 +46,9 @@ class LidInstellingenController extends AbstractController {
 	 * @Route("/instellingen/update/{module}/{instelling}/{waarde}", methods={"POST"}, defaults={"waarde": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function update($module, $instelling, $waarde = null) {
+	public function update(Request $request, $module, $instelling, $waarde = null) {
 		if ($waarde === null) {
-			$waarde = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_STRING);
+			$waarde = $request->request->get('waarde');
 		}
 
 		if ($this->lidInstellingenRepository->isValidValue($module, $instelling, urldecode($waarde))) {

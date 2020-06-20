@@ -13,6 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method PinTransactieMatch|null findOneBy(array $criteria, array $orderBy = null)
  * @method PinTransactieMatch[]    findAll()
  * @method PinTransactieMatch[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PinTransactieMatch|null retrieveByUuid($UUID)
  */
 class PinTransactieMatchRepository extends AbstractRepository {
 	/**

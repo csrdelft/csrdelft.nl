@@ -193,8 +193,9 @@ class LidInstellingenRepository extends AbstractRepository {
 	 * @return LidInstelling
 	 */
 	public function wijzigInstelling($module, $id, $waarde) {
+		$options = $this->getTypeOptions($module, $id);
 		$instelling = $this->getInstelling($module, $id);
-		$instelling->waarde = $waarde;
+		$instelling->waarde = isset($options[$waarde]) ? $options[$waarde] : $waarde;
 		$this->update($instelling);
 		return $instelling;
 	}
@@ -255,12 +256,18 @@ class LidInstellingenRepository extends AbstractRepository {
 	/**
 	 */
 	public function opschonen() {
-		foreach ($this->findAll() as $instelling) {
-			if (!$this->hasKey($instelling->module, $instelling->instelling_id)) {
-				$this->getEntityManager()->remove($instelling);
+		$instellingen = [];
+		foreach ($this->getModules() as $module) {
+			foreach ($this->getModuleKeys($module) as $instelling) {
+				$instellingen[] = $instelling;
 			}
 		}
 
-		$this->getEntityManager()->flush();
+		$this->createQueryBuilder('i')
+			->delete()
+			->where('i.module not in (:modules) or i.instelling_id not in (:instellingen)')
+			->setParameter('modules', $this->getModules())
+			->setParameter('instellingen', $instellingen)
+			->getQuery()->execute();
 	}
 }

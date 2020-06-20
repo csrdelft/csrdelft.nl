@@ -10,7 +10,7 @@
 	import axios from 'axios';
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
-	import {domUpdate} from '../../context';
+	import {domUpdate} from '../../lib/domUpdate';
 
 	@Component
 	export default class PeilingOptieToevoegen extends Vue {

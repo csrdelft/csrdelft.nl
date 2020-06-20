@@ -539,12 +539,13 @@ function getMaximumFileUploadSize() {
 	return min(convertPHPSizeToBytes(ini_get('post_max_size')), convertPHPSizeToBytes(ini_get('upload_max_filesize')));
 }
 
-function printDebug() {
+function getDebugFooter() {
 	$enableDebug = filter_input(INPUT_GET, 'debug') !== null;
 	if ($enableDebug && (DEBUG || (LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued()))) {
-		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
-		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
+		return '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a><div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
+
+	return '';
 }
 
 function getDebug(

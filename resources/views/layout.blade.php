@@ -4,11 +4,11 @@
 	@include('head')
 </head>
 <body class="nav-is-fixed {{lid_instelling('zijbalk', 'breedte')}}" @yield('bodyArgs')>
-@php(view('menu.main', [
+{!! view('menu.main', [
   'root' => get_menu('main'),
   'personal' => get_menu('Personal'),
   'favorieten' => get_menu(\CsrDelft\service\security\LoginService::getUid()),
-])->view())
+])->toString() !!}
 <nav id="zijbalk">
 	@php($zijbalk = \CsrDelft\view\Zijbalk::addStandaardZijbalk(isset($zijbalk) ? $zijbalk : []))
 	@foreach($zijbalk as $block)
@@ -20,7 +20,7 @@
 		</div>
 	@endcan @endif
 </nav>
-<main class="container my-3 flex-shrink-0">
+<main class="container my-3 py-3 flex-shrink-0">
 	<nav aria-label="breadcrumb">
 		@section('breadcrumbs')
 			{!! csr_breadcrumbs(get_breadcrumbs($_SERVER['REQUEST_URI'])) !!}
@@ -30,9 +30,12 @@
 		{!! getMelding() !!}
 		@yield('content')
 	</div>
-	<footer class="cd-footer">
-		@php(printDebug())
-	</footer>
+	@php($debug = getDebugFooter())
+	@if($debug)
+		<footer class="cd-footer">
+			{!! $debug !!}
+		</footer>
+	@endif
 </main>
 <footer class="footer mt-auto py-3">
 	<div class="container-fluid p-md-5">
@@ -67,7 +70,7 @@
 @if(isset($modal))
 	@php($modal->view())
 @elseif(!isset($modal) && !toestemming_gegeven())
-	@php(toestemming_form()->view())
+	{!! toestemming_form()->toString() !!}
 @else
 	<div id="modal" tabindex="-1"></div>
 @endif
@@ -79,7 +82,11 @@
 @elseif(lid_instelling('layout', 'fx') == 'civisaldo')
 	@include('effect.civisaldo')
 @elseif(lid_instelling('layout', 'fx') == 'wolken')
-	@script('fxclouds.js')
+	@script('fxclouds')
+@elseif(lid_instelling('layout', 'fx') == 'sneeuw')
+	@script('fxsneeuw')
+@elseif(lid_instelling('layout', 'fx') == 'space')
+	@script('fxspace')
 @endif
 @if(lid_instelling('layout', 'trein') !== 'nee')
 	@include('effect.trein')
@@ -93,7 +100,7 @@
 		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
 		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden')}}';
 	</script>
-	@script('fxclippy.js')
+	@script('fxclippy')
 @endif
 </body>
 </html>

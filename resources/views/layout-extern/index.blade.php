@@ -3,7 +3,7 @@
 @section('titel', $titel)
 
 @section('styles')
-	@stylesheet('extern.css')
+	@stylesheet('extern')
 @endsection
 
 @section('oweebanner')
@@ -35,7 +35,7 @@
 	<section id="wrapper">
 
 		<!-- One -->
-		<section id="one" class="wrapper first">
+		<section id="one" class="wrapper first kleur1">
 			<div class="inner">
 				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
 				<div class="content">
@@ -55,6 +55,51 @@
 		<!-- Two -->
 		<section id="two" class="wrapper alt kleur2">
 			<div class="inner">
+				<div class="content">
+					<div class="een-minuut">
+						<div id="hero">
+							<h1 class="major">C.S.R. IN 1 MINUUT</h1>
+							<noscript class="lazy-load">
+							<div class="bb-video">
+								<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl" title="C.S.R. Delft in 1 minuut" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+							</noscript>
+						</div>
+						<noscript class="lazy-load">
+							<div class="sociaal">
+								<div class="youtube">
+									<p>Wil je zien hoe
+										de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
+									<div class="bb-video">
+										<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY?hl=nl" title="Delft studie is maar de helft! Aflevering 1 uit 3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									</div>
+								</div>
+								<div class="instagram">
+									<p>Bekijk en volg ook ons Instagram account voor meer van onze vereniging!</p>
+									<div class="insta-grid">
+										<a href="https://www.instagram.com/csrdelft/"><img src="/dist/images/instagram.svg" alt="Instagram logo in C.S.R. kleuren"></a>
+										<p id="insta-tag">@csrdelft</p>
+									</div>
+								</div>
+							</div>
+						</noscript>
+
+						<p>
+							De OWee gaat er anders uitzien, voor meer informatie zie de <a href="https://owee.nl">OWee website</a>.<br>
+							Maar wij willen je wel vast digitaal een beetje van C.S.R. laten zien.
+							We willen jou daar goede handvaten voor geven. De belangrijkste informatie wordt gedeeld via deze website dus kijk even rond.
+							Wil je meer weten? Kijk op ons <a href="https://www.youtube.com/user/CivitasFilms">YouTube kanaal</a>,
+							onze <a href="https://www.instagram.com/csrdelft">Instagram pagina</a> en vul het interesse formulier onder aan deze pagina in, dan houden wij je op de hoogte.
+						</p>
+						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
+						<p>Liefs,<br>OWeeCie en PromoCie</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="three" class="wrapper kleur3">
+			<div class="inner">
 				<noscript class="lazy-load">
 					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_in_de_OWee.jpg" alt="Sfeerfoto buiten"/></span>
 				</noscript>
@@ -70,14 +115,8 @@
 			</div>
 		</section>
 
-		<!--
-		<section id="two" class="wrapper-img">
-			<img src="/images/vereniging.jpg"/>
-		</section>
-		-->
-
-		<!-- Three -->
-		<section id="three" class="wrapper kleur3">
+		<!-- Four -->
+		<section id="four" class="wrapper alt kleur4">
 			<div class="inner">
 				<noscript class="lazy-load">
 					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/Interesse_vragen.jpg" alt="Owee Commissie"/></span>
@@ -97,8 +136,8 @@
 			</div>
 		</section>
 
-		<!-- Four -->
-		<section id="four" class="wrapper alt kleur4">
+		<!-- Five -->
+		<section id="five" class="wrapper kleur5">
 			<div class="inner">
 				<div class="content">
 					<h2 class="major">Foto's</h2>

@@ -1,25 +1,34 @@
 /**
  * Laad alle externe libs en knoop de goede dingen aan elkaar.
  */
-import axios from 'axios';
 import Bloodhound from 'corejs-typeahead';
 import Dropzone from 'dropzone';
 import $ from 'jquery';
-import Popper from 'popper.js';
-import Vue from 'vue';
-import {ketzerAjax} from './ajax';
-import './bbcode';
-import {domUpdate} from './context';
-import {importAgenda} from './courant';
-import ctx, {init} from './ctx';
-import {formCancel, formInlineToggle, formSubmit} from './formulier';
-import {forumBewerken, saveConceptForumBericht} from './forum';
-import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './maalcie';
-import {docReady} from './util';
+import moment from 'moment';
+import {
+	registerBbContext,
+	registerDataTableContext,
+	registerFormulierContext,
+	registerGlobalContext,
+	registerGrafiekContext,
+	registerKnopContext,
+} from './context';
+import {init} from './ctx';
+import {ketzerAjax} from './lib/ajax';
+import {importAgenda} from './lib/courant';
+import {initSluitMeldingen} from './lib/csrdelft';
+import {domUpdate} from './lib/domUpdate';
+import {formCancel, formInlineToggle, formSubmit, insertPlaatje} from './lib/formulier';
+import {forumBewerken, saveConceptForumBericht} from './lib/forum';
+import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './lib/maalcie';
+import {docReady} from './lib/util';
+
+moment.locale('nl');
 
 declare global {
 	interface JQueryStatic {
 		timeago: any;
+		markItUp: (arg: any) => any;
 	}
 
 	interface JQuery {
@@ -28,6 +37,7 @@ declare global {
 		hoverIntent: (arg: any, arg1?: any) => any;
 		autosize: () => void;
 		scrollTo: (arg: any) => void;
+		modal: (arg?: any) => void;
 	}
 }
 
@@ -46,15 +56,15 @@ require('jquery-ui/ui/effects/effect-highlight');
 require('jquery-ui/ui/effects/effect-fade');
 require('jquery-ui/ui/widgets/datepicker');
 require('jquery-ui/ui/widgets/slider');
-require('./lib/jquery.markitup');
-require('./lib/jquery.contextMenu');
+require('./lib/external/jquery.markitup');
+require('./lib/external/jquery.contextMenu');
 require('timeago');
 require('raty-js');
 require('autosize/build/jquery.autosize');
-require('./lib/jquery.formSteps');
-require('./lib/jquery-ui-sliderAccess');
+require('./lib/external/jquery.formSteps');
+require('./lib/external/jquery-ui-sliderAccess');
 require('jquery-ui-timepicker-addon');
-require('./lib/jquery-ui-timepicker-nl');
+require('./lib/external/jquery-ui-timepicker-nl');
 require('jquery.maskedinput');
 require('lightbox2');
 require('corejs-typeahead/dist/typeahead.jquery.js');
@@ -84,6 +94,7 @@ $.extend(window, {
 		// See view/formulier/invoervelden/InputField.abstract.php
 		// See view/formulier/invoervelden/ZoekField.class.php
 		formSubmit,
+		insertPlaatje,
 	},
 	forum: {
 		// See blade_templates/forum/partial/post_lijst.blade.php
@@ -129,47 +140,21 @@ $.timeago.settings.strings = {
 	years: '%d jaar',
 };
 
-const kaartjes = {};
+(async () => {
+	await registerGrafiekContext();
+	await registerFormulierContext();
+	await registerGlobalContext();
+	await registerKnopContext();
+	await registerDataTableContext();
+	await registerBbContext();
 
-ctx.addHandlers({
-	'.hoverIntent': (el) => $(el).hoverIntent({
-		over() {
-			$(this).find('.hoverIntentContent').fadeIn();
-		},
-		out() {
-			$(this).find('.hoverIntentContent').fadeOut();
-		},
-		timeout: 250,
-	}),
-	'[data-visite]': (el: HTMLElement) => {
+	docReady(() => {
+		initSluitMeldingen();
+		init(document.body);
 
-		const uid = el.dataset!.visite as string;
-		if (!kaartjes.hasOwnProperty(uid)) {
-			kaartjes[uid] = document.createElement('div');
-			kaartjes[uid].style.zIndex = '1000';
+		const modal = $('#modal');
+		if (modal.html() !== '') {
+			modal.modal();
 		}
-		let loading = false;
-		let loaded = false;
-		el.addEventListener('mouseenter', async () => {
-			if (loading) {
-				return;
-			}
-
-			el.append(kaartjes[uid]);
-			// tslint:disable-next-line:no-unused-expression
-			new Popper(el, kaartjes[uid], {placement: 'bottom-start'});
-
-			loading = true;
-			if (!loaded) {
-				const kaartje = await axios.get(`/profiel/${el.dataset!.visite}/kaartje`);
-				kaartjes[uid].innerHTML = kaartje.data;
-				loaded = true;
-			}
-			loading = false;
-		});
-		el.addEventListener('mouseleave', () => {
-			kaartjes[uid].remove();
-		});
-	},
-	'.vue-context': (el) => new Vue({el}),
-});
+	});
+})();

@@ -1,6 +1,6 @@
 import FunctionColumnRender = DataTables.FunctionColumnRender;
 import moment from 'moment';
-import {formatBedrag, formatFilesize} from '../util';
+import {formatBedrag, formatFilesize} from '../lib/util';
 import {getApiFromSettings} from './api';
 
 /**

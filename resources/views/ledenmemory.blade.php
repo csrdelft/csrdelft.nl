@@ -2,8 +2,8 @@
 <html>
 <head>
 	<title>{{$titel}}</title>
-	@stylesheet('ledenmemory.css')
-	@script('ledenmemory.js')
+	@stylesheet('ledenmemory')
+	@script('ledenmemory')
 </head>
 <body data-groep="{{$groep->getUUID()}}">
 <table role="presentation">

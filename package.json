@@ -31,7 +31,6 @@
 		"@types/node": "^10.12.19",
 		"@types/optimize-css-assets-webpack-plugin": "^1.3.3",
 		"@types/terser-webpack-plugin": "^1.2.1",
-		"@types/three": "^0.103.2",
 		"@types/uglifyjs-webpack-plugin": "^1.1.0",
 		"@types/webpack": "^4.4.24",
 		"@types/webpack-manifest-plugin": "^2.0.0",
@@ -114,7 +113,7 @@
 		"popper.js": "1.15",
 		"raty-js": "^2.8.0",
 		"textcomplete": "^0.17.1",
-		"three": "^0.109.0",
+		"three": "^0.117.0",
 		"timeago": "^1.6.7",
 		"vue": "^2.5.7"
 	}
