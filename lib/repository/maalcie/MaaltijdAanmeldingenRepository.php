@@ -386,7 +386,6 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'maalcie';
 		$bestelling->uid = $aanmelding->uid;
-		$bestelling->profiel = $aanmelding->profiel;
 		$bestelling->deleted = false;
 		$bestelling->moment = new DateTime();
 		$bestelling->comment = sprintf('Datum maaltijd: %s', date('Y-M-d', $aanmelding->maaltijd->getBeginMoment()));
