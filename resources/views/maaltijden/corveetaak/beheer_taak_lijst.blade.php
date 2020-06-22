@@ -5,7 +5,7 @@
 ?>
 <tr id="corveetaak-row-{{$taak->taak_id}}" class="taak-datum-{{date_format_intl($taak->datum, DATE_FORMAT)}}
 @if(($taak->datum < date_create_immutable('-1 day') and !empty($maaltijd)) or $taak->verwijderd)
-	taak-oud
+	taak-oud verborgen
 @endif
 @if(!$show and !$prullenbak)
 	verborgen

@@ -202,7 +202,7 @@ class CorveePuntenService {
 			$sumBonus[$fid] = 0;
 		}
 		foreach ($taken as $taak) {
-			$fid = $taak->functie_id;
+			$fid = $taak->corveeFunctie->functie_id;
 			if (array_key_exists($fid, $functies)) {
 				$sumAantal[$fid] += 1;
 				$sumPunten[$fid] += $taak->punten_toegekend;

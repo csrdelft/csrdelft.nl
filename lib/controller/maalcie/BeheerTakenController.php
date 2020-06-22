@@ -74,7 +74,7 @@ class BeheerTakenController extends AbstractController {
 	 * @param CorveeTaak|null $taak
 	 * @param Maaltijd|null $maaltijd
 	 * @return TemplateView
-	 * @Route("/corvee/beheer/{taak_id}/{maaltijd_id}", methods={"GET"}, defaults={"taak_id"=null,"maaltijd_id"=null})
+	 * @Route("/corvee/beheer/{taak_id<\d*>}/{maaltijd_id<\d*>}", methods={"GET"}, defaults={"taak_id"=null,"maaltijd_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
 	public function beheer(CorveeTaak $taak = null, Maaltijd $maaltijd = null) {
@@ -95,7 +95,7 @@ class BeheerTakenController extends AbstractController {
 				if (!array_key_exists(date_format_intl($datum, DATE_FORMAT), $model)) {
 					$model[date_format_intl($datum, DATE_FORMAT)] = array();
 				}
-				$model[date_format_intl($datum, DATE_FORMAT)][$taak->functie_id][] = $taak;
+				$model[date_format_intl($datum, DATE_FORMAT)][$taak->corveeFunctie->functie_id][] = $taak;
 			}
 		}
 		return view('maaltijden.corveetaak.beheer_taken', [
@@ -135,7 +135,7 @@ class BeheerTakenController extends AbstractController {
 			if (!array_key_exists(date_format_intl($datum, DATE_FORMAT), $model)) {
 				$model[date_format_intl($datum, DATE_FORMAT)] = array();
 			}
-			$model[date_format_intl($datum, DATE_FORMAT)][$taak->functie_id][] = $taak;
+			$model[date_format_intl($datum, DATE_FORMAT)][$taak->corveeFunctie->functie_id][] = $taak;
 		}
 		return view('maaltijden.corveetaak.beheer_taken', [
 			'taken' => $model,
@@ -202,6 +202,8 @@ class BeheerTakenController extends AbstractController {
 				'prullenbak' => false,
 			]);
 		}
+
+		$this->entityManager->clear();
 
 		return $view;
 	}
@@ -396,7 +398,12 @@ class BeheerTakenController extends AbstractController {
 			$values = $form->getValues();
 			$maaltijd_id = (empty($values['maaltijd_id']) ? null : (int)$values['maaltijd_id']);
 			$maaltijd = $maaltijd_id ? $this->maaltijdenRepository->find($maaltijd_id) : null;
-			$taken = $this->corveeTakenRepository->maakRepetitieTaken($corveeRepetitie, $values['begindatum'], $values['einddatum'], $maaltijd);
+			$taken = $this->corveeTakenRepository->maakRepetitieTaken(
+				$corveeRepetitie,
+				$form->findByName('begindatum')->getFormattedValue(),
+				$form->findByName('einddatum')->getFormattedValue(),
+				$maaltijd
+			);
 
 			if (empty($taken)) {
 				throw new CsrGebruikerException('Geen nieuwe taken aangemaakt.');

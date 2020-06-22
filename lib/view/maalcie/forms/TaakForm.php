@@ -4,6 +4,7 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\maalcie\Maaltijd;
@@ -16,6 +17,7 @@ use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredEntityDropDown;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -43,7 +45,11 @@ class TaakForm extends ModalForm {
 		$functieNamen = ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class)->getAlleFuncties(); // grouped by functie_id
 		$functiePunten = 'var punten=[];';
 		foreach ($functieNamen as $functie) {
-			$functieNamen[$functie->functie_id] = $functie->naam;
+			$functieNamen[$functie->functie_id] = [
+				'value' => $functie->naam,
+				'label' => $functie->functie_id,
+				'id' => $functie->functie_id,
+			];
 			$functiePunten .= 'punten[' . $functie->functie_id . ']=' . $functie->standaard_punten . ';';
 			if ($taak->punten === null) {
 				$taak->punten = $functie->standaard_punten;
@@ -51,7 +57,8 @@ class TaakForm extends ModalForm {
 		}
 
 		$fields = [];
-		$fields['fid'] = new RequiredSelectField('functie_id', $taak->functie_id, 'Functie', $functieNamen);
+		$fields['fid'] = new DoctrineEntityField('corveeFunctie', $taak->corveeFunctie, 'Functie', CorveeFunctie::class, '');
+		$fields['fid']->suggestions[] = $functieNamen;
 		$fields['fid']->onchange = $functiePunten . "$('.punten_field').val(punten[this.value]);";
 		$fields['lid'] = new LidObjectField('profiel', $taak->profiel, 'Naam');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';

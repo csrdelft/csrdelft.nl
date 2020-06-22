@@ -563,7 +563,7 @@ class MaaltijdenRepository extends AbstractRepository {
 				$this->meldAboAan($maaltijd);
 
 				foreach ($corveerepetities as $corveerepetitie) {
-					$this->corveeTakenRepository->newRepetitieTaken($corveerepetitie, date_format_intl($datum, DATE_FORMAT), date_format_intl($datum, DATE_FORMAT), $maaltijd); // do not repeat within maaltijd period
+					$this->corveeTakenRepository->newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd); // do not repeat within maaltijd period
 				}
 				$maaltijden[] = $maaltijd;
 				if ($repetitie->periode_in_dagen < 1) {

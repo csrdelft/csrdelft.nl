@@ -78,7 +78,7 @@ class DoctrineEntityField extends InputField {
 		if ($value == null) {
 			return null;
 		}
-		return $this->em->getReference($this->entityType, $value);
+		return $this->em->getRepository($this->entityType)->find($value);
 	}
 
 	public function getName() {
