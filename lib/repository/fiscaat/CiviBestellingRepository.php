@@ -162,12 +162,17 @@ class CiviBestellingRepository extends AbstractRepository {
 	 * @throws OptimisticLockException
 	 */
 	public function create(CiviBestelling $entity) {
+		// Persist bestelling eerst zonder inhoud
+		$inhoud = $entity->inhoud;
+		$entity->inhoud = [];
 		$this->_em->persist($entity);
 		$this->_em->flush();
 
-		foreach ($entity->inhoud as $bestelling) {
-			$bestelling->setBestelling($entity);
-			$this->_em->persist($bestelling);
+		// Voeg inhoud toe
+		$entity->inhoud = $inhoud;
+		foreach ($entity->inhoud as $bestellingInhoud) {
+			$bestellingInhoud->setBestelling($entity);
+			$this->_em->persist($bestellingInhoud);
 		}
 
 		$this->_em->flush();
