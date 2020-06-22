@@ -4,9 +4,14 @@ namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\view\renderer\TemplateView;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use ParseCsv\Csv;
 use stdClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -99,7 +104,6 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 		// Ga regels langs
 		$aantalSucces = 0;
 		$aantalGefaald = 0;
-		$totaal = 0;
 		$afschriften = [];
 		$i = -1;
 		foreach ($data as $regel) {
@@ -160,14 +164,15 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 			if (empty($regel['beschrijving'])) {
 				$afschriften[$i]->succes = false;
 				$afschriften[$i]->waarschuwing[] = 'Geen beschrijving ingevuld';
-				continue;
+			} elseif (strlen($regel['beschrijving']) > 255) {
+				$afschriften[$i]->succes = false;
+				$afschriften[$i]->waarschuwing[] = 'Beschrijving is te lang';
 			}
 
 			// Bereken nieuwe CiviSaldo
 			if ($account && $product && isset($aantal)) {
 				$afschriften[$i]->totaal = $product->getPrijsInt() * $aantal / 100;
 				$afschriften[$i]->nieuwSaldo = $account->saldo / 100 - $afschriften[$i]->totaal;
-				$totaal += $afschriften[$i]->totaal;
 			}
 
 			// Sla op
@@ -182,8 +187,112 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 			'key' => $key,
 			'aantalSucces' => $aantalSucces,
 			'aantalGefaald' => $aantalGefaald,
-			'totaal' => $totaal,
 			'afschriften' => $afschriften,
+		]);
+	}
+
+	/**
+	 * @Route("/fiscaat/afschrijven/verwerk/{key}", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
+	 * @param string $key
+	 * @param Session $session
+	 * @param CiviSaldoRepository $civiSaldoRepository
+	 * @param CiviProductRepository $civiProductRepository
+	 * @param CiviBestellingRepository $civiBestellingRepository
+	 * @param Request $request
+	 * @param EntityManagerInterface $em
+	 * @return TemplateView|RedirectResponse
+	 */
+	public function verwerk(
+		string $key,
+		Session $session,
+		CiviSaldoRepository $civiSaldoRepository,
+		CiviProductRepository $civiProductRepository,
+		CiviBestellingRepository $civiBestellingRepository,
+		Request $request,
+		EntityManagerInterface $em
+	) {
+		// Haal data op
+		if (!$session->has("afschrijven-{$key}")) {
+			return $this->quickMelding("Er ging iets fout bij het verwerken van de CSV", 2);
+		} elseif ($session->has("afschrijven-{$key}-locked")) {
+			return $this->quickMelding("Deze CSV wordt al verwerkt", 2);
+		} else {
+			$session->set("afschrijven-{$key}-locked", true);
+		}
+		$data = $session->get("afschrijven-{$key}");
+
+		if (!$request->request->has('gecheckt') || !$request->request->has('foutenAkkoord')) {
+			$session->remove("afschrijven-{$key}-locked");
+			return $this->quickMelding("Geef akkoord voor verwerking", 2, "/fiscaat/afschrijven/controle/{$key}");
+		}
+
+		// Ga regels langs
+		$aantalSucces = 0;
+		$totaal = 0;
+		$em->transactional(function () use ($civiBestellingRepository, $civiSaldoRepository, $civiProductRepository, $data, &$aantalSucces, &$totaal, $session, $key) {
+			/** @var CiviBestelling[] $bestellingen */
+			$bestellingen = [];
+			foreach ($data as $regel) {
+				// Check keys
+				if (array_keys($data[0]) !== ['uid', 'productID', 'aantal', 'beschrijving']) {
+					continue;
+				}
+
+				// Haal account & product op
+				$account = $civiSaldoRepository->findOneBy(['uid' => (strlen($regel['uid']) === 3 ? '0' : '') . $regel['uid']]);
+				$product = $civiProductRepository->find(intval($regel['productID']));
+				if (!$account || $account->deleted || !$product || $product->status !== 1) {
+					continue;
+				}
+
+				// Check aantal
+				if (empty($regel['aantal'])) {
+					continue;
+				} else {
+					$aantal = intval($regel['aantal']);
+				}
+
+				// Check beschrijving
+				if (empty($regel['beschrijving']) || strlen($regel['beschrijving']) > 255) {
+					continue;
+				}
+
+				// Verwerk
+				$totaal += $product->getPrijsInt() * $aantal / 100;
+				$aantalSucces++;
+
+				$bestelling = new CiviBestelling();
+				$bestelling->cie = 'anders';
+				$bestelling->uid = $account->uid;
+				$bestelling->deleted = false;
+				$bestelling->moment = new DateTime();
+				$bestelling->comment = $regel['beschrijving'];
+
+				$inhoud = new CiviBestellingInhoud();
+				$inhoud->aantal = $aantal;
+				$inhoud->product_id = $product->id;
+				$inhoud->product = $product;
+
+				$bestelling->inhoud[] = $inhoud;
+				$bestelling->totaal = $product->getPrijsInt() * $aantal;
+				$bestellingen[] = $bestelling;
+			}
+
+			foreach ($bestellingen as $bestelling) {
+				$civiBestellingRepository->create($bestelling);
+				$civiSaldoRepository->verlagen($bestelling->uid, $bestelling->totaal);
+			}
+
+			$session->remove("afschrijven-{$key}");
+		});
+
+		$session->remove("afschrijven-{$key}-lock");
+
+		// Overzicht tonen
+		return view('fiscaat.afschrijven-succes', [
+			'aantalSucces' => $aantalSucces,
+			'totaal' => $totaal
 		]);
 	}
 
@@ -191,7 +300,6 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 	 * @Route("/fiscaat/afschrijven/template")
 	 * @Auth(P_FISCAAT_MOD)
 	 * @return Response
-	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function downloadTemplate() {
 		$template = "uid;productID;aantal;beschrijving\r\nx101;32;100;Lunch";
