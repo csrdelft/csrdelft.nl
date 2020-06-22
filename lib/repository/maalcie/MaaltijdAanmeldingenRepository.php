@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
@@ -15,6 +16,7 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -384,17 +386,19 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'maalcie';
 		$bestelling->uid = $aanmelding->uid;
-		$bestelling->profiel = $aanmelding->profiel;
 		$bestelling->deleted = false;
-		$bestelling->moment = getDateTime();
+		$bestelling->moment = new DateTime();
 		$bestelling->comment = sprintf('Datum maaltijd: %s', date('Y-M-d', $aanmelding->maaltijd->getBeginMoment()));
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = 1 + $aanmelding->aantal_gasten;
 		$inhoud->product_id = $aanmelding->maaltijd->product_id;
+		/** @var CiviProduct $product */
+		$product = ContainerFacade::getContainer()->get(CiviProductRepository::class)->getProduct($inhoud->product_id);
+		$inhoud->product = $product;
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = ContainerFacade::getContainer()->get(CiviProductRepository::class)->getProduct($inhoud->product_id)->prijs * (1 + $aanmelding->aantal_gasten);
+		$bestelling->totaal = $product->getPrijsInt() * (1 + $aanmelding->aantal_gasten);
 
 		return $bestelling;
 	}

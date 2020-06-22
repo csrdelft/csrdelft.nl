@@ -50,7 +50,8 @@
 		"beberlei/doctrineextensions": "^1.2",
 		"symfony/var-dumper": "^5.0",
 		"zumba/json-serializer": "^2.2",
-		"sensio/framework-extra-bundle": "^5.5"
+		"sensio/framework-extra-bundle": "^5.5",
+		"parsecsv/php-parsecsv": "^1.2"
     },
 	"config": {
 		"platform": {

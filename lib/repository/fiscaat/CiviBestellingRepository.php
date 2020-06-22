@@ -6,7 +6,6 @@ use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\repository\ProfielRepository;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -141,16 +140,17 @@ class CiviBestellingRepository extends AbstractRepository {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'anders';
 		$bestelling->uid = $uid;
-		$bestelling->profiel = ProfielRepository::get($uid);
 		$bestelling->deleted = false;
 		$bestelling->moment = date_create_immutable();
 
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = -$bedrag;
 		$inhoud->product_id = CiviProductTypeEnum::OVERGEMAAKT;
+		$civiProduct = $this->civiProductRepository->getProduct($inhoud->product_id);
+		$inhoud->product = $civiProduct;
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = $this->civiProductRepository->getProduct($inhoud->product_id)->tmpPrijs * -$bedrag;
+		$bestelling->totaal = $civiProduct->tmpPrijs * -$bedrag;
 
 		return $bestelling;
 	}
@@ -162,12 +162,17 @@ class CiviBestellingRepository extends AbstractRepository {
 	 * @throws OptimisticLockException
 	 */
 	public function create(CiviBestelling $entity) {
+		// Persist bestelling eerst zonder inhoud
+		$inhoud = $entity->inhoud;
+		$entity->inhoud = [];
 		$this->_em->persist($entity);
 		$this->_em->flush();
 
-		foreach ($entity->inhoud as $bestelling) {
-			$bestelling->setBestelling($entity);
-			$this->_em->persist($bestelling);
+		// Voeg inhoud toe
+		$entity->inhoud = $inhoud;
+		foreach ($entity->inhoud as $bestellingInhoud) {
+			$bestellingInhoud->setBestelling($entity);
+			$this->_em->persist($bestellingInhoud);
 		}
 
 		$this->_em->flush();

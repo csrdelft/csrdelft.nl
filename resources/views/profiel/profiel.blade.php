@@ -436,7 +436,12 @@
 							<table class="table table-sm table-striped">
 								@foreach($bestellinglog as $bestelling)
 									<tr>
-										<td>{{$bestelling->getInhoudTekst()}}</td>
+										<td>
+											{{$bestelling->getInhoudTekst()}}
+											@if($bestelling->comment)
+												<br><i>{{$bestelling->comment}}</i>
+											@endif
+										</td>
 										<td>{{format_bedrag($bestelling->totaal)}}</td>
 										<td>({{date_format_intl($bestelling->moment, DATETIME_FORMAT)}})</td>
 									</tr>
