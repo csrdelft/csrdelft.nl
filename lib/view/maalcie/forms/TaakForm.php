@@ -3,22 +3,15 @@
 namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\maalcie\Maaltijd;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
-use CsrDelft\repository\maalcie\MaaltijdenRepository;
-use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
-use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredEntityDropDown;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
