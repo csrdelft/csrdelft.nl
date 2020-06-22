@@ -46,6 +46,11 @@ class CorveeTaak implements Agendeerbaar {
 	 */
 	public $taak_id;
 	/**
+	 * @var string
+	 * @ORM\Column(type="uid", nullable=true)
+	 */
+	public $uid;
+	/**
 	 * @var Profiel|null
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=true)

@@ -150,7 +150,7 @@ class CorveePuntenService {
 	 */
 	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null) {
 		if ($lidtaken === null) {
-			$lidtaken = $this->corveeTakenRepository->getTakenVoorLid($profiel->uid);
+			$lidtaken = $this->corveeTakenRepository->getTakenVoorLid($profiel);
 			$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren

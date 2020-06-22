@@ -104,15 +104,15 @@ class CorveeTakenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param array $taken
+	 * @param CorveeTaak[] $taken
 	 * @return array
 	 */
 	public function getRoosterMatrix(array $taken) {
 		$matrix = array();
 		foreach ($taken as $taak) {
-			$datum = strtotime($taak->datum);
-			$week = date('W', $datum);
-			$matrix[$week][$datum][$taak->functie_id][] = $taak;
+			$datum = $taak->datum->getTimestamp();
+			$week = $taak->datum->format('W');
+			$matrix[$week][$datum][$taak->corveeFunctie->functie_id][] = $taak;
 		}
 		return $matrix;
 	}
@@ -173,8 +173,8 @@ class CorveeTakenRepository extends AbstractRepository {
 		$qb->setParameter('van_datum', $van);
 		$qb->setParameter('tot_datum', $tot);
 		if (!$iedereen) {
-			$qb->andWhere('ct.uid = :uid');
-			$qb->setParameter('uid', LoginService::getUid());
+			$qb->andWhere('ct.profiel = :profiel');
+			$qb->setParameter('profiel', LoginService::getProfiel());
 		}
 		return $qb->getQuery()->getResult();
 	}
@@ -182,11 +182,11 @@ class CorveeTakenRepository extends AbstractRepository {
 	/**
 	 * Haalt de taken op voor een lid.
 	 *
-	 * @param string $uid
-	 * @return PDOStatement|CorveeTaak[]
+	 * @param Profiel $profiel
+	 * @return CorveeTaak[]
 	 */
-	public function getTakenVoorLid($uid) {
-		return $this->findBy(['verwijderd' => false, 'uid' => $uid], ['datum' => 'ASC']);
+	public function getTakenVoorLid(Profiel $profiel) {
+		return $this->findBy(['verwijderd' => false, 'profiel' => $profiel], ['datum' => 'ASC']);
 	}
 
 	/**
@@ -202,13 +202,13 @@ class CorveeTakenRepository extends AbstractRepository {
 	/**
 	 * Haalt de komende taken op waarvoor een lid is ingedeeld.
 	 *
-	 * @param string $uid
+	 * @param Profiel $profiel
 	 * @return CorveeTaak[]
 	 */
-	public function getKomendeTakenVoorLid($uid) {
+	public function getKomendeTakenVoorLid(Profiel $profiel) {
 		return $this->createQueryBuilder('ct')
-			->where('ct.verwijderd = false and ct.uid = :uid and ct.datum >= :datum')
-			->setParameter('uid', $uid)
+			->where('ct.verwijderd = false and ct.profiel = :profiel and ct.datum >= :datum')
+			->setParameter('profiel', $profiel)
 			->setParameter('datum', date_create_immutable())
 			->orderBy('ct.datum', 'ASC')
 			->getQuery()->getResult();

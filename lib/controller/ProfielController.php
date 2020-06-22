@@ -173,7 +173,7 @@ class ProfielController extends AbstractController {
 			'activiteiten' => $activiteitenRepository->getGroepenVoorLid($profiel->uid),
 			'bestellinglog' => $civiBestellingRepository->getBestellingenVoorLid($profiel->uid, 10),
 			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginService::getUid() === $profiel->uid ? '' : '/' . $profiel->uid),
-			'corveetaken' => $corveeTakenRepository->getTakenVoorLid($profiel->uid),
+			'corveetaken' => $corveeTakenRepository->getTakenVoorLid($profiel),
 			'corveevoorkeuren' => $corveeVoorkeurenRepository->getVoorkeurenVoorLid($profiel->uid),
 			'corveevrijstelling' => $corveeVrijstellingenRepository->getVrijstelling($profiel->uid),
 			'corveekwalificaties' => $corveeKwalificatiesRepository->getKwalificatiesVanLid($profiel->uid),

@@ -289,7 +289,7 @@ class ProfielRepository extends AbstractRepository {
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
-		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel->uid);
+		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel);
 		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid($profiel->uid);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
