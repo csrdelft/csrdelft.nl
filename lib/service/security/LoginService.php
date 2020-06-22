@@ -431,6 +431,7 @@ class LoginService {
 	public function resetLoginMoment() {
 		$_SESSION[self::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::password_login;
 		$this->current_session->login_moment = date_create_immutable();
+		$this->current_session->authentication_method = AuthenticationMethod::password_login;
 		$this->entityManager->flush();
 	}
 
