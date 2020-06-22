@@ -85,7 +85,7 @@
 		@endif
 	</td>
 	<td
-		@if($taak->uid and ($taak->punten !== $taak->punten_toegekend or $taak->bonus_malus !== $taak->bonus_toegekend) and $taak->datum < date_create_immutable(instelling('corvee', 'waarschuwing_puntentoewijzing_achteraf')))
+		@if($taak->profiel and ($taak->punten !== $taak->punten_toegekend or $taak->bonus_malus !== $taak->bonus_toegekend) and $taak->datum < date_create_immutable(instelling('corvee', 'waarschuwing_puntentoewijzing_achteraf')))
 		class="taak-warning"
 		@endif >
 	{{$taak->punten_toegekend}}

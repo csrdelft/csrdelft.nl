@@ -144,9 +144,8 @@ class CorveeTakenRepository extends AbstractRepository {
 		if ($groupByUid) {
 			$takenByUid = array();
 			foreach ($taken as $taak) {
-				$uid = $taak->uid;
-				if ($uid !== null) {
-					$takenByUid[$uid][] = $taak;
+				if ($taak->profiel !== null) {
+					$takenByUid[$taak->profiel->uid][] = $taak;
 				}
 			}
 			return $takenByUid;
@@ -305,7 +304,6 @@ class CorveeTakenRepository extends AbstractRepository {
 		$taak = new CorveeTaak();
 		$taak->taak_id = null;
 		$taak->corveeFunctie = $repetitie->corveeFunctie;
-		$taak->uid = null;
 		$taak->profiel = null;
 		$taak->corveeRepetitie = $repetitie;
 		$taak->maaltijd = $maaltijd;

@@ -46,16 +46,6 @@ class CorveeTaak implements Agendeerbaar {
 	 */
 	public $taak_id;
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer", columnDefinition="")
-	 */
-	public $functie_id;
-	/**
-	 * @var string
-	 * @ORM\Column(type="uid", nullable=true)
-	 */
-	public $uid;
-	/**
 	 * @var Profiel|null
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=true)
@@ -196,14 +186,6 @@ class CorveeTaak implements Agendeerbaar {
 			return true;
 		}
 		return false;
-	}
-
-	public function setUid($uid) {
-		if ($uid !== null && !ProfielRepository::existsUid($uid)) {
-			throw new CsrGebruikerException('Geen lid: set lid id');
-		}
-		$this->uid = $uid;
-		$this->profiel = ProfielRepository::get($uid);
 	}
 
 	public function setWanneerGemaild($datumtijd) {
