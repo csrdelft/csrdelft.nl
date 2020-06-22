@@ -6,7 +6,7 @@
 	<h2>Bulk afschrijven</h2>
 	<p>
 		Met deze tool kan je op basis van een CSV-lijst bedragen afschrijven.
-		Download hiervoor het template, vul de gegevens in en upload het bestand.
+		Download hiervoor het template, vul de gegevens in en upload het bestand. <b>Laat de kolomkoppen staan.</b>
 		Na een controle wordt elke regel als bestelling ingevoerd
 		en worden de CiviSaldi van leden bijgewerkt.
 	</p>
@@ -20,11 +20,12 @@
 	<p>Dit is de beschrijving die (naast de productnaam) zichtbaar wordt voor het lid. Maak het beschrijvend.</p>
 	<a href="/fiscaat/afschrijven/template" class="btn btn-secondary">Download template</a>
 
-	<form action="/fiscaat/afschrijven/upload" method="post" class="mt-4">
+	<form action="/fiscaat/afschrijven/upload" method="post" class="mt-4" enctype="multipart/form-data">
 		<div class="form-group">
-			<label for="uploadVeld">Example file input</label>
+			<label for="uploadVeld">Upload hier je ingevulde CSV:</label>
 			<input id="uploadVeld" name="csv" type="file" accept=".csv,text/csv" class="form-control-file">
 		</div>
+		@csrf
 		<input class="btn btn-primary" type="submit" value="Volgende">
 	</form>
 @endsection

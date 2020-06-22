@@ -171,6 +171,9 @@
     "ocramius/proxy-manager": {
         "version": "2.0.4"
     },
+    "parsecsv/php-parsecsv": {
+        "version": "1.2.1"
+    },
     "phar-io/manifest": {
         "version": "1.0.1"
     },
