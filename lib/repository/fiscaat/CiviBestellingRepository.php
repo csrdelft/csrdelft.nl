@@ -148,9 +148,11 @@ class CiviBestellingRepository extends AbstractRepository {
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = -$bedrag;
 		$inhoud->product_id = CiviProductTypeEnum::OVERGEMAAKT;
+		$civiProduct = $this->civiProductRepository->getProduct($inhoud->product_id);
+		$inhoud->product = $civiProduct;
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = $this->civiProductRepository->getProduct($inhoud->product_id)->tmpPrijs * -$bedrag;
+		$bestelling->totaal = $civiProduct->tmpPrijs * -$bedrag;
 
 		return $bestelling;
 	}
