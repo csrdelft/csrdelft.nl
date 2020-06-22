@@ -103,14 +103,15 @@ class AccountController extends AbstractController {
 			throw new CsrToegangException();
 		}
 		if ($this->loginService->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
-			$form = new UpdateLoginForm();
+			$action = $this->generateUrl('csrdelft_account_bewerken', ['uid' => $uid]);
+			$form = new UpdateLoginForm($action);
 
 			// Reset loginmoment naar nu als de gebruiker zijn wachtwoord geeft.
 			if ($form->validate() && $this->accountRepository->controleerWachtwoord($account, $form->getValues()['pass'])) {
 				$this->loginService->resetLoginMoment();
 			} else {
 				setMelding('U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.', 2);
-				return view('default', ['content' => new UpdateLoginForm()]);
+				return view('default', ['content' => new UpdateLoginForm($action)]);
 			}
 		}
 		if (!AccessService::mag($account, P_LOGGED_IN)) {

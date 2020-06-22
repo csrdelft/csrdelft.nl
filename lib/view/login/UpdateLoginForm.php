@@ -15,8 +15,8 @@ use CsrDelft\view\formulier\knoppen\SubmitKnop;
  * @package CsrDelft\view\login
  */
 class UpdateLoginForm extends Formulier {
-	public function __construct() {
-		parent::__construct(null, '/account/bewerken', 'Opnieuw inloggen');
+	public function __construct($action) {
+		parent::__construct(null, $action, 'Opnieuw inloggen');
 
 		$this->css_classes[] = 'modal-dialog modal-content modal-body';
 
