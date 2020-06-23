@@ -43,7 +43,13 @@
 									<select name="{{$module}}_{{$id}}" id="inst_{{$module}}_{{$id}}" class="form-control change-opslaan"
 													data-href="/instellingen/update/{{$module}}/{{$id}}">
 										@foreach($opties as $optieId => $optie)
-											<option value="{{$optieId}}" @if($optieId === $keuze) selected @endif>{{ucfirst($optie)}}</option>
+											@if (is_numeric($optieId))
+												<option value="{{$optie}}"
+																@if($optie === $keuze) selected @endif>{{ucfirst($optie)}}</option>
+											@else
+												<option value="{{$optieId}}"
+																@if($optieId === $keuze) selected @endif>{{ucfirst($optie)}}</option>
+											@endif
 										@endforeach
 									</select>
 								@else
