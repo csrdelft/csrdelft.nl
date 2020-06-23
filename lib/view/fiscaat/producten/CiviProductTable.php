@@ -20,6 +20,7 @@ class CiviProductTable extends DataTable {
 
 		$this->selectEnabled = false;
 
+		$this->addColumn('id');
 		$this->addColumn('prijs', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
 		$this->addColumn('beheer', 'prijs', null, CellRender::Check());
 		$this->addColumn('categorie', 'prijs');

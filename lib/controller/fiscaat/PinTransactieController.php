@@ -14,10 +14,10 @@ use CsrDelft\entity\fiscaat\enum\CiviSaldoCommissieEnum;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
@@ -38,6 +38,8 @@ class PinTransactieController extends AbstractController {
 	private $civiBestellingModel;
 	/** @var CiviSaldoRepository */
 	private $civiSaldoRepository;
+	/** @var CiviProductRepository */
+	private $civiProductRepository;
 	/** @var PinTransactieMatchRepository */
 	private $pinTransactieMatchRepository;
 	/** @var PinTransactieRepository */
@@ -51,11 +53,13 @@ class PinTransactieController extends AbstractController {
 		EntityManagerInterface $em,
 		CiviBestellingRepository $civiBestellingRepository,
 		CiviSaldoRepository $civiSaldoRepository,
+		CiviProductRepository $civiProductRepository,
 		PinTransactieMatchRepository $pinTransactieMatchRepository,
 		PinTransactieRepository $pinTransactieRepository
 	) {
 		$this->civiBestellingModel = $civiBestellingRepository;
 		$this->civiSaldoRepository = $civiSaldoRepository;
+		$this->civiProductRepository = $civiProductRepository;
 		$this->pinTransactieMatchRepository = $pinTransactieMatchRepository;
 		$this->pinTransactieRepository = $pinTransactieRepository;
 		$this->em = $em;
@@ -160,7 +164,6 @@ class PinTransactieController extends AbstractController {
 				$bestelling = new CiviBestelling();
 				$bestelling->moment = $pinTransactie->datetime;
 				$bestelling->uid = $values['uid'];
-				$bestelling->profiel = ProfielRepository::get($values['uid']);
 				$bestelling->totaal = $pinTransactie->getBedragInCenten() * -1;
 				$bestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
 				$bestelling->deleted = false;
@@ -168,6 +171,7 @@ class PinTransactieController extends AbstractController {
 
 				$bestellingInhoud = new CiviBestellingInhoud();
 				$bestellingInhoud->product_id = CiviProductTypeEnum::PINTRANSACTIE;
+				$bestellingInhoud->product = $this->civiProductRepository->getProduct($bestellingInhoud->product_id);
 				$bestellingInhoud->aantal = $pinTransactie->getBedragInCenten();
 
 				$bestelling->inhoud[] = $bestellingInhoud;
@@ -346,6 +350,7 @@ class PinTransactieController extends AbstractController {
 						if ($inhoud !== $pinBestellingInhoud) {
 							$nieuweInhoud = new CiviBestellingInhoud();
 							$nieuweInhoud->product_id = $inhoud->product_id;
+							$nieuweInhoud->product = $inhoud->product;
 							$nieuweInhoud->aantal = $inhoud->aantal;
 
 							$nieuweBestellingInhoud[] = $nieuweInhoud;
@@ -355,7 +360,6 @@ class PinTransactieController extends AbstractController {
 					$nieuweBestelling = new CiviBestelling();
 					$nieuweBestelling->inhoud = $nieuweBestellingInhoud;
 					$nieuweBestelling->uid = $oudeBestelling->uid;
-					$nieuweBestelling->profiel = $oudeBestelling->profiel;
 					$nieuweBestelling->moment = $oudeBestelling->moment;
 					$nieuweBestelling->cie = $oudeBestelling->cie;
 					$nieuweBestelling->totaal = $oudeBestelling->totaal - $pinBestellingInhoud->aantal;
