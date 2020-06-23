@@ -9,18 +9,20 @@
   'personal' => get_menu('Personal'),
   'favorieten' => get_menu(\CsrDelft\service\security\LoginService::getUid()),
 ])->toString() !!}
-<nav id="zijbalk">
-	@php($zijbalk = \CsrDelft\view\Zijbalk::addStandaardZijbalk(isset($zijbalk) ? $zijbalk : []))
-	@foreach($zijbalk as $block)
-		<div class="blok">@php($block->view())</div>
-	@endforeach
-	@if(!DEBUG) @can(P_ADMIN)
-		<div class="commit-hash">
-			<a href="{{ commitLink() }}" target="_blank" class="not-external">{{ commitHash() }}</a>
-		</div>
-	@endcan @endif
-</nav>
 <main class="container my-3 py-3 flex-shrink-0">
+	@if(lid_instelling('zijbalk', 'breedte') != 'zijbalk_verborgen')
+		<nav id="zijbalk">
+			@php($zijbalk = \CsrDelft\view\Zijbalk::addStandaardZijbalk(isset($zijbalk) ? $zijbalk : []))
+			@foreach($zijbalk as $block)
+				<div class="blok">@php($block->view())</div>
+			@endforeach
+			@if(!DEBUG) @can(P_ADMIN)
+				<div class="commit-hash">
+					<a href="{{ commitLink() }}" target="_blank" class="not-external">{{ commitHash() }}</a>
+				</div>
+			@endcan @endif
+		</nav>
+	@endif
 	<nav aria-label="breadcrumb">
 		@section('breadcrumbs')
 			{!! csr_breadcrumbs(get_breadcrumbs($_SERVER['REQUEST_URI'])) !!}

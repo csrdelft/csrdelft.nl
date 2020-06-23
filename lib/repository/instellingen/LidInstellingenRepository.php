@@ -193,9 +193,8 @@ class LidInstellingenRepository extends AbstractRepository {
 	 * @return LidInstelling
 	 */
 	public function wijzigInstelling($module, $id, $waarde) {
-		$options = $this->getTypeOptions($module, $id);
 		$instelling = $this->getInstelling($module, $id);
-		$instelling->waarde = isset($options[$waarde]) ? $options[$waarde] : $waarde;
+		$instelling->waarde = $waarde;
 		$this->update($instelling);
 		return $instelling;
 	}
