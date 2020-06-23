@@ -15,6 +15,11 @@ require('timeago');
 
 registerBbContext();
 
+route('/wachtwoord', async () => {
+	await registerFormulierContext();
+	init(document.body);
+});
+
 route('/forum', async () => {
 	await registerFormulierContext();
 	init(document.body);
