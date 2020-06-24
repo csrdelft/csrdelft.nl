@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\corvee;
 
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,7 +35,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\corvee\CorveeRepetitiesRepository")
  * @ORM\Table("crv_repetities")
  */
-class CorveeRepetitie {
+class CorveeRepetitie implements DisplayEntity {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -111,6 +112,18 @@ class CorveeRepetitie {
 				} else {
 					return 'elke ' . $this->periode_in_dagen . ' dagen';
 				}
+		}
+	}
+
+	function getId() {
+		return $this->crv_repetitie_id;
+	}
+
+	function getWeergave(): string {
+		if ($this->corveeFunctie) {
+			return $this->corveeFunctie->naam . ' ' . $this->getDagVanDeWeekText() . ' ' . $this->getPeriodeInDagenText();
+		} else {
+			return $this->getDagVanDeWeekText() . ' ' . $this->getPeriodeInDagenText();
 		}
 	}
 }

@@ -7,7 +7,7 @@
 		class="taak-datum-summary taak-datum-{{$datum}}
 		@if(date_create_immutable($datum) < date_create_immutable('-1 day'))
 		@if(!$show and !$prullenbak)  taak-datum-oud
-	@endif  taak-oud
+	@endif  taak-oud verborgen
 @endif
 		@if($show)  verborgen
 @endif " onclick="window.maalcie.takenToggleDatum('{{$datum}}');">
@@ -24,7 +24,7 @@
 				&nbsp;{{$taak->corveeFunctie->afkorting}}:&nbsp;
 			</span>
 					@endif
-					@if($taak->uid) {{-- ingedeelde taak van functie: teller++ --}}
+					@if($taak->profiel) {{-- ingedeelde taak van functie: teller++ --}}
 					@php($count = $count + 1)
 					@endif
 					@if($loop->last) {{-- laatste taak van functie: toon ingedeeld-teller en totaal aantal taken van deze functie --}}

@@ -127,7 +127,7 @@ DQL
 		if ($this->getHeeftVoorkeur($voorkeur->crv_repetitie_id, $voorkeur->uid)) {
 			throw new CsrGebruikerException('Voorkeur al ingeschakeld');
 		}
-		$repetitie = $this->corveeRepetitiesRepository->getRepetitie($voorkeur->crv_repetitie_id);
+		$repetitie = $voorkeur->corveeRepetitie;
 		if (!$repetitie->voorkeurbaar) {
 			throw new CsrGebruikerException('Niet voorkeurbaar');
 		}

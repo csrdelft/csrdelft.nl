@@ -67,7 +67,7 @@ export function takenToggleSuggestie(soort: string, show: boolean) {
 
 function takenToggleDatumFirst(datum: string, index: number) {
 	if ('taak-datum-head-' + datum === $('#maalcie-tabel tr:visible').eq(index).attr('id')) {
-		$('#taak-datum-head-first').toggle();
+		$('#taak-datum-head-first').toggleClass('verborgen');
 	}
 }
 
@@ -78,15 +78,15 @@ function takenColorDatum() {
 
 export function takenToggleDatum(datum: string) {
 	takenToggleDatumFirst(datum, 0);
-	$('.taak-datum-' + datum).toggle();
+	$('.taak-datum-' + datum).toggleClass('verborgen');
 	takenToggleDatumFirst(datum, 1);
 	takenColorDatum();
 
 }
 
 export function takenShowOld() {
-	$('#taak-datum-head-first').show();
-	$('tr.taak-datum-oud').show();
+	$('#taak-datum-head-first').removeClass('verborgen');
+	$('tr.taak-datum-oud').removeClass('verborgen');
 	takenColorDatum();
 }
 

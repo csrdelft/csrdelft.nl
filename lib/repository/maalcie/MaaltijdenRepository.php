@@ -563,7 +563,7 @@ class MaaltijdenRepository extends AbstractRepository {
 				$this->meldAboAan($maaltijd);
 
 				foreach ($corveerepetities as $corveerepetitie) {
-					$this->corveeTakenRepository->newRepetitieTaken($corveerepetitie, date_format_intl($datum, DATE_FORMAT), date_format_intl($datum, DATE_FORMAT), intval($maaltijd->maaltijd_id)); // do not repeat within maaltijd period
+					$this->corveeTakenRepository->newRepetitieTaken($corveerepetitie, $datum, $datum, $maaltijd); // do not repeat within maaltijd period
 				}
 				$maaltijden[] = $maaltijd;
 				if ($repetitie->periode_in_dagen < 1) {
@@ -594,6 +594,17 @@ class MaaltijdenRepository extends AbstractRepository {
 	public function delete(Maaltijd $maaltijd) {
 		$this->_em->remove($maaltijd);
 		$this->_em->flush();
+	}
+
+	/**
+	 * @param $query
+	 * @return Maaltijd[]
+	 */
+	public function getSuggesties($query) {
+		return $this->createQueryBuilder('m')
+			->where('m.titel like :query or date_format(m.datum, \'%Y-%m-%d\') like :query or m.maaltijd_id like :query')
+			->setParameter('query', sql_contains($query))
+			->getQuery()->getResult();
 	}
 
 }

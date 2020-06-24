@@ -12,6 +12,9 @@ class LidObjectField extends LidField {
 		parent::__construct($name, $value->uid ?? null, $description, $zoekin);
 	}
 
+	/**
+	 * @return Profiel|null
+	 */
 	public function getFormattedValue() {
 		if ($this->getValue()) {
 			$entityManager = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');

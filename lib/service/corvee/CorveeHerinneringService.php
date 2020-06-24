@@ -39,22 +39,17 @@ class CorveeHerinneringService {
 
 	public function stuurHerinnering(CorveeTaak $taak) {
 		$datum = date_format_intl($taak->datum, DATE_FORMAT);
-		$uid = $taak->uid;
-		if (!$uid) {
+		if (!$taak->profiel) {
 			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!');
 		}
-		$profiel = $this->profielRepository->find($uid);
-		if (!$profiel) {
-			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen! ($uid =' . $uid . ')');
-		}
-		$lidnaam = $profiel->getNaam('civitas');
-		$to = array($profiel->getPrimaryEmail() => $lidnaam);
-		$from = 'corvee@csrdelft.nl';
+		$lidnaam = $taak->profiel->getNaam('civitas');
+		$to = array($taak->profiel->getPrimaryEmail() => $lidnaam);
+		$from = env('EMAIL_CC');
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$bericht = $taak->corveeFunctie->email_bericht;
 		$eten = '';
-		if ($taak->maaltijd_id !== null) {
-			$aangemeld = $this->maaltijdAanmeldingenRepository->getIsAangemeld($taak->maaltijd_id, $uid);
+		if ($taak->maaltijd !== null) {
+			$aangemeld = $this->maaltijdAanmeldingenRepository->getIsAangemeld($taak->maaltijd->maaltijd_id, $taak->profiel->uid);
 			if ($aangemeld) {
 				$eten = instelling('corvee', 'mail_wel_meeeten');
 			} else {

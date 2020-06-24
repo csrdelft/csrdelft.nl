@@ -53,6 +53,7 @@ doctrine:
             now: DoctrineExtensions\Query\Mysql\Now
             concat_ws: DoctrineExtensions\Query\Mysql\ConcatWs
             replace: DoctrineExtensions\Query\Mysql\Replace
+            date_format: DoctrineExtensions\Query\Mysql\DateFormat
         mappings:
             CsrDelft:
                 is_bundle: false

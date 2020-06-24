@@ -2,10 +2,8 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\repository\groepen\LichtingenRepository;
-use CsrDelft\repository\corvee\CorveeRepetitiesRepository;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,9 +23,8 @@ class SuggestieLijst implements ToResponse, FormElement {
 		$this->suggesties = $suggesties;
 		$this->taak = $taak;
 
-		$crid = $taak->crv_repetitie_id;
-		if ($crid !== null) {
-			$this->voorkeurbaar = ContainerFacade::getContainer()->get(CorveeRepetitiesRepository::class)->getRepetitie($crid)->voorkeurbaar;
+		if ($taak->corveeRepetitie !== null) {
+			$this->voorkeurbaar = $taak->corveeRepetitie->voorkeurbaar;
 		}
 
 		if ($taak->corveeFunctie->kwalificatie_benodigd) {

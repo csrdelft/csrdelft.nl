@@ -14,6 +14,7 @@ use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
+use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenTable;
@@ -112,7 +113,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @return TemplateView
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/maaltijden/beheer/{maaltijd_id}", methods={"GET"}, defaults={"maaltijd_id"=null})
+	 * @Route("/maaltijden/beheer/{maaltijd_id<\d*>}", methods={"GET"}, defaults={"maaltijd_id"=null})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function GET_beheer($maaltijd_id = null) {
@@ -399,5 +400,15 @@ class BeheerMaaltijdenController extends AbstractController {
 			'titel' => 'Onverwerkte Maaltijden',
 			'content' => new OnverwerkteMaaltijdenTable(),
 		]);
+	}
+
+	/**
+	 * @param Request $request
+	 * @return GenericSuggestiesResponse
+	 * @Route("/maaltijden/beheer/suggesties", methods={"GET", "POST"})
+	 * @Auth(P_MAAL_MOD)
+	 */
+	public function suggesties(Request $request) {
+		return new GenericSuggestiesResponse($this->maaltijdenRepository->getSuggesties($request->query->get('q')));
 	}
 }

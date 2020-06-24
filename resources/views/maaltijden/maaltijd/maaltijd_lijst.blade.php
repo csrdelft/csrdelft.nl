@@ -92,8 +92,8 @@
 					<div style="column-count: 2">
 						@foreach($corveetaken as $taak)
 							<div>
-								@if($taak->uid)
-									{!! \CsrDelft\repository\ProfielRepository::getLink($taak->uid,instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
+								@if($taak->profiel)
+									{!! $taak->profiel->getlink(instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst')) !!}
 								@else
 									<span class="cursief">vacature</span>
 								@endif

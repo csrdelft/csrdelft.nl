@@ -93,8 +93,8 @@ class CorveeToewijzenService {
 			} else {
 				$corveePuntenOverzichten[$uid]->recent = false;
 			}
-			if ($taak->crv_repetitie_id !== null) {
-				$corveePuntenOverzichten[$uid]->voorkeur = ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
+			if ($taak->corveeRepetitie !== null) {
+				$corveePuntenOverzichten[$uid]->voorkeur = ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->getHeeftVoorkeur($taak->corveeRepetitie->crv_repetitie_id, $uid);
 			} else {
 				$corveePuntenOverzichten[$uid]->voorkeur = false;
 			}

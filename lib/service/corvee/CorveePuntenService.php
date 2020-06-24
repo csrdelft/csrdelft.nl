@@ -81,24 +81,21 @@ class CorveePuntenService {
 		});
 	}
 
-	public function puntenToekennen($uid, $punten, $bonus_malus) {
+	public function puntenToekennen(Profiel $profiel, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten toekennen faalt: geen integer');
 		}
-		$profiel = ProfielRepository::get($uid); // false if lid does not exist
-		if (!$profiel) {
-			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
-		}
+
 		if ($punten !== 0 OR $bonus_malus !== 0) {
 			$this->savePuntenVoorLid($profiel, (int)$profiel->corvee_punten + $punten, (int)$profiel->corvee_punten_bonus + $bonus_malus);
 		}
 	}
 
-	public function puntenIntrekken($uid, $punten, $bonus_malus) {
+	public function puntenIntrekken(Profiel $profiel, $punten, $bonus_malus) {
 		if (!is_int($punten) || !is_int($bonus_malus)) {
 			throw new CsrGebruikerException('Punten intrekken faalt: geen integer');
 		}
-		$this->puntenToekennen($uid, -$punten, -$bonus_malus);
+		$this->puntenToekennen($profiel, -$punten, -$bonus_malus);
 	}
 
 	public function savePuntenVoorLid(Profiel $profiel, $punten = null, $bonus_malus = null) {
@@ -153,7 +150,7 @@ class CorveePuntenService {
 	 */
 	public function loadPuntenVoorLid(Profiel $profiel, $functies = null, $lidtaken = null, $vrijstelling = null) {
 		if ($lidtaken === null) {
-			$lidtaken = $this->corveeTakenRepository->getTakenVoorLid($profiel->uid);
+			$lidtaken = $this->corveeTakenRepository->getTakenVoorLid($profiel);
 			$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($profiel->uid);
 		}
 		if ($functies === null) { // niet per functie sommeren
@@ -205,7 +202,7 @@ class CorveePuntenService {
 			$sumBonus[$fid] = 0;
 		}
 		foreach ($taken as $taak) {
-			$fid = $taak->functie_id;
+			$fid = $taak->corveeFunctie->functie_id;
 			if (array_key_exists($fid, $functies)) {
 				$sumAantal[$fid] += 1;
 				$sumPunten[$fid] += $taak->punten_toegekend;

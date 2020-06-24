@@ -51,7 +51,7 @@ class CorveeRepetitiesRepository extends AbstractRepository {
 		if ($shift > 0) {
 			$datum = strtotime('+' . $shift . ' days', $datum);
 		}
-		return date('Y-m-d', $datum);
+		return date_create_immutable('@' . $datum);
 	}
 
 	/**

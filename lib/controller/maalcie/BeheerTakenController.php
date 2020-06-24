@@ -13,7 +13,7 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\corvee\CorveeHerinneringService;
 use CsrDelft\service\corvee\CorveeToewijzenService;
-use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
@@ -74,7 +74,7 @@ class BeheerTakenController extends AbstractController {
 	 * @param CorveeTaak|null $taak
 	 * @param Maaltijd|null $maaltijd
 	 * @return TemplateView
-	 * @Route("/corvee/beheer/{taak_id}/{maaltijd_id}", methods={"GET"}, defaults={"taak_id"=null,"maaltijd_id"=null})
+	 * @Route("/corvee/beheer/{taak_id<\d*>}/{maaltijd_id<\d*>}", methods={"GET"}, defaults={"taak_id"=null,"maaltijd_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
 	public function beheer(CorveeTaak $taak = null, Maaltijd $maaltijd = null) {
@@ -95,7 +95,7 @@ class BeheerTakenController extends AbstractController {
 				if (!array_key_exists(date_format_intl($datum, DATE_FORMAT), $model)) {
 					$model[date_format_intl($datum, DATE_FORMAT)] = array();
 				}
-				$model[date_format_intl($datum, DATE_FORMAT)][$taak->functie_id][] = $taak;
+				$model[date_format_intl($datum, DATE_FORMAT)][$taak->corveeFunctie->functie_id][] = $taak;
 			}
 		}
 		return view('maaltijden.corveetaak.beheer_taken', [
@@ -135,7 +135,7 @@ class BeheerTakenController extends AbstractController {
 			if (!array_key_exists(date_format_intl($datum, DATE_FORMAT), $model)) {
 				$model[date_format_intl($datum, DATE_FORMAT)] = array();
 			}
-			$model[date_format_intl($datum, DATE_FORMAT)][$taak->functie_id][] = $taak;
+			$model[date_format_intl($datum, DATE_FORMAT)][$taak->corveeFunctie->functie_id][] = $taak;
 		}
 		return view('maaltijden.corveetaak.beheer_taken', [
 			'taken' => $model,
@@ -190,10 +190,10 @@ class BeheerTakenController extends AbstractController {
 		if ($view->validate()) {
 			/** @var CorveeTaak $values */
 			$values = $view->getModel();
-			$taak = $this->corveeTakenRepository->saveTaak($taak->taak_id, (int)$values->functie_id, $values->uid, $values->crv_repetitie_id, $values->maaltijd_id, $values->datum, $values->punten, $values->bonus_malus);
+			$taak = $this->corveeTakenRepository->saveTaak($values);
 			$maaltijd = null;
-			if (endsWith($_SERVER['HTTP_REFERER'], '/corvee/beheer/maaltijd/' . $values->maaltijd_id)) { // state of gui
-				$maaltijd = $this->maaltijdenRepository->getMaaltijd($values->maaltijd_id);
+			if (endsWith($_SERVER['HTTP_REFERER'], '/corvee/beheer/maaltijd/' . ($taak->maaltijd ? $taak->maaltijd->maaltijd_id : ''))) { // state of gui
+				$maaltijd = $taak->maaltijd;
 			}
 			return view('maaltijden.corveetaak.beheer_taak_lijst', [
 				'taak' => $taak,
@@ -202,6 +202,8 @@ class BeheerTakenController extends AbstractController {
 				'prullenbak' => false,
 			]);
 		}
+
+		$this->entityManager->clear();
 
 		return $view;
 	}
@@ -226,14 +228,14 @@ class BeheerTakenController extends AbstractController {
 					return new RepetitieCorveeForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
 				}
 			}
-			$taak = $this->corveeTakenRepository->vanRepetitie($repetitie, date_create_immutable($beginDatum), $maaltijd->maaltijd_id);
+			$taak = $this->corveeTakenRepository->vanRepetitie($repetitie, date_create_immutable($beginDatum), $maaltijd);
 			return new TaakForm($taak, 'opslaan'); // fetches POST values itself
 		} else {
 			$taak = new CorveeTaak();
-			if (isset($beginDatum)) {
-				$taak->datum = date_create_immutable($beginDatum);
+			if ($beginDatum) {
+				$taak->datum = $beginDatum;
 			}
-			$taak->maaltijd_id = $maaltijd->maaltijd_id;
+			$taak->maaltijd = $maaltijd;
 			return new TaakForm($taak, 'opslaan'); // fetches POST values itself
 		}
 	}
@@ -285,9 +287,9 @@ class BeheerTakenController extends AbstractController {
 			throw new CsrGebruikerException('Corveetaak is verwijderd');
 		}
 
-		$uidField = new LidField('uid', null, null, 'leden'); // fetches POST values itself
-		if ($uidField->validate()) {
-			$this->corveeTakenRepository->taakToewijzenAanLid($taak, $uidField->getValue());
+		$lidField = new LidObjectField('profiel', null, null, 'leden'); // fetches POST values itself
+		if ($lidField->validate()) {
+			$this->corveeTakenRepository->taakToewijzenAanLid($taak, $taak->profiel, $lidField->getFormattedValue());
 			return view('maaltijden.corveetaak.beheer_taak_lijst', [
 				'taak' => $taak,
 				'maaltijd' => null,
@@ -303,8 +305,6 @@ class BeheerTakenController extends AbstractController {
 	/**
 	 * @param CorveeTaak $taak
 	 * @return TemplateView
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @Route("/corvee/beheer/puntentoekennen/{taak_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
@@ -313,7 +313,9 @@ class BeheerTakenController extends AbstractController {
 			throw new CsrGebruikerException("Corveetaak is verwijderd");
 		}
 
-		$this->corveeTakenRepository->puntenToekennen($taak);
+		$this->corveeTakenRepository->puntenToekennen($taak, $taak->profiel);
+
+		$this->getDoctrine()->getManager()->flush();
 
 		return view('maaltijden.corveetaak.beheer_taak_lijst', [
 			'taak' => $taak,
@@ -326,8 +328,6 @@ class BeheerTakenController extends AbstractController {
 	/**
 	 * @param CorveeTaak $taak
 	 * @return TemplateView
-	 * @throws ORMException
-	 * @throws OptimisticLockException
 	 * @Route("/corvee/beheer/puntenintrekken/{taak_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
@@ -336,7 +336,9 @@ class BeheerTakenController extends AbstractController {
 			throw new CsrGebruikerException("Corveetaak is verwijderd");
 		}
 
-		$this->corveeTakenRepository->puntenIntrekken($taak);
+		$this->corveeTakenRepository->puntenIntrekken($taak, $taak->profiel);
+
+		$this->getDoctrine()->getManager()->flush();
 
 		return view('maaltijden.corveetaak.beheer_taak_lijst', [
 			'taak' => $taak,
@@ -395,7 +397,13 @@ class BeheerTakenController extends AbstractController {
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$maaltijd_id = (empty($values['maaltijd_id']) ? null : (int)$values['maaltijd_id']);
-			$taken = $this->corveeTakenRepository->maakRepetitieTaken($corveeRepetitie, $values['begindatum'], $values['einddatum'], $maaltijd_id);
+			$maaltijd = $maaltijd_id ? $this->maaltijdenRepository->find($maaltijd_id) : null;
+			$taken = $this->corveeTakenRepository->maakRepetitieTaken(
+				$corveeRepetitie,
+				$form->findByName('begindatum')->getFormattedValue(),
+				$form->findByName('einddatum')->getFormattedValue(),
+				$maaltijd
+			);
 
 			if (empty($taken)) {
 				throw new CsrGebruikerException('Geen nieuwe taken aangemaakt.');

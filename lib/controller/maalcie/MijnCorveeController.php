@@ -46,7 +46,7 @@ class MijnCorveeController {
 	 * @Auth(P_CORVEE_IK)
 	 */
 	public function mijn() {
-		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid(LoginService::getUid());
+		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid(LoginService::getProfiel());
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$punten = $this->corveePuntenService->loadPuntenVoorLid(LoginService::getProfiel(), $functies);
