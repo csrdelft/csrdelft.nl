@@ -36,6 +36,12 @@
 
 		.contact {
 			margin-bottom: 1em;
+			display: flex;
+
+			.col {
+				flex: 1;
+				margin: 0 0.75em;
+			}
 
 			.major {
 				border-bottom: solid 4px black;
@@ -53,6 +59,12 @@
 			border-bottom: solid 4px $geel;
 			margin-bottom: 2em;
 			padding: 2em 0;
+			display: flex;
+
+			.col {
+				flex: 1;
+				margin: 0 0.75em;
+			}
 		}
 
 		.copyright {
@@ -117,7 +129,6 @@
       width: 100%;
       form {
         width: 100%;
-        margin: 0 0 4em 0;
       }
 
       .contact {
@@ -126,10 +137,11 @@
       }
 
       .copyright,.sponsors {
-        margin: 4em 0 2em 0;
+        margin: 2em 0 2em 0;
       }
     }
   }
+
 }
 
 @media screen and (max-width: $scherm-middel) {
@@ -139,6 +151,14 @@
     padding-top: 2.5em;
     .inner {
       padding: 2em 2em 0.1em 2em;
+
+			.sponsors {
+				display: block;
+			}
+
+			.contact {
+				display: block;
+			}
     }
 
     form {

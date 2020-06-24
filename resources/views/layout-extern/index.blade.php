@@ -201,7 +201,7 @@
 				<h2 class="major">Interesseformulier</h2>
 				@include('layout-extern.form')
 				<noscript class="lazy-load">
-					<ul class="sponsors flex">
+					<ul class="sponsors">
 						<div class="col">
 							<li>
 								<a href="https://www.dosign.com/nl-nl/carriere/download-dosign-students-app/?utm_source=Banner%20Students&utm_medium=sv%20C.S.R.&utm_campaign=Promotie%20app ">
@@ -259,37 +259,35 @@
 				</noscript>
 
 				<ul class="contact">
-					<div class="flex">
-						<div class="col gutter">
-							<h2 class="major">Contact</h2>
-							<li>Civitas Studiosorum Reformatorum</li>
-							<li class="fa-home">
-								Soci&euml;teit Confide <br/>
-								Oude Delft 9<br/>
-								2611 BA Delft
-							</li>
-							<li class="fa-phone">06-19470413</li>
-							<li class="fa-envelope"><a href="mailto:{{env('EMAIL_ABACTIS')}}">{{env('EMAIL_ABACTIS')}}</a></li>
-						</div>
-						<div class="col gutter">
-							<h2 class="major">Social Media</h2>
-							<li class="fa-instagram">
-								<a href="https://www.instagram.com/csrdelft/" target="_blank">Like onze foto's op Instagram en volg de laatste posts</a>
-							</li>
-							<li class="fa-facebook">
-								<a href="https://www.facebook.com/delftcsr/" target="_blank">Volg ook onze Facebook pagina</a>
-							</li>
-						</div>
-						<div class="col gutter">
-							<h2 class="major">Locatie</h2>
-							<li class="fa-map-marker">
-								<noscript class="lazy-load">
-									<iframe title="Confide op Google Maps" height="300" frameborder="0" style="border:0"
-													src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2456.0445350385166!2d4.360246300000008!3d52.0060664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5b5c03dabb5b3%3A0xea6a437036970629!2sOude+Delft+9!5e0!3m2!1sen!2s!4v1404470858468">
-									</iframe>
-								</noscript>
-							</li>
-						</div>
+					<div class="col gutter">
+						<h2 class="major">Contact</h2>
+						<li>Civitas Studiosorum Reformatorum</li>
+						<li class="fa-home">
+							Soci&euml;teit Confide <br/>
+							Oude Delft 9<br/>
+							2611 BA Delft
+						</li>
+						<li class="fa-phone">06-19470413</li>
+						<li class="fa-envelope"><a href="mailto:{{env('EMAIL_ABACTIS')}}">{{env('EMAIL_ABACTIS')}}</a></li>
+					</div>
+					<div class="col gutter">
+						<h2 class="major">Social Media</h2>
+						<li class="fa-instagram">
+							<a href="https://www.instagram.com/csrdelft/" target="_blank">Like onze foto's op Instagram en volg de laatste posts</a>
+						</li>
+						<li class="fa-facebook">
+							<a href="https://www.facebook.com/delftcsr/" target="_blank">Volg ook onze Facebook pagina</a>
+						</li>
+					</div>
+					<div class="col gutter">
+						<h2 class="major">Locatie</h2>
+						<li class="fa-map-marker">
+							<noscript class="lazy-load">
+								<iframe title="Confide op Google Maps" height="300" frameborder="0" style="border:0"
+												src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2456.0445350385166!2d4.360246300000008!3d52.0060664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5b5c03dabb5b3%3A0xea6a437036970629!2sOude+Delft+9!5e0!3m2!1sen!2s!4v1404470858468">
+								</iframe>
+							</noscript>
+						</li>
 					</div>
 				</ul>
 
