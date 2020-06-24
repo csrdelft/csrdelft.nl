@@ -35,6 +35,7 @@ doctrine:
           enumHuisStatus: CsrDelft\common\Doctrine\Type\HuisStatusType
           enumCommissieSoort: CsrDelft\common\Doctrine\Type\CommissieSoortType
           enumGeslacht: CsrDelft\common\Doctrine\Type\Enum\GeslachtType
+          enumGroepVersie: CsrDelft\common\Doctrine\Type\GroepVersieType
         mapping_types:
           enum: string
     orm:

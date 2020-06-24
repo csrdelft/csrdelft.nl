@@ -60,6 +60,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	public $leden;
 
 	public function __construct() {
+		parent::__construct();
 		$this->leden = new ArrayCollection();
 	}
 
