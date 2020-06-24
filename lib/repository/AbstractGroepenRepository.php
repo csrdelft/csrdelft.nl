@@ -2,13 +2,14 @@
 
 namespace CsrDelft\repository;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\GroepStatus;
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\GroepStatistiekDTO;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use ReflectionClass;
 use ReflectionProperty;
@@ -27,10 +28,6 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @var AbstractGroep
 	 */
 	public $entityClass;
-	/**
-	 * @var Database
-	 */
-	private $database;
 
 	/**
 	 * AbstractGroepenModel constructor.
@@ -41,8 +38,6 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 		parent::__construct($managerRegistry, $entityClass);
 
 		$this->entityClass = $entityClass;
-
-		$this->database = ContainerFacade::getContainer()->get(Database::class);
 	}
 
 	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
@@ -169,7 +164,7 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 		$groep->begin_moment = null;
 		$groep->eind_moment = null;
 		$groep->website = null;
-		$groep->maker_uid = LoginService::getUid();
+		$groep->maker = LoginService::getProfiel();
 		return $groep;
 	}
 
@@ -198,4 +193,66 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 		return $qb->getQuery()->getResult();
 	}
 
+	/**
+	 * Bereken statistieken van de groepleden.
+	 *
+	 * @param AbstractGroep $groep
+	 * @return GroepStatistiekDTO
+	 */
+	public function getStatistieken(AbstractGroep $groep) {
+		if ($groep->aantalLeden() == 0) {
+			return new GroepStatistiekDTO(0, [], [], [], []);
+		}
+
+		$tijd = [];
+		foreach ($groep->getLeden() as $groeplid) {
+			$time = $groeplid->lid_sinds->getTimestamp();
+			if (isset($tijd[$time])) {
+				$tijd[$time] += 1;
+			} else {
+				$tijd[$time] = 1;
+			}
+		}
+		ksort($tijd);
+
+		$totaal = $groep->aantalLeden();
+		if ($groep instanceof HeeftAanmeldLimiet) {
+			if ($groep->getAanmeldLimiet() === null) {
+				$totaal .= ' (geen limiet)';
+			} else {
+				$totaal .= ' van ' . $groep->getAanmeldLimiet();
+			}
+		}
+
+		$verticalen = $this->createQueryBuilder('g')
+			->where('g.id = :id')
+			->setParameter('id', $groep->id)
+			->select('v.naam, count(p.uid) as aantal')
+			->innerJoin('g.leden', 'l')
+			->innerJoin('l.profiel', 'p')
+			// v.letter is niet onderdeel van de pk van Verticale, dus een association is hier niet mogelijk
+			->innerJoin('\CsrDelft\entity\groepen\Verticale', 'v', Join::WITH, 'v.letter = p.verticale')
+			->groupBy('p.verticale')
+			->getQuery()->getArrayResult();
+
+		$geslachten = $this->createQueryBuilder('g')
+			->where('g.id = :id')
+			->setParameter('id', $groep->id)
+			->select('p.geslacht, COUNT(p.uid) as aantal')
+			->innerJoin('g.leden', 'l')
+			->innerJoin('l.profiel', 'p')
+			->groupBy('p.geslacht')
+			->getQuery()->getArrayResult();
+
+		$lidjaren = $this->createQueryBuilder('g')
+			->where('g.id = :id')
+			->setParameter('id', $groep->id)
+			->select('p.lidjaar, count(p.uid) as aantal')
+			->innerJoin('g.leden', 'l')
+			->innerJoin('l.profiel', 'p')
+			->groupBy('p.lidjaar')
+			->getQuery()->getArrayResult();
+
+		return new GroepStatistiekDTO($totaal, $verticalen, $geslachten, $lidjaren, $tijd);
+	}
 }

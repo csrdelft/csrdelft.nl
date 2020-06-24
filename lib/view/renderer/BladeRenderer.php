@@ -1,7 +1,6 @@
 <?php
 namespace CsrDelft\view\renderer;
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\Orm\DependencyManager;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\Icon;
 use eftec\bladeone\BladeOne;
@@ -20,13 +19,12 @@ class BladeRenderer implements Renderer {
 		$this->bladeOne = new CustomBladeOne(TEMPLATE_PATH, BLADE_CACHE_PATH, BladeOne::MODE_AUTO);
 		$this->data = $variables;
 
-		// Tijden compilen doet dit er niet toe.
+		// Specifieke code voor development / Travis
 		if (MODE !== 'TRAVIS') {
 			$this->bladeOne->setInjectResolver(function ($className) {
-				if (is_a($className, DependencyManager::class, true)) {
-					/** @var $className DependencyManager */
+				try {
 					return ContainerFacade::getContainer()->get($className);
-				} else {
+				} catch (Exception $e) {
 					return new $className();
 				}
 			});
@@ -36,24 +34,23 @@ class BladeRenderer implements Renderer {
 				$this->bladeOne->setAuth(LoginService::getUid());
 			}
 			$this->bladeOne->authCallBack = [LoginService::class, 'mag'];
-		}
-		// In mode fast (productie) wordt de stylesheet in de html gehangen,
-		// in andere modi wordt een aanroep naar asset gedaan.
-		if ($this->bladeOne->getMode() === BladeOne::MODE_FAST) {
+
 			$this->bladeOne->directive('stylesheet', function ($expr) {
-				$asset = trim(trim($expr, "()"), "\"'");
-				return '<link rel="stylesheet" href="' . asset($asset) . '" type="text/css"/>';
+				return '<?php echo css_asset' . $expr . '; ?>';
 			});
 			$this->bladeOne->directive('script', function ($expr) {
-				$asset = trim(trim($expr, "()"), "\"'");
-				return '<script type="text/javascript" src="' . asset($asset) . '"></script>';
+				return '<?php echo js_asset' . $expr . '; ?>';
 			});
 		} else {
+			// In productie wordt de stylesheet in de html gehangen,
+			// in andere modi wordt een aanroep naar asset gedaan.
 			$this->bladeOne->directive('stylesheet', function ($expr) {
-				return '<link rel="stylesheet" href="<?php echo asset' . $expr . '; ?>" type="text/css"/>';
+				$asset = trim(trim($expr, "()"), "\"'");
+				return css_asset($asset);
 			});
 			$this->bladeOne->directive('script', function ($expr) {
-				return '<script type="text/javascript" src="<?php echo asset' . $expr . '?>"></script>';
+				$asset = trim(trim($expr, "()"), "\"'");
+				return js_asset($asset);
 			});
 		}
 

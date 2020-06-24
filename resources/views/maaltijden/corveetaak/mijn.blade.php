@@ -78,7 +78,7 @@
 		</tr>
 		</thead>
 		<tbody>
-		@foreach($punten->aantal as $fid => $aantal)
+		@foreach($punten->aantallen as $fid => $aantal)
 			<tr>
 				<td>{{$functies[$fid]->naam}} ({{$aantal}})</td>
 				<td>{{$punten->punten[$fid]}}

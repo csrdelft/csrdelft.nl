@@ -3,23 +3,19 @@
 namespace CsrDelft\repository\documenten;
 
 use CsrDelft\entity\documenten\DocumentCategorie;
-use CsrDelft\model\OrmTrait;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class DocumentCategorieModel.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @method DocumentCategorie[]    ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
  * @method DocumentCategorie|null find($id, $lockMode = null, $lockVersion = null)
  * @method DocumentCategorie|null findOneBy(array $criteria, array $orderBy = null)
  * @method DocumentCategorie[]    findAll()
  * @method DocumentCategorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DocumentCategorieRepository extends ServiceEntityRepository {
-	use OrmTrait;
-
+class DocumentCategorieRepository extends AbstractRepository {
 	/**
 	 * @var DocumentRepository
 	 */

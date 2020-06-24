@@ -2,17 +2,24 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\Mail;
 use CsrDelft\common\SimpleSpamFilter;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\view\PlainView;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/12/2018
  */
 class ContactFormulierController {
+	/**
+	 * @return PlainView
+	 * @Route("/contactformulier/interesse", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 */
 	public function interesse() {
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 
@@ -72,6 +79,57 @@ De PubCie.
 
 		$mail = new Mail([env('EMAIL_OWEECIE') => "OweeCie"], "Interesseformulier", $bericht);
 		$mail->setFrom($email);
+		$mail->send();
+
+		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
+	}
+	/**
+	 * @return PlainView
+	 * @Route("/contactformulier/owee", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function owee() {
+		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
+
+		if (!$resp['success']) {
+			throw new CsrToegangException("Geen toegang");
+		}
+
+		$type = filter_input(INPUT_POST, "optie", FILTER_SANITIZE_STRING);
+		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
+		$email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_STRING);
+		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
+
+		if ($this->isSpam($naam, $email, $telefoon)) {
+			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
+		}
+
+		if ($type === 'lid-worden') {
+			$typeaanduiding = 'Ik wil lid worden';
+			$commissie = "PromoCie";
+			$bestemming = [env('EMAIL_PROMOCIE') => $commissie];
+		} else {
+			$typeaanduiding = 'Eerst een lid spreken';
+			$commissie = "OweeCie";
+			$bestemming = [env('EMAIL_OWEECIE') => $commissie];
+		}
+
+		$bericht = "
+Beste $commissie,
+
+Het formulier op de OWee-pagina is ingevuld:
+
+Type: $typeaanduiding
+Naam: $naam
+E-mail: $email
+Telefoon: $telefoon
+
+Met vriendelijke groeten,
+De PubCie.
+";
+
+		$mail = new Mail($bestemming, "OWee formulier", $bericht);
+		$mail->setFrom(env('EMAIL_PUBCIE'));
 		$mail->send();
 
 		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');

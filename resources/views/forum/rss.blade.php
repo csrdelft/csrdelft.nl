@@ -36,9 +36,9 @@
 		@foreach($draden as $draad)<item>
 			<title>{{$draad->titel}}</title>
 			<link>{{CSR_ROOT}}/forum/reactie/{{$draad->laatste_post_id}}</link>
-			{{--@foreach($draad->getForumPosts() as $post)<description><![CDATA[ {{bbcode($post->tekst)}} ]]></description>
-			<pubDate>{{rfc2822($post->datum_tijd)}}</pubDate>
-			@endforeach--}}
+			<description>{{$draad->getLaatstePostSamenvatting()}}</description>
+			<author>{{\CsrDelft\repository\ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'user')}}</author>
+			<pubDate>{{rfc2822($draad->laatst_gewijzigd->getTimestamp())}}</pubDate>
 			<dc:creator>{{\CsrDelft\repository\ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'user')}}</dc:creator>
 			<category>{{$draad->deel->categorie->titel}} » {{$draad->deel->titel}}</category>
 			<comments>{{CSR_ROOT}}/forum/onderwerp/{{$draad->draad_id}}</comments>

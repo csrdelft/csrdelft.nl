@@ -3,7 +3,7 @@
 namespace CsrDelft\view\login;
 
 use CsrDelft\entity\security\Account;
-use CsrDelft\model\entity\security\AccessRole;
+use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
@@ -22,7 +22,7 @@ class AccountForm extends Formulier {
 		if (LoginService::mag(P_LEDEN_MOD)) {
 			$roles = array();
 			foreach (AccessRole::canChangeAccessRoleTo(LoginService::getAccount()->perm_role) as $optie) {
-				$roles[$optie] = AccessRole::getDescription($optie);
+				$roles[$optie] = AccessRole::from($optie)->getDescription();
 			}
 			$fields[] = new SelectField('perm_role', $account->perm_role, 'Rechten', $roles);
 		}

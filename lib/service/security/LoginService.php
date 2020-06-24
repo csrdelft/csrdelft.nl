@@ -4,11 +4,12 @@
 namespace CsrDelft\service\security;
 
 
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\entity\security\LoginSession;
 use CsrDelft\entity\security\RememberLogin;
-use CsrDelft\model\entity\security\AuthenticationMethod;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\LoginSessionRepository;
@@ -16,6 +17,12 @@ use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
 use DateInterval;
+use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Exception;
 
 /**
  * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.
@@ -23,13 +30,26 @@ use DateInterval;
  * @package CsrDelft\service
  */
 class LoginService {
+	/**
+	 * Voorgedefinieerde uids
+	 */
 	public const UID_EXTERN = 'x999';
-	public const SESS_AUTH_ERROR = 'auth_error';
+	public const UID_CLI = 'x900';
+	/**
+	 * Sessiesleutels
+	 */
+	const SESS_AUTH_ERROR = 'auth_error';
 	const SESS_UID = '_uid';
 	const SESS_AUTHENTICATION_METHOD = '_authenticationMethod';
-	const COOKIE_REMEMBER = 'remember';
 	const SESS_SUED_FROM = '_suedFrom';
-	private static $uid = 'x999';
+	/**
+	 * Cookies
+	 */
+	const COOKIE_REMEMBER = 'remember';
+	/**
+	 * @var string Huidige uid als met cli is ingelogd.
+	 */
+	private static $cliUid = 'x999';
 	/**
 	 * @var LoginSession
 	 */
@@ -46,11 +66,16 @@ class LoginService {
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
 
-	public function __construct(LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
+	public function __construct(EntityManagerInterface $entityManager, LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
 		$this->loginRepository = $loginRepository;
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->accountRepository = $accountRepository;
+		$this->entityManager = $entityManager;
 	}
 
 	/**
@@ -75,7 +100,7 @@ class LoginService {
 	 */
 	public static function getUid() {
 		if (MODE === 'CLI') {
-			return static::$uid;
+			return static::$cliUid;
 		}
 		return $_SESSION[self::SESS_UID] ?? self::UID_EXTERN;
 	}
@@ -87,6 +112,12 @@ class LoginService {
 		return ProfielRepository::get(static::getUid());
 	}
 
+	/**
+	 * @throws NonUniqueResultException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @throws Exception
+	 */
 	public function authenticate() {
 		/**
 		 * Sessie valideren: is er iemand ingelogd en is alles OK?
@@ -97,7 +128,7 @@ class LoginService {
 		if ($this->validate()) {
 			// Public gebruiker heeft geen DB sessie
 			if ($_SESSION[self::SESS_UID] != self::UID_EXTERN) {
-				$this->current_session->expire = date_create_immutable()->add(new \DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
+				$this->current_session->expire = date_create_immutable()->add(new DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 				$this->loginRepository->update($this->current_session);
 			}
 		} else {
@@ -122,7 +153,7 @@ class LoginService {
 			if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
 				$account = $this->accountRepository->findOneBy(['private_token' => $token]);
 				if ($account) {
-					$this->login($account->uid, null, false, null, true, true, getDateTime());
+					$this->login($account->uid, null, false, null, true, true, date_create_immutable());
 				}
 			}
 		}
@@ -236,11 +267,16 @@ class LoginService {
 	 * @param RememberLogin $remember
 	 * @param boolean $lockIP
 	 * @param boolean $alreadyAuthenticatedByUrlToken
-	 * @param string $expire
+	 * @param DateTimeImmutable $expire
 	 * @return boolean
+	 * @throws Exception
 	 */
 	public function login($user, $pass_plain, $evtWachten = true, RememberLogin $remember = null, $lockIP = false, $alreadyAuthenticatedByUrlToken = false, $expire = null) {
 		$user = filter_var($user, FILTER_SANITIZE_STRING);
+
+		if ($user == self::UID_EXTERN || $user == self::UID_CLI) {
+			throw new CsrGebruikerException('Kan niet inloggen op dit account');
+		}
 
 		// Inloggen met lidnummer of gebruikersnaam
 		if ($this->accountRepository::isValidUid($user)) {
@@ -324,8 +360,9 @@ class LoginService {
 			$this->current_session = new LoginSession();
 			$this->current_session->session_hash = hash('sha512', session_id());
 			$this->current_session->uid = $account->uid;
+			$this->current_session->account = $account;
 			$this->current_session->login_moment = date_create_immutable();
-			$this->current_session->expire = $expire ? $expire : date_create_immutable()->add(new \DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
+			$this->current_session->expire = $expire ? $expire : date_create_immutable()->add(new DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 			$this->current_session->user_agent = $user_agent;
 			$this->current_session->ip = $remote_addr;
 			$this->current_session->lock_ip = $lockIP; // sessie koppelen aan ip?
@@ -354,6 +391,8 @@ class LoginService {
 	}
 
 	/**
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function logout() {
 		// Forget autologin
@@ -389,6 +428,13 @@ class LoginService {
 		return $method;
 	}
 
+	public function resetLoginMoment() {
+		$_SESSION[self::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::password_login;
+		$this->current_session->login_moment = date_create_immutable();
+		$this->current_session->authentication_method = AuthenticationMethod::password_login;
+		$this->entityManager->flush();
+	}
+
 	/**
 	 * Na opvragen resetten.
 	 *
@@ -411,18 +457,14 @@ class LoginService {
 	}
 
 	/**
+	 * Maak een sessie aan voor command line gebruik. Zo worden veranderingen die met cron of cli worden gedaan
+	 * toegewezen aan een gebruiker.
+	 *
 	 * @return bool
+	 * @throws Exception
 	 */
-	public function validateCron() {
-		return $this->loginCron(env('CRON_USER'), env('CRON_PASS'));
-	}
-
-	public function loginCron($user, $pass_plain) {
-		$user = filter_var($user, FILTER_SANITIZE_STRING);
-		$pass_plain = filter_var($pass_plain, FILTER_SANITIZE_STRING);
-
-		// Inloggen met lidnummer of gebruikersnaam
-		$account = $this->accountRepository->get($user);
+	public function loginCli() {
+		$account = $this->accountRepository->get(self::UID_CLI);
 
 		// Onbekende gebruiker
 		if (!$account) {
@@ -432,16 +474,7 @@ class LoginService {
 		// Clear session
 		session_unset();
 
-		// Check password
-		if ($this->accountRepository->controleerWachtwoord($account, $pass_plain)) {
-			$this->accountRepository->successfulLoginAttempt($account);
-		} // Wrong password
-		else {
-			$this->accountRepository->failedLoginAttempt($account);
-			die('Cron wachtwoord onjuist');
-		}
-
-		static::$uid = $account->uid;
+		static::$cliUid = $account->uid;
 
 		$this->current_session = $this->loginRepository->find(hash('sha512', session_id()));
 
@@ -452,13 +485,16 @@ class LoginService {
 		// Login sessie aanmaken in database
 		$this->current_session->session_hash = hash('sha512', session_id());
 		$this->current_session->uid = $account->uid;
+		$this->current_session->account = $account;
 		$this->current_session->login_moment = date_create_immutable();
 		$this->current_session->expire = date_create_immutable()->add(new DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
 		$this->current_session->user_agent = MODE;
 		$this->current_session->ip = '';
 		$this->current_session->lock_ip = true; // sessie koppelen aan ip?
 		$this->current_session->authentication_method = AuthenticationMethod::password_login;
-		$this->loginRepository->update($this->current_session);
+
+		$this->entityManager->persist($this->current_session);
+		$this->entityManager->flush();
 
 		return true;
 	}

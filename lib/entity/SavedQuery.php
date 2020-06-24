@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity;
 
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -42,14 +41,4 @@ class SavedQuery {
 	public function magBekijken() {
 		return LoginService::mag($this->permissie) || LoginService::mag(P_ADMIN);
 	}
-
-	protected static $primary_key = ['ID'];
-	protected static $table_name = 'savedquery';
-	protected static $persistent_attributes = [
-		'ID' => [T::Integer, false, 'auto_increment'],
-		'savedquery' => [T::Text, false],
-		'beschrijving' => [T::String, false],
-		'permissie' => [T::String, false],
-		'categorie' => [T::String, false]
-	];
 }

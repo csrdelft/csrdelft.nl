@@ -3,7 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,6 +14,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\LichtingenRepository")
+ * @ORM\Table("lichtingen", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="lidjaar", columns={"lidjaar"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ * })
  */
 class Lichting extends AbstractGroep {
 	/**
@@ -29,8 +35,6 @@ class Lichting extends AbstractGroep {
 	 */
 	public $leden;
 
-	// Stiekem hebben we helemaal geen leden
-
 	/**
 	 * Read-only: generated group
 	 * @param $action
@@ -42,6 +46,10 @@ class Lichting extends AbstractGroep {
 		return $action === AccessAction::Bekijken;
 	}
 
+	/**
+	 * Stiekem hebben we helemaal geen leden
+	 * @return AbstractGroepLid[]|ArrayCollection
+	 */
 	public function getLeden() {
 		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
@@ -52,6 +60,7 @@ class Lichting extends AbstractGroep {
 			/** @var LichtingsLid $lid */
 			$lid = $model->nieuw($this, $profiel->uid);
 			$lid->door_uid = null;
+			$lid->door_profiel = null;
 			$lid->lid_sinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
 			$leden[] = $lid;
 		}

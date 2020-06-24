@@ -4,7 +4,7 @@ namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\LidZoeker;
+use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use Jacwright\RestServer\RestException;
 
@@ -22,7 +22,7 @@ class ApiLedenController {
 	 */
 	public function getLeden() {
 
-		$zoeker = ContainerFacade::getContainer()->get(LidZoeker::class);
+		$zoeker = ContainerFacade::getContainer()->get(LidZoekerService::class);
 		$leden = [];
 
 		foreach ($zoeker->getLeden() as $profiel) {

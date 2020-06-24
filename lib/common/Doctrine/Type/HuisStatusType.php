@@ -4,7 +4,7 @@
 namespace CsrDelft\common\Doctrine\Type;
 
 
-use CsrDelft\entity\groepen\HuisStatus;
+use CsrDelft\entity\groepen\enum\HuisStatus;
 
 class HuisStatusType extends EnumType {
 	public function getEnumClass() {
@@ -12,6 +12,6 @@ class HuisStatusType extends EnumType {
 	}
 
 	public function getName() {
-		return 'enumstatus';
+		return 'enumHuisStatus';
 	}
 }

@@ -44,7 +44,6 @@ class Afbeelding extends Bestand {
 	 * @throws CsrGebruikerException
 	 */
 	public function __construct($path, $parse = true) {
-		parent::__construct();
 		if ($path !== null) {
 			$this->directory = dirname($path) . '/';
 			$this->filename = basename($path);

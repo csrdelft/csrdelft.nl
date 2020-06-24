@@ -4,7 +4,7 @@ namespace CsrDelft\repository\bibliotheek;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\bibliotheek\Boek;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -13,7 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Boek[]    findAll()
  * @method Boek[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoekRepository extends ServiceEntityRepository {
+class BoekRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Boek::class);
 	}

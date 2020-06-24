@@ -2,8 +2,6 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\InlineForm;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
@@ -20,7 +18,7 @@ class EetwensForm extends InlineForm {
 
 	public function __construct() {
 
-		$field = new TextareaField('eetwens', ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->getEetwens(LoginService::getProfiel()), 'Allergie/diëet:');
+		$field = new TextareaField('eetwens', LoginService::getProfiel()->eetwens, 'Allergie/diëet:');
 
 		parent::__construct(null, '/corvee/voorkeuren/eetwens', $field, true, true);
 

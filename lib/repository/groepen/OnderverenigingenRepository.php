@@ -2,9 +2,9 @@
 
 namespace CsrDelft\repository\groepen;
 
-use CsrDelft\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\enum\OnderverenigingStatus;
 use CsrDelft\entity\groepen\Ondervereniging;
-use CsrDelft\entity\groepen\OnderverenigingStatus;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;

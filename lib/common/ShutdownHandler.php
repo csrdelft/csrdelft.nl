@@ -181,22 +181,6 @@ MD
 	}
 
 	/**
-	 * Print de stacktrace als dat mag.
-	 *
-	 * Runt in Debug en Productie mode.
-	 *
-	 * @param null $exception
-	 */
-	public static function stacktraceHandler($exception = null) {
-		if ($exception instanceof Exception) {
-			if ((defined('DEBUG') && DEBUG) || LoginService::mag(P_LOGGED_IN)) {
-				echo str_replace('#', '<br />#', $exception); // stacktrace
-				printDebug();
-			}
-		}
-	}
-
-	/**
 	 * @return array|null
 	 */
 	private static function getDebug() {

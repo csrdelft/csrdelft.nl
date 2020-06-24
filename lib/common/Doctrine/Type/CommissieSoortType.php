@@ -4,7 +4,7 @@
 namespace CsrDelft\common\Doctrine\Type;
 
 
-use CsrDelft\entity\groepen\CommissieSoort;
+use CsrDelft\entity\groepen\enum\CommissieSoort;
 
 class CommissieSoortType extends EnumType {
 

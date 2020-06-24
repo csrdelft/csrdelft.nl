@@ -3,7 +3,7 @@
  * sponsorkliks_affiliate_download.php
  *
  * @author J. Rijsdijk <jorairijsdijk@gmail.com>
- * @date 26/10/2017
+ * @since 26/10/2017
  */
 
 /**

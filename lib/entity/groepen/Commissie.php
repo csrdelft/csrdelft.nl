@@ -2,8 +2,9 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\entity\groepen\enum\CommissieSoort;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,7 +19,12 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Een commissie is een groep waarvan de groepsleden een specifieke functie (kunnen) hebben.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\CommissiesRepository")
- * @ORM\Table("commissies")
+ * @ORM\Table("commissies", indexes={
+ *   @ORM\Index(name="status", columns={"status"}),
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="soort", columns={"soort"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ * })
  */
 class Commissie extends AbstractGroep implements HeeftSoort {
 	public function __construct() {

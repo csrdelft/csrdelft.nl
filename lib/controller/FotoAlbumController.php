@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
@@ -18,10 +19,14 @@ use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * FotoAlbumController.class.php
@@ -52,23 +57,12 @@ class FotoAlbumController extends AbstractController {
 		$this->fotoRepository = $fotoRepository;
 	}
 
-	public function bekijken($dir) {
-		if ($dir == "" && !LoginService::mag(P_ALBUM_READ)) {
-			$dir = 'Publiek';
-		}
-
-		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
-
-		if (!$album->magBekijken()) {
-			throw new CsrToegangException();
-		}
-
-		if ($album->dirname === 'Posters') {
-			$album->orderByDateModified();
-		}
-		return view('fotoalbum.album', ['album' => $album]);
-	}
-
+	/**
+	 * @param $dir
+	 * @return RedirectResponse
+	 * @Route("/fotoalbum/verwerken/{dir}", methods={"GET"}, requirements={"dir": ".+"})
+	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_MOD})
+	 */
 	public function verwerken($dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -83,6 +77,15 @@ class FotoAlbumController extends AbstractController {
 		return $this->csrRedirect($album->getUrl());
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $dir
+	 * @return FotoAlbumToevoegenForm|JsonResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/fotoalbum/toevoegen/{dir}", methods={"POST"}, requirements={"dir": ".+"}, defaults={"dir": ""})
+	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
+	 */
 	public function toevoegen(Request $request, $dir) {
 		$album = new FotoAlbum($dir);
 		if (!$album->magToevoegen()) {
@@ -101,6 +104,13 @@ class FotoAlbumController extends AbstractController {
 		return $formulier;
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $dir
+	 * @return JsonResponse|TemplateView|RedirectResponse
+	 * @Route("/fotoalbum/uploaden/{dir}", methods={"GET","POST"}, requirements={"dir": ".+"})
+	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
+	 */
 	public function uploaden(Request $request, $dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -155,6 +165,12 @@ class FotoAlbumController extends AbstractController {
 		return view('default', ['content' => $formulier]);
 	}
 
+	/**
+	 * @param $dir
+	 * @return JsonResponse
+	 * @Route("/fotoalbum/bestaande/{dir}", methods={"POST"}, requirements={"dir": ".+"})
+	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
+	 */
 	public function bestaande($dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -179,6 +195,11 @@ class FotoAlbumController extends AbstractController {
 		return new JsonResponse($list);
 	}
 
+	/**
+	 * @param $dir
+	 * @Route("/fotoalbum/downloaden/{dir}", methods={"GET"}, requirements={"dir": ".+"})
+	 * @Auth({P_ALBUM_DOWN,P_ALBUM_PUBLIC_READ})
+	 */
 	public function downloaden($dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -205,6 +226,13 @@ class FotoAlbumController extends AbstractController {
 		exit;
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $dir
+	 * @return JsonResponse
+	 * @Route("/fotoalbum/hernoemen/dir", methods={"POST"}, requirements={"dir": ".+"})
+	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_ADD})
+	 */
 	public function hernoemen(Request $request, $dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -224,6 +252,13 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $dir
+	 * @return JsonResponse
+	 * @Route("/fotoalbum/albumcover/{dir}", methods={"POST"}, requirements={"dir": ".+"})
+	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
+	 */
 	public function albumcover(Request $request, $dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -239,6 +274,13 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $dir
+	 * @return JsonResponse
+	 * @Route("/fotoalbum/verwijderen/{dir}", methods={"POST"}, requirements={"dir": ".+"})
+	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
+	 */
 	public function verwijderen(Request $request, $dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -266,6 +308,15 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $dir
+	 * @return JsonResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/fotoalbum/roteren/{dir}", methods={"POST"}, requirements={"dir": ".+"})
+	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
+	 */
 	public function roteren(Request $request, $dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -279,6 +330,13 @@ class FotoAlbumController extends AbstractController {
 		return new JsonResponse(true);
 	}
 
+	/**
+	 * @param Request $request
+	 * @param null $zoekterm
+	 * @return JsonResponse
+	 * @Route("/fotoalbum/zoeken", methods={"GET"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw new CsrToegangException();
@@ -302,6 +360,13 @@ class FotoAlbumController extends AbstractController {
 		return new JsonResponse($result);
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $dir
+	 * @return JsonResponse
+	 * @Route("/fotoalbum/gettags/{dir}", methods={"POST"}, requirements={"dir": ".+"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function gettags(Request $request, $dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -315,6 +380,13 @@ class FotoAlbumController extends AbstractController {
 		return new JsonResponse($tags);
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $dir
+	 * @return FotoTagToevoegenForm|JsonResponse
+	 * @Route("/fotoalbum/addtag/{dir}", methods={"POST"}, requirements={"dir": ".+"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function addtag(Request $request, $dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
@@ -341,6 +413,12 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @return JsonResponse
+	 * @Route("/fotoalbum/removetag", methods={"POST"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function removetag(Request $request) {
 		$refuuid = $request->request->get('refuuid');
 		$keyword = $request->request->get('keyword');
@@ -359,6 +437,18 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
+	/**
+	 * @param Request $request
+	 * @param $type
+	 * @param $dir
+	 * @param $foto
+	 * @param $ext
+	 * @return BinaryFileResponse
+	 * @Route("/fotoalbum/{dir}/_thumbs/{foto}.{ext}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+", "ext": "JPE?G|PNG|jpe?g|png"}, defaults={"type": "thumb"})
+	 * @Route("/fotoalbum/{dir}/_resized/{foto}.{ext}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+", "ext": "JPE?G|PNG|jpe?g|png"}, defaults={"type": "resized"})
+	 * @Route("/fotoalbum/{dir}/{foto}.{ext}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+", "ext": "JPE?G|PNG|jpe?g|png"}, defaults={"type": "full"})
+	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
+	 */
 	public function raw_image(Request $request, $type, $dir, $foto, $ext) {
 		//Extra check to prevent attacks
 		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
@@ -389,5 +479,28 @@ class FotoAlbumController extends AbstractController {
 		$response->isNotModified($request);
 
 		return $response;
+	}
+
+	/**
+	 * @param $dir
+	 * @return TemplateView
+	 * @Route("/fotoalbum/{dir}", methods={"GET"}, requirements={"dir": ".+"}, defaults={"dir": ""})
+	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
+	 */
+	public function bekijken($dir) {
+		if ($dir == "" && !LoginService::mag(P_ALBUM_READ)) {
+			$dir = 'Publiek';
+		}
+
+		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
+
+		if (!$album->magBekijken()) {
+			throw new CsrToegangException();
+		}
+
+		if ($album->dirname === 'Posters') {
+			$album->orderByDateModified();
+		}
+		return view('fotoalbum.album', ['album' => $album]);
 	}
 }

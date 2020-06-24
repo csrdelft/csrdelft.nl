@@ -9,6 +9,7 @@ use CsrDelft\common\instellingen\InstellingType;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\instellingen\LidInstelling;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -110,6 +111,7 @@ class LidInstellingenRepository extends AbstractRepository {
 		$instelling->instelling_id = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
 		$instelling->uid = $uid;
+		$instelling->profiel = ProfielRepository::get($uid);
 
 		$this->getEntityManager()->persist($instelling);
 		$this->getEntityManager()->flush();
@@ -147,6 +149,7 @@ class LidInstellingenRepository extends AbstractRepository {
 				$instelling->module = $module;
 				$instelling->instelling_id = $id;
 				$instelling->uid = $this->getUid();
+				$instelling->profiel = ProfielRepository::get($instelling->uid);
 				$instelling->waarde = $waarde;
 				$this->getEntityManager()->persist($instelling);
 			}
@@ -252,12 +255,18 @@ class LidInstellingenRepository extends AbstractRepository {
 	/**
 	 */
 	public function opschonen() {
-		foreach ($this->findAll() as $instelling) {
-			if (!$this->hasKey($instelling->module, $instelling->instelling_id)) {
-				$this->getEntityManager()->remove($instelling);
+		$instellingen = [];
+		foreach ($this->getModules() as $module) {
+			foreach ($this->getModuleKeys($module) as $instelling) {
+				$instellingen[] = $instelling;
 			}
 		}
 
-		$this->getEntityManager()->flush();
+		$this->createQueryBuilder('i')
+			->delete()
+			->where('i.module not in (:modules) or i.instelling_id not in (:instellingen)')
+			->setParameter('modules', $this->getModules())
+			->setParameter('instellingen', $instellingen)
+			->getQuery()->execute();
 	}
 }

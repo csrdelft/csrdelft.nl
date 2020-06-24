@@ -16,13 +16,15 @@
 	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml"
 				href="{{CSR_ROOT}}/forum/rss.xml"/>
 	@yield('styles')
-	@script('extern.js')
+	@script('extern')
 </head>
 
 <body>
 <script>document.body.classList.add('is-loading');</script>
 <!-- Page Wrapper -->
 <div id="page-wrapper">
+
+	@yield('oweebanner')
 
 	<!-- Header -->
 	<header id="header" class="alt">

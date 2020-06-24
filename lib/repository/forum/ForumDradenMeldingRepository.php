@@ -3,12 +3,12 @@
 namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Mail;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumDraadMelding;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -27,8 +27,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumDraadMelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ForumDradenMeldingRepository extends AbstractRepository {
-	const ORM = ForumDraadMelding::class;
-
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, ForumDraadMelding::class);
 	}
@@ -57,18 +55,18 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		return $melding;
 	}
 
-	public function stopAlleMeldingenVoorLid(string $uid) {
+	public function stopAlleMeldingenVoorLeden(array $uids) {
 		$this->createQueryBuilder('m')
-			->where('m.uid = :uid')
-			->setParameter('uid', $uid)
+			->where('m.uid in (:uids)')
+			->setParameter('uids', $uids)
 			->delete()
 			->getQuery()->execute();
 	}
 
-	public function stopMeldingenVoorIedereen(ForumDraad $draad) {
+	public function stopMeldingenVoorIedereen(array $draadIds) {
 		$this->createQueryBuilder('m')
-			->where('m.draad_id = :draad_id')
-			->setParameter('draad_id', $draad->draad_id)
+			->where('m.draad_id in (:draad_ids)')
+			->setParameter('draad_ids', $draadIds)
 			->delete()
 			->getQuery()->execute();
 	}

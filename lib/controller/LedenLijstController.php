@@ -4,17 +4,28 @@
 namespace CsrDelft\controller;
 
 
-use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleSync;
-use CsrDelft\service\LidZoeker;
+use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
+use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 class LedenLijstController extends AbstractController {
-	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoeker $lidZoeker) {
+	/**
+	 * @param CmsPaginaRepository $cmsPaginaRepository
+	 * @param LidZoekerService $lidZoeker
+	 * @param GoogleSync $googleSync
+	 * @return TemplateView|RedirectResponse
+	 * @Route("/ledenlijst", methods={"GET", "POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
+	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync) {
 		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
@@ -50,12 +61,10 @@ class LedenLijstController extends AbstractController {
 
 		if (isset($_GET['addToGoogleContacts'])) {
 			try {
-				GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
-
-				$gSync = ContainerFacade::getContainer()->get(GoogleSync::class);
+				$googleSync->doRequestToken(CSR_ROOT . REQUEST_URI);
 
 				$start = microtime(true);
-				$message = $gSync->syncLidBatch($lidZoeker->getLeden());
+				$message = $googleSync->syncLidBatch($lidZoeker->getLeden());
 				$elapsed = microtime(true) - $start;
 
 				setMelding(
@@ -74,7 +83,7 @@ class LedenLijstController extends AbstractController {
 			if ($lidZoeker->count() == 1) {
 				$leden = $lidZoeker->getLeden();
 				$profiel = $leden[0];
-				return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
+				return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
 			}
 		}
 

@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \CsrDelft\entity\courant\Courant[] $couranten
+ */
+?>
 @extends('layout')
 
 @section('titel', 'Archief C.S.R.-courant')

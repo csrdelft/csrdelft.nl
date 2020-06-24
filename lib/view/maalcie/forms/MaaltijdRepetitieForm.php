@@ -23,6 +23,7 @@ use CsrDelft\view\formulier\ModalForm;
  *
  * Formulier voor een nieuwe of te bewerken maaltijd-repetitie.
  *
+ * @method MaaltijdRepetitie getModel()
  */
 class MaaltijdRepetitieForm extends ModalForm {
 

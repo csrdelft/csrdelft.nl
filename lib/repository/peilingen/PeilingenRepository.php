@@ -99,6 +99,7 @@ class PeilingenRepository extends AbstractRepository {
 			$stem = new PeilingStem();
 			$stem->peiling_id = $peiling->id;
 			$stem->uid = LoginService::getUid();
+			$stem->profiel = LoginService::getProfiel();
 
 			$manager = $this->getEntityManager();
 

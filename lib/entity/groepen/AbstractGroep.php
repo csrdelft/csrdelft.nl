@@ -5,17 +5,20 @@ namespace CsrDelft\entity\groepen;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\common\Eisen;
+use CsrDelft\entity\groepen\enum\CommissieFunctie;
+use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use PDO;
 use Symfony\Component\Serializer\Annotation as Serializer;
-use function common\short_class;
 
 
 /**
@@ -24,63 +27,63 @@ use function common\short_class;
  * Een groep met leden.
  * @ORM\MappedSuperclass()
  */
-abstract class AbstractGroep implements DataTableEntry {
+abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	/**
 	 * Primary key
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $id;
 	/**
 	 * Naam
 	 * @var string
 	 * @ORM\Column(type="stringkey")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $naam;
 	/**
 	 * Naam voor opvolging
 	 * @var string
 	 * @ORM\Column(type="stringkey")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $familie;
 	/**
 	 * Datum en tijd begin
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $begin_moment;
 	/**
 	 * Datum en tijd einde
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
+	 * @var DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $eind_moment;
 	/**
 	 * o.t. / h.t. / f.t.
 	 * @var GroepStatus
 	 * @ORM\Column(type="enumGroepStatus")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $status;
 	/**
 	 * Korte omschrijving
 	 * @var string
 	 * @ORM\Column(type="text")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $samenvatting;
 	/**
 	 * Lange omschrijving
 	 * @var string
 	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $omschrijving;
 	/**
@@ -90,20 +93,21 @@ abstract class AbstractGroep implements DataTableEntry {
 	 */
 	public $keuzelijst;
 	/**
-	 * Lidnummer van aanmaker
-	 * @var string
-	 * @ORM\Column(type="uid")
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="maker_uid", referencedColumnName="uid", nullable=false)
 	 */
-	public $maker_uid;
+	public $maker;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $versie = GroepVersie::V1;
 	/**
 	 * @var GroepKeuze[]
 	 * @ORM\Column(type="groepkeuze", nullable=true)
+	 * @Serializer\Groups("vue")
 	 */
 	public $keuzelijst2;
 
@@ -133,15 +137,23 @@ abstract class AbstractGroep implements DataTableEntry {
 
 	/**
 	 * @return AbstractGroepLid[]|ArrayCollection
+	 * @Serializer\Groups("vue")
 	 */
 	abstract public function getLeden();
 
 	public function getFamilieSuggesties() {
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
-		$tableName = $em->getClassMetadata(get_class($this))->getTableName();
+		/** @var AbstractGroepenRepository $repo */
+		$repo = $em->getRepository(get_class($this));
 
-		return ContainerFacade::getContainer()->get(Database::class)->sqlSelect(['DISTINCT familie'], $tableName)->fetchAll(PDO::FETCH_COLUMN);
+		$result = $repo->createQueryBuilder('g')
+			->select('DISTINCT g.familie')
+			->getQuery()->getScalarResult();
+
+		return array_map(function ($e) {
+			return $e['familie'];
+		}, $result);
 	}
 
 	public function getOpmerkingSuggesties() {
@@ -187,7 +199,7 @@ abstract class AbstractGroep implements DataTableEntry {
 
 			default:
 				// Maker van groep mag alles
-				if ($this->maker_uid === LoginService::getUid()) {
+				if ($this->maker->uid === LoginService::getUid()) {
 					return true;
 				}
 				break;
@@ -253,5 +265,13 @@ abstract class AbstractGroep implements DataTableEntry {
 
 	public function getUUID() {
 		return $this->id . '@' . short_class($this) . '.csrdelft.nl';
+	}
+
+	public function getId() {
+		return $this->id;
+	}
+
+	public function getWeergave(): string {
+		return $this->naam;
 	}
 }

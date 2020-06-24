@@ -51,6 +51,11 @@ class MaaltijdAbonnement {
 	 */
 	public $wanneer_ingeschakeld; # datetime
 
+	/**
+	 * @var MaaltijdRepetitie
+	 * @ORM\ManyToOne(targetEntity="MaaltijdRepetitie")
+	 * @ORM\JoinColumn(name="mlt_repetitie_id", referencedColumnName="mlt_repetitie_id")
+	 */
 	public $maaltijd_repetitie;
 	public $van_uid;
 	public $waarschuwing;

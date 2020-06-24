@@ -5,7 +5,7 @@ namespace CsrDelft\repository\security;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\security\AccessControl;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;

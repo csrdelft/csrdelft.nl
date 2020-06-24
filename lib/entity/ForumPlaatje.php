@@ -5,6 +5,7 @@ namespace CsrDelft\entity;
 
 
 use CsrDelft\common\CsrException;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Afbeelding;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ForumPlaatje
  * @package CsrDelft\entity
  * @ORM\Entity(repositoryClass="CsrDelft\repository\ForumPlaatjeRepository")
- * @ORM\Table("forumplaatjes")
+ * @ORM\Table("forumplaatjes", indexes={
+ *   @ORM\Index(name="access_key", columns={"access_key"})
+ * })
  */
 class ForumPlaatje {
 	/**
@@ -38,6 +41,12 @@ class ForumPlaatje {
 	 * @ORM\Column(type="uid", nullable=true)
 	 */
 	public $maker;
+	/**
+	 * @var Profiel|null
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="maker", referencedColumnName="uid", nullable=true)
+	 */
+	public $maker_profiel;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string", nullable=true)

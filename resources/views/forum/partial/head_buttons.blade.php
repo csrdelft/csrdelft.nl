@@ -4,7 +4,7 @@
  */
 ?>
 @can(P_LOGGED_IN)
-	@if($deel && $deel->magMeldingKrijgen())
+	@if(isset($deel) && $deel->magMeldingKrijgen())
 		<div class="btn-group mr-2">
 			<a href="/forum/deelmelding/{{$deel->forum_id}}/uit" class="btn btn-light post ReloadPage melding-nooit @if(!$deel->lidWilMeldingVoorDeel()) active @endif"
 				 title="Geen meldingen voor forumdeel onvangen">@icon('email_delete', 'email_delete')</a>

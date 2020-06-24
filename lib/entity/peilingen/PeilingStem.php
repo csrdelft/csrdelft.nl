@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\peilingen;
 
+use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,6 +28,12 @@ class PeilingStem {
 	 * @ORM\Id()
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")

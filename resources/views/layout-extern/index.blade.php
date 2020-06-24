@@ -3,7 +3,23 @@
 @section('titel', $titel)
 
 @section('styles')
-	@stylesheet('extern.css')
+	@stylesheet('extern')
+@endsection
+
+@section('oweebanner')
+	<a href="/lidworden" class="owee-banner">
+		<div class="logo">
+			<img src="/images/owee/owee2020.svg" alt="C.S.R. - Machtig Mooi">
+		</div>
+		<div class="tekst">
+			<p>Kom je volgend jaar in Delft studeren?
+				<br>Lees hier alles over de OWee en lid worden bij C.S.R.</p>
+			<div><span>Alles over de </span>OWee & lid worden</div>
+		</div>
+	</a>
+	<script>
+		document.body.className += ' ' + 'met-owee-banner';
+	</script>
 @endsection
 
 @section('body')
@@ -19,17 +35,11 @@
 	<section id="wrapper">
 
 		<!-- One -->
-		<section id="one" class="wrapper first">
+		<section id="one" class="wrapper first kleur1">
 			<div class="inner">
 				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg" alt="Foto vereniging"/></span>
 				<div class="content">
 					<h2 class="major">C.S.R. Delft</h2>
-					<p>
-						<em style="color:red;">
-							Vanwege de recente maatregelen omtrent de verspreiding van het coronavirus, is besloten per direct alle verenigingsactiviteiten af te lassen en is onze sociëteit gesloten. Als u hierover vragen heeft of het bestuur wil bereiken kunt u het bestuur mailen (bestuur@csrdelft.nl).<br>
-						</em>
-						<strong>Heb je interesse om lid te worden bij C.S.R.? Stuur een appje/maak een praatje met Maartje (06 3327 1913) of mail promocie@csrdelft.nl.</strong>
-					</p>
 					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
 						Delft, rijk aan tradities die zijn ontstaan in haar {{vereniging_leeftijd()}}-jarig bestaan. Het is een breed gezelschap
 						van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
@@ -44,6 +54,51 @@
 
 		<!-- Two -->
 		<section id="two" class="wrapper alt kleur2">
+			<div class="inner">
+				<div class="content">
+					<div class="een-minuut">
+						<div id="hero">
+							<h1 class="major">C.S.R. IN 1 MINUUT</h1>
+							<noscript class="lazy-load">
+							<div class="bb-video">
+								<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl" title="C.S.R. Delft in 1 minuut" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+							</noscript>
+						</div>
+						<noscript class="lazy-load">
+							<div class="sociaal">
+								<div class="youtube">
+									<p>Wil je zien hoe
+										de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
+									<div class="bb-video">
+										<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY?hl=nl" title="Delft studie is maar de helft! Aflevering 1 uit 3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									</div>
+								</div>
+								<div class="instagram">
+									<p>Bekijk en volg ook ons Instagram account voor meer van onze vereniging!</p>
+									<div class="insta-grid">
+										<a href="https://www.instagram.com/csrdelft/"><img src="/dist/images/instagram.svg" alt="Instagram logo in C.S.R. kleuren"></a>
+										<p id="insta-tag">@csrdelft</p>
+									</div>
+								</div>
+							</div>
+						</noscript>
+
+						<p>
+							De OWee gaat er anders uitzien, voor meer informatie zie de <a href="https://owee.nl">OWee website</a>.<br>
+							Maar wij willen je wel vast digitaal een beetje van C.S.R. laten zien.
+							We willen jou daar goede handvaten voor geven. De belangrijkste informatie wordt gedeeld via deze website dus kijk even rond.
+							Wil je meer weten? Kijk op ons <a href="https://www.youtube.com/user/CivitasFilms">YouTube kanaal</a>,
+							onze <a href="https://www.instagram.com/csrdelft">Instagram pagina</a> en vul het interesse formulier onder aan deze pagina in, dan houden wij je op de hoogte.
+						</p>
+						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
+						<p>Liefs,<br>OWeeCie en PromoCie</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="three" class="wrapper kleur3">
 			<div class="inner">
 				<noscript class="lazy-load">
 					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_in_de_OWee.jpg" alt="Sfeerfoto buiten"/></span>
@@ -60,14 +115,8 @@
 			</div>
 		</section>
 
-		<!--
-		<section id="two" class="wrapper-img">
-			<img src="/images/vereniging.jpg"/>
-		</section>
-		-->
-
-		<!-- Three -->
-		<section id="three" class="wrapper kleur3">
+		<!-- Four -->
+		<section id="four" class="wrapper alt kleur4">
 			<div class="inner">
 				<noscript class="lazy-load">
 					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/Interesse_vragen.jpg" alt="Owee Commissie"/></span>
@@ -87,57 +136,57 @@
 			</div>
 		</section>
 
-		<!-- Four -->
-		<section id="four" class="wrapper alt kleur4">
+		<!-- Five -->
+		<section id="five" class="wrapper kleur5">
 			<div class="inner">
 				<div class="content">
 					<h2 class="major">Foto's</h2>
 					<noscript class="lazy-load">
 						<div class="grid">
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr1.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr1.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr1.jpg"/>
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr1.jpg"/>
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr2.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr2.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr2.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr2.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr3.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr3.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr3.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr3.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr4.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr4.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr4.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr4.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr5.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr5.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr5.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr5.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr6.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr6.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr6.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr6.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr7.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr7.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr7.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr7.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr8.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr8.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr8.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr8.jpg">
 							</a>
 							<a class="lightbox-link" href="/fotoalbum/Publiek/Voorpagina/csr9.jpg"
-								 data-lightbox="page-lightbox">
+							   data-lightbox="page-lightbox">
 								<img class="bb-img" alt="/fotoalbum/Publiek/Voorpagina/csr9.jpg"
-										 src="/fotoalbum/Publiek/Voorpagina/_resized/csr9.jpg">
+									 src="/fotoalbum/Publiek/Voorpagina/_resized/csr9.jpg">
 							</a>
 						</div>
 					</noscript>
@@ -151,7 +200,6 @@
 			<div class="inner">
 				<h2 class="major">Interesseformulier</h2>
 				@include('layout-extern.form')
-
 				<noscript class="lazy-load">
 					<ul class="sponsors flex">
 						<div class="col">

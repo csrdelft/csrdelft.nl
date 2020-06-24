@@ -1,12 +1,5 @@
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import path from 'path';
-import TerserPlugin from 'terser-webpack-plugin';
-import {VueLoaderPlugin} from 'vue-loader';
 import webpack from 'webpack';
-import ManifestPlugin from 'webpack-manifest-plugin';
-
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const contextPath = path.resolve(__dirname, 'resources/assets');
 
@@ -15,19 +8,22 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 	mode: 'development',
 	context: contextPath,
 	entry: {
-		'app': './js/app.ts',
-		'ledenmemory': './js/ledenmemory.ts',
-		'fxclouds': './js/effect/fxclouds.ts',
-		'fxonontdekt': './js/effect/fxonontdekt.ts',
-		'fxtrein': './js/effect/fxtrein.ts',
-		'fxraket': './js/effect/fxraket.ts',
-		'fxminion': './js/effect/minion.ts',
-		'fxclippy': './js/effect/fxclippy.ts',
-		'extern': ['./js/extern.ts', './sass/extern.scss'],
+		'app': './js/entry/app.ts',
+		'ledenmemory': './js/entry/ledenmemory.ts',
+		'fxclouds': './js/entry/fxclouds.ts',
+		'fxsneeuw': './js/entry/fxsneeuw.ts',
+		'fxonontdekt': './js/entry/fxonontdekt.ts',
+		'fxtrein': './js/entry/fxtrein.ts',
+		'fxraket': './js/entry/fxraket.ts',
+		'fxminion': './js/entry/fxminion.ts',
+		'fxclippy': './js/entry/fxclippy.ts',
+		'fxspace': './js/entry/fxspace.ts',
+		'extern': ['./js/entry/extern.ts', './sass/extern.scss'],
 		'bredeletters': './sass/bredeletters.scss',
 		'common': './sass/common.scss',
 		'extern-forum': './sass/extern-forum.scss',
 		'extern-fotoalbum': './sass/extern-fotoalbum.scss',
+		'extern-owee': ['./js/entry/extern-owee.ts', './sass/extern-owee.scss'],
 		'maaltijdlijst': './sass/maaltijdlijst.scss',
 		'thema-civitasia': './sass/thema/civitasia.scss',
 		'thema-dies': './sass/thema/dies.scss',
@@ -39,15 +35,13 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		'thema-koevoet': './sass/thema/Koevoet.scss',
 		'thema-sineregno': './sass/thema/sineregno.scss',
 		'effect-civisaldo': './sass/effect/civisaldo.scss',
-		'effect-snow': './sass/effect/snow.scss',
-		'effect-space': './sass/effect/space.scss',
 	},
 	output: {
 		// De map waarin alle bestanden geplaatst worden.
 		path: path.resolve(__dirname, 'htdocs/dist'),
 		// Alle javascript bestanden worden in de map js geplaatst.
-		filename: argv.mode !== 'production' ? 'js/[name].js' : 'js/[name].[contenthash].js',
-		chunkFilename: argv.mode !== 'production' ? 'js/[name].js' : 'js/[id].[contenthash].js',
+		filename: argv.mode !== 'production' ? 'js/[name].bundle.js' : 'js/[name].[contenthash].bundle.js',
+		chunkFilename: argv.mode !== 'production' ? 'js/[name].chunk.js' : 'js/[name].[contenthash].chunk.js',
 		publicPath: '/dist/',
 	},
 	devtool: 'source-map',
@@ -60,20 +54,24 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 	},
 	optimization: {
 		minimizer: [
-			new OptimizeCSSAssetsPlugin({}),
-			new TerserPlugin(),
+			new (require('optimize-css-assets-webpack-plugin'))({}),
+			new (require('terser-webpack-plugin'))(),
 		],
+		splitChunks: {
+			chunks: 'all',
+		},
 	},
 	plugins: [
-		new MiniCssExtractPlugin({
+		new (require('mini-css-extract-plugin'))({
 			// Css bestanden komen in de map css terecht.
 			filename: argv.mode !== 'production' ? 'css/[name].css' : 'css/[name].[contenthash].css',
 		}),
-		new VueLoaderPlugin(),
-		new ManifestPlugin(),
-		new MomentLocalesPlugin({
+		new (require('vue-loader').VueLoaderPlugin)(),
+		new (require('webpack-manifest-plugin'))(),
+		new (require('moment-locales-webpack-plugin'))({
 			localesToKeep: ['nl'],
 		}),
+		new (require('./bin/dev/css-cleanup-webpack-plugin'))(),
 	],
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
@@ -84,7 +82,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 				test: /\.(js|jsx)$/,
 				exclude: [
 					/node_modules/,
-					/lib/,
+					/lib\/external/,
 				],
 				use: 'eslint-loader',
 			},
@@ -172,11 +170,12 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 			// `MiniCssExtractPlugin` >
 			// Normaal slaat webpack css op in javascript bestanden, zodat je ze makkelijk specifiek kan opvragen
 			// hier zorgen we ervoor dat de css eruit wordt getrokken en in een los .css bestand wordt gestopt.
+			// css-cleanup-webpack-plugin is verantwoordelijk voor het verwijderen van leeggetrokken js bestanden.
 			{
 				test: /\.scss$/,
 				use: [
 					{
-						loader: MiniCssExtractPlugin.loader as string, // Om ts tevreden te houden.
+						loader: require('mini-css-extract-plugin').loader as string, // Om ts tevreden te houden.
 						options: {
 							// De css bestanden zitten in de css map, / is dus te vinden op ../
 							publicPath: '../',

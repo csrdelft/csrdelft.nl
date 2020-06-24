@@ -4,7 +4,10 @@ doctrine:
         # use postgresql for PostgreSQL
         # use sqlite for SQLite
         driver: 'mysql'
-        server_version: '5.7'
+        server_version: 'mariadb-10.3.20'
+
+        # Tabellen die niet in het schema zitten, maar toch niet weggegooid moeten worden.
+        schema_filter: /^(?!(biebauteur|groep|groeptype|bijbelrooster|bijbelrooster_old|geolocations|logaggregated|phinxlog|saldolog|soccie.*)$).*/
 
         # only needed for MySQL
         charset: utf8mb4
@@ -32,6 +35,8 @@ doctrine:
           enumHuisStatus: CsrDelft\common\Doctrine\Type\HuisStatusType
           enumCommissieSoort: CsrDelft\common\Doctrine\Type\CommissieSoortType
           enumGeslacht: CsrDelft\common\Doctrine\Type\Enum\GeslachtType
+        mapping_types:
+          enum: string
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
@@ -48,6 +53,7 @@ doctrine:
             now: DoctrineExtensions\Query\Mysql\Now
             concat_ws: DoctrineExtensions\Query\Mysql\ConcatWs
             replace: DoctrineExtensions\Query\Mysql\Replace
+            date_format: DoctrineExtensions\Query\Mysql\DateFormat
         mappings:
             CsrDelft:
                 is_bundle: false

@@ -4,11 +4,12 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\LDAP;
+use CsrDelft\common\Mail;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\model\entity\profiel\AbstractProfielLogEntry;
 use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
 use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
@@ -16,8 +17,6 @@ use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
 use CsrDelft\model\entity\profiel\ProfielLogValueChange;
 use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
-use CsrDelft\model\entity\security\AccessRole;
-use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
@@ -40,7 +39,6 @@ use Exception;
  * @method Profiel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ProfielRepository extends AbstractRepository {
-	use OrmTrait;
 	/**
 	 * @var MaaltijdAbonnementenRepository
 	 */
@@ -291,7 +289,7 @@ class ProfielRepository extends AbstractRepository {
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
-		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel->uid);
+		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel);
 		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid($profiel->uid);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
@@ -307,7 +305,7 @@ class ProfielRepository extends AbstractRepository {
 			$bericht = file_get_contents(TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
 			$values = array(
 				'AANTAL' => $aantal,
-				'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
+				'NAAM' => $profiel->getNaam('volledig'),
 				'UID' => $profiel->uid,
 				'OUD' => $oudestatus,
 				'NIEUW' => $profiel->status,
@@ -384,7 +382,7 @@ class ProfielRepository extends AbstractRepository {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
 				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
-				$naam = ProfielRepository::getNaam($exemplaar->eigenaar_uid, 'volledig');
+				$naam = $exemplaar->eigenaar->getNaam('volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
 		}
@@ -408,7 +406,7 @@ class ProfielRepository extends AbstractRepository {
 		);
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
 		$values = array(
-			'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
+			'NAAM' => $profiel->getNaam('volledig'),
 			'UID' => $profiel->uid,
 			'OUD' => substr($oudestatus, 2),
 			'NIEUW' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
@@ -479,6 +477,12 @@ class ProfielRepository extends AbstractRepository {
 			->where('p.status in (:toegestaan)')
 			->setParameter('toegestaan', $toegestaan)
 			->getQuery()->getResult();
+	}
+
+	public function setEetwens(Profiel $profiel, $eetwens) {
+		if ($profiel->eetwens === $eetwens) return;
+		$profiel->eetwens = $eetwens;
+		$this->update($profiel);
 	}
 
 }

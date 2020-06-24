@@ -12,7 +12,7 @@ use CsrDelft\view\formulier\UrlDownloader;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * Een bestand downloaden van een url, met file_get_contents of de
  * cURL-extensie. Als beide niet beschikbaar zijn wordt het formulier-

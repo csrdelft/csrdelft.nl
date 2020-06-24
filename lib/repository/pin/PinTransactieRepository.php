@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @package model\fiscaat
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/09/2017
+ * @since 06/09/2017
  * @method PinTransactie|null find($id, $lockMode = null, $lockVersion = null)
  * @method PinTransactie|null findOneBy(array $criteria, array $orderBy = null)
  * @method PinTransactie[]    findAll()

@@ -30,7 +30,7 @@ class Account {
 	/**
 	 * Gebruikersnaam
 	 * @var string
-	 * @ORM\Column(type="stringkey")
+	 * @ORM\Column(type="stringkey", unique=true)
 	 */
 	public $username;
 	/**

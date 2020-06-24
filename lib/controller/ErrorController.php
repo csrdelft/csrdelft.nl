@@ -41,7 +41,7 @@ class ErrorController {
 					$requestUri = $request->getRequestUri();
 					$router = $container->get('router');
 
-					return new RedirectResponse($router->generate('login-form', ['redirect' => urlencode($requestUri)]));
+					return new RedirectResponse($router->generate('csrdelft_login_loginform', ['redirect' => urlencode($requestUri)]));
 				}
 
 				return new Response(view('fout.403'), Response::HTTP_FORBIDDEN);

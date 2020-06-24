@@ -1,3 +1,3 @@
 <script>
-insertPlaatje("{{$plaatje->access_key}}");
+window.formulier.insertPlaatje("{{$plaatje->access_key}}");
 </script>

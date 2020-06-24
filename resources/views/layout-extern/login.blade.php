@@ -3,7 +3,7 @@
 @section('titel', 'Login')
 
 @section('styles')
-	@stylesheet('extern.css')
+	@stylesheet('extern')
 @endsection
 
 {{--Verberg login popup--}}

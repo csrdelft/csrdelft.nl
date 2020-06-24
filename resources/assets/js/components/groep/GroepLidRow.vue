@@ -9,8 +9,8 @@
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
 	import GroepKeuzeType from '../../enum/GroepKeuzeType';
+	import {htmlEncode} from '../../lib/util';
 	import {GroepLid, KeuzeOptie} from '../../model/groep';
-	import {htmlEncode} from '../../util';
 
 	@Component({})
 	export default class GroepLidRow extends Vue {

@@ -8,7 +8,6 @@ use CsrDelft\common\datatable\DataTableEntry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use function common\short_class;
 
 /**
  * Als er een object genormalizeerd wordt met interface DataTableEntry, voeg dan het veld UUID toe.

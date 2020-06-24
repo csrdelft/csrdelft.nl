@@ -35,7 +35,7 @@
 					">
 					<td style="width: 15px;">
 						<a class="btn submit" style="padding: 0 2px;"
-							 onclick="$(this).closest('form').find('.LidField').val('{{$uid}}');">
+							 onclick="$(this).closest('form').find('.LidObjectField').val('{{$uid}}');">
 							@if($suggestie->recent)
 								@icon("time_delete", null, "Recent gecorveed")
 							@elseif($suggestie->voorkeur)

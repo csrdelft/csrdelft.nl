@@ -3,11 +3,13 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -18,9 +20,19 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenRepository")
- * @ORM\Table("activiteiten")
+ * @ORM\Table("activiteiten", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="soort", columns={"soort"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="in_agenda", columns={"in_agenda"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ * })
  */
 class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort {
+	public function __construct() {
+		$this->leden = new ArrayCollection();
+	}
+
 	public function getUUID() {
 		return $this->id . '@activiteit.csrdelft.nl';
 	}
@@ -70,14 +82,16 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	public $soort;
 	/**
 	 * Rechten benodigd voor aanmelden
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
 	public $rechten_aanmelden;
 	/**
 	 * Locatie
 	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @Serializer\Groups("datatable")
 	 */
 	public $locatie;
 	/**
@@ -91,6 +105,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	/**
 	 * @var ActiviteitDeelnemer[]
 	 * @ORM\OneToMany(targetEntity="ActiviteitDeelnemer", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="DESC"})
 	 */
 	public $leden;
 
@@ -162,7 +177,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
-		if ($soort) {
+		if ($soort && ActiviteitSoort::isValidValue($soort)) {
 			switch (ActiviteitSoort::from($soort)) {
 
 				case ActiviteitSoort::OWee():

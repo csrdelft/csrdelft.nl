@@ -45,7 +45,7 @@ class BbYoutube extends BbTag {
 	public function render() {
 		$this->assertId($this->content);
 
-		$src = '//www.youtube-nocookie.com/embed/' . $this->content . '?modestbranding=1';
+		$src = '//www.youtube-nocookie.com/embed/' . $this->content . '?modestbranding=1&hl=nl';
 
 		return <<<HTML
 <div class="bb-video">

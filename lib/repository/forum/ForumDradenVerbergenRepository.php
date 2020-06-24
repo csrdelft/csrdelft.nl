@@ -11,7 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  * @method ForumDraadVerbergen|null find($id, $lockMode = null, $lockVersion = null)
  * @method ForumDraadVerbergen|null findOneBy(array $criteria, array $orderBy = null)
  * @method ForumDraadVerbergen[]    findAll()
@@ -51,19 +51,19 @@ class ForumDradenVerbergenRepository extends AbstractRepository {
 		}
 	}
 
-	public function toonAllesVoorLid($uid) {
+	public function toonAllesVoorLeden(array $uids) {
 		$this->createQueryBuilder('v')
 			->delete()
-			->where('v.uid = :uid')
-			->setParameter('uid', $uid)
+			->where('v.uid in (:uids)')
+			->setParameter('uids', $uids)
 			->getQuery()->execute();
 	}
 
-	public function toonDraadVoorIedereen(ForumDraad $draad) {
+	public function toonDraadVoorIedereen(array $draadIds) {
 		$this->createQueryBuilder('v')
 			->delete()
-			->where('v.draad_id = :draad_id')
-			->setParameter('draad_id', $draad->draad_id)
+			->where('v.draad_id in (:draad_ids)')
+			->setParameter('draad_ids', $draadIds)
 			->getQuery()->execute();
 	}
 

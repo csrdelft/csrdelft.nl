@@ -3,15 +3,18 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\Orm\Persistence\Database;
+use Doctrine\DBAL\Driver\Connection;
 
 class Barsysteem {
 
+	/**
+	 * @var Connection|PDO
+	 */
 	var $db;
 	private $beheer;
 	private $csrfToken;
 	function __construct() {
-		$this->db = ContainerFacade::getContainer()->get(Database::class)->getDatabase();
+		$this->db = ContainerFacade::getContainer()->get('doctrine.dbal.default_connection')->getWrappedConnection();
 	}
 
 	function isLoggedIn() {

@@ -3,7 +3,6 @@
 namespace CsrDelft\repository\documenten;
 
 use CsrDelft\entity\documenten\Document;
-use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,8 +15,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Document[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class DocumentRepository extends AbstractRepository {
-	use OrmTrait;
-
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Document::class);
 	}

@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Eisen;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\CsrBB;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +20,14 @@ use Doctrine\ORM\PersistentCollection;
  * Een ForumDraad zit in een deelforum en bevat forumposts.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumDradenRepository")
- * @ORM\Table("forum_draden")
+ * @ORM\Table("forum_draden", indexes={
+ *   @ORM\Index(name="verwijderd", columns={"verwijderd"}),
+ *   @ORM\Index(name="plakkerig", columns={"plakkerig"}),
+ *   @ORM\Index(name="belangrijk", columns={"belangrijk"}),
+ *   @ORM\Index(name="laatst_gewijzigd", columns={"laatst_gewijzigd"}),
+ *   @ORM\Index(name="titel", columns={"titel"}),
+ *   @ORM\Index(name="wacht_goedkeuring", columns={"wacht_goedkeuring"})
+ * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class ForumDraad {
@@ -74,6 +82,12 @@ class ForumDraad {
 	 */
 	public $laatste_post_id;
 	/**
+	 * @var ForumPost
+	 * @ORM\OneToOne(targetEntity="ForumPost")
+	 * @ORM\JoinColumn(name="laatste_post_id", referencedColumnName="post_id", nullable=true)
+	 */
+	public $laatste_post;
+	/**
 	 * Uid van de auteur van de laatst geplaatste of gewijzigde post
 	 * @var string
 	 * @ORM\Column(type="uid", nullable=true)
@@ -124,7 +138,7 @@ class ForumDraad {
 	/**
 	 * Lijst van lezers (wanneer)
 	 * @var PersistentCollection|ForumDraadGelezen[]
-	 * @ORM\OneToMany(targetEntity="ForumDraadGelezen", mappedBy="draad", fetch="LAZY")
+	 * @ORM\OneToMany(targetEntity="ForumDraadGelezen", mappedBy="draad")
 	 */
 	public $lezers;
 	/**
@@ -140,7 +154,7 @@ class ForumDraad {
 	 */
 	public $gedeeld_met_deel;
 	/**
-	 * Forumposts
+	 * ForumPosts
 	 * @var ForumPost[]
 	 */
 	private $forum_posts;
@@ -164,7 +178,6 @@ class ForumDraad {
 		$this->verbergen = new ArrayCollection();
 		$this->meldingen = new ArrayCollection();
 	}
-
 
 	public function magPosten() {
 		if ($this->verwijderd || $this->gesloten) {
@@ -197,8 +210,14 @@ class ForumDraad {
 		if ($this->verwijderd && !$this->magModereren()) {
 			return false;
 		}
-		if (!LoginService::mag(P_LOGGED_IN) && $this->gesloten && $this->laatst_gewijzigd < date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten'))) {
-			return false;
+		if (!LoginService::mag(P_LOGGED_IN)) {
+			if ($this->gesloten && $this->laatst_gewijzigd < date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten'))) {
+				return false;
+			}
+
+			if ($this->laatst_gewijzigd < date_create_immutable(instelling('forum', 'externen_geentoegang_open'))) {
+				return false;
+			}
 		}
 		return $this->deel->magLezen() || ($this->isGedeeld() && $this->gedeeld_met_deel->magLezen());
 	}
@@ -231,8 +250,7 @@ class ForumDraad {
 	}
 
 	public function hasForumPosts() {
-		$this->getForumPosts();
-		return !empty($this->forum_posts);
+		return !empty($this->getForumPosts());
 	}
 
 	/**
@@ -245,6 +263,15 @@ class ForumDraad {
 			$this->setForumPosts(ContainerFacade::getContainer()->get(ForumPostsRepository::class)->getForumPostsVoorDraad($this));
 		}
 		return $this->forum_posts;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLaatstePostSamenvatting() {
+		$laatste = $this->laatste_post;
+		$parseMail = CsrBB::parseMail($laatste->tekst);
+		return truncate($parseMail, 100);
 	}
 
 	/**

@@ -3,8 +3,8 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\GroepStatus;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;

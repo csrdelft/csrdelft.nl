@@ -2,16 +2,13 @@
 
 namespace CsrDelft\repository\forum;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\forum\ForumCategorie;
 use CsrDelft\entity\forum\ForumDraad;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\Orm\Persistence\Database;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\repository\security\AccountRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use PDO;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -129,45 +126,39 @@ class ForumCategorieRepository extends AbstractRepository {
 			->getQuery()->execute();
 
 		// Voor alle ex-leden settings opschonen
-		$uids = ContainerFacade::getContainer()->get(Database::class)->sqlSelect(array('uid'), 'profielen', 'status IN (?,?,?,?)', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden));
-		$uids->setFetchMode(PDO::FETCH_COLUMN, 0);
-		foreach ($uids as $uid) {
-			if (AccountRepository::isValidUid($uid)) {
-				$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLid($uid);
-				$this->forumDradenVerbergenRepository->toonAllesVoorLid($uid);
-				$this->forumDradenMeldingModel->stopAlleMeldingenVoorLid($uid);
-				$this->forumDelenMeldingRepository->stopAlleMeldingenVoorLid($uid);
-				$this->forumDradenReagerenRepository->verwijderReagerenVoorLid($uid);
-			}
-		}
+		$profielen = $this->_em->getRepository(Profiel::class)->createQueryBuilder('p')
+			->select('p.uid')
+			->where('p.status in (:status)')
+			->setParameter('status', array(LidStatus::Commissie, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden))
+			->getQuery()->getArrayResult();
+
+		$uids = array_column($profielen, 'uid');
+		$this->forumDradenGelezenRepository->verwijderDraadGelezenVoorLeden($uids);
+		$this->forumDradenVerbergenRepository->toonAllesVoorLeden($uids);
+		$this->forumDradenMeldingModel->stopAlleMeldingenVoorLeden($uids);
+		$this->forumDelenMeldingRepository->stopAlleMeldingenVoorLeden($uids);
+		$this->forumDradenReagerenRepository->verwijderReagerenVoorLeden($uids);
 
 		// Settings voor oude topics opschonen en oude/verwijderde topics en posts definitief verwijderen
 		/** @var ForumDraad[] $draden */
 		$draden = $this->forumDradenRepository->createQueryBuilder('fd')
+			->select('fd.draad_id')
 			->where('fd.verwijderd = true or (fd.gesloten = true and (fd.laatst_gewijzigd is null or fd.laatst_gewijzigd < :laatst_gewijzigd))')
 			->setParameter('laatst_gewijzigd', date_create_immutable('-1 year'))
-			->getQuery()->getResult();
-		foreach ($draden as $draad) {
+			->getQuery()->getArrayResult();
+		$draadIds = array_column($draden, 'draad_id');
 
-			// Settings verwijderen
-			$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draad);
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
-			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
-			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
+		// Settings verwijderen
+		$this->forumDradenMeldingModel->stopMeldingenVoorIedereen($draadIds);
+		$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draadIds);
+		$this->forumDradenGelezenRepository->verwijderDraadGelezen($draadIds);
+		$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draadIds);
 
-			// Oude verwijderde posts definitief verwijderen
-			$this->forumPostsRepository->createQueryBuilder('fp')
-				->delete()
-				->where('fp.verwijderd = true and fp.draad_id = :draad_id')
-				->setParameter('draad_id', $draad->draad_id)
-				->getQuery()->execute();
-
-			if ($draad->verwijderd) {
-				// Als het goed is zijn er nooit niet-verwijderde posts in een verwijderd draadje
-				$this->getEntityManager()->remove($draad);
-				$this->getEntityManager()->flush();
-			}
-		}
+		// Oude verwijderde posts definitief verwijderen
+		$this->forumPostsRepository->createQueryBuilder('fp')
+			->delete()
+			->where('fp.verwijderd = true and fp.draad_id in (:draad_ids)')
+			->setParameter('draad_ids', $draadIds)
+			->getQuery()->execute();
 	}
-
 }

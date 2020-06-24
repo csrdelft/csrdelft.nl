@@ -2,14 +2,13 @@
 
 namespace CsrDelft\entity\pin;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
-
+use CsrDelft\common\Enum;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 23/02/2018
  */
-class PinTransactieMatchStatusEnum extends PersistentEnum {
+class PinTransactieMatchStatusEnum extends Enum {
 	/**
 	 * PinTransactieMatchStatus opties.
 	 */
@@ -18,17 +17,6 @@ class PinTransactieMatchStatusEnum extends PersistentEnum {
 	const STATUS_VERKEERD_BEDRAG = 'verkeerd bedrag';
 	const STATUS_MISSENDE_TRANSACTIE = 'missende transactie';
 	const STATUS_MISSENDE_BESTELLING = 'missende bestelling';
-
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::STATUS_MATCH => self::STATUS_MATCH,
-		self::STATUS_VERWIJDERD => self::STATUS_VERWIJDERD,
-		self::STATUS_VERKEERD_BEDRAG => self::STATUS_VERKEERD_BEDRAG,
-		self::STATUS_MISSENDE_TRANSACTIE => self::STATUS_MISSENDE_TRANSACTIE,
-		self::STATUS_MISSENDE_BESTELLING => self::STATUS_MISSENDE_BESTELLING,
-	];
 
 	/**
 	 * @var string[]

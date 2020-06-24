@@ -11,7 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
+ * @since 06/05/2017
  */
 class VerticaleLedenRepository extends AbstractGroepLedenRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {
@@ -35,6 +35,7 @@ class VerticaleLedenRepository extends AbstractGroepLedenRepository {
 				$lid->opmerking = 'Kringcoach';
 			}
 			$lid->door_uid = null;
+			$lid->door_profiel = null;
 			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
 			return $lid;
 		}

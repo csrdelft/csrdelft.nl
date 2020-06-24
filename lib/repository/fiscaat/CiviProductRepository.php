@@ -17,10 +17,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CiviProductRepository extends AbstractRepository {
 	/**
-	 * ORM class.
-	 */
-	const ORM = CiviProduct::class;
-	/**
 	 * @var CiviPrijsRepository
 	 */
 	private $civiPrijsRepository;
@@ -29,14 +25,6 @@ class CiviProductRepository extends AbstractRepository {
 		parent::__construct($registry, CiviProduct::class);
 
 		$this->civiPrijsRepository = $civiPrijsRepository;
-	}
-
-	/**
-	 * @param CiviProduct $product
-	 * @return CiviPrijs
-	 */
-	public function getPrijs($product) {
-		return $this->civiPrijsRepository->findOneBy(['product_id' => $product->id], ['van' => 'DESC']);
 	}
 
 	/**

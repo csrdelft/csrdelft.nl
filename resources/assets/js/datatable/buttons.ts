@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
-import {knopPost} from '../knop';
-import {evaluateMultiplicity} from '../util';
+import {knopPost} from '../lib/knop';
+import {evaluateMultiplicity} from '../lib/util';
 import {replacePlaceholders} from './api';
 import ButtonApi = DataTables.ButtonApi;
 import ButtonsSettings = DataTables.ButtonsSettings;

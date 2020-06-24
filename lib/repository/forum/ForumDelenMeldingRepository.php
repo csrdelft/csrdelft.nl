@@ -3,12 +3,12 @@
 namespace CsrDelft\repository\forum;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Mail;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDeelMelding;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\Mail;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
@@ -66,14 +66,14 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 
 	/**
 	 * Verwijder alle te ontvangen meldingen voor gegeven lid
-	 * @param string $uid
+	 * @param $uids
 	 */
-	public function stopAlleMeldingenVoorLid($uid) {
-		$manager = $this->getEntityManager();
-		foreach ($this->findBy(['uid' => $uid]) as $melding) {
-			$manager->remove($melding);
-		}
-		$manager->flush();
+	public function stopAlleMeldingenVoorLeden($uids) {
+		$this->createQueryBuilder('fdm')
+			->delete()
+			->where('fdm.uid in (:uids)')
+			->setParameter('uids', $uids)
+			->getQuery()->execute();
 	}
 
 	/**

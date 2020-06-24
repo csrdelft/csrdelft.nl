@@ -2,7 +2,6 @@
 
 namespace CsrDelft\service;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
@@ -25,6 +24,10 @@ define('GOOGLE_CONTACTS_MAX_RESULTS', 1000);
  * Documentatie voor Google Contacts API:
  * algemeen, interactie: https://developers.google.com/google-apps/contacts/v3/
  * alle referentie https://developers.google.com/google-apps/contacts/v3/reference
+ *
+ * Roep bij gebruik altijd eerst doRequestToken aan om te garanderen dat er een sessie is of gemaakt wordt
+ * houdt er rekening mee dat een aanroep naar doRequestToken er voor kan zorgen dat de gebruiker naar de google
+ * flow wordt gestuurd.
  */
 class GoogleSync {
 	/**
@@ -62,22 +65,26 @@ class GoogleSync {
 	private $contactData = null;
 
 	/**
-	 * sigleton pattern
-	 */
-	private static $instance;
-
-	/**
 	 * @var Google_Client
 	 */
 	private $client;
+	/**
+	 * @var GoogleTokenRepository
+	 */
+	private $googleTokenRepository;
 
 	/**
 	 * GoogleSync constructor.
-	 * @throws CsrException
+	 * @param GoogleTokenRepository $googleTokenRepository
+	 * @throws \Doctrine\ORM\ORMException
+	 * @throws \Doctrine\ORM\OptimisticLockException
 	 */
-	public function __construct() {
-		$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
-		$google_token = $googleTokenRepository->find(LoginService::getUid());
+	public function __construct(GoogleTokenRepository $googleTokenRepository) {
+		$this->googleTokenRepository = $googleTokenRepository;
+	}
+
+	public function init() {
+		$google_token = $this->googleTokenRepository->find(LoginService::getUid());
 		if ($google_token === false) {
 			throw new CsrException('Authsub token not available, use doRequestToken.');
 		}
@@ -103,8 +110,7 @@ class GoogleSync {
 			$this->loadContactsForGroup($this->groupid);
 		} catch (CsrException $e) {
 			triggerExceptionAsWarning($e);
-			$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
-			$googleTokenRepository->delete($google_token);
+			$this->googleTokenRepository->delete($google_token);
 			throw new CsrGebruikerException("Google synchronisatie mislukt");
 		}
 	}
@@ -118,7 +124,7 @@ class GoogleSync {
 		if ($response->getStatusCode() === 401) {
 			throw new CsrException("Code 401 response on GOOGLE_GROUPS_URL");
 		}
-		$this->groupFeed = GoogleSync::loadXmlString($response->getBody())->entry;
+		$this->groupFeed = $this->loadXmlString($response->getBody())->entry;
 	}
 
 	/**
@@ -131,7 +137,7 @@ class GoogleSync {
 		if ($response->getStatusCode() === 401) {
 			throw new CsrException();
 		}
-		$this->contactFeed = GoogleSync::loadXmlString($response->getBody())->entry;
+		$this->contactFeed = $this->loadXmlString($response->getBody())->entry;
 	}
 
 	/**
@@ -204,7 +210,7 @@ class GoogleSync {
 	 * @return null|array met het google-id in het geval van voorkomen, anders null.
 	 */
 	public function existsInGoogleContacts(Profiel $profiel) {
-		if (!static::isAuthenticated()) return null;
+		if (!$this->isAuthenticated()) return null;
 
 		$name = strtolower($profiel->getNaam());
 		foreach ($this->getGoogleContacts() as $contact) {
@@ -317,7 +323,7 @@ class GoogleSync {
 		//herlaad groupFeed om de nieuw gemaakte daar ook in te hebben.
 		$this->loadGroupFeed();
 
-		return (string)GoogleSync::loadXmlString($response->getBody())->id;
+		return (string)$this->loadXmlString($response->getBody())->id;
 	}
 
 	/**
@@ -395,7 +401,7 @@ class GoogleSync {
 				'body' => $doc->saveXML()
 			]);
 
-			$newContacts = GoogleSync::loadXmlString($response->getBody());
+			$newContacts = $this->loadXmlString($response->getBody());
 
 			foreach ($newContacts->entry as $contact) {
 				$this->fixSimpleXMLNameSpace($contact);
@@ -446,7 +452,7 @@ class GoogleSync {
 					'body' => $doc->saveXML()
 				]);
 
-				$contact = $this->unpackGoogleContact(GoogleSync::loadXmlString($response->getBody()));
+				$contact = $this->unpackGoogleContact($this->loadXmlString($response->getBody()));
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Update: ' . $profiel->getNaam() . ' ';
@@ -462,7 +468,7 @@ class GoogleSync {
 					'body' => $doc->saveXML()
 				]);
 
-				$contact = $this->unpackGoogleContact(GoogleSync::loadXmlString($response->getBody()));
+				$contact = $this->unpackGoogleContact($this->loadXmlString($response->getBody()));
 				$this->updatePhoto($contact, $profiel);
 
 				return 'Ingevoegd: ' . $profiel->getNaam() . ' ';
@@ -645,9 +651,8 @@ class GoogleSync {
 	 *
 	 * @return bool
 	 */
-	public static function isAuthenticated() {
-		$googleTokenRepository = ContainerFacade::getContainer()->get(GoogleTokenRepository::class);
-		return $googleTokenRepository->exists(LoginService::getUid());
+	public function isAuthenticated() {
+		return $this->googleTokenRepository->exists(LoginService::getUid());
 	}
 
 	/**
@@ -658,8 +663,8 @@ class GoogleSync {
 	 * de authenticatie mislukt.
 	 * @throws CsrException
 	 */
-	public static function doRequestToken($state) {
-		if (!static::isAuthenticated()) {
+	public function doRequestToken($state) {
+		if (!$this->isAuthenticated()) {
 			$client = self::createGoogleCLient();
 			$client->setState(urlencode($state));
 
@@ -667,6 +672,8 @@ class GoogleSync {
 			header("HTTP/1.0 307 Temporary Redirect");
 			header("Location: $googleImportUrl");
 			exit;
+		} else {
+			$this->init();
 		}
 	}
 
@@ -691,7 +698,7 @@ class GoogleSync {
 		return $client;
 	}
 
-	public static function loadXmlString($xml) {
+	public function loadXmlString($xml) {
 
 		$prev = libxml_use_internal_errors(false);
 		$data = @simplexml_load_string($xml);

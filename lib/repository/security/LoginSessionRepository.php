@@ -58,7 +58,7 @@ class LoginSessionRepository extends AbstractRepository {
 	/**
 	 */
 	public function opschonen() {
-		$this->createQueryBuilder('login')
+		$this->createQueryBuilder('l')
 			->delete()
 			->where('l.expire <= :nu')
 			->setParameter('nu', date_create_immutable())

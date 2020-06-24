@@ -1,6 +1,6 @@
 import Hammer from 'hammerjs';
 import $ from 'jquery';
-import {docReady} from './util';
+import {docReady} from './lib/util';
 
 declare global {
 	// Hammer kan een Document als element krijgen, dit zorgt ervoor dat horizontale scroll mogelijk is op mobiel.
@@ -81,7 +81,7 @@ docReady(() => {
 	}
 
 	$('.trigger[href="#zijbalk"]').on('click', toggle('#zijbalk'));
-	$('main,#menu,footer').on('click', reset);
+	$('.cd-page-content,#menu,footer').on('click', reset);
 
 	const searchfield = document.querySelector<HTMLInputElement>('input[type=search].ZoekField');
 

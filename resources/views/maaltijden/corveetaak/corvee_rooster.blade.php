@@ -67,8 +67,8 @@
 						@if(!isset($mijn))
 							<td>
 								@foreach($taken as $taak)
-									@if($taak->uid)
-										@if($taak->uid === \CsrDelft\service\security\LoginService::getUid())
+									@if($taak->profiel)
+										@if($taak->profiel->uid === \CsrDelft\service\security\LoginService::getUid())
 											@php($class = "taak-self")
 										@else
 											@php($class= "")
@@ -77,10 +77,10 @@
 										@php($class= "taak-grijs")
 									@endif
 									<div class="taak {{$class}}">
-										@if($taak->uid)
-											@if($taak->uid === \CsrDelft\service\security\LoginService::getUid())
+										@if($taak->profiel)
+											@if($taak->profiel->uid === \CsrDelft\service\security\LoginService::getUid())
 											@endif
-											{!! \CsrDelft\repository\ProfielRepository::getLink($taak->uid,instelling('corvee', 'weergave_ledennamen_corveerooster')) !!}
+											{!! $taak->profiel->getLink(instelling('corvee', 'weergave_ledennamen_corveerooster')) !!}
 										@else
 											<span class="cursief">vacature</span>
 										@endif

@@ -23,7 +23,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * @method ForumPost|null find($id, $lockMode = null, $lockVersion = null)
  */
@@ -421,7 +421,26 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 		$qb->where('fp.datum_tijd > :terug');
 		$qb->setParameter('terug', date_create_immutable(instelling('forum', 'grafiek_stats_periode')));
 		$qb->groupBy('timestamp');
-		return $qb->getQuery()->getResult();
+		$stats = $qb->getQuery()->getResult();
+
+		reset($stats);
+
+		$newStats = [];
+
+		$curTime = date_create_immutable('@' . current($stats)['timestamp']);
+
+		while (false !== $current = next($stats)) {
+			$next = date_create_immutable('@' . $current['timestamp']);
+			$curTime = $curTime->add(new DateInterval('P1D'));
+			while ($next > $curTime) {
+				$newStats[] = ['timestamp' => $curTime->getTimestamp(), 'count' => 0];
+				$curTime = $curTime->add(new DateInterval('P1D'));
+			}
+			$curTime = $next;
+			$newStats[] = $current;
+		}
+
+		return $newStats;
 	}
 
 	public function getStatsVoorForumDeel(ForumDeel $deel) {

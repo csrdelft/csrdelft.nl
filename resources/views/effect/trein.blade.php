@@ -1,3 +1,3 @@
 <div class="rails"></div>
-@script('fxtrein.js')
-@stylesheet('fxtrein.css')
+@script('fxtrein')
+@stylesheet('fxtrein')

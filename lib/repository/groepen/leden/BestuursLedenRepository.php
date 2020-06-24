@@ -8,7 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 class BestuursLedenRepository extends AbstractGroepLedenRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {

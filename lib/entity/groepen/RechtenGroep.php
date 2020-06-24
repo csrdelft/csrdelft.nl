@@ -2,7 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een groep beperkt voor rechten.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\RechtenGroepenRepository")
- * @ORM\Table("groepen")
+ * @ORM\Table("groepen", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="familie", columns={"familie"}),
+ *   @ORM\Index(name="status", columns={"status"}),
+ * })
  */
 class RechtenGroep extends AbstractGroep {
 	/**

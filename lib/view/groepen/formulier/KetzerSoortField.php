@@ -4,8 +4,8 @@ namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\KetzersRepository;

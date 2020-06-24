@@ -4,6 +4,7 @@ namespace CsrDelft\entity\documenten;
 
 use CsrDelft\entity\ISelectEntity;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("DocumentCategorie")
  * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentCategorieRepository")
  */
-class DocumentCategorie implements ISelectEntity {
+class DocumentCategorie implements ISelectEntity, DisplayEntity {
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
@@ -53,5 +54,9 @@ class DocumentCategorie implements ISelectEntity {
 
 	public function getId() {
 		return $this->id;
+	}
+
+	function getWeergave(): string {
+		return $this->naam ?? '';
 	}
 }

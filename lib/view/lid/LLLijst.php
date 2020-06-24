@@ -107,7 +107,7 @@ class LLLijst extends LLWeergave {
 					break;
 
 				case 'status':
-					echo LidStatus::getDescription($profiel->status);
+					echo LidStatus::from($profiel->status)->getDescription();
 					break;
 
 				case 'verticale':

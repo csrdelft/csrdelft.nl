@@ -8,8 +8,6 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Persistence\DatabaseAdmin;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
@@ -20,8 +18,8 @@ use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
 
 define('LONG_DATE_FORMAT', 'EE d MMM'); // Ma 3 Jan
-define('DATE_FORMAT', 'Y-MM-dd');
-define('DATETIME_FORMAT', 'Y-MM-dd HH:mm:ss');
+define('DATE_FORMAT', 'y-MM-dd');
+define('DATETIME_FORMAT', 'y-MM-dd HH:mm:ss');
 define('TIME_FORMAT', 'HH:mm');
 
 /**
@@ -541,17 +539,17 @@ function getMaximumFileUploadSize() {
 	return min(convertPHPSizeToBytes(ini_get('post_max_size')), convertPHPSizeToBytes(ini_get('upload_max_filesize')));
 }
 
-function printDebug() {
+function getDebugFooter() {
 	$enableDebug = filter_input(INPUT_GET, 'debug') !== null;
 	if ($enableDebug && (DEBUG || (LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued()))) {
-		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
-		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
+		return '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a><div id="mysql_debug" class="pre">' . getDebug() . '</div>';
 	}
+
+	return '';
 }
 
 function getDebug(
-	$get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true, $sql = true,
-	$sqltrace = true
+	$get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true
 ) {
 	$debug = '';
 	if ($get) {
@@ -571,12 +569,6 @@ function getDebug(
 	}
 	if ($server) {
 		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
-	}
-	if ($sql) {
-		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => ContainerFacade::getContainer()->get(DatabaseAdmin::class)->getQueries(), "PDO" => ContainerFacade::getContainer()->get(Database::class)->getQueries()), true));
-	}
-	if ($sqltrace) {
-		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(ContainerFacade::getContainer()->get(Database::class)->getTrace(), true));
 	}
 	return $debug;
 }
@@ -1178,4 +1170,15 @@ function as_array($value) {
 		return iterator_to_array($value);
 	}
 	throw new CsrException("Geen array of iterable");
+}
+
+/**
+ * Get the short name for a class
+ *
+ * @param object|string $class
+ *
+ * @return string
+ */
+function short_class($class) {
+	return (new \ReflectionClass($class))->getShortName();
 }

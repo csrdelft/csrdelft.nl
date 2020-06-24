@@ -73,7 +73,7 @@ instellingen:
       type: Enumeration
       opties: ['nee', 'civisaldo', 'onontdekt', 'sneeuw', 'space', 'wolken']
       default: 'nee'
-      beschrijving: 'Het effect wat wordt weergegeven tijdens zoeken en als het menu geopend is.'
+      beschrijving: 'Het effect wat wordt weergegeven op de achtergrond. Let op, voor sommige effecten heb je een goede computer nodig.'
     visitekaartjes:
       titel: 'Civikaartjes'
       type: Enumeration

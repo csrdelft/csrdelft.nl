@@ -3,7 +3,7 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Commissie;
-use CsrDelft\entity\groepen\CommissieSoort;
+use CsrDelft\entity\groepen\enum\CommissieSoort;
 use CsrDelft\repository\AbstractGroepenRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

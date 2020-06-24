@@ -111,7 +111,7 @@ class ProfielService {
 			$zoekstatus = '';
 		}
 		if ($zoekstatus == 'allepersonen') {
-			$zoekstatus = LidStatus::getTypeOptions();
+			$zoekstatus = LidStatus::getEnumValues();
 		}
 
 		$statussen = [];

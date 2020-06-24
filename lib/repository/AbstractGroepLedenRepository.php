@@ -46,7 +46,9 @@ abstract class AbstractGroepLedenRepository extends AbstractRepository {
 		$lid->groep = $groep;
 		$lid->groep_id = $groep->id;
 		$lid->uid = $uid;
+		$lid->profiel = $uid ? ProfielRepository::get($uid) : null;
 		$lid->door_uid = LoginService::getUid();
+		$lid->door_profiel = LoginService::getProfiel();
 		$lid->lid_sinds = date_create_immutable();
 		$lid->opmerking = null;
 		return $lid;

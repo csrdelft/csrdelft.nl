@@ -7,6 +7,8 @@ Welkom bij de repo van onze webstek. Kijk gerust rond.
 ## Development
 Als je een development versie wilt gebruiken kijk dan in `CONTRIBUTING.md` voor een snelle start.
 
+Kijk op https://documentatie.csrdelft.nl of de /docs map in deze repository voor meer informatie.
+
 ## Issues
 Het is mogelijk om zelf issues aan te kaarten, zie hiervoor /issues. De policy omtrent labels is te vinden in `CONTRIBUTING.md`.
 

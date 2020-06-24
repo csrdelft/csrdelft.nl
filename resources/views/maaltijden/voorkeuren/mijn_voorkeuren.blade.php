@@ -39,7 +39,7 @@
 		<tbody>
 		@foreach($voorkeuren as $voorkeur)
 			<tr>
-				@include('maaltijden.voorkeuren.mijn_voorkeur_veld', ['uid' => $voorkeur->uid, 'crid' => $voorkeur->crv_repetitie_id])
+				@include('maaltijden.voorkeuren.mijn_voorkeur_veld', ['uid' => $voorkeur->uid, 'crv_repetitie_id' => $voorkeur->crv_repetitie_id])
 				<td>{{$voorkeur->corveeRepetitie->corveeFunctie->naam}}</td>
 				<td>{{$voorkeur->corveeRepetitie->getDagVanDeWeekText()}}</td>
 				<td>{{$voorkeur->corveeRepetitie->getPeriodeInDagenText()}}</td>

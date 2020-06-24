@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\corvee;
 
 use CsrDelft\entity\ISelectEntity;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,7 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("crv_functies")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class CorveeFunctie implements ISelectEntity {
+class CorveeFunctie implements ISelectEntity, DisplayEntity {
 	# ID om functie van kwalikok op te halen, wijzigen als ID van Kwalikok wijzigt
 	const KWALIKOK_FUNCTIE_ID = 7;
 
@@ -96,5 +97,9 @@ class CorveeFunctie implements ISelectEntity {
 
 	public function getId() {
 		return $this->functie_id;
+	}
+
+	function getWeergave(): string {
+		return $this->naam ?? '';
 	}
 }

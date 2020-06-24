@@ -129,6 +129,10 @@
 		@include angle-edge-bordered($kleur4, $text, $geel);
 	}
 
+	&.kleur5 {
+		@include angle-edge-bordered($kleur5, $text, $geel);
+	}
+
 	.image {
 		width: 15em;
 		height: 15em;

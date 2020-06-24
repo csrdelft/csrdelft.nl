@@ -3,7 +3,6 @@
 @import "~@fortawesome/fontawesome-free/scss/regular";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
-@import "~jquery-ui/themes/base/tooltip.css";
 
 @import "fonts";
 @import "extern/variables";
@@ -25,6 +24,7 @@
 @import "extern/footer";
 @import "extern/wrapper";
 @import "extern/animatie";
+@import "extern/owee-banner";
 
 /* Box Model */
 
@@ -41,19 +41,8 @@
 }
 
 body {
-	-ms-overflow-style: scrollbar;
-}
-
-@media screen and (max-width: $scherm-middelsmal) {
-
-	html, body {
-		min-width: 320px;
-	}
-
-}
-
-body {
 	background-color: $basiskleur;
+	-ms-overflow-style: scrollbar;
 
 	&.is-loading {
 		*, *:before, *:after {
@@ -71,22 +60,6 @@ body, input, select, textarea {
 	font-size: 16.5pt;
 	font-weight: 300;
 	line-height: 1.65;
-}
-
-@media screen and (max-width: $scherm-extrabreed) {
-
-	body, input, select, textarea {
-		font-size: 13pt;
-	}
-
-}
-
-@media screen and (max-width: $scherm-smal) {
-
-	body, input, select, textarea {
-		font-size: 12pt;
-	}
-
 }
 
 #wrapper {
@@ -211,18 +184,6 @@ h6 {
 	font-size: 0.7em;
 }
 
-@media screen and (max-width: $scherm-middel) {
-
-	h2 {
-		font-size: 1em;
-	}
-
-	h3 {
-		font-size: 0.8em;
-	}
-
-}
-
 sub {
 	font-size: 0.8em;
 	position: relative;
@@ -322,3 +283,124 @@ optgroup {
 	background-color: #414262;
 }
 
+.include-instagram {
+	background-image: url(../images/social/instagram.svg);
+}
+
+.een-minuut {
+	p {
+		margin-bottom: 1em;
+	}
+
+	.bb-video {
+		max-width: 100%;
+	}
+
+	#hero {
+		margin-bottom: 2em;
+
+		h1 {
+			font-size: 3em;
+			font-weight: bold;
+			text-align: center;
+			margin: 0;
+
+			&.major {
+				border-bottom: 0;
+				padding-bottom: 0;
+			}
+		}
+
+		.bb-video {
+			max-width: 70%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+
+	.sociaal {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 2em;
+		margin-bottom: 1em;
+
+		.instagram .insta-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			align-items: center;
+
+			#insta-tag {
+				font-size: 3em;
+				font-weight: bold;
+				color: $donkerblauw;
+				-webkit-text-stroke-width: 2px;
+				-webkit-text-stroke-color: $geel;
+			}
+		}
+	}
+}
+
+/*
+ MEDIA QUERIES
+*/
+@media screen and (max-width: $scherm-extrabreed) {
+
+	body, input, select, textarea {
+		font-size: 13pt;
+	}
+
+}
+
+@media screen and (max-width: $scherm-breed) {
+
+	.een-minuut .sociaal .instagram .insta-grid #insta-tag {
+		font-size: 2em;
+		-webkit-text-stroke-width: 1px;
+	}
+
+}
+
+@media screen and (max-width: $scherm-middel) {
+
+	h2 {
+		font-size: 1em;
+	}
+
+	h3 {
+		font-size: 0.8em;
+	}
+
+	.een-minuut #hero h1 {
+		font-size: 2em;
+	}
+
+}
+
+@media screen and (max-width: $scherm-middelsmal) {
+
+	html, body {
+		min-width: 320px;
+	}
+
+	.een-minuut .sociaal .instagram .insta-grid {
+		grid-template-columns: 1fr 0px;
+		justify-items: center;
+
+		img {
+			width: 100%;
+		}
+
+		#insta-tag {
+			display: none;
+		}
+	}
+
+}
+
+@media screen and (max-width: $scherm-smal) {
+
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+
+}

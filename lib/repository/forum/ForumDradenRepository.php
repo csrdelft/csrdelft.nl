@@ -20,7 +20,7 @@ use Exception;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  * @method ForumDraad|null find($id, $lockMode = null, $lockVersion = null)
  * @method ForumDraad|null findOneBy(array $criteria, array $orderBy = null)
  * @method PersistentCollection|ForumDraad[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
@@ -160,10 +160,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 			$qb->select('count(d.draad_id)');
 			$qb->where('d.forum_id = :forum_id and d.wacht_goedkeuring = false and d.verwijderd = false');
 			$qb->setParameter('forum_id', $forum_id);
-			if (!LoginService::mag(P_LOGGED_IN)) {
-				$qb->andWhere('d.gesloten = false or d.laatst_gewijzigd >= :laatst_gewijzigd');
-				$qb->setParameter('laatst_gewijzigd', date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')));
-			}
+			$this->filterLaatstGewijzigdExtern($qb);
 
 			$aantal = $qb->getQuery()->getSingleScalarResult();
 
@@ -217,10 +214,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$qb->where('draad.wacht_goedkeuring = false and draad.verwijderd = false and draad.laatst_gewijzigd >= :van and draad.laatst_gewijzigd <= :tot');
 		$qb->setParameter('van', $forumZoeken->van);
 		$qb->setParameter('tot', $forumZoeken->tot);
-		if (!LoginService::mag(P_LOGGED_IN)) {
-			$qb->andWhere('draad.gesloten = false or draad.laatst_gewijzigd >= :laatst_gewijzigd');
-			$qb->setParameter('laatst_gewijzigd', date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')));
-		}
+		$this->filterLaatstGewijzigdExtern($qb, 'draad');
 		$qb->orderBy('score', 'DESC');
 		$qb->addOrderBy('draad.plakkerig', 'DESC');
 		$qb->having('score > 0');
@@ -245,10 +239,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$qb->where('d.forum_id = :forum_id and d.wacht_goedkeuring = false and d.verwijderd = false and d.belangrijk = true');
 		$qb->setParameter('forum_id', $deel->forum_id);
 
-		if (!LoginService::mag(P_LOGGED_IN)) {
-			$qb->andWhere('d.gesloten = false or d.laatst_gewijzigd >= :laatst_gewijzigd');
-			$qb->setParameter('laatst_gewijzigd', date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')));
-		}
+		$this->filterLaatstGewijzigdExtern($qb);
 
 		return $qb->getQuery()->getResult();
 	}
@@ -258,10 +249,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$qb->where('(d.forum_id = :forum_id or d.gedeeld_met = :forum_id) and d.wacht_goedkeuring = false and d.verwijderd = false');
 		$qb->setParameter('forum_id', $deel->forum_id);
 
-		if (!LoginService::mag(P_LOGGED_IN)) {
-			$qb->andWhere('d.gesloten = false and d.laatst_gewijzigd >= :laatst_gewijzigd');
-			$qb->setParameter('laatst_gewijzigd', date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')));
-		}
+		$this->filterLaatstGewijzigdExtern($qb);
 
 		$qb->setFirstResult(($this->pagina - 1) * $this->per_pagina);
 		$qb->setMaxResults($this->per_pagina);
@@ -320,10 +308,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 				}
 			}
 		}
-		if (!LoginService::mag(P_LOGGED_IN)) {
-			$qb->andWhere('d.gesloten = false or d.laatst_gewijzigd >= :laatst_gewijzigd');
-			$qb->setParameter('laatst_gewijzigd', date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')));
-		}
+		$this->filterLaatstGewijzigdExtern($qb);
 		$dradenById = group_by_distinct('draad_id', $qb->getQuery()->getResult());
 		$count = count($dradenById);
 		if ($count > 0) {
@@ -382,14 +367,14 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$this->getEntityManager()->flush();
 
 		if ($property === 'belangrijk') {
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
+			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([$draad->draad_id]);
 		} elseif ($property === 'gesloten') {
-			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen($draad);
+			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([$draad->draad_id]);
 		} elseif ($property === 'verwijderd') {
-			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen($draad);
-			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen($draad);
-			$this->forumDradenGelezenRepository->verwijderDraadGelezen($draad);
-			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draad);
+			$this->forumDradenMeldingRepository->stopMeldingenVoorIedereen([$draad->draad_id]);
+			$this->forumDradenVerbergenRepository->toonDraadVoorIedereen([$draad->draad_id]);
+			$this->forumDradenGelezenRepository->verwijderDraadGelezen([$draad->draad_id]);
+			$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad([$draad->draad_id]);
 			$this->forumPostsRepository->verwijderForumPostsVoorDraad($draad);
 		}
 	}
@@ -420,6 +405,14 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 			return 1;
 		} catch (Exception $ex) {
 			return 0;
+		}
+	}
+
+	private function filterLaatstGewijzigdExtern($qb, $alias = 'd') {
+		if (!LoginService::mag(P_LOGGED_IN)) {
+			$qb->andWhere("({$alias}.gesloten = true and {$alias}.laatst_gewijzigd >= :laatst_gewijzigd_gesloten) or ({$alias}.gesloten = false and {$alias}.laatst_gewijzigd >= :laatst_gewijzigd_open)");
+			$qb->setParameter('laatst_gewijzigd_gesloten', date_create_immutable(instelling('forum', 'externen_geentoegang_gesloten')));
+			$qb->setParameter('laatst_gewijzigd_open', date_create_immutable(instelling('forum', 'externen_geentoegang_open')));
 		}
 	}
 

@@ -3,13 +3,13 @@
 namespace CsrDelft\entity\groepen;
 
 use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\entity\groepen\enum\CommissieFunctie;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
-use CsrDelft\Orm\Entity\T;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
-use function common\short_class;
 
 
 /**
@@ -26,9 +26,6 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	public function getUUID() {
 		return $this->groep_id . '.' . $this->uid . '@' . strtolower(short_class($this)) . '.csrdelft.nl';
 	}
-	protected static $computed_attributes = [
-		'link' => [T::String],
-	];
 	/**
 	 * Shared primary key
 	 * Foreign key
@@ -45,9 +42,15 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	 * @var string
 	 * @ORM\Column(type="uid")
 	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 	/**
 	 * CommissieFunctie of opmerking bij lidmaatschap
 	 * @var CommissieFunctie
@@ -58,7 +61,7 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	/**
 	 * @var GroepKeuzeSelectie[]
 	 * @ORM\Column(type="groepkeuzeselectie", nullable=true)
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $opmerking2;
 	/**
@@ -74,7 +77,12 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	 * @ORM\Column(type="uid")
 	 */
 	public $door_uid;
-
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
+	 */
+	public $door_profiel;
 	/**
 	 * @return string|null
 	 * @Serializer\Groups("datatable")
@@ -93,6 +101,10 @@ abstract class AbstractGroepLid implements DataTableEntry {
 		return ProfielRepository::getLink($this->door_uid);
 	}
 
+	/**
+	 * @return string|null
+	 * @Serializer\Groups("vue")
+	 */
 	public function getLink() {
 		return ProfielRepository::getLink($this->uid);
 	}

@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\security;
 
 use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\Icon;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -39,6 +40,12 @@ class RememberLogin implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $profiel;
 	/**
 	 * DateTime
 	 * @var DateTimeImmutable

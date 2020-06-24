@@ -3,15 +3,15 @@
  * GroepTabView.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\entity\groepen\GroepTab;
+use CsrDelft\entity\groepen\enum\GroepTab;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\groepen\Verticale;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 
 abstract class GroepTabView extends GroepOmschrijvingView {

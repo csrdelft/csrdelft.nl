@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\lid;
 
-use CsrDelft\service\LidZoeker;
+use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\View;
 
@@ -22,11 +22,11 @@ class LedenlijstContent implements View {
 
 	/**
 	 * Lid-zoeker
-	 * @var LidZoeker
+	 * @var LidZoekerService
 	 */
 	private $lidzoeker;
 
-	public function __construct(LidZoeker $zoeker) {
+	public function __construct(LidZoekerService $zoeker) {
 		$this->lidzoeker = $zoeker;
 	}
 

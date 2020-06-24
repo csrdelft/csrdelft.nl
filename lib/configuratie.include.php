@@ -14,10 +14,6 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
-use CsrDelft\Orm\DependencyManager;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Persistence\DatabaseAdmin;
-use CsrDelft\Orm\Persistence\OrmMemcache;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
@@ -94,15 +90,6 @@ $kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
 $kernel->boot();
 $container = $kernel->getContainer();
 
-// Gebruik de PDO connectie van doctrine
-$pdo = $container->get('doctrine.dbal.default_connection')->getWrappedConnection();
-
-// Set csrdelft/orm parts of the container
-$container->set(OrmMemcache::class, new OrmMemcache(env('CACHE_HOST'), (int)env('CACHE_PORT')));
-$container->set(Database::class, new Database($pdo));
-$container->set(DatabaseAdmin::class, new DatabaseAdmin($pdo));
-
-DependencyManager::setContainer($container);
 ContainerFacade::init($container);
 
 // ---
@@ -115,9 +102,10 @@ if (FORCE_HTTPS) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
-			$account = $container->get(AccountRepository::class)->find('private_token = ?', array($token), null, null, 1)->fetch();
-			// Reset private token, user has to get a new one
-			$container->get(AccountRepository::class)->resetPrivateToken($account);
+			if ($account = $container->get(AccountRepository::class)->findOneBy(['private_token' => $token])) {
+				// Reset private token, user has to get a new one
+				$container->get(AccountRepository::class)->resetPrivateToken($account);
+			}
 			// TODO: Log dit
 		}
 		// redirect to https
@@ -133,13 +121,10 @@ switch (MODE) {
 		if (isSyrinx()) die("Syrinx is geen Travis!");
 		break;
 	case 'CLI':
-		// Override LoginModel in container to use the Cli version
-		$cliLoginModel = $container->get(LoginService::class);
-
-		$cliLoginModel->validateCron();
+		$container->get(LoginService::class)->loginCli();
 
 		if (!LoginService::mag(P_ADMIN)) {
-			die('access denied');
+			die('Cron user heeft geen admin rechten.');
 		}
 		break;
 
@@ -177,21 +162,6 @@ switch (MODE) {
 		$container->get(LoginService::class)->authenticate();
 
 		$container->get(LogRepository::class)->log();
-
-		// Database modus meldingen
-		if (DB_MODIFY OR DB_DROP) {
-			if (DEBUG) {
-				if (DB_DROP) {
-					setMelding('DB_DROP enabled', 2);
-				}
-			} elseif (!LoginService::mag(P_ADMIN)) {
-				redirect('/onderhoud.html');
-			} elseif (DB_DROP) {
-				setMelding('DB_DROP enabled', 2);
-			} elseif (DB_MODIFY) {
-				setMelding('DB_MODIFY enabled', 2);
-			}
-		}
 		break;
 
 	default:

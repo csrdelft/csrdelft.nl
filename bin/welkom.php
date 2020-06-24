@@ -1,7 +1,6 @@
 <?php
 
-use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Mail;
+use CsrDelft\common\Mail;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 

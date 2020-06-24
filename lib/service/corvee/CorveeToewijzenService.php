@@ -61,7 +61,7 @@ class CorveeToewijzenService {
 					}
 				}
 				$corveePuntenOverzichten[$uid] = $this->corveePuntenService->loadPuntenVoorLid($profiel, array($functie->functie_id => $functie));
-				$corveePuntenOverzichten[$uid]->aantal = $corveePuntenOverzichten[$uid]->aantal[$functie->functie_id];
+				$corveePuntenOverzichten[$uid]->aantal = $corveePuntenOverzichten[$uid]->aantallen[$functie->functie_id];
 				$avg += $corveePuntenOverzichten[$uid]->aantal;
 			}
 			$avg /= sizeof($corveePuntenOverzichten);
@@ -93,8 +93,8 @@ class CorveeToewijzenService {
 			} else {
 				$corveePuntenOverzichten[$uid]->recent = false;
 			}
-			if ($taak->crv_repetitie_id !== null) {
-				$corveePuntenOverzichten[$uid]->voorkeur = ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->getHeeftVoorkeur($taak->crv_repetitie_id, $uid);
+			if ($taak->corveeRepetitie !== null) {
+				$corveePuntenOverzichten[$uid]->voorkeur = ContainerFacade::getContainer()->get(CorveeVoorkeurenRepository::class)->getHeeftVoorkeur($taak->corveeRepetitie->crv_repetitie_id, $uid);
 			} else {
 				$corveePuntenOverzichten[$uid]->voorkeur = false;
 			}

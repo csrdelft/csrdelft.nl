@@ -19,6 +19,11 @@
 			<li class="nav-item">
 				@link('Pin Transacties', '/fiscaat/pin', 'nav-link', 'active')
 			</li>
+			@can(P_FISCAAT_MOD)
+				<li class="nav-item">
+					@link('Bulk afschrijven', '/fiscaat/afschrijven', 'nav-link', 'active')
+				</li>
+			@endcan
 		</ul>
 	@endcan
 	<div>

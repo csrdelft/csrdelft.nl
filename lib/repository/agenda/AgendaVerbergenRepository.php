@@ -4,7 +4,6 @@ namespace CsrDelft\repository\agenda;
 
 use CsrDelft\entity\agenda\AgendaVerbergen;
 use CsrDelft\entity\agenda\Agendeerbaar;
-use CsrDelft\model\OrmTrait;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
@@ -18,8 +17,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AgendaVerbergen[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AgendaVerbergenRepository extends AbstractRepository {
-	use OrmTrait;
-
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, AgendaVerbergen::class);
 	}

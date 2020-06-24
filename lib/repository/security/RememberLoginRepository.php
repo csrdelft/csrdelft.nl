@@ -76,6 +76,7 @@ class RememberLoginRepository extends AbstractRepository {
 	public function nieuw() {
 		$remember = new RememberLogin();
 		$remember->uid = LoginService::getUid();
+		$remember->profiel = LoginService::getProfiel();
 		$remember->remember_since = date_create_immutable();
 		if (isset($_SERVER['HTTP_USER_AGENT'])) {
 			$remember->device_name = $_SERVER['HTTP_USER_AGENT'];

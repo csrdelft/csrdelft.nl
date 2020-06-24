@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\security\AuthenticationMethod;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\security\LoginService;

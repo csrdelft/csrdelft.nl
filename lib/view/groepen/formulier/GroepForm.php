@@ -4,16 +4,16 @@ namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Activiteit;
-use CsrDelft\entity\groepen\ActiviteitSoort;
 use CsrDelft\entity\groepen\Commissie;
-use CsrDelft\entity\groepen\CommissieSoort;
-use CsrDelft\entity\groepen\GroepVersie;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
+use CsrDelft\entity\groepen\enum\CommissieSoort;
+use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\groepen\Ketzer;
 use CsrDelft\entity\groepen\Kring;
 use CsrDelft\entity\groepen\Woonoord;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuze;
-use CsrDelft\model\entity\security\AccessAction;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\FormFieldFactory;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -77,7 +77,8 @@ class GroepForm extends ModalForm {
 			$fields['keuzelijst2']->title = 'Formaat: naam:type:default:description:optie,optie,optie|naam:type:default:description:|...';
 		}
 
-		$fields['maker_uid']->readonly = !LoginService::mag(P_ADMIN);
+		$fields['maker']->readonly = !LoginService::mag(P_ADMIN);
+		$fields['maker']->suggestions = ['/tools/naamsuggesties?zoekin=leden&q='];
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
 /**
  * LidStatus.enum.php
@@ -10,8 +10,7 @@ use CsrDelft\Orm\Entity\PersistentEnum;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-abstract class LidStatus extends PersistentEnum {
-
+class LidStatus extends Enum {
 	/**
 	 * Status voor h.t. leden.
 	 */
@@ -68,22 +67,6 @@ abstract class LidStatus extends PersistentEnum {
 		self::Noviet => self::Noviet,
 		self::Lid => self::Lid,
 		self::Gastlid => self::Gastlid,
-		self::Kringel => self::Kringel,
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $supportedChoices = [
-		self::Noviet => self::Noviet,
-		self::Lid => self::Lid,
-		self::Gastlid => self::Gastlid,
-		self::Oudlid => self::Oudlid,
-		self::Erelid => self::Erelid,
-		self::Overleden => self::Overleden,
-		self::Exlid => self::Exlid,
-		self::Nobody => self::Nobody,
-		self::Commissie => self::Commissie,
 		self::Kringel => self::Kringel,
 	];
 
@@ -163,5 +146,9 @@ abstract class LidStatus extends PersistentEnum {
 	 */
 	public static function isOudlidLike($option) {
 		return isset(static::$oudlidlike[$option]);
+	}
+
+	public function getChar() {
+		return static::$mapChoiceToChar[$this->getValue()];
 	}
 }
