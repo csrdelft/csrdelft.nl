@@ -2,7 +2,6 @@
  * Wordt geladen als de pagina geladen is.
  */
 import axios from 'axios';
-import $ from 'jquery';
 import {registerBbContext, registerFormulierContext} from '../context';
 import {init} from '../ctx';
 import {route} from '../lib/util';
@@ -13,17 +12,15 @@ require('jquery-hoverintent');
 
 require('timeago');
 
-registerBbContext();
+const contexts = [];
 
-route('/wachtwoord', async () => {
-	await registerFormulierContext();
-	init(document.body);
-});
+contexts.push(registerBbContext());
 
-route('/forum', async () => {
-	await registerFormulierContext();
-	init(document.body);
-});
+route('/wachtwoord', () => contexts.push(registerFormulierContext()));
+route('/forum', () => contexts.push(registerFormulierContext()));
+
+Promise.all(contexts).then(() => init(document.body));
+
 route('/fotoalbum', () => import(/* webpackChunkName: "fotoalbum" */'../page/fotoalbum'));
 
 declare global {
@@ -33,81 +30,43 @@ declare global {
 			bridge: (newName: string, widget: Widget) => void;
 		}
 	}
+
 	interface Window {
 		bbcode: any;
 	}
 }
 
-const $window = $(window);
-const $header = $('#header');
-const $banner = $('#banner');
+let hasLoaded = false;
 
-$window.on('load', () => {
-	// Lazy load cms pages, these should be loaded always, not on scroll
-	setTimeout(() => {
-		$('div.bb-img-loading').each(function () {
-			const content = $(document.createElement('img'));
-			content.on('error', function () {
-				$(this).attr('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
-				$(this).attr('src', '/plaetjes/famfamfam/picture_error.png');
-				$(this).css('width', '16px');
-				$(this).css('height', '16px');
-				$(this).removeClass('bb-img-loading').addClass('bb-img');
-			});
-			content.addClass('bb-img');
-			content.attr('alt', $(this).attr('title')!);
-			content.attr('style', $(this).attr('style')!);
-			content.attr('src', $(this).attr('src')!);
-			$(this).html(content.toString());
-			content.on('load', function () {
-				const foto = content.attr('src')!.indexOf('/plaetjes/fotoalbum/') >= 0;
-				const video = $(this).parent().parent().hasClass('bb-video-preview');
-				const hasAnchor = $(this).closest('a').length !== 0;
-				$(this).parent().replaceWith($(this));
-				if (!foto && !video && !hasAnchor) {
-					$(this).wrap(`<a class="lightbox-link" href="${$(this).attr('src')}" data-lightbox="page-lightbox"></a>`);
-				}
-			});
-		});
-	});
-});
+const header = document.querySelector('#header')!;
+const banner = document.querySelector('#banner')!;
 
-const lazyLoad = (() => {
-	let hasLoaded = false;
-
-	return () => {
-		if (hasLoaded) {
-			return;
-		}
-
-		hasLoaded = true;
-
-		// Lazy load frontpage
-		setTimeout(() => {
-			$('.lazy-load').each(function () {
-				$(this).replaceWith(this.textContent!);
-			});
-		});
-	};
-})();
+const lazyLoad = () => {
+	for (const element of document.querySelectorAll('.lazy-load')) {
+		// setTimeout om lazy-load blokken na elkaar te laden ipv allemaal tegelijk.
+		setTimeout(() => element.outerHTML = element.innerHTML);
+	}
+};
 
 // Lazy load after animations have finished and user has scrolled
-$window.on('scroll', () => {
-	if ($(window).scrollTop()! > 0) {
+const loadPage = () => {
+	if (!hasLoaded && window.scrollY > 0) {
+		hasLoaded = true;
 		lazyLoad();
 	}
 
-	if (window.pageYOffset > $banner.outerHeight()!) {
-		$header.removeClass('alt');
+	if (banner.getBoundingClientRect().bottom < 0) {
+		header.classList.remove('alt');
 	} else {
-		$header.addClass('alt');
+		header.classList.add('alt');
 	}
-});
+};
 
-$window.on('resize', () => $window.trigger('scroll'));
-$window.trigger('scroll');
+// resize of scroll zorgt er voor dat beneden de fold geladen wordt.
+window.addEventListener('scroll', loadPage);
+window.addEventListener('resize', loadPage);
 
-init(document.body);
+loadPage();
 
 const contactForm = document.querySelector('#contact-form') as HTMLFormElement;
 
