@@ -81,7 +81,7 @@ docReady(() => {
 	}
 
 	$('.trigger[href="#zijbalk"]').on('click', toggle('#zijbalk'));
-	$('main,#menu,footer').on('click', reset);
+	$('.cd-page-content,#menu,footer').on('click', reset);
 
 	const searchfield = document.querySelector<HTMLInputElement>('input[type=search].ZoekField');
 
