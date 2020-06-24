@@ -88,7 +88,11 @@ MAIL;
 			$mail->send();
 		}
 	} elseif($interactive) {
-		echo "Er is niets gedownload!\n";
+		if (count($pintransacties) > 0) {
+			echo sprintf("Er zijn %d pin transacties gedownload en gematcht.\n", count($pintransacties));
+		} else {
+			echo "Er is niets gedownload!\n";
+		}
 	}
 
 } catch (Exception $e) {
