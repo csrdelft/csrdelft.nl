@@ -34,56 +34,56 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"datatable", "log"})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $id;
 	/**
 	 * Naam
 	 * @var string
 	 * @ORM\Column(type="stringkey")
-	 * @Serializer\Groups({"datatable", "log"})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $naam;
 	/**
 	 * Naam voor opvolging
 	 * @var string
 	 * @ORM\Column(type="stringkey")
-	 * @Serializer\Groups({"datatable", "log"})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $familie;
 	/**
 	 * Datum en tijd begin
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups({"datatable", "log"})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $begin_moment;
 	/**
 	 * Datum en tijd einde
 	 * @var DateTimeImmutable|null
 	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Serializer\Groups({"datatable", "log"})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $eind_moment;
 	/**
 	 * o.t. / h.t. / f.t.
 	 * @var GroepStatus
 	 * @ORM\Column(type="enumGroepStatus")
-	 * @Serializer\Groups({"datatable", "log"})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $status;
 	/**
 	 * Korte omschrijving
 	 * @var string
 	 * @ORM\Column(type="text")
-	 * @Serializer\Groups({"datatable", "log"})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $samenvatting;
 	/**
 	 * Lange omschrijving
 	 * @var string
 	 * @ORM\Column(type="text", nullable=true)
-	 * @Serializer\Groups({"datatable", "log"})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $omschrijving;
 	/**
@@ -101,12 +101,13 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups({"datatable", "log"})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $versie = GroepVersie::V1;
 	/**
 	 * @var GroepKeuze[]
 	 * @ORM\Column(type="groepkeuze", nullable=true)
+	 * @Serializer\Groups("vue")
 	 */
 	public $keuzelijst2;
 
@@ -136,6 +137,7 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 
 	/**
 	 * @return AbstractGroepLid[]|ArrayCollection
+	 * @Serializer\Groups("vue")
 	 */
 	abstract public function getLeden();
 

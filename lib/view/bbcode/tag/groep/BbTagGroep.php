@@ -12,6 +12,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\groepen\GroepView;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -23,9 +24,14 @@ abstract class BbTagGroep extends BbTag {
 	 * @var AbstractGroepenRepository
 	 */
 	private $model;
+	/**
+	 * @var SerializerInterface
+	 */
+	private $serializer;
 
-	public function __construct(AbstractGroepenRepository $model) {
+	public function __construct(AbstractGroepenRepository $model, SerializerInterface $serializer) {
 		$this->model = $model;
+		$this->serializer = $serializer;
 	}
 
 	/**
@@ -83,7 +89,7 @@ abstract class BbTagGroep extends BbTag {
 	}
 
 	protected function groep(AbstractGroep $groep) {
-		if ($groep->versie == GroepVersie::V2()->getValue()) {
+		if ($groep->versie == GroepVersie::V2()) {
 			$uid = LoginService::getUid();
 			$settings = [
 				'mijn_uid' => $uid,
@@ -91,8 +97,10 @@ abstract class BbTagGroep extends BbTag {
 				'aanmeld_url' => $groep->getUrl() . '/aanmelden2/' . $uid,
 			];
 
+			$groepJson = htmlspecialchars($this->serializer->serialize($groep, 'json', ['groups' => ['vue']]));
+
 			return vsprintf('<groep class="vue-context" :groep="%s" :settings="%s"></groep>', [
-				vue_encode($groep),
+				$groepJson,
 				vue_encode($settings)
 			]);
 		}

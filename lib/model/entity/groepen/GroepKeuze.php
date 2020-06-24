@@ -3,6 +3,7 @@
 namespace CsrDelft\model\entity\groepen;
 
 use CsrDelft\entity\groepen\enum\GroepKeuzeType;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -13,10 +14,30 @@ class GroepKeuze {
 		assert(in_array($this->type, GroepKeuzeType::getEnumValues()));
 	}
 
+	/**
+	 * @var string
+	 * @Serializer\Groups("vue")
+	 */
   public $naam;
+	/**
+	 * @var string
+	 * @Serializer\Groups("vue")
+	 */
 	public $type; // Checks, radios, dropdown, text, slider, number, date
+	/**
+	 * @var string[]
+	 * @Serializer\Groups("vue")
+	 */
 	public $opties; // String, names, name
+	/**
+	 * @var string
+	 * @Serializer\Groups("vue")
+	 */
 	public $default; // String, names, name
+	/**
+	 * @var string
+	 * @Serializer\Groups("vue")
+	 */
 	public $description;
 
 	public function __construct($naam = null, $type = null, $default = null, $description = null) {
