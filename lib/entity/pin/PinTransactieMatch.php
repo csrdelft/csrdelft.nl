@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\pin;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -14,7 +15,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\pin\PinTransactieMatchRepository")
  * @ORM\Table("pin_transactie_match")
  */
-class PinTransactieMatch {
+class PinTransactieMatch implements DataTableEntry {
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
@@ -26,7 +27,6 @@ class PinTransactieMatch {
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
-	 * @Serializer\Groups("datatable")
 	 */
 	public $status;
 	/**
@@ -113,8 +113,51 @@ class PinTransactieMatch {
 	}
 
 	/**
-	 * @throws CsrException
+	 * @return string
 	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("status")
+	 */
+	public function getDataTableStatus() {
+		return PinTransactieMatchStatusEnum::from($this->status)->getDescription();
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("transactie")
+	 */
+	public function getDataTableTransactie() {
+		if ($this->transactie) {
+			return $this->transactie->getKorteBeschrijving();
+		} else {
+			return '-';
+		}
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("bestelling")
+	 */
+	public function getDataTableBestelling() {
+		if ($this->bestelling) {
+			return $this->bestelling->getPinBeschrijving();
+		} else {
+			return '-';
+		}
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("moment")
+	 */
+	public function getDatatTableMoment() {
+		return date_format_intl($this->getMoment(), DATETIME_FORMAT);
+	}
+
+	/**
+	 * @throws CsrException
 	 * @return \DateTimeImmutable
 	 */
 	public function getMoment() {
