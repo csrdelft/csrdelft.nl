@@ -33,15 +33,15 @@
 			@foreach(get_menu('extern', true)->children as $menuItem)
 				@if(count($menuItem->children) > 0)
 					<span class="dropdown-menu">
-						<a href="{{$menuItem->link}}" class="nav-link dropdown-link">{{$menuItem->tekst}} <span class="expand-dropdown"><i class="fa fa-plus"></i></span></a>
+						<a href="{{$menuItem->link}}" class="nav-link dropdown-link @if(startsWith(REQUEST_URI, $menuItem->link)) is-active @endif">{{$menuItem->tekst}} <span class="expand-dropdown"><i class="fa fa-plus"></i></span></a>
 						<span class="dropdown">
 							@foreach($menuItem->children as $childMenuItem)
-								<a href="{{$childMenuItem->link}}">{{$childMenuItem->tekst}}</a>
+								<a href="{{$childMenuItem->link}}" @if(startsWith(REQUEST_URI, $childMenuItem->link)) class="is-active" @endif>{{$childMenuItem->tekst}}</a>
 							@endforeach
 						</span>
 					</span>
 				@else
-					<a class="nav-link" href="{{$menuItem->link}}">{{$menuItem->tekst}}</a>
+					<a class="nav-link @if(startsWith(REQUEST_URI, $menuItem->link)) is-active @endif" href="{{$menuItem->link}}">{{$menuItem->tekst}}</a>
 				@endif
 			@endforeach
 		</nav>

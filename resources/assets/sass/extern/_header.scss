@@ -74,6 +74,10 @@
 					border-radius: 0;
 					border-bottom: none;
 					padding: .8em;
+
+					&.is-active {
+						text-decoration: underline;
+					}
 				}
 			}
 
@@ -103,6 +107,11 @@
 			border-radius: 15px;
 			padding: .8em 1.35em;
 			background: $button-bg;
+
+			&.is-active {
+				border: .2em solid $geel;
+				padding: .6em 1.15em;
+			}
 		}
 	}
 
