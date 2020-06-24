@@ -71,9 +71,9 @@ class PinTransactieController extends AbstractController {
 	 * @Auth(P_FISCAAT_READ)
 	 */
 	public function overzicht() {
-		return view('fiscaat.pagina', [
+		return view('fiscaat.pin', [
 			'titel' => 'Pin transacties beheer',
-			'view' => new PinTransactieMatchTable(),
+			'table' => new PinTransactieMatchTable(),
 		]);
 	}
 
@@ -351,7 +351,7 @@ class PinTransactieController extends AbstractController {
 					$nieuweBestelling->cie = $oudeBestelling->cie;
 					$nieuweBestelling->deleted = false;
 					$nieuweBestelling->totaal = $oudeBestelling->totaal - $pinBestellingInhoud->aantal;
-					$nieuweBestelling->comment = sprintf('Veranderd door de fiscus op %s.', getDateTime());
+					$nieuweBestelling->comment = $oudeBestelling->comment . sprintf(' - Veranderd door de fiscus op %s, pin bestelling van %d verwijderd.', getDateTime(), $pinBestellingInhoud->aantal);
 
 					$this->civiBestellingModel->create($nieuweBestelling);
 				}
