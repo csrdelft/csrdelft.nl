@@ -152,7 +152,7 @@ class PinTransactieMatch implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("moment")
 	 */
-	public function getDatatTableMoment() {
+	public function getDataTableMoment() {
 		return date_format_intl($this->getMoment(), DATETIME_FORMAT);
 	}
 
@@ -167,6 +167,48 @@ class PinTransactieMatch implements DataTableEntry {
 			return $this->bestelling->moment;
 		} else {
 			throw new CsrException('Pin Transactie Match heeft geen bestelling en transactie.');
+		}
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("bestelling_moment")
+	 */
+	public function getDataTableBestellingMoment() {
+		if ($this->bestelling !== null) {
+			return date_format_intl($this->bestelling->moment, DATETIME_FORMAT);
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("verschil")
+	 */
+	public function getDataTableVerschil() {
+		$verschil = $this->getVerschil();
+		if ($verschil !== null) {
+			$min = $verschil < 0 ? '-' : '';
+			$minuten = floor(abs($verschil) / 60);
+			$seconden = abs($verschil) % 60;
+			return $min . sprintf("%d:%02d", $minuten, $seconden);
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * @throws CsrException
+	 * @return int Seconds difference
+	 */
+	public function getVerschil() {
+		if ($this->transactie !== null && $this->bestelling !== null) {
+			return $this->transactie->datetime->getTimestamp() - $this->bestelling->moment->getTimestamp();
+		} else {
+			return null;
 		}
 	}
 }

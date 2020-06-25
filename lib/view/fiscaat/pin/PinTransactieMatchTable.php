@@ -31,6 +31,8 @@ class PinTransactieMatchTable extends DataTable {
 		$this->addKnop(new DataTableKnop(Multiplicity::None(), '/fiscaat/pin/heroverweeg', 'Heroverweeg', 'Controleer op veranderingen in andere systemen', 'cart_go'));
 
 		$this->addColumn('moment');
+		$this->addColumn('bestelling_moment');
+		$this->addColumn('verschil');
 		$this->addColumn('transactie');
 		$this->addColumn('bestelling');
 
