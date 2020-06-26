@@ -21,7 +21,7 @@ class AgendaBreadcrumbs {
 		$jaarMin = $jaarHuidig - 5;
 		$jaarMax = $jaarHuidig + 5;
 		for ($jaar = $jaarMin; $jaar <= $jaarMax; $jaar++) {
-			$dropdown .= '<option value="/agenda/maand/' . $jaar . '/' . $maandHuidig . '"';
+			$dropdown .= '<option value="/agenda/' . $jaar . '/' . $maandHuidig . '"';
 			if ($jaar == $jaarHuidig) {
 				$dropdown .= ' selected="selected"';
 			}
@@ -34,7 +34,7 @@ class AgendaBreadcrumbs {
 	private static function getDropDownMonth($maandHuidig, $jaarHuidig) {
 		$dropdown = '<select onchange="location.href=this.value;">';
 		for ($maand = 1; $maand <= 12; $maand++) {
-			$dropdown .= '<option value="/agenda/maand/' . $jaarHuidig . '/' . $maand . '"';
+			$dropdown .= '<option value="/agenda/' . $jaarHuidig . '/' . $maand . '"';
 			if ($maand == $maandHuidig) {
 				$dropdown .= ' selected="selected"';
 			}

@@ -11,7 +11,7 @@
 				</a>
 			@else
 				<a title="{{$item->getBeschrijving()}}"
-					 href="/agenda/maand/{{strftime("%Y/%m", $item->getBeginMoment())}}#dag-{{strftime("%Y-%m-%d", $item->getBeginMoment())}}">
+					 href="/agenda/{{strftime("%Y/%m", $item->getBeginMoment())}}#dag-{{strftime("%Y-%m-%d", $item->getBeginMoment())}}">
 					<span class="zijbalk-moment">{{zijbalk_date_format($item->getBeginMoment())}}</span>
 					&nbsp;{{$item->getTitel()}}
 				</a>

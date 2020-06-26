@@ -164,7 +164,7 @@ class AgendaController {
 			if ($item->getUrl()) {
 				$url = $item->getUrl();
 			} else {
-				$url = '/agenda/maand/' . $y . '/' . $m . '#dag-' . $y . '-' . $m . '-' . $d;
+				$url = '/agenda/' . $y . '/' . $m . '#dag-' . $y . '-' . $m . '-' . $d;
 			}
 			$result[] = array(
 				'icon' => Icon::getTag('calendar'),

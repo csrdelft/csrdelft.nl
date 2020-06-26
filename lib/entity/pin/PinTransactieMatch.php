@@ -5,6 +5,7 @@ namespace CsrDelft\entity\pin;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\fiscaat\CiviBestelling;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -153,7 +154,7 @@ class PinTransactieMatch implements DataTableEntry {
 	 * @Serializer\SerializedName("moment")
 	 */
 	public function getDataTableMoment() {
-		return date_format_intl($this->getMoment(), DATETIME_FORMAT);
+		return self::renderMoment($this->getMoment());
 	}
 
 	/**
@@ -177,10 +178,21 @@ class PinTransactieMatch implements DataTableEntry {
 	 */
 	public function getDataTableBestellingMoment() {
 		if ($this->bestelling !== null) {
-			return date_format_intl($this->bestelling->moment, DATETIME_FORMAT);
+			return self::renderMoment($this->bestelling->moment);
 		} else {
 			return "";
 		}
+	}
+
+	/**
+	 * @param DateTimeImmutable $moment
+	 * @return string
+	 */
+	private static function renderMoment(DateTimeImmutable $moment) {
+		$formatted = date_format_intl($moment, DATETIME_FORMAT);
+		$dag = date_format_intl($moment, 'cccc');
+		$agendaLink = "/agenda/{$moment->format('Y')}/{$moment->format('m')}";
+		return "<a data-moment='{$formatted}' target='_blank' href='{$agendaLink}' title='{$dag}'>{$formatted}</a>"; // Data attribuut voor sortering
 	}
 
 	/**
