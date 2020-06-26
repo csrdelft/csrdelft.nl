@@ -732,6 +732,14 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
 
+		if (!is_zichtbaar($this, 'profielfoto', 'intern')) {
+			return '/images/geen-foto.jpg';
+		}
+		$path = $this->getPasfotoInternalPath(false, $vorm);
+		if ($path === null) {
+			return '/images/geen-foto.jpg';
+		}
+
 		if (in_array($vorm, ['Duckstad', 'vierkant'])) {
 			return "/profiel/pasfoto/$this->uid.$vorm.jpg";
 		}
