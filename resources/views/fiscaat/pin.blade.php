@@ -1,6 +1,6 @@
 @extends('fiscaat.base')
 
-@section('titel', 'Bulk afschrijven CiviSaldo')
+@section('titel', 'Pinbestellingen')
 
 @section('civisaldocontent')
 	<h2>Pin transacties beheer</h2>
