@@ -62,6 +62,11 @@ class CorveeTaak implements Agendeerbaar {
 	 * @ORM\JoinColumn(name="crv_repetitie_id", referencedColumnName="crv_repetitie_id", nullable=true)
 	 */
 	public $corveeRepetitie;
+		/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 * @var int
+	 */
+	public $maaltijd_id;
 	/**
 	 * @var Maaltijd|null
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\Maaltijd")
