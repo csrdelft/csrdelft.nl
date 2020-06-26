@@ -74,13 +74,20 @@ export const registerKnopContext = async () => {
 };
 
 export const registerFormulierContext = async () => {
-	const {
-		formCancel,
-		formReset,
-		formSubmit,
-		formToggle,
-	} = await import(/* webpackChunkName: "formulier" */'./lib/formulier');
-	const {bbCodeSet} = await import(/* webpackChunkName: "bbcode-set" */'./lib/bbcode-set');
+	const [
+		{
+			formCancel,
+			formReset,
+			formSubmit,
+			formToggle,
+		},
+		{
+			bbCodeSet,
+		},
+	] = await Promise.all([
+		import(/* webpackChunkName: "formulier" */'./lib/formulier'),
+		import(/* webpackChunkName: "bbcode-set" */'./lib/bbcode-set'),
+	]);
 
 	ctx.addHandlers({
 		'.InlineFormToggle': (el) => el.addEventListener('click', (event) => formToggle(el, event)),
@@ -95,9 +102,15 @@ export const registerFormulierContext = async () => {
 };
 
 export const registerGlobalContext = async () => {
-	const {initKaartjes} = await import(/* webpackChunkName: "kaartje" */'./lib/kaartje');
-	const {default: Vue} = await import(/* webpackChunkName: "vue" */'vue');
-	const {default: $} = await import(/* webpackChunkName: "jquery" */'jquery');
+	const [
+		{initKaartjes},
+		{default: Vue},
+		{default: $},
+	] = await Promise.all([
+		import(/* webpackChunkName: "kaartje" */'./lib/kaartje'),
+		import(/* webpackChunkName: "vue" */'vue'),
+		import(/* webpackChunkName: "jquery" */'jquery'),
+	]);
 
 	ctx.addHandlers({
 		'.hoverIntent': (el) => $(el).hoverIntent({
