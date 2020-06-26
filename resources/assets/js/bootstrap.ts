@@ -141,12 +141,14 @@ $.timeago.settings.strings = {
 };
 
 (async () => {
-	await registerGrafiekContext();
-	await registerFormulierContext();
-	await registerGlobalContext();
-	await registerKnopContext();
-	await registerDataTableContext();
-	await registerBbContext();
+	await Promise.all([
+		registerGrafiekContext(),
+		registerFormulierContext(),
+		registerGlobalContext(),
+		registerKnopContext(),
+		registerDataTableContext(),
+		registerBbContext(),
+	]);
 
 	docReady(() => {
 		initSluitMeldingen();
