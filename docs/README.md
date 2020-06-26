@@ -13,6 +13,7 @@ Welkom bij de webstek documentatie
 - [Routes](routes.md): Routes en controllers, hoe zorg ik dat mijn pagina gepresenteerd wordt voor een specifieke url.
 - [Filestructuur](filestructuur.md): De bestandsstructuur van de stek repository.
 - [Typescript](typescript.md)
+- [Vue](vue.md)
 - [Styles](styles.md)
 - [Symfony](symfony.md)
 
