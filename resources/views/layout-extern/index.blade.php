@@ -198,9 +198,10 @@
 		<!-- Footer -->
 		<section id="footer">
 			<div class="inner">
-				<h2 class="major">Interesseformulier</h2>
-				@include('layout-extern.form')
-				<ul class="contact">
+				<h2 class="major">Contact</h2>
+{{--				<h2 class="major">Interesseformulier</h2>--}}
+{{--				@include('layout-extern.form')--}}
+				<ul class="contact zonder-interesseformulier">
 					<li class="fa-home">
 						Soci&euml;teit Confide <br/>
 						Oude Delft 9<br/>

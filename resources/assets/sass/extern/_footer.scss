@@ -41,6 +41,10 @@
 
     .contact {
       width: calc(50% - 1.5em);
+
+			&.zonder-interesseformulier {
+				width: 100%;
+			}
     }
 
     .copyright,.sponsors {
