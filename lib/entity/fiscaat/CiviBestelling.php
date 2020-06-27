@@ -93,7 +93,7 @@ class CiviBestelling {
 	public function getPinBeschrijving() {
 		$pinProduct = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 
-		if ($pinProduct === false) {
+		if ($pinProduct === null) {
 			return "";
 		}
 
