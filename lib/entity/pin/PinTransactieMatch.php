@@ -5,6 +5,7 @@ namespace CsrDelft\entity\pin;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -54,6 +55,12 @@ class PinTransactieMatch implements DataTableEntry {
 	 * @ORM\JoinColumn(nullable=true)
 	 */
 	public $bestelling;
+	/**
+	 * @var string
+	 * @ORM\Column(type="text", nullable=true)
+	 * @Serializer\Groups("datatable")
+	 */
+	public $notitie;
 
 	/**
 	 * @param PinTransactie $pinTransactie
@@ -119,7 +126,19 @@ class PinTransactieMatch implements DataTableEntry {
 	 * @Serializer\SerializedName("status")
 	 */
 	public function getDataTableStatus() {
-		return PinTransactieMatchStatusEnum::from($this->status)->getDescription();
+		return PinTransactieMatchStatusEnum::from($this->status)->getDescription() . $this->icons();
+	}
+
+	/**
+	 * @return string
+	 */
+	private function icons() {
+		if ($this->bestelling !== null && $this->bestelling->comment) {
+			return '&nbsp;<i class="fa fa-info-circle" title="' . $this->bestelling->comment . '"></i>';
+		}
+		if ($this->notitie) {
+			return '&nbsp;<i class="fa fa-comment" title="' .  $this->notitie. '"></i>';
+		}
 	}
 
 	/**
@@ -221,6 +240,24 @@ class PinTransactieMatch implements DataTableEntry {
 			return $this->transactie->datetime->getTimestamp() - $this->bestelling->moment->getTimestamp();
 		} else {
 			return null;
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function gokStatus() {
+		if ($this->bestelling === null) {
+			return PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING;
+		} elseif ($this->transactie === null) {
+			return PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE;
+		} else {
+			$bestellingInhoud = $this->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
+			if ($bestellingInhoud->aantal === $this->transactie->getBedragInCenten()) {
+				return PinTransactieMatchStatusEnum::STATUS_MATCH;
+			} else {
+				return PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG;
+			}
 		}
 	}
 }

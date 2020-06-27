@@ -23,6 +23,7 @@ use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingVerwijderenForm;
+use CsrDelft\view\fiscaat\pin\PinTransactieMatchNegerenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
 use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
@@ -426,59 +427,70 @@ class PinTransactieController extends AbstractController {
 	 * @Auth(P_FISCAAT_READ)
 	 */
 	public function info() {
-		$selection = $this->getDataTableSelection();
+		$form = new PinBestellingInfoForm(new PinTransactieMatch());
 
-		if (count($selection) !== 1) {
-			throw new CsrGebruikerException('Selecteer één regel tegelijk.');
+		if ($form->validate()) {
+			// Find match
+			$values = $form->getValues();
+			$pinTransactieMatch = $this->pinTransactieMatchRepository->find($values['id']);
+			$form = new PinBestellingInfoForm($pinTransactieMatch);
+			$values = $form->getValues();
+			$pinTransactieMatch->notitie = $values['intern'] ? $values['intern'] : null;
+			if ($pinTransactieMatch->bestelling !== null) {
+				$pinTransactieMatch->bestelling->comment = $values['comment'] ? $values['comment'] : null;
+			}
+			$this->em->flush();
+			return $this->tableData([$pinTransactieMatch]);
 		} else {
-			/** @var PinTransactieMatch $pinTransactieMatch */
-			$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUUID($selection[0]);
+			$selection = $this->getDataTableSelection();
 
-			if ($pinTransactieMatch->bestelling === null) {
-				throw new CsrGebruikerException('Geen bestelling gevonden');
+			if (count($selection) !== 1) {
+				throw new CsrGebruikerException('Selecteer één regel tegelijk.');
 			} else {
-				$pinBestelling = $pinTransactieMatch->bestelling;
-				return new PinBestellingInfoForm($pinBestelling);
+				/** @var PinTransactieMatch $pinTransactieMatch */
+				$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUUID($selection[0]);
+				return new PinBestellingInfoForm($pinTransactieMatch);
 			}
 		}
 	}
 
 	/**
-	 * Markeer een match als verwijderd, deze transactie is niet relevant en al op een andere manier verwerkt.
-	 * @Route("/fiscaat/pin/verwijder_transactie", methods={"POST"})
+	 * @Route("/fiscaat/pin/negeer", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function verwijder_transactie() {
+	public function negeer() {
 		$selection = $this->getDataTableSelection();
+		$form = new PinTransactieMatchNegerenForm($selection);
 
-		$updated = $this->em->transactional(function () use ($selection) {
-			$updated = [];
+		if ($form->validate()) {
+			$values = $form->getValues();
 
-			$manager = $this->getDoctrine()->getManager();
+			$updated = $this->em->transactional(function () use ($values) {
+				$updated = [];
+				foreach (explode(',', $values['ids']) as $uuid) {
+					$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUuid($uuid);
 
-			foreach ($selection as $uuid) {
-				$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUUID($uuid);
+					if (!$pinTransactieMatch) {
+						throw new CsrGebruikerException("Match niet gevonden");
+					}
 
-				if ($pinTransactieMatch->bestelling && $pinTransactieMatch->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE)) {
-					throw new CsrGebruikerException("Match kan niet verwijderd worden, er hangt een bestelling aan.");
+					if ($pinTransactieMatch->status === PinTransactieMatchStatusEnum::STATUS_VERWIJDERD) {
+						$pinTransactieMatch->status = $pinTransactieMatch->gokStatus();
+					} else {
+						$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_VERWIJDERD;
+						if ($values['intern']) {
+							$pinTransactieMatch->notitie = $values['intern'];
+						}
+					}
+					$updated[] = $pinTransactieMatch;
 				}
+				return $updated;
+			});
 
-				if ($pinTransactieMatch->status == PinTransactieMatchStatusEnum::STATUS_VERWIJDERD) {
-					$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING;
-				} else {
-					$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_VERWIJDERD;
-				}
-
-				$manager->persist($pinTransactieMatch);
-				$updated[] = $pinTransactieMatch;
-			}
-
-			$manager->flush();
-
-			return $updated;
-		});
-
-		return $this->tableData($updated);
+			return $this->tableData($updated);
+		} else {
+			return $form;
+		}
 	}
 
 	/**

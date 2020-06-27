@@ -38,5 +38,12 @@
 		hebt gemaakt in het SocCie systeem.
 	</p>
 
+	<style>
+		.dt-buttons {
+			position: sticky !important;
+			top: 58px;
+		}
+	</style>
+
 	{!! $table->toString() !!}
 @endsection

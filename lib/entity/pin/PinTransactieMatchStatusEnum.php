@@ -23,7 +23,7 @@ class PinTransactieMatchStatusEnum extends Enum {
 	 */
 	protected static $mapChoiceToDescription = [
 		self::STATUS_MATCH => 'Match',
-		self::STATUS_VERWIJDERD => 'Verwijderd',
+		self::STATUS_VERWIJDERD => 'Genegeerd',
 		self::STATUS_VERKEERD_BEDRAG => 'Verkeerd bedrag',
 		self::STATUS_MISSENDE_TRANSACTIE => 'Missende transactie',
 		self::STATUS_MISSENDE_BESTELLING => 'Missende bestelling',
