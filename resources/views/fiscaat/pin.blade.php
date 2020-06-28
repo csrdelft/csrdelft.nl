@@ -29,9 +29,9 @@
 		</li>
 	</ul>
 	<p>
-		De verwijder knop kan alleen worden gebruikt voor transacties en markeerd een transactie als
-		verwijderd. Dit kan gebruikt worden als de transactie niet relevant was voor het CiviSaldo,
-		zoals bij een feest.
+		De negeer knop haalt een bestelling, transactie of match uit de lijst met fouten. Dit kan
+		bijvoorbeeld gebruikt worden bij een feest, een corrigerende bestelling of een gesplitste
+		betaling of bestelling.
 	</p>
 	<p>
 		De heroverweeg knop controleert gekoppelde matches opnieuw, gebruik dit als je aanpassingen
