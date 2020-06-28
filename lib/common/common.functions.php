@@ -282,7 +282,7 @@ function external_url($url, $label) {
 	$url = filter_var($url, FILTER_SANITIZE_URL);
 	if ($url && (url_like($url) || url_like(CSR_ROOT . $url))) {
 		if (startsWith($url, 'http://') || startsWith($url, 'https://')) {
-			$extern = 'target="_blank"';
+			$extern = 'target="_blank" rel="noopener"';
 		} else {
 			$extern = '';
 		}
