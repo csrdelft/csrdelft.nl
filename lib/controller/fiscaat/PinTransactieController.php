@@ -149,9 +149,11 @@ class PinTransactieController extends AbstractController {
 			$values = $form->getValues();
 
 			$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUUID($values['pinTransactieId']);
+			$form = new PinBestellingAanmakenForm($pinTransactieMatch);
+			$values = $form->getValues();
 			$removePinTransactieMatch = new RemoveDataTableEntry($pinTransactieMatch->id, PinTransactieMatch::class);
 
-			if ($pinTransactieMatch->transactie !== null) {
+			if ($pinTransactieMatch->bestelling !== null) {
 				throw new CsrGebruikerException('Er bestaat al een bestelling.');
 			}
 
@@ -162,34 +164,17 @@ class PinTransactieController extends AbstractController {
 			$nieuwePinTransactieMatch = $this->em->transactional(function () use ($pinTransactieMatch, $values) {
 				$pinTransactie = $pinTransactieMatch->transactie;
 
-				$bestelling = new CiviBestelling();
-				$bestelling->moment = $pinTransactie->datetime;
-				$bestelling->uid = $values['uid'];
-				$bestelling->totaal = $pinTransactie->getBedragInCenten() * -1;
-				$bestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
-				$bestelling->deleted = false;
-				$bestelling->comment = sprintf('Aangemaakt door de fiscus op %s.', getDateTime());
-
-				$bestellingInhoud = new CiviBestellingInhoud();
-				$bestellingInhoud->product_id = CiviProductTypeEnum::PINTRANSACTIE;
-				$bestellingInhoud->product = $this->civiProductRepository->getProduct($bestellingInhoud->product_id);
-				$bestellingInhoud->aantal = $pinTransactie->getBedragInCenten();
-
-				$bestelling->inhoud[] = $bestellingInhoud;
-
+				$bestelling = $pinTransactieMatch->bouwBestelling($this->civiProductRepository, $values['comment'] ?: null, $values['uid']);
 				$bestelling->id = $this->civiBestellingModel->create($bestelling);
-
 				$this->civiSaldoRepository->ophogen($values['uid'], $pinTransactie->getBedragInCenten());
 
 				$manager = $this->getDoctrine()->getManager();
-
 				$manager->remove($pinTransactieMatch);
 				$manager->flush();
 
 				$nieuwePinTransactieMatch = PinTransactieMatch::match($pinTransactie, $bestelling);
-
+				$nieuwePinTransactieMatch->notitie = $values['intern'] ?: null;
 				$manager->persist($nieuwePinTransactieMatch);
-				$manager->flush();
 
 				return $nieuwePinTransactieMatch;
 			});
@@ -435,9 +420,9 @@ class PinTransactieController extends AbstractController {
 			$pinTransactieMatch = $this->pinTransactieMatchRepository->find($values['id']);
 			$form = new PinBestellingInfoForm($pinTransactieMatch);
 			$values = $form->getValues();
-			$pinTransactieMatch->notitie = $values['intern'] ? $values['intern'] : null;
+			$pinTransactieMatch->notitie = $values['intern'] ?: null;
 			if ($pinTransactieMatch->bestelling !== null) {
-				$pinTransactieMatch->bestelling->comment = $values['comment'] ? $values['comment'] : null;
+				$pinTransactieMatch->bestelling->comment = $values['comment'] ?: null;
 			}
 			$this->em->flush();
 			return $this->tableData([$pinTransactieMatch]);
@@ -478,9 +463,7 @@ class PinTransactieController extends AbstractController {
 						$pinTransactieMatch->status = $pinTransactieMatch->gokStatus();
 					} else {
 						$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_VERWIJDERD;
-						if ($values['intern']) {
-							$pinTransactieMatch->notitie = $values['intern'];
-						}
+						$pinTransactieMatch->notitie = $values['intern'] ?: null;
 					}
 					$updated[] = $pinTransactieMatch;
 				}

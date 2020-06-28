@@ -5,7 +5,10 @@ namespace CsrDelft\entity\pin;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
+use CsrDelft\entity\fiscaat\enum\CiviSaldoCommissieEnum;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -133,12 +136,14 @@ class PinTransactieMatch implements DataTableEntry {
 	 * @return string
 	 */
 	private function icons() {
+		$desc = '';
 		if ($this->bestelling !== null && $this->bestelling->comment) {
-			return '&nbsp;<i class="fa fa-info-circle" title="' . $this->bestelling->comment . '"></i>';
+			$desc .= '&nbsp;<i class="fa fa-comment" title="' . $this->bestelling->comment . '"></i>';
 		}
 		if ($this->notitie) {
-			return '&nbsp;<i class="fa fa-comment" title="' .  $this->notitie. '"></i>';
+			$desc .= '&nbsp;<i class="fa fa-info-circle" title="' . $this->notitie . '"></i>';
 		}
+		return $desc;
 	}
 
 	/**
@@ -177,8 +182,8 @@ class PinTransactieMatch implements DataTableEntry {
 	}
 
 	/**
+	 * @return DateTimeImmutable
 	 * @throws CsrException
-	 * @return \DateTimeImmutable
 	 */
 	public function getMoment() {
 		if ($this->transactie !== null) {
@@ -205,10 +210,12 @@ class PinTransactieMatch implements DataTableEntry {
 
 	/**
 	 * @param DateTimeImmutable $moment
+	 * @param bool $link
 	 * @return string
 	 */
-	private static function renderMoment(DateTimeImmutable $moment) {
+	public static function renderMoment(DateTimeImmutable $moment, $link = true) {
 		$formatted = date_format_intl($moment, DATETIME_FORMAT);
+		if (!$link) return $formatted;
 		$dag = date_format_intl($moment, 'cccc');
 		$agendaLink = "/agenda/{$moment->format('Y')}/{$moment->format('m')}";
 		return "<a data-moment='{$formatted}' target='_blank' href='{$agendaLink}' title='{$dag}'>{$formatted}</a>"; // Data attribuut voor sortering
@@ -232,8 +239,8 @@ class PinTransactieMatch implements DataTableEntry {
 	}
 
 	/**
-	 * @throws CsrException
 	 * @return int Seconds difference
+	 * @throws CsrException
 	 */
 	public function getVerschil() {
 		if ($this->transactie !== null && $this->bestelling !== null) {
@@ -259,5 +266,50 @@ class PinTransactieMatch implements DataTableEntry {
 				return PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG;
 			}
 		}
+	}
+
+	/**
+	 * @param CiviProductRepository $civiProductRepository
+	 * @param string|null $comment
+	 * @param string|null $uid
+	 * @return CiviBestelling
+	 */
+	public function bouwBestelling($civiProductRepository, $comment = null, $uid = null) {
+		$bestellingInhoud = $this->bouwBestellingInhoud($civiProductRepository);
+		if (!$bestellingInhoud) {
+			throw new CsrException('Bestelling kan niet gebouwd worden');
+		}
+
+		$bestelling = new CiviBestelling();
+		$bestelling->moment = date_create_immutable();
+		$bestelling->uid = $uid ?: $this->bestelling->uid;
+		$bestelling->totaal = $bestellingInhoud->getPrijs();
+		$bestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
+		$bestelling->deleted = false;
+		$bestelling->comment = $comment;
+		$bestelling->inhoud[] = $bestellingInhoud;
+
+		return $bestelling;
+	}
+
+	/**
+	 * @param CiviProductRepository $civiProductRepository
+	 * @return CiviBestellingInhoud|null
+	 */
+	public function bouwBestellingInhoud($civiProductRepository) {
+		$bestellingInhoud = new CiviBestellingInhoud();
+		// Gebruik pincorrectie voor periode voor invoering tussenrekeningen
+		$bestellingInhoud->product_id = $this->transactie->datetime < date_create_immutable('2020-05-16') ? CiviProductTypeEnum::PINCORRECTIE : CiviProductTypeEnum::PINTRANSACTIE;
+		$bestellingInhoud->product = $civiProductRepository->getProduct($bestellingInhoud->product_id);
+
+		switch ($this->status) {
+			case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
+				$bestellingInhoud->aantal = $this->transactie->getBedragInCenten();
+				break;
+			default:
+				return null;
+		}
+
+		return $bestellingInhoud;
 	}
 }

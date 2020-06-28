@@ -15,6 +15,7 @@ class CiviProductTypeEnum extends Enum {
 	 * CiviProductTypeEnum opties.
 	 */
 	const PINTRANSACTIE = 24;
+	const PINCORRECTIE = 151;
 	const CONTANT = 6;
 	const OVERGEMAAKT = 25;
 
@@ -22,5 +23,6 @@ class CiviProductTypeEnum extends Enum {
 		self::PINTRANSACTIE => 'PIN',
 		self::CONTANT => 'Contant',
 		self::OVERGEMAAKT => 'Overgemaakt',
+		self::PINCORRECTIE => 'Pincorrectie',
 	];
 }
