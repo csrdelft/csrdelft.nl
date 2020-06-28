@@ -4,6 +4,7 @@ namespace CsrDelft\view\fiscaat\pin;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\pin\PinTransactieMatch;
+use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\CivisaldoField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
@@ -22,10 +23,11 @@ class PinBestellingAanmakenForm extends ModalForm {
 	 * @throws CsrGebruikerException
 	 */
 	public function __construct($pinTransactieMatch = null) {
-		parent::__construct([], '/fiscaat/pin/aanmaken', 'Voeg een bestelling toe.', true);
+		parent::__construct([], '/fiscaat/pin/aanmaken', 'Voeg een bestelling toe', true);
 		$comment = 'Pinbetaling ' . ($pinTransactieMatch ? PinTransactieMatch::renderMoment($pinTransactieMatch->getMoment(), false) : '');
 
 		$fields = [];
+		$fields[] = new HtmlComment('Er is geen bestelling gevonden voor deze transactie. Maak met onderstaand formulier een nieuwe bestelling aan met het aangegeven bedrag.');
 		$fields['civisaldo'] = new CivisaldoField('uid', null, 'Account');
 		$fields['civisaldo']->required = true;
 		$fields['comment'] = new TextField('comment', $comment, 'Externe notitie');

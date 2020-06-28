@@ -43,10 +43,15 @@ class CiviSaldoRepository extends AbstractRepository {
 	/**
 	 * @param string $uid
 	 *
+	 * @param bool $alleenActief
 	 * @return CiviSaldo|null
 	 */
-	public function getSaldo($uid) {
-		return $this->findOneBy(['uid' => $uid]);
+	public function getSaldo($uid, $alleenActief = false) {
+		$critera = ['uid' => $uid];
+		if ($alleenActief) {
+			$critera['deleted'] = 0;
+		}
+		return $this->findOneBy($critera);
 	}
 
 	/**
