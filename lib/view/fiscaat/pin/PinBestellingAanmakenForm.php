@@ -8,6 +8,7 @@ use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\CivisaldoField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -29,6 +30,8 @@ class PinBestellingAanmakenForm extends ModalForm {
 		$fields['civisaldo']->required = true;
 		$fields['comment'] = new TextField('comment', $comment, 'Externe notitie');
 		$fields['intern'] = new TextareaField('intern', $pinTransactieMatch ? $pinTransactieMatch->notitie : null, 'Interne notitie');
+		$fields['stuurMail'] = new JaNeeField('stuurMail', true, 'Stuur mail naar lid');
+
 		$fields['pinTransactieId'] = new RequiredIntField('pinTransactieId', $pinTransactieMatch ? $pinTransactieMatch->id : null, 'Pin Transactie Id');
 		$fields['pinTransactieId']->hidden = true;
 

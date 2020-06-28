@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\common\Mail;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
@@ -18,6 +19,8 @@ use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
@@ -138,7 +141,6 @@ class PinTransactieController extends AbstractController {
 
 	/**
 	 * @throws CsrGebruikerException
-	 * @throws CsrException
 	 * @Route("/fiscaat/pin/aanmaken", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
@@ -161,10 +163,16 @@ class PinTransactieController extends AbstractController {
 				throw new CsrGebruikerException('Geen transactie gevonden om een bestelling voor aan te maken');
 			}
 
-			$nieuwePinTransactieMatch = $this->em->transactional(function () use ($pinTransactieMatch, $values) {
+			$account = $this->civiSaldoRepository->getSaldo($values['uid']);
+			if (!$account) {
+				throw new CsrGebruikerException("Er is geen CiviSaldo voor dit lid gevonden.");
+			}
+
+			/** @var PinTransactieMatch $nieuwePinTransactieMatch */
+			$nieuwePinTransactieMatch = $this->em->transactional(function () use ($account, $pinTransactieMatch, $values) {
 				$pinTransactie = $pinTransactieMatch->transactie;
 
-				$bestelling = $pinTransactieMatch->bouwBestelling($this->civiProductRepository, $values['comment'] ?: null, $values['uid']);
+				$bestelling = $pinTransactieMatch->bouwBestelling($this->civiProductRepository, $values['comment'] ?: null, $account->uid);
 				$bestelling->id = $this->civiBestellingModel->create($bestelling);
 				$this->civiSaldoRepository->ophogen($values['uid'], $pinTransactie->getBedragInCenten());
 
@@ -178,6 +186,18 @@ class PinTransactieController extends AbstractController {
 
 				return $nieuwePinTransactieMatch;
 			});
+
+			if ($values['stuurMail']) {
+				$datum = date_format_intl($nieuwePinTransactieMatch->transactie->datetime, 'cccc d MMMM y H:mm');
+				$bedrag = number_format($nieuwePinTransactieMatch->bestelling->totaal / -100, 2, ',', '.');
+				$this->stuurMail(
+					$account->uid,
+					"Uw CiviSaldo is verhoogd",
+					"Uit mijn administratie bleek dat uw pinbetaling van {$datum} nog niet verwerkt was in uw CiviSaldo. "
+					. "Dit is nu wel gebeurd, waardoor uw saldo met € {$bedrag} opgehoogd is. "
+					. "Mocht dit een vergissing zijn, wilt u dan reageren op dit bericht?"
+				);
+			}
 
 			return $this->tableData([
 				$removePinTransactieMatch,
@@ -505,5 +525,29 @@ class PinTransactieController extends AbstractController {
 		});
 
 		return $this->tableData($deleted === true ? [] : $deleted);
+	}
+
+	private function stuurMail($uid, $onderwerp, $melding) {
+		$ontvanger = ProfielRepository::get($uid);
+		if (!$ontvanger) return;
+		$bcc = LoginService::getProfiel();
+		$civiSaldo = $ontvanger->getCiviSaldo();
+		$saldo = number_format($civiSaldo, 2, ',', '.');
+		$saldoMelding = $civiSaldo < 0 ? ' Leg a.u.b. in.' : '';
+
+		$bericht = "Beste {$ontvanger->getNaam('civitas')},
+
+{$melding}
+
+Uw CiviSaldo is nu € {$saldo}.{$saldoMelding}
+
+Met vriendelijke groet,
+h.t. Fiscus";
+
+		$mail = new Mail($ontvanger->getEmailOntvanger(), $onderwerp, $bericht);
+		$mail->setFrom(env('EMAIL_FISCUS'), 'Fiscus C.S.R. Delft');
+		$mail->addBcc($bcc->getEmailOntvanger());
+		$mail->setLightBB();
+		$mail->send();
 	}
 }
