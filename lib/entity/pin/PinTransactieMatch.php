@@ -126,7 +126,7 @@ class PinTransactieMatch implements DataTableEntry {
 	 */
 	public static function negeer(PinTransactie $pinTransactie = null, CiviBestelling $pinBestelling = null) {
 		$pinTransactieMatch = new static();
-		$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_VERWIJDERD;
+		$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_GENEGEERD;
 		$pinTransactieMatch->transactie = $pinTransactie;
 		$pinTransactieMatch->bestelling = $pinBestelling;
 
@@ -312,20 +312,13 @@ class PinTransactieMatch implements DataTableEntry {
 	 */
 	public function bouwBestellingInhoud($civiProductRepository) {
 		$bestellingInhoud = new CiviBestellingInhoud();
-		// Gebruik pincorrectie voor periode voor invoering tussenrekeningen
+		// Gebruik pincorrectie voor periode voor invoering tussenrekeningen, gebruik pintransactie erna
 		$bestellingInhoud->product_id = $this->getMoment() < date_create_immutable('2020-05-16') ? CiviProductTypeEnum::PINCORRECTIE : CiviProductTypeEnum::PINTRANSACTIE;
 		$bestellingInhoud->product = $civiProductRepository->getProduct($bestellingInhoud->product_id);
 
-		switch ($this->status) {
-			case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
-				$bestellingInhoud->aantal = $this->transactie->getBedragInCenten();
-				break;
-			case PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE:
-				$bestellingInhoud->aantal = -1 * $this->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal;
-				break;
-			default:
-				return null;
-		}
+		$correct = $this->transactie ? $this->transactie->getBedragInCenten() : 0;
+		$fout = $this->bestelling ? $this->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal : 0;
+		$bestellingInhoud->aantal = $correct - $fout;
 
 		return $bestellingInhoud;
 	}

@@ -186,7 +186,7 @@ class PinTransactieController extends AbstractController {
 
 			if ($values['stuurMail']) {
 				$datum = date_format_intl($nieuwePinTransactieMatch->transactie->datetime, 'cccc d MMMM y H:mm');
-				$bedrag = number_format($nieuwePinTransactieMatch->bestelling->totaal / -100, 2, ',', '.');
+				$bedrag = format_bedrag($nieuwePinTransactieMatch->bestelling->totaal / -1, false);
 				$this->stuurMail(
 					$account->uid,
 					"Uw CiviSaldo is verhoogd",
@@ -344,12 +344,12 @@ class PinTransactieController extends AbstractController {
 
 				$creditBestelling = $oudePinTransactieMatch->bouwBestelling($this->civiProductRepository, $values['commentNieuw'] ?: null, $account->uid);
 				$creditBestelling->id = $this->civiBestellingModel->create($creditBestelling);
-				$this->civiSaldoRepository->verlagen($oudePinTransactieMatch->bestelling->uid, $bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal);
+				$this->civiSaldoRepository->verlagen($account->uid, abs($creditBestelling->totaal));
 
 				$manager = $this->getDoctrine()->getManager();
 				$manager->flush();
 
-				$oudePinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_VERWIJDERD;
+				$oudePinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_GENEGEERD;
 				$oudePinTransactieMatch->notitie = $values['internOud'] ?: null;
 				$nieuwePinTransactieMatch = PinTransactieMatch::negeer(null, $creditBestelling);
 				$nieuwePinTransactieMatch->notitie = $values['internNieuw'] ?: null;
@@ -360,7 +360,7 @@ class PinTransactieController extends AbstractController {
 
 			if ($values['stuurMail']) {
 				$datum = date_format_intl($oudePinTransactieMatch->bestelling->moment, 'cccc d MMMM y H:mm');
-				$bedrag = number_format($oudePinTransactieMatch->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal / 100, 2, ',', '.');
+				$bedrag = format_bedrag($nieuwePinTransactieMatch->bestelling->totaal, false);
 				$this->stuurMail(
 					$account->uid,
 					"Uw CiviSaldo is verlaagd",
@@ -386,45 +386,73 @@ class PinTransactieController extends AbstractController {
 	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function update() {
-		$form = new PinBestellingVeranderenForm(new PinTransactieMatch());
+		$form = new PinBestellingVeranderenForm();
 
 		if ($form->validate()) {
-			$pinTransactieMatch = $form->getModel();
+			$values = $form->getValues();
 
-			$pinTransactieMatch = $this->em->transactional(function () use ($pinTransactieMatch) {
-				$pinTransactieMatch = $this->pinTransactieMatchRepository->find($pinTransactieMatch->id);
+			$oudePinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUUID($values['pinTransactieId']);
+			$form = new PinBestellingVeranderenForm($oudePinTransactieMatch);
+			$values = $form->getValues();
 
-				$transactie = $pinTransactieMatch->transactie;
+			if ($oudePinTransactieMatch->transactie === null) {
+				throw new CsrGebruikerException('Geen transactie gevonden voor verkeerd bedrag');
+			}
 
-				$bestelling = $pinTransactieMatch->bestelling;
-				$bestellingInhoud = $bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
+			if ($oudePinTransactieMatch->bestelling === null) {
+				throw new CsrGebruikerException('Geen bestelling gevonden voor verkeerd bedrag');
+			}
 
-				$oudAantal = $bestellingInhoud->aantal;
-				$nieuwAantal = $transactie->getBedragInCenten();
+			$account = $this->civiSaldoRepository->getSaldo($oudePinTransactieMatch->bestelling->uid, true);
+			if (!$account) {
+				throw new CsrGebruikerException("Er is geen CiviSaldo voor dit lid gevonden.");
+			}
 
-				$bestellingInhoud->aantal = $transactie->getBedragInCenten();
-				$bestelling->totaal += $oudAantal - $nieuwAantal;
-				$bestelling->comment = sprintf('Veranderd door de fiscus op %s.', getDateTime());
+			/** @var PinTransactieMatch $nieuwePinTransactieMatch */
+			$nieuwePinTransactieMatch = $this->em->transactional(function () use ($account, $oudePinTransactieMatch, $values) {
+				$bestelling = $oudePinTransactieMatch->bestelling;
+				$bestelling->comment = $values['commentOud'];
 
-				if ($oudAantal < $nieuwAantal) {
-					// Is nu meer gepind
-					$this->civiSaldoRepository->ophogen($bestelling->uid, $nieuwAantal - $oudAantal);
+				$correctieBestelling = $oudePinTransactieMatch->bouwBestelling($this->civiProductRepository, $values['commentNieuw'] ?: null, $account->uid);
+				$correctieBestelling->id = $this->civiBestellingModel->create($correctieBestelling);
+
+				if ($correctieBestelling->totaal > 0) {
+					$this->civiSaldoRepository->verlagen($account->uid, $correctieBestelling->totaal);
 				} else {
-					// Is nu minder gepind
-					$this->civiSaldoRepository->verlagen($bestelling->uid, $oudAantal - $nieuwAantal);
+					$this->civiSaldoRepository->ophogen($account->uid, abs($correctieBestelling->totaal));
 				}
 
-				$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_MATCH;
+				$manager = $this->getDoctrine()->getManager();
+				$manager->flush();
 
-				$this->em->persist($bestelling);
-				$this->em->persist($bestellingInhoud);
-				$this->em->persist($pinTransactieMatch);
-				$this->em->flush();
+				$nieuwePinTransactieMatch = PinTransactieMatch::negeer(null, $correctieBestelling);
+				$nieuwePinTransactieMatch->notitie = $values['internNieuw'] ?: null;
+				$oudePinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_GENEGEERD;
+				$oudePinTransactieMatch->notitie = $values['internOud'] ?: null;
+				$manager->persist($nieuwePinTransactieMatch);
 
-				return $pinTransactieMatch;
+				return $nieuwePinTransactieMatch;
 			});
 
-			return $this->tableData([$pinTransactieMatch]);
+			if ($values['stuurMail']) {
+				$datum = date_format_intl($oudePinTransactieMatch->transactie->datetime, 'cccc d MMMM y H:mm');
+				$foutBedrag = format_bedrag($oudePinTransactieMatch->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal, false);
+				$correctBedrag = format_bedrag($oudePinTransactieMatch->transactie->getBedragInCenten(), false);
+				$bedrag = format_bedrag(abs($nieuwePinTransactieMatch->bestelling->totaal), false);
+				$actie = $nieuwePinTransactieMatch->bestelling->totaal > 0 ? 'verlaagd' : 'verhoogd';
+				$this->stuurMail(
+					$account->uid,
+					"Uw CiviSaldo is {$actie}",
+					"Op {$datum} is er een pinbetaling van {$foutBedrag} ingevoerd, terwijl u € {$correctBedrag} had gepind. "
+					. "De pinbetaling is gecorrigeerd, waardoor uw saldo met € {$bedrag} {$actie} is. "
+					. "Mocht dit een vergissing zijn, wilt u dan op dit bericht reageren met een schermafbeelding van de pintransactie?"
+				);
+			}
+
+			return $this->tableData([
+				$oudePinTransactieMatch,
+				$nieuwePinTransactieMatch,
+			]);
 		} else {
 			return $form;
 		}
@@ -483,10 +511,10 @@ class PinTransactieController extends AbstractController {
 						throw new CsrGebruikerException("Match niet gevonden");
 					}
 
-					if ($pinTransactieMatch->status === PinTransactieMatchStatusEnum::STATUS_VERWIJDERD) {
+					if ($pinTransactieMatch->status === PinTransactieMatchStatusEnum::STATUS_GENEGEERD) {
 						$pinTransactieMatch->status = $pinTransactieMatch->gokStatus();
 					} else {
-						$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_VERWIJDERD;
+						$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_GENEGEERD;
 						$pinTransactieMatch->notitie = $values['intern'] ?: null;
 					}
 					$updated[] = $pinTransactieMatch;
@@ -535,8 +563,8 @@ class PinTransactieController extends AbstractController {
 		$ontvanger = ProfielRepository::get($uid);
 		if (!$ontvanger) return;
 		$bcc = LoginService::getProfiel();
-		$civiSaldo = $ontvanger->getCiviSaldo();
-		$saldo = number_format($civiSaldo, 2, ',', '.');
+		$civiSaldo = $ontvanger->getCiviSaldo() * 100;
+		$saldo = format_bedrag($civiSaldo, false);
 		$saldoMelding = $civiSaldo < 0 ? ' Leg a.u.b. in.' : '';
 
 		$bericht = "Beste {$ontvanger->getNaam('civitas')},

@@ -297,10 +297,11 @@ function link_for($title, $href, $class, $activeClass) {
 
 /**
  * @param int $bedrag Bedrag in centen
+ * @param bool $metEuro
  * @return string
  */
-function format_bedrag($bedrag) {
-	return sprintf('€%.2f', $bedrag / 100);
+function format_bedrag($bedrag, $metEuro = true) {
+	return sprintf($metEuro ? '€%.2f' : '%.2f', $bedrag / 100);
 }
 
 /**

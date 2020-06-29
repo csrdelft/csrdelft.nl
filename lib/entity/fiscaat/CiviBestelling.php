@@ -94,7 +94,12 @@ class CiviBestelling {
 		$pinProduct = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 
 		if ($pinProduct === null) {
-			return "";
+			$pinCorrectieProduct = $this->getProduct(CiviProductTypeEnum::PINCORRECTIE);
+			if ($pinCorrectieProduct) {
+				return sprintf('€%.2f pincorrectie', $pinCorrectieProduct->aantal / 100);
+			} else {
+				return "";
+			}
 		}
 
 		$beschrijving = sprintf('€%.2f PIN', $pinProduct->aantal / 100);
