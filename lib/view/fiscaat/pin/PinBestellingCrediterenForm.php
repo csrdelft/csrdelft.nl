@@ -21,7 +21,7 @@ class PinBestellingCrediterenForm extends ModalForm {
 	 * @param PinTransactieMatch|null $pinTransactieMatch
 	 */
 	public function __construct($pinTransactieMatch = null) {
-		parent::__construct($pinTransactieMatch, '/fiscaat/pin/verwijder', 'Crediteer bestelling', true);
+		parent::__construct($pinTransactieMatch, '/fiscaat/pin/crediteer', 'Crediteer bestelling', true);
 		$fields = [];
 
 		if (!$pinTransactieMatch) {

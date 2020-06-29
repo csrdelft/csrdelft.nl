@@ -16,16 +16,13 @@
 	<p>De verwerk knop doet één van de volgende dingen:</p>
 	<ul>
 		<li>
-			Als er alleen een transactie is: Op basis van een lidnummer een nieuwe
-			bestelling maken.
+			Als er alleen een transactie is: Op basis van een lidnummer een nieuwe bestelling maken.
 		</li>
 		<li>
-			Als er alleen een bestelling is: De bestelling aanpassen zodat er niet meer
-			gepind is. Dit laat ook een commentaar achter op de bestelling.
+			Als er alleen een bestelling is: een creditbestelling aanmaken waarin de verhoging van het CiviSaldo teruggedraaid wordt.
 		</li>
 		<li>
-			Als er een transactie en een bestelling is, maar de bedragen kloppen niet: Het bedrag
-			goed zetten op de bestelling. Dit laat ook een commentaar achter op de bestelling.
+			Als er een transactie en een bestelling is, maar de bedragen kloppen niet: een corrigerende bestelling aanmaken om het verschil in CiviSaldo te corrigeren.
 		</li>
 	</ul>
 	<p>
