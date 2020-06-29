@@ -26,6 +26,10 @@
 		</li>
 	</ul>
 	<p>
+		Bij elke actie is te kiezen voor een melding aan het betreffende lid waarin vermeld staat dat het CiviSaldo verhoogd / verlaagd is met de reden waarom.
+		Dit gebeurt in een e-mail uit naam van de Fiscus. Hierin wordt ook gevraagd contact op te nemen als er iets niet klopt.
+	</p>
+	<p>
 		De negeer knop haalt een bestelling, transactie of match uit de lijst met fouten. Dit kan
 		bijvoorbeeld gebruikt worden bij een feest, een corrigerende bestelling of een gesplitste
 		betaling of bestelling.
