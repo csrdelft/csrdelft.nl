@@ -54,7 +54,7 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 		// 1 generatie vooruit en 1 achteruit (default order by)
 		$ft = $this->besturenRepository->findOneBy(['status' => GroepStatus::FT()]);
 		$ht = $this->besturenRepository->findOneBy(['status' => GroepStatus::HT()]);
-		$ot = $this->besturenRepository->findOneBy(['status' => GroepStatus::OT()]);
+		$ot = $this->besturenRepository->findOneBy(['status' => GroepStatus::OT()], ['id' => 'DESC']);
 		if (($ft && $ft->getLid($uid)) || ($ht && $ht->getLid($uid)) || ($ot && $ot->getLid($uid))) {
 			$result[] = 'bestuur';
 		}
