@@ -27,7 +27,7 @@ class CiviPrijs {
 	public $id;
 	/**
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
 	 */
 	public $van;
 	/**

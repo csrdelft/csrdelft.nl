@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\LichtingenRepository")
  * @ORM\Table("lichtingen", indexes={
  *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="lidjaar", columns={"lidjaar"}),
  *   @ORM\Index(name="familie", columns={"familie"}),
  *   @ORM\Index(name="status", columns={"status"}),
  * })
@@ -25,7 +24,7 @@ class Lichting extends AbstractGroep {
 	/**
 	 * Lidjaar
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", unique=true)
 	 */
 	public $lidjaar;
 

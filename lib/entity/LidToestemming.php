@@ -37,7 +37,7 @@ class LidToestemming {
 	/**
 	 * Value
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="text")
 	 */
 	public $waarde;
 

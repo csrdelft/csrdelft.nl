@@ -117,7 +117,7 @@ class CorveeTaak implements Agendeerbaar {
 	/**
 	 * @var CorveeFunctie
 	 * @ORM\ManyToOne(targetEntity="CorveeFunctie")
-	 * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id")
+	 * @ORM\JoinColumn(name="functie_id", referencedColumnName="functie_id", nullable=false)
 	 */
 	public $corveeFunctie;
 

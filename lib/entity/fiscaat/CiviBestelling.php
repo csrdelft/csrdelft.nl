@@ -35,19 +35,19 @@ class CiviBestelling {
 	public $uid;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=0})
 	 * @Serializer\Groups("datatable")
 	 */
 	public $totaal = 0;
 	/**
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="boolean", options={"default"=false})
 	 * @Serializer\Groups("datatable")
 	 */
 	public $deleted;
 	/**
 	 * @var \DateTimeImmutable
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
 	 * @Serializer\Groups("datatable")
 	 */
 	public $moment;

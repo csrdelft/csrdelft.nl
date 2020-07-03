@@ -9,6 +9,7 @@ use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * Verticale.class.php
@@ -19,18 +20,24 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("verticalen", indexes={
  *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
  *   @ORM\Index(name="familie", columns={"familie"}),
- *   @ORM\Index(name="letter", columns={"letter"}),
  *   @ORM\Index(name="status", columns={"status"}),
- *   @ORM\Index(name="naam", columns={"naam"}),
  * })
  */
 class Verticale extends AbstractGroep {
 	/**
 	 * Primary key
 	 * @var string
-	 * @ORM\Column(type="string", length=1, options={"fixed"=true})
+	 * @ORM\Column(type="string", unique=true, length=1, options={"fixed"=true})
 	 */
 	public $letter;
+
+	/**
+	 * Naam
+	 * @var string
+	 * @ORM\Column(type="stringkey", unique=true)
+	 * @Serializer\Groups({"datatable", "log", "vue"})
+	 */
+	public $naam;
 
 	/**
 	 * @var VerticaleLid[]

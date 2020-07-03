@@ -50,13 +50,13 @@ class CiviSaldo implements DataTableEntry {
 	public $saldo;
 	/**
 	 * @var \DateTimeImmutable
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
 	 * @Serializer\Groups({"log", "datatable"})
 	 */
 	public $laatst_veranderd;
 	/**
 	 * @var bool
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="boolean", options={"default"=false})
 	 * @Serializer\Groups({"log", "datatable"})
 	 */
 	public $deleted = false;
