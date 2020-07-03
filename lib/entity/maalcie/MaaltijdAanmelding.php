@@ -29,9 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Zie ook MaaltijdAbonnement.class.php
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository")
- * @ORM\Table("mlt_aanmeldingen", indexes={
- *   @ORM\Index(name="door_abonnement", columns={"door_abonnement"}),
- * })
+ * @ORM\Table("mlt_aanmeldingen")
  */
 class MaaltijdAanmelding {
 	/**
@@ -63,11 +61,6 @@ class MaaltijdAanmelding {
 	 */
 	public $gasten_eetwens;
 	/**
-	 * @var integer|null
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	public $door_abonnement;
-	/**
 	 * @var string|null
 	 * @ORM\Column(type="uid", nullable=true)
 	 */
@@ -89,6 +82,12 @@ class MaaltijdAanmelding {
 	 * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
 	 */
 	public $door_profiel;
+	/**
+	 * @var MaaltijdRepetitie
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\maalcie\MaaltijdRepetitie")
+	 * @ORM\JoinColumn(name="door_abonnement", referencedColumnName="mlt_repetitie_id")
+	 */
+	public $abonnementRepetitie;
 
 	/**
 	 * Haal het MaalCie saldo op van het lid van deze aanmelding.
