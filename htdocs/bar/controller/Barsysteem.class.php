@@ -69,7 +69,7 @@ class Barsysteem {
 SELECT CiviSaldo.uid, CiviSaldo.naam, CiviSaldo.saldo, CiviSaldo.deleted, COUNT(CiviBestelling.totaal) AS recent
 FROM CiviSaldo LEFT JOIN CiviBestelling
 ON (CiviSaldo.uid = CiviBestelling.uid AND DATEDIFF(NOW(), CiviBestelling.moment) < 100 AND CiviBestelling.deleted = 0)
-GROUP BY CiviSaldo.id;
+GROUP BY CiviSaldo.uid;
 SQL
 		);
 		$result = array();

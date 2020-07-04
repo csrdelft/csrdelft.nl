@@ -70,6 +70,13 @@ class CiviBestelling {
 	 */
 	public $inhoud;
 
+	/**
+	 * @var CiviSaldo
+	 * @ORM\ManyToOne(targetEntity="CiviSaldo")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $civiSaldo;
+
 	public function __construct() {
 		$this->inhoud = new ArrayCollection();
 	}

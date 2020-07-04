@@ -23,16 +23,11 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class CiviSaldo implements DataTableEntry {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"log", "datatable"})
-	 */
-	public $id;
-	/**
+	 * Let op, dit is geen fk naar Profiel. Er zijn CiviSaldo's die geen profiel zijn en vice versa.
+	 *
 	 * @var string
 	 * @ORM\Column(type="uid", unique=true)
+	 * @ORM\Id()
 	 * @Serializer\Groups({"log", "datatable"})
 	 */
 	public $uid;

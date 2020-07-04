@@ -124,7 +124,7 @@ class BeheerCiviSaldoController extends AbstractController {
 
 			if ($civisaldo) {
 				$civisaldo->deleted = true;
-				$removed[] = new RemoveDataTableEntry($civisaldo->id, CiviSaldo::class);
+				$removed[] = new RemoveDataTableEntry($civisaldo->uid, CiviSaldo::class);
 				$this->civiSaldoRepository->update($civisaldo);
 			}
 		}
