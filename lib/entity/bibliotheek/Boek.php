@@ -42,8 +42,8 @@ class Boek {
 	 */
 	public $uitgeverij;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @var int|null
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $paginas;
 	/**
@@ -52,8 +52,8 @@ class Boek {
 	 */
 	public $taal = 'Nederlands';
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $isbn;
 	/**
@@ -63,9 +63,23 @@ class Boek {
 	public $code;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $categorie_id;
+
+	// TODO: Gebruik dit, of gooi de auteur tabel weg
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer", options={"default"=0})
+	 */
+	public $auteur_id = 0;
+
+	/**
+	 * @var BiebAuteur
+	 * @ORM\ManyToOne(targetEntity="BiebAuteur")
+	 * @ORM\JoinColumn(name="auteur_id", referencedColumnName="id")
+	 */
+	public $auteur2;
 
 	/**
 	 * @var BoekRecensie[]

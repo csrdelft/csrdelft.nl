@@ -24,7 +24,7 @@ class BoekExemplaar {
 	public $id;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=0})
 	 */
 	public $boek_id;
 	/**
@@ -72,7 +72,7 @@ class BoekExemplaar {
 	public $uitleendatum;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=0})
 	 */
 	public $leningen;
 
