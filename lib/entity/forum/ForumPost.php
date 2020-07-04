@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\forum\ForumPostsRepository")
  * @ORM\Table("forum_posts", indexes={
  *   @ORM\Index(name="verwijderd", columns={"verwijderd"}),
- *   @ORM\Index(name="tekst", columns={"tekst"}),
+ *   @ORM\Index(name="tekst", columns={"tekst"}, flags={"fulltext"}),
  *   @ORM\Index(name="lid_id", columns={"uid"}),
  *   @ORM\Index(name="datum_tijd", columns={"datum_tijd"}),
  *   @ORM\Index(name="wacht_goedkeuring", columns={"wacht_goedkeuring"}),
