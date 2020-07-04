@@ -717,7 +717,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 		$lid = $groep->getLid($uid);
 		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
-		$response = new RemoveDataTableEntry(['groep_id' => $id, 'uid' => $uid], get_class($lid));
+		$response = new RemoveDataTableEntry(['groep_id' => $lid->groep_id, 'uid' => $uid], get_class($lid));
 		$em->remove($lid);
 		$em->flush();
 
