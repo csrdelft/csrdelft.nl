@@ -23,19 +23,28 @@ use Symfony\Component\HttpFoundation\Request;
 // Zet omgeving klaar.
 require __DIR__ . '/../config/bootstrap.php';
 
-// Registreer foutmelding handlers
+// default is website mode
 if (env('CI')) {
-	// geen handlers
-} elseif (DEBUG) {
-	register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
-	umask(0000);
-
-	Debug::enable();
+	define('MODE', 'TRAVIS');
+} elseif (php_sapi_name() === 'cli') {
+	define('MODE', 'CLI');
 } else {
-	register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
-	set_error_handler([ShutdownHandler::class, 'slackHandler']);
-	register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
-	register_shutdown_function([ShutdownHandler::class, 'errorPageHandler']);
+	define('MODE', 'WEB');
+}
+
+// Registreer foutmelding handlers
+if (MODE != 'TRAVIS' && MODE != 'CLI') {
+	if (DEBUG) {
+		register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
+		umask(0000);
+
+		Debug::enable();
+	} else {
+		register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
+		set_error_handler([ShutdownHandler::class, 'slackHandler']);
+		register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
+		register_shutdown_function([ShutdownHandler::class, 'errorPageHandler']);
+	}
 }
 
 register_shutdown_function([ShutdownHandler::class, 'touchHandler']);
@@ -50,16 +59,6 @@ setlocale(LC_ALL, 'nl_NL');
 //setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
-
-
-// default is website mode
-if (env('CI')) {
-	define('MODE', 'TRAVIS');
-} elseif (php_sapi_name() === 'cli') {
-	define('MODE', 'CLI');
-} else {
-	define('MODE', 'WEB');
-}
 
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
@@ -122,10 +121,6 @@ switch (MODE) {
 		break;
 	case 'CLI':
 		$container->get(LoginService::class)->loginCli();
-
-		if (!LoginService::mag(P_ADMIN)) {
-			die('Cron user heeft geen admin rechten.');
-		}
 		break;
 
 	case 'WEB':

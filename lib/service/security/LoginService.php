@@ -92,6 +92,10 @@ class LoginService {
 	 * @return Account|false
 	 */
 	public static function getAccount() {
+		if (static::$cliUid == self::UID_CLI) {
+			return static::getCliAccount();
+		}
+
 		return AccountRepository::get(static::getUid());
 	}
 
@@ -464,38 +468,20 @@ class LoginService {
 	 * @throws Exception
 	 */
 	public function loginCli() {
-		$account = $this->accountRepository->get(self::UID_CLI);
-
-		// Onbekende gebruiker
-		if (!$account) {
-			die('Cron user bestaat niet!');
-		}
-
 		// Clear session
 		session_unset();
 
-		static::$cliUid = $account->uid;
-
-		$this->current_session = $this->loginRepository->find(hash('sha512', session_id()));
-
-		if (!$this->current_session) {
-			$this->current_session = new LoginSession();
-		}
-
-		// Login sessie aanmaken in database
-		$this->current_session->session_hash = hash('sha512', session_id());
-		$this->current_session->uid = $account->uid;
-		$this->current_session->account = $account;
-		$this->current_session->login_moment = date_create_immutable();
-		$this->current_session->expire = date_create_immutable()->add(new DateInterval('PT' . getSessionMaxLifeTime() . 'S'));
-		$this->current_session->user_agent = MODE;
-		$this->current_session->ip = '';
-		$this->current_session->lock_ip = true; // sessie koppelen aan ip?
-		$this->current_session->authentication_method = AuthenticationMethod::password_login;
-
-		$this->entityManager->persist($this->current_session);
-		$this->entityManager->flush();
+		static::$cliUid = self::UID_CLI;
 
 		return true;
+	}
+
+	private static function getCliAccount() {
+		$account = new Account();
+		$account->email = env('EMAIL_PUBCIE');
+		$account->uid = self::UID_CLI;
+		$account->perm_role = 'R_PUBCIE';
+
+		return $account;
 	}
 }
