@@ -23,7 +23,7 @@ jobs:
   include:
     - stage: build
       services: mysql
-      before_install: nvm install 8
+      before_install: nvm install 12
       script: ./bin/ci/build.sh
       deploy:
         provider: script
