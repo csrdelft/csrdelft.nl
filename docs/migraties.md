@@ -27,8 +27,7 @@ $ php bin/console doctrine:migrations:status
 
 Als je code hebt geschreven waar de database voor moet worden veranderd, bijvoorbeeld als je een kolom hebt toegevoegd of als je een nieuwe tabel nodig hebt moet je een migratie gebruiken om deze veranderingen te beschrijven.
 
-Er zijn twee manieren om een migratie te maken, zelf schrijven of laten genereren.
-
+Er zijn twee manieren om een migratie te maken, zelf schrijven of laten genereren. Als je klaar bent met het maken van een migratie voer hem dan uit en controleer of je migratie compleet was door een nieuwe migratie aan te maken. Als deze meldt dat er geen veranderingen zijn gevonden ben je klaar.
 
 ### Een migratie zelf schrijven
 
