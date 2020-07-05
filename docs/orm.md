@@ -74,3 +74,7 @@ class MijnEntityRepository extends AbstractRepository {
     }
 }
 ```
+
+## Een migratie maken
+
+Kijk op de [Migraties](migraties.md) pagina om te zien hoe je een database tabel kan maken voor je nieuwe entity.

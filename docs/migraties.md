@@ -64,4 +64,8 @@ Om een migratie terug te draaien (om te testen of dat werkt of bijvoorbeeld om v
 $ php bin/console doctrine:migrations:migrate prev
 ```
 
+# Belangrijke noten
 
+Let heel erg op met hoofdlettergevoeligheid, MariaDB op linux (Syrinx) is hoofdlettergevoelig, maar MariaDB op Windows is dat niet[^case_sensitive_mariadb]. Oftewel zorg er voor dat alle tabelnamen en veldnamen lowercase zijn. Gegenereerde migraties van Doctrine kunnen soms ook kleine letters bevatten terwijl het eigenlijk hoofdletters moeten zijn. Indeces in Doctrine zijn altijd uppercase, dus als dit niet goeg gegenereerd wordt moet dit gefixt worden.
+
+[^case_sensitive_mariadb]: https://mariadb.com/kb/en/identifier-case-sensitivity/
