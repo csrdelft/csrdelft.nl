@@ -36,6 +36,7 @@ class DataTable implements View, FormElement, ToResponse {
 	protected $dataTableId;
 	protected $defaultLength = 10;
 	protected $selectEnabled = true;
+	protected $vliegendeKnoppen = false;
 	protected $settings = [
 		'dom' => 'Bfrtpli',
 		'buttons' => [
@@ -353,9 +354,10 @@ class DataTable implements View, FormElement, ToResponse {
 		$id = str_replace(' ', '-', strtolower($this->getTitel()));
 
 		$settingsJson = htmlspecialchars(json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0));
+		$vliegendeKnoppenClass = $this->vliegendeKnoppen ? 'vliegende-knoppen' : '';
 
 		return <<<HTML
-<h2 id="table-{$id}" class="Titel">{$this->getTitel()}</h2>
+<h2 id="table-{$id}" class="Titel {$vliegendeKnoppenClass}">{$this->getTitel()}</h2>
 
 <table id="{$this->dataTableId}" class="ctx-datatable display" data-settings="{$settingsJson}"></table>
 HTML;

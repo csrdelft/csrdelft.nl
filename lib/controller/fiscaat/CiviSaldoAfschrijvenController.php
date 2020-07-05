@@ -144,10 +144,6 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 				$afschriften[$i]->succes = false;
 				$afschriften[$i]->waarschuwing[] = "Product {$regel['productID']} niet gevonden";
 				$afschriften[$i]->productNaam = $regel['productID'];
-			} elseif ($product->status !== 1) {
-				$afschriften[$i]->succes = false;
-				$afschriften[$i]->waarschuwing[] = 'Product is niet actief';
-				$afschriften[$i]->productNaam = $product->getWeergave();
 			} else {
 				$afschriften[$i]->productNaam = $product->getWeergave();
 			}
@@ -242,7 +238,7 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 				// Haal account & product op
 				$account = $civiSaldoRepository->findOneBy(['uid' => (strlen($regel['uid']) === 3 ? '0' : '') . $regel['uid']]);
 				$product = $civiProductRepository->find(intval($regel['productID']));
-				if (!$account || $account->deleted || !$product || $product->status !== 1) {
+				if (!$account || $account->deleted || !$product) {
 					continue;
 				}
 

@@ -27,7 +27,7 @@ class PinTransactieMatchTable extends DataTable {
 		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/fiscaat/pin/ontkoppel', 'Ontkoppel', 'Ontkoppel bestelling en transactie', 'arrow_divide'));
 		$this->addKnop(new DataTableKnop(Multiplicity::Two(), '/fiscaat/pin/koppel', 'Koppel', 'Koppel een bestelling en transactie', 'arrow_join'));
 		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/fiscaat/pin/info', 'Info', 'Bekijk informatie over de gekoppelde bestelling', 'magnifier'));
-		$this->addKnop(new DataTableKnop(Multiplicity::Any(), '/fiscaat/pin/verwijder_transactie', 'Verwijder', 'Verwijder matches', 'delete'));
+		$this->addKnop(new DataTableKnop(Multiplicity::Any(), '/fiscaat/pin/negeer', 'Negeer', 'Negeer match(es)', 'delete'));
 		$this->addKnop(new DataTableKnop(Multiplicity::None(), '/fiscaat/pin/heroverweeg', 'Heroverweeg', 'Controleer op veranderingen in andere systemen', 'cart_go'));
 
 		$this->addColumn('moment');
@@ -38,6 +38,7 @@ class PinTransactieMatchTable extends DataTable {
 
 		$this->hideColumn('transactie_id');
 		$this->hideColumn('bestelling_id');
+		$this->hideColumn('notitie');
 
 		$this->setOrder(['moment' => 'desc']);
 
@@ -45,5 +46,7 @@ class PinTransactieMatchTable extends DataTable {
 		$this->searchColumn('moment');
 		$this->searchColumn('transactie');
 		$this->searchColumn('bestelling');
+
+		$this->vliegendeKnoppen = true;
 	}
 }

@@ -437,6 +437,13 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getEmailOntvanger() {
+		return [$this->getPrimaryEmail() => $this->getNaam()];
+	}
+
+	/**
 	 * Geef een array met contactgegevens terug, als de velden niet leeg zijn.
 	 *
 	 * TODO: aparte tabellen voor multiple email, telefoon, etc...

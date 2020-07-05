@@ -36,7 +36,7 @@ export default {
 	datetime(date, type, row) {
 		// tslint:disable-next-line:triple-equals
 		if (Number(date) == date) {
-			return moment(date * 1000).format('L LT');
+			return moment(date * 1000).format('YYYY-MM-DD HH:mm');
 		}
 
 		if (!date) {
@@ -47,7 +47,7 @@ export default {
 			return date;
 		}
 
-		return moment(date).format('L LT');
+		return moment(date).format('YYYY-MM-DD HH:mm');
 	},
 	timeago(data, type, row, meta) {
 		const api = getApiFromSettings(meta.settings);

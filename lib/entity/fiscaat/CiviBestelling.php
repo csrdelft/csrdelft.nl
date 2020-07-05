@@ -100,16 +100,21 @@ class CiviBestelling {
 	public function getPinBeschrijving() {
 		$pinProduct = $this->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 
-		if ($pinProduct === false) {
-			return "";
+		if ($pinProduct === null) {
+			$pinCorrectieProduct = $this->getProduct(CiviProductTypeEnum::PINCORRECTIE);
+			if ($pinCorrectieProduct) {
+				return format_bedrag($pinCorrectieProduct->aantal) . ' pincorrectie';
+			} else {
+				return "";
+			}
 		}
 
-		$beschrijving = sprintf('€%.2f PIN', $pinProduct->aantal / 100);
+		$beschrijving = format_bedrag($pinProduct->aantal) . ' PIN';
 
 		$aantalInhoud = count($this->inhoud);
 
 		if ($aantalInhoud == 2) {
-			$beschrijving .= sprintf(' en 1 ander product');
+			$beschrijving .= ' en 1 ander product';
 		} elseif ($aantalInhoud > 2) {
 			$beschrijving .= sprintf(' en %d andere producten', $aantalInhoud - 1);
 		}

@@ -16,22 +16,23 @@
 	<p>De verwerk knop doet één van de volgende dingen:</p>
 	<ul>
 		<li>
-			Als er alleen een transactie is: Op basis van een lidnummer een nieuwe
-			bestelling maken.
+			Als er alleen een transactie is: Op basis van een lidnummer een nieuwe bestelling maken.
 		</li>
 		<li>
-			Als er alleen een bestelling is: De bestelling aanpassen zodat er niet meer
-			gepind is. Dit laat ook een commentaar achter op de bestelling.
+			Als er alleen een bestelling is: een creditbestelling aanmaken waarin de verhoging van het CiviSaldo teruggedraaid wordt.
 		</li>
 		<li>
-			Als er een transactie en een bestelling is, maar de bedragen kloppen niet: Het bedrag
-			goed zetten op de bestelling. Dit laat ook een commentaar achter op de bestelling.
+			Als er een transactie en een bestelling is, maar de bedragen kloppen niet: een corrigerende bestelling aanmaken om het verschil in CiviSaldo te corrigeren.
 		</li>
 	</ul>
 	<p>
-		De verwijder knop kan alleen worden gebruikt voor transacties en markeerd een transactie als
-		verwijderd. Dit kan gebruikt worden als de transactie niet relevant was voor het CiviSaldo,
-		zoals bij een feest.
+		Bij elke actie is te kiezen voor een melding aan het betreffende lid waarin vermeld staat dat het CiviSaldo verhoogd / verlaagd is met de reden waarom.
+		Dit gebeurt in een e-mail uit naam van de Fiscus. Hierin wordt ook gevraagd contact op te nemen als er iets niet klopt.
+	</p>
+	<p>
+		De negeer knop haalt een bestelling, transactie of match uit de lijst met fouten. Dit kan
+		bijvoorbeeld gebruikt worden bij een feest, een corrigerende bestelling of een gesplitste
+		betaling of bestelling.
 	</p>
 	<p>
 		De heroverweeg knop controleert gekoppelde matches opnieuw, gebruik dit als je aanpassingen

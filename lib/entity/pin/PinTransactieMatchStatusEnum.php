@@ -13,7 +13,7 @@ class PinTransactieMatchStatusEnum extends Enum {
 	 * PinTransactieMatchStatus opties.
 	 */
 	const STATUS_MATCH = 'match';
-	const STATUS_VERWIJDERD = 'verwijderd';
+	const STATUS_GENEGEERD = 'verwijderd';
 	const STATUS_VERKEERD_BEDRAG = 'verkeerd bedrag';
 	const STATUS_MISSENDE_TRANSACTIE = 'missende transactie';
 	const STATUS_MISSENDE_BESTELLING = 'missende bestelling';
@@ -23,7 +23,7 @@ class PinTransactieMatchStatusEnum extends Enum {
 	 */
 	protected static $mapChoiceToDescription = [
 		self::STATUS_MATCH => 'Match',
-		self::STATUS_VERWIJDERD => 'Verwijderd',
+		self::STATUS_GENEGEERD => 'Genegeerd',
 		self::STATUS_VERKEERD_BEDRAG => 'Verkeerd bedrag',
 		self::STATUS_MISSENDE_TRANSACTIE => 'Missende transactie',
 		self::STATUS_MISSENDE_BESTELLING => 'Missende bestelling',
