@@ -22,7 +22,7 @@ Voor deze stap de documentatie van [Symfony](https://symfony.com/doc/current) be
 
 Het verwerken van een request wordt door een Controller gedaan. Hier komen we in het domein van onze eigen code. Iedere request komt aan bij een functie in een controller. Welke functie dit precies is is gedefineerd in de .yaml bestanden in `config/routes`. Iedere route in deze yaml bestanden correspondeerd met een functie in een controller.
 
-Een controller functie returned een `Response` of een `ToResponse` die in de volgende stap naar de gebruiker verzonden kan worden.
+Een controller functie returned een `Response` of een `ToResponse` die in de volgende stap naar de gebruiker verzonden kan worden. Kijk in [Routes](routes.md) om te lezen hoe je een nieuwe route toevoegt.
 
 ## Send
 

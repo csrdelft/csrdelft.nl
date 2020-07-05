@@ -6,29 +6,37 @@ Welkom bij de webstek documentatie
 
 ## Introductie Webstek
 
+Basisconcepten over de stek.
+
 - [Installatie](installatie.md)
 - [Request](request.md): Lees over hoe een request van begin tot eind wordt verwerkt.
 - [Configuratie](configuratie.md): Het configureren van de stek.
-- [Blade](blade.md)
-- [Routes](routes.md): Routes en controllers, hoe zorg ik dat mijn pagina gepresenteerd wordt voor een specifieke url.
 - [Filestructuur](filestructuur.md): De bestandsstructuur van de stek repository.
-- [Typescript](typescript.md)
-- [Vue](vue.md)
-- [Styles](styles.md)
 - [Symfony](symfony.md)
-- [Migraties](migraties.md): Aanpassingen aan de database doorvoeren.
 - [Frontend build](frontend.md): Het builden van de frontend.
 
-## Subsystemen
+## Beginner kennis
 
-Lees hier meer over specifieke onderdelen van de stek
+Kijk hier als je iets nieuws gaat bouwen. Dit zijn de stappen die je dan zou moeten doorlopen.
+
+1. [Routes](routes.md), een nieuw pagina maken
+1. [Blade](blade.md), een nieuwe pagina weergeven
+1. [Database](orm.md), data opslaan in de database
+1. [Migraties](migraties.md), je database veranderingen communiceren
+
+## Meer kennis
+
+Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt iets te maken te krijgen met een specifiek onderdeel van de stek.
 
 - [Submodule](submodule.md): externe projecten die in de stek zijn geladen.
 - [DataTables](datatables.md)
 - [Caching](caching.md)
+- [Typescript](typescript.md)
+- [Styles](styles.md)
 - [Themas maken](themas-maken.md)
 - [Enums](enums.md)
 - [Formulier](formulier.md)
+- [Vue](vue.md)
 
 ## Overig
 
