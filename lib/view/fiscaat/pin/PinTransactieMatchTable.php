@@ -46,5 +46,7 @@ class PinTransactieMatchTable extends DataTable {
 		$this->searchColumn('moment');
 		$this->searchColumn('transactie');
 		$this->searchColumn('bestelling');
+
+		$this->vliegendeKnoppen = true;
 	}
 }
