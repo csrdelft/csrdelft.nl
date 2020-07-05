@@ -123,7 +123,7 @@ class PinTransactieController extends AbstractController {
 					return new PinBestellingAanmakenForm($pinTransactieMatch);
 					break;
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE:
-					// Verwijder de bestelling met een confirm.
+					// Crediteer de bestelling met een confirm.
 					return new PinBestellingCrediterenForm($pinTransactieMatch);
 					break;
 				case PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG:
@@ -311,7 +311,7 @@ class PinTransactieController extends AbstractController {
 
 	/**
 	 * Crediteer pingedeelte van deze bestelling.
-	 * @Route("/fiscaat/pin/verwijder", methods={"POST"})
+	 * @Route("/fiscaat/pin/crediteer", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function crediteer() {
