@@ -12,7 +12,6 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository")
- * @ORM\Table("CiviBestellingInhoud")
  */
 class CiviBestellingInhoud {
 	/**

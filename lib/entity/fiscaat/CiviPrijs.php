@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviPrijsRepository")
- * @ORM\Table("CiviPrijs", uniqueConstraints={
+ * @ORM\Table("civi_prijs", uniqueConstraints={
  *   @ORM\UniqueConstraint(name="unique_van_product_id", columns={"van", "product_id"})
  * })
  */

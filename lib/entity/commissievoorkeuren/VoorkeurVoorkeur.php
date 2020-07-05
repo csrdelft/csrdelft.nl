@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
  * Class VoorkeurVoorkeur
  * @package CsrDelft\model\entity\commissievoorkeuren
  * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository")
- * @ORM\Table("voorkeurVoorkeur")
  */
 class VoorkeurVoorkeur {
 	/**

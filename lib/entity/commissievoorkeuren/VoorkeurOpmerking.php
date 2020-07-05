@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  * Class VoorkeurOpmerking
  * @package CsrDelft\entity\commissievoorkeuren
  * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository")
- * @ORM\Table("voorkeurOpmerking")
  */
 class VoorkeurOpmerking {
 	/**

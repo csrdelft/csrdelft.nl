@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
  * Class VoorkeurCommissie
  * @package CsrDelft\entity\commissievoorkeuren
  * @ORM\Entity(repositoryClass="CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository")
- * @ORM\Table("voorkeurCommissie")
  */
 class VoorkeurCommissie {
 	/**

@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package CsrDelft\entity\fiscaat
- * @ORM\Table("CiviLog")
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviSaldoLogRepository")
  */
 class CiviSaldoLog {

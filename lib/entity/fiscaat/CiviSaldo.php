@@ -19,7 +19,6 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @since 07/04/2017
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviSaldoRepository"))
- * @ORM\Table("CiviSaldo")
  */
 class CiviSaldo implements DataTableEntry {
 	/**
