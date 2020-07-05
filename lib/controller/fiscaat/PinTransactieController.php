@@ -186,7 +186,7 @@ class PinTransactieController extends AbstractController {
 
 			if ($values['stuurMail']) {
 				$datum = date_format_intl($nieuwePinTransactieMatch->transactie->datetime, 'cccc d MMMM y H:mm');
-				$bedrag = format_bedrag($nieuwePinTransactieMatch->bestelling->totaal / -1, false);
+				$bedrag = format_bedrag_kaal($nieuwePinTransactieMatch->bestelling->totaal / -1);
 				$this->stuurMail(
 					$account->uid,
 					"Uw CiviSaldo is verhoogd",
@@ -360,7 +360,7 @@ class PinTransactieController extends AbstractController {
 
 			if ($values['stuurMail']) {
 				$datum = date_format_intl($oudePinTransactieMatch->bestelling->moment, 'cccc d MMMM y H:mm');
-				$bedrag = format_bedrag($nieuwePinTransactieMatch->bestelling->totaal, false);
+				$bedrag = format_bedrag_kaal($nieuwePinTransactieMatch->bestelling->totaal);
 				$this->stuurMail(
 					$account->uid,
 					"Uw CiviSaldo is verlaagd",
@@ -436,9 +436,9 @@ class PinTransactieController extends AbstractController {
 
 			if ($values['stuurMail']) {
 				$datum = date_format_intl($oudePinTransactieMatch->transactie->datetime, 'cccc d MMMM y H:mm');
-				$foutBedrag = format_bedrag($oudePinTransactieMatch->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal, false);
-				$correctBedrag = format_bedrag($oudePinTransactieMatch->transactie->getBedragInCenten(), false);
-				$bedrag = format_bedrag(abs($nieuwePinTransactieMatch->bestelling->totaal), false);
+				$foutBedrag = format_bedrag_kaal($oudePinTransactieMatch->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE)->aantal);
+				$correctBedrag = format_bedrag_kaal($oudePinTransactieMatch->transactie->getBedragInCenten());
+				$bedrag = format_bedrag_kaal(abs($nieuwePinTransactieMatch->bestelling->totaal));
 				$actie = $nieuwePinTransactieMatch->bestelling->totaal > 0 ? 'verlaagd' : 'verhoogd';
 				$this->stuurMail(
 					$account->uid,
@@ -564,7 +564,7 @@ class PinTransactieController extends AbstractController {
 		if (!$ontvanger) return;
 		$bcc = LoginService::getProfiel();
 		$civiSaldo = $ontvanger->getCiviSaldo() * 100;
-		$saldo = format_bedrag($civiSaldo, false);
+		$saldo = format_bedrag_kaal($civiSaldo);
 		$saldoMelding = $civiSaldo < 0 ? ' Leg a.u.b. in.' : '';
 
 		$bericht = "Beste {$ontvanger->getNaam('civitas')},
