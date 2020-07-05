@@ -569,7 +569,9 @@ class PinTransactieController extends AbstractController {
 
 	private function stuurMail($uid, $onderwerp, $melding) {
 		$ontvanger = ProfielRepository::get($uid);
-		if (!$ontvanger) return;
+		if (!$ontvanger) {
+			return;
+		}
 		$bcc = LoginService::getProfiel();
 		$civiSaldo = $ontvanger->getCiviSaldo() * 100;
 		$saldo = format_bedrag_kaal($civiSaldo);

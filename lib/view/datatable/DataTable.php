@@ -354,10 +354,10 @@ class DataTable implements View, FormElement, ToResponse {
 		$id = str_replace(' ', '-', strtolower($this->getTitel()));
 
 		$settingsJson = htmlspecialchars(json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0));
-		$vliegendeKnoppen = $this->vliegendeKnoppen ? 'vliegende-knoppen' : '';
+		$vliegendeKnoppenClass = $this->vliegendeKnoppen ? 'vliegende-knoppen' : '';
 
 		return <<<HTML
-<h2 id="table-{$id}" class="Titel {$vliegendeKnoppen}">{$this->getTitel()}</h2>
+<h2 id="table-{$id}" class="Titel {$vliegendeKnoppenClass}">{$this->getTitel()}</h2>
 
 <table id="{$this->dataTableId}" class="ctx-datatable display" data-settings="{$settingsJson}"></table>
 HTML;

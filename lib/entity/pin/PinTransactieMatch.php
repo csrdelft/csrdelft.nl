@@ -229,7 +229,9 @@ class PinTransactieMatch implements DataTableEntry {
 	 */
 	public static function renderMoment(DateTimeImmutable $moment, $link = true) {
 		$formatted = date_format_intl($moment, DATETIME_FORMAT);
-		if (!$link) return $formatted;
+		if (!$link) {
+			return $formatted;
+		}
 		$dag = date_format_intl($moment, 'cccc');
 		$agendaLink = "/agenda/{$moment->format('Y')}/{$moment->format('m')}";
 		return "<a data-moment='{$formatted}' target='_blank' href='{$agendaLink}' title='{$dag}'>{$formatted}</a>"; // Data attribuut voor sortering
@@ -296,16 +298,16 @@ class PinTransactieMatch implements DataTableEntry {
 			throw new CsrException('Bestelling kan niet gebouwd worden');
 		}
 
-		$bestelling = new CiviBestelling();
-		$bestelling->moment = date_create_immutable();
-		$bestelling->uid = $uid ?: $this->bestelling->uid;
-		$bestelling->totaal = $bestellingInhoud->getPrijs();
-		$bestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
-		$bestelling->deleted = false;
-		$bestelling->comment = $comment;
-		$bestelling->inhoud[] = $bestellingInhoud;
+		$nieuweBestelling = new CiviBestelling();
+		$nieuweBestelling->moment = date_create_immutable();
+		$nieuweBestelling->uid = $uid ?: $this->bestelling->uid;
+		$nieuweBestelling->totaal = $bestellingInhoud->getPrijs();
+		$nieuweBestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
+		$nieuweBestelling->deleted = false;
+		$nieuweBestelling->comment = $comment;
+		$nieuweBestelling->inhoud[] = $bestellingInhoud;
 
-		return $bestelling;
+		return $nieuweBestelling;
 	}
 
 	/**
