@@ -20,8 +20,8 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE biebexemplaar DROP INDEX boek_id, ADD INDEX IDX_27CEE3A45C12AB20 (boek_id)');
 		$this->query('ALTER TABLE biebexemplaar DROP INDEX eigenaar_uid, ADD INDEX IDX_27CEE3A452DCF440 (eigenaar_uid)');
 		$this->query('ALTER TABLE biebexemplaar DROP INDEX uitgeleend_uid, ADD INDEX IDX_27CEE3A4C5564237 (uitgeleend_uid)');
-		$this->query('ALTER TABLE civibestellinginhoud DROP INDEX FK_CBI_product, ADD INDEX IDX_30A7C75C4584665A (product_id)');
-		$this->query('ALTER TABLE civiprijs DROP INDEX FK_CP_product, ADD INDEX IDX_86CCDFA74584665A (product_id)');
+		$this->query('ALTER TABLE CiviBestellingInhoud DROP INDEX FK_CBI_product, ADD INDEX IDX_30A7C75C4584665A (product_id)');
+		$this->query('ALTER TABLE CiviPrijs DROP INDEX FK_CP_product, ADD INDEX IDX_86CCDFA74584665A (product_id)');
 		$this->query('ALTER TABLE commissie_leden DROP INDEX door_uid, ADD INDEX IDX_18A4E69E97983E4 (door_uid)');
 		$this->query('ALTER TABLE commissie_leden DROP INDEX uid, ADD INDEX IDX_18A4E69E539B0606 (uid)');
 		$this->query('ALTER TABLE commissies DROP INDEX maker_uid, ADD INDEX IDX_858C850B3A4A27C1 (maker_uid)');
@@ -69,8 +69,8 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE verticale_leden DROP INDEX door_uid, ADD INDEX IDX_52C85C3897983E4 (door_uid)');
 		$this->query('ALTER TABLE verticale_leden DROP INDEX uid, ADD INDEX IDX_52C85C38539B0606 (uid)');
 		$this->query('ALTER TABLE verticalen DROP INDEX maker_uid, ADD INDEX IDX_79C519073A4A27C1 (maker_uid)');
-		$this->query('ALTER TABLE voorkeurcommissie DROP INDEX categorie_id, ADD INDEX IDX_6567316BCF5E72D (categorie_id)');
-		$this->query('ALTER TABLE voorkeurvoorkeur DROP INDEX cid, ADD INDEX IDX_1A129E324B30D9C4 (cid)');
+		$this->query('ALTER TABLE voorkeurCommissie DROP INDEX categorie_id, ADD INDEX IDX_6567316BCF5E72D (categorie_id)');
+		$this->query('ALTER TABLE voorkeurVoorkeur DROP INDEX cid, ADD INDEX IDX_1A129E324B30D9C4 (cid)');
 		$this->query('ALTER TABLE werkgroep_deelnemers DROP INDEX door_uid, ADD INDEX IDX_38E14A6B97983E4 (door_uid)');
 		$this->query('ALTER TABLE werkgroep_deelnemers DROP INDEX uid, ADD INDEX IDX_38E14A6B539B0606 (uid)');
 		$this->query('ALTER TABLE werkgroepen DROP INDEX maker_uid, ADD INDEX IDX_2194ECF73A4A27C1 (maker_uid)');
@@ -88,8 +88,8 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE mlt_aanmeldingen DROP INDEX door_abonnement, ADD INDEX IDX_B156D32F19F42197 (door_abonnement)');
 		$this->query('ALTER TABLE biebboek DROP INDEX auteur_id, ADD INDEX IDX_42475FFA60BB6FE6 (auteur_id)');
 
-		$this->query('ALTER TABLE voorkeurvoorkeur ADD INDEX IDX_1A129E32539B0606 (uid)');
-		$this->query('ALTER TABLE civibestellinginhoud ADD INDEX IDX_30A7C75CA2E63037 (bestelling_id)');
+		$this->query('ALTER TABLE voorkeurVoorkeur ADD INDEX IDX_1A129E32539B0606 (uid)');
+		$this->query('ALTER TABLE CiviBestellingInhoud ADD INDEX IDX_30A7C75CA2E63037 (bestelling_id)');
 		$this->query('ALTER TABLE login_remember ADD INDEX IDX_BD5B5182539B0606 (uid)');
 		$this->query('ALTER TABLE profielen ADD INDEX IDX_301B6229742C4A98 (patroon)');
 		$this->query('ALTER TABLE mlt_aanmeldingen ADD INDEX IDX_B156D32F539B0606 (uid)');
@@ -161,8 +161,8 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE biebexemplaar DROP INDEX IDX_27CEE3A452DCF440, ADD INDEX eigenaar_uid (eigenaar_uid)');
 		$this->query('ALTER TABLE biebexemplaar DROP INDEX IDX_27CEE3A45C12AB20, ADD INDEX boek_id (boek_id)');
 		$this->query('ALTER TABLE biebexemplaar DROP INDEX IDX_27CEE3A4C5564237, ADD INDEX uitgeleend_uid (uitgeleend_uid)');
-		$this->query('ALTER TABLE civibestellinginhoud DROP INDEX IDX_30A7C75C4584665A, ADD INDEX FK_CBI_product (product_id)');
-		$this->query('ALTER TABLE civiprijs DROP INDEX IDX_86CCDFA74584665A, ADD INDEX FK_CP_product (product_id)');
+		$this->query('ALTER TABLE CiviBestellingInhoud DROP INDEX IDX_30A7C75C4584665A, ADD INDEX FK_CBI_product (product_id)');
+		$this->query('ALTER TABLE CiviPrijs DROP INDEX IDX_86CCDFA74584665A, ADD INDEX FK_CP_product (product_id)');
 		$this->query('ALTER TABLE commissie_leden DROP INDEX IDX_18A4E69E539B0606, ADD INDEX uid (uid)');
 		$this->query('ALTER TABLE commissie_leden DROP INDEX IDX_18A4E69E97983E4, ADD INDEX door_uid (door_uid)');
 		$this->query('ALTER TABLE commissies DROP INDEX IDX_858C850B3A4A27C1, ADD INDEX maker_uid (maker_uid)');
@@ -210,8 +210,8 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE verticale_leden DROP INDEX IDX_52C85C38539B0606, ADD INDEX uid (uid)');
 		$this->query('ALTER TABLE verticale_leden DROP INDEX IDX_52C85C3897983E4, ADD INDEX door_uid (door_uid)');
 		$this->query('ALTER TABLE verticalen DROP INDEX IDX_79C519073A4A27C1, ADD INDEX maker_uid (maker_uid)');
-		$this->query('ALTER TABLE voorkeurcommissie DROP INDEX IDX_6567316BCF5E72D, ADD INDEX categorie_id (categorie_id)');
-		$this->query('ALTER TABLE voorkeurvoorkeur DROP INDEX IDX_1A129E324B30D9C4, ADD INDEX cid (cid)');
+		$this->query('ALTER TABLE voorkeurCommissie DROP INDEX IDX_6567316BCF5E72D, ADD INDEX categorie_id (categorie_id)');
+		$this->query('ALTER TABLE voorkeurVoorkeur DROP INDEX IDX_1A129E324B30D9C4, ADD INDEX cid (cid)');
 		$this->query('ALTER TABLE werkgroep_deelnemers DROP INDEX IDX_38E14A6B539B0606, ADD INDEX uid (uid)');
 		$this->query('ALTER TABLE werkgroep_deelnemers DROP INDEX IDX_38E14A6B97983E4, ADD INDEX door_uid (door_uid)');
 		$this->query('ALTER TABLE werkgroepen DROP INDEX IDX_2194ECF73A4A27C1, ADD INDEX maker_uid (maker_uid)');
@@ -252,8 +252,8 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE peiling DROP FOREIGN KEY FK_A3418E46F725D48E');
 		$this->query('ALTER TABLE forum_draden DROP FOREIGN KEY FK_C7DE4CB6E196D02C');
 
-		$this->query('ALTER TABLE voorkeurvoorkeur DROP INDEX IDX_1A129E32539B0606');
-		$this->query('ALTER TABLE civibestellinginhoud DROP INDEX IDX_30A7C75CA2E63037');
+		$this->query('ALTER TABLE voorkeurVoorkeur DROP INDEX IDX_1A129E32539B0606');
+		$this->query('ALTER TABLE CiviBestellingInhoud DROP INDEX IDX_30A7C75CA2E63037');
 		$this->query('ALTER TABLE login_remember DROP INDEX IDX_BD5B5182539B0606');
 		$this->query('ALTER TABLE profielen DROP INDEX IDX_301B6229742C4A98');
 		$this->query('ALTER TABLE mlt_aanmeldingen DROP INDEX IDX_B156D32F539B0606');

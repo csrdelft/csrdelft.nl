@@ -18,8 +18,8 @@ class TagTypeMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE bestuurs_leden CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE door_uid door_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE opmerking2 opmerking2 TEXT COMMENT \'(DC2Type:groepkeuzeselectie)\' DEFAULT NULL');
 		$this->query('ALTER TABLE bewoners CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE door_uid door_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE opmerking2 opmerking2 TEXT COMMENT \'(DC2Type:groepkeuzeselectie)\' DEFAULT NULL');
 		$this->query('ALTER TABLE changelog CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
-		$this->query('ALTER TABLE civibestelling CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
-		$this->query('ALTER TABLE civisaldo CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
+		$this->query('ALTER TABLE CiviBestelling CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
+		$this->query('ALTER TABLE CiviSaldo CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
 		$this->query('ALTER TABLE cms_paginas CHANGE naam naam VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL');
 		$this->query('ALTER TABLE commissie_leden CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE door_uid door_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE opmerking2 opmerking2 TEXT COMMENT \'(DC2Type:groepkeuzeselectie)\' DEFAULT NULL');
 		$this->query('ALTER TABLE commissies CHANGE maker_uid maker_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE naam naam VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE familie familie VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE status status ENUM(\'ft\', \'ht\', \'ot\') NOT NULL COMMENT \'(DC2Type:enumGroepStatus)\', CHANGE keuzelijst2 keuzelijst2 TEXT COMMENT \'(DC2Type:groepkeuze)\' DEFAULT NULL');
@@ -45,7 +45,7 @@ class TagTypeMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE foto_tags CHANGE refuuid refuuid VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE keyword keyword VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE door door VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
 		$this->query('ALTER TABLE fotoalbums CHANGE subdir subdir VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE owner owner VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
 		$this->query('ALTER TABLE fotos CHANGE subdir subdir VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE filename filename VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE owner owner VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
-		$this->query('ALTER TABLE googletoken CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
+		$this->query('ALTER TABLE GoogleToken CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
 		$this->query('ALTER TABLE groep_leden CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE door_uid door_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE opmerking2 opmerking2 TEXT COMMENT \'(DC2Type:groepkeuzeselectie)\' DEFAULT NULL');
 		$this->query('ALTER TABLE groepen CHANGE maker_uid maker_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE naam naam VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE familie familie VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE status status ENUM(\'ft\', \'ht\', \'ot\') NOT NULL COMMENT \'(DC2Type:enumGroepStatus)\', CHANGE keuzelijst2 keuzelijst2 TEXT COMMENT \'(DC2Type:groepkeuze)\' DEFAULT NULL');
 		$this->query('ALTER TABLE groepen CHANGE versie versie ENUM(\'v1\', \'v2\') COMMENT \'(DC2Type:enumGroepVersie)\' NOT NULL');
@@ -79,8 +79,8 @@ class TagTypeMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE verticale_leden CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE door_uid door_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE opmerking2 opmerking2 TEXT COMMENT \'(DC2Type:groepkeuzeselectie)\' DEFAULT NULL');
 		$this->query('ALTER TABLE verticalen CHANGE maker_uid maker_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE naam naam VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE familie familie VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE status status ENUM(\'ft\', \'ht\', \'ot\') NOT NULL COMMENT \'(DC2Type:enumGroepStatus)\', CHANGE keuzelijst2 keuzelijst2 TEXT COMMENT \'(DC2Type:groepkeuze)\' DEFAULT NULL');
 		$this->query('ALTER TABLE verticalen CHANGE versie versie ENUM(\'v1\', \'v2\') COMMENT \'(DC2Type:enumGroepVersie)\' NOT NULL');
-		$this->query('ALTER TABLE voorkeuropmerking CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
-		$this->query('ALTER TABLE voorkeurvoorkeur CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE timestamp timestamp DATETIME NOT NULL');
+		$this->query('ALTER TABLE voorkeurOpmerking CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
+		$this->query('ALTER TABLE voorkeurVoorkeur CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE timestamp timestamp DATETIME NOT NULL');
 		$this->query('ALTER TABLE werkgroep_deelnemers CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE door_uid door_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE opmerking2 opmerking2 TEXT COMMENT \'(DC2Type:groepkeuzeselectie)\' DEFAULT NULL');
 		$this->query('ALTER TABLE werkgroepen CHANGE maker_uid maker_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE naam naam VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE familie familie VARCHAR(191) COMMENT \'(DC2Type:stringkey)\' NOT NULL, CHANGE status status ENUM(\'ft\', \'ht\', \'ot\') NOT NULL COMMENT \'(DC2Type:enumGroepStatus)\', CHANGE keuzelijst2 keuzelijst2 TEXT COMMENT \'(DC2Type:groepkeuze)\' DEFAULT NULL');
 		$this->query('ALTER TABLE werkgroepen CHANGE versie versie ENUM(\'v1\', \'v2\') COMMENT \'(DC2Type:enumGroepVersie)\' NOT NULL');
