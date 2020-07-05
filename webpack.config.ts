@@ -1,6 +1,8 @@
 import path from 'path';
 import webpack from 'webpack';
 
+const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
+
 const contextPath = path.resolve(__dirname, 'resources/assets');
 
 // De Webpack configuratie.
@@ -51,6 +53,14 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		alias: {
 			vue$: 'vue/dist/vue.esm.js',
 		},
+		plugins: [
+			PnpWebpackPlugin,
+		]
+	},
+	resolveLoader: {
+		plugins: [
+			PnpWebpackPlugin.moduleLoader(module),
+		]
 	},
 	optimization: {
 		minimizer: [
