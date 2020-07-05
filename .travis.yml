@@ -8,8 +8,8 @@ git:
   depth: false
 
 cache:
+  yarn: true
   directories:
-    - "node_modules"
     - "vendor"
 
 env:
