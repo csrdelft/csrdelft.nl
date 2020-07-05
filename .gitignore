@@ -47,8 +47,12 @@ package-lock.json
 .cache-loader
 webpack.config.js
 .onderhoud
-.pnp.js
-.yarn
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
 
 ###> symfony/framework-bundle ###
 /.env.local
