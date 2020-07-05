@@ -25,6 +25,7 @@ use CsrDelft\view\fiscaat\pin\PinBestellingVeranderenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingCrediterenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchNegerenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
+use CsrDelft\view\formulier\FoutmeldingForm;
 use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -114,6 +115,13 @@ class PinTransactieController extends AbstractController {
 		} else {
 			/** @var PinTransactieMatch $pinTransactieMatch */
 			$pinTransactieMatch = $this->pinTransactieMatchRepository->retrieveByUUID($selection[0]);
+
+			if ($pinTransactieMatch->bestelling !== null) {
+				$account = $this->civiSaldoRepository->getSaldo($pinTransactieMatch->bestelling->uid, true);
+				if (!$account) {
+					return new FoutmeldingForm('Account verwijderd.', 'Dit account is verwijderd, dus deze bestelling kan niet gecorrigeerd worden.');
+				}
+			}
 
 			switch ($pinTransactieMatch->status) {
 				case PinTransactieMatchStatusEnum::STATUS_MATCH:
