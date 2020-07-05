@@ -265,9 +265,11 @@ class PinTransactieMatch implements DataTableEntry {
 	}
 
 	/**
+	 * Bepaalt status van pintransactiematch op basis van bestelling en transactie.
+	 * Houdt geen rekening met eventuele correcties.
 	 * @return string
 	 */
-	public function gokStatus() {
+	public function logischeStatus() {
 		if ($this->bestelling === null) {
 			return PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING;
 		} elseif ($this->transactie === null) {

@@ -512,7 +512,7 @@ class PinTransactieController extends AbstractController {
 					}
 
 					if ($pinTransactieMatch->status === PinTransactieMatchStatusEnum::STATUS_GENEGEERD) {
-						$pinTransactieMatch->status = $pinTransactieMatch->gokStatus();
+						$pinTransactieMatch->status = $pinTransactieMatch->logischeStatus();
 					} else {
 						$pinTransactieMatch->status = PinTransactieMatchStatusEnum::STATUS_GENEGEERD;
 						$pinTransactieMatch->notitie = $values['intern'] ?: null;
