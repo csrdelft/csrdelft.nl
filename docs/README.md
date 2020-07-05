@@ -16,6 +16,8 @@ Welkom bij de webstek documentatie
 - [Vue](vue.md)
 - [Styles](styles.md)
 - [Symfony](symfony.md)
+- [Migraties](migraties.md): Aanpassingen aan de database doorvoeren.
+- [Frontend build](frontend.md): Het builden van de frontend.
 
 ## Subsystemen
 

@@ -1,28 +1,55 @@
 # Installatie van de stek
 
-Volg dit stappenplan om de stek op je eigen computer te installeren.
+Volg dit stappenplan om de stek op je eigen computer te installeren. Wees precies met het uitvoeren van de commando's want een aantal instellingen zijn standaard geconfigureerd in de stek en als je daar van afwijkt moet je het in je eigen configuratie ook goed zetten.
 
-## Stap 0
+Als je tegen problemen aan loopt tijdens het doorlopen van de installatie pas dit dan aan in dit document of voeg een kopje toe onder Foutopsporing.
+
+Als je de stek al eens eerder hebt geinstalleerd en je wil de boel verversen gebruikt dan het volgende commando:
+
+```bash
+$ composer update-dev
+```
+
+
+## Stap 0: Programma's installeren
 Zorg ervoor dat je een database dump krijgt van de PubCie, zonder deze dump is het erg ingewikkeld om de boel draaiende te krijgen. Zorg er ook voor dat je een plaetjes dump hebt.
-<br><br>
 
-## Stap 1
-Maak een account aan op [GitHub](https://github.com).
-<br><br>
+Installeer de volgende programma's:
 
-## Stap 2
-Installeer [git](https://git-scm.com). En vertel git met welke gegevens je aanpassingen wil maken, zorg dat het emailadres overeen komt met het account op GitHub. (Regels met een `$` er voor moeten uitgevoerd worden in powershell/bash)
+- [xampp](https://www.apachefriends.org/download.html) of [wampserver](https://sourceforge.net/projects/wampserver/)
+  - Komt met Apache2, Mariadb en PHP
+  - wampserver komt met een iets vriendelijkere gebruikersinterface en wordt verder in deze uitleg gebruikt.
+  - Zorg ervoor dat je een versie met PHP 7.3 installeert, want dit is wat in producti ook draait. (7.4 is op zich ook prima)
+- [git](https://git-scm.com)
+  - Om de sourcecode te downloaden en veranderingen te maken.
+  - De [GitHub Desktop](https://desktop.github.com/) is een toegankelijke manier van git gebruiken.
+- [composer](https://getcomposer.org)
+  - De PHP dependency manager
+- [Node.js](https://nodejs.org/en/)
+  - Een JS runtime.
+  - De LTS-versie is prima voor wat wij doen.
+- [yarn (classic)](https://classic.yarnpkg.com/en/docs/install#windows-stable)
+  - De JS dependency manager
+- [PhpStorm](https://www.jetbrains.com/phpstorm/)
+  - Een goede IDE van Jetbrains, pro versie is gratis voor studenten.
+  - [Visual Studio Code](https://code.visualstudio.com/) is een redelijk alternatief, maar gebruikt dit alleen als je je er echt thuis in voelt.
+- [HeidiSQL](https://www.heidisql.com/download.php)
+  - Een chille sql client.
+  - Veel sql clients kunnen niet met Syrinx (productie) verbinden, deze wel.
+
+## Stap 1: Ophalen van de broncode
+
+Maak een account aan op [GitHub](https://github.com) als je dat nog niet eerder hebt gedaan.
+
+Configureer je lokale git installatie met de goede gegevens, zo worden je veranderingen ook aan je toegekend. (Regels met een `$` er voor moeten uitgevoerd worden in powershell/bash)
 
 ```
 $ git config --global user.name "John Doe"
 $ git config --global user.email johndoe@example.com
 ```
 
-### Stap 2.1
-Ben je geen lid van de PubCie, [maak een fork van de stek](https://github.com/csrdelft/csrdelft.nl/fork)
-<br><br>
+*Ben je geen lid van de PubCie, [maak een fork van de stek](https://github.com/csrdelft/csrdelft.nl/fork)*
 
-## Stap 3
 Download de stek op je computer, als je net een fork hebt gemaakt gebruik dan de url van je zelfgemaakte repository.
 
 ```
@@ -32,105 +59,83 @@ $ git submodule init
 $ git submodule update
 ```
 
-### Stap 3.1
 De hele filestructuur van de repository is nu gedownload op je computer. Een korte uitleg van wat welke folder betekent is te vinden op de pagina [Filestructuur](filestructuur.md).
 
-## Stap 4: Installatie
-Er zijn drie mogelijke manieren om te installeren, met Docker of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
+## Stap 2: Installatie
+Er zijn twee mogelijke manieren om te installeren, met Docker of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
 
 _Over installatie met docker kun je in het bestand [Docker](installatie-docker.md) meer lezen._
 
-Installeer Apache2 met PHP en MySQL. Op Windows is er XAMPP of wampserver, wat dit makkelijk maakt.
+### 2.1: Database instellen
 
-#### Apache2
-Maak in je `hosts` (`/etc/hosts` of `C:\Windows\system32\drivers\etc\hosts`) bestand een verwijzing van `dev-csrdelft.nl` naar `localhost`.
-Voeg bijvoorbeeld de volgende regel toe: `127.0.0.1 dev-csrdelft.nl`
+*Dit gaat er vanuit dat je database een gebruiker `root` heeft zonder wachtwoord, dit is standaard bij een installatie van MySQL. Heb je je database beveiligd kopieer dan het `DATABASE_URL` veld uit `.env` naar `.env.local` en zet de gegevens goed.*
 
-De volgende configuratie werkt goed voor Apache2. (**Let op de** `php_value include_path ...`.)
-
-In XAMPP (waarmee altijd XAMPP Control Panel wordt bedoeld): `Apache => config => <Browse>[Apache] => conf => extra => httpd-vhosts.conf` en plak het volgende:
-```
-<VirtualHost dev-csrdelft.nl:80>
-    DocumentRoot "<repo root>\htdocs"
-    ServerName dev-csrdelft.nl
-    ServerAlias dev-csrdelft.nl
-    ErrorLog "logs/dev-csrdelft.nl-error.log"
-    #tell php to look in the lib-dir
-    php_value include_path "<repo root>\lib"
-    <Directory "<repo root>\htdocs">
-        AllowOverride All
-        Order Allow,Deny
-        Allow from all
-        Require all granted
-    </Directory>
-</VirtualHost>
-```
-
-#### PHP
-Enable `ldap` in `php.ini`
-
-In XAMPP: `Apache => config => PHP (php.ini) => Zoek naar ldap => Haal de ; bij ;extension=ldap weg`
-
-#### MySQL
-We gaan nu een MySQL server opstarten, waar vervolgens de lokale database op runt.
-
-In XAMPP: `MySQL => start`. Hopelijk start de MySQL server gelijk op. Stel de 3306 poort is bezet, dan zijn er 2 oplossingen:
-1. Klik op de Netstat knop in XAMPP, kijk welk process port 3306 bezet houdt en kill dit programma via de Task Manager.
-2. [Verander de poort voor de MySQL server](https://stackoverflow.com/questions/32173242/conflicting-ports-of-mysql-and-xampp). In XAMPP: `MySQL => config => my.ini`. Vervang de 3306 poort overal naar een ander poortnummer, bijvoorbeeld 3307. Ga dan in XAMPP zelf naar `config => Service and Port Settings => MySQL Tab` En verander de service naam `mysql` naar `mysqlxampp` en de main port 3306 naar 3307.
-
-In de C:/XAMPP folder, ga naar `mysql\bin`. Open een terminal en typ het volgende commando:
-```
-./mysql.exe -u root -p
-# of
-mysql -u root -p (als het mysql commando al wel gedefinieerd is in een windows PATH variable.)
-```
-Je bent nu ingelogd op de MySQL server.
-Maak vervolgens een database `csrdelft` aan.
-
-```
-CREATE USER 'csrdelft'@'localhost' IDENTIFIED BY 'bl44t';
-CREATE DATABASE `csrdelft`;
-GRANT ALL PRIVILEGES ON `csrdelft` . * TO 'csrdelft'@'localhost';
-```
-
-Als je database verbinding anders is dan gebruiker `csrdelft` met wachtwoord `bl44t` op host `localhost` en database `csrdelft`, voeg dan de dsn van je database toe aan `.env.local`
-
-Switch nu naar de csrdelft database met het commando: `use csrdelft;`
-
-**Plaats nu de export die je in stap 0 hebt gefixt in de database.** Doe dit als volgt:
-```
-source <repo root>\data\***.sql (Met *** voor de tabellen file);
-source <repo root>\data\###.sql (Met ### voor de data file);
-```
-
-#### Dependencies
-Download en installeer [Composer](https://getcomposer.org/) en [Yarn](https://classic.yarnpkg.com/en/docs/install).
-Deze tools worden gebruikt om respectievelijk PHP en Javascript dependencies te installeren.
-
-Open een terminal en voer het volgende commando uit:
+Voer vanaf de command line het volgende commando uit om een database te maken:
 
 ```bash
-composer update-dev
+$ php bin/console doctrine:database:create
 ```
 
-(Kijk in `composer.json` om te zien wat er precies gebeurt als je dit doet).
-
-Tip: als je met javascript aan de gang gaat is het fijn om automatisch je javascript bestanden te builden, gebruik hier voor het volgende commando:
+Voer vanaf de command line het volgende commando uit om de tabellen in de database te laden:
 
 ```bash
-# Run build en blijf watchen
-$ yarn run watch
-# of (als de eerste niet goed werkt, dat kan op sommige systemen)
-$ yarn run watch-poll
+$ php bin/console doctrine:migrations:migrate
 ```
 
-Download en installeer [ImageMagick](https://imagemagick.org/script/download.php). Dit wordt gebruikt om het fotoalbum goed te laten werken. Als je v7 van ImageMagick hebt geinstalleerd voeg dan `IMAGEMAGICK=magick` toe aan `.env.local`
+Als je een dump hebt gekregen kun je het volgende commando uitvoeren.
 
-#### Klaar
-Ga nu naar `http://dev-csrdelft.nl`
+```bash
+$ php bin/console doctrine:database:import <bestandsnaam van sql bestand>
+```
 
-Als je verse code hebt gepulld kan het handig zijn om `composer update-dev` nog een keer uit te voeren.
+### 2.2: Frontend code builden
 
-#### Cache (geavanceerd)
+De frontend code wordt met een los process gebuild. Hier wordt Typescript omgezet naar Javascript en Scss (sass) naar CSS.
 
-Dit is optioneel, maar kan helpen om je dev stek wat sneller te maken of om specifieke cache problemen te kunnen testen. Lees het [Cache](https://github.com/csrdelft/csrdelft.nl/wiki/Caching) document op de wiki voor meer info.
+Om deze stap te vergemakkelijken is er het volgende commando:
+
+```bash
+$ composer update-dev
+```
+
+Kijk ook in [Typescript](typescript.md) voor meer info.
+
+### 2.3: VirtualHost instellen
+
+*Gaat er vanuit dat je Wampserver hebt geinstalleerd in stap 0*
+
+Start Wampserver op. Rechtsonderin bij de icoontjes verschijnt wampserver. Als je rechts of links klikt op dit icoontje krijg je verschillende menus te zien.
+
+Ga naar [VirtualHost Management](http://localhost/add_vhost.php) in wampserver. Voeg hier een nieuwe virtualhost toe met de naam `dev-csrdelft.nl` en als path de `htdocs` map in de repository. Klik op opslaan en rechts-klik op het wampserver icoon rechtsonderin en klik op `Tools > Restart DNS`.
+
+> Als je de repository hebt gedownload in `C:\users\feut\Projecten\csrdelft.nl` zet dan de path op `C:/users/feut/Projecten/csrdelft.nl/htdocs`.
+
+Als je nu naar [`http://dev-csrdelft.nl`](http://dev-csrdelft.nl) gaat wordt je als het goed is begroet met een dikke error over dat er niet met de database verbonden kan worden.
+
+*Wampserver moet sowieso aan staan als je je lokale stek wil bekijken*
+
+## Extra dingen
+
+### Imagemagick
+
+[ImageMagick](https://imagemagick.org/script/download.php) wordt gebruikt in het fotoalbum, om dingen in het fotoalbum te kunnen testen moet je het installeren. Als je v7 van ImageMagick hebt geinstalleerd voeg dan `IMAGEMAGICK=magick` toe aan `.env.local`
+
+### Cache
+
+Dit is optioneel, maar kan helpen om je dev stek wat sneller te maken of om specifieke cache problemen te kunnen testen. Lees het [Cache](caching.md) document voor meer info.
+
+### Xdebug
+
+[Xdebug](https://xdebug.org/download) is een superhandige tool om PHP code te kunnen debuggen. In PhpStorm bij instellingen (Ctrl+Alt+S) kun je onder **Languages & Frameworks > PHP > Debug** meer info vinden over de installatie van Xdebug. Het kan lonen om Xdebug uit te zetten als je het niet gebruikt, want deze extensie kan PHP heel erg langzaam maken.
+
+### OPcache
+
+Sommige installaties komen standaard met [OPcache](https://www.php.net/manual/en/book.opcache.php), deze extensie zorgt ervoor dat PHP code sneller wordt uitgevoerd als deze niet is veranderd. Dit kan ontwikkelen een stuk sneller maken.
+
+## Foutopsporing
+
+### MySQL wil niet starten
+
+Als het icoontje van Wampserver oranje is kan het zijn dat bepaalde poorten in gebruik zijn. Hier voor kun je de tools in Wampserver gebruiken. Dit menu kun je openen door te rechtsklikken op het Wampserver icoontje rechts onderin. Hier kun je de poort van 3306 aanpassen naar iets anders.
+
+Als je de poort hebt aangepast kopieer dan ook de regel met `DATABASE_URL` van `.env` naar `.env.local` (maak deze aan als deze nog niet bestaat) en verander 3306 naar de poort die je gekozen hebt.

@@ -12,7 +12,8 @@ Hier wordt voor iedere map kort uitgelegd wat het doel van de map is.
   * `packages`: Configuratie van Symfony packages.
   * `routes`: Alle routes van de stek staan in deze map (Zie [Request](request.md))
 * `data`: Bevat de database dump, foto's en andere informatie van de stek
-* `db/migrations`: Database migraties waarmee de database aangepast wordt. Migraties kunnen ook een oude staat terugrollen
+* `db/doctrine_migrations`: Database migraties waarmee de database aangepast wordt. Migraties kunnen ook een oude staat terugrollen, zie [Migraties](migraties.md).
+* `db/migrations`: Oude database migraties
 * `docker`: Docker images voor development aan de stek via Docker
 * `docs`: De map waar deze site van gegenereerd wordt.
 * `htdocs`: Bestanden die de webserver inlaadt. Alle submodules zijn hier ook te vinden. Zie [Submodule](submodule.md) voor bestanden die niet hier onder worden besproken.
