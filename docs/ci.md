@@ -4,9 +4,6 @@
 
 We gebruiken Travis om automatisch alles klaar te zetten om het op Syrinx te deployen. In het bestand `.travis.yml` is het process gedefinieerd.
 
-
-
-
 ## Stappen
 
 Het proces op Travis heeft twee onderdelen, Build en Analysis, na de eerste stap

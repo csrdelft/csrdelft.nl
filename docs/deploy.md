@@ -18,6 +18,7 @@ Dit commando doet de volgende dingen (kijk in `composer.json` voor de precieze c
 1. Zet de stek in onderhoudsmodus
 1. Update de broncode van de stek
 1. Lees de `.env` / `.env.local` / etc. bestanden uit en dump ze naar `.env.local.php`, dit zorgt ervoor dat de komende keren dat de env wordt opgevraagd het een stuk sneller is.
+1. Run Doctrine migraties
 1. Run Phinx migraties
 1. Verwijder de Symfony cache
 1. Flush de memcached cache

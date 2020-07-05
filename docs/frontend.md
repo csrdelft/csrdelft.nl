@@ -36,3 +36,6 @@ De bestanden onder `entry` zijn interessant, dit zijn de aanspreekpunten van de 
 
 Webpack genereerd veel bestanden. Het manifest.json (`htdocs/dist/manifest.json`) bestand wordt aangemaakt om bij te houden welke bestanden er allemaal gemaakt zijn en waar ze te vinden zijn. Met de methodes `js_asset` en `css_asset` wordt in dit bestand gekeken en worden de juiste bestanden als html terug gegeven.
 
+## Dependencies
+
+Er wordt natuurlijk ook voortgebouwd op bestaande Javascript code, bijvoorbeeld in [Vue](vue.md) en [DataTables](datatables.md). In het bestand `package.json` staat een overzicht met alle javascript dependencies. Deze dependencies zijn opgesplitst in twee groupen, `dependencies` en `devDependencies`. Dependencies zijn dependencies die in de Typescript code gebruikt worden. Dev dependencies worden gebruikt door webpack om de Typescript om te vormen naar Javascript (en de SCSS naar CSS).

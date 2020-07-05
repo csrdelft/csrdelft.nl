@@ -37,6 +37,7 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Enums](enums.md)
 - [Formulier](formulier.md)
 - [Vue](vue.md)
+- [Composer](composer.md)
 
 ## Overig
 

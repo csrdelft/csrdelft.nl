@@ -1,5 +1,7 @@
 # Installatie van de stek
 
+*Alle commando's in deze uitleg worden uitgevoerd vanuit de hoofdmap van de repository (zodra je de broncode het binnengehaald). Op Windows werkt Powershell goed, als je op Linux zit weet je waarschijnlijk al welke shell nice is en heb je daar een uitgesproken mening over.*
+
 Volg dit stappenplan om de stek op je eigen computer te installeren. Wees precies met het uitvoeren van de commando's want een aantal instellingen zijn standaard geconfigureerd in de stek en als je daar van afwijkt moet je het in je eigen configuratie ook goed zetten.
 
 Als je tegen problemen aan loopt tijdens het doorlopen van de installatie pas dit dan aan in dit document of voeg een kopje toe onder Foutopsporing.
@@ -7,7 +9,7 @@ Als je tegen problemen aan loopt tijdens het doorlopen van de installatie pas di
 Als je de stek al eens eerder hebt geinstalleerd en je wil de boel verversen gebruikt dan het volgende commando:
 
 ```bash
-$ composer update-dev
+composer update-dev
 ```
 
 
@@ -44,8 +46,8 @@ Maak een account aan op [GitHub](https://github.com) als je dat nog niet eerder 
 Configureer je lokale git installatie met de goede gegevens, zo worden je veranderingen ook aan je toegekend. (Regels met een `$` er voor moeten uitgevoerd worden in powershell/bash)
 
 ```
-$ git config --global user.name "John Doe"
-$ git config --global user.email johndoe@example.com
+git config --global user.name "John Doe"
+git config --global user.email johndoe@example.com
 ```
 
 *Ben je geen lid van de PubCie, [maak een fork van de stek](https://github.com/csrdelft/csrdelft.nl/fork)*
@@ -53,10 +55,10 @@ $ git config --global user.email johndoe@example.com
 Download de stek op je computer, als je net een fork hebt gemaakt gebruik dan de url van je zelfgemaakte repository.
 
 ```
-$ git clone git@github.com:csrdelft/csrdelft.nl
-$ cd csrdelft.nl
-$ git submodule init
-$ git submodule update
+git clone git@github.com:csrdelft/csrdelft.nl
+cd csrdelft.nl
+git submodule init
+git submodule update
 ```
 
 De hele filestructuur van de repository is nu gedownload op je computer. Een korte uitleg van wat welke folder betekent is te vinden op de pagina [Filestructuur](filestructuur.md).
@@ -73,19 +75,19 @@ _Over installatie met docker kun je in het bestand [Docker](installatie-docker.m
 Voer vanaf de command line het volgende commando uit om een database te maken:
 
 ```bash
-$ php bin/console doctrine:database:create
+php bin/console doctrine:database:create
 ```
 
 Voer vanaf de command line het volgende commando uit om de tabellen in de database te laden:
 
 ```bash
-$ php bin/console doctrine:migrations:migrate
+php bin/console doctrine:migrations:migrate
 ```
 
 Als je een dump hebt gekregen kun je het volgende commando uitvoeren.
 
 ```bash
-$ php bin/console doctrine:database:import <bestandsnaam van sql bestand>
+php bin/console doctrine:database:import <bestandsnaam van sql bestand>
 ```
 
 ### 2.2: Frontend code builden
@@ -95,7 +97,7 @@ De frontend code wordt met een los process gebuild. Hier wordt Typescript omgeze
 Om deze stap te vergemakkelijken is er het volgende commando:
 
 ```bash
-$ composer update-dev
+composer update-dev
 ```
 
 Kijk ook in [Typescript](typescript.md) voor meer info.
