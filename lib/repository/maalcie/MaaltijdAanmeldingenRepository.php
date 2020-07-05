@@ -175,7 +175,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$aanmeldingen = $this->getAanmeldingenVoorLid($byMid, $uid);
 		$aantal = 0;
 		foreach ($aanmeldingen as $mid => $aanmelding) {
-			if ($repetitie->mlt_repetitie_id === $aanmelding->door_abonnement) {
+			if ($aanmelding->abonnementRepetitie && $repetitie->mlt_repetitie_id === $aanmelding->abonnementRepetitie->mlt_repetitie_id) {
 				$this->getEntityManager()->remove($aanmelding);
 				$aantal++;
 			}
@@ -462,7 +462,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 				$aanmelding->profiel = $profiel;
 				$aanmelding->door_uid = $uid;
 				$aanmelding->door_profiel = $profiel;
-				$aanmelding->door_abonnement = $repetitie->mlt_repetitie_id;
+				$aanmelding->abonnementRepetitie = $repetitie;
 				$aanmelding->laatst_gewijzigd = date_create_immutable();
 				$aanmelding->gasten_eetwens = '';
 

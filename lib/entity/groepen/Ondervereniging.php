@@ -22,6 +22,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class Ondervereniging extends AbstractGroep {
 	public function __construct() {
+		parent::__construct();
 		$this->leden = new ArrayCollection();
 	}
 

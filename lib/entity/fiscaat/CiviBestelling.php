@@ -35,19 +35,19 @@ class CiviBestelling {
 	public $uid;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=0})
 	 * @Serializer\Groups("datatable")
 	 */
 	public $totaal = 0;
 	/**
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="boolean", options={"default"=false})
 	 * @Serializer\Groups("datatable")
 	 */
 	public $deleted;
 	/**
 	 * @var \DateTimeImmutable
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
 	 * @Serializer\Groups("datatable")
 	 */
 	public $moment;
@@ -69,6 +69,13 @@ class CiviBestelling {
 	 * @ORM\OneToMany(targetEntity="CiviBestellingInhoud", mappedBy="bestelling")
 	 */
 	public $inhoud;
+
+	/**
+	 * @var CiviSaldo
+	 * @ORM\ManyToOne(targetEntity="CiviSaldo")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $civiSaldo;
 
 	public function __construct() {
 		$this->inhoud = new ArrayCollection();

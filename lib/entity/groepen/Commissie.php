@@ -28,6 +28,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class Commissie extends AbstractGroep implements HeeftSoort {
 	public function __construct() {
+		parent::__construct();
 		$this->leden = new ArrayCollection();
 	}
 

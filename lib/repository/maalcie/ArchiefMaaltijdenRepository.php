@@ -45,7 +45,7 @@ class ArchiefMaaltijdenRepository extends AbstractRepository {
 			} else {
 				$archief->aanmeldingen .= $aanmelding->uid;
 			}
-			if ($aanmelding->door_abonnement) {
+			if ($aanmelding->abonnementRepetitie) {
 				$archief->aanmeldingen .= '_abo';
 			}
 			if ($aanmelding->door_uid !== null) {

@@ -45,7 +45,7 @@
 		@if($maaltijd->gesloten)
 			<td class="maaltijd-aangemeld">
 				Ja
-				@if($aanmelding->door_abonnement) (abo) @endif
+				@if($aanmelding->abonnementRepetitie) (abo) @endif
 				<div class="float-right">
 					@icon("lock", null, "Maaltijd is gesloten om " . date_format_intl($maaltijd->laatst_gesloten, TIME_FORMAT) . "")
 				</div>
@@ -54,7 +54,7 @@
 				<a href="/maaltijden/ketzer/afmelden/{{$maaltijd->maaltijd_id}}" class="btn post maaltijd-aangemeld">
 					<input type="checkbox" checked="checked"/> Ja
 				</a>
-				@if($aanmelding->door_abonnement) (abo) @endif
+				@if($aanmelding->abonnementRepetitie) (abo) @endif
 				@endif
 			</td>
 			<td class="maaltijd-gasten">

@@ -33,7 +33,7 @@ class VoorkeurCommissie {
 
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=1})
 	 */
 	public $categorie_id;
 

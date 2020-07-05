@@ -29,12 +29,12 @@ class SavedQuery {
 	public $beschrijving;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", options={"default"=P_LOGGED_IN})
 	 */
 	public $permissie;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", options={"default"="Overig"})
 	 */
 	public $categorie;
 

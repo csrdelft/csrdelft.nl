@@ -35,7 +35,7 @@ class CiviSaldoLog {
 	public $data;
 	/**
 	 * @var \DateTimeImmutable
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
 	 */
 	public $timestamp;
 }

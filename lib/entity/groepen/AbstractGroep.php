@@ -99,11 +99,11 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 */
 	public $maker;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var GroepVersie
+	 * @ORM\Column(type="enumGroepVersie")
 	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
-	public $versie = GroepVersie::V1;
+	public $versie;
 	/**
 	 * @var GroepKeuze[]
 	 * @ORM\Column(type="groepkeuze", nullable=true)
@@ -121,6 +121,10 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @return string|AbstractGroepLid
 	 */
 	abstract public function getLidType();
+
+	public function __construct() {
+		$this->versie = GroepVersie::V1();
+	}
 
 	/**
 	 * @return string

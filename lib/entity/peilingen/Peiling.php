@@ -45,25 +45,25 @@ class Peiling implements DataTableEntry {
 	public $eigenaar;
 	/**
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="boolean", options={"default"=false})
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $mag_bewerken;
 	/**
 	 * @var boolean
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="boolean", options={"default"=true})
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $resultaat_zichtbaar;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=0})
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $aantal_voorstellen;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=1})
 	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $aantal_stemmen;

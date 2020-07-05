@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\groepen;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * Kring.class.php
@@ -22,12 +23,14 @@ class Kring extends AbstractGroep {
 	 * Verticaleletter
 	 * @var string
 	 * @ORM\Column(type="string", length=1, options={"fixed"=true})
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $verticale;
 	/**
 	 * Kringnummer
 	 * @var int
 	 * @ORM\Column(type="integer")
+	 * @Serializer\Groups({"datatable", "log"})
 	 */
 	public $kring_nummer;
 

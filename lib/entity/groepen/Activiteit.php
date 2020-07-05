@@ -30,6 +30,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort {
 	public function __construct() {
+		parent::__construct();
 		$this->leden = new ArrayCollection();
 	}
 

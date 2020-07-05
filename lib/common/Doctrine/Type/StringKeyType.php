@@ -19,7 +19,7 @@ class StringKeyType extends Type {
 	 * @inheritDoc
 	 */
 	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
-		return 'VARCHAR(191)';
+		return 'VARCHAR(191) COMMENT \'(DC2Type:stringkey)\'';
 	}
 
 	/**

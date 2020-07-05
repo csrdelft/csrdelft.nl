@@ -24,7 +24,7 @@ class BoekRecensie {
 	public $id;
 	/**
 	 * @var integer
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=0})
 	 */
 	public $boek_id;
 	/**

@@ -23,16 +23,11 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class CiviSaldo implements DataTableEntry {
 	/**
-	 * @var integer
-	 * @ORM\Column(type="integer")
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups({"log", "datatable"})
-	 */
-	public $id;
-	/**
+	 * Let op, dit is geen fk naar Profiel. Er zijn CiviSaldo's die geen profiel zijn en vice versa.
+	 *
 	 * @var string
 	 * @ORM\Column(type="uid", unique=true)
+	 * @ORM\Id()
 	 * @Serializer\Groups({"log", "datatable"})
 	 */
 	public $uid;
@@ -50,13 +45,13 @@ class CiviSaldo implements DataTableEntry {
 	public $saldo;
 	/**
 	 * @var \DateTimeImmutable
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
 	 * @Serializer\Groups({"log", "datatable"})
 	 */
 	public $laatst_veranderd;
 	/**
 	 * @var bool
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="boolean", options={"default"=false})
 	 * @Serializer\Groups({"log", "datatable"})
 	 */
 	public $deleted = false;
