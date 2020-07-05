@@ -31,8 +31,8 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE crv_repetities DROP INDEX functie_id, ADD INDEX IDX_3C44567B6B113FD2 (functie_id)');
 		$this->query('ALTER TABLE crv_taken DROP INDEX functie_id, ADD INDEX IDX_663841046B113FD2 (functie_id)');
 		$this->query('ALTER TABLE crv_voorkeuren DROP INDEX crv_voorkeuren_ibfk_1, ADD INDEX IDX_5BDAE73AC0ADB06C (crv_repetitie_id)');
-		$this->query('ALTER TABLE document DROP INDEX  catID, ADD INDEX IDX_211FE820BCF5E72D (categorie_id)');
-		$this->query('ALTER TABLE document DROP INDEX eigenaar, ADD INDEX IDX_211FE820F725D48E (eigenaar)');
+		$this->query('ALTER TABLE Document DROP INDEX  catID, ADD INDEX IDX_211FE820BCF5E72D (categorie_id)');
+		$this->query('ALTER TABLE Document DROP INDEX eigenaar, ADD INDEX IDX_211FE820F725D48E (eigenaar)');
 		$this->query('ALTER TABLE forum_delen DROP INDEX categorie_id, ADD INDEX IDX_4D51668FBCF5E72D (categorie_id)');
 		$this->query('ALTER TABLE forum_draden DROP INDEX forum_id, ADD INDEX IDX_C7DE4CB629CCBAD0 (forum_id)');
 		$this->query('ALTER TABLE forum_draden_gelezen DROP INDEX draad_id, ADD INDEX IDX_A4E3F87ECA4E5E (draad_id)');
@@ -78,7 +78,7 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE CiviBestelling DROP INDEX CiviBestelling_ibfk_1, ADD INDEX IDX_290D88AC539B0606 (uid)');
 		$this->query('ALTER TABLE crv_repetities DROP INDEX mlt_repetitie_id, ADD INDEX IDX_3C44567BA8500550 (mlt_repetitie_id)');
 		$this->query('ALTER TABLE fotoalbums DROP INDEX owner, ADD INDEX IDX_AC6D17BECF60E67C (owner)');
-		$this->query('ALTER TABLE civiproduct DROP INDEX FK_CP_categorie, ADD INDEX IDX_C4590238BCF5E72D (categorie_id)');
+		$this->query('ALTER TABLE CiviProduct DROP INDEX FK_CP_categorie, ADD INDEX IDX_C4590238BCF5E72D (categorie_id)');
 		$this->query('ALTER TABLE crv_taken DROP INDEX crv_taken_ibfk_4, ADD INDEX IDX_66384104539B0606 (uid)');
 		$this->query('ALTER TABLE crv_taken DROP INDEX crv_repetitie_id, ADD INDEX IDX_66384104C0ADB06C (crv_repetitie_id)');
 		$this->query('ALTER TABLE crv_taken DROP INDEX maaltijd_id, ADD INDEX IDX_66384104CBA49CBE (maaltijd_id)');
@@ -107,8 +107,8 @@ class RenameIndexMigratie extends AbstractMigration {
 
 		$this->query('ALTER TABLE profielen ADD CONSTRAINT FK_301B6229742C4A98 FOREIGN KEY (patroon) REFERENCES profielen (uid)');
 		$this->query('ALTER TABLE login_remember ADD CONSTRAINT FK_BD5B5182539B0606 FOREIGN KEY (uid) REFERENCES profielen (uid)');
-		$this->query('ALTER TABLE document ADD CONSTRAINT FK_211FE820BCF5E72D FOREIGN KEY (categorie_id) REFERENCES DocumentCategorie (id)');
-		$this->query('ALTER TABLE document ADD CONSTRAINT FK_211FE820F725D48E FOREIGN KEY (eigenaar) REFERENCES profielen (uid)');
+		$this->query('ALTER TABLE Document ADD CONSTRAINT FK_211FE820BCF5E72D FOREIGN KEY (categorie_id) REFERENCES DocumentCategorie (id)');
+		$this->query('ALTER TABLE Document ADD CONSTRAINT FK_211FE820F725D48E FOREIGN KEY (eigenaar) REFERENCES profielen (uid)');
 		$this->query('ALTER TABLE eetplan ADD CONSTRAINT FK_EC97E0BBF0C31BC7 FOREIGN KEY (woonoord_id) REFERENCES woonoorden (id)');
 		$this->query('ALTER TABLE eetplan ADD CONSTRAINT FK_EC97E0BB539B0606 FOREIGN KEY (uid) REFERENCES profielen (uid)');
 		$this->query('ALTER TABLE eetplan_bekenden ADD CONSTRAINT FK_17EC81326AECD184 FOREIGN KEY (uid1) REFERENCES profielen (uid)');
@@ -172,8 +172,8 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE crv_repetities DROP INDEX IDX_3C44567B6B113FD2, ADD INDEX functie_id (functie_id)');
 		$this->query('ALTER TABLE crv_taken DROP INDEX IDX_663841046B113FD2, ADD INDEX functie_id (functie_id)');
 		$this->query('ALTER TABLE crv_voorkeuren DROP INDEX IDX_5BDAE73AC0ADB06C, ADD INDEX crv_voorkeuren_ibfk_1 (crv_repetitie_id)');
-		$this->query('ALTER TABLE document DROP INDEX IDX_211FE820BCF5E72D, ADD INDEX catID (categorie_id)');
-		$this->query('ALTER TABLE document DROP INDEX IDX_211FE820F725D48E, ADD INDEX eigenaar (eigenaar)');
+		$this->query('ALTER TABLE Document DROP INDEX IDX_211FE820BCF5E72D, ADD INDEX catID (categorie_id)');
+		$this->query('ALTER TABLE Document DROP INDEX IDX_211FE820F725D48E, ADD INDEX eigenaar (eigenaar)');
 		$this->query('ALTER TABLE forum_delen DROP INDEX IDX_4D51668FBCF5E72D, ADD INDEX categorie_id (categorie_id)');
 		$this->query('ALTER TABLE forum_draden DROP INDEX IDX_C7DE4CB629CCBAD0, ADD INDEX forum_id (forum_id)');
 		$this->query('ALTER TABLE forum_draden_gelezen DROP INDEX IDX_A4E3F87E539B0606, ADD INDEX lid_id (uid)');
@@ -219,7 +219,7 @@ class RenameIndexMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE civibestelling DROP INDEX IDX_290D88AC539B0606, ADD INDEX CiviBestelling_ibfk_1 (uid)');
 		$this->query('ALTER TABLE crv_repetities DROP INDEX IDX_3C44567BA8500550, ADD INDEX mlt_repetitie_id (mlt_repetitie_id)');
 		$this->query('ALTER TABLE fotoalbums DROP INDEX IDX_AC6D17BECF60E67C, ADD INDEX owner (owner)');
-		$this->query('ALTER TABLE civiproduct DROP INDEX IDX_C4590238BCF5E72D, ADD INDEX FK_CP_categorie (categorie_id)');
+		$this->query('ALTER TABLE CiviProduct DROP INDEX IDX_C4590238BCF5E72D, ADD INDEX FK_CP_categorie (categorie_id)');
 		$this->query('ALTER TABLE crv_taken DROP INDEX IDX_66384104539B0606, ADD INDEX crv_taken_ibfk_4 (uid)');
 		$this->query('ALTER TABLE crv_taken DROP INDEX IDX_66384104C0ADB06C, ADD INDEX crv_repetitie_id (crv_repetitie_id)');
 		$this->query('ALTER TABLE crv_taken DROP INDEX IDX_66384104CBA49CBE, ADD INDEX maaltijd_id (maaltijd_id)');

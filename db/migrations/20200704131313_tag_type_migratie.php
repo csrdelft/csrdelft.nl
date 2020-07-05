@@ -31,7 +31,7 @@ class TagTypeMigratie extends AbstractMigration {
 		$this->query('ALTER TABLE crv_voorkeuren CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
 		$this->query('ALTER TABLE crv_vrijstellingen CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE begin_datum begin_datum DATETIME NOT NULL, CHANGE eind_datum eind_datum DATETIME NOT NULL');
 		$this->query('ALTER TABLE debug_log CHANGE dump dump LONGTEXT COMMENT \'(DC2Type:longtext)\' NOT NULL, CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' DEFAULT NULL, CHANGE su_uid su_uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' DEFAULT NULL');
-		$this->query('ALTER TABLE document CHANGE eigenaar eigenaar VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
+		$this->query('ALTER TABLE Document CHANGE eigenaar eigenaar VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
 		$this->query('ALTER TABLE eetplan CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
 		$this->query('ALTER TABLE eetplan_bekenden CHANGE uid1 uid1 VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL, CHANGE uid2 uid2 VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
 		$this->query('ALTER TABLE forum_delen_meldingen CHANGE uid uid VARCHAR(4) COMMENT \'(DC2Type:uid)\' NOT NULL');
