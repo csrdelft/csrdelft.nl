@@ -20,7 +20,6 @@ SQL
 		);
 		$this->query(<<<SQL
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES ('DoctrineMigrations\\\\Version20200705132858', NULL, NULL);
-INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES ('DoctrineMigrations\\\\Version20200705192721', NULL, NULL);
 SQL
 		);
 	}
@@ -41,7 +40,6 @@ SQL
 		);
 		$this->query(<<<SQL
 INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES ('20200705132858', '2020-07-05 13:30:40');
-INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES ('20200705192721', '2020-07-05 19:57:46');
 SQL
 		);
 	}
