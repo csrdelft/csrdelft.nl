@@ -2,6 +2,7 @@
 
 namespace CsrDelft\repository\fiscaat;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
@@ -140,6 +141,7 @@ class CiviBestellingRepository extends AbstractRepository {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'anders';
 		$bestelling->uid = $uid;
+		$bestelling->civiSaldo = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->find($uid);
 		$bestelling->deleted = false;
 		$bestelling->moment = date_create_immutable();
 

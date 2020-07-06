@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
@@ -261,6 +262,7 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 				$bestelling = new CiviBestelling();
 				$bestelling->cie = 'anders';
 				$bestelling->uid = $account->uid;
+				$bestelling->civiSaldo = $account;
 				$bestelling->deleted = false;
 				$bestelling->moment = new DateTime();
 				$bestelling->comment = $regel['beschrijving'];

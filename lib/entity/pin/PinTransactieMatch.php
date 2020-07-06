@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\pin;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\fiscaat\CiviBestelling;
@@ -9,6 +10,7 @@ use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoCommissieEnum;
 use CsrDelft\repository\fiscaat\CiviProductRepository;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -301,6 +303,7 @@ class PinTransactieMatch implements DataTableEntry {
 		$nieuweBestelling = new CiviBestelling();
 		$nieuweBestelling->moment = date_create_immutable();
 		$nieuweBestelling->uid = $uid ?: $this->bestelling->uid;
+		$nieuweBestelling->civiSaldo = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->find($nieuweBestelling->uid);
 		$nieuweBestelling->totaal = $bestellingInhoud->getPrijs();
 		$nieuweBestelling->cie = CiviSaldoCommissieEnum::SOCCIE;
 		$nieuweBestelling->deleted = false;

@@ -33,8 +33,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method MaaltijdAanmelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class MaaltijdAanmeldingenRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+	/**
+	 * @var CiviSaldoRepository
+	 */
+	private $civiSaldoRepository;
+
+	public function __construct(ManagerRegistry $registry, CiviSaldoRepository $civiSaldoRepository) {
 		parent::__construct($registry, MaaltijdAanmelding::class);
+		$this->civiSaldoRepository = $civiSaldoRepository;
 	}
 
 	/**
@@ -386,6 +392,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$bestelling = new CiviBestelling();
 		$bestelling->cie = 'maalcie';
 		$bestelling->uid = $aanmelding->uid;
+		$bestelling->civiSaldo = $this->civiSaldoRepository->find($aanmelding->uid);
 		$bestelling->deleted = false;
 		$bestelling->moment = new DateTime();
 		$bestelling->comment = sprintf('Datum maaltijd: %s', date('Y-M-d', $aanmelding->maaltijd->getBeginMoment()));
