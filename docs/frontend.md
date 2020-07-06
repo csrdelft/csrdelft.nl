@@ -11,7 +11,7 @@ Als je een build uitvoert worden de gegenereerde bestanden in de map `htdocs/dis
 Om de frontend build te starten voor ontwikkelen aan de stek gebruik je het volgende commando:
 
 ```bash
-$ yarn dev
+yarn dev
 ```
 
 Dit maakt een *development* build van de stek. In de development build is de gegenereerde Javascript en CSS mooi geformatteerd, dus als je er even in wil kijken is het nog steeds goed te begrijpen.
@@ -21,7 +21,7 @@ Dit maakt een *development* build van de stek. In de development build is de geg
 Om de frontend build te starten voor productie gebruik je het volgende commando:
 
 ```bash
-$ yarn prod
+yarn prod
 ```
 
 Dit maakt een *productie* build van de stek. In de productie build is de gegenereerde Javascript en CSS geminified (variabel namen worden ingekort, spaties en tabs worden verwijderd), dit scheelt in de grootte van bestanden. Daarnaast krijgen de bestanden een hash in hun bestandsnaam zodat er in productie gezegd kan worden dat een bestand nooit zal veranderen, want als een bestand veranderd krijgt deze een nieuwe naam.

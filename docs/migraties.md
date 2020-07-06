@@ -12,7 +12,7 @@ Voor migraties gebruiken we [Doctrine Migrations](https://www.doctrine-project.o
 Migraties worden uitgevoerd als je het `composer update-dev` commando uitvoert, je kan ook los de nog niet uitgevoerde migraties uitvoeren door het volgende commando uit te voeren:
 
 ```bash
-$ php bin/console doctrine:migrations:migrate
+php bin/console doctrine:migrations:migrate
 ```
 
 Dit geeft terug hoeveel migraties er uitgevoerd zijn en of het gelukt is.
@@ -20,7 +20,7 @@ Dit geeft terug hoeveel migraties er uitgevoerd zijn en of het gelukt is.
 Voer het volgende commando uit als je meer informatie wil weten over de status van de migraties.
 
 ```bash
-$ php bin/console doctrine:migrations:status
+php bin/console doctrine:migrations:status
 ```
 
 ## Een migratie maken
@@ -34,7 +34,7 @@ Er zijn twee manieren om een migratie te maken, zelf schrijven of laten generere
 Voer het volgende commando uit om een migratie bestand te maken.
 
 ```bash
-$ php bin/console doctrine:migrations:generate
+php bin/console doctrine:migrations:generate
 ```
 
 In de map `db/doctrine_migrations` is nu een lege migratie gemaakt. Kijk in de Doctrine Migrations documentatie voor meer info over het schrijven van migraties. In principe kun je platte SQL schrijven.
@@ -45,7 +45,7 @@ In de map `db/doctrine_migrations` is nu een lege migratie gemaakt. Kijk in de D
 Je kan een migratie laten genereren op basis van de veranderingen die je hebt gemaakt. Hier voor voer je het volgende commando uit:
 
 ```bash
-$ php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:diff
 ```
 
 In de map `db/docrine_migrations` wordt nu een nieuwe migratie aangemaakt. Kijk in het gegenereerde bestand of wat er in staat zinnig is.
@@ -55,13 +55,13 @@ In de map `db/docrine_migrations` wordt nu een nieuwe migratie aangemaakt. Kijk 
 Om een losse migratie uit te voeren kun je het volgende commando uitvoeren.
 
 ```bash
-$ php bin/console doctrine:migrations:migrate next
+php bin/console doctrine:migrations:migrate next
 ```
 
 Om een migratie terug te draaien (om te testen of dat werkt of bijvoorbeeld om veranderingen te kunnen maken aan je migratie):
 
 ```bash
-$ php bin/console doctrine:migrations:migrate prev
+php bin/console doctrine:migrations:migrate prev
 ```
 
 # Belangrijke noten
