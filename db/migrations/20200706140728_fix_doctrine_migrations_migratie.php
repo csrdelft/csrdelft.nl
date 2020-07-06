@@ -19,8 +19,8 @@ ENGINE=InnoDB
 SQL
 		);
 		$this->query(<<<SQL
-INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES ('DoctrineMigrations\\Version20200705132858', NULL, NULL);
-INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES ('DoctrineMigrations\\Version20200705192721', NULL, NULL);
+INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES ('DoctrineMigrations\\\\Version20200705132858', NULL, NULL);
+INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES ('DoctrineMigrations\\\\Version20200705192721', NULL, NULL);
 SQL
 		);
 	}
