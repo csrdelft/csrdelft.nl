@@ -53,6 +53,7 @@ class TaakForm extends ModalForm {
 		$fields['fid'] = new DoctrineEntityField('corveeFunctie', $taak->corveeFunctie, 'Functie', CorveeFunctie::class, '');
 		$fields['fid']->suggestions[] = $functieNamen;
 		$fields['fid']->onchange = $functiePunten . "$('.punten_field').val(punten[this.value]);";
+		$fields['fid']->required = true;
 		$fields['lid'] = new LidObjectField('profiel', $taak->profiel, 'Naam');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
 		$fields[] = new RequiredDateObjectField('datum', $taak->datum, 'Datum', date('Y') + 2, date('Y') - 2);
