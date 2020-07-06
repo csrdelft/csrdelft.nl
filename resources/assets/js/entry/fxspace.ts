@@ -1,6 +1,7 @@
 import {shaderToy} from '../lib/shadertoy';
 
-shaderToy(`
+try {
+	shaderToy(`
 // Star Nest by Pablo Roman Andrioli
 // https://www.shadertoy.com/view/XlfGRj
 
@@ -57,3 +58,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	fragColor = vec4(v * .01, 1.);
 }
 `);
+} catch (e) {
+	// Kan gebeuren
+}
