@@ -6,6 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -22,7 +23,7 @@ use Doctrine\ORM\PersistentCollection;
  *   @ORM\Index(name="prioriteit", columns={"volgorde"})
  * })
  */
-class MenuItem {
+class MenuItem implements DisplayEntity {
 	/**
 	 * Primary key
 	 * @var int
@@ -31,12 +32,6 @@ class MenuItem {
 	 * @ORM\GeneratedValue()
 	 */
 	public $item_id;
-	/**
-	 * Dit menu-item is een sub-item van
-	 * @var int
-	 * @ORM\Column(type="integer")
-	 */
-	public $parent_id;
 	/**
 	 * Volgorde van weergave
 	 * @var int
@@ -128,4 +123,11 @@ class MenuItem {
 		return false;
 	}
 
+	function getId() {
+		return $this->item_id;
+	}
+
+	function getWeergave(): string {
+		return $this->tekst . ' [' . $this->link . ']';
+	}
 }
