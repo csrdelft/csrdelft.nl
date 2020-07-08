@@ -265,7 +265,7 @@ class ToolsController extends AbstractController {
 
 		function uid2naam($uid) {
 			$naam = ProfielRepository::getLink($uid, 'civitas');
-			if ($naam !== false) {
+			if ($naam) {
 				return $naam;
 			} else {
 				return 'Lid[' . htmlspecialchars($uid) . '] &notin; db.';

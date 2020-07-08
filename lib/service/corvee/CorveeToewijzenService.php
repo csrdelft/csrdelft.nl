@@ -104,12 +104,12 @@ class CorveeToewijzenService {
 	}
 
 	function sorteerKwali(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
-		if ($a->laatste !== false && $b->laatste !== false) {
+		if (!$a->laatste && !$b->laatste) {
 			$a = $a->laatste->getBeginMoment();
 			$b = $b->laatste->getBeginMoment();
-		} elseif ($a->laatste === false) {
+		} elseif (!$a->laatste) {
 			return -1;
-		} elseif ($b->laatste === false) {
+		} elseif (!$b->laatste) {
 			return 1;
 		} else {
 			$a = $a->aantal;

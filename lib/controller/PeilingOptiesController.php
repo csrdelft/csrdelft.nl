@@ -91,7 +91,7 @@ class PeilingOptiesController extends AbstractController {
 		/** @var PeilingOptie|false $peilingOptie */
 		$peilingOptie = $this->peilingOptiesRepository->retrieveByUUID($selection[0]);
 
-		if ($peilingOptie !== false && $peilingOptie->stemmen == 0) {
+		if ($peilingOptie && $peilingOptie->stemmen == 0) {
 			$this->getDoctrine()->getManager()->remove($peilingOptie);
 			$removed = new RemoveDataTableEntry($peilingOptie->id, PeilingOptie::class);
 			$this->getDoctrine()->getManager()->flush();

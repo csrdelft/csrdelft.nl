@@ -85,7 +85,7 @@ class GoogleSync {
 
 	public function init() {
 		$google_token = $this->googleTokenRepository->find(LoginService::getUid());
-		if ($google_token === false) {
+		if (!$google_token) {
 			throw new CsrException('Authsub token not available, use doRequestToken.');
 		}
 
@@ -344,7 +344,7 @@ class GoogleSync {
 				$profielBatch[] = $profiel;
 			} else {
 				$profiel = ProfielRepository::get($profiel);
-				if ($profiel !== false) {
+				if ($profiel) {
 					$profielBatch[] = $profiel;
 				}
 			}
@@ -408,7 +408,7 @@ class GoogleSync {
 
 				$contact = $this->unpackGoogleContact($contact);
 				$profiel = ProfielRepository::get($contact['csruid']);
-				if ($profiel !== false) {
+				if ($profiel) {
 					$this->updatePhoto($contact, $profiel);
 				}
 			}

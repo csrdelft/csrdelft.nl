@@ -79,7 +79,7 @@ class EetplanController extends AbstractController {
 	 */
 	public function noviet($uid = null) {
 		$eetplan = $this->eetplanRepository->getEetplanVoorNoviet($uid);
-		if ($eetplan === false) {
+		if (!$eetplan) {
 			throw new CsrNotFoundException("Geen eetplan gevonden voor deze noviet");
 		}
 
@@ -200,7 +200,9 @@ class EetplanController extends AbstractController {
 		if ($selection !== false) {
 			foreach ($selection as $uuid) {
 				$eetplan = $this->eetplanRepository->retrieveByUUID($uuid);
-				if ($eetplan === false) continue;
+				if (!$eetplan) {
+					continue;
+				}
 				$this->eetplanRepository->remove($eetplan);
 				$verwijderd[] = new RemoveDataTableEntry([$eetplan->uid, $eetplan->woonoord_id], Eetplan::class);
 			}

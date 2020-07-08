@@ -246,7 +246,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
 		return lid_instelling('agenda', 'transparantICal') === 'ja' ||
 			$this->isHeledag() ||
-			$this->getLid(LoginService::getUid()) === false;
+			!$this->getLid(LoginService::getUid());
 	}
 
 	public function getAanmeldLimiet() {

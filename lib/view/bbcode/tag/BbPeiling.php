@@ -63,7 +63,7 @@ class BbPeiling extends BbTag {
 	 */
 	private function getPeiling($peiling_id): Peiling {
 		$peiling = $this->peilingenRepository->getPeilingById($peiling_id);
-		if ($peiling === false) {
+		if (!$peiling) {
 			throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
 		}
 
@@ -72,7 +72,6 @@ class BbPeiling extends BbTag {
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
 	 * @throws BbException
 	 */
 	public function parse($arguments = [])

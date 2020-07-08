@@ -77,7 +77,7 @@ class CorveeVrijstellingenRepository extends AbstractRepository {
 		return $this->_em->transactional(function () use ($profiel, $begin, $eind, $percentage) {
 			$vrijstelling = $this->getVrijstelling($profiel->uid);
 
-			if ($vrijstelling === false) {
+			if (!$vrijstelling) {
 				$vrijstelling = $this->nieuw($profiel, $begin, $eind, $percentage);
 			} else {
 				$vrijstelling->begin_datum = $begin;

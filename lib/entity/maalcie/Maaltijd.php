@@ -273,9 +273,9 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 					return true;
 				}
 			}
-			$this->maaltijdcorvee = false;
+			$this->maaltijdcorvee = null;
 		}
-		return $this->maaltijdcorvee !== false;
+		return $this->maaltijdcorvee !== null;
 	}
 
 	/**

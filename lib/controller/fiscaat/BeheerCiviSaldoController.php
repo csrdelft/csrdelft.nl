@@ -209,7 +209,7 @@ class BeheerCiviSaldoController extends AbstractController {
 		foreach ($civiSaldi as $civiSaldo) {
 			$profiel = ProfielRepository::get($civiSaldo->uid);
 			$resp[] = [
-				'label' => $profiel === false ? $civiSaldo->naam : $profiel->getNaam('volledig'),
+				'label' => !$profiel ? $civiSaldo->naam : $profiel->getNaam('volledig'),
 				'value' => $civiSaldo->uid
 			];
 		}

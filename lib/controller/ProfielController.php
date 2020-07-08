@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
@@ -282,7 +281,7 @@ class ProfielController extends AbstractController {
 	public function bewerken($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
-		if ($profiel === false) {
+		if (!$profiel) {
 			throw new CsrNotFoundException();
 		}
 
@@ -298,7 +297,7 @@ class ProfielController extends AbstractController {
 	public function voorkeuren($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
-		if ($profiel === false) {
+		if (!$profiel) {
 			throw new CsrNotFoundException();
 		}
 		if (!$profiel->magBewerken()) {
@@ -339,7 +338,7 @@ class ProfielController extends AbstractController {
 	public function addToGoogleContacts($uid) {
 		$profiel = $this->profielRepository->get($uid);
 
-		if ($profiel === false) {
+		if (!$profiel) {
 			throw new CsrNotFoundException();
 		}
 		try {
