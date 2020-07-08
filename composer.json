@@ -81,7 +81,7 @@
 		"migrate": "@console doctrine:migrations:migrate --allow-no-migration --no-interaction",
 		"generator": "@php bin/dev/generate.php",
 		"production": "@php bin/ci/compile.php",
-		"flushcache": "@php bin/flushcache.php",
+		"flushcache": "@console stek:cache:flush",
 		"analyse": "@php vendor/phpstan/phpstan/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",
 		"test": "@php vendor/phpunit/phpunit/phpunit --bootstrap ./phpunit.init.php tests",
 		"console": "@php bin/console",

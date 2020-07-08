@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\yaml;
 
+use CsrDelft\command\FlushMemcacheCommand;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
@@ -16,7 +17,7 @@ use Symfony\Component\Config\FileLocator;
  *
  * Cached de settings op schijf in productie mode.
  *
- * Cache invalidation met bin/flushcache.php
+ * @see FlushMemcacheCommand voor Cache invalidation
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 15/07/2019
