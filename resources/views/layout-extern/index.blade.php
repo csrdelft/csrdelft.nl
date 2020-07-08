@@ -129,7 +129,7 @@
 
 						Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hieronder voor de
 						mogelijkheden of voor het opvragen van een informatiepakket.</p>
-					<a href="#footer" class="special">Vul interesseformulier in</a>
+					<a href="/lidworden#owee-form" class="special">Vul interesseformulier in</a>
 					<p class="lidworden">Wil je lid worden? Inschrijven kan in de OWee (17 t/m 20 augustus) in onze sociëteit. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek.</p>
 					<a href="/lidworden" class="special">Meer informatie over lid worden</a>
 				</div>
