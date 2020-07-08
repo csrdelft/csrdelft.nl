@@ -253,6 +253,19 @@ function valid_filename($name) {
 }
 
 /**
+ * Remove unsafe characters from filename
+ * @param $name string
+ *
+ * @return bool
+ */
+function filter_filename($name) {
+	//Remove dots in front of filename to prevent directory traversal
+	$name = ltrim($name, ".");
+
+	return preg_replace('/[^a-z0-9 \-_()éê\.]/', ' ', $name);
+}
+
+/**
  * @source http://www.regular-expressions.info/email.html
  * @param $email
  *
