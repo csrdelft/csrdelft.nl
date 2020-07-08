@@ -15,23 +15,27 @@ class FlushMemcacheCommand extends Command {
 	 */
 	private $cache;
 
-	public function __construct(Memcache $cache) {
-		parent::__construct();
-		$this->cache = $cache;
-	}
-
 	public function configure() {
 		$this
 			->setName('stek:cache:flush')
 			->setDescription('Flush de memcache');
 	}
 
+	public function setMemcache($cache) {
+		$this->cache = $cache;
+	}
+
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		if ($this->cache->flush()) {
-			$output->writeln('Memcache succesvol geflushed');
+		if ($this->cache == null) {
+			$output->writeln('Geen cache geinstalleerd');
+			return 1;
 		} else {
-			$output->writeln('Memcache flushen mislukt');
-			$output->writeln(error_get_last()["message"]);
+			if ($this->cache->flush()) {
+				$output->writeln('Memcache succesvol geflushed');
+			} else {
+				$output->writeln('Memcache flushen mislukt');
+				$output->writeln(error_get_last()["message"]);
+			}
 		}
 
 		try {

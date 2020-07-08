@@ -47,10 +47,6 @@ services:
     tags:
       - { name: serializer.normalizer }
 
-  CsrDelft\command\FlushMemcacheCommand:
-    arguments:
-      - "@stek.cache.memcache"
-
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
   CsrDelft\events\ViewEventListener:

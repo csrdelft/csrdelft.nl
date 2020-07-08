@@ -30,3 +30,8 @@ services:
     class: CsrDelft\common\cache\MemcacheCache
     calls:
       - [setMemcache, ["@stek.cache.memcache"]]
+
+  CsrDelft\command\FlushMemcacheCommand:
+    tags: [ console.command ]
+    calls:
+      - [setMemcache, ["@stek.cache.memcache"]]
