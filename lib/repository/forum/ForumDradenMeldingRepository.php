@@ -125,7 +125,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 
 		// Verzend mail
 		try {
-			$mail = new Mail(array($ontvanger->getPrimaryEmail() => $ontvanger->getNaam('volledig')), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
+			$mail = new Mail($ontvanger->getEmailOntvanger(), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
 			$mail->setPlaceholders($values);
 			$mail->setLightBB();
 			$mail->send();

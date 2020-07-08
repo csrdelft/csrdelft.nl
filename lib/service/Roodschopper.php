@@ -155,7 +155,7 @@ h.t. Fiscus.';
 			if (!$profiel) {
 				continue;
 			}
-			$mail = new Mail(array($profiel->getPrimaryEmail() => $profiel->getNaam($uid, 'civitas')), $this->onderwerp, $bericht['bericht']);
+			$mail = new Mail($profiel->getEmailOntvanger(), $this->onderwerp, $bericht['bericht']);
 			$mail->setFrom($this->from);
 			if ($this->bcc) {
 				$mail->addBcc([$this->bcc => $this->bcc]);

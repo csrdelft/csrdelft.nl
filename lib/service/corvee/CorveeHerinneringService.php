@@ -43,7 +43,7 @@ class CorveeHerinneringService {
 			throw new CsrGebruikerException($datum . ' ' . $taak->corveeFunctie->naam . ' niet toegewezen!');
 		}
 		$lidnaam = $taak->profiel->getNaam('civitas');
-		$to = array($taak->profiel->getPrimaryEmail() => $lidnaam);
+		$to = $taak->profiel->getEmailOntvanger();
 		$from = env('EMAIL_CC');
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$bericht = $taak->corveeFunctie->email_bericht;

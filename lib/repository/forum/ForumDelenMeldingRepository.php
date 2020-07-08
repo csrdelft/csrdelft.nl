@@ -123,7 +123,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 		// Verzend mail
 		try {
 			if ($draad->magMeldingKrijgen()) {
-				$mail = new Mail(array($ontvanger->getPrimaryEmail() => $ontvanger->getNaam('volledig')), 'C.S.R. Forum: nieuw draadje in ' . $deel->titel . ': ' . $draad->titel, $bericht);
+				$mail = new Mail($ontvanger->getEmailOntvanger(), 'C.S.R. Forum: nieuw draadje in ' . $deel->titel . ': ' . $draad->titel, $bericht);
 				$mail->setPlaceholders($values);
 				$mail->setLightBB();
 				$mail->send();

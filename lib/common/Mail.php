@@ -50,7 +50,7 @@ class Mail {
 			throw new CsrGebruikerException('Emailadres in $from geen valide e-mailadres');
 		}
 		// Geen speciale tekens in naam vanwege spamfilters
-		$this->from = array($email => filter_var($name, FILTER_SANITIZE_EMAIL));
+		$this->from = array($email => filter_var($name, FILTER_SANITIZE_STRING));
 	}
 
 	public function getReplyTo($email_only = false) {
@@ -67,7 +67,7 @@ class Mail {
 			throw new CsrGebruikerException('Emailadres in $reply_to geen valide e-mailadres');
 		}
 		// Geen speciale tekens in naam vanwege spamfilters
-		$this->replyTo = array($email => filter_var($name, FILTER_SANITIZE_EMAIL));
+		$this->replyTo = array($email => filter_var($name, FILTER_SANITIZE_STRING));
 	}
 
 	public function getTo() {
@@ -88,7 +88,7 @@ class Mail {
 				throw new CsrGebruikerException('Invalid e-mailadres in TO "' . $email . '"');
 			}
 			// Geen speciale tekens in naam vanwege spamfilters
-			$this->to[$this->production_safe($email)] = filter_var($name, FILTER_SANITIZE_EMAIL);
+			$this->to[$this->production_safe($email)] = filter_var($name, FILTER_SANITIZE_STRING);
 		}
 	}
 
@@ -110,7 +110,7 @@ class Mail {
 				throw new CsrGebruikerException('Invalid e-mailadres in BCC "' . $email . '"');
 			}
 			// Geen speciale tekens in naam vanwege spamfilters
-			$this->bcc[$this->production_safe($email)] = filter_var($name, FILTER_SANITIZE_EMAIL);
+			$this->bcc[$this->production_safe($email)] = filter_var($name, FILTER_SANITIZE_STRING);
 		}
 	}
 
