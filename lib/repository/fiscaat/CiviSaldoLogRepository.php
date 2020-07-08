@@ -41,6 +41,7 @@ class CiviSaldoLogRepository extends AbstractRepository {
 		$logEntry->ip = isset($_SERVER['REMOTE_ADDR']) ? filter_var($_SERVER['REMOTE_ADDR']) : '';
 		$logEntry->type = $type;
 		$logEntry->data = $this->serializer->serialize($data, 'json', ['groups' => ['log']]);
+		$logEntry->timestamp = date_create_immutable();
 		$this->_em->persist($logEntry);
 		$this->_em->flush();
 	}

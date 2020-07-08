@@ -120,6 +120,7 @@ class AccountRepository extends AbstractRepository {
 
 		$account = new Account();
 		$account->uid = $uid;
+		$account->profiel = $profiel;
 		$account->username = $uid;
 		$account->email = $profiel->email;
 		$account->pass_hash = '';
