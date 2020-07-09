@@ -69,8 +69,6 @@
 	"include-path": ["lib/"],
 	"require-dev": {
 		"phpstan/phpstan": "*",
-		"phpunit/phpunit": "^6.5",
-		"spatie/phpunit-snapshot-assertions": "^1.4",
 		"symfony/profiler-pack": "*",
 		"doctrine/doctrine-fixtures-bundle": "^3.3",
 		"symfony/maker-bundle": "^1.19",
