@@ -554,7 +554,7 @@ class PinTransactieController extends AbstractController {
 				}
 				$pin = $match->bestelling->getProduct(CiviProductTypeEnum::PINTRANSACTIE);
 				$pinCorrectie = $match->bestelling->getProduct(CiviProductTypeEnum::PINCORRECTIE);
-				if (!$pin && !$pinCorrectie && $match->transactie == null) {
+				if ($match->bestelling->deleted || (!$pin && !$pinCorrectie) && $match->transactie == null) {
 					$deleted[] = new RemoveDataTableEntry($match->id, PinTransactieMatch::class);
 					$manager->remove($match);
 				}
