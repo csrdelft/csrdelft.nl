@@ -6,12 +6,14 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\MeldingResponse;
 use CsrDelft\view\menubeheer\MenuItemForm;
 use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -141,5 +143,15 @@ class MenuBeheerController {
 		$this->menuItemRepository->persist($item);
 		setMelding($item->tekst . ($item->zichtbaar ? ' ' : ' on') . 'zichtbaar gemaakt', 1);
 		return new JsonResponse(true);
+	}
+
+	/**
+	 * @Route("/menubeheer/suggesties")
+	 * @Auth(P_LOGGED_IN)
+	 * @param Request $request
+	 * @return GenericSuggestiesResponse
+	 */
+	public function suggesties(Request $request) {
+		return new GenericSuggestiesResponse($this->menuItemRepository->getSuggesties($request->query->get('q')));
 	}
 }

@@ -47,6 +47,9 @@
     "doctrine/common": {
         "version": "v2.7.3"
     },
+    "doctrine/data-fixtures": {
+        "version": "1.4.3"
+    },
     "doctrine/dbal": {
         "version": "v2.5.13"
     },
@@ -63,6 +66,18 @@
             "./config/packages/prod/doctrine.yaml",
             "./src/Entity/.gitignore",
             "./src/Repository/.gitignore"
+        ]
+    },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "fc52d86631a6dfd9fdf3381d0b7e3df2069e51b3"
+        },
+        "files": [
+            "./src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -117,6 +132,9 @@
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },
+    "fzaninotto/faker": {
+        "version": "v1.9.1"
+    },
     "globalcitizen/php-iban": {
         "version": "v2.7.2"
     },
@@ -167,6 +185,9 @@
     },
     "myclabs/deep-copy": {
         "version": "1.7.0"
+    },
+    "nikic/php-parser": {
+        "version": "v4.6.0"
     },
     "ocramius/proxy-manager": {
         "version": "2.0.4"
@@ -397,6 +418,15 @@
     },
     "symfony/inflector": {
         "version": "v5.0.4"
+    },
+    "symfony/maker-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
+        }
     },
     "symfony/mime": {
         "version": "v5.1.2"

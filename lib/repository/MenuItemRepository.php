@@ -48,7 +48,7 @@ class MenuItemRepository extends AbstractRepository {
 
 		return $this->cache->get($this->createCacheKey($naam), function () use ($naam) {
 			try {
-				$root = $this->findOneBy(['tekst' => $naam, 'parent_id' => 0]);
+				$root = $this->getMenuRoot($naam);
 
 				if ($root == null) {
 					return null;
@@ -73,7 +73,7 @@ class MenuItemRepository extends AbstractRepository {
 	 * @return MenuItem|null
 	 */
 	public function getMenuRoot($naam) {
-		return $this->findOneBy(['parent_id' => 0, 'tekst' => $naam]);
+		return $this->findOneBy(['parent' => null, 'tekst' => $naam]);
 	}
 
 	/**
@@ -146,7 +146,6 @@ class MenuItemRepository extends AbstractRepository {
 	public function nieuw($parent) {
 		$item = new MenuItem();
 		$item->parent = $parent;
-		$item->parent_id = $parent->item_id;
 		$item->volgorde = 0;
 		$item->rechten_bekijken = LoginService::getUid();
 		$item->zichtbaar = true;
@@ -191,20 +190,10 @@ class MenuItemRepository extends AbstractRepository {
 	 */
 	public function getMenuBeheerLijst() {
 		if (LoginService::mag(P_ADMIN)) {
-			return $this->findBy(['parent_id' => 0]);
+			return $this->findBy(['parent' => null]);
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * Get the parent of a menu item (cached).
-	 *
-	 * @param MenuItem $item
-	 * @return MenuItem
-	 */
-	public function getParent(MenuItem $item) {
-		return $this->getMenuItem($item->parent_id);
 	}
 
 	/**
@@ -314,11 +303,9 @@ class MenuItemRepository extends AbstractRepository {
 			if ($item->magBekijken()) {
 				$breadcrumbs = [$item];
 
-				while ($item->parent_id !== 0) {
-					$item = $item->parent;
-
+				do {
 					$breadcrumbs[] = $item;
-				}
+				} while ($item = $item->parent);
 
 				return array_reverse($breadcrumbs);
 			}
@@ -342,12 +329,10 @@ class MenuItemRepository extends AbstractRepository {
 	}
 
 	public function deleteItemFromCache(MenuItem $item) {
-		while ($item->parent_id !== 0) {
+		do {
 			$this->cache->delete($this->createCacheKey($item->tekst));
 			$this->cache->delete($this->createFlatCacheKey($item->tekst));
-
-			$item = $item->parent;
-		}
+		} while ($item = $item->parent);
 	}
 
 	/**
@@ -356,9 +341,17 @@ class MenuItemRepository extends AbstractRepository {
 	 * @return MenuItem
 	 */
 	public function getRoot(MenuItem $item) {
-		if ($item->parent_id === 0) {
+		if (!$item->parent) {
 			return $item;
 		}
 		return $this->getRoot($item->parent);
+	}
+
+	public function getSuggesties($query) {
+		return $this->createQueryBuilder('menuItem')
+			->where('menuItem.tekst like :query or menuItem.link like :query')
+			->setParameter('query', sql_contains($query))
+			->setMaxResults(20)
+			->getQuery()->getResult();
 	}
 }

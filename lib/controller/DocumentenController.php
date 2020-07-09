@@ -162,17 +162,26 @@ class DocumentenController extends AbstractController {
 
 			$bestand = $form->getUploader()->getModel();
 
-			$document->filename = $bestand->filename;
+			$document->filename = filter_filename($bestand->filename);
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
+			
 
+			
 			$this->documentRepository->save($document);
 
+			try {
 			if ($document->hasFile()) {
 				$document->deleteFile();
 			}
 
 			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
+			}
+			catch (\Exception $exception) {
+				$this->documentRepository->remove($document);
+				throw $exception;
+			}
+			
 
 			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {

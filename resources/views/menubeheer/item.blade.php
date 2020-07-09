@@ -1,4 +1,4 @@
-<li id="menu-item-{{$item->item_id}}" parentid="{{$item->parent_id}}" class="menu-item">
+<li id="menu-item-{{$item->item_id}}" parentid="{{$item->parent ? $item->parent->item_id : null}}" class="menu-item">
 	@if($item->children)
 		<button class="btn btn-sm caret"
 						onclick="$(this).parent().children('ul').slideToggle();$(this).children('span.fa').toggleClass('fa-caret-right fa-caret-down');">
