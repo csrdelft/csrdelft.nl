@@ -35,6 +35,7 @@ class Commissie extends AbstractGroep implements HeeftSoort {
 	/**
 	 * @var CommissieLid[]
 	 * @ORM\OneToMany(targetEntity="CommissieLid", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="ASC"})
 	 */
 	public $leden;
 

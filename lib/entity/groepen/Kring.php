@@ -37,6 +37,7 @@ class Kring extends AbstractGroep {
 	/**
 	 * @var KringLid[]
 	 * @ORM\OneToMany(targetEntity="KringLid", mappedBy="groep")
+	 * @ORM\OrderBy({"uid"="ASC"})
 	 */
 	public $leden;
 

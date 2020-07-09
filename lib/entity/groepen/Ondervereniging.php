@@ -37,6 +37,7 @@ class Ondervereniging extends AbstractGroep {
 	/**
 	 * @var OnderverenigingsLid[]
 	 * @ORM\OneToMany(targetEntity="OnderverenigingsLid", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="ASC"})
 	 */
 	public $leden;
 

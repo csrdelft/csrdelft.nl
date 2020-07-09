@@ -18,6 +18,7 @@ use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
 
@@ -144,6 +145,19 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @Serializer\Groups("vue")
 	 */
 	abstract public function getLeden();
+
+	public function getLedenOpAchternaamGesorteerd() {
+		$leden = $this->getLeden();
+		try {
+			$iterator = $leden->getIterator();
+			$iterator->uasort(function (AbstractGroepLid $a, AbstractGroepLid $b) {
+				return strcmp($a->profiel->achternaam, $b->profiel->achternaam) ?: strnatcmp($a->uid, $b->uid);
+			});
+		} catch (Exception $e) {
+			return $leden;
+		}
+		return new ArrayCollection(iterator_to_array($iterator));
+	}
 
 	public function getFamilieSuggesties() {
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');

@@ -43,7 +43,7 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	/**
 	 * @var WoonoordBewoner[]
 	 * @ORM\OneToMany(targetEntity="WoonoordBewoner", mappedBy="groep")
-	 * @ORM\OrderBy({"lid_sinds"="DESC"})
+	 * @ORM\OrderBy({"lid_sinds"="ASC"})
 	 */
 	public $leden;
 

@@ -42,6 +42,7 @@ class Verticale extends AbstractGroep {
 	/**
 	 * @var VerticaleLid[]
 	 * @ORM\OneToMany(targetEntity="VerticaleLid", mappedBy="groep")
+	 * @ORM\OrderBy({"uid"="ASC"})
 	 */
 	public $leden;
 

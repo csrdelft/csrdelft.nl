@@ -30,6 +30,7 @@ class RechtenGroep extends AbstractGroep {
 	/**
 	 * @var RechtenGroepLid[]
 	 * @ORM\OneToMany(targetEntity="RechtenGroepLid", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="ASC"})
 	 */
 	public $leden;
 

@@ -55,6 +55,7 @@ class Werkgroep extends AbstractGroep {
 	/**
 	 * @var WerkgroepDeelnemer[]
 	 * @ORM\OneToMany(targetEntity="WerkgroepDeelnemer", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="ASC"})
 	 */
 	public $leden;
 

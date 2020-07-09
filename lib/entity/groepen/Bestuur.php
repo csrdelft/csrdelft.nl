@@ -21,6 +21,7 @@ class Bestuur extends AbstractGroep {
 	/**
 	 * @var BestuursLid[]
 	 * @ORM\OneToMany(targetEntity="BestuursLid", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="ASC"})
 	 */
 	public $leden;
 

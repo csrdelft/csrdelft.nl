@@ -56,6 +56,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	/**
 	 * @var KetzerDeelnemer
 	 * @ORM\OneToMany(targetEntity="KetzerDeelnemer", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="ASC"})
 	 */
 	public $leden;
 

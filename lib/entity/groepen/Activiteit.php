@@ -106,7 +106,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	/**
 	 * @var ActiviteitDeelnemer[]
 	 * @ORM\OneToMany(targetEntity="ActiviteitDeelnemer", mappedBy="groep")
-	 * @ORM\OrderBy({"lid_sinds"="DESC"})
+	 * @ORM\OrderBy({"lid_sinds"="ASC"})
 	 */
 	public $leden;
 
