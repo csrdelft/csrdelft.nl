@@ -5,6 +5,7 @@ namespace CsrDelft\entity\security;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Account
@@ -17,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("accounts")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class Account {
+class Account implements UserInterface {
 
 	/**
 	 * Lidnummer
@@ -123,4 +124,28 @@ class Account {
 		}
 	}
 
+	//****
+	// UserInterface implementatie
+	//****
+
+
+	public function getRoles() {
+		return [$this->perm_role];
+	}
+
+	public function getPassword() {
+		return $this->pass_hash;
+	}
+
+	public function getSalt() {
+		return '';
+	}
+
+	public function getUsername() {
+		return $this->uid;
+	}
+
+	public function eraseCredentials() {
+		// noop
+	}
 }

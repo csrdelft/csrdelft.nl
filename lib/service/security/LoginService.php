@@ -4,6 +4,7 @@
 namespace CsrDelft\service\security;
 
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
@@ -23,6 +24,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.
@@ -70,12 +72,17 @@ class LoginService {
 	 * @var EntityManagerInterface
 	 */
 	private $entityManager;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
-	public function __construct(EntityManagerInterface $entityManager, LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
+	public function __construct(EntityManagerInterface $entityManager, Security $security, LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
 		$this->loginRepository = $loginRepository;
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->accountRepository = $accountRepository;
 		$this->entityManager = $entityManager;
+		$this->security = $security;
 	}
 
 	/**
@@ -85,7 +92,11 @@ class LoginService {
 	 * @return bool
 	 */
 	public static function mag($permission, array $allowedAuthenticationMethods = null) {
-		return AccessService::mag(static::getAccount(), $permission, $allowedAuthenticationMethods);
+		return ContainerFacade::getContainer()->get(LoginService::class)->_mag($permission, $allowedAuthenticationMethods);
+	}
+
+	public function _mag($permission, array $allowedAuthenticationMethdos = null) {
+		return AccessService::mag($this->_getAccount(), $permission, $allowedAuthenticationMethdos);
 	}
 
 	/**
@@ -96,7 +107,11 @@ class LoginService {
 			return static::getCliAccount();
 		}
 
-		return AccountRepository::get(static::getUid());
+		return ContainerFacade::getContainer()->get(LoginService::class)->_getAccount();
+	}
+
+	public function _getAccount() {
+		return $this->security->getUser() ?? $this->accountRepository->find(self::UID_EXTERN);
 	}
 
 	/**
@@ -106,14 +121,21 @@ class LoginService {
 		if (MODE === 'CLI') {
 			return static::$cliUid;
 		}
-		return $_SESSION[self::SESS_UID] ?? self::UID_EXTERN;
+
+		$account = static::getAccount();
+
+		if (!$account) {
+			return 'x999';
+		}
+
+		return $account->uid;
 	}
 
 	/**
 	 * @return Profiel|false
 	 */
 	public static function getProfiel() {
-		return ProfielRepository::get(static::getUid());
+		return static::getAccount()->profiel;
 	}
 
 	/**
@@ -416,6 +438,7 @@ class LoginService {
 	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod() {
+		return AuthenticationMethod::password_login;
 		if (MODE == 'CLI') {
 			return AuthenticationMethod::password_login;
 		}

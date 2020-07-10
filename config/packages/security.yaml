@@ -1,0 +1,43 @@
+security:
+  # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+  providers:
+    accounts:
+      entity:
+        # the class of the entity that represents users
+        class: 'CsrDelft\entity\security\Account'
+        # the property to query by - e.g. username, email, etc
+        property: 'uid'
+        # optional: if you're using multiple Doctrine entity
+        # managers, this option defines which one to use
+        # manager_name: 'customer'
+
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    main:
+      anonymous: true
+      lazy: true
+      provider: accounts
+      guard:
+        authenticators:
+          - CsrDelft\Security\LoginFormAuthenticator
+      logout:
+        path: app_logout
+        # where to redirect after logout
+        # target: app_any_route
+
+      # activate different ways to authenticate
+      # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+      # https://symfony.com/doc/current/security/impersonating_user.html
+      # switch_user: true
+  encoders:
+    CsrDelft\entity\security\Account:
+      algorithm: auto
+
+  # Easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
+  access_control:
+  # - { path: ^/admin, roles: ROLE_ADMIN }
+  # - { path: ^/profile, roles: ROLE_USER }
