@@ -36,7 +36,7 @@ class LoginForm extends Formulier {
 			$fields[] = new HtmlComment('<div class="float-left">');
 			$fields[] = new HtmlComment('</div>');
 
-			$fields['remember'] = new CheckboxField('_remember_me', true, null, 'Blijf ingelogd');
+			$fields['remember'] = new CheckboxField('_remember_me', false, null, 'Blijf ingelogd');
 		}
 
 		$this->addFields($fields);
