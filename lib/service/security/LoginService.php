@@ -225,17 +225,17 @@ class LoginService {
 			return false;
 		}
 		// Controleer switch user status
-		if (isset($_SESSION[self::SESS_SUED_FROM])) {
-			$suedFrom = SuService::getSuedFrom();
-			if (!$suedFrom || $this->current_session->uid !== $suedFrom->uid) {
-				return false;
-			}
-			// Controleer of account bestaat
-			if (!static::getAccount()) {
-				return false;
-			}
-			return true;
-		}
+//		if (isset($_SESSION[self::SESS_SUED_FROM])) {
+//			$suedFrom = SuService::getSuedFrom();
+//			if (!$suedFrom || $this->current_session->uid !== $suedFrom->uid) {
+//				return false;
+//			}
+//			// Controleer of account bestaat
+//			if (!static::getAccount()) {
+//				return false;
+//			}
+//			return true;
+//		}
 		// Controleer of sessie van gebruiker is
 		$account = static::getAccount();
 		if (!$account || $this->current_session->uid !== $account->uid) {

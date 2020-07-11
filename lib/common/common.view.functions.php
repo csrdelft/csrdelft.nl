@@ -3,11 +3,14 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\MenuItem;
+use CsrDelft\entity\security\Account;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Hulpmethodes die gebruikt worden in views.
@@ -525,4 +528,22 @@ function vereniging_leeftijd() {
 	$leeftijd = date_create_immutable()->diff($oprichting);
 
 	return $leeftijd->y;
+}
+
+function is_granted($attributes, $subject = null) {
+	return ContainerFacade::getContainer()->get('security.authorization_checker')->isGranted($attributes, $subject);
+}
+
+/**
+ * @return TokenInterface
+ */
+function current_token() {
+	return ContainerFacade::getContainer()->get('security.token_storage')->getToken();
+}
+
+/**
+ * @return UserInterface|Account
+ */
+function current_account() {
+	return ContainerFacade::getContainer()->get('security.token_storage')->getToken()->getUser();
 }

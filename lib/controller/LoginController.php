@@ -102,31 +102,4 @@ class LoginController extends AbstractController {
 //		$this->loginService->logout();
 //		return $this->redirectToRoute('default');
 //	}
-
-	/**
-	 * @param null $uid
-	 * @return RedirectResponse
-	 * @Route("/su/{uid}", methods={"GET"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function su($uid = null) {
-		$this->suService->switchUser($uid);
-		setMelding('U bekijkt de webstek nu als ' . ProfielRepository::getNaam($uid, 'volledig') . '!', 1);
-		return $this->csrRedirect(HTTP_REFERER);
-	}
-
-	/**
-	 * @return RedirectResponse
-	 * @Route("/endsu", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function endsu() {
-		if (!$this->suService->isSued()) {
-			setMelding('Niet gesued!', -1);
-		} else {
-			$this->suService->endSwitchUser();
-			setMelding('Switch-useractie is beëindigd.', 1);
-		}
-		return $this->csrRedirect(HTTP_REFERER);
-	}
 }
