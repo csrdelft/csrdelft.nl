@@ -91,17 +91,17 @@ class LoginController extends AbstractController {
 //		}
 //	}
 
-	/**
-	 * @return RedirectResponse
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/logout", methods={"GET","POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function logout() {
-		$this->loginService->logout();
-		return $this->redirectToRoute('default');
-	}
+//	/**
+//	 * @return RedirectResponse
+//	 * @throws ORMException
+//	 * @throws OptimisticLockException
+//	 * @Route("/logout", methods={"GET","POST"})
+//	 * @Auth(P_LOGGED_IN)
+//	 */
+//	public function logout() {
+//		$this->loginService->logout();
+//		return $this->redirectToRoute('default');
+//	}
 
 	/**
 	 * @param null $uid

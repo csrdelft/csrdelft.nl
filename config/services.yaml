@@ -61,4 +61,5 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
+  Symfony\Bridge\Doctrine\Security\RememberMe\DoctrineTokenProvider: ~
 
