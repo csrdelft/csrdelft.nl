@@ -124,10 +124,13 @@ class Account implements UserInterface {
 		}
 	}
 
+	public function getEmail() {
+		return $this->email;
+	}
+
 	//****
 	// UserInterface implementatie
 	//****
-
 
 	public function getRoles() {
 		return [$this->perm_role];
