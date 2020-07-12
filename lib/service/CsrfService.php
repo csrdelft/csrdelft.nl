@@ -26,9 +26,9 @@ class CsrfService {
 	 * @return CsrfToken|null
 	 */
 	public function generateToken(string $path, string $method) {
-//		if (session_status() == PHP_SESSION_NONE) {
-//			return null;
-//		}
+		if (session_status() == PHP_SESSION_NONE) {
+			return null;
+		}
 		return $this->manager->getToken("global");
 	}
 
