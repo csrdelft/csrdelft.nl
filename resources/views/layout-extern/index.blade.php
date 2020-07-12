@@ -42,7 +42,7 @@
 					<h2 class="major">C.S.R. Delft</h2>
 					<p>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
 						Delft, rijk aan tradities die zijn ontstaan in haar {{vereniging_leeftijd()}}-jarig bestaan. Het is een breed gezelschap
-						van zo'n 270 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
+						van zo'n 220 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
 						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
 						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
 						uithalen.
@@ -89,7 +89,7 @@
 							Maar wij willen je wel vast digitaal een beetje van C.S.R. laten zien.
 							We willen jou daar goede handvaten voor geven. De belangrijkste informatie wordt gedeeld via deze website dus kijk even rond.
 							Wil je meer weten? Kijk op ons <a href="https://www.youtube.com/user/CivitasFilms">YouTube kanaal</a>,
-							onze <a href="https://www.instagram.com/csrdelft">Instagram pagina</a> en vul het interesse formulier onder aan deze pagina in, dan houden wij je op de hoogte.
+							onze <a href="https://www.instagram.com/csrdelft">Instagram pagina</a> en de <a href="https://www.owee.nl"> OWee </a> website.
 						</p>
 						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
 						<p>Liefs,<br>OWeeCie en PromoCie</p>
@@ -109,8 +109,8 @@
 						Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
 						studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
 						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
-						Ook bij C.S.R. stellen we van 17 t/m 20 augustus onze deuren open, dus kom vooral langs om de sfeer
-						van C.S.R. en de rest van Delft te proeven!</p>
+						Ook C.S.R. doet mee aan deze gezellig week. Van 14 t/m 16 augustus zijn wij online te zien en van
+						17 t/m 22 augustus heb je de gelegenheid om fysiek de sfeer van C.S.R. en Delft te proeven!</p>
 				</div>
 			</div>
 		</section>
@@ -123,14 +123,16 @@
 				</noscript>
 				<div class="content">
 					<h2 class="major">Interesse/vragen</h2>
-					<p>Uiteraard ben je welkom om tijdens de OWee langs te komen op onze soci&euml;teit Confide aan de Oude Delft
-						9. Ook is het mogelijk om dan in een C.S.R. huis te overnachten. Dit kun je aangeven tijdens het
-						aanmelden voor de OWee op owee.nl.
+					<p>Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid
+						om onze sociëteit Confide aan de Oude Delft 9 te bezoeken. Buiten de OWee om kan jij ook gewoon
+						al jouw vragen aan ons stellen.
 
-						Buiten de OWee om is het eveneens mogelijk om bij C.S.R. langs te komen. Klik hieronder voor de
-						mogelijkheden of voor het opvragen van een informatiepakket.</p>
-					<a href="/lidworden#owee-form" class="special">Vul interesseformulier in</a>
-					<p class="lidworden">Wil je lid worden? Inschrijven kan in de OWee (17 t/m 20 augustus) in onze sociëteit. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek.</p>
+						Ben jij bijvoorbeeld geinteresseerd om een C.S.R. activiteit bij te wonen of een C.S.R. huis te bezoeken?
+						Laat dat dan aan ons weten en kom erachter wat er allemaal mogelijk is.</p>
+					<a href="/lidworden#owee-form" class="special">Laat je interesse weten!</a>
+					<p class="lidworden">Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).
+						Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden opgenomen.
+						Doe dit door <a href="/lidworden#owee-form">hier</a> te klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek</p>
 					<a href="/lidworden" class="special">Meer informatie over lid worden</a>
 				</div>
 			</div>
