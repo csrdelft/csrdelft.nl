@@ -48,7 +48,7 @@ class Account {
 	/**
 	 * DateTime last change
 	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $pass_since;
 	/**
