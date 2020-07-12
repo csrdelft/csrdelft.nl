@@ -68,4 +68,6 @@ php bin/console doctrine:migrations:migrate prev
 
 Let heel erg op met hoofdlettergevoeligheid, MariaDB op linux (Syrinx) is hoofdlettergevoelig, maar MariaDB op Windows is dat niet[^case_sensitive_mariadb]. Oftewel zorg er voor dat alle tabelnamen en veldnamen lowercase zijn. Gegenereerde migraties van Doctrine kunnen soms ook kleine letters bevatten terwijl het eigenlijk hoofdletters moeten zijn. Indeces in Doctrine zijn altijd uppercase, dus als dit niet goeg gegenereerd wordt moet dit gefixt worden.
 
+Let op met de 'lege datum': `0000-00-00 00:00:00` deze waarde mag je invullen in een veld die `NOT NULL` is, maar wordt door de database gezien als NULL. In MariaDB 10.4 zijn er nog dingen veranderd waardoor er nog meer stuk gaat als je deze waarde gebruikt.
+
 [^case_sensitive_mariadb]: https://mariadb.com/kb/en/identifier-case-sensitivity/
