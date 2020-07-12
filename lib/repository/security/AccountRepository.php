@@ -139,7 +139,7 @@ class AccountRepository extends AbstractRepository {
 		$account->username = $uid;
 		$account->email = $profiel->email;
 		$account->pass_hash = '';
-		$account->pass_since = date_create_immutable();
+		$account->pass_since = null;
 		$account->failed_login_attempts = 0;
 		$account->perm_role = $this->accessService->getDefaultPermissionRole($profiel->status);
 		$this->_em->persist($account);
