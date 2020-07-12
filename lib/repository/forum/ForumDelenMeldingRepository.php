@@ -25,8 +25,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumDeelMelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ForumDelenMeldingRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+	/**
+	 * @var SuService
+	 */
+	private $suService;
+
+	public function __construct(ManagerRegistry $registry, SuService $suService) {
 		parent::__construct($registry, ForumDeelMelding::class);
+		$this->suService = $suService;
 	}
 
 	protected function maakForumDeelMelding(ForumDeel $deel, $uid) {
@@ -118,20 +124,14 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 		);
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		ContainerFacade::getContainer()->get(SuService::class)->overrideUid($ontvanger->uid);
-
-		// Verzend mail
-		try {
+		$this->suService->alsLid($ontvanger->account, function () use ($draad, $deel, $ontvanger, $values, $bericht) {
 			if ($draad->magMeldingKrijgen()) {
 				$mail = new Mail($ontvanger->getEmailOntvanger(), 'C.S.R. Forum: nieuw draadje in ' . $deel->titel . ': ' . $draad->titel, $bericht);
 				$mail->setPlaceholders($values);
 				$mail->setLightBB();
 				$mail->send();
 			}
-		} finally {
-			// Zet UID terug in sessie
-			ContainerFacade::getContainer()->get(SuService::class)->resetUid();
-		}
+		});
 	}
 
 	/**

@@ -27,8 +27,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumDraadMelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ForumDradenMeldingRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+	/**
+	 * @var SuService
+	 */
+	private $suService;
+
+	public function __construct(ManagerRegistry $registry, SuService $suService) {
 		parent::__construct($registry, ForumDraadMelding::class);
+		$this->suService = $suService;
 	}
 
 	public function setNiveauVoorLid(ForumDraad $draad, ForumDraadMeldingNiveau $niveau) {
@@ -112,27 +118,22 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	 * @param string $bericht
 	 */
 	private function stuurMelding($ontvanger, $auteur, $post, $draad, $bericht) {
-		$values = array(
-			'NAAM' => $ontvanger->getNaam('civitas'),
-			'AUTEUR' => $auteur->getNaam('civitas'),
-			'POSTLINK' => $post->getLink(true),
-			'TITEL' => $draad->titel,
-			'TEKST' => str_replace('\r\n', "\n", $post->tekst),
-		);
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		ContainerFacade::getContainer()->get(SuService::class)->overrideUid($ontvanger->uid);
+		$this->suService->alsLid($ontvanger->account, function () use ($ontvanger, $auteur, $post, $draad, $bericht) {
+			$values = array(
+				'NAAM' => $ontvanger->getNaam('civitas'),
+				'AUTEUR' => $auteur->getNaam('civitas'),
+				'POSTLINK' => $post->getLink(true),
+				'TITEL' => $draad->titel,
+				'TEKST' => str_replace('\r\n', "\n", $post->tekst),
+			);
 
-		// Verzend mail
-		try {
 			$mail = new Mail($ontvanger->getEmailOntvanger(), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
 			$mail->setPlaceholders($values);
 			$mail->setLightBB();
 			$mail->send();
-		} finally {
-			// Zet UID terug in sessie
-			ContainerFacade::getContainer()->get(SuService::class)->resetUid();
-		}
+		});
 	}
 
 	/**
@@ -156,13 +157,9 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 				continue;
 			}
 
-			// Controleer of lid bij draad mag, stel hiervoor tijdelijk de ingelogde gebruiker in op gegeven lid
-			ContainerFacade::getContainer()->get(SuService::class)->overrideUid($genoemde->uid);
-			try {
-				$magMeldingKrijgen = $draad->magMeldingKrijgen();
-			} finally {
-				ContainerFacade::getContainer()->get(SuService::class)->resetUid();
-			}
+			$magMeldingKrijgen = $this->suService->alsLid($genoemde->account, function () use ($draad) {
+				return $draad->magMeldingKrijgen();
+			});
 
 			if (!$magMeldingKrijgen) {
 				continue;
