@@ -109,7 +109,7 @@
 						Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
 						studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
 						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
-						Ook C.S.R. doet mee aan deze gezellig week. Van 14 t/m 16 augustus zijn wij online te zien en van
+						Ook C.S.R. doet mee aan deze gezellige week. Van 14 t/m 16 augustus zijn wij online te zien en van
 						17 t/m 22 augustus heb je de gelegenheid om fysiek de sfeer van C.S.R. en Delft te proeven!</p>
 				</div>
 			</div>
