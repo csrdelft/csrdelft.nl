@@ -80,7 +80,6 @@
 			"Composer\\Config::disableProcessTimeout",
 			"symfony serve --document-root htdocs"
 		],
-		"phinx": "@php vendor/robmorgan/phinx/bin/phinx",
 		"migrate": "@console doctrine:migrations:migrate --allow-no-migration --no-interaction",
 		"generator": "@php bin/dev/generate.php",
 		"production": "@php bin/ci/compile.php",
@@ -93,7 +92,6 @@
 			"touch .onderhoud",
 			"git merge FETCH_HEAD",
 			"@composer dump-env prod",
-			"@phinx migrate",
 			"@migrate",
 			"rm -r ./var/cache",
 			"@flushcache",
@@ -102,7 +100,6 @@
 		],
 		"update-dev": [
 			"@composer install",
-			"@phinx migrate",
 			"@migrate",
 			"yarn",
 			"yarn dev"
