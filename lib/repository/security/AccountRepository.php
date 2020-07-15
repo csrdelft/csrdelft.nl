@@ -12,6 +12,8 @@ use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\AccessService;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * AccountRepository
@@ -24,7 +26,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Account[]    findAll()
  * @method Account[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AccountRepository extends AbstractRepository {
+class AccountRepository extends AbstractRepository implements PasswordUpgraderInterface {
 
 	/**
 	 * @var AccessService
@@ -285,6 +287,12 @@ class AccountRepository extends AbstractRepository {
 
 	public function delete(Account $account) {
 		$this->_em->remove($account);
+		$this->_em->flush();
+	}
+
+	public function upgradePassword(UserInterface $user, string $newEncodedPassword): void {
+		$user->pass_hash = $newEncodedPassword;
+
 		$this->_em->flush();
 	}
 }

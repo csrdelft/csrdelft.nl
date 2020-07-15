@@ -42,7 +42,7 @@ class SuService {
 	 * @return bool
 	 */
 	public function isSued() {
-		return $this->security->isGranted('IS_IMPERSONATOR');
+		return $this->security->getToken() && $this->security->isGranted('IS_IMPERSONATOR');
 	}
 
 	public function alsLid(Account $account, callable $fun) {
