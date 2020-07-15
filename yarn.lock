@@ -5068,6 +5068,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"inputmask@npm:^3.3.8":
+  version: 3.3.11
+  resolution: "inputmask@npm:3.3.11"
+  checksum: 173eb29361723fb072a283934e201861fe653e96c572236fa4989292358551fc60daa33c59b281205bc4fd01eab174809b266d5b1ec0dbe41f3d1d951abce1b1
+  languageName: node
+  linkType: hard
+
 "inquirer@npm:^7.0.0":
   version: 7.3.0
   resolution: "inquirer@npm:7.3.0"
@@ -7962,6 +7969,7 @@ fsevents@~2.1.2:
     file-loader: ^1.1.11
     google-palette: ^1.1.0
     hammerjs: ^2.0.8
+    inputmask: ^5.0.3
     jgallery: "https://github.com/jakubkowalczyk-pl/jgallery"
     jquery: ^3.4
     jquery-hoverintent: ^1.10.0
@@ -7998,8 +8006,10 @@ fsevents@~2.1.2:
     typescript: ^3.2.4
     vue: ^2.5.7
     vue-class-component: ^6.3.2
+    vue-inputmask: ^0.2.1
     vue-loader: ^15.4.1
     vue-property-decorator: ^7.3.0
+    vue-style-loader: ^4.1.2
     vue-template-compiler: ^2.5.17
     vue-tslint-loader: ^3.5.6
     vue-typescript-import-dts: ^4.0.0
@@ -9380,6 +9390,16 @@ typescript@^3.2.4:
   languageName: node
   linkType: hard
 
+"vue-inputmask@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "vue-inputmask@npm:0.2.1"
+  dependencies:
+    inputmask: ^3.3.8
+    vue: ^2.4.2
+  checksum: 30434e0ba50f8b7f8428e9d952eacf4dffb44b7ef504eb573558527b61ac343a977ac35d66d75cf5daa71d00797dde85518e81e5695674a1dea973b3d7abb6f4
+  languageName: node
+  linkType: hard
+
 "vue-loader@npm:^15.4.1":
   version: 15.9.3
   resolution: "vue-loader@npm:15.9.3"
@@ -9421,7 +9441,7 @@ typescript@^3.2.4:
   languageName: node
   linkType: hard
 
-"vue-style-loader@npm:^4.1.0":
+"vue-style-loader@npm:^4.1.0, vue-style-loader@npm:^4.1.2":
   version: 4.1.2
   resolution: "vue-style-loader@npm:4.1.2"
   dependencies:
@@ -9471,7 +9491,7 @@ typescript@^3.2.4:
   languageName: node
   linkType: hard
 
-"vue@npm:^2.5.7":
+"vue@npm:^2.4.2, vue@npm:^2.5.7":
   version: 2.6.11
   resolution: "vue@npm:2.6.11"
   checksum: ba12fa9632c3fa4e46eec0fffeb6ec03fae6eb999bf502628e0e1c4312a3f5ed62e34378b80a4f21c00fe20d772435f56e87f7c0ee761b47cb2999fb6f7fb722

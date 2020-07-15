@@ -62,6 +62,7 @@
 		"vue-class-component": "^6.3.2",
 		"vue-loader": "^15.4.1",
 		"vue-property-decorator": "^7.3.0",
+		"vue-style-loader": "^4.1.2",
 		"vue-template-compiler": "^2.5.17",
 		"vue-tslint-loader": "^3.5.6",
 		"vue-typescript-import-dts": "^4.0.0",
@@ -124,6 +125,7 @@
 		"textcomplete": "^0.17.1",
 		"three": "^0.117.0",
 		"timeago": "^1.6.7",
-		"vue": "^2.5.7"
+		"vue": "^2.5.7",
+		"vue-inputmask": "^0.2.1"
 	}
 }

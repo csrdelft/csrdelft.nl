@@ -184,6 +184,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 			{
 				test: /\.scss$/,
 				use: [
+					'vue-style-loader',
 					{
 						loader: require('mini-css-extract-plugin').loader as string, // Om ts tevreden te houden.
 						options: {

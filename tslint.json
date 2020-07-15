@@ -1,4 +1,9 @@
 {
+		"compilerOptions": {
+			"plugins": [
+				{ "name":  "typescript-tslint-plugin" }
+			]
+		},
     "defaultSeverity": "error",
     "extends": [
         "tslint:recommended"
