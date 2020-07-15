@@ -365,6 +365,15 @@ function first_space_after(string $string, int $offset = null) {
 }
 
 /**
+ * Encode string for RSS feed.
+ * @param string $string The string to encode
+ * @return string The encoded string
+ */
+function rss_encode(string $string) {
+	return htmlspecialchars($string, ENT_XML1, 'UTF-8');
+}
+
+/**
  * Split a string on keyword with a given space (in characters) around the keyword. Splits on spaces.
  *
  * @param string $string The base string
