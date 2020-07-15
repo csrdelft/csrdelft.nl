@@ -63,6 +63,16 @@ class LidStatus extends Enum {
 	/**
 	 * @var string[]
 	 */
+	protected static $hvLidLike = [
+		self::Erelid => self::Erelid,
+		self::Lid => self::Lid,
+		self::Gastlid => self::Gastlid,
+		self::Noviet => self::Noviet,
+	];
+
+	/**
+	 * @var string[]
+	 */
 	protected static $fiscaalLidlike = [
 		self::Noviet => self::Noviet,
 		self::Lid => self::Lid,
@@ -131,6 +141,13 @@ class LidStatus extends Enum {
 	}
 
 	/**
+	 * @return string[]
+	 */
+	public static function getHvLidLike() {
+		return array_values(static::$hvLidLike);
+	}
+
+	/**
 	 * @param string $option
 	 *
 	 * @return bool
@@ -147,6 +164,7 @@ class LidStatus extends Enum {
 	public static function isOudlidLike($option) {
 		return isset(static::$oudlidlike[$option]);
 	}
+
 
 	public function getChar() {
 		return static::$mapChoiceToChar[$this->getValue()];

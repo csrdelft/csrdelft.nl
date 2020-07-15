@@ -12,7 +12,7 @@ In de map `resources/views` staan alle blade templates, ze hebben de `.blade.php
 @section('titel', 'Mijn Pagina')
 
 @section('content')
-    <h1>Welkom op mijn pagina, {$naam}</h1>
+    <h1>Welkom op mijn pagina, {{$naam}}</h1>
     <p>Lees hier over mijn dingen</p>
 @endsection
 ```
