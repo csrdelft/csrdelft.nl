@@ -42,8 +42,7 @@
 				<dc:creator>{!! rss_encode(\CsrDelft\repository\ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'user'))!!}</dc:creator>
 				<category>{!!rss_encode($draad->deel->categorie->titel)!!} » {!!rss_encode($draad->deel->titel)!!}</category>
 				<comments>{{CSR_ROOT}}/forum/onderwerp/{{$draad->draad_id}}</comments>
-				<guid isPermaLink="true">{{CSR_ROOT}}/forum/reactie/{{$draad->laatste_post_id}}
-					#{{$draad->laatste_post_id}}</guid>
+				<guid isPermaLink="true">{{CSR_ROOT}}/forum/reactie/{{$draad->laatste_post_id}}#{{$draad->laatste_post_id}}</guid>
 			</item>
 		@endforeach
 	</channel>
