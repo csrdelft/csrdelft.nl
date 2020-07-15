@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Mail;
+use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
@@ -19,6 +20,8 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -47,7 +50,7 @@ class WachtwoordController extends AbstractController {
 
 	/**
 	 * @return TemplateView
-	 * @Route("/wachtwoord/wijzigen", methods={"GET", "POST"})
+	 * @Route("/wachtwoord/wijzigen", methods={"GET", "POST"}, name="wachtwoord_wijzigen")
 	 * @Route("/wachtwoord/verlopen", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -57,7 +60,7 @@ class WachtwoordController extends AbstractController {
 		if (!$account || !AccessService::mag($account, P_LOGGED_IN)) {
 			throw new CsrToegangException();
 		}
-		$form = new WachtwoordWijzigenForm($account, 'wijzigen');
+		$form = new WachtwoordWijzigenForm($account, $this->generateUrl('wachtwoord_wijzigen'));
 		if ($form->validate()) {
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
@@ -68,21 +71,34 @@ class WachtwoordController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @return TemplateView|RedirectResponse
 	 * @throws NonUniqueResultException
 	 * @throws ORMException
-	 * @throws Exception
-	 * @Route("/wachtwoord/reset")
+	 * @Route("/wachtwoord/reset", name="wachtwoord_reset")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function reset() {
+	public function reset(Request $request) {
 		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
-		$account = $this->oneTimeTokensRepository->verifyToken('/wachtwoord/reset', $token);
 
+		if ($token) {
+			$this->getSessionService()->set('wachtwoord_reset_token', $token);
+
+			return $this->redirectToRoute('wachtwoord_reset');
+		}
+
+		$token = $this->getSessionService()->get('wachtwoord_reset_token');
+
+		if (!$token) {
+			throw $this->createNotFoundException('Geen token gevonden');
+		}
+
+		$account = $this->oneTimeTokensRepository->verifyToken('/wachtwoord/reset', $token);
 		if ($account == null) {
 			throw new CsrToegangException();
 		}
-		$form = new WachtwoordWijzigenForm($account, 'reset?token=' . rawurlencode($token), false);
+
+		$form = new WachtwoordWijzigenForm($account, $this->generateUrl('wachtwoord_reset'), false);
 		if ($form->validate()) {
 			// wachtwoord opslaan
 			$pass_plain = $form->findByName('wijzigww')->getValue();
@@ -93,7 +109,7 @@ class WachtwoordController extends AbstractController {
 			// (pas na wachtwoord opslaan om meedere pogingen toe te staan als wachtwoord niet aan eisen voldoet)
 			$this->oneTimeTokensRepository->discardToken($account->uid, '/wachtwoord/reset');
 			// inloggen alsof gebruiker wachtwoord heeft ingevoerd
-			$loggedin = $this->loginService->login($account->uid, $pass_plain, false);
+			$loggedin = $this->loginService->login($request, $account->uid, $pass_plain);
 			if (!$loggedin) {
 				throw new CsrGebruikerException('Inloggen met nieuw wachtwoord mislukt');
 			}
@@ -118,32 +134,48 @@ class WachtwoordController extends AbstractController {
 	 */
 	public function vergeten() {
 		$form = new WachtwoordVergetenForm();
-		if ($form->validate()) {
+		if ($form->isPosted() && $form->validate()) {
+
 			$values = $form->getValues();
 			$account = $this->accountRepository->findOneByEmail($values['mail']);
+
 			// mag wachtwoord reset aanvragen?
 			// (mag ook als na verify($tokenString) niet ingelogd is met wachtwoord en dus AuthenticationMethod::url_token is)
 			if (!$account || !AccessService::mag($account, P_LOGGED_IN, AuthenticationMethod::getEnumValues())) {
 				setMelding('E-mailadres onjuist', -1);
-			} else {
-				if ($this->oneTimeTokensRepository->hasToken($account->uid, '/wachtwoord/reset')) {
-					$this->oneTimeTokensRepository->discardToken($account->uid, '/wachtwoord/reset');
-				}
 
-				$token = $this->oneTimeTokensRepository->createToken($account->uid, '/wachtwoord/reset');
-				// stuur resetmail
-				$profiel = $account->profiel;
-				$url =  CSR_ROOT ."/wachtwoord/reset?token=". rawurlencode($token[0]);
-				$bericht = "Geachte " . $profiel->getNaam('civitas') .
-					",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . date_format_intl($token[1], DATETIME_FORMAT) .
-					".\n\n[url=". $url  .
-					"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
-				$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
-				$mail = new Mail(array($account->email => $emailNaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
-				$mail->send();
-				setMelding('Wachtwoord reset email verzonden', 1);
+				return view('default', ['content' => $form]);
 			}
+			if ($this->oneTimeTokensRepository->hasToken($account->uid, '/wachtwoord/reset')) {
+				$this->oneTimeTokensRepository->discardToken($account->uid, '/wachtwoord/reset');
+			}
+
+			$token = $this->oneTimeTokensRepository->createToken($account->uid, '/wachtwoord/reset');
+			// stuur resetmail
+			$this->verzendResetMail($account, $token);
+
+			setMelding('Wachtwoord reset email verzonden', 1);
 		}
 		return view('default', ['content' => $form]);
+	}
+
+	private function verzendResetMail(Account $account, $token) {
+		$profiel = $account->profiel;
+
+		$url = CSR_ROOT . "/wachtwoord/reset?token=" . rawurlencode($token[0]);
+		$bericht = "Geachte " . $profiel->getNaam('civitas') .
+			",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . date_format_intl($token[1], DATETIME_FORMAT) .
+			".\n\n[url=" . $url .
+			"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
+		$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
+		$mail = new Mail(array($account->email => $emailNaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
+		$mail->send();
+	}
+
+	private function getSessionService(): SessionInterface {
+		/** @var Request $request */
+		$request = $this->container->get('request_stack')->getCurrentRequest();
+
+		return $request->getSession();
 	}
 }
