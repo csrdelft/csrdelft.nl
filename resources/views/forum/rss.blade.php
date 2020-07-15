@@ -15,8 +15,8 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<copyright>Copyright {{date('Y')}} C.S.R. Delft</copyright>
-		<pubDate>{{rfc2822($now)}}</pubDate>
-		<lastBuildDate>{{rfc2822($now)}}</lastBuildDate>
+		<pubDate>{{rfc2822('now')}}</pubDate>
+		<lastBuildDate>{{rfc2822('now')}}</lastBuildDate>
 		<docs>{{CSR_ROOT}}</docs>
 		<description>C.S.R. Delft: Vereniging van Christen-studenten te Delft.</description>
 		<image>
