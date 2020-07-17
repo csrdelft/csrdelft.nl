@@ -5451,8 +5451,8 @@ fsevents@~2.1.2:
 
 "jgallery@https://github.com/jakubkowalczyk-pl/jgallery":
   version: 2.2.1
-  resolution: "jgallery@https://github.com/jakubkowalczyk-pl/jgallery.git#commit:7f517e2ae765f6423c4d6b2337a83a7da6f9c22d"
-  checksum: e367826f523d385bd879019922a356369441c634bd7508301cf92b266941f38388c8198ecb45ce9124ce047391844c0bb2210e4c998b66a6b559670f082bf473
+  resolution: "jgallery@https://github.com/jakubkowalczyk-pl/jgallery.git#commit=7f517e2ae765f6423c4d6b2337a83a7da6f9c22d"
+  checksum: 456de223669892e0bb40db0ed36e5b88dac66346013352188eb80e64358bf93bb75731aa95283a113ab71b2d8cb05652eba001ffe4fdc0ac617966e13b47958b
   languageName: node
   linkType: hard
 
