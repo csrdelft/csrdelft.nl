@@ -39,7 +39,7 @@
 					<span>
 				<input type="text" id="su-input" placeholder="uid"/>
 				<input type="button" value="Su"
-							 onclick="window.location = '/su/' + document.getElementById('su-input').value"/>
+							 onclick="window.location += '?_switch_user=' + document.getElementById('su-input').value"/>
 			</span>
 				</div>
 			{% endif %}

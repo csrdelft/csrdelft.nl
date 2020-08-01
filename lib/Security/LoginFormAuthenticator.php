@@ -6,9 +6,11 @@ use CsrDelft\entity\security\Account;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -18,9 +20,15 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
+use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface {
+class LoginFormAuthenticator extends AbstractAuthenticator implements PasswordAuthenticatedInterface, AuthenticatorInterface {
 	use TargetPathTrait;
 
 	public const LOGIN_ROUTE = 'app_login';
@@ -41,7 +49,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 		$this->passwordEncoder = $passwordEncoder;
 	}
 
-	public function supports(Request $request) {
+	public function supports(Request $request): ?bool {
 		return self::LOGIN_ROUTE === $request->attributes->get('_route')
 			&& $request->isMethod('POST');
 	}
@@ -68,9 +76,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
 		$accountRepository = $this->entityManager->getRepository(Account::class);
 
-		$user = $accountRepository->find($credentials[self::CREDENTIALS_USER])
-			?? $accountRepository->findOneByUsername($credentials[self::CREDENTIALS_USER])
-			?? $accountRepository->findOneByEmail($credentials[self::CREDENTIALS_USER]);
+		$user = $accountRepository->findOneByUsername($credentials[self::CREDENTIALS_USER]);
 
 		if (!$user) {
 			// fail authentication with a custom error
@@ -91,7 +97,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 		return $credentials[self::CREDENTIALS_PASS];
 	}
 
-	public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey) {
+	public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response {
 		if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
 			return new RedirectResponse($targetPath);
 		}
@@ -101,5 +107,34 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
 	protected function getLoginUrl() {
 		return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+	}
+
+	public function authenticate(Request $request): PassportInterface {
+		$credentials = $this->getCredentials($request);
+		$token = new CsrfToken('global', $credentials[self::CREDENTIALS_CSRF]);
+		if (!$this->csrfTokenManager->isTokenValid($token)) {
+			throw new InvalidCsrfTokenException();
+		}
+
+		$accountRepository = $this->entityManager->getRepository(Account::class);
+
+		$user = $accountRepository->findOneByUsername($credentials[self::CREDENTIALS_USER]);
+
+		if (!$user) {
+			// fail authentication with a custom error
+			throw new CustomUserMessageAuthenticationException('Uid could not be found.');
+		}
+
+		$badges = [];
+
+		if ($request->request->has('_remember_me')) {
+			$badges[] = new RememberMeBadge();
+		}
+
+		return new Passport($user, new PasswordCredentials($credentials[self::CREDENTIALS_PASS]), $badges);
+	}
+
+	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response {
+		return null;
 	}
 }

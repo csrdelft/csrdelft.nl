@@ -8,6 +8,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccessService;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Security\Core\Security;
 
@@ -87,5 +88,12 @@ class SuService {
 		}
 
 		$this->container->get('security.token_storage')->setToken($token->getOriginalToken());
+	}
+
+	public function maySuTo(Account $suNaar) {
+		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') // Mag switchen
+			&& !$this->security->isGranted('IS_IMPERSONATOR') // Is niet al geswitched
+			&& $this->security->getUser()->uid !== $suNaar->uid // Is niet dezelfde gebruiker
+			&& AccessService::mag($suNaar, P_LOGGED_IN); // Gebruiker waar naar geswitched wordt mag inloggen
 	}
 }

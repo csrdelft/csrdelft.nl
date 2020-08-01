@@ -4,14 +4,20 @@ namespace CsrDelft\view\login;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\knoppen\LoginFormKnoppen;
+use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 
+/**
+ * Class LoginForm
+ * @package CsrDelft\view\login
+ * @see FormLoginAuthenticator
+ */
 class LoginForm extends Formulier {
 
 	public function __construct($showMelding = false) {
@@ -21,13 +27,12 @@ class LoginForm extends Formulier {
 
 		$fields = [];
 
-		$redirectUri = filter_input(INPUT_GET, 'redirect', FILTER_UNSAFE_RAW);
-		$fields['redirect'] = new HiddenField('redirect', $redirectUri);
+		$fields[] = new CsrfField(ContainerFacade::getContainer()->get('security.csrf.token_manager')->getToken('authenticate'), '_csrf_token');
 
-		$fields['user'] = new TextField('user', null, null);
+		$fields['user'] = new TextField('_username', null, null);
 		$fields['user']->placeholder = 'Lidnummer of emailadres';
 
-		$fields['pass'] = new WachtwoordField('pass', null, null);
+		$fields['pass'] = new WachtwoordField('_password', null, null);
 		$fields['pass']->placeholder = 'Wachtwoord';
 
 		if (ContainerFacade::getContainer()->get(LoginService::class)->hasError()) {

@@ -6,31 +6,29 @@ namespace CsrDelft\service\security;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\entity\security\LoginSession;
-use CsrDelft\entity\security\RememberLogin;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\Security\LoginFormAuthenticator;
 use CsrDelft\service\AccessService;
-use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
-use DateInterval;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 
 /**
  * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.
@@ -198,15 +196,7 @@ class LoginService {
 		}
 
 		// Inloggen met lidnummer of gebruikersnaam
-		if ($this->accountRepository::isValidUid($user)) {
-			$account = $this->accountRepository->get($user);
-		} else {
-			$account = $this->accountRepository->findOneByUsername($user);
-
-			if (!$account) {
-				$account = $this->accountRepository->findOneByEmail($user);
-			}
-		}
+		$account = $this->accountRepository->findOneByUsername($user);
 
 		// Onbekende gebruiker
 		if (!$account) {
@@ -263,28 +253,47 @@ class LoginService {
 	 * @see AccessService::mag()
 	 */
 	public function getAuthenticationMethod() {
-		return AuthenticationMethod::password_login;
 		if (MODE == 'CLI') {
 			return AuthenticationMethod::password_login;
 		}
 
-		if (!isset($_SESSION[self::SESS_AUTHENTICATION_METHOD])) {
+		$token = $this->security->getToken();
+
+		if ($token == null) {
 			return null;
 		}
-		$method = $_SESSION[self::SESS_AUTHENTICATION_METHOD];
-		if ($method === AuthenticationMethod::password_login) {
-			if ($this->current_session && $this->current_session->isRecent()) {
-				return AuthenticationMethod::recent_password_login;
-			}
+
+		switch (get_class($token)) {
+			case SwitchUserToken::class:
+			case TemporaryToken::class:
+				$method = AuthenticationMethod::temporary;
+				break;
+			case UsernamePasswordToken::class:
+			case PostAuthenticationToken::class:
+			case PostAuthenticationGuardToken::class:
+				$method = AuthenticationMethod::recent_password_login;
+				break;
+			case RememberMeToken::class;
+				$method = AuthenticationMethod::cookie_token;
+				break;
+			default:
+				$method = null;
+				break;
 		}
+
 		return $method;
 	}
 
-	public function resetLoginMoment() {
-		$_SESSION[self::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::password_login;
-		$this->current_session->login_moment = date_create_immutable();
-		$this->current_session->authentication_method = AuthenticationMethod::password_login;
-		$this->entityManager->flush();
+	/**
+	 * Maak de gebruiker opnieuw recent ingelogd
+	 */
+	public function setRecentLoginToken() {
+		$token = $this->security->getToken();
+
+		if ($token instanceof RememberMeToken) {
+			$this->container->get('security.token_storage')
+				->setToken(new UsernamePasswordToken($token->getUser(), [], $token->getProviderKey(), $token->getRoleNames()));
+		}
 	}
 
 	/**

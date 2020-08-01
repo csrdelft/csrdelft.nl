@@ -12,8 +12,12 @@ use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\AccessService;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * AccountRepository
@@ -26,7 +30,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method Account[]    findAll()
  * @method Account[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AccountRepository extends AbstractRepository implements PasswordUpgraderInterface {
+class AccountRepository extends AbstractRepository implements PasswordUpgraderInterface, UserLoaderInterface {
 
 	/**
 	 * @var AccessService
@@ -90,7 +94,9 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 	}
 
 	public function findOneByUsername($username) {
-		return $this->findOneBy(['username' => $username]);
+		return $this->find($username)
+			?? $this->findOneBy(['username' => $username])
+			?? $this->findOneByEmail($username);
 	}
 
 	/**
@@ -294,5 +300,9 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 		$user->pass_hash = $newEncodedPassword;
 
 		$this->_em->flush();
+	}
+
+	public function loadUserByUsername(string $username) {
+		return $this->findOneByUsername($username);
 	}
 }

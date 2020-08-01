@@ -1,27 +1,24 @@
 security:
+  enable_authenticator_manager: true
   # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
   providers:
     accounts:
       entity:
-        # the class of the entity that represents users
         class: 'CsrDelft\entity\security\Account'
-        # the property to query by - e.g. username, email, etc
-        property: 'uid'
-        # optional: if you're using multiple Doctrine entity
-        # managers, this option defines which one to use
-        # manager_name: 'customer'
 
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
     main:
-      anonymous: true
+      form_login:
+        enable_csrf: true
+        check_path: /login
       lazy: true
       provider: accounts
-      guard:
-        authenticators:
-          - CsrDelft\Security\LoginFormAuthenticator
+#      custom_authenticators:
+#        - CsrDelft\Security\LoginFormAuthenticator
+      entry_point: form_login
       logout:
         path: app_logout
         # where to redirect after logout
