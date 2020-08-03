@@ -358,10 +358,20 @@ class AgendaController {
 				$backgroundColor = '#1ABD2C';
 			}
 
+			// Zet eindmoment naar dag erna als activiteit tot 23:59 duurt en allDay is
+			if ($event->isHeledag() && date('H:i', $event->getEindMoment()) === '23:59') {
+				$eind = date_create_immutable('@'. $event->getEindMoment())
+					->add(new DateInterval('P1D'))
+					->setTime(0, 0, 0)
+					->getTimestamp();
+			} else {
+				$eind = $event->getEindMoment();
+			}
+
 			$eventsJson[] = [
 				'title' => $event->getTitel(),
 				'start' => date('c', $event->getBeginMoment()),
-				'end' => date('c', $event->getEindMoment()),
+				'end' => date('c', $eind),
 				'allDay' => $event->isHeledag(),
 				'id' => $event->getUUID(),
 				'textColor' => '#fff',
