@@ -10,6 +10,7 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
 
 class SuService {
@@ -28,15 +29,20 @@ class SuService {
 	 */
 	private $security;
 	/**
-	 * @var ContainerInterface
+	 * @var TokenStorageInterface
 	 */
-	private $container;
+	private $tokenStorage;
 
-	public function __construct(Security $security, ContainerInterface $container, LoginService $loginService, AccountRepository $accountRepository) {
+	public function __construct(
+		Security $security,
+		LoginService $loginService,
+		AccountRepository $accountRepository,
+		TokenStorageInterface $tokenStorage
+	) {
 		$this->accountRepository = $accountRepository;
 		$this->loginService = $loginService;
 		$this->security = $security;
-		$this->container = $container;
+		$this->tokenStorage = $tokenStorage;
 	}
 
 	/**
@@ -46,6 +52,13 @@ class SuService {
 		return $this->security->getToken() && $this->security->isGranted('IS_IMPERSONATOR');
 	}
 
+	/**
+	 * Voer een callable uit alsof je bent ingelogd als $account.
+	 *
+	 * @param Account $account
+	 * @param callable $fun
+	 * @return mixed Het resultaat van $fun
+	 */
 	public function alsLid(Account $account, callable $fun) {
 		$this->overrideUid($account);
 
@@ -65,6 +78,7 @@ class SuService {
 	 * Moet z.s.m. (binnen dit request) weer ongedaan worden met `endTempSwitchUser()`
 	 * @param Account $account Account van lid waarnaartoe geschakeld moet worden
 	 * @throws CsrException als er al een tijdelijke schakeling actief is.
+	 * @see SuService::alsLid() voor een veilige methode
 	 */
 	public function overrideUid(Account $account) {
 		$token = $this->security->getToken();
@@ -74,12 +88,13 @@ class SuService {
 
 		$temporaryToken = new TemporaryToken($account, $token);
 
-		$this->container->get('security.token_storage')->setToken($temporaryToken);
+		$this->tokenStorage->setToken($temporaryToken);
 	}
 
 	/**
 	 * Beëindig tijdelijke schakeling naar lid.
 	 * @throws CsrException als er geen tijdelijke schakeling actief is.
+	 * @see SuService::alsLid() voor een veilige methode
 	 */
 	public function resetUid() {
 		$token = $this->security->getToken();
@@ -87,7 +102,7 @@ class SuService {
 			throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
 		}
 
-		$this->container->get('security.token_storage')->setToken($token->getOriginalToken());
+		$this->tokenStorage->setToken($token->getOriginalToken());
 	}
 
 	public function maySuTo(Account $suNaar) {
