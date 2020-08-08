@@ -62,9 +62,7 @@ class LoginController extends AbstractController {
 		$error = $authenticationUtils->getLastAuthenticationError();
 		$userName = $authenticationUtils->getLastUsername();
 
-		$response = new Response(view('layout-extern.login', [
-			'loginForm' => new LoginForm($userName, $error)
-		]));
+		$response = new Response(view('layout-extern.login', ['loginForm' => new LoginForm($userName, $error)]));
 
 		// Als er geredirect wordt, stuur dan een forbidden status
 		if ($targetPath) {
@@ -75,30 +73,11 @@ class LoginController extends AbstractController {
 	}
 
 	/**
-	 * @Route("/login_check", name="app_login")
-	 * @Auth(P_PUBLIC)
-	 */
-	public function login(AuthenticationUtils $authenticationUtils): Response {
-		if ($this->getUser()) {
-			return $this->redirectToRoute('default');
-		}
-
-		// get the login error if there is one
-		$error = $authenticationUtils->getLastAuthenticationError();
-		// last username entered by the user
-		$lastUsername = $authenticationUtils->getLastUsername();
-
-		// TODO doe hier iets mee
-
-		return $this->redirectToRoute('default');
-	}
-
-	/**
 	 * @Route("/login_check", name="app_login_check")
 	 * @Auth(P_PUBLIC)
 	 */
 	public function login_check() {
-		throw new \LogicException('Wordt opgevangen door de firewall.');
+		throw new \LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml');
 	}
 
 	/**
@@ -106,6 +85,6 @@ class LoginController extends AbstractController {
 	 * @Auth(P_PUBLIC)
 	 */
 	public function logout() {
-		throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+		throw new \LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml');
 	}
 }

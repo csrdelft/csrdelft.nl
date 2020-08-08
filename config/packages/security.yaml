@@ -13,7 +13,7 @@ security:
     main:
       form_login:
         enable_csrf: true
-        check_path: /login_check
+        check_path: app_login_check
       lazy: true
       provider: accounts
       entry_point: form_login
