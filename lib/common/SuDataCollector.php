@@ -21,9 +21,9 @@ class SuDataCollector extends DataCollector {
 	 */
 	public function collect(Request $request, Response $response, Throwable $exception = null) {
 		$this->data = [
-			'can_su' => LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued(),
-			'is_sued' => ContainerFacade::getContainer()->get(SuService::class)->isSued(),
-			'profiel' => LoginService::getProfiel(),
+			'can_su' => false, //LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued(),
+			'is_sued' => false, //ContainerFacade::getContainer()->get(SuService::class)->isSued(),
+			'profiel' => null, // LoginService::getProfiel(),
 		];
 	}
 

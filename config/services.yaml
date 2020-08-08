@@ -63,3 +63,5 @@ services:
 
   Symfony\Bridge\Doctrine\Security\RememberMe\DoctrineTokenProvider: ~
   Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login.main'
+  Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface: '@security.authenticator.manager.main'
+  

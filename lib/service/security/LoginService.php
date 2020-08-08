@@ -5,7 +5,6 @@ namespace CsrDelft\service\security;
 
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
@@ -24,9 +23,8 @@ use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Guard\AuthenticatorInterface;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+use Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 
@@ -44,7 +42,6 @@ class LoginService {
 	/**
 	 * Sessiesleutels
 	 */
-	const SESS_AUTH_ERROR = 'auth_error';
 	const SESS_UID = '_uid';
 	const SESS_AUTHENTICATION_METHOD = '_authenticationMethod';
 	const SESS_SUED_FROM = '_suedFrom';
@@ -57,17 +54,9 @@ class LoginService {
 	 */
 	private static $cliUid = 'x999';
 	/**
-	 * @var LoginSession
-	 */
-	protected $current_session;
-	/**
 	 * @var LoginSessionRepository
 	 */
 	private $loginRepository;
-	/**
-	 * @var RememberLoginRepository
-	 */
-	private $rememberLoginRepository;
 	/**
 	 * @var AccountRepository
 	 */
@@ -85,23 +74,36 @@ class LoginService {
 	 */
 	private $container;
 	/**
-	 * @var GuardAuthenticatorHandler
+	 * @var AuthenticatorManagerInterface
 	 */
-	private $guardAuthenticatorHandler;
+	private $authenticatorManager;
 	/**
-	 * @var AuthenticatorInterface
+	 * @var UserAuthenticatorInterface
 	 */
-	private $authenticator;
+	private $userAuthenticator;
+	/**
+	 * @var FormLoginAuthenticator
+	 */
+	private $formLoginAuthenticator;
 
-	public function __construct(EntityManagerInterface $entityManager, Security $security, ContainerInterface $container, FormLoginAuthenticator $authenticator, GuardAuthenticatorHandler $guardAuthenticatorHandler, LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
+	public function __construct(
+		EntityManagerInterface $entityManager,
+		Security $security,
+		ContainerInterface $container,
+		LoginSessionRepository $loginRepository,
+		AccountRepository $accountRepository,
+		AuthenticatorManagerInterface $authenticatorManager,
+		UserAuthenticatorInterface $userAuthenticator,
+		FormLoginAuthenticator $formLoginAuthenticator
+	) {
 		$this->loginRepository = $loginRepository;
-		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->accountRepository = $accountRepository;
 		$this->entityManager = $entityManager;
 		$this->security = $security;
 		$this->container = $container;
-		$this->guardAuthenticatorHandler = $guardAuthenticatorHandler;
-		$this->authenticator = $authenticator;
+		$this->authenticatorManager = $authenticatorManager;
+		$this->userAuthenticator = $userAuthenticator;
+		$this->formLoginAuthenticator = $formLoginAuthenticator;
 	}
 
 	/**
@@ -119,6 +121,10 @@ class LoginService {
 	}
 
 	public function _getAccount() {
+		if (MODE == 'CLI') {
+			return static::getCliAccount();
+		}
+
 		return $this->security->getUser() ?? $this->accountRepository->find(self::UID_EXTERN);
 	}
 
@@ -143,10 +149,6 @@ class LoginService {
 	 * @return Account|false
 	 */
 	public static function getAccount() {
-		if (static::$cliUid == self::UID_CLI) {
-			return static::getCliAccount();
-		}
-
 		return ContainerFacade::getContainer()->get(LoginService::class)->_getAccount();
 	}
 
@@ -163,87 +165,33 @@ class LoginService {
 	 * @return Profiel|false
 	 */
 	public static function getProfiel() {
-		return static::getAccount()->profiel;
+		$profiel = ContainerFacade::getContainer()->get(LoginService::class)->_getProfiel();
+		return $profiel;
+	}
+
+	private function _getProfiel() {
+		return $this->_getAccount()->profiel;
 	}
 
 	/**
-	 * Inloggen met verschillende mogelijkheden:
-	 *
-	 * Als een gebruiker wordt ingelogd met $wacht == true, dan wordt gekeken of
-	 * er een timeout nodig is vanwege eerdere mislukte inlogpogingen.
-	 *
-	 * Als een gebruiker wordt ingelogd met $lockIP == true, dan wordt het IP-adres
-	 * van de gebruiker opgeslagen in de sessie, en het sessie-cookie zal ALLEEN
-	 * vanaf dat adres toegang geven tot de website.
-	 *
-	 * Als een gebruiker wordt ingelogd met $tokenAuthenticated == true, dan wordt het wachtwoord
-	 * van de gebruiker NIET gecontroleerd en wordt er ook GEEN timeout geforceerd, er wordt
-	 * vanuit gegaan dat VOORAF een token is gecontroleerd en dat voldoende is voor authenticatie.
-	 *
-	 * Als een gebruiker wordt ingelogd met $expire == DateTime, dan verloopt de sessie
-	 * van de gebruiker op het gegeven moment en wordt de gebruiker uigelogd.
+	 * Login een gebruiker, controleert niet het wachtwoord!
 	 *
 	 * @param Request $request
-	 * @param string $user
-	 * @param string $pass_plain
+	 * @param Account $account
 	 * @return boolean
 	 */
-	public function login(Request $request, $user, $pass_plain) {
-		$user = filter_var($user, FILTER_SANITIZE_STRING);
+	public function login(Request $request, Account $account) {
+		$this->userAuthenticator->authenticateUser($account, $this->formLoginAuthenticator, $request);
 
-		if ($user == self::UID_EXTERN || $user == self::UID_CLI) {
-			throw new CsrGebruikerException('Kan niet inloggen op dit account');
-		}
-
-		// Inloggen met lidnummer of gebruikersnaam
-		$account = $this->accountRepository->findOneByUsername($user);
-
-		// Onbekende gebruiker
-		if (!$account) {
-			return false;
-		}
-
-		if (!empty($account->blocked_reason)) {
-			$_SESSION[self::SESS_AUTH_ERROR] = 'Dit account is geblokkeerd: ' . $account->blocked_reason;
-			return false;
-		}
-
-		// Check password
-		if ($this->accountRepository->controleerWachtwoord($account, $pass_plain)) {
-			$this->accountRepository->successfulLoginAttempt($account);
-			$_SESSION[self::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::password_login;
-		} // Wrong password
-		else {
-			// Password deleted (by admin)
-			if ($account->pass_hash == '') {
-				$_SESSION[self::SESS_AUTH_ERROR] = 'Gebruik wachtwoord vergeten of mail de PubCie';
-			} // Regular failed username+password
-			else {
-				$_SESSION[self::SESS_AUTH_ERROR] = 'Inloggen niet geslaagd';
-				$this->accountRepository->failedLoginAttempt($account);
-			}
-			return false;
-		}
-
-		if ($account->uid !== self::UID_EXTERN) {
-			$this->guardAuthenticatorHandler->authenticateUserAndHandleSuccess($account, $request, $this->authenticator, 'main');
-		}
 		return true;
 	}
 
-	/**
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function logout() {
-		// Forget autologin
-		if (isset($_COOKIE[self::COOKIE_REMEMBER])) {
-			$this->rememberLoginRepository->verwijder(hash('sha512', $_COOKIE[self::COOKIE_REMEMBER]));
-			setRememberCookie(null);
-		}
-		// Destroy login session
-		$this->loginRepository->removeByHash(hash('sha512', session_id()));
-		session_destroy();
+	public function loginCookie(Request  $request, Account $account) {
+		// Todo use other authenticator which gives a cookiesession
+		$this->userAuthenticator->authenticateUser($account, $this->formLoginAuthenticator, $request);
+
+		return true;
+
 	}
 
 	/**
@@ -270,7 +218,6 @@ class LoginService {
 				break;
 			case UsernamePasswordToken::class:
 			case PostAuthenticationToken::class:
-			case PostAuthenticationGuardToken::class:
 				$method = AuthenticationMethod::recent_password_login;
 				break;
 			case RememberMeToken::class;
@@ -294,26 +241,5 @@ class LoginService {
 			$this->container->get('security.token_storage')
 				->setToken(new UsernamePasswordToken($token->getUser(), [], $token->getProviderKey(), $token->getRoleNames()));
 		}
-	}
-
-	/**
-	 * Na opvragen resetten.
-	 *
-	 * @return mixed null or string
-	 */
-	public function getError() {
-		if (!$this->hasError()) {
-			return null;
-		}
-		$error = $_SESSION[self::SESS_AUTH_ERROR];
-		unset($_SESSION[self::SESS_AUTH_ERROR]);
-		return $error;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasError() {
-		return isset($_SESSION[self::SESS_AUTH_ERROR]);
 	}
 }

@@ -120,7 +120,6 @@ switch (MODE) {
 		if (isSyrinx()) die("Syrinx is geen Travis!");
 		break;
 	case 'CLI':
-		$container->get(LoginService::class)->loginCli();
 		break;
 
 	case 'WEB':

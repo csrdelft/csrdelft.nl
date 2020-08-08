@@ -109,10 +109,8 @@ class WachtwoordController extends AbstractController {
 			// (pas na wachtwoord opslaan om meedere pogingen toe te staan als wachtwoord niet aan eisen voldoet)
 			$this->oneTimeTokensRepository->discardToken($account->uid, '/wachtwoord/reset');
 			// inloggen alsof gebruiker wachtwoord heeft ingevoerd
-			$loggedin = $this->loginService->login($request, $account->uid, $pass_plain);
-			if (!$loggedin) {
-				throw new CsrGebruikerException('Inloggen met nieuw wachtwoord mislukt');
-			}
+			$this->loginService->login($request, $account);
+
 			// stuur bevestigingsmail
 			$profiel = $account->profiel;
 			$bericht = "Geachte " . $profiel->getNaam('civitas') .

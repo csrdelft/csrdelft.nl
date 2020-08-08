@@ -10,16 +10,22 @@ use CsrDelft\service\security\LoginService;
 use Exception;
 use Firebase\JWT\JWT;
 use Jacwright\RestServer\RestException;
+use Symfony\Component\HttpFoundation\Request;
 
 class ApiAuthController {
 	private $accountRepository;
 	private $rememberLoginRepository;
+	/**
+	 * @var LoginService
+	 */
+	private $loginService;
 
 	public function __construct() {
 		$container = ContainerFacade::getContainer();
 
 		$this->rememberLoginRepository = $container->get(RememberLoginRepository::class);
 		$this->accountRepository = $container->get(AccountRepository::class);
+		$this->loginService = $container->get(LoginService::class);
 	}
 
 	/**
@@ -43,6 +49,13 @@ class ApiAuthController {
 		} catch (Exception $e) {
 			throw new RestException(401);
 		}
+
+		$container = ContainerFacade::getContainer();
+
+		$loginService = $container->get(LoginService::class);
+		$userProvider = $container->get('security.user_providers');
+
+		$loginService->loginCookie(Request::createFromGlobals(), $userProvider->loadUserByUsername($token->data->userId));
 
 		$_SESSION[LoginService::SESS_UID] = $token->data->userId;
 		$_SESSION[LoginService::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::cookie_token;
@@ -115,7 +128,7 @@ class ApiAuthController {
 		$token = JWT::encode($data, env('JWT_SECRET'), 'HS512');
 
 		// Register uid for this session
-		$_SESSION[LoginService::SESS_UID] = $account->uid;
+		$this->loginService->loginCookie(Request::createFromGlobals(), $account);
 
 		// Generate a refresh token
 		$rand = crypto_rand_token(255);
