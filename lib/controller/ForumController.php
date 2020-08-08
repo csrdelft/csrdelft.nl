@@ -138,7 +138,7 @@ class ForumController extends AbstractController {
 
 	/**
 	 * RSS feed van recente draadjes tonen.
-	 * @Route("/forum/rss/csrdelft.nl", methods={"GET"})
+	 * @Route("/forum/rss/csrdelft.xml", methods={"GET"})
 	 * @Route("/forum/rss/{token}/csrdelft.xml", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
