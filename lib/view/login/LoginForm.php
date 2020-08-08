@@ -17,14 +17,14 @@ use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 /**
  * Class LoginForm
  * @package CsrDelft\view\login
- * @see FormLoginAuthenticator
+ * @see FormLoginAuthenticator Voor de afhandeling van dit formulier
  */
 class LoginForm extends Formulier {
 
-	public function __construct($lastUserName = null, AuthenticationException $lastError = null, $showMelding = false) {
+	public function __construct($lastUserName = null, AuthenticationException $lastError = null) {
 		parent::__construct(null, '/login_check');
 		$this->formId = 'loginform';
-		$this->showMelding = $showMelding;
+		$this->showMelding = false;
 
 		$fields = [];
 
