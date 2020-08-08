@@ -5,6 +5,7 @@ namespace CsrDelft\service\security;
 
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Security\JwtToken;
 use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
@@ -220,7 +221,8 @@ class LoginService {
 			case PostAuthenticationToken::class:
 				$method = AuthenticationMethod::recent_password_login;
 				break;
-			case RememberMeToken::class;
+			case RememberMeToken::class:
+			case JwtToken::class:
 				$method = AuthenticationMethod::cookie_token;
 				break;
 			default:

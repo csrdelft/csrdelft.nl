@@ -43,7 +43,7 @@ class AccessControlEventListener {
 	 * @param CsrfService $csrfService
 	 */
 	public function onKernelController(ControllerEvent $event) {
-		if (!$event->getRequest()->get('_csrfUnsafe')) {
+		if (!startsWith($event->getRequest()->getPathInfo(), '/API/2.0') && !$event->getRequest()->get('_csrfUnsafe')) {
 			$this->csrfService->preventCsrf();
 		}
 

@@ -2,30 +2,34 @@
 
 namespace CsrDelft\controller\api;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use Jacwright\RestServer\RestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ApiLedenController {
-
 	/**
-	 * @return boolean
+	 * @var LidZoekerService
 	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginService::mag(P_OUDLEDEN_READ);
+	private $lidZoekerService;
+
+	public function __construct(LidZoekerService $lidZoekerService) {
+		$this->lidZoekerService = $lidZoekerService;
 	}
 
 	/**
-	 * @url GET /
+	 * @Route("/API/2.0/leden", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function getLeden() {
-
-		$zoeker = ContainerFacade::getContainer()->get(LidZoekerService::class);
 		$leden = [];
 
-		foreach ($zoeker->getLeden() as $profiel) {
+		foreach ($this->lidZoekerService->getLeden() as $profiel) {
 			$leden[] = array(
 				'id' => $profiel->uid,
 				'voornaam' => $profiel->voornaam,
@@ -34,17 +38,18 @@ class ApiLedenController {
 			);
 		}
 
-		return array('data' => $leden);
+		return new JsonResponse(array('data' => $leden));
 	}
 
 	/**
-	 * @url GET /$id
+	 * @Route("/API/2.0/leden/{id}", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function getLid($id) {
 		$profiel = ProfielRepository::get($id);
 
 		if (!$profiel) {
-			throw new RestException(404);
+			throw new NotFoundHttpException(404);
 		}
 
 		$woonoord = $profiel->getWoonoord();
@@ -75,7 +80,7 @@ class ApiLedenController {
 			'verticale' => !$profiel->getVerticale() ? null : $profiel->getVerticale()->naam,
 		);
 
-		return array('data' => $lid);
+		return new JsonResponse(array('data' => $lid));
 	}
 
 }

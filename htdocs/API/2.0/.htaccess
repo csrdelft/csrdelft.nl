@@ -1,2 +1,2 @@
-RewriteEngine On
-RewriteRule ^.*$ index.php [QSA,L]
+#RewriteEngine On
+#RewriteRule ^.*$ index.php [QSA,L]

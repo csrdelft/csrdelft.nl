@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\api;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\groepen\Activiteit;
@@ -14,6 +15,9 @@ use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\security\LoginService;
 use Jacwright\RestServer\RestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ApiAgendaController {
 	/** @var ActiviteitenRepository */
@@ -27,32 +31,22 @@ class ApiAgendaController {
 	/** @var MaaltijdAanmeldingenRepository */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-		$this->agendaRepository = $container->get(AgendaRepository::class);
-		$this->activiteitenRepository = $container->get(ActiviteitenRepository::class);
-		$this->maaltijdAanmeldingenRepository = $container->get(MaaltijdAanmeldingenRepository::class);
-		$this->maaltijdenRepository = $container->get(MaaltijdenRepository::class);
-		$this->activiteitDeelnemersRepository = $container->get(ActiviteitDeelnemersRepository::class);
+	public function __construct(AgendaRepository $agendaRepository, ActiviteitenRepository  $activiteitenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdenRepository  $maaltijdenRepository, ActiviteitDeelnemersRepository $activiteitDeelnemersRepository) {
+		$this->agendaRepository = $agendaRepository;
+		$this->activiteitenRepository = $activiteitenRepository;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->maaltijdenRepository = $maaltijdenRepository;
+		$this->activiteitDeelnemersRepository = $activiteitDeelnemersRepository;
 	}
 
 	/**
-	 * @return boolean
-	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginService::mag('P_AGENDA_READ');
-	}
-
-	/**
-	 * @url GET /
-	 * @param string from
-	 * @param string to
-	 * @return array
-	 * @throws RestException
+	 * @Route("/API/2.0/agenda", methods={"GET"})
+	 * @Auth(P_AGENDA_READ)
+	 * @return JsonResponse
 	 */
 	public function getAgenda() {
 		if (!isset($_GET['from']) || !isset($_GET['to'])) {
-			throw new RestException(400);
+			throw new BadRequestHttpException();
 		}
 
 		$from = strtotime($_GET['from']);
@@ -130,7 +124,7 @@ class ApiAgendaController {
 			)
 		);
 
-		return array('data' => $agenda);
+		return new JsonResponse(array('data' => $agenda));
 	}
 
 }

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller\api;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
@@ -10,7 +11,9 @@ use CsrDelft\service\security\LoginService;
 use Exception;
 use Firebase\JWT\JWT;
 use Jacwright\RestServer\RestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ApiAuthController {
 	private $accountRepository;
@@ -20,52 +23,14 @@ class ApiAuthController {
 	 */
 	private $loginService;
 
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-
-		$this->rememberLoginRepository = $container->get(RememberLoginRepository::class);
-		$this->accountRepository = $container->get(AccountRepository::class);
-		$this->loginService = $container->get(LoginService::class);
+	public function __construct(RememberLoginRepository $rememberLoginRepository, AccountRepository  $accountRepository, LoginService  $loginService) {
+		$this->rememberLoginRepository = $rememberLoginRepository;
+		$this->accountRepository = $accountRepository;
+		$this->loginService = $loginService;
 	}
 
 	/**
-	 * @return boolean
-	 */
-	public static function isAuthorized() {
-		if (!isset($_SERVER['HTTP_X_CSR_AUTHORIZATION'])) {
-			throw new RestException(400);
-		}
-
-		$authHeader = $_SERVER['HTTP_X_CSR_AUTHORIZATION'];
-
-		$jwt = substr($authHeader, 7);
-
-		if (!$jwt) {
-			throw new RestException(400);
-		}
-
-		try {
-			$token = JWT::decode($jwt, env('JWT_SECRET'), array('HS512'));
-		} catch (Exception $e) {
-			throw new RestException(401);
-		}
-
-		$container = ContainerFacade::getContainer();
-
-		$loginService = $container->get(LoginService::class);
-		$userProvider = $container->get('security.user_providers');
-
-		$loginService->loginCookie(Request::createFromGlobals(), $userProvider->loadUserByUsername($token->data->userId));
-
-		$_SESSION[LoginService::SESS_UID] = $token->data->userId;
-		$_SESSION[LoginService::SESS_AUTHENTICATION_METHOD] = AuthenticationMethod::cookie_token;
-
-		return true;
-	}
-
-	/**
-	 * @noAuth
-	 * @url POST /authorize
+	 * @Route("/API/2.0/auth/authorize", methods={"POST"})
 	 */
 	public function postAuthorize() {
 		$credentialsAreValid = false;
@@ -148,7 +113,8 @@ class ApiAuthController {
 	}
 
 	/**
-	 * @url POST /token
+	 * @Route("/API/2.0/auth/token", methods={"POST"}, options={"_csrfUnsafe"=true})
+	 * @Auth(P_PUBLIC)
 	 */
 	public function postToken() {
 
@@ -184,9 +150,9 @@ class ApiAuthController {
 		$token = JWT::encode($data, env('JWT_SECRET'), 'HS512');
 
 		// Respond
-		return [
+		return new JsonResponse([
 			'token' => $token
-		];
+		]);
 	}
 
 }
