@@ -14,7 +14,6 @@ use CsrDelft\entity\security\LoginSession;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
-use CsrDelft\Security\LoginFormAuthenticator;
 use CsrDelft\service\AccessService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -28,6 +27,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 
 /**
@@ -93,7 +93,7 @@ class LoginService {
 	 */
 	private $authenticator;
 
-	public function __construct(EntityManagerInterface $entityManager, Security $security, ContainerInterface $container, LoginFormAuthenticator $authenticator, GuardAuthenticatorHandler $guardAuthenticatorHandler, LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
+	public function __construct(EntityManagerInterface $entityManager, Security $security, ContainerInterface $container, FormLoginAuthenticator $authenticator, GuardAuthenticatorHandler $guardAuthenticatorHandler, LoginSessionRepository $loginRepository, RememberLoginRepository $rememberLoginRepository, AccountRepository $accountRepository) {
 		$this->loginRepository = $loginRepository;
 		$this->rememberLoginRepository = $rememberLoginRepository;
 		$this->accountRepository = $accountRepository;

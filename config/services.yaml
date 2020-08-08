@@ -53,13 +53,13 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.view }
 
-#  CsrDelft\events\AccessControlEventListener:
-#    tags:
-#      - { name: kernel.event_listener, event: kernel.controller }
+  CsrDelft\events\AccessControlEventListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.controller }
 
   CsrDelft\events\JsonBodyEventListener:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
   Symfony\Bridge\Doctrine\Security\RememberMe\DoctrineTokenProvider: ~
-
+  Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login.main'

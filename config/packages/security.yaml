@@ -16,8 +16,6 @@ security:
         check_path: /login_check
       lazy: true
       provider: accounts
-#      custom_authenticators:
-#        - CsrDelft\Security\LoginFormAuthenticator
       entry_point: form_login
       logout:
         path: app_logout
@@ -26,7 +24,7 @@ security:
       remember_me:
         secret:   '%kernel.secret%'
         lifetime: 604800 # 1 week in seconds
-        path:     /
+        path: /
         token_provider: 'Symfony\Bridge\Doctrine\Security\RememberMe\DoctrineTokenProvider'
 
       # activate different ways to authenticate
