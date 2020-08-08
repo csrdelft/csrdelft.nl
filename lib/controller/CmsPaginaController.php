@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\CmsPagina;
 use CsrDelft\repository\CmsPaginaRepository;
