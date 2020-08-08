@@ -12,8 +12,9 @@ security:
       security: false
     main:
       custom_authenticators:
-        - CsrDelft\service\security\ApiJwtAuthenticator
-        - CsrDelft\service\security\ApiAuthenticator
+        - CsrDelft\service\security\ApiJwtAuthenticator # Authenticate een jwt token
+        - CsrDelft\service\security\ApiAuthenticator # Authenticate een api login
+        - CsrDelft\service\security\PrivateTokenAuthenticator # Authenticate een private token url
       form_login:
         enable_csrf: true
         check_path: app_login_check
