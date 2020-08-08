@@ -50,7 +50,7 @@ class LoginController extends AbstractController {
 	 * @Route("/login", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function loginForm(Request $request, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager) {
+	public function loginForm(Request $request, AuthenticationUtils $authenticationUtils) {
 		if ($this->getUser()) {
 			return $this->redirectToRoute('default');
 		}
@@ -60,8 +60,11 @@ class LoginController extends AbstractController {
 			$this->saveTargetPath($request->getSession(), 'main', $targetPath);
 		}
 
+		$error = $authenticationUtils->getLastAuthenticationError();
+		$userName = $authenticationUtils->getLastUsername();
+
 		$response = new Response(view('layout-extern.login', [
-			'loginForm' => new LoginForm($urlGenerator, $csrfTokenManager->getToken('authenticate'), $this->loginService->getError())
+			'loginForm' => new LoginForm($userName, $error)
 		]));
 
 		// Als er geredirect wordt, stuur dan een forbidden status
