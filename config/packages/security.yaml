@@ -13,7 +13,7 @@ security:
     main:
       form_login:
         enable_csrf: true
-        check_path: /login
+        check_path: /login_check
       lazy: true
       provider: accounts
 #      custom_authenticators:
@@ -34,6 +34,7 @@ security:
 
       # https://symfony.com/doc/current/security/impersonating_user.html
       switch_user: true
+
   encoders:
     CsrDelft\entity\security\Account:
       algorithm: auto

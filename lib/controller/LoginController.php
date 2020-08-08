@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
  * LoginController.class.php
@@ -24,6 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller van de agenda.
  */
 class LoginController extends AbstractController {
+	use TargetPathTrait;
 	/**
 	 * @var LoginService
 	 */
@@ -43,22 +45,31 @@ class LoginController extends AbstractController {
 		$this->suService = $suService;
 	}
 
-//	/**
-//	 * @param Request $request
-//	 * @return Response
-//	 * @Route("/login", methods={"GET"})
-//	 * @Auth(P_PUBLIC)
-//	 */
-//	public function loginForm (Request $request) {
-//		$response = new Response(view('layout-extern.login', ['loginForm' => new LoginForm()]));
-//
-//		// Als er geredirect wordt, stuur dan een forbidden status
-//		if ($request->query->has('redirect')) {
-//			$response->setStatusCode(Response::HTTP_FORBIDDEN);
-//		}
-//
-//		return $response;
-//	}
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/login", methods={"GET"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function loginForm (Request $request) {
+		if ($this->getUser()) {
+			return $this->redirectToRoute('default');
+		}
+
+		$targetPath = $request->query->get('_target_path');
+		if ($targetPath) {
+			$this->saveTargetPath($request->getSession(), 'main', $targetPath);
+		}
+
+		$response = new Response(view('layout-extern.login', ['loginForm' => new LoginForm()]));
+
+		// Als er geredirect wordt, stuur dan een forbidden status
+		if ($targetPath) {
+			$response->setStatusCode(Response::HTTP_FORBIDDEN);
+		}
+
+		return $response;
+	}
 
 //	/**
 //	 * @return RedirectResponse

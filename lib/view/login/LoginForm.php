@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 class LoginForm extends Formulier {
 
 	public function __construct($showMelding = false) {
-		parent::__construct(null, '/login');
+		parent::__construct(null, '/login_check');
 		$this->formId = 'loginform';
 		$this->showMelding = $showMelding;
 
