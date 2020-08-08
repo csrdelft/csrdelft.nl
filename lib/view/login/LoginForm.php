@@ -10,6 +10,7 @@ use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
+use CsrDelft\view\formulier\knoppen\LoginFormKnoppen;
 
 class LoginForm extends Formulier {
 
@@ -39,20 +40,12 @@ class LoginForm extends Formulier {
 		}
 
 		$this->addFields($fields);
+
+		$this->formKnoppen = new LoginFormKnoppen();
 	}
 
-	public function view() {
-		parent::view();
-		?>
-		<ul class="login-buttons">
-			<li>
-				<a href="#" class="login-submit" onclick="document.getElementById('loginform').submit();">Inloggen</a>
-				&raquo;
-				&nbsp; <a href="/accountaanvragen">Account aanvragen</a> &raquo;
-			</li>
-			<li><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a></li>
-		</ul>
-		<?php
+	protected function getScriptTag() {
+		// er is geen javascript
+		return "";
 	}
-
 }

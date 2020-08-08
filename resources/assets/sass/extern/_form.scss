@@ -42,11 +42,34 @@ form {
 .login-buttons {
   clear: both;
   padding: 0;
+	text-align: center;
 
   li {
 		list-style: none;
     padding: 0;
   }
+
+	input[type=submit] {
+		// Reset de standaard knop styles
+		box-shadow: none;
+		padding: 0;
+		text-transform: none;
+		line-height: normal;
+		letter-spacing: inherit;
+		font-weight: inherit;
+		font-size: inherit;
+		border-bottom: 1px dotted rgba(255, 255, 255, 0.35);
+		height: auto;
+		border-radius: 0;
+		background: none;
+
+		transition: border-bottom-color 0.2s ease-in-out;
+
+		&:hover, &:active {
+			background-color: inherit;
+			border-bottom-color: transparent;
+		}
+	}
 }
 
 .alert {
