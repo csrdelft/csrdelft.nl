@@ -25,12 +25,12 @@ security:
       provider: accounts
       stateless: true
       custom_authenticators: [CsrDelft\service\security\PrivateTokenAuthenticator]
-    # Dit is de standaar firewall en wordt gebruikt als geen van de andere firewalls gebruikt worden.
+    # Dit is de standaard firewall en wordt gebruikt als geen van de andere firewalls gebruikt worden.
     main:
       form_login:
         enable_csrf: true
         check_path: app_login_check
-      custom_authenticator: [CsrDelft\service\security\WachtwoordResetAuthenticator]
+      custom_authenticators: [CsrDelft\service\security\WachtwoordResetAuthenticator]
       lazy: true
       provider: accounts
       entry_point: form_login
@@ -42,7 +42,6 @@ security:
         secret:   '%kernel.secret%'
         lifetime: 604800 # 1 week in seconds
         path: /
-        remember_me_parameter: force_remember_me
         token_provider: 'CsrDelft\common\Security\PersistentTokenProvider'
       switch_user: true
 

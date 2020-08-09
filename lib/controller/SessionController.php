@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
+use Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -103,17 +103,18 @@ class SessionController extends AbstractController {
 
 	/**
 	 * @param Request $request
-	 * @param RememberMeServicesInterface $rememberMeServices
-	 * @return Response
+	 * @param PersistentTokenBasedRememberMeServices $rememberMeServices
+	 * @return RememberLoginForm|Response
 	 * @Route("/session/remember", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function remember(Request $request, RememberMeServicesInterface $rememberMeServices) {
+	public function remember(Request $request, PersistentTokenBasedRememberMeServices $rememberMeServices) {
 		$selection = $this->getDataTableSelection();
-
 
 		if (count($selection) == 0) {
 			$response = new Response();
+
+			$request->request->set('_remember_me', true);
 			$rememberMeServices->loginSuccess($request, $response, $this->get('security.token_storage')->getToken());
 
 			return $response;
@@ -133,16 +134,9 @@ class SessionController extends AbstractController {
 			} else {
 				$response = new JsonResponse(CSR_ROOT);
 			}
-			if ($remember->id) {
-				$this->getDoctrine()->getManager()->persist($remember);
-				$this->getDoctrine()->getManager()->flush();
 
-			} else {
-				// Er was nog geen remember login
-				$request->attributes->set('force_remember_me', true);
-
-				$rememberMeServices->loginSuccess($request, $response, $this->get('security.token_storage')->getToken());
-			}
+			$this->getDoctrine()->getManager()->persist($remember);
+			$this->getDoctrine()->getManager()->flush();
 
 			return $response;
 		} else {

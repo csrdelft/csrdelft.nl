@@ -102,6 +102,15 @@ class RememberLogin implements DataTableEntry, PersistentTokenInterface {
 		return reldate($this->remember_since);
 	}
 
+	/**
+	 * @return string
+	 * @Serializer\SerializedName("last_used")
+	 * @Serializer\Groups("datatable")
+	 */
+	public function getDataTableLastUsed() {
+		return reldate($this->last_used);
+	}
+
 	public function getClass() {
 		return Account::class;
 	}

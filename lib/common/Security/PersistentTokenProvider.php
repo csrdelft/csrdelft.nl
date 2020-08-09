@@ -11,6 +11,7 @@ use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
 use Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface;
+use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class PersistentTokenProvider implements TokenProviderInterface {
@@ -38,7 +39,13 @@ class PersistentTokenProvider implements TokenProviderInterface {
 	}
 
 	public function loadTokenBySeries(string $series) {
-		return $this->rememberLoginRepository->findOneBy(['series' => $series]);
+		$token = $this->rememberLoginRepository->findOneBy(['series' => $series]);
+
+		if (!$token) {
+			throw new TokenNotFoundException();
+		}
+
+		return $token;
 	}
 
 	public function deleteTokenBySeries(string $series) {
