@@ -10,17 +10,23 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+    # Achter deze firewall zitten requests voor de api.
     api:
       pattern: ^/API/2.0/
       stateless: true
-      custom_authenticators:
-        - CsrDelft\service\security\ApiAuthenticator # Authenticate een api login
-#      entry_point: CsrDelft\service\security\ApiAuthenticator
+      custom_authenticators: [CsrDelft\service\security\ApiAuthenticator]
       provider: accounts
       lazy: true
+    # Achter deze firewall zitten requests die met een private token worden opgehaald.
+    # Concreet zijn dit de forum rss en de agenda ics. Als een request een {private_auth_token}
+    # veld bevat wordt deze opgepikt door deze firewall. Zie ook PrivateTokenAuthenticator
+    private_token:
+      request_matcher: CsrDelft\service\security\PrivateTokenAuthenticator
+      provider: accounts
+      stateless: true
+      custom_authenticators: [CsrDelft\service\security\PrivateTokenAuthenticator]
+    # Dit is de standaar firewall en wordt gebruikt als geen van de andere firewalls gebruikt worden.
     main:
-      custom_authenticators:
-        - CsrDelft\service\security\PrivateTokenAuthenticator # Authenticate een private token url
       form_login:
         enable_csrf: true
         check_path: app_login_check
@@ -37,11 +43,6 @@ security:
         path: /
         remember_me_parameter: force_remember_me
         token_provider: 'CsrDelft\common\Security\PersistentTokenProvider'
-
-      # activate different ways to authenticate
-      # https://symfony.com/doc/current/security.html#firewalls-authentication
-
-      # https://symfony.com/doc/current/security/impersonating_user.html
       switch_user: true
 
   encoders:

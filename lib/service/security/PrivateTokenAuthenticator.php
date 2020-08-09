@@ -7,6 +7,7 @@ namespace CsrDelft\service\security;
 use CsrDelft\common\Security\PrivateTokenToken;
 use CsrDelft\repository\security\AccountRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -23,7 +24,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 2020-08-09
  */
-class PrivateTokenAuthenticator extends AbstractAuthenticator {
+class PrivateTokenAuthenticator extends AbstractAuthenticator implements RequestMatcherInterface {
 	/**
 	 * @var AccountRepository
 	 */
@@ -34,14 +35,18 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator {
 	}
 
 	public function supports(Request $request): ?bool {
-		return $request->query->has('private_token')
-			&& preg_match('/^[a-zA-Z0-9]{150}$/', $request->query->get('private_token'));
+		return $request->attributes->has('private_auth_token')
+			&& preg_match('/^[a-zA-Z0-9]{150}$/', $request->attributes->get('private_auth_token'));
 	}
 
 	public function authenticate(Request $request): PassportInterface {
-		$token = $request->query->get('private_token');
+		$token = $request->attributes->get('private_auth_token');
 
 		$user = $this->accountRepository->findOneBy(['private_token' => $token]);
+
+		if (!$user) {
+			throw new AuthenticationException("Geen geldige private_token");
+		}
 
 		return new SelfValidatingPassport($user);
 
@@ -62,5 +67,9 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator {
 
 	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response {
 		return new Response("", 403);
+	}
+
+	public function matches(Request $request) {
+		return $this->supports($request);
 	}
 }

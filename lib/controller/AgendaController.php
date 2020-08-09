@@ -110,7 +110,7 @@ class AgendaController {
 
 	/**
 	 * @return IcalResponse
-	 * @Route("/agenda/ical/{token}/csrdelft.ics", methods={"GET"})
+	 * @Route("/agenda/ical/{private_auth_token}/csrdelft.ics", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function ical() {
