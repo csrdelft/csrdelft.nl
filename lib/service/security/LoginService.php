@@ -10,14 +10,10 @@ use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
-use CsrDelft\entity\security\LoginSession;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\LoginSessionRepository;
-use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\AccessService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
@@ -75,10 +71,6 @@ class LoginService {
 	 */
 	private $container;
 	/**
-	 * @var AuthenticatorManagerInterface
-	 */
-	private $authenticatorManager;
-	/**
 	 * @var UserAuthenticatorInterface
 	 */
 	private $userAuthenticator;
@@ -86,6 +78,10 @@ class LoginService {
 	 * @var FormLoginAuthenticator
 	 */
 	private $formLoginAuthenticator;
+	/**
+	 * @var AuthenticatorManagerInterface
+	 */
+	private $authenticatorManager;
 
 	public function __construct(
 		EntityManagerInterface $entityManager,
@@ -129,6 +125,15 @@ class LoginService {
 		return $this->security->getUser() ?? $this->accountRepository->find(self::UID_EXTERN);
 	}
 
+	private static function getCliAccount() {
+		$account = new Account();
+		$account->email = env('EMAIL_PUBCIE');
+		$account->uid = self::UID_CLI;
+		$account->perm_role = 'R_PUBCIE';
+
+		return $account;
+	}
+
 	/**
 	 * @return string
 	 */
@@ -153,15 +158,6 @@ class LoginService {
 		return ContainerFacade::getContainer()->get(LoginService::class)->_getAccount();
 	}
 
-	private static function getCliAccount() {
-		$account = new Account();
-		$account->email = env('EMAIL_PUBCIE');
-		$account->uid = self::UID_CLI;
-		$account->perm_role = 'R_PUBCIE';
-
-		return $account;
-	}
-
 	/**
 	 * @return Profiel|false
 	 */
@@ -172,27 +168,6 @@ class LoginService {
 
 	private function _getProfiel() {
 		return $this->_getAccount()->profiel;
-	}
-
-	/**
-	 * Login een gebruiker, controleert niet het wachtwoord!
-	 *
-	 * @param Request $request
-	 * @param Account $account
-	 * @return boolean
-	 */
-	public function login(Request $request, Account $account) {
-		$this->userAuthenticator->authenticateUser($account, $this->formLoginAuthenticator, $request);
-
-		return true;
-	}
-
-	public function loginCookie(Request  $request, Account $account) {
-		// Todo use other authenticator which gives a cookiesession
-		$this->userAuthenticator->authenticateUser($account, $this->formLoginAuthenticator, $request);
-
-		return true;
-
 	}
 
 	/**

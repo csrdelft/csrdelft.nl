@@ -38,7 +38,6 @@ class OneTimeTokensRepository extends AbstractRepository {
 	 * @param string $url
 	 * @param string $token
 	 * @return Account|null
-	 * @throws NonUniqueResultException
 	 */
 	public function verifyToken($url, $token) {
 		$qb = $this->createQueryBuilder('t');
@@ -74,7 +73,6 @@ class OneTimeTokensRepository extends AbstractRepository {
 	/**
 	 * @param string $uid
 	 * @param string $url
-	 * @throws ORMException
 	 */
 	public function discardToken($uid, $url) {
 		$this->getEntityManager()->remove($this->getEntityManager()->getReference(OneTimeToken::class, ['uid' => $uid, 'url' => $url]));
