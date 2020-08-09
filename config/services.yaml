@@ -65,7 +65,7 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
-  Symfony\Bridge\Doctrine\Security\RememberMe\DoctrineTokenProvider: ~
+  CsrDelft\common\Security\PersistentTokenProvider: ~
   Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login.main'
   Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface: '@security.authenticator.manager.main'
 

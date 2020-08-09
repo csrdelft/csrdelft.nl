@@ -3,156 +3,24 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\security\enum\AuthenticationMethod;
-use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\repository\security\RememberLoginRepository;
-use CsrDelft\service\security\LoginService;
-use Exception;
-use Firebase\JWT\JWT;
-use Jacwright\RestServer\RestException;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\service\security\ApiAuthenticator;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiAuthController {
-	private $accountRepository;
-	private $rememberLoginRepository;
-	/**
-	 * @var LoginService
-	 */
-	private $loginService;
-
-	public function __construct(RememberLoginRepository $rememberLoginRepository, AccountRepository  $accountRepository, LoginService  $loginService) {
-		$this->rememberLoginRepository = $rememberLoginRepository;
-		$this->accountRepository = $accountRepository;
-		$this->loginService = $loginService;
-	}
-
+class ApiAuthController extends AbstractController {
 	/**
 	 * @Route("/API/2.0/auth/authorize", methods={"POST"})
+	 * @see ApiAuthenticator
 	 */
 	public function postAuthorize() {
-		$credentialsAreValid = false;
-		$account = null;
-
-		// Check credentials
-		if (isset($_POST['user']) && isset($_POST['pass'])) {
-
-			// Filter posted data
-			$user = filter_var(strval($_POST['user']), FILTER_SANITIZE_STRING);
-			$pass = filter_var(strval($_POST['pass']), FILTER_SANITIZE_STRING);
-
-			// Check uid
-			if ($this->accountRepository->isValidUid($user)) {
-				$account = $this->accountRepository->get($user);
-			}
-
-			// Check account
-			if ($account) {
-
-				// Check timeout
-				$timeout = $this->accountRepository->moetWachten($account);
-
-				if ($timeout === 0) {
-
-					// Check password
-					$validPassword = $this->accountRepository->controleerWachtwoord($account, $pass);
-
-					if ($validPassword) {
-						$this->accountRepository->successfulLoginAttempt($account);
-						$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
-						$credentialsAreValid = true;
-					} else {
-						$this->accountRepository->failedLoginAttempt($account);
-					}
-
-				}
-			}
-
-		}
-
-		if (!$credentialsAreValid) {
-			throw new RestException(401);
-		}
-
-		// Generate JWT
-		$tokenId = base64_encode(openssl_random_pseudo_bytes(32));
-		$issuedAt = time();
-
-		$data = [
-			'iat' => $issuedAt,
-			'exp' => $issuedAt + env('JWT_LIFETIME'),
-			'jti' => $tokenId,
-			'data' => [
-				'userId' => $account->uid
-			]
-		];
-
-		// Encode the JWT
-		$token = JWT::encode($data, env('JWT_SECRET'), 'HS512');
-
-		// Register uid for this session
-		$this->loginService->loginCookie(Request::createFromGlobals(), $account);
-
-		// Generate a refresh token
-		$rand = crypto_rand_token(255);
-
-		// Save the refresh token
-		$remember = $this->rememberLoginRepository->nieuw();
-		$remember->lock_ip = false;
-		$remember->device_name = 'API 2.0: ' . filter_var(strval($_SERVER['HTTP_USER_AGENT']), FILTER_SANITIZE_STRING);
-		$remember->token = hash('sha512', $rand);
-		$this->rememberLoginRepository->create($remember);
-
-		// Respond with both tokens
-		return [
-			'token' => $token,
-			'refreshToken' => $rand
-		];
+		throw new \LogicException("Deze request wordt opgevangen door ApiAuthenticator.");
 	}
 
 	/**
-	 * @Route("/API/2.0/auth/token", methods={"POST"}, options={"_csrfUnsafe"=true})
-	 * @Auth(P_PUBLIC)
+	 * @Route("/API/2.0/auth/token", methods={"POST"})
+	 * @see ApiAuthenticator
 	 */
 	public function postToken() {
-
-		// Check for token
-		if (!isset($_POST['refresh_token'])) {
-			throw new RestException(401);
-		}
-
-		// Filter posted data
-		$refresh_token = filter_var(strval($_POST['refresh_token']), FILTER_SANITIZE_STRING);
-
-		// Check refresh token
-		$remember = $this->rememberLoginRepository->findOneBy(['token' => hash('sha512', $refresh_token)]);
-
-		if (!$remember) {
-			throw new RestException(401);
-		}
-
-		// Generate new JWT
-		$tokenId = base64_encode(openssl_random_pseudo_bytes(32));
-		$issuedAt = time();
-
-		$data = [
-			'iat' => $issuedAt,
-			'exp' => $issuedAt + env('JWT_LIFETIME'),
-			'jti' => $tokenId,
-			'data' => [
-				'userId' => $remember->uid
-			]
-		];
-
-		// Encode the new JWT
-		$token = JWT::encode($data, env('JWT_SECRET'), 'HS512');
-
-		// Respond
-		return new JsonResponse([
-			'token' => $token
-		]);
+		throw new \LogicException("Deze request wordt opgevangen door ApiAuthenticator.");
 	}
-
 }

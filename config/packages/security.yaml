@@ -10,10 +10,16 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+    api:
+      pattern: ^/API/2.0/
+      stateless: true
+      custom_authenticators:
+        - CsrDelft\service\security\ApiAuthenticator # Authenticate een api login
+#      entry_point: CsrDelft\service\security\ApiAuthenticator
+      provider: accounts
+      lazy: true
     main:
       custom_authenticators:
-        - CsrDelft\service\security\ApiJwtAuthenticator # Authenticate een jwt token
-        - CsrDelft\service\security\ApiAuthenticator # Authenticate een api login
         - CsrDelft\service\security\PrivateTokenAuthenticator # Authenticate een private token url
       form_login:
         enable_csrf: true
@@ -29,7 +35,8 @@ security:
         secret:   '%kernel.secret%'
         lifetime: 604800 # 1 week in seconds
         path: /
-        token_provider: 'Symfony\Bridge\Doctrine\Security\RememberMe\DoctrineTokenProvider'
+        remember_me_parameter: force_remember_me
+        token_provider: 'CsrDelft\common\Security\PersistentTokenProvider'
 
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#firewalls-authentication

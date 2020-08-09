@@ -73,7 +73,7 @@ class LoginController extends AbstractController {
 	}
 
 	/**
-	 * @Route("/login_check", name="app_login_check")
+	 * @Route("/login_check", name="app_login_check", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function login_check() {

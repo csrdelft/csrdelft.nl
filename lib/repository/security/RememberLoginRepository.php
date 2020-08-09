@@ -10,6 +10,9 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
+use Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface;
+use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -24,35 +27,6 @@ class RememberLoginRepository extends AbstractRepository {
 
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, RememberLogin::class);
-	}
-
-	/**
-	 * @param string $rand
-	 *
-	 * @return bool|RememberLogin
-	 * @throws NonUniqueResultException
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function verifyToken($rand) {
-		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$ip = $_SERVER['REMOTE_ADDR'];
-		} else {
-			$ip = '';
-		}
-		$qb = $this->createQueryBuilder('t');
-		$qb->andWhere('t.token = :token');
-		$qb->andWhere('t.lock_ip = FALSE or t.ip = :ip');
-		$qb->setParameters(['token'=>hash('sha512', $rand), 'ip'=>$ip]);
-		try {
-			$remember = $qb->getQuery()->getSingleResult();
-			$this->rememberLogin($remember);
-			return $remember;
-		} catch (NoResultException $e) {
-			return false;
-		} catch (NonUniqueResultException $e) {
-			throw $e;
-		}
 	}
 
 	/**

@@ -20,7 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiForumController {
 	private $forumDradenRepository;
 	private $forumPostsRepository;
-	private $forumDradenGelezenModel;
 	/**
 	 * @var ForumDradenGelezenRepository
 	 */
@@ -73,7 +72,7 @@ class ApiForumController {
 			throw new RestException(403);
 		}
 
-		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, date_create_immutable());
+		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, date_create_immutable());
 
 		$posts = $this->forumPostsRepository->findBy(['draad_id' => $id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['datum_tijd' => 'DESC'], $limit, $offset);
 

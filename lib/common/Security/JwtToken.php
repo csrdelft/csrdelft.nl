@@ -21,7 +21,7 @@ class JwtToken extends AbstractToken {
 	 */
 	private $refreshToken;
 
-	public function __construct(UserInterface $user, string $token, string $refreshToken, string $firewall, array $roles = []) {
+	public function __construct(UserInterface $user, string $token, ?string $refreshToken, string $firewall, array $roles = []) {
 		parent::__construct($roles);
 
 		$this->setUser($user);
@@ -45,7 +45,7 @@ class JwtToken extends AbstractToken {
 	/**
 	 * @return string
 	 */
-	public function getRefreshToken(): string {
+	public function getRefreshToken(): ?string {
 		return $this->refreshToken;
 	}
 

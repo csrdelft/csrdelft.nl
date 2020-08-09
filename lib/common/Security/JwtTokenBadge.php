@@ -12,11 +12,11 @@ class JwtTokenBadge implements BadgeInterface {
 	 */
 	private $token;
 	/**
-	 * @var string
+	 * @var string|null
 	 */
 	private $refreshToken;
 
-	public function __construct(string $token, string $refreshToken) {
+	public function __construct(string $token, ?string $refreshToken) {
 		$this->token = $token;
 		$this->refreshToken = $refreshToken;
 	}
@@ -31,7 +31,7 @@ class JwtTokenBadge implements BadgeInterface {
 	/**
 	 * @return string
 	 */
-	public function getRefreshToken(): string {
+	public function getRefreshToken(): ?string {
 		return $this->refreshToken;
 	}
 
