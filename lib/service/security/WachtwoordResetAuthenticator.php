@@ -69,9 +69,6 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator {
 				setMelding('Wachtwoord instellen geslaagd', 1);
 			}
 
-			// User is veranderd, haal een nieuwe op uit de database, user wordt geserialiseerd in de token
-			$user = $this->accountRepository->find($uid);
-
 			// token verbruikt
 			// (pas na wachtwoord opslaan om meedere pogingen toe te staan als wachtwoord niet aan eisen voldoet)
 			$this->oneTimeTokensRepository->discardToken($user->uid, '/wachtwoord/reset');

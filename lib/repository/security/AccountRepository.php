@@ -183,8 +183,6 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 			}
 		}
 
-		$this->_em->clear();
-
 		return true;
 	}
 
