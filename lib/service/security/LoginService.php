@@ -15,7 +15,6 @@ use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\service\AccessService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -162,8 +161,7 @@ class LoginService {
 	 * @return Profiel|false
 	 */
 	public static function getProfiel() {
-		$profiel = ContainerFacade::getContainer()->get(LoginService::class)->_getProfiel();
-		return $profiel;
+		return ContainerFacade::getContainer()->get(LoginService::class)->_getProfiel();
 	}
 
 	private function _getProfiel() {

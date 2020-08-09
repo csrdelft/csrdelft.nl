@@ -28,9 +28,6 @@ class LoginForm extends Formulier {
 
 		$fields = [];
 
-		$redirectUri = filter_input(INPUT_GET, 'redirect', FILTER_UNSAFE_RAW);
-		$fields['redirect'] = new HiddenField('redirect', $redirectUri);
-
 		$fields[] = new CsrfField(ContainerFacade::getContainer()->get('security.csrf.token_manager')->getToken('authenticate'), '_csrf_token');
 
 		$fields['user'] = new TextField('_username', $lastUserName, null);

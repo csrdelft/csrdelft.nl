@@ -10,10 +10,13 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Throwable;
 
 
 class ErrorController {
+	use TargetPathTrait;
+
 	public function handleException(RequestStack $requestStack, Throwable $exception, ContainerInterface $container) {
 		$request = $requestStack->getMasterRequest();
 
@@ -41,7 +44,9 @@ class ErrorController {
 					$requestUri = $request->getRequestUri();
 					$router = $container->get('router');
 
-					return new RedirectResponse($router->generate('csrdelft_login_loginform', ['redirect' => urlencode($requestUri)]));
+					$this->saveTargetPath($request->getSession(), 'main', $requestUri);
+
+					return new RedirectResponse($router->generate('csrdelft_login_loginform'));
 				}
 
 				return new Response(view('fout.403'), Response::HTTP_FORBIDDEN);

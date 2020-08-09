@@ -12,10 +12,9 @@ use CsrDelft\service\AccessService;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class SuService {
-	private $tempSwitchUid;
-
 	/**
 	 * @var AccountRepository
 	 */
@@ -105,10 +104,10 @@ class SuService {
 		$this->tokenStorage->setToken($token->getOriginalToken());
 	}
 
-	public function maySuTo(Account $suNaar) {
+	public function maySuTo(UserInterface $suNaar) {
 		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') // Mag switchen
 			&& !$this->security->isGranted('IS_IMPERSONATOR') // Is niet al geswitched
-			&& $this->security->getUser()->uid !== $suNaar->uid // Is niet dezelfde gebruiker
+			&& $this->security->getUser()->getUsername() !== $suNaar->getUsername() // Is niet dezelfde gebruiker
 			&& AccessService::mag($suNaar, P_LOGGED_IN); // Gebruiker waar naar geswitched wordt mag inloggen
 	}
 }
