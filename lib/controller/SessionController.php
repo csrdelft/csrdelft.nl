@@ -111,7 +111,7 @@ class SessionController extends AbstractController {
 	public function remember(Request $request, PersistentTokenBasedRememberMeServices $rememberMeServices) {
 		$selection = $this->getDataTableSelection();
 
-		if (count($selection) == 0) {
+		if (empty($selection)) {
 			$response = new Response();
 
 			$request->request->set('_remember_me', true);

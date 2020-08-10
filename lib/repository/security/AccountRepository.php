@@ -75,7 +75,7 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 	 * @return bool
 	 */
 	public static function isValidUid($uid) {
-		return is_string($uid) and preg_match('/^[a-z0-9]{4}$/', $uid);
+		return is_string($uid) && preg_match('/^[a-z0-9]{4}$/', $uid);
 	}
 
 	/**

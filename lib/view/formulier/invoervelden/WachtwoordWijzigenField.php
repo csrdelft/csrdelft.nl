@@ -137,7 +137,7 @@ class WachtwoordWijzigenField extends InputField {
 				}
 			}
 
-			if (preg_match('/(.)\1\1+/', $new) OR preg_match('/(.{3,})\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
+			if (preg_match('/(.)\1\1+/', $new) || preg_match('/(.{3,})\1+/', $new) || preg_match('/(.{4,}).*\1+/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
 			} elseif (empty($confirm)) {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';

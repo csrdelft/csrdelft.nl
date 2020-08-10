@@ -11,17 +11,12 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\service\AccessService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 
 /**
@@ -50,17 +45,9 @@ class LoginService {
 	 */
 	private static $cliUid = 'x999';
 	/**
-	 * @var LoginSessionRepository
-	 */
-	private $loginRepository;
-	/**
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $entityManager;
 	/**
 	 * @var Security
 	 */
@@ -69,37 +56,15 @@ class LoginService {
 	 * @var ContainerInterface
 	 */
 	private $container;
-	/**
-	 * @var UserAuthenticatorInterface
-	 */
-	private $userAuthenticator;
-	/**
-	 * @var FormLoginAuthenticator
-	 */
-	private $formLoginAuthenticator;
-	/**
-	 * @var AuthenticatorManagerInterface
-	 */
-	private $authenticatorManager;
 
 	public function __construct(
-		EntityManagerInterface $entityManager,
 		Security $security,
 		ContainerInterface $container,
-		LoginSessionRepository $loginRepository,
-		AccountRepository $accountRepository,
-		AuthenticatorManagerInterface $authenticatorManager,
-		UserAuthenticatorInterface $userAuthenticator,
-		FormLoginAuthenticator $formLoginAuthenticator
+		AccountRepository $accountRepository
 	) {
-		$this->loginRepository = $loginRepository;
 		$this->accountRepository = $accountRepository;
-		$this->entityManager = $entityManager;
 		$this->security = $security;
 		$this->container = $container;
-		$this->authenticatorManager = $authenticatorManager;
-		$this->userAuthenticator = $userAuthenticator;
-		$this->formLoginAuthenticator = $formLoginAuthenticator;
 	}
 
 	/**

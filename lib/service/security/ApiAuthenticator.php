@@ -67,11 +67,7 @@ class ApiAuthenticator extends AbstractAuthenticator {
 	}
 
 	public function supports(Request $request): ?bool {
-		if ($this->isAuthorizePath($request)) {
-			return true;
-		}
-
-		if ($this->isRefreshPath($request)) {
+		if ($this->isAuthorizePath($request) || $this->isRefreshPath($request)) {
 			return true;
 		}
 

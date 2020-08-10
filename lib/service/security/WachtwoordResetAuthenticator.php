@@ -58,8 +58,6 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator {
 			throw new AuthenticationException();
 		}
 
-		$uid = $user->uid;
-
 		$form = new WachtwoordWijzigenForm($user, $this->httpUtils->generateUri($request,'wachtwoord_reset'), false);
 
 		if ($form->validate()) {

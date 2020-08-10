@@ -7,12 +7,10 @@ namespace CsrDelft\common\Security;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
-use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
 use Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface;
 use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class PersistentTokenProvider implements TokenProviderInterface {
 	/**
@@ -23,10 +21,6 @@ class PersistentTokenProvider implements TokenProviderInterface {
 	 * @var RememberLoginRepository
 	 */
 	private $rememberLoginRepository;
-	/**
-	 * @var UserProviderInterface
-	 */
-	private $userProvider;
 	/**
 	 * @var ProfielRepository
 	 */

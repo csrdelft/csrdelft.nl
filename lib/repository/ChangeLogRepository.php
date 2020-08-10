@@ -3,14 +3,10 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\ChangeLogEntry;
-use CsrDelft\service\security\LoginService;
-use CsrDelft\service\security\SuService;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -24,10 +20,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @method ChangeLogEntry[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ChangeLogRepository extends AbstractRepository {
-	/**
-	 * @var SuService
-	 */
-	private $suService;
 	/**
 	 * @var SerializerInterface
 	 */
