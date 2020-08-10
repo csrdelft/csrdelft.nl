@@ -53,7 +53,6 @@ Er staan veel bestanden in `/`, ze zijn hier met allerlei redenen en kunnen vaak
 * `CONTRIBUTING.md`: Lees meer over hoe je bijdraagt aan de stek
 * `docker-compose.yml`: Configuratie voor [Docker](installatie-docker.md)
 * `package.json`: Defineert JavaScript dependencies (Zie [yarnpkg.com](https://yarnpkg.com/) en [npmjs.org](https://npmjs.org/))
-* `phinx.php`: Configuratie voor Phinx migraties (Zie [phinx.org](https://phinx.org/))
 * `phpstan.autoload.php` / `phpstan.neon`: Configuratie voor phpstand static analysis (Zie [phpstan.org](https://phpstan.org/))
 * `phpunit.init.php`: Configuratie van phpunit, de test tool (Zie [phpunit.de](https://phpunit.de/))
 * `README.md`: LEES MIJ
