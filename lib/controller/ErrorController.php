@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 
-class ErrorController {
-	public function handleException(RequestStack $requestStack, Throwable $exception, ContainerInterface $container) {
+class ErrorController extends AbstractController {
+	public function handleException(RequestStack $requestStack, Throwable $exception) {
 		$request = $requestStack->getMasterRequest();
 
 		$statusCode = 500;
@@ -39,7 +39,7 @@ class ErrorController {
 			{
 				if (LoginService::getUid() == LoginService::UID_EXTERN) {
 					$requestUri = $request->getRequestUri();
-					$router = $container->get('router');
+					$router = $this->get('router');
 
 					return new RedirectResponse($router->generate('csrdelft_login_loginform', ['redirect' => urlencode($requestUri)]));
 				}

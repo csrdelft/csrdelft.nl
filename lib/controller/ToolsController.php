@@ -374,18 +374,17 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @param ContainerInterface $container
 	 * @return PlainView
 	 * @Route("/tools/memcachestats", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function memcachestats(ContainerInterface $container) {
+	public function memcachestats() {
 		if (DEBUG || LoginService::mag(P_ADMIN) || $this->suService->isSued()) {
 			ob_start();
 
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
-			debugprint($container->get('stek.cache.memcache')->getStats());
+			debugprint($this->get('stek.cache.memcache')->getStats());
 
 			return new PlainView(ob_get_clean());
 		}
