@@ -37,11 +37,16 @@ class WachtwoordController extends AbstractController {
 	 * @var OneTimeTokensRepository
 	 */
 	private $oneTimeTokensRepository;
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
 
-	public function __construct(LoginService $loginService, AccountRepository $accountRepository, OneTimeTokensRepository $oneTimeTokensRepository) {
+	public function __construct(LoginService $loginService, AccountRepository $accountRepository, OneTimeTokensRepository $oneTimeTokensRepository, AccessService $accessService) {
 		$this->loginService = $loginService;
 		$this->accountRepository = $accountRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
+		$this->accessService = $accessService;
 	}
 
 	/**
@@ -51,9 +56,9 @@ class WachtwoordController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function wijzigen() {
-		$account = LoginService::getAccount();
+		$account = $this->getUser();
 		// mag inloggen?
-		if (!$account || !AccessService::mag($account, P_LOGGED_IN)) {
+		if (!$account || !$this->accessService->mag($account, P_LOGGED_IN)) {
 			throw $this->createAccessDeniedException();
 		}
 		$form = new WachtwoordWijzigenForm($account, $this->generateUrl('wachtwoord_wijzigen'));
@@ -117,7 +122,7 @@ class WachtwoordController extends AbstractController {
 
 			// mag wachtwoord reset aanvragen?
 			// (mag ook als na verify($tokenString) niet ingelogd is met wachtwoord en dus AuthenticationMethod::url_token is)
-			if (!$account || !AccessService::mag($account, P_LOGGED_IN, AuthenticationMethod::getEnumValues())) {
+			if (!$account || !$this->accessService->mag($account, P_LOGGED_IN, AuthenticationMethod::getEnumValues())) {
 				setMelding('E-mailadres onjuist', -1);
 
 				return view('default', ['content' => $form]);

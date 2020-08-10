@@ -7,7 +7,6 @@ use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\repository\documenten\DocumentRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
@@ -156,8 +155,8 @@ class DocumentenController extends AbstractController {
 			/** @var Document $document */
 			$document = $form->getModel();
 
-			$document->eigenaar = LoginService::getUid();
-			$document->eigenaar_profiel = LoginService::getProfiel();
+			$document->eigenaar = $this->getUid();
+			$document->eigenaar_profiel = $this->getProfiel();
 			$document->toegevoegd = date_create_immutable();
 
 			$bestand = $form->getUploader()->getModel();

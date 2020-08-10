@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 
 /**
@@ -57,15 +58,21 @@ class LoginService {
 	 * @var TokenStorageInterface
 	 */
 	private $tokenStorage;
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
 
 	public function __construct(
 		Security $security,
 		AccountRepository $accountRepository,
+		AccessService $accessService,
 		TokenStorageInterface $tokenStorage
 	) {
 		$this->accountRepository = $accountRepository;
 		$this->security = $security;
 		$this->tokenStorage = $tokenStorage;
+		$this->accessService = $accessService;
 	}
 
 	/**
@@ -79,24 +86,9 @@ class LoginService {
 	}
 
 	public function _mag($permission, array $allowedAuthenticationMethdos = null) {
-		return AccessService::mag($this->_getAccount(), $permission, $allowedAuthenticationMethdos);
-	}
+		$account = $this->security->getUser();
 
-	public function _getAccount() {
-		if (MODE == 'CLI') {
-			return static::getCliAccount();
-		}
-
-		return $this->security->getUser() ?? $this->accountRepository->find(self::UID_EXTERN);
-	}
-
-	private static function getCliAccount() {
-		$account = new Account();
-		$account->email = $_ENV['EMAIL_PUBCIE'];
-		$account->uid = self::UID_CLI;
-		$account->perm_role = 'R_PUBCIE';
-
-		return $account;
+		return $this->accessService->mag($account, $permission, $allowedAuthenticationMethdos);
 	}
 
 	/**
@@ -109,29 +101,29 @@ class LoginService {
 
 		$account = static::getAccount();
 
-		if (!$account) {
-			return self::UID_EXTERN;
+		if ($account) {
+			return $account->uid;
 		}
 
-		return $account->uid;
+		return null;
 	}
 
 	/**
-	 * @return Account|false
+	 * @return UserInterface|Account|null
 	 */
 	public static function getAccount() {
-		return ContainerFacade::getContainer()->get(LoginService::class)->_getAccount();
+		return ContainerFacade::getContainer()->get('security')->getUser();
 	}
 
 	/**
-	 * @return Profiel|false
+	 * @return Profiel|null
 	 */
 	public static function getProfiel() {
-		return ContainerFacade::getContainer()->get(LoginService::class)->_getProfiel();
-	}
-
-	private function _getProfiel() {
-		return $this->_getAccount()->profiel;
+		$account = static::getAccount();
+		if ($account) {
+			return $account->profiel;
+		}
+		return null;
 	}
 
 	/**

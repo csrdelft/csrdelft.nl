@@ -55,10 +55,10 @@ class MijnMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function ketzer() {
-		$maaltijden = $this->maaltijdenRepository->getKomendeMaaltijdenVoorLid(LoginService::getUid());
-		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($maaltijden, LoginService::getUid());
+		$maaltijden = $this->maaltijdenRepository->getKomendeMaaltijdenVoorLid($this->getUid());
+		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($maaltijden, $this->getUid());
 		$timestamp = date_create_immutable(instelling('maaltijden', 'beoordeling_periode'));
-		$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid(LoginService::getUid(), $timestamp);
+		$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($this->getUid(), $timestamp);
 		$beoordelen = [];
 		$kwantiteit_forms = [];
 		$kwaliteit_forms = [];
@@ -72,7 +72,7 @@ class MijnMaaltijdenController extends AbstractController {
 			$maaltijd = $aanmelding->maaltijd;
 			$maaltijd_id = $aanmelding->maaltijd_id;
 			$beoordelen[$maaltijd_id] = $maaltijd;
-			$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $maaltijd_id, 'uid' => LoginService::getUid()]);
+			$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $maaltijd_id, 'uid' => $this->getUid()]);
 			if (!$beoordeling) {
 				$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);
 			}
@@ -96,7 +96,7 @@ class MijnMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function lijst(Maaltijd $maaltijd) {
-		if (!$maaltijd->magSluiten(LoginService::getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
+		if (!$maaltijd->magSluiten($this->getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
 			throw $this->createAccessDeniedException();
 		}
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorMaaltijd($maaltijd);
@@ -123,7 +123,7 @@ class MijnMaaltijdenController extends AbstractController {
 	 */
 	public function sluit(Maaltijd $maaltijd) {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
-		if (!$maaltijd->magSluiten(LoginService::getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
+		if (!$maaltijd->magSluiten($this->getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
 			throw $this->createAccessDeniedException();
 		}
 		$this->maaltijdenRepository->sluitMaaltijd($maaltijd);
@@ -142,7 +142,7 @@ class MijnMaaltijdenController extends AbstractController {
 	 */
 	public function aanmelden(Request $request, Maaltijd $maaltijd) {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
-		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, LoginService::getUid(), LoginService::getUid());
+		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $this->getUid(), $this->getUid());
 		if ($request->getMethod() == 'POST') {
 			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
 				'maaltijd' => $aanmelding->maaltijd,
@@ -165,7 +165,7 @@ class MijnMaaltijdenController extends AbstractController {
 	 */
 	public function afmelden(Request $request, Maaltijd $maaltijd) {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
-		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, LoginService::getUid());
+		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $this->getUid());
 		if ($request->getMethod() == 'POST') {
 			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
 				'maaltijd' => $maaltijd,
@@ -187,7 +187,7 @@ class MijnMaaltijdenController extends AbstractController {
 	public function gasten(Maaltijd $maaltijd) {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
 		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
-		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($maaltijd->maaltijd_id, LoginService::getUid(), $gasten);
+		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($maaltijd->maaltijd_id, $this->getUid(), $gasten);
 		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
@@ -201,7 +201,7 @@ class MijnMaaltijdenController extends AbstractController {
 	 */
 	public function opmerking($maaltijd_id) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
-		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens($maaltijd_id, LoginService::getUid(), $opmerking);
+		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens($maaltijd_id, $this->getUid(), $opmerking);
 		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
@@ -215,7 +215,7 @@ class MijnMaaltijdenController extends AbstractController {
 	 */
 	public function beoordeling(Maaltijd $maaltijd) {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
-		$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => LoginService::getUid()]);
+		$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => $this->getUid()]);
 		if (!$beoordeling) {
 			$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);
 		}

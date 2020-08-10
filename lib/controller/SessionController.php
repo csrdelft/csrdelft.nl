@@ -8,7 +8,6 @@ use CsrDelft\entity\security\LoginSession;
 use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\login\RememberLoginForm;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,7 +41,7 @@ class SessionController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function sessionsdata() {
-		$loginSession = $this->loginSessionRepository->findBy(['uid' => LoginService::getUid()]);
+		$loginSession = $this->loginSessionRepository->findBy(['uid' => $this->getUid()]);
 		return $this->tableData($loginSession);
 	}
 
@@ -53,7 +52,7 @@ class SessionController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function endsession(LoginSession $session) {
-		if ($session->uid !== LoginService::getUid()) {
+		if ($session->uid !== $this->getUid()) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -80,7 +79,7 @@ class SessionController extends AbstractController {
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
 			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
-			if (!$remember || $remember->uid !== LoginService::getUid()) {
+			if (!$remember || $remember->uid !== $this->getUid()) {
 				throw $this->createAccessDeniedException();
 			}
 			$remember->lock_ip = !$remember->lock_ip;
@@ -97,7 +96,7 @@ class SessionController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function rememberdata() {
-		return $this->tableData($this->rememberLoginRepository->findBy(['uid' => LoginService::getUid()]));
+		return $this->tableData($this->rememberLoginRepository->findBy(['uid' => $this->getUid()]));
 	}
 
 	/**
@@ -121,7 +120,7 @@ class SessionController extends AbstractController {
 
 		$remember = $this->rememberLoginRepository->retrieveByUUID($selection[0]);
 
-		if (!$remember || $remember->uid !== LoginService::getUid()) {
+		if (!$remember || $remember->uid !== $this->getUid()) {
 			throw $this->createAccessDeniedException();
 		}
 		$form = new RememberLoginForm($remember);
@@ -149,7 +148,7 @@ class SessionController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function forgetAll() {
-		$remembers = $this->rememberLoginRepository->findBy(['uid' => LoginService::getUid()]);
+		$remembers = $this->rememberLoginRepository->findBy(['uid' => $this->getUid()]);
 
 		$response = [];
 		$manager = $this->getDoctrine()->getManager();
@@ -177,7 +176,7 @@ class SessionController extends AbstractController {
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
 			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
-			if (!$remember || $remember->uid !== $this->getUser()->getUsername()) {
+			if (!$remember || $remember->uid !== $this->getUid()) {
 				throw $this->createAccessDeniedException();
 			}
 			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);

@@ -103,7 +103,7 @@ class AgendaController extends AbstractController {
 		return view('agenda.maand', [
 			'maand' => $maand,
 			'jaar' => $jaar,
-			'creator' => LoginService::mag(P_AGENDA_ADD) || LoginService::getProfiel()->verticaleleider,
+			'creator' => LoginService::mag(P_AGENDA_ADD) || $this->getProfiel()->verticaleleider,
 		]);
 	}
 
@@ -192,18 +192,19 @@ class AgendaController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function toevoegen($datum = null) {
-		if (!LoginService::mag(P_AGENDA_ADD) && !LoginService::getProfiel()->verticaleleider) {
+		$profiel = $this->getProfiel();
+		if (!LoginService::mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
 			throw $this->createAccessDeniedException('Mag geen gebeurtenis toevoegen.');
 		}
 
 		$item = $this->agendaRepository->nieuw($datum);
-		if (LoginService::getProfiel()->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
-			$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
+		if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+			$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 		}
 		$form = new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 		if ($form->validate()) {
-			if (LoginService::getProfiel()->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
-				$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
+			if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+				$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 			}
 			$item->item_id = (int)$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {

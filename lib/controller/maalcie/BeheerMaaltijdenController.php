@@ -299,7 +299,7 @@ class BeheerMaaltijdenController extends AbstractController {
 		$form = new AanmeldingForm($maaltijd, true); // fetches POST values itself
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], LoginService::getUid(), $values['aantal_gasten'], true);
+			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], $this->getUid(), $values['aantal_gasten'], true);
 			return $this->tableData([$maaltijd]);
 		} else {
 			return $form;
@@ -359,7 +359,7 @@ class BeheerMaaltijdenController extends AbstractController {
         if (!LoginService::mag(P_MAAL_MOD)) {
         	// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
 					$maaltijden = array_filter($maaltijden, function ($maaltijd) {
-						return $maaltijd->magSluiten(LoginService::getUid());
+						return $maaltijd->magSluiten($this->getUid());
 					});
 				}
         return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);

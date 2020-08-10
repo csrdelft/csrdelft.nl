@@ -25,12 +25,12 @@ class InstellingenBeheerController extends AbstractController {
 	}
 
 	protected function assertToegang($module = null) {
-		if (!$this->mag($module)) {
+		if (!$this->magModuleZien($module)) {
 			throw $this->createAccessDeniedException();
 		}
 	}
 
-	protected function mag($module = null) {
+	protected function magModuleZien($module = null) {
 		if ($module) {
 			switch ($module) {
 				case 'agenda':

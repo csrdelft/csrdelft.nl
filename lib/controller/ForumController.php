@@ -144,7 +144,7 @@ class ForumController extends AbstractController {
 	public function rss() {
 		return new Response(view('forum.rss', [
 			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
-			'privatelink' => LoginService::getAccount()->getRssLink()
+			'privatelink' => $this->getUser()->getRssLink()
 		]), 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
 	}
 
@@ -475,7 +475,7 @@ class ForumController extends AbstractController {
 	 */
 	public function toonalles() {
 		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
-		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([LoginService::getUid()]);
+		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([$this->getUid()]);
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		return new JsonResponse(true);
 	}
