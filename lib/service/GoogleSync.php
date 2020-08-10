@@ -687,8 +687,8 @@ class GoogleSync {
 		$redirect_uri = CSR_ROOT . '/google/callback';
 		$client = new Google_Client();
 		$client->setApplicationName('Stek');
-		$client->setClientId(env('GOOGLE_CLIENT_ID'));
-		$client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+		$client->setClientId(getenv('GOOGLE_CLIENT_ID'));
+		$client->setClientSecret(getenv('GOOGLE_CLIENT_SECRET'));
 		$client->setRedirectUri($redirect_uri);
 		$client->setAccessType('offline');
 		// Zonder force kunnen we nog een oude sessie krijgen (zonder refresh token)

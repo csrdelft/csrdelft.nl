@@ -27,7 +27,7 @@ class LoggerController {
 	public function log(Request $request) {
 		if (!isset($_SESSION[self::LAATSTE_LOG_MELDING])) $_SESSION[self::LAATSTE_LOG_MELDING] = 0;
 
-		if ($_SESSION[self::LAATSTE_LOG_MELDING] < time() - self::LOG_TIMEOUT && !empty(env('SLACK_URL'))) {
+		if ($_SESSION[self::LAATSTE_LOG_MELDING] < time() - self::LOG_TIMEOUT && !empty(getenv('SLACK_URL'))) {
 			$message = $request->request->get('message');
 			$col = $request->request->get('col');
 			$line = $request->request->get('line');
@@ -35,10 +35,10 @@ class LoggerController {
 			$error = $request->request->get('error');
 			$pagina = $request->request->get('pagina');
 
-			$slackClient = new SlackClient(env('SLACK_URL'), [
-				'username' => env('SLACK_USERNAME'),
-				'channel' => env('SLACK_CHANNEL'),
-				'icon' => env('SLACK_ICON'),
+			$slackClient = new SlackClient(getenv('SLACK_URL'), [
+				'username' => getenv('SLACK_USERNAME'),
+				'channel' => getenv('SLACK_CHANNEL'),
+				'icon' => getenv('SLACK_ICON'),
 			]);
 			$foutmelding = $slackClient->createMessage();
 

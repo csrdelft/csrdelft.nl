@@ -47,7 +47,7 @@ $pinTransactieMatchRepository->cleanByTransactieIds($vorigePinTransacties);
 $pinTransactieRepository->clean($vorigePinTransacties);
 
 // Download pintransacties en sla op in DB.
-$pintransacties = $pinTransactieDownloader->download($from, env('PIN_URL'), env('PIN_STORE'), env('PIN_USERNAME'), env('PIN_PASSWORD'));
+$pintransacties = $pinTransactieDownloader->download($from, getenv('PIN_URL'), getenv('PIN_STORE'), getenv('PIN_USERNAME'), getenv('PIN_PASSWORD'));
 
 // Haal pinbestellingen op.
 $pinbestellingen = $civiBestellingRepository->getPinBestellingInMoment($from, $to);
@@ -84,7 +84,7 @@ MAIL;
 			echo sprintf("Er zijn %d pin transacties gedownload.\n", count($pintransacties));
 
 		} else {
-			$mail = new Mail([env('PIN_MONITORING_EMAIL') => 'Pin Transactie Monitoring'], '[CiviSaldo] Pin transactie fouten gevonden.', $body);
+			$mail = new Mail([getenv('PIN_MONITORING_EMAIL') => 'Pin Transactie Monitoring'], '[CiviSaldo] Pin transactie fouten gevonden.', $body);
 			$mail->send();
 		}
 	} elseif($interactive) {

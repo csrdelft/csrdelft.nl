@@ -13,14 +13,14 @@
 require_once __DIR__ . '/../lib/configuratie.include.php';
 
 //Steps
-$SL_HOST = env('SPONSOR_SL_HOST');
+$SL_HOST = getenv('SPONSOR_SL_HOST');
 $PAGE_URL = $SL_HOST . '/api/?call=webshops_club_extension&club=';
 
-$clubId = env('SPONSOR_CLUBID');
+$clubId = getenv('SPONSOR_CLUBID');
 $scrapeUrl = $PAGE_URL . $clubId;
 
 //1. GET JSON
-$result = curl_request($scrapeUrl, [CURLOPT_USERAGENT => env('SPONSOR_USERAGENT')]);
+$result = curl_request($scrapeUrl, [CURLOPT_USERAGENT => getenv('SPONSOR_USERAGENT')]);
 $webshops = json_decode($result)->webshops;
 
 //3. Follow links to final destination

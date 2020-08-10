@@ -39,7 +39,7 @@ class Roodschopper {
 
 	public static function getDefaults() {
 		$return = new Roodschopper();
-		$return->from = env('EMAIL_FISCUS');
+		$return->from = getenv('EMAIL_FISCUS');
 		$return->verzenden = false;
 		$return->saldogrens = -520;
 		$return->onderwerp = 'U staat rood';

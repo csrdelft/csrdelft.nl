@@ -148,11 +148,11 @@ final class ShutdownHandler {
 
 
 		$debug = self::getDebug();
-		if ($debug !== null && !empty(env('SLACK_URL'))) {
-			$slackClient = new SlackClient(env('SLACK_URL'), [
-				'username' => env('SLACK_USERNAME'),
-				'channel' => env('SLACK_CHANNEL'),
-				'icon' => env('SLACK_ICON'),
+		if ($debug !== null && !empty(getenv('SLACK_URL'))) {
+			$slackClient = new SlackClient(getenv('SLACK_URL'), [
+				'username' => getenv('SLACK_USERNAME'),
+				'channel' => getenv('SLACK_CHANNEL'),
+				'icon' => getenv('SLACK_ICON'),
 			]);
 			$foutmelding = $slackClient->createMessage();
 

@@ -71,7 +71,7 @@ class ForumPlaatje {
 
 	public function createResized() {
 		// Resize the smallest side of the image to at most 1024px
-		$command = env('IMAGEMAGICK') . ' ' . escapeshellarg($this->getPath(false)) . ' -resize "750x>" -format jpg -quality 85 -interlace Line  -auto-orient ' . escapeshellarg($this->getPath(true));
+		$command = getenv('IMAGEMAGICK') . ' ' . escapeshellarg($this->getPath(false)) . ' -resize "750x>" -format jpg -quality 85 -interlace Line  -auto-orient ' . escapeshellarg($this->getPath(true));
 		shell_exec($command);
 		if ($this->hasResized()) {
 			chmod($this->getPath(true), 0644);
