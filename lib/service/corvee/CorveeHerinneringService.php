@@ -44,7 +44,7 @@ class CorveeHerinneringService {
 		}
 		$lidnaam = $taak->profiel->getNaam('civitas');
 		$to = $taak->profiel->getEmailOntvanger();
-		$from = getenv('EMAIL_CC');
+		$from = $_ENV['EMAIL_CC'];
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
 		$bericht = $taak->corveeFunctie->email_bericht;
 		$eten = '';

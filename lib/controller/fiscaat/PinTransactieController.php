@@ -588,7 +588,7 @@ Met vriendelijke groet,
 h.t. Fiscus";
 
 		$mail = new Mail($ontvanger->getEmailOntvanger(), $onderwerp, $bericht);
-		$mail->setFrom(getenv('EMAIL_FISCUS'), 'Fiscus C.S.R. Delft');
+		$mail->setFrom($_ENV['EMAIL_FISCUS'], 'Fiscus C.S.R. Delft');
 		$mail->addBcc($bcc->getEmailOntvanger());
 		$mail->setLightBB();
 		$mail->send();

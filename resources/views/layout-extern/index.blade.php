@@ -210,7 +210,7 @@
 						2611 BA Delft
 					</li>
 					<li class="fa-phone">06-19470413</li>
-					<li class="fa-envelope"><a href="mailto:{{getenv('EMAIL_ABACTIS')}}">{{getenv('EMAIL_ABACTIS')}}</a></li>
+					<li class="fa-envelope"><a href="mailto:{{$_ENV['EMAIL_ABACTIS']}}">{{$_ENV['EMAIL_ABACTIS']}}</a></li>
 					<li class="fa-instagram"><a href="https://www.instagram.com/csrdelft/" target="_blank">Like
 							onze foto's op Instagram en volg de laatste posts</a></li>
 					<li class="fa-map-marker">

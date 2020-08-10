@@ -478,7 +478,7 @@ class LoginService {
 
 	private static function getCliAccount() {
 		$account = new Account();
-		$account->email = getenv('EMAIL_PUBCIE');
+		$account->email = $_ENV['EMAIL_PUBCIE'];
 		$account->uid = self::UID_CLI;
 		$account->perm_role = 'R_PUBCIE';
 

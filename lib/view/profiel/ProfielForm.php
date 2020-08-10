@@ -74,7 +74,7 @@ class ProfielForm extends Formulier {
 				Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf
 				wijzigingen door te voeren. Voor de meeste velden geldt daarnaast dat de ingevulde gegevens
 				een geldig formaat moeten hebben. Mochten er fouten in het gedeelte van uw profiel staan,
-				dat u niet zelf kunt wijzigen, meld het dan bij de <a href="mailto:' . getenv('EMAIL_VAB') . '">Vice-Abactis</a>.
+				dat u niet zelf kunt wijzigen, meld het dan bij de <a href="mailto:' . $_ENV['EMAIL_VAB'] . '">Vice-Abactis</a>.
 			</p>');
 		}
 		$fields[] = new HtmlComment('<p>

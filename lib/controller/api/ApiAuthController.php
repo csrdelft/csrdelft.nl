@@ -39,7 +39,7 @@ class ApiAuthController {
 		}
 
 		try {
-			$token = JWT::decode($jwt, getenv('JWT_SECRET'), array('HS512'));
+			$token = JWT::decode($jwt, $_ENV['JWT_SECRET'], array('HS512'));
 		} catch (Exception $e) {
 			throw new RestException(401);
 		}
@@ -104,7 +104,7 @@ class ApiAuthController {
 
 		$data = [
 			'iat' => $issuedAt,
-			'exp' => $issuedAt + getenv('JWT_LIFETIME'),
+			'exp' => $issuedAt + $_ENV['JWT_LIFETIME'],
 			'jti' => $tokenId,
 			'data' => [
 				'userId' => $account->uid
@@ -112,7 +112,7 @@ class ApiAuthController {
 		];
 
 		// Encode the JWT
-		$token = JWT::encode($data, getenv('JWT_SECRET'), 'HS512');
+		$token = JWT::encode($data, $_ENV['JWT_SECRET'], 'HS512');
 
 		// Register uid for this session
 		$_SESSION[LoginService::SESS_UID] = $account->uid;
@@ -160,7 +160,7 @@ class ApiAuthController {
 
 		$data = [
 			'iat' => $issuedAt,
-			'exp' => $issuedAt + getenv('JWT_LIFETIME'),
+			'exp' => $issuedAt + $_ENV['JWT_LIFETIME'],
 			'jti' => $tokenId,
 			'data' => [
 				'userId' => $remember->uid
@@ -168,7 +168,7 @@ class ApiAuthController {
 		];
 
 		// Encode the new JWT
-		$token = JWT::encode($data, getenv('JWT_SECRET'), 'HS512');
+		$token = JWT::encode($data, $_ENV['JWT_SECRET'], 'HS512');
 
 		// Respond
 		return [

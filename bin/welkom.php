@@ -44,7 +44,7 @@ Mark Bekooy,
 h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 TEXT;
     $mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
-    $mail->addBcc(array(getenv('EMAIL_PUBCIE') => 'PubCie C.S.R.'));
+    $mail->addBcc(array($_ENV['EMAIL_PUBCIE'] => 'PubCie C.S.R.'));
     $mail->send();
 
     $accountRepository = \CsrDelft\common\ContainerFacade::getContainer()->get(AccountRepository::class);

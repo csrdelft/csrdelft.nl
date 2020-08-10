@@ -165,7 +165,7 @@ class CourantController extends AbstractController {
 		$courantView = new CourantView($courant, $this->courantBerichtRepository->findAll());
 		$courant->inhoud = $courantView->getHtml(false);
 		if ($iedereen === 'iedereen') {
-			$this->courantRepository->verzenden(getenv('EMAIL_LEDEN'), $courantView);
+			$this->courantRepository->verzenden($_ENV['EMAIL_LEDEN'], $courantView);
 			/** @var Connection $conn */
 			$conn = $this->getDoctrine()->getConnection();
 			$conn->beginTransaction();
@@ -191,7 +191,7 @@ class CourantController extends AbstractController {
 
 			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<strong>Aan iedereen verzonden</strong></div>');
 		} else {
-			$this->courantRepository->verzenden(getenv('EMAIL_PUBCIE'), $courantView);
+			$this->courantRepository->verzenden($_ENV['EMAIL_PUBCIE'], $courantView);
 			setMelding('Verzonden naar de PubCie', 1);
 			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>');
 		}

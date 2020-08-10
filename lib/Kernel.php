@@ -25,7 +25,7 @@ class Kernel extends BaseKernel {
 
 
 		// We willen dat alles ook werkt als Memcache niet bestaat
-		if (class_exists("Memcache") && getenv('CACHE_HOST') != "") {
+		if (class_exists("Memcache") && $_ENV['CACHE_HOST'] != "") {
 			$container->import('../config/custom/memcache.yaml');
 		}
 	}
