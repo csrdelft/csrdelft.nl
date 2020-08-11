@@ -368,6 +368,17 @@ function isGeldigeDatum($datum) {
 }
 
 /**
+ * @param string $date
+ * @param string $format
+ * @return true als huidige datum & tijd voorbij gegeven datum en tijd zijn
+ */
+function isDatumVoorbij(string $date, $format = 'Y-m-d H:i:s') {
+	$date = date_create_immutable_from_format($format, $date);
+	$now = date_create_immutable();
+	return $now >= $date;
+}
+
+/**
  * print_r een variabele met <pre>-tags eromheen.
  *
  * @param mixed $sString
