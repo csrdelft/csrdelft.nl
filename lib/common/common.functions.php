@@ -1218,3 +1218,12 @@ function as_array($value) {
 function short_class($class) {
 	return (new \ReflectionClass($class))->getShortName();
 }
+
+// Base64url functies van https://www.php.net/manual/en/function.base64-encode.php#103849
+function base64url_encode($data) {
+  return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+  return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+}
