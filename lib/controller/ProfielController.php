@@ -201,7 +201,9 @@ class ProfielController extends AbstractController {
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
 	 */
 	public function nieuw($lidjaar, $status, EntityManagerInterface $em) {
-		$em->getFilters()->disable('verbergNovieten');
+		if ($em->getFilters()->isEnabled('verbergNovieten')) {
+			$em->getFilters()->disable('verbergNovieten');
+		}
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
 		if (!preg_match('/^[0-9]{4}$/', $lidjaar) || !in_array($lidstatus, LidStatus::getEnumValues())) {
@@ -341,7 +343,9 @@ class ProfielController extends AbstractController {
 			']);
 		}
 
-		$em->getFilters()->disable('verbergNovieten');
+		if ($em->getFilters()->isEnabled('verbergNovieten')) {
+			$em->getFilters()->disable('verbergNovieten');
+		}
 		$profiel = $this->profielRepository->nieuw(date_create_immutable()->format('Y'), LidStatus::Noviet);
 
 		if (empty($pre)) {

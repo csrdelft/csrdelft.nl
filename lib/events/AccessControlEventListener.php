@@ -83,7 +83,7 @@ class AccessControlEventListener {
 			}
 		}
 
-		if (LoginService::mag('commissie:NovCie')) {
+		if (LoginService::mag('commissie:NovCie') && $this->em->getFilters()->isEnabled('verbergNovieten')) {
 			$this->em->getFilters()->disable('verbergNovieten');
 		}
 	}
