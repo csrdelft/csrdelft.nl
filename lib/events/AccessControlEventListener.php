@@ -35,7 +35,7 @@ class AccessControlEventListener {
 	/**
 	 * @var EntityManagerInterface
 	 */
-	private EntityManagerInterface $em;
+	private $em;
 
 	public function __construct(CsrfService $csrfService, Reader $annotations, EntityManagerInterface $entityManager) {
 		$this->csrfService = $csrfService;
