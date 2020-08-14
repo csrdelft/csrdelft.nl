@@ -39,6 +39,7 @@ use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ExternProfielForm;
+use CsrDelft\view\profiel\InschrijfLinkForm;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\response\VcardResponse;
@@ -49,6 +50,7 @@ use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
 class ProfielController extends AbstractController {
@@ -292,6 +294,35 @@ class ProfielController extends AbstractController {
 	}
 
 	/**
+	 * @Route("/inschrijflink", methods={"GET", "POST"}, name="inschrijflink")
+	 * @Auth(P_LEDEN_MOD)
+	 * @return TemplateView
+	 */
+	public function externInschrijfLink() {
+		$form = new InschrijfLinkForm();
+		$link = null;
+		if ($form->validate()) {
+			$values = $form->getValues();
+			$string = implode(';', [
+				$values['voornaam'],
+				$values['tussenvoegsel'],
+				$values['achternaam'],
+				$values['email'],
+				$values['mobiel']
+			]);
+			$token = base64url_encode($string);
+			$link = $this->generateUrl('extern-inschrijven', ['pre' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+			$_POST = [];
+			$form = new InschrijfLinkForm();
+		}
+
+		return view('extern-inschrijven.link', [
+			'link' => $link,
+			'form' => $form
+		]);
+	}
+
+	/**
 	 * @Route("/inschrijven/{pre}", methods={"GET", "POST"}, name="extern-inschrijven")
 	 * @Auth(P_PUBLIC)
 	 * @param string $pre
@@ -300,7 +331,7 @@ class ProfielController extends AbstractController {
 	 */
 	public function externInschrijfformulier(string $pre) {
 		if (isDatumVoorbij('2020-08-25 00:00:00')) {
-			return view('extern-inschrijven-bevestiging', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
+			return view('extern-inschrijven.tekstpagina', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
 				<h1 class="Titel">Inschrijvingen gesloten</h1>
 				<p>Neem contact op met <a href="mailto:novcie@csrdelft.nl">novcie@csrdelft.nl</a></p>
 			']);
@@ -364,14 +395,14 @@ class ProfielController extends AbstractController {
 			}
 
 			if ($succes) {
-				return view('extern-inschrijven-bevestiging', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
+				return view('extern-inschrijven.tekstpagina', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
 					<h1 class="Titel">Bedankt voor je inschrijving!</h1>
 					<p>De NovCie neemt z.s.m. contact met je op.</p>
 				']);
 			}
 		}
 
-		return view('extern-inschrijven', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => $form]);
+		return view('extern-inschrijven.inschrijven', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => $form]);
 	}
 
 	/**
