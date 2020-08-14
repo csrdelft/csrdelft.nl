@@ -295,7 +295,7 @@ class ProfielController extends AbstractController {
 
 	/**
 	 * @Route("/inschrijflink", methods={"GET", "POST"}, name="inschrijflink")
-	 * @Auth(P_LEDEN_MOD)
+	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
 	 * @return TemplateView
 	 */
 	public function externInschrijfLink() {
