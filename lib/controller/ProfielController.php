@@ -226,7 +226,7 @@ class ProfielController extends AbstractController {
 			if (empty($diff)) {
 				setMelding('Geen wijzigingen', 0);
 			} else {
-				$nieuw = $this->profielRepository->find($profiel->uid) == null;
+				$nieuw = $profiel->uid === null || $this->profielRepository->find($profiel->uid) == null;
 				$changeEntry = ProfielRepository::changelog($diff, LoginService::getUid());
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
