@@ -24,7 +24,7 @@ use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Exception;
@@ -86,22 +86,36 @@ class ExternProfielForm extends Formulier {
 		$fields[] = new HtmlComment('<p>
 			Door dit vakje aan te vinken geef je de fiscus van C.S.R. toestemming om bedragen van je rekening af te schrijven voor contributie en activiteiten. Zowel voor jou als voor de fiscus is dit erg fijn. De contributie komend jaar is vastgesteld op &euro; 147,50 euro.
 		</p>');
-		$fields[] = new JaNeeField('toestemming_afschrijven', true, 'Ik geef C.S.R. toestemming voor afschrijven voor contributie en activiteiten');
+		$fields[] = new JaNeeField('toestemmingAfschrijven', $profiel->toestemmingAfschrijven, 'Ik geef C.S.R. toestemming voor afschrijven voor contributie en activiteiten');
 
 		$fields[] = new Subkopje('Studie');
-		$fields[] = new StudieField('studie', $profiel->studie, 'Onderwijsinstelling en studie');
+		$fields['studie'] = new StudieField('studie', $profiel->studie, 'Onderwijsinstelling en studie');
+		$fields['studie']->required = true;
 		$fields['studiejaar'] = new IntField('studiejaar', (int)$profiel->lidjaar, 'Beginjaar studie', 1950, date('Y'));
+		$fields['studiejaar']->required = true;
 
 		$fields[] = new Subkopje('Persoonlijk');
 		$fields[] = new TextField('eetwens', $profiel->eetwens, 'Dieet/voedselallergie');
 		$fields[] = new RequiredIntField('lengte', (int)$profiel->lengte, 'Lengte (cm)', 50, 250);
 		$fields[] = new TextField('kerk', $profiel->kerk, 'Kerk', 50);
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
-		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
+		$fields[] = new RequiredSelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
 		$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
 		$fields['middelbareSchool'] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 		$fields['middelbareSchool']->required = true;
+
+		$fields[] = new Subkopje('Medisch');
+		$fields[] = new HtmlComment('<p>
+			Voor eventuele noodgevallen tijdens de novitiaatsweek willen we graag weten wie jouw huisarts is.
+			Vanwege de vertrouwelijkheid vragen we je niet om in dit formulier verdere medische gegevens in te vullen.
+			Tijdens het telefoongesprek dat je na het invullen van dit formulier met een lid van de novitiaatscommissie zult hebben,
+			zal er wel een aantal vragen gesteld worden met betrekking tot je gezondheid die van belang kunnen zijn tijdens de novitiaatsweek.
+		</p>');
+		$fields[] = new RequiredTextField('huisarts', $profiel->huisarts, 'Naam huisarts');
+		$fields['huisarts_telefoon'] = new TelefoonField('huisartsTelefoon', $profiel->huisartsTelefoon, 'Telefoonnummer');
+		$fields['huisarts_telefoon']->required = true;
+		$fields[] = new RequiredTextField('huisartsPlaats', $profiel->huisartsPlaats, 'Plaats');
 
 		// Zorg ervoor dat toestemming bij inschrijven wordt opgegeven.
 		$fields[] = new Subkopje('Privacy');

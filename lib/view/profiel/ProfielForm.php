@@ -247,6 +247,7 @@ class ProfielForm extends Formulier {
 				// Alleen als inschrijven, anders bovenin voor admin
 				$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 			}
+			$fields[] = new JaNeeField('toestemmingAfschrijven', $profiel->toestemmingAfschrijven, 'Toestemming afschrijven?');
 
 			$fields['novitiaat'] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
 			$fields['novitiaat']->required = $inschrijven;
@@ -257,9 +258,15 @@ class ProfielForm extends Formulier {
 			$fields['startkamp'] = new SelectField('startkamp', $profiel->startkamp, 'Startkamp', array('ja', 'nee'));
 			$fields['startkamp']->required = $inschrijven;
 
-			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie, bijv. allergieen)');
 			$fields[] = new TextareaField('novitiaatBijz', $profiel->novitiaatBijz, 'Bijzonderheden novitiaat (op dag x ...)');
 			$fields[] = new TextareaField('kgb', $profiel->kgb, 'Overige NovCie-opmerking');
+
+			$fields[] = new Subkopje('Medisch');
+			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie, bijv. allergieen)');
+			$fields[] = new TextField('huisarts', $profiel->huisarts, 'Naam huisarts');
+			$fields[] = new TelefoonField('huisartsTelefoon', $profiel->huisartsTelefoon, 'Telefoonnummer');
+			$fields[] = new TextField('huisartsPlaats', $profiel->huisartsPlaats, 'Plaats');
+
 			$fields[] = new HtmlComment('</div>');
 		}
 		$fields[] = new FormDefaultKnoppen('/profiel/' . $profiel->uid);

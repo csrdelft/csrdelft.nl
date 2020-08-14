@@ -299,6 +299,13 @@ class ProfielController extends AbstractController {
 	 * @throws ConnectionException
 	 */
 	public function externInschrijfformulier(string $pre) {
+		if (isDatumVoorbij('2020-08-25 00:00:00')) {
+			return view('extern-inschrijven-bevestiging', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
+				<h1 class="Titel">Inschrijvingen gesloten</h1>
+				<p>Neem contact op met <a href="mailto:novcie@csrdelft.nl">novcie@csrdelft.nl</a></p>
+			']);
+		}
+
 		$profiel = $this->profielRepository->nieuw(date_create_immutable()->format('Y'), LidStatus::Noviet);
 
 		if (empty($pre)) throw new NotFoundHttpException();
@@ -357,7 +364,10 @@ class ProfielController extends AbstractController {
 			}
 
 			if ($succes) {
-				setMelding('Profiel succesvol opgeslagen met lidnummer: ' . $profiel->uid, 1);
+				return view('extern-inschrijven-bevestiging', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
+					<h1 class="Titel">Bedankt voor je inschrijving!</h1>
+					<p>De NovCie neemt z.s.m. contact met je op.</p>
+				']);
 			}
 		}
 
