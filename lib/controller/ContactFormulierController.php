@@ -106,13 +106,8 @@ De PubCie.
 
 		if ($type === 'lid-worden') {
 			$typeaanduiding = 'Ik wil lid worden';
-			if (isDatumVoorbij('2020-08-14 00:00:00')) {
-				$commissie = "PromoCie";
-				$bestemming = [$_ENV['EMAIL_PROMOCIE'] => $commissie];
-			} else {
-				$commissie = "NovCie";
-				$bestemming = [$_ENV['EMAIL_NOVCIE'] => $commissie];
-			}
+			$commissie = "NovCie";
+			$bestemming = [$_ENV['EMAIL_NOVCIE'] => $commissie];
 		} else {
 			$typeaanduiding = 'Eerst een lid spreken';
 			$commissie = "OweeCie";
