@@ -46,6 +46,7 @@ use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -326,10 +327,11 @@ class ProfielController extends AbstractController {
 	 * @Route("/inschrijven/{pre}", methods={"GET", "POST"}, name="extern-inschrijven")
 	 * @Auth(P_PUBLIC)
 	 * @param string $pre
+	 * @param EntityManagerInterface $em
 	 * @return TemplateView|RedirectResponse
 	 * @throws ConnectionException
 	 */
-	public function externInschrijfformulier(string $pre) {
+	public function externInschrijfformulier(string $pre, EntityManagerInterface $em) {
 		if (isDatumVoorbij('2020-08-25 00:00:00')) {
 			return view('extern-inschrijven.tekstpagina', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
 				<h1 class="Titel">Inschrijvingen gesloten</h1>
@@ -337,6 +339,7 @@ class ProfielController extends AbstractController {
 			']);
 		}
 
+		$em->getFilters()->disable('verbergNovieten');
 		$profiel = $this->profielRepository->nieuw(date_create_immutable()->format('Y'), LidStatus::Noviet);
 
 		if (empty($pre)) {
