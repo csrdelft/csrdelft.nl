@@ -8,6 +8,8 @@ use CsrDelft\common\CsrToegangException;
 use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\ORM\EntityManagerInterface;
+use ReflectionMethod;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 /**
@@ -30,10 +32,15 @@ class AccessControlEventListener {
 	 * @var Reader
 	 */
 	private $annotations;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
 
-	public function __construct(CsrfService $csrfService, Reader $annotations) {
+	public function __construct(CsrfService $csrfService, Reader $annotations, EntityManagerInterface $entityManager) {
 		$this->csrfService = $csrfService;
 		$this->annotations = $annotations;
+		$this->em = $entityManager;
 	}
 
 	/**
@@ -53,7 +60,7 @@ class AccessControlEventListener {
 			return;
 		}
 
-		$reflectionMethod = new \ReflectionMethod($event->getController()[0], $event->getController()[1]);
+		$reflectionMethod = new ReflectionMethod($event->getController()[0], $event->getController()[1]);
 
 		/** @var Auth $authAnnotation */
 		$authAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, Auth::class);
@@ -74,6 +81,10 @@ class AccessControlEventListener {
 			} else {
 				throw new CsrToegangException("Geen toegang");
 			}
+		}
+
+		if (LoginService::mag('commissie:NovCie')) {
+			$this->em->getFilters()->disable('verbergNovieten');
 		}
 	}
 }

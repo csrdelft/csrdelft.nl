@@ -18,7 +18,7 @@ class StudieField extends TextField {
 		$this->suggestions['TU Delft'] = array_map(function ($value) {
 			return "TU Delft - " . $value;
 		}, $tustudies);
-		$this->suggestions[] = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
+		$this->suggestions[] = array('INHolland - ', 'Haagse Hogeschool - ', 'EURotterdam - ', 'ULeiden - ');
 	}
 
 }

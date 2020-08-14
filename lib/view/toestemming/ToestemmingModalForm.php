@@ -2,7 +2,6 @@
 
 namespace CsrDelft\view\toestemming;
 
-use CsrDelft\common\CsrException;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\service\security\LoginService;
@@ -80,7 +79,6 @@ class ToestemmingModalForm extends ModalForm {
 	 * @param string $module
 	 * @param string $id
 	 * @return string
-	 * @throws CsrException
 	 */
 	private function maakToestemmingLine($module, $id) {
 

@@ -62,4 +62,9 @@ doctrine:
                 dir: '%kernel.project_dir%/lib/entity'
                 prefix: 'CsrDelft\entity'
                 alias: App
-
+        filters:
+            verbergNovieten:
+                class: CsrDelft\common\Doctrine\VerbergNovietenFilter
+                enabled: true
+                parameters:
+                    jaar: 2020

@@ -38,14 +38,19 @@ use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\JsonResponse;
+use CsrDelft\view\profiel\ExternProfielForm;
+use CsrDelft\view\profiel\InschrijfLinkForm;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ConnectionException;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
 class ProfielController extends AbstractController {
@@ -214,7 +219,7 @@ class ProfielController extends AbstractController {
 		if (!$profiel->magBewerken()) {
 			throw new CsrToegangException();
 		}
-		$form = new ProfielForm($profiel);
+		$form = new ProfielForm($profiel, $alleenFormulier);
 		if ($form->validate()) {
 			$diff = $form->diff();
 			if (empty($diff)) {
@@ -286,6 +291,124 @@ class ProfielController extends AbstractController {
 		}
 
 		return $this->profielBewerken($profiel);
+	}
+
+	/**
+	 * @Route("/inschrijflink", methods={"GET", "POST"}, name="inschrijflink")
+	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
+	 * @return TemplateView
+	 */
+	public function externInschrijfLink() {
+		$form = new InschrijfLinkForm();
+		$link = null;
+		if ($form->validate()) {
+			$values = $form->getValues();
+			$string = implode(';', [
+				$values['voornaam'],
+				$values['tussenvoegsel'],
+				$values['achternaam'],
+				$values['email'],
+				$values['mobiel']
+			]);
+			$token = base64url_encode($string);
+			$link = $this->generateUrl('extern-inschrijven', ['pre' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+			$_POST = [];
+			$form = new InschrijfLinkForm();
+		}
+
+		return view('extern-inschrijven.link', [
+			'link' => $link,
+			'form' => $form
+		]);
+	}
+
+	/**
+	 * @Route("/inschrijven/{pre}", methods={"GET", "POST"}, name="extern-inschrijven")
+	 * @Auth(P_PUBLIC)
+	 * @param string $pre
+	 * @return TemplateView|RedirectResponse
+	 * @throws ConnectionException
+	 */
+	public function externInschrijfformulier(string $pre) {
+		if (isDatumVoorbij('2020-08-25 00:00:00')) {
+			return view('extern-inschrijven.tekstpagina', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
+				<h1 class="Titel">Inschrijvingen gesloten</h1>
+				<p>Neem contact op met <a href="mailto:novcie@csrdelft.nl">novcie@csrdelft.nl</a></p>
+			']);
+		}
+
+		$profiel = $this->profielRepository->nieuw(date_create_immutable()->format('Y'), LidStatus::Noviet);
+
+		if (empty($pre)) {
+			throw new NotFoundHttpException();
+		}
+		$data = base64url_decode($pre);
+		if (!$data) {
+			throw new NotFoundHttpException();
+		}
+		$split = explode(';', $data);
+		if (count($split) !== 5) {
+			throw new NotFoundHttpException();
+		}
+		list(
+			$profiel->voornaam,
+			$profiel->tussenvoegsel,
+			$profiel->achternaam,
+			$profiel->email,
+			$profiel->mobiel
+		) = $split;
+
+		$form = new ExternProfielForm($profiel, '/inschrijven/' . $pre);
+		if ($form->validate()) {
+			$diff = $form->diff();
+			$changeEntry = ProfielRepository::changelog($diff, LoginService::UID_EXTERN);
+			foreach ($diff as $change) {
+				if ($change->property === 'status') {
+					array_push($changeEntry->entries, ...$this->profielRepository->wijzig_lidstatus($profiel, $change->old_value));
+				}
+			}
+			$profiel->changelog[] = $changeEntry;
+
+			$succes = false;
+
+			try {
+				/** @var Connection $conn */
+				$conn = $this->getDoctrine()->getConnection();
+				$conn->setAutoCommit(false);
+				$conn->connect();
+				try {
+					$toestemmingForm = new ToestemmingModalForm($this->lidToestemmingRepository, true);
+
+					// Sla toesteming op.
+					if ($toestemmingForm->validate()) {
+						$this->profielRepository->create($profiel);
+						$this->lidToestemmingRepository->saveForLid($profiel->uid);
+						$conn->commit();
+						$succes = true;
+					} else {
+						throw new CsrException('Vul de toestemmingen in');
+					}
+				} catch (Exception $e) {
+					setMelding($e->getMessage(), -1);
+					if ($conn->isTransactionActive()) {
+						$conn->rollBack();
+					}
+				} finally {
+					$conn->setAutoCommit(true);
+				}
+			} catch (CsrException $ex) {
+				setMelding($ex->getMessage(), -1);
+			}
+
+			if ($succes) {
+				return view('extern-inschrijven.tekstpagina', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
+					<h1 class="Titel">Bedankt voor je inschrijving!</h1>
+					<p>De NovCie neemt z.s.m. contact met je op.</p>
+				']);
+			}
+		}
+
+		return view('extern-inschrijven.inschrijven', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => $form]);
 	}
 
 	/**
