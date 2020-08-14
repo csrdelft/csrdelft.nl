@@ -51,7 +51,7 @@ class ProfielForm extends Formulier {
 			. '<li class="breadcrumb-item">'. $this->model->getLink('civitas') . '</li></ol>';
 	}
 
-	public function __construct(Profiel $profiel) {
+	public function __construct(Profiel $profiel, $inschrijven) {
 		if ($profiel->uid) {
 			parent::__construct($profiel, '/profiel/' . $profiel->uid . '/bewerken');
 		} else {
@@ -59,7 +59,6 @@ class ProfielForm extends Formulier {
 		}
 
 		$admin = LoginService::mag(P_LEDEN_MOD);
-		$inschrijven = !$profiel->account;
 
 		$fields = [];
 		if ($inschrijven) {

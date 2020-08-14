@@ -219,7 +219,7 @@ class ProfielController extends AbstractController {
 		if (!$profiel->magBewerken()) {
 			throw new CsrToegangException();
 		}
-		$form = new ProfielForm($profiel);
+		$form = new ProfielForm($profiel, $alleenFormulier);
 		if ($form->validate()) {
 			$diff = $form->diff();
 			if (empty($diff)) {
