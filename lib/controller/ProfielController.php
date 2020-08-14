@@ -339,11 +339,17 @@ class ProfielController extends AbstractController {
 
 		$profiel = $this->profielRepository->nieuw(date_create_immutable()->format('Y'), LidStatus::Noviet);
 
-		if (empty($pre)) throw new NotFoundHttpException();
+		if (empty($pre)) {
+			throw new NotFoundHttpException();
+		}
 		$data = base64url_decode($pre);
-		if (!$data) throw new NotFoundHttpException();
+		if (!$data) {
+			throw new NotFoundHttpException();
+		}
 		$split = explode(';', $data);
-		if (count($split) !== 5) throw new NotFoundHttpException();
+		if (count($split) !== 5) {
+			throw new NotFoundHttpException();
+		}
 		list(
 			$profiel->voornaam,
 			$profiel->tussenvoegsel,
