@@ -11,4 +11,5 @@ monolog:
             icon_emoji: '%env(SLACK_ICON)%'
             bot_name: '%env(SLACK_USERNAME)%'
             include_extra: true
+            include_stacktraces: true
             level: critical
