@@ -53,7 +53,7 @@ class AccessControlEventListener {
 	public function onKernelController(ControllerEvent $event) {
 		$controller = $event->getRequest()->get('_controller');
 		$reflectionMethod = new ReflectionMethod($event->getController()[0], $event->getController()[1]);
-		/** @var Auth $authAnnotation */
+		/** @var CsrfUnsafe $authAnnotation */
 		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
 
 		if (!$event->getRequest()->get('_csrfUnsafe') && $csrfUnsafeAnnotation === null) {
