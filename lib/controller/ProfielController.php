@@ -3,6 +3,7 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
@@ -199,6 +200,7 @@ class ProfielController extends AbstractController {
 	 * @return TemplateView|RedirectResponse
 	 * @Route("/profiel/{lidjaar}/nieuw/{status}", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
+	 * @CsrfUnsafe()
 	 */
 	public function nieuw($lidjaar, $status, EntityManagerInterface $em) {
 		if ($em->getFilters()->isEnabled('verbergNovieten')) {
@@ -330,6 +332,7 @@ class ProfielController extends AbstractController {
 	/**
 	 * @Route("/inschrijven/{pre}", methods={"GET", "POST"}, name="extern-inschrijven")
 	 * @Auth(P_PUBLIC)
+	 * @CsrfUnsafe()
 	 * @param string $pre
 	 * @param EntityManagerInterface $em
 	 * @return TemplateView|RedirectResponse

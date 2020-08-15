@@ -3,6 +3,8 @@
 
 namespace CsrDelft\service;
 
+use CsrDelft\service\security\LoginService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -11,13 +13,19 @@ class CsrfService {
 	 * @var CsrfTokenManagerInterface
 	 */
 	private $manager;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
 
 	/**
 	 * CsrfService constructor.
 	 * @param $manager CsrfTokenManagerInterface
+	 * @param LoggerInterface $logger
 	 */
-	public function __construct(CsrfTokenManagerInterface $manager) {
+	public function __construct(CsrfTokenManagerInterface $manager, LoggerInterface $logger) {
 		$this->manager = $manager;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -43,14 +51,19 @@ class CsrfService {
 			$id = filter_input(INPUT_POST, 'X-CSRF-ID', FILTER_SANITIZE_STRING);
 			$value = filter_input(INPUT_POST, 'X-CSRF-VALUE', FILTER_SANITIZE_STRING);
 		}
+		$url = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRING);
 		if ($id != null && $value != null) {
 			$token = new CsrfToken($id, $value);
-			$url = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRING);
 			if ($this->isValid($token, $url, $method)) {
 				return null;
 			}
 		}
 		// No valid token has been posted, so we redirect to prevent sensitive operations from taking place
+		setMelding('Er is iets foutgegaan', -1);
+		$this->logger->critical('Ongeldige CSRF token', [
+			'url' => $url,
+			'user' => LoginService::getUid()
+		]);
 		redirect();
 	}
 

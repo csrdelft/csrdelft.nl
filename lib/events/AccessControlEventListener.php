@@ -3,6 +3,7 @@
 namespace CsrDelft\events;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\service\CsrfService;
@@ -47,20 +48,21 @@ class AccessControlEventListener {
 	 * Controleer of gebruiker deze pagina mag zien.
 	 *
 	 * @param ControllerEvent $event
-	 * @param CsrfService $csrfService
+	 * @throws \ReflectionException
 	 */
 	public function onKernelController(ControllerEvent $event) {
-		if (!$event->getRequest()->get('_csrfUnsafe')) {
+		$controller = $event->getRequest()->get('_controller');
+		$reflectionMethod = new ReflectionMethod($event->getController()[0], $event->getController()[1]);
+		/** @var Auth $authAnnotation */
+		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
+
+		if (!$event->getRequest()->get('_csrfUnsafe') && $csrfUnsafeAnnotation === null) {
 			$this->csrfService->preventCsrf();
 		}
-
-		$controller = $event->getRequest()->get('_controller');
 
 		if (isset(self::EXCLUDED_CONTROLLERS[$controller])){
 			return;
 		}
-
-		$reflectionMethod = new ReflectionMethod($event->getController()[0], $event->getController()[1]);
 
 		/** @var Auth $authAnnotation */
 		$authAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, Auth::class);
