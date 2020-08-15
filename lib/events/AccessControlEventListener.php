@@ -10,7 +10,6 @@ use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
-use ReflectionMethod;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 /**
@@ -52,7 +51,7 @@ class AccessControlEventListener {
 	 */
 	public function onKernelController(ControllerEvent $event) {
 		$controller = $event->getRequest()->get('_controller');
-		$reflectionMethod = new ReflectionMethod($event->getController()[0], $event->getController()[1]);
+		$reflectionMethod = createReflectionMethod($event->getController());
 		/** @var CsrfUnsafe $authAnnotation */
 		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
 
