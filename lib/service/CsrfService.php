@@ -60,10 +60,7 @@ class CsrfService {
 		}
 		// No valid token has been posted, so we redirect to prevent sensitive operations from taking place
 		setMelding('Er is iets foutgegaan', -1);
-		$this->logger->critical('Ongeldige CSRF token', [
-			'url' => $url,
-			'user' => LoginService::getUid()
-		]);
+		$this->logger->critical('Ongeldige CSRF token');
 		redirect();
 	}
 
