@@ -59,6 +59,7 @@ class ProfielForm extends Formulier {
 		}
 
 		$admin = LoginService::mag(P_LEDEN_MOD);
+		$novCie = LoginService::mag('commissie:NovCie');
 
 		$fields = [];
 		if ($inschrijven) {
@@ -224,7 +225,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
 		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
-		if ($admin OR $inschrijven) {
+		if ($admin OR $inschrijven OR $novCie) {
 			$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
 			$fields['middelbareSchool'] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 			$fields['middelbareSchool']->required = $inschrijven;
@@ -239,7 +240,7 @@ class ProfielForm extends Formulier {
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
-		if (($admin OR LoginService::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
+		if (($admin OR $novCie) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
 			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
 
 			if ($inschrijven) {
