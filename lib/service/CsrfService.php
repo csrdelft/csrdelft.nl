@@ -47,8 +47,8 @@ class CsrfService {
 	 * @return bool
 	 */
 	public function preventCsrf(Request $request) {
-		$method = $request->getMethod();
-		if ($method == 'GET') {
+		// Safe: GET, OPTIONS, HEAD, TRACE
+		if ($request->isMethodSafe()) {
 			return true;
 		}
 		$id = $request->server->get('HTTP_X_CSRF_ID');
@@ -61,7 +61,7 @@ class CsrfService {
 		$url = $request->getRequestUri();
 		if ($id != null && $value != null) {
 			$token = new CsrfToken($id, $value);
-			if ($this->isValid($token, $url, $method)) {
+			if ($this->isValid($token, $url, $request->getMethod())) {
 				return true;
 			}
 		}
