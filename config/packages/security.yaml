@@ -40,7 +40,7 @@ security:
         target: default
       remember_me:
         secret:   '%kernel.secret%'
-        lifetime: 604800 # 1 week in seconds
+        lifetime: 1209600 # 2 weken in seconden
         path: /
         token_provider: 'CsrDelft\common\Security\PersistentTokenProvider'
       switch_user: true
