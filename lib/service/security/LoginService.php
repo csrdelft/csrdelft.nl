@@ -152,6 +152,8 @@ class LoginService {
 
 		switch (get_class($token)) {
 			case SwitchUserToken::class:
+				$method = AuthenticationMethod::impersonate;
+				break;
 			case TemporaryToken::class:
 				$method = AuthenticationMethod::temporary;
 				break;

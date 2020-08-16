@@ -67,6 +67,8 @@ class AccessService {
 	 * @var array
 	 */
 	private static $defaultAllowedAuthenticationMethods = [
+		AuthenticationMethod::impersonate,
+		AuthenticationMethod::temporary,
 		AuthenticationMethod::cookie_token,
 		AuthenticationMethod::password_login,
 		AuthenticationMethod::recent_password_login,

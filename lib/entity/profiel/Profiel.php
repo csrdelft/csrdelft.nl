@@ -393,8 +393,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 
 	/**
 	 * @var Account|null
-	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\security\Account", mappedBy="profiel")
-	 * @ORM\Cache("NONSTRICT_READ_WRITE")
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\security\Account", mappedBy="profiel", fetch="EXTRA_LAZY")
 	 */
 	public $account;
 
