@@ -43,7 +43,7 @@
 	@if(lid_instelling('forum', 'datumWeergave') === 'relatief')
 		{!! reldate($draad->laatst_gewijzigd) !!}
 	@else
-		{{$draad->laatst_gewijzigd}}
+		{{date_format_intl($draad->laatst_gewijzigd, DATETIME_FORMAT)}}
 	@endif
 </div>
 <div class="alternate-row draad-laatste-post">
