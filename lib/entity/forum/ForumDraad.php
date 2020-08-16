@@ -270,7 +270,7 @@ class ForumDraad {
 	 */
 	public function getLaatstePostSamenvatting() {
 		$laatste = $this->laatste_post;
-		$parseMail = CsrBB::parseMail($laatste->tekst);
+		$parseMail = strip_tags(CsrBB::parseMail($laatste->tekst));
 		return truncate($parseMail, 100);
 	}
 

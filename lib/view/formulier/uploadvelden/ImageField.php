@@ -81,9 +81,9 @@ class ImageField extends FileField {
 				$filename = $this->getModel()->filename;
 				$resized = $directory . $percent . $filename;
 				if ($this->vierkant) {
-					$command = env('IMAGEMAGICK') . ' ' . escapeshellarg($directory . $filename) . ' -thumbnail 150x150^ -gravity center -extent 150x150 -format jpg -quality 80 ' . escapeshellarg($resized);
+					$command = $_ENV['IMAGEMAGICK'] . ' ' . escapeshellarg($directory . $filename) . ' -thumbnail 150x150^ -gravity center -extent 150x150 -format jpg -quality 80 ' . escapeshellarg($resized);
 				} else {
-					$command = env('IMAGEMAGICK') . ' ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
+					$command = $_ENV['IMAGEMAGICK'] . ' ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
 				}
 				if (defined('RESIZE_OUTPUT')) {
 					debugprint($command);

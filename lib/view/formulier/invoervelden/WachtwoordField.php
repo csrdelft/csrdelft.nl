@@ -10,7 +10,6 @@ namespace CsrDelft\view\formulier\invoervelden;
 class WachtwoordField extends TextField {
 
 	public $type = 'password';
-	public $enter_submit = true;
 
 	// Override TextField getValue as passwords do not need to be sanitised here
 	public function getValue() {

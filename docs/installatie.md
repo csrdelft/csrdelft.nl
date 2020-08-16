@@ -66,9 +66,19 @@ De hele filestructuur van de repository is nu gedownload op je computer. Een kor
 ## Stap 2: Installatie
 Er zijn twee mogelijke manieren om te installeren, met Docker of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
 
+Zorg dat je vanaf hier Apache2 en MariaDB, oftewel wampserver/xampp hebt draaien.
+
 _Over installatie met docker kun je in het bestand [Docker](installatie-docker.md) meer lezen._
 
-### 2.1: Database instellen
+### 2.1: PHP dependencies installeren
+
+Voer het volgende commando uit om php dependencies te installeren.
+
+```bash
+composer install
+```
+
+### 2.2: Database instellen
 
 *Dit gaat er vanuit dat je database een gebruiker `root` heeft zonder wachtwoord, dit is standaard bij een installatie van MySQL. Heb je je database beveiligd kopieer dan het `DATABASE_URL` veld uit `.env` naar `.env.local` en zet de gegevens goed.*
 
@@ -84,25 +94,22 @@ Voer vanaf de command line het volgende commando uit om de tabellen in de databa
 php bin/console doctrine:migrations:migrate
 ```
 
-Als je een dump hebt gekregen kun je het volgende commando uitvoeren.
+Als je een dump hebt gekregen kun je deze nu importeren met HeidiSQL, DataGrip of een andere Sql client die je graag gebruikt
 
-```bash
-php bin/console doctrine:database:import <bestandsnaam van sql bestand>
-```
-
-### 2.2: Frontend code builden
+### 2.3: Frontend code builden
 
 De frontend code wordt met een los process gebuild. Hier wordt Typescript omgezet naar Javascript en Scss (sass) naar CSS.
 
-Om deze stap te vergemakkelijken is er het volgende commando:
+Voer hier voor het volgende commando uit.
 
 ```bash
-composer update-dev
+yarn
+yarn dev
 ```
 
 Kijk ook in [Typescript](typescript.md) voor meer info.
 
-### 2.3: VirtualHost instellen
+### 2.4: VirtualHost instellen
 
 *Gaat er vanuit dat je Wampserver hebt geinstalleerd in stap 0*
 

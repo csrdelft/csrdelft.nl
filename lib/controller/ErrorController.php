@@ -6,20 +6,30 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\service\security\LoginService;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 
-class ErrorController {
-	public function handleException(RequestStack $requestStack, Throwable $exception, ContainerInterface $container) {
+class ErrorController extends AbstractController {
+	public function handleException(RequestStack $requestStack, Throwable $exception) {
 		$request = $requestStack->getMasterRequest();
 
 		$statusCode = 500;
 		if (method_exists($exception, 'getStatusCode')) {
 			$statusCode = $exception->getStatusCode();
+		}
+
+		if (!in_array($request->getMethod(), [
+			Response::HTTP_BAD_REQUEST,
+			Response::HTTP_NOT_FOUND,
+			Response::HTTP_FORBIDDEN,
+			Response::HTTP_METHOD_NOT_ALLOWED,
+		])) {
+			ShutdownHandler::emailException($exception);
+			ShutdownHandler::slackException($exception);
+			ShutdownHandler::touchHandler();
 		}
 
 		if ($request->getMethod() == 'POST') {
@@ -39,7 +49,7 @@ class ErrorController {
 			{
 				if (LoginService::getUid() == LoginService::UID_EXTERN) {
 					$requestUri = $request->getRequestUri();
-					$router = $container->get('router');
+					$router = $this->get('router');
 
 					return new RedirectResponse($router->generate('csrdelft_login_loginform', ['redirect' => urlencode($requestUri)]));
 				}
@@ -52,9 +62,6 @@ class ErrorController {
 			}
 			default:
 			{
-				ShutdownHandler::emailException($exception);
-				ShutdownHandler::slackException($exception);
-				ShutdownHandler::touchHandler();
 				return new Response(view('fout.500'), Response::HTTP_INTERNAL_SERVER_ERROR);
 			}
 		}

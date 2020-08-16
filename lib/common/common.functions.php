@@ -368,6 +368,17 @@ function isGeldigeDatum($datum) {
 }
 
 /**
+ * @param string $date
+ * @param string $format
+ * @return true als huidige datum & tijd voorbij gegeven datum en tijd zijn
+ */
+function isDatumVoorbij(string $date, $format = 'Y-m-d H:i:s') {
+	$date = date_create_immutable_from_format($format, $date);
+	$now = date_create_immutable();
+	return $now >= $date;
+}
+
+/**
  * print_r een variabele met <pre>-tags eromheen.
  *
  * @param mixed $sString
@@ -1206,4 +1217,40 @@ function as_array($value) {
  */
 function short_class($class) {
 	return (new \ReflectionClass($class))->getShortName();
+}
+
+// Base64url functies van https://www.php.net/manual/en/function.base64-encode.php#103849
+function base64url_encode($data) {
+  return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+  return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+}
+
+/**
+ * Maak een ReflectionMethod voor een callable.
+ *
+ * @param callable $fn
+ * @return ReflectionMethod
+ * @throws ReflectionException
+ */
+function createReflectionMethod(callable $fn) {
+	if (is_callable($fn)) {
+		if (is_array($fn)) {
+			if (is_object($fn[0])) {
+				return new ReflectionMethod(\get_class($fn[0]), $fn[1]);
+			} elseif (is_string($fn[0])) {
+				return new ReflectionMethod($fn[0], $fn[1]);
+			}
+		} elseif (is_string($fn)) {
+			if (strpos($fn, '::') !== false) {
+				return new ReflectionMethod($fn);
+			}
+		} elseif (is_object($fn)) {
+			return new ReflectionMethod(\get_class($fn), '__invoke');
+		}
+	}
+
+	throw new InvalidArgumentException('Niet een callable');
 }

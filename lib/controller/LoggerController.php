@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\service\security\LoginService;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,12 +23,13 @@ class LoggerController {
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/logger", methods={"GET", "POST"}, defaults={"_mag": "P_LOGGED_IN"})
+	 * @Route("/logger", methods={"GET", "POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function log(Request $request) {
 		if (!isset($_SESSION[self::LAATSTE_LOG_MELDING])) $_SESSION[self::LAATSTE_LOG_MELDING] = 0;
 
-		if ($_SESSION[self::LAATSTE_LOG_MELDING] < time() - self::LOG_TIMEOUT && !empty(env('SLACK_URL'))) {
+		if ($_SESSION[self::LAATSTE_LOG_MELDING] < time() - self::LOG_TIMEOUT && !empty($_ENV['SLACK_URL'])) {
 			$message = $request->request->get('message');
 			$col = $request->request->get('col');
 			$line = $request->request->get('line');
@@ -35,10 +37,10 @@ class LoggerController {
 			$error = $request->request->get('error');
 			$pagina = $request->request->get('pagina');
 
-			$slackClient = new SlackClient(env('SLACK_URL'), [
-				'username' => env('SLACK_USERNAME'),
-				'channel' => env('SLACK_CHANNEL'),
-				'icon' => env('SLACK_ICON'),
+			$slackClient = new SlackClient($_ENV['SLACK_URL'], [
+				'username' => $_ENV['SLACK_USERNAME'],
+				'channel' => $_ENV['SLACK_CHANNEL'],
+				'icon' => $_ENV['SLACK_ICON'],
 			]);
 			$foutmelding = $slackClient->createMessage();
 

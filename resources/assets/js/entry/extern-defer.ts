@@ -42,9 +42,21 @@ const header = document.querySelector('#header')!;
 const banner = document.querySelector('#banner')!;
 
 const lazyLoad = () => {
+	const textarea = document.createElement('textarea');
+
 	for (const element of document.querySelectorAll('.lazy-load')) {
 		// setTimeout om lazy-load blokken na elkaar te laden ipv allemaal tegelijk.
-		setTimeout(() => element.outerHTML = element.innerHTML);
+		setTimeout(() => {
+			const innerHTML = element.innerHTML.trim();
+
+			// Sommige browsers encoden de inhoud van de noscript tag.
+			if (innerHTML.startsWith('&lt;')) {
+				textarea.innerHTML = innerHTML;
+				element.outerHTML = textarea.value;
+			} else {
+				element.outerHTML = innerHTML;
+			}
+		});
 	}
 };
 

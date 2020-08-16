@@ -331,7 +331,8 @@ class AgendaController {
 	/**
 	 * @param Request $request
 	 * @return JsonResponse
-	 * @Route("/agenda/feed", methods={"GET"}, defaults={"_mag": P_LOGGED_IN})
+	 * @Route("/agenda/feed", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function feed(Request $request) {
 		$startMoment = date_create_immutable($request->query->get('start'));
@@ -358,10 +359,20 @@ class AgendaController {
 				$backgroundColor = '#1ABD2C';
 			}
 
+			// Zet eindmoment naar dag erna als activiteit tot 23:59 duurt en allDay is
+			if ($event->isHeledag() && date('H:i', $event->getEindMoment()) === '23:59') {
+				$eind = date_create_immutable('@'. $event->getEindMoment())
+					->add(new DateInterval('P1D'))
+					->setTime(0, 0, 0)
+					->getTimestamp();
+			} else {
+				$eind = $event->getEindMoment();
+			}
+
 			$eventsJson[] = [
 				'title' => $event->getTitel(),
 				'start' => date('c', $event->getBeginMoment()),
-				'end' => date('c', $event->getEindMoment()),
+				'end' => date('c', $eind),
 				'allDay' => $event->isHeledag(),
 				'id' => $event->getUUID(),
 				'textColor' => '#fff',
@@ -379,7 +390,8 @@ class AgendaController {
 	/**
 	 * @param $uuid
 	 * @return TemplateView
-	 * @Route("/agenda/details/{uuid}", methods={"GET"}, defaults={"_mag": P_LOGGED_IN})
+	 * @Route("/agenda/details/{uuid}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function details($uuid) {
 		$jaar = filter_input(INPUT_GET, 'jaar', FILTER_SANITIZE_NUMBER_INT);

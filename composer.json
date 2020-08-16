@@ -24,7 +24,6 @@
 		"ext-openssl": "*",
 		"ext-pdo_mysql": "*",
 		"ext-simplexml": "*",
-		"ferno/loco": "dev-master",
 		"firebase/php-jwt": "^5.0",
 		"globalcitizen/php-iban": "^2.6",
 		"google/apiclient": "^2.0",
@@ -33,13 +32,12 @@
 		"maknz/slack": "^1.7",
 		"ml/json-ld": "^1.0",
 		"php-di/invoker": "^2.0",
-		"robmorgan/phinx": "^0.11.1",
 		"symfony/config": "^5.0",
 		"symfony/dotenv": "^5.0",
 		"symfony/flex": "^1.4",
 		"symfony/framework-bundle": "^5.0",
 		"symfony/http-foundation": "^5.0",
-		"symfony/orm-pack": "^1.0",
+		"symfony/orm-pack": "^2.0",
 		"symfony/routing": "^5.0",
 		"symfony/security-csrf": "^5.0",
 		"symfony/templating": "^5.0",
@@ -49,10 +47,11 @@
 		"symfony/cache": "^5.0",
 		"beberlei/doctrineextensions": "^1.2",
 		"symfony/var-dumper": "^5.0",
-		"zumba/json-serializer": "^2.2",
+		"zumba/json-serializer": "^3.0",
 		"sensio/framework-extra-bundle": "^5.5",
 		"parsecsv/php-parsecsv": "^1.2",
-		"symfony/mime": "^5.0"
+		"symfony/mime": "^5.0",
+		"symfony/yaml": "^5.0"
 	},
 	"config": {
 		"platform": {
@@ -80,7 +79,6 @@
 			"Composer\\Config::disableProcessTimeout",
 			"symfony serve --document-root htdocs"
 		],
-		"phinx": "@php vendor/robmorgan/phinx/bin/phinx",
 		"migrate": "@console doctrine:migrations:migrate --allow-no-migration --no-interaction",
 		"generator": "@php bin/dev/generate.php",
 		"production": "@php bin/ci/compile.php",
@@ -93,7 +91,6 @@
 			"touch .onderhoud",
 			"git merge FETCH_HEAD",
 			"@composer dump-env prod",
-			"@phinx migrate",
 			"@migrate",
 			"rm -r ./var/cache",
 			"@flushcache",
@@ -102,7 +99,6 @@
 		],
 		"update-dev": [
 			"@composer install",
-			"@phinx migrate",
 			"@migrate",
 			"yarn",
 			"yarn dev"

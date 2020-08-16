@@ -29,12 +29,21 @@ class VerjaardagenService {
 	 * @var string
 	 */
 	private $filterByToestemingSql;
+	/**
+	 * @var string
+	 */
+	private $novietenFilter = '';
 
 	public function __construct(ProfielRepository $profielRepository, EntityManagerInterface $em) {
 		$this->profielRepository = $profielRepository;
 		$this->em = $em;
 
 		$this->filterByToestemingSql = LoginService::mag(P_LEDEN_MOD) ? "" : self::FILTER_BY_TOESTEMMING;
+
+		if ($em->getFilters()->isEnabled('verbergNovieten')) {
+			$jaar = intval(trim($em->getFilters()->getFilter('verbergNovieten')->getParameter('jaar'), "'"));
+			$this->novietenFilter = "AND NOT (STATUS = 'S_NOVIET' AND lidjaar = $jaar)";
+		}
 	}
 
 	/**
@@ -92,6 +101,7 @@ FROM (
         SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(NOW()) - YEAR(gebdatum) YEAR) AS verjaardag
         FROM profielen
         WHERE NOT gebdatum = '0000-00-00' AND status IN ($lidstatus)
+        {$this->novietenFilter}
         ) AS T1
     ) AS T2
 {$this->filterByToestemingSql}
@@ -129,6 +139,7 @@ FROM (
         SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(DATE(:van_datum)) - YEAR(gebdatum) YEAR) AS verjaardag
         FROM profielen
         WHERE NOT gebdatum = '0000-00-00' AND status IN ($lidstatus)
+        {$this->novietenFilter}
         ) AS T1
     ) AS T2
 {$this->filterByToestemingSql}
