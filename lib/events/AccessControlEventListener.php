@@ -50,17 +50,23 @@ class AccessControlEventListener {
 	 * @throws \ReflectionException
 	 */
 	public function onKernelController(ControllerEvent $event) {
-		$controller = $event->getRequest()->get('_controller');
+		$request = $event->getRequest();
 		$reflectionMethod = createReflectionMethod($event->getController());
+
+		$csrfUnsafeAttribute = $request->attributes->get('_csrfUnsafe');
 		/** @var CsrfUnsafe $authAnnotation */
 		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
 
-		if (!startsWith($event->getRequest()->getPathInfo(), '/API/2.0')
-			&& !$event->getRequest()->get('_csrfUnsafe')
-			&& $csrfUnsafeAnnotation === null) {
-			$this->csrfService->preventCsrf();
+		$isInApi = startsWith($request->getPathInfo(), '/API/2.0');
+
+		if ($isInApi === false && $csrfUnsafeAttribute === null && $csrfUnsafeAnnotation === null) {
+			if (!$this->csrfService->preventCsrf($request)) {
+				// Maak dit een CsrToegangException als de fouten gedebugged zijn.
+				throw new CsrException("Ongeldige CSRF token");
+			}
 		}
 
+		$controller = $request->attributes->get('_controller');
 		if (isset(self::EXCLUDED_CONTROLLERS[$controller])){
 			return;
 		}
@@ -71,7 +77,7 @@ class AccessControlEventListener {
 		if ($authAnnotation) {
 			$mag = $authAnnotation->getMag();
 		} else {
-			$mag = $event->getRequest()->get('_mag');
+			$mag = $request->attributes->get('_mag');
 		}
 
 		if (!$mag) {

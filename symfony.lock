@@ -105,9 +105,6 @@
     "eftec/bladeone": {
         "version": "3.21"
     },
-    "ferno/loco": {
-        "version": "dev-master"
-    },
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },
