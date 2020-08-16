@@ -2,6 +2,7 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\service\security\LoginService;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,8 @@ class LoggerController {
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/logger", methods={"GET", "POST"}, defaults={"_mag": "P_LOGGED_IN"})
+	 * @Route("/logger", methods={"GET", "POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function log(Request $request) {
 		if (!isset($_SESSION[self::LAATSTE_LOG_MELDING])) $_SESSION[self::LAATSTE_LOG_MELDING] = 0;
