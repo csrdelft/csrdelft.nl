@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a9316ce69a25d652950cf244799425e",
+    "content-hash": "addc436be117f7c04cff3868f4e75b2d",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -1529,45 +1529,6 @@
                 "view"
             ],
             "time": "2019-03-07T22:20:14+00:00"
-        },
-        {
-            "name": "ferno/loco",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/qntm/loco.git",
-                "reference": "e8a2383bc274b6868592eb774ffce5338ab76a62"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/qntm/loco/zipball/e8a2383bc274b6868592eb774ffce5338ab76a62",
-                "reference": "e8a2383bc274b6868592eb774ffce5338ab76a62",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "jakub-onderka/php-parallel-lint": "0.*",
-                "squizlabs/php_codesniffer": "^2.3"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/Loco.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "homepage": "http://qntm.org/loco",
-            "keywords": [
-                "lexer",
-                "parser",
-                "parsing"
-            ],
-            "time": "2020-08-14T18:47:46+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -8272,7 +8233,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "ferno/loco": 20,
         "jacwright/restserver": 20
     },
     "prefer-stable": false,
