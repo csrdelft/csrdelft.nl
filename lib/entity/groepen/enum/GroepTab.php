@@ -17,6 +17,11 @@ use CsrDelft\common\Enum;
  * @method static static Statistiek
  * @method static static Emails
  * @method static static Eetwens
+ * @method static boolean isLijst($tab)
+ * @method static boolean isPasfotos($tab)
+ * @method static boolean isStatistiek($tab)
+ * @method static boolean isEmails($tab)
+ * @method static boolean isEetwens($tab)
  */
 class GroepTab extends Enum {
 

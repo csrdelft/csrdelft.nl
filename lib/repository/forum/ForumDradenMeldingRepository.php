@@ -152,7 +152,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 
 			// Stuur geen meldingen als lid niet gevonden is, lid de auteur is of als lid geen meldingen wil voor draadje
 			// Met laatste voorwaarde worden ook leden afgevangen die sowieso al een melding zouden ontvangen
-			if (!$genoemde || !AccountRepository::existsUid($genoemde->uid) || $genoemde->uid === $post->uid || $this->getNiveauVoorLid($draad, $genoemde->uid) !== ForumDraadMeldingNiveau::VERMELDING()) {
+			if (!$genoemde || !AccountRepository::existsUid($genoemde->uid) || $genoemde->uid === $post->uid || !ForumDraadMeldingNiveau::isVERMELDING($this->getNiveauVoorLid($draad, $genoemde->uid))) {
 				continue;
 			}
 
