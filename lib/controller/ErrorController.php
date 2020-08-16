@@ -24,6 +24,17 @@ class ErrorController extends AbstractController {
 			$statusCode = $exception->getStatusCode();
 		}
 
+		if (!in_array($statusCode, [
+			Response::HTTP_BAD_REQUEST,
+			Response::HTTP_NOT_FOUND,
+			Response::HTTP_FORBIDDEN,
+			Response::HTTP_METHOD_NOT_ALLOWED,
+		])) {
+			ShutdownHandler::emailException($exception);
+			ShutdownHandler::slackException($exception);
+			ShutdownHandler::touchHandler();
+		}
+
 		if ($request->getMethod() == 'POST') {
 			return new Response($exception->getMessage(), $statusCode);
 		}
@@ -56,9 +67,6 @@ class ErrorController extends AbstractController {
 			}
 			default:
 			{
-				ShutdownHandler::emailException($exception);
-				ShutdownHandler::slackException($exception);
-				ShutdownHandler::touchHandler();
 				return new Response(view('fout.500'), Response::HTTP_INTERNAL_SERVER_ERROR);
 			}
 		}

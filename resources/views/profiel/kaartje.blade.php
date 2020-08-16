@@ -29,7 +29,7 @@
 		@endif
 
 		@foreach (\CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\leden\CommissieLedenRepository::class)->findBy(['uid' => $profiel->uid], ['lid_sinds' => 'DESC']) as $commissielid)
-			@if ($commissielid->groep->status === \CsrDelft\entity\groepen\enum\GroepStatus::HT())
+			@if (\CsrDelft\entity\groepen\enum\GroepStatus::isHT($commissielid->getGroep()->status))
 				<p>
 					@if (!empty($commissielid->opmerking))
 						{{$commissielid->opmerking}} <br/>

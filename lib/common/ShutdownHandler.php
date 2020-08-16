@@ -51,7 +51,8 @@ final class ShutdownHandler {
 	}
 
 	public static function emailException(Throwable $exception) {
-		$error['message'] = $exception->getMessage();
+		$debug['type'] = get_class($exception);
+		$debug['message'] = $exception->getMessage();
 		$debug['trace'] = $exception->getTrace();
 		$debug['POST'] = $_POST;
 		$debug['GET'] = $_GET;
