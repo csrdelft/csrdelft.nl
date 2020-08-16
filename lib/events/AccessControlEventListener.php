@@ -3,11 +3,13 @@
 namespace CsrDelft\events;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 /**
@@ -30,30 +32,38 @@ class AccessControlEventListener {
 	 * @var Reader
 	 */
 	private $annotations;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
 
-	public function __construct(CsrfService $csrfService, Reader $annotations) {
+	public function __construct(CsrfService $csrfService, Reader $annotations, EntityManagerInterface $entityManager) {
 		$this->csrfService = $csrfService;
 		$this->annotations = $annotations;
+		$this->em = $entityManager;
 	}
 
 	/**
 	 * Controleer of gebruiker deze pagina mag zien.
 	 *
 	 * @param ControllerEvent $event
-	 * @param CsrfService $csrfService
+	 * @throws \ReflectionException
 	 */
 	public function onKernelController(ControllerEvent $event) {
-		if (!startsWith($event->getRequest()->getPathInfo(), '/API/2.0') && !$event->getRequest()->get('_csrfUnsafe')) {
+		$controller = $event->getRequest()->get('_controller');
+		$reflectionMethod = createReflectionMethod($event->getController());
+		/** @var CsrfUnsafe $authAnnotation */
+		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
+
+		if (!startsWith($event->getRequest()->getPathInfo(), '/API/2.0')
+			&& !$event->getRequest()->get('_csrfUnsafe')
+			&& $csrfUnsafeAnnotation === null) {
 			$this->csrfService->preventCsrf();
 		}
-
-		$controller = $event->getRequest()->get('_controller');
 
 		if (isset(self::EXCLUDED_CONTROLLERS[$controller])){
 			return;
 		}
-
-		$reflectionMethod = new \ReflectionMethod($event->getController()[0], $event->getController()[1]);
 
 		/** @var Auth $authAnnotation */
 		$authAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, Auth::class);
@@ -74,6 +84,10 @@ class AccessControlEventListener {
 			} else {
 				throw new CsrToegangException("Geen toegang");
 			}
+		}
+
+		if (LoginService::mag('commissie:NovCie') && $this->em->getFilters()->isEnabled('verbergNovieten')) {
+			$this->em->getFilters()->disable('verbergNovieten');
 		}
 	}
 }

@@ -7,7 +7,7 @@ doctrine:
         server_version: 'mariadb-10.3.20'
 
         # Tabellen die niet in het schema zitten, maar toch niet weggegooid moeten worden.
-        schema_filter: /^(?!(rememberme_token|groep|groeptype|bijbelrooster|bijbelrooster_old|geolocations|logaggregated|phinxlog|saldolog|soccie.*)$).*/
+        schema_filter: /^(?!(rememberme_token|groep|groeptype|bijbelrooster|bijbelrooster_old|geolocations|logaggregated|saldolog|soccie.*)$).*/
 
         # only needed for MySQL
         charset: utf8mb4
@@ -62,4 +62,9 @@ doctrine:
                 dir: '%kernel.project_dir%/lib/entity'
                 prefix: 'CsrDelft\entity'
                 alias: App
-
+        filters:
+            verbergNovieten:
+                class: CsrDelft\common\Doctrine\VerbergNovietenFilter
+                enabled: true
+                parameters:
+                    jaar: 2020

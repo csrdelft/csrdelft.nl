@@ -77,7 +77,7 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-		$mail = new Mail([env('EMAIL_OWEECIE') => "OweeCie"], "Interesseformulier", $bericht);
+		$mail = new Mail([$_ENV['EMAIL_OWEECIE'] => "OweeCie"], "Interesseformulier", $bericht);
 		$mail->setFrom($email);
 		$mail->send();
 
@@ -106,12 +106,12 @@ De PubCie.
 
 		if ($type === 'lid-worden') {
 			$typeaanduiding = 'Ik wil lid worden';
-			$commissie = "PromoCie";
-			$bestemming = [env('EMAIL_PROMOCIE') => $commissie];
+			$commissie = "NovCie";
+			$bestemming = [$_ENV['EMAIL_NOVCIE'] => $commissie];
 		} else {
 			$typeaanduiding = 'Eerst een lid spreken';
 			$commissie = "OweeCie";
-			$bestemming = [env('EMAIL_OWEECIE') => $commissie];
+			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
 		}
 
 		$bericht = "
@@ -129,7 +129,7 @@ De PubCie.
 ";
 
 		$mail = new Mail($bestemming, "OWee formulier", $bericht);
-		$mail->setFrom(env('EMAIL_PUBCIE'));
+		$mail->setFrom($_ENV['EMAIL_PUBCIE']);
 		$mail->send();
 
 		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
@@ -154,7 +154,7 @@ De PubCie.
 	 * @return mixed
 	 */
 	public function checkCaptcha($response) {
-		$secret = env('GOOGLE_CAPTCHA_SECRET');
+		$secret = $_ENV['GOOGLE_CAPTCHA_SECRET'];
 
 		$ch = curl_init("https://www.google.com/recaptcha/api/siteverify");
 		curl_setopt($ch, CURLOPT_POST, 1);

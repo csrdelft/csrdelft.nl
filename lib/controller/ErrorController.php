@@ -6,7 +6,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\service\security\LoginService;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +13,10 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Throwable;
 
 
-class ErrorController {
+class ErrorController extends AbstractController {
 	use TargetPathTrait;
 
-	public function handleException(RequestStack $requestStack, Throwable $exception, ContainerInterface $container) {
+	public function handleException(RequestStack $requestStack, Throwable $exception) {
 		$request = $requestStack->getMasterRequest();
 
 		$statusCode = 500;
@@ -42,7 +41,7 @@ class ErrorController {
 			{
 				if (LoginService::getUid() == LoginService::UID_EXTERN) {
 					$requestUri = $request->getRequestUri();
-					$router = $container->get('router');
+					$router = $this->get('router');
 
 					$this->saveTargetPath($request->getSession(), 'main', $requestUri);
 
