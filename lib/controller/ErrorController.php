@@ -6,7 +6,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\service\security\LoginService;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +19,17 @@ class ErrorController extends AbstractController {
 		$statusCode = 500;
 		if (method_exists($exception, 'getStatusCode')) {
 			$statusCode = $exception->getStatusCode();
+		}
+
+		if (!in_array($request->getMethod(), [
+			Response::HTTP_BAD_REQUEST,
+			Response::HTTP_NOT_FOUND,
+			Response::HTTP_FORBIDDEN,
+			Response::HTTP_METHOD_NOT_ALLOWED,
+		])) {
+			ShutdownHandler::emailException($exception);
+			ShutdownHandler::slackException($exception);
+			ShutdownHandler::touchHandler();
 		}
 
 		if ($request->getMethod() == 'POST') {
@@ -52,9 +62,6 @@ class ErrorController extends AbstractController {
 			}
 			default:
 			{
-				ShutdownHandler::emailException($exception);
-				ShutdownHandler::slackException($exception);
-				ShutdownHandler::touchHandler();
 				return new Response(view('fout.500'), Response::HTTP_INTERNAL_SERVER_ERROR);
 			}
 		}
