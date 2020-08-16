@@ -12,8 +12,8 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Security;
@@ -53,18 +53,18 @@ class LoginService {
 	 */
 	private $security;
 	/**
-	 * @var ContainerInterface
+	 * @var TokenStorageInterface
 	 */
-	private $container;
+	private $tokenStorage;
 
 	public function __construct(
 		Security $security,
-		ContainerInterface $container,
-		AccountRepository $accountRepository
+		AccountRepository $accountRepository,
+		TokenStorageInterface $tokenStorage
 	) {
 		$this->accountRepository = $accountRepository;
 		$this->security = $security;
-		$this->container = $container;
+		$this->tokenStorage = $tokenStorage;
 	}
 
 	/**
@@ -178,8 +178,8 @@ class LoginService {
 		$token = $this->security->getToken();
 
 		if ($token instanceof RememberMeToken) {
-			$this->container->get('security.token_storage')
-				->setToken(new UsernamePasswordToken($token->getUser(), [], $token->getProviderKey(), $token->getRoleNames()));
+			$this->tokenStorage->setToken(
+				new UsernamePasswordToken($token->getUser(), [], $token->getProviderKey(), $token->getRoleNames()));
 		}
 	}
 }
