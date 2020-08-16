@@ -39,6 +39,16 @@ jobs:
       addons:
         sonarcloud:
           organization: "csrdelft"
+    - name: Create release and notify Sentry of deploy
+      env: SENTRY_ORG=csrdelft SENTRY_PROJECT=stek SENTRY_ENVIRONMENT=prod
+      script: |
+        curl -sL https://sentry.io/get-cli/ | bash
+        export SENTRY_RELEASE=$(sentry-cli releases propose-version)
+        sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+        sentry-cli releases set-commits $SENTRY_RELEASE --auto
+        sentry-cli releases finalize $SENTRY_RELEASE
+        sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
+      if: branch = master AND fork = false
 
 stages:
   - build
