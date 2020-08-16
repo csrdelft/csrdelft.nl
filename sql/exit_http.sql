@@ -1,1 +1,0 @@
-UPDATE `cms_paginas` SET `naam` = '403' WHERE `cms_paginas`.`naam` = 'geentoegang';

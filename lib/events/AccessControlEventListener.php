@@ -10,7 +10,6 @@ use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
-use ReflectionMethod;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 /**
@@ -51,15 +50,21 @@ class AccessControlEventListener {
 	 * @throws \ReflectionException
 	 */
 	public function onKernelController(ControllerEvent $event) {
-		$controller = $event->getRequest()->get('_controller');
-		$reflectionMethod = new ReflectionMethod($event->getController()[0], $event->getController()[1]);
+		$request = $event->getRequest();
+		$reflectionMethod = createReflectionMethod($event->getController());
+
+		$csrfUnsafeAttribute = $request->attributes->get('_csrfUnsafe');
 		/** @var CsrfUnsafe $authAnnotation */
 		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
 
-		if (!$event->getRequest()->get('_csrfUnsafe') && $csrfUnsafeAnnotation === null) {
-			$this->csrfService->preventCsrf();
+		if ($csrfUnsafeAttribute === null && $csrfUnsafeAnnotation === null) {
+			if (!$this->csrfService->preventCsrf($request)) {
+				// Maak dit een CsrToegangException als de fouten gedebugged zijn.
+				throw new CsrException("Ongeldige CSRF token");
+			}
 		}
 
+		$controller = $request->attributes->get('_controller');
 		if (isset(self::EXCLUDED_CONTROLLERS[$controller])){
 			return;
 		}
@@ -70,7 +75,7 @@ class AccessControlEventListener {
 		if ($authAnnotation) {
 			$mag = $authAnnotation->getMag();
 		} else {
-			$mag = $event->getRequest()->get('_mag');
+			$mag = $request->attributes->get('_mag');
 		}
 
 		if (!$mag) {

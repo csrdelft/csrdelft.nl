@@ -5,7 +5,7 @@ namespace CsrDelft\view\groepen\formulier;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\RadioField;
+use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -21,11 +21,7 @@ class GroepOpvolgingForm extends ModalForm {
 		$fields['fam'] = new TextField('familie', $groep->familie, 'Familienaam');
 		$fields['fam']->suggestions[] = $groep->getFamilieSuggesties();
 
-		$options = array();
-		foreach (GroepStatus::getTypeOptions() as $status) {
-			$options[$status] = GroepStatus::getChar($status);
-		}
-		$fields[] = new RadioField('status', $groep->status, classNameZonderNamespace(Groepstatus::class), $options);
+		$fields[] = new EnumSelectField('status', $groep->status, 'Status', GroepStatus::class);
 
 		$this->addFields($fields);
 

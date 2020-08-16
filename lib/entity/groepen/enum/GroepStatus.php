@@ -14,6 +14,9 @@ use CsrDelft\common\Enum;
  * @method static static FT
  * @method static static HT
  * @method static static OT
+ * @method static boolean isFT($groepStatus)
+ * @method static boolean isHT($groepStatus)
+ * @method static boolean isOT($groepStatus)
  */
 class GroepStatus extends Enum {
 	/**
