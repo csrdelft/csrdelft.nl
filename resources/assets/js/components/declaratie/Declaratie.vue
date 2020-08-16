@@ -43,23 +43,6 @@
 			<input type="text" id="tnv" v-model="declaratie.tnv">
 		</div>
 
-		<div class="bonnen bonnen-weergave" v-if="!bonUploaden && heeftBonnen">
-			<div class="lijst">
-				<div class="bon" v-for="(bon,index) in declaratie.bonnen">
-					<div class="title">Bon {{ index + 1 }}</div>
-
-					<div class="field">
-						<label :for="'bon' + index + '_datum'">Datum</label>
-						<input type="text" :id="'bon' + index + '_datum'" v-model="bon.datum">
-					</div>
-
-				</div>
-			</div>
-			<div class="voorbeeld">
-				<iframe :src="huidigeBon.bestandsnaam"></iframe>
-			</div>
-		</div>
-
 		<div class="bonnen bon-upload" v-if="bonUploaden || !heeftBonnen">
 			<div class="inhoud">
 				<div class="titel">Voeg je bonnen en facturen toe</div>
@@ -71,6 +54,47 @@
 					<button class="blue">Kies bestand</button>
 					<button class="open" @click="bonUploaden = false" v-if="heeftBonnen">Annuleren</button>
 				</div>
+			</div>
+		</div>
+
+		<div class="bonnen bonnen-weergave" v-if="!bonUploaden && heeftBonnen">
+			<div class="lijst">
+				<div class="bon" v-for="(bon,index) in declaratie.bonnen">
+					<div class="title">Bon {{ index + 1 }}</div>
+
+					<div class="field">
+						<label :for="'bon' + index + '_datum'">Datum</label>
+						<input type="text" :id="'bon' + index + '_datum'" v-model="bon.datum" v-mask="'dd-mm-yyyy'">
+					</div>
+
+					<div class="regels">
+						<div class="regels-row">
+							<label>Omschrijving</label>
+							<label>Bedrag</label>
+							<label>Btw</label>
+							<div></div>
+						</div>
+						<div class="regels-row" v-for="regel in bon.regels">
+							<div class="field">
+								<input type="text" v-model="regel.omschrijving">
+							</div>
+							<div class="field">
+								<input type="text" v-model="regel.bedrag" v-mask="{'alias': 'numeric', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false, 'prefix': '€ ', 'placeholder': '0'}">
+							</div>
+							<div class="field">
+								<select v-model="regel.btw">
+
+								</select>
+							</div>
+							<div>
+								<i class="fa fa-trash"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="voorbeeld">
+				<iframe :src="huidigeBon.bestandsnaam"></iframe>
 			</div>
 		</div>
 
@@ -120,7 +144,24 @@
 			{
 				bestandsnaam: 'https://media-cdn.tripadvisor.com/media/photo-s/0a/de/cc/6f/addition.jpg',
 				datum: '',
-				regels: [],
+				regels: [
+					{
+						omschrijving: 'Pizza',
+						bedrag: 25.00,
+						btw: 'incl. 9%',
+					},
+				],
+			},
+			{
+				bestandsnaam: 'https://media-cdn.tripadvisor.com/media/photo-s/0a/de/cc/6f/addition.jpg',
+				datum: '',
+				regels: [
+					{
+						omschrijving: 'Pizza',
+						bedrag: 25.00,
+						btw: 'incl. 9%',
+					},
+				],
 			},
 		],
 	});
@@ -153,7 +194,7 @@
 </script>
 
 <style scoped lang="scss">
-	template {
+	.declaratie {
 		font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
 		font-size: 1rem;
 	}
@@ -199,14 +240,47 @@
 
 		&.bonnen-weergave {
 			display: grid;
-			grid-template-columns: 450px auto;
+			grid-template-columns: 550px auto;
+			height: 400px;
 
 			.lijst {
+				.bon {
+					padding: 21px 25px;
 
+					.regels-row {
+						display: grid;
+						grid-template-columns: 3fr 1fr 1fr 15px;
+						grid-column-gap: 6px;
+
+						.field + .field {
+							margin-top: 0;
+						}
+					}
+
+					.title {
+						font-size: 18px;
+						font-weight: 600;
+						margin-bottom: 5px;
+					}
+
+					label {
+						font-size: 11px;
+					}
+
+					input {
+						font-size: 1.1rem;
+					}
+				}
 			}
 
 			.voorbeeld {
 				background: #545454;
+
+				iframe {
+					width: 100%;
+					height: 100%;
+					border: none;
+				}
 			}
 		}
 
