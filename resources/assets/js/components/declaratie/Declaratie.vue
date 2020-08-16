@@ -67,7 +67,7 @@
 						<input type="text" :id="'bon' + index + '_datum'" v-model="bon.datum" v-mask="'dd-mm-yyyy'">
 					</div>
 
-					<div class="regels">
+					<div class="bon-regels">
 						<div class="regels-row">
 							<label>Omschrijving</label>
 							<label>Bedrag</label>
@@ -83,11 +83,31 @@
 							</div>
 							<div class="field">
 								<select v-model="regel.btw">
-
+									<option value="" disabled></option>
+									<option value="incl. 9%">incl. 9%</option>
+									<option value="incl. 21%">incl. 21%</option>
+									<option value="excl. 9%">excl. 9%</option>
+									<option value="excl. 21%">excl. 21%</option>
 								</select>
 							</div>
-							<div>
-								<i class="fa fa-trash"></i>
+							<div class="trash" @click="regelVerwijderen(bon, regel)">
+								<i class="fa fa-trash-alt"></i>
+							</div>
+						</div>
+						<div class="regels-row nieuw" @click="nieuweRegel(bon)">
+							<div class="field">
+								<input type="text" disabled>
+							</div>
+							<div class="field">
+								<input type="text" disabled>
+							</div>
+							<div class="field">
+								<select disabled>
+									<option value=""></option>
+								</select>
+							</div>
+							<div class="add">
+								<i class="fa fa-plus-circle"></i>
 							</div>
 						</div>
 					</div>
@@ -132,9 +152,15 @@
 
 	interface Regel {
 		omschrijving: string;
-		bedrag: number;
-		btw: 'incl. 9%' | 'incl. 21%' | 'excl. 9%' | 'excl. 21%';
+		bedrag: number|null;
+		btw: '' | 'incl. 9%' | 'incl. 21%' | 'excl. 9%' | 'excl. 21%';
 	}
+
+	const legeRegel: () => Regel = () => ({
+		omschrijving: '',
+		bedrag: null,
+		btw: '',
+	});
 
 	const legeDeclaratie: () => Declaratie = () => ({
 		opmerkingen: '',
@@ -188,6 +214,17 @@
 			} else {
 				this.geselecteerdeRegel = Math.max(this.declaratie.bonnen!.length - 1, this.geselecteerdeRegel);
 				return this.declaratie.bonnen![this.geselecteerdeRegel];
+			}
+		}
+
+		private nieuweRegel = (bon: Bon) => {
+			bon.regels.push(legeRegel());
+		}
+
+		private regelVerwijderen = (bon: Bon, regel: Regel) => {
+			const find = bon.regels.indexOf(regel);
+			if (find) {
+				bon.regels.splice(find);
 			}
 		}
 	}
@@ -244,16 +281,60 @@
 			height: 400px;
 
 			.lijst {
+				height: 100%;
+				overflow-y: auto;
+
 				.bon {
 					padding: 21px 25px;
+
+					.bon-regels {
+						margin-top: 11px;
+					}
 
 					.regels-row {
 						display: grid;
 						grid-template-columns: 3fr 1fr 1fr 15px;
 						grid-column-gap: 6px;
+						margin-top: 9px;
 
 						.field + .field {
 							margin-top: 0;
+						}
+
+						.trash, .add {
+							line-height: 33px;
+							text-align: right;
+							cursor: pointer;
+
+							&.trash {
+								color: #676767;
+							}
+
+							&.add {
+								color: #2ECC71;
+							}
+						}
+
+						&.nieuw {
+							cursor: pointer;
+
+							.field {
+								position: relative;
+
+								&:before {
+									content: '';
+									position: absolute;
+									top: 0;
+									right: 0;
+									bottom: 0;
+									left: 0;
+									background: rgba(255, 255, 255, 0.65);
+								}
+							}
+
+							input:disabled, select:disabled {
+								background: white;
+							}
 						}
 					}
 
