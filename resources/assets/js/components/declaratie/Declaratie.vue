@@ -59,58 +59,90 @@
 
 		<div class="bonnen bonnen-weergave" v-if="!bonUploaden && heeftBonnen">
 			<div class="lijst">
-				<div class="bon" v-for="(bon,index) in declaratie.bonnen">
-					<div class="title">Bon {{ index + 1 }}</div>
-
-					<div class="field">
-						<label :for="'bon' + index + '_datum'">Datum</label>
-						<input type="text" :id="'bon' + index + '_datum'" v-model="bon.datum" v-mask="'dd-mm-yyyy'">
-					</div>
-
-					<div class="bon-regels">
-						<div class="regels-row">
-							<label>Omschrijving</label>
-							<label>Bedrag</label>
-							<label>Btw</label>
-							<div></div>
+				<div class="bon" v-for="(bon,bonIndex) in declaratie.bonnen">
+					<div class="bon-collapsed" @click="geselecteerdeBon = bonIndex" v-if="bonIndex !== geselecteerdeBon">
+						<div class="left">
+							<div class="title">Bon {{ bonIndex + 1 }}</div>
+							<div class="date">{{ bon.datum }}</div>
 						</div>
-						<div class="regels-row" v-for="regel in bon.regels">
-							<div class="field">
-								<input type="text" v-model="regel.omschrijving">
-							</div>
-							<div class="field">
-								<input type="text" v-model="regel.bedrag" v-mask="{'alias': 'numeric', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false, 'prefix': '€ ', 'placeholder': '0'}">
-							</div>
-							<div class="field">
-								<select v-model="regel.btw">
-									<option value="" disabled></option>
-									<option value="incl. 9%">incl. 9%</option>
-									<option value="incl. 21%">incl. 21%</option>
-									<option value="excl. 9%">excl. 9%</option>
-									<option value="excl. 21%">excl. 21%</option>
-								</select>
-							</div>
-							<div class="trash" @click="regelVerwijderen(bon, regel)">
-								<i class="fa fa-trash-alt"></i>
-							</div>
-						</div>
-						<div class="regels-row nieuw" @click="nieuweRegel(bon)">
-							<div class="field">
-								<input type="text" disabled>
-							</div>
-							<div class="field">
-								<input type="text" disabled>
-							</div>
-							<div class="field">
-								<select disabled>
-									<option value=""></option>
-								</select>
-							</div>
-							<div class="add">
-								<i class="fa fa-plus-circle"></i>
-							</div>
+						<div class="right">
+							<div class="title">&euro; {{ berekening(bon).totaalIncl|bedrag }}</div>
+							<div class="btw">incl. btw</div>
 						</div>
 					</div>
+					<div class="bon-selected" v-else>
+						<div class="title">Bon {{ bonIndex + 1 }}</div>
+
+						<div class="field">
+							<label :for="'bon' + bonIndex + '_datum'">Datum</label>
+							<input type="text" :id="'bon' + bonIndex + '_datum'" v-model="bon.datum" v-mask="'dd-mm-yyyy'">
+						</div>
+
+						<div class="bon-regels">
+							<div class="regels-row">
+								<label>Omschrijving</label>
+								<label>Bedrag</label>
+								<label>Btw</label>
+								<div></div>
+							</div>
+							<div class="regels-row" v-for="(regel, index) in bon.regels">
+								<div class="field">
+									<input type="text" v-model="regel.omschrijving">
+								</div>
+								<div class="field">
+									<input type="text" v-model="regel.bedrag" v-mask="{'alias': 'numeric', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false, 'placeholder': '0'}">
+								</div>
+								<div class="field">
+									<select v-model="regel.btw">
+										<option value="" disabled></option>
+										<option value="incl. 9%">incl. 9%</option>
+										<option value="incl. 21%">incl. 21%</option>
+										<option value="excl. 9%">excl. 9%</option>
+										<option value="excl. 21%">excl. 21%</option>
+										<option value="geen: 0%">geen: 0%</option>
+									</select>
+								</div>
+								<div v-if="bon.regels.length > 1" class="trash" @click="regelVerwijderen(bon, index)">
+									<i class="fa fa-trash-alt"></i>
+								</div>
+							</div>
+							<div class="regels-row nieuw" @click="nieuweRegel(bon)">
+								<div class="field">
+									<input type="text" disabled>
+								</div>
+								<div class="field">
+									<input type="text" disabled>
+								</div>
+								<div class="field">
+									<select disabled>
+										<option value=""></option>
+									</select>
+								</div>
+								<div class="add">
+									<i class="fa fa-plus-circle"></i>
+								</div>
+							</div>
+							<div class="regels-row totaal streep">
+								<div class="onderdeel">Totaal excl. btw</div>
+								<div class="bedrag">{{ berekening(bon).totaalExcl|bedrag }}</div>
+							</div>
+							<div class="regels-row totaal" v-if="berekening(bon).btw[9] > 0">
+								<div class="onderdeel">Btw 9%</div>
+								<div class="bedrag">{{ berekening(bon).btw[9]|bedrag }}</div>
+							</div>
+							<div class="regels-row totaal" v-if="berekening(bon).btw[21] > 0">
+								<div class="onderdeel">Btw 21%</div>
+								<div class="bedrag">{{ berekening(bon).btw[21]|bedrag }}</div>
+							</div>
+							<div class="regels-row totaal totaalBold">
+								<div class="onderdeel">Totaal incl. btw</div>
+								<div class="bedrag">{{ berekening(bon).totaalIncl|bedrag }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="nieuwe-bon" @click="bonUploaden = true">
+					<i class="fa fa-plus-circle"></i>
 				</div>
 			</div>
 			<div class="voorbeeld">
@@ -152,7 +184,7 @@
 
 	interface Regel {
 		omschrijving: string;
-		bedrag: number|null;
+		bedrag: number | null;
 		btw: '' | 'incl. 9%' | 'incl. 21%' | 'excl. 9%' | 'excl. 21%';
 	}
 
@@ -192,7 +224,19 @@
 		],
 	});
 
-	@Component({})
+	@Component({
+		filters: {
+			bedrag(value: number) {
+				const text = value.toString();
+				const split = text.split('.');
+				if (split.length === 1) {
+					return text + ',00';
+				} else {
+					return split[0] + ',' + split[1].padEnd(2, '0');
+				}
+			},
+		},
+	})
 	export default class DeclaratieVue extends Vue {
 		@Prop()
 		private type: 'nieuw' | 'bewerken';
@@ -202,7 +246,7 @@
 		private declaratie: Declaratie;
 
 		private bonUploaden: boolean = true;
-		private geselecteerdeRegel: number = 0;
+		private geselecteerdeBon: number = 0;
 
 		private get heeftBonnen() {
 			return this.declaratie.bonnen && this.declaratie.bonnen.length > 0;
@@ -212,20 +256,62 @@
 			if (!this.heeftBonnen) {
 				return null;
 			} else {
-				this.geselecteerdeRegel = Math.max(this.declaratie.bonnen!.length - 1, this.geselecteerdeRegel);
-				return this.declaratie.bonnen![this.geselecteerdeRegel];
+				this.geselecteerdeBon = Math.min(this.declaratie.bonnen!.length - 1, this.geselecteerdeBon);
+				return this.declaratie.bonnen![this.geselecteerdeBon];
 			}
 		}
 
-		private nieuweRegel = (bon: Bon) => {
+		public nieuweRegel(bon: Bon) {
 			bon.regels.push(legeRegel());
 		}
 
-		private regelVerwijderen = (bon: Bon, regel: Regel) => {
-			const find = bon.regels.indexOf(regel);
-			if (find) {
-				bon.regels.splice(find);
+		public regelVerwijderen(bon: Bon, regel: number) {
+			bon.regels.splice(regel, 1);
+		}
+
+		public berekening(bon: Bon): { totaalExcl: number, totaalIncl: number, btw: { 0: number, 9: number, 21: number } } {
+			const ret = {
+				totaalExcl: 0,
+				totaalIncl: 0,
+				btw: {
+					0: 0,
+					9: 0,
+					21: 0,
+				},
+			};
+
+			for (const regel of bon.regels) {
+				if (regel.btw && regel.bedrag) {
+					regel.bedrag = parseFloat(regel.bedrag.toString());
+					const incl = regel.btw.substr(0, 4) === 'incl';
+					const percentage = parseInt(regel.btw.substr(6).replace('%', ''), 10);
+					const perunage = percentage / 100;
+
+					if (incl) {
+						ret.totaalExcl += regel.bedrag / (1 + perunage);
+						ret.btw[percentage] += regel.bedrag / (1 + perunage) * perunage;
+						ret.totaalIncl += regel.bedrag;
+					} else {
+						ret.totaalExcl += regel.bedrag;
+						ret.btw[percentage] += regel.bedrag * perunage;
+						ret.totaalIncl += regel.bedrag * (1 + perunage);
+					}
+				}
 			}
+
+			function round(toRound: number) {
+				return Math.round((toRound + Number.EPSILON) * 100) / 100;
+			}
+
+			return {
+				totaalExcl: round(ret.totaalExcl),
+				totaalIncl: round(ret.totaalIncl),
+				btw: {
+					0: round(ret.btw[0]),
+					9: round(ret.btw[9]),
+					21: round(ret.btw[21]),
+				},
+			};
 		}
 	}
 </script>
@@ -279,13 +365,56 @@
 			display: grid;
 			grid-template-columns: 550px auto;
 			height: 400px;
+			overflow: hidden;
 
 			.lijst {
 				height: 100%;
 				overflow-y: auto;
+				background: #F2F2F2;
+
+				.nieuwe-bon {
+					text-align: center;
+					font-size: 21px;
+					padding: 14px 0 33px;
+					color: #2ECC71;
+					cursor: pointer;
+				}
 
 				.bon {
-					padding: 21px 25px;
+					border-bottom: 1px solid #D0D0D0;
+
+					.bon-collapsed {
+						padding: 12px 25px;
+						background: #FAFAFA;
+						cursor: pointer;
+						display: flex;
+						justify-content: space-between;
+
+						.title {
+							font-size: 16px;
+							color: #4A4A4A;
+							margin-bottom: 0;
+						}
+
+						.date {
+							font-weight: 300;
+							font-size: 15px;
+						}
+
+						.right {
+							.btw {
+								margin-top: -3px;
+								font-size: 13px;
+								font-weight: 300;
+								text-align: right;
+							}
+						}
+					}
+
+					.bon-selected {
+						padding: 21px 25px;
+						background: white;
+					}
 
 					.bon-regels {
 						margin-top: 11px;
@@ -336,6 +465,41 @@
 								background: white;
 							}
 						}
+
+						&.totaal {
+							font-size: 15px;
+							font-weight: 300;
+
+							.onderdeel {
+								text-align: right;
+								padding-right: 20px;
+							}
+
+							&.streep {
+								div {
+									padding-top: 9px;
+								}
+
+								.bedrag {
+									border-top: 1px solid #C7C7C7;
+								}
+							}
+
+							.bedrag {
+								position: relative;
+								text-align: right;
+
+								&:before {
+									content: '€';
+									position: absolute;
+									left: 0;
+								}
+							}
+
+							&.totaalBold {
+								font-weight: 600;
+							}
+						}
 					}
 
 					.title {
@@ -369,8 +533,8 @@
 			background: linear-gradient(135deg, #ffffff, #f4f6f9 41%, #eff3f6);
 			position: relative;
 			overflow: hidden;
-			min-height: 210px;
-			padding: 40px;
+			min-height: 400px;
+			padding: 110px;
 
 			.inhoud {
 				position: relative;
