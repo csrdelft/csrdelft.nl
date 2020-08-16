@@ -21,7 +21,7 @@ class ErrorController extends AbstractController {
 			$statusCode = $exception->getStatusCode();
 		}
 
-		if (!in_array($request->getMethod(), [
+		if (!in_array($statusCode, [
 			Response::HTTP_BAD_REQUEST,
 			Response::HTTP_NOT_FOUND,
 			Response::HTTP_FORBIDDEN,
