@@ -16,7 +16,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\security\AccountRepository")
  * @ORM\Table("accounts")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Account implements UserInterface {
 
