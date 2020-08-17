@@ -45,7 +45,6 @@ use GuzzleHttp\Exception\RequestException;
  *   @ORM\Index(name="nickname", columns={"nickname"}),
  *   @ORM\Index(name="status", columns={"status"})
  * })
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Profiel implements Agendeerbaar, DisplayEntity {
 	public function __construct() {

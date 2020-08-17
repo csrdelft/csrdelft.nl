@@ -98,7 +98,6 @@ class Account implements UserInterface {
 	 * @var Profiel
 	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel", inversedBy="account")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
-	 * @ORM\Cache("NONSTRICT_READ_WRITE")
 	 */
 	public $profiel;
 
