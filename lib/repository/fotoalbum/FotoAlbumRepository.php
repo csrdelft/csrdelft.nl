@@ -4,7 +4,6 @@ namespace CsrDelft\repository\fotoalbum;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
@@ -18,6 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -117,10 +117,10 @@ class FotoAlbumRepository extends AbstractRepository {
 			$album = new FotoAlbum($path);
 		}
 		if (!$album->exists()) {
-			throw new CsrNotFoundException("Fotoalbum $path bestaat niet");
+			throw new NotFoundHttpException("Fotoalbum $path bestaat niet");
 		}
 		if (!$album->magBekijken()) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 		return $album;
 	}
@@ -192,7 +192,7 @@ HTML;
 		try {
 			$album = $this->getFotoAlbum('');
 			return $album->getMostRecentSubAlbum();
-		} catch (CsrNotFoundException $ex) {
+		} catch (NotFoundHttpException $ex) {
 			return null;
 		}
 	}

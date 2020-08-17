@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
@@ -30,6 +29,7 @@ use CsrDelft\view\View;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -293,7 +293,7 @@ class ToolsController extends AbstractController {
 			return new PlainView('Geen lid gevonden');
 		}
 
-		throw new CsrNotFoundException();
+		throw new NotFoundHttpException();
 	}
 
 	/**

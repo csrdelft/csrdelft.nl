@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\eetplan\Eetplan;
@@ -33,6 +32,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -80,7 +80,7 @@ class EetplanController extends AbstractController {
 	public function noviet($uid = null) {
 		$eetplan = $this->eetplanRepository->getEetplanVoorNoviet($uid);
 		if (!$eetplan) {
-			throw new CsrNotFoundException("Geen eetplan gevonden voor deze noviet");
+			throw new NotFoundHttpException("Geen eetplan gevonden voor deze noviet");
 		}
 
 		return view('eetplan.noviet', [

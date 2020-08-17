@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\profiel\Profiel;
@@ -95,11 +94,11 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 
 		if ($profiel->account == null) {
-			throw new CsrNotFoundException("Profiel heeft geen account");
+			throw new NotFoundHttpException("Profiel heeft geen account");
 		}
 
 		$this->accountRepository->resetPrivateToken($profiel->account);
@@ -294,7 +293,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 
 		return $this->profielBewerken($profiel);
@@ -433,7 +432,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 		if (!$profiel->magBewerken()) {
 			throw new CsrToegangException();
@@ -474,7 +473,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 		try {
 			$this->googleSync->doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
@@ -543,7 +542,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 
 		return new VcardResponse(view('profiel.vcard', ['profiel' => $profiel])->toString());
