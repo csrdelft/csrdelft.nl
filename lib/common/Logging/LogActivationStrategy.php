@@ -6,6 +6,7 @@ namespace CsrDelft\common\Logging;
 
 use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
 use Monolog\Logger;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -26,10 +27,15 @@ class LogActivationStrategy implements ActivationStrategyInterface {
 
 		$exception = $record['context']['exception'];
 
-		$ignoredExceptions = [
-			AccessDeniedException::class => true,
-		];
+		// Alleen http status 500 loggen
+		if ($exception instanceof HttpException) {
+			return $exception->getStatusCode() == 500;
+		}
 
-		return !isset($ignoredExceptions[get_class($exception)]);
+		if ($exception instanceof AccessDeniedException) {
+			return false;
+		}
+
+		return true;
 	}
 }
