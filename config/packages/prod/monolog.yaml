@@ -4,7 +4,7 @@ monolog:
       type: fingers_crossed
       action_level: critical
       handler: grouped
-      activation_strategy: CsrDelft\common\LogActivationStrategy
+      activation_strategy: CsrDelft\common\Logging\LogActivationStrategy
     grouped:
       type: group
       members: [streamed, filtered]

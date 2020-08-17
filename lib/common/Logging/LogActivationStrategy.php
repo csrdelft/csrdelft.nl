@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\common;
+namespace CsrDelft\common\Logging;
 
 
 use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
