@@ -3,10 +3,14 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Voor eventuele generieke controller methodes.
@@ -56,5 +60,13 @@ class AbstractController extends BaseController {
 
 	protected function tableData($data) {
 		return new GenericDataTableResponse($this->get('serializer'), $data);
+	}
+
+	protected function createAccessDeniedException(string $message = 'Geen Toegang.', \Throwable $previous = null): AccessDeniedException {
+		return parent::createAccessDeniedException($message, $previous);
+	}
+
+	protected function createNotFoundException(string $message = 'Niet gevonden', \Throwable $previous = null): NotFoundHttpException {
+		return parent::createNotFoundException($message, $previous);
 	}
 }
