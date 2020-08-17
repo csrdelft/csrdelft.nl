@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 require __DIR__ . '/../config/bootstrap.php';
 
 // default is website mode
-if (isset($_ENV['CI'])) {
+if (getenv('CI')) {
 	define('MODE', 'TRAVIS');
 } elseif (php_sapi_name() === 'cli') {
 	define('MODE', 'CLI');
