@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\renderer\TemplateView;
@@ -15,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class InstellingenBeheerController {
+class InstellingenBeheerController extends AbstractController {
 	/**
 	 * @var InstellingenRepository
 	 */
@@ -27,7 +26,7 @@ class InstellingenBeheerController {
 
 	protected function assertToegang($module = null) {
 		if (!$this->mag($module)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 	}
 

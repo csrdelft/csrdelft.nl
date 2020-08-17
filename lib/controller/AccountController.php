@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
@@ -62,7 +61,7 @@ class AccountController extends AbstractController {
 	 */
 	public function aanmaken($uid = null) {
 		if (!LoginService::mag(P_ADMIN)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if ($uid == null) {
 			$uid = $this->loginService->getUid();
@@ -95,12 +94,12 @@ class AccountController extends AbstractController {
 			return $this->aanvragen();
 		}
 		if ($uid !== $this->loginService->getUid() && !LoginService::mag(P_ADMIN)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$account = $this->accountRepository->get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if ($this->loginService->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
 			$action = $this->generateUrl('csrdelft_account_bewerken', ['uid' => $uid]);
@@ -141,7 +140,7 @@ class AccountController extends AbstractController {
 			$uid = $this->loginService->getUid();
 		}
 		if ($uid !== $this->loginService->getUid() && !LoginService::mag(P_ADMIN)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$account = $this->accountRepository->get($uid);
 		if (!$account) {

@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
@@ -26,7 +25,6 @@ use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
 use CsrDelft\view\View;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -180,7 +178,7 @@ class ToolsController extends AbstractController {
 			return new PlainView('done');
 		}
 
-		throw new CsrToegangException();
+		throw $this->createAccessDeniedException();
 	}
 
 	/**
@@ -389,7 +387,7 @@ class ToolsController extends AbstractController {
 			return new PlainView(ob_get_clean());
 		}
 
-		throw new CsrToegangException();
+		throw $this->createAccessDeniedException();
 	}
 
 	/**

@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviSaldo;
@@ -104,7 +103,7 @@ class BeheerCiviSaldoController extends AbstractController {
 			}
 		}
 
-		throw new CsrToegangException();
+		throw $this->createAccessDeniedException();
 	}
 
 	/**
@@ -133,7 +132,7 @@ class BeheerCiviSaldoController extends AbstractController {
 			return $this->tableData($removed);
 		}
 
-		throw new CsrToegangException();
+		throw $this->createAccessDeniedException();
 	}
 
 	/**
@@ -161,7 +160,7 @@ class BeheerCiviSaldoController extends AbstractController {
 			}
 
 			if (count($this->civiSaldoRepository->findBy(['uid' => $saldo->uid])) === 1) {
-				throw new CsrToegangException();
+				throw $this->createAccessDeniedException();
 			} else {
 				$this->civiSaldoRepository->create($saldo);
 			}
@@ -181,7 +180,7 @@ class BeheerCiviSaldoController extends AbstractController {
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
 		$moment = DateTime::createFromFormat("Y-m-d H:i:s", $momentString);
 		if (!$moment) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		return view('fiscaat.saldisom', [

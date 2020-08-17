@@ -3,13 +3,13 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Exception;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiMaaltijdenController {
+class ApiMaaltijdenController extends AbstractController {
 	private $maaltijdenRepository;
 	private $maaltijdAanmeldingenRepository;
 
@@ -29,7 +29,7 @@ class ApiMaaltijdenController {
 			$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $_SESSION['_uid'], $_SESSION['_uid']);
 			return array('data' => $aanmelding->maaltijd);
 		} catch (Exception $e) {
-			throw new CsrToegangException($e->getMessage());
+			throw $this->createAccessDeniedException($e->getMessage());
 		}
 	}
 
@@ -44,7 +44,7 @@ class ApiMaaltijdenController {
 			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $_SESSION['_uid']);
 			return array('data' => $maaltijd);
 		} catch (Exception $e) {
-			throw new CsrToegangException($e->getMessage());
+			throw $this->createAccessDeniedException($e->getMessage());
 		}
 	}
 

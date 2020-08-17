@@ -3,11 +3,8 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\LidZoekerService;
-use CsrDelft\service\security\LoginService;
-use Jacwright\RestServer\RestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;

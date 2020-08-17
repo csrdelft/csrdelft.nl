@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Mail;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
@@ -55,7 +54,7 @@ class WachtwoordController extends AbstractController {
 		$account = LoginService::getAccount();
 		// mag inloggen?
 		if (!$account || !AccessService::mag($account, P_LOGGED_IN)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$form = new WachtwoordWijzigenForm($account, $this->generateUrl('wachtwoord_wijzigen'));
 		if ($form->validate()) {
@@ -94,7 +93,7 @@ class WachtwoordController extends AbstractController {
 
 		$account = $this->oneTimeTokensRepository->verifyToken('/wachtwoord/reset', $token);
 		if ($account == null) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		return view('default', [

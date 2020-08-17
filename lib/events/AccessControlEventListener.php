@@ -5,12 +5,12 @@ namespace CsrDelft\events;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Controlleer access op route niveau.
@@ -61,7 +61,7 @@ class AccessControlEventListener {
 
 		if ($isInApi === false && $csrfUnsafeAttribute === null && $csrfUnsafeAnnotation === null) {
 			if (!$this->csrfService->preventCsrf($request)) {
-				// Maak dit een CsrToegangException als de fouten gedebugged zijn.
+				// Maak dit een AccessDeniedException als de fouten gedebugged zijn.
 				throw new CsrException("Ongeldige CSRF token");
 			}
 		}
@@ -86,9 +86,9 @@ class AccessControlEventListener {
 
 		if (!LoginService::mag($mag)) {
 			if (DEBUG) {
-				throw new CsrToegangException("Geen toegang tot " . $controller . ", ten minste " . $mag . " nodig.");
+				throw new AccessDeniedException("Geen toegang tot " . $controller . ", ten minste " . $mag . " nodig.");
 			} else {
-				throw new CsrToegangException("Geen toegang");
+				throw new AccessDeniedException("Geen toegang");
 			}
 		}
 

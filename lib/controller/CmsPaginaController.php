@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\CmsPagina;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\security\LoginService;
@@ -58,7 +57,7 @@ class CmsPaginaController extends AbstractController {
 			throw new NotFoundHttpException();
 		}
 		if (!$pagina->magBekijken()) { // 403
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$body = new CmsPaginaView($pagina);
 		if (!LoginService::mag(P_LOGGED_IN)) { // nieuwe layout altijd voor uitgelogde bezoekers
@@ -94,7 +93,7 @@ class CmsPaginaController extends AbstractController {
 			$pagina = $this->cmsPaginaRepository->nieuw($naam);
 		}
 		if (!$pagina->magBewerken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$form = new CmsPaginaForm($pagina); // fetches POST values itself
 		if ($form->validate()) {
@@ -119,7 +118,7 @@ class CmsPaginaController extends AbstractController {
 		/** @var CmsPagina $pagina */
 		$pagina = $this->cmsPaginaRepository->find($naam);
 		if (!$pagina OR !$pagina->magVerwijderen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$manager = $this->getDoctrine()->getManager();
 		$manager->remove($pagina);

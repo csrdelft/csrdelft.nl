@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\service\security\ApiAuthenticator;
 use Symfony\Component\Routing\Annotation\Route;

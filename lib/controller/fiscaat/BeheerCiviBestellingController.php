@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
@@ -80,7 +79,7 @@ class BeheerCiviBestellingController extends AbstractController {
 	 */
 	private function checkToegang($uid) {
 		if (!LoginService::mag(P_FISCAAT_READ) && $uid) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 	}
 }

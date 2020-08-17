@@ -3,7 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MijnMaaltijdenController {
+class MijnMaaltijdenController extends AbstractController {
 	/** @var MaaltijdenRepository */
 	private $maaltijdenRepository;
 	/** @var CorveeTakenRepository */
@@ -97,7 +97,7 @@ class MijnMaaltijdenController {
 	 */
 	public function lijst(Maaltijd $maaltijd) {
 		if (!$maaltijd->magSluiten(LoginService::getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorMaaltijd($maaltijd);
 		for ($i = $maaltijd->getMarge(); $i > 0; $i--) { // ruimte voor marge eters
@@ -122,9 +122,9 @@ class MijnMaaltijdenController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function sluit(Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw new CsrToegangException();
+		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
 		if (!$maaltijd->magSluiten(LoginService::getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$this->maaltijdenRepository->sluitMaaltijd($maaltijd);
 		echo '<h3 id="gesloten-melding" class="remove"></div>';
@@ -141,7 +141,7 @@ class MijnMaaltijdenController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function aanmelden(Request $request, Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw new CsrToegangException();
+		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
 		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, LoginService::getUid(), LoginService::getUid());
 		if ($request->getMethod() == 'POST') {
 			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
@@ -164,7 +164,7 @@ class MijnMaaltijdenController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function afmelden(Request $request, Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw new CsrToegangException();
+		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
 		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, LoginService::getUid());
 		if ($request->getMethod() == 'POST') {
 			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
@@ -185,7 +185,7 @@ class MijnMaaltijdenController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function gasten(Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw new CsrToegangException();
+		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
 		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($maaltijd->maaltijd_id, LoginService::getUid(), $gasten);
 		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
@@ -214,7 +214,7 @@ class MijnMaaltijdenController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function beoordeling(Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw new CsrToegangException();
+		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
 		$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => LoginService::getUid()]);
 		if (!$beoordeling) {
 			$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);

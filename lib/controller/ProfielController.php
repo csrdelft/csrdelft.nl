@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
@@ -208,11 +207,11 @@ class ProfielController extends AbstractController {
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
 		if (!preg_match('/^[0-9]{4}$/', $lidjaar) || !in_array($lidstatus, LidStatus::getEnumValues())) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		// NovCie mag novieten aanmaken
 		if ($lidstatus !== LidStatus::Noviet && !LoginService::mag(P_LEDEN_MOD)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		// Maak nieuw profiel zonder op te slaan
 		$profiel = $this->profielRepository->nieuw((int)$lidjaar, $lidstatus);
@@ -223,7 +222,7 @@ class ProfielController extends AbstractController {
 	private function profielBewerken(Profiel $profiel, $alleenFormulier = false) {
 
 		if (!$profiel->magBewerken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$form = new ProfielForm($profiel, $alleenFormulier);
 		if ($form->validate()) {
@@ -435,7 +434,7 @@ class ProfielController extends AbstractController {
 			throw new NotFoundHttpException();
 		}
 		if (!$profiel->magBewerken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$form = new CommissieVoorkeurenForm($profiel);
 		if ($form->isPosted() && $form->validate()) {
@@ -528,7 +527,7 @@ class ProfielController extends AbstractController {
 		if ($saldoGrafiekService->magGrafiekZien($uid)) {
 			return new JsonResponse($saldoGrafiekService->getDataPoints($uid, $timespan));
 		} else {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 	}
 

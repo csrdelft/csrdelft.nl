@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\entity\courant\CourantBericht;
 use CsrDelft\repository\CourantBerichtRepository;
@@ -132,7 +131,7 @@ class CourantController extends AbstractController {
 	 */
 	public function verwijderen(CourantBericht $bericht) {
 		if (!$bericht->magBeheren()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		try {

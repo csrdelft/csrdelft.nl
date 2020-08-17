@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
@@ -73,7 +72,6 @@ class EetplanController extends AbstractController {
 	/**
 	 * @param null $uid
 	 * @return View
-	 * @throws CsrToegangException
 	 * @Route("/eetplan/noviet/{uid}", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */

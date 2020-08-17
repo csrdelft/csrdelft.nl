@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
@@ -15,6 +14,7 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
 use CsrDelft\view\renderer\TemplateView;
+use Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,7 +69,7 @@ class DocumentenController extends AbstractController {
 	 */
 	public function bekijken(Document $document) {
 		if (!$document->magBekijken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		//We do not allow serving html files because they can be used for XSS.
@@ -95,7 +95,7 @@ class DocumentenController extends AbstractController {
 	 */
 	public function download(Document $document) {
 		if (!$document->magBekijken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		if ($document->hasFile()) {
@@ -116,7 +116,7 @@ class DocumentenController extends AbstractController {
 	 */
 	public function categorie(DocumentCategorie $categorie) {
 		if (!$categorie->magBekijken()) {
-			throw new CsrToegangException('Mag deze categorie niet bekijken');
+			throw $this->createAccessDeniedException('Mag deze categorie niet bekijken');
 		} else {
 			return view('documenten.categorie', ['categorie' => $categorie]);
 		}
@@ -165,9 +165,9 @@ class DocumentenController extends AbstractController {
 			$document->filename = filter_filename($bestand->filename);
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
-			
 
-			
+
+
 			$this->documentRepository->save($document);
 
 			try {
@@ -177,11 +177,11 @@ class DocumentenController extends AbstractController {
 
 			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
 			}
-			catch (\Exception $exception) {
+			catch (Exception $exception) {
 				$this->documentRepository->remove($document);
 				throw $exception;
 			}
-			
+
 
 			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {
@@ -201,7 +201,7 @@ class DocumentenController extends AbstractController {
 	 */
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');

@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\security\LoginSession;
 use CsrDelft\entity\security\RememberLogin;
@@ -55,7 +54,7 @@ class SessionController extends AbstractController {
 	 */
 	public function endsession(LoginSession $session) {
 		if ($session->uid !== LoginService::getUid()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		$removed = new RemoveDataTableEntry($session->session_hash, LoginSession::class);
@@ -74,7 +73,7 @@ class SessionController extends AbstractController {
 	public function lockip() {
 		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
 		if (!$selection) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$response = [];
 		$manager = $this->getDoctrine()->getManager();
@@ -82,7 +81,7 @@ class SessionController extends AbstractController {
 			/** @var RememberLogin $remember */
 			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
 			if (!$remember || $remember->uid !== LoginService::getUid()) {
-				throw new CsrToegangException();
+				throw $this->createAccessDeniedException();
 			}
 			$remember->lock_ip = !$remember->lock_ip;
 			$manager->persist($remember);
@@ -123,7 +122,7 @@ class SessionController extends AbstractController {
 		$remember = $this->rememberLoginRepository->retrieveByUUID($selection[0]);
 
 		if (!$remember || $remember->uid !== LoginService::getUid()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$form = new RememberLoginForm($remember);
 		if ($form->validate()) {
@@ -171,7 +170,7 @@ class SessionController extends AbstractController {
 	public function forget() {
 		$selection = $this->getDataTableSelection();
 		if (!$selection) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$response = [];
 		$manager = $this->getDoctrine()->getManager();
@@ -179,7 +178,7 @@ class SessionController extends AbstractController {
 			/** @var RememberLogin $remember */
 			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
 			if (!$remember || $remember->uid !== $this->getUser()->getUsername()) {
-				throw new CsrToegangException();
+				throw $this->createAccessDeniedException();
 			}
 			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);
 			$manager->remove($remember);

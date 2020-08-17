@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ChangeLogRepository;
@@ -42,7 +41,7 @@ class ApiActiviteitenController extends AbstractController {
 		}
 
 		if (!$activiteit->mag(AccessAction::Aanmelden)) {
-			throw new CsrToegangException('Aanmelden niet mogelijk');
+			throw $this->createAccessDeniedException('Aanmelden niet mogelijk');
 		}
 
 		$lid = $this->activiteitDeelnemersRepository->nieuw($activiteit, $_SESSION[LoginService::SESS_UID]);
@@ -66,7 +65,7 @@ class ApiActiviteitenController extends AbstractController {
 		}
 
 		if (!$activiteit->mag(AccessAction::Afmelden)) {
-			throw new CsrToegangException('Afmelden niet mogelijk');
+			throw $this->createAccessDeniedException('Afmelden niet mogelijk');
 		}
 
 		$lid = $activiteit->getLid($_SESSION['_uid']);

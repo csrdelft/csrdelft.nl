@@ -3,12 +3,15 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\security\AccessControl;
 use CsrDelft\repository\security\AccessRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\RechtenForm;
 use CsrDelft\view\RechtenTable;
+use CsrDelft\view\renderer\TemplateView;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -32,7 +35,7 @@ class RechtenController extends AbstractController {
 	/**
 	 * @param null $environment
 	 * @param null $resource
-	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @return TemplateView
 	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"GET"}, defaults={"environment"=null,"resource"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -45,7 +48,7 @@ class RechtenController extends AbstractController {
 	/**
 	 * @param null $environment
 	 * @param null $resource
-	 * @return \CsrDelft\view\datatable\GenericDataTableResponse
+	 * @return GenericDataTableResponse
 	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -56,9 +59,9 @@ class RechtenController extends AbstractController {
 	/**
 	 * @param null $environment
 	 * @param null $resource
-	 * @return \CsrDelft\view\datatable\GenericDataTableResponse|RechtenForm
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @return GenericDataTableResponse|RechtenForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 * @Route("/rechten/aanmaken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -74,9 +77,9 @@ class RechtenController extends AbstractController {
 	}
 
 	/**
-	 * @return \CsrDelft\view\datatable\GenericDataTableResponse|RechtenForm
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @return GenericDataTableResponse|RechtenForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 * @Route("/rechten/wijzigen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -84,7 +87,7 @@ class RechtenController extends AbstractController {
 		$selection = $this->getDataTableSelection();
 
 		if (!isset($selection[0])) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		/** @var AccessControl $ac */
@@ -102,9 +105,9 @@ class RechtenController extends AbstractController {
 	}
 
 	/**
-	 * @return \CsrDelft\view\datatable\GenericDataTableResponse
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
+	 * @return GenericDataTableResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 * @Route("/rechten/verwijderen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
