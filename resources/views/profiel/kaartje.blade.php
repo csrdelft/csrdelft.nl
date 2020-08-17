@@ -7,7 +7,7 @@
 	<div class="card-body @if($profiel->isJarig()) jarig @endif ">
 		@if ($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\service\security\SuService::class)->maySuTo($profiel->account))
 			<div class="float-right">
-				<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
+				<a href="?_switch_user={{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 			</div>
 		@endif
 		<p class="naam">

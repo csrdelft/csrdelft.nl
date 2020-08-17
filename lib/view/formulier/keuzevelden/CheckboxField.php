@@ -64,7 +64,7 @@ class CheckboxField extends InputField {
 	}
 
 	public function getHtml() {
-		$html = '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'value', 'origvalue', 'class', 'disabled', 'readonly'));
+		$html = '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'origvalue', 'class', 'disabled', 'readonly'));
 		if ($this->value) {
 			$html .= ' checked="checked" ';
 		}

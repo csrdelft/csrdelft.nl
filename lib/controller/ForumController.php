@@ -139,16 +139,14 @@ class ForumController extends AbstractController {
 	/**
 	 * RSS feed van recente draadjes tonen.
 	 * @Route("/forum/rss/csrdelft.xml", methods={"GET"})
-	 * @Route("/forum/rss/{token}/csrdelft.xml", methods={"GET"})
+	 * @Route("/forum/rss/{private_auth_token}/csrdelft.xml", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function rss() {
-		$response = new Response(view('forum.rss', [
+		return new Response(view('forum.rss', [
 			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
 			'privatelink' => LoginService::getAccount()->getRssLink()
-		]));
-		$response->headers->set('Content-Type', 'application/rss+xml; charset=UTF-8');
-		return $response;
+		]), 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
 	}
 
 	/**

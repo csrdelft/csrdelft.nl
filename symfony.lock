@@ -177,6 +177,9 @@
     "ocramius/proxy-manager": {
         "version": "2.0.4"
     },
+    "paragonie/random_compat": {
+        "version": "v9.99.99"
+    },
     "parsecsv/php-parsecsv": {
         "version": "1.2.1"
     },
@@ -493,6 +496,9 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.12.0"
     },
+    "symfony/polyfill-php70": {
+        "version": "v1.18.0"
+    },
     "symfony/polyfill-php72": {
         "version": "v1.13.1"
     },
@@ -527,11 +533,29 @@
             "./config/routes.yaml"
         ]
     },
+    "symfony/security-bundle": {
+        "version": "5.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.1",
+            "ref": "0a4bae19389d3b9cba1ca0102e3b2bccea724603"
+        },
+        "files": [
+            "./config/packages/security.yaml"
+        ]
+    },
     "symfony/security-core": {
         "version": "v3.4.35"
     },
     "symfony/security-csrf": {
         "version": "v3.4.35"
+    },
+    "symfony/security-guard": {
+        "version": "v5.1.2"
+    },
+    "symfony/security-http": {
+        "version": "v5.1.2"
     },
     "symfony/serializer": {
         "version": "v5.0.4"

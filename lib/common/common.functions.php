@@ -164,10 +164,6 @@ function redirect($url = null, $refresh = true) {
 	exit;
 }
 
-function redirect_via_login($url) {
-	redirect(CSR_ROOT . "/login?redirect=" . urlencode($url));
-}
-
 /**
  * rawurlencode() met uitzondering van slashes.
  *

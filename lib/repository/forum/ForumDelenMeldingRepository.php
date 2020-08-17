@@ -9,6 +9,7 @@ use CsrDelft\entity\forum\ForumDeelMelding;
 use CsrDelft\entity\forum\ForumDraad;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\Account;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
@@ -25,8 +26,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumDeelMelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ForumDelenMeldingRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+	/**
+	 * @var SuService
+	 */
+	private $suService;
+
+	public function __construct(ManagerRegistry $registry, SuService $suService) {
 		parent::__construct($registry, ForumDeelMelding::class);
+		$this->suService = $suService;
 	}
 
 	protected function maakForumDeelMelding(ForumDeel $deel, $uid) {
@@ -100,16 +107,16 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	/**
 	 * Verzendt mail
 	 *
-	 * @param Profiel $ontvanger
+	 * @param Account $ontvanger
 	 * @param Profiel $auteur
 	 * @param ForumPost $post
 	 * @param ForumDraad $draad
 	 * @param ForumDeel $deel
 	 * @param string $bericht
 	 */
-	private function stuurMelding($ontvanger, $auteur, $post, $draad, $deel, $bericht) {
+	private function stuurMelding(Account $ontvanger, $auteur, $post, $draad, $deel, $bericht) {
 		$values = array(
-			'NAAM' => $ontvanger->getNaam('civitas'),
+			'NAAM' => $ontvanger->profiel->getNaam('civitas'),
 			'AUTEUR' => $auteur->getNaam('civitas'),
 			'POSTLINK' => $post->getLink(true),
 			'TITEL' => $draad->titel,
@@ -118,20 +125,14 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 		);
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		ContainerFacade::getContainer()->get(SuService::class)->overrideUid($ontvanger->uid);
-
-		// Verzend mail
-		try {
+		$this->suService->alsLid($ontvanger, function () use ($draad, $deel, $ontvanger, $values, $bericht) {
 			if ($draad->magMeldingKrijgen()) {
-				$mail = new Mail($ontvanger->getEmailOntvanger(), 'C.S.R. Forum: nieuw draadje in ' . $deel->titel . ': ' . $draad->titel, $bericht);
+				$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuw draadje in ' . $deel->titel . ': ' . $draad->titel, $bericht);
 				$mail->setPlaceholders($values);
 				$mail->setLightBB();
 				$mail->send();
 			}
-		} finally {
-			// Zet UID terug in sessie
-			ContainerFacade::getContainer()->get(SuService::class)->resetUid();
-		}
+		});
 	}
 
 	/**
@@ -147,13 +148,21 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 		// Laad meldingsbericht in
 		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumdeelmelding.mail');
 		foreach ($deel->meldingen as $volger) {
-			$volger = ProfielRepository::get($volger->uid);
+			$volgerProfiel = ProfielRepository::get($volger->uid);
 
 			// Stuur geen meldingen als lid niet gevonden is of lid de auteur
-			if (!$volger || $volger->uid === $post->uid) {
+			if (!$volgerProfiel || $volgerProfiel->uid === $post->uid) {
 				continue;
 			}
-			$this->stuurMelding($volger, $auteur, $post, $draad, $deel, $bericht);
+
+			$account = $volgerProfiel->account;
+
+			// Als dit lid geen account meer heeft, volgt dit lid niet meer deze post
+			if (!$account) {
+				$this->remove($volger);
+			} else {
+				$this->stuurMelding($account, $auteur, $post, $draad, $deel, $bericht);
+			}
 		}
 	}
 }

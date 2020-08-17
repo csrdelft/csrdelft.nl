@@ -57,7 +57,9 @@ class AccessControlEventListener {
 		/** @var CsrfUnsafe $authAnnotation */
 		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
 
-		if ($csrfUnsafeAttribute === null && $csrfUnsafeAnnotation === null) {
+		$isInApi = startsWith($request->getPathInfo(), '/API/2.0');
+
+		if ($isInApi === false && $csrfUnsafeAttribute === null && $csrfUnsafeAnnotation === null) {
 			if (!$this->csrfService->preventCsrf($request)) {
 				// Maak dit een CsrToegangException als de fouten gedebugged zijn.
 				throw new CsrException("Ongeldige CSRF token");

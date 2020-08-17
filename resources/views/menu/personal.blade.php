@@ -7,14 +7,14 @@
 		{{ \CsrDelft\service\security\LoginService::getProfiel()->getNaam('volledig') }}
 	</a>
 	<ul class="dropdown-menu" aria-labelledby="menu-personal">
-		@if(\CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\service\security\SuService::class)->isSued())
+		@if(is_granted('IS_IMPERSONATOR'))
 			<li>
-				<a href="/endsu" class="dropdown-item error"
-					 title="Switch user actie beeindingen">SU {{\CsrDelft\repository\ProfielRepository::getNaam(\CsrDelft\service\security\SuService::getSuedFrom()->uid, 'civitas')}}</a>
+				<a href="?_switch_user=_exit" class="dropdown-item error"
+					 title="Switch user actie beeindingen">SU {{\CsrDelft\repository\ProfielRepository::getNaam(current_token()->getOriginalToken()->getUserName(), 'civitas')}}</a>
 			</li>
 		@endif
 		<li>
-			<a class="dropdown-item" href="/profiel/{{\CsrDelft\service\security\LoginService::getUid()}}#CiviSaldo"
+			<a class="dropdown-item" href="/profiel/{{current_account()->uid}}#CiviSaldo"
 				 title="Bekijk CiviSaldo historie">
 				@php($saldo = \CsrDelft\service\security\LoginService::getProfiel()->getCiviSaldo())
 				@if($saldo < 0)

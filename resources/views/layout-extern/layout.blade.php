@@ -60,7 +60,7 @@
 			<a href="#_" class="overlay"></a>
 			<div class="inner">
 				<h2>Inloggen</h2>
-				@php((new \CsrDelft\view\login\LoginForm())->view())
+				{!! (new \CsrDelft\view\login\LoginForm())->toString() !!}
 				<a href="#_" class="close">Close</a>
 			</div>
 		</nav>

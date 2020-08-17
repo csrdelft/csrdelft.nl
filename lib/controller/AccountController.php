@@ -108,7 +108,7 @@ class AccountController extends AbstractController {
 
 			// Reset loginmoment naar nu als de gebruiker zijn wachtwoord geeft.
 			if ($form->validate() && $this->accountRepository->controleerWachtwoord($account, $form->getValues()['pass'])) {
-				$this->loginService->resetLoginMoment();
+				$this->loginService->setRecentLoginToken();
 			} else {
 				setMelding('U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.', 2);
 				return view('default', ['content' => new UpdateLoginForm($action)]);

@@ -14,6 +14,7 @@ class RememberLoginTable extends DataTable {
 		parent::__construct(RememberLogin::class, '/session/rememberdata', 'Automatisch inloggen');
 		$this->settings['tableTools']['aButtons'] = array();
 		$this->deleteColumn('token');
+		$this->deleteColumn('series');
 		$this->hideColumn('uid');
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');

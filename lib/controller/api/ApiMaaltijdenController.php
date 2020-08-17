@@ -2,33 +2,25 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\CsrToegangException;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
-use CsrDelft\service\security\LoginService;
 use Exception;
-use Jacwright\RestServer\RestException;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ApiMaaltijdenController {
 	private $maaltijdenRepository;
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-
-		$this->maaltijdAanmeldingenRepository = $container->get(MaaltijdAanmeldingenRepository::class);
-		$this->maaltijdenRepository = $container->get(MaaltijdenRepository::class);
+	public function __construct(MaaltijdenRepository $maaltijdenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+		$this->maaltijdenRepository = $maaltijdenRepository;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
 	/**
-	 * @return boolean
-	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginService::mag(P_MAAL_IK);
-	}
-
-	/**
-	 * @url POST /$id/aanmelden
+	 * @Route("/API/2.0/maaltijden/{id}/aanmelden", methods={"POST"})
+	 * @Auth(P_MAAL_IK)
 	 */
 	public function maaltijdAanmelden($id) {
 
@@ -37,12 +29,13 @@ class ApiMaaltijdenController {
 			$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $_SESSION['_uid'], $_SESSION['_uid']);
 			return array('data' => $aanmelding->maaltijd);
 		} catch (Exception $e) {
-			throw new RestException(403, $e->getMessage());
+			throw new CsrToegangException($e->getMessage());
 		}
 	}
 
 	/**
-	 * @url POST /$id/afmelden
+	 * @Route("/API/2.0/maaltijden/{id}/afmelden", methods={"POST"})
+	 * @Auth(P_MAAL_IK)
 	 */
 	public function maaltijdAfmelden($id) {
 
@@ -51,7 +44,7 @@ class ApiMaaltijdenController {
 			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $_SESSION['_uid']);
 			return array('data' => $maaltijd);
 		} catch (Exception $e) {
-			throw new RestException(403, $e->getMessage());
+			throw new CsrToegangException($e->getMessage());
 		}
 	}
 

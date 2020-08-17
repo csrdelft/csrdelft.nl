@@ -11,11 +11,12 @@ use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\RememberLoginForm;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -101,37 +102,43 @@ class SessionController extends AbstractController {
 	}
 
 	/**
-	 * @return GenericDataTableResponse|JsonResponse|RememberLoginForm
-	 * @throws ORMException
-	 * @throws OptimisticLockException
+	 * @param Request $request
+	 * @param PersistentTokenBasedRememberMeServices $rememberMeServices
+	 * @return RememberLoginForm|Response
 	 * @Route("/session/remember", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function remember() {
+	public function remember(Request $request, PersistentTokenBasedRememberMeServices $rememberMeServices) {
 		$selection = $this->getDataTableSelection();
-		if (isset($selection[0])) {
-			$remember = $this->rememberLoginRepository->retrieveByUUID($selection[0]);
-		} else {
-			$remember = $this->rememberLoginRepository->nieuw();
+
+		if (empty($selection)) {
+			$response = new Response();
+
+			$request->request->set('_remember_me', true);
+			$rememberMeServices->loginSuccess($request, $response, $this->get('security.token_storage')->getToken());
+
+			return $response;
 		}
+
+		$remember = $this->rememberLoginRepository->retrieveByUUID($selection[0]);
+
 		if (!$remember || $remember->uid !== LoginService::getUid()) {
 			throw new CsrToegangException();
 		}
 		$form = new RememberLoginForm($remember);
 		if ($form->validate()) {
-			if ($remember->id) {
-				$this->getDoctrine()->getManager()->persist($remember);
-				$this->getDoctrine()->getManager()->flush();
-			} else {
-				$this->rememberLoginRepository->rememberLogin($remember);
-			}
 			if (isset($_POST['DataTableId'])) {
-				return $this->tableData([$remember]);
+				$response = $this->tableData([$remember]);
 			} else if (!empty($_POST['redirect'])) {
-				return new JsonResponse($_POST['redirect']);
+				$response = new JsonResponse($_POST['redirect']);
 			} else {
-				return new JsonResponse(CSR_ROOT);
+				$response = new JsonResponse(CSR_ROOT);
 			}
+
+			$this->getDoctrine()->getManager()->persist($remember);
+			$this->getDoctrine()->getManager()->flush();
+
+			return $response;
 		} else {
 			return $form;
 		}
@@ -162,7 +169,7 @@ class SessionController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function forget() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		if (!$selection) {
 			throw new CsrToegangException();
 		}
@@ -171,11 +178,11 @@ class SessionController extends AbstractController {
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
 			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
-			if (!$remember || $remember->uid !== LoginService::getUid()) {
+			if (!$remember || $remember->uid !== $this->getUser()->getUsername()) {
 				throw new CsrToegangException();
 			}
-			$manager->remove($remember);
 			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);
+			$manager->remove($remember);
 		}
 		$manager->flush();
 		return $this->tableData($response);

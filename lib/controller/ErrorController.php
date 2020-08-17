@@ -9,10 +9,13 @@ use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Throwable;
 
 
 class ErrorController extends AbstractController {
+	use TargetPathTrait;
+
 	public function handleException(RequestStack $requestStack, Throwable $exception) {
 		$request = $requestStack->getMasterRequest();
 
@@ -51,7 +54,9 @@ class ErrorController extends AbstractController {
 					$requestUri = $request->getRequestUri();
 					$router = $this->get('router');
 
-					return new RedirectResponse($router->generate('csrdelft_login_loginform', ['redirect' => urlencode($requestUri)]));
+					$this->saveTargetPath($request->getSession(), 'main', $requestUri);
+
+					return new RedirectResponse($router->generate('csrdelft_login_loginform'));
 				}
 
 				return new Response(view('fout.403'), Response::HTTP_FORBIDDEN);

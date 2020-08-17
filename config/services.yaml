@@ -62,4 +62,11 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
+  CsrDelft\events\ApiTrustedHostsEventListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
 
+  CsrDelft\common\Security\PersistentTokenProvider: ~
+  Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login.main'
+  Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface: '@security.authenticator.manager.main'
+  Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices: '@security.authentication.rememberme.services.persistent.main'

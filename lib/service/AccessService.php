@@ -31,6 +31,7 @@ use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -66,6 +67,8 @@ class AccessService {
 	 * @var array
 	 */
 	private static $defaultAllowedAuthenticationMethods = [
+		AuthenticationMethod::impersonate,
+		AuthenticationMethod::temporary,
 		AuthenticationMethod::cookie_token,
 		AuthenticationMethod::password_login,
 		AuthenticationMethod::recent_password_login,
@@ -291,7 +294,8 @@ class AccessService {
 	 *
 	 * @return bool Of $subject $permission heeft.
 	 */
-	public static function mag(Account $subject, $permission, array $allowedAuthenticationMethods = null) {
+	public static function mag(UserInterface $subject = null, $permission = null, array $allowedAuthenticationMethods = null) {
+
 
 		// Als voor het ingelogde lid een permissie gevraagd wordt
 		if ($subject->uid == LoginService::getUid()) {
@@ -410,13 +414,13 @@ class AccessService {
 	}
 
 	/**
-	 * @param Account $subject
+	 * @param UserInterface $subject
 	 * @param string $permission
 	 *
 	 * @return bool|mixed
 	 * @throws InvalidArgumentException
 	 */
-	private function hasPermission(Account $subject, $permission) {
+	private function hasPermission(UserInterface $subject, $permission) {
 		// Rechten vergeten?
 		if (empty($permission)) {
 			return false;
