@@ -6,6 +6,7 @@ namespace CsrDelft\service\security;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Security\JwtToken;
+use CsrDelft\common\Security\PrivateTokenToken;
 use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
@@ -154,6 +155,7 @@ class LoginService {
 			case SwitchUserToken::class:
 				$method = AuthenticationMethod::impersonate;
 				break;
+			case PrivateTokenToken::class:
 			case TemporaryToken::class:
 				$method = AuthenticationMethod::temporary;
 				break;

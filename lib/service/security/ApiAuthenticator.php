@@ -122,7 +122,7 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		}
 
 		try {
-			$token = JWT::decode($jwt, env('JWT_SECRET'), ['HS512']);
+			$token = JWT::decode($jwt, $_ENV['JWT_SECRET'], ['HS512']);
 		} catch (Exception $e) {
 			throw new AuthenticationException('', 401);
 		}
@@ -195,7 +195,7 @@ class ApiAuthenticator extends AbstractAuthenticator {
 
 		$data = [
 			'iat' => $issuedAt,
-			'exp' => $issuedAt + env('JWT_LIFETIME'),
+			'exp' => $issuedAt + $_ENV['JWT_LIFETIME'],
 			'jti' => $tokenId,
 			'data' => [
 				'userId' => $userId
@@ -203,7 +203,7 @@ class ApiAuthenticator extends AbstractAuthenticator {
 		];
 
 		// Encode the new JWT
-		return JWT::encode($data, env('JWT_SECRET'), 'HS512');
+		return JWT::encode($data, $_ENV['JWT_SECRET'], 'HS512');
 	}
 
 	private function createRefreshToken(string $series, string $token) {
