@@ -9,6 +9,7 @@ use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Throwable;
 
@@ -25,11 +26,14 @@ class ErrorController extends AbstractController {
 		}
 
 		if (!in_array($statusCode, [
-			Response::HTTP_BAD_REQUEST,
-			Response::HTTP_NOT_FOUND,
-			Response::HTTP_FORBIDDEN,
-			Response::HTTP_METHOD_NOT_ALLOWED,
-		])) {
+				Response::HTTP_BAD_REQUEST,
+				Response::HTTP_NOT_FOUND,
+				Response::HTTP_FORBIDDEN,
+				Response::HTTP_METHOD_NOT_ALLOWED,
+			]) &&
+			!in_array(get_class($exception), [
+				AccessDeniedException::class
+			])) {
 			ShutdownHandler::emailException($exception);
 			ShutdownHandler::slackException($exception);
 			ShutdownHandler::touchHandler();
