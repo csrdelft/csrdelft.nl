@@ -29,8 +29,11 @@ function compileBlade() {
 try {
 	require_once __DIR__ . '/../../lib/configuratie.include.php';
 
+	echo "Huidige mode mode " . MODE . PHP_EOL;
+
 	compileBlade();
 } catch (Exception $ex) {
 	echo $ex->getMessage();
+	print_r($ex->getTrace());
 	exit(-1);
 }
