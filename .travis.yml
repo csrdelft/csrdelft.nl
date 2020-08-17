@@ -50,7 +50,7 @@ jobs:
         sentry-cli releases set-commits $SENTRY_RELEASE --auto
         sentry-cli releases finalize $SENTRY_RELEASE
         sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
-      if: branch = master AND fork = false
+      if: branch = master AND fork = false AND type != pull_request
 
 stages:
   - build
