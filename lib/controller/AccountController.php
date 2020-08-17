@@ -96,9 +96,6 @@ class AccountController extends AbstractController {
 		if ($uid == null) {
 			$uid = $this->getUid();
 		}
-		if ($uid === LoginService::UID_EXTERN) {
-			return $this->aanvragen();
-		}
 		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}

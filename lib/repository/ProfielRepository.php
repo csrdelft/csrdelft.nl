@@ -21,6 +21,7 @@ use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\security\LoginService;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -124,11 +125,15 @@ class ProfielRepository extends AbstractRepository {
 	}
 
 	public function nieuw($lidjaar, $lidstatus) {
+		$user = $this->security->getUser();
+
+		// Create kan door x999 gedaan worden
+		$logUsername = $user == null ? LoginService::UID_EXTERN : $user->getUsername();
 		$profiel = new Profiel();
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
 		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee();
-		$profiel->changelog = [new ProfielCreateLogGroup($this->security->getUser()->getUsername(), new DateTime())];
+		$profiel->changelog = [new ProfielCreateLogGroup($logUsername, new DateTime())];
 		return $profiel;
 	}
 
