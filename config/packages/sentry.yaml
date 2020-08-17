@@ -3,5 +3,7 @@ sentry:
     options:
       excluded_exceptions:
         - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+        - Symfony\Component\HttpKernel\Exception\BadRequestHttpException
         - CsrDelft\common\CsrToegangException
         - CsrDelft\common\CsrGebruikerException
+        - Symfony\Component\Security\Core\Exception\AccessDeniedException
