@@ -3,12 +3,12 @@
 namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Map;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * FotoAlbum.class.php
@@ -66,7 +66,7 @@ class FotoAlbum extends Map {
 			//We verwijderen het beginstuk van de string
 			$this->subdir = $path;
 		} else {
-			throw new CsrNotFoundException("Fotoalbum niet gevonden");
+			throw new NotFoundHttpException("Fotoalbum niet gevonden");
 		}
 		$this->dirname = basename($this->path);
 	}

@@ -3,10 +3,10 @@
 namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Afbeelding;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -61,7 +61,7 @@ class Foto extends Afbeelding {
 			$this->subdir = $album->subdir;
 
 			if (!path_valid(PHOTOALBUM_PATH, join_paths($album->subdir, $filename))) {
-				throw new CsrNotFoundException(); // Voorkom traversal door filename
+				throw new NotFoundHttpException(); // Voorkom traversal door filename
 			}
 		}
 		parent::__construct(null, $parse);
