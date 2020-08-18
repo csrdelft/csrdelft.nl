@@ -47,7 +47,6 @@ class Formulier implements View, Validator, ToResponse {
 	public $css_classes = array();
 	protected $javascript = '';
 	public $titel;
-	public $stappen_submit = false;
 
 	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
@@ -223,12 +222,6 @@ class Formulier implements View, Validator, ToResponse {
 	protected function getJavascript() {
 		foreach ($this->fields as $field) {
 			$this->javascript .= $field->getJavascript();
-		}
-		if ($this->stappen_submit) {
-			$this->javascript .= <<<JS
-
-$(form).formSteps({submitButton: "{$this->stappen_submit}"});
-JS;
 		}
 		return $this->javascript;
 	}
