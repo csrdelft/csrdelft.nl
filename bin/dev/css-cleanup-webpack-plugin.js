@@ -1,14 +1,12 @@
-import webpack from 'webpack';
-
 /**
  * Strip js bestanden die leeggemaakt zijn door mini css extract plugin.
  */
 class CssCleanupWebpackPlugin {
-	public apply(compiler: webpack.Compiler) {
+	apply(compiler) {
 		compiler.hooks.emit.tapAsync('MiniCssExtractPluginCleanup', (compilation, callback) => {
-			const sassEntries: string[] = compilation.entries
+			const sassEntries = compilation.entries
 				.filter((e) => /scss$/.test(e.rawRequest))
-				.map((e) => (e.getChunks() as webpack.compilation.Chunk[]).map((c) => c.name as string))
+				.map((e) => (e.getChunks()).map((c) => c.name))
 				.reduce((flat, val) => flat.concat(val), []);
 
 			const assets = Object.keys(compilation.assets);

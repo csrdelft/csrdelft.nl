@@ -11,11 +11,11 @@ export default {
 		if (data === null || typeof data !== 'object') { return data; }
 		switch (type) {
 			case 'sort':
-				return data.sort!;
+				return data.sort;
 			case 'export':
-				return data.export!;
+				return data.export;
 			default:
-				return data.display!;
+				return data.display;
 		}
 	},
 	bedrag(data) {
@@ -33,8 +33,7 @@ export default {
 	totaalPrijs(data, type, row) {
 		return formatBedrag(row.aantal_aanmeldingen * parseInt(row.prijs, 10));
 	},
-	datetime(date, type, row) {
-		// tslint:disable-next-line:triple-equals
+	datetime(date) {
 		if (Number(date) == date) {
 			return moment(date * 1000).format('YYYY-MM-DD HH:mm');
 		}

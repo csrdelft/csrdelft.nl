@@ -27,17 +27,16 @@ moment.locale('nl');
 
 declare global {
 	interface JQueryStatic {
-		timeago: any;
-		markItUp: (arg: any) => any;
+		markItUp: (arg: unknown) => unknown;
 	}
 
 	interface JQuery {
-		timeago: () => void;
-		markItUp: (arg: any) => any;
-		hoverIntent: (arg: any, arg1?: any) => any;
+		markItUp: (arg: unknown) => unknown;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		hoverIntent: (arg: any, arg1?: any) => unknown;
 		autosize: () => void;
-		scrollTo: (arg: any) => void;
-		modal: (arg?: any) => void;
+		scrollTo: (arg: unknown) => void;
+		modal: (arg?: unknown) => void;
 	}
 }
 
@@ -125,7 +124,8 @@ $.timeago.settings.strings = {
 	month: '1 maand',
 	months: '%d maanden',
 	numbers: [],
-	prefiprefixAgo: '',
+	prefixAgo: '',
+	inPast: '',
 	prefixFromNow: 'sinds',
 	seconds: 'nog geen minuut',
 	suffixAgo: 'geleden',

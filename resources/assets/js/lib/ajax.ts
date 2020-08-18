@@ -4,11 +4,11 @@ import {modalClose} from './modal';
 export function ajaxRequest(
 	type: string,
 	url: string,
-	data: string | FormData | object,
+	data: string | FormData | Record<string, string|string[]|undefined>,
 	source: JQuery<Element> | false,
 	onsuccess: (data: string) => void,
 	onerror?: (data: string) => void,
-	onfinish?: () => void) {
+	onfinish?: () => void): void {
 	if (source) {
 		if (!source.hasClass('noanim')) {
 			$(source).replaceWith(
@@ -78,7 +78,7 @@ export function ajaxRequest(
  * @param ketzer
  * @returns {boolean}
  */
-export function ketzerAjax(url: string, ketzer: string) {
+export function ketzerAjax(url: string, ketzer: string): true {
 	$(ketzer + ' .aanmeldbtn').addClass('loading');
 	$.ajax({
 		cache: false,

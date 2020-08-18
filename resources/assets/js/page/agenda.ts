@@ -1,5 +1,4 @@
 import {Calendar} from '@fullcalendar/core';
-// @ts-ignore
 import nlLocale from '@fullcalendar/core/locales/nl';
 import {OptionsInput, ToolbarInput} from '@fullcalendar/core/types/input-types';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -69,7 +68,12 @@ const options: OptionsInput = {
 
 				// De button wordt ververst door fullcalendar, zorg ervoor dat de laatste wordt gepakt.
 				setTimeout(() => {
-					const button = calendarEl.querySelector('.fc-bewerken-button')!;
+					const button = calendarEl.querySelector('.fc-bewerken-button');
+
+					if (!button) {
+						throw new Error("Geen bewerken knop gevonden");
+					}
+
 					if (editable) {
 						button.classList.add('fc-button-active');
 					} else {
@@ -102,20 +106,29 @@ const options: OptionsInput = {
 		}, false, domUpdate);
 	},
 	eventClick: (info) => {
-		axios.get(`/agenda/details/${info.event.id}?jaar=${(info.event.start!.getFullYear())}`).then((response) => {
+		const start = info.event.start
+
+		if (!start) {
+			return;
+		}
+
+		axios.get(`/agenda/details/${info.event.id}?jaar=${(start.getFullYear())}`).then((response) => {
 			const card = htmlParse(response.data)[0] as HTMLElement;
 			card.style.zIndex = '100';
 			card.style.position = 'absolute';
 
-			card.querySelector('.close')!.addEventListener('click', () => {
-				card.remove();
-				return false;
-			});
+			const closeButton = card.querySelector('.close')
+
+			if (closeButton) {
+				closeButton.addEventListener('click', () => {
+					card.remove();
+					return false;
+				});
+			}
 
 			document.body.append(card);
 			ctx.init(card);
 
-			// tslint:disable-next-line:no-unused-expression
 			new Popper(info.el, card, {placement: 'bottom'});
 
 			// Na deze klik een event listener
@@ -131,17 +144,35 @@ const options: OptionsInput = {
 			});
 		});
 	},
-	eventDrop(dropInfo) {
-		axios.post(`/agenda/verplaatsen/${dropInfo.event.id}`, {
-			begin_moment: fmt(dropInfo.event.start!),
-			eind_moment: fmt(dropInfo.event.end!),
-		}).then(() => calendar.refetchEvents());
+	eventDrop: async(dropInfo) => {
+		const start = dropInfo.event.start
+		const end = dropInfo.event.end
+
+		if (!start || !end) {
+			throw new Error("Drop heeft geen start of end")
+		}
+
+		await axios.post(`/agenda/verplaatsen/${dropInfo.event.id}`, {
+			begin_moment: fmt(start),
+			eind_moment: fmt(end),
+		})
+
+		calendar.refetchEvents()
 	},
-	eventResize(resizeInfo) {
-		axios.post(`/agenda/verplaatsen/${resizeInfo.event.id}`, {
-			begin_moment: fmt(resizeInfo.event.start!),
-			eind_moment: fmt(resizeInfo.event.end!),
-		}).then(() => calendar.refetchEvents());
+	eventResize: async (resizeInfo) => {
+		const start = resizeInfo.event.start
+		const end = resizeInfo.event.end
+
+		if (!start || !end) {
+			throw new Error("Resize heeft geen start of end")
+		}
+
+		await axios.post(`/agenda/verplaatsen/${resizeInfo.event.id}`, {
+			begin_moment: fmt(start),
+			eind_moment: fmt(end),
+		})
+
+		calendar.refetchEvents()
 	},
 };
 

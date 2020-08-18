@@ -7,6 +7,7 @@ import ButtonApi = DataTables.ButtonApi;
 import ButtonsSettings = DataTables.ButtonsSettings;
 
 declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace DataTables {
 		interface ExtButtonsSettings {
 			// Default buttons, zitten om de een of andere reden niet in de typedef
@@ -92,7 +93,7 @@ $.fn.dataTable.ext.buttons.popup = {
 $.fn.dataTable.ext.buttons.url = {
 	extend: 'default',
 	action(e, dt, button) {
-		window.location.href = button.attr('href')!;
+		window.location.href = button.attr('href') ?? "";
 	},
 };
 
@@ -128,7 +129,6 @@ $.fn.dataTable.ext.buttons.confirm = {
 		// Initiele staat
 		toggle();
 
-		// tslint:disable-next-line:no-unused-expression
 		new $.fn.dataTable.Buttons(dt, {
 			buttons: [
 				{

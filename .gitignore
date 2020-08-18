@@ -45,7 +45,6 @@ yarn-error.log
 htdocs/dist
 package-lock.json
 .cache-loader
-webpack.config.js
 .onderhoud
 .yarn/*
 !.yarn/releases

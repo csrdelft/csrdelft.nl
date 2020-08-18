@@ -3,7 +3,7 @@ import $ from 'jquery';
 /**
  * @param {string} id
  */
-export function importAgenda(id: string) {
+export function importAgenda(id: string): void {
 	const input = document.getElementById(id) as HTMLInputElement;
 
 	$.ajax({

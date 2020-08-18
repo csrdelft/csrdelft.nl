@@ -2,28 +2,38 @@ import $ from 'jquery';
 import {init} from '../ctx';
 import {domUpdate} from './domUpdate';
 
-export function toggleForumConceptBtn(enable: boolean) {
+export function toggleForumConceptBtn(enable: boolean): void {
 	const $concept = $('#forumConcept');
 	if (typeof enable === 'undefined') {
-		$concept.attr('disabled', String(!Boolean($concept.prop('disabled'))));
+		$concept.attr('disabled', String(!($concept.prop('disabled'))));
 	} else {
 		$concept.attr('disabled', String(!enable));
 	}
 }
 
-export function saveConceptForumBericht() {
+export function saveConceptForumBericht(): void {
 	toggleForumConceptBtn(false);
-	const $concept = $('#forumConcept');
-	const $textarea = $('#forumBericht');
-	const $titel = $('#nieuweTitel');
-	if ($textarea.val() !== $textarea.attr('origvalue')) {
-		$.post($concept.attr('data-url')!, {
-			forumBericht: $textarea.val(),
-			titel: ($titel.length === 1 ? $titel.val() : ''),
+	const concept = document.querySelector<HTMLButtonElement>('#forumConcept')
+	const textarea = document.querySelector<HTMLTextAreaElement>('#forumBericht')
+	const titel = document.querySelector<HTMLInputElement>('#nieuweTitel')
+
+	if (!concept || !textarea) {
+		throw new Error('concept of textarea of titel bestaat niet')
+	}
+
+	if (textarea.value !== textarea.dataset.origvalue) {
+		const url = concept.dataset.url
+		if (!url) {
+			throw new Error("concept knop heeft geen data-url")
+		}
+
+		$.post(url, {
+			forumBericht: textarea.value,
+			titel: titel ? titel.value : '',
 		}).done(() => {
-			$textarea.attr('origvalue', String($textarea.val()));
+			textarea.dataset.origvalue = textarea.value
 		}).fail((error) => {
-			alert(error);
+			throw new Error(error.responseText)
 		});
 	}
 	setTimeout(toggleForumConceptBtn, 3000);
@@ -36,7 +46,12 @@ let bewerkContainerInnerHTML: string | null = null;
  * @see inline in forumBewerken
  */
 function restorePost() {
-	bewerkContainer!.html(bewerkContainerInnerHTML!);
+	if (!bewerkContainer || !bewerkContainerInnerHTML) {
+		// niets te restoren
+		return;
+	}
+
+	bewerkContainer.html(bewerkContainerInnerHTML);
 	$('#bewerk-melding').slideUp(200, function () {
 		$(this).remove();
 	});
@@ -63,7 +78,7 @@ function submitPost(event: Event) {
  *
  * @see blade_templates/forum/partial/post_lijst.blade.php
  */
-export function forumBewerken(postId: string) {
+export function forumBewerken(postId: string): false {
 	$.ajax({
 		url: '/forum/tekst/' + postId,
 		method: 'POST',
@@ -101,7 +116,7 @@ Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbe
 	return false;
 }
 
-export function forumCiteren(postId: string) {
+export function forumCiteren(postId: string): false {
 	$.ajax({
 		url: '/forum/citeren/' + postId,
 		method: 'POST',

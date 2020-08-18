@@ -14,8 +14,8 @@ const instellingOpslaan = async (ev: Event) => {
 
 	const input = ev.target as HTMLElement;
 
-	let href = '';
-	let waarde = '';
+	let href = null;
+	let waarde = null;
 
 	input.classList.add('loading');
 
@@ -24,10 +24,14 @@ const instellingOpslaan = async (ev: Event) => {
 			return false;
 		}
 
-		href = input.dataset.href!;
+		href = input.dataset.href;
 		waarde = input.value;
 	} else if (input instanceof HTMLAnchorElement) {
 		href = input.href;
+	}
+
+	if (!href) {
+		throw new Error("Geen url gevonden voor instelling")
 	}
 
 	await axios.post(href, {waarde});

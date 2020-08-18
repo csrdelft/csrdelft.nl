@@ -20,7 +20,12 @@ const withFullSizePreview: GalleryDecorator = (constructor) =>
 		}
 
 		protected async updateImage(size: Size) {
-			const content = this.preview.getElement().querySelector<HTMLDivElement>('.j-gallery-preview-content')!;
+			const content = this.preview.getElement().querySelector<HTMLDivElement>('.j-gallery-preview-content');
+
+			if (!content) {
+				throw new Error("Geen content gevonden")
+			}
+
 			if (size === Size.auto) {
 				await load(this.currentItem.fullUrl);
 

@@ -1,4 +1,11 @@
-import clippy, {Agent} from 'clippyjs';
+import clippy, {Agent, AgentName} from 'clippyjs';
+
+declare global {
+	interface Window {
+		ASSISTENT: AgentName
+		ASSISTENT_GELUIDEN: string
+	}
+}
 
 interface AgentRule {
 	cb?: (agent: Agent) => void;
@@ -58,7 +65,7 @@ function gestureAt(agent: Agent, x: number, y: number, cb: () => void) {
 
 const rules: AgentRule[] = [];
 
-function addRule(options: any, cb: (agent: Agent) => void) {
+function addRule(options: AgentRule, cb: (agent: Agent) => void) {
 	rules.push({
 		...options,
 		cb,
@@ -66,10 +73,8 @@ function addRule(options: any, cb: (agent: Agent) => void) {
 }
 
 $(() => {
-	// @ts-ignore
-	const assistant = ASSISTENT || 'Clippy';
-	// @ts-ignore
-	const geenGeluiden = (ASSISTENT_GELUIDEN || 'nee') === 'nee';
+	const assistant = window.ASSISTENT || 'Clippy';
+	const geenGeluiden = (window.ASSISTENT_GELUIDEN || 'nee') === 'nee';
 	const welcomeMessages = [
 		'Hallo, welkom op de stek! Hoe kan ik je vandaag helpen?',
 		'Hoe kan ik je stek ervaring vandaag weer verrijken?',
@@ -155,7 +160,6 @@ addRule({location: '/profiel'}, async (agent) => {
 });
 
 addRule({location: '/'}, (agent) => {
-	// @ts-ignore
 	$('#search input.ZoekField').on('focusin', (event) => {
 		const box = event.target.getBoundingClientRect();
 

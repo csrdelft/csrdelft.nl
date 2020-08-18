@@ -6,9 +6,16 @@ interface Token {
 }
 
 function getCsrfHeaders(): Token {
+	const idMetaTag = document.querySelector<HTMLMetaElement>('meta[property=\'X-CSRF-ID\']')
+	const valueMetaTag = document.querySelector<HTMLMetaElement>('meta[property=\'X-CSRF-VALUE\']');
+
+	if (!idMetaTag || !valueMetaTag) {
+		throw new Error("Geen CSRF meta tag gevonden")
+	}
+
 	return {
-		'X-CSRF-ID': (document.querySelector('meta[property=\'X-CSRF-ID\']') as HTMLMetaElement).content!,
-		'X-CSRF-VALUE': (document.querySelector('meta[property=\'X-CSRF-VALUE\']') as HTMLMetaElement).content!,
+		'X-CSRF-ID': idMetaTag.content,
+		'X-CSRF-VALUE': valueMetaTag.content,
 	};
 }
 

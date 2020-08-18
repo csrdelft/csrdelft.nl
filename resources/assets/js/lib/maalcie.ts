@@ -3,7 +3,7 @@ import {dragObject} from '../dragobject';
 import {ajaxRequest} from './ajax';
 import {domUpdate} from './domUpdate';
 
-export function takenSubmitRange(e: Event) {
+export function takenSubmitRange(e: Event): void | boolean {
 	let target = e.target as Element;
 	if (target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		target = target.parentElement!;
@@ -14,25 +14,25 @@ export function takenSubmitRange(e: Event) {
 	}
 	$('input[name="' + $(target).find('input:first').attr('name') + '"]:visible').each(function () {
 		if ($(this).prop('checked')) {
-			ajaxRequest(
-				'POST',
-				$(target).parent().attr('href')!,
-				$(target).parent().attr('post')!,
-				$(target).parent(),
-				domUpdate,
-				alert,
-			);
+			const href = $(target).parent().attr('href');
+			const post = $(target).parent().attr('post');
+
+			if (!href || !post) {
+				throw new Error("Element heeft geen href of post");
+			}
+
+			ajaxRequest('POST', href, post, $(target).parent(), domUpdate, alert);
 		}
 	});
 }
 
-export function takenColorSuggesties() {
+export function takenColorSuggesties(): void {
 	const $suggestiesTabel = $('#suggesties-tabel');
 	$suggestiesTabel.find('tr:visible:odd').css('background-color', '#FAFAFA');
 	$suggestiesTabel.find('tr:visible:even').css('background-color', '#EBEBEB');
 }
 
-export function takenToggleSuggestie(soort: string, show: boolean) {
+export function takenToggleSuggestie(soort: string, show: boolean): void {
 	$('#suggesties-tabel .' + soort).each(function () {
 		let verborgen = 0;
 		if (typeof show !== 'undefined') {
@@ -76,7 +76,7 @@ function takenColorDatum() {
 	$('tr.taak-datum-summary:visible:even th').css('background-color', '#f5f5f5');
 }
 
-export function takenToggleDatum(datum: string) {
+export function takenToggleDatum(datum: string): void {
 	takenToggleDatumFirst(datum, 0);
 	$('.taak-datum-' + datum).toggleClass('verborgen');
 	takenToggleDatumFirst(datum, 1);
@@ -84,52 +84,62 @@ export function takenToggleDatum(datum: string) {
 
 }
 
-export function takenShowOld() {
+export function takenShowOld(): void {
 	$('#taak-datum-head-first').removeClass('verborgen');
 	$('tr.taak-datum-oud').removeClass('verborgen');
 	takenColorDatum();
 }
 
 /* Ruilen van CorveeTaak */
-export function takenMagRuilen(e: Event) {
+export function takenMagRuilen(e: Event): void {
 	let target = e.target as Element;
 	if (target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
 		target = target.parentElement!;
 	}
 
-	const source = dragObject.el!;
-	if (source.attr('id') !== target.id) {
+	const source = dragObject.el;
+	if (source && source.attr('id') !== target.id) {
 		e.preventDefault();
 	}
 }
 
-export function takenRuilen(e: Event) {
+export function takenRuilen(e: Event): void {
 	e.preventDefault();
 	let elmnt = e.target as Element;
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
 		elmnt = elmnt.parentElement!;
 	}
-	const source = dragObject.el!;
-	if (!confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
+	const source = dragObject.el;
+	if (!source || !confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
 	let attr = source.attr('uid');
 	if (!attr) {
 		attr = '';
 	}
-	ajaxRequest('POST', elmnt.getAttribute('href')!, 'uid=' + attr, $(elmnt), domUpdate, alert);
+	const href = elmnt.getAttribute('href');
+	if (!href) {
+		throw new Error("Element heeft geen href")
+	}
+	ajaxRequest('POST', href, 'uid=' + attr, $(elmnt), domUpdate, alert);
 	attr = $(elmnt).attr('uid');
 	if (!attr) {
 		attr = '';
 	}
-	ajaxRequest('POST', elmnt.getAttribute('href')!, 'uid=' + attr, source, domUpdate, alert);
+	ajaxRequest('POST', href, 'uid=' + attr, source, domUpdate, alert);
 }
 
 let lastSelectedId: string;
 
-export function takenSelectRange(e: KeyboardEvent) {
+export function takenSelectRange(e: KeyboardEvent): void {
+	const target = e.target;
+
+	if (!target) {
+		throw new Error("Er is geen target")
+	}
+
 	let withinRange = false;
-	$('#maalcie-tabel').find('tbody tr td a input[name="' + $(e.target!).attr('name') + '"]:visible').each(function () {
+	$('#maalcie-tabel').find('tbody tr td a input[name="' + $(target).attr('name') + '"]:visible').each(function () {
 		const thisId = $(this).attr('id');
 		if (thisId === lastSelectedId) {
 			withinRange = !withinRange;

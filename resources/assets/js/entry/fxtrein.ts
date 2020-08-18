@@ -41,7 +41,11 @@ class TjoekTjoek {
 	];
 
 	constructor() {
-		this.rails = document.querySelector('.rails')!;
+		const rails = document.querySelector('.rails')
+		if (!rails) {
+			throw new Error(".rails niet gevonden")
+		}
+		this.rails = rails
 	}
 
 	public start() {

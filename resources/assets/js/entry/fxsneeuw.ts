@@ -31,7 +31,13 @@ let parameters: Array<{ color: number[]; sprite: Texture; size: number; }>;
 docReady(() => {
 	let lightTheme = false;
 
-	const bgColor = window.getComputedStyle(document.querySelector('.container')!).backgroundColor;
+	const container = document.querySelector('.container');
+
+	if (!container) {
+		throw new Error("Container van fxsneeuw niet gevonden");
+	}
+
+	const bgColor = window.getComputedStyle(container).backgroundColor;
 
 	const sep = bgColor.indexOf(',') > -1 ? ',' : ' ';
 	const rgb = bgColor.substr(4).split(')')[0].split(sep);
