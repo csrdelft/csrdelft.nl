@@ -1189,6 +1189,70 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/browser@npm:^5.21.1":
+  version: 5.21.1
+  resolution: "@sentry/browser@npm:5.21.1"
+  dependencies:
+    "@sentry/core": 5.21.1
+    "@sentry/types": 5.21.1
+    "@sentry/utils": 5.21.1
+    tslib: ^1.9.3
+  checksum: 04d7f72e9fbd3225c50634982c42883816426cb7572ac57f77aec212361f5daaddf0fd3ed2b0fc23554a29358790d67e4cf8b2d8bf7040cbf33c437016b53384
+  languageName: node
+  linkType: hard
+
+"@sentry/core@npm:5.21.1":
+  version: 5.21.1
+  resolution: "@sentry/core@npm:5.21.1"
+  dependencies:
+    "@sentry/hub": 5.21.1
+    "@sentry/minimal": 5.21.1
+    "@sentry/types": 5.21.1
+    "@sentry/utils": 5.21.1
+    tslib: ^1.9.3
+  checksum: 729117cf54fd0c2586633ad77afeae18433d583af0e2c494789a66654f263c3ef532ffea9fc6780c9ba4058f55ec9ff51b2eea12237bef88e0b701faabbcd4c4
+  languageName: node
+  linkType: hard
+
+"@sentry/hub@npm:5.21.1":
+  version: 5.21.1
+  resolution: "@sentry/hub@npm:5.21.1"
+  dependencies:
+    "@sentry/types": 5.21.1
+    "@sentry/utils": 5.21.1
+    tslib: ^1.9.3
+  checksum: 08250ad28003120c65525a4927d7c9e3c0fb5397b88db8512f2420e5a3dc734b2e5b2c0d459821548c0cdc15a871aa33192b95bc6ead08cb85a5115b6ea7f82c
+  languageName: node
+  linkType: hard
+
+"@sentry/minimal@npm:5.21.1":
+  version: 5.21.1
+  resolution: "@sentry/minimal@npm:5.21.1"
+  dependencies:
+    "@sentry/hub": 5.21.1
+    "@sentry/types": 5.21.1
+    tslib: ^1.9.3
+  checksum: fe35186154205a9430a168a4b80a9d8f927b6c3d20f722b8bfcda9e8a0d4fec6ca16181e7b24849aedad5998f28e2fb760cbd41c877520c63337ef74199bb06a
+  languageName: node
+  linkType: hard
+
+"@sentry/types@npm:5.21.1":
+  version: 5.21.1
+  resolution: "@sentry/types@npm:5.21.1"
+  checksum: 7d82e857dc9bc5d36d76e8c742277580359878d45c974d23fff020c8b9dacba9dfe7e0a8ae2098f1fe10aa4150e23d2e5edb33b40138b82a9e00fa1b8ab1c8b5
+  languageName: node
+  linkType: hard
+
+"@sentry/utils@npm:5.21.1":
+  version: 5.21.1
+  resolution: "@sentry/utils@npm:5.21.1"
+  dependencies:
+    "@sentry/types": 5.21.1
+    tslib: ^1.9.3
+  checksum: 93681a4cff9ead5b8a71cb67445eba54bc877dd959a7f57c9f45b351489a43ff9af9eb9d6ec3c47a6437cc28bc8ef065c9db8fa1dc762ad4cd31962d2124c3be
+  languageName: node
+  linkType: hard
+
 "@types/anymatch@npm:*":
   version: 1.3.1
   resolution: "@types/anymatch@npm:1.3.1"
@@ -7907,6 +7971,7 @@ fsevents@~2.1.2:
     "@fullcalendar/interaction": ^4.3.0
     "@fullcalendar/list": ^4.3.0
     "@fullcalendar/timegrid": ^4.3.0
+    "@sentry/browser": ^5.21.1
     "@types/bootstrap": ^4.2.0
     "@types/chart.js": ^2.7.42
     "@types/datatables.net": ^1.10.17
@@ -8981,7 +9046,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.8.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0":
+"tslib@npm:^1.8.0, tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.3":
   version: 1.13.0
   resolution: "tslib@npm:1.13.0"
   checksum: 5dc3bdaea3b67c76ef4a14c28fcb2171da7bcf292fd9c59a260098729626b1ce766c52b588f08e324ed9a0c52ea8a93a815920f980d75981abc9d850fbf310fb

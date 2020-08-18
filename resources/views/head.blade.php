@@ -24,7 +24,13 @@
 @foreach(\CsrDelft\view\CompressedLayout::getUserModules() as $sheet)
 	{!! css_asset($sheet) !!}
 @endforeach
+<script>
+	APP_ENV="{{$_ENV['APP_ENV']}}";
+	SENTRY_DSN_JS="{{$_ENV['SENTRY_DSN_JS']}}";
+	USER="{{\CsrDelft\service\security\LoginService::getUid()}}";
+</script>
 @stack('styles')
+@script('sentry')
 @script('app')
 @stack('scripts')
 <!-- Google Analytics -->
