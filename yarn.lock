@@ -4362,6 +4362,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"flatpickr@npm:^4.6.6":
+  version: 4.6.6
+  resolution: "flatpickr@npm:4.6.6"
+  checksum: a16cd4bdb1349453d36f74c7ea90e372de6db6c8b923833074c7bd59cff21ff2b17039df834b0468b03077442e06f7b068577b3b470e1052478074b5c4fbfe25
+  languageName: node
+  linkType: hard
+
 "flatted@npm:^2.0.0":
   version: 2.0.2
   resolution: "flatted@npm:2.0.2"
@@ -5464,13 +5471,6 @@ fsevents@~2.1.2:
   peerDependencies:
     jquery: ">=1.7.0"
   checksum: bc5c3b9f06f4120d60fd3f1cd9d94d18bff88a592132d6aefe6f8df9be0f9d6156606f7e05bbf310194c49e6547aa6168c76c392ee60cc3b09eaee70e6ec64ad
-  languageName: node
-  linkType: hard
-
-"jquery-ui-timepicker-addon@npm:^1.6.3":
-  version: 1.6.3
-  resolution: "jquery-ui-timepicker-addon@npm:1.6.3"
-  checksum: 22dac53a715bfb11da66f694a67e07612a6f5923b419094e9a7476c53530fc66ae71210091267ca8bb75a34ec40c773c5c7bfc2ba953c664471d3bb99beaace1
   languageName: node
   linkType: hard
 
@@ -7960,13 +7960,13 @@ fsevents@~2.1.2:
     eslint: ^6.5.1
     eslint-loader: ^3.0.2
     file-loader: ^1.1.11
+    flatpickr: ^4.6.6
     google-palette: ^1.1.0
     hammerjs: ^2.0.8
     jgallery: "https://github.com/jakubkowalczyk-pl/jgallery"
     jquery: ^3.4
     jquery-hoverintent: ^1.10.0
     jquery-ui: ^1.12.1
-    jquery-ui-timepicker-addon: ^1.6.3
     jquery.maskedinput: ^1.4.1
     jquery.scrollto: ^2.1.2
     jqueryui: ^1.11.1

@@ -7,7 +7,7 @@ import $ from 'jquery';
 import moment from 'moment';
 import {
 	registerBbContext,
-	registerDataTableContext,
+	registerDataTableContext, registerFlatpickrContext,
 	registerFormulierContext,
 	registerGlobalContext,
 	registerGrafiekContext,
@@ -62,9 +62,6 @@ require('timeago');
 require('raty-js');
 require('autosize/build/jquery.autosize');
 require('./lib/external/jquery.formSteps');
-require('./lib/external/jquery-ui-sliderAccess');
-require('jquery-ui-timepicker-addon');
-require('./lib/external/jquery-ui-timepicker-nl');
 require('jquery.maskedinput');
 require('lightbox2');
 require('corejs-typeahead/dist/typeahead.jquery.js');
@@ -148,6 +145,7 @@ $.timeago.settings.strings = {
 		registerKnopContext(),
 		registerDataTableContext(),
 		registerBbContext(),
+		registerFlatpickrContext(),
 	]);
 
 	docReady(() => {

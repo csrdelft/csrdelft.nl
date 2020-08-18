@@ -126,3 +126,13 @@ export const registerGlobalContext = async () => {
 		'[data-visite]': initKaartjes,
 	});
 };
+
+export const registerFlatpickrContext = async () => {
+	const {
+		initDateTimePicker,
+	} = await import(/* webpackChunkName: "datepicker" */'./datepicker');
+
+	ctx.addHandlers({
+		'.DateTimeField': initDateTimePicker,
+	});
+};
