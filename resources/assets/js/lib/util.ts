@@ -213,3 +213,7 @@ export function isLoggedIn(): boolean {
 	}
 	return elem.getAttribute('content') === 'true';
 }
+
+export function throwError(message: string) {
+	throw new Error(message)
+}

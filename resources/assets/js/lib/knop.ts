@@ -6,20 +6,26 @@ import {domUpdate} from './domUpdate';
 import {takenSelectRange, takenSubmitRange} from './maalcie';
 import {modalClose} from './modal';
 import {redirect, reload} from './reload';
+import {parents} from "./dom";
+import {throwError} from "./util";
 
-function knopAjax(knop: JQuery, type: string) {
-	if (knop.hasClass('confirm') && !confirm(knop.attr('title') + '.\n\nWeet u het zeker?')) {
+function knopAjax(knop: Element, type: string) {
+	if (!(knop instanceof HTMLElement)) {
+		throw new Error("Knop is geen HTMLElement")
+	}
+
+	if (knop.classList.contains('confirm') && !confirm(knop.title + '.\n\nWeet u het zeker?')) {
 		modalClose();
 		return false;
 	}
-	let source: JQuery | false = knop;
+	let source: Element|null = knop;
 	let done = domUpdate;
-	let data: undefined | string | Record<string, string | undefined | string[]> = knop.attr('data');
+	let data: null | string | Record<string, string | undefined | string[]> = knop.getAttribute('data');
 
-	if (knop.hasClass('popup')) {
-		source = false;
+	if (knop.classList.contains('popup')) {
+		source = null;
 	}
-	if (knop.hasClass('prompt')) {
+	if (knop.classList.contains('prompt')) {
 		if (!data) {
 			throw new Error("Prompt knop heeft geen data")
 		}
@@ -30,17 +36,17 @@ function knopAjax(knop: JQuery, type: string) {
 		}
 		data = encodeURIComponent(data[0]) + '=' + encodeURIComponent(userVal);
 	}
-	if (knop.hasClass('addfav')) {
+	if (knop.classList.contains('addfav')) {
 		data = {
 			tekst: document.title.replace('C.S.R. Delft - ', ''),
 			link: window.location.href,
 		};
 	}
-	if (knop.hasClass('DataTableRowKnop')) {
-		const dataTableId = knop.parents('table').attr('id');
+	if (knop.classList.contains('DataTableRowKnop')) {
+		const dataTableId = parents(knop, 'table').id
 		data = {
 			DataTableId: dataTableId,
-			DataTableSelection: knop.parents('tr').attr('data-uuid'),
+			DataTableSelection: parents(knop, 'tr').dataset.uuid
 		};
 
 		done = (response: unknown) => {
@@ -56,13 +62,16 @@ function knopAjax(knop: JQuery, type: string) {
 			}
 		};
 	}
-	if (knop.hasClass('DataTableResponse')) {
+	if (knop.classList.contains('DataTableResponse')) {
 
-		let tableId = knop.attr('data-tableid');
+		let tableId = knop.dataset.tableid
 		if (!tableId || !document.getElementById(tableId)) {
-			tableId = knop.closest('form').attr('data-tableid');
+			const form = knop.closest('form')
+			if (!form) {
+				throw new Error('Geen form gevonden')
+			}
+			tableId = form.dataset.tableid
 			if (!tableId || !document.getElementById(tableId)) {
-				alert('DataTable not found');
 				throw new Error("DataTable not found")
 			}
 		}
@@ -87,21 +96,21 @@ function knopAjax(knop: JQuery, type: string) {
 			}
 		};
 
-		if (!knop.hasClass('SingleRow')) {
-			source = false;
+		if (!knop.classList.contains('SingleRow')) {
+			source = null;
 		}
 	}
-	if (knop.hasClass('ReloadPage')) {
+	if (knop.classList.contains('ReloadPage')) {
 		done = reload;
-	} else if (knop.hasClass('redirect')) {
+	} else if (knop.classList.contains('redirect')) {
 		done = redirect;
 	}
 
-	const url = knop.attr('href');
+	const url = knop.getAttribute('href');
 	if (!url) {
 		throw new Error("Knop heeft geen href")
 	}
-	ajaxRequest(type, url, data, source, done, alert);
+	ajaxRequest(type, url, data, source, done, throwError);
 }
 
 export function knopPost(this: HTMLElement, event: Event): boolean {
@@ -115,17 +124,17 @@ export function knopPost(this: HTMLElement, event: Event): boolean {
 		}
 		return false;
 	}
-	knopAjax($(this), 'POST');
+	knopAjax(this, 'POST');
 	return false;
 }
 
-export function knopGet(this: HTMLElement, event: Event): false {
+export function knopGet(event: Event, el: Element): false {
 	event.preventDefault();
-	knopAjax($(this), 'GET');
+	knopAjax(el , 'GET');
 	return false;
 }
 
-export function knopVergroot(event: Event, el: HTMLElement): void {
+export function knopVergroot(event: Event, el: Element): void {
 	const target = el
 
 	if (!(target instanceof HTMLElement)) {

@@ -32,7 +32,8 @@ declare global {
 export function isDataTableResponse(response: unknown): response is DatatableResponse {
 	const check = response as DatatableResponse
 
-	return "lastUpdate" in check
+	return typeof response == 'object'
+		&& "lastUpdate" in check
 		&& "autoUpdate" in check
 		&& "data" in check
 }

@@ -11,8 +11,11 @@
     "removeComments": false,
 		"types": ["vue-typescript-import-dts", "@types/jqueryui"],
     "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
   },
+	"exclude": [
+		"node_modules"
+	],
   "include": [
     "resources/assets/js/**/*.ts",
 		"resources/assets/js/**/*.vue"

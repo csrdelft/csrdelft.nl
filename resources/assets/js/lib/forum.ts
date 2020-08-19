@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import {init} from '../ctx';
 import {domUpdate} from './domUpdate';
+import {throwError} from "./util";
 
 export function toggleForumConceptBtn(enable: boolean): void {
 	const $concept = $('#forumConcept');
@@ -69,7 +70,7 @@ function submitPost(event: Event) {
 	}).done((data) => {
 		restorePost();
 		domUpdate(data);
-	}).fail((jqXHR) => alert(jqXHR.responseJSON));
+	}).fail((jqXHR) => throwError(jqXHR.responseJSON));
 }
 
 /**

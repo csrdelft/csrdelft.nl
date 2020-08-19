@@ -2,11 +2,13 @@ import $ from 'jquery';
 import {dragObject} from '../dragobject';
 import {ajaxRequest} from './ajax';
 import {domUpdate} from './domUpdate';
+import {parents} from "./dom";
+import {throwError} from "./util";
 
 export function takenSubmitRange(e: Event): void | boolean {
-	let target = e.target as Element;
+	let target = e.target as HTMLElement;
 	if (target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
-		target = target.parentElement!;
+		target = parents(target)
 	}
 	$(target).find('input').prop('checked', true);
 	if ($(target).hasClass('confirm') && !confirm($(target).attr('title') + '.\n\nWeet u het zeker?')) {
@@ -21,7 +23,7 @@ export function takenSubmitRange(e: Event): void | boolean {
 				throw new Error("Element heeft geen href of post");
 			}
 
-			ajaxRequest('POST', href, post, $(target).parent(), domUpdate, alert);
+			ajaxRequest('POST', href, post, target.parentElement, domUpdate, throwError);
 		}
 	});
 }
@@ -92,9 +94,9 @@ export function takenShowOld(): void {
 
 /* Ruilen van CorveeTaak */
 export function takenMagRuilen(e: Event): void {
-	let target = e.target as Element;
+	let target = e.target as HTMLElement;
 	if (target.tagName.toUpperCase() === 'IMG') { // over an image inside of anchor
-		target = target.parentElement!;
+		target = parents(target)
 	}
 
 	const source = dragObject.el;
@@ -105,15 +107,15 @@ export function takenMagRuilen(e: Event): void {
 
 export function takenRuilen(e: Event): void {
 	e.preventDefault();
-	let elmnt = e.target as Element;
+	let elmnt = e.target as HTMLElement;
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
-		elmnt = elmnt.parentElement!;
+		elmnt = parents(elmnt)
 	}
-	const source = dragObject.el;
+	const source = dragObject.el?.get(0)
 	if (!source || !confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
-	let attr = source.attr('uid');
+	let attr = source.getAttribute('uid');
 	if (!attr) {
 		attr = '';
 	}
@@ -121,12 +123,12 @@ export function takenRuilen(e: Event): void {
 	if (!href) {
 		throw new Error("Element heeft geen href")
 	}
-	ajaxRequest('POST', href, 'uid=' + attr, $(elmnt), domUpdate, alert);
-	attr = $(elmnt).attr('uid');
+	ajaxRequest('POST', href, 'uid=' + attr, elmnt, domUpdate, throwError);
+	attr = elmnt.getAttribute('uid');
 	if (!attr) {
 		attr = '';
 	}
-	ajaxRequest('POST', href, 'uid=' + attr, source, domUpdate, alert);
+	ajaxRequest('POST', href, 'uid=' + attr, source, domUpdate, throwError);
 }
 
 let lastSelectedId: string;

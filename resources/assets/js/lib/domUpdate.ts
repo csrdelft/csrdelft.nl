@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import {init} from '../ctx';
 import {modalClose, modalOpen} from './modal';
-import {htmlParse} from './util';
+import {html, htmlParse} from './util';
 
 export function domUpdate(this: HTMLElement | void, htmlString: string|null): void {
 	if (typeof htmlString !== 'string') {
@@ -11,7 +11,7 @@ export function domUpdate(this: HTMLElement | void, htmlString: string|null): vo
 	htmlString = $.trim(htmlString);
 	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
 		alert('response error');
-		document.write(htmlString);
+		throw new Error(htmlString)
 	}
 	const elements = htmlParse(htmlString);
 	$(elements).each(function (index, element) {

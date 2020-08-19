@@ -53,7 +53,7 @@ const options: OptionsInput = {
 				ajaxRequest('POST', '/agenda/toevoegen', {
 					begin_moment: datum,
 					eind_moment: datum,
-				}, false, domUpdate);
+				}, null, domUpdate);
 			},
 		},
 		bewerken: { // Alleen zichtbaar als je mag bewerken
@@ -103,7 +103,7 @@ const options: OptionsInput = {
 		ajaxRequest('POST', '/agenda/toevoegen', {
 			begin_moment: fmt(selectionInfo.start),
 			eind_moment: fmt(selectionInfo.end),
-		}, false, domUpdate);
+		}, null, domUpdate);
 	},
 	eventClick: (info) => {
 		const start = info.event.start

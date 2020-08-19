@@ -54,7 +54,7 @@ export const registerKnopContext = async (): Promise<void> => {
 	} = await import(/* webpackChunkName: "knop" */'./lib/knop');
 
 	ctx.addHandlers({
-		'.get': (el) => el.addEventListener('click', knopGet),
+		'.get': (el) => el.addEventListener('click', (e) => knopGet(e, el)),
 		'.post': (el) => el.addEventListener('click', knopPost),
 		'.vergroot': (el) => el.addEventListener('click', (e) => knopVergroot(e, el)),
 		'[data-buttons=radio]': (el) => {

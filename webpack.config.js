@@ -121,10 +121,6 @@ module.exports = (env, argv) => ({
 				test: /\.ts$/,
 				use: {
 					loader: 'ts-loader',
-					options: {
-						// Controleert geen types.
-						transpileOnly: true,
-					},
 				},
 			},
 			{

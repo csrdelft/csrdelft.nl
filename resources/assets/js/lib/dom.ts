@@ -18,3 +18,18 @@ export const selectAll = <T extends Element = Element>(selectors: string, contai
 	return container.querySelectorAll<T>(selectors)
 }
 
+export const parents = (element: HTMLElement, selector: string | null = null): HTMLElement => {
+	let parent = element.parentElement;
+
+	if (selector) {
+		while (parent && !parent.matches(selector)) {
+			parent = parent.parentElement;
+		}
+	}
+
+	if (!parent) {
+		throw new Error("Parent verwacht");
+	}
+
+	return parent
+}

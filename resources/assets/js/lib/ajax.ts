@@ -1,43 +1,36 @@
 import $ from 'jquery';
 import {modalClose} from './modal';
+import axios, {AxiosError} from 'axios'
+import {select} from "./dom";
 
 export function ajaxRequest(
 	type: string,
 	url: string,
-	data: string | FormData | Record<string, string|string[]|undefined> | undefined,
-	source: JQuery<Element> | false,
-	onsuccess: (data: string) => void,
+	data: string | FormData | Record<string, string | string[] | undefined> | null,
+	source: Element | null,
+	onsuccess: (data: unknown) => void,
 	onerror?: (data: string) => void,
 	onfinish?: () => void): void {
 	if (source) {
-		if (!source.hasClass('noanim')) {
+		if (!source.classList.contains('noanim')) {
 			$(source).replaceWith(
-				`<img alt="Laden" id="${source.attr('id')}" title="${url}" src="/images/loading-arrows.gif" />`);
-			source = $(`img[title="${url}"]`);
-		} else if (source.hasClass('InlineForm')) {
-			$(source).find('.FormElement:first').css({
-				'background-image': 'url("/images/loading-fb.gif")',
-				'background-position': 'center right',
-				'background-repeat': 'no-repeat',
+				`<img alt="Laden" id="${source.id}" title="${url}" src="/images/loading-arrows.gif" />`);
+			source = select(`img[title="${url}"]`);
+		} else if (source.classList.contains('InlineForm')) {
+			Object.assign(select<HTMLElement>('.FormElement:first', source).style, <CSSStyleDeclaration>{
+				backgroundImage: 'url("/images/loading-fb.gif")',
+				backgroundPosition: 'center right',
+				backgroundRepeat: 'no-repeat',
 			});
 		} else {
-			source.addClass('loading');
+			source.classList.add('loading');
 		}
 	}
-	let contentType: string | boolean = 'application/x-www-form-urlencoded; charset=UTF-8';
-	let processData = true;
-	if (data instanceof FormData) {
-		contentType = false;
-		processData = false;
-	}
-	$.ajax({
-		cache: false,
-		contentType,
+	axios({
+		method: type,
 		data,
-		processData,
-		type,
 		url,
-	}).done((response) => {
+	}).then((response) => {
 		if (source) {
 			if (!$(source).hasClass('noanim')) {
 				$(source).hide();
@@ -48,25 +41,22 @@ export function ajaxRequest(
 					'background-repeat': '',
 				});
 			}
-			source.removeClass('loading');
+			source.classList.remove('loading');
 		}
-		onsuccess(response);
-	}).fail((response, textStatus, errorThrown) => {
-		if (errorThrown === '') {
-			errorThrown = 'Nog bezig met laden!';
-		}
+		onsuccess(response.data);
+	}).catch((error: AxiosError) => {
 		if (source) {
-			$(source).replaceWith('<img alt="Mislukt" title="' + errorThrown + '" src="/plaetjes/famfamfam/cancel.png" />');
+			$(source).replaceWith('<img alt="Mislukt" title="' + error.message + '" src="/plaetjes/famfamfam/cancel.png" />');
 		} else {
 			modalClose();
 		}
 		if (onerror) {
-			if (response.responseText.startsWith('<!DOC')) {
-				onerror('Er ging iets fout, code is: ' + response.status);
+			if (error.message.startsWith('<!DOC')) {
+				onerror('Er ging iets fout, code is: ' + error.code);
 			}
-			onerror(response.responseText);
+			onerror(error.message);
 		}
-	}).always(() => {
+	}).then(() => {
 		if (onfinish) {
 			onfinish();
 		}
@@ -90,7 +80,7 @@ export function ketzerAjax(url: string, ketzer: string): true {
 	}).fail((jqXHR, textStatus, errorThrown) => {
 		$(ketzer + ' .aanmeldbtn')
 			.replaceWith($(`<div class="alert alert-danger"><strong>Actie mislukt!</strong> ${errorThrown}</div>`));
-		alert(jqXHR.responseText);
+		throw new Error(jqXHR.responseText)
 	});
 	return true;
 }
