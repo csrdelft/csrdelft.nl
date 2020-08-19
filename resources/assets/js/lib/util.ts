@@ -131,7 +131,7 @@ export function singleLineString(strings: TemplateStringsArray, ...values: strin
 	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
 }
 
-export function html(strings: TemplateStringsArray, ...values: Array<string |undefined| null>): HTMLElement {
+export function html(strings: TemplateStringsArray, ...values: Array<string | undefined | null>): HTMLElement {
 	let output = '';
 	for (let i = 0; i < values.length; i++) {
 		output += strings[i] + values[i];
@@ -214,6 +214,24 @@ export function isLoggedIn(): boolean {
 	return elem.getAttribute('content') === 'true';
 }
 
-export function throwError(message: string) {
+export function throwError(message: string): void {
 	throw new Error(message)
+}
+
+
+/**
+ * Voer de meegegeven functie éénmaal uit.
+ * @param func
+ */
+export const once = <T extends unknown[], U>(func: (...args: T) => U): (...args: T) => U => {
+	let called = false;
+	let returnValue: U;
+	return (...args: T): U => {
+		if (!called) {
+			called = true;
+			returnValue = func(...args)
+		}
+
+		return returnValue
+	}
 }

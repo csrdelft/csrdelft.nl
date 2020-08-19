@@ -22,6 +22,7 @@ import {formCancel, formInlineToggle, formSubmit, insertPlaatje} from './lib/for
 import {forumBewerken, saveConceptForumBericht} from './lib/forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './lib/maalcie';
 import {docReady} from './lib/util';
+import hoverintent from 'hoverintent'
 
 moment.locale('nl');
 
@@ -32,8 +33,6 @@ declare global {
 
 	interface JQuery {
 		markItUp: (arg: unknown) => unknown;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		hoverIntent: (arg: any, arg1?: any) => unknown;
 		autosize: () => void;
 		scrollTo: (arg: unknown) => void;
 		modal: (arg?: unknown) => void;
@@ -47,7 +46,6 @@ window.$ = window.jQuery = $;
  */
 require('bootstrap');
 require('./ajax-csrf');
-require('jquery-hoverintent');
 require('jquery.scrollto');
 require('jquery-ui');
 require('jquery-ui/ui/effect');
@@ -70,6 +68,7 @@ $.extend(window, {
 	Bloodhound,
 	Dropzone,
 	docReady,
+	hoverintent,
 	context: {
 		// See view/groepen/leden/GroepTabView.class.php
 		domUpdate,

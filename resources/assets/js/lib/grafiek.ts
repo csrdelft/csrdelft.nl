@@ -40,13 +40,12 @@ export async function initLine(el: HTMLElement): Promise<Chart> {
 		options: {
 			scales: {
 				xAxes: [{
-					barPercentage: 1.0,
 					stacked: true,
 					time: {
 						tooltipFormat: 'D MMM H:mm ',
 					},
 					type: 'time',
-				} as any],
+				}],
 				yAxes: [{
 					stacked: true,
 					ticks: {

@@ -19,7 +19,7 @@ export default {
 		&& typeof (FileList) !== 'undefined'
 		&& typeof (Blob) !== 'undefined',
 
-	getWebGLErrorMessage() {
+	getWebGLErrorMessage(): HTMLDivElement {
 		const domElement = document.createElement('div');
 
 		domElement.style.fontFamily = 'monospace';
@@ -45,7 +45,7 @@ export default {
 		return domElement;
 	},
 
-	addGetWebGLMessage() {
+	addGetWebGLMessage(): void {
 		const domElement = this.getWebGLErrorMessage();
 		domElement.id = 'oldie';
 		document.body.appendChild(domElement);

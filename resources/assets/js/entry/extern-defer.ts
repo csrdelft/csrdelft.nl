@@ -6,10 +6,10 @@ import {registerBbContext, registerFormulierContext} from '../context';
 import {init} from '../ctx';
 import {route} from '../lib/util';
 import {select} from "../lib/dom";
+import hoverintent from "hoverintent"
 
 require('lightbox2');
 require('../lib/external/jquery.markitup');
-require('jquery-hoverintent');
 
 require('timeago');
 
@@ -35,8 +35,11 @@ declare global {
 
 	interface Window {
 		bbcode: unknown;
+		hoverintent: typeof hoverintent
 	}
 }
+
+window.hoverintent = hoverintent
 
 let hasLoaded = false;
 

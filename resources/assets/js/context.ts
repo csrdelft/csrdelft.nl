@@ -1,4 +1,6 @@
 import ctx from './ctx';
+import hoverintent from "hoverintent";
+import {select} from "./lib/dom";
 
 export const registerGrafiekContext = async (): Promise<void> => {
 	const {
@@ -113,15 +115,10 @@ export const registerGlobalContext = async (): Promise<void> => {
 	]);
 
 	ctx.addHandlers({
-		'.hoverIntent': (el) => $(el).hoverIntent({
-			over() {
-				$(this).find('.hoverIntentContent').fadeIn();
-			},
-			out() {
-				$(this).find('.hoverIntentContent').fadeOut();
-			},
-			timeout: 250,
-		}),
+		'.hoverIntent': (el) => hoverintent(el,
+			() => $(select('.hoverIntentContent', el)).fadeIn(),
+			() => $(select('.hoverIntentContent', el)).fadeOut()
+		).options({timeout: 250}),
 		'.vue-context': (el) => new Vue({el}),
 		'[data-visite]': initKaartjes,
 	});

@@ -73,8 +73,9 @@ JS;
 			$js .= <<<JS
 
 try {
-	$('#toggle_kopje_{$this->id}').hoverIntent(function() {
-		$(this).trigger('click');
+	var kopje = $('#toggle_kopje_{$this->id}')
+	window.hoverIntent(kopje, function() {
+		kopje.trigger('click');
 	});
 } catch(err) {
 	console.log(err);

@@ -5013,6 +5013,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"hoverintent@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "hoverintent@npm:2.2.1"
+  checksum: 3fd5548a144386ea7731bb46ac915cf60e87bc55f6b2f2b8975fdaaff7051205d4fa423fb39db58484d505321dbcf91cd9741fa87b6739ae3f24926b3b70764b
+  languageName: node
+  linkType: hard
+
 "hsl-regex@npm:^1.0.0":
   version: 1.0.0
   resolution: "hsl-regex@npm:1.0.0"
@@ -5572,17 +5579,6 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"jquery-hoverintent@npm:^1.10.0":
-  version: 1.10.1
-  resolution: "jquery-hoverintent@npm:1.10.1"
-  dependencies:
-    jquery: ">=1.7.0"
-  peerDependencies:
-    jquery: ">=1.7.0"
-  checksum: bc5c3b9f06f4120d60fd3f1cd9d94d18bff88a592132d6aefe6f8df9be0f9d6156606f7e05bbf310194c49e6547aa6168c76c392ee60cc3b09eaee70e6ec64ad
-  languageName: node
-  linkType: hard
-
 "jquery-ui@npm:^1.12.1":
   version: 1.12.1
   resolution: "jquery-ui@npm:1.12.1"
@@ -5606,7 +5602,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"jquery@npm:>=1.11, jquery@npm:>=1.5.0 <4.0, jquery@npm:>=1.7, jquery@npm:>=1.7.0, jquery@npm:>=1.8, jquery@npm:^3.2.1, jquery@npm:^3.3.1, jquery@npm:^3.4":
+"jquery@npm:>=1.11, jquery@npm:>=1.5.0 <4.0, jquery@npm:>=1.7, jquery@npm:>=1.8, jquery@npm:^3.2.1, jquery@npm:^3.3.1, jquery@npm:^3.4":
   version: 3.5.1
   resolution: "jquery@npm:3.5.1"
   checksum: c50818c84837902a60938c85786feb612f346a9918f7285409d605449460790b3815ad8aaf5806f19e89f1a79b27d327802b421ab354fe213f3fd1801e3562e6
@@ -8048,9 +8044,9 @@ fsevents@~2.1.2:
     flatpickr: ^4.6.6
     google-palette: ^1.1.0
     hammerjs: ^2.0.8
+    hoverintent: ^2.2.1
     jgallery: "https://github.com/jakubkowalczyk-pl/jgallery"
     jquery: ^3.4
-    jquery-hoverintent: ^1.10.0
     jquery-ui: ^1.12.1
     jquery.maskedinput: ^1.4.1
     jquery.scrollto: ^2.1.2
