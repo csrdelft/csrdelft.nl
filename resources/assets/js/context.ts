@@ -56,7 +56,7 @@ export const registerKnopContext = async (): Promise<void> => {
 	ctx.addHandlers({
 		'.get': (el) => el.addEventListener('click', knopGet),
 		'.post': (el) => el.addEventListener('click', knopPost),
-		'.vergroot': (el) => el.addEventListener('click', knopVergroot),
+		'.vergroot': (el) => el.addEventListener('click', (e) => knopVergroot(e, el)),
 		'[data-buttons=radio]': (el) => {
 			for (const btn of Array.from(el.querySelectorAll('a.btn'))) {
 				btn.addEventListener('click',
@@ -130,7 +130,7 @@ export const registerGlobalContext = async (): Promise<void> => {
 export const registerFlatpickrContext = async (): Promise<void> => {
 	const {
 		initDateTimePicker,
-	} = await import(/* webpackChunkName: "datepicker" */'./datepicker');
+	} = await import(/* webpackChunkName: "datepicker" */'./lib/datepicker');
 
 	ctx.addHandlers({
 		'.DateTimeField': initDateTimePicker,

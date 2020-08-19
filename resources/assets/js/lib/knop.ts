@@ -14,7 +14,7 @@ function knopAjax(knop: JQuery, type: string) {
 	}
 	let source: JQuery | false = knop;
 	let done = domUpdate;
-	let data: undefined | string | Record<string, string|undefined|string[]> = knop.attr('data');
+	let data: undefined | string | Record<string, string | undefined | string[]> = knop.attr('data');
 
 	if (knop.hasClass('popup')) {
 		source = false;
@@ -125,8 +125,8 @@ export function knopGet(this: HTMLElement, event: Event): false {
 	return false;
 }
 
-export function knopVergroot(this: HTMLElement, event: Event): void {
-	const target = event.target
+export function knopVergroot(event: Event, el: HTMLElement): void {
+	const target = el
 
 	if (!(target instanceof HTMLElement)) {
 		throw new Error("Knop vergroot klik heeft geen target")
