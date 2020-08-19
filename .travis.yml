@@ -36,7 +36,10 @@ jobs:
       if: type != pull_request OR fork = true
     - stage: Post-build
       name: Voer sonar scanner uit op de repository
-      script: sonar-scanner
+      before_install: nvm install 12
+      script: |
+        yarn
+        sonar-scanner
       if: (branch = master OR type = pull_request) AND fork = false
       addons:
         sonarcloud:
