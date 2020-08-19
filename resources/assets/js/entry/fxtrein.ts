@@ -1,5 +1,6 @@
 // Laad styles
 import '../../sass/effect/trein.scss';
+import {select} from "../lib/dom";
 
 /**
  * Tijd voordat een trein van het spoor wordt gehaald.
@@ -41,11 +42,7 @@ class TjoekTjoek {
 	];
 
 	constructor() {
-		const rails = document.querySelector('.rails')
-		if (!rails) {
-			throw new Error(".rails niet gevonden")
-		}
-		this.rails = rails
+		this.rails = select('.rails')
 	}
 
 	public start() {

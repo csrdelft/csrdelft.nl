@@ -13,6 +13,7 @@ import {
 	TextureLoader,
 	WebGLRenderer,
 } from 'three';
+import {select} from "../lib/dom";
 
 function docReady(fn: () => void): void {
 	if (document.readyState === 'complete') {
@@ -31,11 +32,7 @@ let parameters: Array<{ color: number[]; sprite: Texture; size: number; }>;
 docReady(() => {
 	let lightTheme = false;
 
-	const container = document.querySelector('.container');
-
-	if (!container) {
-		throw new Error("Container van fxsneeuw niet gevonden");
-	}
+	const container = select('.container', document, "Container van fxsneeuw niet gevonden.");
 
 	const bgColor = window.getComputedStyle(container).backgroundColor;
 

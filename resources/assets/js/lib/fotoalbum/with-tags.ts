@@ -7,6 +7,7 @@ import {GalleryDecorator} from 'jgallery/types/gallery';
 import Params from 'jgallery/types/gallery/parameters';
 import $ from 'jquery';
 import {basename, dirname} from '../util';
+import {select} from "../dom";
 
 interface Position {
 	x: number;
@@ -23,15 +24,15 @@ const withTags: GalleryDecorator = (constructor) =>
 	class extends constructor {
 
 		private get imageElement() {
-			return this.previewElement.querySelector('.j-gallery-preview-content') as HTMLImageElement;
+			return select<HTMLImageElement>('.j-gallery-preview-content', this.previewElement)
 		}
 
 		private get left() {
-			return this.previewElement.querySelector('.j-gallery-left') as HTMLElement;
+			return select<HTMLElement>('.j-gallery-left', this.previewElement)
 		}
 
 		private get right() {
-			return this.previewElement.querySelector('.j-gallery-right') as HTMLElement;
+			return select<HTMLElement>('.j-gallery-right', this.previewElement)
 		}
 
 		private tagMode = false;
@@ -98,8 +99,7 @@ const withTags: GalleryDecorator = (constructor) =>
 			tagButton.addEventListener('click', () => {
 				if (this.tagMode) {
 					this.tagMode = false;
-					tagIcon.classList.add('fa-toggle-off');
-					tagIcon.classList.remove('fa-toggle-on');
+					tagIcon.classList.replace('fa-toggle-on', 'fa-toggle-off')
 					this.hideTags();
 					if (this.tagFormDiv) {
 						this.exitTagForm();
@@ -111,25 +111,22 @@ const withTags: GalleryDecorator = (constructor) =>
 					this.right.style.display = 'block';
 				} else {
 					this.tagMode = true;
-					tagIcon.classList.add('fa-toggle-on');
-					tagIcon.classList.remove('fa-toggle-off');
+					tagIcon.classList.replace('fa-toggle-off', 'fa-toggle-on')
 					this.duringTagMode();
 				}
 			});
 			tagButton.addEventListener('mouseenter', () => {
 				if (this.tagMode) {
-					tagIcon.classList.add('fa-toggle-on');
-					tagIcon.classList.remove('fa-toggle-off');
+					tagIcon.classList.replace('fa-toggle-off', 'fa-toggle-on')
 				} else {
-					tagIcon.classList.remove('fa-toggle-off');
-					tagIcon.classList.add('fa-toggle-off');
+					tagIcon.classList.replace('fa-toggle-on', 'fa-toggle-off')
 				}
 			});
 			tagButton.addEventListener('mouseleave', () => {
 				tagIcon.classList.remove('fa-toggle-on', 'fa-toggle-off');
 				tagIcon.classList.add('fa-smile');
 			});
-			const screenIcon = this.getElement().querySelector('.j-gallery-screen-icon')
+			const screenIcon = select('.j-gallery-screen-icon', this.getElement())
 			if (!screenIcon) {
 				throw new Error("Geen screenIcon gevonden")
 			}

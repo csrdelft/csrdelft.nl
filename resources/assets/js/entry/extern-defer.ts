@@ -5,6 +5,7 @@ import axios from 'axios';
 import {registerBbContext, registerFormulierContext} from '../context';
 import {init} from '../ctx';
 import {route} from '../lib/util';
+import {select} from "../lib/dom";
 
 require('lightbox2');
 require('../lib/external/jquery.markitup');
@@ -83,10 +84,10 @@ window.addEventListener('resize', loadPage);
 
 loadPage();
 
-const contactForm = document.querySelector('#contact-form') as HTMLFormElement;
+const contactForm = select<HTMLFormElement>('#contact-form')
 
 if (contactForm) {
-	const errorContainer = document.querySelector('#melding') as HTMLElement;
+	const errorContainer = select('#melding')
 	const submitButton = contactForm.submitButton as HTMLButtonElement;
 
 	contactForm.addEventListener('submit', (event) => {
