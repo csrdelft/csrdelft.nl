@@ -4,7 +4,7 @@ import {modalClose} from './modal';
 export function ajaxRequest(
 	type: string,
 	url: string,
-	data: string | FormData | Record<string, string|string[]|undefined>,
+	data: string | FormData | Record<string, string|string[]|undefined> | undefined,
 	source: JQuery<Element> | false,
 	onsuccess: (data: string) => void,
 	onerror?: (data: string) => void,

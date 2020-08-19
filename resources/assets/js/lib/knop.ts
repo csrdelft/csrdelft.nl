@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {DatatableResponse, fnGetSelection, fnUpdateDataTable, isDataTableResponse} from '../datatable/api';
+import {fnGetSelection, fnUpdateDataTable, isDataTableResponse} from '../datatable/api';
 import {ajaxRequest} from './ajax';
 
 import {domUpdate} from './domUpdate';
@@ -16,14 +16,13 @@ function knopAjax(knop: JQuery, type: string) {
 	let done = domUpdate;
 	let data: undefined | string | Record<string, string|undefined|string[]> = knop.attr('data');
 
-	if (!data) {
-		throw new Error("knop heeft geen data")
-	}
-
 	if (knop.hasClass('popup')) {
 		source = false;
 	}
 	if (knop.hasClass('prompt')) {
+		if (!data) {
+			throw new Error("Prompt knop heeft geen data")
+		}
 		const [key, value] = data.split('=')
 		const userVal = prompt(key, value);
 		if (!userVal) {
