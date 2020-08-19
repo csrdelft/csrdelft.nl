@@ -15,6 +15,8 @@ mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft;'
 
 # Installeer js dependencies
 yarn
+# Lint js
+yarn run lint
 # Compileer js
 yarn run production
 
