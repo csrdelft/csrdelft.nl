@@ -47,7 +47,7 @@ export const bbCodeSet = {
 		},
 		{separator: '|'},
 		{
-			className: 'ico photos', name: 'Fotoalbum', replaceWith: (markitup: any) => {
+			className: 'ico photos', name: 'Fotoalbum', replaceWith: (markitup: { selection: unknown }): unknown => {
 				let url = window.prompt('Url', '');
 				if (url) {
 					url = decodeURIComponent(url.trim());
@@ -62,7 +62,9 @@ export const bbCodeSet = {
 			},
 		},
 		{
-			className: 'ico photo', name: 'Poster of foto uit album', replaceWith: (markitup: any) => {
+			className: 'ico photo',
+			name: 'Poster of foto uit album',
+			replaceWith: (markitup: { selection: unknown }): unknown => {
 				let url = window.prompt('Url', '');
 				if (url) {
 					url = decodeURIComponent(url.trim());
@@ -76,18 +78,18 @@ export const bbCodeSet = {
 				return markitup.selection;
 			},
 		},
-		( isLoggedIn() ?
-		{
-			className: 'ico picture', name: 'Plaatje',
-			closeWith: (markitup: any) => {
-				axios.get('/forum/plaatjes/upload').then((response) => {
-					domUpdate(response.data);
-				});
-				return '';
-			},
-		} :
-		// Hide this (maybe temporarily) for registered users to encourage uploading images to de stek
-		{className: 'ico picture', name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'}),
+		(isLoggedIn() ?
+			{
+				className: 'ico picture', name: 'Plaatje',
+				closeWith: () => {
+					axios.get('/forum/plaatjes/upload').then((response) => {
+						domUpdate(response.data);
+					});
+					return '';
+				},
+			} :
+			// Hide this (maybe temporarily) for registered users to encourage uploading images to de stek
+			{className: 'ico picture', name: 'Afbeelding', replaceWith: '[img][![Url]!][/img]'}),
 		{className: 'ico film', name: 'Video', replaceWith: '[video][![Url]!][/video]'},
 		{separator: '|'},
 		{className: 'ico map', name: 'Kaart', openWith: '[locatie]', closeWith: '[/locatie]', placeHolder: 'C.S.R. Delft'},

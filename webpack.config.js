@@ -1,12 +1,10 @@
-import path from 'path';
-import webpack from 'webpack';
+const path = require('path')
 
 const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
 const contextPath = path.resolve(__dirname, 'resources/assets');
 
-// De Webpack configuratie.
-const config: (env: string, argv: any) => webpack.Configuration = (env, argv) => ({
+module.exports = (env, argv) => ({
 	mode: 'development',
 	context: contextPath,
 	entry: {
@@ -87,7 +85,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
 		rules: [
-			// Controleer .js bestanden met ESLint. Zie ook .eslintrc.js
+			// Controleer .js bestanden met ESLint. Zie ook .eslintrc.yaml
 			{
 				enforce: 'pre',
 				test: /\.(js|jsx)$/,
@@ -96,34 +94,6 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 					/lib\/external/,
 				],
 				use: 'eslint-loader',
-			},
-			{
-				enforce: 'pre',
-				test: /\.ts$/,
-				exclude: [
-					/node_modules/,
-					/lib/,
-					/\.vue\.tsx?/,
-				],
-				use: {
-					loader: 'tslint-loader',
-					options: {
-						failOnHint: true,
-					},
-				},
-			},
-			{
-				test: /\.vue.(ts|tsx)$/,
-				exclude: /node_modules/,
-				enforce: 'pre',
-				use: [
-					{
-						loader: 'vue-tslint-loader',
-						options: {
-							failOnHint: true,
-						},
-					},
-				],
 			},
 			// Verwerk .js bestanden met babel, dit zorgt ervoor dat alle nieuwe foefjes van javascript gebruikt kunnen worden
 			// terwijl we nog wel oudere browsers ondersteunen.
@@ -163,7 +133,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 					loader: 'vue-loader',
 					options: {
 						loaders: {
-							ts: 'ts-loader!tslint-loader',
+							ts: 'ts-loader',
 						},
 					},
 				},
@@ -186,7 +156,7 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 				test: /\.scss$/,
 				use: [
 					{
-						loader: require('mini-css-extract-plugin').loader as string, // Om ts tevreden te houden.
+						loader: require('mini-css-extract-plugin').loader,
 						options: {
 							// De css bestanden zitten in de css map, / is dus te vinden op ../
 							publicPath: '../',
@@ -246,5 +216,3 @@ const config: (env: string, argv: any) => webpack.Configuration = (env, argv) =>
 		],
 	},
 });
-
-export default config;

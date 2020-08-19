@@ -1,6 +1,6 @@
 /**
  * NIET AANPASSEN.
- * Gegenereerde code voor CsrDelft\model\entity\security\AccessAction.
+ * Gegenereerde code voor CsrDelft\entity\security\enum\AccessAction.
  *
  * Zie bin/dev/generator.enum.php voor generator.
  */
@@ -17,7 +17,7 @@ export default {
 	Rechten: 'p',
 };
 
-export function getAccessActionDescription(option: string) {
+export function getAccessActionDescription(option: string): string {
 	return {
 		r: 'Bekijken',
 		j: 'Aanmelden',

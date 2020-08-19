@@ -17,7 +17,7 @@ export default {
 	Kringel: 'S_KRINGEL',
 };
 
-export function getLidStatusDescription(option: string) {
+export function getLidStatusDescription(option: string): string {
 	return {
 		S_NOVIET: 'Noviet',
 		S_LID: 'Lid',

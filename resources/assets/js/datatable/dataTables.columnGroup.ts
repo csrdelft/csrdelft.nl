@@ -62,22 +62,21 @@ class ColumnGroup {
 		const dt = this.s.dt;
 		const table = dt.table(0);
 		const tableNode = $(table.node());
-		const that = this;
 
 		$.fn.dataTable.ext.search.push((settings: any, data: any) => {
-			return that._fnGroupExpandCollapseDraw(settings, data);
+			return this._fnGroupExpandCollapseDraw(settings, data);
 		});
 
 		// Group by column
 		tableNode.find('tbody')
-			.on('click', 'tr.group', function (event) {
+			.on('click', 'tr.group', (event) => {
 				if (!event.shiftKey && !event.ctrlKey) {
-					that._fnGroupExpandCollapse($(this));
+					this._fnGroupExpandCollapse($(event.target));
 				}
 			});
 		tableNode.find('thead')
-			.on('click', 'th.toggle-group:first', function (event) {
-				that._fnGroupExpandCollapseAll($(this));
+			.on('click', 'th.toggle-group:first', (event) => {
+				this._fnGroupExpandCollapseAll($(event.target));
 			});
 		tableNode.on('draw.dt', () => this._fnGroupByColumnDraw());
 		tableNode.find('thead tr th').first().addClass('toggle-group toggle-group-expanded');
@@ -200,7 +199,7 @@ ${colspan}
 		this._fnHideEmptyCollapsedAll($th);
 	}
 
-	public _fnGroupExpandCollapseDraw(settings: any, data: any) {
+	public _fnGroupExpandCollapseDraw(settings: unknown, data: Record<string, string>) {
 		const column = this.c.column;
 		const collapsedGroups = this.s.collapsedGroups;
 
@@ -211,6 +210,7 @@ ${colspan}
 }
 
 declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace DataTables {
 		// noinspection JSUnusedGlobalSymbols
 		interface StaticFunctions {
@@ -224,6 +224,7 @@ declare global {
 }
 // Expose
 $.fn.dataTable.ColumnGroup = ColumnGroup;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 $.fn.DataTable.ColumnGroup = ColumnGroup;
 
@@ -241,7 +242,6 @@ $(document).on('preInit.dt.columnGroup', (e, settings) => {
 		const opts = $.extend({}, init, defaults);
 
 		if (init !== false) {
-			// tslint:disable-next-line:no-unused-expression
 			new ColumnGroup(settings, opts);
 		}
 	}

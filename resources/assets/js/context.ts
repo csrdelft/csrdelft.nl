@@ -1,6 +1,6 @@
 import ctx from './ctx';
 
-export const registerGrafiekContext = async () => {
+export const registerGrafiekContext = async (): Promise<void> => {
 	const {
 		initBar,
 		initDeelnamegrafiek,
@@ -18,7 +18,7 @@ export const registerGrafiekContext = async () => {
 	});
 };
 
-export const registerBbContext = async () => {
+export const registerBbContext = async (): Promise<void> => {
 	const {
 		activeerLidHints,
 		initBbPreview,
@@ -34,7 +34,7 @@ export const registerBbContext = async () => {
 	});
 };
 
-export const registerDataTableContext = async () => {
+export const registerDataTableContext = async (): Promise<void> => {
 	const {
 		initDataTable,
 		initOfflineDataTable,
@@ -46,7 +46,7 @@ export const registerDataTableContext = async () => {
 	});
 };
 
-export const registerKnopContext = async () => {
+export const registerKnopContext = async (): Promise<void> => {
 	const {
 		knopGet,
 		knopPost,
@@ -73,7 +73,7 @@ export const registerKnopContext = async () => {
 
 };
 
-export const registerFormulierContext = async () => {
+export const registerFormulierContext = async (): Promise<void> => {
 	const [
 		{
 			formCancel,
@@ -101,7 +101,7 @@ export const registerFormulierContext = async () => {
 	});
 };
 
-export const registerGlobalContext = async () => {
+export const registerGlobalContext = async (): Promise<void> => {
 	const [
 		{initKaartjes},
 		{default: Vue},
@@ -127,7 +127,7 @@ export const registerGlobalContext = async () => {
 	});
 };
 
-export const registerFlatpickrContext = async () => {
+export const registerFlatpickrContext = async (): Promise<void> => {
 	const {
 		initDateTimePicker,
 	} = await import(/* webpackChunkName: "datepicker" */'./datepicker');

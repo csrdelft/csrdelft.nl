@@ -3,9 +3,14 @@ import Popper from 'popper.js';
 
 const kaartjes = {};
 
-export const initKaartjes = (el: HTMLElement) => {
-	const uid = el.dataset.visite!;
-	if (!kaartjes.hasOwnProperty(uid)) {
+export const initKaartjes = (el: HTMLElement): void => {
+	const uid = el.dataset.visite;
+
+	if (!uid) {
+		throw new Error("data-visite niet gezet op link")
+	}
+
+	if (!(uid in kaartjes)) {
 		kaartjes[uid] = document.createElement('div');
 		kaartjes[uid].style.zIndex = '1000';
 	}

@@ -1,6 +1,6 @@
 /**
  * NIET AANPASSEN.
- * Gegenereerde code voor CsrDelft\entity\groepen\GroepKeuzeType.
+ * Gegenereerde code voor CsrDelft\entity\groepen\enum\GroepKeuzeType.
  *
  * Zie bin/dev/generator.enum.php voor generator.
  */
@@ -11,7 +11,7 @@ export default {
 	TEXT: 'text_1',
 };
 
-export function getGroepKeuzeTypeDescription(option: string) {
+export function getGroepKeuzeTypeDescription(option: string): string {
 	return {
 		checkbox_1: 'Een checkbox',
 		dropdown_1: 'Een dropdown',

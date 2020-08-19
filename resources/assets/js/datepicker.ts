@@ -3,7 +3,7 @@ import {Dutch} from 'flatpickr/dist/l10n/nl';
 import rangePlugin from 'flatpickr/dist/plugins/rangePlugin';
 import {Options} from 'flatpickr/dist/types/options';
 
-export const initDateTimePicker = (el: HTMLInputElement) => {
+export const initDateTimePicker = (el: HTMLInputElement): void => {
 	const {before, after, maxDate, minDate, readonly} = el.dataset;
 
 	if (readonly) {

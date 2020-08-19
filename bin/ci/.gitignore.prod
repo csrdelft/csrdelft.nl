@@ -29,9 +29,7 @@ sql/*
 docs/*
 docker-compose.yml
 tsconfig.json
-tsconfig-for-webpack-config.json
 tslint.json
-webpack.config.ts
 webpack.config.js
 .travis.yml
 .tidelift.yml
@@ -40,7 +38,7 @@ phpstan.autoload.php
 phpstan.neon
 CONTRIBUTING.md
 README.md
-.eslintrc.js
+.eslintrc.yaml
 fixturesSQL_minimal.sql
 .editorconfig
 .dockerignore

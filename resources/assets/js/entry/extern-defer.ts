@@ -25,6 +25,7 @@ route('/fotoalbum', () => import(/* webpackChunkName: "fotoalbum" */'../page/fot
 
 declare global {
 	// Deze functie heeft geen type...
+	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace JQueryUI {
 		interface Widget {
 			bridge: (newName: string, widget: Widget) => void;
@@ -32,14 +33,14 @@ declare global {
 	}
 
 	interface Window {
-		bbcode: any;
+		bbcode: unknown;
 	}
 }
 
 let hasLoaded = false;
 
-const header = document.querySelector('#header')!;
-const banner = document.querySelector('#banner')!;
+const header = document.querySelector('#header');
+const banner = document.querySelector('#banner');
 
 const lazyLoad = () => {
 	const textarea = document.createElement('textarea');
@@ -67,10 +68,12 @@ const loadPage = () => {
 		lazyLoad();
 	}
 
-	if (banner.getBoundingClientRect().bottom < 0) {
-		header.classList.remove('alt');
-	} else {
-		header.classList.add('alt');
+	if (banner && header) {
+		if (banner.getBoundingClientRect().bottom < 0) {
+			header.classList.remove('alt');
+		} else {
+			header.classList.add('alt');
+		}
 	}
 };
 

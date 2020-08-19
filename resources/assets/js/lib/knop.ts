@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {fnGetSelection, fnUpdateDataTable} from '../datatable/api';
+import {DatatableResponse, fnGetSelection, fnUpdateDataTable, isDataTableResponse} from '../datatable/api';
 import {ajaxRequest} from './ajax';
 
 import {domUpdate} from './domUpdate';
@@ -12,23 +12,26 @@ function knopAjax(knop: JQuery, type: string) {
 		modalClose();
 		return false;
 	}
-	let source: JQuery|false = knop;
+	let source: JQuery | false = knop;
 	let done = domUpdate;
-	let data: string|string[]|object = knop.attr('data')!;
+	let data: undefined | string | Record<string, string|undefined|string[]> = knop.attr('data');
+
+	if (!data) {
+		throw new Error("knop heeft geen data")
+	}
 
 	if (knop.hasClass('popup')) {
 		source = false;
 	}
 	if (knop.hasClass('prompt')) {
-		data = data.split('=');
-		const val = prompt(data[0], data[1]);
-		if (!val) {
+		const [key, value] = data.split('=')
+		const userVal = prompt(key, value);
+		if (!userVal) {
 			return false;
 		}
-		data = encodeURIComponent(data[0]) + '=' + encodeURIComponent(val);
+		data = encodeURIComponent(data[0]) + '=' + encodeURIComponent(userVal);
 	}
 	if (knop.hasClass('addfav')) {
-		// @ts-ignore
 		data = {
 			tekst: document.title.replace('C.S.R. Delft - ', ''),
 			link: window.location.href,
@@ -41,26 +44,27 @@ function knopAjax(knop: JQuery, type: string) {
 			DataTableSelection: knop.parents('tr').attr('data-uuid'),
 		};
 
-		done = (response: any) => {
-			if (typeof response === 'object') { // JSON
+		done = (response: unknown) => {
+			if (isDataTableResponse(response)) { // JSON
 				fnUpdateDataTable('#' + dataTableId, response);
-				if (response.modal) {
+				if (response && response.modal) {
 					domUpdate(response.modal);
 				} else {
 					modalClose();
 				}
-			} else { // HTML
+			} else if (typeof response == "string") { // HTML
 				domUpdate(response);
 			}
 		};
 	}
 	if (knop.hasClass('DataTableResponse')) {
 
-		let tableId = knop.attr('data-tableid')!;
-		if (!document.getElementById(tableId)) {
-			tableId = knop.closest('form').attr('data-tableid')!;
-			if (!document.getElementById(tableId)) {
+		let tableId = knop.attr('data-tableid');
+		if (!tableId || !document.getElementById(tableId)) {
+			tableId = knop.closest('form').attr('data-tableid');
+			if (!tableId || !document.getElementById(tableId)) {
 				alert('DataTable not found');
+				throw new Error("DataTable not found")
 			}
 		}
 
@@ -69,16 +73,18 @@ function knopAjax(knop: JQuery, type: string) {
 			'DataTableSelection[]': fnGetSelection('#' + tableId),
 		};
 
-		done = (response: any) => {
-			if (typeof response === 'object') { // JSON
+		done = (response: unknown) => {
+			if (isDataTableResponse(response)) { // JSON
 				fnUpdateDataTable('#' + tableId, response);
 				if (response.modal) {
 					domUpdate(response.modal);
 				} else {
 					modalClose();
 				}
-			} else { // HTML
+			} else if (typeof response == 'string') { // HTML
 				domUpdate(response);
+			} else {
+				throw new Error("Niets met deze response: " + response)
 			}
 		};
 
@@ -92,10 +98,14 @@ function knopAjax(knop: JQuery, type: string) {
 		done = redirect;
 	}
 
-	ajaxRequest(type, knop.attr('href')!, data, source, done, alert);
+	const url = knop.attr('href');
+	if (!url) {
+		throw new Error("Knop heeft geen href")
+	}
+	ajaxRequest(type, url, data, source, done, alert);
 }
 
-export function knopPost(this: HTMLElement, event: Event) {
+export function knopPost(this: HTMLElement, event: Event): boolean {
 	event.preventDefault();
 	const target = event.target as HTMLElement;
 	if ($(target).hasClass('range')) {
@@ -110,28 +120,48 @@ export function knopPost(this: HTMLElement, event: Event) {
 	return false;
 }
 
-export function knopGet(this: HTMLElement, event: Event) {
+export function knopGet(this: HTMLElement, event: Event): false {
 	event.preventDefault();
 	knopAjax($(this), 'GET');
 	return false;
 }
 
-export function knopVergroot(this: HTMLElement, event: Event) {
-	const knop = $(this);
-	const id = knop.attr('data-vergroot')!;
-	const oud = knop.attr('data-vergroot-oud')!;
+export function knopVergroot(this: HTMLElement, event: Event): void {
+	const target = event.target
 
-	if (oud) {
-		$(id).animate({height: oud}, 600);
-		knop.removeAttr('data-vergroot-oud');
-		knop.find('span.fa').removeClass('fa-compress').addClass('fa-expand');
-		knop.attr('title', 'Uitklappen');
+	if (!(target instanceof HTMLElement)) {
+		throw new Error("Knop vergroot klik heeft geen target")
+	}
+
+	const {vergroot, vergrootOud} = target.dataset
+
+	if (!vergroot) {
+		throw new Error("Knop vergroot heeft geen data-vergroot")
+	}
+
+	const icon = target.querySelector('span.fa')
+
+	if (!icon) {
+		throw new Error("knopVergroot heeft geen icon")
+	}
+
+	if (vergrootOud) {
+		$(vergroot).animate({height: vergrootOud}, 600);
+
+		delete target.dataset.vergrootOud
+
+		icon.classList.remove('fa-compress', 'fa-expand')
+
+		target.title = 'Uitklappen'
 	} else {
-		knop.attr('title', 'Inklappen');
-		knop.find('span.fa').removeClass('fa-expand').addClass('fa-compress');
-		knop.attr('data-vergroot-oud', $(id).height()!);
-		$(id).animate({
-			height: $(id).prop('scrollHeight') + 1,
+		target.title = 'Inklappen'
+
+		icon.classList.replace('fa-expand', 'fa-compress')
+
+		target.dataset.vergrootOud = String($(vergroot).height())
+
+		$(vergroot).animate({
+			height: $(vergroot).prop('scrollHeight') + 1,
 		}, 600);
 	}
 }

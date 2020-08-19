@@ -43,7 +43,7 @@ Er staan veel bestanden in `/`, ze zijn hier met allerlei redenen en kunnen vaak
 * `.dockerignore`: Voor Docker, voorkomt dat de hele map naar Docker wordt gestuurd bij initialiseren van Docker (dit zou namelijk erg lang duren).
 * `.editorconfig`: De regels waar de editor zich aan houdt, bijv dat we tabs gebruiken om in te springen behalve voor yaml bestanden.
 * `.env` / `.env.dev` / `.env.prod`: Zie [Configuratie](configuratie.md)
-* `.eslintrc.js`: Configuratie van de JavaScript stijl regels
+* `.eslintrc.yaml`: Configuratie van de JavaScript stijl regels
 * `.gitattributes`: Specifiek git bestand die o.a. line endings in kan stellen voor specifieke bestanden
 * `.gitignore`: Geeft aan welke bestanden niet op GitHub terecht moeten komen.
 * `.gitmodules`: Git [Submodules](submodule.md)
@@ -59,8 +59,7 @@ Er staan veel bestanden in `/`, ze zijn hier met allerlei redenen en kunnen vaak
 * `sonar-project.properties`: Configuratie van [SonarCloud.io](https://sonarcloud.io/dashboard?id=csrdelft_csrdelft.nl)
 * `symfony.lock`: Symfony variant van composer.lock
 * `tsconfig.json`: Configuratie van [Typescript](typescript.md)
-* `tsconfig-for-webpack-config.json`: Configuratie van de Typescript gebruikt in webpack.config.ts, deze is net ietsje anders dan de normale configuratie. (Helaas)
 * `tslint.json`: Configuratie van de Typescript style
-* `webpack.config.ts`: Configuratie van Webpack, de build tool van de frontend. (Zie [webpack.js.org](https://webpack.js.org/))
+* `webpack.config.js`: Configuratie van Webpack, de build tool van de frontend. (Zie [webpack.js.org](https://webpack.js.org/))
 * `yarn.lock`: Zet de JavaScript dependencies op een specifieke versie (automatisch gegenereerd)
 

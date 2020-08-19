@@ -8,16 +8,20 @@ const withPreload: GalleryDecorator = (constructor) =>
 			const {items} = this.album;
 			const next = items[items.indexOf(item) + 1];
 			if (next) {
-				load(next.url!);
+				next.url && load(next.url);
 			} else {
-				load(items[0].url!);
+				const first = items[0]
+
+				first.url && load(first.url)
 			}
 
 			const prev = items[items.indexOf(item) + 1];
 			if (prev) {
-				load(prev.url!);
+				prev.url && load(prev.url);
 			} else {
-				load(items[items.length - 1].url!);
+				const last = items[items.length - 1]
+
+				last.url && load(last.url);
 			}
 
 			return super.goToItem(item);
