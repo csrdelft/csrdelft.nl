@@ -39,7 +39,7 @@ class RowButtons {
 	}
 
 	private c: RowButtonsConfig;
-	private s: { dt: DataTables.Api; collapsedGroups: never[]; regrouping: boolean; lastDraw: null; };
+	private s: { dt: DataTables.Api; collapsedGroups: unknown[]; regrouping: boolean; lastDraw: null; };
 
 	constructor(settings: string, config: RowButtonsConfig[]) {
 		const dt = new $.fn.dataTable.Api(settings);

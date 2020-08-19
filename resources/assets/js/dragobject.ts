@@ -57,7 +57,6 @@ $(() => {
 			return;
 		}
 		const instance = dragObject.el;
-		e = e || window.event;
 		const newX = mouseX(e);
 		const newY = mouseY(e);
 		dragged = instance.hasClass('savepos');
@@ -83,7 +82,6 @@ $(() => {
 	 * @param {MouseEvent} e
 	 */
 	function startDrag(e: DragEvent) {
-		e = e || window.event;
 
 		const target = e.target;
 

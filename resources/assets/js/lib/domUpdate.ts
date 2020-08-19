@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import {init} from '../ctx';
 import {modalClose, modalOpen} from './modal';
-import {html, htmlParse} from './util';
+import {htmlParse} from './util';
 
 export function domUpdate(this: HTMLElement | void, htmlString: string|null): void {
 	if (typeof htmlString !== 'string') {
