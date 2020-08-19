@@ -75,7 +75,13 @@ $.fn.dataTable.ext.buttons.default = {
 
 		// Settings voor knop_ajax
 		node.attr('href', config.href);
-		node.attr('data-tableid', dt.tables().nodes().to$().attr('id')!);
+		const id = dt.tables().nodes().to$().attr('id');
+
+		if (!id) {
+			throw new Error("Datatable heeft geen id")
+		}
+
+		node.attr('data-tableid', id);
 	},
 	action(e, dt, button) {
 		knopPost.call(button, e);
@@ -110,7 +116,13 @@ $.fn.dataTable.ext.buttons.sourceChange = {
 		enable();
 	},
 	action(e, dt, button, config) {
-		dt.ajax.url(config.href!).load();
+		const href = config.href
+
+		if (!href) {
+			throw new Error("SourceChange Button heeft geen href")
+		}
+
+		dt.ajax.url(href).load();
 	},
 };
 
@@ -156,6 +168,12 @@ $.fn.dataTable.ext.buttons.confirm = {
 $.fn.dataTable.ext.buttons.defaultCollection = {
 	extend: 'collection',
 	init(dt, node, config) {
-		$.fn.dataTable.ext.buttons.default.init!.call(this, dt, node, config);
+		const init = $.fn.dataTable.ext.buttons.default.init;
+
+		if (!init) {
+			throw new Error("Configuratie fout! Default knop bestaat niet")
+		}
+
+		init.call(this, dt, node, config);
 	},
 };

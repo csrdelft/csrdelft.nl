@@ -9,7 +9,7 @@
 		"prod": "yarn run production",
 		"production": "cross-env webpack --no-progress --hide-modules --mode=production",
 		"docker": "yarn run development --no-progress && yarn run watch-poll --no-progress",
-		"lint": "yarn run eslint resources"
+		"lint": "yarn run eslint resources/js"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.2.0",
