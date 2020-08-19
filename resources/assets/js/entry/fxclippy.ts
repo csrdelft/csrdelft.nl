@@ -137,8 +137,13 @@ $(() => {
 });
 
 addRule({location: '/profiel'}, async (agent) => {
-	const pasfoto = $('.naam .pasfoto img');
-	const foto = pasfoto[0] as HTMLImageElement;
+	const pasfoto = $<HTMLImageElement>('.naam .pasfoto img')
+	const foto = pasfoto[0]
+
+	if (!foto) {
+		return;
+	}
+
 	if (foto.complete) {
 		pasfotoLoaded().then();
 	} else {
@@ -146,7 +151,7 @@ addRule({location: '/profiel'}, async (agent) => {
 	}
 
 	async function pasfotoLoaded() {
-		const box = offset(pasfoto);
+		const box = offset($(foto));
 
 		await sleep(2000);
 		agent.stop();
