@@ -149,7 +149,7 @@ export function knopVergroot(event: Event, el: HTMLElement): void {
 
 		delete target.dataset.vergrootOud
 
-		icon.classList.remove('fa-compress', 'fa-expand')
+		icon.classList.replace('fa-compress', 'fa-expand')
 
 		target.title = 'Uitklappen'
 	} else {
