@@ -61,7 +61,7 @@
 							<h1 class="major">C.S.R. IN 1 MINUUT</h1>
 							<noscript class="lazy-load">
 							<div class="bb-video">
-								<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl" title="C.S.R. Delft in 1 minuut" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl" title="C.S.R. Delft in 1 minuut" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 							</div>
 							</noscript>
 						</div>
@@ -71,7 +71,7 @@
 									<p>Wil je zien hoe
 										de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</p>
 									<div class="bb-video">
-										<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY?hl=nl" title="Delft studie is maar de helft! Aflevering 1 uit 3" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+										<iframe src="https://www.youtube-nocookie.com/embed/a7hhtoo_kzY?hl=nl" title="Delft studie is maar de helft! Aflevering 1 uit 3" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 									</div>
 								</div>
 								<div class="instagram">
@@ -211,7 +211,7 @@
 					</li>
 					<li class="fa-phone">06-19470413</li>
 					<li class="fa-envelope"><a href="mailto:{{$_ENV['EMAIL_ABACTIS']}}">{{$_ENV['EMAIL_ABACTIS']}}</a></li>
-					<li class="fa-instagram"><a href="https://www.instagram.com/csrdelft/" target="_blank">Like
+					<li class="fa-instagram"><a href="https://www.instagram.com/csrdelft/" target="_blank" rel="noopener noreferrer">Like
 							onze foto's op Instagram en volg de laatste posts</a></li>
 					<li class="fa-map-marker">
 						<noscript class="lazy-load">

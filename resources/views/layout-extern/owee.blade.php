@@ -39,7 +39,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="iframe-container">
-						<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 					</div>
 				</div>
 			</div>
@@ -83,15 +83,15 @@
 				</div>
 				<div class="col-12 col-sm-6 col-md-4 mb-4">
 					<div class="iframe-container">
-						<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi&hl=nl" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi&hl=nl" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 					</div>
 				</div>
 				<div class="col-12 col-sm-6 col-md-4 mb-4">
 					<div class="iframe-container">
-						<iframe src="https://www.youtube-nocookie.com/embed/01kzRDhdcYw?hl=nl" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<iframe src="https://www.youtube-nocookie.com/embed/01kzRDhdcYw?hl=nl" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 					</div>
 				</div>
-				<a class="col-12 col-md-4 mb-4" href="https://www.youtube.com/user/CivitasFilms" target="_blank">
+				<a class="col-12 col-md-4 mb-4" href="https://www.youtube.com/user/CivitasFilms" target="_blank" rel="noopener noreferrer">
 					<div class="iframe-container youtube-container">
 						<div class="youtube">
 							<div>
@@ -117,7 +117,7 @@
 		<div class="content pt-4 pb-4">
 			<div class="row">
 				<div class="col-md-5 col-lg-4 mb-4 mb-md-0">
-					<a class="whatsapp" href="https://wa.me/31639667236" target="_blank">
+					<a class="whatsapp" href="https://wa.me/31639667236" target="_blank" rel="noopener noreferrer">
 						<i class="fab fa-whatsapp mr-3 mr-md-0"></i>
 						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Maartje!</div>
 						<div class="maartje"></div>
@@ -203,8 +203,8 @@
 							afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.</p>
 							<ul>
 								<li><a href="https://csrdelft.nl/download/Code%20of%20Ethics%202016-2017.pdf" target="_blank">Code Of Ethics</a></li>
-								<li><a href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/Communicatieconvenant%20TU%20Delft%20--getekende%20versie-website.pdf" target="_blank">Communicatieconvenant</a></li>
-								<li><a href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/gedragsovereenkomst%20TU%20Delft%20en%20de%20vijf%20grote%20verenigingen%20getekende%20versie%20website.pdf" target="_blank">Gedragsovereenkomst</a></li>
+								<li><a href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/Communicatieconvenant%20TU%20Delft%20--getekende%20versie-website.pdf" target="_blank" rel="noopener noreferrer">Communicatieconvenant</a></li>
+								<li><a href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/gedragsovereenkomst%20TU%20Delft%20en%20de%20vijf%20grote%20verenigingen%20getekende%20versie%20website.pdf" target="_blank" rel="noopener noreferrer">Gedragsovereenkomst</a></li>
 							</ul>
 					</div>
 				</div>
