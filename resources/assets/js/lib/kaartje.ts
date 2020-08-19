@@ -22,7 +22,6 @@ export const initKaartjes = (el: HTMLElement): void => {
 		}
 
 		el.append(kaartjes[uid]);
-		// tslint:disable-next-line:no-unused-expression
 		new Popper(el, kaartjes[uid], {placement: 'bottom-start'});
 
 		loading = true;
