@@ -38,7 +38,7 @@ jobs:
       name: Voer sonar scanner uit op de repository
       before_install: nvm install 12
       script: |
-        yarn
+        npm install typescript
         sonar-scanner
       if: (branch = master OR type = pull_request) AND fork = false
       addons:
