@@ -84,7 +84,7 @@ $.fn.dataTable.ext.buttons.default = {
 		node.attr('data-tableid', id);
 	},
 	action(e, dt, button) {
-		knopPost.call(button, e);
+		knopPost.call(button.get(0), e);
 	},
 	className: 'post DataTableResponse',
 };
