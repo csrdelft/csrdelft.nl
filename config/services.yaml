@@ -74,3 +74,4 @@ services:
 
   security:
     class: Symfony\Component\Security\Core\Security
+    public: true
