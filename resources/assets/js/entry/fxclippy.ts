@@ -256,7 +256,7 @@ addRule({
 	if (amount < 3 && sessionStorage.getItem('clippy-first')) {
 		const extensie = $('a[title="Sponsorkliks extensie (Chrome)"]');
 		const extOffset = offset(extensie);
-		if (extensie) {
+		if (extensie[0]) {
 			extensie[0].scrollIntoView({
 				behavior: 'smooth',
 				block: 'center',
