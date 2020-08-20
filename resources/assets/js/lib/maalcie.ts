@@ -99,8 +99,7 @@ export function takenMagRuilen(e: Event): void {
 		target = parents(target)
 	}
 
-	const source = dragObject.el;
-	if (source && source.attr('id') !== target.id) {
+	if (dragObject.el && dragObject.el.id !== target.id) {
 		e.preventDefault();
 	}
 }
@@ -111,7 +110,7 @@ export function takenRuilen(e: Event): void {
 	if (elmnt.tagName.toUpperCase() === 'IMG') { // dropped on image inside of anchor
 		elmnt = parents(elmnt)
 	}
-	const source = dragObject.el?.get(0)
+	const source = dragObject.el
 	if (!source || !confirm('Toegekende corveepunten worden meegeruild!\n\nDoorgaan met ruilen?')) {
 		return;
 	}
