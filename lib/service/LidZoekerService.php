@@ -13,6 +13,7 @@ use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Security\Core\Security;
 
 
 /**
@@ -76,8 +77,12 @@ class LidZoekerService {
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
-	public function __construct(ProfielRepository $profielRepository) {
+	public function __construct(ProfielRepository $profielRepository, Security $security) {
 		$this->allowStatus = LidStatus::getEnumValues();
 
 		//wat extra velden voor moderators.
@@ -88,6 +93,7 @@ class LidZoekerService {
 		//parse default values.
 		$this->parseQuery($this->rawQuery);
 		$this->profielRepository = $profielRepository;
+		$this->security = $security;
 	}
 
 	public function parseQuery($query) {
@@ -99,7 +105,7 @@ class LidZoekerService {
 		$this->rawQuery = $query;
 
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch ook in de oudleden.
-		if (!isset($query['status']) && LoginService::getProfiel()->isOudlid()) {
+		if (!isset($query['status']) && $this->security->getUser()->profiel->isOudlid()) {
 			$this->rawQuery['status'] = 'LEDEN|OUDLEDEN';
 		}
 

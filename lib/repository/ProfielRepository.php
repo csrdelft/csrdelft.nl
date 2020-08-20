@@ -27,6 +27,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Symfony\Component\Security\Core\Security;
 
 
 /**
@@ -51,9 +52,14 @@ class ProfielRepository extends AbstractRepository {
 	 * @var BoekExemplaarRepository
 	 */
 	private $boekExemplaarModel;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
 		ManagerRegistry $registry,
+		Security $security,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
 		BoekExemplaarRepository $boekExemplaarModel
@@ -63,6 +69,7 @@ class ProfielRepository extends AbstractRepository {
 		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->boekExemplaarModel = $boekExemplaarModel;
+		$this->security = $security;
 	}
 
 	public static function changelog(array $diff, $uid) {
@@ -118,11 +125,15 @@ class ProfielRepository extends AbstractRepository {
 	}
 
 	public function nieuw($lidjaar, $lidstatus) {
+		$user = $this->security->getUser();
+
+		// Create kan door x999 gedaan worden
+		$logUsername = $user == null ? LoginService::UID_EXTERN : $user->getUsername();
 		$profiel = new Profiel();
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
 		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee();
-		$profiel->changelog = [new ProfielCreateLogGroup(LoginService::getUid(), new DateTime())];
+		$profiel->changelog = [new ProfielCreateLogGroup($logUsername, new DateTime())];
 		return $profiel;
 	}
 
@@ -310,7 +321,7 @@ class ProfielRepository extends AbstractRepository {
 				'OUD' => $oudestatus,
 				'NIEUW' => $profiel->status,
 				'CHANGE' => $change->toHtml(),
-				'ADMIN' => LoginService::getProfiel()->getNaam()
+				'ADMIN' => $this->security->getUser()->profiel->getNaam()
 			);
 			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
 			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
@@ -339,7 +350,7 @@ class ProfielRepository extends AbstractRepository {
 			'OUD' => $oudestatus,
 			'NIEUW' => $profiel->status,
 			'SALDI' => $saldi,
-			'ADMIN' => LoginService::getProfiel()->getNaam()
+			'ADMIN' => $this->security->getUser()->profiel->getNaam()
 		);
 		$to = array(
 			'fiscus@csrdelft.nl' => 'Fiscus C.S.R.',
@@ -412,7 +423,7 @@ class ProfielRepository extends AbstractRepository {
 			'NIEUW' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
 			'CSRLIJST' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
 			'LEDENLIJST' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
-			'ADMIN' => LoginService::getProfiel()->getNaam()
+			'ADMIN' => $this->security->getUser()->profiel->getNaam()
 		);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
@@ -455,7 +466,7 @@ class ProfielRepository extends AbstractRepository {
 		$changes = $this->verwijderVelden($profiel);
 		if (sizeof($changes) == 0)
 			return false;
-		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginService::getUid(), new DateTime(), $changes);
+		$profiel->changelog[] = new ProfielUpdateLogGroup($this->security->getUser()->getUsername(), new DateTime(), $changes);
 		$this->update($profiel);
 		return true;
 	}

@@ -51,7 +51,7 @@ class BeheerCiviBestellingController extends AbstractController {
 	 */
 	public function lijst(Request $request, $uid = null) {
 		$this->checkToegang($uid);
-		$uid = $uid == null ? LoginService::getUid() : $uid;
+		$uid = $uid == null ? $this->getUid() : $uid;
 		if ($request->query->get("deleted") == "true") {
 			$data = $this->civiBestellingRepository->findBy(['uid' => $uid]);
 		} else {

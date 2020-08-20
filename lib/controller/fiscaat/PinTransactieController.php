@@ -573,7 +573,7 @@ class PinTransactieController extends AbstractController {
 		if (!$ontvanger) {
 			return;
 		}
-		$bcc = LoginService::getProfiel();
+		$bcc = $this->getProfiel();
 		$civiSaldo = $ontvanger->getCiviSaldo() * 100;
 		$saldo = format_bedrag_kaal($civiSaldo);
 		$saldoMelding = $civiSaldo < 0 ? ' Leg a.u.b. in.' : '';

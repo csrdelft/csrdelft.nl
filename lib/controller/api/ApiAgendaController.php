@@ -84,7 +84,7 @@ class ApiAgendaController extends AbstractController {
 		// Activiteit aanmeldingen
 		$activiteitAanmeldingen = array();
 		foreach ($activiteitenFiltered as $activiteit) {
-			$deelnemer = $this->activiteitDeelnemersRepository->get($activiteit, $this->getUser()->getUsername());
+			$deelnemer = $this->activiteitDeelnemersRepository->get($activiteit, $this->getUid());
 			if ($deelnemer) {
 				$activiteitAanmeldingen[] = $deelnemer->groep_id;
 			}
@@ -104,7 +104,7 @@ class ApiAgendaController extends AbstractController {
 			$result[] = $maaltijd;
 
 		}
-		$maaltijdAanmeldingen = array_keys($this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($mids, $this->getUser()->getUsername()));
+		$maaltijdAanmeldingen = array_keys($this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($mids, $this->getUid()));
 
 		// Sorteren
 		usort($result, array(AgendaRepository::class, 'vergelijkAgendeerbaars'));

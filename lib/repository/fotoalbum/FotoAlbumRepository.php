@@ -10,13 +10,13 @@ use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -31,9 +31,14 @@ class FotoAlbumRepository extends AbstractRepository {
 	 * @var FotoTagsRepository
 	 */
 	private $fotoTagsRepository;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
 		ManagerRegistry $registry,
+		Security $security,
 		FotoRepository $fotoRepository,
 		FotoTagsRepository $fotoTagsRepository
 	) {
@@ -41,6 +46,7 @@ class FotoAlbumRepository extends AbstractRepository {
 
 		$this->fotoRepository = $fotoRepository;
 		$this->fotoTagsRepository = $fotoTagsRepository;
+		$this->security = $security;
 	}
 
 	/**
@@ -80,8 +86,8 @@ class FotoAlbumRepository extends AbstractRepository {
 				throw new CsrException('Geen eigenaar van album: ' . htmlspecialchars($album->path));
 			}
 		}
-		$album->owner = LoginService::getUid();
-		$album->owner_profiel = LoginService::getProfiel();
+		$album->owner = $this->security->getUser()->getUsername();
+		$album->owner_profiel = $this->security->getUser()->profiel;
 
 		$this->getEntityManager()->persist($album);
 		$this->getEntityManager()->flush();

@@ -77,8 +77,8 @@ class CourantController extends AbstractController {
 	public function toevoegen() {
 		$bericht = new CourantBericht();
 		$bericht->datumTijd = new DateTime();
-		$bericht->uid = LoginService::getUid();
-		$bericht->schrijver = LoginService::getProfiel();
+		$bericht->uid = $this->getUid();
+		$bericht->schrijver = $this->getProfiel();
 
 		$form = new CourantBerichtFormulier($bericht, '/courant');
 

@@ -4,11 +4,12 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\Account;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -16,6 +17,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * Voor eventuele generieke controller methodes.
  *
  * @package CsrDelft\controller
+ * @method Account|null getUser()
  */
 class AbstractController extends BaseController {
 	/**
@@ -24,7 +26,7 @@ class AbstractController extends BaseController {
 	 * @return string[]
 	 */
 	protected function getDataTableSelection() {
-		$selection = $this->container->get('request_stack')
+		$selection = $this->get('request_stack')
 			->getCurrentRequest()
 			->request->filter(DataTable::POST_SELECTION, [], FILTER_SANITIZE_STRING);
 
@@ -60,6 +62,28 @@ class AbstractController extends BaseController {
 
 	protected function tableData($data) {
 		return new GenericDataTableResponse($this->get('serializer'), $data);
+	}
+
+	/**
+	 * @return string|null
+	 */
+	protected function getUid() {
+		$user = $this->getUser();
+		if ($user) {
+			return $user->uid;
+		}
+		return null;
+	}
+
+	/**
+	 * @return Profiel|null
+	 */
+	protected function getProfiel() {
+		$user = $this->getUser();
+		if ($user) {
+			return $user->profiel;
+		}
+		return null;
 	}
 
 	protected function createAccessDeniedException(string $message = 'Geen Toegang.', \Throwable $previous = null): AccessDeniedException {

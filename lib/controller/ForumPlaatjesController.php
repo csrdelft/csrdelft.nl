@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ForumPlaatjesController {
+class ForumPlaatjesController extends AbstractController {
 	/** @var ForumPlaatjeRepository  */
 	private $forumPlaatjeRepository;
 
@@ -29,7 +29,7 @@ class ForumPlaatjesController {
 	public function upload() {
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
-			$plaatje = $this->forumPlaatjeRepository->fromUploader($form->uploader, LoginService::getUid());
+			$plaatje = $this->forumPlaatjeRepository->fromUploader($form->uploader, $this->getUid());
 			return view('forum.insert_plaatje', ['plaatje' => $plaatje]);
 		} else {
 			return $form;

@@ -35,7 +35,7 @@ class MenuBeheerController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function beheer($menu_name = 'main') {
-		if ($menu_name != LoginService::getUid() && !LoginService::mag(P_ADMIN)) {
+		if ($menu_name != $this->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
 		$root = $this->menuItemRepository->getMenu($menu_name);
@@ -58,7 +58,7 @@ class MenuBeheerController extends AbstractController {
 	 */
 	public function toevoegen($parent_id) {
 		if ($parent_id == 'favoriet') {
-			$parent = $this->menuItemRepository->getMenuRoot(LoginService::getUid());
+			$parent = $this->menuItemRepository->getMenuRoot($this->getUid());
 		} else {
 			$parent = $this->menuItemRepository->getMenuItem((int)$parent_id);
 		}

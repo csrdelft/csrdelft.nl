@@ -85,7 +85,7 @@
 	</div>
 	<div class="forum-bericht @cycle('bericht0', 'bericht1')" id="post{{$post->post_id}}">
 		@php($account = \CsrDelft\repository\security\AccountRepository::get($post->uid))
-		@if($account && \CsrDelft\service\AccessService::mag($account, P_ADMIN))
+		@if($account && $account->perm_role == "R_PUBCIE")
 			{!! bbcode($post->tekst, 'html') !!}
 		@else
 			{!! bbcode($post->tekst) !!}

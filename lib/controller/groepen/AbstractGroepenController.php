@@ -265,10 +265,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if (!$id) {
 			$old = null;
 			$groep = $this->repository->nieuw($soort);
-			/**
-			 * @var Profiel $profiel
-			 */
-			$profiel = LoginService::getProfiel();
+			$profiel = $this->getProfiel();
 			if ($groep instanceof Activiteit && empty($groep->rechten_aanmelden)) {
 				switch ($groep->soort) {
 
@@ -584,7 +581,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	public function ketzer_aanmelden(EntityManagerInterface $em, $id) {
-		$uid = LoginService::getUid();
+		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
@@ -636,7 +633,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	public function ketzer_bewerken(EntityManagerInterface $em, $id) {
-		$uid = LoginService::getUid();
+		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
 
 		if (!$groep->mag(AccessAction::Bewerken)) {
@@ -687,7 +684,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	public function ketzer_afmelden(EntityManagerInterface $em, $id) {
-		$uid = LoginService::getUid();
+		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
 
 		if (!$groep->mag(AccessAction::Afmelden) && !$groep->mag(AccessAction::Beheren)) { // A::Beheren voor afmelden via context-menu
@@ -783,8 +780,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					$em->flush();
 					$lid->groep_id = $ot_groep->id;
 					$lid->lid_sinds = getDateTime();
-					$lid->door_uid = LoginService::getUid();
-					$lid->door_profiel = LoginService::getProfiel();
+					$lid->door_uid = $this->getUid();
+					$lid->door_profiel = $this->getProfiel();
 					$em->persist($lid);
 					$em->flush();
 					$lid->groep_id = $groep->id;

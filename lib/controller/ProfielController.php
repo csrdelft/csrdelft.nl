@@ -155,7 +155,7 @@ class ProfielController extends AbstractController {
 		Profiel $profiel = null
 	) {
 		if (!$profiel) {
-			$profiel = LoginService::getProfiel();
+			$profiel = $this->getProfiel();
 		}
 		$fotos = [];
 		foreach ($fotoTagsRepository->findBy(['keyword' => $profiel->uid], null, 3) as $tag) {
@@ -176,7 +176,7 @@ class ProfielController extends AbstractController {
 			'ketzers' => $ketzersRepository->getGroepenVoorLid($profiel->uid),
 			'activiteiten' => $activiteitenRepository->getGroepenVoorLid($profiel->uid),
 			'bestellinglog' => $civiBestellingRepository->getBestellingenVoorLid($profiel->uid, 10),
-			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginService::getUid() === $profiel->uid ? '' : '/' . $profiel->uid),
+			'bestellingenlink' => '/fiscaat/bestellingen' . ($this->getUid() === $profiel->uid ? '' : '/' . $profiel->uid),
 			'corveetaken' => $corveeTakenRepository->getTakenVoorLid($profiel),
 			'corveevoorkeuren' => $corveeVoorkeurenRepository->getVoorkeurenVoorLid($profiel->uid),
 			'corveevrijstelling' => $corveeVrijstellingenRepository->getVrijstelling($profiel->uid),
@@ -231,7 +231,7 @@ class ProfielController extends AbstractController {
 				setMelding('Geen wijzigingen', 0);
 			} else {
 				$nieuw = $profiel->uid === null || $this->profielRepository->find($profiel->uid) == null;
-				$changeEntry = ProfielRepository::changelog($diff, LoginService::getUid());
+				$changeEntry = ProfielRepository::changelog($diff, $this->getUid());
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
 						array_push($changeEntry->entries, ...$this->profielRepository->wijzig_lidstatus($profiel, $change->old_value));
@@ -459,7 +459,7 @@ class ProfielController extends AbstractController {
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
 	public function voorkeurenNoUid() {
-		return $this->voorkeuren(LoginService::getUid());
+		return $this->voorkeuren($this->getUid());
 	}
 
 	/**
@@ -492,7 +492,7 @@ class ProfielController extends AbstractController {
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function stamboom($uid = null) {
-		$profiel = $uid ? $this->profielRepository->get($uid) : LoginService::getProfiel();
+		$profiel = $uid ? $this->profielRepository->get($uid) : $this->getProfiel();
 
 		return view('profiel.stamboom', [
 			'profiel' => $profiel,

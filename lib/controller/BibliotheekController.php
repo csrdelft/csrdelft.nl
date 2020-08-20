@@ -73,7 +73,7 @@ class BibliotheekController extends AbstractController {
 	 * @Auth(P_BIEB_READ)
 	 */
 	public function recensie($boek_id) {
-		$recensie = $this->boekRecensieRepository->get($boek_id, LoginService::getUid());
+		$recensie = $this->boekRecensieRepository->get($boek_id, $this->getUid());
 		$formulier = new RecensieFormulier($recensie);
 		if ($formulier->validate()) {
 			if (!$recensie->magBewerken()) {
@@ -175,7 +175,7 @@ class BibliotheekController extends AbstractController {
 			}
 		}
 		foreach ($alleRecensies as $recensie) {
-			if ($recensie->schrijver_uid == LoginService::getUid()) {
+			if ($recensie->schrijver_uid == $this->getUid()) {
 				$mijnRecensie = $recensie;
 			}
 			$andereRecensies[] = $recensie;
@@ -290,9 +290,9 @@ class BibliotheekController extends AbstractController {
 			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 		}
 		if ($uid == null) {
-			$uid = LoginService::getUid();
+			$uid = $this->getUid();
 		}
-		if ($uid != LoginService::getUid() && !($uid == 'x222' && LoginService::mag(P_BIEB_MOD))) {
+		if ($uid != $this->getUid() && !($uid == 'x222' && LoginService::mag(P_BIEB_MOD))) {
 			throw $this->createAccessDeniedException('Mag deze eigenaar niet kiezen');
 		}
 		$this->boekExemplaarRepository->addExemplaar($boek, $uid);
@@ -399,7 +399,7 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function exemplaarlenen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
-		if (!$this->boekExemplaarRepository->leen($exemplaar, LoginService::getUid())) {
+		if (!$this->boekExemplaarRepository->leen($exemplaar, $this->getUid())) {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
@@ -418,7 +418,7 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function exemplaarteruggegeven($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
-		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == LoginService::getUid()) {
+		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == $this->getUid()) {
 			if ($this->boekExemplaarRepository->terugGegeven($exemplaar)) {
 				setMelding('Exemplaar is teruggegeven.', 1);
 			} else {

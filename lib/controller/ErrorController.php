@@ -54,7 +54,7 @@ class ErrorController extends AbstractController {
 			}
 			case Response::HTTP_FORBIDDEN:
 			{
-				if (LoginService::getUid() == LoginService::UID_EXTERN) {
+				if ($this->getUser() == null) {
 					$requestUri = $request->getRequestUri();
 					$router = $this->get('router');
 
