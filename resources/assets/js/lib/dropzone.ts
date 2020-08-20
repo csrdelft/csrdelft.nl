@@ -11,7 +11,7 @@ interface Afbeelding {
 
 }
 
-export const initDropzone = (el: HTMLFormElement) => {
+export const initDropzone = (el: HTMLFormElement): void => {
 	const {naam, accept, deleteUrl, maxsize, coverUrl, existingUrl} = el.dataset
 	const thisDropzone = new Dropzone(el, {
 		paramName: naam,
@@ -64,7 +64,7 @@ export const initDropzone = (el: HTMLFormElement) => {
 		}
 	});
 
-	let showExisting = html`<a href="#"><span class="ico photos"></span> Toon bestaande foto's in dit album</a>`;
+	const showExisting = html`<a href="#"><span class="ico photos"></span> Toon bestaande foto's in dit album</a>`;
 	el.appendChild(showExisting)
 	showExisting.addEventListener('click', async function (e) {
 		e.preventDefault()
@@ -72,7 +72,7 @@ export const initDropzone = (el: HTMLFormElement) => {
 		showExisting.remove()
 
 		const response = await axios.post(existingUrl)
-		for (let value of Object.values<Afbeelding>(response.data)) {
+		for (const value of Object.values<Afbeelding>(response.data)) {
 			const mockFile = {name: value.name, size: value.size, type: value.type};
 			thisDropzone.emit('addedfile', mockFile);
 			if (typeof value.thumbnail !== 'undefined') {

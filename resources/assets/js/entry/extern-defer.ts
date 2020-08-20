@@ -1,7 +1,7 @@
 /**
  * Wordt geladen als de pagina geladen is.
  */
-import axios, {AxiosError} from 'axios';
+import axios from 'axios';
 import {registerBbContext, registerFormulierContext} from '../context';
 import {init} from '../ctx';
 import {route} from '../lib/util';
@@ -80,10 +80,6 @@ const loadPage = () => {
 		}
 	}
 };
-
-// resize of scroll zorgt er voor dat beneden de fold geladen wordt.
-// window.addEventListener('scroll', loadPage);
-// window.addEventListener('resize', loadPage);
 
 setTimeout(loadPage)
 
