@@ -1,7 +1,7 @@
 /**
  * Wordt geladen als de pagina geladen is.
  */
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import {registerBbContext, registerFormulierContext} from '../context';
 import {init} from '../ctx';
 import {route} from '../lib/util';
@@ -82,10 +82,10 @@ const loadPage = () => {
 };
 
 // resize of scroll zorgt er voor dat beneden de fold geladen wordt.
-window.addEventListener('scroll', loadPage);
-window.addEventListener('resize', loadPage);
+// window.addEventListener('scroll', loadPage);
+// window.addEventListener('resize', loadPage);
 
-loadPage();
+setTimeout(loadPage)
 
 const contactForm = select<HTMLFormElement>('#contact-form')
 
@@ -93,25 +93,25 @@ if (contactForm) {
 	const errorContainer = select('#melding')
 	const submitButton = contactForm.submitButton as HTMLButtonElement;
 
-	contactForm.addEventListener('submit', (event) => {
+	contactForm.addEventListener('submit', async (event) => {
 		event.preventDefault();
 		errorContainer.innerHTML = '';
 		submitButton.disabled = true;
 		const formData = new FormData(contactForm);
-		axios.post('/contactformulier/interesse', formData)
-			.then((response) => {
-				contactForm.reset();
-				submitButton.disabled = false;
-				errorContainer.innerHTML = '<div class="alert alert-success">' +
-					'<span class="ico accept"></span>' + response.data +
-					'</div>';
-			})
-			.catch((error) => {
-				submitButton.disabled = false;
-				errorContainer.innerHTML = '<div class="alert alert-danger">' +
-					'<span class="ico exclamation"></span>' + error.response.data +
-					'</div>';
-			});
+
+		try {
+			const response = await axios.post('/contactformulier/interesse', formData)
+			contactForm.reset();
+			submitButton.disabled = false;
+			errorContainer.innerHTML = '<div class="alert alert-success">' +
+				'<span class="ico accept"></span>' + response.data +
+				'</div>';
+		} catch (error) {
+			submitButton.disabled = false;
+			errorContainer.innerHTML = '<div class="alert alert-danger">' +
+				'<span class="ico exclamation"></span>' + error.response.data +
+				'</div>';
+		}
 
 		return false;
 	});

@@ -32,7 +32,7 @@ class Formulier implements View, Validator, ToResponse {
 	protected $action = null;
 	public $post = true;
 	protected $error;
-	private $enctype = 'multipart/form-data';
+	protected $enctype = 'multipart/form-data';
 	public $showMelding = true;
 	public $preventCsrf = true;
 	/**

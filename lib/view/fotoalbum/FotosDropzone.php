@@ -25,7 +25,6 @@ class FotosDropzone extends Dropzone {
 		parent::view();
 		echo '</div><div class="card-footer">';
 		echo '<span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
-		echo '<div class="float-right"><a href="#" onclick="showExisting_' . $this->formId . '();$(this).remove();">' . Icon::getTag('photos') . ' Toon bestaande foto\'s in dit album</a></div>';
 		echo '</div></div>';
 		// Uitleg foto's toevoegen
 		$body = new CmsPaginaView(ContainerFacade::getContainer()->get(CmsPaginaRepository::class)->find('fotostoevoegen'));
