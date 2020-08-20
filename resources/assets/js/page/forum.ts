@@ -56,5 +56,9 @@ try {
 	// deze pagina heeft geen auteur
 }
 
-const citeerKnop = select<HTMLElement>('a.citeren')
-citeerKnop.addEventListener('click', () => forumCiteren(citeerKnop.dataset.citeren))
+try {
+	const citeerKnop = select<HTMLElement>('a.citeren')
+	citeerKnop.addEventListener('click', () => forumCiteren(citeerKnop.dataset.citeren))
+} catch (e) {
+	// deze pagina heeft geen citeerknop
+}
