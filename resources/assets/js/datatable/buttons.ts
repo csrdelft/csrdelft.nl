@@ -161,7 +161,7 @@ $.fn.dataTable.ext.buttons.confirm = {
 		config.action = $.fn.dataTable.ext.buttons.collection.action;
 	},
 	action(e, dt, button) {
-		knopPost.call(button, e);
+		knopPost.call(button.get(0), e);
 	},
 };
 
