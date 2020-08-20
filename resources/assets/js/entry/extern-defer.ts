@@ -83,9 +83,9 @@ const loadPage = () => {
 
 setTimeout(loadPage)
 
-const contactForm = select<HTMLFormElement>('#contact-form')
+try {
+	const contactForm = select<HTMLFormElement>('#contact-form')
 
-if (contactForm) {
 	const errorContainer = select('#melding')
 	const submitButton = contactForm.submitButton as HTMLButtonElement;
 
@@ -111,4 +111,6 @@ if (contactForm) {
 
 		return false;
 	});
+} catch (e) {
+	// Geen contactform
 }
