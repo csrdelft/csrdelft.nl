@@ -130,7 +130,7 @@ export function formSubmit(event: Event): boolean {
 
 		if (form.classList.contains('InlineForm')) {
 			source = form;
-			const id = form.attr('id')
+			const id = form.id
 			if (id) {
 				formData.append('InlineFormId', id);
 			}
