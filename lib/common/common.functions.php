@@ -559,40 +559,6 @@ function getMaximumFileUploadSize() {
 	return min(convertPHPSizeToBytes(ini_get('post_max_size')), convertPHPSizeToBytes(ini_get('upload_max_filesize')));
 }
 
-function getDebugFooter() {
-	$enableDebug = filter_input(INPUT_GET, 'debug') !== null;
-	if ($enableDebug && (DEBUG || (LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued()))) {
-		return '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a><div id="mysql_debug" class="pre">' . getDebug() . '</div>';
-	}
-
-	return '';
-}
-
-function getDebug(
-	$get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true
-) {
-	$debug = '';
-	if ($get) {
-		$debug .= '<hr />GET<hr />' . htmlspecialchars(print_r($_GET, true));
-	}
-	if ($post) {
-		$debug .= '<hr />POST<hr />' . htmlspecialchars(print_r($_POST, true));
-	}
-	if ($files) {
-		$debug .= '<hr />FILES<hr />' . htmlspecialchars(print_r($_FILES, true));
-	}
-	if ($cookie) {
-		$debug .= '<hr />COOKIE<hr />' . htmlspecialchars(print_r($_COOKIE, true));
-	}
-	if ($session) {
-		$debug .= '<hr />SESSION<hr />' . htmlspecialchars(print_r($_SESSION, true));
-	}
-	if ($server) {
-		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
-	}
-	return $debug;
-}
-
 /**
  * Stores a message.
  *

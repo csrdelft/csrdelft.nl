@@ -83,7 +83,7 @@ class LidInstellingenRepository extends AbstractRepository {
 	 */
 	protected function getInstelling($module, $id, $uid = null) {
 		if (!$uid) {
-			$uid = $this->getUid();
+			$uid = $this->getUid() ?? LoginService::UID_EXTERN;
 		}
 		$instelling = $this->findOneBy(['module' => $module, 'instelling_id' => $id, 'uid' => $uid]);
 		if ($this->hasKey($module, $id)) {
