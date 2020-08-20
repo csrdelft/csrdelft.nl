@@ -11,6 +11,7 @@ use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
@@ -105,14 +106,15 @@ class LoginService {
 			return $account->uid;
 		}
 
-		return null;
+		return self::UID_EXTERN;
 	}
 
 	/**
 	 * @return UserInterface|Account|null
 	 */
 	public static function getAccount() {
-		return ContainerFacade::getContainer()->get('security')->getUser();
+		return ContainerFacade::getContainer()->get('security')->getUser()
+			?? ContainerFacade::getContainer()->get(AccountRepository::class)->find(self::UID_EXTERN);
 	}
 
 	/**
