@@ -75,7 +75,7 @@ module.exports = (env, argv) => ({
 			// Css bestanden komen in de map css terecht.
 			filename: argv.mode !== 'production' ? 'css/[name].css' : 'css/[name].[contenthash].css',
 		}),
-		new (require('vue-loader').VueLoaderPlugin)(),
+		new (require('vue-loader/lib/plugin'))(),
 		new (require('webpack-manifest-plugin'))(),
 		new (require('moment-locales-webpack-plugin'))({
 			localesToKeep: ['nl'],
@@ -121,6 +121,7 @@ module.exports = (env, argv) => ({
 				test: /\.ts$/,
 				use: {
 					loader: 'ts-loader',
+					options: { appendTsSuffixTo: [/\.vue$/] }
 				},
 			},
 			{
