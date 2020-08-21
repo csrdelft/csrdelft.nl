@@ -79,7 +79,6 @@
 		"@fullcalendar/list": "^4.3.0",
 		"@fullcalendar/timegrid": "^4.3.0",
 		"@sentry/browser": "^5.21.1",
-		"autosize": "^1.18.13",
 		"axios": "^0.18",
 		"bootstrap": "^4.3.1",
 		"bootstrap-vue": "^2.0.0-rc.11",

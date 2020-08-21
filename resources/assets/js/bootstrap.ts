@@ -33,7 +33,6 @@ declare global {
 
 	interface JQuery {
 		markItUp: (arg: unknown) => unknown;
-		autosize: () => void;
 		scrollTo: (arg: unknown) => void;
 		modal: (arg?: unknown) => void;
 	}
@@ -56,7 +55,6 @@ require('./lib/external/jquery.markitup');
 require('./lib/external/jquery.contextMenu');
 require('timeago');
 require('raty-js');
-require('autosize/build/jquery.autosize');
 require('jquery.maskedinput');
 require('lightbox2');
 require('corejs-typeahead/dist/typeahead.jquery.js');

@@ -121,6 +121,13 @@ export const registerGlobalContext = async (): Promise<void> => {
 		).options({timeout: 250}),
 		'.vue-context': (el) => new Vue({el}),
 		'[data-visite]': initKaartjes,
+		'.AutoSize': el => {
+				el.setAttribute('style', 'height:' + (el.scrollHeight) + 'px;overflow-y:hidden;');
+				el.addEventListener("input", function () {
+					this.style.height = 'auto';
+					this.style.height = (this.scrollHeight) + 'px';
+				}, false);
+		}
 	});
 };
 

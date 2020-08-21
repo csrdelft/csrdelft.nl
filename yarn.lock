@@ -2144,15 +2144,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autosize@npm:^1.18.13":
-  version: 1.18.13
-  resolution: "autosize@npm:1.18.13"
-  dependencies:
-    jquery: ">=1.7"
-  checksum: 528be9d90e243340918e9b8b3e490ce87ad6d47ce82e0ed698bb1105d0c8474d876d9bab189c0c4fd6e3767a9e07d4e772e6c5d43e8a6fd9fb55c3bf655b8b25
-  languageName: node
-  linkType: hard
-
 "aws-sign2@npm:~0.7.0":
   version: 0.7.0
   resolution: "aws-sign2@npm:0.7.0"
@@ -8005,7 +7996,6 @@ fsevents@~2.1.2:
     "@typescript-eslint/eslint-plugin": ^3.9.1
     "@typescript-eslint/parser": ^3.9.1
     autoprefixer: ^9.1.1
-    autosize: ^1.18.13
     axios: ^0.18
     babel-eslint: ^10.0.0
     babel-loader: ^8.0.0
