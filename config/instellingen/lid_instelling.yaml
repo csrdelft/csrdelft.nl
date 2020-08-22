@@ -56,6 +56,12 @@ instellingen:
       opties: ['normaal', 'lustrum', 'owee', 'dies', 'donker', 'sineregno', 'civitasia', 'roze', 'koevoet']
       default: 'normaal'
       beschrijving: 'Ik daag je uit roze te gebruiken. Of koevoet.'
+    automatischDonker:
+      titel: 'Automatisch donker thema'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Schakel automatisch donkere modus in als je computer op donkere modus staat.'
     assistent:
       titel: 'Assistent'
       type: Enumeration

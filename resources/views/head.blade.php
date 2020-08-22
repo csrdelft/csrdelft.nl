@@ -24,6 +24,9 @@
 @foreach(\CsrDelft\view\CompressedLayout::getUserModules() as $sheet)
 	{!! css_asset($sheet) !!}
 @endforeach
+@if (lid_instelling('layout', 'automatischDonker') == 'ja')
+	{!! css_asset('thema-donker', 'screen and (prefers-color-scheme: dark') !!}
+@endif
 <script>
 	APP_ENV="{{$_ENV['APP_ENV']}}";
 	SENTRY_DSN_JS="{{$_ENV['SENTRY_DSN_JS']}}";

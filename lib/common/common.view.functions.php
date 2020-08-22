@@ -54,11 +54,15 @@ function crlf_endings(string $input) {
  * @param string $asset
  * @return string
  */
-function css_asset(string $module) {
+function css_asset(string $module, $media = null) {
 	$assetString = '';
 
 	foreach (module_asset($module, 'css') as $asset) {
-		$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\"/>\n";
+		if ($media) {
+			$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\" media=\"{$media}\"/>\n";
+		} else {
+			$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\"/>\n";
+		}
 	}
 
 	return $assetString;
