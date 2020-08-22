@@ -26,15 +26,11 @@
 	@else
 		<p>Op deze pagina kunt u de corveetaken aanmaken, wijzigen en verwijderen
 			@if(!empty($maaltijd))  voor de
-			@if($maaltijd->archief !== null)
-				<span class="dikgedrukt">gearchiveerde</span>
-			@elseif($maaltijd->verwijderd)
+			@if($maaltijd->verwijderd)
 				<span class="dikgedrukt">verwijderde</span>
 			@endif
 			maaltijd:<br/>
-			@if($maaltijd->archief !== null)
-				@icon("compress", null, "Maaltijd is gearchiveerd")
-			@elseif($maaltijd->verwijderd)
+			@if($maaltijd->verwijderd)
 				@icon("bin", null, "Maaltijd is verwijderd")
 			@else
 				<a href="/maaltijdenbeheer/beheer/{{$maaltijd->maaltijd_id}}" title="Wijzig gekoppelde maaltijd"
