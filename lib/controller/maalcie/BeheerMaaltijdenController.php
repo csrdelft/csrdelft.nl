@@ -293,7 +293,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function aanmelden() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 		$form = new AanmeldingForm($maaltijd, true); // fetches POST values itself

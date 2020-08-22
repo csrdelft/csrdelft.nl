@@ -78,7 +78,7 @@ function knopAjax(knop: Element, type: string) {
 
 		data = {
 			'DataTableId': tableId,
-			'DataTableSelection[]': fnGetSelection('#' + tableId),
+			'DataTableSelection': fnGetSelection('#' + tableId),
 		};
 
 		done = (response: unknown) => {
