@@ -19,7 +19,6 @@ class EntitySelectField extends InputField {
 	 * @var ISelectEntity[]
 	 */
 	protected $options;
-	private $groups;
 	private $entityType;
 	/**
 	 * @var ObjectRepository
@@ -69,24 +68,6 @@ class EntitySelectField extends InputField {
 		}
 
 		return $this->entityManager->getReference($this->entityType, $value);
-	}
-
-	public function getPreviewDiv() {
-		if ($this->groups) {
-			return '<div id="selectPreview_' . $this->getId() . '" class="previewDiv"></div>';
-		}
-		return '';
-	}
-
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-
-var preview{$this->getId()} = function () {
-	var selected = $(':selected', '#{$this->getId()}');
-	$('#selectPreview_{$this->getId()}').html(selected.parent().attr('label'));
-};
-preview{$this->getId()}();
-JS;
 	}
 
 	public function getHtml($include_hidden = true) {
