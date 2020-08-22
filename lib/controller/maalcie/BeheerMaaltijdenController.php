@@ -249,7 +249,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function verwijder() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
@@ -273,7 +273,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function herstel() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
@@ -314,7 +314,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function afmelden() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 		$form = new AanmeldingForm($maaltijd, false); // fetches POST values itself

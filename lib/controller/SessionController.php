@@ -70,7 +70,7 @@ class SessionController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function lockip() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		if (!$selection) {
 			throw $this->createAccessDeniedException();
 		}

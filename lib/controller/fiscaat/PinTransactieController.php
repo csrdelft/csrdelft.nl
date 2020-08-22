@@ -17,7 +17,6 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
@@ -129,15 +128,12 @@ class PinTransactieController extends AbstractController {
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
 					// Maak een nieuwe bestelling met bedrag en uid.
 					return new PinBestellingAanmakenForm($pinTransactieMatch);
-					break;
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE:
 					// Crediteer de bestelling met een confirm.
 					return new PinBestellingCrediterenForm($pinTransactieMatch);
-					break;
 				case PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG:
 					// Update bestelling met bedrag.
 					return new PinBestellingVeranderenForm($pinTransactieMatch);
-					break;
 				default:
 					throw new CsrException('Onbekende PinTransactieMatchStatusEnum: ' . $pinTransactieMatch->status);
 			}
@@ -259,7 +255,7 @@ class PinTransactieController extends AbstractController {
 	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function koppel() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 
 		if (count($selection) !== 2) {
 			throw new CsrGebruikerException('Selecteer twee regels om te koppelen.');

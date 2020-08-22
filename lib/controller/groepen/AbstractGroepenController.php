@@ -12,13 +12,11 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\AbstractGroepLedenRepository;
 use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
@@ -374,7 +372,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			}
 		} // beheren
 		else {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			$selection = $this->getDataTableSelection();
 			if (empty($selection)) {
 				throw $this->createAccessDeniedException();
 			}
@@ -753,7 +751,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			});
 			return new GroepView($groep);
 		} else {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			$selection = $this->getDataTableSelection();
 			if (empty($selection)) {
 				throw new CsrGebruikerException();
 			}

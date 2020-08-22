@@ -117,7 +117,7 @@ class BeheerCiviSaldoController extends AbstractController {
 	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function verwijderen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 
 		$removed = array();
 		foreach ($selection as $uuid) {
