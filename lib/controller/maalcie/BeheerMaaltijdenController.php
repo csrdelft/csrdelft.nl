@@ -8,6 +8,7 @@ use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\entity\maalcie\RepetitieMaaltijdMaken;
 use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
@@ -194,12 +195,17 @@ class BeheerMaaltijdenController extends AbstractController {
 				setMelding($aanmeldingen . ' aanmelding' . ($aanmeldingen !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter, 2);
 			}
 			return $this->tableData([$maaltijd]);
-		} elseif ($request->query->has('mlt_repetitie_id')) {
-			$mlt_repetitie_id = $request->query->get('mlt_repetitie_id');
+		} elseif ($request->query->has('mrid')) {
+			$mlt_repetitie_id = $request->query->get('mrid');
 			$repetitie = $this->maaltijdRepetitiesRepository->getRepetitie($mlt_repetitie_id);
-			$beginDatum = $repetitie->getFirstOccurrence();
+			$repetitieMaken = new RepetitieMaaltijdMaken();
+			$repetitieMaken->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+			$repetitieMaken->begin_moment = $repetitie->getFirstOccurrence();
+			$repetitieMaken->eind_moment = $repetitie->getFirstOccurrence();
+			$repetitieMaken->periode = $repetitie->getPeriodeInDagenText();
+			$repetitieMaken->dag = $repetitie->getDagVanDeWeekText();
 			if ($repetitie->periode_in_dagen > 0) {
-				return new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
+				return new RepetitieMaaltijdenForm($repetitieMaken); // fetches POST values itself
 			} else {
 				$maaltijd->repetitie = $repetitie;
 				$maaltijd->product = $repetitie->product;
@@ -375,10 +381,14 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function aanmaken(MaaltijdRepetitie $repetitie) {
-		$form = new RepetitieMaaltijdenForm($repetitie); // fetches POST values itself
+		$repetitieMaaltijdMaken = new RepetitieMaaltijdMaken();
+		$repetitieMaaltijdMaken->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+		$repetitieMaaltijdMaken->periode = $repetitie->getPeriodeInDagenText();
+		$repetitieMaaltijdMaken->dag = $repetitie->getDagVanDeWeekText();
+
+		$form = new RepetitieMaaltijdenForm($repetitieMaaltijdMaken); // fetches POST values itself
 		if ($form->validate()) {
-			$values = $form->getValues();
-			$maaltijden = $this->maaltijdenRepository->maakRepetitieMaaltijden($repetitie, $values['begindatum'], $values['einddatum']);
+			$maaltijden = $this->maaltijdenRepository->maakRepetitieMaaltijden($repetitie, $repetitieMaaltijdMaken->begin_moment, $repetitieMaaltijdMaken->eind_moment);
 			if (empty($maaltijden)) {
 				throw new CsrGebruikerException('Geen nieuwe maaltijden aangemaakt.');
 			}
