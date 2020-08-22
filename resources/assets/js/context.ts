@@ -1,5 +1,4 @@
 import ctx from './ctx';
-import hoverintent from "hoverintent";
 import {select} from "./lib/dom";
 
 export const registerGrafiekContext = async (): Promise<void> => {
@@ -105,10 +104,12 @@ export const registerFormulierContext = async (): Promise<void> => {
 
 export const registerGlobalContext = async (): Promise<void> => {
 	const [
+		{default: hoverintent},
 		{initKaartjes},
 		{default: Vue},
 		{default: $},
 	] = await Promise.all([
+		import(/* webpackChunkName: "hoverintent" */'hoverintent'),
 		import(/* webpackChunkName: "kaartje" */'./lib/kaartje'),
 		import(/* webpackChunkName: "vue" */'vue'),
 		import(/* webpackChunkName: "jquery" */'jquery'),
@@ -134,9 +135,11 @@ export const registerGlobalContext = async (): Promise<void> => {
 export const registerFlatpickrContext = async (): Promise<void> => {
 	const {
 		initDateTimePicker,
+		initDatePicker,
 	} = await import(/* webpackChunkName: "datepicker" */'./lib/datepicker');
 
 	ctx.addHandlers({
 		'.DateTimeField': initDateTimePicker,
+		'.DateField': initDatePicker,
 	});
 };

@@ -36,3 +36,18 @@ export const initDateTimePicker = (el: HTMLInputElement): void => {
 
 	flatpickr(el, defaultOpts);
 };
+
+export const initDatePicker = (el: HTMLInputElement): void => {
+	const {readonly, minDate, maxDate} = el.dataset
+
+	if (readonly) {
+		el.readOnly = true;
+		return
+	}
+
+	flatpickr(el, {
+		locale: Dutch,
+		minDate,
+		maxDate
+	})
+}

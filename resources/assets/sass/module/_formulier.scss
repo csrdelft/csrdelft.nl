@@ -141,6 +141,10 @@ h1.Titel {
   .password {
     padding: 2px 1px;
   }
+	// DateField en DateTimeField zijn altijd readonly
+	.form-control.DateField[readonly], .form-control.DateTimeField[readonly] {
+		background-color: $white;
+	}
 }
 
 /* Inline Formulier */
