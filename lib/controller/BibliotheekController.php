@@ -471,7 +471,8 @@ class BibliotheekController extends AbstractController {
 			$results = $this->boekRepository->autocompleteProperty($zoekveld, $zoekterm);
 			$data = [];
 			foreach ($results as $result) {
-				$data[] = ['data' => [$result], 'value' => $result->{$zoekveld}, 'id' => $result->id];
+				$waarde = $result[$zoekveld];
+				$data[] = ['data' => $waarde, 'value' => $waarde, 'id' => $waarde];
 			}
 			return new JsonResponse($data);
 		} else {
