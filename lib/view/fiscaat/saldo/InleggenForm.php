@@ -14,7 +14,7 @@ use CsrDelft\view\formulier\ModalForm;
  */
 class InleggenForm extends ModalForm {
 	public function __construct(Civisaldo $model) {
-		parent::__construct($model, '/fiscaat/saldo/inleggen', "Inleggen: " . ProfielRepository::getNaam($model->uid, 'volledig'), true);
+		parent::__construct($model, '/fiscaat/saldo/inleggen/'. $model->uid, "Inleggen: " . ProfielRepository::getNaam($model->uid, 'volledig'), true);
 
 		$fields = [];
 		$fields['saldo'] = new BedragField('saldo', $model->saldo, 'Huidig saldo');

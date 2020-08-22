@@ -181,7 +181,7 @@ class CiviSaldoRepository extends AbstractRepository {
 			->where('s.uid LIKE \'c%\'')
 			->orderBy('s.uid', 'DESC')
 			->setMaxResults(1)
-			->getQuery()->getResult()->first();
+			->getQuery()->getResult()[0];
 	}
 
 	/**

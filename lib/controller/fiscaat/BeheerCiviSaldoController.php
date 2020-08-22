@@ -73,15 +73,19 @@ class BeheerCiviSaldoController extends AbstractController {
 
 	/**
 	 * @param EntityManagerInterface $em
+	 * @param string $uid
 	 * @return GenericDataTableResponse|InleggenForm
-	 * @Route("/fiscaat/saldo/inlegen", methods={"POST"})
+	 * @Route("/fiscaat/saldo/inleggen/{uid}", defaults={"uid"=null}, methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
-	public function inleggen(EntityManagerInterface $em) {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-
-		/** @var CiviSaldo $civisaldo */
-		$civisaldo = $this->civiSaldoRepository->retrieveByUUID($selection[0]);
+	public function inleggen(EntityManagerInterface $em, $uid) {
+		if ($uid) {
+			$civisaldo = $this->civiSaldoRepository->find($uid);
+		} else {
+			$selection = $this->getDataTableSelection();
+			/** @var CiviSaldo $civisaldo */
+			$civisaldo = $this->civiSaldoRepository->retrieveByUUID($selection[0]);
+		}
 
 		if ($civisaldo) {
 			$form = new InleggenForm($civisaldo);
@@ -93,7 +97,6 @@ class BeheerCiviSaldoController extends AbstractController {
 					$this->civiBestellingRepository->create($bestelling);
 
 					$this->civiSaldoRepository->ophogen($civisaldo->uid, $inleg);
-					$civisaldo->saldo += $inleg;
 					$civisaldo->laatst_veranderd = date_create_immutable();
 				});
 
@@ -152,7 +155,8 @@ class BeheerCiviSaldoController extends AbstractController {
 
 			if (is_null($saldo->uid)) {
 				$laatsteSaldo = $this->civiSaldoRepository->findLaatsteCommissie();
-				$saldo->uid = ++$laatsteSaldo->uid;
+				$saldo->uid = $laatsteSaldo->uid;
+				++$saldo->uid;
 			}
 
 			if (is_null($saldo->naam)) {
