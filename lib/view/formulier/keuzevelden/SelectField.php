@@ -55,17 +55,6 @@ class SelectField extends InputField {
 		return $this->error === '';
 	}
 
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-
-var preview{$this->getId()} = function () {
-	var selected = $(':selected', '#{$this->getId()}');
-	$('#selectPreview_{$this->getId()}').html(selected.parent().attr('label'));
-};
-preview{$this->getId()}();
-JS;
-	}
-
 	public function getHtml($include_hidden = true) {
 		$html = '';
 		if ($include_hidden) {
