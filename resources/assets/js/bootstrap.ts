@@ -26,18 +26,6 @@ import hoverintent from 'hoverintent'
 
 moment.locale('nl');
 
-declare global {
-	interface JQueryStatic {
-		markItUp: (arg: unknown) => unknown;
-	}
-
-	interface JQuery {
-		markItUp: (arg: unknown) => unknown;
-		scrollTo: (arg: unknown) => void;
-		modal: (arg?: unknown) => void;
-	}
-}
-
 window.$ = window.jQuery = $;
 
 /**

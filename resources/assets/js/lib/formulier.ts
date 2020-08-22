@@ -248,3 +248,18 @@ export function formCancel(event: Event): boolean {
 export function insertPlaatje(id: string): void {
 	$.markItUp({replaceWith: '[plaatje]' + id + '[/plaatje]'});
 }
+
+export function initSterrenField(el: HTMLElement): void {
+	$(el).raty({
+		...JSON.parse(el.dataset.config),
+		path: '/images/raty/',
+		cancelHint: 'Wis beoordeling',
+		cancelPlace: 'right',
+		noRatedMsg: '',
+		click: function (score, event) {
+			console.log(score)
+			$(this).raty('score', score)
+			$(this).closest('form').submit()
+		}
+	})
+}

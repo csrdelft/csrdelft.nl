@@ -81,6 +81,7 @@ export const registerFormulierContext = async (): Promise<void> => {
 			formReset,
 			formSubmit,
 			formToggle,
+			initSterrenField,
 		},
 		{
 			bbCodeSet,
@@ -99,6 +100,7 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
 		'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 		'time.timeago': (el) => $(el).timeago(),
+		'.SterrenField': initSterrenField
 	});
 };
 

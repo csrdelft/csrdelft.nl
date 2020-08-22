@@ -17,11 +17,15 @@ export function ajaxRequest(
 				`<img alt="Laden" id="${source.id}" title="${url}" src="/images/loading-arrows.gif" />`);
 			source = select(`img[title="${url}"]`);
 		} else if (source.classList.contains('InlineForm')) {
-			Object.assign(select<HTMLElement>('.FormElement:first', source).style, <CSSStyleDeclaration>{
-				backgroundImage: 'url("/images/loading-fb.gif")',
-				backgroundPosition: 'center right',
-				backgroundRepeat: 'no-repeat',
-			});
+			try {
+				Object.assign(select<HTMLElement>('.FormElement:first', source).style, <CSSStyleDeclaration>{
+					backgroundImage: 'url("/images/loading-fb.gif")',
+					backgroundPosition: 'center right',
+					backgroundRepeat: 'no-repeat',
+				});
+			} catch (e) {
+				// negeer
+			}
 		} else {
 			source.classList.add('loading');
 		}
