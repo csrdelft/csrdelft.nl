@@ -3,7 +3,9 @@
 
 namespace CsrDelft;
 
+use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -37,5 +39,9 @@ class Kernel extends BaseKernel {
 		$routes->import('../config/{routes}/' . $this->environment . '/**/*.yaml');
 		$routes->import('../config/{routes}/*.yaml');
 		$routes->import('../config/{routes}.yaml');
+	}
+
+	protected function build(ContainerBuilder $builder) {
+		$builder->registerForAutoconfiguration(FormulierTypeInterface::class)->addTag('csr.formulier.type');
 	}
 }

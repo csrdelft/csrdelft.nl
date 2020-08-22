@@ -3,7 +3,8 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrException;
+use CsrDelft\Component\Formulier\FormulierFactory;
+use CsrDelft\Component\Formulier\FormulierInstance;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\view\datatable\DataTable;
@@ -20,6 +21,12 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @method Account|null getUser()
  */
 class AbstractController extends BaseController {
+	public static function getSubscribedServices() {
+		return parent::getSubscribedServices() + [
+				'csr.formulier.factory' => FormulierFactory::class
+			];
+	}
+
 	/**
 	 * Haal de DataTable selectie uit POST.
 	 *
@@ -92,5 +99,16 @@ class AbstractController extends BaseController {
 
 	protected function createNotFoundException(string $message = 'Niet gevonden', \Throwable $previous = null): NotFoundHttpException {
 		return parent::createNotFoundException($message, $previous);
+	}
+
+	/**
+	 * Creates and returns a Form instance from the type of the form.
+	 * @param string $type
+	 * @param null $data
+	 * @param array $options
+	 * @return FormulierInstance
+	 */
+	protected function createFormulier(string $type, $data = null, array $options = []): FormulierInstance {
+		return $this->container->get('csr.formulier.factory')->create($type, $data, $options);
 	}
 }

@@ -75,3 +75,19 @@ services:
   security:
     class: Symfony\Component\Security\Core\Security
     public: true
+
+  CsrDelft\view\:
+    resource: '../lib/view'
+
+  csr.formulier.factory:
+    alias: CsrDelft\view\formulier\FormulierFactory
+
+  CsrDelft\Component\Formulier\FormulierBuilder:
+    shared: false # iedere instance is uniek
+
+  CsrDelft\Component\Formulier\FormulierFactory:
+    shared: false
+    public: true
+    arguments:
+      - !tagged_locator {tag: csr.formulier.type, index_by: key}
+      - '@CsrDelft\Component\Formulier\FormulierBuilder'

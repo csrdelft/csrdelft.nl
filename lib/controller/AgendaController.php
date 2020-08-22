@@ -26,6 +26,7 @@ use CsrDelft\view\response\IcalResponse;
 use CsrDelft\view\View;
 use DateInterval;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -187,11 +188,11 @@ class AgendaController extends AbstractController {
 
 	/**
 	 * @param null $datum
-	 * @return AgendaItemForm|JsonResponse
+	 * @return JsonResponse|Response
 	 * @Route("/agenda/toevoegen/{datum}", methods={"POST"}, defaults={"datum": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen($datum = null) {
+	public function toevoegen(Request $request, $datum = null) {
 		$profiel = $this->getProfiel();
 		if (!LoginService::mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
 			throw $this->createAccessDeniedException('Mag geen gebeurtenis toevoegen.');
@@ -201,7 +202,8 @@ class AgendaController extends AbstractController {
 		if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
 			$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 		}
-		$form = new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
+		$form = $this->createFormulier(AgendaItemForm::class, $item, ['actie' => 'toevoegen']);
+		$form->handleRequest($request);
 		if ($form->validate()) {
 			if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
 				$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
@@ -211,32 +213,33 @@ class AgendaController extends AbstractController {
 				$_POST = []; // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . date_format_intl($item->begin_moment, DATETIME_FORMAT) . ')', 1);
 				$item->item_id = null;
-				return new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
+				return $this->createFormulier($item, 'toevoegen')->createModalView();
 			} else {
 				return new JsonResponse(true);
 			}
 		} else {
-			return $form;
+			return $form->createModalView();
 		}
 	}
 
 	/**
 	 * @param $aid
-	 * @return AgendaItemForm|JsonResponse
+	 * @return JsonResponse|Response
 	 * @Route("/agenda/bewerken/{aid}", methods={"POST"}, requirements={"aid": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($aid) {
+	public function bewerken(Request $request, $aid) {
 		$item = $this->agendaRepository->getAgendaItem((int)$aid);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
-		$form = new AgendaItemForm($item, 'bewerken'); // fetches POST values itself
+		$form = $this->createFormulier(AgendaItemForm::class, $item, ['actie' => 'bewerken']);
+		$form->handleRequest($request);
 		if ($form->validate()) {
 			$this->agendaRepository->save($item);
 			return new JsonResponse(true);
 		} else {
-			return $form;
+			return $form->createModalView();
 		}
 	}
 
