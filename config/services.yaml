@@ -80,7 +80,7 @@ services:
     resource: '../lib/view'
 
   csr.formulier.factory:
-    alias: CsrDelft\view\formulier\FormulierFactory
+    alias: CsrDelft\Component\Formulier\FormulierFactory
 
   CsrDelft\Component\Formulier\FormulierBuilder:
     shared: false # iedere instance is uniek
