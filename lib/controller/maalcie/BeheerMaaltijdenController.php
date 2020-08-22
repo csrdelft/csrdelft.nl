@@ -225,7 +225,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	 */
 	public function bewerk(Maaltijd $maaltijd = null) {
 		if (!$maaltijd) {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			$selection = $this->getDataTableSelection();
 			if (empty($selection)) {
 				throw new ResourceNotFoundException();
 			}
