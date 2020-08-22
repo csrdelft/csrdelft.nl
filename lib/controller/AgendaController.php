@@ -197,7 +197,7 @@ class AgendaController extends AbstractController {
 			throw $this->createAccessDeniedException('Mag geen gebeurtenis toevoegen.');
 		}
 
-		$item = $this->agendaRepository->nieuw($datum);
+		$item = $this->agendaRepository->nieuw($request->request->get('begin_moment'), $request->request->get('eind_moment'));
 		if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
 			$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 		}

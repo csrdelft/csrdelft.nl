@@ -235,13 +235,10 @@ class AgendaRepository extends AbstractRepository {
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
-	public function nieuw($datum) {
+	public function nieuw($begin_moment, $eind_moment) {
 		$item = new AgendaItem();
-		if (!preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
-			$datum = strtotime('Y-m-d');
-		}
-		$item->begin_moment = date_create_immutable(getDateTime(strtotime($datum) + 72000));
-		$item->eind_moment = date_create_immutable(getDateTime(strtotime($datum) + 79200));
+		$item->begin_moment = $begin_moment ? date_create_immutable($begin_moment) : date_create_immutable()->add(new DateInterval('P1D'));
+		$item->eind_moment = $eind_moment ? date_create_immutable($eind_moment) : date_create_immutable()->add(new DateInterval('P2D'));
 		if (LoginService::mag(P_AGENDA_MOD)) {
 			$item->rechten_bekijken = instelling('agenda', 'standaard_rechten');
 		} else {
