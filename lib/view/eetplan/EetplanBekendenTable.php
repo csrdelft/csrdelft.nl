@@ -16,6 +16,7 @@ class EetplanBekendenTable extends DataTable {
 		$this->addColumn('noviet1', 'noviet2');
 		$this->searchColumn('noviet1');
 		$this->searchColumn('noviet2');
+		$this->searchColumn('opmerking');
 
 		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $this->dataUrl . '/toevoegen', 'Toevoegen', 'Bekenden toevoegen', 'add'));
 		$this->addRowKnop(new DataTableRowKnop($this->dataUrl . '/verwijderen', 'Bekenden verwijderen', 'cross', 'confirm'));

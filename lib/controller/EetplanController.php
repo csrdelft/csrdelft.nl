@@ -156,11 +156,13 @@ class EetplanController extends AbstractController {
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/toevoegen');
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanRepository->find(['uid' => $eetplan->uid, 'woonoord_id' => $eetplan->woonoord_id]) != null) {
+		} elseif ($this->eetplanRepository->findOneBy(['noviet' => $eetplan->noviet, 'woonoord' => $eetplan->woonoord]) != null) {
 			setMelding('Deze noviet is al eens op dit huis geweest', -1);
 			return $form;
 		} else {
-			$eetplan->noviet = $em->getReference(Profiel::class, $eetplan->uid);
+			// Fix pk
+			$eetplan->uid = $eetplan->noviet->uid;
+			$eetplan->woonoord_id = $eetplan->woonoord->id;
 			$this->eetplanRepository->save($eetplan);
 			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		}
@@ -220,7 +222,7 @@ class EetplanController extends AbstractController {
 		/** @var Woonoord[] $woonoorden */
 		$woonoorden = $this->woonoordenRepository->createQueryBuilder('w')
 			->where('w.status = :status and w.naam LIKE :naam')
-			->setParameter('status', GroepStatus::HT())
+			->setParameter('status', GroepStatus::HT)
 			->setParameter('naam', $huisnaam)
 			->getQuery()->getResult();
 		return new EetplanHuizenZoekenResponse($woonoorden);
