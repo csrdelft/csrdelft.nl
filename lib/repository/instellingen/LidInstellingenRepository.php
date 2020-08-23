@@ -51,11 +51,11 @@ class LidInstellingenRepository extends AbstractRepository {
 	 */
 	public function getAllForLid(string $uid) {
 		$result = [];
-		foreach ($this->findBy(['uid' => $uid]) as $instelling) {
+		foreach ($this->findBy(['profiel' => $uid]) as $instelling) {
 			if (!isset($result[$instelling->module])) {
 				$result[$instelling->module] = [];
 			}
-			$result[$instelling->module][$instelling->instelling_id] = $instelling->waarde;
+			$result[$instelling->module][$instelling->instelling] = $instelling->waarde;
 		}
 
 		return $result;
@@ -85,7 +85,7 @@ class LidInstellingenRepository extends AbstractRepository {
 		if (!$uid) {
 			$uid = $this->getUid() ?? LoginService::UID_EXTERN;
 		}
-		$instelling = $this->findOneBy(['module' => $module, 'instelling_id' => $id, 'uid' => $uid]);
+		$instelling = $this->findOneBy(['module' => $module, 'instelling' => $id, 'profiel' => $uid]);
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
 				$instelling = $this->newInstelling($module, $id, $uid);
@@ -94,8 +94,8 @@ class LidInstellingenRepository extends AbstractRepository {
 		} else {
 			if ($instelling) {
 				// Haal niet-bestaande instelling uit de database
-				$this->getEntityManager()->remove($instelling);
-				$this->getEntityManager()->flush();
+				$this->_em->remove($instelling);
+				$this->_em->flush();
 			}
 			throw new CsrException(sprintf('Instelling bestaat niet: "%s" module: "%s".', $id, $module));
 		}
@@ -108,13 +108,12 @@ class LidInstellingenRepository extends AbstractRepository {
 	protected function newInstelling($module, $id, $uid) {
 		$instelling = new LidInstelling();
 		$instelling->module = $module;
-		$instelling->instelling_id = $id;
+		$instelling->instelling = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
-		$instelling->uid = $uid;
 		$instelling->profiel = ProfielRepository::get($uid);
 
-		$this->getEntityManager()->persist($instelling);
-		$this->getEntityManager()->flush();
+		$this->_em->persist($instelling);
+		$this->_em->flush();
 		return $instelling;
 	}
 
@@ -147,14 +146,13 @@ class LidInstellingenRepository extends AbstractRepository {
 				}
 				$instelling = new LidInstelling();
 				$instelling->module = $module;
-				$instelling->instelling_id = $id;
-				$instelling->uid = $this->getUid();
-				$instelling->profiel = ProfielRepository::get($instelling->uid);
+				$instelling->instelling = $id;
+				$instelling->profiel = ProfielRepository::get($this->getUid());
 				$instelling->waarde = $waarde;
-				$this->getEntityManager()->persist($instelling);
+				$this->_em->persist($instelling);
 			}
 		}
-		$this->getEntityManager()->flush();
+		$this->_em->flush();
 	}
 
 	public function isValidValue($module, $id, $waarde) {
@@ -178,7 +176,7 @@ class LidInstellingenRepository extends AbstractRepository {
 	public function resetForAll($module, $id) {
 		$this->createQueryBuilder('i')
 			->andWhere('i.module = :module')
-			->andWhere('i.instelling_id = :id')
+			->andWhere('i.instelling = :id')
 			->setParameters(['module' => $module, 'id' => $id])
 			->delete()
 			->getQuery()
@@ -204,12 +202,12 @@ class LidInstellingenRepository extends AbstractRepository {
 	 * @throws CsrGebruikerException
 	 */
 	public function update($entity) {
-		if (!$this->hasKey($entity->module, $entity->instelling_id)) {
-			throw new CsrGebruikerException("Instelling '{$entity->instelling_id}' uit module '{$entity->module}' niet gevonden.");
+		if (!$this->hasKey($entity->module, $entity->instelling)) {
+			throw new CsrGebruikerException("Instelling '{$entity->instelling}' uit module '{$entity->module}' niet gevonden.");
 		}
 
-		$type = $this->getTypeOptions($entity->module, $entity->instelling_id);
-		$typeOptions = $this->getTypeOptions($entity->module, $entity->instelling_id);
+		$type = $this->getTypeOptions($entity->module, $entity->instelling);
+		$typeOptions = $this->getTypeOptions($entity->module, $entity->instelling);
 
 		if ($type === InstellingType::Enumeration && !in_array($entity->waarde, $typeOptions)) {
 			throw new CsrGebruikerException("Waarde is geen geldige optie");
@@ -235,8 +233,7 @@ class LidInstellingenRepository extends AbstractRepository {
 			}
 		}
 
-		$this->getEntityManager()->persist($entity);
-		$this->getEntityManager()->flush();
+		$this->_em->flush();
 	}
 
 	/**
@@ -264,7 +261,7 @@ class LidInstellingenRepository extends AbstractRepository {
 
 		$this->createQueryBuilder('i')
 			->delete()
-			->where('i.module not in (:modules) or i.instelling_id not in (:instellingen)')
+			->where('i.module not in (:modules) or i.instelling not in (:instellingen)')
 			->setParameter('modules', $this->getModules())
 			->setParameter('instellingen', $instellingen)
 			->getQuery()->execute();
