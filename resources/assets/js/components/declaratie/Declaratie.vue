@@ -71,6 +71,9 @@
 						</div>
 					</div>
 					<div class="bon-selected" v-else>
+						<div v-if="declaratie.bonnen.length > 1" class="bonVerwijderen" @click="bonVerwijderen(bonIndex)">
+							<i class="fa fa-trash-alt"></i>
+						</div>
 						<div class="title">Bon {{ bonIndex + 1 }}</div>
 
 						<div class="field">
@@ -269,6 +272,10 @@
 			}
 		}
 
+		public bonVerwijderen(index: number) {
+			this.declaratie.bonnen.splice(index, 1);
+		}
+
 		public nieuweRegel(bon: Bon) {
 			bon.regels.push(legeRegel());
 		}
@@ -452,7 +459,11 @@
 							cursor: pointer;
 
 							&.trash {
-								color: #676767;
+								color: #a5a5a5;
+
+								&:hover {
+									color: #676767;
+								}
 							}
 
 							&.add {
@@ -515,6 +526,17 @@
 							&.totaalBold {
 								font-weight: 600;
 							}
+						}
+					}
+
+					.bonVerwijderen {
+						float: right;
+						color: #a5a5a5;
+						cursor: pointer;
+						margin-top: 4px;
+
+						&:hover {
+							color: #676767;
 						}
 					}
 
