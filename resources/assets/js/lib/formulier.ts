@@ -41,8 +41,12 @@ export function formInlineToggle(form: Element): void {
 	$form.children(':first').trigger('focus');
 }
 
-export function formToggle(target: HTMLElement, event: Event): false {
+export function formToggle(target: Element, event: Event): false {
 	event.preventDefault();
+
+	if (!(target instanceof HTMLElement)) {
+		throw new Error("Element geen HTMLElement")
+	}
 
 	formInlineToggle(select('form', parents(target)));
 
