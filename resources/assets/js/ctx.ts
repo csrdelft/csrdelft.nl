@@ -54,4 +54,4 @@ class Context {
 window._stek_context = new Context();
 
 export default window._stek_context;
-export const init = (parent: Element) => window._stek_context.init(parent);
+export const init = (parent: Element): void => window._stek_context.init(parent);

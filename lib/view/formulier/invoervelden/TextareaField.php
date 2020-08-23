@@ -28,18 +28,4 @@ class TextareaField extends TextField {
 	public function getHtml() {
 		return '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete')) . '>' . $this->value . '</textarea>';
 	}
-
-	/**
-	 * Maakt een verborgen div met dezelfde eigenschappen als de textarea en
-	 * gebruikt autoresize eigenschappen van de div om de hoogte te bepalen voor de textarea.
-	 *
-	 * @return string
-	 */
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-
-$('#{$this->getId()}').autosize();
-JS;
-	}
-
 }

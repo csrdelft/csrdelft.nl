@@ -4,8 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
@@ -33,6 +31,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -73,14 +72,13 @@ class EetplanController extends AbstractController {
 	/**
 	 * @param null $uid
 	 * @return View
-	 * @throws CsrToegangException
 	 * @Route("/eetplan/noviet/{uid}", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
 	public function noviet($uid = null) {
 		$eetplan = $this->eetplanRepository->getEetplanVoorNoviet($uid);
 		if (!$eetplan) {
-			throw new CsrNotFoundException("Geen eetplan gevonden voor deze noviet");
+			throw new NotFoundHttpException("Geen eetplan gevonden voor deze noviet");
 		}
 
 		return view('eetplan.noviet', [
@@ -158,11 +156,13 @@ class EetplanController extends AbstractController {
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/toevoegen');
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanRepository->find(['uid' => $eetplan->uid, 'woonoord_id' => $eetplan->woonoord_id]) != null) {
+		} elseif ($this->eetplanRepository->findOneBy(['noviet' => $eetplan->noviet, 'woonoord' => $eetplan->woonoord]) != null) {
 			setMelding('Deze noviet is al eens op dit huis geweest', -1);
 			return $form;
 		} else {
-			$eetplan->noviet = $em->getReference(Profiel::class, $eetplan->uid);
+			// Fix pk
+			$eetplan->uid = $eetplan->noviet->uid;
+			$eetplan->woonoord_id = $eetplan->woonoord->id;
 			$this->eetplanRepository->save($eetplan);
 			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		}
@@ -222,7 +222,7 @@ class EetplanController extends AbstractController {
 		/** @var Woonoord[] $woonoorden */
 		$woonoorden = $this->woonoordenRepository->createQueryBuilder('w')
 			->where('w.status = :status and w.naam LIKE :naam')
-			->setParameter('status', GroepStatus::HT())
+			->setParameter('status', GroepStatus::HT)
 			->setParameter('naam', $huisnaam)
 			->getQuery()->getResult();
 		return new EetplanHuizenZoekenResponse($woonoorden);

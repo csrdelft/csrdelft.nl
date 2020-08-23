@@ -135,7 +135,9 @@ class WachtwoordWijzigenField extends InputField {
 				} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new)) {
 					$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
 				}
-			} elseif (preg_match('/(.)\1\1+/', $new) OR preg_match('/(.{3,})\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
+			}
+
+			if (preg_match('/(.)\1\1+/', $new) || preg_match('/(.{3,})\1+/', $new) || preg_match('/(.{4,}).*\1+/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
 			} elseif (empty($confirm)) {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';

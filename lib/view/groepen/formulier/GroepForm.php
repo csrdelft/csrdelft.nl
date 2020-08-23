@@ -79,6 +79,7 @@ class GroepForm extends ModalForm {
 
 		$fields['maker']->readonly = !LoginService::mag(P_ADMIN);
 		$fields['maker']->suggestions = ['/tools/naamsuggesties?zoekin=leden&q='];
+		$fields['maker']->suggestieIdField = 'uid';
 		$this->addFields($fields);
 
 		$this->formKnoppen = new FormDefaultKnoppen($nocancel ? false : null);

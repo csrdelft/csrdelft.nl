@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-export function modalOpen(htmlString = '') {
+export function modalOpen(htmlString = ''): boolean {
 	const modal = $('#modal');
 	const modalBackdrop = $('.modal-backdrop');
 
@@ -23,7 +23,7 @@ export function modalOpen(htmlString = '') {
 	return true;
 }
 
-export function modalClose() {
+export function modalClose(): void {
 	$('#modal').modal('hide');
 	$(document.body).trigger('modalClose');
 }

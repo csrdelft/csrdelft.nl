@@ -2,43 +2,35 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\forum\ForumDraad;
-use CsrDelft\entity\forum\ForumPost;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
 use Jacwright\RestServer\RestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ApiForumController {
 	private $forumDradenRepository;
 	private $forumPostsRepository;
-	private $forumDradenGelezenModel;
-
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-
-		$this->forumDradenGelezenModel = $container->get(ForumDradenGelezenRepository::class);
-		$this->forumPostsRepository = $container->get(ForumPostsRepository::class);
-		$this->forumDradenRepository = $container->get(ForumDradenRepository::class);
-	}
-
 	/**
-	 * @return boolean
+	 * @var ForumDradenGelezenRepository
 	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginService::mag(P_OUDLEDEN_READ);
+	private $forumDradenGelezenRepository;
+
+	public function __construct(ForumDradenGelezenRepository $forumDradenGelezenRepository, ForumPostsRepository $forumPostsRepository, ForumDradenRepository $forumDradenRepository) {
+		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
+		$this->forumPostsRepository = $forumPostsRepository;
+		$this->forumDradenRepository = $forumDradenRepository;
 	}
 
 	/**
-	 * @url GET /recent
-	 * @param int offset
-	 * @param int limit
-	 * @return ForumDraad[]
+	 * @Route("/API/2.0/forum/recent", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 * @return JsonResponse
 	 */
 	public function getRecent() {
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
@@ -52,14 +44,15 @@ class ApiForumController {
 			$draad->laatste_wijziging_naam = ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'civitas');
 		}
 
-		return array('data' => array_values($draden));
+		return new JsonResponse(array('data' => array_values($draden)));
 	}
 
 	/**
-	 * @url GET /onderwerp/$id
+	 * @Route("/API/2.0/forum/onderwerp/{id}", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
 	 * @param int offset
 	 * @param int limit
-	 * @return ForumPost[]
+	 * @return JsonResponse
 	 */
 	public function getOnderwerp($id) {
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
@@ -75,7 +68,7 @@ class ApiForumController {
 			throw new RestException(403);
 		}
 
-		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, date_create_immutable());
+		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, date_create_immutable());
 
 		$posts = $this->forumPostsRepository->findBy(['draad_id' => $id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['datum_tijd' => 'DESC'], $limit, $offset);
 
@@ -87,7 +80,7 @@ class ApiForumController {
 			$post->tekst = CsrBB::parseLight($post->tekst);
 		}
 
-		return array('data' => $posts);
+		return new JsonResponse(array('data' => $posts));
 	}
 
 }

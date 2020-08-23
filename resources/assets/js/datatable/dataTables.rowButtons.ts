@@ -15,11 +15,12 @@ class RowButtons {
 	public static version = '1.0.0';
 	public static defaults: RowButtonsConfig = {};
 
-	private static createButtonGroup(config: RowButtonsConfig[], row: object) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	private static createButtonGroup(config: RowButtonsConfig[], row: any) {
 		const btnGroup = html`<div class="btn-group"></div>`;
 
 		for (const btn of Object.values(config)) {
-			const action = replacePlaceholders(btn.action!, row);
+			const action = replacePlaceholders(btn.action ?? "", row);
 
 			const newButton = html`
 <a href="${action}"
@@ -38,10 +39,10 @@ class RowButtons {
 	}
 
 	private c: RowButtonsConfig;
-	private s: any;
+	private s: { dt: DataTables.Api; collapsedGroups: unknown[]; regrouping: boolean; lastDraw: null; };
 
-	constructor(settings: DataTables.SettingsLegacy, config: RowButtonsConfig[]) {
-		const dt = new $.fn.dataTable.Api(settings as any);
+	constructor(settings: string, config: RowButtonsConfig[]) {
+		const dt = new $.fn.dataTable.Api(settings);
 
 		this.c = $.extend(true, {}, RowButtons.defaults, config);
 
@@ -69,6 +70,7 @@ class RowButtons {
 }
 
 declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace DataTables {
 		// noinspection JSUnusedGlobalSymbols
 		interface StaticFunctions {
@@ -76,12 +78,13 @@ declare global {
 		}
 
 		interface Settings {
-			rowButtons?: any;
+			rowButtons?: RowButtonsConfig[];
 		}
 	}
 }
 // Expose
 $.fn.dataTable.RowButtons = RowButtons;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 $.fn.DataTable.RowButtons = RowButtons;
 
@@ -99,7 +102,6 @@ $(document).on('preInit.dt.rowButtons', (e, settings) => {
 		const opts = $.extend({}, buttonInit, defaults);
 
 		if (buttonInit !== false) {
-			// tslint:disable-next-line:no-unused-expression
 			new RowButtons(settings, opts);
 		}
 	}

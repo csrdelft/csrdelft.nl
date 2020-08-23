@@ -5,7 +5,6 @@ import {docReady} from './lib/util';
 declare global {
 	// Hammer kan een Document als element krijgen, dit zorgt ervoor dat horizontale scroll mogelijk is op mobiel.
 	interface HammerStatic {
-		// tslint:disable-next-line:callable-types Deze syntax is nodig omdat HammerStatic ge-extend is.
 		new(element: HTMLElement | SVGElement | Document, options?: HammerOptions | undefined): HammerManager;
 	}
 }
@@ -43,7 +42,7 @@ docReady(() => {
 		toggleScroll();
 	}
 
-	$('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
+	$('.dropdown-menu a.dropdown-toggle').on('click', function () {
 		if (!$(this).next().hasClass('show')) {
 			$(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
 		}

@@ -28,7 +28,7 @@ class ChildRow {
 	 * @private
 	 * @static
 	 */
-	public static _fnCreatedRowCallback(tr: HTMLTableRowElement, data: any) {
+	public static _fnCreatedRowCallback(tr: HTMLTableRowElement, data: {detailSource: string}) {
 		// Details from external source
 		if ('detailSource' in data) {
 			$(tr).children('td:first').addClass('toggle-childrow').data('detailSource', data.detailSource);
@@ -37,7 +37,7 @@ class ChildRow {
 
 	private api: DataTables.Api;
 
-	constructor(dt: any) {
+	constructor(dt: string) {
 		// Sanity check - you just know it will happen
 		if (!(this instanceof ChildRow)) {
 			throw new Error('ChildRow must be initialised with the \'new\' keyword.');
@@ -54,6 +54,7 @@ class ChildRow {
 
 		const tableNode = $(this.api.table(0).node());
 
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		$.fn.dataTable.ext.internal._fnCallbackReg(
 			this.api.settings()[0],
@@ -118,6 +119,7 @@ class ChildRow {
  */
 
 declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace DataTables {
 		// noinspection JSUnusedGlobalSymbols
 		interface StaticFunctions {
@@ -128,6 +130,7 @@ declare global {
 
 // Attach for constructor access
 $.fn.dataTable.ChildRow = ChildRow;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 $.fn.DataTable.ChildRow = ChildRow;
 
@@ -142,16 +145,17 @@ $(document).on('preInit.dt.childRow', (e, settings) => {
 	if (!settings._childRow) {
 
 		if (init !== false) {
-			// tslint:disable-next-line:no-unused-expression
 			new ChildRow(settings);
 		}
 	}
 });
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-$.fn.dataTable.Api.register('childRow.toggle()', function (this: DataTables.TablesMethods, td: any) {
+$.fn.dataTable.Api.register('childRow.toggle()', function (this: DataTables.TablesMethods, td: JQuery<HTMLTableCellElement>) {
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	return this.iterator('table', (ctx: any) => {
+	return this.iterator('table', (ctx: {_childRow: ChildRow}) => {
 		const fh = ctx._childRow;
 
 		if (fh) {

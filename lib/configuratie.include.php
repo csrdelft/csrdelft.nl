@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 require __DIR__ . '/../config/bootstrap.php';
 
 // default is website mode
-if (isset($_ENV['CI'])) {
+if (getenv('CI')) {
 	define('MODE', 'TRAVIS');
 } elseif (php_sapi_name() === 'cli') {
 	define('MODE', 'CLI');
@@ -120,7 +120,6 @@ switch (MODE) {
 		if (isSyrinx()) die("Syrinx is geen Travis!");
 		break;
 	case 'CLI':
-		$container->get(LoginService::class)->loginCli();
 		break;
 
 	case 'WEB':
@@ -148,23 +147,11 @@ switch (MODE) {
 		ini_set('intl.default_locale', 'nl');
 		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
-		session_start();
-		if (session_id() == 'deleted') {
-			// Deletes old session
-			session_regenerate_id(true);
-		}
-		// Validate login
-		$container->get(LoginService::class)->authenticate();
-
 		$container->get(LogRepository::class)->log();
 		break;
 
 	default:
 		die('configuratie.include.php unsupported MODE: ' . MODE);
 }
-
-// ---
-// Nu heeft de gebruiker een sessie en kan er echt begonnen worden.
-// ---
 
 return $kernel;

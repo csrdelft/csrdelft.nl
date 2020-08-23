@@ -32,12 +32,6 @@
 		{!! getMelding() !!}
 		@yield('content')
 	</div>
-	@php($debug = getDebugFooter())
-	@if($debug)
-		<footer class="cd-footer">
-			{!! $debug !!}
-		</footer>
-	@endif
 </main>
 <footer class="footer mt-auto py-3">
 	<div class="container-fluid p-md-5">

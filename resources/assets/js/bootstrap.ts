@@ -7,7 +7,7 @@ import $ from 'jquery';
 import moment from 'moment';
 import {
 	registerBbContext,
-	registerDataTableContext,
+	registerDataTableContext, registerFlatpickrContext,
 	registerFormulierContext,
 	registerGlobalContext,
 	registerGrafiekContext,
@@ -22,24 +22,9 @@ import {formCancel, formInlineToggle, formSubmit, insertPlaatje} from './lib/for
 import {forumBewerken, saveConceptForumBericht} from './lib/forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './lib/maalcie';
 import {docReady} from './lib/util';
+import hoverintent from 'hoverintent'
 
 moment.locale('nl');
-
-declare global {
-	interface JQueryStatic {
-		timeago: any;
-		markItUp: (arg: any) => any;
-	}
-
-	interface JQuery {
-		timeago: () => void;
-		markItUp: (arg: any) => any;
-		hoverIntent: (arg: any, arg1?: any) => any;
-		autosize: () => void;
-		scrollTo: (arg: any) => void;
-		modal: (arg?: any) => void;
-	}
-}
 
 window.$ = window.jQuery = $;
 
@@ -48,23 +33,16 @@ window.$ = window.jQuery = $;
  */
 require('bootstrap');
 require('./ajax-csrf');
-require('jquery-hoverintent');
 require('jquery.scrollto');
 require('jquery-ui');
 require('jquery-ui/ui/effect');
 require('jquery-ui/ui/effects/effect-highlight');
 require('jquery-ui/ui/effects/effect-fade');
-require('jquery-ui/ui/widgets/datepicker');
 require('jquery-ui/ui/widgets/slider');
 require('./lib/external/jquery.markitup');
 require('./lib/external/jquery.contextMenu');
 require('timeago');
 require('raty-js');
-require('autosize/build/jquery.autosize');
-require('./lib/external/jquery.formSteps');
-require('./lib/external/jquery-ui-sliderAccess');
-require('jquery-ui-timepicker-addon');
-require('./lib/external/jquery-ui-timepicker-nl');
 require('jquery.maskedinput');
 require('lightbox2');
 require('corejs-typeahead/dist/typeahead.jquery.js');
@@ -76,6 +54,7 @@ $.extend(window, {
 	Bloodhound,
 	Dropzone,
 	docReady,
+	hoverintent,
 	context: {
 		// See view/groepen/leden/GroepTabView.class.php
 		domUpdate,
@@ -130,7 +109,8 @@ $.timeago.settings.strings = {
 	month: '1 maand',
 	months: '%d maanden',
 	numbers: [],
-	prefiprefixAgo: '',
+	prefixAgo: '',
+	inPast: '',
 	prefixFromNow: 'sinds',
 	seconds: 'nog geen minuut',
 	suffixAgo: 'geleden',
@@ -148,6 +128,7 @@ $.timeago.settings.strings = {
 		registerKnopContext(),
 		registerDataTableContext(),
 		registerBbContext(),
+		registerFlatpickrContext(),
 	]);
 
 	docReady(() => {

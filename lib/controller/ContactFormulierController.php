@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Mail;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\view\PlainView;
@@ -14,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/12/2018
  */
-class ContactFormulierController {
+class ContactFormulierController extends AbstractController {
 	/**
 	 * @return PlainView
 	 * @Route("/contactformulier/interesse", methods={"POST"})
@@ -24,7 +23,7 @@ class ContactFormulierController {
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 
 		if (!$resp['success']) {
-			throw new CsrToegangException("Geen toegang");
+			throw $this->createAccessDeniedException("Geen toegang");
 		}
 
 		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
@@ -92,7 +91,7 @@ De PubCie.
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 
 		if (!$resp['success']) {
-			throw new CsrToegangException("Geen toegang");
+			throw $this->createAccessDeniedException("Geen toegang");
 		}
 
 		$type = filter_input(INPUT_POST, "optie", FILTER_SANITIZE_STRING);

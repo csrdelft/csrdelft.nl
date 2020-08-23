@@ -3,7 +3,6 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
@@ -52,7 +51,7 @@ class BeheerCiviBestellingController extends AbstractController {
 	 */
 	public function lijst(Request $request, $uid = null) {
 		$this->checkToegang($uid);
-		$uid = $uid == null ? LoginService::getUid() : $uid;
+		$uid = $uid == null ? $this->getUid() : $uid;
 		if ($request->query->get("deleted") == "true") {
 			$data = $this->civiBestellingRepository->findBy(['uid' => $uid]);
 		} else {
@@ -80,7 +79,7 @@ class BeheerCiviBestellingController extends AbstractController {
 	 */
 	private function checkToegang($uid) {
 		if (!LoginService::mag(P_FISCAAT_READ) && $uid) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 	}
 }

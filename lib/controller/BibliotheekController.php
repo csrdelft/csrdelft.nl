@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekRecensie;
 use CsrDelft\repository\bibliotheek\BiebRubriekRepository;
@@ -74,11 +73,11 @@ class BibliotheekController extends AbstractController {
 	 * @Auth(P_BIEB_READ)
 	 */
 	public function recensie($boek_id) {
-		$recensie = $this->boekRecensieRepository->get($boek_id, LoginService::getUid());
+		$recensie = $this->boekRecensieRepository->get($boek_id, $this->getUid());
 		$formulier = new RecensieFormulier($recensie);
 		if ($formulier->validate()) {
 			if (!$recensie->magBewerken()) {
-				throw new CsrToegangException("Mag recensie niet bewerken");
+				throw $this->createAccessDeniedException("Mag recensie niet bewerken");
 			} else {
 				$recensie->bewerkdatum = getDateTime();
 				$manager = $this->getDoctrine()->getManager();
@@ -154,7 +153,7 @@ class BibliotheekController extends AbstractController {
 
 		if ($boekForm->validate()) {
 			if (!$boek->magBewerken()) {
-				throw new CsrToegangException('U mag dit boek niet bewerken');
+				throw $this->createAccessDeniedException('U mag dit boek niet bewerken');
 			} else {
 				$boek->setCategorie($this->biebRubriekRepository->find($boek->categorie_id));
 				$manager = $this->getDoctrine()->getManager();
@@ -176,7 +175,7 @@ class BibliotheekController extends AbstractController {
 			}
 		}
 		foreach ($alleRecensies as $recensie) {
-			if ($recensie->schrijver_uid == LoginService::getUid()) {
+			if ($recensie->schrijver_uid == $this->getUid()) {
 				$mijnRecensie = $recensie;
 			}
 			$andereRecensies[] = $recensie;
@@ -201,7 +200,7 @@ class BibliotheekController extends AbstractController {
 	public function import($boek_id) {
 		$boek = $this->boekRepository->find($boek_id);
 		if (!$boek->isEigenaar()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		} else {
 			$importer = new BoekImporter();
 			$importer->import($boek);
@@ -222,7 +221,7 @@ class BibliotheekController extends AbstractController {
 		$recensie = $this->boekRecensieRepository->get($boek_id, $uid);
 		if (!$recensie->magVerwijderen()) {
 			setMelding('Onvoldoende rechten voor deze actie.', -1);
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		} else {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($recensie);
@@ -265,7 +264,7 @@ class BibliotheekController extends AbstractController {
 	public function exemplaar($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
 		if (!$exemplaar->magBewerken()) {
-			throw new CsrToegangException("Mag exemplaar niet bewerken");
+			throw $this->createAccessDeniedException("Mag exemplaar niet bewerken");
 		}
 		$form = new BoekExemplaarFormulier($exemplaar);
 		if ($form->validate()) {
@@ -291,10 +290,10 @@ class BibliotheekController extends AbstractController {
 			return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $boek->id]);
 		}
 		if ($uid == null) {
-			$uid = LoginService::getUid();
+			$uid = $this->getUid();
 		}
-		if ($uid != LoginService::getUid() && !($uid == 'x222' && LoginService::mag(P_BIEB_MOD))) {
-			throw new CsrToegangException('Mag deze eigenaar niet kiezen');
+		if ($uid != $this->getUid() && !($uid == 'x222' && LoginService::mag(P_BIEB_MOD))) {
+			throw $this->createAccessDeniedException('Mag deze eigenaar niet kiezen');
 		}
 		$this->boekExemplaarRepository->addExemplaar($boek, $uid);
 
@@ -400,7 +399,7 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function exemplaarlenen($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
-		if (!$this->boekExemplaarRepository->leen($exemplaar, LoginService::getUid())) {
+		if (!$this->boekExemplaarRepository->leen($exemplaar, $this->getUid())) {
 			setMelding('Kan dit exemplaar niet lenen', -1);
 		}
 		return $this->redirectToRoute('csrdelft_bibliotheek_boek', ['boek_id' => $exemplaar->getBoek()->id, '_fragment' => 'exemplaren']);
@@ -419,7 +418,7 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function exemplaarteruggegeven($exemplaar_id) {
 		$exemplaar = $this->boekExemplaarRepository->get($exemplaar_id);
-		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == LoginService::getUid()) {
+		if ($exemplaar->isUitgeleend() && $exemplaar->uitgeleend_uid == $this->getUid()) {
 			if ($this->boekExemplaarRepository->terugGegeven($exemplaar)) {
 				setMelding('Exemplaar is teruggegeven.', 1);
 			} else {
@@ -472,11 +471,12 @@ class BibliotheekController extends AbstractController {
 			$results = $this->boekRepository->autocompleteProperty($zoekveld, $zoekterm);
 			$data = [];
 			foreach ($results as $result) {
-				$data[] = ['data' => [$result], 'value' => $result->{$zoekveld}, 'id' => $result->id];
+				$waarde = $result[$zoekveld];
+				$data[] = ['data' => $waarde, 'value' => $waarde, 'id' => $waarde];
 			}
 			return new JsonResponse($data);
 		} else {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 	}
 
@@ -489,7 +489,7 @@ class BibliotheekController extends AbstractController {
 	 */
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');

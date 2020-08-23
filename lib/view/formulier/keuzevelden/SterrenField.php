@@ -24,39 +24,21 @@ class SterrenField extends FloatField {
 		$this->reset = $reset;
 		$this->half = $half;
 		$this->hints = array_fill(0, $max_stars, '');
+		$this->css_classes[] = 'SterrenField';
 	}
 
 	public function getHtml() {
-		return '<div ' . $this->getInputAttribute(array('id', 'name', 'class')) . '></div>';
-	}
-
-	public function getJavascript() {
-		$settings = json_encode(array(
+		$attributes = $this->getInputAttribute(array('id', 'name', 'class'));
+		$config = htmlspecialchars(json_encode([
 			'scoreName' => $this->name,
-			'path' => '/images/raty/',
 			'score' => $this->getValue(),
 			'number' => $this->max,
 			'half' => (boolean)$this->half,
 			'hints' => $this->hints,
 			'readOnly' => (boolean)$this->readonly,
 			'cancel' => (boolean)$this->reset,
-			'cancelHint' => 'Wis beoordeling',
-			'cancelPlace' => 'right',
-			'noRatedMsg' => ''
-		));
-		$js = parent::getJavascript() . <<<JS
+		]));
 
-var settings{$this->getId()} = {$settings};
-settings{$this->getId()}['click'] = function(score, event) {
-
-JS;
-		if ($this->click_submit) {
-			$js .= "$(this).raty('score', score);$(this).closest('form').submit();";
-		}
-		return $js . <<<JS
-};
-$("#{$this->getId()}").raty(settings{$this->getId()});
-JS;
+		return "<div {$attributes} data-config=\"{$config}\"></div>";
 	}
-
 }

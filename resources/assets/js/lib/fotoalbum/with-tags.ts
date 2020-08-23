@@ -7,6 +7,7 @@ import {GalleryDecorator} from 'jgallery/types/gallery';
 import Params from 'jgallery/types/gallery/parameters';
 import $ from 'jquery';
 import {basename, dirname} from '../util';
+import {select} from "../dom";
 
 interface Position {
 	x: number;
@@ -23,18 +24,18 @@ const withTags: GalleryDecorator = (constructor) =>
 	class extends constructor {
 
 		private get imageElement() {
-			return this.previewElement.querySelector('.j-gallery-preview-content') as HTMLImageElement;
+			return select<HTMLImageElement>('.j-gallery-preview-content', this.previewElement)
 		}
 
 		private get left() {
-			return this.previewElement.querySelector('.j-gallery-left') as HTMLElement;
+			return select<HTMLElement>('.j-gallery-left', this.previewElement)
 		}
 
 		private get right() {
-			return this.previewElement.querySelector('.j-gallery-right') as HTMLElement;
+			return select<HTMLElement>('.j-gallery-right', this.previewElement)
 		}
 
-		private tagMode: boolean = false;
+		private tagMode = false;
 		private tagFormDiv: HTMLElement | null;
 		private readonly root: string;
 		private readonly tagContainer: HTMLElement;
@@ -44,7 +45,7 @@ const withTags: GalleryDecorator = (constructor) =>
 
 		constructor(albums: AlbumItem[], params: Params) {
 			super(albums, params);
-			this.root = params.root!;
+			this.root = params.root;
 
 			this.tagContainer = createElement(`<div class="tag-container"></div>`);
 			this.previewElement.appendChild(this.tagContainer);
@@ -98,8 +99,7 @@ const withTags: GalleryDecorator = (constructor) =>
 			tagButton.addEventListener('click', () => {
 				if (this.tagMode) {
 					this.tagMode = false;
-					tagIcon.classList.add('fa-toggle-off');
-					tagIcon.classList.remove('fa-toggle-on');
+					tagIcon.classList.replace('fa-toggle-on', 'fa-toggle-off')
 					this.hideTags();
 					if (this.tagFormDiv) {
 						this.exitTagForm();
@@ -111,25 +111,26 @@ const withTags: GalleryDecorator = (constructor) =>
 					this.right.style.display = 'block';
 				} else {
 					this.tagMode = true;
-					tagIcon.classList.add('fa-toggle-on');
-					tagIcon.classList.remove('fa-toggle-off');
+					tagIcon.classList.replace('fa-toggle-off', 'fa-toggle-on')
 					this.duringTagMode();
 				}
 			});
 			tagButton.addEventListener('mouseenter', () => {
 				if (this.tagMode) {
-					tagIcon.classList.add('fa-toggle-on');
-					tagIcon.classList.remove('fa-toggle-off');
+					tagIcon.classList.replace('fa-toggle-off', 'fa-toggle-on')
 				} else {
-					tagIcon.classList.remove('fa-toggle-off');
-					tagIcon.classList.add('fa-toggle-off');
+					tagIcon.classList.replace('fa-toggle-on', 'fa-toggle-off')
 				}
 			});
 			tagButton.addEventListener('mouseleave', () => {
 				tagIcon.classList.remove('fa-toggle-on', 'fa-toggle-off');
 				tagIcon.classList.add('fa-smile');
 			});
-			this.getElement().querySelector('.j-gallery-screen-icon')!.addEventListener('click', () => {
+			const screenIcon = select('.j-gallery-screen-icon', this.getElement())
+			if (!screenIcon) {
+				throw new Error("Geen screenIcon gevonden")
+			}
+			screenIcon.addEventListener('click', () => {
 				if (this.preview.size !== Size.contain) {
 					this.tagContainer.querySelectorAll('.fototag').forEach((tag) => tag.classList.add('verborgen'));
 				} else {
@@ -150,7 +151,7 @@ const withTags: GalleryDecorator = (constructor) =>
 
 		private moveTagDivs() {
 			this.tagContainer.querySelectorAll('.fototag')
-				.forEach((t: HTMLElement) => this.moveTag(t, JSON.parse(t.dataset.tag!)));
+				.forEach((t: HTMLElement) => this.moveTag(t, JSON.parse(t.dataset.tag ?? "{}")));
 		}
 
 		private moveTag(t: HTMLElement, tag: Tag) {
@@ -165,7 +166,7 @@ const withTags: GalleryDecorator = (constructor) =>
 			if (!this.tagFormDiv) {
 				return;
 			}
-			const pos = this.getScreenPos(JSON.parse(this.tagFormDiv.dataset.tagPosition!) as Position);
+			const pos = this.getScreenPos(JSON.parse(this.tagFormDiv.dataset.tagPosition ?? "{}") as Position);
 			this.tagFormDiv.style.left = pos.x - (pos.size / 2) + 'px';
 			this.tagFormDiv.style.top = pos.y + pos.size + 'px';
 		}
@@ -198,10 +199,13 @@ const withTags: GalleryDecorator = (constructor) =>
 
 		private getScreenPos(position: Position): Position {
 			if (this.imageElement == null) {
-				return { size: 0, x: 0, y: 0 };
+				return {size: 0, x: 0, y: 0};
 			}
 
-			const parent = this.imageElement.parentElement!;
+			const parent = this.imageElement.parentElement;
+			if (!parent) {
+				throw new Error("ImageElement niet in DOM")
+			}
 			const w = this.imageElement.clientWidth;
 			const h = this.imageElement.clientHeight;
 			const fotoTopLeft = {
@@ -217,7 +221,7 @@ const withTags: GalleryDecorator = (constructor) =>
 
 		private removeTag(tagDiv: HTMLElement) {
 			if (confirm('Etiket verwijderen?')) {
-				const tag = JSON.parse(tagDiv.dataset.tag!);
+				const tag = JSON.parse(tagDiv.dataset.tag ?? "{}");
 				const data = new FormData();
 				data.append('refuuid', tag.refuuid);
 				data.append('keyword', tag.keyword);
@@ -270,7 +274,7 @@ const withTags: GalleryDecorator = (constructor) =>
 				tagMenu.style.display = 'block';
 				tagMenu.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
 			}, true);
-			document.addEventListener('mouseup', (e) => {
+			document.addEventListener('mouseup', () => {
 				tagMenu.style.display = 'none';
 			});
 			// verberg tags tijdens zoomen
@@ -357,7 +361,12 @@ const withTags: GalleryDecorator = (constructor) =>
 			// set attr for move/resize
 			this.tagFormDiv.dataset.tagPosition = JSON.stringify(position);
 			// set submit handler
-			$(this.tagFormDiv.querySelector('form')!).data('submitCallback', (response: Tag[] | string) => {
+			const form = this.tagFormDiv.querySelector('form')
+			if (!form) {
+				throw new Error('tag div bevat geen form')
+			}
+
+			$(form).data('submitCallback', (response: Tag[] | string) => {
 				if (this.tagFormDiv) {
 					this.exitTagForm();
 				}
@@ -368,14 +377,30 @@ const withTags: GalleryDecorator = (constructor) =>
 				}
 			});
 			// set focus
-			setTimeout(() => this.tagFormDiv && this.tagFormDiv.querySelector('input[name="uid"]')!.dispatchEvent(new Event('focus')));
+			setTimeout(() => {
+				if (this.tagFormDiv) {
+					const uidInput = this.tagFormDiv.querySelector('input[name="uid"]')
+
+					if (!uidInput) {
+						throw new Error("tagFormDiv bevat input met name uid")
+					}
+
+					uidInput.dispatchEvent(new Event('focus'))
+				}
+
+			});
 		}
 
 		private newTagStart(e: MouseEvent) {
 			const img = this.imageElement;
 			const target = e.target as HTMLElement;
 			// calculate relative position to image top left
-			const offset = $(target).offset()!;
+			const offset = $(target).offset();
+
+			if (!offset) {
+				throw new Error("Tag target heeft geen offset")
+			}
+
 			const width = img.clientWidth;
 			const height = img.clientHeight;
 			const newTag = {

@@ -2,7 +2,6 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\view\JsonResponse;
@@ -24,7 +23,7 @@ class LichtingenController extends AbstractGroepenController {
 
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');

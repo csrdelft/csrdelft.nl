@@ -7,7 +7,6 @@ use CsrDelft\common\CsrException;
 use CsrDelft\entity\GoogleToken;
 use CsrDelft\repository\GoogleTokenRepository;
 use CsrDelft\service\GoogleSync;
-use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,7 +41,7 @@ class GoogleController extends AbstractController {
 			$client->fetchAccessTokenWithAuthCode($code);
 
 			$googleToken = new GoogleToken();
-			$googleToken->uid = LoginService::getUid();
+			$googleToken->uid = $this->getUid();
 			$googleToken->token = $client->getRefreshToken();
 
 			$manager = $this->getDoctrine()->getManager();

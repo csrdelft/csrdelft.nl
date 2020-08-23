@@ -1,5 +1,6 @@
 import '../ajax-csrf';
 import {docReady} from '../lib/util';
+import {select, selectAll} from "../lib/dom";
 
 declare global {
 	interface Window {
@@ -27,9 +28,11 @@ docReady(async () => {
 
 	import(/* webpackChunkName: "extern-defer" */ './extern-defer');
 
-	const menu = document.querySelector('#menu') as HTMLDivElement;
-	const menuKnop = document.querySelector('.menu-knop')!;
-	const dropdownKnoppen = document.querySelectorAll('.expand-dropdown');
+	const menu = select('#menu');
+
+	const menuKnop = select('.menu-knop');
+
+	const dropdownKnoppen = selectAll('.expand-dropdown')
 
 	document.body.addEventListener('click', (e) => {
 		if (!menu.contains(e.target as Node) && !menuKnop.contains(e.target as Node)) {
@@ -49,7 +52,19 @@ docReady(async () => {
 		knop.addEventListener('click', (e) => {
 			e.preventDefault();
 
-			const submenu = knop.parentElement!.parentElement!.querySelector('.dropdown') as HTMLDivElement;
+			const parent = knop.parentElement;
+
+			if (!parent) {
+				return;
+			}
+
+			const parentParent = parent.parentElement;
+
+			if (!parentParent) {
+				return;
+			}
+
+			const submenu = select('.dropdown', parentParent);
 
 			submenu.classList.toggle('show');
 

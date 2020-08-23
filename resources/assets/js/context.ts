@@ -1,6 +1,7 @@
 import ctx from './ctx';
+import {select} from "./lib/dom";
 
-export const registerGrafiekContext = async () => {
+export const registerGrafiekContext = async (): Promise<void> => {
 	const {
 		initBar,
 		initDeelnamegrafiek,
@@ -18,7 +19,7 @@ export const registerGrafiekContext = async () => {
 	});
 };
 
-export const registerBbContext = async () => {
+export const registerBbContext = async (): Promise<void> => {
 	const {
 		activeerLidHints,
 		initBbPreview,
@@ -34,7 +35,7 @@ export const registerBbContext = async () => {
 	});
 };
 
-export const registerDataTableContext = async () => {
+export const registerDataTableContext = async (): Promise<void> => {
 	const {
 		initDataTable,
 		initOfflineDataTable,
@@ -46,7 +47,7 @@ export const registerDataTableContext = async () => {
 	});
 };
 
-export const registerKnopContext = async () => {
+export const registerKnopContext = async (): Promise<void> => {
 	const {
 		knopGet,
 		knopPost,
@@ -54,9 +55,9 @@ export const registerKnopContext = async () => {
 	} = await import(/* webpackChunkName: "knop" */'./lib/knop');
 
 	ctx.addHandlers({
-		'.get': (el) => el.addEventListener('click', knopGet),
+		'.get': (el) => el.addEventListener('click', (e) => knopGet(e, el)),
 		'.post': (el) => el.addEventListener('click', knopPost),
-		'.vergroot': (el) => el.addEventListener('click', knopVergroot),
+		'.vergroot': (el) => el.addEventListener('click', (e) => knopVergroot(e, el)),
 		'[data-buttons=radio]': (el) => {
 			for (const btn of Array.from(el.querySelectorAll('a.btn'))) {
 				btn.addEventListener('click',
@@ -73,13 +74,14 @@ export const registerKnopContext = async () => {
 
 };
 
-export const registerFormulierContext = async () => {
+export const registerFormulierContext = async (): Promise<void> => {
 	const [
 		{
 			formCancel,
 			formReset,
 			formSubmit,
 			formToggle,
+			initSterrenField,
 		},
 		{
 			bbCodeSet,
@@ -98,31 +100,48 @@ export const registerFormulierContext = async () => {
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
 		'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 		'time.timeago': (el) => $(el).timeago(),
+		'.SterrenField': initSterrenField
 	});
 };
 
-export const registerGlobalContext = async () => {
+export const registerGlobalContext = async (): Promise<void> => {
 	const [
+		{default: hoverintent},
 		{initKaartjes},
 		{default: Vue},
 		{default: $},
 	] = await Promise.all([
+		import(/* webpackChunkName: "hoverintent" */'hoverintent'),
 		import(/* webpackChunkName: "kaartje" */'./lib/kaartje'),
 		import(/* webpackChunkName: "vue" */'vue'),
 		import(/* webpackChunkName: "jquery" */'jquery'),
 	]);
 
 	ctx.addHandlers({
-		'.hoverIntent': (el) => $(el).hoverIntent({
-			over() {
-				$(this).find('.hoverIntentContent').fadeIn();
-			},
-			out() {
-				$(this).find('.hoverIntentContent').fadeOut();
-			},
-			timeout: 250,
-		}),
+		'.hoverIntent': (el) => hoverintent(el,
+			() => $(select('.hoverIntentContent', el)).fadeIn(),
+			() => $(select('.hoverIntentContent', el)).fadeOut()
+		).options({timeout: 250}),
 		'.vue-context': (el) => new Vue({el}),
 		'[data-visite]': initKaartjes,
+		'.AutoSize': el => {
+				el.setAttribute('style', 'height:' + (el.scrollHeight) + 'px;overflow-y:hidden;');
+				el.addEventListener("input", function () {
+					this.style.height = 'auto';
+					this.style.height = (this.scrollHeight) + 'px';
+				}, false);
+		}
+	});
+};
+
+export const registerFlatpickrContext = async (): Promise<void> => {
+	const {
+		initDateTimePicker,
+		initDatePicker,
+	} = await import(/* webpackChunkName: "datepicker" */'./lib/datepicker');
+
+	ctx.addHandlers({
+		'.DateTimeField': initDateTimePicker,
+		'.DateField': initDatePicker,
 	});
 };

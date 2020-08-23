@@ -20,7 +20,7 @@ class RadioField extends SelectField {
 	public $type = 'radio';
 
 	public function __construct($name, $value, $description, array $options) {
-		parent::__construct($name, $value, $description, $options, array(), 1, false);
+		parent::__construct($name, $value, $description, $options, 1, false);
 
 		$this->css_classes = ['FormElement', 'form-check-input'];
 	}

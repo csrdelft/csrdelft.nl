@@ -15,6 +15,8 @@ mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft;'
 
 # Installeer js dependencies
 yarn
+# Lint js
+yarn run lint
 # Compileer js
 yarn run production
 
@@ -24,8 +26,5 @@ composer install
 composer run-script production
 # Verwijder dev dependencies en optimize autoloader
 composer install --no-dev --optimize-autoloader
-
-# Versions.php update bij iedere build, dit is vervelend. Het volgende commando verwijderd de regel die sowieso nieuw is.
-sed -i "/csr\/csrdelft.nl' =>/d" vendor/composer/package-versions-deprecated/src/PackageVersions/Versions.php
 
 fi;

@@ -5,8 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
@@ -95,11 +93,11 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 
 		if ($profiel->account == null) {
-			throw new CsrNotFoundException("Profiel heeft geen account");
+			throw new NotFoundHttpException("Profiel heeft geen account");
 		}
 
 		$this->accountRepository->resetPrivateToken($profiel->account);
@@ -157,7 +155,7 @@ class ProfielController extends AbstractController {
 		Profiel $profiel = null
 	) {
 		if (!$profiel) {
-			$profiel = LoginService::getProfiel();
+			$profiel = $this->getProfiel();
 		}
 		$fotos = [];
 		foreach ($fotoTagsRepository->findBy(['keyword' => $profiel->uid], null, 3) as $tag) {
@@ -178,7 +176,7 @@ class ProfielController extends AbstractController {
 			'ketzers' => $ketzersRepository->getGroepenVoorLid($profiel->uid),
 			'activiteiten' => $activiteitenRepository->getGroepenVoorLid($profiel->uid),
 			'bestellinglog' => $civiBestellingRepository->getBestellingenVoorLid($profiel->uid, 10),
-			'bestellingenlink' => '/fiscaat/bestellingen' . (LoginService::getUid() === $profiel->uid ? '' : '/' . $profiel->uid),
+			'bestellingenlink' => '/fiscaat/bestellingen' . ($this->getUid() === $profiel->uid ? '' : '/' . $profiel->uid),
 			'corveetaken' => $corveeTakenRepository->getTakenVoorLid($profiel),
 			'corveevoorkeuren' => $corveeVoorkeurenRepository->getVoorkeurenVoorLid($profiel->uid),
 			'corveevrijstelling' => $corveeVrijstellingenRepository->getVrijstelling($profiel->uid),
@@ -209,11 +207,11 @@ class ProfielController extends AbstractController {
 		// Controleer invoer
 		$lidstatus = 'S_' . strtoupper($status);
 		if (!preg_match('/^[0-9]{4}$/', $lidjaar) || !in_array($lidstatus, LidStatus::getEnumValues())) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		// NovCie mag novieten aanmaken
 		if ($lidstatus !== LidStatus::Noviet && !LoginService::mag(P_LEDEN_MOD)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		// Maak nieuw profiel zonder op te slaan
 		$profiel = $this->profielRepository->nieuw((int)$lidjaar, $lidstatus);
@@ -224,7 +222,7 @@ class ProfielController extends AbstractController {
 	private function profielBewerken(Profiel $profiel, $alleenFormulier = false) {
 
 		if (!$profiel->magBewerken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$form = new ProfielForm($profiel, $alleenFormulier);
 		if ($form->validate()) {
@@ -233,7 +231,7 @@ class ProfielController extends AbstractController {
 				setMelding('Geen wijzigingen', 0);
 			} else {
 				$nieuw = $profiel->uid === null || $this->profielRepository->find($profiel->uid) == null;
-				$changeEntry = ProfielRepository::changelog($diff, LoginService::getUid());
+				$changeEntry = ProfielRepository::changelog($diff, $this->getUid());
 				foreach ($diff as $change) {
 					if ($change->property === 'status') {
 						array_push($changeEntry->entries, ...$this->profielRepository->wijzig_lidstatus($profiel, $change->old_value));
@@ -294,7 +292,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 
 		return $this->profielBewerken($profiel);
@@ -433,10 +431,10 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 		if (!$profiel->magBewerken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$form = new CommissieVoorkeurenForm($profiel);
 		if ($form->isPosted() && $form->validate()) {
@@ -461,7 +459,7 @@ class ProfielController extends AbstractController {
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
 	public function voorkeurenNoUid() {
-		return $this->voorkeuren(LoginService::getUid());
+		return $this->voorkeuren($this->getUid());
 	}
 
 	/**
@@ -474,7 +472,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 		try {
 			$this->googleSync->doRequestToken(CSR_ROOT . "/profiel/" . $profiel->uid . "/addToGoogleContacts");
@@ -494,7 +492,7 @@ class ProfielController extends AbstractController {
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function stamboom($uid = null) {
-		$profiel = $uid ? $this->profielRepository->get($uid) : LoginService::getProfiel();
+		$profiel = $uid ? $this->profielRepository->get($uid) : $this->getProfiel();
 
 		return view('profiel.stamboom', [
 			'profiel' => $profiel,
@@ -529,7 +527,7 @@ class ProfielController extends AbstractController {
 		if ($saldoGrafiekService->magGrafiekZien($uid)) {
 			return new JsonResponse($saldoGrafiekService->getDataPoints($uid, $timespan));
 		} else {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 	}
 
@@ -543,7 +541,7 @@ class ProfielController extends AbstractController {
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
-			throw new CsrNotFoundException();
+			throw new NotFoundHttpException();
 		}
 
 		return new VcardResponse(view('profiel.vcard', ['profiel' => $profiel])->toString());

@@ -9,10 +9,14 @@ use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Throwable;
 
 
 class ErrorController extends AbstractController {
+	use TargetPathTrait;
+
 	public function handleException(RequestStack $requestStack, Throwable $exception) {
 		$request = $requestStack->getMasterRequest();
 
@@ -21,12 +25,15 @@ class ErrorController extends AbstractController {
 			$statusCode = $exception->getStatusCode();
 		}
 
-		if (!in_array($request->getMethod(), [
-			Response::HTTP_BAD_REQUEST,
-			Response::HTTP_NOT_FOUND,
-			Response::HTTP_FORBIDDEN,
-			Response::HTTP_METHOD_NOT_ALLOWED,
-		])) {
+		if (!in_array($statusCode, [
+				Response::HTTP_BAD_REQUEST,
+				Response::HTTP_NOT_FOUND,
+				Response::HTTP_FORBIDDEN,
+				Response::HTTP_METHOD_NOT_ALLOWED,
+			]) &&
+			!in_array(get_class($exception), [
+				AccessDeniedException::class
+			])) {
 			ShutdownHandler::emailException($exception);
 			ShutdownHandler::slackException($exception);
 			ShutdownHandler::touchHandler();
@@ -47,11 +54,13 @@ class ErrorController extends AbstractController {
 			}
 			case Response::HTTP_FORBIDDEN:
 			{
-				if (LoginService::getUid() == LoginService::UID_EXTERN) {
+				if ($this->getUser() == null) {
 					$requestUri = $request->getRequestUri();
 					$router = $this->get('router');
 
-					return new RedirectResponse($router->generate('csrdelft_login_loginform', ['redirect' => urlencode($requestUri)]));
+					$this->saveTargetPath($request->getSession(), 'main', $requestUri);
+
+					return new RedirectResponse($router->generate('csrdelft_login_loginform'));
 				}
 
 				return new Response(view('fout.403'), Response::HTTP_FORBIDDEN);

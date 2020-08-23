@@ -241,7 +241,7 @@ class ProfielForm extends Formulier {
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
 		if (($admin OR $novCie) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
-			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
+			$fields[] = new CollapsableSubkopje('In te vullen door NovCie', true);
 
 			if ($inschrijven) {
 				// Alleen als inschrijven, anders bovenin voor admin

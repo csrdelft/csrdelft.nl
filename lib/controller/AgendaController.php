@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
@@ -35,7 +34,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van de agenda.
  */
-class AgendaController {
+class AgendaController extends AbstractController {
 	const SECONDEN_IN_JAAR = 31557600;
 	/**
 	 * @var AgendaRepository
@@ -104,13 +103,13 @@ class AgendaController {
 		return view('agenda.maand', [
 			'maand' => $maand,
 			'jaar' => $jaar,
-			'creator' => LoginService::mag(P_AGENDA_ADD) || LoginService::getProfiel()->verticaleleider,
+			'creator' => LoginService::mag(P_AGENDA_ADD) || $this->getProfiel()->verticaleleider,
 		]);
 	}
 
 	/**
 	 * @return IcalResponse
-	 * @Route("/agenda/ical/{token}/csrdelft.ics", methods={"GET"})
+	 * @Route("/agenda/ical/{private_auth_token}/csrdelft.ics", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function ical() {
@@ -142,7 +141,7 @@ class AgendaController {
 	 */
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		if (!$zoekterm) {
@@ -193,18 +192,19 @@ class AgendaController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function toevoegen($datum = null) {
-		if (!LoginService::mag(P_AGENDA_ADD) && !LoginService::getProfiel()->verticaleleider) {
-			throw new CsrToegangException('Mag geen gebeurtenis toevoegen.');
+		$profiel = $this->getProfiel();
+		if (!LoginService::mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
+			throw $this->createAccessDeniedException('Mag geen gebeurtenis toevoegen.');
 		}
 
-		$item = $this->agendaRepository->nieuw($datum);
-		if (LoginService::getProfiel()->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
-			$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
+		$item = $this->agendaRepository->nieuw($request->request->get('begin_moment'), $request->request->get('eind_moment'));
+		if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+			$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 		}
 		$form = new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
 		if ($form->validate()) {
-			if (LoginService::getProfiel()->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
-				$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
+			if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+				$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 			}
 			$item->item_id = (int)$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {
@@ -229,7 +229,7 @@ class AgendaController {
 	public function bewerken($aid) {
 		$item = $this->agendaRepository->getAgendaItem((int)$aid);
 		if (!$item || !$item->magBeheren()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$form = new AgendaItemForm($item, 'bewerken'); // fetches POST values itself
 		if ($form->validate()) {
@@ -252,7 +252,7 @@ class AgendaController {
 
 		if (!$item || !$item instanceof AgendaItem) throw new CsrGebruikerException('Kan alleen AgendaItem verplaatsen');
 
-		if (!$item->magBeheren()) throw new CsrToegangException();
+		if (!$item->magBeheren()) throw $this->createAccessDeniedException();
 
 		$item->begin_moment = date_create_immutable($request->request->get('begin_moment'));
 		$item->eind_moment = date_create_immutable($request->request->get('eind_moment'));
@@ -271,7 +271,7 @@ class AgendaController {
 	public function verwijderen($aid) {
 		$item = $this->agendaRepository->getAgendaItem((int)$aid);
 		if (!$item || !$item->magBeheren()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$this->agendaRepository->remove($item);
 		return new JsonResponse(true);
@@ -286,7 +286,7 @@ class AgendaController {
 	public function verbergen($refuuid = null) {
 		$item = $this->getAgendaItemByUuid($refuuid);
 		if (!$item) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$this->agendaVerbergenRepository->toggleVerbergen($item);
 		return new JsonResponse(true);

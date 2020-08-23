@@ -4,8 +4,13 @@
  *
  * @see templates/fotoalbum/album.tpl
  */
-export function selectText(elmnt: HTMLElement) {
-	const selection = window.getSelection()!;
+export function selectText(elmnt: HTMLElement): void {
+	const selection = window.getSelection();
+
+	if (!selection) {
+		throw new Error("Geen getSelection in window")
+	}
+
 	const range = document.createRange();
 	range.selectNodeContents(elmnt);
 	selection.removeAllRanges();
@@ -23,12 +28,12 @@ export function selectText(elmnt: HTMLElement) {
  *   example 3: dirname('/dir/test/');
  *   returns 3: '/dir'
  */
-export function dirname(path: string) {
+export function dirname(path: string): string {
 	return path.replace(/\\/g, '/')
 		.replace(/\/[^/]*\/?$/, '');
 }
 
-export function basename(path: string, suffix: string = '') {
+export function basename(path: string, suffix = ''): string {
 	//  discuss at: http://phpjs.org/functions/basename/
 	// original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
 	// improved by: Ash Searle (http://hexmen.com/blog/)
@@ -60,7 +65,7 @@ export function basename(path: string, suffix: string = '') {
 	return base;
 }
 
-export function route(path: string, cb: () => void) {
+export function route(path: string, cb: () => void): void {
 	if (window.location.pathname.startsWith(path)) {
 		cb();
 	}
@@ -91,7 +96,7 @@ export function evaluateMultiplicity(expression: string, num: number): boolean {
 	return mapOperationToFunction[expressionOperator](num, expressionAantal);
 }
 
-export function formatFilesize(data: string) {
+export function formatFilesize(data: string): string {
 	const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 	let i = 0;
 	let size = Number(data);
@@ -102,7 +107,7 @@ export function formatFilesize(data: string) {
 	return size.toFixed(1) + ' ' + units[i];
 }
 
-export function formatBedrag(data: number) {
+export function formatBedrag(data: number): string {
 	if (data > 0) {
 		return '€' + (data / 100).toFixed(2);
 	} else {
@@ -110,7 +115,7 @@ export function formatBedrag(data: number) {
 	}
 }
 
-export function singleLineString(strings: TemplateStringsArray, ...values: string[]) {
+export function singleLineString(strings: TemplateStringsArray, ...values: string[]): string {
 	// Interweave the strings with the
 	// substitution vars first.
 	let output = '';
@@ -126,7 +131,7 @@ export function singleLineString(strings: TemplateStringsArray, ...values: strin
 	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
 }
 
-export function html(strings: TemplateStringsArray, ...values: Array<string | undefined>): HTMLElement {
+export function html(strings: TemplateStringsArray, ...values: Array<string | undefined | null>): HTMLElement {
 	let output = '';
 	for (let i = 0; i < values.length; i++) {
 		output += strings[i] + values[i];
@@ -136,20 +141,20 @@ export function html(strings: TemplateStringsArray, ...values: Array<string | un
 	return (new DOMParser().parseFromString(output, 'text/html').body.firstChild) as HTMLElement;
 }
 
-export function htmlParse(htmlString: string) {
+export function htmlParse(htmlString: string): Node[] {
 	return jQuery.parseHTML(htmlString, null, true) as Node[];
 }
 
-export function preloadImage(url: string, callback: () => void) {
+export function preloadImage(url: string, callback: () => void): void {
 	const img = new Image();
 	img.src = url;
 	img.onload = callback;
 }
 
-export function parseData(el: HTMLElement) {
+export function parseData(el: HTMLElement): Record<string, unknown> {
 	const data = el.dataset;
 
-	const out: any = {};
+	const out: Record<string, unknown> = {};
 
 	for (const item of Object.keys(data)) {
 		if (data[item] === 'false') {
@@ -166,7 +171,7 @@ export function parseData(el: HTMLElement) {
 	return out;
 }
 
-export function htmlEncode(str: string) {
+export function htmlEncode(str: string): string {
 	return String(str)
 		.replace(/&/g, '&amp;')
 		.replace(/"/g, '&quot;')
@@ -175,22 +180,20 @@ export function htmlEncode(str: string) {
 		.replace(/>/g, '&gt;');
 }
 
-export function ontstuiter(func: any, wait: number, immediate: boolean) {
+export function ontstuiter(func: (...args: unknown[]) => unknown, wait: number, immediate: boolean): (...args: unknown[]) => void {
 	let timeout: number | undefined;
-	return function (this: any) {
-		const context = this;
-		const args = arguments;
+	return function (this: unknown, ...args: unknown[]) {
 		const later = () => {
 			timeout = undefined;
 			if (!immediate) {
-				func.apply(context, args);
+				func.apply(this, args);
 			}
 		};
 		const callNow = immediate && !timeout;
 		clearTimeout(timeout);
 		timeout = window.setTimeout(later, wait);
 		if (callNow) {
-			func.apply(context, args);
+			func.apply(this, args);
 		}
 	};
 }
@@ -209,4 +212,26 @@ export function isLoggedIn(): boolean {
 		return false;
 	}
 	return elem.getAttribute('content') === 'true';
+}
+
+export function throwError(message: string): void {
+	throw new Error(message)
+}
+
+
+/**
+ * Voer de meegegeven functie éénmaal uit.
+ * @param func
+ */
+export const once = <T extends unknown[], U>(func: (...args: T) => U): (...args: T) => U => {
+	let called = false;
+	let returnValue: U;
+	return (...args: T): U => {
+		if (!called) {
+			called = true;
+			returnValue = func(...args)
+		}
+
+		return returnValue
+	}
 }

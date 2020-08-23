@@ -30,7 +30,7 @@ import {
  *
  * @param shader
  */
-export function shaderToy(shader: string) {
+export function shaderToy(shader: string): void {
 	const container = document.createElement('div');
 	Object.assign(container.style, {
 		position: 'fixed',

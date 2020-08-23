@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDraad;
@@ -139,16 +138,14 @@ class ForumController extends AbstractController {
 	/**
 	 * RSS feed van recente draadjes tonen.
 	 * @Route("/forum/rss/csrdelft.xml", methods={"GET"})
-	 * @Route("/forum/rss/{token}/csrdelft.xml", methods={"GET"})
+	 * @Route("/forum/rss/{private_auth_token}/csrdelft.xml", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function rss() {
-		$response = new Response(view('forum.rss', [
+		return new Response(view('forum.rss', [
 			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
-			'privatelink' => LoginService::getAccount()->getRssLink()
-		]));
-		$response->headers->set('Content-Type', 'application/rss+xml; charset=UTF-8');
-		return $response;
+			'privatelink' => $this->getUser()->getRssLink()
+		]), 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
 	}
 
 	/**
@@ -286,7 +283,7 @@ class ForumController extends AbstractController {
 	 */
 	public function deel(ForumDeel $deel, $pagina = 1) {
 		if (!$deel->magLezen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$paging = true;
 		if ($pagina === 'laatste') {
@@ -339,7 +336,7 @@ class ForumController extends AbstractController {
 	 */
 	public function onderwerp(ForumDraad $draad, $pagina = null, $statistiek = null) {
 		if (!$draad->magLezen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (LoginService::mag(P_LOGGED_IN)) {
 			$gelezen = $draad->getWanneerGelezen();
@@ -478,7 +475,7 @@ class ForumController extends AbstractController {
 	 */
 	public function toonalles() {
 		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
-		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([LoginService::getUid()]);
+		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([$this->getUid()]);
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		return new JsonResponse(true);
 	}
@@ -495,10 +492,10 @@ class ForumController extends AbstractController {
 	 */
 	public function meldingsniveau(ForumDraad $draad, $niveau) {
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
-			throw new CsrToegangException('Onderwerp mag geen melding voor ontvangen worden');
+			throw $this->createAccessDeniedException('Onderwerp mag geen melding voor ontvangen worden');
 		}
 		if (!ForumDraadMeldingNiveau::isValidValue($niveau)) {
-			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
+			throw $this->createAccessDeniedException('Ongeldig meldingsniveau gespecificeerd');
 		}
 		$this->forumDradenMeldingRepository->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::from($niveau));
 		return new JsonResponse(true);
@@ -516,10 +513,10 @@ class ForumController extends AbstractController {
 	 */
 	public function deelmelding(ForumDeel $deel, $niveau) {
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
-			throw new CsrToegangException('Deel mag geen melding voor ontvangen worden');
+			throw $this->createAccessDeniedException('Deel mag geen melding voor ontvangen worden');
 		}
 		if ($niveau !== 'aan' && $niveau !== 'uit') {
-			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
+			throw $this->createAccessDeniedException('Ongeldig meldingsniveau gespecificeerd');
 		}
 		$this->forumDelenMeldingRepository->setMeldingVoorLid($deel, $niveau === 'aan');
 		return new JsonResponse(true);
@@ -552,19 +549,19 @@ class ForumController extends AbstractController {
 	public function wijzigen(ForumDraad $draad, $property) {
 		// gedeelde moderators mogen dit niet
 		if (!$draad->deel->magModereren()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'eerste_post_plakkerig', 'pagina_per_post'))) {
 			$value = !$draad->$property;
 			if ($property === 'belangrijk' && !LoginService::mag(P_FORUM_BELANGRIJK)) {
-				throw new CsrToegangException();
+				throw $this->createAccessDeniedException();
 			}
 		} elseif ($property === 'forum_id' || $property === 'gedeeld_met') {
 			$value = (int)filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			if ($property === 'forum_id') {
 				$deel = $this->forumDelenRepository->get($value);
 				if (!$deel->magModereren()) {
-					throw new CsrToegangException();
+					throw $this->createAccessDeniedException();
 				}
 			} elseif ($value === 0) {
 				$value = null;
@@ -575,7 +572,7 @@ class ForumController extends AbstractController {
 				$value = null;
 			}
 		} else {
-			throw new CsrToegangException("Kan draad niet wijzigen");
+			throw $this->createAccessDeniedException("Kan draad niet wijzigen");
 		}
 		$this->forumDradenRepository->wijzigForumDraad($draad, $property, $value);
 		if (is_bool($value)) {
@@ -607,13 +604,13 @@ class ForumController extends AbstractController {
 		if ($draad !== null) {
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
-				throw new CsrToegangException('Draad bestaat niet');
+				throw $this->createAccessDeniedException('Draad bestaat niet');
 			}
 			$redirect = $this->redirectToRoute('csrdelft_forum_onderwerp', ['draad_id' => $draad->draad_id]);
 			$nieuw = false;
 		} else {
 			if (!$deel->magPosten()) {
-				throw new CsrToegangException('Mag niet posten');
+				throw $this->createAccessDeniedException('Mag niet posten');
 			}
 			$redirect = $this->redirectToRoute('csrdelft_forum_deel', ['forum_id' => $deel->forum_id]);
 			$nieuw = true;
@@ -661,7 +658,7 @@ class ForumController extends AbstractController {
 			if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || (isset($titel) && $titel && $filter->isSpam($titel))) {
 				$this->debugLogRepository->log(static::class, 'posten', [$deel->forum_id, $draad->draad_id], 'SPAM ' . $tekst);
 				setMelding('SPAM', -1);
-				throw new CsrToegangException("");
+				throw $this->createAccessDeniedException("");
 			}
 
 			$wacht_goedkeuring = true;
@@ -672,7 +669,7 @@ class ForumController extends AbstractController {
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
 				setMelding('SPAM', -1);
-				throw new CsrToegangException('SPAM');
+				throw $this->createAccessDeniedException('SPAM');
 			}
 		}
 
@@ -736,7 +733,7 @@ class ForumController extends AbstractController {
 	 */
 	public function citeren(ForumPost $post) {
 		if (!$post->magCiteren()) {
-			throw new CsrToegangException("Mag niet citeren");
+			throw $this->createAccessDeniedException("Mag niet citeren");
 		}
 		echo $this->forumPostsRepository->citeerForumPost($post);
 		exit; //TODO: JsonResponse
@@ -749,7 +746,7 @@ class ForumController extends AbstractController {
 	 */
 	public function tekst(ForumPost $post) {
 		if (!$post->magBewerken()) {
-			throw new CsrToegangException("Mag niet berwerken");
+			throw $this->createAccessDeniedException("Mag niet berwerken");
 		}
 		echo $post->tekst;
 		exit; //TODO: JsonResponse
@@ -763,7 +760,7 @@ class ForumController extends AbstractController {
 	 */
 	public function bewerken(ForumPost $post) {
 		if (!$post->magBewerken()) {
-			throw new CsrToegangException("Mag niet bewerken");
+			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
@@ -781,12 +778,12 @@ class ForumController extends AbstractController {
 	public function verplaatsen(ForumPost $post) {
 		$oudDraad = $post->draad;
 		if (!$oudDraad->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
 		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
 		$nieuwDraad = $this->forumDradenRepository->get((int)$nieuw);
 		if (!$nieuwDraad->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
 		$this->forumPostsRepository->verplaatsForumPost($nieuwDraad, $post);
 		$this->forumPostsRepository->goedkeurenForumPost($post);
@@ -801,7 +798,7 @@ class ForumController extends AbstractController {
 	 */
 	public function verwijderen(ForumPost $post) {
 		if (!$post->draad->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
 		$this->forumPostsRepository->verwijderForumPost($post);
 		return view('forum.partial.post_delete', ['post' => $post]);
@@ -815,7 +812,7 @@ class ForumController extends AbstractController {
 	 */
 	public function offtopic(ForumPost $post) {
 		if (!$post->draad->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
 		$this->forumPostsRepository->offtopicForumPost($post);
 		return view('forum.partial.post_lijst', ['post' => $post]);
@@ -829,7 +826,7 @@ class ForumController extends AbstractController {
 	 */
 	public function goedkeuren(ForumPost $post) {
 		if (!$post->draad->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
 		$this->forumPostsRepository->goedkeurenForumPost($post);
 		return view('forum.partial.post_lijst', ['post' => $post]);
@@ -853,7 +850,7 @@ class ForumController extends AbstractController {
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
-				throw new CsrToegangException("Draad bevindt zich niet in deel");
+				throw $this->createAccessDeniedException("Draad bevindt zich niet in deel");
 			}
 			if (empty($ping)) {
 				$this->forumDradenReagerenRepository->setConcept($deel, $draad_id, $concept);
@@ -863,7 +860,7 @@ class ForumController extends AbstractController {
 			$reageren = $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad);
 		} else {
 			if (!$deel->magPosten()) {
-				throw new CsrToegangException("Mag niet posten");
+				throw $this->createAccessDeniedException("Mag niet posten");
 			}
 			if (empty($ping)) {
 				$this->forumDradenReagerenRepository->setConcept($deel, null, $concept, $titel);
