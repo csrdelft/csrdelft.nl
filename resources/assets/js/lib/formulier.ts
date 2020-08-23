@@ -5,7 +5,7 @@ import {ajaxRequest} from './ajax';
 import {domUpdate} from './domUpdate';
 import {modalClose} from './modal';
 import {redirect, reload} from './reload';
-import {selectAll} from "./dom";
+import {parents, select, selectAll} from "./dom";
 import {throwError} from "./util";
 
 export function formIsChanged(form: HTMLFormElement): boolean {
@@ -41,13 +41,11 @@ export function formInlineToggle(form: Element): void {
 	$form.children(':first').trigger('focus');
 }
 
-export function formToggle(target: Element, event: Event): false {
+export function formToggle(target: HTMLElement, event: Event): false {
 	event.preventDefault();
-	const form = target.closest('form');
-	if (!form) {
-		throw new Error("Geen form gevonden in formToggle")
-	}
-	formInlineToggle(form);
+
+	formInlineToggle(select('form', parents(target)));
+
 	return false;
 }
 

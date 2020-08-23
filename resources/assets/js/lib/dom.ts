@@ -3,6 +3,7 @@
  * @param selectors
  * @param container
  * @param bericht
+ * @throws Error als element niet wordt gevonden
  */
 export const select = <T extends Element = Element>(selectors: string, container: Element | Document = document, bericht = ""): T => {
 	const el = container.querySelector<T>(selectors)
