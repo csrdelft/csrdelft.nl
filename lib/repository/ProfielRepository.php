@@ -473,7 +473,7 @@ class ProfielRepository extends AbstractRepository {
 
 	public function getNovieten($lichting) {
 		return $this->createQueryBuilder('p')
-			->where('p.uid like :uid and status = :status')
+			->where('p.uid like :uid and p.status = :status')
 			->setParameter('uid', $lichting . '%')
 			->setParameter('status', 'S_NOVIET')
 			->getQuery()->getResult();

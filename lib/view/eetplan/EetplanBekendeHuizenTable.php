@@ -15,8 +15,6 @@ class EetplanBekendeHuizenTable extends DataTable {
 		$this->selectEnabled = false;
 
 		$this->hideColumn('avond');
-		$this->hideColumn('woonoord_id');
-		$this->hideColumn('uid');
 		$this->addColumn('naam', 'opmerking');
 		$this->addColumn('woonoord', 'naam');
 

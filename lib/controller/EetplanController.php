@@ -9,7 +9,6 @@ use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Woonoord;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\eetplan\EetplanBekendenRepository;
 use CsrDelft\repository\eetplan\EetplanRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
@@ -27,7 +26,6 @@ use CsrDelft\view\eetplan\NieuwEetplanForm;
 use CsrDelft\view\eetplan\VerwijderEetplanForm;
 use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\View;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
@@ -145,13 +143,11 @@ class EetplanController extends AbstractController {
 	}
 
 	/**
-	 * @param EntityManagerInterface $em
 	 * @return GenericDataTableResponse|EetplanBekendeHuizenForm
-	 * @throws ORMException
 	 * @Route("/eetplan/bekendehuizen/toevoegen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_toevoegen(EntityManagerInterface $em) {
+	public function bekendehuizen_toevoegen() {
 		$eetplan = new Eetplan();
 		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/toevoegen');
 		if (!$form->validate()) {
@@ -160,9 +156,6 @@ class EetplanController extends AbstractController {
 			setMelding('Deze noviet is al eens op dit huis geweest', -1);
 			return $form;
 		} else {
-			// Fix pk
-			$eetplan->uid = $eetplan->noviet->uid;
-			$eetplan->woonoord_id = $eetplan->woonoord->id;
 			$this->eetplanRepository->save($eetplan);
 			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		}
@@ -203,8 +196,8 @@ class EetplanController extends AbstractController {
 				if (!$eetplan) {
 					continue;
 				}
+				$verwijderd[] = new RemoveDataTableEntry($eetplan->id, Eetplan::class);
 				$this->eetplanRepository->remove($eetplan);
-				$verwijderd[] = new RemoveDataTableEntry([$eetplan->uid, $eetplan->woonoord_id], Eetplan::class);
 			}
 		}
 		return $this->tableData($verwijderd);
@@ -287,8 +280,8 @@ class EetplanController extends AbstractController {
 		$verwijderd = [];
 		foreach ($selection as $uuid) {
 			$bekenden = $this->eetplanBekendenRepository->retrieveByUUID($uuid);
+			$verwijderd[] = new RemoveDataTableEntry($bekenden->id, EetplanBekenden::class);
 			$this->eetplanBekendenRepository->remove($bekenden);
-			$verwijderd[] = new RemoveDataTableEntry([$bekenden->uid1, $bekenden->uid2], EetplanBekenden::class);
 		}
 		return $this->tableData($verwijderd);
 	}

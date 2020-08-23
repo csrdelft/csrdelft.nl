@@ -113,11 +113,11 @@ class DoctrineEntityField extends InputField {
 	 * @return bool Of alles gepost is
 	 */
 	public function isPosted() {
-		if (false === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
+		if (!filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
 			return false;
 		}
 
-		if (false === filter_input(INPUT_POST, $this->name, FILTER_DEFAULT)) {
+		if (!filter_input(INPUT_POST, $this->name, FILTER_DEFAULT)) {
 			return false;
 		}
 
