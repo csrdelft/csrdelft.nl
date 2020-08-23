@@ -150,6 +150,14 @@
 			</div>
 		</div>
 
+		<div class="totaal" v-if="totaal > 0">
+			<div class="left">Totaal</div>
+			<div class="right">
+				<div class="title">&euro; {{ totaal|bedrag }}</div>
+				<div class="btw">incl. btw</div>
+			</div>
+		</div>
+
 		<div class="field">
 			<label for="opmerkingen">Opmerkingen</label>
 			<textarea id="opmerkingen" v-model="declaratie.opmerkingen"></textarea>
@@ -267,6 +275,14 @@
 
 		public regelVerwijderen(bon: Bon, regel: number) {
 			bon.regels.splice(regel, 1);
+		}
+
+		public get totaal() {
+			let totaal = 0;
+			for (let bon of this.declaratie.bonnen) {
+				totaal += this.berekening(bon).totaalIncl;
+			}
+			return totaal;
 		}
 
 		public berekening(bon: Bon): { totaalExcl: number, totaalIncl: number, btw: { 0: number, 9: number, 21: number } } {
@@ -596,6 +612,33 @@
 				top: 0;
 				right: 0;
 				bottom: 0;
+			}
+		}
+	}
+
+	.totaal {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+
+		.left {
+			font-size: 21px;
+			font-weight: 600;
+		}
+
+		.right {
+			text-align: right;
+
+			.title {
+				font-size: 27px;
+				font-weight: 600;
+				color: black;
+				margin-bottom: 0;
+			}
+
+			.btw {
+				margin-top: -6px;
+				font-size: 16px;
+				font-weight: 300;
 			}
 		}
 	}
