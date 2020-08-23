@@ -14,7 +14,7 @@ class VerticalenFixtures extends Fixture {
 		$faker = Faker::create('nl_NL');
 
 		$verticaleLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-		$verticaleNamen = $faker->words(count($verticaleLetters));
+		$verticaleNamen = $faker->unique()->words(count($verticaleLetters));
 
 		foreach ($verticaleLetters as $i => $letter) {
 			$verticale = new Verticale();
