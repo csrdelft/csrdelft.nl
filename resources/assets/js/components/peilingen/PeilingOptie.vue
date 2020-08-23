@@ -67,9 +67,9 @@
 		protected initBeschrijvingContext() {
 			setTimeout(() => {
 				if (this.kanStemmen) {
-					init(this.$refs.beschrijving as Element);
+					init(this.$refs.beschrijving as HTMLElement);
 				} else {
-					init(this.$refs.beschrijving_gestemd as Element);
+					init(this.$refs.beschrijving_gestemd as HTMLElement);
 				}
 			});
 		}

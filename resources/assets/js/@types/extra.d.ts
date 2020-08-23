@@ -9,5 +9,6 @@ interface JQuery {
 	markItUp: (arg: unknown) => unknown;
 	scrollTo: (arg: unknown) => void;
 	modal: (arg?: unknown) => void;
+	timeago: () => void
 }
 

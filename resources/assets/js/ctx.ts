@@ -19,7 +19,7 @@ declare global {
 	}
 }
 
-type ContextHandlerFunction = (el: Element) => void;
+type ContextHandlerFunction = (el: HTMLElement) => void;
 
 class Context {
 	private handlers: ContextHandler[] = [];
@@ -34,7 +34,7 @@ class Context {
 		this.handlers.push({selector, handler});
 	}
 
-	public init(parent: Element) {
+	public init(parent: HTMLElement) {
 		if (!parent.querySelectorAll) {
 			throw new Error('Kan geen context initializeren op dit element: ' + parent);
 		}
@@ -43,7 +43,7 @@ class Context {
 			if (selector === '') {
 				handler(parent);
 			} else {
-				for (const el of Array.from(parent.querySelectorAll(selector))) {
+				for (const el of Array.from(parent.querySelectorAll<HTMLElement>(selector))) {
 					handler(el);
 				}
 			}
@@ -54,4 +54,4 @@ class Context {
 window._stek_context = new Context();
 
 export default window._stek_context;
-export const init = (parent: Element): void => window._stek_context.init(parent);
+export const init = (parent: HTMLElement): void => window._stek_context.init(parent);

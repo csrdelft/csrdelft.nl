@@ -117,7 +117,7 @@ docReady(() => {
 	});
 
 	$(document).on('keyup', (event) => {
-		if (event.keyCode === 27) { // esc
+		if (event.key == "Escape") {
 			reset();
 		}
 	});

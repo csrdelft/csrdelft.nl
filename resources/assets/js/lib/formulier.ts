@@ -34,19 +34,15 @@ export function formIsChanged(form: HTMLFormElement): boolean {
  * @see templates/instellingen/beheer/instelling_row.tpl
  * @param form
  */
-export function formInlineToggle(form: Element): void {
+export function formInlineToggle(form: HTMLElement): void {
 	const $form = $(form)
 	$form.prev('.InlineFormToggle').toggle();
 	$form.toggle();
 	$form.children(':first').trigger('focus');
 }
 
-export function formToggle(target: Element, event: Event): false {
+export function formToggle(target: HTMLElement, event: Event): false {
 	event.preventDefault();
-
-	if (!(target instanceof HTMLElement)) {
-		throw new Error("Element geen HTMLElement")
-	}
 
 	formInlineToggle(select('form', parents(target)));
 
@@ -258,7 +254,7 @@ export function initSterrenField(el: HTMLElement): void {
 		cancelHint: 'Wis beoordeling',
 		cancelPlace: 'right',
 		noRatedMsg: '',
-		click: function (score, event) {
+		click: function (score) {
 			console.log(score)
 			$(this).raty('score', score)
 			$(this).closest('form').submit()

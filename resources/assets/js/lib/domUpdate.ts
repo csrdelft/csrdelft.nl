@@ -15,7 +15,7 @@ export function domUpdate(this: HTMLElement | void, htmlString: string|null): vo
 	}
 	const elements = htmlParse(htmlString);
 	$(elements).each(function (index, element) {
-		if (!(element instanceof Element)) {
+		if (!(element instanceof HTMLElement)) {
 			// element kan ook een stuk tekst zijn, hier kunnen we niets mee.
 			return;
 		}
