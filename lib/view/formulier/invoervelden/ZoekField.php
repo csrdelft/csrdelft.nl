@@ -100,17 +100,17 @@ JS;
                     <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" role="menu">
-                    <a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                    <a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent(document.querySelector('#<?= $this->getId() ?>').value);">
                         Oudleden
                     </a>
-                    <a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                    <a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent(document.querySelector('#<?= $this->getId() ?>').value);">
                         Iedereen
                     </a>
 
-                    <a href="#" class="dropdown-item" onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                    <a href="#" class="dropdown-item" onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent(document.querySelector('#<?= $this->getId() ?>').value);">
                         Forum reacties
                     </a>
-                    <a href="#" class="dropdown-item" onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
+                    <a href="#" class="dropdown-item" onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent(document.querySelector('#<?= $this->getId() ?>').value);">
                         Wiki inhoud
                     </a>
                     <a class="divider"></a>

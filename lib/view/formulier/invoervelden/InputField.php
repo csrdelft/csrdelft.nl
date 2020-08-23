@@ -64,7 +64,6 @@ abstract class InputField implements FormElement, Validator {
 	public $placeholder = null; // plaats een grijze placeholdertekst in leeg veld
 	public $error = ''; // foutmelding van dit veld
 	public $onchange = null; // callback on change of value
-	public $onchange_submit = false; // bij change of value form submitten
 	public $onclick = null; // callback on click
 	public $onkeydown = null; // prevent illegal character from being entered
 	public $onkeyup = null; // respond to keyboard strokes
@@ -428,12 +427,6 @@ abstract class InputField implements FormElement, Validator {
 JS;
 		if ($this->readonly) {
 			return $js;
-		}
-		if ($this->onchange_submit) {
-			$this->onchange .= <<<JS
-
-	window.formulier.formSubmit(event);
-JS;
 		}
 		if ($this->enter_submit) {
 			$this->onkeydown .= <<<JS
