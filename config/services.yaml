@@ -72,6 +72,8 @@ services:
   Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices: '@security.authentication.rememberme.services.persistent.main'
   CsrDelft\common\Logging\LogActivationStrategy: ~
 
+  Psr\Container\ContainerInterface: '@service_container'
+
   security:
     class: Symfony\Component\Security\Core\Security
     public: true
