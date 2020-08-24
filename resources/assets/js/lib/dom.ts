@@ -5,7 +5,7 @@
  * @param bericht
  * @throws Error als element niet wordt gevonden
  */
-export const select = <T extends Element = Element>(selectors: string, container: Element | Document = document, bericht = ""): T => {
+export const select = <T extends Element = HTMLElement>(selectors: string, container: Element | Document = document, bericht = ""): T => {
 	const el = container.querySelector<T>(selectors)
 
 	if (!el) {
@@ -15,8 +15,8 @@ export const select = <T extends Element = Element>(selectors: string, container
 	return el
 }
 
-export const selectAll = <T extends Element = Element>(selectors: string, container: Element | Document = document): NodeListOf<T> => {
-	return container.querySelectorAll<T>(selectors)
+export const selectAll = <T extends Element = HTMLElement>(selectors: string, container: Element | Document = document): T[] => {
+	return Array.from(container.querySelectorAll<T>(selectors))
 }
 
 export const parents = (element: HTMLElement, selector: string | null = null): HTMLElement => {

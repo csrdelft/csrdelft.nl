@@ -66,13 +66,22 @@ input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
   filter: alpha(opacity=30);
 }
 
-.btn.loading {
+.btn-loading {
 	background-image: url("../images/loading-fb.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
-	color: transparent;
+	color: transparent !important; // een specifieke knop geeft ook een color mee
+}
+
+.btn.loading {
+	@extend .btn-loading;
 }
 
 .btn img {
 	vertical-align: text-bottom;
+}
+
+.get:not(.loaded), .post:not(.loaded) {
+	@extend .disabled;
+	@extend .btn-loading;
 }

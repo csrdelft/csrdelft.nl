@@ -50,27 +50,17 @@ export const registerDataTableContext = async (): Promise<void> => {
 
 export const registerKnopContext = async (): Promise<void> => {
 	const {
-		knopGet,
-		knopPost,
-		knopVergroot,
+		initKnopPost,
+		initKnopGet,
+		initKnopVergroot,
+		initRadioButtons,
 	} = await import(/* webpackChunkName: "knop" */'./lib/knop');
 
 	ctx.addHandlers({
-		'.get': (el) => el.addEventListener('click', (e) => knopGet(e, el)),
-		'.post': (el) => el.addEventListener('click', knopPost),
-		'.vergroot': (el) => el.addEventListener('click', (e) => knopVergroot(e, el)),
-		'[data-buttons=radio]': (el) => {
-			for (const btn of Array.from(el.querySelectorAll('a.btn'))) {
-				btn.addEventListener('click',
-					(event) => {
-						for (const active of Array.from(el.querySelectorAll('.active'))) {
-							active.classList.remove('active');
-						}
-						(event.target as Element).classList.add('active');
-					},
-				);
-			}
-		},
+		'.get': initKnopGet,
+		'.post': initKnopPost,
+		'.vergroot': initKnopVergroot,
+		'[data-buttons=radio]': initRadioButtons,
 	});
 
 };
