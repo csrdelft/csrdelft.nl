@@ -30,6 +30,9 @@ services:
     exclude: '../lib/model/entity'
     public: true # Alle modellen zijn uit de container te trekken.
 
+  CsrDelft\view\:
+    resource: '../lib/view'
+
   CsrDelft\view\bbcode\tag\:
     resource: '../lib/view/bbcode/tag/'
     shared: false # iedere instance is uniek
@@ -77,3 +80,16 @@ services:
   security:
     class: Symfony\Component\Security\Core\Security
     public: true
+
+  csr.formulier.factory:
+    alias: CsrDelft\Component\Formulier\FormulierFactory
+
+  CsrDelft\Component\Formulier\FormulierBuilder:
+    shared: false # iedere instance is uniek
+
+  CsrDelft\Component\Formulier\FormulierFactory:
+    shared: false
+    public: true
+    arguments:
+      - !tagged_locator {tag: csr.formulier.type, index_by: key}
+      - '@CsrDelft\Component\Formulier\FormulierBuilder'
