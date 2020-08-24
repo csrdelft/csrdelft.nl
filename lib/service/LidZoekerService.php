@@ -415,6 +415,8 @@ class LidZoekerService {
 	 * @return Profiel|null
 	 */
 	private function zoekMag(Profiel $profiel, string $query) {
+		// Voorkom dat deze versie van profiel wordt opgeslagen.
+		$this->em->clear(Profiel::class);
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
 		$lidToestemmingRepository = ContainerFacade::getContainer()->get(LidToestemmingRepository::class);
 		$zoekvelden = $lidToestemmingRepository->getModuleKeys('profiel');
@@ -434,8 +436,6 @@ class LidZoekerService {
 				}
 			}
 		}
-		// Voorkom dat deze versie van profiel wordt opgeslagen.
-		$this->em->clear(Profiel::class);
 
 		return $profiel;
 	}
