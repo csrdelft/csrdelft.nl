@@ -41,7 +41,7 @@ class FormulierInstance {
 	private $modalBreedte;
 	private $validationMethods;
 
-	public function __construct($action, $titel, $dataTableId, $formKnoppen, $fields, $showMelding, $preventCsrf, $css_classes, $validationMethods, $post = true) {
+	public function __construct($action, $titel, $dataTableId, $formKnoppen, $fields, $showMelding, $preventCsrf, $css_classes, $validationMethods = [], $post = true) {
 		$this->formId = uniqid_safe('Formulier_');
 		$this->action = $action;
 		$this->formKnoppen = $formKnoppen;

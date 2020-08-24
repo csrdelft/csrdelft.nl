@@ -36,7 +36,7 @@ class FormulierBuilder {
 	/**
 	 * @var array
 	 */
-	private $validationMethods;
+	private $validationMethods = [];
 	/**
 	 * @var RequestStack
 	 */
@@ -60,7 +60,7 @@ class FormulierBuilder {
 	 * Set the id late (after constructor).
 	 * Use in case it is not POSTed.
 	 *
-	 * @param string $dataTableId
+	 * @param string|bool $dataTableId
 	 */
 	public function setDataTableId($dataTableId) {
 		// Link with DataTable?
