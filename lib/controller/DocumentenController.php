@@ -46,10 +46,11 @@ class DocumentenController extends AbstractController {
 	/**
 	 * @param Document $document
 	 * @return JsonResponse|PlainView|RedirectResponse
-	 * @Route("/doucmenten/verwijderen/{id}", methods={"POST"})
+	 * @Route("/documenten/verwijderen/{id}", methods={"POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
 	public function verwijderen(Document $document) {
+		$id = $document->id;
 		if ($document->magVerwijderen()) {
 			$this->documentRepository->remove($document);
 		} else {
@@ -57,7 +58,7 @@ class DocumentenController extends AbstractController {
 			return new JsonResponse(false);
 		}
 
-		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $document->id));
+		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $id));
 	}
 
 	/**
