@@ -86,7 +86,7 @@ $.fn.dataTable.ext.buttons.default = {
 	action(e, dt, button) {
 		knopPost(button.get(0), e);
 	},
-	className: 'post DataTableResponse',
+	className: 'post loaded DataTableResponse',
 };
 
 $.fn.dataTable.ext.buttons.popup = {
