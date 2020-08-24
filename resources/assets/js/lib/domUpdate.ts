@@ -1,3 +1,4 @@
+import $ from 'jquery'
 import {init} from '../ctx';
 import {modalClose, modalOpen} from './modal';
 import {fadeAway, htmlParse} from './util';
@@ -30,7 +31,8 @@ export function domUpdate(this: HTMLElement | void, htmlString: string | null): 
 			if (element.classList.contains('remove')) {
 				fadeAway(target, 400)
 			} else {
-				target.replaceWith(element)
+				// Jquery voert ook js uit, dat is nodig op dit moment voor forms
+				$(target).replaceWith($(element))
 			}
 		} else if (targetParent) {
 			targetParent.append(element);
