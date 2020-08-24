@@ -29,6 +29,7 @@ use CsrDelft\view\View;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -68,12 +69,12 @@ class EetplanController extends AbstractController {
 	}
 
 	/**
-	 * @param null $uid
+	 * @param string $uid
 	 * @return View
 	 * @Route("/eetplan/noviet/{uid}", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function noviet($uid = null) {
+	public function noviet($uid) {
 		$eetplan = $this->eetplanRepository->getEetplanVoorNoviet($uid);
 		if (!$eetplan) {
 			throw new NotFoundHttpException("Geen eetplan gevonden voor deze noviet");
@@ -81,17 +82,17 @@ class EetplanController extends AbstractController {
 
 		return view('eetplan.noviet', [
 			'noviet' => ProfielRepository::get($uid),
-			'eetplan' => $this->eetplanRepository->getEetplanVoorNoviet($uid)
+			'eetplan' => $eetplan,
 		]);
 	}
 
 	/**
-	 * @param null $id
+	 * @param integer $id
 	 * @return TemplateView
 	 * @Route("/eetplan/huis/{id}", methods={"GET"}, requirements={"id": "\d+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function huis($id = null) {
+	public function huis($id) {
 		$eetplan = $this->eetplanRepository->getEetplanVoorHuis($id, $this->lichting);
 		if ($eetplan == []) {
 			throw new CsrGebruikerException('Huis niet gevonden');
@@ -111,16 +112,16 @@ class EetplanController extends AbstractController {
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
 	public function woonoorden_toggle() {
-			$selection = $this->getDataTableSelection();
-			$woonoorden = [];
-			foreach ($selection as $woonoord) {
-				/** @var Woonoord $woonoord */
-				$woonoord = $this->woonoordenRepository->retrieveByUUID($woonoord);
-				$woonoord->eetplan = !$woonoord->eetplan;
-				$this->woonoordenRepository->update($woonoord);
-				$woonoorden[] = $woonoord;
-			}
-			return new EetplanHuizenResponse($woonoorden);
+		$selection = $this->getDataTableSelection();
+		$woonoorden = [];
+		foreach ($selection as $woonoord) {
+			/** @var Woonoord $woonoord */
+			$woonoord = $this->woonoordenRepository->retrieveByUUID($woonoord);
+			$woonoord->eetplan = !$woonoord->eetplan;
+			$this->woonoordenRepository->update($woonoord);
+			$woonoorden[] = $woonoord;
+		}
+		return new EetplanHuizenResponse($woonoorden);
 	}
 
 	/**
@@ -143,18 +144,24 @@ class EetplanController extends AbstractController {
 	}
 
 	/**
-	 * @return GenericDataTableResponse|EetplanBekendeHuizenForm
+	 * @param Request $request
+	 * @return GenericDataTableResponse|Response
 	 * @Route("/eetplan/bekendehuizen/toevoegen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_toevoegen() {
+	public function bekendehuizen_toevoegen(Request $request) {
 		$eetplan = new Eetplan();
-		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/toevoegen');
+		$form = $this->createFormulier(
+			EetplanBekendeHuizenForm::class,
+			$eetplan,
+			['action' => $this->generateUrl('csrdelft_eetplan_bekendehuizen_toevoegen'), 'update' => false]
+		);
+		$form->handleRequest($request);
 		if (!$form->validate()) {
-			return $form;
+			return $form->createModalView();
 		} elseif ($this->eetplanRepository->findOneBy(['noviet' => $eetplan->noviet, 'woonoord' => $eetplan->woonoord]) != null) {
 			setMelding('Deze noviet is al eens op dit huis geweest', -1);
-			return $form;
+			return $form->createModalView();
 		} else {
 			$this->eetplanRepository->save($eetplan);
 			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
@@ -162,23 +169,29 @@ class EetplanController extends AbstractController {
 	}
 
 	/**
-	 * @param null $uuid
-	 * @return GenericDataTableResponse|EetplanBekendeHuizenForm
+	 * @param Request $request
+	 * @param string|null $uuid
+	 * @return GenericDataTableResponse|Response
 	 * @Route("/eetplan/bekendehuizen/bewerken/{uuid}", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_bewerken($uuid = null) {
+	public function bekendehuizen_bewerken(Request $request, $uuid = null) {
 		if (!$uuid) {
 			$uuid = $this->getDataTableSelection()[0];
 		}
 
 		$eetplan = $this->eetplanRepository->retrieveByUUID($uuid);
-		$form = new EetplanBekendeHuizenForm($eetplan, '/eetplan/bekendehuizen/bewerken/' . $uuid, true);
+		$form = $this->createFormulier(
+			EetplanBekendeHuizenForm::class,
+			$eetplan,
+			['action' => $this->generateUrl('csrdelft_eetplan_bekendehuizen_bewerken', ['uuid' => $uuid]), 'update' => true],
+		);
+		$form->handleRequest($request);
 		if ($form->isPosted() && $form->validate()) {
 			$this->eetplanRepository->save($eetplan);
 			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		} else {
-			return $form;
+			return $form->createModalView();
 		}
 	}
 
@@ -231,18 +244,24 @@ class EetplanController extends AbstractController {
 	}
 
 	/**
-	 * @return GenericDataTableResponse|EetplanBekendenForm
+	 * @param Request $request
+	 * @return GenericDataTableResponse|Response
 	 * @Route("/eetplan/novietrelatie/toevoegen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie_toevoegen() {
+	public function novietrelatie_toevoegen(Request $request) {
 		$eetplanbekenden = new EetplanBekenden();
-		$form = new EetplanBekendenForm($eetplanbekenden, '/eetplan/novietrelatie/toevoegen');
+		$form = $this->createFormulier(
+			EetplanBekendenForm::class,
+			$eetplanbekenden,
+			['action' => $this->generateUrl('csrdelft_eetplan_novietrelatie_toevoegen'), 'update' => false]
+		);
+		$form->handleRequest($request);
 		if (!$form->validate()) {
-			return $form;
+			return $form->createModalView();
 		} elseif ($this->eetplanBekendenRepository->exists($eetplanbekenden)) {
 			setMelding('Bekenden bestaan al', -1);
-			return $form;
+			return $form->createModalView();
 		} else {
 			$this->eetplanBekendenRepository->save($eetplanbekenden);
 			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
@@ -250,23 +269,29 @@ class EetplanController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @param $uuid
-	 * @return GenericDataTableResponse|EetplanBekendenForm
+	 * @return GenericDataTableResponse|Response
 	 * @Route("/eetplan/novietrelatie/bewerken/{uuid}", methods={"POST"}, defaults={"uuid": null})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie_bewerken($uuid) {
+	public function novietrelatie_bewerken(Request $request, $uuid) {
 		if (!$uuid) {
 			$uuid = $this->getDataTableSelection()[0];
 		}
 
 		$eetplanbekenden = $this->eetplanBekendenRepository->retrieveByUUID($uuid);
-		$form = new EetplanBekendenForm($eetplanbekenden, '/eetplan/novietrelatie/bewerken/' . $uuid, true);
+		$form = $this->createFormulier(
+			EetplanBekendenForm::class,
+			$eetplanbekenden,
+			['action' => $this->generateUrl('csrdelft_eetplan_novietrelatie_bewerken', ['uuid' => $uuid]), 'update' => true]
+		);
+		$form->handleRequest($request);
 		if ($form->isPosted() && $form->validate()) {
 			$this->eetplanBekendenRepository->save($eetplanbekenden);
 			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
 		} else {
-			return $form;
+			return $form->createModalView();
 		}
 	}
 

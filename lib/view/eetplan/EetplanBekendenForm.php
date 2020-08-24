@@ -2,37 +2,43 @@
 
 namespace CsrDelft\view\eetplan;
 
+use CsrDelft\Component\Formulier\FormulierBuilder;
+use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredProfielEntityField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
-use CsrDelft\view\formulier\ModalForm;
 
 /**
  * Toevoegen voor EetplanBekendenTable op /eetplan/novietrelatie/toevoegen
  *
  * Class EetplanBekendenForm
  */
-class EetplanBekendenForm extends ModalForm {
-	function __construct(EetplanBekenden $model, $action, $update = false) {
-		parent::__construct($model, $action, 'Novieten die elkaar kennen toevoegen', true);
-		$fields[] = new HiddenField('id', $model->id);
+class EetplanBekendenForm implements FormulierTypeInterface {
+	/**
+	 * @param FormulierBuilder $builder
+	 * @param EetplanBekenden $data
+	 * @param array $options
+	 */
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+		$builder->setAction($options['action']);
+		$builder->setDataTableId(true);
+		$builder->setTitel('Novieten die elkaar kennen toevoegen');
+		$fields[] = new HiddenField('id', $data->id);
 
-		$fields['noviet1'] = new RequiredProfielEntityField('noviet1', $model->noviet1, 'Noviet 1', 'novieten');
-		$fields['noviet2'] = new RequiredProfielEntityField('noviet2', $model->noviet2, 'Noviet 2', 'novieten');
+		$fields['noviet1'] = new RequiredProfielEntityField('noviet1', $data->noviet1, 'Noviet 1', 'novieten');
+		$fields['noviet2'] = new RequiredProfielEntityField('noviet2', $data->noviet2, 'Noviet 2', 'novieten');
 
-		$fields[] = new TextareaField('opmerking', $model->opmerking, 'Opmerking');
+		$fields[] = new TextareaField('opmerking', $data->opmerking, 'Opmerking');
 
-		if ($update) {
+		if ($options['update']) {
 			$fields['noviet1']->readonly = true;
 			$fields['noviet2']->readonly = true;
 		}
 
-		$this->addFields($fields);
+		$builder->addFields($fields);
 
-		$this->formKnoppen = new FormDefaultKnoppen();
-
-		$this->modalBreedte = '';
+		$builder->setFormKnoppen(new FormDefaultKnoppen());
 	}
 }
