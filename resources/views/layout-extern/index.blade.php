@@ -7,19 +7,19 @@
 @endsection
 
 @section('oweebanner')
-	<a href="/lidworden" class="owee-banner">
-		<div class="logo">
-			<img src="/images/owee/owee2020.svg" alt="C.S.R. - Machtig Mooi">
-		</div>
-		<div class="tekst">
-			<p>Kom je volgend jaar in Delft studeren?
-				<br>Lees hier alles over de OWee en lid worden bij C.S.R.</p>
-			<div><span>Alles over de </span>OWee & lid worden</div>
-		</div>
-	</a>
-	<script>
-		document.body.className += ' ' + 'met-owee-banner';
-	</script>
+{{--	<a href="/lidworden" class="owee-banner">--}}
+{{--		<div class="logo">--}}
+{{--			<img src="/images/owee/owee2020.svg" alt="C.S.R. - Machtig Mooi">--}}
+{{--		</div>--}}
+{{--		<div class="tekst">--}}
+{{--			<p>Kom je volgend jaar in Delft studeren?--}}
+{{--				<br>Lees hier alles over de OWee en lid worden bij C.S.R.</p>--}}
+{{--			<div><span>Alles over de </span>OWee & lid worden</div>--}}
+{{--		</div>--}}
+{{--	</a>--}}
+{{--	<script>--}}
+{{--		document.body.className += ' ' + 'met-owee-banner';--}}
+{{--	</script>--}}
 @endsection
 
 @section('body')
