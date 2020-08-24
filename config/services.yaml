@@ -30,6 +30,9 @@ services:
     exclude: '../lib/model/entity'
     public: true # Alle modellen zijn uit de container te trekken.
 
+  CsrDelft\view\:
+    resource: '../lib/view'
+
   CsrDelft\view\bbcode\tag\:
     resource: '../lib/view/bbcode/tag/'
     shared: false # iedere instance is uniek
@@ -77,9 +80,6 @@ services:
   security:
     class: Symfony\Component\Security\Core\Security
     public: true
-
-  CsrDelft\view\:
-    resource: '../lib/view'
 
   csr.formulier.factory:
     alias: CsrDelft\Component\Formulier\FormulierFactory
