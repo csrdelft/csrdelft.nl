@@ -1,50 +1,43 @@
-import $ from 'jquery';
 import {init} from '../ctx';
 import {modalClose, modalOpen} from './modal';
-import {htmlParse} from './util';
+import {fadeAway, htmlParse} from './util';
+import {select} from "./dom";
 
-export function domUpdate(this: HTMLElement | void, htmlString: string|null): void {
+export function domUpdate(this: HTMLElement | void, htmlString: string | null): void {
 	if (typeof htmlString !== 'string') {
 		return;
 	}
 
-	htmlString = $.trim(htmlString);
+	htmlString = htmlString.trim();
 	if (htmlString.substring(0, 9) === '<!DOCTYPE') {
 		alert('response error');
 		throw new Error(htmlString)
 	}
 	const elements = htmlParse(htmlString);
-	$(elements).each(function (index, element) {
+	for (const element of elements) {
 		if (!(element instanceof HTMLElement)) {
 			// element kan ook een stuk tekst zijn, hier kunnen we niets mee.
 			return;
 		}
 
-		const $element = $(element);
-		const id = $(element).attr('id');
-		const parentId = $(element).attr('parentid');
+		const id = element.id;
+		const parentId = element.getAttribute('parentid')
 
-		const target = $('#' + id);
-		const targetParent = $('#' + parentId);
-		if (target.length === 1) {
-			if ($element.hasClass('remove')) {
-				target.effect('fade', {}, 400, () => {
-					target.remove();
-				});
+		const target = document.querySelector<HTMLElement>(`#${id}`);
+		const targetParent = document.querySelector<HTMLElement>(`#${parentId}`)
+
+		if (target) {
+			if (element.classList.contains('remove')) {
+				fadeAway(target, 400)
 			} else {
-				target.replaceWith($element.show().get()).effect('highlight');
+				target.replaceWith(element)
 			}
-		} else if (targetParent.length === 1) {
-			targetParent.append($element.show());
+		} else if (targetParent) {
+			targetParent.append(element);
 		} else if (element instanceof HTMLScriptElement) {
-			$('head').append($element);
+			document.head.append(element)
 		} else {
-			const parentid = $(this).attr('parentid');
-			if (parentid) {
-				$(this).prependTo(`#${parentid}`).show().effect('highlight');
-			} else {
-				$(this).prependTo('#maalcie-tabel tbody:visible:first').show().effect('highlight'); // FIXME: make generic
-			}
+			select('#maalcie-tabel tbody:visible:first').append(element) // FIXME: make generic
 		}
 		init(element);
 
@@ -53,5 +46,5 @@ export function domUpdate(this: HTMLElement | void, htmlString: string|null): vo
 		} else {
 			modalClose();
 		}
-	});
+	}
 }
