@@ -6,4 +6,3 @@ import {initDropzone} from "../lib/dropzone";
 // noinspection JSIgnoredPromiseFromCall
 loadFotoAlbum();
 
-ctx.addHandler('form.dropzone', initDropzone)

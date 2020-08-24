@@ -1,5 +1,6 @@
 import ctx from './ctx';
 import {select} from "./lib/dom";
+import {initDropzone} from "./lib/dropzone";
 
 export const registerGrafiekContext = async (): Promise<void> => {
 	const {
@@ -86,9 +87,13 @@ export const registerFormulierContext = async (): Promise<void> => {
 		{
 			bbCodeSet,
 		},
+		{
+			initDropzone,
+		},
 	] = await Promise.all([
 		import(/* webpackChunkName: "formulier" */'./lib/formulier'),
 		import(/* webpackChunkName: "bbcode-set" */'./lib/bbcode-set'),
+		import(/* webpackChunkName: "dropzone" */'./lib/dropzone'),
 	]);
 
 	ctx.addHandlers({
@@ -100,7 +105,8 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
 		'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 		'time.timeago': (el) => $(el).timeago(),
-		'.SterrenField': initSterrenField
+		'.SterrenField': initSterrenField,
+		'form.dropzone': initDropzone,
 	});
 };
 
