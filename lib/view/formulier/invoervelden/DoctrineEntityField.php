@@ -78,7 +78,9 @@ class DoctrineEntityField extends InputField {
 		if ($value == null) {
 			return null;
 		}
-		return $this->em->getRepository($this->entityType)->find($value);
+		$this->entity = $this->em->getRepository($this->entityType)->find($value);
+		$this->show_value = $this->entity->getWeergave();
+		return $this->entity;
 	}
 
 	public function getName() {
@@ -113,11 +115,11 @@ class DoctrineEntityField extends InputField {
 	 * @return bool Of alles gepost is
 	 */
 	public function isPosted() {
-		if (!filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
+		if (null === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
 			return false;
 		}
 
-		if (!filter_input(INPUT_POST, $this->name, FILTER_DEFAULT)) {
+		if (null === filter_input(INPUT_POST, $this->name, FILTER_DEFAULT)) {
 			return false;
 		}
 
