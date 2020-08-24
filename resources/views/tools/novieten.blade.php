@@ -17,6 +17,7 @@
 			<th scope="col">Mobiel</th>
 			<th scope="col">Studie</th>
 			<th scope="col">Nanoviet</th>
+			<th scope="col">Matrixplek</th>
 		</tr>
 		@foreach($novieten as $noviet)
 			<tr>
@@ -27,6 +28,7 @@
 				<td>{{$noviet->mobiel}}</td>
 				<td>{{$noviet->studie}}</td>
 				<td>@if($noviet->novietSoort == '1') @icon('tick') @else @icon('cross') @endif </td>
+				<td>@if($noviet->matrixPlek !== null) {{['Voor', 'Midden', 'Achter'][$noviet->matrixPlek]}} @endif</td>
 			</tr>
 		@endforeach
 	</table>
