@@ -23,17 +23,17 @@ class ToestemmingLijstResponse extends DataTableResponse {
      * @param LidToestemming[] $entity
      */
     public function renderElement($entity) {
-        $profiel = ProfielRepository::get($entity[0]->uid);
+        $profiel = $entity[0]->profiel;
 
         $arr = [
-            'uid' => $entity[0]->uid,
+            'uid' => $profiel->uid,
             'status' => $profiel->status,
             'lid' => $profiel->getLink(),
         ];
 
 
         foreach ($entity as $toestemming) {
-            $arr[$toestemming->instelling_id] = $toestemming->waarde;
+            $arr[$toestemming->instelling] = $toestemming->waarde;
         }
 
         foreach ($this->categorien as $categorie) {

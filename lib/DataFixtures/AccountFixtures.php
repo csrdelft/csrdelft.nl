@@ -8,6 +8,7 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -41,6 +42,9 @@ class AccountFixtures extends Fixture {
 		$externProfiel->woonplaats = '';
 		$externProfiel->email = '';
 		$externProfiel->lidjaar = 0;
+		$externProfiel->changelog = [
+			new ProfielLogTextEntry('Aangemaakt door fixtures'),
+		];
 
 		$manager->persist($externProfiel);
 
@@ -73,6 +77,9 @@ class AccountFixtures extends Fixture {
 		$pubcieProfiel->woonplaats = '';
 		$pubcieProfiel->email = '';
 		$pubcieProfiel->lidjaar = 0;
+		$pubcieProfiel->changelog = [
+			new ProfielLogTextEntry('Aangemaakt door fixtures'),
+		];
 
 		$manager->persist($pubcieProfiel);
 

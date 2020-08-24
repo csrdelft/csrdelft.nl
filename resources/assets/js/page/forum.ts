@@ -3,7 +3,7 @@ import axios from 'axios'
 import {domUpdate} from '../lib/domUpdate';
 import {forumCiteren} from '../lib/forum';
 import hoverintent from "hoverintent";
-import {select} from "../lib/dom";
+import {select, selectAll} from "../lib/dom";
 
 try {
 	const textarea = select<HTMLTextAreaElement>('textarea#forumBericht')
@@ -44,17 +44,14 @@ $('.togglePasfoto').on('click', function () {
 	$(this).parent().find('.forumpasfoto').toggleClass('verborgen');
 });
 
-try {
-	const auteur = select('.auteur')
-	const forummodKnop = select<HTMLElement>('a.forummodknop', auteur)
+selectAll('.auteur').forEach(auteur => {
+	const forummodKnoppen = selectAll<HTMLElement>('a.forummodknop', auteur)
 
 	hoverintent(auteur,
-		() => forummodKnop.style.opacity = '1',
-		() => forummodKnop.style.opacity = '0'
+		() => forummodKnoppen.forEach(el => el.style.opacity = '1'),
+		() => forummodKnoppen.forEach(el => el.style.opacity = '0'),
 	)
-} catch (e) {
-	// deze pagina heeft geen auteur
-}
+})
 
 try {
 	const citeerKnop = select<HTMLElement>('a.citeren')

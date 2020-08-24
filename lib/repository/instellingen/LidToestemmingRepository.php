@@ -31,8 +31,8 @@ class LidToestemmingRepository extends AbstractRepository {
 	use YamlInstellingen;
 
 	const FIELD_MODULE = 'module';
-	const FIELD_INSTELLING_ID = 'instelling_id';
-	const FIELD_UID = 'uid';
+	const FIELD_INSTELLING = 'instelling';
+	const FIELD_UID = 'profiel';
 	const MODULE_PROFIEL_LID = 'profiel_lid';
 	const MODULE_PROFIEL_OUDLID = 'profiel_oudlid';
 	const MODULE_PROFIEL = 'profiel';
@@ -59,27 +59,28 @@ class LidToestemmingRepository extends AbstractRepository {
 	 * @return array
 	 */
 	public function getRelevantToestemmingCategories($islid) {
-		$instellingen = [];
+		$toestemmingen = [];
 
 		if ($islid) {
-			$instellingen[self::MODULE_PROFIEL_LID] = $this->getModuleKeys(self::MODULE_PROFIEL_LID);
+			$toestemmingen[self::MODULE_PROFIEL_LID] = $this->getModuleKeys(self::MODULE_PROFIEL_LID);
 		}
 
-		$instellingen[self::MODULE_PROFIEL_OUDLID] = $this->getModuleKeys(self::MODULE_PROFIEL_OUDLID);
-		$instellingen[self::MODULE_PROFIEL] = $this->getModuleKeys(self::MODULE_PROFIEL);
-		$instellingen[self::MODULE_INTERN] = $this->getModuleKeys(self::MODULE_INTERN);
+		$toestemmingen[self::MODULE_PROFIEL_OUDLID] = $this->getModuleKeys(self::MODULE_PROFIEL_OUDLID);
+		$toestemmingen[self::MODULE_PROFIEL] = $this->getModuleKeys(self::MODULE_PROFIEL);
+		$toestemmingen[self::MODULE_INTERN] = $this->getModuleKeys(self::MODULE_INTERN);
 
-		return $instellingen;
+		return $toestemmingen;
 	}
 
-	protected function newInstelling($module, $id, $uid) {
-		$instelling = new LidToestemming();
-		$instelling->module = $module;
-		$instelling->instelling_id = $id;
-		$instelling->waarde = $this->getDefault($module, $id);
-		$instelling->uid = $uid;
-		$instelling->profiel = ProfielRepository::get($uid);
-		return $instelling;
+	protected function newToestemming($module, $id, $uid) {
+		$toestemming = new LidToestemming();
+		$toestemming->module = $module;
+		$toestemming->instelling = $id;
+		$toestemming->waarde = $this->getDefault($module, $id);
+		$toestemming->profiel = ProfielRepository::get($uid);
+		$this->_em->persist($toestemming);
+		$this->_em->flush();
+		return $toestemming;
 	}
 
 	public function toestemmingGegeven() {
@@ -124,7 +125,7 @@ class LidToestemmingRepository extends AbstractRepository {
 			return true;
 		}
 
-		$toestemming = $this->find([self::FIELD_MODULE => $cat, self::FIELD_INSTELLING_ID => $id, self::FIELD_UID => $profiel->uid]);
+		$toestemming = $this->findOneBy([self::FIELD_MODULE => $cat, self::FIELD_INSTELLING => $id, self::FIELD_UID => $profiel->uid]);
 
 		if (!$toestemming) {
 			return false;
@@ -142,7 +143,7 @@ class LidToestemmingRepository extends AbstractRepository {
 			return true;
 		}
 
-		$toestemming = $this->find([self::FIELD_MODULE => self::MODULE_TOESTEMMING, self::FIELD_INSTELLING_ID => $id, self::FIELD_UID => $uid]);
+		$toestemming = $this->findOneBy([self::FIELD_MODULE => self::MODULE_TOESTEMMING, self::FIELD_INSTELLING => $id, self::FIELD_UID => $uid]);
 
 		if (!$toestemming) {
 			return false;
@@ -188,32 +189,31 @@ class LidToestemmingRepository extends AbstractRepository {
 	 * @return string
 	 */
 	public function getValue($module, $id) {
-		return $this->getInstelling($module, $id)->waarde;
+		return $this->getToestemming($module, $id)->waarde;
 	}
 
-	protected function getInstelling($module, $id, $uid = null) {
+	protected function getToestemming($module, $id, $uid = null) {
 		if ($uid == null) {
 			$uid = LoginService::getUid();
 		}
-		$instelling = $this->find([self::FIELD_MODULE => $module, self::FIELD_INSTELLING_ID => $id, self::FIELD_UID => $uid]);
+		$instelling = $this->findOneBy([self::FIELD_MODULE => $module, self::FIELD_INSTELLING => $id, self::FIELD_UID => $uid]);
 		if ($this->hasKey($module, $id)) {
 			if (!$instelling) {
-				$instelling = $this->newInstelling($module, $id, $uid);
+				$instelling = $this->newToestemming($module, $id, $uid);
 			}
 			return $instelling;
 		} else {
 			if ($instelling) {
 				// Haal niet-bestaande instelling uit de database
-				$entityManager = $this->getEntityManager();
-				$entityManager->remove($instelling);
-				$entityManager->flush();
+				$this->_em->remove($instelling);
+				$this->_em->flush();
 			}
 			throw new CsrException(sprintf('Toestemming bestaat niet: "%s" module: "%s".', $id, $module));
 		}
 	}
 
 	public function getToestemmingForIds($ids, $waardes = ['ja', 'nee']) {
-		return $this->findBy([self::FIELD_INSTELLING_ID => $ids, self::FIELD_WAARDE => $waardes], [self::FIELD_UID => 'ASC']);
+		return $this->findBy([self::FIELD_INSTELLING => $ids, self::FIELD_WAARDE => $waardes], [self::FIELD_UID => 'ASC']);
 	}
 
 	/**
@@ -233,9 +233,8 @@ class LidToestemmingRepository extends AbstractRepository {
 				if (!$this->isValidValue($module, $id, $waarde)) {
 					continue;
 				}
-				$instelling = $this->getInstelling($module, $id, $uid);
+				$instelling = $this->getToestemming($module, $id, $uid);
 				$instelling->waarde = (string)$waarde;
-				$this->getEntityManager()->persist($instelling);
 			}
 		}
 		$this->getEntityManager()->flush();

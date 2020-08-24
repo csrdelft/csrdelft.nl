@@ -76,8 +76,10 @@ trait YamlInstellingen {
 	}
 
 	private function writeConfig($config, $file) {
-		@mkdir(CONFIG_CACHE_PATH, 0777, true);
-		touch($file);
+		if (!touch($file)) {
+			mkdir(CONFIG_CACHE_PATH, 0777, true);
+			touch($file);
+		}
 		/**
 		 * Deze config is direct van schijf gelezen en bevat geen informatie die beinvloedbaar is door gebruikers.
 		 */

@@ -85,7 +85,7 @@ class InstellingenBeheerController extends AbstractController {
 
 		return view('instellingenbeheer.regel', [
 			'waarde' => $instelling->waarde,
-			'id' => $instelling->instelling_id,
+			'id' => $instelling->instelling,
 			'module' => $instelling->module,
 		]);
 	}
@@ -104,7 +104,7 @@ class InstellingenBeheerController extends AbstractController {
 
 		return view('instellingenbeheer.regel', [
 			'waarde' => $instelling->waarde,
-			'id' => $instelling->instelling_id,
+			'id' => $instelling->instelling,
 			'module' => $instelling->module,
 		]);
 	}

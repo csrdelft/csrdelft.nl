@@ -1,6 +1,7 @@
 <?php
 /**
  * @var \CsrDelft\entity\maalcie\Maaltijd $maaltijd
+ * @var \CsrDelft\entity\maalcie\MaaltijdAanmelding $aanmelding
  */
 ?><div class="media pt-3 maaltijdketzer-{{$maaltijd->maaltijd_id}}" data-maaltijdnaam="{{$maaltijd->titel}}">
 	<div class="media-body pb-3 mb-0 lh-125 @if(isset($border) && $border) border-bottom border-gray @endif ">
@@ -64,7 +65,7 @@
 						@else
 							@if (isset($aanmelding))
 								@if ($maaltijd->getEindMoment() > time())
-									<div class="btn btn-success disabled">Aangemeld @if($aanmelding->door_abonnement) (abo) @endif</div>
+									<div class="btn btn-success disabled">Aangemeld @if($aanmelding->abonnementRepetitie) (abo) @endif</div>
 								@else
 									<span class="beoordeling-label bg-white">Kwaliteit:</span>
 									{!! $kwaliteit !!}

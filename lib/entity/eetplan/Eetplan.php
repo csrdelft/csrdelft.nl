@@ -11,23 +11,19 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="CsrDelft\repository\eetplan\EetplanRepository")
+ * @ORM\Table(
+ *   uniqueConstraints={@ORM\UniqueConstraint(name="noviet_woonoord", columns={"uid", "woonoord_id"})}
+ * )
  */
 class Eetplan implements DataTableEntry {
 	/**
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 * @var string
-	 * @Serializer\Groups("datatable")
-	 */
-	public $uid;
-
-	/**
+	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
-	 * @var int
 	 * @Serializer\Groups("datatable")
+	 * @ORM\GeneratedValue()
 	 */
-	public $woonoord_id;
+	public $id;
 	/**
 	 * @var Woonoord
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\groepen\Woonoord")
@@ -39,7 +35,6 @@ class Eetplan implements DataTableEntry {
 	 * @var DateTimeImmutable
 	 */
 	public $avond;
-
 	/**
 	 * Specifiek bedoelt voor bekende huizen.
 	 *
@@ -48,7 +43,6 @@ class Eetplan implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $opmerking;
-
 	/**
 	 * @var Profiel
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")

@@ -337,7 +337,7 @@ class ProfielController extends AbstractController {
 	 * @throws ConnectionException
 	 */
 	public function externInschrijfformulier(string $pre, EntityManagerInterface $em) {
-		if (isDatumVoorbij('2020-08-25 00:00:00')) {
+		if (isDatumVoorbij('2020-08-26 00:00:00')) {
 			return view('extern-inschrijven.tekstpagina', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
 				<h1 class="Titel">Inschrijvingen gesloten</h1>
 				<p>Neem contact op met <a href="mailto:novcie@csrdelft.nl">novcie@csrdelft.nl</a></p>

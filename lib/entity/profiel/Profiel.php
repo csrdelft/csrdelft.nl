@@ -938,6 +938,6 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	}
 
 	function getWeergave(): string {
-		return $this->getNaam('volledig');
+		return $this->achternaam ? $this->getNaam('volledig') : '';
 	}
 }

@@ -8,7 +8,6 @@ interface Afbeelding {
 	size: number
 	type: string
 	thumbnail?: string
-
 }
 
 export const initDropzone = (el: HTMLFormElement): void => {
