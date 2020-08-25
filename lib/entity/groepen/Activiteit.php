@@ -56,7 +56,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * Datum en tijd aanmeldperiode einde
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $aanmelden_tot;
 	/**
