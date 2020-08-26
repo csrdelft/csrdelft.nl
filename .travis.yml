@@ -36,6 +36,9 @@ jobs:
           branch: master
       if: type != pull_request OR fork = true
     - name: Voer de phpunit tests uit
+      before_install: |
+        mysql -e 'drop user if exists travis@localhost;'
+        mysql -e 'create user travis@localhost;'
       install: composer install
       before_script: |
         php bin/console doctrine:database:create -n
