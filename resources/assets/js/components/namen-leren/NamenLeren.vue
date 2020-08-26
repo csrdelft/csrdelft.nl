@@ -345,7 +345,7 @@
 	}
 
 	.pasfotoContainer.onderkantVerbergen {
-		height: 200px;
+		height: 150px;
 	}
 
 	.pasfotoContainer .pasfoto {
