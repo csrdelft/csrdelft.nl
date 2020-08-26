@@ -36,6 +36,7 @@ jobs:
           branch: master
       if: type != pull_request OR fork = true
     - name: Voer de phpunit tests uit
+      services: mysql
       install: composer install
       before_script: mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft_test;'
       script: php ./bin/phpunit
