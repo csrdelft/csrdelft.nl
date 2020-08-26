@@ -12,6 +12,7 @@ cache:
   directories:
     - ".yarn"
     - "vendor"
+    - "bin/.phpunit"
 
 env:
   global:
@@ -36,6 +37,7 @@ jobs:
       if: type != pull_request OR fork = true
     - name: Voer de phpunit tests uit
       install: composer install
+      before_script: mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft_test;'
       script: php ./bin/phpunit
       if: type != pull_request OR fork = true
     - stage: Post-build
