@@ -38,7 +38,10 @@ jobs:
     - name: Voer de phpunit tests uit
       services: mysql
       install: composer install
-      before_script: mysql -e 'CREATE DATABASE IF NOT EXISTS csrdelft_test;'
+      before_script: |
+        php bin/console doctrine:database:create -n
+        php bin/console doctrine:migrations:migrate -n
+        php bin/console doctrine:fixtures:load -n
       script: php ./bin/phpunit
       if: type != pull_request OR fork = true
     - stage: Post-build
