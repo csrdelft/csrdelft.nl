@@ -14,13 +14,12 @@ class VerticalenFixtures extends Fixture {
 		$faker = Faker::create('nl_NL');
 
 		$verticaleLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-		$verticaleNamen = $faker->unique()->words(count($verticaleLetters));
 
 		foreach ($verticaleLetters as $i => $letter) {
 			$verticale = new Verticale();
 
 			$verticale->letter = $letter;
-			$verticale->naam = ucfirst($verticaleNamen[$i]);
+			$verticale->naam = ucfirst($faker->unique()->word);
 			$verticale->familie = 'Verticale';
 			$verticale->begin_moment = date_create_immutable();
 			$verticale->eind_moment = null;
