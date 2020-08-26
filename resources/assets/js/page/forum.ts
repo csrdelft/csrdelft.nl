@@ -53,9 +53,6 @@ selectAll('.auteur').forEach(auteur => {
 	)
 })
 
-try {
-	const citeerKnop = select<HTMLElement>('a.citeren')
+for (const citeerKnop of selectAll<HTMLElement>('a.citeren')) {
 	citeerKnop.addEventListener('click', () => forumCiteren(citeerKnop.dataset.citeren))
-} catch (e) {
-	// deze pagina heeft geen citeerknop
 }
