@@ -12,10 +12,12 @@ cache:
   directories:
     - ".yarn"
     - "vendor"
+    - "bin/.phpunit"
 
 env:
   global:
     - SKIP_BUILD=`[[ $TRAVIS_COMMIT_MESSAGE == *"[skipbuild]"* ]]; echo $?`
+    - APP_ENV=test
 
 # master: build & sonar
 # pull intern: build & sonar (2 builds, 1 met type pull_request, 1 met type push)
@@ -34,12 +36,21 @@ jobs:
         on:
           branch: master
       if: type != pull_request OR fork = true
+    - name: Voer de phpunit tests uit
+      install: composer install
+      before_script: |
+        php bin/console doctrine:database:create -n
+        php bin/console doctrine:migrations:migrate -n
+        php bin/console doctrine:fixtures:load -n
+      script: php ./bin/phpunit
+      if: type != pull_request OR fork = true
+      addons:
+        mariadb: '10.3'
     - stage: Post-build
       name: Voer sonar scanner uit op de repository
       before_install: nvm install 12
-      script: |
-        npm install typescript
-        sonar-scanner
+      install: npm install typescript
+      script: sonar-scanner
       if: (branch = master OR type = pull_request) AND fork = false
       addons:
         sonarcloud:

@@ -6,7 +6,7 @@ import {domUpdate} from './domUpdate';
 import {takenSelectRange, takenSubmitRange} from './maalcie';
 import {modalClose} from './modal';
 import {redirect, reload} from './reload';
-import {parents} from "./dom";
+import {parents, selectAll} from "./dom";
 import {throwError} from "./util";
 
 function knopAjax(knop: Element, type: string) {
@@ -18,7 +18,7 @@ function knopAjax(knop: Element, type: string) {
 		modalClose();
 		return false;
 	}
-	let source: Element|null = knop;
+	let source: Element | null = knop;
 	let done = domUpdate;
 	let data: null | string | Record<string, string | undefined | string[]> = knop.getAttribute('data');
 
@@ -113,7 +113,7 @@ function knopAjax(knop: Element, type: string) {
 	ajaxRequest(type, url, data, source, done, throwError);
 }
 
-export function knopPost(this: HTMLElement, event: Event): boolean {
+export function knopPost(el: HTMLElement, event: Event): boolean {
 	event.preventDefault();
 	const target = event.target as HTMLElement;
 	if ($(target).hasClass('range')) {
@@ -124,15 +124,28 @@ export function knopPost(this: HTMLElement, event: Event): boolean {
 		}
 		return false;
 	}
-	knopAjax(this, 'POST');
+	knopAjax(el, 'POST');
 	return false;
 }
 
-export function knopGet(event: Event, el: Element): false {
-	event.preventDefault();
-	knopAjax(el , 'GET');
-	return false;
+export const initKnopPost = (el: HTMLElement): void => {
+	el.classList.add('loaded')
+
+	el.addEventListener('click', (ev) => knopPost(el, ev))
 }
+
+export const initKnopGet = (el: HTMLElement): void => {
+	el.classList.add('loaded')
+
+	el.addEventListener('click', (event) => {
+		event.preventDefault()
+		knopAjax(el, 'GET');
+		return false;
+	})
+}
+
+export const initKnopVergroot = (el: HTMLElement): void =>
+	el.addEventListener('click', (e) => knopVergroot(e, el))
 
 export function knopVergroot(event: Event, el: Element): void {
 	const target = el
@@ -171,5 +184,17 @@ export function knopVergroot(event: Event, el: Element): void {
 		$(vergroot).animate({
 			height: $(vergroot).prop('scrollHeight') + 1,
 		}, 600);
+	}
+}
+
+export const initRadioButtons = (el: HTMLElement): void => {
+	for (const btn of selectAll('a.btn', el)) {
+		btn.addEventListener('click', (event) => {
+			for (const active of selectAll('.active', el)) {
+				active.classList.remove('active');
+			}
+
+			btn.classList.add('active');
+		});
 	}
 }

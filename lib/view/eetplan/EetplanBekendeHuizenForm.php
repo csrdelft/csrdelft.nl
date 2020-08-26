@@ -2,6 +2,8 @@
 
 namespace CsrDelft\view\eetplan;
 
+use CsrDelft\Component\Formulier\FormulierBuilder;
+use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
@@ -9,33 +11,34 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredDoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredProfielEntityField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
-use CsrDelft\view\formulier\ModalForm;
 
 /**
  * Formulier voor noviet-huis relatie toevoegen op /eetplan/bekendehuizen/toevoegen
  *
  * Class EetplanBekendeHuizenForm
  */
-class EetplanBekendeHuizenForm extends ModalForm {
+class EetplanBekendeHuizenForm implements FormulierTypeInterface {
 	/**
-	 * EetplanBekendeHuizenForm constructor.
-	 * @param Eetplan $model
-	 * @param bool $update
+	 * @param FormulierBuilder $builder
+	 * @param Eetplan $data
+	 * @param array $options
 	 */
-	public function __construct($model, $action, $update = false) {
-		parent::__construct($model, $action, 'Noviet die een huis kent toevoegen', true);
-		$fields[] = new HiddenField('id', $model->id);
-		$fields['noviet'] = new RequiredProfielEntityField('noviet', $model->noviet, 'Noviet', 'novieten');
-		$fields['woonoord'] = new RequiredDoctrineEntityField('woonoord', $model->woonoord, 'Woonoord', Woonoord::class, '/eetplan/bekendehuizen/zoeken?q=');
-		$fields[] = new TextareaField('opmerking', $model->opmerking, 'Opmerking');
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+		$builder->setDataTableId(true);
+		$builder->setTitel('Noviet die een huis kent toevoegen');
+		$builder->setAction($options['action']);
+		$fields[] = new HiddenField('id', $data->id);
+		$fields['noviet'] = new RequiredProfielEntityField('noviet', $data->noviet, 'Noviet', 'novieten');
+		$fields['woonoord'] = new RequiredDoctrineEntityField('woonoord', $data->woonoord, 'Woonoord', Woonoord::class, '/eetplan/bekendehuizen/zoeken?q=');
+		$fields[] = new TextareaField('opmerking', $data->opmerking, 'Opmerking');
 
-		if ($update) {
+		if ($options['update']) {
 			$fields['noviet']->readonly = true;
 			$fields['woonoord']->readonly = true;
 		}
 
-		$this->addFields($fields);
+		$builder->addFields($fields);
 
-		$this->formKnoppen = new FormDefaultKnoppen();
+		$builder->setFormKnoppen(new FormDefaultKnoppen());
 	}
 }

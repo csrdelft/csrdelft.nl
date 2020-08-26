@@ -84,9 +84,9 @@ $.fn.dataTable.ext.buttons.default = {
 		node.attr('data-tableid', id);
 	},
 	action(e, dt, button) {
-		knopPost.call(button.get(0), e);
+		knopPost(button.get(0), e);
 	},
-	className: 'post DataTableResponse',
+	className: 'post loaded DataTableResponse',
 };
 
 $.fn.dataTable.ext.buttons.popup = {
@@ -161,7 +161,7 @@ $.fn.dataTable.ext.buttons.confirm = {
 		config.action = $.fn.dataTable.ext.buttons.collection.action;
 	},
 	action(e, dt, button) {
-		knopPost.call(button.get(0), e);
+		knopPost(button.get(0), e);
 	},
 };
 

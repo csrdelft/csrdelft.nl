@@ -12,6 +12,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Security;
 
@@ -81,8 +82,12 @@ class LidZoekerService {
 	 * @var Security
 	 */
 	private $security;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
 
-	public function __construct(ProfielRepository $profielRepository, Security $security) {
+	public function __construct(EntityManagerInterface $em, ProfielRepository $profielRepository, Security $security) {
 		$this->allowStatus = LidStatus::getEnumValues();
 
 		//wat extra velden voor moderators.
@@ -94,6 +99,7 @@ class LidZoekerService {
 		$this->parseQuery($this->rawQuery);
 		$this->profielRepository = $profielRepository;
 		$this->security = $security;
+		$this->em = $em;
 	}
 
 	public function parseQuery($query) {
@@ -409,6 +415,8 @@ class LidZoekerService {
 	 * @return Profiel|null
 	 */
 	private function zoekMag(Profiel $profiel, string $query) {
+		// Voorkom dat deze versie van profiel wordt opgeslagen.
+		$this->em->clear(Profiel::class);
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
 		$lidToestemmingRepository = ContainerFacade::getContainer()->get(LidToestemmingRepository::class);
 		$zoekvelden = $lidToestemmingRepository->getModuleKeys('profiel');

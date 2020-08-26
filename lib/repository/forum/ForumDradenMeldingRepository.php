@@ -187,7 +187,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		$regex = "/\[(?:lid|citaat)=?\s*]?\s*([[:alnum:]]+)\s*(?:\]|\[)/";
 		preg_match_all($regex, $bericht, $leden);
 
-		return $leden[1];
+		return array_unique($leden[1]);
 	}
 
 	public function getNiveauVoorLid(ForumDraad $draad, $uid = null) {

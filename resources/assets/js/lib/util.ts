@@ -235,3 +235,22 @@ export const once = <T extends unknown[], U>(func: (...args: T) => U): (...args:
 		return returnValue
 	}
 }
+
+export const wait = (ms: number): Promise<void> => {
+	return new Promise(resolve =>  setTimeout(resolve, ms))
+}
+
+export const fadeAway = async (el: HTMLElement, ms: number): Promise<void> => {
+	const transitionValue = `opacity ${ms}ms`
+	if (el.style.transition) {
+		el.style.transition += `, ${transitionValue}`
+	} else {
+		el.style.transition = transitionValue
+	}
+
+	el.style.opacity = "0";
+
+	await wait(ms)
+
+	el.remove()
+}

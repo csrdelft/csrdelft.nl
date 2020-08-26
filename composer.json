@@ -69,12 +69,13 @@
 	"include-path": ["lib/"],
 	"require-dev": {
 		"phpstan/phpstan": "*",
-		"phpunit/phpunit": "^6.5",
-		"spatie/phpunit-snapshot-assertions": "^1.4",
 		"symfony/profiler-pack": "*",
 		"doctrine/doctrine-fixtures-bundle": "^3.3",
 		"symfony/maker-bundle": "^1.19",
-		"fzaninotto/faker": "^1.9"
+		"fzaninotto/faker": "^1.9",
+		"symfony/phpunit-bridge": "^5.1",
+		"phpunit/phpunit": "8.3.0",
+		"spatie/phpunit-snapshot-assertions": "^3.0"
 	},
 	"scripts": {
 		"serve": [
