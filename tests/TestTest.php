@@ -1,13 +1,21 @@
 <?php
 declare(strict_types=1);
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\entity\profiel\Profiel;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-final class ExampleTest extends TestCase
+define('MODE', 'TEST');
+
+final class TestTest extends KernelTestCase
 {
-    public function testGetNaam(): void
+	protected function setUp(): void {
+		self::bootKernel();
+		ContainerFacade::init(self::$container);
+	}
+
+	public function testGetNaam(): void
     {
     	$profiel = new Profiel();
     	$profiel->status = LidStatus::Lid;

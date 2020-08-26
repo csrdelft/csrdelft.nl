@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\entity\pin\PinTransactie;
@@ -103,10 +104,15 @@ final class PinTransactieMatcherTest extends TestCase {
 	}
 
 	private function best($id, $bedrag) {
-		$bestelling = new CiviBestellingInhoud();
-		$bestelling->aantal = $bedrag;
-		$bestelling->bestelling_id = $id;
-		$bestelling->product_id = CiviProductTypeEnum::PINTRANSACTIE;
+
+		$bestellingInhoud = new CiviBestellingInhoud();
+		$bestellingInhoud->aantal = $bedrag;
+		$bestellingInhoud->bestelling_id = $id;
+		$bestellingInhoud->product_id = CiviProductTypeEnum::PINTRANSACTIE;
+
+		$bestelling = new CiviBestelling();
+		$bestelling->inhoud->add($bestellingInhoud);
+
 		return $bestelling;
 	}
 

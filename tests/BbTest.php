@@ -1,20 +1,24 @@
 <?php
 declare(strict_types=1);
 
-use CsrDelft\model\entity\LidStatus;
-use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\view\bbcode\CsrBB;
-use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-final class BbTest extends TestCase
+// TODO: Dit moet niet hier, mode is oud
+define('MODE', 'TEST');
+
+final class BbTest extends KernelTestCase
 {
 	use MatchesSnapshots;
 
 	protected $parser;
 	public function setUp(): void
 	{
-		$this->parser = new CsrBB();
+		self::bootKernel();
+		ContainerFacade::init(self::$container);
+		$this->parser = new CsrBB(self::$container);
 	}
 
 	public function testBbSpotify(): void
