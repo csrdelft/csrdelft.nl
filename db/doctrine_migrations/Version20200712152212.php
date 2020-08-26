@@ -14,7 +14,12 @@ final class Version20200712152212 extends AbstractMigration {
 
 	public function up(Schema $schema): void {
 		$this->addSql('ALTER TABLE accounts CHANGE pass_since pass_since DATETIME DEFAULT NULL');
-		$this->addSql('UPDATE accounts SET pass_since = NULL WHERE pass_since = \'0000-00-00 00:00:00\';');
+		try {
+			$this->addSql('UPDATE accounts SET pass_since = NULL WHERE pass_since = \'0000-00-00 00:00:00\';');
+		} catch (\Exception $exception) {
+			// Sommige versies van mysql gaan hier van op hun plaat, maakt niet uit.
+			echo $exception->getMessage();
+		}
 	}
 
 	public function down(Schema $schema): void {
