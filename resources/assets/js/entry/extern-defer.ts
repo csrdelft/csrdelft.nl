@@ -5,7 +5,7 @@ import axios from 'axios';
 import {registerBbContext, registerFormulierContext} from '../context';
 import {init} from '../ctx';
 import {route} from '../lib/util';
-import {select} from "../lib/dom";
+import {select, selectAll} from "../lib/dom";
 import hoverintent from "hoverintent"
 
 require('lightbox2');
@@ -41,47 +41,33 @@ declare global {
 
 window.hoverintent = hoverintent
 
-let hasLoaded = false;
+const textarea = document.createElement('textarea');
+
+for (const element of selectAll('.lazy-load')) {
+	// setTimeout om lazy-load blokken na elkaar te laden ipv allemaal tegelijk.
+	setTimeout(() => {
+		const innerHTML = element.innerHTML.trim();
+
+		// Sommige browsers encoden de inhoud van de noscript tag.
+		if (innerHTML.startsWith('&lt;')) {
+			textarea.innerHTML = innerHTML;
+			element.outerHTML = textarea.value;
+		} else {
+			element.outerHTML = innerHTML;
+		}
+	});
+}
 
 const header = document.querySelector('#header');
 const banner = document.querySelector('#banner');
 
-const lazyLoad = () => {
-	const textarea = document.createElement('textarea');
-
-	for (const element of document.querySelectorAll('.lazy-load')) {
-		// setTimeout om lazy-load blokken na elkaar te laden ipv allemaal tegelijk.
-		setTimeout(() => {
-			const innerHTML = element.innerHTML.trim();
-
-			// Sommige browsers encoden de inhoud van de noscript tag.
-			if (innerHTML.startsWith('&lt;')) {
-				textarea.innerHTML = innerHTML;
-				element.outerHTML = textarea.value;
-			} else {
-				element.outerHTML = innerHTML;
-			}
-		});
+if (banner && header) {
+	if (banner.getBoundingClientRect().bottom < 0) {
+		header.classList.remove('alt');
+	} else {
+		header.classList.add('alt');
 	}
-};
-
-// Lazy load after animations have finished and user has scrolled
-const loadPage = () => {
-	if (!hasLoaded) {
-		hasLoaded = true;
-		lazyLoad();
-	}
-
-	if (banner && header) {
-		if (banner.getBoundingClientRect().bottom < 0) {
-			header.classList.remove('alt');
-		} else {
-			header.classList.add('alt');
-		}
-	}
-};
-
-setTimeout(loadPage)
+}
 
 try {
 	const contactForm = select<HTMLFormElement>('#contact-form')
