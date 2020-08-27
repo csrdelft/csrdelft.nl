@@ -67,7 +67,8 @@ const lazyLoad = () => {
 
 // Lazy load after animations have finished and user has scrolled
 const loadPage = () => {
-	if (!hasLoaded && window.scrollY > 0) {
+	console.log("loadPage")
+	if (!hasLoaded) {
 		hasLoaded = true;
 		lazyLoad();
 	}
