@@ -58,15 +58,19 @@ for (const element of selectAll('.lazy-load')) {
 	});
 }
 
-const header = document.querySelector('#header');
-const banner = document.querySelector('#banner');
+try {
+	const header = select('#header');
+	const banner = select('#banner');
 
-if (banner && header) {
-	if (banner.getBoundingClientRect().bottom < 0) {
-		header.classList.remove('alt');
-	} else {
-		header.classList.add('alt');
-	}
+	document.addEventListener('scroll', () => {
+		if (banner.getBoundingClientRect().bottom < 0) {
+			header.classList.remove('alt');
+		} else {
+			header.classList.add('alt');
+		}
+	});
+} catch (e) {
+	// Geen banner of header
 }
 
 try {

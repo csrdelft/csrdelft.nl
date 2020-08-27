@@ -20,20 +20,14 @@ window.docReady = docReady;
 // Versimpelde versie van formSubmit in formulier.js
 window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).form.submit()};
 
+import(/* webpackChunkName: "jquery" */'jquery').then(({default: $}) => window.$ = window.jQuery = $);
+
 docReady(async () => {
 	setTimeout(() => document.body.classList.remove('is-loading'));
-	const {default: $} = await import(/* webpackChunkName: "jquery" */'jquery');
-
-	window.$ = window.jQuery = $;
-
-	import(/* webpackChunkName: "extern-defer" */ './extern-defer');
+	setTimeout(() => import(/* webpackChunkName: "extern-defer" */ './extern-defer'))
 
 	const menu = select('#menu');
-
 	const menuKnop = select('.menu-knop');
-
-	const dropdownKnoppen = selectAll('.expand-dropdown')
-
 	document.body.addEventListener('click', (e) => {
 		if (!menu.contains(e.target as Node) && !menuKnop.contains(e.target as Node)) {
 			menu.classList.remove('show');
@@ -48,7 +42,7 @@ docReady(async () => {
 		return false;
 	});
 
-	dropdownKnoppen.forEach((knop) => {
+	selectAll('.expand-dropdown').forEach((knop) => {
 		knop.addEventListener('click', (e) => {
 			e.preventDefault();
 
