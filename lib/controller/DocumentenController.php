@@ -136,7 +136,7 @@ class DocumentenController extends AbstractController {
 
 			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {
-			return view('default', [
+			return $this->render('default.html.twig', [
 				'titel' => 'Document bewerken',
 				'content' => $form,
 			]);
@@ -185,7 +185,7 @@ class DocumentenController extends AbstractController {
 
 			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {
-			return view('default', [
+			return $this->render('default.html.twig', [
 				'titel' => 'Document toevoegen',
 				'content' => $form,
 			]);

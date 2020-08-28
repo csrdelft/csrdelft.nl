@@ -72,7 +72,7 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @return PlainView|TemplateView
+	 * @return PlainView|\Symfony\Component\HttpFoundation\Response
 	 * @Route("/tools/streeplijst", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
@@ -83,7 +83,7 @@ class ToolsController extends AbstractController {
 		if (isset($_GET['iframe'])) {
 			return new PlainView($body->getHtml());
 		} else {
-			return view('default', ['content' => $body]);
+			return $this->render('default.html.twig', ['content' => $body]);
 		}
 	}
 
@@ -221,11 +221,11 @@ class ToolsController extends AbstractController {
 	 * @Route("/tools/dragobject", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function dragobject() {
+	public function dragobject(Request $request) {
 		$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
 		$coords = filter_input(INPUT_POST, 'coords', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
 
-		$_SESSION['dragobject'][$id] = $coords;
+		$request->getSession()->set("dragobject_$id", $coords);
 
 		return new JsonResponse(null);
 	}
@@ -404,7 +404,7 @@ class ToolsController extends AbstractController {
 			$result = null;
 		}
 
-		return view('default', [
+		return $this->render('default.html.twig', [
 			'content' => new SavedQueryContent($result),
 		]);
 	}

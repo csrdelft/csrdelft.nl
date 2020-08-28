@@ -1,0 +1,16 @@
+{% extends 'extern/layout.html.twig' %}
+
+{% block titel %}{{ titel }}{% endblock %}
+
+{% block styles %}
+	{{ css_asset('extern') }}
+	{{ css_asset('extern-fotoalbum') }}
+{% endblock %}
+
+{% block content %}
+	{% if showMenu %}
+		{{ include('extern/menu.html.twig') }}
+	{% endif %}
+	{{ body.toString | raw }}
+{% endblock %}
+

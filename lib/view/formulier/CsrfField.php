@@ -4,10 +4,12 @@
 namespace CsrDelft\view\formulier;
 
 
+use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
 use Symfony\Component\Security\Csrf\CsrfToken;
 
 class CsrfField implements View, FormElement {
+	use ToHtmlResponse;
 	/**
 	 * @var CsrfToken
 	 */

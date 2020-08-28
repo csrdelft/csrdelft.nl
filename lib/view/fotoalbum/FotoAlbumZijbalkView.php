@@ -10,9 +10,11 @@ namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
 
 class FotoAlbumZijbalkView implements View {
+	use ToHtmlResponse;
 	protected $model;
 
 	public function __construct(FotoAlbum $fotoalbum) {

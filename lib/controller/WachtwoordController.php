@@ -68,7 +68,7 @@ class WachtwoordController extends AbstractController {
 			$this->accountRepository->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Wachtwoord instellen geslaagd', 1);
 		}
-		return view('default', ['content' => $form]);
+		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
 	/**
@@ -101,7 +101,7 @@ class WachtwoordController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		}
 
-		return view('default', [
+		return $this->render('default.html.twig', [
 			'content' => new WachtwoordWijzigenForm($account, $this->generateUrl('wachtwoord_reset'), false)
 		]);
 	}
@@ -125,7 +125,7 @@ class WachtwoordController extends AbstractController {
 			if (!$account || !$this->accessService->mag($account, P_LOGGED_IN, AuthenticationMethod::getEnumValues())) {
 				setMelding('E-mailadres onjuist', -1);
 
-				return view('default', ['content' => $form]);
+				return $this->render('default.html.twig', ['content' => $form]);
 			}
 			if ($this->oneTimeTokensRepository->hasToken($account->uid, '/wachtwoord/reset')) {
 				$this->oneTimeTokensRepository->discardToken($account->uid, '/wachtwoord/reset');
@@ -137,7 +137,7 @@ class WachtwoordController extends AbstractController {
 
 			setMelding('Wachtwoord reset email verzonden', 1);
 		}
-		return view('default', ['content' => $form]);
+		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
 	private function verzendResetMail(Account $account, $token) {

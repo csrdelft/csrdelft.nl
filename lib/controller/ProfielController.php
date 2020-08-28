@@ -48,6 +48,7 @@ use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -277,9 +278,9 @@ class ProfielController extends AbstractController {
 			return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
 		}
 		if ($alleenFormulier) {
-			return view('plain', ['titel' => 'Noviet toevoegen', 'content' => $form]);
+			return $this->render('plain.html.twig', ['titel' => 'Noviet toevoegen', 'content' => $form]);
 		}
-		return view('default', ['content' => $form]);
+		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
 	/**
@@ -366,7 +367,7 @@ class ProfielController extends AbstractController {
 			$profiel->achternaam,
 			$profiel->email,
 			$profiel->mobiel
-		) = $split;
+			) = $split;
 
 		$form = new ExternProfielForm($profiel, '/inschrijven/' . $pre);
 		if ($form->validate()) {
@@ -422,8 +423,17 @@ class ProfielController extends AbstractController {
 	}
 
 	/**
-	 * @param $uid
 	 * @return TemplateView
+	 * @Route("/profiel/voorkeuren", methods={"GET"})
+	 * @Auth(P_PROFIEL_EDIT)
+	 */
+	public function voorkeurenNoUid() {
+		return $this->voorkeuren($this->getUid());
+	}
+
+	/**
+	 * @param $uid
+	 * @return Response
 	 * @Route("/profiel/{uid}/voorkeuren", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
@@ -447,19 +457,10 @@ class ProfielController extends AbstractController {
 			$manager->persist($opmerking);
 			$manager->flush();
 			setMelding('Voorkeuren opgeslagen', 1);
-			$this->redirectToRoute('csrdelft_profiel_voorkeuren', ['uid' => $uid]);
-
+			return $this->redirectToRoute('csrdelft_profiel_voorkeuren', ['uid' => $uid]);
 		}
-		return view('default', ['content' => $form]);
-	}
 
-	/**
-	 * @return TemplateView
-	 * @Route("/profiel/voorkeuren", methods={"GET"})
-	 * @Auth(P_PROFIEL_EDIT)
-	 */
-	public function voorkeurenNoUid() {
-		return $this->voorkeuren($this->getUid());
+		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
 	/**
@@ -533,7 +534,7 @@ class ProfielController extends AbstractController {
 
 	/**
 	 * @param $uid
-	 * @return VcardResponse
+	 * @return Response
 	 * @Route("/profiel/{uid}.vcf", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
@@ -544,7 +545,7 @@ class ProfielController extends AbstractController {
 			throw new NotFoundHttpException();
 		}
 
-		return new VcardResponse(view('profiel.vcard', ['profiel' => $profiel])->toString());
+		return $this->render('profiel/vcard.ical.twig', ['profiel' => $profiel]);
 	}
 
 	/**
@@ -555,5 +556,13 @@ class ProfielController extends AbstractController {
 	 */
 	public function kaartje($uid) {
 		return view('profiel.kaartje', ['profiel' => $this->profielRepository->get($uid)]);
+	}
+
+	public function test() {
+		return $this->render('default.html.twig', [
+			'content' => $this->renderView('user/user.html.twig', [
+				'user' => $this->getProfiel()
+			])
+		]);
 	}
 }

@@ -455,7 +455,7 @@ function csr_breadcrumbs($breadcrumbs) {
  *
  * @return string
  */
-function escape_ical($string, $prefix_length) {
+function escape_ical($string, $prefix_length = 0) {
 	$string = str_replace('\\', '\\\\', $string);
 	$string = str_replace("\r", '', $string);
 	$string = str_replace("\n", '\n', $string);
@@ -469,18 +469,6 @@ function escape_ical($string, $prefix_length) {
 		$wrap .= "\n " . wordwrap($rest, 59, "\n ", true);
 	}
 	return $wrap;
-}
-
-function commitHash($full = false) {
-	if ($full) {
-		return trim(`git rev-parse HEAD`);
-	} else {
-		return trim(`git rev-parse --short HEAD`);
-	}
-}
-
-function commitLink() {
-	return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
 }
 
 function toestemming_gegeven() {

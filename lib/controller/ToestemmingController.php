@@ -16,6 +16,7 @@ use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -56,13 +57,16 @@ class ToestemmingController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Exception
 	 * @Route("/toestemming", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function GET_overzicht() {
-		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')), 'modal' => new ToestemmingModalForm($this->lidToestemmingRepository)]);
+		return $this->render('default.html.twig', [
+			'content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')),
+			'modal' => new ToestemmingModalForm($this->lidToestemmingRepository),
+		]);
 	}
 
 	/**

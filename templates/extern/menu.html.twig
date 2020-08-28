@@ -1,0 +1,12 @@
+<ul class="submenu">
+	{% set geloof = url('default', {naam: 'vereniging', subnaam: 'geloof'}) %}
+	{% set vorming = url('default', {naam: 'vereniging', subnaam: 'vorming'}) %}
+	{% set gezelligheid = url('default', {naam: 'vereniging', subnaam: 'gezelligheid'}) %}
+	{% set onderverenigingen = url('default', {naam: 'vereniging', subnaam: 'onderverenigingen'}) %}
+	{% set ontspanning = url('default', {naam: 'vereniging', subnaam: 'ontspanning'}) %}
+	<li class="rotate"><a href="{{ geloof }}" {% if app.request.uri starts with geloof %} class="is-active" {% endif %}>Geloof</a></li>
+	<li class="rotate"><a href="{{ vorming }}" {% if app.request.uri starts with vorming %} class="is-active" {% endif %}>Vorming</a></li>
+	<li class="rotate"><a href="{{ gezelligheid }}" {% if app.request.uri starts with gezelligheid %} class="is-active" {% endif %}>Gezelligheid</a></li>
+	<li class="rotate"><a href="{{ onderverenigingen }}" {% if app.request.uri starts with onderverenigingen %} class="is-active" {% endif %}>Onderverenigingen</a></li>
+	<li class="rotate"><a href="{{ ontspanning }}" {% if app.request.uri starts with ontspanning %} class="is-active" {% endif %}>Ontspanning</a></li>
+</ul>

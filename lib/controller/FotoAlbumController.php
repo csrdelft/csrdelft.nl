@@ -12,6 +12,7 @@ use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\fotoalbum\FotoAlbumBreadcrumbs;
 use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
 use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
@@ -161,7 +162,7 @@ class FotoAlbumController extends AbstractController {
 				}
 			}
 		}
-		return view('default', ['content' => $formulier]);
+		return $this->render('default.html.twig', ['content' => $formulier]);
 	}
 
 	/**
@@ -482,7 +483,7 @@ class FotoAlbumController extends AbstractController {
 
 	/**
 	 * @param $dir
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/fotoalbum/{dir}", methods={"GET"}, requirements={"dir": ".+"}, defaults={"dir": ""})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
@@ -500,6 +501,6 @@ class FotoAlbumController extends AbstractController {
 		if ($album->dirname === 'Posters') {
 			$album->orderByDateModified();
 		}
-		return view('fotoalbum.album', ['album' => $album]);
+		return $this->render('fotoalbum/album.html.twig', ['album' => $album, 'breadcrumbs' => FotoAlbumBreadcrumbs::getBreadcrumbs($album)]);
 	}
 }

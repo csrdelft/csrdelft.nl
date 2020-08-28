@@ -9,6 +9,7 @@ use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\service\security\LoginService;
 
 class IsHetAlView implements View {
+	use ToHtmlResponse;
 	/**
 	 * Type of IsHetAlContent
 	 * @var string

@@ -165,6 +165,9 @@ class FotoAlbum extends Map {
 		return $this->subalbums;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getCoverUrls() {
 		$fotos = [];
 		$fotos[] = $this->getCoverUrl();
