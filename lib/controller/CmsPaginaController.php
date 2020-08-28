@@ -11,6 +11,7 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -42,7 +43,7 @@ class CmsPaginaController extends AbstractController {
 	/**
 	 * @param $naam
 	 * @param string $subnaam
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/pagina/{naam}")
 	 * @Auth(P_PUBLIC)
 	 */
@@ -61,23 +62,17 @@ class CmsPaginaController extends AbstractController {
 		}
 		$body = new CmsPaginaView($pagina);
 		if (!LoginService::mag(P_LOGGED_IN)) { // nieuwe layout altijd voor uitgelogde bezoekers
-			$tmpl = 'content';
-			$menu = false;
 			if ($pagina->naam === 'thuis') {
-				$tmpl = 'index';
+				return $this->render('extern/index.html.twig', ['titel' => $body->getTitel()]);
 			} elseif ($naam === 'vereniging') {
-				$menu = true;
+				return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body, 'showMenu' => true]);
 			} elseif ($naam === 'lidworden') {
-				$tmpl = 'owee';
-				$menu = true;
+				return $this->render('extern/owee.html.twig');
 			}
-			return view('layout-extern.' . $tmpl, [
-				'titel' => $body->getTitel(),
-				'body' => $body,
-				'showmenu' => $menu,
-			]);
+
+			return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body, 'showMenu' => false]);
 		} else {
-			return view('default', ['content' => $body]);
+			return $this->render('cms/pagina.html.twig', ['body' => $body]);
 		}
 	}
 

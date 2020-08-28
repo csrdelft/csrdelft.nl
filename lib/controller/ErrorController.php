@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 
 
 use CsrDelft\common\ShutdownHandler;
-use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,11 +45,13 @@ class ErrorController extends AbstractController {
 		switch ($statusCode) {
 			case Response::HTTP_BAD_REQUEST:
 			{
-				return new Response(view('fout.400', ['bericht' => $exception->getMessage()]), Response::HTTP_BAD_REQUEST);
+				$response = new Response(null, Response::HTTP_BAD_REQUEST);
+				return $this->render('fout/400.html.twig', ['bericht' => $exception->getMessage()], $response);
 			}
 			case Response::HTTP_NOT_FOUND:
 			{
-				return new Response(view('fout.404', ['bericht' => $exception->getMessage()]), Response::HTTP_NOT_FOUND);
+				$response = new Response(null, Response::HTTP_NOT_FOUND);
+				return $this->render('fout/404.html.twig', ['bericht' => $exception->getMessage()], $response);
 			}
 			case Response::HTTP_FORBIDDEN:
 			{
@@ -63,15 +64,18 @@ class ErrorController extends AbstractController {
 					return new RedirectResponse($router->generate('csrdelft_login_loginform'));
 				}
 
-				return new Response(view('fout.403'), Response::HTTP_FORBIDDEN);
+				$response = new Response(null, Response::HTTP_FORBIDDEN);
+				return $this->render('fout/403.html.twig', [], $response);
 			}
 			case Response::HTTP_METHOD_NOT_ALLOWED:
 			{
-				return new Response(view('fout.405'), Response::HTTP_METHOD_NOT_ALLOWED);
+				$response = new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+				return $this->render('fout/405.html.twig', [], $response);
 			}
 			default:
 			{
-				return new Response(view('fout.500'), Response::HTTP_INTERNAL_SERVER_ERROR);
+				$response = new Response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+				return $this->render('fout/500.html.twig', [], $response);
 			}
 		}
 	}

@@ -1,0 +1,12 @@
+{% if mag('P_LOGGED_IN') %}
+	{% extends 'base.html.twig' %}
+{% else %}
+	{# TODO: Hier externe styles #}
+	{% block styles %}
+		{{ css_asset('extern') }}
+	{% endblock %}
+{% endif %}
+
+{% block titel %}{{ content.titel }}{% endblock %}
+{% block content %}{{ content.toString | raw }}{% endblock %}
+

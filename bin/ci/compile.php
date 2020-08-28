@@ -27,6 +27,7 @@ function compileBlade() {
 }
 
 try {
+	putenv('CI=true');
 	require_once __DIR__ . '/../../lib/configuratie.include.php';
 
 	compileBlade();

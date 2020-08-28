@@ -221,11 +221,11 @@ class ToolsController extends AbstractController {
 	 * @Route("/tools/dragobject", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function dragobject() {
+	public function dragobject(Request $request) {
 		$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
 		$coords = filter_input(INPUT_POST, 'coords', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
 
-		$_SESSION['dragobject'][$id] = $coords;
+		$request->getSession()->set("dragobject_$id", $coords);
 
 		return new JsonResponse(null);
 	}

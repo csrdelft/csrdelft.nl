@@ -20,9 +20,9 @@
 		})
 	};
 </script>
-<form method="post" id="contact-form" action="/contactformulier/interesse">
-  {!! getMelding() !!}
-	@csrf
+<form method="post" id="contact-form" action="{{ url('csrdelft_contactformulier_interesse') }}">
+	{{ getMelding() }}
+	{{ csrfField() }}
 	<div class="field">
 		<label for="naam">Naam</label>
 		<input type="text" name="naam" id="naam" required/>

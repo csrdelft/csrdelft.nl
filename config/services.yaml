@@ -93,3 +93,6 @@ services:
     arguments:
       - !tagged_locator {tag: csr.formulier.type, index_by: key}
       - '@CsrDelft\Component\Formulier\FormulierBuilder'
+
+  CsrDelft\Twig\Configurator:
+    decorates: 'twig.configurator.environment'

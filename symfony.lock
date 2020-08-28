@@ -615,6 +615,9 @@
             "./templates/base.html.twig"
         ]
     },
+    "symfony/twig-pack": {
+        "version": "v1.0.0"
+    },
     "symfony/var-dumper": {
         "version": "v3.4.32"
     },
