@@ -24,6 +24,12 @@ export function domUpdate(this: HTMLElement | void, htmlString: string | null): 
 		const id = element.id;
 		const parentId = element.getAttribute('parentid')
 
+		if (!id && element instanceof HTMLScriptElement) {
+			eval(element.innerText);
+			modalClose()
+			return;
+		}
+
 		const target = document.querySelector<HTMLElement>(`#${id}`);
 		const targetParent = document.querySelector<HTMLElement>(`#${parentId}`)
 
