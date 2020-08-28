@@ -40,7 +40,7 @@ class RechtenController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function bekijken($environment = null, $resource = null) {
-		return view('default', [
+		return $this->render('default.html.twig', [
 			'content' => new RechtenTable($this->accessRepository, $environment, $resource)
 		]);
 	}

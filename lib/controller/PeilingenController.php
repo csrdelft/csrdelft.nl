@@ -34,7 +34,7 @@ class PeilingenController extends AbstractController {
 
 	/**
 	 * @param Peiling|null $peiling
-	 * @return View
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/peilingen/beheer/{id}", methods={"GET"}, requirements={"id": "\d+"}, defaults={"id": null})
 	 * @Auth(P_PEILING_EDIT)
 	 */
@@ -46,9 +46,9 @@ class PeilingenController extends AbstractController {
 			$form = new PeilingForm($peiling, false);
 			$form->setDataTableId($table->getDataTableId());
 
-			return view('default', ['content' => $table, 'modal' => $form]);
+			return $this->render('default.html.twig', ['content' => $table, 'modal' => $form]);
 		} else {
-			return view('default', ['content' => new PeilingTable()]);
+			return $this->render('default.html.twig', ['content' => new PeilingTable()]);
 		}
 	}
 

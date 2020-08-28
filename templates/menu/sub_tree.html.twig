@@ -11,8 +11,10 @@
 			</li>
 		{% else %}
 			<li>
-				<a class="dropdown-item" href="{{ item.link }}"
-					{% if item.link starts with 'http' %} target="_blank" {% endif %}>{{ item.tekst }}</a>
+				<a class="dropdown-item"
+					 href="{{ item.link }}" {% if item.link starts with 'http' %} target="_blank" {% endif %}>
+					{{ item.tekst }}
+				</a>
 			</li>
 		{% endif %}
 	{% endif %}

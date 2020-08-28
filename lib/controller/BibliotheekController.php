@@ -95,7 +95,7 @@ class BibliotheekController extends AbstractController {
 	 * @Auth(P_BIEB_READ)
 	 */
 	public function rubrieken() {
-		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('rubrieken'))]);
+		return $this->render('default.html.twig', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('rubrieken'))]);
 	}
 
 	/**
@@ -104,7 +104,7 @@ class BibliotheekController extends AbstractController {
 	 * @Auth(P_BIEB_READ)
 	 */
 	public function wenslijst() {
-		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('wenslijst'))]);
+		return $this->render('default.html.twig', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('wenslijst'))]);
 	}
 
 	/**
@@ -112,7 +112,7 @@ class BibliotheekController extends AbstractController {
 	 * @Auth(P_BIEB_READ)
 	 */
 	public function catalogustonen() {
-		return view('default', ['content' => new BibliotheekCatalogusDatatable()]);
+		return $this->render('default.html.twig', ['content' => new BibliotheekCatalogusDatatable()]);
 	}
 
 	/**

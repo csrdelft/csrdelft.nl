@@ -31,7 +31,7 @@
 			{% endif %}
 		</ul>
 		<div class="navbar-nav navbar-search ml-auto mr-3">
-			@php((new \CsrDelft\view\formulier\InstantSearchForm())->view())
+			{{ instant_search_form() }}
 		</div>
 		<ul class="navbar-nav">
 			{% for item in root.children %}

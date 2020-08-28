@@ -130,7 +130,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$groepen = $this->repository->findBy(['status' => GroepStatus::HT()]);
 		}
 		$body = new GroepenView($this->repository, $groepen, $soort); // controleert rechten bekijken per groep
-		return view('default', ['content' => $body]);
+		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
 	public function bekijken($id) {
@@ -142,7 +142,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$soort = null;
 		}
 		$body = new GroepenView($this->repository, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
-		return view('default', ['content' => $body]);
+		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
 	public function deelnamegrafiek($id) {
@@ -309,7 +309,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if ($request->getMethod() == 'GET') {
 			$this->beheren($request);
 			$form->setDataTableId($this->table->getDataTableId());
-			return view('default', ['content' => $this->table, 'modal' => $form]);
+			return $this->render('default.html.twig', ['content' => $this->table, 'modal' => $form]);
 		} elseif ($form->validate()) {
 			$this->changeLogRepository->log($groep, 'create', null, $this->changeLogRepository->serialize($groep));
 			$this->repository->create($groep);
@@ -340,7 +340,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		} else {
 			$table = new GroepenBeheerTable($this->repository);
 			$this->table = $table;
-			return view('default', ['content' => $table]);
+			return $this->render('default.html.twig', ['content' => $table]);
 		}
 	}
 
@@ -362,7 +362,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 				$this->beheren($request);
 				$this->table->filter = $groep->naam;
 				$form->setDataTableId($this->table->getDataTableId());
-				return view('default', ['content' => $this->table, 'modal' => $form]);
+				return $this->render('default.html.twig', ['content' => $this->table, 'modal' => $form]);
 			} elseif ($form->validate()) {
 				$this->changeLogRepository->logChanges($form->diff());
 				$this->repository->update($groep);

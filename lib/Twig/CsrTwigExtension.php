@@ -13,8 +13,8 @@ namespace CsrDelft\Twig {
 	use CsrDelft\service\CsrfService;
 	use CsrDelft\service\security\LoginService;
 	use CsrDelft\view\formulier\CsrfField;
+	use CsrDelft\view\formulier\InstantSearchForm;
 	use CsrDelft\view\toestemming\ToestemmingModalForm;
-	use CsrDelft\view\Zijbalk;
 	use Symfony\Component\HttpFoundation\Session\SessionInterface;
 	use Twig\Extension\AbstractExtension;
 	use Twig\TwigFilter;
@@ -90,6 +90,8 @@ namespace CsrDelft\Twig {
 				new TwigFunction('get_zijbalk', 'get_zijbalk', ['is_safe' => ['html']]),
 				new TwigFunction('vereniging_leeftijd', 'vereniging_leeftijd'),
 				new TwigFunction('login_form', 'login_form', ['is_safe' => ['html']]),
+				new TwigFunction('icon', 'icon', ['is_safe' => ['html']]),
+				new TwigFunction('instant_search_form', [$this, 'instant_search_form'], ['is_safe' => ['html']]),
 			];
 		}
 
@@ -100,12 +102,14 @@ namespace CsrDelft\Twig {
 		public function toestemming_form() {
 			return new ToestemmingModalForm($this->lidToestemmingRepository);
 		}
+
 		public function csrfField($path = '', $method = 'post') {
 			return (new CsrfField($this->csrfService->generateToken($path, $method)))->toString();
 		}
+
 		function csrfMetaTag() {
 			$token = $this->csrfService->generateToken('', 'POST');
-			return '<meta property="X-CSRF-ID" content="'. htmlentities($token->getId()) .'" /><meta property="X-CSRF-VALUE" content="'. htmlentities($token->getValue()) .'" />';
+			return '<meta property="X-CSRF-ID" content="' . htmlentities($token->getId()) . '" /><meta property="X-CSRF-VALUE" content="' . htmlentities($token->getValue()) . '" />';
 		}
 
 
@@ -145,6 +149,7 @@ namespace CsrDelft\Twig {
 		public function instelling($module, $key) {
 			return $this->instellingenRepository->getValue($module, $key);
 		}
+
 		/**
 		 * Mag de op dit moment ingelogde gebruiker $permissie?
 		 *
@@ -157,6 +162,7 @@ namespace CsrDelft\Twig {
 		public function mag($permission, array $allowedAuthenticationMethods = null) {
 			return $this->loginService->_mag($permission, $allowedAuthenticationMethods);
 		}
+
 		/**
 		 * Genereer een unieke url voor een asset.
 		 *
@@ -186,6 +192,7 @@ namespace CsrDelft\Twig {
 
 			return $assetString;
 		}
+
 		public function dragobject_coords($id, $top, $left) {
 			if ($this->session->has("dragobject_$id")) {
 				$dragObject = $this->session->get("dragobject_$id");
@@ -197,6 +204,7 @@ namespace CsrDelft\Twig {
 			$left = max($left, 0);
 			return ['top' => $top, 'left' => $left];
 		}
+
 		/**
 		 * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
 		 * De modules zijn terug te vinden in /resources/assets/sass
@@ -224,9 +232,11 @@ namespace CsrDelft\Twig {
 
 			return $modules;
 		}
+
 		function csr_breadcrumbs($breadcrumbs) {
 			return $this->menuItemRepository->renderBreadcrumbs($breadcrumbs);
 		}
+
 		function get_breadcrumbs($name) {
 			return $this->menuItemRepository->getBreadcrumbs($name);
 		}
@@ -243,11 +253,16 @@ namespace CsrDelft\Twig {
 
 			return $this->menuItemRepository->getMenu($name);
 		}
+
+		public function instant_search_form() {
+			return (new InstantSearchForm())->toString();
+		}
 	}
 }
 
 namespace {
 
+	use CsrDelft\view\Icon;
 	use CsrDelft\view\login\LoginForm;
 	use CsrDelft\view\Zijbalk;
 
@@ -257,6 +272,7 @@ namespace {
 		}
 		return '';
 	}
+
 	function commitHash($full = false) {
 		if ($full) {
 			return trim(`git rev-parse HEAD`);
@@ -268,11 +284,16 @@ namespace {
 	function commitLink() {
 		return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
 	}
+
 	function get_zijbalk() {
 		return Zijbalk::addStandaardZijbalk([]);
 	}
 
 	function login_form() {
 		return (new LoginForm())->toString();
+	}
+
+	function icon($name) {
+		return Icon::getTag($name);
 	}
 }

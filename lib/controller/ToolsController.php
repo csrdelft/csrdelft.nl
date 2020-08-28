@@ -72,7 +72,7 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @return PlainView|TemplateView
+	 * @return PlainView|\Symfony\Component\HttpFoundation\Response
 	 * @Route("/tools/streeplijst", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
@@ -83,7 +83,7 @@ class ToolsController extends AbstractController {
 		if (isset($_GET['iframe'])) {
 			return new PlainView($body->getHtml());
 		} else {
-			return view('default', ['content' => $body]);
+			return $this->render('default.html.twig', ['content' => $body]);
 		}
 	}
 
@@ -404,7 +404,7 @@ class ToolsController extends AbstractController {
 			$result = null;
 		}
 
-		return view('default', [
+		return $this->render('default.html.twig', [
 			'content' => new SavedQueryContent($result),
 		]);
 	}

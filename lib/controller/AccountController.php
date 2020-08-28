@@ -87,7 +87,7 @@ class AccountController extends AbstractController {
 
 	/**
 	 * @param null $uid
-	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/account/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
@@ -113,7 +113,7 @@ class AccountController extends AbstractController {
 				$this->loginService->setRecentLoginToken();
 			} else {
 				setMelding('U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.', 2);
-				return view('default', ['content' => new UpdateLoginForm($action)]);
+				return $this->render('default.html.twig', ['content' => new UpdateLoginForm($action)]);
 			}
 		}
 		if (!$this->accessService->mag($account, P_LOGGED_IN)) {
@@ -129,16 +129,16 @@ class AccountController extends AbstractController {
 			$this->accountRepository->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
-		return view('default', ['content' => $form]);
+		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
 	/**
-	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/account/{uid}/aanvragen", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function aanvragen() {
-		return view('default', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
+		return $this->render('default.html.twig', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
 	}
 
 	/**

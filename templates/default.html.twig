@@ -1,12 +1,13 @@
-{% if mag('P_LOGGED_IN') %}
-	{% extends 'base.html.twig' %}
-{% else %}
-	{# TODO: Hier externe styles #}
-	{% block styles %}
+{% extends mag('P_LOGGED_IN') ? 'base.html.twig' : 'extern/layout.html.twig' %}
+
+{% block styles %}
+	{% if not mag('P_LOGGED_IN') %}
 		{{ css_asset('extern') }}
-	{% endblock %}
-{% endif %}
+	{% endif %}
+{% endblock %}
 
 {% block titel %}{{ content.titel }}{% endblock %}
+
 {% block content %}{{ content.toString | raw }}{% endblock %}
 
+{% block modal %}{{ modal.toString | raw }}{% endblock %}

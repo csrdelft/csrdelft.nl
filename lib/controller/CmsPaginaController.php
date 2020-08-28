@@ -78,7 +78,7 @@ class CmsPaginaController extends AbstractController {
 
 	/**
 	 * @param $naam
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/pagina/bewerken/{naam}")
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -99,7 +99,7 @@ class CmsPaginaController extends AbstractController {
 			setMelding('Bijgewerkt: ' . $pagina->naam, 1);
 			return $this->redirectToRoute('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]);
 		} else {
-			return view('default', ['content' => $form]);
+			return $this->render('default.html.twig', ['content' => $form]);
 		}
 	}
 

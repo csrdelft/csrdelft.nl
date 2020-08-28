@@ -280,7 +280,7 @@ class ProfielController extends AbstractController {
 		if ($alleenFormulier) {
 			return $this->render('plain.html.twig', ['titel' => 'Noviet toevoegen', 'content' => $form]);
 		}
-		return view('default', ['content' => $form]);
+		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
 	/**
@@ -433,7 +433,7 @@ class ProfielController extends AbstractController {
 
 	/**
 	 * @param $uid
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/profiel/{uid}/voorkeuren", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
@@ -457,10 +457,10 @@ class ProfielController extends AbstractController {
 			$manager->persist($opmerking);
 			$manager->flush();
 			setMelding('Voorkeuren opgeslagen', 1);
-			$this->redirectToRoute('csrdelft_profiel_voorkeuren', ['uid' => $uid]);
-
+			return $this->redirectToRoute('csrdelft_profiel_voorkeuren', ['uid' => $uid]);
 		}
-		return view('default', ['content' => $form]);
+
+		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
 	/**
@@ -559,7 +559,7 @@ class ProfielController extends AbstractController {
 	}
 
 	public function test() {
-		return view('default', [
+		return $this->render('default.html.twig', [
 			'content' => $this->renderView('user/user.html.twig', [
 				'user' => $this->getProfiel()
 			])
