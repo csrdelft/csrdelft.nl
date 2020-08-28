@@ -229,7 +229,7 @@ class FotoAlbumController extends AbstractController {
 	 * @param Request $request
 	 * @param $dir
 	 * @return JsonResponse
-	 * @Route("/fotoalbum/hernoemen/dir", methods={"POST"}, requirements={"dir": ".+"})
+	 * @Route("/fotoalbum/hernoemen/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_ADD})
 	 */
 	public function hernoemen(Request $request, $dir) {
@@ -238,7 +238,7 @@ class FotoAlbumController extends AbstractController {
 		if (!$album->magAanpassen()) {
 			throw $this->createAccessDeniedException();
 		}
-		$naam = trim($request->request->get('naam'));
+		$naam = trim($request->request->get('n'));
 		if ($album !== null) {
 			try {
 				$this->fotoAlbumRepository->hernoemAlbum($album, $naam);
