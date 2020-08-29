@@ -82,7 +82,7 @@ input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
 }
 
 .get:not(.loaded), .post:not(.loaded) {
-	@extend .disabled;
+	pointer-events: none;
 	@extend .btn-loading;
 }
 
