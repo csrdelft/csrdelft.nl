@@ -62,7 +62,7 @@ class LoginController extends AbstractController {
 		$error = $authenticationUtils->getLastAuthenticationError();
 		$userName = $authenticationUtils->getLastUsername();
 
-		$response = $this->render('extern/login.html.twig', ['loginForm', new LoginForm($userName, $error)]);
+		$response = $this->render('extern/login.html.twig', ['loginForm' => new LoginForm($userName, $error)]);
 
 		// Als er geredirect wordt, stuur dan een forbidden status
 		if ($targetPath) {
