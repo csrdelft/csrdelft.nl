@@ -94,10 +94,10 @@ abstract class Zijbalk {
 		// Komende verjaardagen
 		if (LoginService::mag(P_LOGGED_IN) and lid_instelling('zijbalk', 'verjaardagen') > 0) {
 			$verjaardagenService = ContainerFacade::getContainer()->get(VerjaardagenService::class);
-			$zijbalk[] = view('verjaardagen.komende', [
+			$zijbalk[] = $twig->render('verjaardagen/komende.html.twig', [
 				'verjaardagen' => $verjaardagenService->getKomende((int)lid_instelling('zijbalk', 'verjaardagen')),
 				'toonpasfotos' => lid_instelling('zijbalk', 'verjaardagen_pasfotos') == 'ja',
-			])->toString();
+			]);
 		}
 		return $zijbalk;
 	}

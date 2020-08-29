@@ -144,6 +144,7 @@ namespace CsrDelft\Twig {
 				new TwigFilter('zijbalk_date_format', 'twig_zijbalk_date_format'),
 				new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
 				new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
+				new TwigFilter('date_create', 'twig_date_create'),
 			];
 		}
 
@@ -345,5 +346,9 @@ namespace {
 		} else {
 			return date('r', strtotime($date));
 		}
+	}
+
+	function twig_date_create($date, $format) {
+		return DateTime::createFromFormat($format, $date);
 	}
 }

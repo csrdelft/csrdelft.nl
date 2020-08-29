@@ -502,14 +502,14 @@ class ProfielController extends AbstractController {
 
 	/**
 	 * @param VerjaardagenService $verjaardagenService
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/leden/verjaardagen", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function verjaardagen(VerjaardagenService $verjaardagenService) {
 		$nu = time();
-		return view('verjaardagen.alle', [
-			'dezemaand' => date('n', $nu),
+		return $this->render('verjaardagen/alle.html.twig', [
+			'dezemaand' => date('m', $nu),
 			'dezedag' => date('d', $nu),
 			'verjaardagen' => $verjaardagenService->getJaar(),
 		]);
