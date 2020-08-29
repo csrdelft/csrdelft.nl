@@ -324,23 +324,6 @@ namespace {
 		return Icon::getTag($name);
 	}
 
-	function reldate($datum) {
-		if ($datum instanceof DateTimeInterface) {
-			$moment = $datum->getTimestamp();
-		} else {
-			$moment = strtotime($datum);
-		}
-
-		if (date('Y-m-d') == date('Y-m-d', $moment)) {
-			$return = 'vandaag om ' . strftime('%H:%M', $moment);
-		} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
-			$return = 'gisteren om ' . strftime('%H:%M', $moment);
-		} else {
-			$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
-		}
-		return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
-	}
-
 	function twig_date_format($date) {
 		return date_format_intl($date, DATE_FORMAT);
 	}
