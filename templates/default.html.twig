@@ -10,4 +10,4 @@
 
 {% block content %}{{ content.toString | raw }}{% endblock %}
 
-{% block modal %}{{ modal.toString | raw }}{% endblock %}
+{% block modal %}{% if modal is defined %}{{ modal.toString | raw }}{% endif %}{% endblock %}

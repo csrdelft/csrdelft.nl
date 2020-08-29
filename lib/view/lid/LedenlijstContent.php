@@ -4,6 +4,7 @@ namespace CsrDelft\view\lid;
 
 use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
 
 /**
@@ -19,6 +20,7 @@ use CsrDelft\view\View;
  *    Algemene View voor de ledenlijst.
  */
 class LedenlijstContent implements View {
+	use ToHtmlResponse;
 
 	/**
 	 * Lid-zoeker
