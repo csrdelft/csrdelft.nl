@@ -386,23 +386,6 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
 	}
 }
 
-function reldate($datum) {
-	if ($datum instanceof DateTimeInterface) {
-		$moment = $datum->getTimestamp();
-	} else {
-		$moment = strtotime($datum);
-	}
-
-	if (date('Y-m-d') == date('Y-m-d', $moment)) {
-		$return = 'vandaag om ' . strftime('%H:%M', $moment);
-	} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
-		$return = 'gisteren om ' . strftime('%H:%M', $moment);
-	} else {
-		$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
-	}
-	return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
-}
-
 /**
  * Voeg landcode toe als nummer met 0 begint of vervang 00 met +
  *

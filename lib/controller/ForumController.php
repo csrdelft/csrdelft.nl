@@ -111,9 +111,9 @@ class ForumController extends AbstractController {
 	 * @Auth(P_PUBLIC)
 	 */
 	public function forum() {
-		return view('forum.overzicht', [
+		return $this->render('forum/overzicht.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid()
+			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 		]);
 	}
 
@@ -142,10 +142,11 @@ class ForumController extends AbstractController {
 	 * @Auth(P_PUBLIC)
 	 */
 	public function rss() {
-		return new Response(view('forum.rss', [
+		$response = new Response(null, 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
+		return $this->render('forum/rss.xml.twig', [
 			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
 			'privatelink' => $this->getUser()->getRssLink()
-		]), 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
+		], $response);
 	}
 
 	/**
@@ -154,7 +155,7 @@ class ForumController extends AbstractController {
 	 * @Auth(P_FORUM_MOD)
 	 */
 	public function wacht() {
-		return view('forum.wacht', [
+		return $this->render('forum/wacht.html.twig', [
 			'resultaten' => $this->forumDelenRepository->getWachtOpGoedkeuring()
 		]);
 	}
@@ -162,9 +163,9 @@ class ForumController extends AbstractController {
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 *
-	 * @param string $query
+	 * @param string|null $query
 	 * @param int $pagina
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/zoeken/{query}/{pagina<\d+>}", methods={"GET", "POST"}, defaults={"query"=null,"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
@@ -182,7 +183,7 @@ class ForumController extends AbstractController {
 			$forumZoeken = $override;
 		}
 
-		return view('forum.resultaten', [
+		return $this->render('forum/resultaten.html.twig', [
 			'titel' => 'Zoeken',
 			'form' => $zoekform,
 			'resultaten' => $this->forumDelenRepository->zoeken($forumZoeken),
@@ -237,7 +238,7 @@ class ForumController extends AbstractController {
 	 * Shortcut to /recent/1/belangrijk.
 	 *
 	 * @param int $pagina
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/belangrijk/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -250,7 +251,7 @@ class ForumController extends AbstractController {
 	 *
 	 * @param int|string $pagina
 	 * @param string|null $belangrijk
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/recent/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
 	 * @Route("/forum/recent/{pagina<\d+>}/belangrijk", methods={"GET"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
@@ -260,7 +261,7 @@ class ForumController extends AbstractController {
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = $this->forumDelenRepository->getRecent($belangrijk);
 
-		return view('forum.deel', [
+		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'deel' => $deel,
@@ -277,7 +278,7 @@ class ForumController extends AbstractController {
 	 *
 	 * @param ForumDeel $deel
 	 * @param int|string $pagina or 'laatste' or 'prullenbak'
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/deel/{forum_id}/{pagina<\d+>}", methods={"GET","POST"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
@@ -297,7 +298,8 @@ class ForumController extends AbstractController {
 		} else {
 			$this->forumDradenRepository->setHuidigePagina((int)$pagina, $deel->forum_id);
 		}
-		return view('forum.deel', [
+
+		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'deel' => $deel,
@@ -313,7 +315,7 @@ class ForumController extends AbstractController {
 	 * Opzoeken forumdraad van forumpost.
 	 *
 	 * @param ForumPost $post
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/reactie/{post_id}", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
@@ -328,9 +330,9 @@ class ForumController extends AbstractController {
 	 * Forumdraadje laten zien met alle zichtbare/verwijderde posts.
 	 *
 	 * @param ForumDraad $draad
-	 * @param int $pagina or 'laatste' or 'ongelezen'
+	 * @param int|null $pagina or 'laatste' or 'ongelezen'
 	 * @param string|null $statistiek
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/onderwerp/{draad_id}/{pagina}/{statistiek}", methods={"GET"}, defaults={"pagina"=null,"statistiek"=null})
 	 * @Auth(P_PUBLIC)
 	 */
@@ -358,7 +360,7 @@ class ForumController extends AbstractController {
 			$this->forumPostsRepository->setHuidigePagina((int)$pagina, $draad->draad_id);
 		}
 
-		$view = view('forum.draad', [
+		$view = $this->render('forum/draad.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
 			'paging' => $paging && $this->forumPostsRepository->getAantalPaginas($draad->draad_id) > 1,
@@ -754,7 +756,7 @@ class ForumController extends AbstractController {
 
 	/**
 	 * @param ForumPost $post
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/bewerken/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -766,12 +768,12 @@ class ForumController extends AbstractController {
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
 		$this->forumPostsRepository->bewerkForumPost($tekst, $reden, $post);
 		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($post->draad, $post->laatst_gewijzigd);
-		return view('forum.partial.post_lijst', ['post' => $post]);
+		return $this->render('forum/partial/post_lijst.html.twig', ['post' => $post]);
 	}
 
 	/**
 	 * @param ForumPost $post
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/verplaatsen/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -787,12 +789,12 @@ class ForumController extends AbstractController {
 		}
 		$this->forumPostsRepository->verplaatsForumPost($nieuwDraad, $post);
 		$this->forumPostsRepository->goedkeurenForumPost($post);
-		return view('forum.partial.post_delete', ['post' => $post]);
+		return $this->render('forum/partial/post_delete.html.twig', ['post' => $post]);
 	}
 
 	/**
 	 * @param ForumPost $post
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/verwijderen/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -801,12 +803,12 @@ class ForumController extends AbstractController {
 			throw $this->createAccessDeniedException("Geen moderator");
 		}
 		$this->forumPostsRepository->verwijderForumPost($post);
-		return view('forum.partial.post_delete', ['post' => $post]);
+		return $this->render('forum/partial/post_delete.html.twig', ['post' => $post]);
 	}
 
 	/**
 	 * @param ForumPost $post
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/offtopic/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -815,12 +817,12 @@ class ForumController extends AbstractController {
 			throw $this->createAccessDeniedException("Geen moderator");
 		}
 		$this->forumPostsRepository->offtopicForumPost($post);
-		return view('forum.partial.post_lijst', ['post' => $post]);
+		return $this->render('forum/partial/post_lijst.html.twig', ['post' => $post]);
 	}
 
 	/**
 	 * @param ForumPost $post
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/goedkeuren/{post_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -829,14 +831,14 @@ class ForumController extends AbstractController {
 			throw $this->createAccessDeniedException("Geen moderator");
 		}
 		$this->forumPostsRepository->goedkeurenForumPost($post);
-		return view('forum.partial.post_lijst', ['post' => $post]);
+		return $this->render('forum/partial/post_lijst.html.twig', ['post' => $post]);
 	}
 
 	/**
 	 * Concept bericht opslaan
 	 * @param ForumDeel $deel
 	 * @param ForumDraad|null $draad
-	 * @return View
+	 * @return Response
 	 * @Route("/forum/concept/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -870,9 +872,7 @@ class ForumController extends AbstractController {
 			$reageren = $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel);
 		}
 
-		return view('forum.partial.draad_reageren', [
-			'reageren' => $reageren
-		]);
+		return $this->render('forum/partial/draad_reageren.html.twig', ['reageren' => $reageren]);
 	}
 
 	/**

@@ -23,6 +23,7 @@ class Configurator
 	public function configure(Environment $environment)
 	{
 		$environment->getExtension(EscaperExtension::class)->setEscaper(AutoEscapeService::STRATEGY_ICAL, [$this, 'escape_ical']);
+		$environment->getExtension(EscaperExtension::class)->setEscaper(AutoEscapeService::STRATEGY_XML, [$this, 'escape_xml']);
 
 		$this->configurator->configure($environment);
 	}
@@ -30,6 +31,10 @@ class Configurator
 	public function escape_ical($twig, $string, $charset)
 	{
 		return escape_ical($string);
+	}
+
+	function escape_xml($twig, $string, $charset) {
+		return htmlspecialchars($string, ENT_XML1, 'UTF-8');
 	}
 }
 

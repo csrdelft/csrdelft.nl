@@ -9,6 +9,7 @@ use CsrDelft\repository\ForumPlaatjeRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\plaatjes\PlaatjesUploadModalForm;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +23,7 @@ class ForumPlaatjesController extends AbstractController {
 	}
 
 	/**
-	 * @return PlaatjesUploadModalForm|\CsrDelft\view\renderer\TemplateView
+	 * @return PlaatjesUploadModalForm|Response
 	 * @Route("/forum/plaatjes/upload", methods={"GET","POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -30,7 +31,7 @@ class ForumPlaatjesController extends AbstractController {
 		$form = new PlaatjesUploadModalForm();
 		if ($form->isPosted()) {
 			$plaatje = $this->forumPlaatjeRepository->fromUploader($form->uploader, $this->getUid());
-			return view('forum.insert_plaatje', ['plaatje' => $plaatje]);
+			return $this->render('forum/partial/insert_plaatje.html.twig', ['plaatje' => $plaatje]);
 		} else {
 			return $form;
 		}

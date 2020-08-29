@@ -291,9 +291,12 @@ class ForumDraad {
 		return $this->aantal_ongelezen_posts;
 	}
 
+	/**
+	 * @return ForumDraadMeldingNiveau
+	 */
 	public function getMeldingsNiveau() {
 		if (!$this->magLezen()) {
-			return false;
+			return ForumDraadMeldingNiveau::NOOIT();
 		}
 
 		/** @var ForumDraadMelding $melding */
@@ -301,6 +304,6 @@ class ForumDraad {
 			return $melding->niveau;
 		}
 
-		return false;
+		return ForumDraadMeldingNiveau::NOOIT();
 	}
 }

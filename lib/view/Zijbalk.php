@@ -20,17 +20,25 @@ use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
  */
 abstract class Zijbalk {
 
+	/**
+	 * @param string[] $zijbalk
+	 * @return array
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
+	 */
 	public static function addStandaardZijbalk(array $zijbalk) {
+		$twig = ContainerFacade::getContainer()->get('twig');
 		$menuItemRepository = ContainerFacade::getContainer()->get(MenuItemRepository::class);
 		// Favorieten menu
-		if (LoginService::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'favorieten') == 'ja') {
+		if (LoginService::mag(P_LOGGED_IN) and lid_instelling('zijbalk', 'favorieten') == 'ja') {
 			$menu = $menuItemRepository->getMenu(LoginService::getUid());
 			$menu->tekst = 'Favorieten';
-			array_unshift($zijbalk, view('menu.block', ['root' => $menu]));
+			array_unshift($zijbalk, view('menu.block', ['root' => $menu])->toString());
 		}
 		// Is het al...
 		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
-			array_unshift($zijbalk, new IsHetAlView(lid_instelling('zijbalk', 'ishetal')));
+			array_unshift($zijbalk, (new IsHetAlView(lid_instelling('zijbalk', 'ishetal')))->toString());
 		}
 
 		// Sponsors
@@ -38,7 +46,7 @@ abstract class Zijbalk {
 			$sponsor_menu = $menuItemRepository->getMenu("sponsors");
 			if ($sponsor_menu) {
 				$sponsor_menu->tekst = 'Mogelijkheden';
-				$zijbalk[] = view('menu.block', ['root' => $sponsor_menu]);
+				$zijbalk[] = view('menu.block', ['root' => $sponsor_menu])->toString();
 			}
 		}
 
@@ -50,13 +58,13 @@ abstract class Zijbalk {
 			if (count($items) > lid_instelling('zijbalk', 'agenda_max')) {
 				$items = array_slice($items, 0, lid_instelling('zijbalk', 'agenda_max'));
 			}
-			$zijbalk[] = view('agenda.zijbalk', ['items' => $items]);
+			$zijbalk[] = view('agenda.zijbalk', ['items' => $items])->toString();
 		}
 		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
 		$forumPostsRepository = ContainerFacade::getContainer()->get(ForumPostsRepository::class);
 		// Nieuwste belangrijke forumberichten
 		if (lid_instelling('zijbalk', 'forum_belangrijk') > 0) {
-			$zijbalk[] = view('forum.partial.draad_zijbalk', [
+			$zijbalk[] = $twig->render('forum/partial/draad_zijbalk.html.twig', [
 				'draden' => $forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum_belangrijk'), true),
 				'aantalWacht' => $forumPostsRepository->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => true
@@ -65,7 +73,7 @@ abstract class Zijbalk {
 		// Nieuwste forumberichten
 		if (lid_instelling('zijbalk', 'forum') > 0) {
 			$belangrijk = (lid_instelling('zijbalk', 'forum_belangrijk') > 0 ? false : null);
-			$zijbalk[] = view('forum.partial.draad_zijbalk', [
+			$zijbalk[] = $twig->render('forum/partial/draad_zijbalk.html.twig', [
 				'draden' => $forumDradenRepository->getRecenteForumDraden((int)lid_instelling('zijbalk', 'forum'), $belangrijk),
 				'aantalWacht' => $forumPostsRepository->getAantalWachtOpGoedkeuring(),
 				'belangrijk' => $belangrijk
@@ -74,22 +82,22 @@ abstract class Zijbalk {
 		// Zelfgeposte forumberichten
 		if (lid_instelling('zijbalk', 'forum_zelf') > 0) {
 			$posts = $forumPostsRepository->getRecenteForumPostsVanLid(LoginService::getUid(), (int)lid_instelling('zijbalk', 'forum_zelf'), true);
-			$zijbalk[] = view('forum.partial.post_zijbalk', ['posts' => $posts]);
+			$zijbalk[] = $twig->render('forum/partial/post_zijbalk.html.twig', ['posts' => $posts]);
 		}
 		// Nieuwste fotoalbum
 		if (lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
 			$album = ContainerFacade::getContainer()->get(FotoAlbumRepository::class)->getMostRecentFotoAlbum();
 			if ($album !== null) {
-				$zijbalk[] = new FotoAlbumZijbalkView($album);
+				$zijbalk[] = (new FotoAlbumZijbalkView($album))->toString();
 			}
 		}
 		// Komende verjaardagen
-		if (LoginService::mag(P_LOGGED_IN) AND lid_instelling('zijbalk', 'verjaardagen') > 0) {
+		if (LoginService::mag(P_LOGGED_IN) and lid_instelling('zijbalk', 'verjaardagen') > 0) {
 			$verjaardagenService = ContainerFacade::getContainer()->get(VerjaardagenService::class);
 			$zijbalk[] = view('verjaardagen.komende', [
 				'verjaardagen' => $verjaardagenService->getKomende((int)lid_instelling('zijbalk', 'verjaardagen')),
 				'toonpasfotos' => lid_instelling('zijbalk', 'verjaardagen_pasfotos') == 'ja',
-			]);
+			])->toString();
 		}
 		return $zijbalk;
 	}

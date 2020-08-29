@@ -92,6 +92,10 @@ abstract class Enum {
 		throw new \BadMethodCallException("Enum " . static::class . '::' . $name . ' bestaat niet.');
 	}
 
+	public function __call($name, $arguments) {
+		return static::__callStatic($name, $arguments);
+	}
+
 	/**
 	 * @param $value
 	 * @return static

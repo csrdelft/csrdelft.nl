@@ -62,7 +62,7 @@
 		{% if lid_instelling('zijbalk', 'breedte') != 'zijbalk_verborgen' %}
 			<nav id="zijbalk">
 				{% for blok in get_zijbalk() %}
-					<div class="blok">{{ blok.toString | raw }}</div>
+					<div class="blok">{{ blok | raw }}</div>
 				{% endfor %}
 				{% if app.debug and mag('P_ADMIN') %}
 					<div class="commit-hash">
@@ -142,7 +142,7 @@
 		{{ include('effect/raket.html.twig') }}
 	{% endif %}
 	{% if lid_instelling('layout', 'assistent') != 'nee' %}
-	<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css"/>
+<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css"/>
 	<script type="application/javascript">
 		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
 		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden') }}';

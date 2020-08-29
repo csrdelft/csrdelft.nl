@@ -6,12 +6,15 @@ namespace CsrDelft\Twig {
 
 	use CsrDelft\entity\MenuItem;
 	use CsrDelft\entity\profiel\Profiel;
+	use CsrDelft\repository\groepen\LichtingenRepository;
 	use CsrDelft\repository\instellingen\InstellingenRepository;
 	use CsrDelft\repository\instellingen\LidInstellingenRepository;
 	use CsrDelft\repository\instellingen\LidToestemmingRepository;
 	use CsrDelft\repository\MenuItemRepository;
+	use CsrDelft\repository\ProfielRepository;
 	use CsrDelft\service\CsrfService;
 	use CsrDelft\service\security\LoginService;
+	use CsrDelft\view\bbcode\CsrBB;
 	use CsrDelft\view\formulier\CsrfField;
 	use CsrDelft\view\formulier\InstantSearchForm;
 	use CsrDelft\view\toestemming\ToestemmingModalForm;
@@ -49,11 +52,16 @@ namespace CsrDelft\Twig {
 		 * @var CsrfService
 		 */
 		private $csrfService;
+		/**
+		 * @var ProfielRepository
+		 */
+		private $profielRepository;
 
 		public function __construct(
 			SessionInterface $session,
 			LoginService $loginService,
 			CsrfService $csrfService,
+			ProfielRepository $profielRepository,
 			MenuItemRepository $menuItemRepository,
 			LidToestemmingRepository $lidToestemmingRepository,
 			LidInstellingenRepository $lidInstellingenRepository,
@@ -66,6 +74,7 @@ namespace CsrDelft\Twig {
 			$this->session = $session;
 			$this->menuItemRepository = $menuItemRepository;
 			$this->csrfService = $csrfService;
+			$this->profielRepository = $profielRepository;
 		}
 
 		public function getFunctions() {
@@ -77,7 +86,7 @@ namespace CsrDelft\Twig {
 				new TwigFunction('js_asset', [$this, 'js_asset'], ['is_safe' => ['html']]),
 				new TwigFunction('dragobject_coords', [$this, 'dragobject_coords']),
 				new TwigFunction('user_modules', [$this, 'getUserModules']),
-				new TwigFunction('csr_breadcrumbs', [$this, 'csr_breadcrumbs']),
+				new TwigFunction('csr_breadcrumbs', [$this, 'csr_breadcrumbs'], ['is_safe' => ['html']]),
 				new TwigFunction('get_breadcrumbs', [$this, 'get_breadcrumbs']),
 				new TwigFunction('get_menu', [$this, 'get_menu']),
 				new TwigFunction('commitHash', 'commitHash'),
@@ -92,7 +101,17 @@ namespace CsrDelft\Twig {
 				new TwigFunction('login_form', 'login_form', ['is_safe' => ['html']]),
 				new TwigFunction('icon', 'icon', ['is_safe' => ['html']]),
 				new TwigFunction('instant_search_form', [$this, 'instant_search_form'], ['is_safe' => ['html']]),
+				new TwigFunction('get_profiel', [$this, 'get_profiel']),
+				new TwigFunction('huidige_jaargang', [$this, 'huidige_jaargang']),
 			];
+		}
+
+		public function huidige_jaargang() {
+			return LichtingenRepository::getHuidigeJaargang();
+		}
+
+		public function get_profiel($uid) {
+			return $this->profielRepository->find($uid);
 		}
 
 		public function toestemming_gegeven() {
@@ -118,6 +137,12 @@ namespace CsrDelft\Twig {
 				new TwigFilter('escape_ical', 'escape_ical'),
 				new TwigFilter('is_zichtbaar', [$this, 'is_zichtbaar']),
 				new TwigFilter('file_base64', 'file_base64'),
+				new TwigFilter('reldate', 'reldate', ['is_safe' => ['html']]),
+				new TwigFilter('date_format', 'twig_date_format'),
+				new TwigFilter('datetime_format', 'twig_datetime_format'),
+				new TwigFilter('zijbalk_date_format', 'twig_zijbalk_date_format'),
+				new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
+				new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
 			];
 		}
 
@@ -257,6 +282,19 @@ namespace CsrDelft\Twig {
 		public function instant_search_form() {
 			return (new InstantSearchForm())->toString();
 		}
+		public function bbcode(string $string, string $mode = 'normal') {
+			if ($mode === 'html') {
+				return CsrBB::parseHtml($string);
+			} else if ($mode == 'mail') {
+				return CsrBB::parseMail($string);
+			} else {
+				return CsrBB::parse($string);
+			}
+		}
+
+		public function bbcode_light(string $string) {
+			return CsrBB::parseLight($string);
+		}
 	}
 }
 
@@ -283,5 +321,33 @@ namespace {
 
 	function icon($name) {
 		return Icon::getTag($name);
+	}
+
+	function reldate($datum) {
+		if ($datum instanceof DateTimeInterface) {
+			$moment = $datum->getTimestamp();
+		} else {
+			$moment = strtotime($datum);
+		}
+
+		if (date('Y-m-d') == date('Y-m-d', $moment)) {
+			$return = 'vandaag om ' . strftime('%H:%M', $moment);
+		} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
+			$return = 'gisteren om ' . strftime('%H:%M', $moment);
+		} else {
+			$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
+		}
+		return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
+	}
+
+	function twig_date_format($date) {
+		return date_format_intl($date, DATE_FORMAT);
+	}
+
+	function twig_datetime_format($datetime) {
+		return date_format_intl($datetime, DATETIME_FORMAT);
+	}
+	function twig_zijbalk_date_format(DateTimeInterface $datetime) {
+		return zijbalk_date_format($datetime->getTimeStamp());
 	}
 }
