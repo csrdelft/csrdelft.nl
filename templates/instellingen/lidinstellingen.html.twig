@@ -80,7 +80,7 @@
 							{% endif %}
 							<small class="form-text text-muted">
 								{% set default = instelling.opties[instelling.default] is defined ? instelling.opties[instelling.default] : instelling.default %}
-								{{ instelling.beschrijving }} Standaard waarde: "{{ default | title }}".
+								{{ instelling.beschrijving | raw }} Standaard waarde: "{{ default | title }}".
 							</small>
 						</div>
 					</div>
