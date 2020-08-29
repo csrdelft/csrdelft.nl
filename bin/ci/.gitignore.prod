@@ -23,6 +23,7 @@ var/*
 
 # Dev bestanden
 docker/*
+bin/.phpunit
 bin/dev/*
 bin/ci/*
 sql/*
