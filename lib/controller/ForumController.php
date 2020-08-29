@@ -145,7 +145,7 @@ class ForumController extends AbstractController {
 		$response = new Response(null, 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
 		return $this->render('forum/rss.xml.twig', [
 			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
-			'privatelink' => $this->getUser()->getRssLink()
+			'privatelink' => $this->getUser() ? $this->getUser()->getRssLink() : null,
 		], $response);
 	}
 

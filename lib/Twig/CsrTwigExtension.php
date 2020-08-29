@@ -140,6 +140,7 @@ namespace CsrDelft\Twig {
 				new TwigFilter('reldate', 'reldate', ['is_safe' => ['html']]),
 				new TwigFilter('date_format', 'twig_date_format'),
 				new TwigFilter('datetime_format', 'twig_datetime_format'),
+				new TwigFilter('rfc2822', 'twig_rfc2822'),
 				new TwigFilter('zijbalk_date_format', 'twig_zijbalk_date_format'),
 				new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
 				new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
@@ -349,5 +350,17 @@ namespace {
 	}
 	function twig_zijbalk_date_format(DateTimeInterface $datetime) {
 		return zijbalk_date_format($datetime->getTimeStamp());
+	}
+	/**
+	 * @param $date
+	 * @return false|string
+	 */
+	function twig_rfc2822(DateTimeInterface $date) {
+		$date = $date->getTimestamp();
+		if (strlen($date) == strlen((int)$date)) {
+			return date('r', $date);
+		} else {
+			return date('r', strtotime($date));
+		}
 	}
 }
