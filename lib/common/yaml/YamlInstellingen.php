@@ -63,6 +63,9 @@ trait YamlInstellingen {
 		return $this->defaults[$module][$key][$field];
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getAll() {
 		return $this->defaults;
 	}

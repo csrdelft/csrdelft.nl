@@ -22,6 +22,7 @@ namespace CsrDelft\Twig {
 	use Twig\Extension\AbstractExtension;
 	use Twig\TwigFilter;
 	use Twig\TwigFunction;
+	use Twig\TwigTest;
 
 	class CsrTwigExtension extends AbstractExtension {
 		/**
@@ -145,6 +146,12 @@ namespace CsrDelft\Twig {
 				new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
 				new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
 				new TwigFilter('date_create', 'twig_date_create'),
+			];
+		}
+
+		public function getTests() {
+			return [
+				new TwigTest('numeric', function ($value) { return is_numeric($value); }),
 			];
 		}
 
