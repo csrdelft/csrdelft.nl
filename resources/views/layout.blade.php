@@ -14,7 +14,7 @@
 		<nav id="zijbalk">
 			@php($zijbalk = \CsrDelft\view\Zijbalk::addStandaardZijbalk(isset($zijbalk) ? $zijbalk : []))
 			@foreach($zijbalk as $block)
-				<div class="blok">@php($block->view())</div>
+				<div class="blok">{!! $block !!}</div>
 			@endforeach
 			@if(!DEBUG) @can(P_ADMIN)
 				<div class="commit-hash">
