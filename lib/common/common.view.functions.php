@@ -539,3 +539,15 @@ function current_token() {
 function current_account() {
 	return ContainerFacade::getContainer()->get('security.token_storage')->getToken()->getUser();
 }
+
+function commitHash($full = false) {
+	if ($full) {
+		return trim(`git rev-parse HEAD`);
+	} else {
+		return trim(`git rev-parse --short HEAD`);
+	}
+}
+
+function commitLink() {
+	return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
+}
