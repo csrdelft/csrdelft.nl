@@ -11,6 +11,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Environment;
 
 /**
  * Fotoalbum
@@ -51,9 +52,14 @@ class BbFotoalbum extends BbTag {
 	 * @var FotoAlbumRepository
 	 */
 	private $fotoAlbumRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(FotoAlbumRepository $fotoAlbumRepository) {
+	public function __construct(FotoAlbumRepository $fotoAlbumRepository, Environment $twig) {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
+		$this->twig = $twig;
 	}
 
 	public static function getTagName() {
@@ -75,7 +81,7 @@ class BbFotoalbum extends BbTag {
 		$album = $this->album;
 		$arguments = $this->arguments;
 		if (isset($arguments['slider'])) {
-			$view = view('fotoalbum.slider', [
+			return $this->twig->render('fotoalbum/slider.html.twig', [
 				'fotos' => array_shuffle($album->getFotos())
 			]);
 		} else {

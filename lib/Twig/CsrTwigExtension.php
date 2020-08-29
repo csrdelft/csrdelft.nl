@@ -146,6 +146,7 @@ namespace CsrDelft\Twig {
 				new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
 				new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
 				new TwigFilter('date_create', 'twig_date_create'),
+				new TwigFilter('uniqid', function ($prefix) { return uniqid_safe($prefix); }),
 			];
 		}
 

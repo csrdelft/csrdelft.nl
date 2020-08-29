@@ -100,6 +100,10 @@ class FotoAlbum extends Map {
 		return !empty($fotos);
 	}
 
+	/**
+	 * @param false $incompleet
+	 * @return Foto[]
+	 */
 	public function getFotos($incompleet = false) {
 		if (!isset($this->fotos)) {
 
@@ -108,7 +112,7 @@ class FotoAlbum extends Map {
 
 			$scan = scandir($this->path, SCANDIR_SORT_ASCENDING);
 			if (empty($scan)) {
-				return false;
+				return [];
 			}
 			foreach ($scan as $entry) {
 				if (is_file(join_paths($this->path, $entry))) {
