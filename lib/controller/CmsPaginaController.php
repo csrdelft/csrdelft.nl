@@ -30,12 +30,12 @@ class CmsPaginaController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/pagina")
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function overzicht() {
-		return view('cms.overzicht', [
+		return $this->render('cms/overzicht.html.twig', [
 			'paginas' => $this->cmsPaginaRepository->getAllePaginas(),
 		]);
 	}
