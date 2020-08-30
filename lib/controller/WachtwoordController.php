@@ -50,7 +50,7 @@ class WachtwoordController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/wachtwoord/wijzigen", methods={"GET", "POST"}, name="wachtwoord_wijzigen")
 	 * @Route("/wachtwoord/verlopen", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
@@ -74,12 +74,12 @@ class WachtwoordController extends AbstractController {
 	/**
 	 * Wordt opgevangen door WachtwoordResetAuthenticator zodra wachtwoord_reset_token in de sessie staat.
 	 *
-	 * @see WachtwoordResetAuthenticator
-	 *
 	 * @param Request $request
-	 * @return TemplateView|RedirectResponse
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/wachtwoord/reset", name="wachtwoord_reset")
 	 * @Auth(P_PUBLIC)
+	 *@see WachtwoordResetAuthenticator
+	 *
 	 */
 	public function reset(Request $request) {
 		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
@@ -101,9 +101,13 @@ class WachtwoordController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		}
 
-		return $this->render('default.html.twig', [
-			'content' => new WachtwoordWijzigenForm($account, $this->generateUrl('wachtwoord_reset'), false)
-		]);
+		$form = new WachtwoordWijzigenForm($account, $this->generateUrl('wachtwoord_reset'), false);
+
+		if ($form->isPosted()) {
+			$form->validate();
+		}
+
+		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
 	/**
