@@ -50,7 +50,7 @@ HTML
 
 		$this->addFields($fields);
 
-		$this->formKnoppen = new FormDefaultKnoppen();
+		$this->formKnoppen = new FormDefaultKnoppen('/courant');
 	}
 
 }
