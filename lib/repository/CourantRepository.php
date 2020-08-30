@@ -65,27 +65,31 @@ Subject: C.S.R.-courant $datum
 
 HEAD;
 
+		$response = '';
+
 		$smtp = fsockopen('localhost', 25, $feut, $fout);
-		echo 'Zo, mail verzenden naar ' . $email . '.<pre>';
-		echo fread($smtp, 1024);
+		$response .= 'Zo, mail verzenden naar ' . $email . '.<pre>';
+		$response .= fread($smtp, 1024);
 		fwrite($smtp, "HELO localhost\r\n");
-		echo "HELO localhost\r\n";
-		echo fread($smtp, 1024);
+		$response .= "HELO localhost\r\n";
+		$response .= fread($smtp, 1024);
 		fwrite($smtp, "MAIL FROM:<pubcie@csrdelft.nl>\r\n");
-		echo htmlspecialchars("MAIL FROM:<pubcie@csrdelft.nl>\r\n");
-		echo fread($smtp, 1024);
+		$response .= htmlspecialchars("MAIL FROM:<pubcie@csrdelft.nl>\r\n");
+		$response .= fread($smtp, 1024);
 		fwrite($smtp, "RCPT TO:<" . $email . ">\r\n");
-		echo htmlspecialchars("RCPT TO:<" . $email . ">\r\n");
-		echo fread($smtp, 1024);
+		$response .= htmlspecialchars("RCPT TO:<" . $email . ">\r\n");
+		$response .= fread($smtp, 1024);
 		fwrite($smtp, "DATA\r\n");
-		echo htmlspecialchars("DATA\r\n");
-		echo fread($smtp, 1024);
+		$response .= htmlspecialchars("DATA\r\n");
+		$response .= fread($smtp, 1024);
 
 		fwrite($smtp, $headers . $inhoud . "\r\n");
-		echo htmlspecialchars("[mail hier]\r\n");
+		$response .= htmlspecialchars("[mail hier]\r\n");
 		fwrite($smtp, "\r\n.\r\n");
-		echo htmlspecialchars("\r\n.\r\n");
-		echo fread($smtp, 1024);
-		echo '</pre>';
+		$response .= htmlspecialchars("\r\n.\r\n");
+		$response .= fread($smtp, 1024);
+		$response .= '</pre>';
+
+		return $response;
 	}
 }
