@@ -4,6 +4,7 @@ namespace CsrDelft\view\lid;
 
 use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\Icon;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
 
@@ -84,6 +85,12 @@ class LedenlijstContent implements View {
 				$url = REQUEST_URI . '?addToGoogleContacts=true';
 			}
 			echo '<a href="' . $url . '" class="btn float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
+			if (strstr(REQUEST_URI, '?') !== false) {
+				$url = REQUEST_URI . '&exportVcf=true';
+			} else {
+				$url = REQUEST_URI . '?exprotVcf=true';
+			}
+			echo '<a href="' . $url . '" class="btn float-right" title="Huidige selectie exporteren als vcard">' . Icon::getTag('vcard_add') . '</a>';
 		}
 		echo getMelding();
 		echo '<h1>' . (LoginService::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';

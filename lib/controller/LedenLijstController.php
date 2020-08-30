@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleSync;
@@ -14,18 +15,20 @@ use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
 use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 class LedenLijstController extends AbstractController {
 	/**
 	 * @param CmsPaginaRepository $cmsPaginaRepository
 	 * @param LidZoekerService $lidZoeker
 	 * @param GoogleSync $googleSync
-	 * @return TemplateView|RedirectResponse
+	 * @return TemplateView|RedirectResponse|Response
 	 * @Route("/ledenlijst", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync) {
+	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync, Environment $twig) {
 		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
@@ -77,6 +80,17 @@ class LedenLijstController extends AbstractController {
 			} catch (CsrGebruikerException $e) {
 				setMelding($e->getMessage(), -1);
 			}
+		} elseif (isset($_GET['exportVcf'])) {
+			$responseBody = '';
+
+			foreach ($lidZoeker->getLeden() as $profiel) {
+				$responseBody .= $twig->render('profiel/vcard.ical.twig', ['profiel' => $profiel]);
+			}
+
+			$response = new Response(crlf_endings($responseBody), 200, ['Content-Type' => 'text/x-vcard', 'Content-Disposition' => 'attachment; filename="ledenlijst.vcf"']);
+			$response->setCharset('UTF-8');
+
+			return $response;
 		} else {
 
 			//redirect to profile if only one result.
