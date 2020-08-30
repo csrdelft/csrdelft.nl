@@ -57,6 +57,7 @@ class CorveeRepetitieForm extends ModalForm {
 		$fields = [];
 		$fields['fid'] = new DoctrineEntityField('corveeFunctie', $repetitie->corveeFunctie, 'Functie', CorveeFunctie::class, '/corvee/functies/suggesties?q=');
 		$fields['fid']->onchange = $functiePunten . "$('#field_standaard_punten').val(punten[this.value]);";
+		$fields['fid']->required = true;
 		$fields[] = new WeekdagField('dag_vd_week', $repetitie->dag_vd_week, 'Dag v/d week');
 		$fields['dag'] = new IntField('periode_in_dagen', $repetitie->periode_in_dagen, 'Periode (in dagen)', 0, 183);
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';

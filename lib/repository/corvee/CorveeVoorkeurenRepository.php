@@ -176,7 +176,7 @@ DQL
 	 * @throws OptimisticLockException
 	 */
 	public function verwijderVoorkeuren($crid) {
-		$voorkeuren = $this->findBy(['crv_repetitie_id' => $crid]);
+		$voorkeuren = $this->findBy(['corveeRepetitie' => $crid]);
 		$num = count($voorkeuren);
 		foreach ($voorkeuren as $voorkeur) {
 			$this->_em->remove($voorkeur);

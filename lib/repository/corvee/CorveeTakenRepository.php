@@ -460,7 +460,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	 * @throws OptimisticLockException
 	 */
 	public function verwijderRepetitieTaken($crid) {
-		$taken = $this->findBy(['crv_repetitie_id' => $crid]);
+		$taken = $this->findBy(['corveeRepetitie' => $crid]);
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
 			$this->_em->persist($taak);
@@ -478,7 +478,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	 * @return bool
 	 */
 	public function existRepetitieTaken($crid) {
-		return count($this->findBy(['crv_repetitie_id' => $crid])) > 0;
+		return count($this->findBy(['corveeRepetitie' => $crid])) > 0;
 	}
 
 	/**
