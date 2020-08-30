@@ -24,8 +24,6 @@ use CsrDelft\view\eetplan\EetplanHuizenTable;
 use CsrDelft\view\eetplan\EetplanHuizenZoekenResponse;
 use CsrDelft\view\eetplan\NieuwEetplanForm;
 use CsrDelft\view\eetplan\VerwijderEetplanForm;
-use CsrDelft\view\renderer\TemplateView;
-use CsrDelft\view\View;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,19 +56,19 @@ class EetplanController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/eetplan", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
 	public function view() {
-		return view('eetplan.overzicht', [
+		return $this->render('eetplan/overzicht.html.twig', [
 			'eetplan' => $this->eetplanRepository->getEetplan($this->lichting)
 		]);
 	}
 
 	/**
 	 * @param string $uid
-	 * @return View
+	 * @return Response
 	 * @Route("/eetplan/noviet/{uid}", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
@@ -80,7 +78,7 @@ class EetplanController extends AbstractController {
 			throw new NotFoundHttpException("Geen eetplan gevonden voor deze noviet");
 		}
 
-		return view('eetplan.noviet', [
+		return $this->render('eetplan/noviet.html.twig', [
 			'noviet' => ProfielRepository::get($uid),
 			'eetplan' => $eetplan,
 		]);
@@ -88,7 +86,7 @@ class EetplanController extends AbstractController {
 
 	/**
 	 * @param integer $id
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/eetplan/huis/{id}", methods={"GET"}, requirements={"id": "\d+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
@@ -98,7 +96,7 @@ class EetplanController extends AbstractController {
 			throw new CsrGebruikerException('Huis niet gevonden');
 		}
 
-		return view('eetplan.huis', [
+		return $this->render('eetplan/huis.html.twig', [
 			'woonoord' => $this->woonoordenRepository->get($id),
 			'eetplan' => $eetplan,
 		]);
@@ -319,7 +317,7 @@ class EetplanController extends AbstractController {
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
 	public function beheer() {
-		return view('eetplan.beheer', [
+		return $this->render('eetplan/beheer.html.twig', [
 			'bekendentable' => new EetplanBekendenTable(),
 			'huizentable' => new EetplanHuizenTable(),
 			'bekendehuizentable' => new EetplanBekendeHuizenTable(),
@@ -328,7 +326,7 @@ class EetplanController extends AbstractController {
 	}
 
 	/**
-	 * @return NieuwEetplanForm|TemplateView
+	 * @return NieuwEetplanForm|Response
 	 * @Route("/eetplan/nieuw", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
@@ -348,12 +346,12 @@ class EetplanController extends AbstractController {
 				$this->eetplanRepository->save($sessie);
 			}
 
-			return view('eetplan.table', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);
+			return $this->render('eetplan/table.html.twig', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);
 		}
 	}
 
 	/**
-	 * @return VerwijderEetplanForm|TemplateView
+	 * @return VerwijderEetplanForm|Response
 	 * @Route("/eetplan/verwijderen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
@@ -367,7 +365,7 @@ class EetplanController extends AbstractController {
 			$avond = date_create_immutable($form->getValues()['avond']);
 			$this->eetplanRepository->verwijderEetplan($avond, $this->lichting);
 
-			return view('eetplan.table', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);
+			return $this->render('eetplan/table.html.twig', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);
 		}
 	}
 }

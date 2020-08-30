@@ -79,8 +79,8 @@ trait YamlInstellingen {
 	}
 
 	private function writeConfig($config, $file) {
-		if (!touch($file)) {
-			mkdir(CONFIG_CACHE_PATH, 0777, true);
+		if (!file_exists($file)) {
+			@mkdir(CONFIG_CACHE_PATH, 0777, true);
 			touch($file);
 		}
 		/**
