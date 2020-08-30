@@ -5,3 +5,4 @@ twig:
   globals:
     sentry_dsn: '%env(SENTRY_DSN_JS)%'
     email_abactis: '%env(EMAIL_ABACTIS)%'
+    csrmail_password: '%env(CSRMAIL_PASSWORD)%'

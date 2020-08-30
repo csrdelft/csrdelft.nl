@@ -149,7 +149,8 @@ namespace CsrDelft\Twig {
 				new TwigFilter('date_create', 'twig_date_create'),
 				new TwigFilter('uniqid', function ($prefix) { return uniqid_safe($prefix); }),
 				new TwigFilter('format_bedrag', 'format_bedrag'),
-				new TwigFilter('truncate', 'truncate')
+				new TwigFilter('truncate', 'truncate'),
+				new TwigFilter('date_format_intl', 'date_format_intl'),
 			];
 		}
 

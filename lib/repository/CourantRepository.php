@@ -4,7 +4,6 @@ namespace CsrDelft\repository;
 
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\view\courant\CourantView;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
@@ -50,8 +49,20 @@ class CourantRepository extends AbstractRepository {
 		return $courant;
 	}
 
-	public function verzenden($email, CourantView $view) {
-		$sMail = $view->getHtml(true);
+	public function verzenden($email, $inhoud) {
+		$csrMailPassword = $_ENV['CSRMAIL_PASSWORD'];
+		$datum = date_format_intl(date_create_immutable(), 'd MMMM y');
+		$headers = <<<HEAD
+From: PubCie <pubcie@csrdelft.nl>
+To: leden@csrdelft.nl
+Organization: C.S.R. Delft
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+User-Agent: telnet localhost 25
+X-Complaints-To: pubcie@csrdelft.nl
+Approved: $csrMailPassword
+Subject: C.S.R.-courant $datum
+HEAD;
 
 		$smtp = fsockopen('localhost', 25, $feut, $fout);
 		echo 'Zo, mail verzenden naar ' . $email . '.<pre>';
@@ -69,7 +80,8 @@ class CourantRepository extends AbstractRepository {
 		echo htmlspecialchars("DATA\r\n");
 		echo fread($smtp, 1024);
 
-		fwrite($smtp, $sMail . "\r\n");
+		fwrite($smtp, $headers);
+		fwrite($smtp, $inhoud . "\r\n");
 		echo htmlspecialchars("[mail hier]\r\n");
 		fwrite($smtp, "\r\n.\r\n");
 		echo htmlspecialchars("\r\n.\r\n");

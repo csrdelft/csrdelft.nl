@@ -5,13 +5,11 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\entity\courant\CourantBericht;
+use CsrDelft\entity\courant\CourantCategorie;
 use CsrDelft\repository\CourantBerichtRepository;
 use CsrDelft\repository\CourantRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\courant\CourantBerichtFormulier;
-use CsrDelft\view\courant\CourantView;
 use CsrDelft\view\PlainView;
-use CsrDelft\view\renderer\TemplateView;
 use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
@@ -42,12 +40,12 @@ class CourantController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/courant/archief", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
 	public function archief() {
-		return view('courant.archief', ['couranten' => $this->courantRepository->findAll()]);
+		return $this->render('courant/archief.html.twig', ['couranten' => group_by('getJaar', $this->courantRepository->findAll())]);
 	}
 
 	/**
@@ -61,16 +59,19 @@ class CourantController extends AbstractController {
 	}
 
 	/**
-	 * @return CourantView
+	 * @return Response
 	 * @Route("/courant/voorbeeld", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
 	public function voorbeeld() {
-		return new CourantView($this->courantRepository->nieuwCourant(), $this->courantBerichtRepository->findAll());
+		return $this->render('courant/mail.html.twig', [
+			'berichten' => $this->courantBerichtRepository->findAll(),
+			'catNames' => CourantCategorie::getEnumDescriptions(),
+		]);
 	}
 
 	/**
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/courant", methods={"GET", "POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
@@ -92,7 +93,7 @@ class CourantController extends AbstractController {
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
 
-		return view('courant.beheer', [
+		return $this->render('courant/beheer.html.twig', [
 			'magVerzenden' => $this->courantRepository->magVerzenden(),
 			'magBeheren' => $this->courantRepository->magBeheren(),
 			'berichten' => $this->courantBerichtRepository->getBerichtenVoorGebruiker(),
@@ -102,7 +103,7 @@ class CourantController extends AbstractController {
 
 	/**
 	 * @param CourantBericht $bericht
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/courant/bewerken/{id}", methods={"GET", "POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
@@ -115,7 +116,7 @@ class CourantController extends AbstractController {
 			return $this->redirectToRoute('csrdelft_courant_toevoegen');
 		}
 
-		return view('courant.beheer', [
+		return $this->render('courant/beheer.html.twig', [
 			'magVerzenden' => $this->courantRepository->magVerzenden(),
 			'magBeheren' => $this->courantRepository->magBeheren(),
 			'berichten' => $this->courantBerichtRepository->getBerichtenVoorGebruiker(),
@@ -161,10 +162,12 @@ class CourantController extends AbstractController {
 
 		$courant = $this->courantRepository->nieuwCourant();
 
-		$courantView = new CourantView($courant, $this->courantBerichtRepository->findAll());
-		$courant->inhoud = $courantView->getHtml(false);
+		$courant->inhoud = $this->renderView('courant/mail.html.twig', [
+			'berichten' => $this->courantBerichtRepository->findAll(),
+			'catNames' => CourantCategorie::getEnumDescriptions(),
+		]);
 		if ($iedereen === 'iedereen') {
-			$this->courantRepository->verzenden($_ENV['EMAIL_LEDEN'], $courantView);
+			$this->courantRepository->verzenden($_ENV['EMAIL_LEDEN'], $courant->inhoud);
 			/** @var Connection $conn */
 			$conn = $this->getDoctrine()->getConnection();
 			$conn->beginTransaction();
@@ -190,7 +193,7 @@ class CourantController extends AbstractController {
 
 			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<strong>Aan iedereen verzonden</strong></div>');
 		} else {
-			$this->courantRepository->verzenden($_ENV['EMAIL_PUBCIE'], $courantView);
+			$this->courantRepository->verzenden($_ENV['EMAIL_PUBCIE'], $courant->inhoud);
 			setMelding('Verzonden naar de PubCie', 1);
 			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>');
 		}

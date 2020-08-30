@@ -84,7 +84,15 @@ function group_by($prop, $in, $del = true) {
 	$del &= is_array($in);
 	$out = array();
 	foreach ($in as $i => $obj) {
-		$out[$obj->$prop][] = $obj; // add to array
+		if (property_exists($obj, $prop)) {
+			$key = $obj->$prop;
+		} elseif (method_exists($obj, $prop)) {
+			$key = $obj->$prop();
+		} else {
+			throw new Exception("Veld bestaat niet");
+		}
+
+		$out[$key][] = $obj; // add to array
 		if ($del) {
 			unset($in[$i]);
 		}
