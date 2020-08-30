@@ -62,6 +62,7 @@ User-Agent: telnet localhost 25
 X-Complaints-To: pubcie@csrdelft.nl
 Approved: $csrMailPassword
 Subject: C.S.R.-courant $datum
+
 HEAD;
 
 		$smtp = fsockopen('localhost', 25, $feut, $fout);
@@ -80,8 +81,7 @@ HEAD;
 		echo htmlspecialchars("DATA\r\n");
 		echo fread($smtp, 1024);
 
-		fwrite($smtp, $headers);
-		fwrite($smtp, $inhoud . "\r\n");
+		fwrite($smtp, $headers . $inhoud . "\r\n");
 		echo htmlspecialchars("[mail hier]\r\n");
 		fwrite($smtp, "\r\n.\r\n");
 		echo htmlspecialchars("\r\n.\r\n");
