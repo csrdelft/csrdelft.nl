@@ -3,6 +3,7 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\entity\fotoalbum\Foto;
+use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
  * @package CsrDelft\view\fotoalbum
  */
 class FotoBBView implements ToResponse, View {
-
 	private $groot;
 	private $responsive;
 	private $model;

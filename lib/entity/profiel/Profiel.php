@@ -7,6 +7,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\Kring;
+use CsrDelft\entity\groepen\Verticale;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\security\Account;
@@ -621,7 +624,9 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
 			return '<span data-visite="'.$this->uid.'"><a href="/profiel/' . $this->uid . '" class="lidLink ' . htmlspecialchars($this->status) . '">' . $naam . '</a></span>';
 		} else if ($vorm === 'leeg') {
-			return view('profiel.kaartje', ['profiel' => $this])->getHtml();
+			$twig = ContainerFacade::getContainer()->get('twig');
+
+			return $twig->render('profiel/kaartje.html.twig', ['profiel' => $this]);
 		}
 
 		return $l . $naam . '</a>';
@@ -866,22 +871,32 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		return LidStatus::isOudlidLike($this->status);
 	}
 
+	/**
+	 * @return Woonoord|null
+	 */
 	public function getWoonoord() {
+		/** @var Woonoord[] $woonoorden */
 		$woonoorden = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($woonoorden)) {
-			return false;
+			return null;
 		}
 		return reset($woonoorden);
 	}
 
+	/**
+	 * @return Verticale|null
+	 */
 	public function getVerticale() {
 		return ContainerFacade::getContainer()->get(VerticalenRepository::class)->get($this->verticale);
 	}
 
+	/**
+	 * @return Kring|null
+	 */
 	public function getKring() {
 		$kringen = ContainerFacade::getContainer()->get(KringenRepository::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($kringen)) {
-			return false;
+			return null;
 		}
 		return reset($kringen);
 	}
@@ -939,5 +954,13 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 
 	function getWeergave(): string {
 		return $this->achternaam ? $this->getNaam('volledig') : '';
+	}
+
+	public function getChar() {
+		return LidStatus::from($this->status)->getChar();
+	}
+
+	public function getLidStatusDescription() {
+		return LidStatus::from($this->status)->getDescription();
 	}
 }

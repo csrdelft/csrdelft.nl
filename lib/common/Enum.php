@@ -93,6 +93,14 @@ abstract class Enum {
 	}
 
 	public function __call($name, $arguments) {
+		if (startsWith($name, 'is')) {
+			$enumName = substr($name, 2);
+
+			if (isset(self::getConstants()[$enumName])) {
+				return static::from(self::getConstants()[$enumName]) == $this;
+			}
+		}
+
 		return static::__callStatic($name, $arguments);
 	}
 

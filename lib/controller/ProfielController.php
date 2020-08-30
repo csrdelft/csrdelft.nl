@@ -41,7 +41,6 @@ use CsrDelft\view\profiel\ExternProfielForm;
 use CsrDelft\view\profiel\InschrijfLinkForm;
 use CsrDelft\view\profiel\ProfielForm;
 use CsrDelft\view\renderer\TemplateView;
-use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
@@ -107,7 +106,6 @@ class ProfielController extends AbstractController {
 	}
 
 	/**
-	 * @param Profiel $profiel
 	 * @param BesturenRepository $besturenRepository
 	 * @param CommissiesRepository $commissiesRepository
 	 * @param WerkgroepenRepository $werkgroepenRepository
@@ -127,9 +125,9 @@ class ProfielController extends AbstractController {
 	 * @param FotoTagsRepository $fotoTagsRepository
 	 * @param CorveeKwalificatiesRepository $corveeKwalificatiesRepository
 	 * @param MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
-	 * @return TemplateView
+	 * @param Profiel|null $profiel
+	 * @return Response
 	 * @throws Throwable
-	 *
 	 * @Route("/profiel/{uid}", methods={"GET"}, defaults={"uid": null}, requirements={"uid": ".{4}"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
@@ -167,7 +165,7 @@ class ProfielController extends AbstractController {
 			}
 		}
 
-		return view('profiel.profiel', [
+		return $this->render('profiel/profiel.html.twig', [
 			'profiel' => $profiel,
 			'besturen' => $besturenRepository->getGroepenVoorLid($profiel->uid),
 			'commissies' => $commissiesRepository->getGroepenVoorLid($profiel->uid),
@@ -488,14 +486,14 @@ class ProfielController extends AbstractController {
 
 	/**
 	 * @param null $uid
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/profiel/{uid}/stamboom", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function stamboom($uid = null) {
 		$profiel = $uid ? $this->profielRepository->get($uid) : $this->getProfiel();
 
-		return view('profiel.stamboom', [
+		return $this->render('profiel/stamboom.html.twig', [
 			'profiel' => $profiel,
 		]);
 	}
@@ -545,17 +543,19 @@ class ProfielController extends AbstractController {
 			throw new NotFoundHttpException();
 		}
 
-		return $this->render('profiel/vcard.ical.twig', ['profiel' => $profiel]);
+		$response = new Response(null, 200, ['Content-Type' => 'text/x-vcard']);
+
+		return $this->render('profiel/vcard.ical.twig', ['profiel' => $profiel], $response);
 	}
 
 	/**
 	 * @param $uid
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/profiel/{uid}/kaartje", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
 	public function kaartje($uid) {
-		return view('profiel.kaartje', ['profiel' => $this->profielRepository->get($uid)]);
+		return $this->render('profiel/kaartje.html.twig', ['profiel' => $this->profielRepository->get($uid)]);
 	}
 
 	public function test() {
