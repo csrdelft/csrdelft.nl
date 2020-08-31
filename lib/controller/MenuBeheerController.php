@@ -30,7 +30,7 @@ class MenuBeheerController extends AbstractController {
 
 	/**
 	 * @param string $menu_name
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/menubeheer/beheer/{menu_name}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -42,7 +42,7 @@ class MenuBeheerController extends AbstractController {
 		if (!$root || !$root->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
-		return view('menubeheer.tree', [
+		return $this->render('menubeheer/tree.html.twig', [
 			'root' => $root,
 			'menus' => $this->menuItemRepository->getMenuBeheerLijst(),
 		]);
