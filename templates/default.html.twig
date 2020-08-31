@@ -10,4 +10,10 @@
 
 {% block content %}{{ content.toString | raw }}{% endblock %}
 
-{% block modal %}{% if modal is defined %}{{ modal.toString | raw }}{% endif %}{% endblock %}
+{% block modal %}
+	{% if modal is defined %}
+		{{ modal.toString | raw }}
+	{% else %}
+		<div id="modal" tabindex="-1"></div>
+	{% endif %}
+{% endblock %}
