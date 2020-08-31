@@ -23,7 +23,6 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\response\IcalResponse;
-use CsrDelft\view\View;
 use DateInterval;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,12 +81,12 @@ class AgendaController extends AbstractController {
 	 * Maandoverzicht laten zien.
 	 * @param int $jaar
 	 * @param int $maand
-	 * @return View
+	 * @return Response
 	 * @Route(
 	 *   "/agenda/{jaar}/{maand}",
 	 *   methods={"GET"},
-	 *	 defaults={"jaar": null, "maand": null},
-	 *	 requirements={"jaar": "\d+", "maand": "\d+"}
+	 *   defaults={"jaar": null, "maand": null},
+	 *   requirements={"jaar": "\d+", "maand": "\d+"}
 	 * )
 	 * @Auth(P_AGENDA_READ)
 	 */
@@ -101,7 +100,7 @@ class AgendaController extends AbstractController {
 			$maand = date('n');
 		}
 
-		return view('agenda.maand', [
+		return $this->render('agenda/maand.html.twig', [
 			'maand' => $maand,
 			'jaar' => $jaar,
 			'creator' => LoginService::mag(P_AGENDA_ADD) || $this->getProfiel()->verticaleleider,
@@ -109,28 +108,28 @@ class AgendaController extends AbstractController {
 	}
 
 	/**
-	 * @return IcalResponse
+	 * @return Response
 	 * @Route("/agenda/ical/{private_auth_token}/csrdelft.ics", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function ical() {
-		return new IcalResponse(view('agenda.icalendar', [
+		return $this->render('agenda/icalendar.ical.twig', [
 			'items' => $this->agendaRepository->getICalendarItems(),
 			'published' => $this->icalDate(),
-		])->toString());
+		], new IcalResponse());
 	}
 
 	/**
 	 * @param $uuid
-	 * @return IcalResponse
-	 * @Route("/agenda/export/{uuid}.ics", methods={"GET"})
+	 * @return Response
+	 * @Route("/agenda/export/{uuid}.ics", methods={"GET"}, requirements={"uuid": ".+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function export($uuid) {
-		return new IcalResponse(view('agenda.icalendar', [
+		return $this->render('agenda/icalendar.ical.twig', [
 			'items' => [$this->getAgendaItemByUuid($uuid)],
 			'published' => $this->icalDate(),
-		])->toString());
+		], new IcalResponse());
 	}
 
 	/**
@@ -183,7 +182,7 @@ class AgendaController extends AbstractController {
 	 */
 	public function courant() {
 		$items = $this->agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + 2 weeks'), false, false);
-		return view('agenda.courant', ['items' => $items]);
+		return $this->render('agenda/courant.html.twig', ['items' => $items]);
 	}
 
 	/**
@@ -327,7 +326,7 @@ class AgendaController extends AbstractController {
 			default:
 				throw new CsrException('invalid UUID');
 		}
-		/** @var Agendeerbaar|false $item **/
+		/** @var Agendeerbaar|false $item * */
 		return $item;
 	}
 
@@ -364,7 +363,7 @@ class AgendaController extends AbstractController {
 
 			// Zet eindmoment naar dag erna als activiteit tot 23:59 duurt en allDay is
 			if ($event->isHeledag() && date('H:i', $event->getEindMoment()) === '23:59') {
-				$eind = date_create_immutable('@'. $event->getEindMoment())
+				$eind = date_create_immutable('@' . $event->getEindMoment())
 					->add(new DateInterval('P1D'))
 					->setTime(0, 0, 0)
 					->getTimestamp();
@@ -392,7 +391,7 @@ class AgendaController extends AbstractController {
 
 	/**
 	 * @param $uuid
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/agenda/details/{uuid}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -404,7 +403,7 @@ class AgendaController extends AbstractController {
 		}
 		$item = $this->getAgendaItemByUuid($uuid);
 
-		return view('agenda.details', [
+		return $this->render('agenda/details.html.twig', [
 			'item' => $item,
 			'verborgen' => $this->agendaVerbergenRepository->isVerborgen($item),
 		]);

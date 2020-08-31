@@ -58,7 +58,7 @@ abstract class Zijbalk {
 			if (count($items) > lid_instelling('zijbalk', 'agenda_max')) {
 				$items = array_slice($items, 0, lid_instelling('zijbalk', 'agenda_max'));
 			}
-			$zijbalk[] = view('agenda.zijbalk', ['items' => $items])->toString();
+			$zijbalk[] = $twig->render('agenda/zijbalk.html.twig', ['items' => $items]);
 		}
 		$forumDradenRepository = ContainerFacade::getContainer()->get(ForumDradenRepository::class);
 		$forumPostsRepository = ContainerFacade::getContainer()->get(ForumPostsRepository::class);

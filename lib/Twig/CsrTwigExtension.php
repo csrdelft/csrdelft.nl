@@ -4,6 +4,11 @@
 namespace CsrDelft\Twig {
 
 
+	use CsrDelft\entity\agenda\AgendaItem;
+	use CsrDelft\entity\agenda\Agendeerbaar;
+	use CsrDelft\entity\corvee\CorveeTaak;
+	use CsrDelft\entity\groepen\AbstractGroep;
+	use CsrDelft\entity\maalcie\Maaltijd;
 	use CsrDelft\entity\MenuItem;
 	use CsrDelft\entity\profiel\Profiel;
 	use CsrDelft\repository\groepen\LichtingenRepository;
@@ -155,8 +160,22 @@ namespace CsrDelft\Twig {
 		}
 
 		public function getTests() {
+			/**
+			 * @param Agendeerbaar $value
+			 * @return bool
+			 */
+			/**
+			 * @param Profiel $value
+			 * @return bool
+			 */
 			return [
 				new TwigTest('numeric', function ($value) { return is_numeric($value); }),
+				new TwigTest('profiel', function ($value) { return $value instanceof Profiel; }),
+				new TwigTest('corveetaak', function ($value) { return $value instanceof CorveeTaak; }),
+				new TwigTest('maaltijd', function ($value) { return $value instanceof Maaltijd; }),
+				new TwigTest('agendeerbaar', function ($value) { return $value instanceof Agendeerbaar; }),
+				new TwigTest('abstractgroep', function ($value) { return $value instanceof AbstractGroep; }),
+				new TwigTest('agendaitem', function ($value) { return $value instanceof AgendaItem; }),
 			];
 		}
 

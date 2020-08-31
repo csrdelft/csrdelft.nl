@@ -11,10 +11,10 @@ class AutoEscapeService {
 	const STRATEGY_XML = 'xml';
 
 	public function guess($name) {
-		if ($name == '.ical.twig') {
+		if (endsWith($name, '.ical.twig')) {
 			return self::STRATEGY_ICAL;
 		}
-		if ($name == '.xml.twig') {
+		if (endsWith($name, '.xml.twig')) {
 			return self::STRATEGY_XML;
 		}
 
