@@ -303,7 +303,7 @@
 					<dd>
 						<ul class="list-unstyled">
 							{% for bestuur in besturen %}
-								<li><a href="{{ bestuur.url }}">{{ bestuur.naam }}</a></li>
+								<li><a href="{{ bestuur.url }}">{{ bestuur.naam | raw }}</a></li>
 							{% endfor %}
 						</ul>
 					</dd>
@@ -313,7 +313,7 @@
 					<dd>
 						<ul class="list-unstyled">
 							{% for commissie in commissies %}
-								<li><a href="{{ commissie.url }}">{{ commissie.naam }}</a></li>
+								<li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
 							{% endfor %}
 						</ul>
 					</dd>
@@ -333,7 +333,7 @@
 					<dd>
 						<ul class="list-unstyled">
 							{% for groep in groepen %}
-								<li><a href="{{ groep.url }}">{{ groep.naam }}</a></li>
+								<li><a href="{{ groep.url }}">{{ groep.naam | raw }}</a></li>
 							{% endfor %}
 						</ul>
 					</dd>
@@ -345,7 +345,7 @@
 					<dd>
 						<ul class="list-unstyled">
 							{% for werkgroep in werkgroepen %}
-								<li><a href="{{ werkgroep.url }}">{{ werkgroep.naam }}</a></li>
+								<li><a href="{{ werkgroep.url }}">{{ werkgroep.naam | raw }}</a></li>
 							{% endfor %}
 						</ul>
 					</dd>
@@ -364,7 +364,7 @@
 						<dd>
 							<ul class="list-unstyled">
 								{% for ketzer in ketzers %}
-									<li><a href="{{ ketzer.url }}">{{ ketzer.naam }}</a></li>
+									<li><a href="{{ ketzer.url }}">{{ ketzer.naam | raw }}</a></li>
 								{% endfor %}
 							</ul>
 						</dd>
@@ -376,7 +376,7 @@
 						<dd>
 							<ul class="list-unstyled">
 								{% for activiteit in activiteiten %}
-									<li><a href="{{ activiteit.url }}">{{ activiteit.naam }}</a></li>
+									<li><a href="{{ activiteit.url }}">{{ activiteit.naam | raw }}</a></li>
 								{% endfor %}
 							</ul>
 						</dd>
