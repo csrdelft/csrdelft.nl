@@ -20,7 +20,18 @@ class BladeRenderer implements Renderer {
 		$this->data = $variables;
 
 		// Specifieke code voor development / Travis
-		if (MODE !== 'TRAVIS') {
+		if (isCi()) {
+			// In productie wordt de stylesheet in de html gehangen,
+			// in andere modi wordt een aanroep naar asset gedaan.
+			$this->bladeOne->directive('stylesheet', function ($expr) {
+				$asset = trim(trim($expr, "()"), "\"'");
+				return css_asset($asset);
+			});
+			$this->bladeOne->directive('script', function ($expr) {
+				$asset = trim(trim($expr, "()"), "\"'");
+				return js_asset($asset);
+			});
+		} else {
 			$this->bladeOne->setInjectResolver(function ($className) {
 				try {
 					return ContainerFacade::getContainer()->get($className);
@@ -40,17 +51,6 @@ class BladeRenderer implements Renderer {
 			});
 			$this->bladeOne->directive('script', function ($expr) {
 				return '<?php echo js_asset' . $expr . '; ?>';
-			});
-		} else {
-			// In productie wordt de stylesheet in de html gehangen,
-			// in andere modi wordt een aanroep naar asset gedaan.
-			$this->bladeOne->directive('stylesheet', function ($expr) {
-				$asset = trim(trim($expr, "()"), "\"'");
-				return css_asset($asset);
-			});
-			$this->bladeOne->directive('script', function ($expr) {
-				$asset = trim(trim($expr, "()"), "\"'");
-				return js_asset($asset);
 			});
 		}
 

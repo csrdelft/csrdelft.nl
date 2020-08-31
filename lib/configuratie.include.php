@@ -22,17 +22,8 @@ use Symfony\Component\HttpFoundation\Request;
 // Zet omgeving klaar.
 require __DIR__ . '/../config/bootstrap.php';
 
-// default is website mode
-if (getenv('CI')) {
-	define('MODE', 'TRAVIS');
-} elseif (php_sapi_name() === 'cli') {
-	define('MODE', 'CLI');
-} else {
-	define('MODE', 'WEB');
-}
-
 // Registreer foutmelding handlers
-if (MODE != 'TRAVIS' && MODE != 'CLI') {
+if (!isCi() && !isCli()) {
 	if (DEBUG) {
 		register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
 		umask(0000);
@@ -101,7 +92,7 @@ ContainerFacade::init($container);
 
 // Use HTTP Strict Transport Security to force client to use secure connections only
 if (FORCE_HTTPS) {
-	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && MODE !== 'CLI' && MODE !== 'TRAVIS') {
+	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && !isCi() && !isCli()) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
@@ -118,44 +109,34 @@ if (FORCE_HTTPS) {
 	}
 }
 
-// Router
-switch (MODE) {
-	case 'TRAVIS':
-		if (isSyrinx()) die("Syrinx is geen Travis!");
-		break;
-	case 'CLI':
-		break;
+if (isCi() && isSyrinx()) die("Syrinx is geen Travis!");
 
-	case 'WEB':
-		// Terugvinden van temp upload files
-		ini_set('upload_tmp_dir', TMP_PATH);
+if (!isCli()) {
+	// Terugvinden van temp upload files
+	ini_set('upload_tmp_dir', TMP_PATH);
 
-		// Sessie configureren
-		ini_set('session.name', 'CSRSESSID');
-		ini_set('session.save_path', SESSION_PATH);
-		ini_set('session.hash_function', 'sha512');
-		ini_set('session.cache_limiter', 'nocache');
-		ini_set('session.use_trans_sid', 0);
-		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		ini_set('session.gc_maxlifetime', (int)instelling('beveiliging', 'session_lifetime_seconds'));
-		ini_set('session.use_strict_mode', true);
-		ini_set('session.use_cookies', true);
-		ini_set('session.use_only_cookies', true);
-		ini_set('session.cookie_lifetime', 0);
-		ini_set('session.cookie_path', '/');
-		ini_set('session.cookie_domain', CSR_DOMAIN);
-		ini_set('session.cookie_secure', FORCE_HTTPS);
-		ini_set('session.cookie_httponly', true);
-		ini_set('log_errors_max_len', 0);
-		ini_set('xdebug.max_nesting_level', 2000);
-		ini_set('intl.default_locale', 'nl');
-		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	// Sessie configureren
+	ini_set('session.name', 'CSRSESSID');
+	ini_set('session.save_path', SESSION_PATH);
+	ini_set('session.hash_function', 'sha512');
+	ini_set('session.cache_limiter', 'nocache');
+	ini_set('session.use_trans_sid', 0);
+	// Sync lifetime of FS based PHP session with DB based C.S.R. session
+	ini_set('session.gc_maxlifetime', (int)instelling('beveiliging', 'session_lifetime_seconds'));
+	ini_set('session.use_strict_mode', true);
+	ini_set('session.use_cookies', true);
+	ini_set('session.use_only_cookies', true);
+	ini_set('session.cookie_lifetime', 0);
+	ini_set('session.cookie_path', '/');
+	ini_set('session.cookie_domain', CSR_DOMAIN);
+	ini_set('session.cookie_secure', FORCE_HTTPS);
+	ini_set('session.cookie_httponly', true);
+	ini_set('log_errors_max_len', 0);
+	ini_set('xdebug.max_nesting_level', 2000);
+	ini_set('intl.default_locale', 'nl');
+	session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
-		$container->get(LogRepository::class)->log();
-		break;
-
-	default:
-		die('configuratie.include.php unsupported MODE: ' . MODE);
+	$container->get(LogRepository::class)->log();
 }
 
 return $kernel;

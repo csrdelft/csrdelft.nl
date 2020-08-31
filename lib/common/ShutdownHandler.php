@@ -56,7 +56,7 @@ final class ShutdownHandler {
 		$debug['trace'] = $exception->getTrace();
 		$debug['POST'] = $_POST;
 		$debug['GET'] = $_GET;
-		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
+		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : null;
 		$debug['SERVER'] = $_SERVER;
 		unset($debug['SERVER']['HTTP_COOKIE']); // Voorkom dat sessie en remember cookies gemaild worden
 		unset($debug['SERVER']['DATABASE_URL']);
@@ -193,7 +193,7 @@ MD
 			$debug['trace'] = debug_backtrace();
 			$debug['POST'] = $_POST;
 			$debug['GET'] = $_GET;
-			$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
+			$debug['SESSION'] = isset($_SESSION) ? $_SESSION : null;
 			$debug['SERVER'] = $_SERVER;
 			unset($debug['SERVER']['HTTP_COOKIE']); // Voorkom dat sessie en remember cookies gemaild worden
 			return $debug;

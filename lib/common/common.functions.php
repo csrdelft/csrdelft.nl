@@ -318,6 +318,14 @@ function isSyrinx() {
 	return 'syrinx' === php_uname('n');
 }
 
+function isCli() {
+	return php_sapi_name() == 'cli';
+}
+
+function isCi() {
+	return getenv('CI');
+}
+
 /**
  * @param int $timestamp optional
  *
