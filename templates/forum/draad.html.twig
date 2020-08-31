@@ -32,13 +32,13 @@
 				{% if draad.magMeldingKrijgen %}
 					<div class="btn-group mr-2">
 						<a href="{{ url('csrdelft_forum_meldingsniveau', {draad_id: draad.draad_id, niveau: 'nooit'}) }}"
-							 class="btn btn-light post ReloadPage melding-nooit {% if draad.meldingsNiveau.NOOIT %}active{% endif %}"
+							 class="btn btn-light post ReloadPage melding-nooit {% if draad.meldingsNiveau.isNOOIT %}active{% endif %}"
 							 title="Nooit meldingen ontvangen">{{ icon('email_delete', 'email_delete') }}</a>
 						<a href="{{ url('csrdelft_forum_meldingsniveau', {draad_id: draad.draad_id, niveau: 'vermelding'}) }}"
-							 class="btn btn-light post ReloadPage melding-vermelding {% if draad.meldingsNiveau.VERMELDING %}active{% endif %}"
+							 class="btn btn-light post ReloadPage melding-vermelding {% if draad.meldingsNiveau.isVERMELDING %}active{% endif %}"
 							 title="Melding ontvangen als ik genoemd word">{{ icon('email_error', 'email_error') }}</a>
 						<a href="{{ url('csrdelft_forum_meldingsniveau', {draad_id: draad.draad_id, niveau: 'altijd'}) }}"
-							 class="btn btn-light post ReloadPage melding-altijd {% if draad.meldingsNiveau.ALTIJD %}active{% endif %}"
+							 class="btn btn-light post ReloadPage melding-altijd {% if draad.meldingsNiveau.isALTIJD %}active{% endif %}"
 							 title="Melding ontvangen bij elk nieuw bericht">{{ icon('email_add', 'email_add') }}</a>
 					</div>
 				{% endif %}
