@@ -50,11 +50,6 @@ setlocale(LC_ALL, 'nl_NL');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
 
-if (FORCE_HTTPS) {
-	// Hack om Response::isSecure() true te laten returnen als we https doen
-	$_SERVER['HTTPS'] = 'on';
-}
-
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 } else {
