@@ -143,7 +143,7 @@ namespace CsrDelft\Twig {
 				new TwigFilter('datetime_format', 'twig_datetime_format'),
 				new TwigFilter('datetime_format_long', 'twig_datetime_format_long'),
 				new TwigFilter('rfc2822', 'twig_rfc2822', ['is_safe' => ['html']]),
-				new TwigFilter('zijbalk_date_format', 'twig_zijbalk_date_format'),
+				new TwigFilter('zijbalk_date_format', 'twig_zijbalk_date_format', ['is_safe' => ['html']]),
 				new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
 				new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
 				new TwigFilter('date_create', 'twig_date_create'),
