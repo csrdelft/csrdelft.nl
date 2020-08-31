@@ -223,7 +223,8 @@ class AgendaRepository extends AbstractRepository {
 	 * @return mixed|null
 	 */
 	public function zoekWoordAgenda($woord) {
-		foreach ($this->getItemsByDay(date_create_immutable()) as $item) {
+		$beginDag = date_create_immutable()->setTime(0, 0, 0);
+		foreach ($this->getItemsByDay($beginDag) as $item) {
 			if (stristr($item->getTitel(), $woord) !== false OR stristr($item->getBeschrijving(), $woord) !== false) {
 				return $item;
 			}
