@@ -137,7 +137,7 @@
 			<font face="verdana" size="-1">
 				{% for bericht in berichten %}
 					<h4><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</h4>
-					<div class="p">{{ bericht.titel | bbcode("mail") }}</div>
+					<div class="p">{{ bericht.bericht | bbcode("mail") }}</div>
 				{% endfor %}
 			</font>
 		</td>
