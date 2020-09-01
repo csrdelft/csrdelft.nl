@@ -13,7 +13,7 @@
 		{% if is_granted('IS_IMPERSONATOR') %}
 			<li>
 				<a href="?_switch_user=_exit" class="dropdown-item error"
-					 title="Switch user actie beeindingen">SU {{ profiel.getNaam('civitas') }}</a>
+					 title="Switch user actie beeindingen">SU {{ get_profiel(app.token.originalToken.user.uid).naam('civitas') }} </a>
 			</li>
 		{% endif %}
 		<li>
