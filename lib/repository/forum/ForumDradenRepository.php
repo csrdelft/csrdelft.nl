@@ -58,7 +58,8 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	private $pagina;
 	/**
 	 * Aantal draden per pagina
-	 * @var int
+	 * Gebruik @see ForumDradenRepository::getAantalPerPagina()
+	 * @var int|null
 	 */
 	private $per_pagina;
 	/**
@@ -106,7 +107,6 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	) {
 		parent::__construct($registry, ForumDraad::class);
 		$this->pagina = 1;
-		$this->per_pagina = (int)lid_instelling('forum', 'draden_per_pagina');
 		$this->aantal_paginas = array();
 		$this->aantal_plakkerig = null;
 
@@ -131,6 +131,9 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	}
 
 	public function getAantalPerPagina() {
+		if (!$this->per_pagina) {
+			$this->per_pagina = (int)lid_instelling('forum', 'draden_per_pagina');
+		}
 		return $this->per_pagina;
 	}
 
@@ -164,7 +167,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 
 			$aantal = $qb->getQuery()->getSingleScalarResult();
 
-			$this->aantal_paginas[$forum_id] = (int)ceil($aantal / $this->per_pagina);
+			$this->aantal_paginas[$forum_id] = (int)ceil($aantal / $this->getAantalPerPagina());
 		}
 		return max(1, $this->aantal_paginas[$forum_id]);
 	}
@@ -198,7 +201,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 		$qb->setParameter('laatst_gewijzigd', $draad->laatst_gewijzigd);
 
 		$count = $this->aantal_plakkerig + $qb->getQuery()->getSingleScalarResult();
-		return (int)ceil($count / $this->per_pagina);
+		return (int)ceil($count / $this->getAantalPerPagina());
 	}
 
 	public function zoeken(ForumZoeken $forumZoeken) {
@@ -251,8 +254,8 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 
 		$this->filterLaatstGewijzigdExtern($qb);
 
-		$qb->setFirstResult(($this->pagina - 1) * $this->per_pagina);
-		$qb->setMaxResults($this->per_pagina);
+		$qb->setFirstResult(($this->pagina - 1) * $this->getAantalPerPagina());
+		$qb->setMaxResults($this->getAantalPerPagina());
 
 		$paginator = new Paginator($qb);
 
@@ -273,7 +276,7 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 	 */
 	public function getRecenteForumDraden($aantal, $belangrijk, $rss = false, $offset = 0) {
 		if (!is_int($aantal)) {
-			$aantal = $this->per_pagina;
+			$aantal = $this->getAantalPerPagina();
 			$pagina = $this->pagina;
 			$offset = ($pagina - 1) * $aantal;
 		}

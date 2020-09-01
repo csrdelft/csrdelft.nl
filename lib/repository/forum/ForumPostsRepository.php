@@ -35,7 +35,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	private $pagina;
 	/**
 	 * Aantal posts per pagina
-	 * @var int
+	 * Waarschuwing, is lazy, gebruik @see ForumPostsRepository::getAantalPerPagina()
+	 * @var int|null
 	 */
 	private $per_pagina;
 	/**
@@ -59,7 +60,6 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	) {
 		parent::__construct($registry, ForumPost::class);
 		$this->pagina = 1;
-		$this->per_pagina = (int)lid_instelling('forum', 'posts_per_pagina');
 		$this->aantal_paginas = array();
 		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
 	}
@@ -94,6 +94,9 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	}
 
 	public function getAantalPerPagina() {
+		if (!$this->per_pagina) {
+			$this->per_pagina = (int)lid_instelling('forum', 'posts_per_pagina');
+		}
 		return $this->per_pagina;
 	}
 
@@ -118,7 +121,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 			} else {
 				$this->per_pagina = (int)lid_instelling('forum', 'posts_per_pagina');
 			}
-			$this->aantal_paginas[$draad_id] = (int)ceil($this->count(['draad_id' => $draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false]) / $this->per_pagina);
+			$this->aantal_paginas[$draad_id] = (int)ceil($this->count(['draad_id' => $draad_id, 'wacht_goedkeuring' => false, 'verwijderd' => false]) / $this->getAantalPerPagina());
 		}
 		return max(1, $this->aantal_paginas[$draad_id]);
 	}
@@ -143,7 +146,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 			->setParameter('draad_id', $post->draad_id)
 			->setParameter('post_id', $post->post_id)
 			->getQuery()->getSingleScalarResult();
-		return (int)ceil($count / $this->per_pagina);
+		return (int)ceil($count / $this->getAantalPerPagina());
 	}
 
 	public function setPaginaVoorLaatstGelezen(ForumDraadGelezen $gelezen) {
@@ -154,7 +157,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 				->setParameter('datum_tijd', $gelezen->datum_tijd)
 				->getQuery()->getSingleScalarResult();
 		$this->getAantalPaginas($gelezen->draad_id); // set per_pagina
-		$this->setHuidigePagina((int)ceil($count / $this->per_pagina), $gelezen->draad_id);
+		$this->setHuidigePagina((int)ceil($count / $this->getAantalPerPagina()), $gelezen->draad_id);
 	}
 
 	public function setHuidigePagina($pagina, $draad_id) {
@@ -232,8 +235,8 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 			->where('fp.draad_id = :draad_id and fp.verwijderd = false')
 			->setParameter('draad_id', $draad->draad_id)
 			->orderBy('fp.datum_tijd', 'ASC')
-			->setMaxResults($this->per_pagina)
-			->setFirstResult(($this->pagina - 1) * $this->per_pagina);
+			->setMaxResults($this->getAantalPerPagina())
+			->setFirstResult(($this->pagina - 1) * $this->getAantalPerPagina());
 
 		if (!LoginService::mag(P_FORUM_MOD)) {
 			$qb->andWhere('fp.wacht_goedkeuring = false');
