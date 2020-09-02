@@ -102,3 +102,7 @@ services:
       - '%env(SPONSOR_SL_HOST)%'
       - '%env(SPONSOR_CLUBID)%'
       - '%env(SPONSOR_USERAGENT)%'
+
+  CsrDelft\command\WelkomCommand:
+    arguments:
+      - '%env(EMAIL_PUBCIE)%'

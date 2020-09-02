@@ -115,7 +115,7 @@ class WachtwoordController extends AbstractController {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/wachtwoord/vergeten", methods={"GET", "POST"})
-	 * @Route("/wachtwoord/aanvragen", methods={"GET", "POST"})
+	 * @Route("/wachtwoord/aanvragen", methods={"GET", "POST"}, name="wachtwoord_aanvragen")
 	 * @Auth(P_PUBLIC)
 	 */
 	public function vergeten() {
