@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class PinTransactiesDownloadenCommand extends Command {
+	protected static $defaultName = 'fiscaat:pintransacties:download';
 	/**
 	 * @var PinTransactieRepository
 	 */
@@ -59,7 +60,6 @@ class PinTransactiesDownloadenCommand extends Command {
 
 	protected function configure() {
 		$this
-			->setName('fiscaat:pintransacties:download')
 			->setDescription('Download pintransacties van aangegeven periode en probeer te matchen met bestellingen.')
 			->addArgument('vanaf', InputArgument::OPTIONAL, 'Vanaf welke datum wil je downloaden (jjjj-mm-dd)')
 			->addArgument('tot', InputArgument::OPTIONAL, 'T/m welke datum wil je downloaden (jjjj-mm-dd)');

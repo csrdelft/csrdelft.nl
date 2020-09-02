@@ -789,7 +789,13 @@ function curl_request($url, $options = []) {
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt_array($curl, $options);
-	return curl_exec($curl);
+	$resp = curl_exec($curl);
+
+	if ($resp == false) {
+		throw new Exception(curl_error($curl));
+	}
+
+	return $resp;
 }
 
 /**

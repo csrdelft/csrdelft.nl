@@ -96,3 +96,9 @@ services:
 
   CsrDelft\Twig\Configurator:
     decorates: 'twig.configurator.environment'
+
+  CsrDelft\command\SponsorAffiliateDownloadCommand:
+    arguments:
+      - '%env(SPONSOR_SL_HOST)%'
+      - '%env(SPONSOR_CLUBID)%'
+      - '%env(SPONSOR_USERAGENT)%'

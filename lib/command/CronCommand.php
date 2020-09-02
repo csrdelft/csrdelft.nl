@@ -16,7 +16,8 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CsrCronCommand extends Command {
+class CronCommand extends Command {
+	protected static $defaultName = 'stek:cron';
 	/**
 	 * @var DebugLogRepository
 	 */
@@ -56,7 +57,6 @@ class CsrCronCommand extends Command {
 
 	protected function configure() {
 		$this
-			->setName('stek:cron')
 			->setDescription('Voer alle periodieke taken uit');
 	}
 
@@ -143,8 +143,9 @@ class CsrCronCommand extends Command {
 			$this->debugLogRepository->log('cron.php', 'forumCategorieRepository->opschonen', array(), $e);
 		}
 
-		$pinTransactiesDownloadenCommand = $this->getApplication()->find('fiscaat:pintransacties:download');
-		$ret = $pinTransactiesDownloadenCommand->run(new ArrayInput([ "--no-interaction" => true ]), $output);
+		$ret = $this->getApplication()
+			->find(PinTransactiesDownloadenCommand::getDefaultName())
+			->run(new ArrayInput(["--no-interaction" => true]), $output);
 
 		if ($ret !== 0) {
 			$output->writeln($ret);
@@ -152,7 +153,7 @@ class CsrCronCommand extends Command {
 		}
 
 		$finish = microtime(true) - $start;
-		$output->writeln(getDateTime() . ' Finished in ' . (int) $finish . ' seconds', OutputInterface::VERBOSITY_VERBOSE);
+		$output->writeln(getDateTime() . ' Finished in ' . (int)$finish . ' seconds', OutputInterface::VERBOSITY_VERBOSE);
 
 		return Command::SUCCESS;
 	}
