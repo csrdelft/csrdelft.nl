@@ -50,14 +50,14 @@ class MenuItemRepository extends AbstractRepository {
 			try {
 				$root = $this->getMenuRoot($naam);
 
-				// Voorkom dat extendedTree updates doorvoert
-				$this->_em->clear(MenuItem::class);
-
 				if ($root == null) {
 					return null;
 				}
 
 				$this->getExtendedTree($root);
+
+				// Voorkom dat extendedTree updates doorvoert
+				$this->_em->clear(MenuItem::class);
 
 				return $root;
 			} catch (EntityNotFoundException $ex) {
