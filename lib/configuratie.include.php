@@ -107,22 +107,15 @@ if (FORCE_HTTPS) {
 if (isCi() && isSyrinx()) die("Syrinx is geen Travis!");
 
 if (!isCli()) {
-	// Terugvinden van temp upload files
-	ini_set('upload_tmp_dir', TMP_PATH);
-
 	// Sessie configureren
 	ini_set('session.name', 'CSRSESSID');
 	ini_set('session.save_path', SESSION_PATH);
-	ini_set('session.hash_function', 'sha512');
-	ini_set('session.cache_limiter', 'nocache');
 	ini_set('session.use_trans_sid', 0);
 	// Sync lifetime of FS based PHP session with DB based C.S.R. session
 	ini_set('session.gc_maxlifetime', (int)instelling('beveiliging', 'session_lifetime_seconds'));
 	ini_set('session.use_strict_mode', true);
 	ini_set('session.use_cookies', true);
 	ini_set('session.use_only_cookies', true);
-	ini_set('session.cookie_lifetime', 0);
-	ini_set('session.cookie_path', '/');
 	ini_set('session.cookie_domain', CSR_DOMAIN);
 	ini_set('session.cookie_secure', FORCE_HTTPS);
 	ini_set('session.cookie_httponly', true);
