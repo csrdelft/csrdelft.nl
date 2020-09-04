@@ -666,7 +666,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			throw $this->createAccessDeniedException();
 		}
 
-		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken');
+		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken/' . $lid->uid);
 
 		if ($form->validate()) {
 			$this->changeLogRepository->logChanges($form->diff());
