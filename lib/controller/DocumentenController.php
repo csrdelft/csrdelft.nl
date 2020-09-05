@@ -12,11 +12,11 @@ use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
-use CsrDelft\view\renderer\TemplateView;
 use Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -40,7 +40,7 @@ class DocumentenController extends AbstractController {
 	 * @Auth(P_DOCS_READ)
 	 */
 	public function recenttonen() {
-		return view('documenten.documenten', ['categorieen' => $this->documentCategorieRepository->findAll()]);
+		return $this->render('documenten/documenten.html.twig', ['categorien' => $this->documentCategorieRepository->findAll()]);
 	}
 
 	/**
@@ -110,7 +110,7 @@ class DocumentenController extends AbstractController {
 
 	/**
 	 * @param DocumentCategorie $categorie
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/documenten/categorie/{id}", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
@@ -118,13 +118,13 @@ class DocumentenController extends AbstractController {
 		if (!$categorie->magBekijken()) {
 			throw $this->createAccessDeniedException('Mag deze categorie niet bekijken');
 		} else {
-			return view('documenten.categorie', ['categorie' => $categorie]);
+			return $this->render('documenten/categorie.html.twig', ['categorie' => $categorie]);
 		}
 	}
 
 	/**
 	 * @param Document $document
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/documenten/bewerken/{id}", methods={"GET","POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
@@ -145,7 +145,7 @@ class DocumentenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/documenten/toevoegen", methods={"GET","POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */

@@ -156,6 +156,7 @@ namespace CsrDelft\Twig {
 				new TwigFilter('format_bedrag', 'format_bedrag'),
 				new TwigFilter('truncate', 'truncate'),
 				new TwigFilter('date_format_intl', 'date_format_intl'),
+				new TwigFilter('format_filesize', 'format_filesize'),
 			];
 		}
 
