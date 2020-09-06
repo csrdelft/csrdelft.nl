@@ -1,9 +1,8 @@
 <?php
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\repository\ProfielRepository;
 use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\DriverManager;
 
 class Barsysteem {
 
@@ -13,8 +12,12 @@ class Barsysteem {
 	var $db;
 	private $beheer;
 	private $csrfToken;
+
 	function __construct() {
-		$this->db = ContainerFacade::getContainer()->get('doctrine.dbal.default_connection')->getWrappedConnection();
+		$this->db = DriverManager::getConnection([
+			'url' => $_ENV['DATABASE_URL'],
+			'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"]
+		])->getWrappedConnection();
 	}
 
 	function isLoggedIn() {
@@ -49,17 +52,31 @@ class Barsysteem {
 		return $token != null && $this->getCsrfToken() === $token;
 	}
 
+	function getProfiel($uid) {
+		$q = $this->db->prepare(<<<SQL
+SELECT profielen.voornaam, profielen.voorletters, profielen.tussenvoegsel, profielen.achternaam, profielen.status, profielen.email, accounts.email as accountEmail
+FROM profielen LEFT JOIN accounts ON accounts.uid = profielen.uid
+WHERE profielen.uid = :uid
+SQL
+		);
+		$q->bindValue('uid', $uid);
+
+		$q->execute();
+
+		return $q->fetch(PDO::FETCH_ASSOC);
+	}
+
 	function getNaam($profiel) {
 
-		if (empty($profiel->voornaam)) {
-			$naam = $profiel->voorletters . ' ';
+		if (empty($profiel["voornaam"])) {
+			$naam = $profiel["voorletters"] . ' ';
 		} else {
-			$naam = $profiel->voornaam . ' ';
+			$naam = $profiel["voornaam"] . ' ';
 		}
-		if (!empty($profiel->tussenvoegsel)) {
-			$naam .= $profiel->tussenvoegsel . ' ';
+		if (!empty($profiel["tussenvoegsel"])) {
+			$naam .= $profiel["tussenvoegsel"] . ' ';
 		}
-		$naam .= $profiel->achternaam;
+		$naam .= $profiel["achternaam"];
 
 		return $naam;
 	}
@@ -78,10 +95,10 @@ SQL
 			$persoon["naam"] = $row["naam"];
 			$persoon["status"] = LidStatus::Nobody;
 			if ($row["uid"]) {
-				$profiel = ProfielRepository::get($row["uid"]);
+				$profiel = $this->getProfiel($row["uid"]);
 				if ($profiel) {
 					$persoon["naam"] = $this->getNaam($profiel);
-					$persoon["status"] = $profiel->status;
+					$persoon["status"] = $profiel["status"];
 				}
 			}
 			$persoon["socCieId"] = $row["uid"];
@@ -454,11 +471,13 @@ ORDER BY yearweek DESC
 		$q = $this->db->query("SELECT uid, saldo FROM civi_saldo WHERE deleted = 0 AND saldo < 0 AND uid NOT LIKE 'c%' ORDER BY saldo");
 		while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
+			$profiel = $this->getProfiel($r['uid']);
+
 			$result[] = array(
-				'naam' => $this->getNaam(ProfielRepository::get($r['uid'])),
-				'email' => ProfielRepository::get($r['uid'])->getPrimaryEmail(),
+				'naam' => $this->getNaam($profiel),
+				'email' => $profiel['accountEmail'] ?? $profiel['email'],// ?: "rood" ?? $profiel['accountEmail'],
 				'saldo' => $r['saldo'],
-				'status' => ProfielRepository::get($r['uid'])->status
+				'status' => $profiel['status'],
 			);
 		}
 
