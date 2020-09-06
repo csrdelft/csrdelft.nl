@@ -722,7 +722,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groep = $this->repository->get($id);
 
 		// Vind de groep uit deze familie met het laatste eind_moment
-		$ot_groep_statement = $this->repository->findOneBy(["familie" => $groep->familie, 'status' => 'ot'], ['eind_moment', 'DESC']);
+		$ot_groep_statement = $this->repository->findOneBy(["familie" => $groep->familie, 'status' => 'ot'], ['eind_moment' => 'DESC']);
 
 		if ($ot_groep_statement) {
 			throw new CsrGebruikerException('Geen o.t. groep gevonden');
