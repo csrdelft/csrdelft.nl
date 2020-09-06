@@ -30,8 +30,9 @@ export function domUpdate(this: HTMLElement | void, htmlString: string | null): 
 			return;
 		}
 
-		const target = document.querySelector<HTMLElement>(`#${id}`);
-		const targetParent = document.querySelector<HTMLElement>(`#${parentId}`)
+		// Probeer niet een lege id te laden.
+		const target = id ? document.querySelector<HTMLElement>(`#${id}`) : null
+		const targetParent = parentId ? document.querySelector<HTMLElement>(`#${parentId}`) : null
 
 		if (target) {
 			if (element.classList.contains('remove')) {
