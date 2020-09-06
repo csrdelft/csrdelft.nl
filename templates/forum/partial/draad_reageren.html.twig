@@ -1,5 +1,5 @@
 {% if app.user %}
-	<ul class="forum-reageren">
+	<ul id="forumReageren" class="forum-reageren">
 		{% for ract in reageren %}
 			<li class="reagerenLid" title="{{ get_profiel(react.uid).naam('user') }} is een reactie aan het schrijven">
 				{{ icon('comment_edit') }} {{ get_profiel(react.uid).naam('user') }}</li>
