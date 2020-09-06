@@ -16,9 +16,14 @@ try {
 	setInterval(async () => {
 		const pingValue = textarea.value !== textarea.getAttribute('origvalue');
 		if (pingValue || lastPing) {
-			const {data} = await axios.post(concept.dataset.url, {ping: pingValue})
-			domUpdate(data);
-			lastPing = pingValue;
+			try {
+				const {data} = await axios.post(concept.dataset.url, {ping: pingValue})
+				domUpdate(data);
+				lastPing = pingValue;
+			} catch (e) {
+				// Herlaad de pagina als dit niet lukt
+				window.location.reload()
+			}
 		}
 	}, 60000);
 	/*var autosave;
