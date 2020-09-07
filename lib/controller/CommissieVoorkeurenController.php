@@ -95,7 +95,7 @@ class CommissieVoorkeurenController extends AbstractController {
 
 			setMelding('Aanpassingen commissie opgeslagen', 1);
 		}
-		return $this->redirectToRoute('csrdelft_commissievoorkeuren_updatecommissie', ['commissieId' => $commissie->id]);
+		return $this->redirectToRoute('csrdelft_commissievoorkeuren_updatecommissie', ['id' => $commissie->id]);
 	}
 
 	/**
@@ -115,7 +115,7 @@ class CommissieVoorkeurenController extends AbstractController {
 			$manager->persist($model);
 			$manager->flush();
 
-			return $this->redirectToRoute('csrdelft_commissievoorkeuren_commissie', ['commissieId' => $model->id]);
+			return $this->redirectToRoute('csrdelft_commissievoorkeuren_commissie', ['id' => $model->id]);
 		}
 
 		return view('commissievoorkeuren.overzicht', [
