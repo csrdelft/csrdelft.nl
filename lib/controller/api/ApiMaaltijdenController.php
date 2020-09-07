@@ -26,7 +26,7 @@ class ApiMaaltijdenController extends AbstractController {
 
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
-			$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $_SESSION['_uid'], $_SESSION['_uid']);
+			$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $this->getProfiel(), $this->getProfiel());
 			return array('data' => $aanmelding->maaltijd);
 		} catch (Exception $e) {
 			throw $this->createAccessDeniedException($e->getMessage());
@@ -41,7 +41,7 @@ class ApiMaaltijdenController extends AbstractController {
 
 		try {
 			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
-			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $_SESSION['_uid']);
+			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $this->getProfiel());
 			return array('data' => $maaltijd);
 		} catch (Exception $e) {
 			throw $this->createAccessDeniedException($e->getMessage());

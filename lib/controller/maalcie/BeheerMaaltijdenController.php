@@ -7,6 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\MaaltijdAanmeldingDTO;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\entity\maalcie\RepetitieMaaltijdMaken;
 use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
@@ -53,7 +54,11 @@ class BeheerMaaltijdenController extends AbstractController {
 	 */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(MaaltijdenRepository $maaltijdenRepository, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+	public function __construct(
+		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
@@ -302,10 +307,10 @@ class BeheerMaaltijdenController extends AbstractController {
 		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
-		$form = new AanmeldingForm($maaltijd, true); // fetches POST values itself
+		$aanmelding = new MaaltijdAanmeldingDTO();
+		$form = new AanmeldingForm($aanmelding, true); // fetches POST values itself
 		if ($form->validate()) {
-			$values = $form->getValues();
-			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], $this->getUid(), $values['aantal_gasten'], true);
+			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $aanmelding->voor_lid, $this->getProfiel(), $aanmelding->aantal_gasten, true);
 			return $this->tableData([$maaltijd]);
 		} else {
 			return $form;
@@ -323,10 +328,10 @@ class BeheerMaaltijdenController extends AbstractController {
 		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
-		$form = new AanmeldingForm($maaltijd, false); // fetches POST values itself
+		$aanmelding = new MaaltijdAanmeldingDTO();
+		$form = new AanmeldingForm($aanmelding, false); // fetches POST values itself
 		if ($form->validate()) {
-			$values = $form->getValues();
-			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $values['voor_lid'], true);
+			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $aanmelding->voor_lid, true);
 			return $this->tableData([$maaltijd]);
 		} else {
 			return $form;
@@ -361,14 +366,14 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function POST_beoordelingen() {
-        $maaltijden = $this->maaltijdenRepository->getMaaltijdenHistorie();
-        if (!LoginService::mag(P_MAAL_MOD)) {
-        	// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
-					$maaltijden = array_filter($maaltijden, function ($maaltijd) {
-						return $maaltijd->magSluiten($this->getUid());
-					});
-				}
-        return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
+		$maaltijden = $this->maaltijdenRepository->getMaaltijdenHistorie();
+		if (!LoginService::mag(P_MAAL_MOD)) {
+			// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
+			$maaltijden = array_filter($maaltijden, function ($maaltijd) {
+				return $maaltijd->magSluiten($this->getUid());
+			});
+		}
+		return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 	}
 
 	// Repetitie-Maaltijden ############################################################

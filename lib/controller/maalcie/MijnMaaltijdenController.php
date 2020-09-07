@@ -142,7 +142,7 @@ class MijnMaaltijdenController extends AbstractController {
 	 */
 	public function aanmelden(Request $request, Maaltijd $maaltijd) {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
-		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $this->getUid(), $this->getUid());
+		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $this->getProfiel(), $this->getProfiel());
 		if ($request->getMethod() == 'POST') {
 			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
 				'maaltijd' => $aanmelding->maaltijd,
@@ -165,7 +165,7 @@ class MijnMaaltijdenController extends AbstractController {
 	 */
 	public function afmelden(Request $request, Maaltijd $maaltijd) {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
-		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $this->getUid());
+		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $this->getProfiel());
 		if ($request->getMethod() == 'POST') {
 			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
 				'maaltijd' => $maaltijd,
