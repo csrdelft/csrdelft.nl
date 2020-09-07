@@ -127,7 +127,7 @@ class CommissieVoorkeurenController extends AbstractController {
 
 	/**
 	 * @return TemplateView|RedirectResponse
-	 * @Route("/commissievoorkeuren/nieuwecommissie", methods={"POST"})
+	 * @Route("/commissievoorkeuren/nieuwecategorie", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
 	public function nieuwecategorie() {
