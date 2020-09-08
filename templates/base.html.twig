@@ -103,7 +103,7 @@
 							<ul class="list-unstyled text-small">
 								{% for subItem in item.children %}
 									{% if subItem.magBekijken %}
-										<li><a class="text-muted" href="{{ subItem.link }}">{{ subItem.tekst }}</a></li>
+										<li><a class="text-muted" href="{{ subItem.link }}">{{ subItem.tekst | raw }}</a></li>
 									{% endif %}
 								{% endfor %}
 							</ul>
