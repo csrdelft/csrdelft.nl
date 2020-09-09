@@ -5,9 +5,11 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\LDAP;
+use CsrDelft\controller\groepen\VerticalenController;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\SavedQueryRepository;
@@ -61,14 +63,19 @@ class ToolsController extends AbstractController {
 	 * @var ProfielService
 	 */
 	private $profielService;
+	/**
+	 * @var VerticalenRepository
+	 */
+	private $verticalenRepository;
 
-	public function __construct(AccountRepository $accountRepository, ProfielRepository $profielRepository, ProfielService $profielService, SuService $suService, LogRepository $logRepository, SavedQueryRepository $savedQueryRepository) {
+	public function __construct(AccountRepository $accountRepository, ProfielRepository $profielRepository, ProfielService $profielService, SuService $suService, LogRepository $logRepository, SavedQueryRepository $savedQueryRepository, VerticalenRepository $verticalenRepository) {
 		$this->savedQueryRepository = $savedQueryRepository;
 		$this->accountRepository = $accountRepository;
 		$this->profielRepository = $profielRepository;
 		$this->suService = $suService;
 		$this->logRepository = $logRepository;
 		$this->profielService = $profielService;
+		$this->verticalenRepository = $verticalenRepository;
 	}
 
 	/**
@@ -108,18 +115,18 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/tools/verticalelijsten", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
 	public function verticalelijsten() {
-		return view('tools.verticalelijst', [
+		return $this->render('tools/verticalelijst.html.twig', [
 			'verticalen' => array_reduce(
-				['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
-				function ($carry, $letter) {
-					$carry[$letter] = $this->profielRepository->createQueryBuilder('p')
+				$this->verticalenRepository->findAll(),
+				function ($carry, $verticale) {
+					$carry[$verticale->naam] = $this->profielRepository->createQueryBuilder('p')
 						->where('p.verticale = :verticale and p.status in (:lidstatus)')
-						->setParameter('verticale', $letter)
+						->setParameter('verticale', $verticale->letter)
 						->setParameter('lidstatus', LidStatus::getFiscaalLidLike())
 						->getQuery()->getResult();
 					return $carry;
@@ -193,12 +200,12 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/tools/admins", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
 	public function admins() {
-		return view('tools.admins', [
+		return $this->render('tools/admins.html.twig', [
 			'accounts' => $this->accountRepository->findAdmins(),
 		]);
 	}
@@ -206,12 +213,12 @@ class ToolsController extends AbstractController {
 	/**
 	 * Voor de NovCie, zorgt ervoor dat novieten bekeken kunnen worden als dat afgeschermd is op de rest van de stek.
 	 *
-	 * @return View
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/tools/novieten", methods={"GET"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
 	public function novieten() {
-		return view('tools.novieten', [
+		return $this->render('tools/novieten.html.twig', [
 			'novieten' => $this->profielRepository->findBy(['status' => LidStatus::Noviet, 'lidjaar' => date('Y')])
 		]);
 	}
@@ -392,7 +399,7 @@ class ToolsController extends AbstractController {
 
 	/**
 	 * @param Request $request
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/tools/query", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
