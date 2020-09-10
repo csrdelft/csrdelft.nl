@@ -109,6 +109,7 @@ namespace CsrDelft\Twig {
 				new TwigFunction('instant_search_form', [$this, 'instant_search_form'], ['is_safe' => ['html']]),
 				new TwigFunction('get_profiel', [$this, 'get_profiel']),
 				new TwigFunction('huidige_jaargang', [$this, 'huidige_jaargang']),
+				new TwigFunction('gethostbyaddr', 'gethostbyaddr')
 			];
 		}
 

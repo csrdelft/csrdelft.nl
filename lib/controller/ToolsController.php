@@ -96,7 +96,7 @@ class ToolsController extends AbstractController {
 
 	/**
 	 * @param Request $request
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/tools/stats", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
@@ -111,7 +111,7 @@ class ToolsController extends AbstractController {
 
 		$log = $this->logRepository->findBy($by, ['ID' => 'desc'], 30);
 
-		return view('stats.stats', ['log' => $log]);
+		return $this->render('stats/stats.html.twig', ['log' => $log]);
 	}
 
 	/**
