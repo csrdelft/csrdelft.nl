@@ -59,7 +59,7 @@ class BoekRecensie {
 	 * @ORM\ManyToOne(targetEntity="Boek", inversedBy="recensies")
 	 * @ORM\JoinColumn(name="boek_id", referencedColumnName="id")
 	 */
-	protected $boek;
+	public $boek;
 
 	public function getBoek() {
 		return $this->boek;
@@ -88,7 +88,7 @@ class BoekRecensie {
 		if ($uid === null) {
 			$uid = LoginService::getUid();
 		}
-		return $this->schrijver_uid == $uid;
+		return $this->schrijver->uid == $uid;
 	}
 
 	/**

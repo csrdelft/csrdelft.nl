@@ -384,7 +384,7 @@ class ProfielRepository extends AbstractRepository {
 			'aantal' => 0
 		);
 		foreach ($geleend as $exemplaar) {
-			$boek = $exemplaar->getBoek();
+			$boek = $exemplaar->boek;
 			if ($exemplaar->isBiebBoek()) {
 				$bkncsr['aantal']++;
 				$bkncsr['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
