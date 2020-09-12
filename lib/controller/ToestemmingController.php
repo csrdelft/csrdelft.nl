@@ -9,7 +9,6 @@ use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\toestemming\ToestemmingLijstResponse;
 use CsrDelft\view\toestemming\ToestemmingLijstTable;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
@@ -93,7 +92,7 @@ class ToestemmingController extends AbstractController {
 
 	/**
 	 * @param Request $request
-	 * @return TemplateView|ToestemmingLijstResponse
+	 * @return ToestemmingLijstResponse|Response
 	 * @Route("/toestemming/lijst", methods={"GET","POST"})
 	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
 	 */
@@ -131,10 +130,8 @@ class ToestemmingController extends AbstractController {
 
 			return new ToestemmingLijstResponse($toestemmingFiltered, $ids);
 		} else {
-			return view('pagina', [
-				'titel' => 'Lid toestemming',
-				'breadcrumbs' => 'Lid toestemmingen',
-				'body' => new ToestemmingLijstTable($ids)
+			return $this->render('default.html.twig', [
+				'content' => new ToestemmingLijstTable($ids)
 			]);
 		}
 	}
