@@ -318,9 +318,9 @@ namespace CsrDelft\Twig {
 		public function instant_search_form() {
 			return (new InstantSearchForm())->toString();
 		}
-		public function bbcode(string $string, string $mode = 'normal', bool $light = false) {
+		public function bbcode(string $string, string $mode = 'normal') {
 			if ($mode === 'html') {
-				return CsrBB::parseHtml($string, $light);
+				return CsrBB::parseHtml($string);
 			} else if ($mode == 'mail') {
 				return CsrBB::parseMail($string);
 			} else if ($mode == 'plain') {
