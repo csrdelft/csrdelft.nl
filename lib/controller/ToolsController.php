@@ -5,10 +5,8 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\LDAP;
-use CsrDelft\controller\groepen\VerticalenController;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -26,7 +24,6 @@ use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
-use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -442,17 +439,5 @@ class ToolsController extends AbstractController {
 		} else {
 			return new PlainView(CsrBB::parse($string));
 		}
-	}
-
-	/**
-	 * Voor patronaat 2019 kan september 2019 verwijderd worden.
-	 *
-	 * @param ActiviteitenRepository $activiteitenRepository
-	 * @return View
-	 * @Route("/tools/patronaat", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function patronaat(ActiviteitenRepository $activiteitenRepository) {
-		return view('patronaat', ['groep' => $activiteitenRepository->get(1754)]);
 	}
 }
