@@ -7,7 +7,7 @@
 		}
 	],
 	"require": {
-		"csrdelft/bb": "1.1.9",
+		"csrdelft/bb": "1.2.0",
 		"easyrdf/easyrdf": "^0.9.1",
 		"eftec/bladeone": "3.21",
 		"ext-PDO": "*",
