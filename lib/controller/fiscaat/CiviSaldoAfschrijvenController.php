@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\entity\fiscaat\CiviSaldoAfschrijvenDTO;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
@@ -25,11 +26,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class CiviSaldoAfschrijvenController extends AbstractController {
 	/**
 	 * @Route("/fiscaat/afschrijven")
-	 * @return TemplateView
+	 * @return Response
 	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function afschrijven() {
-		return view('fiscaat.afschrijven', []);
+		return $this->render('fiscaat/afschrijven.html.twig', []);
 	}
 
 	private function quickMelding($melding, $code, $url = '/fiscaat/afschrijven') {
@@ -53,6 +54,10 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 		// Kijk of bestand CSV is
 		/** @var UploadedFile $file */
 		$file = $request->files->get('csv');
+		if (!$file) {
+			return $this->quickMelding('Geen bestand gekozen', 2);
+		}
+
 		if (!in_array($file->getMimeType(), ['text/plain', 'text/csv', 'application/vnd.ms-excel'])) {
 			return $this->quickMelding("Alleen een CSV is toegestaan", 2);
 		}
@@ -87,7 +92,7 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 	 * @param Session $session
 	 * @param CiviSaldoRepository $civiSaldoRepository
 	 * @param CiviProductRepository $civiProductRepository
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 */
 	public function controle(
 		string $key,
@@ -104,11 +109,12 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 		// Ga regels langs
 		$aantalSucces = 0;
 		$aantalGefaald = 0;
+		/** @var CiviSaldoAfschrijvenDTO[] $afschriften */
 		$afschriften = [];
 		$i = -1;
 		foreach ($data as $regel) {
 			$i++;
-			$afschriften[$i] = new stdClass();
+			$afschriften[$i] = new CiviSaldoAfschrijvenDTO();
 			$afschriften[$i]->succes = true;
 			$afschriften[$i]->regel = $regel;
 			$afschriften[$i]->productNaam = '';
@@ -179,7 +185,7 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 		}
 
 		// Overzicht tonen
-		return view('fiscaat.afschrijven-overzicht', [
+		return $this->render('fiscaat/afschrijven-overzicht.html.twig', [
 			'key' => $key,
 			'aantalSucces' => $aantalSucces,
 			'aantalGefaald' => $aantalGefaald,
@@ -197,7 +203,7 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 	 * @param CiviBestellingRepository $civiBestellingRepository
 	 * @param Request $request
 	 * @param EntityManagerInterface $em
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 */
 	public function verwerk(
 		string $key,
@@ -287,7 +293,7 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 		$session->remove("afschrijven-{$key}-lock");
 
 		// Overzicht tonen
-		return view('fiscaat.afschrijven-succes', [
+		return $this->render('fiscaat/afschrijven-succes.html.twig', [
 			'aantalSucces' => $aantalSucces,
 			'totaal' => $totaal
 		]);

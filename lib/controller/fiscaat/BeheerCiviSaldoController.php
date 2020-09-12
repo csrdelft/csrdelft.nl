@@ -22,6 +22,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -51,12 +52,12 @@ class BeheerCiviSaldoController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/fiscaat/saldo", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
 	public function overzicht() {
-		return view('fiscaat.pagina', [
+		return $this->render('fiscaat/pagina.html.twig', [
 			'titel' => 'Saldo beheer',
 			'view' => new CiviSaldoTable(),
 		]);
@@ -176,7 +177,7 @@ class BeheerCiviSaldoController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/fiscaat/saldo/som", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
@@ -187,7 +188,7 @@ class BeheerCiviSaldoController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		}
 
-		return view('fiscaat.saldisom', [
+		return $this->render('fiscaat/saldisom.html.twig', [
 			'saldisomform' => new SaldiSomForm($this->civiSaldoRepository, $moment),
 			'saldisom' => $this->civiSaldoRepository->getSomSaldiOp($moment),
 			'saldisomleden' => $this->civiSaldoRepository->getSomSaldiOp($moment, true),

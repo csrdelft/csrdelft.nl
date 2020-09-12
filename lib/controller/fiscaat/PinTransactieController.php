@@ -67,12 +67,12 @@ class PinTransactieController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/fiscaat/pin", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
 	public function overzicht() {
-		return view('fiscaat.pin', [
+		return $this->render('fiscaat/pin.html.twig', [
 			'titel' => 'Pin transacties beheer',
 			'table' => new PinTransactieMatchTable(),
 		]);
