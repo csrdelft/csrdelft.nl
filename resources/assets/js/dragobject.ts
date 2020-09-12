@@ -77,7 +77,7 @@ function mouseMoveHandler(e: MouseEvent) {
 /**
  * @param {MouseEvent} e
  */
-function startDrag(e: DragEvent) {
+function startDrag(e: MouseEvent) {
 
 	const target = e.target;
 
@@ -97,7 +97,7 @@ function startDrag(e: DragEvent) {
 			oldY = mouseY(e);
 			window.addEventListener('mousemove', mouseMoveHandler, true);
 		} else {
-			dragObject.el = undefined;
+			dragObject.el = null;
 		}
 	}
 	dragged = false;
@@ -126,7 +126,7 @@ function stopDrag() {
 		});
 		dragged = false;
 	}
-	dragObject.el = undefined;
+	dragObject.el = null;
 }
 
 window.addEventListener('mousedown', startDrag, false);

@@ -1,65 +1,98 @@
 <template>
-	<div class="card peiling">
-		<div class="card-body">
-			<a :href="beheerUrl" v-if="isMod" class="bewerken">
-				<Icon icon="pencil"/>
-			</a>
-			<span class="totaal">{{strAantalGestemd}}</span>
-			<h3 class="card-title">{{titel}}</h3>
-			<p class="card-text pt-2" v-html="beschrijving"></p>
-		</div>
-		<div>
-			<div v-if="heeftGestemd && !resultaatZichtbaar">
-				<div class="card-body">Bedankt voor het stemmen!</div>
-			</div>
-			<div v-else class="card-body">
-				<div v-if="zoekbalkZichtbaar" class="pb-2">
-					<input type="text" placeholder="Zoeken" v-model="zoekterm" class="form-control"/>
-				</div>
-				<ul class="list-group list-group-flush">
-					<li class="list-group-item" v-for="optie in optiesZichtbaar">
-						<PeilingOptie
-							v-model="optie.selected"
-							:key="optie.id"
-							:id="optie.id"
-							:peilingId="id"
-							:titel="optie.titel"
-							:beschrijving="optie.beschrijving_formatted"
-							:stemmen="optie.stemmen"
-							:magStemmen="magStemmen"
-							:heeftGestemd="heeftGestemd"
-							:aantalGestemd="aantalGestemd"
-							:keuzesOver="keuzesOver"
-							:selected="optie.selected"></PeilingOptie>
-					</li>
-				</ul>
-				<b-pagination
-					v-if="optiesFiltered.length > paginaSize"
-					size="md"
-					align="center"
-					v-model="huidigePagina"
-					:limit="15"
-					:total-rows="optiesFiltered.length"
-					:per-page="paginaSize">
-				</b-pagination>
-			</div>
-		</div>
+  <div class="card peiling">
+    <div class="card-body">
+      <a
+        v-if="isMod"
+        :href="beheerUrl"
+        class="bewerken"
+      >
+        <Icon icon="pencil" />
+      </a>
+      <span class="totaal">{{ strAantalGestemd }}</span>
+      <h3 class="card-title">
+        {{ titel }}
+      </h3>
+      <!-- eslint-disable-next-line vue/no-v-html vue/max-attributes-per-line -->
+      <p class="card-text pt-2" v-html="beschrijving" />
+    </div>
+    <div>
+      <div v-if="heeftGestemd && !resultaatZichtbaar">
+        <div class="card-body">
+          Bedankt voor het stemmen!
+        </div>
+      </div>
+      <div
+        v-else
+        class="card-body"
+      >
+        <div
+          v-if="zoekbalkZichtbaar"
+          class="pb-2"
+        >
+          <input
+            v-model="zoekterm"
+            type="text"
+            placeholder="Zoeken"
+            class="form-control"
+          >
+        </div>
+        <ul class="list-group list-group-flush">
+          <li
+            v-for="optie in optiesZichtbaar"
+            :key="optie.id"
+            class="list-group-item"
+          >
+            <PeilingOptie
+              :id="optie.id"
+              :key="optie.id"
+              v-model="optie.selected"
+              :peiling-id="id"
+              :titel="optie.titel"
+              :beschrijving="optie.beschrijving_formatted"
+              :stemmen="optie.stemmen"
+              :mag-stemmen="magStemmen"
+              :heeft-gestemd="heeftGestemd"
+              :aantal-gestemd="aantalGestemd"
+              :keuzes-over="keuzesOver"
+              :selected="optie.selected"
+            />
+          </li>
+        </ul>
+        <b-pagination
+          v-if="optiesFiltered.length > paginaSize"
+          v-model="huidigePagina"
+          size="md"
+          align="center"
+          :limit="15"
+          :total-rows="optiesFiltered.length"
+          :per-page="paginaSize"
+        />
+      </div>
+    </div>
 
-		<div v-if="!heeftGestemd && magStemmen" class="card-footer footer">
-			<div>{{strKeuzes}}</div>
-			<PeilingOptieToevoegen v-if="aantalVoorstellen > 0" :id="id"></PeilingOptieToevoegen>
+    <div
+      v-if="!heeftGestemd && magStemmen"
+      class="card-footer footer"
+    >
+      <div>{{ strKeuzes }}</div>
+      <PeilingOptieToevoegen
+        v-if="aantalVoorstellen > 0"
+        :id="id"
+      />
 
-			<input
-				type="button"
-				class="btn btn-primary"
-				value="Stem"
-				:disabled="selected.length === 0"
-				v-on:click="stem"/>
-		</div>
-	</div>
+      <input
+        type="button"
+        class="btn btn-primary"
+        value="Stem"
+        :disabled="selected.length === 0"
+        @click="stem"
+      >
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
+import $ from 'jquery';
 	import axios from 'axios';
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
@@ -94,22 +127,22 @@
 	})
 	export default class Peiling extends Vue {
 		@Prop()
-		private settings: PeilingSettings;
+		settings: PeilingSettings;
 
-		private id: string = '';
-		private titel: string = '';
-		private beschrijving: string = '';
-		private resultaatZichtbaar: boolean = false;
-		private aantalVoorstellen: number = 0;
-		private aantalStemmen: number = 0;
-		private aantalGestemd: number = 0;
-		private isMod: boolean = false;
-		private heeftGestemd: boolean = false;
-		private magStemmen: boolean = false;
-		private opties: PeilingOptieSettings[] = [];
-		private zoekterm: string = '';
-		private huidigePagina = 1;
-		private paginaSize = 10;
+		id = '';
+		titel = '';
+		beschrijving = '';
+		resultaatZichtbaar = false;
+		aantalVoorstellen = 0;
+		aantalStemmen = 0;
+		aantalGestemd = 0;
+		isMod = false;
+		heeftGestemd = false;
+		magStemmen = false;
+		opties: PeilingOptieSettings[] = [];
+		zoekterm = '';
+		huidigePagina = 1;
+		paginaSize = 10;
 
 		private created() {
 			this.id = this.settings.id;

@@ -1,23 +1,40 @@
 <template>
-	<div class="card groep">
-		<div class="card-body">
-			<h3 class="card-title">{{naam}}</h3>
-			<div class="row">
-				<div class="left-col col-md-5" v-if="!aangemeld && magAanmelden">
-					<p class="card-text">{{samenvatting}}</p>
-					<GroepAanmeldForm :keuzes="keuzelijst2" :opmerking="mijnOpmerking" :aangemeld="aangemeld" @aanmelden="aanmelden"/>
-				</div>
-				<div class="col results">
-					<table class="table table-sm">
-						<GroepHeaderRow :keuzes="keuzelijst2"/>
-						<tbody>
-						<GroepLidRow v-for="lid of leden" :key="lid.uid" :lid="lid" :keuzes="keuzelijst2"/>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="card groep">
+    <div class="card-body">
+      <h3 class="card-title">
+        {{ naam }}
+      </h3>
+      <div class="row">
+        <div
+          v-if="!aangemeld && magAanmelden"
+          class="left-col col-md-5"
+        >
+          <p class="card-text">
+            {{ samenvatting }}
+          </p>
+          <GroepAanmeldForm
+            :keuzes="keuzelijst2"
+            :opmerking="mijnOpmerking"
+            :aangemeld="aangemeld"
+            @aanmelden="aanmelden"
+          />
+        </div>
+        <div class="col results">
+          <table class="table table-sm">
+            <GroepHeaderRow :keuzes="keuzelijst2" />
+            <tbody>
+              <GroepLidRow
+                v-for="lid of leden"
+                :key="lid.uid"
+                :lid="lid"
+                :keuzes="keuzelijst2"
+              />
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -34,29 +51,29 @@
 	export default class Groep extends Vue {
 		/// Props
 		@Prop()
-		private settings: GroepSettings;
+		settings: GroepSettings;
 		@Prop()
-		private groep: GroepInstance;
+		groep: GroepInstance;
 
 		/// Data
-		private id: number = 0;
-		private naam: string = '';
-		private familie: string = '';
-		private beginMoment: Date = new Date();
-		private eindMoment: Date = new Date();
-		private status: string = '';
-		private samenvatting: string = '';
-		private omschrijving: string = '';
-		private makerUid: string = '';
-		private versie: string = '';
-		private keuzelijst2: KeuzeOptie[] = [];
-		private leden: GroepLid[] = [];
-		private mijnUid: string = '';
-		private mijnLink: string = '';
-		private aanmeldUrl: string = '';
-		private mijnOpmerking: GroepKeuzeSelectie[] = [];
+		id = 0;
+		naam = '';
+		familie = '';
+		beginMoment: Date = new Date();
+		eindMoment: Date = new Date();
+		status = '';
+		samenvatting = '';
+		omschrijving = '';
+		makerUid = '';
+		versie = '';
+		keuzelijst2: KeuzeOptie[] = [];
+		leden: GroepLid[] = [];
+		mijnUid = '';
+		mijnLink = '';
+		aanmeldUrl = '';
+		mijnOpmerking: GroepKeuzeSelectie[] = [];
 
-		protected created() {
+		private created() {
 			this.id = this.groep.id;
 			this.naam = this.groep.naam;
 			this.familie = this.groep.familie;
@@ -75,7 +92,7 @@
 			this.aanmeldUrl = this.settings.aanmeld_url;
 
 			if (this.aangemeld) {
-				this.mijnOpmerking = this.mijnAanmelding!.opmerking2;
+				this.mijnOpmerking = this.mijnAanmelding.opmerking2;
 			} else {
 				this.mijnOpmerking = this.keuzelijst2.map((value) => ({
 					selectie: value.default,
@@ -89,11 +106,11 @@
 			return this.leden.find((lid) => lid.uid === this.mijnUid);
 		}
 
-		protected get aangemeld() {
+		private get aangemeld() {
 			return this.mijnAanmelding !== undefined;
 		}
 
-		protected get magAanmelden() {
+		private get magAanmelden() {
 			console.log(this.groep.aanmelden_tot, new Date)
 			if (this.groep.aanmelden_tot) {
 				return new Date(this.groep.aanmelden_tot) > new Date;
@@ -103,7 +120,7 @@
 		}
 
 		/// Methods
-		protected aanmelden(event: Event) {
+		private aanmelden() {
 			if (!this.aangemeld) {
 				this.leden.push({
 					uid: this.mijnUid,

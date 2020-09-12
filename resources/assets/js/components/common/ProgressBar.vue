@@ -1,9 +1,12 @@
 <template>
-	<div class="progress">
-		<div class="progress-bar" :style="{width: progress + '%'}">
-			<slot/>
-		</div>
-	</div>
+  <div class="progress">
+    <div
+      class="progress-bar"
+      :style="{width: progress + '%'}"
+    >
+      <slot />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -15,7 +18,7 @@
 		@Prop({
 			type: [Number, String],
 		})
-		private progress: number | string; // Liever een nummer, maar een string kunnen we ook mee overweg.
+		progress: number | string; // Liever een nummer, maar een string kunnen we ook mee overweg.
 	}
 </script>
 

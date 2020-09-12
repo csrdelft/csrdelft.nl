@@ -189,7 +189,7 @@ export function knopVergroot(event: Event, el: Element): void {
 
 export const initRadioButtons = (el: HTMLElement): void => {
 	for (const btn of selectAll('a.btn', el)) {
-		btn.addEventListener('click', (event) => {
+		btn.addEventListener('click', () => {
 			for (const active of selectAll('.active', el)) {
 				active.classList.remove('active');
 			}

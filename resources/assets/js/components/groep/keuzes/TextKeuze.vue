@@ -1,23 +1,29 @@
 <template>
-	<div class="form-group">
-		<label :for="'customCheck' + keuze.naam">{{keuze.description}}</label>
-		<input type="text" class="form-control" :id="'customCheck' + keuze.naam" :value="value" @input="$emit('input', $event.target.value)">
-	</div>
+  <div class="form-group">
+    <label :for="'customCheck' + keuze.naam">{{ keuze.description }}</label>
+    <input
+      :id="'customCheck' + keuze.naam"
+      type="text"
+      class="form-control"
+      :value="value"
+      @input="$emit('input', $event.target.value)"
+    >
+  </div>
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
-	import {Component, Prop} from 'vue-property-decorator';
-	import {GroepKeuzeSelectie, KeuzeOptie} from '../../../model/groep';
+import Vue from 'vue';
+import {Component, Prop} from 'vue-property-decorator';
+import {KeuzeOptie} from '../../../model/groep';
 
-	@Component({})
-	export default class TextKeuze extends Vue {
-		@Prop()
-		private keuze: KeuzeOptie;
+@Component({})
+export default class TextKeuze extends Vue {
+  @Prop()
+  keuze: KeuzeOptie;
 
-		@Prop()
-		private value: string;
-	}
+  @Prop()
+  value: string;
+}
 </script>
 
 <style scoped>

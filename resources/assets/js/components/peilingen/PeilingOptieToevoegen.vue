@@ -1,9 +1,9 @@
 <template>
-	<div>
-		<a @click="toevoegen">
-			<span :class="icon"></span> {{text}}
-		</a>
-	</div>
+  <div>
+    <a @click="toevoegen">
+      <span :class="icon" /> {{ text }}
+    </a>
+  </div>
 </template>
 
 <script lang="ts">
@@ -14,19 +14,19 @@
 
 	@Component
 	export default class PeilingOptieToevoegen extends Vue {
-		private icon = 'ico add';
-		private text = 'Optie toevoegen';
+		icon = 'ico add';
+		text = 'Optie toevoegen';
 
 		@Prop({
 			type: Number,
 		})
-		private id: number;
+		id: number;
 
-		protected get optieToevoegenUrl() {
+		private get optieToevoegenUrl() {
 			return `/peilingen/opties/${this.id}/toevoegen`;
 		}
 
-		protected toevoegen(event) {
+		private toevoegen(event: MouseEvent) {
 			event.preventDefault();
 			this.icon = 'ico arrow_rotate_clockwise rotating';
 			axios.post(this.optieToevoegenUrl.toString())

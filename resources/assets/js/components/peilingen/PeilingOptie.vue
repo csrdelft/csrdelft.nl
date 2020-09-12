@@ -1,95 +1,116 @@
 <template>
-	<div v-if="!kanStemmen"
-			 class="row">
-		<div class="col-md-4">{{titel}}</div>
-		<div class="col-md-6">
-			<ProgressBar :progress="progress"></ProgressBar>
-		</div>
-		<div class="col-md-2">{{progressText}}</div>
-		<div ref="beschrijving_gestemd" class="col text-muted pt-2" v-html="beschrijving"></div>
-	</div>
-	<div v-else=""
-			 class="row">
-		<div class="col-md-12">
-			<div class="form-check">
-				<input type="checkbox"
-							 class="form-check-input"
-							 name="optie"
-							 :value="id"
-							 :id="'PeilingOptie' + id"
-							 :disabled="isDisabled"
-							 :checked="selected"
-							 @change="$emit('input', $event.target.checked)"/>
-				<label :for="'PeilingOptie' + id"
-							 class="form-check-label">{{ titel }}</label>
-			</div>
-		</div>
-		<div ref="beschrijving" class="col-md-12 pt-2" v-html="beschrijving"></div>
-	</div>
+  <!-- eslint-disable vue/no-v-html -->
+  <div
+    v-if="!kanStemmen"
+    class="row"
+  >
+    <div class="col-md-4">
+      {{ titel }}
+    </div>
+    <div class="col-md-6">
+      <ProgressBar :progress="progress" />
+    </div>
+    <div class="col-md-2">
+      {{ progressText }}
+    </div>
+    <div
+      ref="beschrijving_gestemd"
+      class="col text-muted pt-2"
+      v-html="beschrijving"
+    />
+  </div>
+  <div
+    v-else=""
+    class="row"
+  >
+    <div class="col-md-12">
+      <div class="form-check">
+        <input
+          :id="'PeilingOptie' + id"
+          type="checkbox"
+          class="form-check-input"
+          name="optie"
+          :value="id"
+          :disabled="isDisabled"
+          :checked="selected"
+          @change="$emit('input', $event.target.checked)"
+        >
+        <label
+          :for="'PeilingOptie' + id"
+          class="form-check-label"
+        >{{ titel }}</label>
+      </div>
+    </div>
+    <div
+      ref="beschrijving"
+      class="col-md-12 pt-2"
+      v-html="beschrijving"
+    />
+  </div>
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
-	import {Component, Prop, Watch} from 'vue-property-decorator';
-	import {init} from '../../ctx';
-	import ProgressBar from '../common/ProgressBar';
+import Vue from 'vue';
+import {Component, Prop, Watch} from 'vue-property-decorator';
+import {init} from '../../ctx';
+import ProgressBar from '../common/ProgressBar';
 
-	@Component({
-		components: {ProgressBar},
-	})
-	export default class PeilingOptie extends Vue {
-		@Prop()
-		private id: string;
-		@Prop()
-		private peilingId: number;
-		@Prop()
-		private titel: string;
-		@Prop()
-		private beschrijving: string;
-		@Prop()
-		private stemmen: number;
-		@Prop()
-		private magStemmen: boolean;
-		@Prop()
-		private aantalGestemd: number;
-		@Prop()
-		private heeftGestemd: boolean;
-		@Prop()
-		private keuzesOver: boolean;
-		@Prop()
-		private selected: boolean;
+@Component({
+  components: {ProgressBar},
+})
+export default class PeilingOptie extends Vue {
+  @Prop()
+  id: string;
+  @Prop()
+  peilingId: number;
+  @Prop()
+  titel: string;
+  @Prop()
+  beschrijving: string;
+  @Prop()
+  stemmen: number;
+  @Prop()
+  magStemmen: boolean;
+  @Prop()
+  aantalGestemd: number;
+  @Prop()
+  heeftGestemd: boolean;
+  @Prop()
+  keuzesOver: boolean;
+  @Prop()
+  selected: boolean;
 
-		protected mounted() {
-			this.initBeschrijvingContext();
-		}
+  private mounted() {
+    this.initBeschrijvingContext();
+  }
 
-		@Watch('kanStemmen')
-		protected initBeschrijvingContext() {
-			setTimeout(() => {
-				if (this.kanStemmen) {
-					init(this.$refs.beschrijving as HTMLElement);
-				} else {
-					init(this.$refs.beschrijving_gestemd as HTMLElement);
-				}
-			});
-		}
+  @Watch('kanStemmen')
+  private initBeschrijvingContext() {
+    setTimeout(() => {
+      if (this.kanStemmen) {
+        init(this.$refs.beschrijving as HTMLElement);
+      } else {
+        init(this.$refs.beschrijving_gestemd as HTMLElement);
+      }
+    });
+  }
 
-		protected get kanStemmen() {
-			return this.magStemmen && !this.heeftGestemd;
-		}
+  private get kanStemmen() {
+    return this.magStemmen && !this.heeftGestemd;
+  }
 
-		protected get progress() {
-			return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
-		}
+  private get progress() {
+    return (this.stemmen / this.aantalGestemd * 100).toFixed(2);
+  }
 
-		protected get progressText() {
-			return `${this.progress}% (${this.stemmen})`;
-		}
+  private get progressText() {
+    return `${this.progress}% (${this.stemmen})`;
+  }
 
-		protected get isDisabled() {
-			return !this.selected && !this.keuzesOver;
-		}
-	}
+  private get isDisabled() {
+    return !this.selected && !this.keuzesOver;
+  }
+}
 </script>
 
 <style scoped>

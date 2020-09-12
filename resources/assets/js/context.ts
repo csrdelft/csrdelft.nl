@@ -1,6 +1,5 @@
 import ctx from './ctx';
 import {select} from "./lib/dom";
-import {initDropzone} from "./lib/dropzone";
 
 export const registerGrafiekContext = async (): Promise<void> => {
 	const {

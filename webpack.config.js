@@ -95,34 +95,16 @@ module.exports = (env, argv) => ({
 				],
 				use: 'eslint-loader',
 			},
-			// Verwerk .js bestanden met babel, dit zorgt ervoor dat alle nieuwe foefjes van javascript gebruikt kunnen worden
-			// terwijl we nog wel oudere browsers ondersteunen.
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: [
-					'cache-loader',
-					{
-						loader: 'babel-loader',
-						options: {
-							presets: ['@babel/preset-env'],
-							plugins: [
-								'@babel/syntax-dynamic-import',
-								'@babel/plugin-proposal-class-properties',
-								'@babel/plugin-transform-runtime',
-								['@babel/plugin-proposal-decorators', {decoratorsBeforeExport: true}],
-							],
-						},
-					},
-				],
-			},
 			// Verwerk .ts (typescript) bestanden en maak er javascript van.
 			{
 				test: /\.ts$/,
-				use: {
-					loader: 'ts-loader',
-					options: { appendTsSuffixTo: [/\.vue$/] }
-				},
+				use: [
+					'cache-loader',
+					{
+						loader: 'ts-loader',
+						options: {appendTsSuffixTo: [/\.vue$/]}
+					}
+				],
 			},
 			{
 				test: /\.vue$/,
