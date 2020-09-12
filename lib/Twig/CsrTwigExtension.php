@@ -158,6 +158,7 @@ namespace CsrDelft\Twig {
 				new TwigFilter('truncate', 'truncate'),
 				new TwigFilter('date_format_intl', 'date_format_intl'),
 				new TwigFilter('format_filesize', 'format_filesize'),
+				new TwigFilter('shuffle', 'array_shuffle'),
 			];
 		}
 
