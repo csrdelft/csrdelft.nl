@@ -18,6 +18,7 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\HttpUtils;
+use Twig\Environment;
 
 /**
  * @see WachtwoordController::reset()
@@ -37,11 +38,16 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator {
 	 * @var AccountRepository
 	 */
 	private $accountRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(HttpUtils  $httpUtils, OneTimeTokensRepository $oneTimeTokensRepository, AccountRepository $accountRepository) {
+	public function __construct(HttpUtils  $httpUtils, Environment $twig, OneTimeTokensRepository $oneTimeTokensRepository, AccountRepository $accountRepository) {
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->httpUtils = $httpUtils;
 		$this->accountRepository = $accountRepository;
+		$this->twig = $twig;
 	}
 
 	public function supports(Request $request): ?bool {
@@ -73,10 +79,10 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator {
 
 			// stuur bevestigingsmail
 			$profiel = $user->profiel;
-			$bericht = "Geachte " . $profiel->getNaam('civitas') .
-				",\n\nU heeft recent uw wachtwoord opnieuw ingesteld. Als u dit niet zelf gedaan heeft dan moet u nu direct uw wachtwoord wijzigen en de PubCie op de hoogte stellen.\n\nMet amicale groet,\nUw PubCie";
-			$emailNaam = $profiel->getNaam('volledig');
-			$mail = new Mail(array($user->email => $emailNaam), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
+			$bericht = $this->twig->render('mail/bericht/wachtwoordresetsucces.mail.twig', [
+				'naam' => $profiel->getNaam('civitas'),
+			]);
+			$mail = new Mail(array($user->email => $profiel->getNaam('volledig')), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
 			$mail->send();
 
 			return new SelfValidatingPassport($user);

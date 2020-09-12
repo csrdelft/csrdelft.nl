@@ -28,6 +28,7 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Security\Core\Security;
+use Twig\Environment;
 
 
 /**
@@ -56,10 +57,15 @@ class ProfielRepository extends AbstractRepository {
 	 * @var Security
 	 */
 	private $security;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
 	public function __construct(
 		ManagerRegistry $registry,
 		Security $security,
+		Environment $twig,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
 		BoekExemplaarRepository $boekExemplaarModel
@@ -70,6 +76,7 @@ class ProfielRepository extends AbstractRepository {
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->boekExemplaarModel = $boekExemplaarModel;
 		$this->security = $security;
+		$this->twig = $twig;
 	}
 
 	public static function changelog(array $diff, $uid) {
@@ -312,20 +319,19 @@ class ProfielRepository extends AbstractRepository {
 				$change->corveetaken[] = strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->corveeFunctie->naam;
 			}
 			$changes[] = $change;
+
 			// Corveeceasar mailen over vrijvallende corveetaken.
-			$bericht = file_get_contents(TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
-			$values = array(
-				'AANTAL' => $aantal,
-				'NAAM' => $profiel->getNaam('volledig'),
-				'UID' => $profiel->uid,
-				'OUD' => $oudestatus,
-				'NIEUW' => $profiel->status,
-				'CHANGE' => $change->toHtml(),
-				'ADMIN' => $this->security->getUser()->profiel->getNaam()
-			);
+			$bericht = $this->twig->render('mail/bericht/toekomstigcorveeverwijderd.mail.twig', [
+				'aantal' => $aantal,
+				'naam' => $profiel->getNaam('volledig'),
+				'uid' => $profiel->uid,
+				'oud' => $oudestatus,
+				'nieuw' => $profiel->status,
+				'change' => $change->toHtml(),
+				'admin' => $this->security->getUser()->profiel->getNaam()
+			]);
 			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
 			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-			$mail->setPlaceholders($values);
 			$mail->send();
 		}
 		return $changes;
@@ -343,15 +349,14 @@ class ProfielRepository extends AbstractRepository {
 		$saldi = '';
 		$saldi .= 'CiviSaldo: ' . $profiel->getCiviSaldo() . "\n";
 
-		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafmeldingfisci.mail');
-		$values = array(
-			'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
-			'UID' => $profiel->uid,
-			'OUD' => $oudestatus,
-			'NIEUW' => $profiel->status,
-			'SALDI' => $saldi,
-			'ADMIN' => $this->security->getUser()->profiel->getNaam()
-		);
+		$bericht = $this->twig->render('mail/bericht/lidafmeldingfisci.mail.twig', [
+			'naam' => $profiel->getNaam('volledig'),
+			'uid' => $profiel->uid,
+			'oud' => $oudestatus,
+			'nieuw' => $profiel->status,
+			'saldi' => $saldi,
+			'admin' => $this->security->getUser()->profiel->getNaam()
+		]);
 		$to = array(
 			'fiscus@csrdelft.nl' => 'Fiscus C.S.R.',
 			'maalcie-fiscus@csrdelft.nl' => 'MaalCie fiscus C.S.R.',
@@ -360,7 +365,6 @@ class ProfielRepository extends AbstractRepository {
 
 		$mail = new Mail($to, 'Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-		$mail->setPlaceholders($values);
 
 		return $mail->send();
 	}
@@ -415,19 +419,17 @@ class ProfielRepository extends AbstractRepository {
 			'bibliothecaris@csrdelft.nl' => 'Bibliothecaris C.S.R.',
 			$profiel->getPrimaryEmail() => $profiel->getNaam('civitas')
 		);
-		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
-		$values = array(
-			'NAAM' => $profiel->getNaam('volledig'),
-			'UID' => $profiel->uid,
-			'OUD' => substr($oudestatus, 2),
-			'NIEUW' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
-			'CSRLIJST' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
-			'LEDENLIJST' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
-			'ADMIN' => $this->security->getUser()->profiel->getNaam()
-		);
+		$bericht = $this->twig->render('mail/bericht/lidafgeleendebiebboeken.mail.twig', [
+			'naam' => $profiel->getNaam('volledig'),
+			'uid' => $profiel->uid,
+			'oud' => substr($oudestatus, 2),
+			'nieuw' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
+			'csrlijst' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
+			'ledenlijst' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
+			'admin' => $this->security->getUser()->profiel->getNaam()
+		]);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-		$mail->setPlaceholders($values);
 
 		return $mail->send();
 	}

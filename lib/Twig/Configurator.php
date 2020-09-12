@@ -24,6 +24,7 @@ class Configurator
 	{
 		$environment->getExtension(EscaperExtension::class)->setEscaper(AutoEscapeService::STRATEGY_ICAL, [$this, 'escape_ical']);
 		$environment->getExtension(EscaperExtension::class)->setEscaper(AutoEscapeService::STRATEGY_XML, [$this, 'escape_xml']);
+		$environment->getExtension(EscaperExtension::class)->setEscaper(AutoEscapeService::STRATEGY_MAIL, [$this, 'escape_mail']);
 
 		$this->configurator->configure($environment);
 	}
@@ -35,6 +36,10 @@ class Configurator
 
 	function escape_xml($twig, $string, $charset) {
 		return htmlspecialchars($string, ENT_XML1, 'UTF-8');
+	}
+
+	function escape_mail($twig, $string, $charset) {
+		return $string;
 	}
 }
 

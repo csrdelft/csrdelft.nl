@@ -2,7 +2,6 @@
 
 namespace CsrDelft\repository\forum;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Mail;
 use CsrDelft\entity\forum\ForumDeel;
 use CsrDelft\entity\forum\ForumDeelMelding;
@@ -15,6 +14,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
+use Twig\Environment;
 
 /**
  * Model voor bijhouden, bewerken en verzenden van meldingen voor forumberichten in forumdelen
@@ -30,10 +30,15 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	 * @var SuService
 	 */
 	private $suService;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(ManagerRegistry $registry, SuService $suService) {
+	public function __construct(ManagerRegistry $registry, Environment $twig, SuService $suService) {
 		parent::__construct($registry, ForumDeelMelding::class);
 		$this->suService = $suService;
+		$this->twig = $twig;
 	}
 
 	protected function maakForumDeelMelding(ForumDeel $deel, $uid) {
@@ -112,23 +117,21 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	 * @param ForumPost $post
 	 * @param ForumDraad $draad
 	 * @param ForumDeel $deel
-	 * @param string $bericht
 	 */
-	private function stuurMelding(Account $ontvanger, $auteur, $post, $draad, $deel, $bericht) {
-		$values = array(
-			'NAAM' => $ontvanger->profiel->getNaam('civitas'),
-			'AUTEUR' => $auteur->getNaam('civitas'),
-			'POSTLINK' => $post->getLink(true),
-			'TITEL' => $draad->titel,
-			'FORUMDEEL' => $deel->titel,
-			'TEKST' => str_replace('\r\n', "\n", $post->tekst),
-		);
+	private function stuurMelding(Account $ontvanger, $auteur, $post, $draad, $deel) {
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		$this->suService->alsLid($ontvanger, function () use ($draad, $deel, $ontvanger, $values, $bericht) {
+		$this->suService->alsLid($ontvanger, function () use ($draad, $deel, $ontvanger, $auteur, $post) {
+			$bericht = $this->twig->render('mail/bericht/forumdeelmelding.mail.twig', [
+				'naam' => $ontvanger->profiel->getNaam('civitas'),
+				'auteur' => $auteur->getNaam('civitas'),
+				'postlink' => $post->getLink(true),
+				'titel' => $draad->titel,
+				'forumdeel' => $deel->titel,
+				'tekst' => str_replace('\r\n', "\n", $post->tekst),
+			]);
 			if ($draad->magMeldingKrijgen()) {
 				$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuw draadje in ' . $deel->titel . ': ' . $draad->titel, $bericht);
-				$mail->setPlaceholders($values);
 				$mail->setLightBB();
 				$mail->send();
 			}
@@ -145,8 +148,6 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 		$draad = $post->draad;
 		$deel = $draad->deel;
 
-		// Laad meldingsbericht in
-		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumdeelmelding.mail');
 		foreach ($deel->meldingen as $volger) {
 			$volgerProfiel = ProfielRepository::get($volger->uid);
 
@@ -161,7 +162,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 			if (!$account) {
 				$this->remove($volger);
 			} else {
-				$this->stuurMelding($account, $auteur, $post, $draad, $deel, $bericht);
+				$this->stuurMelding($account, $auteur, $post, $draad, $deel);
 			}
 		}
 	}

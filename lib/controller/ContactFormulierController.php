@@ -116,19 +116,13 @@ De PubCie.
 //			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
 		}
 
-		$bericht = "
-Beste $commissie,
-
-Het formulier op de OWee-pagina is ingevuld:
-
-Type: $typeaanduiding
-Naam: $naam
-E-mail: $email
-Telefoon: $telefoon
-
-Met vriendelijke groeten,
-De PubCie.
-";
+		$bericht = $this->renderView('mail/bericht/contactformulier.mail.twig', [
+			'telefoon' => $telefoon,
+			'typeaanduiding' => $typeaanduiding,
+			'naam' => $naam,
+			'email' => $email,
+			'commissie' => $commissie,
+		]);
 
 		$mail = new Mail($bestemming, "Lid worden formulier", $bericht);
 		$mail->setFrom($_ENV['EMAIL_PUBCIE']);

@@ -17,6 +17,7 @@ use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
+use Twig\Environment;
 
 /**
  * Model voor bijhouden, bewerken en verzenden van meldingen voor forumberichten
@@ -32,10 +33,15 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	 * @var SuService
 	 */
 	private $suService;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(ManagerRegistry $registry, SuService $suService) {
+	public function __construct(ManagerRegistry $registry, Environment $twig, SuService $suService) {
 		parent::__construct($registry, ForumDraadMelding::class);
 		$this->suService = $suService;
+		$this->twig = $twig;
 	}
 
 	public function setNiveauVoorLid(ForumDraad $draad, ForumDraadMeldingNiveau $niveau) {
@@ -93,7 +99,6 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		$draad = $post->draad;
 
 		// Laad meldingsbericht in
-		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumaltijdmelding.mail');
 		foreach ($this->getAltijdMeldingVoorDraad($draad) as $volger) {
 			$volgerProfiel = ProfielRepository::get($volger->uid);
 
@@ -107,7 +112,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 			if (!$account) {
 				$this->remove($volger);
 			} else {
-				$this->stuurMelding($account, $auteur, $post, $draad, $bericht);
+				$this->stuurMelding($account, $auteur, $post, $draad, 'mail/bericht/forumaltijdmelding.mail.twig');
 			}
 		}
 	}
@@ -125,20 +130,19 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	 * @param ForumDraad $draad
 	 * @param string $bericht
 	 */
-	private function stuurMelding($ontvanger, $auteur, $post, $draad, $bericht) {
+	private function stuurMelding($ontvanger, $auteur, $post, $draad, $template) {
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		$this->suService->alsLid($ontvanger, function () use ($ontvanger, $auteur, $post, $draad, $bericht) {
-			$values = array(
-				'NAAM' => $ontvanger->profiel->getNaam('civitas'),
-				'AUTEUR' => $auteur->getNaam('civitas'),
-				'POSTLINK' => $post->getLink(true),
-				'TITEL' => $draad->titel,
-				'TEKST' => str_replace('\r\n', "\n", $post->tekst),
-			);
+		$this->suService->alsLid($ontvanger, function () use ($ontvanger, $auteur, $post, $draad, $template) {
+			$bericht = $this->twig->render($template, [
+				'naam' => $ontvanger->profiel->getNaam('civitas'),
+				'auteur' => $auteur->getNaam('civitas'),
+				'postlink' => $post->getLink(true),
+				'titel' => $draad->titel,
+				'tekst' => str_replace('\r\n', "\n", $post->tekst),
+			]);
 
 			$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
-			$mail->setPlaceholders($values);
 			$mail->setLightBB();
 			$mail->send();
 		});
@@ -154,7 +158,6 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		$draad = $post->draad;
 
 		// Laad meldingsbericht in
-		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumvermeldingmelding.mail');
 		$genoemden = $this->zoekGenoemdeLeden($post->tekst);
 		foreach ($genoemden as $uid) {
 			$genoemde = ProfielRepository::get($uid);
@@ -173,7 +176,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 				continue;
 			}
 
-			$this->stuurMelding($genoemde->account, $auteur, $post, $draad, $bericht);
+			$this->stuurMelding($genoemde->account, $auteur, $post, $draad, 'mail/bericht/forumvermeldingmelding.mail.twig');
 		}
 	}
 

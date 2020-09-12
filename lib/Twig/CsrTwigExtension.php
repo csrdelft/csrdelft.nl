@@ -318,11 +318,11 @@ namespace CsrDelft\Twig {
 		public function instant_search_form() {
 			return (new InstantSearchForm())->toString();
 		}
-		public function bbcode(string $string, string $mode = 'normal') {
+		public function bbcode(string $string, string $mode = 'normal', bool $light = false) {
 			if ($mode === 'html') {
-				return CsrBB::parseHtml($string);
+				return CsrBB::parseHtml($string, $light);
 			} else if ($mode == 'mail') {
-				return CsrBB::parseMail($string);
+				return CsrBB::parseMail($string, $light);
 			} else {
 				return CsrBB::parse($string);
 			}

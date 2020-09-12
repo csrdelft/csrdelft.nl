@@ -26,6 +26,7 @@ use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -439,5 +440,39 @@ class ToolsController extends AbstractController {
 		} else {
 			return new PlainView(CsrBB::parse($string));
 		}
+	}
+
+	/**
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @Route("/tools/mail")
+	 * @Auth(P_PUBLIC)
+	 */
+	public function testMail() {
+		return new Response(str_replace("\n", "\r\n", str_replace("\r\n", "\n", $this->renderView('mail/letter.mail.twig', [
+			'email_from' => 'pubcie@csrdelft.nl',
+			'email_to' => 'pubcie@csrdelft.nl',
+			'bericht' => <<<HTML
+Geachte Am. Oolbekkink,
+
+Ama. Van Riggelen heeft een draad aangemaakt in het forum Verticale Faculteit: [url=https://csrdelft.nl/forum/reactie/126651#126651]VGA's 20/21[/url]. U heeft aangegeven meldingen te willen ontvangen voor nieuwe draadjes in dit forumdeel.
+HTML,
+
+			'body' => <<<HTML
+Allerbeste Faculs!!
+Komende dinsdag is alweer de eerste VGA en wij als verticale leiders hebben allemaal [s]leuke[/s] Facultastische dingen voor jullie bedacht!
+De avond gaat er als volgt uit zien:
+Vanaf [b]19.00 uur[/b] gaan we afspreken in het Abtswoudse Bos om daar samen te eten. Na het eten is er een supermooie, relaxte activiteit gepland waarbij we kunnen genieten van het mooie weer dat voorspeld is. De activiteit zal maximaal vier euro gaan kosten per persoon.
+Verder: de maaltijd is een voor-door maaltijd, ofwel iedereen/elke kring neemt wat mee. Om iets meer orde te scheppen in de potentiële chaos, is er al een kleine voorindeling. Gemaakte kosten voor het eten en drinken kunnen op de wbw gezet worden.
+Indeling:
+B1: Snacks en fris
+B2: Bier
+B3: Avondeten voedsel
+B4: Meer avondeten voedsel
+Ook mag iedereen [b]bord, bestek en [u]twee[/u] bekers[/b] meenemen!
+
+Ketzt u in!
+[activiteit=2064]
+HTML
+		]))));
 	}
 }

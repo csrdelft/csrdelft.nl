@@ -3,6 +3,7 @@
 namespace CsrDelft\common;
 
 use CsrDelft\view\bbcode\CsrBB;
+use Twig\Environment;
 
 /**
  * Mail.class.php
@@ -143,11 +144,8 @@ class Mail {
 		return !isSyrinx();
 	}
 
-	public function setPlaceholders(array $placeholders) {
-		$this->placeholders = $placeholders;
-	}
-
 	public function getHeaders() {
+		$headers[] = 'MIME-Version: 1.0';
 		$headers[] = 'From: ' . $this->getFrom();
 		if (!empty($this->replyTo)) {
 			$headers[] = 'Reply-To: ' . $this->getReplyTo();
@@ -155,7 +153,6 @@ class Mail {
 		if (!empty($this->bcc)) {
 			$headers[] = 'Bcc: ' . $this->getBcc();
 		}
-		$headers[] = 'Content-Type: text/' . $this->type . '; charset=' . $this->charset;
 		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 		return implode("\r\n", $headers);
 	}
@@ -164,47 +161,42 @@ class Mail {
 		return '-f ' . $this->getFrom(true);
 	}
 
-	/**
-	 * Eenvoudige search-and-replace jetzer.
-	 *
-	 * voorbeeld: "hallo NAAM, groet, AFZENDER"
-	 * replace_values: array('NAAM' => 'Jieter', 'AFZENDER' => 'PubCie');
-	 * resultaat in body: "hallo Jieter, groet, PubCie"
-	 *
-	 * Controleert niet of alle placeholders ook gegeven worden in de
-	 * values-array!
-	 */
-	public function getBody() {
-		$body = $this->bericht;
-		foreach ($this->placeholders as $key => $value) {
-			$body = str_replace($key, $value, $body);
-		}
-		if ($this->type === 'html') {
-			$body = CsrBB::parseMail($body, $this->lightBB);
-		}
-		return $body;
-	}
-
 	////////// active-record //////////
 
 	public function send($debug = false) {
-		switch ($this->type) {
-			case 'html':
-				$body = view('mail.letter', ['body' => $this->getBody()]);
-				break;
+		$twig = ContainerFacade::getContainer()->get('twig');
+		$boundary = uniqid('csr_');
 
-			case 'plain':
-				$body = $this->getBody();
-				break;
+		$htmlBody = $twig->render('mail/letter.mail.twig', [
+			'bericht' => $this->bericht,
+		]);
+		$plainBody = $twig->render('mail/plain.mail.twig', ['bericht' => $this->bericht]);
 
-			default:
-				throw new CsrException('unknown mail type: "' . $this->type . '"');
-		}
-		if ($this->inDebugMode() AND !$debug) {
-			setMelding($body, 0);
-			return false;
-		}
-		return mail($this->getTo(), $this->getSubject(), $body, $this->getHeaders(), $this->getExtraparameters());
+		$headers = $this->getHeaders();
+		$headers .= "\r\nContent-Type: multipart/alternative;boundary=\"$boundary\"\r\n";
+
+		$body = <<<MAIL
+This is a mime encode message
+
+--$boundary
+Content-Type: text/plain;charset="utf-8"
+
+$plainBody
+
+--$boundary
+Content-Type: text/html;charset="utf-8"
+
+$htmlBody
+
+--$boundary--
+MAIL;
+		$body = str_replace("\n", "\r\n", $body);
+
+//		if ($this->inDebugMode() AND !$debug) {
+//			setMelding($htmlBody, 0);
+//			return false;
+//		}
+		return mail($this->getTo(), $this->getSubject(), $body, $headers);//, $this->getExtraparameters());
 	}
 
 	public function __toString() {
