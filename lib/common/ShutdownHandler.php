@@ -17,19 +17,6 @@ use Throwable;
  */
 final class ShutdownHandler {
 	/**
-	 * Zet de http status code. Voorkomt dat stacktraces weergegeven worden.
-	 *
-	 * Runt in Productie mode.
-	 */
-	public static function errorPageHandler() {
-		$debug = self::getDebug();
-		if ($debug !== null && self::isError($debug)) {
-			http_response_code(500);
-			view('fout.500')->view();
-		}
-	}
-
-	/**
 	 * Stuur een mail naar de PubCie.
 	 *
 	 * Runt in Productie mode.

@@ -11,6 +11,9 @@ use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\fotoalbum\FotoAlbumZijbalkView;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Zijbalk.static.php
@@ -22,10 +25,10 @@ abstract class Zijbalk {
 
 	/**
 	 * @param string[] $zijbalk
-	 * @return array
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
+	 * @return string[]
+	 * @throws LoaderError
+	 * @throws RuntimeError
+	 * @throws SyntaxError
 	 */
 	public static function addStandaardZijbalk(array $zijbalk) {
 		$twig = ContainerFacade::getContainer()->get('twig');
@@ -34,7 +37,7 @@ abstract class Zijbalk {
 		if (LoginService::mag(P_LOGGED_IN) and lid_instelling('zijbalk', 'favorieten') == 'ja') {
 			$menu = $menuItemRepository->getMenu(LoginService::getUid());
 			$menu->tekst = 'Favorieten';
-			array_unshift($zijbalk, view('menu.block', ['root' => $menu])->toString());
+			array_unshift($zijbalk, $twig->render('menu/block.html.twig', ['root' => $menu]));
 		}
 		// Is het al...
 		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
@@ -46,7 +49,7 @@ abstract class Zijbalk {
 			$sponsor_menu = $menuItemRepository->getMenu("sponsors");
 			if ($sponsor_menu) {
 				$sponsor_menu->tekst = 'Mogelijkheden';
-				$zijbalk[] = view('menu.block', ['root' => $sponsor_menu])->toString();
+				$zijbalk[] = $twig->render('menu/block.html.twig', ['root' => $sponsor_menu]);
 			}
 		}
 

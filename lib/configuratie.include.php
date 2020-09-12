@@ -33,7 +33,6 @@ if (!isCi() && !isCli()) {
 		register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
 		set_error_handler([ShutdownHandler::class, 'slackHandler']);
 		register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
-		register_shutdown_function([ShutdownHandler::class, 'errorPageHandler']);
 	}
 }
 
