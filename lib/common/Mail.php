@@ -192,10 +192,10 @@ $htmlBody
 MAIL;
 		$body = str_replace("\n", "\r\n", $body);
 
-//		if ($this->inDebugMode() AND !$debug) {
-//			setMelding($htmlBody, 0);
-//			return false;
-//		}
+		if ($this->inDebugMode() AND !$debug) {
+			setMelding($htmlBody, 0);
+			return false;
+		}
 		return mail($this->getTo(), $this->getSubject(), $body, $headers);//, $this->getExtraparameters());
 	}
 
