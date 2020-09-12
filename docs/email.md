@@ -4,7 +4,7 @@
 
 Het makkelijkst is om sendmail in te stellen met je eigen gmail account als SMTP server. Deze [guide](https://websistent.com/using-sendmail-on-windows/) kan je helpen om sendmail op te zetten op Windows. Als je 2F aan hebt staan moet je via accounts.google.com een app wachtwoord maken voor je gmail en deze gebruiken.
 
-Standaard wordt in `APP_ENV=dev` mail als melding getoond. Door `APP_ENV` op prod te zetten of door de check in `Mail::send` weg te halen kun je mails sturen. Standaard zijn alle emailadressen het adres van de pubcie, zodat je niet per ongeluk mailtjes naar willekeurige mensen stuurt. Check `Mail::production_safe` als je dit wil veranderen naar je eigen emailadres.
+Standaard wordt mail als melding getoond. Door de check in `Mail::send` weg te halen kun je mails sturen. Standaard zijn alle emailadressen het adres van de pubcie, zodat je niet per ongeluk mailtjes naar willekeurige mensen stuurt. Check `Mail::production_safe` als je dit wil veranderen naar je eigen emailadres.
 
 ## Courant
 
