@@ -20,7 +20,7 @@ final class BbHelper {
 	 * @return string
 	 */
 	public static function lightLinkInline($env, $tag, $url, $content) {
-		if ($env->email_mode && isset($url[0]) && $url[0] === '/') {
+		if (isset($url[0]) && $url[0] === '/') {
 			// Zorg voor werkende link in e-mail
 			$url = CSR_ROOT . $url;
 		}

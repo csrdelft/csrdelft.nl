@@ -69,7 +69,7 @@ HTML;
 			$style .= 'height: ' . ((int)$arguments['h']) . 'px;';
 		}
 
-		if ($this->env->email_mode) {
+		if ($this->env->mode == "light") {
 			// Geef een standaard breedte op om te voorkomen dat afbeeldingen te breed worden.
 			if (!$heeftBreedte && !$heeftHoogte) {
 				$style .= 'width:500px;';

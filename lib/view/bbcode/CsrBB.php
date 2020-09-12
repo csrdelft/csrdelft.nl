@@ -167,10 +167,9 @@ class CsrBB extends Parser {
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseMail($bbcode, $light = false) {
+	public static function parseMail($bbcode) {
 		$env = new BbEnv();
 		$env->mode = "light";
-		$env->email_mode = true;
 		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
 		return $parser->getHtml($bbcode);
 	}

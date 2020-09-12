@@ -322,7 +322,7 @@ namespace CsrDelft\Twig {
 			if ($mode === 'html') {
 				return CsrBB::parseHtml($string, $light);
 			} else if ($mode == 'mail') {
-				return CsrBB::parseMail($string, $light);
+				return CsrBB::parseMail($string);
 			} else if ($mode == 'plain') {
 				return CsrBB::parsePlain($string);
 			} else {
