@@ -48,3 +48,4 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Wiki](wiki.md)
 - [Deploy](deploy.md) op Syrinx
 - [Verbinden met MySql op Syrinx](verbinden-met-mysql-op-syrinx.md)
+- [Email](email.md) Mailtjes sturen
