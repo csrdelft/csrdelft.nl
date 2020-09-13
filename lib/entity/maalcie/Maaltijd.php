@@ -266,9 +266,10 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 			// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
 			// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
 			/** @var CorveeTaak $taken */
-			$taken = ContainerFacade::getContainer()->get(CorveeTakenRepository::class)->getTakenVoorAgenda($this->getMoment(), $this->getMoment());
+			$corveeTakenRepository = ContainerFacade::getContainer()->get(CorveeTakenRepository::class);
+			$taken = $corveeTakenRepository->getTakenVoorAgenda($this->getMoment(), $this->getMoment());
 			foreach ($taken as $taak) {
-				if ($taak->profiel && $taak->profiel === $uid && $taak->maaltijd_id !== null) { // checken op gekoppelde maaltijd (zie hierboven)
+				if ($taak->profiel && $taak->profiel->uid === $uid && $taak->maaltijd_id !== null) { // checken op gekoppelde maaltijd (zie hierboven)
 					$this->maaltijdcorvee = $taak; // de taak die toegang geeft tot de maaltijdlijst
 					return true;
 				}

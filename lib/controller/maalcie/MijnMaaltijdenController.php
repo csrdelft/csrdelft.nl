@@ -18,6 +18,7 @@ use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -134,7 +135,7 @@ class MijnMaaltijdenController extends AbstractController {
 	/**
 	 * @param Request $request
 	 * @param Maaltijd $maaltijd
-	 * @return TemplateView
+	 * @return TemplateView|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/maaltijden/ketzer/aanmelden/{maaltijd_id}", methods={"GET","POST"})
@@ -150,14 +151,14 @@ class MijnMaaltijdenController extends AbstractController {
 				'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs'))
 			]);
 		} else {
-			return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
+			return $this->render('maaltijden/bb.html.twig', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 		}
 	}
 
 	/**
 	 * @param Request $request
 	 * @param Maaltijd $maaltijd
-	 * @return TemplateView
+	 * @return TemplateView|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/maaltijden/ketzer/afmelden/{maaltijd_id}", methods={"GET","POST"})
@@ -172,13 +173,13 @@ class MijnMaaltijdenController extends AbstractController {
 				'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs'))
 			]);
 		} else {
-			return view('maaltijden.bb', ['maaltijd' => $maaltijd]);
+			return $this->render('maaltijden/bb.html.twig', ['maaltijd' => $maaltijd]);
 		}
 	}
 
 	/**
 	 * @param Maaltijd $maaltijd
-	 * @return TemplateView
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/maaltijden/ketzer/gasten/{maaltijd_id}", methods={"POST"})
@@ -188,12 +189,12 @@ class MijnMaaltijdenController extends AbstractController {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
 		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($maaltijd->maaltijd_id, $this->getUid(), $gasten);
-		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
+		return $this->render('maaltijden/bb.html.twig', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
 	/**
 	 * @param int $maaltijd_id
-	 * @return TemplateView
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/maaltijden/ketzer/opmerking/{maaltijd_id}", methods={"POST"})
@@ -202,7 +203,7 @@ class MijnMaaltijdenController extends AbstractController {
 	public function opmerking($maaltijd_id) {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
 		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens($maaltijd_id, $this->getUid(), $opmerking);
-		return view('maaltijden.bb', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
+		return $this->render('maaltijden/bb.html.twig', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
 	}
 
 	/**

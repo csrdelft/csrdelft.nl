@@ -81,7 +81,7 @@ $.extend(window, {
 		// See blade_templates/forum/partial/post_forum.blade.php
 		saveConceptForumBericht,
 	},
-	// See resources/views/maaltijden/bb.blade.php
+	// See templates/maaltijden/bb.html.twig
 	ketzerAjax,
 	maalcie: {
 		// See view/maalcie/forms/SuggestieLijst.php

@@ -13,6 +13,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
+use Twig\Environment;
 
 /**
  * Geeft een maaltijdketzer weer met maaltijdgegevens, aantal aanmeldingen en een aanmeldknopje.
@@ -42,11 +43,16 @@ class BbMaaltijd extends BbTag {
 	 * @var MaaltijdenRepository
 	 */
 	private $maaltijdenRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(MaaltijdenRepository $maaltijdenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository) {
+	public function __construct(Environment $twig, MaaltijdenRepository $maaltijdenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdBeoordelingenRepository = $maaltijdBeoordelingenRepository;
+		$this->twig = $twig;
 	}
 
 	public static function getTagName() {
@@ -86,13 +92,13 @@ class BbMaaltijd extends BbTag {
 				$kwaliteit = (new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling))->getHtml();
 			}
 
-			$result .= view('maaltijden.bb', [
+			$result .= $this->twig->render('maaltijden/bb.html.twig', [
 				'maaltijd' => $maaltijd,
 				'kwantiteit' => $kwantiteit,
 				'kwaliteit' => $kwaliteit,
 				'aanmelding' => $aanmelding,
 				'border' => count($this->maaltijden) > 1
-			])->getHtml();
+			]);
 		}
 		if (count($this->maaltijden) > 1 && $this->content !== 'beoordeling') {
 			$result .= '<div class="d-block mt-3 text-right"><a href="/maaltijden/ketzer">Alle maaltijden</a></div>';

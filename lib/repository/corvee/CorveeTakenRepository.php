@@ -170,8 +170,8 @@ class CorveeTakenRepository extends AbstractRepository {
 	public function getTakenVoorAgenda(DateTimeInterface $van, DateTimeInterface $tot, $iedereen = false) {
 		$qb = $this->createQueryBuilder('ct');
 		$qb->where('ct.verwijderd = false and ct.datum >= :van_datum and ct.datum <= :tot_datum');
-		$qb->setParameter('van_datum', $van);
-		$qb->setParameter('tot_datum', $tot);
+		$qb->setParameter('van_datum', $van->setTime(0,0,0));
+		$qb->setParameter('tot_datum', $tot->setTime(23,59,59));
 		if (!$iedereen) {
 			$qb->andWhere('ct.profiel = :profiel');
 			$qb->setParameter('profiel', LoginService::getProfiel());
