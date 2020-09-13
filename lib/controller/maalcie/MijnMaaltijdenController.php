@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
+use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
@@ -48,7 +49,7 @@ class MijnMaaltijdenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/maaltijden", methods={"GET"})
@@ -60,8 +61,11 @@ class MijnMaaltijdenController extends AbstractController {
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($maaltijden, $this->getUid());
 		$timestamp = date_create_immutable(instelling('maaltijden', 'beoordeling_periode'));
 		$recent = $this->maaltijdAanmeldingenRepository->getRecenteAanmeldingenVoorLid($this->getUid(), $timestamp);
+		/** @var Maaltijd[] $beoordelen */
 		$beoordelen = [];
+		/** @var MaaltijdKwantiteitBeoordelingForm[] $kwantiteit_forms */
 		$kwantiteit_forms = [];
+		/** @var MaaltijdKwaliteitBeoordelingForm[] $kwaliteit_forms */
 		$kwaliteit_forms = [];
 		foreach ($maaltijden as $maaltijd) {
 			$maaltijd_id = $maaltijd->maaltijd_id;
@@ -80,7 +84,7 @@ class MijnMaaltijdenController extends AbstractController {
 			$kwantiteit_forms[$maaltijd_id] = new MaaltijdKwantiteitBeoordelingForm($maaltijd, $beoordeling);
 			$kwaliteit_forms[$maaltijd_id] = new MaaltijdKwaliteitBeoordelingForm($maaltijd, $beoordeling);
 		}
-		return view('maaltijden.maaltijd.mijn_maaltijden', [
+		return $this->render('maaltijden/maaltijd/mijn_maaltijden.html.twig', [
 			'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs')),
 			'maaltijden' => $maaltijden,
 			'aanmeldingen' => $aanmeldingen,
@@ -92,7 +96,7 @@ class MijnMaaltijdenController extends AbstractController {
 
 	/**
 	 * @param Maaltijd $maaltijd
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/lijst/{maaltijd_id}", methods={"GET"})
 	 * @Auth(P_MAAL_IK)
 	 */
@@ -105,7 +109,7 @@ class MijnMaaltijdenController extends AbstractController {
 			$aanmeldingen[] = new MaaltijdAanmelding();
 		}
 
-		return view('maaltijden.maaltijd.maaltijd_lijst', [
+		return $this->render('maaltijden/maaltijd/maaltijd_lijst.html.twig', [
 			'titel' => $maaltijd->getTitel(),
 			'aanmeldingen' => $aanmeldingen,
 			'eterstotaal' => $maaltijd->getAantalAanmeldingen() + $maaltijd->getMarge(),
@@ -135,7 +139,7 @@ class MijnMaaltijdenController extends AbstractController {
 	/**
 	 * @param Request $request
 	 * @param Maaltijd $maaltijd
-	 * @return TemplateView|Response
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/maaltijden/ketzer/aanmelden/{maaltijd_id}", methods={"GET","POST"})
@@ -145,7 +149,7 @@ class MijnMaaltijdenController extends AbstractController {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
 		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $this->getProfiel(), $this->getProfiel());
 		if ($request->getMethod() == 'POST') {
-			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
+			return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
 				'maaltijd' => $aanmelding->maaltijd,
 				'aanmelding' => $aanmelding,
 				'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs'))
@@ -158,7 +162,7 @@ class MijnMaaltijdenController extends AbstractController {
 	/**
 	 * @param Request $request
 	 * @param Maaltijd $maaltijd
-	 * @return TemplateView|Response
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/maaltijden/ketzer/afmelden/{maaltijd_id}", methods={"GET","POST"})
@@ -168,7 +172,7 @@ class MijnMaaltijdenController extends AbstractController {
 		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
 		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $this->getProfiel());
 		if ($request->getMethod() == 'POST') {
-			return view('maaltijden.maaltijd.mijn_maaltijd_lijst', [
+			return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
 				'maaltijd' => $maaltijd,
 				'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs'))
 			]);
@@ -193,6 +197,25 @@ class MijnMaaltijdenController extends AbstractController {
 	}
 
 	/**
+	 * @param Maaltijd $maaltijd
+	 * @return Response
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/maaltijden/mijn/gasten/{maaltijd_id}", methods={"POST"})
+	 * @Auth(P_MAAL_IK)
+	 */
+	public function gasten_mijn(Maaltijd $maaltijd) {
+		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
+		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
+		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($maaltijd->maaltijd_id, $this->getUid(), $gasten);
+		return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
+			'maaltijd' => $aanmelding->maaltijd,
+			'aanmelding' => $aanmelding,
+			'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs'))
+		]);
+	}
+
+	/**
 	 * @param int $maaltijd_id
 	 * @return Response
 	 * @throws ORMException
@@ -204,6 +227,24 @@ class MijnMaaltijdenController extends AbstractController {
 		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
 		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens($maaltijd_id, $this->getUid(), $opmerking);
 		return $this->render('maaltijden/bb.html.twig', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
+	}
+
+	/**
+	 * @param int $maaltijd_id
+	 * @return Response
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/maaltijden/mijn/opmerking/{maaltijd_id}", methods={"POST"})
+	 * @Auth(P_MAAL_IK)
+	 */
+	public function opmerking_mijn($maaltijd_id) {
+		$opmerking = filter_input(INPUT_POST, 'gasten_eetwens', FILTER_SANITIZE_STRING);
+		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGastenEetwens($maaltijd_id, $this->getUid(), $opmerking);
+		return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
+			'maaltijd' => $aanmelding->maaltijd,
+			'aanmelding' => $aanmelding,
+			'standaardprijs' => intval(instelling('maaltijden', 'standaard_prijs'))
+		]);
 	}
 
 	/**

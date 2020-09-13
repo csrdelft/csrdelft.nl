@@ -346,7 +346,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	 *
 	 * @param int $mid
 	 * @param bool $verwijderd
-	 * @return PDOStatement|CorveeTaak[]
+	 * @return CorveeTaak[]
 	 * @throws CsrGebruikerException
 	 */
 	public function getTakenVoorMaaltijd($mid, $verwijderd = false) {

@@ -1,16 +1,17 @@
-@extends('maaltijden.base')
+{% extends 'maaltijden/base.html.twig' %}
 
-@section('titel', 'Mijn maaltijden')
+{% block titel %}Mijn maaltijden{% endblock %}
 
-@section('content')
-	@parent
+{% block content %}
+	{{ parent() }}
 	<p>
 		Op deze pagina kunt u zich aan- en afmelden voor maaltijden op Confide door op de knop te klikken in de kolom
 		"Aangemeld".
 		Onderstaande tabel toont de maaltijden in de komende maand.
 		De kolom "Aangemeld" geeft aan of u bent aangemeld voor de maaltijd met "Ja", of niet bent aangemeld met "Nee".
 		Als u een abonnement heeft dat u automatisch heeft aangemeld staat er "(abo)" achter.
-		Als u bent ingedeeld voor een corveetaak staat dat aangegeven door middel van dit icoon: @icon("paintcan", null, "Corvee")
+		Als u bent ingedeeld voor een corveetaak staat dat aangegeven door middel van dit
+		icoon: {{ icon("paintcan", null, "Corvee") }}
 		Als u (kwali)kok bent heeft u tevens de mogelijkheid de maaltijdlijst te bekijken en de inschrijvingen te sluiten.
 	</p>
 	<h3>Gasten aanmelden</h3>
@@ -34,13 +35,13 @@
 			<th>Eters (Limiet)</th>
 			<th style="width: 140px;">Aangemeld</th>
 			<th>Gasten</th>
-			<th title="Gasten allergie/diëet" style="width: 25px;">@icon("comment")</th>
+			<th title="Gasten allergie/diëet" style="width: 25px;">{{ icon("comment") }}</th>
 		</tr>
 		</thead>
 		<tbody>
-		@foreach($maaltijden as $mid => $maaltijd)
-			@include('maaltijden.maaltijd.mijn_maaltijd_lijst', ['maaltijd' => $maaltijd, 'standaardprijs' => $standaardprijs, 'aanmelding' => $aanmeldingen[$mid]])
-		@endforeach
+		{% for mid, maaltijd in maaltijden %}
+			{{ include('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', {maaltijd: maaltijd, standaardprijs: standaardprijs, aanmelding: aanmeldingen[mid]}) }}
+		{% endfor %}
 		</tbody>
 	</table>
 
@@ -56,14 +57,14 @@
 		</tr>
 		</thead>
 		<tbody>
-		@foreach($beoordelen as $mid => $maaltijd)
+		{% for mid, maaltijd in beoordelen %}
 			<tr>
-				<td>{{date_format_intl($maaltijd->datum, LONG_DATE_FORMAT)}}</td>
-				<td>{{$maaltijd->titel}}</td>
-				<td>{{$kwantiteit[$mid]->view()}}</td>
-				<td>{{$kwaliteit[$mid]->view()}}</td>
+				<td>{{ maaltijd.datum | datetime_format_long }}</td>
+				<td>{{ maaltijd.titel }}</td>
+				<td>{{ kwantiteit[mid].toString | raw }}</td>
+				<td>{{ kwaliteit[mid].toString | raw }}</td>
 			</tr>
-		@endforeach
+		{% endfor %}
 		</tbody>
 	</table>
-@endsection
+{% endblock %}

@@ -1,9 +1,9 @@
-@extends('maaltijden.base')
+{% extends 'maaltijden/base.html.twig' %}
 
-@section('titel', 'Maaltijdbeoordelingen')
+{% block titel %}Maaltijdbeoordelingen{% endblock %}
 
-@section('content')
-	@parent
+{% block content %}
+	{{ parent() }}
 
 	<p>Hieronder vind je per maaltijd de gegeven beoordelingen. Onder aantal beoordelingen
 		staat eerst het aantal leden dat de kwantiteit heeft beoordeeld, gevolgd door het aantal
@@ -18,6 +18,5 @@
 		Omdat deze afwijking gebaseerd is op het gemiddelde van een lid, zal dit getal ook na de
 		uiterste beoordeeldatum veranderen.</p>
 
-	{!! $table->getHtml() !!}
-
-@endsection
+	{{ table.toString | raw }}
+{% endblock %}

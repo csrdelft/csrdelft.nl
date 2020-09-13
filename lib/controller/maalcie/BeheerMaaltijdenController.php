@@ -31,6 +31,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -350,12 +351,12 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/beheer/beoordelingen", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function GET_beoordelingen() {
-		return view('maaltijden.maaltijd.maaltijd_beoordelingen', [
+		return $this->render('maaltijden/maaltijd/maaltijd_beoordelingen.html.twig', [
 			'table' => new BeheerMaaltijdenBeoordelingenTable(),
 		]);
 	}
