@@ -6,14 +6,17 @@ import Settings = DataTables.Settings;
 export default {
 	deferRender: true,
 	createdRow(this: JQuery, tr, data: PersistentEntity) {
-		const table = this;
 		$(tr).attr('data-uuid', data.UUID);
 		init(tr as HTMLElement);
 
 		$(tr).children().each((columnIndex, td) => {
 			// Init custom buttons in rows
 			$(td).children('a.post').each((i, a) => {
-				$(a).attr('data-tableid', table.attr('id')!);
+				const id = this.attr('id');
+				if (!id) {
+					throw new Error("Geen datatableid")
+				}
+				$(a).attr('data-tableid', id);
 			});
 		});
 	},

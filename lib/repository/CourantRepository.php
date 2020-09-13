@@ -7,6 +7,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\courant\CourantView;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * CourantModel.class.php
@@ -22,8 +23,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Courant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CourantRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+	/**
+	 * @var Security
+	 */
+	private $security;
+
+	public function __construct(ManagerRegistry $registry, Security $security) {
 		parent::__construct($registry, Courant::class);
+		$this->security = $security;
 	}
 
 	public function magBeheren() {
@@ -37,8 +44,8 @@ class CourantRepository extends AbstractRepository {
 	public function nieuwCourant() {
 		$courant = new Courant();
 		$courant->verzendMoment = new DateTime();
-		$courant->verzender_profiel = LoginService::getProfiel();
-		$courant->verzender = LoginService::getUid();
+		$courant->verzender_profiel = $this->security->getUser()->profiel;
+		$courant->verzender = $this->security->getUser()->getUsername();
 
 		return $courant;
 	}

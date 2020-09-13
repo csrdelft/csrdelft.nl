@@ -1,6 +1,8 @@
 import ctx from './ctx';
+import {select} from "./lib/dom";
+import {initDropzone} from "./lib/dropzone";
 
-export const registerGrafiekContext = async () => {
+export const registerGrafiekContext = async (): Promise<void> => {
 	const {
 		initBar,
 		initDeelnamegrafiek,
@@ -18,7 +20,7 @@ export const registerGrafiekContext = async () => {
 	});
 };
 
-export const registerBbContext = async () => {
+export const registerBbContext = async (): Promise<void> => {
 	const {
 		activeerLidHints,
 		initBbPreview,
@@ -34,7 +36,7 @@ export const registerBbContext = async () => {
 	});
 };
 
-export const registerDataTableContext = async () => {
+export const registerDataTableContext = async (): Promise<void> => {
 	const {
 		initDataTable,
 		initOfflineDataTable,
@@ -46,47 +48,42 @@ export const registerDataTableContext = async () => {
 	});
 };
 
-export const registerKnopContext = async () => {
+export const registerKnopContext = async (): Promise<void> => {
 	const {
-		knopGet,
-		knopPost,
-		knopVergroot,
+		initKnopPost,
+		initKnopGet,
+		initKnopVergroot,
+		initRadioButtons,
 	} = await import(/* webpackChunkName: "knop" */'./lib/knop');
 
 	ctx.addHandlers({
-		'.get': (el) => el.addEventListener('click', knopGet),
-		'.post': (el) => el.addEventListener('click', knopPost),
-		'.vergroot': (el) => el.addEventListener('click', knopVergroot),
-		'[data-buttons=radio]': (el) => {
-			for (const btn of Array.from(el.querySelectorAll('a.btn'))) {
-				btn.addEventListener('click',
-					(event) => {
-						for (const active of Array.from(el.querySelectorAll('.active'))) {
-							active.classList.remove('active');
-						}
-						(event.target as Element).classList.add('active');
-					},
-				);
-			}
-		},
+		'.get': initKnopGet,
+		'.post': initKnopPost,
+		'.vergroot': initKnopVergroot,
+		'[data-buttons=radio]': initRadioButtons,
 	});
 
 };
 
-export const registerFormulierContext = async () => {
+export const registerFormulierContext = async (): Promise<void> => {
 	const [
 		{
 			formCancel,
 			formReset,
 			formSubmit,
 			formToggle,
+			initSterrenField,
 		},
 		{
 			bbCodeSet,
 		},
+		{
+			initDropzone,
+		},
 	] = await Promise.all([
 		import(/* webpackChunkName: "formulier" */'./lib/formulier'),
 		import(/* webpackChunkName: "bbcode-set" */'./lib/bbcode-set'),
+		import(/* webpackChunkName: "dropzone" */'./lib/dropzone'),
 	]);
 
 	ctx.addHandlers({
@@ -98,31 +95,49 @@ export const registerFormulierContext = async () => {
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
 		'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 		'time.timeago': (el) => $(el).timeago(),
+		'.SterrenField': initSterrenField,
+		'form.dropzone': initDropzone,
 	});
 };
 
-export const registerGlobalContext = async () => {
+export const registerGlobalContext = async (): Promise<void> => {
 	const [
+		{default: hoverintent},
 		{initKaartjes},
 		{default: Vue},
 		{default: $},
 	] = await Promise.all([
+		import(/* webpackChunkName: "hoverintent" */'hoverintent'),
 		import(/* webpackChunkName: "kaartje" */'./lib/kaartje'),
 		import(/* webpackChunkName: "vue" */'vue'),
 		import(/* webpackChunkName: "jquery" */'jquery'),
 	]);
 
 	ctx.addHandlers({
-		'.hoverIntent': (el) => $(el).hoverIntent({
-			over() {
-				$(this).find('.hoverIntentContent').fadeIn();
-			},
-			out() {
-				$(this).find('.hoverIntentContent').fadeOut();
-			},
-			timeout: 250,
-		}),
+		'.hoverIntent': (el) => hoverintent(el,
+			() => $(select('.hoverIntentContent', el)).fadeIn(),
+			() => $(select('.hoverIntentContent', el)).fadeOut()
+		).options({timeout: 250}),
 		'.vue-context': (el) => new Vue({el}),
 		'[data-visite]': initKaartjes,
+		'.AutoSize': el => {
+				el.setAttribute('style', 'height:' + (el.scrollHeight) + 'px;overflow-y:hidden;');
+				el.addEventListener("input", function () {
+					this.style.height = 'auto';
+					this.style.height = (this.scrollHeight) + 'px';
+				}, false);
+		}
+	});
+};
+
+export const registerFlatpickrContext = async (): Promise<void> => {
+	const {
+		initDateTimePicker,
+		initDatePicker,
+	} = await import(/* webpackChunkName: "datepicker" */'./lib/datepicker');
+
+	ctx.addHandlers({
+		'.DateTimeField': initDateTimePicker,
+		'.DateField': initDatePicker,
 	});
 };

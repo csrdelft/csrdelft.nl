@@ -1,0 +1,18 @@
+{% extends 'extern/layout.html.twig' %}
+
+{% block titel %}Login{% endblock %}
+
+{% block styles %}
+	{{ css_asset('extern') }}
+{% endblock %}
+
+{% block loginpopup %}{% endblock %}
+{% block loginbutton %}{% endblock %}
+
+{% block content %}
+	<div>
+		<h1>Inloggen</h1>
+		<p>U dient in te loggen om verder te gaan</p>
+		{{ loginForm.toString | raw }}
+	</div>
+{% endblock %}

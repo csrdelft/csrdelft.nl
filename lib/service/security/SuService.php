@@ -5,14 +5,15 @@ namespace CsrDelft\service\security;
 
 
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class SuService {
-	private $tempSwitchUid;
-
 	/**
 	 * @var AccountRepository
 	 */
@@ -21,106 +22,97 @@ class SuService {
 	 * @var LoginService
 	 */
 	private $loginService;
+	/**
+	 * @var Security
+	 */
+	private $security;
+	/**
+	 * @var TokenStorageInterface
+	 */
+	private $tokenStorage;
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
 
-	public function __construct(LoginService $loginService, AccountRepository $accountRepository) {
+	public function __construct(
+		Security $security,
+		LoginService $loginService,
+		AccountRepository $accountRepository,
+		TokenStorageInterface $tokenStorage,
+		AccessService $accessService
+	) {
 		$this->accountRepository = $accountRepository;
 		$this->loginService = $loginService;
+		$this->security = $security;
+		$this->tokenStorage = $tokenStorage;
+		$this->accessService = $accessService;
 	}
 
-	/**
-	 * @param string $uid
-	 *
-	 * @throws CsrGebruikerException
-	 */
-	public function switchUser($uid) {
-		if ($this->isSued()) {
-			throw new CsrGebruikerException('Geneste su niet mogelijk!');
-		}
-		$suNaar = $this->accountRepository->get($uid);
-		if (!$this->maySuTo($suNaar)) {
-			throw new CsrGebruikerException('Deze gebruiker mag niet inloggen!');
-		}
-		$suedFrom = $this->loginService->getAccount();
-		// Keep authentication method
-		$authMethod = $this->loginService->getAuthenticationMethod();
-
-		// Clear session
-		session_unset();
-
-		// Subject assignment:
-		$_SESSION[LoginService::SESS_SUED_FROM] = $suedFrom->uid;
-		$_SESSION[LoginService::SESS_UID] = $suNaar->uid;
-		$_SESSION[LoginService::SESS_AUTHENTICATION_METHOD] = $authMethod;
-	}
-
-	/**
-	 */
-	public function endSwitchUser() {
-		$suedFrom = static::getSuedFrom();
-		// Keep authentication method
-		$authMethod = $this->loginService->getAuthenticationMethod();
-
-		// Clear session
-		session_unset();
-
-		// Subject assignment:
-		$_SESSION[LoginService::SESS_UID] = $suedFrom->uid;
-		$_SESSION[LoginService::SESS_SUED_FROM] = null;
-		$_SESSION[LoginService::SESS_AUTHENTICATION_METHOD] = $authMethod;
-	}
 	/**
 	 * @return bool
 	 */
 	public function isSued() {
-		if (!isset($_SESSION[LoginService::SESS_SUED_FROM])) {
-			return false;
+		return $this->security->getToken() && $this->security->isGranted('IS_IMPERSONATOR');
+	}
+
+	/**
+	 * Voer een callable uit alsof je bent ingelogd als $account.
+	 *
+	 * @param Account $account
+	 * @param callable $fun
+	 * @return mixed Het resultaat van $fun
+	 */
+	public function alsLid(Account $account, callable $fun) {
+		$this->overrideUid($account);
+
+		$result = null;
+
+		try {
+			$result = $fun();
+		} finally {
+			$this->resetUid();
 		}
-		$suedFrom = static::getSuedFrom();
-		return $suedFrom && AccessService::mag($suedFrom, P_ADMIN);
+
+		return $result;
 	}
 
 	/**
 	 * Schakel tijdelijk naar een lid om gedrag van functies te simuleren alsof dit lid is ingelogd.
 	 * Moet z.s.m. (binnen dit request) weer ongedaan worden met `endTempSwitchUser()`
-	 * @param string $uid Uid van lid waarnaartoe geschakeld moet worden
+	 * @param Account $account Account van lid waarnaartoe geschakeld moet worden
 	 * @throws CsrException als er al een tijdelijke schakeling actief is.
+	 * @see SuService::alsLid() voor een veilige methode
 	 */
-	public function overrideUid($uid) {
-		if (isset($this->tempSwitchUid)) {
+	public function overrideUid(Account $account) {
+		$token = $this->security->getToken();
+		if ($token instanceof TemporaryToken) {
 			throw new CsrException("Er is al een tijdelijke schakeling actief, beëindig deze eerst.");
 		}
-		$this->tempSwitchUid = $_SESSION[LoginService::SESS_UID];
-		$_SESSION[LoginService::SESS_UID] = $uid;
+
+		$temporaryToken = new TemporaryToken($account, $token);
+
+		$this->tokenStorage->setToken($temporaryToken);
 	}
 
 	/**
 	 * Beëindig tijdelijke schakeling naar lid.
 	 * @throws CsrException als er geen tijdelijke schakeling actief is.
+	 * @see SuService::alsLid() voor een veilige methode
 	 */
 	public function resetUid() {
-		if (!isset($this->tempSwitchUid)) {
+		$token = $this->security->getToken();
+		if (!($token instanceof TemporaryToken)) {
 			throw new CsrException("Geen tijdelijke schakeling actief, kan niet terug.");
 		}
-		$_SESSION[LoginService::SESS_UID] = $this->tempSwitchUid;
-		$this->tempSwitchUid = null;
+
+		$this->tokenStorage->setToken($token->getOriginalToken());
 	}
 
-
-
-	/**
-	 * @param Account $suNaar
-	 *
-	 * @return bool
-	 */
-	public function maySuTo(Account $suNaar) {
-		return LoginService::mag(P_ADMIN) && !$this->isSued() && $suNaar->uid !== LoginService::getUid() && AccessService::mag($suNaar, P_LOGGED_IN);
+	public function maySuTo(UserInterface $suNaar) {
+		return $this->security->isGranted('ROLE_ALLOWED_TO_SWITCH') // Mag switchen
+			&& !$this->security->isGranted('IS_IMPERSONATOR') // Is niet al geswitched
+			&& $this->security->getUser()->getUsername() !== $suNaar->getUsername() // Is niet dezelfde gebruiker
+			&& $this->accessService->mag($suNaar, P_LOGGED_IN); // Gebruiker waar naar geswitched wordt mag inloggen
 	}
-
-	/**
-	 * @return Account|null
-	 */
-	public static function getSuedFrom() {
-		return AccountRepository::get($_SESSION[LoginService::SESS_SUED_FROM]);
-	}
-
 }

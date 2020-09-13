@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
@@ -15,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MijnCorveeController {
+class MijnCorveeController extends AbstractController {
 	/**
 	 * @var CorveeTakenRepository
 	 */
@@ -46,11 +47,11 @@ class MijnCorveeController {
 	 * @Auth(P_CORVEE_IK)
 	 */
 	public function mijn() {
-		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid(LoginService::getProfiel());
+		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($this->getProfiel());
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
-		$punten = $this->corveePuntenService->loadPuntenVoorLid(LoginService::getProfiel(), $functies);
-		$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling(LoginService::getUid());
+		$punten = $this->corveePuntenService->loadPuntenVoorLid($this->getProfiel(), $functies);
+		$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($this->getUid());
 		return view('maaltijden.corveetaak.mijn', [
 			'rooster' => $rooster,
 			'functies' => $functies,

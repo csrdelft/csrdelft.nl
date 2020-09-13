@@ -3,11 +3,11 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\corvee\CorveeRepetitie;
 use CsrDelft\entity\corvee\CorveeVoorkeur;
 use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\maalcie\forms\EetwensForm;
 use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MijnVoorkeurenController {
+class MijnVoorkeurenController extends AbstractController {
 	/**
 	 * @var CorveeVoorkeurenRepository
 	 */
@@ -38,7 +38,7 @@ class MijnVoorkeurenController {
 	 * @Auth(P_CORVEE_IK)
 	 */
 	public function mijn() {
-		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid(LoginService::getUid(), true);
+		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid($this->getUid(), true);
 		return view('maaltijden.voorkeuren.mijn_voorkeuren', [
 			'voorkeuren' => $voorkeuren,
 			'eetwens' => new EetwensForm(),
@@ -55,7 +55,7 @@ class MijnVoorkeurenController {
 	 */
 	public function inschakelen(CorveeRepetitie $repetitie) {
 		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->setProfiel(LoginService::getProfiel());
+		$voorkeur->setProfiel($this->getProfiel());
 		$voorkeur->setCorveeRepetitie($repetitie);
 
 		$this->corveeVoorkeurenRepository->inschakelenVoorkeur($voorkeur);
@@ -75,7 +75,7 @@ class MijnVoorkeurenController {
 	 * @Auth(P_CORVEE_IK)
 	 */
 	public function uitschakelen($crv_repetitie_id) {
-		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur($crv_repetitie_id, LoginService::getUid());
+		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur($crv_repetitie_id, $this->getUid());
 		$this->corveeVoorkeurenRepository->uitschakelenVoorkeur($voorkeur);
 
 		return view('maaltijden.voorkeuren.mijn_voorkeur_veld', [
@@ -92,7 +92,7 @@ class MijnVoorkeurenController {
 	public function eetwens() {
 		$form = new EetwensForm();
 		if ($form->validate()) {
-			$this->profielRepository->setEetwens(LoginService::getProfiel(), $form->getField()->getValue());
+			$this->profielRepository->setEetwens($this->getProfiel(), $form->getField()->getValue());
 		}
 		return $form;
 	}

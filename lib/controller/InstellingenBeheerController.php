@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\renderer\TemplateView;
@@ -15,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class InstellingenBeheerController {
+class InstellingenBeheerController extends AbstractController {
 	/**
 	 * @var InstellingenRepository
 	 */
@@ -26,12 +25,12 @@ class InstellingenBeheerController {
 	}
 
 	protected function assertToegang($module = null) {
-		if (!$this->mag($module)) {
-			throw new CsrToegangException();
+		if (!$this->magModuleZien($module)) {
+			throw $this->createAccessDeniedException();
 		}
 	}
 
-	protected function mag($module = null) {
+	protected function magModuleZien($module = null) {
 		if ($module) {
 			switch ($module) {
 				case 'agenda':
@@ -86,7 +85,7 @@ class InstellingenBeheerController {
 
 		return view('instellingenbeheer.regel', [
 			'waarde' => $instelling->waarde,
-			'id' => $instelling->instelling_id,
+			'id' => $instelling->instelling,
 			'module' => $instelling->module,
 		]);
 	}
@@ -105,7 +104,7 @@ class InstellingenBeheerController {
 
 		return view('instellingenbeheer.regel', [
 			'waarde' => $instelling->waarde,
-			'id' => $instelling->instelling_id,
+			'id' => $instelling->instelling,
 			'module' => $instelling->module,
 		]);
 	}

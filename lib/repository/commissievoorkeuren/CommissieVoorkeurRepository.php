@@ -55,6 +55,7 @@ class CommissieVoorkeurRepository extends AbstractRepository {
 			$voorkeur->setProfiel($profiel);
 			$voorkeur->setCommissie($commissie);
 			$voorkeur->voorkeur = 1;
+			$voorkeur->timestamp = date_create_immutable();
 		}
 		return $voorkeur;
 	}

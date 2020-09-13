@@ -4,6 +4,7 @@ namespace CsrDelft\entity\fiscaat;
 
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -20,7 +21,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\fiscaat\CiviSaldoRepository"))
  */
-class CiviSaldo implements DataTableEntry {
+class CiviSaldo implements DataTableEntry, DisplayEntity {
 	/**
 	 * Let op, dit is geen fk naar Profiel. Er zijn CiviSaldo's die geen profiel zijn en vice versa.
 	 *
@@ -70,6 +71,14 @@ class CiviSaldo implements DataTableEntry {
 	 * @Serializer\SerializedName("naam")
 	 */
 	public function getDataTableNaam() {
+		return $this->getWeergave();
+	}
+
+	function getId() {
+		return $this->uid;
+	}
+
+	function getWeergave(): string {
 		return ProfielRepository::existsUid($this->uid) ? ProfielRepository::getNaam($this->uid, 'volledig') : $this->naam;
 	}
 }

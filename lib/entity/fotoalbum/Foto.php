@@ -3,10 +3,10 @@
 namespace CsrDelft\entity\fotoalbum;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Afbeelding;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -61,7 +61,7 @@ class Foto extends Afbeelding {
 			$this->subdir = $album->subdir;
 
 			if (!path_valid(PHOTOALBUM_PATH, join_paths($album->subdir, $filename))) {
-				throw new CsrNotFoundException(); // Voorkom traversal door filename
+				throw new NotFoundHttpException(); // Voorkom traversal door filename
 			}
 		}
 		parent::__construct(null, $parse);
@@ -117,7 +117,7 @@ class Foto extends Afbeelding {
 		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
-		$command = env('IMAGEMAGICK') . ' ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 200x200^ -gravity center -extent 150x150 -format jpg -quality 80 -auto-orient ' . $rotate . escapeshellarg($this->getThumbPath());
+		$command = $_ENV['IMAGEMAGICK'] . ' ' . escapeshellarg($this->getFullPath()) . ' -thumbnail 200x200^ -gravity center -extent 150x150 -format jpg -quality 80 -auto-orient ' . $rotate . escapeshellarg($this->getThumbPath());
 		shell_exec($command);
 		if ($this->hasThumb()) {
 			chmod($this->getThumbPath(), 0644);
@@ -136,7 +136,7 @@ class Foto extends Afbeelding {
 		} else {
 			$rotate = '-rotate ' . $this->rotation . ' ';
 		}
-		$command = env('IMAGEMAGICK') . ' ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 -interlace Line  -auto-orient ' . $rotate . escapeshellarg($this->getResizedPath());
+		$command = $_ENV['IMAGEMAGICK'] . ' ' . escapeshellarg($this->getFullPath()) . ' -resize 1024x1024 -format jpg -quality 85 -interlace Line  -auto-orient ' . $rotate . escapeshellarg($this->getResizedPath());
 		shell_exec($command);
 		if ($this->hasResized()) {
 			chmod($this->getResizedPath(), 0644);

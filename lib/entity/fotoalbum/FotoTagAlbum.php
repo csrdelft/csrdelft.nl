@@ -56,6 +56,10 @@ class FotoTagAlbum extends FotoAlbum {
 		return true;
 	}
 
+	/**
+	 * @param false $incompleet
+	 * @return Foto[]
+	 */
 	public function getFotos($incompleet = false) {
 		if (!isset($this->fotos)) {
 			// find tagged fotos

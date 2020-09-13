@@ -3,7 +3,7 @@
 		<div class="card-body">
 			<h3 class="card-title">{{naam}}</h3>
 			<div class="row">
-				<div class="left-col col-md-5" v-if="!aangemeld">
+				<div class="left-col col-md-5" v-if="!aangemeld && magAanmelden">
 					<p class="card-text">{{samenvatting}}</p>
 					<GroepAanmeldForm :keuzes="keuzelijst2" :opmerking="mijnOpmerking" :aangemeld="aangemeld" @aanmelden="aanmelden"/>
 				</div>
@@ -91,6 +91,15 @@
 
 		protected get aangemeld() {
 			return this.mijnAanmelding !== undefined;
+		}
+
+		protected get magAanmelden() {
+			console.log(this.groep.aanmelden_tot, new Date)
+			if (this.groep.aanmelden_tot) {
+				return new Date(this.groep.aanmelden_tot) > new Date;
+			}
+
+			return true;
 		}
 
 		/// Methods

@@ -28,7 +28,7 @@ Dit maakt een *productie* build van de stek. In de productie build is de gegener
 
 ## Webpack
 
-[Webpack](https://webpack.js.org/) is een hele handige tool voor het builden van frontend dingen. In het bestand `webpack.config.ts` is gedefineerd hoe de build precies werkt.
+[Webpack](https://webpack.js.org/) is een hele handige tool voor het builden van frontend dingen. In het bestand `webpack.config.js` is gedefineerd hoe de build precies werkt.
 
 De bestanden onder `entry` zijn interessant, dit zijn de aanspreekpunten van de Typescript/Scss.
 

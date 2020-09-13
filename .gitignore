@@ -45,7 +45,6 @@ yarn-error.log
 htdocs/dist
 package-lock.json
 .cache-loader
-webpack.config.js
 .onderhoud
 .yarn/*
 !.yarn/releases
@@ -67,3 +66,9 @@ webpack.config.js
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

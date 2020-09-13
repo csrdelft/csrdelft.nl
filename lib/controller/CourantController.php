@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\courant\Courant;
 use CsrDelft\entity\courant\CourantBericht;
 use CsrDelft\repository\CourantBerichtRepository;
@@ -78,8 +77,8 @@ class CourantController extends AbstractController {
 	public function toevoegen() {
 		$bericht = new CourantBericht();
 		$bericht->datumTijd = new DateTime();
-		$bericht->uid = LoginService::getUid();
-		$bericht->schrijver = LoginService::getProfiel();
+		$bericht->uid = $this->getUid();
+		$bericht->schrijver = $this->getProfiel();
 
 		$form = new CourantBerichtFormulier($bericht, '/courant');
 
@@ -132,7 +131,7 @@ class CourantController extends AbstractController {
 	 */
 	public function verwijderen(CourantBericht $bericht) {
 		if (!$bericht->magBeheren()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		try {
@@ -165,7 +164,7 @@ class CourantController extends AbstractController {
 		$courantView = new CourantView($courant, $this->courantBerichtRepository->findAll());
 		$courant->inhoud = $courantView->getHtml(false);
 		if ($iedereen === 'iedereen') {
-			$this->courantRepository->verzenden(env('EMAIL_LEDEN'), $courantView);
+			$this->courantRepository->verzenden($_ENV['EMAIL_LEDEN'], $courantView);
 			/** @var Connection $conn */
 			$conn = $this->getDoctrine()->getConnection();
 			$conn->beginTransaction();
@@ -191,7 +190,7 @@ class CourantController extends AbstractController {
 
 			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<strong>Aan iedereen verzonden</strong></div>');
 		} else {
-			$this->courantRepository->verzenden(env('EMAIL_PUBCIE'), $courantView);
+			$this->courantRepository->verzenden($_ENV['EMAIL_PUBCIE'], $courantView);
 			setMelding('Verzonden naar de PubCie', 1);
 			return new PlainView('<div id="courantKnoppenContainer">' . getMelding() . '<a class="btn btn-primary post confirm" title="Courant aan iedereen verzenden" href="/courant/verzenden/iedereen">Aan iedereen verzenden</a></div>');
 		}

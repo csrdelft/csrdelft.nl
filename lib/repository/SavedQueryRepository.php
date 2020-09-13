@@ -5,11 +5,11 @@ namespace CsrDelft\repository;
 # C.S.R. Delft | pubcie@csrdelft.nl
 # -------------------------------------------------------------------
 
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\SavedQuery;
 use CsrDelft\entity\SavedQueryResult;
 use Doctrine\DBAL\DBALException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class SavedQueryRepository
@@ -40,7 +40,7 @@ class SavedQueryRepository extends AbstractRepository {
 		$query = $this->find($queryId);
 
 		if (!$query || !$query->magBekijken()) {
-			throw new CsrToegangException();
+			throw new AccessDeniedException();
 		}
 
 		$resultObject = new SavedQueryResult();

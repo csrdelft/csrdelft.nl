@@ -7,7 +7,7 @@
 	<div class="card-body @if($profiel->isJarig()) jarig @endif ">
 		@if ($profiel->account && \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\service\security\SuService::class)->maySuTo($profiel->account))
 			<div class="float-right">
-				<a href="/su/{{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
+				<a href="?_switch_user={{$profiel->uid}}" title="Su naar dit lid">{{$profiel->uid}}</a>
 			</div>
 		@endif
 		<p class="naam">
@@ -29,7 +29,7 @@
 		@endif
 
 		@foreach (\CsrDelft\common\ContainerFacade::getContainer()->get(CsrDelft\repository\groepen\leden\CommissieLedenRepository::class)->findBy(['uid' => $profiel->uid], ['lid_sinds' => 'DESC']) as $commissielid)
-			@if ($commissielid->groep->status === \CsrDelft\entity\groepen\enum\GroepStatus::HT())
+			@if (\CsrDelft\entity\groepen\enum\GroepStatus::isHT($commissielid->getGroep()->status))
 				<p>
 					@if (!empty($commissielid->opmerking))
 						{{$commissielid->opmerking}} <br/>

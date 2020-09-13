@@ -38,6 +38,7 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Formulier](formulier.md)
 - [Vue](vue.md)
 - [Composer](composer.md)
+- [Security](security.md)
 
 ## Overig
 

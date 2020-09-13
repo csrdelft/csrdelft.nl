@@ -97,7 +97,7 @@ class MaaltijdenFiscaatController extends AbstractController {
 	 */
 	public function POST_verwerk(EntityManagerInterface $em) {
 		# Haal maaltijd op
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 

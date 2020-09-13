@@ -9,15 +9,21 @@ function createCanvas(parent: HTMLElement) {
 	return canvas;
 }
 
-export function initPie(el: HTMLElement) {
-	let data = JSON.parse(el.dataset.data!) as ChartData;
+export function initPie(el: HTMLElement): Chart {
+	const stringData = el.dataset.data
+
+	if (!stringData) {
+		throw new Error("initPie: element heeft geen data-data")
+	}
+
+	let data = JSON.parse(stringData) as ChartData;
 
 	data = defaultKleuren(data);
 
 	return new Chart(createCanvas(el), {data, type: 'pie'});
 }
 
-export async function initLine(el: HTMLElement) {
+export async function initLine(el: HTMLElement): Promise<Chart> {
 	let data: ChartData;
 	if (el.dataset.data) {
 		data = JSON.parse(el.dataset.data);
@@ -34,13 +40,12 @@ export async function initLine(el: HTMLElement) {
 		options: {
 			scales: {
 				xAxes: [{
-					barPercentage: 1.0,
 					stacked: true,
 					time: {
 						tooltipFormat: 'D MMM H:mm ',
 					},
 					type: 'time',
-				} as any],
+				}],
 				yAxes: [{
 					stacked: true,
 					ticks: {
@@ -58,24 +63,41 @@ export async function initLine(el: HTMLElement) {
 }
 
 function kleurPerDataset(data: ChartData) {
-	const kleuren = palette(['tol', 'qualitative'], data.datasets!.length)[Symbol.iterator]();
-	data.datasets!.forEach((dataset) => {
+	const datasets = data.datasets
+
+	if (!datasets) {
+		throw new Error("Data heeft geen datasets")
+	}
+
+	const kleuren = palette(['tol', 'qualitative'], datasets.length)[Symbol.iterator]();
+	datasets.forEach((dataset) => {
 		dataset.pointBorderColor = dataset.backgroundColor = dataset.borderColor = `#${kleuren.next().value}`;
 	});
 	return data;
 }
 
 function defaultKleuren(data: ChartData) {
-	data.datasets = data.datasets!
+	const datasets = data.datasets
+
+	if (!datasets) {
+		throw new Error("Data heeft geen datasets")
+	}
+
+	data.datasets = datasets
 		.map((dataset) => ({
-			backgroundColor: palette('tol-rainbow', dataset.data!.length).map((col) => `#${col}`),
+			backgroundColor: palette('tol-rainbow', dataset.data?.length ?? 0).map((col) => `#${col}`),
 			...dataset,
 		}));
 	return data;
 }
 
-export function initBar(el: HTMLElement) {
-	let data = JSON.parse(el.dataset.data!) as ChartData;
+export function initBar(el: HTMLElement): Chart {
+	const stringData = el.dataset.data
+
+	if (!stringData) {
+		throw new Error("initBar: geen data-data attribuut")
+	}
+	let data = JSON.parse(stringData) as ChartData;
 	data = defaultKleuren(data);
 
 	const options: ChartOptions = {
@@ -92,8 +114,13 @@ export function initBar(el: HTMLElement) {
 	return new Chart(createCanvas(el), {data, type: 'bar', options});
 }
 
-export function initDeelnamegrafiek(el: HTMLElement) {
-	const data = JSON.parse(el.dataset.data!) as any;
+export function initDeelnamegrafiek(el: HTMLElement): Chart {
+	const stringData = el.dataset.data
+
+	if (!stringData) {
+		throw new Error("initBar: geen data-data attribuut")
+	}
+	const data = JSON.parse(stringData) as ChartData & { jaren: number[] };
 	const options: ChartOptions = {
 		scales: {
 			xAxes: [{
@@ -111,7 +138,16 @@ export function initDeelnamegrafiek(el: HTMLElement) {
 		},
 		tooltips: {
 			callbacks: {
-				title: (t, d) => String(d.labels![t[0].index!]),
+				title: (t, d) => {
+					const labels = d.labels
+					const index = t[0].index
+
+					if (!labels || !index) {
+						throw new Error("Data heeft geen labels of index")
+					}
+
+					return String(labels[index])
+				},
 			},
 			intersect: false,
 			mode: 'index',
@@ -122,27 +158,29 @@ export function initDeelnamegrafiek(el: HTMLElement) {
 }
 
 function createNegativetransparentLineChartController() {
-	if (Chart.defaults.NegativeTransparentLine) { return; }
+	if (Chart.defaults.NegativeTransparentLine) {
+		return;
+	}
 
 	Chart.defaults.NegativeTransparentLine = Chart.helpers.clone(Chart.defaults.line);
 	Chart.controllers.NegativeTransparentLine = Chart.controllers.line.extend({
-		update() {
+		update(...args: unknown[]) {
 			if (this.chart.data.datasets.length) {
 				// get the min and max values
 				const min = this.chart.data.datasets[0].data
-					.reduce((mininum: number, p: any) => p.y < mininum ? p.y : mininum, this.chart.data.datasets[0].data[0].y);
+					.reduce((mininum: number, p: { x: number, y: number }) => p.y < mininum ? p.y : mininum, this.chart.data.datasets[0].data[0].y);
 
 				if (min >= 0) {
 					this.chart.data.datasets[0].borderColor = 'green';
-					return Chart.controllers.line.prototype.update.apply(this, arguments);
+					return Chart.controllers.line.prototype.update.apply(this, args);
 				}
 
 				const max = this.chart.data.datasets[0].data
-					.reduce((maximum: number, p: any) => p.y > maximum ? p.y : maximum, this.chart.data.datasets[0].data[0].y);
+					.reduce((maximum: number, p: { x: number, y: number }) => p.y > maximum ? p.y : maximum, this.chart.data.datasets[0].data[0].y);
 
 				if (max <= 0) {
 					this.chart.data.datasets[0].borderColor = 'red';
-					return Chart.controllers.line.prototype.update.apply(this, arguments);
+					return Chart.controllers.line.prototype.update.apply(this, args);
 				}
 
 				const yScale = this.getScaleForId(this.getMeta().yAxisID);
@@ -164,14 +202,19 @@ function createNegativetransparentLineChartController() {
 			}
 
 			// noinspection JSPotentiallyInvalidConstructorUsage
-			return Chart.controllers.line.prototype.update.apply(this, arguments);
+			return Chart.controllers.line.prototype.update.apply(this, args);
 		},
 	});
 }
 
-export function initSaldoGrafiek(el: HTMLElement) {
+export function initSaldoGrafiek(el: HTMLElement): void {
 	const closed = el.dataset.closed === 'true';
-	const uid = el.dataset.uid!;
+	const uid = el.dataset.uid;
+
+	if (!uid) {
+		throw new Error("Saldografiek heeft geen uid")
+	}
+
 	let timespan = 11;
 
 	const options: ChartOptions = {
@@ -191,7 +234,13 @@ export function initSaldoGrafiek(el: HTMLElement) {
 		tooltips: {
 			callbacks: {
 				label(tooltipItem, data) {
-					const datasetLabel = data.datasets![tooltipItem.datasetIndex!].label || '';
+					const datasets = data.datasets
+					const datasetIndex = tooltipItem.datasetIndex
+
+					if (!datasets || !datasetIndex) {
+						throw new Error("Saldografiek heeft geen datasets")
+					}
+					const datasetLabel = datasets[datasetIndex].label || '';
 					return datasetLabel + ': ' + formatBedrag(Number(tooltipItem.yLabel));
 				},
 			},
@@ -235,7 +284,13 @@ export function initSaldoGrafiek(el: HTMLElement) {
 			load();
 		});
 
-		el.parentElement!.appendChild(button);
+		const parent = el.parentElement
+
+		if (!parent) {
+			throw new Error("Saldografiek geen onderdeel van DOM")
+		}
+
+		parent.appendChild(button);
 	} else {
 		el.classList.remove('verborgen');
 		load();

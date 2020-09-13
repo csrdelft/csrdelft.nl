@@ -4,13 +4,14 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\CsrNotFoundException;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\entity\fotoalbum\FotoTagAlbum;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Environment;
 
 /**
  * Fotoalbum
@@ -51,9 +52,14 @@ class BbFotoalbum extends BbTag {
 	 * @var FotoAlbumRepository
 	 */
 	private $fotoAlbumRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(FotoAlbumRepository $fotoAlbumRepository) {
+	public function __construct(FotoAlbumRepository $fotoAlbumRepository, Environment $twig) {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
+		$this->twig = $twig;
 	}
 
 	public static function getTagName() {
@@ -75,7 +81,7 @@ class BbFotoalbum extends BbTag {
 		$album = $this->album;
 		$arguments = $this->arguments;
 		if (isset($arguments['slider'])) {
-			$view = view('fotoalbum.slider', [
+			return $this->twig->render('fotoalbum/slider.html.twig', [
 				'fotos' => array_shuffle($album->getFotos())
 			]);
 		} else {
@@ -125,7 +131,7 @@ class BbFotoalbum extends BbTag {
 				$album = $this->fotoAlbumRepository->getFotoAlbum($url);
 			}
 			return $album;
-		} catch (CsrNotFoundException $ex) {
+		} catch (NotFoundHttpException $ex) {
 			return null;
 		}
 	}

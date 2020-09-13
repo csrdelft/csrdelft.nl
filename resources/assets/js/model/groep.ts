@@ -16,6 +16,7 @@ export interface GroepInstance {
 	familie: string;
 	begin_moment: Date;
 	eind_moment: Date;
+	aanmelden_tot?: Date;
 	status: string;
 	samenvatting: string;
 	omschrijving: string;

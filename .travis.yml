@@ -12,17 +12,20 @@ cache:
   directories:
     - ".yarn"
     - "vendor"
+    - "bin/.phpunit"
 
 env:
   global:
     - SKIP_BUILD=`[[ $TRAVIS_COMMIT_MESSAGE == *"[skipbuild]"* ]]; echo $?`
+    - APP_ENV=test
 
 # master: build & sonar
 # pull intern: build & sonar (2 builds, 1 met type pull_request, 1 met type push)
 # pull extern: build
 jobs:
   include:
-    - stage: build
+    - stage: Build & Deploy
+      name: Build Javascript, Scss en Blade templates. Voer een deploy uit.
       services: mysql
       before_install: nvm install 12
       script: ./bin/ci/build.sh
@@ -33,12 +36,49 @@ jobs:
         on:
           branch: master
       if: type != pull_request OR fork = true
-    - stage: analysis
+    - name: Voer de phpunit tests uit
+      install: composer install
+      before_script: |
+        php bin/console doctrine:database:create -n
+        php bin/console doctrine:migrations:migrate -n
+        php bin/console doctrine:fixtures:load -n
+      script: php ./bin/phpunit
+      if: type != pull_request OR fork = true
+      addons:
+        mariadb: '10.3'
+    - stage: Post-build
+      name: Voer sonar scanner uit op de repository
+      before_install: nvm install 12
+      install: npm install typescript
       script: sonar-scanner
       if: (branch = master OR type = pull_request) AND fork = false
       addons:
         sonarcloud:
           organization: "csrdelft"
+    - name: Maak een release voor het backend project in Sentry
+      env: SENTRY_ORG=csrdelft SENTRY_PROJECT=stek SENTRY_ENVIRONMENT=prod
+      script: |
+        curl -sL https://sentry.io/get-cli/ | bash
+        export SENTRY_RELEASE=$(sentry-cli releases propose-version)
+        sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+        sentry-cli releases set-commits $SENTRY_RELEASE --auto
+        sentry-cli releases finalize $SENTRY_RELEASE
+        sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
+      if: branch = master AND fork = false AND type != pull_request
+    - name: Maak een release voor het frontend project in Sentry
+      env: SENTRY_ORG=csrdelft SENTRY_PROJECT=stek-frontend SENTRY_ENVIRONMENT=prod
+      before_install: nvm install 12
+      script: |
+        yarn
+        yarn run production
+        curl -sL https://sentry.io/get-cli/ | bash
+        export SENTRY_RELEASE=$(sentry-cli releases propose-version)
+        sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+        sentry-cli releases set-commits $SENTRY_RELEASE --auto
+        sentry-cli releases files $SENTRY_RELEASE upload-sourcemaps ./htdocs/dist/js
+        sentry-cli releases finalize $SENTRY_RELEASE
+        sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
+      if: branch = master AND fork = false AND type != pull_request
 
 stages:
   - build

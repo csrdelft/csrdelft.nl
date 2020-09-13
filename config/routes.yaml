@@ -5,7 +5,7 @@ app-controller:
   type: annotation
 
 app-controller-sub:
-  resource: ../lib/controller/{fiscaat,maalcie}/*.php
+  resource: ../lib/controller/{fiscaat,maalcie,api}/*.php
   type: annotation
 
 # Deze route is een catch-all als allerlaatste

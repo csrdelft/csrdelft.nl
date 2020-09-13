@@ -3,11 +3,14 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\MenuItem;
+use CsrDelft\entity\security\Account;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Hulpmethodes die gebruikt worden in views.
@@ -51,11 +54,15 @@ function crlf_endings(string $input) {
  * @param string $asset
  * @return string
  */
-function css_asset(string $module) {
+function css_asset(string $module, $media = null) {
 	$assetString = '';
 
 	foreach (module_asset($module, 'css') as $asset) {
-		$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\"/>\n";
+		if ($media) {
+			$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\" media=\"{$media}\"/>\n";
+		} else {
+			$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\"/>\n";
+		}
 	}
 
 	return $assetString;
@@ -365,6 +372,15 @@ function first_space_after(string $string, int $offset = null) {
 }
 
 /**
+ * Encode string for RSS feed.
+ * @param string $string The string to encode
+ * @return string The encoded string
+ */
+function rss_encode(string $string) {
+	return htmlspecialchars($string, ENT_XML1, 'UTF-8');
+}
+
+/**
  * Split a string on keyword with a given space (in characters) around the keyword. Splits on spaces.
  *
  * @param string $string The base string
@@ -416,12 +432,6 @@ function split_on_keyword(string $string, string $keyword, int $space_around = 1
 	return $string;
 }
 
-function highlight_zoekterm($bericht, $zoekterm, $before = null, $after = null) {
-	$before = $before ?: '<span style="background-color: rgba(255,255,0,0.4);">';
-	$after = $after ?: '</span>';
-	return preg_replace('/' . preg_quote($zoekterm, '/') . '/i', $before . '$0' . $after, $bericht);
-}
-
 function csr_breadcrumbs($breadcrumbs) {
 	return ContainerFacade::getContainer()->get(MenuItemRepository::class)->renderBreadcrumbs($breadcrumbs);
 }
@@ -439,7 +449,7 @@ function csr_breadcrumbs($breadcrumbs) {
  *
  * @return string
  */
-function escape_ical($string, $prefix_length) {
+function escape_ical($string, $prefix_length = 0) {
 	$string = str_replace('\\', '\\\\', $string);
 	$string = str_replace("\r", '', $string);
 	$string = str_replace("\n", '\n', $string);
@@ -453,18 +463,6 @@ function escape_ical($string, $prefix_length) {
 		$wrap .= "\n " . wordwrap($rest, 59, "\n ", true);
 	}
 	return $wrap;
-}
-
-function commitHash($full = false) {
-	if ($full) {
-		return trim(`git rev-parse HEAD`);
-	} else {
-		return trim(`git rev-parse --short HEAD`);
-	}
-}
-
-function commitLink() {
-	return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
 }
 
 function toestemming_gegeven() {
@@ -516,4 +514,51 @@ function vereniging_leeftijd() {
 	$leeftijd = date_create_immutable()->diff($oprichting);
 
 	return $leeftijd->y;
+}
+
+function is_granted($attributes, $subject = null) {
+	return ContainerFacade::getContainer()->get('security.authorization_checker')->isGranted($attributes, $subject);
+}
+
+/**
+ * @return TokenInterface
+ */
+function current_token() {
+	return ContainerFacade::getContainer()->get('security.token_storage')->getToken();
+}
+
+/**
+ * @return UserInterface|Account
+ */
+function current_account() {
+	return ContainerFacade::getContainer()->get('security.token_storage')->getToken()->getUser();
+}
+
+function commitHash($full = false) {
+	if ($full) {
+		return trim(`git rev-parse HEAD`);
+	} else {
+		return trim(`git rev-parse --short HEAD`);
+	}
+}
+
+function commitLink() {
+	return 'https://github.com/csrdelft/productie/commit/' . commitHash(true);
+}
+
+function reldate($datum) {
+	if ($datum instanceof DateTimeInterface) {
+		$moment = $datum->getTimestamp();
+	} else {
+		$moment = strtotime($datum);
+	}
+
+	if (date('Y-m-d') == date('Y-m-d', $moment)) {
+		$return = 'vandaag om ' . strftime('%H:%M', $moment);
+	} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
+		$return = 'gisteren om ' . strftime('%H:%M', $moment);
+	} else {
+		$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
+	}
+	return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
 }

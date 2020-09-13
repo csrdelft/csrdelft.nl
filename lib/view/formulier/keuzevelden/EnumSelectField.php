@@ -22,7 +22,7 @@ class EnumSelectField extends SelectField {
 	 * @param bool $multiple
 	 */
 	public function __construct($name, $value, $description, $enumClass, $size = 1, $multiple = false) {
-		parent::__construct($name, $value == null ? null : $value->getValue(), $description, $enumClass::getEnumDescriptions(), false, $size, $multiple);
+		parent::__construct($name, $value == null ? null : $value->getValue(), $description, $enumClass::getEnumDescriptions(), $size, $multiple);
 
 		$this->enumClass = $enumClass;
 	}

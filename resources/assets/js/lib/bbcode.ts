@@ -1,12 +1,16 @@
 import axios from 'axios';
 import $ from 'jquery';
-// @ts-ignore
 import {Textarea, Textcomplete} from 'textcomplete';
 import {init} from '../ctx';
 import {html, preloadImage} from './util';
 
-export const initBbPreviewBtn = (el: HTMLElement) => {
-	const previewId = el.dataset.bbpreviewBtn!;
+export const initBbPreviewBtn = (el: HTMLElement): void => {
+	const previewId = el.dataset.bbpreviewBtn;
+
+	if (!previewId) {
+		throw new Error('Geen previewId gevonden')
+	}
+
 	const source = document.querySelector<HTMLTextAreaElement>('#' + previewId);
 	const target = document.querySelector<HTMLElement>('#preview_' + previewId);
 
@@ -16,8 +20,13 @@ export const initBbPreviewBtn = (el: HTMLElement) => {
 
 	el.addEventListener('click', () => CsrBBPreviewEl(source, target));
 };
-export const initBbPreview = (el: HTMLTextAreaElement) => {
-	const previewId = el.dataset.bbpreview!;
+export const initBbPreview = (el: HTMLTextAreaElement): void => {
+	const previewId = el.dataset.bbpreview;
+
+	if (!previewId) {
+		throw new Error('Geen previewId gevonden')
+	}
+
 	const target = document.querySelector<HTMLElement>('#preview_' + previewId);
 
 	if (!target) {
@@ -31,7 +40,7 @@ export const initBbPreview = (el: HTMLTextAreaElement) => {
 	});
 };
 
-export const CsrBBPreviewEl = (source: HTMLTextAreaElement, target: HTMLElement, params: object = {}) => {
+export const CsrBBPreviewEl = (source: HTMLTextAreaElement, target: HTMLElement, params: Record<string, string> = {}): void => {
 	const bbcode = source.value;
 
 	if (bbcode.trim() === '') {
@@ -52,12 +61,12 @@ export const CsrBBPreviewEl = (source: HTMLTextAreaElement, target: HTMLElement,
 	});
 };
 
-export const loadBbImage = (el: HTMLElement) => {
+export const loadBbImage = (el: HTMLElement): void => {
 	const content = html`<img
 													class="bb-img"
-													alt="${el.getAttribute('title')!}"
-													style="${el.getAttribute('style')!}"
-													src="${el.getAttribute('src')!}"/>`;
+													alt="${el.getAttribute('title')}"
+													style="${el.getAttribute('style')}"
+													src="${el.getAttribute('src')}"/>`;
 	content.onerror = () => {
 		el.setAttribute('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
 		el.setAttribute('src', '/plaetjes/famfamafm/picture_error.png');
@@ -66,30 +75,41 @@ export const loadBbImage = (el: HTMLElement) => {
 		el.classList.replace('bb-img-loading', 'bb-img');
 	};
 
-	preloadImage(el.getAttribute('src')!, () => {
-		const foto = content.getAttribute('src')!.indexOf('/plaetjes/fotoalbum/') >= 0;
-		const video = $(el).parent().parent().hasClass('bb-video-preview');
+	const src = el.getAttribute('src')
+
+	if (!src) {
+		throw new Error('Bb image heeft geen src');
+	}
+
+	preloadImage(src, () => {
+		const foto = src.indexOf('/plaetjes/fotoalbum/') >= 0;
+		const video = el.parentElement?.parentElement?.classList.contains('bb-video-preview')
 		const hasAnchor = $(el).closest('a').length !== 0;
-		const parent = el.parentElement!;
+		const parent = el.parentElement;
+
+		if (!parent) {
+			throw new Error("BBimage heeft geen parent.")
+		}
+
 		if (foto || video || hasAnchor) {
 			parent.replaceChild(content, el);
 		} else {
 			const targetUrl = el.getAttribute('bb-href') == null ? el.getAttribute('src') : el.getAttribute('bb-href');
-			const link = html`<a class="lightbox-link" href="${targetUrl!}" data-lightbox="page-lightbox"></a>`;
+			const link = html`<a class="lightbox-link" href="${targetUrl}" data-lightbox="page-lightbox"></a>`;
 			link.appendChild(content);
 			parent.replaceChild(link, el);
 		}
 	});
 };
 
-export function activeerLidHints(textarea: HTMLElement) {
+export function activeerLidHints(textarea: HTMLElement): void {
 	const editor = new Textarea(textarea);
 	const textcomplete = new Textcomplete(editor);
 
 	textcomplete.register([{
 		// @...
 		match: /(^|\s|])@((?:[^ ]+ ?){1,5})$/,
-		replace(data: any) {
+		replace(data: { label: string }) {
 			return '$1[lid=' + data.label + ']';
 		},
 		search,
@@ -100,7 +120,7 @@ export function activeerLidHints(textarea: HTMLElement) {
 		match: /(^|\s|])\[(citaat|lid)=(?:[0-9]{4}|([^\]]+))$/,
 		search,
 		template,
-		replace(data: any) {
+		replace(data: { label: string }) {
 			return '$1[$2=' + data.label;
 		},
 	}]);
@@ -112,7 +132,7 @@ export function activeerLidHints(textarea: HTMLElement) {
 	});
 }
 
-function search(term: string, callback: (data: any) => void) {
+function search(term: string, callback: (data: unknown) => void) {
 	if (!term || term.length === 1) {
 		callback([]);
 	} else {
@@ -126,6 +146,6 @@ function search(term: string, callback: (data: any) => void) {
 	}
 }
 
-function template(data: any, term: string) {
+function template(data: { value: string }) {
 	return data.value;
 }

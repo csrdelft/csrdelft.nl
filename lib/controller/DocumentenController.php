@@ -3,18 +3,17 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\repository\documenten\DocumentRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
 use CsrDelft\view\renderer\TemplateView;
+use Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,10 +46,11 @@ class DocumentenController extends AbstractController {
 	/**
 	 * @param Document $document
 	 * @return JsonResponse|PlainView|RedirectResponse
-	 * @Route("/doucmenten/verwijderen/{id}", methods={"POST"})
+	 * @Route("/documenten/verwijderen/{id}", methods={"POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
 	public function verwijderen(Document $document) {
+		$id = $document->id;
 		if ($document->magVerwijderen()) {
 			$this->documentRepository->remove($document);
 		} else {
@@ -58,7 +58,7 @@ class DocumentenController extends AbstractController {
 			return new JsonResponse(false);
 		}
 
-		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $document->id));
+		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $id));
 	}
 
 	/**
@@ -69,7 +69,7 @@ class DocumentenController extends AbstractController {
 	 */
 	public function bekijken(Document $document) {
 		if (!$document->magBekijken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		//We do not allow serving html files because they can be used for XSS.
@@ -95,7 +95,7 @@ class DocumentenController extends AbstractController {
 	 */
 	public function download(Document $document) {
 		if (!$document->magBekijken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		if ($document->hasFile()) {
@@ -116,7 +116,7 @@ class DocumentenController extends AbstractController {
 	 */
 	public function categorie(DocumentCategorie $categorie) {
 		if (!$categorie->magBekijken()) {
-			throw new CsrToegangException('Mag deze categorie niet bekijken');
+			throw $this->createAccessDeniedException('Mag deze categorie niet bekijken');
 		} else {
 			return view('documenten.categorie', ['categorie' => $categorie]);
 		}
@@ -136,7 +136,7 @@ class DocumentenController extends AbstractController {
 
 			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {
-			return view('default', [
+			return $this->render('default.html.twig', [
 				'titel' => 'Document bewerken',
 				'content' => $form,
 			]);
@@ -156,8 +156,8 @@ class DocumentenController extends AbstractController {
 			/** @var Document $document */
 			$document = $form->getModel();
 
-			$document->eigenaar = LoginService::getUid();
-			$document->eigenaar_profiel = LoginService::getProfiel();
+			$document->eigenaar = $this->getUid();
+			$document->eigenaar_profiel = $this->getProfiel();
 			$document->toegevoegd = date_create_immutable();
 
 			$bestand = $form->getUploader()->getModel();
@@ -165,9 +165,9 @@ class DocumentenController extends AbstractController {
 			$document->filename = filter_filename($bestand->filename);
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
-			
 
-			
+
+
 			$this->documentRepository->save($document);
 
 			try {
@@ -177,15 +177,15 @@ class DocumentenController extends AbstractController {
 
 			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
 			}
-			catch (\Exception $exception) {
+			catch (Exception $exception) {
 				$this->documentRepository->remove($document);
 				throw $exception;
 			}
-			
+
 
 			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {
-			return view('default', [
+			return $this->render('default.html.twig', [
 				'titel' => 'Document toevoegen',
 				'content' => $form,
 			]);
@@ -201,7 +201,7 @@ class DocumentenController extends AbstractController {
 	 */
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');

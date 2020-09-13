@@ -45,7 +45,6 @@ use GuzzleHttp\Exception\RequestException;
  *   @ORM\Index(name="nickname", columns={"nickname"}),
  *   @ORM\Index(name="status", columns={"status"})
  * })
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Profiel implements Agendeerbaar, DisplayEntity {
 	public function __construct() {
@@ -261,6 +260,11 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	 * @var boolean|null
 	 */
 	public $machtiging;
+	/**
+	 * @ORM\Column(type="boolean", nullable=true, name="toestemmingAfschrijven")
+	 * @var boolean|null
+	 */
+	public $toestemmingAfschrijven;
 	// verticale
 	/**
 	 * @ORM\Column(type="string", nullable=true)
@@ -350,11 +354,26 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	 */
 	public $middelbareSchool;
 	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string
+	 */
+	public $huisarts;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="huisartsPlaats")
+	 * @var string
+	 */
+	public $huisartsPlaats;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="huisartsTelefoon")
+	 * @var string|null
+	 */
+	public $huisartsTelefoon;
+	// overig
+	/**
 	 * @ORM\Column(type="string", nullable=true, name="profielOpties")
 	 * @var string
 	 */
 	public $profielOpties;
-	// overig
 	/**
 	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
@@ -402,7 +421,10 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		'startkamp' => [LidStatus::Noviet],
 		'matrixPlek' => [LidStatus::Noviet],
 		'novietSoort' => [LidStatus::Noviet],
-		'kgb' => [LidStatus::Noviet]
+		'kgb' => [LidStatus::Noviet],
+		'huisarts' => [LidStatus::Noviet],
+		'huisartsPlaats' => [LidStatus::Noviet],
+		'huisartsTelefoon' => [LidStatus::Noviet]
 	];
 
 	public function getUUID() {
@@ -683,9 +705,9 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 				} elseif ($this->isLid() OR $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
 					if (LoginService::getProfiel()->status === LidStatus::Noviet) {
-						$naam = ($this->geslacht->getValue() === Geslacht::Vrouw) ? 'Mevr. ' : 'Dhr. ';
+						$naam = (Geslacht::isVrouw($this->geslacht)) ? 'Mevr. ' : 'Dhr. ';
 					} else {
-						$naam = ($this->geslacht->getValue() === Geslacht::Vrouw) ? 'Ama. ' : 'Am. ';
+						$naam = (Geslacht::isVrouw($this->geslacht)) ? 'Ama. ' : 'Am. ';
 					}
 					if (!empty($this->tussenvoegsel)) {
 						$naam .= ucfirst($this->tussenvoegsel) . ' ';
@@ -916,6 +938,6 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	}
 
 	function getWeergave(): string {
-		return $this->getNaam('volledig');
+		return $this->achternaam ? $this->getNaam('volledig') : '';
 	}
 }

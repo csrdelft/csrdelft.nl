@@ -12,22 +12,19 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Class EetplanBekenden
  * @package CsrDelft\model\entity\eetplan
  * @ORM\Entity(repositoryClass="CsrDelft\repository\eetplan\EetplanBekendenRepository")
+ * @ORM\Table(
+ *   uniqueConstraints={@ORM\UniqueConstraint(name="noviet1_noviet2", columns={"uid1", "uid2"})}
+ * )
  */
 class EetplanBekenden implements DataTableEntry {
 	/**
-	 * @ORM\Column(type="uid")
+	 * @var int
 	 * @ORM\Id()
-	 * @var string
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
 	 * @Serializer\Groups("datatable")
 	 */
-	public $uid1;
-	/**
-	 * @ORM\Column(type="uid")
-	 * @ORM\Id()
-	 * @var string
-	 * @Serializer\Groups("datatable")
-	 */
-	public $uid2;
+	public $id;
 	/**
 	 * @var Profiel
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
@@ -46,22 +43,6 @@ class EetplanBekenden implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $opmerking;
-
-	public function setNoviet1($noviet) {
-		$this->noviet1 = $noviet;
-
-		if ($noviet) {
-			$this->uid1 = $noviet->uid;
-		}
-	}
-
-	public function setNoviet2($noviet) {
-		$this->noviet2 = $noviet;
-
-		if ($noviet) {
-			$this->uid2 = $noviet->uid;
-		}
-	}
 
 	/**
 	 * @return DataTableColumn

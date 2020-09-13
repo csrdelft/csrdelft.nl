@@ -4,12 +4,12 @@
 import $ from 'jquery';
 
 interface ColumnGroupConfig {
-	column: any;
+	column: string
 }
 
 interface ColumnGroupSettings {
 	dt: DataTables.Api;
-	collapsedGroups: any[];
+	collapsedGroups: string[];
 	regrouping: boolean;
 	lastDraw: number | null;
 }
@@ -31,7 +31,7 @@ class ColumnGroup {
 	private c: ColumnGroupConfig;
 	private s: ColumnGroupSettings;
 
-	constructor(settings: any, config: ColumnGroupConfig) {
+	constructor(settings: DataTables.SettingsLegacy, config: ColumnGroupConfig) {
 		// Sanity check - you just know it will happen
 		if (!(this instanceof ColumnGroup)) {
 			throw new Error('ColumnGroup must be initialised with the \'new\' keyword.');
@@ -62,22 +62,21 @@ class ColumnGroup {
 		const dt = this.s.dt;
 		const table = dt.table(0);
 		const tableNode = $(table.node());
-		const that = this;
 
-		$.fn.dataTable.ext.search.push((settings: any, data: any) => {
-			return that._fnGroupExpandCollapseDraw(settings, data);
+		$.fn.dataTable.ext.search.push((settings, data) => {
+			return this._fnGroupExpandCollapseDraw(settings, data);
 		});
 
 		// Group by column
 		tableNode.find('tbody')
-			.on('click', 'tr.group', function (event) {
+			.on('click', 'tr.group', (event) => {
 				if (!event.shiftKey && !event.ctrlKey) {
-					that._fnGroupExpandCollapse($(this));
+					this._fnGroupExpandCollapse($(event.target));
 				}
 			});
 		tableNode.find('thead')
-			.on('click', 'th.toggle-group:first', function (event) {
-				that._fnGroupExpandCollapseAll($(this));
+			.on('click', 'th.toggle-group:first', (event) => {
+				this._fnGroupExpandCollapseAll($(event.target));
 			});
 		tableNode.on('draw.dt', () => this._fnGroupByColumnDraw());
 		tableNode.find('thead tr th').first().addClass('toggle-group toggle-group-expanded');
@@ -107,9 +106,9 @@ class ColumnGroup {
 		// Create group rows for visible rows
 		const rows = $(dt.rows({page: 'current'}).nodes());
 		tableNode.find('tr.group').remove();
-		let last: any;
+		let last: unknown;
 		// Iterate over data in the group by column
-		dt.column(column, {page: 'current'}).data().each((group: any, i: any) => {
+		dt.column(column, {page: 'current'}).data().each((group, i) => {
 			if (last !== group) {
 				// Create group rows for collapsed groups
 				while (collapse.length > 0 && collapse[0].localeCompare(group) < 0) {
@@ -134,7 +133,7 @@ ${colspan}
 		});
 		// Create group rows for collapsed groups
 		const tbody = tableNode.children('tbody:first');
-		collapse.forEach((group: any) => {
+		collapse.forEach((group) => {
 			groupRow = $(`<tr class="group">
 <td class="toggle-group"></td>
 <td class="group-label">${group}</td>
@@ -184,11 +183,11 @@ ${colspan}
 		const dt = this.s.dt;
 
 		const column = this.c.column;
-		const collapsedGroups: any[] = [];
+		const collapsedGroups: string[] = [];
 
 		if ($th.hasClass('toggle-group-expanded')) {
-			let last: any;
-			dt.column(column).data().each((group: any) => {
+			let last: unknown;
+			dt.column(column).data().each((group) => {
 				if (last !== group) {
 					collapsedGroups.push(group);
 					last = group;
@@ -200,7 +199,7 @@ ${colspan}
 		this._fnHideEmptyCollapsedAll($th);
 	}
 
-	public _fnGroupExpandCollapseDraw(settings: any, data: any) {
+	public _fnGroupExpandCollapseDraw(settings: unknown, data: Record<string, string>) {
 		const column = this.c.column;
 		const collapsedGroups = this.s.collapsedGroups;
 
@@ -211,19 +210,20 @@ ${colspan}
 }
 
 declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace DataTables {
-		// noinspection JSUnusedGlobalSymbols
 		interface StaticFunctions {
 			ColumnGroup: typeof ColumnGroup;
 		}
 
 		interface Settings {
-			columnGroup?: any;
+			columnGroup?: unknown;
 		}
 	}
 }
 // Expose
 $.fn.dataTable.ColumnGroup = ColumnGroup;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 $.fn.DataTable.ColumnGroup = ColumnGroup;
 
@@ -241,7 +241,6 @@ $(document).on('preInit.dt.columnGroup', (e, settings) => {
 		const opts = $.extend({}, init, defaults);
 
 		if (init !== false) {
-			// tslint:disable-next-line:no-unused-expression
 			new ColumnGroup(settings, opts);
 		}
 	}

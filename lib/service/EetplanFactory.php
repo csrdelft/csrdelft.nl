@@ -6,6 +6,7 @@ use CsrDelft\entity\eetplan\Eetplan;
 use CsrDelft\entity\eetplan\EetplanBekenden;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\groepen\Woonoord;
+use CsrDelft\repository\ProfielRepository;
 
 /**
  * EetplanFactory.class.php
@@ -95,8 +96,8 @@ class EetplanFactory {
 	public function setBekenden($bekenden) {
 		$this->bekenden = array();
 		foreach ($bekenden as $eetplanBekenden) {
-			$noviet1 = $eetplanBekenden->uid1;
-			$noviet2 = $eetplanBekenden->uid2;
+			$noviet1 = $eetplanBekenden->noviet1->uid;
+			$noviet2 = $eetplanBekenden->noviet2->uid;
 			$this->bekenden[$noviet1][$noviet2] = true;
 			$this->bekenden[$noviet2][$noviet1] = true;
 		}
@@ -110,8 +111,8 @@ class EetplanFactory {
 		$this->bezocht_ah = array();
 		$this->bezocht_sh = array();
 		foreach ($bezochten as $sessie) {
-			$huis = $sessie->woonoord_id;
-			$noviet = $sessie->uid;
+			$huis = $sessie->woonoord->id;
+			$noviet = $sessie->noviet->uid;
 			$this->bezocht_sh[$noviet][$huis] = true;
 		}
 	}
@@ -218,7 +219,7 @@ class EetplanFactory {
 			# Maak een entity voor deze sessie
 			$nieuweetplan = new Eetplan();
 			$nieuweetplan->avond = date_create_immutable($avond);
-			$nieuweetplan->uid = $uid;
+			$nieuweetplan->noviet = ProfielRepository::get($uid);
 			$nieuweetplan->woonoord = $this->huizen[$huis_index];
 
 			$eetplan[] = $nieuweetplan;

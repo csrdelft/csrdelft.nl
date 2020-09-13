@@ -65,6 +65,7 @@ class MaaltijdRepetitiesController {
 	 * @return MaaltijdRepetitieForm|TemplateView
 	 * @throws Throwable
 	 * @Route("/maaltijden/repetities/opslaan/{mlt_repetitie_id}", methods={"POST"}, defaults={"mlt_repetitie_id"=null})
+	 * @Route("/maaltijden/repetities/opslaan/", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function opslaan(MaaltijdRepetitie $repetitie = null) {

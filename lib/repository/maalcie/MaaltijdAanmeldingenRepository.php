@@ -37,10 +37,15 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 * @var CiviSaldoRepository
 	 */
 	private $civiSaldoRepository;
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
 
-	public function __construct(ManagerRegistry $registry, CiviSaldoRepository $civiSaldoRepository) {
+	public function __construct(ManagerRegistry $registry, CiviSaldoRepository $civiSaldoRepository, AccessService $accessService) {
 		parent::__construct($registry, MaaltijdAanmelding::class);
 		$this->civiSaldoRepository = $civiSaldoRepository;
+		$this->accessService = $accessService;
 	}
 
 	/**
@@ -136,7 +141,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		if (empty($filter)) {
 			return true;
 		}
-		return AccessService::mag($account, $filter);
+		return $this->accessService->mag($account, $filter);
 	}
 
 	public function getIsAangemeld($mid, $uid) {

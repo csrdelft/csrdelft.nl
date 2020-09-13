@@ -38,21 +38,21 @@ class LDAP {
 		if ($this->_conn !== false)
 			$this->disconnect();
 
-		if (!env('LDAP_HOST')) {
+		if (!$_ENV['LDAP_HOST']) {
 			throw new CsrException('LDAP not available');
 		}
-		$conn = ldap_connect(env('LDAP_HOST'), (int) env('LDAP_PORT'));
+		$conn = ldap_connect($_ENV['LDAP_HOST'], (int) $_ENV['LDAP_PORT']);
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
 		ldap_start_tls($conn);
 		if ($dobind === true) {
-			$bind = ldap_bind($conn, env('LDAP_BINDDN'), env('LDAP_PASSWD'));
+			$bind = ldap_bind($conn, $_ENV['LDAP_BINDDN'], $_ENV['LDAP_PASSWD']);
 			if ($bind !== true)
 				return false;
 		}
 		# Onthouden van wat instellingen
 		$this->_conn = $conn;
-		$this->_base_leden = env('LDAP_BASE_LEDEN');
-		$this->_base_groepen = env('LDAP_BASE_GROEPEN');
+		$this->_base_leden = $_ENV['LDAP_BASE_LEDEN'];
+		$this->_base_groepen = $_ENV['LDAP_BASE_GROEPEN'];
 
 		return true;
 	}

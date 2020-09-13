@@ -9,6 +9,8 @@ use CsrDelft\common\Enum;
  *
  * @method static Geslacht Man()
  * @method static Geslacht Vrouw()
+ * @method static boolean isMan($geslacht)
+ * @method static boolean isVrouw($geslacht)
  */
 class Geslacht extends Enum {
 	/**

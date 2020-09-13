@@ -63,6 +63,9 @@ trait YamlInstellingen {
 		return $this->defaults[$module][$key][$field];
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getAll() {
 		return $this->defaults;
 	}
@@ -76,8 +79,10 @@ trait YamlInstellingen {
 	}
 
 	private function writeConfig($config, $file) {
-		@mkdir(CONFIG_CACHE_PATH, 0777, true);
-		touch($file);
+		if (!file_exists($file)) {
+			@mkdir(CONFIG_CACHE_PATH, 0777, true);
+			touch($file);
+		}
 		/**
 		 * Deze config is direct van schijf gelezen en bevat geen informatie die beinvloedbaar is door gebruikers.
 		 */

@@ -1,6 +1,6 @@
 /**
  * NIET AANPASSEN.
- * Gegenereerde code voor CsrDelft\model\entity\Geslacht.
+ * Gegenereerde code voor CsrDelft\entity\Geslacht.
  *
  * Zie bin/dev/generator.enum.php voor generator.
  */
@@ -9,7 +9,7 @@ export default {
 	Vrouw: 'v',
 };
 
-export function getGeslachtDescription(option: string) {
+export function getGeslachtDescription(option: string): string {
 	return {
 		m: 'man',
 		v: 'vrouw',

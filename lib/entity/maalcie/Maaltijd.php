@@ -214,7 +214,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	 * @return CorveeTaak[]
 	 */
 	public function getCorveeTaken($functieID) {
-		return ContainerFacade::getContainer()->get(CorveeTakenRepository::class)->findBy(['functie_id' => $functieID, 'maaltijd_id' => $this->maaltijd_id, 'verwijderd' => false]);
+		return ContainerFacade::getContainer()->get(CorveeTakenRepository::class)->findBy(['corveeFunctie' => $functieID, 'maaltijd_id' => $this->maaltijd_id, 'verwijderd' => false]);
 	}
 
 	// Agendeerbaar ############################################################

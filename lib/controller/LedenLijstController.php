@@ -29,7 +29,7 @@ class LedenLijstController extends AbstractController {
 		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
-			return view('default', ['content' => $body]);
+			return $this->render('default.html.twig', ['content' => $body]);
 		}
 
 		$message = '';
@@ -91,6 +91,6 @@ class LedenLijstController extends AbstractController {
 			setMelding($message, 0);
 		}
 
-		return view('default', ['content' => $ledenlijstcontent]);
+		return $this->render('default.html.twig', ['content' => $ledenlijstcontent]);
 	}
 }

@@ -290,6 +290,6 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	}
 
 	public function getWeergave(): string {
-		return $this->naam;
+		return $this->naam ?? "";
 	}
 }

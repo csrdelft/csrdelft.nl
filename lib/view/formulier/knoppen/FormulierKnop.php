@@ -54,7 +54,7 @@ class FormulierKnop implements FormElement {
 
 	public function getHtml() {
 		$this->css_classes[] = $this->action;
-		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '" tabindex="0"';
+		$html = '<a id="' . $this->getId() . '" href="'.($this->url ?: '#').'" class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '" tabindex="0"';
 		if (isset($this->data)) {
 			$html .= ' data="' . $this->data . '"';
 		}

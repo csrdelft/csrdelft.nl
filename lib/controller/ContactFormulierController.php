@@ -4,7 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\Mail;
 use CsrDelft\common\SimpleSpamFilter;
 use CsrDelft\view\PlainView;
@@ -14,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/12/2018
  */
-class ContactFormulierController {
+class ContactFormulierController extends AbstractController {
 	/**
 	 * @return PlainView
 	 * @Route("/contactformulier/interesse", methods={"POST"})
@@ -24,7 +23,7 @@ class ContactFormulierController {
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 
 		if (!$resp['success']) {
-			throw new CsrToegangException("Geen toegang");
+			throw $this->createAccessDeniedException("Geen toegang");
 		}
 
 		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
@@ -77,7 +76,7 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-		$mail = new Mail([env('EMAIL_OWEECIE') => "OweeCie"], "Interesseformulier", $bericht);
+		$mail = new Mail([$_ENV['EMAIL_OWEECIE'] => "OweeCie"], "Interesseformulier", $bericht);
 		$mail->setFrom($email);
 		$mail->send();
 
@@ -92,7 +91,7 @@ De PubCie.
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 
 		if (!$resp['success']) {
-			throw new CsrToegangException("Geen toegang");
+			throw $this->createAccessDeniedException("Geen toegang");
 		}
 
 		$type = filter_input(INPUT_POST, "optie", FILTER_SANITIZE_STRING);
@@ -106,12 +105,12 @@ De PubCie.
 
 		if ($type === 'lid-worden') {
 			$typeaanduiding = 'Ik wil lid worden';
-			$commissie = "PromoCie";
-			$bestemming = [env('EMAIL_PROMOCIE') => $commissie];
+			$commissie = "NovCie";
+			$bestemming = [$_ENV['EMAIL_NOVCIE'] => $commissie];
 		} else {
 			$typeaanduiding = 'Eerst een lid spreken';
 			$commissie = "OweeCie";
-			$bestemming = [env('EMAIL_OWEECIE') => $commissie];
+			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
 		}
 
 		$bericht = "
@@ -129,7 +128,7 @@ De PubCie.
 ";
 
 		$mail = new Mail($bestemming, "OWee formulier", $bericht);
-		$mail->setFrom(env('EMAIL_PUBCIE'));
+		$mail->setFrom($_ENV['EMAIL_PUBCIE']);
 		$mail->send();
 
 		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
@@ -154,7 +153,7 @@ De PubCie.
 	 * @return mixed
 	 */
 	public function checkCaptcha($response) {
-		$secret = env('GOOGLE_CAPTCHA_SECRET');
+		$secret = $_ENV['GOOGLE_CAPTCHA_SECRET'];
 
 		$ch = curl_init("https://www.google.com/recaptcha/api/siteverify");
 		curl_setopt($ch, CURLOPT_POST, 1);

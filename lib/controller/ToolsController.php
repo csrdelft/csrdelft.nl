@@ -4,8 +4,6 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
@@ -27,9 +25,9 @@ use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
 use CsrDelft\view\View;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -74,7 +72,7 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @return PlainView|TemplateView
+	 * @return PlainView|\Symfony\Component\HttpFoundation\Response
 	 * @Route("/tools/streeplijst", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
@@ -85,7 +83,7 @@ class ToolsController extends AbstractController {
 		if (isset($_GET['iframe'])) {
 			return new PlainView($body->getHtml());
 		} else {
-			return view('default', ['content' => $body]);
+			return $this->render('default.html.twig', ['content' => $body]);
 		}
 	}
 
@@ -180,7 +178,7 @@ class ToolsController extends AbstractController {
 			return new PlainView('done');
 		}
 
-		throw new CsrToegangException();
+		throw $this->createAccessDeniedException();
 	}
 
 	/**
@@ -223,11 +221,11 @@ class ToolsController extends AbstractController {
 	 * @Route("/tools/dragobject", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function dragobject() {
+	public function dragobject(Request $request) {
 		$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
 		$coords = filter_input(INPUT_POST, 'coords', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
 
-		$_SESSION['dragobject'][$id] = $coords;
+		$request->getSession()->set("dragobject_$id", $coords);
 
 		return new JsonResponse(null);
 	}
@@ -293,7 +291,7 @@ class ToolsController extends AbstractController {
 			return new PlainView('Geen lid gevonden');
 		}
 
-		throw new CsrNotFoundException();
+		throw new NotFoundHttpException();
 	}
 
 	/**
@@ -374,23 +372,22 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @param ContainerInterface $container
 	 * @return PlainView
 	 * @Route("/tools/memcachestats", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function memcachestats(ContainerInterface $container) {
+	public function memcachestats() {
 		if (DEBUG || LoginService::mag(P_ADMIN) || $this->suService->isSued()) {
 			ob_start();
 
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
-			debugprint($container->get('stek.cache.memcache')->getStats());
+			debugprint($this->get('stek.cache.memcache')->getStats());
 
 			return new PlainView(ob_get_clean());
 		}
 
-		throw new CsrToegangException();
+		throw $this->createAccessDeniedException();
 	}
 
 	/**
@@ -407,7 +404,7 @@ class ToolsController extends AbstractController {
 			$result = null;
 		}
 
-		return view('default', [
+		return $this->render('default.html.twig', [
 			'content' => new SavedQueryContent($result),
 		]);
 	}

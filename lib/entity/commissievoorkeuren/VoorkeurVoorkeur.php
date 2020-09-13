@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\commissievoorkeuren;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\AccessService;
 use DateTimeImmutable;
@@ -82,6 +83,7 @@ class VoorkeurVoorkeur {
 	}
 
 	public function heeftGedaan() {
-		return AccessService::mag($this->profiel->account, 'commissie:' . $this->commissie->naam . ',commissie:' . $this->commissie->naam . ':ot');
+		return ContainerFacade::getContainer()->get(AccessService::class)
+			->mag($this->profiel->account, 'commissie:' . $this->commissie->naam . ',commissie:' . $this->commissie->naam . ':ot');
 	}
 }

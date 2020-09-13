@@ -16,7 +16,7 @@ use Doctrine\ORM\QueryBuilder;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com
  */
 class VerjaardagenService {
-	const FILTER_BY_TOESTEMMING = "INNER JOIN lidtoestemmingen t ON T2.uid  = t.uid AND t.waarde = 'ja' AND t.module = 'profiel' AND t.instelling_id = 'gebdatum'";
+	const FILTER_BY_TOESTEMMING = "INNER JOIN lidtoestemmingen t ON T2.uid  = t.uid AND t.waarde = 'ja' AND t.module = 'profiel' AND t.instelling = 'gebdatum'";
 	/**
 	 * @var ProfielRepository
 	 */
@@ -29,12 +29,21 @@ class VerjaardagenService {
 	 * @var string
 	 */
 	private $filterByToestemingSql;
+	/**
+	 * @var string
+	 */
+	private $novietenFilter = '';
 
 	public function __construct(ProfielRepository $profielRepository, EntityManagerInterface $em) {
 		$this->profielRepository = $profielRepository;
 		$this->em = $em;
 
 		$this->filterByToestemingSql = LoginService::mag(P_LEDEN_MOD) ? "" : self::FILTER_BY_TOESTEMMING;
+
+		if ($em->getFilters()->isEnabled('verbergNovieten')) {
+			$jaar = intval(trim($em->getFilters()->getFilter('verbergNovieten')->getParameter('jaar'), "'"));
+			$this->novietenFilter = "AND NOT (STATUS = 'S_NOVIET' AND lidjaar = $jaar)";
+		}
 	}
 
 	/**
@@ -64,11 +73,11 @@ class VerjaardagenService {
 			->getQuery()->getResult();
 	}
 
-	public static function filterByToestemming(QueryBuilder $queryBuilder, $module, $instelling_id, $profielAlias = 'p') {
+	public static function filterByToestemming(QueryBuilder $queryBuilder, $module, $instelling, $profielAlias = 'p') {
 		return $queryBuilder
-			->andWhere('t.waarde = \'ja\' and t.module = :t_module and t.instelling_id = :t_instelling_id')
+			->andWhere('t.waarde = \'ja\' and t.module = :t_module and t.instelling = :t_instelling')
 			->setParameter('t_module', $module)
-			->setParameter('t_instelling_id', $instelling_id)
+			->setParameter('t_instelling', $instelling)
 			->join($profielAlias . '.toestemmingen', 't');
 	}
 
@@ -92,6 +101,7 @@ FROM (
         SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(NOW()) - YEAR(gebdatum) YEAR) AS verjaardag
         FROM profielen
         WHERE NOT gebdatum = '0000-00-00' AND status IN ($lidstatus)
+        {$this->novietenFilter}
         ) AS T1
     ) AS T2
 {$this->filterByToestemingSql}
@@ -129,6 +139,7 @@ FROM (
         SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(DATE(:van_datum)) - YEAR(gebdatum) YEAR) AS verjaardag
         FROM profielen
         WHERE NOT gebdatum = '0000-00-00' AND status IN ($lidstatus)
+        {$this->novietenFilter}
         ) AS T1
     ) AS T2
 {$this->filterByToestemingSql}

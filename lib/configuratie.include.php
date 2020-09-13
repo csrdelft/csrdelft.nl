@@ -16,7 +16,6 @@ use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\service\security\LoginService;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 require __DIR__ . '/../config/bootstrap.php';
 
 // default is website mode
-if (env('CI')) {
+if (getenv('CI')) {
 	define('MODE', 'TRAVIS');
 } elseif (php_sapi_name() === 'cli') {
 	define('MODE', 'CLI');
@@ -59,6 +58,11 @@ setlocale(LC_ALL, 'nl_NL');
 //setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
+
+if (FORCE_HTTPS) {
+	// Hack om Response::isSecure() true te laten returnen als we https doen
+	$_SERVER['HTTPS'] = 'on';
+}
 
 if (isset($_SERVER['REQUEST_URI'])) {
 	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
@@ -120,7 +124,6 @@ switch (MODE) {
 		if (isSyrinx()) die("Syrinx is geen Travis!");
 		break;
 	case 'CLI':
-		$container->get(LoginService::class)->loginCli();
 		break;
 
 	case 'WEB':
@@ -148,23 +151,11 @@ switch (MODE) {
 		ini_set('intl.default_locale', 'nl');
 		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
-		session_start();
-		if (session_id() == 'deleted') {
-			// Deletes old session
-			session_regenerate_id(true);
-		}
-		// Validate login
-		$container->get(LoginService::class)->authenticate();
-
 		$container->get(LogRepository::class)->log();
 		break;
 
 	default:
 		die('configuratie.include.php unsupported MODE: ' . MODE);
 }
-
-// ---
-// Nu heeft de gebruiker een sessie en kan er echt begonnen worden.
-// ---
 
 return $kernel;

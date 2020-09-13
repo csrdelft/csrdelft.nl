@@ -1,12 +1,14 @@
 import axios from 'axios';
 import $ from 'jquery';
-import {DatatableResponse, fnGetSelection, fnUpdateDataTable} from '../datatable/api';
+import {fnGetSelection, fnUpdateDataTable, isDataTableResponse} from '../datatable/api';
 import {ajaxRequest} from './ajax';
 import {domUpdate} from './domUpdate';
 import {modalClose} from './modal';
 import {redirect, reload} from './reload';
+import {parents, select, selectAll} from "./dom";
+import {throwError} from "./util";
 
-export function formIsChanged(form: JQuery<EventTarget>) {
+export function formIsChanged(form: HTMLFormElement): boolean {
 	let changed = false;
 	$(form).find('.FormElement').not('.tt-hint').each(function () {
 		const elmnt = $(this);
@@ -32,31 +34,45 @@ export function formIsChanged(form: JQuery<EventTarget>) {
  * @see templates/instellingen/beheer/instelling_row.tpl
  * @param form
  */
-export function formInlineToggle(form: JQuery<EventTarget>) {
-	form.prev('.InlineFormToggle').toggle();
-	form.toggle();
-	form.children(':first').trigger('focus');
+export function formInlineToggle(form: HTMLElement): void {
+	const $form = $(form)
+	$form.prev('.InlineFormToggle').toggle();
+	$form.toggle();
+	$form.children(':first').trigger('focus');
 }
 
-export function formToggle(target: Element, event: Event) {
+export function formToggle(target: HTMLElement, event: Event): false {
 	event.preventDefault();
-	const form = $(target).next('form');
-	formInlineToggle(form);
+
+	formInlineToggle(select('form', parents(target)));
+
 	return false;
 }
 
-export function formReset(event: Event, form?: JQuery<any>) {
+export function formReset(event: Event, form?: HTMLFormElement | null): false {
+	const target = event.target
+
+	if (!target || !(target instanceof HTMLElement)) {
+		throw new Error("formReset: geen EventTarget")
+	}
+
 	if (!form) {
-		form = $(event.target!).closest('form');
+		form = target.closest('form');
 		event.preventDefault();
 	}
-	if ($(event.target!).hasClass('confirm') && !confirm($(event.target!).attr('title') + '.\n\nWeet u het zeker?')) {
+
+	if (!form) {
+		throw new Error("Geen form gevonden in formReset")
+	}
+
+	if (target.classList.contains('confirm') && !confirm(target.title + '.\n\nWeet u het zeker?')) {
 		return false;
 	}
-	form.find('.FormElement').each(function () {
-		const orig = $(event.target!).attr('origvalue');
-		if (typeof orig === 'string') {
-			$(this).val(orig);
+
+	selectAll('.FormElement', form).forEach(function (el) {
+		const orig = el.getAttribute('origvalue')
+		if (orig && (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) {
+			el.value = orig
 		}
 	});
 	return false;
@@ -68,11 +84,10 @@ export function formReset(event: Event, form?: JQuery<any>) {
  * @param event
  * @returns {boolean}
  */
-export function formSubmit(event: Event) {
-	const target = event.target as Element;
-	const $target = $(target);
-	if ($target.hasClass('confirm')) {
-		let q = $target.attr('title');
+export function formSubmit(event: Event): boolean {
+	const target = event.target as HTMLElement;
+	if (target.classList.contains('confirm')) {
+		let q = target.title;
 		if (q) {
 			q += '.\n\n';
 		} else {
@@ -84,41 +99,46 @@ export function formSubmit(event: Event) {
 		}
 	}
 
-	const form = $target.closest('form');
-	if (!form.hasClass('Formulier')) {
+	const form = target.closest('form');
+	if (!form || !form.classList.contains('Formulier')) {
 		return false;
 	}
 
-	if (form.hasClass('PreventUnchanged') && !formIsChanged(form)) {
+	if (form.classList.contains('PreventUnchanged') && !formIsChanged(form)) {
 		event.preventDefault();
 		alert('Geen wijzigingen');
 		return false;
 	}
 
-	if ($target.attr('href')) {
-		form.attr('action', $target.attr('href')!);
+	const href = target.getAttribute('href');
+	if (href && href != '#') {
+		form.setAttribute('action', href);
 	}
 
-	if (!(form.hasClass('ModalForm') || form.hasClass('InlineForm'))) {
-		form.off('submit');
-		form.trigger('submit');
+	if (!(form.classList.contains('ModalForm') || form.classList.contains('InlineForm'))) {
+		// kijk of er een manier is die niet jquery is
+		$(form).off('submit');
+		$(form).trigger('submit');
 		return true;
 	} else {
 		event.preventDefault();
-		const formData = new FormData(form.get(0) as HTMLFormElement);
+		const formData = new FormData(form);
 		let done = domUpdate;
-		let source: JQuery<Element> | boolean = false;
+		let source: Element | null = null
 
-		if (form.hasClass('InlineForm')) {
+		if (form.classList.contains('InlineForm')) {
 			source = form;
-			formData.append('InlineFormId', form.attr('id')!);
-			if (form.data('submitCallback')) {
-				done = form.data('submitCallback');
+			const id = form.id
+			if (id) {
+				formData.append('InlineFormId', id);
+			}
+			if ($(form).data('submitCallback')) {
+				done = $(form).data('submitCallback');
 			}
 		}
 
-		if (form.hasClass('ModalForm')) {
-			done = (response: any) => {
+		if (form.classList.contains('ModalForm')) {
+			done = (response: unknown) => {
 				if (typeof response === 'string') {
 					domUpdate(response);
 				} else {
@@ -127,11 +147,11 @@ export function formSubmit(event: Event) {
 			};
 		}
 
-		if (form.hasClass('DataTableResponse')) {
+		if (form.classList.contains('DataTableResponse')) {
 
-			const tableId = form.attr('data-tableid')!;
-			if (!document.getElementById(tableId)) {
-				alert('DataTable not found');
+			const tableId = form.dataset.tableid
+			if (!tableId || !document.getElementById(tableId)) {
+				throw new Error("DataTable not found")
 			}
 
 			formData.append('DataTableId', tableId);
@@ -140,32 +160,40 @@ export function formSubmit(event: Event) {
 				formData.append('DataTableSelection[]', value);
 			});
 
-			done = (response: DatatableResponse | string) => {
-				if (typeof response === 'object') { // JSON
+			done = (response: unknown) => {
+				if (isDataTableResponse(response)) { // JSON
 					fnUpdateDataTable('#' + tableId, response);
 					if (response.modal) {
 						domUpdate(response.modal);
 					} else {
 						modalClose();
 					}
-				} else { // HTML
+				} else if (typeof response === 'string') { // HTML
 					domUpdate(response);
+				} else {
+					throw new Error('onbekende response' + response)
 				}
 			};
 
-			if (!form.hasClass('noanim')) {
-				source = false;
+			if (!form.classList.contains('noanim')) {
+				source = null;
 			}
 		}
 
-		if (form.hasClass('ReloadPage')) {
+		if (form.classList.contains('ReloadPage')) {
 			done = reload;
-		} else if (form.hasClass('redirect')) {
+		} else if (form.classList.contains('redirect')) {
 			done = redirect;
 		}
 
-		ajaxRequest('POST', form.attr('action')!, formData, source, done, alert, () => {
-			if (form.hasClass('SubmitReset')) {
+		const url = form.getAttribute('action');
+
+		if (!url) {
+			throw new Error("Form heeft geen action")
+		}
+
+		ajaxRequest('POST', url, formData, source, done, throwError, () => {
+			if (form.classList.contains('SubmitReset')) {
 				formReset(event, form);
 			}
 		});
@@ -179,21 +207,31 @@ export function formSubmit(event: Event) {
  * @param event
  * @returns {boolean}
  */
-export function formCancel(event: Event) {
-	const source = $(event.target!);
-	if (source.hasClass('confirm') && !confirm(source.attr('title') + '.\n\nWeet u het zeker?')) {
+export function formCancel(event: Event): boolean {
+	const sourceEl = event.target
+
+	if (!sourceEl || !(sourceEl instanceof HTMLElement)) {
+		throw new Error("formCancel: Geen EventTarget")
+	}
+
+	if (sourceEl.classList.contains('confirm') && !confirm(sourceEl.title + '.\n\nWeet u het zeker?')) {
 		event.preventDefault();
 		return false;
 	}
-	const form = source.closest('form')!;
-	if (form.hasClass('InlineForm')) {
+	const form = sourceEl.closest('form');
+
+	if (!form) {
+		throw new Error("Geen form in formCancel")
+	}
+
+	if (form.classList.contains('InlineForm')) {
 		event.preventDefault();
 		formInlineToggle(form);
 		return false;
 	}
-	if (form.hasClass('ModalForm')) {
+	if (form.classList.contains('ModalForm')) {
 		event.preventDefault();
-		const href = source.attr('href');
+		const href = sourceEl.getAttribute('href')
 		if (href) {
 			axios.get(href);
 		}
@@ -205,6 +243,21 @@ export function formCancel(event: Event) {
 	return true;
 }
 
-export function insertPlaatje(id: string) {
+export function insertPlaatje(id: string): void {
 	$.markItUp({replaceWith: '[plaatje]' + id + '[/plaatje]'});
+}
+
+export function initSterrenField(el: HTMLElement): void {
+	$(el).raty({
+		...JSON.parse(el.dataset.config),
+		path: '/images/raty/',
+		cancelHint: 'Wis beoordeling',
+		cancelPlace: 'right',
+		noRatedMsg: '',
+		click: function (score) {
+			console.log(score)
+			$(this).raty('score', score)
+			$(this).closest('form').submit()
+		}
+	})
 }

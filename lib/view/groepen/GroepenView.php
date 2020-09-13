@@ -12,9 +12,11 @@ use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\Icon;
+use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
 
 class GroepenView implements View {
+	use ToHtmlResponse;
 
 	private $model;
 	/**

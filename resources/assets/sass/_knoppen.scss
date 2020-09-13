@@ -4,7 +4,7 @@ Externe links & Knoppen
 
 -------------------------------- */
 
-a[href^="http://"]:not(.not-external), a[href^="https://"]:not(.not-external) {
+a[href^="http://"]:not([href*="csrdelft.nl"]):not(.not-external), a[href^="https://"]:not([href*="csrdelft.nl"]):not(.not-external) {
   padding-right: 16px;
   background: url("../images/external-link-blue.png") no-repeat center right;
 }
@@ -66,13 +66,27 @@ input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
   filter: alpha(opacity=30);
 }
 
-.btn.loading {
+.btn-loading {
 	background-image: url("../images/loading-fb.gif");
 	background-repeat: no-repeat;
 	background-position: center center;
-	color: transparent;
+	color: transparent !important; // een specifieke knop geeft ook een color mee
+}
+
+.btn.loading {
+	@extend .btn-loading;
 }
 
 .btn img {
 	vertical-align: text-bottom;
+}
+
+.get:not(.loaded), .post:not(.loaded) {
+	pointer-events: none;
+	@extend .btn-loading;
+}
+
+.btn-outline-primary.active {
+	background-color: $primary;
+	color: $white;
 }

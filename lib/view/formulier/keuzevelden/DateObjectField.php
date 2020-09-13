@@ -18,7 +18,7 @@ class DateObjectField extends DateField {
 		if ($value instanceof DateTimeInterface) {
 			$value = date_format_intl($value, DATE_FORMAT);
 		}
-		parent::__construct($name, $value, $description);
+		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}
 
 	public function getFormattedValue() {

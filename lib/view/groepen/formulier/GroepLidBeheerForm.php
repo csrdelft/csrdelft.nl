@@ -26,7 +26,6 @@ class GroepLidBeheerForm extends ModalForm {
 			$fields['profiel']->readonly = false;
 		}
 		$fields['profiel']->hidden = false;
-		$fields['profiel']->suggestieIdField = 'uid';
 		$fields['door_uid']->required = true;
 		$fields['door_uid']->readonly = true;
 		$fields['door_uid']->hidden = true;

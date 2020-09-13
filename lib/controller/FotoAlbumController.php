@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\model\entity\Afbeelding;
@@ -13,6 +12,7 @@ use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\repository\fotoalbum\FotoRepository;
 use CsrDelft\repository\fotoalbum\FotoTagsRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\fotoalbum\FotoAlbumBreadcrumbs;
 use CsrDelft\view\fotoalbum\FotoAlbumToevoegenForm;
 use CsrDelft\view\fotoalbum\FotosDropzone;
 use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
@@ -67,7 +67,7 @@ class FotoAlbumController extends AbstractController {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if ($album->dirname === 'fotoalbum') {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
@@ -89,7 +89,7 @@ class FotoAlbumController extends AbstractController {
 	public function toevoegen(Request $request, $dir) {
 		$album = new FotoAlbum($dir);
 		if (!$album->magToevoegen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$formulier = new FotoAlbumToevoegenForm($album);
 		if ($request->getMethod() == 'POST' && $formulier->validate()) {
@@ -115,7 +115,7 @@ class FotoAlbumController extends AbstractController {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$poster = $album->dirname === 'Posters';
 		if ($poster) {
@@ -162,7 +162,7 @@ class FotoAlbumController extends AbstractController {
 				}
 			}
 		}
-		return view('default', ['content' => $formulier]);
+		return $this->render('default.html.twig', ['content' => $formulier]);
 	}
 
 	/**
@@ -175,7 +175,7 @@ class FotoAlbumController extends AbstractController {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$list = [];
 		$files = $album->getFotos();
@@ -204,7 +204,7 @@ class FotoAlbumController extends AbstractController {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magDownloaden()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		header('Content-Description: File Transfer');
 		header('Content-Type: application/x-tar');
@@ -230,16 +230,16 @@ class FotoAlbumController extends AbstractController {
 	 * @param Request $request
 	 * @param $dir
 	 * @return JsonResponse
-	 * @Route("/fotoalbum/hernoemen/dir", methods={"POST"}, requirements={"dir": ".+"})
+	 * @Route("/fotoalbum/hernoemen/{dir}", methods={"POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_MOD,P_ALBUM_PUBLIC_ADD})
 	 */
 	public function hernoemen(Request $request, $dir) {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
-		$naam = trim($request->request->get('naam'));
+		$naam = trim($request->request->get('n'));
 		if ($album !== null) {
 			try {
 				$this->fotoAlbumRepository->hernoemAlbum($album, $naam);
@@ -263,7 +263,7 @@ class FotoAlbumController extends AbstractController {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$filename = $request->request->get('foto');
 		$cover = new Foto($filename, $album);
@@ -285,7 +285,7 @@ class FotoAlbumController extends AbstractController {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magVerwijderen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if ($album->isEmpty()) {
 			try {
@@ -321,7 +321,7 @@ class FotoAlbumController extends AbstractController {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magAanpassen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
@@ -339,7 +339,7 @@ class FotoAlbumController extends AbstractController {
 	 */
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		if (!$zoekterm) {
@@ -373,7 +373,7 @@ class FotoAlbumController extends AbstractController {
 		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		// return all tags
 		$tags = $this->fotoTagsRepository->getTags($foto);
@@ -391,12 +391,12 @@ class FotoAlbumController extends AbstractController {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magToevoegen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$filename = $request->request->get('foto');
 		$foto = new Foto($filename, $album);
 		if (!$foto->exists()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$formulier = new FotoTagToevoegenForm($foto);
 		if ($request->getMethod() == 'POST' && $formulier->validate()) {
@@ -423,7 +423,7 @@ class FotoAlbumController extends AbstractController {
 		$refuuid = $request->request->get('refuuid');
 		$keyword = $request->request->get('keyword');
 		if (!LoginService::mag(P_ALBUM_MOD) && !LoginService::mag($keyword)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$this->fotoTagsRepository->removeTag($refuuid, $keyword);
 		/** @var Foto $foto */
@@ -452,15 +452,15 @@ class FotoAlbumController extends AbstractController {
 	public function raw_image(Request $request, $type, $dir, $foto, $ext) {
 		//Extra check to prevent attacks
 		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		$image = new Foto($foto . '.' . $ext, new FotoAlbum($dir), true);
 
 		if (!$image->magBekijken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		} else if (!$image->exists()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		if ($type == 'full') {
@@ -483,7 +483,7 @@ class FotoAlbumController extends AbstractController {
 
 	/**
 	 * @param $dir
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/fotoalbum/{dir}", methods={"GET"}, requirements={"dir": ".+"}, defaults={"dir": ""})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
@@ -495,12 +495,12 @@ class FotoAlbumController extends AbstractController {
 		$album = $this->fotoAlbumRepository->getFotoAlbum($dir);
 
 		if (!$album->magBekijken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		if ($album->dirname === 'Posters') {
 			$album->orderByDateModified();
 		}
-		return view('fotoalbum.album', ['album' => $album]);
+		return $this->render('fotoalbum/album.html.twig', ['album' => $album, 'breadcrumbs' => FotoAlbumBreadcrumbs::getBreadcrumbs($album)]);
 	}
 }

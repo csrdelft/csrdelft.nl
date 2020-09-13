@@ -56,7 +56,7 @@ class InstellingenRepository extends AbstractRepository {
 	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
 	protected function getInstelling($module, $id) {
-		$entity = $this->find(['module' => $module, 'instelling_id' => $id]);
+		$entity = $this->findOneBy(['module' => $module, 'instelling' => $id]);
 		if ($this->hasKey($module, $id) && $entity != null) {
 			return $entity;
 		} else if ($this->hasKey($module, $id)) {
@@ -80,7 +80,7 @@ class InstellingenRepository extends AbstractRepository {
 	protected function newInstelling($module, $id) {
 		$instelling = new Instelling();
 		$instelling->module = $module;
-		$instelling->instelling_id = $id;
+		$instelling->instelling = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
 		$entityManager = $this->getEntityManager();
 		$entityManager->persist($instelling);
@@ -126,7 +126,7 @@ class InstellingenRepository extends AbstractRepository {
 
 		$this->createQueryBuilder('i')
 			->delete()
-			->where('i.module not in (:modules) or i.instelling_id not in (:instellingen)')
+			->where('i.module not in (:modules) or i.instelling not in (:instellingen)')
 			->setParameter('modules', $this->getModules())
 			->setParameter('instellingen', $instellingen)
 			->getQuery()->execute();

@@ -4,7 +4,6 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\groepen\AbstractGroep;
@@ -13,13 +12,11 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\repository\AbstractGroepLedenRepository;
 use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
@@ -133,7 +130,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$groepen = $this->repository->findBy(['status' => GroepStatus::HT()]);
 		}
 		$body = new GroepenView($this->repository, $groepen, $soort); // controleert rechten bekijken per groep
-		return view('default', ['content' => $body]);
+		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
 	public function bekijken($id) {
@@ -145,7 +142,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$soort = null;
 		}
 		$body = new GroepenView($this->repository, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
-		return view('default', ['content' => $body]);
+		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
 	public function deelnamegrafiek($id) {
@@ -158,7 +155,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function omschrijving($id) {
 		$groep = $this->repository->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepOmschrijvingView($groep);
 	}
@@ -166,7 +163,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function pasfotos($id) {
 		$groep = $this->repository->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepPasfotosView($groep);
 	}
@@ -174,7 +171,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function lijst($id) {
 		$groep = $this->repository->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepLijstView($groep);
 	}
@@ -182,7 +179,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function stats($id) {
 		$groep = $this->repository->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		$statistieken = $this->repository->getStatistieken($groep);
@@ -193,7 +190,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function emails($id) {
 		$groep = $this->repository->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepEmailsView($groep);
 	}
@@ -201,14 +198,14 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function eetwens($id) {
 		$groep = $this->repository->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepEetwensView($groep);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');
@@ -266,10 +263,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if (!$id) {
 			$old = null;
 			$groep = $this->repository->nieuw($soort);
-			/**
-			 * @var Profiel $profiel
-			 */
-			$profiel = LoginService::getProfiel();
+			$profiel = $this->getProfiel();
 			if ($groep instanceof Activiteit && empty($groep->rechten_aanmelden)) {
 				switch ($groep->soort) {
 
@@ -297,7 +291,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			/** @var AbstractGroep $old */
 			$old = $this->repository->retrieveByUUID($id);
 			if (!$old) {
-				throw new CsrToegangException();
+				throw $this->createAccessDeniedException();
 			}
 			if (property_exists($old, 'soort')) {
 				$soort = $old->soort;
@@ -315,7 +309,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if ($request->getMethod() == 'GET') {
 			$this->beheren($request);
 			$form->setDataTableId($this->table->getDataTableId());
-			return view('default', ['content' => $this->table, 'modal' => $form]);
+			return $this->render('default.html.twig', ['content' => $this->table, 'modal' => $form]);
 		} elseif ($form->validate()) {
 			$this->changeLogRepository->log($groep, 'create', null, $this->changeLogRepository->serialize($groep));
 			$this->repository->create($groep);
@@ -346,7 +340,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		} else {
 			$table = new GroepenBeheerTable($this->repository);
 			$this->table = $table;
-			return view('default', ['content' => $table]);
+			return $this->render('default.html.twig', ['content' => $table]);
 		}
 	}
 
@@ -361,14 +355,14 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if ($id) {
 			$groep = $this->repository->get($id);
 			if (!$groep->mag(AccessAction::Wijzigen)) {
-				throw new CsrToegangException();
+				throw $this->createAccessDeniedException();
 			}
 			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($request->getMethod() == 'GET') {
 				$this->beheren($request);
 				$this->table->filter = $groep->naam;
 				$form->setDataTableId($this->table->getDataTableId());
-				return view('default', ['content' => $this->table, 'modal' => $form]);
+				return $this->render('default.html.twig', ['content' => $this->table, 'modal' => $form]);
 			} elseif ($form->validate()) {
 				$this->changeLogRepository->logChanges($form->diff());
 				$this->repository->update($groep);
@@ -378,14 +372,14 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			}
 		} // beheren
 		else {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			$selection = $this->getDataTableSelection();
 			if (empty($selection)) {
-				throw new CsrToegangException();
+				throw $this->createAccessDeniedException();
 			}
 			/** @var AbstractGroep $groep */
 			$groep = $this->repository->retrieveByUUID($selection[0]);
 			if (!$groep || !$groep->mag(AccessAction::Wijzigen)) {
-				throw new CsrToegangException();
+				throw $this->createAccessDeniedException();
 			}
 			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
 			if ($form->validate()) {
@@ -511,7 +505,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
 		if (!$groep or !$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepPreviewForm($groep);
 	}
@@ -526,7 +520,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if ($request->getMethod() == 'POST') {
 			$groep = $this->repository->get($id);
 			if (!$groep->mag(AccessAction::Bekijken)) {
-				throw new CsrToegangException();
+				throw $this->createAccessDeniedException();
 			}
 			$data = $this->changeLogRepository->findBy(['subject' => $groep->getUUID()]);
 			return $this->tableData($data);
@@ -535,7 +529,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			/** @var AbstractGroep $groep */
 			$groep = $this->repository->retrieveByUUID($id);
 			if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
-				throw new CsrToegangException('Kan logboek niet vinden');
+				throw $this->createAccessDeniedException('Kan logboek niet vinden');
 			}
 			return new GroepLogboekForm($groep);
 		}
@@ -544,7 +538,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function leden(Request $request, $id) {
 		$groep = $this->repository->get($id);
 		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if ($request->getMethod() == 'POST') {
 			return $this->tableData($groep->getLeden());
@@ -561,7 +555,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$model = $em->getRepository($groep->getLidType());
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$lid = $model->nieuw($groep, $uid);
 
@@ -585,11 +579,11 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	public function ketzer_aanmelden(EntityManagerInterface $em, $id) {
-		$uid = LoginService::getUid();
+		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		/** @var AbstractGroepLedenRepository $repository */
@@ -615,7 +609,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$model = $em->getRepository($groep->getLidType());
 
 		if (!$groep->mag(AccessAction::Beheren)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		/** @var AbstractGroepLid $lid */
@@ -637,11 +631,11 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	public function ketzer_bewerken(EntityManagerInterface $em, $id) {
-		$uid = LoginService::getUid();
+		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
 
 		if (!$groep->mag(AccessAction::Bewerken)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$lid = $groep->getLid($uid);
 		$form = new GroepBewerkenForm($lid, $groep);
@@ -665,11 +659,11 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$lid = $groep->getLid($uid);
 
 		if (!$lid) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		if (!$groep->mag(AccessAction::Beheren)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken');
@@ -688,17 +682,17 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	}
 
 	public function ketzer_afmelden(EntityManagerInterface $em, $id) {
-		$uid = LoginService::getUid();
+		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
 
 		if (!$groep->mag(AccessAction::Afmelden) && !$groep->mag(AccessAction::Beheren)) { // A::Beheren voor afmelden via context-menu
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		$lid = $groep->getLid($uid);
 
 		if (!$lid) {
-			throw new CsrToegangException('Niet aangemeld');
+			throw $this->createAccessDeniedException('Niet aangemeld');
 		}
 
 		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
@@ -712,7 +706,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groep = $this->repository->get($id);
 
 		if (!$groep->mag(AccessAction::Beheren)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		$lid = $groep->getLid($uid);
@@ -757,7 +751,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			});
 			return new GroepView($groep);
 		} else {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			$selection = $this->getDataTableSelection();
 			if (empty($selection)) {
 				throw new CsrGebruikerException();
 			}
@@ -784,8 +778,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					$em->flush();
 					$lid->groep_id = $ot_groep->id;
 					$lid->lid_sinds = getDateTime();
-					$lid->door_uid = LoginService::getUid();
-					$lid->door_profiel = LoginService::getProfiel();
+					$lid->door_uid = $this->getUid();
+					$lid->door_profiel = $this->getProfiel();
 					$em->persist($lid);
 					$em->flush();
 					$lid->groep_id = $groep->id;

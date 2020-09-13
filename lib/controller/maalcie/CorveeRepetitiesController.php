@@ -125,6 +125,11 @@ class CorveeRepetitiesController {
 
 			// Voor bijwerken
 			$this->repetitie = $repetitie;
+			if (!empty($repetitie->mlt_repetitie_id)) {
+				$repetitie->maaltijdRepetitie = $this->entityManager->getRepository(MaaltijdRepetitie::class)->find($repetitie->mlt_repetitie_id);
+			} else {
+				$repetitie->maaltijdRepetitie = null;
+			}
 
 			$this->entityManager->persist($repetitie);
 			$this->entityManager->flush();

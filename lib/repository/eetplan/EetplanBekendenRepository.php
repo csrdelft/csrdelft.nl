@@ -28,7 +28,8 @@ class EetplanBekendenRepository extends AbstractRepository {
 	 */
 	public function getBekenden($lichting) {
 		return $this->createQueryBuilder('b')
-			->where('b.uid1 like :lichting')
+			->join('b.noviet1', 'n')
+			->where('n.uid like :lichting')
 			->setParameter('lichting', $lichting . '%')
 			->getQuery()->getResult();
 	}
@@ -39,7 +40,7 @@ class EetplanBekendenRepository extends AbstractRepository {
 	 * @return bool
 	 */
 	public function exists($entity) {
-		return $this->find(['uid1' => $entity->uid1, 'uid2' => $entity->uid2]) != null
-			|| $this->find(['uid1' => $entity->uid2, 'uid2' => $entity->uid1]) != null;
+		return count($this->findBy(['noviet1' => $entity->noviet1, 'noviet2' => $entity->noviet2])) != 0
+			|| count($this->findBy(['noviet1' => $entity->noviet1, 'noviet2' => $entity->noviet1])) != 0;
 	}
 }

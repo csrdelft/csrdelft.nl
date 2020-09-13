@@ -7,6 +7,7 @@ import ButtonApi = DataTables.ButtonApi;
 import ButtonsSettings = DataTables.ButtonsSettings;
 
 declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace DataTables {
 		interface ExtButtonsSettings {
 			// Default buttons, zitten om de een of andere reden niet in de typedef
@@ -74,12 +75,18 @@ $.fn.dataTable.ext.buttons.default = {
 
 		// Settings voor knop_ajax
 		node.attr('href', config.href);
-		node.attr('data-tableid', dt.tables().nodes().to$().attr('id')!);
+		const id = dt.tables().nodes().to$().attr('id');
+
+		if (!id) {
+			throw new Error("Datatable heeft geen id")
+		}
+
+		node.attr('data-tableid', id);
 	},
 	action(e, dt, button) {
-		knopPost.call(button, e);
+		knopPost(button.get(0), e);
 	},
-	className: 'post DataTableResponse',
+	className: 'post loaded DataTableResponse',
 };
 
 $.fn.dataTable.ext.buttons.popup = {
@@ -92,7 +99,7 @@ $.fn.dataTable.ext.buttons.popup = {
 $.fn.dataTable.ext.buttons.url = {
 	extend: 'default',
 	action(e, dt, button) {
-		window.location.href = button.attr('href')!;
+		window.location.href = button.attr('href') ?? "";
 	},
 };
 
@@ -109,7 +116,13 @@ $.fn.dataTable.ext.buttons.sourceChange = {
 		enable();
 	},
 	action(e, dt, button, config) {
-		dt.ajax.url(config.href!).load();
+		const href = config.href
+
+		if (!href) {
+			throw new Error("SourceChange Button heeft geen href")
+		}
+
+		dt.ajax.url(href).load();
 	},
 };
 
@@ -128,7 +141,6 @@ $.fn.dataTable.ext.buttons.confirm = {
 		// Initiele staat
 		toggle();
 
-		// tslint:disable-next-line:no-unused-expression
 		new $.fn.dataTable.Buttons(dt, {
 			buttons: [
 				{
@@ -149,13 +161,19 @@ $.fn.dataTable.ext.buttons.confirm = {
 		config.action = $.fn.dataTable.ext.buttons.collection.action;
 	},
 	action(e, dt, button) {
-		knopPost.call(button, e);
+		knopPost(button.get(0), e);
 	},
 };
 
 $.fn.dataTable.ext.buttons.defaultCollection = {
 	extend: 'collection',
 	init(dt, node, config) {
-		$.fn.dataTable.ext.buttons.default.init!.call(this, dt, node, config);
+		const init = $.fn.dataTable.ext.buttons.default.init;
+
+		if (!init) {
+			throw new Error("Configuratie fout! Default knop bestaat niet")
+		}
+
+		init.call(this, dt, node, config);
 	},
 };
