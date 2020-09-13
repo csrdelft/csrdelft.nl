@@ -1,9 +1,9 @@
-@extends('maaltijden.base')
+{% extends 'maaltijden/base.html.twig' %}
 
-@section('titel', 'Beheer corveepunten')
+{% block titel %}Beheer corveepunten{% endblock %}
 
-@section('content')
-	@parent
+{% block content %}
+	{{ parent() }}
 	<p>
 		Op deze pagina kunt u voor alle leden de corveepunten beheren.
 	</p>
@@ -29,37 +29,37 @@
 		vrijstellingen worden definitief verwijderd!
 	</p>
 	<div class="float-right">
-		<a href="/corvee/punten/resetjaar" title="Reset corveejaar" class="btn post confirm">@icon("lightning") Corveejaar
+		<a href="{{ url('csrdelft_maalcie_beheerpunten_resetjaar') }}" title="Reset corveejaar"
+			 class="btn post confirm">{{ icon("lightning") }} Corveejaar
 			resetten</a>
 	</div>
 	<table id="maalcie-tabel" class="maalcie-tabel">
-		@foreach($matrix as $puntenlijst)
-		@if($loop->index % 25 === 0)
-
-		@if(!$loop->first)
-		</tbody>
-		@endif
+		{% for puntenlijst in matrix %}
+		{% if loop.index % 25 == 0 %}
+		{% if not loop.first %}
+			</tbody>
+		{% endif %}
 		<thead>
 		<tr class="text-bottom">
 			<th>Lid</th>
-			@foreach($functies as $functie)
-				<th class="@cycle('rowColor0','rowColor1')" style="padding: 5px;">
+			{% for functie in functies %}
+				<th class="{{ cycle(['rowColor0', 'rowColor1'], loop.index) }}" style="padding: 5px;">
 					<div style="width: 17px; height: 160px;">
 						<div class="vertical niet-dik" style="position: relative; top: 140px;">
-							<nobr>{{$functie->naam}}</nobr>
+							<nobr>{{ functie.naam }}</nobr>
 						</div>
 					</div>
 				</th>
-			@endforeach
+			{% endfor %}
 			<th>Punten</th>
 			<th>Bonus<br/>/malus</th>
 			<th>Prognose</th>
 		</tr>
 		</thead>
 		<tbody>
-		@endif
-		@include('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $puntenlijst])
-		@endforeach
+		{% endif %}
+		{{ include('maaltijden/corveepunt/beheer_punten_lijst.html.twig', {puntenlijst: puntenlijst}) }}
+		{% endfor %}
 		</tbody>
 	</table>
-@endsection
+{% endblock %}

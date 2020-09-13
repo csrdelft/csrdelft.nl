@@ -77,7 +77,7 @@
 			<div class="forumpasfoto">{{ get_profiel(post.uid).link('pasfoto') | raw }}</div>
 		{% endif %}
 	</div>
-	<div class="forum-bericht @cycle('bericht0', 'bericht1')" id="post{{ post.post_id }}">
+	<div class="forum-bericht" id="post{{ post.post_id }}">
 		{% set account = get_profiel(post.uid).account %}
 		{% if account is not none and account.perm_role == 'R_PUBCIE' %}
 			{{ post.tekst | bbcode('html') }}

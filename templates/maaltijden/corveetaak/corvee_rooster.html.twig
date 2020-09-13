@@ -49,7 +49,7 @@
 						{% if firstOfDatum %}
 							{% set firstOfDatum = not firstOfDatum %}
 							{# {{cycle name="datumColor" assign="datumColor" values="rowColor0,rowColor1"}} #}
-							<td rowspan="{{ loop.length }}" class="@cycle('rowColor0', 'rowColor1')">
+							<td rowspan="{{ loop.length }}" class="{{ cycle(['rowColor0', 'rowColor1'], loop.index) }}">
 								<nobr>{{ date(datum) | date_format_intl('eee dd MMM') }}</nobr>
 							</td>
 						{% endif %}
