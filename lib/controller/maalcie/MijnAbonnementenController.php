@@ -9,6 +9,7 @@ use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
@@ -31,19 +32,19 @@ class MijnAbonnementenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/abonnementen", methods={"GET"})
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function mijn() {
 		$abonnementen = $this->maaltijdAbonnementenRepository->getAbonnementenVoorLid($this->getUid(), true, true);
-		return view('maaltijden.abonnement.mijn_abonnementen', ['titel' => 'Mijn abonnementen', 'abonnementen' => $abonnementen]);
+		return $this->render('maaltijden/abonnement/mijn_abonnementen.html.twig', ['titel' => 'Mijn abonnementen', 'abonnementen' => $abonnementen]);
 	}
 
 	/**
 	 * @param MaaltijdRepetitie $repetitie
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/abonnementen/inschakelen/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
@@ -58,12 +59,12 @@ class MijnAbonnementenController extends AbstractController {
 			$melding = 'Automatisch aangemeld voor ' . $aantal . ' maaltijd' . ($aantal === 1 ? '' : 'en');
 			setMelding($melding, 2);
 		}
-		return view('maaltijden.abonnement.mijn_abonnement', ['uid' => $abo->uid, 'mrid' => $abo->mlt_repetitie_id]);
+		return $this->render('maaltijden/abonnement/mijn_abonnement.html.twig', ['uid' => $abo->uid, 'mrid' => $abo->mlt_repetitie_id]);
 	}
 
 	/**
 	 * @param MaaltijdRepetitie $repetitie
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/abonnementen/uitschakelen/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_IK)
@@ -75,7 +76,7 @@ class MijnAbonnementenController extends AbstractController {
 			setMelding($melding, 2);
 		}
 		$abo = $abo_aantal[0];
-		return view('maaltijden.abonnement.mijn_abonnement', ['uid' => $abo->uid, 'mrid' => $abo->mlt_repetitie_id]);
+		return $this->render('maaltijden/abonnement/mijn_abonnement.html.twig', ['uid' => $abo->uid, 'mrid' => $abo->mlt_repetitie_id]);
 	}
 
 }

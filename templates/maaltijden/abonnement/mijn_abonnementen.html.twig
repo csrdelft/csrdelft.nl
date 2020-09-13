@@ -1,9 +1,9 @@
-@extends('maaltijden.base')
+{% extends 'maaltijden/base.html.twig' %}
 
-@section('titel', $titel)
+{% block titel %}{{ titel }}{% endblock %}
 
-@section('content')
-	@parent
+{% block content %}
+	{{ parent() }}
 	<p>
 		Op deze pagina kunt u abonnementen in- en uitschakelen voor periodieke maaltijden op Confide door op de knop te
 		klikken in de kolom "Ingeschakeld".
@@ -27,9 +27,9 @@
 		</tr>
 		</thead>
 		<tbody>
-		@foreach($abonnementen as $abonnement)
-			@include('maaltijden.abonnement.mijn_abonnement_lijst', ['abonnement' => $abonnement])
-		@endforeach
+		{% for abonnement in abonnementen %}
+			{{ include('maaltijden/abonnement/mijn_abonnement_lijst.html.twig', {abonnement: abonnement}) }}
+		{% endfor %}
 		</tbody>
 	</table>
-@endsection
+{% endblock %}
