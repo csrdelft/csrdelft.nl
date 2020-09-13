@@ -1,14 +1,9 @@
-<?php
-/**
- * @var \CsrDelft\entity\corvee\CorveeVoorkeur[] $voorkeuren
- */
-?>
-@extends('maaltijden.base')
+{% extends 'maaltijden/base.html.twig' %}
 
-@section('titel', 'Mijn voorkeuren')
+{% block titel %}Mijn voorkeuren{% endblock %}
 
-@section('content')
-	@parent
+{% block content %}
+	{{ parent() }}
 	<p>
 		Op deze pagina kunt u voorkeuren in- en uitschakelen voor periodieke maaltijden op Confide door op de knop te
 		klikken
@@ -25,7 +20,7 @@
 	<p>
 		N.B. Dit is niet de plek om aan te geven dat u iets niet lekker vindt!
 	</p>
-	@php($eetwens->view())
+	{{ eetwens.toString | raw }}
 	<br/>
 	<table id="maalcie-tabel" class="maalcie-tabel">
 		<thead>
@@ -37,14 +32,14 @@
 		</tr>
 		</thead>
 		<tbody>
-		@foreach($voorkeuren as $voorkeur)
+		{% for voorkeur in voorkeuren %}
 			<tr>
-				@include('maaltijden.voorkeuren.mijn_voorkeur_veld', ['uid' => $voorkeur->uid, 'crv_repetitie_id' => $voorkeur->crv_repetitie_id])
-				<td>{{$voorkeur->corveeRepetitie->corveeFunctie->naam}}</td>
-				<td>{{$voorkeur->corveeRepetitie->getDagVanDeWeekText()}}</td>
-				<td>{{$voorkeur->corveeRepetitie->getPeriodeInDagenText()}}</td>
+				{{ include('maaltijden/voorkeuren/mijn_voorkeur_veld.html.twig', {uid: voorkeur.uid, crv_repetitie_id: voorkeur.crv_repetitie_id}) }}
+				<td>{{ voorkeur.corveeRepetitie.corveeFunctie.naam }}</td>
+				<td>{{ voorkeur.corveeRepetitie.dagVanDeWeekText }}</td>
+				<td>{{ voorkeur.corveeRepetitie.periodeInDagenText }}</td>
 			</tr>
-		@endforeach
+		{% endfor %}
 		</tbody>
 	</table>
-@endsection
+{% endblock %}
