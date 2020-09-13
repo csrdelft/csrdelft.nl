@@ -54,11 +54,11 @@ class AbstractController extends BaseController {
 	protected function csrRedirect($url, $status = 302, $allowExternal = false)
 	{
 			if (empty($url) || $url === null) {
-				$url = REQUEST_URI;
+				$url = $this->get('request_stack')->getCurrentRequest()->getRequestUri();
 			}
-			if (!startsWith($url, CSR_ROOT) && !$allowExternal) {
+			if (!startsWith($url, $_ENV['CSR_ROOT']) && !$allowExternal) {
 				if (preg_match("/^[?#\/]/", $url) === 1) {
-					$url = CSR_ROOT . $url;
+					$url = $_ENV['CSR_ROOT'] . $url;
 				} else {
 					throw $this->createAccessDeniedException();
 				}

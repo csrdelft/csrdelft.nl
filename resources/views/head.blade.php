@@ -8,8 +8,8 @@
 <meta name="author" content="PubCie C.S.R. Delft" />
 <meta name="description" content="{{instelling('stek', 'beschrijving')}}">
 <meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE" />
-<meta name="apple-itunes-app" content="app-id=1112148892, app-argument={{CSR_ROOT}}{{REQUEST_URI}}">
-<meta property="og:url" content="{{CSR_ROOT}}{{REQUEST_URI}}" />
+<meta name="apple-itunes-app" content="app-id=1112148892, app-argument={{CSR_ROOT}}{{$_SERVER['REQUEST_URI']}}">
+<meta property="og:url" content="{{CSR_ROOT}}{{$_SERVER['REQUEST_URI']}}" />
 <meta property="og:title" content="C.S.R. Delft | @yield('titel')" />
 <meta property="og:locale" content="nl_nl" />
 <meta property="og:image" content="{{CSR_ROOT}}/dist/images/beeldmerk.png" />
