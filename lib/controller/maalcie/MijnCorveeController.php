@@ -10,6 +10,7 @@ use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -42,7 +43,7 @@ class MijnCorveeController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
@@ -52,7 +53,7 @@ class MijnCorveeController extends AbstractController {
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$punten = $this->corveePuntenService->loadPuntenVoorLid($this->getProfiel(), $functies);
 		$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($this->getUid());
-		return view('maaltijden.corveetaak.mijn', [
+		return $this->render('maaltijden/corveetaak/mijn.html.twig', [
 			'rooster' => $rooster,
 			'functies' => $functies,
 			'punten' => $punten,
@@ -61,7 +62,7 @@ class MijnCorveeController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee/rooster", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
@@ -69,17 +70,17 @@ class MijnCorveeController extends AbstractController {
 		$taken = $this->corveeTakenRepository->getKomendeTaken();
 		$toonverleden = LoginService::mag(P_CORVEE_MOD);
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
-		return view('maaltijden.corveetaak.corvee_rooster', ['rooster' => $rooster, 'toonverleden' => $toonverleden]);
+		return $this->render('maaltijden/corveetaak/corvee_rooster.html.twig', ['rooster' => $rooster, 'toonverleden' => $toonverleden]);
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee/rooster/verleden", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
 	public function roosterVerleden() {
 		$taken = $this->corveeTakenRepository->getVerledenTaken();
 		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
-		return view('maaltijden.corveetaak.corvee_rooster', ['rooster' => $rooster, 'toonverleden' => false]);
+		return $this->render('maaltijden/corveetaak/corvee_rooster.html.twig', ['rooster' => $rooster, 'toonverleden' => false]);
 	}
 }
