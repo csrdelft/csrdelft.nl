@@ -320,7 +320,7 @@ function isSyrinx() {
 }
 
 function isCli() {
-	return php_sapi_name() == 'cli';
+	return php_sapi_name() == 'cli' && $_SERVER['APP_ENV'] != 'test';
 }
 
 function isCi() {

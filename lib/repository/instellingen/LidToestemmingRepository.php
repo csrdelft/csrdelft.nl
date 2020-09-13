@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 
 /**
@@ -40,16 +41,21 @@ class LidToestemmingRepository extends AbstractRepository {
 	const MODULE_ALGEMEEN = 'algemeen';
 	const FIELD_WAARDE = 'waarde';
 	const MODULE_TOESTEMMING = 'toestemming';
+	/**
+	 * @var RequestStack
+	 */
+	private $requestStack;
 
 	/**
 	 * @param ManagerRegistry $registry
 	 * @throws FileLoaderImportCircularReferenceException
 	 * @throws LoaderLoadException
 	 */
-	public function __construct(ManagerRegistry $registry) {
+	public function __construct(ManagerRegistry $registry, RequestStack $requestStack) {
 		parent::__construct($registry, LidToestemming::class);
 
 		$this->load('instellingen/toestemming.yaml', new InstellingConfiguration());
+		$this->requestStack = $requestStack;
 	}
 
 	/**
@@ -84,16 +90,18 @@ class LidToestemmingRepository extends AbstractRepository {
 	}
 
 	public function toestemmingGegeven() {
+		$requestUri = $this->requestStack->getCurrentRequest()->getRequestUri();
+		$stopNag = $this->requestStack->getCurrentRequest()->getSession()->get('stop_nag', null);
 		// Doe niet naggen op de privacy info pagina.
-		if ($_SERVER['REQUEST_URI'] == '/privacy') {
+		if ($requestUri == '/privacy') {
 			return true;
 		}
 		// Voorkom problemen tijdens opnieuw instellen wachtwoord
-		if (startsWith($_SERVER['REQUEST_URI'], '/wachtwoord')) {
+		if (startsWith($requestUri, '/wachtwoord')) {
 			return true;
 		}
 		// Doe niet naggen voor een uur als een lid op annuleren heeft geklikt.
-		if (isset($_SESSION['stop_nag']) && $_SESSION['stop_nag'] > time() - 3600) {
+		if ($stopNag && $stopNag > time() - 3600) {
 			return true;
 		}
 
