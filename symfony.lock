@@ -216,6 +216,9 @@
     "php-http/promise": {
         "version": "1.1.0"
     },
+    "php-webdriver/webdriver": {
+        "version": "1.8.2"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
@@ -445,6 +448,12 @@
             "./src/Kernel.php"
         ]
     },
+    "symfony/http-client": {
+        "version": "v5.1.5"
+    },
+    "symfony/http-client-contracts": {
+        "version": "v2.2.0"
+    },
     "symfony/http-foundation": {
         "version": "v3.4.35"
     },
@@ -485,6 +494,9 @@
     },
     "symfony/orm-pack": {
         "version": "v1.0.7"
+    },
+    "symfony/panther": {
+        "version": "v0.7.1"
     },
     "symfony/phpunit-bridge": {
         "version": "4.3",
@@ -530,6 +542,9 @@
     },
     "symfony/polyfill-uuid": {
         "version": "v1.18.1"
+    },
+    "symfony/process": {
+        "version": "v5.1.5"
     },
     "symfony/profiler-pack": {
         "version": "v1.0.4"
