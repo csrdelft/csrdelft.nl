@@ -1,0 +1,61 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Yarn packages
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: .yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install yarn dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
+      - name: Run yarn build
+        run: yarn run production
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: js
+          path: htdocs/dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_js
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer packages
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Download JS
+        uses: actions/download-artifact@v2
+        with:
+          name: js
