@@ -1,5 +1,7 @@
 <?php
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\Kernel;
 use CsrDelft\view\renderer\BladeRenderer;
 
 /**
@@ -28,7 +30,13 @@ function compileBlade() {
 
 try {
 	putenv('CI=true');
-	require_once __DIR__ . '/../../lib/configuratie.include.php';
+	require __DIR__ . '/../../config/bootstrap.php';
+
+	$kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
+	$kernel->boot();
+	$container = $kernel->getContainer();
+
+	ContainerFacade::init($container);
 
 	compileBlade();
 } catch (Exception $ex) {

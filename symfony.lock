@@ -362,6 +362,9 @@
     "spatie/phpunit-snapshot-assertions": {
         "version": "3.0.0"
     },
+    "symfony/browser-kit": {
+        "version": "v5.1.5"
+    },
     "symfony/cache": {
         "version": "v3.4.32"
     },
@@ -384,6 +387,9 @@
             "./config/bootstrap.php"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v5.1.5"
+    },
     "symfony/dependency-injection": {
         "version": "v3.4.32"
     },
@@ -392,6 +398,9 @@
     },
     "symfony/doctrine-bridge": {
         "version": "v3.4.32"
+    },
+    "symfony/dom-crawler": {
+        "version": "v5.1.5"
     },
     "symfony/dotenv": {
         "version": "v3.4.32"

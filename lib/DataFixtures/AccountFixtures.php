@@ -3,6 +3,7 @@
 namespace CsrDelft\DataFixtures;
 
 use CsrDelft\entity\Geslacht;
+use CsrDelft\entity\MenuItem;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
@@ -88,6 +89,10 @@ class AccountFixtures extends Fixture {
 		$this->accountRepository->wijzigWachtwoord($account, 'stek open u voor mij!');
 
 		$account->perm_role = AccessRole::PubCie;
+
+		$pubcieMenu = new MenuItem();
+		$pubcieMenu->tekst = 'x101';
+		$pubcieMenu->rechten_bekijken = 'x101';
 
 		$manager->flush();
 	}
