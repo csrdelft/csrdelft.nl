@@ -12,7 +12,7 @@
 <main class="container my-3 py-3 flex-shrink-0">
 	@if(lid_instelling('zijbalk', 'breedte') != 'zijbalk_verborgen')
 		<nav id="zijbalk">
-			@php($zijbalk = \CsrDelft\view\Zijbalk::addStandaardZijbalk(isset($zijbalk) ? $zijbalk : []))
+			@php($zijbalk = \CsrDelft\common\ContainerFacade::getContainer()->get(\CsrDelft\view\Zijbalk::class)->getZijbalk())
 			@foreach($zijbalk as $block)
 				<div class="blok">{!! $block !!}</div>
 			@endforeach

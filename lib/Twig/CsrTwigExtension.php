@@ -23,6 +23,7 @@ namespace CsrDelft\Twig {
 	use CsrDelft\view\formulier\CsrfField;
 	use CsrDelft\view\formulier\InstantSearchForm;
 	use CsrDelft\view\toestemming\ToestemmingModalForm;
+	use CsrDelft\view\Zijbalk;
 	use Symfony\Component\HttpFoundation\Session\SessionInterface;
 	use Twig\Extension\AbstractExtension;
 	use Twig\TwigFilter;
@@ -62,11 +63,16 @@ namespace CsrDelft\Twig {
 		 * @var ProfielRepository
 		 */
 		private $profielRepository;
+		/**
+		 * @var Zijbalk
+		 */
+		private $zijbalk;
 
 		public function __construct(
 			SessionInterface $session,
 			LoginService $loginService,
 			CsrfService $csrfService,
+			Zijbalk $zijbalk,
 			ProfielRepository $profielRepository,
 			MenuItemRepository $menuItemRepository,
 			LidToestemmingRepository $lidToestemmingRepository,
@@ -81,6 +87,7 @@ namespace CsrDelft\Twig {
 			$this->menuItemRepository = $menuItemRepository;
 			$this->csrfService = $csrfService;
 			$this->profielRepository = $profielRepository;
+			$this->zijbalk = $zijbalk;
 		}
 
 		public function getFunctions() {
@@ -102,7 +109,7 @@ namespace CsrDelft\Twig {
 				new TwigFunction('csrfMetaTag', [$this, 'csrfMetaTag'], ['is_safe' => ['html']]),
 				new TwigFunction('csrfField', [$this, 'csrfField'], ['is_safe' => ['html']]),
 				new TwigFunction('getMelding', 'getMelding', ['is_safe' => ['html']]),
-				new TwigFunction('get_zijbalk', 'get_zijbalk', ['is_safe' => ['html']]),
+				new TwigFunction('get_zijbalk', [$this, 'get_zijbalk'], ['is_safe' => ['html']]),
 				new TwigFunction('vereniging_leeftijd', 'vereniging_leeftijd'),
 				new TwigFunction('login_form', 'login_form', ['is_safe' => ['html']]),
 				new TwigFunction('icon', 'icon', ['is_safe' => ['html']]),
@@ -334,6 +341,10 @@ namespace CsrDelft\Twig {
 		public function bbcode_light(string $string) {
 			return CsrBB::parseLight($string);
 		}
+		public function get_zijbalk() {
+			return $this->zijbalk->getZijbalk();
+		}
+
 	}
 }
 
@@ -341,17 +352,12 @@ namespace {
 
 	use CsrDelft\view\Icon;
 	use CsrDelft\view\login\LoginForm;
-	use CsrDelft\view\Zijbalk;
 
 	function file_base64($filename) {
 		if (file_exists($filename)) {
 			return base64_encode(file_get_contents($filename));
 		}
 		return '';
-	}
-
-	function get_zijbalk() {
-		return Zijbalk::addStandaardZijbalk([]);
 	}
 
 	function login_form() {
