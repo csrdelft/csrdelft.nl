@@ -37,7 +37,10 @@ jobs:
           branch: master
       if: type != pull_request OR fork = true
     - name: Voer de phpunit tests uit
-      install: composer install
+      install: |
+        composer install
+        yarn
+        yarn production
       before_script: |
         php bin/console doctrine:database:create -n
         php bin/console doctrine:migrations:migrate -n
