@@ -21,7 +21,7 @@
 			<tbody>
 			@foreach($saldi as $saldo)
 				<tr>
-					<td>{!! $saldo->profiel ? $saldo->profiel->getLink() : "" !!}</td>
+					<td>{!! $saldo->uid ? \CsrDelft\repository\ProfielRepository::getLink($saldo->uid) : "" !!}</td>
 					<td>{{$saldo->uid}}</td>
 					<td>{{format_bedrag($saldo->saldo)}}</td>
 				</tr>
