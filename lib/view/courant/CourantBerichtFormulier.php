@@ -35,13 +35,13 @@ class CourantBerichtFormulier extends Formulier {
 		$fields['bb'] = new RequiredBBCodeField('bericht', $model->bericht, 'Bericht');
 
 		$bbId = $fields['bb']->getId();
-		$sponsorlink = 'https://www.csrdelft.nl/plaetjes/banners/' . instelling('courant', 'sponsor');
+		$sponsorlink = instelling('courant', 'sponsor');
 
 		if (LoginService::mag(P_MAIL_COMPOSE)) {
 			$fields[] = new HtmlComment(<<<HTML
 <div>
 	<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda('${bbId}');" class="btn btn-primary" />
-	<input type="button" value="Importeer sponsor" onclick="document.getElementById('${bbId}').value += '[img]${sponsorlink}[/img]'" class="btn btn-primary" />
+	<input type="button" value="Importeer sponsor" onclick="document.getElementById('${bbId}').value += '${sponsorlink}'" class="btn btn-primary" />
 </div>
 HTML
 );
