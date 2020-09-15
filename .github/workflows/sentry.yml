@@ -16,7 +16,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          .yarn/cache
+          .yarn
           .pnp.js
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
