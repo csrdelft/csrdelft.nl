@@ -28,18 +28,6 @@ class BbImg extends BbTag {
 		return 'img';
 	}
 
-	public function renderLight() {
-		$url = $this->content;
-		$url = filter_var($url, FILTER_SANITIZE_URL);
-		if (!$url || (!url_like($url) && !startsWith($url, '/plaetjes/'))) {
-			return $url;
-		}
-
-		return <<<HTML
-			<a class="bb-link-image bb-tag-img" href="{$url}"></a>
-HTML;
-	}
-
 	public function render() {
 		$url = $this->getSourceUrl();
 		$arguments = $this->arguments;
