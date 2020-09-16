@@ -1,9 +1,10 @@
-@extends('maaltijden.base')
+{% extends 'maaltijden/base.html.twig' %}
 
-@section('titel', 'Beheer corveefuncties en kwalificaties')
+{% block titel %}Beheer corveefuncties en kwalificaties{% endblock %}
 
-@section('content')
+{% block content %}
 	@parent
+	{{ parent() }}
 	<p>
 		Op deze pagina kunt u corveefuncties aanmaken, wijzigen en verwijderen.
 		Onderstaande tabel toont alle functies in het systeem.
@@ -14,8 +15,8 @@
 		corveerepetities definitief zijn verwijderd.
 	</p>
 	<div class="float-right">
-		<a href="/corvee/functies/toevoegen" class="btn post popup">
-			@icon("add") Nieuwe functie
+		<a href="{{ url('csrdelft_maalcie_beheerfuncties_toevoegen') }}" class="btn post popup">
+			{{ icon("add") }} Nieuwe functie
 		</a>
 	</div>
 	<table id="maalcie-tabel" class="maalcie-tabel">
@@ -25,16 +26,16 @@
 			<th title="Afkorting">Afk</th>
 			<th>Naam</th>
 			<th>Standaard<br/>punten</th>
-			<th title="Email bericht">@icon("email")</th>
+			<th title="Email bericht">{{ icon("email") }}</th>
 			<th>Gekwalificeerden</th>
-			<th title="Mag maaltijden sluiten">@icon("lock_add")</th>
-			<th title="Definitief verwijderen" class="text-center">@icon("cross")</th>
+			<th title="Mag maaltijden sluiten">{{ icon("lock_add") }}</th>
+			<th title="Definitief verwijderen" class="text-center">{{ icon("cross") }}</th>
 		</tr>
 		</thead>
 		<tbody>
-		@foreach($functies as $functie)
-			@include('maaltijden.functie.beheer_functie_lijst', ['functie' => $functie])
-		@endforeach
+		{% for functie in functies %}
+			{{ include('maaltijden/functie/beheer_functie_lijst.html.twig', {functie: functie}) }}
+		{% endfor %}
 		</tbody>
 	</table>
-@endsection
+{% endblock %}
