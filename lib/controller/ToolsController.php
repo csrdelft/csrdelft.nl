@@ -20,12 +20,11 @@ use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
-use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -76,7 +75,7 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @return PlainView|\Symfony\Component\HttpFoundation\Response
+	 * @return PlainView|Response
 	 * @Route("/tools/streeplijst", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
@@ -93,7 +92,7 @@ class ToolsController extends AbstractController {
 
 	/**
 	 * @param Request $request
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 * @Route("/tools/stats", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
@@ -112,7 +111,7 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 * @Route("/tools/verticalelijsten", methods={"GET"})
 	 * @Auth(P_ADMIN)
 	 */
@@ -135,13 +134,13 @@ class ToolsController extends AbstractController {
 
 	/**
 	 * @param Request $request
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/tools/roodschopper", methods={"GET", "POST"})
 	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function roodschopper(Request $request) {
 		if ($request->query->has('verzenden')) {
-			return view('roodschopper.roodschopper', [
+			return $this->render('tools/roodschopper.html.twig', [
 				'verzenden' => true,
 				'aantal' => $request->query->get('aantal'),
 			]);
@@ -158,7 +157,7 @@ class ToolsController extends AbstractController {
 			$roodschopper->generateMails();
 		}
 
-		return view('roodschopper.roodschopper', [
+		return $this->render('tools/roodschopper.html.twig', [
 			'verzenden' => false,
 			'form' => $roodschopperForm,
 			'saldi' => $roodschopper->getSaldi(),
@@ -197,7 +196,7 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 * @Route("/tools/admins", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
@@ -210,7 +209,7 @@ class ToolsController extends AbstractController {
 	/**
 	 * Voor de NovCie, zorgt ervoor dat novieten bekeken kunnen worden als dat afgeschermd is op de rest van de stek.
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 * @Route("/tools/novieten", methods={"GET"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
@@ -221,6 +220,7 @@ class ToolsController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @return JsonResponse
 	 * @Route("/tools/dragobject", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
@@ -396,7 +396,7 @@ class ToolsController extends AbstractController {
 
 	/**
 	 * @param Request $request
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 * @Route("/tools/query", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
