@@ -364,8 +364,8 @@ namespace {
 		return (new LoginForm())->toString();
 	}
 
-	function icon($name) {
-		return Icon::getTag($name);
+	function icon($key, $hover = null, $title = null, $class = null, $content = null) {
+		return Icon::getTag($key, $hover, $title, $class, $content);
 	}
 
 	function twig_date_format($date) {

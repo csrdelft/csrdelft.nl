@@ -13,9 +13,9 @@ export function ajaxRequest(
 	onfinish?: () => void): void {
 	if (source) {
 		if (!source.classList.contains('noanim')) {
-			$(source).replaceWith(
-				`<img alt="Laden" id="${source.id}" title="${url}" src="/images/loading-arrows.gif" />`);
-			source = select(`img[title="${url}"]`);
+			const img = $(`<img alt="Laden" id="${source.id}" title="${url}" src="/images/loading-arrows.gif" />`)
+			$(source).replaceWith(img);
+			source = img.get(0)
 		} else if (source.classList.contains('InlineForm')) {
 			try {
 				Object.assign(select<HTMLElement>('.FormElement:first', source).style, <CSSStyleDeclaration>{
