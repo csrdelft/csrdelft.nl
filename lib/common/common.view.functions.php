@@ -28,17 +28,6 @@ function view(string $template, array $variables = []) {
 }
 
 /**
- * Shorthand voor het weergeven van een TemplateView
- *
- * @param string $template
- * @param array $variables
- * @throws Exception
- */
-function display(string $template, array $variables = []) {
-	(new TemplateView($template, $variables))->view();
-}
-
-/**
  * Zorgt dat line endings CRLF zijn voor ical en vcard.
  *
  * @param string input

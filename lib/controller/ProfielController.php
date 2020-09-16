@@ -40,7 +40,6 @@ use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ExternProfielForm;
 use CsrDelft\view\profiel\InschrijfLinkForm;
 use CsrDelft\view\profiel\ProfielForm;
-use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
@@ -194,7 +193,7 @@ class ProfielController extends AbstractController {
 	 * @param $lidjaar
 	 * @param $status
 	 * @param EntityManagerInterface $em
-	 * @return TemplateView|RedirectResponse
+	 * @return RedirectResponse|Response
 	 * @Route("/profiel/{lidjaar}/nieuw/{status}", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
 	 * @CsrfUnsafe()
@@ -283,7 +282,7 @@ class ProfielController extends AbstractController {
 
 	/**
 	 * @param $uid
-	 * @return TemplateView|RedirectResponse
+	 * @return RedirectResponse|Response
 	 * @Route("/profiel/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */

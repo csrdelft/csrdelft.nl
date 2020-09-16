@@ -11,7 +11,6 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\maalcie\forms\CorveeRepetitieForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -167,7 +166,7 @@ class CorveeRepetitiesController extends AbstractController {
 
 	/**
 	 * @param CorveeRepetitie $corveeRepetitie
-	 * @return CorveeRepetitieForm|TemplateView
+	 * @return CorveeRepetitieForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @throws Throwable

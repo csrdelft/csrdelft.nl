@@ -26,7 +26,6 @@ use CsrDelft\view\maalcie\beheer\PrullenbakMaaltijdenTable;
 use CsrDelft\view\maalcie\forms\AanmeldingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdForm;
 use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -66,12 +65,12 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/beheer/prullenbak", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function GET_prullenbak() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Prullenbak maaltijdenbeheer',
 			'content' => new PrullenbakMaaltijdenTable(),
 		]);
@@ -117,7 +116,7 @@ class BeheerMaaltijdenController extends AbstractController {
 
 	/**
 	 * @param null $maaltijd_id
-	 * @return TemplateView
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/maaltijden/beheer/{maaltijd_id<\d*>}", methods={"GET"}, defaults={"maaltijd_id"=null})
@@ -129,7 +128,7 @@ class BeheerMaaltijdenController extends AbstractController {
 			$modal = $this->bewerk($maaltijd_id);
 		}
 		$repetities = $this->maaltijdRepetitiesRepository->findAll();
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Maaltijdenbeheer',
 			'content' => new BeheerMaaltijdenTable($repetities),
 			'modal' => $modal,
@@ -137,12 +136,12 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/beheer/archief", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function GET_archief() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Archief maaltijdenbeheer',
 			'content' => new ArchiefMaaltijdenTable(),
 		]);
@@ -407,12 +406,12 @@ class BeheerMaaltijdenController extends AbstractController {
 	// Maalcie-fiscaat
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/beheer/onverwerkt", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function onverwerkt() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/maaltijd/maaltijd_beoordelingen.html.twig', [
 			'titel' => 'Onverwerkte Maaltijden',
 			'content' => new OnverwerkteMaaltijdenTable(),
 		]);

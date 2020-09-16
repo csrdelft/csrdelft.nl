@@ -25,7 +25,6 @@ use CsrDelft\view\fiscaat\pin\PinBestellingCrediterenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchNegerenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
 use CsrDelft\view\formulier\FoutmeldingForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

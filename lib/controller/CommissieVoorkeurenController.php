@@ -14,7 +14,6 @@ use CsrDelft\view\commissievoorkeuren\AddCategorieFormulier;
 use CsrDelft\view\commissievoorkeuren\AddCommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\CommissieFormulier;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurPraesesOpmerkingForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;

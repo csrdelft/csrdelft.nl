@@ -9,7 +9,6 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

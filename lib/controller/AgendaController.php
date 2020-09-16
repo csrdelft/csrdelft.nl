@@ -21,7 +21,6 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\agenda\AgendaItemForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\response\IcalResponse;
 use DateInterval;
 use Symfony\Component\HttpFoundation\Request;
@@ -176,7 +175,7 @@ class AgendaController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/agenda/courant", methods={"POST"})
 	 * @Auth(P_MAIL_COMPOSE)
 	 */

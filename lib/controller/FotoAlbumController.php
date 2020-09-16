@@ -19,12 +19,12 @@ use CsrDelft\view\fotoalbum\FotoTagToevoegenForm;
 use CsrDelft\view\fotoalbum\PosterUploadForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -107,7 +107,7 @@ class FotoAlbumController extends AbstractController {
 	/**
 	 * @param Request $request
 	 * @param $dir
-	 * @return JsonResponse|TemplateView|RedirectResponse
+	 * @return JsonResponse|RedirectResponse|Response
 	 * @Route("/fotoalbum/uploaden/{dir}", methods={"GET","POST"}, requirements={"dir": ".+"})
 	 * @Auth({P_ALBUM_ADD,P_ALBUM_PUBLIC_ADD})
 	 */
@@ -483,7 +483,7 @@ class FotoAlbumController extends AbstractController {
 
 	/**
 	 * @param $dir
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 * @Route("/fotoalbum/{dir}", methods={"GET"}, requirements={"dir": ".+"}, defaults={"dir": ""})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */

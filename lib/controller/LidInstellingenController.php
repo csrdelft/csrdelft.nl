@@ -6,7 +6,6 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\RememberLoginTable;
-use CsrDelft\view\renderer\TemplateView;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -8,7 +8,6 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
 use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
 use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
-use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

@@ -9,10 +9,10 @@ use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\MeldingResponse;
 use CsrDelft\view\menubeheer\MenuItemForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -30,7 +30,7 @@ class MenuBeheerController extends AbstractController {
 
 	/**
 	 * @param string $menu_name
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 * @Route("/menubeheer/beheer/{menu_name}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */

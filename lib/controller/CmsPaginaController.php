@@ -9,8 +9,6 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaForm;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\renderer\TemplateView;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;

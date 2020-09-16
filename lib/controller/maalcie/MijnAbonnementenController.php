@@ -8,7 +8,6 @@ use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
-use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;

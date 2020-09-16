@@ -9,7 +9,6 @@ use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
-use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

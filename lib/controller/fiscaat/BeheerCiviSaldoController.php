@@ -16,7 +16,6 @@ use CsrDelft\view\fiscaat\saldo\InleggenForm;
 use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\renderer\TemplateView;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;

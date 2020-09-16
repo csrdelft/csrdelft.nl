@@ -7,7 +7,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
-use CsrDelft\view\renderer\TemplateView;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

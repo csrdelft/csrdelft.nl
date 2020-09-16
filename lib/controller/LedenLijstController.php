@@ -12,19 +12,26 @@ use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
-use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class LedenLijstController extends AbstractController {
 	/**
+	 * @param Request $request
 	 * @param CmsPaginaRepository $cmsPaginaRepository
 	 * @param LidZoekerService $lidZoeker
 	 * @param GoogleSync $googleSync
-	 * @return TemplateView|RedirectResponse|Response
+	 * @param Environment $twig
+	 * @return RedirectResponse|Response
+	 * @throws LoaderError
+	 * @throws RuntimeError
+	 * @throws SyntaxError
 	 * @Route("/ledenlijst", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */

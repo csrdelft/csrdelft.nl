@@ -40,12 +40,12 @@ use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -243,7 +243,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @param Request $request
 	 * @param null $id
 	 * @param null $soort
-	 * @return GroepForm|GroepPreviewForm|TemplateView
+	 * @return GenericDataTableResponse|GroepForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -255,7 +255,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @param Request $request
 	 * @param null $id
 	 * @param null $soort
-	 * @return GenericDataTableResponse|GroepForm|TemplateView
+	 * @return GenericDataTableResponse|GroepForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -347,7 +347,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	/**
 	 * @param Request $request
 	 * @param null $id
-	 * @return GenericDataTableResponse|GroepForm|TemplateView
+	 * @return GenericDataTableResponse|GroepForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */

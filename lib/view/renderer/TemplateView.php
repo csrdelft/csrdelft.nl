@@ -56,13 +56,6 @@ class TemplateView implements View, ToResponse {
 	/**
 	 * @throws Exception
 	 */
-	public function getBody() {
-		throw new CsrException("getBody: Not supported");
-	}
-
-	/**
-	 * @throws Exception
-	 */
 	public function getModel() {
 		throw new CsrException("getModel: Not supported");
 	}
