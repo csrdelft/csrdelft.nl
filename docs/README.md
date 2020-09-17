@@ -20,7 +20,7 @@ Basisconcepten over de stek.
 Kijk hier als je iets nieuws gaat bouwen. Dit zijn de stappen die je dan zou moeten doorlopen.
 
 1. [Routes](routes.md), een nieuw pagina maken
-1. [Blade](blade.md), een nieuwe pagina weergeven
+1. [Twig](twig.md), een nieuwe pagina weergeven
 1. [Database](orm.md), data opslaan in de database
 1. [Migraties](migraties.md), je database veranderingen communiceren
 

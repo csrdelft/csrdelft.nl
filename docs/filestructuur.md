@@ -28,8 +28,8 @@ Hier wordt voor iedere map kort uitgelegd wat het doel van de map is.
 * `node_modules`: **Niet echt relevant.** Modules die yarn (package manager) gebruikt
 * `resources`: Template pagina's die worden gecompiled en vervolgens in `htdocs/dist` gezet
   * `assets`: [Typescript](typescript.md) / [Scss](styles.md) / etc.
-  * `views`: [Blade](blade.md) templates
 * `sessie`: **Niet echt relevant.** Map waar sessiebestanden in worden opgeslagen.
+* `templates`: [Twig](twig.md) templates
 * `sql`: **Niet echt relevant.** Oude database migraties. Alleen fixturesSQL_mininal.sql blijkt nog een beetje interessant te zijn
 * `templates`: Symfony Twig templates. Vervolg op blade templates
 * `tests`: Tests voor de stek. Wordt niet zoveel mee gedaan en er wordt vrij weinig getest.
