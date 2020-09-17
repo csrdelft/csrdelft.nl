@@ -18,6 +18,7 @@ class RememberLoginTable extends DataTable {
 		$this->hideColumn('uid');
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');
+		$this->setOrder(['last_used' => 'desc']);
 
 		$this->selectEnabled = false;
 
