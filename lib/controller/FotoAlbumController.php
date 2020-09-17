@@ -437,43 +437,89 @@ class FotoAlbumController extends AbstractController {
 		}
 	}
 
+	private function assertValidFotoPath($dir, $foto) {
+		if (!preg_match("/\.(JPE?G|PNG|jpe?g|png)/", $foto)) {
+			throw $this->createNotFoundException();
+		}
+		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto))) {
+			throw $this->createNotFoundException();
+		}
+	}
+
 	/**
 	 * @param Request $request
-	 * @param $type
-	 * @param $dir
-	 * @param $foto
-	 * @param $ext
+	 * @param string $dir
+	 * @param string $foto
 	 * @return BinaryFileResponse
-	 * @Route("/fotoalbum/{dir}/_thumbs/{foto}.{ext}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+", "ext": "JPE?G|PNG|jpe?g|png"}, defaults={"type": "thumb"})
-	 * @Route("/fotoalbum/{dir}/_resized/{foto}.{ext}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+", "ext": "JPE?G|PNG|jpe?g|png"}, defaults={"type": "resized"})
-	 * @Route("/fotoalbum/{dir}/{foto}.{ext}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+", "ext": "JPE?G|PNG|jpe?g|png"}, defaults={"type": "full"})
+	 * @Route("/fotoalbum/{dir}/_resized/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
-	public function raw_image(Request $request, $type, $dir, $foto, $ext) {
-		//Extra check to prevent attacks
-		if (!path_valid(PHOTOALBUM_PATH, join_paths($dir, $foto . "." . $ext))) {
-			throw $this->createAccessDeniedException();
-		}
+	public function raw_image_resized(Request $request, string $dir, string $foto) {
+		$this->assertValidFotoPath($dir, $foto);
 
-		$image = new Foto($foto . '.' . $ext, new FotoAlbum($dir), true);
+		$image = new Foto($foto, new FotoAlbum($dir), true);
 
 		if (!$image->magBekijken()) {
 			throw $this->createAccessDeniedException();
 		} else if (!$image->exists()) {
+			throw $this->createNotFoundException();
+		}
+
+		$response = new BinaryFileResponse($image->getResizedPath(), 200, [], true, null, true);
+		$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $image->filename);
+		$response->setExpires(date_create_immutable('+1 day'));
+		$response->isNotModified($request);
+
+		return $response;
+	}
+
+	/**
+	 * @param Request $request
+	 * @param string $dir
+	 * @param string $foto
+	 * @return BinaryFileResponse
+	 * @Route("/fotoalbum/{dir}/_thumbs/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+"})
+	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
+	 */
+	public function raw_image_thumb(Request $request, string $dir, string $foto) {
+		$this->assertValidFotoPath($dir, $foto);
+
+		$image = new Foto($foto, new FotoAlbum($dir), true);
+
+		if (!$image->magBekijken()) {
 			throw $this->createAccessDeniedException();
+		} else if (!$image->exists()) {
+			throw $this->createNotFoundException();
 		}
 
-		if ($type == 'full') {
-			$path = $image->getFullPath();
-		} elseif ($type == 'thumb') {
-			$path = $image->getThumbPath();
-		} elseif ($type == 'resized') {
-			$path = $image->getResizedPath();
-		} else {
-			throw new CsrException("raw_image type: " . $type . " wordt niet afgehandeld");
+		$response = new BinaryFileResponse($image->getThumbPath(), 200, [], true, null, true);
+		$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $image->filename);
+		$response->setExpires(date_create_immutable('+1 day'));
+		$response->isNotModified($request);
+
+		return $response;
+	}
+
+	/**
+	 * @param Request $request
+	 * @param string $dir
+	 * @param string $foto
+	 * @return BinaryFileResponse
+	 * @Route("/fotoalbum/{dir}/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+\.\w+"})
+	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
+	 */
+	public function raw_image(Request $request, string $dir, string $foto) {
+		$this->assertValidFotoPath($dir, $foto);
+
+		$image = new Foto($foto, new FotoAlbum($dir), true);
+
+		if (!$image->magBekijken()) {
+			throw $this->createAccessDeniedException();
+		} else if (!$image->exists()) {
+			throw $this->createNotFoundException();
 		}
 
-		$response = new BinaryFileResponse($path, 200, [], true, null, true);
+		$response = new BinaryFileResponse($image->getFullPath(), 200, [], true, null, true);
 		$response->setContentDisposition($request->query->has('download') ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE, $image->filename);
 		$response->setExpires(date_create_immutable('+1 day'));
 		$response->isNotModified($request);
