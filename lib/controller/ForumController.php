@@ -782,7 +782,7 @@ class ForumController extends AbstractController {
 		if (!$oudDraad->magModereren()) {
 			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
+		$nieuw = filter_input(INPUT_POST, 'draad_id', FILTER_SANITIZE_NUMBER_INT);
 		$nieuwDraad = $this->forumDradenRepository->get((int)$nieuw);
 		if (!$nieuwDraad->magModereren()) {
 			throw $this->createAccessDeniedException("Geen moderator");

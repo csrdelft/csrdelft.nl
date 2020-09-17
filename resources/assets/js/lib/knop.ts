@@ -34,7 +34,7 @@ function knopAjax(knop: Element, type: string) {
 		if (!userVal) {
 			return false;
 		}
-		data = encodeURIComponent(data[0]) + '=' + encodeURIComponent(userVal);
+		data = encodeURIComponent(key) + '=' + encodeURIComponent(userVal);
 	}
 	if (knop.classList.contains('addfav')) {
 		data = {
