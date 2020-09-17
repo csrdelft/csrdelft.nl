@@ -39,6 +39,7 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Vue](vue.md)
 - [Composer](composer.md)
 - [Security](security.md)
+- [Tests](test.md)
 
 ## Overig
 
