@@ -76,7 +76,7 @@ class FormulierInstance {
 		}
 		$csrfField = $this->getCsrfField();
 		if ($csrfField != null)
-			$csrfField->view();
+			$html .= $csrfField->getHtml();
 		$html .= $this->formKnoppen->getHtml();
 		$html .= $this->getScriptTag();
 		$html .= '</form>';

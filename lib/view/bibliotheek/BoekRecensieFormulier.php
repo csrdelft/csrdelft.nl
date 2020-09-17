@@ -1,17 +1,18 @@
 <?php
 
-
 namespace CsrDelft\view\bibliotheek;
-
 
 use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
-use CsrDelft\entity\bibliotheek\BoekExemplaar;
-use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\entity\bibliotheek\BoekRecensie;
+use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class BoekExemplaarFormulier implements FormulierTypeInterface {
+/**
+ * Boek weergeven
+ */
+class BoekRecensieFormulier implements FormulierTypeInterface {
 	/**
 	 * @var UrlGeneratorInterface
 	 */
@@ -23,16 +24,17 @@ class BoekExemplaarFormulier implements FormulierTypeInterface {
 
 	/**
 	 * @param FormulierBuilder $builder
-	 * @param BoekExemplaar $data
+	 * @param BoekRecensie $data
 	 * @param array $options
 	 */
 	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
-		$builder->setAction($this->urlGenerator->generate('csrdelft_bibliotheek_exemplaar', ['exemplaar' => $data->id]));
+		$builder->setAction($this->urlGenerator->generate('csrdelft_bibliotheek_recensie', ['boek' => $data->boek->id]));
 		$builder->setTitel('');
-
 		$fields = [];
-		$fields[] = new TextField('opmerking', $data->opmerking, "Beschrijving:");
+		$fields['beschrijving'] = new TextareaField("beschrijving", $data->beschrijving, null);
+
 		$fields[] = new SubmitKnop();
 		$builder->addFields($fields);
+		$builder->addCssClass('boekformulier');
 	}
 }

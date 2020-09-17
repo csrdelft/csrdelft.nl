@@ -37,15 +37,15 @@
 				</div>
 			</div>
 
-			{{ boekFormulier.toString | raw }}
+			{{ boekFormulier.content | raw }}
 		</div>
 	{% else %}
 		<div class="row">
 			{# weergave bestaand boek, soms met bewerkbare velden #}
 			<div class="boek col-md-8" id="{{ boek.id }}">
 
-				{% if boekFormulier.fields %}
-					{{ boekFormulier.toString | raw }}
+				{% if boek.id is none or boek.magBewerken %}
+					{{ boekFormulier.content | raw }}
 				{% else %}
 					<div class="row">
 						<div class="col-3 col-form-label">Boek</div>
@@ -113,7 +113,7 @@
 						{% if boek.magVerwijderen %}
 							<li class="list-group-item">
 								<a class="post verwijderen"
-									 href="{{ url('csrdelft_bibliotheek_verwijderboek', {id: boek.id}) }}"
+									 href="{{ url('csrdelft_bibliotheek_verwijderboek', {boek: boek.id}) }}"
 									 title="Boek verwijderen"
 									 onclick="return confirm('Weet u zeker dat u dit boek wilt verwijderen?')">
 									{{ icon("verwijderen") }} Verwijderen
@@ -121,7 +121,7 @@
 							</li>
 						{% endif %}
 						<li class="list-group-item">
-							<a class="post ReloadPage" href="{{ url('csrdelft_bibliotheek_addexemplaar', {id: boek.id}) }}"
+							<a class="post ReloadPage" href="{{ url('csrdelft_bibliotheek_addexemplaar', {exemplaar: boek.id}) }}"
 								 title="Ik bezit dit boek ook"
 								 onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">
 								{{ icon("user_add") }} Ik bezit dit boek
@@ -130,7 +130,7 @@
 						{% if mag('P_BIEB_MOD') %}
 							<li class="list-group-item">
 								<a class="post ReloadPage"
-									 href="{{ url('csrdelft_bibliotheek_addexemplaar', {id: boek.id, uid: 'x222'}) }}"
+									 href="{{ url('csrdelft_bibliotheek_addexemplaar', {exemplaar: boek.id, profiel: 'x222'}) }}"
 									 title="C.S.R.-bieb bezit dit boek ook"
 									 onclick="return confirm('Bezit de C.S.R.-bieb een exemplaar van dit boek?')">
 									{{ icon("user_add") }} Is een biebboek
@@ -165,7 +165,7 @@
 
 							{# opmerking #}
 							{% if exemplaar.magBewerken %}
-								{{ exemplaarFormulieren[exemplaar.id].toString | raw }}
+								{{ exemplaarFormulieren[exemplaar.id].content | raw }}
 							{% else %}
 								{% if exemplaar.opmerking is not none %}
 									<div class="regel">
@@ -205,7 +205,7 @@
 											{% endif %}
 										{% else %}
 											<a class="btn post ReloadPage"
-												 href="{{ url('csrdelft_bibliotheek_exemplaarlenen', {id: exemplaar.id}) }}"
+												 href="{{ url('csrdelft_bibliotheek_exemplaarlenen', {exemplaar: exemplaar.id}) }}"
 												 title="Leen dit boek"
 												 onclick="return confirm('U wilt dit boek van {{ exemplaar.eigenaar.naam }} lenen?')">
 												{{ icon("lorry") }} Exemplaar lenen
@@ -222,28 +222,28 @@
 									{% if exemplaar.eigenaar %}
 										{% if exemplaar.status.isuitgeleend or exemplaar.teruggegeven %}
 											<a class="btn post ReloadPage"
-												 href="{{ url('csrdelft_bibliotheek_exemplaarterugontvangen', {id: exemplaar.id}) }}"
+												 href="{{ url('csrdelft_bibliotheek_exemplaarterugontvangen', {exemplaar: exemplaar.id}) }}"
 												 title="Boek is ontvangen"
 												 onclick="return confirm('Dit exemplaar van {{ exemplaar.eigenaar.naam }} is terugontvangen?')">
 												{{ icon("lorry_flatbed") }} Ontvangen
 											</a>
 										{% elseif exemplaar.status.isbeschikbaar %}
 											<a class="btn post ReloadPage"
-												 href="{{ url('csrdelft_bibliotheek_exemplaarvermist', {id: exemplaar.id}) }}"
+												 href="{{ url('csrdelft_bibliotheek_exemplaarvermist', {exemplaar: exemplaar.id}) }}"
 												 title="Exemplaar is vermist"
 												 onclick="return confirm('Is het exemplaar van {{ exemplaar.eigenaar.naam }} vermist?')">
 												{{ icon("emoticon_unhappy") }} Vermist
 											</a>
 										{% elseif exemplaar.status.isvermist %}
 											<a class="btn post ReloadPage"
-												 href="{{ url('csrdelft_bibliotheek_exemplaargevonden', {id: exemplaar.id}) }}"
+												 href="{{ url('csrdelft_bibliotheek_exemplaargevonden', {exemplaar: exemplaar.id}) }}"
 												 title="Exemplaar teruggevonden"
 												 onclick="return confirm('Is het exemplaar van {{ exemplaar.eigenaar.naam }} teruggevonden?')">
 												{{ icon("emoticon_smile") }} Teruggevonden
 											</a>
 										{% endif %}
 										<a class="btn post ReloadPage"
-											 href="{{ url('csrdelft_bibliotheek_verwijderexemplaar', {id: exemplaar.id}) }}"
+											 href="{{ url('csrdelft_bibliotheek_verwijderexemplaar', {exemplaar: exemplaar.id}) }}"
 											 title="Exemplaar verwijderen"
 											 onclick="return confirm('Weet u zeker dat u dit exemplaar van {{ exemplaar.eigenaar.naam }} wilt verwijderen?')">
 											{{ icon("verwijderen") }} Verwijderen
@@ -303,7 +303,7 @@
 								{# knopjes bij elke post #}
 								{% if beschrijving.magVerwijderen %}
 									<a
-										href="{{ url('csrdelft_bibliotheek_verwijderbeschrijving', {id: boek.id, profiel: app.user.uid}) }}"
+										href="{{ url('csrdelft_bibliotheek_verwijderbeschrijving', {boek: boek.id, profiel: app.user.uid}) }}"
 										class="post ReloadPage"
 										onclick="return confirm('Weet u zeker dat u deze beschrijving wilt verwijderen?')">
 										<span class="ico cross" title="Verwijderen"></span> Verwijderen
@@ -311,8 +311,8 @@
 								{% endif %}
 							</td>
 							<td class="beschrijving {{ cycle(['b0', 'b1'], loop.index) }}" id="beschrijving{{ beschrijving.id }}">
-								{% if recensieFormulier.model == beschrijving %}
-									{{ recensieFormulier.toString | raw }}
+								{% if mijnRecensie == beschrijving %}
+									{{ recensieFormulier.content | raw }}
 								{% else %}
 									{{ beschrijving.beschrijving | bbcode }}
 								{% endif %}
@@ -327,10 +327,10 @@
 							<td class="tussenschot"></td>
 						</tr>
 					{% endfor %}
-					{% if recensieFormulier.nieuw %}
+					{% if mijnRecensie.id is none %}
 						<tr>
 							<td colspan="2">
-								{{ recensieFormulier.toString | raw }}
+								{{ recensieFormulier.content | raw }}
 							</td>
 						</tr>
 					{% endif %}

@@ -19,7 +19,7 @@ use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatable;
 use CsrDelft\view\bibliotheek\BibliotheekCatalogusDatatableResponse;
 use CsrDelft\view\bibliotheek\BoekExemplaarFormulier;
 use CsrDelft\view\bibliotheek\BoekFormulier;
-use CsrDelft\view\bibliotheek\RecensieFormulier;
+use CsrDelft\view\bibliotheek\BoekRecensieFormulier;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
@@ -69,14 +69,16 @@ class BibliotheekController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @param Boek $boek
 	 * @return RedirectResponse
 	 * @Route("/bibliotheek/boek/{boek}/recensie", methods={"POST"}, requirements={"boek": "\d+"})
 	 * @Auth(P_BIEB_READ)
 	 */
-	public function recensie(Boek $boek) {
+	public function recensie(Request $request, Boek $boek) {
 		$recensie = $this->boekRecensieRepository->get($boek, $this->getProfiel());
-		$formulier = new RecensieFormulier($recensie);
+		$formulier = $this->createFormulier(BoekRecensieFormulier::class, $recensie);
+		$formulier->handleRequest($request);
 		if ($formulier->validate()) {
 			if (!$recensie->magBewerken()) {
 				throw $this->createAccessDeniedException("Mag recensie niet bewerken");
@@ -142,17 +144,18 @@ class BibliotheekController extends AbstractController {
 
 	/**
 	 * Boek weergeven
+	 * @param Request $request
 	 * @param Boek|null $boek
 	 * @return Response
 	 * @Route("/bibliotheek/boek/{boek}", methods={"GET", "POST"}, defaults={"boek": null}, requirements={"boek": "\d+"})
 	 * @Auth(P_BIEB_READ)
 	 */
-	public function boek(Boek $boek = null) {
+	public function boek(Request $request, Boek $boek = null) {
 		if ($boek == null) {
 			$boek = new Boek();
 		}
-		$boekForm = new BoekFormulier($boek);
-
+		$boekForm = $this->createFormulier(BoekFormulier::class, $boek);
+		$boekForm->handleRequest($request);
 		if ($boekForm->validate()) {
 			if (!$boek->magBewerken()) {
 				throw $this->createAccessDeniedException('U mag dit boek niet bewerken');
@@ -167,13 +170,15 @@ class BibliotheekController extends AbstractController {
 		}
 
 		$alleRecensies = $boek->getRecensies();
+		/** @var BoekRecensie[] $andereRecensies */
 		$andereRecensies = [];
 		$mijnRecensie = new BoekRecensie();
 		$mijnRecensie->boek = $boek;
+		/** @var Response[] $exemplaarFormulieren */
 		$exemplaarFormulieren = [];
 		foreach ($boek->getExemplaren() as $exemplaar) {
 			if ($exemplaar->magBewerken()) {
-				$exemplaarFormulieren[$exemplaar->id] = new BoekExemplaarFormulier($exemplaar);
+				$exemplaarFormulieren[$exemplaar->id] = $this->createFormulier(BoekExemplaarFormulier::class, $exemplaar)->createView();
 			}
 		}
 		foreach ($alleRecensies as $recensie) {
@@ -183,12 +188,12 @@ class BibliotheekController extends AbstractController {
 			$andereRecensies[] = $recensie;
 
 		}
-		$recensieForm = new RecensieFormulier($mijnRecensie);
 		return $this->render('bibliotheek/boek.html.twig', [
 			'boek' => $boek,
 			'recensies' => $andereRecensies,
-			'boekFormulier' => $boekForm,
-			'recensieFormulier' => $recensieForm,
+			'boekFormulier' => $boekForm->createView(),
+			'mijnRecensie' => $mijnRecensie,
+			'recensieFormulier' => $boek->id ? $this->createFormulier(BoekRecensieFormulier::class, $mijnRecensie)->createView() : null,
 			'exemplaarFormulieren' => $exemplaarFormulieren,
 		]);
 	}
@@ -255,16 +260,18 @@ class BibliotheekController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @param BoekExemplaar $exemplaar
 	 * @return RedirectResponse
 	 * @Route("/bibliotheek/exemplaar/{exemplaar}", methods={"POST"}, requirements={"exemplaar": "\d+"})
 	 * @Auth(P_BIEB_READ)
 	 */
-	public function exemplaar(BoekExemplaar $exemplaar) {
+	public function exemplaar(Request $request, BoekExemplaar $exemplaar) {
 		if (!$exemplaar->magBewerken()) {
 			throw $this->createAccessDeniedException("Mag exemplaar niet bewerken");
 		}
-		$form = new BoekExemplaarFormulier($exemplaar);
+		$form = $this->createFormulier(BoekExemplaarFormulier::class, $exemplaar);
+		$form->handleRequest($request);
 		if ($form->validate()) {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($exemplaar);
