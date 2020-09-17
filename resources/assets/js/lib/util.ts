@@ -254,3 +254,13 @@ export const fadeAway = async (el: HTMLElement, ms: number): Promise<void> => {
 
 	el.remove()
 }
+
+// Grote beunmethode om te zien of we een light theme hebben.
+export const isLightMode = (): boolean => {
+	const bgColor = window.getComputedStyle(document.body).backgroundColor;
+
+	const sep = bgColor.indexOf(',') > -1 ? ',' : ' ';
+	const rgb = bgColor.substr(4).split(')')[0].split(sep);
+
+	return (Number(rgb[0]) > 124 && Number(rgb[1]) > 124 && Number(rgb[2]) > 124)
+}

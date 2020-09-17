@@ -13,15 +13,7 @@ import {
 	TextureLoader,
 	WebGLRenderer,
 } from 'three';
-import {select} from "../lib/dom";
-
-function docReady(fn: () => void): void {
-	if (document.readyState === 'complete') {
-		fn();
-	} else {
-		document.addEventListener('DOMContentLoaded', fn);
-	}
-}
+import {docReady, isLightMode} from "../lib/util";
 
 let camera: PerspectiveCamera;
 let scene: Scene;
@@ -30,19 +22,7 @@ const materials: PointsMaterial[] = [];
 let parameters: Array<{ color: number[]; sprite: Texture; size: number; }>;
 
 docReady(() => {
-	let lightTheme = false;
-
-	const container = select('.container', document, "Container van fxsneeuw niet gevonden.");
-
-	const bgColor = window.getComputedStyle(container).backgroundColor;
-
-	const sep = bgColor.indexOf(',') > -1 ? ',' : ' ';
-	const rgb = bgColor.substr(4).split(')')[0].split(sep);
-
-	// Grote beunmethode om te zien of we een light theme hebben.
-	if (Number(rgb[0]) > 124 && Number(rgb[1]) > 124 && Number(rgb[2]) > 124) {
-		lightTheme = true;
-	}
+	const lightTheme = isLightMode()
 
 	init();
 	animate();
@@ -125,7 +105,13 @@ docReady(() => {
 
 		//
 
-		renderer = new WebGLRenderer();
+		let renderer: WebGLRenderer
+		try {
+			renderer = new WebGLRenderer();
+		} catch (e) {
+			// WebGL kan niet opstarten, stop hier
+			return
+		}
 		renderer.setPixelRatio(window.devicePixelRatio);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		container.appendChild(renderer.domElement);
