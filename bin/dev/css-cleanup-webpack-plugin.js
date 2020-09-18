@@ -18,8 +18,8 @@ class CssCleanupWebpackPlugin {
 				for (const sassEntry of sassEntries) {
 					// asset is js/----.js of js/blah~----~blah.js of js/blah~----.js
 					if (asset.startsWith(`js/${sassEntry}.`)
-						|| asset.indexOf(`~${sassEntry}~`) > 0
-						|| asset.indexOf(`~${sassEntry}.`) > 0) {
+						|| asset.includes(`~${sassEntry}~`)
+						|| asset.includes(`~${sassEntry}.`)) {
 						delete compilation.assets[asset];
 					}
 				}

@@ -202,11 +202,9 @@ function sliding_pager($params) {
 	/* Build link bar */
 	$retval = '';
 	$cssClass = $cssClass ? 'class="' . $cssClass . '"' : '';
-	if ($curpage > 1) {
-		if ($showPrevNext) {
-			$retval .= '<a href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a>';
-			$retval .= $separator;
-		}
+	if ($curpage > 1 && $showPrevNext) {
+		$retval .= '<a href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a>';
+		$retval .= $separator;
 	}
 	if ($links[0] != 1) {
 		$retval .= '<a href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>1</a>';
@@ -217,7 +215,7 @@ function sliding_pager($params) {
 		}
 	}
 	for ($i = 0; $i < sizeof($links); $i++) {
-		if (($links[$i] != $curpage)) {
+		if ($links[$i] != $curpage) {
 			$retval .= '<a href="' . $baseurl . $links[$i] . $urlAppend . '" ' . $cssClass . '>' . $links[$i] . '</a>';
 		} else {
 			$retval .= '<span class="curpage">' . $links[$i] . '</span>';
@@ -235,11 +233,9 @@ function sliding_pager($params) {
 		}
 		$retval .= '<a href="' . $baseurl . $pagecount . $urlAppend . '" ' . $cssClass . '>' . $pagecount . '</a>';
 	}
-	if ($curpage != $pagecount) {
-		if ($showPrevNext) {
-			$retval .= $separator;
-			$retval .= '<a href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a>';
-		}
+	if ($curpage != $pagecount && $showPrevNext) {
+		$retval .= $separator;
+		$retval .= '<a href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a>';
 	}
 	return $retval;
 }
@@ -431,27 +427,17 @@ function csr_breadcrumbs($breadcrumbs) {
  * Name:     escape_ical<br>
  * Purpose:  escape string for ical output
  *
+ * @param string $string
+ * @return string
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @param string $string
- * @param int $prefix_length
- *
- * @return string
  */
-function escape_ical($string, $prefix_length = 0) {
+function escape_ical($string) {
 	$string = str_replace('\\', '\\\\', $string);
 	$string = str_replace("\r", '', $string);
 	$string = str_replace("\n", '\n', $string);
 	$string = str_replace(';', '\;', $string);
-	$string = str_replace(',', '\,', $string);
-
-//	$length = 60 - (int)$prefix_length;
-//	$wrap = mb_substr($string, 0, $length);
-//	$rest = mb_substr($string, $length);
-//	if (!empty($rest)) {
-//		$wrap .= "\n " . wordwrap($rest, 59, "\n ", true);
-//	}
-	return $string;
+	return str_replace(',', '\,', $string);
 }
 
 function toestemming_gegeven() {

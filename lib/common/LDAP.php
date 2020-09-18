@@ -35,8 +35,9 @@ class LDAP {
 
 	function connect($dobind) {
 		# zijn we al ingelogd?
-		if ($this->_conn !== false)
+		if ($this->_conn !== false) {
 			$this->disconnect();
+		}
 
 		if (!$_ENV['LDAP_HOST']) {
 			throw new CsrException('LDAP not available');
@@ -46,8 +47,9 @@ class LDAP {
 		ldap_start_tls($conn);
 		if ($dobind === true) {
 			$bind = ldap_bind($conn, $_ENV['LDAP_BINDDN'], $_ENV['LDAP_PASSWD']);
-			if ($bind !== true)
+			if ($bind !== true) {
 				return false;
+			}
 		}
 		# Onthouden van wat instellingen
 		$this->_conn = $conn;
@@ -72,19 +74,17 @@ class LDAP {
 			'antiplesk' => $this->_base_antiplesk,
 			'mailbox' => $this->_base_mailbox
 		);
-		if (!array_key_exists($mech, $validbase))
+		if (!array_key_exists($mech, $validbase)) {
 			return false;
+		}
 
 		# sanitaire controle
-		if (!is_utf8($user))
+		if (!is_utf8($user) || !is_utf8($pass)) {
 			return false;
-		if (!is_utf8($pass))
-			return false;
+		}
 
 		# als er geen bindingsangst is gaan we proberen met de ldap te binden...
-		if (@ldap_bind($this->_conn, sprintf("uid=%s,%s", $this->ldap_escape_dn($user), $validbase[$mech]), $pass))
-			return true;
-		return false;
+		return @ldap_bind($this->_conn, sprintf("uid=%s,%s", $this->ldap_escape_dn($user), $validbase[$mech]), $pass);
 	}
 
 	#### Ledenlijst ####
@@ -95,8 +95,9 @@ class LDAP {
 		$filter = sprintf("(uid=%s)", $this->ldap_escape_filter($uid));
 		$result = ldap_search($this->_conn, $base, $filter);
 		$num = ldap_count_entries($this->_conn, $result);
-		if ($num == 0 or $num === false)
+		if ($num == 0 || $num === false) {
 			return false;
+		}
 		return true;
 	}
 
@@ -104,10 +105,11 @@ class LDAP {
 
 	function getLid($uid = '') {
 		$base = $this->_base_leden;
-		if ($uid == '')
+		if ($uid == '') {
 			$filter = "(uid=*)";
-		else
+		} else {
 			$filter = sprintf("(uid=%s)", $this->ldap_escape_filter($uid));
+		}
 		$result = ldap_search($this->_conn, $base, $filter);
 		return ldap_get_entries($this->_conn, $result);
 	}
@@ -155,8 +157,9 @@ class LDAP {
 		$filter = sprintf("(cn=%s)", $this->ldap_escape_filter($cn));
 		$result = ldap_search($this->_conn, $base, $filter);
 		$num = ldap_count_entries($this->_conn, $result);
-		if ($num == 0 or $num === false)
+		if ($num == 0 || $num === false) {
 			return false;
+		}
 		return true;
 	}
 
@@ -164,10 +167,11 @@ class LDAP {
 
 	function getGroep($cn = '') {
 		$base = $this->_base_groepen;
-		if ($cn == '')
+		if ($cn == '') {
 			$filter = "(cn=*)";
-		else
+		} else {
 			$filter = sprintf("(cn=%s)", $this->ldap_escape_filter($cn));
+		}
 		$result = ldap_search($this->_conn, $base, $filter);
 		return ldap_get_entries($this->_conn, $result);
 	}
@@ -242,15 +246,13 @@ class LDAP {
 		# A DN may contain special characters which require escaping. These characters are:
 		# , (comma), = (equals), + (plus), < (less than), > (greater than), ; (semicolon),
 		# \ (backslash), and "" (quotation marks).
-		$text = preg_replace('/([,=+<>;"\x5C])/', '\\\\$1', $text);
+		$text = preg_replace("/([,=+<>;\"\\\])/", '\\\\$1', $text);
 
 		# In addition, the # (number sign) requires
 		# escaping if it is the first character in an attribute value, and a space character
 		# requires escaping if it is the first or last character in an attribute value.
 		$text = preg_replace("/^#/", "\\#", $text);
-		$text = preg_replace("/^ /", "\\ ", $text);
-
-		return $text;
+		return preg_replace("/^ /", "\\ ", $text);
 	}
 
 	# RFC2254
