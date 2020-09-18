@@ -96,12 +96,17 @@ class ProfielRepository extends AbstractRepository {
 	 */
 	public static function get($uid) {
 		if ($uid == null) {
-			return false;
+			return null;
 		}
+
+		if (!ctype_alnum($uid) || strlen($uid) != 4) {
+			return null;
+		}
+
 		$model = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		$profiel = $model->find($uid);
 		if (!$profiel) {
-			return false;
+			return null;
 		}
 		return $profiel;
 	}
