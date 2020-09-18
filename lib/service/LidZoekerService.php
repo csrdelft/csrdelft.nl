@@ -258,7 +258,7 @@ class LidZoekerService {
 			$veld = strtolower($parts[0]);
 
 			if ($parts[1][0] == '=') {
-				$queryBuilder->where($queryBuilder->expr()->eq('p' . $veld, ':zoekterm'));
+				$queryBuilder->where($queryBuilder->expr()->eq('p.' . $veld, ':zoekterm'));
 				$queryBuilder->setParameter('zoekterm', substr($parts[1], 1));
 			} else {
 				$queryBuilder->where($queryBuilder->expr()->like('p.' . $veld, ':zoekterm'));
