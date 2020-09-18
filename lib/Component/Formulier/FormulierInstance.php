@@ -214,7 +214,7 @@ HTML;
 		}
 		$valid = true;
 		foreach ($this->fields as $field) {
-			if ($field instanceof Validator and !$field->validate()) { // geen comments bijv.
+			if ($field instanceof Validator && !$field->validate()) { // geen comments bijv.
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
 		}
@@ -236,7 +236,7 @@ HTML;
 	 */
 	public function isPosted() {
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField and !$field->isPosted()) {
+			if ($field instanceof InputField && !$field->isPosted()) {
 				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}

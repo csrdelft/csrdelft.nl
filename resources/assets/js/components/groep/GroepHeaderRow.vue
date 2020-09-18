@@ -1,8 +1,9 @@
 <template>
   <thead>
     <tr>
-      <th />
+      <th scope="col" />
       <th
+        scope="col"
         v-for="keuze in keuzes"
         :key="keuze.description"
       >
