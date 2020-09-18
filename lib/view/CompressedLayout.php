@@ -9,21 +9,7 @@ use CsrDelft\service\security\LoginService;
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-abstract class CompressedLayout extends HtmlPage {
-
-	/**
-	 * CompressedLayout constructor.
-	 *
-	 * @param View $body
-	 * @param string $titel
-	 */
-	public function __construct(View $body, $titel) {
-		parent::__construct($body, $titel);
-
-		foreach (static::getUserModules() as $module) {
-		    parent::addStylesheet($module . '.css');
-		}
-	}
+abstract class CompressedLayout {
 
 	/**
 	 * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
