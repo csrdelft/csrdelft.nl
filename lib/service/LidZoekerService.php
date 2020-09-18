@@ -255,11 +255,13 @@ class LidZoekerService {
 			//met 'veld:=<zoekterm> wordt exact gezocht.
 			$parts = explode(':', $zoekterm);
 
+			$veld = strtolower($parts[0]);
+
 			if ($parts[1][0] == '=') {
-				$queryBuilder->where($queryBuilder->expr()->eq('p' . $parts[0], ':zoekterm'));
+				$queryBuilder->where($queryBuilder->expr()->eq('p' . $veld, ':zoekterm'));
 				$queryBuilder->setParameter('zoekterm', substr($parts[1], 1));
 			} else {
-				$queryBuilder->where($queryBuilder->expr()->like('p.' . $parts[0], ':zoekterm'));
+				$queryBuilder->where($queryBuilder->expr()->like('p.' . $veld, ':zoekterm'));
 				$queryBuilder->setParameter('zoekterm', sql_contains($parts[1]));
 			}
 		} else { //als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
