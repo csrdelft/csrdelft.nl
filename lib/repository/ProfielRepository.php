@@ -128,6 +128,9 @@ class ProfielRepository extends AbstractRepository {
 	}
 
 	public static function existsUid($uid) {
+		if (!ctype_alnum($uid) || strlen($uid) != 4) {
+			return false;
+		}
 		$model = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		return $model->find($uid) !== null;
 	}
