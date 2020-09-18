@@ -132,7 +132,6 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 			]);
 			if ($draad->magMeldingKrijgen()) {
 				$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuw draadje in ' . $deel->titel . ': ' . $draad->titel, $bericht);
-				$mail->setLightBB();
 				$mail->send();
 			}
 		});

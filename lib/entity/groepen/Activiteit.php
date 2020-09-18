@@ -134,7 +134,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 
 			case AccessAction::Bekijken:
 			case AccessAction::Aanmelden:
-				if (!empty($this->rechten_aanmelden) AND !LoginService::mag($this->rechten_aanmelden, $allowedAuthenticationMethods)) {
+				if (!empty($this->rechten_aanmelden) && !LoginService::mag($this->rechten_aanmelden, $allowedAuthenticationMethods)) {
 					return false;
 				}
 				break;
@@ -143,7 +143,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 		switch ($action) {
 			case AccessAction::Aanmelden:
 				// Controleer maximum leden
-				if (isset($this->aanmeld_limiet) and $this->aantalLeden() >= $this->aanmeld_limiet) {
+				if (isset($this->aanmeld_limiet) && $this->aantalLeden() >= $this->aanmeld_limiet) {
 					return false;
 				}
 				// Controleer aanmeldperiode
@@ -218,7 +218,7 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	}
 
 	public function getEindMoment() {
-		if ($this->eind_moment AND $this->eind_moment !== $this->begin_moment) {
+		if ($this->eind_moment && $this->eind_moment !== $this->begin_moment) {
 			return $this->eind_moment->getTimestamp();
 		}
 		return $this->getBeginMoment() + 1800;
@@ -239,14 +239,14 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	public function isHeledag() {
 		$begin = date('H:i', $this->getBeginMoment());
 		$eind = date('H:i', $this->getEindMoment());
-		return $begin == '00:00' AND ($eind == '23:59' OR $eind == '00:00');
+		return $begin == '00:00' && ($eind == '23:59' || $eind == '00:00');
 	}
 
 	public function isTransparant() {
 		// Toon als transparant (vrij) als lid dat wil, activiteit hele dag(en) duurt of lid niet ingeketzt is
-		return lid_instelling('agenda', 'transparantICal') === 'ja' ||
-			$this->isHeledag() ||
-			!$this->getLid(LoginService::getUid());
+		return lid_instelling('agenda', 'transparantICal') === 'ja'
+			|| $this->isHeledag()
+			|| !$this->getLid(LoginService::getUid());
 	}
 
 	public function getAanmeldLimiet() {

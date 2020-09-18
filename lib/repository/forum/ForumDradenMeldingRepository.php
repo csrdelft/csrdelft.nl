@@ -143,7 +143,6 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 			]);
 
 			$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
-			$mail->setLightBB();
 			$mail->send();
 		});
 	}

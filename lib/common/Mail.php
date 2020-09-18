@@ -2,9 +2,6 @@
 
 namespace CsrDelft\common;
 
-use CsrDelft\view\bbcode\CsrBB;
-use Twig\Environment;
-
 /**
  * Mail.class.php
  *
@@ -18,23 +15,16 @@ class Mail {
 
 	private $onderwerp;
 	private $bericht;
-	private $from = array('pubcie@csrdelft.nl' => 'PubCie C.S.R. Delft');
-	private $replyTo = array();
-	private $to = array();
-	private $bcc = array();
-	private $type = 'html'; // plain or html
+	private $from = ['pubcie@csrdelft.nl' => 'PubCie C.S.R. Delft'];
+	private $replyTo = [];
+	private $to = [];
+	private $bcc = [];
 	private $charset = 'UTF-8';
-	private $placeholders = array();
-	private $lightBB = false;
 
 	public function __construct(array $to, $onderwerp, $bericht) {
 		$this->onderwerp = $onderwerp;
 		$this->bericht = $bericht;
 		$this->addTo($to);
-	}
-
-	public function setLightBB($lightBB = true) {
-		$this->lightBB = $lightBB;
 	}
 
 	public function getFrom($email_only = false) {
@@ -72,15 +62,15 @@ class Mail {
 	}
 
 	public function getTo() {
-		$to = array();
+		$toLijst = [];
 		foreach ($this->to as $email => $name) {
 			if (empty($name)) {
-				$to[] = $email;
+				$toLijst[] = $email;
 			} else {
-				$to[] = $name . ' <' . $email . '>';
+				$toLijst[] = $name . ' <' . $email . '>';
 			}
 		}
-		return implode(', ', $to);
+		return implode(', ', $toLijst);
 	}
 
 	public function addTo(array $to) {
@@ -94,15 +84,15 @@ class Mail {
 	}
 
 	public function getBcc() {
-		$bcc = array();
+		$bccLijst = [];
 		foreach ($this->bcc as $email => $name) {
 			if (empty($name)) {
-				$bcc[] = $email;
+				$bccLijst[] = $email;
 			} else {
-				$bcc[] = $name . ' <' . $email . '>';
+				$bccLijst[] = $name . ' <' . $email . '>';
 			}
 		}
-		return implode(', ', $bcc);
+		return implode(', ', $bccLijst);
 	}
 
 	public function addBcc(array $bcc) {
@@ -116,16 +106,16 @@ class Mail {
 	}
 
 	public function getSubject() {
-		$onderwerp = $this->onderwerp;
+		$subject = $this->onderwerp;
 		if ($this->inDebugMode()) {
-			$onderwerp .= ' [Mail: Debug-modus actief]';
+			$subject .= ' [Mail: Debug-modus actief]';
 		}
 		if ($this->charset === 'UTF-8') {
 			// Zorg dat het onderwerp netjes utf8 in base64 is. Als je dit niet doet krijgt het
 			// spampunten van spamassasin (SUBJECT_NEEDS_ENCODING,SUBJ_ILLEGAL_CHARS)
-			$onderwerp = ' =?UTF-8?B?' . base64_encode($onderwerp) . "?=\n";
+			$subject = ' =?UTF-8?B?' . base64_encode($subject) . "?=\n";
 		}
-		return $onderwerp;
+		return $subject;
 	}
 
 	/**
@@ -192,15 +182,10 @@ $htmlBody
 MAIL;
 		$body = str_replace("\n", "\r\n", $body);
 
-		if ($this->inDebugMode() AND !$debug) {
+		if ($this->inDebugMode() && !$debug) {
 			setMelding($htmlBody, 0);
 			return false;
 		}
-		return mail($this->getTo(), $this->getSubject(), $body, $headers);//, $this->getExtraparameters());
+		return mail($this->getTo(), $this->getSubject(), $body, $headers, $this->getExtraparameters());
 	}
-
-	public function __toString() {
-		return $this->getHeaders() . "\nSubject:" . $this->getSubject() . "\n" . $this->bericht;
-	}
-
 }

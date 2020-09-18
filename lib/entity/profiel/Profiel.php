@@ -444,7 +444,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		if ($this->uid === LoginService::getUid()) {
 			return true;
 		}
-		if ($this->status === LidStatus::Noviet AND LoginService::mag('commissie:NovCie')) {
+		if ($this->status === LidStatus::Noviet && LoginService::mag('commissie:NovCie')) {
 			return true;
 		}
 		return false;
@@ -603,8 +603,8 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	}
 
 	public function getLink($vorm = 'civitas') {
-		if (!LoginService::mag(P_LEDEN_READ) OR in_array($this->uid, array(LoginService::UID_EXTERN, 'x101', 'x027', 'x222', '4444'))) {
-			if ($vorm === 'pasfoto' AND LoginService::mag(P_LEDEN_READ)) {
+		if (!LoginService::mag(P_LEDEN_READ) || in_array($this->uid, array(LoginService::UID_EXTERN, 'x101', 'x027', 'x222', '4444'))) {
+			if ($vorm === 'pasfoto' && LoginService::mag(P_LEDEN_READ)) {
 				return $this->getPasfotoTag();
 			}
 			return $this->getNaam();
@@ -615,13 +615,13 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		} elseif ($this->lidjaar === 2013) {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
-		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' && lid_instelling('layout', 'visitekaartjes') == 'ja') {
 			$title = '';
 		} else {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '"';
 		}
 		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
-		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' && lid_instelling('layout', 'visitekaartjes') == 'ja') {
 			return '<span data-visite="'.$this->uid.'"><a href="/profiel/' . $this->uid . '" class="lidLink ' . htmlspecialchars($this->status) . '">' . $naam . '</a></span>';
 		} else if ($vorm === 'leeg') {
 			$twig = ContainerFacade::getContainer()->get('twig');
@@ -649,7 +649,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		if ($vorm === 'user') {
 			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
-		if ($vorm != 'civitas' AND !$force AND !LoginService::mag(P_LOGGED_IN)) {
+		if ($vorm != 'civitas' && !$force && !LoginService::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
@@ -707,7 +707,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 					if (!empty($this->postfix)) {
 						$naam .= ' ' . $this->postfix;
 					}
-				} elseif ($this->isLid() OR $this->isOudlid()) {
+				} elseif ($this->isLid() || $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
 					if (LoginService::getProfiel()->status === LidStatus::Noviet) {
 						$naam = (Geslacht::isVrouw($this->geslacht)) ? 'Mevr. ' : 'Dhr. ';
@@ -930,11 +930,10 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 			return !is_null($googleSync->existsInGoogleContacts($this));
 		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), 0);
-			return false;
 		} catch (RequestException $e) {
 			setMelding($e->getMessage(), -1);
-			return false;
 		}
+		return false;
 	}
 
 	public function propertyMogelijk(string $name) {

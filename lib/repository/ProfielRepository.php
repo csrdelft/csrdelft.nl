@@ -95,23 +95,16 @@ class ProfielRepository extends AbstractRepository {
 	 * @return Profiel|false
 	 */
 	public static function get($uid) {
-		if ($uid == null) {
-			return null;
-		}
-
-		if (!ctype_alnum($uid) || strlen($uid) != 4) {
+		if ($uid == null || !ctype_alnum($uid) || strlen($uid) != 4) {
 			return null;
 		}
 
 		$model = ContainerFacade::getContainer()->get(ProfielRepository::class);
-		$profiel = $model->find($uid);
-		if (!$profiel) {
-			return null;
-		}
-		return $profiel;
+
+		return $model->find($uid);
 	}
 
-	public static function getNaam($uid, $vorm='civitas') {
+	public static function getNaam($uid, $vorm = 'civitas') {
 		$profiel = static::get($uid);
 		if (!$profiel) {
 			return null;
@@ -119,7 +112,7 @@ class ProfielRepository extends AbstractRepository {
 		return $profiel->getNaam($vorm);
 	}
 
-	public static function getLink($uid, $vorm='civitas') {
+	public static function getLink($uid, $vorm = 'civitas') {
 		$profiel = static::get($uid);
 		if (!$profiel) {
 			return null;
@@ -273,7 +266,7 @@ class ProfielRepository extends AbstractRepository {
 		if (in_array($profiel->status, $geenAboEnCorveeVoor)) {
 			//maaltijdabo's uitzetten (R_ETER is een S_NOBODY die toch een abo mag hebben)
 			$account = AccountRepository::get($profiel->uid);
-			if (!$account OR $account->perm_role !== AccessRole::Eter) {
+			if (!$account || $account->perm_role !== AccessRole::Eter) {
 				$removedabos = $this->disableMaaltijdabos($profiel, $oudestatus);
 				$changes = array_merge($changes, $removedabos);
 			}
@@ -284,12 +277,11 @@ class ProfielRepository extends AbstractRepository {
 		// Mailen naar fisci,bibliothecaris...
 		$wordtinactief = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden);
 		$wasactief = array(LidStatus::Noviet, LidStatus::Gastlid, LidStatus::Lid, LidStatus::Kringel);
-		if (in_array($profiel->status, $wordtinactief) AND in_array($oudestatus, $wasactief)) {
+		if (in_array($profiel->status, $wordtinactief) && in_array($oudestatus, $wasactief)) {
 			$this->notifyFisci($profiel, $oudestatus);
 			$this->notifyBibliothecaris($profiel, $oudestatus);
 		}
-		$changes = array_merge($changes, $this->verwijderVelden($profiel));
-		return $changes;
+		return array_merge($changes, $this->verwijderVelden($profiel));
 	}
 
 	/**
@@ -413,10 +405,12 @@ class ProfielRepository extends AbstractRepository {
 		$mv = ($profiel->geslacht->getValue() === Geslacht::Man ? 'hem' : 'haar');
 		$enkelvoud = "Het volgende boek is nog door {$mv} geleend";
 		$meervoud = "De volgende boeken zijn nog door {$mv} geleend";
-		if ($bkncsr['aantal'])
+		if ($bkncsr['aantal']) {
 			$bkncsr['kopje'] = ($bkncsr['aantal'] > 1 ? $meervoud : $enkelvoud) . " van de C.S.R.-bibliotheek:";
-		if ($bknleden['aantal'])
+		}
+		if ($bknleden['aantal']) {
 			$bknleden['kopje'] = ($bknleden['aantal'] > 1 ? $meervoud : $enkelvoud) . " van leden:";
+		}
 
 		// Alleen mailen als er C.S.R.boeken zijn
 		if ($bkncsr['aantal'] == 0) {
@@ -445,7 +439,7 @@ class ProfielRepository extends AbstractRepository {
 	/**
 	 * Verwijdert overbodige velden van het profiel.
 	 * @param Profiel $profiel
-	 * @return AbstractProfielLogEntry[]	Een logentry als er wijzigingen zijn.
+	 * @return AbstractProfielLogEntry[]  Een logentry als er wijzigingen zijn.
 	 */
 	private function verwijderVelden(Profiel $profiel) {
 		$velden_verwijderd = [];
@@ -461,10 +455,10 @@ class ProfielRepository extends AbstractRepository {
 				}
 			}
 		}
-		if (sizeof($velden_verwijderd) != 0) {
-			return [new ProfielLogVeldenVerwijderChange($velden_verwijderd)];
-		} else {
+		if (empty($velden_verwijderd)) {
 			return [];
+		} else {
+			return [new ProfielLogVeldenVerwijderChange($velden_verwijderd)];
 		}
 	}
 
@@ -474,8 +468,9 @@ class ProfielRepository extends AbstractRepository {
 	 */
 	public function verwijderVeldenUpdate(Profiel $profiel) {
 		$changes = $this->verwijderVelden($profiel);
-		if (sizeof($changes) == 0)
+		if (empty($changes)) {
 			return false;
+		}
 		$profiel->changelog[] = new ProfielUpdateLogGroup($this->security->getUser()->getUsername(), new DateTime(), $changes);
 		$this->update($profiel);
 		return true;
@@ -501,7 +496,9 @@ class ProfielRepository extends AbstractRepository {
 	}
 
 	public function setEetwens(Profiel $profiel, $eetwens) {
-		if ($profiel->eetwens === $eetwens) return;
+		if ($profiel->eetwens === $eetwens) {
+			return;
+		}
 		$profiel->eetwens = $eetwens;
 		$this->update($profiel);
 	}

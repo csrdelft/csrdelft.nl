@@ -150,7 +150,7 @@ class LidZoekerService {
 					$value = strtoupper($value);
 					//als op alle lid-statussen moet worden gezocht verwijderen we
 					//eventueel aanwezige filters en zoeken we in alles.
-					if ($value == '*' OR $value == 'ALL') {
+					if ($value == '*' || $value == 'ALL') {
 						if (isset($this->filters['status'])) {
 							unset($this->filters['status']);
 						}
@@ -314,7 +314,7 @@ class LidZoekerService {
 
 		foreach ($result as $profiel) {
 			if ($this->magProfielVinden($profiel, $this->query)) {
-				$this->result[] = new ProfielToestemmingProxy($profiel, $this->lidToestemmingRepository, $this->query);
+				$this->result[] = new ProfielToestemmingProxy($profiel, $this->lidToestemmingRepository);
 			}
 		}
 	}
