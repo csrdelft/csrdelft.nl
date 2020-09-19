@@ -380,7 +380,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	public function offtopicForumPost(ForumPost $post) {
 		$post->tekst = '[offtopic]' . $post->tekst . '[/offtopic]';
 		$post->laatst_gewijzigd = date_create_immutable();
-		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginService::getUid() . '] [reldate]' . $post->laatst_gewijzigd->format(DATETIME_FORMAT) . '[/reldate]' . "\n";
+		$post->bewerkt_tekst .= 'offtopic door [lid=' . LoginService::getUid() . '] [reldate]' . date_format_intl($post->laatst_gewijzigd, DATETIME_FORMAT) . '[/reldate]' . "\n";
 		try {
 			$this->getEntityManager()->persist($post);
 			$this->getEntityManager()->flush();
