@@ -68,10 +68,10 @@ class WachtwoordWijzigenField extends InputField {
 	}
 
 	public function isPosted() {
-		if ($this->require_current AND !isset($_POST[$this->name . '_current'])) {
+		if ($this->require_current && !isset($_POST[$this->name . '_current'])) {
 			return false;
 		}
-		return isset($_POST[$this->name . '_new']) AND isset($_POST[$this->name . '_confirm']);
+		return isset($_POST[$this->name . '_new']) && isset($_POST[$this->name . '_confirm']);
 	}
 
 	public function getValue() {
@@ -80,7 +80,7 @@ class WachtwoordWijzigenField extends InputField {
 		} else {
 			$this->value = false;
 		}
-		if ($this->empty_null AND $this->value == '') {
+		if ($this->empty_null && $this->value == '') {
 			return null;
 		}
 		return $this->value;
