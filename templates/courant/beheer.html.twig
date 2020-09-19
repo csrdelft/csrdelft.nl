@@ -3,11 +3,11 @@
 {% block titel %}Inzendingen C.S.R.-courant{% endblock %}
 
 {% block breadcrumbs %}
-	{% if form.model.titel %}
+	{% if form.titel %}
 		{{ csr_breadcrumbs({
 			(url('default')): 'main',
 			(url('csrdelft_courant_toevoegen')): 'Courant',
-			'': form.model.titel,
+			'': form.titel,
 		}) }}
 	{% else %}
 		{{ csr_breadcrumbs({
@@ -68,5 +68,5 @@
 		</dl>
 	{% endif %}
 
-	{{ form.toString | raw }}
+	{{ form.view | raw }}
 {% endblock %}

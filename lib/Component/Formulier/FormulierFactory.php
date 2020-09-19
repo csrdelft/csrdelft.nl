@@ -5,6 +5,7 @@ namespace CsrDelft\Component\Formulier;
 
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class FormulierFactory {
 	/**
@@ -15,15 +16,26 @@ class FormulierFactory {
 	 * @var FormulierBuilder
 	 */
 	private $formulierBuilder;
+	/**
+	 * @var RequestStack
+	 */
+	private $requestStack;
 
-	public function __construct($registry, FormulierBuilder $formulierBuilder) {
+	public function __construct($registry, RequestStack $requestStack, FormulierBuilder $formulierBuilder) {
 		$this->registry = $registry;
 		$this->formulierBuilder = $formulierBuilder;
+		$this->requestStack = $requestStack;
 	}
 
 	public function create(string $type, $data, $options) {
 		/** @var FormulierTypeInterface $typeInstance */
 		$typeInstance = $this->registry->get($type);
+
+		if (isset($options['action'])) {
+			$this->formulierBuilder->setAction($options['action']);
+		} else {
+			$this->formulierBuilder->setAction($this->requestStack->getCurrentRequest()->getRequestUri());
+		}
 
 		$typeInstance->createFormulier($this->formulierBuilder, $data, $options);
 

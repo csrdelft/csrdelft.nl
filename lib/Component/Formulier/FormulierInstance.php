@@ -81,7 +81,7 @@ class FormulierInstance {
 		$html .= $this->getScriptTag();
 		$html .= '</form>';
 
-		return new Response($html);
+		return new FormulierView($html, $this->titel);
 	}
 
 	protected function getFormTag() {

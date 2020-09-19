@@ -15,6 +15,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -71,18 +72,22 @@ class CourantController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @return Response
 	 * @Route("/courant", methods={"GET", "POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
-	public function toevoegen() {
+	public function toevoegen(Request $request) {
 		$bericht = new CourantBericht();
 		$bericht->datumTijd = new DateTime();
 		$bericht->uid = $this->getUid();
 		$bericht->schrijver = $this->getProfiel();
 
-		$form = new CourantBerichtFormulier($bericht, '/courant');
+		$form = $this->createFormulier(CourantBerichtFormulier::class, $bericht, [
+			'action' => $this->generateUrl('csrdelft_courant_toevoegen')
+		]);
 
+		$form->handleRequest($request);
 		if ($form->isPosted() && $form->validate()) {
 			$bericht->setVolgorde();
 			$manager = $this->getDoctrine()->getManager();
@@ -97,19 +102,23 @@ class CourantController extends AbstractController {
 			'magVerzenden' => $this->courantRepository->magVerzenden(),
 			'magBeheren' => $this->courantRepository->magBeheren(),
 			'berichten' => $this->courantBerichtRepository->getBerichtenVoorGebruiker(),
-			'form' => $form,
+			'form' => $form->createView(),
 		]);
 	}
 
 	/**
+	 * @param Request $request
 	 * @param CourantBericht $bericht
 	 * @return Response
 	 * @Route("/courant/bewerken/{id}", methods={"GET", "POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
-	public function bewerken(CourantBericht $bericht) {
-		$form = new CourantBerichtFormulier($bericht, '/courant/bewerken/' . $bericht->id);
+	public function bewerken(Request $request, CourantBericht $bericht) {
+		$form = $this->createFormulier(CourantBerichtFormulier::class, $bericht, [
+			'action' => $this->generateUrl('csrdelft_courant_bewerken', ['id' => $bericht->id]),
+		]);
 
+		$form->handleRequest($request);
 		if ($form->isPosted() && $form->validate()) {
 			$this->getDoctrine()->getManager()->flush();
 			setMelding('Bericht is bewerkt', 1);
@@ -120,7 +129,7 @@ class CourantController extends AbstractController {
 			'magVerzenden' => $this->courantRepository->magVerzenden(),
 			'magBeheren' => $this->courantRepository->magBeheren(),
 			'berichten' => $this->courantBerichtRepository->getBerichtenVoorGebruiker(),
-			'form' => $form,
+			'form' => $form->createView(),
 		]);
 	}
 

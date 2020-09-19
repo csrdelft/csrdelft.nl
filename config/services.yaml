@@ -96,6 +96,7 @@ services:
     public: true
     arguments:
       - !tagged_locator {tag: csr.formulier.type, index_by: key}
+      - '@request_stack'
       - '@CsrDelft\Component\Formulier\FormulierBuilder'
 
   CsrDelft\Twig\Configurator:

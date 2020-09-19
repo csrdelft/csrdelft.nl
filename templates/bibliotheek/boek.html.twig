@@ -37,7 +37,7 @@
 				</div>
 			</div>
 
-			{{ boekFormulier.content | raw }}
+			{{ boekFormulier.view | raw }}
 		</div>
 	{% else %}
 		<div class="row">
@@ -45,7 +45,7 @@
 			<div class="boek col-md-8" id="{{ boek.id }}">
 
 				{% if boek.id is none or boek.magBewerken %}
-					{{ boekFormulier.content | raw }}
+					{{ boekFormulier.view | raw }}
 				{% else %}
 					<div class="row">
 						<div class="col-3 col-form-label">Boek</div>
@@ -312,7 +312,7 @@
 							</td>
 							<td class="beschrijving {{ cycle(['b0', 'b1'], loop.index) }}" id="beschrijving{{ beschrijving.id }}">
 								{% if mijnRecensie == beschrijving %}
-									{{ recensieFormulier.content | raw }}
+									{{ recensieFormulier.view | raw }}
 								{% else %}
 									{{ beschrijving.beschrijving | bbcode }}
 								{% endif %}
@@ -330,7 +330,7 @@
 					{% if mijnRecensie.id is none %}
 						<tr>
 							<td colspan="2">
-								{{ recensieFormulier.content | raw }}
+								{{ recensieFormulier.view | raw }}
 							</td>
 						</tr>
 					{% endif %}
