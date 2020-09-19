@@ -24,8 +24,14 @@ let parameters: Array<{ color: number[]; sprite: Texture; size: number; }>;
 docReady(() => {
 	const lightTheme = isLightMode()
 
-	init();
-	animate();
+	try {
+		init();
+		animate();
+	} catch (e) {
+		console.log(e);
+
+		// negeer fout
+	}
 
 	function init() {
 		const container = document.createElement('div');
@@ -105,13 +111,7 @@ docReady(() => {
 
 		//
 
-		let renderer: WebGLRenderer
-		try {
-			renderer = new WebGLRenderer();
-		} catch (e) {
-			// WebGL kan niet opstarten, stop hier
-			return
-		}
+		renderer = new WebGLRenderer();
 		renderer.setPixelRatio(window.devicePixelRatio);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		container.appendChild(renderer.domElement);
