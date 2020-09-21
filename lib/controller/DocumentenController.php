@@ -11,10 +11,10 @@ use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
 use Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +46,7 @@ class DocumentenController extends AbstractController {
 
 	/**
 	 * @param Document $document
-	 * @return JsonResponse|PlainView|RedirectResponse
+	 * @return JsonResponse|PlainView
 	 * @Route("/documenten/verwijderen/{id}", methods={"POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */

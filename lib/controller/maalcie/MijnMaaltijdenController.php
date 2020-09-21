@@ -11,11 +11,11 @@ use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\maalcie\forms\MaaltijdKwaliteitBeoordelingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdKwantiteitBeoordelingForm;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -99,7 +99,7 @@ class MijnMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function lijst(Maaltijd $maaltijd) {
-		if (!$maaltijd->magSluiten($this->getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
+		if (!$maaltijd->magSluiten($this->getUid()) && !LoginService::mag(P_MAAL_MOD)) {
 			throw $this->createAccessDeniedException();
 		}
 		$aanmeldingen = $this->maaltijdAanmeldingenRepository->getAanmeldingenVoorMaaltijd($maaltijd);
@@ -125,8 +125,10 @@ class MijnMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function sluit(Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
-		if (!$maaltijd->magSluiten($this->getUid()) AND !LoginService::mag(P_MAAL_MOD)) {
+		if ($maaltijd->verwijderd) {
+			throw $this->createAccessDeniedException();
+		}
+		if (!$maaltijd->magSluiten($this->getUid()) && !LoginService::mag(P_MAAL_MOD)) {
 			throw $this->createAccessDeniedException();
 		}
 		$this->maaltijdenRepository->sluitMaaltijd($maaltijd);
@@ -144,7 +146,9 @@ class MijnMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function aanmelden(Request $request, Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
+		if ($maaltijd->verwijderd) {
+			throw $this->createAccessDeniedException();
+		}
 		$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $this->getProfiel(), $this->getProfiel());
 		if ($request->getMethod() == 'POST') {
 			return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
@@ -167,7 +171,9 @@ class MijnMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function afmelden(Request $request, Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
+		if ($maaltijd->verwijderd) {
+			throw $this->createAccessDeniedException();
+		}
 		$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $this->getProfiel());
 		if ($request->getMethod() == 'POST') {
 			return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
@@ -188,7 +194,9 @@ class MijnMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function gasten(Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
+		if ($maaltijd->verwijderd) {
+			throw $this->createAccessDeniedException();
+		}
 		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($maaltijd->maaltijd_id, $this->getUid(), $gasten);
 		return $this->render('maaltijden/bb.html.twig', ['maaltijd' => $aanmelding->maaltijd, 'aanmelding' => $aanmelding]);
@@ -203,7 +211,9 @@ class MijnMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function gasten_mijn(Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
+		if ($maaltijd->verwijderd) {
+			throw $this->createAccessDeniedException();
+		}
 		$gasten = (int)filter_input(INPUT_POST, 'aantal_gasten', FILTER_SANITIZE_NUMBER_INT);
 		$aanmelding = $this->maaltijdAanmeldingenRepository->saveGasten($maaltijd->maaltijd_id, $this->getUid(), $gasten);
 		return $this->render('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', [
@@ -254,7 +264,9 @@ class MijnMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_IK)
 	 */
 	public function beoordeling(Maaltijd $maaltijd) {
-		if ($maaltijd->verwijderd) throw $this->createAccessDeniedException();
+		if ($maaltijd->verwijderd) {
+			throw $this->createAccessDeniedException();
+		}
 		$beoordeling = $this->maaltijdBeoordelingenRepository->find(['maaltijd_id' => $maaltijd->maaltijd_id, 'uid' => $this->getUid()]);
 		if (!$beoordeling) {
 			$beoordeling = $this->maaltijdBeoordelingenRepository->nieuw($maaltijd);

@@ -39,11 +39,11 @@ use CsrDelft\view\groepen\leden\GroepOmschrijvingView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Route;
@@ -430,7 +430,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$response = [];
 			/** @var AbstractGroep $groep */
 			$groep = $this->repository->retrieveByUUID($id);
-			if ($groep and $groep->mag(AccessAction::Opvolging)) {
+			if ($groep && $groep->mag(AccessAction::Opvolging)) {
 				$this->changeLogRepository->log($groep, 'familie', $groep->familie, $values['familie']);
 				$this->changeLogRepository->log($groep, 'status', $groep->status, $values['status']);
 				$groep->familie = $values['familie'];
@@ -461,7 +461,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$converteer = get_class($model) !== get_class($this->repository);
 			$response = [];
 			$groep = $this->repository->retrieveByUUID($id);
-			if ($groep and $groep->mag(AccessAction::Wijzigen)) {
+			if ($groep && $groep->mag(AccessAction::Wijzigen)) {
 				if ($converteer) {
 					$this->changeLogRepository->log($groep, 'class', get_class($groep), $model->entityClass);
 					$nieuw = $model->converteer($groep, $this->repository, $values['soort']);
@@ -492,7 +492,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$response = [];
 		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
-		if ($groep and property_exists($groep, 'aanmelden_tot') && date_create_immutable() <= $groep->aanmelden_tot && $groep->mag(AccessAction::Wijzigen)) {
+		if ($groep && property_exists($groep, 'aanmelden_tot') && date_create_immutable() <= $groep->aanmelden_tot && $groep->mag(AccessAction::Wijzigen)) {
 			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, date_create_immutable());
 			$groep->aanmelden_tot = date_create_immutable();
 			$this->repository->update($groep);
@@ -504,7 +504,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function voorbeeld($id) {
 		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
-		if (!$groep or !$groep->mag(AccessAction::Bekijken)) {
+		if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
 			throw $this->createAccessDeniedException();
 		}
 		return new GroepPreviewForm($groep);
@@ -735,7 +735,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			if ($ot_groep->getLid($uid)) {
 				throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
 			}
-			if (!$groep->mag(AccessAction::Afmelden) and !$groep->mag(AccessAction::Beheren) and !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
+			if (!$groep->mag(AccessAction::Afmelden) && !$groep->mag(AccessAction::Beheren) && !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
 				throw new CsrGebruikerException();
 			}
 			$em->transactional(function () use ($groep, $ot_groep, $uid, $em) {

@@ -4,7 +4,6 @@ namespace CsrDelft\controller\groepen;
 
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
-use CsrDelft\view\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

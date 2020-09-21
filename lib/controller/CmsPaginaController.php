@@ -8,7 +8,7 @@ use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaForm;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -112,7 +112,7 @@ class CmsPaginaController extends AbstractController {
 	public function verwijderen($naam) {
 		/** @var CmsPagina $pagina */
 		$pagina = $this->cmsPaginaRepository->find($naam);
-		if (!$pagina OR !$pagina->magVerwijderen()) {
+		if (!$pagina || !$pagina->magVerwijderen()) {
 			throw $this->createAccessDeniedException();
 		}
 		$manager = $this->getDoctrine()->getManager();

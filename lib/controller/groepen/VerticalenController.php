@@ -5,7 +5,7 @@ namespace CsrDelft\controller\groepen;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
-use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

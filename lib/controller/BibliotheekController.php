@@ -22,7 +22,7 @@ use CsrDelft\view\bibliotheek\BoekFormulier;
 use CsrDelft\view\bibliotheek\BoekRecensieFormulier;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -27,9 +27,8 @@ use CsrDelft\view\forum\ForumSnelZoekenForm;
 use CsrDelft\view\forum\ForumZoekenForm;
 use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
-use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -198,7 +197,7 @@ class ForumController extends AbstractController {
 	 *
 	 * @param Request $request
 	 * @param null $zoekterm
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/titelzoeken", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -448,7 +447,7 @@ class ForumController extends AbstractController {
 	 * Forum deel verwijderen.
 	 *
 	 * @param ForumDeel $deel
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/opheffen/{forum_id}", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
@@ -467,7 +466,7 @@ class ForumController extends AbstractController {
 	 * Forum draad verbergen in zijbalk.
 	 *
 	 * @param ForumDraad $draad
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/verbergen/{draad_id}", methods={"POST"}))
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -486,7 +485,7 @@ class ForumController extends AbstractController {
 	 * Forum draad tonen in zijbalk.
 	 *
 	 * @param ForumDraad $draad
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/tonen/{draad_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -516,7 +515,7 @@ class ForumController extends AbstractController {
 	 * @param ForumDraad $draad
 	 * @param string $niveau
 	 *
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/meldingsniveau/{draad_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -537,7 +536,7 @@ class ForumController extends AbstractController {
 	 * @param ForumDeel $deel
 	 * @param string $niveau
 	 *
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/deelmelding/{forum_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -572,7 +571,7 @@ class ForumController extends AbstractController {
 	 *
 	 * @param ForumDraad $draad
 	 * @param string $property
-	 * @return View|RedirectResponse|null
+	 * @return Response
 	 * @Route("/forum/wijzigen/{draad_id}/{property}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */

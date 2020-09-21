@@ -15,10 +15,10 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\LedenMemoryScoresRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
 use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -122,7 +122,7 @@ class LedenMemoryController extends AbstractController {
 		$min = LichtingenRepository::getOudsteLidjaar();
 		$max = LichtingenRepository::getJongsteLidjaar();
 
-		if ($l < $min or $l > $max) {
+		if ($l < $min || $l > $max) {
 			$l = $max;
 		}
 

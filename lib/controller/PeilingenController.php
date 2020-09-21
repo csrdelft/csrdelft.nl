@@ -9,10 +9,9 @@ use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\service\PeilingenService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
-use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -150,7 +149,7 @@ class PeilingenController extends AbstractController {
 	/**
 	 * @param Request $request
 	 * @param int $id
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/peilingen/stem/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
 	 */

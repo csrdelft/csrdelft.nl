@@ -15,11 +15,11 @@ use CsrDelft\view\fiscaat\saldo\CiviSaldoTable;
 use CsrDelft\view\fiscaat\saldo\InleggenForm;
 use CsrDelft\view\fiscaat\saldo\LidRegistratieForm;
 use CsrDelft\view\fiscaat\saldo\SaldiSomForm;
-use CsrDelft\view\JsonResponse;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -90,7 +90,7 @@ class BeheerCiviSaldoController extends AbstractController {
 		if ($civisaldo) {
 			$form = new InleggenForm($civisaldo);
 			$values = $form->getValues();
-			if ($form->validate() AND $values['inleg'] !== 0 AND $values['saldo'] == $civisaldo->saldo) {
+			if ($form->validate() && $values['inleg'] !== 0 && $values['saldo'] == $civisaldo->saldo) {
 				$inleg = $values['inleg'];
 				$em->transactional(function () use ($inleg, $civisaldo) {
 					$bestelling = $this->civiBestellingRepository->vanBedragInCenten($inleg, $civisaldo->uid);
