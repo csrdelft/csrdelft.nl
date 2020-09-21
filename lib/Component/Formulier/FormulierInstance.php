@@ -180,7 +180,7 @@ HTML;
 	{$this->getScriptTag()}
 </div>
 HTML;
-		return new Response($html);
+		return new FormulierView($html, $this->titel);
 	}
 
 	/**
@@ -295,9 +295,11 @@ HTML;
 	}
 
 	public function handleRequest(Request $request) {
-		foreach ($this->fields as $field) {
-			if ($field instanceof InputField) {
-				$this->loadProperty($field);
+		if ($this->isPosted()) {
+			foreach ($this->fields as $field) {
+				if ($field instanceof InputField) {
+					$this->loadProperty($field);
+				}
 			}
 		}
 	}

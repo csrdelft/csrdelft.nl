@@ -37,6 +37,10 @@ class FormulierFactory {
 			$this->formulierBuilder->setAction($this->requestStack->getCurrentRequest()->getRequestUri());
 		}
 
+		if (isset($options['dataTableId'])) {
+			$this->formulierBuilder->setDataTableId($options['dataTableId']);
+		}
+
 		$typeInstance->createFormulier($this->formulierBuilder, $data, $options);
 
 		$instance = $this->formulierBuilder->getFormulier();
