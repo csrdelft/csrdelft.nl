@@ -321,4 +321,8 @@ HTML;
 	public function setModel($model): void {
 		$this->model = $model;
 	}
+
+	public function getField($name) {
+		return $this->fields[$name];
+	}
 }
