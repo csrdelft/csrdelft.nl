@@ -34,4 +34,8 @@ class FormulierView {
 	public function toString() {
 		return $this->view;
 	}
+
+	public function __toString() {
+		return $this->view;
+	}
 }

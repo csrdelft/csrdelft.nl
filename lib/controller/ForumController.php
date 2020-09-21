@@ -25,9 +25,11 @@ use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
 use CsrDelft\view\forum\ForumZoekenForm;
+use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\Icon;
 use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -382,38 +384,64 @@ class ForumController extends AbstractController {
 
 	/**
 	 * Forum deel aanmaken.
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @param Request $request
+	 * @return JsonResponse|Response
 	 * @Route("/forum/aanmaken", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function aanmaken() {
+	public function aanmaken(Request $request) {
 		$deel = $this->forumDelenRepository->nieuwForumDeel();
-		$form = new ForumDeelForm($deel, true); // fetches POST values itself
-		if ($form->validate()) {
+		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
+			'action' => $this->generateUrl('csrdelft_forum_aanmaken'),
+			'aanmaken' => true,
+		]);
+
+		$form->handleRequest($request);
+
+		if ($form->isPosted() && $form->validate()) {
 			$this->forumDelenRepository->create($deel);
 			return new JsonResponse(true);
 		} else {
-			return $form;
+			return new Response($form->createModalView());
 		}
 	}
 
 	/**
 	 * Forum deel bewerken.
 	 *
+	 * @param Request $request
 	 * @param ForumDeel $deel
-	 * @return View
+	 * @return View|Response
 	 * @Route("/forum/beheren/{forum_id}", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function beheren(ForumDeel $deel) {
-		$form = new ForumDeelForm($deel); // fetches POST values itself
-		if ($form->validate()) {
+	public function beheren(Request $request, ForumDeel $deel) {
+		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
+			'action' => $this->generateUrl('csrdelft_forum_beheren', ['forum_id' => $deel->forum_id]),
+			'aanmaken' => false,
+		]);
+
+		$form->handleRequest($request);
+		if ($form->isPosted() && $form->validate()) {
 			$this->forumDelenRepository->update($deel);
 			return new JsonResponse(true);
 		} else {
-			return $form;
+			return new Response($form->createModalView());
 		}
+	}
+
+	/**
+	 * @return GenericSuggestiesResponse
+	 * @Route("/forum/categorie/suggestie")
+	 * @Auth(P_FORUM_ADMIN)
+	 */
+	public function forumCategorieSuggestie(Request $request) {
+		$zoekterm = $request->query->get('q');
+		$forumCategories = $this->forumCategorieRepository->createQueryBuilder('c')
+			->where('c.titel LIKE :zoekterm')
+			->setParameter('zoekterm', sql_contains($zoekterm))
+			->getQuery()->getResult();
+		return new GenericSuggestiesResponse($forumCategories);
 	}
 
 	/**
@@ -425,7 +453,7 @@ class ForumController extends AbstractController {
 	 * @Auth(P_FORUM_ADMIN)
 	 */
 	public function opheffen(ForumDeel $deel) {
-		$count = $this->forumDradenRepository->findBy(['forum_id' =>$deel->forum_id])->count();
+		$count = count($this->forumDradenRepository->findBy(['forum_id' => $deel->forum_id]));
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
 		} else {
