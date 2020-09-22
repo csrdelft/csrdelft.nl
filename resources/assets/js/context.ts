@@ -120,11 +120,13 @@ export const registerGlobalContext = async (): Promise<void> => {
 		'.vue-context': (el) => new Vue({el}),
 		'[data-visite]': initKaartjes,
 		'.AutoSize': el => {
-				el.setAttribute('style', 'height:' + (el.scrollHeight) + 'px;overflow-y:hidden;');
-				el.addEventListener("input", function () {
-					this.style.height = 'auto';
-					this.style.height = (this.scrollHeight) + 'px';
-				}, false);
+			const cb = function () {
+				el.style.height = 'auto';
+				el.style.height = (el.scrollHeight) + 'px';
+			}
+			el.setAttribute('style', 'height:' + (el.scrollHeight) + 'px;overflow-y:hidden;');
+			el.addEventListener("input", cb, false);
+			setTimeout(cb)
 		}
 	});
 };
