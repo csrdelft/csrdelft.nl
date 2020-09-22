@@ -6,6 +6,7 @@ use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
+use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\security\LoginService;
@@ -90,7 +91,7 @@ class Zijbalk {
 	public function getZijbalk() {
 		$zijbalk = [];
 		// Favorieten menu
-		if (LoginService::mag(P_LOGGED_IN) and lid_instelling('zijbalk', 'favorieten') == 'ja') {
+		if (LoginService::mag(P_LOGGED_IN) && lid_instelling('zijbalk', 'favorieten') == 'ja') {
 			$menu = $this->menuItemRepository->getMenu(LoginService::getUid());
 			$menu->tekst = 'Favorieten';
 			array_unshift($zijbalk, $this->twig->render('menu/block.html.twig', ['root' => $menu]));
@@ -144,11 +145,11 @@ class Zijbalk {
 		if (lid_instelling('zijbalk', 'fotoalbum') == 'ja') {
 			$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
 			if ($album !== null) {
-				$zijbalk[] = (new FotoAlbumZijbalkView($album))->toString();
+				$zijbalk[] = $this->twig->render('fotoalbum/zijbalk.html.twig', ['album' => $album, 'jaargang' => LichtingenRepository::getHuidigeJaargang()]);
 			}
 		}
 		// Komende verjaardagen
-		if (LoginService::mag(P_LOGGED_IN) and lid_instelling('zijbalk', 'verjaardagen') > 0) {
+		if (LoginService::mag(P_LOGGED_IN) && lid_instelling('zijbalk', 'verjaardagen') > 0) {
 			$zijbalk[] = $this->twig->render('verjaardagen/komende.html.twig', [
 				'verjaardagen' => $this->verjaardagenService->getKomende((int)lid_instelling('zijbalk', 'verjaardagen')),
 				'toonpasfotos' => lid_instelling('zijbalk', 'verjaardagen_pasfotos') == 'ja',
