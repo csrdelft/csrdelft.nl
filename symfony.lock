@@ -290,9 +290,6 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
-    "robmorgan/phinx": {
-        "version": "0.11.1"
-    },
     "sebastian/code-unit-reverse-lookup": {
         "version": "1.0.1"
     },
@@ -456,9 +453,6 @@
     },
     "symfony/http-kernel": {
         "version": "v3.4.32"
-    },
-    "symfony/inflector": {
-        "version": "v5.0.4"
     },
     "symfony/maker-bundle": {
         "version": "1.0",
