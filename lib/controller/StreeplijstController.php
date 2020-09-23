@@ -53,7 +53,6 @@ class StreeplijstController extends AbstractController
 	{
 		return view('streeplijst.overzicht', [
 			'streeplijstoverzicht' => $this->streeplijstRepository->getAlleStreeplijsten(),
-			'streeplijstformulier' => new StreeplijstForm(new Streeplijst()),
 			'huidigestreeplijst' => new Streeplijst(),
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
@@ -90,7 +89,6 @@ class StreeplijstController extends AbstractController
 		return view('streeplijst.overzicht', [
 			'streeplijstoverzicht' => $this->streeplijstRepository->getAlleStreeplijsten(),
 			'huidigestreeplijst' => $streeplijst,
-			'streeplijstformulier' => new StreeplijstForm(new Streeplijst()),
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
 		]);
@@ -163,7 +161,6 @@ class StreeplijstController extends AbstractController
 		return view('streeplijst.overzicht', [
 			'streeplijstoverzicht' => $this->streeplijstRepository->getAlleStreeplijsten(),
 			'huidigestreeplijst' => $streeplijst,
-			'streeplijstformulier' => new StreeplijstForm(new Streeplijst()),
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
 		]);
