@@ -1,11 +1,9 @@
-@section('titel', $titel)
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
 	@include('head')
 </head>
-<body>
+<body class="zijbalk_verborgen">
 
 <div class="container">
 	<nav
