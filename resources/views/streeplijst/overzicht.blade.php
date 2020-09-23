@@ -58,25 +58,31 @@
 		{{printCsrfField()}}
 
 		<h5> Leden op de streeplijst</h5>
+
 		<div>
 			<em>Verticale:</em>
 			<input type="radio" name="verticale" id="alleverticale" value="alle" checked>
 			<label for="alleverticale"> Alle </label>
 			@foreach($verticalen as $verticale)
-				<input type="radio" name="verticale" id="{{$verticale->letter}}" value="{{$verticale->letter}}">
-				<label for="{{$verticale->letter}}"> {{$verticale->naam}}</label>
+				@if($verticale->letter)
+					<input type="radio" name="verticale" id="verticale_{{$verticale->letter}}" value="{{$verticale->letter}}">
+					<label for="verticale_{{$verticale->letter}}"> {{$verticale->naam}}</label>
+				@endif
 			@endforeach
 		</div>
 
-		<div><em>Lichting:</em>
+		<div>
+			<em>Lichting:</em>
 			<input type="radio" name="lichting" id="alle" value="alle" checked>
 			<label for="alle"> Alle </label>
 			@foreach(range($jongstelidjaar-8, $jongstelidjaar) as $lichting)
-				<input type="radio" name="lichting" id="{{$lichting}}" value="{{$lichting}}">
-				<label for="{{$lichting}}"> {{$lichting}}</label>
+				<input type="radio" name="lichting" id="lichting_{{$lichting}}" value="{{$lichting}}">
+				<label for="lichting_{{$lichting}}"> {{$lichting}}</label>
 			@endforeach
 		</div>
-		<div><em>Type leden:</em>
+
+		<div>
+			<em>Type leden:</em>
 			@foreach(CsrDelft\model\entity\LidStatus::getLidLike() as $lidstatus)
 				<input type="checkbox" id="{{$lidstatus}}" name="ledentype[]" value="{{$lidstatus}}" checked>
 				<label for="{{$lidstatus}}">{{CsrDelft\model\entity\LidStatus::from($lidstatus)->getDescription()}}</label>
