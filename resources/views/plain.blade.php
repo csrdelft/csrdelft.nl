@@ -1,5 +1,3 @@
-@section('titel', $titel)
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
