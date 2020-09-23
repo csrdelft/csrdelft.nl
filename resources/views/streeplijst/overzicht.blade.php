@@ -73,11 +73,15 @@
 
 		<div>
 			<em>Lichting:</em>
-			<input type="radio" name="lichting" id="alle" value="alle" checked>
-			<label for="alle"> Alle </label>
+			<div class="form-check form-check-inline">
+				<input class="form-check-inline" type="radio" name="lichting" id="alle" value="alle" checked>
+				<label class="form-check-label" for="alle">Alle</label>
+			</div>
 			@foreach(range($jongstelidjaar-8, $jongstelidjaar) as $lichting)
-				<input type="radio" name="lichting" id="lichting_{{$lichting}}" value="{{$lichting}}">
-				<label for="lichting_{{$lichting}}"> {{$lichting}}</label>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="lichting" id="lichting_{{$lichting}}" value="{{$lichting}}">
+					<label class="form-check-label" for="lichting_{{$lichting}}">{{$lichting}}</label>
+				</div>
 			@endforeach
 		</div>
 
@@ -86,13 +90,11 @@
 			@foreach(CsrDelft\model\entity\LidStatus::getLidLike() as $lidstatus)
 				<input type="checkbox" id="{{$lidstatus}}" name="ledentype[]" value="{{$lidstatus}}" checked>
 				<label for="{{$lidstatus}}">{{CsrDelft\model\entity\LidStatus::from($lidstatus)->getDescription()}}</label>
-
 			@endforeach
 
 			@foreach(CsrDelft\model\entity\LidStatus::getOudLidLike() as $lidstatus)
 				<input type="checkbox" id="{{$lidstatus}}" name="ledentype[]" value="{{$lidstatus}}">
 				<label for="{{$lidstatus}}">{{CsrDelft\model\entity\LidStatus::from($lidstatus)->getDescription()}}</label>
-
 			@endforeach
 		</div>
 
