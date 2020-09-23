@@ -3,7 +3,7 @@
 <head>
 	@include('head')
 </head>
-<body>
+<body class="zijbalk_verborgen">
 
 <div class="container">
 	<nav
