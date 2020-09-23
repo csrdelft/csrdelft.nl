@@ -61,6 +61,7 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
+	 * @param Request $request
 	 * @return RedirectResponse
 	 * @Route("/streeplijst/aanmaken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
@@ -78,6 +79,7 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
+	 * @param $id
 	 * @return StreeplijstForm
 	 * @Route("/streeplijst/bewerken/{id}", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
@@ -95,6 +97,7 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
+	 * @param $id
 	 * @return RedirectResponse
 	 * @Route("/streeplijst/verwijderen/{id}", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
@@ -109,6 +112,7 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
+	 * @param Request $request
 	 * @return RedirectResponse
 	 * @Route("/streeplijst/selectie", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
@@ -166,7 +170,8 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
-	 * @return ???
+	 * @param $id
+	 * @return TemplateView
 	 * @Route("/streeplijst/genereren/{id}", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
