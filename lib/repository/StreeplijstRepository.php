@@ -16,16 +16,19 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Streeplijst[]    findAll()
  * @method Streeplijst[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class StreeplijstRepository extends ServiceEntityRepository {
+class StreeplijstRepository extends ServiceEntityRepository
+{
 
-	public function __construct(ManagerRegistry $registry) {
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Streeplijst::class);
 	}
 
 	/**
 	 * @return Streeplijst[]
 	 */
-	public function getAlleStreeplijsten() {
+	public function getAlleStreeplijsten()
+	{
 		return $this->findBy(['maker' => LoginService::getUid()], ['aanmaakdatum' => 'ASC']);
 	}
 
@@ -35,11 +38,12 @@ class StreeplijstRepository extends ServiceEntityRepository {
 	 * @param string $inhoud_streeplijst
 	 * @return Streeplijst
 	 */
-	public function nieuw( $naam_streeplijst,$leden_streeplijst,$inhoud_streeplijst) {
+	public function nieuw($naam_streeplijst, $leden_streeplijst, $inhoud_streeplijst)
+	{
 		$streeplijst = new Streeplijst();
 		$streeplijst->maker = LoginService::getUid();
 		$streeplijst->aanmaakdatum = date_create_immutable();
-		$streeplijst->inhoud_streeplijst=$inhoud_streeplijst;
+		$streeplijst->inhoud_streeplijst = $inhoud_streeplijst;
 		$streeplijst->naam_streeplijst = $naam_streeplijst;
 		$streeplijst->leden_streeplijst = $leden_streeplijst;
 		return $streeplijst;
@@ -49,7 +53,8 @@ class StreeplijstRepository extends ServiceEntityRepository {
 	 * @param int $id
 	 * @param string $naam_streeplijst
 	 */
-	public function updateNaam($id, $naam_streeplijst){
+	public function updateNaam($id, $naam_streeplijst)
+	{
 		$streeplijst = $this->find($id);
 		$streeplijst->naam_streeplijst = $naam_streeplijst;
 	}
@@ -59,7 +64,8 @@ class StreeplijstRepository extends ServiceEntityRepository {
 	 * @param string $leden_streeplijst
 	 * @param string $inhoud_streeplijst
 	 */
-	public function updateInhoud($id, $leden_streeplijst,$inhoud_streeplijst){
+	public function updateInhoud($id, $leden_streeplijst, $inhoud_streeplijst)
+	{
 		$streeplijst = $this->find($id);
 		$streeplijst->inhoud_streeplijst = $inhoud_streeplijst;
 		$streeplijst->leden_streeplijst = $leden_streeplijst;

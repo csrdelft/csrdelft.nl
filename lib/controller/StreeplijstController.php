@@ -3,20 +3,16 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\Streeplijst;
-use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\StreeplijstRepository;
-use CsrDelft\view\JsonResponse;
+use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\streeplijst\StreeplijstForm;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use \CsrDelft\view\ToHtmlResponse;
-
 
 /**
  * StreeplijstController.class.php
@@ -49,7 +45,7 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
-	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @return TemplateView
 	 * @Route("/streeplijst", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -61,20 +57,21 @@ class StreeplijstController extends AbstractController
 			'huidigestreeplijst' => new Streeplijst(),
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
-
 		]);
-
 	}
 
 	/**
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @return RedirectResponse
 	 * @Route("/streeplijst/aanmaken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function aanmaken()
+	public function aanmaken(Request $request)
 	{
-		$nieuwelijst = $this->streeplijstRepository->nieuw($_GET["naam_streeplijst"], $_GET["leden_streeplijst"], $_GET["inhoud_streeplijst"]);
-		if ($nieuwelijst) $manager = $this->getDoctrine()->getManager();
+		$inhoud_streeplijst = $request->query->get("inhoud_streeplijst");
+		$leden_streeplijst = $request->query->get("leden_streeplijst");
+		$naam_streeplijst = $request->query->get("naam_streeplijst");
+		$nieuwelijst = $this->streeplijstRepository->nieuw($naam_streeplijst, $leden_streeplijst, $inhoud_streeplijst);
+		$manager = $this->getDoctrine()->getManager();
 		$manager->persist($nieuwelijst);
 		$manager->flush();
 		return $this->redirectToRoute('csrdelft_streeplijst_overzicht');
@@ -87,10 +84,7 @@ class StreeplijstController extends AbstractController
 	 */
 	public function bewerken($id)
 	{
-		// haalt naam, inhoud en leden uit de database
-		$streeplijst = $this->getDoctrine()->getRepository(Streeplijst::class)->find($id);
-
-		// return deze dingen in de tekstboxen.
+		$streeplijst = $this->streeplijstRepository->find($id);
 		return view('streeplijst.overzicht', [
 			'streeplijstoverzicht' => $this->streeplijstRepository->getAlleStreeplijsten(),
 			'huidigestreeplijst' => $streeplijst,
@@ -101,13 +95,13 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @return RedirectResponse
 	 * @Route("/streeplijst/verwijderen/{id}", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function verwijderen($id)
 	{
-		$streeplijst = $this->getDoctrine()->getRepository(Streeplijst::class)->find($id);
+		$streeplijst = $this->streeplijstRepository->find($id);
 		$manager = $this->getDoctrine()->getManager();
 		$manager->remove($streeplijst);
 		$manager->flush();
@@ -115,7 +109,7 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @return RedirectResponse
 	 * @Route("/streeplijst/selectie", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -124,9 +118,6 @@ class StreeplijstController extends AbstractController
 		$verticale = $request->request->get('verticale');
 		$lichting = $request->request->get('lichting');
 		$ledentype = $request->request->get('ledentype');
-		$criteria = [];
-//		$criteria = ['status' => LidStatus::getLidLike()];
-
 		$criteria = ['status' => $ledentype];
 		if ($verticale && $verticale != 'alle') {
 			$criteria['verticale'] = $verticale;
@@ -137,33 +128,26 @@ class StreeplijstController extends AbstractController
 		$profielen = $this->profielRepository->findBy($criteria);
 		$namen = [];
 		$naamopmaak = $request->request->get('naamopmaak');
-		if ($naamopmaak == 'Achternaam') {
-			foreach ($profielen as $profiel) {
-				$namen[] = $profiel->getNaam('streeplijst');
-			}
-		} elseif ($naamopmaak == 'Civitas') {
-			foreach ($profielen as $profiel) {
-				$namen[] = $profiel->getNaam('civitas');
-			}
-		} else {
-			foreach ($profielen as $profiel) {
-				$namen[] = $profiel->getNaam();
-			}
+		foreach ($profielen as $profiel) {
+			$namen[] = $profiel->getNaam($naamopmaak);
 		}
-		// Hoe krijg ik een array van alle checked dingen, ipv enkel de laatste?
-		// Of gewoon per stuk opvragen?
 		$goederen = $request->request->get('streepbareUnits');
 		$opmaakInhoud = $request->request->get('opmaakInhoud');
-		if ($opmaakInhoud == true) {
+
+		if ($opmaakInhoud) {
+
 			sort($goederen);
 		}
 		$stringGoederen = null;
+
 		if ($goederen != null) {
+
 			$stringGoederen = implode("; ", $goederen);
 		}
 
-		$opmaakAbc = $request->request->get('opmaakabc');
-		if ($opmaakAbc == true) {
+		$opmaakSorteringWantCasperVindDatMooierKlinken = $request->request->get('opmaakabc');
+
+		if ($opmaakSorteringWantCasperVindDatMooierKlinken) {
 			sort($namen);
 		}
 		$stringNamen = implode("; ", $namen);
@@ -172,14 +156,12 @@ class StreeplijstController extends AbstractController
 		$streeplijst->leden_streeplijst = $stringNamen;
 		$streeplijst->inhoud_streeplijst = $stringGoederen;
 
-
 		return view('streeplijst.overzicht', [
 			'streeplijstoverzicht' => $this->streeplijstRepository->getAlleStreeplijsten(),
 			'huidigestreeplijst' => $streeplijst,
 			'streeplijstformulier' => new StreeplijstForm(new Streeplijst()),
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
-
 		]);
 	}
 
@@ -190,7 +172,7 @@ class StreeplijstController extends AbstractController
 	 */
 	public function genereren($id)
 	{
-		$streeplijst = $this->getDoctrine()->getRepository(Streeplijst::class)->find($id);
+		$streeplijst = $this->streeplijstRepository->find($id);
 
 		return view('streeplijst.streeplijst', [
 			'streeplijst' => $streeplijst
@@ -198,18 +180,20 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
-	 * @return  ???
+	 * @param Request $request
+	 * @return TemplateView
 	 * @Route("/streeplijst/genererenZonderId", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function genererenZonderId()
+	public function genererenZonderId(Request $request)
 	{
-		$nieuwelijst = $this->streeplijstRepository->nieuw($_GET["naam_streeplijst"], $_GET["leden_streeplijst"], $_GET["inhoud_streeplijst"]);
+		$naam_streeplijst = $request->query->get("naam_streeplijst");
+		$leden_streeplijst = $request->query->get("leden_streeplijst");
+		$inhoud_streeplijst = $request->query->get("inhoud_streeplijst");
+		$nieuwelijst = $this->streeplijstRepository->nieuw($naam_streeplijst, $leden_streeplijst, $inhoud_streeplijst);
 
 		return view('streeplijst.streeplijst', [
 			'streeplijst' => $nieuwelijst
 		]);
 	}
-
-
 }

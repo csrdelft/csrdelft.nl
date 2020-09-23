@@ -32,19 +32,20 @@
 					<div class="btn-group" role="group" aria-label="Basic example">
 						<a href="/streeplijst/genereren/{{$streeplijst->id}}">
 						<span type="button"
-									class="btn brn-secondary btn-success btn-rounded btn-sm my-0">Genereer</span></a>
+									class="btn btn-success btn-rounded btn-sm">Genereer</span></a>
 						<a href="/streeplijst/bewerken/{{$streeplijst->id}}">
 						<span type="button"
-									class="btn brn-secondary btn-warning btn-rounded btn-sm my-0">Bewerk</span></a>
+									class="btn btn-warning btn-rounded btn-sm">Bewerk</span></a>
 						<a href="/streeplijst/verwijderen/{{$streeplijst->id}}">
 						<span type="button"
-									class="btn brn-secondary btn-danger btn-rounded btn-sm my-0">Verwijder</span> </a>
+									class="btn btn-danger btn-rounded btn-sm">Verwijder</span> </a>
 					</div>
 				</td>
 			</tr>
 		@empty
-			<p>Er zijn geen streeplijsten.</p>
-
+			<tr>
+				<td colspan="5">Er zijn geen streeplijsten.</td>
+			</tr>
 		@endforelse
 		</tbody>
 	</table>
@@ -118,15 +119,15 @@
 
 		<div>
 			<em>Stijl van naamweergave: </em>
-			<input type="radio" name="naamopmaak" id="VoorEnAchternaam" value="VoorEnAchternaam" checked>
+			<input type="radio" name="naamopmaak" id="VoorEnAchternaam" value="volledig" checked>
 			<label for="VoorEnAchternaam">Voor- en achternaam</label>
-			<input type="radio" name="naamopmaak" id="Achternaam" value="Achternaam">
+			<input type="radio" name="naamopmaak" id="Achternaam" value="streeplijst">
 			<label for="Achternaam">Achternaam, voornaam </label>
-			<input type="radio" name="naamopmaak" id="Civitas" value="Civitas">
+			<input type="radio" name="naamopmaak" id="Civitas" value="civitas">
 			<label for="Civitas">Civitas</label>
 		</div>
 
-		<input type="submit" class="btn btn-info btn-rounded btn-xs my-0"
+		<input type="submit" class="btn btn-info btn-rounded btn-xs"
 					 name="selecteer" value="Selecteer"/>
 	</form>
 
@@ -153,10 +154,10 @@
 
 		<div>
 			<input type="button" onclick="this.form.action='/streeplijst/aanmaken'; this.form.submit()"
-						 class="btn btn-info btn-rounded btn-xs my-0"
+						 class="btn btn-info btn-rounded btn-xs"
 						 name="opslaan" value="Sla lijst op"/>
 			<input type="button" onclick="this.form.action='/streeplijst/genererenZonderId'; this.form.submit()"
-						 class="btn btn-success btn-rounded btn-xs my-0"
+						 class="btn btn-success btn-rounded btn-xs"
 						 name="genereer" value="Genereer lijst"/>
 		</div>
 	</form>
