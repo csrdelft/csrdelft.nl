@@ -5,7 +5,7 @@
 	<div class="zijbalk-kopje"><a href="{{ url('csrdelft_fotoalbum_bekijken', {dir: jaargang}) }}">Fotoalbum</a></div>
 	<div class="item">
 		<p><a href="{{ album.url }}">{{ album.dirname }}</a></p>
-		<div class="fotos">';
+		<div class="fotos">
 			{% set limit = lid_instelling('zijbalk', 'fotos') %}
 			{% for foto in album.fotos | shuffle | slice(0, limit) %}
 				<a href="{{ album.url }}#{{ foto.fullUrl }}">
