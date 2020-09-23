@@ -745,7 +745,7 @@ class ForumController extends AbstractController {
 
 		// markeer als gelezen
 		if (LoginService::mag(P_LOGGED_IN)) {
-			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
+			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, $post->laatst_gewijzigd);
 		}
 
 		// voorkom dubbelposts
