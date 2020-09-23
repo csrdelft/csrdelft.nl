@@ -32,13 +32,13 @@
 					<div class="btn-group" role="group" aria-label="Basic example">
 						<a href="/streeplijst/genereren/{{$streeplijst->id}}">
 						<span type="button"
-									class="btn btn-success btn-rounded btn-sm">Genereer</span></a>
+									class="btn btn-success btn-sm">Genereer</span></a>
 						<a href="/streeplijst/bewerken/{{$streeplijst->id}}">
 						<span type="button"
-									class="btn btn-warning btn-rounded btn-sm">Bewerk</span></a>
+									class="btn btn-warning btn-sm">Bewerk</span></a>
 						<a href="/streeplijst/verwijderen/{{$streeplijst->id}}">
 						<span type="button"
-									class="btn btn-danger btn-rounded btn-sm">Verwijder</span> </a>
+									class="btn btn-danger btn-sm">Verwijder</span> </a>
 					</div>
 				</td>
 			</tr>
@@ -135,7 +135,7 @@
 			<label for="Civitas">Civitas</label>
 		</div>
 
-		<input type="submit" class="btn btn-info btn-rounded btn-xs"
+		<input type="submit" class="btn btn-info btn-xs"
 					 name="selecteer" value="Selecteer"/>
 	</form>
 
@@ -162,10 +162,10 @@
 
 		<div>
 			<input type="button" onclick="this.form.action='/streeplijst/aanmaken'; this.form.submit()"
-						 class="btn btn-info btn-rounded btn-xs"
+						 class="btn btn-info btn-xs"
 						 name="opslaan" value="Sla lijst op"/>
 			<input type="button" onclick="this.form.action='/streeplijst/genererenZonderId'; this.form.submit()"
-						 class="btn btn-success btn-rounded btn-xs"
+						 class="btn btn-success btn-xs"
 						 name="genereer" value="Genereer lijst"/>
 		</div>
 	</form>
