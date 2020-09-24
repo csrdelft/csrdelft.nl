@@ -72,15 +72,27 @@ jobs:
           repository: csrdelft/productie
           token: ${{ secrets.PRODUCTIE_TOKEN }}
 
-      - name: Push naar productie
-        # if: github.ref == 'refs/heads/master'
+      - name: Configureer productie user
         working-directory: productie
         run: |
           git config user.name "PubCie"
           git config user.email "pubcie@csrdelft.nl"
+
+      - name: Prepareer productie repo
+        working-directory: productie
+        run: |
           rm -r *
           rsync -a ../main/ ./ --exclude node_modules --exclude .git --exclude assets --exclude .gitmodules
           mv bin/ci/.gitignore.prod .gitignore
+
+      - name: Commit naar productie
+        working-directory: productie
+        run: |
           git add -A
           git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_ACTION"
+
+      - name: Push naar productie
+        # if: github.ref == 'refs/heads/master'
+        working-directory: productie
+        run: |
           git push --force --quiet --set-upstream origin 🚀
