@@ -27,7 +27,7 @@ $footer-background: $primair-achtergrond;
 
 $headings-font-family: 'adam.cg_proregular', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 
-@import "donker";
+@import "./donker";
 
 #zijbalk .blok .zijbalk-kopje {
 	font-family: $headings-font-family;

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Dropzone from "assets/js/lib/dropzone";
+import Dropzone from "dropzone";
 import {selectAll} from "./dom";
 import {html} from "./util";
 
