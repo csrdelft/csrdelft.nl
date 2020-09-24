@@ -48,7 +48,6 @@ jobs:
           path: main
 
       - name: Cache Composer packages
-        working-directory: main
         id: composer-cache
         uses: actions/cache@v2
         with:
@@ -67,6 +66,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: js
+          path: dist
 
       - name: Pull productie
         uses: actions/checkout@v2
