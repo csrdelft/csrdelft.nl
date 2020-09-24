@@ -91,7 +91,7 @@ jobs:
         working-directory: productie
         run: |
           git add -A
-          git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_ACTION"
+          git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_RUN_NUMBER van csrdelft/csrdelft.nl@$GITHUB_SHA"
 
       - name: Push naar productie
         # if: github.ref == 'refs/heads/master'
