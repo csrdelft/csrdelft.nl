@@ -61,12 +61,6 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Download JS
-        uses: actions/download-artifact@v2
-        with:
-          name: js
-          path: main/dist
-
       - name: Pull productie
         uses: actions/checkout@v2
         with:
@@ -86,6 +80,12 @@ jobs:
           rm -r *
           rsync -a ../main/ ./ --exclude node_modules --exclude .git --exclude assets --exclude .gitmodules
           mv bin/ci/.gitignore.prod .gitignore
+
+      - name: Download JS
+        uses: actions/download-artifact@v2
+        with:
+          name: js
+          path: productie/htdocs/dist
 
       - name: Commit naar productie
         working-directory: productie
