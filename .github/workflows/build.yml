@@ -62,11 +62,10 @@ jobs:
         run: composer install --no-dev --optimize-autoloader
 
       - name: Download JS
-        working-directory: main
         uses: actions/download-artifact@v2
         with:
           name: js
-          path: dist
+          path: main/dist
 
       - name: Pull productie
         uses: actions/checkout@v2
