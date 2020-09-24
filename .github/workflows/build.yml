@@ -48,6 +48,7 @@ jobs:
           path: main
 
       - name: Cache Composer packages
+        working-directory: main
         id: composer-cache
         uses: actions/cache@v2
         with:
@@ -57,10 +58,12 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install Composer packages
+        working-directory: main
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --no-dev --optimize-autoloader
 
       - name: Download JS
+        working-directory: main
         uses: actions/download-artifact@v2
         with:
           name: js
