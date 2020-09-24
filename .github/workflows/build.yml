@@ -94,7 +94,7 @@ jobs:
           git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_RUN_NUMBER van csrdelft/csrdelft.nl@$GITHUB_SHA"
 
       - name: Push naar productie
-        # if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         working-directory: productie
         run: |
           git push --force --quiet --set-upstream origin master:🚀
