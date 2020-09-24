@@ -95,4 +95,4 @@ jobs:
         # if: github.ref == 'refs/heads/master'
         working-directory: productie
         run: |
-          git push --force --quiet --set-upstream origin 🚀
+          git push --force --quiet --set-upstream origin master:🚀
