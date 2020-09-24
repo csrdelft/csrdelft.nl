@@ -72,6 +72,7 @@ jobs:
           token: ${{ secrets.PRODUCTIE_TOKEN }}
 
       - name: Push naar productie
+        # if: github.ref == 'refs/heads/master'
         working-directory: productie
         run: |
           git config user.name "PubCie"
@@ -80,3 +81,5 @@ jobs:
           rsync -a ../main/ ./ --exclude node_modules --exclude .git --exclude assets --exclude .gitmodules
           mv bin/ci/.gitignore.prod .gitignore
           git add -A
+          git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_ACTION"
+          git push --force --quiet --set-upstream origin 🚀
