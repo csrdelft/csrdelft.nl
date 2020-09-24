@@ -1,5 +1,5 @@
 // importeer stijl
-import '../../sass/effect/raket.scss';
+import '../../scss/effect/raket.scss';
 import {ontstuiter} from '../lib/util';
 
 class UVo {

@@ -55,4 +55,4 @@ services:
       - ./webpack.config.js:/app/webpack.config.js
       - ./tsconfig.json:/app/tsconfig.json
       - ./htdocs/dist:/app/htdocs/dist # output
-      - ./resources/assets:/app/resources/assets # input
+      - ./assets:/app/assets # input

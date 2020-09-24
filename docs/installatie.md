@@ -98,7 +98,7 @@ Als je een dump hebt gekregen kun je deze nu importeren met HeidiSQL, DataGrip o
 
 ### 2.3: Frontend code builden
 
-De frontend code wordt met een los process gebuild. Hier wordt Typescript omgezet naar Javascript en SCSS (sass) naar CSS.
+De frontend code wordt met een los process gebuild. Hier wordt Typescript omgezet naar Javascript en SCSS naar CSS.
 
 Voer hier voor het volgende commando uit.
 

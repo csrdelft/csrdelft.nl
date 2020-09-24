@@ -96,9 +96,9 @@ import $ from 'jquery';
 	import axios from 'axios';
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
-	import Icon from '../common/Icon';
-	import PeilingOptie from './PeilingOptie';
-	import PeilingOptieToevoegen from './PeilingOptieToevoegen';
+	import Icon from '../common/Icon.vue';
+	import PeilingOptie from './PeilingOptie.vue';
+	import PeilingOptieToevoegen from './PeilingOptieToevoegen.vue';
 
 	interface PeilingSettings {
 		id: string;

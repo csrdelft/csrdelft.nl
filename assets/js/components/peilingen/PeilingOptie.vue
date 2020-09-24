@@ -53,7 +53,7 @@
 import Vue from 'vue';
 import {Component, Prop, Watch} from 'vue-property-decorator';
 import {init} from '../../ctx';
-import ProgressBar from '../common/ProgressBar';
+import ProgressBar from '../common/ProgressBar.vue';
 
 @Component({
   components: {ProgressBar},

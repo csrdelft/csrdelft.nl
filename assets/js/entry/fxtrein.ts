@@ -1,5 +1,5 @@
 // Laad styles
-import '../../sass/effect/trein.scss';
+import '../../scss/effect/trein.scss';
 import {select} from "../lib/dom";
 
 /**

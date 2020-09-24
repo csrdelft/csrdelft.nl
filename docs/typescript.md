@@ -30,7 +30,7 @@ Als je deze dynamic imports gebruikt **moet** je een `webpackChunkName` opgeven 
 Meer info is te vinden op de [Code Splitting](https://webpack.js.org/guides/code-splitting/#dynamic-imports) pagina in de webpack docs.
 
 ```javascript
-// resources/assets/js/router.js
+// assets/js/router.js
 
 import {route} from './util';
 

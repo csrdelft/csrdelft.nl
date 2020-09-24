@@ -1,6 +1,6 @@
 import Parallax from 'parallax-js';
 
-import '../../sass/effect/onontdekt.scss';
+import '../../scss/effect/onontdekt.scss';
 
 const overlay = document.getElementById('onontdekt-overlay');
 

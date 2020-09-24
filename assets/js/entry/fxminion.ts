@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import '../../sass/effect/minion.scss';
+import '../../scss/effect/minion.scss';
 
 /**
  * minion.js  |  P.W.G. Brussee (brussee@live.nl)

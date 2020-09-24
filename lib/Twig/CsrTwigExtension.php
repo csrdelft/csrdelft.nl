@@ -274,7 +274,7 @@ namespace CsrDelft\Twig {
 
 		/**
 		 * Geeft een array met gevraagde modules, afhankelijk van lidinstellingen
-		 * De modules zijn terug te vinden in /resources/assets/sass
+		 * De modules zijn terug te vinden in /assets/sass
 		 *
 		 * @return array
 		 */

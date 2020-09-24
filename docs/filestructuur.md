@@ -25,8 +25,7 @@ Hier wordt voor iedere map kort uitgelegd wat het doel van de map is.
   * `manifest.json` & `robots.txt`: Info bestandjes voor zoekmachines/browsers
 * `lib`: Alle PHP bestanden
 * `node_modules`: **Niet echt relevant.** Modules die yarn (package manager) gebruikt
-* `resources`: Template pagina's die worden gecompiled en vervolgens in `htdocs/dist` gezet
-  * `assets`: [Typescript](typescript.md) / [Scss](styles.md) / etc.
+* `assets`: [Typescript](typescript.md) / [Scss](styles.md) / etc.
 * `sessie`: **Niet echt relevant.** Map waar sessiebestanden in worden opgeslagen.
 * `templates`: [Symfony Twig](twig.md) templates. Vervolg op Blade templates
 * `tests`: Tests voor de stek. Wordt niet zoveel mee gedaan en er wordt vrij weinig getest.
