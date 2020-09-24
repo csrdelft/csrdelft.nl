@@ -110,10 +110,28 @@ class LidStatus extends Enum {
 	}
 
 	/**
+	 * @return LidStatus[]
+	 */
+	public static function getLidLikeObject() {
+		return array_map(function ($val) {
+			return static::from($val);
+		}, static::getLidLike());
+	}
+
+	/**
 	 * @return string[]
 	 */
 	public static function getOudlidLike() {
 		return array_values(static::$oudlidlike);
+	}
+
+	/**
+	 * @return LidStatus[]
+	 */
+	public static function getOudLidLikeObject() {
+		return array_map(function ($val) {
+			return static::from($val);
+		}, static::getOudLidLike());
 	}
 
 	/**

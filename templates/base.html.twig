@@ -55,7 +55,7 @@
 	{% block head %}
 	{% endblock %}
 </head>
-<body class="nav-is-fixed {{ lid_instelling('zijbalk', 'breedte') }}" {% block bodyArgs %}{% endblock %}>
+<body class="nav-is-fixed {{ lid_instelling('zijbalk', 'breedte') }} {% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
 {% block body %}
 	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
 	<main class="container my-3 py-3 flex-shrink-0">

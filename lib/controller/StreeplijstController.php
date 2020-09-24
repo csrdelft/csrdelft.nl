@@ -4,14 +4,14 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\Streeplijst;
+use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\StreeplijstRepository;
-use CsrDelft\view\renderer\TemplateView;
-use CsrDelft\view\streeplijst\StreeplijstForm;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -45,17 +45,19 @@ class StreeplijstController extends AbstractController
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/streeplijst", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function overzicht()
 	{
-		return view('streeplijst.overzicht', [
+		return $this->render('streeplijst/overzicht.html.twig', [
 			'streeplijstoverzicht' => $this->streeplijstRepository->getAlleStreeplijsten(),
 			'huidigestreeplijst' => new Streeplijst(),
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
+			'lidstatus' => LidStatus::getLidLikeObject(),
+			'oudlidstatus' => LidStatus::getOudLidLikeObject(),
 		]);
 	}
 
@@ -79,18 +81,20 @@ class StreeplijstController extends AbstractController
 
 	/**
 	 * @param $id
-	 * @return StreeplijstForm
+	 * @return Response
 	 * @Route("/streeplijst/bewerken/{id}", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function bewerken($id)
 	{
 		$streeplijst = $this->streeplijstRepository->find($id);
-		return view('streeplijst.overzicht', [
+		return $this->render('streeplijst/overzicht.html.twig', [
 			'streeplijstoverzicht' => $this->streeplijstRepository->getAlleStreeplijsten(),
 			'huidigestreeplijst' => $streeplijst,
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
+			'lidstatus' => LidStatus::getLidLikeObject(),
+			'oudlidstatus' => LidStatus::getOudLidLikeObject(),
 		]);
 	}
 
@@ -111,7 +115,7 @@ class StreeplijstController extends AbstractController
 
 	/**
 	 * @param Request $request
-	 * @return RedirectResponse
+	 * @return Response
 	 * @Route("/streeplijst/selectie", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -158,17 +162,19 @@ class StreeplijstController extends AbstractController
 		$streeplijst->leden_streeplijst = $stringNamen;
 		$streeplijst->inhoud_streeplijst = $stringGoederen;
 
-		return view('streeplijst.overzicht', [
+		return $this->render('streeplijst/overzicht.html.twig', [
 			'streeplijstoverzicht' => $this->streeplijstRepository->getAlleStreeplijsten(),
 			'huidigestreeplijst' => $streeplijst,
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
+			'lidstatus' => LidStatus::getLidLikeObject(),
+			'oudlidstatus' => LidStatus::getOudLidLikeObject(),
 		]);
 	}
 
 	/**
 	 * @param $id
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/streeplijst/genereren/{id}", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -176,14 +182,14 @@ class StreeplijstController extends AbstractController
 	{
 		$streeplijst = $this->streeplijstRepository->find($id);
 
-		return view('streeplijst.streeplijst', [
+		return $this->render('streeplijst/streeplijst.html.twig', [
 			'streeplijst' => $streeplijst
 		]);
 	}
 
 	/**
 	 * @param Request $request
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/streeplijst/genererenZonderId", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -194,7 +200,7 @@ class StreeplijstController extends AbstractController
 		$inhoud_streeplijst = $request->query->get("inhoud_streeplijst");
 		$nieuwelijst = $this->streeplijstRepository->nieuw($naam_streeplijst, $leden_streeplijst, $inhoud_streeplijst);
 
-		return view('streeplijst.streeplijst', [
+		return $this->render('streeplijst/streeplijst.html.twig', [
 			'streeplijst' => $nieuwelijst
 		]);
 	}
