@@ -14,6 +14,7 @@ Basisconcepten over de stek.
 - [Filestructuur](filestructuur.md): De bestandsstructuur van de stek repository.
 - [Symfony](symfony.md)
 - [Frontend build](frontend.md): Het builden van de frontend.
+- [Code style](code.md): Codestyle
 
 ## Beginner kennis
 
