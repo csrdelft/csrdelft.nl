@@ -31,7 +31,7 @@ window.$ = window.jQuery = $;
 /**
  * jQuery extensies registreren zichzelf aan bovenstaande jQuery.
  */
-require('assets/js/bootstrap');
+require('bootstrap');
 require('./ajax-csrf');
 require('jquery.scrollto');
 require('jquery-ui');
