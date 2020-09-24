@@ -44,6 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          submodule: true
           path: main
 
       - name: Cache Composer packages
