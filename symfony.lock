@@ -105,9 +105,6 @@
     "easyrdf/easyrdf": {
         "version": "0.9.1"
     },
-    "eftec/bladeone": {
-        "version": "3.21"
-    },
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },

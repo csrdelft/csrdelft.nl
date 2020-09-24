@@ -76,9 +76,9 @@ $.extend(window, {
 		insertPlaatje,
 	},
 	forum: {
-		// See blade_templates/forum/partial/post_lijst.blade.php
+		// See templates/forum/partial/post_lijst.html.twig
 		forumBewerken,
-		// See blade_templates/forum/partial/post_forum.blade.php
+		// See templates/forum/partial/post_forum.html.twig
 		saveConceptForumBericht,
 	},
 	// See templates/maaltijden/bb.html.twig
@@ -86,12 +86,12 @@ $.extend(window, {
 	maalcie: {
 		// See view/maalcie/forms/SuggestieLijst.php
 		takenColorSuggesties,
-		// See assets/view/maaltijden/corveetaak/beheer_taken.blade.php
+		// See templates/maaltijden/corveetaak/beheer_taken.html.twig
 		takenShowOld,
-		// See assets/view/maaltijden/corveetaak/beheer_taak_datum.blade.php
-		// See assets/view/maaltijden/corveetaak/beheer_taak_head.blade.php
+		// See templates/maaltijden/corveetaak/beheer_taak_datum.html.twig
+		// See templates/maaltijden/corveetaak/beheer_taak_head.html.twig
 		takenToggleDatum,
-		// See assets/view/maaltijden/corveetaak/suggesties_lijst.blade.php
+		// See templates/maaltijden/corveetaak/suggesties_lijst.html.twig
 		// See view/maalcie/forms/SuggestieLijst.php
 		takenToggleSuggestie,
 	},

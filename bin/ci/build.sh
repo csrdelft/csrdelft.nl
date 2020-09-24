@@ -22,8 +22,6 @@ yarn run production
 
 # Installeer php dependencies
 composer install
-# Compileer blade
-composer run-script production
 # Verwijder dev dependencies en optimize autoloader
 composer install --no-dev --optimize-autoloader
 

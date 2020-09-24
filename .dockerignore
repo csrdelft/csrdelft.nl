@@ -4,7 +4,6 @@ node_modules
 vendor
 data/assets
 data/less
-data/blade
 data/foto
 data/documenten
 lib

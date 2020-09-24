@@ -9,7 +9,6 @@
 	"require": {
 		"csrdelft/bb": "1.2.0",
 		"easyrdf/easyrdf": "^0.9.1",
-		"eftec/bladeone": "3.21",
 		"ext-PDO": "*",
 		"ext-curl": "*",
 		"ext-dom": "*",
@@ -86,7 +85,6 @@
 		],
 		"migrate": "@console doctrine:migrations:migrate --allow-no-migration --no-interaction",
 		"generator": "@php bin/dev/generate.php",
-		"production": "@php bin/ci/compile.php",
 		"flushcache": "@console stek:cache:flush",
 		"analyse": "@php vendor/phpstan/phpstan/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",
 		"test": "@php vendor/phpunit/phpunit/phpunit --bootstrap ./phpunit.init.php tests",
