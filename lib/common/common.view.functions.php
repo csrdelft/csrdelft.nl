@@ -7,7 +7,6 @@ use CsrDelft\entity\security\Account;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\bbcode\CsrBB;
-use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,17 +14,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Hulpmethodes die gebruikt worden in views.
  */
-
-/**
- * Shorthand voor het aanmaken van een TemplateView
- *
- * @param string $template
- * @param array $variables
- * @return TemplateView
- */
-function view(string $template, array $variables = []) {
-	return new TemplateView($template, $variables);
-}
 
 /**
  * Zorgt dat line endings CRLF zijn voor ical en vcard.

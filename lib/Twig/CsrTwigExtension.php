@@ -222,8 +222,6 @@ namespace CsrDelft\Twig {
 		/**
 		 * Mag de op dit moment ingelogde gebruiker $permissie?
 		 *
-		 * Korte methode voor gebruik in Blade templates.
-		 *
 		 * @param string $permission
 		 * @param array|null $allowedAuthenticationMethods
 		 * @return bool

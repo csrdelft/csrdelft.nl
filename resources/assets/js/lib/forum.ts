@@ -77,7 +77,7 @@ function submitPost(event: Event) {
  * Een post bewerken in het forum.
  * Haal een post op, bouw een formuliertje met javascript.
  *
- * @see blade_templates/forum/partial/post_lijst.blade.php
+ * @see templates/forum/partial/post_lijst.html.twig
  */
 export function forumBewerken(postId: string): false {
 	$.ajax({

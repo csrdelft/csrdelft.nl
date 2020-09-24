@@ -31,7 +31,7 @@ cd deploy
 
 # Als in deze build geen js en php gedraaid is, trek deze dan uit de vorige versie
 if (( $SKIP_BUILD == 0 )); then
-git checkout -- data/blade htdocs/dist
+git checkout -- htdocs/dist
 fi;
 
 git add -A
