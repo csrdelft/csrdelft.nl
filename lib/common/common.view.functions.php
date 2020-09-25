@@ -70,7 +70,7 @@ function module_asset(string $module, string $extension) {
 		}
 	}
 
-	return ($relevantAssets);
+	return $relevantAssets;
 }
 
 /**
