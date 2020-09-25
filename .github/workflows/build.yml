@@ -46,6 +46,52 @@ jobs:
           name: js
           path: htdocs/dist
 
+  test:
+    runs-on: ubuntu-latest
+    needs: build_js
+    env:
+      APP_ENV: test
+
+    steps:
+      - name: Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
+
+      - uses: getong/mariadb-action@v1.1
+        with:
+          mariadb version: "10.3"
+          mysql root password: ""
+
+      - uses: actions/checkout@v2
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: main/vendor
+          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-dev-
+
+      - name: Install Composer packages
+        working-directory: main
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install
+
+      - name: Download JS
+        uses: actions/download-artifact@v2
+        with:
+          name: js
+          path: htdocs/dist
+
+      - name: Setup database
+        run: |
+          php bin/console doctrine:database:create -n
+          php bin/console doctrine:migrations:migrate -n
+          php bin/console doctrine:fixtures:load -n
+
+      - name: Run PhpUnit
+        run: php bin/phpunit
+
   deploy:
     runs-on: ubuntu-latest
     needs: build_js
