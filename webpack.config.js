@@ -108,14 +108,17 @@ module.exports = (env, argv) => ({
 			},
 			{
 				test: /\.vue$/,
-				use: {
-					loader: 'vue-loader',
-					options: {
-						loaders: {
-							ts: 'ts-loader',
+				use: [
+					'cache-loader',
+					{
+						loader: 'vue-loader',
+						options: {
+							loaders: {
+								ts: 'ts-loader',
+							},
 						},
-					},
-				},
+					}
+				],
 			},
 			// Verwerk sass bestanden.
 			// `sass-loader` >
@@ -124,9 +127,6 @@ module.exports = (env, argv) => ({
 			// Zorg ervoor dat verwijzingen naar externe bestanden kloppen (sass was meerdere bestanden, css één)
 			// `css-loader` >
 			// Trek alle afbeeldingen/fonts waar naar verwezen wordt naar de dist/images map
-			// `postcss-loader` >
-			// Haal een autoprefixer over de css, deze zorgt ervoor dat eventuele vendor-prefixes (-moz-, -webkit-)
-			// worden toegevoegd.
 			// `MiniCssExtractPlugin` >
 			// Normaal slaat webpack css op in javascript bestanden, zodat je ze makkelijk specifiek kan opvragen
 			// hier zorgen we ervoor dat de css eruit wordt getrokken en in een los .css bestand wordt gestopt.
@@ -134,6 +134,7 @@ module.exports = (env, argv) => ({
 			{
 				test: /\.scss$/,
 				use: [
+					'cache-loader',
 					{
 						loader: require('mini-css-extract-plugin').loader,
 						options: {
@@ -141,7 +142,6 @@ module.exports = (env, argv) => ({
 							publicPath: '../',
 						},
 					},
-					'cache-loader',
 					{
 						loader: 'css-loader',
 						options: {

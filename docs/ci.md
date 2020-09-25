@@ -1,25 +1,31 @@
-# Travis CI/CD
+# Github Actions CI
 
 [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) is de praktijk van het automatisch samenvoegen van veranderingen van verschillende programmeurs.
 
-We gebruiken Travis om automatisch alles klaar te zetten om het op Syrinx te deployen. In het bestand `.travis.yml` is het process gedefinieerd.
+We gebruiken [GitHub Actions](https://docs.github.com/en/actions) om automatische acties uit te voeren.
+
+Kijk in de [Actions](https://github.com/csrdelft/csrdelft.nl/actions) tab in de repository voor de huidige status.
 
 ## Stappen
 
-Het proces op Travis heeft twee onderdelen, Build en Analysis, na de eerste stap
+Er zijn een aantal losse workflows, deze draaien los van elkaar
 
-### Build
+- ![Build & Deploy](https://github.com/csrdelft/csrdelft.nl/workflows/Build%20&%20Deploy/badge.svg)
+- ![Create Sentry Releases](https://github.com/csrdelft/csrdelft.nl/workflows/Create%20Sentry%20Releases/badge.svg)
+- ![Sonarcloud analyse](https://github.com/csrdelft/csrdelft.nl/workflows/Sonarcloud%20analyse/badge.svg)
+
+### Build & Deploy
 
 De build doet een aantal stappen,
 * Compileren van Typescript en Scss naar Javascript en css
-* PHP dependencies installeren
-* Blade Templates compileren
-* De PHP autoloader optimizen zodat deze sneller werkt
+* PHP dependencies installeren en de autoloader optimizen
 * De nieuwe versie naar [csrdelft/productie](https://github.com/csrdelft/productie) pushen
 
-Als dit allemaal gelukt is gaat de volgende badge op groen: [![Build Status](https://travis-ci.org/csrdelft/csrdelft.nl.svg?branch=master)](https://travis-ci.org/csrdelft/csrdelft.nl)
+### Create Sentry Releases
 
-### Analysis
+Maakt een nieuwe release in Sentry, hierdoor kunnen commits aan foutmeldingen geknoopt worden
+
+### Sonarcloud analyse
 
 Hier gaat Sonarcloud over de code heen om te checken of alles akkoord is.
 
