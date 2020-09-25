@@ -117,7 +117,7 @@
 	{% if block('modal') is defined %}
 	{{ block('modal') | raw }}
 	{% elseif not toestemming_gegeven() %}
-	{!! toestemming_form()->toString() !!}
+	{{ toestemming_form().toString | raw }}
 	{% else %}
 	<div id="modal" tabindex="-1"></div>
 	{% endif %}
