@@ -17,7 +17,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  *
  * @package CsrDelft\events
  */
-class AccessControlEventListener {
+class AccessControlEventListener
+{
 	const EXCLUDED_CONTROLLERS = [
 		'error_controller' => true,
 		'CsrDelft\controller\ErrorController::handleException' => true,
@@ -37,7 +38,8 @@ class AccessControlEventListener {
 	 */
 	private $em;
 
-	public function __construct(CsrfService $csrfService, Reader $annotations, EntityManagerInterface $entityManager) {
+	public function __construct(CsrfService $csrfService, Reader $annotations, EntityManagerInterface $entityManager)
+	{
 		$this->csrfService = $csrfService;
 		$this->annotations = $annotations;
 		$this->em = $entityManager;
@@ -49,7 +51,8 @@ class AccessControlEventListener {
 	 * @param ControllerEvent $event
 	 * @throws \ReflectionException
 	 */
-	public function onKernelController(ControllerEvent $event) {
+	public function onKernelController(ControllerEvent $event)
+	{
 		$request = $event->getRequest();
 
 		if (!$event->isMasterRequest()) {
@@ -64,15 +67,17 @@ class AccessControlEventListener {
 
 		$isInApi = startsWith($request->getPathInfo(), '/API/2.0');
 
-		if ($isInApi === false && $csrfUnsafeAttribute === null && $csrfUnsafeAnnotation === null) {
-			if (!$this->csrfService->preventCsrf($request)) {
-				// Maak dit een AccessDeniedException als de fouten gedebugged zijn.
-				throw new CsrException("Ongeldige CSRF token");
-			}
+		if (
+			$isInApi === false
+			&& $csrfUnsafeAttribute === null
+			&& $csrfUnsafeAnnotation === null
+			&& !$this->csrfService->preventCsrf($request)
+		) {
+			throw new AccessDeniedException("Ongeldige CSRF token");
 		}
 
 		$controller = $request->attributes->get('_controller');
-		if (isset(self::EXCLUDED_CONTROLLERS[$controller])){
+		if (isset(self::EXCLUDED_CONTROLLERS[$controller])) {
 			return;
 		}
 
