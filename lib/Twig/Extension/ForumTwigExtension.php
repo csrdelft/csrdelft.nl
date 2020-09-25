@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\Twig;
+namespace CsrDelft\Twig\Extension;
 
 
 use CsrDelft\repository\forum\ForumDradenRepository;

@@ -25,209 +25,6 @@ function crlf_endings(string $input) {
 	return str_replace("\n", "\r\n", $input);
 }
 
-/**
- * Genereer een unieke url voor een asset.
- *
- * @param string $asset
- * @return string
- */
-function css_asset(string $module, $media = null) {
-	$assetString = '';
-
-	foreach (module_asset($module, 'css') as $asset) {
-		if ($media) {
-			$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\" media=\"{$media}\"/>\n";
-		} else {
-			$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\"/>\n";
-		}
-	}
-
-	return $assetString;
-}
-
-function js_asset(string $module) {
-	$assetString = '';
-
-	foreach (module_asset($module, 'js') as $asset) {
-		$assetString .= "<script type=\"text/javascript\" src=\"{$asset}\"></script>\n";
-	}
-
-	return $assetString;
-}
-
-function module_asset(string $module, string $extension) {
-	if (!file_exists(HTDOCS_PATH . 'dist/manifest.json')) {
-		throw new CsrException('htdocs/dist/manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
-	}
-
-	$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/manifest.json'), true);
-
-	$relevantAssets = [];
-
-	foreach ($manifest as $asset => $resource) {
-		if (preg_match('/(^|~)('.$module.')([.~])/', $asset) && endsWith($asset, $extension)) {
-			$relevantAssets[] = $resource;
-		}
-	}
-
-	return $relevantAssets;
-}
-
-/**
- * @param $date
- * @return false|string
- */
-function rfc2822($date) {
-	if (strlen($date) == strlen((int)$date)) {
-		return date('r', $date);
-	} else {
-		return date('r', strtotime($date));
-	}
-}
-
-/**
- * Gebasseerd op de sliding_pager smarty plugin
- * -------------------------------------------------------------
- * Type:     function
- * Name:     sliding_page
- * Purpose:  create a sliding-pager for page browsing
- * Version:  0.1.1
- * Date:     April 11, 2004
- * Last Modified:    March 31, 2014
- * Author:   Mario Witte <mario dot witte at chengfu dot net>
- * HTTP:     http://www.chengfu.net/
- * -------------------------------------------------------------
- * @param array $params
- * @return string
- */
-function sliding_pager($params) {
-	/*
-	  @param  mixed   $pagecount          - number of pages to browse
-	  @param  int     $linknum            - max. number of links to show on one page (default: 5)
-	  @param  int     $curpage            - current page number
-	  @param  string  baseurl             - baseurl to which the pagenumber will appended
-	  @param  string  urlAppend          - text to append to url after pagenumber, e.g. "html" (default: "")
-	  @param  string  txtPre             - laat zien voor de paginering
-	  @param  string  txtFirst           - text for link to first page (default: "<<")
-	  @param  string  txtPrev            - text for link to previous page (default: "<")
-	  @param  string  separator           - text to print between page numbers (default: " ")
-	  @param  string  txtNext            - text for link to next page (default: ">")
-	  @param  string  txtLast            - text for link to last page (default: ">>")
-	  @param  string  txtPost            - laat zien na de paginering
-	  @param  string  txtSkip            - text shown when page s are skipped (not shown) (default: "…")
-	  @param  string  cssClass           - css class for the pager (default: "")
-	  @param  boolean linkCurrent        - whether to link the current page (default: false)
-	  @param  boolean showAlways         - als er maar 1 pagina is, toch laten zien
-	  @param  boolean showFirstLast     - eerste/laatste links laten zien
-	  @param  boolean showPrevNext      - vorige/volgende links laten zien
-	 */
-
-	/* Define all vars with default value */
-	$pagecount = 0;
-	$curpage = 0;
-	$baseurl = '';
-	$linknum = 5;
-	$urlAppend = '';
-	$txtPrev = '<';
-	$separator = ' ';
-	$txtNext = '>';
-	$txtSkip = '…';
-	$cssClass = '';
-	$showPrevNext = false;
-
-	/* Import parameters */
-	extract($params);
-
-	/* Convert page count if array */
-	if (is_array($pagecount)) {
-		$pagecount = sizeof($pagecount);
-	}
-
-	/* Define additional required vars */
-	if ($linknum % 2 == 0) {
-		$deltaL = ($linknum / 2) - 1;
-		$deltaR = $linknum / 2;
-	} else {
-		$deltaL = $deltaR = ($linknum - 1) / 2;
-	}
-
-	/* There is no 0th page: assume last page */
-	$curpage = $curpage == 0 ? $pagecount : $curpage;
-
-	/* Internally we need an "array-compatible" index */
-	$intCurpage = $curpage - 1;
-
-	/* Paging needed? */
-	if ($pagecount <= 1) {
-		// No paging needed for one page
-		return '';
-	}
-
-	/* Build all page links (we'll delete some later if required) */
-	$links = array();
-	for ($i = 0; $i < $pagecount; $i++) {
-		$links[$i] = $i + 1;
-	}
-
-	/* Sliding needed? */
-	if ($pagecount > $linknum) { // Yes
-		if (($intCurpage - $deltaL) < 1) { // Delta_l needs adjustment, we are too far left
-			$deltaL = $intCurpage - 1;
-			$deltaR = $linknum - $deltaL - 1;
-		}
-		if (($intCurpage + $deltaR) > $pagecount) { // Delta_r needs adjustment, we are too far right
-			$deltaR = $pagecount - $intCurpage;
-			$deltaL = $linknum - $deltaR - 1;
-		}
-		if ($intCurpage - $deltaL > 1) { // Let's do some cutting on the left side
-			array_splice($links, 0, $intCurpage - $deltaL);
-		}
-		if ($intCurpage + $deltaR < $pagecount) { // The right side will also need some treatment
-			array_splice($links, $intCurpage + $deltaR + 2 - $links[0]);
-		}
-	}
-
-	/* Build link bar */
-	$retval = '';
-	$cssClass = $cssClass ? 'class="' . $cssClass . '"' : '';
-	if ($curpage > 1 && $showPrevNext) {
-		$retval .= '<a href="' . $baseurl . ($curpage - 1) . $urlAppend . '" ' . $cssClass . '>' . $txtPrev . '</a>';
-		$retval .= $separator;
-	}
-	if ($links[0] != 1) {
-		$retval .= '<a href="' . $baseurl . '1' . $urlAppend . '" ' . $cssClass . '>1</a>';
-		if ($links[0] == 2) {
-			$retval .= $separator;
-		} else {
-			$retval .= $separator . $txtSkip . $separator;
-		}
-	}
-	for ($i = 0; $i < sizeof($links); $i++) {
-		if ($links[$i] != $curpage) {
-			$retval .= '<a href="' . $baseurl . $links[$i] . $urlAppend . '" ' . $cssClass . '>' . $links[$i] . '</a>';
-		} else {
-			$retval .= '<span class="curpage">' . $links[$i] . '</span>';
-		}
-
-		if ($i < sizeof($links) - 1) {
-			$retval .= $separator;
-		}
-	}
-	if ($links[sizeof($links) - 1] != $pagecount) {
-		if ($links[sizeof($links) - 2] != $pagecount - 1) {
-			$retval .= $separator . $txtSkip . $separator;
-		} else {
-			$retval .= $separator;
-		}
-		$retval .= '<a href="' . $baseurl . $pagecount . $urlAppend . '" ' . $cssClass . '>' . $pagecount . '</a>';
-	}
-	if ($curpage != $pagecount && $showPrevNext) {
-		$retval .= $separator;
-		$retval .= '<a href="' . $baseurl . ($curpage + 1) . $urlAppend . '" ' . $cssClass . '>' . $txtNext . '</a>';
-	}
-	return $retval;
-}
-
 function bbcode(string $string, string $mode = 'normal') {
 	if ($mode === 'html') {
 		return CsrBB::parseHtml($string);
@@ -236,43 +33,6 @@ function bbcode(string $string, string $mode = 'normal') {
 	} else {
 		return CsrBB::parse($string);
 	}
-}
-
-function bbcode_light(string $string) {
-	return CsrBB::parseLight($string);
-}
-
-/**
- * Formatteer een datum voor de zijbalk.
- *
- *  - Als dezelfe dag:     13:13
- *  - Als dezelfde maand:  ma 06
- *  - Anders:              06-12
- *
- * @version 1.0
- * @param string|integer
- * @return string
- */
-function zijbalk_date_format($datetime) {
-	if (!is_int($datetime)) {
-		$datetime = strtotime($datetime);
-	}
-
-	if (date('d-m', $datetime) === date('d-m')) {
-		return strftime('%H:%M', $datetime);
-	} elseif (strftime('%U', $datetime) === strftime('%U')) {
-		return strftime('%a&nbsp;%d', $datetime);
-	} else {
-		return strftime('%d-%m', $datetime);
-	}
-}
-
-function link_for($title, $href, $class, $activeClass) {
-	if ($_SERVER['REQUEST_URI'] == $href) {
-		$class .= ' ' . $activeClass;
-	}
-
-	return '<a href="' . $href . '" class="' . $class . '">' . $title . '</a>';
 }
 
 /**
@@ -345,15 +105,6 @@ function first_space_after(string $string, int $offset = null) {
 }
 
 /**
- * Encode string for RSS feed.
- * @param string $string The string to encode
- * @return string The encoded string
- */
-function rss_encode(string $string) {
-	return htmlspecialchars($string, ENT_XML1, 'UTF-8');
-}
-
-/**
  * Split a string on keyword with a given space (in characters) around the keyword. Splits on spaces.
  *
  * @param string $string The base string
@@ -405,10 +156,6 @@ function split_on_keyword(string $string, string $keyword, int $space_around = 1
 	return $string;
 }
 
-function csr_breadcrumbs($breadcrumbs) {
-	return ContainerFacade::getContainer()->get(MenuItemRepository::class)->renderBreadcrumbs($breadcrumbs);
-}
-
 /**
  * Ical escape modifier plugin
  * Type:     modifier<br>
@@ -428,30 +175,6 @@ function escape_ical($string) {
 	return str_replace(',', '\,', $string);
 }
 
-function toestemming_gegeven() {
-	return ContainerFacade::getContainer()->get(LidToestemmingRepository::class)->toestemmingGegeven();
-}
-
-function toestemming_form() {
-	return new ToestemmingModalForm(ContainerFacade::getContainer()->get(LidToestemmingRepository::class));
-}
-
-/**
- * @param $name
- * @return MenuItem|null
- */
-function get_menu($name, $root = false) {
-	if ($root) {
-		return ContainerFacade::getContainer()->get(MenuItemRepository::class)->getMenuRoot($name);
-	}
-
-	return ContainerFacade::getContainer()->get(MenuItemRepository::class)->getMenu($name);
-}
-
-function get_breadcrumbs($name) {
-	return ContainerFacade::getContainer()->get(MenuItemRepository::class)->getBreadcrumbs($name);
-}
-
 /**
  * Zie http://userguide.icu-project.org/formatparse/datetime voor de geaccepteerde formats
  *
@@ -464,37 +187,6 @@ function date_format_intl(DateTimeInterface $date, $format) {
 	$fmt->setPattern($format);
 
 	return $fmt->format($date);
-}
-
-/**
- * Reken uit hoe oud de vereniging is.
- *
- * @return int
- */
-function vereniging_leeftijd() {
-	$oprichting = date_create_immutable('1961-06-16');
-
-	$leeftijd = date_create_immutable()->diff($oprichting);
-
-	return $leeftijd->y;
-}
-
-function is_granted($attributes, $subject = null) {
-	return ContainerFacade::getContainer()->get('security.authorization_checker')->isGranted($attributes, $subject);
-}
-
-/**
- * @return TokenInterface
- */
-function current_token() {
-	return ContainerFacade::getContainer()->get('security.token_storage')->getToken();
-}
-
-/**
- * @return UserInterface|Account
- */
-function current_account() {
-	return ContainerFacade::getContainer()->get('security.token_storage')->getToken()->getUser();
 }
 
 function commitHash($full = false) {
