@@ -46,7 +46,7 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 
 - [Status](status.md) van ontwikkelingen van verschillende onderdelen van de stek.
 - [Docker](installatie-docker.md)
-- [Travis](ci.md)
+- [Github Actions](ci.md)
 - [Wiki](wiki.md)
 - [Deploy](deploy.md) op Syrinx
 - [Verbinden met MySql op Syrinx](verbinden-met-mysql-op-syrinx.md)
