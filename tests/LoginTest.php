@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class LoginTest extends \Symfony\Component\Panther\PantherTestCase {
 	public function testPageLoad() {
-		$client = static::createPantherClient(['webServerDir' => __DIR__ . '/../htdocs/']);
+		$client = static::createPantherClient();
 		ContainerFacade::init(self::$container);
 
 		$client->request('GET', '/');
@@ -16,7 +16,7 @@ class LoginTest extends \Symfony\Component\Panther\PantherTestCase {
 	}
 
 	public function testLogin() {
-		$client = static::createPantherClient(['webServerDir' => __DIR__ . '/../htdocs/']);
+		$client = static::createPantherClient();
 
 		$crawler = $client->request('GET', '/');
 
