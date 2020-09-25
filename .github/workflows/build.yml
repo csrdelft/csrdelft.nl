@@ -79,7 +79,7 @@ jobs:
         working-directory: productie
         run: |
           rm -r *
-          rsync -a ../main/ ./ --exclude node_modules --exclude .git --exclude assets --exclude .gitmodules
+          rsync --archive --exclude-from=../main/bin/ci/rsync-exclude.txt ../main/ ./
           mv bin/ci/.gitignore.prod .gitignore
 
       - name: Download JS
