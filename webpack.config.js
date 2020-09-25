@@ -134,7 +134,6 @@ module.exports = (env, argv) => ({
 			{
 				test: /\.scss$/,
 				use: [
-					'cache-loader',
 					{
 						loader: require('mini-css-extract-plugin').loader,
 						options: {
@@ -142,6 +141,7 @@ module.exports = (env, argv) => ({
 							publicPath: '../',
 						},
 					},
+					'cache-loader',
 					{
 						loader: 'css-loader',
 						options: {
