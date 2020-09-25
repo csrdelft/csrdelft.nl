@@ -19,11 +19,9 @@ abstract class JsonResponse extends Response {
 		parent::__construct('', $code);
 
 		$this->model = $model;
-		$this->headers->set('Conent-Type', 'application/json');
-	}
 
-	public function getContent() {
-		return json_encode($this->getModel());
+		$this->setContent(json_encode($this->getModel()));
+		$this->headers->set('Content-Type', 'application/json');
 	}
 
 	public function getModel() {
