@@ -36,6 +36,8 @@ window.JSZip = JSZip;
 
 $.extend(true, $.fn.dataTable.defaults, defaults);
 
+$.fn.dataTable.ext.errMode = 'throw'
+
 $(() => {
 	$('body').on('click', () => {
 		// Verwijder tooltips als de datatable modal wordt gesloten
