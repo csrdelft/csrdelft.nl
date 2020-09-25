@@ -89,6 +89,10 @@ jobs:
           php bin/console doctrine:fixtures:load -n
 
       - name: Run PhpUnit
+        env:
+          PANTHER_CHROME_ARGUMENTS: "--disable-dev-shm-usage"
+          PANTHER_CHROME_DRIVER_BINARY: "/usr/bin/chromedriver"
+          PANTHER_NO_SANDBOX: "1"
         run: php bin/phpunit
 
   deploy:
