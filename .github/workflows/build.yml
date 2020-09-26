@@ -49,8 +49,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: build_js
-    env:
-      APP_ENV: test
 
     steps:
       - name: Shutdown Ubuntu MySQL (SUDO)

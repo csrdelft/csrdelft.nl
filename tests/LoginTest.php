@@ -2,9 +2,9 @@
 
 
 use CsrDelft\common\ContainerFacade;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Panther\PantherTestCase;
 
-class LoginTest extends \Symfony\Component\Panther\PantherTestCase {
+class LoginTest extends PantherTestCase {
 	public function testPageLoad() {
 		$client = static::createPantherClient();
 		ContainerFacade::init(self::$container);
