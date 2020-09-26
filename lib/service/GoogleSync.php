@@ -245,7 +245,7 @@ class GoogleSync {
 	/**
 	 * Get array with group[name] => id
 	 */
-	function getGroups() {
+	public function getGroups() {
 		$return = array();
 		foreach ($this->groupFeed as $group) {
 			$this->fixSimpleXMLNameSpace($group);

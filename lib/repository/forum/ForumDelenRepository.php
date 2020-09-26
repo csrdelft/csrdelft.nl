@@ -258,7 +258,7 @@ class ForumDelenRepository extends AbstractRepository {
 		}, $posts));
 	}
 
-	function sorteerFunctie($sorteerOp) {
+	private function sorteerFunctie($sorteerOp) {
 		switch ($sorteerOp) {
 			case 'aangemaakt_op':
 				return function ($a, $b) {

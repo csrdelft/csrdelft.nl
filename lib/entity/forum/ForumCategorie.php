@@ -74,11 +74,11 @@ class ForumCategorie implements DisplayEntity {
 		$this->forum_delen = $forum_delen;
 	}
 
-	function getId() {
+	public function getId() {
 		return $this->categorie_id;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		return $this->titel ?? "";
 	}
 }

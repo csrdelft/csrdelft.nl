@@ -951,7 +951,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		return $this->uid;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		return $this->achternaam ? $this->getNaam('volledig') : '';
 	}
 

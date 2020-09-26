@@ -334,7 +334,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 		return date_format_intl($this->datum, DATE_FORMAT);
 	}
 
-	function getAanmeldLimiet() {
+	public function getAanmeldLimiet() {
 		return $this->aanmeld_limiet;
 	}
 
@@ -352,11 +352,11 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	}
 
 
-	function getId() {
+	public function getId() {
 		return $this->maaltijd_id;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		if ($this->datum) {
 			return $this->titel . ' op ' . date_format_intl($this->datum, DATE_FORMAT) . ' om ' . date_format_intl($this->getMoment(), TIME_FORMAT);
 		} else {

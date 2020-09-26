@@ -20,7 +20,7 @@ class AgendaItemForm implements FormulierTypeInterface {
 	 * @param AgendaItem $data
 	 * @param array $options
 	 */
-	function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
 		$builder->setAction('/agenda/' . $options['actie'] . ($data->item_id ? '/' . $data->item_id : ''));
 		$builder->setTitel('Agenda-item ' . $options['actie']);
 		if ($options['actie'] === 'bewerken') {
