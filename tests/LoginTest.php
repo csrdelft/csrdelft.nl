@@ -2,34 +2,32 @@
 
 
 use CsrDelft\common\ContainerFacade;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Panther\PantherTestCase;
 
-class LoginTest extends WebTestCase {
+class LoginTest extends PantherTestCase {
 	public function testPageLoad() {
-		$client = static::createClient();
+		$client = static::createPantherClient();
 		ContainerFacade::init(self::$container);
 
 		$client->request('GET', '/');
 
-		$this->assertResponseIsSuccessful();
+		// Check of we hier zijn aangekomen
+		$this->assertTrue(true);
 	}
 
 	public function testLogin() {
-		$client = static::createClient();
-		ContainerFacade::init(self::$container);
+		$client = static::createPantherClient();
 
 		$crawler = $client->request('GET', '/');
+
+		$crawler->selectLink("Inloggen")->click();
 
 		$form = $crawler->selectButton('Inloggen')->form();
 
 		$form['_username'] = 'x101';
 		$form['_password'] = 'stek open u voor mij!';
 
-		$client->submit($form);
-
-		$crawler = $client->request('GET', '/');
-
-		$this->assertResponseIsSuccessful();
+		$crawler = $client->submit($form);
 
 		$pageContent = $crawler->filter('.cd-page-content')->text();
 
