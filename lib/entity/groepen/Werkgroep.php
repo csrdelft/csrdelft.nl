@@ -6,6 +6,7 @@ use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
@@ -25,6 +26,7 @@ class Werkgroep extends AbstractGroep {
 	 * Maximaal aantal groepsleden
 	 * @var string
 	 * @ORM\Column(type="integer", nullable=true)
+	 * @Groups({"datatable", "log", "vue"})
 	 */
 	public $aanmeld_limiet;
 	/**
