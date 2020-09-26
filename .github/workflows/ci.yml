@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: CI
 
 on:
   push:
@@ -7,13 +7,14 @@ on:
     branches: [ master ]
 
 jobs:
-  build_js:
+  build:
+    name: Build JavaScript
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache Yarn packages
+      - name: 🗃 Cache Yarn
         id: yarn-cache
         uses: actions/cache@v2
         with:
@@ -28,7 +29,7 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --immutable
 
-      - name: Load cache-loader cache
+      - name: 🗃 Cache cache-loader
         uses: actions/cache@v2
         with:
           path: node_modules/.cache
@@ -37,21 +38,22 @@ jobs:
           # Restore als yarn.lock niet is veranderd
           restore-keys: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock') }}-
 
-      - name: Run yarn build
+      - name: 🔧 Run yarn build
         run: yarn run production
 
-      - name: Upload dist
+      - name: 📤 Upload dist
         uses: actions/upload-artifact@v2
         with:
           name: js
           path: htdocs/dist
 
   test:
+    name: Voer tests uit
     runs-on: ubuntu-latest
-    needs: build_js
+    needs: build
 
     steps:
-      - name: Shutdown Ubuntu MySQL (SUDO)
+      - name: 💤 Shutdown Ubuntu MySQL (SUDO)
         run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
 
       - uses: getong/mariadb-action@v1.1
@@ -61,7 +63,7 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: Cache Composer packages
+      - name: 🗃 Cache Composer packages
         id: composer-cache
         uses: actions/cache@v2
         with:
@@ -74,19 +76,19 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install
 
-      - name: Download JS
+      - name: 📥 Download JS
         uses: actions/download-artifact@v2
         with:
           name: js
           path: htdocs/dist
 
-      - name: Setup database
+      - name: 💽 Setup database
         run: |
           php bin/console doctrine:database:create -n
           php bin/console doctrine:migrations:migrate -n
           php bin/console doctrine:fixtures:load -n
 
-      - name: Run PhpUnit
+      - name: 🧪 Run PhpUnit
         env:
           PANTHER_CHROME_ARGUMENTS: "--disable-dev-shm-usage"
           PANTHER_CHROME_DRIVER_BINARY: "/usr/bin/chromedriver"
@@ -94,8 +96,9 @@ jobs:
         run: php bin/phpunit
 
   deploy:
+    name: Push naar productie
     runs-on: ubuntu-latest
-    needs: build_js
+    needs: build
 
     steps:
       - uses: actions/checkout@v2
@@ -103,7 +106,7 @@ jobs:
           submodules: true
           path: main
 
-      - name: Cache Composer packages
+      - name: 🗃 Cache Composer packages
         id: composer-cache
         uses: actions/cache@v2
         with:
@@ -117,18 +120,12 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Pull productie
+      - name: 📥 Pull productie
         uses: actions/checkout@v2
         with:
           path: productie
           repository: csrdelft/productie
           token: ${{ secrets.PRODUCTIE_TOKEN }}
-
-      - name: Configureer productie user
-        working-directory: productie
-        run: |
-          git config user.name "PubCie"
-          git config user.email "pubcie@csrdelft.nl"
 
       - name: Prepareer productie repo
         working-directory: productie
@@ -137,20 +134,18 @@ jobs:
           rsync --archive --exclude-from=../main/bin/ci/rsync-exclude.txt ../main/ ./
           mv bin/ci/.gitignore.prod .gitignore
 
-      - name: Download JS
+      - name: 📥 Download JS
         uses: actions/download-artifact@v2
         with:
           name: js
           path: productie/htdocs/dist
 
-      - name: Commit naar productie
-        working-directory: productie
-        run: |
-          git add -A
-          git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_RUN_NUMBER van csrdelft/csrdelft.nl@$GITHUB_SHA"
-
-      - name: Push naar productie
+      - name: 📩 Push naar productie
         if: github.ref == 'refs/heads/master'
         working-directory: productie
         run: |
+          git config user.name "PubCie"
+          git config user.email "pubcie@csrdelft.nl"
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_RUN_NUMBER van csrdelft/csrdelft.nl@$GITHUB_SHA"
           git push --force --quiet --set-upstream origin master
