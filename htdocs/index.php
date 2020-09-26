@@ -24,13 +24,7 @@ HTML;
 }
 
 /** @var Kernel $kernel */
-require __DIR__ . '/../config/bootstrap.php';
-
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
-$kernel->boot();
-$container = $kernel->getContainer();
-
-\CsrDelft\common\ContainerFacade::init($container);
+$kernel = require dirname(__DIR__) . '/lib/configuratie.include.php';
 
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);

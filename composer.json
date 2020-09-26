@@ -53,8 +53,7 @@
 		"symfony/mime": "^5.0",
 		"symfony/security-bundle": "^5.0",
 		"symfony/yaml": "^5.0",
-		"sentry/sentry-symfony": "^3.5",
-		"symfony/panther": "^0.7.1"
+		"sentry/sentry-symfony": "^3.5"
 	},
 	"config": {
 		"platform": {
