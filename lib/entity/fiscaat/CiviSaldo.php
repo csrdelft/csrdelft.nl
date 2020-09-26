@@ -74,11 +74,11 @@ class CiviSaldo implements DataTableEntry, DisplayEntity {
 		return $this->getWeergave();
 	}
 
-	function getId() {
+	public function getId() {
 		return $this->uid;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		return ProfielRepository::existsUid($this->uid) ? ProfielRepository::getNaam($this->uid, 'volledig') : $this->naam;
 	}
 }

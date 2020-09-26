@@ -55,7 +55,7 @@ class DocumentCategorie implements ISelectEntity, DisplayEntity {
 		return $this->id;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		return $this->naam ?? '';
 	}
 }

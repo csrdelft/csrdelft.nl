@@ -44,12 +44,12 @@ class LayoutTwigExtension extends AbstractExtension
 		];
 	}
 
-	function csr_breadcrumbs($breadcrumbs)
+	public function csr_breadcrumbs($breadcrumbs)
 	{
 		return $this->menuItemRepository->renderBreadcrumbs($breadcrumbs);
 	}
 
-	function get_breadcrumbs($name)
+	public function get_breadcrumbs($name)
 	{
 		return $this->menuItemRepository->getBreadcrumbs($name);
 	}
@@ -59,7 +59,7 @@ class LayoutTwigExtension extends AbstractExtension
 	 * @param bool $root
 	 * @return MenuItem
 	 */
-	function get_menu($name, $root = false)
+	public function get_menu($name, $root = false)
 	{
 		if ($root) {
 			return $this->menuItemRepository->getMenuRoot($name);

@@ -99,7 +99,7 @@ class CorveeFunctie implements ISelectEntity, DisplayEntity {
 		return $this->functie_id;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		return $this->naam ?? '';
 	}
 }

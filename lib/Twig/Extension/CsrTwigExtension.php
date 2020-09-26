@@ -80,7 +80,7 @@ class CsrTwigExtension extends AbstractExtension
 		return (new CsrfField($this->csrfService->generateToken($path, $method)))->toString();
 	}
 
-	function csrfMetaTag()
+	public function csrfMetaTag()
 	{
 		$token = $this->csrfService->generateToken('', 'POST');
 		return '<meta property="X-CSRF-ID" content="' . htmlentities($token->getId()) . '" /><meta property="X-CSRF-VALUE" content="' . htmlentities($token->getValue()) . '" />';

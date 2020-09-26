@@ -34,11 +34,13 @@ class Configurator
 		return escape_ical($string);
 	}
 
-	function escape_xml($twig, $string, $charset) {
+	public function escape_xml($twig, $string, $charset)
+	{
 		return htmlspecialchars($string, ENT_XML1, 'UTF-8');
 	}
 
-	function escape_mail($twig, $string, $charset) {
+	public function escape_mail($twig, $string, $charset)
+	{
 		return $string;
 	}
 }

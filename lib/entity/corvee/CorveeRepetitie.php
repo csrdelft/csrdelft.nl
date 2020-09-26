@@ -115,11 +115,11 @@ class CorveeRepetitie implements DisplayEntity {
 		}
 	}
 
-	function getId() {
+	public function getId() {
 		return $this->crv_repetitie_id;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		if ($this->corveeFunctie) {
 			return $this->corveeFunctie->naam . ' ' . $this->getDagVanDeWeekText() . ' ' . $this->getPeriodeInDagenText();
 		} else {

@@ -252,7 +252,7 @@ class ForumDelenRepository extends AbstractRepository {
 		return $gevonden_draden;
 	}
 
-	function laatstGewijzigd($posts) {
+	public function laatstGewijzigd($posts) {
 		return max(array_map(function (ForumPost $post) {
 			return $post->laatst_gewijzigd;
 		}, $posts));
