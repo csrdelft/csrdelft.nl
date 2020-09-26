@@ -93,6 +93,8 @@ jobs:
           PANTHER_CHROME_ARGUMENTS: "--disable-dev-shm-usage"
           PANTHER_CHROME_DRIVER_BINARY: "/usr/bin/chromedriver"
           PANTHER_NO_SANDBOX: "1"
+          CSR_ROOT: "http://127.0.0.1:9080"
+          DATABASE_URL: "mysql://root@127.0.0.1:3306/csrdelft_test"
         run: php bin/phpunit
 
   deploy:
