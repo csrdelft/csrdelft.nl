@@ -47,6 +47,49 @@ jobs:
           name: js
           path: htdocs/dist
 
+  validate_schema:
+    name: Valideer het database schema
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 💤 Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
+
+      - uses: getong/mariadb-action@v1.1
+        with:
+          mariadb version: "10.3"
+          mysql root password: ""
+
+      - uses: actions/checkout@v2
+
+      - name: 🗃 Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-dev-
+
+      - name: Install Composer packages
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install
+
+      - name: 💽 Setup database
+        run: |
+          php bin/console doctrine:database:create -n
+          php bin/console doctrine:migrations:migrate -n
+          php bin/console doctrine:fixtures:load -n
+
+      - name: Valideer schema
+        id: validate-schema
+        continue-on-error: true
+        run: php bin/console doctrine:schema:validate
+
+      - name: Dump schema SQL
+        if: steps.validate-schema.outcome == 'failure'
+        run: php bin/console doctrine:schema:update --dump-sql
+
   test:
     name: Voer tests uit
     runs-on: ubuntu-latest
@@ -89,7 +132,13 @@ jobs:
           php bin/console doctrine:fixtures:load -n
 
       - name: Valideer schema
+        id: validate-schema
+        continue-on-error: true
         run: php bin/console doctrine:schema:validate
+
+      - name: Dump schema SQL
+        if: steps.validate-schema.outcome == 'failure'
+        run php bin/console doctrine:schema:update --dump-sql
 
       - name: 🧪 Run PhpUnit
         env:
