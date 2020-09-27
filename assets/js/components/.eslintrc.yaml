@@ -1,0 +1,10 @@
+# In deze map bevinden zich alleen maar .vue bestanden
+---
+parser: vue-eslint-parser
+parserOptions:
+  parser: "@typescript-eslint/parser"
+extends:
+  - eslint:recommended
+  - plugin:vue/recommended
+  - plugin:@typescript-eslint/eslint-recommended
+  - plugin:@typescript-eslint/recommended

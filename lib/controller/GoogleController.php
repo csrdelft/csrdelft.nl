@@ -40,12 +40,18 @@ class GoogleController extends AbstractController {
 			$client = GoogleSync::createGoogleCLient();
 			$client->fetchAccessTokenWithAuthCode($code);
 
-			$googleToken = new GoogleToken();
-			$googleToken->uid = $this->getUid();
-			$googleToken->token = $client->getRefreshToken();
-
+			$existingToken = $this->googleTokenModel->findOneBy(['uid' => $this->getUid()]);
 			$manager = $this->getDoctrine()->getManager();
-			$manager->persist($googleToken);
+
+			if (!$existingToken) {
+				$googleToken = new GoogleToken();
+				$googleToken->uid = $this->getUid();
+				$googleToken->token = $client->getRefreshToken();
+				$manager->persist($googleToken);
+			} else {
+				$existingToken->token = $client->getRefreshToken();
+			}
+
 			$manager->flush();
 
 			return $this->csrRedirect(urldecode($state));

@@ -8,6 +8,7 @@ use CsrDelft\entity\SavedQueryResult;
 use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\SavedQueryContent;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Deze methode kan resultaten van query's die in de database staan printen in een
@@ -59,7 +60,11 @@ class BbQuery extends BbTag {
 		$this->readMainArgument($arguments);
 		$this->content = (int)$this->content;
 		$this->assertId($this->content);
-		$this->query = $this->savedQueryRepository->loadQuery($this->content);
+		try {
+			$this->query = $this->savedQueryRepository->loadQuery($this->content);
+		} catch (AccessDeniedException $ex) {
+			throw new BbException('[query] Geen geldige query');
+		}
 	}
 
 	/**

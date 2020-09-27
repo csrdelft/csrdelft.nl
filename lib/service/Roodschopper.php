@@ -15,6 +15,7 @@ namespace CsrDelft\service;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Mail;
+use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
@@ -71,6 +72,9 @@ h.t. Fiscus.';
 		return $leden;
 	}
 
+	/**
+	 * @return CiviSaldo[]
+	 */
 	public function getSaldi() {
 		if ($this->doelgroep == 'oudleden') {
 			$status = LidStatus::getFiscaalOudlidLike();

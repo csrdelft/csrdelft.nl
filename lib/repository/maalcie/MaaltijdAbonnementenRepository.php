@@ -166,7 +166,7 @@ class MaaltijdAbonnementenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @return bool|mixed
+	 * @return MaaltijdAbonnement[][]
 	 * @throws Throwable
 	 */
 	public function getAbonnementenVanNovieten() {

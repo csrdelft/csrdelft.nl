@@ -1,0 +1,8 @@
+# Gecachede node_modules
+node_modules
+# Git map van de oude repo
+.git
+# Alleen /assets excluden
+/assets
+# Git modules
+.gitmodules

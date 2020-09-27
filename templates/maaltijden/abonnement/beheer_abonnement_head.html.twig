@@ -1,0 +1,21 @@
+<thead>
+<tr>
+	<th class="text-bottom">Lid</th>
+	{% for repetitie in repetities %}
+		<th class="{{ cycle(['rowColor0', 'rowColor1'], loop.index) }}" style="width: 30px;">
+			<div style="width: 28px;">
+				<a
+					href="{{ url('csrdelft_maalcie_maaltijdrepetities_beheer', {mlt_repetitie_id: repetitie.mlt_repetitie_id}) }}"
+					title="Wijzig maaltijdrepetitie" class="btn popup">
+					{{ icon("calendar_edit") }}
+				</a>
+			</div>
+			<div style="width: 26px; height: 140px;">
+				<div class="vertical niet-dik" style="position: relative; top: 120px;">
+					<nobr>{{ repetitie.standaard_titel }}</nobr>
+				</div>
+			</div>
+		</th>
+	{% endfor %}
+</tr>
+</thead>

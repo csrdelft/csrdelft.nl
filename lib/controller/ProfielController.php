@@ -36,17 +36,15 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
 use CsrDelft\view\fotoalbum\FotoBBView;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\profiel\ExternProfielForm;
 use CsrDelft\view\profiel\InschrijfLinkForm;
 use CsrDelft\view\profiel\ProfielForm;
-use CsrDelft\view\renderer\TemplateView;
-use CsrDelft\view\response\VcardResponse;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -107,7 +105,6 @@ class ProfielController extends AbstractController {
 	}
 
 	/**
-	 * @param Profiel $profiel
 	 * @param BesturenRepository $besturenRepository
 	 * @param CommissiesRepository $commissiesRepository
 	 * @param WerkgroepenRepository $werkgroepenRepository
@@ -127,9 +124,9 @@ class ProfielController extends AbstractController {
 	 * @param FotoTagsRepository $fotoTagsRepository
 	 * @param CorveeKwalificatiesRepository $corveeKwalificatiesRepository
 	 * @param MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository
-	 * @return TemplateView
+	 * @param Profiel|null $profiel
+	 * @return Response
 	 * @throws Throwable
-	 *
 	 * @Route("/profiel/{uid}", methods={"GET"}, defaults={"uid": null}, requirements={"uid": ".{4}"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
@@ -167,7 +164,7 @@ class ProfielController extends AbstractController {
 			}
 		}
 
-		return view('profiel.profiel', [
+		return $this->render('profiel/profiel.html.twig', [
 			'profiel' => $profiel,
 			'besturen' => $besturenRepository->getGroepenVoorLid($profiel->uid),
 			'commissies' => $commissiesRepository->getGroepenVoorLid($profiel->uid),
@@ -196,7 +193,7 @@ class ProfielController extends AbstractController {
 	 * @param $lidjaar
 	 * @param $status
 	 * @param EntityManagerInterface $em
-	 * @return TemplateView|RedirectResponse
+	 * @return RedirectResponse|Response
 	 * @Route("/profiel/{lidjaar}/nieuw/{status}", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
 	 * @CsrfUnsafe()
@@ -285,7 +282,7 @@ class ProfielController extends AbstractController {
 
 	/**
 	 * @param $uid
-	 * @return TemplateView|RedirectResponse
+	 * @return RedirectResponse|Response
 	 * @Route("/profiel/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
@@ -302,7 +299,7 @@ class ProfielController extends AbstractController {
 	/**
 	 * @Route("/inschrijflink", methods={"GET", "POST"}, name="inschrijflink")
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
-	 * @return TemplateView
+	 * @return Response
 	 */
 	public function externInschrijfLink() {
 		$form = new InschrijfLinkForm();
@@ -322,7 +319,7 @@ class ProfielController extends AbstractController {
 			$form = new InschrijfLinkForm();
 		}
 
-		return view('extern-inschrijven.link', [
+		return $this->render('extern-inschrijven/link.html.twig', [
 			'link' => $link,
 			'form' => $form
 		]);
@@ -334,15 +331,18 @@ class ProfielController extends AbstractController {
 	 * @CsrfUnsafe()
 	 * @param string $pre
 	 * @param EntityManagerInterface $em
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @throws ConnectionException
 	 */
 	public function externInschrijfformulier(string $pre, EntityManagerInterface $em) {
 		if (isDatumVoorbij('2020-08-26 00:00:00')) {
-			return view('extern-inschrijven.tekstpagina', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
+			return $this->render('extern-inschrijven/tekstpagina.html.twig', [
+				'titel' => 'C.S.R. Delft - Inschrijven',
+				'content' => '
 				<h1 class="Titel">Inschrijvingen gesloten</h1>
 				<p>Neem contact op met <a href="mailto:novcie@csrdelft.nl">novcie@csrdelft.nl</a></p>
-			']);
+			'
+			]);
 		}
 
 		if ($em->getFilters()->isEnabled('verbergNovieten')) {
@@ -412,18 +412,20 @@ class ProfielController extends AbstractController {
 			}
 
 			if ($succes) {
-				return view('extern-inschrijven.tekstpagina', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => '
+				return $this->render('extern-inschrijven/tekstpagina.html.twig', [
+					'titel' => 'C.S.R. Delft - Inschrijven',
+					'content' => '
 					<h1 class="Titel">Bedankt voor je inschrijving!</h1>
 					<p>De NovCie neemt z.s.m. contact met je op.</p>
 				']);
 			}
 		}
 
-		return view('extern-inschrijven.inschrijven', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => $form]);
+		return $this->render('extern-inschrijven/inschrijven.html.twig', ['titel' => 'C.S.R. Delft - Inschrijven', 'content' => $form]);
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/profiel/voorkeuren", methods={"GET"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
@@ -488,14 +490,14 @@ class ProfielController extends AbstractController {
 
 	/**
 	 * @param null $uid
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/profiel/{uid}/stamboom", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function stamboom($uid = null) {
 		$profiel = $uid ? $this->profielRepository->get($uid) : $this->getProfiel();
 
-		return view('profiel.stamboom', [
+		return $this->render('profiel/stamboom.html.twig', [
 			'profiel' => $profiel,
 		]);
 	}
@@ -545,24 +547,18 @@ class ProfielController extends AbstractController {
 			throw new NotFoundHttpException();
 		}
 
-		return $this->render('profiel/vcard.ical.twig', ['profiel' => $profiel]);
+		$response = new Response(null, 200, ['Content-Type' => 'text/x-vcard']);
+
+		return $this->render('profiel/vcard.ical.twig', ['profiel' => $profiel], $response);
 	}
 
 	/**
 	 * @param $uid
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/profiel/{uid}/kaartje", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
 	public function kaartje($uid) {
-		return view('profiel.kaartje', ['profiel' => $this->profielRepository->get($uid)]);
-	}
-
-	public function test() {
-		return $this->render('default.html.twig', [
-			'content' => $this->renderView('user/user.html.twig', [
-				'user' => $this->getProfiel()
-			])
-		]);
+		return $this->render('profiel/kaartje.html.twig', ['profiel' => $this->profielRepository->get($uid)]);
 	}
 }

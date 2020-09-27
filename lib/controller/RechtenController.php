@@ -9,9 +9,9 @@ use CsrDelft\repository\security\AccessRepository;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\RechtenForm;
 use CsrDelft\view\RechtenTable;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -35,7 +35,7 @@ class RechtenController extends AbstractController {
 	/**
 	 * @param null $environment
 	 * @param null $resource
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"GET"}, defaults={"environment"=null,"resource"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */

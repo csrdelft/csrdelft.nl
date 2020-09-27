@@ -33,6 +33,10 @@ class BbUrl extends BbTag {
 		}
 	}
 
+	public function renderPlain() {
+		return $this->content . " (" . $this->url . ")";
+	}
+
 	public function renderLight() {
 		return BbHelper::lightLinkInline($this->env, 'url', $this->url, $this->content);
 	}

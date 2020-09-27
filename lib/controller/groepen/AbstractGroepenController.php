@@ -39,13 +39,13 @@ use CsrDelft\view\groepen\leden\GroepOmschrijvingView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -243,7 +243,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @param Request $request
 	 * @param null $id
 	 * @param null $soort
-	 * @return GroepForm|GroepPreviewForm|TemplateView
+	 * @return GenericDataTableResponse|GroepForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -255,7 +255,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 * @param Request $request
 	 * @param null $id
 	 * @param null $soort
-	 * @return GenericDataTableResponse|GroepForm|TemplateView
+	 * @return GenericDataTableResponse|GroepForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -347,7 +347,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	/**
 	 * @param Request $request
 	 * @param null $id
-	 * @return GenericDataTableResponse|GroepForm|TemplateView
+	 * @return GenericDataTableResponse|GroepForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
@@ -430,7 +430,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$response = [];
 			/** @var AbstractGroep $groep */
 			$groep = $this->repository->retrieveByUUID($id);
-			if ($groep and $groep->mag(AccessAction::Opvolging)) {
+			if ($groep && $groep->mag(AccessAction::Opvolging)) {
 				$this->changeLogRepository->log($groep, 'familie', $groep->familie, $values['familie']);
 				$this->changeLogRepository->log($groep, 'status', $groep->status, $values['status']);
 				$groep->familie = $values['familie'];
@@ -461,7 +461,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$converteer = get_class($model) !== get_class($this->repository);
 			$response = [];
 			$groep = $this->repository->retrieveByUUID($id);
-			if ($groep and $groep->mag(AccessAction::Wijzigen)) {
+			if ($groep && $groep->mag(AccessAction::Wijzigen)) {
 				if ($converteer) {
 					$this->changeLogRepository->log($groep, 'class', get_class($groep), $model->entityClass);
 					$nieuw = $model->converteer($groep, $this->repository, $values['soort']);
@@ -492,7 +492,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$response = [];
 		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
-		if ($groep and property_exists($groep, 'aanmelden_tot') && date_create_immutable() <= $groep->aanmelden_tot && $groep->mag(AccessAction::Wijzigen)) {
+		if ($groep && property_exists($groep, 'aanmelden_tot') && date_create_immutable() <= $groep->aanmelden_tot && $groep->mag(AccessAction::Wijzigen)) {
 			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, date_create_immutable());
 			$groep->aanmelden_tot = date_create_immutable();
 			$this->repository->update($groep);
@@ -504,7 +504,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function voorbeeld($id) {
 		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
-		if (!$groep or !$groep->mag(AccessAction::Bekijken)) {
+		if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
 			throw $this->createAccessDeniedException();
 		}
 		return new GroepPreviewForm($groep);
@@ -666,7 +666,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			throw $this->createAccessDeniedException();
 		}
 
-		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken');
+		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken/' . $lid->uid);
 
 		if ($form->validate()) {
 			$this->changeLogRepository->logChanges($form->diff());
@@ -722,7 +722,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groep = $this->repository->get($id);
 
 		// Vind de groep uit deze familie met het laatste eind_moment
-		$ot_groep_statement = $this->repository->findOneBy(["familie" => $groep->familie, 'status' => 'ot'], ['eind_moment', 'DESC']);
+		$ot_groep_statement = $this->repository->findOneBy(["familie" => $groep->familie, 'status' => 'ot'], ['eind_moment' => 'DESC']);
 
 		if ($ot_groep_statement) {
 			throw new CsrGebruikerException('Geen o.t. groep gevonden');
@@ -735,7 +735,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			if ($ot_groep->getLid($uid)) {
 				throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
 			}
-			if (!$groep->mag(AccessAction::Afmelden) and !$groep->mag(AccessAction::Beheren) and !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
+			if (!$groep->mag(AccessAction::Afmelden) && !$groep->mag(AccessAction::Beheren) && !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
 				throw new CsrGebruikerException();
 			}
 			$em->transactional(function () use ($groep, $ot_groep, $uid, $em) {

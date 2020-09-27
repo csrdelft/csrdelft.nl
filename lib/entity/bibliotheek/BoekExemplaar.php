@@ -99,13 +99,6 @@ class BoekExemplaar {
 		return $this->isEigenaar();
 	}
 
-	/**
-	 * @return Boek
-	 */
-	public function getBoek() {
-		return $this->boek;
-	}
-
 	public function magBekijken() {
 		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}

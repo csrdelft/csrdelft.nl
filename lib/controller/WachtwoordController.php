@@ -13,11 +13,10 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\WachtwoordResetAuthenticator;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -50,7 +49,7 @@ class WachtwoordController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/wachtwoord/wijzigen", methods={"GET", "POST"}, name="wachtwoord_wijzigen")
 	 * @Route("/wachtwoord/verlopen", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
@@ -74,12 +73,12 @@ class WachtwoordController extends AbstractController {
 	/**
 	 * Wordt opgevangen door WachtwoordResetAuthenticator zodra wachtwoord_reset_token in de sessie staat.
 	 *
-	 * @see WachtwoordResetAuthenticator
-	 *
 	 * @param Request $request
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/wachtwoord/reset", name="wachtwoord_reset")
 	 * @Auth(P_PUBLIC)
+	 *@see WachtwoordResetAuthenticator
+	 *
 	 */
 	public function reset(Request $request) {
 		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
@@ -101,17 +100,21 @@ class WachtwoordController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		}
 
-		return $this->render('default.html.twig', [
-			'content' => new WachtwoordWijzigenForm($account, $this->generateUrl('wachtwoord_reset'), false)
-		]);
+		$form = new WachtwoordWijzigenForm($account, $this->generateUrl('wachtwoord_reset'), false);
+
+		if ($form->isPosted()) {
+			$form->validate();
+		}
+
+		return $this->render('default.html.twig', ['content' => $form]);
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/wachtwoord/vergeten", methods={"GET", "POST"})
-	 * @Route("/wachtwoord/aanvragen", methods={"GET", "POST"})
+	 * @Route("/wachtwoord/aanvragen", methods={"GET", "POST"}, name="wachtwoord_aanvragen")
 	 * @Auth(P_PUBLIC)
 	 */
 	public function vergeten() {
@@ -145,10 +148,11 @@ class WachtwoordController extends AbstractController {
 		$profiel = $account->profiel;
 
 		$url = CSR_ROOT . "/wachtwoord/reset?token=" . rawurlencode($token[0]);
-		$bericht = "Geachte " . $profiel->getNaam('civitas') .
-			",\n\nU heeft verzocht om uw wachtwoord opnieuw in te stellen. Dit is mogelijk met de onderstaande link tot " . date_format_intl($token[1], DATETIME_FORMAT) .
-			".\n\n[url=" . $url .
-			"]Wachtwoord instellen[/url].\n\nAls dit niet uw eigen verzoek is kunt u dit bericht negeren.\n\nMet amicale groet,\nUw PubCie";
+		$bericht = $this->renderView('mail/bericht/wachtwoord_vergeten.mail.twig', [
+			'naam' => $profiel->getNaam('civitas'),
+			'mogelijkTot' => date_format_intl($token[1], DATETIME_FORMAT),
+			'url' => $url,
+		]);
 		$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
 		$mail = new Mail(array($account->email => $emailNaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
 		$mail->send();

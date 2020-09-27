@@ -18,7 +18,7 @@ class LedenMemoryZijbalkView implements View {
 		$this->titel = $titel;
 	}
 
-	function getTitel() {
+	public function getTitel() {
 		return 'Topscores ' . $this->titel;
 	}
 
@@ -26,11 +26,11 @@ class LedenMemoryZijbalkView implements View {
 		return null;
 	}
 
-	function getModel() {
+	public function getModel() {
 		return $this->scores;
 	}
 
-	function view() {
+	public function view() {
 		echo '<div id="zijbalk_ledenmemory_topscores"><div class="zijbalk-kopje"><a href="/forum/onderwerp/8017">';
 		echo $this->getTitel();
 		echo '</a></div>';

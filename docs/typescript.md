@@ -1,6 +1,6 @@
 # Typescript
 
-De Typescript van de stek wordt door [babel](https://babeljs.io/) getrokken voordat de eindegbruiker het ziet. Hierdoor is het mogelijk om je code in es6 te schrijven en typescript te gebruiken. Kijk in [Frontend](frontend.md) voor meer info over deze stap.
+De Typescript van de stek wordt door de TypeScript compiler getrokken voordat de eindegbruiker het ziet. Hierdoor is het mogelijk om je code in es6 te schrijven en typescript te gebruiken. Kijk in [Frontend](frontend.md) voor meer info over deze stap.
 
 Het bestand `app.ts` is het aanspreekpunt van de Typescript, vanaf hier wordt alles ingeladen. Er zijn nog een aantal andere losse bestanden die worden gebruikt om de javascript op te splitsen, kijk in `webpack.config.js` voor alle javascript en sass bestanden die aanspreekpunt zijn.
 
@@ -30,7 +30,7 @@ Als je deze dynamic imports gebruikt **moet** je een `webpackChunkName` opgeven 
 Meer info is te vinden op de [Code Splitting](https://webpack.js.org/guides/code-splitting/#dynamic-imports) pagina in de webpack docs.
 
 ```javascript
-// resources/assets/js/router.js
+// assets/js/router.js
 
 import {route} from './util';
 

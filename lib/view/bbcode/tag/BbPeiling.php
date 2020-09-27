@@ -8,6 +8,7 @@ use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use Symfony\Component\Serializer\SerializerInterface;
+use Twig\Environment;
 
 /**
  * Peiling
@@ -31,10 +32,15 @@ class BbPeiling extends BbTag {
 	 * @var PeilingenRepository
 	 */
 	private $peilingenRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(SerializerInterface $serializer, PeilingenRepository $peilingenRepository) {
+	public function __construct(SerializerInterface $serializer, PeilingenRepository $peilingenRepository, Environment $twig) {
 		$this->serializer = $serializer;
 		$this->peilingenRepository = $peilingenRepository;
+		$this->twig = $twig;
 	}
 
 	public static function getTagName() {
@@ -51,9 +57,9 @@ class BbPeiling extends BbTag {
 	}
 
 	public function render() {
-		return view('peilingen.peiling', [
+		return $this->twig->render('peilingen/peiling.html.twig', [
 			'peiling' => $this->serializer->serialize($this->peiling, 'json', ['groups' => 'vue']),
-		])->getHtml();
+		]);
 	}
 
 	/**

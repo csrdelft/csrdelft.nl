@@ -8,9 +8,8 @@ use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaForm;
 use CsrDelft\view\cms\CmsPaginaView;
-use CsrDelft\view\JsonResponse;
-use CsrDelft\view\renderer\TemplateView;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -82,7 +81,7 @@ class CmsPaginaController extends AbstractController {
 	 * @Route("/pagina/bewerken/{naam}")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($naam) {
+	public function bewerken(Request $request, $naam) {
 		$pagina = $this->cmsPaginaRepository->find($naam);
 		if (!$pagina) {
 			$pagina = $this->cmsPaginaRepository->nieuw($naam);
@@ -90,7 +89,8 @@ class CmsPaginaController extends AbstractController {
 		if (!$pagina->magBewerken()) {
 			throw $this->createAccessDeniedException();
 		}
-		$form = new CmsPaginaForm($pagina); // fetches POST values itself
+		$form = $this->createFormulier(CmsPaginaForm::class, $pagina);
+		$form->handleRequest($request);
 		if ($form->validate()) {
 			$pagina->laatst_gewijzigd = date_create_immutable();
 			$manager = $this->getDoctrine()->getManager();
@@ -99,7 +99,7 @@ class CmsPaginaController extends AbstractController {
 			setMelding('Bijgewerkt: ' . $pagina->naam, 1);
 			return $this->redirectToRoute('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]);
 		} else {
-			return $this->render('default.html.twig', ['content' => $form]);
+			return $this->render('default.html.twig', ['content' => $form->createView()]);
 		}
 	}
 
@@ -112,7 +112,7 @@ class CmsPaginaController extends AbstractController {
 	public function verwijderen($naam) {
 		/** @var CmsPagina $pagina */
 		$pagina = $this->cmsPaginaRepository->find($naam);
-		if (!$pagina OR !$pagina->magVerwijderen()) {
+		if (!$pagina || !$pagina->magVerwijderen()) {
 			throw $this->createAccessDeniedException();
 		}
 		$manager = $this->getDoctrine()->getManager();

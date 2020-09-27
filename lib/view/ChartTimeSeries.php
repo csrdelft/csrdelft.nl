@@ -13,7 +13,9 @@ class ChartTimeSeries extends JsonResponse {
 		foreach ($this->model as $label => $data) {
 			$entry = [];
 			foreach ($data as $row) {
-				if ($row['timestamp'] < $minimum) $minimum = (int)$row['timestamp'];
+				if ($row['timestamp'] < $minimum) {
+					$minimum = (int)$row['timestamp'];
+				}
 				$entry[] = ['x' => date('Y-m-d', $row['timestamp']), 'y' => (int)$row['count']];
 			}
 			$array[] = [

@@ -2,7 +2,7 @@ const path = require('path')
 
 const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
-const contextPath = path.resolve(__dirname, 'resources/assets');
+const contextPath = path.resolve(__dirname, 'assets');
 
 module.exports = (env, argv) => ({
 	mode: 'development',
@@ -19,23 +19,23 @@ module.exports = (env, argv) => ({
 		'fxminion': './js/entry/fxminion.ts',
 		'fxclippy': './js/entry/fxclippy.ts',
 		'fxspace': './js/entry/fxspace.ts',
-		'extern': ['./js/entry/extern.ts', './sass/extern.scss'],
-		'bredeletters': './sass/bredeletters.scss',
-		'common': './sass/common.scss',
-		'extern-forum': './sass/extern-forum.scss',
-		'extern-fotoalbum': './sass/extern-fotoalbum.scss',
-		'extern-owee': ['./js/entry/extern-owee.ts', './sass/extern-owee.scss'],
-		'maaltijdlijst': './sass/maaltijdlijst.scss',
-		'thema-civitasia': './sass/thema/civitasia.scss',
-		'thema-dies': './sass/thema/dies.scss',
-		'thema-donker': './sass/thema/donker.scss',
-		'thema-lustrum': './sass/thema/lustrum.scss',
-		'thema-normaal': './sass/thema/normaal.scss',
-		'thema-owee': './sass/thema/owee.scss',
-		'thema-roze': './sass/thema/roze.scss',
-		'thema-koevoet': './sass/thema/Koevoet.scss',
-		'thema-sineregno': './sass/thema/sineregno.scss',
-		'effect-civisaldo': './sass/effect/civisaldo.scss',
+		'extern': ['./js/entry/extern.ts', './scss/extern.scss'],
+		'bredeletters': './scss/bredeletters.scss',
+		'common': './scss/common.scss',
+		'extern-forum': './scss/extern-forum.scss',
+		'extern-fotoalbum': './scss/extern-fotoalbum.scss',
+		'extern-owee': ['./js/entry/extern-owee.ts', './scss/extern-owee.scss'],
+		'maaltijdlijst': './scss/maaltijdlijst.scss',
+		'thema-civitasia': './scss/thema/civitasia.scss',
+		'thema-dies': './scss/thema/dies.scss',
+		'thema-donker': './scss/thema/donker.scss',
+		'thema-lustrum': './scss/thema/lustrum.scss',
+		'thema-normaal': './scss/thema/normaal.scss',
+		'thema-owee': './scss/thema/owee.scss',
+		'thema-roze': './scss/thema/roze.scss',
+		'thema-koevoet': './scss/thema/Koevoet.scss',
+		'thema-sineregno': './scss/thema/sineregno.scss',
+		'effect-civisaldo': './scss/effect/civisaldo.scss',
 	},
 	output: {
 		// De map waarin alle bestanden geplaatst worden.
@@ -95,45 +95,30 @@ module.exports = (env, argv) => ({
 				],
 				use: 'eslint-loader',
 			},
-			// Verwerk .js bestanden met babel, dit zorgt ervoor dat alle nieuwe foefjes van javascript gebruikt kunnen worden
-			// terwijl we nog wel oudere browsers ondersteunen.
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: [
-					'cache-loader',
-					{
-						loader: 'babel-loader',
-						options: {
-							presets: ['@babel/preset-env'],
-							plugins: [
-								'@babel/syntax-dynamic-import',
-								'@babel/plugin-proposal-class-properties',
-								'@babel/plugin-transform-runtime',
-								['@babel/plugin-proposal-decorators', {decoratorsBeforeExport: true}],
-							],
-						},
-					},
-				],
-			},
 			// Verwerk .ts (typescript) bestanden en maak er javascript van.
 			{
 				test: /\.ts$/,
-				use: {
-					loader: 'ts-loader',
-					options: { appendTsSuffixTo: [/\.vue$/] }
-				},
+				use: [
+					'cache-loader',
+					{
+						loader: 'ts-loader',
+						options: {appendTsSuffixTo: [/\.vue$/]}
+					}
+				],
 			},
 			{
 				test: /\.vue$/,
-				use: {
-					loader: 'vue-loader',
-					options: {
-						loaders: {
-							ts: 'ts-loader',
+				use: [
+					'cache-loader',
+					{
+						loader: 'vue-loader',
+						options: {
+							loaders: {
+								ts: 'ts-loader',
+							},
 						},
-					},
-				},
+					}
+				],
 			},
 			// Verwerk sass bestanden.
 			// `sass-loader` >
@@ -142,9 +127,6 @@ module.exports = (env, argv) => ({
 			// Zorg ervoor dat verwijzingen naar externe bestanden kloppen (sass was meerdere bestanden, css één)
 			// `css-loader` >
 			// Trek alle afbeeldingen/fonts waar naar verwezen wordt naar de dist/images map
-			// `postcss-loader` >
-			// Haal een autoprefixer over de css, deze zorgt ervoor dat eventuele vendor-prefixes (-moz-, -webkit-)
-			// worden toegevoegd.
 			// `MiniCssExtractPlugin` >
 			// Normaal slaat webpack css op in javascript bestanden, zodat je ze makkelijk specifiek kan opvragen
 			// hier zorgen we ervoor dat de css eruit wordt getrokken en in een los .css bestand wordt gestopt.

@@ -9,9 +9,9 @@ use CsrDelft\entity\corvee\CorveeVoorkeur;
 use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\maalcie\forms\EetwensForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,13 +33,13 @@ class MijnVoorkeurenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee/voorkeuren", methods={"GET"})
 	 * @Auth(P_CORVEE_IK)
 	 */
 	public function mijn() {
 		$voorkeuren = $this->corveeVoorkeurenRepository->getVoorkeurenVoorLid($this->getUid(), true);
-		return view('maaltijden.voorkeuren.mijn_voorkeuren', [
+		return $this->render('maaltijden/voorkeuren/mijn_voorkeuren.html.twig', [
 			'voorkeuren' => $voorkeuren,
 			'eetwens' => new EetwensForm(),
 		]);
@@ -47,7 +47,7 @@ class MijnVoorkeurenController extends AbstractController {
 
 	/**
 	 * @param CorveeRepetitie $repetitie
-	 * @return TemplateView
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/corvee/voorkeuren/inschakelen/{crv_repetitie_id}", methods={"POST"})
@@ -60,7 +60,7 @@ class MijnVoorkeurenController extends AbstractController {
 
 		$this->corveeVoorkeurenRepository->inschakelenVoorkeur($voorkeur);
 
-		return view('maaltijden.voorkeuren.mijn_voorkeur_veld', [
+		return $this->render('maaltijden/voorkeuren/mijn_voorkeur_veld.html.twig', [
 			'uid' => $voorkeur->uid,
 			'crv_repetitie_id' => $voorkeur->crv_repetitie_id,
 		]);
@@ -68,7 +68,7 @@ class MijnVoorkeurenController extends AbstractController {
 
 	/**
 	 * @param $crv_repetitie_id
-	 * @return TemplateView
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/corvee/voorkeuren/uitschakelen/{crv_repetitie_id}", methods={"POST"})
@@ -78,7 +78,7 @@ class MijnVoorkeurenController extends AbstractController {
 		$voorkeur = $this->corveeVoorkeurenRepository->getVoorkeur($crv_repetitie_id, $this->getUid());
 		$this->corveeVoorkeurenRepository->uitschakelenVoorkeur($voorkeur);
 
-		return view('maaltijden.voorkeuren.mijn_voorkeur_veld', [
+		return $this->render('maaltijden/voorkeuren/mijn_voorkeur_veld.html.twig', [
 			'uid' => $voorkeur->uid,
 			'crv_repetitie_id' => $voorkeur->crv_repetitie_id,
 		]);

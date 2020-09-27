@@ -108,7 +108,7 @@ class FormulierBuilder {
 	 */
 	public function findByName($fieldName) {
 		foreach ($this->fields as $field) {
-			if (($field instanceof InputField or $field instanceof FileField) and $field->getName() === $fieldName) {
+			if (($field instanceof InputField || $field instanceof FileField) && $field->getName() === $fieldName) {
 				return $field;
 			}
 		}

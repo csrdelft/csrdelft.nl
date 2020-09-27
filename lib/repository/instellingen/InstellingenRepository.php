@@ -55,7 +55,7 @@ class InstellingenRepository extends AbstractRepository {
 	 * @return Instelling
 	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
-	protected function getInstelling($module, $id) {
+	public function getInstelling($module, $id) {
 		$entity = $this->findOneBy(['module' => $module, 'instelling' => $id]);
 		if ($this->hasKey($module, $id) && $entity != null) {
 			return $entity;

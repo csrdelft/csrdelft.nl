@@ -28,18 +28,6 @@ class BbImg extends BbTag {
 		return 'img';
 	}
 
-	public function renderLight() {
-		$url = $this->content;
-		$url = filter_var($url, FILTER_SANITIZE_URL);
-		if (!$url || (!url_like($url) && !startsWith($url, '/plaetjes/'))) {
-			return $url;
-		}
-
-		return <<<HTML
-			<a class="bb-link-image bb-tag-img" href="{$url}"></a>
-HTML;
-	}
-
 	public function render() {
 		$url = $this->getSourceUrl();
 		$arguments = $this->arguments;
@@ -69,7 +57,7 @@ HTML;
 			$style .= 'height: ' . ((int)$arguments['h']) . 'px;';
 		}
 
-		if ($this->env->email_mode) {
+		if ($this->env->mode == "light") {
 			// Geef een standaard breedte op om te voorkomen dat afbeeldingen te breed worden.
 			if (!$heeftBreedte && !$heeftHoogte) {
 				$style .= 'width:500px;';

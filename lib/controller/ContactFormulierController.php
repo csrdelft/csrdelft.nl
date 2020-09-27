@@ -35,20 +35,19 @@ class ContactFormulierController extends AbstractController {
 		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
 		$opmerking = filter_input(INPUT_POST, "opmerking", FILTER_SANITIZE_STRING);
 
-		$interesses = [];
-
-		$interesse1 = filter_input(INPUT_POST, "interesse1", FILTER_SANITIZE_STRING);
-		$interesse2 = filter_input(INPUT_POST, "interesse2", FILTER_SANITIZE_STRING);
-		$interesse3 = filter_input(INPUT_POST, "interesse3", FILTER_SANITIZE_STRING);
-		$interesse4 = filter_input(INPUT_POST, "interesse4", FILTER_SANITIZE_STRING);
-
-		if ($interesse1) array_push($interesses, $interesse1);
-		if ($interesse2) array_push($interesses, $interesse2);
-		if ($interesse3) array_push($interesses, $interesse3);
-		if ($interesse4) array_push($interesses, $interesse4);
+		$interesses = [
+			filter_input(INPUT_POST, "interesse1", FILTER_SANITIZE_STRING),
+			filter_input(INPUT_POST, "interesse2", FILTER_SANITIZE_STRING),
+			filter_input(INPUT_POST, "interesse3", FILTER_SANITIZE_STRING),
+			filter_input(INPUT_POST, "interesse4", FILTER_SANITIZE_STRING),
+		];
 
 		$interessestring = '';
-		foreach ($interesses as $interesse) $interessestring .= " * " . $interesse . "\n";
+		foreach ($interesses as $interesse) {
+			if ($interesse) {
+				$interessestring .= " * " . $interesse . "\n";
+			}
+		}
 
 		if ($achternaam || $this->bevatUrl($opmerking) || $this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
 			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
@@ -82,6 +81,7 @@ De PubCie.
 
 		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
 	}
+
 	/**
 	 * @return PlainView
 	 * @Route("/contactformulier/owee", methods={"POST"})
@@ -103,31 +103,28 @@ De PubCie.
 			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
 		}
 
+		$commissie = 'PromoCie';
+		$bestemming = [$_ENV['EMAIL_PROMOCIE'] => $commissie];
+
 		if ($type === 'lid-worden') {
 			$typeaanduiding = 'Ik wil lid worden';
-			$commissie = "NovCie";
-			$bestemming = [$_ENV['EMAIL_NOVCIE'] => $commissie];
+//			$commissie = "NovCie";
+//			$bestemming = [$_ENV['EMAIL_NOVCIE'] => $commissie];
 		} else {
 			$typeaanduiding = 'Eerst een lid spreken';
-			$commissie = "OweeCie";
-			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
+//			$commissie = "OweeCie";
+//			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
 		}
 
-		$bericht = "
-Beste $commissie,
+		$bericht = $this->renderView('mail/bericht/contactformulier.mail.twig', [
+			'telefoon' => $telefoon,
+			'typeaanduiding' => $typeaanduiding,
+			'naam' => $naam,
+			'email' => $email,
+			'commissie' => $commissie,
+		]);
 
-Het formulier op de OWee-pagina is ingevuld:
-
-Type: $typeaanduiding
-Naam: $naam
-E-mail: $email
-Telefoon: $telefoon
-
-Met vriendelijke groeten,
-De PubCie.
-";
-
-		$mail = new Mail($bestemming, "OWee formulier", $bericht);
+		$mail = new Mail($bestemming, "Lid worden formulier", $bericht);
 		$mail->setFrom($_ENV['EMAIL_PUBCIE']);
 		$mail->send();
 

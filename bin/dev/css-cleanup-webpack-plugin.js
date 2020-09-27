@@ -4,7 +4,7 @@
 class CssCleanupWebpackPlugin {
 	apply(compiler) {
 		compiler.hooks.emit.tapAsync('MiniCssExtractPluginCleanup', (compilation, callback) => {
-			const sassEntries = compilation.entries
+			const scssEntries = compilation.entries
 				.filter((e) => /scss$/.test(e.rawRequest))
 				.map((e) => (e.getChunks()).map((c) => c.name))
 				.reduce((flat, val) => flat.concat(val), []);
@@ -15,11 +15,11 @@ class CssCleanupWebpackPlugin {
 					continue;
 				}
 
-				for (const sassEntry of sassEntries) {
+				for (const scssEntry of scssEntries) {
 					// asset is js/----.js of js/blah~----~blah.js of js/blah~----.js
-					if (asset.startsWith(`js/${sassEntry}.`)
-						|| asset.indexOf(`~${sassEntry}~`) > 0
-						|| asset.indexOf(`~${sassEntry}.`) > 0) {
+					if (asset.startsWith(`js/${scssEntry}.`)
+						|| asset.includes(`~${scssEntry}~`)
+						|| asset.includes(`~${scssEntry}.`)) {
 						delete compilation.assets[asset];
 					}
 				}

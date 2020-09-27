@@ -3,7 +3,6 @@
 namespace CsrDelft\view\toestemming;
 
 use CsrDelft\entity\LidToestemming;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
 /**
@@ -15,8 +14,8 @@ class ToestemmingLijstResponse extends DataTableResponse {
     private $categorien;
 
     public function __construct($model, $categorien) {
-        parent::__construct($model);
-        $this->categorien = $categorien;
+			$this->categorien = $categorien;
+			parent::__construct($model);
     }
 
     /**
@@ -28,7 +27,7 @@ class ToestemmingLijstResponse extends DataTableResponse {
         $arr = [
             'uid' => $profiel->uid,
             'status' => $profiel->status,
-            'lid' => $profiel->getLink(),
+            'lid' => $profiel->getLink('volledig'),
         ];
 
 

@@ -17,7 +17,7 @@ services:
 
   CsrDelft\:
     resource: '../lib'
-    exclude: '../lib/{view,config,common,Kernel.php}'
+    exclude: '../lib/{common,Kernel.php}'
 
   # controllers are imported separately to make sure services can be injected
   # as action arguments even if you don't extend any base controller class
@@ -75,6 +75,10 @@ services:
   Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices: '@security.authentication.rememberme.services.persistent.main'
   CsrDelft\common\Logging\LogActivationStrategy: ~
 
+  # Voor Zijbalk in blade templates
+  CsrDelft\view\Zijbalk:
+    public: true
+
   Psr\Container\ContainerInterface: '@service_container'
 
   security:
@@ -92,7 +96,18 @@ services:
     public: true
     arguments:
       - !tagged_locator {tag: csr.formulier.type, index_by: key}
+      - '@request_stack'
       - '@CsrDelft\Component\Formulier\FormulierBuilder'
 
   CsrDelft\Twig\Configurator:
     decorates: 'twig.configurator.environment'
+
+  CsrDelft\command\SponsorAffiliateDownloadCommand:
+    arguments:
+      - '%env(SPONSOR_SL_HOST)%'
+      - '%env(SPONSOR_CLUBID)%'
+      - '%env(SPONSOR_USERAGENT)%'
+
+  CsrDelft\command\WelkomCommand:
+    arguments:
+      - '%env(EMAIL_PUBCIE)%'

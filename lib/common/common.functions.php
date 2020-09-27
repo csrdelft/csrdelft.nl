@@ -84,7 +84,15 @@ function group_by($prop, $in, $del = true) {
 	$del &= is_array($in);
 	$out = array();
 	foreach ($in as $i => $obj) {
-		$out[$obj->$prop][] = $obj; // add to array
+		if (property_exists($obj, $prop)) {
+			$key = $obj->$prop;
+		} elseif (method_exists($obj, $prop)) {
+			$key = $obj->$prop();
+		} else {
+			throw new Exception("Veld bestaat niet");
+		}
+
+		$out[$key][] = $obj; // add to array
 		if ($del) {
 			unset($in[$i]);
 		}
@@ -147,17 +155,18 @@ function getSessionMaxLifeTime() {
  * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
  */
 function redirect($url = null, $refresh = true) {
+	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
 	if (empty($url) || $url === null) {
-		$url = REQUEST_URI;
+		$url = $request->getRequestUri();
 	}
-	if (!$refresh && $url == REQUEST_URI) {
-		$url = CSR_ROOT;
+	if (!$refresh && $url == $request->getRequestUri()) {
+		$url = $_ENV['CSR_ROOT'];
 	}
-	if (!startsWith($url, CSR_ROOT)) {
+	if (!startsWith($url, $_ENV['CSR_ROOT'])) {
 		if (preg_match("/^[?#\/]/", $url) === 1) {
-			$url = CSR_ROOT . $url;
+			$url = $_ENV['CSR_ROOT'] . $url;
 		} else {
-			$url = CSR_ROOT;
+			$url = $_ENV['CSR_ROOT'];
 		}
 	}
 	header('location: ' . $url);
@@ -308,6 +317,14 @@ function external_url($url, $label) {
  */
 function isSyrinx() {
 	return 'syrinx' === php_uname('n');
+}
+
+function isCli() {
+	return php_sapi_name() == 'cli' && $_SERVER['APP_ENV'] != 'test';
+}
+
+function isCi() {
+	return getenv('CI');
 }
 
 /**
@@ -773,7 +790,13 @@ function curl_request($url, $options = []) {
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt_array($curl, $options);
-	return curl_exec($curl);
+	$resp = curl_exec($curl);
+
+	if ($resp == false) {
+		throw new Exception(curl_error($curl));
+	}
+
+	return $resp;
 }
 
 /**
@@ -941,8 +964,6 @@ function checkMimetype($filename, $mime) {
 
 /**
  * Mag de op dit moment ingelogde gebruiker $permissie?
- *
- * Korte methode voor gebruik in Blade templates.
  *
  * @param string $permission
  * @param array|null $allowedAuthenticationMethods

@@ -9,8 +9,8 @@ use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
-use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,14 +29,14 @@ class BeheerCiviBestellingController extends AbstractController {
 
 	/**
 	 * @param null $uid
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/fiscaat/bestellingen/{uid}", methods={"GET"}, defaults={"uid"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function overzicht($uid = null) {
 		$this->checkToegang($uid);
 
-		return view('fiscaat.pagina', [
+		return $this->render('fiscaat/pagina.html.twig', [
 			'titel' => 'Beheer bestellingen',
 			'view' => new CiviBestellingTable($uid)
 		]);

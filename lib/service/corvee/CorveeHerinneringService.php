@@ -9,6 +9,7 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use DateInterval;
+use Twig\Environment;
 
 /**
  * CorveeHerinneringenModel.class.php
@@ -30,11 +31,16 @@ class CorveeHerinneringService {
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, CorveeTakenRepository $corveeTakenRepository, ProfielRepository $profielRepository) {
+	public function __construct(Environment $twig, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, CorveeTakenRepository $corveeTakenRepository, ProfielRepository $profielRepository) {
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->profielRepository = $profielRepository;
+		$this->twig = $twig;
 	}
 
 	public function stuurHerinnering(CorveeTaak $taak) {
@@ -46,7 +52,6 @@ class CorveeHerinneringService {
 		$to = $taak->profiel->getEmailOntvanger();
 		$from = $_ENV['EMAIL_CC'];
 		$onderwerp = 'C.S.R. Delft corvee ' . $datum;
-		$bericht = $taak->corveeFunctie->email_bericht;
 		$eten = '';
 		if ($taak->maaltijd !== null) {
 			$aangemeld = $this->maaltijdAanmeldingenRepository->getIsAangemeld($taak->maaltijd->maaltijd_id, $taak->profiel->uid);
@@ -56,9 +61,9 @@ class CorveeHerinneringService {
 				$eten = instelling('corvee', 'mail_niet_meeeten');
 			}
 		}
+		$bericht = str_replace(['LIDNAAM', 'DATUM', 'MEEETEN'], [$lidnaam, $datum, $eten], $taak->corveeFunctie->email_bericht);
 		$mail = new Mail($to, $onderwerp, $bericht);
 		$mail->setFrom($from);
-		$mail->setPlaceholders(array('LIDNAAM' => $lidnaam, 'DATUM' => $datum, 'MEEETEN' => $eten));
 		if ($mail->send()) { // false if failed
 			if (!$mail->inDebugMode()) {
 				$this->corveeTakenRepository->updateGemaild($taak);

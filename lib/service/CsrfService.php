@@ -33,7 +33,7 @@ class CsrfService {
 	 * @param string $method
 	 * @return CsrfToken|null
 	 */
-	public function generateToken(string $path, string $method) {
+	public function generateToken($path, string $method) {
 		return $this->manager->getToken("global");
 	}
 

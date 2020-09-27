@@ -37,7 +37,7 @@ class SimpleSpamFilter {
 		return $score > 0;
 	}
 
-	static function hasOnlyLinks($str) {
+	private function hasOnlyLinks($str) {
 		// strip out all URLs from the comment
 		$str = preg_replace("'https*://(\S*)'", "", $str);
 		$str = preg_replace("'<a ([^<]*?)</a>'", "", $str);

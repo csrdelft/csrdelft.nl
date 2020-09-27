@@ -31,7 +31,7 @@ security:
         enable_csrf: true
         check_path: app_login_check
       custom_authenticators: [CsrDelft\service\security\WachtwoordResetAuthenticator]
-      lazy: true
+#      lazy: true
       provider: accounts
       entry_point: form_login
       logout:

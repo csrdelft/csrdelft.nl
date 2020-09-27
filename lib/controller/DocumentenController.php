@@ -5,18 +5,19 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
+use CsrDelft\model\entity\Bestand;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
-use CsrDelft\view\renderer\TemplateView;
 use Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -40,12 +41,12 @@ class DocumentenController extends AbstractController {
 	 * @Auth(P_DOCS_READ)
 	 */
 	public function recenttonen() {
-		return view('documenten.documenten', ['categorieen' => $this->documentCategorieRepository->findAll()]);
+		return $this->render('documenten/documenten.html.twig', ['categorien' => $this->documentCategorieRepository->findAll()]);
 	}
 
 	/**
 	 * @param Document $document
-	 * @return JsonResponse|PlainView|RedirectResponse
+	 * @return JsonResponse|PlainView
 	 * @Route("/documenten/verwijderen/{id}", methods={"POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
@@ -110,7 +111,7 @@ class DocumentenController extends AbstractController {
 
 	/**
 	 * @param DocumentCategorie $categorie
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/documenten/categorie/{id}", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
@@ -118,18 +119,23 @@ class DocumentenController extends AbstractController {
 		if (!$categorie->magBekijken()) {
 			throw $this->createAccessDeniedException('Mag deze categorie niet bekijken');
 		} else {
-			return view('documenten.categorie', ['categorie' => $categorie]);
+			return $this->render('documenten/categorie.html.twig', ['categorie' => $categorie]);
 		}
 	}
 
 	/**
+	 * @param Request $request
 	 * @param Document $document
-	 * @return TemplateView|RedirectResponse
+	 * @return Response
 	 * @Route("/documenten/bewerken/{id}", methods={"GET","POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
-	public function bewerken(Document $document) {
-		$form = new DocumentBewerkenForm($document, $this->documentCategorieRepository->getCategorieNamen());
+	public function bewerken(Request $request, Document $document) {
+		$form = $this->createFormulier(DocumentBewerkenForm::class, $document, [
+			'action' => $this->generateUrl('csrdelft_documenten_bewerken', ['id' => $document->id])
+		]);
+
+		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
 			$this->documentRepository->save($document);
@@ -138,56 +144,63 @@ class DocumentenController extends AbstractController {
 		} else {
 			return $this->render('default.html.twig', [
 				'titel' => 'Document bewerken',
-				'content' => $form,
+				'content' => $form->createView(),
 			]);
 		}
 
 	}
 
 	/**
-	 * @return TemplateView|RedirectResponse
+	 * @param Request $request
+	 * @return Response
+	 * @throws Exception
 	 * @Route("/documenten/toevoegen", methods={"GET","POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
-	public function toevoegen() {
-		$form = new DocumentToevoegenForm($this->documentCategorieRepository->getCategorieNamen());
+	public function toevoegen(Request $request) {
+		$document = new Document();
+
+		$catId = $request->query->getInt('catID');
+		if ($catId) {
+			$document->categorie = $this->getDoctrine()->getManager()->getReference(DocumentCategorie::class, $catId);
+		}
+
+		$form = $this->createFormulier(DocumentToevoegenForm::class, $document, [
+			'action' => $this->generateUrl('csrdelft_documenten_toevoegen'),
+		]);
+
+		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			/** @var Document $document */
-			$document = $form->getModel();
-
 			$document->eigenaar = $this->getUid();
 			$document->eigenaar_profiel = $this->getProfiel();
 			$document->toegevoegd = date_create_immutable();
 
-			$bestand = $form->getUploader()->getModel();
+			/** @var Bestand $bestand */
+			$bestand = $form->getField('uploader')->getModel();
 
 			$document->filename = filter_filename($bestand->filename);
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
 
-
-
 			$this->documentRepository->save($document);
 
 			try {
-			if ($document->hasFile()) {
-				$document->deleteFile();
-			}
+				if ($document->hasFile()) {
+					$document->deleteFile();
+				}
 
-			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
-			}
-			catch (Exception $exception) {
+				$form->getField('uploader')->opslaan($document->getPath(), $document->getFullFileName());
+			} catch (Exception $exception) {
 				$this->documentRepository->remove($document);
 				throw $exception;
 			}
-
 
 			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {
 			return $this->render('default.html.twig', [
 				'titel' => 'Document toevoegen',
-				'content' => $form,
+				'content' => $form->createView(),
 			]);
 		}
 	}

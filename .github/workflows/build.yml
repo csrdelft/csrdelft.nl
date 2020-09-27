@@ -1,0 +1,154 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Yarn packages
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .yarn
+            .pnp.js
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install yarn dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
+      - name: Load cache-loader cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules/.cache
+          # Uniek voor yarn.lock + alle assets
+          key: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('assets/**') }}
+          # Restore als yarn.lock niet is veranderd
+          restore-keys: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock') }}-
+
+      - name: Run yarn build
+        run: yarn run production
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: js
+          path: htdocs/dist
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build_js
+    env:
+      APP_ENV: test
+
+    steps:
+      - name: Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
+
+      - uses: getong/mariadb-action@v1.1
+        with:
+          mariadb version: "10.3"
+          mysql root password: ""
+
+      - uses: actions/checkout@v2
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-dev-
+
+      - name: Install Composer packages
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install
+
+      - name: Download JS
+        uses: actions/download-artifact@v2
+        with:
+          name: js
+          path: htdocs/dist
+
+      - name: Setup database
+        run: |
+          php bin/console doctrine:database:create -n
+          php bin/console doctrine:migrations:migrate -n
+          php bin/console doctrine:fixtures:load -n
+
+      - name: Run PhpUnit
+        run: php bin/phpunit
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_js
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          path: main
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: main/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer packages
+        working-directory: main
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Pull productie
+        uses: actions/checkout@v2
+        with:
+          path: productie
+          repository: csrdelft/productie
+          token: ${{ secrets.PRODUCTIE_TOKEN }}
+
+      - name: Configureer productie user
+        working-directory: productie
+        run: |
+          git config user.name "PubCie"
+          git config user.email "pubcie@csrdelft.nl"
+
+      - name: Prepareer productie repo
+        working-directory: productie
+        run: |
+          rm -r *
+          rsync --archive --exclude-from=../main/bin/ci/rsync-exclude.txt ../main/ ./
+          mv bin/ci/.gitignore.prod .gitignore
+
+      - name: Download JS
+        uses: actions/download-artifact@v2
+        with:
+          name: js
+          path: productie/htdocs/dist
+
+      - name: Commit naar productie
+        working-directory: productie
+        run: |
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_RUN_NUMBER van csrdelft/csrdelft.nl@$GITHUB_SHA"
+
+      - name: Push naar productie
+        if: github.ref == 'refs/heads/master'
+        working-directory: productie
+        run: |
+          git push --force --quiet --set-upstream origin master

@@ -3,6 +3,7 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\entity\corvee\CorveeKwalificatie;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
@@ -11,17 +12,17 @@ use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\maalcie\corvee\functies\FunctieDeleteView;
 use CsrDelft\view\maalcie\corvee\functies\FunctieForm;
 use CsrDelft\view\maalcie\corvee\functies\KwalificatieForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class BeheerFunctiesController {
+class BeheerFunctiesController extends AbstractController {
 	/** @var CorveeFunctiesRepository */
 	private $corveeFunctiesRepository;
 	/** @var CorveeKwalificatiesRepository */
@@ -49,18 +50,18 @@ class BeheerFunctiesController {
 
 	/**
 	 * @param CorveeFunctie|null $functie
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee/functies/{functie_id}", methods={"GET"}, defaults={"functie_id"=null})
 	 * @Auth(P_CORVEE_MOD)
 	 */
 	public function beheer(CorveeFunctie $functie = null) {
 		$modal = $functie ? $this->bewerken($functie) : null;
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
-		return view('maaltijden.functie.beheer_functies', ['functies' => $functies, 'modal' => $modal]);
+		return $this->render('maaltijden/functie/beheer_functies.html.twig', ['functies' => $functies, 'modal' => $modal]);
 	}
 
 	/**
-	 * @return FunctieForm|TemplateView
+	 * @return FunctieForm|Response
 	 * @Route("/corvee/functies/toevoegen", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
@@ -73,7 +74,7 @@ class BeheerFunctiesController {
 
 			setMelding('Toegevoegd', 1);
 
-			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
+			return $this->render('maaltijden/functie/beheer_functie.html.twig', ['functie' => $functie]);
 		} else {
 			return $form;
 		}
@@ -81,7 +82,7 @@ class BeheerFunctiesController {
 
 	/**
 	 * @param CorveeFunctie $functie
-	 * @return FunctieForm|TemplateView
+	 * @return FunctieForm|Response
 	 * @Route("/corvee/functies/bewerken/{functie_id}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
@@ -90,7 +91,7 @@ class BeheerFunctiesController {
 		if ($form->validate()) {
 			$this->entityManager->flush();
 			setMelding('Bijgewerkt', 1);
-			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
+			return $this->render('maaltijden/functie/beheer_functie.html.twig', ['functie' => $functie]);
 		} else {
 			// Voorkom opslaan
 			$this->entityManager->clear();
@@ -112,8 +113,8 @@ class BeheerFunctiesController {
 	}
 
 	/**
-	 * @param $functie_id
-	 * @return KwalificatieForm|TemplateView
+	 * @param CorveeFunctie $functie
+	 * @return KwalificatieForm|Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/corvee/functies/kwalificeer/{functie_id}", methods={"POST"})
@@ -124,7 +125,7 @@ class BeheerFunctiesController {
 		$form = new KwalificatieForm($kwalificatie); // fetches POST values itself
 		if ($form->validate()) {
 			$this->corveeKwalificatiesRepository->kwalificatieToewijzen($kwalificatie);
-			return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
+			return $this->render('maaltijden/functie/beheer_functie.html.twig', ['functie' => $functie]);
 		} else {
 			return $form;
 		}
@@ -132,9 +133,7 @@ class BeheerFunctiesController {
 
 	/**
 	 * @param CorveeKwalificatie $kwalificatie
-	 * @return TemplateView
-	 * @throws ORMException
-	 * @throws OptimisticLockException
+	 * @return Response
 	 * @Route("/corvee/functies/dekwalificeer/{functie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
@@ -143,6 +142,6 @@ class BeheerFunctiesController {
 		$this->entityManager->remove($kwalificatie);
 		$this->entityManager->flush();
 
-		return view('maaltijden.functie.beheer_functie', ['functie' => $functie]);
+		return $this->render('maaltijden/functie/beheer_functie.html.twig', ['functie' => $functie]);
 	}
 }

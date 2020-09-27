@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\forum;
 
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class ForumCategorie {
+class ForumCategorie implements DisplayEntity {
 
 	/**
 	 * Primary key
@@ -73,4 +74,11 @@ class ForumCategorie {
 		$this->forum_delen = $forum_delen;
 	}
 
+	public function getId() {
+		return $this->categorie_id;
+	}
+
+	public function getWeergave(): string {
+		return $this->titel ?? "";
+	}
 }

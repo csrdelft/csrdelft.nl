@@ -7,11 +7,11 @@ Zie `initDataTable` in `datatable/api.ts` voor de initializatie code van DataTab
 
 ## API
 
-Het bestand [`api.ts`](https://github.com/csrdelft/csrdelft.nl/blob/master/resources/assets/js/datatable/api.ts) is losgetrokken omdat anders de externe stek op datatables zou leunen terwijl dat niet nodig is. Er zijn een aantal functies in de knoppen code die datatables gebruikt en die worden ook op de externe stek geladen, maar de externe stek heeft geen datatables.
+Het bestand [`api.ts`](https://github.com/csrdelft/csrdelft.nl/blob/master/assets/js/datatable/api.ts) is losgetrokken omdat anders de externe stek op datatables zou leunen terwijl dat niet nodig is. Er zijn een aantal functies in de knoppen code die datatables gebruikt en die worden ook op de externe stek geladen, maar de externe stek heeft geen datatables.
 
 ## Knoppen
 
-Boven een datatable staat bijna altijd een rij met knoppen, het aanmaken van een knop is heel makkelijk. Ze zijn geïmplementeerd in [`buttons.ts`](https://github.com/csrdelft/csrdelft.nl/blob/master/resources/assets/js/datatable/buttons.ts)
+Boven een datatable staat bijna altijd een rij met knoppen, het aanmaken van een knop is heel makkelijk. Ze zijn geïmplementeerd in [`buttons.ts`](https://github.com/csrdelft/csrdelft.nl/blob/master/assets/js/datatable/buttons.ts)
 
 ```php
 // In een DataTable class' __construct

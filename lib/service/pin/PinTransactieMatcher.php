@@ -216,7 +216,7 @@ class PinTransactieMatcher {
 
 					printf("%s - Bestelling en transactie hebben geen overeenkomend bedrag.\n", $moment);
 					printf(" - %s Transactie %d om %s.\n", $pinTransactie->amount, $pinTransactie->STAN, date_format_intl($pinTransactie->datetime, DATETIME_FORMAT));
-					printf(" - EUR %.2f Bestelling %d om %s door %s.\n", $pinBestellingInhoud->aantal / 100, $pinBestelling->id, $pinBestelling->moment, $pinBestelling->uid);
+					printf(" - EUR %.2f Bestelling %d om %s door %s.\n", $pinBestellingInhoud->aantal / 100, $pinBestelling->id, date_format_intl($pinBestelling->moment, DATETIME_FORMAT), $pinBestelling->uid);
 					break;
 				default:
 					// Er is niets mis gegaan.

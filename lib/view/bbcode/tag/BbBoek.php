@@ -7,6 +7,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\repository\bibliotheek\BoekRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
+use Twig\Environment;
 
 /**
  * Geeft titel en auteur van een boek.
@@ -22,9 +23,14 @@ class BbBoek extends BbTag {
 	 * @var BoekRepository
 	 */
 	private $boekRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(BoekRepository $boekRepository) {
+	public function __construct(BoekRepository $boekRepository, Environment $twig) {
 		$this->boekRepository = $boekRepository;
+		$this->twig = $twig;
 	}
 
 	public static function getTagName() {
@@ -49,7 +55,7 @@ class BbBoek extends BbTag {
 
 		try {
 			$boek = $this->boekRepository->find($this->content);
-			return view('bibliotheek.boek-bb', ['boek' => $boek])->getHtml();
+			return $this->twig->render('bibliotheek/boek-bb.html.twig', ['boek' => $boek]);
 		} catch (CsrException $e) {
 			return '[boek] Boek [boekid:' . (int)$this->content . '] bestaat niet.';
 		}

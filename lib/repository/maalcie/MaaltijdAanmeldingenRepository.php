@@ -10,6 +10,7 @@ use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdAanmelding;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\fiscaat\CiviProductRepository;
 use CsrDelft\repository\fiscaat\CiviSaldoRepository;
@@ -50,8 +51,8 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 
 	/**
 	 * @param Maaltijd $maaltijd
-	 * @param string $uid
-	 * @param string $doorUid
+	 * @param Profiel $profiel
+	 * @param Profiel $doorProfiel
 	 * @param int $aantalGasten
 	 * @param bool $beheer
 	 * @param string $gastenEetwens
@@ -61,8 +62,8 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 	 */
 	public function aanmeldenVoorMaaltijd(
 		Maaltijd $maaltijd,
-		$uid,
-		$doorUid,
+		Profiel $profiel,
+		Profiel $doorProfiel,
 		$aantalGasten = 0,
 		$beheer = false,
 		$gastenEetwens = ''
@@ -71,15 +72,15 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			ContainerFacade::getContainer()->get(MaaltijdenRepository::class)->sluitMaaltijd($maaltijd);
 		}
 		if (!$beheer) {
-			$this->assertMagAanmelden($maaltijd, $uid);
+			$this->assertMagAanmelden($maaltijd, $profiel->uid);
 		}
 
-		if ($maaltijd->getIsAangemeld($uid)) {
+		if ($maaltijd->getIsAangemeld($profiel->uid)) {
 			if (!$beheer) {
 				throw new CsrGebruikerException('Al aangemeld');
 			}
 			// aanmelding van lid updaten met aantal gasten door beheerder
-			$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $uid);
+			$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $profiel->uid);
 			$verschil = $aantalGasten - $aanmelding->aantal_gasten;
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->laatst_gewijzigd = date_create_immutable();
@@ -87,13 +88,12 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 			$this->getEntityManager()->flush();
 			$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() + $verschil;
 		} else {
-			$profiel = ProfielRepository::get($uid);
 			$aanmelding = new MaaltijdAanmelding();
 			$aanmelding->maaltijd = $maaltijd;
 			$aanmelding->maaltijd_id = $maaltijd->maaltijd_id;
-			$aanmelding->uid = $uid;
+			$aanmelding->uid = $profiel->uid;
 			$aanmelding->profiel = $profiel;
-			$aanmelding->door_uid = $doorUid;
+			$aanmelding->door_uid = $doorProfiel->uid;
 			$aanmelding->door_profiel = $profiel;
 			$aanmelding->aantal_gasten = $aantalGasten;
 			$aanmelding->gasten_eetwens = $gastenEetwens;
@@ -223,14 +223,14 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 
 	/**
 	 * @param Maaltijd $maaltijd
-	 * @param string $uid
+	 * @param Profiel $profiel
 	 * @param bool $beheer
 	 * @return Maaltijd
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function afmeldenDoorLid(Maaltijd $maaltijd, $uid, $beheer = false) {
-		if (!$this->getIsAangemeld($maaltijd->maaltijd_id, $uid)) {
+	public function afmeldenDoorLid(Maaltijd $maaltijd, Profiel $profiel, $beheer = false) {
+		if (!$this->getIsAangemeld($maaltijd->maaltijd_id, $profiel->uid)) {
 			throw new CsrGebruikerException('Niet aangemeld');
 		}
 		if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
@@ -239,7 +239,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		if (!$beheer && $maaltijd->gesloten) {
 			throw new CsrGebruikerException('Maaltijd is gesloten');
 		}
-		$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $uid);
+		$aanmelding = $this->loadAanmelding($maaltijd->maaltijd_id, $profiel->uid);
 		$this->_em->remove($aanmelding);
 		$this->_em->flush();
 		$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - 1 - $aanmelding->aantal_gasten;

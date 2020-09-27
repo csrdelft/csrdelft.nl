@@ -6,7 +6,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\KetzersRepository;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
-use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

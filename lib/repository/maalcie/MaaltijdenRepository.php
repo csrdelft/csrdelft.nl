@@ -196,7 +196,7 @@ class MaaltijdenRepository extends AbstractRepository {
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')
 			->where('m.verwijderd = false and m.datum >= :van_datum and m.datum <= :tot_datum')
-			->setParameter('van_datum', date_create())
+			->setParameter('van_datum', date_create('-1 day'))
 			->setParameter('tot_datum', date_create(instelling('maaltijden', 'toon_ketzer_vooraf')))
 			->orderBy('m.datum', 'ASC')
 			->addOrderBy('m.tijd', 'ASC')

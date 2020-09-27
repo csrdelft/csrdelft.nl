@@ -39,12 +39,8 @@ define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 define('PLAATJES_PATH', DATA_PATH . 'plaatjes/');
 define('CONFIG_CACHE_PATH', VAR_PATH . 'config_cache/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
-define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
-define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
 define('CONFIG_PATH', BASE_PATH . 'config');
 define('TEMPLATE_DIR', LIB_PATH . 'templates/');
-# BladeOne
-define('BLADEONE_MODE', $_ENV['BLADEONE_MODE']);
 
 # Permissies
 define('P_PUBLIC', 'P_PUBLIC');

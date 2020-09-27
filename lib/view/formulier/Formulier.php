@@ -247,7 +247,6 @@ HTML;
 	/**
 	 * Toont het formulier en javascript van alle fields.
 	 *
-	 * @param boolean $showMelding Toon meldingen bovenaan formulier (set through property)
 	 * @return void
 	 */
 	public function view() {
