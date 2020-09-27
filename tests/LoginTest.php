@@ -1,13 +1,19 @@
 <?php
 
 
-use CsrDelft\common\ContainerFacade;
 use Symfony\Component\Panther\Client;
 use Symfony\Component\Panther\DomCrawler\Crawler;
 use Symfony\Component\Panther\PantherTestCase;
 
-class LoginTest extends PantherTestCase {
-	private function login(Client $client): Crawler {
+class LoginTest extends PantherTestCase
+{
+	protected function tearDown(): void
+	{
+		static::createPantherClient()->get('/logout');
+	}
+
+	private function login(Client $client): Crawler
+	{
 		$crawler = $client->request('GET', '/');
 
 		$crawler->selectLink("Inloggen")->click();
@@ -20,9 +26,9 @@ class LoginTest extends PantherTestCase {
 		return $client->submit($form);
 	}
 
-	public function testPageLoad() {
+	public function testPageLoad()
+	{
 		$client = static::createPantherClient();
-		ContainerFacade::init(self::$container);
 
 		$client->request('GET', '/');
 
@@ -30,7 +36,8 @@ class LoginTest extends PantherTestCase {
 		$this->assertTrue(true);
 	}
 
-	public function testLogin() {
+	public function testLogin()
+	{
 		$client = static::createPantherClient();
 
 		$crawler = $this->login($client);
@@ -40,7 +47,8 @@ class LoginTest extends PantherTestCase {
 		$this->assertStringContainsString('Dit is de voorpagina.', $pageContent);
 	}
 
-	public function testToestemming() {
+	public function testToestemming()
+	{
 		$client = static::createPantherClient();
 
 		$this->login($client);
