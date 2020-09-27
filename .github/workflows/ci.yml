@@ -91,7 +91,7 @@ jobs:
       - name: Valideer schema
         run: php bin/console doctrine:schema:validate
 
-      - name: Dump schema SQL
+      - name: Dump schema SQL fouten
         if: ${{ failure() }}
         run: php bin/console doctrine:schema:update --dump-sql
 
