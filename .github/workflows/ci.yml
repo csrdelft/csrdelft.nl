@@ -88,6 +88,9 @@ jobs:
           php bin/console doctrine:migrations:migrate -n
           php bin/console doctrine:fixtures:load -n
 
+      - name: Valideer schema
+        run: php bin/console doctrine:schema:validate
+
       - name: 🧪 Run PhpUnit
         env:
           PANTHER_CHROME_ARGUMENTS: "--disable-dev-shm-usage"
