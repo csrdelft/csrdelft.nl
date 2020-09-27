@@ -7,7 +7,6 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\login\AccountForm;
@@ -35,10 +34,6 @@ class AccountController extends AbstractController {
 	 */
 	private $loginService;
 	/**
-	 * @var LoginSessionRepository
-	 */
-	private $loginSessionRepository;
-	/**
 	 * @var AccessService
 	 */
 	private $accessService;
@@ -47,14 +42,12 @@ class AccountController extends AbstractController {
 		AccessService $accessService,
 		AccountRepository $accountRepository,
 		CmsPaginaRepository $cmsPaginaRepository,
-		LoginService $loginService,
-		LoginSessionRepository $loginSessionRepository
+		LoginService $loginService
 	) {
 		$this->accessService = $accessService;
 		$this->accountRepository = $accountRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->loginService = $loginService;
-		$this->loginSessionRepository = $loginSessionRepository;
 	}
 
 	/**
