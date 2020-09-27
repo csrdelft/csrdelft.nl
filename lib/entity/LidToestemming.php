@@ -43,7 +43,7 @@ class LidToestemming {
 	/**
 	 * @var Profiel
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel", inversedBy="toestemmingen")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=false)
 	 */
 	public $profiel;
 
