@@ -4,13 +4,32 @@ Er zijn twee soorten tests in de stek, unit tests en functionele tests. Unit tes
 
 ## Tests runnen
 
+1. Stel een andere database in dan de database waar je normaal op test, door `DATABASE_URL` te zetten in `.env.local`.
+    ```
+    DATABASE_URL=mysql://root@127.0.0.1:3306/csrdelft_test
+    ```
 1. Maak een db in te test environment
     ```shell script
-    bin/console doctrine:database:create --env test
-    bin/console doctrine:migrations:migrate --env test
-    bin/console doctrine:fixtures:load --env test
+    # Als de database al bestaat je en je hem wil verversen
+    php bin/console doctrine:database:drop --force
+    php bin/console doctrine:database:create
+    php bin/console doctrine:migrations:migrate
+    php bin/console doctrine:fixtures:load
     ```
 1. Run `php bin/phpunit` om alle tests te runnen. PhpStorm kan ook losse tests uitvoeren.
+
+
+### Panther (Browser) tests
+
+Om Panther tests te runnen moet je Panther naar chrome en chromedriver wijzen. Dit kun je instellen in `.env.test.local`
+
+```
+PANTHER_CHROME_BINARY="C:\Program Files\Google\Chrome\Application\chrome.exe"
+PANTHER_CHROME_DRIVER_BINARY="<path naar chromedriver>\chromedriver.exe"
+PANTHER_NO_HEADLESS=true
+```
+
+Chromedriver is te downloaden van https://chromedriver.chromium.org/
 
 ## Tests maken
 
