@@ -25,7 +25,6 @@ require __DIR__ . '/../config/bootstrap.php';
 // Registreer foutmelding handlers
 if (!isCi() && !isCli()) {
 	if (DEBUG) {
-		register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
 		umask(0000);
 
 		Debug::enable();

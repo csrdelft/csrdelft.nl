@@ -2,9 +2,6 @@
 
 namespace CsrDelft\common;
 
-use CsrDelft\repository\DebugLogRepository;
-use CsrDelft\service\security\LoginService;
-use Exception;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
@@ -57,18 +54,6 @@ final class ShutdownHandler {
 		$cloner = new VarCloner();
 
 		mail('pubcie@csrdelft.nl', $subject, $dumper->dump($cloner->cloneVar($debug), true), implode("\r\n", $headers));
-	}
-
-	/**
-	 * Schrijf naar de debug log in de database.
-	 *
-	 * Runt in Debug mode.
-	 */
-	public static function debugLogHandler() {
-		$debug = static::getDebug();
-		if ($debug !== null) {
-			ContainerFacade::getContainer()->get(DebugLogRepository::class)->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
-		}
 	}
 
 	/**
