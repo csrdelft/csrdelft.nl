@@ -22,6 +22,8 @@ Installeer de volgende programma's:
   - Komt met Apache2, Mariadb en PHP
   - wampserver komt met een iets vriendelijkere gebruikersinterface en wordt verder in deze uitleg gebruikt.
   - Zorg ervoor dat je een versie met PHP 7.3 installeert, want dit is wat de productie versie van de stek ook draait. (7.4 is op zich ook prima)
+	- Zorg ervoor dat je MariaDB installeert en niet MySql, deze twee databases lijken erg op elkaar maar hebben allerlei subtiele verschillen.
+	- In productie draait MariaDB 10.3, installeer deze als je zeker wil zijn dat alles hetzelfde is.
 - [git](https://git-scm.com)
   - Om de sourcecode te downloaden en veranderingen te maken
   - De [GitHub Desktop](https://desktop.github.com/) is een toegankelijke manier van git gebruiken
@@ -29,8 +31,8 @@ Installeer de volgende programma's:
   - De PHP dependency manager
 - [Node.js](https://nodejs.org/en/)
   - Een JS runtime
-  - De LTS-versie is prima voor wat wij doen
-- [yarn (classic)](https://classic.yarnpkg.com/en/docs/install#windows-stable)
+  - De LTS-versie is prima voor wat wij doen, en is aanbevolen tenzij je expliciet dingen wil die niet in de LTS zitten.
+- [yarn](https://yarnpkg.com/getting-started/install)
   - De JS dependency manager
 - [PhpStorm](https://www.jetbrains.com/phpstorm/)
   - Een goede IDE van Jetbrains, pro versie is gratis voor studenten
@@ -94,7 +96,7 @@ Voer vanaf de command line het volgende commando uit om de tabellen in de databa
 php bin/console doctrine:migrations:migrate
 ```
 
-Als je een dump hebt gekregen kun je deze nu importeren met HeidiSQL, DataGrip of een andere SQL client die je graag gebruikt.
+Als je een dump hebt gekregen kun je deze nu importeren met HeidiSQL, DataGrip of een andere SQL client die je graag gebruikt. Als je geen dump hebt gekregen kun je de [fixtures](fixtures.md) laden om te kunnen testen op test-data.
 
 ### 2.3: Frontend code builden
 
@@ -119,7 +121,7 @@ Ga naar [VirtualHost Management](http://localhost/add_vhost.php) in wampserver. 
 
 > Als je de repository hebt gedownload in `C:\users\feut\Projecten\csrdelft.nl` zet dan de path op `C:/users/feut/Projecten/csrdelft.nl/htdocs`.
 
-Als je nu naar [`http://dev-csrdelft.nl`](http://dev-csrdelft.nl) gaat wordt je als het goed is begroet met een dikke error over dat er niet met de database verbonden kan worden.
+Als je nu naar [`http://dev-csrdelft.nl`](http://dev-csrdelft.nl) als je alles goed hebt gedaan wordt je nu begroet door de externe stek en kun je inloggen met dezelfde gegevens als op de productie stek. Of met gebruiker `x101` met wachtwoord `stek open u voor mij!` als je de fixtures hebt geladen.
 
 *Wampserver moet sowieso aan staan als je je lokale stek wil bekijken*
 
