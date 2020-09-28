@@ -246,7 +246,7 @@
           transform: rotate(5deg);
         }
 
-      .fowardslash{ width: 100%; 
+      .forwardslash{ width: 100%; 
           margin: auto; 
           margin-top: 5%; 
           margin-bottom: 5%; 
@@ -256,12 +256,12 @@
 
       .slashLiBo {
           margin: 10px;
-          padding: 10px 30px 10px 30px;
+          padding: 30px 30px 20px 30px;
       }
 
       .slashLiOn {
           margin: 10px;
-          padding: 30px 30px 10px 30px;
+          padding: 10px 30px 10px 30px;
       }  
 
       hr { 
@@ -295,6 +295,7 @@
       .donker-lichtLiOn {
         background-image: -webkit-linear-gradient(95deg, #4e698b 50%, #11273a 50%);
       }
+
 
       .licht-mediumLiBo {
         background-image: -webkit-linear-gradient(85deg, #043763 50%, #4e698b 50%);
@@ -330,18 +331,19 @@
     </style>
   </head>
   <body class="">
+      <table>
       <tr>
         <td>&nbsp;</td>
         <td class="container">
           <div class="content">
 
             <!-- START CENTERED WHITE CONTAINER -->
-            <table role="presentation" class="main">
+            <table class="main">
               <tr>
                 <td class="wrapper">
           
                   <!-- LOGO en TITEL -->                  
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="background: #e8e8e8">
+                  <table border="0" cellpadding="0" cellspacing="0" style="background: #e8e8e8">
                     <tr style="height: 200px">
                       <td id="logo" class="inhoud-lb">
                         <img class="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/C.S.R._Delft_Logo.svg/190px-C.S.R._Delft_Logo.svg.png" style="width:150px;" />
@@ -352,10 +354,10 @@
                     </tr>
                   </table>
 
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                  <table border="0" cellpadding="0" cellspacing="0">
                     <tr > 
                       <td class="grijs-donkerblauwLiOn">
-                        <div class="fowardslash">
+                        <div class="forwardslash">
                           <hr>
                         </div>
                       </td>
@@ -363,7 +365,7 @@
                   </table>
 
                   <!-- INHOUD -->
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="background: #11273a">
+                  <table border="0" cellpadding="0" cellspacing="0" style="background: #11273a">
                   <tr>
                   {% for categorie,catName in catNames %}
                     {% if categorie != 'voorwoord' and categorie != 'sponsor' %}
@@ -386,9 +388,9 @@
                   </tr>
                   </table>
 
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                  <table  border="0" cellpadding="0" cellspacing="0">
                     <tr > 
-                      <td class="medium-donkerLiBo">
+                      <td class="donker-mediumLiBo">
                         <div class="backslash">
                           <hr>
                         </div>
@@ -409,23 +411,23 @@
                   medium: #043763
                   licht:  #4e698b
                   -->
-
+                    
                   {% for bericht in berichten %}
                     {% if loop.index % 2 == 0 %}
-                      {% set slashmargin = 'slashLiOn' %}
-                      {% set slashbgdirection = 'forwardslash' %}
-                    {% else %}
                       {% set slashmargin = 'slashLiBo' %}
                       {% set slashbgdirection = 'backslash' %}
+                    {% else %}
+                      {% set slashmargin = 'slashLiOn' %}
+                      {% set slashbgdirection = 'forwardslash' %}
                     {% endif %}
 
-                    {% if loop.index % 4 == 0 %}
+                    {% if loop.index % 4 == 1 %}
                       {% set bgcolor = '#043763' %}
                       {% set slashbgcolor = 'medium-lichtLiOn' %}
-                    {% elif loop.index % 4 == 1 %}
+                    {% elseif loop.index % 4 == 2 %}
                       {% set bgcolor = '#4e698b' %}
                       {% set slashbgcolor = 'licht-donkerLiBo' %}
-                    {% elif loop.index % 4 == 2 %}
+                    {% elseif loop.index % 4 == 3 %}
                       {% set bgcolor = '#11273a' %}
                       {% set slashbgcolor = 'donker-lichtLiOn' %}
                     {% else %}
@@ -433,44 +435,44 @@
                       {% set slashbgcolor = 'licht-mediumLiBo' %}
                     {% endif %}
 
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="background-color: {{bgcolor}}">
-                      <td class="{{slashmargin}}">
-                        <h3><u><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</u></h3>
-                        <p>
-                          {{ bericht.titel | bbcode("mail") }}
-                        </p>
-                      </td>
-                    </table>
-                    
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                      <tr > 
-                        <td class="{{slashbgcolor}}">
-                          <div class="{{slashdirection}}">
-                            <hr>
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  {% endfor %}
+                    {% if loop.last == 0 %}
+                        <table border="0" cellpadding="0" cellspacing="0" style="background-color: {{bgcolor}}">
+                          <td class="{{slashmargin}}">
+                            <h3><u><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</u></h3>
+                            <p>
+                              {{ bericht.bericht | bbcode("mail") }}
+                            </p>
+                          </td>
+                        </table>
 
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                    <td>
-                      <img src="https://www.csrdelft.nl/plaetjes/banners/Projectkwadraat.jpg">
-                    </td>
-                  </table>
+                        <table border="0" cellpadding="0" cellspacing="0">
+                          <tr > 
+                            <td class="{{slashbgcolor}}">
+                              <div class="{{slashbgdirection}}">
+                                <hr>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>                    
+                    {% else %}
+                        <table border="0" cellpadding="0" cellspacing="0" style="background-color: {{bgcolor}}">
+                            <tr>
+                                <td class="{{slashmargin}}">
+                                   {{ instelling('courant', 'sponsor') | bbcode("mail") }}     
+                                </td>
+                            </tr>
+                        </table>
+                    {% endif %}                    
+                  {% endfor %}  
                 </td>
               </tr>
-            <!-- END MAIN CONTENT AREA -->
             </table>
-            <!-- END CENTERED WHITE CONTAINER -->
-            <!-- START FOOTER -->
             <div class="footer">
-
             </div>
           </div>
         </td>
         <td>&nbsp;</td>
       </tr>
-    </table>
+      </table>
   </body>
 </html>
