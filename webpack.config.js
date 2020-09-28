@@ -20,7 +20,7 @@ module.exports = (env, argv) => ({
 		'fxclippy': './js/entry/fxclippy.ts',
 		'fxspace': './js/entry/fxspace.ts',
 		'extern': ['./js/entry/extern.ts', './scss/extern.scss'],
-		'bar': './sass/bar.scss',
+		'bar': './scss/bar.scss',
 		'bredeletters': './scss/bredeletters.scss',
 		'common': './scss/common.scss',
 		'extern-forum': './scss/extern-forum.scss',
