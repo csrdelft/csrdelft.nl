@@ -1,20 +1,61 @@
 <?php
 
 
+use CsrDelft\common\ContainerFacade;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Panther\Client;
 use Symfony\Component\Panther\DomCrawler\Crawler;
 use Symfony\Component\Panther\PantherTestCase;
 
 class LoginTest extends PantherTestCase
 {
-	protected function tearDown(): void
+	public static function setUpBeforeClass(): void
 	{
-		static::createPantherClient()->get('/logout');
+		self::bootKernel();
+		ContainerFacade::init(self::$container);
+		$application = new Application(self::$kernel);
+		$application->setAutoExit(false);
+
+		$doctrineDatabaseDrop = new ArrayInput(['command' => 'doctrine:database:drop', '--force' => true, '--no-interaction' => true,]);
+		$doctrineDatabaseCreate = new ArrayInput(['command' => 'doctrine:database:create', '--no-interaction' => true,]);
+		$doctrineMigrationsMigrate = new ArrayInput(['command' => 'doctrine:migrations:migrate', '--no-interaction' => true,]);
+		$doctrineFixturesLoad = new ArrayInput(['command' => 'doctrine:fixtures:load', '--no-interaction' => true,]);
+
+		$output = new BufferedOutput();
+
+		$application->run($doctrineDatabaseDrop, $output);
+		echo $output->fetch();
+
+		$application->run($doctrineDatabaseCreate, $output);
+		echo $output->fetch();
+
+		$application->run($doctrineMigrationsMigrate, $output);
+		echo $output->fetch();
+
+		$application->run($doctrineFixturesLoad, $output);
+		echo $output->fetch();
 	}
 
-	private function login(Client $client): Crawler
+	/**
+	 * @var Client
+	 */
+	private $client;
+
+	protected function setUp(): void
 	{
-		$crawler = $client->request('GET', '/');
+		$this->client = static::createPantherClient();
+	}
+
+	protected function tearDown(): void
+	{
+		$this->client->get('/logout');
+	}
+
+	private function login(): Crawler
+	{
+		$crawler = $this->client->request('GET', '/');
 
 		$crawler->selectLink("Inloggen")->click();
 
@@ -23,14 +64,12 @@ class LoginTest extends PantherTestCase
 		$form['_username'] = 'x101';
 		$form['_password'] = 'stek open u voor mij!';
 
-		return $client->submit($form);
+		return $this->client->submit($form);
 	}
 
 	public function testPageLoad()
 	{
-		$client = static::createPantherClient();
-
-		$client->request('GET', '/');
+		$this->client->request('GET', '/');
 
 		// Check of we hier zijn aangekomen
 		$this->assertTrue(true);
@@ -38,9 +77,7 @@ class LoginTest extends PantherTestCase
 
 	public function testLogin()
 	{
-		$client = static::createPantherClient();
-
-		$crawler = $this->login($client);
+		$crawler = $this->login();
 
 		$pageContent = $crawler->filter('.cd-page-content')->text();
 
@@ -49,11 +86,9 @@ class LoginTest extends PantherTestCase
 
 	public function testToestemming()
 	{
-		$client = static::createPantherClient();
+		$this->login();
 
-		$this->login($client);
-
-		$crawler = $client->request('GET', '/');
+		$crawler = $this->client->request('GET', '/');
 
 		$form = $crawler->filter('#modal form')->form();
 
@@ -62,13 +97,13 @@ class LoginTest extends PantherTestCase
 		$form['algemeen_foto_extern'] = 'ja';
 		$form['algemeen_foto_intern'] = 'ja';
 
-		$client->executeScript("document.getElementById('toestemming-ja').scrollIntoView();");
+		$this->client->executeScript("document.getElementById('toestemming-ja').scrollIntoView();");
 
 		$crawler->filter('#toestemming-ja')->click();
 
 		$crawler->selectLink('Opslaan')->click();
 
-		$crawler = $client->getCrawler();
+		$crawler = $this->client->getCrawler();
 
 		$this->assertEquals("Toestemming opgeslagen", $crawler->filter('#melding')->text());
 	}
