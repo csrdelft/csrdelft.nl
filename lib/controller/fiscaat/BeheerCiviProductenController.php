@@ -14,9 +14,9 @@ use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductForm;
 use CsrDelft\view\fiscaat\producten\CiviProductSuggestiesResponse;
 use CsrDelft\view\fiscaat\producten\CiviProductTable;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -72,12 +72,12 @@ class BeheerCiviProductenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/fiscaat/producten", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
 	public function overzicht() {
-		return view('fiscaat.pagina', [
+		return $this->render('fiscaat/pagina.html.twig', [
 			'titel' => 'Producten beheer',
 			'view' => new CiviProductTable(),
 		]);

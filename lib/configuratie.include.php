@@ -25,7 +25,6 @@ require __DIR__ . '/../config/bootstrap.php';
 // Registreer foutmelding handlers
 if (!isCi() && !isCli()) {
 	if (DEBUG) {
-		register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
 		umask(0000);
 
 		Debug::enable();
@@ -33,7 +32,6 @@ if (!isCi() && !isCli()) {
 		register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
 		set_error_handler([ShutdownHandler::class, 'slackHandler']);
 		register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
-		register_shutdown_function([ShutdownHandler::class, 'errorPageHandler']);
 	}
 }
 
@@ -49,20 +47,6 @@ setlocale(LC_ALL, 'nl_NL');
 //setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
-
-if (isset($_SERVER['REQUEST_URI'])) {
-	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
-} else {
-	$req = null;
-}
-define('REQUEST_URI', $req);
-
-if (isset($_SERVER['HTTP_REFERER'])) {
-	$ref = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL);
-} else {
-	$ref = null;
-}
-define('HTTP_REFERER', $ref);
 
 if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
 	Request::setTrustedProxies(
@@ -98,7 +82,7 @@ if (FORCE_HTTPS) {
 			// TODO: Log dit
 		}
 		// redirect to https
-		header('Location: ' . CSR_ROOT . REQUEST_URI, true, 301);
+		header('Location: ' . CSR_ROOT . $_SERVER['REQUEST_URI'], true, 301);
 		// we are in cleartext at the moment, prevent further execution and output
 		die();
 	}

@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\GoogleSync;
@@ -13,22 +12,30 @@ use CsrDelft\service\LidZoekerService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
-use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class LedenLijstController extends AbstractController {
 	/**
+	 * @param Request $request
 	 * @param CmsPaginaRepository $cmsPaginaRepository
 	 * @param LidZoekerService $lidZoeker
 	 * @param GoogleSync $googleSync
-	 * @return TemplateView|RedirectResponse|Response
+	 * @param Environment $twig
+	 * @return RedirectResponse|Response
+	 * @throws LoaderError
+	 * @throws RuntimeError
+	 * @throws SyntaxError
 	 * @Route("/ledenlijst", methods={"GET", "POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function lijst(CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync, Environment $twig) {
+	public function lijst(Request $request, CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync, Environment $twig) {
 		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
@@ -60,11 +67,9 @@ class LedenLijstController extends AbstractController {
 			}
 		}
 
-		$ledenlijstcontent = new LedenlijstContent($lidZoeker);
-
 		if (isset($_GET['addToGoogleContacts'])) {
 			try {
-				$googleSync->doRequestToken(CSR_ROOT . REQUEST_URI);
+				$googleSync->doRequestToken($request->getUri());
 
 				$start = microtime(true);
 				$message = $googleSync->syncLidBatch($lidZoeker->getLeden());
@@ -105,6 +110,6 @@ class LedenLijstController extends AbstractController {
 			setMelding($message, 0);
 		}
 
-		return $this->render('default.html.twig', ['content' => $ledenlijstcontent]);
+		return $this->render('default.html.twig', ['content' => new LedenlijstContent($request, $lidZoeker)]);
 	}
 }

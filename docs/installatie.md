@@ -1,6 +1,6 @@
 # Installatie van de stek
 
-*Alle commando's in deze uitleg worden uitgevoerd vanuit de hoofdmap van de repository (zodra je de broncode het binnengehaald). Op Windows werkt Powershell goed, als je op Linux zit weet je waarschijnlijk al welke shell nice is en heb je daar een uitgesproken mening over.*
+*Alle commando's in deze uitleg worden uitgevoerd vanuit de hoofdmap van de repository (zodra je de broncode hebt binnengehaald). Op Windows werkt Powershell goed, als je op Linux zit weet je waarschijnlijk al welke shell nice is en heb je daar een uitgesproken mening over.*
 
 Volg dit stappenplan om de stek op je eigen computer te installeren. Wees precies met het uitvoeren van de commando's want een aantal instellingen zijn standaard geconfigureerd in de stek en als je daar van afwijkt moet je het in je eigen configuratie ook goed zetten.
 
@@ -21,23 +21,25 @@ Installeer de volgende programma's:
 - [xampp](https://www.apachefriends.org/download.html) of [wampserver](https://sourceforge.net/projects/wampserver/)
   - Komt met Apache2, Mariadb en PHP
   - wampserver komt met een iets vriendelijkere gebruikersinterface en wordt verder in deze uitleg gebruikt.
-  - Zorg ervoor dat je een versie met PHP 7.3 installeert, want dit is wat in producti ook draait. (7.4 is op zich ook prima)
+  - Zorg ervoor dat je een versie met PHP 7.3 installeert, want dit is wat de productie versie van de stek ook draait. (7.4 is op zich ook prima)
+	- Zorg ervoor dat je MariaDB installeert en niet MySql, deze twee databases lijken erg op elkaar maar hebben allerlei subtiele verschillen.
+	- In productie draait MariaDB 10.3, installeer deze als je zeker wil zijn dat alles hetzelfde is.
 - [git](https://git-scm.com)
-  - Om de sourcecode te downloaden en veranderingen te maken.
-  - De [GitHub Desktop](https://desktop.github.com/) is een toegankelijke manier van git gebruiken.
+  - Om de sourcecode te downloaden en veranderingen te maken
+  - De [GitHub Desktop](https://desktop.github.com/) is een toegankelijke manier van git gebruiken
 - [composer](https://getcomposer.org)
   - De PHP dependency manager
 - [Node.js](https://nodejs.org/en/)
-  - Een JS runtime.
-  - De LTS-versie is prima voor wat wij doen.
-- [yarn (classic)](https://classic.yarnpkg.com/en/docs/install#windows-stable)
+  - Een JS runtime
+  - De LTS-versie is prima voor wat wij doen, en is aanbevolen tenzij je expliciet dingen wil die niet in de LTS zitten.
+- [yarn](https://yarnpkg.com/getting-started/install)
   - De JS dependency manager
 - [PhpStorm](https://www.jetbrains.com/phpstorm/)
-  - Een goede IDE van Jetbrains, pro versie is gratis voor studenten.
+  - Een goede IDE van Jetbrains, pro versie is gratis voor studenten
   - [Visual Studio Code](https://code.visualstudio.com/) is een redelijk alternatief, maar gebruikt dit alleen als je je er echt thuis in voelt.
 - [HeidiSQL](https://www.heidisql.com/download.php)
-  - Een chille sql client.
-  - Veel sql clients kunnen niet met Syrinx (productie) verbinden, deze wel.
+  - Een chille sql client
+  - Veel sql clients kunnen niet met Syrinx (productie) verbinden, deze wel
 
 ## Stap 1: Ophalen van de broncode
 
@@ -94,11 +96,11 @@ Voer vanaf de command line het volgende commando uit om de tabellen in de databa
 php bin/console doctrine:migrations:migrate
 ```
 
-Als je een dump hebt gekregen kun je deze nu importeren met HeidiSQL, DataGrip of een andere Sql client die je graag gebruikt
+Als je een dump hebt gekregen kun je deze nu importeren met HeidiSQL, DataGrip of een andere SQL client die je graag gebruikt. Als je geen dump hebt gekregen kun je de [fixtures](fixtures.md) laden om te kunnen testen op test-data.
 
 ### 2.3: Frontend code builden
 
-De frontend code wordt met een los process gebuild. Hier wordt Typescript omgezet naar Javascript en Scss (sass) naar CSS.
+De frontend code wordt met een los process gebuild. Hier wordt Typescript omgezet naar Javascript en SCSS naar CSS.
 
 Voer hier voor het volgende commando uit.
 
@@ -107,7 +109,7 @@ yarn
 yarn dev
 ```
 
-Kijk ook in [Typescript](typescript.md) voor meer info.
+Kijk ook in [Frontend Build](frontend.md) en [Typescript](typescript.md) voor meer info.
 
 ### 2.4: VirtualHost instellen
 
@@ -119,7 +121,7 @@ Ga naar [VirtualHost Management](http://localhost/add_vhost.php) in wampserver. 
 
 > Als je de repository hebt gedownload in `C:\users\feut\Projecten\csrdelft.nl` zet dan de path op `C:/users/feut/Projecten/csrdelft.nl/htdocs`.
 
-Als je nu naar [`http://dev-csrdelft.nl`](http://dev-csrdelft.nl) gaat wordt je als het goed is begroet met een dikke error over dat er niet met de database verbonden kan worden.
+Als je nu naar [`http://dev-csrdelft.nl`](http://dev-csrdelft.nl) als je alles goed hebt gedaan wordt je nu begroet door de externe stek en kun je inloggen met dezelfde gegevens als op de productie stek. Of met gebruiker `x101` met wachtwoord `stek open u voor mij!` als je de fixtures hebt geladen.
 
 *Wampserver moet sowieso aan staan als je je lokale stek wil bekijken*
 
@@ -127,7 +129,7 @@ Als je nu naar [`http://dev-csrdelft.nl`](http://dev-csrdelft.nl) gaat wordt je 
 
 ### Imagemagick
 
-[ImageMagick](https://imagemagick.org/script/download.php) wordt gebruikt in het fotoalbum, om dingen in het fotoalbum te kunnen testen moet je het installeren. Als je v7 van ImageMagick hebt geinstalleerd voeg dan `IMAGEMAGICK=magick` toe aan `.env.local`
+[ImageMagick](https://imagemagick.org/script/download.php) wordt gebruikt in het fotoalbum. Om dingen in het fotoalbum te kunnen testen, moet je het installeren. Als je v7 van ImageMagick hebt geinstalleerd voeg dan `IMAGEMAGICK=magick` toe aan `.env.local`
 
 ### Cache
 

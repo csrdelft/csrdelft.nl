@@ -2,6 +2,8 @@
 
 Met Memcached kun je de stek best wel wat versnellen. Hier wordt uitgelegd hoe je dit op Windows kan instellen. Voor linux kun je het waarschijnlijk zelf wel en anders kun je in de Docker configuratie kijken.
 
+_NOOT: Deze cache is anders dan de cache die te vinden is in `var/cache/<env>`. De cache hier is alleen gebasseerd op de code en bevat bijvoorbeeld de annotaties van Symfony._
+
 ## Werking van de cache
 
 Er zijn twee caches `cache.app` en `doctrine.orm.second_level_cache`, de eerste is in code te gebruiken en de tweede is intern voor Doctrine. De caches zijn geconfigureerd in `config/custom/memcache.yaml` en de configuratie wordt dus alleen ingeladen als memcache ondersteund wordt en geconfigureerd is.
@@ -61,3 +63,9 @@ Geen cache ingesteld
 ![Wel een cache](https://i.imgur.com/r7LmBAF.png)
 
 Wel een cache ingesteld
+
+## Flushen van de cache
+
+Bij het veranderen van database of bij het veranderen van branches die ver uit elkaar liggen kan het zijn dat wat in de cache staat niet meer klopt. Dan moet de cache geflushed worden. Dit gebeurt normaal bij iedere deploy (de data in de cache bestaat dus niet lang en kan zo verdwenen zijn).
+
+Om de cache te flushen kun je het `php bin/console stek:cache:flush` commando uitvoeren of de `Memcached` service vanuit taakbeheer opnieuw opstarten.

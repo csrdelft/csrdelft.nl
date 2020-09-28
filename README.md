@@ -1,5 +1,5 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=csrdelft_csrdelft.nl&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=csrdelft_csrdelft.nl)
-[![Build Status](https://travis-ci.org/csrdelft/csrdelft.nl.svg?branch=master)](https://travis-ci.org/csrdelft/csrdelft.nl)
+[![CI](https://github.com/csrdelft/csrdelft.nl/workflows/CI/badge.svg)](https://github.com/csrdelft/csrdelft.nl/actions?query=workflow%3ACI)
 # csrdelft.nl stek
 
 Welkom bij de repo van onze webstek. Kijk gerust rond.

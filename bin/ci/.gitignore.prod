@@ -2,7 +2,6 @@
 
 # Mappen nodig voor goede werking van de stek.
 data/*
-!data/blade
 sessie/*
 htdocs/plaetjes/*
 
@@ -12,6 +11,8 @@ etc/*.crt
 etc/*.csr
 etc/*.htpasswd
 etc/*.kdbx
+# Voorkom dat er per ongeluk workflows gekopieerd worden
+.github
 
 # Overige mappen
 htdocs/download/*

@@ -2,9 +2,10 @@
 
 namespace CsrDelft\repository\bibliotheek;
 
+use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekRecensie;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
-use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -18,15 +19,14 @@ class BoekRecensieRepository extends AbstractRepository {
 		parent::__construct($registry, BoekRecensie::class);
 	}
 
-	public function get(int $boek_id, string $uid): BoekRecensie {
-		$recensie = $this->findOneBy(["boek_id" => $boek_id, "schrijver_uid" => $uid]);
+	public function get(Boek $boek, Profiel $profiel): BoekRecensie {
+		$recensie = $this->findOneBy(["boek" => $boek, "schrijver" => $profiel]);
 
 		if (!$recensie) {
 			$recensie = new BoekRecensie();
-			$recensie->boek_id = $boek_id;
-			$recensie->schrijver_uid = $uid;
-			$recensie->schrijver = ProfielRepository::get($uid);
-			$recensie->toegevoegd = getDateTime();
+			$recensie->boek = $boek;
+			$recensie->schrijver = $profiel;
+			$recensie->toegevoegd = date_create_immutable();
 		}
 
 		return $recensie;

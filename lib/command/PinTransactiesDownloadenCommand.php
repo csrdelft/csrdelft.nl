@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Twig\Environment;
 
 class PinTransactiesDownloadenCommand extends Command {
 	protected static $defaultName = 'fiscaat:pintransacties:download';
@@ -42,8 +43,13 @@ class PinTransactiesDownloadenCommand extends Command {
 	 * @var bool
 	 */
 	private $interactive;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
 	public function __construct(
+		Environment $twig,
 		PinTransactieRepository $pinTransactieRepository,
 		PinTransactieMatchRepository $pinTransactieMatchRepository,
 		PinTransactieMatcher $pinTransactieMatcher,
@@ -56,6 +62,7 @@ class PinTransactiesDownloadenCommand extends Command {
 		$this->pinTransactieMatcher = $pinTransactieMatcher;
 		$this->pinTransactieDownloader = $pinTransactieDownloader;
 		$this->civiBestellingRepository = $civiBestellingRepository;
+		$this->twig = $twig;
 	}
 
 	protected function configure() {
@@ -134,23 +141,14 @@ class PinTransactiesDownloadenCommand extends Command {
 		if ($this->pinTransactieMatcher->bevatFouten()) {
 			$report = $this->pinTransactieMatcher->genereerReport();
 
-			$body = <<<MAIL
-Beste am. Fiscus,
-
-Zojuist zijn de pin transacties en bestellingen tussen {$from} en {$to} geanalyseerd.
-
-De volgende fouten zijn gevonden.
-
-{$report}
-
-Met vriendelijke groet,
-
-namens de PubCie,
-Feut
-MAIL;
+			$body = $this->twig->render('mail/bericht/pintransactie.mail.twig', [
+				'from' => $from,
+				'to' => $to,
+				'report' => $report
+			]);
 
 			if ($this->interactive) {
-				$output->writeln($body);
+				$output->writeln($report);
 				$output->writeln("De mail is niet verzonden, want de sessie is in interactieve modus.");
 				$output->writeln(sprintf("Er zijn %d pin transacties gedownload.", count($pintransacties)));
 

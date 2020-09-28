@@ -135,7 +135,7 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 		return parent::mag($action, $allowedAuthenticationMethods);
 	}
 
-	function getAanmeldLimiet() {
+	public function getAanmeldLimiet() {
 		return $this->aanmeld_limiet;
 	}
 }

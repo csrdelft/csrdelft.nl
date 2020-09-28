@@ -39,6 +39,10 @@ class BbForumPlaatje extends BbImg {
 		return $this->plaatje->getUrl(true);
 	}
 
+	public function renderPlain() {
+		return 'Plaatje (' . $this->getLinkUrl() . ')';
+	}
+
 	/**
 	 * @param array $arguments
 	 * @throws BbException

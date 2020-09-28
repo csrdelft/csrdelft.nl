@@ -155,17 +155,18 @@ function getSessionMaxLifeTime() {
  * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
  */
 function redirect($url = null, $refresh = true) {
+	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
 	if (empty($url) || $url === null) {
-		$url = REQUEST_URI;
+		$url = $request->getRequestUri();
 	}
-	if (!$refresh && $url == REQUEST_URI) {
-		$url = CSR_ROOT;
+	if (!$refresh && $url == $request->getRequestUri()) {
+		$url = $_ENV['CSR_ROOT'];
 	}
-	if (!startsWith($url, CSR_ROOT)) {
+	if (!startsWith($url, $_ENV['CSR_ROOT'])) {
 		if (preg_match("/^[?#\/]/", $url) === 1) {
-			$url = CSR_ROOT . $url;
+			$url = $_ENV['CSR_ROOT'] . $url;
 		} else {
-			$url = CSR_ROOT;
+			$url = $_ENV['CSR_ROOT'];
 		}
 	}
 	header('location: ' . $url);
@@ -319,7 +320,7 @@ function isSyrinx() {
 }
 
 function isCli() {
-	return php_sapi_name() == 'cli';
+	return php_sapi_name() == 'cli' && $_SERVER['APP_ENV'] != 'test';
 }
 
 function isCi() {
@@ -963,8 +964,6 @@ function checkMimetype($filename, $mime) {
 
 /**
  * Mag de op dit moment ingelogde gebruiker $permissie?
- *
- * Korte methode voor gebruik in Blade templates.
  *
  * @param string $permission
  * @param array|null $allowedAuthenticationMethods

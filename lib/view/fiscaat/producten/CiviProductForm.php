@@ -18,7 +18,7 @@ use CsrDelft\view\formulier\ModalForm;
  * @since 07/05/2017
  */
 class CiviProductForm extends ModalForm {
-	function __construct(CiviProduct $model) {
+	public function __construct(CiviProduct $model) {
 		parent::__construct($model, '/fiscaat/producten/opslaan', false, true);
 
 		$fields = [];

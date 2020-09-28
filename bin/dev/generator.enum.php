@@ -7,7 +7,7 @@ use CsrDelft\model\entity\LidStatus;
 
 require_once __DIR__ . '/../../lib/configuratie.include.php';
 
-const FILE_TEMPLATE = __DIR__ . '/../../resources/assets/js/enum/%s.ts';
+const FILE_TEMPLATE = __DIR__ . '/../../assets/js/enum/%s.ts';
 const ENUMS = [
 	AccessAction::class,
 	LidStatus::class,

@@ -14,8 +14,8 @@ class ToestemmingLijstResponse extends DataTableResponse {
     private $categorien;
 
     public function __construct($model, $categorien) {
-        parent::__construct($model);
-        $this->categorien = $categorien;
+			$this->categorien = $categorien;
+			parent::__construct($model);
     }
 
     /**

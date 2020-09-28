@@ -103,7 +103,7 @@ class CorveeToewijzenService {
 		return $corveePuntenOverzichten;
 	}
 
-	function sorteerKwali(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
+	public function sorteerKwali(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
 		if (!$a->laatste && !$b->laatste) {
 			$a = $a->laatste->getBeginMoment();
 			$b = $b->laatste->getBeginMoment();
@@ -124,7 +124,7 @@ class CorveeToewijzenService {
 		}
 	}
 
-	function sorteerPrognose(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
+	public function sorteerPrognose(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
 		$a = $a->prognose;
 		$b = $b->prognose;
 		if ($a === $b) {

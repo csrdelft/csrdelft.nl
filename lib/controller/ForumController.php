@@ -25,9 +25,10 @@ use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
 use CsrDelft\view\forum\ForumZoekenForm;
+use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -196,7 +197,7 @@ class ForumController extends AbstractController {
 	 *
 	 * @param Request $request
 	 * @param null $zoekterm
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/titelzoeken", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -382,50 +383,76 @@ class ForumController extends AbstractController {
 
 	/**
 	 * Forum deel aanmaken.
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @param Request $request
+	 * @return JsonResponse|Response
 	 * @Route("/forum/aanmaken", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function aanmaken() {
+	public function aanmaken(Request $request) {
 		$deel = $this->forumDelenRepository->nieuwForumDeel();
-		$form = new ForumDeelForm($deel, true); // fetches POST values itself
-		if ($form->validate()) {
+		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
+			'action' => $this->generateUrl('csrdelft_forum_aanmaken'),
+			'aanmaken' => true,
+		]);
+
+		$form->handleRequest($request);
+
+		if ($form->isPosted() && $form->validate()) {
 			$this->forumDelenRepository->create($deel);
 			return new JsonResponse(true);
 		} else {
-			return $form;
+			return new Response($form->createModalView());
 		}
 	}
 
 	/**
 	 * Forum deel bewerken.
 	 *
+	 * @param Request $request
 	 * @param ForumDeel $deel
-	 * @return View
+	 * @return View|Response
 	 * @Route("/forum/beheren/{forum_id}", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function beheren(ForumDeel $deel) {
-		$form = new ForumDeelForm($deel); // fetches POST values itself
-		if ($form->validate()) {
+	public function beheren(Request $request, ForumDeel $deel) {
+		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
+			'action' => $this->generateUrl('csrdelft_forum_beheren', ['forum_id' => $deel->forum_id]),
+			'aanmaken' => false,
+		]);
+
+		$form->handleRequest($request);
+		if ($form->isPosted() && $form->validate()) {
 			$this->forumDelenRepository->update($deel);
 			return new JsonResponse(true);
 		} else {
-			return $form;
+			return new Response($form->createModalView());
 		}
+	}
+
+	/**
+	 * @return GenericSuggestiesResponse
+	 * @Route("/forum/categorie/suggestie")
+	 * @Auth(P_FORUM_ADMIN)
+	 */
+	public function forumCategorieSuggestie(Request $request) {
+		$zoekterm = $request->query->get('q');
+		$forumCategories = $this->forumCategorieRepository->createQueryBuilder('c')
+			->where('c.titel LIKE :zoekterm')
+			->setParameter('zoekterm', sql_contains($zoekterm))
+			->getQuery()->getResult();
+		return new GenericSuggestiesResponse($forumCategories);
 	}
 
 	/**
 	 * Forum deel verwijderen.
 	 *
 	 * @param ForumDeel $deel
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/opheffen/{forum_id}", methods={"POST"})
 	 * @Auth(P_FORUM_ADMIN)
 	 */
 	public function opheffen(ForumDeel $deel) {
-		$count = $this->forumDradenRepository->findBy(['forum_id' =>$deel->forum_id])->count();
+		$count = count($this->forumDradenRepository->findBy(['forum_id' => $deel->forum_id]));
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
 		} else {
@@ -439,7 +466,7 @@ class ForumController extends AbstractController {
 	 * Forum draad verbergen in zijbalk.
 	 *
 	 * @param ForumDraad $draad
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/verbergen/{draad_id}", methods={"POST"}))
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -458,7 +485,7 @@ class ForumController extends AbstractController {
 	 * Forum draad tonen in zijbalk.
 	 *
 	 * @param ForumDraad $draad
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/tonen/{draad_id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -488,7 +515,7 @@ class ForumController extends AbstractController {
 	 * @param ForumDraad $draad
 	 * @param string $niveau
 	 *
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/meldingsniveau/{draad_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -509,7 +536,7 @@ class ForumController extends AbstractController {
 	 * @param ForumDeel $deel
 	 * @param string $niveau
 	 *
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/forum/deelmelding/{forum_id}/{niveau}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -544,7 +571,7 @@ class ForumController extends AbstractController {
 	 *
 	 * @param ForumDraad $draad
 	 * @param string $property
-	 * @return View|RedirectResponse|null
+	 * @return Response
 	 * @Route("/forum/wijzigen/{draad_id}/{property}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -718,7 +745,7 @@ class ForumController extends AbstractController {
 
 		// markeer als gelezen
 		if (LoginService::mag(P_LOGGED_IN)) {
-			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
+			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, $post->laatst_gewijzigd);
 		}
 
 		// voorkom dubbelposts
@@ -782,7 +809,7 @@ class ForumController extends AbstractController {
 		if (!$oudDraad->magModereren()) {
 			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
+		$nieuw = filter_input(INPUT_POST, 'draad_id', FILTER_SANITIZE_NUMBER_INT);
 		$nieuwDraad = $this->forumDradenRepository->get((int)$nieuw);
 		if (!$nieuwDraad->magModereren()) {
 			throw $this->createAccessDeniedException("Geen moderator");

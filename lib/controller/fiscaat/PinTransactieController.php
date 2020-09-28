@@ -25,7 +25,6 @@ use CsrDelft\view\fiscaat\pin\PinBestellingCrediterenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchNegerenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
 use CsrDelft\view\formulier\FoutmeldingForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -67,12 +66,12 @@ class PinTransactieController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/fiscaat/pin", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
 	public function overzicht() {
-		return view('fiscaat.pin', [
+		return $this->render('fiscaat/pin.html.twig', [
 			'titel' => 'Pin transacties beheer',
 			'table' => new PinTransactieMatchTable(),
 		]);
@@ -586,7 +585,6 @@ h.t. Fiscus";
 		$mail = new Mail($ontvanger->getEmailOntvanger(), $onderwerp, $bericht);
 		$mail->setFrom($_ENV['EMAIL_FISCUS'], 'Fiscus C.S.R. Delft');
 		$mail->addBcc($bcc->getEmailOntvanger());
-		$mail->setLightBB();
 		$mail->send();
 	}
 }

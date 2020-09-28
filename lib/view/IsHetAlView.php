@@ -2,11 +2,11 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\service\security\LoginService;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class IsHetAlView implements View {
 	use ToHtmlResponse;
@@ -35,10 +35,9 @@ class IsHetAlView implements View {
 		'u het forum kan volgen met RSS?' => '/profiel#forum',
 	);
 
-	public function __construct($ishetal) {
+	public function __construct(LidInstellingenRepository $lidInstellingenRepository, SessionInterface $session, AgendaRepository $agendaRepository, $ishetal) {
 		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
-			$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
 			$opties = array_slice($lidInstellingenRepository->getTypeOptions('zijbalk', 'ishetal'), 2);
 			$this->model = $opties[array_rand($opties)];
 		}
@@ -77,18 +76,17 @@ class IsHetAlView implements View {
 				break;
 
 			case 'studeren':
-				if (isset($_COOKIE['studeren'])) {
-					$this->ja = (time() > ($_COOKIE['studeren'] + 5 * 60) AND date('w') != 0);
-					$tijd = $_COOKIE['studeren'];
+				if ($session->has('studeren')) {
+					$this->ja = (time() > ($session->get('studeren') + 5 * 60) AND date('w') != 0);
+					$tijd = $session->get('studeren');
 				} else {
 					$this->ja = false;
 					$tijd = time();
 				}
-				setcookie('studeren', $tijd, time() + 30 * 60, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+				$session->set('studeren', $tijd);
 				break;
 
 			default:
-				$agendaRepository = ContainerFacade::getContainer()->get(AgendaRepository::class);
 				$vandaag = $agendaRepository->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					$this->ja = true;

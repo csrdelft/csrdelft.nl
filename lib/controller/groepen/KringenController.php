@@ -6,7 +6,7 @@ use CsrDelft\entity\groepen\Kring;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

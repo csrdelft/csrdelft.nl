@@ -25,25 +25,23 @@ class VerjaardagenService {
 	 * @var EntityManagerInterface
 	 */
 	private $em;
-	/**
-	 * @var string
-	 */
-	private $filterByToestemingSql;
-	/**
-	 * @var string
-	 */
-	private $novietenFilter = '';
 
 	public function __construct(ProfielRepository $profielRepository, EntityManagerInterface $em) {
 		$this->profielRepository = $profielRepository;
 		$this->em = $em;
+	}
 
-		$this->filterByToestemingSql = LoginService::mag(P_LEDEN_MOD) ? "" : self::FILTER_BY_TOESTEMMING;
+	private function getFilterByToestemmingSql() {
+		return LoginService::mag(P_LEDEN_MOD) ? "" : self::FILTER_BY_TOESTEMMING;
+	}
 
-		if ($em->getFilters()->isEnabled('verbergNovieten')) {
-			$jaar = intval(trim($em->getFilters()->getFilter('verbergNovieten')->getParameter('jaar'), "'"));
-			$this->novietenFilter = "AND NOT (STATUS = 'S_NOVIET' AND lidjaar = $jaar)";
+	private function getNovietenFilter() {
+		if ($this->em->getFilters()->isEnabled('verbergNovieten')) {
+			$jaar = intval(trim($this->em->getFilters()->getFilter('verbergNovieten')->getParameter('jaar'), "'"));
+			return "AND NOT (STATUS = 'S_NOVIET' AND lidjaar = $jaar)";
 		}
+
+		return '';
 	}
 
 	/**
@@ -101,10 +99,10 @@ FROM (
         SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(NOW()) - YEAR(gebdatum) YEAR) AS verjaardag
         FROM profielen
         WHERE NOT gebdatum = '0000-00-00' AND status IN ($lidstatus)
-        {$this->novietenFilter}
+        {$this->getNovietenFilter()}
         ) AS T1
     ) AS T2
-{$this->filterByToestemingSql}
+{$this->getFilterByToestemmingSql()}
 ORDER BY distance
 LIMIT :limit
 SQL;
@@ -139,10 +137,10 @@ FROM (
         SELECT profielen.*, ADDDATE(gebdatum, INTERVAL YEAR(DATE(:van_datum)) - YEAR(gebdatum) YEAR) AS verjaardag
         FROM profielen
         WHERE NOT gebdatum = '0000-00-00' AND status IN ($lidstatus)
-        {$this->novietenFilter}
+        {$this->getNovietenFilter()}
         ) AS T1
     ) AS T2
-{$this->filterByToestemingSql}
+{$this->getFilterByToestemmingSql()}
 WHERE volgende_verjaardag >= DATE(:van_datum) AND volgende_verjaardag <= DATE(:tot_datum)
 ORDER BY volgende_verjaardag
 SQL;

@@ -8,7 +8,7 @@ Kijk op [vuejs.org](https://vuejs.org/) voor meer uitleg. Maar het komt er eigen
 
 ## Een vue component maken
 
-Kijk in `resources/assets/js/components` voor alle Vue code in de stek.
+Kijk in `assets/js/components` voor alle Vue code in de stek.
 
 Het volgen van de [Guide](https://vuejs.org/v2/guide/) van Vue is aangeraden als je nooit Vue hebt aangeraakt.
 

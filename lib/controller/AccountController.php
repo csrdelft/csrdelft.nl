@@ -7,12 +7,13 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
 use CsrDelft\view\login\UpdateLoginForm;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,10 +34,6 @@ class AccountController extends AbstractController {
 	 */
 	private $loginService;
 	/**
-	 * @var LoginSessionRepository
-	 */
-	private $loginSessionRepository;
-	/**
 	 * @var AccessService
 	 */
 	private $accessService;
@@ -45,14 +42,12 @@ class AccountController extends AbstractController {
 		AccessService $accessService,
 		AccountRepository $accountRepository,
 		CmsPaginaRepository $cmsPaginaRepository,
-		LoginService $loginService,
-		LoginSessionRepository $loginSessionRepository
+		LoginService $loginService
 	) {
 		$this->accessService = $accessService;
 		$this->accountRepository = $accountRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->loginService = $loginService;
-		$this->loginSessionRepository = $loginSessionRepository;
 	}
 
 	/**
@@ -87,12 +82,12 @@ class AccountController extends AbstractController {
 
 	/**
 	 * @param null $uid
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 * @Route("/account/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($uid = null) {
+	public function bewerken(Request $request, $uid = null) {
 		if ($uid == null) {
 			$uid = $this->getUid();
 		}
@@ -119,21 +114,25 @@ class AccountController extends AbstractController {
 		if (!$this->accessService->mag($account, P_LOGGED_IN)) {
 			setMelding('Account mag niet inloggen', 2);
 		}
-		$form = new AccountForm($account);
+		$form = $this->createFormulier(AccountForm::class, $account, [
+			'action' => $this->generateUrl('csrdelft_account_bewerken', ['uid' => $account->uid])
+		]);
+		$form->handleRequest($request);
 		if ($form->validate()) {
-			if ($form->findByName('username')->getValue() == '') {
+			if ($account->username == '') {
 				$account->username = $account->uid;
 			}
 			// username, email & wachtwoord opslaan
-			$pass_plain = $form->findByName('wijzigww')->getValue();
+			$pass_plain = $account->pass_plain;
 			$this->accountRepository->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
-		return $this->render('default.html.twig', ['content' => $form]);
+		$account->eraseCredentials();
+		return $this->render('default.html.twig', ['content' => $form->createView()]);
 	}
 
 	/**
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 * @Route("/account/{uid}/aanvragen", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PUBLIC)
 	 */

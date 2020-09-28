@@ -15,7 +15,7 @@ class VerticalenFixtures extends Fixture {
 
 		$verticaleLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
 
-		foreach ($verticaleLetters as $i => $letter) {
+		foreach ($verticaleLetters as $letter) {
 			$verticale = new Verticale();
 
 			$verticale->letter = $letter;

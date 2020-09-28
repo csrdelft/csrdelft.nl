@@ -8,6 +8,7 @@ use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
+use Twig\Environment;
 
 /**
  * ToewijzenForm.php
@@ -19,7 +20,7 @@ use CsrDelft\view\formulier\ModalForm;
  */
 class ToewijzenForm extends ModalForm {
 
-	public function __construct(CorveeTaak $taak, array $suggesties) {
+	public function __construct(CorveeTaak $taak, Environment $twig, array $suggesties) {
 		parent::__construct(null, '/corvee/beheer/toewijzen/' . $taak->taak_id);
 
 		if (!is_numeric($taak->taak_id) || $taak->taak_id <= 0) {
@@ -30,7 +31,7 @@ class ToewijzenForm extends ModalForm {
 
 		$fields = [];
 		$fields[] = new LidObjectField('profiel', $taak->profiel, 'Naam', 'leden');
-		$fields[] = new SuggestieLijst($suggesties, $taak);
+		$fields[] = new SuggestieLijst($suggesties, $twig, $taak);
 
 		$this->addFields($fields);
 

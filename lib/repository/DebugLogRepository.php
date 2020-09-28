@@ -7,6 +7,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Security;
 
@@ -22,12 +23,17 @@ class DebugLogRepository extends AbstractRepository {
 	 * @var Security
 	 */
 	private $security;
+	/**
+	 * @var RequestStack
+	 */
+	private $requestStack;
 
-	public function __construct(ManagerRegistry $registry, Security $security, SuService $suService) {
+	public function __construct(ManagerRegistry $registry, RequestStack $requestStack, Security $security, SuService $suService) {
 		parent::__construct($registry, DebugLogEntry::class);
 
 		$this->suService = $suService;
 		$this->security = $security;
+		$this->requestStack = $requestStack;
 	}
 
 	/**
@@ -62,7 +68,7 @@ class DebugLogRepository extends AbstractRepository {
 		}
 		$entry->ip = @$_SERVER['REMOTE_ADDR'] ?: '127.0.0.1';
 		$entry->referer = @$_SERVER['HTTP_REFERER'] ?: 'CLI';
-		$entry->request = REQUEST_URI ?: 'CLI';
+		$entry->request = $this->requestStack->getCurrentRequest()->getRequestUri() ?: 'CLI';
 		$entry->user_agent = @$_SERVER['HTTP_USER_AGENT'] ?: 'CLI';
 
 		$this->getEntityManager()->persist($entry);

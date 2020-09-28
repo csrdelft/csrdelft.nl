@@ -41,7 +41,18 @@ class FormulierInstance {
 	private $modalBreedte;
 	private $validationMethods;
 
-	public function __construct($action, $titel, $dataTableId, $formKnoppen, $fields, $showMelding, $preventCsrf, $css_classes, $validationMethods = [], $post = true) {
+	public function __construct(
+		$action,
+		$titel,
+		$dataTableId,
+		$formKnoppen,
+		$fields,
+		$showMelding,
+		$preventCsrf,
+		$css_classes,
+		$validationMethods = [],
+		$post = true
+	) {
 		$this->formId = uniqid_safe('Formulier_');
 		$this->action = $action;
 		$this->formKnoppen = $formKnoppen;
@@ -76,12 +87,12 @@ class FormulierInstance {
 		}
 		$csrfField = $this->getCsrfField();
 		if ($csrfField != null)
-			$csrfField->view();
+			$html .= $csrfField->getHtml();
 		$html .= $this->formKnoppen->getHtml();
 		$html .= $this->getScriptTag();
 		$html .= '</form>';
 
-		return new Response($html);
+		return new FormulierView($html, $this->titel);
 	}
 
 	protected function getFormTag() {
@@ -169,7 +180,7 @@ HTML;
 	{$this->getScriptTag()}
 </div>
 HTML;
-		return new Response($html);
+		return new FormulierView($html, $this->titel);
 	}
 
 	/**
@@ -214,7 +225,7 @@ HTML;
 		}
 		$valid = true;
 		foreach ($this->fields as $field) {
-			if ($field instanceof Validator and !$field->validate()) { // geen comments bijv.
+			if ($field instanceof Validator && !$field->validate()) { // geen comments bijv.
 				$valid = false; // niet gelijk retourneren om voor alle velden eventueel errors te zetten
 			}
 		}
@@ -236,7 +247,7 @@ HTML;
 	 */
 	public function isPosted() {
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField and !$field->isPosted()) {
+			if ($field instanceof InputField && !$field->isPosted()) {
 				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
@@ -284,9 +295,11 @@ HTML;
 	}
 
 	public function handleRequest(Request $request) {
-		foreach ($this->fields as $field) {
-			if ($field instanceof InputField) {
-				$this->loadProperty($field);
+		if ($this->isPosted()) {
+			foreach ($this->fields as $field) {
+				if ($field instanceof InputField) {
+					$this->loadProperty($field);
+				}
 			}
 		}
 	}
@@ -307,5 +320,9 @@ HTML;
 	 */
 	public function setModel($model): void {
 		$this->model = $model;
+	}
+
+	public function getField($name) {
+		return $this->fields[$name];
 	}
 }

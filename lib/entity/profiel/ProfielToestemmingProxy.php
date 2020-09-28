@@ -6,6 +6,8 @@ namespace CsrDelft\entity\profiel;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * Bescherm velden van een Profiel object door eerst te controleren of de velden te bekijken zijn.
@@ -39,9 +41,9 @@ class ProfielToestemmingProxy extends Profiel {
 		$this->lidToestemmingRepository = $lidToestemmingRepository;
 
 		if (!static::$publicVelden) {
-			$reflectionClass = new \ReflectionClass(get_class($this));
-			$publicReflectionProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
-			$staticReflectionProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_STATIC);
+			$reflectionClass = new ReflectionClass(get_class($this));
+			$publicReflectionProperties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
+			$staticReflectionProperties = $reflectionClass->getProperties(ReflectionProperty::IS_STATIC);
 
 			static::$publicVelden = array_map(function ($prop) {
 				return $prop->name;

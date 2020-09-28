@@ -74,7 +74,7 @@
 									<div class="forumpasfoto">{{ get_profiel(post.uid).link('pasfoto') | raw }}</div>
 								{% endif %}
 							</div>
-							<div class="forum-bericht @cycle('bericht0', 'bericht1')" id="post{{ post.post_id }}">
+							<div class="forum-bericht {{ cycle(['bericht0', 'bericht1'], loop.index) }}" id="post{{ post.post_id }}">
 								{{ post.tekst | split_on_keyword(query) | bbcode_light | highlight_zoekterm(query) }}
 							</div>
 						</div>

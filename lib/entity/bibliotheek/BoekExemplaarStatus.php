@@ -13,6 +13,10 @@ use CsrDelft\common\Enum;
  * @method static static uitgeleend
  * @method static static teruggegeven
  * @method static static vermist
+ * @method static boolean isbeschikbaar
+ * @method static boolean isuitgeleend
+ * @method static boolean isteruggegeven
+ * @method static boolean isvermist
  */
 class BoekExemplaarStatus extends Enum {
 	const beschikbaar = 'beschikbaar';

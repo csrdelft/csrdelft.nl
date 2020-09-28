@@ -86,4 +86,8 @@ class VoorkeurVoorkeur {
 		return ContainerFacade::getContainer()->get(AccessService::class)
 			->mag($this->profiel->account, 'commissie:' . $this->commissie->naam . ',commissie:' . $this->commissie->naam . ':ot');
 	}
+
+	public function getVoorkeurTekst() {
+		return ['', 'nee', 'ja', 'misschien'][$this->voorkeur];
+	}
 }

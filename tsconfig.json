@@ -10,8 +10,8 @@
 		"skipLibCheck": true
   },
   "include": [
-    "resources/assets/js/**/*.ts",
-		"resources/assets/js/**/*.vue"
+    "assets/js/**/*.ts",
+		"assets/js/**/*.vue"
   ],
   "compileOnSave": false
 }

@@ -150,7 +150,7 @@ class LidZoekerService {
 					$value = strtoupper($value);
 					//als op alle lid-statussen moet worden gezocht verwijderen we
 					//eventueel aanwezige filters en zoeken we in alles.
-					if ($value == '*' OR $value == 'ALL') {
+					if ($value == '*' || $value == 'ALL') {
 						if (isset($this->filters['status'])) {
 							unset($this->filters['status']);
 						}
@@ -255,11 +255,13 @@ class LidZoekerService {
 			//met 'veld:=<zoekterm> wordt exact gezocht.
 			$parts = explode(':', $zoekterm);
 
+			$veld = strtolower($parts[0]);
+
 			if ($parts[1][0] == '=') {
-				$queryBuilder->where($queryBuilder->expr()->eq('p' . $parts[0], ':zoekterm'));
+				$queryBuilder->where($queryBuilder->expr()->eq('p.' . $veld, ':zoekterm'));
 				$queryBuilder->setParameter('zoekterm', substr($parts[1], 1));
 			} else {
-				$queryBuilder->where($queryBuilder->expr()->like('p.' . $parts[0], ':zoekterm'));
+				$queryBuilder->where($queryBuilder->expr()->like('p.' . $veld, ':zoekterm'));
 				$queryBuilder->setParameter('zoekterm', sql_contains($parts[1]));
 			}
 		} else { //als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
@@ -312,7 +314,7 @@ class LidZoekerService {
 
 		foreach ($result as $profiel) {
 			if ($this->magProfielVinden($profiel, $this->query)) {
-				$this->result[] = new ProfielToestemmingProxy($profiel, $this->lidToestemmingRepository, $this->query);
+				$this->result[] = new ProfielToestemmingProxy($profiel, $this->lidToestemmingRepository);
 			}
 		}
 	}

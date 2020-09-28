@@ -123,11 +123,11 @@ class MenuItem implements DisplayEntity {
 		return false;
 	}
 
-	function getId() {
+	public function getId() {
 		return $this->item_id;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		return $this->tekst . ' [' . $this->link . ']';
 	}
 }

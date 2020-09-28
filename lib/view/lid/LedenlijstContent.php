@@ -7,6 +7,8 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\Icon;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  *  C.S.R. Delft | pubcie@csrdelft.nl
@@ -28,9 +30,14 @@ class LedenlijstContent implements View {
 	 * @var LidZoekerService
 	 */
 	private $lidzoeker;
+	/**
+	 * @var Request
+	 */
+	private $requestStack;
 
-	public function __construct(LidZoekerService $zoeker) {
+	public function __construct(Request $requestStack, LidZoekerService $zoeker) {
 		$this->lidzoeker = $zoeker;
+		$this->requestStack = $requestStack;
 	}
 
 	public function getModel() {
@@ -78,17 +85,18 @@ class LedenlijstContent implements View {
 	}
 
 	public function view() {
+		$requestUri = $this->requestStack->getRequestUri();
 		if ($this->lidzoeker->count() > 0) {
-			if (strstr(REQUEST_URI, '?') !== false) {
-				$url = REQUEST_URI . '&amp;addToGoogleContacts=true';
+			if (strstr($requestUri, '?') !== false) {
+				$url = $requestUri . '&amp;addToGoogleContacts=true';
 			} else {
-				$url = REQUEST_URI . '?addToGoogleContacts=true';
+				$url = $requestUri . '?addToGoogleContacts=true';
 			}
 			echo '<a href="' . $url . '" class="btn float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
-			if (strstr(REQUEST_URI, '?') !== false) {
-				$url = REQUEST_URI . '&exportVcf=true';
+			if (strstr($requestUri, '?') !== false) {
+				$url = $requestUri . '&exportVcf=true';
 			} else {
-				$url = REQUEST_URI . '?exprotVcf=true';
+				$url = $requestUri . '?exportVcf=true';
 			}
 			echo '<a href="' . $url . '" class="btn float-right" title="Huidige selectie exporteren als vcard">' . Icon::getTag('vcard_add') . '</a>';
 		}

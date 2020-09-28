@@ -266,9 +266,10 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 			// Zoek op datum, want er kunnen meerdere maaltijden op 1 dag zijn terwijl er maar 1 kookploeg is.
 			// Ook hoeft een taak niet per se gekoppeld te zijn aan een maaltijd (maximaal aan 1 maaltijd).
 			/** @var CorveeTaak $taken */
-			$taken = ContainerFacade::getContainer()->get(CorveeTakenRepository::class)->getTakenVoorAgenda($this->getMoment(), $this->getMoment());
+			$corveeTakenRepository = ContainerFacade::getContainer()->get(CorveeTakenRepository::class);
+			$taken = $corveeTakenRepository->getTakenVoorAgenda($this->getMoment(), $this->getMoment());
 			foreach ($taken as $taak) {
-				if ($taak->profiel && $taak->profiel === $uid && $taak->maaltijd_id !== null) { // checken op gekoppelde maaltijd (zie hierboven)
+				if ($taak->profiel && $taak->profiel->uid === $uid && $taak->maaltijd_id !== null) { // checken op gekoppelde maaltijd (zie hierboven)
 					$this->maaltijdcorvee = $taak; // de taak die toegang geeft tot de maaltijdlijst
 					return true;
 				}
@@ -333,7 +334,7 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 		return date_format_intl($this->datum, DATE_FORMAT);
 	}
 
-	function getAanmeldLimiet() {
+	public function getAanmeldLimiet() {
 		return $this->aanmeld_limiet;
 	}
 
@@ -351,11 +352,11 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	}
 
 
-	function getId() {
+	public function getId() {
 		return $this->maaltijd_id;
 	}
 
-	function getWeergave(): string {
+	public function getWeergave(): string {
 		if ($this->datum) {
 			return $this->titel . ' op ' . date_format_intl($this->datum, DATE_FORMAT) . ' om ' . date_format_intl($this->getMoment(), TIME_FORMAT);
 		} else {
