@@ -2,88 +2,76 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
 use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
 use CsrDelft\service\security\LoginService;
-use Doctrine\ORM\EntityManager;
-use Jacwright\RestServer\RestException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ApiActiviteitenController {
+class ApiActiviteitenController extends AbstractController {
 	/** @var ChangeLogRepository  */
 	private $changeLogRepository;
 	/** @var ActiviteitenRepository  */
 	private $activiteitenRepository;
 	/**
-	 * @var EntityManager
-	 */
-	private $em;
-	/**
 	 * @var ActiviteitDeelnemersRepository
 	 */
 	private $activiteitDeelnemersRepository;
 
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-
-		$this->activiteitenRepository = $container->get(ActiviteitenRepository::class);
-		$this->activiteitDeelnemersRepository = $container->get(ActiviteitDeelnemersRepository::class);
-		$this->changeLogRepository = $container->get(ChangeLogRepository::class);
-		$this->em = $container->get('doctrine.orm.entity_manager');
+	public function __construct(ActiviteitenRepository  $activiteitenRepository, ActiviteitDeelnemersRepository $activiteitDeelnemersRepository, ChangeLogRepository  $changeLogRepository) {
+		$this->activiteitenRepository = $activiteitenRepository;
+		$this->activiteitDeelnemersRepository = $activiteitDeelnemersRepository;
+		$this->changeLogRepository = $changeLogRepository;
 	}
 
 	/**
-	 * @return boolean
-	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginService::mag(P_LEDEN_READ);
-	}
-
-	/**
-	 * @url POST /$id/aanmelden
+	 * url POST /$id/aanmelden
+	 * @Route("/API/2.0/activiteiten/{id}/aanmelden", methods={"POST"})
+	 * @Auth(P_LEDEN_READ)
 	 */
 	public function activiteitAanmelden($id) {
-
 		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
-			throw new RestException(404, 'Activiteit bestaat niet');
+			throw new NotFoundHttpException('Activiteit bestaat niet');
 		}
 
 		if (!$activiteit->mag(AccessAction::Aanmelden)) {
-			throw new RestException(403, 'Aanmelden niet mogelijk');
+			throw $this->createAccessDeniedException('Aanmelden niet mogelijk');
 		}
 
 		$lid = $this->activiteitDeelnemersRepository->nieuw($activiteit, $_SESSION[LoginService::SESS_UID]);
 
 		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
-		$this->em->persist($lid);
-		$this->em->flush();
+		$this->getDoctrine()->getManager()->persist($lid);
+		$this->getDoctrine()->getManager()->flush();
 
 		return array('data' => $activiteit);
 	}
 
 	/**
-	 * @url POST /$id/afmelden
+	 * @Route("/API/2.0/activiteiten/{id}/afmelden", methods={"POST"})
+	 * @Auth(P_LEDEN_READ)
 	 */
 	public function activiteitAfmelden($id) {
-
 		$activiteit = $this->activiteitenRepository->get($id);
 
 		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
-			throw new RestException(404, 'Activiteit bestaat niet');
+			throw new NotFoundHttpException('Activiteit bestaat niet');
 		}
 
 		if (!$activiteit->mag(AccessAction::Afmelden)) {
-			throw new RestException(403, 'Afmelden niet mogelijk');
+			throw $this->createAccessDeniedException('Afmelden niet mogelijk');
 		}
 
 		$lid = $activiteit->getLid($_SESSION['_uid']);
 		$this->changeLogRepository->log($activiteit, 'afmelden', $lid->uid, null);
-		$this->em->remove($lid);
-		$this->em->flush();
+		$this->getDoctrine()->getManager()->remove($lid);
+		$this->getDoctrine()->getManager()->flush();
 
 		return array('data' => $activiteit);
 	}

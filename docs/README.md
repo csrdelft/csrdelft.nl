@@ -14,13 +14,14 @@ Basisconcepten over de stek.
 - [Filestructuur](filestructuur.md): De bestandsstructuur van de stek repository.
 - [Symfony](symfony.md)
 - [Frontend build](frontend.md): Het builden van de frontend.
+- [Code style](code.md): Codestyle
 
 ## Beginner kennis
 
 Kijk hier als je iets nieuws gaat bouwen. Dit zijn de stappen die je dan zou moeten doorlopen.
 
 1. [Routes](routes.md), een nieuw pagina maken
-1. [Blade](blade.md), een nieuwe pagina weergeven
+1. [Twig](twig.md), een nieuwe pagina weergeven
 1. [Database](orm.md), data opslaan in de database
 1. [Migraties](migraties.md), je database veranderingen communiceren
 
@@ -38,12 +39,15 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Formulier](formulier.md)
 - [Vue](vue.md)
 - [Composer](composer.md)
+- [Security](security.md)
+- [Tests](test.md)
 
 ## Overig
 
 - [Status](status.md) van ontwikkelingen van verschillende onderdelen van de stek.
 - [Docker](installatie-docker.md)
-- [Travis](ci.md)
+- [Github Actions](ci.md)
 - [Wiki](wiki.md)
 - [Deploy](deploy.md) op Syrinx
 - [Verbinden met MySql op Syrinx](verbinden-met-mysql-op-syrinx.md)
+- [Email](email.md) Mailtjes sturen

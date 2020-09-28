@@ -1,0 +1,50 @@
+{% extends 'forum/base.html.twig' %}
+
+{% block titel %}Wacht op goedkeuring{% endblock %}
+
+{% block breadcrumbs %}
+	{{ csr_breadcrumbs({
+		'/': 'main',
+		'/forum': 'Forum',
+		'': 'Wacht',
+	}) }}
+{% endblock %}
+
+{% block content %}
+	{{ getMelding() }}
+	<h1>Wacht op goedkeuring</h1>
+
+	{% if resultaten is not empty %}
+		<div class="forum-zoeken">
+			{% for draad in resultaten %}
+				<div class="forum-zoeken-header">
+					<div>
+							<span title="Nieuw onderwerp in {{ draad.deel.titel }}">{{ draad.titel }}
+								<span>
+									[<a href="{{ url('csrdelft_forum_deel', {forum_id: draad.forum_id}) }}">{{ draad.deel.titel }}</a>]
+								</span>
+								{{ icon('new') }}
+							</span>
+					</div>
+					<div class="niet-dik">
+						{% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
+							{{ draad.datum_tijd | reldate }}
+						{% else %}
+							{{ draad.datum_tijd | date_format }}
+						{% endif %}
+					</div>
+				</div>
+				<div class="forum-zoeken-bericht">
+					{% for post in draad.forumPosts %}
+						{{ include('forum/partial/post_lijst.html.twig', {draad: draad, post: post}) }}
+						<div class="tussenschot"></div>
+					{% endfor %}
+				</div>
+			{% endfor %}
+		</div>
+		<h1>Wacht op goedkeuring</h1>
+	{% else %}
+		Geen berichten die op goedkeuring wachten.
+	{% endif %}
+{% endblock %}
+

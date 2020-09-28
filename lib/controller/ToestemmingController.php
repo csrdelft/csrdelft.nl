@@ -3,7 +3,6 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
@@ -14,7 +13,9 @@ use CsrDelft\view\toestemming\ToestemmingLijstResponse;
 use CsrDelft\view\toestemming\ToestemmingLijstTable;
 use CsrDelft\view\toestemming\ToestemmingModalForm;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -55,13 +56,16 @@ class ToestemmingController extends AbstractController {
 	}
 
 	/**
-	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @return Response
 	 * @throws Exception
 	 * @Route("/toestemming", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function GET_overzicht() {
-		return view('default', ['content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')), 'modal' => new ToestemmingModalForm($this->lidToestemmingRepository)]);
+		return $this->render('default.html.twig', [
+			'content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')),
+			'modal' => new ToestemmingModalForm($this->lidToestemmingRepository),
+		]);
 	}
 
 	/**
@@ -76,7 +80,7 @@ class ToestemmingController extends AbstractController {
 	}
 
 	/**
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @return RedirectResponse
 	 * @Route("/toestemming/annuleren", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -88,7 +92,7 @@ class ToestemmingController extends AbstractController {
 
 	/**
 	 * @param Request $request
-	 * @return \CsrDelft\view\renderer\TemplateView|ToestemmingLijstResponse
+	 * @return ToestemmingLijstResponse|Response
 	 * @Route("/toestemming/lijst", methods={"GET","POST"})
 	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
 	 */
@@ -100,7 +104,7 @@ class ToestemmingController extends AbstractController {
 		} else if (LoginService::mag('commissie:promocie:ht')) {
 			$ids = ['foto_intern', 'foto_extern'];
 		} else {
-			throw new CsrToegangException('Geen toegang');
+			throw $this->createAccessDeniedException('Geen toegang');
 		}
 
 		if ($request->getMethod() === 'POST') {
@@ -126,10 +130,8 @@ class ToestemmingController extends AbstractController {
 
 			return new ToestemmingLijstResponse($toestemmingFiltered, $ids);
 		} else {
-			return view('pagina', [
-				'titel' => 'Lid toestemming',
-				'breadcrumbs' => 'Lid toestemmingen',
-				'body' => new ToestemmingLijstTable($ids)
+			return $this->render('default.html.twig', [
+				'content' => new ToestemmingLijstTable($ids)
 			]);
 		}
 	}

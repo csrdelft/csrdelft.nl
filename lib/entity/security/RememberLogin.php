@@ -7,6 +7,7 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\Icon;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
@@ -17,7 +18,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\security\RememberLoginRepository")
  * @ORM\Table("login_remember")
  */
-class RememberLogin implements DataTableEntry {
+class RememberLogin implements DataTableEntry, PersistentTokenInterface {
 	/**
 	 * Primary key
 	 * @var int
@@ -27,6 +28,11 @@ class RememberLogin implements DataTableEntry {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
+	 */
+	public $series;
 	/**
 	 * Token string
 	 * @var string
@@ -52,6 +58,11 @@ class RememberLogin implements DataTableEntry {
 	 * @ORM\Column(type="datetime")
 	 */
 	public $remember_since;
+	/**
+	 * @var DateTimeImmutable
+	 * @ORM\Column(type="datetime")
+	 */
+	public $last_used;
 	/**
 	 * Device name
 	 * @var string
@@ -89,5 +100,34 @@ class RememberLogin implements DataTableEntry {
 	 */
 	public function getDataTableRememberSince() {
 		return reldate($this->remember_since);
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\SerializedName("last_used")
+	 * @Serializer\Groups("datatable")
+	 */
+	public function getDataTableLastUsed() {
+		return reldate($this->last_used);
+	}
+
+	public function getClass() {
+		return Account::class;
+	}
+
+	public function getUsername() {
+		return $this->uid;
+	}
+
+	public function getSeries() {
+		return $this->series;
+	}
+
+	public function getTokenValue() {
+		return $this->token;
+	}
+
+	public function getLastUsed() {
+		return $this->last_used;
 	}
 }

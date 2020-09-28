@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view\cms;
 
+use CsrDelft\Component\Formulier\FormulierBuilder;
+use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\entity\CmsPagina;
 use CsrDelft\view\formulier\elementen\HtmlComment;
-use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\TextField;
@@ -20,30 +21,32 @@ use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
  *
  * Bewerken van een CmsPagina.
  */
-class CmsPaginaForm extends Formulier {
-
-	function __construct(CmsPagina $pagina) {
-		parent::__construct($pagina, '/pagina/bewerken/' . $pagina->naam);
-		$this->titel = 'Pagina bewerken: ' . $pagina->naam;
+class CmsPaginaForm implements FormulierTypeInterface {
+	/**
+	 * @param FormulierBuilder $builder
+	 * @param CmsPagina $data
+	 * @param array $options
+	 */
+	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+		$builder->setTitel('Pagina bewerken: ' . $data->naam);
 
 		$fields = [];
-		$fields[] = new HtmlComment('<div class="row"><label class="col-3 col-form-label">Laatst gewijzigd</label><div class="col-9"><div class="form-control-plaintext">' . reldate($pagina->laatst_gewijzigd) . '</div></div></div>');
-		$fields[] = new TextField('titel', $pagina->titel, 'Titel');
-		if ($pagina->magRechtenWijzigen()) {
-			$fields[] = new RechtenField('rechten_bekijken', $pagina->rechten_bekijken, 'Rechten bekijken');
-			$fields[] = new RechtenField('rechten_bewerken', $pagina->rechten_bewerken, 'Rechten bewerken');
-			$fields['html'] = new RadioField('inline_html', (int)$pagina->inline_html, 'Inline HTML', array('[html] tussen [/html]', 'Direct <html>'));
+		$fields[] = new HtmlComment('<div class="row"><label class="col-3 col-form-label">Laatst gewijzigd</label><div class="col-9"><div class="form-control-plaintext">' . reldate($data->laatst_gewijzigd) . '</div></div></div>');
+		$fields[] = new TextField('titel', $data->titel, 'Titel');
+		if ($data->magRechtenWijzigen()) {
+			$fields[] = new RechtenField('rechten_bekijken', $data->rechten_bekijken, 'Rechten bekijken');
+			$fields[] = new RechtenField('rechten_bewerken', $data->rechten_bewerken, 'Rechten bewerken');
+			$fields['html'] = new RadioField('inline_html', (int)$data->inline_html, 'Inline HTML', array('[html] tussen [/html]', 'Direct <html>'));
 			$fields['html']->title = 'Geen [html] nodig en zelf regeleindes plaatsen met [rn] of <br />';
 		} else {
-			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . $pagina->rechten_bekijken .
-				'</div><div class="clear-left"><label>Rechten bewerken</label>' . $pagina->rechten_bewerken . '</div>');
+			$fields[] = new HtmlComment('<div><label>Rechten bekijken</label>' . $data->rechten_bekijken .
+				'</div><div class="clear-left"><label>Rechten bewerken</label>' . $data->rechten_bewerken . '</div>');
 		}
-		$fields[] = new BBCodeField('inhoud', $pagina->inhoud, 'Inhoud');
-		$fields['btn'] = new FormDefaultKnoppen('/pagina/' . $pagina->naam);
-		$delete = new DeleteKnop('/pagina/verwijderen/' . $pagina->naam);
+		$fields[] = new BBCodeField('inhoud', $data->inhoud, 'Inhoud');
+		$fields['btn'] = new FormDefaultKnoppen('/pagina/' . $data->naam);
+		$delete = new DeleteKnop('/data/verwijderen/' . $data->naam);
 		$fields['btn']->addKnop($delete, true);
 
-		$this->addFields($fields);
+		$builder->addFields($fields);
 	}
-
 }

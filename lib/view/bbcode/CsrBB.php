@@ -167,17 +167,23 @@ class CsrBB extends Parser {
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseMail($bbcode, $light = false) {
+	public static function parseMail($bbcode) {
 		$env = new BbEnv();
-		$env->light_mode = $light;
-		$env->email_mode = true;
+		$env->mode = "light";
 		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
 		return $parser->getHtml($bbcode);
 	}
 
 	public static function parseLight($bbcode) {
 		$env = new BbEnv();
-		$env->light_mode = true;
+		$env->mode = "light";
+		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
+		return $parser->getHtml($bbcode);
+	}
+
+	public static function parsePlain($bbcode) {
+		$env = new BbEnv();
+		$env->mode = "plain";
 		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
 		return $parser->getHtml($bbcode);
 	}

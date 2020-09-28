@@ -11,6 +11,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
+use Psr\Log\LoggerInterface;
 
 /**
  * ForumDraad.class.php
@@ -139,6 +140,7 @@ class ForumDraad {
 	 * Lijst van lezers (wanneer)
 	 * @var PersistentCollection|ForumDraadGelezen[]
 	 * @ORM\OneToMany(targetEntity="ForumDraadGelezen", mappedBy="draad")
+	 * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
 	 */
 	public $lezers;
 	/**
@@ -232,7 +234,9 @@ class ForumDraad {
 
 	public function isOngelezen() {
 		if ($gelezen = $this->getWanneerGelezen()) {
-			if ($this->laatst_gewijzigd > $gelezen->datum_tijd) {
+			// Omdat this en gelezen uit de cache _kunnen_ komen kunnen de milliseconden in
+			// de date verschillend zijn van wat er in de db staat. Doe dus hier check op seconden.
+			if ($this->laatst_gewijzigd->getTimestamp() > $gelezen->datum_tijd->getTimestamp()) {
 				return true;
 			}
 			return false;
@@ -270,7 +274,7 @@ class ForumDraad {
 	 */
 	public function getLaatstePostSamenvatting() {
 		$laatste = $this->laatste_post;
-		$parseMail = CsrBB::parseMail($laatste->tekst);
+		$parseMail = strip_tags(CsrBB::parseMail($laatste->tekst));
 		return truncate($parseMail, 100);
 	}
 
@@ -291,9 +295,12 @@ class ForumDraad {
 		return $this->aantal_ongelezen_posts;
 	}
 
+	/**
+	 * @return ForumDraadMeldingNiveau
+	 */
 	public function getMeldingsNiveau() {
 		if (!$this->magLezen()) {
-			return false;
+			return ForumDraadMeldingNiveau::NOOIT();
 		}
 
 		/** @var ForumDraadMelding $melding */
@@ -301,6 +308,6 @@ class ForumDraad {
 			return $melding->niveau;
 		}
 
-		return false;
+		return ForumDraadMeldingNiveau::NOOIT();
 	}
 }

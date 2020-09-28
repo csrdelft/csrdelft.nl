@@ -7,6 +7,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\Kring;
+use CsrDelft\entity\groepen\Verticale;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\security\Account;
@@ -45,7 +48,6 @@ use GuzzleHttp\Exception\RequestException;
  *   @ORM\Index(name="nickname", columns={"nickname"}),
  *   @ORM\Index(name="status", columns={"status"})
  * })
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Profiel implements Agendeerbaar, DisplayEntity {
 	public function __construct() {
@@ -261,6 +263,11 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	 * @var boolean|null
 	 */
 	public $machtiging;
+	/**
+	 * @ORM\Column(type="boolean", nullable=true, name="toestemmingAfschrijven")
+	 * @var boolean|null
+	 */
+	public $toestemmingAfschrijven;
 	// verticale
 	/**
 	 * @ORM\Column(type="string", nullable=true)
@@ -350,11 +357,26 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	 */
 	public $middelbareSchool;
 	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string
+	 */
+	public $huisarts;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="huisartsPlaats")
+	 * @var string
+	 */
+	public $huisartsPlaats;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="huisartsTelefoon")
+	 * @var string|null
+	 */
+	public $huisartsTelefoon;
+	// overig
+	/**
 	 * @ORM\Column(type="string", nullable=true, name="profielOpties")
 	 * @var string
 	 */
 	public $profielOpties;
-	// overig
 	/**
 	 * @ORM\Column(type="string", nullable=true)
 	 * @var string|null
@@ -402,7 +424,10 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		'startkamp' => [LidStatus::Noviet],
 		'matrixPlek' => [LidStatus::Noviet],
 		'novietSoort' => [LidStatus::Noviet],
-		'kgb' => [LidStatus::Noviet]
+		'kgb' => [LidStatus::Noviet],
+		'huisarts' => [LidStatus::Noviet],
+		'huisartsPlaats' => [LidStatus::Noviet],
+		'huisartsTelefoon' => [LidStatus::Noviet]
 	];
 
 	public function getUUID() {
@@ -419,7 +444,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		if ($this->uid === LoginService::getUid()) {
 			return true;
 		}
-		if ($this->status === LidStatus::Noviet AND LoginService::mag('commissie:NovCie')) {
+		if ($this->status === LidStatus::Noviet && LoginService::mag('commissie:NovCie')) {
 			return true;
 		}
 		return false;
@@ -578,8 +603,8 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	}
 
 	public function getLink($vorm = 'civitas') {
-		if (!LoginService::mag(P_LEDEN_READ) OR in_array($this->uid, array(LoginService::UID_EXTERN, 'x101', 'x027', 'x222', '4444'))) {
-			if ($vorm === 'pasfoto' AND LoginService::mag(P_LEDEN_READ)) {
+		if (!LoginService::mag(P_LEDEN_READ) || in_array($this->uid, array(LoginService::UID_EXTERN, 'x101', 'x027', 'x222', '4444'))) {
+			if ($vorm === 'pasfoto' && LoginService::mag(P_LEDEN_READ)) {
 				return $this->getPasfotoTag();
 			}
 			return $this->getNaam();
@@ -590,16 +615,18 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		} elseif ($this->lidjaar === 2013) {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
-		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' && lid_instelling('layout', 'visitekaartjes') == 'ja') {
 			$title = '';
 		} else {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '"';
 		}
 		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
-		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' && lid_instelling('layout', 'visitekaartjes') == 'ja') {
 			return '<span data-visite="'.$this->uid.'"><a href="/profiel/' . $this->uid . '" class="lidLink ' . htmlspecialchars($this->status) . '">' . $naam . '</a></span>';
 		} else if ($vorm === 'leeg') {
-			return view('profiel.kaartje', ['profiel' => $this])->getHtml();
+			$twig = ContainerFacade::getContainer()->get('twig');
+
+			return $twig->render('profiel/kaartje.html.twig', ['profiel' => $this]);
 		}
 
 		return $l . $naam . '</a>';
@@ -622,7 +649,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		if ($vorm === 'user') {
 			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
-		if ($vorm != 'civitas' AND !$force AND !LoginService::mag(P_LOGGED_IN)) {
+		if ($vorm != 'civitas' && !$force && !LoginService::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
@@ -680,12 +707,12 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 					if (!empty($this->postfix)) {
 						$naam .= ' ' . $this->postfix;
 					}
-				} elseif ($this->isLid() OR $this->isOudlid()) {
+				} elseif ($this->isLid() || $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
 					if (LoginService::getProfiel()->status === LidStatus::Noviet) {
-						$naam = ($this->geslacht->getValue() === Geslacht::Vrouw) ? 'Mevr. ' : 'Dhr. ';
+						$naam = (Geslacht::isVrouw($this->geslacht)) ? 'Mevr. ' : 'Dhr. ';
 					} else {
-						$naam = ($this->geslacht->getValue() === Geslacht::Vrouw) ? 'Ama. ' : 'Am. ';
+						$naam = (Geslacht::isVrouw($this->geslacht)) ? 'Ama. ' : 'Am. ';
 					}
 					if (!empty($this->tussenvoegsel)) {
 						$naam .= ucfirst($this->tussenvoegsel) . ' ';
@@ -844,22 +871,32 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		return LidStatus::isOudlidLike($this->status);
 	}
 
+	/**
+	 * @return Woonoord|null
+	 */
 	public function getWoonoord() {
+		/** @var Woonoord[] $woonoorden */
 		$woonoorden = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($woonoorden)) {
-			return false;
+			return null;
 		}
 		return reset($woonoorden);
 	}
 
+	/**
+	 * @return Verticale|null
+	 */
 	public function getVerticale() {
 		return ContainerFacade::getContainer()->get(VerticalenRepository::class)->get($this->verticale);
 	}
 
+	/**
+	 * @return Kring|null
+	 */
 	public function getKring() {
 		$kringen = ContainerFacade::getContainer()->get(KringenRepository::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
 		if (empty($kringen)) {
-			return false;
+			return null;
 		}
 		return reset($kringen);
 	}
@@ -893,11 +930,10 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 			return !is_null($googleSync->existsInGoogleContacts($this));
 		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), 0);
-			return false;
 		} catch (RequestException $e) {
 			setMelding($e->getMessage(), -1);
-			return false;
 		}
+		return false;
 	}
 
 	public function propertyMogelijk(string $name) {
@@ -915,7 +951,15 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		return $this->uid;
 	}
 
-	function getWeergave(): string {
-		return $this->getNaam('volledig');
+	public function getWeergave(): string {
+		return $this->achternaam ? $this->getNaam('volledig') : '';
+	}
+
+	public function getChar() {
+		return LidStatus::from($this->status)->getChar();
+	}
+
+	public function getLidStatusDescription() {
+		return LidStatus::from($this->status)->getDescription();
 	}
 }

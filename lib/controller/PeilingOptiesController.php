@@ -9,7 +9,6 @@ use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\entity\peilingen\PeilingOptie;
 use CsrDelft\repository\peilingen\PeilingOptiesRepository;
 use CsrDelft\service\PeilingenService;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingOptieForm;
 use CsrDelft\view\peilingen\PeilingOptieTable;
@@ -68,7 +67,7 @@ class PeilingOptiesController extends AbstractController {
 		if ($form->isPosted() && $form->validate()) {
 			/** @var PeilingOptie $optie */
 			$optie = $form->getModel();
-			$optie->ingebracht_door = LoginService::getUid();
+			$optie->ingebracht_door = $this->getUid();
 			$optie->peiling = $peiling;
 
 			$this->getDoctrine()->getManager()->persist($optie);

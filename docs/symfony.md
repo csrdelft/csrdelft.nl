@@ -21,3 +21,8 @@ De router van Symfony wordt gebruikt om routes te resolven. De YAML configuratie
 ## ORM
 
 Voor alle onderdelen (behalve het Barsysteem) wordt Doctrine gebruikt als ORM. Zie [ORM](orm.md)
+
+
+## Security
+
+Voor inloggen wordt symfony-security gebruikt, zie [Security](security.md)

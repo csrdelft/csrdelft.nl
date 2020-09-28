@@ -3,10 +3,9 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -15,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class InstellingenBeheerController {
+class InstellingenBeheerController extends AbstractController {
 	/**
 	 * @var InstellingenRepository
 	 */
@@ -26,12 +25,12 @@ class InstellingenBeheerController {
 	}
 
 	protected function assertToegang($module = null) {
-		if (!$this->mag($module)) {
-			throw new CsrToegangException();
+		if (!$this->magModuleZien($module)) {
+			throw $this->createAccessDeniedException();
 		}
 	}
 
-	protected function mag($module = null) {
+	protected function magModuleZien($module = null) {
 		if ($module) {
 			switch ($module) {
 				case 'agenda':
@@ -49,22 +48,24 @@ class InstellingenBeheerController {
 
 	/**
 	 * @param null $module
-	 * @return TemplateView
-	 * @Route("/instellingenbeheer", methods={"GET"})
+	 * @return Response
 	 * @Route("/instellingenbeheer/module/{module}", methods={"GET"})
+	 * @Route("/instellingenbeheer", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function module($module = null) {
 		$this->assertToegang($module);
 
 		if (in_array($module, $this->instellingenRepository->getModules())) {
-			$instellingen = $this->instellingenRepository->getModuleKeys($module);
+			$instellingen = array_map(function ($instelling) use ($module) {
+				return $this->instellingenRepository->getInstelling($module, $instelling);
+			}, $this->instellingenRepository->getModuleKeys($module));
 		} else {
 			$instellingen = null;
 			$module = null;
 		}
 
-		return view('instellingenbeheer.beheer', [
+		return $this->render('instellingenbeheer/beheer.html.twig', [
 			'module' => $module,
 			'modules' => $this->instellingenRepository->getModules(),
 			'instellingen' => $instellingen,
@@ -74,7 +75,7 @@ class InstellingenBeheerController {
 	/**
 	 * @param $module
 	 * @param $id
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/instellingenbeheer/opslaan/{module}/{id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -84,17 +85,13 @@ class InstellingenBeheerController {
 		$waarde = filter_input(INPUT_POST, 'waarde', FILTER_UNSAFE_RAW);
 		$instelling = $this->instellingenRepository->wijzigInstelling($module, $id, $waarde);
 
-		return view('instellingenbeheer.regel', [
-			'waarde' => $instelling->waarde,
-			'id' => $instelling->instelling_id,
-			'module' => $instelling->module,
-		]);
+		return $this->render('instellingenbeheer/regel.html.twig', ['instelling' => $instelling]);
 	}
 
 	/**
 	 * @param $module
 	 * @param $id
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/instellingenbeheer/reset/{module}/{id}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
@@ -103,10 +100,6 @@ class InstellingenBeheerController {
 
 		$instelling = $this->instellingenRepository->wijzigInstelling($module, $id, $this->instellingenRepository->getDefault($module, $id));
 
-		return view('instellingenbeheer.regel', [
-			'waarde' => $instelling->waarde,
-			'id' => $instelling->instelling_id,
-			'module' => $instelling->module,
-		]);
+		return $this->render('instellingenbeheer/regel.html.twig', ['instelling' => $instelling]);
 	}
 }

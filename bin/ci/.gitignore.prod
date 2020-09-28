@@ -2,7 +2,6 @@
 
 # Mappen nodig voor goede werking van de stek.
 data/*
-!data/blade
 sessie/*
 htdocs/plaetjes/*
 
@@ -12,6 +11,8 @@ etc/*.crt
 etc/*.csr
 etc/*.htpasswd
 etc/*.kdbx
+# Voorkom dat er per ongeluk workflows gekopieerd worden
+.github
 
 # Overige mappen
 htdocs/download/*
@@ -23,15 +24,14 @@ var/*
 
 # Dev bestanden
 docker/*
+bin/.phpunit
 bin/dev/*
 bin/ci/*
 sql/*
 docs/*
 docker-compose.yml
 tsconfig.json
-tsconfig-for-webpack-config.json
 tslint.json
-webpack.config.ts
 webpack.config.js
 .travis.yml
 .tidelift.yml
@@ -40,7 +40,7 @@ phpstan.autoload.php
 phpstan.neon
 CONTRIBUTING.md
 README.md
-.eslintrc.js
+.eslintrc.yaml
 fixturesSQL_minimal.sql
 .editorconfig
 .dockerignore
@@ -55,6 +55,7 @@ phpunit.init.php
 .sonar-project.properties
 package.json
 yarn.lock
+.yarn
 
 /.env.local
 /.env.local.php

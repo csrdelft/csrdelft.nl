@@ -4,6 +4,7 @@ namespace CsrDelft\service;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\profiel\ProfielToestemmingProxy;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
@@ -12,7 +13,9 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\lid\LLCSV;
 use CsrDelft\view\lid\LLKaartje;
 use CsrDelft\view\lid\LLLijst;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Security\Core\Security;
 
 
 /**
@@ -76,8 +79,20 @@ class LidZoekerService {
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
+	/**
+	 * @var Security
+	 */
+	private $security;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
+	/**
+	 * @var LidToestemmingRepository
+	 */
+	private $lidToestemmingRepository;
 
-	public function __construct(ProfielRepository $profielRepository) {
+	public function __construct(EntityManagerInterface $em, ProfielRepository $profielRepository, Security $security, LidToestemmingRepository $lidToestemmingRepository) {
 		$this->allowStatus = LidStatus::getEnumValues();
 
 		//wat extra velden voor moderators.
@@ -88,6 +103,9 @@ class LidZoekerService {
 		//parse default values.
 		$this->parseQuery($this->rawQuery);
 		$this->profielRepository = $profielRepository;
+		$this->security = $security;
+		$this->em = $em;
+		$this->lidToestemmingRepository = $lidToestemmingRepository;
 	}
 
 	public function parseQuery($query) {
@@ -99,7 +117,7 @@ class LidZoekerService {
 		$this->rawQuery = $query;
 
 		//als er geen explicite status is opgegeven, en het zoekende lid is oudlid, dan zoeken we automagisch ook in de oudleden.
-		if (!isset($query['status']) && LoginService::getProfiel()->isOudlid()) {
+		if (!isset($query['status']) && $this->security->getUser()->profiel->isOudlid()) {
 			$this->rawQuery['status'] = 'LEDEN|OUDLEDEN';
 		}
 
@@ -132,7 +150,7 @@ class LidZoekerService {
 					$value = strtoupper($value);
 					//als op alle lid-statussen moet worden gezocht verwijderen we
 					//eventueel aanwezige filters en zoeken we in alles.
-					if ($value == '*' OR $value == 'ALL') {
+					if ($value == '*' || $value == 'ALL') {
 						if (isset($this->filters['status'])) {
 							unset($this->filters['status']);
 						}
@@ -237,11 +255,13 @@ class LidZoekerService {
 			//met 'veld:=<zoekterm> wordt exact gezocht.
 			$parts = explode(':', $zoekterm);
 
+			$veld = strtolower($parts[0]);
+
 			if ($parts[1][0] == '=') {
-				$queryBuilder->where($queryBuilder->expr()->eq('p' . $parts[0], ':zoekterm'));
+				$queryBuilder->where($queryBuilder->expr()->eq('p.' . $veld, ':zoekterm'));
 				$queryBuilder->setParameter('zoekterm', substr($parts[1], 1));
 			} else {
-				$queryBuilder->where($queryBuilder->expr()->like('p.' . $parts[0], ':zoekterm'));
+				$queryBuilder->where($queryBuilder->expr()->like('p.' . $veld, ':zoekterm'));
 				$queryBuilder->setParameter('zoekterm', sql_contains($parts[1]));
 			}
 		} else { //als niets van hierboven toepasselijk is zoeken we in zo ongeveer alles
@@ -293,8 +313,8 @@ class LidZoekerService {
 		$result = $qb->getQuery()->getResult();
 
 		foreach ($result as $profiel) {
-			if ($this->zoekMag($profiel, $this->query)) {
-				$this->result[] = $profiel;
+			if ($this->magProfielVinden($profiel, $this->query)) {
+				$this->result[] = new ProfielToestemmingProxy($profiel, $this->lidToestemmingRepository);
 			}
 		}
 	}
@@ -400,30 +420,32 @@ class LidZoekerService {
 	 *
 	 * @param $profiel
 	 * @param string $query
-	 * @return Profiel|null
+	 * @return bool
 	 */
-	private function zoekMag(Profiel $profiel, string $query) {
+	private function magProfielVinden(Profiel $profiel, string $query) {
 		// Als de zoekquery in de naam zit, geef dan altijd dit profiel terug als resultaat.
-		$lidToestemmingRepository = ContainerFacade::getContainer()->get(LidToestemmingRepository::class);
-		$zoekvelden = $lidToestemmingRepository->getModuleKeys('profiel');
+		$zoekvelden = $this->lidToestemmingRepository->getModuleKeys('profiel');
+
+		if (strpos($profiel->getNaam(), $query) !== false) {
+			return true;
+		}
+
 		foreach ($zoekvelden as $veld) {
 			if ($veld === 'status') {
 				continue;
 			}
 
-			if (!is_zichtbaar($profiel, $veld)) {
-				$queryNietInNaam = is_string($profiel->$veld) && $query !== '' && strpos($profiel->getNaam(), $query) === false;
-				$queryInVeld = is_string($profiel->$veld) && $query !== '' && strpos($profiel->$veld, $query) !== false;
+			$zichtbaar = $this->lidToestemmingRepository->toestemming($profiel, $veld);
 
-				if ($queryNietInNaam && $queryInVeld) {
-					return null;
-				} else {
-					$profiel->$veld = null;
-				}
+			$queryInVeld = is_string($profiel->$veld) && $query !== '' && strpos($profiel->$veld, $query) !== false;
+
+			// Geef dit profiel niet terug als een niet zichtbaar veld de query bevat.
+			if (!$zichtbaar && $queryInVeld) {
+				return false;
 			}
 		}
 
-		return $profiel;
+		return true;
 	}
 
 }

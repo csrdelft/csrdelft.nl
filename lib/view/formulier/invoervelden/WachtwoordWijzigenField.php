@@ -68,10 +68,10 @@ class WachtwoordWijzigenField extends InputField {
 	}
 
 	public function isPosted() {
-		if ($this->require_current AND !isset($_POST[$this->name . '_current'])) {
+		if ($this->require_current && !isset($_POST[$this->name . '_current'])) {
 			return false;
 		}
-		return isset($_POST[$this->name . '_new']) AND isset($_POST[$this->name . '_confirm']);
+		return isset($_POST[$this->name . '_new']) && isset($_POST[$this->name . '_confirm']);
 	}
 
 	public function getValue() {
@@ -80,7 +80,7 @@ class WachtwoordWijzigenField extends InputField {
 		} else {
 			$this->value = false;
 		}
-		if ($this->empty_null AND $this->value == '') {
+		if ($this->empty_null && $this->value == '') {
 			return null;
 		}
 		return $this->value;
@@ -135,7 +135,9 @@ class WachtwoordWijzigenField extends InputField {
 				} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new)) {
 					$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
 				}
-			} elseif (preg_match('/(.)\1\1+/', $new) OR preg_match('/(.{3,})\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
+			}
+
+			if (preg_match('/(.)\1\1+/', $new) || preg_match('/(.{3,})\1+/', $new) || preg_match('/(.{4,}).*\1+/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
 			} elseif (empty($confirm)) {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';

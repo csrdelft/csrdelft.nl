@@ -1,0 +1,56 @@
+name: Create Sentry Releases
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  release_js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Yarn packages
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .yarn
+            .pnp.js
+            node_modules/.cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install yarn dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
+      - name: Build JavaScript
+        run: yarn run production
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: csrdelft
+          SENTRY_PROJECT: stek
+        with:
+          environment: prod
+          sourcemaps: ./htdocs/dist/js
+
+  release_php:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: csrdelft
+          SENTRY_PROJECT: stek
+        with:
+          environment: prod

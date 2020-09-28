@@ -15,14 +15,14 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
 use CsrDelft\repository\LedenMemoryScoresRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LedenMemoryController {
+class LedenMemoryController extends AbstractController {
 	/**
 	 * @var LedenMemoryScoresRepository
 	 */
@@ -53,7 +53,7 @@ class LedenMemoryController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @throws NonUniqueResultException
 	 * @Route("/leden/memory", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
@@ -61,7 +61,8 @@ class LedenMemoryController {
 	public function memory() {
 		$lidstatus = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$lidstatus[] = LidStatus::Overleden;
-		$leden = null;
+		/** @var Profiel[] $leden */
+		$leden = [];
 		$cheat = isset($_GET['rosebud']);
 		$learnmode = isset($_GET['oefenen']);
 		$groep = $this->getVerticale() ?? $this->getLichting();
@@ -81,8 +82,7 @@ class LedenMemoryController {
 			}
 		}
 
-
-		return view('ledenmemory', [
+		return $this->render('ledenmemory.html.twig', [
 			'titel' => $titel,
 			'groep' => $groep,
 			'cheat' => $cheat,
@@ -122,7 +122,7 @@ class LedenMemoryController {
 		$min = LichtingenRepository::getOudsteLidjaar();
 		$max = LichtingenRepository::getJongsteLidjaar();
 
-		if ($l < $min or $l > $max) {
+		if ($l < $min || $l > $max) {
 			$l = $max;
 		}
 
@@ -170,7 +170,7 @@ class LedenMemoryController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/leden/namen-leren", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
@@ -199,8 +199,6 @@ class LedenMemoryController {
 		}));
 
 		// Laad Vue app.
-		return view('namenleren', [
-			'leden' => json_encode($leden),
-		]);
+		return $this->render('namenleren.html.twig', ['leden' => json_encode($leden)]);
 	}
 }

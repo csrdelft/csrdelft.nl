@@ -16,6 +16,7 @@ use CsrDelft\view\ToResponse;
 
 class GroepOmschrijvingView implements FormElement, ToResponse {
 	use ToHtmlResponse;
+
 	protected $groep;
 	protected $javascript;
 
@@ -49,10 +50,10 @@ class GroepOmschrijvingView implements FormElement, ToResponse {
 
 $('#groep-omschrijving-{$this->groep->id}').hide().slideDown(600);
 JS;
-		echo '<div id="groep-omschrijving-' . $this->groep->id . '">';
-		echo CsrBB::parse($this->groep->omschrijving);
-		echo $this->getScriptTag();
-		echo '</div>';
+		return '<div id="groep-omschrijving-' . $this->groep->id . '">'
+			. CsrBB::parse($this->groep->omschrijving)
+			. $this->getScriptTag()
+			. '</div>';
 	}
 
 	public function view() {

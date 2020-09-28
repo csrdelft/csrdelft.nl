@@ -6,6 +6,7 @@ use CsrDelft\bb\BbTag;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\bbcode\BbHelper;
+use Twig\Environment;
 
 /**
  * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
@@ -24,9 +25,14 @@ class BbDocument extends BbTag {
 	 * @var DocumentRepository
 	 */
 	private $documentRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(DocumentRepository $documentRepository) {
+	public function __construct(DocumentRepository $documentRepository, Environment $twig) {
 		$this->documentRepository = $documentRepository;
+		$this->twig = $twig;
 	}
 
 	public static function getTagName() {
@@ -48,7 +54,7 @@ class BbDocument extends BbTag {
 
 	public function render() {
 		if ($this->document) {
-			return view('documenten.document_bb', ['document' => $this->document])->getHtml();
+			return $this->twig->render('documenten/document_bb.html.twig', ['document' => $this->document]);
 		} else {
 			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->content . ')</div>';
 		}

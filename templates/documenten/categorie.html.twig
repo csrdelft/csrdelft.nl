@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}Documenten in categorie: {{ categorie.naam }}{% endblock %}
+
+{% block breadcrumbs %}
+	{{ csr_breadcrumbs({
+		(url('default')): 'main',
+		(url('csrdelft_documenten_recenttonen')): 'Documenten',
+		'': categorie.naam
+	}) }}
+{% endblock %}
+
+{% block content %}
+	<div id="controls">
+		{% if mag('P_DOCS_MOD') %}
+			<a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}?catID={{ categorie.id }}">{{ icon('toevoegen') }}
+				Toevoegen</a>
+		{% endif %}
+	</div>
+
+	<h1>{{ categorie.naam }}</h1>
+
+	<table id="documentencategorie" class="table table-striped">
+		<thead>
+		<tr>
+			<th scope="col">Document</th>
+			<th scope="col">Grootte</th>
+			<th scope="col">Type</th>
+			<th scope="col">Toegevoegd</th>
+			<th scope="col">Eigenaar</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for document in categorie.documenten %}
+			{{ include('documenten/documentregel.html.twig', {document: document}) }}
+		{% else %}
+			<tr>
+				<td class="document" colspan="5">Geen documenten in deze categorie.</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+		<tfoot>
+		<tr>
+			<th scope="col">Document</th>
+			<th scope="col">Grootte</th>
+			<th scope="col">Type</th>
+			<th scope="col">Toegevoegd</th>
+			<th scope="col">Eigenaar</th>
+		</tr>
+		</tfoot>
+	</table>
+{% endblock %}

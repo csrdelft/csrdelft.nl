@@ -6,6 +6,19 @@ namespace CsrDelft\common;
 use InvalidArgumentException;
 use ReflectionClass;
 
+/**
+ * Enum implementatie.
+ *
+ * Gebruik static::ENUM() om een instance te krijgen van de enum,
+ *
+ * Gebruik static::isENUM($enum) om te controleren of een enum van een bepaald type is.
+ *
+ * Je kan er helaas niet vanuit gaan dat twee instances met dezelfde waarde van een enum hetzelfde zijn.
+ * Gebruik dus == of ::isENUM($enum) om de waarde te checken.
+ *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
+ * @since 2020-08-16
+ */
 abstract class Enum {
 	/**
 	 * @var string[]
@@ -53,21 +66,42 @@ abstract class Enum {
 
 	/**
 	 * Returns a value when called statically like so: MyEnum::SOME_VALUE() given SOME_VALUE is a class constant
+	 * Returns if a value is part of this enum if called like MyEnum::isSOME_VALUE()
 	 *
 	 * @param string $name
 	 * @param array $arguments
 	 *
-	 * @return static
+	 * @return static|bool
 	 * @psalm-pure
 	 * @throws \BadMethodCallException
 	 */
 	public static function __callStatic($name, $arguments) {
+		if (startsWith($name, 'is') && count($arguments) == 1) {
+			$enumName = substr($name, 2);
+
+			if (isset(self::getConstants()[$enumName])) {
+				return static::from(self::getConstants()[$enumName]) == $arguments[0];
+			}
+		}
+
 		if (isset(self::getConstants()[$name])) {
 			$value = self::getConstants()[$name];
 			return static::from($value);
 		}
 
 		throw new \BadMethodCallException("Enum " . static::class . '::' . $name . ' bestaat niet.');
+	}
+
+	public function __call($name, $arguments) {
+		if (startsWith($name, 'is')) {
+			$enumName = substr($name, 2);
+
+			if (isset(self::getConstants()[$enumName])) {
+				return static::from(self::getConstants()[$enumName]) == $this;
+			}
+		}
+
+		return static::__callStatic($name, $arguments);
 	}
 
 	/**

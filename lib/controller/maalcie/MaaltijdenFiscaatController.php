@@ -16,8 +16,8 @@ use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -56,12 +56,12 @@ class MaaltijdenFiscaatController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/fiscaat", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function GET_overzicht() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Overzicht verwerkte maaltijden',
 			'content' => new FiscaatMaaltijdenOverzichtTable(),
 		]);
@@ -78,12 +78,12 @@ class MaaltijdenFiscaatController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/fiscaat/onverwerkt", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function GET_onverwerkt() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Onverwerkte Maaltijden',
 			'content' => new OnverwerkteMaaltijdenTable(),
 		]);
@@ -97,7 +97,7 @@ class MaaltijdenFiscaatController extends AbstractController {
 	 */
 	public function POST_verwerk(EntityManagerInterface $em) {
 		# Haal maaltijd op
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 

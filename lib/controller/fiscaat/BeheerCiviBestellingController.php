@@ -3,15 +3,14 @@
 namespace CsrDelft\controller\fiscaat;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\fiscaat\CiviBestellingInhoudRepository;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\bestellingen\CiviBestellingTable;
-use CsrDelft\view\renderer\TemplateView;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -30,14 +29,14 @@ class BeheerCiviBestellingController extends AbstractController {
 
 	/**
 	 * @param null $uid
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/fiscaat/bestellingen/{uid}", methods={"GET"}, defaults={"uid"=null})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function overzicht($uid = null) {
 		$this->checkToegang($uid);
 
-		return view('fiscaat.pagina', [
+		return $this->render('fiscaat/pagina.html.twig', [
 			'titel' => 'Beheer bestellingen',
 			'view' => new CiviBestellingTable($uid)
 		]);
@@ -52,7 +51,7 @@ class BeheerCiviBestellingController extends AbstractController {
 	 */
 	public function lijst(Request $request, $uid = null) {
 		$this->checkToegang($uid);
-		$uid = $uid == null ? LoginService::getUid() : $uid;
+		$uid = $uid == null ? $this->getUid() : $uid;
 		if ($request->query->get("deleted") == "true") {
 			$data = $this->civiBestellingRepository->findBy(['uid' => $uid]);
 		} else {
@@ -80,7 +79,7 @@ class BeheerCiviBestellingController extends AbstractController {
 	 */
 	private function checkToegang($uid) {
 		if (!LoginService::mag(P_FISCAAT_READ) && $uid) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 	}
 }

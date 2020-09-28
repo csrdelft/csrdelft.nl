@@ -31,6 +31,20 @@ class BbCitaat extends BbTag {
 		return 'citaat';
 	}
 
+	public function renderPlain() {
+		$text = 'Citaat';
+		if ($this->bron_profiel != null) {
+			$text .= ' van ' . $this->bron_profiel->getNaam('user');
+		} elseif ($this->bron_text != null) {
+			if ($this->bron_url != null) {
+				$text .= ' van ' . $this->bron_text . ' (' . $this->bron_url . ')';
+			} else {
+				$text .= ' van ' . $this->bron_url;
+			}
+		}
+		return $text . ":\n " . trim($this->content);
+	}
+
 	public function renderLight() {
 		$text = '<div class="citaatContainer bb-tag-citaat">Citaat';
 		if ($this->bron_profiel != null) {

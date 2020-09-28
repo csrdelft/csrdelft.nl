@@ -4,12 +4,13 @@ namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdAbonnement;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
@@ -18,7 +19,7 @@ use Throwable;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class BeheerAbonnementenController {
+class BeheerAbonnementenController extends AbstractController {
 	/**
 	 * @var MaaltijdAbonnementenRepository
 	 */
@@ -34,7 +35,7 @@ class BeheerAbonnementenController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/abonnementen/beheer", methods={"GET"})
 	 * @Route("/maaltijden/abonnementen/beheer/waarschuwingen", methods={"GET"})
@@ -43,7 +44,7 @@ class BeheerAbonnementenController {
 	public function waarschuwingen() {
 		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenWaarschuwingenMatrix();
 
-		return view('maaltijden.abonnement.beheer_abonnementen', [
+		return $this->render('maaltijden/abonnement/beheer_abonnementen.html.twig', [
 			'toon' => 'waarschuwing',
 			'aborepetities' => $this->maaltijdRepetitiesRepository->findBy(['abonneerbaar' => 'true']),
 			'repetities' => $matrix_repetities[1],
@@ -52,7 +53,7 @@ class BeheerAbonnementenController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/abonnementen/beheer/ingeschakeld", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
@@ -60,7 +61,7 @@ class BeheerAbonnementenController {
 	public function ingeschakeld() {
 		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenMatrix();
 
-		return view('maaltijden.abonnement.beheer_abonnementen', [
+		return $this->render('maaltijden/abonnement/beheer_abonnementen.html.twig', [
 			'toon' => 'in',
 			'aborepetities' => $this->maaltijdRepetitiesRepository->findBy(['abonneerbaar' => 'true']),
 			'repetities' => $matrix_repetities[1],
@@ -69,7 +70,7 @@ class BeheerAbonnementenController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/abonnementen/beheer/abonneerbaar", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
@@ -77,8 +78,8 @@ class BeheerAbonnementenController {
 	public function abonneerbaar() {
 		$matrix_repetities = $this->maaltijdAbonnementenRepository->getAbonnementenAbonneerbaarMatrix();
 
-		return view('maaltijden.abonnement.beheer_abonnementen', [
-			'toon' => 'waarschuwing',
+		return $this->render('maaltijden/abonnement/beheer_abonnementen.html.twig', [
+			'toon' => 'abo',
 			'aborepetities' => $this->maaltijdRepetitiesRepository->findBy(['abonneerbaar' => 'true']),
 			'repetities' => $matrix_repetities[1],
 			'matrix' => $matrix_repetities[0],
@@ -86,7 +87,7 @@ class BeheerAbonnementenController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/abonnementen/beheer/novieten", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
@@ -100,13 +101,13 @@ class BeheerAbonnementenController {
 		setMelding(
 			$aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' aangemaakt voor ' .
 			$novieten . ' noviet' . ($novieten !== 1 ? 'en' : '') . '.', 1);
-		return view('maaltijden.abonnement.beheer_abonnementen_lijst', ['matrix' => $matrix]);
+		return $this->render('maaltijden/abonnement/beheer_abonnementen_lijst.html.twig', ['matrix' => $matrix]);
 	}
 
 	/**
 	 * @param MaaltijdRepetitie $repetitie
 	 * @param string $uid
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/abonnementen/beheer/inschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
@@ -124,13 +125,13 @@ class BeheerAbonnementenController {
 			$melding = 'Automatisch aangemeld voor ' . $aantal . ' maaltijd' . ($aantal === 1 ? '' : 'en');
 			setMelding($melding, 2);
 		}
-		return view('maaltijden.abonnement.beheer_abonnement', ['abonnement' => $abo]);
+		return $this->render('maaltijden/abonnement/beheer_abonnement.html.twig', ['abonnement' => $abo]);
 	}
 
 	/**
 	 * @param MaaltijdRepetitie $repetitie
 	 * @param string $uid
-	 * @return TemplateView
+	 * @return Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/abonnementen/beheer/uitschakelen/{mlt_repetitie_id}/{uid}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
@@ -144,7 +145,7 @@ class BeheerAbonnementenController {
 			$melding = 'Automatisch afgemeld voor ' . $abo_aantal[1] . ' maaltijd' . ($abo_aantal[1] === 1 ? '' : 'en');
 			setMelding($melding, 2);
 		}
-		return view('maaltijden.abonnement.beheer_abonnement', ['abonnement' => $abo_aantal[0]]);
+		return $this->render('maaltijden/abonnement/beheer_abonnement.html.twig', ['abonnement' => $abo_aantal[0]]);
 	}
 
 }

@@ -51,9 +51,8 @@ services:
     volumes:
       - ./package.json:/app/package.json
       - ./yarn.lock:/app/yarn.lock
-      - ./.eslintrc.js:/app/.eslintrc.js
-      - ./webpack.config.ts:/app/webpack.config.ts
+      - ./.eslintrc.yaml:/app/.eslintrc.yaml
+      - ./webpack.config.js:/app/webpack.config.js
       - ./tsconfig.json:/app/tsconfig.json
-      - ./tsconfig-for-webpack-config.json:/app/tsconfig-for-webpack-config.json
       - ./htdocs/dist:/app/htdocs/dist # output
-      - ./resources/assets:/app/resources/assets # input
+      - ./assets:/app/assets # input

@@ -19,7 +19,7 @@ class EetplanHuizenResponse extends DataTableResponse {
 			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,
 			'naam' => '<a href="' . $entity->getUrl() . '">' . $entity->naam . '</a>',
-			'soort' => $entity->soort,
+			'soort' => $entity->soort->getDescription(),
 			'eetplan' => $entity->eetplan
 		);
 	}

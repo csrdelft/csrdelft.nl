@@ -3,11 +3,12 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
 use CsrDelft\view\maalcie\forms\VrijstellingForm;
 use CsrDelft\view\PlainView;
-use CsrDelft\view\renderer\TemplateView;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
@@ -15,7 +16,7 @@ use Throwable;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class BeheerVrijstellingenController {
+class BeheerVrijstellingenController extends AbstractController {
 	/** @var CorveeVrijstellingenRepository */
 	private $corveeVrijstellingenRepository;
 
@@ -24,12 +25,12 @@ class BeheerVrijstellingenController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee/vrijstellingen", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
 	public function beheer() {
-		return view('maaltijden.vrijstelling.beheer_vrijstellingen', ['vrijstellingen' => $this->corveeVrijstellingenRepository->findAll()]);
+		return $this->render('maaltijden/vrijstelling/beheer_vrijstellingen.html.twig', ['vrijstellingen' => $this->corveeVrijstellingenRepository->findAll()]);
 	}
 
 	/**
@@ -53,7 +54,7 @@ class BeheerVrijstellingenController {
 
 	/**
 	 * @param Profiel|null $profiel
-	 * @return VrijstellingForm|TemplateView
+	 * @return VrijstellingForm|Response
 	 * @throws Throwable
 	 * @Route("/corvee/vrijstellingen/opslaan/{uid}", methods={"POST"}, defaults={"uid"=null})
 	 * @Auth(P_CORVEE_MOD)
@@ -66,7 +67,7 @@ class BeheerVrijstellingenController {
 		}
 		if ($view->validate()) {
 			$values = $view->getModel();
-			return view('maaltijden.vrijstelling.beheer_vrijstelling_lijst', [
+			return $this->render('maaltijden/vrijstelling/beheer_vrijstelling_lijst.html.twig', [
 				'vrijstelling' => $this->corveeVrijstellingenRepository->saveVrijstelling($values->profiel, $values->begin_datum, $values->eind_datum, $values->percentage)
 			]);
 		}

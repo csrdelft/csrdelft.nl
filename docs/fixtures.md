@@ -1,5 +1,7 @@
 # Fixtures
 
+_Fixtures zijn een werk in uitvoering. Er zijn nu net genoeg fixtures om in te kunnen loggen. Er moeten er nog een boel bijgebouwd worden._
+
 Er zijn fixtures om data in de database te laden zonder dat je een productiedatabase nodig hebt. Dit kan handing zijn voor het maken van tests.
 
 De fixture generators gaan altijd uit van een verse database waar alle migraties op uitgevoerd zijn.

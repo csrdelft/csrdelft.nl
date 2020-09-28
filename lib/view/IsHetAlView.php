@@ -2,13 +2,14 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\service\security\LoginService;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class IsHetAlView implements View {
+	use ToHtmlResponse;
 	/**
 	 * Type of IsHetAlContent
 	 * @var string
@@ -34,18 +35,10 @@ class IsHetAlView implements View {
 		'u het forum kan volgen met RSS?' => '/profiel#forum',
 	);
 
-	private static $redEenKindActief = true;
-	private static $redEenKindHuidig = 280;
-	private static $redEenKindDoel = 280;
-
-	public function __construct($ishetal) {
+	public function __construct(LidInstellingenRepository $lidInstellingenRepository, SessionInterface $session, AgendaRepository $agendaRepository, $ishetal) {
 		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
-			$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
 			$opties = array_slice($lidInstellingenRepository->getTypeOptions('zijbalk', 'ishetal'), 2);
-			if (!self::$redEenKindActief && ($key = array_search('red een kind', $opties)) !== false) {
-				unset($opties[$key]);
-			}
 			$this->model = $opties[array_rand($opties)];
 		}
 		switch ($this->model) {
@@ -53,10 +46,6 @@ class IsHetAlView implements View {
 			case 'foutmelding':
 			case 'sponsorkliks':
 				$this->ja = null;
-				break;
-
-			case 'red een kind':
-				$this->ja = self::$redEenKindHuidig >= self::$redEenKindDoel;
 				break;
 
 			case 'dies' :
@@ -87,18 +76,17 @@ class IsHetAlView implements View {
 				break;
 
 			case 'studeren':
-				if (isset($_COOKIE['studeren'])) {
-					$this->ja = (time() > ($_COOKIE['studeren'] + 5 * 60) AND date('w') != 0);
-					$tijd = $_COOKIE['studeren'];
+				if ($session->has('studeren')) {
+					$this->ja = (time() > ($session->get('studeren') + 5 * 60) AND date('w') != 0);
+					$tijd = $session->get('studeren');
 				} else {
 					$this->ja = false;
 					$tijd = time();
 				}
-				setcookie('studeren', $tijd, time() + 30 * 60, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+				$session->set('studeren', $tijd);
 				break;
 
 			default:
-				$agendaRepository = ContainerFacade::getContainer()->get(AgendaRepository::class);
 				$vandaag = $agendaRepository->zoekWoordAgenda($this->model);
 				if ($vandaag instanceof AgendaItem) {
 					$this->ja = true;
@@ -134,10 +122,6 @@ class IsHetAlView implements View {
 		switch ($this->model) {
 			case 'sponsorkliks':
 				echo '<iframe src="https://banner.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
-				break;
-
-			case 'red een kind':
-				echo 'Hebben we al genoeg geld voor Red een Kind?';
 				break;
 
 			case 'jarig':
@@ -183,10 +167,6 @@ class IsHetAlView implements View {
 			echo '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
 		} else {
 			// wist u dat
-		}
-
-		if ($this->model === 'red een kind') {
-			echo '<progress id="file" value="' . self::$redEenKindHuidig . '" max="' . self::$redEenKindDoel . '" title="€ ' . self::$redEenKindHuidig . ',- van € ' . self::$redEenKindDoel . ',-"></progress>';
 		}
 
 		echo '</div>';

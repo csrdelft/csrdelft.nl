@@ -17,7 +17,6 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
@@ -26,7 +25,6 @@ use CsrDelft\view\fiscaat\pin\PinBestellingCrediterenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchNegerenForm;
 use CsrDelft\view\fiscaat\pin\PinTransactieMatchTable;
 use CsrDelft\view\formulier\FoutmeldingForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -68,12 +66,12 @@ class PinTransactieController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @Route("/fiscaat/pin", methods={"GET"})
 	 * @Auth(P_FISCAAT_READ)
 	 */
 	public function overzicht() {
-		return view('fiscaat.pin', [
+		return $this->render('fiscaat/pin.html.twig', [
 			'titel' => 'Pin transacties beheer',
 			'table' => new PinTransactieMatchTable(),
 		]);
@@ -129,15 +127,12 @@ class PinTransactieController extends AbstractController {
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_BESTELLING:
 					// Maak een nieuwe bestelling met bedrag en uid.
 					return new PinBestellingAanmakenForm($pinTransactieMatch);
-					break;
 				case PinTransactieMatchStatusEnum::STATUS_MISSENDE_TRANSACTIE:
 					// Crediteer de bestelling met een confirm.
 					return new PinBestellingCrediterenForm($pinTransactieMatch);
-					break;
 				case PinTransactieMatchStatusEnum::STATUS_VERKEERD_BEDRAG:
 					// Update bestelling met bedrag.
 					return new PinBestellingVeranderenForm($pinTransactieMatch);
-					break;
 				default:
 					throw new CsrException('Onbekende PinTransactieMatchStatusEnum: ' . $pinTransactieMatch->status);
 			}
@@ -259,7 +254,7 @@ class PinTransactieController extends AbstractController {
 	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function koppel() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 
 		if (count($selection) !== 2) {
 			throw new CsrGebruikerException('Selecteer twee regels om te koppelen.');
@@ -573,7 +568,7 @@ class PinTransactieController extends AbstractController {
 		if (!$ontvanger) {
 			return;
 		}
-		$bcc = LoginService::getProfiel();
+		$bcc = $this->getProfiel();
 		$civiSaldo = $ontvanger->getCiviSaldo() * 100;
 		$saldo = format_bedrag_kaal($civiSaldo);
 		$saldoMelding = $civiSaldo < 0 ? ' Leg a.u.b. in.' : '';
@@ -588,9 +583,8 @@ Met vriendelijke groet,
 h.t. Fiscus";
 
 		$mail = new Mail($ontvanger->getEmailOntvanger(), $onderwerp, $bericht);
-		$mail->setFrom(env('EMAIL_FISCUS'), 'Fiscus C.S.R. Delft');
+		$mail->setFrom($_ENV['EMAIL_FISCUS'], 'Fiscus C.S.R. Delft');
 		$mail->addBcc($bcc->getEmailOntvanger());
-		$mail->setLightBB();
 		$mail->send();
 	}
 }

@@ -13,18 +13,18 @@ define('DB_MODIFY', false); # heb je een backup gemaakt?
 # database automatisch droppen
 define('DB_DROP', false); # heb je een backup gemaakt?
 # debug modus
-define('DEBUG', env('APP_ENV') == 'dev');
+define('DEBUG', $_SERVER['APP_DEBUG']);
 # measure time
 define('TIME_MEASURE', false);
 # redirect to https
-define('FORCE_HTTPS', env('FORCE_HTTPS') == 'true');
+define('FORCE_HTTPS', $_ENV['FORCE_HTTPS'] == 'true');
 # urls ZONDER trailing slash
-define('CSR_ROOT', env('CSR_ROOT'));
+define('CSR_ROOT', $_ENV['CSR_ROOT']);
 define('CSR_DOMAIN', parse_url(CSR_ROOT)['host']);
 # Toegestane API origins
-define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io');
+define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io,http://dev-csrdelft.nl');
 # paden MET trailing slash
-define('BASE_PATH', env('BASE_PATH') ?: realpath(__DIR__ . '/../') . '/');
+define('BASE_PATH', $_ENV['BASE_PATH'] ? $_ENV['BASE_PATH'] : realpath(__DIR__ . '/../') . '/');
 define('ETC_PATH', BASE_PATH . 'etc/');
 define('DATA_PATH', BASE_PATH . 'data/');
 define('MEMCACHED_PATH', DATA_PATH);
@@ -39,12 +39,8 @@ define('PASFOTO_PATH', DATA_PATH . 'foto/pasfoto/');
 define('PLAATJES_PATH', DATA_PATH . 'plaatjes/');
 define('CONFIG_CACHE_PATH', VAR_PATH . 'config_cache/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
-define('TEMPLATE_PATH', BASE_PATH . 'resources/views/');
-define('BLADE_CACHE_PATH', DATA_PATH . 'blade/');
 define('CONFIG_PATH', BASE_PATH . 'config');
 define('TEMPLATE_DIR', LIB_PATH . 'templates/');
-# BladeOne
-define('BLADEONE_MODE', env('BLADEONE_MODE'));
 
 # Permissies
 define('P_PUBLIC', 'P_PUBLIC');

@@ -16,26 +16,15 @@ use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
 use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\service\security\LoginService;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
 // Zet omgeving klaar.
 require __DIR__ . '/../config/bootstrap.php';
 
-// default is website mode
-if (env('CI')) {
-	define('MODE', 'TRAVIS');
-} elseif (php_sapi_name() === 'cli') {
-	define('MODE', 'CLI');
-} else {
-	define('MODE', 'WEB');
-}
-
 // Registreer foutmelding handlers
-if (MODE != 'TRAVIS' && MODE != 'CLI') {
+if (!isCi() && !isCli()) {
 	if (DEBUG) {
-		register_shutdown_function([ShutdownHandler::class, 'debugLogHandler']);
 		umask(0000);
 
 		Debug::enable();
@@ -43,7 +32,6 @@ if (MODE != 'TRAVIS' && MODE != 'CLI') {
 		register_shutdown_function([ShutdownHandler::class, 'emailHandler']);
 		set_error_handler([ShutdownHandler::class, 'slackHandler']);
 		register_shutdown_function([ShutdownHandler::class, 'slackShutdownHandler']);
-		register_shutdown_function([ShutdownHandler::class, 'errorPageHandler']);
 	}
 }
 
@@ -59,20 +47,6 @@ setlocale(LC_ALL, 'nl_NL');
 //setlocale(LC_ALL, 'nl_NL.utf8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Amsterdam');
-
-if (isset($_SERVER['REQUEST_URI'])) {
-	$req = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
-} else {
-	$req = null;
-}
-define('REQUEST_URI', $req);
-
-if (isset($_SERVER['HTTP_REFERER'])) {
-	$ref = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL);
-} else {
-	$ref = null;
-}
-define('HTTP_REFERER', $ref);
 
 if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
 	Request::setTrustedProxies(
@@ -97,7 +71,7 @@ ContainerFacade::init($container);
 
 // Use HTTP Strict Transport Security to force client to use secure connections only
 if (FORCE_HTTPS) {
-	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && MODE !== 'CLI' && MODE !== 'TRAVIS') {
+	if (!(isset($_SERVER['HTTP_X_FORWARDED_SCHEME']) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https') && !isCi() && !isCli()) {
 		// check if the private token has been send over HTTP
 		$token = filter_input(INPUT_GET, 'private_token', FILTER_SANITIZE_STRING);
 		if (preg_match('/^[a-zA-Z0-9]{150}$/', $token)) {
@@ -108,63 +82,33 @@ if (FORCE_HTTPS) {
 			// TODO: Log dit
 		}
 		// redirect to https
-		header('Location: ' . CSR_ROOT . REQUEST_URI, true, 301);
+		header('Location: ' . CSR_ROOT . $_SERVER['REQUEST_URI'], true, 301);
 		// we are in cleartext at the moment, prevent further execution and output
 		die();
 	}
 }
 
-// Router
-switch (MODE) {
-	case 'TRAVIS':
-		if (isSyrinx()) die("Syrinx is geen Travis!");
-		break;
-	case 'CLI':
-		$container->get(LoginService::class)->loginCli();
-		break;
+if (isCi() && isSyrinx()) die("Syrinx is geen Travis!");
 
-	case 'WEB':
-		// Terugvinden van temp upload files
-		ini_set('upload_tmp_dir', TMP_PATH);
+if (!isCli()) {
+	// Sessie configureren
+	ini_set('session.name', 'CSRSESSID');
+	ini_set('session.save_path', SESSION_PATH);
+	ini_set('session.use_trans_sid', 0);
+	// Sync lifetime of FS based PHP session with DB based C.S.R. session
+	ini_set('session.gc_maxlifetime', (int)instelling('beveiliging', 'session_lifetime_seconds'));
+	ini_set('session.use_strict_mode', true);
+	ini_set('session.use_cookies', true);
+	ini_set('session.use_only_cookies', true);
+	ini_set('session.cookie_domain', CSR_DOMAIN);
+	ini_set('session.cookie_secure', FORCE_HTTPS);
+	ini_set('session.cookie_httponly', true);
+	ini_set('log_errors_max_len', 0);
+	ini_set('xdebug.max_nesting_level', 2000);
+	ini_set('intl.default_locale', 'nl');
+	session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
-		// Sessie configureren
-		ini_set('session.name', 'CSRSESSID');
-		ini_set('session.save_path', SESSION_PATH);
-		ini_set('session.hash_function', 'sha512');
-		ini_set('session.cache_limiter', 'nocache');
-		ini_set('session.use_trans_sid', 0);
-		// Sync lifetime of FS based PHP session with DB based C.S.R. session
-		ini_set('session.gc_maxlifetime', (int)instelling('beveiliging', 'session_lifetime_seconds'));
-		ini_set('session.use_strict_mode', true);
-		ini_set('session.use_cookies', true);
-		ini_set('session.use_only_cookies', true);
-		ini_set('session.cookie_lifetime', 0);
-		ini_set('session.cookie_path', '/');
-		ini_set('session.cookie_domain', CSR_DOMAIN);
-		ini_set('session.cookie_secure', FORCE_HTTPS);
-		ini_set('session.cookie_httponly', true);
-		ini_set('log_errors_max_len', 0);
-		ini_set('xdebug.max_nesting_level', 2000);
-		ini_set('intl.default_locale', 'nl');
-		session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
-
-		session_start();
-		if (session_id() == 'deleted') {
-			// Deletes old session
-			session_regenerate_id(true);
-		}
-		// Validate login
-		$container->get(LoginService::class)->authenticate();
-
-		$container->get(LogRepository::class)->log();
-		break;
-
-	default:
-		die('configuratie.include.php unsupported MODE: ' . MODE);
+	$container->get(LogRepository::class)->log();
 }
-
-// ---
-// Nu heeft de gebruiker een sessie en kan er echt begonnen worden.
-// ---
 
 return $kernel;

@@ -16,10 +16,13 @@ class ToestemmingLijstTable extends DataTable {
 	public function __construct($extrakolommen = []) {
 		parent::__construct(LidToestemming::class, '/toestemming/lijst', 'Lid toestemmingen');
 		$this->addColumn('lid', 'waarde');
+		$this->searchColumn('lid');
 		$this->addColumn('status', 'waarde');
+		$this->deleteColumn('id');
 		$this->deleteColumn('waarde');
 		$this->deleteColumn('module');
 		$this->deleteColumn('instelling_id');
+		$this->deleteColumn('instelling');
 
 		foreach ($extrakolommen as $kolom) {
 			$this->addColumn($kolom);

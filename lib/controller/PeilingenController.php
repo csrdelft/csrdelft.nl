@@ -6,18 +6,14 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\peilingen\Peiling;
-use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\service\PeilingenService;
-use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\peilingen\PeilingForm;
 use CsrDelft\view\peilingen\PeilingTable;
-use CsrDelft\view\View;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -36,7 +32,7 @@ class PeilingenController extends AbstractController {
 
 	/**
 	 * @param Peiling|null $peiling
-	 * @return View
+	 * @return Response
 	 * @Route("/peilingen/beheer/{id}", methods={"GET"}, requirements={"id": "\d+"}, defaults={"id": null})
 	 * @Auth(P_PEILING_EDIT)
 	 */
@@ -45,12 +41,16 @@ class PeilingenController extends AbstractController {
 		if ($peiling) {
 			$table = new PeilingTable();
 			$table->setSearch($peiling->titel);
-			$form = new PeilingForm($peiling, false);
-			$form->setDataTableId($table->getDataTableId());
 
-			return view('default', ['content' => $table, 'modal' => $form]);
+			$form = $this->createFormulier(PeilingForm::class, $peiling, [
+				'action' => $this->generateUrl('csrdelft_peilingen_bewerken'),
+				'nieuw' => false,
+				'dataTableId' => $table->getDataTableId(),
+			]);
+
+			return $this->render('default.html.twig', ['content' => $table, 'modal' => $form->createModalView()]);
 		} else {
-			return view('default', ['content' => new PeilingTable()]);
+			return $this->render('default.html.twig', ['content' => new PeilingTable()]);
 		}
 	}
 
@@ -64,19 +64,24 @@ class PeilingenController extends AbstractController {
 	}
 
 	/**
-	 * @param EntityManagerInterface $em
-	 * @return GenericDataTableResponse|PeilingForm
-	 * @throws ORMException
+	 * @param Request $request
+	 * @return GenericDataTableResponse|Response
 	 * @Route("/peilingen/nieuw", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function nieuw(EntityManagerInterface $em) {
+	public function nieuw(Request $request) {
 		$peiling = new Peiling();
-		$form = new PeilingForm($peiling, true);
+
+		$form = $this->createFormulier(PeilingForm::class, $peiling, [
+			'action' => $this->generateUrl('csrdelft_peilingen_nieuw'),
+			'nieuw' => true,
+			'dataTableId' => true,
+		]);
+
+		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			$peiling = $form->getModel();
-			$peiling->eigenaarProfiel = $em->getReference(Profiel::class, LoginService::getUid());
+			$peiling->eigenaarProfiel = $this->getProfiel();
 			$peiling->mag_bewerken = false;
 
 			$this->getDoctrine()->getManager()->persist($peiling);
@@ -85,16 +90,16 @@ class PeilingenController extends AbstractController {
 			return $this->tableData([$peiling]);
 		}
 
-		return $form;
+		return new Response($form->createModalView());
 	}
 
 	/**
-	 * @return GenericDataTableResponse|PeilingForm
-	 * @throws CsrGebruikerException
+	 * @param Request $request
+	 * @return GenericDataTableResponse|Response
 	 * @Route("/peilingen/bewerken", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function bewerken() {
+	public function bewerken(Request $request) {
 		$selection = $this->getDataTableSelection();
 
 		if ($selection) {
@@ -108,16 +113,22 @@ class PeilingenController extends AbstractController {
 			$peiling = new Peiling();
 		}
 
-		$form = new PeilingForm($peiling, false);
+		$form = $this->createFormulier(PeilingForm::class, $peiling, [
+			'action' => $this->generateUrl('csrdelft_peilingen_bewerken'),
+			'nieuw' => false,
+			'dataTableId' => true,
+		]);
+
+		$form->handleRequest($request);
+
 		if ($form->isPosted() && $form->validate()) {
-			$peiling = $form->getModel();
 			$this->getDoctrine()->getManager()->persist($peiling);
 			$this->getDoctrine()->getManager()->flush();
 
 			return $this->tableData([$peiling]);
 		}
 
-		return $form;
+		return new Response($form->createModalView());
 	}
 
 	/**
@@ -138,14 +149,14 @@ class PeilingenController extends AbstractController {
 	/**
 	 * @param Request $request
 	 * @param int $id
-	 * @return View
+	 * @return JsonResponse
 	 * @Route("/peilingen/stem/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
 	 */
 	public function stem(Request $request, $id) {
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);
 
-		if($this->peilingenService->stem($id, $ids, LoginService::getUid())) {
+		if($this->peilingenService->stem($id, $ids, $this->getUid())) {
 			return new JsonResponse(true);
 		} else {
 			return new JsonResponse(false, 400);

@@ -4,16 +4,16 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\security\AccountRepository;
-use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\login\AccountForm;
 use CsrDelft\view\login\UpdateLoginForm;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -34,24 +34,20 @@ class AccountController extends AbstractController {
 	 */
 	private $loginService;
 	/**
-	 * @var LoginSessionRepository
+	 * @var AccessService
 	 */
-	private $loginSessionRepository;
+	private $accessService;
 
-	public function __construct(AccountRepository $accountRepository, LoginService $loginService, CmsPaginaRepository $cmsPaginaRepository, LoginSessionRepository $loginSessionRepository) {
-		$this->cmsPaginaRepository = $cmsPaginaRepository;
+	public function __construct(
+		AccessService $accessService,
+		AccountRepository $accountRepository,
+		CmsPaginaRepository $cmsPaginaRepository,
+		LoginService $loginService
+	) {
+		$this->accessService = $accessService;
 		$this->accountRepository = $accountRepository;
+		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->loginService = $loginService;
-		$this->loginSessionRepository = $loginSessionRepository;
-	}
-
-	/**
-	 * @return \CsrDelft\view\renderer\TemplateView
-	 * @Route("/account/{uid}/aanvragen", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function aanvragen() {
-		return view('default', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
 	}
 
 	/**
@@ -62,12 +58,16 @@ class AccountController extends AbstractController {
 	 */
 	public function aanmaken($uid = null) {
 		if (!LoginService::mag(P_ADMIN)) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
+
 		if ($uid == null) {
-			$uid = $this->loginService->getUid();
+			$account = $this->getUser();
+		} else {
+			$account = $this->accountRepository->find($uid);
 		}
-		if ($this->accountRepository->get($uid)) {
+
+		if ($account) {
 			setMelding('Account bestaat al', 0);
 		} else {
 			$account = $this->accountRepository->maakAccount($uid);
@@ -82,25 +82,22 @@ class AccountController extends AbstractController {
 
 	/**
 	 * @param null $uid
-	 * @return \CsrDelft\view\renderer\TemplateView
+	 * @return Response
 	 * @Route("/account/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($uid = null) {
+	public function bewerken(Request $request, $uid = null) {
 		if ($uid == null) {
-			$uid = $this->loginService->getUid();
+			$uid = $this->getUid();
 		}
-		if ($uid === LoginService::UID_EXTERN) {
-			return $this->aanvragen();
-		}
-		if ($uid !== $this->loginService->getUid() && !LoginService::mag(P_ADMIN)) {
-			throw new CsrToegangException();
+		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
+			throw $this->createAccessDeniedException();
 		}
 		$account = $this->accountRepository->get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if ($this->loginService->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
 			$action = $this->generateUrl('csrdelft_account_bewerken', ['uid' => $uid]);
@@ -108,26 +105,39 @@ class AccountController extends AbstractController {
 
 			// Reset loginmoment naar nu als de gebruiker zijn wachtwoord geeft.
 			if ($form->validate() && $this->accountRepository->controleerWachtwoord($account, $form->getValues()['pass'])) {
-				$this->loginService->resetLoginMoment();
+				$this->loginService->setRecentLoginToken();
 			} else {
 				setMelding('U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.', 2);
-				return view('default', ['content' => new UpdateLoginForm($action)]);
+				return $this->render('default.html.twig', ['content' => new UpdateLoginForm($action)]);
 			}
 		}
-		if (!AccessService::mag($account, P_LOGGED_IN)) {
+		if (!$this->accessService->mag($account, P_LOGGED_IN)) {
 			setMelding('Account mag niet inloggen', 2);
 		}
-		$form = new AccountForm($account);
+		$form = $this->createFormulier(AccountForm::class, $account, [
+			'action' => $this->generateUrl('csrdelft_account_bewerken', ['uid' => $account->uid])
+		]);
+		$form->handleRequest($request);
 		if ($form->validate()) {
-			if ($form->findByName('username')->getValue() == '') {
+			if ($account->username == '') {
 				$account->username = $account->uid;
 			}
 			// username, email & wachtwoord opslaan
-			$pass_plain = $form->findByName('wijzigww')->getValue();
+			$pass_plain = $account->pass_plain;
 			$this->accountRepository->wijzigWachtwoord($account, $pass_plain);
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
-		return view('default', ['content' => $form]);
+		$account->eraseCredentials();
+		return $this->render('default.html.twig', ['content' => $form->createView()]);
+	}
+
+	/**
+	 * @return Response
+	 * @Route("/account/{uid}/aanvragen", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function aanvragen() {
+		return $this->render('default.html.twig', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
 	}
 
 	/**
@@ -138,10 +148,10 @@ class AccountController extends AbstractController {
 	 */
 	public function verwijderen($uid = null) {
 		if ($uid == null) {
-			$uid = $this->loginService->getUid();
+			$uid = $this->getUid();
 		}
-		if ($uid !== $this->loginService->getUid() && !LoginService::mag(P_ADMIN)) {
-			throw new CsrToegangException();
+		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
+			throw $this->createAccessDeniedException();
 		}
 		$account = $this->accountRepository->get($uid);
 		if (!$account) {

@@ -5,21 +5,37 @@ namespace CsrDelft\controller;
 
 
 use CsrDelft\common\ShutdownHandler;
-use CsrDelft\service\security\LoginService;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Throwable;
 
 
-class ErrorController {
-	public function handleException(RequestStack $requestStack, Throwable $exception, ContainerInterface $container) {
+class ErrorController extends AbstractController {
+	use TargetPathTrait;
+
+	public function handleException(RequestStack $requestStack, Throwable $exception) {
 		$request = $requestStack->getMasterRequest();
 
 		$statusCode = 500;
 		if (method_exists($exception, 'getStatusCode')) {
 			$statusCode = $exception->getStatusCode();
+		}
+
+		if (!in_array($statusCode, [
+				Response::HTTP_BAD_REQUEST,
+				Response::HTTP_NOT_FOUND,
+				Response::HTTP_FORBIDDEN,
+				Response::HTTP_METHOD_NOT_ALLOWED,
+			]) &&
+			!in_array(get_class($exception), [
+				AccessDeniedException::class
+			])) {
+			ShutdownHandler::emailException($exception);
+			ShutdownHandler::slackException($exception);
+			ShutdownHandler::touchHandler();
 		}
 
 		if ($request->getMethod() == 'POST') {
@@ -29,33 +45,37 @@ class ErrorController {
 		switch ($statusCode) {
 			case Response::HTTP_BAD_REQUEST:
 			{
-				return new Response(view('fout.400', ['bericht' => $exception->getMessage()]), Response::HTTP_BAD_REQUEST);
+				$response = new Response(null, Response::HTTP_BAD_REQUEST);
+				return $this->render('fout/400.html.twig', ['bericht' => $exception->getMessage()], $response);
 			}
 			case Response::HTTP_NOT_FOUND:
 			{
-				return new Response(view('fout.404', ['bericht' => $exception->getMessage()]), Response::HTTP_NOT_FOUND);
+				$response = new Response(null, Response::HTTP_NOT_FOUND);
+				return $this->render('fout/404.html.twig', ['bericht' => $exception->getMessage()], $response);
 			}
 			case Response::HTTP_FORBIDDEN:
 			{
-				if (LoginService::getUid() == LoginService::UID_EXTERN) {
+				if ($this->getUser() == null) {
 					$requestUri = $request->getRequestUri();
-					$router = $container->get('router');
+					$router = $this->get('router');
 
-					return new RedirectResponse($router->generate('csrdelft_login_loginform', ['redirect' => urlencode($requestUri)]));
+					$this->saveTargetPath($request->getSession(), 'main', $requestUri);
+
+					return new RedirectResponse($router->generate('csrdelft_login_loginform'));
 				}
 
-				return new Response(view('fout.403'), Response::HTTP_FORBIDDEN);
+				$response = new Response(null, Response::HTTP_FORBIDDEN);
+				return $this->render('fout/403.html.twig', [], $response);
 			}
 			case Response::HTTP_METHOD_NOT_ALLOWED:
 			{
-				return new Response(view('fout.405'), Response::HTTP_METHOD_NOT_ALLOWED);
+				$response = new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+				return $this->render('fout/405.html.twig', [], $response);
 			}
 			default:
 			{
-				ShutdownHandler::emailException($exception);
-				ShutdownHandler::slackException($exception);
-				ShutdownHandler::touchHandler();
-				return new Response(view('fout.500'), Response::HTTP_INTERNAL_SERVER_ERROR);
+				$response = new Response(null, Response::HTTP_INTERNAL_SERVER_ERROR);
+				return $this->render('fout/500.html.twig', [], $response);
 			}
 		}
 	}

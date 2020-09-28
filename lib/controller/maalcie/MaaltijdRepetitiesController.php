@@ -3,20 +3,21 @@
 namespace CsrDelft\controller\maalcie;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\maalcie\forms\MaaltijdRepetitieForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MaaltijdRepetitiesController {
+class MaaltijdRepetitiesController extends AbstractController {
 	private $repetitie = null;
 	/** @var MaaltijdRepetitiesRepository */
 	private $maaltijdRepetitiesRepository;
@@ -30,12 +31,12 @@ class MaaltijdRepetitiesController {
 
 	/**
 	 * @param MaaltijdRepetitie|null $repetitie
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/repetities/{mlt_repetitie_id}", methods={"GET"}, defaults={"mlt_repetitie_id"=null})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function beheer(MaaltijdRepetitie $repetitie = null) {
-		return view('maaltijden.maaltijdrepetitie.beheer_maaltijd_repetities', [
+		return $this->render('maaltijden/maaltijdrepetitie/beheer_maaltijd_repetities.html.twig', [
 			'repetities' => $this->maaltijdRepetitiesRepository->getAlleRepetities(),
 			'modal' => $repetitie ? $this->bewerk($repetitie) : null
 		]);
@@ -62,9 +63,10 @@ class MaaltijdRepetitiesController {
 
 	/**
 	 * @param MaaltijdRepetitie|null $repetitie
-	 * @return MaaltijdRepetitieForm|TemplateView
+	 * @return MaaltijdRepetitieForm|Response
 	 * @throws Throwable
 	 * @Route("/maaltijden/repetities/opslaan/{mlt_repetitie_id}", methods={"POST"}, defaults={"mlt_repetitie_id"=null})
+	 * @Route("/maaltijden/repetities/opslaan/", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function opslaan(MaaltijdRepetitie $repetitie = null) {
@@ -82,7 +84,7 @@ class MaaltijdRepetitiesController {
 				setMelding($aantal . ' abonnement' . ($aantal !== 1 ? 'en' : '') . ' uitgeschakeld.', 2);
 			}
 			$this->repetitie = $repetitie;
-			return view('maaltijden.maaltijdrepetitie.beheer_maaltijd_repetitie', ['repetitie' => $repetitie]);
+			return $this->render('maaltijden/maaltijdrepetitie/beheer_maaltijd_repetitie.html.twig', ['repetitie' => $repetitie]);
 		}
 
 		return $view;
@@ -110,7 +112,7 @@ class MaaltijdRepetitiesController {
 
 	/**
 	 * @param MaaltijdRepetitie $repetitie
-	 * @return MaaltijdRepetitieForm|TemplateView
+	 * @return MaaltijdRepetitieForm
 	 * @throws Throwable
 	 * @Route("/maaltijden/repetities/bijwerken/{mlt_repetitie_id}", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)

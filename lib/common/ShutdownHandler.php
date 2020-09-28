@@ -2,9 +2,6 @@
 
 namespace CsrDelft\common;
 
-use CsrDelft\repository\DebugLogRepository;
-use CsrDelft\service\security\LoginService;
-use Exception;
 use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
@@ -16,19 +13,6 @@ use Throwable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 final class ShutdownHandler {
-	/**
-	 * Zet de http status code. Voorkomt dat stacktraces weergegeven worden.
-	 *
-	 * Runt in Productie mode.
-	 */
-	public static function errorPageHandler() {
-		$debug = self::getDebug();
-		if ($debug !== null && self::isError($debug)) {
-			http_response_code(500);
-			view('fout.500')->view();
-		}
-	}
-
 	/**
 	 * Stuur een mail naar de PubCie.
 	 *
@@ -51,11 +35,12 @@ final class ShutdownHandler {
 	}
 
 	public static function emailException(Throwable $exception) {
-		$error['message'] = $exception->getMessage();
+		$debug['type'] = get_class($exception);
+		$debug['message'] = $exception->getMessage();
 		$debug['trace'] = $exception->getTrace();
 		$debug['POST'] = $_POST;
 		$debug['GET'] = $_GET;
-		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
+		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : null;
 		$debug['SERVER'] = $_SERVER;
 		unset($debug['SERVER']['HTTP_COOKIE']); // Voorkom dat sessie en remember cookies gemaild worden
 		unset($debug['SERVER']['DATABASE_URL']);
@@ -69,18 +54,6 @@ final class ShutdownHandler {
 		$cloner = new VarCloner();
 
 		mail('pubcie@csrdelft.nl', $subject, $dumper->dump($cloner->cloneVar($debug), true), implode("\r\n", $headers));
-	}
-
-	/**
-	 * Schrijf naar de debug log in de database.
-	 *
-	 * Runt in Debug mode.
-	 */
-	public static function debugLogHandler() {
-		$debug = static::getDebug();
-		if ($debug !== null) {
-			ContainerFacade::getContainer()->get(DebugLogRepository::class)->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
-		}
 	}
 
 	/**
@@ -148,11 +121,11 @@ final class ShutdownHandler {
 
 
 		$debug = self::getDebug();
-		if ($debug !== null && !empty(env('SLACK_URL'))) {
-			$slackClient = new SlackClient(env('SLACK_URL'), [
-				'username' => env('SLACK_USERNAME'),
-				'channel' => env('SLACK_CHANNEL'),
-				'icon' => env('SLACK_ICON'),
+		if ($debug !== null && !empty($_ENV['SLACK_URL'])) {
+			$slackClient = new SlackClient($_ENV['SLACK_URL'], [
+				'username' => $_ENV['SLACK_USERNAME'],
+				'channel' => $_ENV['SLACK_CHANNEL'],
+				'icon' => $_ENV['SLACK_ICON'],
 			]);
 			$foutmelding = $slackClient->createMessage();
 
@@ -192,7 +165,7 @@ MD
 			$debug['trace'] = debug_backtrace();
 			$debug['POST'] = $_POST;
 			$debug['GET'] = $_GET;
-			$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
+			$debug['SESSION'] = isset($_SESSION) ? $_SESSION : null;
 			$debug['SERVER'] = $_SERVER;
 			unset($debug['SERVER']['HTTP_COOKIE']); // Voorkom dat sessie en remember cookies gemaild worden
 			return $debug;

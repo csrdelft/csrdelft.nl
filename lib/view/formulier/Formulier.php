@@ -32,7 +32,7 @@ class Formulier implements View, Validator, ToResponse {
 	protected $action = null;
 	public $post = true;
 	protected $error;
-	private $enctype = 'multipart/form-data';
+	protected $enctype = 'multipart/form-data';
 	public $showMelding = true;
 	public $preventCsrf = true;
 	/**
@@ -47,7 +47,6 @@ class Formulier implements View, Validator, ToResponse {
 	public $css_classes = array();
 	protected $javascript = '';
 	public $titel;
-	public $stappen_submit = false;
 
 	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
@@ -224,12 +223,6 @@ class Formulier implements View, Validator, ToResponse {
 		foreach ($this->fields as $field) {
 			$this->javascript .= $field->getJavascript();
 		}
-		if ($this->stappen_submit) {
-			$this->javascript .= <<<JS
-
-$(form).formSteps({submitButton: "{$this->stappen_submit}"});
-JS;
-		}
 		return $this->javascript;
 	}
 
@@ -254,7 +247,6 @@ HTML;
 	/**
 	 * Toont het formulier en javascript van alle fields.
 	 *
-	 * @param boolean $showMelding Toon meldingen bovenaan formulier (set through property)
 	 * @return void
 	 */
 	public function view() {

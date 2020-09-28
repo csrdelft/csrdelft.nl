@@ -170,8 +170,8 @@ class CorveeTakenRepository extends AbstractRepository {
 	public function getTakenVoorAgenda(DateTimeInterface $van, DateTimeInterface $tot, $iedereen = false) {
 		$qb = $this->createQueryBuilder('ct');
 		$qb->where('ct.verwijderd = false and ct.datum >= :van_datum and ct.datum <= :tot_datum');
-		$qb->setParameter('van_datum', $van);
-		$qb->setParameter('tot_datum', $tot);
+		$qb->setParameter('van_datum', $van->setTime(0,0,0));
+		$qb->setParameter('tot_datum', $tot->setTime(23,59,59));
 		if (!$iedereen) {
 			$qb->andWhere('ct.profiel = :profiel');
 			$qb->setParameter('profiel', LoginService::getProfiel());
@@ -346,7 +346,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	 *
 	 * @param int $mid
 	 * @param bool $verwijderd
-	 * @return PDOStatement|CorveeTaak[]
+	 * @return CorveeTaak[]
 	 * @throws CsrGebruikerException
 	 */
 	public function getTakenVoorMaaltijd($mid, $verwijderd = false) {
@@ -460,7 +460,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	 * @throws OptimisticLockException
 	 */
 	public function verwijderRepetitieTaken($crid) {
-		$taken = $this->findBy(['crv_repetitie_id' => $crid]);
+		$taken = $this->findBy(['corveeRepetitie' => $crid]);
 		foreach ($taken as $taak) {
 			$taak->verwijderd = true;
 			$this->_em->persist($taak);
@@ -478,7 +478,7 @@ class CorveeTakenRepository extends AbstractRepository {
 	 * @return bool
 	 */
 	public function existRepetitieTaken($crid) {
-		return count($this->findBy(['crv_repetitie_id' => $crid])) > 0;
+		return count($this->findBy(['corveeRepetitie' => $crid])) > 0;
 	}
 
 	/**

@@ -94,14 +94,14 @@ class Document extends Bestand {
 	 * @return bool
 	 */
 	public function exists() {
-		return @is_readable($this->directory . '/' . $this->filename) AND is_file($this->directory . '/' . $this->filename);
+		return @is_readable($this->directory . '/' . $this->filename) and is_file($this->directory . '/' . $this->filename);
 	}
 
 	public function hasFile() {
 		if (!$this->magBekijken()) {
 			return false;
 		}
-		return $this->filename != '' AND file_exists($this->getFullPath());
+		return $this->filename != '' and file_exists($this->getFullPath());
 	}
 
 	public function isEigenaar() {
@@ -113,7 +113,7 @@ class Document extends Bestand {
 	}
 
 	public function magBewerken() {
-		return $this->isEigenaar() OR LoginService::mag(P_DOCS_MOD);
+		return $this->isEigenaar() or LoginService::mag(P_DOCS_MOD);
 	}
 
 	public function magVerwijderen() {

@@ -10,6 +10,7 @@ use CsrDelft\repository\forum\ForumDelenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\service\security\LoginService;
 use Exception;
+use Twig\Environment;
 
 class BbForum extends BbTag {
 	public $num = 3;
@@ -25,10 +26,15 @@ class BbForum extends BbTag {
 	 * @var ForumDelenRepository
 	 */
 	private $forumDelenRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
-	public function __construct(ForumDradenRepository $forumDradenRepository, ForumDelenRepository $forumDelenRepository) {
+	public function __construct(ForumDradenRepository $forumDradenRepository, ForumDelenRepository $forumDelenRepository, Environment $twig) {
 		$this->forumDradenRepository = $forumDradenRepository;
 		$this->forumDelenRepository = $forumDelenRepository;
+		$this->twig = $twig;
 	}
 
 	public static function getTagName() {
@@ -52,10 +58,10 @@ class BbForum extends BbTag {
 			return 'Geen toegang';
 		}
 
-		return view('forum.bb', [
+		return $this->twig->render('forum/bb.html.twig', [
 			'deel' => $this->deel,
 			'id' => $this->content,
-		])->getHtml();
+		]);
 	}
 
 	/**

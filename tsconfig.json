@@ -3,19 +3,15 @@
     "target": "es2017",
     "module": "esnext",
     "moduleResolution": "node",
-    "isolatedModules": false,
     "experimentalDecorators": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
     "removeComments": false,
 		"types": ["vue-typescript-import-dts", "@types/jqueryui"],
-    "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+		"skipLibCheck": true
   },
   "include": [
-    "resources/assets/js/**/*.ts",
-		"resources/assets/js/**/*.vue"
+    "assets/js/**/*.ts",
+		"assets/js/**/*.vue"
   ],
   "compileOnSave": false
 }

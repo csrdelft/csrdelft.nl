@@ -55,7 +55,8 @@ class EetplanRepository extends AbstractRepository {
 	 */
 	public function getAvonden($lichting) {
 		return $this->createQueryBuilder('e')
-			->where('e.uid like :uid and e.avond is not null')
+			->join('e.noviet', 'n')
+			->where('n.uid like :uid and e.avond is not null')
 			->setParameter('uid', $lichting . '%')
 			->groupBy('e.avond')
 			->getQuery()->getResult();
@@ -75,24 +76,25 @@ class EetplanRepository extends AbstractRepository {
 		// Orderen bij avond, zodat de avondvolgorde per noviet klopt
 		/** @var Eetplan[] $eetplan */
 		$eetplan = $this->createQueryBuilder('e')
-			->where('e.uid like :uid and e.avond is not null')
+			->join('e.noviet', ' n')
+			->where('n.uid like :uid and e.avond is not null')
 			->setParameter('uid', $lichting . '%')
 			->orderBy('e.avond', 'DESC')
 			->getQuery()->getResult();
 		$eetplanFeut = [];
 		$avonden = [];
 		foreach ($eetplan as $sessie) {
-			if (!isset($eetplanFeut[$sessie->uid])) {
-				$eetplanFeut[$sessie->uid] = [
+			if (!isset($eetplanFeut[$sessie->noviet->uid])) {
+				$eetplanFeut[$sessie->noviet->uid] = [
 					'avonden' => [],
-					'uid' => $sessie->uid,
+					'uid' => $sessie->noviet->uid,
 					'naam' => $sessie->noviet->getNaam()
 				];
 			}
 
-			$eetplanFeut[$sessie->uid]['avonden'][] = [
+			$eetplanFeut[$sessie->noviet->uid]['avonden'][] = [
 				'datum' => $sessie->avond,
-				'woonoord_id' => $sessie->woonoord_id,
+				'woonoord_id' => $sessie->woonoord->id,
 				'woonoord' => $sessie->woonoord->naam
 			];
 
@@ -120,7 +122,8 @@ class EetplanRepository extends AbstractRepository {
 		$factory->setBekenden($bekenden);
 
 		$bezocht = $this->createQueryBuilder('e')
-			->where("e.uid like :uid")
+			->join('e.noviet', 'n')
+			->where("n.uid like :uid")
 			->setParameter('uid', $lichting . '%')
 			->getQuery()->getResult();
 		$factory->setBezocht($bezocht);
@@ -141,7 +144,8 @@ class EetplanRepository extends AbstractRepository {
 	 */
 	public function getEetplanVoorNoviet($uid) {
 		return $this->createQueryBuilder('e')
-			->where('e.uid = :uid and e.avond is not null')
+			->join('e.noviet', 'n')
+			->where('n.uid = :uid and e.avond is not null')
 			->setParameter('uid', $uid)
 			->orderBy('e.avond', 'ASC')
 			->getQuery()->getResult();
@@ -156,7 +160,9 @@ class EetplanRepository extends AbstractRepository {
 	public function getEetplanVoorHuis($woonoord_id, $lichting) {
 		/** @var Eetplan[] $sessies */
 		$sessies = $this->createQueryBuilder('e')
-			->where('e.uid like :uid and e.woonoord_id = :woonoord_id and e.avond is not null')
+			->join('e.noviet', 'n')
+			->join('e.woonoord', 'w')
+			->where('n.uid like :uid and w.id = :woonoord_id and e.avond is not null')
 			->setParameter('uid', $lichting . '%')
 			->setParameter('woonoord_id', $woonoord_id)
 			->orderBy('e.avond', 'ASC')
@@ -176,7 +182,8 @@ class EetplanRepository extends AbstractRepository {
 	 */
 	public function getBekendeHuizen($lichting) {
 		return $this->createQueryBuilder('e')
-			->where('e.uid like :uid and e.avond is null')
+			->join('e.noviet', 'n')
+			->where('n.uid like :uid and e.avond is null')
 			->setParameter('uid', $lichting . '%')
 			->getQuery()->getResult();
 	}
@@ -201,7 +208,8 @@ class EetplanRepository extends AbstractRepository {
 	 */
 	public function getEetplanVoorAvond($avond, $lichting) {
 		return $this->createQueryBuilder('e')
-			->where('e.avond = :avond and e.uid like :uid')
+			->join('e.noviet', 'n')
+			->where('e.avond = :avond and n.uid like :uid')
 			->setParameter('avond', $avond)
 			->setParameter('uid', $lichting . '%')
 			->getQuery()->getResult();

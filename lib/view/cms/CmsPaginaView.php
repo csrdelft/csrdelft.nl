@@ -25,7 +25,7 @@ class CmsPaginaView implements View, ToResponse {
 		$this->pagina = $pagina;
 	}
 
-	function getModel() {
+	public function getModel() {
 		return $this->pagina;
 	}
 
@@ -33,7 +33,7 @@ class CmsPaginaView implements View, ToResponse {
 		return null;
 	}
 
-	function getTitel() {
+	public function getTitel() {
 		return $this->pagina->titel;
 	}
 

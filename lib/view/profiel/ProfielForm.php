@@ -51,7 +51,7 @@ class ProfielForm extends Formulier {
 			. '<li class="breadcrumb-item">'. $this->model->getLink('civitas') . '</li></ol>';
 	}
 
-	public function __construct(Profiel $profiel) {
+	public function __construct(Profiel $profiel, $inschrijven) {
 		if ($profiel->uid) {
 			parent::__construct($profiel, '/profiel/' . $profiel->uid . '/bewerken');
 		} else {
@@ -59,7 +59,7 @@ class ProfielForm extends Formulier {
 		}
 
 		$admin = LoginService::mag(P_LEDEN_MOD);
-		$inschrijven = !$profiel->account;
+		$novCie = LoginService::mag('commissie:NovCie');
 
 		$fields = [];
 		if ($inschrijven) {
@@ -74,7 +74,7 @@ class ProfielForm extends Formulier {
 				Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf
 				wijzigingen door te voeren. Voor de meeste velden geldt daarnaast dat de ingevulde gegevens
 				een geldig formaat moeten hebben. Mochten er fouten in het gedeelte van uw profiel staan,
-				dat u niet zelf kunt wijzigen, meld het dan bij de <a href="mailto:' . env('EMAIL_VAB') . '">Vice-Abactis</a>.
+				dat u niet zelf kunt wijzigen, meld het dan bij de <a href="mailto:' . $_ENV['EMAIL_VAB'] . '">Vice-Abactis</a>.
 			</p>');
 		}
 		$fields[] = new HtmlComment('<p>
@@ -225,7 +225,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
 		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
-		if ($admin OR $inschrijven) {
+		if ($admin OR $inschrijven OR $novCie) {
 			$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
 			$fields['middelbareSchool'] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 			$fields['middelbareSchool']->required = $inschrijven;
@@ -240,13 +240,14 @@ class ProfielForm extends Formulier {
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
-		if (($admin OR LoginService::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
-			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
+		if (($admin OR $novCie) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
+			$fields[] = new CollapsableSubkopje('In te vullen door NovCie', true);
 
 			if ($inschrijven) {
 				// Alleen als inschrijven, anders bovenin voor admin
 				$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 			}
+			$fields[] = new JaNeeField('toestemmingAfschrijven', $profiel->toestemmingAfschrijven, 'Toestemming afschrijven?');
 
 			$fields['novitiaat'] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
 			$fields['novitiaat']->required = $inschrijven;
@@ -257,9 +258,15 @@ class ProfielForm extends Formulier {
 			$fields['startkamp'] = new SelectField('startkamp', $profiel->startkamp, 'Startkamp', array('ja', 'nee'));
 			$fields['startkamp']->required = $inschrijven;
 
-			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie, bijv. allergieen)');
 			$fields[] = new TextareaField('novitiaatBijz', $profiel->novitiaatBijz, 'Bijzonderheden novitiaat (op dag x ...)');
 			$fields[] = new TextareaField('kgb', $profiel->kgb, 'Overige NovCie-opmerking');
+
+			$fields[] = new Subkopje('Medisch');
+			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie, bijv. allergieen)');
+			$fields[] = new TextField('huisarts', $profiel->huisarts, 'Naam huisarts');
+			$fields[] = new TelefoonField('huisartsTelefoon', $profiel->huisartsTelefoon, 'Telefoonnummer');
+			$fields[] = new TextField('huisartsPlaats', $profiel->huisartsPlaats, 'Plaats');
+
 			$fields[] = new HtmlComment('</div>');
 		}
 		$fields[] = new FormDefaultKnoppen('/profiel/' . $profiel->uid);

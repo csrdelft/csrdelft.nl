@@ -25,7 +25,7 @@ class BoekRepository extends AbstractRepository {
 	/**
 	 * @param string $zoekveld
 	 * @param string $zoekterm
-	 * @return Boek[]
+	 * @return string[][]
 	 * @throws CsrGebruikerException
 	 */
 	public function autocompleteProperty(string $zoekveld, string $zoekterm) {
@@ -33,9 +33,12 @@ class BoekRepository extends AbstractRepository {
 		if (!in_array($zoekveld, $allowedFields)) {
 			throw new CsrGebruikerException("Autocomplete niet toegestaan voor dit veld");
 		}
-		$qb = $this->createQueryBuilder('b');
-		$qb->where($qb->expr()->like('b.' . $zoekveld, '%' . $zoekterm . '%'));
-		return $qb->getQuery()->getArrayResult();
+		return $this->createQueryBuilder('b')
+			->select("b.$zoekveld")
+			->distinct()
+			->where("b.$zoekveld LIKE :zoekterm")
+			->setParameter('zoekterm', sql_contains($zoekterm))
+			->getQuery()->getScalarResult();
 	}
 
 	/**

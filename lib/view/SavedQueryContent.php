@@ -8,6 +8,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\SavedQueryRepository;
 
 class SavedQueryContent implements View {
+	use ToHtmlResponse;
 
 	/**
 	 * Saved query

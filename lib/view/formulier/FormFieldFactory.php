@@ -10,11 +10,13 @@ use CsrDelft\common\Doctrine\Type\LongTextType;
 use CsrDelft\common\Doctrine\Type\SafeJsonType;
 use CsrDelft\common\Doctrine\Type\StringKeyType;
 use CsrDelft\common\Doctrine\Type\UidType;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\view\formulier\getalvelden\FloatField;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\invoervelden\ProfielEntityField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
@@ -83,7 +85,13 @@ class FormFieldFactory {
 
 			$targetEntity = $associationMapping['targetEntity'];
 
-			$field = new DoctrineEntityField($fieldName, $model->$fieldName, ucfirst(str_replace('_', ' ', $fieldName)), $targetEntity, '');
+			$readableFieldName = ucfirst(str_replace('_', ' ', $fieldName));
+
+			if ($targetEntity == Profiel::class) {
+				$field = new ProfielEntityField($fieldName, $model->$fieldName, $readableFieldName, 'leden');
+			} else {
+				$field = new DoctrineEntityField($fieldName, $model->$fieldName, $readableFieldName, $targetEntity, '');
+			}
 
 			$joinColumn = $associationMapping['joinColumns'][0];
 

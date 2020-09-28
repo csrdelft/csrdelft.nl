@@ -18,6 +18,7 @@ use CsrDelft\service\VerjaardagenService;
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -49,9 +50,14 @@ class AgendaRepository extends AbstractRepository {
 	 * @var VerjaardagenService
 	 */
 	private $verjaardagenService;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
 	public function __construct(
 		ManagerRegistry $registry,
+		Security $security,
 		AgendaVerbergenRepository $agendaVerbergenRepository,
 		ActiviteitenRepository $activiteitenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
@@ -65,6 +71,7 @@ class AgendaRepository extends AbstractRepository {
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->verjaardagenService = $verjaardagenService;
+		$this->security = $security;
 	}
 
 	/**
@@ -216,7 +223,8 @@ class AgendaRepository extends AbstractRepository {
 	 * @return mixed|null
 	 */
 	public function zoekWoordAgenda($woord) {
-		foreach ($this->getItemsByDay(date_create_immutable()) as $item) {
+		$beginDag = date_create_immutable()->setTime(0, 0, 0);
+		foreach ($this->getItemsByDay($beginDag) as $item) {
 			if (stristr($item->getTitel(), $woord) !== false OR stristr($item->getBeschrijving(), $woord) !== false) {
 				return $item;
 			}
@@ -228,17 +236,14 @@ class AgendaRepository extends AbstractRepository {
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
-	public function nieuw($datum) {
+	public function nieuw($begin_moment, $eind_moment) {
 		$item = new AgendaItem();
-		if (!preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $datum)) {
-			$datum = strtotime('Y-m-d');
-		}
-		$item->begin_moment = date_create_immutable(getDateTime(strtotime($datum) + 72000));
-		$item->eind_moment = date_create_immutable(getDateTime(strtotime($datum) + 79200));
+		$item->begin_moment = $begin_moment ? date_create_immutable($begin_moment) : date_create_immutable()->add(new DateInterval('P1D'));
+		$item->eind_moment = $eind_moment ? date_create_immutable($eind_moment) : date_create_immutable()->add(new DateInterval('P2D'));
 		if (LoginService::mag(P_AGENDA_MOD)) {
 			$item->rechten_bekijken = instelling('agenda', 'standaard_rechten');
 		} else {
-			$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
+			$item->rechten_bekijken = 'verticale:' . $this->security->getUser()->profiel->verticale;
 		}
 		return $item;
 	}

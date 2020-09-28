@@ -21,6 +21,6 @@ class BesturenController extends AbstractGroepenController {
 	public function overzicht($soort = null) {
 		$groepen = $this->repository->findBy([]);
 		$body = new GroepenView($this->repository, $groepen, $soort); // controleert rechten bekijken per groep
-		return view('default', ['content' => $body]);
+		return $this->render('default.html.twig', ['content' => $body]);
 	}
 }

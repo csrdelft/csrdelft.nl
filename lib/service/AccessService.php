@@ -26,11 +26,11 @@ use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\LichtingenRepository;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -66,6 +66,8 @@ class AccessService {
 	 * @var array
 	 */
 	private static $defaultAllowedAuthenticationMethods = [
+		AuthenticationMethod::impersonate,
+		AuthenticationMethod::temporary,
 		AuthenticationMethod::cookie_token,
 		AuthenticationMethod::password_login,
 		AuthenticationMethod::recent_password_login,
@@ -261,9 +263,9 @@ class AccessService {
 	}
 
 	/**
-	 * @param Account $subject Het lid dat de gevraagde permissies zou moeten bezitten.
-	 * @param string $permission Gevraagde permissie(s).
-	 * @param array $allowedAuthenticationMethods Bij niet toegestane methode doen alsof gebruiker x999 is.
+	 * @param UserInterface|null $subject Het lid dat de gevraagde permissies zou moeten bezitten.
+	 * @param string|null $permission Gevraagde permissie(s).
+	 * @param array|null $allowedAuthenticationMethods Bij niet toegestane methode doen alsof gebruiker x999 is.
 	 *
 	 * Met deze functies kan op één of meerdere permissies worden getest,
 	 * onderling gescheiden door komma's. Als een lid één van de
@@ -291,7 +293,10 @@ class AccessService {
 	 *
 	 * @return bool Of $subject $permission heeft.
 	 */
-	public static function mag(Account $subject, $permission, array $allowedAuthenticationMethods = null) {
+	public function mag(UserInterface $subject = null, $permission = null, array $allowedAuthenticationMethods = null) {
+		if ($subject == null) {
+			$subject = AccountRepository::get(LoginService::UID_EXTERN);
+		}
 
 		// Als voor het ingelogde lid een permissie gevraagd wordt
 		if ($subject->uid == LoginService::getUid()) {
@@ -307,116 +312,17 @@ class AccessService {
 		}
 
 		// case insensitive
-		return ContainerFacade::getContainer()->get(AccessService::class)->hasPermission($subject, strtoupper($permission));
+		return $this->hasPermission($subject, strtoupper($permission));
 	}
 
 	/**
-	 * @param string $lidstatus
-	 *
-	 * @return string
-	 * @throws CsrException
-	 */
-	public function getDefaultPermissionRole($lidstatus) {
-		switch ($lidstatus) {
-			case LidStatus::Kringel:
-			case LidStatus::Noviet:
-			case LidStatus::Lid:
-			case LidStatus::Gastlid:
-				return AccessRole::Lid;
-			case LidStatus::Oudlid:
-			case LidStatus::Erelid:
-				return AccessRole::Oudlid;
-			case LidStatus::Commissie:
-			case LidStatus::Overleden:
-			case LidStatus::Exlid:
-			case LidStatus::Nobody:
-				return AccessRole::Nobody;
-			default:
-				throw new CsrException('LidStatus onbekend');
-		}
-	}
-
-	/**
-	 * @return string[]
-	 */
-	public function getPermissionSuggestions() {
-		$suggestions = array_keys($this->permissions);
-		$suggestions[] = 'bestuur';
-		$suggestions[] = 'geslacht:m';
-		$suggestions[] = 'geslacht:v';
-		$suggestions[] = 'ouderejaars';
-		$suggestions[] = 'eerstejaars';
-		return $suggestions;
-	}
-
-	/**
-	 * Get error(s) in permission string, if any.
-	 *
-	 * @param string $permissions
-	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
-	 */
-	public function getPermissionStringErrors($permissions) {
-		$errors = [];
-		// OR
-		$or = explode(',', $permissions);
-		foreach ($or as $and) {
-			// AND
-			$and = explode('+', $and);
-			foreach ($and as $or2) {
-				// OR (secondary)
-				$or2 = explode('|', $or2);
-				foreach ($or2 as $perm) {
-					if (!$this->isValidPermission($perm)) {
-						$errors[] = $perm;
-					}
-				}
-			}
-		}
-		return $errors;
-	}
-
-	/**
-	 * @param string $permission
-	 *
-	 * @return bool
-	 */
-	public function isValidPermission($permission) {
-		// case insensitive
-		$permission = strtoupper($permission);
-
-		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
-		if (AccountRepository::isValidUid(strtolower($permission))) {
-			return true;
-		}
-
-		// Is de gevraagde permissie voorgedefinieerd?
-		if (isset($this->permissions[$permission])) {
-			return true;
-		}
-
-		// splits permissie in type, waarde en rol
-		$p = explode(':', $permission);
-		if (in_array($p[0], self::$prefix) && sizeof($p) <= 3) {
-			if (isset($p[1]) && $p[1] == '') {
-				return false;
-			}
-			if (isset($p[2]) && $p[2] == '') {
-				return false;
-			}
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param Account $subject
-	 * @param string $permission
+	 * @param UserInterface $subject
+	 * @param null $permission
 	 *
 	 * @return bool|mixed
 	 * @throws InvalidArgumentException
 	 */
-	private function hasPermission(Account $subject, $permission) {
+	private function hasPermission(UserInterface $subject, $permission = null) {
 		// Rechten vergeten?
 		if (empty($permission)) {
 			return false;
@@ -477,12 +383,12 @@ class AccessService {
 	}
 
 	/**
-	 * @param Account $subject
+	 * @param Account|UserInterface $subject
 	 * @param string $permission
 	 *
 	 * @return bool
 	 */
-	private function mandatoryAccessControl(Account $subject, $permission) {
+	private function mandatoryAccessControl(UserInterface $subject, $permission) {
 
 		if (isset($_SESSION['password_unsafe'])) {
 			if (in_array_i($permission, self::$ledenRead) || in_array_i($permission, self::$ledenWrite)) {
@@ -559,16 +465,16 @@ class AccessService {
 	}
 
 	/**
-	 * @param Account $subject
+	 * @param Account|UserInterface $subject
 	 * @param string $permission
 	 *
 	 * @return bool
 	 * @throws InvalidArgumentException
 	 */
-	private function discretionaryAccessControl(Account $subject, $permission) {
+	private function discretionaryAccessControl(UserInterface $subject, $permission) {
 
 		// haal het profiel van de gebruiker op
-		$profiel = ProfielRepository::get($subject->uid);
+		$profiel = $subject->profiel;
 
 		// ga alleen verder als er een geldig profiel wordt teruggegeven
 		if (!$profiel) {
@@ -599,7 +505,7 @@ class AccessService {
 			 * Is lid man of vrouw?
 			 */
 			case self::PREFIX_GESLACHT:
-				if ($gevraagd == strtoupper($profiel->geslacht->getValue())) {
+				if ($profiel->geslacht && $gevraagd == strtoupper($profiel->geslacht->getValue())) {
 					// Niet ingelogd heeft geslacht m dus check of ingelogd
 					if ($this->hasPermission($subject, P_LOGGED_IN)) {
 						return true;
@@ -812,6 +718,105 @@ class AccessService {
 
 				return $this->em->getRepository(CorveeKwalificatie::class)->isLidGekwalificeerdVoorFunctie($profiel->uid, $functie_id);
 		}
+		return false;
+	}
+
+	/**
+	 * @param string $lidstatus
+	 *
+	 * @return string
+	 * @throws CsrException
+	 */
+	public function getDefaultPermissionRole($lidstatus) {
+		switch ($lidstatus) {
+			case LidStatus::Kringel:
+			case LidStatus::Noviet:
+			case LidStatus::Lid:
+			case LidStatus::Gastlid:
+				return AccessRole::Lid;
+			case LidStatus::Oudlid:
+			case LidStatus::Erelid:
+				return AccessRole::Oudlid;
+			case LidStatus::Commissie:
+			case LidStatus::Overleden:
+			case LidStatus::Exlid:
+			case LidStatus::Nobody:
+				return AccessRole::Nobody;
+			default:
+				throw new CsrException('LidStatus onbekend');
+		}
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getPermissionSuggestions() {
+		$suggestions = array_keys($this->permissions);
+		$suggestions[] = 'bestuur';
+		$suggestions[] = 'geslacht:m';
+		$suggestions[] = 'geslacht:v';
+		$suggestions[] = 'ouderejaars';
+		$suggestions[] = 'eerstejaars';
+		return $suggestions;
+	}
+
+	/**
+	 * Get error(s) in permission string, if any.
+	 *
+	 * @param string $permissions
+	 * @return array empty if no errors; substring(s) of $permissions containing error(s) otherwise
+	 */
+	public function getPermissionStringErrors($permissions) {
+		$errors = [];
+		// OR
+		$or = explode(',', $permissions);
+		foreach ($or as $and) {
+			// AND
+			$and = explode('+', $and);
+			foreach ($and as $or2) {
+				// OR (secondary)
+				$or2 = explode('|', $or2);
+				foreach ($or2 as $perm) {
+					if (!$this->isValidPermission($perm)) {
+						$errors[] = $perm;
+					}
+				}
+			}
+		}
+		return $errors;
+	}
+
+	/**
+	 * @param string $permission
+	 *
+	 * @return bool
+	 */
+	public function isValidPermission($permission) {
+		// case insensitive
+		$permission = strtoupper($permission);
+
+		// Is de gevraagde permissie het uid van de gevraagde gebruiker?
+		if (AccountRepository::isValidUid(strtolower($permission))) {
+			return true;
+		}
+
+		// Is de gevraagde permissie voorgedefinieerd?
+		if (isset($this->permissions[$permission])) {
+			return true;
+		}
+
+		// splits permissie in type, waarde en rol
+		$p = explode(':', $permission);
+		if (in_array($p[0], self::$prefix) && sizeof($p) <= 3) {
+			if (isset($p[1]) && $p[1] == '') {
+				return false;
+			}
+			if (isset($p[2]) && $p[2] == '') {
+				return false;
+			}
+			return true;
+		}
+
 		return false;
 	}
 

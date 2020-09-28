@@ -3,11 +3,13 @@
 namespace CsrDelft\DataFixtures;
 
 use CsrDelft\entity\Geslacht;
+use CsrDelft\entity\MenuItem;
 use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\model\entity\LidStatus;
+use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -41,6 +43,9 @@ class AccountFixtures extends Fixture {
 		$externProfiel->woonplaats = '';
 		$externProfiel->email = '';
 		$externProfiel->lidjaar = 0;
+		$externProfiel->changelog = [
+			new ProfielLogTextEntry('Aangemaakt door fixtures'),
+		];
 
 		$manager->persist($externProfiel);
 
@@ -73,6 +78,9 @@ class AccountFixtures extends Fixture {
 		$pubcieProfiel->woonplaats = '';
 		$pubcieProfiel->email = '';
 		$pubcieProfiel->lidjaar = 0;
+		$pubcieProfiel->changelog = [
+			new ProfielLogTextEntry('Aangemaakt door fixtures'),
+		];
 
 		$manager->persist($pubcieProfiel);
 
@@ -81,6 +89,10 @@ class AccountFixtures extends Fixture {
 		$this->accountRepository->wijzigWachtwoord($account, 'stek open u voor mij!');
 
 		$account->perm_role = AccessRole::PubCie;
+
+		$pubcieMenu = new MenuItem();
+		$pubcieMenu->tekst = 'x101';
+		$pubcieMenu->rechten_bekijken = 'x101';
 
 		$manager->flush();
 	}

@@ -7,7 +7,8 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\service\corvee\CorveePuntenService;
-use CsrDelft\view\renderer\TemplateView;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -16,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  */
-class BeheerPuntenController {
+class BeheerPuntenController extends AbstractController {
 	/**
 	 * @var CorveeFunctiesRepository
 	 */
@@ -32,19 +33,19 @@ class BeheerPuntenController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee/punten", methods={"GET"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
 	public function beheer() {
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$matrix = $this->corveePuntenService->loadPuntenVoorAlleLeden($functies);
-		return view('maaltijden.corveepunt.beheer_punten', ['matrix' => $matrix, 'functies' => $functies]);
+		return $this->render('maaltijden/corveepunt/beheer_punten.html.twig', ['matrix' => $matrix, 'functies' => $functies]);
 	}
 
 	/**
 	 * @param Profiel $profiel
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee/punten/wijzigpunten/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
@@ -53,12 +54,12 @@ class BeheerPuntenController {
 		$this->corveePuntenService->savePuntenVoorLid($profiel, $punten, null);
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$corveePuntenOverzicht = $this->corveePuntenService->loadPuntenVoorLid($profiel, $functies);
-		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $corveePuntenOverzicht]);
+		return $this->render('maaltijden/corveepunt/beheer_punten_lijst.html.twig', ['puntenlijst' => $corveePuntenOverzicht]);
 	}
 
 	/**
 	 * @param Profiel $profiel
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee/punten/wijzigbonus/{uid}", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */
@@ -67,11 +68,11 @@ class BeheerPuntenController {
 		$this->corveePuntenService->savePuntenVoorLid($profiel, null, $bonus);
 		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
 		$corveePuntenOverzicht = $this->corveePuntenService->loadPuntenVoorLid($profiel, $functies);
-		return view('maaltijden.corveepunt.beheer_punten_lijst', ['puntenlijst' => $corveePuntenOverzicht]);
+		return $this->render('maaltijden/corveepunt/beheer_punten_lijst.html.twig', ['puntenlijst' => $corveePuntenOverzicht]);
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/corvee/punten/resetjaar", methods={"POST"})
 	 * @Auth(P_CORVEE_MOD)
 	 */

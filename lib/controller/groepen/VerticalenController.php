@@ -2,11 +2,10 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
-use CsrDelft\view\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -23,7 +22,7 @@ class VerticalenController extends AbstractGroepenController {
 
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');

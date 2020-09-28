@@ -16,7 +16,7 @@ class WachtwoordWijzigenForm extends Formulier {
 		$action,
 		$require_current = true
 	) {
-		parent::__construct($account, '/wachtwoord/' . $action, 'Wachtwoord instellen');
+		parent::__construct($account, $action, 'Wachtwoord instellen');
 
 		$fields = [];
 		if ($account->email == '') {

@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\groepen\Activiteit;
@@ -21,12 +20,11 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\agenda\AgendaItemForm;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
-use CsrDelft\view\renderer\TemplateView;
 use CsrDelft\view\response\IcalResponse;
-use CsrDelft\view\View;
 use DateInterval;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -35,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller van de agenda.
  */
-class AgendaController {
+class AgendaController extends AbstractController {
 	const SECONDEN_IN_JAAR = 31557600;
 	/**
 	 * @var AgendaRepository
@@ -82,12 +80,12 @@ class AgendaController {
 	 * Maandoverzicht laten zien.
 	 * @param int $jaar
 	 * @param int $maand
-	 * @return View
+	 * @return Response
 	 * @Route(
 	 *   "/agenda/{jaar}/{maand}",
 	 *   methods={"GET"},
-	 *	 defaults={"jaar": null, "maand": null},
-	 *	 requirements={"jaar": "\d+", "maand": "\d+"}
+	 *   defaults={"jaar": null, "maand": null},
+	 *   requirements={"jaar": "\d+", "maand": "\d+"}
 	 * )
 	 * @Auth(P_AGENDA_READ)
 	 */
@@ -101,36 +99,36 @@ class AgendaController {
 			$maand = date('n');
 		}
 
-		return view('agenda.maand', [
+		return $this->render('agenda/maand.html.twig', [
 			'maand' => $maand,
 			'jaar' => $jaar,
-			'creator' => LoginService::mag(P_AGENDA_ADD) || LoginService::getProfiel()->verticaleleider,
+			'creator' => LoginService::mag(P_AGENDA_ADD) || $this->getProfiel()->verticaleleider,
 		]);
 	}
 
 	/**
-	 * @return IcalResponse
-	 * @Route("/agenda/ical/{token}/csrdelft.ics", methods={"GET"})
+	 * @return Response
+	 * @Route("/agenda/ical/{private_auth_token}/csrdelft.ics", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function ical() {
-		return new IcalResponse(view('agenda.icalendar', [
+		return $this->render('agenda/icalendar.ical.twig', [
 			'items' => $this->agendaRepository->getICalendarItems(),
 			'published' => $this->icalDate(),
-		])->toString());
+		], new IcalResponse());
 	}
 
 	/**
 	 * @param $uuid
-	 * @return IcalResponse
-	 * @Route("/agenda/export/{uuid}.ics", methods={"GET"})
+	 * @return Response
+	 * @Route("/agenda/export/{uuid}.ics", methods={"GET"}, requirements={"uuid": ".+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function export($uuid) {
-		return new IcalResponse(view('agenda.icalendar', [
+		return $this->render('agenda/icalendar.ical.twig', [
 			'items' => [$this->getAgendaItemByUuid($uuid)],
 			'published' => $this->icalDate(),
-		])->toString());
+		], new IcalResponse());
 	}
 
 	/**
@@ -142,7 +140,7 @@ class AgendaController {
 	 */
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		if (!$zoekterm) {
@@ -177,66 +175,69 @@ class AgendaController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/agenda/courant", methods={"POST"})
 	 * @Auth(P_MAIL_COMPOSE)
 	 */
 	public function courant() {
 		$items = $this->agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + 2 weeks'), false, false);
-		return view('agenda.courant', ['items' => $items]);
+		return $this->render('agenda/courant.html.twig', ['items' => $items]);
 	}
 
 	/**
 	 * @param null $datum
-	 * @return AgendaItemForm|JsonResponse
+	 * @return JsonResponse|Response
 	 * @Route("/agenda/toevoegen/{datum}", methods={"POST"}, defaults={"datum": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen($datum = null) {
-		if (!LoginService::mag(P_AGENDA_ADD) && !LoginService::getProfiel()->verticaleleider) {
-			throw new CsrToegangException('Mag geen gebeurtenis toevoegen.');
+	public function toevoegen(Request $request, $datum = null) {
+		$profiel = $this->getProfiel();
+		if (!LoginService::mag(P_AGENDA_ADD) && !$profiel->verticaleleider) {
+			throw $this->createAccessDeniedException('Mag geen gebeurtenis toevoegen.');
 		}
 
-		$item = $this->agendaRepository->nieuw($datum);
-		if (LoginService::getProfiel()->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
-			$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
+		$item = $this->agendaRepository->nieuw($request->request->get('begin_moment'), $request->request->get('eind_moment'));
+		if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+			$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 		}
-		$form = new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
+		$form = $this->createFormulier(AgendaItemForm::class, $item, ['actie' => 'toevoegen']);
+		$form->handleRequest($request);
 		if ($form->validate()) {
-			if (LoginService::getProfiel()->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
-				$item->rechten_bekijken = 'verticale:' . LoginService::getProfiel()->verticale;
+			if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
+				$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 			}
 			$item->item_id = (int)$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . date_format_intl($item->begin_moment, DATETIME_FORMAT) . ')', 1);
 				$item->item_id = null;
-				return new AgendaItemForm($item, 'toevoegen'); // fetches POST values itself
+				return $this->createFormulier($item, 'toevoegen')->createModalView();
 			} else {
 				return new JsonResponse(true);
 			}
 		} else {
-			return $form;
+			return $form->createModalView();
 		}
 	}
 
 	/**
 	 * @param $aid
-	 * @return AgendaItemForm|JsonResponse
+	 * @return JsonResponse|Response
 	 * @Route("/agenda/bewerken/{aid}", methods={"POST"}, requirements={"aid": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($aid) {
+	public function bewerken(Request $request, $aid) {
 		$item = $this->agendaRepository->getAgendaItem((int)$aid);
 		if (!$item || !$item->magBeheren()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
-		$form = new AgendaItemForm($item, 'bewerken'); // fetches POST values itself
+		$form = $this->createFormulier(AgendaItemForm::class, $item, ['actie' => 'bewerken']);
+		$form->handleRequest($request);
 		if ($form->validate()) {
 			$this->agendaRepository->save($item);
 			return new JsonResponse(true);
 		} else {
-			return $form;
+			return $form->createModalView();
 		}
 	}
 
@@ -252,7 +253,7 @@ class AgendaController {
 
 		if (!$item || !$item instanceof AgendaItem) throw new CsrGebruikerException('Kan alleen AgendaItem verplaatsen');
 
-		if (!$item->magBeheren()) throw new CsrToegangException();
+		if (!$item->magBeheren()) throw $this->createAccessDeniedException();
 
 		$item->begin_moment = date_create_immutable($request->request->get('begin_moment'));
 		$item->eind_moment = date_create_immutable($request->request->get('eind_moment'));
@@ -271,7 +272,7 @@ class AgendaController {
 	public function verwijderen($aid) {
 		$item = $this->agendaRepository->getAgendaItem((int)$aid);
 		if (!$item || !$item->magBeheren()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$this->agendaRepository->remove($item);
 		return new JsonResponse(true);
@@ -286,7 +287,7 @@ class AgendaController {
 	public function verbergen($refuuid = null) {
 		$item = $this->getAgendaItemByUuid($refuuid);
 		if (!$item) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$this->agendaVerbergenRepository->toggleVerbergen($item);
 		return new JsonResponse(true);
@@ -324,14 +325,15 @@ class AgendaController {
 			default:
 				throw new CsrException('invalid UUID');
 		}
-		/** @var Agendeerbaar|false $item **/
+		/** @var Agendeerbaar|false $item * */
 		return $item;
 	}
 
 	/**
 	 * @param Request $request
 	 * @return JsonResponse
-	 * @Route("/agenda/feed", methods={"GET"}, defaults={"_mag": P_LOGGED_IN})
+	 * @Route("/agenda/feed", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function feed(Request $request) {
 		$startMoment = date_create_immutable($request->query->get('start'));
@@ -358,10 +360,20 @@ class AgendaController {
 				$backgroundColor = '#1ABD2C';
 			}
 
+			// Zet eindmoment naar dag erna als activiteit tot 23:59 duurt en allDay is
+			if ($event->isHeledag() && date('H:i', $event->getEindMoment()) === '23:59') {
+				$eind = date_create_immutable('@' . $event->getEindMoment())
+					->add(new DateInterval('P1D'))
+					->setTime(0, 0, 0)
+					->getTimestamp();
+			} else {
+				$eind = $event->getEindMoment();
+			}
+
 			$eventsJson[] = [
 				'title' => $event->getTitel(),
 				'start' => date('c', $event->getBeginMoment()),
-				'end' => date('c', $event->getEindMoment()),
+				'end' => date('c', $eind),
 				'allDay' => $event->isHeledag(),
 				'id' => $event->getUUID(),
 				'textColor' => '#fff',
@@ -378,8 +390,9 @@ class AgendaController {
 
 	/**
 	 * @param $uuid
-	 * @return TemplateView
-	 * @Route("/agenda/details/{uuid}", methods={"GET"}, defaults={"_mag": P_LOGGED_IN})
+	 * @return Response
+	 * @Route("/agenda/details/{uuid}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function details($uuid) {
 		$jaar = filter_input(INPUT_GET, 'jaar', FILTER_SANITIZE_NUMBER_INT);
@@ -389,7 +402,7 @@ class AgendaController {
 		}
 		$item = $this->getAgendaItemByUuid($uuid);
 
-		return view('agenda.details', [
+		return $this->render('agenda/details.html.twig', [
 			'item' => $item,
 			'verborgen' => $this->agendaVerbergenRepository->isVerborgen($item),
 		]);

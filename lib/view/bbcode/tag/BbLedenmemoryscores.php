@@ -51,7 +51,7 @@ class BbLedenmemoryscores extends BbTag {
 	/**
 	 * @param $arguments
 	 */
-	function parse($arguments = []) {
+	public function parse($arguments = []) {
 		$groep = null;
 		$titel = null;
 		if (isset($arguments['verticale'])) {

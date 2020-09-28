@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="msapplication-tap-highlight" content="no"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	<meta name="theme-color" content="#0a3292">
+	<meta name="robots" content="index, follow"/>
+	<meta name="author" content="PubCie C.S.R. Delft"/>
+	<meta name="description" content="{{ instelling('stek', 'beschrijving') }}">
+	<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE"/>
+	<meta name="apple-itunes-app" content="app-id=1112148892, app-argument={{ app.request.uri }}">
+	<meta property="og:url" content="{{ app.request.uri }}"/>
+	<meta property="og:title" content="C.S.R. Delft | {{ block('titel') }}"/>
+	<meta property="og:locale" content="nl_nl"/>
+	<meta property="og:image" content="{{ absolute_url('/dist/images/beeldmerk.png') }}"/>
+	<meta property="og:description" content="{{ instelling('stek', 'beschrijving') }}"/>
+	{{ csrfMetaTag() }}
+	<meta property="X-CSR-LOGGEDIN" content="{{ mag('P_LOGGED_IN') ? 'true' : 'false' }}"/>
+	<title>C.S.R. Delft - {% block titel %}{% endblock %}</title>
+	<link rel="shortcut icon" href="{{ absolute_url('/images/favicon.ico') }}"/>
+	<link rel="manifest" href="{{ absolute_url('/manifest.json') }}">
+	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{{ url('csrdelft_forum_rss') }}"/>
+	{{ css_asset('common') }}
+	{% for sheet in user_modules() %}
+		{{ css_asset(sheet) }}
+	{% endfor %}
+	{% if lid_instelling('layout', 'automatischDonker') == 'ja' %}
+		{{ css_asset('thema-donker', 'screen and (prefers-color-scheme: dark') }}
+	{% endif %}
+	<script>
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+	{{ js_asset('app') }}
+	{% block styles %}
+	{% endblock %}
+	{% block scripts %}
+	{% endblock %}
+	<!-- Google Analytics -->
+	<script>
+		window.ga = window.ga || function () {
+			(ga.q = ga.q || []).push(arguments)
+		};
+		ga.l = +new Date;
+		window.ga('create', 'UA-19828019-4', 'auto');
+		window.ga('send', 'pageview');
+	</script>
+	<script async src='https://www.google-analytics.com/analytics.js'></script>
+	<!-- End Google Analytics -->
+	{% block head %}
+	{% endblock %}
+</head>
+<body class="nav-is-fixed {{ lid_instelling('zijbalk', 'breedte') }} {% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
+{% block body %}
+	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
+	<main class="container my-3 py-3 flex-shrink-0">
+		{% if lid_instelling('zijbalk', 'breedte') != 'zijbalk_verborgen' %}
+			<nav id="zijbalk">
+				{% for blok in get_zijbalk() %}
+					<div class="blok">{{ blok | raw }}</div>
+				{% endfor %}
+				{% if app.debug and mag('P_ADMIN') %}
+					<div class="commit-hash">
+						<a href="{{ commitLink() }}" target="_blank" class="not-external">{{ commitHash() }}</a>
+					</div>
+				{% endif %}
+			</nav>
+		{% endif %}
+		<nav aria-label="breadcrumb">
+			{% block breadcrumbs %}
+				{{ csr_breadcrumbs(get_breadcrumbs(app.request.uri)) }}
+			{% endblock %}
+		</nav>
+		<div class="cd-page-content">
+			{{ getMelding() }}
+			{% block content %}
+			{% endblock %}
+		</div>
+	</main>
+	<footer class="footer mt-auto py-3">
+		<div class="container-fluid p-md-5">
+			<div class="row">
+				<div class="col-12 col-md-auto">
+					<img src="{{ absolute_url('/dist/images/beeldmerk.png') }}" width="80" class="d-block mb-2"
+							 alt="C.S.R. Logo"/>
+					<small class="d-block mb-3 text-muted">© 2006-{{ date().format('Y') }}</small>
+					{% if not app.debug and mag('P_ADMIN') %}
+						<small class="cd-block mb-3">
+							<a href="{{ commitLink() }}" target="_blank" class="not-external text-muted">{{ commitHash() }}</a>
+						</small>
+					{% endif %}
+				</div>
+				{% set menu = get_menu('main') %}
+				{% for item in menu.children %}
+					{% if item.magBekijken %}
+						<div class="col-6 col-md">
+							<h5>{{ item.tekst }}</h5>
+							<ul class="list-unstyled text-small">
+								{% for subItem in item.children %}
+									{% if subItem.magBekijken %}
+										<li><a class="text-muted" href="{{ subItem.link }}">{{ subItem.tekst | raw }}</a></li>
+									{% endif %}
+								{% endfor %}
+							</ul>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</footer>
+	<div id="modal-background" {% if block('modal') is defined %} style="display: block;" {% endif %}></div>
+	{% if block('modal') is defined %}
+	{{ block('modal') | raw }}
+	{% elseif not toestemming_gegeven() %}
+	{{ toestemming_form().toString | raw }}
+	{% else %}
+	<div id="modal" tabindex="-1"></div>
+	{% endif %}
+	{% if lid_instelling('layout', 'minion') == 'ja' %}
+		{{ include('effect/minion.html.twig') }}
+	{% endif %}
+	{% if lid_instelling('layout', 'fx') == 'onontdekt' %}
+		{{ include('effect/onontdekt.html.twig') }}
+	{% elseif lid_instelling('layout', 'fx') == 'civisaldo' %}
+		{{ include('effect/civisaldo.html.twig') }}
+	{% elseif lid_instelling('layout', 'fx') == 'wolken' %}
+		{{ js_asset('fxclouds') }}
+	{% elseif lid_instelling('layout', 'fx') == 'sneeuw' %}
+		{{ js_asset('fxsneeuw') }}
+	{% elseif lid_instelling('layout', 'fx') == 'space' %}
+		{{ js_asset('fxspace') }}
+	{% endif %}
+	{% if lid_instelling('layout', 'trein') != 'nee' %}
+		{{ include('effect/trein.html.twig') }}
+	{% endif %}
+	{% if lid_instelling('layout', 'raket') != 'nee' %}
+		{{ include('effect/raket.html.twig') }}
+	{% endif %}
+	{% if lid_instelling('layout', 'assistent') != 'nee' %}
+<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css"/>
+	<script type="application/javascript">
+		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
+		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden') }}';
+	</script>
+	{{ js_asset('fxclippy') }}
+	{% endif %}
+{% endblock %}
+</body>
+</html>

@@ -3,19 +3,22 @@
 namespace CsrDelft\events;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Controlleer access op route niveau.
  *
  * @package CsrDelft\events
  */
-class AccessControlEventListener {
+class AccessControlEventListener
+{
 	const EXCLUDED_CONTROLLERS = [
 		'error_controller' => true,
 		'CsrDelft\controller\ErrorController::handleException' => true,
@@ -30,30 +33,53 @@ class AccessControlEventListener {
 	 * @var Reader
 	 */
 	private $annotations;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $em;
 
-	public function __construct(CsrfService $csrfService, Reader $annotations) {
+	public function __construct(CsrfService $csrfService, Reader $annotations, EntityManagerInterface $entityManager)
+	{
 		$this->csrfService = $csrfService;
 		$this->annotations = $annotations;
+		$this->em = $entityManager;
 	}
 
 	/**
 	 * Controleer of gebruiker deze pagina mag zien.
 	 *
 	 * @param ControllerEvent $event
-	 * @param CsrfService $csrfService
+	 * @throws \ReflectionException
 	 */
-	public function onKernelController(ControllerEvent $event) {
-		if (!$event->getRequest()->get('_csrfUnsafe')) {
-			$this->csrfService->preventCsrf();
-		}
+	public function onKernelController(ControllerEvent $event)
+	{
+		$request = $event->getRequest();
 
-		$controller = $event->getRequest()->get('_controller');
-
-		if (isset(self::EXCLUDED_CONTROLLERS[$controller])){
+		if (!$event->isMasterRequest()) {
 			return;
 		}
 
-		$reflectionMethod = new \ReflectionMethod($event->getController()[0], $event->getController()[1]);
+		$reflectionMethod = createReflectionMethod($event->getController());
+
+		$csrfUnsafeAttribute = $request->attributes->get('_csrfUnsafe');
+		/** @var CsrfUnsafe $authAnnotation */
+		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
+
+		$isInApi = startsWith($request->getPathInfo(), '/API/2.0');
+
+		if (
+			$isInApi === false
+			&& $csrfUnsafeAttribute === null
+			&& $csrfUnsafeAnnotation === null
+			&& !$this->csrfService->preventCsrf($request)
+		) {
+			throw new AccessDeniedException("Ongeldige CSRF token");
+		}
+
+		$controller = $request->attributes->get('_controller');
+		if (isset(self::EXCLUDED_CONTROLLERS[$controller])) {
+			return;
+		}
 
 		/** @var Auth $authAnnotation */
 		$authAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, Auth::class);
@@ -61,7 +87,7 @@ class AccessControlEventListener {
 		if ($authAnnotation) {
 			$mag = $authAnnotation->getMag();
 		} else {
-			$mag = $event->getRequest()->get('_mag');
+			$mag = $request->attributes->get('_mag');
 		}
 
 		if (!$mag) {
@@ -70,10 +96,14 @@ class AccessControlEventListener {
 
 		if (!LoginService::mag($mag)) {
 			if (DEBUG) {
-				throw new CsrToegangException("Geen toegang tot " . $controller . ", ten minste " . $mag . " nodig.");
+				throw new AccessDeniedException("Geen toegang tot " . $controller . ", ten minste " . $mag . " nodig.");
 			} else {
-				throw new CsrToegangException("Geen toegang");
+				throw new AccessDeniedException("Geen toegang");
 			}
+		}
+
+		if (LoginService::mag('commissie:NovCie') && $this->em->getFilters()->isEnabled('verbergNovieten')) {
+			$this->em->getFilters()->disable('verbergNovieten');
 		}
 	}
 }

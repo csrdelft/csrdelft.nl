@@ -84,7 +84,15 @@ function group_by($prop, $in, $del = true) {
 	$del &= is_array($in);
 	$out = array();
 	foreach ($in as $i => $obj) {
-		$out[$obj->$prop][] = $obj; // add to array
+		if (property_exists($obj, $prop)) {
+			$key = $obj->$prop;
+		} elseif (method_exists($obj, $prop)) {
+			$key = $obj->$prop();
+		} else {
+			throw new Exception("Veld bestaat niet");
+		}
+
+		$out[$key][] = $obj; // add to array
 		if ($del) {
 			unset($in[$i]);
 		}
@@ -147,25 +155,22 @@ function getSessionMaxLifeTime() {
  * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
  */
 function redirect($url = null, $refresh = true) {
+	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
 	if (empty($url) || $url === null) {
-		$url = REQUEST_URI;
+		$url = $request->getRequestUri();
 	}
-	if (!$refresh && $url == REQUEST_URI) {
-		$url = CSR_ROOT;
+	if (!$refresh && $url == $request->getRequestUri()) {
+		$url = $_ENV['CSR_ROOT'];
 	}
-	if (!startsWith($url, CSR_ROOT)) {
+	if (!startsWith($url, $_ENV['CSR_ROOT'])) {
 		if (preg_match("/^[?#\/]/", $url) === 1) {
-			$url = CSR_ROOT . $url;
+			$url = $_ENV['CSR_ROOT'] . $url;
 		} else {
-			$url = CSR_ROOT;
+			$url = $_ENV['CSR_ROOT'];
 		}
 	}
 	header('location: ' . $url);
 	exit;
-}
-
-function redirect_via_login($url) {
-	redirect(CSR_ROOT . "/login?redirect=" . urlencode($url));
 }
 
 /**
@@ -314,6 +319,14 @@ function isSyrinx() {
 	return 'syrinx' === php_uname('n');
 }
 
+function isCli() {
+	return php_sapi_name() == 'cli' && $_SERVER['APP_ENV'] != 'test';
+}
+
+function isCi() {
+	return getenv('CI');
+}
+
 /**
  * @param int $timestamp optional
  *
@@ -368,6 +381,17 @@ function isGeldigeDatum($datum) {
 }
 
 /**
+ * @param string $date
+ * @param string $format
+ * @return true als huidige datum & tijd voorbij gegeven datum en tijd zijn
+ */
+function isDatumVoorbij(string $date, $format = 'Y-m-d H:i:s') {
+	$date = date_create_immutable_from_format($format, $date);
+	$now = date_create_immutable();
+	return $now >= $date;
+}
+
+/**
  * print_r een variabele met <pre>-tags eromheen.
  *
  * @param mixed $sString
@@ -377,23 +401,6 @@ function debugprint($sString, $cssID = 'pubcie_debug') {
 	if (DEBUG || LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued()) {
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
-}
-
-function reldate($datum) {
-	if ($datum instanceof DateTimeInterface) {
-		$moment = $datum->getTimestamp();
-	} else {
-		$moment = strtotime($datum);
-	}
-
-	if (date('Y-m-d') == date('Y-m-d', $moment)) {
-		$return = 'vandaag om ' . strftime('%H:%M', $moment);
-	} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
-		$return = 'gisteren om ' . strftime('%H:%M', $moment);
-	} else {
-		$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
-	}
-	return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
 }
 
 /**
@@ -550,40 +557,6 @@ function convertPHPSizeToBytes($sSize) {
 
 function getMaximumFileUploadSize() {
 	return min(convertPHPSizeToBytes(ini_get('post_max_size')), convertPHPSizeToBytes(ini_get('upload_max_filesize')));
-}
-
-function getDebugFooter() {
-	$enableDebug = filter_input(INPUT_GET, 'debug') !== null;
-	if ($enableDebug && (DEBUG || (LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued()))) {
-		return '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a><div id="mysql_debug" class="pre">' . getDebug() . '</div>';
-	}
-
-	return '';
-}
-
-function getDebug(
-	$get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true
-) {
-	$debug = '';
-	if ($get) {
-		$debug .= '<hr />GET<hr />' . htmlspecialchars(print_r($_GET, true));
-	}
-	if ($post) {
-		$debug .= '<hr />POST<hr />' . htmlspecialchars(print_r($_POST, true));
-	}
-	if ($files) {
-		$debug .= '<hr />FILES<hr />' . htmlspecialchars(print_r($_FILES, true));
-	}
-	if ($cookie) {
-		$debug .= '<hr />COOKIE<hr />' . htmlspecialchars(print_r($_COOKIE, true));
-	}
-	if ($session) {
-		$debug .= '<hr />SESSION<hr />' . htmlspecialchars(print_r($_SESSION, true));
-	}
-	if ($server) {
-		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
-	}
-	return $debug;
 }
 
 /**
@@ -817,7 +790,13 @@ function curl_request($url, $options = []) {
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt_array($curl, $options);
-	return curl_exec($curl);
+	$resp = curl_exec($curl);
+
+	if ($resp == false) {
+		throw new Exception(curl_error($curl));
+	}
+
+	return $resp;
 }
 
 /**
@@ -985,8 +964,6 @@ function checkMimetype($filename, $mime) {
 
 /**
  * Mag de op dit moment ingelogde gebruiker $permissie?
- *
- * Korte methode voor gebruik in Blade templates.
  *
  * @param string $permission
  * @param array|null $allowedAuthenticationMethods
@@ -1206,4 +1183,40 @@ function as_array($value) {
  */
 function short_class($class) {
 	return (new \ReflectionClass($class))->getShortName();
+}
+
+// Base64url functies van https://www.php.net/manual/en/function.base64-encode.php#103849
+function base64url_encode($data) {
+  return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+  return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+}
+
+/**
+ * Maak een ReflectionMethod voor een callable.
+ *
+ * @param callable $fn
+ * @return ReflectionMethod
+ * @throws ReflectionException
+ */
+function createReflectionMethod(callable $fn) {
+	if (is_callable($fn)) {
+		if (is_array($fn)) {
+			if (is_object($fn[0])) {
+				return new ReflectionMethod(\get_class($fn[0]), $fn[1]);
+			} elseif (is_string($fn[0])) {
+				return new ReflectionMethod($fn[0], $fn[1]);
+			}
+		} elseif (is_string($fn)) {
+			if (strpos($fn, '::') !== false) {
+				return new ReflectionMethod($fn);
+			}
+		} elseif (is_object($fn)) {
+			return new ReflectionMethod(\get_class($fn), '__invoke');
+		}
+	}
+
+	throw new InvalidArgumentException('Niet een callable');
 }

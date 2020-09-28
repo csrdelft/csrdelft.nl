@@ -7,7 +7,9 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\MaaltijdAanmeldingDTO;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
+use CsrDelft\entity\maalcie\RepetitieMaaltijdMaken;
 use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
@@ -24,11 +26,11 @@ use CsrDelft\view\maalcie\beheer\PrullenbakMaaltijdenTable;
 use CsrDelft\view\maalcie\forms\AanmeldingForm;
 use CsrDelft\view\maalcie\forms\MaaltijdForm;
 use CsrDelft\view\maalcie\forms\RepetitieMaaltijdenForm;
-use CsrDelft\view\renderer\TemplateView;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -52,19 +54,23 @@ class BeheerMaaltijdenController extends AbstractController {
 	 */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(MaaltijdenRepository $maaltijdenRepository, MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+	public function __construct(
+		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdRepetitiesRepository $maaltijdRepetitiesRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository
+	) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
 		$this->maaltijdRepetitiesRepository = $maaltijdRepetitiesRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/beheer/prullenbak", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function GET_prullenbak() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Prullenbak maaltijdenbeheer',
 			'content' => new PrullenbakMaaltijdenTable(),
 		]);
@@ -110,7 +116,7 @@ class BeheerMaaltijdenController extends AbstractController {
 
 	/**
 	 * @param null $maaltijd_id
-	 * @return TemplateView
+	 * @return Response
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 * @Route("/maaltijden/beheer/{maaltijd_id<\d*>}", methods={"GET"}, defaults={"maaltijd_id"=null})
@@ -122,7 +128,7 @@ class BeheerMaaltijdenController extends AbstractController {
 			$modal = $this->bewerk($maaltijd_id);
 		}
 		$repetities = $this->maaltijdRepetitiesRepository->findAll();
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Maaltijdenbeheer',
 			'content' => new BeheerMaaltijdenTable($repetities),
 			'modal' => $modal,
@@ -130,12 +136,12 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/beheer/archief", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function GET_archief() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Archief maaltijdenbeheer',
 			'content' => new ArchiefMaaltijdenTable(),
 		]);
@@ -194,12 +200,17 @@ class BeheerMaaltijdenController extends AbstractController {
 				setMelding($aanmeldingen . ' aanmelding' . ($aanmeldingen !== 1 ? 'en' : '') . ' verwijderd vanwege aanmeldrestrictie: ' . $maaltijd->aanmeld_filter, 2);
 			}
 			return $this->tableData([$maaltijd]);
-		} elseif ($request->query->has('mlt_repetitie_id')) {
-			$mlt_repetitie_id = $request->query->get('mlt_repetitie_id');
+		} elseif ($request->query->has('mrid')) {
+			$mlt_repetitie_id = $request->query->get('mrid');
 			$repetitie = $this->maaltijdRepetitiesRepository->getRepetitie($mlt_repetitie_id);
-			$beginDatum = $repetitie->getFirstOccurrence();
+			$repetitieMaken = new RepetitieMaaltijdMaken();
+			$repetitieMaken->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+			$repetitieMaken->begin_moment = $repetitie->getFirstOccurrence();
+			$repetitieMaken->eind_moment = $repetitie->getFirstOccurrence();
+			$repetitieMaken->periode = $repetitie->getPeriodeInDagenText();
+			$repetitieMaken->dag = $repetitie->getDagVanDeWeekText();
 			if ($repetitie->periode_in_dagen > 0) {
-				return new RepetitieMaaltijdenForm($repetitie, $beginDatum, $beginDatum); // fetches POST values itself
+				return new RepetitieMaaltijdenForm($repetitieMaken); // fetches POST values itself
 			} else {
 				$maaltijd->repetitie = $repetitie;
 				$maaltijd->product = $repetitie->product;
@@ -225,7 +236,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	 */
 	public function bewerk(Maaltijd $maaltijd = null) {
 		if (!$maaltijd) {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+			$selection = $this->getDataTableSelection();
 			if (empty($selection)) {
 				throw new ResourceNotFoundException();
 			}
@@ -249,7 +260,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function verwijder() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
@@ -273,7 +284,7 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function herstel() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
@@ -293,13 +304,13 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function aanmelden() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
-		$form = new AanmeldingForm($maaltijd, true); // fetches POST values itself
+		$aanmelding = new MaaltijdAanmeldingDTO();
+		$form = new AanmeldingForm($aanmelding, true); // fetches POST values itself
 		if ($form->validate()) {
-			$values = $form->getValues();
-			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $values['voor_lid'], LoginService::getUid(), $values['aantal_gasten'], true);
+			$this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $aanmelding->voor_lid, $this->getProfiel(), $aanmelding->aantal_gasten, true);
 			return $this->tableData([$maaltijd]);
 		} else {
 			return $form;
@@ -314,13 +325,13 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function afmelden() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
 		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
-		$form = new AanmeldingForm($maaltijd, false); // fetches POST values itself
+		$aanmelding = new MaaltijdAanmeldingDTO();
+		$form = new AanmeldingForm($aanmelding, false); // fetches POST values itself
 		if ($form->validate()) {
-			$values = $form->getValues();
-			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $values['voor_lid'], true);
+			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $aanmelding->voor_lid, true);
 			return $this->tableData([$maaltijd]);
 		} else {
 			return $form;
@@ -339,12 +350,12 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/beheer/beoordelingen", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function GET_beoordelingen() {
-		return view('maaltijden.maaltijd.maaltijd_beoordelingen', [
+		return $this->render('maaltijden/maaltijd/maaltijd_beoordelingen.html.twig', [
 			'table' => new BeheerMaaltijdenBeoordelingenTable(),
 		]);
 	}
@@ -355,14 +366,14 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function POST_beoordelingen() {
-        $maaltijden = $this->maaltijdenRepository->getMaaltijdenHistorie();
-        if (!LoginService::mag(P_MAAL_MOD)) {
-        	// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
-					$maaltijden = array_filter($maaltijden, function ($maaltijd) {
-						return $maaltijd->magSluiten(LoginService::getUid());
-					});
-				}
-        return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
+		$maaltijden = $this->maaltijdenRepository->getMaaltijdenHistorie();
+		if (!LoginService::mag(P_MAAL_MOD)) {
+			// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
+			$maaltijden = array_filter($maaltijden, function ($maaltijd) {
+				return $maaltijd->magSluiten($this->getUid());
+			});
+		}
+		return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
 	}
 
 	// Repetitie-Maaltijden ############################################################
@@ -375,10 +386,14 @@ class BeheerMaaltijdenController extends AbstractController {
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function aanmaken(MaaltijdRepetitie $repetitie) {
-		$form = new RepetitieMaaltijdenForm($repetitie); // fetches POST values itself
+		$repetitieMaaltijdMaken = new RepetitieMaaltijdMaken();
+		$repetitieMaaltijdMaken->mlt_repetitie_id = $repetitie->mlt_repetitie_id;
+		$repetitieMaaltijdMaken->periode = $repetitie->getPeriodeInDagenText();
+		$repetitieMaaltijdMaken->dag = $repetitie->getDagVanDeWeekText();
+
+		$form = new RepetitieMaaltijdenForm($repetitieMaaltijdMaken); // fetches POST values itself
 		if ($form->validate()) {
-			$values = $form->getValues();
-			$maaltijden = $this->maaltijdenRepository->maakRepetitieMaaltijden($repetitie, $values['begindatum'], $values['einddatum']);
+			$maaltijden = $this->maaltijdenRepository->maakRepetitieMaaltijden($repetitie, $repetitieMaaltijdMaken->begin_moment, $repetitieMaaltijdMaken->eind_moment);
 			if (empty($maaltijden)) {
 				throw new CsrGebruikerException('Geen nieuwe maaltijden aangemaakt.');
 			}
@@ -391,12 +406,12 @@ class BeheerMaaltijdenController extends AbstractController {
 	// Maalcie-fiscaat
 
 	/**
-	 * @return TemplateView
+	 * @return Response
 	 * @Route("/maaltijden/beheer/onverwerkt", methods={"GET"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function onverwerkt() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/maaltijd/maaltijd_beoordelingen.html.twig', [
 			'titel' => 'Onverwerkte Maaltijden',
 			'content' => new OnverwerkteMaaltijdenTable(),
 		]);

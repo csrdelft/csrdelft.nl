@@ -11,33 +11,30 @@ use Doctrine\ORM\Mapping as ORM;
  * Een LidInstelling beschrijft een Instelling per Lid.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\instellingen\LidInstellingenRepository")
- * @ORM\Table("lidinstellingen")
+ * @ORM\Table(
+ *   "lidinstellingen",
+ *   uniqueConstraints={@ORM\UniqueConstraint(name="uid_module_instelling", columns={"uid", "module", "instelling"})}
+ * )
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class LidInstelling {
-
 	/**
-	 * Lidnummer
-	 * Foreign key
-	 * @var string
-	 * @ORM\Column(type="uid")
+	 * @var integer
 	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
 	 */
-	public $uid;
+	public $id;
 	/**
-	 * Shared primary key
 	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
+	 * @ORM\Column(type="string")
 	 */
 	public $module;
 	/**
-	 * Shared primary key
 	 * @var string
-	 * @ORM\Column(type="stringkey")
-	 * @ORM\Id()
+	 * @ORM\Column(type="string")
 	 */
-	public $instelling_id;
+	public $instelling;
 	/**
 	 * Value
 	 * @var string
@@ -47,7 +44,7 @@ class LidInstelling {
 	/**
 	 * @var Profiel
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
-	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=false)
 	 */
 	public $profiel;
 }

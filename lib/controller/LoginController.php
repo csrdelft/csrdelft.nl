@@ -3,18 +3,15 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use CsrDelft\view\login\LoginForm;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
-use Exception;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
  * LoginController.class.php
@@ -24,6 +21,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller van de agenda.
  */
 class LoginController extends AbstractController {
+	use TargetPathTrait;
+
 	/**
 	 * @var LoginService
 	 */
@@ -45,15 +44,28 @@ class LoginController extends AbstractController {
 
 	/**
 	 * @param Request $request
+	 * @param AuthenticationUtils $authenticationUtils
 	 * @return Response
 	 * @Route("/login", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function loginForm (Request $request) {
-		$response = new Response(view('layout-extern.login', ['loginForm' => new LoginForm()]));
+	public function loginForm(Request $request, AuthenticationUtils $authenticationUtils) {
+		if ($this->getUser()) {
+			return $this->redirectToRoute('default');
+		}
+
+		$targetPath = $request->query->get('_target_path');
+		if ($targetPath) {
+			$this->saveTargetPath($request->getSession(), 'main', $targetPath);
+		}
+
+		$error = $authenticationUtils->getLastAuthenticationError();
+		$userName = $authenticationUtils->getLastUsername();
+
+		$response = $this->render('extern/login.html.twig', ['loginForm' => new LoginForm($userName, $error)]);
 
 		// Als er geredirect wordt, stuur dan een forbidden status
-		if ($request->query->has('redirect')) {
+		if ($targetPath) {
 			$response->setStatusCode(Response::HTTP_FORBIDDEN);
 		}
 
@@ -61,72 +73,18 @@ class LoginController extends AbstractController {
 	}
 
 	/**
-	 * @return RedirectResponse
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @throws Exception
-	 * @Route("/login", methods={"POST"})
+	 * @Route("/login_check", name="app_login_check", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function login() {
-		$form = new LoginForm(); // fetches POST values itself
-		$values = $form->getValues();
-
-		if ($form->validate() && $this->loginService->login($values['user'], $values['pass'])) {
-			if ($values['remember']) {
-				$remember = $this->rememberLoginRepository->nieuw();
-				$this->rememberLoginRepository->rememberLogin($remember);
-			}
-
-			if ($values['redirect']) {
-				return $this->csrRedirect(urldecode($values['redirect']));
-			}
-			return $this->redirectToRoute('default');
-		} else {
-			if ($values['redirect']) {
-				return $this->redirectToRoute('csrdelft_login_loginform', ['redirect' => $values['redirect']]);
-			}
-
-			return $this->redirectToRoute('csrdelft_login_loginform');
-		}
+	public function login_check() {
+		throw new \LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml');
 	}
 
 	/**
-	 * @return RedirectResponse
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/logout", methods={"GET","POST"})
-	 * @Auth(P_LOGGED_IN)
+	 * @Route("/logout", name="app_logout")
+	 * @Auth(P_PUBLIC)
 	 */
 	public function logout() {
-		$this->loginService->logout();
-		return $this->redirectToRoute('default');
-	}
-
-	/**
-	 * @param null $uid
-	 * @return RedirectResponse
-	 * @Route("/su/{uid}", methods={"GET"}, requirements={"uid": ".{4}"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function su($uid = null) {
-		$this->suService->switchUser($uid);
-		setMelding('U bekijkt de webstek nu als ' . ProfielRepository::getNaam($uid, 'volledig') . '!', 1);
-		return $this->csrRedirect(HTTP_REFERER);
-	}
-
-	/**
-	 * @return RedirectResponse
-	 * @Route("/endsu", methods={"GET"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function endsu() {
-		if (!$this->suService->isSued()) {
-			setMelding('Niet gesued!', -1);
-		} else {
-			$this->suService->endSwitchUser();
-			setMelding('Switch-useractie is beëindigd.', 1);
-		}
-		return $this->csrRedirect(HTTP_REFERER);
+		throw new \LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml');
 	}
 }

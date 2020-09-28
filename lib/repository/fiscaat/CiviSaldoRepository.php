@@ -181,7 +181,7 @@ class CiviSaldoRepository extends AbstractRepository {
 			->where('s.uid LIKE \'c%\'')
 			->orderBy('s.uid', 'DESC')
 			->setMaxResults(1)
-			->getQuery()->getResult()->first();
+			->getQuery()->getResult()[0];
 	}
 
 	/**
@@ -211,6 +211,10 @@ class CiviSaldoRepository extends AbstractRepository {
 			->getQuery()->getResult();
 	}
 
+	/**
+	 * @param int $saldogrens
+	 * @return CiviSaldo[]
+	 */
 	public function getRoodstaandeLeden($saldogrens) {
 		return $this->createQueryBuilder('cs')
 			->where('cs.saldo < :saldogrens')

@@ -9,6 +9,7 @@ use CsrDelft\entity\forum\ForumDraadMelding;
 use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
 use CsrDelft\entity\forum\ForumPost;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\entity\security\Account;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -16,6 +17,7 @@ use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
+use Twig\Environment;
 
 /**
  * Model voor bijhouden, bewerken en verzenden van meldingen voor forumberichten
@@ -27,8 +29,19 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ForumDraadMelding[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ForumDradenMeldingRepository extends AbstractRepository {
-	public function __construct(ManagerRegistry $registry) {
+	/**
+	 * @var SuService
+	 */
+	private $suService;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+
+	public function __construct(ManagerRegistry $registry, Environment $twig, SuService $suService) {
 		parent::__construct($registry, ForumDraadMelding::class);
+		$this->suService = $suService;
+		$this->twig = $twig;
 	}
 
 	public function setNiveauVoorLid(ForumDraad $draad, ForumDraadMeldingNiveau $niveau) {
@@ -86,15 +99,21 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		$draad = $post->draad;
 
 		// Laad meldingsbericht in
-		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumaltijdmelding.mail');
 		foreach ($this->getAltijdMeldingVoorDraad($draad) as $volger) {
-			$volger = ProfielRepository::get($volger->uid);
+			$volgerProfiel = ProfielRepository::get($volger->uid);
 
 			// Stuur geen meldingen als lid niet gevonden is of lid de auteur
-			if (!$volger || $volger->uid === $post->uid) {
+			if (!$volgerProfiel || $volgerProfiel->uid === $post->uid) {
 				continue;
 			}
-			$this->stuurMelding($volger, $auteur, $post, $draad, $bericht);
+
+			$account = $volgerProfiel->account;
+
+			if (!$account) {
+				$this->remove($volger);
+			} else {
+				$this->stuurMelding($account, $auteur, $post, $draad, 'mail/bericht/forumaltijdmelding.mail.twig');
+			}
 		}
 	}
 
@@ -105,34 +124,27 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	/**
 	 * Verzendt mail
 	 *
-	 * @param Profiel $ontvanger
+	 * @param Account $ontvanger
 	 * @param Profiel $auteur
 	 * @param ForumPost $post
 	 * @param ForumDraad $draad
 	 * @param string $bericht
 	 */
-	private function stuurMelding($ontvanger, $auteur, $post, $draad, $bericht) {
-		$values = array(
-			'NAAM' => $ontvanger->getNaam('civitas'),
-			'AUTEUR' => $auteur->getNaam('civitas'),
-			'POSTLINK' => $post->getLink(true),
-			'TITEL' => $draad->titel,
-			'TEKST' => str_replace('\r\n', "\n", $post->tekst),
-		);
+	private function stuurMelding($ontvanger, $auteur, $post, $draad, $template) {
 
 		// Stel huidig UID in op ontvanger om te voorkomen dat ontvanger privé of andere persoonlijke info te zien krijgt
-		ContainerFacade::getContainer()->get(SuService::class)->overrideUid($ontvanger->uid);
+		$this->suService->alsLid($ontvanger, function () use ($ontvanger, $auteur, $post, $draad, $template) {
+			$bericht = $this->twig->render($template, [
+				'naam' => $ontvanger->profiel->getNaam('civitas'),
+				'auteur' => $auteur->getNaam('civitas'),
+				'postlink' => $post->getLink(true),
+				'titel' => $draad->titel,
+				'tekst' => str_replace('\r\n', "\n", $post->tekst),
+			]);
 
-		// Verzend mail
-		try {
-			$mail = new Mail($ontvanger->getEmailOntvanger(), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
-			$mail->setPlaceholders($values);
-			$mail->setLightBB();
+			$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
 			$mail->send();
-		} finally {
-			// Zet UID terug in sessie
-			ContainerFacade::getContainer()->get(SuService::class)->resetUid();
-		}
+		});
 	}
 
 	/**
@@ -145,30 +157,25 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		$draad = $post->draad;
 
 		// Laad meldingsbericht in
-		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/forumvermeldingmelding.mail');
 		$genoemden = $this->zoekGenoemdeLeden($post->tekst);
 		foreach ($genoemden as $uid) {
 			$genoemde = ProfielRepository::get($uid);
 
 			// Stuur geen meldingen als lid niet gevonden is, lid de auteur is of als lid geen meldingen wil voor draadje
 			// Met laatste voorwaarde worden ook leden afgevangen die sowieso al een melding zouden ontvangen
-			if (!$genoemde || !AccountRepository::existsUid($genoemde->uid) || $genoemde->uid === $post->uid || $this->getNiveauVoorLid($draad, $genoemde->uid) !== ForumDraadMeldingNiveau::VERMELDING()) {
+			if (!$genoemde || !$genoemde->account || $genoemde->uid === $post->uid || !ForumDraadMeldingNiveau::isVERMELDING($this->getNiveauVoorLid($draad, $genoemde->uid))) {
 				continue;
 			}
 
-			// Controleer of lid bij draad mag, stel hiervoor tijdelijk de ingelogde gebruiker in op gegeven lid
-			ContainerFacade::getContainer()->get(SuService::class)->overrideUid($genoemde->uid);
-			try {
-				$magMeldingKrijgen = $draad->magMeldingKrijgen();
-			} finally {
-				ContainerFacade::getContainer()->get(SuService::class)->resetUid();
-			}
+			$magMeldingKrijgen = $this->suService->alsLid($genoemde->account, function () use ($draad) {
+				return $draad->magMeldingKrijgen();
+			});
 
 			if (!$magMeldingKrijgen) {
 				continue;
 			}
 
-			$this->stuurMelding($genoemde, $auteur, $post, $draad, $bericht);
+			$this->stuurMelding($genoemde->account, $auteur, $post, $draad, 'mail/bericht/forumvermeldingmelding.mail.twig');
 		}
 	}
 
@@ -182,7 +189,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 		$regex = "/\[(?:lid|citaat)=?\s*]?\s*([[:alnum:]]+)\s*(?:\]|\[)/";
 		preg_match_all($regex, $bericht, $leden);
 
-		return $leden[1];
+		return array_unique($leden[1]);
 	}
 
 	public function getNiveauVoorLid(ForumDraad $draad, $uid = null) {

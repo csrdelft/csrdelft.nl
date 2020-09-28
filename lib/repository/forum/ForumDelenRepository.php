@@ -252,13 +252,13 @@ class ForumDelenRepository extends AbstractRepository {
 		return $gevonden_draden;
 	}
 
-	function laatstGewijzigd($posts) {
+	public function laatstGewijzigd($posts) {
 		return max(array_map(function (ForumPost $post) {
 			return $post->laatst_gewijzigd;
 		}, $posts));
 	}
 
-	function sorteerFunctie($sorteerOp) {
+	private function sorteerFunctie($sorteerOp) {
 		switch ($sorteerOp) {
 			case 'aangemaakt_op':
 				return function ($a, $b) {

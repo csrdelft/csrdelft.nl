@@ -1,0 +1,14 @@
+/*
+ * Dit bestand bevat styles die niet zomaar veranderen, of geen sass variabelen bevatten.
+ */
+
+@import "icons";
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~lightbox2/dist/css/lightbox.css";
+@import "~jquery-ui/themes/base/core.css";
+@import "~jquery-ui/themes/base/theme.css";
+@import "~jquery-ui/themes/base/datepicker.css";
+@import "~jquery-ui/themes/base/slider.css";
