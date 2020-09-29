@@ -2922,6 +2922,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-formatter-json-relative@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "eslint-formatter-json-relative@npm:0.1.0"
+  checksum: 52873f084ebae9e7b48baf2ee7c3ee653f707d3adf47a35b09476faa69796d68638b873ce5bddf570a287f59f079b9420f667557ef29e216cd274b417012dbe2
+  languageName: node
+  linkType: hard
+
 "eslint-loader@npm:^3.0.2":
   version: 3.0.4
   resolution: "eslint-loader@npm:3.0.4"
@@ -6790,6 +6797,7 @@ fsevents@~2.1.2:
     datatables.net-select-dt: ^1.3.0
     dropzone: ^5.5.0
     eslint: ^7.7.0
+    eslint-formatter-json-relative: ^0.1.0
     eslint-loader: ^3.0.2
     eslint-plugin-vue: ^6.2.2
     file-loader: ^1.1.11
