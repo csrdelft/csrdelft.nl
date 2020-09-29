@@ -156,10 +156,10 @@ class EetplanController extends AbstractController {
 		);
 		$form->handleRequest($request);
 		if (!$form->validate()) {
-			return $form->createModalView();
+			return new Response($form->createModalView());
 		} elseif ($this->eetplanRepository->findOneBy(['noviet' => $eetplan->noviet, 'woonoord' => $eetplan->woonoord]) != null) {
 			setMelding('Deze noviet is al eens op dit huis geweest', -1);
-			return $form->createModalView();
+			return new Response($form->createModalView());
 		} else {
 			$this->eetplanRepository->save($eetplan);
 			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
@@ -189,7 +189,7 @@ class EetplanController extends AbstractController {
 			$this->eetplanRepository->save($eetplan);
 			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
 		} else {
-			return $form->createModalView();
+			return new Response($form->createModalView());
 		}
 	}
 
@@ -256,10 +256,10 @@ class EetplanController extends AbstractController {
 		);
 		$form->handleRequest($request);
 		if (!$form->validate()) {
-			return $form->createModalView();
+			return new Response($form->createModalView());
 		} elseif ($this->eetplanBekendenRepository->exists($eetplanbekenden)) {
 			setMelding('Bekenden bestaan al', -1);
-			return $form->createModalView();
+			return new Response($form->createModalView());
 		} else {
 			$this->eetplanBekendenRepository->save($eetplanbekenden);
 			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
@@ -289,7 +289,7 @@ class EetplanController extends AbstractController {
 			$this->eetplanBekendenRepository->save($eetplanbekenden);
 			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
 		} else {
-			return $form->createModalView();
+			return new Response($form->createModalView());
 		}
 	}
 
