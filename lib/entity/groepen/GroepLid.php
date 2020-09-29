@@ -9,6 +9,8 @@ use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\ProfielRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
+
 /**
  * Class GroepLid
  * @package CsrDelft\entity\groepen2
