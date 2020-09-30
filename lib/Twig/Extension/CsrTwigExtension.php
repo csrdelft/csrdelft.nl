@@ -166,7 +166,7 @@ class CsrTwigExtension extends AbstractExtension
 		}
 	}
 
-	public function bbcode_light(string $string)
+	public function bbcode_light($string)
 	{
 		return CsrBB::parseLight($string);
 	}
