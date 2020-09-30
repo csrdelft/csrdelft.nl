@@ -183,7 +183,7 @@ class StreeplijstController extends AbstractController
 		$streeplijst = $this->streeplijstRepository->find($id);
 
 		return $this->render('streeplijst/streeplijst.html.twig', [
-			'streeplijst' => $streeplijst
+			'streeplijsten' => [$streeplijst]
 		]);
 	}
 
@@ -201,7 +201,43 @@ class StreeplijstController extends AbstractController
 		$nieuwelijst = $this->streeplijstRepository->nieuw($naam_streeplijst, $leden_streeplijst, $inhoud_streeplijst);
 
 		return $this->render('streeplijst/streeplijst.html.twig', [
-			'streeplijst' => $nieuwelijst
+			'streeplijsten' => [$nieuwelijst]
+		]);
+	}
+
+
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/streeplijst/genererenHVPresentielijst", methods={"GET", "POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function genererenHVPresentielijst(Request $request)
+	{
+		$arrayStreeplijsten = [];
+		$ledentype = $request->query->get('ledentype');
+		$streepopties = $request->query->get('HVStreepopties');
+
+		foreach ($ledentype as $type) {
+			$nieuwelijst = new Streeplijst();
+			$nieuwelijst->naam_streeplijst = LidStatus::from($type)->getDescription();
+			$profielen = $this->profielRepository->findBy(['status' => $type], ['achternaam'=> 'asc']);
+			$namen = [];
+			foreach ($profielen as $profiel) {
+				$namen[] = $profiel->getNaam('volledig');
+			}
+			$stringNamen = implode("; ", $namen);
+
+			if ($streepopties != null) {
+				$stringStreepopties = implode("; ", $streepopties);
+			}
+
+			$nieuwelijst->leden_streeplijst = $stringNamen;
+			$nieuwelijst->inhoud_streeplijst = $stringStreepopties;
+			$arrayStreeplijsten[] = $nieuwelijst;
+		}
+		return $this->render('streeplijst/streeplijst.html.twig', [
+			'streeplijsten' => $arrayStreeplijsten
 		]);
 	}
 }

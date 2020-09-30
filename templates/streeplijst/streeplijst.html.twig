@@ -2,8 +2,9 @@
 {% block titel %}Streeplijst{% endblock %}
 
 {% block bodyClass %}zijbalk_verborgen{% endblock %}
-
 {% block body %}
+	{% for streeplijst in streeplijsten %}
+	<h1 class="text-center">{{ streeplijst.naam_streeplijst }}</h1>
 	<table class="table table-striped table-bordered">
 		<thead>
 		<tr>
@@ -26,4 +27,5 @@
 
 		</tbody>
 	</table>
+	{% endfor %}
 {% endblock %}
