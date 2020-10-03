@@ -8,6 +8,8 @@ use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\model\entity\Map;
+use CsrDelft\repository\documenten\DocumentCategorieRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
@@ -22,40 +24,55 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class DocumentToevoegenForm implements FormulierTypeInterface {
+class DocumentToevoegenForm implements FormulierTypeInterface
+{
 
 	private $uploader;
 	/**
 	 * @var UrlGeneratorInterface
 	 */
 	private $urlGenerator;
+	/**
+	 * @var DocumentCategorieRepository
+	 */
+	private $documentCategorieRepository;
+	/**
+	 * @var LoginService
+	 */
+	private $loginService;
 
-	public function __construct(UrlGeneratorInterface $urlGenerator) {
+	public function __construct(UrlGeneratorInterface $urlGenerator, DocumentCategorieRepository $documentCategorieRepository, LoginService $loginService)
+	{
 		$this->urlGenerator = $urlGenerator;
+		$this->documentCategorieRepository = $documentCategorieRepository;
+		$this->loginService = $loginService;
 	}
 
 	/**
 	 * @return FileField
 	 */
-	public function getUploader() {
+	public function getUploader()
+	{
 		return $this->uploader;
 	}
 
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
-		//parent::__construct(new Document(), '/documenten/toevoegen', 'Document toevoegen');
+	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
+	{
 		$builder->setTitel('Document toevoegen');
 
 		$map = new Map();
 		$map->path = PUBLIC_FTP . 'documenten/';
 		$map->dirname = basename($map->path);
 
-		$fields[] = new EntitySelectField('categorie', $data->categorie, 'Categorie', DocumentCategorie::class);
+		$fields['categorie'] = new EntitySelectField('categorie', $data->categorie, 'Categorie', DocumentCategorie::class);
+		$fields['categorie']->setOptions($this->documentCategorieRepository->findMetSchijfrechtenVoorLid());
 		$fields[] = new RequiredTextField('naam', $data->naam, 'Documentnaam');
 		$fields['uploader'] = $this->uploader = new RequiredFileField('document', 'Document', $data, $map);
 		$fields['rechten'] = new RechtenField('leesrechten', $data->leesrechten, 'Leesrechten');
 		$fields['rechten']->readonly = true;
-		$fields[] = new FormDefaultKnoppen($this->urlGenerator->generate('csrdelft_documenten_recenttonen'));
 
 		$builder->addFields($fields);
+
+		$builder->setFormKnoppen(new FormDefaultKnoppen($this->urlGenerator->generate('csrdelft_documenten_recenttonen')));
 	}
 }

@@ -4,6 +4,7 @@ namespace CsrDelft\repository\documenten;
 
 use CsrDelft\entity\documenten\DocumentCategorie;
 use CsrDelft\repository\AbstractRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,10 +21,15 @@ class DocumentCategorieRepository extends AbstractRepository {
 	 * @var DocumentRepository
 	 */
 	private $documentRepository;
+	/**
+	 * @var LoginService
+	 */
+	private $loginService;
 
-	public function __construct(ManagerRegistry $registry, DocumentRepository $documentRepository) {
+	public function __construct(ManagerRegistry $registry, LoginService $loginService, DocumentRepository $documentRepository) {
 		parent::__construct($registry, DocumentCategorie::class);
 		$this->documentRepository = $documentRepository;
+		$this->loginService = $loginService;
 	}
 
 	/**
@@ -48,5 +54,12 @@ class DocumentCategorieRepository extends AbstractRepository {
 		}
 
 		return $return;
+	}
+
+	public function findMetSchijfrechtenVoorLid() {
+		return array_filter($this->findAll(),
+			function ($categorie) {
+				return $this->loginService->_mag($categorie->schrijfrechten);
+			});
 	}
 }
