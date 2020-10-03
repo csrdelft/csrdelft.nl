@@ -19,6 +19,8 @@
 			<a class="bewerken mr-2 float-right" href="{{ url('csrdelft_documenten_bewerken', {id: document.id}) }}"
 				 title="Document bewerken">{{ icon('bewerken') }}</a>
 		{% endif %}
+		<span role="button" class="float-right mr-2" data-copy="[document={{ document.id }}]"
+					title="Klik om bbcode te kopieren: [document={{ document.id }}]">{{ icon('page_copy') }}</span>
 	</td>
 	<td class="size">{{ document.filesize }}</td>
 	<td title="{{ document.mimetype }}">{{ document.mimetypeIcon | raw }}</td>
