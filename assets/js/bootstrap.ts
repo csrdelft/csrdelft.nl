@@ -6,7 +6,7 @@ import Dropzone from 'dropzone';
 import $ from 'jquery';
 import moment from 'moment';
 import {
-	registerBbContext,
+	registerBbContext, registerClipboardContext,
 	registerDataTableContext, registerFlatpickrContext,
 	registerFormulierContext,
 	registerGlobalContext,
@@ -122,6 +122,7 @@ $.timeago.settings.strings = {
 
 (async () => {
 	await Promise.all([
+		registerClipboardContext(),
 		registerGrafiekContext(),
 		registerFormulierContext(),
 		registerGlobalContext(),

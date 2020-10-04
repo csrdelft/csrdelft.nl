@@ -29,12 +29,18 @@ class DocumentCategorie implements ISelectEntity, DisplayEntity {
 	 * @ORM\Column(type="boolean")
 	 * @var boolean
 	 */
-	public $zichtbaar;
+	public $zichtbaar = true;
 	/**
 	 * @ORM\Column(type="string")
 	 * @var string
 	 */
-	public $leesrechten;
+	public $leesrechten = P_LOGGED_IN;
+
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	public $schrijfrechten = P_DOCS_MOD;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\documenten\Document", mappedBy="categorie")

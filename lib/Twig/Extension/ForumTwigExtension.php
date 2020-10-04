@@ -47,7 +47,7 @@ class ForumTwigExtension extends AbstractExtension {
 	public function getFilters() {
 		return [
 			new TwigFilter('highlight_zoekterm', [$this, 'highlight_zoekterm'], ['is_safe' => ['html']]),
-			new TwigFilter('split_on_keyword', [$this, 'split_on_keyword'], ['is_safe' => ['html']]),
+			new TwigFilter('split_on_keyword', 'split_on_keyword', ['is_safe' => ['html']]),
 		];
 	}
 

@@ -211,12 +211,12 @@ class AgendaController extends AbstractController {
 				$_POST = []; // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . date_format_intl($item->begin_moment, DATETIME_FORMAT) . ')', 1);
 				$item->item_id = null;
-				return $this->createFormulier($item, 'toevoegen')->createModalView();
+				return new Response($this->createFormulier($item, 'toevoegen')->createModalView());
 			} else {
 				return new JsonResponse(true);
 			}
 		} else {
-			return $form->createModalView();
+			return new Response($form->createModalView());
 		}
 	}
 
@@ -237,7 +237,7 @@ class AgendaController extends AbstractController {
 			$this->agendaRepository->save($item);
 			return new JsonResponse(true);
 		} else {
-			return $form->createModalView();
+			return new Response($form->createModalView());
 		}
 	}
 

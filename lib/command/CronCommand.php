@@ -7,7 +7,6 @@ use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\LogRepository;
-use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\corvee\CorveeHerinneringService;
 use Exception;
@@ -26,10 +25,6 @@ class CronCommand extends Command {
 	 * @var LogRepository
 	 */
 	private $logRepository;
-	/**
-	 * @var LoginSessionRepository
-	 */
-	private $loginSessionRepository;
 	/**
 	 * @var OneTimeTokensRepository
 	 */
@@ -64,7 +59,6 @@ class CronCommand extends Command {
 		PinTransactiesDownloadenCommand $pinTransactiesDownloadenCommand,
 		DebugLogRepository $debugLogRepository,
 		LogRepository $logRepository,
-		LoginSessionRepository $loginSessionRepository,
 		OneTimeTokensRepository $oneTimeTokensRepository,
 		InstellingenRepository $instellingenRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
@@ -74,7 +68,6 @@ class CronCommand extends Command {
 		parent::__construct(null);
 		$this->debugLogRepository = $debugLogRepository;
 		$this->logRepository = $logRepository;
-		$this->loginSessionRepository = $loginSessionRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->instellingenRepository = $instellingenRepository;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
@@ -100,14 +93,6 @@ class CronCommand extends Command {
 		} catch (Exception $e) {
 			$output->writeln($e->getMessage());
 			$this->debugLogRepository->log('cron.php', 'logRepository->opschonen', array(), $e);
-		}
-
-		$output->writeln("LoginSession opschonen", OutputInterface::VERBOSITY_VERBOSE);
-		try {
-			$this->loginSessionRepository->opschonen();
-		} catch (Exception $e) {
-			$output->writeln($e->getMessage());
-			$this->debugLogRepository->log('cron.php', 'loginSessionsRepository->opschonen', array(), $e);
 		}
 
 		$output->writeln("One time tokens opschonen", OutputInterface::VERBOSITY_VERBOSE);

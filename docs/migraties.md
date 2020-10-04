@@ -64,9 +64,13 @@ Om een migratie terug te draaien (om te testen of dat werkt of bijvoorbeeld om v
 php bin/console doctrine:migrations:migrate prev
 ```
 
+## Migraties in CI
+
+In de `CI` workflow in de `Voer tests uit` stap worden alle migraties uitgevoerd en wordt  er gecontroleerd of de database na het uitvoeren van alle migraties precies hetzelfde is als wat er in de code staat. Als dit niet het geval is wordt een sql script gedumpt met potentiele oplossingen voor de fouten, deze sql statements laten je zien waar de fouten zitten. Je kan hier ook het `php bin/console doctrine:schema:validate` commando voor uitvoeren.
+
 # Belangrijke noten
 
-Let heel erg op met hoofdlettergevoeligheid, MariaDB op linux (Syrinx) is hoofdlettergevoelig, maar MariaDB op Windows is dat niet[^case_sensitive_mariadb]. Oftewel zorg er voor dat alle tabelnamen en veldnamen lowercase zijn. Gegenereerde migraties van Doctrine kunnen soms ook kleine letters bevatten terwijl het eigenlijk hoofdletters moeten zijn. Indeces in Doctrine zijn altijd uppercase, dus als dit niet goeg gegenereerd wordt moet dit gefixt worden.
+Let heel erg op met hoofdlettergevoeligheid, MariaDB op linux (Syrinx) is hoofdlettergevoelig, maar MariaDB op Windows is dat niet[^case_sensitive_mariadb]. Hierdoor kan het gebeuren dat migraties lokaal wel werken, maar op CI of Syrinx niet werken. Oftewel zorg er voor dat alle tabelnamen en veldnamen lowercase zijn. Gegenereerde migraties van Doctrine kunnen soms ook kleine letters bevatten terwijl het eigenlijk hoofdletters moeten zijn. Indeces in Doctrine zijn altijd uppercase, dus als dit niet goeg gegenereerd wordt moet dit gefixt worden.
 
 Let op met de 'lege datum': `0000-00-00 00:00:00` deze waarde mag je invullen in een veld die `NOT NULL` is, maar wordt door de database gezien als NULL. In MariaDB 10.4 zijn er nog dingen veranderd waardoor er nog meer stuk gaat als je deze waarde gebruikt.
 

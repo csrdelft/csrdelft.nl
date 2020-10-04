@@ -56,8 +56,8 @@ class CorveePuntenService {
 					if (!$profiel) {
 						throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
 					}
-					$punten = $totalen['puntenTotaal'];
-					$punten += $totalen['bonusTotaal'];
+					$punten = $totalen->puntenTotaal;
+					$punten += $totalen->bonusTotaal;
 					$vrijstelling = null;
 					if (array_key_exists($uid, $vrijstellingen) && time() > $vrijstellingen[$uid]->begin_datum->getTimestamp()) {
 						$vrijstelling = $vrijstellingen[$uid];
@@ -111,6 +111,9 @@ class CorveePuntenService {
 		ContainerFacade::getContainer()->get(ProfielRepository::class)->update($profiel);
 	}
 
+	/**
+	 * @return array|CorveePuntenOverzichtDTO[]
+	 */
 	public function loadPuntenTotaalVoorAlleLeden() {
 		$leden = $this->profielRepository->findByLidStatus([LidStatus::Lid, LidStatus::Gastlid, LidStatus::Noviet]);
 		$totalen = array();

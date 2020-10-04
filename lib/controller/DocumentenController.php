@@ -9,6 +9,7 @@ use CsrDelft\model\entity\Bestand;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
+use CsrDelft\view\documenten\DocumentCategorieForm;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\PlainView;
@@ -24,13 +25,15 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class DocumentenController extends AbstractController {
+class DocumentenController extends AbstractController
+{
 	/** @var DocumentRepository */
 	private $documentRepository;
 	/** @var DocumentCategorieRepository */
 	private $documentCategorieRepository;
 
-	public function __construct(DocumentRepository $documentRepository, DocumentCategorieRepository $documentCategorieRepository) {
+	public function __construct(DocumentRepository $documentRepository, DocumentCategorieRepository $documentCategorieRepository)
+	{
 		$this->documentRepository = $documentRepository;
 		$this->documentCategorieRepository = $documentCategorieRepository;
 	}
@@ -40,7 +43,8 @@ class DocumentenController extends AbstractController {
 	 * @Route("/documenten", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function recenttonen() {
+	public function recenttonen()
+	{
 		return $this->render('documenten/documenten.html.twig', ['categorien' => $this->documentCategorieRepository->findAll()]);
 	}
 
@@ -50,7 +54,8 @@ class DocumentenController extends AbstractController {
 	 * @Route("/documenten/verwijderen/{id}", methods={"POST"})
 	 * @Auth(P_DOCS_MOD)
 	 */
-	public function verwijderen(Document $document) {
+	public function verwijderen(Document $document)
+	{
 		$id = $document->id;
 		if ($document->magVerwijderen()) {
 			$this->documentRepository->remove($document);
@@ -68,7 +73,8 @@ class DocumentenController extends AbstractController {
 	 * @Route("/documenten/bekijken/{id}/{bestandsnaam}", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function bekijken(Document $document) {
+	public function bekijken(Document $document)
+	{
 		if (!$document->magBekijken()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -94,7 +100,8 @@ class DocumentenController extends AbstractController {
 	 * @Route("/documenten/download/{id}/{bestandsnaam}", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function download(Document $document) {
+	public function download(Document $document)
+	{
 		if (!$document->magBekijken()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -112,10 +119,11 @@ class DocumentenController extends AbstractController {
 	/**
 	 * @param DocumentCategorie $categorie
 	 * @return Response
-	 * @Route("/documenten/categorie/{id}", methods={"GET"})
+	 * @Route("/documenten/categorie/{id}", methods={"GET"}, requirements={"id": "\d+"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function categorie(DocumentCategorie $categorie) {
+	public function categorie(DocumentCategorie $categorie)
+	{
 		if (!$categorie->magBekijken()) {
 			throw $this->createAccessDeniedException('Mag deze categorie niet bekijken');
 		} else {
@@ -125,12 +133,80 @@ class DocumentenController extends AbstractController {
 
 	/**
 	 * @param Request $request
+	 * @param DocumentCategorie|null $categorie
+	 * @return JsonResponse|Response
+	 * @Route("/documenten/categorie/{id}/bewerken", methods={"GET", "POST"})
+	 * @Auth(P_DOCS_MOD)
+	 */
+	public function categorieBewerken(Request $request, DocumentCategorie $categorie)
+	{
+		$form = $this->createFormulier(DocumentCategorieForm::class, $categorie, [
+			'action' => $this->generateUrl('csrdelft_documenten_categoriebewerken', ['id' => $categorie->id])
+		]);
+
+		$form->handleRequest($request);
+
+		if ($form->isPosted() && $form->validate()) {
+			$this->getDoctrine()->getManager()->flush();
+			return new JsonResponse(true);
+		} else {
+			// Voorkom opslaan
+			$this->getDoctrine()->getManager()->clear();
+			return new Response($form->createModalView());
+		}
+	}
+
+	/**
+	 * @param Request $request
+	 * @Route("/documenten/categorie/nieuw", methods={"GET", "POST"})
+	 * @Auth(P_DOCS_MOD)
+	 * @return JsonResponse|Response
+	 */
+	public function categorieAanmaken(Request $request)
+	{
+		$categorie = new DocumentCategorie();
+		$form = $this->createFormulier(DocumentCategorieForm::class, $categorie, [
+			'action' => $this->generateUrl('csrdelft_documenten_categorieaanmaken')
+		]);
+
+		$form->handleRequest($request);
+
+		if ($form->isPosted() && $form->validate()) {
+			$this->getDoctrine()->getManager()->persist($categorie);
+			$this->getDoctrine()->getManager()->flush();
+			return new JsonResponse(true);
+		} else {
+			// Voorkom opslaan
+			$this->getDoctrine()->getManager()->clear();
+			return new Response($form->createModalView());
+		}
+	}
+
+	/**
+	 * @param DocumentCategorie $categorie
+	 * @Route("/documenten/categorie/{id}/verwijderen", methods={"POST"})
+	 * @Auth(P_DOCS_MOD)
+	 * @return JsonResponse
+	 */
+	public function categorieVerwijderen(DocumentCategorie $categorie) {
+		$this->getDoctrine()->getManager()->remove($categorie);
+		$this->getDoctrine()->getManager()->flush();
+
+		return new JsonResponse($this->generateUrl('csrdelft_documenten_recenttonen'));
+	}
+
+	/**
+	 * @param Request $request
 	 * @param Document $document
 	 * @return Response
 	 * @Route("/documenten/bewerken/{id}", methods={"GET","POST"})
-	 * @Auth(P_DOCS_MOD)
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(Request $request, Document $document) {
+	public function bewerken(Request $request, Document $document)
+	{
+		if (!$document->magBewerken()) {
+			throw $this->createAccessDeniedException();
+		}
 		$form = $this->createFormulier(DocumentBewerkenForm::class, $document, [
 			'action' => $this->generateUrl('csrdelft_documenten_bewerken', ['id' => $document->id])
 		]);
@@ -155,9 +231,10 @@ class DocumentenController extends AbstractController {
 	 * @return Response
 	 * @throws Exception
 	 * @Route("/documenten/toevoegen", methods={"GET","POST"})
-	 * @Auth(P_DOCS_MOD)
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen(Request $request) {
+	public function toevoegen(Request $request)
+	{
 		$document = new Document();
 
 		$catId = $request->query->getInt('catID');
@@ -212,7 +289,8 @@ class DocumentenController extends AbstractController {
 	 * @Route("/documenten/zoeken", methods={"GET","POST"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function zoeken(Request $request, $zoekterm = null) {
+	public function zoeken(Request $request, $zoekterm = null)
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
 		}

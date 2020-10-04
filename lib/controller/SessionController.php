@@ -4,9 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
-use CsrDelft\entity\security\LoginSession;
 use CsrDelft\entity\security\RememberLogin;
-use CsrDelft\repository\security\LoginSessionRepository;
 use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\login\RememberLoginForm;
@@ -22,72 +20,12 @@ use Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeSer
  */
 class SessionController extends AbstractController {
 	/**
-	 * @var LoginSessionRepository
-	 */
-	private $loginSessionRepository;
-	/**
 	 * @var RememberLoginRepository
 	 */
 	private $rememberLoginRepository;
 
-	public function __construct(LoginSessionRepository $loginSessionRepository, RememberLoginRepository $rememberLoginRepository) {
-		$this->loginSessionRepository = $loginSessionRepository;
+	public function __construct(RememberLoginRepository $rememberLoginRepository) {
 		$this->rememberLoginRepository = $rememberLoginRepository;
-	}
-
-	/**
-	 * @return GenericDataTableResponse
-	 * @Route("/session/sessionsdata", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function sessionsdata() {
-		$loginSession = $this->loginSessionRepository->findBy(['uid' => $this->getUid()]);
-		return $this->tableData($loginSession);
-	}
-
-	/**
-	 * @param LoginSession $session
-	 * @return GenericDataTableResponse
-	 * @Route("/session/endsession/{session_hash}", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function endsession(LoginSession $session) {
-		if ($session->uid !== $this->getUid()) {
-			throw $this->createAccessDeniedException();
-		}
-
-		$removed = new RemoveDataTableEntry($session->session_hash, LoginSession::class);
-
-		$this->getDoctrine()->getManager()->remove($session);
-		$this->getDoctrine()->getManager()->flush();
-
-		return $this->tableData([$removed]);
-	}
-
-	/**
-	 * @return GenericDataTableResponse
-	 * @Route("/session/lockip", methods={"POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function lockip() {
-		$selection = $this->getDataTableSelection();
-		if (!$selection) {
-			throw $this->createAccessDeniedException();
-		}
-		$response = [];
-		$manager = $this->getDoctrine()->getManager();
-		foreach ($selection as $UUID) {
-			/** @var RememberLogin $remember */
-			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
-			if (!$remember || $remember->uid !== $this->getUid()) {
-				throw $this->createAccessDeniedException();
-			}
-			$remember->lock_ip = !$remember->lock_ip;
-			$manager->persist($remember);
-			$response[] = $remember;
-		}
-		$manager->flush();
-		return $this->tableData($response);
 	}
 
 	/**
