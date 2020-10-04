@@ -1,171 +1,358 @@
 <template>
-	<div class="declaratie">
-		<div class="field">
-			<label for="categorie">Categorie</label>
-			<select id="categorie" v-model="declaratie.categorie">
-				<option disabled></option>
-				<option :value="categorieID" v-for="(categorie,categorieID) in categorieen">{{ categorie }}</option>
-			</select>
-		</div>
+  <div class="declaratie">
+    <div class="field">
+      <label for="categorie">Categorie</label>
+      <select
+        id="categorie"
+        v-model="declaratie.categorie"
+      >
+        <option disabled />
+        <option
+          v-for="(categorie,categorieID) in categorieen"
+          :value="categorieID"
+        >
+          {{ categorie }}
+        </option>
+      </select>
+    </div>
 
-		<div class="field">
-			<label>Betaalwijze</label>
-			<div>
-				<input type="radio" id="C.S.R.-pas" value="C.S.R.-pas" v-model="declaratie.betaalwijze">
-				<label for="C.S.R.-pas">Betaald met C.S.R.-pas</label>
-			</div>
-			<div>
-				<input type="radio" id="voorgeschoten" value="voorgeschoten" v-model="declaratie.betaalwijze">
-				<label for="voorgeschoten">Voorgeschoten</label>
-			</div>
-		</div>
+    <div class="field">
+      <label>Betaalwijze</label>
+      <div>
+        <input
+          id="C.S.R.-pas"
+          v-model="declaratie.betaalwijze"
+          type="radio"
+          value="C.S.R.-pas"
+        >
+        <label for="C.S.R.-pas">Betaald met C.S.R.-pas</label>
+      </div>
+      <div>
+        <input
+          id="voorgeschoten"
+          v-model="declaratie.betaalwijze"
+          type="radio"
+          value="voorgeschoten"
+        >
+        <label for="voorgeschoten">Voorgeschoten</label>
+      </div>
+    </div>
 
-		<div class="field" v-if="declaratie.betaalwijze === 'voorgeschoten'">
-			<label>Terugstorten</label>
-			<div>
-				<input type="radio" id="eigenRekening" :value="true" v-model="declaratie.eigenRekening">
-				<label for="eigenRekening">Naar eigen rekening</label>
-			</div>
-			<div>
-				<input type="radio" id="nietEigenRekening" :value="false" v-model="declaratie.eigenRekening">
-				<label for="nietEigenRekening">Naar andere rekening</label>
-			</div>
-		</div>
+    <div
+      v-if="declaratie.betaalwijze === 'voorgeschoten'"
+      class="field"
+    >
+      <label>Terugstorten</label>
+      <div>
+        <input
+          id="eigenRekening"
+          v-model="declaratie.eigenRekening"
+          type="radio"
+          :value="true"
+        >
+        <label for="eigenRekening">Naar eigen rekening</label>
+      </div>
+      <div>
+        <input
+          id="nietEigenRekening"
+          v-model="declaratie.eigenRekening"
+          type="radio"
+          :value="false"
+        >
+        <label for="nietEigenRekening">Naar andere rekening</label>
+      </div>
+    </div>
 
-		<div class="field" v-if="declaratie.betaalwijze === 'voorgeschoten' && !declaratie.eigenRekening">
-			<label for="rekening">IBAN</label>
-			<input type="text" id="rekening" v-model="declaratie.rekening">
-		</div>
+    <div
+      v-if="declaratie.betaalwijze === 'voorgeschoten' && !declaratie.eigenRekening"
+      class="field"
+    >
+      <label for="rekening">IBAN</label>
+      <input
+        id="rekening"
+        v-model="declaratie.rekening"
+        type="text"
+      >
+    </div>
 
-		<div class="field" v-if="declaratie.betaalwijze === 'voorgeschoten' && !declaratie.eigenRekening || declaratie.betaalwijze === 'C.S.R.-pas'">
-			<label for="tnv" v-if="declaratie.betaalwijze === 'voorgeschoten'">Ten name van</label>
-			<label for="tnv" v-else>Bij bedrijf</label>
-			<input type="text" id="tnv" v-model="declaratie.tnv">
-		</div>
+    <div
+      v-if="declaratie.betaalwijze === 'voorgeschoten' && !declaratie.eigenRekening || declaratie.betaalwijze === 'C.S.R.-pas'"
+      class="field"
+    >
+      <label
+        v-if="declaratie.betaalwijze === 'voorgeschoten'"
+        for="tnv"
+      >Ten name van</label>
+      <label
+        v-else
+        for="tnv"
+      >Bij bedrijf</label>
+      <input
+        id="tnv"
+        v-model="declaratie.tnv"
+        type="text"
+      >
+    </div>
 
-		<div class="bonnen bon-upload" v-if="bonUploaden || !heeftBonnen">
-			<div class="inhoud">
-				<div class="titel">Voeg je bonnen en facturen toe</div>
-				<p>
-					Upload je bon of factuur als PDF of goed leesbare foto.
-					Neem daarna de bedragen van de bon of het factuur over.
-				</p>
-				<div class="buttons">
-					<button class="blue">Kies bestand</button>
-					<button class="open" @click="bonUploaden = false" v-if="heeftBonnen">Annuleren</button>
-				</div>
-			</div>
-		</div>
+    <div
+      v-if="bonUploaden || !heeftBonnen"
+      class="bonnen bon-upload"
+    >
+      <div class="inhoud">
+        <div class="titel">
+          Voeg je bonnen en facturen toe
+        </div>
+        <p>
+          Upload je bon of factuur als PDF of goed leesbare foto.
+          Neem daarna de bedragen van de bon of het factuur over.
+        </p>
+        <div class="buttons">
+          <button
+            v-if="uploading"
+            class="loading blue"
+            disabled
+          >
+            <i class="fas fa-circle-notch fa-spin" />
+          </button>
+          <template v-else>
+            <label
+              class="blue"
+              for="fileUpload"
+            >
+              Kies bestand
+            </label>
+            <input
+              id="fileUpload"
+              type="file"
+              accept=".jpg,.jpeg,.png,.pdf"
+              @change="uploadBon($event.target.files)"
+            >
+            <button
+              v-if="heeftBonnen"
+              class="open"
+              @click="bonUploaden = false"
+            >
+              Annuleren
+            </button>
+          </template>
+        </div>
+      </div>
+    </div>
 
-		<div class="bonnen bonnen-weergave" v-if="!bonUploaden && heeftBonnen">
-			<div class="lijst">
-				<div class="bon" v-for="(bon,bonIndex) in declaratie.bonnen">
-					<div class="bon-collapsed" @click="geselecteerdeBon = bonIndex" v-if="bonIndex !== geselecteerdeBon">
-						<div class="left">
-							<div class="title">Bon {{ bonIndex + 1 }}</div>
-							<div class="date">{{ bon.datum }}</div>
-						</div>
-						<div class="right">
-							<div class="title">&euro; {{ berekening(bon).totaalIncl|bedrag }}</div>
-							<div class="btw">incl. btw</div>
-						</div>
-					</div>
-					<div class="bon-selected" v-else>
-						<div v-if="declaratie.bonnen.length > 1" class="bonVerwijderen" @click="bonVerwijderen(bonIndex)">
-							<i class="fa fa-trash-alt"></i>
-						</div>
-						<div class="title">Bon {{ bonIndex + 1 }}</div>
+    <div
+      v-if="!bonUploaden && heeftBonnen"
+      class="bonnen bonnen-weergave"
+    >
+      <div class="lijst">
+        <div
+          v-for="(bon,bonIndex) in declaratie.bonnen"
+          class="bon"
+        >
+          <div
+            v-if="bonIndex !== geselecteerdeBon"
+            class="bon-collapsed"
+            @click="geselecteerdeBon = bonIndex"
+          >
+            <div class="left">
+              <div class="title">
+                Bon {{ bonIndex + 1 }}
+              </div>
+              <div class="date">
+                {{ bon.datum }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="title">
+                &euro; {{ berekening(bon).totaalIncl|bedrag }}
+              </div>
+              <div class="btw">
+                incl. btw
+              </div>
+            </div>
+          </div>
+          <div
+            v-else
+            class="bon-selected"
+          >
+            <div
+              v-if="declaratie.bonnen.length > 1"
+              class="bonVerwijderen"
+              @click="bonVerwijderen(bonIndex)"
+            >
+              <i class="fa fa-trash-alt" />
+            </div>
+            <div class="title">
+              Bon {{ bonIndex + 1 }}
+            </div>
 
-						<div class="field">
-							<label :for="'bon' + bonIndex + '_datum'">Datum</label>
-							<input type="text" :id="'bon' + bonIndex + '_datum'" v-model="bon.datum" v-mask="'dd-mm-yyyy'">
-						</div>
+            <div class="field">
+              <label :for="'bon' + bonIndex + '_datum'">Datum</label>
+              <input
+                :id="'bon' + bonIndex + '_datum'"
+                v-model="bon.datum"
+                v-mask="'dd-mm-yyyy'"
+                type="text"
+              >
+            </div>
 
-						<div class="bon-regels">
-							<div class="regels-row">
-								<label>Omschrijving</label>
-								<label>Bedrag</label>
-								<label>Btw</label>
-								<div></div>
-							</div>
-							<div class="regels-row" v-for="(regel, index) in bon.regels">
-								<div class="field">
-									<input type="text" v-model="regel.omschrijving">
-								</div>
-								<div class="field">
-									<input type="text" v-model="regel.bedrag" v-mask="{'alias': 'numeric', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false, 'placeholder': '0'}">
-								</div>
-								<div class="field">
-									<select v-model="regel.btw">
-										<option value="" disabled></option>
-										<option value="incl. 9%">incl. 9%</option>
-										<option value="incl. 21%">incl. 21%</option>
-										<option value="excl. 9%">excl. 9%</option>
-										<option value="excl. 21%">excl. 21%</option>
-										<option value="geen: 0%">geen: 0%</option>
-									</select>
-								</div>
-								<div v-if="bon.regels.length > 1" class="trash" @click="regelVerwijderen(bon, index)">
-									<i class="fa fa-trash-alt"></i>
-								</div>
-							</div>
-							<div class="regels-row nieuw" @click="nieuweRegel(bon)">
-								<div class="field">
-									<input type="text" disabled>
-								</div>
-								<div class="field">
-									<input type="text" disabled>
-								</div>
-								<div class="field">
-									<select disabled>
-										<option value=""></option>
-									</select>
-								</div>
-								<div class="add">
-									<i class="fa fa-plus-circle"></i>
-								</div>
-							</div>
-							<div class="regels-row totaal streep">
-								<div class="onderdeel">Totaal excl. btw</div>
-								<div class="bedrag">{{ berekening(bon).totaalExcl|bedrag }}</div>
-							</div>
-							<div class="regels-row totaal" v-if="berekening(bon).btw[9] > 0">
-								<div class="onderdeel">Btw 9%</div>
-								<div class="bedrag">{{ berekening(bon).btw[9]|bedrag }}</div>
-							</div>
-							<div class="regels-row totaal" v-if="berekening(bon).btw[21] > 0">
-								<div class="onderdeel">Btw 21%</div>
-								<div class="bedrag">{{ berekening(bon).btw[21]|bedrag }}</div>
-							</div>
-							<div class="regels-row totaal totaalBold">
-								<div class="onderdeel">Totaal incl. btw</div>
-								<div class="bedrag">{{ berekening(bon).totaalIncl|bedrag }}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="nieuwe-bon" @click="bonUploaden = true">
-					<i class="fa fa-plus-circle"></i>
-				</div>
-			</div>
-			<div class="voorbeeld">
-				<iframe :src="huidigeBon.bestandsnaam"></iframe>
-			</div>
-		</div>
+            <div class="bon-regels">
+              <div class="regels-row">
+                <label>Omschrijving</label>
+                <label>Bedrag</label>
+                <label>Btw</label>
+                <div />
+              </div>
+              <div
+                v-for="(regel, index) in bon.regels"
+                class="regels-row"
+              >
+                <div class="field">
+                  <input
+                    v-model="regel.omschrijving"
+                    type="text"
+                  >
+                </div>
+                <div class="field">
+                  <input
+                    v-model="regel.bedrag"
+                    v-mask="{'alias': 'numeric', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false, 'placeholder': '0'}"
+                    type="text"
+                  >
+                </div>
+                <div class="field">
+                  <select v-model="regel.btw">
+                    <option
+                      value=""
+                      disabled
+                    />
+                    <option value="incl. 9%">
+                      incl. 9%
+                    </option>
+                    <option value="incl. 21%">
+                      incl. 21%
+                    </option>
+                    <option value="excl. 9%">
+                      excl. 9%
+                    </option>
+                    <option value="excl. 21%">
+                      excl. 21%
+                    </option>
+                    <option value="geen: 0%">
+                      geen: 0%
+                    </option>
+                  </select>
+                </div>
+                <div
+                  v-if="bon.regels.length > 1"
+                  class="trash"
+                  @click="regelVerwijderen(bon, index)"
+                >
+                  <i class="fa fa-trash-alt" />
+                </div>
+              </div>
+              <div
+                class="regels-row nieuw"
+                @click="nieuweRegel(bon)"
+              >
+                <div class="field">
+                  <input
+                    type="text"
+                    disabled
+                  >
+                </div>
+                <div class="field">
+                  <input
+                    type="text"
+                    disabled
+                  >
+                </div>
+                <div class="field">
+                  <select disabled>
+                    <option value="" />
+                  </select>
+                </div>
+                <div class="add">
+                  <i class="fa fa-plus-circle" />
+                </div>
+              </div>
+              <div class="regels-row totaal streep">
+                <div class="onderdeel">
+                  Totaal excl. btw
+                </div>
+                <div class="bedrag">
+                  {{ berekening(bon).totaalExcl|bedrag }}
+                </div>
+              </div>
+              <div
+                v-if="berekening(bon).btw[9] > 0"
+                class="regels-row totaal"
+              >
+                <div class="onderdeel">
+                  Btw 9%
+                </div>
+                <div class="bedrag">
+                  {{ berekening(bon).btw[9]|bedrag }}
+                </div>
+              </div>
+              <div
+                v-if="berekening(bon).btw[21] > 0"
+                class="regels-row totaal"
+              >
+                <div class="onderdeel">
+                  Btw 21%
+                </div>
+                <div class="bedrag">
+                  {{ berekening(bon).btw[21]|bedrag }}
+                </div>
+              </div>
+              <div class="regels-row totaal totaalBold">
+                <div class="onderdeel">
+                  Totaal incl. btw
+                </div>
+                <div class="bedrag">
+                  {{ berekening(bon).totaalIncl|bedrag }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="nieuwe-bon"
+          @click="bonUploaden = true"
+        >
+          <i class="fa fa-plus-circle" />
+        </div>
+      </div>
+      <div class="voorbeeld">
+        <iframe :src="huidigeBon.bestandsnaam" />
+      </div>
+    </div>
 
-		<div class="totaal" v-if="totaal > 0">
-			<div class="left">Totaal</div>
-			<div class="right">
-				<div class="title">&euro; {{ totaal|bedrag }}</div>
-				<div class="btw">incl. btw</div>
-			</div>
-		</div>
+    <div
+      v-if="totaal > 0"
+      class="totaal"
+    >
+      <div class="left">
+        Totaal
+      </div>
+      <div class="right">
+        <div class="title">
+          &euro; {{ totaal|bedrag }}
+        </div>
+        <div class="btw">
+          incl. btw
+        </div>
+      </div>
+    </div>
 
-		<div class="field">
-			<label for="opmerkingen">Opmerkingen</label>
-			<textarea id="opmerkingen" v-model="declaratie.opmerkingen"></textarea>
-		</div>
-	</div>
+    <div class="field">
+      <label for="opmerkingen">Opmerkingen</label>
+      <textarea
+        id="opmerkingen"
+        v-model="declaratie.opmerkingen"
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -256,8 +443,9 @@
 		@Prop({default: legeDeclaratie})
 		private declaratie: Declaratie;
 
-		private bonUploaden: boolean = true;
-		private geselecteerdeBon: number = 0;
+		private bonUploaden = true;
+		private uploading = false;
+		private geselecteerdeBon = 0;
 
 		private get heeftBonnen() {
 			return this.declaratie.bonnen && this.declaratie.bonnen.length > 0;
@@ -272,19 +460,19 @@
 			}
 		}
 
-		public bonVerwijderen(index: number) {
+		public bonVerwijderen(index: number): void {
 			this.declaratie.bonnen.splice(index, 1);
 		}
 
-		public nieuweRegel(bon: Bon) {
+		public nieuweRegel(bon: Bon): void {
 			bon.regels.push(legeRegel());
 		}
 
-		public regelVerwijderen(bon: Bon, regel: number) {
+		public regelVerwijderen(bon: Bon, regel: number): void {
 			bon.regels.splice(regel, 1);
 		}
 
-		public get totaal() {
+		public get totaal(): number {
 			let totaal = 0;
 			for (let bon of this.declaratie.bonnen) {
 				totaal += this.berekening(bon).totaalIncl;
@@ -336,6 +524,17 @@
 				},
 			};
 		}
+
+		public uploadBon(files: FileList): void {
+      const formData = new FormData();
+
+      if (files.length !== 1) {
+        return;
+      }
+
+      this.uploading = true;
+      formData.append('bon', files[0], files[0].name);
+    }
 	}
 </script>
 
@@ -593,7 +792,7 @@
 			}
 
 			.buttons {
-				button {
+				button, label {
 					width: 110px;
 					border-radius: 3px;
 					-webkit-appearance: none;
@@ -601,13 +800,19 @@
 					border: none;
 					margin-right: 10px;
 					margin-top: 5px;
+          text-align: center;
+          cursor: pointer;
+
+          &.loading {
+            cursor: default;
+          }
 
 					&.blue {
 						background: #00087B;
 						color: white;
 						font-weight: 600;
 
-						&:hover {
+						&:hover:not(.loading) {
 							background: #3498db;
 						}
 					}
@@ -623,6 +828,10 @@
 						}
 					}
 				}
+
+        input {
+          display: none;
+        }
 			}
 
 			&:before {
