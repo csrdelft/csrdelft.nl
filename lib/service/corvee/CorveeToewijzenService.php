@@ -104,7 +104,7 @@ class CorveeToewijzenService {
 	}
 
 	/**
-	 * Langst geleden bovenaan. Bij geen laatste taken op punten.
+	 * Langst geleden bovenaan. Bij geen laatste taken op aantal.
 	 * @param CorveePuntenOverzichtDTO $a
 	 * @param CorveePuntenOverzichtDTO $b
 	 * @return int
