@@ -103,17 +103,23 @@ class CorveeToewijzenService {
 		return $corveePuntenOverzichten;
 	}
 
+	/**
+	 * Langst geleden bovenaan. Bij geen laatste taken op punten.
+	 * @param CorveePuntenOverzichtDTO $a
+	 * @param CorveePuntenOverzichtDTO $b
+	 * @return int
+	 */
 	public function sorteerKwali(CorveePuntenOverzichtDTO $a, CorveePuntenOverzichtDTO $b) {
 		if (!$a->laatste && !$b->laatste) {
-			$a = $a->laatste->getBeginMoment();
-			$b = $b->laatste->getBeginMoment();
+			$a = $a->aantal;
+			$b = $b->aantal;
 		} elseif (!$a->laatste) {
 			return -1;
 		} elseif (!$b->laatste) {
 			return 1;
 		} else {
-			$a = $a->aantal;
-			$b = $b->aantal;
+			$a = $a->laatste->getBeginMoment();
+			$b = $b->laatste->getBeginMoment();
 		}
 		if ($a === $b) {
 			return 0;
