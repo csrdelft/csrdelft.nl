@@ -91,7 +91,7 @@ class CsrTwigExtension extends AbstractExtension
 	{
 		return [
 			new TwigFilter('escape_ical', 'escape_ical'),
-			new TwigFilter('file_base64', 'file_base64'),
+			new TwigFilter('file_base64', [$this, 'file_base64']),
 			new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
 			new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
 			new TwigFilter('uniqid', function ($prefix) {
