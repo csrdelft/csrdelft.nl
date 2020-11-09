@@ -31,7 +31,7 @@
 	<div class="d-block text-right mt-3">
 		{% if id == 'recent' %}
 			<a href="{{ url('csrdelft_forum_recent') }}">Meer lezen...</a>
-		{% if id == 'belangrijk' %}
+		{% elseif id == 'belangrijk' %}
 			<a href="{{ url('csrdelft_forum_belangrijk') }}">Meer lezen...</a>
 		{% else %}
 			<a href="{{ url('csrdelft_forum_deel', {deel: deel.forum_id}) }}">Meer lezen...</a>
