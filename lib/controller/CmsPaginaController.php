@@ -64,12 +64,12 @@ class CmsPaginaController extends AbstractController {
 			if ($pagina->naam === 'thuis') {
 				return $this->render('extern/index.html.twig', ['titel' => $body->getTitel()]);
 			} elseif ($naam === 'vereniging') {
-				return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body, 'showMenu' => true]);
+				return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
 			} elseif ($naam === 'lidworden') {
 				return $this->render('extern/owee.html.twig');
 			}
 
-			return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body, 'showMenu' => false]);
+			return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
 		} else {
 			return $this->render('cms/pagina.html.twig', ['body' => $body]);
 		}
