@@ -217,7 +217,7 @@
         "version": "1.1.0"
     },
     "php-webdriver/webdriver": {
-        "version": "1.8.2"
+        "version": "1.8.3"
     },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
@@ -449,7 +449,7 @@
         ]
     },
     "symfony/http-client": {
-        "version": "v5.1.5"
+        "version": "v5.1.8"
     },
     "symfony/http-client-contracts": {
         "version": "v2.2.0"
@@ -496,7 +496,7 @@
         "version": "v1.0.7"
     },
     "symfony/panther": {
-        "version": "v0.7.1"
+        "version": "v0.8.0"
     },
     "symfony/phpunit-bridge": {
         "version": "4.3",
@@ -544,7 +544,7 @@
         "version": "v1.18.1"
     },
     "symfony/process": {
-        "version": "v5.1.5"
+        "version": "v5.1.8"
     },
     "symfony/profiler-pack": {
         "version": "v1.0.4"
