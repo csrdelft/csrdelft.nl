@@ -98,7 +98,11 @@ class CiviBestellingRepository extends AbstractRepository {
 			if ($bestelling->deleted) {
 				throw new Exception("Bestelling kan niet worden teruggedraaid.");
 			}
-			$this->civiSaldoRepository->ophogen($bestelling->uid, $bestelling->totaal);
+			if ($bestelling->totaal > 0) {
+				$this->civiSaldoRepository->ophogen($bestelling->uid, $bestelling->totaal);
+			} else {
+				$this->civiSaldoRepository->verlagen($bestelling->uid, -$bestelling->totaal);
+			}
 			$bestelling->deleted = true;
 			// TODO LOG?
 			$this->_em->persist($bestelling);
