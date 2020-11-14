@@ -43,10 +43,11 @@ class CmsPaginaForm implements FormulierTypeInterface {
 				'</div><div class="clear-left"><label>Rechten bewerken</label>' . $data->rechten_bewerken . '</div>');
 		}
 		$fields[] = new BBCodeField('inhoud', $data->inhoud, 'Inhoud');
-		$fields['btn'] = new FormDefaultKnoppen('/pagina/' . $data->naam);
-		$delete = new DeleteKnop('/data/verwijderen/' . $data->naam);
-		$fields['btn']->addKnop($delete, true);
 
 		$builder->addFields($fields);
+
+		$formKnoppen = new FormDefaultKnoppen('/pagina/' . $data->naam);
+		$formKnoppen->addKnop(new DeleteKnop('/pagina/verwijderen/' . $data->naam), true);
+		$builder->setFormKnoppen($formKnoppen);
 	}
 }
