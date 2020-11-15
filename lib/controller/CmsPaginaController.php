@@ -105,7 +105,8 @@ class CmsPaginaController extends AbstractController {
 		} else {
 			return $this->render('default_form.html.twig', [
 				'titel' => 'Pagina bewerken: ' . $pagina->naam,
-				'form' => $form->createView()
+				'form' => $form->createView(),
+				'cancel_url' => $this->generateUrl('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]),
 			]);
 		}
 	}

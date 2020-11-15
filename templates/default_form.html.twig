@@ -10,5 +10,16 @@
 
 {% block content %}
 	<h1>{{ titel }}</h1>
-	{{ form(form) }}
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<div class="row">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-primary">Opslaan</button>
+			<button type="reset" class="btn btn-secondary">Reset</button>
+			{% if cancel_url is defined %}
+				<a href="{{ cancel_url }}" class="btn btn-secondary">Annuleren</a>
+			{% endif %}
+		</div>
+	</div>
+	{{ form_end(form) }}
 {% endblock %}
