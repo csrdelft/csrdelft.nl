@@ -5,10 +5,13 @@ namespace CsrDelft\view\cms;
 
 
 use CsrDelft\Component\Form\Type\BbTextType;
+use CsrDelft\Component\Form\Type\DateDisplayType;
 use CsrDelft\entity\CmsPagina;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,14 +22,19 @@ class CmsPaginaType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('laatstGewijzigd', DateTimeType::class, ['disabled' => true])
+			->add('laatstGewijzigd', DateDisplayType::class)
 			->add('titel', TextType::class)
 			->add('rechtenBekijken', TextType::class, ['disabled' => !$options['rechten_wijzigen']])
 			->add('rechtenBewerken', TextType::class, ['disabled' => !$options['rechten_wijzigen']]);
 
 		if ($options['rechten_wijzigen']) {
 			$builder
-				->add('inlineHtml', CheckboxType::class, [
+				->add('inlineHtml', ChoiceType::class, [
+					'expanded' => true,
+					'choices' => [
+						'Direct <html>' => true,
+						'[html] tussen [/html]' => false,
+					],
 					'help' => 'Geen [html] nodig en zelf regeleindes plaatsen met [rn] of <br />'
 				]);
 		}
@@ -42,8 +50,5 @@ class CmsPaginaType extends AbstractType
 			'data_class' => CmsPagina::class,
 			'rechten_wijzigen' => false,
 		]);
-
 	}
-
-
 }
