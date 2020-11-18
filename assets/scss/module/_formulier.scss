@@ -91,11 +91,6 @@ h1.Titel {
     position: absolute;
     margin: 5px 0 0 -25px;
   }
-  .BBCodeField {
-    height: 225px;
-    border: none;
-    resize: none;
-  }
   textarea {
     width: 100%;
     line-height: 1.25em;
@@ -173,4 +168,10 @@ h1.Titel {
 	background-image: url(../../images/loading-fb.gif);
 	background-repeat: no-repeat;
 	background-position: right 40px center;
+}
+
+.BBCodeField {
+	height: 225px;
+	border: none;
+	resize: none;
 }

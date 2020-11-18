@@ -46,9 +46,9 @@ class CmsPaginaRepository extends AbstractRepository {
 		$pagina->naam = $naam;
 		$pagina->titel = $naam;
 		$pagina->inhoud = $naam;
-		$pagina->laatst_gewijzigd = date_create_immutable();
-		$pagina->rechten_bekijken = P_PUBLIC;
-		$pagina->rechten_bewerken = P_ADMIN;
+		$pagina->laatstGewijzigd = date_create_immutable();
+		$pagina->rechtenBekijken = P_PUBLIC;
+		$pagina->rechtenBewerken = P_ADMIN;
 		return $pagina;
 	}
 
