@@ -1,6 +1,6 @@
 {% extends 'forum/base.html.twig' %}
 
-{% block titel %}{{ draad.titel }}{% endblock %}
+{% block titel %}{{ draad.titel | raw }}{% endblock %}
 
 {% block breadcrumbs %}
 	{{ csr_breadcrumbs({
