@@ -154,11 +154,29 @@ class ForumCategorieRepository extends AbstractRepository {
 		$this->forumDradenGelezenRepository->verwijderDraadGelezen($draadIds);
 		$this->forumDradenReagerenRepository->verwijderReagerenVoorDraad($draadIds);
 
+		$this->forumDradenRepository->createQueryBuilderWithoutOrder('fd')
+			->update()
+			->where('fd.draad_id in (?2)')
+			->set('fd.laatste_post_id', '?1')
+			->setParameter(1, null)
+			->setParameter(2, $draadIds)
+			->getQuery()
+			->execute();
+
 		// Oude verwijderde posts definitief verwijderen
 		$this->forumPostsRepository->createQueryBuilder('fp')
 			->delete()
-			->where('fp.verwijderd = true and fp.draad_id in (:draad_ids)')
+			->where('fp.draad_id in (:draad_ids)')
 			->setParameter('draad_ids', $draadIds)
-			->getQuery()->execute();
+			->getQuery()
+			->execute();
+
+		// Verwijder corresponderende draden
+		$this->forumDradenRepository->createQueryBuilderWithoutOrder('fd')
+			->delete()
+			->where('fd.draad_id in (:draad_ids)')
+			->setParameter('draad_ids', $draadIds)
+			->getQuery()
+			->execute();
 	}
 }
