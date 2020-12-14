@@ -1,3 +1,11 @@
-<div class="noviet-van-de-dag">
-	Noviet van de dag = {{ naam }}
-</div>
+<a class="noviet-van-de-dag bb-block" href="/profiel/{{ noviet.uid }}">
+	<div class="titel">Noviet van de dag:</div>
+	<div class="foto">
+		{{ noviet.pasfotoTag|raw }}
+	</div>
+	<div class="naam">{{ noviet.naam }}</div>
+	<div class="details">
+		<div><span>Leeftijd</span>: {{ noviet.leeftijd }}</div>
+		<div><span>Studie</span>: {{ noviet.studie }} ({{ noviet.studiejaar }})</div>
+	</div>
+</a>

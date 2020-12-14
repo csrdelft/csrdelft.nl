@@ -962,4 +962,8 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	public function getLidStatusDescription() {
 		return LidStatus::from($this->status)->getDescription();
 	}
+
+	public function getLeeftijd() {
+		return $this->gebdatum->diff(date_create_immutable())->y;
+	}
 }
