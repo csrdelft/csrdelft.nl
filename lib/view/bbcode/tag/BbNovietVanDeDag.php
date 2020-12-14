@@ -9,8 +9,14 @@ use CsrDelft\service\security\LoginService;
 use Twig\Environment;
 
 class BbNovietVanDeDag extends BbTag {
-	private ProfielRepository $profielRepository;
-	private Environment $twig;
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
 
 	public function __construct(ProfielRepository $profielRepository, Environment $twig) {
 		$this->profielRepository = $profielRepository;
