@@ -601,3 +601,31 @@ Voor de /bio pagina
 		margin-top: 0.5em;
 	}
 }
+
+.noviet-van-de-dag {
+	display: block;
+
+	.pasfoto {
+		width: 68px;
+		height: 90px;
+		margin-right: 18px;
+	}
+
+	.naam {
+		font-weight: 300;
+		margin-top: 0;
+		margin-bottom: 5px;
+	}
+
+	.details {
+		div span {
+			font-weight: 600;
+		}
+	}
+
+	&:hover {
+		text-decoration: none;
+		color: inherit;
+	}
+	color: inherit;
+}
