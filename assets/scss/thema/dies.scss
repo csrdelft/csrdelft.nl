@@ -77,22 +77,3 @@ h5 {
 		color: $kleur-textheader;
 	}
 }
-
-.dies {
-	display: flex;
-	flex-direction: column;
-}
-
-#dies-poster {
-	width: 150px;
-	padding-bottom: 20px;
-	align-items: center;
-}
-
-.dies-button {
-	background-color: $kleur-secundair;
-	font-family: BossaNovaMVB, Calibri, sans-serif;
-	font-size: 1.5em;
-	align-items: center;
-	width: 150px;
-}
