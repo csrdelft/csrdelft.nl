@@ -1,36 +1,23 @@
-$kleur-primair: #33332d;
-$kleur-secundair: #6f8b8c;
-$kleur-textheader: #8c7456;
-$kleur-text: #f2ebc7;
+$kleur-primair: #903921;
+$kleur-secundair: #C8611A;
+$kleur-textheader: #D08976;
+$kleur-text: #fffbfa;
 $kleur-hover: #E9600B;
 
 $kleur-groen: #ABD1B5;
 $kleur-rood: #B0413E;
 
-/*
 @font-face {
-	font-family: 'Futura';
-	src: url('../../fonts/motown-fever/Futura-Bold.woff2') format('woff2'),
-	url('../../fonts/motown-fever/Futura-Bold.woff') format('woff');
-	font-weight: 500;
-	font-style: normal;
+	font-family: BossaNovaMVB;
+	src: url('../../fonts/dies-2021/BossaNovaMVB.otf');
 }
-
-@font-face {
-	font-family: 'Futura BT';
-	src: url('../../fonts/motown-fever/FuturaBT-Book.woff2') format('woff2'),
-	url('../../fonts/motown-fever/FuturaBT-Book.woff') format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-*/
 
 $font: Calibri, sans-serif;
 $font-family-base: $font;
 $headings-font-family: ($font, uppercase);
 
 $theme-colors: (
-	"primary": $kleur-groen,
+	"primary": $kleur-primair,
 	"danger": #E54B4B,
 	"white": $kleur-text,
 );
@@ -70,5 +57,23 @@ $tabel-hover: darken($kleur-secundair, 5%);
 $footer-background: darken($kleur-primair, 5%);
 $maaltijdketzer-bg: $kleur-primair;
 
+$list-group-action-color: $kleur-text;
+$list-group-hover-bg: $kleur-textheader;
+$text-muted: #fffbfa;
+
 /* importeer basis */
 @import "../base";
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: BossaNovaMVB, Calibri, sans-serif;
+}
+
+h5 {
+	color: $kleur-textheader;
+}
+
+.zijbalk {
+	.blok .zijbalk-kopje a {
+		color: $kleur-textheader;
+	}
+}
