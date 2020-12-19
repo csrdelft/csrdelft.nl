@@ -96,9 +96,6 @@
     "doctrine/persistence": {
         "version": "1.3.3"
     },
-    "doctrine/reflection": {
-        "version": "v1.0.0"
-    },
     "doctrine/sql-formatter": {
         "version": "1.1.0"
     },
@@ -177,9 +174,6 @@
     "ocramius/proxy-manager": {
         "version": "2.0.4"
     },
-    "paragonie/random_compat": {
-        "version": "v9.99.99"
-    },
     "parsecsv/php-parsecsv": {
         "version": "1.2.1"
     },
@@ -200,9 +194,6 @@
     },
     "php-http/discovery": {
         "version": "1.9.1"
-    },
-    "php-http/guzzle6-adapter": {
-        "version": "v2.0.1"
     },
     "php-http/httplug": {
         "version": "2.2.0"
@@ -536,9 +527,6 @@
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.12.0"
-    },
-    "symfony/polyfill-php70": {
-        "version": "v1.18.0"
     },
     "symfony/polyfill-php72": {
         "version": "v1.13.1"
