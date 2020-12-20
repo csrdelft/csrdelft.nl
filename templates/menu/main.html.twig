@@ -1,11 +1,12 @@
 <nav id="menu" class="navbar navbar-expand-md navbar-dark">
+	<div class="container-fluid">
 	<a class="nav-option trigger text-white d-block d-lg-none" href="#zijbalk"><span class="sr-only">Zijbalk openen</span><i
 			class="fa fa-lg fa-fw fa-bookmark"></i></a>
 	<a class="navbar-brand" href="/">
 		<img src="{{ absolute_url('/images/beeldmerk-wit.png') }}" alt="Beeldmerk C.S.R. Delft"/>
 		<h2>C.S.R. Delft</h2>
 	</a>
-	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
 					aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -40,5 +41,6 @@
 				{% endif %}
 			{% endfor %}
 		</ul>
+	</div>
 	</div>
 </nav>
