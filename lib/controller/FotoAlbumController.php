@@ -351,7 +351,7 @@ class FotoAlbumController extends AbstractController {
 		foreach ($this->fotoAlbumRepository->zoeken($query, $limit) as $album) {
 			/** @var FotoAlbum $album */
 			$result[] = array(
-				'icon' => Icon::getTag('fotoalbum', null, 'Fotoalbum', 'mr-2'),
+				'icon' => Icon::getTag('fotoalbum', null, 'Fotoalbum', 'me-2'),
 				'url' => $album->getUrl(),
 				'label' => $album->getParentName(),
 				'value' => ucfirst($album->dirname)

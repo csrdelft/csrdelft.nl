@@ -78,7 +78,7 @@
 							{% else %}
 								<div class="bg-danger">Voor dit type bestaat geen optie.</div>
 							{% endif %}
-							<small class="form-text text-muted">
+							<small class="d-block mb-2 form-text text-muted">
 								{% set default = instelling.opties[instelling.default] is defined ? instelling.opties[instelling.default] : instelling.default %}
 								{{ instelling.beschrijving | raw }} Standaard waarde: "{{ default | title }}".
 							</small>
