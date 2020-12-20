@@ -44,7 +44,7 @@
 								{{ icon('vcard_add') }}
 							</a>
 						</div>
-						<div class="btn-group ml-2">
+						<div class="btn-group ms-2">
 							{% if profiel.magBewerken %}
 								<a href="{{ url('csrdelft_profiel_bewerken', {uid: profiel.uid}) }}" class="btn btn-light"
 									 title="Bewerk dit profiel">{{ icon('pencil') }}</a>
@@ -419,7 +419,7 @@
 									</tr>
 								{% endfor %}
 							</table>
-							<div class="text-right">
+							<div class="text-end">
 								<a href="{{ bestellingenlink }}">Meer &#187;</a>
 							</div>
 						</div>

@@ -5,7 +5,7 @@
 		<img src="{{ absolute_url('/images/beeldmerk-wit.png') }}" alt="Beeldmerk C.S.R. Delft"/>
 		<h2>C.S.R. Delft</h2>
 	</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
 					aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -14,7 +14,7 @@
 			{% if mag('P_LOGGED_IN') %}
 				{{ include('menu/main_tree.html.twig', {parent: root}) }}
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="menu-favorieten" role="button" data-toggle="dropdown"
+					<a class="nav-link dropdown-toggle" href="#" id="menu-favorieten" role="button" data-bs-toggle="dropdown"
 						 aria-haspopup="true" aria-expanded="false">
 						Favorieten
 					</a>
@@ -30,7 +30,7 @@
 				<li><a href="/">Log in</a></li>
 			{% endif %}
 		</ul>
-		<div class="navbar-nav navbar-search ml-auto mr-3">
+		<div class="navbar-nav navbar-search ms-auto me-3">
 			{{ instant_search_form() }}
 		</div>
 		<ul class="navbar-nav">

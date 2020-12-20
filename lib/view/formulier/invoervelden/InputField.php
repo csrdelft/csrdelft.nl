@@ -385,7 +385,7 @@ abstract class InputField implements FormElement, Validator {
 
 	public function getHelpDiv() {
 		if ($this->title) {
-			return '<small class="col-md-12 text-muted">' . $this->title . '</small>';
+			return '<small class="d-block col-md-12 text-muted">' . $this->title . '</small>';
 		}
 		return '';
 	}
