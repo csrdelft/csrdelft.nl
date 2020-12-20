@@ -89,7 +89,7 @@ $bb-hover-bg: #DDEEFF !default;
 }
 
 .bb-prive {
-  background-color: #FFF0F5;
+	@extend .alert-danger;
 }
 
 .bb-maaltijd {
