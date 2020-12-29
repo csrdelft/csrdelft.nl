@@ -356,6 +356,7 @@
 </template>
 
 <script lang="ts">
+  import axios from 'axios';
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
 
@@ -534,6 +535,22 @@
 
       this.uploading = true;
       formData.append('bon', files[0], files[0].name);
+
+      axios({
+        method: 'post',
+        url: '/declaratie/upload',
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((res) => {
+        this.uploading = false;
+        this.bonUploaden = false;
+        console.log(res);
+      }).catch((err) => {
+        this.uploading = false;
+        console.log(err);
+      });
     }
 	}
 </script>
