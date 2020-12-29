@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\civimelder;
 
 use CsrDelft\repository\civimelder\ReeksRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -88,5 +89,9 @@ class Reeks extends ActiviteitEigenschappen {
 		}
 
 		return $this;
+	}
+
+	public function magActiviteitenBeheren(): bool {
+		return LoginService::mag($this->getRechtenAanmaken());
 	}
 }

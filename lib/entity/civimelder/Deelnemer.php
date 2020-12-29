@@ -3,58 +3,68 @@
 namespace CsrDelft\entity\civimelder;
 
 use CsrDelft\repository\civimelder\DeelnemerRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=DeelnemerRepository::class)
  * @ORM\Table(name="civimelder_deelnemer")
  */
-class Deelnemer
-{
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+class Deelnemer {
+	/**
+	 * @ORM\Id
+	 * @ORM\GeneratedValue
+	 * @ORM\Column(type="integer")
+	 */
+	private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Activiteit::class, inversedBy="deelnemers")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $activiteit;
+	/**
+	 * @ORM\ManyToOne(targetEntity=Activiteit::class, inversedBy="deelnemers")
+	 * @ORM\JoinColumn(nullable=false)
+	 */
+	private $activiteit;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $aantal;
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	private $aantal;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	private $aangemeld;
 
-    public function getActiviteit(): ?Activiteit
-    {
-        return $this->activiteit;
-    }
+	public function getId(): ?int {
+		return $this->id;
+	}
 
-    public function setActiviteit(?Activiteit $activiteit): self
-    {
-        $this->activiteit = $activiteit;
+	public function getActiviteit(): ?Activiteit {
+		return $this->activiteit;
+	}
 
-        return $this;
-    }
+	public function setActiviteit(?Activiteit $activiteit): self {
+		$this->activiteit = $activiteit;
 
-    public function getAantal(): ?int
-    {
-        return $this->aantal;
-    }
+		return $this;
+	}
 
-    public function setAantal(int $aantal): self
-    {
-        $this->aantal = $aantal;
+	public function getAantal(): int {
+		return $this->aantal;
+	}
 
-        return $this;
-    }
+	public function setAantal(int $aantal): self {
+		$this->aantal = $aantal;
+
+		return $this;
+	}
+
+	public function getAangemeld(): DateTimeImmutable {
+		return $this->aangemeld;
+	}
+
+	public function setAangemeld(DateTimeImmutable $aangemeld): self {
+		$this->aangemeld = $aangemeld;
+
+		return $this;
+	}
 }

@@ -3,6 +3,9 @@
 namespace CsrDelft\entity\civimelder;
 
 use CsrDelft\repository\civimelder\ActiviteitRepository;
+use CsrDelft\service\security\LoginService;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,6 +52,7 @@ class Activiteit extends ActiviteitEigenschappen {
 		$this->deelnemers = new ArrayCollection();
 	}
 
+	// Getters & setters
 	public function getId(): ?int {
 		return $this->id;
 	}
@@ -63,27 +67,27 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this;
 	}
 
-	public function getStart(): ?\DateTimeInterface {
+	public function getStart(): ?DateTimeImmutable {
 		return $this->start;
 	}
 
-	public function setStart(\DateTimeInterface $start): self {
+	public function setStart(DateTimeImmutable $start): self {
 		$this->start = $start;
 
 		return $this;
 	}
 
-	public function getEinde(): ?\DateTimeInterface {
+	public function getEinde(): ?DateTimeImmutable {
 		return $this->einde;
 	}
 
-	public function setEinde(\DateTimeInterface $einde): self {
+	public function setEinde(DateTimeImmutable $einde): self {
 		$this->einde = $einde;
 
 		return $this;
 	}
 
-	public function getGesloten(): ?bool {
+	public function isGesloten(): ?bool {
 		return $this->gesloten;
 	}
 
@@ -121,55 +125,101 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this;
 	}
 
-	public function getInheritedTitel(): string {
-		return $this->getTitel() ?: $this->getReeks()->getTitel();
+	// Eigenschappen
+	public function getTitel(): string {
+		return $this->getRawTitel() ?: $this->getReeks()->getRawTitel();
 	}
 
-	public function getInheritedBeschrijving(): string {
-		return $this->getBeschrijving() ?: $this->getReeks()->getBeschrijving();
+	public function getBeschrijving(): string {
+		return $this->getRawBeschrijving() ?: $this->getReeks()->getRawBeschrijving();
 	}
 
-	public function getInheritedCapaciteit(): int {
-		return $this->getCapaciteit() ?: $this->getReeks()->getCapaciteit();
+	public function getCapaciteit(): int {
+		return $this->getRawCapaciteit() ?: $this->getReeks()->getRawCapaciteit();
 	}
 
-	public function getInheritedRechtenAanmelden(): string {
-		return $this->getRechtenAanmelden() ?: $this->getReeks()->getRechtenAanmelden();
+	public function getRechtenAanmelden(): string {
+		return $this->getRawRechtenAanmelden() ?: $this->getReeks()->getRawRechtenAanmelden();
 	}
 
-	public function getInheritedRechtenLijstBekijken(): string {
-		return $this->getRechtenLijstBekijken() ?: $this->getReeks()->getRechtenLijstBekijken();
+	public function getRechtenLijstBekijken(): string {
+		return $this->getRawRechtenLijstBekijken() ?: $this->getReeks()->getRawRechtenLijstBekijken();
 	}
 
-	public function getInheritedRechtenLijstBeheren(): string {
-		return $this->getRechtenLijstBeheren() ?: $this->getReeks()->getRechtenLijstBeheren();
+	public function getRechtenLijstBeheren(): string {
+		return $this->getRawRechtenLijstBeheren() ?: $this->getReeks()->getRawRechtenLijstBeheren();
 	}
 
-	public function getInheritedMaxGasten(): int {
-		return $this->getMaxGasten() ?: $this->getReeks()->getMaxGasten();
+	public function getMaxGasten(): int {
+		return $this->getRawMaxGasten() ?: $this->getReeks()->getRawMaxGasten();
 	}
 
-	public function getInheritedAanmeldenMogelijk(): bool {
-		return $this->getAanmeldenMogelijk() ?: $this->getReeks()->getAanmeldenMogelijk();
+	public function isAanmeldenMogelijk(): bool {
+		return $this->isRawAanmeldenMogelijk() ?: $this->getReeks()->isRawAanmeldenMogelijk();
 	}
 
-	public function getInheritedAanmeldenVanaf(): ?int {
-		return $this->getAanmeldenVanaf() ?: $this->getReeks()->getAanmeldenVanaf();;
+	public function getAanmeldenVanaf(): ?int {
+		return $this->getRawAanmeldenVanaf() ?: $this->getReeks()->getRawAanmeldenVanaf();;
 	}
 
-	public function getInheritedAanmeldenTot(): ?int {
-		return $this->getAanmeldenTot() ?: $this->getReeks()->getAanmeldenTot();
+	public function getAanmeldenTot(): ?int {
+		return $this->getRawAanmeldenTot() ?: $this->getReeks()->getRawAanmeldenTot();
 	}
 
-	public function getInheritedAfmeldenMogelijk(): bool {
-		return $this->isAfmeldenMogelijk() ?: $this->getReeks()->isAfmeldenMogelijk();
+	public function isAfmeldenMogelijk(): bool {
+		return $this->isRawAfmeldenMogelijk() ?: $this->getReeks()->isRawAfmeldenMogelijk();
 	}
 
-	public function getInheritedAfmeldenTot(): ?int {
-		return $this->getAfmeldenTot() ?: $this->getReeks()->getAfmeldenTot();
+	public function getAfmeldenTot(): ?int {
+		return $this->getRawAfmeldenTot() ?: $this->getReeks()->getRawAfmeldenTot();
 	}
 
-	public function getInheritedVoorwaarden(): array {
-		return $this->getVoorwaarden() ?: $this->getReeks()->getVoorwaarden();
+	public function getVoorwaarden(): array {
+		return $this->getRawVoorwaarden() ?: $this->getReeks()->getRawVoorwaarden();
+	}
+
+	// Tijden afmelden
+	private function getTijdVoor(int $minutes): DateTimeImmutable {
+		/** @noinspection PhpUnhandledExceptionInspection Minuten is altijd aantal minuten als integer */
+		$tijd = new DateInterval('PT' . $minutes . 'M');
+		return $this->getStart()->sub($tijd);
+	}
+
+	public function getStartAanmelden(): DateTimeImmutable {
+		return $this->getTijdVoor($this->getAanmeldenVanaf());
+	}
+
+	public function getEindAanmelden(): DateTimeImmutable {
+		return $this->getTijdVoor($this->getAanmeldenTot());
+	}
+
+	public function getEindAfmelden(): DateTimeImmutable {
+		return $this->getTijdVoor($this->getAfmeldenTot());
+	}
+
+	// Rechten
+	public function magLijstBekijken(): bool {
+		return $this->magLijstBeheren() || LoginService::mag($this->getRechtenLijstBekijken());
+	}
+
+	public function magLijstBeheren(): bool {
+		return $this->getReeks()->magActiviteitenBeheren() || LoginService::mag($this->getRechtenLijstBeheren());
+	}
+
+	public function magAanmelden(): bool {
+		$nu = date_create_immutable();
+		return !$this->isGesloten()
+			&& $this->isAanmeldenMogelijk()
+			&& LoginService::mag($this->getRechtenAanmelden())
+			&& $nu >= $this->getStartAanmelden()
+			&& $nu < $this->getEindAanmelden();
+	}
+
+	public function magAfmelden(): bool {
+		$nu = date_create_immutable();
+		return !$this->isGesloten()
+			&& $this->isAfmeldenMogelijk()
+			&& $nu >= $this->getStartAanmelden()
+			&& $nu < $this->getEindAanmelden();
 	}
 }
