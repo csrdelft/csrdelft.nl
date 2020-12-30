@@ -159,7 +159,7 @@ class Activiteit extends ActiviteitEigenschappen {
 	}
 
 	public function getAanmeldenVanaf(): ?int {
-		return $this->getRawAanmeldenVanaf() ?: $this->getReeks()->getRawAanmeldenVanaf();;
+		return $this->getRawAanmeldenVanaf() ?: $this->getReeks()->getRawAanmeldenVanaf();
 	}
 
 	public function getAanmeldenTot(): ?int {
@@ -172,10 +172,6 @@ class Activiteit extends ActiviteitEigenschappen {
 
 	public function getAfmeldenTot(): ?int {
 		return $this->getRawAfmeldenTot() ?: $this->getReeks()->getRawAfmeldenTot();
-	}
-
-	public function getVoorwaarden(): array {
-		return $this->getRawVoorwaarden() ?: $this->getReeks()->getRawVoorwaarden();
 	}
 
 	// Tijden afmelden

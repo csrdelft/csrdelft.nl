@@ -68,11 +68,6 @@ abstract class ActiviteitEigenschappen {
      */
     private $afmeldenTot;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $voorwaarden = [];
-
     public function getRawTitel(): ?string {
 		return $this->titel;
 	}
@@ -189,16 +184,6 @@ abstract class ActiviteitEigenschappen {
 
 	public function setAfmeldenTot(?int $afmeldenTot): self {
 		$this->afmeldenTot = $afmeldenTot;
-
-		return $this;
-	}
-
-	public function getRawVoorwaarden(): ?array {
-		return $this->voorwaarden;
-	}
-
-	public function setVoorwaarden(?array $voorwaarden): self {
-		$this->voorwaarden = $voorwaarden;
 
 		return $this;
 	}
