@@ -225,21 +225,33 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this->getReeks()->magActiviteitenBeheren() || LoginService::mag($this->getRechtenLijstBeheren());
 	}
 
-	public function magAanmelden($aantal): bool {
+	public function magAanmelden(int $aantal, string &$reden = null): bool {
 		$nu = date_create_immutable();
-		return !$this->isGesloten()
-			&& $this->isAanmeldenMogelijk()
-			&& LoginService::mag($this->getRechtenAanmelden())
-			&& $nu >= $this->getStartAanmelden()
-			&& $nu < $this->getEindAanmelden()
-			&& $this->getResterendeCapaciteit() >= $aantal;
+		if ($this->isGesloten() || $nu < $this->getStartAanmelden() || $nu >= $this->getEindAanmelden()) {
+			$reden = 'activiteit is gesloten';
+		} elseif ($this->isAanmeldenMogelijk()) {
+			$reden = 'aanmelden niet toegestaan voor deze activiteit';
+		} elseif (LoginService::mag($this->getRechtenAanmelden())) {
+			$reden = 'geen rechten om aan te melden';
+		} elseif ($this->getResterendeCapaciteit() >= $aantal) {
+			$reden = 'activiteit is vol';
+		} else {
+			return true;
+		}
+
+		return false;
 	}
 
-	public function magAfmelden(): bool {
+	public function magAfmelden(string &$reden = null): bool {
 		$nu = date_create_immutable();
-		return !$this->isGesloten()
-			&& $this->isAfmeldenMogelijk()
-			&& $nu >= $this->getStartAanmelden()
-			&& $nu < $this->getEindAanmelden();
+		if ($this->isGesloten() || $nu < $this->getStartAanmelden() || $nu >= $this->getEindAfmelden()) {
+			$reden = 'activiteit is gesloten';
+		} elseif ($this->isAfmeldenMogelijk()) {
+			$reden = 'afmelden niet toegestaan voor deze activiteit';
+		} else {
+			return true;
+		}
+
+		return false;
 	}
 }

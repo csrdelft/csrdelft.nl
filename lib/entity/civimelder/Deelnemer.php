@@ -42,6 +42,13 @@ class Deelnemer {
 	 */
 	private $aangemeld;
 
+	public function __construct(Activiteit $activiteit, Profiel $lid, int $aantal) {
+		$this->activiteit = $activiteit;
+		$this->lid = $lid;
+		$this->aantal = $aantal;
+		$this->aangemeld = date_create_immutable();
+	}
+
 	public function getId(): ?int {
 		return $this->id;
 	}
