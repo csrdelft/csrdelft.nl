@@ -3,6 +3,7 @@
 namespace CsrDelft\repository\civimelder;
 
 use CsrDelft\entity\civimelder\Activiteit;
+use CsrDelft\entity\profiel\Profiel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -33,5 +34,13 @@ class ActiviteitRepository extends ServiceEntityRepository {
 		} catch (NonUniqueResultException $e) {
 			return 0;
 		}
+	}
+
+	public function aanmelden(Activiteit $activiteit): void {
+
+	}
+
+	public function lidAangemeld(Activiteit $activiteit, Profiel $lid): bool {
+
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\civimelder;
 
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\civimelder\DeelnemerRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,6 +24,13 @@ class Deelnemer {
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $activiteit;
+
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $lid;
 
 	/**
 	 * @ORM\Column(type="integer")
@@ -66,5 +74,15 @@ class Deelnemer {
 		$this->aangemeld = $aangemeld;
 
 		return $this;
+	}
+
+	public function setLid(Profiel $lid): Deelnemer {
+		$this->lid = $lid;
+
+		return $this;
+	}
+
+	public function getLid(): Profiel {
+		return $this->lid;
 	}
 }
