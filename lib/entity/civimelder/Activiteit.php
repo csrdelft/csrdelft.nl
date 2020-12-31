@@ -4,6 +4,7 @@ namespace CsrDelft\entity\civimelder;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\civimelder\ActiviteitRepository;
+use CsrDelft\repository\civimelder\DeelnemerRepository;
 use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTimeImmutable;
@@ -196,8 +197,8 @@ class Activiteit extends ActiviteitEigenschappen {
 
 	// Aanmeldingen
 	public function getAantalAanmeldingen(): int {
-		$activiteitRepository = ContainerFacade::getContainer()->get(ActiviteitRepository::class);
-		return $activiteitRepository->getAantalAanmeldingenByActiviteit($this);
+		$deelnemerRepository = ContainerFacade::getContainer()->get(DeelnemerRepository::class);
+		return $deelnemerRepository->getAantalAanmeldingen($this);
 	}
 
 	public function getResterendeCapaciteit(): int {
@@ -206,7 +207,10 @@ class Activiteit extends ActiviteitEigenschappen {
 
 	// Rechten
 	public function magBekijken(): bool {
-		return $this->magLijstBekijken() || LoginService::mag($this->getRechtenAanmelden());
+		return $this->magLijstBekijken()
+			|| LoginService::mag($this->getRechtenAanmelden())
+			|| ContainerFacade::getContainer()->get(DeelnemerRepository::class)
+						->isAangemeld($this, LoginService::getProfiel());
 	}
 
 	public function magAanpassen(): bool {
