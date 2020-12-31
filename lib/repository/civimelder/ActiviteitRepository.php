@@ -4,6 +4,8 @@ namespace CsrDelft\repository\civimelder;
 
 use CsrDelft\entity\civimelder\Activiteit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,5 +17,21 @@ use Doctrine\Persistence\ManagerRegistry;
 class ActiviteitRepository extends ServiceEntityRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Activiteit::class);
+	}
+
+	public function getAantalAanmeldingenByActiviteit(Activiteit $activiteit): int {
+		$q = $this->createQueryBuilder('a')
+        ->select('SUM(a.aantal)')
+        ->where('a.activiteit = :activiteit')
+        ->setParameter('activiteit', $activiteit)
+        ->getQuery();
+
+		try {
+			return $q->getSingleScalarResult();
+		} catch (NoResultException $e) {
+			return 0;
+		} catch (NonUniqueResultException $e) {
+			return 0;
+		}
 	}
 }

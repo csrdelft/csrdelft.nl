@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\civimelder;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\repository\civimelder\ActiviteitRepository;
 use CsrDelft\service\security\LoginService;
 use DateInterval;
@@ -193,7 +194,25 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this->getTijdVoor($this->getAfmeldenTot());
 	}
 
+	// Aanmeldingen
+	public function getAantalAanmeldingen(): int {
+		$activiteitRepository = ContainerFacade::getContainer()->get(ActiviteitRepository::class);
+		return $activiteitRepository->getAantalAanmeldingenByActiviteit($this);
+	}
+
+	public function getResterendeCapaciteit(): int {
+		return max($this->getCapaciteit() - $this->getAantalAanmeldingen(), 0);
+	}
+
 	// Rechten
+	public function magBekijken(): bool {
+		return $this->magLijstBekijken() || LoginService::mag($this->getRechtenAanmelden());
+	}
+
+	public function magAanpassen(): bool {
+		return $this->getReeks()->magActiviteitenBeheren();
+	}
+
 	public function magLijstBekijken(): bool {
 		return $this->magLijstBeheren() || LoginService::mag($this->getRechtenLijstBekijken());
 	}
@@ -202,13 +221,14 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this->getReeks()->magActiviteitenBeheren() || LoginService::mag($this->getRechtenLijstBeheren());
 	}
 
-	public function magAanmelden(): bool {
+	public function magAanmelden($aantal): bool {
 		$nu = date_create_immutable();
 		return !$this->isGesloten()
 			&& $this->isAanmeldenMogelijk()
 			&& LoginService::mag($this->getRechtenAanmelden())
 			&& $nu >= $this->getStartAanmelden()
-			&& $nu < $this->getEindAanmelden();
+			&& $nu < $this->getEindAanmelden()
+			&& $this->getResterendeCapaciteit() >= $aantal;
 	}
 
 	public function magAfmelden(): bool {
