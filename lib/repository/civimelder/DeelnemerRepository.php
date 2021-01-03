@@ -51,30 +51,35 @@ class DeelnemerRepository extends ServiceEntityRepository {
 	 * @param Activiteit $activiteit
 	 * @param Profiel $lid
 	 * @param int $aantal
+	 * @return Deelnemer
 	 * @throws ORMException
 	 */
-	public function aanmelden(Activiteit $activiteit, Profiel $lid, int $aantal): void {
+	public function aanmelden(Activiteit $activiteit, Profiel $lid, int $aantal): Deelnemer {
 		$reden = '';
 		if (!$activiteit->magAanmelden($aantal, $reden)) {
 			throw new CsrGebruikerException("Aanmelden mislukt: {$reden}.");
+		} elseif ($this->isAangemeld($activiteit, $lid)) {
+			throw new CsrGebruikerException("Aanmelden mislukt: al aangemeld.");
+		} elseif ($aantal < 1) {
+			throw new CsrGebruikerException("Aanmelden mislukt: aantal moet minimaal 1 zijn.");
 		}
 
 		$deelnemer = new Deelnemer($activiteit, $lid, $aantal);
 
 		$this->getEntityManager()->persist($deelnemer);
 		$this->getEntityManager()->flush();
+		return $deelnemer;
 	}
 
 	/**
 	 * @param Activiteit $activiteit
 	 * @param Profiel $lid
-	 * @param int $aantal
 	 * @throws ORMException
 	 */
-	public function afmelden(Activiteit $activiteit, Profiel $lid, int $aantal): void {
+	public function afmelden(Activiteit $activiteit, Profiel $lid): void {
 		$reden = '';
 		if (!$this->isAangemeld($activiteit, $lid)) {
-			throw new CsrGebruikerException("Afmelden mislukt: je bent niet aangemeld.");
+			throw new CsrGebruikerException("Afmelden mislukt: niet aangemeld.");
 		} elseif (!$activiteit->magAfmelden($reden)) {
 			throw new CsrGebruikerException("Afmelden mislukt: {$reden}.");
 		}
@@ -92,7 +97,9 @@ class DeelnemerRepository extends ServiceEntityRepository {
 	 */
 	public function aantalAanpassen(Activiteit $activiteit, Profiel $lid, int $aantal): void {
 		if (!$this->isAangemeld($activiteit, $lid)) {
-			throw new CsrGebruikerException("Afmelden mislukt: je bent niet aangemeld.");
+			throw new CsrGebruikerException("Gasten aanpassen mislukt: niet aangemeld.");
+		} elseif ($aantal < 1) {
+			throw new CsrGebruikerException("Aanmelden mislukt: aantal moet minimaal 1 zijn.");
 		}
 
 		$deelnemer = $this->getDeelnemer($activiteit, $lid);
@@ -100,11 +107,11 @@ class DeelnemerRepository extends ServiceEntityRepository {
 		if ($deelnemer->getAantal() > $aantal) {
 			$extra = $aantal - $deelnemer->getAantal();
 			if (!$activiteit->magAanmelden($extra, $reden)) {
-				throw new CsrGebruikerException("Aanmelden mislukt: {$reden}.");
+				throw new CsrGebruikerException("Gasten aanpassen mislukt: {$reden}.");
 			}
 		} elseif ($deelnemer->getAantal() < $aantal) {
 			if (!$activiteit->magAfmelden($reden)) {
-				throw new CsrGebruikerException("Afmelden mislukt: {$reden}.");
+				throw new CsrGebruikerException("Gasten aanpassen mislukt: {$reden}.");
 			}
 		} else {
 			return;

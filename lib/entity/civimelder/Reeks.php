@@ -92,6 +92,10 @@ class Reeks extends ActiviteitEigenschappen {
 	}
 
 	public function magActiviteitenBeheren(): bool {
-		return LoginService::mag($this->getRechtenAanmaken());
+		return $this->magAanmaken() || LoginService::mag($this->getRechtenAanmaken());
+	}
+
+	public function magAanmaken(): bool {
+		return LoginService::mag(P_ADMIN);
 	}
 }
