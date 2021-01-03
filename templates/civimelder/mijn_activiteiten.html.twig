@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}Mijn activiteiten{% endblock %}
+
+{% block content %}
+	<H3>
+		Mijn activiteiten
+	</H3>
+	<p>
+		Op deze pagina ziet u een overzicht van de activiteiten waar u bij staat ingeketzt en waar u bij bent geweest.
+	</p>
+
+	Aankomende activiteiten
+	<table id="civimelder-tabel" class="civimelder-tabel">
+		<thead>
+		<tr>
+			<th>Wanneer</th>
+			<th>Omschrijving</th>
+			<th>Aanwezigen (Limiet)</th>
+			<th style="width: 140px;">Aangemeld</th>
+			<th>Gasten</th>
+			<th title="Gasten allergie/diëet" style="width: 25px;">{{ icon("comment") }}</th>
+		</tr>
+		</thead>
+		<tbody>
+{#		{% for mid, maaltijd in maaltijden %}#}
+{#			{{ include('maaltijden/maaltijd/mijn_maaltijd_lijst.html.twig', {maaltijd: maaltijd, standaardprijs: standaardprijs, aanmelding: aanmeldingen[mid]}) }}#}
+{#		{% endfor %}#}
+		</tbody>
+	</table>
+
+{% endblock %}
