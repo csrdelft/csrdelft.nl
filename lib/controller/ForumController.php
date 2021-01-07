@@ -792,7 +792,7 @@ class ForumController extends AbstractController {
 			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
 		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
-		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
+		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_UNSAFE_RAW));
 		$this->forumPostsRepository->bewerkForumPost($tekst, $reden, $post);
 		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($post->draad, $post->laatst_gewijzigd);
 		return $this->render('forum/partial/post_lijst.html.twig', ['post' => $post]);
