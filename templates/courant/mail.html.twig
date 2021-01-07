@@ -16,12 +16,12 @@
 
       img {
         border: none;
-        -ms-interpolation-mode: bicubic;
+        /*-ms-interpolation-mode: bicubic;*/
         max-width: 100%;
       }
 
       body {
-        background-color: #e8e8e8;
+        background-color: #fafafa;
         font-family: sans-serif;
         -webkit-font-smoothing: antialiased;
         font-size: 14px;
@@ -48,7 +48,6 @@
       ------------------------------------- */
 
       .body {
-        background-color: #e8e8e8;
         width: 100%;
       }
 
@@ -75,8 +74,9 @@
           HEADER, FOOTER, MAIN
       ------------------------------------- */
       .main {
-        border-radius: 3px;
+        border-radius: 5px;
         width: 100%;
+        background-color: #e8e8e8;
       }
 
       .wrapper {
@@ -94,14 +94,6 @@
         margin-top: 10px;
         text-align: center;
         width: 100%;
-      }
-        .footer td,
-        .footer p,
-        .footer span,
-        .footer a {
-          color: #999999;
-          font-size: 12px;
-          text-align: center;
       }
 
       /* -------------------------------------
@@ -121,9 +113,14 @@
         font-weight: bold;
       }
 
+      h3 {
+        text-align: center;
+      }
+
       h1 {
-        font-size: 45px;
+        font-size: 40px;
         font-weight: 300;
+        margin-bottom: 0px!important;
         text-align: center;
         text-transform: uppercase;
         color: #000;
@@ -238,32 +235,6 @@
 
       /* extra ccs */
 
-      .backslash{
-          width: 100%;
-          margin: auto;
-          margin-top: 5%;
-          margin-bottom: 5%;
-          transform: rotate(5deg);
-        }
-
-      .forwardslash{ width: 100%;
-          margin: auto;
-          margin-top: 5%;
-          margin-bottom: 5%;
-          transform:
-          rotate(-5deg);
-        }
-
-      .slashLiBo {
-          margin: 10px;
-          padding: 30px 30px 20px 30px;
-      }
-
-      .slashLiOn {
-          margin: 10px;
-          padding: 10px 30px 10px 30px;
-      }
-
       hr {
           height: 5px;
           background: #e59200;
@@ -272,34 +243,8 @@
         }
 
       u {
-          text-decoration: none;
-          border-bottom: 3px solid #e59200;
-      }
-
-      .grijs-donkerblauwLiOn {
-				height: 70px;
-				background: linear-gradient(-5deg, #11273a 47%,#e59200 48%,#e59200 52%,#e8e8e8 53%);
-			}
-
-      .donker-mediumLiBo {
-        background-image: -webkit-linear-gradient(85deg, #043763 50%, #11273a 50%);
-      }
-
-      .medium-lichtLiOn {
-        background-image: -webkit-linear-gradient(95deg, #4e698b 50%, #043763 50%);
-      }
-
-      .licht-donkerLiBo {
-          background-image: -webkit-linear-gradient(85deg, #11273a 50%, #4e698b 50%);
-      }
-
-      .donker-lichtLiOn {
-        background-image: -webkit-linear-gradient(95deg, #4e698b 50%, #11273a 50%);
-      }
-
-
-      .licht-mediumLiBo {
-        background-image: -webkit-linear-gradient(85deg, #043763 50%, #4e698b 50%);
+        text-decoration: none;
+        border-bottom: 3px solid #e59200;
       }
 
       .inhoudKop {
@@ -322,11 +267,24 @@
         color: white;
       }
 
-      .liLink{
+      .liLink {
         list-style: none;
         text-align: center;
         color: white;
         padding: 5px;
+      }
+
+      .box {
+        padding: 25px;
+      }
+
+      .table {
+         margin-bottom: 10px;
+         border-radius: 5px;
+      }
+
+      #id {
+        padding: 20px;
       }
 
     </style>
@@ -345,28 +303,20 @@
 
                   <!-- LOGO en TITEL -->
                   <table border="0" cellpadding="0" cellspacing="0" style="background: #e8e8e8">
-                    <tr style="height: 200px">
-                      <td id="logo" class="inhoud-lb">
-                        <img class="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/C.S.R._Delft_Logo.svg/190px-C.S.R._Delft_Logo.svg.png" style="width:150px;" />
+                    <tr style="height: 100px">
+                      <td id="logo" class="inhoud-lb" style="padding: 20px 20px 30px 40px">
+                        <img class="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/C.S.R._Delft_Logo.svg/190px-C.S.R._Delft_Logo.svg.png" style="width:100px;" />
                       </td>
-                      <td style="text-align: center; vertical-align: middle;">
-                        <h1>De courant  </h1>
-                      </td>
-                    </tr>
-                  </table>
-
-                  <table border="0" cellpadding="0" cellspacing="0">
-                    <tr >
-                      <td class="grijs-donkerblauwLiOn">
-                        <div class="forwardslash">
-{#                          <hr>#}
-                        </div>
+                      <td style="text-align: center; vertical-align: middle; padding-right:20px;">
+                        <hr>
+                          <h1>De courant</h1>
+                        <hr>
                       </td>
                     </tr>
                   </table>
 
                   <!-- INHOUD -->
-                  <table border="0" cellpadding="0" cellspacing="0" style="background: #11273a">
+                  <table border="0" cellpadding="0" cellspacing="0" class="table" style="background: #11273a;">
                   <tr>
                   {% for categorie,catName in catNames %}
                     {% if categorie != 'voorwoord' and categorie != 'sponsor' %}
@@ -388,80 +338,43 @@
                   {% endfor %}
                   </tr>
                   </table>
-
-                  <table  border="0" cellpadding="0" cellspacing="0">
-                    <tr >
-                      <td class="donker-mediumLiBo">
-                        <div class="backslash">
-{#                          <hr>#}
-                        </div>
-                      </td>
-                    </tr>
-                  </table>
-
+                  
                   <!--
-
                   //Berichten generator//
-
-                  middelblauw -> lichtblauw  /
-                  lichtblauw  -> donkerblauw \
-                  donkerblauw -> lichtblauw  /
-                  lichtblauw  -> middelblauw \
-
                   donker: #11273a
                   medium: #043763
                   licht:  #4e698b
                   -->
 
                   {% for bericht in berichten %}
-                    {% if loop.index % 2 == 0 %}
-                      {% set slashmargin = 'slashLiBo' %}
-                      {% set slashbgdirection = 'backslash' %}
-                    {% else %}
-                      {% set slashmargin = 'slashLiOn' %}
-                      {% set slashbgdirection = 'forwardslash' %}
-                    {% endif %}
-
                     {% if loop.index % 4 == 1 %}
                       {% set bgcolor = '#043763' %}
-                      {% set slashbgcolor = 'medium-lichtLiOn' %}
                     {% elseif loop.index % 4 == 2 %}
                       {% set bgcolor = '#4e698b' %}
-                      {% set slashbgcolor = 'licht-donkerLiBo' %}
                     {% elseif loop.index % 4 == 3 %}
                       {% set bgcolor = '#11273a' %}
-                      {% set slashbgcolor = 'donker-lichtLiOn' %}
                     {% else %}
                       {% set bgcolor = '#4e698b' %}
-                      {% set slashbgcolor = 'licht-mediumLiBo' %}
                     {% endif %}
 
                     {% if loop.last == 0 %}
-                        <table border="0" cellpadding="0" cellspacing="0" style="background-color: {{bgcolor}}">
-                          <td class="{{slashmargin}}">
-                            <h3><u><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</u></h3>
-                            <p>
-                              {{ bericht.bericht | bbcode("mail") }}
-                            </p>
-                          </td>
-                        </table>
-
-                        <table border="0" cellpadding="0" cellspacing="0">
-                          <tr >
-                            <td class="{{slashbgcolor}}">
-                              <div class="{{slashbgdirection}}">
-{#                                <hr>#}
-                              </div>
+                        <table border="0" cellpadding="0" cellspacing="0" class="table" style="background-color: {{bgcolor}}">
+                          <tr>
+                            <td class="box">
+                              <h3><u><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</u></h3>
+                              <p>
+                                {{ bericht.bericht | bbcode("mail") }}
+                              </p>
                             </td>
                           </tr>
                         </table>
                     {% else %}
-                        <table border="0" cellpadding="0" cellspacing="0" style="background-color: {{bgcolor}}">
-                            <tr>
-                                <td class="{{slashmargin}}">
-                                   {{ instelling('courant', 'sponsor') | bbcode("mail") }}
-                                </td>
-                            </tr>
+                        <table border="0" cellpadding="0" cellspacing="0" class="table" style='width: 100%;'>
+                          <tr>
+                            <td>
+                              <img style='position: relative; width: 100%; border-radius: 5px' src="Projectkwadraat.jpg">
+                            </td>
+                          </tr>
                         </table>
                     {% endif %}
                   {% endfor %}
