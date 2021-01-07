@@ -249,7 +249,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 				];
 			}
 		}
-		return new JsonResponse($result);
+		return new JsonResponse(array_values($result));
 	}
 
 	/**
