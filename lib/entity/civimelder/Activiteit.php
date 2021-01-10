@@ -208,7 +208,7 @@ class Activiteit extends ActiviteitEigenschappen {
 	public function magBekijken(): bool {
 		return $this->magLijstBekijken()
 			|| LoginService::mag($this->getRechtenAanmelden())
-			|| $this->deelnemerRepository()->isAangemeld($this, LoginService::getProfiel());
+			|| $this->isAangemeld();
 	}
 
 	public function magAanpassen(): bool {
@@ -260,9 +260,14 @@ class Activiteit extends ActiviteitEigenschappen {
 
 		return false;
 	}
+
 	public function isInToekomst(): bool {
 		$nu = date_create_immutable();
 		return $nu < $this->getStart();
+	}
+
+	public function isAangemeld(): bool {
+		return $this->deelnemerRepository()->isAangemeld($this, LoginService::getProfiel());
 	}
 
 	private function deelnemerRepository(): DeelnemerRepository {
