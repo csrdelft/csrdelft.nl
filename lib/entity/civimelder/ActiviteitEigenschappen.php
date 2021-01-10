@@ -9,66 +9,66 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class ActiviteitEigenschappen {
 	/**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $titel;
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private $titel;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $beschrijving;
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	private $beschrijving;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $capaciteit;
+	/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	private $capaciteit;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $rechtenAanmelden;
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private $rechtenAanmelden;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $rechtenLijstBekijken;
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private $rechtenLijstBekijken;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $rechtenLijstBeheren;
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private $rechtenLijstBeheren;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $maxGasten;
+	/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	private $maxGasten;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $aanmeldenMogelijk;
+	/**
+	 * @ORM\Column(type="boolean", nullable=true)
+	 */
+	private $aanmeldenMogelijk;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $aanmeldenVanaf;
+	/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	private $aanmeldenVanaf;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $aanmeldenTot;
+	/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	private $aanmeldenTot;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $afmeldenMogelijk;
+	/**
+	 * @ORM\Column(type="boolean", nullable=true)
+	 */
+	private $afmeldenMogelijk;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $afmeldenTot;
+	/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	private $afmeldenTot;
 
-    public function getRawTitel(): ?string {
+	public function getRawTitel(): ?string {
 		return $this->titel;
 	}
 

@@ -73,7 +73,7 @@ class DataTable implements View, FormElement, ToResponse {
 	private $columns = array();
 	private $groupByColumn;
 
-	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
+	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null, $includeAllColumns = true) {
 		$this->model = new $orm();
 		$this->titel = $titel;
 
@@ -92,34 +92,36 @@ class DataTable implements View, FormElement, ToResponse {
 			'defaultContent' => ''
 		);
 
-		if (is_a($orm, CustomDataTableEntry::class, true)) {
-			foreach ($orm::getFieldNames() as $attribute) {
-				$this->addColumn($attribute);
-			}
-
-			foreach ($orm::getIdentifierFieldNames() as $attribute) {
-				$this->hideColumn($attribute);
-			}
-		} else {
-			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
-			/** @var ClassMetadata $metadata */
-			$metadata = $manager->getClassMetaData($orm);
-
-			// generate columns from entity attributes
-			foreach ($metadata->getFieldNames() as $attribute) {
-				$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
-				if ($type instanceof DateTimeImmutableType) {
-					$this->addColumn($attribute, null, null, CellRender::DateTime());
-				} elseif ($type instanceof BooleanType) {
-					$this->addColumn($attribute, null, null, CellRender::Check());
-				} else {
+		if ($includeAllColumns) {
+			if (is_a($orm, CustomDataTableEntry::class, true)) {
+				foreach ($orm::getFieldNames() as $attribute) {
 					$this->addColumn($attribute);
 				}
-			}
 
-			// hide primary key columns
-			foreach ($metadata->getIdentifierFieldNames() as $attribute) {
-				$this->hideColumn($attribute);
+				foreach ($orm::getIdentifierFieldNames() as $attribute) {
+					$this->hideColumn($attribute);
+				}
+			} else {
+				$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
+				/** @var ClassMetadata $metadata */
+				$metadata = $manager->getClassMetaData($orm);
+
+				// generate columns from entity attributes
+				foreach ($metadata->getFieldNames() as $attribute) {
+					$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
+					if ($type instanceof DateTimeImmutableType) {
+						$this->addColumn($attribute, null, null, CellRender::DateTime());
+					} elseif ($type instanceof BooleanType) {
+						$this->addColumn($attribute, null, null, CellRender::Check());
+					} else {
+						$this->addColumn($attribute);
+					}
+				}
+
+				// hide primary key columns
+				foreach ($metadata->getIdentifierFieldNames() as $attribute) {
+					$this->hideColumn($attribute);
+				}
 			}
 		}
 	}
