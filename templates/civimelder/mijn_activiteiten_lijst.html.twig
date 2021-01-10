@@ -1,23 +1,32 @@
-<tr id="maaltijd-row-{{ activiteit.getId }}">
-
-	<td>
-		<div class="Wanneer">
-			{{ activiteit.getStart() | datetime_format_long }} {{ activiteit.getStart() | time_format }}
-		</div>
-	</td>
+<tr id="civimelder-row-{{ activiteit.getId }}">
 	<td>
 		<div class="Activiteit">
 			{{ activiteit.getTitel() }}
 		</div>
 	</td>
 	<td>
+		<div class="Van">
+			{{ activiteit.getStart() | datetime_format_long }} {{ activiteit.getStart() | time_format }}
+		</div>
+	</td>
+	<td>
+		<div class="Tot">
+			{{ activiteit.getEinde() | datetime_format_long }} {{ activiteit.getEinde() | time_format }}
+		</div>
+	</td>
+	<td>
 		<div class="Aanwezigen (limiet)">
-			{#{{ activiteit.getAantalAanmeldingen() }} #} ({{ activiteit.getMaxGasten() }})
+			{#{{ activiteit.getAantalAanmeldingen() }} #} ({{ activiteit.getCapaciteit() }})
 		</div>
 	</td>
 	<td>
 		<div class="Aangemeld">
 			Aangemeld / Afgemeld
+		</div>
+	</td>
+	<td>
+		<div class="Gasten">
+			0
 		</div>
 	</td>
 </tr>

@@ -4,25 +4,23 @@
 
 {% block content %}
 	<H3>
-		Mijn activiteiten
+		{{ reeks.rawTitel}}
 	</H3>
 	<p>
-		Op deze pagina ziet u een overzicht van de activiteiten waar u bij staat ingeketzt en waar u bij bent geweest.
+		{{ reeks.rawBeschrijving }}
 	</p>
-
-	{# For elke reeks #}
-
-	{# Titel Reeks #}
-	{# Omschrijving Reeks #}
-
-	Aankomende activiteiten
+	<p>
+		Hieronder ziet u een overzicht van aankomende activiteiten waar u zich voor in heeft geketzt of in kan ketzen.
+	</p>
 	<table id="civimelder-tabel" class="civimelder-tabel">
 		<thead>
 		<tr>
-			<th>Wanneer</th>
 			<th>Activiteit</th>
+			<th>Begintijd</th>
+			<th>Eindtijd</th>
 			<th>Aanwezigen (Limiet)</th>
 			<th>Aangemeld</th>
+			<th>Gasten</th>
 		</tr>
 		</thead>
 		<tbody>

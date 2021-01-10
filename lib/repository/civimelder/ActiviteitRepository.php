@@ -3,7 +3,7 @@
 namespace CsrDelft\repository\civimelder;
 
 use CsrDelft\entity\civimelder\Activiteit;
-use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\civimelder\Reeks;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,15 +23,21 @@ class ActiviteitRepository extends ServiceEntityRepository {
 	 *
 	 * @return Activiteit[]
 	 */
-	public function getKomendeActiviteiten() {
+	public function getKomendeActiviteiten(Reeks $reeks) {
+		$reeks_id = $reeks->getId();
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->createQueryBuilder('a')
+//		$activiteiten = $this->createQueryBuilder('a')
 		//	->where('a.start >= :van_datum and a.start <= :tot_datum')
 		//	->setParameter('van_datum', date_create(instelling('civimelder_activiteit', 'aanmelden_vanaf')))		// Laat zien vanaf: gisteren
 		//	->setParameter('tot_datum', date_create(instelling('civimelder_activiteit', 'eind'))) // laat zien tot: 'eind'
-			->orderBy('a.start', 'ASC')
-			->addOrderBy('a.start', 'ASC')
-			->getQuery()->getResult();
+//			->setParameter('cur_reeks_id', $reeks_id)
+//			->where('a.reeks = :cur_reeks_id')
+//			->orderBy('a.start', 'ASC')
+//			->addOrderBy('a.start', 'ASC')
+//			->getQuery()->getResult();
+		$activiteiten = $reeks->getActiviteiten()->filter(function(Activiteit $activiteit){
+			return $activiteit->magBekijken() && $activiteit->isInToekomst();
+		});
 		return $activiteiten;
 	}
 }

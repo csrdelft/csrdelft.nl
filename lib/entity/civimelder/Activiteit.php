@@ -260,6 +260,10 @@ class Activiteit extends ActiviteitEigenschappen {
 
 		return false;
 	}
+	public function isInToekomst(): bool {
+		$nu = date_create_immutable();
+		return $nu < $this->getStart();
+	}
 
 	private function deelnemerRepository(): DeelnemerRepository {
 		return ContainerFacade::getContainer()->get(DeelnemerRepository::class);

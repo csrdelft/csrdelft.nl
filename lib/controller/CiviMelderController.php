@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\civimelder\Activiteit;
+use CsrDelft\entity\civimelder\Reeks;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\ORM\ORMException;
@@ -21,10 +22,6 @@ class CiviMelderController extends AbstractController {
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
-//	/**
-//	 * @var DeelnemerRepository
-//	 */
-//	private $deelnemerRepository;
 	/**
 	 * @var ActiviteitRepository
 	 */
@@ -35,26 +32,25 @@ class CiviMelderController extends AbstractController {
 	private $reeksRepository;
 
 	public function __construct(ProfielRepository $profielRepository,
-//															DeelnemerRepository $deelnemerRepository,
 															ActiviteitRepository $activiteitRepository,
 															ReeksRepository $reeksRepository)
 	{
 		$this->profielRepository = $profielRepository;
-//		$this->deelnemerRepository = $deelnemerRepository;
 		$this->activiteitRepository = $activiteitRepository;
 		$this->reeksRepository = $reeksRepository;
 	}
 
 	/**
+	 * @param Reeks $reeks
 	 * @return Response
-	 * @Route("/civimelder", methods={"GET"})
+	 * @Route("/civimelder/{reeks}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function mijnActiviteiten() {
-//		return new Response("Test 123 ");
-		$alleActiviteiten = $this->activiteitRepository->getKomendeActiviteiten();
+	public function mijnActiviteiten(Reeks $reeks) {
+		$alleActiviteiten = $this->activiteitRepository->getKomendeActiviteiten($reeks);
 		return $this->render('civimelder/mijn_activiteiten.html.twig', [
-			'activiteiten' => $alleActiviteiten
+			'reeks' => $reeks
+			, 'activiteiten' => $alleActiviteiten
 		]);
 	}
 

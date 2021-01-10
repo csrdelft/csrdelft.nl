@@ -32,6 +32,7 @@ class Reeks extends ActiviteitEigenschappen {
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Activiteit::class, mappedBy="reeks", orphanRemoval=true)
+	 * @ORM\OrderBy({"start" = "ASC", "einde" = "ASC"})
 	 */
 	private $activiteiten;
 
