@@ -197,8 +197,7 @@ class Activiteit extends ActiviteitEigenschappen {
 
 	// Aanmeldingen
 	public function getAantalAanmeldingen(): int {
-		$deelnemerRepository = ContainerFacade::getContainer()->get(DeelnemerRepository::class);
-		return $deelnemerRepository->getAantalAanmeldingen($this);
+		return $this->deelnemerRepository()->getAantalAanmeldingen($this);
 	}
 
 	public function getResterendeCapaciteit(): int {
@@ -209,8 +208,7 @@ class Activiteit extends ActiviteitEigenschappen {
 	public function magBekijken(): bool {
 		return $this->magLijstBekijken()
 			|| LoginService::mag($this->getRechtenAanmelden())
-			|| ContainerFacade::getContainer()->get(DeelnemerRepository::class)
-						->isAangemeld($this, LoginService::getProfiel());
+			|| $this->deelnemerRepository()->isAangemeld($this, LoginService::getProfiel());
 	}
 
 	public function magAanpassen(): bool {
@@ -226,6 +224,10 @@ class Activiteit extends ActiviteitEigenschappen {
 	}
 
 	public function magAanmelden(int $aantal, string &$reden = null): bool {
+		if ($this->magLijstBeheren()) {
+			return true;
+		}
+
 		$nu = date_create_immutable();
 		if ($this->isGesloten() || $nu < $this->getStartAanmelden() || $nu >= $this->getEindAanmelden()) {
 			$reden = 'activiteit is gesloten';
@@ -243,6 +245,10 @@ class Activiteit extends ActiviteitEigenschappen {
 	}
 
 	public function magAfmelden(string &$reden = null): bool {
+		if ($this->magLijstBeheren()) {
+			return true;
+		}
+
 		$nu = date_create_immutable();
 		if ($this->isGesloten() || $nu < $this->getStartAanmelden() || $nu >= $this->getEindAfmelden()) {
 			$reden = 'activiteit is gesloten';
@@ -253,5 +259,9 @@ class Activiteit extends ActiviteitEigenschappen {
 		}
 
 		return false;
+	}
+
+	private function deelnemerRepository(): DeelnemerRepository {
+		return ContainerFacade::getContainer()->get(DeelnemerRepository::class);
 	}
 }
