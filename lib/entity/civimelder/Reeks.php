@@ -2,26 +2,30 @@
 
 namespace CsrDelft\entity\civimelder;
 
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\repository\civimelder\ReeksRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=ReeksRepository::class)
  * @ORM\Table(name="civimelder_reeks")
  */
-class Reeks extends ActiviteitEigenschappen {
+class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Serializer\Groups({"datatable"})
 	 */
 	private $id;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Serializer\Groups({"datatable"})
 	 */
 	private $naam;
 
@@ -98,5 +102,14 @@ class Reeks extends ActiviteitEigenschappen {
 
 	public function magAanmaken(): bool {
 		return LoginService::mag(P_ADMIN);
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("detailSource")
+	 */
+	public function getDetailSource() {
+		return '/civimelder/reeks/' . $this->id;
 	}
 }

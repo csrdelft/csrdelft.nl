@@ -4,7 +4,7 @@ namespace CsrDelft\repository\civimelder;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\civimelder\Activiteit;
-use CsrDelft\Entity\civimelder\Deelnemer;
+use CsrDelft\entity\civimelder\Deelnemer;
 use CsrDelft\entity\profiel\Profiel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
