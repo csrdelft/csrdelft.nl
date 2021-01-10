@@ -21,10 +21,10 @@ class CiviMelderController extends AbstractController {
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
-//	/**
-//	 * @var DeelnemerRepository
-//	 */
-//	private $deelnemerRepository;
+	/**
+	 * @var DeelnemerRepository
+	 */
+	private $deelnemerRepository;
 	/**
 	 * @var ActiviteitRepository
 	 */
@@ -35,12 +35,12 @@ class CiviMelderController extends AbstractController {
 	private $reeksRepository;
 
 	public function __construct(ProfielRepository $profielRepository,
-//															DeelnemerRepository $deelnemerRepository,
+															DeelnemerRepository $deelnemerRepository,
 															ActiviteitRepository $activiteitRepository,
 															ReeksRepository $reeksRepository)
 	{
 		$this->profielRepository = $profielRepository;
-//		$this->deelnemerRepository = $deelnemerRepository;
+		$this->deelnemerRepository = $deelnemerRepository;
 		$this->activiteitRepository = $activiteitRepository;
 		$this->reeksRepository = $reeksRepository;
 	}
