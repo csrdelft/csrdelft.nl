@@ -19,11 +19,20 @@
 			{{ activiteit.getAantalAanmeldingen() }}  ({{ activiteit.getCapaciteit() }})
 		</div>
 	</td>
-	<td>
-		<div class="Aangemeld">
-			Aangemeld / Afgemeld
-		</div>
-	</td>
+{#	Aangemeld #}
+	{%  if activiteit.isAangemeld() %}
+		<td class="maaltijd-aangemeld">
+			<a href="{{ url('csrdelft_civimelder_afmelden', {activiteit: activiteit.getId()}) }}"
+			 class="btn post maaltijd-aangemeld">
+			<input type="checkbox" checked="checked"/> Ja
+		</a>
+	{%  elseif not activiteit.isAangemeld()%}
+	<td class="maaltijd-afgemeld">
+		<a href="{{ url('csrdelft_civimelder_aanmelden', {activiteit: activiteit.getId()}) }}"
+			 class="btn post maaltijd-afgemeld">
+			<input type="checkbox"/> Nee
+		</a>
+	{% endif %}
 	<td>
 		<div class="Gasten">
 			0
