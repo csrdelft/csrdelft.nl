@@ -270,6 +270,10 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this->deelnemerRepository()->isAangemeld($this, LoginService::getProfiel());
 	}
 
+	public function aantalGasten(): bool {
+		return $this->deelnemerRepository()->getAantalGasten($this, LoginService::getProfiel());
+	}
+
 	private function deelnemerRepository(): DeelnemerRepository {
 		return ContainerFacade::getContainer()->get(DeelnemerRepository::class);
 	}

@@ -33,6 +33,7 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\view\bbcode\tag\BbBijbel;
 use CsrDelft\view\bbcode\tag\BbBoek;
 use CsrDelft\view\bbcode\tag\BbCitaat;
+use CsrDelft\view\bbcode\tag\BbCiviMelder;
 use CsrDelft\view\bbcode\tag\BbDocument;
 use CsrDelft\view\bbcode\tag\BbForum;
 use CsrDelft\view\bbcode\tag\BbForumPlaatje;
@@ -144,6 +145,7 @@ class CsrBB extends Parser {
 		BbWoonoord::class,
 		BbYoutube::class,
 		BbNovietVanDeDag::class,
+		BbCiviMelder::class,
 	];
 	/**
 	 * @var ContainerInterface

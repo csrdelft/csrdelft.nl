@@ -5,6 +5,7 @@ namespace CsrDelft\repository\civimelder;
 use CsrDelft\entity\civimelder\Activiteit;
 use CsrDelft\entity\civimelder\Reeks;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,15 +20,12 @@ class ActiviteitRepository extends ServiceEntityRepository {
 	}
 
 	/**
-	 * Haalt de maaltijden op die beschikbaar zijn voor aanmelding voor het lid in de ingestelde periode vooraf.
-	 *
-	 * @return Activiteit[]
+	 * @param Reeks $reeks
+	 * @return Collection|Activiteit[]
 	 */
 	public function getKomendeActiviteiten(Reeks $reeks) {
-		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $reeks->getActiviteiten()->filter(function(Activiteit $activiteit){
+		return $reeks->getActiviteiten()->filter(function(Activiteit $activiteit){
 			return $activiteit->magBekijken() && $activiteit->isInToekomst();
 		});
-		return $activiteiten;
 	}
 }

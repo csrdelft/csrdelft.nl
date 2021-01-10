@@ -43,6 +43,10 @@ class DeelnemerRepository extends ServiceEntityRepository {
 		return $this->getDeelnemer($activiteit, $profiel) !== null;
 	}
 
+	public function getAantalGasten(Activiteit $activiteit, Profiel $profiel): int {
+		return $this->getDeelnemer($activiteit, $profiel)->getAantal() - 1;
+	}
+
 	public function getDeelnemer(Activiteit $activiteit, Profiel $profiel): ?Deelnemer {
 		return $this->findOneBy(['activiteit' => $activiteit, 'lid' => $profiel]);
 	}
