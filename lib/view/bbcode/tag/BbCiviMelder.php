@@ -18,19 +18,19 @@ class BbCiviMelder extends BbTag {
 	/**
 	 * @var ReeksRepository
 	 */
-	private ReeksRepository $reeksRepository;
+	private $reeksRepository;
 	/**
 	 * @var ActiviteitRepository
 	 */
-	private ActiviteitRepository $activiteitRepository;
+	private $activiteitRepository;
 	/**
 	 * @var DeelnemerRepository
 	 */
-	private DeelnemerRepository $deelnemerRepository;
+	private $deelnemerRepository;
 	/**
 	 * @var Environment
 	 */
-	private Environment $twig;
+	private $twig;
 
 	public function __construct(ReeksRepository $reeksRepository,
 															ActiviteitRepository $activiteitRepository,
