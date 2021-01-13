@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\entity\CmsPagina;
+use CsrDelft\Kernel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaType;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -47,15 +49,27 @@ class CmsPaginaController extends AbstractController {
 	 * @Route("/pagina/{naam}")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function bekijken($naam, $subnaam = "") {
+	public function bekijken(Request $request, $naam, $subnaam = "") {
 		$paginaNaam = $naam;
 		if ($subnaam) {
 			$paginaNaam = $subnaam;
 		}
+
+		$locale = $request->getLocale();
+		$defaultLocale = $request->getDefaultLocale();
+
+		$fallbackPaginaNaam = $paginaNaam;
+		if ($locale != $defaultLocale) {
+			$paginaNaam = $paginaNaam . "_" . $locale;
+		}
+
 		/** @var CmsPagina $pagina */
 		$pagina = $this->cmsPaginaRepository->find($paginaNaam);
 		if (!$pagina) { // 404
-			throw new NotFoundHttpException();
+			$pagina = $this->cmsPaginaRepository->find($fallbackPaginaNaam);
+			if (!$pagina) {
+				throw new NotFoundHttpException();
+			}
 		}
 		if (!$pagina->magBekijken()) { // 403
 			throw $this->createAccessDeniedException();
