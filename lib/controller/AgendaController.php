@@ -211,7 +211,7 @@ class AgendaController extends AbstractController {
 				$_POST = []; // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . date_format_intl($item->begin_moment, DATETIME_FORMAT) . ')', 1);
 				$item->item_id = null;
-				return new Response($this->createFormulier($item, 'toevoegen')->createModalView());
+				return new Response($this->createFormulier(AgendaItemForm::class, $item, ['actie' => 'toevoegen'])->createModalView());
 			} else {
 				return new JsonResponse(true);
 			}
