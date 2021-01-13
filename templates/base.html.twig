@@ -31,20 +31,19 @@
 		{{ css_asset('thema-donker', 'screen and (prefers-color-scheme: dark') }}
 	{% endif %}
 	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
 		APP_ENV = "{{ app.environment }}";
 		SENTRY_DSN_JS = "{{ sentry_dsn }}";
 		USER = "{{ app.user.uid }}";
 	</script>
 	{{ js_asset('sentry') }}
 	{{ js_asset('app') }}
-	{% block styles %}
-	{% endblock %}
-	{% block scripts %}
-	{% endblock %}
-	{% block head %}
-	{% endblock %}
+	{% block styles %}{% endblock %}
+	{% block scripts %}{% endblock %}
+	{% block head %}{% endblock %}
 </head>
-<body class="nav-is-fixed {{ lid_instelling('zijbalk', 'breedte') }} {% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
+<body
+	class="nav-is-fixed {{ lid_instelling('zijbalk', 'breedte') }} {% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
 {% block body %}
 	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
 	<main class="container my-3 py-3 flex-shrink-0">
@@ -67,77 +66,19 @@
 		</nav>
 		<div class="cd-page-content">
 			{{ getMelding() }}
-			{% block content %}
-			{% endblock %}
+			{% block content %}{% endblock %}
 		</div>
 	</main>
-	<footer class="footer mt-auto py-3">
-		<div class="container-fluid p-md-5">
-			<div class="row">
-				<div class="col-12 col-md-auto">
-					<img src="{{ absolute_url('/dist/images/beeldmerk.png') }}" width="80" class="d-block mb-2"
-							 alt="C.S.R. Logo"/>
-					<small class="d-block mb-3 text-muted">© 2006-{{ date().format('Y') }}</small>
-					{% if not app.debug and mag('P_ADMIN') %}
-						<small class="cd-block mb-3">
-							<a href="{{ commitLink() }}" target="_blank" class="not-external text-muted">{{ commitHash() }}</a>
-						</small>
-					{% endif %}
-				</div>
-				{% set menu = get_menu('main') %}
-				{% for item in menu.children %}
-					{% if item.magBekijken %}
-						<div class="col-6 col-md">
-							<h5>{{ item.tekst }}</h5>
-							<ul class="list-unstyled text-small">
-								{% for subItem in item.children %}
-									{% if subItem.magBekijken %}
-										<li><a class="text-muted" href="{{ subItem.link }}">{{ subItem.tekst | raw }}</a></li>
-									{% endif %}
-								{% endfor %}
-							</ul>
-						</div>
-					{% endif %}
-				{% endfor %}
-			</div>
-		</div>
-	</footer>
+	{% include 'menu/footer.html.twig' %}
 	<div id="modal-background" {% if block('modal') is defined %} style="display: block;" {% endif %}></div>
 	{% if block('modal') is defined %}
-	{{ block('modal') | raw }}
+		{{ block('modal') | raw }}
 	{% elseif not toestemming_gegeven() %}
-	{{ toestemming_form().toString | raw }}
+		{{ toestemming_form().toString | raw }}
 	{% else %}
-	<div id="modal" tabindex="-1"></div>
+		<div id="modal" tabindex="-1"></div>
 	{% endif %}
-	{% if lid_instelling('layout', 'minion') == 'ja' %}
-		{{ include('effect/minion.html.twig') }}
-	{% endif %}
-	{% if lid_instelling('layout', 'fx') == 'onontdekt' %}
-		{{ include('effect/onontdekt.html.twig') }}
-	{% elseif lid_instelling('layout', 'fx') == 'civisaldo' %}
-		{{ include('effect/civisaldo.html.twig') }}
-	{% elseif lid_instelling('layout', 'fx') == 'wolken' %}
-		{{ js_asset('fxclouds') }}
-	{% elseif lid_instelling('layout', 'fx') == 'sneeuw' %}
-		{{ js_asset('fxsneeuw') }}
-	{% elseif lid_instelling('layout', 'fx') == 'space' %}
-		{{ js_asset('fxspace') }}
-	{% endif %}
-	{% if lid_instelling('layout', 'trein') != 'nee' %}
-		{{ include('effect/trein.html.twig') }}
-	{% endif %}
-	{% if lid_instelling('layout', 'raket') != 'nee' %}
-		{{ include('effect/raket.html.twig') }}
-	{% endif %}
-	{% if lid_instelling('layout', 'assistent') != 'nee' %}
-<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css"/>
-	<script type="application/javascript">
-		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
-		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden') }}';
-	</script>
-	{{ js_asset('fxclippy') }}
-	{% endif %}
+	{% include 'effect/effecten.html.twig' %}
 {% endblock %}
 </body>
 </html>
