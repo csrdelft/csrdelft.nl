@@ -68,9 +68,9 @@
 		<nav id="login">
 			<a href="#_" class="overlay"></a>
 			<div class="inner">
-				<h2>{{ 'Inloggen'|trans }}</h2>
+				<h2>{% trans %}Inloggen{% endtrans %}</h2>
 				{{ login_form() }}
-				<a href="#_" class="close">{{ 'Sluiten'|trans }}</a>
+				<a href="#_" class="close">{% trans %}Sluiten{% endtrans %}</a>
 			</div>
 		</nav>
 	{% endblock %}
