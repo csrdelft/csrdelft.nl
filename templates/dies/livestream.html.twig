@@ -54,7 +54,7 @@
 	<div class="container">
 		<div class="video-container">
 			<div class="youtube-container closed">
-				<div class="embed-responsive embed-responsive-16by9" id="livestream-player"></div>
+				<div class="embed-responsive embed-responsive-16by9" id="livestream-player">Er is momenteel geen livestream beschikbaar</div>
 			</div>
 		</div>
 	</div>
@@ -62,9 +62,11 @@
 </body>
 
 <script type="text/javascript">
-	window.addEventListener('load', function () {
-		document.getElementById("livestream-player").innerHTML =
-			`<iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=12345" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
-	});
+	{% if instelling('dies', 'youtubekey') %}
+		window.addEventListener('load', function () {
+			document.getElementById("livestream-player").innerHTML =
+				`<iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel={{ instelling('dies', 'youtubekey') }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+		});
+	{% endif %}
 </script>
 </html>

@@ -152,6 +152,10 @@ nav {
   }
 }
 
+.bb-groep a {
+	color: $white;
+}
+
 @include media-breakpoint-down(md) {
   nav {
     .logo-titel {
