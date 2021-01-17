@@ -58,6 +58,13 @@ class PinTransactieDownloader
 	 */
 	private $entityManager;
 
+	/**
+	 * Boolean om SSL check uit te zetten
+	 * Gemaakt i.v.m. problemen met SSL van Payplaza.
+	 * @var bool
+	 */
+	public $disableSSL = false;
+
 	public function __construct(PinTransactieRepository $pinTransactieRepository, EntityManagerInterface $entityManager) {
 		$this->pinTransactieRepository = $pinTransactieRepository;
 		$this->entityManager = $entityManager;
@@ -70,13 +77,13 @@ class PinTransactieDownloader
 			self::POST_FIELD_LOGIN_USERNAME => $username,
 			self::POST_FIELD_LOGIN_PASSWORD => $password,
 		];
-		$result = static::postPage(url2absolute($baseUrl, self::RELATIVE_URL_LOGIN), $postFields, null, true);
+		$result = $this->postPage(url2absolute($baseUrl, self::RELATIVE_URL_LOGIN), $postFields, null, true);
 
 		//2. Parse session cookie from response
 		$sessionCookie = static::parseSessionCookie($result);
 
 		//3. GET report overview
-		$result = static::getPage(url2absolute($baseUrl, self::RELATIVE_URL_REPORT), $sessionCookie);
+		$result = $this->getPage(url2absolute($baseUrl, self::RELATIVE_URL_REPORT), $sessionCookie);
 
 		//4. Retrieve Merchant Transactions Url #article-content .report a[title=Merchant transactions]@href
 		$xml = new DOMDocument();
@@ -85,7 +92,7 @@ class PinTransactieDownloader
 		$merchantTransactionsUrl = $xpath->query('//a[@title = "Merchant transactions"]/@href')->item(0)->nodeValue;
 
 		//5. GET Merchant Transactions Url
-		$result = static::getPage(url2absolute($baseUrl, $merchantTransactionsUrl), $sessionCookie);
+		$result = $this->getPage(url2absolute($baseUrl, $merchantTransactionsUrl), $sessionCookie);
 
 		//6. Retrieve Search Url: Only form tag -> action
 		preg_match('/action="(.*?)"/', $result, $searchMatches);
@@ -100,7 +107,7 @@ class PinTransactieDownloader
 			self::POST_FIELD_NUM_ROWS => 2,
 			self::POST_FIELD_STORE => $store,
 		];
-		$result = self::postPage(url2absolute($baseUrl, $searchUrl), $postFields, $sessionCookie);
+		$result = $this->postPage(url2absolute($baseUrl, $searchUrl), $postFields, $sessionCookie);
 
 		//8. Parse html and create PinTransactie
 		$xml = new DOMDocument();
@@ -155,16 +162,28 @@ class PinTransactieDownloader
 	}
 
 	/**
+	 * Zet SSL verify uit indien disableSSL aan staat
+	 * @param resource $ch
+	 */
+	function disableSSLCheck($ch) {
+		if ($this->disableSSL) {
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		}
+	}
+
+	/**
 	 * @param string $url
 	 * @param string $sessionCookie
 	 * @return string
 	 */
-	public static function getPage($url, $sessionCookie): string
+	public function getPage($url, $sessionCookie): string
 	{
 		$curl_handle = curl_init();
 		curl_setopt($curl_handle, CURLOPT_URL, $url);
 		curl_setopt($curl_handle, CURLOPT_COOKIE, $sessionCookie);
 		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+		$this->disableSSLCheck($curl_handle);
 		return curl_exec($curl_handle);
 	}
 
@@ -175,7 +194,7 @@ class PinTransactieDownloader
 	 * @param bool $returnHeader
 	 * @return string
 	 */
-	public static function postPage($url, $postFields, $sessionCookie, $returnHeader = false): string
+	public function postPage($url, $postFields, $sessionCookie, $returnHeader = false): string
 	{
 		$curl_handle = curl_init();
 		curl_setopt($curl_handle, CURLOPT_URL, $url);
@@ -185,6 +204,7 @@ class PinTransactieDownloader
 		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($curl_handle, CURLOPT_HEADER, $returnHeader);
+		$this->disableSSLCheck($curl_handle);
 		return curl_exec($curl_handle);
 	}
 }
