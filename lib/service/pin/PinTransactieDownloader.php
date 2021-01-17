@@ -165,7 +165,7 @@ class PinTransactieDownloader
 	 * Zet SSL verify uit indien disableSSL aan staat
 	 * @param resource $ch
 	 */
-	function disableSSLCheck($ch) {
+	private function disableSSLCheck($ch) {
 		if ($this->disableSSL) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -177,7 +177,7 @@ class PinTransactieDownloader
 	 * @param string $sessionCookie
 	 * @return string
 	 */
-	public function getPage($url, $sessionCookie): string
+	private function getPage($url, $sessionCookie): string
 	{
 		$curl_handle = curl_init();
 		curl_setopt($curl_handle, CURLOPT_URL, $url);
@@ -194,7 +194,7 @@ class PinTransactieDownloader
 	 * @param bool $returnHeader
 	 * @return string
 	 */
-	public function postPage($url, $postFields, $sessionCookie, $returnHeader = false): string
+	private function postPage($url, $postFields, $sessionCookie, $returnHeader = false): string
 	{
 		$curl_handle = curl_init();
 		curl_setopt($curl_handle, CURLOPT_URL, $url);
