@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor de 59e dies der Civitas Studiosorum Reformatorum onder het thema Gateway of India.">
+	<meta name="author" content="Gerben Oolbekkink">
+
+	<title>Gateway of India - Dies 2021</title>
+
+	{{ csrfMetaTag() }}
+
+	{{ js_asset('app') }}
+	{{ css_asset('thema-dies') }}
+	{{ css_asset('common') }}
+	{{ css_asset('dies') }}
+
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+
+	<link rel="icon" href="/dies/2021/favicon.ico">
+</head>
+
+<body class="zijbalk_verborgen">
+<a id="home"></a>
+<nav class="site-header">
+	<div class="container">
+		<a class="logo-titel d-inline-block" href="#">
+			<img src="/images/dies/logo-menu.png"
+					 srcset="/images/dies/logo-menu.png 320w, /images/dies/logo-menu-2x.png 1000w"
+					 alt="Logo menu" />
+		</a>
+		<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">
+			<a class="d-none d-md-inline-block" href="/gateway-of-india/#home">Home</a>
+			<a class="d-none d-md-inline-block" href="/gateway-of-india/#filmpje">Themafilmpje</a>
+			<a class="d-none d-md-inline-block" href="/gateway-of-india/#programma">Programma</a>
+			<!-- <a class="d-none d-md-inline-block" href="/gateway-of-india/#commissie">Commissie</a> -->
+			<a class="d-none d-md-inline-block" href="/gateway-of-india/ketzers">Ketzers</a>
+			<a class="d-none d-md-inline-block" href="/gateway-of-india/livestream">Livestream</a>
+		</div>
+	</div>
+</nav>
+
+<section class="ketzers">
+	<a class="anchor" id="ketzers"></a>
+	<h2>Ketzers</h2>
+	<div class="container">
+			{{ '[activiteit=2142]'|bbcode }}
+			{{ '[activiteit=2149]'|bbcode }}
+			{{ '[activiteit=2143]'|bbcode }}
+			{{ '[activiteit=2144]'|bbcode }}
+			{{ '[activiteit=2145]'|bbcode }}
+			{{ '[activiteit=2146]'|bbcode }}
+			{{ '[activiteit=2150]'|bbcode }}
+			{{ '[activiteit=2147]'|bbcode }}
+			{{ '[activiteit=2148]'|bbcode }}
+			{{ '[activiteit=2152]'|bbcode }}
+	</div>
+</section>
+</body>
+</html>
