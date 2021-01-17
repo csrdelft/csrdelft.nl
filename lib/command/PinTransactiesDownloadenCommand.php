@@ -13,6 +13,7 @@ use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Twig\Environment;
@@ -69,8 +70,8 @@ class PinTransactiesDownloadenCommand extends Command {
 		$this
 			->setDescription('Download pintransacties van aangegeven periode en probeer te matchen met bestellingen.')
 			->addArgument('vanaf', InputArgument::OPTIONAL, 'Vanaf welke datum wil je downloaden (jjjj-mm-dd)')
-			->addArgument('tot', InputArgument::OPTIONAL, 'T/m welke datum wil je downloaden (jjjj-mm-dd)');
-
+			->addArgument('tot', InputArgument::OPTIONAL, 'T/m welke datum wil je downloaden (jjjj-mm-dd)')
+			->addOption('disableSSL', null, InputOption::VALUE_NONE, 'Zet SSL validatie bij ophalen pintransacties uit - handmatig gebruik i.v.m. problemen Payplaza');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -91,6 +92,11 @@ class PinTransactiesDownloadenCommand extends Command {
 			if ($vanaf > $tot) {
 				$output->writeln("Tot datum ligt voor vanaf datum");
 				return 1;
+			}
+
+			if ($input->getOption('disableSSL') === true) {
+				$output->writeln("SSL is uitgeschakeld!");
+				$this->pinTransactieDownloader->disableSSL = true;
 			}
 
 			$helper = $this->getHelper('question');
