@@ -66,6 +66,8 @@ SQL
 
 	public function down(Schema $schema): void
 	{
+		$this->addSql('SET FOREIGN_KEY_CHECKS = 0;');
 		$this->addSql('DELETE FROM menus WHERE link LIKE \'/en/%\' AND rechten_bekijken = \'P_PUBLIC\'');
+		$this->addSql('SET FOREIGN_KEY_CHECKS = 1;');
 	}
 }
