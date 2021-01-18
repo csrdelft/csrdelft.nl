@@ -33,13 +33,11 @@
 						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
 						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
 						uithalen.</source>
-        <target>__De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
-						Delft, rijk aan tradities die zijn ontstaan in haar %leeftijd%-jarig bestaan. Het is een
-						breed gezelschap
-						van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
-						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
-						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
-						uithalen.</target>
+        <target> Civitas Studiosorum Reformatorum is a vibrant, enthusiastic christian student association in Delft,
+        rich in traditions that have developed over the past %leeftijd% years.
+        We are counting 275 members coming from all kinds of church congregations, united in christian faith. C.S.R. is a community
+         in which friendships are made, personal intellectual and spiritual development is encouraged and where we enjoy the fun of a good student prank.
+        </target>
       </trans-unit>
       <trans-unit id="pj.QOKC" resname="Lees meer over C.S.R.">
         <source>Lees meer over C.S.R.</source>
@@ -52,12 +50,11 @@
       <trans-unit id="AiTuF4c" resname="Wil je zien hoe&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'">
         <source>Wil je zien hoe
 										de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</source>
-        <target>__Wil je zien hoe
-										de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'</target>
+        <target>Do you want to see what our student association is like? Watch the short video series 'Delft: studies is only a part of student life!'</target>
       </trans-unit>
       <trans-unit id="wMJ25_y" resname="Bekijk en volg ook ons Instagram account voor meer van onze vereniging!">
         <source>Bekijk en volg ook ons Instagram account voor meer van onze vereniging!</source>
-        <target>__Bekijk en volg ook ons Instagram account voor meer van onze vereniging!</target>
+        <target>Follow us on our Instagram account to see more of our association!</target>
       </trans-unit>
       <trans-unit id="1mtQLfN" resname="&lt;p&gt;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De OWee gaat er anders uitzien, voor meer informatie zie de &lt;a href=&quot;https://owee.nl&quot;&gt;OWee&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;website&lt;/a&gt;.&lt;br&gt;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Maar wij willen je wel vast digitaal een beetje van C.S.R. laten zien.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;We willen jou daar goede handvaten voor geven. De belangrijkste informatie wordt gedeeld via deze website&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;dus kijk even rond.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Wil je meer weten? Kijk op ons &lt;a href=&quot;https://www.youtube.com/user/CivitasFilms&quot;&gt;YouTube kanaal&lt;/a&gt;,&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;onze &lt;a href=&quot;https://www.instagram.com/csrdelft&quot;&gt;Instagram pagina&lt;/a&gt; en de &lt;a&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;href=&quot;https://www.owee.nl&quot;&gt; OWee &lt;/a&gt; website.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&lt;/p&gt;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&lt;p&gt;We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.&lt;/p&gt;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&lt;p&gt;Liefs,&lt;br&gt;OWeeCie en PromoCie&lt;/p&gt;">
         <source>&lt;p&gt;
@@ -73,21 +70,19 @@
 						&lt;p&gt;We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.&lt;/p&gt;
 						&lt;p&gt;Liefs,&lt;br&gt;OWeeCie en PromoCie&lt;/p&gt;</source>
         <target><![CDATA[__<p>
-							De OWee gaat er anders uitzien, voor meer informatie zie de <a href="https://owee.nl">OWee
-								website</a>.<br>
-							Maar wij willen je wel vast digitaal een beetje van C.S.R. laten zien.
-							We willen jou daar goede handvaten voor geven. De belangrijkste informatie wordt gedeeld via deze website
-							dus kijk even rond.
-							Wil je meer weten? Kijk op ons <a href="https://www.youtube.com/user/CivitasFilms">YouTube kanaal</a>,
-							onze <a href="https://www.instagram.com/csrdelft">Instagram pagina</a> en de <a
-								href="https://www.owee.nl"> OWee </a> website.
+							This year the OWee (opening week) will not take place in the same fashion as usual. For more information and the latest updates please refer to the
+							Owee website <a href="https://owee.nl">OWee
+								website</a>.<br>.
+							Still, we want to show you already online what C.S.R. is. The most important information will be shared on this website, so please
+							take a look. For more information, check out our social media channels: <a href="https://www.youtube.com/user/CivitasFilms">YouTube channel</a>,
+							<a href="https://www.instagram.com/csrdelft">Instagram</a> and  <ahref="https://www.owee.nl"> OWee </a> website.
 						</p>
-						<p>We hopen je snel te kunnen spreken, digitaal of op anderhalve meter.</p>
-						<p>Liefs,<br>OWeeCie en PromoCie</p>]]></target>
+						<p> We hope to meet you soon, either online or at 1,5 m distance. </p>
+						<p>Warm regards,<br>OWeeCie and PromoCie</p>]]></target>
       </trans-unit>
       <trans-unit id="_tFekif" resname="C.S.R. in de OWee">
         <source>C.S.R. in de OWee</source>
-        <target>__C.S.R. in de OWee</target>
+        <target>__C.S.R. and the OWee</target>
       </trans-unit>
       <trans-unit id="SK7m38T" resname="Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,&#10;&#9;&#9;&#9;&#9;&#9;&#9;studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al&#10;&#9;&#9;&#9;&#9;&#9;&#9;deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Ook C.S.R. doet mee aan deze gezellige week. Van 14 t/m 16 augustus zijn wij online te zien en van&#10;&#9;&#9;&#9;&#9;&#9;&#9;17 t/m 22 augustus heb je de gelegenheid om fysiek de sfeer van C.S.R. en Delft te proeven!">
         <source>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
@@ -96,16 +91,16 @@
 						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
 						Ook C.S.R. doet mee aan deze gezellige week. Van 14 t/m 16 augustus zijn wij online te zien en van
 						17 t/m 22 augustus heb je de gelegenheid om fysiek de sfeer van C.S.R. en Delft te proeven!</source>
-        <target>__Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
-						Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
-						studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
-						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
-						Ook C.S.R. doet mee aan deze gezellige week. Van 14 t/m 16 augustus zijn wij online te zien en van
-						17 t/m 22 augustus heb je de gelegenheid om fysiek de sfeer van C.S.R. en Delft te proeven!</target>
+        <target> OWee is short for ‘OntvangstWeek’, which translates as ‘Opening Week’. During this week, you will get to know a great deal about the student city of Delft.
+        You will find out about the various student associations, go on a tour of the city, visit special places on the campus,
+        and there will surely be some unforgettable parties. The perfect start to your life as a student in Delft!
+        C.S.R. will also be present during this week. Between August 14 - 16 you can see us online and between August 17 - 22 you can
+        come visit and see C.S.R. in real life.
+        </target>
       </trans-unit>
       <trans-unit id="WXbGaaE" resname="Interesse/vragen">
         <source>Interesse/vragen</source>
-        <target>__Interesse/vragen</target>
+        <target>Get to know C.S.R./ Questions</target>
       </trans-unit>
       <trans-unit id="jUUQQ.H" resname="Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid&#10;&#9;&#9;&#9;&#9;&#9;&#9;om onze sociëteit Confide aan de Oude Delft 9 te bezoeken. Buiten de OWee om kan jij ook gewoon&#10;&#9;&#9;&#9;&#9;&#9;&#9;al jouw vragen aan ons stellen.&#10;&#10;&#9;&#9;&#9;&#9;&#9;&#9;Ben jij bijvoorbeeld geinteresseerd om een C.S.R. activiteit bij te wonen of een C.S.R. huis te bezoeken?&#10;&#9;&#9;&#9;&#9;&#9;&#9;Laat dat dan aan ons weten en kom erachter wat er allemaal mogelijk is.">
         <source>Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid
@@ -114,16 +109,15 @@
 
 						Ben jij bijvoorbeeld geinteresseerd om een C.S.R. activiteit bij te wonen of een C.S.R. huis te bezoeken?
 						Laat dat dan aan ons weten en kom erachter wat er allemaal mogelijk is.</source>
-        <target>__Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid
-						om onze sociëteit Confide aan de Oude Delft 9 te bezoeken. Buiten de OWee om kan jij ook gewoon
-						al jouw vragen aan ons stellen.
-
-						Ben jij bijvoorbeeld geinteresseerd om een C.S.R. activiteit bij te wonen of een C.S.R. huis te bezoeken?
-						Laat dat dan aan ons weten en kom erachter wat er allemaal mogelijk is.</target>
+        <target> Of course there will be many opportunities to talk to us during the Owee. In addition, you can also visit our
+        own building called Confide, located at Oude Delft 9. Throughout the entire year you can always ask us any question you may have.
+         Would you like to join a C.S.R. activity, visit a C.S.R. student house or attend any of the other possibilities to discover what C.S.R. is like?
+         Please let us know and we will get in touch.
+        </target>
       </trans-unit>
       <trans-unit id="DZuTr7f" resname="Laat je interesse weten!">
         <source>Laat je interesse weten!</source>
-        <target>__Laat je interesse weten!</target>
+        <target>Let us know you are interested!</target>
       </trans-unit>
       <trans-unit id="vLigd3J" resname="Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;%lidworden%&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek">
         <source>Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).
@@ -131,11 +125,9 @@
 						opgenomen.
 						Doe dit door &lt;a href="%lidworden%"&gt;hier&lt;/a&gt; te
 						klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek</source>
-        <target><![CDATA[__Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).
-						Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
-						opgenomen.
-						Doe dit door <a href="%lidworden%">hier</a> te
-						klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek]]></target>
+        <target><![CDATA[Do you want to become a member? Registration is open during the Owee (August 17 -22). It is also possible
+        to register in advance so that we can get in contact with you right when the OWee starts. Join us by clicking  <a href="%lidworden%">here</a>.
+        Make sure to reserve the week of August 24-30 for the introduction week of C.S.R. ]]></target>
       </trans-unit>
       <trans-unit id="zEMOsJp" resname="Meer informatie over lid worden">
         <source>Meer informatie over lid worden</source>
@@ -143,7 +135,7 @@
       </trans-unit>
       <trans-unit id="arGwqOE" resname="Like onze foto's op Instagram en volg de laatste posts">
         <source>Like onze foto's op Instagram en volg de laatste posts</source>
-        <target>__Like onze foto's op Instagram en volg de laatste posts</target>
+        <target>Like us on Instagram and check out the latest posts</target>
       </trans-unit>
     </body>
   </file>
