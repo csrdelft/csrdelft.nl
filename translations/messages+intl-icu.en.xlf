@@ -137,6 +137,38 @@
         <source>Like onze foto's op Instagram en volg de laatste posts</source>
         <target>Like us on Instagram and check out the latest posts</target>
       </trans-unit>
+      <trans-unit id="ejF63GG" resname="Account aanvragen">
+        <source>Account aanvragen</source>
+        <target>Request account</target>
+      </trans-unit>
+      <trans-unit id="XeKy_KG" resname="Wachtwoord vergeten?">
+        <source>Wachtwoord vergeten?</source>
+        <target>Forgot password?</target>
+      </trans-unit>
+      <trans-unit id="nwpRdki" resname="Gebruiker '%username%' niet gevonden.">
+        <source>Gebruiker '%username%' niet gevonden.</source>
+        <target>User '%username%' not found.</target>
+      </trans-unit>
+      <trans-unit id="4_ZbLM." resname="Onjuist wachtwoord.">
+        <source>Onjuist wachtwoord.</source>
+        <target>Wrong password.</target>
+      </trans-unit>
+      <trans-unit id="1HsZ1Nx" resname="Er was een fout.">
+        <source>Er was een fout.</source>
+        <target>There was an error.</target>
+      </trans-unit>
+      <trans-unit id="44GkCgt" resname="Lidnummer of emailadres">
+        <source>Lidnummer of emailadres</source>
+        <target>Member id or emailaddress</target>
+      </trans-unit>
+      <trans-unit id="mivKO4K" resname="Wachtwoord">
+        <source>Wachtwoord</source>
+        <target>Password</target>
+      </trans-unit>
+      <trans-unit id="MhhxDgi" resname="Blijf ingelogd">
+        <source>Blijf ingelogd</source>
+        <target>Remember me</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

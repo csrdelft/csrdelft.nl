@@ -4,6 +4,7 @@
 namespace CsrDelft\Twig\Extension;
 
 
+use CsrDelft\Component\Formulier\FormulierFactory;
 use CsrDelft\entity\MenuItem;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\formulier\InstantSearchForm;
@@ -28,12 +29,17 @@ class LayoutTwigExtension extends AbstractExtension
 	 * @var RequestStack
 	 */
 	private $requestStack;
+	/**
+	 * @var FormulierFactory
+	 */
+	private $formulierFactory;
 
-	public function __construct(RequestStack $requestStack, Zijbalk $zijbalk, MenuItemRepository $menuItemRepository)
+	public function __construct(RequestStack $requestStack, Zijbalk $zijbalk, MenuItemRepository $menuItemRepository, FormulierFactory $formulierFactory)
 	{
 		$this->zijbalk = $zijbalk;
 		$this->menuItemRepository = $menuItemRepository;
 		$this->requestStack = $requestStack;
+		$this->formulierFactory = $formulierFactory;
 	}
 
 	public function getFunctions()
@@ -91,7 +97,7 @@ class LayoutTwigExtension extends AbstractExtension
 
 	public function login_form()
 	{
-		return (new LoginForm())->toString();
+		return $this->formulierFactory->create(LoginForm::class, null, [])->createView()->toString();
 	}
 
 	public function icon($key, $hover = null, $title = null, $class = null, $content = null)
