@@ -10,9 +10,11 @@ Zie ook de documentatie van [`symfony/translation`](https://symfony.com/doc/curr
 In templates kunnen stukken tekst op twee verschillende manieren vertaald worden. Met `{% raw %}{% trans %}{% endraw %}` blokken en met de `trans` filter.
 
 ```html
-<p>{% raw %}{% trans %}Deze tekst wordt vertaald{% endtrans %}{% endraw %}</p>
+{% raw %}
+<p>{% trans %}Deze tekst wordt vertaald{% endtrans %}</p>
 
 <p>{{ 'Deze tekst wordt vertaald'|trans }}</p>
+{% endraw %}
 ```
 
 ### Vertalingen in code
@@ -46,8 +48,10 @@ Dit zorgt ervoor dat het bestand `translations/messages+intl-icu.en.xlf` wordt g
 Het is ook mogelijk om variabelen te gebruiken in vertalingen, bijvoorbeeld als er een woord is dat op basis van een variabele gezet wordt. Op deze manier heb je geen twee losse vertaling strings nodig
 
 ```html
-<p>{% raw %}{% trans with {'naam': get_naam()} %}Hallo, {naam}{% endtrans %}{% endraw %}</p>
+{% raw %}
+<p>{% trans with {'naam': get_naam()} %}Hallo, {naam}{% endtrans %}</p>
 <p>{{ 'Hallo, {naam}'|trans({'naam': get_naam()}) }}</p>
+{% endraw %}
 ```
 
 ```php
