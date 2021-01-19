@@ -25,7 +25,7 @@
         <source>C.S.R. Delft</source>
         <target>C.S.R. Delft</target>
       </trans-unit>
-      <trans-unit id="iXRdDVv" resname="De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in&#10;&#9;&#9;&#9;&#9;&#9;&#9;Delft, rijk aan tradities die zijn ontstaan in haar {leeftijd}-jarig bestaan. Het is een&#10;&#9;&#9;&#9;&#9;&#9;&#9;breed gezelschap&#10;&#9;&#9;&#9;&#9;&#9;&#9;van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke&#10;&#9;&#9;&#9;&#9;&#9;&#9;eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede&#10;&#9;&#9;&#9;&#9;&#9;&#9;vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen&#10;&#9;&#9;&#9;&#9;&#9;&#9;uithalen.">
+      <trans-unit id="mxshV.p" resname="De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in&#10;&#9;&#9;&#9;&#9;&#9;&#9;Delft, rijk aan tradities die zijn ontstaan in haar {leeftijd}-jarig bestaan. Het is een&#10;&#9;&#9;&#9;&#9;&#9;&#9;breed gezelschap&#10;&#9;&#9;&#9;&#9;&#9;&#9;van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke&#10;&#9;&#9;&#9;&#9;&#9;&#9;eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede&#10;&#9;&#9;&#9;&#9;&#9;&#9;vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen&#10;&#9;&#9;&#9;&#9;&#9;&#9;uithalen.">
         <source>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
 						Delft, rijk aan tradities die zijn ontstaan in haar {leeftijd}-jarig bestaan. Het is een
 						breed gezelschap
@@ -119,7 +119,7 @@
         <source>Laat je interesse weten!</source>
         <target>Let us know you are interested!</target>
       </trans-unit>
-      <trans-unit id="vLigd3J" resname="Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;{lidworden}&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek">
+      <trans-unit id="aAhhU_4" resname="Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;{lidworden}&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek">
         <source>Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).
 						Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
 						opgenomen.
@@ -168,6 +168,162 @@
       <trans-unit id="MhhxDgi" resname="Blijf ingelogd">
         <source>Blijf ingelogd</source>
         <target>Remember me</target>
+      </trans-unit>
+      <trans-unit id="ErfzN0b" resname="Word lid van C.S.R.">
+        <source>Word lid van C.S.R.</source>
+        <target>Become a member of C.S.R.</target>
+      </trans-unit>
+      <trans-unit id="02iv3m2" resname="C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging&#10;&#9;&#9;&#9;&#9;&#9;&#9;betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die&#10;&#9;&#9;&#9;&#9;&#9;&#9;de vereniging biedt. Het betekent dat je je geloof blijft voeden en je kan verdiepen met kringen,&#10;&#9;&#9;&#9;&#9;&#9;&#9;bidgroepjes en zangavonden. Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven&#10;&#9;&#9;&#9;&#9;&#9;&#9;lang niet gaat vergeten!">
+        <source>C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging
+						betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die
+						de vereniging biedt. Het betekent dat je je geloof blijft voeden en je kan verdiepen met kringen,
+						bidgroepjes en zangavonden. Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven
+						lang niet gaat vergeten!</source>
+        <target>__C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging
+						betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die
+						de vereniging biedt. Het betekent dat je je geloof blijft voeden en je kan verdiepen met kringen,
+						bidgroepjes en zangavonden. Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven
+						lang niet gaat vergeten!</target>
+      </trans-unit>
+      <trans-unit id="6scUwPz" resname="Ik wil lid worden">
+        <source>Ik wil lid worden</source>
+        <target>I want to become a member</target>
+      </trans-unit>
+      <trans-unit id="595YROK" resname="Eerst een lid spreken">
+        <source>Eerst een lid spreken</source>
+        <target>I want to talk to a member</target>
+      </trans-unit>
+      <trans-unit id="Yn.nBrx" resname="Geloof">
+        <source>Geloof</source>
+        <target>Faith</target>
+      </trans-unit>
+      <trans-unit id="NANbaVC" resname="Vorming">
+        <source>Vorming</source>
+        <target>Personal development</target>
+      </trans-unit>
+      <trans-unit id="J0GSm0S" resname="Gezelligheid">
+        <source>Gezelligheid</source>
+        <target>Leisure</target>
+      </trans-unit>
+      <trans-unit id="mghd2FT" resname="Sport">
+        <source>Sport</source>
+        <target>Sport</target>
+      </trans-unit>
+      <trans-unit id="BbwT2Km" resname="Ontspanning">
+        <source>Ontspanning</source>
+        <target>Leisure</target>
+      </trans-unit>
+      <trans-unit id="bpEHMo3" resname="Societeit">
+        <source>Societeit</source>
+        <target>Building</target>
+      </trans-unit>
+      <trans-unit id="ZegUxCl" resname="Soci&amp;euml;teit">
+        <source>Soci&amp;euml;teit</source>
+        <target>Building</target>
+      </trans-unit>
+      <trans-unit id="ASLN45t" resname="C.S.R. op YouTube">
+        <source>C.S.R. op YouTube</source>
+        <target>C.S.R. on YouTube</target>
+      </trans-unit>
+      <trans-unit id="mSHQWvT" resname="Bekijk meer op YouTube">
+        <source>Bekijk meer op YouTube</source>
+        <target>Watch more on YouTube</target>
+      </trans-unit>
+      <trans-unit id="5s3mhpF" resname="Interesse in C.S.R.?">
+        <source>Interesse in C.S.R.?</source>
+        <target>Interested in C.S.R.?</target>
+      </trans-unit>
+      <trans-unit id="EuC0Bfa" resname="Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met&#10;&#9;&#9;&#9;&#9;&#9;&#9;nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan&#10;&#9;&#9;&#9;&#9;&#9;&#9;je hieronder ook je gegevens achterlaten voor je voorinschrijving.">
+        <source>Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met
+						nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan
+						je hieronder ook je gegevens achterlaten voor je voorinschrijving.</source>
+        <target>__Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met
+						nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan
+						je hieronder ook je gegevens achterlaten voor je voorinschrijving.</target>
+      </trans-unit>
+      <trans-unit id="cxgi4eS" resname="&lt;span class=&quot;d-none d-sm-inline&quot;&gt;Ik wil &lt;/span&gt;lid worden">
+        <source>&lt;span class="d-none d-sm-inline"&gt;Ik wil &lt;/span&gt;lid worden</source>
+        <target><![CDATA[<span class="d-none d-sm-inline">I want to </span>become a member]]></target>
+      </trans-unit>
+      <trans-unit id="2qDlSv4" resname="&lt;span class=&quot;d-none d-sm-inline&quot;&gt;Eerst een &lt;/span&gt;lid spreken">
+        <source>&lt;span class="d-none d-sm-inline"&gt;Eerst een &lt;/span&gt;lid spreken</source>
+        <target><![CDATA[<span class="d-none d-sm-inline">I want to </span>talk to a member]]></target>
+      </trans-unit>
+      <trans-unit id="c7SEUCJ" resname="De inschrijvingen voor het collegejaar 2020-2021 zijn helaas gesloten. Wil je volgend&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;collegejaar lid worden? Vul dan onderstaand formulier in en we nemen z.s.m. contact met je op.">
+        <source>De inschrijvingen voor het collegejaar 2020-2021 zijn helaas gesloten. Wil je volgend
+								collegejaar lid worden? Vul dan onderstaand formulier in en we nemen z.s.m. contact met je op.</source>
+        <target>__De inschrijvingen voor het collegejaar 2020-2021 zijn helaas gesloten. Wil je volgend
+								collegejaar lid worden? Vul dan onderstaand formulier in en we nemen z.s.m. contact met je op.</target>
+      </trans-unit>
+      <trans-unit id="mAc5Nrs" resname="Wil je meer weten over de vereniging? Een gesprek met een lid kan helpen, je kan al&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;je vragen kwijt en erachter komen of de vereniging bij jou past. Laat je gegevens hier achter, we zullen&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;dan zo snel mogelijk contact met je opnemen!">
+        <source>Wil je meer weten over de vereniging? Een gesprek met een lid kan helpen, je kan al
+								je vragen kwijt en erachter komen of de vereniging bij jou past. Laat je gegevens hier achter, we zullen
+								dan zo snel mogelijk contact met je opnemen!</source>
+        <target>__Wil je meer weten over de vereniging? Een gesprek met een lid kan helpen, je kan al
+								je vragen kwijt en erachter komen of de vereniging bij jou past. Laat je gegevens hier achter, we zullen
+								dan zo snel mogelijk contact met je opnemen!</target>
+      </trans-unit>
+      <trans-unit id="7VcyeyO" resname="Je naam">
+        <source>Je naam</source>
+        <target>Your name</target>
+      </trans-unit>
+      <trans-unit id="lt2gO1p" resname="Je e-mailadres">
+        <source>Je e-mailadres</source>
+        <target>Your email address</target>
+      </trans-unit>
+      <trans-unit id="BWCLTXJ" resname="Je mobiele telefoonnummer">
+        <source>Je mobiele telefoonnummer</source>
+        <target>Your mobile phone number</target>
+      </trans-unit>
+      <trans-unit id="7FB9ZBb" resname="Met het verzenden van dit formulier ga je akkoord met de &lt;a&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;href=&quot;/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf&quot;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;target=&quot;_blank&quot;&gt;privacyverklaring van C.S.R. Delft&lt;/a&gt;.">
+        <source>Met het verzenden van dit formulier ga je akkoord met de &lt;a
+										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
+										target="_blank"&gt;privacyverklaring van C.S.R. Delft&lt;/a&gt;.</source>
+        <target><![CDATA[By submitting this form you agree with the <a
+										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
+										target="_blank">privacy statement of C.S.R. Delft</a>.]]></target>
+      </trans-unit>
+      <trans-unit id="j0a0Tv3" resname="Novitaatsweek">
+        <source>Novitaatsweek</source>
+        <target>__Novitaatsweek</target>
+      </trans-unit>
+      <trans-unit id="kkgSXxj" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;(ook wel de kennismakingstijd, afgekort KMT). Deze tijd zal plaatsvinden&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;na de OWee, in deze week zal je elkaar,&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de vereniging en haar leden leren kennen. De activiteiten die tijdens&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
+        <source>Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek
+							(ook wel de kennismakingstijd, afgekort KMT). Deze tijd zal plaatsvinden
+							na de OWee, in deze week zal je elkaar,
+							de vereniging en haar leden leren kennen. De activiteiten die tijdens
+							de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</source>
+        <target>__Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek
+							(ook wel de kennismakingstijd, afgekort KMT). Deze tijd zal plaatsvinden
+							na de OWee, in deze week zal je elkaar,
+							de vereniging en haar leden leren kennen. De activiteiten die tijdens
+							de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</target>
+      </trans-unit>
+      <trans-unit id="9BoRNMF" resname="Documenten">
+        <source>Documenten</source>
+        <target>Documents</target>
+      </trans-unit>
+      <trans-unit id="VOSgLYH" resname="C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.">
+        <source>C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,
+							Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
+							afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe
+							we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
+							KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
+							afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.</source>
+        <target>__C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,
+							Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
+							afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe
+							we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
+							KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
+							afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.</target>
+      </trans-unit>
+      <trans-unit id="4DpUTgy" resname="Communicatieconvenant">
+        <source>Communicatieconvenant</source>
+        <target>__Communicatieconvenant</target>
+      </trans-unit>
+      <trans-unit id="Ij5DoA1" resname="Gedragsovereenkomst">
+        <source>Gedragsovereenkomst</source>
+        <target>__Gedragsovereenkomst</target>
       </trans-unit>
     </body>
   </file>
