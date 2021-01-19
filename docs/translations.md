@@ -46,7 +46,7 @@ Dit zorgt ervoor dat het bestand `translations/messages+intl-icu.en.xlf` wordt g
 Het is ook mogelijk om variabelen te gebruiken in vertalingen, bijvoorbeeld als er een woord is dat op basis van een variabele gezet wordt. Op deze manier heb je geen twee losse vertaling strings nodig
 
 ```html
-<p>{% trans with {'naam': get_naam()} %}Hallo, {naam}{% endtrans %}</p>
+<p>{% raw %}{% trans with {'naam': get_naam()} %}Hallo, {naam}{% endtrans %}{% endraw %}</p>
 <p>{{ 'Hallo, {naam}'|trans({'naam': get_naam()}) }}</p>
 ```
 
