@@ -29,9 +29,16 @@ function __construct(\Symfony\Contracts\Translation\TranslatorInterface $transla
 
 ### Vertalingen in CMS paginas en menus
 
-CMS paginas en menus worden op basis van de huidige locale geladen. De standaard locale is `nl`, voor deze locale wordt de pagina of het menu met de gevraagde naam geladen. Voor alle andere locales wordt gezocht of de pagina of het menu met de naam gevolgd door `_<locale>` bestaat, als dit het geval is wordt deze geladen.
+Menus worden op basis van de huidige locale geladen. De standaard locale is `nl`, voor deze locale wordt het menu met de gevraagde naam geladen. Voor alle andere locales wordt gezocht of het menu met de naam gevolgd door `_<locale>` bestaat, als dit het geval is wordt deze geladen.
 
-Bijvoorbeeld voor de pagina `vereniging`. Voor locale `nl` wordt `vereniging` geladen. Voor locale `en` wordt `vereniging_en` geladen, als deze niet bestaat wordt `vereniging` geladen.
+Bijvoorbeeld voor het menu `extern`. Voor locale `nl` wordt `extern` geladen. Voor locale `en` wordt `extern_en` geladen, als deze niet bestaat wordt `extern` geladen.
+
+In Cms pagina's kun je gebruik maken van de `[taal=...]` bb tag om bepaalde tekst alleen te laten zien voor een specifieke taal.
+
+```
+[taal=en]This is in English[/taal]
+[taal=nl]Dit is in het Nederlands[/taal]
+```
 
 ## Vertalingen bewerken
 
