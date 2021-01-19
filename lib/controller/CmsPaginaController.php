@@ -5,7 +5,6 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\entity\CmsPagina;
-use CsrDelft\Kernel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaType;
@@ -15,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -49,36 +47,25 @@ class CmsPaginaController extends AbstractController {
 	 * @Route("/pagina/{naam}")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function bekijken(Request $request, $naam, $subnaam = "") {
+	public function bekijken($naam, $subnaam = "") {
 		$paginaNaam = $naam;
 		if ($subnaam) {
 			$paginaNaam = $subnaam;
 		}
-
-		$locale = $request->getLocale();
-		$defaultLocale = $request->getDefaultLocale();
-
-		$fallbackPaginaNaam = $paginaNaam;
-		if ($locale != $defaultLocale) {
-			$paginaNaam = $paginaNaam . "_" . $locale;
-		}
-
 		/** @var CmsPagina $pagina */
 		$pagina = $this->cmsPaginaRepository->find($paginaNaam);
 		if (!$pagina) { // 404
-			$pagina = $this->cmsPaginaRepository->find($fallbackPaginaNaam);
-			if (!$pagina) {
-				throw new NotFoundHttpException();
-			}
+			throw new NotFoundHttpException();
 		}
 		if (!$pagina->magBekijken()) { // 403
 			throw $this->createAccessDeniedException();
 		}
 		$body = new CmsPaginaView($pagina);
-		// nieuwe layout altijd voor uitgelogde bezoekers
-		if (!LoginService::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) { // nieuwe layout altijd voor uitgelogde bezoekers
 			if ($pagina->naam === 'thuis') {
 				return $this->render('extern/index.html.twig', ['titel' => $body->getTitel()]);
+			} elseif ($naam === 'vereniging') {
+				return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
 			} elseif ($naam === 'lidworden') {
 				return $this->render('extern/owee.html.twig');
 			}
