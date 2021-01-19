@@ -7,7 +7,7 @@ Zie ook de documentatie van [`symfony/translation`](https://symfony.com/doc/curr
 ## Vertalignen gebruiken
 ### Vertalingen in templates
 
-In templates kunnen stukken tekst op twee verschillende manieren vertaald worden. Met `{% trans %}` blokken en met de `trans` filter.
+In templates kunnen stukken tekst op twee verschillende manieren vertaald worden. Met `{% raw %}{% trans %}{% endraw %}` blokken en met de `trans` filter.
 
 ```html
 <p>{% raw %}{% trans %}Deze tekst wordt vertaald{% endtrans %}{% endraw %}</p>
