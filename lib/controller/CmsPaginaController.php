@@ -75,11 +75,10 @@ class CmsPaginaController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		}
 		$body = new CmsPaginaView($pagina);
-		if (!LoginService::mag(P_LOGGED_IN)) { // nieuwe layout altijd voor uitgelogde bezoekers
+		// nieuwe layout altijd voor uitgelogde bezoekers
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			if ($pagina->naam === 'thuis') {
 				return $this->render('extern/index.html.twig', ['titel' => $body->getTitel()]);
-			} elseif ($naam === 'vereniging') {
-				return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
 			} elseif ($naam === 'lidworden') {
 				return $this->render('extern/owee.html.twig');
 			}

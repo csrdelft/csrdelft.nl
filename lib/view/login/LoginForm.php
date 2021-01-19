@@ -2,23 +2,18 @@
 
 namespace CsrDelft\view\login;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\formulier\elementen\HtmlComment;
-use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\knoppen\TemplateFormKnoppen;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use CsrDelft\view\formulier\knoppen\LoginFormKnoppen;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
-use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -103,7 +98,8 @@ class LoginForm implements FormulierTypeInterface {
 		$fields['pass']->placeholder = $this->translator->trans('Wachtwoord');
 
 		if (isset($options['lastError'])) {
-			$fields[] = new HtmlComment('<p class="error">' . $this->formatError($options['lastError'], $options['lastUserName'] ?? "") . '</p>');
+			$fields[] = new HtmlComment(
+				sprintf("<p class=\"error\">%s</p>", $this->formatError($options['lastError'], $options['lastUserName'] ?? "")));
 		} else {
 			$fields[] = new HtmlComment('<div class="float-left">');
 			$fields[] = new HtmlComment('</div>');
