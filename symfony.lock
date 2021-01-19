@@ -669,6 +669,12 @@
     "theseer/tokenizer": {
         "version": "1.2.0"
     },
+    "twig/extra-bundle": {
+        "version": "v3.2.1"
+    },
+    "twig/intl-extra": {
+        "version": "v3.2.1"
+    },
     "twig/twig": {
         "version": "v2.12.0"
     },
