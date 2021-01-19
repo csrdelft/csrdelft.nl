@@ -25,16 +25,16 @@
         <source>C.S.R. Delft</source>
         <target>C.S.R. Delft</target>
       </trans-unit>
-      <trans-unit id="iXRdDVv" resname="De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in&#10;&#9;&#9;&#9;&#9;&#9;&#9;Delft, rijk aan tradities die zijn ontstaan in haar %leeftijd%-jarig bestaan. Het is een&#10;&#9;&#9;&#9;&#9;&#9;&#9;breed gezelschap&#10;&#9;&#9;&#9;&#9;&#9;&#9;van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke&#10;&#9;&#9;&#9;&#9;&#9;&#9;eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede&#10;&#9;&#9;&#9;&#9;&#9;&#9;vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen&#10;&#9;&#9;&#9;&#9;&#9;&#9;uithalen.">
+      <trans-unit id="iXRdDVv" resname="De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in&#10;&#9;&#9;&#9;&#9;&#9;&#9;Delft, rijk aan tradities die zijn ontstaan in haar {leeftijd}-jarig bestaan. Het is een&#10;&#9;&#9;&#9;&#9;&#9;&#9;breed gezelschap&#10;&#9;&#9;&#9;&#9;&#9;&#9;van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke&#10;&#9;&#9;&#9;&#9;&#9;&#9;eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede&#10;&#9;&#9;&#9;&#9;&#9;&#9;vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen&#10;&#9;&#9;&#9;&#9;&#9;&#9;uithalen.">
         <source>De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
-						Delft, rijk aan tradities die zijn ontstaan in haar %leeftijd%-jarig bestaan. Het is een
+						Delft, rijk aan tradities die zijn ontstaan in haar {leeftijd}-jarig bestaan. Het is een
 						breed gezelschap
 						van zo'n 275 leden met een zeer gevarieerde (kerkelijke) achtergrond, maar met een duidelijke
 						eenheid door het christelijk geloof. C.S.R. is de plek waar al tientallen jaren studenten goede
 						vrienden van elkaar worden, op intellectueel en geestelijk gebied groeien en goede studentengrappen
 						uithalen.</source>
         <target>Civitas Studiosorum Reformatorum is a vibrant, enthusiastic Christian student association in Delft,
-        rich in traditions that have developed over the past %leeftijd% years.
+        rich in traditions that have developed over the past {leeftijd} years.
         We are counting 275 members coming from all kinds of Christian backgrounds, united in the Christian faith. C.S.R. is a community
          in which friendships are made, where personal, intellectual, and spiritual development is encouraged and where we enjoy the fun of a good student prank.
         </target>
@@ -119,14 +119,14 @@
         <source>Laat je interesse weten!</source>
         <target>Let us know you are interested!</target>
       </trans-unit>
-      <trans-unit id="vLigd3J" resname="Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;%lidworden%&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek">
+      <trans-unit id="vLigd3J" resname="Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;{lidworden}&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek">
         <source>Wil je lid worden? Inschrijven kan in de OWee (17 t/m 22 augustus).
 						Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
 						opgenomen.
-						Doe dit door &lt;a href="%lidworden%"&gt;hier&lt;/a&gt; te
+						Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te
 						klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek</source>
         <target><![CDATA[Do you want to become a member? Registration is open during the Owee (August 17 -22). It is also possible
-        to register in advance so that we can get in contact with you right when the OWee starts. Join us by clicking  <a href="%lidworden%">here</a>.
+        to register in advance so that we can get in contact with you right when the OWee starts. Join us by clicking  <a href="{lidworden}">here</a>.
         Make sure to reserve the week of August 24-30 for the introduction week of C.S.R. ]]></target>
       </trans-unit>
       <trans-unit id="zEMOsJp" resname="Meer informatie over lid worden">
