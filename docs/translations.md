@@ -10,7 +10,7 @@ Zie ook de documentatie van [`symfony/translation`](https://symfony.com/doc/curr
 In templates kunnen stukken tekst op twee verschillende manieren vertaald worden. Met `{% trans %}` blokken en met de `trans` filter.
 
 ```html
-<p>{% trans %}Deze tekst wordt vertaald{% endtrans %}</p>
+<p>{% raw %}{% trans %}Deze tekst wordt vertaald{% endtrans %}{% endraw %}</p>
 
 <p>{{ 'Deze tekst wordt vertaald'|trans }}</p>
 ```
