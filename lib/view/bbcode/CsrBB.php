@@ -55,6 +55,7 @@ use CsrDelft\view\bbcode\tag\BbTaal;
 use CsrDelft\view\bbcode\tag\BbUbboff;
 use CsrDelft\view\bbcode\tag\BbUrl;
 use CsrDelft\view\bbcode\tag\BbVerklapper;
+use CsrDelft\view\bbcode\tag\embed\BbAudio;
 use CsrDelft\view\bbcode\tag\embed\BbLocatie;
 use CsrDelft\view\bbcode\tag\embed\BbSpotify;
 use CsrDelft\view\bbcode\tag\embed\BbTwitter;
@@ -108,6 +109,7 @@ class CsrBB extends Parser {
 		BbUnderline::class,
 		// Custom
 		BbActiviteit::class,
+		BbAudio::class,
 		BbBestuur::class,
 		BbBijbel::class,
 		BbBoek::class,
