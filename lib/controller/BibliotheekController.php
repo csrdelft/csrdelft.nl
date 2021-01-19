@@ -285,7 +285,7 @@ class BibliotheekController extends AbstractController {
 	 * @param Boek $boek
 	 * @param Profiel|null $profiel
 	 * @return RedirectResponse
-	 * @Route("/bibliotheek/addexemplaar/{exemplaar}/{profiel}", methods={"POST"}, defaults={"profiel": null}, requirements={"exemplaar": "\d+", "profiel": ".{4}"})
+	 * @Route("/bibliotheek/addexemplaar/{boek}/{profiel}", methods={"POST"}, defaults={"profiel": null}, requirements={"boek": "\d+", "profiel": ".{4}"})
 	 * @Auth(P_BIEB_READ)
 	 */
 	public function addexemplaar(Boek $boek, Profiel $profiel = null) {

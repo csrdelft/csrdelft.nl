@@ -10,7 +10,7 @@ Soms moet er een nieuwe pagina toegevoegd worden. Er zijn twee plekken waar je d
 
 - De constructor van een controller verwijst naar repositories (`lib/repository`) en services (`lib/services`) die veel worden gebruikt in die specifieke controller. (bij grote uitzondering wordt er ook verwezen naar andere controllers, zie `ZoekController`).
 
-In het begin is een controller een klasse met een lege constructor.
+In het begin is een controller een klasse met een lege constructor. Een controller is ook altijd een [Service](services.md).
 
 ```php
 namespace CsrDelft\controller;

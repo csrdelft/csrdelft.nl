@@ -1,6 +1,16 @@
 import ctx from './ctx';
 import {select} from "./lib/dom";
 
+export const registerClipboardContext = async (): Promise<void> => {
+	const {
+		copyTextToClipboard
+	} = await import(/* webpackChunkName: "clipboard" */'./lib/clipboard');
+
+	ctx.addHandler('[data-copy]', el => {
+		el.addEventListener('click', () => copyTextToClipboard(el.dataset.copy))
+	})
+}
+
 export const registerGrafiekContext = async (): Promise<void> => {
 	const {
 		initBar,

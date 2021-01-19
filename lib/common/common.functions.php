@@ -267,7 +267,7 @@ function filter_filename($name) {
 	//Remove dots in front of filename to prevent directory traversal
 	$name = ltrim($name, ".");
 
-	return preg_replace('/[^a-z0-9 \-_()éê\.]/', ' ', $name);
+	return preg_replace('/[^a-z0-9 \-_()éê\.]/i', ' ', $name);
 }
 
 /**

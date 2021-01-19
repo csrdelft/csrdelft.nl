@@ -178,6 +178,10 @@ class ForumDradenRepository extends AbstractRepository implements Paging {
 			->addOrderBy($alias . '.laatst_gewijzigd', 'DESC');
 	}
 
+	public function createQueryBuilderWithoutOrder($alias, $indexBy = null) {
+		return parent::createQueryBuilder($alias, $indexBy);
+	}
+
 	public function setLaatstePagina($forum_id) {
 		$this->pagina = $this->getAantalPaginas($forum_id);
 	}

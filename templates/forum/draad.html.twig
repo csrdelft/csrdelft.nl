@@ -1,6 +1,6 @@
 {% extends 'forum/base.html.twig' %}
 
-{% block titel %}{{ draad.titel }}{% endblock %}
+{% block titel %}{{ draad.titel | raw }}{% endblock %}
 
 {% block breadcrumbs %}
 	{{ csr_breadcrumbs({
@@ -88,7 +88,7 @@
 		{{ include('forum/partial/draad_mod.html.twig') }}
 	{% endif %}
 	<h1>
-		{{ draad.titel }}
+		{{ draad.titel | raw }}
 		{% if statistiek %}
 			&nbsp;&nbsp;&nbsp;
 			<span class="lichtgrijs small" title="Aantal lezers">{{ draad.aantalLezers }} lezers</span>

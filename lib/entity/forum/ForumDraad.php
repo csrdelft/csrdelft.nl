@@ -26,7 +26,7 @@ use Psr\Log\LoggerInterface;
  *   @ORM\Index(name="plakkerig", columns={"plakkerig"}),
  *   @ORM\Index(name="belangrijk", columns={"belangrijk"}),
  *   @ORM\Index(name="laatst_gewijzigd", columns={"laatst_gewijzigd"}),
- *   @ORM\Index(name="titel", columns={"titel"}),
+ *   @ORM\Index(name="titel", columns={"titel"}, flags={"fulltext"}),
  *   @ORM\Index(name="wacht_goedkeuring", columns={"wacht_goedkeuring"})
  * })
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")

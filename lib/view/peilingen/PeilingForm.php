@@ -31,7 +31,7 @@ class PeilingForm implements FormulierTypeInterface {
 		//$url = $nieuw ? '/peilingen/nieuw' : '/peilingen/bewerken';
 
 		$builder->setTitel($options['nieuw'] ? 'Nieuwe peiling' : 'Peiling bewerken');
-		$builder->setDataTableId(true);
+		$builder->setDataTableId($options['dataTableId']);
 
 		$fields = [];
 

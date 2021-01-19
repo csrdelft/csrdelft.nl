@@ -53,8 +53,7 @@ class EntitySelectField extends InputField {
 			return false;
 		}
 
-		$options = $this->options;
-		if (($this->required || $this->getValue() !== null) && !array_key_exists($this->value, $options)) {
+		if (($this->required || $this->getValue() !== null) && !in_array($this->value, $this->getOptionIds())) {
 			$this->error = 'Onbekende optie gekozen';
 		}
 		return $this->error === '';
@@ -102,6 +101,18 @@ class EntitySelectField extends InputField {
 			$html .= "<option hidden disabled selected value=''></option>";
 		}
 		return $html;
+	}
+
+	/**
+	 * @param ISelectEntity[] $options
+	 */
+	public function setOptions(array $options): void
+	{
+		$this->options = $options;
+	}
+
+	public function getOptionIds() {
+		return array_map(function ($option) { return $option->getId(); }, $this->options);
 	}
 
 }

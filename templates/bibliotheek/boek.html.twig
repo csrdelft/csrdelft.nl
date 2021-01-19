@@ -121,7 +121,7 @@
 							</li>
 						{% endif %}
 						<li class="list-group-item">
-							<a class="post ReloadPage" href="{{ url('csrdelft_bibliotheek_addexemplaar', {exemplaar: boek.id}) }}"
+							<a class="post ReloadPage" href="{{ url('csrdelft_bibliotheek_addexemplaar', {boek: boek.id}) }}"
 								 title="Ik bezit dit boek ook"
 								 onclick="return confirm('U bezit zelf een exemplaar van dit boek? Door het toevoegen aan de catalogus geef je aan dat anderen dit boek kunnen lenen.')">
 								{{ icon("user_add") }} Ik bezit dit boek
@@ -130,7 +130,7 @@
 						{% if mag('P_BIEB_MOD') %}
 							<li class="list-group-item">
 								<a class="post ReloadPage"
-									 href="{{ url('csrdelft_bibliotheek_addexemplaar', {exemplaar: boek.id, profiel: 'x222'}) }}"
+									 href="{{ url('csrdelft_bibliotheek_addexemplaar', {boek: boek.id, profiel: 'x222'}) }}"
 									 title="C.S.R.-bieb bezit dit boek ook"
 									 onclick="return confirm('Bezit de C.S.R.-bieb een exemplaar van dit boek?')">
 									{{ icon("user_add") }} Is een biebboek
@@ -159,13 +159,13 @@
 									{% set total_exemplaren_bibliotheek = total_exemplaren_bibliotheek + 1 %}
 									C.S.R.-bibliotheek
 								{% else %}
-									{{ exemplaar.eigenaar.link('civitas') }}
+									{{ exemplaar.eigenaar.link('civitas') | raw }}
 								{% endif %}
 							</div>
 
 							{# opmerking #}
 							{% if exemplaar.magBewerken %}
-								{{ exemplaarFormulieren[exemplaar.id].content | raw }}
+								{{ exemplaarFormulieren[exemplaar.id].view | raw }}
 							{% else %}
 								{% if exemplaar.opmerking is not none %}
 									<div class="regel">
@@ -264,7 +264,7 @@
 					<div class="exemplaar compact">
 						{% for exemplaar in boek.exemplaren %}
 							{% if not boek.eigenaar(exemplaar.id) and (not exemplaar.biebBoek or total_exemplaren_bibliotheek > 0) %}
-								{{ exemplaar.eigenaar.link('pasfoto') }}
+								{{ exemplaar.eigenaar.link('pasfoto') | raw }}
 								<div class="statusmarkering">
 						<span class="biebindicator {{ exemplaar.status.description }}"
 									title="Boek is {{ exemplaar.status.description }}">• </span>
@@ -278,7 +278,7 @@
 						<div class="clear"></div>
 						<label>&nbsp;</label>
 						<a
-							onclick="jQuery(this).parent().parent().children('div.exemplaar->uitgebreid').show(); jQuery(this).parent().remove();">
+							onclick="jQuery(this).parent().parent().children('div.exemplaar.uitgebreid').show(); jQuery(this).parent().remove();">
 							» meer informatie
 						</a>
 					</div>

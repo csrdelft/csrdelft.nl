@@ -8,7 +8,7 @@ Twig templates zijn te vinden in de `templates` map in de repository.
 
 ## Functies in Twig
 
-Twig kan niet zomaar php functies aanroepen, hier heb je Twig extensies voor nodig. Kijk in de `CsrDelft\Twig\` namespace voor de extensies die we nu hebben. Al deze extensies worden automatisch aangevuld door PhpStorm bij het bewerken van Twig bestanden.
+Twig kan niet zomaar php functies aanroepen, hier heb je Twig extensies voor nodig. Kijk in de `CsrDelft\Twig\Extension\ ` namespace voor de extensies die we nu hebben. Al deze extensies worden automatisch aangevuld door PhpStorm bij het bewerken van Twig bestanden.
 
 ## Bestandsnaam van twig bestanden
 

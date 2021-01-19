@@ -35,7 +35,7 @@ jobs:
         run: yarn install --immutable
 
       - name: ESLint report
-        run: yarn run lint -f json > eslint-result.json
+        run: yarn run lint -f json-relative -o eslint-result.json
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
