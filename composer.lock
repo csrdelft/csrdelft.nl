@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59f6ad4be393065c200ff93a0eff96c9",
+    "content-hash": "545c7c3ca8211937549028b4de0e73ea",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -65,12 +65,12 @@
             "version": "v1.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/clue/php-stream-filter.git",
+                "url": "https://github.com/clue/stream-filter.git",
                 "reference": "aeb7d8ea49c7963d3b581378955dbf5bc49aa320"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-stream-filter/zipball/aeb7d8ea49c7963d3b581378955dbf5bc49aa320",
+                "url": "https://api.github.com/repos/clue/stream-filter/zipball/aeb7d8ea49c7963d3b581378955dbf5bc49aa320",
                 "reference": "aeb7d8ea49c7963d3b581378955dbf5bc49aa320",
                 "shasum": ""
             },
@@ -8790,6 +8790,52 @@
     ],
     "packages-dev": [
         {
+            "name": "dbrekelmans/bdi",
+            "version": "0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dbrekelmans/bdi.git",
+                "reference": "d94d818ebe20b419a7d9f17dc21e9c66a10b171f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dbrekelmans/bdi/zipball/d94d818ebe20b419a7d9f17dc21e9c66a10b171f",
+                "reference": "d94d818ebe20b419a7d9f17dc21e9c66a10b171f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-zip": "*",
+                "ext-zlib": "*",
+                "php": "^7.2|^8.0"
+            },
+            "bin": [
+                "bdi",
+                "bdi.phar"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniël Brekelmans",
+                    "homepage": "https://github.com/dbrekelmans"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/dbrekelmans/bdi/graphs/contributors"
+                }
+            ],
+            "description": "PHAR distribution of dbrekelmans/browser-driver-installer.",
+            "homepage": "https://github.com/dbrekelmans/bdi",
+            "keywords": [
+                "browser-driver-installer"
+            ],
+            "time": "2020-12-13T21:43:40+00:00"
+        },
+        {
             "name": "doctrine/data-fixtures",
             "version": "1.4.4",
             "source": {
@@ -10766,16 +10812,16 @@
         },
         {
             "name": "symfony/panther",
-            "version": "v0.8.0",
+            "version": "v0.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/panther.git",
-                "reference": "04a6e5552e66080eb2549017e106b061090a6f56"
+                "reference": "c3cd37ea186211632697732e219b257cf0a7c431"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/panther/zipball/04a6e5552e66080eb2549017e106b061090a6f56",
-                "reference": "04a6e5552e66080eb2549017e106b061090a6f56",
+                "url": "https://api.github.com/repos/symfony/panther/zipball/c3cd37ea186211632697732e219b257cf0a7c431",
+                "reference": "c3cd37ea186211632697732e219b257cf0a7c431",
                 "shasum": ""
             },
             "require": {
@@ -10783,12 +10829,9 @@
                 "php-webdriver/webdriver": "^1.8.2",
                 "symfony/browser-kit": "^4.4 || ^5.0",
                 "symfony/dom-crawler": "^4.4 || ^5.0",
-                "symfony/http-client": "^4.4 || ^5.0",
+                "symfony/http-client": "^4.4.11 || ^5.2",
                 "symfony/polyfill-php72": "^1.9",
                 "symfony/process": "^4.4 || ^5.0"
-            },
-            "conflict": {
-                "symfony/framework-bundle": ">=4.3 <4.3.4"
             },
             "require-dev": {
                 "fabpot/goutte": "^3.2.3",
@@ -10796,12 +10839,12 @@
                 "symfony/css-selector": "^4.4 || ^5.0",
                 "symfony/framework-bundle": "^4.4 || ^5.0",
                 "symfony/mime": "^4.4 || ^5.0",
-                "symfony/phpunit-bridge": "dev-master"
+                "symfony/phpunit-bridge": "^5.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-main": "1.0.x-dev"
                 }
             },
             "autoload": {
@@ -10834,13 +10877,17 @@
                 "testing",
                 "webdriver"
             ],
+            "support": {
+                "issues": "https://github.com/symfony/panther/issues",
+                "source": "https://github.com/symfony/panther/tree/v0.9.0"
+            },
             "funding": [
                 {
                     "url": "https://www.panthera.org/donate",
                     "type": "custom"
                 }
             ],
-            "time": "2020-10-03T09:22:56+00:00"
+            "time": "2020-12-29T07:51:42+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
@@ -11171,5 +11218,5 @@
     "platform-overrides": {
         "php": "7.3.14"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

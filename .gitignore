@@ -53,6 +53,8 @@ package-lock.json
 !.yarn/versions
 .pnp.*
 
+drivers/
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
