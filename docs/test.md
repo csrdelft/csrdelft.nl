@@ -21,15 +21,20 @@ Er zijn twee soorten tests in de stek, unit tests en functionele tests. Unit tes
 
 ### Panther (Browser) tests
 
-Om Panther tests te runnen moet je Panther naar chrome en chromedriver wijzen. Dit kun je instellen in `.env.test.local`
+Om Panther tests te runnen moet je Panther naar chrome wijzen. Dit kun je instellen in `.env.test.local`
 
 ```
 PANTHER_CHROME_BINARY="C:\Program Files\Google\Chrome\Application\chrome.exe"
-PANTHER_CHROME_DRIVER_BINARY="<path naar chromedriver>\chromedriver.exe"
 PANTHER_NO_HEADLESS=true
 ```
 
-Chromedriver is te downloaden van https://chromedriver.chromium.org/
+Voer het volgende commando uit om Chromedriver te downloaden:
+
+```
+composer run-script update-driver
+```
+
+Dit plaatst `chromedriver.exe` (of de Linux versie) in de `drivers/` map, hier zoekt Panther in.
 
 ## Tests maken
 
