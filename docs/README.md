@@ -29,6 +29,7 @@ Kijk hier als je iets nieuws gaat bouwen. Dit zijn de stappen die je dan zou moe
 
 Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt iets te maken te krijgen met een specifiek onderdeel van de stek.
 
+- [Services](services.md)
 - [Submodule](submodule.md): externe projecten die in de stek zijn geladen.
 - [DataTables](datatables.md)
 - [Caching](caching.md)
@@ -41,6 +42,7 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Composer](composer.md)
 - [Security](security.md)
 - [Tests](test.md)
+- [Vertalingen](translations.md)
 
 ## Overig
 

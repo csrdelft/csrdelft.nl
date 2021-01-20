@@ -1,6 +1,6 @@
 framework:
   secret: '%env(APP_SECRET)%'
-  #csrf_protection: true
+  csrf_protection: ~
   #http_method_override: true
   ide: 'phpstorm'
 

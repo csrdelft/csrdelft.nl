@@ -10,10 +10,11 @@
 {% endblock %}
 
 {% block content %}
-	<div id="controls">
+	<div id="controls" class="btn-group">
 		{% if mag('P_DOCS_MOD') %}
-			<a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}">{{ icon('toevoegen') }} Toevoegen</a>
+			<a class="btn post popup redirect" href="{{ url('csrdelft_documenten_categorieaanmaken') }}">Categorie toevoegen</a>
 		{% endif %}
+		<a class="btn" href="{{ url('csrdelft_documenten_toevoegen') }}">{{ icon('toevoegen') }} Toevoegen</a>
 	</div>
 
 	{{ getMelding() }}
@@ -32,32 +33,37 @@
 		</thead>
 
 		{% for categorie in categorien %}
-			<tbody>
-			<tr class="table-primary">
-				<td colspan="5">
-					<a href="{{ url('csrdelft_documenten_categorie', {id: categorie.id}) }}"
-						 title="Alle documenten in {{ categorie.naam }}">
-						{{ categorie.naam }}
-					</a>
-					{% if mag('P_DOCS_MOD') %}
-						<a class="toevoegen float-right" href="{{ url('csrdelft_documenten_toevoegen') }}?catID={{ categorie.id }}"
-							 title="Document toevoegen in categorie: {{ categorie.naam }}">
-							{{ icon('toevoegen') }}
+			{% if mag(categorie.leesrechten) %}
+				<tbody>
+				<tr class="table-primary">
+					<td colspan="5">
+						<a href="{{ url('csrdelft_documenten_categorie', {id: categorie.id}) }}"
+							 title="Alle documenten in {{ categorie.naam }}">
+							{{ categorie.naam }}
 						</a>
-					{% endif %}
-				</td>
-			</tr>
-			{% for document in categorie.documenten.slice(0, 5) %}
-				{{ include('documenten/documentregel.html.twig', {document: document}) }}
-			{% else %}
-				<tr>
-					<td class="document" colspan="5">Geen documenten in deze categorie</td>
+						{% if mag(categorie.schrijfrechten) %}
+							<a class="toevoegen float-right"
+								 href="{{ url('csrdelft_documenten_toevoegen') }}?catID={{ categorie.id }}"
+								 title="Document toevoegen in categorie: {{ categorie.naam }}">
+								{{ icon('toevoegen') }}
+							</a>
+						{% endif %}
+					</td>
 				</tr>
-			{% endfor %}
-			</tbody>
+				{% for document in categorie.documenten.slice(0, 5) %}
+					{{ include('documenten/documentregel.html.twig', {document: document}) }}
+				{% else %}
+					<tr>
+						<td class="document" colspan="5">Geen documenten in deze categorie</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			{% endif %}
 		{% else %}
 			<tr>
-				<td colspan="5">Geen categorieën in de database aanwezig.</td>
+				<td colspan="5">
+					Geen categorieën in de database aanwezig.
+				</td>
 			</tr>
 		{% endfor %}
 		<tfoot>

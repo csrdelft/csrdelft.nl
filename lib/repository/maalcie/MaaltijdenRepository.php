@@ -287,8 +287,8 @@ class MaaltijdenRepository extends AbstractRepository {
 			if (!$maaltijd->gesloten && $maaltijd->getBeginMoment() < time()) {
 				$this->sluitMaaltijd($maaltijd);
 			}
-			if (!$maaltijd->gesloten && !$maaltijd->verwijderd && !empty($filter)) {
-				$verwijderd = $this->maaltijdAanmeldingenRepository->checkAanmeldingenFilter($filter, array($maaltijd));
+			if (!$maaltijd->gesloten && !$maaltijd->verwijderd && !empty($maaltijd->filter)) {
+				$verwijderd = $this->maaltijdAanmeldingenRepository->checkAanmeldingenFilter($maaltijd->filter, array($maaltijd));
 				$maaltijd->aantal_aanmeldingen = $maaltijd->getAantalAanmeldingen() - $verwijderd;
 			}
 		}

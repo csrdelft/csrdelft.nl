@@ -62,11 +62,11 @@ class BoekExemplaarRepository extends AbstractRepository {
 		}
 	}
 
-	public function addExemplaar(Boek $boek, string $uid) {
+	public function addExemplaar(Boek $boek, Profiel $profiel) {
 		$exemplaar = new BoekExemplaar();
 		$exemplaar->boek = $boek;
-		$exemplaar->eigenaar = ProfielRepository::get($uid);
-		$exemplaar->eigenaar_uid = $uid;
+		$exemplaar->eigenaar = $profiel;
+		$exemplaar->eigenaar_uid = $profiel->uid;
 		$exemplaar->status = BoekExemplaarStatus::beschikbaar();
 		$exemplaar->toegevoegd = date_create_immutable();
 		$exemplaar->uitleendatum = null;

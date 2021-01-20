@@ -7,6 +7,7 @@ namespace CsrDelft\Component\Formulier;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
+use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -44,8 +45,16 @@ class FormulierBuilder {
 
 	public function __construct(RequestStack $requestStack) {
 		$this->css_classes[] = 'Formulier';
-		$this->formKnoppen = new EmptyFormKnoppen();
+		$this->formKnoppen = new FormDefaultKnoppen();
 		$this->requestStack = $requestStack;
+	}
+
+	public function setShowMelding($showMelding) {
+		$this->showMelding = $showMelding;
+	}
+
+	public function setFormId($formId) {
+		$this->formId = $formId;
 	}
 
 	public function getFormId() {

@@ -64,7 +64,7 @@ class AgendaItemForm implements FormulierTypeInterface {
 		$builder->setFormKnoppen($formKnoppen);
 
 		$builder->addValidationMethod(function($fields) {
-			if ($fields['eind_moment']->getValue() !== null AND $fields['eind_moment']->getValue() < $fields['begin_moment']->getValue()) {
+			if ($fields['eind_moment']->getValue() !== null && $fields['eind_moment']->getValue() < $fields['begin_moment']->getValue()) {
 				$fields['eind_moment']->error = 'Eindmoment moet na beginmoment liggen';
 
 				return false;

@@ -170,8 +170,8 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 
 			// Bereken nieuwe CiviSaldo
 			if ($account && $product && isset($aantal)) {
-				$afschriften[$i]->totaal = $product->getPrijsInt() * $aantal / 100;
-				$afschriften[$i]->nieuwSaldo = $account->saldo / 100 - $afschriften[$i]->totaal;
+				$afschriften[$i]->totaal = $product->getPrijsInt() * $aantal;
+				$afschriften[$i]->nieuwSaldo = $account->saldo - $afschriften[$i]->totaal;
 			}
 
 			// Sla op
@@ -258,7 +258,7 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 				}
 
 				// Verwerk
-				$totaal += $product->getPrijsInt() * $aantal / 100;
+				$totaal += $product->getPrijsInt() * $aantal;
 				$aantalSucces++;
 
 				$bestelling = new CiviBestelling();
@@ -281,7 +281,11 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 
 			foreach ($bestellingen as $bestelling) {
 				$civiBestellingRepository->create($bestelling);
-				$civiSaldoRepository->verlagen($bestelling->uid, $bestelling->totaal);
+				if ($bestelling->totaal < 0) {
+					$civiSaldoRepository->ophogen($bestelling->uid, -$bestelling->totaal);
+				} else {
+					$civiSaldoRepository->verlagen($bestelling->uid, $bestelling->totaal);
+				}
 			}
 
 			$session->remove("afschrijven-{$key}");

@@ -110,7 +110,9 @@ class PeilingenController extends AbstractController {
 			}
 		} else {
 			// Hier is de id in post gezet
-			$peiling = new Peiling();
+//			$peiling = new Peiling();
+			$id = $request->request->get('id');
+			$peiling = $this->peilingenRepository->find($id);
 		}
 
 		$form = $this->createFormulier(PeilingForm::class, $peiling, [

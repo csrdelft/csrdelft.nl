@@ -8,8 +8,9 @@ import {modalClose} from './modal';
 import {redirect, reload} from './reload';
 import {parents, selectAll} from "./dom";
 import {throwError} from "./util";
+import {Method} from "axios";
 
-function knopAjax(knop: Element, type: string) {
+function knopAjax(knop: Element, type: Method) {
 	if (!(knop instanceof HTMLElement)) {
 		throw new Error("Knop is geen HTMLElement")
 	}
