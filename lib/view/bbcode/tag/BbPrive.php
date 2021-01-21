@@ -31,7 +31,7 @@ class BbPrive extends BbTag {
 	}
 
 	public function render() {
-		return '<span class="bb-prive bb-tag-prive">' . $this->content . '</span>';
+		return '<span class="bb-prive bb-tag-prive">' . $this->getContent() . '</span>';
 	}
 
 	/**

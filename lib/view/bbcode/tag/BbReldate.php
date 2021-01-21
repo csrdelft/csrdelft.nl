@@ -19,7 +19,7 @@ class BbReldate extends BbTag {
 	}
 
 	public function render() {
-		return '<span class="bb-tag-reldate" title="' . htmlspecialchars($this->content) . '">' . reldate($this->content) . '</span>';
+		return '<span class="bb-tag-reldate" title="' . htmlspecialchars($this->getContent()) . '">' . reldate($this->getContent()) . '</span>';
 	}
 
 	/**

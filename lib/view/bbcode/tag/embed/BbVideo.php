@@ -21,6 +21,11 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbVideo extends BbTag {
 
+	/**
+	 * @var string
+	 */
+	private $url;
+
 	public static function getTagName() {
 		return 'video';
 	}
@@ -64,41 +69,41 @@ HTML;
 	 * @throws BbException
 	 */
 	private function processVideo(): array {
-		$content = $this->content;
+		$url = $this->url;
 		$matches = array();
 
 		//match type and id
-		if (strstr($content, 'youtube.com') || strstr($content, 'youtu.be')) {
-			if (preg_match('#(?:youtube\.com/watch\?v=|youtu.be/)([0-9a-zA-Z\-_]{11})#', $content, $matches) > 0) {
+		if (strstr($url, 'youtube.com') || strstr($url, 'youtu.be')) {
+			if (preg_match('#(?:youtube\.com/watch\?v=|youtu.be/)([0-9a-zA-Z\-_]{11})#', $url, $matches) > 0) {
 				return ['//www.youtube-nocookie.com/embed/' . $matches[1] . '?modestbranding=1&hl=nl', 'YouTube'];
 			}
-			throw new BbException('Geen geldige YouTube url: ' . $content);
-		} elseif (strstr($content, 'vimeo')) {
-			if (preg_match('#vimeo\.com/(?:clip\:)?(\d+)#', $content, $matches) > 0) {
+			throw new BbException('Geen geldige YouTube url: ' . $url);
+		} elseif (strstr($url, 'vimeo')) {
+			if (preg_match('#vimeo\.com/(?:clip\:)?(\d+)#', $url, $matches) > 0) {
 				return ['//player.vimeo.com/video/' . $matches[1], 'Vimeo'];
 			}
 
-			throw new BbException('Geen geldige Vimeo url: ' . $content);
-		} elseif (strstr($content, 'dailymotion')) {
-			if (preg_match('#dailymotion\.com/video/([a-z0-9]+)#', $content, $matches) > 0) {
+			throw new BbException('Geen geldige Vimeo url: ' . $url);
+		} elseif (strstr($url, 'dailymotion')) {
+			if (preg_match('#dailymotion\.com/video/([a-z0-9]+)#', $url, $matches) > 0) {
 				return ['//dailymotion.com/embed/video/' . $matches[1], 'DailyMotion'];
 			}
 
-			throw new BbException('Geen geldige DailyMotion url: ' . $content);
+			throw new BbException('Geen geldige DailyMotion url: ' . $url);
 		}
 
-		return [$content, null];
+		return [$url, null];
 	}
 
 	/**
 	 * @param $type
 	 * @param $id
-	 * @param $content
+	 * @param $url
 	 * @throws BbException
 	 */
-	private function assertId($type, $id, $content) {
+	private function assertId($type, $id, $url) {
 		if (empty($type) || empty($id)) {
-			throw new BbException('[video] Niet-ondersteunde video-website (' . htmlspecialchars($content) . ')');
+			throw new BbException('[video] Niet-ondersteunde video-website (' . htmlspecialchars($url) . ')');
 		}
 	}
 
@@ -107,6 +112,6 @@ HTML;
 	 */
 	public function parse($arguments = [])
 	{
-		$this->readMainArgument($arguments);
+		$this->url = $this->readMainArgument($arguments);
 	}
 }

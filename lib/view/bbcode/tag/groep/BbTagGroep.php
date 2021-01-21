@@ -28,6 +28,10 @@ abstract class BbTagGroep extends BbTag {
 	 * @var SerializerInterface
 	 */
 	private $serializer;
+	/**
+	 * @var string
+	 */
+	private $id;
 
 	public function __construct(AbstractGroepenRepository $model, SerializerInterface $serializer) {
 		$this->model = $model;
@@ -47,16 +51,16 @@ abstract class BbTagGroep extends BbTag {
 	 * @throws BbException
 	 */
 	private function getGroep() {
-		$this->content = (int)$this->content;
-		$groep = $this->model->get($this->content);
+		$this->id = (int)$this->id;
+		$groep = $this->model->get($this->id);
 		if (!$groep) {
-			throw new BbException("Groep met id $this->content does not exist");
+			throw new BbException("Groep met id $this->id does not exist");
 		}
 		return $groep;
 	}
 
 	public function parse($arguments = []) {
-		$this->readMainArgument($arguments);
+		$this->id = $this->readMainArgument($arguments);
 	}
 
 	public function renderLight() {
@@ -65,7 +69,7 @@ abstract class BbTagGroep extends BbTag {
 			return $this->groepLight($groep, 'ketzer', $this->getLidNaam());
 		} else {
 			$url = $this->model->getUrl();
-			return ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>';
+			return ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($this->id) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>';
 		}
 	}
 
@@ -83,7 +87,7 @@ abstract class BbTagGroep extends BbTag {
 		$groep = $this->getGroep();
 		if (!$groep) {
 			$url = $this->model->getUrl();
-			throw new BbException(ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>');
+			throw new BbException(ucfirst($this->getTagName()) . ' met id=' . htmlspecialchars($this->id) . ' bestaat niet. <a href="' . $url . '/beheren">Zoeken</a>');
 		}
 		return $this->groep($groep);
 	}

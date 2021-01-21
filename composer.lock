@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59f6ad4be393065c200ff93a0eff96c9",
+    "content-hash": "5a140681406dd699edc74242b50e88ca",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -193,16 +193,16 @@
         },
         {
             "name": "csrdelft/bb",
-            "version": "v1.2.0",
+            "version": "dev-two-stage-parser",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/bb.git",
-                "reference": "707ae71489f2b8007b5bc160fa2e4985c6afe771"
+                "reference": "e07d9cc60957f4f141d0ac9dc2e065dd42a43c98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/bb/zipball/707ae71489f2b8007b5bc160fa2e4985c6afe771",
-                "reference": "707ae71489f2b8007b5bc160fa2e4985c6afe771",
+                "url": "https://api.github.com/repos/csrdelft/bb/zipball/e07d9cc60957f4f141d0ac9dc2e065dd42a43c98",
+                "reference": "e07d9cc60957f4f141d0ac9dc2e065dd42a43c98",
                 "shasum": ""
             },
             "require": {
@@ -215,7 +215,8 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "CsrDelft\\bb\\": "src/"
+                    "CsrDelft\\bb\\": "src/",
+                    "CsrDelft\\bb\\test\\": "tests/lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -230,7 +231,11 @@
             ],
             "description": "C.S.R. BB Parser",
             "homepage": "https://csrdelft.github.io/bb",
-            "time": "2020-09-12T15:18:49+00:00"
+            "support": {
+                "issues": "https://github.com/csrdelft/bb/issues",
+                "source": "https://github.com/csrdelft/bb/tree/two-stage-parser"
+            },
+            "time": "2021-01-21T10:36:46+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -11147,6 +11152,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "csrdelft/bb": 20,
         "jacwright/restserver": 20
     },
     "prefer-stable": false,
@@ -11171,5 +11177,5 @@
     "platform-overrides": {
         "php": "7.3.14"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

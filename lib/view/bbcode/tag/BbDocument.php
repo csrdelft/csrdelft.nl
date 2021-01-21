@@ -29,6 +29,10 @@ class BbDocument extends BbTag {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var string
+	 */
+	private $id;
 
 	public function __construct(DocumentRepository $documentRepository, Environment $twig) {
 		$this->documentRepository = $documentRepository;
@@ -48,7 +52,7 @@ class BbDocument extends BbTag {
 			$beschrijving = $this->document->getFriendlyMimetype() . ' (' . format_filesize((int)$this->document->filesize) . ')';
 			return BbHelper::lightLinkBlock('document', $this->document->getDownloadUrl(), $this->document->naam, $beschrijving);
 		} else {
-			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->content . ')</div>';
+			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->id . ')</div>';
 		}
 	}
 
@@ -56,7 +60,7 @@ class BbDocument extends BbTag {
 		if ($this->document) {
 			return $this->twig->render('documenten/document_bb.html.twig', ['document' => $this->document]);
 		} else {
-			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->content . ')</div>';
+			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->id . ')</div>';
 		}
 	}
 
@@ -64,7 +68,7 @@ class BbDocument extends BbTag {
 	 * @param array $arguments
 	 */
 	public function parse($arguments = []) {
-		$this->readMainArgument($arguments);
-		$this->document = $this->documentRepository->get($this->content);
+		$this->id = $this->readMainArgument($arguments);
+		$this->document = $this->documentRepository->get($this->id);
 	}
 }

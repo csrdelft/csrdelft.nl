@@ -7,6 +7,11 @@ use CsrDelft\bb\BbTag;
 class BbAudio extends BbTag
 {
 
+	/**
+	 * @var string
+	 */
+	private $url;
+
 	public static function getTagName()
 	{
 		return ['audio', 'geluid'];
@@ -14,12 +19,12 @@ class BbAudio extends BbTag
 
 	public function parse($arguments = [])
 	{
-		$this->readMainArgument($arguments);
+		$this->url = $this->readMainArgument($arguments);
 	}
 
 	public function render()
 	{
-		$src = htmlspecialchars($this->content);
+		$src = htmlspecialchars($this->url);
 
 		return <<<HTML
 <audio controls>

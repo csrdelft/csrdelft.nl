@@ -23,6 +23,10 @@ class BbImg extends BbTag {
 	 * @var array
 	 */
 	protected $arguments;
+	/**
+	 * @var mixed
+	 */
+	private $url;
 
 	public static function getTagName() {
 		return 'img';
@@ -47,8 +51,8 @@ class BbImg extends BbTag {
 					break;
 			}
 		}
-		$heeftBreedte = isset($arguments['w']) AND $arguments['w'] > 10;
-		$heeftHoogte = isset($arguments['h']) AND $arguments['h'] > 10;
+		$heeftBreedte = isset($arguments['w']) && $arguments['w'] > 10;
+		$heeftHoogte = isset($arguments['h']) && $arguments['h'] > 10;
 
 		if ($heeftBreedte) {
 			$style .= 'width: ' . ((int)$arguments['w']) . 'px; ';
@@ -69,11 +73,11 @@ class BbImg extends BbTag {
 	}
 
 	public function getSourceUrl() {
-		return $this->content;
+		return $this->url;
 	}
 
 	public function getLinkUrl() {
-		return $this->content;
+		return $this->url;
 	}
 
 	/**
@@ -81,11 +85,12 @@ class BbImg extends BbTag {
 	 */
 	public function parse($arguments = [])
 	{
-		$this->readMainArgument($arguments);
-		$url = filter_var($this->content, FILTER_SANITIZE_URL);
+		$url = $this->readMainArgument($arguments);
+		$url = filter_var($url, FILTER_SANITIZE_URL);
 		if (!$url || (!url_like($url) && !startsWith($url, '/'))) {
 			throw new BbException("Wrong url ".$url);
 		}
 		$this->arguments = $arguments;
+		$this->url = $url;
 	}
 }
