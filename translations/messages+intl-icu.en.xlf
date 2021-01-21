@@ -109,7 +109,7 @@
 
 						Ben jij bijvoorbeeld geinteresseerd om een C.S.R. activiteit bij te wonen of een C.S.R. huis te bezoeken?
 						Laat dat dan aan ons weten en kom erachter wat er allemaal mogelijk is.</source>
-        <target>Of course there will be ample opportunity to talk to us during the Owee. In addition, you can also visit us in our
+        <target>Of course there will be ample opportunity to talk to us during the OWee. In addition, you can also visit us in our
         own building called Confide, located at Oude Delft 9. Even outside of the OWee, you can always contact us with any question you may have.
          Would you like to join a C.S.R. activity, visit a C.S.R. student house or attend any of the other possibilities to discover what C.S.R. is like?
          Please let us know and we will get in touch.
@@ -327,6 +327,14 @@
       <trans-unit id="Ij5DoA1" resname="Gedragsovereenkomst">
         <source>Gedragsovereenkomst</source>
         <target>Code of Conduct</target>
+      </trans-unit>
+      <trans-unit id="bbXtnF7" resname="Inschrijven">
+        <source>Inschrijven</source>
+        <target>Register</target>
+      </trans-unit>
+      <trans-unit id=".0lHlcl" resname="Verzenden">
+        <source>Verzenden</source>
+        <target>Send</target>
       </trans-unit>
     </body>
   </file>
