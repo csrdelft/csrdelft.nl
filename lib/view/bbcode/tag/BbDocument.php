@@ -32,7 +32,7 @@ class BbDocument extends BbTag {
 	/**
 	 * @var string
 	 */
-	private $id;
+	public $id;
 
 	public function __construct(DocumentRepository $documentRepository, Environment $twig) {
 		$this->documentRepository = $documentRepository;
