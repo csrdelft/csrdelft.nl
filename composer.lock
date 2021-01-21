@@ -197,12 +197,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/bb.git",
-                "reference": "e07d9cc60957f4f141d0ac9dc2e065dd42a43c98"
+                "reference": "1065321071080167760fdc1b88dfa1f369ca25db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/bb/zipball/e07d9cc60957f4f141d0ac9dc2e065dd42a43c98",
-                "reference": "e07d9cc60957f4f141d0ac9dc2e065dd42a43c98",
+                "url": "https://api.github.com/repos/csrdelft/bb/zipball/1065321071080167760fdc1b88dfa1f369ca25db",
+                "reference": "1065321071080167760fdc1b88dfa1f369ca25db",
                 "shasum": ""
             },
             "require": {
@@ -235,7 +235,7 @@
                 "issues": "https://github.com/csrdelft/bb/issues",
                 "source": "https://github.com/csrdelft/bb/tree/two-stage-parser"
             },
-            "time": "2021-01-21T10:36:46+00:00"
+            "time": "2021-01-21T13:00:09+00:00"
         },
         {
             "name": "doctrine/annotations",
