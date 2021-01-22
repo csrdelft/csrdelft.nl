@@ -35,6 +35,10 @@
 	</div>
 
 	<div class="bericht0 flex-grow-1">
+		<div id="editor"></div>
+
+		<button id="export">Commit</button>
+		<input id="bericht" type="hidden" name="bericht" value="" />
 
 		<form id="forumForm" class="Formulier"
 					action="{{ url('csrdelft_forum_posten', {forum_id: deel.forum_id, draad_id: draad is not none ? draad.draad_id : null}) }}"
