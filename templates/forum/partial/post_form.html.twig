@@ -38,11 +38,11 @@
 		<div id="editor"></div>
 
 		<button id="export">Commit</button>
-		<input id="bericht" type="hidden" name="bericht" value="" />
 
 		<form id="forumForm" class="Formulier"
 					action="{{ url('csrdelft_forum_posten', {forum_id: deel.forum_id, draad_id: draad is not none ? draad.draad_id : null}) }}"
 					method="post">
+			<input id="bericht" type="hidden" name="bericht" value="" />
 			{{ csrfField() }}
 			{% if not app.user %}
 				<input type="text" name="email" class="FormElement TextField forumEmail form-control"

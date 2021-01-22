@@ -33,7 +33,10 @@ class MarkLink implements Mark
 		}
 
 		return [
-			'href' => $node->url,
+			'type' => 'link',
+			'attrs' => [
+				'href' => $node->url,
+			],
 		];
 	}
 }

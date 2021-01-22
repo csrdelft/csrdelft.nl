@@ -21,6 +21,7 @@ use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\ProsemirrorToBb;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -646,7 +647,10 @@ class ForumController extends AbstractController {
 
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 		}
-		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
+		$tekst = json_decode(trim(filter_input(INPUT_POST, 'bericht', FILTER_UNSAFE_RAW)));
+
+		$proseMirrorToBb = new ProsemirrorToBb();
+		$tekst = $proseMirrorToBb->render($tekst);
 
 		if (empty($tekst)) {
 			setMelding('Bericht mag niet leeg zijn', -1);

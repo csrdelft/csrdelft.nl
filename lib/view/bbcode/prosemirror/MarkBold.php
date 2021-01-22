@@ -17,13 +17,13 @@ class MarkBold implements Mark
 	public function getData(BbNode $node)
 	{
 		return [
-			'type' => 'bold',
+			'type' => 'strong',
 		];
 	}
 
 	public function getMarkType()
 	{
-		return 'bold';
+		return 'strong';
 	}
 
 	public function getTagAttributes($mark)

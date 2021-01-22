@@ -7,12 +7,17 @@ namespace CsrDelft\view\bbcode;
 use CsrDelft\bb\internal\BbString;
 use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\MarkBold;
+use CsrDelft\view\bbcode\prosemirror\MarkCode;
 use CsrDelft\view\bbcode\prosemirror\MarkItalic;
 use CsrDelft\view\bbcode\prosemirror\MarkLink;
 use CsrDelft\view\bbcode\prosemirror\MarkUnderline;
 use CsrDelft\view\bbcode\prosemirror\Node;
+use CsrDelft\view\bbcode\prosemirror\NodeCodeBlock;
 use CsrDelft\view\bbcode\prosemirror\NodeDocument;
+use CsrDelft\view\bbcode\prosemirror\NodeHeader;
+use CsrDelft\view\bbcode\prosemirror\NodeHorizontalRule;
 use CsrDelft\view\bbcode\prosemirror\NodeImage;
+use CsrDelft\view\bbcode\prosemirror\NodeParagraph;
 use CsrDelft\view\bbcode\prosemirror\NodeString;
 use CsrDelft\view\bbcode\prosemirror\NodeVerklapper;
 
@@ -24,7 +29,11 @@ class ProsemirrorToBb
 		NodeDocument::class,
 		NodeImage::class,
 		NodeString::class,
-		NodeVerklapper::class
+		NodeVerklapper::class,
+		NodeHeader::class,
+		NodeHorizontalRule::class,
+		NodeParagraph::class,
+		NodeCodeBlock::class,
 	];
 
 	const MARKS = [
@@ -32,6 +41,7 @@ class ProsemirrorToBb
 		MarkBold::class,
 		MarkItalic::class,
 		MarkLink::class,
+		MarkCode::class,
 	];
 
 	public function document($value)

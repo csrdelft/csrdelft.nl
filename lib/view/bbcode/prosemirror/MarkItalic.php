@@ -17,13 +17,13 @@ class MarkItalic implements Mark
 	public function getData(BbNode $node)
 	{
 		return [
-			'type' => 'italic',
+			'type' => 'em',
 		];
 	}
 
 	public function getMarkType()
 	{
-		return 'italic';
+		return 'em';
 	}
 
 	public function getTagAttributes($mark)

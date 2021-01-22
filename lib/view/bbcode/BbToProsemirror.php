@@ -1,20 +1,18 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode;
 
-
-use CsrDelft\bb\tag\BbBold;
-use CsrDelft\bb\tag\BbItalic;
-use CsrDelft\bb\tag\BbNode;
-use CsrDelft\bb\tag\BbStrikethrough;
-use CsrDelft\bb\tag\BbUnderline;
 use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\MarkBold;
+use CsrDelft\view\bbcode\prosemirror\MarkCode;
 use CsrDelft\view\bbcode\prosemirror\MarkItalic;
+use CsrDelft\view\bbcode\prosemirror\MarkLink;
 use CsrDelft\view\bbcode\prosemirror\MarkUnderline;
 use CsrDelft\view\bbcode\prosemirror\Node;
+use CsrDelft\view\bbcode\prosemirror\NodeCodeBlock;
 use CsrDelft\view\bbcode\prosemirror\NodeDocument;
+use CsrDelft\view\bbcode\prosemirror\NodeHeader;
+use CsrDelft\view\bbcode\prosemirror\NodeHorizontalRule;
 use CsrDelft\view\bbcode\prosemirror\NodeImage;
 use CsrDelft\view\bbcode\prosemirror\NodeString;
 use CsrDelft\view\bbcode\prosemirror\NodeVerklapper;
@@ -25,6 +23,8 @@ class BbToProsemirror
 		MarkBold::class,
 		MarkUnderline::class,
 		MarkItalic::class,
+		MarkCode::class,
+		MarkLink::class,
 	];
 
 	public const NODES = [
@@ -32,6 +32,9 @@ class BbToProsemirror
 		NodeImage::class,
 		NodeVerklapper::class,
 		NodeString::class,
+		NodeHeader::class,
+		NodeHorizontalRule::class,
+		NodeCodeBlock::class,
 	];
 	/**
 	 * @var CsrBB
