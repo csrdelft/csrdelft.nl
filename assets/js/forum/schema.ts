@@ -19,7 +19,7 @@ export const bbBlockSpec: NodeSpec = {
 		tag: "div[data-block-type]",
 		getAttrs: (dom: HTMLElement) => {
 			const type = dom.dataset.bbBlockType
-			return blocks.indexOf(type) > -1 ? {type} : false
+			return type in blocks ? {type} : false
 		}
 	}]
 }
