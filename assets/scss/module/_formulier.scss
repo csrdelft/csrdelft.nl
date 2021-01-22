@@ -35,6 +35,17 @@
 	outline: none;
 }
 
+.ProseMirror .pm-block {
+	height: 100px;
+	background: #f5f5f5;
+	box-shadow: 0 0 10px #e8e8e8;
+	margin: 0.5em 0;
+
+	text-transform: capitalize;
+	text-align: center;
+	padding: 2em;
+}
+
 input[type="file"] {
   background-color: transparent;
   border: none;
