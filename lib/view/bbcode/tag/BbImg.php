@@ -17,7 +17,8 @@ use CsrDelft\bb\BbTag;
  * @since 27/03/2019
  * @example [img class=special float=left w=20 h=50]URL[/img]
  */
-class BbImg extends BbTag {
+class BbImg extends BbTag
+{
 
 	/**
 	 * @var array
@@ -28,12 +29,13 @@ class BbImg extends BbTag {
 	 */
 	private $url;
 
-	public static function getTagName() {
+	public static function getTagName()
+	{
 		return 'img';
 	}
 
-	public function render() {
-		$url = $this->getSourceUrl();
+	public function render()
+	{
 		$arguments = $this->arguments;
 
 		$style = '';
@@ -67,30 +69,44 @@ class BbImg extends BbTag {
 				$style .= 'width:500px;';
 			}
 
-			return '<img class="' . $class . '" src="' . $url . '" alt="' . htmlspecialchars($url) . '" style="' . $style . '" />';
+			return vsprintf("<img class=\"%s\" src=\"%s\" alt=\"%s\" style=\"%s\" />", [
+				$class,
+				$this->getSourceUrl(),
+				htmlspecialchars($this->getSourceUrl()),
+				$style
+			]);
 		}
-		return '<div class="bb-img-loading" bb-href= "' . $this->getLinkUrl() . '" src= "' . $url . '" title="' . htmlspecialchars($url) . '" style="' . $style . '"></div>';
+
+		return vsprintf("<div class=\"bb-img-loading\" bb-href= \"%s\" src= \"%s\" title=\"%s\" style=\"%s\"></div>", [
+			$this->getLinkUrl(),
+			$this->getSourceUrl(),
+			htmlspecialchars($this->getSourceUrl()),
+			$style
+		]);
 	}
 
-	public function getSourceUrl() {
+	public function getSourceUrl()
+	{
 		return $this->url;
 	}
 
-	public function getLinkUrl() {
+	public function getLinkUrl()
+	{
 		return $this->url;
 	}
 
 	/**
 	 * @param array $arguments
+	 * @throws BbException
 	 */
 	public function parse($arguments = [])
 	{
-		$url = $this->readMainArgument($arguments);
-		$url = filter_var($url, FILTER_SANITIZE_URL);
-		if (!$url || (!url_like($url) && !startsWith($url, '/'))) {
-			throw new BbException("Wrong url ".$url);
+		$this->url = filter_var($this->readMainArgument($arguments), FILTER_SANITIZE_URL);
+
+		if (!$this->url || (!url_like($this->url) && !startsWith($this->url, '/'))) {
+			throw new BbException("Wrong url " . $this->url);
 		}
+
 		$this->arguments = $arguments;
-		$this->url = $url;
 	}
 }

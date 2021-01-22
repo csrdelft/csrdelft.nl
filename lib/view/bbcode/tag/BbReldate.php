@@ -19,7 +19,10 @@ class BbReldate extends BbTag {
 	}
 
 	public function render() {
-		return '<span class="bb-tag-reldate" title="' . htmlspecialchars($this->getContent()) . '">' . reldate($this->getContent()) . '</span>';
+		return vsprintf("<span class=\"bb-tag-reldate\" title=\"%s\">%s</span>", [
+			htmlspecialchars($this->getContent()),
+			reldate($this->getContent())
+		]);
 	}
 
 	/**

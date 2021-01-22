@@ -30,7 +30,13 @@ class BbYoutube extends BbTag {
 	public function renderLight() {
 		$this->assertId($this->id);
 
-		return BbHelper::lightLinkBlock('youtube', 'https://youtu.be/' . $this->id, 'YouTube video', '', 'https://img.youtube.com/vi/' . $this->id . '/0.jpg');
+		return BbHelper::lightLinkBlock(
+			'youtube',
+			"https://youtu.be/{$this->id}",
+			'YouTube video',
+			'',
+			"https://img.youtube.com/vi/{$this->id}/0.jpg"
+		);
 	}
 
 	/**

@@ -61,12 +61,11 @@ class BbSpotify extends BbTag {
 
 	private function getBeschrijving()
 	{
-		$uri = $this->uri;
-		if (strstr($uri, 'playlist')) {
+		if (strstr($this->uri, 'playlist')) {
 			return'Afspeellijst';
-		} elseif (strstr($uri, 'album')) {
+		} elseif (strstr($this->uri, 'album')) {
 			return 'Album';
-		} elseif (strstr($uri, 'track')) {
+		} elseif (strstr($this->uri, 'track')) {
 			return 'Nummer';
 		} else {
 			return '';

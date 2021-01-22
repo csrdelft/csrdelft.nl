@@ -29,7 +29,12 @@ class BbTwitter extends BbTag {
 	}
 
 	public function renderLight() {
-		return BbHelper::lightLinkBlock('twitter', 'https://twitter.com/' . $this->url, 'Twitter', 'Tweets van @' . $this->url);
+		return BbHelper::lightLinkBlock(
+			'twitter',
+			'https://twitter.com/' . $this->url,
+			'Twitter',
+			'Tweets van @' . $this->url
+		);
 	}
 
 	public function render() {
@@ -53,7 +58,12 @@ HTML;
 
 		return <<<HTML
 <a class="twitter-timeline"
-	 data-lang="nl" data-width="{$width}" data-height="{$height}" data-dnt="true" data-theme="light" data-link-color="#0a338d"
+	 data-lang="nl"
+	 data-width="{$width}"
+	 data-height="{$height}"
+	 data-dnt="true"
+	 data-theme="light"
+	 data-link-color="#0a338d"
 	 href="https://twitter.com/{$this->url}">
 	 	Tweets van {$this->url}
 </a>
