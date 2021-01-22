@@ -23,7 +23,7 @@ class NodeVerklapper implements Node
 
 	public function getNodeType()
 	{
-		return 'spoiler'; // TODO: Not yet implemented in frontend
+		return 'verklapper';
 	}
 
 	public function getTagAttributes($node)

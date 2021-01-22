@@ -20,7 +20,9 @@ class NodeHorizontalRule implements Node
 
 	public function getData(BbNode $node)
 	{
-		return [];
+		return [
+			'type' => 'horizontal_rule',
+		];
 	}
 
 	public function getTagAttributes($node)
