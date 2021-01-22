@@ -17,18 +17,22 @@ use CsrDelft\view\bbcode\BbHelper;
 class BbSpotify extends BbTag {
 
 	private $formaat;
+	/**
+	 * @var string
+	 */
+	private $uri;
 
 	public static function getTagName() {
 		return 'spotify';
 	}
 
 	public function renderLight() {
-		$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $this->content));
+		$url = 'https://open.spotify.com/' . str_replace(':', '/', str_replace('spotify:', '', $this->uri));
 		return BbHelper::lightLinkBlock('spotify', $url, 'Spotify', $this->getBeschrijving());
 	}
 
 	public function render() {
-		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->content\" frameborder=\"0\" allowtransparency=\"true\"";
+		$commonAttributen = "src=\"https://embed.spotify.com/?uri=$this->uri\" frameborder=\"0\" allowtransparency=\"true\"";
 
 		switch($this->formaat) {
 			case "hoog":
@@ -48,21 +52,20 @@ class BbSpotify extends BbTag {
 	public function parse($arguments = [])
 	{
 		$this->formaat = $arguments['formaat'] ?? null;
-		$this->readMainArgument($arguments);
-		if (!startsWith($this->content, 'spotify') && !filter_var($this->content, FILTER_VALIDATE_URL)) {
-			throw new BbException('[spotify] Geen geldige url (' . $this->content . ')');
+		$url = $this->readMainArgument($arguments);
+		if (!startsWith($url, 'spotify') && !filter_var($url, FILTER_VALIDATE_URL)) {
+			throw new BbException('[spotify] Geen geldige url (' . $url . ')');
 		}
-		$this->content = urlencode($this->content);
+		$this->uri = urlencode($url);
 	}
 
 	private function getBeschrijving()
 	{
-		$uri = $this->content;
-		if (strstr($uri, 'playlist')) {
+		if (strstr($this->uri, 'playlist')) {
 			return'Afspeellijst';
-		} elseif (strstr($uri, 'album')) {
+		} elseif (strstr($this->uri, 'album')) {
 			return 'Album';
-		} elseif (strstr($uri, 'track')) {
+		} elseif (strstr($this->uri, 'track')) {
 			return 'Nummer';
 		} else {
 			return '';

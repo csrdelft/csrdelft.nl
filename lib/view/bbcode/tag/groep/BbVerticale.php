@@ -20,6 +20,10 @@ class BbVerticale extends BbTag {
 	 * @var VerticalenRepository
 	 */
 	private $verticalenRepository;
+	/**
+	 * @var string
+	 */
+	private $letter;
 
 	public function __construct(VerticalenRepository $verticalenRepository) {
 		$this->verticalenRepository = $verticalenRepository;
@@ -35,10 +39,10 @@ class BbVerticale extends BbTag {
 
 	public function render() {
 		try {
-			$verticale = $this->verticalenRepository->get($this->content);
+			$verticale = $this->verticalenRepository->get($this->letter);
 			return '<a href="/verticalen#' . $verticale->letter . '">' . $verticale->naam . '</a>';
 		} catch (CsrException $e) {
-			return 'Verticale met letter=' . htmlspecialchars($this->content) . ' bestaat niet. <a href="/verticalen">Zoeken</a>';
+			return 'Verticale met letter=' . htmlspecialchars($this->letter) . ' bestaat niet. <a href="/verticalen">Zoeken</a>';
 		}
 	}
 
@@ -46,6 +50,6 @@ class BbVerticale extends BbTag {
 	 * @param array $arguments
 	 */
 	public function parse($arguments = []) {
-		$this->readMainArgument($arguments);
+		$this->letter = $this->readMainArgument($arguments);
 	}
 }

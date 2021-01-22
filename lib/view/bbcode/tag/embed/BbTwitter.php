@@ -19,12 +19,22 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbTwitter extends BbTag {
 
+	/**
+	 * @var string
+	 */
+	private $url;
+
 	public static function getTagName() {
 		return 'twitter';
 	}
 
 	public function renderLight() {
-		return BbHelper::lightLinkBlock('twitter', 'https://twitter.com/' . $this->content, 'Twitter', 'Tweets van @' . $this->content);
+		return BbHelper::lightLinkBlock(
+			'twitter',
+			'https://twitter.com/' . $this->url,
+			'Twitter',
+			'Tweets van @' . $this->url
+		);
 	}
 
 	public function render() {
@@ -37,10 +47,10 @@ class BbTwitter extends BbTag {
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 HTML;
 
-		if (preg_match('/status/', $this->content)) {
+		if (preg_match('/status/', $this->url)) {
 			return <<<HTML
 <blockquote class="twitter-tweet" data-lang="nl" data-dnt="true" data-link-color="#0a338d">
-	<a href="{$this->content}">Tweet op Twitter</a>
+	<a href="{$this->url}">Tweet op Twitter</a>
 </blockquote>
 {$script}
 HTML;
@@ -48,9 +58,14 @@ HTML;
 
 		return <<<HTML
 <a class="twitter-timeline"
-	 data-lang="nl" data-width="{$width}" data-height="{$height}" data-dnt="true" data-theme="light" data-link-color="#0a338d"
-	 href="https://twitter.com/{$this->content}">
-	 	Tweets van {$this->content}
+	 data-lang="nl"
+	 data-width="{$width}"
+	 data-height="{$height}"
+	 data-dnt="true"
+	 data-theme="light"
+	 data-link-color="#0a338d"
+	 href="https://twitter.com/{$this->url}">
+	 	Tweets van {$this->url}
 </a>
 {$script}
 HTML;
@@ -63,11 +78,11 @@ HTML;
 	 */
 	public function parse($arguments = [])
 	{
-		$this->readContent([], false);
-		if (startsWith($this->content, '@')) {
-			$this->content = 'https://twitter.com/' . $this->content;
+		$this->url = $this->readMainArgument($arguments);
+		if (startsWith($this->url, '@')) {
+			$this->url = 'https://twitter.com/' . $this->url;
 		}
-		if (!preg_match('^https?://(www.)?twitter.com/', $this->content)) {
+		if (!preg_match('^https?://(www.)?twitter.com/', $this->url)) {
 			throw new BbException("Not a valid twitter url");
 		}
 	}

@@ -32,7 +32,7 @@ class BbNovietVanDeDag extends BbTag {
 	}
 
 	public function parse($arguments = []) {
-
+		// geen argumenten
 	}
 
 	public function render() {
@@ -73,6 +73,6 @@ class BbNovietVanDeDag extends BbTag {
 	}
 
 	public function renderLight() {
-
+		// Niet light te renderen
 	}
 }

@@ -34,7 +34,7 @@ class BbInstelling extends BbTag {
 		}
 		try {
 			if (lid_instelling($this->module, $this->instelling) == $this->testwaarde) {
-				return $this->content;
+				return $this->getContent();
 			}
 		} catch (CsrException $e) {
 			return '[instelling]: ' . $e->getMessage();

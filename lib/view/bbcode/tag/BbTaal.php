@@ -40,7 +40,7 @@ class BbTaal extends BbTag
 	public function render()
 	{
 		if ($this->requestStack->getCurrentRequest()->getLocale() == $this->taal) {
-			return $this->content;
+			return $this->getContent();
 		} else {
 			return '';
 		}

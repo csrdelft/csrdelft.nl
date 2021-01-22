@@ -18,14 +18,25 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbYoutube extends BbTag {
 
+	/**
+	 * @var string
+	 */
+	private $id;
+
 	public static function getTagName() {
 		return 'youtube';
 	}
 
 	public function renderLight() {
-		$this->assertId($this->content);
+		$this->assertId($this->id);
 
-		return BbHelper::lightLinkBlock('youtube', 'https://youtu.be/' . $this->content, 'YouTube video', '', 'https://img.youtube.com/vi/' . $this->content . '/0.jpg');
+		return BbHelper::lightLinkBlock(
+			'youtube',
+			"https://youtu.be/{$this->id}",
+			'YouTube video',
+			'',
+			"https://img.youtube.com/vi/{$this->id}/0.jpg"
+		);
 	}
 
 	/**
@@ -34,7 +45,7 @@ class BbYoutube extends BbTag {
 	 */
 	private function assertId($id) {
 		if (!preg_match('/^[0-9a-zA-Z\-_]{11}$/', $id)) {
-			throw new BbException('[youtube] Geen geldig youtube-id (' . htmlspecialchars($this->content) . ')');
+			throw new BbException('[youtube] Geen geldig youtube-id (' . htmlspecialchars($this->id) . ')');
 		}
 	}
 
@@ -43,9 +54,9 @@ class BbYoutube extends BbTag {
 	 * @throws BbException
 	 */
 	public function render() {
-		$this->assertId($this->content);
+		$this->assertId($this->id);
 
-		$src = '//www.youtube-nocookie.com/embed/' . $this->content . '?modestbranding=1&hl=nl';
+		$src = '//www.youtube-nocookie.com/embed/' . $this->id . '?modestbranding=1&hl=nl';
 
 		return <<<HTML
 <div class="bb-video">
@@ -66,6 +77,6 @@ HTML;
 	 */
 	public function parse($arguments = [])
 	{
-		$this->readMainArgument($arguments);
+		$this->id = $this->readMainArgument($arguments);
 	}
 }
