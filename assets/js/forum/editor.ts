@@ -4,6 +4,7 @@ import {Node, Schema} from "prosemirror-model"
 import {schema} from "prosemirror-schema-basic"
 import {addListNodes} from "prosemirror-schema-list"
 import {exampleSetup} from "prosemirror-example-setup"
+import ctx from "../ctx";
 
 declare global {
 	interface Window {
@@ -17,55 +18,37 @@ const mySchema = new Schema({
 	nodes: addListNodes(schema.spec.nodes as any, "paragraph block*", "block"),
 	marks: schema.spec.marks
 })
-const content = {
-	"doc": {
-		"type": "doc",
-		"content": [{
-			"type": "heading",
-			"attrs": {"level": 2},
-			"content": [{"type": "text", "text": "Dingen met spullen"}]
-		}, {
-			"type": "paragraph",
-			"content": [{"type": "text", "text": "Dit is mijn "}, {
-				"type": "text",
-				"marks": [{"type": "em"}],
-				"text": "verhaal"
-			}, {"type": "text", "text": ", wat vindt je er van?"}]
-		}, {
-			"type": "paragraph",
-			"content": [{
-				"type": "image",
-				"attrs": {"src": "http://dev-csrdelft.nl/profiel/pasfoto/1345.jpg", "alt": "", "title": ""}
-			}]
-		}, {"type": "horizontal_rule"}, {
-			"type": "paragraph",
-			"content": [{"type": "text", "marks": [{"type": "em"}], "text": "a"}, {
-				"type": "text",
-				"marks": [{"type": "em"}, {"type": "strong"}],
-				"text": "sdfa"
-			}, {"type": "text", "marks": [{"type": "em"}], "text": "sdf"}]
-		}]
-	},
-	"selection": {
-		"type": "text",
-		"anchor": 16,
-		"head": 16,
+
+ctx.addHandler('.pm-editor', el => {
+	const input = document.querySelector<HTMLInputElement>('#' + el.dataset.prosemirrorDoc);
+
+	const doc = JSON.parse(input.value);
+
+	const content = {
+		"doc": doc,
+		"selection": {
+			"type": "text",
+			"anchor": 16,
+			"head": 16,
+		}
 	}
 
-}
+	console.log(doc)
 
-const contentNode = Node.fromJSON(mySchema, content.doc)
+	const contentNode = Node.fromJSON(mySchema, content.doc)
 
-window.view = new EditorView(document.querySelector("#editor"), {
-	state: EditorState.create({
-		doc: contentNode,
-		plugins: exampleSetup({schema: mySchema})
+	const view = new EditorView(document.querySelector("#editor"), {
+		state: EditorState.create({
+			doc: contentNode,
+			plugins: exampleSetup({schema: mySchema})
+		}),
+		dispatchTransaction(tr) {
+			view.updateState(view.state.apply(tr));
+			//current state as json in text area
+			input.value = JSON.stringify(view.state.doc.toJSON());
+		}
 	})
 })
 
 
-document.querySelector("#export").addEventListener('click', () => {
-	console.log(window.view.state.doc, JSON.stringify(window.view.state.doc))
-	document.querySelector<HTMLInputElement>("input#bericht").value = JSON.stringify(window.view.state.doc)
-})
 

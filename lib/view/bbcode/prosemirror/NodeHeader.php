@@ -28,6 +28,7 @@ class NodeHeader implements Node
 		}
 
 		return [
+			'type' => 'heading',
 			'attrs' => ['level' => $node->heading_level],
 		];
 	}

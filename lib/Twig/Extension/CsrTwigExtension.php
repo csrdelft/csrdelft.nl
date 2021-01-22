@@ -12,13 +12,11 @@ use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
-use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\CsrfService;
-use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\CsrfField;
-use CsrDelft\view\Zijbalk;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -40,6 +38,10 @@ class CsrTwigExtension extends AbstractExtension
 	 */
 	private $profielRepository;
 	/**
+	 * @var BbToProsemirror
+	 */
+	private $bbToProsemirror;
+	/**
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
@@ -48,12 +50,14 @@ class CsrTwigExtension extends AbstractExtension
 		SessionInterface $session,
 		CsrfService $csrfService,
 		CmsPaginaRepository $cmsPaginaRepository,
-		ProfielRepository $profielRepository
+		ProfielRepository $profielRepository,
+		BbToProsemirror $bbToProsemirror
 	)
 	{
 		$this->session = $session;
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
+		$this->bbToProsemirror = $bbToProsemirror;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
@@ -116,6 +120,7 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFilter('file_base64', [$this, 'file_base64']),
 			new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
 			new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
+			new TwigFilter('bbcode_to_prosemirror', [$this, 'bbcode_to_prosemirror']),
 			new TwigFilter('uniqid', function ($prefix) {
 				return uniqid_safe($prefix);
 			}),
@@ -191,6 +196,11 @@ class CsrTwigExtension extends AbstractExtension
 	public function bbcode_light($string)
 	{
 		return CsrBB::parseLight($string);
+	}
+
+	public function bbcode_to_prosemirror($string)
+	{
+		return $this->bbToProsemirror->toProseMirror($string);
 	}
 
 	public function file_base64($filename)

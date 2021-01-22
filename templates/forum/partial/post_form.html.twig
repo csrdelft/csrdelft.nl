@@ -55,10 +55,11 @@
 							 placeholder="Onderwerp titel" value="{{ post_form_titel }}" origvalue="{{ post_form_titel }}"/>
 			{% endif %}
 			<div id="preview_forumBericht" class="bbcodePreview forumBericht"></div>
-			<textarea name="forumBericht" id="forumBericht" class="FormElement BBCodeField forumBericht"
-								data-bbpreview="forumBericht" tabindex="2"
-								rows="12"
-								origvalue="{{ post_form_tekst }}">{{ post_form_tekst }}</textarea>
+			<input id="bericht" name="forumBericht" value="{{ post_form_tekst|bbcode_to_prosemirror|json_encode }}" />
+{#			<textarea name="forumBericht" id="forumBericht" class="FormElement BBCodeField forumBericht"#}
+{#								data-bbpreview="forumBericht" tabindex="2"#}
+{#								rows="12"#}
+{#								origvalue="{{ post_form_tekst }}">{{ post_form_tekst }}</textarea>#}
 			<div class="butn">
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn btn-primary"/>
 				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn btn-secondary"

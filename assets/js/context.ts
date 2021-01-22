@@ -102,7 +102,7 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'.reset': (el) => el.addEventListener('click', formReset),
 		'.submit': (el) => el.addEventListener('click', formSubmit),
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
-		'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
+		// 'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 		'time.timeago': (el) => $(el).timeago(),
 		'.SterrenField': initSterrenField,
 		'form.dropzone': initDropzone,

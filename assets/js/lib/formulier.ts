@@ -8,6 +8,8 @@ import {redirect, reload} from './reload';
 import {parents, select, selectAll} from "./dom";
 import {throwError} from "./util";
 
+require('../forum/editor')
+
 export function formIsChanged(form: HTMLFormElement): boolean {
 	let changed = false;
 	$(form).find('.FormElement').not('.tt-hint').each(function () {

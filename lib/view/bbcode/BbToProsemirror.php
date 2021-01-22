@@ -14,6 +14,7 @@ use CsrDelft\view\bbcode\prosemirror\NodeDocument;
 use CsrDelft\view\bbcode\prosemirror\NodeHeader;
 use CsrDelft\view\bbcode\prosemirror\NodeHorizontalRule;
 use CsrDelft\view\bbcode\prosemirror\NodeImage;
+use CsrDelft\view\bbcode\prosemirror\NodeParagraph;
 use CsrDelft\view\bbcode\prosemirror\NodeString;
 use CsrDelft\view\bbcode\prosemirror\NodeVerklapper;
 
@@ -35,6 +36,7 @@ class BbToProsemirror
 		NodeHeader::class,
 		NodeHorizontalRule::class,
 		NodeCodeBlock::class,
+		NodeParagraph::class,
 	];
 	/**
 	 * @var CsrBB
@@ -48,7 +50,7 @@ class BbToProsemirror
 		$this->csrBB = $csrBB;
 	}
 
-	public function toProseMirror(string $bbCode) {
+	public function toProseMirror($bbCode) {
 		$nodes = $this->csrBB->parseString($bbCode);
 
 		$content = $this->nodeToProseMirror($nodes);

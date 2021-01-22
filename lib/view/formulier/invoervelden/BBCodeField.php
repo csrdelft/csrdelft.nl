@@ -2,6 +2,9 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\view\bbcode\BbToProsemirror;
+
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -24,12 +27,11 @@ class BBCodeField extends TextareaField {
 
 	public function getHtml() {
 		$inputAttribute = $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete'));
+		$converter = ContainerFacade::getContainer()->get(BbToProsemirror::class);
+		$jsonValue = htmlspecialchars(json_encode($converter->toProseMirror($this->value)));
 		return  <<<HTML
-<textarea data-bbpreview="{$this->getId()}" $inputAttribute>{$this->value}</textarea>
-<div class="row justify-content-end">
-	<div class="col-auto">
-		<a class="btn btn-light" href="/wiki/cie:diensten:forum" target="_blank" title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
-	</div>
+<input type="hidden" $inputAttribute value="{$jsonValue}">
+<div id="editor"></div>
 HTML
 		. ($this->preview ? <<<HTML
 	<div class="col-auto">
