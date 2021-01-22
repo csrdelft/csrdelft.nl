@@ -412,32 +412,4 @@ class ToolsController extends AbstractController {
 			'content' => new SavedQueryContent($result),
 		]);
 	}
-
-	/**
-	 * @return PlainView
-	 * @Route("/tools/bbcode", methods={"GET", "POST"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function bbcode() {
-		$inputJSON = file_get_contents('php://input');
-		$input = json_decode($inputJSON, TRUE);
-
-		if (isset($_POST['data'])) {
-			$string = urldecode($_POST['data']);
-		} elseif (isset($_GET['data'])) {
-			$string = $_GET['data'];
-		} elseif (isset($input['data'])) {
-			$string = urldecode($input['data']);
-		} else {
-			$string = 'b0rkb0rkb0rk: geen invoer in htdocs/tools/bbcode';
-		}
-
-		$string = trim($string);
-
-		if (isset($_POST['mail']) || isset($input['mail'])) {
-			return new PlainView(CsrBB::parseMail($string));
-		} else {
-			return new PlainView(CsrBB::parse($string));
-		}
-	}
 }

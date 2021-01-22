@@ -121,5 +121,5 @@ export const bbCodeSet = {
 		// {className: 'btn-preview', name: 'Voorbeeld', call: 'preview'}
 	],
 	nameSpace: 'CsrBB',
-	previewParserPath: '/tools/bbcode', // path to your BBCode parser
+	previewParserPath: '/bb/preview', // path to your BBCode parser
 };
