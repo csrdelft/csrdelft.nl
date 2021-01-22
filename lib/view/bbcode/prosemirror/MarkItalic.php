@@ -9,7 +9,6 @@ use CsrDelft\bb\tag\BbNode;
 
 class MarkItalic implements Mark
 {
-
 	public function getBbTagType()
 	{
 		return BbItalic::class;
@@ -20,5 +19,15 @@ class MarkItalic implements Mark
 		return [
 			'type' => 'italic',
 		];
+	}
+
+	public function getMarkType()
+	{
+		return 'italic';
+	}
+
+	public function getTagAttributes($mark)
+	{
+		return [];
 	}
 }

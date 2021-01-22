@@ -1,25 +1,24 @@
 <?php
 declare(strict_types=1);
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\view\bbcode\BbToProseMirror;
+use CsrDelft\tests\CsrTestCase;
+use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\bbcode\CsrBB;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-final class TestProseMirror extends KernelTestCase
+final class TestBbToProsemirror extends CsrTestCase
 {
 	protected $parser;
 	/**
-	 * @var BbToProseMirror
+	 * @var BbToProsemirror
 	 */
 	private $converter;
 
 	public function setUp(): void
 	{
-		self::bootKernel();
-		ContainerFacade::init(self::$container);
+		parent::setUp();
+
 		$this->parser = new CsrBB(self::$container);
-		$this->converter = new BbToProseMirror($this->parser);
+		$this->converter = new BbToProsemirror($this->parser);
 	}
 
 	public function testString()

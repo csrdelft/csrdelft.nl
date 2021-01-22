@@ -20,4 +20,14 @@ class MarkBold implements Mark
 			'type' => 'bold',
 		];
 	}
+
+	public function getMarkType()
+	{
+		return 'bold';
+	}
+
+	public function getTagAttributes($mark)
+	{
+		return [];
+	}
 }

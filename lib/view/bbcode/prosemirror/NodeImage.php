@@ -30,4 +30,21 @@ class NodeImage implements Node
 			]
 		];
 	}
+
+	public function getTagAttributes($node)
+	{
+		return [
+			'img' => $node->attrs->src,
+		];
+	}
+
+	public function getNodeType()
+	{
+		return 'image';
+	}
+
+	public function selfClosing()
+	{
+		return true;
+	}
 }

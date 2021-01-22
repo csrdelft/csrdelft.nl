@@ -28,4 +28,21 @@ class NodeDocument implements Node
 			],
 		];
 	}
+
+	public function getNodeType()
+	{
+		return 'document'; // TODO: Not yet implemented in frontend
+	}
+
+	public function getTagAttributes($node)
+	{
+		return [
+			'document' => $node->attrs->id,
+		];
+	}
+
+	public function selfClosing()
+	{
+		return true;
+	}
 }

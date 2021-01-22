@@ -19,7 +19,7 @@ use CsrDelft\view\bbcode\prosemirror\NodeImage;
 use CsrDelft\view\bbcode\prosemirror\NodeString;
 use CsrDelft\view\bbcode\prosemirror\NodeVerklapper;
 
-class BbToProseMirror
+class BbToProsemirror
 {
 	public const MARKS = [
 		MarkBold::class,

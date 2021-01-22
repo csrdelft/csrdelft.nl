@@ -20,4 +20,19 @@ class NodeVerklapper implements Node
 			'type' => 'verklapper',
 		];
 	}
+
+	public function getNodeType()
+	{
+		return 'spoiler'; // TODO: Not yet implemented in frontend
+	}
+
+	public function getTagAttributes($node)
+	{
+		return [];
+	}
+
+	public function selfClosing()
+	{
+		return false;
+	}
 }
