@@ -99,7 +99,7 @@ $.extend(window, {
 
 Dropzone.autoDiscover = false;
 
-$.timeago.settings.strings = {
+($ as any).timeago.settings.strings = {
 	day: '1 dag',
 	days: '%d dagen',
 	hour: '1 uur',
