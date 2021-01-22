@@ -4414,10 +4414,10 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"jgallery@https://github.com/jakubkowalczyk-pl/jgallery":
+"jgallery@https://github.com/csrdelft/jgallery":
   version: 2.2.1
-  resolution: "jgallery@https://github.com/jakubkowalczyk-pl/jgallery.git#commit:7f517e2ae765f6423c4d6b2337a83a7da6f9c22d"
-  checksum: e367826f523d385bd879019922a356369441c634bd7508301cf92b266941f38388c8198ecb45ce9124ce047391844c0bb2210e4c998b66a6b559670f082bf473
+  resolution: "jgallery@https://github.com/csrdelft/jgallery.git#commit=cf28c15b3adf20a6c157b83cacfe9f616896c192"
+  checksum: 57761210ba2292a245952464a3540a9d5c4e1dfa094a00a7acc4627f42dde2929a98558109fc573a88e067f8017c29f10c572addc28c449fa8bb4fd1008203ae
   languageName: node
   linkType: hard
 
@@ -6791,7 +6791,7 @@ fsevents@~2.1.2:
     google-palette: ^1.1.0
     hammerjs: ^2.0.8
     hoverintent: ^2.2.1
-    jgallery: "https://github.com/jakubkowalczyk-pl/jgallery"
+    jgallery: "https://github.com/csrdelft/jgallery"
     jquery: ^3.4
     jquery-ui: ^1.12.1
     jquery.maskedinput: ^1.4.1

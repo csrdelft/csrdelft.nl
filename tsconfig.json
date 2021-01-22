@@ -13,8 +13,5 @@
     "assets/js/**/*.ts",
 		"assets/js/**/*.vue"
   ],
-  "compileOnSave": false,
-	"exclude": [
-		"node_modules"
-	]
+  "compileOnSave": false
 }
