@@ -328,6 +328,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prosemirror-history@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@types/prosemirror-history@npm:1.0.2"
+  dependencies:
+    "@types/prosemirror-model": "*"
+    "@types/prosemirror-state": "*"
+  checksum: fc32f1459c6e93ced7669aa760680d6142a5a30901863cc2efc88879b8e8f43111b1d32797fc0ec46fe842848ed603f9a367143fa093126e339f66024c10be7b
+  languageName: node
+  linkType: hard
+
 "@types/prosemirror-menu@npm:^1.0.3":
   version: 1.0.3
   resolution: "@types/prosemirror-menu@npm:1.0.3"
@@ -6414,7 +6424,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"prosemirror-history@npm:^1.0.0":
+"prosemirror-history@npm:^1.0.0, prosemirror-history@npm:^1.1.3":
   version: 1.1.3
   resolution: "prosemirror-history@npm:1.1.3"
   dependencies:
@@ -7000,6 +7010,7 @@ fsevents@~2.1.2:
     "@types/node": ^10.12.19
     "@types/optimize-css-assets-webpack-plugin": ^1.3.3
     "@types/prosemirror-commands": ^1.0.4
+    "@types/prosemirror-history": ^1.0.2
     "@types/prosemirror-menu": ^1.0.3
     "@types/prosemirror-model": ^1.11.2
     "@types/prosemirror-schema-basic": ^1.0.2
@@ -7072,6 +7083,7 @@ fsevents@~2.1.2:
     postcss-loader: ^3.0.0
     prosemirror-commands: ^1.1.5
     prosemirror-example-setup: ^1.1.2
+    prosemirror-history: ^1.1.3
     prosemirror-menu: ^1.1.4
     prosemirror-model: ^1.13.1
     prosemirror-schema-basic: ^1.1.2

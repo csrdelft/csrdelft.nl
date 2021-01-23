@@ -77,14 +77,6 @@ class BbToProsemirror
 					]);
 				}
 
-//				if ($class->wrapper) {
-//					$item['content'] = [
-//						array_merge($class->wrapper, [
-//							'content' => @$item['content'] ?: [],
-//						]),
-//					];
-//				}
-
 				array_push($nodes, $item);
 			} elseif ($this->marksRegistry->has(get_class($child))) {
 				$class = $this->marksRegistry->get(get_class($child));
