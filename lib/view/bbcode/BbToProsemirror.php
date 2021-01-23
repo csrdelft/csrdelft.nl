@@ -7,6 +7,7 @@ use CsrDelft\view\bbcode\prosemirror\MarkBold;
 use CsrDelft\view\bbcode\prosemirror\MarkCode;
 use CsrDelft\view\bbcode\prosemirror\MarkItalic;
 use CsrDelft\view\bbcode\prosemirror\MarkLink;
+use CsrDelft\view\bbcode\prosemirror\MarkPrive;
 use CsrDelft\view\bbcode\prosemirror\MarkUnderline;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use CsrDelft\view\bbcode\prosemirror\NodeCodeBlock;
@@ -26,6 +27,7 @@ class BbToProsemirror
 		MarkItalic::class,
 		MarkCode::class,
 		MarkLink::class,
+		MarkPrive::class,
 	];
 
 	public const NODES = [

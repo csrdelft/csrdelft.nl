@@ -317,6 +317,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prosemirror-commands@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@types/prosemirror-commands@npm:1.0.4"
+  dependencies:
+    "@types/prosemirror-model": "*"
+    "@types/prosemirror-state": "*"
+    "@types/prosemirror-view": "*"
+  checksum: 6f280dda19553388be16bf118a22cae2abd71ea4d4361315dcd5eb405e452106ffae70feedf9ba64226d4200f61eb9a75139d3fd201c0b7b41361d851c3ff4e3
+  languageName: node
+  linkType: hard
+
 "@types/prosemirror-menu@npm:^1.0.3":
   version: 1.0.3
   resolution: "@types/prosemirror-menu@npm:1.0.3"
@@ -6352,7 +6363,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"prosemirror-commands@npm:^1.0.0":
+"prosemirror-commands@npm:^1.0.0, prosemirror-commands@npm:^1.1.5":
   version: 1.1.5
   resolution: "prosemirror-commands@npm:1.1.5"
   dependencies:
@@ -6988,6 +6999,7 @@ fsevents@~2.1.2:
     "@types/mini-css-extract-plugin": ^0.2.0
     "@types/node": ^10.12.19
     "@types/optimize-css-assets-webpack-plugin": ^1.3.3
+    "@types/prosemirror-commands": ^1.0.4
     "@types/prosemirror-menu": ^1.0.3
     "@types/prosemirror-model": ^1.11.2
     "@types/prosemirror-schema-basic": ^1.0.2
@@ -7058,6 +7070,7 @@ fsevents@~2.1.2:
     pnp-webpack-plugin: ^1.6.4
     popper.js: ^1.15
     postcss-loader: ^3.0.0
+    prosemirror-commands: ^1.1.5
     prosemirror-example-setup: ^1.1.2
     prosemirror-menu: ^1.1.4
     prosemirror-model: ^1.13.1

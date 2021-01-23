@@ -90,6 +90,9 @@ services:
     class: Symfony\Component\Security\Core\Security
     public: true
 
+  CsrDelft\view\bbcode\CsrBB:
+    public: true
+
   csr.formulier.factory:
     alias: CsrDelft\Component\Formulier\FormulierFactory
 

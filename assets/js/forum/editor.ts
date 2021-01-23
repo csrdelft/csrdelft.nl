@@ -7,17 +7,19 @@ import {buildMenuItems, exampleSetup} from "prosemirror-example-setup"
 import ctx from "../ctx";
 import {addBbBlock, buildBbBlockMenu} from "./bbBlockSchema";
 import {addBbVerklapper, buildBbVerklapperMenu} from "./bbVerklapperSchema";
+import {addBbMarks, buildBbMarksMenu} from "./bbMarks";
 
 // Mix the nodes from prosemirror-schema-list into the basic schema to
 // create a schema with list support.
 const mySchema = new Schema({
 	nodes: addBbVerklapper(addBbBlock(addListNodes(schema.spec.nodes as any, "paragraph block*", "block"))),
-	marks: schema.spec.marks
+	marks: addBbMarks(schema.spec.marks as any),
 })
 
 const menu = buildMenuItems(mySchema)
 buildBbBlockMenu(menu)
 buildBbVerklapperMenu(mySchema, menu)
+buildBbMarksMenu(mySchema, menu)
 
 ctx.addHandler('.pm-editor', el => {
 	const input = document.querySelector<HTMLInputElement>('#' + el.dataset.prosemirrorDoc);

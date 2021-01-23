@@ -10,6 +10,7 @@ use CsrDelft\view\bbcode\prosemirror\MarkBold;
 use CsrDelft\view\bbcode\prosemirror\MarkCode;
 use CsrDelft\view\bbcode\prosemirror\MarkItalic;
 use CsrDelft\view\bbcode\prosemirror\MarkLink;
+use CsrDelft\view\bbcode\prosemirror\MarkPrive;
 use CsrDelft\view\bbcode\prosemirror\MarkUnderline;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use CsrDelft\view\bbcode\prosemirror\NodeCodeBlock;
@@ -42,6 +43,7 @@ class ProsemirrorToBb
 		MarkItalic::class,
 		MarkLink::class,
 		MarkCode::class,
+		MarkPrive::class,
 	];
 
 	public function document($value)
@@ -138,6 +140,10 @@ class ProsemirrorToBb
 
 		$attrs = '';
 		foreach ($tagAttributes as $attribute => $value) {
+			if (!$value) {
+				continue;
+			}
+
 			if ($attribute == $tagName) {
 				$tagName = "{$tagName}={$value}";
 			} else {

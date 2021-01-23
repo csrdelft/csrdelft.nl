@@ -3,9 +3,11 @@ import {EditorState, NodeSelection} from "prosemirror-state";
 import {MenuItem} from "prosemirror-menu";
 import {openPrompt, TextField} from "prosemirror-example-setup/src/prompt"
 
-export const blocks = {
+export const blocks: Record<string, string[]> = {
 	"groep": ["id"],
-	"activiteit": ["id"]
+	"activiteit": ["id"],
+	"ishetal": [],
+	"maaltijd": ["id"],
 }
 
 export const bbBlockSpec: NodeSpec = {
@@ -32,7 +34,7 @@ export const buildBbBlockMenu = (menu: Record<string, any>): Record<string, any>
 		title: "Insert " + type,
 		label: type.charAt(0).toUpperCase() + type.slice(1),
 		enable: canInsertBlock,
-		run(state, _, view) {
+		run(state, dispatch, view) {
 			let attrs = null
 			const blockType = state.schema.nodes["bb-block"]
 
@@ -40,16 +42,20 @@ export const buildBbBlockMenu = (menu: Record<string, any>): Record<string, any>
 				attrs = state.selection.node.attrs
 			}
 
-			openPrompt({
-				title: attrs && attrs.id ? "Update: " + attrs.type : "Invoegen: " + type,
-				fields: Object.fromEntries(
-					fields.map(field =>
-						[field, new TextField({label: field, required: true, value: attrs && attrs[field]})])),
-				callback(attrs) {
-					view.dispatch(view.state.tr.replaceSelectionWith(blockType.createAndFill({type, ...attrs})))
-					view.focus()
-				}
-			})
+			if (fields.length > 0) {
+				openPrompt({
+					title: attrs && attrs.id ? "Update: " + attrs.type : "Invoegen: " + type,
+					fields: Object.fromEntries(
+						fields.map(field =>
+							[field, new TextField({label: field, required: true, value: attrs && attrs[field]})])),
+					callback(attrs) {
+						view.dispatch(view.state.tr.replaceSelectionWith(blockType.createAndFill({type, ...attrs})))
+						view.focus()
+					}
+				})
+			} else {
+				dispatch(state.tr.replaceSelectionWith(blockType.createAndFill({type, ...attrs})))
+			}
 		}
 	})))
 	return menu
