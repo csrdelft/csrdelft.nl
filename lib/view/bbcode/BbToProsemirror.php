@@ -38,6 +38,11 @@ class BbToProsemirror
 
 		$content = $this->nodeToProseMirror($nodes);
 
+		// Lege paragraph als er geen content is.
+		if (empty($content)) {
+			$content = [['type' => 'paragraph']];
+		}
+
 		return [
 			'type' => 'doc',
 			'content' => $content,

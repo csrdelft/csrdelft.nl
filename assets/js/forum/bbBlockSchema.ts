@@ -44,7 +44,7 @@ export const buildBbBlockMenu = (menu: Record<string, any>): Record<string, any>
 
 			if (fields.length > 0) {
 				openPrompt({
-					title: attrs && attrs.id ? "Update: " + attrs.type : "Invoegen: " + type,
+					title: attrs && attrs.type == type ? "Update: " + attrs.type : "Invoegen: " + type,
 					fields: Object.fromEntries(
 						fields.map(field =>
 							[field, new TextField({label: field, required: true, value: attrs && attrs[field]})])),
