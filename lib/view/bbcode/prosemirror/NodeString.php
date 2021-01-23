@@ -9,7 +9,7 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeString implements Node
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbString::class;
 	}
@@ -22,7 +22,7 @@ class NodeString implements Node
 		];
 	}
 
-	public function getNodeType()
+	public static function getNodeType()
 	{
 		return 'text';
 	}

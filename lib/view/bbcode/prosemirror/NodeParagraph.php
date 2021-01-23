@@ -11,12 +11,12 @@ use CsrDelft\view\bbcode\tag\BbParagraph;
 
 class NodeParagraph implements Node
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbParagraph::class;
 	}
 
-	public function getNodeType()
+	public static function getNodeType()
 	{
 		return 'paragraph';
 	}

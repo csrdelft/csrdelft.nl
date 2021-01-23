@@ -8,12 +8,12 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeHorizontalRule implements Node
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbHorizontalRule::class;
 	}
 
-	public function getNodeType()
+	public static function getNodeType()
 	{
 		return 'horizontal_rule';
 	}

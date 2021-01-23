@@ -3,56 +3,37 @@
 namespace CsrDelft\view\bbcode;
 
 use CsrDelft\view\bbcode\prosemirror\Mark;
-use CsrDelft\view\bbcode\prosemirror\MarkBold;
-use CsrDelft\view\bbcode\prosemirror\MarkCode;
-use CsrDelft\view\bbcode\prosemirror\MarkItalic;
-use CsrDelft\view\bbcode\prosemirror\MarkLink;
-use CsrDelft\view\bbcode\prosemirror\MarkPrive;
-use CsrDelft\view\bbcode\prosemirror\MarkUnderline;
 use CsrDelft\view\bbcode\prosemirror\Node;
-use CsrDelft\view\bbcode\prosemirror\NodeCodeBlock;
-use CsrDelft\view\bbcode\prosemirror\NodeDocument;
-use CsrDelft\view\bbcode\prosemirror\NodeHeader;
-use CsrDelft\view\bbcode\prosemirror\NodeHorizontalRule;
-use CsrDelft\view\bbcode\prosemirror\NodeImage;
-use CsrDelft\view\bbcode\prosemirror\NodeParagraph;
-use CsrDelft\view\bbcode\prosemirror\NodeString;
-use CsrDelft\view\bbcode\prosemirror\NodeVerklapper;
+use Psr\Container\ContainerInterface;
 
 class BbToProsemirror
 {
-	public const MARKS = [
-		MarkBold::class,
-		MarkUnderline::class,
-		MarkItalic::class,
-		MarkCode::class,
-		MarkLink::class,
-		MarkPrive::class,
-	];
-
-	public const NODES = [
-		NodeDocument::class,
-		NodeImage::class,
-		NodeVerklapper::class,
-		NodeString::class,
-		NodeHeader::class,
-		NodeHorizontalRule::class,
-		NodeCodeBlock::class,
-		NodeParagraph::class,
-	];
 	/**
 	 * @var CsrBB
 	 */
 	private $csrBB;
 
 	private $storedMarks = [];
+	/**
+	 * Bevat @see Mark instances, met sleutel getBbTagType
+	 * @var ContainerInterface
+	 */
+	private $marksRegistry;
+	/**
+	 * Bevat @see Node instances, met sleutel getBbTagType
+	 * @var ContainerInterface
+	 */
+	private $nodesRegistry;
 
-	public function __construct(CsrBB $csrBB)
+	public function __construct($marksRegistry, $nodesRegistry, CsrBB $csrBB)
 	{
 		$this->csrBB = $csrBB;
+		$this->marksRegistry = $marksRegistry;
+		$this->nodesRegistry = $nodesRegistry;
 	}
 
-	public function toProseMirror($bbCode) {
+	public function toProseMirror($bbCode)
+	{
 		$nodes = $this->csrBB->parseString($bbCode);
 
 		$content = $this->nodeToProseMirror($nodes);
@@ -63,11 +44,13 @@ class BbToProsemirror
 		];
 	}
 
-	private function nodeToProseMirror($children) {
+	private function nodeToProseMirror($children)
+	{
 		$nodes = [];
 
 		foreach ($children as $child) {
-			if ($class = $this->findNode(get_class($child))) {
+			if ($this->nodesRegistry->has(get_class($child))) {
+				$class = $this->nodesRegistry->get(get_class($child));
 				$item = $class->getData($child);
 
 				if ($item === null) {
@@ -98,7 +81,8 @@ class BbToProsemirror
 //				}
 
 				array_push($nodes, $item);
-			} elseif ($class = $this->findMark(get_class($child))) {
+			} elseif ($this->marksRegistry->has(get_class($child))) {
+				$class = $this->marksRegistry->get(get_class($child));
 				array_push($this->storedMarks, $class->getData($child));
 
 				if (!empty($child->getChildren())) {
@@ -112,37 +96,5 @@ class BbToProsemirror
 		}
 
 		return $nodes;
-	}
-
-	/**
-	 * @param $class
-	 * @return Mark|null
-	 */
-	private function findMark($class) {
-		foreach (self::MARKS as $mark) {
-			/** @var Mark $instance */
-			$instance = new $mark();
-			if ($instance->getBbTagType() == $class) {
-				return $instance;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * @param $class
-	 * @return Node|null
-	 */
-	private function findNode($class) {
-		foreach(self::NODES as $node) {
-			/** @var Node $instance */
-			$instance = new $node();
-			if ($instance->getBbTagType() == $class) {
-				return $instance;
-			}
-		}
-
-		return null;
 	}
 }

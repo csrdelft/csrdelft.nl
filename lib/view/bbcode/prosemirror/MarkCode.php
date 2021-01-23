@@ -11,12 +11,12 @@ use CsrDelft\view\bbcode\tag\BbCodeInline;
 
 class MarkCode implements Mark
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbCodeInline::class;
 	}
 
-	public function getMarkType()
+	public static function getMarkType()
 	{
 		return 'code';
 	}

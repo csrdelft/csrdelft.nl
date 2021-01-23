@@ -9,7 +9,7 @@ use CsrDelft\bb\tag\BbUnderline;
 
 class MarkUnderline implements Mark
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbUnderline::class;
 	}
@@ -21,7 +21,7 @@ class MarkUnderline implements Mark
 		];
 	}
 
-	public function getMarkType()
+	public static function getMarkType()
 	{
 		return 'underline';
 	}

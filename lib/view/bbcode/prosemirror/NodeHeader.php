@@ -11,12 +11,12 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeHeader implements Node
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbHeading::class;
 	}
 
-	public function getNodeType()
+	public static function getNodeType()
 	{
 		return 'heading';
 	}

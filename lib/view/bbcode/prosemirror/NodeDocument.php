@@ -10,7 +10,7 @@ use CsrDelft\view\bbcode\tag\BbDocument;
 class NodeDocument implements Node
 {
 
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbDocument::class;
 	}
@@ -29,7 +29,7 @@ class NodeDocument implements Node
 		];
 	}
 
-	public function getNodeType()
+	public static function getNodeType()
 	{
 		return 'document'; // TODO: Not yet implemented in frontend
 	}

@@ -9,7 +9,7 @@ use CsrDelft\bb\tag\BbNode;
 
 class MarkItalic implements Mark
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbItalic::class;
 	}
@@ -21,7 +21,7 @@ class MarkItalic implements Mark
 		];
 	}
 
-	public function getMarkType()
+	public static function getMarkType()
 	{
 		return 'em';
 	}

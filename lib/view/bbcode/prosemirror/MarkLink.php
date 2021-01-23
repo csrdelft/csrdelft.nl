@@ -9,12 +9,12 @@ use CsrDelft\view\bbcode\tag\BbUrl;
 
 class MarkLink implements Mark
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbUrl::class;
 	}
 
-	public function getMarkType()
+	public static function getMarkType()
 	{
 		return 'link';
 	}

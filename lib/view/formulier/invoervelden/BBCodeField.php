@@ -29,13 +29,14 @@ class BBCodeField extends TextareaField {
 
 	public function getFormattedValue()
 	{
-		return (new ProsemirrorToBb())->render(json_decode(htmlspecialchars_decode($this->getValue())));
+		$converter = ContainerFacade::getContainer()->get(ProsemirrorToBb::class);
+
+		return $converter->render(json_decode(htmlspecialchars_decode($this->getValue())));
 	}
 
 	public function getHtml() {
 		$inputAttribute = $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete'));
-		$bb = ContainerFacade::getContainer()->get(CsrBB::class);
-		$converter = new BbToProsemirror($bb);
+		$converter = ContainerFacade::getContainer()->get(BbToProsemirror::class);
 		$jsonValue = htmlspecialchars(json_encode($converter->toProseMirror($this->value)));
 
 		return <<<HTML

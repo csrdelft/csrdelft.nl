@@ -9,7 +9,7 @@ use CsrDelft\view\bbcode\tag\BbVerklapper;
 
 class NodeVerklapper implements Node
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbVerklapper::class;
 	}
@@ -21,7 +21,7 @@ class NodeVerklapper implements Node
 		];
 	}
 
-	public function getNodeType()
+	public static function getNodeType()
 	{
 		return 'verklapper';
 	}

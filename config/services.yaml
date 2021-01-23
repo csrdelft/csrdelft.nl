@@ -107,6 +107,19 @@ services:
       - '@request_stack'
       - '@CsrDelft\Component\Formulier\FormulierBuilder'
 
+  CsrDelft\view\bbcode\BbToProsemirror:
+    public: true
+    arguments:
+      - !tagged_locator {tag: csr.editor.mark, default_index_method: getBbTagType}
+      - !tagged_locator {tag: csr.editor.node, default_index_method: getBbTagType}
+      - '@CsrDelft\view\bbcode\CsrBB'
+
+  CsrDelft\view\bbcode\ProsemirrorToBb:
+    public: true
+    arguments:
+      - !tagged_locator {tag: csr.editor.mark, default_index_method: getMarkType}
+      - !tagged_locator {tag: csr.editor.node, default_index_method: getNodeType}
+
   CsrDelft\Twig\Configurator:
     decorates: 'twig.configurator.environment'
 

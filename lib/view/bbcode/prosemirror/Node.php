@@ -11,28 +11,38 @@ use CsrDelft\bb\tag\BbNode;
 interface Node
 {
 	/**
+	 * Referentie naar type in Bb.
+	 *
 	 * @return BbTag|BbString
 	 */
-	public function getBbTagType();
+	public static function getBbTagType();
 
 	/**
+	 * Referentie naar type in Prosemirror schema.
+	 *
 	 * @return string
 	 */
-	public function getNodeType();
+	public static function getNodeType();
 
 	/**
+	 * Prosemirror definitie.
+	 *
 	 * @param BbNode $node
 	 * @return mixed
 	 */
 	public function getData(BbNode $node);
 
 	/**
-	 * @param $node
+	 * Bb attributes.
+	 *
+	 * @param $node \stdClass Prosemirror definitie.
 	 * @return string[]
 	 */
 	public function getTagAttributes($node);
 
 	/**
+	 * Moet er een close tag gerendered worden?
+	 *
 	 * @return bool
 	 */
 	public function selfClosing();

@@ -7,12 +7,12 @@ use CsrDelft\bb\tag\BbNode;
 
 class NodeCodeBlock implements Node
 {
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbCode::class;
 	}
 
-	public function getNodeType()
+	public static function getNodeType()
 	{
 		return 'code_block';
 	}

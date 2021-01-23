@@ -10,7 +10,7 @@ use CsrDelft\view\bbcode\tag\BbImg;
 class NodeImage implements Node
 {
 
-	public function getBbTagType()
+	public static function getBbTagType()
 	{
 		return BbImg::class;
 	}
@@ -38,7 +38,7 @@ class NodeImage implements Node
 		];
 	}
 
-	public function getNodeType()
+	public static function getNodeType()
 	{
 		return 'image';
 	}

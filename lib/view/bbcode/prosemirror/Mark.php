@@ -11,22 +11,30 @@ use CsrDelft\bb\tag\BbNode;
 interface Mark
 {
 	/**
+	 * Referentie naar type in Bb.
+	 *
 	 * @return BbTag|BbString
 	 */
-	public function getBbTagType();
+	public static function getBbTagType();
 
 	/**
+	 * Referentie naar type in Prosemirror schema.
+	 *
 	 * @return string
 	 */
-	public function getMarkType();
+	public static function getMarkType();
 
 	/**
-	 * @param $mark
-	 * @return mixed
+	 * Bb attributes.
+	 *
+	 * @param $node \stdClass Prosemirror definitie.
+	 * @return string[]
 	 */
 	public function getTagAttributes($mark);
 
 	/**
+	 * Prosemirror definitie.
+	 *
 	 * @param BbNode $node
 	 * @return mixed
 	 */
