@@ -16,9 +16,7 @@ class MarkBold implements Mark
 
 	public function getData(BbNode $node)
 	{
-		return [
-			'type' => 'strong',
-		];
+		return [];
 	}
 
 	public static function getMarkType()

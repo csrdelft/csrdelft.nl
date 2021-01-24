@@ -22,7 +22,6 @@ class NodeDocument implements Node
 		}
 
 		return [
-			'type' => 'document',
 			'attrs' => [
 				'id' => $node->id,
 			],

@@ -17,7 +17,6 @@ class NodeString implements Node
 	public function getData(BbNode $node)
 	{
 		return [
-			'type' => 'text',
 			'text' => $node->getContent(),
 		];
 	}

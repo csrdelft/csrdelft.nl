@@ -136,13 +136,9 @@ function blockTypeHead(nodeType, i) {
 function priveItem(markType) {
 	return new MenuItem({
 		title: "Markeer tekst als prive",
-		icon: icons.link,
-		active(state) {
-			return markActive(state, markType)
-		},
-		enable(state) {
-			return !state.selection.empty
-		},
+		label: "Prive",
+		active: state => markActive(state, markType),
+		enable: state => !state.selection.empty,
 		run(state, dispatch, view) {
 			if (markActive(state, markType)) {
 				toggleMark(markType)(state, dispatch)
@@ -208,13 +204,19 @@ function blockMenuItem(type: string, fields: string[]) {
 export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] {
 	return [
 		[
-			markItem(schema.marks.strong, {title: "Toggle strong style", icon: icons.strong}),
-			markItem(schema.marks.em, {title: "Toggle emphasis", icon: icons.em}),
-			markItem(schema.marks.code, {title: "Toggle code font", icon: icons.code}),
+			markItem(schema.marks.strong, {title: "Schakel dikgedrukt", icon: icons.strong}),
+			markItem(schema.marks.em, {title: "Schakel schuingedrukt", icon: icons.em}),
 			linkItem(schema.marks.link),
-			markItem(schema.marks.offtopic, {title: "Schakel offtopic", icon: icons.strong}),
-			markItem(schema.marks.neuzen, {title: "Schakel neuzen", icon: icons.strong}),
-			priveItem(schema.marks.prive),
+			new Dropdown([
+				markItem(schema.marks.code, {title: "Schakel code", label: "Code"}),
+				markItem(schema.marks.neuzen, {title: "Schakel neuzen", label: "Neuzen"}),
+				markItem(schema.marks.superscript, {title: "Schakel superscript", label: "Superscript"}),
+				markItem(schema.marks.subscript, {title: "Schakel subscript", label: "Subscript"}),
+				markItem(schema.marks.underline, {title: "Schakel onderlijn", label: "Onderlijn"}),
+				markItem(schema.marks.strikethrough, {title: "Schakel doorstreep", label: "Doorstreep"}),
+				markItem(schema.marks.offtopic, {title: "Schakel offtopic", label: "Offtopic"}),
+				priveItem(schema.marks.prive),
+			], {label: "Meer"})
 		],
 		[
 			new Dropdown([

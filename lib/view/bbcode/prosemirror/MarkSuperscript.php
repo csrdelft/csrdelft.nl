@@ -1,24 +1,20 @@
 <?php
 
-
 namespace CsrDelft\view\bbcode\prosemirror;
 
-
-use CsrDelft\bb\BbTag;
-use CsrDelft\bb\internal\BbString;
 use CsrDelft\bb\tag\BbNode;
-use CsrDelft\view\bbcode\tag\BbCodeInline;
+use CsrDelft\bb\tag\BbSuperscript;
 
-class MarkCode implements Mark
+class MarkSuperscript implements Mark
 {
 	public static function getBbTagType()
 	{
-		return BbCodeInline::class;
+		return BbSuperscript::class;
 	}
 
 	public static function getMarkType()
 	{
-		return 'code';
+		return 'superscript';
 	}
 
 	public function getTagAttributes($mark)

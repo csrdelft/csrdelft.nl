@@ -16,9 +16,7 @@ class NodeVerklapper implements Node
 
 	public function getData(BbNode $node)
 	{
-		return [
-			'type' => 'verklapper',
-		];
+		return [];
 	}
 
 	public static function getNodeType()

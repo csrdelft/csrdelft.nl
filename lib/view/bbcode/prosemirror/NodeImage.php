@@ -22,7 +22,6 @@ class NodeImage implements Node
 		}
 
 		return [
-			'type' => 'image',
 			'attrs' => [
 				'alt' => $node->getSourceUrl(),
 				'src' => $node->getSourceUrl(),

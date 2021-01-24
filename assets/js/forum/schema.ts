@@ -4,10 +4,15 @@ import {DOMOutputSpec, MarkSpec, Node, NodeSpec, Schema} from "prosemirror-model
 const RecordWithType = <U>() => <T extends Record<string, U>>(id: T) => id
 
 export const blocks: Record<string, string[]> = {
-	"groep": ["id"],
-	"activiteit": ["id"],
-	"ishetal": [],
-	"maaltijd": ["id"],
+	groep: ["id"],
+	activiteit: ["id"],
+	ishetal: [],
+	maaltijd: ["id"],
+	document: ["id"],
+	fotoalbum: ["url"],
+	foto: ["url"],
+	peiling: ["url"],
+	locatie: ["locatie"]
 }
 
 // :: Object
@@ -211,10 +216,30 @@ export const marks = RecordWithType<MarkSpec>()({
 		toDOM: () => ["strong", 0]
 	},
 
+	superscript: {
+		parseDOM: [{tag: "sup"}],
+		toDOM: () => ["sup", 0]
+	},
+
+	subscript: {
+		parseDOM: [{tag: "sub"}],
+		toDOM: () => ["sub", 0]
+	},
+
+	strikethrough: {
+		parseDOM: [{tag: "del"}],
+		toDOM: () => ["del", 0]
+	},
+
+	underline: {
+		parseDOM: [{tag: "ins"}],
+		toDOM: () => ["ins", 0]
+	},
+
 	// :: MarkSpec Code font mark. Represented as a `<code>` element.
 	code: {
 		parseDOM: [{tag: "code"}],
-		toDOM: () => ["code", 0] as const
+		toDOM: () => ["code", 0]
 	},
 
 	offtopic: {

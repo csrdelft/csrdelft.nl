@@ -16,9 +16,7 @@ class MarkItalic implements Mark
 
 	public function getData(BbNode $node)
 	{
-		return [
-			'type' => 'em',
-		];
+		return [];
 	}
 
 	public static function getMarkType()

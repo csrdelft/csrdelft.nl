@@ -19,9 +19,7 @@ class NodeCodeBlock implements Node
 
 	public function getData(BbNode $node)
 	{
-		return [
-			'type' => 'code_block',
-		];
+		return [];
 	}
 
 	public function getTagAttributes($node)

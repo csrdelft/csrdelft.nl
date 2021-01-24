@@ -16,19 +16,12 @@ class MarkUnderline implements Mark
 
 	public function getData(BbNode $node)
 	{
-		return [
-			'type' => 'underline',
-		];
+		return [];
 	}
 
 	public static function getMarkType()
 	{
 		return 'underline';
-	}
-
-	public function getTagName()
-	{
-		return 'u';
 	}
 
 	public function getTagAttributes($mark)

@@ -23,9 +23,7 @@ class NodeParagraph implements Node
 
 	public function getData(BbNode $node)
 	{
-		return [
-			'type' => 'paragraph',
-		];
+		return [];
 	}
 
 	public function getTagAttributes($node)
