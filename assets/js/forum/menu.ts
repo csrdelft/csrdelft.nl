@@ -201,6 +201,31 @@ function blockMenuItem(type: string, fields: string[]) {
 	})
 }
 
+function blockTypeItemPrompt(nodeType: NodeType<EditorSchema>, options) {
+	return new MenuItem({
+		title: options.title,
+		label: options.label,
+		enable: state => canInsert(state, nodeType),
+		run: (state, dispatch, view) => {
+			let attrs = null
+
+			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+				attrs = state.selection.node.attrs
+			}
+
+			openPrompt({
+				title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
+				fields: Object.fromEntries(Object.entries(nodeType.spec.attrs).map(([attr, spec]) =>
+					[attr, new TextField({label: attr, required: true, value: attrs ? attrs[attr] : spec.default})])),
+				callback(callbackAttrs) {
+					view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs})))
+					view.focus()
+				}
+			})
+		}
+	})
+}
+
 export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] {
 	return [
 		[
@@ -220,10 +245,15 @@ export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] 
 		],
 		[
 			new Dropdown([
-				...Object.entries(blocks).map(([name, fields]) => blockMenuItem(name, fields))
-			], {label: "Blok"}),
-			new Dropdown([
 				insertImageItem(schema.nodes.image),
+				new DropdownSubmenu([
+					blockTypeItemPrompt(schema.nodes.twitter, {title: "Twitter invoegen", label: "Twitter"}),
+					blockTypeItemPrompt(schema.nodes.youtube, {title: "YouTube invoegen", label: "YouTube"}),
+					blockTypeItemPrompt(schema.nodes.spotify, {title: "Spotify invoegen", label: "Spotify"}),
+					blockTypeItemPrompt(schema.nodes.video, {title: "Video invoegen", label: "Video"}),
+					blockTypeItemPrompt(schema.nodes.audio, {title: "Geluid invoegen", label: "Geluid"}),
+				], {label: "Embed"}),
+				...Object.entries(blocks).map(([name, fields]) => blockMenuItem(name, fields)),
 				new MenuItem({
 					title: "Insert horizontal rule",
 					label: "Horizontal rule",

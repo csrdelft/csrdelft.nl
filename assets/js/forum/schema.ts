@@ -127,14 +127,12 @@ export const nodes = RecordWithType<NodeSpec>()({
 	verklapper: {
 		content: "block+",
 		group: "block",
-		defining: true,
 		parseDOM: [{tag: "div[data-bb-verklapper]"}],
 		toDOM: () => ["div", {"data-bb-verklapper": "", class: "pm-verklapper"}, 0]
 	},
 
 	"bb-block": {
 		attrs: {type: {default: "groep"}, id: {default: "none"}},
-		inline: false,
 		group: "block",
 		draggable: true,
 		toDOM: node => ["div", {
@@ -149,7 +147,65 @@ export const nodes = RecordWithType<NodeSpec>()({
 				return type in blocks ? {type} : false
 			}
 		}]
-	}
+	},
+
+	// Embeds
+	twitter: {
+		attrs: {url: {default: null}},
+		group: "block",
+		parseDOM: [{
+			tag: "div[data-bb-twitter]",
+			getAttrs: (dom: HTMLElement) => ({
+				url: dom.dataset.bbTwitter,
+			})
+		}],
+		toDOM: node => ["div", {"data-bb-twitter": node.attrs.url}]
+	},
+
+	video: {
+		attrs: {url: {default: null}},
+		group: "block",
+		parseDOM: [{
+			tag: "div[data-bb-video]",
+			getAttrs: (dom: HTMLElement) => ({
+				url: dom.dataset.bbVideo
+			})
+		}],
+		toDOM: node => ["div", {"data-bb-video": node.attrs.url}],
+	},
+
+	audio: {
+		attrs: {url: {default: null}},
+		group: "block",
+		parseDOM: [{
+			tag: "div[data-bb-audio]",
+			getAttrs: (dom: HTMLElement) => ({
+				url: dom.dataset.bbAudio,
+			})
+		}],
+		toDOM: node => ["div", {"data-bb-audio": node.attrs.url}]
+	},
+
+	youtube: {
+		attrs: {url: {default: null}},
+		group: "block",
+		parseDOM: [{tag: "div[data-bb-youtube]"}],
+		toDOM: node => ["div", {"data-bb-youtube": node.attrs.url}]
+	},
+
+	spotify: {
+		attrs: {url: {default: null}, formaat: {default: null}},
+		group: "block",
+		parseDOM: [{
+			tag: "div[data-bb-spotify]",
+			getAttrs: (dom: HTMLElement) => ({
+				url: dom.dataset.bbSpotify,
+				formaat: dom.dataset.bbSpotifyFormaat,
+			})
+		}],
+		toDOM: node => ["div", {"data-bb-spotify": node.attrs.url, "data-bb-spotify-formaat": node.attrs.formaat}]
+	},
+
 })
 
 export type NodeScheme = keyof typeof nodes
