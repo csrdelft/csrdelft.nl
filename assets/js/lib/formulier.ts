@@ -8,7 +8,7 @@ import {redirect, reload} from './reload';
 import {parents, select, selectAll} from "./dom";
 import {throwError} from "./util";
 
-require('../forum/editor')
+require('../editor')
 
 export function formIsChanged(form: HTMLFormElement): boolean {
 	let changed = false;
