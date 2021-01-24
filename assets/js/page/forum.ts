@@ -5,7 +5,6 @@ import {forumCiteren} from '../lib/forum';
 import hoverintent from "hoverintent";
 import {select, selectAll} from "../lib/dom";
 
-
 try {
 	const textarea = select<HTMLTextAreaElement>('textarea#forumBericht')
 	const concept = select<HTMLElement>('#forumConcept')

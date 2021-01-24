@@ -263,8 +263,4 @@ class CsrBB extends Parser {
 
 		return $tag;
 	}
-
-	public function getAllTags() {
-		return $this->tags;
-	}
 }
