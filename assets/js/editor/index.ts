@@ -7,20 +7,20 @@ import {exampleSetup} from "prosemirror-example-setup"
 import {buildMenuItems} from "./menu";
 import {htmlDecode} from "../lib/util";
 import {bbPrompt} from "./bb-prompt";
+import ctx from "../ctx";
 
-// Mix the nodes from prosemirror-schema-list into the basic schema to
-// create a schema with list support.
-const mySchema = new Schema<EditorNodes, EditorMarks>({
-	nodes: addListNodes(schema.spec.nodes as any, "paragraph block*", "block"),
-	marks: schema.spec.marks,
-})
+ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
+	// Mix the nodes from prosemirror-schema-list into the basic schema to
+	// create a schema with list support.
+	const mySchema = new Schema<EditorNodes, EditorMarks>({
+		nodes: addListNodes(schema.spec.nodes as any, "paragraph block*", "block"),
+		marks: schema.spec.marks,
+	})
 
-const menuContent = buildMenuItems(mySchema)
-
-export const initEditor = (el: HTMLElement): void => {
+	const menuContent = buildMenuItems(mySchema)
 	const input = document.querySelector<HTMLInputElement>('#' + el.dataset.prosemirrorDoc);
 	const text = htmlDecode(input.value.replace(/&quot;/g, "\\\""));
-	console.log(text, input.value);
+
 	const contentNode = Node.fromJSON(mySchema, JSON.parse(text))
 
 	const currentView = new EditorView<typeof mySchema>(el, {
@@ -42,4 +42,4 @@ export const initEditor = (el: HTMLElement): void => {
 			return true
 		}
 	})
-}
+})
