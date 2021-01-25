@@ -8,6 +8,19 @@
 	margin-bottom: 23px;
 }
 
+.ProseMirror-toggle-button {
+	position: absolute;
+	right: 15px;
+	z-index: 100;
+	padding: 8px;
+	cursor: pointer;
+	line-height: 0.8;
+}
+
+.bb-editor {
+	margin-top: 30px;
+}
+
 .ProseMirror p:first-child,
 .ProseMirror h1:first-child,
 .ProseMirror h2:first-child,
@@ -70,4 +83,61 @@
 	background: #f5f5f5;
 	box-shadow: 0 0 10px #e8e8e8;
 	margin: 0.5em 0;
+}
+
+.ProseMirror [data-bb] {
+	border: 1px dotted lightgrey;
+}
+
+.ProseMirror-popup {
+	background: white;
+	padding: 5px 10px 5px 15px;
+	border: 1px solid silver;
+	position: fixed;
+	border-radius: 3px;
+	z-index: 11;
+	box-shadow: -.5px 2px 5px rgba(0, 0, 0, .2);
+}
+
+.ProseMirror-popup h5 {
+	margin: 0;
+	font-weight: normal;
+	font-size: 100%;
+	color: #444;
+}
+
+.ProseMirror-popup input[type="text"],
+.ProseMirror-popup textarea {
+	background: #eee;
+	border: none;
+	outline: none;
+}
+
+.ProseMirror-popup input[type="text"] {
+	padding: 0 4px;
+}
+
+.ProseMirror-popup-close {
+	position: absolute;
+	left: 2px; top: 1px;
+	color: #666;
+	border: none; background: transparent; padding: 0;
+}
+
+.ProseMirror-popup-close:after {
+	content: "✕";
+	font-size: 12px;
+}
+
+.ProseMirror-invalid {
+	background: #ffc;
+	border: 1px solid #cc7;
+	border-radius: 4px;
+	padding: 5px 10px;
+	position: absolute;
+	min-width: 10em;
+}
+
+.ProseMirror-popup-buttons {
+	margin-top: 5px;
 }

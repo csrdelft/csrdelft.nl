@@ -1,5 +1,5 @@
 {% block bb_text_widget %}
-	<input type="hidden" {{ block('widget_attributes') }} value="{{ value|json_encode }}">
+	<input type="hidden" {{ block('widget_attributes') }} value="{{ value }}">
 	<div id="editor" class="pm-editor" data-prosemirror-doc="{{ id }}"></div>
 {% endblock %}
 

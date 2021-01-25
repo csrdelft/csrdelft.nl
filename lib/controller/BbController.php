@@ -24,7 +24,8 @@ class BbController extends AbstractController
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function preview(Request $request) {
+	public function preview(Request $request)
+	{
 		$input = json_decode($request->getContent(), true);
 
 		if ($request->request->has('data')) {
@@ -53,7 +54,8 @@ class BbController extends AbstractController
 	 * @Route("/bb/convert-to-bb")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function convertToBb(Request $request, ProsemirrorToBb $prosemirrorToBb) {
+	public function convertToBb(Request $request, ProsemirrorToBb $prosemirrorToBb)
+	{
 		$input = json_decode($request->getContent(), true);
 
 		if (isset($input['data'])) {
@@ -70,13 +72,12 @@ class BbController extends AbstractController
 	 * @Route("/bb/convert-to-prosemirror")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function convertToProsemirror(Request $request, BbToProsemirror $bbToProsemirror) {
+	public function convertToProsemirror(Request $request, BbToProsemirror $bbToProsemirror)
+	{
 		$input = json_decode($request->getContent(), true);
 
 		if (isset($input['data'])) {
-			return new JsonResponse([
-				'data' => $bbToProsemirror->toProseMirror($input['data'])
-			]);
+			return new JsonResponse($bbToProsemirror->toProseMirror($input['data']));
 		}
 
 		throw new BadRequestHttpException("Veld data in body niet gezet.");

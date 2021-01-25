@@ -15,6 +15,11 @@ class NodeDocument implements Node
 		return BbDocument::class;
 	}
 
+	public static function getNodeType()
+	{
+		return 'document';
+	}
+
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbDocument) {
@@ -26,11 +31,6 @@ class NodeDocument implements Node
 				'id' => $node->id,
 			],
 		];
-	}
-
-	public static function getNodeType()
-	{
-		return 'document'; // TODO: Not yet implemented in frontend
 	}
 
 	public function getTagAttributes($node)

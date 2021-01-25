@@ -16,6 +16,7 @@ import {openPrompt, TextField} from "prosemirror-example-setup/src/prompt"
 import {MarkType, NodeType} from "prosemirror-model";
 import {blocks, EditorSchema} from "./schema";
 import {redo, undo} from "prosemirror-history";
+import {bbPrompt} from "./bb-prompt";
 
 function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<EditorSchema>) {
 	const $from = state.selection.$from
@@ -226,6 +227,23 @@ function blockTypeItemPrompt(nodeType: NodeType<EditorSchema>, options) {
 	})
 }
 
+function bbInsert(nodeType: NodeType<EditorSchema>) {
+	return new MenuItem({
+		title: "BB code als platte tekst invoegen",
+		label: "BB code",
+		enable: state => canInsert(state, nodeType),
+		run: (state, dispatch, view) => {
+			let attrs: any = {bb: ""}
+
+			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+				attrs = state.selection.node.attrs
+			}
+
+			bbPrompt(nodeType, attrs, view)
+		}
+	})
+}
+
 export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] {
 	return [
 		[
@@ -267,7 +285,8 @@ export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] 
 				wrapItem(schema.nodes.verklapper, {
 					title: "Stop selectie in verklapper",
 					label: "Verklapper"
-				})
+				}),
+				bbInsert(schema.nodes.bb),
 			], {label: "Invoegen"}),
 			new Dropdown([
 				blockTypeItem(schema.nodes.paragraph, {

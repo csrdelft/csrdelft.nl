@@ -52,6 +52,7 @@ use CsrDelft\view\bbcode\tag\BbParagraph;
 use CsrDelft\view\bbcode\tag\BbPeiling;
 use CsrDelft\view\bbcode\tag\BbPrive;
 use CsrDelft\view\bbcode\tag\BbQuery;
+use CsrDelft\view\bbcode\tag\BbBb;
 use CsrDelft\view\bbcode\tag\BbReldate;
 use CsrDelft\view\bbcode\tag\BbTaal;
 use CsrDelft\view\bbcode\tag\BbUbboff;
@@ -81,7 +82,6 @@ use function substr_count;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
 class CsrBB extends Parser {
-
 	protected $tags = [
 		// Standard
 		BbBold::class,
@@ -110,6 +110,7 @@ class CsrBB extends Parser {
 		BbTableRow::class,
 		BbUnderline::class,
 		// Custom
+		BbBb::class,
 		BbActiviteit::class,
 		BbAudio::class,
 		BbBestuur::class,

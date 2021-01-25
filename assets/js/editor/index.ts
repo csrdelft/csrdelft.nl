@@ -6,6 +6,9 @@ import {addListNodes} from "prosemirror-schema-list"
 import {exampleSetup} from "prosemirror-example-setup"
 import ctx from "../ctx";
 import {buildMenuItems} from "./menu";
+import {htmlDecode} from "../lib/util";
+import {openPrompt, TextAreaField} from "./prompt";
+import {bbPrompt} from "./bb-prompt";
 
 // Mix the nodes from prosemirror-schema-list into the basic schema to
 // create a schema with list support.
@@ -18,12 +21,11 @@ const menu = buildMenuItems(mySchema)
 
 ctx.addHandler('.pm-editor', el => {
 	const input = document.querySelector<HTMLInputElement>('#' + el.dataset.prosemirrorDoc);
+	const text = htmlDecode(input.value.replace(/&quot;/g, "\\\""));
+	console.log(text, input.value);
+	const contentNode = Node.fromJSON(mySchema, JSON.parse(text))
 
-	const doc = JSON.parse(input.value);
-
-	const contentNode = Node.fromJSON(mySchema, doc)
-
-	const view = new EditorView(el, {
+	const view = new EditorView<typeof mySchema>(el, {
 		state: EditorState.create({
 			doc: contentNode,
 			plugins: exampleSetup({schema: mySchema, menuContent: menu})
@@ -33,6 +35,13 @@ ctx.addHandler('.pm-editor', el => {
 			view.updateState(view.state.apply(tr));
 			// Synchroniseer state met input veld.
 			input.value = JSON.stringify(view.state.doc.toJSON());
+		},
+		handleDoubleClickOn(view, pos, node) {
+			if (node.type == mySchema.nodes.bb) {
+				bbPrompt(node.type, node.attrs, view)
+			}
+
+			return true
 		}
 	})
 })

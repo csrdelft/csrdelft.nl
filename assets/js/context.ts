@@ -1,5 +1,6 @@
 import ctx from './ctx';
 import {select} from "./lib/dom";
+import {autosizeTextarea} from "./lib/util";
 
 export const registerClipboardContext = async (): Promise<void> => {
 	const {
@@ -129,15 +130,7 @@ export const registerGlobalContext = async (): Promise<void> => {
 		).options({timeout: 250}),
 		'.vue-context': (el) => new Vue({el}),
 		'[data-visite]': initKaartjes,
-		'.AutoSize': el => {
-			const cb = function () {
-				el.style.height = 'auto';
-				el.style.height = (el.scrollHeight) + 'px';
-			}
-			el.setAttribute('style', 'height:' + (el.scrollHeight) + 'px;overflow-y:hidden;');
-			el.addEventListener("input", cb, false);
-			setTimeout(cb)
-		}
+		'.AutoSize': autosizeTextarea,
 	});
 };
 

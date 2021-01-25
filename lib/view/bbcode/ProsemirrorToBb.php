@@ -123,8 +123,14 @@ class ProsemirrorToBb
 		}
 
 		$attrs = '';
+		$content = '';
 		foreach ($tagAttributes as $attribute => $value) {
 			if (!$value) {
+				continue;
+			}
+
+			if ($attribute == 0) {
+				$content = $value;
 				continue;
 			}
 
@@ -135,7 +141,7 @@ class ProsemirrorToBb
 			}
 		}
 
-		return "[{$tagName}{$attrs}]";
+		return "[{$tagName}{$attrs}]{$content}";
 	}
 
 	private function renderClosingTag($tagName)

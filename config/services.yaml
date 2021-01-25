@@ -112,7 +112,7 @@ services:
     arguments:
       - !tagged_locator {tag: csr.editor.mark, default_index_method: getBbTagType}
       - !tagged_locator {tag: csr.editor.node, default_index_method: getBbTagType}
-      - '@CsrDelft\view\bbcode\CsrBB'
+      - '@Psr\Container\ContainerInterface'
 
   CsrDelft\view\bbcode\ProsemirrorToBb:
     public: true

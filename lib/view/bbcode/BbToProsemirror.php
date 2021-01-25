@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\bbcode;
 
+use CsrDelft\bb\BbEnv;
 use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use Psr\Container\ContainerInterface;
@@ -25,9 +26,11 @@ class BbToProsemirror
 	 */
 	private $nodesRegistry;
 
-	public function __construct($marksRegistry, $nodesRegistry, CsrBB $csrBB)
+	public function __construct($marksRegistry, $nodesRegistry, ContainerInterface $container)
 	{
-		$this->csrBB = $csrBB;
+		$env = new BbEnv();
+		$env->prosemirror = true;
+		$this->csrBB = new CsrBB($container, $env);
 		$this->marksRegistry = $marksRegistry;
 		$this->nodesRegistry = $nodesRegistry;
 	}

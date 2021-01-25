@@ -35,7 +35,7 @@ class BbTextType extends AbstractType
 	{
 		$builder->addModelTransformer(new CallbackTransformer(
 			function ($bbcode) {
-				return $this->bbToProsemirror->toProseMirror($bbcode);
+				return json_encode($this->bbToProsemirror->toProseMirror($bbcode), JSON_HEX_QUOT);
 			},
 			function ($data) {
 				return $this->prosemirrorToBb->render(json_decode($data));

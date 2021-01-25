@@ -149,6 +149,27 @@ export const nodes = RecordWithType<NodeSpec>()({
 		}]
 	},
 
+	bb: {
+		attrs: {bb: {default: null}},
+		group: "block",
+		toDOM: node => ["div", {"data-bb": node.attrs.bb}, node.attrs.bb],
+		parseDOM: [{
+			tag: "div[data-bb]",
+			getAttrs: (dom: HTMLElement) => ({bb: dom.dataset.bb})
+		}]
+	},
+
+	// Blocks
+	document: {
+		attrs: {id: {default: "none"}},
+		group: "block",
+		toDOM: node => ["div", {"data-document": node.attrs.id, class: "pm-block"}, "Document: " + node.attrs.id],
+		parseDOM: [{
+			tag: "div[data-document]",
+			getAttrs: (dom: HTMLElement) => ({id: dom.dataset.document})
+		}]
+	},
+
 	// Embeds
 	twitter: {
 		attrs: {url: {default: null}},
