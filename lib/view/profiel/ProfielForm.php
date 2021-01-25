@@ -156,7 +156,7 @@ class ProfielForm extends Formulier {
 				$fields[] = new EnumSelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?', OntvangtContactueel::class);
 			}
 		}
-		
+
 		$fields[] = new Subkopje('Adres');
 		$fields[] = new RequiredTextField('adres', $profiel->adres, 'Straatnaam + Huisnummer', 100);
 		$fields[] = new RequiredTextField('postcode', $profiel->postcode, 'Postcode', 20);
