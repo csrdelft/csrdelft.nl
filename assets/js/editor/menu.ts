@@ -233,7 +233,7 @@ function bbInsert(nodeType: NodeType<EditorSchema>) {
 		label: "BB code",
 		enable: state => canInsert(state, nodeType),
 		run: (state, dispatch, view) => {
-			let attrs: any = {bb: ""}
+			let attrs: Record<string, string> = {bb: ""}
 
 			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
 				attrs = state.selection.node.attrs

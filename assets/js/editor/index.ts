@@ -4,10 +4,8 @@ import {Node, Schema} from "prosemirror-model"
 import {EditorMarks, EditorNodes, schema} from "./schema"
 import {addListNodes} from "prosemirror-schema-list"
 import {exampleSetup} from "prosemirror-example-setup"
-import ctx from "../ctx";
 import {buildMenuItems} from "./menu";
 import {htmlDecode} from "../lib/util";
-import {openPrompt, TextAreaField} from "./prompt";
 import {bbPrompt} from "./bb-prompt";
 
 // Mix the nodes from prosemirror-schema-list into the basic schema to
@@ -17,24 +15,24 @@ const mySchema = new Schema<EditorNodes, EditorMarks>({
 	marks: schema.spec.marks,
 })
 
-const menu = buildMenuItems(mySchema)
+const menuContent = buildMenuItems(mySchema)
 
-ctx.addHandler('.pm-editor', el => {
+export const initEditor = (el: HTMLElement): void => {
 	const input = document.querySelector<HTMLInputElement>('#' + el.dataset.prosemirrorDoc);
 	const text = htmlDecode(input.value.replace(/&quot;/g, "\\\""));
 	console.log(text, input.value);
 	const contentNode = Node.fromJSON(mySchema, JSON.parse(text))
 
-	const view = new EditorView<typeof mySchema>(el, {
+	const currentView = new EditorView<typeof mySchema>(el, {
 		state: EditorState.create({
 			doc: contentNode,
-			plugins: exampleSetup({schema: mySchema, menuContent: menu})
+			plugins: exampleSetup({schema: mySchema, menuContent})
 		}),
 		dispatchTransaction(tr) {
 			// dispatchTransaction is verantwoordelijk voor het updaten van de state.
-			view.updateState(view.state.apply(tr));
+			currentView.updateState(currentView.state.apply(tr));
 			// Synchroniseer state met input veld.
-			input.value = JSON.stringify(view.state.doc.toJSON());
+			input.value = JSON.stringify(currentView.state.doc.toJSON());
 		},
 		handleDoubleClickOn(view, pos, node) {
 			if (node.type == mySchema.nodes.bb) {
@@ -44,4 +42,4 @@ ctx.addHandler('.pm-editor', el => {
 			return true
 		}
 	})
-})
+}

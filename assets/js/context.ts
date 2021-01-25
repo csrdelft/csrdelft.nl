@@ -85,14 +85,14 @@ export const registerFormulierContext = async (): Promise<void> => {
 			initSterrenField,
 		},
 		{
-			bbCodeSet,
+			initEditor,
 		},
 		{
 			initDropzone,
 		},
 	] = await Promise.all([
 		import(/* webpackChunkName: "formulier" */'./lib/formulier'),
-		import(/* webpackChunkName: "bbcode-set" */'./lib/bbcode-set'),
+		import(/* webpackChunkName: "editor" */'./editor'),
 		import(/* webpackChunkName: "dropzone" */'./lib/dropzone'),
 	]);
 
@@ -103,7 +103,7 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'.reset': (el) => el.addEventListener('click', formReset),
 		'.submit': (el) => el.addEventListener('click', formSubmit),
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
-		// 'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
+		'.pm-editor': initEditor,
 		'time.timeago': (el) => $(el).timeago(),
 		'.SterrenField': initSterrenField,
 		'form.dropzone': initDropzone,

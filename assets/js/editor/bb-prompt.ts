@@ -1,8 +1,8 @@
 import {openPrompt, TextAreaField} from "./prompt";
-import {Node, NodeType} from "prosemirror-model";
+import {NodeType} from "prosemirror-model";
 import {EditorView} from "prosemirror-view";
 
-export const bbPrompt = (node: NodeType, attrs, view: EditorView): void => openPrompt({
+export const bbPrompt = (node: NodeType, attrs: Record<string, string>, view: EditorView): void => openPrompt({
 	title: "Bewerk bb",
 	fields: {
 		'bb': new TextAreaField({label: "Bb", value: attrs.bb})
