@@ -128,19 +128,20 @@ class ProfielForm extends Formulier {
 
 			$fields[] = new HtmlComment($html);
 		}
-
+		$fields[] = new Subkopje('Identiteit');
 		if ($admin OR $inschrijven OR $profiel->isOudlid()) {
-			$fields[] = new Subkopje('Identiteit');
 			$fields[] = new RequiredTextField('voornaam', $profiel->voornaam, 'Voornaam', 50);
 			$fields[] = new RequiredTextField('voorletters', $profiel->voorletters, 'Voorletters', 10);
 			$fields[] = new TextField('tussenvoegsel', $profiel->tussenvoegsel, 'Tussenvoegsel', 15);
 			$fields[] = new RequiredTextField('achternaam', $profiel->achternaam, 'Achternaam', 50);
+		}
+		$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
+		if ($admin OR $inschrijven OR $profiel->isOudlid()) {
 			if ($admin OR $inschrijven) {
 				$fields[] = new RequiredEnumSelectField('geslacht', $profiel->geslacht, 'Geslacht', Geslacht::class);
 				$fields[] = new TextField('voornamen', $profiel->voornamen, 'Voornamen', 100);
 				if (!$inschrijven) {
 					$fields[] = new TextField('postfix', $profiel->postfix, 'Postfix', 7);
-					$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
 				}
 			}
 			$fields[] = new RequiredDateObjectField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15, 1900);
@@ -155,6 +156,7 @@ class ProfielForm extends Formulier {
 				$fields[] = new EnumSelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?', OntvangtContactueel::class);
 			}
 		}
+
 
 		$fields[] = new Subkopje('Adres');
 		$fields[] = new RequiredTextField('adres', $profiel->adres, 'Straatnaam + Huisnummer', 100);
