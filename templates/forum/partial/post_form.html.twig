@@ -35,14 +35,9 @@
 	</div>
 
 	<div class="bericht0 flex-grow-1">
-		<div id="editor"></div>
-
-		<button id="export">Commit</button>
-
 		<form id="forumForm" class="Formulier"
 					action="{{ url('csrdelft_forum_posten', {forum_id: deel.forum_id, draad_id: draad is not none ? draad.draad_id : null}) }}"
 					method="post">
-			<input id="bericht" type="hidden" name="bericht" value="" />
 			{{ csrfField() }}
 			{% if not app.user %}
 				<input type="text" name="email" class="FormElement TextField forumEmail form-control"
@@ -54,12 +49,8 @@
 				<input type="text" id="nieuweTitel" name="titel" class="FormElement TextField form-control" tabindex="1"
 							 placeholder="Onderwerp titel" value="{{ post_form_titel }}" origvalue="{{ post_form_titel }}"/>
 			{% endif %}
-			<div id="preview_forumBericht" class="bbcodePreview forumBericht"></div>
-			<input id="bericht" name="forumBericht" value="{{ post_form_tekst|bbcode_to_prosemirror|json_encode }}" />
-{#			<textarea name="forumBericht" id="forumBericht" class="FormElement BBCodeField forumBericht"#}
-{#								data-bbpreview="forumBericht" tabindex="2"#}
-{#								rows="12"#}
-{#								origvalue="{{ post_form_tekst }}">{{ post_form_tekst }}</textarea>#}
+			<input type="hidden" name="forumBericht" id="forumBericht" value="{{ post_form_tekst|json_encode }}">
+			<div id="editor" class="pm-editor" data-prosemirror-doc="forumBericht"></div>
 			<div class="butn">
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn btn-primary"/>
 				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn btn-secondary"

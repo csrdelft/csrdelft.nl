@@ -39,7 +39,6 @@ require('jquery-ui/ui/effect');
 require('jquery-ui/ui/effects/effect-highlight');
 require('jquery-ui/ui/effects/effect-fade');
 require('jquery-ui/ui/widgets/slider');
-require('./lib/external/jquery.markitup');
 require('./lib/external/jquery.contextMenu');
 require('timeago');
 require('raty-js');
