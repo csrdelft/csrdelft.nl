@@ -53,9 +53,6 @@
 			<div id="editor" class="pm-editor" data-prosemirror-doc="forumBericht"></div>
 			<div class="butn">
 				<input type="submit" name="submit" value="Opslaan" id="forumOpslaan" class="btn btn-primary"/>
-				<input type="button" value="Voorbeeld" id="forumVoorbeeld" class="btn btn-secondary"
-							 data-bbpreview-btn="forumBericht"
-				/>
 				{% if app.user %}
 					<input type="button" value="Concept opslaan" id="forumConcept" class="btn btn-secondary"
 								 onclick="window.forum.saveConceptForumBericht();"
