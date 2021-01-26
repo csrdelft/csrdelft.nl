@@ -18,6 +18,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\ProfielEntityField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\SafeJsonField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
@@ -145,8 +146,12 @@ class FormFieldFactory {
 			return new DateTimeObjectField($fieldName, $value, $desc);
 		}
 
-		if ($type instanceof TextType || $type instanceof LongTextType || $type instanceof SafeJsonType) {
+		if ($type instanceof TextType || $type instanceof LongTextType) {
 			return new TextareaField($fieldName, $value, $desc);
+		}
+
+		if ($type instanceof SafeJsonType) {
+			return new SafeJsonField($fieldName, $value, $desc);
 		}
 
 		if ($type instanceof UidType) {
