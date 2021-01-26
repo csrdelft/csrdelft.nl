@@ -31,9 +31,13 @@
 	margin-top: 10px;
 }
 
-.ProseMirror p { margin-bottom: 1em }
+.ProseMirror p {
+	margin-bottom: 1em
+}
 
-.ProseMirror hr { background: transparent; }
+.ProseMirror hr {
+	background: transparent;
+}
 
 .ProseMirror {
 	padding: 4px 8px 4px 14px;
@@ -45,7 +49,7 @@
 	height: 100px;
 	background: #f5f5f5;
 	box-shadow: 0 0 10px #e8e8e8;
-	margin: 0.5em 0;
+	margin: 0.5em 0 1em;
 
 	text-transform: capitalize;
 	text-align: center;
@@ -53,7 +57,7 @@
 }
 
 .ProseMirror .pm-verklapper {
-	border: 1px solid rgba(0,0,0,.125);
+	border: 1px solid rgba(0, 0, 0, .125);
 	border-radius: 0.25rem;
 	padding: 1.25rem;
 
@@ -77,12 +81,42 @@
 .ProseMirror [data-bb-twitter],
 .ProseMirror [data-bb-audio],
 .ProseMirror [data-bb-youtube],
-.ProseMirror [data-bb-spotify]
-{
+.ProseMirror [data-bb-spotify] {
 	height: 100px;
 	background: #f5f5f5;
 	box-shadow: 0 0 10px #e8e8e8;
-	margin: 0.5em 0;
+	margin: 0.5em 0 1em;
+}
+
+.ProseMirror [data-bb-citaat] {
+
+	padding-left: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	position: relative;
+	margin-top: 20px;
+	margin-bottom: 1em;
+
+	&::before {
+		content: "Citaat van " attr(data-bb-citaat) ":";
+		font-style: italic;
+		display: block;
+		position: absolute;
+		top: -16px;
+		left: 0;
+	}
+
+
+	&::after {
+		background: #d3d3d3;
+		top: 0;
+		width: 4px;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		border-radius: 4px;
+		content: '';
+	}
 }
 
 .ProseMirror [data-bb] {
@@ -119,9 +153,12 @@
 
 .ProseMirror-popup-close {
 	position: absolute;
-	left: 2px; top: 1px;
+	left: 2px;
+	top: 1px;
 	color: #666;
-	border: none; background: transparent; padding: 0;
+	border: none;
+	background: transparent;
+	padding: 0;
 }
 
 .ProseMirror-popup-close:after {

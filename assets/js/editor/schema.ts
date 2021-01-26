@@ -41,6 +41,15 @@ export const nodes = RecordWithType<NodeSpec>()({
 		toDOM: () => ["blockquote", 0]
 	},
 
+	citaat: {
+		attrs: {van: {default: ""}, url: {default: ""}},
+		content: "block+",
+		group: "block",
+		defining: true,
+		parseDOM: [{tag: "div[data-bb-citaat]", getAttrs: (dom: HTMLElement) => ({van: dom.dataset.bbCitaat, url: dom.dataset.bbCitaatUrl})}],
+		toDOM: node => ["div", {"data-bb-citaat": node.attrs.van, "data-bb-citaat-url": node.attrs.url}, 0]
+	},
+
 	// :: NodeSpec A horizontal rule (`<hr>`).
 	horizontal_rule: {
 		group: "block",

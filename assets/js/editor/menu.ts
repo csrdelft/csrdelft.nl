@@ -209,9 +209,11 @@ function blockTypeItemPrompt(nodeType: NodeType<EditorSchema>, options) {
 		enable: state => canInsert(state, nodeType),
 		run: (state, dispatch, view) => {
 			let attrs = null
+			let content = null
 
 			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
 				attrs = state.selection.node.attrs
+				content = state.selection.node.content
 			}
 
 			openPrompt({
@@ -219,7 +221,7 @@ function blockTypeItemPrompt(nodeType: NodeType<EditorSchema>, options) {
 				fields: Object.fromEntries(Object.entries(nodeType.spec.attrs).map(([attr, spec]) =>
 					[attr, new TextField({label: attr, required: true, value: attrs ? attrs[attr] : spec.default})])),
 				callback(callbackAttrs) {
-					view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs})))
+					view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs}, content)))
 					view.focus()
 				}
 			})
@@ -264,6 +266,7 @@ export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] 
 		[
 			new Dropdown([
 				insertImageItem(schema.nodes.image),
+				blockTypeItemPrompt(schema.nodes.citaat, {title: "Citaat invoegen", label: "Citaat"}),
 				new DropdownSubmenu([
 					blockTypeItemPrompt(schema.nodes.twitter, {title: "Twitter invoegen", label: "Twitter"}),
 					blockTypeItemPrompt(schema.nodes.youtube, {title: "YouTube invoegen", label: "YouTube"}),
