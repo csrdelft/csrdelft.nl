@@ -47,6 +47,7 @@ class LoginController extends AbstractController {
 	 * @param AuthenticationUtils $authenticationUtils
 	 * @return Response
 	 * @Route("/login", methods={"GET"})
+	 * @Route("/{_locale<%app.supported_locales%>}/login", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function loginForm(Request $request, AuthenticationUtils $authenticationUtils) {
@@ -62,7 +63,9 @@ class LoginController extends AbstractController {
 		$error = $authenticationUtils->getLastAuthenticationError();
 		$userName = $authenticationUtils->getLastUsername();
 
-		$response = $this->render('extern/login.html.twig', ['loginForm' => new LoginForm($userName, $error)]);
+		$loginForm = $this->createFormulier(LoginForm::class, null, ['lastUserName' => $userName, 'lastError' => $error]);
+
+		$response = $this->render('extern/login.html.twig', ['loginForm' => $loginForm->createView()]);
 
 		// Als er geredirect wordt, stuur dan een forbidden status
 		if ($targetPath) {
@@ -74,6 +77,7 @@ class LoginController extends AbstractController {
 
 	/**
 	 * @Route("/login_check", name="app_login_check", methods={"POST"})
+	 * @Route("/{_locale<%app.supported_locales%>}/login_check", name="app_login_check", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function login_check() {

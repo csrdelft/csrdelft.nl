@@ -30,6 +30,10 @@ class BbForum extends BbTag {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var string
+	 */
+	private $id;
 
 	public function __construct(ForumDradenRepository $forumDradenRepository, ForumDelenRepository $forumDelenRepository, Environment $twig) {
 		$this->forumDradenRepository = $forumDradenRepository;
@@ -42,7 +46,7 @@ class BbForum extends BbTag {
 	}
 
 	public function isAllowed() {
-		if ($this->content == 'recent' || $this->content == 'belangrijk') {
+		if ($this->id == 'recent' || $this->id == 'belangrijk') {
 			return LoginService::mag(P_LOGGED_IN);
 		}
 
@@ -60,7 +64,7 @@ class BbForum extends BbTag {
 
 		return $this->twig->render('forum/bb.html.twig', [
 			'deel' => $this->deel,
-			'id' => $this->content,
+			'id' => $this->id,
 		]);
 	}
 
@@ -68,13 +72,13 @@ class BbForum extends BbTag {
 	 * @param array $arguments
 	 */
 	public function parse($arguments = []) {
-		$this->readMainArgument($arguments);
+		$this->id = $this->readMainArgument($arguments);
 		if (isset($arguments['num'])) {
 			$this->num = (int)$arguments['num'];
 		}
 
 		$this->forumDradenRepository->setAantalPerPagina($this->num);
-		switch ($this->content) {
+		switch ($this->id) {
 			case 'recent':
 				$this->deel = $this->forumDelenRepository->getRecent();
 				break;
@@ -82,7 +86,7 @@ class BbForum extends BbTag {
 				$this->deel = $this->forumDelenRepository->getRecent(true);
 				break;
 			default:
-				$this->deel = $this->forumDelenRepository->get($this->content);
+				$this->deel = $this->forumDelenRepository->get($this->id);
 				break;
 		}
 	}

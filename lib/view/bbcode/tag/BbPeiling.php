@@ -36,6 +36,10 @@ class BbPeiling extends BbTag {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var string
+	 */
+	private $id;
 
 	public function __construct(SerializerInterface $serializer, PeilingenRepository $peilingenRepository, Environment $twig) {
 		$this->serializer = $serializer;
@@ -52,7 +56,7 @@ class BbPeiling extends BbTag {
 	}
 
 	public function renderLight() {
-		$url = '#/peiling/' . urlencode($this->content);
+		$url = '#/peiling/' . urlencode($this->id);
 		return BbHelper::lightLinkBlock('peiling', $url, $this->peiling->titel, $this->peiling->beschrijving);
 	}
 
@@ -82,7 +86,7 @@ class BbPeiling extends BbTag {
 	 */
 	public function parse($arguments = [])
 	{
-		$this->readMainArgument($arguments);
-		$this->peiling = $this->getPeiling($this->content);
+		$this->id = $this->readMainArgument($arguments);
+		$this->peiling = $this->getPeiling($this->id);
 	}
 }

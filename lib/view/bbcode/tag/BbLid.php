@@ -23,6 +23,10 @@ class BbLid extends BbTag {
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
+	/**
+	 * @var string
+	 */
+	private $uid;
 
 	public function __construct(ProfielRepository $profielRepository) {
 		$this->profielRepository = $profielRepository;
@@ -46,10 +50,10 @@ class BbLid extends BbTag {
 	 * @throws BbException
 	 */
 	private function getProfiel() {
-		$profiel = $this->profielRepository->find($this->content);
+		$profiel = $this->profielRepository->find($this->uid);
 
 		if (!$profiel) {
-			throw new BbException('[lid] ' . htmlspecialchars($this->content) . '] &notin; db.');
+			throw new BbException('[lid] ' . htmlspecialchars($this->uid) . '] &notin; db.');
 		}
 
 		return $profiel;
@@ -68,6 +72,6 @@ class BbLid extends BbTag {
 	 * @param array $arguments
 	 */
 	public function parse($arguments = []) {
-		$this->readMainArgument($arguments);
+		$this->uid = $this->readMainArgument($arguments);
 	}
 }

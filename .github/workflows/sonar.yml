@@ -12,6 +12,9 @@ name: Sonarcloud analyse
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
+    # Deze workflow gebruikt een geheime key: SONAR_TOKEN en kan niet van een fork gerund worden
+    # Zie https://jira.sonarsource.com/browse/MMF-1371
+    if: github.repository == 'csrdelft/csrdelft.nl'
 
     steps:
       - uses: actions/checkout@v2

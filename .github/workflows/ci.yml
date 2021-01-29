@@ -112,6 +112,8 @@ jobs:
     name: Push naar productie
     runs-on: ubuntu-latest
     needs: build
+    # Deze workflow gebruikt een geheime token: PRODUCTIE_TOKEN en kan niet van een fork gerund worden.
+    if: github.repository == 'csrdelft/csrdelft.nl'
 
     steps:
       - uses: actions/checkout@v2
