@@ -105,6 +105,9 @@
     "firebase/php-jwt": {
         "version": "v5.0.0"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.3"
+    },
     "fzaninotto/faker": {
         "version": "v1.9.1"
     },
@@ -150,6 +153,15 @@
     "jean85/pretty-package-versions": {
         "version": "1.5.0"
     },
+    "laminas/laminas-code": {
+        "version": "3.4.1"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.3.0"
+    },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.1.1"
+    },
     "maknz/slack": {
         "version": "1.7.0"
     },
@@ -171,8 +183,11 @@
     "ocramius/package-versions": {
         "version": "1.5.1"
     },
-    "ocramius/proxy-manager": {
-        "version": "2.0.4"
+    "paragonie/constant_time_encoding": {
+        "version": "v2.4.0"
+    },
+    "paragonie/random_compat": {
+        "version": "v9.99.100"
     },
     "parsecsv/php-parsecsv": {
         "version": "1.2.1"
@@ -552,6 +567,9 @@
     "symfony/property-info": {
         "version": "v5.0.4"
     },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.2.2"
+    },
     "symfony/routing": {
         "version": "3.3",
         "recipe": {
@@ -680,12 +698,6 @@
     },
     "webmozart/assert": {
         "version": "1.5.0"
-    },
-    "zendframework/zend-code": {
-        "version": "3.1.0"
-    },
-    "zendframework/zend-eventmanager": {
-        "version": "3.2.1"
     },
     "zumba/json-serializer": {
         "version": "2.2.0"
