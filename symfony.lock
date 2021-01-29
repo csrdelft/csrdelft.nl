@@ -144,9 +144,6 @@
     "http-interop/http-factory-guzzle": {
         "version": "1.0.0"
     },
-    "jacwright/restserver": {
-        "version": "dev-master"
-    },
     "jakeasmith/http_build_url": {
         "version": "1.0.1"
     },
@@ -164,12 +161,6 @@
     },
     "maknz/slack": {
         "version": "1.7.0"
-    },
-    "ml/iri": {
-        "version": "1.1.4"
-    },
-    "ml/json-ld": {
-        "version": "1.1.0"
     },
     "monolog/monolog": {
         "version": "1.25.2"
@@ -200,9 +191,6 @@
     },
     "php": {
         "version": "7.3.14"
-    },
-    "php-di/invoker": {
-        "version": "2.0.0"
     },
     "php-http/client-common": {
         "version": "2.3.0"

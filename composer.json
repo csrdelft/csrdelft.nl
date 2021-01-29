@@ -29,8 +29,6 @@
 		"google/apiclient": "^2.0",
 		"jakeasmith/http_build_url": "^1",
 		"maknz/slack": "^1.7",
-		"ml/json-ld": "^1.0",
-		"php-di/invoker": "^2.0",
 		"symfony/config": "^5.0",
 		"symfony/dotenv": "^5.0",
 		"symfony/flex": "^1.4",
