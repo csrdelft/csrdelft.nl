@@ -27,7 +27,6 @@
 		"firebase/php-jwt": "^5.0",
 		"globalcitizen/php-iban": "^2.6",
 		"google/apiclient": "^2.0",
-		"jacwright/restserver": "dev-master",
 		"jakeasmith/http_build_url": "^1",
 		"maknz/slack": "^1.7",
 		"ml/json-ld": "^1.0",
