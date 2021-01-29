@@ -129,7 +129,7 @@ class ProsemirrorToBb
 				continue;
 			}
 
-			if ($attribute == 0) {
+			if ($attribute === 0) {
 				$content = $value;
 				continue;
 			}

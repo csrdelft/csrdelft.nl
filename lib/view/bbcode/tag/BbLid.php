@@ -26,7 +26,7 @@ class BbLid extends BbTag {
 	/**
 	 * @var string
 	 */
-	private $uid;
+	public $uid;
 
 	public function __construct(ProfielRepository $profielRepository) {
 		$this->profielRepository = $profielRepository;
@@ -49,7 +49,7 @@ class BbLid extends BbTag {
 	 * @return Profiel
 	 * @throws BbException
 	 */
-	private function getProfiel() {
+	public function getProfiel() {
 		$profiel = $this->profielRepository->find($this->uid);
 
 		if (!$profiel) {

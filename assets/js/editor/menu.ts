@@ -43,6 +43,7 @@ export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] 
 			], {label: "Meer"})
 		],
 		[
+			blockTypeItemPrompt(schema.nodes.lid, {title: "Lid invoegen", label: "Lid"}),
 			new Dropdown([
 				insertPlaatjeItem(schema.nodes.plaatje),
 				insertImageItem(schema.nodes.image),

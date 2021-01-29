@@ -10,6 +10,7 @@ import {bbPrompt} from "./bb-prompt";
 import ctx from "../ctx";
 import {placeholderPlugin} from "./plugin/placeholder";
 import {trackChangesPlugin} from "./plugin/track-changes";
+import {lidHintPlugin} from "./plugin/lid-hint";
 
 ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 	// Mix the nodes from prosemirror-schema-list into the basic schema to
@@ -26,7 +27,7 @@ ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 	new EditorView<typeof mySchema>(el, {
 		state: EditorState.create({
 			doc: Node.fromJSON(mySchema, JSON.parse(text)),
-			plugins: exampleSetup({schema: mySchema, menuContent}).concat(placeholderPlugin, trackChangesPlugin(input))
+			plugins: exampleSetup({schema: mySchema, menuContent}).concat(placeholderPlugin/*, trackChangesPlugin(input)*/, lidHintPlugin)
 		}),
 		handleDoubleClickOn(view, pos, node) {
 			if (node.type == mySchema.nodes.bb) {

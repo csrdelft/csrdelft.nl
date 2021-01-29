@@ -8,6 +8,11 @@
 	margin-bottom: 23px;
 }
 
+.ProseMirror-menubar-wrapper {
+	// To contain .lid-hints
+	position: relative;
+}
+
 .ProseMirror-toggle-button {
 	position: absolute;
 	right: 15px;

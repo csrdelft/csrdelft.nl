@@ -53,6 +53,14 @@ export const nodes = RecordWithType<NodeSpec>()({
 		toDOM: node => ["div", {"data-bb-citaat": node.attrs.van, "data-bb-citaat-url": node.attrs.url}, 0]
 	},
 
+	lid: {
+		attrs: {uid: {default: null}, naam: {default: null}},
+		group: "inline",
+		inline: true,
+		parseDOM: [{tag: "span[data-lid]", getAttrs: (dom: HTMLElement) => ({uid: dom.dataset.lid, naam: dom.dataset.lidNaam})}],
+		toDOM: node => ["span", {"data-lid": node.attrs.uid, "data-lidNaam": node.attrs.naam}, node.attrs.naam],
+	},
+
 	// :: NodeSpec A horizontal rule (`<hr>`).
 	horizontal_rule: {
 		group: "block",
