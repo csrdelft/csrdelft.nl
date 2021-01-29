@@ -8,7 +8,8 @@ import {buildMenuItems} from "./menu";
 import {htmlDecode} from "../lib/util";
 import {bbPrompt} from "./bb-prompt";
 import ctx from "../ctx";
-import {placeholderPlugin} from "./placeholder";
+import {placeholderPlugin} from "./plugin/placeholder";
+import {trackChangesPlugin} from "./plugin/track-changes";
 
 ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 	// Mix the nodes from prosemirror-schema-list into the basic schema to
@@ -22,19 +23,11 @@ ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 	const input = document.querySelector<HTMLInputElement>('#' + el.dataset.prosemirrorDoc);
 	const text = htmlDecode(input.value.replace(/&quot;/g, "\\\""));
 
-	const contentNode = Node.fromJSON(mySchema, JSON.parse(text))
-
-	const currentView = new EditorView<typeof mySchema>(el, {
+	new EditorView<typeof mySchema>(el, {
 		state: EditorState.create({
-			doc: contentNode,
-			plugins: exampleSetup({schema: mySchema, menuContent}).concat(placeholderPlugin)
+			doc: Node.fromJSON(mySchema, JSON.parse(text)),
+			plugins: exampleSetup({schema: mySchema, menuContent}).concat(placeholderPlugin, trackChangesPlugin(input))
 		}),
-		dispatchTransaction(tr) {
-			// dispatchTransaction is verantwoordelijk voor het updaten van de state.
-			currentView.updateState(currentView.state.apply(tr));
-			// Synchroniseer state met input veld.
-			input.value = JSON.stringify(currentView.state.doc.toJSON());
-		},
 		handleDoubleClickOn(view, pos, node) {
 			if (node.type == mySchema.nodes.bb) {
 				bbPrompt(node.type, node.attrs, view)

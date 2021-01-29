@@ -518,6 +518,7 @@ a.responsive {
 a[href].lightbox-link { // Override externe link style
 	background: none;
 	padding-right: 0;
+	display: inline-block;
 }
 
 .bb-video {

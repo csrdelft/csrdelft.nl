@@ -1,4 +1,4 @@
-import {findPlaceholder, placeholderPlugin} from "./placeholder";
+import {findPlaceholder, placeholderPlugin} from "./plugin/placeholder";
 import {EditorView} from "prosemirror-view";
 import {EditorSchema} from "./schema";
 import axios from "axios";
