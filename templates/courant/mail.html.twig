@@ -56,9 +56,8 @@
         display: block;
         margin: 0 auto !important;
         /* makes it centered */
-        max-width: 580px;
         padding: 10px;
-        width: 580px;
+        width: 720px;
       }
 
       /* This should also be a block element, so that it will fill 100% of the .container */
@@ -66,7 +65,6 @@
         box-sizing: border-box;
         display: block;
         margin: 0 auto;
-        max-width: 580px;
         padding: 10px;
       }
 
@@ -305,9 +303,9 @@
                   <table border="0" cellpadding="0" cellspacing="0" style="background: #e8e8e8">
                     <tr style="height: 100px">
                       <td id="logo" class="inhoud-lb" style="padding: 20px 20px 30px 40px">
-                        <img class="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/C.S.R._Delft_Logo.svg/190px-C.S.R._Delft_Logo.svg.png" style="width:100px;" />
+                        <img class="" src="https://csrdelft.nl/plaetjes/courant/beeldmerk.png" style="width:100px;" />
                       </td>
-                      <td style="text-align: center; vertical-align: middle; padding-right:20px;">
+                      <td style="text-align: center; vertical-align: middle; padding-right:70px;">
                         <hr>
                           <h1>De courant</h1>
                         <hr>
@@ -343,39 +341,31 @@
                   //Berichten generator//
                   donker: #11273a
                   medium: #043763
-                  licht:  #4e698b
+                  licht:  #3C5573
                   -->
 
                   {% for bericht in berichten %}
                     {% if loop.index % 4 == 1 %}
                       {% set bgcolor = '#043763' %}
                     {% elseif loop.index % 4 == 2 %}
-                      {% set bgcolor = '#4e698b' %}
+                      {% set bgcolor = '#3C5573' %}
                     {% elseif loop.index % 4 == 3 %}
                       {% set bgcolor = '#11273a' %}
                     {% else %}
-                      {% set bgcolor = '#4e698b' %}
+                      {% set bgcolor = '#3C5573' %}
                     {% endif %}
 
                     {% if loop.last == 0 %}
-                        <table border="0" cellpadding="0" cellspacing="0" class="table" style="background-color: {{bgcolor}}">
-                          <tr>
-                            <td class="box">
-                              <h3><u><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</u></h3>
-                              <p>
-                                {{ bericht.bericht | bbcode("mail") }}
-                              </p>
-                            </td>
-                          </tr>
-                        </table>
-                    {% else %}
-                        <table border="0" cellpadding="0" cellspacing="0" class="table" style='width: 100%;'>
-                          <tr>
-                            <td>
-                              <img style='position: relative; width: 100%; border-radius: 5px' src="Projectkwadraat.jpg">
-                            </td>
-                          </tr>
-                        </table>
+											<table border="0" cellpadding="0" cellspacing="0" class="table" style="background-color: {{bgcolor}}">
+												<tr>
+													<td class="box">
+														<h3><u><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</u></h3>
+														<p>
+															{{ bericht.bericht | bbcode("mail") }}
+														</p>
+													</td>
+												</tr>
+											</table>
                     {% endif %}
                   {% endfor %}
                 </td>
