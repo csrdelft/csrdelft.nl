@@ -8,6 +8,7 @@ import {buildMenuItems} from "./menu";
 import {htmlDecode} from "../lib/util";
 import {bbPrompt} from "./bb-prompt";
 import ctx from "../ctx";
+import {placeholderPlugin} from "./placeholder";
 
 ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 	// Mix the nodes from prosemirror-schema-list into the basic schema to
@@ -26,7 +27,7 @@ ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 	const currentView = new EditorView<typeof mySchema>(el, {
 		state: EditorState.create({
 			doc: contentNode,
-			plugins: exampleSetup({schema: mySchema, menuContent})
+			plugins: exampleSetup({schema: mySchema, menuContent}).concat(placeholderPlugin)
 		}),
 		dispatchTransaction(tr) {
 			// dispatchTransaction is verantwoordelijk voor het updaten van de state.

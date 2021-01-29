@@ -77,6 +77,24 @@
 	}
 }
 
+.ProseMirror .plaatje-placeholder {
+	&::before {
+		content: '\f03e';
+		display: block;
+		font-family: "Font Awesome 5 Free", sans-serif;
+		text-align: center;
+		vertical-align: middle;
+		padding: 2em;
+		font-size: 1.5em;
+	}
+	display: inline-block;
+	background: #f5f5f5;
+	box-shadow: 0 0 10px #e8e8e8;
+	margin: 0.5em 0 1em;
+	width: 100px;
+	height: 100px;
+}
+
 .ProseMirror [data-bb-video],
 .ProseMirror [data-bb-twitter],
 .ProseMirror [data-bb-audio],

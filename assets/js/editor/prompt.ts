@@ -5,7 +5,7 @@ const prefix = "ProseMirror-popup"
 
 interface PromptOptions {
 	title: string
-	fields: Record<string, Field<any>>
+	fields: Record<string, Field<any, any>>
 	callback: (params: any) => void
 }
 
@@ -121,7 +121,7 @@ function reportInvalid(dom, message) {
 }
 
 interface FieldOptions<T = unknown> {
-	value: T
+	value?: T
 	label: string
 	required?: boolean
 	validate?: (val: T) => string
@@ -130,7 +130,7 @@ interface FieldOptions<T = unknown> {
 }
 
 // ::- The type of field that `FieldPrompt` expects to be passed to it.
-export class Field<T extends string> {
+export class Field<T extends string, U = string> {
 	protected options: FieldOptions<T>;
 	// :: (Object)
 	// Create a field with the given options. Options support by all
@@ -155,7 +155,7 @@ export class Field<T extends string> {
 
 	// :: (dom.Node) → any
 	// Read the field's value from its DOM node.
-	read(dom: HTMLInputElement) { return dom.value }
+	read(dom: HTMLInputElement): U { return dom.value as unknown as U }
 
 	// :: (any) → ?string
 	// A field-type-specific validation function.
@@ -216,5 +216,19 @@ export class TextAreaField extends Field<any> {
 		input.value = this.options.value || ""
 		input.autocomplete = "off"
 		return input
+	}
+}
+
+export class FileField extends Field<string, File> {
+	render() {
+		const input = document.createElement("input")
+		input.classList.add("form-control")
+		input.type = "file"
+
+		return input
+	}
+
+	read(dom: HTMLInputElement): File {
+		return dom.files[0]
 	}
 }

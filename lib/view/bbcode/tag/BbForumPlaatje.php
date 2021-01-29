@@ -31,6 +31,10 @@ class BbForumPlaatje extends BbImg {
 		return mag("P_LOGGED_IN");
 	}
 
+	public function getKey() {
+		return $this->plaatje->access_key;
+	}
+
 	public function getLinkUrl() {
 		return $this->plaatje->getUrl(false);
 	}

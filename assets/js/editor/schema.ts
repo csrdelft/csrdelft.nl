@@ -46,7 +46,10 @@ export const nodes = RecordWithType<NodeSpec>()({
 		content: "block+",
 		group: "block",
 		defining: true,
-		parseDOM: [{tag: "div[data-bb-citaat]", getAttrs: (dom: HTMLElement) => ({van: dom.dataset.bbCitaat, url: dom.dataset.bbCitaatUrl})}],
+		parseDOM: [{
+			tag: "div[data-bb-citaat]",
+			getAttrs: (dom: HTMLElement) => ({van: dom.dataset.bbCitaat, url: dom.dataset.bbCitaatUrl})
+		}],
 		toDOM: node => ["div", {"data-bb-citaat": node.attrs.van, "data-bb-citaat-url": node.attrs.url}, 0]
 	},
 
@@ -122,6 +125,21 @@ export const nodes = RecordWithType<NodeSpec>()({
 			const {src, alt, title} = node.attrs;
 			return ["img", {src, alt, title}]
 		}
+	},
+
+	plaatje: {
+		inline: true,
+		attrs: {
+			src: {},
+			key: {},
+		},
+		group: "inline",
+		draggable: true,
+		parseDOM: [{
+			tag: "[data-plaatje]",
+			getAttrs: (dom: HTMLElement) => ({key: dom.dataset.plaatje, src: dom.dataset.plaatjeSrc})
+		}],
+		toDOM: (node: Node) => ["div", {"data-plaatje": node.attrs.key, "data-plaatje-src": node.attrs.src}, ["img", {src: node.attrs.src}]],
 	},
 
 	// :: NodeSpec A hard line break, represented in the DOM as `<br>`.
