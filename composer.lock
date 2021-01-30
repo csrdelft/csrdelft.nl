@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d6a9d8b704df4cdcb8c9e17fccbaf712",
+    "content-hash": "8db8981ce08f606349fa8ea3d6f7eb82",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -204,16 +204,16 @@
         },
         {
             "name": "csrdelft/bb",
-            "version": "v1.3.1",
+            "version": "v1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/bb.git",
-                "reference": "7d1bf03aedf7b1ac2c7cc412644ba065309ee4ba"
+                "reference": "7231293be832160a63f0b56082bd9b3b8a6df786"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/bb/zipball/7d1bf03aedf7b1ac2c7cc412644ba065309ee4ba",
-                "reference": "7d1bf03aedf7b1ac2c7cc412644ba065309ee4ba",
+                "url": "https://api.github.com/repos/csrdelft/bb/zipball/7231293be832160a63f0b56082bd9b3b8a6df786",
+                "reference": "7231293be832160a63f0b56082bd9b3b8a6df786",
                 "shasum": ""
             },
             "require": {
@@ -244,9 +244,9 @@
             "homepage": "https://csrdelft.github.io/bb",
             "support": {
                 "issues": "https://github.com/csrdelft/bb/issues",
-                "source": "https://github.com/csrdelft/bb/tree/v1.3.1"
+                "source": "https://github.com/csrdelft/bb/tree/v1.3.2"
             },
-            "time": "2021-01-29T08:25:08+00:00"
+            "time": "2021-01-30T20:08:32+00:00"
         },
         {
             "name": "doctrine/annotations",
