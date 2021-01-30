@@ -24,13 +24,13 @@ async function search(term: string, cancelToken?: CancelToken): Promise<NaamSugg
 	}
 }
 
-const updateLidHintsPosition = (view: EditorView, pos: { left: number, top: number }) => {
+const updateLidHintsPosition = (view: EditorView, pos: { left: number, bottom: number }) => {
 	const lidHints = document.querySelector<HTMLDivElement>(".lid-hints")
 	if (!lidHints) return
 
 	const viewPos = view.dom.parentElement.getBoundingClientRect()
 	lidHints.style.left = (pos.left - viewPos.left) + "px"
-	lidHints.style.top = (pos.top - viewPos.top) + "px"
+	lidHints.style.top = (pos.bottom - viewPos.top) + "px"
 }
 
 const createLidHints = (command, view: EditorView, pos: { left: number, right: number, top: number, bottom: number }) => {
@@ -78,7 +78,7 @@ const suggestLeden: Suggester = {
 	noDecorations: true,
 	char: '@',
 	name: 'lid-hint',
-	appendText: ' ',
+	appendText: '',
 
 	keyBindings: {
 		ArrowUp: () => {

@@ -1,42 +1,40 @@
 <?php
 
 
-namespace CsrDelft\view\bbcode\prosemirror;
+namespace CsrDelft\view\bbcode\prosemirror\groep;
 
 
 use CsrDelft\bb\tag\BbNode;
-use CsrDelft\view\bbcode\tag\BbDocument;
+use CsrDelft\view\bbcode\prosemirror\Node;
+use CsrDelft\view\bbcode\tag\groep\BbKetzer;
 
-class NodeDocument implements Node
+class NodeKetzer implements Node
 {
-
 	public static function getBbTagType()
 	{
-		return BbDocument::class;
+		return BbKetzer::class;
 	}
 
 	public static function getNodeType()
 	{
-		return 'document';
+		return 'ketzer';
 	}
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbDocument) {
+		if (!$node instanceof BbKetzer) {
 			throw new \InvalidArgumentException();
 		}
 
 		return [
-			'attrs' => [
-				'id' => $node->id,
-			],
+			'attrs' => ['id' => $node->getId()]
 		];
 	}
 
 	public function getTagAttributes($node)
 	{
 		return [
-			'document' => $node->attrs->id,
+			'ketzer' => $node->attrs->id,
 		];
 	}
 

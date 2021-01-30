@@ -9,11 +9,10 @@ import {
 	selectParentNodeItem,
 	wrapItem
 } from "prosemirror-menu"
-import {blocks, EditorSchema} from "./schema";
+import {EditorSchema} from "./schema";
 import {redo, undo} from "prosemirror-history";
 import {
 	bbInsert,
-	blockMenuItem,
 	blockTypeHead,
 	blockTypeItemPrompt,
 	canInsert,
@@ -43,19 +42,30 @@ export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] 
 			], {label: "Meer"})
 		],
 		[
-			blockTypeItemPrompt(schema.nodes.lid, {title: "Lid invoegen", label: "Lid"}),
+			blockTypeItemPrompt(schema.nodes.lid, "Lid", "Lid invoegen"),
 			new Dropdown([
 				insertPlaatjeItem(schema.nodes.plaatje),
 				insertImageItem(schema.nodes.image),
-				blockTypeItemPrompt(schema.nodes.citaat, {title: "Citaat invoegen", label: "Citaat"}),
+				blockTypeItemPrompt(schema.nodes.citaat, "Citaat", "Citaat invoegen"),
 				new DropdownSubmenu([
-					blockTypeItemPrompt(schema.nodes.twitter, {title: "Twitter invoegen", label: "Twitter"}),
-					blockTypeItemPrompt(schema.nodes.youtube, {title: "YouTube invoegen", label: "YouTube"}),
-					blockTypeItemPrompt(schema.nodes.spotify, {title: "Spotify invoegen", label: "Spotify"}),
-					blockTypeItemPrompt(schema.nodes.video, {title: "Video invoegen", label: "Video"}),
-					blockTypeItemPrompt(schema.nodes.audio, {title: "Geluid invoegen", label: "Geluid"}),
+					blockTypeItemPrompt(schema.nodes.twitter, "Twitter", "Twitter invoegen"),
+					blockTypeItemPrompt(schema.nodes.youtube, "YouTube", "YouTube invoegen"),
+					blockTypeItemPrompt(schema.nodes.spotify, "Spotify", "Spotify invoegen"),
+					blockTypeItemPrompt(schema.nodes.video, "Video", "Video invoegen"),
+					blockTypeItemPrompt(schema.nodes.audio, "Geluid", "Geluid invoegen"),
 				], {label: "Embed"}),
-				...Object.entries(blocks).map(([name, fields]) => blockMenuItem(name, fields)),
+				blockTypeItemPrompt(schema.nodes.activiteit, "Activiteit", "Activiteit invoegen"),
+				blockTypeItemPrompt(schema.nodes.bestuur, "Bestuur", "Bestuur invoegen"),
+				blockTypeItemPrompt(schema.nodes.commissie, "Commissie", "Commissie invoegen"),
+				blockTypeItemPrompt(schema.nodes.groep, "Groep", "Groep invoegen"),
+				blockTypeItemPrompt(schema.nodes.ketzer, "Ketzer", "Ketzer invoegen"),
+				blockTypeItemPrompt(schema.nodes.ondervereniging, "Ondervereniging", "Ondervereniging invoegen"),
+				blockTypeItemPrompt(schema.nodes.verticale, "Verticale", "Verticale invoegen"),
+				blockTypeItemPrompt(schema.nodes.werkgroep, "Werkgroep", "Werkgroep invoegen"),
+				blockTypeItemPrompt(schema.nodes.woonoord, "Woonoord", "Woonoord invoegen"),
+				blockTypeItemPrompt(schema.nodes.boek, "Boek", "Boek invoegen"),
+				blockTypeItemPrompt(schema.nodes.document, "Document", "Document invoegen"),
+				blockTypeItemPrompt(schema.nodes.maaltijd, "Maaltijd", "Maaltijd invoegen"),
 				new MenuItem({
 					title: "Insert horizontal rule",
 					label: "Horizontal rule",

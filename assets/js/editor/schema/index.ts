@@ -1,4 +1,10 @@
 import {DOMOutputSpec, MarkSpec, Node, NodeSpec, Schema} from "prosemirror-model"
+import {
+	activiteit, bestuur, boek, commissie,
+	groep, ketzer, maaltijd, ondervereniging,
+	verticale, werkgroep, woonoord
+} from "./block-nodes";
+import {audio, spotify, twitter, video, youtube} from "./embed";
 
 // Helper functie om typescript te laten snappen dat alle elementen van i U zijn, maar dat de sleutels nog te ontdekken zijn.
 const RecordWithType = <U>() => <T extends Record<string, U>>(id: T) => id
@@ -42,7 +48,7 @@ export const nodes = RecordWithType<NodeSpec>()({
 	},
 
 	citaat: {
-		attrs: {van: {default: ""}, url: {default: ""}},
+		attrs: {van: {}, url: {default: ""}},
 		content: "block+",
 		group: "block",
 		defining: true,
@@ -54,7 +60,7 @@ export const nodes = RecordWithType<NodeSpec>()({
 	},
 
 	lid: {
-		attrs: {uid: {default: null}, naam: {default: null}},
+		attrs: {uid: {}, naam: {default: null}},
 		group: "inline",
 		inline: true,
 		parseDOM: [{tag: "span[data-lid]", getAttrs: (dom: HTMLElement) => ({uid: dom.dataset.lid, naam: dom.dataset.lidNaam})}],
@@ -166,24 +172,6 @@ export const nodes = RecordWithType<NodeSpec>()({
 		toDOM: () => ["div", {"data-bb-verklapper": "", class: "pm-verklapper"}, 0]
 	},
 
-	"bb-block": {
-		attrs: {type: {default: "groep"}, id: {default: "none"}},
-		group: "block",
-		draggable: true,
-		toDOM: node => ["div", {
-			"data-bb-block-type": node.attrs.type,
-			class: `pm-block pm-block-${node.attrs.type}`,
-			title: node.attrs.type,
-		}, `${node.attrs.type}: ${node.attrs.id}`],
-		parseDOM: [{
-			tag: "div[data-block-type]",
-			getAttrs: (dom: HTMLElement) => {
-				const type = dom.dataset.bbBlockType
-				return type in blocks ? {type} : false
-			}
-		}]
-	},
-
 	bb: {
 		attrs: {bb: {default: null}},
 		group: "block",
@@ -194,74 +182,16 @@ export const nodes = RecordWithType<NodeSpec>()({
 		}]
 	},
 
-	// Blocks
-	document: {
-		attrs: {id: {default: "none"}},
-		group: "block",
-		toDOM: node => ["div", {"data-document": node.attrs.id, class: "pm-block"}, "Document: " + node.attrs.id],
-		parseDOM: [{
-			tag: "div[data-document]",
-			getAttrs: (dom: HTMLElement) => ({id: dom.dataset.document})
-		}]
-	},
+	// Groepen
+	activiteit, bestuur, commissie, groep,
+	ketzer, ondervereniging, verticale, werkgroep,
+	woonoord,
+
+	// Overige blokken
+	boek, document, maaltijd,
 
 	// Embeds
-	twitter: {
-		attrs: {url: {default: null}},
-		group: "block",
-		parseDOM: [{
-			tag: "div[data-bb-twitter]",
-			getAttrs: (dom: HTMLElement) => ({
-				url: dom.dataset.bbTwitter,
-			})
-		}],
-		toDOM: node => ["div", {"data-bb-twitter": node.attrs.url}]
-	},
-
-	video: {
-		attrs: {url: {default: null}},
-		group: "block",
-		parseDOM: [{
-			tag: "div[data-bb-video]",
-			getAttrs: (dom: HTMLElement) => ({
-				url: dom.dataset.bbVideo
-			})
-		}],
-		toDOM: node => ["div", {"data-bb-video": node.attrs.url}],
-	},
-
-	audio: {
-		attrs: {url: {default: null}},
-		group: "block",
-		parseDOM: [{
-			tag: "div[data-bb-audio]",
-			getAttrs: (dom: HTMLElement) => ({
-				url: dom.dataset.bbAudio,
-			})
-		}],
-		toDOM: node => ["div", {"data-bb-audio": node.attrs.url}]
-	},
-
-	youtube: {
-		attrs: {url: {default: null}},
-		group: "block",
-		parseDOM: [{tag: "div[data-bb-youtube]"}],
-		toDOM: node => ["div", {"data-bb-youtube": node.attrs.url}]
-	},
-
-	spotify: {
-		attrs: {url: {default: null}, formaat: {default: null}},
-		group: "block",
-		parseDOM: [{
-			tag: "div[data-bb-spotify]",
-			getAttrs: (dom: HTMLElement) => ({
-				url: dom.dataset.bbSpotify,
-				formaat: dom.dataset.bbSpotifyFormaat,
-			})
-		}],
-		toDOM: node => ["div", {"data-bb-spotify": node.attrs.url, "data-bb-spotify-formaat": node.attrs.formaat}]
-	},
-
+	twitter, youtube, video, audio, spotify,
 })
 
 export type NodeScheme = keyof typeof nodes

@@ -23,7 +23,7 @@ class NodeBb implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbBb) {
-			throw new \Exception();
+			throw new \InvalidArgumentException();
 		}
 		$content = $node->getChildren();
 		$node->setChildren([]);

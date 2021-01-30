@@ -27,7 +27,7 @@ class MarkPrive implements Mark
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbPrive) {
-			throw new \Exception();
+			throw new \InvalidArgumentException();
 		}
 
 		return [

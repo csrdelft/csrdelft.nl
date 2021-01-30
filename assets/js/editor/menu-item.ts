@@ -176,9 +176,9 @@ export const blockMenuItem = (type: string, fields: string[]): MenuItem => new M
 	}
 });
 
-export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, options: { label: string; title: string }): MenuItem => new MenuItem({
-	title: options.title,
-	label: options.label,
+export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, label: string, title: string): MenuItem => new MenuItem({
+	title,
+	label,
 	enable: state => canInsert(state, nodeType),
 	run: (state, dispatch, view) => {
 		let attrs = null
@@ -192,7 +192,7 @@ export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, options: {
 		openPrompt({
 			title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
 			fields: Object.fromEntries(Object.entries(nodeType.spec.attrs).map(([attr, spec]) =>
-				[attr, new TextField({label: attr, required: true, value: attrs ? attrs[attr] : spec.default})])),
+				[attr, new TextField({label: attr, required: spec.default === undefined, value: attrs ? attrs[attr] : spec.default})])),
 			callback(callbackAttrs) {
 				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs}, content)))
 				view.focus()

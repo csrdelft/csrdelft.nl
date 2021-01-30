@@ -1,42 +1,40 @@
 <?php
 
 
-namespace CsrDelft\view\bbcode\prosemirror;
+namespace CsrDelft\view\bbcode\prosemirror\groep;
 
 
 use CsrDelft\bb\tag\BbNode;
-use CsrDelft\view\bbcode\tag\BbDocument;
+use CsrDelft\view\bbcode\prosemirror\Node;
+use CsrDelft\view\bbcode\tag\groep\BbCommissie;
 
-class NodeDocument implements Node
+class NodeCommissie implements Node
 {
-
 	public static function getBbTagType()
 	{
-		return BbDocument::class;
+		return BbCommissie::class;
 	}
 
 	public static function getNodeType()
 	{
-		return 'document';
+		return 'commissie';
 	}
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbDocument) {
+		if (!$node instanceof BbCommissie) {
 			throw new \InvalidArgumentException();
 		}
 
 		return [
-			'attrs' => [
-				'id' => $node->id,
-			],
+			'attrs' => ['id' => $node->getId()]
 		];
 	}
 
 	public function getTagAttributes($node)
 	{
 		return [
-			'document' => $node->attrs->id,
+			'commissie' => $node->attrs->id,
 		];
 	}
 

@@ -1,12 +1,11 @@
 <?php
 
 
-namespace CsrDelft\view\bbcode\prosemirror;
+namespace CsrDelft\view\bbcode\prosemirror\embed;
 
 
-use CsrDelft\bb\BbTag;
-use CsrDelft\bb\internal\BbString;
 use CsrDelft\bb\tag\BbNode;
+use CsrDelft\view\bbcode\prosemirror\Node;
 use CsrDelft\view\bbcode\tag\embed\BbTwitter;
 
 class NodeTwitter implements Node
@@ -24,7 +23,7 @@ class NodeTwitter implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbTwitter) {
-			throw new \Exception();
+			throw new \InvalidArgumentException();
 		}
 
 		return [

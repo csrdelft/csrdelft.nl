@@ -21,7 +21,7 @@ class NodeLid implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbLid) {
-			throw new \Exception();
+			throw new \InvalidArgumentException();
 		}
 
 		try {

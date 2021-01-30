@@ -20,7 +20,7 @@ class NodeForumPlaatje implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbForumPlaatje) {
-			throw new \Exception();
+			throw new \InvalidArgumentException();
 		}
 
 		return [

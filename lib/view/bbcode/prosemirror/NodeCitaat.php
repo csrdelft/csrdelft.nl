@@ -22,7 +22,7 @@ class NodeCitaat implements Node
 	public function getData(BbNode $node)
 	{
 		if (!$node instanceof BbCitaat) {
-			throw new \Exception();
+			throw new \InvalidArgumentException();
 		}
 
 		if ($node->bron_profiel != null) {

@@ -1,42 +1,40 @@
 <?php
 
 
-namespace CsrDelft\view\bbcode\prosemirror;
+namespace CsrDelft\view\bbcode\prosemirror\groep;
 
 
 use CsrDelft\bb\tag\BbNode;
-use CsrDelft\view\bbcode\tag\BbDocument;
+use CsrDelft\view\bbcode\prosemirror\Node;
+use CsrDelft\view\bbcode\tag\groep\BbWoonoord;
 
-class NodeDocument implements Node
+class NodeWoonoord implements Node
 {
-
 	public static function getBbTagType()
 	{
-		return BbDocument::class;
+		return BbWoonoord::class;
 	}
 
 	public static function getNodeType()
 	{
-		return 'document';
+		return 'woonoord';
 	}
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbDocument) {
+		if (!$node instanceof BbWoonoord) {
 			throw new \InvalidArgumentException();
 		}
 
 		return [
-			'attrs' => [
-				'id' => $node->id,
-			],
+			'attrs' => ['id' => $node->getId()]
 		];
 	}
 
 	public function getTagAttributes($node)
 	{
 		return [
-			'document' => $node->attrs->id,
+			'woonoord' => $node->attrs->id,
 		];
 	}
 

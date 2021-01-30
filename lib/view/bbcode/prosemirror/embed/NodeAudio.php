@@ -1,32 +1,30 @@
 <?php
 
 
-namespace CsrDelft\view\bbcode\prosemirror;
+namespace CsrDelft\view\bbcode\prosemirror\embed;
 
 
-use CsrDelft\bb\BbTag;
-use CsrDelft\bb\internal\BbString;
 use CsrDelft\bb\tag\BbNode;
-use CsrDelft\view\bbcode\tag\embed\BbVideo;
+use CsrDelft\view\bbcode\prosemirror\Node;
+use CsrDelft\view\bbcode\tag\embed\BbAudio;
 
-class NodeVideo implements Node
+class NodeAudio implements Node
 {
 	public static function getBbTagType()
 	{
-		return BbVideo::class;
+		return BbAudio::class;
 	}
 
 	public static function getNodeType()
 	{
-		return 'video';
+		return 'audio';
 	}
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbVideo) {
-			throw new \Exception();
+		if (!$node instanceof BbAudio) {
+			throw new \InvalidArgumentException();
 		}
-
 		return [
 			'attrs' => [
 				'url' => $node->url
@@ -37,7 +35,7 @@ class NodeVideo implements Node
 	public function getTagAttributes($node)
 	{
 		return [
-			'video' => $node->attrs->url
+			'audio' => $node->attrs->url
 		];
 	}
 
