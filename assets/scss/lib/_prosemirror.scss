@@ -8,6 +8,13 @@
 	margin-bottom: 23px;
 }
 
+.ProseMirror-menubar {
+	// Override de styles van prosemirror om te kunnen compenseren voor de menubalk
+	// Misschien is hier een betere fix voor.
+	position: sticky !important;
+	top: 80px !important;
+}
+
 .ProseMirror-menubar-wrapper {
 	// To contain .lid-hints
 	position: relative;
