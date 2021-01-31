@@ -21,7 +21,7 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 	 * @ORM\Column(type="integer")
 	 * @Serializer\Groups({"datatable"})
 	 */
-	private $id;
+	public $id;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
