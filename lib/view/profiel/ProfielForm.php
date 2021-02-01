@@ -135,6 +135,8 @@ class ProfielForm extends Formulier {
 			$fields[] = new TextField('tussenvoegsel', $profiel->tussenvoegsel, 'Tussenvoegsel', 15);
 			$fields[] = new RequiredTextField('achternaam', $profiel->achternaam, 'Achternaam', 50);
 		}
+		/* In account is ook een veld 'bijnaam' (verwijst naar accounts->username) te vinden. Deze kan, in tegenstelling
+		tot 'nickname', gebruikt worden als inlognaam. */
 		$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
 		if ($admin OR $inschrijven OR $profiel->isOudlid()) {
 			if ($admin OR $inschrijven) {
