@@ -115,7 +115,8 @@ class ProfielForm extends Formulier {
 				$html .= 'Geen novieten met overeenkomstige namen.';
 			}
 			$html .= '</div><div class="leden">';
-			if (count($gelijknamigeleden) > 1 || (!($profiel->status == LidStatus::Lid || $profiel->status == LidStatus::Gastlid) && !empty($gelijknamigeleden))) {
+			if (count($gelijknamigeleden) > 1 || (!($profiel->status == LidStatus::Lid
+						|| $profiel->status == LidStatus::Gastlid) && !empty($gelijknamigeleden))) {
 				$html .= 'Gelijknamige (gast)leden:<ul class="nobullets">';
 				foreach ($gelijknamigeleden as $lid) {
 					$html .= '<li>' . $lid->getLink('volledig') . '</li>';
