@@ -105,7 +105,7 @@ class ProfielForm extends Formulier {
 			}
 
 			$html = '<div class="novieten">';
-			if (count($gelijknamigenovieten) > 1 OR ($profiel->status !== LidStatus::Noviet AND !empty($gelijknamigenovieten))) {
+			if (count($gelijknamigenovieten) > 1 || ($profiel->status !== LidStatus::Noviet AND !empty($gelijknamigenovieten))) {
 				$html .= 'Gelijknamige novieten:<ul class="nobullets">';
 				foreach ($gelijknamigenovieten as $noviet) {
 					$html .= '<li>' . $noviet->getLink('volledig') . '</li>';
@@ -115,7 +115,7 @@ class ProfielForm extends Formulier {
 				$html .= 'Geen novieten met overeenkomstige namen.';
 			}
 			$html .= '</div><div class="leden">';
-			if (count($gelijknamigeleden) > 1 OR (!($profiel->status == LidStatus::Lid OR $profiel->status == LidStatus::Gastlid) AND !empty($gelijknamigeleden))) {
+			if (count($gelijknamigeleden) > 1 || (!($profiel->status == LidStatus::Lid || $profiel->status == LidStatus::Gastlid) AND !empty($gelijknamigeleden))) {
 				$html .= 'Gelijknamige (gast)leden:<ul class="nobullets">';
 				foreach ($gelijknamigeleden as $lid) {
 					$html .= '<li>' . $lid->getLink('volledig') . '</li>';
@@ -129,7 +129,7 @@ class ProfielForm extends Formulier {
 			$fields[] = new HtmlComment($html);
 		}
 		$fields[] = new Subkopje('Identiteit');
-		if ($admin OR $inschrijven OR $profiel->isOudlid()) {
+		if ($admin || $inschrijven || $profiel->isOudlid()) {
 			$fields[] = new RequiredTextField('voornaam', $profiel->voornaam, 'Voornaam', 50);
 			$fields[] = new RequiredTextField('voorletters', $profiel->voorletters, 'Voorletters', 10);
 			$fields[] = new TextField('tussenvoegsel', $profiel->tussenvoegsel, 'Tussenvoegsel', 15);
@@ -138,8 +138,8 @@ class ProfielForm extends Formulier {
 		/* In account is ook een veld 'bijnaam' (verwijst naar accounts->username) te vinden. Deze kan, in tegenstelling
 		tot 'nickname', gebruikt worden als inlognaam. */
 		$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
-		if ($admin OR $inschrijven OR $profiel->isOudlid()) {
-			if ($admin OR $inschrijven) {
+		if ($admin || $inschrijven || $profiel->isOudlid()) {
+			if ($admin || $inschrijven) {
 				$fields[] = new RequiredEnumSelectField('geslacht', $profiel->geslacht, 'Geslacht', Geslacht::class);
 				$fields[] = new TextField('voornamen', $profiel->voornamen, 'Voornamen', 100);
 				if (!$inschrijven) {
@@ -150,7 +150,7 @@ class ProfielForm extends Formulier {
 			if ($admin AND $profiel->status === LidStatus::Overleden) {
 				$fields[] = new DateObjectField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
-			if (($admin OR $profiel->isOudlid() OR $profiel->status === LidStatus::Overleden) AND !$inschrijven) {
+			if (($admin || $profiel->isOudlid() || $profiel->status === LidStatus::Overleden) AND !$inschrijven) {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
 				$fields[] = new Subkopje('Oudledenpost');
 				$fields[] = new TextField('adresseringechtpaar', $profiel->adresseringechtpaar, 'Tenaamstelling post echtpaar', 250);
@@ -205,7 +205,7 @@ class ProfielForm extends Formulier {
 		$fields['studiejaar'] = new IntField('studiejaar', (int)$profiel->studiejaar, 'Beginjaar studie', 1950, date('Y'));
 		$fields['studiejaar']->leden_mod = $admin;
 
-		if (!$inschrijven AND ($admin OR $profiel->isOudlid())) {
+		if (!$inschrijven AND ($admin || $profiel->isOudlid())) {
 			$fields[] = new TextField('beroep', $profiel->beroep, 'Beroep/werk', 4096);
 			$fields[] = new IntField('lidjaar', (int)$profiel->lidjaar, 'Lid sinds', 1950, date('Y'));
 			$fields[] = new DateObjectField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
@@ -228,7 +228,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
 		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
-		if ($admin OR $inschrijven OR $novCie) {
+		if ($admin || $inschrijven || $novCie) {
 			$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
 			$fields['middelbareSchool'] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 			$fields['middelbareSchool']->required = $inschrijven;
@@ -243,7 +243,7 @@ class ProfielForm extends Formulier {
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
-		if (($admin OR $novCie) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
+		if (($admin || $novCie) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
 			$fields[] = new CollapsableSubkopje('In te vullen door NovCie', true);
 
 			if ($inschrijven) {
