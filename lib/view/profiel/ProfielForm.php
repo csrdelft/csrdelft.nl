@@ -105,7 +105,7 @@ class ProfielForm extends Formulier {
 			}
 
 			$html = '<div class="novieten">';
-			if (count($gelijknamigenovieten) > 1 || ($profiel->status !== LidStatus::Noviet AND !empty($gelijknamigenovieten))) {
+			if (count($gelijknamigenovieten) > 1 || ($profiel->status !== LidStatus::Noviet && !empty($gelijknamigenovieten))) {
 				$html .= 'Gelijknamige novieten:<ul class="nobullets">';
 				foreach ($gelijknamigenovieten as $noviet) {
 					$html .= '<li>' . $noviet->getLink('volledig') . '</li>';
@@ -115,7 +115,7 @@ class ProfielForm extends Formulier {
 				$html .= 'Geen novieten met overeenkomstige namen.';
 			}
 			$html .= '</div><div class="leden">';
-			if (count($gelijknamigeleden) > 1 || (!($profiel->status == LidStatus::Lid || $profiel->status == LidStatus::Gastlid) AND !empty($gelijknamigeleden))) {
+			if (count($gelijknamigeleden) > 1 || (!($profiel->status == LidStatus::Lid || $profiel->status == LidStatus::Gastlid) && !empty($gelijknamigeleden))) {
 				$html .= 'Gelijknamige (gast)leden:<ul class="nobullets">';
 				foreach ($gelijknamigeleden as $lid) {
 					$html .= '<li>' . $lid->getLink('volledig') . '</li>';
@@ -147,10 +147,10 @@ class ProfielForm extends Formulier {
 				}
 			}
 			$fields[] = new RequiredDateObjectField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15, 1900);
-			if ($admin AND $profiel->status === LidStatus::Overleden) {
+			if ($admin && $profiel->status === LidStatus::Overleden) {
 				$fields[] = new DateObjectField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
-			if (($admin || $profiel->isOudlid() || $profiel->status === LidStatus::Overleden) AND !$inschrijven) {
+			if (($admin || $profiel->isOudlid() || $profiel->status === LidStatus::Overleden) && !$inschrijven) {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
 				$fields[] = new Subkopje('Oudledenpost');
 				$fields[] = new TextField('adresseringechtpaar', $profiel->adresseringechtpaar, 'Tenaamstelling post echtpaar', 250);
@@ -205,13 +205,13 @@ class ProfielForm extends Formulier {
 		$fields['studiejaar'] = new IntField('studiejaar', (int)$profiel->studiejaar, 'Beginjaar studie', 1950, date('Y'));
 		$fields['studiejaar']->leden_mod = $admin;
 
-		if (!$inschrijven AND ($admin || $profiel->isOudlid())) {
+		if (!$inschrijven && ($admin || $profiel->isOudlid())) {
 			$fields[] = new TextField('beroep', $profiel->beroep, 'Beroep/werk', 4096);
 			$fields[] = new IntField('lidjaar', (int)$profiel->lidjaar, 'Lid sinds', 1950, date('Y'));
 			$fields[] = new DateObjectField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
 		}
 
-		if ($admin AND !$inschrijven) {
+		if ($admin && !$inschrijven) {
 			$fields[] = new VerticaleField('verticale', $profiel->verticale, 'Verticale');
 			if ($profiel->isLid()) {
 				$fields[] = new JaNeeField('verticaleleider', $profiel->verticaleleider, 'Verticaleleider');
@@ -243,7 +243,7 @@ class ProfielForm extends Formulier {
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
-		if (($admin || $novCie) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
+		if (($admin || $novCie) && ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
 			$fields[] = new CollapsableSubkopje('In te vullen door NovCie', true);
 
 			if ($inschrijven) {
