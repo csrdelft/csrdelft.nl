@@ -353,7 +353,7 @@ const withTags: GalleryDecorator = (constructor) =>
 
 			this.getElement().appendChild(this.tagFormDiv);
 
-			const scripts = this.tagFormDiv.querySelectorAll('script');
+			const scripts = Array.from(this.tagFormDiv.querySelectorAll('script'));
 			for (const script of scripts) {
 				$.globalEval(script.innerText);
 			}

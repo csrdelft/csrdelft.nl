@@ -56,6 +56,10 @@ class BbFotoalbum extends BbTag {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var string
+	 */
+	private $albumUrl;
 
 	public function __construct(FotoAlbumRepository $fotoAlbumRepository, Environment $twig) {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
@@ -141,11 +145,11 @@ class BbFotoalbum extends BbTag {
 	 */
 	public function parse($arguments = [])
 	{
-		$this->readMainArgument($arguments);
+		$this->albumUrl = $this->readMainArgument($arguments);
 		$this->arguments = $arguments;
-		$this->album = $this->getAlbum($this->content);
+		$this->album = $this->getAlbum($this->albumUrl);
 		if ($this->album == null) {
-			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($this->content) . '</div>');
+			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($this->albumUrl) . '</div>');
 		}
 	}
 }

@@ -11,6 +11,7 @@ use CsrDelft\entity\groepen\AbstractGroepLid;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
@@ -46,6 +47,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -579,12 +581,17 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function aanmelden2(Request $request, EntityManagerInterface $em, $id, $uid)
 	{
 		$groep = $this->repository->get($id);
-		$model = $em->getRepository($groep->getLidType());
+		/** @var AbstractGroepLedenRepository $ledenRepository */
+		$ledenRepository = $em->getRepository($groep->getLidType());
+
+		if ($groep->versie !== GroepVersie::V2()) {
+			throw new BadRequestHttpException("Groep is niet van versie 2.");
+		}
 
 		if (!$groep->mag(AccessAction::Aanmelden)) {
 			throw $this->createAccessDeniedException();
 		}
-		$lid = $model->nieuw($groep, $uid);
+		$lid = $ledenRepository->nieuw($groep, $uid);
 
 		$opmerking = $request->request->get('opmerking2');
 
@@ -600,7 +607,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$lid->opmerking2 = $keuzes;
 
 		$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
-		$model->save($lid);
+		$ledenRepository->save($lid);
 
 		return new JsonResponse(['success' => true]);
 	}
@@ -610,13 +617,17 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
 
+		if ($groep->versie !== GroepVersie::V1()) {
+			throw new BadRequestHttpException("Groep is niet van versie 1.");
+		}
+
 		if (!$groep->mag(AccessAction::Aanmelden)) {
 			throw $this->createAccessDeniedException();
 		}
 
-		/** @var AbstractGroepLedenRepository $repository */
-		$repository = $em->getRepository($groep->getLidType());
-		$lid = $repository->nieuw($groep, $uid);
+		/** @var AbstractGroepLedenRepository $ledenRepository */
+		$ledenRepository = $em->getRepository($groep->getLidType());
+		$lid = $ledenRepository->nieuw($groep, $uid);
 
 		$form = new GroepAanmeldenForm($lid, $groep);
 

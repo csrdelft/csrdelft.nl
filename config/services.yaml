@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   container.dumper.inline_class_loader: true
+  app.supported_locales: 'nl|en'
 
 services:
   # default configuration for services in *this* file

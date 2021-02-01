@@ -1,0 +1,35 @@
+/* variables */
+$kleur-bruin: #903921;
+$kleur-oranje: #C8611A;
+$kleur-roze: #D08976;
+$white: #FFFBFA;
+
+/* bootstrap override */
+$font-color: $white;
+@font-face {
+  font-family: BossaNovaMVB;
+  src: url(../../fonts/BossaNovaMVB.otf);
+}
+
+$font-header: BossaNovaMVB, Arial, Helvetica, sans-serif;
+$font-text: BossaNovaMVB, Arial, Helvetica, sans-serif;
+
+$primary: $kleur-bruin;
+$secondary: $kleur-oranje;
+
+$theme-colors: (
+  "primary": $kleur-bruin,
+  "secondary": $kleur-oranje,
+  "danger": #ff4136,
+  "white": #f6c8b1,
+);
+
+$font-family-sans-serif: $font-text;
+$headings-font-family: $font-header;
+$headings-font-weight: 700;
+$body-color: $white;
+$body-bg: $kleur-bruin;
+
+$h2-font-size: 3.2rem;
+$h3-font-size: 2.5rem;
+$h4-font-size: 2rem;

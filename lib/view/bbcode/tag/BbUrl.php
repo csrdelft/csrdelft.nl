@@ -38,11 +38,11 @@ class BbUrl extends BbTag {
 	}
 
 	public function renderLight() {
-		return BbHelper::lightLinkInline($this->env, 'url', $this->url, $this->content);
+		return BbHelper::lightLinkInline($this->env, 'url', $this->url, $this->getContent());
 	}
 
 	public function render() {
-		return external_url($this->url, $this->content);
+		return external_url($this->url, $this->getContent());
 	}
 
 	/**
