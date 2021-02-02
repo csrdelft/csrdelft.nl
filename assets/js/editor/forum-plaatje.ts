@@ -15,7 +15,7 @@ async function uploadFile(file: File) {
 	return response.data
 }
 
-export async function startImageUpload(view: EditorView<EditorSchema>, file: File) {
+export async function startImageUpload(view: EditorView<EditorSchema>, file: File): Promise<void> {
 	// A fresh object to act as the ID for this upload
 	const id: any = {}
 
@@ -27,19 +27,18 @@ export async function startImageUpload(view: EditorView<EditorSchema>, file: Fil
 
 	try {
 		const {src, key} = await uploadFile(file)
-		console.log(src, key)
 		const pos = findPlaceholder(view.state, id)
-		// If the content around the placeholder has been deleted, drop
-		// the image
+		// If the content around the placeholder has been deleted, drop the image
 		if (pos == null) return
-		// Otherwise, insert it at the placeholder's position, and remove
-		// the placeholder
+		// Otherwise, insert it at the placeholder's position, and remove the placeholder
 		view.dispatch(view.state.tr
 			.replaceWith(pos, pos, view.state.schema.nodes.plaatje.create({src, key}))
 			.setMeta(placeholderPlugin, {remove: {id}}))
 	} catch (e) {
-		console.log("failed", e)
 		// On failure, just clean up the placeholder
 		view.dispatch(tr.setMeta(placeholderPlugin, {remove: {id}}))
+
+		// Rethrow
+		throw e;
 	}
 }
