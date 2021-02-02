@@ -150,6 +150,12 @@
 	}
 }
 
+.ProseMirror [data-plaatje] {
+	img {
+		max-width: 100%;
+	}
+}
+
 .ProseMirror [data-bb] {
 	border: 1px dotted lightgrey;
 }

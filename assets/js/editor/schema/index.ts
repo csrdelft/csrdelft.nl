@@ -1,7 +1,7 @@
 import {DOMOutputSpec, MarkSpec, Node, NodeSpec, Schema} from "prosemirror-model"
 import {
 	activiteit, bestuur, boek, commissie,
-	groep, ketzer, maaltijd, ondervereniging,
+	document, groep, ketzer, maaltijd, ondervereniging,
 	verticale, werkgroep, woonoord
 } from "./block-nodes";
 import {audio, spotify, twitter, video, youtube} from "./embed";

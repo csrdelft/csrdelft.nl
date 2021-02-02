@@ -11,8 +11,7 @@ interface PromptOptions {
 
 export function openPrompt(options: PromptOptions) {
 
-	const domFields = []
-	for (const name in options.fields) domFields.push(options.fields[name].render())
+	const domFields = Object.fromEntries(Object.entries(options.fields).map(([name, field])=> [name, field.render()]))
 
 	const submitButton = document.createElement("button")
 	submitButton.type = "submit"
@@ -29,8 +28,11 @@ export function openPrompt(options: PromptOptions) {
 	const formFooter = form.appendChild(document.createElement("div"))
 	formFooter.classList.add("modal-footer")
 
-	domFields.forEach(field => {
-		formBody.appendChild(document.createElement("div")).appendChild(field)
+	Object.entries(domFields).forEach(([name, field]) => {
+		formBody.appendChild(html`<div class="row">
+			<div class="col-3">${name}</div>
+			<div class="col-9">${field}</div>
+		</div>`)
 	})
 	const buttons = form.appendChild(document.createElement("div"))
 	buttons.className = prefix + "-buttons"
@@ -98,7 +100,7 @@ function getValues(fields, domFields) {
 	const result = Object.create(null)
 	let i = 0
 	for (const name in fields) {
-		const field = fields[name], dom = domFields[i++]
+		const field = fields[name], dom = domFields[name]
 		const value = field.read(dom), bad = field.validate(value)
 		if (bad) {
 			reportInvalid(dom, bad)
@@ -173,8 +175,9 @@ export class Field<T extends string, U = string> {
 		return this.options.clean ? this.options.clean(value) : value
 	}
 
-	render() {
+	render(): HTMLElement {
 		// abstract
+		return null
 	}
 }
 
