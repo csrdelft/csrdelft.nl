@@ -49,7 +49,7 @@ export const CsrBBPreviewEl = (source: HTMLTextAreaElement, target: HTMLElement,
 		return;
 	}
 
-	axios.post('/bb/previes', {
+	axios.post('/bb/preview', {
 		data: encodeURIComponent(bbcode),
 		...params,
 	}).then((response) => {
