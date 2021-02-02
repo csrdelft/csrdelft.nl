@@ -10,6 +10,7 @@ use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\repository\ProfielRepository;
@@ -38,16 +39,22 @@ class CsrTwigExtension extends AbstractExtension
 	 * @var ProfielRepository
 	 */
 	private $profielRepository;
+	/**
+	 * @var CmsPaginaRepository
+	 */
+	private $cmsPaginaRepository;
 
 	public function __construct(
 		SessionInterface $session,
 		CsrfService $csrfService,
+		CmsPaginaRepository $cmsPaginaRepository,
 		ProfielRepository $profielRepository
 	)
 	{
 		$this->session = $session;
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
+		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
 	public function getFunctions()
@@ -61,7 +68,8 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFunction('vereniging_leeftijd', [$this, 'vereniging_leeftijd']),
 			new TwigFunction('get_profiel', [$this, 'get_profiel']),
 			new TwigFunction('huidige_jaargang', [$this, 'huidige_jaargang']),
-			new TwigFunction('gethostbyaddr', 'gethostbyaddr')
+			new TwigFunction('gethostbyaddr', 'gethostbyaddr'),
+			new TwigFunction('cms', [$this, 'cms'], ['is_safe' => ['html']]),
 		];
 	}
 
@@ -86,6 +94,20 @@ class CsrTwigExtension extends AbstractExtension
 		return '<meta property="X-CSRF-ID" content="' . htmlentities($token->getId()) . '" /><meta property="X-CSRF-VALUE" content="' . htmlentities($token->getValue()) . '" />';
 	}
 
+	public function cms($id)
+	{
+		$pagina = $this->cmsPaginaRepository->find($id);
+
+		if (!$pagina) {
+			return '<div class="alert alert-danger">Gedeelte van de pagina met naam "' . htmlspecialchars($id) . '" niet gevonden.</div>';
+		}
+
+		if ($pagina->magBekijken()) {
+			return CsrBB::parseHtml($pagina->inhoud, $pagina->inlineHtml);
+		}
+
+		return '';
+	}
 
 	public function getFilters()
 	{
