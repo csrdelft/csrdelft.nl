@@ -9,18 +9,6 @@ import {audio, spotify, twitter, video, youtube} from "./embed";
 // Helper functie om typescript te laten snappen dat alle elementen van i U zijn, maar dat de sleutels nog te ontdekken zijn.
 const RecordWithType = <U>() => <T extends Record<string, U>>(id: T) => id
 
-export const blocks: Record<string, string[]> = {
-	groep: ["id"],
-	activiteit: ["id"],
-	ishetal: [],
-	maaltijd: ["id"],
-	document: ["id"],
-	fotoalbum: ["url"],
-	foto: ["url"],
-	peiling: ["url"],
-	locatie: ["locatie"]
-}
-
 // :: Object
 // [Specs](#model.NodeSpec) for the nodes defined in this schema.
 export const nodes = RecordWithType<NodeSpec>()({
