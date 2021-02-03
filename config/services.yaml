@@ -70,6 +70,10 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
+  CsrDelft\events\CacheControlEventListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.response }
+
   CsrDelft\common\Security\PersistentTokenProvider: ~
   Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login.main'
   Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface: '@security.authenticator.manager.main'
