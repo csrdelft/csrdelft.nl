@@ -1,15 +1,14 @@
-// From "prosemirror-example-setup/src/prompt"
 import {html} from "../lib/util";
 
 const prefix = "ProseMirror-popup"
 
-interface PromptOptions {
+interface PromptOptions<T> {
 	title: string
 	fields: Record<string, Field<any, any>>
-	callback: (params: any) => void
+	callback: (params: T) => void
 }
 
-export function openPrompt(options: PromptOptions): void {
+export function openPrompt<T = any>(options: PromptOptions<T>): void {
 	const submitButton = html`
 		<button type="submit" class="${prefix}-submit btn btn-primary">OK</button>`
 	const cancelButton = html`
@@ -180,7 +179,7 @@ export class Field<T extends string, U = string> {
 
 // ::- A field class for single-line text fields.
 export class TextField extends Field<any> {
-	render(name: string) {
+	render(name: string): HTMLElement {
 		return html`<input type="text" name="${name}" value="${this.options.value || ""}" autocomplete="off" class="form-control"/>`
 	}
 }
@@ -190,7 +189,7 @@ export class TextField extends Field<any> {
 // `{value: string, label: string}` objects, or a function taking a
 // `ProseMirror` instance and returning such an array.
 export class SelectField extends Field<any> {
-	render(name: string) {
+	render(name: string): HTMLElement {
 		const select = document.createElement("select")
 		select.name = name
 		this.options.options.forEach(o => {
@@ -204,7 +203,7 @@ export class SelectField extends Field<any> {
 }
 
 export class TextAreaField extends Field<any> {
-	render(name: string) {
+	render(name: string): HTMLElement {
 		const input = document.createElement("textarea")
 		input.name = name
 		input.classList.add("form-control")
@@ -216,7 +215,7 @@ export class TextAreaField extends Field<any> {
 }
 
 export class FileField extends Field<string, File> {
-	render(name: string) {
+	render(name: string): HTMLElement {
 		const input = document.createElement("input")
 		input.name = name
 		input.classList.add("form-control")

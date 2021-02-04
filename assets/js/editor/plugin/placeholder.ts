@@ -2,7 +2,7 @@ import {EditorState, Plugin} from "prosemirror-state"
 import {Decoration, DecorationSet} from "prosemirror-view"
 import {EditorSchema} from "../schema";
 
-export const placeholderPlugin = new Plugin<any, EditorSchema>({
+export const placeholderPlugin = new Plugin<DecorationSet<EditorSchema>, EditorSchema>({
 	state: {
 		init() {
 			return DecorationSet.empty
@@ -18,8 +18,7 @@ export const placeholderPlugin = new Plugin<any, EditorSchema>({
 				const deco = Decoration.widget(action.add.pos, widget, {id: action.add.id})
 				set = set.add(tr.doc, [deco])
 			} else if (action && action.remove) {
-				set = set.remove(set.find(null, null,
-					spec => spec.id == action.remove.id))
+				set = set.remove(set.find(null, null, spec => spec.id == action.remove.id))
 			}
 			return set
 		}
@@ -31,8 +30,8 @@ export const placeholderPlugin = new Plugin<any, EditorSchema>({
 	}
 })
 
-export const findPlaceholder = (state: EditorState<EditorSchema>, id: string) => {
-	const decos = placeholderPlugin.getState(state)
-	const found = decos.find(null, null, spec => spec.id == id)
+export const findPlaceholder = (state: EditorState<EditorSchema>, id: string): number | null => {
+	const decorations = placeholderPlugin.getState(state)
+	const found = decorations.find(null, null, spec => spec.id == id)
 	return found.length ? found[0].from : null
 };
