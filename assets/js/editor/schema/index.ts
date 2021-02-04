@@ -1,10 +1,21 @@
 import {DOMOutputSpec, MarkSpec, Node, NodeSpec, Schema} from "prosemirror-model"
 import {
-	activiteit, bestuur, boek, commissie,
-	document, groep, ketzer, maaltijd, ondervereniging,
-	verticale, werkgroep, woonoord
+	activiteit,
+	bestuur,
+	boek,
+	commissie,
+	document,
+	groep,
+	ketzer,
+	maaltijd,
+	ondervereniging,
+	verticale,
+	werkgroep,
+	woonoord
 } from "./block-nodes";
 import {audio, spotify, twitter, video, youtube} from "./embed";
+import {addListNodes} from "prosemirror-schema-list";
+import OrderedMap from "orderedmap";
 
 // Helper functie om typescript te laten snappen dat alle elementen van i U zijn, maar dat de sleutels nog te ontdekken zijn.
 const RecordWithType = <U>() => <T extends Record<string, U>>(id: T) => id
@@ -51,7 +62,10 @@ export const nodes = RecordWithType<NodeSpec>()({
 		attrs: {uid: {}, naam: {default: null}},
 		group: "inline",
 		inline: true,
-		parseDOM: [{tag: "span[data-lid]", getAttrs: (dom: HTMLElement) => ({uid: dom.dataset.lid, naam: dom.dataset.lidNaam})}],
+		parseDOM: [{
+			tag: "span[data-lid]",
+			getAttrs: (dom: HTMLElement) => ({uid: dom.dataset.lid, naam: dom.dataset.lidNaam})
+		}],
 		toDOM: node => ["span", {"data-lid": node.attrs.uid, "data-lidNaam": node.attrs.naam}, node.attrs.naam],
 	},
 
@@ -141,7 +155,10 @@ export const nodes = RecordWithType<NodeSpec>()({
 			tag: "[data-plaatje]",
 			getAttrs: (dom: HTMLElement) => ({key: dom.dataset.plaatje, src: dom.dataset.plaatjeSrc})
 		}],
-		toDOM: (node: Node) => ["div", {"data-plaatje": node.attrs.key, "data-plaatje-src": node.attrs.src}, ["img", {src: node.attrs.src}]],
+		toDOM: (node: Node) => ["div", {
+			"data-plaatje": node.attrs.key,
+			"data-plaatje-src": node.attrs.src
+		}, ["img", {src: node.attrs.src}]],
 	},
 
 	// :: NodeSpec A hard line break, represented in the DOM as `<br>`.
@@ -294,8 +311,12 @@ export const marks = RecordWithType<MarkSpec>()({
 
 })
 
-export const schema = new Schema({nodes, marks})
-
-export type EditorNodes = keyof typeof nodes
+export type EditorNodes = keyof typeof nodes | "bullet_list" | "ordered_list" | "list_item"
 export type EditorMarks = keyof typeof marks
+
+export const schema = new Schema<EditorNodes, EditorMarks>({
+	nodes: addListNodes(OrderedMap.from<NodeSpec>(nodes as any), "paragraph block*", "block"),
+	marks
+})
+
 export type EditorSchema = typeof schema

@@ -479,7 +479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/orderedmap@npm:*":
+"@types/orderedmap@npm:*, @types/orderedmap@npm:^1.0.0":
   version: 1.0.0
   resolution: "@types/orderedmap@npm:1.0.0"
   checksum: 54e0da27647be2bc73aacd4a4af1334c4e2ef6369bb500263342c423c34abf855724b233a3f9b5926c259443132035600ffd8dfb9ac366f9ee1e6459b57b80fb
@@ -5853,7 +5853,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"orderedmap@npm:^1.1.0":
+"orderedmap@npm:^1.1.0, orderedmap@npm:^1.1.1":
   version: 1.1.1
   resolution: "orderedmap@npm:1.1.1"
   checksum: d4e485755304ded3ac35edaa485cf8b1f90a02232ef32ab47bb62ea64a5716da2312672ef697113fa3b51a7911215a836fe31a7518702f6c45685b58910e313f
@@ -7336,6 +7336,7 @@ fsevents@~2.1.2:
     "@types/mini-css-extract-plugin": ^0.2.0
     "@types/node": ^10.12.19
     "@types/optimize-css-assets-webpack-plugin": ^1.3.3
+    "@types/orderedmap": ^1.0.0
     "@types/prosemirror-commands": ^1.0.4
     "@types/prosemirror-history": ^1.0.2
     "@types/prosemirror-menu": ^1.0.3
@@ -7403,6 +7404,7 @@ fsevents@~2.1.2:
     moment: ^2.24.0
     moment-locales-webpack-plugin: ^1.0.7
     optimize-css-assets-webpack-plugin: ^5.0.1
+    orderedmap: ^1.1.1
     parallax-js: ^3.1.0
     path: ^0.12.7
     pnp-webpack-plugin: ^1.6.4

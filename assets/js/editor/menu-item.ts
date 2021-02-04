@@ -18,25 +18,26 @@ export function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<E
 }
 
 export const insertImageItem = (nodeType: NodeType<EditorSchema>): MenuItem => new MenuItem({
-	title: "Insert image",
-	label: "Image",
+	title: "Afbeelding invoegen",
+	label: "Afbeelding",
 	enable(state) {
 		return canInsert(state, nodeType)
 	},
 	run(state, _, view) {
-		const {from, to} = state.selection
+		// const {from, to} = state.selection
 		let attrs = null
 		if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType)
 			attrs = state.selection.node.attrs
 		openPrompt({
-			title: "Insert image",
+			title: "Afbeelding invoegen",
 			fields: {
-				src: new TextField({label: "Location", required: true, value: attrs && attrs.src}),
-				title: new TextField({label: "Title", value: attrs && attrs.title}),
-				alt: new TextField({
-					label: "Description",
-					value: attrs ? attrs.alt : state.doc.textBetween(from, to, " ")
-				})
+				src: new TextField({label: "Locatie", required: true, value: attrs && attrs.src}),
+				// TODO: Support ook title en alt in bb
+				// title: new TextField({label: "Titel", value: attrs && attrs.title}),
+				// alt: new TextField({
+				// 	label: "Beschrijving",
+				// 	value: attrs ? attrs.alt : state.doc.textBetween(from, to, " ")
+				// })
 			},
 			callback: callbackAttrs => {
 				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill(callbackAttrs)))
@@ -74,7 +75,7 @@ export const markItem = (markType: MarkType<EditorSchema>, options): MenuItem =>
 });
 
 export const linkItem = (markType: MarkType<EditorSchema>): MenuItem => new MenuItem({
-	title: "Add or remove link",
+	title: "Maak of verwijder link",
 	icon: icons.link,
 	active(state) {
 		return markActive(state, markType)
@@ -88,13 +89,13 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem => new Menu
 			return true
 		}
 		openPrompt({
-			title: "Create a link",
+			title: "Maak een link",
 			fields: {
 				href: new TextField({
-					label: "Link target",
+					label: "Link doel",
 					required: true
 				}),
-				title: new TextField({label: "Title"})
+				title: new TextField({label: "Titel"})
 			},
 			callback(attrs) {
 				toggleMark(markType, attrs)(view.state, view.dispatch)
@@ -107,8 +108,8 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem => new Menu
 export const wrapListItem = (nodeType: NodeType<EditorSchema>, options): MenuItem => cmdItem(wrapInList(nodeType, options.attrs), options);
 
 export const blockTypeHead = (nodeType: NodeType, i: number): MenuItem => blockTypeItem(nodeType, {
-	title: "Change to heading " + i,
-	label: "Level " + i,
+	title: "Verander naar kop " + i,
+	label: "Kop " + i,
 	attrs: {level: i}
 });
 
@@ -132,47 +133,6 @@ export const priveItem = (markType: MarkType): MenuItem => new MenuItem({
 				view.focus()
 			}
 		})
-	}
-});
-
-const canInsertBlock = (state: EditorState<EditorSchema>) => {
-	const {$from} = state.selection
-	const blockType = state.schema.nodes["bb-block"];
-
-	for (let d = $from.depth; d >= 0; d--) {
-		const index = $from.index(d)
-		if ($from.node(d).canReplaceWith(index, index, blockType)) return true
-	}
-
-	return false;
-}
-
-export const blockMenuItem = (type: string, fields: string[]): MenuItem => new MenuItem({
-	title: "Insert " + type,
-	label: type.charAt(0).toUpperCase() + type.slice(1),
-	enable: canInsertBlock,
-	run(state, dispatch, view) {
-		let attrs = null
-		const blockType = state.schema.nodes["bb-block"]
-
-		if (state.selection instanceof NodeSelection && state.selection.node.type == blockType) {
-			attrs = state.selection.node.attrs
-		}
-
-		if (fields.length > 0) {
-			openPrompt({
-				title: attrs && attrs.type == type ? "Update: " + attrs.type : "Invoegen: " + type,
-				fields: Object.fromEntries(
-					fields.map(field =>
-						[field, new TextField({label: field, required: true, value: attrs && attrs[field]})])),
-				callback(callbackAttrs) {
-					view.dispatch(view.state.tr.replaceSelectionWith(blockType.createAndFill({type, ...callbackAttrs})))
-					view.focus()
-				}
-			})
-		} else {
-			dispatch(state.tr.replaceSelectionWith(blockType.createAndFill({type, ...attrs})))
-		}
 	}
 });
 

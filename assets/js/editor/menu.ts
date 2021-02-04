@@ -70,8 +70,8 @@ export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] 
 				blockTypeItemPrompt(schema.nodes.document, "Document", "Document invoegen"),
 				blockTypeItemPrompt(schema.nodes.maaltijd, "Maaltijd", "Maaltijd invoegen"),
 				new MenuItem({
-					title: "Insert horizontal rule",
-					label: "Horizontal rule",
+					title: "Horizontale lijn invoegen",
+					label: "Lijn",
 					enable(state) {
 						return canInsert(state, schema.nodes.horizontal_rule)
 					},
@@ -87,11 +87,11 @@ export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] 
 			], {label: "Invoegen"}),
 			new Dropdown([
 				blockTypeItem(schema.nodes.paragraph, {
-					title: "Change to paragraph",
-					label: "Plain"
+					title: "Verander naar een paragraaf",
+					label: "Normaal"
 				}),
 				blockTypeItem(schema.nodes.code_block, {
-					title: "Change to code block",
+					title: "Verander naar een code blok",
 					label: "Code"
 				}),
 				new DropdownSubmenu([
@@ -101,18 +101,18 @@ export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] 
 					blockTypeHead(schema.nodes.heading, 4),
 					blockTypeHead(schema.nodes.heading, 5),
 					blockTypeHead(schema.nodes.heading, 6),
-				], {label: "Heading"})
-			], {label: "Type..."}),
+				], {label: "Koppen"})
+			], {label: "Tekst..."}),
 		],
 		[
 			new MenuItem({
-				title: "Undo last change",
+				title: "Laatste wijziging ongedaan maken",
 				run: undo,
 				enable: state => undo(state),
 				icon: icons.undo
 			}),
 			new MenuItem({
-				title: "Redo last undone change",
+				title: "Herhaal de laatste ongedaan gemaakte wijziging",
 				run: redo,
 				enable: state => redo(state),
 				icon: icons.redo
@@ -120,15 +120,15 @@ export function buildMenuItems(schema: EditorSchema): (MenuItem | Dropdown)[][] 
 		],
 		[
 			wrapListItem(schema.nodes.bullet_list, {
-				title: "Wrap in bullet list",
+				title: "Maak een puntenlijst",
 				icon: icons.bulletList
 			}),
 			wrapListItem(schema.nodes.ordered_list, {
-				title: "Wrap in ordered list",
+				title: "Maak een geordende lijst",
 				icon: icons.orderedList
 			}),
 			wrapItem(schema.nodes.blockquote, {
-				title: "Wrap in block quote",
+				title: "Maak een quote",
 				icon: icons.blockquote
 			}),
 			joinUpItem,

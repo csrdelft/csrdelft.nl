@@ -9,53 +9,46 @@ interface PromptOptions {
 	callback: (params: any) => void
 }
 
-export function openPrompt(options: PromptOptions) {
-
-	const domFields = Object.fromEntries(Object.entries(options.fields).map(([name, field])=> [name, field.render()]))
-
-	const submitButton = document.createElement("button")
-	submitButton.type = "submit"
-	submitButton.className = prefix + "-submit btn btn-primary"
-	submitButton.textContent = "OK"
-	const cancelButton = document.createElement("button")
-	cancelButton.type = "button"
-	cancelButton.className = prefix + "-cancel btn btn-secondary"
-	cancelButton.textContent = "Cancel"
+export function openPrompt(options: PromptOptions): void {
+	const submitButton = html`
+		<button type="submit" class="${prefix}-submit btn btn-primary">OK</button>`
+	const cancelButton = html`
+		<button type="button" class="${prefix}-cancel btn btn-primary">Cancel</button>`
 
 	const form = document.createElement("form")
-	const formBody = form.appendChild(document.createElement("div"))
-	formBody.classList.add("modal-body")
-	const formFooter = form.appendChild(document.createElement("div"))
-	formFooter.classList.add("modal-footer")
+	const formBody = form.appendChild(html`
+		<div class="modal-body"></div>`)
+	const formFooter = form.appendChild(html`
+		<div class="modal-footer"></div>`)
 
-	Object.entries(domFields).forEach(([name, field]) => {
-		formBody.appendChild(html`<div class="row">
-			<div class="col-3">${name}</div>
-			<div class="col-9">${field}</div>
-		</div>`)
+	Object.entries(options.fields).forEach(([name, field]) => {
+		formBody.appendChild(html`
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">${field.options.label}</label>
+				<div class="col-sm-10">${field.render(name)}</div>
+			</div>`)
 	})
-	const buttons = form.appendChild(document.createElement("div"))
-	buttons.className = prefix + "-buttons"
-	buttons.appendChild(submitButton)
-	buttons.appendChild(document.createTextNode(" "))
-	buttons.appendChild(cancelButton)
 
-	formFooter.appendChild(buttons)
+	formFooter.appendChild(html`
+		<div class="${prefix}-buttons">${submitButton} ${cancelButton}</div>`)
 
-	const modal = html`<div class="modal" style="display: block;" tabindex="-1">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">${options.title}</h5>
+	const modal = html`
+		<div class="modal" style="display: block;" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">${options.title}</h5>
+					</div>
+					${form}
 				</div>
-				${form}
 			</div>
-		</div>
-	</div>`
+		</div>`
 
 	document.body.appendChild(modal)
 
-	const mouseOutside = e => { if (!form.contains(e.target)) close() }
+	const mouseOutside = e => {
+		if (!form.contains(e.target)) close()
+	}
 	setTimeout(() => window.addEventListener("mousedown", mouseOutside), 50)
 	const close = () => {
 		window.removeEventListener("mousedown", mouseOutside)
@@ -65,7 +58,7 @@ export function openPrompt(options: PromptOptions) {
 	cancelButton.addEventListener("click", close)
 
 	const submit = () => {
-		const params = getValues(options.fields, domFields)
+		const params = getValues(options.fields, form)
 		if (params) {
 			close()
 			options.callback(params)
@@ -78,14 +71,13 @@ export function openPrompt(options: PromptOptions) {
 	})
 
 	form.addEventListener("keydown", e => {
-		if (e.keyCode == 27) {
+		if (e.key == "Escape") {
 			e.preventDefault()
 			close()
-		} else if (e.keyCode == 13 && !(e.ctrlKey || e.metaKey || e.shiftKey) && document.activeElement.tagName.toLowerCase() != "textarea") {
-			console.log(document.activeElement.tagName)
+		} else if (e.key == "Enter" && !(e.ctrlKey || e.metaKey || e.shiftKey) && document.activeElement.tagName.toLowerCase() != "textarea") {
 			e.preventDefault()
 			submit()
-		} else if (e.keyCode == 9) {
+		} else if (e.key == "Tab") {
 			window.setTimeout(() => {
 				if (!modal.contains(document.activeElement)) close()
 			}, 500)
@@ -96,12 +88,13 @@ export function openPrompt(options: PromptOptions) {
 	if (input) input.focus()
 }
 
-function getValues(fields, domFields) {
+function getValues(fields: Record<string, Field<string, any>>, form: HTMLFormElement) {
 	const result = Object.create(null)
-	let i = 0
-	for (const name in fields) {
-		const field = fields[name], dom = domFields[name]
-		const value = field.read(dom), bad = field.validate(value)
+	for (const name of Object.keys(fields)) {
+		const field = fields[name]
+		const dom = form[name]
+		const value = field.read(dom)
+		const bad = field.validate(value)
 		if (bad) {
 			reportInvalid(dom, bad)
 			return null
@@ -133,7 +126,7 @@ interface FieldOptions<T = unknown> {
 
 // ::- The type of field that `FieldPrompt` expects to be passed to it.
 export class Field<T extends string, U = string> {
-	protected options: FieldOptions<T>;
+	options: FieldOptions<T>;
 	// :: (Object)
 	// Create a field with the given options. Options support by all
 	// field types are:
@@ -150,14 +143,18 @@ export class Field<T extends string, U = string> {
 	// **`validate`**`: ?(any) → ?string`
 	//   : A function to validate the given value. Should return an
 	//     error message if it is not valid.
-	constructor(options: FieldOptions<T>) { this.options = options }
+	constructor(options: FieldOptions<T>) {
+		this.options = options
+	}
 
 	// render:: (state: EditorState, props: Object) → dom.Node
 	// Render the field to the DOM. Should be implemented by all subclasses.
 
 	// :: (dom.Node) → any
 	// Read the field's value from its DOM node.
-	read(dom: HTMLInputElement): U { return dom.value as unknown as U }
+	read(dom: HTMLInputElement): U {
+		return dom.value as unknown as U
+	}
 
 	// :: (any) → ?string
 	// A field-type-specific validation function.
@@ -175,7 +172,7 @@ export class Field<T extends string, U = string> {
 		return this.options.clean ? this.options.clean(value) : value
 	}
 
-	render(): HTMLElement {
+	render(name: string): HTMLElement {
 		// abstract
 		return null
 	}
@@ -183,24 +180,19 @@ export class Field<T extends string, U = string> {
 
 // ::- A field class for single-line text fields.
 export class TextField extends Field<any> {
-	render() {
-		const input = document.createElement("input")
-		input.type = "text"
-		input.placeholder = this.options.label
-		input.value = this.options.value || ""
-		input.autocomplete = "off"
-		return input
+	render(name: string) {
+		return html`<input type="text" name="${name}" value="${this.options.value || ""}" autocomplete="off" class="form-control"/>`
 	}
 }
-
 
 // ::- A field class for dropdown fields based on a plain `<select>`
 // tag. Expects an option `options`, which should be an array of
 // `{value: string, label: string}` objects, or a function taking a
 // `ProseMirror` instance and returning such an array.
 export class SelectField extends Field<any> {
-	render() {
+	render(name: string) {
 		const select = document.createElement("select")
+		select.name = name
 		this.options.options.forEach(o => {
 			const opt = select.appendChild(document.createElement("option"))
 			opt.value = o.value
@@ -212,8 +204,9 @@ export class SelectField extends Field<any> {
 }
 
 export class TextAreaField extends Field<any> {
-	render() {
+	render(name: string) {
 		const input = document.createElement("textarea")
+		input.name = name
 		input.classList.add("form-control")
 		input.placeholder = this.options.label
 		input.value = this.options.value || ""
@@ -223,8 +216,9 @@ export class TextAreaField extends Field<any> {
 }
 
 export class FileField extends Field<string, File> {
-	render() {
+	render(name: string) {
 		const input = document.createElement("input")
+		input.name = name
 		input.classList.add("form-control")
 		input.type = "file"
 
