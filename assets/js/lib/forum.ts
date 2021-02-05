@@ -1,9 +1,11 @@
 import $ from 'jquery';
 import {init} from '../ctx';
 import {domUpdate} from './domUpdate';
-import {throwError} from "./util";
+import {html, throwError} from "./util";
 import axios from "axios";
 import {Fragment, NodeType} from "prosemirror-model";
+import {EditorView} from "prosemirror-view";
+import {EditorSchema} from "../editor/schema";
 
 export function toggleForumConceptBtn(enable: boolean): void {
 	const $concept = $('#forumConcept');
@@ -42,8 +44,10 @@ export function saveConceptForumBericht(): void {
 	setTimeout(toggleForumConceptBtn, 3000);
 }
 
-let bewerkContainer: JQuery | null = null;
+let bewerkContainer: HTMLElement | null = null;
 let bewerkContainerInnerHTML: string | null = null;
+// Houdt een verwijzing naar de standaard editor in deze pagina voor bij bewerken.
+let oldEditor: EditorView<EditorSchema> | null = null;
 
 /**
  * @see inline in forumBewerken
@@ -54,25 +58,25 @@ function restorePost() {
 		return;
 	}
 
-	bewerkContainer.html(bewerkContainerInnerHTML);
+	window.editor = oldEditor;
+
+	bewerkContainer.innerHTML = bewerkContainerInnerHTML;
 	$('#bewerk-melding').slideUp(200, function () {
 		$(this).remove();
 	});
 	$('#forumPosten').css('visibility', 'visible');
 }
 
-function submitPost(event: Event) {
+async function submitPost(event: Event, form: HTMLFormElement) {
 	event.preventDefault();
-	const form = $('#forumEditForm');
-	$.ajax({
-		type: 'POST',
-		cache: false,
-		url: form.attr('action'),
-		data: form.serialize(),
-	}).done((data) => {
-		restorePost();
-		domUpdate(data);
-	}).fail((jqXHR) => throwError(jqXHR.responseJSON));
+
+	try {
+		const response = await axios.post<string>(form.action, new FormData(form))
+		restorePost()
+		domUpdate(response.data)
+	} catch (error) {
+		throwError(error)
+	}
 }
 
 /**
@@ -81,41 +85,48 @@ function submitPost(event: Event) {
  *
  * @see templates/forum/partial/post_lijst.html.twig
  */
-export function forumBewerken(postId: string): false {
-	$.ajax({
-		url: '/forum/tekst/' + postId,
-		method: 'POST',
-	}).done((data) => {
-		if (document.getElementById('forumEditForm')) {
-			restorePost();
-		}
-		bewerkContainer = $('#post' + postId);
-		bewerkContainerInnerHTML = bewerkContainer.html();
-		bewerkContainer.html(`
-<form id="forumEditForm" class="ForumFormulier" action="/forum/bewerken/${postId}" method="post">
-	<div id="preview_forumBewerkBericht" class="bbcodePreview forumBericht"></div>
-	<textarea name="forumBericht" id="forumBewerkBericht" data-bbpreview="forumBewerkBericht" class="FormElement BBCodeField" rows="8"></textarea>
-	Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/>
-	<br />
-	<br />
-	<div class="float-right"><a href="/wiki/cie:diensten:forum" target="_blank">Opmaakhulp</a></div>
-	<input type="submit" class="opslaan btn btn-primary" value="Opslaan" />
-	<input type="button" class="voorbeeld btn btn-secondary" value="Voorbeeld" data-bbpreview-btn="forumBewerkBericht" />
-	<input type="button" class="annuleren btn btn-secondary" value="Annuleren" />
-</form>`);
-		bewerkContainer.find('form').on('submit', submitPost);
-		bewerkContainer.find('input.annuleren').on('click', restorePost);
+export async function forumBewerken(postId: string): Promise<false> {
+	const response = await axios.post<unknown>(`/forum/tekst/${postId}`)
 
-		init(bewerkContainer.get(0));
+	if (document.getElementById('forumEditForm')) {
+		restorePost();
+	}
 
-		$('#forumBewerkBericht').val(data);
-		$(bewerkContainer).parent().children('.auteur:first')
-			.append(`<div id="bewerk-melding" class="alert alert-warning">
+	bewerkContainer = document.getElementById('post' + postId);
+	bewerkContainerInnerHTML = bewerkContainer.innerHTML
+
+	console.log(JSON.stringify(response.data))
+
+	const berichtInput = html<HTMLInputElement>`<input type="hidden" name="forumBericht" id="forumBewerkenBericht">`
+	berichtInput.value = JSON.stringify(response.data)
+
+	bewerkContainer.innerHTML = ''
+	bewerkContainer.appendChild(html`
+		<form id="forumEditForm" class="ForumFormulier" action="/forum/bewerken/${postId}" method="post">
+			${berichtInput}
+			<div id="editor" class="pm-editor" data-prosemirror-doc="forumBewerkenBericht"></div>
+			<div>Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/></div>
+			<input type="submit" class="opslaan btn btn-primary" value="Opslaan"/>
+			<input type="button" class="annuleren btn btn-secondary" value="Annuleren"/>
+		</form>
+	`)
+
+	const form = bewerkContainer.querySelector('form')
+	form.addEventListener('submit', e => submitPost(e, form))
+	bewerkContainer.querySelector('input.annuleren').addEventListener('click', restorePost);
+
+	oldEditor = window.editor
+
+	init(bewerkContainer);
+
+	$(bewerkContainer).parent().children('.auteur:first')
+		.append(`<div id="bewerk-melding" class="alert alert-warning">
 Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbeeld [s]...[/s]
 </div>`);
-		$('#bewerk-melding').slideDown(200);
-		$('#forumPosten').css('visibility', 'hidden');
-	});
+	$('#bewerk-melding').slideDown(200);
+
+	document.getElementById("forumPosten").style.visibility = "hidden"
+
 	return false;
 }
 

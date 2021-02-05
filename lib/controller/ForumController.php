@@ -793,10 +793,10 @@ class ForumController extends AbstractController {
 	 */
 	public function tekst(ForumPost $post) {
 		if (!$post->magBewerken()) {
-			throw $this->createAccessDeniedException("Mag niet berwerken");
+			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
-		echo $post->tekst;
-		exit; //TODO: JsonResponse
+
+		return new JsonResponse($this->bbToProsemirror->toProseMirror($post->tekst));
 	}
 
 	/**

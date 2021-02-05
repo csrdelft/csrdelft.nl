@@ -131,7 +131,7 @@ export function singleLineString(strings: TemplateStringsArray, ...values: strin
 	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
 }
 
-export function html(strings: TemplateStringsArray, ...values: Array<string | undefined | null | Node>): HTMLElement {
+export function html<T extends HTMLElement = HTMLElement>(strings: TemplateStringsArray, ...values: Array<string | undefined | null | Node>): T {
 	let output = '';
 	const nodes: [string, Node][] = []
 	for (let i = 0; i < values.length; i++) {
@@ -146,7 +146,7 @@ export function html(strings: TemplateStringsArray, ...values: Array<string | un
 	}
 	output += strings[values.length];
 
-	const element = (new DOMParser().parseFromString(output, 'text/html').body.firstChild) as HTMLElement;
+	const element = (new DOMParser().parseFromString(output, 'text/html').body.firstChild) as T;
 
 	for (const [id, node] of nodes) {
 		element.querySelector(`#${id}`).replaceWith(node)
