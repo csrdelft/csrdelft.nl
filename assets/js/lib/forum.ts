@@ -8,39 +8,27 @@ import {EditorView} from "prosemirror-view";
 import {EditorSchema} from "../editor/schema";
 
 export function toggleForumConceptBtn(enable: boolean): void {
-	const $concept = $('#forumConcept');
+	const conceptButton = document.getElementById('forumConcept') as HTMLButtonElement
+
 	if (typeof enable === 'undefined') {
-		$concept.attr('disabled', String(!($concept.prop('disabled'))));
+		conceptButton.disabled = !conceptButton.disabled
 	} else {
-		$concept.attr('disabled', String(!enable));
+		conceptButton.disabled = !enable
 	}
 }
 
 export function saveConceptForumBericht(): void {
 	toggleForumConceptBtn(false);
+
+	const formulier = document.getElementById("forumForm") as HTMLFormElement;
 	const concept = document.querySelector<HTMLButtonElement>('#forumConcept')
-	const textarea = document.querySelector<HTMLTextAreaElement>('#forumBericht')
-	const titel = document.querySelector<HTMLInputElement>('#nieuweTitel')
-
-	if (!concept || !textarea) {
-		throw new Error('concept of textarea of titel bestaat niet')
+	const url = concept.dataset.url
+	if (!url) {
+		throw new Error("concept knop heeft geen data-url")
 	}
 
-	if (textarea.value !== textarea.dataset.origvalue) {
-		const url = concept.dataset.url
-		if (!url) {
-			throw new Error("concept knop heeft geen data-url")
-		}
+	axios.post(url, new FormData(formulier))
 
-		$.post(url, {
-			forumBericht: textarea.value,
-			titel: titel ? titel.value : '',
-		}).done(() => {
-			textarea.dataset.origvalue = textarea.value
-		}).fail((error) => {
-			throw new Error(error.responseText)
-		});
-	}
 	setTimeout(toggleForumConceptBtn, 3000);
 }
 
