@@ -13,16 +13,17 @@ import {lidHintPlugin} from "./plugin/lid-hint";
 
 declare global {
 	interface Window {
-		editor: EditorView<EditorSchema>
+		// Huidige editor, referentie voor citeren enzo
+		currentEditor: EditorView<EditorSchema>
 	}
 }
 
 ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
-	const menuContent = buildMenuItems(schema)
+	const menuContent = buildMenuItems(schema, window.loggedIn)
 	const input = document.querySelector<HTMLInputElement>('#' + el.dataset.prosemirrorDoc);
 	const text = htmlDecode(input.value.replace(/&quot;/g, "\\\""));
 
-	window.editor = new EditorView<EditorSchema>(el, {
+	window.currentEditor = new EditorView<EditorSchema>(el, {
 		state: EditorState.create({
 			doc: Node.fromJSON(schema, JSON.parse(text)),
 			plugins: exampleSetup({schema, menuContent}).concat(placeholderPlugin, trackChangesPlugin(input), lidHintPlugin)

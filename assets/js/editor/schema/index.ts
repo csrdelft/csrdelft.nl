@@ -47,7 +47,7 @@ export const nodes = RecordWithType<NodeSpec>()({
 	},
 
 	citaat: {
-		attrs: {van: {}, naam: {}, url: {default: ""}},
+		attrs: {van: {}, naam: {default: "Lid"}, url: {default: ""}},
 		content: "block+",
 		group: "block",
 		defining: true,

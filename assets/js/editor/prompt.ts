@@ -4,6 +4,7 @@ const prefix = "ProseMirror-popup"
 
 interface PromptOptions<T> {
 	title: string
+	description?: string
 	fields: Record<string, Field<any, any>>
 	callback: (params: T) => void
 }
@@ -20,16 +21,21 @@ export function openPrompt<T = any>(options: PromptOptions<T>): void {
 	const formFooter = form.appendChild(html`
 		<div class="modal-footer"></div>`)
 
+	if (options.description) {
+		formBody.appendChild(html`<p>${options.description}</p>`)
+	}
+
 	Object.entries(options.fields).forEach(([name, field]) => {
 		formBody.appendChild(html`
 			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">${field.options.label}</label>
+				<label class="col-sm-2 col-form-label" for="${name}">${field.options.label}</label>
 				<div class="col-sm-10">${field.render(name)}</div>
 			</div>`)
 	})
 
 	formFooter.appendChild(html`
 		<div class="${prefix}-buttons">${submitButton} ${cancelButton}</div>`)
+
 
 	const modal = html`
 		<div class="modal" style="display: block;" tabindex="-1">
@@ -180,7 +186,7 @@ export class Field<T extends string, U = string> {
 // ::- A field class for single-line text fields.
 export class TextField extends Field<any> {
 	render(name: string): HTMLElement {
-		return html`<input type="text" name="${name}" value="${this.options.value || ""}" autocomplete="off" class="form-control"/>`
+		return html`<input type="text" name="${name}" id="${name}" value="${this.options.value || ""}" autocomplete="off" class="form-control"/>`
 	}
 }
 
@@ -191,6 +197,7 @@ export class TextField extends Field<any> {
 export class SelectField extends Field<any> {
 	render(name: string): HTMLElement {
 		const select = document.createElement("select")
+		select.id = name
 		select.name = name
 		this.options.options.forEach(o => {
 			const opt = select.appendChild(document.createElement("option"))
@@ -205,6 +212,7 @@ export class SelectField extends Field<any> {
 export class TextAreaField extends Field<any> {
 	render(name: string): HTMLElement {
 		const input = document.createElement("textarea")
+		input.id = name
 		input.name = name
 		input.classList.add("form-control")
 		input.placeholder = this.options.label
@@ -217,6 +225,7 @@ export class TextAreaField extends Field<any> {
 export class FileField extends Field<string, File> {
 	render(name: string): HTMLElement {
 		const input = document.createElement("input")
+		input.id = name
 		input.name = name
 		input.classList.add("form-control")
 		input.type = "file"

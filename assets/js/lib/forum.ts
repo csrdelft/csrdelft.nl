@@ -46,7 +46,7 @@ function restorePost() {
 		return;
 	}
 
-	window.editor = oldEditor;
+	window.currentEditor = oldEditor;
 
 	bewerkContainer.innerHTML = bewerkContainerInnerHTML;
 	$('#bewerk-melding').slideUp(200, function () {
@@ -103,7 +103,7 @@ export async function forumBewerken(postId: string): Promise<false> {
 	form.addEventListener('submit', e => submitPost(e, form))
 	bewerkContainer.querySelector('input.annuleren').addEventListener('click', restorePost);
 
-	oldEditor = window.editor
+	oldEditor = window.currentEditor
 
 	init(bewerkContainer);
 
@@ -123,10 +123,10 @@ export async function forumCiteren(postId: string): Promise<false> {
 
 	const {van, naam, content} = response.data
 
-	const editor = window.editor
+	const editor = window.currentEditor
 	const citaat: NodeType = editor.state.schema.nodes.citaat
 
-	window.editor.dispatch(editor.state.tr.replaceSelectionWith(
+	window.currentEditor.dispatch(editor.state.tr.replaceSelectionWith(
 		citaat.create({van, naam}, Fragment.fromJSON(editor.state.schema, content))))
 
 	$(window).scrollTo('#reageren');

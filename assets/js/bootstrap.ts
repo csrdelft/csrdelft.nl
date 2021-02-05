@@ -21,7 +21,7 @@ import {domUpdate} from './lib/domUpdate';
 import {formCancel, formInlineToggle, formSubmit, insertPlaatje} from './lib/formulier';
 import {forumBewerken, saveConceptForumBericht} from './lib/forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './lib/maalcie';
-import {docReady} from './lib/util';
+import {docReady, isLoggedIn} from './lib/util';
 import hoverintent from 'hoverintent'
 
 moment.locale('nl');
@@ -47,10 +47,17 @@ require('jquery.maskedinput');
 require('lightbox2');
 require('corejs-typeahead/dist/typeahead.jquery.js');
 
+declare global {
+	interface Window {
+		loggedIn: boolean
+	}
+}
+
 /**
  * Globale objecten gebruikt in PHP code.
  */
 $.extend(window, {
+	loggedIn: isLoggedIn(),
 	Bloodhound,
 	Dropzone,
 	docReady,

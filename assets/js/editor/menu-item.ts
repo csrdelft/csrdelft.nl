@@ -7,6 +7,7 @@ import {FileField, openPrompt, TextField} from "./prompt";
 import {toggleMark} from "prosemirror-commands";
 import {wrapInList} from "prosemirror-schema-list";
 import {startImageUpload} from "./forum-plaatje";
+import {ucfirst} from "../lib/util";
 
 export function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<EditorSchema>): boolean {
 	const $from = state.selection.$from
@@ -136,7 +137,7 @@ export const priveItem = (markType: MarkType): MenuItem => new MenuItem({
 	}
 });
 
-export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, label: string, title: string): MenuItem => new MenuItem({
+export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, label: string, title: string, description = ""): MenuItem => new MenuItem({
 	title,
 	label,
 	enable: state => canInsert(state, nodeType),
@@ -150,9 +151,14 @@ export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, label: str
 		}
 
 		openPrompt({
+			description,
 			title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
 			fields: Object.fromEntries(Object.entries(nodeType.spec.attrs).map(([attr, spec]) =>
-				[attr, new TextField({label: attr, required: spec.default === undefined, value: attrs ? attrs[attr] : spec.default})])),
+				[attr, new TextField({
+					label: ucfirst(attr),
+					required: spec.default === undefined,
+					value: attrs ? attrs[attr] : spec.default
+				})])),
 			callback(callbackAttrs) {
 				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs}, content)))
 				view.focus()

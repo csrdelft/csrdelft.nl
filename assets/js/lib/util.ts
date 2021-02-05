@@ -294,3 +294,15 @@ export const autosizeTextarea = (el: HTMLTextAreaElement): void => {
 	el.addEventListener("input", cb, false);
 	setTimeout(cb)
 }
+
+/**
+ * Eerste letter wordt een hoofdletter.
+ * @param str
+ */
+export const ucfirst = (str: string): string => str.slice(0, 1).toUpperCase() + str.slice(1)
+
+/**
+ * Verwijder null/falsy elementen uit een lijst.
+ * @param list
+ */
+export const cut = <T>(list: T[]): T[] => list.filter(_=>_)
