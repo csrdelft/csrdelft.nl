@@ -35,6 +35,18 @@ class BbToProsemirror
 		$this->nodesRegistry = $nodesRegistry;
 	}
 
+	/**
+	 * Return een Fragment<EditorSchema>, deze heeft geen root, maar kan worden gebuikt om
+	 * een node te inserten in prosemirror.
+	 *
+	 * @param $bbCode
+	 * @return array
+	 */
+	public function toProseMirrorFragment($bbCode) {
+		$nodes = $this->csrBB->parseString($bbCode);
+		return $this->nodeToProseMirror($nodes);
+	}
+
 	public function toProseMirror($bbCode)
 	{
 		$nodes = $this->csrBB->parseString($bbCode);

@@ -47,15 +47,15 @@ export const nodes = RecordWithType<NodeSpec>()({
 	},
 
 	citaat: {
-		attrs: {van: {}, url: {default: ""}},
+		attrs: {van: {}, naam: {}, url: {default: ""}},
 		content: "block+",
 		group: "block",
 		defining: true,
 		parseDOM: [{
 			tag: "div[data-bb-citaat]",
-			getAttrs: (dom: HTMLElement) => ({van: dom.dataset.bbCitaat, url: dom.dataset.bbCitaatUrl})
+			getAttrs: (dom: HTMLElement) => ({van: dom.dataset.bbCitaat, naam: dom.dataset.bbCitaatNaam, url: dom.dataset.bbCitaatUrl})
 		}],
-		toDOM: node => ["div", {"data-bb-citaat": node.attrs.van, "data-bb-citaat-url": node.attrs.url}, 0]
+		toDOM: node => ["div", {"data-bb-citaat": node.attrs.van, "data-bb-citaat-naam": node.attrs.naam, "data-bb-citaat-url": node.attrs.url}, 0]
 	},
 
 	lid: {

@@ -20,6 +20,7 @@ use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\bbcode\ProsemirrorToBb;
@@ -778,8 +779,11 @@ class ForumController extends AbstractController {
 		if (!$post->magCiteren()) {
 			throw $this->createAccessDeniedException("Mag niet citeren");
 		}
-		echo $this->forumPostsRepository->citeerForumPost($post);
-		exit; //TODO: JsonResponse
+		return new JsonResponse([
+			'van' => $post->uid,
+			'naam' => ProfielRepository::getNaam($post->uid, 'user'),
+			'content' => $this->bbToProsemirror->toProseMirrorFragment($this->forumPostsRepository->citeerForumPost($post)),
+		]);
 	}
 
 	/**

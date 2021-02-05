@@ -2,6 +2,8 @@ import $ from 'jquery';
 import {init} from '../ctx';
 import {domUpdate} from './domUpdate';
 import {throwError} from "./util";
+import axios from "axios";
+import {Fragment, NodeType} from "prosemirror-model";
 
 export function toggleForumConceptBtn(enable: boolean): void {
 	const $concept = $('#forumConcept');
@@ -117,15 +119,18 @@ Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbe
 	return false;
 }
 
-export function forumCiteren(postId: string): false {
-	$.ajax({
-		url: '/forum/citeren/' + postId,
-		method: 'POST',
-	}).done((data) => {
-		const bericht = $('#forumBericht');
-		bericht.val(bericht.val() + data);
-		$(window).scrollTo('#reageren');
-	});
+export async function forumCiteren(postId: string): Promise<false> {
+	const response = await axios.post<{ van: string, naam: string, content: unknown }>("/forum/citeren/" + postId)
+
+	const {van, naam, content} = response.data
+
+	const editor = window.editor
+	const citaat: NodeType = editor.state.schema.nodes.citaat
+
+	window.editor.dispatch(editor.state.tr.replaceSelectionWith(
+		citaat.create({van, naam}, Fragment.fromJSON(editor.state.schema, content))))
+
+	$(window).scrollTo('#reageren');
 	// We returnen altijd false, dan wordt de href= van <a> niet meer uitgevoerd.
 	// Het werkt dan dus nog wel als javascript uit staat.
 	return false;

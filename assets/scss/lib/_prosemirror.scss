@@ -130,7 +130,7 @@
 	margin-bottom: 1em;
 
 	&::before {
-		content: "Citaat van " attr(data-bb-citaat) ":";
+		content: "Citaat van " attr(data-bb-citaat-naam) ":";
 		font-style: italic;
 		display: block;
 		position: absolute;

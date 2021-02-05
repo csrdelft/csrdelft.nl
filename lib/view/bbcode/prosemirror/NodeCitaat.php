@@ -26,15 +26,20 @@ class NodeCitaat implements Node
 		}
 
 		if ($node->bron_profiel != null) {
-			$van = $node->bron_profiel->getLink();
+			$van = $node->bron_profiel->uid;
+			$naam = $node->bron_profiel->getNaam('user');
+			$url = '/profiel/' . $node->bron_profiel->uid;
 		} elseif ($node->bron_text != null) {
 			$van = $node->bron_text;
+			$naam = $node->bron_text;
+			$url = $node->bron_url;
 		}
 
 		return [
 			'attrs' => [
 				'van' => $van,
-				'url' => $node->bron_url,
+				'naam' => $naam,
+				'url' => $url,
 			]
 		];
 	}
