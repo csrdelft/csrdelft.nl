@@ -93,7 +93,10 @@ export async function forumBewerken(postId: string): Promise<false> {
 		<form id="forumEditForm" class="ForumFormulier" action="/forum/bewerken/${postId}" method="post">
 			${berichtInput}
 			<div id="editor" class="pm-editor" data-prosemirror-doc="forumBewerkenBericht"></div>
-			<div>Reden van bewerking: <input type="text" name="reden" id="forumBewerkReden"/></div>
+			<div class="row form-group">
+				<label class="col-sm-3">Reden van bewerking:</label>
+				<div class="col-sm-9"><input type="text" name="reden" id="forumBewerkReden" class="form-control"/></div>
+			</div>
 			<input type="submit" class="opslaan btn btn-primary" value="Opslaan"/>
 			<input type="button" class="annuleren btn btn-secondary" value="Annuleren"/>
 		</form>
@@ -113,7 +116,11 @@ Als u dingen aanpast zet er dan even bij w&aacute;t u aanpast! Gebruik bijvoorbe
 </div>`);
 	$('#bewerk-melding').slideDown(200);
 
-	document.getElementById("forumPosten").style.visibility = "hidden"
+	const forumPosten = document.getElementById("forumPosten")
+	// forumPosten bestaat niet op /forum/wacht
+	if (forumPosten) {
+		forumPosten.style.visibility = "hidden"
+	}
 
 	return false;
 }
