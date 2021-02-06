@@ -48,6 +48,7 @@ use CsrDelft\view\bbcode\tag\BbMaaltijd;
 use CsrDelft\view\bbcode\tag\BbNeuzen;
 use CsrDelft\view\bbcode\tag\BbNovietVanDeDag;
 use CsrDelft\view\bbcode\tag\BbOfftopic;
+use CsrDelft\view\bbcode\tag\BbOrderedList;
 use CsrDelft\view\bbcode\tag\BbParagraph;
 use CsrDelft\view\bbcode\tag\BbPeiling;
 use CsrDelft\view\bbcode\tag\BbPrive;
@@ -136,6 +137,7 @@ class CsrBB extends Parser {
 		BbNeuzen::class,
 		BbOfftopic::class,
 		BbOndervereniging::class,
+		BbOrderedList::class,
 		BbParagraph::class,
 		BbPeiling::class,
 		BbPrive::class,
