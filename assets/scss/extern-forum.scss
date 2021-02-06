@@ -1,7 +1,15 @@
 @import "extern/variables";
-@import "lib/markitup";
 @import "icons";
 
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/modal";
+
+.modal-content {
+	background-color: $donkerblauw;
+}
 
 #forumZoekenForm {
 
