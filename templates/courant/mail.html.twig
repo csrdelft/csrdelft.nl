@@ -56,8 +56,8 @@
         display: block;
         margin: 0 auto !important;
         /* makes it centered */
+        min-width: 580px;
         padding: 10px;
-        width: 720px;
       }
 
       /* This should also be a block element, so that it will fill 100% of the .container */
@@ -65,6 +65,7 @@
         box-sizing: border-box;
         display: block;
         margin: 0 auto;
+        /*max-width: 580px;*/
         padding: 10px;
       }
 
@@ -146,93 +147,6 @@
         text-decoration: underline;
       }
 
-      /* -------------------------------------
-          RESPONSIVE AND MOBILE FRIENDLY STYLES
-      ------------------------------------- */
-      @media only screen and (max-width: 620px) {
-        table[class=body] h1 {
-          font-size: 30px !important;
-          margin-bottom: 0px !important;
-        }
-        table[class=body] p,
-        table[class=body] ul,
-        table[class=body] ol,
-        table[class=body] td,
-        table[class=body] span,
-        table[class=body] a {
-          font-size: 12px !important;
-        }
-        table[class=body] .wrapper,
-        table[class=body] .article {
-          padding: 10px !important;
-        }
-        table[class=body] .content {
-          padding: 0 !important;
-        }
-        table[class=body] .container {
-          padding: 0 !important;
-          width: 100% !important;
-        }
-        table[class=body] .main {
-          border-left-width: 0 !important;
-          border-radius: 0 !important;
-          border-right-width: 0 !important;
-        }
-        table[class=body] .btn table {
-          width: 100% !important;
-        }
-        table[class=body] .btn a {
-          width: 100% !important;
-        }
-        table[class=body] .img-responsive {
-          height: auto !important;
-          max-width: 100% !important;
-          width: auto !important;
-        }
-      }
-
-      /* -------------------------------------
-          PRESERVE THESE STYLES IN THE HEAD
-      ------------------------------------- */
-      @media all {
-        .ExternalClass {
-          width: 100%;
-        }
-        .ExternalClass,
-        .ExternalClass p,
-        .ExternalClass span,
-        .ExternalClass font,
-        .ExternalClass td,
-        .ExternalClass div {
-          line-height: 100%;
-        }
-        .apple-link a {
-          color: inherit !important;
-          font-family: inherit !important;
-          font-size: inherit !important;
-          font-weight: inherit !important;
-          line-height: inherit !important;
-          text-decoration: none !important;
-        }
-        #MessageViewBody a {
-          color: inherit;
-          text-decoration: none;
-          font-size: inherit;
-          font-family: inherit;
-          font-weight: inherit;
-          line-height: inherit;
-        }
-        .btn-primary table td:hover {
-          background-color: #34495e !important;
-        }
-        .btn-primary a:hover {
-          background-color: #34495e !important;
-          border-color: #34495e !important;
-        }
-      }
-
-      /* extra ccs */
-
       hr {
           height: 5px;
           background: #e59200;
@@ -280,9 +194,10 @@
          margin-bottom: 10px;
          border-radius: 5px;
       }
-
-      #id {
-        padding: 20px;
+      .underline {
+        text-decoration: underline;
+        text-decoration-thickness: 3px;
+        text-decoration-color: #e59200;
       }
 
     </style>
@@ -300,16 +215,13 @@
                 <td class="wrapper">
 
                   <!-- LOGO en TITEL -->
-                  <table border="0" cellpadding="0" cellspacing="0" style="background: #e8e8e8">
-                    <tr style="height: 100px">
-                      <td id="logo" class="inhoud-lb" style="padding: 20px 20px 30px 40px">
-                        <img class="" src="https://csrdelft.nl/plaetjes/courant/beeldmerk.png" style="width:100px;" />
-                      </td>
-                      <td style="text-align: center; vertical-align: middle; padding-right:70px;">
-                        <hr>
-                          <h1>De courant</h1>
-                        <hr>
-                      </td>
+                  <table border="0" cellpadding="0" cellspacing="0" class="table" style="">
+                    <tr>
+                      <div style="height: 200px; overflow-y: hidden; position: relative; text-align: center;">
+                        <img class="" src="C:/csrdelft.nl/logo.png" style="position: absolute; width:100px;display: block;padding: 30px 20px 30px 40px;"/>
+                          <h1 style="color: #e8e8e8; position: absolute;right: 50px; top: 75px; vertical-align: middle; padding-right:15px; font-size: 3em;font-weight: normal;">De courant</h1>                  
+                        <img class="" src="C:/csrdelft.nl/header.jpg" style="width:100%;vertical-align: middle;"/>
+                      </div>
                     </tr>
                   </table>
 
@@ -320,7 +232,7 @@
                     {% if categorie != 'voorwoord' and categorie != 'sponsor' %}
                       <td class="inhoudKolom">
                         <div class="inhoudKop">
-                          <h4><u>{{ catName }}</u></h4>
+                          <h4 class="underline">{{ catName }}</h4>
                         </div>
                         {% for bericht in berichten %}
                           {% if bericht.cat.value == categorie %}
@@ -341,7 +253,7 @@
                   //Berichten generator//
                   donker: #11273a
                   medium: #043763
-                  licht:  #3C5573
+                  licht:  #4e698b
                   -->
 
                   {% for bericht in berichten %}
@@ -355,18 +267,16 @@
                       {% set bgcolor = '#3C5573' %}
                     {% endif %}
 
-                    {% if loop.last == 0 %}
-											<table border="0" cellpadding="0" cellspacing="0" class="table" style="background-color: {{bgcolor}}">
-												<tr>
-													<td class="box">
-														<h3><u><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</u></h3>
-														<p>
-															{{ bericht.bericht | bbcode("mail") }}
-														</p>
-													</td>
-												</tr>
-											</table>
-                    {% endif %}
+                    <table border="0" cellpadding="0" cellspacing="0" class="table" style="background-color: {{bgcolor}}">
+                      <tr>
+                        <td class="box">
+                          <h3 class="underline"><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</h3>
+                          <p>
+                            {{ bericht.bericht | bbcode("mail") }}
+                          </p>
+                        </td>
+                      </tr>
+                    </table> 
                   {% endfor %}
                 </td>
               </tr>
