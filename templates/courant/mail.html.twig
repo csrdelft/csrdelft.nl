@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+{% apply inline_css %}
 <html>
   <head>
     <title>C.S.R.-courant {{ date() | date_format_intl('d MMMM y') }}</title>
@@ -289,3 +290,4 @@
       </table>
   </body>
 </html>
+{% endapply %}
