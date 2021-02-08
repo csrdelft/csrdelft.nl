@@ -1,147 +1,292 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
-<head>
-	<title>C.S.R.-courant {{ date() | date_format_intl('d MMMM y') }}</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta name="author" content="PubCie der C.S.R. Delft"/>
-	<meta name="robots" content="index, follow"/>
-	<style type="text/css">
-		<!--
-		body {
-			font-face: verdana, arial, sans-serif;
-			font-size: 12px;
-			margin: 0 0 20px 0;
-			padding: 0;
-		}
+  <head>
+    <title>C.S.R.-courant {{ date() | date_format_intl('d MMMM y') }}</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+    <meta name="author" content="PubCie der C.S.R. Delft"/>
+    <meta name="robots" content="index, follow"/>
+    <style type="text/css">
+      /* -------------------------------------
+          GLOBAL RESETS
+      ------------------------------------- */
 
-		table {
-			border: 0;
-			margin: 0;
-			padding: 0;
-			width: 100%
-		}
+      /*All the styling goes here*/
 
-		td {
-			vertical-align: top;
-			font-size: 11px;
-			font-face: verdana, arial, sans-serif;
-		}
+      img {
+        border: none;
+        /*-ms-interpolation-mode: bicubic;*/
+        max-width: 100%;
+      }
 
-		.Zijbalk {
-			width: 150px;
-			margin: 0;
-			padding: 0;
-			vertical-align: top;
+      body {
+        background-color: #fafafa;
+        font-family: sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        line-height: 1.4;
+        margin: 0;
+        padding: 0;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+      }
 
-			background-repeat: repeat-y;
-		}
+      table {
+        border-collapse: separate;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+        width: 100%; }
+        table td {
+          font-family: sans-serif;
+          font-size: 14px;
+          vertical-align: top;
+      }
 
-		.hoofdKolom {
-			margin: 0;
-			padding: 23px 20px 0 0;
-			vertical-align: top;
-		}
+      /* -------------------------------------
+          BODY & CONTAINER
+      ------------------------------------- */
 
-		img {
-			border: 0;
-		}
+      .body {
+        width: 100%;
+      }
 
-		h4 {
-			background-color: #CAD6FF;
-			font-size: 15px;
-			margin: 10px 0 0 0;
-			padding: 5px 5px 5px 10px;
-			color: black;
-		}
+      /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+      .container {
+        display: block;
+        margin: 0 auto !important;
+        /* makes it centered */
+        min-width: 580px;
+        padding: 10px;
+      }
 
-		div.p {
-			background-color: #FAFAFF;
-			margin: 0 0 0 0;
-			padding: 10px 5px 5px 10px;
-			color: #020883;
-			font-size: 11px;
-			font-face: verdana, arial, sans-serif;
-			line-height: 1.4em;
-		}
+      /* This should also be a block element, so that it will fill 100% of the .container */
+      .content {
+        box-sizing: border-box;
+        display: block;
+        margin: 0 auto;
+        /*max-width: 580px;*/
+        padding: 10px;
+      }
 
-		.inhoud {
-			border: 0;
-			width: 100%;
-			background-color: #FAFAFF;
-			margin: 0 0 15px 0;
-			padding: 0;
-		}
+      /* -------------------------------------
+          HEADER, FOOTER, MAIN
+      ------------------------------------- */
+      .main {
+        border-radius: 5px;
+        width: 100%;
+        background-color: #e8e8e8;
+      }
 
-		.inhoudKolom {
-			margin: 0 0 10px 0;
-			padding: 5px 5px 5px 10px;
-			font-size: 11px;
-			vertical-align: top;
-			width: 33%;
-		}
+      .wrapper {
+        box-sizing: border-box;
+        padding: 20px;
+      }
 
-		.inhoudKop {
-			font-weight: bold;
-			font-size: 11px;
-		}
+      .content-block {
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
 
-		ul {
-			margin: 0 0 0 10px;
-			padding: 0 0 0 5px;
+      .footer {
+        clear: both;
+        margin-top: 10px;
+        text-align: center;
+        width: 100%;
+      }
 
-		}
+      /* -------------------------------------
+          TYPOGRAPHY
+      ------------------------------------- */
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: #fff;
+        font-family: Open Sans, Arial, Helvetica, sans-serif;
+        font-weight: 400;
+        line-height: 1.4;
+        margin: 0;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
 
-		li {
-			margin: 0 0 0 00px;
-			color: #020883;
-			font-size: 11px;
-		}
+      h3 {
+        text-align: center;
+      }
 
-		div.citaatContainer {
-			margin: 5px 5px 5px 20px;
-		}
+      h1 {
+        font-size: 40px;
+        font-weight: 300;
+        margin-bottom: 0px!important;
+        text-align: center;
+        text-transform: uppercase;
+        color: #000;
+      }
 
-		-->
-	</style>
-</head>
-<body>
-<table>
-	<tr>
-		<td class="Zijbalk" valign="top">
-			<img src="{{ absolute_url('/plaetjes/courant/logo.jpg') }}" width="150px" height="197px" alt="Logo van C.S.R."/>
-			<img src="{{ absolute_url('/plaetjes/courant/balk.gif') }}" width="150px" height="100%"/>
-		</td>
-		<td class="hoofdKolom">
-			<h4><font size="-3" face="verdana">Inhoud</font></h4>
-			<table class="inhoud">
-				<tr>
-					{% for categorie,catName in catNames %}
-						{% if categorie != 'voorwoord' and categorie != 'sponsor' %}
-							<td class="inhoudKolom" valign="top">
-								<font face="verdana" size="-1">
-									<div class="inhoudKop"><b>{{ catName }}</b></div>
-									<ul>
-										{% for bericht in berichten %}
-											{% if bericht.cat.value == categorie %}
-												<li><a href="#{{ bericht.id }}"
-															 style="text-decoration: none;">{{ bericht.titel | bbcode("mail") }}</a></li>
-											{% endif %}
-										{% endfor %}
-									</ul>
-								</font>
-							</td>
-						{% endif %}
-					{% endfor %}
-				</tr>
-			</table>
-			<font face="verdana" size="-1">
-				{% for bericht in berichten %}
-					<h4><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</h4>
-					<div class="p">{{ bericht.bericht | bbcode("mail") }}</div>
-				{% endfor %}
-			</font>
-		</td>
-	</tr>
-</table>
-</body>
+      p,
+      ul,
+      ol {
+        font-family: sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        margin: 0;
+        margin-bottom: 15px;
+        color: #fff;
+      }
+        p li,
+        ul li,
+        ol li {
+          list-style-position: inside;
+          margin-left: 5px;
+      }
+
+      a {
+        color: #3498db;
+        text-decoration: underline;
+      }
+
+      hr {
+          height: 5px;
+          background: #e59200;
+          border-style: solid;
+          border: none;
+        }
+
+      u {
+        text-decoration: none;
+        border-bottom: 3px solid #e59200;
+      }
+
+      .inhoudKop {
+        text-align: center;
+        color: white;
+      }
+
+      .inhoudKolom {
+        width: 33%;
+        padding: 30px 10px 20px 10px;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      .link {
+        text-decoration: none;
+        text-align: center;
+        color: white;
+      }
+
+      .liLink {
+        list-style: none;
+        text-align: center;
+        color: white;
+        padding: 5px;
+      }
+
+      .box {
+        padding: 25px;
+      }
+
+      .table {
+         margin-bottom: 10px;
+         border-radius: 5px;
+      }
+      .underline {
+        text-decoration: underline;
+        text-decoration-thickness: 3px;
+        text-decoration-color: #e59200;
+      }
+
+    </style>
+  </head>
+  <body class="">
+      <table>
+      <tr>
+        <td>&nbsp;</td>
+        <td class="container">
+          <div class="content">
+
+            <!-- START CENTERED WHITE CONTAINER -->
+            <table class="main">
+              <tr>
+                <td class="wrapper">
+
+                  <!-- LOGO en TITEL -->
+                  <table border="0" cellpadding="0" cellspacing="0" class="table" style="">
+                    <tr>
+                      <div style="height: 200px; overflow-y: hidden; position: relative; text-align: center;">
+                        <img class="" src="https://csrdelft.nl/plaetjes/courant/beeldmerk_20210208.png" style="position: absolute; width:100px;display: block;padding: 30px 20px 30px 40px;"/>
+                          <h1 style="color: #e8e8e8; position: absolute;right: 50px; top: 75px; vertical-align: middle; padding-right:15px; font-size: 3em;font-weight: normal;">De courant</h1>
+                        <img class="" src="https://csrdelft.nl/plaetjes/courant/courant_header_20210208.jpg" style="width:100%;vertical-align: middle;"/>
+                      </div>
+                    </tr>
+                  </table>
+
+                  <!-- INHOUD -->
+                  <table border="0" cellpadding="0" cellspacing="0" class="table" style="background: #11273a;">
+                  <tr>
+                  {% for categorie,catName in catNames %}
+                    {% if categorie != 'voorwoord' and categorie != 'sponsor' %}
+                      <td class="inhoudKolom">
+                        <div class="inhoudKop">
+                          <h4 class="underline">{{ catName }}</h4>
+                        </div>
+                        {% for bericht in berichten %}
+                          {% if bericht.cat.value == categorie %}
+                            <li class="liLink">
+                              <a href="#{{ bericht.id }}" class="link">
+                                {{ bericht.titel | bbcode("mail") }}
+                              </a>
+                            </li>
+                          {% endif %}
+                        {% endfor %}
+                      </td>
+                    {% endif %}
+                  {% endfor %}
+                  </tr>
+                  </table>
+
+                  <!--
+                  //Berichten generator//
+                  donker: #11273a
+                  medium: #043763
+                  licht:  #4e698b
+                  -->
+
+                  {% for bericht in berichten %}
+                    {% if loop.index % 4 == 1 %}
+                      {% set bgcolor = '#043763' %}
+                    {% elseif loop.index % 4 == 2 %}
+                      {% set bgcolor = '#3C5573' %}
+                    {% elseif loop.index % 4 == 3 %}
+                      {% set bgcolor = '#11273a' %}
+                    {% else %}
+                      {% set bgcolor = '#3C5573' %}
+                    {% endif %}
+
+                    <table border="0" cellpadding="0" cellspacing="0" class="table" style="background-color: {{bgcolor}}">
+                      <tr>
+                        <td class="box">
+                          <h3 class="underline"><a id="{{ bericht.id }}"></a>{{ bericht.titel | bbcode("mail") }}</h3>
+                          <p>
+                            {{ bericht.bericht | bbcode("mail") }}
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  {% endfor %}
+                </td>
+              </tr>
+            </table>
+            <div class="footer">
+            </div>
+          </div>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+      </table>
+  </body>
 </html>
