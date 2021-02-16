@@ -1,19 +1,11 @@
-import {
-	blockTypeItem,
-	Dropdown,
-	DropdownSubmenu,
-	joinUpItem,
-	liftItem,
-	MenuItem,
-	selectParentNodeItem,
-	wrapItem
-} from "prosemirror-menu"
+import {blockTypeItem, Dropdown, DropdownSubmenu, joinUpItem, MenuItem, wrapItem} from "prosemirror-menu"
 import {EditorSchema} from "./schema";
 import {redo, undo} from "prosemirror-history";
 import {
 	bbInsert,
 	blockTypeItemPrompt,
-	canInsert, insertCitaat,
+	canInsert,
+	insertCitaat,
 	insertImageItem,
 	insertPlaatjeItem,
 	lidInsert,
@@ -24,6 +16,7 @@ import {
 } from "./menu-item";
 import {cut} from "../lib/util";
 import icon from "./icon";
+import {lift, selectParentNode} from "prosemirror-commands";
 
 export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuItem | Dropdown)[][] {
 	return [
@@ -140,8 +133,18 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 				icon: icon.quote
 			}),
 			joinUpItem,
-			liftItem,
-			selectParentNodeItem
+			new MenuItem({
+				title: "Til uit omvattende blok",
+				run: lift,
+				select: state => lift(state),
+				icon: icon.lift
+			}),
+			new MenuItem({
+				title: "Selecteer dit blok",
+				run: selectParentNode,
+				select: state => selectParentNode(state),
+				icon: icon.selectParentNode
+			}),
 		],
 	]
 }

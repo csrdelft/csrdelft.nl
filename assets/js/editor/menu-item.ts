@@ -8,6 +8,7 @@ import {toggleMark} from "prosemirror-commands";
 import {wrapInList} from "prosemirror-schema-list";
 import {startImageUpload} from "./forum-plaatje";
 import {html, ucfirst, uidLike} from "../lib/util";
+import icon from "./icon";
 
 export function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<EditorSchema>): boolean {
 	const $from = state.selection.$from

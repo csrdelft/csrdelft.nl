@@ -120,6 +120,18 @@
 	margin: 0.5em 0 1em;
 }
 
+.ProseMirror [data-lid] {
+	color: $link-color;
+
+	&::before {
+		content: '\f007'; // fa-user
+		display: inline-block;
+		font-family: "Font Awesome 5 Free", sans-serif;
+		margin-right: 3px;
+		font-size: 10px;
+	}
+}
+
 .ProseMirror [data-bb-citaat] {
 
 	padding-left: 1em;
