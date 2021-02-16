@@ -2,8 +2,8 @@ import {EditorSchema} from "./schema";
 import {bbPrompt} from "./bb-prompt";
 import {EditorState, NodeSelection} from "prosemirror-state";
 import {MarkType, NodeType} from "prosemirror-model";
-import {blockTypeItem, icons, MenuItem} from "prosemirror-menu";
-import {FileField, openPrompt, TextField} from "./prompt";
+import {blockTypeItem, MenuItem} from "prosemirror-menu";
+import {FileField, LidField, openPrompt, TextField} from "./prompt";
 import {toggleMark} from "prosemirror-commands";
 import {wrapInList} from "prosemirror-schema-list";
 import {startImageUpload} from "./forum-plaatje";
@@ -152,14 +152,16 @@ export const lidInsert = (nodeType: NodeType<EditorSchema>): MenuItem => new Men
 
 		openPrompt({
 			title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
-			fields: Object.fromEntries(Object.entries(nodeType.spec.attrs).map(([attr, spec]) =>
-				[attr, new TextField({
-					label: ucfirst(attr),
-					required: spec.default === undefined,
-					value: attrs ? attrs[attr] : spec.default
-				})])),
+			fields: {
+				lid: new LidField({
+					label: "Lid",
+					required: true,
+					value: attrs ? {uid: attrs.uid, naam: attrs.naam} : {uid: "", naam: ""}
+				})
+			},
 			callback(callbackAttrs) {
-				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs}, content)))
+				console.log(callbackAttrs)
+				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs.lid}, content)))
 				view.focus()
 			}
 		})

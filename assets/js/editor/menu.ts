@@ -16,7 +16,7 @@ import {
 	blockTypeItemPrompt,
 	canInsert,
 	insertImageItem,
-	insertPlaatjeItem,
+	insertPlaatjeItem, lidInsert,
 	linkItem,
 	markItem,
 	priveItem,
@@ -42,7 +42,7 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 			], {label: "Meer"})
 		],
 		cut([
-			loggedIn && blockTypeItemPrompt(schema.nodes.lid, "Lid", "Lid invoegen"),
+			loggedIn && lidInsert(schema.nodes.lid),
 		]),
 		cut([
 			new Dropdown(cut([

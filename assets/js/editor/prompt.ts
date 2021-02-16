@@ -1,4 +1,5 @@
 import {html} from "../lib/util";
+import Bloodhound from "corejs-typeahead";
 
 const prefix = "ProseMirror-popup"
 
@@ -130,7 +131,7 @@ interface FieldOptions<T = unknown> {
 }
 
 // ::- The type of field that `FieldPrompt` expects to be passed to it.
-export class Field<T extends string, U = string> {
+export class Field<T, U = string> {
 	options: FieldOptions<T>;
 	// :: (Object)
 	// Create a field with the given options. Options support by all
@@ -186,7 +187,8 @@ export class Field<T extends string, U = string> {
 // ::- A field class for single-line text fields.
 export class TextField extends Field<any> {
 	render(name: string): HTMLElement {
-		return html`<input type="text" name="${name}" id="${name}" value="${this.options.value || ""}" autocomplete="off" class="form-control"/>`
+		return html`<input type="text" name="${name}" id="${name}" value="${this.options.value || ""}" autocomplete="off"
+											 class="form-control"/>`
 	}
 }
 
@@ -235,5 +237,88 @@ export class FileField extends Field<string, File> {
 
 	read(dom: HTMLInputElement): File {
 		return dom.files[0]
+	}
+}
+
+export class LidField extends Field<{uid: string, naam: string}, { uid: string, naam: string }> {
+	name: string
+	render(name: string): HTMLElement {
+		this.name = name;
+		const textInput = html`<input type="text" class="form-control" autocomplete="off" name="${name}_naam" value="${this.options.value.naam}">`
+		const hiddenInput = html<HTMLInputElement>`<input type="hidden" name="${name}_uid" value="${this.options.value.uid}">`
+		const auxInput = html`<input type="hidden" name="${name}">`
+
+		const ledenDataset = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			remote: {
+				url: '/tools/naamsuggesties?q=%QUERY',
+				wildcard: '%QUERY',
+			}
+		})
+
+		ledenDataset.initialize()
+
+		let textValue = this.options.value.naam
+
+		setTimeout(() => {
+			$(textInput).typeahead({
+				hint: true,
+				highlight: true,
+			}, {
+				name: 'leden',
+				display: 'value',
+				limit: 20,
+				source: ledenDataset.ttAdapter(),
+				templates: {
+					suggestion: function (suggestion) {
+						let html = '<p';
+						if (suggestion.title) {
+							html += ' title="' + suggestion.title + '"';
+						}
+						html += '>';
+						if (suggestion.icon) {
+							html += suggestion.icon;
+						}
+						html += suggestion.value;
+						if (suggestion.label) {
+							html += '<span class="lichtgrijs"> - ' + suggestion.label + '</span>';
+						}
+						return html + '</p>';
+					}
+				}
+			})
+
+			$(textInput).on("typeahead:select", (event, suggestion) => {
+				hiddenInput.value = suggestion['uid']
+				textValue = suggestion['value']
+			})
+
+			$(textInput).on("typeahead:change", (event, value) => {
+				if (textValue != value) {
+					hiddenInput.value = ""
+				}
+			})
+		})
+
+		return html`
+			<div>
+				${textInput}
+				${hiddenInput}
+				${auxInput}
+			</div>`
+	}
+	read(dom: HTMLInputElement): { uid: string; naam: string } {
+		return {
+			naam: dom.form[`${this.name}_naam`].value,
+			uid: dom.form[`${this.name}_uid`].value,
+		}
+	}
+	validate(value: { uid: string; naam: string }): string {
+		if (!value.uid) {
+			return "Lid niet gezet";
+		}
+
+		return super.validate(value);
 	}
 }
