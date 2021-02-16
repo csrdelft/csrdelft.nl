@@ -35,7 +35,7 @@ class NodeYoutube implements Node
 	public function getTagAttributes($node)
 	{
 		return [
-			'youtube' => $node->attrs->url,
+			'youtube' => $node->attrs->id,
 		];
 	}
 
