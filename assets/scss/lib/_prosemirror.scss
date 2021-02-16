@@ -138,6 +138,10 @@
 		left: 0;
 	}
 
+	&[data-bb-citaat-url]::before {
+		color: $link-color;
+	}
+
 
 	&::after {
 		background: #d3d3d3;

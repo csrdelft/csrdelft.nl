@@ -306,3 +306,5 @@ export const ucfirst = (str: string): string => str.slice(0, 1).toUpperCase() + 
  * @param list
  */
 export const cut = <T>(list: T[]): T[] => list.filter(_=>_)
+
+export const uidLike = (str: string): boolean => str.length == 4

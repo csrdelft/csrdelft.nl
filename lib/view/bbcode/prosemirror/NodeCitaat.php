@@ -30,9 +30,11 @@ class NodeCitaat implements Node
 			$naam = $node->bron_profiel->getNaam('user');
 			$url = '/profiel/' . $node->bron_profiel->uid;
 		} elseif ($node->bron_text != null) {
-			$van = $node->bron_text;
-			$naam = $node->bron_text;
+			$van = str_replace("_", " ", $node->bron_text);
+			$naam = $van;
 			$url = $node->bron_url;
+		} else {
+			throw new \InvalidArgumentException();
 		}
 
 		return [
@@ -47,7 +49,7 @@ class NodeCitaat implements Node
 	public function getTagAttributes($node)
 	{
 		return [
-			'citaat' => $node->attrs->van,
+			'citaat' => str_replace(" ", "_", $node->attrs->van),
 			'url' => $node->attrs->url
 		];
 	}

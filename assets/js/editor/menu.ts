@@ -12,11 +12,11 @@ import {EditorSchema} from "./schema";
 import {redo, undo} from "prosemirror-history";
 import {
 	bbInsert,
-	blockTypeHead,
 	blockTypeItemPrompt,
-	canInsert,
+	canInsert, insertCitaat,
 	insertImageItem,
-	insertPlaatjeItem, lidInsert,
+	insertPlaatjeItem,
+	lidInsert,
 	linkItem,
 	markItem,
 	priveItem,
@@ -48,7 +48,7 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 			new Dropdown(cut([
 				loggedIn && insertPlaatjeItem(schema.nodes.plaatje),
 				insertImageItem(schema.nodes.image),
-				loggedIn && blockTypeItemPrompt(schema.nodes.citaat, "Citaat", "Citaat invoegen", "Vul voor 'van' een lidnummer in om een lid te citeren"),
+				loggedIn && insertCitaat(schema.nodes.citaat),
 				loggedIn && new DropdownSubmenu([
 					blockTypeItemPrompt(schema.nodes.twitter, "Twitter", "Twitter invoegen"),
 					blockTypeItemPrompt(schema.nodes.youtube, "YouTube", "YouTube invoegen"),
@@ -89,21 +89,28 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 			new Dropdown([
 				blockTypeItem(schema.nodes.paragraph, {
 					title: "Verander naar een paragraaf",
-					label: "Normaal"
+					label: "Tekst"
 				}),
 				blockTypeItem(schema.nodes.code_block, {
 					title: "Verander naar een code blok",
 					label: "Code"
 				}),
-				new DropdownSubmenu([
-					blockTypeHead(schema.nodes.heading, 1),
-					blockTypeHead(schema.nodes.heading, 2),
-					blockTypeHead(schema.nodes.heading, 3),
-					blockTypeHead(schema.nodes.heading, 4),
-					blockTypeHead(schema.nodes.heading, 5),
-					blockTypeHead(schema.nodes.heading, 6),
-				], {label: "Koppen"})
-			], {label: "Tekst"}),
+				blockTypeItem(schema.nodes.heading, {
+					title: "Verander naar kop 1",
+					label: "Titel",
+					attrs: {level: 1},
+				}),
+				blockTypeItem(schema.nodes.heading, {
+					title: "Verander naar kop 2",
+					label: "Kop",
+					attrs: {level: 2},
+				}),
+				blockTypeItem(schema.nodes.heading, {
+					title: "Verander naar kop 3",
+					label: "Subkop",
+					attrs: {level: 3},
+				}),
+			], {label: "Stijl"}),
 		]),
 		[
 			new MenuItem({

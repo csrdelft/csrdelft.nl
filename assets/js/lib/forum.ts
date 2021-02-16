@@ -83,8 +83,6 @@ export async function forumBewerken(postId: string): Promise<false> {
 	bewerkContainer = document.getElementById('post' + postId);
 	bewerkContainerInnerHTML = bewerkContainer.innerHTML
 
-	console.log(JSON.stringify(response.data))
-
 	const berichtInput = html<HTMLInputElement>`<input type="hidden" name="forumBericht" id="forumBewerkenBericht">`
 	berichtInput.value = JSON.stringify(response.data)
 

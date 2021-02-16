@@ -192,6 +192,16 @@ export class TextField extends Field<any> {
 	}
 }
 
+export class Label extends Field<string> {
+	render(name: string): HTMLElement {
+		return html`<div>${this.options.value}</div>`
+	}
+
+	read(dom: HTMLInputElement): string {
+		return "";
+	}
+}
+
 // ::- A field class for dropdown fields based on a plain `<select>`
 // tag. Expects an option `options`, which should be an array of
 // `{value: string, label: string}` objects, or a function taking a
@@ -252,7 +262,7 @@ export class LidField extends Field<{uid: string, naam: string}, { uid: string, 
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			remote: {
-				url: '/tools/naamsuggesties?q=%QUERY',
+				url: '/tools/naamsuggesties?vorm=user&zoekin=voorkeur&q=%QUERY',
 				wildcard: '%QUERY',
 			}
 		})
@@ -315,7 +325,7 @@ export class LidField extends Field<{uid: string, naam: string}, { uid: string, 
 		}
 	}
 	validate(value: { uid: string; naam: string }): string {
-		if (!value.uid) {
+		if (this.options.required && !value.uid) {
 			return "Lid niet gezet";
 		}
 

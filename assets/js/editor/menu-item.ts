@@ -2,12 +2,12 @@ import {EditorSchema} from "./schema";
 import {bbPrompt} from "./bb-prompt";
 import {EditorState, NodeSelection} from "prosemirror-state";
 import {MarkType, NodeType} from "prosemirror-model";
-import {blockTypeItem, MenuItem} from "prosemirror-menu";
-import {FileField, LidField, openPrompt, TextField} from "./prompt";
+import {MenuItem} from "prosemirror-menu";
+import {FileField, Label, LidField, openPrompt, TextField} from "./prompt";
 import {toggleMark} from "prosemirror-commands";
 import {wrapInList} from "prosemirror-schema-list";
 import {startImageUpload} from "./forum-plaatje";
-import {html, ucfirst} from "../lib/util";
+import {html, ucfirst, uidLike} from "../lib/util";
 
 export function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<EditorSchema>): boolean {
 	const $from = state.selection.$from
@@ -48,6 +48,52 @@ export const insertImageItem = (nodeType: NodeType<EditorSchema>): MenuItem => n
 	}
 });
 
+export function insertCitaat(nodeType: NodeType): MenuItem {
+	return new MenuItem({
+		label: "Citaat",
+		title: "Citaat invoegen",
+		enable: state => canInsert(state, nodeType),
+		run: (state, dispatch, view) => {
+			let attrs = null
+			let content = null
+
+			if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+				attrs = state.selection.node.attrs
+				content = state.selection.node.content
+			}
+
+			openPrompt({
+				description: "",
+				title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
+				fields: {
+					lid: new LidField({
+						label: "Lid",
+						required: false,
+						value: attrs && uidLike(attrs.van) ? {naam: attrs.naam, uid: attrs.van} : {naam: "", uid: ""},
+					}),
+					of: new Label({label: "", value: "- Of -"}),
+					naam: new TextField({
+						label: "Van",
+						required: false,
+						value: attrs && !uidLike(attrs.van) ? attrs.naam : "",
+					}),
+					url: new TextField({
+						label: "Url",
+						required: false,
+						value: attrs && !uidLike(attrs.van) ? attrs.url : "",
+					})
+				},
+				callback({lid, naam, url}) {
+					const newAttrs = lid.uid ? {naam: lid.naam, van: lid.uid} : {van: naam, naam, url}
+
+					view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...newAttrs}, content)))
+					view.focus()
+				}
+			})
+		}
+	})
+}
+
 function cmdItem(cmd: (state: EditorState) => boolean, options) {
 	const passedOptions = {
 		label: options.title,
@@ -81,38 +127,52 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem => new Menu
 	active(state) {
 		return markActive(state, markType)
 	},
-	enable(state) {
-		return !state.selection.empty
+	enable() {
+		return true;
 	},
 	run(state, dispatch, view) {
 		if (markActive(state, markType)) {
 			toggleMark(markType)(state, dispatch)
 			return true
 		}
-		openPrompt({
-			title: "Maak een link",
-			fields: {
-				href: new TextField({
-					label: "Link doel",
-					required: true
-				}),
-				title: new TextField({label: "Titel"})
-			},
-			callback(attrs) {
-				toggleMark(markType, attrs)(view.state, view.dispatch)
-				view.focus()
-			}
-		})
+
+		if (state.selection.empty) {
+			openPrompt({
+				title: "Maak een link",
+				fields: {
+					tekst: new TextField({
+						label: "Link tekst",
+						required: true,
+					}),
+					href: new TextField({
+						label: "Link doel",
+						required: true
+					}),
+				},
+				callback(attrs) {
+					view.dispatch(view.state.tr.replaceSelectionWith(state.schema.text(attrs.tekst).mark([markType.create({href: attrs.href})]), false))
+					view.focus()
+				}
+			})
+		} else {
+			openPrompt({
+				title: "Maak een link",
+				fields: {
+					href: new TextField({
+						label: "Link doel",
+						required: true
+					}),
+				},
+				callback(attrs) {
+					toggleMark(markType, attrs)(view.state, view.dispatch)
+					view.focus()
+				}
+			})
+		}
 	}
 });
 
 export const wrapListItem = (nodeType: NodeType<EditorSchema>, options): MenuItem => cmdItem(wrapInList(nodeType, options.attrs), options);
-
-export const blockTypeHead = (nodeType: NodeType, i: number): MenuItem => blockTypeItem(nodeType, {
-	title: "Verander naar kop " + i,
-	label: "Kop " + i,
-	attrs: {level: i}
-});
 
 export const priveItem = (markType: MarkType): MenuItem => new MenuItem({
 	title: "Markeer tekst als prive",
@@ -138,8 +198,8 @@ export const priveItem = (markType: MarkType): MenuItem => new MenuItem({
 });
 
 export const lidInsert = (nodeType: NodeType<EditorSchema>): MenuItem => new MenuItem({
-	title: "Lid",
-	label: "Lid invoegen",
+	title: "Lid invoegen",
+	label: "Lid",
 	enable: state => canInsert(state, nodeType),
 	run: (state, dispatch, view) => {
 		let attrs = null
@@ -160,7 +220,6 @@ export const lidInsert = (nodeType: NodeType<EditorSchema>): MenuItem => new Men
 				})
 			},
 			callback(callbackAttrs) {
-				console.log(callbackAttrs)
 				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs.lid}, content)))
 				view.focus()
 			}
