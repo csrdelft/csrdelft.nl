@@ -264,11 +264,13 @@ export const marks = RecordWithType<MarkSpec>()({
 	},
 
 	superscript: {
+		excludes: "superscript subscript",
 		parseDOM: [{tag: "sup"}],
 		toDOM: () => ["sup", 0]
 	},
 
 	subscript: {
+		excludes: "subscript superscript",
 		parseDOM: [{tag: "sub"}],
 		toDOM: () => ["sub", 0]
 	},
