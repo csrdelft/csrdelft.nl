@@ -31,10 +31,14 @@ export const audio: NodeSpec = {
 }
 
 export const youtube: NodeSpec = {
-	attrs: {url: {}},
+	attrs: {id: {}},
 	group: "block",
 	parseDOM: [{tag: "div[data-bb-youtube]"}],
-	toDOM: node => ["div", {"data-bb-youtube": node.attrs.url}]
+	toDOM: node => ["div", {
+		"data-bb-youtube": node.attrs.id,
+		"class": "bb-video",
+		title: "YouTube"
+	}, ["img", {src: `https://i.ytimg.com/vi/${node.attrs.id}/sddefault.jpg`}]]
 }
 
 export const spotify: NodeSpec = {

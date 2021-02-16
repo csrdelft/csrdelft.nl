@@ -27,7 +27,7 @@ class NodeYoutube implements Node
 		}
 		return [
 			'attrs' => [
-				'url' => $node->id
+				'id' => $node->id
 			]
 		];
 	}

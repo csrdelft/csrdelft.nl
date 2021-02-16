@@ -112,12 +112,15 @@
 .ProseMirror [data-bb-video],
 .ProseMirror [data-bb-twitter],
 .ProseMirror [data-bb-audio],
-.ProseMirror [data-bb-youtube],
 .ProseMirror [data-bb-spotify] {
 	height: 100px;
 	background: #f5f5f5;
 	box-shadow: 0 0 10px #e8e8e8;
 	margin: 0.5em 0 1em;
+}
+
+.ProseMirror [data-bb-youtube] {
+	width: 600px;
 }
 
 .ProseMirror [data-lid] {

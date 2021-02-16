@@ -527,7 +527,7 @@ a[href].lightbox-link { // Override externe link style
 	@extend .embed-responsive;
 	@extend .embed-responsive-16by9;
 
-	iframe {
+	iframe, img {
 		@extend .embed-responsive-item;
 	}
 }
