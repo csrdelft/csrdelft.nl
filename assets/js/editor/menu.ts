@@ -2,7 +2,6 @@ import {
 	blockTypeItem,
 	Dropdown,
 	DropdownSubmenu,
-	icons,
 	joinUpItem,
 	liftItem,
 	MenuItem,
@@ -24,12 +23,13 @@ import {
 	wrapListItem
 } from "./menu-item";
 import {cut} from "../lib/util";
+import icon from "./icon";
 
 export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuItem | Dropdown)[][] {
 	return [
 		[
-			markItem(schema.marks.strong, {title: "Schakel dikgedrukt", icon: icons.strong}),
-			markItem(schema.marks.em, {title: "Schakel schuingedrukt", icon: icons.em}),
+			markItem(schema.marks.strong, {title: "Schakel dikgedrukt", icon: icon.strong}),
+			markItem(schema.marks.em, {title: "Schakel schuingedrukt", icon: icon.em}),
 			linkItem(schema.marks.link),
 			new Dropdown([
 				markItem(schema.marks.code, {title: "Schakel code", label: "Code"}),
@@ -43,6 +43,8 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 		],
 		cut([
 			loggedIn && blockTypeItemPrompt(schema.nodes.lid, "Lid", "Lid invoegen"),
+		]),
+		cut([
 			new Dropdown(cut([
 				loggedIn && insertPlaatjeItem(schema.nodes.plaatje),
 				insertImageItem(schema.nodes.image),
@@ -101,34 +103,34 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 					blockTypeHead(schema.nodes.heading, 5),
 					blockTypeHead(schema.nodes.heading, 6),
 				], {label: "Koppen"})
-			], {label: "Tekst..."}),
+			], {label: "Tekst"}),
 		]),
 		[
 			new MenuItem({
 				title: "Laatste wijziging ongedaan maken",
 				run: undo,
 				enable: state => undo(state),
-				icon: icons.undo
+				icon: icon.undo
 			}),
 			new MenuItem({
 				title: "Herhaal de laatste ongedaan gemaakte wijziging",
 				run: redo,
 				enable: state => redo(state),
-				icon: icons.redo
+				icon: icon.redo
 			})
 		],
 		[
 			wrapListItem(schema.nodes.bullet_list, {
 				title: "Maak een puntenlijst",
-				icon: icons.bulletList
+				icon: icon.ul
 			}),
 			wrapListItem(schema.nodes.ordered_list, {
 				title: "Maak een geordende lijst",
-				icon: icons.orderedList
+				icon: icon.ol
 			}),
 			wrapItem(schema.nodes.blockquote, {
 				title: "Maak een quote",
-				icon: icons.blockquote
+				icon: icon.quote
 			}),
 			joinUpItem,
 			liftItem,

@@ -7,7 +7,7 @@ import {FileField, openPrompt, TextField} from "./prompt";
 import {toggleMark} from "prosemirror-commands";
 import {wrapInList} from "prosemirror-schema-list";
 import {startImageUpload} from "./forum-plaatje";
-import {ucfirst} from "../lib/util";
+import {html, ucfirst} from "../lib/util";
 
 export function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<EditorSchema>): boolean {
 	const $from = state.selection.$from
@@ -77,7 +77,7 @@ export const markItem = (markType: MarkType<EditorSchema>, options): MenuItem =>
 
 export const linkItem = (markType: MarkType<EditorSchema>): MenuItem => new MenuItem({
 	title: "Maak of verwijder link",
-	icon: icons.link,
+	icon: {dom: html`<i class="fa fa-link"></i>`},
 	active(state) {
 		return markActive(state, markType)
 	},
@@ -136,6 +136,35 @@ export const priveItem = (markType: MarkType): MenuItem => new MenuItem({
 		})
 	}
 });
+
+export const lidInsert = (nodeType: NodeType<EditorSchema>): MenuItem => new MenuItem({
+	title: "Lid",
+	label: "Lid invoegen",
+	enable: state => canInsert(state, nodeType),
+	run: (state, dispatch, view) => {
+		let attrs = null
+		let content = null
+
+		if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			attrs = state.selection.node.attrs
+			content = state.selection.node.content
+		}
+
+		openPrompt({
+			title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
+			fields: Object.fromEntries(Object.entries(nodeType.spec.attrs).map(([attr, spec]) =>
+				[attr, new TextField({
+					label: ucfirst(attr),
+					required: spec.default === undefined,
+					value: attrs ? attrs[attr] : spec.default
+				})])),
+			callback(callbackAttrs) {
+				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs}, content)))
+				view.focus()
+			}
+		})
+	}
+})
 
 export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, label: string, title: string, description = ""): MenuItem => new MenuItem({
 	title,
