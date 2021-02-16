@@ -25,4 +25,7 @@ export default {
 	quote: {
 		dom: html`<i class="fa fa-quote-right"></i>`
 	},
+	underline: {
+		dom: html`<i class="fa fa-underline"></i>`
+	},
 }

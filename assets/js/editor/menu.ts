@@ -30,12 +30,12 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 		[
 			markItem(schema.marks.strong, {title: "Schakel dikgedrukt", icon: icon.strong}),
 			markItem(schema.marks.em, {title: "Schakel schuingedrukt", icon: icon.em}),
+			markItem(schema.marks.underline, {title: "Schakel onderlijn", icon: icon.underline}),
 			linkItem(schema.marks.link),
 			new Dropdown([
 				markItem(schema.marks.code, {title: "Schakel code", label: "Code"}),
 				markItem(schema.marks.superscript, {title: "Schakel superscript", label: "Superscript"}),
 				markItem(schema.marks.subscript, {title: "Schakel subscript", label: "Subscript"}),
-				markItem(schema.marks.underline, {title: "Schakel onderlijn", label: "Onderlijn"}),
 				markItem(schema.marks.strikethrough, {title: "Schakel doorstreep", label: "Doorstreep"}),
 				markItem(schema.marks.offtopic, {title: "Schakel offtopic", label: "Offtopic"}),
 				priveItem(schema.marks.prive),
