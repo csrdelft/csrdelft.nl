@@ -54,7 +54,8 @@
 		"symfony/form": "^5.0",
 		"symfony/translation": "^5.0",
 		"twig/intl-extra": "^3.2",
-		"twig/extra-bundle": "^3.2"
+		"twig/extra-bundle": "^3.2",
+		"twig/cssinliner-extra": "^3.3"
 	},
 	"config": {
 		"platform": {
