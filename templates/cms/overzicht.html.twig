@@ -13,6 +13,7 @@
 			<th>Laatst gewijzigd</th>
 			<th>Rechten bekijken</th>
 			<th>Rechten bewerken</th>
+			<th>Inline HTML</th>
 			<th></th>
 		</tr>
 		</thead>
@@ -25,6 +26,7 @@
 					<td>{{ pagina.laatstGewijzigd | reldate }}</td>
 					<td>{{ pagina.rechtenBekijken }}</td>
 					<td>{{ pagina.rechtenBewerken }}</td>
+					<td>{{ pagina.inlineHtml ? icon('tick') : icon('cross') }}</td>
 					<td>
 						<div class="btn-group btn-group-sm">
 							<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bekijken', {naam: pagina.naam}) }}"

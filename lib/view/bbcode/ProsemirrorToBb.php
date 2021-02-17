@@ -88,7 +88,7 @@ class ProsemirrorToBb
 				$html[] = $this->renderNode($nestedNode);
 			}
 		} elseif (isset($node->text)) {
-			$html[] = $node->text;
+			$html[] = htmlentities($node->text, ENT_QUOTES);
 		}
 
 		/** @var Node $nodeRenderClass */

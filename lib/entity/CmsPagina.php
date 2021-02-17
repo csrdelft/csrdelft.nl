@@ -54,6 +54,12 @@ class CmsPagina {
 	 * @var string
 	 */
 	public $rechtenBewerken;
+	/**
+	 * Inline HTML
+	 * @ORM\Column(type="boolean", name="inline_html")
+	 * @var boolean
+	 */
+	public $inlineHtml;
 
 	/**
 	 * @return bool

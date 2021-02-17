@@ -14,6 +14,7 @@ class CmsPaginaFixtures extends Fixture {
 		$legePagina->laatstGewijzigd = date_create_immutable();
 		$legePagina->titel = '';
 		$legePagina->naam = '';
+		$legePagina->inlineHtml = false;
 		$legePagina->rechtenBekijken = P_PUBLIC;
 		$legePagina->rechtenBewerken = '';
 
@@ -32,6 +33,7 @@ BB;
 		$geenToegangPagina->laatstGewijzigd = date_create_immutable();
 		$geenToegangPagina->rechtenBekijken = P_PUBLIC;
 		$geenToegangPagina->rechtenBewerken = P_ADMIN;
+		$geenToegangPagina->inlineHtml = false;
 
 		$manager->persist($geenToegangPagina);
 
@@ -47,6 +49,7 @@ BB;
 		$nietGevondenPagina->laatstGewijzigd = date_create_immutable();
 		$nietGevondenPagina->rechtenBekijken = P_PUBLIC;
 		$nietGevondenPagina->rechtenBewerken = P_ADMIN;
+		$nietGevondenPagina->inlineHtml = false;
 
 		$manager->persist($nietGevondenPagina);
 
@@ -61,6 +64,7 @@ BB;
 		$thuisPagina->laatstGewijzigd = date_create_immutable();
 		$thuisPagina->rechtenBekijken = P_PUBLIC;
 		$thuisPagina->rechtenBewerken = 'P_ADMIN,Bestuur';
+		$thuisPagina->inlineHtml = true;
 
 		$manager->persist($thuisPagina);
 
