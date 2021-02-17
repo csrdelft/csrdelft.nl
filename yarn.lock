@@ -558,7 +558,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prosemirror-schema-list@npm:^1.0.1, @types/prosemirror-schema-list@npm:^1.0.2":
+"@types/prosemirror-schema-list@npm:^1.0.1":
   version: 1.0.2
   resolution: "@types/prosemirror-schema-list@npm:1.0.2"
   dependencies:
@@ -566,6 +566,17 @@ __metadata:
     "@types/prosemirror-model": "*"
     "@types/prosemirror-state": "*"
   checksum: 0190fee98e2879a6566dd3363570d4d1a22e37d3fa0d5de75c37b6a150b3c2ad2a253f2b1df9e7b26a0b0d798db79925b4378dabb50ff030a6020fc0fc6470d7
+  languageName: node
+  linkType: hard
+
+"@types/prosemirror-schema-list@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@types/prosemirror-schema-list@npm:1.0.3"
+  dependencies:
+    "@types/orderedmap": "*"
+    "@types/prosemirror-model": "*"
+    "@types/prosemirror-state": "*"
+  checksum: 11f42c71431bf2f94c753f5bd9159aa04cc24bde4abae966108a3ad2c5929e5c7b22b08393cf4a8de4729f2e34fbf21d2f2c3d764dd0a8b65daf17541593a072
   languageName: node
   linkType: hard
 
@@ -7342,7 +7353,7 @@ fsevents@~2.1.2:
     "@types/prosemirror-menu": ^1.0.3
     "@types/prosemirror-model": ^1.11.2
     "@types/prosemirror-schema-basic": ^1.0.2
-    "@types/prosemirror-schema-list": ^1.0.2
+    "@types/prosemirror-schema-list": ^1.0.3
     "@types/prosemirror-state": ^1.2.6
     "@types/prosemirror-view": ^1.17.1
     "@types/terser-webpack-plugin": ^1.2.1

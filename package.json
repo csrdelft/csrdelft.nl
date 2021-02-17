@@ -29,7 +29,7 @@
 		"@types/prosemirror-menu": "^1.0.3",
 		"@types/prosemirror-model": "^1.11.2",
 		"@types/prosemirror-schema-basic": "^1.0.2",
-		"@types/prosemirror-schema-list": "^1.0.2",
+		"@types/prosemirror-schema-list": "^1.0.3",
 		"@types/prosemirror-state": "^1.2.6",
 		"@types/prosemirror-view": "^1.17.1",
 		"@types/terser-webpack-plugin": "^1.2.1",

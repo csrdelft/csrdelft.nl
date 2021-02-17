@@ -313,11 +313,10 @@ export const marks = RecordWithType<MarkSpec>()({
 
 })
 
-export type EditorNodes = keyof typeof nodes | "bullet_list" | "ordered_list" | "list_item"
-export type EditorMarks = keyof typeof marks
+const nodesMap = OrderedMap.from(nodes) as (OrderedMap<NodeSpec> | Record<keyof typeof nodes, NodeSpec>)
 
-export const schema = new Schema<EditorNodes, EditorMarks>({
-	nodes: addListNodes(OrderedMap.from<NodeSpec>(nodes as any), "paragraph block*", "block"),
+export const schema = new Schema({
+	nodes: addListNodes(nodesMap, "paragraph block*", "block"),
 	marks
 })
 
