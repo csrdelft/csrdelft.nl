@@ -6,7 +6,7 @@ const prefix = "ProseMirror-popup"
 interface PromptOptions<T> {
 	title: string
 	description?: string
-	fields: Record<string, Field<any, any>>
+	fields: Record<string, Field<unknown>>
 	callback: (params: T) => void
 }
 
@@ -94,7 +94,7 @@ export function openPrompt<T = any>(options: PromptOptions<T>): void {
 	if (input) input.focus()
 }
 
-function getValues(fields: Record<string, Field<string, any>>, form: HTMLFormElement) {
+function getValues<T>(fields: Record<string, Field<T>>, form: HTMLFormElement) {
 	const result = Object.create(null)
 	for (const name of Object.keys(fields)) {
 		const field = fields[name]
@@ -131,7 +131,7 @@ interface FieldOptions<T = unknown> {
 }
 
 // ::- The type of field that `FieldPrompt` expects to be passed to it.
-export class Field<T, U = string> {
+export class Field<T = string> {
 	options: FieldOptions<T>;
 	// :: (Object)
 	// Create a field with the given options. Options support by all
@@ -158,8 +158,8 @@ export class Field<T, U = string> {
 
 	// :: (dom.Node) → any
 	// Read the field's value from its DOM node.
-	read(dom: HTMLInputElement): U {
-		return dom.value as unknown as U
+	read(dom: HTMLInputElement): T {
+		return dom.value as unknown as T
 	}
 
 	// :: (any) → ?string
@@ -185,14 +185,14 @@ export class Field<T, U = string> {
 }
 
 // ::- A field class for single-line text fields.
-export class TextField extends Field<any> {
+export class TextField extends Field {
 	render(name: string): HTMLElement {
 		return html`<input type="text" name="${name}" id="${name}" value="${this.options.value || ""}" autocomplete="off"
 											 class="form-control"/>`
 	}
 }
 
-export class Label extends Field<string> {
+export class Label extends Field {
 	render(name: string): HTMLElement {
 		return html`<div>${this.options.value}</div>`
 	}
@@ -235,7 +235,7 @@ export class TextAreaField extends Field<any> {
 	}
 }
 
-export class FileField extends Field<string, File> {
+export class FileField extends Field<File> {
 	render(name: string): HTMLElement {
 		const input = document.createElement("input")
 		input.id = name
@@ -251,7 +251,7 @@ export class FileField extends Field<string, File> {
 	}
 }
 
-export class LidField extends Field<{uid: string, naam: string}, { uid: string, naam: string }> {
+export class LidField extends Field<{ uid: string, naam: string }> {
 	name: string
 	render(name: string): HTMLElement {
 		this.name = name;

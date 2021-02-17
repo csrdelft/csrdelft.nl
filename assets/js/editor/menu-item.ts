@@ -2,13 +2,12 @@ import {EditorSchema} from "./schema";
 import {bbPrompt} from "./bb-prompt";
 import {EditorState, NodeSelection} from "prosemirror-state";
 import {MarkType, NodeType} from "prosemirror-model";
-import {MenuItem} from "prosemirror-menu";
+import {MenuItem, MenuItemSpec} from "prosemirror-menu";
 import {FileField, Label, LidField, openPrompt, TextField} from "./prompt";
 import {toggleMark} from "prosemirror-commands";
 import {wrapInList} from "prosemirror-schema-list";
 import {startImageUpload} from "./forum-plaatje";
 import {html, ucfirst, uidLike} from "../lib/util";
-import icon from "./icon";
 
 export function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<EditorSchema>): boolean {
 	const $from = state.selection.$from
@@ -95,15 +94,15 @@ export function insertCitaat(nodeType: NodeType): MenuItem {
 	})
 }
 
-function cmdItem(cmd: (state: EditorState) => boolean, options) {
-	const passedOptions = {
-		label: options.title,
+function cmdItem(cmd: (state: EditorState) => boolean, {enabled, ...options}: Partial<MenuItemSpec> & {enabled?: boolean}) {
+	const passedOptions: MenuItemSpec = {
+		label: typeof options.title == "string" ? options.title : "",
 		run: cmd,
 		...options
 	}
 
-	if ((!options.enable || options.enable === true) && !options.select)
-		passedOptions[options.enable ? "enable" : "select"] = state => cmd(state)
+	if ((!enabled || enabled === true) && !options.select)
+		passedOptions[enabled ? "enable" : "select"] = state => cmd(state)
 
 	return new MenuItem(passedOptions)
 }
@@ -114,11 +113,11 @@ function markActive(state: EditorState<EditorSchema>, type: MarkType<EditorSchem
 	else return state.doc.rangeHasMark(from, to, type)
 }
 
-export const markItem = (markType: MarkType<EditorSchema>, options): MenuItem => cmdItem(toggleMark(markType), {
+export const markItem = (markType: MarkType<EditorSchema>, options: Partial<MenuItemSpec>): MenuItem => cmdItem(toggleMark(markType), {
 	active(state) {
 		return markActive(state, markType)
 	},
-	enable: true,
+	enabled: true,
 	...options
 });
 
@@ -173,7 +172,7 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem => new Menu
 	}
 });
 
-export const wrapListItem = (nodeType: NodeType<EditorSchema>, options): MenuItem => cmdItem(wrapInList(nodeType, options.attrs), options);
+export const wrapListItem = (nodeType: NodeType<EditorSchema>, options: Partial<MenuItemSpec>): MenuItem => cmdItem(wrapInList(nodeType, null), options);
 
 export const priveItem = (markType: MarkType): MenuItem => new MenuItem({
 	title: "Markeer tekst als prive",
@@ -258,7 +257,7 @@ export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, label: str
 	}
 });
 
-export const bbInsert = (nodeType: NodeType<EditorSchema>): MenuItem => new MenuItem({
+export const bbInsert = (nodeType: NodeType<EditorSchema>): MenuItem<EditorSchema> => new MenuItem<EditorSchema>({
 	title: "BB code als platte tekst invoegen",
 	label: "BB code",
 	enable: state => canInsert(state, nodeType),
@@ -273,7 +272,7 @@ export const bbInsert = (nodeType: NodeType<EditorSchema>): MenuItem => new Menu
 	}
 });
 
-export const insertPlaatjeItem = (nodeType: NodeType<EditorSchema>): MenuItem => new MenuItem<any>({
+export const insertPlaatjeItem = (nodeType: NodeType<EditorSchema>): MenuItem<EditorSchema> => new MenuItem<EditorSchema>({
 	title: "Plaatje uploaden",
 	label: "Plaatje",
 	enable: state => canInsert(state, nodeType),
