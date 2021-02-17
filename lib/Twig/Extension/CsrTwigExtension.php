@@ -107,7 +107,7 @@ class CsrTwigExtension extends AbstractExtension
 		}
 
 		if ($pagina->magBekijken()) {
-			return CsrBB::parseHtml($pagina->inhoud, $pagina->inlineHtml);
+			return CsrBB::parseHtml($pagina->inhoud);
 		}
 
 		return '';

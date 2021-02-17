@@ -21,21 +21,7 @@ class CmsPaginaType extends AbstractType
 			->add('laatstGewijzigd', DateDisplayType::class)
 			->add('titel', TextType::class)
 			->add('rechtenBekijken', TextType::class, ['disabled' => !$options['rechten_wijzigen']])
-			->add('rechtenBewerken', TextType::class, ['disabled' => !$options['rechten_wijzigen']]);
-
-		if ($options['rechten_wijzigen']) {
-			$builder
-				->add('inlineHtml', ChoiceType::class, [
-					'expanded' => true,
-					'choices' => [
-						'Direct <html>' => true,
-						'[html] tussen [/html]' => false,
-					],
-					'help' => 'Geen [html] nodig en zelf regeleindes plaatsen met [rn] of <br />'
-				]);
-		}
-
-		$builder
+			->add('rechtenBewerken', TextType::class, ['disabled' => !$options['rechten_wijzigen']])
 			->add('inhoud', BbTextType::class);
 	}
 
