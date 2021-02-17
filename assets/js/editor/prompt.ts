@@ -230,6 +230,7 @@ export class TextAreaField extends Field<any> {
 		input.placeholder = this.options.label
 		input.value = this.options.value || ""
 		input.autocomplete = "off"
+		input.rows = 20
 		return input
 	}
 }
