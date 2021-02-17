@@ -3,7 +3,11 @@
 		<div id="public-melding" class="alert alert-danger">
 			<strong>Openbaar forum</strong>
 			Voor iedereen leesbaar, doorzoekbaar door zoekmachines.<br/>
-			Zet [prive] en [/prive] om uw persoonlijke contactgegevens in het bericht.
+			{% if not app.user %}
+				Markeer uw persoonlijke contactgegevens in het bericht met <i class="fa fa-user-shield"></i>.
+			{% else %}
+				Markeer uw persoonlijke contactgegevens in het bericht als prive.
+			{% endif %}
 		</div>
 		{% if not app.user %}
 			<div class="alert alert-info">

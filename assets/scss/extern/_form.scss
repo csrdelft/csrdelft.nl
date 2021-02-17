@@ -5,6 +5,11 @@
 @import "~prosemirror-example-setup/style/style.css";
 @import "../lib/prosemirror";
 
+.ProseMirror .bb-prive {
+	border: none;
+	padding: 0;
+}
+
 .ProseMirror a {
 	color: blue;
 

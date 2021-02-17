@@ -20,20 +20,21 @@ import {lift, selectParentNode} from "prosemirror-commands";
 
 export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuItem | Dropdown)[][] {
 	return [
-		[
+		cut([
 			markItem(schema.marks.strong, {title: "Schakel dikgedrukt", icon: icon.strong}),
 			markItem(schema.marks.em, {title: "Schakel schuingedrukt", icon: icon.em}),
 			markItem(schema.marks.underline, {title: "Schakel onderlijn", icon: icon.underline}),
 			linkItem(schema.marks.link),
-			new Dropdown([
+			!loggedIn && markItem(schema.marks.prive, {title: "Maak prive", icon: icon.prive}),
+			new Dropdown(cut([
 				markItem(schema.marks.code, {title: "Schakel code", label: "Code"}),
 				markItem(schema.marks.superscript, {title: "Schakel superscript", label: "Superscript"}),
 				markItem(schema.marks.subscript, {title: "Schakel subscript", label: "Subscript"}),
 				markItem(schema.marks.strikethrough, {title: "Schakel doorstreep", label: "Doorstreep"}),
 				markItem(schema.marks.offtopic, {title: "Schakel offtopic", label: "Offtopic"}),
-				priveItem(schema.marks.prive),
-			], {label: "Meer"})
-		],
+				loggedIn && priveItem(schema.marks.prive),
+			]), {label: "Meer"})
+		]),
 		cut([
 			loggedIn && lidInsert(schema.nodes.lid),
 		]),

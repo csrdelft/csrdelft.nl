@@ -12,4 +12,5 @@ export default {
 	underline: {dom: html`<i class="fa fa-underline"></i>`},
 	selectParentNode: {dom: html`<i class="fa fa-object-group"></i>`},
 	lift: {dom: html`<i class="fa fa-outdent"></i>`},
+	prive: {dom: html`<i class="fa fa-user-shield"></i>`},
 }
