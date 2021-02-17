@@ -7,6 +7,7 @@ use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * Lichting.class.php
@@ -25,6 +26,7 @@ class Lichting extends AbstractGroep {
 	 * Lidjaar
 	 * @var int
 	 * @ORM\Column(type="integer", unique=true)
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $lidjaar;
 
