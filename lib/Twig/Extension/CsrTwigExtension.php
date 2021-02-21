@@ -38,10 +38,6 @@ class CsrTwigExtension extends AbstractExtension
 	 */
 	private $profielRepository;
 	/**
-	 * @var BbToProsemirror
-	 */
-	private $bbToProsemirror;
-	/**
 	 * @var CmsPaginaRepository
 	 */
 	private $cmsPaginaRepository;
@@ -50,14 +46,12 @@ class CsrTwigExtension extends AbstractExtension
 		SessionInterface $session,
 		CsrfService $csrfService,
 		CmsPaginaRepository $cmsPaginaRepository,
-		ProfielRepository $profielRepository,
-		BbToProsemirror $bbToProsemirror
+		ProfielRepository $profielRepository
 	)
 	{
 		$this->session = $session;
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
-		$this->bbToProsemirror = $bbToProsemirror;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 	}
 
@@ -120,7 +114,6 @@ class CsrTwigExtension extends AbstractExtension
 			new TwigFilter('file_base64', [$this, 'file_base64']),
 			new TwigFilter('bbcode', [$this, 'bbcode'], ['is_safe' => ['html']]),
 			new TwigFilter('bbcode_light', [$this, 'bbcode_light'], ['is_safe' => ['html']]),
-			new TwigFilter('bbcode_to_prosemirror', [$this, 'bbcode_to_prosemirror']),
 			new TwigFilter('uniqid', function ($prefix) {
 				return uniqid_safe($prefix);
 			}),
@@ -196,11 +189,6 @@ class CsrTwigExtension extends AbstractExtension
 	public function bbcode_light($string)
 	{
 		return CsrBB::parseLight($string);
-	}
-
-	public function bbcode_to_prosemirror($string)
-	{
-		return $this->bbToProsemirror->toProseMirror($string);
 	}
 
 	public function file_base64($filename)
