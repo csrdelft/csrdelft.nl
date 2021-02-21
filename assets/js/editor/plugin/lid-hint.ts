@@ -90,12 +90,14 @@ const suggestLeden: Suggester = {
 			updateLidHints()
 		},
 		// Enter wordt niet opgepikt.
-		// Enter: ({command}) => {
-		// 	if (showSuggestions) {
-		// 		command(lidList[selectedIndex]);
-		// 		showSuggestions = false
-		// 	}
-		// },
+		Enter: ({command, event}) => {
+			event.preventDefault()
+			command(lidList[selectedIndex]);
+		},
+		Tab: ({command, event}) => {
+			event.preventDefault()
+			command(lidList[selectedIndex])
+		},
 		Esc: () => {
 			removeLidHints()
 		},
@@ -115,11 +117,8 @@ const suggestLeden: Suggester = {
 		}
 	},
 
-	onExit: ({command, reason}) => {
+	onExit: () => {
 		cancel.cancel()
-		if (reason == "move-end") {
-			command(lidList[selectedIndex])
-		}
 		removeLidHints()
 		lidList = [];
 		selectedIndex = 0;
@@ -130,7 +129,7 @@ const suggestLeden: Suggester = {
 	createCommand: ({match, view}) => {
 		return (lid: NaamSuggestie) => {
 			if (!lid) {
-				throw new Error('An emoji is required when calling the emoji suggesters command');
+				return
 			}
 
 			const tr = view.state.tr;

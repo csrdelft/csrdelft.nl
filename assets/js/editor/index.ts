@@ -26,7 +26,7 @@ ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 	window.currentEditor = new EditorView<EditorSchema>(el, {
 		state: EditorState.create({
 			doc: Node.fromJSON(schema, JSON.parse(text)),
-			plugins: exampleSetup({schema, menuContent}).concat(placeholderPlugin, trackChangesPlugin(input), lidHintPlugin)
+			plugins: [lidHintPlugin, ...exampleSetup({schema, menuContent}).concat(placeholderPlugin, trackChangesPlugin(input))]
 		}),
 		handleDoubleClickOn(view, pos, node) {
 			if (node.type == schema.nodes.bb) {
