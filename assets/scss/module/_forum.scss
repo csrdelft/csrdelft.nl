@@ -124,7 +124,6 @@
 				hr {
 					margin-bottom: 0;
 					text-align: left;
-					background-color: #bbb;
 				}
 			}
 
@@ -287,9 +286,8 @@ span.curpage {
 				margin: 0.5em 0 1em 0;
 			}
 
-			hr {
+			hr::after {
 				background-color: #ccc;
-				border-bottom: 1px solid #fff;
 			}
 
 			h4 {

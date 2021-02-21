@@ -1,4 +1,4 @@
-import {blockTypeItem, Dropdown, DropdownSubmenu, joinUpItem, MenuItem, wrapItem} from "prosemirror-menu"
+import {blockTypeItem, Dropdown, DropdownSubmenu, MenuItem, wrapItem} from "prosemirror-menu"
 import {EditorSchema} from "./schema";
 import {redo, undo} from "prosemirror-history";
 import {
@@ -16,7 +16,7 @@ import {
 } from "./menu-item";
 import {cut} from "../lib/util";
 import icon from "./icon";
-import {lift, selectParentNode} from "prosemirror-commands";
+import {joinUp, lift, selectParentNode} from "prosemirror-commands";
 
 export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuItem | Dropdown)[][] {
 	return [
@@ -130,7 +130,12 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 				title: "Maak een geordende lijst",
 				icon: icon.ol
 			}),
-			joinUpItem,
+			new MenuItem({
+				title: "Voeg samen met blok hier boven",
+				run: joinUp,
+				select: state => joinUp(state),
+				icon: icon.join
+			}),
 			new MenuItem({
 				title: "Til uit omvattende blok",
 				run: lift,

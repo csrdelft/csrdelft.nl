@@ -13,4 +13,5 @@ export default {
 	selectParentNode: {dom: html`<i class="fa fa-object-group"></i>`},
 	lift: {dom: html`<i class="fa fa-outdent"></i>`},
 	prive: {dom: html`<i class="fa fa-user-shield"></i>`},
+	join: {dom: html`<i class="fa fa-caret-up"></i>`},
 }
