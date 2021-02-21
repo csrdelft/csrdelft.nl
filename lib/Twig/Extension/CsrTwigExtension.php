@@ -14,7 +14,6 @@ use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\CsrfService;
-use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\CsrfField;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
