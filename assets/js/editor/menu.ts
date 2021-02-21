@@ -40,8 +40,8 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 		]),
 		cut([
 			new Dropdown(cut([
-				loggedIn && insertPlaatjeItem(schema.nodes.plaatje),
-				insertImageItem(schema.nodes.image),
+				loggedIn && insertPlaatjeItem(schema.nodes.plaatje, schema.nodes.image),
+				!loggedIn && insertImageItem(schema.nodes.image),
 				loggedIn && insertCitaat(schema.nodes.citaat),
 				wrapItem(schema.nodes.blockquote, {title: "Maak een quote", label: "Quote"}),
 				loggedIn && new DropdownSubmenu([

@@ -18,6 +18,10 @@ export function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<E
 	return false
 }
 
+/**
+ * Alleen voor externen
+ * @param nodeType
+ */
 export const insertImageItem = (nodeType: NodeType<EditorSchema>): MenuItem => new MenuItem({
 	title: "Afbeelding invoegen",
 	label: "Afbeelding",
@@ -25,7 +29,6 @@ export const insertImageItem = (nodeType: NodeType<EditorSchema>): MenuItem => n
 		return canInsert(state, nodeType)
 	},
 	run(state, _, view) {
-		// const {from, to} = state.selection
 		let attrs = null
 		if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType)
 			attrs = state.selection.node.attrs
@@ -33,12 +36,6 @@ export const insertImageItem = (nodeType: NodeType<EditorSchema>): MenuItem => n
 			title: "Afbeelding invoegen",
 			fields: {
 				src: new TextField({label: "Locatie", required: true, value: attrs && attrs.src}),
-				// TODO: Support ook title en alt in bb
-				// title: new TextField({label: "Titel", value: attrs && attrs.title}),
-				// alt: new TextField({
-				// 	label: "Beschrijving",
-				// 	value: attrs ? attrs.alt : state.doc.textBetween(from, to, " ")
-				// })
 			},
 			callback: callbackAttrs => {
 				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill(callbackAttrs)))
@@ -273,19 +270,26 @@ export const bbInsert = (nodeType: NodeType<EditorSchema>): MenuItem<EditorSchem
 	}
 });
 
-export const insertPlaatjeItem = (nodeType: NodeType<EditorSchema>): MenuItem<EditorSchema> => new MenuItem<EditorSchema>({
-	title: "Plaatje uploaden",
-	label: "Plaatje",
-	enable: state => canInsert(state, nodeType),
+export const insertPlaatjeItem = (nodeType: NodeType<EditorSchema>, imageType: NodeType<EditorSchema>): MenuItem<EditorSchema> => new MenuItem<EditorSchema>({
+	title: "Afbeelding invoegen",
+	label: "Afbeelding",
+	enable: state => canInsert(state, nodeType) || canInsert(state, imageType),
 	run: (state, dispatch, view) => {
 
 		openPrompt({
 			title: "Plaatje uploaden",
 			fields: {
-				image: new FileField({label: "Afbeelding"})
+				image: new FileField({label: "Afbeelding"}),
+				of: new Label({label: "", value: "- Of -"}),
+				url: new TextField({label: "Url"}),
 			},
 			callback: params => {
-				startImageUpload(view, params.image)
+				if (params.url) {
+					view.dispatch(view.state.tr.replaceSelectionWith(imageType.createAndFill({src: params.url})))
+					view.focus()
+				} else if (params.image) {
+					startImageUpload(view, params.image)
+				}
 			}
 		})
 	}
