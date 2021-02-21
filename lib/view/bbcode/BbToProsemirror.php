@@ -7,6 +7,17 @@ use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use Psr\Container\ContainerInterface;
 
+/**
+ * Converteer BB code naar een Prosemirror object. Als een stuk bbcode door de bb parser heen komt wordt er ook
+ * altijd een Prosemirror object van gemaakt. Er is geen garantie dat BB->Prosemirror->BB dezelfde BB code als aan
+ * het begin oplevert.
+ *
+ * Zorg ervoor dat alle Node & Mark types in het document beschikbaar zijn.
+ *
+ * @see Node Implementeer deze interface voor alle nodes.
+ * @see Mark Implementeer deze interface voor alle marks.
+ * @package CsrDelft\view\bbcode
+ */
 class BbToProsemirror
 {
 	/**
@@ -37,21 +48,18 @@ class BbToProsemirror
 
 	/**
 	 * Return een Fragment<EditorSchema>, deze heeft geen root, maar kan worden gebuikt om
-	 * een node te inserten in prosemirror.
+	 * een node in te voegen in prosemirror. Bijvoorbeeld voor citeren.
 	 *
 	 * @param $bbCode
 	 * @return array
 	 */
 	public function toProseMirrorFragment($bbCode) {
-		$nodes = $this->csrBB->parseString($bbCode);
-		return $this->nodeToProseMirror($nodes);
+		return $this->nodeToProseMirror($this->csrBB->parseString($bbCode));
 	}
 
 	public function toProseMirror($bbCode)
 	{
-		$nodes = $this->csrBB->parseString($bbCode);
-
-		$content = $this->nodeToProseMirror($nodes);
+		$content = $this->toProseMirrorFragment($bbCode);
 
 		// Lege paragraph als er geen content is.
 		if (empty($content)) {

@@ -3,6 +3,10 @@ import {EditorView} from "prosemirror-view";
 import {EditorSchema} from "./schema";
 import axios from "axios";
 
+/**
+ * Wordt opgepikt door de ImageField in PlaatjesUploadModalForm.
+ * @param file
+ */
 async function uploadFile(file: File) {
 	const data = new FormData();
 	data.append('image_HF', file, file.name)
@@ -17,7 +21,7 @@ async function uploadFile(file: File) {
 
 export async function startImageUpload(view: EditorView<EditorSchema>, file: File): Promise<void> {
 	// A fresh object to act as the ID for this upload
-	const id: any = {}
+	const id = {}
 
 	// Replace the selection with a placeholder
 	const tr = view.state.tr

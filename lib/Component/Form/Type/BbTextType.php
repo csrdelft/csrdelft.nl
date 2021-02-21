@@ -38,7 +38,7 @@ class BbTextType extends AbstractType
 				return json_encode($this->bbToProsemirror->toProseMirror($bbcode), JSON_HEX_QUOT);
 			},
 			function ($data) {
-				return $this->prosemirrorToBb->render(json_decode($data));
+				return $this->prosemirrorToBb->convertToBb(json_decode($data));
 			}
 		));
 	}

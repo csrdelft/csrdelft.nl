@@ -661,7 +661,7 @@ class ForumController extends AbstractController {
 
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 		}
-		$tekst = $this->prosemirrorToBb->render(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
+		$tekst = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 
 		if (empty($tekst)) {
 			setMelding('Bericht mag niet leeg zijn', -1);
@@ -809,7 +809,7 @@ class ForumController extends AbstractController {
 		if (!$post->magBewerken()) {
 			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
-		$tekst = $this->prosemirrorToBb->render(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
+		$tekst = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_UNSAFE_RAW));
 		$this->forumPostsRepository->bewerkForumPost($tekst, $reden, $post);
 		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($post->draad, $post->laatst_gewijzigd);
@@ -889,7 +889,7 @@ class ForumController extends AbstractController {
 	 */
 	public function concept(ForumDeel $deel, ForumDraad $draad = null) {
 		$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
-		$concept = $this->prosemirrorToBb->render(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
+		$concept = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 		$ping = filter_input(INPUT_POST, 'ping', FILTER_SANITIZE_STRING);
 
 		// bestaand draadje?

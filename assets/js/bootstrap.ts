@@ -6,7 +6,7 @@ import Dropzone from 'dropzone';
 import $ from 'jquery';
 import moment from 'moment';
 import {
-	registerBbContext, registerClipboardContext,
+	registerClipboardContext,
 	registerDataTableContext, registerFlatpickrContext,
 	registerFormulierContext,
 	registerGlobalContext,
@@ -135,7 +135,6 @@ Dropzone.autoDiscover = false;
 		registerGlobalContext(),
 		registerKnopContext(),
 		registerDataTableContext(),
-		registerBbContext(),
 		registerFlatpickrContext(),
 	]);
 

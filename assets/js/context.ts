@@ -30,22 +30,6 @@ export const registerGrafiekContext = async (): Promise<void> => {
 	});
 };
 
-export const registerBbContext = async (): Promise<void> => {
-	const {
-		activeerLidHints,
-		initBbPreview,
-		initBbPreviewBtn,
-		loadBbImage,
-	} = await import(/* webpackChunkName: "bbcode" */'./lib/bbcode');
-
-	ctx.addHandlers({
-		'div.bb-img-loading': loadBbImage,
-		'[data-bbpreview-btn]': initBbPreviewBtn,
-		'[data-bbpreview]': initBbPreview,
-		'textarea.BBCodeField': activeerLidHints,
-	});
-};
-
 export const registerDataTableContext = async (): Promise<void> => {
 	const {
 		initDataTable,

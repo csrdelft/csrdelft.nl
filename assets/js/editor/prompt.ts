@@ -206,7 +206,7 @@ export class Label extends Field {
 // tag. Expects an option `options`, which should be an array of
 // `{value: string, label: string}` objects, or a function taking a
 // `ProseMirror` instance and returning such an array.
-export class SelectField extends Field<any> {
+export class SelectField extends Field {
 	render(name: string): HTMLElement {
 		const select = document.createElement("select")
 		select.id = name
@@ -221,7 +221,7 @@ export class SelectField extends Field<any> {
 	}
 }
 
-export class TextAreaField extends Field<any> {
+export class TextAreaField extends Field {
 	render(name: string): HTMLElement {
 		const input = document.createElement("textarea")
 		input.id = name
@@ -327,7 +327,7 @@ export class LidField extends Field<{ uid: string, naam: string }> {
 	}
 	validate(value: { uid: string; naam: string }): string {
 		if (this.options.required && !value.uid) {
-			return "Lid niet gezet";
+			return "Selecteer een lid";
 		}
 
 		return super.validate(value);

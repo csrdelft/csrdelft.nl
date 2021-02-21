@@ -7,7 +7,7 @@ use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
-use CsrDelft\view\formulier\invoervelden\BBCodeField;
+use CsrDelft\view\formulier\invoervelden\ProsemirrorField;
 use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredDoctrineEntityField;
@@ -59,7 +59,7 @@ class MaaltijdForm extends ModalForm {
 		$fields[] = new FormulierKnop('/fiscaat/producten', 'redirect', 'Nieuw product', 'Nieuw product aanmaken', '');
 		$fields[] = new RequiredIntField('aanmeld_limiet', $maaltijd->aanmeld_limiet, 'Aanmeldlimiet', 0, 200);
 		$fields[] = new RechtenField('aanmeld_filter', $maaltijd->aanmeld_filter, 'Aanmeldrestrictie');
-		$fields[] = new BBCodeField('omschrijving', $maaltijd->omschrijving, 'Omschrijving');
+		$fields[] = new ProsemirrorField('omschrijving', $maaltijd->omschrijving, 'Omschrijving');
 
 		$this->addFields($fields);
 

@@ -2,7 +2,7 @@
  * Wordt geladen als de pagina geladen is.
  */
 import axios from 'axios';
-import {registerBbContext, registerFormulierContext} from '../context';
+import {registerFormulierContext} from '../context';
 import {init} from '../ctx';
 import {route} from '../lib/util';
 import {select, selectAll} from "../lib/dom";
@@ -14,8 +14,6 @@ require('../lib/external/jquery.markitup');
 require('timeago');
 
 const contexts = [];
-
-contexts.push(registerBbContext());
 
 route('/wachtwoord', () => contexts.push(registerFormulierContext()));
 route('/forum', () => contexts.push(registerFormulierContext()));

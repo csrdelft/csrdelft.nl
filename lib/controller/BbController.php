@@ -59,7 +59,7 @@ class BbController extends AbstractController
 		$input = json_decode($request->getContent(), true);
 
 		if (isset($input['data'])) {
-			return new Response($prosemirrorToBb->render($input['data']));
+			return new Response($prosemirrorToBb->convertToBb($input['data']));
 		}
 
 		throw new BadRequestHttpException("Veld data in body niet gezet.");

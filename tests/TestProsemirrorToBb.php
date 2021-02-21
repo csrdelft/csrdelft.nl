@@ -22,7 +22,7 @@ class TestProsemirrorToBb extends CsrTestCase
 	{
 		$this->assertEquals(
 			'[b]vetgedrukt[/b]',
-			$this->converter->render([
+			$this->converter->convertToBb([
 				'type' => 'doc',
 				'content' => [
 					[
@@ -45,7 +45,7 @@ class TestProsemirrorToBb extends CsrTestCase
 	{
 		$this->assertEquals(
 			'[b]vetgedrukt en [/b][b][i]schuingedrukt[/i][/b]',
-			$this->converter->render([
+			$this->converter->convertToBb([
 				'type' => 'doc',
 				'content' => [
 					[
@@ -71,7 +71,7 @@ class TestProsemirrorToBb extends CsrTestCase
 	public function testLink() {
 		$this->assertEquals(
 			'Een linkje naar: [url=https://google.com]Google[/url]',
-			$this->converter->render([
+			$this->converter->convertToBb([
 				'type' => 'doc',
 				'content' => [
 					[

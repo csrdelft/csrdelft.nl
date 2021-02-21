@@ -30,7 +30,7 @@ export const placeholderPlugin = new Plugin<DecorationSet<EditorSchema>, EditorS
 	}
 })
 
-export const findPlaceholder = (state: EditorState<EditorSchema>, id: string): number | null => {
+export const findPlaceholder = (state: EditorState<EditorSchema>, id: unknown): number | null => {
 	const decorations = placeholderPlugin.getState(state)
 	const found = decorations.find(null, null, spec => spec.id == id)
 	return found.length ? found[0].from : null

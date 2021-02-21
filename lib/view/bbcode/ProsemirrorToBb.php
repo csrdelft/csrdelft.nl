@@ -8,6 +8,18 @@ use CsrDelft\view\bbcode\prosemirror\Mark;
 use CsrDelft\view\bbcode\prosemirror\Node;
 use Psr\Container\ContainerInterface;
 
+/**
+ * Converteer een Prosemirror document naar BB code.
+ *
+ * Conversie Prosemirror->BB->Prosemirror zorgt altijd voor dezelfde Prosemirror objecten.
+ *
+ * Zorg ervoor dat alle Node & Mark types in het document beschikbaar zijn.
+ *
+ * @see Node Implementeer deze interface voor alle nodes.
+ * @see Mark Implementeer deze interface voor alle marks.
+ *
+ * @package CsrDelft\view\bbcode
+ */
 class ProsemirrorToBb
 {
 	protected $document;
@@ -28,22 +40,22 @@ class ProsemirrorToBb
 		$this->nodesRegistry = $nodesRegistry;
 	}
 
-	public function render($value)
+	public function convertToBb($value)
 	{
 		$this->document($value);
 
-		$html = [];
+		$bb = [];
 
 		$content = is_array($this->document->content) ? $this->document->content : [];
 
 		foreach ($content as $node) {
-			$html[] = $this->renderNode($node);
+			$bb[] = $this->convertNodeToBb($node);
 		}
 
-		return implode("", $html);
+		return implode("", $bb);
 	}
 
-	public function document($value)
+	private function document($value)
 	{
 		if (is_string($value)) {
 			$value = json_decode($value);
@@ -56,9 +68,9 @@ class ProsemirrorToBb
 		return $this;
 	}
 
-	private function renderNode($node)
+	private function convertNodeToBb($node)
 	{
-		$html = [];
+		$bb = [];
 
 		if (isset($node->marks)) {
 			foreach ($node->marks as $mark) {
@@ -69,7 +81,7 @@ class ProsemirrorToBb
 				}
 
 				$tagName = $markRenderClass::getBbTagType()::getTagName();
-				$html[] = $this->renderOpeningTag($tagName, $markRenderClass->getTagAttributes($mark));
+				$bb[] = $this->renderOpeningTag($tagName, $markRenderClass->getTagAttributes($mark));
 			}
 		}
 
@@ -79,16 +91,16 @@ class ProsemirrorToBb
 
 			if ($markRenderClass != null) {
 				$tagName = $markRenderClass->getBbTagType()::getTagName();
-				$html[] = $this->renderOpeningTag($tagName, $markRenderClass->getTagAttributes($node));
+				$bb[] = $this->renderOpeningTag($tagName, $markRenderClass->getTagAttributes($node));
 			}
 		}
 
 		if (isset($node->content)) {
 			foreach ($node->content as $nestedNode) {
-				$html[] = $this->renderNode($nestedNode);
+				$bb[] = $this->convertNodeToBb($nestedNode);
 			}
 		} elseif (isset($node->text)) {
-			$html[] = $node->text;
+			$bb[] = $node->text;
 		}
 
 		/** @var Node $nodeRenderClass */
@@ -96,7 +108,7 @@ class ProsemirrorToBb
 
 		if ($nodeRenderClass && !$nodeRenderClass->selfClosing()) {
 			$tagName = $nodeRenderClass->getBbTagType()::getTagName();
-			$html[] = $this->renderClosingTag($tagName);
+			$bb[] = $this->renderClosingTag($tagName);
 		}
 
 		if (isset($node->marks)) {
@@ -104,11 +116,11 @@ class ProsemirrorToBb
 				/** @var Mark $markRenderClass */
 				$markRenderClass = $this->marksRegistry->get($mark->type);
 				$tagName = $markRenderClass->getBbTagType()::getTagName();
-				$html[] = $this->renderClosingTag($tagName);
+				$bb[] = $this->renderClosingTag($tagName);
 			}
 		}
 
-		return implode("", $html);
+		return implode("", $bb);
 	}
 
 	private function renderOpeningTag($tagName, $tagAttributes)
