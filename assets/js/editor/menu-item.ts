@@ -212,6 +212,7 @@ export const lidInsert = (nodeType: NodeType<EditorSchema>): MenuItem => new Men
 
 		openPrompt({
 			title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
+			description: "Tip: Type '@' met een zoekterm in je bericht om snel een lid te noemen.",
 			fields: {
 				lid: new LidField({
 					label: "Lid",
