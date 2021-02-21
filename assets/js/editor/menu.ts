@@ -43,6 +43,7 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 				loggedIn && insertPlaatjeItem(schema.nodes.plaatje),
 				insertImageItem(schema.nodes.image),
 				loggedIn && insertCitaat(schema.nodes.citaat),
+				wrapItem(schema.nodes.blockquote, {title: "Maak een quote", label: "Quote"}),
 				loggedIn && new DropdownSubmenu([
 					blockTypeItemPrompt(schema.nodes.twitter, "Twitter", "Twitter invoegen"),
 					blockTypeItemPrompt(schema.nodes.youtube, "YouTube", "YouTube invoegen"),
@@ -128,10 +129,6 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 			wrapListItem(schema.nodes.ordered_list, {
 				title: "Maak een geordende lijst",
 				icon: icon.ol
-			}),
-			wrapItem(schema.nodes.blockquote, {
-				title: "Maak een quote",
-				icon: icon.quote
 			}),
 			joinUpItem,
 			new MenuItem({
