@@ -30,6 +30,16 @@ export const registerGrafiekContext = async (): Promise<void> => {
 	});
 };
 
+export const registerBbContext = async (): Promise<void> => {
+	const {
+		loadBbImage,
+	} = await import(/* webpackChunkName: "bbcode" */'./lib/bbcode');
+
+	ctx.addHandlers({
+		'div.bb-img-loading': loadBbImage,
+	});
+};
+
 export const registerDataTableContext = async (): Promise<void> => {
 	const {
 		initDataTable,
