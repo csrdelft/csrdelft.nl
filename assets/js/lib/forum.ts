@@ -3,7 +3,7 @@ import {init} from '../ctx';
 import {domUpdate} from './domUpdate';
 import {html, throwError} from "./util";
 import axios from "axios";
-import {Fragment, NodeType} from "prosemirror-model";
+import {Fragment, NodeType, Slice} from "prosemirror-model";
 import {EditorView} from "prosemirror-view";
 import {EditorSchema} from "../editor/schema";
 
@@ -131,8 +131,12 @@ export async function forumCiteren(postId: string): Promise<false> {
 	const editor = window.currentEditor
 	const citaat: NodeType = editor.state.schema.nodes.citaat
 
-	window.currentEditor.dispatch(editor.state.tr.replaceSelectionWith(
-		citaat.create({van, naam}, Fragment.fromJSON(editor.state.schema, content))))
+	// Maak een slice met de citaat en een lege paragraaf, zodat er makkelijk doorgetyped kan worden.
+	const citaatNode = citaat.create({van, naam}, Fragment.fromJSON(editor.state.schema, content));
+	const paragraphNode = editor.state.schema.nodes.paragraph.create();
+	const slice = new Slice(Fragment.fromArray([citaatNode, paragraphNode]), 0, 0)
+
+	window.currentEditor.dispatch(editor.state.tr.replaceSelection(slice))
 
 	$(window).scrollTo('#reageren');
 	// We returnen altijd false, dan wordt de href= van <a> niet meer uitgevoerd.
