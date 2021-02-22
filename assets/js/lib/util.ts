@@ -159,10 +159,11 @@ export function htmlParse(htmlString: string): Node[] {
 	return jQuery.parseHTML(htmlString, null, true) as Node[];
 }
 
-export function preloadImage(url: string, callback: () => void): void {
+export function preloadImage(url: string, callback: (ev: Event) => void, error?: (ev: Event) => void): void {
 	const img = new Image();
 	img.src = url;
 	img.onload = callback;
+	img.onerror = error;
 }
 
 export function parseData(el: HTMLElement): Record<string, unknown> {

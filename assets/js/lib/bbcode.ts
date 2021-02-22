@@ -6,13 +6,6 @@ export const loadBbImage = (el: HTMLElement): void => {
 													alt="${el.getAttribute('title')}"
 													style="${el.getAttribute('style')}"
 													src="${el.getAttribute('src')}"/>`;
-	content.onerror = () => {
-		el.setAttribute('title', 'Afbeelding bestaat niet of is niet toegankelijk!');
-		el.setAttribute('src', '/plaetjes/famfamafm/picture_error.png');
-		el.style.width = '16px';
-		el.style.height = '16px';
-		el.classList.replace('bb-img-loading', 'bb-img');
-	};
 
 	const src = el.getAttribute('src')
 
@@ -38,5 +31,7 @@ export const loadBbImage = (el: HTMLElement): void => {
 			link.appendChild(content);
 			parent.replaceChild(link, el);
 		}
+	}, () => {
+		el.replaceWith(html`<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-triangle"></i> Afbeelding kan niet geladen worden.</div>`)
 	});
 };
