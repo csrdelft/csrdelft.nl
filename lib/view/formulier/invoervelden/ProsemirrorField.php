@@ -15,7 +15,7 @@ class ProsemirrorField extends InputField
 	{
 		$attribute = $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly'));
 		$converter = ContainerFacade::getContainer()->get(BbToProsemirror::class);
-		$jsonValue = json_encode($converter->toProseMirror($this->getValue()));
+		$jsonValue = htmlentities(json_encode($converter->toProseMirror($this->getValue())));
 
 		return <<<HTML
 <input type="hidden" name="{$this->getName()}_type" value="pm">
