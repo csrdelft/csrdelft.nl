@@ -22,6 +22,7 @@ use CsrDelft\view\PlainView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -386,7 +387,11 @@ class ToolsController extends AbstractController {
 
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
-			debugprint($this->get('stek.cache.memcache')->getStats());
+			try {
+				debugprint($this->get('stek.cache.memcache')->getStats());
+			} catch (ServiceNotFoundException $ex) {
+				echo 'Memcache is niet ingesteld.';
+			}
 
 			return new PlainView(ob_get_clean());
 		}
