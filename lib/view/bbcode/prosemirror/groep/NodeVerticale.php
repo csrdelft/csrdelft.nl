@@ -27,7 +27,7 @@ class NodeVerticale implements Node
 		}
 
 		return [
-			'attrs' => ['id' => $node->getId()]
+			'attrs' => ['id' => $node->getLetter()]
 		];
 	}
 
