@@ -24,7 +24,6 @@ class NodeForumPlaatje implements Node
 		}
 
 		return [
-			'content' => '',
 			'attrs' => [
 				'key' => $node->getKey(),
 				'src' => $node->getSourceUrl(),
@@ -35,12 +34,12 @@ class NodeForumPlaatje implements Node
 	public function getTagAttributes($node)
 	{
 		return [
-			$node->attrs->key
+			'plaatje' => $node->attrs->key
 		];
 	}
 
 	public function selfClosing()
 	{
-		return false;
+		return true;
 	}
 }
