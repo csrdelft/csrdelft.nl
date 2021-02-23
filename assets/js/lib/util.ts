@@ -159,11 +159,26 @@ export function htmlParse(htmlString: string): Node[] {
 	return jQuery.parseHTML(htmlString, null, true) as Node[];
 }
 
-export function preloadImage(url: string, callback: (ev: Event) => void, error?: (ev: Event) => void): void {
-	const img = new Image();
-	img.src = url;
-	img.onload = callback;
-	img.onerror = error;
+export function preloadImage(url: string): Promise<Event> {
+	return new Promise((resolve, reject) => {
+		const img = new Image()
+		img.src = url
+		img.onload = resolve
+		img.onerror = reject
+	})
+}
+
+/**
+ * Maak een bestand van een base64 string
+ * @param str
+ * @param fileName
+ */
+export async function base64toFile(str: string, fileName: string): Promise<File> {
+	const res = await fetch(str)
+	const blob = await res.blob()
+	const extension = blob.type.split("/").pop()
+
+	return new File([blob], `${fileName}.${extension}`, {type: blob.type})
 }
 
 export function parseData(el: HTMLElement): Record<string, unknown> {

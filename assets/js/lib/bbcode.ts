@@ -1,6 +1,6 @@
 import {html, preloadImage} from "./util";
 
-export const loadBbImage = (el: HTMLElement): void => {
+export const loadBbImage = async (el: HTMLElement): Promise<void> => {
 	const content = html`<img
 													class="bb-img"
 													alt="${el.getAttribute('title')}"
@@ -13,7 +13,9 @@ export const loadBbImage = (el: HTMLElement): void => {
 		throw new Error('Bb image heeft geen src');
 	}
 
-	preloadImage(src, () => {
+	try {
+		await preloadImage(src)
+
 		const foto = src.indexOf('/plaetjes/fotoalbum/') >= 0;
 		const video = el.parentElement?.parentElement?.classList.contains('bb-video-preview')
 		const hasAnchor = $(el).closest('a').length !== 0;
@@ -31,7 +33,7 @@ export const loadBbImage = (el: HTMLElement): void => {
 			link.appendChild(content);
 			parent.replaceChild(link, el);
 		}
-	}, () => {
+	} catch {
 		el.replaceWith(html`<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-triangle"></i> Afbeelding kan niet geladen worden.</div>`)
-	});
+	}
 };

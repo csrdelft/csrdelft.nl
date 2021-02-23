@@ -10,6 +10,7 @@ import ctx from "../ctx";
 import {placeholderPlugin} from "./plugin/placeholder";
 import {trackChangesPlugin} from "./plugin/track-changes";
 import {lidHintPlugin} from "./plugin/lid-hint";
+import {imageRemovePlugin, imageUploadPlugin} from "./plugin/image-upload";
 
 declare global {
 	interface Window {
@@ -28,7 +29,16 @@ ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 	window.currentEditor = new EditorView<EditorSchema>(el, {
 		state: EditorState.create({
 			doc: Node.fromJSON(schema, JSON.parse(text)),
-			plugins: [lidHintPlugin, ...exampleSetup({schema, menuContent}).concat(placeholderPlugin, trackChangesPlugin(input))]
+			plugins: [
+				lidHintPlugin,
+				(window.loggedIn ? imageUploadPlugin(schema) : imageRemovePlugin(schema)),
+				...exampleSetup({
+					schema,
+					menuContent
+				}),
+				placeholderPlugin,
+				trackChangesPlugin(input),
+			]
 		}),
 		handleDoubleClickOn(view, pos, node) {
 			if (node.type == schema.nodes.bb) {
