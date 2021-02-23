@@ -79,7 +79,7 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 					title: "Stop selectie in verklapper",
 					label: "Verklapper"
 				}),
-				loggedIn && bbInsert(schema.nodes.bb),
+				bbInsert(schema.nodes.bb),
 			]), {label: "Invoegen"}),
 			new Dropdown([
 				blockTypeItem(schema.nodes.paragraph, {

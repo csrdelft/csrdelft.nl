@@ -48,6 +48,7 @@ class CourantBerichtFormulier implements FormulierTypeInterface {
 		<em>Aankondigingen over kamers te huur komen in <strong>overig</strong> terecht! C.S.R. is bedoeld voor
 			activiteiten van C.S.R.-commissies en andere verenigingsactiviteiten.</em>';
 		$fields['bb'] = new RequiredProsemirrorField('bericht', $data->bericht, 'Bericht');
+		$fields['bb']->extern = true;
 
 		$sponsorlink = $this->instellingenRepository->getValue('courant', 'sponsor');
 

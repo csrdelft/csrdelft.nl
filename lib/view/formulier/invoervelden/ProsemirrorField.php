@@ -11,6 +11,13 @@ use CsrDelft\view\bbcode\ProsemirrorToBb;
  */
 class ProsemirrorField extends InputField
 {
+	/**
+	 * De externe editor heeft geen knopjes voor groepen, forumplaetje, leden, etc.
+	 *
+	 * @var bool Forceer externe editor voor dit veld.
+	 */
+	public $extern = false;
+
 	public function getHtml()
 	{
 		$attribute = $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly'));
@@ -20,7 +27,7 @@ class ProsemirrorField extends InputField
 		return <<<HTML
 <input type="hidden" name="{$this->getName()}_type" value="pm">
 <input type="hidden" $attribute value="{$jsonValue}">
-<div class="pm-editor" data-prosemirror-doc="{$this->getId()}"></div>
+<div class="pm-editor" data-prosemirror-doc="{$this->getId()}" data-extern="{$this->extern}"></div>
 HTML;
 	}
 

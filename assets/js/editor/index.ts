@@ -19,7 +19,9 @@ declare global {
 }
 
 ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
-	const menuContent = buildMenuItems(schema, window.loggedIn)
+	const extern = el.dataset.extern;
+
+	const menuContent = buildMenuItems(schema, window.loggedIn && !extern)
 	const input = document.querySelector<HTMLInputElement>('#' + el.dataset.prosemirrorDoc);
 	const text = htmlDecode(input.value.replace(/&quot;/g, "\\\""));
 
