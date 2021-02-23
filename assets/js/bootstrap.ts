@@ -16,7 +16,7 @@ import {
 } from './context';
 import {init} from './ctx';
 import {ketzerAjax} from './lib/ajax';
-import {importAgenda} from './lib/courant';
+import {importAgenda, importSponsor} from './lib/courant';
 import {initSluitMeldingen} from './lib/csrdelft';
 import {domUpdate} from './lib/domUpdate';
 import {formCancel, formInlineToggle, formSubmit, insertPlaatje} from './lib/formulier';
@@ -72,6 +72,7 @@ $.extend(window, {
 	courant: {
 		// See templates/courant/courantbeheer.tpl
 		importAgenda,
+		importSponsor,
 	},
 	formulier: {
 		// See view/formulier/invoervelden/InputField.abstract.php

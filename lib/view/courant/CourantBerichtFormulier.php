@@ -49,14 +49,13 @@ class CourantBerichtFormulier implements FormulierTypeInterface {
 			activiteiten van C.S.R.-commissies en andere verenigingsactiviteiten.</em>';
 		$fields['bb'] = new RequiredProsemirrorField('bericht', $data->bericht, 'Bericht');
 
-		$bbId = $fields['bb']->getId();
 		$sponsorlink = $this->instellingenRepository->getValue('courant', 'sponsor');
 
 		if (LoginService::mag(P_MAIL_COMPOSE)) {
 			$fields[] = new HtmlComment(<<<HTML
 <div>
-	<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda('${bbId}');" class="btn btn-primary" />
-	<input type="button" value="Importeer sponsor" onclick="document.getElementById('${bbId}').value += '${sponsorlink}'" class="btn btn-primary" />
+	<input type="button" value="Importeer agenda" onclick="window.courant.importAgenda();" class="btn btn-primary" />
+	<input type="button" value="Importeer sponsor" onclick="window.courant.importSponsor('${sponsorlink}')" class="btn btn-primary" />
 </div>
 HTML
 			);
