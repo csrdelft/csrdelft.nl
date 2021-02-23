@@ -178,36 +178,11 @@ span.curpage {
 	}
 }
 
-/* Zoeken */
-#forumZoekenForm {
-	float: right;
-}
-
-#forumZoekenForm #field_zoekopdracht {
-	width: 150px;
-	background-image: url('/plaetjes/famfamfam/find.png');
-	background-repeat: no-repeat;
-	background-position: center right;
-	padding-right: 16px;
-}
-
-#forumZoekenForm .forumZoekenGeavanceerd {
-	margin-top: 30px;
-	padding: 25px;
-
-	.form-group {
-		margin-bottom: 0;
-	}
-
-	.InputField {
-		display: inline-block;
-	}
-}
-
 /* Forum deel */
 .forum-deel {
 	display: grid;
 	width: 100%;
+	grid-template-columns: 1fr auto auto;
 	// CSS grid ondersteund niet echt gekleurde rows.
 	// Dit is second-best. Er zijn 3 divs per row,
 	// iedere 6e moet een kleurtje krijgen, en de divs daarna.
