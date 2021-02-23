@@ -67,9 +67,14 @@
 			"CsrDelft\\": "lib/",
 			"CsrDelft\\tests\\": "tests/lib/"
 		},
-		"files": ["lib/common/common.functions.php", "lib/common/common.view.functions.php"]
+		"files": [
+			"lib/common/common.functions.php",
+			"lib/common/common.view.functions.php"
+		]
 	},
-	"include-path": ["lib/"],
+	"include-path": [
+		"lib/"
+	],
 	"require-dev": {
 		"phpstan/phpstan": "*",
 		"symfony/profiler-pack": "*",
@@ -95,6 +100,7 @@
 		"test": "@php vendor/phpunit/phpunit/phpunit --bootstrap ./phpunit.init.php tests",
 		"console": "@php bin/console",
 		"update-prod": [
+			"@php -r \"exit(exec('git rev-parse --abbrev-ref HEAD') == 'master' ? 'Branch is master' . PHP_EOL : 1);\"",
 			"git fetch",
 			"touch .onderhoud",
 			"git merge FETCH_HEAD",
