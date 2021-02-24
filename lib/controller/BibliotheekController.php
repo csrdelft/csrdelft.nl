@@ -3,10 +3,12 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\entity\bibliotheek\BiebAuteur;
 use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekExemplaar;
 use CsrDelft\entity\bibliotheek\BoekRecensie;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\bibliotheek\BiebAuteurRepository;
 use CsrDelft\repository\bibliotheek\BiebRubriekRepository;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
@@ -53,12 +55,17 @@ class BibliotheekController extends AbstractController {
 	 * @var BiebRubriekRepository
 	 */
 	private $biebRubriekRepository;
+	/**
+	 * @var BiebAuteurRepository
+	 */
+	private $biebAuteurRepository;
 
 	public function __construct(
 		BoekExemplaarRepository $boekExemplaarRepository,
 		BoekRepository $boekRepository,
 		BoekRecensieRepository $boekRecensieRepository,
 		BiebRubriekRepository $biebRubriekRepository,
+		BiebAuteurRepository $biebAuteurRepository,
 		CmsPaginaRepository $cmsPaginaRepository
 	) {
 		$this->boekExemplaarRepository = $boekExemplaarRepository;
@@ -66,6 +73,7 @@ class BibliotheekController extends AbstractController {
 		$this->boekRecensieRepository = $boekRecensieRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
 		$this->biebRubriekRepository = $biebRubriekRepository;
+		$this->biebAuteurRepository = $biebAuteurRepository;
 	}
 
 	/**
@@ -160,6 +168,16 @@ class BibliotheekController extends AbstractController {
 			if (!$boek->magBewerken()) {
 				throw $this->createAccessDeniedException('U mag dit boek niet bewerken');
 			} else {
+				$auteur = $this->biebAuteurRepository->findOneBy(['auteur' => $boek->auteur]);
+
+				if (!$auteur) {
+					$auteur = new BiebAuteur();
+					$auteur->auteur = $boek->auteur;
+					$this->getDoctrine()->getManager()->persist($auteur);
+				}
+
+				$boek->auteur2 = $auteur;
+
 				$boek->setCategorie($this->biebRubriekRepository->find($boek->categorie_id));
 				$manager = $this->getDoctrine()->getManager();
 				$manager->persist($boek);
