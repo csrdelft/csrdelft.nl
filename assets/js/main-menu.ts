@@ -108,7 +108,7 @@ docReady(() => {
 				return;
 			}
 
-			if (element.contentEditable) {
+			if (element.isContentEditable) {
 				return;
 			}
 		}
