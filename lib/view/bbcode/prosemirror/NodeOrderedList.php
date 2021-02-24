@@ -20,12 +20,22 @@ class NodeOrderedList implements Node
 
 	public function getData(BbNode $node)
 	{
-		return [];
+		if (!$node instanceof BbOrderedList) {
+			throw new \InvalidArgumentException();
+		}
+
+		return [
+			'attrs' => [
+				'order' => $node->getOrder(),
+			]
+		];
 	}
 
 	public function getTagAttributes($node)
 	{
-		return [];
+		return [
+			'order' => $node->attrs->order,
+		];
 	}
 
 	public function selfClosing()
