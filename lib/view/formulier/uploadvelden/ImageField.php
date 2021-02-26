@@ -20,7 +20,7 @@ class ImageField extends FileField {
 	protected $maxHeight;
 	private $filterMime;
 
-	public function __construct($name, $description, Afbeelding $behouden = null, Map $dir = null, array $filterMime = null, $vierkant = false, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
+	public function __construct($name, $description, Afbeelding $behouden = null, Map $dir = null, array $filterMime = null, $vierkant = false, $minWidth = null, $minHeight = null, $maxWidth = 10000, $maxHeight = 10000) {
 		$this->filterMime = $filterMime === null ? Afbeelding::$mimeTypes : array_intersect(Afbeelding::$mimeTypes, $filterMime);
 		parent::__construct($name, $description, $behouden, $dir, $this->filterMime);
 		$this->vierkant = $vierkant;
