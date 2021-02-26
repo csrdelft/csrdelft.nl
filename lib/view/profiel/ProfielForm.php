@@ -136,9 +136,9 @@ class ProfielForm extends Formulier {
 			$fields[] = new TextField('tussenvoegsel', $profiel->tussenvoegsel, 'Tussenvoegsel', 15);
 			$fields[] = new RequiredTextField('achternaam', $profiel->achternaam, 'Achternaam', 50);
 		}
-		/* In account is ook een veld 'bijnaam' (verwijst naar accounts->username) te vinden. Deze kan, in tegenstelling
-		tot 'nickname', gebruikt worden als inlognaam. */
-		$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
+		$fields["bijnaam"]= new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
+		$fields["bijnaam"]->title = "Bijnaam is zichtbaar op profiel, kan op worden gezocht in de zoekbalk en wordt
+		weergegeven op het forum bij gebruikers waarbij als profielinstelling de naamweergave 'bijnaam' is ingesteld.";
 		if ($admin || $inschrijven || $profiel->isOudlid()) {
 			if ($admin || $inschrijven) {
 				$fields[] = new RequiredEnumSelectField('geslacht', $profiel->geslacht, 'Geslacht', Geslacht::class);
