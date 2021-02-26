@@ -141,14 +141,6 @@ class IsHetAlView implements View {
 				echo 'Is er een ' . $this->model . ' vanavond?';
 				break;
 
-			case 'foutmelding':
-				if (file_exists(VAR_PATH . 'foutmelding.last')) {
-					echo '<div class="ja">' . reldate(date('c', filemtime(VAR_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
-				} else {
-					echo '<div class="nee">Geen foutmelding in het systeem.</div>';
-				}
-				break;
-
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);
 				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
