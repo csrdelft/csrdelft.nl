@@ -60,10 +60,10 @@ class PinTransactieDownloader
 
 	/**
 	 * Boolean om SSL check uit te zetten
-	 * Gemaakt i.v.m. problemen met SSL van Payplaza.
+	 * Gemaakt i.v.m. problemen met SSL van Payplaza (#800).
 	 * @var bool
 	 */
-	public $disableSSL = false;
+	public $disableSSL = true;
 
 	public function __construct(PinTransactieRepository $pinTransactieRepository, EntityManagerInterface $entityManager) {
 		$this->pinTransactieRepository = $pinTransactieRepository;
