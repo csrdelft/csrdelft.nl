@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   container.dumper.inline_class_loader: true
+  app.supported_locales: 'nl|en'
 
 services:
   # default configuration for services in *this* file
@@ -69,6 +70,10 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
+  CsrDelft\events\CacheControlEventListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.response }
+
   CsrDelft\common\Security\PersistentTokenProvider: ~
   Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login.main'
   Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface: '@security.authenticator.manager.main'
@@ -85,6 +90,9 @@ services:
     class: Symfony\Component\Security\Core\Security
     public: true
 
+  CsrDelft\view\bbcode\CsrBB:
+    public: true
+
   csr.formulier.factory:
     alias: CsrDelft\Component\Formulier\FormulierFactory
 
@@ -98,6 +106,19 @@ services:
       - !tagged_locator {tag: csr.formulier.type, index_by: key}
       - '@request_stack'
       - '@CsrDelft\Component\Formulier\FormulierBuilder'
+
+  CsrDelft\view\bbcode\BbToProsemirror:
+    public: true
+    arguments:
+      - !tagged_locator {tag: csr.editor.mark, default_index_method: getBbTagType}
+      - !tagged_locator {tag: csr.editor.node, default_index_method: getBbTagType}
+      - '@Psr\Container\ContainerInterface'
+
+  CsrDelft\view\bbcode\ProsemirrorToBb:
+    public: true
+    arguments:
+      - !tagged_locator {tag: csr.editor.mark, default_index_method: getMarkType}
+      - !tagged_locator {tag: csr.editor.node, default_index_method: getNodeType}
 
   CsrDelft\Twig\Configurator:
     decorates: 'twig.configurator.environment'

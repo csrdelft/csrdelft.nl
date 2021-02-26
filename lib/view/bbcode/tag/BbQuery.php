@@ -29,6 +29,10 @@ class BbQuery extends BbTag {
 	 * @var SavedQueryRepository
 	 */
 	private $savedQueryRepository;
+	/**
+	 * @var string
+	 */
+	private $id;
 
 	public function __construct(SavedQueryRepository $savedQueryRepository) {
 		$this->savedQueryRepository = $savedQueryRepository;
@@ -43,7 +47,7 @@ class BbQuery extends BbTag {
 	}
 
 	public function renderLight() {
-		$url = '/tools/query?id=' . urlencode($this->content);
+		$url = '/tools/query?id=' . urlencode($this->id);
 		return BbHelper::lightLinkBlock('query', $url, $this->query->query->beschrijving, count($this->query->rows) . ' regels');
 	}
 
@@ -57,11 +61,11 @@ class BbQuery extends BbTag {
 	 * @throws BbException
 	 */
 	public function parse($arguments = []) {
-		$this->readMainArgument($arguments);
-		$this->content = (int)$this->content;
-		$this->assertId($this->content);
+		$this->id = $this->readMainArgument($arguments);
+		$this->id = (int)$this->id;
+		$this->assertId($this->id);
 		try {
-			$this->query = $this->savedQueryRepository->loadQuery($this->content);
+			$this->query = $this->savedQueryRepository->loadQuery($this->id);
 		} catch (AccessDeniedException $ex) {
 			throw new BbException('[query] Geen geldige query');
 		}

@@ -4,6 +4,8 @@ namespace CsrDelft\repository;
 
 use CsrDelft\entity\ForumPlaatje;
 use CsrDelft\view\formulier\uploadvelden\ImageField;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 
@@ -17,14 +19,27 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ForumPlaatjeRepository extends AbstractRepository {
 
-	public function __construct(ManagerRegistry $registry) {
+	/**
+	 * @var ProfielRepository
+	 */
+	private $profielRepository;
+
+	public function __construct(ManagerRegistry $registry, ProfielRepository $profielRepository) {
 		parent::__construct($registry, ForumPlaatje::class);
+		$this->profielRepository = $profielRepository;
 	}
 
+	/**
+	 * @param ImageField $uploader
+	 * @param $uid
+	 * @return ForumPlaatje
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
 	public function fromUploader(ImageField $uploader, $uid) {
 		$plaatje = static::generate();
 		$plaatje->maker = $uid;
-		$plaatje->maker_profiel = ProfielRepository::get($uid);
+		$plaatje->maker_profiel = $this->profielRepository->find($uid);
 
 		$this->getEntityManager()->persist($plaatje);
 		$this->getEntityManager()->flush();

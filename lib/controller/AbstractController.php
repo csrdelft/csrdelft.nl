@@ -23,7 +23,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class AbstractController extends BaseController {
 	public static function getSubscribedServices() {
 		return parent::getSubscribedServices() + [
-				'csr.formulier.factory' => FormulierFactory::class
+				'csr.formulier.factory' => FormulierFactory::class,
+				'stek.cache.memcache' => '?'.\Memcache::class,
 			];
 	}
 

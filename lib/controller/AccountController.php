@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -87,7 +88,8 @@ class AccountController extends AbstractController {
 	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(Request $request, $uid = null) {
+	public function bewerken(Request $request, Security $security, $uid = null) {
+		$eigenAccount = $security->getUser();
 		if ($uid == null) {
 			$uid = $this->getUid();
 		}
@@ -99,12 +101,18 @@ class AccountController extends AbstractController {
 			setMelding('Account bestaat niet', -1);
 			throw $this->createAccessDeniedException();
 		}
+		// Het is alleen toegestaan om een account te bewerken als er recent met een wachtwoord is ingelogd.
+		// En dus niet met een rememberme token, want dit geeft minder garantie dat de eigenaar van het account
+		// de actie uitvoert.
+		// Als dit niet het geval is moet de gebruiker zijn wachtwoord geven om de huidige sessie te converteren
+		// naar een 'recent_password_login' sessie. Deze sessie blijft gelden totdat de sessie verloopt en de
+		// rememberme token wordt gebruikt om een nieuwe sessie aan te vragen.
 		if ($this->loginService->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
 			$action = $this->generateUrl('csrdelft_account_bewerken', ['uid' => $uid]);
 			$form = new UpdateLoginForm($action);
 
 			// Reset loginmoment naar nu als de gebruiker zijn wachtwoord geeft.
-			if ($form->validate() && $this->accountRepository->controleerWachtwoord($account, $form->getValues()['pass'])) {
+			if ($form->validate() && $this->accountRepository->controleerWachtwoord($eigenAccount, $form->getValues()['pass'])) {
 				$this->loginService->setRecentLoginToken();
 			} else {
 				setMelding('U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.', 2);
@@ -123,8 +131,7 @@ class AccountController extends AbstractController {
 				$account->username = $account->uid;
 			}
 			// username, email & wachtwoord opslaan
-			$pass_plain = $account->pass_plain;
-			$this->accountRepository->wijzigWachtwoord($account, $pass_plain);
+			$this->accountRepository->wijzigWachtwoord($account, $account->pass_plain);
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
 		$account->eraseCredentials();
@@ -157,10 +164,10 @@ class AccountController extends AbstractController {
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 		} else {
-			$result = $this->accountRepository->delete($account);
-			if ($result === 1) {
+			try {
+				$this->accountRepository->delete($account);
 				setMelding('Account succesvol verwijderd', 1);
-			} else {
+			} catch (\Exception $exception) {
 				setMelding('Account verwijderen mislukt', -1);
 			}
 		}

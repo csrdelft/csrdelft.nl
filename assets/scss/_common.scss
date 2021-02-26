@@ -386,6 +386,7 @@ Bootstrap overrides / uitbreidingen
 .sticky-top {
 	// Compenseer voor bovenbalk
 	top: 60px;
+	z-index: 99;
 }
 
 // Fix plek icoontje in een alert

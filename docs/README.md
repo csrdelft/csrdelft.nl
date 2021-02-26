@@ -42,6 +42,8 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Composer](composer.md)
 - [Security](security.md)
 - [Tests](test.md)
+- [Vertalingen](translations.md)
+- [Editor](prosemirror.md)
 
 ## Overig
 

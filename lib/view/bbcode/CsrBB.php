@@ -34,6 +34,7 @@ use CsrDelft\view\bbcode\tag\BbBijbel;
 use CsrDelft\view\bbcode\tag\BbBoek;
 use CsrDelft\view\bbcode\tag\BbCitaat;
 use CsrDelft\view\bbcode\tag\BbCiviMelder;
+use CsrDelft\view\bbcode\tag\BbCodeInline;
 use CsrDelft\view\bbcode\tag\BbDocument;
 use CsrDelft\view\bbcode\tag\BbForum;
 use CsrDelft\view\bbcode\tag\BbForumPlaatje;
@@ -48,13 +49,18 @@ use CsrDelft\view\bbcode\tag\BbMaaltijd;
 use CsrDelft\view\bbcode\tag\BbNeuzen;
 use CsrDelft\view\bbcode\tag\BbNovietVanDeDag;
 use CsrDelft\view\bbcode\tag\BbOfftopic;
+use CsrDelft\view\bbcode\tag\BbOrderedList;
+use CsrDelft\view\bbcode\tag\BbParagraph;
 use CsrDelft\view\bbcode\tag\BbPeiling;
 use CsrDelft\view\bbcode\tag\BbPrive;
 use CsrDelft\view\bbcode\tag\BbQuery;
+use CsrDelft\view\bbcode\tag\BbBb;
 use CsrDelft\view\bbcode\tag\BbReldate;
+use CsrDelft\view\bbcode\tag\BbTaal;
 use CsrDelft\view\bbcode\tag\BbUbboff;
 use CsrDelft\view\bbcode\tag\BbUrl;
 use CsrDelft\view\bbcode\tag\BbVerklapper;
+use CsrDelft\view\bbcode\tag\embed\BbAudio;
 use CsrDelft\view\bbcode\tag\embed\BbLocatie;
 use CsrDelft\view\bbcode\tag\embed\BbSpotify;
 use CsrDelft\view\bbcode\tag\embed\BbTwitter;
@@ -78,7 +84,6 @@ use function substr_count;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
 class CsrBB extends Parser {
-
 	protected $tags = [
 		// Standard
 		BbBold::class,
@@ -107,11 +112,14 @@ class CsrBB extends Parser {
 		BbTableRow::class,
 		BbUnderline::class,
 		// Custom
+		BbBb::class,
 		BbActiviteit::class,
+		BbAudio::class,
 		BbBestuur::class,
 		BbBijbel::class,
 		BbBoek::class,
 		BbCitaat::class,
+		BbCodeInline::class,
 		BbCommissie::class,
 		BbDocument::class,
 		BbForum::class,
@@ -130,11 +138,14 @@ class CsrBB extends Parser {
 		BbNeuzen::class,
 		BbOfftopic::class,
 		BbOndervereniging::class,
+		BbOrderedList::class,
+		BbParagraph::class,
 		BbPeiling::class,
 		BbPrive::class,
 		BbQuery::class,
 		BbReldate::class,
 		BbSpotify::class,
+		BbTaal::class,
 		BbTwitter::class,
 		BbUbboff::class,
 		BbUrl::class,

@@ -139,24 +139,11 @@ class GroepForm extends ModalForm {
 		}
 
 		// GROEPEN_V2
-		if ($fields['keuzelijst2']->getValue() !== null && $fields['versie']->getValue() === GroepVersie::V2) {
-			$this->model->keuzelijst2 = $this->parseKeuzelijst($fields['keuzelijst2']->getValue());
-		}
+//		if ($fields['keuzelijst2']->getValue() !== null && $fields['versie']->getValue() === GroepVersie::V2) {
+//			$this->model->keuzelijst2 = $this->parseKeuzelijst($fields['keuzelijst2']->getValue());
+//		}
 
 		return parent::validate();
 	}
 
-	private function parseKeuzelijst($keuzelijst) {
-		$return = [];
-		$keuzes = explode('|', $keuzelijst);
-		foreach ($keuzes as $keuze) {
-			$attrs = explode(':', $keuze);
-			$opties = explode(',', $attrs[4]);
-			$groepKeuze = new GroepKeuze($attrs[0], $attrs[1], $attrs[2], $attrs[3]);
-			$groepKeuze->opties = $opties;
-			$return[] = $groepKeuze;
-		}
-
-		return $return;
-	}
 }

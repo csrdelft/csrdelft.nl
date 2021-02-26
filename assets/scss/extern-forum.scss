@@ -1,7 +1,15 @@
 @import "extern/variables";
-@import "lib/markitup";
 @import "icons";
 
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/modal";
+
+.modal-content {
+	background-color: $donkerblauw;
+}
 
 #forumZoekenForm {
 
@@ -234,28 +242,6 @@ span.curpage {
 
 	.curpage {
 		background-color: initial;
-	}
-}
-
-/* Zoeken */
-#forumZoekenForm {
-	float: right;
-}
-
-#forumZoekenForm #field_zoekopdracht {
-	width: 150px;
-	background-image: url('/plaetjes/famfamfam/find.png');
-	background-repeat: no-repeat;
-	background-position: center right;
-	padding-right: 16px;
-}
-
-#forumZoekenForm .forumZoekenGeavanceerd {
-	right: 250px;
-	padding: 25px;
-
-	.InputField {
-		display: inline-block;
 	}
 }
 
