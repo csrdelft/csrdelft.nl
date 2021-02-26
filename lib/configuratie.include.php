@@ -35,8 +35,6 @@ if (!isCi() && !isCli()) {
 	}
 }
 
-register_shutdown_function([ShutdownHandler::class, 'touchHandler']);
-
 // alle meldingen tonen
 error_reporting(E_ALL);
 
