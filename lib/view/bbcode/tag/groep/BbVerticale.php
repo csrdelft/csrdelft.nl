@@ -25,6 +25,10 @@ class BbVerticale extends BbTag {
 	 */
 	private $letter;
 
+	public function getLetter() {
+		return $this->letter;
+	}
+
 	public function __construct(VerticalenRepository $verticalenRepository) {
 		$this->verticalenRepository = $verticalenRepository;
 	}

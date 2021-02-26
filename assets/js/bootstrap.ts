@@ -6,7 +6,8 @@ import Dropzone from 'dropzone';
 import $ from 'jquery';
 import moment from 'moment';
 import {
-	registerBbContext, registerClipboardContext,
+	registerBbContext,
+	registerClipboardContext,
 	registerDataTableContext, registerFlatpickrContext,
 	registerFormulierContext,
 	registerGlobalContext,
@@ -15,13 +16,13 @@ import {
 } from './context';
 import {init} from './ctx';
 import {ketzerAjax} from './lib/ajax';
-import {importAgenda} from './lib/courant';
+import {importAgenda, importSponsor} from './lib/courant';
 import {initSluitMeldingen} from './lib/csrdelft';
 import {domUpdate} from './lib/domUpdate';
 import {formCancel, formInlineToggle, formSubmit, insertPlaatje} from './lib/formulier';
 import {forumBewerken, saveConceptForumBericht} from './lib/forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './lib/maalcie';
-import {docReady} from './lib/util';
+import {docReady, isLoggedIn} from './lib/util';
 import hoverintent from 'hoverintent'
 
 moment.locale('nl');
@@ -47,10 +48,17 @@ require('jquery.maskedinput');
 require('lightbox2');
 require('corejs-typeahead/dist/typeahead.jquery.js');
 
+declare global {
+	interface Window {
+		loggedIn: boolean
+	}
+}
+
 /**
  * Globale objecten gebruikt in PHP code.
  */
 $.extend(window, {
+	loggedIn: isLoggedIn(),
 	Bloodhound,
 	Dropzone,
 	docReady,
@@ -64,6 +72,7 @@ $.extend(window, {
 	courant: {
 		// See templates/courant/courantbeheer.tpl
 		importAgenda,
+		importSponsor,
 	},
 	formulier: {
 		// See view/formulier/invoervelden/InputField.abstract.php

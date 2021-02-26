@@ -42,4 +42,8 @@ class BbPrive extends BbTag {
 		$this->readContent();
 		$this->permissie = $arguments['prive'] ?? 'P_LOGGED_IN';
 	}
+
+	public function getPermissie() {
+		return $this->permissie;
+	}
 }

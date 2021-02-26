@@ -87,6 +87,7 @@ jobs:
         with:
           php-version: 7.3
           tools: composer:v2
+          extensions: pdo_mysql
 
       - name: 💽 Setup database
         run: |

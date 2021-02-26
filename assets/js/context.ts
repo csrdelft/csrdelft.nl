@@ -1,5 +1,6 @@
 import ctx from './ctx';
 import {select} from "./lib/dom";
+import {autosizeTextarea} from "./lib/util";
 
 export const registerClipboardContext = async (): Promise<void> => {
 	const {
@@ -31,17 +32,11 @@ export const registerGrafiekContext = async (): Promise<void> => {
 
 export const registerBbContext = async (): Promise<void> => {
 	const {
-		activeerLidHints,
-		initBbPreview,
-		initBbPreviewBtn,
 		loadBbImage,
 	} = await import(/* webpackChunkName: "bbcode" */'./lib/bbcode');
 
 	ctx.addHandlers({
 		'div.bb-img-loading': loadBbImage,
-		'[data-bbpreview-btn]': initBbPreviewBtn,
-		'[data-bbpreview]': initBbPreview,
-		'textarea.BBCodeField': activeerLidHints,
 	});
 };
 
@@ -84,14 +79,10 @@ export const registerFormulierContext = async (): Promise<void> => {
 			initSterrenField,
 		},
 		{
-			bbCodeSet,
-		},
-		{
 			initDropzone,
 		},
 	] = await Promise.all([
 		import(/* webpackChunkName: "formulier" */'./lib/formulier'),
-		import(/* webpackChunkName: "bbcode-set" */'./lib/bbcode-set'),
 		import(/* webpackChunkName: "dropzone" */'./lib/dropzone'),
 	]);
 
@@ -102,7 +93,6 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'.reset': (el) => el.addEventListener('click', formReset),
 		'.submit': (el) => el.addEventListener('click', formSubmit),
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
-		'textarea.BBCodeField': (el) => $(el).markItUp(bbCodeSet),
 		'time.timeago': (el) => $(el).timeago(),
 		'.SterrenField': initSterrenField,
 		'form.dropzone': initDropzone,
@@ -129,15 +119,7 @@ export const registerGlobalContext = async (): Promise<void> => {
 		).options({timeout: 250}),
 		'.vue-context': (el) => new Vue({el}),
 		'[data-visite]': initKaartjes,
-		'.AutoSize': el => {
-			const cb = function () {
-				el.style.height = 'auto';
-				el.style.height = (el.scrollHeight) + 'px';
-			}
-			el.setAttribute('style', 'height:' + (el.scrollHeight) + 'px;overflow-y:hidden;');
-			el.addEventListener("input", cb, false);
-			setTimeout(cb)
-		}
+		'.AutoSize': autosizeTextarea,
 	});
 };
 

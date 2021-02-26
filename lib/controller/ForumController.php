@@ -20,7 +20,10 @@ use CsrDelft\repository\forum\ForumDradenReagerenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\BbToProsemirror;
+use CsrDelft\view\bbcode\ProsemirrorToBb;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
@@ -81,8 +84,18 @@ class ForumController extends AbstractController {
 	 * @var ForumPostsRepository
 	 */
 	private $forumPostsRepository;
+	/**
+	 * @var BbToProsemirror
+	 */
+	private $bbToProsemirror;
+	/**
+	 * @var ProsemirrorToBb
+	 */
+	private $prosemirrorToBb;
 
 	public function __construct(
+		BbToProsemirror $bbToProsemirror,
+		ProsemirrorToBb $prosemirrorToBb,
 		ForumCategorieRepository $forumCategorieRepository,
 		DebugLogRepository $debugLogRepository,
 		ForumDradenMeldingRepository $forumDradenMeldingRepository,
@@ -104,6 +117,8 @@ class ForumController extends AbstractController {
 		$this->forumCategorieRepository = $forumCategorieRepository;
 		$this->forumPostsRepository = $forumPostsRepository;
 		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
+		$this->bbToProsemirror = $bbToProsemirror;
+		$this->prosemirrorToBb = $prosemirrorToBb;
 	}
 
 	/**
@@ -269,7 +284,7 @@ class ForumController extends AbstractController {
 			'paging' => $this->forumDradenRepository->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
 			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
-			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($deel),
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($deel)),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel)
 		]);
 	}
@@ -307,7 +322,7 @@ class ForumController extends AbstractController {
 			'paging' => $paging && $this->forumDradenRepository->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
 			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
-			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($deel),
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($deel)),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel),
 		]);
 	}
@@ -365,7 +380,7 @@ class ForumController extends AbstractController {
 			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
 			'paging' => $paging && $this->forumPostsRepository->getAantalPaginas($draad->draad_id) > 1,
-			'post_form_tekst' => $this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id),
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id)),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen($draad->deel),
@@ -646,7 +661,7 @@ class ForumController extends AbstractController {
 
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 		}
-		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
+		$tekst = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 
 		if (empty($tekst)) {
 			setMelding('Bericht mag niet leeg zijn', -1);
@@ -764,8 +779,11 @@ class ForumController extends AbstractController {
 		if (!$post->magCiteren()) {
 			throw $this->createAccessDeniedException("Mag niet citeren");
 		}
-		echo $this->forumPostsRepository->citeerForumPost($post);
-		exit; //TODO: JsonResponse
+		return new JsonResponse([
+			'van' => $post->uid,
+			'naam' => ProfielRepository::getNaam($post->uid, 'user'),
+			'content' => $this->bbToProsemirror->toProseMirrorFragment($this->forumPostsRepository->citeerForumPost($post)),
+		]);
 	}
 
 	/**
@@ -775,10 +793,10 @@ class ForumController extends AbstractController {
 	 */
 	public function tekst(ForumPost $post) {
 		if (!$post->magBewerken()) {
-			throw $this->createAccessDeniedException("Mag niet berwerken");
+			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
-		echo $post->tekst;
-		exit; //TODO: JsonResponse
+
+		return new JsonResponse($this->bbToProsemirror->toProseMirror($post->tekst));
 	}
 
 	/**
@@ -791,7 +809,7 @@ class ForumController extends AbstractController {
 		if (!$post->magBewerken()) {
 			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
-		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
+		$tekst = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_UNSAFE_RAW));
 		$this->forumPostsRepository->bewerkForumPost($tekst, $reden, $post);
 		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($post->draad, $post->laatst_gewijzigd);
@@ -871,7 +889,7 @@ class ForumController extends AbstractController {
 	 */
 	public function concept(ForumDeel $deel, ForumDraad $draad = null) {
 		$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
-		$concept = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
+		$concept = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 		$ping = filter_input(INPUT_POST, 'ping', FILTER_SANITIZE_STRING);
 
 		// bestaand draadje?

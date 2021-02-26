@@ -16,7 +16,7 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbUrl extends BbTag {
 
-	private $url;
+	public $url;
 
 	public static function getTagName() {
 		return ['url', 'rul'];
@@ -26,7 +26,7 @@ class BbUrl extends BbTag {
 		$this->url = $this->getUrl($arguments);
 		if ($this->url == null) {
 			$this->readContent([], false);
-			$this->url = $this->content;
+			$this->url = $this->getContent();
 		}
 		else {
 			$this->readContent();
@@ -34,7 +34,7 @@ class BbUrl extends BbTag {
 	}
 
 	public function renderPlain() {
-		return $this->content . " (" . $this->url . ")";
+		return $this->getContent() . " (" . $this->url . ")";
 	}
 
 	public function renderLight() {

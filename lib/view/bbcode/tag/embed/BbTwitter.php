@@ -22,7 +22,7 @@ class BbTwitter extends BbTag {
 	/**
 	 * @var string
 	 */
-	private $url;
+	public $url;
 
 	public static function getTagName() {
 		return 'twitter';

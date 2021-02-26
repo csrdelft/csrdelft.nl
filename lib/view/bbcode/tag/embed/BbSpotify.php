@@ -16,11 +16,11 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbSpotify extends BbTag {
 
-	private $formaat;
+	public $formaat;
 	/**
 	 * @var string
 	 */
-	private $uri;
+	public $uri;
 
 	public static function getTagName() {
 		return 'spotify';

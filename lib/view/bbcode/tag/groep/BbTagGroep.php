@@ -40,6 +40,10 @@ abstract class BbTagGroep extends BbTag
 		$this->serializer = $serializer;
 	}
 
+	public function getId() {
+		return $this->id;
+	}
+
 	/**
 	 * @return bool
 	 * @throws BbException
@@ -58,7 +62,7 @@ abstract class BbTagGroep extends BbTag
 		$this->id = (int)$this->id;
 		$groep = $this->model->get($this->id);
 		if (!$groep) {
-			throw new BbException("Groep met id $this->id does not exist");
+			throw new BbException("Groep met id $this->id bestaat niet");
 		}
 		return $groep;
 	}

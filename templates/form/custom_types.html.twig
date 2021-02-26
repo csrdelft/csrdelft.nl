@@ -1,17 +1,6 @@
 {% block bb_text_widget %}
-	<div id="preview_{{ id }}" class="previewDiv bbcodePreview"></div>
-	<textarea data-bbpreview="{{ id }}"
-						class="form-control BBCodeField AutoSize" {{ block('widget_attributes') }}>{{ value | raw }}</textarea>
-	<div class="row justify-content-end">
-		<div class="col-auto">
-			<a class="btn btn-light" href="/wiki/cie:diensten:forum" target="_blank"
-				 title="Ga naar het overzicht van alle opmaak codes">Opmaakhulp</a>
-		</div>
-		<div class="col-auto">
-			<a class="btn btn-secondary" data-bbpreview-btn="{{ id }}" href="#"
-				 title="Toon voorbeeld met opmaak">Voorbeeld</a>
-		</div>
-	</div>
+	<input type="hidden" {{ block('widget_attributes') }} value="{{ value }}">
+	<div id="editor" class="pm-editor" data-prosemirror-doc="{{ id }}"></div>
 {% endblock %}
 
 {% block date_display_widget %}

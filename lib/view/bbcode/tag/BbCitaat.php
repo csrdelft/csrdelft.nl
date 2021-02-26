@@ -12,11 +12,11 @@ use CsrDelft\view\bbcode\BbHelper;
  * @since 27/03/2019
  */
 class BbCitaat extends BbTag {
-	private $bron_text = null;
+	public $bron_text = null;
 	/** @var Profiel */
-	private $bron_profiel = null;
+	public $bron_profiel = null;
 	/** @var string */
-	private $bron_url = null;
+	public $bron_url = null;
 	private $hidden = false;
 	/**
 	 * @var ProfielRepository

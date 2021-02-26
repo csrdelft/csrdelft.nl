@@ -1,6 +1,10 @@
 @import "~raty-js/lib/jquery.raty.css";
-@import "../lib/markitup";
 @import "../knoppen";
+@import "~prosemirror-view/style/prosemirror.css";
+@import "~prosemirror-menu/style/menu.css";
+@import "~prosemirror-example-setup/style/style.css";
+@import "../lib/prosemirror";
+
 
 input[type="file"] {
   background-color: transparent;
@@ -168,10 +172,4 @@ h1.Titel {
 	background-image: url(../../images/loading-fb.gif);
 	background-repeat: no-repeat;
 	background-position: right 40px center;
-}
-
-.BBCodeField {
-	height: 225px;
-	border: none;
-	resize: none;
 }

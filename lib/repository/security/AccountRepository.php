@@ -146,13 +146,14 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 	/**
 	 * Verify SSHA hash.
 	 *
-	 * @param Account $account
+	 * @param UserInterface $account
 	 * @param string $passPlain
 	 * @return boolean
 	 */
-	public function controleerWachtwoord(Account $account, $passPlain) {
+	public function controleerWachtwoord(UserInterface $account, $passPlain) {
 		// Controleer of het wachtwoord klopt
-		return $this->encoderFactory->getEncoder($account)->isPasswordValid($account->pass_hash, $passPlain, $account->getSalt());
+		return $this->encoderFactory->getEncoder($account)
+			->isPasswordValid($account->getPassword(), $passPlain, $account->getSalt());
 	}
 
 	/**

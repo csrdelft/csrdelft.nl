@@ -21,7 +21,7 @@ class BbYoutube extends BbTag {
 	/**
 	 * @var string
 	 */
-	private $id;
+	public $id;
 
 	public static function getTagName() {
 		return 'youtube';

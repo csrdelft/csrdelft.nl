@@ -414,8 +414,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	}
 
 	public function citeerForumPost(ForumPost $post) {
-		$tekst = CsrBB::filterCommentaar(CsrBB::filterPrive($post->tekst));
-		return '[citaat=' . $post->uid . ']' . CsrBB::sluitTags($tekst) . '[/citaat]';
+		return CsrBB::filterCommentaar(CsrBB::filterPrive($post->tekst));
 	}
 
 	public function getStatsTotal() {

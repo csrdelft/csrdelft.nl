@@ -38,7 +38,7 @@ class Boek {
 	public $uitgavejaar;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $uitgeverij;
 	/**
@@ -67,7 +67,6 @@ class Boek {
 	 */
 	public $categorie_id;
 
-	// TODO: Gebruik dit, of gooi de auteur tabel weg
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer", options={"default"=0})
