@@ -6,13 +6,16 @@ declare module 'corejs-typeahead' {
 
 		public initialize(): void;
 
-		public ttAdapter(): any;
+		public ttAdapter(): (query: string, syncResults: any, asyncResults: any) => void;
 	}
 
 	interface BloodhoundTokenizers {
 		whitespace: BloodhoundTokenizer;
 		nonword: BloodhoundTokenizer;
 		ngram: BloodhoundTokenizer;
+		obj: {
+			whitespace: (field: string) => BloodhoundTokenizer
+		}
 	}
 
 	type BloodhoundTokenizer = (query: string) => string[];
@@ -81,7 +84,7 @@ declare module 'corejs-typeahead' {
 		async?: boolean;
 		name?: string;
 		limit?: number;
-		display?: (result: string) => string;
+		display?: string | ((result: string) => string);
 		displayKey?: string;
 		templates?: {
 			notfound?: string | ((query: string) => string);

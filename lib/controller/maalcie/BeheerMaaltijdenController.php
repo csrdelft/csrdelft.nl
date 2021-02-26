@@ -201,7 +201,7 @@ class BeheerMaaltijdenController extends AbstractController {
 			}
 			return $this->tableData([$maaltijd]);
 		} elseif ($request->query->has('mrid')) {
-			$mlt_repetitie_id = $request->query->get('mrid');
+			$mlt_repetitie_id = $request->query->getInt('mrid');
 			$repetitie = $this->maaltijdRepetitiesRepository->getRepetitie($mlt_repetitie_id);
 			$repetitieMaken = new RepetitieMaaltijdMaken();
 			$repetitieMaken->mlt_repetitie_id = $repetitie->mlt_repetitie_id;

@@ -178,7 +178,7 @@
       <strong
         v-if="antwoordMethode === 'combi'"
         class="mb-1 block"
-      >Voor- en achtenraam:</strong>
+      >Voor- en achternaam:</strong>
       <input
         type="text"
         class="form-control"

@@ -24,13 +24,13 @@ class BbLocatie extends BbTag {
 	}
 
 	public function renderLight() {
-		$address = $this->content;
+		$address = $this->getContent();
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
 		return BbHelper::lightLinkInline($this->env, 'locatie', $url, $address);
 	}
 
 	public function render() {
-		$address = $this->content;
+		$address = $this->getContent();
 		$url = 'https://maps.google.nl/maps?q=' . urlencode($address);
 		if (trim(htmlspecialchars($address)) == '') {
 			$maps = 'Geen adres opgegeven';

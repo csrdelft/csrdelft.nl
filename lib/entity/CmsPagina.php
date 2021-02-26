@@ -38,41 +38,41 @@ class CmsPagina {
 	public $inhoud;
 	/**
 	 * DateTime
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(type="datetime", name="laatst_gewijzigd")
 	 * @var DateTimeImmutable
 	 */
-	public $laatst_gewijzigd;
+	public $laatstGewijzigd;
 	/**
 	 * Permissie voor tonen
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", name="rechten_bekijken")
 	 * @var string
 	 */
-	public $rechten_bekijken;
+	public $rechtenBekijken;
 	/**
 	 * Link
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", name="rechten_bewerken")
 	 * @var string
 	 */
-	public $rechten_bewerken;
+	public $rechtenBewerken;
 	/**
 	 * Inline HTML
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="boolean", name="inline_html")
 	 * @var boolean
 	 */
-	public $inline_html;
+	public $inlineHtml;
 
 	/**
 	 * @return bool
 	 */
 	public function magBekijken() {
-		return LoginService::mag($this->rechten_bekijken);
+		return LoginService::mag($this->rechtenBekijken);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function magBewerken() {
-		return LoginService::mag($this->rechten_bewerken);
+		return LoginService::mag($this->rechtenBewerken);
 	}
 
 	/**

@@ -12,11 +12,11 @@ use CsrDelft\view\bbcode\BbHelper;
  * @since 27/03/2019
  */
 class BbCitaat extends BbTag {
-	private $bron_text = null;
+	public $bron_text = null;
 	/** @var Profiel */
-	private $bron_profiel = null;
+	public $bron_profiel = null;
 	/** @var string */
-	private $bron_url = null;
+	public $bron_url = null;
 	private $hidden = false;
 	/**
 	 * @var ProfielRepository
@@ -42,7 +42,7 @@ class BbCitaat extends BbTag {
 				$text .= ' van ' . $this->bron_url;
 			}
 		}
-		return $text . ":\n " . trim($this->content);
+		return $text . ":\n " . trim($this->getContent());
 	}
 
 	public function renderLight() {
@@ -56,7 +56,7 @@ class BbCitaat extends BbTag {
 				$text .= ' van ' . $this->bron_url;
 			}
 		}
-		return $text . ':<div class="citaat">' . trim($this->content) . '</div></div>';
+		return $text . ':<div class="citaat">' . trim($this->getContent()) . '</div></div>';
 	}
 
 	/**
@@ -72,9 +72,9 @@ class BbCitaat extends BbTag {
 	 */
 	public function render($arguments = array()) {
 		if (!$this->hidden) {
-			$content = $this->content;
+			$content = $this->getContent();
 		} else {
-			$content = '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();"><div class="meercitaat verborgen">' . $this->content . '</div><div class="citaatpuntjes" title="Toon citaat">...</div></div>';
+			$content = '<div onclick="$(this).children(\'.citaatpuntjes\').slideUp();$(this).children(\'.meercitaat\').slideDown();"><div class="meercitaat verborgen">' . $this->getContent() . '</div><div class="citaatpuntjes" title="Toon citaat">...</div></div>';
 		}
 		$text = '<div class="citaatContainer bb-tag-citaat"><em>Citaat';
 

@@ -56,8 +56,12 @@ class StreeplijstController extends AbstractController
 			'huidigestreeplijst' => new Streeplijst(),
 			'verticalen' => $this->verticalenRepository->findAll(),
 			'jongstelidjaar' => LichtingenRepository::getJongsteLidjaar(),
-			'lidstatus' => LidStatus::getLidLikeObject(),
-			'oudlidstatus' => LidStatus::getOudLidLikeObject(),
+			'lidstatus' =>[
+				LidStatus::Erelid(),
+			LidStatus::Oudlid(),
+			LidStatus::Lid(),
+			LidStatus::Gastlid(),
+			LidStatus::Noviet(),],
 		]);
 	}
 
@@ -214,6 +218,7 @@ class StreeplijstController extends AbstractController
 	 */
 	public function genererenHVPresentielijst(Request $request)
 	{
+		$naam_HVlijst = $request->query->get("naam_HVlijst");
 		$arrayStreeplijsten = [];
 		$ledentype = $request->query->get('ledentype');
 		$streepopties = $request->query->get('HVStreepopties');
@@ -221,23 +226,24 @@ class StreeplijstController extends AbstractController
 		foreach ($ledentype as $type) {
 			$nieuwelijst = new Streeplijst();
 			$nieuwelijst->naam_streeplijst = LidStatus::from($type)->getDescription();
-			$profielen = $this->profielRepository->findBy(['status' => $type], ['achternaam'=> 'asc']);
+			$profielen = $this->profielRepository->findBy(['status' => $type], ['achternaam' => 'asc']);
 			$namen = [];
 			foreach ($profielen as $profiel) {
-				$namen[] = $profiel->getNaam('volledig');
+				$namen[] = $profiel->getNaam('streeplijst');
 			}
 			$stringNamen = implode("; ", $namen);
 
 			if ($streepopties != null) {
 				$stringStreepopties = implode("; ", $streepopties);
 			}
-
 			$nieuwelijst->leden_streeplijst = $stringNamen;
 			$nieuwelijst->inhoud_streeplijst = $stringStreepopties;
 			$arrayStreeplijsten[] = $nieuwelijst;
+
 		}
-		return $this->render('streeplijst/streeplijst.html.twig', [
-			'streeplijsten' => $arrayStreeplijsten
+		return $this->render('streeplijst/presentielijst.html.twig', [
+			'streeplijsten' => $arrayStreeplijsten,
+			'HVnummer' => $naam_HVlijst
 		]);
 	}
 }

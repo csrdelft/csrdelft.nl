@@ -28,6 +28,7 @@ class Verticale extends AbstractGroep {
 	 * Primary key
 	 * @var string
 	 * @ORM\Column(type="string", unique=true, length=1, options={"fixed"=true})
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $letter;
 

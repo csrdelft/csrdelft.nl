@@ -84,6 +84,7 @@ class Zijbalk {
 	public function getZijbalk() {
 		return array_filter_empty([
 			$this->blockIsHetAl(),
+			$this->blockDies(),
 			$this->blockFavorieten(),
 			$this->blockSponsors(),
 			$this->blockAgenda(),
@@ -102,6 +103,10 @@ class Zijbalk {
 		}
 
 		return null;
+	}
+
+	private function blockDies() {
+		return $this->twig->render('menu/diesblock.html.twig');
 	}
 
 	private function blockFavorieten() {

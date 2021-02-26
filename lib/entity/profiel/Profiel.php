@@ -559,11 +559,11 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 			$van = $GLOBALS['agenda_van'];
 			$tot = $GLOBALS['agenda_tot'];
 
-			$datum = date_create_immutable($van->format('Y') . '-' . $dag . ' 00:00:00');
-
-			if ($datum < $van || $datum > $tot) {
-				$datum = date_create_immutable($tot->format('Y') . '-' . $dag . ' 00:00:00');
-			}
+			$jaar = $van->format('Y');
+			do {
+				$datum = date_create_immutable($jaar . '-' . $dag . ' 00:00:00');
+				$jaar++;
+			} while ($datum < $van);
 		} else if (isset($GLOBALS['agenda_jaar'])) {
 			$datum = date_create_immutable($GLOBALS['agenda_jaar'] . '-' . $dag . ' 00:00:00');
 		} else {
@@ -961,5 +961,9 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 
 	public function getLidStatusDescription() {
 		return LidStatus::from($this->status)->getDescription();
+	}
+
+	public function getLeeftijd() {
+		return $this->gebdatum->diff(date_create_immutable())->y;
 	}
 }

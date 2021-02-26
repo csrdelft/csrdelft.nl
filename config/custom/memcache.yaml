@@ -15,6 +15,9 @@ framework:
     default_doctrine_provider: stek.cache.provider
 
 services:
+  Memcache:
+    alias: stek.cache.memcache
+
   stek.cache.memcache:
     public: true
     class: Memcache

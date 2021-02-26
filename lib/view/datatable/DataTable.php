@@ -251,21 +251,22 @@ class DataTable implements View, FormElement, ToResponse {
 	}
 
 	protected function getSettings() {
+		$settings = $this->settings;
 
 		// set view modus: paging or scrolling
 		if ($this->defaultLength > 0) {
-			$this->settings['paging'] = true;
-			$this->settings['pageLength'] = $this->defaultLength;
+			$settings['paging'] = true;
+			$settings['pageLength'] = $this->defaultLength;
 		} else {
-			$this->settings['paging'] = false;
-			$this->settings['dom'] = str_replace('i', '', $this->settings['dom']);
+			$settings['paging'] = false;
+			$settings['dom'] = str_replace('i', '', $this->settings['dom']);
 		}
 
-		$this->settings['select'] = $this->selectEnabled;
+		$settings['select'] = $this->selectEnabled;
 
 		// set ajax url
 		if ($this->dataUrl) {
-			$this->settings['ajax'] = array(
+			$settings['ajax'] = array(
 				'url' => $this->dataUrl,
 				'type' => 'POST',
 				'data' => array(
@@ -282,13 +283,13 @@ class DataTable implements View, FormElement, ToResponse {
 			$this->searchColumn($this->groupByColumn);
 
 			$groupByColumnPosition = $this->columnPosition($this->groupByColumn);
-			$this->settings['columnGroup'] = ['column' => $groupByColumnPosition];
-			$this->settings['orderFixed'] = [
+			$settings['columnGroup'] = ['column' => $groupByColumnPosition];
+			$settings['orderFixed'] = [
 				[$groupByColumnPosition, 'asc']
 			];
 		}
 
-		if (count($this->settings['rowButtons']) > 0) {
+		if (count($settings['rowButtons']) > 0) {
 			$this->columns['actionButtons'] = [
 				'name' => 'actionButtons',
 				'searchable' => false,
@@ -297,18 +298,18 @@ class DataTable implements View, FormElement, ToResponse {
 			];
 		} else {
 			// Client checkt of rowButtons bestaat
-			unset($this->settings['rowButtons']);
+			unset($settings['rowButtons']);
 		}
 
 		// create visible columns index array and default order
 		$index = 0;
 		$visibleIndex = 0;
 		foreach ($this->columns as $name => $def) {
-			if (!isset($def['visible']) OR $def['visible'] === true) {
+			if (!isset($def['visible']) || $def['visible'] === true) {
 
 				// default order by first visible orderable column
-				if (!isset($this->settings['order']) AND !(isset($def['orderable']) AND $def['orderable'] === false)) {
-					$this->settings['order'] = array(
+				if (!isset($settings['order']) && !(isset($def['orderable']) && $def['orderable'] === false)) {
+					$settings['order'] = array(
 						array($index, 'asc')
 					);
 				}
@@ -319,12 +320,12 @@ class DataTable implements View, FormElement, ToResponse {
 		}
 
 		// translate columns index
-		$this->settings['columns'] = array_values($this->columns);
+		$settings['columns'] = array_values($this->columns);
 
 		// Voeg nieuwe knoppen toe
-		$this->settings['buttons'] = array_merge($this->settings['userButtons'], $this->settings['buttons']);
+		$settings['buttons'] = array_merge($settings['userButtons'], $settings['buttons']);
 
-		return $this->settings;
+		return $settings;
 	}
 
 	public function view() {

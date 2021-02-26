@@ -35,7 +35,7 @@ export default {
 	},
 	datetime(date) {
 		if (Number(date) == date) {
-			return moment(date * 1000).format('YYYY-MM-DD HH:mm');
+			return moment.unix(date).format('YYYY-MM-DD HH:mm');
 		}
 
 		if (!date) {
@@ -44,6 +44,10 @@ export default {
 
 		if (date.substr(0, 5) === '<time') {
 			return date;
+		}
+
+		if (date.substr(0, 1) === '-') {
+			return "Nooit";
 		}
 
 		return moment(date).format('YYYY-MM-DD HH:mm');

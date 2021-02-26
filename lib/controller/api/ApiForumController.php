@@ -3,17 +3,17 @@
 namespace CsrDelft\controller\api;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
 use CsrDelft\repository\forum\ForumDradenGelezenRepository;
 use CsrDelft\repository\forum\ForumDradenRepository;
 use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
-use Jacwright\RestServer\RestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiForumController {
+class ApiForumController extends AbstractController {
 	private $forumDradenRepository;
 	private $forumPostsRepository;
 	/**
@@ -61,11 +61,11 @@ class ApiForumController {
 		try {
 			$draad = $this->forumDradenRepository->get((int)$id);
 		} catch (Exception $e) {
-			throw new RestException(404);
+			throw $this->createNotFoundException();
 		}
 
 		if (!$draad->magLezen()) {
-			throw new RestException(403);
+			throw $this->createAccessDeniedException();
 		}
 
 		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, date_create_immutable());

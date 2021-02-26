@@ -182,7 +182,7 @@ class BeheerCiviSaldoController extends AbstractController {
 	 */
 	public function som() {
 		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
-		$moment = DateTime::createFromFormat("Y-m-d H:i:s", $momentString);
+		$moment = DateTime::createFromFormat("Y-m-d H:i", $momentString);
 		if (!$moment) {
 			throw $this->createAccessDeniedException();
 		}

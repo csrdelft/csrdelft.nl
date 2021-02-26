@@ -11,7 +11,6 @@ use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
@@ -177,7 +176,7 @@ class LoginService {
 
 		if ($token instanceof RememberMeToken) {
 			$this->tokenStorage->setToken(
-				new UsernamePasswordToken($token->getUser(), [], $token->getProviderKey(), $token->getRoleNames()));
+				new UsernamePasswordToken($token->getUser(), [], $token->getFirewallName(), $token->getRoleNames()));
 		}
 	}
 }

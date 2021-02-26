@@ -22,6 +22,7 @@ use CsrDelft\view\PlainView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
 use CsrDelft\view\Streeplijstcontent;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -386,7 +387,11 @@ class ToolsController extends AbstractController {
 
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
-			debugprint($this->get('stek.cache.memcache')->getStats());
+			try {
+				debugprint($this->get('stek.cache.memcache')->getStats());
+			} catch (ServiceNotFoundException $ex) {
+				echo 'Memcache is niet ingesteld.';
+			}
 
 			return new PlainView(ob_get_clean());
 		}
@@ -411,33 +416,5 @@ class ToolsController extends AbstractController {
 		return $this->render('default.html.twig', [
 			'content' => new SavedQueryContent($result),
 		]);
-	}
-
-	/**
-	 * @return PlainView
-	 * @Route("/tools/bbcode", methods={"GET", "POST"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function bbcode() {
-		$inputJSON = file_get_contents('php://input');
-		$input = json_decode($inputJSON, TRUE);
-
-		if (isset($_POST['data'])) {
-			$string = urldecode($_POST['data']);
-		} elseif (isset($_GET['data'])) {
-			$string = $_GET['data'];
-		} elseif (isset($input['data'])) {
-			$string = urldecode($input['data']);
-		} else {
-			$string = 'b0rkb0rkb0rk: geen invoer in htdocs/tools/bbcode';
-		}
-
-		$string = trim($string);
-
-		if (isset($_POST['mail']) || isset($input['mail'])) {
-			return new PlainView(CsrBB::parseMail($string));
-		} else {
-			return new PlainView(CsrBB::parse($string));
-		}
 	}
 }
