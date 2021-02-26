@@ -209,6 +209,7 @@ instellingen:
         zijbalk_verborgen: Verborgen
       default: 'zijbalk_normaal'
       beschrijving: ''
+    meescrollen: {titel: "Zijbalk meescrollen", type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
     ishetal:
       titel: 'Is het al… weergeven'
       type: Enumeration
