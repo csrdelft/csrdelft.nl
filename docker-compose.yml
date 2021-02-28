@@ -56,3 +56,4 @@ services:
       - ./tsconfig.json:/app/tsconfig.json
       - ./htdocs/dist:/app/htdocs/dist # output
       - ./assets:/app/assets # input
+      - ./bin/dev:/app/bin/dev
