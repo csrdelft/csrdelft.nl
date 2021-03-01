@@ -24,7 +24,7 @@ class IsHetAlView implements View {
 	 * Aftellen voor deze typen IsHetAlContent
 	 * @var array
 	 */
-	public static $aftellen = array('jarig', 'dies');
+	public static $aftellen = array('jarig', 'dies', 'lustrum');
 	/**
 	 * Wist u dat'tjes
 	 * @var array
