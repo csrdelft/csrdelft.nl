@@ -48,12 +48,27 @@ class IsHetAlView implements View {
 				$this->ja = null;
 				break;
 
-			case 'dies' :
-				$begin = strtotime('2021-02-09');
-				$einde = strtotime('2021-02-19');
+			case 'dies':
+				$begin = strtotime('2022-02-08');
+				$einde = strtotime('2022-02-18');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
+				}
+				$dagen = round(($begin - $nu) / 86400);
+				if ($dagen <= 0) {
+					$this->ja = true;
+				} else {
+					$this->ja = $dagen;
+				}
+				break;
+
+			case 'lustrum':
+				$begin = strtotime('2021-06-16');
+				$einde = strtotime('2022-06-16');
+				$nu = strtotime(date('Y-m-d'));
+				if ($nu > $einde) {
+					$begin = strtotime('+5 year', $begin);
 				}
 				$dagen = round(($begin - $nu) / 86400);
 				if ($dagen <= 0) {

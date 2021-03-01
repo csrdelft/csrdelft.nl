@@ -213,7 +213,7 @@ instellingen:
     ishetal:
       titel: 'Is het al… weergeven'
       type: Enumeration
-      opties: ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'sponsorkliks']
+      opties: ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lustrum', 'lunch', 'studeren', 'sponsorkliks']
       default: 'willekeurig'
       beschrijving: ''
     favorieten: {titel: 'Favorieten menu weergeven', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}
