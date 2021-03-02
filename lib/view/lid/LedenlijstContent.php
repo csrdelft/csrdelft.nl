@@ -88,7 +88,7 @@ class LedenlijstContent implements View {
 		$requestUri = $this->requestStack->getRequestUri();
 		if ($this->lidzoeker->count() > 0) {
 			if (strstr($requestUri, '?') !== false) {
-				$url = $requestUri . '&amp;addToGoogleContacts=true';
+				$url = $requestUri . '&addToGoogleContacts=true';
 			} else {
 				$url = $requestUri . '?addToGoogleContacts=true';
 			}
