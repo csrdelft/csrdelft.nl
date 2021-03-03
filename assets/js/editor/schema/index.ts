@@ -9,6 +9,7 @@ import {
 	ketzer,
 	maaltijd,
 	ondervereniging,
+	peiling,
 	verticale,
 	werkgroep,
 	woonoord
@@ -193,7 +194,7 @@ export const nodes = RecordWithType<NodeSpec>()({
 	woonoord,
 
 	// Overige blokken
-	boek, document, maaltijd,
+	boek, document, maaltijd, peiling,
 
 	// Embeds
 	twitter, youtube, video, audio, spotify,

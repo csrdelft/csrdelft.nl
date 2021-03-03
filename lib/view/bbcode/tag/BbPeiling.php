@@ -89,4 +89,8 @@ class BbPeiling extends BbTag {
 		$this->id = $this->readMainArgument($arguments);
 		$this->peiling = $this->getPeiling($this->id);
 	}
+
+	public function getId() {
+		return $this->id;
+	}
 }

@@ -65,6 +65,7 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 				loggedIn && blockTypeItemPrompt(schema.nodes.boek, "Boek", "Boek invoegen"),
 				loggedIn && blockTypeItemPrompt(schema.nodes.document, "Document", "Document invoegen"),
 				loggedIn && blockTypeItemPrompt(schema.nodes.maaltijd, "Maaltijd", "Maaltijd invoegen"),
+				loggedIn && blockTypeItemPrompt(schema.nodes.peiling, "Peiling", "Peiling invoegen"),
 				new MenuItem({
 					title: "Horizontale lijn invoegen",
 					label: "Lijn",
