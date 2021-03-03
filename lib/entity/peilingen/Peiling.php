@@ -5,6 +5,7 @@ namespace CsrDelft\entity\peilingen;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\datatable\DataTableColumn;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,7 +35,6 @@ class Peiling implements DataTableEntry {
 	/**
 	 * @var string
 	 * @ORM\Column(type="text")
-	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $beschrijving;
 	/**
@@ -196,6 +196,14 @@ class Peiling implements DataTableEntry {
 	 */
 	public function magBekijken() {
 		return LoginService::mag(P_LOGGED_IN);
+	}
+
+	/**
+	 * @return string|null
+	 * @Serializer\Groups({"datatable", "vue"})
+	 */
+	public function getBeschrijving() {
+		return CsrBB::parse($this->beschrijving);
 	}
 
 }
