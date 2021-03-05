@@ -56,8 +56,14 @@ button, a, div {
 .dataTable {
 	width: 100% !important;
 
-	a {
-		color: #000;
+	.document {
+		&.odd a {
+			color: #fff;
+		}
+
+		&.even a {
+			color: #000;
+		}
 	}
 
 	tbody {
