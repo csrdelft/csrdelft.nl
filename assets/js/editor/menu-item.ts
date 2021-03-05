@@ -146,8 +146,13 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem => new Menu
 						required: true
 					}),
 				},
-				callback(attrs) {
-					view.dispatch(view.state.tr.replaceSelectionWith(state.schema.text(attrs.tekst).mark([markType.create({href: attrs.href})]), false))
+				callback({tekst, href}) {
+					// Voeg https toe als dat er nog niet staat.
+					if (!(href.startsWith("/") || href.startsWith("https://") || href.startsWith("http://"))) {
+						href = "https://" + href
+					}
+
+					view.dispatch(view.state.tr.replaceSelectionWith(state.schema.text(tekst).mark([markType.create({href})]), false))
 					view.focus()
 				}
 			})
@@ -160,8 +165,12 @@ export const linkItem = (markType: MarkType<EditorSchema>): MenuItem => new Menu
 						required: true
 					}),
 				},
-				callback(attrs) {
-					toggleMark(markType, attrs)(view.state, view.dispatch)
+				callback({href}) {
+					// Voeg https toe als dat er nog niet staat.
+					if (!(href.startsWith("/") || href.startsWith("https://") || href.startsWith("http://"))) {
+						href = "https://" + href
+					}
+					toggleMark(markType, {href})(view.state, view.dispatch)
 					view.focus()
 				}
 			})
