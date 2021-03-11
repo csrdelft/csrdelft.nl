@@ -34,7 +34,9 @@ class NodeCitaat implements Node
 			$naam = $van;
 			$url = $node->bron_url;
 		} else {
-			throw new \InvalidArgumentException();
+			$van = '';
+			$naam = '';
+			$url = '';
 		}
 
 		return [
