@@ -11,6 +11,7 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Controlleer access op route niveau.
@@ -37,12 +38,17 @@ class AccessControlEventListener
 	 * @var EntityManagerInterface
 	 */
 	private $em;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
-	public function __construct(CsrfService $csrfService, Reader $annotations, EntityManagerInterface $entityManager)
+	public function __construct(CsrfService $csrfService, Security $security, Reader $annotations, EntityManagerInterface $entityManager)
 	{
 		$this->csrfService = $csrfService;
 		$this->annotations = $annotations;
 		$this->em = $entityManager;
+		$this->security = $security;
 	}
 
 	/**
@@ -92,6 +98,12 @@ class AccessControlEventListener
 
 		if (!$mag) {
 			throw new CsrException("Route heeft geen @Auth: " . $controller);
+		}
+
+		$user = $this->security->getUser();
+
+		if ($user && $user->blocked_reason) {
+			throw new AccessDeniedException("Geblokkeerd: ". $user->blocked_reason);
 		}
 
 		if (!LoginService::mag($mag)) {
