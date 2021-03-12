@@ -5,12 +5,15 @@ namespace CsrDelft\events;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
+use CsrDelft\controller\LoginController;
 use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
+use phpseclib3\Exception\InsufficientSetupException;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\LockedException;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -103,7 +106,7 @@ class AccessControlEventListener
 		$user = $this->security->getUser();
 
 		if ($user && $user->blocked_reason) {
-			throw new AccessDeniedException("Geblokkeerd: ". $user->blocked_reason);
+			throw new LockedException("Geblokkeerd: ". $user->blocked_reason);
 		}
 
 		if (!LoginService::mag($mag)) {
