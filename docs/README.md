@@ -35,7 +35,7 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Caching](caching.md)
 - [Typescript](typescript.md)
 - [Styles](styles.md)
-- [Themas maken](themas-maken.md)
+- [Themas](themas-maken.md)
 - [Enums](enums.md)
 - [Formulier](formulier.md)
 - [Vue](vue.md)
