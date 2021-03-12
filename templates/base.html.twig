@@ -27,6 +27,7 @@
 	{% for sheet in user_modules() %}
 		{{ css_asset(sheet) }}
 	{% endfor %}
+	{{ css_asset('vendors') }}
 	{% if lid_instelling('layout', 'automatischDonker') == 'ja' %}
 		{{ css_asset('thema-donker', 'screen and (prefers-color-scheme: dark') }}
 	{% endif %}
