@@ -268,7 +268,17 @@
 					<dt>Verticale</dt>
 					<dd>
 						<a
-							href="{{ url('csrdelft_ledenlijst_lijst') }}?q=verticale:{{ profiel.verticale().letter }}">{{ profiel.verticale().naam }}</a>
+							href="{{ url('csrdelft_ledenlijst_lijst') }}?q=verticale:{{ profiel.verticale().letter }}">{{ profiel.verticale().naam }}
+							{% if profiel.status == 'S_KRINGEL' %}
+								(kringel)
+							{% elseif profiel.kring.lid(profiel.uid).opmerking == 'leider' %}
+								(kringleider)
+							{% elseif profiel.verticaleleider %}
+								(leider)
+							{% elseif profiel.kringcoach %}
+								<span title="Kringcoach van verticale {{ profiel.verticale().naam }}">(kringcoach)</span>
+							{% endif %}
+					</a>
 					</dd>
 				{% endif %}
 				{% if profiel.moot %}
@@ -280,17 +290,7 @@
 				{% if profiel.kring and profiel|is_zichtbaar('kring', 'intern') %}
 					<dt>Kring</dt>
 					<dd>
-						<a href="{{ profiel.kring.url }}">{{ profiel.kring.naam }}
-							{% if profiel.status == 'S_KRINGEL' %}
-								(kringel)
-							{% elseif profiel.kring.lid(profiel.uid).opmerking == 'leider' %}
-								(kringleider)
-							{% elseif profiel.verticaleleider %}
-								(leider)
-							{% elseif profiel.kringcoach %}
-								<span title="Kringcoach van verticale {{ profiel.verticale().naam }}">(kringcoach)</span>
-							{% endif %}
-						</a>
+						<a href="{{ profiel.kring.url }}">{{ profiel.kring.naam }}</a>
 					</dd>
 				{% endif %}
 			</dl>
