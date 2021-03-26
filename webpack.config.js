@@ -37,7 +37,6 @@ module.exports = (env, argv) => ({
 		'thema-koevoet': './scss/thema/Koevoet.scss',
 		'thema-sineregno': './scss/thema/sineregno.scss',
 		'effect-civisaldo': './scss/effect/civisaldo.scss',
-		'dies': './scss/dies/style.scss',
 	},
 	output: {
 		// De map waarin alle bestanden geplaatst worden.
