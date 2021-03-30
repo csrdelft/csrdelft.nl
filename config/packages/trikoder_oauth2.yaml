@@ -1,13 +1,12 @@
 trikoder_oauth2:
 
   authorization_server:
-    private_key: '%env(string:OAUTH2_PRIVATE_KEY_PATH)%'                     # Change this
+    private_key: '%env(string:OAUTH2_PRIVATE_KEY_PATH)%'
     private_key_passphrase: null                            # Passphrase of the private key, if any
-
-    encryption_key: '%env(string:OAUTH2_ENCRYPTION_KEY)%'   # (Optional) Change this
+    encryption_key: '%env(string:OAUTH2_ENCRYPTION_KEY)%'
 
   resource_server:
-    public_key: '%env(string:OAUTH2_PUBLIC_KEY_PATH)%'                       # Change this
+    public_key: '%env(string:OAUTH2_PUBLIC_KEY_PATH)%'
 
   persistence:
     doctrine: null

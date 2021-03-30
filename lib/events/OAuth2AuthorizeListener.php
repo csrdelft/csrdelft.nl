@@ -58,8 +58,6 @@ class OAuth2AuthorizeListener
 			return;
 		}
 
-		$user = $this->security->getUser() ? $this->security->getUser()->getUsername() : "Niemand";
-
 		$response = new Response(200,
 			[],
 			$this->twig->render('oauth2/authorize.html.twig', [
@@ -68,13 +66,6 @@ class OAuth2AuthorizeListener
 				'response_type' => $request->get('response_type'),
 				'token' => $this->session->get('token'),
 			])
-//			"Hoi, ${user}. You need to accept <form>
-//<input type='hidden' value='" . $request->get('client_id') . "' name='client_id'>
-//<input type='hidden' value='" . $request->get('redirect_uri') . "' name='redirect_uri'>
-//<input type='hidden' value='" . $request->get('response_type') . "' name='response_type'>
-//<input type='hidden' value='" . $this->session->get('token') . "' name='token'>
-//<input type='submit'>dignen</input>
-//</form>"
 		);
 
 		$event->setResponse($response);
