@@ -30,6 +30,7 @@ use CsrDelft\bb\tag\BbTableHeader;
 use CsrDelft\bb\tag\BbTableRow;
 use CsrDelft\bb\tag\BbUnderline;
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\view\bbcode\tag\BbAftel;
 use CsrDelft\view\bbcode\tag\BbBijbel;
 use CsrDelft\view\bbcode\tag\BbBoek;
 use CsrDelft\view\bbcode\tag\BbCitaat;
@@ -155,6 +156,7 @@ class CsrBB extends Parser {
 		BbWoonoord::class,
 		BbYoutube::class,
 		BbNovietVanDeDag::class,
+		BbAftel::class,
 	];
 	/**
 	 * @var ContainerInterface
