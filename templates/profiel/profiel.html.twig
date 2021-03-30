@@ -14,77 +14,90 @@
 	<div id="profiel" class="container {{ profiel.profielClasses }}">
 		<div id="profielregel">
 			<div class="row">
-				<h1 class="col" title="Lid-status: {{ profiel.lidStatusDescription }}">
-					{% if profiel.char %}
-						<span class="status">
+				<div class="col">
+					<h1 class="col" title="Lid-status: {{ profiel.lidStatusDescription }}">
+						{% if profiel.char %}
+							<span class="status">
 							{{ profiel.char }}
 					</span>
-					{% endif %}
-					{{ profiel.naam('volledig') }}
-				</h1>
+						{% endif %}
+						{{ profiel.naam('volledig') }}
+					</h1>
+
+					<div class="row">
+						<div class="col-md"></div>
+						<div class="col-md-auto">
+							{{ profiel.pasfotoTag('rounded shadow-sm') | raw }}
+						</div>
+						<div class="col-md">
+							{% if 'banaan' in profiel.profielOpties %}
+								<img src="{{ absolute_url('/dist/images/banaan.gif') }}" alt="Dansende banaan" class="banaan clear">
+							{% endif %}
+						</div>
+					</div>
+				</div>
 
 				<div class="col-auto">
-					<div class="btn-toolbar">
-						<div class="btn-group">
-							{% if profiel.inGoogleContacts %}
-								<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="btn btn-light"
-									 title="Dit profiel opdateren in mijn google adresboek">
-									<img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
-											 alt="opdateren in Google contacts"/>
+					<div class="list-group">
+						{% if profiel.inGoogleContacts %}
+							<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
+								 title="Dit profiel opdateren in mijn google adresboek">
+								<img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
+										 alt="opdateren in Google contacts"/>
+								Google Contacten
+							</a>
+						{% else %}
+							<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="list-group-item"
+								 title="Dit profiel toevoegen aan mijn google adresboek">
+								<img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
+										 alt="toevoegen aan Google contacts"/>
+								Google Contacten
+							</a>
+						{% endif %}
+						<a href="{{ url('csrdelft_profiel_vcard', {uid: profiel.uid}) }}" class="list-group-item"
+							 title="Dit profiel opslaan in lokaal adresboek">
+							{{ icon('vcard_add') }} Exporteren
+						</a>
+						{% if profiel.magBewerken %}
+							<a href="{{ url('csrdelft_profiel_bewerken', {uid: profiel.uid}) }}" class="list-group-item"
+								 title="Bewerk dit profiel">
+								{{ icon('pencil') }} Profiel bewerken
+							</a>
+							<a href="{{ url('csrdelft_profiel_voorkeuren', {uid: profiel.uid}) }}" class="list-group-item"
+								 title="Pas voorkeuren voor commissies aan">
+								{{ icon('report_edit') }} Commissievoorkeuren
+							</a>
+							<a href="{{ url('csrdelft_toestemming_get_overzicht') }}" class="list-group-item"
+								 title="Pas toestemming aan">
+								{{ icon('lock_edit') }} Toestemming
+							</a>
+						{% endif %}
+						{% if mag('P_ADMIN') or app.user.uid == profiel.uid %}
+							{% if profiel.account %}
+								<a href="{{ url('csrdelft_account_bewerken', {uid: profiel.uid}) }}" class="list-group-item"
+									 title="Inloggegevens bewerken">
+									{{ icon('key') }} Inloggegevens bewerken
 								</a>
 							{% else %}
-								<a href="{{ url('csrdelft_profiel_addtogooglecontacts', {uid: profiel.uid}) }}" class="btn btn-light"
-									 title="Dit profiel toevoegen aan mijn google adresboek">
-									<img src="{{ absolute_url('/images/google.ico') }}" width="16" height="16"
-											 alt="toevoegen aan Google contacts"/>
+								{% if mag('P_ADMIN') %}
+									<a href="{{ url('csrdelft_account_aanmaken', {uid: profiel.uid}) }}" class="list-group-item"
+										 title="Account aanmaken">
+										{{ icon('key_delete', 'key_add') }} Account aanmaken
+									</a>
+								{% endif %}
+							{% endif %}
+							{% if mag('P_ADMIN') %}
+								<a href="{{ url('csrdelft_tools_stats') }}?uid={{ profiel.uid }}" class="list-group-item"
+									 title="Toon bezoeklog">
+									{{ icon('server_chart') }} Toon bezoeklog
 								</a>
 							{% endif %}
-							<a href="{{ url('csrdelft_profiel_vcard', {uid: profiel.uid}) }}" class="btn btn-light"
-								 title="Dit profiel opslaan in lokaal adresboek">
-								{{ icon('vcard_add') }}
-							</a>
-						</div>
-						<div class="btn-group ml-2">
-							{% if profiel.magBewerken %}
-								<a href="{{ url('csrdelft_profiel_bewerken', {uid: profiel.uid}) }}" class="btn btn-light"
-									 title="Bewerk dit profiel">{{ icon('pencil') }}</a>
-								<a href="{{ url('csrdelft_profiel_voorkeuren', {uid: profiel.uid}) }}" class="btn btn-light"
-									 title="Pas voorkeuren voor commissies aan">{{ icon('report_edit') }}</a>
-								<a href="{{ url('csrdelft_toestemming_get_overzicht') }}" class="btn btn-light"
-									 title="Pas toestemming aan">{{ icon('lock_edit') }}</a>
-							{% endif %}
-							{% if mag('P_ADMIN') or app.user.uid == profiel.uid %}
-								{% if profiel.account %}
-									<a href="{{ url('csrdelft_account_bewerken', {uid: profiel.uid}) }}" class="btn btn-light"
-										 title="Inloggegevens bewerken">{{ icon('key') }}</a>
-								{% else %}
-									{% if mag('P_ADMIN') %}
-										<a href="{{ url('csrdelft_account_aanmaken', {uid: profiel.uid}) }}" class="btn btn-light"
-											 title="Account aanmaken">{{ icon('key_delete', 'key_add') }}</a>
-									{% endif %}
-								{% endif %}
-								{% if mag('P_ADMIN') %}
-									<a href="{{ url('csrdelft_tools_stats') }}?uid={{ profiel.uid }}" class="btn btn-light"
-										 title="Toon bezoeklog">{{ icon('server_chart') }}</a>
-								{% endif %}
-							{% endif %}
-						</div>
+						{% endif %}
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col-md"></div>
-			<div class="col-md-auto">
-				{{ profiel.pasfotoTag('rounded shadow-sm') | raw }}
-			</div>
-			<div class="col-md">
-				{% if 'banaan' in profiel.profielOpties %}
-					<img src="{{ absolute_url('/dist/images/banaan.gif') }}" alt="Dansende banaan" class="banaan clear">
-				{% endif %}
-			</div>
-		</div>
 
 		<div class="row">
 			<dl class="col-md-6">
@@ -135,7 +148,7 @@
 						<dt class="text-center">
 							<a target="_blank"
 								 href="https://maps.google.nl/maps?q={{ profiel.adres | url_encode }}+{{ profiel.woonplaats | url_encode }}+{{ profiel.land | url_encode }}"
-								 title="Open kaart" class="lichtgrijs fa fa-map-marked fa-5x"></a>
+								 title="Open kaart" class="lichtgrijs fa fa-map-marked fa-5x not-external"></a>
 						</dt>
 						<dd>
 							<ul class="list-unstyled">
@@ -164,7 +177,7 @@
 						<dt class="text-center">
 							<a target="_blank"
 								 href="https://maps.google.nl/maps?q={{ profiel.o_adres | url_encode }}+{{ profiel.o_woonplaats | url_encode }}+{{ profiel.o_land | url_encode }}"
-								 title="Open kaart" class="lichtgrijs fa fa-map-marked fa-5x"></a>
+								 title="Open kaart" class="lichtgrijs fa fa-map-marked fa-5x not-external"></a>
 						</dt>
 						<dd>
 							<ul class="list-unstyled">
@@ -278,7 +291,7 @@
 							{% elseif profiel.kringcoach %}
 								<span title="Kringcoach van verticale {{ profiel.verticale().naam }}">(kringcoach)</span>
 							{% endif %}
-					</a>
+						</a>
 					</dd>
 				{% endif %}
 				{% if profiel.moot %}
