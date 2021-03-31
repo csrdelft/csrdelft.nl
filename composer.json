@@ -57,7 +57,8 @@
 		"twig/extra-bundle": "^3.2",
 		"twig/cssinliner-extra": "^3.3",
 		"trikoder/oauth2-bundle": "3.x-dev",
-		"nyholm/psr7": "^1.4"
+		"nyholm/psr7": "^1.4",
+		"symfony/uid": "^5.0"
 	},
 	"config": {
 		"platform": {

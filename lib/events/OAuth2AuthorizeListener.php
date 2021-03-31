@@ -58,9 +58,11 @@ class OAuth2AuthorizeListener
 			return;
 		}
 
+		$allScopes = array_unique(array_merge($event->getScopes(), $event->getClient()->getScopes()));
+
 		$scopes = array_map(function ($scope) {
 			return OAuth2Scope::getBeschrijving((string)$scope);
-		}, array_merge($event->getScopes(), $event->getClient()->getScopes()));
+		}, $allScopes);
 
 		$response = new Response(200,
 			[],

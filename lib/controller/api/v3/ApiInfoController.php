@@ -18,19 +18,20 @@ class ApiInfoController extends AbstractController
 	 * @Route("/api/v3/profiel")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function profiel(Security $security) {
+	public function profiel(Security $security)
+	{
+		$user = $this->getUser();
+
+		$json = [
+			'id' => $user->uuid->toRfc4122(),
+			'displayName' => $this->getUser()->profiel->getNaam(),
+		];
+
 		if ($security->isGranted('ROLE_OAUTH2_PROFIEL:EMAIL')) {
-			return new JsonResponse([
-				'id' => $this->getUser()->getUsername(),
-				'displayName' => $this->getUser()->profiel->getNaam(),
-				'email' => $this->getUser()->email,
-			]);
-		} else {
-			return new JsonResponse([
-				'id' => $this->getUser()->getUsername(),
-				'displayName' => $this->getUser()->profiel->getNaam(),
-			]);
+			$json['email'] = $user->email;
 		}
+
+		return new JsonResponse($json);
 	}
 
 }

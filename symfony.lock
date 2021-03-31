@@ -679,6 +679,9 @@
     "symfony/twig-pack": {
         "version": "v1.0.0"
     },
+    "symfony/uid": {
+        "version": "v5.2.6"
+    },
     "symfony/var-dumper": {
         "version": "v3.4.32"
     },
