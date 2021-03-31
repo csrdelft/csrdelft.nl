@@ -139,8 +139,6 @@ services:
 
   CsrDelft\events\OAuth2AuthorizeListener:
     arguments:
-      - '@security'
-      - '@session'
       - '@request_stack'
       - '@twig'
     tags:

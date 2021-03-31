@@ -8,5 +8,8 @@ trikoder_oauth2:
   resource_server:
     public_key: '%env(string:OAUTH2_PUBLIC_KEY_PATH)%'
 
+  scopes:
+    - PROFIEL:EMAIL
+
   persistence:
     doctrine: null

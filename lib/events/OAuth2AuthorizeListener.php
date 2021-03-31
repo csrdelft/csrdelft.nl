@@ -4,24 +4,17 @@
 namespace CsrDelft\events;
 
 
+use CsrDelft\common\Security\OAuth2Scope;
 use Nyholm\Psr7\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
-use Symfony\Component\Security\Core\Security;
 use Trikoder\Bundle\OAuth2Bundle\Event\AuthorizationRequestResolveEvent;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class OAuth2AuthorizeListener
 {
-	/**
-	 * @var Security
-	 */
-	private $security;
-	/**
-	 * @var SessionBagInterface
-	 */
-	private $session;
 	/**
 	 * @var RequestStack
 	 */
@@ -32,31 +25,42 @@ class OAuth2AuthorizeListener
 	private $twig;
 
 	public function __construct(
-		Security $security,
-		Session $session,
 		RequestStack $requestStack,
 		Environment $twig
 	)
 	{
-		$this->security = $security;
-		$this->session = $session;
 		$this->requestStack = $requestStack;
 		$this->twig = $twig;
 	}
 
+	/**
+	 * @param AuthorizationRequestResolveEvent $event
+	 * @throws LoaderError
+	 * @throws RuntimeError
+	 * @throws SyntaxError
+	 */
 	public function onAuthorizationRequest(AuthorizationRequestResolveEvent $event): void
 	{
-
 		$request = $this->requestStack->getMasterRequest();
-		if (!$this->session->has('token')) {
-			$this->session->set('token', uniqid_safe('token_'));
+
+		// Maak een tijdelijke token aan om te voorkomen dat een applicatie voor de gebruiker kan approven.
+		if (!$request->getSession()->has('token')) {
+			$request->getSession()->set('token', uniqid_safe('token_'));
 		}
 
-		if ($request->get('token') == $this->session->get('token')) {
-			$event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
-
+		if ($request->get('cancel')) {
+			$event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_DENIED);
 			return;
 		}
+
+		if ($request->get('token') == $request->getSession()->get('token')) {
+			$event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
+			return;
+		}
+
+		$scopes = array_map(function ($scope) {
+			return OAuth2Scope::getBeschrijving((string)$scope);
+		}, array_merge($event->getScopes(), $event->getClient()->getScopes()));
 
 		$response = new Response(200,
 			[],
@@ -64,7 +68,9 @@ class OAuth2AuthorizeListener
 				'client_id' => $event->getClient()->getIdentifier(),
 				'redirect_uri' => $request->get('redirect_uri'),
 				'response_type' => $request->get('response_type'),
-				'token' => $this->session->get('token'),
+				'token' => $request->getSession()->get('token'),
+				'scope' => $request->get('scope'),
+				'scopes' => $scopes,
 			])
 		);
 

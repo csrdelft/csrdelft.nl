@@ -6,19 +6,35 @@
 		<h1 class="display-4">Autoriseer {{ client_id }}</h1>
 		<p>{{ client_id }} wil inloggen met je stekprofiel.</p>
 
+		{% if scopes is not empty %}
+			<p>Deze applicatie vraagt toegang tot de volgende onderdelen:</p>
+		{% endif %}
+
+		{% for scope in scopes %}
+			<div class="card">
+				<div class="card-body">
+					{{ scope }}
+				</div>
+			</div>
+		{% endfor %}
+
 		<hr class="my-4">
 
-		<div class="block">Klik op Autoriseer als je <em>{{ client_id }}</em> aan je account wil koppelen. Na autoriseren worden je naam, lidnummer en emailadres gedeeld.</div>
+		<div class="block">
+			Klik op Autoriseer als je <em>{{ client_id }}</em> aan je account wil koppelen. Na autoriseren
+			worden je naam, lidnummer en emailadres gedeeld.
+		</div>
 
 		<form>
 			<input type="hidden" name="client_id" value="{{ client_id }}">
 			<input type="hidden" name="redirect_uri" value="{{ redirect_uri }}">
 			<input type="hidden" name="response_type" value="{{ response_type }}">
 			<input type="hidden" name="token" value="{{ token }}">
+			<input type="hidden" name="scope" value="{{ scope }}">
 
 			<div class="btn-toolbar mt-4">
-			<input type="submit" value="Autoriseer" class="btn btn-primary mr-2">
-			<a href="/" class="btn btn-secondary">Terug</a>
+				<input type="submit" value="Autoriseer" class="btn btn-primary mr-2">
+				<input type="submit" value="Terug" class="btn btn-secondary" name="cancel">
 			</div>
 		</form>
 
