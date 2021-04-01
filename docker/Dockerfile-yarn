@@ -11,6 +11,8 @@ RUN apk add --no-cache \
 	python \
 	nasm
 
+RUN npm install -g cross-env webpack-cli
+
 WORKDIR /app
 
 ENTRYPOINT ["yarn"]

@@ -2,16 +2,16 @@
 
 namespace CsrDelft\view\bibliotheek;
 
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\repository\bibliotheek\BiebRubriekRepository;
-use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\TitelField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
+use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -54,13 +54,17 @@ class BoekFormulier implements FormulierTypeInterface {
 		$fields['isbn']->placeholder = 'Uniek nummer';
 		$fields['uitgeverij'] = new TextField('uitgeverij', $data->uitgeverij, 'Uitgeverij', 100);
 		$fields['uitgeverij']->suggestions[] = '/bibliotheek/autocomplete/uitgeverij?q=';
-		$fields['uitgavejaar'] = new IntField('uitgavejaar', $data->uitgavejaar, 'Uitgavejaar', 0, 2100);
+		$fields['uitgavejaar'] = new RequiredIntField('uitgavejaar', $data->uitgavejaar, 'Uitgavejaar', 0, 2100);
 		$fields['categorie_id'] = new SelectField('categorie_id', $data->getRubriek() ? $data->getRubriek()->id : "", 'Rubriek', $this->getRubriekOptions());
 		$fields['categorie_id']->required = true;
 		$fields['code'] = new TextField('code', $data->code, 'Biebcode', 7);
 		$fields['code']->required = true;
-		$fields[] = new SubmitKnop();
+
 		$builder->addFields($fields);
+		$knoppen = new EmptyFormKnoppen();
+		$knoppen->addKnop(new SubmitKnop());
+		$builder->setFormKnoppen($knoppen);
+
 		$builder->addCssClass('boekformulier');
 	}
 

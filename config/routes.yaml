@@ -1,5 +1,3 @@
-# De controller/api routes moeten expliciet niet geladen worden
-# Want deze bevatten annotaties van RestServer die niet door Symfony worden begrepen.
 app-controller:
   resource: ../lib/controller/*.php
   type: annotation
@@ -10,6 +8,11 @@ app-controller-sub:
 
 # Deze route is een catch-all als allerlaatste
 default:
-  path: /{naam}/{subnaam}
+  path: /{_locale<%app.supported_locales%>}/{naam}/{subnaam}
   controller: CsrDelft\controller\CmsPaginaController::bekijken
   defaults: { naam: thuis, subnaam: "", _mag: P_PUBLIC }
+
+defaultNoLocale:
+  path: /{naam}/{subnaam}
+  controller: CsrDelft\controller\CmsPaginaController::bekijken
+  defaults: { naam: thuis, subnaam: "", _mag: P_PUBLIC, _locale: nl}

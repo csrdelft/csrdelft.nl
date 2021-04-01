@@ -24,7 +24,7 @@ class IsHetAlView implements View {
 	 * Aftellen voor deze typen IsHetAlContent
 	 * @var array
 	 */
-	public static $aftellen = array('jarig', 'dies');
+	public static $aftellen = array('jarig', 'dies', 'lustrum');
 	/**
 	 * Wist u dat'tjes
 	 * @var array
@@ -48,12 +48,27 @@ class IsHetAlView implements View {
 				$this->ja = null;
 				break;
 
-			case 'dies' :
-				$begin = strtotime('2021-02-09');
-				$einde = strtotime('2021-02-19');
+			case 'dies':
+				$begin = strtotime('2022-02-08');
+				$einde = strtotime('2022-02-18');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
+				}
+				$dagen = round(($begin - $nu) / 86400);
+				if ($dagen <= 0) {
+					$this->ja = true;
+				} else {
+					$this->ja = $dagen;
+				}
+				break;
+
+			case 'lustrum':
+				$begin = strtotime('2021-06-16');
+				$einde = strtotime('2022-06-16');
+				$nu = strtotime(date('Y-m-d'));
+				if ($nu > $einde) {
+					$begin = strtotime('+5 year', $begin);
 				}
 				$dagen = round(($begin - $nu) / 86400);
 				if ($dagen <= 0) {
@@ -139,14 +154,6 @@ class IsHetAlView implements View {
 			case 'lezing':
 			case 'borrel':
 				echo 'Is er een ' . $this->model . ' vanavond?';
-				break;
-
-			case 'foutmelding':
-				if (file_exists(VAR_PATH . 'foutmelding.last')) {
-					echo '<div class="ja">' . reldate(date('c', filemtime(VAR_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
-				} else {
-					echo '<div class="nee">Geen foutmelding in het systeem.</div>';
-				}
 				break;
 
 			case 'wist u dat':

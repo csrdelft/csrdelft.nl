@@ -114,6 +114,27 @@
 				padding: .6em 1.15em;
 			}
 		}
+
+		.locale-switch {
+			.nav-link {
+				background: $button-bg;
+				padding: 0.8em;
+				width: auto;
+			}
+
+			img {
+				vertical-align: middle;
+			}
+
+			.dropdown {
+				width: auto;
+				padding: 1em 0 0;
+				margin-top: -1em;
+				.dropdown-item {
+					padding: 0.8em;
+				}
+			}
+		}
 	}
 
 	&.alt {

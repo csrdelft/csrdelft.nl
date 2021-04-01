@@ -19,6 +19,7 @@ use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\agenda\AgendaItemForm;
+use CsrDelft\view\bbcode\BbToProsemirror;
 use CsrDelft\view\Icon;
 use CsrDelft\view\response\IcalResponse;
 use DateInterval;
@@ -179,9 +180,9 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/courant", methods={"POST"})
 	 * @Auth(P_MAIL_COMPOSE)
 	 */
-	public function courant() {
+	public function courant(BbToProsemirror $bbToProsemirror) {
 		$items = $this->agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + 2 weeks'), false, false);
-		return $this->render('agenda/courant.html.twig', ['items' => $items]);
+		return new JsonResponse($bbToProsemirror->toProseMirrorFragment($this->renderView('agenda/courant.html.twig', ['items' => $items])));
 	}
 
 	/**
@@ -211,7 +212,7 @@ class AgendaController extends AbstractController {
 				$_POST = []; // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . date_format_intl($item->begin_moment, DATETIME_FORMAT) . ')', 1);
 				$item->item_id = null;
-				return new Response($this->createFormulier($item, 'toevoegen')->createModalView());
+				return new Response($this->createFormulier(AgendaItemForm::class, $item, ['actie' => 'toevoegen'])->createModalView());
 			} else {
 				return new JsonResponse(true);
 			}

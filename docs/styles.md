@@ -5,14 +5,16 @@ _Zie ook [Themas maken](themas-maken.md)_
 We gebruiken [scss](https://sass-lang.com/) voor de styles. Deze worden door webpack verwerkt naar css. Ieder .scss bestand zonder `_` aan het begin wordt door webpack opgepikt. Een scss bestand in een submap krijgt de volgende vorm:
 
 ```
-opmaak/roze.scss -> opmaak-roze.css
+thema/roze.scss -> thema-roze.css
 ```
 
 Dit omdat webpack niet helemaal goed overweg kan met output in verschillende mappen.
 
 ## Bootstrap
 
-Het basis framework is bootstrap (4.0.0). Je kan in views klassen uit bootstrap gebruiken. In `_variables.scss` worden wat dingen uit bootstrap overgeschreven.
+Het basis framework is bootstrap (4.0.0). Je kan in views klassen uit bootstrap gebruiken. In `_defaults.scss` worden wat dingen uit bootstrap overgeschreven.
+
+Je kan het bestand `_defaults.scss` inladen in [bootstrap.build](https://bootstrap.build/app) om te zien welke veranderingen wij aan Bootstrap hebben gemaakt.
 
 ## z-index
 Bootstrap definieert z'n eigen z-indexes. Deze hebben we niet veranderd, alleen wat toegevoegd.

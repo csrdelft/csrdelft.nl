@@ -24,7 +24,7 @@ use CsrDelft\view\Validator;
  *        * EmailField                Email adressen
  *        * UrlField                    Url's
  *        * TextareaField                Textarea die automagisch uitbreidt bij typen
- *            - BBCodeField        Textarea met bbcode voorbeeld
+ * 			  * ProsemirrorField 					Een Prosemirror editor met als uitvoer BB code
  *    * NickField                    Nicknames
  *    * DuckField                    Ducknames
  *        * LidField                    Leden selecteren

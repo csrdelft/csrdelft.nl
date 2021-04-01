@@ -110,7 +110,7 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @ORM\Column(type="groepkeuze", nullable=true)
 	 * @Serializer\Groups("vue")
 	 */
-	public $keuzelijst2;
+	public $keuzelijst2 = [];
 
 	/**
 	 * De URL van de groep

@@ -262,7 +262,7 @@ class CiviSaldoAfschrijvenController extends AbstractController {
 				$aantalSucces++;
 
 				$bestelling = new CiviBestelling();
-				$bestelling->cie = 'anders';
+				$bestelling->cie = $product->categorie->cie;
 				$bestelling->uid = $account->uid;
 				$bestelling->civiSaldo = $account;
 				$bestelling->deleted = false;

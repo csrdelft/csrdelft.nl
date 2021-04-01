@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import {modalClose} from './modal';
-import axios, {AxiosError} from 'axios'
+import axios, {AxiosError, Method} from 'axios'
 import {select} from "./dom";
 
 export function ajaxRequest(
-	type: string,
+	type: Method,
 	url: string,
 	data: string | FormData | Record<string, string | string[] | undefined> | null,
 	source: Element | null,
@@ -30,10 +30,9 @@ export function ajaxRequest(
 			source.classList.add('loading');
 		}
 	}
-	axios({
+	axios(url, {
 		method: type,
 		data,
-		url,
 	}).then((response) => {
 		if (source) {
 			if (!$(source).hasClass('noanim')) {

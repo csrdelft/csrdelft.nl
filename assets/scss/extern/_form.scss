@@ -1,5 +1,23 @@
 @import "~@fortawesome/fontawesome-free/scss/variables";
 @import "variables";
+@import "~prosemirror-view/style/prosemirror.css";
+@import "~prosemirror-menu/style/menu.css";
+@import "~prosemirror-example-setup/style/style.css";
+@import "../lib/prosemirror";
+
+.ProseMirror .bb-prive {
+	border: none;
+	padding: 0;
+}
+
+.ProseMirror a {
+	color: blue;
+
+	&:hover {
+		color: blue;
+		text-decoration: underline;
+	}
+}
 
 .float-left {
   float: left;

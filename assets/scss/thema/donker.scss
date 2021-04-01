@@ -17,7 +17,7 @@ $body-bg: $dark-grey !default;
 $body-color: darken($black, 7%) !default;
 $headings-color: inherit;
 
-$primary: #006699 !default;
+$primary: #009FFD !default;
 $secondary: lighten($body-bg, 20%) !default;
 $light: $gray-100 !default;
 $dark: $gray-800 !default;
@@ -143,11 +143,6 @@ table.groep-lijst tr:nth-child(even) {
 	}
 }
 
-/* Maak tekst zwart in prive bb-code (voor leesbaarheid) */
-.bb-prive {
-	color: black;
-}
-
 /* Pas achtergrond van, onder andere het courant formulier, aan */
 div#pubciemail_form {
 	background-color: transparent;
@@ -158,4 +153,30 @@ div#pubciemail_form {
 /* Peiling uitslag van de peilingen niet meer wit */
 .list-group-item {
 	background-color: lighten($body-bg, 4%);
+}
+
+.dataTable {
+	width: 100% !important;
+
+	.document {
+		&.odd {
+			color: #fff;
+
+			a {
+				color: #fff;
+			}
+		}
+
+		&.even {
+			color: #000;
+
+			a {
+				color: #000;
+			}
+		}
+	}
+}
+
+span.curpage {
+	color: white;
 }

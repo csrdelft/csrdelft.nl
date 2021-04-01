@@ -56,18 +56,6 @@ final class ShutdownHandler {
 		mail('pubcie@csrdelft.nl', $subject, $dumper->dump($cloner->cloneVar($debug), true), implode("\r\n", $headers));
 	}
 
-	/**
-	 * Raak het 'laaste foutmelding' bestand aan.
-	 *
-	 * Runt in Debug en Productie mode.
-	 */
-	public static function touchHandler() {
-		$debug = self::getDebug();
-		if ($debug !== null && self::isError($debug)) {
-			touch(VAR_PATH . 'foutmelding.last');
-		}
-	}
-
 	public static function slackException(Throwable $exception) {
 		static::slackHandler(1, $exception->getMessage(), $exception->getFile(), $exception->getLine());
 	}

@@ -239,7 +239,7 @@ class FotoAlbumController extends AbstractController {
 		if (!$album->magAanpassen()) {
 			throw $this->createAccessDeniedException();
 		}
-		$naam = trim($request->request->get('n'));
+		$naam = trim($request->request->get('naam'));
 		if ($album !== null) {
 			try {
 				$this->fotoAlbumRepository->hernoemAlbum($album, $naam);

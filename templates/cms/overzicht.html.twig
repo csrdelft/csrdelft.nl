@@ -19,19 +19,19 @@
 		</thead>
 		<tbody>
 		{% for pagina in paginas %}
-			{% if pagina.titel and mag(pagina.rechten_bekijken) %}
+			{% if pagina.titel and mag(pagina.rechtenBekijken) %}
 				<tr>
 					<td>/pagina/{{ pagina.naam }}</td>
 					<td>{{ pagina.titel }}</td>
-					<td>{{ pagina.laatst_gewijzigd | reldate }}</td>
-					<td>{{ pagina.rechten_bekijken }}</td>
-					<td>{{ pagina.rechten_bewerken }}</td>
-					<td>{{ pagina.inline_html ? icon('tick') : icon('cross') }}</td>
+					<td>{{ pagina.laatstGewijzigd | reldate }}</td>
+					<td>{{ pagina.rechtenBekijken }}</td>
+					<td>{{ pagina.rechtenBewerken }}</td>
+					<td>{{ pagina.inlineHtml ? icon('tick') : icon('cross') }}</td>
 					<td>
 						<div class="btn-group btn-group-sm">
 							<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bekijken', {naam: pagina.naam}) }}"
 								 title="Bekijken">{{ icon('eye') }}</a>
-							{% if mag(pagina.rechten_bewerken) %}
+							{% if mag(pagina.rechtenBewerken) %}
 								<a class="btn btn-light" href="{{ url('csrdelft_cmspagina_bewerken', {naam: pagina.naam}) }}"
 									 title="Bewerken">{{ icon('bewerken') }}</a>
 							{% endif %}

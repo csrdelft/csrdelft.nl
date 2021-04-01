@@ -1,0 +1,36 @@
+{# Hier worden verschillende effecten ingeladen die de gebruiker via instellingen heeft aangezet #}
+
+{% if lid_instelling('layout', 'minion') == 'ja' %}
+	{{ include('effect/minion.html.twig') }}
+{% endif %}
+{% if lid_instelling('layout', 'fx') == 'onontdekt' %}
+	{{ include('effect/onontdekt.html.twig') }}
+{% elseif lid_instelling('layout', 'fx') == 'civisaldo' %}
+	{{ include('effect/civisaldo.html.twig') }}
+{% elseif lid_instelling('layout', 'fx') == 'wolken' %}
+	{{ js_asset('fxclouds') }}
+{% elseif lid_instelling('layout', 'fx') == 'sneeuw' %}
+	{{ js_asset('fxsneeuw') }}
+{% elseif lid_instelling('layout', 'fx') == 'space' %}
+	{{ js_asset('fxspace') }}
+{% endif %}
+{% if lid_instelling('zijbalk', 'meescrollen') != 'nee' %}
+	{{ js_asset('zijbalk-scroll') }}
+{% endif %}
+{% if lid_instelling('layout', 'trein') != 'nee' %}
+	{{ include('effect/trein.html.twig') }}
+{% endif %}
+{% if lid_instelling('layout', 'raket') != 'nee' %}
+	{{ include('effect/raket.html.twig') }}
+{% endif %}
+{% if lid_instelling('layout', 'druif') != 'nee' %}
+	{{ include('effect/druif.html.twig') }}
+{% endif %}
+{% if lid_instelling('layout', 'assistent') != 'nee' %}
+	<link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/pi0/clippyjs/master/assets/clippy.css"/>
+	<script type="application/javascript">
+		const ASSISTENT = '{{ lid_instelling('layout', 'assistent') }}';
+		const ASSISTENT_GELUIDEN = '{{ lid_instelling('layout', 'assistentGeluiden') }}';
+	</script>
+	{{ js_asset('fxclippy') }}
+{% endif %}

@@ -20,6 +20,7 @@ module.exports = (env, argv) => ({
 		'fxminion': './js/entry/fxminion.ts',
 		'fxclippy': './js/entry/fxclippy.ts',
 		'fxspace': './js/entry/fxspace.ts',
+		'zijbalk-scroll': './js/entry/zijbalk-scroll.ts',
 		'extern': ['./js/entry/extern.ts', './scss/extern.scss'],
 		'bredeletters': './scss/bredeletters.scss',
 		'common': './scss/common.scss',

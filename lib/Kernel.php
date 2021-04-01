@@ -4,6 +4,8 @@
 namespace CsrDelft;
 
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
+use CsrDelft\view\bbcode\prosemirror\Mark;
+use CsrDelft\view\bbcode\prosemirror\Node;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -43,5 +45,7 @@ class Kernel extends BaseKernel {
 
 	protected function build(ContainerBuilder $builder) {
 		$builder->registerForAutoconfiguration(FormulierTypeInterface::class)->addTag('csr.formulier.type');
+		$builder->registerForAutoconfiguration(Mark::class)->addTag('csr.editor.mark');
+		$builder->registerForAutoconfiguration(Node::class)->addTag('csr.editor.node');
 	}
 }
