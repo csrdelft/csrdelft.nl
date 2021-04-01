@@ -23,3 +23,9 @@ OAUTH2_ENCRYPTION_KEY=
 Zie https://oauth2.thephpleague.com/installation/#generating-public-and-private-keys voor info over het genereren van sleutels. Plaats deze sleutels in `OAUTH2_PRIVATE_KEY_PATH` en `OAUTH2_PUBLIC_KEY_PATH`.
 
 Stop een random string in `OAUTH2_ENCRYPTION_KEY`
+
+## Een Client maken
+
+Zie hiervoor ook de docs van oauth2-bundle: https://github.com/trikoder/oauth2-bundle/blob/v3.x/docs/basic-setup.md
+
+Let op dat bij het `trikoder:oauth2:update-client` command je alle velden moet meegeven, anders worden ze leeg gemaakt.
