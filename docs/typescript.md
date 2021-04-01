@@ -2,7 +2,7 @@
 
 De Typescript van de stek wordt door de TypeScript compiler getrokken voordat de eindegbruiker het ziet. Hierdoor is het mogelijk om je code in es6 te schrijven en typescript te gebruiken. Kijk in [Frontend](frontend.md) voor meer info over deze stap.
 
-Het bestand `app.ts` is het aanspreekpunt van de Typescript, vanaf hier wordt alles ingeladen. Er zijn nog een aantal andere losse bestanden die worden gebruikt om de javascript op te splitsen, kijk in `webpackw.config.js` voor alle javascript en sass bestanden die aanspreekpunt zijn.
+Het bestand `app.ts` is het aanspreekpunt van de Typescript, vanaf hier wordt alles ingeladen. Er zijn nog een aantal andere losse bestanden die worden gebruikt om de javascript op te splitsen, kijk in `webpack.config.js` voor alle javascript en sass bestanden die aanspreekpunt zijn.
 
 ## Typescript & PHP laten samenwerken
 
