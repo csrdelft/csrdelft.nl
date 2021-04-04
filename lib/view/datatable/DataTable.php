@@ -29,8 +29,6 @@ class DataTable implements View, FormElement, ToResponse {
 	use ToHtmlResponse;
 	const POST_SELECTION = 'DataTableSelection';
 
-	public $model;
-
 	protected $dataUrl;
 	protected $titel;
 	protected $dataTableId;
@@ -74,7 +72,6 @@ class DataTable implements View, FormElement, ToResponse {
 	private $groupByColumn;
 
 	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
-		$this->model = new $orm();
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
@@ -344,7 +341,7 @@ class DataTable implements View, FormElement, ToResponse {
 	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
 	 */
 	public function getModel() {
-		return $this->model;
+		return null;
 	}
 
 	public function getType() {

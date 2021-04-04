@@ -44,6 +44,7 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Tests](test.md)
 - [Vertalingen](translations.md)
 - [Editor](prosemirror.md)
+- [OAuth](oauth.md)
 
 ## Overig
 

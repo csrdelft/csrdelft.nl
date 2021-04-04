@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\view\login\OAuth2RefreshTokenTable;
 use CsrDelft\view\login\RememberLoginTable;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,6 +36,7 @@ class LidInstellingenController extends AbstractController {
 			'defaultInstellingen' => $this->lidInstellingenRepository->getAll(),
 			'instellingen' => $this->lidInstellingenRepository->getAllForLid($this->getUid()),
 			'rememberLoginTable' => new RememberLoginTable(),
+			'authorizationCodeTable' => new OAuth2RefreshTokenTable(),
 		]);
 	}
 

@@ -6,6 +6,7 @@ use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Account
@@ -27,6 +28,13 @@ class Account implements UserInterface {
 	 * @ORM\Id()
 	 */
 	public $uid;
+
+	/**
+	 * Unieke id voor externe applicaties
+	 * @var Uuid
+	 * @ORM\Column(type="uuid", unique=true)
+	 */
+	public $uuid;
 	/**
 	 * Gebruikersnaam
 	 * @var string

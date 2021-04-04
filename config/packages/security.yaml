@@ -11,10 +11,20 @@ security:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
     # Achter deze firewall zitten requests voor de api.
+    oauth_token:
+      pattern: ^/token$
+      security: false
+    oauth:
+      pattern: ^/api/v3/
+      security: true
+      stateless: true
+      guard:
+        authenticators:
+          - Trikoder\Bundle\OAuth2Bundle\Security\Guard\Authenticator\OAuth2Authenticator
     api:
       pattern: ^/API/2.0/
       stateless: true
-      custom_authenticators: [CsrDelft\service\security\ApiAuthenticator]
+      custom_authenticators: [ CsrDelft\service\security\ApiAuthenticator ]
       provider: accounts
       lazy: true
     # Achter deze firewall zitten requests die met een private token worden opgehaald.
@@ -24,14 +34,14 @@ security:
       request_matcher: CsrDelft\service\security\PrivateTokenAuthenticator
       provider: accounts
       stateless: true
-      custom_authenticators: [CsrDelft\service\security\PrivateTokenAuthenticator]
+      custom_authenticators: [ CsrDelft\service\security\PrivateTokenAuthenticator ]
     # Dit is de standaard firewall en wordt gebruikt als geen van de andere firewalls gebruikt worden.
     main:
       form_login:
         enable_csrf: true
         check_path: app_login_check
-      custom_authenticators: [CsrDelft\service\security\WachtwoordResetAuthenticator]
-#      lazy: true
+      custom_authenticators: [ CsrDelft\service\security\WachtwoordResetAuthenticator ]
+      #      lazy: true
       provider: accounts
       entry_point: form_login
       logout:
@@ -39,7 +49,7 @@ security:
         # where to redirect after logout
         target: default
       remember_me:
-        secret:   '%kernel.secret%'
+        secret: '%kernel.secret%'
         lifetime: 1209600 # 2 weken in seconden
         path: /
         token_provider: 'CsrDelft\common\Security\PersistentTokenProvider'
@@ -56,5 +66,6 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-  # - { path: ^/admin, roles: ROLE_ADMIN }
-  # - { path: ^/profile, roles: ROLE_USER }
+    # - { path: ^/admin, roles: ROLE_ADMIN }
+    # - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/authorize, roles: IS_AUTHENTICATED_FULLY }

@@ -29,6 +29,8 @@ class AccessControlEventListener
 		'CsrDelft\controller\ErrorController::handleException' => true,
 		'twig.controller.exception::showAction' => true,
 		'Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction' => true,
+		'Trikoder\Bundle\OAuth2Bundle\Controller\TokenController::indexAction' => true,
+		'Trikoder\Bundle\OAuth2Bundle\Controller\AuthorizationController::indexAction' => true,
 	];
 	/**
 	 * @var CsrfService
@@ -75,7 +77,7 @@ class AccessControlEventListener
 		/** @var CsrfUnsafe $authAnnotation */
 		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
 
-		$isInApi = startsWith($request->getPathInfo(), '/API/2.0');
+		$isInApi = startsWith($request->getPathInfo(), '/API/2.0') || startsWith($request->getPathInfo(), '/api/v3/');
 
 		if (
 			$isInApi === false

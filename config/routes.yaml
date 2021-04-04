@@ -6,6 +6,10 @@ app-controller-sub:
   resource: ../lib/controller/{fiscaat,maalcie,api}/*.php
   type: annotation
 
+api-controller:
+  resource: ../lib/controller/api/v3/*.php
+  type: annotation
+
 # Deze route is een catch-all als allerlaatste
 default:
   path: /{_locale<%app.supported_locales%>}/{naam}/{subnaam}
