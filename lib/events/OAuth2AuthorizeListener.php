@@ -71,6 +71,7 @@ class OAuth2AuthorizeListener
 				'redirect_uri' => $request->get('redirect_uri'),
 				'response_type' => $request->get('response_type'),
 				'token' => $request->getSession()->get('token'),
+				'state' => $request->get('state'),
 				'scope' => $request->get('scope'),
 				'scopes' => $scopes,
 			])
