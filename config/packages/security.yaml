@@ -68,4 +68,6 @@ security:
   access_control:
     # - { path: ^/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
-    - { path: ^/authorize, roles: IS_AUTHENTICATED_FULLY }
+    # Sta _ook_ toe als je geremembered bent, voeg een manier toe om je wachtwoord opnieuw in te vullen
+    # als dit niet gewenst is.
+    - { path: ^/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
