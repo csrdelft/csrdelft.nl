@@ -22,7 +22,7 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
 		if (!$this->groep instanceof Verticale) {
-			$html .= '<li class="geschiedenis float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock"></span></a></li>';
+			$html .= '<li class="geschiedenis"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock"></span></a></li>';
 		}
 
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Pasfotos . '" title="' . GroepTab::Pasfotos()->getDescription() . ' tonen"><span class="fa fa-user"></span></a></li>';
@@ -36,7 +36,7 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEetwensView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Eetwens . '" title="' . GroepTab::Eetwens()->getDescription() . ' tonen"><span class="fa fa-heartbeat"></span></a></li>';
 
 		$onclick = "$('#groep-" . $this->groep->id . "').toggleClass('leden-uitgeklapt');";
-		$html .= '<li class="float-right"><a class="btn vergroot" id="groep-vergroot-' . $this->groep->id . '" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen" onclick="' . $onclick . '"><span class="fa fa-expand"></span></a>';
+		$html .= '<li class="knop-vergroot"><a class="btn vergroot" id="groep-vergroot-' . $this->groep->id . '" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen" onclick="' . $onclick . '"><span class="fa fa-expand"></span></a>';
 
 		$html .= '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content ' . $this->getType() . '">';
 

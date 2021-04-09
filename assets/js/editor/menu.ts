@@ -44,6 +44,8 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 				!loggedIn && insertImageItem(schema.nodes.image),
 				loggedIn && insertCitaat(schema.nodes.citaat),
 				wrapItem(schema.nodes.blockquote, {title: "Maak een quote", label: "Quote"}),
+				loggedIn && blockTypeItemPrompt(schema.nodes.activiteit, "Activiteitenketzer", "Activiteit invoegen"),
+				loggedIn && blockTypeItemPrompt(schema.nodes.ketzer, "Aanschafketzer", "Ketzer invoegen"),
 				loggedIn && new DropdownSubmenu([
 					blockTypeItemPrompt(schema.nodes.twitter, "Twitter", "Twitter invoegen"),
 					blockTypeItemPrompt(schema.nodes.youtube, "YouTube", "YouTube invoegen"),
@@ -52,11 +54,9 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 					blockTypeItemPrompt(schema.nodes.audio, "Geluid", "Geluid invoegen"),
 				], {label: "Embed"}),
 				loggedIn && new DropdownSubmenu([
-					blockTypeItemPrompt(schema.nodes.activiteit, "Activiteit", "Activiteit invoegen"),
 					blockTypeItemPrompt(schema.nodes.bestuur, "Bestuur", "Bestuur invoegen"),
 					blockTypeItemPrompt(schema.nodes.commissie, "Commissie", "Commissie invoegen"),
 					blockTypeItemPrompt(schema.nodes.groep, "Groep", "Groep invoegen"),
-					blockTypeItemPrompt(schema.nodes.ketzer, "Ketzer", "Ketzer invoegen"),
 					blockTypeItemPrompt(schema.nodes.ondervereniging, "Ondervereniging", "Ondervereniging invoegen"),
 					blockTypeItemPrompt(schema.nodes.verticale, "Verticale", "Verticale invoegen"),
 					blockTypeItemPrompt(schema.nodes.werkgroep, "Werkgroep", "Werkgroep invoegen"),

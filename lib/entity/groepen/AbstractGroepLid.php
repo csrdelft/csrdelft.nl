@@ -110,6 +110,14 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	}
 
 	/**
+	 * @return string
+	 * @Serializer\Groups("vue")
+	 */
+	public function getNaam() {
+		return $this->profiel->getNaam();
+	}
+
+	/**
 	 * @return AbstractGroep
 	 */
 	abstract public function getGroep();

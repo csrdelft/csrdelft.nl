@@ -14,6 +14,7 @@ use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\AbstractGroepenRepository;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\DisplayEntity;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -279,6 +280,14 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 		}
 
 		return count($keuzes) == count($correct);
+	}
+
+	/**
+	 * @return string|null
+	 * @Serializer\Groups("vue")
+	 */
+	public function getSamenvattingHtml() {
+		return CsrBB::parse($this->samenvatting);
 	}
 
 	public function getUUID() {

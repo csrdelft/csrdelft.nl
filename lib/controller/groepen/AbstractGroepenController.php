@@ -101,6 +101,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$route('{id}/ketzer/aanmelden', 'ketzer_aanmelden', ['POST']);
 		$route('{id}/ketzer/bewerken', 'ketzer_bewerken', ['POST']);
 		$route('{id}/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null], [], 'nieuw_id');
+		$route('{id}/info', 'info', ['GET']);
 		$route('{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
 		$route('{id}/omschrijving', 'omschrijving', ['POST']);
 		$route('{id}/pasfotos', 'pasfotos', ['POST']);
@@ -150,6 +151,20 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		}
 		$body = new GroepenView($this->repository, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
 		return $this->render('default.html.twig', ['content' => $body]);
+	}
+
+	public function info($id) {
+		$groep = $this->repository->get($id);
+
+		if ($groep == null) {
+			throw $this->createNotFoundException();
+		}
+
+		if (!$groep->mag(AccessAction::Bekijken)) {
+			throw $this->createAccessDeniedException();
+		}
+
+		return $this->json($groep, 200, [], ['groups' => 'vue']);
 	}
 
 	public function deelnamegrafiek($id)

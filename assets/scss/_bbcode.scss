@@ -207,7 +207,16 @@ Groepen
 }
 
 .groep-tabs {
-  text-align: center;
+	display: flex;
+	padding-left: 0;
+
+	.geschiedenis {
+		margin-right: auto;
+	}
+
+	.knop-vergroot {
+		margin-left: auto;
+	}
 
   li {
     display: inline-block;
