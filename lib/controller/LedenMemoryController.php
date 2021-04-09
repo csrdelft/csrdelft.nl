@@ -144,24 +144,21 @@ class LedenMemoryController extends AbstractController {
 	}
 
 	/**
-	 * @param null $groep
+	 * @param string $groepUuid
 	 * @return LedenMemoryScoreResponse
 	 * @Route("/leden/memoryscores/{groep}", methods={"POST"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function memoryscores($groep = null) {
-		$parts = explode('@', $groep);
+	public function memoryscores($groepUuid = null) {
+		$parts = explode('@', $groepUuid);
 		if (isset($parts[0], $parts[1])) {
-			switch ($parts[1]) {
-				case 'verticale.csrdelft.nl':
-					$groep = $this->verticalenRepository->retrieveByUUID($groep);
-					break;
-				case 'lichting.csrdelft.nl':
-					$groep = $this->lichtingenRepository->get($parts[0]);
-					break;
+			if ($parts[1] == 'verticale.csrdelft.nl') {
+				$groep = $this->verticalenRepository->retrieveByUUID($groepUuid);
+			} elseif ($parts[1] == 'lichting.csrdelft.nl') {
+				$groep = $this->lichtingenRepository->get($parts[0]);
 			}
 		}
-		if ($groep) {
+		if (isset($groep)) {
 			$data = $this->ledenMemoryScoresModel->getGroepTopScores($groep);
 		} else {
 			$data = $this->ledenMemoryScoresModel->getAllTopScores();
