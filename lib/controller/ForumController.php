@@ -277,11 +277,17 @@ class ForumController extends AbstractController {
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = $this->forumDelenRepository->getRecent($belangrijk);
 
+		$aantalPaginas = $this->forumDradenRepository->getAantalPaginas($deel->forum_id);
+
+		if ($pagina > $aantalPaginas) {
+			throw $this->createNotFoundException();
+		}
+
 		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'deel' => $deel,
-			'paging' => $this->forumDradenRepository->getAantalPaginas($deel->forum_id) > 1,
+			'paging' => $aantalPaginas > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
 			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
 			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($deel)),
