@@ -360,6 +360,15 @@
         v-model="declaratie.opmerkingen"
       />
     </div>
+
+    <div class="save-buttons">
+      <button class="concept">
+        Concept opslaan en later afmaken
+      </button>
+      <button class="confirm">
+        Declaratie indienen
+      </button>
+    </div>
   </div>
 </template>
 
@@ -895,6 +904,47 @@ export default class DeclaratieVue extends Vue {
       margin-top: -6px;
       font-size: 16px;
       font-weight: 300;
+    }
+  }
+}
+
+.save-buttons {
+  margin-top: 30px;
+  text-align: right;
+
+  button {
+    border-radius: 3px;
+    -webkit-appearance: none;
+    padding: 7px 21px;
+    border: none;
+    margin-left: 10px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+
+    @media screen and (max-width: 576px) {
+      width: 100%;
+      margin: 10px 0 0 0;
+    }
+
+    &.concept {
+      border: 1px solid #D0D0D0;
+      color: #898989;
+      font-weight: 400;
+
+      &:hover {
+        color: #4e4e4e;
+      }
+    }
+
+    &.confirm {
+      color: white;
+      background: #2ECC71;
+
+      &:hover {
+        background: #48E088;
+      }
     }
   }
 }
