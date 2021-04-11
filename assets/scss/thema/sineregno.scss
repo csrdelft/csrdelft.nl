@@ -1,7 +1,7 @@
-$primair-achtergrond: #313131;
-$zijbalk-achtergrond: #49646C;
-$secundaire-accenten-1: #B92E2E;
-$secundaire-accenten-2: #28C4BC;
+$primair-achtergrond: #B5312B;
+$zijbalk-achtergrond: #741F1B;
+$secundaire-accenten-1: #8C2521;
+$secundaire-accenten-2: white;
 
 $primary: $secundaire-accenten-1;
 $secondary: $secundaire-accenten-2;
@@ -15,16 +15,31 @@ $donkerblauw: $secundaire-accenten-1;
 $orange: $secundaire-accenten-2;
 
 @font-face {
-	font-family: 'Bad Signal Regular';
+	font-family: 'Caricature';
 	font-style: normal;
 	font-weight: normal;
-	src: url('../../fonts/sine-regno-2020/Bad-Signal.woff') format('woff');
+	src: url('../../fonts/sine-regno-2021/caricature.woff') format('woff');
 }
 
-$headings-font-family: 'Bad Signal Regular', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+@font-face {
+	font-family: 'Spongeboy-Me-Bob';
+	font-style: normal;
+	font-weight: normal;
+	src: url('../../fonts/sine-regno-2021/Spongeboy-Me-Bob.woff') format('woff');
+}
+
+$font-family-base: 'Spongeboy-Me-Bob', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+$headings-font-family: 'Caricature', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 
 @import "./donker";
 
 #zijbalk .blok .zijbalk-kopje {
 	font-family: $headings-font-family;
+	font-size: x-large;
 }
+
+#zijbalk .blok .item {
+	font-family: $font-family-base;
+}
+
+

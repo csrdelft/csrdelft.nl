@@ -11,7 +11,6 @@ use CsrDelft\common\Security\TemporaryToken;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AuthenticationMethod;
-use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\AccessService;
 use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
@@ -21,6 +20,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
+use Trikoder\Bundle\OAuth2Bundle\Security\Authentication\Token\OAuth2Token;
 
 /**
  * Deze service verteld je dingen over de op dit moment ingelogde gebruiker.
@@ -159,6 +159,7 @@ class LoginService {
 				break;
 			case RememberMeToken::class:
 			case JwtToken::class:
+			case OAuth2Token::class:
 				$method = AuthenticationMethod::cookie_token;
 				break;
 			default:
@@ -177,7 +178,7 @@ class LoginService {
 
 		if ($token instanceof RememberMeToken) {
 			$this->tokenStorage->setToken(
-				new UsernamePasswordToken($token->getUser(), [], $token->getProviderKey(), $token->getRoleNames()));
+				new UsernamePasswordToken($token->getUser(), [], $token->getFirewallName(), $token->getRoleNames()));
 		}
 	}
 }

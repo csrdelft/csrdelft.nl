@@ -107,6 +107,10 @@ docReady(() => {
 			if (tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT') {
 				return;
 			}
+
+			if (element.isContentEditable) {
+				return;
+			}
 		}
 
 		// a-z en 0-9 incl. numpad

@@ -16,7 +16,7 @@ class BbNeuzen extends BbTag {
 	}
 
 	public function render() {
-		$content = $this->content;
+		$content = $this->getContent();
 		if (lid_instelling('layout', 'neuzen') != 'nee') {
 			$neus = Icon::getTag('bullet_red', null, null, 'neus2013', 'o');
 			$content = str_replace('o', $neus, $content);
@@ -26,6 +26,6 @@ class BbNeuzen extends BbTag {
 	}
 
 	public function parse($arguments = []) {
-		return $this->readContent([], false);
+		$this->readContent([], false);
 	}
 }

@@ -89,7 +89,7 @@ $bb-hover-bg: #DDEEFF !default;
 }
 
 .bb-prive {
-  background-color: #FFF0F5;
+	@extend .alert-danger;
 }
 
 .bb-maaltijd {
@@ -207,7 +207,16 @@ Groepen
 }
 
 .groep-tabs {
-  text-align: center;
+	display: flex;
+	padding-left: 0;
+
+	.geschiedenis {
+		margin-right: auto;
+	}
+
+	.knop-vergroot {
+		margin-left: auto;
+	}
 
   li {
     display: inline-block;
@@ -493,9 +502,9 @@ pre.bbcode {
 }
 
 .bb-img {
-  width: 100%;
-  max-width: 570px;
+  max-width: 100%;
   border: 0;
+	display: block;
 }
 
 a.responsive {
@@ -518,6 +527,7 @@ a.responsive {
 a[href].lightbox-link { // Override externe link style
 	background: none;
 	padding-right: 0;
+	display: inline-block;
 }
 
 .bb-video {
@@ -526,7 +536,7 @@ a[href].lightbox-link { // Override externe link style
 	@extend .embed-responsive;
 	@extend .embed-responsive-16by9;
 
-	iframe {
+	iframe, img {
 		@extend .embed-responsive-item;
 	}
 }
@@ -600,4 +610,32 @@ Voor de /bio pagina
 	.bb-video {
 		margin-top: 0.5em;
 	}
+}
+
+.noviet-van-de-dag {
+	display: block;
+
+	.pasfoto {
+		width: 68px;
+		height: 90px;
+		margin-right: 18px;
+	}
+
+	.naam {
+		font-weight: 300;
+		margin-top: 0;
+		margin-bottom: 5px;
+	}
+
+	.details {
+		div span {
+			font-weight: 600;
+		}
+	}
+
+	&:hover {
+		text-decoration: none;
+		color: inherit;
+	}
+	color: inherit;
 }

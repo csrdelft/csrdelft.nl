@@ -49,6 +49,14 @@ class FormulierBuilder {
 		$this->requestStack = $requestStack;
 	}
 
+	public function setShowMelding($showMelding) {
+		$this->showMelding = $showMelding;
+	}
+
+	public function setFormId($formId) {
+		$this->formId = $formId;
+	}
+
 	public function getFormId() {
 		return $this->formId;
 	}

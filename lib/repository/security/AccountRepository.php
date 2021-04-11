@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * AccountRepository
@@ -130,6 +131,7 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 		}
 
 		$account = new Account();
+		$account->uuid = Uuid::v4();
 		$account->uid = $uid;
 		$account->profiel = $profiel;
 		$account->username = $uid;
@@ -146,13 +148,14 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 	/**
 	 * Verify SSHA hash.
 	 *
-	 * @param Account $account
+	 * @param UserInterface $account
 	 * @param string $passPlain
 	 * @return boolean
 	 */
-	public function controleerWachtwoord(Account $account, $passPlain) {
+	public function controleerWachtwoord(UserInterface $account, $passPlain) {
 		// Controleer of het wachtwoord klopt
-		return $this->encoderFactory->getEncoder($account)->isPasswordValid($account->pass_hash, $passPlain, $account->getSalt());
+		return $this->encoderFactory->getEncoder($account)
+			->isPasswordValid($account->getPassword(), $passPlain, $account->getSalt());
 	}
 
 	/**

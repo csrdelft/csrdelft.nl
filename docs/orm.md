@@ -45,6 +45,8 @@ Een Repository beschrijft verschillende acties die je met een entity kan doen, z
 
 Zie hier onder een simpele repository. Het belangrijkste stuk is de constructor. Daarnaast is het belangrijk om `CsrDelft\Repository\AbstractRepository` te extenden om de boel conistent te houden.
 
+Een Repository is ook altijd een [Service](services.md), dus naast de dingen die in de constructor moeten staan kun je ook andere services hier in zetten. Let wel op dat je Repository alleen zaken moet regelen voor de specifieke Entity waar je hem voor maakt.
+
 ```php
 namespace CsrDelft\repository;
 

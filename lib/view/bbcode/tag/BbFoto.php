@@ -33,6 +33,10 @@ class BbFoto extends BbTag {
 	 * @var FotoAlbumRepository
 	 */
 	private $fotoAlbumRepository;
+	/**
+	 * @var string
+	 */
+	private $fotoUrl;
 
 	public function __construct(FotoAlbumRepository $fotoAlbumRepository) {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
@@ -51,7 +55,7 @@ class BbFoto extends BbTag {
 	}
 
 	public function render() {
-		$url = $this->content;
+		$url = $this->fotoUrl;
 		$parts = explode('/', $url);
 		$fototag = new FotoBBView($this->foto, in_array('Posters', $parts), $this->responsive);
 		return $fototag->getHtml();
@@ -62,8 +66,8 @@ class BbFoto extends BbTag {
 	 */
 	public function parse($arguments = []) {
 		$this->responsive = isset($arguments['responsive']);
-		$this->readMainArgument($arguments);
-		$this->foto = $this->getFoto(explode('/', $this->content), $this->content);
+		$this->fotoUrl = $this->readMainArgument($arguments);
+		$this->foto = $this->getFoto(explode('/', $this->fotoUrl), $this->fotoUrl);
 	}
 
 	/**

@@ -31,6 +31,10 @@ class BbForumPlaatje extends BbImg {
 		return mag("P_LOGGED_IN");
 	}
 
+	public function getKey() {
+		return $this->plaatje->access_key;
+	}
+
 	public function getLinkUrl() {
 		return $this->plaatje->getUrl(false);
 	}
@@ -48,8 +52,8 @@ class BbForumPlaatje extends BbImg {
 	 * @throws BbException
 	 */
 	public function parse($arguments = []) {
-		$this->readMainArgument($arguments);
-		$plaatje = $this->forumPlaatjeRepository->getByKey($this->content);
+		$key = $this->readMainArgument($arguments);
+		$plaatje = $this->forumPlaatjeRepository->getByKey($key);
 		if (!$plaatje) {
 			throw new BbException("Plaatje bestaat niet");
 		}

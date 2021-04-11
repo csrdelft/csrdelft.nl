@@ -7,8 +7,5 @@
 {% endblock %}
 
 {% block content %}
-	{% if showMenu %}
-		{{ include('extern/menu.html.twig') }}
-	{% endif %}
 	{{ body.toString | raw }}
 {% endblock %}

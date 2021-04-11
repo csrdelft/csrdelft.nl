@@ -11,12 +11,12 @@ class CmsPaginaFixtures extends Fixture {
 		$legePagina = new CmsPagina();
 
 		$legePagina->inhoud = '';
-		$legePagina->laatst_gewijzigd = date_create_immutable();
+		$legePagina->laatstGewijzigd = date_create_immutable();
 		$legePagina->titel = '';
 		$legePagina->naam = '';
-		$legePagina->inline_html = false;
-		$legePagina->rechten_bekijken = P_PUBLIC;
-		$legePagina->rechten_bewerken = '';
+		$legePagina->inlineHtml = false;
+		$legePagina->rechtenBekijken = P_PUBLIC;
+		$legePagina->rechtenBewerken = '';
 
 		$manager->persist($legePagina);
 
@@ -30,10 +30,10 @@ U heeft helaas niet genoeg rechten om deze pagina te bekijken, of er is een fout
 
 Log in als gebruiker van de website met behulp van het inlogvakje rechtsboven op de pagina. Neem voor meer informatie contact op met de [email=pubcie@csrdelft.nl spamsafe=true]PubCie[/email].
 BB;
-		$geenToegangPagina->laatst_gewijzigd = date_create_immutable();
-		$geenToegangPagina->rechten_bekijken = P_PUBLIC;
-		$geenToegangPagina->rechten_bewerken = P_ADMIN;
-		$geenToegangPagina->inline_html = false;
+		$geenToegangPagina->laatstGewijzigd = date_create_immutable();
+		$geenToegangPagina->rechtenBekijken = P_PUBLIC;
+		$geenToegangPagina->rechtenBewerken = P_ADMIN;
+		$geenToegangPagina->inlineHtml = false;
 
 		$manager->persist($geenToegangPagina);
 
@@ -46,10 +46,10 @@ BB;
 
 De pagina die u zoekt kan helaas niet worden gevonden.
 BB;
-		$nietGevondenPagina->laatst_gewijzigd = date_create_immutable();
-		$nietGevondenPagina->rechten_bekijken = P_PUBLIC;
-		$nietGevondenPagina->rechten_bewerken = P_ADMIN;
-		$nietGevondenPagina->inline_html = false;
+		$nietGevondenPagina->laatstGewijzigd = date_create_immutable();
+		$nietGevondenPagina->rechtenBekijken = P_PUBLIC;
+		$nietGevondenPagina->rechtenBewerken = P_ADMIN;
+		$nietGevondenPagina->inlineHtml = false;
 
 		$manager->persist($nietGevondenPagina);
 
@@ -61,10 +61,10 @@ BB;
 
 Dit is de voorpagina.
 BB;
-		$thuisPagina->laatst_gewijzigd = date_create_immutable();
-		$thuisPagina->rechten_bekijken = P_PUBLIC;
-		$thuisPagina->rechten_bewerken = 'P_ADMIN,Bestuur';
-		$thuisPagina->inline_html = true;
+		$thuisPagina->laatstGewijzigd = date_create_immutable();
+		$thuisPagina->rechtenBekijken = P_PUBLIC;
+		$thuisPagina->rechtenBewerken = 'P_ADMIN,Bestuur';
+		$thuisPagina->inlineHtml = true;
 
 		$manager->persist($thuisPagina);
 

@@ -131,24 +131,56 @@ export function singleLineString(strings: TemplateStringsArray, ...values: strin
 	return lines.map((line) => line.replace(/^\s+/gm, '')).join(' ').trim();
 }
 
-export function html(strings: TemplateStringsArray, ...values: Array<string | undefined | null>): HTMLElement {
+export function html<T extends HTMLElement = HTMLElement>(strings: TemplateStringsArray, ...values: Array<string | undefined | null | Node>): T {
 	let output = '';
+	const nodes: [string, Node][] = []
 	for (let i = 0; i < values.length; i++) {
-		output += strings[i] + values[i];
+		output += strings[i];
+		const value = values[i]
+		if (value instanceof Node) {
+			output += `<div id="_node_html_${i}"></div>`
+			nodes.push([`_node_html_${i}`, value])
+		} else {
+			output += value
+		}
 	}
 	output += strings[values.length];
 
-	return (new DOMParser().parseFromString(output, 'text/html').body.firstChild) as HTMLElement;
+	const element = document.createElement("div")
+
+	element.innerHTML = output
+
+	for (const [id, node] of nodes) {
+		element.querySelector(`#${id}`).replaceWith(node)
+	}
+
+	return element.firstElementChild as T;
 }
 
 export function htmlParse(htmlString: string): Node[] {
 	return jQuery.parseHTML(htmlString, null, true) as Node[];
 }
 
-export function preloadImage(url: string, callback: () => void): void {
-	const img = new Image();
-	img.src = url;
-	img.onload = callback;
+export function preloadImage(url: string): Promise<Event> {
+	return new Promise((resolve, reject) => {
+		const img = new Image()
+		img.src = url
+		img.onload = resolve
+		img.onerror = reject
+	})
+}
+
+/**
+ * Maak een bestand van een base64 string
+ * @param str
+ * @param fileName
+ */
+export async function base64toFile(str: string, fileName: string): Promise<File> {
+	const res = await fetch(str)
+	const blob = await res.blob()
+	const extension = blob.type.split("/").pop()
+
+	return new File([blob], `${fileName}.${extension}`, {type: blob.type})
 }
 
 export function parseData(el: HTMLElement): Record<string, unknown> {
@@ -169,6 +201,12 @@ export function parseData(el: HTMLElement): Record<string, unknown> {
 	}
 
 	return out;
+}
+
+export function htmlDecode(str: string): string {
+	const txt = document.createElement("textarea");
+	txt.innerHTML = str;
+	return txt.value;
 }
 
 export function htmlEncode(str: string): string {
@@ -264,3 +302,27 @@ export const isLightMode = (): boolean => {
 
 	return (Number(rgb[0]) > 124 && Number(rgb[1]) > 124 && Number(rgb[2]) > 124)
 }
+
+export const autosizeTextarea = (el: HTMLTextAreaElement): void => {
+	const cb = () => {
+		el.style.height = 'auto';
+		el.style.height = (el.scrollHeight) + 'px';
+	}
+	el.setAttribute('style', 'height:' + (el.scrollHeight) + 'px;overflow-y:hidden;');
+	el.addEventListener("input", cb, false);
+	setTimeout(cb)
+}
+
+/**
+ * Eerste letter wordt een hoofdletter.
+ * @param str
+ */
+export const ucfirst = (str: string): string => str.slice(0, 1).toUpperCase() + str.slice(1)
+
+/**
+ * Verwijder null/falsy elementen uit een lijst.
+ * @param list
+ */
+export const cut = <T>(list: T[]): T[] => list.filter(_=>_)
+
+export const uidLike = (str: string): boolean => str.length == 4

@@ -12,6 +12,8 @@ Er zijn een aantal Authenticators, een authenticator is verantwoordelijk voor he
 
 Een authenticator gooit een `AccessException` of returned een `Passport`, de passport wordt daarna afgehandeld.
 
+Authenticators zijn nog een beetje experimentele technologie, het kan dus zijn dat bij het updaten (van patch versies) van Symfony er iets stuk gaat.
+
 De volgende authenticators worden gebruikt.
 
 ### FormLoginAuthenticator

@@ -3,10 +3,11 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\entity\CmsPagina;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\service\security\LoginService;
-use CsrDelft\view\cms\CmsPaginaForm;
+use CsrDelft\view\cms\CmsPaginaType;
 use CsrDelft\view\cms\CmsPaginaView;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,22 +65,24 @@ class CmsPaginaController extends AbstractController {
 			if ($pagina->naam === 'thuis') {
 				return $this->render('extern/index.html.twig', ['titel' => $body->getTitel()]);
 			} elseif ($naam === 'vereniging') {
-				return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body, 'showMenu' => true]);
+				return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
 			} elseif ($naam === 'lidworden') {
 				return $this->render('extern/owee.html.twig');
 			}
 
-			return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body, 'showMenu' => false]);
+			return $this->render('extern/content.html.twig', ['titel' => $body->getTitel(), 'body' => $body]);
 		} else {
 			return $this->render('cms/pagina.html.twig', ['body' => $body]);
 		}
 	}
 
 	/**
+	 * @param Request $request
 	 * @param $naam
 	 * @return Response
 	 * @Route("/pagina/bewerken/{naam}")
 	 * @Auth(P_LOGGED_IN)
+	 * @CsrfUnsafe
 	 */
 	public function bewerken(Request $request, $naam) {
 		$pagina = $this->cmsPaginaRepository->find($naam);
@@ -89,17 +92,22 @@ class CmsPaginaController extends AbstractController {
 		if (!$pagina->magBewerken()) {
 			throw $this->createAccessDeniedException();
 		}
-		$form = $this->createFormulier(CmsPaginaForm::class, $pagina);
+
+		$form = $this->createForm(CmsPaginaType::class, $pagina, ['rechten_wijzigen' => $pagina->magRechtenWijzigen()]);
 		$form->handleRequest($request);
-		if ($form->validate()) {
-			$pagina->laatst_gewijzigd = date_create_immutable();
+		if ($form->isSubmitted() && $form->isValid()) {
+			$pagina->laatstGewijzigd = date_create_immutable();
 			$manager = $this->getDoctrine()->getManager();
 			$manager->persist($pagina);
 			$manager->flush();
 			setMelding('Bijgewerkt: ' . $pagina->naam, 1);
 			return $this->redirectToRoute('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]);
 		} else {
-			return $this->render('default.html.twig', ['content' => $form->createView()]);
+			return $this->render('default_form.html.twig', [
+				'titel' => 'Pagina bewerken: ' . $pagina->naam,
+				'form' => $form->createView(),
+				'cancel_url' => $this->generateUrl('csrdelft_cmspagina_bekijken', ['naam' => $pagina->naam]),
+			]);
 		}
 	}
 

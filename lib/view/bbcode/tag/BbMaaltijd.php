@@ -47,6 +47,10 @@ class BbMaaltijd extends BbTag {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var string
+	 */
+	private $id;
 
 	public function __construct(Environment $twig, MaaltijdenRepository $maaltijdenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository) {
 		$this->maaltijdenRepository = $maaltijdenRepository;
@@ -100,7 +104,7 @@ class BbMaaltijd extends BbTag {
 				'border' => count($this->maaltijden) > 1
 			]);
 		}
-		if (count($this->maaltijden) > 1 && $this->content !== 'beoordeling') {
+		if (count($this->maaltijden) > 1 && $this->id !== 'beoordeling') {
 			$result .= '<div class="d-block mt-3 text-right"><a href="/maaltijden/ketzer">Alle maaltijden</a></div>';
 		}
 		return $result . '</div>';
@@ -111,9 +115,9 @@ class BbMaaltijd extends BbTag {
 	 * @throws BbException
 	 */
 	public function parse($arguments = []) {
-		$this->readMainArgument($arguments);
+		$this->id = $this->readMainArgument($arguments);
 		$this->maaltijden = [];
-		foreach ($this->getMaaltijd($this->content) as $maaltijd) {
+		foreach ($this->getMaaltijd($this->id) as $maaltijd) {
 			if ($maaltijd != null) {
 				$this->maaltijden[] = $maaltijd;
 			}

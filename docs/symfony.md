@@ -14,6 +14,8 @@ De Service container van symfony is beschikbaar. In controllers kan in functies 
 
 Met de `CsrDelft\common\ContainerFacade` kun je te pas en te onpas de container te pakken krijgen. Dit is om de overgang te vergemakkelijken. Het liefst wordt op alle plekken DI gebruikt, bijv door factories te bouwen die in de container zitten. Dit is wel iets voor een moment waarop je eigenlijk op alle plekken makkelijk bij de container kan zonder dat er teveel plumbing code geschreven moet worden.
 
+Zie [Services](services.md) voor meer info over de container.
+
 ## Router
 
 De router van Symfony wordt gebruikt om routes te resolven. De YAML configuratie wordt hier voor gebruikt. Zie de YAML bestanden in de `config/routes` map.

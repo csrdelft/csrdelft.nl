@@ -41,7 +41,7 @@
 			</a>
 		{% endif %}
 		{% if mag('P_LOGGED_IN') %}
-			{% if album.fotos %}
+			{% if album.fotos and album.subdir %}
 				<a class="btn" href="{{ url('csrdelft_fotoalbum_downloaden', {dir: album.subdir}) }}"
 					 title="Download als TAR-bestand">{{ icon('picture_save') }} Download album</a>
 			{% endif %}

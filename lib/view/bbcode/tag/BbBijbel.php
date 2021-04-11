@@ -42,7 +42,7 @@ class BbBijbel extends BbTag {
 	 * @return array
 	 */
 	private function getLink(): array {
-		$content = $this->content;
+		$content = $this->getContent();
 		if ($this->bijbel != null) { // [bijbel=
 			$stukje = str_replace('_', ' ', $this->bijbel);
 		} else { // [bijbel][/bijbel]

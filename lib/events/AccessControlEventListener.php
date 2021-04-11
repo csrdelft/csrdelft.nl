@@ -5,12 +5,17 @@ namespace CsrDelft\events;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
+use CsrDelft\controller\LoginController;
 use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
+use phpseclib3\Exception\InsufficientSetupException;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\LockedException;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Controlleer access op route niveau.
@@ -24,6 +29,8 @@ class AccessControlEventListener
 		'CsrDelft\controller\ErrorController::handleException' => true,
 		'twig.controller.exception::showAction' => true,
 		'Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction' => true,
+		'Trikoder\Bundle\OAuth2Bundle\Controller\TokenController::indexAction' => true,
+		'Trikoder\Bundle\OAuth2Bundle\Controller\AuthorizationController::indexAction' => true,
 	];
 	/**
 	 * @var CsrfService
@@ -37,12 +44,17 @@ class AccessControlEventListener
 	 * @var EntityManagerInterface
 	 */
 	private $em;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
-	public function __construct(CsrfService $csrfService, Reader $annotations, EntityManagerInterface $entityManager)
+	public function __construct(CsrfService $csrfService, Security $security, Reader $annotations, EntityManagerInterface $entityManager)
 	{
 		$this->csrfService = $csrfService;
 		$this->annotations = $annotations;
 		$this->em = $entityManager;
+		$this->security = $security;
 	}
 
 	/**
@@ -65,7 +77,7 @@ class AccessControlEventListener
 		/** @var CsrfUnsafe $authAnnotation */
 		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
 
-		$isInApi = startsWith($request->getPathInfo(), '/API/2.0');
+		$isInApi = startsWith($request->getPathInfo(), '/API/2.0') || startsWith($request->getPathInfo(), '/api/v3/');
 
 		if (
 			$isInApi === false
@@ -92,6 +104,12 @@ class AccessControlEventListener
 
 		if (!$mag) {
 			throw new CsrException("Route heeft geen @Auth: " . $controller);
+		}
+
+		$user = $this->security->getUser();
+
+		if ($user && $user->blocked_reason) {
+			throw new NotFoundHttpException("Geblokkeerd: ". $user->blocked_reason);
 		}
 
 		if (!LoginService::mag($mag)) {

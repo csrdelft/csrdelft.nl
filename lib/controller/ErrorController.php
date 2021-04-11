@@ -35,7 +35,6 @@ class ErrorController extends AbstractController {
 			])) {
 			ShutdownHandler::emailException($exception);
 			ShutdownHandler::slackException($exception);
-			ShutdownHandler::touchHandler();
 		}
 
 		if ($request->getMethod() == 'POST') {

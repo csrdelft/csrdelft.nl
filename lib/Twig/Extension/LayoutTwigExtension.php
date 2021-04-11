@@ -4,12 +4,14 @@
 namespace CsrDelft\Twig\Extension;
 
 
+use CsrDelft\Component\Formulier\FormulierFactory;
 use CsrDelft\entity\MenuItem;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\view\formulier\InstantSearchForm;
 use CsrDelft\view\Icon;
 use CsrDelft\view\login\LoginForm;
 use CsrDelft\view\Zijbalk;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -23,11 +25,25 @@ class LayoutTwigExtension extends AbstractExtension
 	 * @var MenuItemRepository
 	 */
 	private $menuItemRepository;
+	/**
+	 * @var RequestStack
+	 */
+	private $requestStack;
+	/**
+	 * @var FormulierFactory
+	 */
+	private $formulierFactory;
 
-	public function __construct(Zijbalk $zijbalk, MenuItemRepository $menuItemRepository)
-	{
+	public function __construct(
+		RequestStack $requestStack,
+		Zijbalk $zijbalk,
+		MenuItemRepository $menuItemRepository,
+		FormulierFactory $formulierFactory
+	) {
 		$this->zijbalk = $zijbalk;
 		$this->menuItemRepository = $menuItemRepository;
+		$this->requestStack = $requestStack;
+		$this->formulierFactory = $formulierFactory;
 	}
 
 	public function getFunctions()
@@ -61,11 +77,16 @@ class LayoutTwigExtension extends AbstractExtension
 	 */
 	public function get_menu($name, $root = false)
 	{
+		$defaultName = $name;
+		$locale = $this->requestStack->getCurrentRequest()->getLocale();
+		if ($locale != $this->requestStack->getCurrentRequest()->getDefaultLocale()) {
+			$name = $name . '_' . $locale;
+		}
 		if ($root) {
-			return $this->menuItemRepository->getMenuRoot($name);
+			return $this->menuItemRepository->getMenuRoot($name) ?? $this->menuItemRepository->getMenuRoot($defaultName);
 		}
 
-		return $this->menuItemRepository->getMenu($name);
+		return $this->menuItemRepository->getMenu($name) ?? $this->menuItemRepository->getMenu($defaultName);
 	}
 
 	public function instant_search_form()
@@ -80,7 +101,7 @@ class LayoutTwigExtension extends AbstractExtension
 
 	public function login_form()
 	{
-		return (new LoginForm())->toString();
+		return $this->formulierFactory->create(LoginForm::class, null, [])->createView()->toString();
 	}
 
 	public function icon($key, $hover = null, $title = null, $class = null, $content = null)

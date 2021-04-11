@@ -13,18 +13,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices;
+use Trikoder\Bundle\OAuth2Bundle\Model\AccessToken;
+use Trikoder\Bundle\OAuth2Bundle\Model\RefreshToken;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 28/07/2019
  */
-class SessionController extends AbstractController {
+class SessionController extends AbstractController
+{
 	/**
 	 * @var RememberLoginRepository
 	 */
 	private $rememberLoginRepository;
 
-	public function __construct(RememberLoginRepository $rememberLoginRepository) {
+	public function __construct(RememberLoginRepository $rememberLoginRepository)
+	{
 		$this->rememberLoginRepository = $rememberLoginRepository;
 	}
 
@@ -33,7 +37,8 @@ class SessionController extends AbstractController {
 	 * @Route("/session/rememberdata", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function rememberdata() {
+	public function rememberdata()
+	{
 		return $this->tableData($this->rememberLoginRepository->findBy(['uid' => $this->getUid()]));
 	}
 
@@ -44,7 +49,8 @@ class SessionController extends AbstractController {
 	 * @Route("/session/remember", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function remember(Request $request, PersistentTokenBasedRememberMeServices $rememberMeServices) {
+	public function remember(Request $request, PersistentTokenBasedRememberMeServices $rememberMeServices)
+	{
 		$selection = $this->getDataTableSelection();
 
 		if (empty($selection)) {
@@ -85,7 +91,8 @@ class SessionController extends AbstractController {
 	 * @Route("/session/forget-all", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function forgetAll() {
+	public function forgetAll()
+	{
 		$remembers = $this->rememberLoginRepository->findBy(['uid' => $this->getUid()]);
 
 		$response = [];
@@ -104,7 +111,8 @@ class SessionController extends AbstractController {
 	 * @Route("/session/forget", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function forget() {
+	public function forget()
+	{
 		$selection = $this->getDataTableSelection();
 		if (!$selection) {
 			throw $this->createAccessDeniedException();
@@ -122,5 +130,55 @@ class SessionController extends AbstractController {
 		}
 		$manager->flush();
 		return $this->tableData($response);
+	}
+
+	/**
+	 * @return GenericDataTableResponse
+	 * @Route("/session/oauth2-refresh-token", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function oauth2Data()
+	{
+		$accessTokens = $this->getDoctrine()->getRepository(AccessToken::class)
+			->findBy(['userIdentifier' => $this->getUser()->uid]);
+
+		$refreshTokens = [];
+
+		foreach ($accessTokens as $accessToken) {
+			$refreshTokens[] = $this->getDoctrine()->getRepository(RefreshToken::class)
+				->findOneBy(['accessToken' => $accessToken->getIdentifier()]);
+		}
+
+		return $this->tableData(array_map(function (RefreshToken $token) {
+			return [
+				'UUID' => $token->getIdentifier() . '@RefreshToken.csrdelft.nl',
+				'identifier' => $token->getIdentifier(),
+				'client' => $token->getAccessToken()->getClient()->getIdentifier(),
+				'expiry' => $token->getExpiry(),
+				'revoked' => $token->isRevoked(),
+			];
+		}, $refreshTokens));
+	}
+
+	/**
+	 * @Route("/session/oauth2-refresh-token-revoke/{identifier}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @param RefreshToken $refreshToken
+	 * @return GenericDataTableResponse
+	 */
+	public function oauth2RefreshTokenRevoke(RefreshToken $refreshToken)
+	{
+		$refreshToken->revoke();
+		$refreshToken->getAccessToken()->revoke();
+
+		$this->getDoctrine()->getManager()->flush();
+
+		return $this->tableData([[
+			'UUID' => $refreshToken->getIdentifier() . '@RefreshToken.csrdelft.nl',
+			'identifier' => $refreshToken->getIdentifier(),
+			'client' => $refreshToken->getAccessToken()->getClient()->getIdentifier(),
+			'expiry' => $refreshToken->getExpiry(),
+			'revoked' => $refreshToken->isRevoked(),
+		]]);
 	}
 }

@@ -7,6 +7,7 @@ use CsrDelft\entity\security\enum\AccessAction;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * Ketzer.class.php
@@ -27,18 +28,21 @@ class Ketzer extends AbstractGroep implements HeeftAanmeldLimiet {
 	 * Maximaal aantal groepsleden
 	 * @var string
 	 * @ORM\Column(type="integer", nullable=true)
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $aanmeld_limiet;
 	/**
 	 * Datum en tijd aanmeldperiode begin
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $aanmelden_vanaf;
 	/**
 	 * Datum en tijd aanmeldperiode einde
 	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
+	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $aanmelden_tot;
 	/**

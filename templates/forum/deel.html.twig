@@ -1,6 +1,6 @@
 {% extends 'forum/base.html.twig' %}
 
-{% block titel %}{{ deel.titel }}{% endblock %}
+{% block titel %}{{ deel.titel | raw }}{% endblock %}
 
 {% block breadcrumbs %}
 	<ol class="breadcrumb">

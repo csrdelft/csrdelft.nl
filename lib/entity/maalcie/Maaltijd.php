@@ -199,12 +199,12 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	/**
 	 * Bereken het budget voor deze maaltijd.
 	 *
-	 * @return double
+	 * @return integer
 	 */
 	public function getBudget() {
 		$budget = $this->getAantalAanmeldingen() + $this->getMarge();
 		$budget *= $this->getPrijs() - intval(instelling('maaltijden', 'budget_maalcie'));
-		return floatval($budget) / 100.0;
+		return $budget;
 	}
 
 	/**

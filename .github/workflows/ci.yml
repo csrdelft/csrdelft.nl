@@ -82,6 +82,13 @@ jobs:
           name: js
           path: htdocs/dist
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3
+          tools: composer:v2
+          extensions: pdo_mysql
+
       - name: 💽 Setup database
         run: |
           php bin/console doctrine:database:create -n
@@ -106,6 +113,8 @@ jobs:
     name: Push naar productie
     runs-on: ubuntu-latest
     needs: build
+    # Deze workflow gebruikt een geheime token: PRODUCTIE_TOKEN en kan niet van een fork gerund worden.
+    if: github.repository == 'csrdelft/csrdelft.nl'
 
     steps:
       - uses: actions/checkout@v2
