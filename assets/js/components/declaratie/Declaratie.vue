@@ -327,7 +327,12 @@
         </div>
       </div>
       <div class="voorbeeld">
-        <iframe :src="huidigeBon.bestandsnaam" />
+        <iframe
+          v-for="(bon,bonIndex) in declaratie.bonnen"
+          v-show="geselecteerdeBon === bonIndex"
+          :key="'voorbeeld-' + bonIndex"
+          :src="bon.bestandsnaam"
+        />
       </div>
     </div>
 
@@ -396,34 +401,17 @@ const legeRegel: () => Regel = () => ({
   btw: '',
 });
 
+const legeBon: (string) => Bon = (bon) => ({
+  bestandsnaam: bon,
+  datum: '',
+  regels: [ legeRegel() ],
+});
+
 const legeDeclaratie: () => Declaratie = () => ({
   opmerkingen: '',
   eigenRekening: true,
   status: 'concept',
-  bonnen: [ // TODO: Verwijderen
-    {
-      bestandsnaam: 'https://media-cdn.tripadvisor.com/media/photo-s/0a/de/cc/6f/addition.jpg',
-      datum: '',
-      regels: [
-        {
-          omschrijving: 'Pizza',
-          bedrag: 25.00,
-          btw: 'incl. 9%',
-        },
-      ],
-    },
-    {
-      bestandsnaam: 'https://media-cdn.tripadvisor.com/media/photo-s/0a/de/cc/6f/addition.jpg',
-      datum: '',
-      regels: [
-        {
-          omschrijving: 'Pizza',
-          bedrag: 25.00,
-          btw: 'incl. 9%',
-        },
-      ],
-    },
-  ],
+  bonnen: [],
 });
 
 @Component({
@@ -462,6 +450,13 @@ export default class DeclaratieVue extends Vue {
       this.geselecteerdeBon = Math.min(this.declaratie.bonnen?.length - 1, this.geselecteerdeBon);
       return this.declaratie.bonnen?.[this.geselecteerdeBon];
     }
+  }
+
+  public nieuweBon(file: string): void {
+    this.declaratie.bonnen.push(
+      legeBon(file)
+    );
+    this.geselecteerdeBon = this.declaratie.bonnen?.length - 1;
   }
 
   public bonVerwijderen(index: number): void {
@@ -549,10 +544,10 @@ export default class DeclaratieVue extends Vue {
     }).then((res) => {
       this.uploading = false;
       this.bonUploaden = false;
-      console.log(res);
+      this.nieuweBon(res.data.file);
     }).catch((err) => {
       this.uploading = false;
-      console.log(err);
+      alert(err);
     });
   }
 }
@@ -608,6 +603,12 @@ export default class DeclaratieVue extends Vue {
     grid-template-columns: 550px auto;
     height: 400px;
     overflow: hidden;
+
+    @media screen and (max-width: 768px) {
+      grid-template-columns: auto;
+      grid-template-rows: 400px 400px;
+      height: auto;
+    }
 
     .lijst {
       height: 100%;
@@ -792,6 +793,10 @@ export default class DeclaratieVue extends Vue {
     overflow: hidden;
     min-height: 400px;
     padding: 110px;
+
+    @media screen and (max-width: 768px) {
+      padding: 50px;
+    }
 
     .inhoud {
       position: relative;
