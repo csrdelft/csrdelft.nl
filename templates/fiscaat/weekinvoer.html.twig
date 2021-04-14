@@ -5,23 +5,22 @@
 {% block civisaldocontent %}
 	<h2>Weekinvoer</h2>
 
-	<form action="{{ url('csrdelft_fiscaat_weekinvoer_weekinvoer') }}" method="post" class="mt-4">
+	<form action="{{ url('csrdelft_fiscaat_weekinvoer_weekinvoer') }}" method="get" class="mt-4">
 		<div class="row">
 			<div class="col-md-5">
 				<div class="form-group">
-					<label for="uploadVeld">Van:</label>
-					<input name="van" type="date" class="form-control" value="{{ van }}" />
+					<label for="van">Van:</label>
+					<input id="van" name="van" type="date" class="form-control" value="{{ van }}" />
 				</div>
 			</div>
 			<div class="col-md-5">
 				<div class="form-group">
-					<label for="uploadVeld">Tot:</label>
-					<input name="tot" type="date" class="form-control" value="{{ tot }}" />
+					<label for="tot">Tot:</label>
+					<input id="tot" name="tot" type="date" class="form-control" value="{{ tot }}" />
 				</div>
 			</div>
 			<div class="col-md-2">
 				<div class="form-group">
-					{{ csrfField() }}
 					<label>&emsp;</label>
 					<input class="btn btn-primary form-control" type="submit" value="Bekijk">
 				</div>

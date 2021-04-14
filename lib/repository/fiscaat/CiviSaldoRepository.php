@@ -308,4 +308,95 @@ SQL;
 
 		return $weekinvoeren;
 	}
+
+	/**
+	 * @param DateTimeImmutable $from
+	 * @param DateTimeImmutable $until
+	 * @param string $cie
+	 * @param int $categorie
+	 * @param int $product
+	 * @param bool $groeperen
+	 * @return int|mixed|string
+	 */
+	public function zoekBestellingen(DateTimeImmutable $from, DateTimeImmutable $until, string $cie, int $categorie, int $product, bool $groeperen) {
+		$rsm = new ResultSetMapping();
+		$rsm->addScalarResult('moment', 'moment', 'datetime_immutable');
+		$rsm->addScalarResult('cie', 'cie');
+		$rsm->addScalarResult('type', 'type');
+		$rsm->addScalarResult('beschrijving', 'beschrijving');
+		$rsm->addScalarResult('comment', 'comment');
+		$rsm->addScalarResult('prijs', 'prijs', 'integer');
+		$rsm->addScalarResult('aantal', 'aantal', 'integer');
+
+		if ($groeperen) {
+			$select = "MIN(moment) AS moment, G.cie, type, beschrijving, comment, prijs, SUM(aantal) AS aantal";
+			$orderBy = "MIN(moment)";
+			$groupBy = "GROUP BY G.cie, type, beschrijving, comment";
+		} else {
+			$select = "moment, uid, G.cie, type, beschrijving, prijs, aantal, comment";
+			$orderBy = "moment";
+			$groupBy = "";
+
+			$rsm->addScalarResult('uid', 'uid');
+		}
+
+		$filter = "";
+		if ($cie != -1) {
+			$filter .= " AND G.cie = :cie ";
+		}
+		if ($categorie != -1) {
+			$filter .= " AND G.id = :categorie ";
+		}
+		if ($product != -1) {
+			$filter .= " AND P.id = :product ";
+		}
+
+		$query = <<<SQL
+SELECT $select
+FROM civi_bestelling AS B
+JOIN civi_bestelling_inhoud AS I ON
+	B.id = I.bestelling_id
+JOIN civi_product AS P ON
+	I.product_id = P.id
+JOIN civi_prijs AS PR ON
+	P.id = PR.product_id
+	AND (B.moment > PR.van AND (B.moment < PR.tot OR PR.tot IS NULL))
+JOIN civi_categorie AS G ON
+	P.categorie_id = G.id
+WHERE
+	deleted = 0 AND
+	B.moment >= :van AND
+	B.moment < :tot
+	{$filter}
+{$groupBy}
+ORDER BY {$orderBy}
+SQL;
+
+		$nativeQuery = $this->_em->createNativeQuery($query, $rsm);
+		$nativeQuery->setParameter('van', $from);
+		$nativeQuery->setParameter('tot', $until);
+
+		if ($cie != -1) {
+			$nativeQuery->setParameter('cie', $cie);
+		}
+		if ($categorie != -1) {
+			$nativeQuery->setParameter('categorie', $categorie);
+		}
+		if ($product != -1) {
+			$nativeQuery->setParameter('product', $product);
+		}
+
+		$result = $nativeQuery->getResult();
+
+		if (count($result) > 1000) {
+			setMelding("Te veel (>1000) resultaten. Stel specifiekere filters in.", -1);
+			return [];
+		}
+
+		foreach ($result as $key => $value) {
+			$result[$key]['civisaldo'] = $this->getSaldo($value['uid'])->getWeergave();
+		}
+		return $result;
+	}
+
 }

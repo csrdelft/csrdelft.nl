@@ -18,7 +18,7 @@ class WeekinvoerController extends AbstractController {
 	 * @param Request $request
 	 * @param CiviSaldoRepository $civiSaldoRepository
 	 * @return Response
-	 * @Auth(P_FISCAAT_MOD)
+	 * @Auth(P_FISCAAT_READ)
 	 */
 	public function weekinvoer(Request $request, CiviSaldoRepository $civiSaldoRepository) {
 		$from = new DateTimeImmutable();
@@ -27,16 +27,16 @@ class WeekinvoerController extends AbstractController {
 		$until = new DateTimeImmutable();
 		$until = $until->add(new DateInterval('P1W'));
 
-		if ($request->request->has('van')) {
+		if ($request->query->has('van')) {
 			try {
-				$from = new DateTimeImmutable($request->request->get('van'));
+				$from = new DateTimeImmutable($request->query->get('van'));
 			} catch (Exception $e) {
 			}
 		}
 
-		if ($request->request->has('tot')) {
+		if ($request->query->has('tot')) {
 			try {
-				$until = new DateTimeImmutable($request->request->get('tot'));
+				$until = new DateTimeImmutable($request->query->get('tot'));
 			} catch (Exception $e) {
 			}
 		}

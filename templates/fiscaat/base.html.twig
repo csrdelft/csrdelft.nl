@@ -37,8 +37,14 @@
 			</li>
 			<li class="nav-item">
 				<a href="{{ url('csrdelft_fiscaat_weekinvoer_weekinvoer') }}"
-					 class="nav-link {% if app.request.uri == url('csrdelft_fiscaat_weekinvoer_weekinvoer') %}active{% endif %}">
+					 class="nav-link {% if app.request.uri starts with url('csrdelft_fiscaat_weekinvoer_weekinvoer') %}active{% endif %}">
 					Weekinvoer
+				</a>
+			</li>
+			<li class="nav-item">
+				<a href="{{ url('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker') }}"
+					 class="nav-link {% if app.request.uri starts with url('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker') %}active{% endif %}">
+					Zoeker
 				</a>
 			</li>
 			{% if mag('P_FISCAAT_MOD') %}
