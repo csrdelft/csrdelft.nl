@@ -22,7 +22,7 @@ class WeekinvoerController extends AbstractController {
 	 */
 	public function weekinvoer(Request $request, CiviSaldoRepository $civiSaldoRepository) {
 		$from = new DateTimeImmutable();
-		$from = $from->sub(new DateInterval('P3M'));
+		$from = $from->sub(new DateInterval('P1M'));
 
 		$until = new DateTimeImmutable();
 		$until = $until->add(new DateInterval('P1W'));
