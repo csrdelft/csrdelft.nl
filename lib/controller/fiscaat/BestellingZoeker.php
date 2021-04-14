@@ -67,7 +67,7 @@ class BestellingZoeker extends AbstractController {
 
 		foreach ($civiCategorieRepository->findBy([], ['type' => 'ASC']) as $categorie) {
 			$categorieen[$categorie->id] = $categorie->type;
-			if ($request->query->get('categorie') == $categorie->id) {
+			if ($request->query->get('categorie') == $categorie->id || $request->query->get('categorie') == $categorie->type) {
 				$selectedCategorie = $categorie->id;
 			}
 		}

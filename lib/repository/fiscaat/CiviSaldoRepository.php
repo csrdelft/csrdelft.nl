@@ -7,6 +7,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoLogEnum;
 use CsrDelft\repository\AbstractRepository;
+use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\OptimisticLockException;
@@ -292,6 +293,7 @@ SQL;
 				$weekinvoer->week = intval(substr($yearweek, 4));
 				$padWeek = str_pad($weekinvoer->week, 2, '0', STR_PAD_LEFT);
 				$weekinvoer->datum = new DateTimeImmutable("{$weekinvoer->jaar}-W{$padWeek}-1");
+				$weekinvoer->einde = $weekinvoer->datum->add(new DateInterval('P1W'));
 				$weekinvoer->categorieen = [];
 				$weekinvoer->totaal = 0;
 

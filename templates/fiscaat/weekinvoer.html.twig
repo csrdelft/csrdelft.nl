@@ -48,8 +48,16 @@
 								<th style="{% if weekinvoer.totaal < 0 %}color: red;{% endif %}">{{ weekinvoer.totaal|format_bedrag }}</th>
 								{% for categorie in categorieen %}
 									{% if categorie in weekinvoer.categorieen|keys %}
-										<td style="{% if weekinvoer.categorieen[categorie] < 0 %}color: red;{% endif %}">
-											{{ weekinvoer.categorieen[categorie]|format_bedrag }}
+										<td>
+											<a href="{{ path('csrdelft_fiscaat_bestellingzoeker_bestellingzoeker', {
+												'van': weekinvoer.datum|date('Y-m-d'),
+												'tot': weekinvoer.einde|date('Y-m-d'),
+												'categorie': categorie,
+											}) }}"
+												 style="{% if weekinvoer.categorieen[categorie] < 0 %}color: red;{% else %}color: inherit;{% endif %}"
+												 target="_blank">
+												{{ weekinvoer.categorieen[categorie]|format_bedrag }}
+											</a>
 										</td>
 									{% else %}
 										<td></td>
@@ -60,6 +68,14 @@
 					</tbody>
 				</table>
 			</div>
+
+			<script>
+				function openDetail() {
+					// Zoek categorie
+					// Zoek datums
+					// Open link
+				}
+			</script>
 		{% else %}
 			Geen weekinvoeren in periode.
 		{% endif %}
