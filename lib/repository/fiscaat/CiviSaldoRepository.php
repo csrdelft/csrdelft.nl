@@ -7,10 +7,14 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoLogEnum;
 use CsrDelft\repository\AbstractRepository;
+use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
+use stdClass;
 
 /**
  * @author Gerben Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -221,4 +225,180 @@ class CiviSaldoRepository extends AbstractRepository {
 			->setParameter('saldogrens', $saldogrens)
 			->getQuery()->getResult();
 	}
+
+	/**
+	 * @param DateTimeImmutable $from
+	 * @param DateTimeImmutable $until
+	 * @return stdClass
+	 */
+	public function getWeekinvoer(DateTimeImmutable $from, DateTimeImmutable $until) {
+		// Invoer gebeurt op maandag, zoek eerste en laatse maandag (eerste inbegrepen, laatste niet)
+		$from = $from->modify('monday');
+		$until = $until->modify('next monday'); // Ook als het maandag is de volgende maandag pakken
+
+		$query = <<<SQL
+SELECT G.type,
+	SUM(I.aantal * PR.prijs) AS total,
+	YEARWEEK(B.moment, 3) AS yearweek
+FROM civi_bestelling AS B
+JOIN civi_bestelling_inhoud AS I ON
+	B.id = I.bestelling_id
+JOIN civi_product AS P ON
+	I.product_id = P.id
+JOIN civi_prijs AS PR ON
+	P.id = PR.product_id
+	AND (B.moment > PR.van AND (B.moment < PR.tot OR PR.tot IS NULL))
+JOIN civi_categorie AS G ON
+	P.categorie_id = G.id
+WHERE
+	B.deleted = 0 AND
+	G.status = 1 AND
+	B.cie != 'maalcie' AND
+	B.moment >= :van AND
+	B.moment < :tot
+GROUP BY
+	yearweek,
+	G.id
+ORDER BY yearweek DESC
+SQL;
+
+		$rsm = new ResultSetMapping();
+		$rsm->addScalarResult('type', 'categorie');
+		$rsm->addScalarResult('total', 'total', 'integer');
+		$rsm->addScalarResult('yearweek', 'yearweek');
+
+		$nativeQuery = $this->_em->createNativeQuery($query, $rsm);
+		$nativeQuery->setParameter('van', $from);
+		$nativeQuery->setParameter('tot', $until);
+
+		return self::formatWeekinvoer($nativeQuery->getResult());
+	}
+
+	private static function formatWeekinvoer($result) {
+		$weekinvoeren = new stdClass();
+		// Standaard volgorde categorieën
+		$weekinvoeren->categorieen = [
+			'Bier', 'Wijn', 'Fris', 'Speciaalbier', 'Sterk', 'Whisky',
+			'Etenswaar', 'Glaswerk', 'Overig',
+			'PrakCie pils', 'PrakCie cent', 'Incidentele donateur', 'Cent',
+			'PIN', 'Overgemaakt', 'Contant'
+		];
+		$weekinvoeren->weken = [];
+
+		foreach ($result as $regel) {
+			$yearweek = $regel['yearweek'];
+			if (!isset($weekinvoeren->weken[$yearweek])) {
+				$weekinvoer = new stdClass();
+				$weekinvoer->jaar = intval(substr($yearweek, 0, 4));
+				$weekinvoer->week = intval(substr($yearweek, 4));
+				$padWeek = str_pad($weekinvoer->week, 2, '0', STR_PAD_LEFT);
+				$weekinvoer->datum = new DateTimeImmutable("{$weekinvoer->jaar}-W{$padWeek}-1");
+				$weekinvoer->einde = $weekinvoer->datum->add(new DateInterval('P1W'));
+				$weekinvoer->categorieen = [];
+				$weekinvoer->totaal = 0;
+
+				$weekinvoeren->weken[$yearweek] = $weekinvoer;
+			}
+
+			if (!in_array($regel['categorie'], $weekinvoeren->categorieen)) {
+				$weekinvoeren->categorieen[] = $regel['categorie'];
+			}
+
+			$weekinvoeren->weken[$yearweek]->categorieen[$regel['categorie']] = $regel['total'];
+			$weekinvoeren->weken[$yearweek]->totaal += $regel['total'];
+		}
+
+		return $weekinvoeren;
+	}
+
+	/**
+	 * @param DateTimeImmutable $from
+	 * @param DateTimeImmutable $until
+	 * @param string $cie
+	 * @param int $categorie
+	 * @param int $product
+	 * @param bool $groeperen
+	 * @return int|mixed|string
+	 */
+	public function zoekBestellingen(DateTimeImmutable $from, DateTimeImmutable $until, string $cie, int $categorie, int $product, bool $groeperen) {
+		$rsm = new ResultSetMapping();
+		$rsm->addScalarResult('moment', 'moment', 'datetime_immutable');
+		$rsm->addScalarResult('cie', 'cie');
+		$rsm->addScalarResult('type', 'type');
+		$rsm->addScalarResult('beschrijving', 'beschrijving');
+		$rsm->addScalarResult('comment', 'comment');
+		$rsm->addScalarResult('prijs', 'prijs', 'integer');
+		$rsm->addScalarResult('aantal', 'aantal', 'integer');
+
+		if ($groeperen) {
+			$select = "MIN(moment) AS moment, G.cie, type, beschrijving, comment, prijs, SUM(aantal) AS aantal";
+			$orderBy = "MIN(moment)";
+			$groupBy = "GROUP BY G.cie, type, beschrijving, comment";
+		} else {
+			$select = "moment, uid, G.cie, type, beschrijving, prijs, aantal, comment";
+			$orderBy = "moment";
+			$groupBy = "";
+
+			$rsm->addScalarResult('uid', 'uid');
+		}
+
+		$filter = "";
+		if ($cie != -1) {
+			$filter .= " AND G.cie = :cie ";
+		}
+		if ($categorie != -1) {
+			$filter .= " AND G.id = :categorie ";
+		}
+		if ($product != -1) {
+			$filter .= " AND P.id = :product ";
+		}
+
+		$query = <<<SQL
+SELECT $select
+FROM civi_bestelling AS B
+JOIN civi_bestelling_inhoud AS I ON
+	B.id = I.bestelling_id
+JOIN civi_product AS P ON
+	I.product_id = P.id
+JOIN civi_prijs AS PR ON
+	P.id = PR.product_id
+	AND (B.moment > PR.van AND (B.moment < PR.tot OR PR.tot IS NULL))
+JOIN civi_categorie AS G ON
+	P.categorie_id = G.id
+WHERE
+	deleted = 0 AND
+	B.moment >= :van AND
+	B.moment < :tot
+	{$filter}
+{$groupBy}
+ORDER BY {$orderBy}
+SQL;
+
+		$nativeQuery = $this->_em->createNativeQuery($query, $rsm);
+		$nativeQuery->setParameter('van', $from);
+		$nativeQuery->setParameter('tot', $until);
+
+		if ($cie != -1) {
+			$nativeQuery->setParameter('cie', $cie);
+		}
+		if ($categorie != -1) {
+			$nativeQuery->setParameter('categorie', $categorie);
+		}
+		if ($product != -1) {
+			$nativeQuery->setParameter('product', $product);
+		}
+
+		$result = $nativeQuery->getResult();
+
+		if (count($result) > 1000) {
+			setMelding("Te veel (>1000) resultaten. Stel specifiekere filters in.", -1);
+			return [];
+		}
+
+		foreach ($result as $key => $value) {
+			$result[$key]['civisaldo'] = $this->getSaldo($value['uid'])->getWeergave();
+		}
+		return $result;
+	}
+
 }
