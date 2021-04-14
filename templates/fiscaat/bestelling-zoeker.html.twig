@@ -87,8 +87,8 @@
 						{% for bestelling in bestellingen %}
 							<tr>
 								<td>{{ bestelling.moment|date("D j-n-Y G:i:s") }}</td>
-								{% if not groeperen %}<td>{{ bestelling.uid }}</td>{% endif %}
-								<td>{{ bestelling.civisaldo }}</td>
+								{% if not groeperen %}<td>{{ bestelling.civisaldo|raw }}</td>{% endif %}
+								<td>{{ bestelling.cie }}</td>
 								<td>{{ bestelling.type }}</td>
 								<td>{{ bestelling.beschrijving }}</td>
 								<td>{{ bestelling.comment }}</td>

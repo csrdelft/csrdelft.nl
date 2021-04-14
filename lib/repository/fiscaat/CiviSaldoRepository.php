@@ -396,7 +396,7 @@ SQL;
 		}
 
 		foreach ($result as $key => $value) {
-			$result[$key]['civisaldo'] = $this->getSaldo($value['uid'])->getWeergave();
+			$result[$key]['civisaldo'] = $this->getSaldo($value['uid'])->getLink();
 		}
 		return $result;
 	}
