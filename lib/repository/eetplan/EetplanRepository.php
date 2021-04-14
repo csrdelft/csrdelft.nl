@@ -49,15 +49,15 @@ class EetplanRepository extends AbstractRepository {
 	/**
 	 * Haal alle avonden op die voor deze lichting gelden.
 	 *
-	 * @param $lichting
+	 * @param $lidjaar
 	 *
 	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
-	public function getAvonden($lichting) {
+	public function getAvonden($lidjaar) {
 		return $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')
-			->where('n.uid like :uid and e.avond is not null')
-			->setParameter('uid', $lichting . '%')
+			->where('n.lidjaar = :lidjaar and e.avond is not null')
+			->setParameter('lidjaar', $lidjaar)
 			->groupBy('e.avond')
 			->getQuery()->getResult();
 	}
@@ -67,18 +67,18 @@ class EetplanRepository extends AbstractRepository {
 	 *
 	 * Uitvoer is een array met 'uid' => [Eetplan, Eetplan, ...]
 	 *
-	 * @param $lichting
+	 * @param $lidjaar
 	 *
 	 * @return array Het eetplan
 	 */
-	public function getEetplan($lichting) {
+	public function getEetplan($lidjaar) {
 		// Avond null wordt gebruikt voor novieten die huizen kennen
 		// Orderen bij avond, zodat de avondvolgorde per noviet klopt
 		/** @var Eetplan[] $eetplan */
 		$eetplan = $this->createQueryBuilder('e')
 			->join('e.noviet', ' n')
-			->where('n.uid like :uid and e.avond is not null')
-			->setParameter('uid', $lichting . '%')
+			->where('n.lidjaar = :lidjaar and e.avond is not null')
+			->setParameter('lidjaar', $lidjaar)
 			->orderBy('e.avond', 'DESC')
 			->getQuery()->getResult();
 		$eetplanFeut = [];
@@ -111,24 +111,20 @@ class EetplanRepository extends AbstractRepository {
 
 	/**
 	 * @param string $avond
-	 * @param string $lichting
+	 * @param integer $lidjaar
 	 *
 	 * @return Eetplan[]
 	 */
-	public function maakEetplan($avond, $lichting) {
+	public function maakEetplan($avond, $lidjaar) {
 		$factory = new EetplanFactory();
 
-		$bekenden = $this->eetplanBekendenRepository->getBekenden($lichting);
+		$bekenden = $this->eetplanBekendenRepository->getBekendenVoorLidjaar($lidjaar);
 		$factory->setBekenden($bekenden);
 
-		$bezocht = $this->createQueryBuilder('e')
-			->join('e.noviet', 'n')
-			->where("n.uid like :uid")
-			->setParameter('uid', $lichting . '%')
-			->getQuery()->getResult();
+		$bezocht = $this->getBezocht($lidjaar);
 		$factory->setBezocht($bezocht);
 
-		$novieten = $this->profielRepository->getNovieten($lichting);
+		$novieten = $this->profielRepository->getNovietenVanLaatsteLidjaar($lidjaar);
 		$factory->setNovieten($novieten);
 
 		$huizen = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->findBy(["eetplan" => true, "status" => GroepStatus::HT()]);
@@ -153,17 +149,17 @@ class EetplanRepository extends AbstractRepository {
 
 	/**
 	 * @param int $woonoord_id Id van het huis
-	 * @param string $lichting
+	 * @param string $lidjaar
 	 *
 	 * @return Eetplan[] lijst van eetplansessies voor dit huis, gegroepeerd op avond (oplopend)
 	 */
-	public function getEetplanVoorHuis($woonoord_id, $lichting) {
+	public function getEetplanVoorHuis($woonoord_id, $lidjaar) {
 		/** @var Eetplan[] $sessies */
 		$sessies = $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')
 			->join('e.woonoord', 'w')
-			->where('n.uid like :uid and w.id = :woonoord_id and e.avond is not null')
-			->setParameter('uid', $lichting . '%')
+			->where('n.lidjaar = :lidjaar and w.id = :woonoord_id and e.avond is not null')
+			->setParameter('lidjaar', $lidjaar)
 			->setParameter('woonoord_id', $woonoord_id)
 			->orderBy('e.avond', 'ASC')
 			->getQuery()->getResult();
@@ -176,15 +172,15 @@ class EetplanRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param string $lichting
+	 * @param string $lidjaar
 	 *
 	 * @return Eetplan[]
 	 */
-	public function getBekendeHuizen($lichting) {
+	public function getBekendeHuizen($lidjaar) {
 		return $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')
-			->where('n.uid like :uid and e.avond is null')
-			->setParameter('uid', $lichting . '%')
+			->where('n.lidjaar = :lidjaar and e.avond is null')
+			->setParameter('lidjaar', $lidjaar)
 			->getQuery()->getResult();
 	}
 
@@ -203,15 +199,28 @@ class EetplanRepository extends AbstractRepository {
 	/**
 	 * @param string $avond
 	 *
-	 * @param $lichting
+	 * @param $lidjaar
 	 * @return Eetplan[]
 	 */
-	public function getEetplanVoorAvond($avond, $lichting) {
+	public function getEetplanVoorAvond($avond, $lidjaar) {
 		return $this->createQueryBuilder('e')
 			->join('e.noviet', 'n')
-			->where('e.avond = :avond and n.uid like :uid')
+			->where('e.avond = :avond and n.lidjaar = :lidjaar')
 			->setParameter('avond', $avond)
-			->setParameter('uid', $lichting . '%')
+			->setParameter('lidjaar', $lidjaar)
+			->getQuery()->getResult();
+	}
+
+	/**
+	 * @param int $lidjaar
+	 * @return int|mixed|string
+	 */
+	public function getBezocht(int $lidjaar)
+	{
+		return $this->createQueryBuilder('e')
+			->join('e.noviet', 'n')
+			->where("n.lidjaar like :lidjaar")
+			->setParameter('lidjaar', $lidjaar)
 			->getQuery()->getResult();
 	}
 }

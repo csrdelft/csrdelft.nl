@@ -36,9 +36,10 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * Controller voor eetplan.
  */
-class EetplanController extends AbstractController {
+class EetplanController extends AbstractController
+{
 	/** @var string */
-	private $lichting;
+	private $lidjaar;
 	/** @var EetplanRepository */
 	private $eetplanRepository;
 	/** @var EetplanBekendenRepository */
@@ -47,12 +48,15 @@ class EetplanController extends AbstractController {
 	private $woonoordenRepository;
 
 	public function __construct(
-		EetplanRepository $eetplanRepository, EetplanBekendenRepository $eetplanBekendenRepository, WoonoordenRepository $woonoordenRepository
-	) {
+		EetplanRepository $eetplanRepository,
+		EetplanBekendenRepository $eetplanBekendenRepository,
+		WoonoordenRepository $woonoordenRepository
+	)
+	{
 		$this->eetplanRepository = $eetplanRepository;
 		$this->eetplanBekendenRepository = $eetplanBekendenRepository;
 		$this->woonoordenRepository = $woonoordenRepository;
-		$this->lichting = substr((string)LichtingenRepository::getJongsteLidjaar(), 2, 2);
+		$this->lidjaar = LichtingenRepository::getJongsteLidjaar();
 	}
 
 	/**
@@ -60,9 +64,10 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function view() {
+	public function view()
+	{
 		return $this->render('eetplan/overzicht.html.twig', [
-			'eetplan' => $this->eetplanRepository->getEetplan($this->lichting)
+			'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)
 		]);
 	}
 
@@ -72,7 +77,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/noviet/{uid}", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function noviet($uid) {
+	public function noviet($uid)
+	{
 		$eetplan = $this->eetplanRepository->getEetplanVoorNoviet($uid);
 		if (!$eetplan) {
 			throw new NotFoundHttpException("Geen eetplan gevonden voor deze noviet");
@@ -90,8 +96,9 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/huis/{id}", methods={"GET"}, requirements={"id": "\d+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function huis($id) {
-		$eetplan = $this->eetplanRepository->getEetplanVoorHuis($id, $this->lichting);
+	public function huis($id)
+	{
+		$eetplan = $this->eetplanRepository->getEetplanVoorHuis($id, $this->lidjaar);
 		if ($eetplan == []) {
 			throw new CsrGebruikerException('Huis niet gevonden');
 		}
@@ -109,7 +116,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/woonoorden/toggle", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function woonoorden_toggle() {
+	public function woonoorden_toggle()
+	{
 		$selection = $this->getDataTableSelection();
 		$woonoorden = [];
 		foreach ($selection as $woonoord) {
@@ -127,7 +135,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/woonoorden", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function woonoorden() {
+	public function woonoorden()
+	{
 		$woonoorden = $this->woonoordenRepository->findBy(['status' => GroepStatus::HT()]);
 		return new EetplanHuizenResponse($woonoorden);
 	}
@@ -137,8 +146,9 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/bekendehuizen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen() {
-		return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
+	public function bekendehuizen()
+	{
+		return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lidjaar));
 	}
 
 	/**
@@ -147,7 +157,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/bekendehuizen/toevoegen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_toevoegen(Request $request) {
+	public function bekendehuizen_toevoegen(Request $request)
+	{
 		$eetplan = new Eetplan();
 		$form = $this->createFormulier(
 			EetplanBekendeHuizenForm::class,
@@ -162,7 +173,7 @@ class EetplanController extends AbstractController {
 			return new Response($form->createModalView());
 		} else {
 			$this->eetplanRepository->save($eetplan);
-			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
+			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lidjaar));
 		}
 	}
 
@@ -173,7 +184,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/bekendehuizen/bewerken/{uuid}", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_bewerken(Request $request, $uuid = null) {
+	public function bekendehuizen_bewerken(Request $request, $uuid = null)
+	{
 		if (!$uuid) {
 			$uuid = $this->getDataTableSelection()[0];
 		}
@@ -187,7 +199,7 @@ class EetplanController extends AbstractController {
 		$form->handleRequest($request);
 		if ($form->isPosted() && $form->validate()) {
 			$this->eetplanRepository->save($eetplan);
-			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lichting));
+			return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lidjaar));
 		} else {
 			return new Response($form->createModalView());
 		}
@@ -198,7 +210,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/bekendehuizen/verwijderen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_verwijderen() {
+	public function bekendehuizen_verwijderen()
+	{
 		$selection = $this->getDataTableSelection();
 		$verwijderd = array();
 		if ($selection !== false) {
@@ -220,7 +233,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/bekendehuizen/zoeken", methods={"GET"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_zoeken(Request $request) {
+	public function bekendehuizen_zoeken(Request $request)
+	{
 		$huisnaam = $request->query->get('q');
 		$huisnaam = '%' . $huisnaam . '%';
 		/** @var Woonoord[] $woonoorden */
@@ -237,8 +251,9 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/novietrelatie", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie() {
-		return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
+	public function novietrelatie()
+	{
+		return $this->tableData($this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar));
 	}
 
 	/**
@@ -247,7 +262,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/novietrelatie/toevoegen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie_toevoegen(Request $request) {
+	public function novietrelatie_toevoegen(Request $request)
+	{
 		$eetplanbekenden = new EetplanBekenden();
 		$form = $this->createFormulier(
 			EetplanBekendenForm::class,
@@ -262,7 +278,7 @@ class EetplanController extends AbstractController {
 			return new Response($form->createModalView());
 		} else {
 			$this->eetplanBekendenRepository->save($eetplanbekenden);
-			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
+			return $this->tableData($this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar));
 		}
 	}
 
@@ -273,7 +289,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/novietrelatie/bewerken/{uuid}", methods={"POST"}, defaults={"uuid": null})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie_bewerken(Request $request, $uuid) {
+	public function novietrelatie_bewerken(Request $request, $uuid)
+	{
 		if (!$uuid) {
 			$uuid = $this->getDataTableSelection()[0];
 		}
@@ -287,7 +304,7 @@ class EetplanController extends AbstractController {
 		$form->handleRequest($request);
 		if ($form->isPosted() && $form->validate()) {
 			$this->eetplanBekendenRepository->save($eetplanbekenden);
-			return $this->tableData($this->eetplanBekendenRepository->getBekenden($this->lichting));
+			return $this->tableData($this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar));
 		} else {
 			return new Response($form->createModalView());
 		}
@@ -298,7 +315,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/novietrelatie/verwijderen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie_verwijderen() {
+	public function novietrelatie_verwijderen()
+	{
 		$selection = $this->getDataTableSelection();
 		$verwijderd = [];
 		foreach ($selection as $uuid) {
@@ -316,12 +334,13 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/beheer", methods={"GET", "POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function beheer() {
+	public function beheer()
+	{
 		return $this->render('eetplan/beheer.html.twig', [
 			'bekendentable' => new EetplanBekendenTable(),
 			'huizentable' => new EetplanHuizenTable(),
 			'bekendehuizentable' => new EetplanBekendeHuizenTable(),
-			'eetplan' => $this->eetplanRepository->getEetplan($this->lichting)
+			'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)
 		]);
 	}
 
@@ -330,7 +349,8 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/nieuw", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function nieuw() {
+	public function nieuw()
+	{
 		$form = new NieuwEetplanForm();
 
 		if (!$form->validate()) {
@@ -340,13 +360,13 @@ class EetplanController extends AbstractController {
 			return $form;
 		} else {
 			$avond = $form->getValues()['avond'];
-			$eetplan = $this->eetplanRepository->maakEetplan($avond, $this->lichting);
+			$eetplan = $this->eetplanRepository->maakEetplan($avond, $this->lidjaar);
 
 			foreach ($eetplan as $sessie) {
 				$this->eetplanRepository->save($sessie);
 			}
 
-			return $this->render('eetplan/table.html.twig', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);
+			return $this->render('eetplan/table.html.twig', ['eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)]);
 		}
 	}
 
@@ -355,17 +375,18 @@ class EetplanController extends AbstractController {
 	 * @Route("/eetplan/verwijderen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function verwijderen() {
-		$avonden = $this->eetplanRepository->getAvonden($this->lichting);
+	public function verwijderen()
+	{
+		$avonden = $this->eetplanRepository->getAvonden($this->lidjaar);
 		$form = new VerwijderEetplanForm($avonden);
 
 		if (!$form->validate()) {
 			return $form;
 		} else {
 			$avond = date_create_immutable($form->getValues()['avond']);
-			$this->eetplanRepository->verwijderEetplan($avond, $this->lichting);
+			$this->eetplanRepository->verwijderEetplan($avond, $this->lidjaar);
 
-			return $this->render('eetplan/table.html.twig', ['eetplan' => $this->eetplanRepository->getEetplan($this->lichting)]);
+			return $this->render('eetplan/table.html.twig', ['eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)]);
 		}
 	}
 }
