@@ -395,8 +395,15 @@ SQL;
 			return [];
 		}
 
-		foreach ($result as $key => $value) {
-			$result[$key]['civisaldo'] = $this->getSaldo($value['uid'])->getLink();
+		if (!$groeperen) {
+			foreach ($result as $key => $value) {
+				$civiSaldo = $this->getSaldo($value['uid']);
+				if ($civiSaldo) {
+					$result[$key]['civisaldo'] = $civiSaldo->getLink();
+				} else {
+					$result[$key]['civisaldo'] = $value['uid'];
+				}
+			}
 		}
 		return $result;
 	}
