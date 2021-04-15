@@ -6,7 +6,9 @@ use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\GroepStatistiekDTO;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
@@ -23,7 +25,8 @@ use Throwable;
  * @method AbstractGroep|null findOneBy(array $criteria, array $orderBy = null)
  * @method AbstractGroep[]    findAll()
  */
-abstract class AbstractGroepenRepository extends AbstractRepository {
+abstract class AbstractGroepenRepository extends AbstractRepository
+{
 	/**
 	 * @var AbstractGroep
 	 */
@@ -34,29 +37,34 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @param ManagerRegistry $managerRegistry
 	 * @param $entityClass
 	 */
-	public function __construct(ManagerRegistry $managerRegistry, $entityClass) {
+	public function __construct(ManagerRegistry $managerRegistry, $entityClass)
+	{
 		parent::__construct($managerRegistry, $entityClass);
 
 		$this->entityClass = $entityClass;
 	}
 
-	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
-		return parent::findBy($criteria, ['begin_moment' => 'DESC'] + ($orderBy ?? []), $limit, $offset);
-	}
-
-	public static function getUrl() {
+	public static function getUrl()
+	{
 		return '/groepen/' . static::getNaam();
 	}
 
-	public static function getNaam() {
+	public static function getNaam()
+	{
 		return strtolower(str_replace('Repository', '', classNameZonderNamespace(get_called_class())));
+	}
+
+	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+	{
+		return parent::findBy($criteria, ['begin_moment' => 'DESC'] + ($orderBy ?? []), $limit, $offset);
 	}
 
 	/**
 	 * @param $id
 	 * @return AbstractGroep|false
 	 */
-	public function get($id) {
+	public function get($id)
+	{
 		if (is_numeric($id)) {
 			return $this->find($id);
 		}
@@ -71,7 +79,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function create(AbstractGroep $groep) {
+	public function create(AbstractGroep $groep)
+	{
 		$this->_em->persist($groep);
 		$this->_em->flush();
 	}
@@ -81,7 +90,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function update(AbstractGroep $groep) {
+	public function update(AbstractGroep $groep)
+	{
 		$this->_em->persist($groep);
 		$this->_em->flush();
 	}
@@ -91,7 +101,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function delete(AbstractGroep $groep) {
+	public function delete(AbstractGroep $groep)
+	{
 		$this->_em->remove($groep);
 		$this->_em->flush();
 	}
@@ -104,7 +115,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @param string $soort
 	 * @return AbstractGroep|bool
 	 */
-	public function converteer(AbstractGroep $oldgroep, AbstractGroepenRepository $oldmodel, $soort = null) {
+	public function converteer(AbstractGroep $oldgroep, AbstractGroepenRepository $oldmodel, $soort = null)
+	{
 		try {
 			return $this->_em->transactional(function () use ($oldgroep, $oldmodel, $soort) {
 				// groep converteren
@@ -153,7 +165,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @param null $soort
 	 * @return AbstractGroep
 	 */
-	public function nieuw(/* @noinspection PhpUnusedParameterInspection */ $soort = null) {
+	public function nieuw(/* @noinspection PhpUnusedParameterInspection */ $soort = null)
+	{
 		$orm = $this->entityClass;
 		$groep = new $orm();
 		$groep->naam = null;
@@ -175,7 +188,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @param GroepStatus|array $status
 	 * @return AbstractGroep[]
 	 */
-	public function getGroepenVoorLid($uid, $status = null) {
+	public function getGroepenVoorLid($uid, $status = null)
+	{
 		$qb = $this->createQueryBuilder('ag')
 			->orderBy('ag.begin_moment', 'DESC')
 			->join('ag.leden', 'l')
@@ -199,7 +213,8 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 	 * @param AbstractGroep $groep
 	 * @return GroepStatistiekDTO
 	 */
-	public function getStatistieken(AbstractGroep $groep) {
+	public function getStatistieken(AbstractGroep $groep)
+	{
 		if ($groep->aantalLeden() == 0) {
 			return new GroepStatistiekDTO(0, [], [], [], []);
 		}
@@ -254,5 +269,38 @@ abstract class AbstractGroepenRepository extends AbstractRepository {
 			->getQuery()->getArrayResult();
 
 		return new GroepStatistiekDTO($totaal, $verticalen, $geslachten, $lidjaren, $tijd);
+	}
+
+	/**
+	 * @param string $zoekterm
+	 * @param int $limit
+	 * @return AbstractGroep[]
+	 */
+	public function zoeken($zoekterm, $limit = 5)
+	{
+		$query = $this->createQueryBuilder('g')
+			->where('g.status = :ht or g.status = :ft')
+			->setParameter('ht', GroepStatus::HT)
+			->setParameter('ft', GroepStatus::FT);
+
+		if ($zoekterm != '') {
+			$query = $query
+				->andWhere('g.familie LIKE :zoekterm or g.naam LIKE :zoekterm')
+				->setParameter('zoekterm', sql_contains($zoekterm));
+		}
+
+		$query = $query->orderBy('g.id', 'DESC');
+
+		$result = $query->getQuery()->iterate(null, AbstractQuery::HYDRATE_OBJECT);
+
+		$num = 0;
+		while ($num < $limit && ($object = $result->next()) !== false) {
+			if ($object[0]->mag(AccessAction::Bekijken)) {
+				$num++;
+				yield $object[0];
+			}
+		}
+
+		return [];
 	}
 }
