@@ -12,7 +12,7 @@ import {
 	linkItem,
 	markItem,
 	priveItem,
-	wrapListItem
+	wrapListItem, youtubeItemPrompt
 } from "./menu-item";
 import {cut} from "../lib/util";
 import icon from "./icon";
@@ -48,7 +48,7 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 				loggedIn && blockTypeItemPrompt(schema.nodes.ketzer, "Aanschafketzer", "Ketzer invoegen"),
 				loggedIn && new DropdownSubmenu([
 					blockTypeItemPrompt(schema.nodes.twitter, "Twitter", "Twitter invoegen"),
-					blockTypeItemPrompt(schema.nodes.youtube, "YouTube", "YouTube invoegen"),
+					youtubeItemPrompt(schema.nodes.youtube, "YouTube", "YouTube invoegen"),
 					blockTypeItemPrompt(schema.nodes.spotify, "Spotify", "Spotify invoegen"),
 					blockTypeItemPrompt(schema.nodes.video, "Video", "Video invoegen"),
 					blockTypeItemPrompt(schema.nodes.audio, "Geluid", "Geluid invoegen"),

@@ -3,7 +3,7 @@ import {bbPrompt} from "./bb-prompt";
 import {EditorState, NodeSelection} from "prosemirror-state";
 import {MarkType, NodeType} from "prosemirror-model";
 import {MenuItem, MenuItemSpec} from "prosemirror-menu";
-import {FileField, Label, LidField, openPrompt, TextField} from "./prompt";
+import {FileField, Label, LidField, openPrompt, TextField, YoutubeField} from "./prompt";
 import {toggleMark} from "prosemirror-commands";
 import {wrapInList} from "prosemirror-schema-list";
 import {startImageUpload} from "./forum-plaatje";
@@ -252,6 +252,36 @@ export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, label: str
 			title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
 			fields: Object.fromEntries(Object.entries(nodeType.spec.attrs).map(([attr, spec]) =>
 				[attr, new TextField({
+					label: ucfirst(attr),
+					required: spec.default === undefined,
+					value: attrs ? attrs[attr] : spec.default
+				})])),
+			callback(callbackAttrs) {
+				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs}, content)))
+				view.focus()
+			}
+		})
+	}
+});
+
+export const youtubeItemPrompt = (nodeType: NodeType<EditorSchema>, label: string, title: string, description = ""): MenuItem => new MenuItem({
+	title,
+	label,
+	enable: state => canInsert(state, nodeType),
+	run: (state, dispatch, view) => {
+		let attrs = null
+		let content = null
+
+		if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			attrs = state.selection.node.attrs
+			content = state.selection.node.content
+		}
+
+		openPrompt({
+			description,
+			title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
+			fields: Object.fromEntries(Object.entries(nodeType.spec.attrs).map(([attr, spec]) =>
+				[attr, new YoutubeField({
 					label: ucfirst(attr),
 					required: spec.default === undefined,
 					value: attrs ? attrs[attr] : spec.default

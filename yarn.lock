@@ -3955,10 +3955,26 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"get-src@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "get-src@npm:1.0.1"
+  checksum: 3ee3ae0c57bd0cb603c34a3853f5c058abe0811fde5c634c7235f437ec6063e1b28b1b0020a22f65855c83e688510ee21c8ad0660548513e00e3ba308fc03f73
+  languageName: node
+  linkType: hard
+
 "get-value@npm:^2.0.3, get-value@npm:^2.0.6":
   version: 2.0.6
   resolution: "get-value@npm:2.0.6"
   checksum: f08da3262718e0f2617703cc99ecd0ddb4cca1541b0022118f898824c99157778e044c802160688dc184b17e5a894d11c5771aaadc376c68cdf66bdbc25ff865
+  languageName: node
+  linkType: hard
+
+"get-video-id@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "get-video-id@npm:3.2.0"
+  dependencies:
+    get-src: ^1.0.1
+  checksum: 0223b5db5d55ac2159839ea81f1a55cdc1c0d64281ca6f3b72416ddae45088a598d2b98d474741a1e4a96e6850abd6b1dbb4c6d3c7583d9c4a1113ca5b2d9f0e
   languageName: node
   linkType: hard
 
@@ -7400,6 +7416,7 @@ fsevents@~2.1.2:
     eslint-plugin-vue: ^6.2.2
     file-loader: ^1.1.11
     flatpickr: ^4.6.6
+    get-video-id: ^3.2.0
     google-palette: ^1.1.0
     hammerjs: ^2.0.8
     hoverintent: ^2.2.1

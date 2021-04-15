@@ -1,5 +1,6 @@
 import {html} from "../lib/util";
 import Bloodhound from "corejs-typeahead";
+import getVideoId from "get-video-id";
 
 const prefix = "ProseMirror-popup"
 
@@ -331,5 +332,20 @@ export class LidField extends Field<{ uid: string, naam: string }> {
 		}
 
 		return super.validate(value);
+	}
+}
+export class YoutubeField extends Field<string> {
+	render(name: string): HTMLElement {
+		return html`<textarea name="${name}" id="${name}" autocomplete="off"
+													class="form-control">${this.options.value || ""}</textarea>`
+	}
+
+	read(dom: HTMLInputElement): string {
+		const videoId = getVideoId(dom.value)
+		if(videoId.service != "youtube") {
+			return '';
+		}
+
+		return videoId.id
 	}
 }
