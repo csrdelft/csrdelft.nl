@@ -90,12 +90,12 @@
 						studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
 						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
 						Ook C.S.R. doet mee aan deze gezellige week. Van 14 t/m 16 augustus zijn wij online te zien en van
-						17 t/m 22 augustus heb je de gelegenheid om fysiek de sfeer van C.S.R. en Delft te proeven!</source>
+						17 t/m 22 augustus heb je de gelegenheid om fysiek de sfeer van C.S.R. en Delft te proeven!
+					Van 16 t/m 20 augustus heb je de gelegenheid om de sfeer van C.S.R. en Delft te proeven!</source>
         <target>OWee is short for ‘OntvangstWeek’, which translates as ‘Opening Week’. During this week, you will get to know a great deal about the student city of Delft.
         You will find out about the various student associations, go on a tour of the city, visit special places on the campus,
         and there will surely be some unforgettable parties. The perfect start to your life as a student in Delft!
-        C.S.R. will also be present during this week. Between August 14 - 16 you can see us online and between August 17 - 22 you can
-        come visit and see C.S.R. in person.
+        C.S.R. will also be present during this week. This week starts on August the 16th and it ends on August the 20th.
         </target>
       </trans-unit>
       <trans-unit id="WXbGaaE" resname="Interesse/vragen">
@@ -125,7 +125,7 @@
 						opgenomen.
 						Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te
 						klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek</source>
-        <target><![CDATA[Do you want to become a member? Registration is open during the Owee (August 17 -22). It is also possible
+        <target><![CDATA[Do you want to become a member? Registration is open during the Owee (August 16 - 20). It is also possible
         to register in advance so that we can get in contact with you right when the OWee starts. Join us by clicking  <a href="{lidworden}">here</a>.
         Make sure to reserve the week of August 24-30 for the introduction week of C.S.R. ]]></target>
       </trans-unit>
