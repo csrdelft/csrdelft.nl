@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
@@ -33,7 +33,7 @@ class GroepForm extends ModalForm {
 	 */
 	private $mode;
 
-	public function __construct(AbstractGroep $groep, $action, $mode, $nocancel = false) {
+	public function __construct(Groep $groep, $action, $mode, $nocancel = false) {
 		parent::__construct($groep, $action, classNameZonderNamespace(get_class($groep)), true);
 		$this->mode = $mode;
 		if ($groep->id) {
@@ -85,7 +85,7 @@ class GroepForm extends ModalForm {
 
 	public function validate() {
 		/**
-		 * @var AbstractGroep $groep
+		 * @var Groep $groep
 		 */
 		$groep = $this->getModel();
 		if ($groep instanceof HeeftSoort) {

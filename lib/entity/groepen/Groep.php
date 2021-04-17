@@ -10,9 +10,8 @@ use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
-use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\DisplayEntity;
@@ -27,9 +26,26 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Een groep met leden.
- * @ORM\MappedSuperclass()
+ * @ORM\Entity()
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="groep_type", type="string")
+ * @ORM\DiscriminatorMap({
+ *   "groep" = "Groep",
+ *   "activiteit" = "Activiteit",
+ *   "bestuur" = "Bestuur",
+ *   "commissie" = "Commissie",
+ *   "ketzer" = "Ketzer",
+ *   "kring" = "Kring",
+ *   "lichting" = "Lichting",
+ *   "ondervereniging" = "Ondervereniging",
+ *   "rechtengroep" = "RechtenGroep",
+ *   "verticale" = "Verticale",
+ *   "werkgroep" = "Werkgroep",
+ *   "woonoord" = "Woonoord",
+ * })
  */
-abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
+class Groep implements DataTableEntry, DisplayEntity
+{
 	/**
 	 * Primary key
 	 * @var int
@@ -39,6 +55,14 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $id;
+
+	/**
+	 * Oude ID, uniek voor type groep
+	 * @var int
+	 * @ORM\Column(type="integer")
+	 */
+	public $oudId;
+
 	/**
 	 * Naam
 	 * @var string
@@ -112,20 +136,18 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @Serializer\Groups("vue")
 	 */
 	public $keuzelijst2 = [];
-
 	/**
-	 * De URL van de groep
-	 * @return string
+	 * @var GroepLid[]|ArrayCollection
+	 * @ORM\OneToMany(targetEntity="GroepLid", mappedBy="groep")
+	 * @ORM\OrderBy({"lid_sinds"="ASC"})
+	 * @ORM\JoinColumn(name="groep_id", referencedColumnName="id")
 	 */
-	abstract public function getUrl();
+	public $leden;
 
-	/**
-	 * @return string|AbstractGroepLid
-	 */
-	abstract public function getLidType();
-
-	public function __construct() {
+	public function __construct()
+	{
 		$this->versie = GroepVersie::V1();
+		$this->leden = new ArrayCollection();
 	}
 
 	/**
@@ -133,25 +155,41 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("detailSource")
 	 */
-	public function getDetailSource() {
+	public function getDetailSource()
+	{
 		return $this->getUrl() . '/leden';
 	}
 
-	public function aantalLeden() {
+	/**
+	 * De URL van de groep
+	 * @return string
+	 */
+	public function getUrl()
+	{
+		return '/groepen/groep/' . $this->id;
+	}
+
+	public function aantalLeden()
+	{
 		return $this->getLeden()->count();
 	}
 
 	/**
-	 * @return AbstractGroepLid[]|ArrayCollection
+	 * Maak het mogelijk om leden te 'faken', zie verticale/lichting
+	 * @return GroepLid[]|ArrayCollection
 	 * @Serializer\Groups("vue")
 	 */
-	abstract public function getLeden();
+	public function getLeden()
+	{
+		return $this->leden;
+	}
 
-	public function getLedenOpAchternaamGesorteerd() {
+	public function getLedenOpAchternaamGesorteerd()
+	{
 		$leden = $this->getLeden();
 		try {
 			$iterator = $leden->getIterator();
-			$iterator->uasort(function (AbstractGroepLid $a, AbstractGroepLid $b) {
+			$iterator->uasort(function (GroepLid $a, GroepLid $b) {
 				return strcmp($a->profiel->achternaam, $b->profiel->achternaam) ?: strnatcmp($a->uid, $b->uid);
 			});
 		} catch (Exception $e) {
@@ -160,10 +198,11 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 		return new ArrayCollection(iterator_to_array($iterator));
 	}
 
-	public function getFamilieSuggesties() {
+	public function getFamilieSuggesties()
+	{
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
-		/** @var AbstractGroepenRepository $repo */
+		/** @var GroepRepository $repo */
 		$repo = $em->getRepository(get_class($this));
 
 		$result = $repo->createQueryBuilder('g')
@@ -175,13 +214,14 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 		}, $result);
 	}
 
-	public function getOpmerkingSuggesties() {
+	public function getOpmerkingSuggesties()
+	{
 		if (isset($this->keuzelijst)) {
 			$suggesties = [];
-		} elseif ($this instanceof Commissie or $this instanceof Bestuur) {
+		} elseif ($this instanceof Commissie || $this instanceof Bestuur) {
 			$suggesties = CommissieFunctie::getEnumValues();
 		} else {
-			$suggesties = array_unique($this->getLeden()->map(function (AbstractGroepLid $lid) {
+			$suggesties = array_unique($this->getLeden()->map(function (GroepLid $lid) {
 				return $lid->opmerking;
 			})->toArray());
 		}
@@ -195,7 +235,8 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag($action, $allowedAuthenticationMethods = null) {
+	public function mag($action, $allowedAuthenticationMethods = null)
+	{
 		if (!LoginService::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
 			return false;
 		}
@@ -230,9 +271,10 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * Is lid van deze groep?
 	 *
 	 * @param string $uid
-	 * @return AbstractGroepLid
+	 * @return GroepLid|null
 	 */
-	public function getLid($uid) {
+	public function getLid($uid)
+	{
 		if ($this->getLeden() == null) {
 			return null;
 		}
@@ -247,7 +289,8 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
+	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null)
+	{
 		switch ($action) {
 
 			case AccessAction::Bekijken:
@@ -269,7 +312,8 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @param GroepKeuzeSelectie[] $keuzes
 	 * @return bool
 	 */
-	public function valideerOpmerking(array $keuzes) {
+	public function valideerOpmerking(array $keuzes)
+	{
 		$correct = [];
 		foreach ($keuzes as $keuze) {
 			foreach ($this->keuzelijst2 as $optie) {
@@ -286,19 +330,23 @@ abstract class AbstractGroep implements DataTableEntry, DisplayEntity {
 	 * @return string|null
 	 * @Serializer\Groups("vue")
 	 */
-	public function getSamenvattingHtml() {
+	public function getSamenvattingHtml()
+	{
 		return CsrBB::parse($this->samenvatting);
 	}
 
-	public function getUUID() {
+	public function getUUID()
+	{
 		return $this->id . '@' . short_class($this) . '.csrdelft.nl';
 	}
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->id;
 	}
 
-	public function getWeergave(): string {
+	public function getWeergave(): string
+	{
 		return $this->naam ?? "";
 	}
 }

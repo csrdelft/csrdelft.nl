@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\entity\groepen\AbstractGroepLid;
+use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\view\formulier\FormFieldFactory;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\ModalForm;
 class GroepLidBeheerForm extends ModalForm {
 
 	public function __construct(
-		AbstractGroepLid $lid,
+		GroepLid $lid,
 		$action,
 		array $blacklist = null
 	) {

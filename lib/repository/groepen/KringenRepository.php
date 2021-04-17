@@ -3,10 +3,10 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Kring;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class KringenRepository extends AbstractGroepenRepository {
+class KringenRepository extends GroepRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Kring::class);
 	}

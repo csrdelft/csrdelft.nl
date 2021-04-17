@@ -3,7 +3,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\entity\Geslacht;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
@@ -16,7 +16,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 
 	/**
 	 * GroepenDeelnameGrafiek constructor.
-	 * @param AbstractGroep[] $groepen
+	 * @param Groep[] $groepen
 	 */
 	public function __construct($groepen) {
 		$aantalMannen = [];

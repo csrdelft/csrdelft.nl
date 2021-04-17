@@ -6,7 +6,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\profiel\Profiel;
@@ -75,7 +75,7 @@ class LedenMemoryController extends AbstractController {
 		} else {
 			throw new CsrGebruikerException("Geen geldige groep");
 		}
-		if ($groep instanceof AbstractGroep) {
+		if ($groep instanceof Groep) {
 			foreach ($groep->getLeden() as $lid) {
 				$profiel = ProfielRepository::get($lid->uid);
 				if (in_array($profiel->status, $lidstatus)) {
@@ -120,7 +120,7 @@ class LedenMemoryController extends AbstractController {
 
 	/**
 	 * @param Request $request
-	 * @return AbstractGroep|null
+	 * @return Groep|null
 	 */
 	private function getLichting(Request $request) {
 		$l = $request->query->getInt('lichting');

@@ -20,19 +20,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\ActiviteitenRepository")
- * @ORM\Table("activiteiten", indexes={
- *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="soort", columns={"soort"}),
- *   @ORM\Index(name="familie", columns={"familie"}),
- *   @ORM\Index(name="in_agenda", columns={"in_agenda"}),
- *   @ORM\Index(name="status", columns={"status"}),
- * })
  */
-class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort {
-	public function __construct() {
-		parent::__construct();
-		$this->leden = new ArrayCollection();
-	}
+class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort {
 
 	public function getUUID() {
 		return $this->id . '@activiteit.csrdelft.nl';
@@ -102,21 +91,6 @@ class Activiteit extends AbstractGroep implements Agendeerbaar, HeeftAanmeldLimi
 	 * @Serializer\Groups("datatable")
 	 */
 	public $in_agenda;
-
-	/**
-	 * @var ActiviteitDeelnemer[]
-	 * @ORM\OneToMany(targetEntity="ActiviteitDeelnemer", mappedBy="groep")
-	 * @ORM\OrderBy({"lid_sinds"="ASC"})
-	 */
-	public $leden;
-
-	public function getLeden() {
-		return $this->leden;
-	}
-
-	public function getLidType() {
-		return ActiviteitDeelnemer::class;
-	}
 
 	public function getUrl() {
 		return '/groepen/activiteiten/' . $this->id;

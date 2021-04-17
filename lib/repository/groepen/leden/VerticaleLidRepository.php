@@ -2,10 +2,10 @@
 
 namespace CsrDelft\repository\groepen\leden;
 
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\groepen\VerticaleLid;
-use CsrDelft\repository\AbstractGroepLedenRepository;
+use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -13,7 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 06/05/2017
  */
-class VerticaleLedenRepository extends AbstractGroepLedenRepository {
+class VerticaleLidRepository extends GroepLidRepository {
 	public function __construct(ManagerRegistry $managerRegistry) {
 		parent::__construct($managerRegistry, VerticaleLid::class);
 	}
@@ -25,7 +25,7 @@ class VerticaleLedenRepository extends AbstractGroepLedenRepository {
 	 * @param string $uid
 	 * @return VerticaleLid|false
 	 */
-	public function get(AbstractGroep $verticale, $uid) {
+	public function get(Groep $verticale, $uid) {
 		$profiel = ProfielRepository::get($uid);
 		if ($profiel AND $profiel->verticale === $verticale->letter) {
 			$lid = $this->nieuw($verticale, $uid);

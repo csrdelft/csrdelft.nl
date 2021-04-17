@@ -6,17 +6,17 @@ use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\controller\AbstractController;
-use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\entity\groepen\AbstractGroepLid;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
-use CsrDelft\repository\AbstractGroepenRepository;
-use CsrDelft\repository\AbstractGroepLedenRepository;
+use CsrDelft\repository\GroepRepository;
+use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
@@ -62,12 +62,12 @@ abstract class AbstractGroepenController extends AbstractController implements R
 {
 	/** @var DataTable */
 	protected $table;
-	/** @var AbstractGroepenRepository */
+	/** @var GroepRepository */
 	protected $repository;
 	/** @var ChangeLogRepository */
 	private $changeLogRepository;
 
-	public function __construct(ChangeLogRepository $changeLogRepository, AbstractGroepenRepository $repository)
+	public function __construct(ChangeLogRepository $changeLogRepository, GroepRepository $repository)
 	{
 		$this->repository = $repository;
 		$this->changeLogRepository = $changeLogRepository;
@@ -170,7 +170,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function deelnamegrafiek($id)
 	{
 		$groep = $this->repository->get($id);
-		/** @var AbstractGroep[] $groepen */
 		$groepen = $this->repository->findBy(['familie' => $groep->familie]);
 		return new GroepenDeelnameGrafiek($groepen); // controleert GEEN rechten bekijken
 	}
@@ -307,7 +306,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 					case ActiviteitSoort::Kring:
 						$kring = $profiel->getKring();
 						if ($kring) {
-							$groep->rechten_aanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer;
+							$groep->rechten_aanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kringNummer;
 						}
 						break;
 					default:
@@ -317,7 +316,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			}
 		} // opvolger
 		else {
-			/** @var AbstractGroep $old */
 			$old = $this->repository->retrieveByUUID($id);
 			if (!$old) {
 				throw $this->createAccessDeniedException();
@@ -407,7 +405,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			if (empty($selection)) {
 				throw $this->createAccessDeniedException();
 			}
-			/** @var AbstractGroep $groep */
 			$groep = $this->repository->retrieveByUUID($selection[0]);
 			if (!$groep || !$groep->mag(AccessAction::Wijzigen)) {
 				throw $this->createAccessDeniedException();
@@ -433,7 +430,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function verwijderen(SerializerInterface $serializer, $id)
 	{
 		$response = [];
-		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
 		if ($groep && $groep->mag(AccessAction::Verwijderen) && count($groep->getLeden()) === 0) {
 			$old = $serializer->serialize($groep, 'json', [
@@ -457,13 +453,11 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 */
 	public function opvolging($id)
 	{
-		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
 		$form = new GroepOpvolgingForm($groep, $this->repository->getUrl() . '/opvolging');
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$response = [];
-			/** @var AbstractGroep $groep */
 			$groep = $this->repository->retrieveByUUID($id);
 			if ($groep && $groep->mag(AccessAction::Opvolging)) {
 				$this->changeLogRepository->log($groep, 'familie', $groep->familie, $values['familie']);
@@ -487,12 +481,11 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	 */
 	public function converteren($id)
 	{
-		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
 		$form = new GroepConverteerForm($groep, $this->repository);
 		if ($form->validate()) {
 			$values = $form->getValues();
-			/** @var AbstractGroepenRepository $model */
+			/** @var GroepRepository $model */
 			$model = ContainerFacade::getContainer()->get($values['model']);
 			$converteer = get_class($model) !== get_class($this->repository);
 			$response = [];
@@ -527,7 +520,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function sluiten($id)
 	{
 		$response = [];
-		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
 		if ($groep && property_exists($groep, 'aanmelden_tot') && date_create_immutable() <= $groep->aanmelden_tot && $groep->mag(AccessAction::Wijzigen)) {
 			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, date_create_immutable());
@@ -540,7 +532,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 	public function voorbeeld($id)
 	{
-		/** @var AbstractGroep $groep */
 		$groep = $this->repository->retrieveByUUID($id);
 		if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
 			throw $this->createAccessDeniedException();
@@ -565,7 +556,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			return $this->tableData($data);
 		} // popup request
 		else {
-			/** @var AbstractGroep $groep */
 			$groep = $this->repository->retrieveByUUID($id);
 			if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
 				throw $this->createAccessDeniedException('Kan logboek niet vinden');
@@ -593,8 +583,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function aanmelden2(Request $request, EntityManagerInterface $em, $id, $uid)
 	{
 		$groep = $this->repository->get($id);
-		/** @var AbstractGroepLedenRepository $ledenRepository */
-		$ledenRepository = $em->getRepository($groep->getLidType());
 
 		if ($groep->versie !== GroepVersie::V2()) {
 			throw new BadRequestHttpException("Groep is niet van versie 2.");
@@ -603,7 +591,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if (!$groep->mag(AccessAction::Aanmelden)) {
 			throw $this->createAccessDeniedException();
 		}
-		$lid = $ledenRepository->nieuw($groep, $uid);
+		$lid = $this->getDoctrine()->getRepository(GroepLid::class)->nieuw($groep, $uid);
 
 		$opmerking = $request->request->get('opmerking2');
 
@@ -619,7 +607,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$lid->opmerking2 = $keuzes;
 
 		$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
-		$ledenRepository->save($lid);
+		$this->getDoctrine()->getRepository(GroepLid::class)->save($lid);
 
 		return new JsonResponse(['success' => true]);
 	}
@@ -637,9 +625,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			throw $this->createAccessDeniedException();
 		}
 
-		/** @var AbstractGroepLedenRepository $ledenRepository */
-		$ledenRepository = $em->getRepository($groep->getLidType());
-		$lid = $ledenRepository->nieuw($groep, $uid);
+		$lid = $this->getDoctrine()->getRepository(GroepLid::class)->nieuw($groep, $uid);
 
 		$form = new GroepAanmeldenForm($lid, $groep);
 
@@ -657,14 +643,12 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function aanmelden(EntityManagerInterface $em, $id)
 	{
 		$groep = $this->repository->get($id);
-		/** @var AbstractGroepLedenRepository $model */
-		$model = $em->getRepository($groep->getLidType());
+		$model = $em->getRepository(GroepLid::class);
 
 		if (!$groep->mag(AccessAction::Beheren)) {
 			throw $this->createAccessDeniedException();
 		}
 
-		/** @var AbstractGroepLid $lid */
 		$lid = $model->nieuw($groep, null);
 		$lid->groep = $groep;
 		$lid->groep_id = $groep->id;
@@ -779,7 +763,6 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$groep = $this->repository->get($id);
 
 		// Vind de groep uit deze familie met het laatste eind_moment
-		/** @var AbstractGroep $otGroep */
 		$otGroep = $this->repository->findOneBy(
 			["familie" => $groep->familie, 'status' => GroepStatus::OT()],
 			['eind_moment' => 'DESC']

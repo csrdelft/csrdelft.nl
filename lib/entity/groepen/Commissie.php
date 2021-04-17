@@ -19,34 +19,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Een commissie is een groep waarvan de groepsleden een specifieke functie (kunnen) hebben.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\CommissiesRepository")
- * @ORM\Table("commissies", indexes={
- *   @ORM\Index(name="status", columns={"status"}),
- *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="soort", columns={"soort"}),
- *   @ORM\Index(name="familie", columns={"familie"}),
- * })
  */
-class Commissie extends AbstractGroep implements HeeftSoort {
-	public function __construct() {
-		parent::__construct();
-		$this->leden = new ArrayCollection();
-	}
-
-	/**
-	 * @var CommissieLid[]
-	 * @ORM\OneToMany(targetEntity="CommissieLid", mappedBy="groep")
-	 * @ORM\OrderBy({"lid_sinds"="ASC"})
-	 */
-	public $leden;
-
-	public function getLeden() {
-		return $this->leden;
-	}
-
-	public function getLidType() {
-		return CommissieLid::class;
-	}
-
+class Commissie extends Groep implements HeeftSoort {
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
 	 * @var CommissieSoort

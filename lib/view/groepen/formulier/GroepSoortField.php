@@ -4,10 +4,10 @@ namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
-use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\CommissieSoort;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
@@ -27,7 +27,7 @@ class GroepSoortField extends RadioField {
 	protected $activiteit;
 	protected $commissie;
 	/**
-	 * @var AbstractGroep
+	 * @var Groep
 	 */
 	private $groep;
 
@@ -35,7 +35,7 @@ class GroepSoortField extends RadioField {
 		$name,
 		$value,
 		$description,
-		AbstractGroep $groep
+		Groep $groep
 	) {
 		parent::__construct($name, $value, $description, array());
 

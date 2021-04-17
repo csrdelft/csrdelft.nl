@@ -13,34 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een groep beperkt voor rechten.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\RechtenGroepenRepository")
- * @ORM\Table("groepen", indexes={
- *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="familie", columns={"familie"}),
- *   @ORM\Index(name="status", columns={"status"}),
- * })
  */
-class RechtenGroep extends AbstractGroep {
+class RechtenGroep extends Groep {
 	/**
 	 * Rechten benodigd voor aanmelden
 	 * @var string
 	 * @ORM\Column(type="string")
 	 */
 	public $rechten_aanmelden;
-
-	/**
-	 * @var RechtenGroepLid[]
-	 * @ORM\OneToMany(targetEntity="RechtenGroepLid", mappedBy="groep")
-	 * @ORM\OrderBy({"lid_sinds"="ASC"})
-	 */
-	public $leden;
-
-	public function getLeden() {
-		return $this->leden;
-	}
-
-	public function getLidType() {
-		return RechtenGroepLid::class;
-	}
 
 	public function getUrl() {
 		return '/groepen/overig/' . $this->id;

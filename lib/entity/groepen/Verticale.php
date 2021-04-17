@@ -17,13 +17,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenRepository")
- * @ORM\Table("verticalen", indexes={
- *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="familie", columns={"familie"}),
- *   @ORM\Index(name="status", columns={"status"}),
- * })
  */
-class Verticale extends AbstractGroep {
+class Verticale extends Groep {
 	/**
 	 * Primary key
 	 * @var string
@@ -40,13 +35,6 @@ class Verticale extends AbstractGroep {
 	 */
 	public $naam;
 
-	/**
-	 * @var VerticaleLid[]
-	 * @ORM\OneToMany(targetEntity="VerticaleLid", mappedBy="groep")
-	 * @ORM\OrderBy({"uid"="ASC"})
-	 */
-	public $leden;
-
 	// Stiekem hebben we helemaal geen leden.
 	public function getLeden() {
 		$leden = [];
@@ -58,10 +46,10 @@ class Verticale extends AbstractGroep {
 			->setParameter('lidstatus', LidStatus::getLidLike())
 			->getQuery()->getResult();
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
-		$model = $em->getRepository($this->getLidType());
+		$model = $em->getRepository(GroepLid::class);
 		foreach ($profielen as $profiel) {
 			if ($profiel AND $profiel->verticale === $this->letter) {
-				/** @var VerticaleLid $lid */
+				/** @var GroepLid $lid */
 				$lid = $model->nieuw($this, $profiel->uid);
 				if ($profiel->verticaleleider) {
 					$lid->opmerking = 'Leider';
@@ -75,10 +63,6 @@ class Verticale extends AbstractGroep {
 			}
 		}
 		return new ArrayCollection($leden);
-	}
-
-	public function getLidType() {
-		return VerticaleLid::class;
 	}
 
 	public function getUrl() {

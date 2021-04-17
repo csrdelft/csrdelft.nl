@@ -4,11 +4,11 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Woonoord;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
-class WoonoordenRepository extends AbstractGroepenRepository {
+class WoonoordenRepository extends GroepRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Woonoord::class);
 	}

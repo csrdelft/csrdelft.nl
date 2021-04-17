@@ -9,6 +9,7 @@
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
@@ -24,7 +25,7 @@ class GroepLijstView extends GroepTabView {
 		$html = '<table class="groep-lijst"><tbody>';
 		if ($this->groep->mag(AccessAction::Aanmelden)) {
 			$html .= '<tr><td colspan="2">';
-			$lid = $em->getRepository($this->groep->getLidType())->nieuw($this->groep, LoginService::getUid());
+			$lid = $em->getRepository(GroepLid::class)->nieuw($this->groep, LoginService::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep, false);
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';

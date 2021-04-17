@@ -15,13 +15,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WerkgroepenRepository")
- * @ORM\Table("werkgroepen", indexes={
- *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="familie", columns={"familie"}),
- *   @ORM\Index(name="status", columns={"status"}),
- * })
  */
-class Werkgroep extends AbstractGroep {
+class Werkgroep extends Groep {
 	/**
 	 * Maximaal aantal groepsleden
 	 * @var string
@@ -53,21 +48,6 @@ class Werkgroep extends AbstractGroep {
 	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $afmelden_tot;
-
-	/**
-	 * @var WerkgroepDeelnemer[]
-	 * @ORM\OneToMany(targetEntity="WerkgroepDeelnemer", mappedBy="groep")
-	 * @ORM\OrderBy({"lid_sinds"="ASC"})
-	 */
-	public $leden;
-
-	public function getLeden() {
-		return $this->leden;
-	}
-
-	public function getLidType() {
-		return WerkgroepDeelnemer::class;
-	}
 
 	public function getUrl() {
 		return '/groepen/werkgroepen/' . $this->id;

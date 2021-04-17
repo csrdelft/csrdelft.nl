@@ -7,7 +7,7 @@ namespace CsrDelft\Twig\Extension;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\entity\agenda\Agendeerbaar;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\CmsPaginaRepository;
@@ -150,7 +150,7 @@ class CsrTwigExtension extends AbstractExtension
 				return $value instanceof Agendeerbaar;
 			}),
 			new TwigTest('abstractgroep', function ($value) {
-				return $value instanceof AbstractGroep;
+				return $value instanceof Groep;
 			}),
 			new TwigTest('agendaitem', function ($value) {
 				return $value instanceof AgendaItem;

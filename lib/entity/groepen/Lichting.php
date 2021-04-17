@@ -15,13 +15,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\LichtingenRepository")
- * @ORM\Table("lichtingen", indexes={
- *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="familie", columns={"familie"}),
- *   @ORM\Index(name="status", columns={"status"}),
- * })
  */
-class Lichting extends AbstractGroep {
+class Lichting extends Groep {
 	/**
 	 * Lidjaar
 	 * @var int
@@ -29,12 +24,6 @@ class Lichting extends AbstractGroep {
 	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $lidjaar;
-
-	/**
-	 * @var LichtingsLid[]
-	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\groepen\LichtingsLid", mappedBy="groep")
-	 */
-	public $leden;
 
 	/**
 	 * Read-only: generated group
@@ -49,16 +38,16 @@ class Lichting extends AbstractGroep {
 
 	/**
 	 * Stiekem hebben we helemaal geen leden
-	 * @return AbstractGroepLid[]|ArrayCollection
+	 * @return GroepLid[]|ArrayCollection
 	 */
 	public function getLeden() {
 		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
-		$model = $em->getRepository($this->getLidType());
+		$model = $em->getRepository(GroepLid::class);
 		$leden = [];
 
 		foreach ($profielRepository->findBy(['lidjaar' => $this->lidjaar]) as $profiel) {
-			/** @var LichtingsLid $lid */
+			/** @var GroepLid $lid */
 			$lid = $model->nieuw($this, $profiel->uid);
 			$lid->door_uid = null;
 			$lid->door_profiel = null;
@@ -66,10 +55,6 @@ class Lichting extends AbstractGroep {
 			$leden[] = $lid;
 		}
 		return new ArrayCollection($leden);
-	}
-
-	public function getLidType() {
-		return LichtingsLid::class;
 	}
 
 	public function getUrl() {

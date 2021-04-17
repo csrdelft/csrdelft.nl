@@ -47,7 +47,7 @@ class KringenController extends AbstractGroepenController {
 				'url' => $kring->getUrl() . '#' . $kring->id,
 				'label' => $kring->familie,
 				'icon' => Icon::getTag('Kring'),
-				'value' => 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer
+				'value' => 'Kring:' . $kring->verticale . '.' . $kring->kringNummer
 			);
 		}
 		return new JsonResponse($result);

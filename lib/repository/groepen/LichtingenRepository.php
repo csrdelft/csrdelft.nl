@@ -4,11 +4,11 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\groepen\Lichting;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class LichtingenRepository extends AbstractGroepenRepository {
+class LichtingenRepository extends GroepRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Lichting::class);
 	}

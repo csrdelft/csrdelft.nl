@@ -2,14 +2,14 @@
 
 namespace CsrDelft\view\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 
 class GroepenBeheerData extends DataTableResponse {
 
 	/**
-	 * @param AbstractGroep $groep
+	 * @param Groep $groep
 	 * @return string
 	 * @throws Exception
 	 */

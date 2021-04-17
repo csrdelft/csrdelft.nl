@@ -4,11 +4,9 @@
 namespace CsrDelft\Twig\Extension;
 
 
-use CsrDelft\entity\groepen\BestuursLid;
+use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
-use CsrDelft\repository\groepen\leden\BestuursLedenRepository;
-use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Twig\Extension\AbstractExtension;
@@ -22,28 +20,16 @@ class AccountTwigExtension extends AbstractExtension
 	 */
 	private $suService;
 	/**
-	 * @var BestuursLedenRepository
-	 */
-	private $bestuursLedenRepository;
-	/**
-	 * @var CommissieLedenRepository
-	 */
-	private $commissieLedenRepository;
-	/**
 	 * @var LoginService
 	 */
 	private $loginService;
 
 	public function __construct(
 		LoginService $loginService,
-		SuService $suService,
-		BestuursLedenRepository $bestuursLedenRepository,
-		CommissieLedenRepository $commissieLedenRepository
+		SuService $suService
 	)
 	{
 		$this->suService = $suService;
-		$this->bestuursLedenRepository = $bestuursLedenRepository;
-		$this->commissieLedenRepository = $commissieLedenRepository;
 		$this->loginService = $loginService;
 	}
 
@@ -82,16 +68,18 @@ class AccountTwigExtension extends AbstractExtension
 
 	/**
 	 * @param Profiel $profiel
-	 * @return BestuursLid
+	 * @return GroepLid
 	 */
 	public function getBestuurslid(Profiel $profiel)
 	{
-		return $this->bestuursLedenRepository->findOneBy(['uid' => $profiel->uid]);
+		// TODO: Fixme
+		return null;
 	}
 
 	public function getCommissielid(Profiel $profiel)
 	{
-		return $this->commissieLedenRepository->findBy(['uid' => $profiel->uid], ['lid_sinds' => 'DESC']);
+		// TODO: Fixme
+		return null;
 	}
 
 }

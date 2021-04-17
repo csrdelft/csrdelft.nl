@@ -5,11 +5,11 @@ namespace CsrDelft\repository\groepen;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\OnderverenigingStatus;
 use CsrDelft\entity\groepen\Ondervereniging;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Persistence\ManagerRegistry;
 
-class OnderverenigingenRepository extends AbstractGroepenRepository {
+class OnderverenigingenRepository extends GroepRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Ondervereniging::class);
 	}
