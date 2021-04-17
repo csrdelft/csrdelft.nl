@@ -5,6 +5,7 @@ namespace CsrDelft\controller\groepen;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
+use CsrDelft\view\Icon;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -44,7 +45,9 @@ class VerticalenController extends AbstractGroepenController {
 			$result[] = [
 				'url' => $verticale->getUrl() . '#' . $verticale->id,
 				'label' => $verticale->naam,
-				'value' => 'Verticale:' . $verticale->letter
+				'value' => 'Verticale:' . $verticale->letter,
+				'naam' => $verticale->naam,
+				'id' => $verticale->getId(),
 			];
 		}
 		return new JsonResponse($result);
