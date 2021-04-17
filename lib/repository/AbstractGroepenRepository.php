@@ -274,14 +274,20 @@ abstract class AbstractGroepenRepository extends AbstractRepository
 	/**
 	 * @param string $zoekterm
 	 * @param int $limit
+	 * @param string[] $status
 	 * @return AbstractGroep[]
 	 */
-	public function zoeken($zoekterm, $limit = 5)
+	public function zoeken($zoekterm, $limit, $status)
 	{
+		foreach ($status as $item) {
+			if (!GroepStatus::isValidValue($item)) {
+				throw new \InvalidArgumentException($item . ' is geen geldige groepstatus');
+			}
+		}
+
 		$query = $this->createQueryBuilder('g')
-			->where('g.status = :ht or g.status = :ft')
-			->setParameter('ht', GroepStatus::HT)
-			->setParameter('ft', GroepStatus::FT);
+			->where('g.status IN (:status)')
+			->setParameter('status', $status);
 
 		if ($zoekterm != '') {
 			$query = $query
