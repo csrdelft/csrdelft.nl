@@ -50,6 +50,7 @@
                     v-model="zoekHt"
                     type="checkbox"
                     class="form-check-input"
+                    :disabled="!zoekFt && !zoekOt"
                     @change="update"
                   >
                   <label
@@ -63,6 +64,7 @@
                     v-model="zoekFt"
                     type="checkbox"
                     class="form-check-input"
+                    :disabled="!zoekHt && !zoekOt"
                     @change="update"
                   >
                   <label
@@ -76,6 +78,7 @@
                     v-model="zoekOt"
                     type="checkbox"
                     class="form-check-input"
+                    :disabled="!zoekHt && !zoekFt"
                     @change="update"
                   >
                   <label
