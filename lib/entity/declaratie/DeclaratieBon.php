@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\declaratie;
 
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\declaratie\DeclaratieBonRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,6 +29,13 @@ class DeclaratieBon {
 	 * @ORM\ManyToOne(targetEntity=Declaratie::class, inversedBy="bonnen")
 	 */
 	private $declaratie;
+
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(nullable=false, referencedColumnName="uid")
+	 */
+	private $maker;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
@@ -63,6 +71,16 @@ class DeclaratieBon {
 
 	public function setDeclaratie(?Declaratie $declaratie): self {
 		$this->declaratie = $declaratie;
+
+		return $this;
+	}
+
+	public function getMaker(): Profiel {
+		return $this->maker;
+	}
+
+	public function setMaker(Profiel $maker): self {
+		$this->maker = $maker;
 
 		return $this;
 	}

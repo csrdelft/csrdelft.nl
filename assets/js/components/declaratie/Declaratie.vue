@@ -410,7 +410,8 @@ const legeRegel: () => Regel = () => ({
   btw: '',
 });
 
-const legeBon: (string) => Bon = (bon) => ({
+const legeBon: (string, number) => Bon = (bon, id) => ({
+  id: id,
   bestandsnaam: bon,
   datum: '',
   regels: [ legeRegel() ],
@@ -461,9 +462,9 @@ export default class DeclaratieVue extends Vue {
     }
   }
 
-  public nieuweBon(file: string): void {
+  public nieuweBon(file: string, id: number): void {
     this.declaratie.bonnen.push(
-      legeBon(file)
+      legeBon(file, id)
     );
     this.geselecteerdeBon = this.declaratie.bonnen?.length - 1;
   }
@@ -553,7 +554,7 @@ export default class DeclaratieVue extends Vue {
     }).then((res) => {
       this.uploading = false;
       this.bonUploaden = false;
-      this.nieuweBon(res.data.file);
+      this.nieuweBon(res.data.file, res.data.id);
     }).catch((err) => {
       this.uploading = false;
       alert(err);

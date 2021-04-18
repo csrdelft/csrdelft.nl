@@ -3,9 +3,9 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
+use CsrDelft\repository\declaratie\DeclaratieBonRepository;
 use CsrDelft\view\formulier\uploadvelden\UploadFileField;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
@@ -51,7 +51,7 @@ class DeclaratieController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 * @throws Exception
 	 */
-	public function upload(Request $request) {
+	public function upload(Request $request, DeclaratieBonRepository $bonRepository) {
 		$key = bin2hex(random_bytes(16));
 
 		/** @var File $file */
@@ -75,8 +75,10 @@ class DeclaratieController extends AbstractController {
 		$filename = $key . '.' . $file->guessExtension();
 		$uploadFileField->opslaan(DECLARATIE_PATH, $filename);
 
+		$bon = $bonRepository->generate($filename, $this->getProfiel());
 		return $this->json([
 			'file' => $this->generateUrl('declaratie_download', ['filename' => $filename]),
+			'id' => $bon->getId(),
 		]);
 	}
 }
