@@ -20,13 +20,15 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WoonoordenRepository")
  */
 class Woonoord extends Groep implements HeeftSoort {
+	use GroepMoment;
+
 	/**
 	 * Woonoord / Huis
 	 * @var HuisStatus
 	 * @ORM\Column(type="enumHuisStatus")
 	 * @Serializer\Groups("datatable")
 	 */
-	public $soort;
+	public $huisStatus;
 
 	/**
 	 * Doet mee met Eetplan
@@ -63,10 +65,10 @@ class Woonoord extends Groep implements HeeftSoort {
 	}
 
 	public function getSoort() {
-		return $this->soort;
+		return $this->huisStatus;
 	}
 
 	public function setSoort($soort) {
-		$this->soort = $soort;
+		$this->huisStatus = $soort;
 	}
 }

@@ -18,7 +18,7 @@ class OnderverenigingenRepository extends GroepRepository {
 		/** @var Ondervereniging $ondervereniging */
 		$ondervereniging = parent::nieuw();
 		$ondervereniging->status = GroepStatus::FT();
-		$ondervereniging->soort = OnderverenigingStatus::AdspirantOndervereniging;
+		$ondervereniging->onderverenigingStatus = OnderverenigingStatus::AdspirantOndervereniging();
 		$ondervereniging->status_historie = '[div]Aangemaakt als ' . $ondervereniging->status->getDescription() . ' door [lid=' . LoginService::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $ondervereniging;
 	}

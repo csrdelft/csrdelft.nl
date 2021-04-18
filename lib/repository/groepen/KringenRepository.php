@@ -12,7 +12,7 @@ class KringenRepository extends GroepRepository {
 	}
 
 	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
-		return parent::findBy($criteria, ['verticale' => 'ASC', 'kring_nummer' => 'ASC'] + ($orderBy ?? []), $limit, $offset);
+		return parent::findBy($criteria, ['verticale' => 'ASC', 'kringNummer' => 'ASC'] + ($orderBy ?? []), $limit, $offset);
 	}
 
 	public function get($id) {
@@ -20,7 +20,7 @@ class KringenRepository extends GroepRepository {
 			return parent::get($id);
 		}
 		list($verticale, $kringNummer) = explode('.', $id);
-		return $this->findOneBy(['verticale' => $verticale, 'kring_nummer' => $kringNummer]);
+		return $this->findOneBy(['verticale' => $verticale, 'kringNummer' => $kringNummer]);
 	}
 
 	public function nieuw($letter = null) {

@@ -5,6 +5,7 @@ namespace CsrDelft\repository;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepLid;
+use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\GroepStatistiekDTO;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
 use CsrDelft\entity\profiel\Profiel;
@@ -66,7 +67,11 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
 	{
-		return parent::findBy($criteria, ['begin_moment' => 'DESC'] + ($orderBy ?? []), $limit, $offset);
+		if (is_a($this->entityClass, GroepMoment::class)) {
+			$orderBy = ['beginMoment' => 'DESC'] + ($orderBy ?? []);
+
+		}
+		return parent::findBy($criteria, $orderBy, $limit, $offset);
 	}
 
 	/**
@@ -190,8 +195,8 @@ abstract class GroepRepository extends AbstractRepository
 		$groep->status = GroepStatus::HT();
 		$groep->samenvatting = '';
 		$groep->omschrijving = null;
-		$groep->begin_moment = null;
-		$groep->eind_moment = null;
+		$groep->beginMoment = null;
+		$groep->eindMoment = null;
 		$groep->website = null;
 		$groep->maker = LoginService::getProfiel();
 		return $groep;
@@ -206,8 +211,13 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	public function getGroepenVoorLid(Profiel $uid, $status = null)
 	{
-		$qb = $this->createQueryBuilder('ag')
-			->orderBy('ag.begin_moment', 'DESC')
+		$qb = $this->createQueryBuilder('ag');
+
+		if (is_a($this->entityClass, GroepMoment::class)) {
+			$qb = $qb->orderBy('ag.beginMoment', 'DESC');
+		}
+
+		$qb = $qb
 			->join('ag.leden', 'l')
 			->where('l.uid = :uid')
 			->setParameter('uid', $uid->uid);
@@ -324,5 +334,20 @@ abstract class GroepRepository extends AbstractRepository
 		}
 
 		return [];
+	}
+
+	/**
+	 * @param $van
+	 * @param $tot
+	 * @return Groep[]
+	 */
+	public function getGroepenVoorAgenda(\DateTimeImmutable $van, \DateTimeImmutable $tot)
+	{
+		return $this->createQueryBuilder('a')
+			->where("a.inAgenda = true")
+			->andWhere("(a.beginMoment >= :van and a.beginMoment <= :tot) or (a.eindMoment >= :van and a.eindMoment <= :tot)")
+			->setParameter('van', $van)
+			->setParameter('tot', $tot)
+			->getQuery()->getResult();
 	}
 }

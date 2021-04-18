@@ -40,7 +40,7 @@ class GroepSoortField extends RadioField {
 		parent::__construct($name, $value, $description, array());
 
 		if ($groep instanceof HeeftSoort && $groep->getSoort() instanceof ActiviteitSoort) {
-			$default = $groep->getSoort() ? ActiviteitSoort::from($groep->getSoort()) : ActiviteitSoort::Vereniging();
+			$default = $groep->getSoort() ? $groep->getSoort() : ActiviteitSoort::Vereniging();
 		} else {
 			$default = ActiviteitSoort::Vereniging();
 		}
@@ -51,7 +51,7 @@ $('#{$this->getId()}Option_ActiviteitenRepository').click();
 JS;
 
 		if ($groep instanceof Commissie) {
-			$default = $groep->soort ?? CommissieSoort::Commissie();
+			$default = $groep->commissieSoort ?? CommissieSoort::Commissie();
 		} else {
 			$default = CommissieSoort::Commissie();
 		}

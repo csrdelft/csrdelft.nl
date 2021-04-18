@@ -55,7 +55,6 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $id;
-
 	/**
 	 * Oude ID, uniek voor type groep, kleiner dan 3000 in de database (sorry)
 	 * @var int
@@ -77,20 +76,6 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * @Serializer\Groups({"datatable", "log", "vue"})
 	 */
 	public $familie;
-	/**
-	 * Datum en tijd begin
-	 * @var DateTimeImmutable
-	 * @ORM\Column(type="datetime")
-	 * @Serializer\Groups({"datatable", "log", "vue"})
-	 */
-	public $begin_moment;
-	/**
-	 * Datum en tijd einde
-	 * @var DateTimeImmutable|null
-	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Serializer\Groups({"datatable", "log", "vue"})
-	 */
-	public $eind_moment;
 	/**
 	 * o.t. / h.t. / f.t.
 	 * @var GroepStatus

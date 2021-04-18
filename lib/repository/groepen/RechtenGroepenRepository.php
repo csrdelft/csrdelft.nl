@@ -33,7 +33,7 @@ class RechtenGroepenRepository extends GroepRepository {
 	public function nieuw($soort = null) {
 		/** @var RechtenGroep $groep */
 		$groep = parent::nieuw();
-		$groep->rechten_aanmelden = P_LEDEN_MOD;
+		$groep->rechtenAanmelden = P_LEDEN_MOD;
 		return $groep;
 	}
 

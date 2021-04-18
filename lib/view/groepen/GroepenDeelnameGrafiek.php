@@ -37,7 +37,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 			}
 
 			$this->series[] = [
-				"moment" => $groep->begin_moment->getTimestamp() * 1000,
+				"moment" => $groep->beginMoment->getTimestamp() * 1000,
 				"aantalMannen" => $mannen,
 				"aantalVrouwen" => $vrouwen,
 				"naam" => $groep->naam,
@@ -46,7 +46,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 			$aantalMannen[] = $mannen;
 			$aantalVrouwen[] = $vrouwen;
 			$groepNamen[] = $groep->naam;
-			$groepJaren[] = $groep->begin_moment->format('Y');
+			$groepJaren[] = $groep->beginMoment->format('Y');
 		}
 		$this->series = [
 			'labels'=> $groepNamen,

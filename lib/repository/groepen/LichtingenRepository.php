@@ -27,7 +27,7 @@ class LichtingenRepository extends GroepRepository {
 		$lichting->id = $lichting->lidjaar;
 		$lichting->naam = 'Lichting ' . $lichting->lidjaar;
 		$lichting->familie = 'Lichting';
-		$lichting->begin_moment = date_create_immutable($lichting->lidjaar . '-09-01 00:00:00');
+		$lichting->beginMoment = date_create_immutable($lichting->lidjaar . '-09-01 00:00:00');
 		return $lichting;
 	}
 

@@ -36,6 +36,8 @@ doctrine:
           enumCommissieSoort: CsrDelft\common\Doctrine\Type\CommissieSoortType
           enumGeslacht: CsrDelft\common\Doctrine\Type\Enum\GeslachtType
           enumGroepVersie: CsrDelft\common\Doctrine\Type\GroepVersieType
+          enumOnderverenigingStatus: CsrDelft\common\Doctrine\Type\OnderverenigingStatusType
+          enumActiviteitSoort: CsrDelft\common\Doctrine\Type\ActiviteitSoortType
           uuid: Symfony\Bridge\Doctrine\Types\UuidType
         mapping_types:
           enum: string

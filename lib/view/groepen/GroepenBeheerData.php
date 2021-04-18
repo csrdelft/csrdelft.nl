@@ -3,6 +3,7 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 
@@ -26,14 +27,14 @@ class GroepenBeheerData extends DataTableResponse {
 			}
 		}
 		$array['naam'] = '<span title="' . $title . '">' . $groep->naam . '</span>';
-		$array['status'] = $groep->status->getDescription();
+		$array['status'] = ($groep instanceof GroepMoment) ? $groep->status->getDescription() : null;
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;
 		$array['leden'] = null;
 
-		if (property_exists($groep, 'in_agenda')) {
-			$array['in_agenda'] = $groep->in_agenda ? 'ja' : 'nee';
+		if (property_exists($groep, 'inAgenda')) {
+			$array['inAgenda'] = $groep->inAgenda ? 'ja' : 'nee';
 		}
 
 		return $array;

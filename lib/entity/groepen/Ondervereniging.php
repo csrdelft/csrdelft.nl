@@ -15,13 +15,14 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\OnderverenigingenRepository")
  */
 class Ondervereniging extends Groep {
+	use GroepMoment;
 	/**
 	 * (Adspirant-)Ondervereniging
 	 * @var OnderverenigingStatus
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="enumOnderverenigingStatus")
 	 * @Serializer\Groups("datatable")
 	 */
-	public $soort;
+	public $onderverenigingStatus;
 
 	public function getUrl() {
 		return '/groepen/onderverenigingen/' . $this->id;

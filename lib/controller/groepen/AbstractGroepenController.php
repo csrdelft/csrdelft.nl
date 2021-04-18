@@ -12,6 +12,7 @@ use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\groepen\GroepLid;
+use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
@@ -136,20 +137,22 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		} else {
 			$groepen = $this->repository->findBy(['status' => GroepStatus::HT()]);
 		}
-		$body = new GroepenView($this->repository, $groepen, $soort); // controleert rechten bekijken per groep
+		// controleert rechten bekijken per groep
+		$body = new GroepenView($this->repository, $groepen, $soort);
 		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
 	public function bekijken($id)
 	{
 		$groep = $this->repository->get($id);
-		$groepen = $this->repository->findBy(['familie' => $groep->familie], ['begin_moment' => 'DESC']);
+		$groepen = $this->repository->findBy(['familie' => $groep->familie]);
 		if ($groep instanceof HeeftSoort) {
 			$soort = $groep->getSoort();
 		} else {
 			$soort = null;
 		}
-		$body = new GroepenView($this->repository, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
+		// controleert rechten bekijken per groep
+		$body = new GroepenView($this->repository, $groepen, $soort, $groep->id);
 		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
@@ -292,25 +295,25 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$old = null;
 			$groep = $this->repository->nieuw($soort);
 			$profiel = $this->getProfiel();
-			if ($groep instanceof Activiteit && empty($groep->rechten_aanmelden)) {
-				switch ($groep->soort) {
+			if ($groep instanceof Activiteit && empty($groep->rechtenAanmelden)) {
+				switch ($groep->activiteitSoort) {
 
 					case ActiviteitSoort::Lichting:
-						$groep->rechten_aanmelden = 'Lichting:' . $profiel->lidjaar;
+						$groep->rechtenAanmelden = 'Lichting:' . $profiel->lidjaar;
 						break;
 
 					case ActiviteitSoort::Verticale:
-						$groep->rechten_aanmelden = 'Verticale:' . $profiel->verticale;
+						$groep->rechtenAanmelden = 'Verticale:' . $profiel->verticale;
 						break;
 
 					case ActiviteitSoort::Kring:
 						$kring = $profiel->getKring();
 						if ($kring) {
-							$groep->rechten_aanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kringNummer;
+							$groep->rechtenAanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kringNummer;
 						}
 						break;
 					default:
-						$groep->rechten_aanmelden = P_LOGGED_IN;
+						$groep->rechtenAanmelden = P_LOGGED_IN;
 						break;
 				}
 			}
@@ -321,7 +324,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 				throw $this->createAccessDeniedException();
 			}
 			if (property_exists($old, 'soort')) {
-				$soort = $old->soort;
+				$soort = $old->huisStatus;
 			}
 			$groep = $this->repository->nieuw($soort);
 			$groep->naam = $old->naam;
@@ -329,7 +332,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$groep->samenvatting = $old->samenvatting;
 			$groep->omschrijving = $old->omschrijving;
 			if (property_exists($old, 'rechten_aanmelden')) {
-				$groep->rechten_aanmelden = $old->rechten_aanmelden;
+				$groep->rechtenAanmelden = $old->rechtenAanmelden;
 			}
 		}
 		$form = new GroepForm($groep, $this->repository->getUrl() . '/aanmaken', AccessAction::Aanmaken); // checks rechten aanmaken
@@ -360,7 +363,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	{
 		if ($request->getMethod() == 'POST') {
 			if ($soort) {
-				$groepen = $this->repository->findBy(['soort' => $soort], ['begin_moment' => 'DESC']);
+				$groepen = $this->repository->findBy(['soort' => $soort]);
 			} else {
 				$groepen = $this->repository->findAll();
 			}
@@ -521,9 +524,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	{
 		$response = [];
 		$groep = $this->repository->retrieveByUUID($id);
-		if ($groep && property_exists($groep, 'aanmelden_tot') && date_create_immutable() <= $groep->aanmelden_tot && $groep->mag(AccessAction::Wijzigen)) {
-			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, date_create_immutable());
-			$groep->aanmelden_tot = date_create_immutable();
+		if ($groep && property_exists($groep, 'aanmelden_tot') && date_create_immutable() <= $groep->aanmeldenTot && $groep->mag(AccessAction::Wijzigen)) {
+			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmeldenTot, date_create_immutable());
+			$groep->aanmeldenTot = date_create_immutable();
 			$this->repository->update($groep);
 			$response[] = $groep;
 		}

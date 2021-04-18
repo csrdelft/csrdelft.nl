@@ -18,7 +18,7 @@ class CommissiesRepository extends GroepRepository {
 		}
 		/** @var Commissie $commissie */
 		$commissie = parent::nieuw();
-		$commissie->soort = $soort;
+		$commissie->commissieSoort = $soort;
 		return $commissie;
 	}
 }

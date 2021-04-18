@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\BesturenRepository")
  */
 class Bestuur extends Groep {
+	use GroepMoment;
 	/**
 	 * Bestuurstekst
 	 * @var string

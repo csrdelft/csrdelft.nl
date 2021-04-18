@@ -14,11 +14,11 @@ class KetzersRepository extends GroepRepository {
 	public function nieuw($soort = null) {
 		/** @var Ketzer $ketzer */
 		$ketzer = parent::nieuw();
-		$ketzer->aanmeld_limiet = null;
-		$ketzer->aanmelden_vanaf = date_create_immutable();
-		$ketzer->aanmelden_tot = null;
-		$ketzer->bewerken_tot = null;
-		$ketzer->afmelden_tot = null;
+		$ketzer->aanmeldLimiet = null;
+		$ketzer->aanmeldenVanaf = date_create_immutable();
+		$ketzer->aanmeldenTot = null;
+		$ketzer->bewerkenTot = null;
+		$ketzer->afmeldenTot = null;
 		return $ketzer;
 	}
 }

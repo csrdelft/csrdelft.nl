@@ -21,13 +21,14 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\CommissiesRepository")
  */
 class Commissie extends Groep implements HeeftSoort {
+	use GroepMoment;
 	/**
 	 * (Bestuurs-)Commissie / SjaarCie
 	 * @var CommissieSoort
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="enumCommissieSoort")
 	 * @Serializer\Groups("datatable")
 	 */
-	public $soort;
+	public $commissieSoort;
 
 	public function getUrl() {
 		return '/groepen/commissies/' . $this->id;
@@ -42,7 +43,7 @@ class Commissie extends Groep implements HeeftSoort {
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
-		switch ($soort) {
+		switch (CommissieSoort::from($soort)) {
 
 			case CommissieSoort::SjaarCie():
 				if (LoginService::mag('commissie:NovCie')) {
@@ -54,10 +55,10 @@ class Commissie extends Groep implements HeeftSoort {
 	}
 
 	public function getSoort() {
-		return $this->soort;
+		return $this->commissieSoort;
 	}
 
 	public function setSoort($soort) {
-		$this->soort = $soort;
+		$this->commissieSoort = $soort;
 	}
 }

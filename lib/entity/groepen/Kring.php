@@ -13,6 +13,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\KringenRepository")
  */
 class Kring extends Groep {
+	use GroepMoment;
+
 	/**
 	 * Verticaleletter
 	 * @var string

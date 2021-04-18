@@ -15,37 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\RechtenGroepenRepository")
  */
 class RechtenGroep extends Groep {
-	/**
-	 * Rechten benodigd voor aanmelden
-	 * @var string
-	 * @ORM\Column(type="string")
-	 */
-	public $rechten_aanmelden;
+	use GroepAanmeldRechten;
 
 	public function getUrl() {
 		return '/groepen/overig/' . $this->id;
-	}
-
-	/**
-	 * Has permission for action?
-	 *
-	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
-	 * @return boolean
-	 */
-	public function mag($action, $allowedAuthenticationMethods = null) {
-		switch ($action) {
-			case AccessAction::Bekijken:
-				break;
-			case AccessAction::Aanmelden:
-			case AccessAction::Bewerken:
-			case AccessAction::Afmelden:
-				if (!LoginService::mag($this->rechten_aanmelden)) {
-					return false;
-				}
-				break;
-		}
-		return parent::mag($action, $allowedAuthenticationMethods);
 	}
 
 	/**

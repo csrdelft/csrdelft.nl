@@ -77,12 +77,12 @@
 			this.id = this.groep.id;
 			this.naam = this.groep.naam;
 			this.familie = this.groep.familie;
-			this.beginMoment = this.groep.begin_moment;
-			this.eindMoment = this.groep.eind_moment;
+			this.beginMoment = this.groep.beginMoment;
+			this.eindMoment = this.groep.eindMoment;
 			this.status = this.groep.status;
 			this.samenvatting = this.groep.samenvatting;
 			this.omschrijving = this.groep.omschrijving;
-			this.makerUid = this.groep.maker_uid;
+			this.makerUid = this.groep.makerUid;
 			this.versie = this.groep.versie;
 			this.keuzelijst2 = this.groep.keuzelijst2;
 			this.leden = this.groep.leden;
@@ -111,9 +111,9 @@
 		}
 
 		private get magAanmelden() {
-			console.log(this.groep.aanmelden_tot, new Date)
-			if (this.groep.aanmelden_tot) {
-				return new Date(this.groep.aanmelden_tot) > new Date;
+			console.log(this.groep.aanmeldenTot, new Date)
+			if (this.groep.aanmeldenTot) {
+				return new Date(this.groep.aanmeldenTot) > new Date;
 			}
 
 			return true;
