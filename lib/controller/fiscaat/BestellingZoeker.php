@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BestellingZoeker extends AbstractController {
 	/**
-	 * @Route("/fiscaat/bestellingZoeker")
+	 * @Route("/fiscaat/bestelling-zoeker")
 	 * @param Request $request
 	 * @param CiviCategorieRepository $civiCategorieRepository
 	 * @param CiviProductRepository $civiProductRepository
