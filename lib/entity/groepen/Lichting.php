@@ -51,7 +51,7 @@ class Lichting extends Groep {
 			$lid = $model->nieuw($this, $profiel->uid);
 			$lid->door_uid = null;
 			$lid->door_profiel = null;
-			$lid->lid_sinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
+			$lid->lidSinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
 			$leden[] = $lid;
 		}
 		return new ArrayCollection($leden);

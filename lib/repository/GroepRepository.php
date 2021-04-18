@@ -2,11 +2,12 @@
 
 namespace CsrDelft\repository;
 
-use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\groepen\GroepStatistiekDTO;
 use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\AbstractQuery;
@@ -75,7 +76,13 @@ abstract class GroepRepository extends AbstractRepository
 	public function get($id)
 	{
 		if (is_numeric($id)) {
-			return $this->find($id);
+			$groep = $this->find($id);
+
+			if (!$groep) {
+				return $this->findOneBy(['oudId' => $id]);
+			}
+
+			return $groep;
 		}
 		return $this->findOneBy(['familie' => $id, 'status' => GroepStatus::HT()]);
 	}
@@ -197,13 +204,13 @@ abstract class GroepRepository extends AbstractRepository
 	 * @param GroepStatus|array $status
 	 * @return Groep[]
 	 */
-	public function getGroepenVoorLid($uid, $status = null)
+	public function getGroepenVoorLid(Profiel $uid, $status = null)
 	{
 		$qb = $this->createQueryBuilder('ag')
 			->orderBy('ag.begin_moment', 'DESC')
 			->join('ag.leden', 'l')
 			->where('l.uid = :uid')
-			->setParameter('uid', $uid);
+			->setParameter('uid', $uid->uid);
 
 		if (is_array($status)) {
 			$qb->andWhere('ag.status in (:status)')
@@ -230,7 +237,7 @@ abstract class GroepRepository extends AbstractRepository
 
 		$tijd = [];
 		foreach ($groep->getLeden() as $groeplid) {
-			$time = $groeplid->lid_sinds->getTimestamp();
+			$time = $groeplid->lidSinds->getTimestamp();
 			if (isset($tijd[$time])) {
 				$tijd[$time] += 1;
 			} else {

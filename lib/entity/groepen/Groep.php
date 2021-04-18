@@ -139,7 +139,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	/**
 	 * @var GroepLid[]|ArrayCollection
 	 * @ORM\OneToMany(targetEntity="GroepLid", mappedBy="groep")
-	 * @ORM\OrderBy({"lid_sinds"="ASC"})
+	 * @ORM\OrderBy({"lidSinds"="ASC"})
 	 * @ORM\JoinColumn(name="groep_id", referencedColumnName="id")
 	 */
 	public $leden;

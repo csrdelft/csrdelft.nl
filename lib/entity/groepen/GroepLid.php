@@ -68,7 +68,7 @@ class GroepLid
 	 * @ORM\Column(type="datetime")
 	 * @Serializer\Groups("datatable")
 	 */
-	public $lid_sinds;
+	public $lidSinds;
 	/**
 	 * Lidnummer van aanmelder
 	 * @var string

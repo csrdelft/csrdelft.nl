@@ -36,7 +36,7 @@ class VerticaleLidRepository extends GroepLidRepository {
 			}
 			$lid->door_uid = null;
 			$lid->door_profiel = null;
-			$lid->lid_sinds = $profiel->lidjaar . '-09-01 00:00:00';
+			$lid->lidSinds = $profiel->lidjaar . '-09-01 00:00:00';
 			return $lid;
 		}
 		return false;
