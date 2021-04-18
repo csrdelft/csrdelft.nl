@@ -120,8 +120,5 @@ final class Version20210417170454 extends AbstractMigration
 		$this->addSql('ALTER TABLE werkgroep_deelnemers ADD CONSTRAINT FK_38E14A6B9EB44EC5 FOREIGN KEY (groep_id) REFERENCES werkgroepen (id)');
 		$this->addSql('ALTER TABLE werkgroepen ADD CONSTRAINT FK_2194ECF73A4A27C1 FOREIGN KEY (maker_uid) REFERENCES profielen (uid)');
 		$this->addSql('ALTER TABLE woonoorden ADD CONSTRAINT FK_782FB8083A4A27C1 FOREIGN KEY (maker_uid) REFERENCES profielen (uid)');
-
-		$this->addSql('ALTER TABLE eetplan DROP FOREIGN KEY FK_EC97E0BBF0C31BC7');
-		$this->addSql('ALTER TABLE eetplan ADD CONSTRAINT FK_EC97E0BBF0C31BC7 FOREIGN KEY (woonoord_id) REFERENCES woonoorden (id)');
 	}
 }

@@ -47,7 +47,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 class Groep implements DataTableEntry, DisplayEntity
 {
 	/**
-	 * Primary key
+	 * Primary key, groter dan 3000 in de database
 	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
@@ -57,9 +57,9 @@ class Groep implements DataTableEntry, DisplayEntity
 	public $id;
 
 	/**
-	 * Oude ID, uniek voor type groep
+	 * Oude ID, uniek voor type groep, kleiner dan 3000 in de database (sorry)
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $oudId;
 
