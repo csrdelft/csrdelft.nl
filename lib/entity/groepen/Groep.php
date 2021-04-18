@@ -137,12 +137,13 @@ class Groep implements DataTableEntry, DisplayEntity
 	 */
 	public $keuzelijst2 = [];
 	/**
+	 * Gebruik @see Groep::getLeden om leden op te vragen.
 	 * @var GroepLid[]|ArrayCollection
 	 * @ORM\OneToMany(targetEntity="GroepLid", mappedBy="groep")
 	 * @ORM\OrderBy({"lidSinds"="ASC"})
 	 * @ORM\JoinColumn(name="groep_id", referencedColumnName="id")
 	 */
-	public $leden;
+	protected $leden;
 
 	public function __construct()
 	{

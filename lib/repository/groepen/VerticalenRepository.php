@@ -2,7 +2,6 @@
 
 namespace CsrDelft\repository\groepen;
 
-use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\repository\GroepRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -43,9 +42,5 @@ class VerticalenRepository extends GroepRepository {
 		$verticale = parent::nieuw();
 		$verticale->letter = null;
 		return $verticale;
-	}
-
-	public function nieuwLid(Groep $groep, $uid) {
-
 	}
 }

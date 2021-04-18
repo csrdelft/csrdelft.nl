@@ -38,26 +38,26 @@ class Verticale extends Groep {
 	// Stiekem hebben we helemaal geen leden.
 	public function getLeden() {
 		$leden = [];
-		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
+		$container = ContainerFacade::getContainer();
+		$profielRepository = $container->get(ProfielRepository::class);
 		/** @var Profiel $profielen */
 		$profielen = $profielRepository->createQueryBuilder('p')
 			->where('p.verticale = :verticale and p.status in (:lidstatus)')
 			->setParameter('verticale', $this->letter)
 			->setParameter('lidstatus', LidStatus::getLidLike())
 			->getQuery()->getResult();
-		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+		$em = $container->get('doctrine.orm.entity_manager');
 		$model = $em->getRepository(GroepLid::class);
 		foreach ($profielen as $profiel) {
-			if ($profiel AND $profiel->verticale === $this->letter) {
-				/** @var GroepLid $lid */
+			if ($profiel && $profiel->verticale === $this->letter) {
 				$lid = $model->nieuw($this, $profiel->uid);
 				if ($profiel->verticaleleider) {
 					$lid->opmerking = 'Leider';
 				} elseif ($profiel->kringcoach) {
 					$lid->opmerking = 'Kringcoach';
 				}
-				$lid->door_uid = null;
-				$lid->door_profiel = null;
+				$lid->doorUid = null;
+				$lid->doorProfiel = null;
 				$lid->lidSinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
 				$leden[] = $lid;
 			}
