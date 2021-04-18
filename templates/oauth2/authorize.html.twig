@@ -41,7 +41,9 @@
 						<input type="hidden" name="response_type" value="{{ response_type }}">
 						<input type="hidden" name="token" value="{{ token }}">
 						<input type="hidden" name="scope" value="{{ scope }}">
+						{% if state %}
 						<input type="hidden" name="state" value="{{ state }}">
+						{% endif %}
 
 						<input type="submit" value="Terug" class="btn btn-secondary" name="cancel">
 						<input type="submit" value="Autoriseer" class="btn btn-primary mr-2">

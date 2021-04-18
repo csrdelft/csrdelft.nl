@@ -240,33 +240,30 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');
 		}
-		$zoekterm = '%' . $zoekterm . '%';
 		$limit = 5;
 		if ($request->query->has('limit')) {
 			$limit = $request->query->getInt('limit');
 		}
+		$status = ['ft', 'ht'];
+		if ($request->query->has('status')) {
+			$status = explode(',', $request->query->get('status'));
+		}
 		$result = [];
-		/** @var AbstractGroep $groepen */
-		$groepen = $this->repository->createQueryBuilder('g')
-			->where('g.familie LIKE :familie and (g.status = :ht or g.status = :ft)')
-			->setParameter('familie', $zoekterm)
-			->setParameter('ht', GroepStatus::HT)
-			->setParameter('ft', GroepStatus::FT)
-			->setMaxResults($limit)
-			->getQuery()->getResult();
+
+		$groepen = $this->repository->zoeken($zoekterm, $limit, $status);
+
 		foreach ($groepen as $groep) {
-			/** @var AbstractGroep $groep */
-			if (!isset($result[$groep->familie])) {
 				$type = classNameZonderNamespace(get_class($groep));
-				$result[$groep->familie] = [
+				$result[] = [
 					'url' => $groep->getUrl() . '#' . $groep->id,
 					'label' => 'Groepen',
-					'value' => $type . ': ' . $groep->familie,
+					'value' => $type . ': ' . $groep->naam,
+					'naam' => $groep->naam,
 					'icon' => Icon::getTag($type),
+					'id' => $groep->getId(),
 				];
-			}
 		}
-		return new JsonResponse(array_values($result));
+		return new JsonResponse($result);
 	}
 
 	/**

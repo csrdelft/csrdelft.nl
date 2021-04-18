@@ -10,7 +10,7 @@ const createBlockSpec = (type: string, attr = 'id'): NodeSpec => ({
 })
 
 const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeSpec => ({
-	attrs: {[attr]: {}},
+	attrs: {[attr]: {}, naam: {}},
 	group: "block",
 	draggable: true,
 	toDOM: node => {
@@ -20,6 +20,7 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 		fetch(`/groepen/${type}/${node.attrs[attr]}/info`)
 			.then(response => response.json())
 			.then(json => {
+				el.dataset.naam = json.naam
 				const ledenDiv = html`
 					<div id="groep-leden-content-2152" class="groep-tab-content GroepPasfotosView" style="height: 212.8px;">`
 
@@ -32,36 +33,36 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 
 				el.innerHTML = ''
 				el.appendChild(html`
-					<div class="bb-groep bb-block">
-						<div class="groep-samenvatting">
-							<div class="float-right"><a class="btn" target="_blank" href="/groepen/${type}/${json.id}/wijzigen"
-																					title="Wijzig ${json.naam}"><span
-								class="fa fa-edit"></span></a></div>
-							<h3>${json.naam} <span class="groep-id-hint">(<a target="_blank"
-																															 href="/groepen/${type}/${json.id}">#${json.id}</a>)</span>
-							</h3>
-							${json.samenvatting_html ?? ""}
-						</div>
+<div class="bb-groep">
+<div class="groep-samenvatting">
+<div class="float-right"><a class="btn" target="_blank" href="/groepen/${type}/${json.id}/wijzigen"
+title="Wijzig ${json.naam}"><span
+class="fa fa-edit"></span></a></div>
+<h3>${json.naam} <span class="groep-id-hint">(<a target="_blank"
+href="/groepen/${type}/${json.id}">#${json.id}</a>)</span>
+</h3>
+${json.samenvatting_html ?? ""}
+</div>
 
-						<div id="groep-leden-2152" class="groep-leden">
-							<ul class="groep-tabs nobullets">
-								<li class="geschiedenis"><a class="btn disabled" href="#" title="Bekijk geschiedenis"><span
-									class="fa fa-clock"></span></a></li>
-								<li><a class="btn btn-primary disabled" href="#" title="Pasfoto's tonen"><span
-									class="fa fa-user"></span></a></li>
-								<li><a class="btn disabled" href="#" title="Lijst tonen"><span class="fa fa-align-justify"></span></a>
-								</li>
-								<li><a class="btn disabled" href="#" title="Statistiek tonen"><span class="fa fa-chart-pie"></span></a>
-								</li>
-								<li><a class="btn disabled" href="#" title="E-mails tonen"><span class="fa fa-envelope"></span></a></li>
-								<li><a class="btn disabled" href="#" title="Allergie/dieet tonen"><span class="fa fa-heartbeat"></span></a>
-								</li>
-								<li class="knop-vergroot"></li>
-							</ul>
-							${ledenDiv}
-						</div>
-						<div class="clear">&nbsp;</div>
-					</div>`)
+<div id="groep-leden-2152" class="groep-leden">
+<ul class="groep-tabs nobullets">
+<li class="geschiedenis"><a class="btn disabled" href="#" title="Bekijk geschiedenis"><span
+class="fa fa-clock"></span></a></li>
+<li><a class="btn btn-primary disabled" href="#" title="Pasfoto's tonen"><span
+class="fa fa-user"></span></a></li>
+<li><a class="btn disabled" href="#" title="Lijst tonen"><span class="fa fa-align-justify"></span></a>
+</li>
+<li><a class="btn disabled" href="#" title="Statistiek tonen"><span class="fa fa-chart-pie"></span></a>
+</li>
+<li><a class="btn disabled" href="#" title="E-mails tonen"><span class="fa fa-envelope"></span></a></li>
+<li><a class="btn disabled" href="#" title="Allergie/dieet tonen"><span class="fa fa-heartbeat"></span></a>
+</li>
+<li class="knop-vergroot"></li>
+</ul>
+${ledenDiv}
+</div>
+<div class="clear">&nbsp;</div>
+</div>`)
 			})
 			.catch(() => {
 				el.innerText = "Groep niet gevonden"
@@ -69,14 +70,14 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 
 		return el;
 	},
-	parseDOM: [{tag: `div[data-${type}`, getAttrs: (dom: HTMLElement) => ({[attr]: dom.dataset[type]})}]
+	parseDOM: [{tag: `div[data-${type}`, getAttrs: (dom: HTMLElement) => ({[attr]: dom.dataset[type], naam: dom.dataset.naam})}]
 })
 
 // Groepen
 export const activiteit = createGroepBlockSpec("activiteit", "activiteiten")
 export const bestuur = createGroepBlockSpec("bestuur", "besturen")
 export const commissie = createGroepBlockSpec("commissie", "commissies")
-export const groep = createGroepBlockSpec("groep", "groepen")
+export const groep = createGroepBlockSpec("groep", "overig")
 export const ketzer = createGroepBlockSpec("ketzer", "ketzers")
 export const ondervereniging = createGroepBlockSpec("ondervereniging", "onderverenigingen")
 export const verticale = createGroepBlockSpec("verticale", "verticalen")

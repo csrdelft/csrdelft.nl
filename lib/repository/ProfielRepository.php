@@ -476,11 +476,24 @@ class ProfielRepository extends AbstractRepository {
 		return true;
 	}
 
-	public function getNovieten($lichting) {
+	/**
+	 * Geef een lidjaar mee om alleen novieten van een specifiek lidjaar op te halen.
+	 *
+	 * @param null $lidjaar
+	 * @return int|mixed|string
+	 */
+	public function getNovietenVanLaatsteLidjaar($lidjaar = null) {
+		if (empty($lidjaar)) {
+			return $this->createQueryBuilder('p')
+				->where('p.status = :status')
+				->setParameter('status', LidStatus::Noviet)
+				->getQuery()->getResult();
+		}
+
 		return $this->createQueryBuilder('p')
-			->where('p.uid like :uid and p.status = :status')
-			->setParameter('uid', $lichting . '%')
-			->setParameter('status', 'S_NOVIET')
+			->where('p.status = :status and p.lidjaar = :lidjaar')
+			->setParameter('lidjaar', $lidjaar)
+			->setParameter('status', LidStatus::Noviet)
 			->getQuery()->getResult();
 	}
 

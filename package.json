@@ -111,6 +111,7 @@
 		"datatables.net-select-dt": "^1.3.0",
 		"dropzone": "^5.5.0",
 		"flatpickr": "^4.6.6",
+		"get-video-id": "^3.2.0",
 		"google-palette": "^1.1.0",
 		"hammerjs": "^2.0.8",
 		"hoverintent": "^2.2.1",
