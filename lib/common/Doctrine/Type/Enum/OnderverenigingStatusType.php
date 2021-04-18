@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CsrDelft\common\Doctrine\Type;
+namespace CsrDelft\common\Doctrine\Type\Enum;
 
 
 use CsrDelft\entity\groepen\enum\OnderverenigingStatus;

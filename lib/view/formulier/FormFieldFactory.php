@@ -5,7 +5,7 @@ namespace CsrDelft\view\formulier;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
-use CsrDelft\common\Doctrine\Type\EnumType;
+use CsrDelft\common\Doctrine\Type\Enum\EnumType;
 use CsrDelft\common\Doctrine\Type\LongTextType;
 use CsrDelft\common\Doctrine\Type\SafeJsonType;
 use CsrDelft\common\Doctrine\Type\StringKeyType;

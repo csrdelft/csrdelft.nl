@@ -41,7 +41,7 @@ class OntvangtContactueel extends \CsrDelft\common\Enum {
 Om doctrine je enum te laten snappen moet je een 'Type' er voor aanmaken, zie de `lib/common/Doctrine/Type` map voor voorbeelden. Hier onder zie je de meest simpele versie.
 
 ```php
-class OntvangtContactueelType extends \CsrDelft\common\Doctrine\Type\EnumType {
+class OntvangtContactueelType extends \CsrDelft\common\Doctrine\Type\Enum\EnumType {
     public  function getEnumClass(): string{
         return \CsrDelft\entity\OntvangtContactueel::class;
     }

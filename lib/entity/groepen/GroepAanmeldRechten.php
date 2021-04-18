@@ -27,11 +27,17 @@ trait GroepAanmeldRechten
 	 * @return boolean
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
-		if ($action == AccessAction::Aanmelden || $action == AccessAction::Bewerken || $action == AccessAction::Afmelden) {
-			if (!LoginService::mag($this->rechtenAanmelden)) {
-				return false;
-			}
+		$beschermdeActies = [
+			AccessAction::Bekijken => true,
+			AccessAction::Aanmelden => true,
+			AccessAction::Bewerken => true,
+			AccessAction::Afmelden => true,
+		];
+
+		if (isset($beschermdeActies[$action]) && !LoginService::mag($this->rechtenAanmelden)) {
+			return false;
 		}
+
 		return parent::mag($action, $allowedAuthenticationMethods);
 	}
 }
