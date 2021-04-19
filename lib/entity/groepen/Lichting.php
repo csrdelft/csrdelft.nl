@@ -32,8 +32,8 @@ class Lichting extends Groep {
 	 * @param null $soort
 	 * @return bool
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
-		return $action === AccessAction::Bekijken;
+	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null) {
+		return AccessAction::isBekijken($action);
 	}
 
 	/**
@@ -63,12 +63,12 @@ class Lichting extends Groep {
 
 	/**
 	 * Read-only: generated group
-	 * @param $action
+	 * @param AccessAction $action
 	 * @param null $allowedAuthenticationMethods
 	 * @return bool
 	 */
-	public function mag($action, $allowedAuthenticationMethods = null) {
-		return $action === AccessAction::Bekijken;
+	public function mag(AccessAction $action, $allowedAuthenticationMethods = null) {
+		return AccessAction::isBekijken($action);
 	}
 
 }

@@ -43,7 +43,7 @@ trait GroepAanmelden
 	/**
 	 * Controleer of aanmeldLimiet en bewerken/afmelden tot gehaald wordt.
 	 *
-	 * @param string $action
+	 * @param AccessAction $action
 	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
@@ -51,15 +51,15 @@ trait GroepAanmelden
 		$nu = date_create_immutable();
 
 		switch ($action) {
-			case AccessAction::Aanmelden:
+			case AccessAction::Aanmelden():
 				// Controleer aanmeldperiode
 				return $nu <= $this->aanmeldenTot && $nu >= $this->aanmeldenVanaf;
 
-			case AccessAction::Bewerken:
+			case AccessAction::Bewerken():
 				// Controleer bewerkperiode
 				return $nu <= $this->bewerkenTot;
 
-			case AccessAction::Afmelden:
+			case AccessAction::Afmelden():
 				// Controleer afmeldperiode
 				return $nu <= $this->afmeldenTot;
 		}

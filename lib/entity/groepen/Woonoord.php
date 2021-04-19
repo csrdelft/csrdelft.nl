@@ -52,8 +52,8 @@ class Woonoord extends Groep implements HeeftSoort {
 	public function mag($action, $soort = null) {
 		switch ($action) {
 
-			case AccessAction::Beheren:
-			case AccessAction::Wijzigen:
+			case AccessAction::Beheren():
+			case AccessAction::Wijzigen():
 				// Huidige bewoners mogen beheren
 				if (LoginService::mag('woonoord:' . $this->familie)) {
 					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()

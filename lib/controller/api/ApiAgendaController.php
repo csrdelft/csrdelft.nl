@@ -83,7 +83,7 @@ class ApiAgendaController extends AbstractController
 			->getQuery()->getResult();
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
-			if (in_array($activiteit->activiteitSoort, array(ActiviteitSoort::Extern(), ActiviteitSoort::OWee(), ActiviteitSoort::IFES())) or $activiteit->mag(AccessAction::Bekijken)) {
+			if (in_array($activiteit->activiteitSoort, array(ActiviteitSoort::Extern(), ActiviteitSoort::OWee(), ActiviteitSoort::IFES())) or $activiteit->mag(AccessAction::Bekijken())) {
 				$activiteitenFiltered[] = $activiteit;
 			}
 		}

@@ -22,19 +22,19 @@ trait GroepAanmeldRechten
 	/**
 	 * Has permission for action?
 	 *
-	 * @param string $action
+	 * @param AccessAction $action
 	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
 	public function mag($action, $allowedAuthenticationMethods = null) {
 		$beschermdeActies = [
-			AccessAction::Bekijken => true,
-			AccessAction::Aanmelden => true,
-			AccessAction::Bewerken => true,
-			AccessAction::Afmelden => true,
+			AccessAction::Bekijken(),
+			AccessAction::Aanmelden(),
+			AccessAction::Bewerken(),
+			AccessAction::Afmelden(),
 		];
 
-		if (isset($beschermdeActies[$action]) && !LoginService::mag($this->rechtenAanmelden)) {
+		if (in_array($action, $beschermdeActies) && !LoginService::mag($this->rechtenAanmelden)) {
 			return false;
 		}
 

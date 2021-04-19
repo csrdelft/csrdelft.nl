@@ -3,9 +3,7 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Verticale;
-use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\repository\groepen\VerticalenRepository;
-use CsrDelft\view\Icon;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,8 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Controller voor verticalen.
  */
 class VerticalenController extends AbstractGroepenController {
-	public function __construct(ChangeLogRepository $changeLogRepository, VerticalenRepository $verticalenRepository) {
-		parent::__construct($changeLogRepository, $verticalenRepository);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Verticale::class);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {

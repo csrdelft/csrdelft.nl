@@ -71,7 +71,7 @@ class GroepenView implements View {
 		$model = $this->model;
 		$orm = $model->entityClass;
 		$html = '';
-		if ($orm::magAlgemeen(AccessAction::Aanmaken, null, $this->soort)) {
+		if ($orm::magAlgemeen(AccessAction::Aanmaken(), null, $this->soort)) {
 			$html .= '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
 		$html .= '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
@@ -82,7 +82,7 @@ class GroepenView implements View {
 		$html .= $view->__toString();
 		foreach ($this->groepen as $groep) {
 			// Controleer rechten
-			if (!$groep->mag(AccessAction::Bekijken)) {
+			if (!$groep->mag(AccessAction::Bekijken())) {
 				continue;
 			}
 			$html .= '<hr>';

@@ -50,7 +50,7 @@ abstract class BbTagGroep extends BbTag
 	 */
 	public function isAllowed()
 	{
-		return $this->getGroep()->mag(AccessAction::Bekijken);
+		return $this->getGroep()->mag(AccessAction::Bekijken());
 	}
 
 	/**

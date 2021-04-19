@@ -59,7 +59,7 @@ else {
 	tabContent.height(availableHeight);
 }
 JS;
-		if ($this->groep->mag(AccessAction::Beheren)) {
+		if ($this->groep->mag(AccessAction::Beheren())) {
 
 			$this->javascript .= <<<JS
 

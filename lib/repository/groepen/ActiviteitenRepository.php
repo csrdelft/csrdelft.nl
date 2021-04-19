@@ -18,7 +18,7 @@ class ActiviteitenRepository extends KetzersRepository {
 		}
 		/** @var Activiteit $activiteit */
 		$activiteit = parent::nieuw();
-		$activiteit->activiteitSoort = $soort;
+		$activiteit->activiteitSoort = ActiviteitSoort::from($soort);
 		$activiteit->rechtenAanmelden = null;
 		$activiteit->locatie = null;
 		$activiteit->inAgenda = false;

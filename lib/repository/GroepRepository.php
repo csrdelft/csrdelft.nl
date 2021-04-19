@@ -327,7 +327,8 @@ abstract class GroepRepository extends AbstractRepository
 
 		$num = 0;
 		while ($num < $limit && ($object = $result->next()) !== false) {
-			if ($object[0]->mag(AccessAction::Bekijken)) {
+			/** @var $object Groep[] */
+			if ($object[0]->mag(AccessAction::Bekijken())) {
 				$num++;
 				yield $object[0];
 			}

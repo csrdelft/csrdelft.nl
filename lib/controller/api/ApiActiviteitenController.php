@@ -40,11 +40,11 @@ class ApiActiviteitenController extends AbstractController {
 	public function activiteitAanmelden($id) {
 		$activiteit = $this->activiteitenRepository->get($id);
 
-		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
+		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
 			throw new NotFoundHttpException('Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(AccessAction::Aanmelden)) {
+		if (!$activiteit->mag(AccessAction::Aanmelden())) {
 			throw $this->createAccessDeniedException('Aanmelden niet mogelijk');
 		}
 
@@ -64,11 +64,11 @@ class ApiActiviteitenController extends AbstractController {
 	public function activiteitAfmelden($id) {
 		$activiteit = $this->activiteitenRepository->get($id);
 
-		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
+		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
 			throw new NotFoundHttpException('Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(AccessAction::Afmelden)) {
+		if (!$activiteit->mag(AccessAction::Afmelden())) {
 			throw $this->createAccessDeniedException('Afmelden niet mogelijk');
 		}
 

@@ -26,7 +26,7 @@ class GroepLedenTable extends DataTable {
 		$this->setColumnTitle('lid', 'Lidnaam');
 		$this->setColumnTitle('door_uid', 'Aangemeld door');
 
-		if ($groep->mag(AccessAction::Beheren)) {
+		if ($groep->mag(AccessAction::Beheren())) {
 			$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $groep->getUrl() . '/aanmelden', 'Aanmelden', 'Lid toevoegen', 'user_add'));
 			$this->addRowKnop(new DataTableRowKnop($groep->getUrl() . '/bewerken/:uid', 'Lidmaatschap bewerken', 'user_edit'));
 			$this->addRowKnop(new DataTableRowKnop($groep->getUrl() . '/afmelden/:uid', 'Leden verwijderen', 'user_delete', 'confirm'));

@@ -34,6 +34,14 @@ class GroepForm extends ModalForm {
 	 */
 	private $mode;
 
+	/**
+	 * GroepForm constructor.
+	 * @param Groep $groep
+	 * @param $action
+	 * @param AccessAction $mode
+	 * @param false $nocancel
+	 * @throws \Exception
+	 */
 	public function __construct(Groep $groep, $action, $mode, $nocancel = false) {
 		parent::__construct($groep, $action, classNameZonderNamespace(get_class($groep)), true);
 		$this->mode = $mode;
@@ -43,6 +51,8 @@ class GroepForm extends ModalForm {
 			$this->titel .= ' aanmaken';
 		}
 		$fields = FormFieldFactory::generateFields($this->model);
+
+		$fields['oudId']->hidden = true;
 
 		$fields['familie']->title = 'Vul hier een \'achternaam\' in zodat de juiste ketzers elkaar opvolgen';
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
@@ -57,7 +67,7 @@ class GroepForm extends ModalForm {
 			$fields['eindMoment']->required = true;
 		}
 
-		if ($groep instanceof Ketzer) {
+		if ($groep instanceof Ketzer || $groep instanceof Activiteit) {
 			$fields['beginMoment']->title = 'Dit is NIET het moment van openstellen voor aanmeldingen';
 			$fields['eindMoment']->title = 'Dit is NIET het moment van sluiten voor aanmeldingen';
 			$fields['aanmeldenVanaf']->to_datetime = $fields['afmeldenTot'];
@@ -103,10 +113,8 @@ class GroepForm extends ModalForm {
 		if (!$groep->magAlgemeen($this->mode, null, $soort)) {
 			if (!$groep->mag($this->mode)) {
 				// beide aanroepen vanwege niet doorsturen van param $soort door mag() naar magAlgemeen()
-				if ($groep instanceof Activiteit) {
-					$naam = ActiviteitSoort::from($soort)->getDescription();
-				} elseif ($groep instanceof Commissie) {
-					$naam = CommissieSoort::from($soort)->getDescription();
+				if ($soort) {
+					$naam = $soort->getDescription();
 				} else {
 					$naam = classNameZonderNamespace(get_class($groep));
 				}
@@ -119,7 +127,7 @@ class GroepForm extends ModalForm {
 			 *
 			 * N.B.: Deze check staat binnen de !magAlgemeen zodat P_LEDEN_MOD deze check overslaat
 			 */
-			elseif ($this->mode === AccessAction::Wijzigen && $groep instanceof Woonoord) {
+			elseif (AccessAction::isWijzigen($this->mode) && $groep instanceof Woonoord) {
 
 				$origvalue = $this->findByName('soort')->getOrigValue();
 				if ($origvalue !== $soort) {

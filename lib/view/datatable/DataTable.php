@@ -105,17 +105,18 @@ class DataTable implements View, FormElement, ToResponse {
 			// generate columns from entity attributes
 			foreach ($metadata->getFieldNames() as $attribute) {
 				$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
+				$columnName = $metadata->getColumnName($attribute);
 				if ($type instanceof DateTimeImmutableType) {
-					$this->addColumn($attribute, null, null, CellRender::DateTime());
+					$this->addColumn($columnName, null, null, CellRender::DateTime());
 				} elseif ($type instanceof BooleanType) {
-					$this->addColumn($attribute, null, null, CellRender::Check());
+					$this->addColumn($columnName, null, null, CellRender::Check());
 				} else {
-					$this->addColumn($attribute);
+					$this->addColumn($columnName);
 				}
 			}
 
 			// hide primary key columns
-			foreach ($metadata->getIdentifierFieldNames() as $attribute) {
+			foreach ($metadata->getIdentifierColumnNames() as $attribute) {
 				$this->hideColumn($attribute);
 			}
 		}

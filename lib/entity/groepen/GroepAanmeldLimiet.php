@@ -17,9 +17,9 @@ trait GroepAanmeldLimiet
 	 */
 	public $aanmeldLimiet;
 
-	public function mag($action, $allowedAuthenticationMethods = null) {
+	public function mag(AccessAction $action, $allowedAuthenticationMethods = null) {
 		// Controleer maximum leden
-		if ($action == AccessAction::Aanmelden) {
+		if (AccessAction::isAanmelden($action)) {
 			return !isset($this->aanmeldLimiet) || $this->aantalLeden() < $this->aanmeldLimiet;
 		}
 

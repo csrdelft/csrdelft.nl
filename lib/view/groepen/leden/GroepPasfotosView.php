@@ -19,7 +19,7 @@ class GroepPasfotosView extends GroepTabView {
 
 	protected function getTabContent() {
 		$html = '';
-		if ($this->groep->mag(AccessAction::Aanmelden)) {
+		if ($this->groep->mag(AccessAction::Aanmelden())) {
 			$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 			$lid = $em->getRepository(GroepLid::class)->nieuw($this->groep, LoginService::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep);

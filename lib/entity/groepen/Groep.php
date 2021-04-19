@@ -59,6 +59,7 @@ class Groep implements DataTableEntry, DisplayEntity
 	 * Oude ID, uniek voor type groep, kleiner dan 3000 in de database (sorry)
 	 * @var int
 	 * @ORM\Column(type="integer", nullable=true)
+	 * @Serializer\Groups({"datatable", "vue"})
 	 */
 	public $oudId;
 
@@ -217,11 +218,11 @@ class Groep implements DataTableEntry, DisplayEntity
 	/**
 	 * Has permission for action?
 	 *
-	 * @param string $action
+	 * @param AccessAction $action
 	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag($action, $allowedAuthenticationMethods = null)
+	public function mag(AccessAction $action, $allowedAuthenticationMethods = null)
 	{
 		if (!LoginService::mag(P_LOGGED_IN, $allowedAuthenticationMethods)) {
 			return false;
@@ -230,14 +231,14 @@ class Groep implements DataTableEntry, DisplayEntity
 		$aangemeld = $this->getLid(LoginService::getUid()) != null;
 		switch ($action) {
 
-			case AccessAction::Aanmelden:
+			case AccessAction::Aanmelden():
 				if ($aangemeld) {
 					return false;
 				}
 				break;
 
-			case AccessAction::Bewerken:
-			case AccessAction::Afmelden:
+			case AccessAction::Bewerken():
+			case AccessAction::Afmelden():
 				if (!$aangemeld) {
 					return false;
 				}
@@ -271,21 +272,22 @@ class Groep implements DataTableEntry, DisplayEntity
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
 	 *
-	 * @param string $action
+	 * @param AccessAction $action
 	 * @param array|null $allowedAuthenticationMethods
+	 * @param null $soort
 	 * @return boolean
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null)
+	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null)
 	{
 		switch ($action) {
 
-			case AccessAction::Bekijken:
+			case AccessAction::Bekijken():
 				return LoginService::mag(P_LEDEN_READ, $allowedAuthenticationMethods);
 
 			// Voorkom dat moderators overal een normale aanmeldknop krijgen
-			case AccessAction::Aanmelden:
-			case AccessAction::Bewerken:
-			case AccessAction::Afmelden:
+			case AccessAction::Aanmelden():
+			case AccessAction::Bewerken():
+			case AccessAction::Afmelden():
 				return false;
 		}
 		// Moderators mogen alles

@@ -183,7 +183,7 @@ class AgendaRepository extends AbstractRepository {
 		/** @var Activiteit[] $activiteiten */
 		$activiteiten = $this->activiteitenRepository->getGroepenVoorAgenda($van, $tot);
 		foreach ($activiteiten as $activiteit) {
-			if ($activiteit->mag(AccessAction::Bekijken, $auth)) {
+			if ($activiteit->mag(AccessAction::Bekijken(), $auth)) {
 				$result[] = $activiteit;
 			}
 		}

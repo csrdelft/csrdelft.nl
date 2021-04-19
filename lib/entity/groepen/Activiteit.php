@@ -59,13 +59,13 @@ class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, Heef
 	 *
 	 * @param AccessAction $action
 	 * @param array|null $allowedAuthenticationMethods
-	 * @param string $soort
+	 * @param Enum $soort
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null)
 	{
-		if ($soort && ActiviteitSoort::isValidValue($soort)) {
-			switch (ActiviteitSoort::from($soort)) {
+		if ($soort && $soort instanceof ActiviteitSoort) {
+			switch ($soort) {
 
 				case ActiviteitSoort::OWee():
 					if (LoginService::mag('commissie:OWeeCie', $allowedAuthenticationMethods)) {
@@ -88,10 +88,10 @@ class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, Heef
 		}
 		switch ($action) {
 
-			case AccessAction::Aanmaken:
-			case AccessAction::Aanmelden:
-			case AccessAction::Bewerken:
-			case AccessAction::Afmelden:
+			case AccessAction::Aanmaken():
+			case AccessAction::Aanmelden():
+			case AccessAction::Bewerken():
+			case AccessAction::Afmelden():
 				return true;
 		}
 		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
@@ -110,11 +110,11 @@ class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, Heef
 	/**
 	 * Has permission for action?
 	 *
-	 * @param string $action
+	 * @param AccessAction $action
 	 * @param array|null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag($action, $allowedAuthenticationMethods = null)
+	public function mag(AccessAction $action, $allowedAuthenticationMethods = null)
 	{
 		return $this->aanmeldRechtenMag($action, $allowedAuthenticationMethods)
 			&& $this->aanmeldenMag($action, $allowedAuthenticationMethods)
