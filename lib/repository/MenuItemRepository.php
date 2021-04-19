@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -28,10 +29,15 @@ class MenuItemRepository extends AbstractRepository {
 	 * @var CacheInterface
 	 */
 	private $cache;
+	/**
+	 * @var Security
+	 */
+	private $security;
 
-	public function __construct(ManagerRegistry $registry, CacheInterface $cache) {
+	public function __construct(ManagerRegistry $registry, CacheInterface $cache, Security $security) {
 		parent::__construct($registry, MenuItem::class);
 		$this->cache = $cache;
+		$this->security = $security;
 	}
 
 	/**
@@ -67,7 +73,8 @@ class MenuItemRepository extends AbstractRepository {
 	}
 
 	private function createCacheKey($naam) {
-		return 'stek.menu.' . urlencode($naam);
+		$user = $this->security->getUser();
+		return 'stek.menu.' . urlencode($naam) . '.' . ($user ? $user->getUsername() : 'x999');
 	}
 
 	/**
