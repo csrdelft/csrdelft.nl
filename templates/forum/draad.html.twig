@@ -82,7 +82,7 @@
 			{% endif %}
 		{% endblock %}
 
-		{{ zoekform.toString | raw }}
+		{{ zoekform | raw }}
 	</div>
 	{% if draad.magModereren %}
 		{{ include('forum/partial/draad_mod.html.twig') }}

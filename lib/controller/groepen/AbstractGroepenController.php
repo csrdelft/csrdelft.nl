@@ -351,7 +351,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$view = $this->tableData($response);
 			setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
 			$form = new GroepPreviewForm($groep);
-			$view->modal = $form->toString();
+			$view->modal = $form->__toString();
 			return $view;
 		} else {
 			return $form;

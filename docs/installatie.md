@@ -125,6 +125,14 @@ Als je nu naar [`http://dev-csrdelft.nl`](http://dev-csrdelft.nl) als je alles g
 
 *Wampserver moet sowieso aan staan als je je lokale stek wil bekijken*
 
+## Stap 3: Inloggen
+
+Om in te loggen op je teststek kun je de wachtwoord vergeten flow gebruiken. In de testomgeving worden berichten die eigenlijk een mail zouden zijn als melding weergegeven. Op deze manier kan je snel een nieuw wachtwoord aanmaken.
+
+Op deze manier kun je ook inloggen op andere accounts, zonder SU (switch user) te gebruiken (meestal is SU genoeg).
+
+Bij de fixtures kun je uid `x101` gebruiken om in te loggen.
+
 ## Extra dingen
 
 ### Imagemagick

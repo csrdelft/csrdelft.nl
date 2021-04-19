@@ -79,8 +79,8 @@ abstract class FormKnoppen implements FormElement {
 		return $html . '</div>';
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getJavascript() {

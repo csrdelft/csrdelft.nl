@@ -33,10 +33,8 @@ class HtmlComment implements FormElement {
 		return $this->comment;
 	}
 
-	public function view() {
-		echo '<div>';
-		echo $this->getHtml();
-		echo '</div>';
+	public function __toString() {
+		return '<div>'. $this->getHtml(). '</div>';
 	}
 
 	public function getJavascript() {

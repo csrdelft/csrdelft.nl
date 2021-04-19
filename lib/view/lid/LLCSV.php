@@ -11,33 +11,36 @@ use Exception;
 class LLCSV extends LLWeergave {
 
 	public function viewHeader() {
-		echo '<textarea class="csv">';
+		$html = '';
+		$html .= '<textarea class="csv">';
 		foreach ($this->velden as $veld) {
 			switch ($veld) {
 
 				case 'adres':
-					echo 'adres;';
-					echo 'postcode;';
-					echo 'woonplaats;';
+					$html .= 'adres;';
+					$html .= 'postcode;';
+					$html .= 'woonplaats;';
 					break;
 
 				case 'naam':
-					echo 'voornaam;';
-					echo 'tussenvoegsel;';
-					echo 'achternaam;';
+					$html .= 'voornaam;';
+					$html .= 'tussenvoegsel;';
+					$html .= 'achternaam;';
 					break;
 
 				default:
-					echo $veld . ';';
+					$html .= $veld . ';';
 			}
 		}
 
-		echo "\n";
+		$html .= "\n";
+		return $html;
 	}
 
 	public function viewFooter() {
-		echo '</textarea>';
-		?>
+		$html = '';
+		$html .= '</textarea>';
+		$html .= <<<HTML
 		<a href="" class="btn btn-primary download-ledenlijst">Download</a>
 		<script>
 			let csvContent = "data:text/csv;charset=utf-8,";
@@ -47,10 +50,12 @@ class LLCSV extends LLWeergave {
 			link.attr("href", encodedUri);
 			link.attr("download", "ledenlijst.csv");
 		</script>
-		<?php
+		HTML;
+		return $html;
 	}
 
 	public function viewLid(Profiel $profiel) {
+		$html = '';
 
 		foreach ($this->velden as $veld) {
 			$return = '';
@@ -119,9 +124,10 @@ class LLCSV extends LLWeergave {
 						//omit non-existant fields
 					}
 			}
-			echo htmlspecialchars($return) . ';';
+			$html .= htmlspecialchars($return) . ';';
 		}
-		echo "\n";
+		$html .= "\n";
+		return $html;
 	}
 
 }

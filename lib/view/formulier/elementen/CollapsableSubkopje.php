@@ -31,8 +31,8 @@ class CollapsableSubkopje extends Subkopje {
 HTML;
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 }

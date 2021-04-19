@@ -67,27 +67,30 @@ class GroepenView implements View {
 		return $this->pagina->titel;
 	}
 
-	public function view() {
+	public function __toString() {
 		$model = $this->model;
 		$orm = $model->entityClass;
+		$html = '';
 		if ($orm::magAlgemeen(AccessAction::Aanmaken, null, $this->soort)) {
-			echo '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
+			$html .= '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
-		echo '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
+		$html .= '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
 		if ($this->geschiedenis) {
-			echo '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . "/" . $this->geschiedenis . '/deelnamegrafiek">' . Icon::getTag('chart_bar') . ' Deelnamegrafiek</a>';
+			$html .= '<a id="deelnamegrafiek" class="btn post" href="' . $this->model->getUrl() . "/" . $this->geschiedenis . '/deelnamegrafiek">' . Icon::getTag('chart_bar') . ' Deelnamegrafiek</a>';
 		}
 		$view = new CmsPaginaView($this->pagina);
-		$view->view();
+		$html .= $view->__toString();
 		foreach ($this->groepen as $groep) {
 			// Controleer rechten
 			if (!$groep->mag(AccessAction::Bekijken)) {
 				continue;
 			}
-			echo '<hr>';
+			$html .= '<hr>';
 			$view = new GroepView($groep, $this->tab, $this->geschiedenis);
-			$view->view();
+			$html .= $view->__toString();
 		}
+
+		return $html;
 	}
 
 }

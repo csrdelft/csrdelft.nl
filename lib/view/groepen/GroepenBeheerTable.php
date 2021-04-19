@@ -87,10 +87,9 @@ class GroepenBeheerTable extends DataTable {
 			. '<li class="breadcrumb-item active">Beheren</li></ul>';
 	}
 
-	public function view() {
+	public function __toString()
+	{
 		$view = new CmsPaginaView($this->pagina);
-		$view->view();
-		parent::view();
+		return $view->__toString() . parent::__toString();
 	}
-
 }

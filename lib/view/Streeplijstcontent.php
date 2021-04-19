@@ -158,8 +158,9 @@ class Streeplijstcontent implements View, ToResponse {
 		return $sReturn;
 	}
 
-	function view() {
-		echo '<h1>' . $this->getTitel() . '</h1>
+	function __toString() {
+		$html ='';
+		$html .= '<h1>' . $this->getTitel() . '</h1>
 			<form id="streeplijst" action="streeplijst" method="get">
 			<fieldset>
 				<legend>Bestellijst</legend>
@@ -172,33 +173,33 @@ class Streeplijstcontent implements View, ToResponse {
 			<fieldset>
 				<legend>Ledenselectie</legend><br />';
 		//verticaleselectie
-		echo '<strong>Verticale:</strong><br />';
+		$html .= '<strong>Verticale:</strong><br />';
 		$verticalen = array('alle', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I');
 		foreach ($verticalen as $letter) {
-			echo '<input type="radio" name="moot" id="m' . $letter . '" value="' . $letter . '" ';
+			$html .= '<input type="radio" name="moot" id="m' . $letter . '" value="' . $letter . '" ';
 			if ($letter == $this->sVerticale || ($letter === 'alle' && empty($this->sVerticale))) {
-				echo 'checked="checked" ';
+				$html .= 'checked="checked" ';
 			}
-			echo '/> <label for="m' . $letter . '">';
+			$html .= '/> <label for="m' . $letter . '">';
 			if ($letter == 'alle') {
-				echo $letter;
+				$html .= $letter;
 			} else {
-				echo ContainerFacade::getContainer()->get(VerticalenRepository::class)->get($letter)->naam;
+				$html .= ContainerFacade::getContainer()->get(VerticalenRepository::class)->get($letter)->naam;
 			}
-			echo '</label>';
+			$html .= '</label>';
 		}
-		echo '<br />';
+		$html .= '<br />';
 		//lichtingsselectie
-		echo '<strong>Lichting:</strong><br />';
+		$html .= '<strong>Lichting:</strong><br />';
 		$jaren = array_merge(array('alle'), range(date('Y') - 7, date('Y')));
 		foreach ($jaren as $jaar) {
-			echo '<input type="radio" name="lichting" id="l' . $jaar . '" value="' . ($jaar === 'alle' ? $jaar : substr($jaar, 2)) . '" ';
+			$html .= '<input type="radio" name="lichting" id="l' . $jaar . '" value="' . ($jaar === 'alle' ? $jaar : substr($jaar, 2)) . '" ';
 			if (substr($jaar, 2) == $this->sLidjaar || ($jaar == 'alle' && empty($this->sLidjaar))) {
-				echo 'checked="checked" ';
+				$html .= 'checked="checked" ';
 			}
-			echo '/> <label for="l' . $jaar . '">' . $jaar . '</label>';
+			$html .= '/> <label for="l' . $jaar . '">' . $jaar . '</label>';
 		}
-		echo '</fieldset>
+		$html .= '</fieldset>
 			<br />
 			<fieldset>
 				<legend>Leguit</legend>
@@ -209,7 +210,7 @@ class Streeplijstcontent implements View, ToResponse {
 				<br /><input type="submit" name="toon" value="Laeden" />
 			</fieldset>
 			</form>';
-		echo '<br />
+		$html .= '<br />
 			Aandachtspunten bij printen via Firefox (andere browsers nog geen uitleg beschikbaar):
 			<ul>
 				<li>In de <i>Bestand</i> > <i>Pagina-instellingen</i>:
@@ -225,10 +226,11 @@ class Streeplijstcontent implements View, ToResponse {
 				</li>
 			</ul><br />';
 		if (isset($_GET['toon'])) {
-			echo '<a href="' . $this->getUrl() . 'iframe">Alleen de streeplijst</a><br />';
+			$html .= '<a href="' . $this->getUrl() . 'iframe">Alleen de streeplijst</a><br />';
 			//iframe met html meuk...
-			echo '<iframe style="width: 100%; height: 400px;" src="' . $this->getUrl() . 'iframe"></iframe>';
+			$html .= '<iframe style="width: 100%; height: 400px;" src="' . $this->getUrl() . 'iframe"></iframe>';
 		}
+		return $html;
 	}
 
 }

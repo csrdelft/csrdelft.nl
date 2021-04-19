@@ -58,8 +58,8 @@ class SuggestieLijst implements ToResponse, FormElement {
 		]);
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getTitel() {

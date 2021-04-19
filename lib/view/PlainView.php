@@ -16,8 +16,8 @@ class PlainView implements View, ToResponse {
 		$this->body = $body;
 	}
 
-	public function view() {
-		echo $this->body;
+	public function __toString() {
+		return $this->body;
 	}
 
 	public function getTitel() {

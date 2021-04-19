@@ -82,7 +82,7 @@ class CsrTwigExtension extends AbstractExtension
 
 	public function csrfField($path = '', $method = 'post')
 	{
-		return (new CsrfField($this->csrfService->generateToken($path, $method)))->toString();
+		return (new CsrfField($this->csrfService->generateToken($path, $method)))->__toString();
 	}
 
 	public function csrfMetaTag()

@@ -56,8 +56,8 @@ JS;
 			. '</div>';
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	protected function getScriptTag() {

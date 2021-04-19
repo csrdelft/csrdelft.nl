@@ -54,37 +54,42 @@ class LedenlijstContent implements View {
 	}
 
 	public function viewSelect($name, $options) {
-		echo '<select class="form-control" name="' . $name . '" id="f' . $name . '">';
+		$html = '';
+		$html .= '<select class="form-control" name="' . $name . '" id="f' . $name . '">';
 		foreach ($options as $key => $value) {
-			echo '<option value="' . htmlspecialchars($key) . '"';
+			$html .= '<option value="' . htmlspecialchars($key) . '"';
 			if ($key == $this->lidzoeker->getRawQuery($name)) {
-				echo ' selected="selected"';
+				$html .= ' selected="selected"';
 			}
-			echo '>' . htmlspecialchars($value) . '</option>';
+			$html .= '>' . htmlspecialchars($value) . '</option>';
 		}
-		echo '</select> ';
+		$html .= '</select> ';
+		return $html;
 	}
 
 	public function viewVeldselectie() {
-		echo '<div class="form-group">';
-		echo '<label for="veldselectie">Veldselectie: </label>';
-		echo '<div class="veldselectie">';
+		$html = '';
+		$html .= '<div class="form-group">';
+		$html .= '<label for="veldselectie">Veldselectie: </label>';
+		$html .= '<div class="veldselectie">';
 		$velden = $this->lidzoeker->getSelectableVelden();
 		foreach ($velden as $key => $veld) {
-			echo '<div class="form-check">';
-			echo '<input class="form-check-input" type="checkbox" name="velden[]" id="veld' . $key . '" value="' . $key . '" ';
+			$html .= '<div class="form-check">';
+			$html .= '<input class="form-check-input" type="checkbox" name="velden[]" id="veld' . $key . '" value="' . $key . '" ';
 			if (in_array($key, $this->lidzoeker->getSelectedVelden())) {
-				echo 'checked="checked" ';
+				$html .= 'checked="checked" ';
 			}
-			echo ' />';
-			echo '<label class="form-check-label" for="veld' . $key . '">' . ucfirst($veld) . '</label>';
-			echo '</div>';
+			$html .= ' />';
+			$html .= '<label class="form-check-label" for="veld' . $key . '">' . ucfirst($veld) . '</label>';
+			$html .= '</div>';
 		}
-		echo '</div>';
-		echo '</div>';
+		$html .= '</div>';
+		$html .= '</div>';
+		return $html;
 	}
 
-	public function view() {
+	public function __toString() {
+		$html = '';
 		$requestUri = $this->requestStack->getRequestUri();
 		if ($this->lidzoeker->count() > 0) {
 			if (strstr($requestUri, '?') !== false) {
@@ -92,25 +97,25 @@ class LedenlijstContent implements View {
 			} else {
 				$url = $requestUri . '?addToGoogleContacts=true';
 			}
-			echo '<a href="' . htmlspecialchars($url) . '" class="btn float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
+			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
 			if (strstr($requestUri, '?') !== false) {
 				$url = $requestUri . '&exportVcf=true';
 			} else {
 				$url = $requestUri . '?exportVcf=true';
 			}
-			echo '<a href="' . htmlspecialchars($url) . '" class="btn float-right" title="Huidige selectie exporteren als vcard">' . Icon::getTag('vcard_add') . '</a>';
+			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-right" title="Huidige selectie exporteren als vcard">' . Icon::getTag('vcard_add') . '</a>';
 		}
-		echo getMelding();
-		echo '<h1>' . (LoginService::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
-		echo '<form id="zoekform" method="get">';
-		echo '<div class="input-group">';
-		echo '<input type="text" class="form-control" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
-		echo '<div class="input-group-append"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
+		$html .= getMelding();
+		$html .= '<h1>' . (LoginService::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
+		$html .= '<form id="zoekform" method="get">';
+		$html .= '<div class="input-group">';
+		$html .= '<input type="text" class="form-control" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
+		$html .= '<div class="input-group-append"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 
-		echo '<div id="advanced" class="verborgen">';
-		echo '<div class="form-group">';
-		echo '<label for="status">Status:</label>';
-		$this->viewSelect('status', array(
+		$html .= '<div id="advanced" class="verborgen">';
+		$html .= '<div class="form-group">';
+		$html .= '<label for="status">Status:</label>';
+		$html .= $this->viewSelect('status', array(
 			'LEDEN' => 'Leden',
 			'NOVIET' => 'Novieten',
 			'GASTLID' => 'Gastlid',
@@ -119,41 +124,42 @@ class LedenlijstContent implements View {
 			'KRINGEL' => 'Kringel',
 			'ALL' => 'Alles'
 		));
-		echo '</div>';
-		echo '<div class="form-group">';
-		echo '<label for="weergave">Weergave:</label>';
-		$this->viewSelect('weergave', array(
+		$html .= '</div>';
+		$html .= '<div class="form-group">';
+		$html .= '<label for="weergave">Weergave:</label>';
+		$html .= $this->viewSelect('weergave', array(
 			'lijst' => 'Lijst (standaard)',
 			'kaartje' => 'Visitekaartjes',
 			'csv' => 'CSV-bestand'));
-		echo '</div>';
+		$html .= '</div>';
 
 		//sorteren op:
-		echo '<div class="form-group">';
-		echo '<label for="sort">Sorteer op:</label>';
-		$this->viewSelect('sort', $this->lidzoeker->getSortableVelden());
-		echo '</div>';
+		$html .= '<div class="form-group">';
+		$html .= '<label for="sort">Sorteer op:</label>';
+		$html .= $this->viewSelect('sort', $this->lidzoeker->getSortableVelden());
+		$html .= '</div>';
 
 		//selecteer velden
-		echo '<div id="veldselectiecontainer">';
-		$this->viewVeldselectie();
-		echo '</div><br />';
+		$html .= '<div id="veldselectiecontainer">';
+		$html .= $this->viewVeldselectie();
+		$html .= '</div><br />';
 
-		echo '</div>'; //einde advanced div.
-		echo '</form>';
+		$html .= '</div>'; //einde advanced div.
+		$html .= '</form>';
 
-		echo '<hr class="clear" />';
+		$html .= '<hr class="clear" />';
 
 		if ($this->lidzoeker->count() > 0) {
 			$class = $this->lidzoeker->getWeergave();
+			/** @var LLWeergave $weergave */
 			$weergave = new $class($this->lidzoeker);
-			$weergave->view();
+			$html .= $weergave->__toString();
 		} elseif ($this->lidzoeker->searched()) {
-			echo 'Geen resultaten';
+			$html .= 'Geen resultaten';
 		} else {
 			//nog niet gezocht.
 		}
-		?>
+		$html .= <<<HTML
 		<script type="text/javascript">
 			function updateVeldselectie() {
 				if (jQuery('#fweergave').val() === 'kaartje') {
@@ -193,8 +199,8 @@ class LedenlijstContent implements View {
 				updateVeldselectie();
 			});
 		</script>
-
-		<?php
+		HTML;
+		return $html;
 	}
 
 }

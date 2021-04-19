@@ -1079,7 +1079,7 @@ function sql_contains($field) {
 
 function printCsrfField($path = '', $method = 'post') {
 	$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
-	(new CsrfField($csrfService->generateToken($path, $method)))->view();
+	echo (new CsrfField($csrfService->generateToken($path, $method)))->__toString();
 }
 
 function csrfMetaTag() {
