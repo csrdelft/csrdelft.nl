@@ -160,46 +160,46 @@ class LedenlijstContent implements View {
 			//nog niet gezocht.
 		}
 		$html .= <<<HTML
-		<script type="text/javascript">
-			function updateVeldselectie() {
-				if (jQuery('#fweergave').val() === 'kaartje') {
-					jQuery('#veldselectiecontainer').hide('fast');
-				} else {
-					jQuery('#veldselectiecontainer').show('fast');
-				}
+<script type="text/javascript">
+	function updateVeldselectie() {
+		if (jQuery('#fweergave').val() === 'kaartje') {
+			jQuery('#veldselectiecontainer').hide('fast');
+		} else {
+			jQuery('#veldselectiecontainer').show('fast');
+		}
+	}
+
+	jQuery(document).ready(function ($) {
+		$('#toggleAdvanced').click(function () {
+			adv = $('#advanced');
+			adv.toggleClass('verborgen');
+
+			if (adv.hasClass('verborgen')) {
+				window.location.hash = '';
+				$('#advanced input').attr('disabled', 'disabled');
+			} else {
+				window.location.hash = 'geavanceerd';
+				$('#zoekform').attr('action', '#geavanceerd');
+				$('#advanced input').removeAttr('disabled');
+				$('#advanced select').removeAttr('disabled');
 			}
+		});
 
-			jQuery(document).ready(function ($) {
-				$('#toggleAdvanced').click(function () {
-					adv = $('#advanced');
-					adv.toggleClass('verborgen');
-
-					if (adv.hasClass('verborgen')) {
-						window.location.hash = '';
-						$('#advanced input').attr('disabled', 'disabled');
-					} else {
-						window.location.hash = 'geavanceerd';
-						$('#zoekform').attr('action', '#geavanceerd');
-						$('#advanced input').removeAttr('disabled');
-						$('#advanced select').removeAttr('disabled');
-					}
-				});
-
-				if (document.location.hash === '#geavanceerd') {
-					$('#advanced').removeClass('verborgen');
-				} else {
-					$('#advanced input').attr('disabled', 'disabled');
-					$('#advanced select').attr('disabled', 'disabled');
-				}
-				//weergave van selectie beschikbare veldjes
-				$('#fweergave').change(function () {
-					updateVeldselectie();
-					$('#zoekform').submit();
-				});
-				updateVeldselectie();
-			});
-		</script>
-		HTML;
+		if (document.location.hash === '#geavanceerd') {
+			$('#advanced').removeClass('verborgen');
+		} else {
+			$('#advanced input').attr('disabled', 'disabled');
+			$('#advanced select').attr('disabled', 'disabled');
+		}
+		//weergave van selectie beschikbare veldjes
+		$('#fweergave').change(function () {
+			updateVeldselectie();
+			$('#zoekform').submit();
+		});
+		updateVeldselectie();
+	});
+</script>
+HTML;
 		return $html;
 	}
 
