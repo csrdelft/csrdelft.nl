@@ -49,24 +49,22 @@ class MenuItemRepository extends AbstractRepository {
 			return null;
 		}
 
-		return $this->cache->get($this->createCacheKey($naam), function () use ($naam) {
-			try {
-				$root = $this->getMenuRoot($naam);
+		try {
+			$root = $this->getMenuRoot($naam);
 
-				if ($root == null) {
-					return null;
-				}
-
-				$this->getExtendedTree($root, false);
-
-				// Voorkom dat extendedTree updates doorvoert
-				$this->_em->clear(MenuItem::class);
-
-				return $root;
-			} catch (EntityNotFoundException $ex) {
+			if ($root == null) {
 				return null;
 			}
-		});
+
+			$this->getExtendedTree($root, false);
+
+			// Voorkom dat extendedTree updates doorvoert
+			$this->_em->clear(MenuItem::class);
+
+			return $root;
+		} catch (EntityNotFoundException $ex) {
+			return null;
+		}
 	}
 
 	/**
