@@ -123,10 +123,18 @@ class MenuItemRepository extends AbstractRepository {
 	 * @return MenuItem
 	 */
 	private function getExtendedTree(MenuItem $parent, $checkRechten) {
-		if ($parent->children)
+		// Check leesrechten op de boom
+		if ($parent->children) {
+			$newChildren = [];
 			foreach ($parent->children as $child) {
-				$this->getExtendedTree($child, $checkRechten);
+				if (!$checkRechten || $child->magBekijken()) {
+					$this->getExtendedTree($child, $checkRechten);
+					$newChildren[] = $child;
+				}
 			}
+			$parent->children = $newChildren;
+		}
+
 		// append additional children
 		switch ($parent->tekst) {
 
