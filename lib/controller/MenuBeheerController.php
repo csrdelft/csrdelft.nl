@@ -38,7 +38,7 @@ class MenuBeheerController extends AbstractController {
 		if ($menu_name != $this->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
-		$root = $this->menuItemRepository->getMenu($menu_name);
+		$root = $this->menuItemRepository->getMenuBeheer($menu_name);
 		if (!$root || !$root->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}

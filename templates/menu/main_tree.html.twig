@@ -1,6 +1,5 @@
 {% for item in parent.children %}
-	{% if item.tekst == 'Personal' %}
-	{% elseif item.magBekijken %}
+	{% if item.tekst != 'Personal' %}
 		{% if item.hasChildren %}
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="menu-{{ item.item_id }}" role="button" data-toggle="dropdown"
