@@ -39,5 +39,5 @@
 	branch = gh-pages
 [submodule "htdocs/lustrum12"]
 	path = htdocs/lustrum12
-	url = git@github.com:csrdelft/lustrum12.git
+	url = https://github.com/csrdelft/lustrum12.git
 	branch = gh-pages
