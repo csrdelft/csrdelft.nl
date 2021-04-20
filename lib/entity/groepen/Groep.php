@@ -43,6 +43,19 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  *   "werkgroep" = "Werkgroep",
  *   "woonoord" = "Woonoord",
  * })
+ * @ORM\Table("groep", indexes={
+ *   @ORM\Index(columns={"in_agenda"}),
+ *   @ORM\Index(columns={"familie"}),
+ *   @ORM\Index(columns={"begin_moment"}),
+ *   @ORM\Index(columns={"huis_status"}),
+ *   @ORM\Index(columns={"ondervereniging_status"}),
+ *   @ORM\Index(columns={"activiteit_soort"}),
+ *   @ORM\Index(columns={"commissie_soort"}),
+ *   @ORM\Index(columns={"eetplan"}),
+ *   @ORM\Index(columns={"kring_nummer"}),
+ *   @ORM\Index(columns={"verticale"}),
+ *   @ORM\Index(columns={"groep_type"}),
+ * })
  */
 class Groep implements DataTableEntry, DisplayEntity
 {
