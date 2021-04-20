@@ -14,6 +14,7 @@ composer update-prod
 
 Dit commando doet de volgende dingen (kijk in `composer.json` voor de precieze commandos):
 
+1. Controleer of de `master` branch actief is en of er geen veranderingen open staan.
 1. Download de laatste versie van de broncode (maar vervang de oude nog niet)
 1. Zet de stek in onderhoudsmodus
 1. Update de broncode van de stek
