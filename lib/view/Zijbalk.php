@@ -84,6 +84,7 @@ class Zijbalk {
 	public function getZijbalk() {
 		return array_filter_empty([
 			$this->blockIsHetAl(),
+			$this->blockLustrum(),
 			$this->blockFavorieten(),
 			$this->blockSponsors(),
 			$this->blockAgenda(),
@@ -93,6 +94,10 @@ class Zijbalk {
 			$this->blockNieuwsteFotoAlbum(),
 			$this->blockKomendeVerjaardagen(),
 		]);
+	}
+
+	private function blockLustrum() {
+		return $this->twig->render('menu/lustrumblock.html.twig');
 	}
 
 	private function blockIsHetAl() {
