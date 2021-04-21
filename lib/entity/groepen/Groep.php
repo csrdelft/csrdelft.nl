@@ -15,7 +15,6 @@ use CsrDelft\repository\GroepRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\DisplayEntity;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
@@ -241,15 +240,15 @@ class Groep implements DataTableEntry, DisplayEntity
 			return false;
 		}
 
-		if ($this instanceof GroepAanmeldLimiet && !$this->magAanmeldLimiet($action, $allowedAuthenticationMethods)) {
+		if ($this instanceof GroepAanmeldLimiet && !$this->magAanmeldLimiet($action)) {
 			return false;
 		}
 
-		if ($this instanceof GroepAanmeldMoment && !$this->aanmeldenMag($action, $allowedAuthenticationMethods)) {
+		if ($this instanceof GroepAanmeldMoment && !$this->magAanmeldMoment($action)) {
 			return false;
 		}
 
-		if ($this instanceof GroepAanmeldRechten && !$this->magAanmeldRechten($action, $allowedAuthenticationMethods)) {
+		if ($this instanceof GroepAanmeldRechten && !$this->magAanmeldRechten($action)) {
 			return false;
 		}
 

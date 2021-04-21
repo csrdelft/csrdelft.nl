@@ -40,16 +40,11 @@ trait GroepAanmeldMoment
 	 */
 	public $afmeldenTot;
 
-	abstract function mag($action, $allowedAuthenticationMethods = null);
-
 	/**
-	 * Controleer of aanmeldLimiet en bewerken/afmelden tot gehaald wordt.
-	 *
 	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function aanmeldenMag($action, $allowedAuthenticationMethods = null)
+	public function magAanmeldMoment($action)
 	{
 		$nu = date_create_immutable();
 

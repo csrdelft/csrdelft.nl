@@ -23,10 +23,9 @@ trait GroepAanmeldRechten
 	 * Has permission for action?
 	 *
 	 * @param AccessAction $action
-	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function magAanmeldRechten($action, $allowedAuthenticationMethods = null)
+	public function magAanmeldRechten($action)
 	{
 		$beschermdeActies = [
 			AccessAction::Bekijken(),
@@ -39,6 +38,6 @@ trait GroepAanmeldRechten
 			return false;
 		}
 
-		return parent::mag($action, $allowedAuthenticationMethods);
+		return true;
 	}
 }
