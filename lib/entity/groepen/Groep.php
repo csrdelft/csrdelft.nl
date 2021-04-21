@@ -241,6 +241,18 @@ class Groep implements DataTableEntry, DisplayEntity
 			return false;
 		}
 
+		if ($this instanceof GroepAanmeldLimiet && !$this->magAanmeldLimiet($action, $allowedAuthenticationMethods)) {
+			return false;
+		}
+
+		if ($this instanceof GroepAanmeldMoment && !$this->aanmeldenMag($action, $allowedAuthenticationMethods)) {
+			return false;
+		}
+
+		if ($this instanceof GroepAanmeldRechten && !$this->magAanmeldRechten($action, $allowedAuthenticationMethods)) {
+			return false;
+		}
+
 		$aangemeld = $this->getLid(LoginService::getUid()) != null;
 		switch ($action) {
 

@@ -40,6 +40,8 @@ trait GroepAanmeldMoment
 	 */
 	public $afmeldenTot;
 
+	abstract function mag($action, $allowedAuthenticationMethods = null);
+
 	/**
 	 * Controleer of aanmeldLimiet en bewerken/afmelden tot gehaald wordt.
 	 *
@@ -47,7 +49,7 @@ trait GroepAanmeldMoment
 	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag($action, $allowedAuthenticationMethods = null)
+	public function aanmeldenMag($action, $allowedAuthenticationMethods = null)
 	{
 		$nu = date_create_immutable();
 
@@ -60,8 +62,8 @@ trait GroepAanmeldMoment
 		} elseif (AccessAction::isAfmelden($action) && $nu > $this->afmeldenTot) {
 			// Controleer afmeldperiode
 			return false;
+		} else {
+			return true;
 		}
-
-		return parent::mag($action, $allowedAuthenticationMethods);
 	}
 }

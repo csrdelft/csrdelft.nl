@@ -22,15 +22,9 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort
 {
 	use GroepMoment;
-	use GroepAanmeldMoment {
-		GroepAanmeldMoment::mag as aanmeldenMag;
-	}
-	use GroepAanmeldRechten {
-		GroepAanmeldRechten::mag as aanmeldRechtenMag;
-	}
-	use GroepAanmeldLimiet {
-		GroepAanmeldLimiet::mag as aanmeldLimietMag;
-	}
+	use GroepAanmeldMoment;
+	use GroepAanmeldRechten;
+	use GroepAanmeldLimiet;
 
 	/**
 	 * Intern / Extern / SjaarsActie / etc.
@@ -105,20 +99,6 @@ class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, Heef
 	public function getUrl()
 	{
 		return '/groepen/activiteiten/' . $this->id;
-	}
-
-	/**
-	 * Has permission for action?
-	 *
-	 * @param AccessAction $action
-	 * @param array|null $allowedAuthenticationMethods
-	 * @return boolean
-	 */
-	public function mag(AccessAction $action, $allowedAuthenticationMethods = null)
-	{
-		return $this->aanmeldRechtenMag($action, $allowedAuthenticationMethods)
-			&& $this->aanmeldenMag($action, $allowedAuthenticationMethods)
-			&& $this->aanmeldLimietMag($action, $allowedAuthenticationMethods);
 	}
 
 	// Agendeerbaar:

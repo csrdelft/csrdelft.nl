@@ -17,12 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ketzer extends Groep implements HeeftAanmeldLimiet
 {
-	use GroepAanmeldMoment {
-		GroepAanmeldMoment::mag as magAanmelden;
-	}
-	use GroepAanmeldLimiet {
-		GroepAanmeldLimiet::mag as magAanmeldLimiet;
-	}
+	use GroepAanmeldMoment;
+	use GroepAanmeldLimiet;
 
 	/**
 	 * Rechten voor de gehele klasse of soort groep?
@@ -54,11 +50,5 @@ class Ketzer extends Groep implements HeeftAanmeldLimiet
 	public function getAanmeldLimiet()
 	{
 		return $this->aanmeldLimiet;
-	}
-
-	public function mag($action, $allowedAuthenticationMethods = null)
-	{
-		return $this->magAanmelden($action, $allowedAuthenticationMethods)
-			&& $this->magAanmeldLimiet($action, $allowedAuthenticationMethods);
 	}
 }
