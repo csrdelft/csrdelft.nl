@@ -26,7 +26,8 @@ trait GroepAanmeldRechten
 	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag($action, $allowedAuthenticationMethods = null) {
+	public function mag($action, $allowedAuthenticationMethods = null)
+	{
 		$beschermdeActies = [
 			AccessAction::Bekijken(),
 			AccessAction::Aanmelden(),

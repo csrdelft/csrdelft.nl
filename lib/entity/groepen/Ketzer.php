@@ -17,8 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ketzer extends Groep implements HeeftAanmeldLimiet
 {
-	use GroepAanmelden {
-		GroepAanmelden::mag as magAanmelden;
+	use GroepAanmeldMoment {
+		GroepAanmeldMoment::mag as magAanmelden;
 	}
 	use GroepAanmeldLimiet {
 		GroepAanmeldLimiet::mag as magAanmeldLimiet;

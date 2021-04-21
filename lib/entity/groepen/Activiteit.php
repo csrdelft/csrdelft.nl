@@ -22,8 +22,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 class Activiteit extends Groep implements Agendeerbaar, HeeftAanmeldLimiet, HeeftSoort
 {
 	use GroepMoment;
-	use GroepAanmelden {
-		GroepAanmelden::mag as aanmeldenMag;
+	use GroepAanmeldMoment {
+		GroepAanmeldMoment::mag as aanmeldenMag;
 	}
 	use GroepAanmeldRechten {
 		GroepAanmeldRechten::mag as aanmeldRechtenMag;

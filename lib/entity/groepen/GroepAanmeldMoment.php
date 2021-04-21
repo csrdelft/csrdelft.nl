@@ -9,7 +9,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-trait GroepAanmelden
+trait GroepAanmeldMoment
 {
 	/**
 	 * Datum en tijd aanmeldperiode begin
@@ -47,21 +47,19 @@ trait GroepAanmelden
 	 * @param null $allowedAuthenticationMethods
 	 * @return boolean
 	 */
-	public function mag($action, $allowedAuthenticationMethods = null) {
+	public function mag($action, $allowedAuthenticationMethods = null)
+	{
 		$nu = date_create_immutable();
 
-		switch ($action) {
-			case AccessAction::Aanmelden():
-				// Controleer aanmeldperiode
-				return $nu <= $this->aanmeldenTot && $nu >= $this->aanmeldenVanaf;
-
-			case AccessAction::Bewerken():
-				// Controleer bewerkperiode
-				return $nu <= $this->bewerkenTot;
-
-			case AccessAction::Afmelden():
-				// Controleer afmeldperiode
-				return $nu <= $this->afmeldenTot;
+		if (AccessAction::isAanmelden($action) && ($nu > $this->aanmeldenTot || $nu < $this->aanmeldenVanaf)) {
+			// Controleer aanmeldperiode
+			return false;
+		} elseif (AccessAction::isBewerken($action) && $nu > $this->bewerkenTot) {
+			// Controleer bewerkperiode
+			return false;
+		} elseif (AccessAction::isAfmelden($action) && $nu > $this->afmeldenTot) {
+			// Controleer afmeldperiode
+			return false;
 		}
 
 		return parent::mag($action, $allowedAuthenticationMethods);

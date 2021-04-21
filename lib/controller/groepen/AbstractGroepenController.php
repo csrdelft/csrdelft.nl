@@ -11,7 +11,7 @@ use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
-use CsrDelft\entity\groepen\GroepAanmelden;
+use CsrDelft\entity\groepen\GroepAanmeldMoment;
 use CsrDelft\entity\groepen\GroepAanmeldRechten;
 use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
@@ -533,7 +533,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$response = [];
 		$groep = $this->repository->retrieveByUUID($id);
 		if ($groep
-			&& $groep instanceof GroepAanmelden
+			&& $groep instanceof GroepAanmeldMoment
 			&& date_create_immutable() <= $groep->aanmeldenTot
 			&& $groep->mag(AccessAction::Wijzigen)
 		) {
