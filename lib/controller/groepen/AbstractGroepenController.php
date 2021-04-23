@@ -352,7 +352,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$groep->familie = $vorige->familie;
 			$groep->samenvatting = $vorige->samenvatting;
 			$groep->omschrijving = $vorige->omschrijving;
-			if ($groep instanceof GroepAanmeldRechten && $vorige instanceof GroepAanmeldRechten) {
+			if (in_array(GroepAanmeldRechten::class, class_uses($groep)) && in_array(GroepAanmeldRechten::class, class_uses($vorige))) {
 				$groep->rechtenAanmelden = $vorige->rechtenAanmelden;
 			}
 		}
@@ -360,9 +360,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		// checks rechten aanmaken
 		$form = new GroepForm($groep, $this->repository->getUrl() . '/aanmaken', AccessAction::Aanmaken());
 		if ($request->getMethod() == 'GET') {
-			$this->beheren($request);
-			$form->setDataTableId($this->table->getDataTableId());
-			return $this->render('default.html.twig', ['content' => $this->table, 'modal' => $form]);
+			$table = new GroepenBeheerTable($this->repository);
+			$form->setDataTableId($table->getDataTableId());
+			return $this->render('default.html.twig', ['content' => $table, 'modal' => $form]);
 		} elseif ($form->validate()) {
 			$this->changeLogRepository->log($groep, 'create', null, $this->changeLogRepository->serialize($groep));
 			$this->repository->create($groep);
@@ -533,9 +533,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$response = [];
 		$groep = $this->repository->retrieveByUUID($id);
 		if ($groep
-			&& $groep instanceof GroepAanmeldMoment
+			&& in_array(GroepAanmeldMoment::class, class_uses($groep))
 			&& date_create_immutable() <= $groep->aanmeldenTot
-			&& $groep->mag(AccessAction::Wijzigen)
+			&& $groep->mag(AccessAction::Wijzigen())
 		) {
 			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmeldenTot, date_create_immutable());
 			$groep->aanmeldenTot = date_create_immutable();

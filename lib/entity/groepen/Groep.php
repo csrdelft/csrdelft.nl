@@ -240,15 +240,15 @@ class Groep implements DataTableEntry, DisplayEntity
 			return false;
 		}
 
-		if ($this instanceof GroepAanmeldLimiet && !$this->magAanmeldLimiet($action)) {
+		if (in_array(GroepAanmeldLimiet::class, class_uses($this)) && !$this->magAanmeldLimiet($action)) {
 			return false;
 		}
 
-		if ($this instanceof GroepAanmeldMoment && !$this->magAanmeldMoment($action)) {
+		if (in_array(GroepAanmeldMoment::class, class_uses($this)) && !$this->magAanmeldMoment($action)) {
 			return false;
 		}
 
-		if ($this instanceof GroepAanmeldRechten && !$this->magAanmeldRechten($action)) {
+		if (in_array(GroepAanmeldRechten::class, class_uses($this)) && !$this->magAanmeldRechten($action)) {
 			return false;
 		}
 

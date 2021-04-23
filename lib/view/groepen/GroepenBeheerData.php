@@ -27,7 +27,11 @@ class GroepenBeheerData extends DataTableResponse {
 			}
 		}
 		$array['naam'] = '<span title="' . $title . '">' . $groep->naam . '</span>';
-		$array['status'] = ($groep instanceof GroepMoment) ? $groep->status->getDescription() : null;
+		if (in_array(GroepMoment::class, class_uses($groep))) {
+			$array['status'] = $groep->status->getDescription();
+		} else {
+			$array['status'] = null;
+		}
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;

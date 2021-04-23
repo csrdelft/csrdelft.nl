@@ -8,6 +8,7 @@ use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\CommissieSoort;
 use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\groepen\GroepAanmeldMoment;
 use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\groepen\Ketzer;
@@ -58,7 +59,7 @@ class GroepForm extends ModalForm {
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
 		$fields['omschrijving']->description = 'Meer lezen';
 
-		if ($groep instanceof GroepMoment) {
+		if (in_array(GroepMoment::class, class_uses($groep))) {
 			$fields['beginMoment']->to_datetime = $fields['eindMoment'];
 			$fields['eindMoment']->from_datetime = $fields['beginMoment'];
 		}
@@ -67,14 +68,18 @@ class GroepForm extends ModalForm {
 			$fields['eindMoment']->required = true;
 		}
 
+		if (in_array(GroepAanmeldMoment::class, class_uses($groep))) {
+			$fields['aanmeldenVanaf']->to_datetime = $fields['aanmeldenTot'];
+			$fields['aanmeldenTot']->from_datetime = $fields['aanmeldenVanaf'];
+
+			if (in_array(GroepMoment::class, class_uses($groep))) {
+				$fields['beginMoment']->title = 'Dit is NIET het moment van openstellen voor aanmeldingen';
+				$fields['eindMoment']->title = 'Dit is NIET het moment van sluiten voor aanmeldingen';
+			}
+		}
+
 		if ($groep instanceof Ketzer || $groep instanceof Activiteit) {
-			$fields['beginMoment']->title = 'Dit is NIET het moment van openstellen voor aanmeldingen';
-			$fields['eindMoment']->title = 'Dit is NIET het moment van sluiten voor aanmeldingen';
-			$fields['aanmeldenVanaf']->to_datetime = $fields['afmeldenTot'];
-			$fields['bewerkenTot']->to_datetime = $fields['afmeldenTot'];
-			$fields['bewerkenTot']->from_datetime = $fields['aanmeldenVanaf'];
 			$fields['bewerkenTot']->title = 'Leden mogen hun eigen opmerking of keuze niet aanpassen als u dit veld leeg laat';
-			$fields['afmeldenTot']->from_datetime = $fields['aanmeldenVanaf'];
 			$fields['afmeldenTot']->title = 'Leden mogen zichzelf niet afmelden als u dit veld leeg laat';
 			$fields['keuzelijst']->title = 'Zet | tussen de opties en gebruik && voor meerdere keuzelijsten';
 		}

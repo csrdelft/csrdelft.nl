@@ -19,7 +19,7 @@ class GroepAanmakenForm extends ModalForm {
 
 		$default = get_class($huidig);
 		if ($groep instanceof HeeftSoort) {
-			$default .= '_' . $groep->getSoort();
+			$default .= '_' . $groep->getSoort()->getDescription();
 		}
 
 		$fields = [];

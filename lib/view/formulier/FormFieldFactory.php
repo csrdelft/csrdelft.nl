@@ -55,7 +55,7 @@ class FormFieldFactory {
 		$fields = array();
 		foreach ($meta->getFieldNames() as $fieldName) {
 			$type = Type::getTypeRegistry()->get($meta->getTypeOfField($fieldName));
-			$field = static::getFieldByType($meta->getColumnName($fieldName), $model->$fieldName, $type);
+			$field = static::getFieldByType($fieldName, $model->$fieldName, $type);
 
 			if (!$meta->isNullable($fieldName)) {
 				$field->required = true;
