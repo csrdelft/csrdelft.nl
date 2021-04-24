@@ -115,6 +115,7 @@
 			"@console cache:warmup"
 		],
 		"startup": [
+			"Composer\\Config::disableProcessTimeout",
 			"@composer install"
 		],
 		"update-dev": [

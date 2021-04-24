@@ -8,7 +8,7 @@ Welkom bij de webstek documentatie
 
 Basisconcepten over de stek.
 
-- [Installatie](installatie.md)
+- [Installatie](installatie.md): Begin hier!
 - [Request](request.md): Lees over hoe een request van begin tot eind wordt verwerkt.
 - [Configuratie](configuratie.md): Het configureren van de stek.
 - [Filestructuur](filestructuur.md): De bestandsstructuur van de stek repository.

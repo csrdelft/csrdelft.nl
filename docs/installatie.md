@@ -40,6 +40,8 @@ Maak een account aan op [GitHub](https://github.com) als je dat nog niet eerder 
 
 Gebruik de GitHub Desktop client om `csrdelft/csrdelft.nl` te downloaden (of je eigen fork). Stel in dit programma ook je naam en email in (standaard waarden zijn meestal prima). Kijk goed in welke map de gedownloade code terecht komt, dit heb je later nodig. Standaard komt de code van GitHub Desktop in `C:\Users\feut\Documenten\GitHub\csrdelft.nl\` terecht.
 
+**Zorg ervoor dat de code in een map komt die niet met Google Drive of OneDrive gesynced wordt, anders zit deze straks vol.**
+
 <details>
 <summary><strong>Command line</strong></summary>
 
