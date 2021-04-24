@@ -107,10 +107,9 @@ Installeer de volgende Plugins in PhpStorm (File > Settings... > Plugins):
 De volgende commando's worden uitgevoerd om de boel te initialiseren en te updaten:
 
 Javascript dependencies installeren:
-
-```bash
+~~~bash
 yarn
-```
+~~~
 
 PHP dependencies installeren:
 ```bash
