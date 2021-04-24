@@ -1,7 +1,7 @@
 ---
 layout: default
-nav_order: 3
-title: Frontend
+nav_order: 4
+title: Onderdelen
 has_children: true
 ---
 

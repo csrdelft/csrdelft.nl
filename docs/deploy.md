@@ -1,3 +1,10 @@
+---
+layout: default
+title: Deploy
+nav_order: 3
+has_children: true
+---
+
 # Deploy
 
 Een nieuwe versie van de stek op Syrinx deployen is erg makkelijk. Het enige wat je van tevoren nodig hebt is SSH toegang tot Syrinx. Waarschijnlijk is er wel een commissiegenoot die je daarmee verder kan helpen.
