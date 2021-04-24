@@ -40,23 +40,25 @@ Maak een account aan op [GitHub](https://github.com) als je dat nog niet eerder 
 
 Gebruik de GitHub Desktop client om `csrdelft/csrdelft.nl` te downloaden (of je eigen fork). Stel in dit programma ook je naam en email in (standaard waarden zijn meestal prima). Kijk goed in welke map de gedownloade code terecht komt, dit heb je later nodig. Standaard komt de code van GitHub Desktop in `C:\Users\feut\Documenten\GitHub\csrdelft.nl\` terecht.
 
-<details><summary><strong>Command line</strong></summary>
+<details>
+<summary><strong>Command line</strong></summary>
 
 Configureer je lokale git installatie met de goede gegevens, zo worden je veranderingen ook aan je toegekend. (Regels met een `$` er voor moeten uitgevoerd worden in powershell/bash)
 
-```
+```bash
 git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
 ```
 
 Download de stek op je computer, als je net een fork hebt gemaakt gebruik dan de url van je zelfgemaakte repository.
 
-```
+```bash
 git clone git@github.com:csrdelft/csrdelft.nl
 cd csrdelft.nl
 git submodule init
 git submodule update
 ```
+
 </details>
 
 De hele filestructuur van de repository is nu gedownload op je computer. Een korte uitleg van wat welke folder betekent is te vinden op de pagina [Filestructuur](filestructuur.md).
@@ -97,7 +99,8 @@ Installeer de volgende Plugins in PhpStorm (File > Settings... > Plugins):
 * Symfony Support
 * .env files support
 
-<details><summary><strong>Command line</strong></summary>
+<details>
+<summary><strong>Command line</strong></summary>
 
 De volgende commando's worden uitgevoerd om de boel te initialiseren en te updaten:
 
@@ -115,6 +118,7 @@ Javascript & SCSS compileren:
 ```bash
 yarn dev
 ```
+
 </details>
 
 ### 2.3: Database instellen
@@ -129,7 +133,8 @@ Als je een dump hebt gekregen kun je deze nu importeren. Onder de database tab o
 
 Als je geen dump hebt (je zit niet in de PubCie), kun je de Fixtures laden met het `[PHP] Database Fixtures` commando
 
-<details><summary><strong>Command line</strong></summary>
+<details>
+<summary><strong>Command line</strong></summary>
 
 Je kan ook commando's in de commandline uitvoeren. Dan moet je deze commando's hebben.
 
@@ -147,6 +152,7 @@ Database verwijderen:
 ```bash
 php bin/console doctrine:database:drop --force
 ```
+
 </details>
 
 ### 2.3: Frontend code builden
