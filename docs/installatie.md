@@ -45,21 +45,21 @@ Gebruik de GitHub Desktop client om `csrdelft/csrdelft.nl` te downloaden (of je 
 <details>
 <summary><strong>Command line</strong></summary>
 
-Configureer je lokale git installatie met de goede gegevens, zo worden je veranderingen ook aan je toegekend. (Regels met een `$` er voor moeten uitgevoerd worden in powershell/bash)
+Configureer je lokale git installatie met de goede gegevens, zo worden je veranderingen ook aan je toegekend. Zorg dat deze gegevens kloppen met je gegevens op GitHub.
 
-```bash
+<pre>
 git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
-```
+</pre>
 
 Download de stek op je computer, als je net een fork hebt gemaakt gebruik dan de url van je zelfgemaakte repository.
 
-```bash
+<pre>
 git clone git@github.com:csrdelft/csrdelft.nl
 cd csrdelft.nl
 git submodule init
 git submodule update
-```
+</pre>
 
 </details>
 
@@ -90,7 +90,7 @@ Nu is de server ingesteld, nu moet de code nog goed geinstalleerd worden.
 
 Open het project in PhpStorm. Als het goed is worden dan de `[composer] Startup` en `[yarn] Startup` taken uitgevoerd in de Run tab onderin. Als dit niet het geval is kun je ze zelf nog uitvoeren.
 
-_Iedere keer bij het opstarten van PhpStorm worden de Startup tasks uitgevoerd, als je_
+_Iedere keer bij het opstarten van PhpStorm worden de Startup tasks uitgevoerd._
 
 In de lijst met Configurations kun je allerlei interessante commando's vinden. Deze commando's corresponderen met `yarn` en `composer` commando's die je ook in je terminal kan uitvoeren.
 
@@ -107,6 +107,7 @@ Installeer de volgende Plugins in PhpStorm (File > Settings... > Plugins):
 De volgende commando's worden uitgevoerd om de boel te initialiseren en te updaten:
 
 Javascript dependencies installeren:
+
 ```bash
 yarn
 ```
@@ -135,6 +136,8 @@ Als je een dump hebt gekregen kun je deze nu importeren. Onder de database tab o
 
 Als je geen dump hebt (je zit niet in de PubCie), kun je de Fixtures laden met het `[PHP] Database Fixtures` commando
 
+Als je database kapot is (in het begin een kleine kans dat het gebeurt). Kun je het makkelijkst de database droppen en de dump terugzetten.
+
 <details>
 <summary><strong>Command line</strong></summary>
 
@@ -157,19 +160,6 @@ php bin/console doctrine:database:drop --force
 
 </details>
 
-### 2.3: Frontend code builden
-
-De frontend code wordt met een los process gebuild. Hier wordt Typescript omgezet naar Javascript en SCSS naar CSS.
-
-Voer hier voor het volgende commando uit.
-
-```bash
-yarn
-yarn dev
-```
-
-Kijk ook in [Frontend Build](frontend.md) en [Typescript](typescript.md) voor meer info.
-
 ## Stap 3: Inloggen
 
 Om in te loggen op je teststek kun je de wachtwoord vergeten flow gebruiken. In de testomgeving worden berichten die eigenlijk een mail zouden zijn als melding weergegeven. Op deze manier kan je snel een nieuw wachtwoord aanmaken.
@@ -179,6 +169,8 @@ Op deze manier kun je ook inloggen op andere accounts, zonder SU (switch user) t
 Bij de fixtures kun je uid `x101` gebruiken om in te loggen.
 
 ## Extra dingen
+
+Er zijn nog een aantal optionele onderdelen die je kan installeren. Deze onderdelen worden gebruikt door specifieke onderdelen (zoals het fotoalbum) of kunnen je helpen bij het ontwikkelen van de stek.
 
 ### Imagemagick
 
