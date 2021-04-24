@@ -9,6 +9,7 @@
 		"prod": "yarn run production",
 		"production": "cross-env webpack --no-progress --hide-modules --mode=production",
 		"docker": "yarn install && yarn run development --no-progress && yarn run watch-poll --no-progress",
+		"startup": "yarn install && yarn run dev",
 		"lint": "yarn run eslint --ext .vue,.ts assets/js"
 	},
 	"devDependencies": {

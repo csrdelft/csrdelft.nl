@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectStartupSharedConfiguration">
+    <configurations>
+      <configuration id="Composer Script.[composer] Startup" name="[composer] Startup" />
+      <configuration id="npm.[yarn] Startup" name="[yarn] Startup" />
+    </configurations>
+  </component>
+</project>

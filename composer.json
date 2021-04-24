@@ -114,6 +114,9 @@
 			"rm .onderhoud",
 			"@console cache:warmup"
 		],
+		"startup": [
+			"@composer install"
+		],
 		"update-dev": [
 			"@composer install",
 			"@migrate",
