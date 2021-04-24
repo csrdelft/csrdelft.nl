@@ -114,19 +114,19 @@ Installeer de volgende Plugins in PhpStorm (File > Settings... > Plugins):
 De volgende commando's worden uitgevoerd om de boel te initialiseren en te updaten:
 
 Javascript dependencies installeren:
-~~~bash
+<pre>
 yarn
-~~~
+</pre>
 
 PHP dependencies installeren:
-```bash
+<pre>
 composer install
-```
+</pre>
 
 Javascript & SCSS compileren:
-```bash
+<pre>
 yarn dev
-```
+</pre>
 
 </details>
 
@@ -150,19 +150,19 @@ Als je database kapot is (in het begin een kleine kans dat het gebeurt). Kun je 
 Je kan ook commando's in de commandline uitvoeren. Dan moet je deze commando's hebben.
 
 Database aanmaken:
-```bash
+<pre>
 php bin/console doctrine:database:create
-```
+</pre>
 
 Database migraties:
-```bash
+<pre>
 php bin/console doctrine:migrations:migrate
-```
+</pre>
 
 Database verwijderen:
-```bash
+<pre>
 php bin/console doctrine:database:drop --force
-```
+</pre>
 
 </details>
 
