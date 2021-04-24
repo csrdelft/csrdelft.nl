@@ -9,10 +9,13 @@ title: Installatie
 
 Volg dit stappenplan om de stek op je eigen computer te installeren. Wees precies met het uitvoeren van de commando's want een aantal instellingen zijn standaard geconfigureerd in de stek en als je daar van afwijkt moet je het in je eigen configuratie ook goed zetten.
 
+Bij iedere stap waar commando's worden uitgevoerd kun je ook het **Command line** blokje uitklappen om de commando's te zien die je in PowerShell/Bash kan uitvoeren. Deze zijn handig voor als je graag vanuit de command line wil werken.
+
 Als je tegen problemen aan loopt tijdens het doorlopen van de installatie pas dit dan aan in dit document of voeg een kopje toe onder Foutopsporing.
 
-## Stap 0: Programma's installeren
 _Als je in de PubCie zit en je hebt geen toegang tot de database, zorg er dan voor dat je van iemand een dump van de database krijgt. Zonder de dump kun je ook met de testdatabase werken, maar dit is een minder goede ervaring. Je kan ook een dump van de profielfoto's vragen, deze heb je niet per se nodig, maar maakt je lokale stek iets mooier._
+
+## Stap 0: Programma's installeren
 
 Installeer de volgende programma's:
 
@@ -24,13 +27,13 @@ Installeer de volgende programma's:
   - In productie draait MariaDB 10.3, installeer deze als je zeker wil zijn dat alles hetzelfde is.
 - [git](https://git-scm.com)
   - Om de sourcecode te downloaden en veranderingen te maken
-  - De [GitHub Desktop](https://desktop.github.com/) is een toegankelijke manier van git gebruiken
+  - De [GitHub Desktop](https://desktop.github.com/) client is een toegankelijke manier van git gebruiken (aanbevolen als je niet eerder met git hebt gewerkt)
 - [composer](https://getcomposer.org)
   - De PHP dependency manager
 - [Node.js](https://nodejs.org/en/)
   - Een JS runtime
-  - De LTS-versie is prima voor wat wij doen, en is aanbevolen tenzij je expliciet dingen wil die niet in de LTS zitten.
-- [yarn](https://yarnpkg.com/getting-started/install)
+  - Download de LTS-versie als je node.js alleen voor de stek download.
+- [yarn 2](https://yarnpkg.com/getting-started/install)
   - De JS dependency manager
 - [PhpStorm](https://www.jetbrains.com/phpstorm/)
   - Een goede IDE van Jetbrains, pro versie is gratis voor studenten
@@ -140,9 +143,9 @@ Voer daarna het `[PHP] Migraties` commando uit (let op dat je `yes` moet typen).
 
 Als je een dump hebt gekregen kun je deze nu importeren. Onder de database tab of met HeidiSQL kun je deze importeren.
 
-Als je geen dump hebt (je zit niet in de PubCie), kun je de Fixtures laden met het `[PHP] Database Fixtures` commando
+Als je geen dump hebt (je zit niet in de PubCie), kun je de Fixtures laden met het `[PHP] Database Fixtures` commando.
 
-Als je database kapot is (in het begin een kleine kans dat het gebeurt). Kun je het makkelijkst de database droppen en de dump terugzetten.
+Als je database kapot is (in het begin een kleine kans dat het gebeurt). Kun je het makkelijkst de database droppen en de dump terugzetten. Zodra je een beter idee hebt hoe de database werkt kun je vaak zelf problemen fixen.
 
 <details>
 <summary><strong>Command line</strong></summary>
