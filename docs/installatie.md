@@ -6,24 +6,17 @@ Volg dit stappenplan om de stek op je eigen computer te installeren. Wees precie
 
 Als je tegen problemen aan loopt tijdens het doorlopen van de installatie pas dit dan aan in dit document of voeg een kopje toe onder Foutopsporing.
 
-Als je de stek al eens eerder hebt geinstalleerd en je wil de boel verversen gebruikt dan het volgende commando:
-
-```bash
-composer update-dev
-```
-
-
 ## Stap 0: Programma's installeren
-Zorg ervoor dat je een database dump krijgt van de PubCie, zonder deze dump is het erg ingewikkeld om de boel draaiende te krijgen. Zorg er ook voor dat je een plaetjes dump hebt.
+_Als je in de PubCie zit en je hebt geen toegang tot de database, zorg er dan voor dat je van iemand een dump van de database krijgt. Zonder de dump kun je ook met de testdatabase werken, maar dit is een minder goede ervaring. Je kan ook een dump van de profielfoto's vragen, deze heb je niet per se nodig, maar maakt je lokale stek iets mooier._
 
 Installeer de volgende programma's:
 
-- [xampp](https://www.apachefriends.org/download.html) of [wampserver](https://sourceforge.net/projects/wampserver/)
+- [wampserver](https://sourceforge.net/projects/wampserver/)
   - Komt met Apache2, Mariadb en PHP
   - wampserver komt met een iets vriendelijkere gebruikersinterface en wordt verder in deze uitleg gebruikt.
   - Zorg ervoor dat je een versie met PHP 7.3 installeert, want dit is wat de productie versie van de stek ook draait. (7.4 is op zich ook prima)
-	- Zorg ervoor dat je MariaDB installeert en niet MySql, deze twee databases lijken erg op elkaar maar hebben allerlei subtiele verschillen.
-	- In productie draait MariaDB 10.3, installeer deze als je zeker wil zijn dat alles hetzelfde is.
+  - Zorg ervoor dat je MariaDB installeert en niet MySql, deze twee databases lijken erg op elkaar maar hebben allerlei subtiele verschillen.
+  - In productie draait MariaDB 10.3, installeer deze als je zeker wil zijn dat alles hetzelfde is.
 - [git](https://git-scm.com)
   - Om de sourcecode te downloaden en veranderingen te maken
   - De [GitHub Desktop](https://desktop.github.com/) is een toegankelijke manier van git gebruiken
@@ -45,14 +38,17 @@ Installeer de volgende programma's:
 
 Maak een account aan op [GitHub](https://github.com) als je dat nog niet eerder hebt gedaan.
 
+*Ben je geen lid van de PubCie, [maak een fork van de stek](https://github.com/csrdelft/csrdelft.nl/fork)*
+
+Gebruik de GitHub Desktop client om `csrdelft/csrdelft.nl` te downloaden (of je eigen fork). Stel in dit programma ook je naam en email in (standaard waarden zijn meestal prima). Kijk goed in welke map de gedownloade code terecht komt, dit heb je later nodig. Standaard komt de code van GitHub Desktop in `C:\Users\feut\Documenten\GitHub\csrdelft.nl\` terecht.
+
+<details><summary><strong>Command line</strong></summary>
 Configureer je lokale git installatie met de goede gegevens, zo worden je veranderingen ook aan je toegekend. (Regels met een `$` er voor moeten uitgevoerd worden in powershell/bash)
 
 ```
 git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
 ```
-
-*Ben je geen lid van de PubCie, [maak een fork van de stek](https://github.com/csrdelft/csrdelft.nl/fork)*
 
 Download de stek op je computer, als je net een fork hebt gemaakt gebruik dan de url van je zelfgemaakte repository.
 
@@ -62,41 +58,95 @@ cd csrdelft.nl
 git submodule init
 git submodule update
 ```
+</details>
 
 De hele filestructuur van de repository is nu gedownload op je computer. Een korte uitleg van wat welke folder betekent is te vinden op de pagina [Filestructuur](filestructuur.md).
 
 ## Stap 2: Installatie
 Er zijn twee mogelijke manieren om te installeren, met Docker of met de hand. Als je actief gaat ontwikkelen aan de stek is het met de hand opzetten aan te raden.
 
-Zorg dat je vanaf hier Apache2 en MariaDB, oftewel wampserver/xampp hebt draaien.
+Zorg dat je vanaf hier Apache2 en MariaDB, oftewel wampserver hebt draaien.
 
 _Over installatie met docker kun je in het bestand [Docker](installatie-docker.md) meer lezen._
 
-### 2.1: PHP dependencies installeren
+### 2.1: VirtualHost instellen
 
-Voer het volgende commando uit om php dependencies te installeren.
+*Gaat er vanuit dat je Wampserver hebt geinstalleerd in stap 0*
 
+Start Wampserver op. Rechtsonderin bij de icoontjes verschijnt wampserver. Als je rechts of links klikt op dit icoontje krijg je verschillende menus te zien.
+
+Ga naar [VirtualHost Management](http://localhost/add_vhost.php) in wampserver. Voeg hier een nieuwe virtualhost toe met de naam `dev-csrdelft.nl` en als path de `htdocs` map in de repository. Klik op opslaan en rechts-klik op het wampserver icoon rechtsonderin en klik op `Tools > Restart DNS`.
+
+> Als je de repository hebt gedownload in `C:\Users\feut\Documenten\GitHub\csrdelft.nl` zet dan de path op `C:/Users/feut/Documenten/GitHub/csrdelft.nl/htdocs` (let op de slashes).
+
+Nu is de server ingesteld, nu moet de code nog goed geinstalleerd worden.
+
+**Wampserver moet aan staan als je je lokale stek wil bekijken**
+
+### 2.2: PhpStorm instellen
+
+Open het project in PhpStorm. Als het goed is worden dan de `[composer] Startup` en `[yarn] Startup` taken uitgevoerd in de Run tab onderin. Als dit niet het geval is kun je ze zelf nog uitvoeren.
+
+_Iedere keer bij het opstarten van PhpStorm worden de Startup tasks uitgevoerd, als je_
+
+In de lijst met Configurations kun je allerlei interessante commando's vinden. Deze commando's corresponderen met `yarn` en `composer` commando's die je ook in je terminal kan uitvoeren.
+
+![](https://i.imgur.com/0W5HlPq.png)
+
+Installeer de volgende Plugins in PhpStorm (File > Settings... > Plugins):
+
+* Symfony Support
+* .env files support
+
+<details><summary><strong>Command line</strong></summary>
+De volgende commando's worden uitgevoerd om de boel te initialiseren en te updaten:
+
+Javascript dependencies installeren:
+```bash
+yarn
+```
+
+PHP dependencies installeren:
 ```bash
 composer install
 ```
 
-### 2.2: Database instellen
+Javascript & SCSS compileren:
+```bash
+yarn dev
+```
+</details>
+
+### 2.3: Database instellen
 
 *Dit gaat er vanuit dat je database een gebruiker `root` heeft zonder wachtwoord, dit is standaard bij een installatie van MySQL. Heb je je database beveiligd kopieer dan het `DATABASE_URL` veld uit `.env` naar `.env.local` en zet de gegevens goed.*
 
-Voer vanaf de command line het volgende commando uit om een database te maken:
+Voer vanuit PhpStorm het `[PHP] Maak Database` commando uit. Dit commando zorgt ervoor dat er een lege database wordt neergezet.
 
+Voer daarna het `[PHP] Migraties` commando uit (let op dat je `yes` moet typen). Dit commando zorgt ervoor dat alle database tabellen worden neergezet.
+
+Als je een dump hebt gekregen kun je deze nu importeren. Onder de database tab of met HeidiSQL kun je deze importeren.
+
+Als je geen dump hebt (je zit niet in de PubCie), kun je de Fixtures laden met het `[PHP] Database Fixtures` commando
+
+<details><summary><strong>Command line</strong></summary>
+Je kan ook commando's in de commandline uitvoeren. Dan moet je deze commando's hebben.
+
+Database aanmaken:
 ```bash
 php bin/console doctrine:database:create
 ```
 
-Voer vanaf de command line het volgende commando uit om de tabellen in de database te laden:
-
+Database migraties:
 ```bash
 php bin/console doctrine:migrations:migrate
 ```
 
-Als je een dump hebt gekregen kun je deze nu importeren met HeidiSQL, DataGrip of een andere SQL client die je graag gebruikt. Als je geen dump hebt gekregen kun je de [fixtures](fixtures.md) laden om te kunnen testen op test-data.
+Database verwijderen:
+```bash
+php bin/console doctrine:database:drop --force
+```
+</details>
 
 ### 2.3: Frontend code builden
 
@@ -110,20 +160,6 @@ yarn dev
 ```
 
 Kijk ook in [Frontend Build](frontend.md) en [Typescript](typescript.md) voor meer info.
-
-### 2.4: VirtualHost instellen
-
-*Gaat er vanuit dat je Wampserver hebt geinstalleerd in stap 0*
-
-Start Wampserver op. Rechtsonderin bij de icoontjes verschijnt wampserver. Als je rechts of links klikt op dit icoontje krijg je verschillende menus te zien.
-
-Ga naar [VirtualHost Management](http://localhost/add_vhost.php) in wampserver. Voeg hier een nieuwe virtualhost toe met de naam `dev-csrdelft.nl` en als path de `htdocs` map in de repository. Klik op opslaan en rechts-klik op het wampserver icoon rechtsonderin en klik op `Tools > Restart DNS`.
-
-> Als je de repository hebt gedownload in `C:\users\feut\Projecten\csrdelft.nl` zet dan de path op `C:/users/feut/Projecten/csrdelft.nl/htdocs`.
-
-Als je nu naar [`http://dev-csrdelft.nl`](http://dev-csrdelft.nl) als je alles goed hebt gedaan wordt je nu begroet door de externe stek en kun je inloggen met dezelfde gegevens als op de productie stek. Of met gebruiker `x101` met wachtwoord `stek open u voor mij!` als je de fixtures hebt geladen.
-
-*Wampserver moet sowieso aan staan als je je lokale stek wil bekijken*
 
 ## Stap 3: Inloggen
 

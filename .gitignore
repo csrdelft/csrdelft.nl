@@ -44,7 +44,6 @@ tmp/*
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-.idea/**/dataSources.xml
 .idea/**/commandlinetools/
 
 # Generated files
