@@ -1,7 +1,5 @@
 # Installatie van de stek
 
-*Alle commando's in deze uitleg worden uitgevoerd vanuit de hoofdmap van de repository (zodra je de broncode hebt binnengehaald). Op Windows werkt Powershell goed, als je op Linux zit weet je waarschijnlijk al welke shell nice is en heb je daar een uitgesproken mening over.*
-
 Volg dit stappenplan om de stek op je eigen computer te installeren. Wees precies met het uitvoeren van de commando's want een aantal instellingen zijn standaard geconfigureerd in de stek en als je daar van afwijkt moet je het in je eigen configuratie ook goed zetten.
 
 Als je tegen problemen aan loopt tijdens het doorlopen van de installatie pas dit dan aan in dit document of voeg een kopje toe onder Foutopsporing.
@@ -43,6 +41,7 @@ Maak een account aan op [GitHub](https://github.com) als je dat nog niet eerder 
 Gebruik de GitHub Desktop client om `csrdelft/csrdelft.nl` te downloaden (of je eigen fork). Stel in dit programma ook je naam en email in (standaard waarden zijn meestal prima). Kijk goed in welke map de gedownloade code terecht komt, dit heb je later nodig. Standaard komt de code van GitHub Desktop in `C:\Users\feut\Documenten\GitHub\csrdelft.nl\` terecht.
 
 <details><summary><strong>Command line</strong></summary>
+
 Configureer je lokale git installatie met de goede gegevens, zo worden je veranderingen ook aan je toegekend. (Regels met een `$` er voor moeten uitgevoerd worden in powershell/bash)
 
 ```
@@ -99,6 +98,7 @@ Installeer de volgende Plugins in PhpStorm (File > Settings... > Plugins):
 * .env files support
 
 <details><summary><strong>Command line</strong></summary>
+
 De volgende commando's worden uitgevoerd om de boel te initialiseren en te updaten:
 
 Javascript dependencies installeren:
@@ -130,6 +130,7 @@ Als je een dump hebt gekregen kun je deze nu importeren. Onder de database tab o
 Als je geen dump hebt (je zit niet in de PubCie), kun je de Fixtures laden met het `[PHP] Database Fixtures` commando
 
 <details><summary><strong>Command line</strong></summary>
+
 Je kan ook commando's in de commandline uitvoeren. Dan moet je deze commando's hebben.
 
 Database aanmaken:
