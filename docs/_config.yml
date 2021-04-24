@@ -29,7 +29,7 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 remote_theme: pmarsceill/just-the-docs
 # Build settings
-theme: just-the-docs
+#theme: just-the-docs
 
 aux_links:
   "Naar de code":
