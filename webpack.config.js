@@ -55,7 +55,7 @@ module.exports = (env, argv) => ({
 	devtool: 'source-map',
 	resolve: {
 		// Vanuit javascript kun je automatisch .js en .ts bestanden includen.
-		extensions: ['.ts', '.js', '.vue'],
+		extensions: ['.ts', '.js'],
 		alias: {
 			vue$: 'vue/dist/vue.esm.js',
 		},
@@ -121,16 +121,7 @@ module.exports = (env, argv) => ({
 			},
 			{
 				test: /\.vue$/,
-				use: [
-					{
-						loader: 'vue-loader',
-						options: {
-							loaders: {
-								ts: 'ts-loader',
-							},
-						},
-					}
-				],
+				use: 'vue-loader',
 			},
 			// Verwerk sass bestanden.
 			// `sass-loader` >
