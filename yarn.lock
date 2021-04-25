@@ -6133,6 +6133,7 @@ resolve@^1.9.0:
     webpack: ^5.34.0
     webpack-assets-manifest: ^5.0.5
     webpack-cli: ^4.6.0
+    webpack-remove-empty-scripts: ^0.7.1
   languageName: unknown
   linkType: soft
 
@@ -7284,6 +7285,13 @@ typescript@^4.1.3:
     clone-deep: ^4.0.1
     wildcard: ^2.0.0
   checksum: 5e28f66f597cb34ac5f7ca0881cd3f106265091e47d7cda9ae00f4902283efdfdab36a70e34a9cf7b1467aac021178981513393b7dcddbb84caf11920f269379
+  languageName: node
+  linkType: hard
+
+"webpack-remove-empty-scripts@npm:^0.7.1":
+  version: 0.7.1
+  resolution: "webpack-remove-empty-scripts@npm:0.7.1"
+  checksum: 55274db968a8e9606a43db9b0e4f6a74eaeddd5f7e6daaa00833e007c987bd2ecaeae8bd4f8d8175c46c49075a815d2e8d416a717177dcd8a4917740587e52d2
   languageName: node
   linkType: hard
 

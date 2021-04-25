@@ -4,6 +4,7 @@ const contextPath = path.resolve(__dirname, 'assets');
 
 const terserPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const VuePlugin = require('vue-loader/lib/plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
@@ -80,6 +81,7 @@ module.exports = (env, argv) => ({
 			// Css bestanden komen in de map css terecht.
 			filename: argv.mode !== 'production' ? 'css/[name].css' : 'css/[name].[contenthash].css',
 		}),
+		new RemoveEmptyScriptsPlugin(),
 		new VuePlugin(),
 		new WebpackAssetsManifest({
 			entrypoints: true
