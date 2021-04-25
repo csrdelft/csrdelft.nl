@@ -7,8 +7,6 @@ title: OAuth
 
 # OAuth
 
-Werk in uitvoering hiero
-
 Maak het mogelijk voor externe partijen om in te loggen met een C.S.R. webstek account en ook om met eventuele api's te verbinden.
 
 Zie [`oauth2-bundle`](https://github.com/trikoder/oauth2-bundle) voor meer info en documentatie.
@@ -24,7 +22,7 @@ De OAuth2 flow is als volgt:
 1. De gebruiker wordt doorverwezen naar https://csrdelft.nl/authorize?client_id=...&...
 	1. `OAUth2AuthorizeListener` pikt dit op en toont een pagina met uitleg aan de gebruiker
 	1. De gebruiker klikt op Autoriseer
-1. De gebruiker wordt doorverwezen naar de `redirect_uri` die de externe service heeft opgegeven.
+1. De gebruiker wordt doorverwezen naar de `redirect_uri` die de externe service heeft opgegeven, met een token.
 1. De externe service ontvangt een refresh_token
 1. De externe service kan de refresh_token gebruiken om bij `/api/v3/token` een access_token op te vragen.
 1. De externe service
