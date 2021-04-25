@@ -13,23 +13,29 @@ Het bestand `app.ts` is het aanspreekpunt van de Typescript, vanaf hier wordt al
 
 ## Typescript & PHP laten samenwerken
 
-Een voorbeeld waar PHP een stuk javascript opstart is te zien in `GroepStatistiekView`. Hier hebben de verschillende grafieken een specifieke klassenaam en een data attribuut met alle informatie die interessant is voor de grafiek.
+TypeScript en PHP leven allebei in hun eigen wereld. Om deze twee systemen goed met elkaar samen te laten werken is de volgende oplossing verzonnen.
 
-In het bestand `grafiek.ts` wordt er een handler aan `ctx` toegevoegd als volgt:
+De PHP code geeft HTML terug met specifieke klassen die door de TypeScript code worden opgepikt en worden geinitialiseerd. Bijvoorbeeld de volgende html, hier wordt een element met de klasse `ctx-graph-pie` gemaakt.
 
-```typescript
+```html
+<div class="ctx-graph-pie" data-data="{$verticale}"></div>
+```
+
+In de TypeScript code wordt een nieuwe handler aan de 'context' `ctx` gehangen. `ctx` is een singleton waar allerlei handlers aan gehangen kunnen worden, op basis van een selector.
+
+```ts
+import ctx from './ctx'
 ctx.addHandlers({
 	'.ctx-graph-pie': initPie,
 });
 ```
 
-Hier wordt een handler gecreeerd voor de selector `.ctx-graph-pie` met de handler `initPie`. Dit zorgt ervoor dat iedere keer als de 'context' geladen wordt en een node met klasse `ctx-graph-pie` wordt gevonden de `initPie` functie wordt aangeroepen met als argument die specifieke node.
+Iedere keer als de pagina wordt geladen of als er een stuk html van de server wordt geladen wordt de context aangeroepen en deze roept alle handlers aan die iets selecteren in de nieuwe html. Zo kun je makkelijk PHP aan TypeScript knopen, zonder dat je javascript code in php hoeft te schrijven. Javascript code on-the-fly genereren met PHP is vaak een slecht idee en is iets wat we dus proberen te voorkomen.
 
-De 'context' wordt voor ieder nieuw blokje html dat wordt ingeladen uitgevoerd. Bijvoorbeeld als er een modal wordt geladen, dan wordt de context geinitializeerd en wordt voor alle handlers in de context gecontroleerd of er iets te laden valt.
-
-Met deze aanpak hoef je in je templates geen Javascript code te schrijven. Dit kan op de lange termijn er voor zorgen dat we CSP (Content Security Policy) kunnen instellen waardoor de stek nog een stuk veiliger wordt.
+Vue wordt ook geinitialiseerd met de context, zie hiervoor de [Vue](./vue.md) pagina.
 
 ## Javascript voor specifieke routes / Dynamic Import
+
 Het is mogelijk om javascript voor specifieke routes uit te voeren. De javascript voor deze routes wordt los opgehaald van de server. De code in de bestanden achter routes wordt in principe voor page-load uitgevoerd, dus het kan handig zijn om nog een `document.ready` er in te gooien.
 
 Als je deze dynamic imports gebruikt **moet** je een `webpackChunkName` opgeven anders breekt de javascript omdat de chunk dan geen naam heeft en niet terug kan worden gevonden. Dit is deels een bug in webpack.
@@ -62,4 +68,5 @@ export function initialiseerEetplan() {
   console.log('Laad Eetplan');
 }
 ```
-Want `import()` geeft een promise terug met de module die geimport wordt. Probeer dit alleen niet te pas en te onpas te gebruiken, want het kan zo uit de hand lopen.
+
+Want `import()` geeft een promise terug met de module die geïmporteerd wordt. Probeer dit alleen niet te pas en te onpas te gebruiken, want het kan zo uit de hand lopen.

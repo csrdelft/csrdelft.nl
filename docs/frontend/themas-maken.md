@@ -1,6 +1,6 @@
 ---
 layout: default
-parent: Onderdelen
+parent: Frontend
 nav_order: 1
 title: Themas
 ---

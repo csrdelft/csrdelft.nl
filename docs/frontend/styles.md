@@ -7,7 +7,7 @@ title: Styles
 
 # Styles
 
-_Zie ook [Themas maken](../onderdelen/themas-maken.md)_
+_Zie ook [Themas maken](themas-maken.md)_
 
 We gebruiken [scss](https://sass-lang.com/) voor de styles. Deze worden door webpack verwerkt naar css. Ieder .scss bestand zonder `_` aan het begin wordt door webpack opgepikt. Een scss bestand in een submap krijgt de volgende vorm:
 
@@ -19,7 +19,7 @@ Dit omdat webpack niet helemaal goed overweg kan met output in verschillende map
 
 ## Bootstrap
 
-Het basis framework is bootstrap (4.0.0). Je kan in views klassen uit bootstrap gebruiken. In `_defaults.scss` worden wat dingen uit bootstrap overgeschreven.
+Het basis framework is bootstrap (4.x). Je kan in views klassen uit bootstrap gebruiken. In `_defaults.scss` worden wat dingen uit bootstrap overgeschreven.
 
 Je kan het bestand `_defaults.scss` inladen in [bootstrap.build](https://bootstrap.build/app) om te zien welke veranderingen wij aan Bootstrap hebben gemaakt.
 

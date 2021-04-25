@@ -41,7 +41,7 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Caching](backend/caching.md)
 - [Typescript](frontend/typescript.md)
 - [Styles](frontend/styles.md)
-- [Themas](onderdelen/themas-maken.md)
+- [Themas](frontend/themas-maken.md)
 - [Enums](backend/enums.md)
 - [Formulier](onderdelen/formulier.md)
 - [Vue](frontend/vue.md)
@@ -50,7 +50,7 @@ Lees hier meer over specifieke onderdelen van de stek, kijk hier als je denkt ie
 - [Tests](backend/test.md)
 - [Vertalingen](onderdelen/translations.md)
 - [Editor](onderdelen/prosemirror.md)
-- [OAuth](backend/oauth.md)
+- [OAuth](onderdelen/oauth.md)
 
 ## Overig
 

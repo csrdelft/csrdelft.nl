@@ -87,4 +87,4 @@ Als je een component hebt geregistreerd, bijvoorbeeld `mijn-component` dan kun j
 <mijn-component class="vue-context" :settings="{id: 10}" />
 ```
 
-Door de `.vue-context` klasse wordt op die html tag vue geinitialiseerd. Zie [TypeScript](typescript.md) voor meer uitleg over hoe de context werkt.
+Door de `.vue-context` klasse wordt op die html tag vue geïnitialiseerd. Zie [TypeScript](typescript.md) voor meer uitleg over hoe de context werkt.

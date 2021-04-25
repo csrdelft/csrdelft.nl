@@ -1,6 +1,6 @@
 ---
 layout: default
-parent: Backend
+parent: Onderdelen
 nav_order: 1
 title: OAuth
 ---
