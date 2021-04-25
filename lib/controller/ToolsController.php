@@ -16,12 +16,10 @@ use CsrDelft\service\ProfielService;
 use CsrDelft\service\Roodschopper;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
-use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\Icon;
 use CsrDelft\view\PlainView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
-use CsrDelft\view\Streeplijstcontent;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,22 +71,6 @@ class ToolsController extends AbstractController {
 		$this->logRepository = $logRepository;
 		$this->profielService = $profielService;
 		$this->verticalenRepository = $verticalenRepository;
-	}
-
-	/**
-	 * @return PlainView|Response
-	 * @Route("/tools/streeplijst", methods={"GET"})
-	 * @Auth(P_OUDLEDEN_READ)
-	 */
-	public function streeplijst() {
-		$body = new Streeplijstcontent();
-
-		# yuck
-		if (isset($_GET['iframe'])) {
-			return new PlainView($body->getHtml());
-		} else {
-			return $this->render('default.html.twig', ['content' => $body]);
-		}
 	}
 
 	/**
