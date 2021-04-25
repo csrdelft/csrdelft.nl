@@ -20,5 +20,5 @@
 		"assets/js/**/*.ts",
 		"assets/js/**/*.vue"
 	],
-	"compileOnSave": false,
+	"compileOnSave": false
 }
