@@ -84,18 +84,28 @@ class AssetsTwigExtension extends AbstractExtension
 
 	private function module_asset(string $module, string $extension)
 	{
-		if (!file_exists(HTDOCS_PATH . 'dist/manifest.json')) {
-			throw new CsrException('htdocs/dist/manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
+		if (!file_exists(HTDOCS_PATH . 'dist/assets-manifest.json')) {
+			throw new CsrException('htdocs/dist/assets-manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
 		}
 
-		$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/manifest.json'), true);
+		$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/assets-manifest.json'), true);
 
 		$relevantAssets = [];
 
-		foreach ($manifest as $asset => $resource) {
-			if (preg_match('/(^|~)(' . $module . ')([.~])/', $asset) && endsWith($asset, $extension)) {
-				$relevantAssets[] = $resource;
-			}
+		$entrypoints = $manifest['entrypoints'];
+
+		if (!isset($entrypoints[$module])) {
+			throw new CsrException("Entrypoint met naam {$module} bestaat niet.");
+		}
+
+		if (!isset($entrypoints[$module]['assets'][$extension])) {
+			throw new CsrException("Entrypoint met naam {$module} heeft geen extensie {$extension}");
+		}
+
+		$assets = $manifest['entrypoints'][$module]['assets'][$extension];
+
+		foreach ($assets as $resource) {
+			$relevantAssets[] = '/dist/' . $resource;
 		}
 
 		return $relevantAssets;
