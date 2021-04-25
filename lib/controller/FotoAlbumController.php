@@ -505,7 +505,7 @@ class FotoAlbumController extends AbstractController {
 	 * @param string $dir
 	 * @param string $foto
 	 * @return BinaryFileResponse
-	 * @Route("/fotoalbum/{dir}/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+\.\w+"})
+	 * @Route("/fotoalbum/{dir}/{foto}", methods={"GET"}, requirements={"dir": ".+", "foto": "[^/]+\.(JPE?G|PNG|jpe?g|png)"})
 	 * @Auth({P_ALBUM_READ,P_ALBUM_PUBLIC_READ})
 	 */
 	public function raw_image(Request $request, string $dir, string $foto) {
