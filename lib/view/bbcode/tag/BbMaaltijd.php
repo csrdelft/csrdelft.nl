@@ -141,7 +141,7 @@ class BbMaaltijd extends BbTag {
 					throw new BbException('<div class="bb-block bb-maaltijd">Geen aankomende maaltijd.</div>');
 				}
 				$maaltijd = reset($maaltijden);
-				if (endsWith($mid, '2') && $aantal >= 2) {
+				if (str_ends_with($mid, '2') && $aantal >= 2) {
 					unset($maaltijden[$maaltijd->maaltijd_id]);
 					$maaltijd2 = reset($maaltijden);
 				}

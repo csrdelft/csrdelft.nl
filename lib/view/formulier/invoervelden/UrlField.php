@@ -13,7 +13,7 @@ class UrlField extends TextField {
 
 	public function getValue() {
 		$this->value = parent::getValue();
-		if (startsWith($this->value, CSR_ROOT)) {
+		if (str_starts_with($this->value, CSR_ROOT)) {
 			$this->value = str_replace(CSR_ROOT, '', $this->value);
 		}
 		return $this->value;
@@ -28,7 +28,7 @@ class UrlField extends TextField {
 			return true;
 		}
 		// controleren of het een geldige url is
-		if (!url_like($this->value) AND !startsWith($this->value, '/')) {
+		if (!url_like($this->value) AND !str_starts_with($this->value, '/')) {
 			$this->error = 'Geen geldige url';
 		}
 		return $this->error === '';

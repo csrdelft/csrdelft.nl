@@ -12,13 +12,13 @@ class AutoEscapeService {
 	const STRATEGY_MAIL = 'mail';
 
 	public function guess($name) {
-		if (endsWith($name, '.ical.twig')) {
+		if (str_ends_with($name, '.ical.twig')) {
 			return self::STRATEGY_ICAL;
 		}
-		if (endsWith($name, '.xml.twig')) {
+		if (str_ends_with($name, '.xml.twig')) {
 			return self::STRATEGY_XML;
 		}
-		if (endsWith($name, '.mail.twig')) {
+		if (str_ends_with($name, '.mail.twig')) {
 			return self::STRATEGY_MAIL;
 		}
 

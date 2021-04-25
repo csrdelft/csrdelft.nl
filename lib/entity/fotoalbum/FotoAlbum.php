@@ -58,7 +58,7 @@ class FotoAlbum extends Map {
 	public function __construct($path = null, $absolute = false) {
 		if ($path === null) { // called from PersistenceModel
 			$this->path = realpathunix(join_paths(PHOTOALBUM_PATH, $this->subdir));
-		} else if ($absolute == true && startsWith(realpathunix($path), realpathunix(PHOTOALBUM_PATH))) { // Check that $path is inside PHOTOALBUM_PATH
+		} else if ($absolute == true && str_starts_with(realpathunix($path), realpathunix(PHOTOALBUM_PATH))) { // Check that $path is inside PHOTOALBUM_PATH
 			$this->path = rtrim($path, "/");
 			$this->subdir = substr($this->path, strlen(realpathunix(PHOTOALBUM_PATH) . "/"));
 		} else if (path_valid(PHOTOALBUM_PATH, $path)) { // Check if $path not trying to traverse outside PHOTOALBUM_PATH
@@ -229,7 +229,7 @@ class FotoAlbum extends Map {
 		return preg_match('/Publiek\/?.*$/', $this->subdir) == 1;
 	}
 	public function magBekijken() {
-		if (!startsWith(realpath($this->path), realpath(PHOTOALBUM_PATH . 'fotoalbum/'))) {
+		if (!str_starts_with(realpath($this->path), realpath(PHOTOALBUM_PATH . 'fotoalbum/'))) {
 			return false;
 		}
 		if ($this->isPubliek()) {

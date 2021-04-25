@@ -11,7 +11,7 @@ class ApiTrustedHostsEventListener {
 	public function onKernelRequest(RequestEvent $event) {
 		$request = $event->getRequest();
 
-		if (!startsWith($request->getUri(), '/API/2.0')) {
+		if (!str_starts_with($request->getUri(), '/API/2.0')) {
 			return;
 		}
 

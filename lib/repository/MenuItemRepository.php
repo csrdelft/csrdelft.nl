@@ -307,7 +307,7 @@ class MenuItemRepository extends AbstractRepository {
 				$breadcrumb = (object)['link' => $k, 'tekst' => $breadcrumb];
 			}
 
-			if (startsWith($k, '-') || $k == array_key_last($breadcrumbs)) {
+			if (str_starts_with($k, '-') || $k == array_key_last($breadcrumbs)) {
 				$html .= $this->renderBreadcrumb($breadcrumb, true);
 			} else {
 				$html .= $this->renderBreadcrumb($breadcrumb, false);

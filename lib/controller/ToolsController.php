@@ -322,7 +322,7 @@ class ToolsController extends AbstractController {
 			$score = 0;
 
 			// Beste match start met de zoekterm
-			if (startsWith(strtolower($profiel->getNaam('volledig')), strtolower($query))) {
+			if (str_starts_with(strtolower($profiel->getNaam('volledig')), strtolower($query))) {
 				$score += 100;
 			}
 

@@ -129,7 +129,7 @@ class BbFotoalbum extends BbTag {
 				//check fotoalbum in url
 				$url = str_ireplace('fotoalbum/', '', $url);
 				//check slash voor pad
-				if (startsWith($url, '/')) {
+				if (str_starts_with($url, '/')) {
 					$url = substr($url, 1);
 				}
 				$album = $this->fotoAlbumRepository->getFotoAlbum($url);

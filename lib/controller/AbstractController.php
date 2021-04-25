@@ -57,7 +57,7 @@ class AbstractController extends BaseController {
 			if (empty($url) || $url === null) {
 				$url = $this->get('request_stack')->getCurrentRequest()->getRequestUri();
 			}
-			if (!startsWith($url, $_ENV['CSR_ROOT']) && !$allowExternal) {
+			if (!str_starts_with($url, $_ENV['CSR_ROOT']) && !$allowExternal) {
 				if (preg_match("/^[?#\/]/", $url) === 1) {
 					$url = $_ENV['CSR_ROOT'] . $url;
 				} else {

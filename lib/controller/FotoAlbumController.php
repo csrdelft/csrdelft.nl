@@ -182,7 +182,7 @@ class FotoAlbumController extends AbstractController {
 		if ($files !== false) {
 			foreach ($files as $filename) {
 				$afbeelding = new Afbeelding($filename->getThumbPath());
-				if (endsWith($afbeelding->filename, '.jpg')) {
+				if (str_ends_with($afbeelding->filename, '.jpg')) {
 					$obj = [];
 					$obj['name'] = $afbeelding->filename;
 					$obj['size'] = $afbeelding->filesize;

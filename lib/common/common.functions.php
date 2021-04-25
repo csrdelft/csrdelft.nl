@@ -1,9 +1,9 @@
 <?php
 
-# C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# common.functions.php
-# -------------------------------------------------------------------
+// C.S.R. Delft | pubcie@csrdelft.nl
+// -------------------------------------------------------------------
+// common.functions.php
+// -------------------------------------------------------------------
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
@@ -22,26 +22,30 @@ define('DATE_FORMAT', 'y-MM-dd');
 define('DATETIME_FORMAT', 'y-MM-dd HH:mm:ss');
 define('TIME_FORMAT', 'HH:mm');
 
-/**
- * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
- * @param string $haystack
- * @param string $needle
- *
- * @return boolean
- */
-function startsWith($haystack, $needle) {
-	return strval($needle) === "" || strpos($haystack, strval($needle)) === 0;
+if (!function_exists('str_starts_with')) {
+	/**
+	 * @param string $haystack
+	 * @param string $needle
+	 *
+	 * @return boolean
+	 */
+	function str_starts_with($haystack, $needle)
+	{
+		return (string)$needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0;
+	}
 }
 
-/**
- * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
- * @param string $haystack
- * @param string $needle
- *
- * @return boolean
- */
-function endsWith($haystack, $needle) {
-	return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+if (!function_exists('str_ends_with')) {
+	/**
+	 * @param string $haystack
+	 * @param string $needle
+	 *
+	 * @return boolean
+	 */
+	function str_ends_with($haystack, $needle)
+	{
+		return $needle === "" || substr($haystack, -strlen($needle)) === (string)$needle;
+	}
 }
 
 /**
@@ -122,37 +126,11 @@ function group_by_distinct($prop, $in, $del = true) {
 }
 
 /**
- * Set cookie with token to automatically login.
- *
- * @param string $token
- */
-function setRememberCookie($token) {
-	if ($token == null) {
-		unset($_COOKIE['remember']);
-		setcookie('remember', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
-	} else {
-		setcookie('remember', $token, time() + (int)instelling('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
-	}
-}
-
-/**
- * @return int
- */
-function getSessionMaxLifeTime() {
-	$lifetime = (int)instelling('beveiliging', 'session_lifetime_seconds');
-	// Sync lifetime of FS based PHP session with DB based C.S.R. session
-	$gc = (int)ini_get('session.gc_maxlifetime');
-	if ($gc > 0 && $gc < $lifetime) {
-		$lifetime = $gc;
-	}
-	return $lifetime;
-}
-
-/**
  * Invokes a client page (re)load the url.
  *
  * @param string $url
  * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
+ * @deprecated Gebruik redirect in de controller
  */
 function redirect($url = null, $refresh = true) {
 	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
@@ -162,7 +140,7 @@ function redirect($url = null, $refresh = true) {
 	if (!$refresh && $url == $request->getRequestUri()) {
 		$url = $_ENV['CSR_ROOT'];
 	}
-	if (!startsWith($url, $_ENV['CSR_ROOT'])) {
+	if (!str_starts_with($url, $_ENV['CSR_ROOT'])) {
 		if (preg_match("/^[?#\/]/", $url) === 1) {
 			$url = $_ENV['CSR_ROOT'] . $url;
 		} else {
@@ -238,17 +216,6 @@ function crypto_rand_secure($min, $max) {
 }
 
 /**
- * @param $date
- * @param string $format
- *
- * @return bool
- */
-function valid_date($date, $format = 'Y-m-d H:i:s') {
-	$d = DateTime::createFromFormat($format, $date);
-	return $d && $d->format($format) == $date;
-}
-
-/**
  * @param $name string
  *
  * @return bool
@@ -299,7 +266,7 @@ function url_like($url) {
 function external_url($url, $label) {
 	$url = filter_var($url, FILTER_SANITIZE_URL);
 	if ($url && (url_like($url) || url_like(CSR_ROOT . $url))) {
-		if (startsWith($url, 'http://') || startsWith($url, 'https://')) {
+		if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
 			$extern = 'target="_blank" rel="noopener"';
 		} else {
 			$extern = '';
@@ -337,47 +304,6 @@ function getDateTime($timestamp = null) {
 		$timestamp = time();
 	}
 	return date('Y-m-d H:i:s', $timestamp);
-}
-
-/**
- * @param int $timestamp
- *
- * @return string aangepast ISO-8601 weeknummer met zondag als eerste dag van de week
- */
-function getWeekNumber($timestamp) {
-	if (date('w', $timestamp) == 0) {
-		return date('W', strtotime('+1 day', $timestamp));
-	} else {
-		return date('W', $timestamp);
-	}
-}
-
-/**
- * @param string $datum moet beginnen met 'yyyy-mm-dd' (wat daarna komt maakt niet uit)
- *
- * @return boolean true als $datum geldig is volgens checkdate(); false otherwise
- */
-function isGeldigeDatum($datum) {
-	// De string opdelen en checken of er genoeg delen zijn.
-	$delen = explode('-', $datum);
-	if (count($delen) < 3) {
-		return false;
-	}
-	// Checken of we geldige strings hebben, voordat we ze casten naar ints.
-	$jaar = $delen[0];
-	if (!is_numeric($jaar) || strlen($jaar) != 4) {
-		return false;
-	}
-	$maand = $delen[1];
-	if (!is_numeric($maand) || strlen($maand) != 2) {
-		return false;
-	}
-	$dag = substr($delen[2], 0, 2); // Alleen de eerste twee karakters pakken.
-	if (!is_numeric($dag) || strlen($dag) != 2) {
-		return false;
-	}
-	// De strings casten naar ints en de datum laten checken.
-	return checkdate((int)$maand, (int)$dag, (int)$jaar);
 }
 
 /**
@@ -823,7 +749,7 @@ function curl_follow_location($url, $options = []) {
 			return $location;
 		}
 
-		if (!startsWith($refreshUrl, 'http')) {
+		if (!str_starts_with($refreshUrl, 'http')) {
 			$refreshUrl = http_build_url($location, $refreshUrl, HTTP_URL_REPLACE | HTTP_URL_JOIN_PATH);
 		}
 
@@ -974,16 +900,6 @@ function mag($permission, array $allowedAuthenticationMethods = null) {
 }
 
 /**
- * Is $uid de op dit moment ingelogde account?
- *
- * @param string $uid
- * @return bool
- */
-function is_ingelogd_account($uid) {
-	return LoginService::getUid() == $uid;
-}
-
-/**
  * @param Profiel $profiel
  * @param string|string[] $key
  * @param string $cat
@@ -1029,11 +945,11 @@ function safe_combine_path($folder, $subpath) {
 		return null;
 	}
 	$combined = $folder;
-	if (!endsWith($combined, '/')) {
+	if (!str_ends_with($combined, '/')) {
 		$combined .= '/';
 	}
 	$combined .= $subpath;
-	if (!startsWith(realpath($combined), realpath($folder))) {
+	if (!str_starts_with(realpath($combined), realpath($folder))) {
 		return null;
 	}
 	return $combined;
@@ -1075,17 +991,6 @@ $configCache = [];
 
 function sql_contains($field) {
 	return "%$field%";
-}
-
-function printCsrfField($path = '', $method = 'post') {
-	$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
-	echo (new CsrfField($csrfService->generateToken($path, $method)))->__toString();
-}
-
-function csrfMetaTag() {
-	$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
-	$token = $csrfService->generateToken('', 'POST');
-	return '<meta property="X-CSRF-ID" content="'. htmlentities($token->getId()) .'" /><meta property="X-CSRF-VALUE" content="'. htmlentities($token->getValue()) .'" />';
 }
 
 if (!function_exists('array_key_first')) {
@@ -1154,7 +1059,7 @@ function join_paths(...$args) {
  * @return bool
  */
 function path_valid($prefix, $path) {
-	return startsWith(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
+	return str_starts_with(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
 }
 
 function triggerExceptionAsWarning(Exception $e) {
