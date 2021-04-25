@@ -10,7 +10,7 @@ const createBlockSpec = (type: string, attr = 'id'): NodeSpec => ({
 })
 
 const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeSpec => ({
-	attrs: {[attr]: {}, naam: {}},
+	attrs: {[attr]: {}, naam: {default: ""}},
 	group: "block",
 	draggable: true,
 	toDOM: node => {
