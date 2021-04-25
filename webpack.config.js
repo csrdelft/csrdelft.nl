@@ -84,7 +84,9 @@ module.exports = (env, argv) => ({
 		new RemoveEmptyScriptsPlugin(),
 		new VuePlugin(),
 		new WebpackAssetsManifest({
-			entrypoints: true
+			entrypoints: true,
+			integrity: true,
+			entrypointsUseAssets: true,
 		}),
 		new MomentLocalesPlugin({
 			localesToKeep: ['nl'],

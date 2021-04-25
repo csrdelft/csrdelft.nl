@@ -62,9 +62,9 @@ class AssetsTwigExtension extends AbstractExtension
 
 		foreach ($this->module_asset($module, 'css') as $asset) {
 			if ($media) {
-				$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\" media=\"{$media}\"/>\n";
+				$assetString .= "<link rel=\"stylesheet\" href=\"{$asset[0]}\" integrity=\"{$asset[1]}\" type=\"text/css\" media=\"{$media}\"/>\n";
 			} else {
-				$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\"/>\n";
+				$assetString .= "<link rel=\"stylesheet\" href=\"{$asset[0]}\" integrity=\"{$asset[1]}\" type=\"text/css\"/>\n";
 			}
 		}
 
@@ -76,7 +76,7 @@ class AssetsTwigExtension extends AbstractExtension
 		$assetString = '';
 
 		foreach ($this->module_asset($module, 'js') as $asset) {
-			$assetString .= "<script type=\"text/javascript\" src=\"{$asset}\"></script>\n";
+			$assetString .= "<script type=\"text/javascript\" src=\"{$asset[0]}\" integrity=\"{$asset[1]}\"></script>\n";
 		}
 
 		return $assetString;
@@ -104,8 +104,8 @@ class AssetsTwigExtension extends AbstractExtension
 
 		$assets = $manifest['entrypoints'][$module]['assets'][$extension];
 
-		foreach ($assets as $resource) {
-			$relevantAssets[] = '/dist/' . $resource;
+		foreach ($assets as $asset) {
+			$relevantAssets[] = ['/dist/' . $asset['src'], $asset['integrity']];
 		}
 
 		return $relevantAssets;
