@@ -92,6 +92,16 @@ class AssetsTwigExtension extends AbstractExtension
 
 		$relevantAssets = [];
 
+		$entrypoints = $manifest['entrypoints'];
+
+		if (!isset($entrypoints[$module])) {
+			throw new CsrException("Entrypoint met naam {$module} bestaat niet.");
+		}
+
+		if (!isset($entrypoints[$module]['assets'][$extension])) {
+			throw new CsrException("Entrypoint met naam {$module} heeft geen extensie {$extension}");
+		}
+
 		$assets = $manifest['entrypoints'][$module]['assets'][$extension];
 
 		foreach ($assets as $resource) {

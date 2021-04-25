@@ -2,11 +2,10 @@ const path = require('path')
 
 const contextPath = path.resolve(__dirname, 'assets');
 
-let terserPlugin = require('terser-webpack-plugin');
-let OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
-
-let VuePlugin = require('vue-loader/lib/plugin');
-let MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const terserPlugin = require('terser-webpack-plugin');
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+const VuePlugin = require('vue-loader/lib/plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 
 module.exports = (env, argv) => ({
