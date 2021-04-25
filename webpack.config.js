@@ -1,9 +1,15 @@
 const path = require('path')
 
-const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
-
 const contextPath = path.resolve(__dirname, 'assets');
 
+let terserPlugin = require('terser-webpack-plugin');
+let OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+
+let VuePlugin = require('vue-loader/lib/plugin');
+let MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
+
+let CssCleanupPlugin = require('./bin/dev/css-cleanup-webpack-plugin');
 module.exports = (env, argv) => ({
 	mode: 'development',
 	context: contextPath,
@@ -45,6 +51,7 @@ module.exports = (env, argv) => ({
 		filename: argv.mode !== 'production' ? 'js/[name].bundle.js' : 'js/[name].[contenthash].bundle.js',
 		chunkFilename: argv.mode !== 'production' ? 'js/[name].chunk.js' : 'js/[name].[contenthash].chunk.js',
 		publicPath: '/dist/',
+		assetModuleFilename: 'images/[hash][ext][query]',
 	},
 	devtool: 'source-map',
 	resolve: {
@@ -53,19 +60,15 @@ module.exports = (env, argv) => ({
 		alias: {
 			vue$: 'vue/dist/vue.esm.js',
 		},
-		plugins: [
-			PnpWebpackPlugin,
-		]
-	},
-	resolveLoader: {
-		plugins: [
-			PnpWebpackPlugin.moduleLoader(module),
-		]
+		fallback: {
+			stream: false,
+			util: false,
+		}
 	},
 	optimization: {
 		minimizer: [
-			new (require('optimize-css-assets-webpack-plugin'))({}),
-			new (require('terser-webpack-plugin'))(),
+			new OptimizeCssAssetsWebpackPlugin({}),
+			new terserPlugin(),
 		],
 		splitChunks: {
 			chunks: 'all',
@@ -76,12 +79,13 @@ module.exports = (env, argv) => ({
 			// Css bestanden komen in de map css terecht.
 			filename: argv.mode !== 'production' ? 'css/[name].css' : 'css/[name].[contenthash].css',
 		}),
-		new (require('vue-loader/lib/plugin'))(),
-		new (require('webpack-manifest-plugin'))(),
-		new (require('moment-locales-webpack-plugin'))({
+		new VuePlugin(),
+		new WebpackAssetsManifest({
+			entrypoints: true
+		}),
+		new MomentLocalesPlugin({
 			localesToKeep: ['nl'],
 		}),
-		new (require('./bin/dev/css-cleanup-webpack-plugin'))(),
 	],
 	module: {
 		// Regels voor bestanden die webpack tegenkomt, als `test` matcht wordt de rule uitgevoerd.
@@ -100,17 +104,19 @@ module.exports = (env, argv) => ({
 			{
 				test: /\.ts$/,
 				use: [
-					'cache-loader',
 					{
 						loader: 'ts-loader',
-						options: {appendTsSuffixTo: [/\.vue$/]}
+						options: {
+							appendTsSuffixTo: [/\.vue$/],
+							// We compilen jgallery ts
+							allowTsInNodeModules: true,
+						}
 					}
 				],
 			},
 			{
 				test: /\.vue$/,
 				use: [
-					'cache-loader',
 					{
 						loader: 'vue-loader',
 						options: {
@@ -142,7 +148,6 @@ module.exports = (env, argv) => ({
 							publicPath: '../',
 						},
 					},
-					'cache-loader',
 					{
 						loader: 'css-loader',
 						options: {
@@ -152,8 +157,9 @@ module.exports = (env, argv) => ({
 					{
 						loader: 'postcss-loader',
 						options: {
-							ident: 'postcss',
-							plugins: [require('autoprefixer')],
+							postcssOptions: {
+								plugins: [require('autoprefixer')],
+							}
 						},
 					},
 					{
@@ -171,27 +177,23 @@ module.exports = (env, argv) => ({
 			},
 			{
 				test: /\.css$/,
-				use: ['cache-loader', 'style-loader', 'css-loader'],
+				use: ['style-loader', 'css-loader'],
 			},
 			// Sla fonts op in de fonts map.
 			{
 				test: /\.(woff|woff2|eot|ttf|otf)$/,
-				use: [{
-					loader: 'file-loader',
-					options: {
-						name: 'fonts/[name].[ext]',
-					},
-				}],
+				type: 'asset',
+				generator: {
+					filename: 'fonts/[hash][ext][query]',
+				},
 			},
 			// Sla plaetjes op in de images map.
 			{
 				test: /\.(png|svg|jpg|gif)$/,
-				use: [{
-					loader: 'file-loader',
-					options: {
-						name: 'images/[name].[ext]',
-					},
-				}],
+				type: 'asset/resource',
+				generator: {
+					filename: "images/[hash][ext][query]"
+				}
 			},
 		],
 	},
