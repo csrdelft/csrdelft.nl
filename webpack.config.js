@@ -63,6 +63,9 @@ module.exports = (env, argv) => ({
 			util: false,
 		}
 	},
+	cache: {
+		type: "filesystem",
+	},
 	optimization: {
 		minimizer: [
 			new OptimizeCssAssetsWebpackPlugin({}),

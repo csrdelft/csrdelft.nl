@@ -21,9 +21,11 @@ jobs:
           path: |
             .yarn
             .pnp.js
+            !.yarn/.cache
+          # De cache wordt alleen naderhand opgeslagen als yarn.lock veranderd is
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          # De cache wordt opgehaald als os hetzelfde is (altijd)
+          restore-keys: ${{ runner.os }}-yarn-
 
       - name: Install yarn dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
@@ -32,10 +34,10 @@ jobs:
       - name: 🗃 Cache cache-loader
         uses: actions/cache@v2
         with:
-          path: node_modules/.cache
-          # Uniek voor yarn.lock + alle assets
+          path: .yarn/.cache
+          # De cache wordt alleen naderhand opgeslagen als yarn.lock + alle assets zijn veranderd
           key: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('assets/**') }}
-          # Restore als yarn.lock niet is veranderd
+          # De cache wordt opgehaald als yarn.lock niet veranderd is
           restore-keys: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock') }}-
 
       - name: 🔧 Run yarn build
