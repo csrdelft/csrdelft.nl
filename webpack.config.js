@@ -9,7 +9,6 @@ let VuePlugin = require('vue-loader/lib/plugin');
 let MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 
-let CssCleanupPlugin = require('./bin/dev/css-cleanup-webpack-plugin');
 module.exports = (env, argv) => ({
 	mode: 'development',
 	context: contextPath,
