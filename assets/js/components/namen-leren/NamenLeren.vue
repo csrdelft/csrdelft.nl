@@ -445,8 +445,7 @@ export default class NamenLeren extends Vue {
   width: 170px;
   height: 255px;
   margin: 15px auto;
-  /*noinspection CssUnknownTarget*/
-  background: url('/dist/images/loading.gif') no-repeat center center white;
+  background: url('../../../images/loading-fb.gif') no-repeat center center white;
   overflow: hidden;
 }
 

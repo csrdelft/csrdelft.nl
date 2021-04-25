@@ -17,6 +17,7 @@ class AssetsTwigExtension extends AbstractExtension
 			new TwigFunction('user_modules', [$this, 'getUserModules']),
 			new TwigFunction('css_asset', [$this, 'css_asset'], ['is_safe' => ['html']]),
 			new TwigFunction('js_asset', [$this, 'js_asset'], ['is_safe' => ['html']]),
+			new TwigFunction('asset_url', [$this, 'asset_url']),
 		];
 	}
 
@@ -84,11 +85,7 @@ class AssetsTwigExtension extends AbstractExtension
 
 	private function module_asset(string $module, string $extension)
 	{
-		if (!file_exists(HTDOCS_PATH . 'dist/assets-manifest.json')) {
-			throw new CsrException('htdocs/dist/assets-manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
-		}
-
-		$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/assets-manifest.json'), true);
+		$manifest = $this->readManifest();
 
 		$relevantAssets = [];
 
@@ -109,5 +106,30 @@ class AssetsTwigExtension extends AbstractExtension
 		}
 
 		return $relevantAssets;
+	}
+
+	public function asset_url($name) {
+		$manifest = $this->readManifest();
+
+		if (!isset($manifest[$name])) {
+			throw new CsrException("Asset met naam {$name} bestaat niet.");
+		}
+
+		$asset = $manifest[$name];
+
+		return '/dist/' . $asset['src'];
+	}
+
+	/**
+	 * @return mixed
+	 */
+	private function readManifest()
+	{
+		if (!file_exists(HTDOCS_PATH . 'dist/assets-manifest.json')) {
+			throw new CsrException('htdocs/dist/assets-manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
+		}
+
+		$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/assets-manifest.json'), true);
+		return $manifest;
 	}
 }
