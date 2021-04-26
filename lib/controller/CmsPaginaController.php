@@ -34,7 +34,8 @@ class CmsPaginaController extends AbstractController {
 	 * @Route("/pagina")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function overzicht() {
+	public function overzicht(): Response
+	{
 		return $this->render('cms/overzicht.html.twig', [
 			'paginas' => $this->cmsPaginaRepository->getAllePaginas(),
 		]);
@@ -47,7 +48,8 @@ class CmsPaginaController extends AbstractController {
 	 * @Route("/pagina/{naam}")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function bekijken($naam, $subnaam = "") {
+	public function bekijken($naam, $subnaam = ""): Response
+	{
 		$paginaNaam = $naam;
 		if ($subnaam) {
 			$paginaNaam = $subnaam;
@@ -84,7 +86,8 @@ class CmsPaginaController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 * @CsrfUnsafe
 	 */
-	public function bewerken(Request $request, $naam) {
+	public function bewerken(Request $request, $naam): Response
+	{
 		$pagina = $this->cmsPaginaRepository->find($naam);
 		if (!$pagina) {
 			$pagina = $this->cmsPaginaRepository->nieuw($naam);
@@ -117,7 +120,8 @@ class CmsPaginaController extends AbstractController {
 	 * @Route("/pagina/verwijderen/{naam}", methods={"POST"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function verwijderen($naam) {
+	public function verwijderen($naam): JsonResponse
+	{
 		/** @var CmsPagina $pagina */
 		$pagina = $this->cmsPaginaRepository->find($naam);
 		if (!$pagina || !$pagina->magVerwijderen()) {

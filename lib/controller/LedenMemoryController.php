@@ -58,7 +58,8 @@ class LedenMemoryController extends AbstractController {
 	 * @Route("/leden/memory", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function memory() {
+	public function memory(): Response
+	{
 		$lidstatus = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$lidstatus[] = LidStatus::Overleden;
 		/** @var Profiel[] $leden */
@@ -95,7 +96,8 @@ class LedenMemoryController extends AbstractController {
 	 * @return Verticale|null
 	 * @throws NonUniqueResultException
 	 */
-	private function getVerticale() {
+	private function getVerticale(): ?Verticale
+	{
 		$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
 		if (!$v) {
 			return null;

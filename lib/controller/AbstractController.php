@@ -9,10 +9,12 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
+use Memcache;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Throwable;
 
 /**
  * Voor eventuele generieke controller methodes.
@@ -24,7 +26,7 @@ class AbstractController extends BaseController {
 	public static function getSubscribedServices() {
 		return parent::getSubscribedServices() + [
 				'csr.formulier.factory' => FormulierFactory::class,
-				'stek.cache.memcache' => '?'.\Memcache::class,
+				'stek.cache.memcache' => '?'. Memcache::class,
 			];
 	}
 
@@ -33,7 +35,8 @@ class AbstractController extends BaseController {
 	 *
 	 * @return string[]
 	 */
-	protected function getDataTableSelection() {
+	protected function getDataTableSelection(): array
+	{
 		$selection = $this->get('request_stack')
 			->getCurrentRequest()
 			->request->filter(DataTable::POST_SELECTION, [], FILTER_SANITIZE_STRING);
@@ -52,7 +55,7 @@ class AbstractController extends BaseController {
 	 * @param bool $allowExternal
 	 * @return RedirectResponse
 	 */
-	protected function csrRedirect($url, $status = 302, $allowExternal = false)
+	protected function csrRedirect($url, $status = 302, $allowExternal = false): RedirectResponse
 	{
 			if (empty($url) || $url === null) {
 				$url = $this->get('request_stack')->getCurrentRequest()->getRequestUri();
@@ -68,14 +71,16 @@ class AbstractController extends BaseController {
 
 	}
 
-	protected function tableData($data) {
+	protected function tableData($data): GenericDataTableResponse
+	{
 		return new GenericDataTableResponse($this->get('serializer'), $data);
 	}
 
 	/**
 	 * @return string|null
 	 */
-	protected function getUid() {
+	protected function getUid(): ?string
+	{
 		$user = $this->getUser();
 		if ($user) {
 			return $user->uid;
@@ -86,7 +91,8 @@ class AbstractController extends BaseController {
 	/**
 	 * @return Profiel|null
 	 */
-	protected function getProfiel() {
+	protected function getProfiel(): ?Profiel
+	{
 		$user = $this->getUser();
 		if ($user) {
 			return $user->profiel;
@@ -94,11 +100,11 @@ class AbstractController extends BaseController {
 		return null;
 	}
 
-	protected function createAccessDeniedException(string $message = 'Geen Toegang.', \Throwable $previous = null): AccessDeniedException {
+	protected function createAccessDeniedException(string $message = 'Geen Toegang.', Throwable $previous = null): AccessDeniedException {
 		return parent::createAccessDeniedException($message, $previous);
 	}
 
-	protected function createNotFoundException(string $message = 'Niet gevonden', \Throwable $previous = null): NotFoundHttpException {
+	protected function createNotFoundException(string $message = 'Niet gevonden', Throwable $previous = null): NotFoundHttpException {
 		return parent::createNotFoundException($message, $previous);
 	}
 

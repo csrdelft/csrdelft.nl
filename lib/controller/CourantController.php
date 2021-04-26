@@ -44,8 +44,10 @@ class CourantController extends AbstractController {
 	 * @return Response
 	 * @Route("/courant/archief", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
+	 * @throws Exception
 	 */
-	public function archief() {
+	public function archief(): Response
+	{
 		return $this->render('courant/archief.html.twig', ['couranten' => group_by('getJaar', $this->courantRepository->findAll())]);
 	}
 
@@ -55,7 +57,8 @@ class CourantController extends AbstractController {
 	 * @Route("/courant/bekijken/{id}", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function bekijken(Courant $courant) {
+	public function bekijken(Courant $courant): Response
+	{
 		return new Response($courant->inhoud);
 	}
 
@@ -64,7 +67,8 @@ class CourantController extends AbstractController {
 	 * @Route("/courant/voorbeeld", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function voorbeeld() {
+	public function voorbeeld(): Response
+	{
 		return $this->render('courant/mail.html.twig', [
 			'berichten' => $this->courantBerichtRepository->findAll(),
 			'catNames' => CourantCategorie::getEnumDescriptions(),
@@ -77,7 +81,8 @@ class CourantController extends AbstractController {
 	 * @Route("/courant", methods={"GET", "POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
-	public function toevoegen(Request $request) {
+	public function toevoegen(Request $request): Response
+	{
 		$bericht = new CourantBericht();
 		$bericht->datumTijd = new DateTime();
 		$bericht->uid = $this->getUid();
@@ -113,7 +118,8 @@ class CourantController extends AbstractController {
 	 * @Route("/courant/bewerken/{id}", methods={"GET", "POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
-	public function bewerken(Request $request, CourantBericht $bericht) {
+	public function bewerken(Request $request, CourantBericht $bericht): Response
+	{
 		$form = $this->createFormulier(CourantBerichtFormulier::class, $bericht, [
 			'action' => $this->generateUrl('csrdelft_courant_bewerken', ['id' => $bericht->id]),
 		]);
@@ -139,7 +145,8 @@ class CourantController extends AbstractController {
 	 * @Route("/courant/verwijderen/{id}", methods={"POST"})
 	 * @Auth(P_MAIL_POST)
 	 */
-	public function verwijderen(CourantBericht $bericht) {
+	public function verwijderen(CourantBericht $bericht): RedirectResponse
+	{
 		if (!$bericht->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
