@@ -95,7 +95,9 @@ _Over installatie met docker kun je in het bestand [Docker](installatie-docker.m
 
 Start Wampserver op. Rechtsonderin bij de icoontjes verschijnt wampserver. Als je rechts of links klikt op dit icoontje krijg je verschillende menus te zien.
 
-Controleer of de database op MariaDB staat door links te klikken op het wampserver icoontje en te kijken of er een vinkje bij MariaDB staat. Als er een vinkje bij MySQL staat, rechtsklik dan op het wampserver icoontje en ga naar "Tools > Change default dbms" om de dbms op MariaDB te zetten. 
+Controleer of de database op MariaDB staat door links te klikken op het wampserver icoontje en te kijken of er een vinkje bij MariaDB staat. Als er een vinkje bij MySQL staat, rechtsklik dan op het wampserver icoontje en ga naar "Tools > Change default dbms" om de dbms op MariaDB te zetten.
+
+Open het wampserver menu en zet het vinkje bij `headers_module` onder Apache > Apache Modules.
 
 Ga naar [VirtualHost Management](http://localhost/add_vhost.php) in wampserver. Voeg hier een nieuwe virtualhost toe met de naam `dev-csrdelft.nl` en als path de `htdocs` map in de repository. Klik op opslaan en rechts-klik op het wampserver icoon rechtsonderin en klik op `Tools > Restart DNS`.
 
