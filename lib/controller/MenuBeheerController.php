@@ -32,17 +32,17 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param string $menu_name
+	 * @param string $menuName
 	 * @return Response
-	 * @Route("/menubeheer/beheer/{menu_name}", methods={"GET"})
+	 * @Route("/menubeheer/beheer/{menuName}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function beheer($menu_name = 'main'): Response
+	public function beheer($menuName = 'main'): Response
 	{
-		if ($menu_name != $this->getUid() && !LoginService::mag(P_ADMIN)) {
+		if ($menuName != $this->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
-		$root = $this->menuItemRepository->getMenuBeheer($menu_name);
+		$root = $this->menuItemRepository->getMenuBeheer($menuName);
 		if (!$root || !$root->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -53,19 +53,19 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $parent_id
+	 * @param $parentId
 	 * @return MeldingResponse|MenuItemForm
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/menubeheer/toevoegen/{parent_id}", methods={"POST"})
+	 * @Route("/menubeheer/toevoegen/{parentId}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen($parent_id)
+	public function toevoegen($parentId)
 	{
-		if ($parent_id == 'favoriet') {
+		if ($parentId == 'favoriet') {
 			$parent = $this->menuItemRepository->getMenuRoot($this->getUid());
 		} else {
-			$parent = $this->menuItemRepository->getMenuItem((int)$parent_id);
+			$parent = $this->menuItemRepository->getMenuItem((int)$parentId);
 		}
 		if (!$parent || !$parent->magBeheren()) {
 			throw $this->createAccessDeniedException();
@@ -74,7 +74,7 @@ class MenuBeheerController extends AbstractController
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
-		$form = new MenuItemForm($item, 'toevoegen', $parent_id); // fetches POST values itself
+		$form = new MenuItemForm($item, 'toevoegen', $parentId); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
 			$this->menuItemRepository->persist($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
@@ -85,14 +85,14 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $item_id
+	 * @param $itemId
 	 * @return JsonResponse|MenuItemForm
-	 * @Route("/menubeheer/bewerken/{item_id}", methods={"POST"}, requirements={"item_id": "\d+"})
+	 * @Route("/menubeheer/bewerken/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($item_id)
+	public function bewerken($itemId)
 	{
-		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
+		$item = $this->menuItemRepository->getMenuItem((int)$itemId);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -111,14 +111,14 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $item_id
+	 * @param $itemId
 	 * @return JsonResponse
-	 * @Route("/menubeheer/verwijderen/{item_id}", methods={"POST"}, requirements={"item_id": "\d+"})
+	 * @Route("/menubeheer/verwijderen/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verwijderen($item_id): JsonResponse
+	public function verwijderen($itemId): JsonResponse
 	{
-		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
+		$item = $this->menuItemRepository->getMenuItem((int)$itemId);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -131,16 +131,16 @@ class MenuBeheerController extends AbstractController
 	}
 
 	/**
-	 * @param $item_id
+	 * @param $itemId
 	 * @return JsonResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/menubeheer/zichtbaar/{item_id}", methods={"POST"}, requirements={"item_id": "\d+"})
+	 * @Route("/menubeheer/zichtbaar/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function zichtbaar($item_id): JsonResponse
+	public function zichtbaar($itemId): JsonResponse
 	{
-		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
+		$item = $this->menuItemRepository->getMenuItem((int)$itemId);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}

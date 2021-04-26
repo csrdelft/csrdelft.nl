@@ -48,7 +48,9 @@ class CourantController extends AbstractController {
 	 */
 	public function archief(): Response
 	{
-		return $this->render('courant/archief.html.twig', ['couranten' => group_by('getJaar', $this->courantRepository->findAll())]);
+		return $this->render('courant/archief.html.twig', [
+			'couranten' => group_by('getJaar', $this->courantRepository->findAll())
+		]);
 	}
 
 	/**
