@@ -156,7 +156,12 @@ class AgendaController extends AbstractController {
 		if ($request->query->has('limit')) {
 			$limit = $request->query->getInt('limit');
 		}
-		$items = $this->agendaRepository->zoeken(date_create_immutable(), date_create_immutable('+6 months'), $zoekterm, $limit);
+		$items = $this->agendaRepository->zoeken(
+			date_create_immutable(),
+			date_create_immutable('+6 months'),
+			$zoekterm,
+			$limit
+		);
 		$result = [];
 		foreach ($items as $item) {
 			$begin = $item->getBeginMoment();
@@ -185,8 +190,15 @@ class AgendaController extends AbstractController {
 	 * @Auth(P_MAIL_COMPOSE)
 	 */
 	public function courant(BbToProsemirror $bbToProsemirror) {
-		$items = $this->agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + 2 weeks'), false, false);
-		return new JsonResponse($bbToProsemirror->toProseMirrorFragment($this->renderView('agenda/courant.html.twig', ['items' => $items])));
+		$items = $this->agendaRepository->getAllAgendeerbaar(
+			date_create_immutable(),
+			date_create_immutable('next saturday + 2 weeks'),
+			false,
+			false
+		);
+		return new JsonResponse(
+			$bbToProsemirror->toProseMirrorFragment($this->renderView('agenda/courant.html.twig', ['items' => $items]))
+		);
 	}
 
 	/**
@@ -259,9 +271,13 @@ class AgendaController extends AbstractController {
 	{
 		$item = $this->getAgendaItemByUuid($uuid);
 
-		if (!$item || !$item instanceof AgendaItem) throw new CsrGebruikerException('Kan alleen AgendaItem verplaatsen');
+		if (!$item || !$item instanceof AgendaItem) {
+			throw new CsrGebruikerException('Kan alleen AgendaItem verplaatsen');
+		}
 
-		if (!$item->magBeheren()) throw $this->createAccessDeniedException();
+		if (!$item->magBeheren()) {
+			throw $this->createAccessDeniedException();
+		}
 
 		$item->begin_moment = date_create_immutable($request->request->get('begin_moment'));
 		$item->eind_moment = date_create_immutable($request->request->get('eind_moment'));
@@ -305,7 +321,7 @@ class AgendaController extends AbstractController {
 
 	/**
 	 * @param $refuuid
-	 * @return Agendeerbaar|false
+	 * @return Agendeerbaar|null
 	 */
 	private function getAgendaItemByUuid($refuuid) {
 		$parts = explode('@', $refuuid, 2);
@@ -335,7 +351,7 @@ class AgendaController extends AbstractController {
 			default:
 				throw new CsrException('invalid UUID');
 		}
-		/** @var Agendeerbaar|false $item * */
+		/** @var Agendeerbaar|null $item * */
 		return $item;
 	}
 
@@ -363,11 +379,11 @@ class AgendaController extends AbstractController {
 			$backgroundColor = '#214AB0';
 			if ($event instanceof Profiel) {
 				$backgroundColor = '#BD135E';
-			} else if ($event instanceof Maaltijd) {
+			} elseif ($event instanceof Maaltijd) {
 				$backgroundColor = '#731CC7';
-			} else if ($event instanceof Activiteit) {
+			} elseif ($event instanceof Activiteit) {
 				$backgroundColor = '#1CC7BC';
-			} else if ($event instanceof Ketzer) {
+			} elseif ($event instanceof Ketzer) {
 				$backgroundColor = '#1ABD2C';
 			}
 
@@ -387,7 +403,7 @@ class AgendaController extends AbstractController {
 				'end' => date('c', $eind),
 				'allDay' => $event->isHeledag(),
 				'id' => $event->getUUID(),
-				'textColor' => '#fff',
+				'textColor' => '#FFF',
 				'backgroundColor' => $backgroundColor,
 				'borderColor' => $backgroundColor,
 				'description' => $event->getBeschrijving(),

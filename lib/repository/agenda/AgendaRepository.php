@@ -102,7 +102,13 @@ class AgendaRepository extends AbstractRepository {
 	}
 
 	public function getICalendarItems() {
-		return $this->filterVerborgen($this->getAllAgendeerbaar(date_create_immutable(instelling('agenda', 'ical_from')), date_create_immutable(instelling('agenda', 'ical_to')), true));
+		return $this->filterVerborgen(
+			$this->getAllAgendeerbaar(
+				date_create_immutable(instelling('agenda', 'ical_from')),
+				date_create_immutable(instelling('agenda', 'ical_to')),
+				true
+			)
+		);
 	}
 
 	public function filterVerborgen(array $items) {
@@ -112,7 +118,7 @@ class AgendaRepository extends AbstractRepository {
 			$itemsByUUID[$item->getUUID()] = $item;
 			unset($items[$index]);
 		}
-		if (count($itemsByUUID) > 0) {
+		if (!empty($itemsByUUID)) {
 			/** @var AgendaVerbergen[] $verborgen */
 			$verborgen = $this->agendaVerbergenRepository->createQueryBuilder('av')
 				->where('av.uid = :uid and av.refuuid in (:uuids)')
@@ -176,13 +182,13 @@ class AgendaRepository extends AbstractRepository {
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
 		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
-			->where("a.in_agenda = true and ((a.begin_moment >= :van and a.begin_moment <= :tot) or (a.eind_moment >= :van and a.eind_moment <= :tot))")
+			->where("a.in_agenda = true")
+			->andWhere("(a.begin_moment >= :van and a.begin_moment <= :tot) or (a.eind_moment >= :van and a.eind_moment <= :tot)")
 			->setParameter('van', $van, Types::DATE_IMMUTABLE)
 			->setParameter('tot', $tot, Types::DATE_IMMUTABLE)
 			->getQuery()->getResult();
 		foreach ($activiteiten as $activiteit) {
-			// Alleen bekijken in agenda (leden bekijken mag dus niet)
-			if (in_array($activiteit->soort, [ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES]) OR $activiteit->mag(AccessAction::Bekijken, $auth)) {
+			if ($activiteit->mag(AccessAction::Bekijken, $auth)) {
 				$result[] = $activiteit;
 			}
 		}
@@ -201,7 +207,11 @@ class AgendaRepository extends AbstractRepository {
 
 		// Verjaardagen
 		$toonVerjaardagen = ($ical ? 'toonVerjaardagenICal' : 'toonVerjaardagen');
-		if (!$zijbalk && LoginService::mag(P_VERJAARDAGEN, $auth) AND lid_instelling('agenda', $toonVerjaardagen) === 'ja') {
+		if (
+			!$zijbalk
+			&& LoginService::mag(P_VERJAARDAGEN, $auth)
+			&& lid_instelling('agenda', $toonVerjaardagen) === 'ja'
+		) {
 			//Verjaardagen. Omdat Lid-objectjes eigenlijk niet Agendeerbaar, maar meer iets als
 			//PeriodiekAgendeerbaar zijn, maar we geen zin hebben om dat te implementeren,
 			//doen we hier even een vieze hack waardoor het wel soort van werkt.
@@ -226,7 +236,7 @@ class AgendaRepository extends AbstractRepository {
 	public function zoekWoordAgenda($woord) {
 		$beginDag = date_create_immutable()->setTime(0, 0, 0);
 		foreach ($this->getItemsByDay($beginDag) as $item) {
-			if (stristr($item->getTitel(), $woord) !== false OR stristr($item->getBeschrijving(), $woord) !== false) {
+			if (stristr($item->getTitel(), $woord) !== false || stristr($item->getBeschrijving(), $woord) !== false) {
 				return $item;
 			}
 		}
@@ -237,10 +247,14 @@ class AgendaRepository extends AbstractRepository {
 		return $this->getAllAgendeerbaar($dag, $dag);
 	}
 
-	public function nieuw($begin_moment, $eind_moment) {
+	public function nieuw($beginMoment, $eindMoment) {
 		$item = new AgendaItem();
-		$item->begin_moment = $begin_moment ? date_create_immutable($begin_moment) : date_create_immutable()->add(new DateInterval('P1D'));
-		$item->eind_moment = $eind_moment ? date_create_immutable($eind_moment) : date_create_immutable()->add(new DateInterval('P2D'));
+		$item->begin_moment = $beginMoment
+			? date_create_immutable($beginMoment)
+			: date_create_immutable()->add(new DateInterval('P1D'));
+		$item->eind_moment = $eindMoment
+			? date_create_immutable($eindMoment)
+			: date_create_immutable()->add(new DateInterval('P2D'));
 		if (LoginService::mag(P_AGENDA_MOD)) {
 			$item->rechten_bekijken = instelling('agenda', 'standaard_rechten');
 		} else {
