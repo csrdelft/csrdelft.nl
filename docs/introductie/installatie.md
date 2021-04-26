@@ -35,6 +35,7 @@ Installeer de volgende programma's:
   - Download de LTS-versie als je node.js alleen voor de stek download.
 - [yarn 2](https://yarnpkg.com/getting-started/install)
   - De JS dependency manager
+	- Doe dit door "Powershell" te starten en `npm install -g yarn` uit te voeren in dit venster
 - [PhpStorm](https://www.jetbrains.com/phpstorm/)
   - Een goede IDE van Jetbrains, pro versie is gratis voor studenten
   - [Visual Studio Code](https://code.visualstudio.com/) is een redelijk alternatief, maar gebruikt dit alleen als je je er echt thuis in voelt.
