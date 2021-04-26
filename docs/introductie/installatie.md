@@ -7,7 +7,9 @@ title: Installatie
 
 # Installatie van de stek
 
-Volg dit stappenplan om de stek op je eigen computer te installeren. Wees precies met het uitvoeren van de commando's want een aantal instellingen zijn standaard geconfigureerd in de stek en als je daar van afwijkt moet je het in je eigen configuratie ook goed zetten.
+Volg dit stappenplan om de stek op je eigen computer te installeren. Dit document gaat er vanuit dat je Windows gebruikt, als je de stek op een ander platform wil installeren moet je sommige stappen net iets anders uitvoeren, maar het stappenplan zou grotendeels moeten werken.
+
+Als je deze stappen volgt krijg je de standaard installatie. Er is nog een boel te configureren, maar dat is in het begin niet nodig. Let goed op bij het uitvoeren van de stappen zodat alle configuratie volgens de standaard configuratie gaat.
 
 Bij iedere stap waar commando's worden uitgevoerd kun je ook het **Command line** blokje uitklappen om de commando's te zien die je in PowerShell/Bash kan uitvoeren. Deze zijn handig voor als je graag vanuit de command line wil werken.
 
