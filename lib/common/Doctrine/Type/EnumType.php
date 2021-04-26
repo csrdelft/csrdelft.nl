@@ -13,7 +13,7 @@ abstract class EnumType extends Type {
 
 	abstract public function getEnumClass();
 
-	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform) {
 		$values = array_map(function ($val) {
 			return "'" . $val . "'";
 		}, $this->getEnumClass()::getEnumValues());

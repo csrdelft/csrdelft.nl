@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d254c87517cebafd136c622700f096b",
+    "content-hash": "1ce7180533bfa4b8c0ca528ae22f6c95",
     "packages": [
         {
             "name": "ajgarlag/psr-http-message-bundle",
@@ -581,16 +581,16 @@
         },
         {
             "name": "csrdelft/bb",
-            "version": "v1.3.3",
+            "version": "v1.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csrdelft/bb.git",
-                "reference": "865227da268879edef24d3821cc7ab4f83502e6b"
+                "reference": "10767a6353c0604c8a73d48c0cf5c53433668fdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csrdelft/bb/zipball/865227da268879edef24d3821cc7ab4f83502e6b",
-                "reference": "865227da268879edef24d3821cc7ab4f83502e6b",
+                "url": "https://api.github.com/repos/csrdelft/bb/zipball/10767a6353c0604c8a73d48c0cf5c53433668fdf",
+                "reference": "10767a6353c0604c8a73d48c0cf5c53433668fdf",
                 "shasum": ""
             },
             "require": {
@@ -621,9 +621,9 @@
             "homepage": "https://csrdelft.github.io/bb",
             "support": {
                 "issues": "https://github.com/csrdelft/bb/issues",
-                "source": "https://github.com/csrdelft/bb/tree/v1.3.3"
+                "source": "https://github.com/csrdelft/bb/tree/v1.3.4"
             },
-            "time": "2021-02-16T16:19:45+00:00"
+            "time": "2021-04-26T20:08:01+00:00"
         },
         {
             "name": "defuse/php-encryption",

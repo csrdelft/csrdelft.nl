@@ -19,6 +19,7 @@ use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -209,7 +210,7 @@ class CorveeTakenRepository extends AbstractRepository {
 		return $this->createQueryBuilder('ct')
 			->where('ct.verwijderd = false and ct.profiel = :profiel and ct.datum >= :datum')
 			->setParameter('profiel', $profiel)
-			->setParameter('datum', date_create_immutable())
+			->setParameter('datum', date_create_immutable(), Types::DATE_IMMUTABLE)
 			->orderBy('ct.datum', 'ASC')
 			->getQuery()->getResult();
 	}

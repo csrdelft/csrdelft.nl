@@ -11,7 +11,7 @@ class LongTextType extends Type {
 	/**
 	 * @inheritDoc
 	 */
-	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
+	public function getSQLDeclaration(array $column, AbstractPlatform $platform) {
 		return 'LONGTEXT COMMENT \'(DC2Type:longtext)\'';
 	}
 
