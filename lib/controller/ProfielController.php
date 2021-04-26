@@ -88,7 +88,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/{uid}/resetPrivateToken", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
-	public function resetPrivateToken($uid) {
+	public function resetPrivateToken($uid): RedirectResponse
+	{
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
@@ -151,7 +152,8 @@ class ProfielController extends AbstractController {
 		CorveeKwalificatiesRepository $corveeKwalificatiesRepository,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		Profiel $profiel = null
-	) {
+	): Response
+	{
 		if (!$profiel) {
 			$profiel = $this->getProfiel();
 		}
@@ -301,7 +303,8 @@ class ProfielController extends AbstractController {
 	 * @Auth({P_LEDEN_MOD,"commissie:NovCie"})
 	 * @return Response
 	 */
-	public function externInschrijfLink() {
+	public function externInschrijfLink(): Response
+	{
 		$form = new InschrijfLinkForm();
 		$link = null;
 		if ($form->validate()) {
@@ -334,7 +337,8 @@ class ProfielController extends AbstractController {
 	 * @return Response
 	 * @throws ConnectionException
 	 */
-	public function externInschrijfformulier(string $pre, EntityManagerInterface $em) {
+	public function externInschrijfformulier(string $pre, EntityManagerInterface $em): Response
+	{
 		if (isDatumVoorbij('2020-08-26 00:00:00')) {
 			return $this->render('extern-inschrijven/tekstpagina.html.twig', [
 				'titel' => 'C.S.R. Delft - Inschrijven',
@@ -429,7 +433,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/voorkeuren", methods={"GET"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
-	public function voorkeurenNoUid() {
+	public function voorkeurenNoUid(): Response
+	{
 		return $this->voorkeuren($this->getUid());
 	}
 
@@ -439,7 +444,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/{uid}/voorkeuren", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
-	public function voorkeuren($uid) {
+	public function voorkeuren($uid): Response
+	{
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
@@ -471,7 +477,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/{uid}/addToGoogleContacts", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function addToGoogleContacts($uid) {
+	public function addToGoogleContacts($uid): RedirectResponse
+	{
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
@@ -494,7 +501,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/{uid}/stamboom", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function stamboom($uid = null) {
+	public function stamboom($uid = null): Response
+	{
 		$profiel = $uid ? $this->profielRepository->get($uid) : $this->getProfiel();
 
 		return $this->render('profiel/stamboom.html.twig', [
@@ -508,7 +516,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/leden/verjaardagen", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function verjaardagen(VerjaardagenService $verjaardagenService) {
+	public function verjaardagen(VerjaardagenService $verjaardagenService): Response
+	{
 		$nu = time();
 		return $this->render('verjaardagen/alle.html.twig', [
 			'dezemaand' => date('m', $nu),
@@ -526,7 +535,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/{uid}/saldo/{timespan}", methods={"POST"}, requirements={"uid": ".{4}", "timespan": "\d+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function saldo($uid, $timespan, SaldoGrafiekService $saldoGrafiekService) {
+	public function saldo($uid, $timespan, SaldoGrafiekService $saldoGrafiekService): JsonResponse
+	{
 		if ($saldoGrafiekService->magGrafiekZien($uid)) {
 			return new JsonResponse($saldoGrafiekService->getDataPoints($uid, $timespan));
 		} else {
@@ -540,7 +550,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/{uid}.vcf", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function vcard($uid) {
+	public function vcard($uid): Response
+	{
 		$profiel = $this->profielRepository->get($uid);
 
 		if (!$profiel) {
@@ -558,7 +569,8 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/{uid}/kaartje", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function kaartje($uid) {
+	public function kaartje($uid): Response
+	{
 		return $this->render('profiel/kaartje.html.twig', ['profiel' => $this->profielRepository->get($uid)]);
 	}
 }

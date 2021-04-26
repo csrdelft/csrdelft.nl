@@ -7,6 +7,7 @@ use CsrDelft\repository\security\RememberLoginRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use CsrDelft\view\login\LoginForm;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,7 +51,8 @@ class LoginController extends AbstractController {
 	 * @Route("/{_locale<%app.supported_locales%>}/login", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function loginForm(Request $request, AuthenticationUtils $authenticationUtils) {
+	public function loginForm(Request $request, AuthenticationUtils $authenticationUtils): Response
+	{
 		if ($this->getUser()) {
 			return $this->redirectToRoute('default');
 		}
@@ -81,7 +83,7 @@ class LoginController extends AbstractController {
 	 * @Auth(P_PUBLIC)
 	 */
 	public function login_check() {
-		throw new \LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml');
+		throw new LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml');
 	}
 
 	/**
@@ -89,6 +91,6 @@ class LoginController extends AbstractController {
 	 * @Auth(P_PUBLIC)
 	 */
 	public function logout() {
-		throw new \LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml');
+		throw new LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml');
 	}
 }

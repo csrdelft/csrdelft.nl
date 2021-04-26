@@ -8,6 +8,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\repository\ProfielRepository;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PasfotoController extends AbstractController {
@@ -23,7 +24,7 @@ class PasfotoController extends AbstractController {
 	/**
 	 * @param $uid
 	 * @param string $vorm
-	 * @return BinaryFileResponse|\Symfony\Component\HttpFoundation\RedirectResponse
+	 * @return BinaryFileResponse|RedirectResponse
 	 * @Route("/profiel/pasfoto/{uid}.jpg", methods={"GET"}, requirements={"uid": ".{4}"}, defaults={"vorm": "civitas"})
 	 * @Route("/profiel/pasfoto/{uid}.{vorm}.jpg", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)

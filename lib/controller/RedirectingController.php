@@ -3,11 +3,12 @@
 
 namespace CsrDelft\controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class RedirectingController extends AbstractController
 {
-	public function removeTrailingSlashAction(Request $request)
+	public function removeTrailingSlashAction(Request $request): RedirectResponse
 	{
 		$pathInfo = $request->getPathInfo();
 		$requestUri = $request->getRequestUri();

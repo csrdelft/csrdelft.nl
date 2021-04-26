@@ -21,15 +21,7 @@ class ToestemmingRegel
 	/** @var string */
 	public $default;
 
-	public function __construct(
-		string $module,
-		string $id,
-		string $type,
-		string $opties,
-		string $label,
-		string $waarde,
-		string $default
-	)
+	public function __construct($module, $id, $type, $opties, $label, $waarde, $default)
 	{
 		$this->module = $module;
 		$this->id = $id;

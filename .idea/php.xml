@@ -187,6 +187,7 @@
       <path value="$PROJECT_DIR$/vendor/amphp/amp" />
       <path value="$PROJECT_DIR$/vendor/weirdan/doctrine-psalm-plugin" />
       <path value="$PROJECT_DIR$/vendor/psalm/plugin-symfony" />
+      <path value="$PROJECT_DIR$/vendor/phpstan/phpstan" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3">
@@ -204,7 +205,7 @@
   </component>
   <component name="Psalm">
     <Psalm_settings>
-      <PsalmConfiguration tool_path="$PROJECT_DIR$/vendor/bin/psalm" />
+      <PsalmConfiguration tool_path="$PROJECT_DIR$/vendor/bin/psalm" timeout="60000" />
     </Psalm_settings>
   </component>
 </project>
