@@ -21,5 +21,6 @@
 	</mockClasses>
 	<plugins>
 		<pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
-	<pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/></plugins>
+		<pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
+	</plugins>
 </psalm>

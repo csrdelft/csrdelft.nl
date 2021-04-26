@@ -2,8 +2,6 @@
 
 namespace CsrDelft\view\formulier;
 
-use HTTPClient;
-
 /**
  * UrlDownloader.class.php
  *
@@ -30,10 +28,8 @@ class UrlDownloader {
 	public function file_get_contents($url) {
 		if ($this->file_get_contents_available()) {
 			return @file_get_contents($url);
-		} elseif (function_exists('curl_init')) {
-			return $this->curl_file_get_contents($url);
 		} else {
-			return $this->dokuhttpclient_get_contents($url);
+			return $this->curl_file_get_contents($url);
 		}
 	}
 
@@ -56,19 +52,6 @@ class UrlDownloader {
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		return curl_exec($ch);
-	}
-
-	/**
-	 * DokuWiki heeft een complete fsocket gebaseerde downloader
-	 *
-	 * @param $url
-	 * @return bool|string
-	 */
-	protected function dokuhttpclient_get_contents($url) {
-		require_once HTDOCS_PATH . 'wiki/inc/HTTPClient.php';
-		$http = new HTTPClient();
-		$http->timeout = 12;
-		return $http->get($url);
 	}
 
 	/**
