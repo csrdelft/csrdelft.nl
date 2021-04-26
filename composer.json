@@ -58,7 +58,8 @@
 		"twig/cssinliner-extra": "^3.3",
 		"trikoder/oauth2-bundle": "3.x-dev",
 		"nyholm/psr7": "^1.4",
-		"symfony/uid": "^5.0"
+		"symfony/uid": "^5.0",
+		"vimeo/psalm": "^4.7"
 	},
 	"config": {
 		"platform": {
@@ -79,7 +80,6 @@
 		"lib/"
 	],
 	"require-dev": {
-		"phpstan/phpstan": "*",
 		"symfony/profiler-pack": "*",
 		"doctrine/doctrine-fixtures-bundle": "^3.3",
 		"symfony/maker-bundle": "^1.19",
@@ -89,7 +89,9 @@
 		"spatie/phpunit-snapshot-assertions": "^3.0",
 		"symfony/browser-kit": "^5.0",
 		"symfony/css-selector": "^5.0",
-		"symfony/panther": "^0.8.0"
+		"symfony/panther": "^0.8.0",
+		"weirdan/doctrine-psalm-plugin": "^1.0",
+		"psalm/plugin-symfony": "^2.2"
 	},
 	"scripts": {
 		"serve": [
@@ -99,7 +101,7 @@
 		"migrate": "@console doctrine:migrations:migrate --allow-no-migration --no-interaction",
 		"generator": "@php bin/dev/generate.php",
 		"flushcache": "@console stek:cache:flush",
-		"analyse": "@php vendor/phpstan/phpstan/phpstan --memory-limit=1000M analyse -l 4 -c phpstan.neon lib htdocs",
+		"analyze": "@php vendor/vimeo/psalm/psalm",
 		"test": "@php vendor/phpunit/phpunit/phpunit --bootstrap ./phpunit.init.php tests",
 		"console": "@php bin/console",
 		"update-prod": [
