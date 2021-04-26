@@ -21,6 +21,8 @@ _Als je in de PubCie zit en je hebt geen toegang tot de database, zorg er dan vo
 
 Installeer de volgende programma's:
 
+_Je kan deze progamma's allemaal tegelijk downloaden en installeren, behalve als dat anders staat aangegeven_
+
 - [wampserver](https://sourceforge.net/projects/wampserver/)
   - Komt met Apache2, Mariadb en PHP
   - wampserver komt met een iets vriendelijkere gebruikersinterface en wordt verder in deze uitleg gebruikt.
@@ -31,6 +33,7 @@ Installeer de volgende programma's:
   - Om de sourcecode te downloaden en veranderingen te maken
   - De [GitHub Desktop](https://desktop.github.com/) client is een toegankelijke manier van git gebruiken (aanbevolen als je niet eerder met git hebt gewerkt)
 - [composer](https://getcomposer.org)
+  - Installeer eerst wampserver voordat je composer installeert.
   - De PHP dependency manager
 - [Node.js](https://nodejs.org/en/download/)
   - Een JS runtime
