@@ -107,7 +107,7 @@ Nu is de server ingesteld, nu moet de code nog goed geinstalleerd worden.
 
 ### 2.2: PhpStorm instellen
 
-Open het project in PhpStorm. Als het goed is worden dan de `[composer] Startup` en `[yarn] Startup` taken uitgevoerd in de Run tab onderin. Als dit niet het geval is kun je ze zelf nog uitvoeren.
+Open het project in PhpStorm. De eerste keer moet je de startup tasks 'Allowen', klik hiervoor onderin om de event log te openen en klik op 'Allow'. Als het goed is worden dan de `[composer] Startup` en `[yarn] Startup` taken uitgevoerd in de Run tab onderin. Als dit niet het geval is kun je ze zelf nog uitvoeren.
 
 _Iedere keer bij het opstarten van PhpStorm worden de Startup tasks uitgevoerd._
 
