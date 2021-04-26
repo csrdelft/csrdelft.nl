@@ -9,6 +9,7 @@ use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\AccessService;
+use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\WachtwoordResetAuthenticator;
 use CsrDelft\view\login\WachtwoordVergetenForm;
@@ -41,17 +42,23 @@ class WachtwoordController extends AbstractController {
 	 * @var AccessService
 	 */
 	private $accessService;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
 	public function __construct(
 		LoginService $loginService,
 		AccountRepository $accountRepository,
 		OneTimeTokensRepository $oneTimeTokensRepository,
-		AccessService $accessService
+		AccessService $accessService,
+		MailService $mailService
 	) {
 		$this->loginService = $loginService;
 		$this->accountRepository = $accountRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->accessService = $accessService;
+		$this->mailService = $mailService;
 	}
 
 	/**
@@ -165,6 +172,6 @@ class WachtwoordController extends AbstractController {
 		]);
 		$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
 		$mail = new Mail(array($account->email => $emailNaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
-		$mail->send();
+		$this->mailService->send($mail);
 	}
 }

@@ -21,6 +21,7 @@ use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
@@ -61,6 +62,10 @@ class ProfielRepository extends AbstractRepository {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
 	public function __construct(
 		ManagerRegistry $registry,
@@ -68,7 +73,8 @@ class ProfielRepository extends AbstractRepository {
 		Environment $twig,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
-		BoekExemplaarRepository $boekExemplaarModel
+		BoekExemplaarRepository $boekExemplaarModel,
+		MailService $mailService
 	) {
 		parent::__construct($registry, Profiel::class);
 
@@ -77,6 +83,7 @@ class ProfielRepository extends AbstractRepository {
 		$this->boekExemplaarModel = $boekExemplaarModel;
 		$this->security = $security;
 		$this->twig = $twig;
+		$this->mailService = $mailService;
 	}
 
 	public static function changelog(array $diff, $uid) {
@@ -332,7 +339,7 @@ class ProfielRepository extends AbstractRepository {
 			]);
 			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
 			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-			$mail->send();
+			$this->mailService->send($mail);
 		}
 		return $changes;
 	}
@@ -366,7 +373,7 @@ class ProfielRepository extends AbstractRepository {
 		$mail = new Mail($to, 'Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
 
-		return $mail->send();
+		return $this->mailService->send($mail);
 	}
 
 	/**
@@ -433,7 +440,7 @@ class ProfielRepository extends AbstractRepository {
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
 
-		return $mail->send();
+		return $this->mailService->send($mail);
 	}
 
 	/**

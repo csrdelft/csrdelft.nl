@@ -8,6 +8,7 @@ use CsrDelft\common\Mail;
 use CsrDelft\controller\WachtwoordController;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
+use CsrDelft\service\MailService;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -25,7 +27,8 @@ use Twig\Environment;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 2020-08-09
  */
-class WachtwoordResetAuthenticator extends AbstractAuthenticator {
+class WachtwoordResetAuthenticator extends AbstractAuthenticator
+{
 	/**
 	 * @var OneTimeTokensRepository
 	 */
@@ -42,19 +45,33 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
-	public function __construct(HttpUtils  $httpUtils, Environment $twig, OneTimeTokensRepository $oneTimeTokensRepository, AccountRepository $accountRepository) {
+	public function __construct(
+		HttpUtils $httpUtils,
+		Environment $twig,
+		OneTimeTokensRepository $oneTimeTokensRepository,
+		AccountRepository $accountRepository,
+		MailService $mailService
+	)
+	{
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->httpUtils = $httpUtils;
 		$this->accountRepository = $accountRepository;
 		$this->twig = $twig;
+		$this->mailService = $mailService;
 	}
 
-	public function supports(Request $request): ?bool {
+	public function supports(Request $request): ?bool
+	{
 		return $request->getSession()->has('wachtwoord_reset_token');
 	}
 
-	public function authenticate(Request $request): PassportInterface {
+	public function authenticate(Request $request): PassportInterface
+	{
 		$token = $request->getSession()->get('wachtwoord_reset_token');
 
 		$user = $this->oneTimeTokensRepository->verifyToken('/wachtwoord/reset', $token);
@@ -64,7 +81,7 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator {
 			throw new AuthenticationException();
 		}
 
-		$form = new WachtwoordWijzigenForm($user, $this->httpUtils->generateUri($request,'wachtwoord_reset'), false);
+		$form = new WachtwoordWijzigenForm($user, $this->httpUtils->generateUri($request, 'wachtwoord_reset'), false);
 
 		if ($form->validate()) {
 			// wachtwoord opslaan
@@ -82,20 +99,26 @@ class WachtwoordResetAuthenticator extends AbstractAuthenticator {
 			$bericht = $this->twig->render('mail/bericht/wachtwoordresetsucces.mail.twig', [
 				'naam' => $profiel->getNaam('civitas'),
 			]);
-			$mail = new Mail(array($user->email => $profiel->getNaam('volledig')), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
-			$mail->send();
+			$mail = new Mail(array($user->email => $profiel->getNaam()), '[C.S.R. webstek] Nieuw wachtwoord ingesteld', $bericht);
+			$this->mailService->send($mail);
 
-			return new SelfValidatingPassport($user);
+			$badge = new UserBadge($user->getUsername(), function () use ($user) {
+				return $user;
+			});
+
+			return new SelfValidatingPassport($badge);
 		}
 
 		throw new AuthenticationException();
 	}
 
-	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response {
+	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+	{
 		return new RedirectResponse($this->httpUtils->generateUri($request, 'default'));
 	}
 
-	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response {
+	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+	{
 		return null;
 	}
 }

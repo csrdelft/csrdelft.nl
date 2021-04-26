@@ -2,10 +2,6 @@
 
 namespace CsrDelft\common;
 
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
-
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
@@ -15,7 +11,6 @@ use Twig\Error\SyntaxError;
  */
 class Mail
 {
-
 	/** @var string */
 	private $onderwerp;
 	/** @var string */
@@ -84,63 +79,6 @@ class Mail
 			// Geen speciale tekens in naam vanwege spamfilters
 			$this->bcc[$this->productionSafe($email)] = filter_var($name, FILTER_SANITIZE_STRING);
 		}
-	}
-
-	/**
-	 * @param bool $debug
-	 * @return bool
-	 * @throws LoaderError
-	 * @throws RuntimeError
-	 * @throws SyntaxError
-	 */
-	public function send(): bool
-	{
-		$twig = ContainerFacade::getContainer()->get('twig');
-		$boundary = uniqid('csr_');
-
-		$htmlBody = $twig->render('mail/letter.mail.twig', ['bericht' => $this->bericht]);
-		$plainBody = $twig->render('mail/plain.mail.twig', ['bericht' => $this->bericht]);
-
-		$headers = $this->getHeaders();
-		$headers .= "\r\nContent-Type: multipart/alternative;boundary=\"$boundary\"\r\n";
-
-		$body = <<<MAIL
-This is a mime encode message
-
---$boundary
-Content-Type: text/plain;charset="utf-8"
-
-$plainBody
-
---$boundary
-Content-Type: text/html;charset="utf-8"
-
-$htmlBody
-
---$boundary--
-MAIL;
-		$body = str_replace("\n", "\r\n", $body);
-
-		if ($this->inDebugMode()) {
-			setMelding($htmlBody, 0);
-			return false;
-		}
-		return mail($this->getTo(), $this->getSubject(), $body, $headers, $this->getExtraparameters());
-	}
-
-	public function getHeaders(): string
-	{
-		$headers = [];
-		$headers[] = 'MIME-Version: 1.0';
-		$headers[] = 'From: ' . $this->getFrom();
-		if (!empty($this->replyTo)) {
-			$headers[] = 'Reply-To: ' . $this->getReplyTo();
-		}
-		if (!empty($this->bcc)) {
-			$headers[] = 'Bcc: ' . $this->getBcc();
-		}
-		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
-		return implode("\r\n", $headers);
 	}
 
 	/**
@@ -233,8 +171,11 @@ MAIL;
 		return $subject;
 	}
 
-	public function getExtraparameters(): string
+	/**
+	 * @return string
+	 */
+	public function getBericht(): string
 	{
-		return '-f ' . $this->getFrom(true);
+		return $this->bericht;
 	}
 }

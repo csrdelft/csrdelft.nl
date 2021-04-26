@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\Mail;
 use CsrDelft\common\SimpleSpamFilter;
+use CsrDelft\service\MailService;
 use CsrDelft\view\PlainView;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,6 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
  * @since 19/12/2018
  */
 class ContactFormulierController extends AbstractController {
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
+
+	public function __construct(MailService $mailService) {
+		$this->mailService = $mailService;
+	}
 	/**
 	 * @return PlainView
 	 * @Route("/contactformulier/interesse", methods={"POST"})
@@ -77,7 +86,7 @@ De PubCie.
 
 		$mail = new Mail([$_ENV['EMAIL_OWEECIE'] => "OweeCie"], "Interesseformulier", $bericht);
 		$mail->setFrom($email);
-		$mail->send();
+		$this->mailService->send($mail);
 
 		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
 	}
@@ -126,7 +135,7 @@ De PubCie.
 
 		$mail = new Mail($bestemming, "Lid worden formulier", $bericht);
 		$mail->setFrom($_ENV['EMAIL_PUBCIE']);
-		$mail->send();
+		$this->mailService->send($mail);
 
 		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
 	}
