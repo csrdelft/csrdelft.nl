@@ -30,18 +30,18 @@ Installeer de volgende programma's:
   - De [GitHub Desktop](https://desktop.github.com/) client is een toegankelijke manier van git gebruiken (aanbevolen als je niet eerder met git hebt gewerkt)
 - [composer](https://getcomposer.org)
   - De PHP dependency manager
-- [Node.js](https://nodejs.org/en/)
+- [Node.js](https://nodejs.org/en/download/)
   - Een JS runtime
   - Download de LTS-versie als je node.js alleen voor de stek download.
 - [yarn 2](https://yarnpkg.com/getting-started/install)
   - De JS dependency manager
-	- Doe dit door "Powershell" te starten en `npm install -g yarn` uit te voeren in dit venster
+  - Doe dit door "Powershell" te starten in windows en `npm install -g yarn` uit te voeren in dit venster
 - [PhpStorm](https://www.jetbrains.com/phpstorm/)
-  - Een goede IDE van Jetbrains, pro versie is gratis voor studenten
+  - Een goede IDE van Jetbrains. Pro versie is gratis voor studenten, je kan activeren met je studentenmail.
   - [Visual Studio Code](https://code.visualstudio.com/) is een redelijk alternatief, maar gebruikt dit alleen als je je er echt thuis in voelt.
-- [HeidiSQL](https://www.heidisql.com/download.php)
+- OPTIONEEL: [HeidiSQL](https://www.heidisql.com/download.php)
   - Een chille sql client
-  - Veel sql clients kunnen niet met Syrinx (productie) verbinden, deze wel
+  - Je kan ook de interne sql client van PhpStorm gebruiken
 
 ## Stap 1: Ophalen van de broncode
 
