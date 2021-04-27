@@ -13,7 +13,7 @@ class UrlField extends TextField {
 
 	public function getValue() {
 		$this->value = parent::getValue();
-		if (str_starts_with($this->value, CSR_ROOT)) {
+		if ($this->value && str_starts_with($this->value, CSR_ROOT)) {
 			$this->value = str_replace(CSR_ROOT, '', $this->value);
 		}
 		return $this->value;
