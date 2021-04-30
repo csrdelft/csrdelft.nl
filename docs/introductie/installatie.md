@@ -188,6 +188,10 @@ Op deze manier kun je ook inloggen op andere accounts, zonder SU (switch user) t
 
 Bij de fixtures kun je uid `x101` gebruiken om in te loggen.
 
+## Verder lezen
+
+Zie de [Ontwikkelen](./ontwikkelen.md) pagina voor tips bij het maken van veranderingen aan de stek.	
+
 ## Extra dingen
 
 Er zijn nog een aantal optionele onderdelen die je kan installeren. Deze onderdelen worden gebruikt door specifieke onderdelen (zoals het fotoalbum) of kunnen je helpen bij het ontwikkelen van de stek.
