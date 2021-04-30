@@ -9,7 +9,22 @@ title: Symfony
 
 De stek draait op de Symfony stack. Kijk op [symfony.com](https://symfony.com) voor meer informatie over Symfony.
 
+Kijk in de [Getting Started](https://symfony.com/doc/current/index.html) categorie van de Symfony documentatie, hier staat uitgelegd hoe je dingen met moet doen.  De [Charming Development in Symfony 5](https://symfonycasts.com/screencast/symfony) screencasts zijn ook een goed startpunt. De meeste dingen zijn een-op-een toe te passen op de stek.
+
 Kijk naar de [Best Practices](https://symfony.com/doc/current/best_practices.html) op de Symfony website.
+
+We gebruiken **YAML** voor configuratie en **Annotations** voor routes en entities.
+
+## Afwijkingen van Symfony
+
+Omdat Symfony in stappen is/wordt geintroduceerd in de stek is (nog) niet alles precies volgens het boekje.
+
+- Geen `symfony/assets`, dit moet nog gefixt worden
+- Geen `Webpack Encore`, de webpack setup die we hebben werkt prima.
+- Geen `symfony/mailer`, misschien nog overstappen, huidige mailoplossing werkt nog prima.
+- Nog maar op een paar plekken `symfony/form`, overstap gaat stroef, een aantal formfields moeten hier nog naar geport worden
+- Geen `symfony/ldap`, eigen implementatie, zou misschien vervangen kunnen worden.
+- Geen Symfony flash messages, eigen implementatie met `getMelding/setMelding`, moet nog omgebouwd worden.
 
 ## Kernel
 
