@@ -11,6 +11,8 @@ De stek draait op de Symfony stack. Kijk op [symfony.com](https://symfony.com) v
 
 Kijk in de [Getting Started](https://symfony.com/doc/current/index.html) categorie van de Symfony documentatie, hier staat uitgelegd hoe je dingen met moet doen.  De [Charming Development in Symfony 5](https://symfonycasts.com/screencast/symfony) screencasts zijn ook een goed startpunt. De meeste dingen zijn een-op-een toe te passen op de stek.
 
+Als je een deep-dive in Symfony wil kun je het boek [Symfony5: The Fast Track](https://symfony.com/book) lezen (gratis te lezen, ook in het Nederlands). Dit boek gaat veel verder dan wat we nu met de stek doen en gaat ook in op Symfony cloud.
+
 Kijk naar de [Best Practices](https://symfony.com/doc/current/best_practices.html) op de Symfony website.
 
 We gebruiken **YAML** voor configuratie en **Annotations** voor routes en entities.
