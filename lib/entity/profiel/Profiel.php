@@ -591,6 +591,10 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 			return $this->getTitel() . ' wordt geboren';
 		}
 
+		if ($leeftijd < 0) {
+			return $this->getTitel() . ' wordt over ' . ($leeftijd * -1) . ' jaar geboren.';
+		}
+
 		return $this->getTitel() . ' wordt ' . $leeftijd . ' jaar';
 	}
 
