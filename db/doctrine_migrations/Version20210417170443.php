@@ -128,6 +128,17 @@ INNER JOIN groep AS a ON a.oud_id = d.groep_id AND a.groep_type = 'woonoord'");
 		$this->addSql('DELETE FROM bewoners');
 		$this->addSql('DELETE FROM woonoorden');
 
+		$this->addSql("
+INSERT INTO groep (groep_type, oud_id, maker_uid, soort, naam, familie, begin_moment, eind_moment, status, samenvatting, omschrijving, keuzelijst, versie, keuzelijst2 )
+SELECT 'ondervereniging', id, maker_uid, soort, naam, familie, begin_moment, eind_moment, status, samenvatting, omschrijving, keuzelijst, versie, keuzelijst2
+FROM onderverenigingen");
+		$this->addSql("
+INSERT INTO groep_lid (groep_id, uid, door_uid, opmerking, opmerking2, lid_sinds)
+SELECT a.id, uid, door_uid, opmerking, opmerking2, lid_sinds FROM ondervereniging_leden AS d
+INNER JOIN groep AS a ON a.oud_id = d.groep_id AND a.groep_type = 'ondervereniging'");
+		$this->addSql('DELETE FROM ondervereniging_leden');
+		$this->addSql('DELETE FROM onderverenigingen');
+
 		$this->addSql("UPDATE eetplan SET woonoord_id = (SELECT id FROM groep WHERE groep_type = 'woonoord' AND oud_id = woonoord_id)");
 		$this->addSql('ALTER TABLE eetplan ADD CONSTRAINT FK_EC97E0BBF0C31BC7 FOREIGN KEY (woonoord_id) REFERENCES groep (id)');
 	}
