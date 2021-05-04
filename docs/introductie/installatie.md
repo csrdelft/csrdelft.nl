@@ -107,6 +107,36 @@ Nu is de server ingesteld, nu moet de code nog goed geinstalleerd worden.
 
 **Wampserver moet aan staan als je je lokale stek wil bekijken**
 
+<details>
+<summary><strong>Niet-Windows / Wampserver</strong></summary>
+
+Draai je geen Windows of heb je geen wampserver, dan zul je zelf de VirtualHost in moeten stellen in Apache2.
+
+Zoek hiervoor de configuratie bestanden van Apache2 op, bij unix-achtige systemen is dit meestal `/etc/apache2`, in deze map staat in ieder geval `httpd.conf`.
+
+Voeg een nieuw bestand toe in `/etc/apache2/sites-enabled/csrdelft.nl` met de volgende inhoud. Zorg ervoor dat de path bij DocumentRoot en Directory klopt met waar jij je spullen hebt neergezet.
+
+<pre>
+&lt;VirtualHost *:80>
+	ServerName dev-csrdelft.nl
+	DocumentRoot "/home/feut/projects/csrdelft.nl/htdocs"
+	&lt;Directory  "/home/feut/projects/csrdelft.nl/htdocs/">
+		Options +Indexes +Includes +FollowSymLinks +MultiViews
+		AllowOverride All
+		Require local
+		Allow from 10.0.0
+	&lt;/Directory>
+&lt;/VirtualHost>
+</pre>
+
+Open daarna `/etc/apache2/httpd.conf` en zoek naar `headers_module` haal het hekje (`#`) aan het begin van de regel weg.
+
+Zorg ervoor dat de `www-data` gebruiker mag lezen in de map die je hebt gekozen voor je project.
+
+Herstart hierna apache2 met (op Ubuntu): `sudo service apache2 reload`.
+
+</details>
+
 ### 2.2: PhpStorm instellen
 
 Open het project in PhpStorm. De eerste keer moet je de startup tasks 'Allowen', klik hiervoor onderin om de event log te openen en klik op 'Allow'. Als het goed is worden dan de `[composer] Startup` en `[yarn] Startup` taken uitgevoerd in de Run tab onderin. Als dit niet het geval is kun je ze zelf nog uitvoeren.
@@ -190,7 +220,7 @@ Bij de fixtures kun je uid `x101` gebruiken om in te loggen.
 
 ## Verder lezen
 
-Zie de [Ontwikkelen](./ontwikkelen.md) pagina voor tips bij het maken van veranderingen aan de stek.	
+Zie de [Ontwikkelen](./ontwikkelen.md) pagina voor tips bij het maken van veranderingen aan de stek.
 
 ## Extra dingen
 
