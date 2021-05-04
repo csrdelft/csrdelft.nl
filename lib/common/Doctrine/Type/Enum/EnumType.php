@@ -22,6 +22,10 @@ abstract class EnumType extends Type {
 	}
 
 	public function convertToPHPValue($value, AbstractPlatform $platform) {
+		if ($value == null) {
+			return null;
+		}
+
 		$enumClass = $this->getEnumClass();
 		return $enumClass::from($value);
 	}
