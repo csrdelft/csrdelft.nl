@@ -20,6 +20,14 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\PlainView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -384,5 +392,29 @@ class ToolsController extends AbstractController
 		return $this->render('default.html.twig', [
 			'content' => new SavedQueryContent($result),
 		]);
+	}
+
+	/**
+	 * @param Request $request
+	 * @Route("/tools/qr", methods={"GET"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function qr(Request $request) {
+		$result = Builder::create()
+			->writer(new PngWriter())
+			->writerOptions([])
+			->data('https://csrdelft.nl/remote-authorize')
+			->encoding(new Encoding('UTF-8'))
+			->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+//			->size(300)
+//			->margin(10)
+			->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+//			->logoPath(__DIR__.'/assets/symfony.png')
+//			->labelText('This is the label')
+//			->labelFont(new NotoSans(20))
+//			->labelAlignment(new LabelAlignmentCenter())
+			->build();
+
+		return new Response($result->getString(), 200, ['Content-Type' => $result->getMimeType()]);
 	}
 }

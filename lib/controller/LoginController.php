@@ -78,6 +78,32 @@ class LoginController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/remote_login")
+	 * @Auth(P_PUBLIC)
+	 */
+	public function remoteLogin(Request $request) : Response {
+		return $this->render('extern/remote_login.html.twig', []);
+	}
+
+	/**
+	 * Geeft de huidige status voor een remote_login sessie weer.
+	 *
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/remote_login_status", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function remoteLoginStatus(Request $request): Response {
+		$status = $request->getSession()->get('remote_login_status');
+
+		return $this->json([
+			'status' => $status
+		]);
+	}
+
+	/**
 	 * @Route("/login_check", name="app_login_check", methods={"POST"})
 	 * @Route("/{_locale<%app.supported_locales%>}/login_check", name="app_login_check", methods={"POST"})
 	 * @Auth(P_PUBLIC)
