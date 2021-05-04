@@ -21,6 +21,11 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class GroepLid
 {
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("UUID")
+	 */
 	public function getUUID() {
 		return $this->groepId . '.' . $this->uid . '@' . strtolower(short_class($this)) . '.csrdelft.nl';
 	}

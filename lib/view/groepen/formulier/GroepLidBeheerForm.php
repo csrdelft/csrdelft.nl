@@ -18,7 +18,7 @@ class GroepLidBeheerForm extends ModalForm {
 		$fields = FormFieldFactory::generateFields($this->model);
 
 		unset($fields['uid']);
-		unset($fields['groep_id']);
+		unset($fields['groepId']);
 
 		if ($blacklist !== null) {
 			$fields['profiel']->blacklist = $blacklist;
@@ -26,9 +26,9 @@ class GroepLidBeheerForm extends ModalForm {
 			$fields['profiel']->readonly = false;
 		}
 		$fields['profiel']->hidden = false;
-		$fields['door_uid']->required = true;
-		$fields['door_uid']->readonly = true;
-		$fields['door_uid']->hidden = true;
+		$fields['doorUid']->required = true;
+		$fields['doorUid']->readonly = true;
+		$fields['doorUid']->hidden = true;
 
 		$fields['profiel']->readonly = false;
 		$fields['profiel']->suggestions = ['/tools/naamsuggesties?zoekin=alleleden&q='];
