@@ -109,10 +109,10 @@
 			"git fetch",
 			"touch .onderhoud",
 			"git merge FETCH_HEAD",
-			"@composer dump-env prod",
-			"@migrate",
 			"rm -r ./var/cache",
+			"@composer dump-env prod",
 			"@flushcache",
+			"@migrate",
 			"rm .onderhoud",
 			"@console cache:warmup"
 		],
