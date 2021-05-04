@@ -56,7 +56,7 @@ class GroepLid
 	public $profiel;
 	/**
 	 * CommissieFunctie of opmerking bij lidmaatschap
-	 * @var CommissieFunctie
+	 * @var CommissieFunctie|string
 	 * @ORM\Column(type="string", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */

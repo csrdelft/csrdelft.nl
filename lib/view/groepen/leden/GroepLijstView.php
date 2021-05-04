@@ -45,7 +45,7 @@ class GroepLijstView extends GroepTabView {
 				$form = new GroepBewerkenForm($lid, $this->groep);
 				$html .= $form->getHtml();
 			} else {
-				$html .= $lid->opmerking->getValue();
+				$html .= $lid->opmerking;
 			}
 			$html .= '</td></tr>';
 		}

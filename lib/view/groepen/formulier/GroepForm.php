@@ -143,7 +143,7 @@ class GroepForm extends ModalForm {
 		}
 
 		$fields = $this->getFields();
-		if ($fields['eindMoment']->getValue() !== null and strtotime($fields['eindMoment']->getValue()) < strtotime($fields['beginMoment']->getValue())) {
+		if (isset($fields['eindMoment']) && $fields['eindMoment']->getValue() !== null and strtotime($fields['eindMoment']->getValue()) < strtotime($fields['beginMoment']->getValue())) {
 			$fields['eindMoment']->error = 'Eindmoment moet na beginmoment liggen';
 		}
 		if ($groep instanceof Ketzer) {
