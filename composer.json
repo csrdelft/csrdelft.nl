@@ -59,7 +59,8 @@
 		"trikoder/oauth2-bundle": "3.x-dev",
 		"nyholm/psr7": "^1.4",
 		"symfony/uid": "^5.0",
-		"vimeo/psalm": "^4.7"
+		"vimeo/psalm": "^4.7",
+		"nelmio/cors-bundle": "^2.1"
 	},
 	"config": {
 		"platform": {

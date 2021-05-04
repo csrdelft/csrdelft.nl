@@ -10,6 +10,8 @@ trikoder_oauth2:
 
   scopes:
     - PROFIEL:EMAIL
+    - BAR:NORMAAL
+    - BAR:BEHEER
 
   persistence:
     doctrine: null
