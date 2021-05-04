@@ -3,11 +3,11 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Verticale;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class VerticalenRepository extends AbstractGroepenRepository {
+class VerticalenRepository extends GroepRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Verticale::class);
 	}
@@ -43,5 +43,4 @@ class VerticalenRepository extends AbstractGroepenRepository {
 		$verticale->letter = null;
 		return $verticale;
 	}
-
 }

@@ -3,8 +3,8 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\groepen\AbstractGroep;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\datatable\DataTable;
@@ -18,14 +18,14 @@ use CsrDelft\view\datatable\Multiplicity;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @property-read AbstractGroep $model
+ * @property-read Groep $model
  */
 class GroepenBeheerTable extends DataTable {
 
 	private $naam;
 	private $pagina;
 
-	public function __construct(AbstractGroepenRepository $repository) {
+	public function __construct(GroepRepository $repository) {
 		parent::__construct($repository->entityClass, $repository->getUrl() . '/beheren', null);
 
 		$this->selectEnabled = false;

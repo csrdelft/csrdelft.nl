@@ -4,10 +4,10 @@ namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepTab;
 use CsrDelft\entity\security\enum\AccessAction;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\repository\groepen\BesturenRepository;
 use CsrDelft\view\cms\CmsPaginaView;
@@ -20,7 +20,7 @@ class GroepenView implements View {
 
 	private $model;
 	/**
-	 * @var AbstractGroep[]
+	 * @var Groep[]
 	 */
 	private $groepen;
 	/**
@@ -32,10 +32,10 @@ class GroepenView implements View {
 	private $pagina;
 
 	public function __construct(
-		AbstractGroepenRepository $model,
-		$groepen,
-		$soort = null,
-		$geschiedenis = false
+        GroepRepository $model,
+        $groepen,
+        $soort = null,
+        $geschiedenis = false
 	) {
 		$this->model = $model;
 		$this->groepen = $groepen;
@@ -71,8 +71,8 @@ class GroepenView implements View {
 		$model = $this->model;
 		$orm = $model->entityClass;
 		$html = '';
-		if ($orm::magAlgemeen(AccessAction::Aanmaken, null, $this->soort)) {
-			$html .= '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort . '">' . Icon::getTag('add') . ' Toevoegen</a>';
+		if ($orm::magAlgemeen(AccessAction::Aanmaken(), null, $this->soort)) {
+			$html .= '<a class="btn" href="' . $this->model->getUrl() . '/nieuw/' . $this->soort->getValue() . '">' . Icon::getTag('add') . ' Toevoegen</a>';
 		}
 		$html .= '<a class="btn" href="' . $this->model->getUrl() . '/beheren">' . Icon::getTag('table') . ' Beheren</a>';
 		if ($this->geschiedenis) {
@@ -82,7 +82,7 @@ class GroepenView implements View {
 		$html .= $view->__toString();
 		foreach ($this->groepen as $groep) {
 			// Controleer rechten
-			if (!$groep->mag(AccessAction::Bekijken)) {
+			if (!$groep->mag(AccessAction::Bekijken())) {
 				continue;
 			}
 			$html .= '<hr>';

@@ -9,10 +9,10 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepTab;
 use CsrDelft\entity\security\enum\AccessAction;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\groepen\leden\GroepEetwensView;
@@ -30,7 +30,7 @@ class GroepView implements FormElement, ToResponse {
 	private $geschiedenis;
 	private $bbAan;
 
-	public function __construct(AbstractGroep $groep, $tab = null, $geschiedenis = false, $bbAan = false) {
+	public function __construct(Groep $groep, $tab = null, $geschiedenis = false, $bbAan = false) {
 		$this->groep = $groep;
 		$this->geschiedenis = $geschiedenis;
 		$this->bbAan = $bbAan;
@@ -45,7 +45,7 @@ class GroepView implements FormElement, ToResponse {
 				break;
 
 			case GroepTab::Statistiek:
-				/** @var AbstractGroepenRepository $repository */
+				/** @var GroepRepository $repository */
 				$repository = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager')->getRepository(get_class($groep));
 				$statistiek = $repository->getStatistieken($groep);
 				$this->leden = new GroepStatistiekView($groep, $statistiek);
@@ -89,14 +89,13 @@ class GroepView implements FormElement, ToResponse {
 			$html .= ' bb-block';
 		}
 		$html .= '"><div id="groep-samenvatting-' . $this->groep->id . '" class="groep-samenvatting">';
-		if ($this->groep->mag(AccessAction::Wijzigen)) {
+		if ($this->groep->mag(AccessAction::Wijzigen())) {
 			$html .= '<div class="float-right"><a class="btn" href="' . $this->groep->getUrl() . '/wijzigen' . '" title="Wijzig ' . htmlspecialchars($this->groep->naam) . '"><span class="fa fa-edit"></span></a></div>';
 		}
 		$html .= '<h3>' . $this->getTitel();
 		if (property_exists($this->groep, 'locatie') AND !empty($this->groep->locatie)) {
 			$html .= ' &nbsp; <a target="_blank" href="https://maps.google.nl/maps?q=' . urlencode($this->groep->locatie) . '" title="' . $this->groep->locatie . '" class="lichtgrijs fa fa-map-marker fa-lg"></a>';
 		}
-		$html .= ' <span class="groep-id-hint">(<a href="' . $this->groep->getUrl() . '">#' . $this->groep->id . '</a>)</span>';
 		$html .= '</h3>';
 		$html .= CsrBB::parse($this->groep->samenvatting);
 		if (!empty($this->groep->omschrijving)) {

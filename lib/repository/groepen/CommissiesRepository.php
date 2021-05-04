@@ -4,10 +4,10 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\enum\CommissieSoort;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class CommissiesRepository extends AbstractGroepenRepository {
+class CommissiesRepository extends GroepRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Commissie::class);
 	}
@@ -18,7 +18,7 @@ class CommissiesRepository extends AbstractGroepenRepository {
 		}
 		/** @var Commissie $commissie */
 		$commissie = parent::nieuw();
-		$commissie->soort = $soort;
+		$commissie->commissieSoort = $soort;
 		return $commissie;
 	}
 }

@@ -14,14 +14,14 @@ class ActiviteitenRepository extends KetzersRepository {
 
 	public function nieuw($soort = null) {
 		if ($soort == null) {
-			$soort = ActiviteitSoort::SjaarsActie()->getValue();
+			$soort = ActiviteitSoort::Vereniging()->getValue();
 		}
 		/** @var Activiteit $activiteit */
 		$activiteit = parent::nieuw();
-		$activiteit->soort = $soort;
-		$activiteit->rechten_aanmelden = null;
+		$activiteit->activiteitSoort = ActiviteitSoort::from($soort);
+		$activiteit->rechtenAanmelden = null;
 		$activiteit->locatie = null;
-		$activiteit->in_agenda = false;
+		$activiteit->inAgenda = false;
 		return $activiteit;
 	}
 }

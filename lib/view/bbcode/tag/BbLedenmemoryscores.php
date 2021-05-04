@@ -3,7 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\groepen\VerticalenRepository;
@@ -18,7 +18,7 @@ use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 class BbLedenmemoryscores extends BbTag {
 
 	/**
-	 * @var AbstractGroep|Lichting|false|null
+	 * @var Groep|Lichting|false|null
 	 */
 	private $groep;
 	private $titel;

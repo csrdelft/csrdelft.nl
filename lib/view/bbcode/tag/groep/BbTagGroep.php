@@ -4,10 +4,10 @@ namespace CsrDelft\view\bbcode\tag\groep;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\security\enum\AccessAction;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
@@ -22,7 +22,7 @@ abstract class BbTagGroep extends BbTag
 {
 
 	/**
-	 * @var AbstractGroepenRepository
+	 * @var GroepRepository
 	 */
 	private $model;
 	/**
@@ -34,7 +34,7 @@ abstract class BbTagGroep extends BbTag
 	 */
 	private $id;
 
-	public function __construct(AbstractGroepenRepository $model, SerializerInterface $serializer)
+	public function __construct(GroepRepository $model, SerializerInterface $serializer)
 	{
 		$this->model = $model;
 		$this->serializer = $serializer;
@@ -50,11 +50,11 @@ abstract class BbTagGroep extends BbTag
 	 */
 	public function isAllowed()
 	{
-		return $this->getGroep()->mag(AccessAction::Bekijken);
+		return $this->getGroep()->mag(AccessAction::Bekijken());
 	}
 
 	/**
-	 * @return AbstractGroep
+	 * @return Groep
 	 * @throws BbException
 	 */
 	private function getGroep()
@@ -86,7 +86,7 @@ abstract class BbTagGroep extends BbTag
 		}
 	}
 
-	protected function groepLight(AbstractGroep $groep, $tag, $leden)
+	protected function groepLight(Groep $groep, $tag, $leden)
 	{
 		return BbHelper::lightLinkBlock($tag, $groep->getUrl(), $groep->naam, $groep->aantalLeden() . ' ' . $leden);
 	}
@@ -110,7 +110,7 @@ abstract class BbTagGroep extends BbTag
 		return $this->groep($groep);
 	}
 
-	protected function groep(AbstractGroep $groep)
+	protected function groep(Groep $groep)
 	{
 		if ($groep->versie == GroepVersie::V2()) {
 			$uid = LoginService::getUid();

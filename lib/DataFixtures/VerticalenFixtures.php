@@ -21,8 +21,8 @@ class VerticalenFixtures extends Fixture {
 			$verticale->letter = $letter;
 			$verticale->naam = ucfirst($faker->unique()->word);
 			$verticale->familie = 'Verticale';
-			$verticale->begin_moment = date_create_immutable();
-			$verticale->eind_moment = null;
+			$verticale->beginMoment = date_create_immutable();
+			$verticale->eindMoment = null;
 			$verticale->status = GroepStatus::HT();
 			$verticale->samenvatting = '';
 			$verticale->maker = $manager->find(Profiel::class, '2020');

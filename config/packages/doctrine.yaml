@@ -24,15 +24,17 @@ doctrine:
           longtext: CsrDelft\common\Doctrine\Type\LongTextType
           uid: CsrDelft\common\Doctrine\Type\UidType
           stringkey: CsrDelft\common\Doctrine\Type\StringKeyType
-          enumOntvangtContactueel: CsrDelft\common\Doctrine\Type\OntvangtContactueelType
-          enumBoekExemplaarStatus: CsrDelft\common\Doctrine\Type\BoekExemplaarStatusType
-          enumCourantCategorie: CsrDelft\common\Doctrine\Type\CourantCategorieType
-          enumForumDraadMeldingNiveau: CsrDelft\common\Doctrine\Type\ForumDraadMeldingNiveauType
-          enumGroepStatus: CsrDelft\common\Doctrine\Type\GroepStatusType
-          enumHuisStatus: CsrDelft\common\Doctrine\Type\HuisStatusType
-          enumCommissieSoort: CsrDelft\common\Doctrine\Type\CommissieSoortType
+          enumOntvangtContactueel: CsrDelft\common\Doctrine\Type\Enum\OntvangtContactueelType
+          enumBoekExemplaarStatus: CsrDelft\common\Doctrine\Type\Enum\BoekExemplaarStatusType
+          enumCourantCategorie: CsrDelft\common\Doctrine\Type\Enum\CourantCategorieType
+          enumForumDraadMeldingNiveau: CsrDelft\common\Doctrine\Type\Enum\ForumDraadMeldingNiveauType
+          enumGroepStatus: CsrDelft\common\Doctrine\Type\Enum\GroepStatusType
+          enumHuisStatus: CsrDelft\common\Doctrine\Type\Enum\HuisStatusType
+          enumCommissieSoort: CsrDelft\common\Doctrine\Type\Enum\CommissieSoortType
           enumGeslacht: CsrDelft\common\Doctrine\Type\Enum\GeslachtType
-          enumGroepVersie: CsrDelft\common\Doctrine\Type\GroepVersieType
+          enumGroepVersie: CsrDelft\common\Doctrine\Type\Enum\GroepVersieType
+          enumOnderverenigingStatus: CsrDelft\common\Doctrine\Type\Enum\OnderverenigingStatusType
+          enumActiviteitSoort: CsrDelft\common\Doctrine\Type\Enum\ActiviteitSoortType
           uuid: Symfony\Bridge\Doctrine\Types\UuidType
         mapping_types:
           enum: string

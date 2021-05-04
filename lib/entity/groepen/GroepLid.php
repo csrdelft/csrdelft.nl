@@ -1,8 +1,8 @@
 <?php
 
+
 namespace CsrDelft\entity\groepen;
 
-use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\entity\groepen\enum\CommissieFunctie;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
@@ -11,20 +11,23 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
-
 /**
- * AbstractGroepLid.php
- *
- * @author P.W.G. Brussee <brussee@live.nl>
- *
- * Een lid van een groep.
- *
- * @ORM\MappedSuperclass()
+ * Class GroepLid
+ * @package CsrDelft\entity\groepen2
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\GroepLidRepository")
+ * @ORM\Table("groep_lid", indexes={
+ *   @ORM\Index(name="lid_sinds", columns={"lid_sinds"})
+ * })
  */
-abstract class AbstractGroepLid implements DataTableEntry {
-
+class GroepLid
+{
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("UUID")
+	 */
 	public function getUUID() {
-		return $this->groep_id . '.' . $this->uid . '@' . strtolower(short_class($this)) . '.csrdelft.nl';
+		return $this->groepId . '.' . $this->uid . '@' . strtolower(short_class($this)) . '.csrdelft.nl';
 	}
 	/**
 	 * Shared primary key
@@ -34,7 +37,7 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	 * @ORM\Id()
 	 * @Serializer\Groups("datatable")
 	 */
-	public $groep_id;
+	public $groepId;
 	/**
 	 * Lidnummer
 	 * Shared primary key
@@ -53,7 +56,7 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	public $profiel;
 	/**
 	 * CommissieFunctie of opmerking bij lidmaatschap
-	 * @var CommissieFunctie
+	 * @var CommissieFunctie|string
 	 * @ORM\Column(type="string", nullable=true)
 	 * @Serializer\Groups("datatable")
 	 */
@@ -70,19 +73,25 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	 * @ORM\Column(type="datetime")
 	 * @Serializer\Groups("datatable")
 	 */
-	public $lid_sinds;
+	public $lidSinds;
 	/**
 	 * Lidnummer van aanmelder
 	 * @var string
 	 * @ORM\Column(type="uid")
 	 */
-	public $door_uid;
+	public $doorUid;
 	/**
 	 * @var Profiel
 	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
 	 * @ORM\JoinColumn(name="door_uid", referencedColumnName="uid")
 	 */
-	public $door_profiel;
+	public $doorProfiel;
+	/**
+	 * @var Groep
+	 * @ORM\ManyToOne(targetEntity="Groep", inversedBy="leden")
+	 * @ORM\JoinColumn(name="groep_id", referencedColumnName="id")
+	 */
+	public $groep;
 	/**
 	 * @return string|null
 	 * @Serializer\Groups("datatable")
@@ -98,7 +107,7 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	 * @Serializer\SerializedName("door_uid")
 	 */
 	public function getDatatableDoorUid() {
-		return ProfielRepository::getLink($this->door_uid);
+		return $this->doorProfiel->getLink();
 	}
 
 	/**
@@ -106,7 +115,7 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	 * @Serializer\Groups("vue")
 	 */
 	public function getLink() {
-		return ProfielRepository::getLink($this->uid);
+		return $this->profiel->getLink();
 	}
 
 	/**
@@ -116,9 +125,4 @@ abstract class AbstractGroepLid implements DataTableEntry {
 	public function getNaam() {
 		return $this->profiel->getNaam();
 	}
-
-	/**
-	 * @return AbstractGroep
-	 */
-	abstract public function getGroep();
 }

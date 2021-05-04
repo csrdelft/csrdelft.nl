@@ -2,7 +2,7 @@
 
 namespace CsrDelft\repository;
 
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\LedenMemoryScore;
 use CsrDelft\service\security\LoginService;use Doctrine\Persistence\ManagerRegistry;
 
@@ -34,7 +34,7 @@ class LedenMemoryScoresRepository extends AbstractRepository {
 		return $score;
 	}
 
-	public function getGroepTopScores(AbstractGroep $groep, $limit = 10) {
+	public function getGroepTopScores(Groep $groep, $limit = 10) {
 		return $this->findBy(['eerlijk' => true, 'groep' => $groep->getUUID()], ['tijd' => 'ASC', 'beurten' => 'DESC'], $limit);
 	}
 

@@ -10,31 +10,38 @@ use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
+use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiAgendaController extends AbstractController {
+class ApiAgendaController extends AbstractController
+{
 	/** @var ActiviteitenRepository */
 	private $activiteitenRepository;
 	/** @var AgendaRepository */
 	private $agendaRepository;
-	/** @var ActiviteitDeelnemersRepository */
-	private $activiteitDeelnemersRepository;
+	/** @var GroepLidRepository */
+	private $groepLidRepository;
 	/** @var MaaltijdenRepository */
 	private $maaltijdenRepository;
 	/** @var MaaltijdAanmeldingenRepository */
 	private $maaltijdAanmeldingenRepository;
 
-	public function __construct(AgendaRepository $agendaRepository, ActiviteitenRepository  $activiteitenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, MaaltijdenRepository  $maaltijdenRepository, ActiviteitDeelnemersRepository $activiteitDeelnemersRepository) {
+	public function __construct(
+		AgendaRepository $agendaRepository,
+		ActiviteitenRepository $activiteitenRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdenRepository $maaltijdenRepository,
+		GroepLidRepository $groepLidRepository
+	) {
 		$this->agendaRepository = $agendaRepository;
 		$this->activiteitenRepository = $activiteitenRepository;
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->maaltijdenRepository = $maaltijdenRepository;
-		$this->activiteitDeelnemersRepository = $activiteitDeelnemersRepository;
+		$this->groepLidRepository = $groepLidRepository;
 	}
 
 	/**
@@ -42,7 +49,8 @@ class ApiAgendaController extends AbstractController {
 	 * @Auth(P_AGENDA_READ)
 	 * @return JsonResponse
 	 */
-	public function getAgenda() {
+	public function getAgenda()
+	{
 		if (!isset($_GET['from']) || !isset($_GET['to'])) {
 			throw new BadRequestHttpException();
 		}
@@ -69,13 +77,13 @@ class ApiAgendaController extends AbstractController {
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
 		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
-			->where('a.in_agenda = true and (a.begin_moment >= :begin and a.begin_moment <= :eind)')
+			->where('a.inAgenda = true and (a.beginMoment >= :begin and a.beginMoment <= :eind)')
 			->setParameter('begin', date_create_immutable("@$from"))
 			->setParameter('eind', date_create_immutable("@$to"))
 			->getQuery()->getResult();
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern(), ActiviteitSoort::OWee(), ActiviteitSoort::IFES())) OR $activiteit->mag(AccessAction::Bekijken)) {
+			if (in_array($activiteit->activiteitSoort, array(ActiviteitSoort::Extern(), ActiviteitSoort::OWee(), ActiviteitSoort::IFES())) or $activiteit->mag(AccessAction::Bekijken())) {
 				$activiteitenFiltered[] = $activiteit;
 			}
 		}
@@ -84,7 +92,7 @@ class ApiAgendaController extends AbstractController {
 		// Activiteit aanmeldingen
 		$activiteitAanmeldingen = array();
 		foreach ($activiteitenFiltered as $activiteit) {
-			$deelnemer = $this->activiteitDeelnemersRepository->get($activiteit, $this->getUid());
+			$deelnemer = $this->groepLidRepository->get($activiteit, $this->getUid());
 			if ($deelnemer) {
 				$activiteitAanmeldingen[] = $deelnemer->groep_id;
 			}

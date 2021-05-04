@@ -181,14 +181,9 @@ class AgendaRepository extends AbstractRepository {
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
-			->where("a.in_agenda = true")
-			->andWhere("(a.begin_moment >= :van and a.begin_moment <= :tot) or (a.eind_moment >= :van and a.eind_moment <= :tot)")
-			->setParameter('van', $van, Types::DATE_IMMUTABLE)
-			->setParameter('tot', $tot, Types::DATE_IMMUTABLE)
-			->getQuery()->getResult();
+		$activiteiten = $this->activiteitenRepository->getGroepenVoorAgenda($van, $tot);
 		foreach ($activiteiten as $activiteit) {
-			if ($activiteit->mag(AccessAction::Bekijken, $auth)) {
+			if ($activiteit->mag(AccessAction::Bekijken(), $auth)) {
 				$result[] = $activiteit;
 			}
 		}

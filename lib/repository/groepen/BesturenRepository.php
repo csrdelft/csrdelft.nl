@@ -3,10 +3,10 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Bestuur;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class BesturenRepository extends AbstractGroepenRepository {
+class BesturenRepository extends GroepRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Bestuur::class);
 	}

@@ -880,7 +880,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	 */
 	public function getWoonoord() {
 		/** @var Woonoord[] $woonoorden */
-		$woonoorden = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		$woonoorden = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->getGroepenVoorLid($this, GroepStatus::HT);
 		if (empty($woonoorden)) {
 			return null;
 		}
@@ -898,7 +898,7 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 	 * @return Kring|null
 	 */
 	public function getKring() {
-		$kringen = ContainerFacade::getContainer()->get(KringenRepository::class)->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		$kringen = ContainerFacade::getContainer()->get(KringenRepository::class)->getGroepenVoorLid($this, GroepStatus::HT);
 		if (empty($kringen)) {
 			return null;
 		}

@@ -2,14 +2,15 @@
 
 namespace CsrDelft\view\groepen;
 
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 
 class GroepenBeheerData extends DataTableResponse {
 
 	/**
-	 * @param AbstractGroep $groep
+	 * @param Groep $groep
 	 * @return string
 	 * @throws Exception
 	 */
@@ -26,14 +27,18 @@ class GroepenBeheerData extends DataTableResponse {
 			}
 		}
 		$array['naam'] = '<span title="' . $title . '">' . $groep->naam . '</span>';
-		$array['status'] = $groep->status->getDescription();
+		if (in_array(GroepMoment::class, class_uses($groep))) {
+			$array['status'] = $groep->status->getDescription();
+		} else {
+			$array['status'] = null;
+		}
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;
 		$array['leden'] = null;
 
-		if (property_exists($groep, 'in_agenda')) {
-			$array['in_agenda'] = $groep->in_agenda ? 'ja' : 'nee';
+		if (property_exists($groep, 'inAgenda')) {
+			$array['inAgenda'] = $groep->inAgenda ? 'ja' : 'nee';
 		}
 
 		return $array;

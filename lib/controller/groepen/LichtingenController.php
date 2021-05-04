@@ -2,8 +2,9 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\repository\groepen\LichtingenRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,8 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
  * @property LichtingenRepository $repository
  */
 class LichtingenController extends AbstractGroepenController {
-	public function __construct(ChangeLogRepository $changeLogRepository, LichtingenRepository $lichtingenRepository) {
-		parent::__construct($changeLogRepository, $lichtingenRepository);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Lichting::class);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {

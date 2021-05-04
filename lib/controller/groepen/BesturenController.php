@@ -2,9 +2,9 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\repository\groepen\BesturenRepository;
+use CsrDelft\entity\groepen\Bestuur;
 use CsrDelft\view\groepen\GroepenView;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * BesturenController.class.php
@@ -14,13 +14,15 @@ use CsrDelft\view\groepen\GroepenView;
  * Controller voor besturen.
  */
 class BesturenController extends AbstractGroepenController {
-	public function __construct(ChangeLogRepository $changeLogRepository, BesturenRepository $besturenRepository) {
-		parent::__construct($changeLogRepository, $besturenRepository);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Bestuur::class);
 	}
 
 	public function overzicht($soort = null) {
+		// Zoek ook op ht
 		$groepen = $this->repository->findBy([]);
-		$body = new GroepenView($this->repository, $groepen, $soort); // controleert rechten bekijken per groep
+		// controleert rechten bekijken per groep
+		$body = new GroepenView($this->repository, $groepen, $soort);
 		return $this->render('default.html.twig', ['content' => $body]);
 	}
 }
