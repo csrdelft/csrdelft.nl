@@ -227,6 +227,10 @@ class Groep implements DataTableEntry, DisplayEntity
 		return $suggesties;
 	}
 
+	public function magWijzigen($allowedAuthenticationMethods = null) {
+		return $this->mag(AccessAction::Wijzigen(), $allowedAuthenticationMethods);
+	}
+
 	/**
 	 * Has permission for action?
 	 *
