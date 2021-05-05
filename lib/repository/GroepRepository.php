@@ -351,4 +351,22 @@ abstract class GroepRepository extends AbstractRepository
 			->setParameter('tot', $tot)
 			->getQuery()->getResult();
 	}
+
+	/**
+	 * Laat een specifieke implementatie ook filteren op soort
+	 *
+	 * @param string|null $soort
+	 * @return Groep[]
+	 */
+	public function overzicht(string $soort = null) {
+		return $this->findBy(['status' => GroepStatus::HT()]);
+	}
+
+	public function beheer(string $soort = null) {
+		return $this->findBy([]);
+	}
+
+	public function parseSoort(string $soort = null) {
+		return null;
+	}
 }

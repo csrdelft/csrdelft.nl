@@ -22,4 +22,29 @@ class OnderverenigingenRepository extends GroepRepository {
 		$ondervereniging->status_historie = '[div]Aangemaakt als ' . $ondervereniging->status->getDescription() . ' door [lid=' . LoginService::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][/div][hr]';
 		return $ondervereniging;
 	}
+
+	public function overzicht(string $soort = null)
+	{
+		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
+			return $this->findBy(['status' => GroepStatus::HT(), 'onderverenigingStatus' => OnderverenigingStatus::from($soort)]);
+		}
+		return parent::overzicht($soort);
+	}
+
+	public function beheer(string $soort = null)
+	{
+		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
+			return $this->findBy(['onderverenigingStatus' => OnderverenigingStatus::from($soort)]);
+		}
+		return parent::beheer($soort);
+	}
+
+
+	public function parseSoort(string $soort = null)
+	{
+		if ($soort && OnderverenigingStatus::isValidValue($soort)) {
+			return OnderverenigingStatus::from($soort);
+		}
+		return parent::parseSoort($soort);
+	}
 }

@@ -146,13 +146,10 @@ abstract class AbstractGroepenController extends AbstractController implements R
 
 	public function overzicht($soort = null)
 	{
-		if ($soort) {
-			$groepen = $this->repository->findBy(['status' => GroepStatus::HT(), 'soort' => $soort]);
-		} else {
-			$groepen = $this->repository->findBy(['status' => GroepStatus::HT()]);
-		}
+		$groepen = $this->repository->overzicht($soort);
+		$soortEnum = $this->repository->parseSoort($soort);
 		// controleert rechten bekijken per groep
-		$body = new GroepenView($this->repository, $groepen, $soort);
+		$body = new GroepenView($this->repository, $groepen, $soortEnum);
 		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
@@ -385,8 +382,9 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function beheren(Request $request, $soort = null)
 	{
 		if ($request->getMethod() == 'POST') {
-			if ($soort) {
-				$groepen = $this->repository->findBy(['soort' => $soort]);
+			$soortEnum = $this->repository->parseSoort($soort);
+			if ($soortEnum) {
+				$groepen = $this->repository->findBy(['soort' => $soortEnum]);
 			} else {
 				$groepen = $this->repository->findAll();
 			}
