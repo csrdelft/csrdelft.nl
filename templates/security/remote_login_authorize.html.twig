@@ -17,6 +17,7 @@
 				<div class="modal-footer">
 					<form method="post">
 						<input type="hidden" value="{{ uuid }}" name="uuid"/>
+						{{ csrfField() }}
 						<input type="submit" value="Terug" class="btn btn-secondary" name="cancel">
 						<input type="submit" value="Autoriseer" class="btn btn-primary mr-2">
 					</form>

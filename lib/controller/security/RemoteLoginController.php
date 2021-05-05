@@ -8,6 +8,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\security\enum\RemoteLoginStatus;
 use CsrDelft\repository\security\RemoteLoginRepository;
+use CsrDelft\service\security\RemoteLoginAuthenticator;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
@@ -37,7 +38,7 @@ class RemoteLoginController extends AbstractController
 	 * @Route("/remote_login")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function remoteLogin(Request $request)
+	public function remoteLogin(Request $request): Response
 	{
 		$remoteLogin = $this->remoteLoginRepository->nieuw();
 
@@ -72,7 +73,9 @@ class RemoteLoginController extends AbstractController
 			$remoteLogin->status = RemoteLoginStatus::EXPIRED();
 		}
 
-		return $this->json($remoteLogin);
+		$this->getDoctrine()->getManager()->flush();
+
+		return $this->json($remoteLogin, 200, [], ['groups' => ['json']]);
 	}
 
 	/**
@@ -119,9 +122,32 @@ class RemoteLoginController extends AbstractController
 			$remoteLogin->status = RemoteLoginStatus::REJECTED();
 		} else {
 			$remoteLogin->status = RemoteLoginStatus::ACCEPTED();
+			$remoteLogin->account = $this->getUser();
 		}
 
+		$this->getDoctrine()->getManager()->flush();
+
+		return $this->redirectToRoute('csrdelft_security_remotelogin_remoteloginauthorizesuccess');
+	}
+
+	/**
+	 * @return Response
+	 * @Route("/remote_login_success")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function remoteLoginAuthorizeSuccess(): Response
+	{
 		return $this->render('security/remote_login_authorized.html.twig');
+	}
+
+	/**
+	 * @return Response
+	 * @Route("/remote_login_final", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 * @see RemoteLoginAuthenticator
+	 */
+	public function remoteLoginFinal(): Response {
+		throw new \LogicException("Moet opgevangen worden door RemoteLoginAuthenticator");
 	}
 
 	/**
@@ -134,20 +160,18 @@ class RemoteLoginController extends AbstractController
 	{
 		$data = $request->query->get('uuid');
 
-		$url = $this->generateUrl('csrdelft_security_remotelogin_remoteloginauthorize', ['uuid' => $data], UrlGeneratorInterface::ABSOLUTE_URL);
+		$url = $this->generateUrl(
+			'csrdelft_security_remotelogin_remoteloginauthorize',
+			['uuid' => $data],
+			UrlGeneratorInterface::ABSOLUTE_URL
+		);
 		$result = Builder::create()
 			->writer(new PngWriter())
 			->writerOptions([])
 			->data($url)
 			->encoding(new Encoding('UTF-8'))
 			->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-//			->size(300)
-//			->margin(10)
 			->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-//			->logoPath(__DIR__.'/assets/symfony.png')
-//			->labelText('This is the label')
-//			->labelFont(new NotoSans(20))
-//			->labelAlignment(new LabelAlignmentCenter())
 			->build();
 
 		return new Response($result->getString(), 200, ['Content-Type' => $result->getMimeType()]);

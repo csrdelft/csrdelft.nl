@@ -14,6 +14,11 @@ use CsrDelft\common\Enum;
  * @method static static ACCEPTED()
  * @method static static REJECTED()
  * @method static static EXPIRED()
+ * @method static bool isPENDING(static $status)
+ * @method static bool isACTIVE(static $status)
+ * @method static bool isACCEPTED(static $status)
+ * @method static bool isREJECTED(static $status)
+ * @method static bool isEXPIRED(static $status)
  */
 class RemoteLoginStatus extends Enum
 {

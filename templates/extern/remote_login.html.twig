@@ -14,10 +14,12 @@
 		<h1>{% trans %}Inloggen{% endtrans %}</h1>
 		<p>{% trans %}U dient in te loggen om verder te gaan{% endtrans %}</p>
 
-		<div class="remote-login-code">
-		<a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize') }}?uuid={{ uuid }}">
-		<img src="{{ url('csrdelft_security_remotelogin_remoteloginqr') }}?uuid={{ uuid }}"/>
-		</a>
-		</div>
+		<form method="post" action="{{ url('csrdelft_security_remotelogin_remoteloginfinal') }}" class="remote-login-code">
+			<input type="hidden" name="uuid" value="{{ uuid }}">
+			{{ csrfField() }}
+{#			<a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize') }}?uuid={{ uuid }}">#}
+				<img src="{{ url('csrdelft_security_remotelogin_remoteloginqr') }}?uuid={{ uuid }}"/>
+{#			</a>#}
+		</form>
 	</div>
 {% endblock %}

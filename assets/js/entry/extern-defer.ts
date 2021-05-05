@@ -79,34 +79,35 @@ try {
 }
 
 try {
-	const remoteLoginCode = select<HTMLElement>('.remote-login-code')
+	const remoteLoginCode = select<HTMLFormElement>('.remote-login-code')
 
-	const updateRemoteLogin = () => {
+	const updateStatus = async () => {
+		const response = await fetch('/remote_login_status', {method: 'POST'});
+		const remoteLogin = await response.json();
 
+		switch (remoteLogin.status) {
+			case 'pending':
+				remoteLoginCode.classList.remove('active');
+				setTimeout(updateStatus, 1000)
+				break;
+			case 'active':
+				remoteLoginCode.classList.add('active');
+				setTimeout(updateStatus, 1000)
+				break;
+			case 'rejected':
+			case 'expired':
+				// TODO: Vraag nieuwe code aan
+				break;
+			case 'accepted':
+				remoteLoginCode.classList.remove('active');
+				remoteLoginCode.classList.add('accepted');
+				// navigeer
+				remoteLoginCode.submit();
+				break;
+		}
 	}
 
-	setInterval(() => {
-		fetch('/remote_login_status', {method: 'POST'})
-			.then(response => response.json())
-			.then(remoteLogin => {
-				switch (remoteLogin.status) {
-					case 'pending':
-						remoteLoginCode.classList.remove('active');
-						break;
-					case 'active':
-						remoteLoginCode.classList.add('active');
-						break;
-					case 'rejected':
-					case 'expired':
-						// Vraag nieuwe code aan
-						break;
-					case 'accepted':
-						// navigeer
-						break;
-				}
-			})
-
-	}, 5000)
+	updateStatus();
 } catch (e) {
 	// Geen remote login
 }

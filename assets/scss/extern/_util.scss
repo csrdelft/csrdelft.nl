@@ -3,15 +3,3 @@
 .flex-grow-1 {
 	flex-grow: 1;
 }
-
-.remote-login-code {
-	display: inline-block;
-}
-
-.remote-login-code.active {
-	background: url('../../images/loading-fb.gif') no-repeat center center;
-
-	img {
-		opacity: 0.2;
-	}
-}

@@ -336,6 +336,44 @@ optgroup {
 	}
 }
 
+.remote-login-code {
+	display: inline-block;
+	line-height: 0;
+
+	img {
+		margin: 0;
+	}
+}
+
+.remote-login-code.active {
+	background: url('../images/loading-fb.gif') no-repeat center center;
+
+	img {
+		opacity: 0.2;
+	}
+}
+
+.remote-login-code.accepted {
+	background: white;
+	position: relative;
+
+	&:before {
+		position: absolute;
+		left: 0;
+		right: 0;
+		content: '✔';
+		font-size: 200px;
+		color: green;
+		text-align: center;
+		width: 320px;
+		line-height: 320px;
+	}
+
+	img {
+		opacity: 0;
+	}
+}
+
 /*
  MEDIA QUERIES
 */
