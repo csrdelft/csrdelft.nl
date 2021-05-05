@@ -40,4 +40,11 @@ class RechtenGroep extends Groep {
 		return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
 	}
 
+	public function mag(AccessAction $action, $allowedAuthenticationMethods = null)
+	{
+		if (AccessAction::isBekijken($action)) {
+			return true;
+		}
+		return parent::mag($action, $allowedAuthenticationMethods);
+	}
 }
