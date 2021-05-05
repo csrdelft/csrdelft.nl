@@ -77,3 +77,36 @@ try {
 } catch (e) {
 	// Geen contactform
 }
+
+try {
+	const remoteLoginCode = select<HTMLElement>('.remote-login-code')
+
+	const updateRemoteLogin = () => {
+
+	}
+
+	setInterval(() => {
+		fetch('/remote_login_status', {method: 'POST'})
+			.then(response => response.json())
+			.then(remoteLogin => {
+				switch (remoteLogin.status) {
+					case 'pending':
+						remoteLoginCode.classList.remove('active');
+						break;
+					case 'active':
+						remoteLoginCode.classList.add('active');
+						break;
+					case 'rejected':
+					case 'expired':
+						// Vraag nieuwe code aan
+						break;
+					case 'accepted':
+						// navigeer
+						break;
+				}
+			})
+
+	}, 5000)
+} catch (e) {
+	// Geen remote login
+}

@@ -1,9 +1,9 @@
-app-controller:
-  resource: ../lib/controller/*.php
-  type: annotation
+#app-controller:
+#  resource: ../lib/controller/*.php
+#  type: annotation
 
 app-controller-sub:
-  resource: ../lib/controller/{fiscaat,maalcie,api}/*.php
+  resource: ../lib/controller/**/*.php
   type: annotation
 
 api-controller:
