@@ -213,7 +213,7 @@ abstract class GroepRepository extends AbstractRepository
 	{
 		$qb = $this->createQueryBuilder('ag');
 
-		if (is_a($this->entityClass, GroepMoment::class)) {
+		if (in_array(GroepMoment::class, class_uses($this->entityClass))) {
 			$qb = $qb->orderBy('ag.beginMoment', 'DESC');
 		}
 
@@ -368,5 +368,21 @@ abstract class GroepRepository extends AbstractRepository
 
 	public function parseSoort(string $soort = null) {
 		return null;
+	}
+
+	/**
+	 * Vind de groep uit deze familie met het laatste eindMoment
+	 * @param Groep $groep
+	 * @return Groep|null
+	 */
+	public function findOt(Groep $groep) {
+		$sortBy = [];
+		if (in_array(GroepMoment::class, class_uses($groep))) {
+			$sortBy = ['eindMoment' => 'DESC'];
+		}
+		return  $this->findOneBy(
+			["familie" => $groep->familie, 'status' => GroepStatus::OT()],
+			$sortBy,
+		);
 	}
 }

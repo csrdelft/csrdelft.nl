@@ -14,6 +14,7 @@ use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\groepen\GroepAanmeldMoment;
 use CsrDelft\entity\groepen\GroepAanmeldRechten;
 use CsrDelft\entity\groepen\GroepLid;
+use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
@@ -776,12 +777,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 	public function naar_ot(EntityManagerInterface $em, $id, $uid = null)
 	{
 		$groep = $this->repository->get($id);
-
-		// Vind de groep uit deze familie met het laatste eind_moment
-		$otGroep = $this->repository->findOneBy(
-			["familie" => $groep->familie, 'status' => GroepStatus::OT()],
-			['eind_moment' => 'DESC']
-		);
+		$otGroep = $this->repository->findOt($groep);
 
 		if (!$otGroep) {
 			throw new CsrGebruikerException('Geen o.t. groep gevonden');
@@ -806,6 +802,8 @@ abstract class AbstractGroepenController extends AbstractController implements R
 			$em->remove($lid);
 			$em->flush();
 			$lid->groep = $otGroep;
+			$lid->doorProfiel = $this->getProfiel();
+			$lid->lidSinds = date_create_immutable();
 			$em->persist($lid);
 			$em->flush();
 			$em->clear();
