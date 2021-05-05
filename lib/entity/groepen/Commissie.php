@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity\groepen;
 
+use CsrDelft\common\Enum;
 use CsrDelft\entity\groepen\enum\CommissieSoort;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
@@ -39,11 +40,11 @@ class Commissie extends Groep implements HeeftSoort {
 	 *
 	 * @param AccessAction $action
 	 * @param null $allowedAuthenticationMethods
-	 * @param string $soort
+	 * @param Enum $soort
 	 * @return boolean
 	 */
 	public static function magAlgemeen($action, $allowedAuthenticationMethods=null, $soort = null) {
-		switch (CommissieSoort::from($soort)) {
+		switch ($soort) {
 
 			case CommissieSoort::SjaarCie():
 				if (LoginService::mag('commissie:NovCie')) {
