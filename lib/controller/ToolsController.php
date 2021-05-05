@@ -35,6 +35,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Deze controller bevat een aantal beheertools die niet direct onder een andere controller geschaard kunnen worden.
@@ -394,27 +395,4 @@ class ToolsController extends AbstractController
 		]);
 	}
 
-	/**
-	 * @param Request $request
-	 * @Route("/tools/qr", methods={"GET"})
-	 * @Auth(P_PUBLIC)
-	 */
-	public function qr(Request $request) {
-		$result = Builder::create()
-			->writer(new PngWriter())
-			->writerOptions([])
-			->data('https://csrdelft.nl/remote-authorize')
-			->encoding(new Encoding('UTF-8'))
-			->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-//			->size(300)
-//			->margin(10)
-			->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-//			->logoPath(__DIR__.'/assets/symfony.png')
-//			->labelText('This is the label')
-//			->labelFont(new NotoSans(20))
-//			->labelAlignment(new LabelAlignmentCenter())
-			->build();
-
-		return new Response($result->getString(), 200, ['Content-Type' => $result->getMimeType()]);
-	}
 }

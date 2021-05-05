@@ -11,7 +11,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * Class RemoteLogin
  * @package CsrDelft\entity\security
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="CsrDelft\repository\security\RemoteLoginRepository")
  */
 class RemoteLogin
 {
@@ -31,11 +31,10 @@ class RemoteLogin
 	 * @var Uuid
 	 * @ORM\Column(type="uuid")
 	 */
-	public $key;
+	public $uuid;
 	/**
 	 * @var RemoteLoginStatus
 	 * @ORM\Column(type="enumRemoteLoginStatus")
 	 */
 	public $status;
-
 }

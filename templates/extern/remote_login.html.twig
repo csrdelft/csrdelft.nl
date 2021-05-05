@@ -13,6 +13,9 @@
 	<div>
 		<h1>{% trans %}Inloggen{% endtrans %}</h1>
 		<p>{% trans %}U dient in te loggen om verder te gaan{% endtrans %}</p>
-		<img src="/tools/qr"/>
+
+		<a href="{{ url('csrdelft_login_remoteloginauthorize') }}?uuid={{ uuid }}">
+		<img src="{{ url('csrdelft_login_remoteloginqr') }}?uuid={{ uuid }}"/>
+		</a>
 	</div>
 {% endblock %}
