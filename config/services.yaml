@@ -84,15 +84,12 @@ services:
 
   CsrDelft\common\Logging\LogActivationStrategy: ~
 
-  csr.authentication.success_handler: '@security.authentication.success_handler.main.form_login'
-  csr.authentication.failure_handler: '@security.authentication.failure_handler.main.form_login'
-
   CsrDelft\service\security\RemoteLoginAuthenticator:
     arguments:
       - '@security.http_utils'
       - '@CsrDelft\repository\security\RemoteLoginRepository'
-      - '@csr.authentication.success_handler'
-      - '@csr.authentication.failure_handler'
+      - '@security.authentication.success_handler.main.form_login'
+      - '@security.authentication.failure_handler.main.form_login'
 
   # Voor Zijbalk in blade templates
   CsrDelft\view\Zijbalk:
