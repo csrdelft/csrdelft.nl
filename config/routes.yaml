@@ -1,13 +1,5 @@
-#app-controller:
-#  resource: ../lib/controller/*.php
-#  type: annotation
-
 app-controller-sub:
   resource: ../lib/controller/**/*.php
-  type: annotation
-
-api-controller:
-  resource: ../lib/controller/api/v3/*.php
   type: annotation
 
 # Deze route is een catch-all als allerlaatste
