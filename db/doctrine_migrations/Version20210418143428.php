@@ -26,6 +26,6 @@ final class Version20210418143428 extends AbstractMigration
 
 	public function down(Schema $schema): void
 	{
-		$this->addSql('ALTER TABLE groep ADD soort VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, DROP activiteit_soort, DROP commissie_soort, DROP ondervereniging_status, DROP huis_status, CHANGE begin_moment begin_moment DATETIME NOT NULL, CHANGE status status ENUM(\'ft\', \'ht\', \'ot\') COMMENT \'(DC2Type:enumGroepStatus)\' CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci` COMMENT \'(DC2Type:enumGroepStatus)\'');
+		$this->addSql('ALTER TABLE groep ADD soort VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_general_ci`, DROP activiteit_soort, DROP commissie_soort, DROP ondervereniging_status, DROP huis_status, CHANGE begin_moment begin_moment DATETIME NOT NULL, CHANGE status status ENUM(\'ft\', \'ht\', \'ot\') COMMENT \'(DC2Type:enumGroepStatus)\' CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_general_ci` COMMENT \'(DC2Type:enumGroepStatus)\'');
 	}
 }
