@@ -14,14 +14,9 @@ class LogEventListener
 	 * @var LoggerInterface
 	 */
 	private $logger;
-	/**
-	 * @var Security
-	 */
-	private $security;
 
-	public function __construct(LoggerInterface $logger, Security $security) {
+	public function __construct(LoggerInterface $logger) {
 		$this->logger = $logger;
-		$this->security = $security;
 	}
 
 	/**
@@ -31,10 +26,8 @@ class LogEventListener
 	 */
 	public function onKernelRequest(RequestEvent $event) {
 		$request = $event->getRequest();
-		$user = $this->security->getUser();
 
 		$this->logger->info($request->getRequestUri(), [
-			'user' => $user ? $user->getUsername() : "x999",
 			'ip' => $request->getClientIp(),
 			'user-agent' => $request->headers->get('User-Agent'),
 			'referer' => $request->headers->get('Referer'),
