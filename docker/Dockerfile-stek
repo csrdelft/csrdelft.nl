@@ -2,13 +2,13 @@ FROM php:7.3-apache
 
 # update
 RUN apt-get update \
- && apt-get install -y --no-install-recommends sendmail libpng-dev libjpeg-dev libfreetype6-dev imagemagick memcached libmemcached-dev \
+ && apt-get install -y --no-install-recommends sendmail libpng-dev libjpeg-dev libfreetype6-dev imagemagick memcached libmemcached-dev libicu-dev \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 # install php extensions
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install mysqli pdo pdo_mysql hash exif gd opcache \
+    && docker-php-ext-install mysqli pdo pdo_mysql hash exif gd opcache intl \
     && pecl install xdebug\
     && pecl install memcache-4.0.5.2\
     && pecl install memcached\

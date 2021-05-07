@@ -284,7 +284,7 @@
 							href="{{ url('csrdelft_ledenlijst_lijst') }}?q=verticale:{{ profiel.verticale().letter }}">{{ profiel.verticale().naam }}
 							{% if profiel.status == 'S_KRINGEL' %}
 								(kringel)
-							{% elseif profiel.kring.lid(profiel.uid).opmerking == 'leider' %}
+							{% elseif profiel.kring and profiel.kring.lid(profiel.uid).opmerking == 'leider' %}
 								(kringleider)
 							{% elseif profiel.verticaleleider %}
 								(leider)
