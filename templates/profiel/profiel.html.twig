@@ -543,7 +543,7 @@
 				<dd>
 					{% if profiel.account.privateToken %}
 						<input title="ICal-feed" class="form-control" type="text"
-									 value="{{ profiel.account.iCalLink }}"
+									 value="{{ absolute_url(profiel.account.iCalLink) }}"
 									 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 					{% endif %}
 					&nbsp;
@@ -559,7 +559,7 @@
 					<dd>
 						{% if profiel.account.privateToken %}
 							<input title="RSS-feed" class="form-control" type="text"
-										 value="{{ profiel.account.rssLink }}"
+										 value="{{ absolute_url(profiel.account.rssLink) }}"
 										 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 						{% endif %}
 						<a id="tokenaanvragen" class="btn btn-primary"

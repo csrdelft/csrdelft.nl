@@ -253,7 +253,7 @@ class FotoAlbum extends Map {
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
 				'url' => $foto->getResizedUrl(),
-				'fullUrl' => CSR_ROOT . $foto->getFullUrl(),
+				'fullUrl' => getCsrRoot() . $foto->getFullUrl(),
 				'thumbUrl' => $foto->getThumbUrl(),
 				'title' => '',
 				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),
@@ -286,7 +286,7 @@ class FotoAlbum extends Map {
 		foreach ($this->getFotos() as $foto) {
 			$fotos[] = [
 				'url' => $foto->getResizedUrl(),
-				'fullUrl' => CSR_ROOT . $foto->getFullUrl(),
+				'fullUrl' => getCsrRoot() . $foto->getFullUrl(),
 				'thumbUrl' => $foto->getThumbUrl(),
 				'title' => '',
 				'hash' => str_replace(' ', '%20', urldecode($foto->getFullUrl())),

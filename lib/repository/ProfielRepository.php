@@ -399,11 +399,11 @@ class ProfielRepository extends AbstractRepository {
 			if ($exemplaar->isBiebBoek()) {
 				$bkncsr['aantal']++;
 				$bkncsr['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
-				$bkncsr['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
+				$bkncsr['lijst'] .= " - " . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 			} else {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
-				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
+				$bknleden['lijst'] .= " - " . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 				$naam = $exemplaar->eigenaar->getNaam('volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
