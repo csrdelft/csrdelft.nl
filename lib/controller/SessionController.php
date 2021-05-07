@@ -74,7 +74,7 @@ class SessionController extends AbstractController
 			} else if (!empty($_POST['redirect'])) {
 				$response = new JsonResponse($_POST['redirect']);
 			} else {
-				$response = new JsonResponse($this->generateUrl('default'));
+				$response = new JsonResponse(CSR_ROOT);
 			}
 
 			$this->getDoctrine()->getManager()->persist($remember);

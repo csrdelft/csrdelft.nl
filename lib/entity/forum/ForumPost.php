@@ -130,7 +130,7 @@ class ForumPost {
 	}
 
 	public function getLink($external = false) {
-		return ($external ? getCsrRoot() : '') . "/forum/reactie/" . $this->post_id . "#" . $this->post_id;
+		return ($external ? CSR_ROOT : '') . "/forum/reactie/" . $this->post_id . "#" . $this->post_id;
 	}
 
 }

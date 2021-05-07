@@ -114,7 +114,7 @@ class Account implements UserInterface {
 	}
 
 	public function getICalLink() {
-		$url = '/agenda/ical/';
+		$url = CSR_ROOT . '/agenda/ical/';
 		if (empty($this->private_token)) {
 			return $url . 'csrdelft.ics';
 		} else {
@@ -123,7 +123,7 @@ class Account implements UserInterface {
 	}
 
 	public function getRssLink() {
-		$url = '/forum/rss/';
+		$url = CSR_ROOT . '/forum/rss/';
 		if (empty($this->private_token)) {
 			return $url . 'csrdelft.xml';
 		} else {

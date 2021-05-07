@@ -129,32 +129,26 @@ function group_by_distinct($prop, $in, $del = true) {
  * Invokes a client page (re)load the url.
  *
  * @param string $url
- * @param boolean $refresh allow a refresh; redirect to / otherwise
+ * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
  * @deprecated Gebruik redirect in de controller
  */
 function redirect($url = null, $refresh = true) {
 	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
-	if (empty($url)) {
+	if (empty($url) || $url === null) {
 		$url = $request->getRequestUri();
 	}
 	if (!$refresh && $url == $request->getRequestUri()) {
-		$url = $request->getSchemeAndHttpHost();
+		$url = $_ENV['CSR_ROOT'];
 	}
-	if (!str_starts_with($url, $request->getSchemeAndHttpHost())) {
+	if (!str_starts_with($url, $_ENV['CSR_ROOT'])) {
 		if (preg_match("/^[?#\/]/", $url) === 1) {
-			$url = $request->getSchemeAndHttpHost() . $url;
+			$url = $_ENV['CSR_ROOT'] . $url;
 		} else {
-			$url = $request->getSchemeAndHttpHost();
+			$url = $_ENV['CSR_ROOT'];
 		}
 	}
 	header('location: ' . $url);
 	exit;
-}
-
-function getCsrRoot() {
-	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
-
-	return $request->getSchemeAndHttpHost();
 }
 
 /**
@@ -271,7 +265,7 @@ function url_like($url) {
 
 function external_url($url, $label) {
 	$url = filter_var($url, FILTER_SANITIZE_URL);
-	if ($url && (url_like($url) || url_like(getCsrRoot() . $url))) {
+	if ($url && (url_like($url) || url_like(CSR_ROOT . $url))) {
 		if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
 			$extern = 'target="_blank" rel="noopener"';
 		} else {

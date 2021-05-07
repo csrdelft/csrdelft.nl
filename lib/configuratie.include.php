@@ -80,7 +80,7 @@ if (FORCE_HTTPS) {
 			// TODO: Log dit
 		}
 		// redirect to https
-		header('Location: ' . getCsrRoot() . $_SERVER['REQUEST_URI'], true, 301);
+		header('Location: ' . CSR_ROOT . $_SERVER['REQUEST_URI'], true, 301);
 		// we are in cleartext at the moment, prevent further execution and output
 		die();
 	}
@@ -98,11 +98,13 @@ if (!isCli()) {
 	ini_set('session.use_strict_mode', true);
 	ini_set('session.use_cookies', true);
 	ini_set('session.use_only_cookies', true);
+	ini_set('session.cookie_domain', CSR_DOMAIN);
 	ini_set('session.cookie_secure', FORCE_HTTPS);
 	ini_set('session.cookie_httponly', true);
 	ini_set('log_errors_max_len', 0);
 	ini_set('xdebug.max_nesting_level', 2000);
 	ini_set('intl.default_locale', 'nl');
+	session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
 
 	$container->get(LogRepository::class)->log();
 }

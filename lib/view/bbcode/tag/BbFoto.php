@@ -51,7 +51,7 @@ class BbFoto extends BbTag {
 	}
 
 	public function renderLight() {
-		return BbHelper::lightLinkThumbnail('foto', $this->foto->getAlbumUrl() . '#' . $this->foto->getResizedUrl(), getCsrRoot() . $this->foto->getThumbUrl());
+		return BbHelper::lightLinkThumbnail('foto', $this->foto->getAlbumUrl() . '#' . $this->foto->getResizedUrl(), CSR_ROOT . $this->foto->getThumbUrl());
 	}
 
 	public function render() {

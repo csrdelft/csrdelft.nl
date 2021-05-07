@@ -164,7 +164,7 @@ class WachtwoordController extends AbstractController {
 	private function verzendResetMail(Account $account, $token) {
 		$profiel = $account->profiel;
 
-		$url = $this->generateUrl('wachtwoord_reset', ['token' => $token[0]]);
+		$url = CSR_ROOT . "/wachtwoord/reset?token=" . rawurlencode($token[0]);
 		$bericht = $this->renderView('mail/bericht/wachtwoord_vergeten.mail.twig', [
 			'naam' => $profiel->getNaam('civitas'),
 			'mogelijkTot' => date_format_intl($token[1], DATETIME_FORMAT),
