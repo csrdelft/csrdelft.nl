@@ -79,24 +79,41 @@ try {
 }
 
 try {
+	const refreshInterval = 2500;
 	const remoteLoginCode = select<HTMLFormElement>('.remote-login-code')
 
+	interface RemoteLogin {
+		expires: string
+		status: string
+		uuid: string
+	}
+
 	const updateStatus = async () => {
-		const response = await fetch('/remote_login_status', {method: 'POST'});
-		const remoteLogin = await response.json();
+		const response = await fetch('/remote-login-status', {method: 'POST'});
+		const remoteLogin = await response.json() as RemoteLogin;
+
+		const expires = new Date(remoteLogin.expires);
+
+		// Ververs de qr code als rejected of verloop is bijna
+		if (remoteLogin.status == 'rejected' || +expires - +new Date < 10_000) {
+			remoteLoginCode.classList.remove('active')
+			const refreshResponse = await fetch('/remote-login-refresh', {method: 'POST'})
+			const refresh = await refreshResponse.json() as RemoteLogin
+
+			remoteLoginCode.querySelector('img').src = '/remote-login-qr?uuid=' + refresh.uuid
+
+			setTimeout(updateStatus, refreshInterval)
+			return
+		}
 
 		switch (remoteLogin.status) {
 			case 'pending':
 				remoteLoginCode.classList.remove('active');
-				setTimeout(updateStatus, 1000)
+				setTimeout(updateStatus, refreshInterval)
 				break;
 			case 'active':
 				remoteLoginCode.classList.add('active');
-				setTimeout(updateStatus, 1000)
-				break;
-			case 'rejected':
-			case 'expired':
-				// TODO: Vraag nieuwe code aan
+				setTimeout(updateStatus, refreshInterval)
 				break;
 			case 'accepted':
 				remoteLoginCode.classList.remove('active');

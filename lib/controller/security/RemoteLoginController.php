@@ -35,7 +35,7 @@ class RemoteLoginController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/remote_login")
+	 * @Route("/remote-login")
 	 * @Auth(P_PUBLIC)
 	 */
 	public function remoteLogin(Request $request): Response
@@ -52,11 +52,40 @@ class RemoteLoginController extends AbstractController
 	}
 
 	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/remote-login-refresh", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function remoteLoginRefresh(Request $request): Response
+	{
+		$id = $request->getSession()->get('remote_login');
+
+		if (!$id) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$originalRemoteLogin = $this->remoteLoginRepository->find($id);
+
+		if (!$originalRemoteLogin) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$remoteLogin = $this->remoteLoginRepository->nieuw();
+
+		$this->remoteLoginRepository->save($remoteLogin);
+
+		$request->getSession()->set('remote_login', $remoteLogin->id);
+
+		return $this->json($remoteLogin, 200, [], ['groups' => ['json']]);
+	}
+
+	/**
 	 * Geeft de huidige status voor een remote_login sessie weer.
 	 *
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/remote_login_status", methods={"POST"})
+	 * @Route("/remote-login-status", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function remoteLoginStatus(Request $request): Response
@@ -81,7 +110,7 @@ class RemoteLoginController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/remote_login_authorize", methods={"GET"})
+	 * @Route("/remote-login-authorize", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function remoteLoginAuthorize(Request $request): Response
@@ -105,7 +134,7 @@ class RemoteLoginController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/remote_login_authorize", methods={"POST"})
+	 * @Route("/remote-login-authorize", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function remoteLoginAuthorizePost(Request $request): Response
@@ -132,7 +161,7 @@ class RemoteLoginController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/remote_login_success")
+	 * @Route("/remote-login-success")
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function remoteLoginAuthorizeSuccess(): Response
@@ -142,7 +171,7 @@ class RemoteLoginController extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/remote_login_final", methods={"POST"})
+	 * @Route("/remote-login-final", methods={"POST"})
 	 * @Auth(P_PUBLIC)
 	 * @see RemoteLoginAuthenticator
 	 */
@@ -153,7 +182,7 @@ class RemoteLoginController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return Response
-	 * @Route("/remote_login_qr", methods={"GET"})
+	 * @Route("/remote-login-qr", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
 	public function remoteLoginQr(Request $request): Response
