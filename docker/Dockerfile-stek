@@ -22,6 +22,6 @@ COPY docker/dev/apache2.conf /etc/apache2/apache2.conf
 COPY docker/dev/php.ini  /usr/local/etc/php/php.ini
 COPY docker/dev/memcached.conf /etc/memcached.conf
 
-RUN mkdir /app && chown -R www-data "/app" && chmod -R u+rw "/app"
+RUN mkdir /app && mkdir /app/sessie && mkdir /app/var && chown -R www-data "/app" && chmod -R u+rwx "/app"
 
 CMD service memcached start && apache2-foreground

@@ -3,7 +3,9 @@ version: '3'
 volumes:
   mysqldata:
     driver: local
-
+  symfonycache:
+  sessiecache:
+    
 services:
   stek:
     build:
@@ -18,6 +20,8 @@ services:
       - ./:/app
       - ./docker/dev/.env.local:/app/.env.local
       - ./vendor:/app/vendor
+      - symfonycache:/app/var
+      - sessiecache:/app/sessie
 
   composer:
     build:

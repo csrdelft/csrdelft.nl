@@ -4,7 +4,7 @@
 		"dev": "yarn run development",
 		"development": "cross-env webpack --progress",
 		"watch": "cross-env webpack --watch --progress --mode=development",
-		"watch-poll": "yarn run watch -- --watch-poll",
+		"watch-poll": "yarn run watch",
 		"hot": "cross-env webpack-dev-server --inline --hot",
 		"prod": "yarn run production",
 		"production": "cross-env webpack --mode=production",
