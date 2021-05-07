@@ -2,7 +2,7 @@ FROM php:7.3-apache
 
 # update
 RUN apt-get update \
- && apt-get install -y --no-install-recommends sendmail libpng-dev libjpeg-dev libfreetype6-dev imagemagick memcached libmemcached-dev libicu-dev \
+ && apt-get install -y --no-install-recommends sendmail libpng-dev libjpeg-dev libfreetype6-dev imagemagick memcached libmemcached-dev libicu-dev git \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
