@@ -740,7 +740,8 @@ class ForumController extends AbstractController {
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 
-			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', CSR_ROOT . "/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT", "From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres);
+			$url = $this->generateUrl('csrdelft_forum_onderwerp', ['draad_id' => $draad->draad_id, '_fragment' => $post->post_id]);
+			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', $url . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT", "From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres);
 		} else {
 
 			// direct goedkeuren voor ingelogd
