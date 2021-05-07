@@ -132,7 +132,7 @@ class CmsPaginaController extends AbstractController {
 		$manager->flush();
 		setMelding('Pagina ' . $naam . ' succesvol verwijderd', 1);
 
-		return new JsonResponse($this->generateUrl('default')); // redirect
+		return new JsonResponse(CSR_ROOT); // redirect
 	}
 
 }
