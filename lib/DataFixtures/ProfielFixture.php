@@ -18,7 +18,7 @@ class ProfielFixture extends Fixture {
 		$faker = Faker::create('nl_NL');
 
 		foreach ($lichtingen as $lichting) {
-			foreach (range(1, $lichtingsGrootte) as $index) {
+			foreach (range(0, $lichtingsGrootte) as $index) {
 				$lidNummer = sprintf("%02d%02d", $lichting, $index);
 				$geslacht = $faker->randomElement(['male', 'female']);
 
