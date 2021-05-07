@@ -56,4 +56,10 @@ Controleerd of het wachtwoord reset formulier goed ingevuld is, als dit het geva
 
 Deze authenticator doet de volledige jwt flow voor de api.
 
+### OAuth2Authenticator
+
+*Geactiveerd wanneer:* Path begint met `/api/v3/` en de `Authorization` header begint met `Bearer `
+
+Zie [OAuth](../onderdelen/oauth.md).
+
 
