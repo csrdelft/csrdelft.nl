@@ -145,3 +145,19 @@ services:
       - { name: kernel.event_listener, event: trikoder.oauth2.authorization_request_resolve, method: onAuthorizationRequest }
 
   Trikoder\Bundle\OAuth2Bundle\Security\Guard\Authenticator\OAuth2Authenticator:
+
+  CsrDelft\events\LogEventListener:
+    arguments:
+      - '@logger'
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
+      - { name: monolog.logger, channel: access }
+
+  Monolog\Processor\GitProcessor:
+    tags:
+      - { name: monolog.processor, handler: access }
+
+  CsrDelft\common\Logging\LogProcessor:
+    arguments: ["@request_stack", "@security.helper"]
+    tags:
+      - { name: monolog.processor }

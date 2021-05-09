@@ -77,7 +77,7 @@ class AccessControlEventListener
 		/** @var CsrfUnsafe $authAnnotation */
 		$csrfUnsafeAnnotation = $this->annotations->getMethodAnnotation($reflectionMethod, CsrfUnsafe::class);
 
-		$isInApi = startsWith($request->getPathInfo(), '/API/2.0') || startsWith($request->getPathInfo(), '/api/v3/');
+		$isInApi = str_starts_with($request->getPathInfo(), '/API/2.0') || str_starts_with($request->getPathInfo(), '/api/v3/');
 
 		if (
 			$isInApi === false

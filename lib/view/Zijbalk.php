@@ -84,6 +84,7 @@ class Zijbalk {
 	public function getZijbalk() {
 		return array_filter_empty([
 			$this->blockIsHetAl(),
+			$this->blockLustrum(),
 			$this->blockFavorieten(),
 			$this->blockSponsors(),
 			$this->blockAgenda(),
@@ -95,10 +96,14 @@ class Zijbalk {
 		]);
 	}
 
+	private function blockLustrum() {
+		return $this->twig->render('menu/lustrumblock.html.twig');
+	}
+
 	private function blockIsHetAl() {
 		// Is het al...
 		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
-			return (new IsHetAlView($this->lidInstellingenRepository, $this->session, $this->agendaRepository, lid_instelling('zijbalk', 'ishetal')))->toString();
+			return (new IsHetAlView($this->lidInstellingenRepository, $this->session, $this->agendaRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
 		}
 
 		return null;

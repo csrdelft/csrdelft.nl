@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\repository\groepen\CommissiesRepository;
+use CsrDelft\entity\groepen\Commissie;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * CommissiesController.class.php
@@ -13,7 +13,7 @@ use CsrDelft\repository\groepen\CommissiesRepository;
  * Controller voor commissies.
  */
 class CommissiesController extends AbstractGroepenController {
-	public function __construct(ChangeLogRepository $changeLogRepository, CommissiesRepository $commissiesRepository) {
-		parent::__construct($changeLogRepository, $commissiesRepository);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Commissie::class);
 	}
 }

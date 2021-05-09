@@ -4,5 +4,5 @@
 
 {% block content %}
 	{{ parent() }}
-	{{ content.toString | raw }}
+	{{ content | raw }}
 {% endblock %}

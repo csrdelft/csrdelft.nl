@@ -76,7 +76,7 @@ abstract class Enum {
 	 * @throws \BadMethodCallException
 	 */
 	public static function __callStatic($name, $arguments) {
-		if (startsWith($name, 'is') && count($arguments) == 1) {
+		if (str_starts_with($name, 'is') && count($arguments) == 1) {
 			$enumName = substr($name, 2);
 
 			if (isset(self::getConstants()[$enumName])) {
@@ -93,7 +93,7 @@ abstract class Enum {
 	}
 
 	public function __call($name, $arguments) {
-		if (startsWith($name, 'is')) {
+		if (str_starts_with($name, 'is')) {
 			$enumName = substr($name, 2);
 
 			if (isset(self::getConstants()[$enumName])) {

@@ -20,7 +20,7 @@
     />
   </div>
   <div
-    v-else=""
+    v-else
     class="row"
   >
     <div class="col-md-12">

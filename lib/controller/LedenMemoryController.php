@@ -6,7 +6,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Lichting;
 use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\profiel\Profiel;
@@ -19,6 +19,7 @@ use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -58,22 +59,23 @@ class LedenMemoryController extends AbstractController {
 	 * @Route("/leden/memory", methods={"GET"})
 	 * @Auth(P_OUDLEDEN_READ)
 	 */
-	public function memory() {
+	public function memory(Request $request): Response
+	{
 		$lidstatus = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$lidstatus[] = LidStatus::Overleden;
 		/** @var Profiel[] $leden */
 		$leden = [];
-		$cheat = isset($_GET['rosebud']);
-		$learnmode = isset($_GET['oefenen']);
-		$groep = $this->getVerticale() ?? $this->getLichting();
+		$cheat = $request->query->has('rosebud');
+		$learnmode = $request->query->has('oefenen');
+		$groep = $this->getVerticale($request) ?? $this->getLichting($request);
 		if ($groep instanceof Verticale) {
 			$titel = $groep->naam . ' verticale ledenmemory' . ($learnmode ? ' (oefenen)' : '');
-		} else if ($groep instanceof Lichting) {
+		} elseif ($groep instanceof Lichting) {
 			$titel = $groep->lidjaar . ' lichting ledenmemory' . ($learnmode ? ' (oefenen)' : '');
 		} else {
 			throw new CsrGebruikerException("Geen geldige groep");
 		}
-		if ($groep instanceof AbstractGroep) {
+		if ($groep instanceof Groep) {
 			foreach ($groep->getLeden() as $lid) {
 				$profiel = ProfielRepository::get($lid->uid);
 				if (in_array($profiel->status, $lidstatus)) {
@@ -92,11 +94,13 @@ class LedenMemoryController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @return Verticale|null
 	 * @throws NonUniqueResultException
 	 */
-	private function getVerticale() {
-		$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
+	private function getVerticale(Request $request): ?Verticale
+	{
+		$v = $request->query->get('verticale');
 		if (!$v) {
 			return null;
 		}
@@ -115,10 +119,11 @@ class LedenMemoryController extends AbstractController {
 	}
 
 	/**
-	 * @return AbstractGroep|null
+	 * @param Request $request
+	 * @return Groep|null
 	 */
-	private function getLichting() {
-		$l = (int)filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
+	private function getLichting(Request $request) {
+		$l = $request->query->getInt('lichting');
 		$min = LichtingenRepository::getOudsteLidjaar();
 		$max = LichtingenRepository::getJongsteLidjaar();
 

@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[PHP] Database Verwijderen" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/bin/console" scriptParameters="doctrine:database:drop --force">
+    <method v="2" />
+  </configuration>
+</component>

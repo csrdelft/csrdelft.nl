@@ -27,8 +27,8 @@ class FotoBBView implements ToResponse, View {
 		$this->responsive = $responsive;
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getHtml() {

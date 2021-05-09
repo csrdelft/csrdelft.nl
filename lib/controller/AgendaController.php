@@ -90,7 +90,8 @@ class AgendaController extends AbstractController {
 	 * )
 	 * @Auth(P_AGENDA_READ)
 	 */
-	public function maand($jaar = 0, $maand = 0) {
+	public function maand($jaar = 0, $maand = 0): Response
+	{
 		$jaar = intval($jaar);
 		if ($jaar < 1970 || $jaar > 2100) {
 			$jaar = date('Y');
@@ -112,7 +113,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/ical/{private_auth_token}/csrdelft.ics", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function ical() {
+	public function ical(): Response
+	{
 		return $this->render('agenda/icalendar.ical.twig', [
 			'items' => $this->agendaRepository->getICalendarItems(),
 			'published' => $this->icalDate(),
@@ -125,7 +127,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/export/{uuid}.ics", methods={"GET"}, requirements={"uuid": ".+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function export($uuid) {
+	public function export($uuid): Response
+	{
 		return $this->render('agenda/icalendar.ical.twig', [
 			'items' => [$this->getAgendaItemByUuid($uuid)],
 			'published' => $this->icalDate(),
@@ -139,7 +142,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/zoeken", methods={"GET"})
 	 * @Auth(P_AGENDA_READ)
 	 */
-	public function zoeken(Request $request, $zoekterm = null) {
+	public function zoeken(Request $request, $zoekterm = null): JsonResponse
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();
 		}
@@ -152,8 +156,12 @@ class AgendaController extends AbstractController {
 		if ($request->query->has('limit')) {
 			$limit = $request->query->getInt('limit');
 		}
-		/** @var AgendaItem[] $items */
-		$items = $this->agendaRepository->zoeken(date_create_immutable(), date_create_immutable('+6 months'), $zoekterm, $limit);
+		$items = $this->agendaRepository->zoeken(
+			date_create_immutable(),
+			date_create_immutable('+6 months'),
+			$zoekterm,
+			$limit
+		);
 		$result = [];
 		foreach ($items as $item) {
 			$begin = $item->getBeginMoment();
@@ -176,16 +184,25 @@ class AgendaController extends AbstractController {
 	}
 
 	/**
+	 * @param BbToProsemirror $bbToProsemirror
 	 * @return Response
 	 * @Route("/agenda/courant", methods={"POST"})
 	 * @Auth(P_MAIL_COMPOSE)
 	 */
 	public function courant(BbToProsemirror $bbToProsemirror) {
-		$items = $this->agendaRepository->getAllAgendeerbaar(date_create_immutable(), date_create_immutable('next saturday + 2 weeks'), false, false);
-		return new JsonResponse($bbToProsemirror->toProseMirrorFragment($this->renderView('agenda/courant.html.twig', ['items' => $items])));
+		$items = $this->agendaRepository->getAllAgendeerbaar(
+			date_create_immutable(),
+			date_create_immutable('next saturday + 2 weeks'),
+			false,
+			false
+		);
+		return new JsonResponse(
+			$bbToProsemirror->toProseMirrorFragment($this->renderView('agenda/courant.html.twig', ['items' => $items]))
+		);
 	}
 
 	/**
+	 * @param Request $request
 	 * @param null $datum
 	 * @return JsonResponse|Response
 	 * @Route("/agenda/toevoegen/{datum}", methods={"POST"}, defaults={"datum": null})
@@ -207,7 +224,7 @@ class AgendaController extends AbstractController {
 			if ($profiel->verticaleleider && !LoginService::mag(P_AGENDA_ADD)) {
 				$item->rechten_bekijken = 'verticale:' . $profiel->verticale;
 			}
-			$item->item_id = (int)$this->agendaRepository->save($item);
+			$this->agendaRepository->save($item);
 			if ($datum === 'doorgaan') {
 				$_POST = []; // clear post values of previous input
 				setMelding('Toegevoegd: ' . $item->titel . ' (' . date_format_intl($item->begin_moment, DATETIME_FORMAT) . ')', 1);
@@ -222,6 +239,7 @@ class AgendaController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
 	 * @param $aid
 	 * @return JsonResponse|Response
 	 * @Route("/agenda/bewerken/{aid}", methods={"POST"}, requirements={"aid": "\d+"})
@@ -249,12 +267,17 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/verplaatsen/{uuid}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verplaatsen(Request $request, $uuid) {
+	public function verplaatsen(Request $request, $uuid): JsonResponse
+	{
 		$item = $this->getAgendaItemByUuid($uuid);
 
-		if (!$item || !$item instanceof AgendaItem) throw new CsrGebruikerException('Kan alleen AgendaItem verplaatsen');
+		if (!$item || !$item instanceof AgendaItem) {
+			throw new CsrGebruikerException('Kan alleen AgendaItem verplaatsen');
+		}
 
-		if (!$item->magBeheren()) throw $this->createAccessDeniedException();
+		if (!$item->magBeheren()) {
+			throw $this->createAccessDeniedException();
+		}
 
 		$item->begin_moment = date_create_immutable($request->request->get('begin_moment'));
 		$item->eind_moment = date_create_immutable($request->request->get('eind_moment'));
@@ -270,7 +293,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/verwijderen/{aid}", methods={"POST"}, requirements={"aid": "\d+"})
 	 * @Auth(P_AGENDA_MOD)
 	 */
-	public function verwijderen($aid) {
+	public function verwijderen($aid): JsonResponse
+	{
 		$item = $this->agendaRepository->getAgendaItem((int)$aid);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
@@ -285,7 +309,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/verbergen/{refuuid}", methods={"POST"}, defaults={"refuuid": null})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verbergen($refuuid = null) {
+	public function verbergen($refuuid = null): JsonResponse
+	{
 		$item = $this->getAgendaItemByUuid($refuuid);
 		if (!$item) {
 			throw $this->createAccessDeniedException();
@@ -296,7 +321,7 @@ class AgendaController extends AbstractController {
 
 	/**
 	 * @param $refuuid
-	 * @return Agendeerbaar|false
+	 * @return Agendeerbaar|null
 	 */
 	private function getAgendaItemByUuid($refuuid) {
 		$parts = explode('@', $refuuid, 2);
@@ -326,7 +351,7 @@ class AgendaController extends AbstractController {
 			default:
 				throw new CsrException('invalid UUID');
 		}
-		/** @var Agendeerbaar|false $item * */
+		/** @var Agendeerbaar|null $item * */
 		return $item;
 	}
 
@@ -336,7 +361,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/feed", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function feed(Request $request) {
+	public function feed(Request $request): JsonResponse
+	{
 		$startMoment = date_create_immutable($request->query->get('start'));
 		$eindMoment = date_create_immutable($request->query->get('end'));
 
@@ -353,11 +379,11 @@ class AgendaController extends AbstractController {
 			$backgroundColor = '#214AB0';
 			if ($event instanceof Profiel) {
 				$backgroundColor = '#BD135E';
-			} else if ($event instanceof Maaltijd) {
+			} elseif ($event instanceof Maaltijd) {
 				$backgroundColor = '#731CC7';
-			} else if ($event instanceof Activiteit) {
+			} elseif ($event instanceof Activiteit) {
 				$backgroundColor = '#1CC7BC';
-			} else if ($event instanceof Ketzer) {
+			} elseif ($event instanceof Ketzer) {
 				$backgroundColor = '#1ABD2C';
 			}
 
@@ -377,7 +403,7 @@ class AgendaController extends AbstractController {
 				'end' => date('c', $eind),
 				'allDay' => $event->isHeledag(),
 				'id' => $event->getUUID(),
-				'textColor' => '#fff',
+				'textColor' => '#FFF',
 				'backgroundColor' => $backgroundColor,
 				'borderColor' => $backgroundColor,
 				'description' => $event->getBeschrijving(),
@@ -395,7 +421,8 @@ class AgendaController extends AbstractController {
 	 * @Route("/agenda/details/{uuid}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function details($uuid) {
+	public function details($uuid): Response
+	{
 		$jaar = filter_input(INPUT_GET, 'jaar', FILTER_SANITIZE_NUMBER_INT);
 
 		if ($jaar) {

@@ -5,6 +5,7 @@ namespace CsrDelft\command;
 use CsrDelft\common\Mail;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\MailService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,18 +33,24 @@ class WelkomCommand extends Command {
 	 * @var UrlGeneratorInterface
 	 */
 	private $urlGenerator;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
 	public function __construct(
 		string $emailPubCie,
 		AccountRepository $accountRepository,
 		ProfielRepository $profielRepository,
-	UrlGeneratorInterface $urlGenerator
+		UrlGeneratorInterface $urlGenerator,
+		MailService $mailService
 	) {
 		parent::__construct();
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
 		$this->emailPubCie = $emailPubCie;
 		$this->urlGenerator = $urlGenerator;
+		$this->mailService = $mailService;
 	}
 
 	protected function configure() {
@@ -110,7 +117,7 @@ h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 TEXT;
 			$mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
 			$mail->addBcc(array($this->emailPubCie => 'PubCie C.S.R.'));
-			$mail->send();
+			$this->mailService->send($mail);
 
 			if (!$this->accountRepository->existsUid($profiel->uid)) {
 				// Maak een account aan voor deze noviet

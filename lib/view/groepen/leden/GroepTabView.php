@@ -59,7 +59,7 @@ else {
 	tabContent.height(availableHeight);
 }
 JS;
-		if ($this->groep->mag(AccessAction::Beheren)) {
+		if ($this->groep->mag(AccessAction::Beheren())) {
 
 			$this->javascript .= <<<JS
 
@@ -85,7 +85,7 @@ JS;
 			$aantal = $this->groep->aantalLeden();
 			$percent = round($aantal * 100 / $this->groep->getAanmeldLimiet());
 			// Aanmelden mogelijk?
-			if ($nu > $this->groep->aanmelden_vanaf && $nu < $this->groep->aanmelden_tot) {
+			if ($nu > $this->groep->aanmeldenVanaf && $nu < $this->groep->aanmeldenTot) {
 				$verschil = $this->groep->getAanmeldLimiet() - $aantal;
 				if ($verschil === 0) {
 					$title = 'Inschrijvingen vol!';
@@ -95,7 +95,7 @@ JS;
 					$color = ' progress-bar-success';
 				}
 			} // Bewerken mogelijk?
-			elseif ($this->groep->getLid(LoginService::getUid()) && date_create_immutable() < $this->groep->bewerken_tot) {
+			elseif ($this->groep->getLid(LoginService::getUid()) && date_create_immutable() < $this->groep->bewerkenTot) {
 				$title = 'Inschrijvingen gesloten! Inschrijving bewerken is nog wel toegestaan.';
 				$color = ' progress-bar-warning';
 			} else {

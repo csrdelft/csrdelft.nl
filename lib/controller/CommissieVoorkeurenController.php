@@ -58,7 +58,8 @@ class CommissieVoorkeurenController extends AbstractController {
 	 * @Route("/commissievoorkeuren", methods={"GET"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
-	public function overzicht() {
+	public function overzicht(): Response
+	{
 		return $this->render('commissievoorkeuren/overzicht.html.twig', [
 			'categorien' => $this->voorkeurCommissieRepository->getByCategorie(),
 			'commissieFormulier' => new AddCommissieFormulier(new VoorkeurCommissie()),
@@ -72,7 +73,8 @@ class CommissieVoorkeurenController extends AbstractController {
 	 * @Route("/commissievoorkeuren/overzicht/{id}", methods={"GET"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
-	public function commissie(VoorkeurCommissie $commissie) {
+	public function commissie(VoorkeurCommissie $commissie): Response
+	{
 		return $this->render('commissievoorkeuren/commissie.html.twig', [
 			'voorkeuren' => $this->commissieVoorkeurRepository->getVoorkeurenVoorCommissie($commissie),
 			'commissie' => $commissie,
@@ -86,7 +88,8 @@ class CommissieVoorkeurenController extends AbstractController {
 	 * @Route("/commissievoorkeuren/overzicht/{id}", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
-	public function updatecommissie(VoorkeurCommissie $commissie) {
+	public function updatecommissie(VoorkeurCommissie $commissie): RedirectResponse
+	{
 		$body = new CommissieFormulier($commissie);
 		if ($body->validate()) {
 			$manager = $this->getDoctrine()->getManager();
@@ -105,7 +108,8 @@ class CommissieVoorkeurenController extends AbstractController {
 	 * @Route("/commissievoorkeuren/nieuwecommissie", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
-	public function nieuwecommissie(EntityManagerInterface $em) {
+	public function nieuwecommissie(EntityManagerInterface $em): Response
+	{
 		$model = new VoorkeurCommissie();
 		$form = new AddCommissieFormulier($model);
 
@@ -130,7 +134,8 @@ class CommissieVoorkeurenController extends AbstractController {
 	 * @Route("/commissievoorkeuren/nieuwecategorie", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
-	public function nieuwecategorie() {
+	public function nieuwecategorie(): Response
+	{
 		$model = new VoorkeurCommissieCategorie();
 		$form = new AddCategorieFormulier($model);
 		if ($form->validate()) {
@@ -153,7 +158,8 @@ class CommissieVoorkeurenController extends AbstractController {
 	 * @Route("/commissievoorkeuren/verwijdercategorie/{id}", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
-	public function verwijdercategorie(VoorkeurCommissieCategorie $categorie) {
+	public function verwijdercategorie(VoorkeurCommissieCategorie $categorie): RedirectResponse
+	{
 		if (count($categorie->commissies) == 0) {
 			$manager = $this->getDoctrine()->getManager();
 			$manager->remove($categorie);
@@ -173,7 +179,8 @@ class CommissieVoorkeurenController extends AbstractController {
 	 * @Route("/commissievoorkeuren/lidpagina/{uid}", methods={"GET"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
-	public function lidpagina(Profiel $profiel) {
+	public function lidpagina(Profiel $profiel): Response
+	{
 		$voorkeuren = $this->commissieVoorkeurRepository->getVoorkeurenVoorLid($profiel);
 		$voorkeurenMap = [];
 		$commissies = $this->voorkeurCommissieRepository->findBy(['zichtbaar' => 'true']);
@@ -197,12 +204,13 @@ class CommissieVoorkeurenController extends AbstractController {
 
 	/**
 	 * @param $uid
-	 * @param VoorkeurOpmerking $opmerking
+	 * @param VoorkeurOpmerking|null $opmerking
 	 * @return RedirectResponse
 	 * @Route("/commissievoorkeuren/lidpagina/{uid}", methods={"POST"})
 	 * @Auth({"bestuur",P_ADMIN})
 	 */
-	public function lidpaginaopmerking($uid, VoorkeurOpmerking $opmerking = null) {
+	public function lidpaginaopmerking($uid, VoorkeurOpmerking $opmerking = null): RedirectResponse
+	{
 		if (!$opmerking) {
 			$opmerking = new VoorkeurOpmerking();
 			$opmerking->uid = $uid;

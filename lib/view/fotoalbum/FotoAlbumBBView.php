@@ -38,12 +38,14 @@ class FotoAlbumBBView implements View {
 		$this->model = $fotoalbum;
 	}
 
-	public function view() {
+	public function __toString() {
+		$html = '';
 		if (count($this->model->getFotos()) < 1) {
-			echo '<div class="bb-block">Fotoalbum bevat geen foto\'s: /' . $this->model->dirname . '</div>';
-			return;
+			$html .= '<div class="bb-block">Fotoalbum bevat geen foto\'s: /' . $this->model->dirname . '</div>';
+			return $html;
 		}
-		echo $this->getHtml();
+		$html .= $this->getHtml();
+		return $html;
 	}
 
 	public function makeCompact() {

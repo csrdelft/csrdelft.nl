@@ -9,10 +9,12 @@ use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\AccessService;
+use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\WachtwoordResetAuthenticator;
 use CsrDelft\view\login\WachtwoordVergetenForm;
 use CsrDelft\view\login\WachtwoordWijzigenForm;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,12 +42,23 @@ class WachtwoordController extends AbstractController {
 	 * @var AccessService
 	 */
 	private $accessService;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
-	public function __construct(LoginService $loginService, AccountRepository $accountRepository, OneTimeTokensRepository $oneTimeTokensRepository, AccessService $accessService) {
+	public function __construct(
+		LoginService $loginService,
+		AccountRepository $accountRepository,
+		OneTimeTokensRepository $oneTimeTokensRepository,
+		AccessService $accessService,
+		MailService $mailService
+	) {
 		$this->loginService = $loginService;
 		$this->accountRepository = $accountRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->accessService = $accessService;
+		$this->mailService = $mailService;
 	}
 
 	/**
@@ -54,7 +67,8 @@ class WachtwoordController extends AbstractController {
 	 * @Route("/wachtwoord/verlopen", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function wijzigen() {
+	public function wijzigen(): Response
+	{
 		$account = $this->getUser();
 		// mag inloggen?
 		if (!$account || !$this->accessService->mag($account, P_LOGGED_IN)) {
@@ -77,10 +91,12 @@ class WachtwoordController extends AbstractController {
 	 * @return Response
 	 * @Route("/wachtwoord/reset", name="wachtwoord_reset")
 	 * @Auth(P_PUBLIC)
-	 *@see WachtwoordResetAuthenticator
+	 * @throws NonUniqueResultException
+	 * @see WachtwoordResetAuthenticator
 	 *
 	 */
-	public function reset(Request $request) {
+	public function reset(Request $request): Response
+	{
 		$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
 
 		if ($token) {
@@ -117,7 +133,8 @@ class WachtwoordController extends AbstractController {
 	 * @Route("/wachtwoord/aanvragen", methods={"GET", "POST"}, name="wachtwoord_aanvragen")
 	 * @Auth(P_PUBLIC)
 	 */
-	public function vergeten() {
+	public function vergeten(): Response
+	{
 		$form = new WachtwoordVergetenForm();
 		if ($form->isPosted() && $form->validate()) {
 
@@ -147,7 +164,7 @@ class WachtwoordController extends AbstractController {
 	private function verzendResetMail(Account $account, $token) {
 		$profiel = $account->profiel;
 
-		$url = CSR_ROOT . "/wachtwoord/reset?token=" . rawurlencode($token[0]);
+		$url = $this->generateUrl('wachtwoord_reset', ['token' => $token[0]]);
 		$bericht = $this->renderView('mail/bericht/wachtwoord_vergeten.mail.twig', [
 			'naam' => $profiel->getNaam('civitas'),
 			'mogelijkTot' => date_format_intl($token[1], DATETIME_FORMAT),
@@ -155,6 +172,6 @@ class WachtwoordController extends AbstractController {
 		]);
 		$emailNaam = $profiel->getNaam('volledig', true); // Forceer, want gebruiker is niet ingelogd en krijgt anders 'civitas'
 		$mail = new Mail(array($account->email => $emailNaam), '[C.S.R. webstek] Wachtwoord vergeten', $bericht);
-		$mail->send();
+		$this->mailService->send($mail);
 	}
 }

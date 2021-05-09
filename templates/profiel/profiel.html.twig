@@ -31,7 +31,7 @@
 						</div>
 						<div class="col-md">
 							{% if 'banaan' in profiel.profielOpties %}
-								<img src="{{ absolute_url('/dist/images/banaan.gif') }}" alt="Dansende banaan" class="banaan clear">
+								<img src="{{ absolute_url(asset_url('images/banaan.gif')) }}" alt="Dansende banaan" class="banaan clear">
 							{% endif %}
 						</div>
 					</div>
@@ -284,7 +284,7 @@
 							href="{{ url('csrdelft_ledenlijst_lijst') }}?q=verticale:{{ profiel.verticale().letter }}">{{ profiel.verticale().naam }}
 							{% if profiel.status == 'S_KRINGEL' %}
 								(kringel)
-							{% elseif profiel.kring.lid(profiel.uid).opmerking == 'leider' %}
+							{% elseif profiel.kring and profiel.kring.lid(profiel.uid).opmerking == 'leider' %}
 								(kringleider)
 							{% elseif profiel.verticaleleider %}
 								(leider)
@@ -543,7 +543,7 @@
 				<dd>
 					{% if profiel.account.privateToken %}
 						<input title="ICal-feed" class="form-control" type="text"
-									 value="{{ profiel.account.iCalLink }}"
+									 value="{{ absolute_url(profiel.account.iCalLink) }}"
 									 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 					{% endif %}
 					&nbsp;
@@ -559,7 +559,7 @@
 					<dd>
 						{% if profiel.account.privateToken %}
 							<input title="RSS-feed" class="form-control" type="text"
-										 value="{{ profiel.account.rssLink }}"
+										 value="{{ absolute_url(profiel.account.rssLink) }}"
 										 onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 						{% endif %}
 						<a id="tokenaanvragen" class="btn btn-primary"

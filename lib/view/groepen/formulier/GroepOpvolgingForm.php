@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
@@ -12,8 +12,8 @@ use CsrDelft\view\formulier\ModalForm;
 class GroepOpvolgingForm extends ModalForm {
 
 	public function __construct(
-		AbstractGroep $groep,
-		$action
+        Groep $groep,
+        $action
 	) {
 		parent::__construct($groep, $action, 'Opvolging instellen', true);
 

@@ -193,7 +193,7 @@ class BeheerTakenController extends AbstractController {
 			$values = $view->getModel();
 			$taak = $this->corveeTakenRepository->saveTaak($values);
 			$maaltijd = null;
-			if (endsWith($_SERVER['HTTP_REFERER'], '/corvee/beheer/maaltijd/' . ($taak->maaltijd ? $taak->maaltijd->maaltijd_id : ''))) { // state of gui
+			if (str_ends_with($_SERVER['HTTP_REFERER'], '/corvee/beheer/maaltijd/' . ($taak->maaltijd ? $taak->maaltijd->maaltijd_id : ''))) { // state of gui
 				$maaltijd = $taak->maaltijd;
 			}
 			return $this->render('maaltijden/corveetaak/beheer_taak_lijst.html.twig', [

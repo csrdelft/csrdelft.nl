@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\repository\groepen\WoonoordenRepository;
+use CsrDelft\entity\groepen\Woonoord;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * WoonoordenController.class.php
@@ -13,7 +13,7 @@ use CsrDelft\repository\groepen\WoonoordenRepository;
  * Controller voor woonoorden en huizen.
  */
 class WoonoordenController extends AbstractGroepenController {
-	public function __construct(ChangeLogRepository $changeLogRepository, WoonoordenRepository $woonoordenRepository) {
-		parent::__construct($changeLogRepository, $woonoordenRepository);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Woonoord::class);
 	}
 }

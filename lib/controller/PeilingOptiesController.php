@@ -37,7 +37,8 @@ class PeilingOptiesController extends AbstractController {
 	 * @Route("/peilingen/opties/{id}", methods={"GET"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function table($id) {
+	public function table($id): PeilingOptieTable
+	{
 		return new PeilingOptieTable($id);
 	}
 
@@ -47,7 +48,8 @@ class PeilingOptiesController extends AbstractController {
 	 * @Route("/peilingen/opties/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function lijst($id) {
+	public function lijst($id): GenericDataTableResponse
+	{
 		return $this->tableData($this->peilingOptiesRepository->findBy(['peiling_id' => $id]));
 	}
 
@@ -84,7 +86,8 @@ class PeilingOptiesController extends AbstractController {
 	 * @Route("/peilingen/opties/verwijderen", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function verwijderen() {
+	public function verwijderen(): GenericDataTableResponse
+	{
 		$selection = $this->getDataTableSelection();
 
 		/** @var PeilingOptie|false $peilingOptie */

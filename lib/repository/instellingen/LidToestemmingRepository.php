@@ -97,7 +97,7 @@ class LidToestemmingRepository extends AbstractRepository {
 			return true;
 		}
 		// Voorkom problemen tijdens opnieuw instellen wachtwoord
-		if (startsWith($requestUri, '/wachtwoord')) {
+		if (str_starts_with($requestUri, '/wachtwoord')) {
 			return true;
 		}
 		// Doe niet naggen voor een uur als een lid op annuleren heeft geklikt.

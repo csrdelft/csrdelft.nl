@@ -10,7 +10,7 @@ const createBlockSpec = (type: string, attr = 'id'): NodeSpec => ({
 })
 
 const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeSpec => ({
-	attrs: {[attr]: {}, naam: {}},
+	attrs: {[attr]: {}, naam: {default: ""}},
 	group: "block",
 	draggable: true,
 	toDOM: node => {
@@ -38,9 +38,7 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 <div class="float-right"><a class="btn" target="_blank" href="/groepen/${type}/${json.id}/wijzigen"
 title="Wijzig ${json.naam}"><span
 class="fa fa-edit"></span></a></div>
-<h3>${json.naam} <span class="groep-id-hint">(<a target="_blank"
-href="/groepen/${type}/${json.id}">#${json.id}</a>)</span>
-</h3>
+<h3>${json.naam}</h3>
 ${json.samenvatting_html ?? ""}
 </div>
 

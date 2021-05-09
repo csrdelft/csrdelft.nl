@@ -18,9 +18,6 @@ define('DEBUG', $_SERVER['APP_DEBUG']);
 define('TIME_MEASURE', false);
 # redirect to https
 define('FORCE_HTTPS', $_ENV['FORCE_HTTPS'] == 'true');
-# urls ZONDER trailing slash
-define('CSR_ROOT', $_ENV['CSR_ROOT']);
-define('CSR_DOMAIN', parse_url(CSR_ROOT)['host']);
 # Toegestane API origins
 define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io,http://dev-csrdelft.nl');
 # paden MET trailing slash

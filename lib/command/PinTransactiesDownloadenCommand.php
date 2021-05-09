@@ -6,6 +6,7 @@ use CsrDelft\common\Mail;
 use CsrDelft\repository\fiscaat\CiviBestellingRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
+use CsrDelft\service\MailService;
 use CsrDelft\service\pin\PinTransactieDownloader;
 use CsrDelft\service\pin\PinTransactieMatcher;
 use DateInterval;
@@ -48,6 +49,10 @@ class PinTransactiesDownloadenCommand extends Command {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
 	public function __construct(
 		Environment $twig,
@@ -55,7 +60,8 @@ class PinTransactiesDownloadenCommand extends Command {
 		PinTransactieMatchRepository $pinTransactieMatchRepository,
 		PinTransactieMatcher $pinTransactieMatcher,
 		PinTransactieDownloader $pinTransactieDownloader,
-		CiviBestellingRepository $civiBestellingRepository
+		CiviBestellingRepository $civiBestellingRepository,
+		MailService $mailService
 	) {
 		parent::__construct(null);
 		$this->pinTransactieRepository = $pinTransactieRepository;
@@ -64,6 +70,7 @@ class PinTransactiesDownloadenCommand extends Command {
 		$this->pinTransactieDownloader = $pinTransactieDownloader;
 		$this->civiBestellingRepository = $civiBestellingRepository;
 		$this->twig = $twig;
+		$this->mailService = $mailService;
 	}
 
 	protected function configure() {
@@ -160,7 +167,7 @@ class PinTransactiesDownloadenCommand extends Command {
 
 			} else {
 				$mail = new Mail([$_ENV['PIN_MONITORING_EMAIL'] => 'Pin Transactie Monitoring'], '[CiviSaldo] Pin transactie fouten gevonden.', $body);
-				$mail->send();
+				$this->mailService->send($mail);
 			}
 		} elseif ($this->interactive) {
 			if (count($pintransacties) > 0) {

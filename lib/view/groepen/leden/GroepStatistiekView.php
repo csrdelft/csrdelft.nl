@@ -4,7 +4,7 @@ namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\Geslacht;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\GroepStatistiekDTO;
 use DateTime;
 use function array_key_first;
@@ -16,7 +16,7 @@ class GroepStatistiekView extends GroepTabView {
 	 */
 	private $statistiek;
 
-	public function __construct(AbstractGroep $groep, GroepStatistiekDTO $statistiek) {
+	public function __construct(Groep $groep, GroepStatistiekDTO $statistiek) {
 		parent::__construct($groep);
 		$this->statistiek = $statistiek;
 	}

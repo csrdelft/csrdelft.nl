@@ -64,7 +64,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan", methods={"GET"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function view()
+	public function view(): Response
 	{
 		return $this->render('eetplan/overzicht.html.twig', [
 			'eetplan' => $this->eetplanRepository->getEetplan($this->lidjaar)
@@ -77,7 +77,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/noviet/{uid}", methods={"GET"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function noviet($uid)
+	public function noviet(string $uid): Response
 	{
 		$eetplan = $this->eetplanRepository->getEetplanVoorNoviet($uid);
 		if (!$eetplan) {
@@ -96,7 +96,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/huis/{id}", methods={"GET"}, requirements={"id": "\d+"})
 	 * @Auth(P_LEDEN_READ)
 	 */
-	public function huis($id)
+	public function huis(int $id): Response
 	{
 		$eetplan = $this->eetplanRepository->getEetplanVoorHuis($id, $this->lidjaar);
 		if ($eetplan == []) {
@@ -116,7 +116,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/woonoorden/toggle", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function woonoorden_toggle()
+	public function woonoorden_toggle(): EetplanHuizenResponse
 	{
 		$selection = $this->getDataTableSelection();
 		$woonoorden = [];
@@ -135,7 +135,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/woonoorden", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function woonoorden()
+	public function woonoorden(): EetplanHuizenResponse
 	{
 		$woonoorden = $this->woonoordenRepository->findBy(['status' => GroepStatus::HT()]);
 		return new EetplanHuizenResponse($woonoorden);
@@ -146,7 +146,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/bekendehuizen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen()
+	public function bekendehuizen(): GenericDataTableResponse
 	{
 		return $this->tableData($this->eetplanRepository->getBekendeHuizen($this->lidjaar));
 	}
@@ -210,7 +210,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/bekendehuizen/verwijderen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_verwijderen()
+	public function bekendehuizen_verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 		$verwijderd = array();
@@ -233,7 +233,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/bekendehuizen/zoeken", methods={"GET"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function bekendehuizen_zoeken(Request $request)
+	public function bekendehuizen_zoeken(Request $request): EetplanHuizenZoekenResponse
 	{
 		$huisnaam = $request->query->get('q');
 		$huisnaam = '%' . $huisnaam . '%';
@@ -251,7 +251,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/novietrelatie", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie()
+	public function novietrelatie(): GenericDataTableResponse
 	{
 		return $this->tableData($this->eetplanBekendenRepository->getBekendenVoorLidjaar($this->lidjaar));
 	}
@@ -315,7 +315,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/novietrelatie/verwijderen", methods={"POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novietrelatie_verwijderen()
+	public function novietrelatie_verwijderen(): GenericDataTableResponse
 	{
 		$selection = $this->getDataTableSelection();
 		$verwijderd = [];
@@ -334,7 +334,7 @@ class EetplanController extends AbstractController
 	 * @Route("/eetplan/beheer", methods={"GET", "POST"})
 	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function beheer()
+	public function beheer(): Response
 	{
 		return $this->render('eetplan/beheer.html.twig', [
 			'bekendentable' => new EetplanBekendenTable(),

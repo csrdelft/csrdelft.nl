@@ -13,7 +13,7 @@ class HiddenField extends InputField {
 		$this->type = "hidden";
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 }

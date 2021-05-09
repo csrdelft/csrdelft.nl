@@ -81,13 +81,12 @@ class FormulierInstance {
 		}
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
-			ob_start();
-			$field->view();
-			$html .= ob_get_clean();
+			$html .= $field->__toString();
 		}
 		$csrfField = $this->getCsrfField();
-		if ($csrfField != null)
+		if ($csrfField != null) {
 			$html .= $csrfField->getHtml();
+		}
 		$html .= $this->formKnoppen->getHtml();
 		$html .= $this->getScriptTag();
 		$html .= '</form>';
@@ -166,9 +165,7 @@ HTML;
 		}
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
-			ob_start();
-			$field->view();
-			$html .= ob_get_clean();
+			$html .= $field->__toString();
 		}
 		$html .= <<<HTML
 			</div>

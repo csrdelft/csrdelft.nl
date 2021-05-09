@@ -393,18 +393,20 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * View die zou moeten werken voor veel velden.
 	 */
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo '<div class="' . $this->fieldClassName . '">';
-		echo $this->getHtml();
-		echo $this->getErrorDiv();
-		echo '</div>';
-		echo $this->getHelpDiv();
+	public function __toString() {
+		$html = '';
+		$html .= $this->getDiv();
+		$html .= $this->getLabel();
+		$html .= '<div class="' . $this->fieldClassName . '">';
+		$html .= $this->getHtml();
+		$html .= $this->getErrorDiv();
+		$html .= '</div>';
+		$html .= $this->getHelpDiv();
 		if ($this->preview) {
-			echo $this->getPreviewDiv();
+			$html .= $this->getPreviewDiv();
 		}
-		echo '</div>';
+		$html .= '</div>';
+		return $html;
 	}
 
 	/**

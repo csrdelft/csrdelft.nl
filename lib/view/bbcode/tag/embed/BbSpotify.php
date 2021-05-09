@@ -53,7 +53,7 @@ class BbSpotify extends BbTag {
 	{
 		$this->formaat = $arguments['formaat'] ?? null;
 		$url = $this->readMainArgument($arguments);
-		if (!startsWith($url, 'spotify') && !filter_var($url, FILTER_VALIDATE_URL)) {
+		if (!str_starts_with($url, 'spotify') && !filter_var($url, FILTER_VALIDATE_URL)) {
 			throw new BbException('[spotify] Geen geldige url (' . $url . ')');
 		}
 		$this->uri = urlencode($url);

@@ -3,7 +3,9 @@ version: '3'
 volumes:
   mysqldata:
     driver: local
-
+  symfonycache:
+  sessiecache:
+    
 services:
   stek:
     build:
@@ -18,6 +20,8 @@ services:
       - ./:/app
       - ./docker/dev/.env.local:/app/.env.local
       - ./vendor:/app/vendor
+      - symfonycache:/app/var
+      - sessiecache:/app/sessie
 
   composer:
     build:
@@ -49,11 +53,4 @@ services:
       dockerfile: "docker/Dockerfile-yarn"
     image: csrdelft/yarn
     volumes:
-      - ./package.json:/app/package.json
-      - ./yarn.lock:/app/yarn.lock
-      - ./.eslintrc.yaml:/app/.eslintrc.yaml
-      - ./webpack.config.js:/app/webpack.config.js
-      - ./tsconfig.json:/app/tsconfig.json
-      - ./htdocs/dist:/app/htdocs/dist # output
-      - ./assets:/app/assets # input
-      - ./bin/dev:/app/bin/dev
+      - ./:/app

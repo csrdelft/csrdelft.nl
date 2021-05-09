@@ -9,15 +9,15 @@ use CsrDelft\entity\profiel\Profiel;
 class LLKaartje extends LLWeergave {
 
 	public function viewHeader() {
-
+		return '';
 	}
 
 	public function viewFooter() {
-
+		return '';
 	}
 
 	public function viewLid(Profiel $profiel) {
-		echo $profiel->getLink('leeg');
+		return $profiel->getLink('leeg');
 	}
 
 }

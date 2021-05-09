@@ -18,9 +18,12 @@ class FunctieDeleteView implements ToResponse , View{
 		$this->functieId = $functieId;
 	}
 
-	public function view() {
-		echo '<tr id="corveefunctie-row-' . $this->functieId . '" class="remove"></tr>';
-		echo '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
+	public function __toString() {
+		$html = '';
+		$html .= '<tr id="corveefunctie-row-' . $this->functieId . '" class="remove"></tr>';
+		$html .= '<tr id="maalcie-melding"><td>' . getMelding() . '</td></tr>';
+
+		return $html;
 	}
 
 	public function getTitel() {

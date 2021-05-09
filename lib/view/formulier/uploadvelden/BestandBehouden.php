@@ -58,7 +58,7 @@ class BestandBehouden extends InputField {
 
 	public function getPreviewDiv() {
 		if ($this->model instanceof Afbeelding) {
-			return '<div id="imagePreview_' . $this->getId() . '" class="previewDiv"><img src="' . str_replace(PHOTOALBUM_PATH, CSR_ROOT . '/plaetjes/', $this->model->directory) . $this->model->filename . '" width="' . $this->model->width . '" height="' . $this->model->height . '" /></div>';
+			return '<div id="imagePreview_' . $this->getId() . '" class="previewDiv"><img src="' . str_replace(PHOTOALBUM_PATH, getCsrRoot() . '/plaetjes/', $this->model->directory) . $this->model->filename . '" width="' . $this->model->width . '" height="' . $this->model->height . '" /></div>';
 		}
 		return '';
 	}
