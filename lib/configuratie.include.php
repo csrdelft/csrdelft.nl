@@ -24,7 +24,7 @@ require __DIR__ . '/../config/bootstrap.php';
 
 $headers = apache_request_headers();
 if (isset($headers['Cookie']) && substr_count($headers['Cookie'], 'CSRSESSID') > 1) {
-	setcookie('CSRSESSID', 'deleted', time() - 3600, '/', '.csrdelft.nl');
+	setcookie('CSRSESSID', 'deleted', time() - 3600, '/', '.csrdelft.nl', true, true);
 }
 
 // Registreer foutmelding handlers
