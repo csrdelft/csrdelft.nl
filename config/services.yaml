@@ -141,13 +141,6 @@ services:
     tags:
       - { name: kernel.event_listener, event: trikoder.oauth2.user_resolve, method: onUserResolve }
 
-  CsrDelft\events\OAuth2AuthorizeListener:
-    arguments:
-      - '@request_stack'
-      - '@twig'
-    tags:
-      - { name: kernel.event_listener, event: trikoder.oauth2.authorization_request_resolve, method: onAuthorizationRequest }
-
   Trikoder\Bundle\OAuth2Bundle\Security\Guard\Authenticator\OAuth2Authenticator:
 
   CsrDelft\events\LogEventListener:

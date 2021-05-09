@@ -5,15 +5,20 @@ namespace CsrDelft\events;
 
 
 use CsrDelft\common\Security\OAuth2Scope;
+use CsrDelft\service\security\LoginService;
 use Nyholm\Psr7\Response;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Trikoder\Bundle\OAuth2Bundle\Event\AuthorizationRequestResolveEvent;
+use Trikoder\Bundle\OAuth2Bundle\Event\ScopeResolveEvent;
+use Trikoder\Bundle\OAuth2Bundle\Model\Scope;
+use Trikoder\Bundle\OAuth2Bundle\OAuth2Events;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class OAuth2AuthorizeListener
+class OAuth2Subscriber implements EventSubscriberInterface
 {
 	/**
 	 * @var RequestStack
@@ -23,14 +28,42 @@ class OAuth2AuthorizeListener
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var LoginService
+	 */
+	private $loginService;
 
 	public function __construct(
 		RequestStack $requestStack,
-		Environment $twig
+		Environment $twig,
+		LoginService $loginService
 	)
 	{
+		$this->loginService = $loginService;
 		$this->requestStack = $requestStack;
 		$this->twig = $twig;
+	}
+
+	public static function getSubscribedEvents()
+	{
+		return [
+			OAuth2Events::SCOPE_RESOLVE => 'onScopeResolve',
+			OAuth2Events::AUTHORIZATION_REQUEST_RESOLVE => 'onAuthorizationRequest',
+		];
+	}
+
+	public function onScopeResolve(ScopeResolveEvent $event)
+	{
+		$requestedScopes = $event->getScopes();
+
+		$scopes = [];
+		foreach ($requestedScopes as $scope) {
+			if ($this->loginService->_mag(OAuth2Scope::magScope($scope))) {
+				$scopes[] = $scope;
+			}
+		}
+
+		$event->setScopes(...$scopes);
 	}
 
 	/**
@@ -58,11 +91,16 @@ class OAuth2AuthorizeListener
 			return;
 		}
 
-		$allScopes = array_unique(array_merge($event->getScopes(), $event->getClient()->getScopes()));
+		/** @var Scope[] $requestedScopes */
+		$requestedScopes = array_unique(array_merge($event->getScopes(), $event->getClient()->getScopes()));
 
-		$scopes = array_map(function ($scope) {
-			return OAuth2Scope::getBeschrijving((string)$scope);
-		}, $allScopes);
+		// Deze check wordt ook gedaan in OAuth2ScopeSubscriber
+		$scopeBeschrijving = [];
+		foreach ($requestedScopes as $scope) {
+			if ($this->loginService->_mag(OAuth2Scope::magScope($scope))) {
+				$scopeBeschrijving[] = OAuth2Scope::getBeschrijving($scope);
+			}
+		}
 
 		$response = new Response(200,
 			[],
@@ -73,7 +111,7 @@ class OAuth2AuthorizeListener
 				'token' => $request->getSession()->get('token'),
 				'state' => $request->get('state'),
 				'scope' => $request->get('scope'),
-				'scopes' => $scopes,
+				'scopes' => $scopeBeschrijving,
 			])
 		);
 

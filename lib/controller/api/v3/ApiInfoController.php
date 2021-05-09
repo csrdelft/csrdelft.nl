@@ -7,8 +7,10 @@ namespace CsrDelft\controller\api\v3;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Trikoder\Bundle\OAuth2Bundle\Security\Authentication\Token\OAuth2Token;
 
 class ApiInfoController extends AbstractController
 {
@@ -20,11 +22,19 @@ class ApiInfoController extends AbstractController
 	 */
 	public function profiel(Security $security): JsonResponse
 	{
+		$token = $security->getToken();
+		if (!$token instanceof OAuth2Token) {
+			throw new BadRequestHttpException();
+		}
+
+		$scopes = $token->getAttribute('server_request')->getAttribute('oauth_scopes', []);
+
 		$user = $this->getUser();
 
 		$json = [
 			'id' => $user->uuid->toRfc4122(),
 			'displayName' => $this->getUser()->profiel->getNaam(),
+			'scopes' => $scopes,
 		];
 
 		if ($security->isGranted('ROLE_OAUTH2_PROFIEL:EMAIL')) {
