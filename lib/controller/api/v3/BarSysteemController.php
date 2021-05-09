@@ -6,12 +6,16 @@ namespace CsrDelft\controller\api\v3;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\bar\BarLocatie;
+use CsrDelft\service\AccessService;
 use CsrDelft\service\BarSysteemService;
+use CsrDelft\service\security\LoginService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Class BarSysteemController
@@ -28,6 +32,34 @@ class BarSysteemController extends AbstractController
 	public function __construct(BarSysteemService $barSysteemService)
 	{
 		$this->barSysteemService = $barSysteemService;
+	}
+
+	/**
+	 * @Route("/trust", methods={"POST"})
+	 * @Auth(P_FISCAAT_MOD)
+	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
+	 * @param Request $request
+	 * @return JsonResponse
+	 */
+	public function trust(Request $request, LoginService $loginService) {
+		// maak een nieuwe BarSysteemTrust object en sla op.
+
+		if (!$loginService->_mag(P_FISCAAT_MOD)) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$barLocatie = new BarLocatie();
+		$barLocatie->ip = $request->getClientIp();
+		$barLocatie->naam = $request->request->get('naam');
+		$barLocatie->sleutel = Uuid::v4();
+		$barLocatie->doorAccount = $this->getUser();
+
+		$objectManager = $this->getDoctrine()->getManager();
+
+		$objectManager->persist($barLocatie);
+		$objectManager->flush();
+
+		return $this->json($barLocatie, 200, [], ['groups' => ['json']]);
 	}
 
 	/**
