@@ -40,11 +40,7 @@ Bootstrap submenu
 	transform: rotate(-90deg);
 	position: absolute;
 	right: 6px;
-	top: 1em;
-	border-top: 0.3em solid transparent;
-	border-right: 0;
-	border-bottom: 0.3em solid transparent;
-	border-left: 0.3em solid;
+	top: .8em;
 }
 
 .dropdown-submenu .dropdown-menu {
@@ -131,7 +127,7 @@ table.inline {
   font-size: smaller;
 }
 
-.text-end {
+.text-right {
   text-align: right;
 }
 

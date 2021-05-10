@@ -329,7 +329,7 @@ class ToolsController extends AbstractController {
 			$profiel = $scoredProfiel['profiel'];
 
 			$result[] = array(
-				'icon' => Icon::getTag('profiel', null, 'Profiel', 'me-2'),
+				'icon' => Icon::getTag('profiel', null, 'Profiel', 'mr-2'),
 				'url' => '/profiel/' . $profiel->uid,
 				'label' => $profiel->uid,
 				'value' => $profiel->getNaam($vorm),

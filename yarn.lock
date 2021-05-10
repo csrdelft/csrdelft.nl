@@ -140,20 +140,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:2.6.0":
-  version: 2.6.0
-  resolution: "@popperjs/core@npm:2.6.0"
-  checksum: b05148a11586c3d622973d4968355e694471ae86620eaf28d78360e4e48323123428c963dbc76182777a91837203de4060a0e76603a4b275df3ebcdaaf1e4ded
-  languageName: node
-  linkType: hard
-
-"@popperjs/core@npm:^2.6.0":
-  version: 2.8.3
-  resolution: "@popperjs/core@npm:2.8.3"
-  checksum: 775aa6393a1bf0a7e76c9366f6714de32e6db6e8f863d759a3106c3daaa2026f034e27217c186a44d159d201ab624e70cfecc56ae661772b4e2a29e27eef650a
-  languageName: node
-  linkType: hard
-
 "@remirror/core-constants@npm:^0.7.4":
   version: 0.7.4
   resolution: "@remirror/core-constants@npm:0.7.4"
@@ -341,13 +327,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bootstrap@npm:^5.0.0":
-  version: 5.0.13
-  resolution: "@types/bootstrap@npm:5.0.13"
+"@types/bootstrap@npm:^4.2.0":
+  version: 4.5.0
+  resolution: "@types/bootstrap@npm:4.5.0"
   dependencies:
-    "@popperjs/core": 2.6.0
     "@types/jquery": "*"
-  checksum: d7c94da0651e6fa2b035c46c56f5c17c29b9a557bb6e9657ea2bfece1774db07e29a8d7ed5e23114ca95bb6889d13ed459a617937c24671788001b1fd2fe1914
+    popper.js: ^1.14.1
+  checksum: 9cb3da3957539c10e8fbaff46814f42ddfbaa2f5377d8786cc16b7fc78f86180d2edc993cfd824622e815365758e5f352902a001f3aec5fff36edcd03ad1523b
   languageName: node
   linkType: hard
 
@@ -1489,22 +1475,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap@npm:>=4.5.0 <5.0.0":
+"bootstrap@npm:>=4.5.0 <5.0.0, bootstrap@npm:^4.3.1":
   version: 4.5.0
   resolution: "bootstrap@npm:4.5.0"
   peerDependencies:
     jquery: 1.9.1 - 3
     popper.js: ^1.16.0
   checksum: 89284a8d1bfcf508588e2eedb652374af5790d2b47d3ca7b192ec67742db99c9652181979a6ab16b91230df1efea1a8ac5a4e6ffd44265a7b5f0583d275227d3
-  languageName: node
-  linkType: hard
-
-"bootstrap@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "bootstrap@npm:5.0.0"
-  peerDependencies:
-    "@popperjs/core": ^2.9.2
-  checksum: bcba4d099d2cbe2c923b6b48f8934f446af452f9a3e6e74fc10d51fb51987960e4335808ab7ca2a7c2a0a5aefbcb7603c4b48bb6d194433371bb6c251b97f57f
   languageName: node
   linkType: hard
 
@@ -5015,7 +4992,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"popper.js@npm:^1.15, popper.js@npm:^1.16.1":
+"popper.js@npm:^1.14.1, popper.js@npm:^1.15, popper.js@npm:^1.16.1":
   version: 1.16.1
   resolution: "popper.js@npm:1.16.1"
   checksum: eb53806fb7680e31c7d1db096f95438a40a7cb869f7ee0e27100c0860f11583a0d322606c6073618e7fe8865f834ec36482901b547256d9a0cf2b22434bca75d
@@ -6041,9 +6018,8 @@ resolve@^1.9.0:
     "@fullcalendar/interaction": ^4.3.0
     "@fullcalendar/list": ^4.3.0
     "@fullcalendar/timegrid": ^4.3.0
-    "@popperjs/core": ^2.6.0
     "@sentry/browser": ^5.21.1
-    "@types/bootstrap": ^5.0.0
+    "@types/bootstrap": ^4.2.0
     "@types/chart.js": ^2.7.42
     "@types/datatables.net": ^1.10.17
     "@types/datatables.net-buttons": ^1.4.2
@@ -6073,7 +6049,7 @@ resolve@^1.9.0:
     "@typescript-eslint/parser": ^4.22.0
     autoprefixer: ^9.1.1
     axios: ^0.21.1
-    bootstrap: ^5.0.0
+    bootstrap: ^4.3.1
     bootstrap-vue: ^2.0.0-rc.11
     chart.js: ^2.7.3
     clippyjs: ^0.0.3

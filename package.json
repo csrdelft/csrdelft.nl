@@ -13,7 +13,7 @@
 		"lint": "yarn run eslint --ext .vue,.ts assets/js"
 	},
 	"devDependencies": {
-		"@types/bootstrap": "^5.0.0",
+		"@types/bootstrap": "^4.2.0",
 		"@types/chart.js": "^2.7.42",
 		"@types/datatables.net": "^1.10.17",
 		"@types/datatables.net-buttons": "^1.4.2",
@@ -80,11 +80,10 @@
 		"@fullcalendar/interaction": "^4.3.0",
 		"@fullcalendar/list": "^4.3.0",
 		"@fullcalendar/timegrid": "^4.3.0",
-		"@popperjs/core": "^2.6.0",
 		"@sentry/browser": "^5.21.1",
 		"@types/orderedmap": "^1.0.0",
 		"axios": "^0.21.1",
-		"bootstrap": "^5.0.0",
+		"bootstrap": "^4.3.1",
 		"bootstrap-vue": "^2.0.0-rc.11",
 		"chart.js": "^2.7.3",
 		"clippyjs": "^0.0.3",

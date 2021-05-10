@@ -88,7 +88,7 @@ main {
     > .form-control,
     > .custom-select {
       &:not(:last-child) {
-        @include border-end-radius(0);
+        @include border-right-radius(0);
       }
     }
   }
