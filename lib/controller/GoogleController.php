@@ -60,7 +60,7 @@ class GoogleController extends AbstractController {
 
 			$manager->flush();
 
-			return $this->redirect(urldecode($state));
+			return $this->redirect($state);
 		}
 
 		if ($error) {
