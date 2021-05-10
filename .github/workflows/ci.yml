@@ -198,4 +198,4 @@ jobs:
       - name: Check translations
         run: |
           php bin/console translation:update en --force
-          git diff-index --quiet HEAD || exit 1
+          git diff --exit-code || exit 1
