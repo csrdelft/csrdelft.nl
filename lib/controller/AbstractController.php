@@ -63,8 +63,6 @@ class AbstractController extends BaseController {
 				$url = $request->getRequestUri();
 			}
 
-			$url = $this->get('request_stack')->getAbsoluteUrl($url);
-
 			$root = $request->getSchemeAndHttpHost();
 
 			if (!str_starts_with($url, $root) && !$allowExternal) {
