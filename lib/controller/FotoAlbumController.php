@@ -37,6 +37,9 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller van het fotoalbum.
  */
 class FotoAlbumController extends AbstractController {
+	/**
+	 * @var FotoAlbumRepository
+	 */
 	private $fotoAlbumRepository;
 	/**
 	 * @var FotoTagsRepository
@@ -71,10 +74,10 @@ class FotoAlbumController extends AbstractController {
 		}
 		if ($album->dirname === 'fotoalbum') {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
-			return $this->csrRedirect($album->getUrl());
+		} else {
+			$this->fotoAlbumRepository->verwerkFotos($album);
 		}
-		$this->fotoAlbumRepository->verwerkFotos($album);
-		return $this->csrRedirect($album->getUrl());
+		return $this->redirectToRoute('csrdelft_fotoalbum_bekijken', ['dir' => $dir]);
 	}
 
 	/**
@@ -149,7 +152,10 @@ class FotoAlbumController extends AbstractController {
 					}
 
 					if ($poster) {
-						return $this->csrRedirect($album->getUrl() . '#' . $foto->getResizedUrl());
+						return $this->redirectToRoute(
+							'csrdelft_fotoalbum_bekijken', 
+							['dir' => $dir, '_fragment' => $foto->getResizedUrl()]
+						);
 					} else {
 						return new JsonResponse(true);
 					}

@@ -54,14 +54,14 @@ class GoogleController extends AbstractController {
 
 			$manager->flush();
 
-			return $this->csrRedirect(urldecode($state));
+			return $this->redirect(urldecode($state));
 		}
 
 		if ($error) {
 			setMelding('Verbinding met Google niet geaccepteerd', 2);
 			$state = substr(strstr($state, 'addToGoogleContacts', true), 0, -1);
 
-			return $this->csrRedirect($state);
+			return $this->redirect($state);
 		}
 
 		throw new CsrException('Geen error en geen code van Google gekregen.');
