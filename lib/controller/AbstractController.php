@@ -11,7 +11,6 @@ use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use Memcache;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Throwable;
@@ -46,35 +45,6 @@ class AbstractController extends BaseController {
 		}
 
 		return $selection;
-	}
-
-	/**
-	 * Redirect only to external urls if explicitly allowed
-	 * @param string $url
-	 * @param int $status
-	 * @param bool $allowExternal
-	 * @return RedirectResponse
-	 */
-	protected function csrRedirect($url, $status = 302, $allowExternal = false): RedirectResponse
-	{
-
-		$request = $this->get('request_stack')->getCurrentRequest();
-			if (empty($url) || $url === null) {
-				$url = $request->getRequestUri();
-			}
-
-			$root = $request->getSchemeAndHttpHost();
-
-			if (!str_starts_with($url, $root) && !$allowExternal) {
-				if (preg_match("/^[?#\/]/", $url) === 1) {
-
-					$url = $this->get('url_helper')->getAbsoluteUrl($url);
-				} else {
-					throw $this->createAccessDeniedException();
-				}
-			}
-			return parent::redirect($url, $status);
-
 	}
 
 	protected function tableData($data): GenericDataTableResponse
