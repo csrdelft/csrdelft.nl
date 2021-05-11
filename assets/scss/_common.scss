@@ -27,6 +27,21 @@ html {
 	z-index: 10000!important;
 }
 
+/**
+General overrides
+ */
+.footer a:not(:hover) {
+	text-decoration: none;
+}
+
+#zijbalk a:not(:hover) {
+	text-decoration: none;
+}
+
+a.lidLink:not(:hover) {
+	text-decoration: none;
+}
+
 /* --------------------------------
 
 Bootstrap submenu
