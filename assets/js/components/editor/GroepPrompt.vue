@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="form-group row">
+            <div class="mb-3 row">
               <label
                 class="col-sm-2 col-form-label"
                 for="zoeken"
@@ -39,7 +39,7 @@
                 >
               </div>
             </div>
-            <div class="form-group row">
+            <div class="mb-3 row">
               <label
                 class="col-sm-2 col-form-label"
               >Status</label>

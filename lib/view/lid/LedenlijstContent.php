@@ -69,7 +69,7 @@ class LedenlijstContent implements View {
 
 	public function viewVeldselectie() {
 		$html = '';
-		$html .= '<div class="form-group">';
+		$html .= '<div class="mb-3">';
 		$html .= '<label for="veldselectie">Veldselectie: </label>';
 		$html .= '<div class="veldselectie">';
 		$velden = $this->lidzoeker->getSelectableVelden();
@@ -110,10 +110,10 @@ class LedenlijstContent implements View {
 		$html .= '<form id="zoekform" method="get">';
 		$html .= '<div class="input-group">';
 		$html .= '<input type="text" class="form-control" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
-		$html .= '<div class="input-group-append"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
+		$html .= '<div class="input-group-text"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 
 		$html .= '<div id="advanced" class="verborgen">';
-		$html .= '<div class="form-group">';
+		$html .= '<div class="mb-3">';
 		$html .= '<label for="status">Status:</label>';
 		$html .= $this->viewSelect('status', array(
 			'LEDEN' => 'Leden',
@@ -125,7 +125,7 @@ class LedenlijstContent implements View {
 			'ALL' => 'Alles'
 		));
 		$html .= '</div>';
-		$html .= '<div class="form-group">';
+		$html .= '<div class="mb-3">';
 		$html .= '<label for="weergave">Weergave:</label>';
 		$html .= $this->viewSelect('weergave', array(
 			'lijst' => 'Lijst (standaard)',
@@ -134,7 +134,7 @@ class LedenlijstContent implements View {
 		$html .= '</div>';
 
 		//sorteren op:
-		$html .= '<div class="form-group">';
+		$html .= '<div class="mb-3">';
 		$html .= '<label for="sort">Sorteer op:</label>';
 		$html .= $this->viewSelect('sort', $this->lidzoeker->getSortableVelden());
 		$html .= '</div>';

@@ -40,7 +40,7 @@ use CsrDelft\view\Validator;
  * behalve FileField zelf die wel meerdere InputFields bevat.
  */
 abstract class InputField implements FormElement, Validator {
-	protected $wrapperClassName = 'form-group row mb-3';
+	protected $wrapperClassName = 'row mb-3';
 	protected $labelClassName = 'col-3 col-form-label';
 	protected $fieldClassName = 'col-9';
 

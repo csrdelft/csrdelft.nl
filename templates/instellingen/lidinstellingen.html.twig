@@ -27,7 +27,7 @@
 
 				{% for id, instelling in moduleInstellingen %}
 					{% set keuze = instellingen[module][id] is defined ? instellingen[module][id] : default %}
-					<div class="form-group row instelling mb-3" id="instelling-{{ module }}-{{ id }}">
+					<div class="row instelling mb-3" id="instelling-{{ module }}-{{ id }}">
 						<label class="col-md-3 col-form-label" for="inst_{{ module }}_{{ id }}">{{ instelling.titel | raw }}</label>
 
 						<div class="col-md-9">

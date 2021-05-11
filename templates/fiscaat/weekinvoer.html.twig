@@ -7,23 +7,17 @@
 
 	<form action="{{ url('csrdelft_fiscaat_weekinvoer_weekinvoer') }}" method="get" class="mt-4">
 		<div class="row">
-			<div class="col-md-5">
-				<div class="form-group">
-					<label for="van">Van:</label>
-					<input id="van" name="van" type="date" class="form-control" value="{{ van }}" />
-				</div>
+			<div class="col-md-5 mb-3">
+				<label for="van">Van:</label>
+				<input id="van" name="van" type="date" class="form-control" value="{{ van }}" />
 			</div>
-			<div class="col-md-5">
-				<div class="form-group">
-					<label for="tot">Tot:</label>
-					<input id="tot" name="tot" type="date" class="form-control" value="{{ tot }}" />
-				</div>
+			<div class="col-md-5 mb-3">
+				<label for="tot">Tot:</label>
+				<input id="tot" name="tot" type="date" class="form-control" value="{{ tot }}" />
 			</div>
-			<div class="col-md-2">
-				<div class="form-group">
-					<label>&emsp;</label>
-					<input class="btn btn-primary form-control" type="submit" value="Bekijk">
-				</div>
+			<div class="col-md-2 mb-3">
+				<label>&emsp;</label>
+				<input class="btn btn-primary form-control" type="submit" value="Bekijk">
 			</div>
 		</div>
 
