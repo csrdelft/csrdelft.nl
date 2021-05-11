@@ -1,11 +1,11 @@
 {% set user = app.user %}
 {% set profiel = user.profiel %}
-<li class="nav-item d-md-block d-none ml-3">
+<li class="nav-item d-md-block d-none ms-3">
 	<img src="{{ profiel.getPasfotoPath('vierkant') }}" alt="Pasfoto"
 			 class="pasfoto-menu"/>
 </li>
 <li class="nav-item dropdown">
-	<a class="nav-link dropdown-toggle pl-2" href="#" id="menu-personal" role="button" data-toggle="dropdown"
+	<a class="nav-link dropdown-toggle ps-2" href="#" id="menu-personal" role="button" data-bs-toggle="dropdown"
 		 aria-haspopup="true" aria-expanded="false">
 		{{ profiel.getNaam('volledig') }}
 	</a>
