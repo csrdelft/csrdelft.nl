@@ -185,5 +185,5 @@ docReady(() => {
 	const calendar = new Calendar(calendarEl, options);
 	calendar.render();
 
-	$(document.body).on('modalClose', () => calendar.refetchEvents());
+	document.addEventListener('modalClose', () => calendar.refetchEvents());
 });
