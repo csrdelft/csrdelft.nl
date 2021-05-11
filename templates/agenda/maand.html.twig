@@ -49,7 +49,7 @@
 		</div>
 		{% if app.user.privateToken %}
 			<input class="form-control" type="text" id="ical-link"
-						 value="{{ app.user.iCalLink }}"
+						 value="{{ absolute_url(app.user.iCalLink) }}"
 						 size="35" onclick="this.setSelectionRange(0, this.value.length);" readonly/>
 		{% else %}
 			<a class="input-group-text" href="{{ url('csrdelft_profiel_profiel', {_fragment: 'tokenaanvragen'}) }}">
