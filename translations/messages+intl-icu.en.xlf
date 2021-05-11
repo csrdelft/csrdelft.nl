@@ -358,12 +358,12 @@
 							goed mogelijk beeld proberen te geven tijdens deze meeloopdag van het studentenleven bij
 							C.S.R. Daarnaast staan we klaar om al je vragen te beantwoorden.
 							Om deel te nemen aan een meeloopdag kun je het volgende formulier invullen:</source>
-        <target><![CDATA[Dear student,
+        <target>Dear student,
 							Thanks for visiting our website! Here you can find information en photos of what we do at C.S.R.
 							If you want a better view of how C.S.R. is, you're free to join a student here in Delft for a day.
 							You'll be able to see how a day as a student looks like and you'll be able to talk to members of C.S.R.
 							If you're interested, you can fill in the following form:
-							]]></target>
+							</target>
       </trans-unit>
       <trans-unit id="kwuZyk_" resname="Formulier">
         <source>Formulier</source>
