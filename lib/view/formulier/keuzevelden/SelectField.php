@@ -24,6 +24,8 @@ class SelectField extends InputField {
 		$this->options = $options;
 		$this->size = (int)$size;
 		$this->multiple = $multiple;
+
+		$this->css_classes = ['form-select'];
 	}
 
 	public function getOptions() {

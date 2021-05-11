@@ -11,7 +11,7 @@ namespace CsrDelft\view\formulier\invoervelden;
  */
 class TextareaField extends TextField {
 
-	protected $wrapperClassName = 'form-group';
+	protected $wrapperClassName = 'mb-3';
 	protected $labelClassName = '';
 	protected $fieldClassName = '';
 

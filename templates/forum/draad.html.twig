@@ -18,19 +18,19 @@
 		{% block kop %}
 			{% if app.user %}
 				{% if statistiek is none and draad.magStatistiekBekijken %}
-					<div class="btn-group mr-2">
+					<div class="btn-group me-2">
 						<a
 							href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, pagina: getHuidigePagina(), statistiek: 'statistiek'}) }}"
 							class="btn btn-light" title="Toon statistieken">{{ icon('chart_line') }}</a>
 					</div>
 				{% endif %}
-				<div class="btn-group mr-2">
+				<div class="btn-group me-2">
 					<a title="Onderwerp toevoegen aan favorieten" class="btn btn-light post popup addfav"
 						 href="{{ url('csrdelft_menubeheer_toevoegen', {parentId: 'favoriet'}) }}">{{ icon('heart', 'heart_add') }}</a>
 				</div>
 
 				{% if draad.magMeldingKrijgen %}
-					<div class="btn-group mr-2">
+					<div class="btn-group me-2">
 						<a href="{{ url('csrdelft_forum_meldingsniveau', {draad_id: draad.draad_id, niveau: 'nooit'}) }}"
 							 class="btn btn-light post ReloadPage melding-nooit {% if draad.meldingsNiveau.isNOOIT %}active{% endif %}"
 							 title="Nooit meldingen ontvangen">{{ icon('email_delete', 'email_delete') }}</a>
@@ -44,13 +44,13 @@
 				{% endif %}
 
 				{% if draad.verborgen %}
-					<div class="btn-group mr-2">
+					<div class="btn-group me-2">
 						<a href="{{ url('csrdelft_forum_tonen', {draad_id: draad.draad_id}) }}"
 							 class="btn btn-light post ReloadPage tonenAan"
 							 title="Onderwerp tonen in zijbalk">{{ icon('layout', 'layout_add') }}</a>
 					</div>
 				{% elseif draad.magVerbergen %}
-					<div class="btn-group mr-2">
+					<div class="btn-group me-2">
 						<a href="{{ url('csrdelft_forum_verbergen', {draad_id: draad.draad_id}) }}"
 							 class="btn btn-light post ReloadPage tonenUit"
 							 title="Onderwerp verbergen in zijbalk">{{ icon('layout_sidebar', 'layout_delete') }}</a>
@@ -58,7 +58,7 @@
 				{% endif %}
 
 				{% if draad.magModereren %}
-					<div class="btn-group mr-2">
+					<div class="btn-group me-2">
 						{% if draad.gesloten %}
 							<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gesloten'}) }}"
 								 class="btn btn-light post ReloadPage slotjeUit"
@@ -70,9 +70,9 @@
 						{% endif %}
 					</div>
 
-					<div class="btn-group mr-2">
+					<div class="btn-group me-2">
 						<a href="#modereren" class="btn btn-light modfuncties" title="Moderatie-functies weergeven"
-							 data-toggle="collapse"
+							 data-bs-toggle="collapse"
 							 onclick="">
 							{{ icon('wrench') }} Modereren
 						</a>

@@ -27,6 +27,21 @@ html {
 	z-index: 10000!important;
 }
 
+/**
+General overrides
+ */
+.footer a:not(:hover) {
+	text-decoration: none;
+}
+
+#zijbalk a:not(:hover) {
+	text-decoration: none;
+}
+
+a.lidLink:not(:hover) {
+	text-decoration: none;
+}
+
 /* --------------------------------
 
 Bootstrap submenu
@@ -37,10 +52,13 @@ Bootstrap submenu
 }
 
 .dropdown-submenu a::after {
-	transform: rotate(-90deg);
 	position: absolute;
 	right: 6px;
-	top: .8em;
+	top: 1em;
+	border-top: 0.3em solid transparent;
+	border-right: 0;
+	border-bottom: 0.3em solid transparent;
+	border-left: 0.3em solid;
 }
 
 .dropdown-submenu .dropdown-menu {
@@ -127,7 +145,7 @@ table.inline {
   font-size: smaller;
 }
 
-.text-right {
+.text-end {
   text-align: right;
 }
 
