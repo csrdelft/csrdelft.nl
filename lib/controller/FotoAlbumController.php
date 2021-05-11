@@ -153,7 +153,7 @@ class FotoAlbumController extends AbstractController {
 
 					if ($poster) {
 						return $this->redirectToRoute(
-							'csrdelft_fotoalbum_bekijken', 
+							'csrdelft_fotoalbum_bekijken',
 							['dir' => $dir, '_fragment' => $foto->getResizedUrl()]
 						);
 					} else {
@@ -467,8 +467,10 @@ class FotoAlbumController extends AbstractController {
 
 		if (!$image->magBekijken()) {
 			throw $this->createAccessDeniedException();
-		} else if (!$image->exists()) {
+		} elseif (!$image->exists()) {
 			throw $this->createNotFoundException();
+		} elseif (!is_file($image->getResizedPath()) || !is_readable($image->getResizedPath())) {
+			$image->createResized();
 		}
 
 		$response = new BinaryFileResponse($image->getResizedPath(), 200, [], true, null, true);
@@ -494,8 +496,10 @@ class FotoAlbumController extends AbstractController {
 
 		if (!$image->magBekijken()) {
 			throw $this->createAccessDeniedException();
-		} else if (!$image->exists()) {
+		} elseif (!$image->exists()) {
 			throw $this->createNotFoundException();
+		} elseif (!is_file($image->getThumbPath()) || !is_readable($image->getThumbPath())) {
+			$image->createThumb();
 		}
 
 		$response = new BinaryFileResponse($image->getThumbPath(), 200, [], true, null, true);
