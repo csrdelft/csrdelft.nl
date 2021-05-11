@@ -37,7 +37,7 @@ class GroepLijstView extends GroepTabView {
 		foreach ($this->groep->getLedenOpAchternaamGesorteerd() as $lid) {
 			$html .= '<tr><td>';
 			if ($lid->uid === LoginService::getUid() AND $this->groep->mag(AccessAction::Afmelden())) {
-				$html .= '<a href="' . $this->groep->getUrl() . '/ketzer/afmelden" class="post confirm float-left" title="Afmelden">' . Icon::getTag('bullet_delete') . '</a>';
+				$html .= '<a href="' . $this->groep->getUrl() . '/ketzer/afmelden" class="post confirm float-start" title="Afmelden">' . Icon::getTag('bullet_delete') . '</a>';
 			}
 			$html .= ProfielRepository::getLink($lid->uid, 'civitas');
 			$html .= '</td><td>';

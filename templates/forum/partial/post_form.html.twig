@@ -61,7 +61,7 @@
 					<input type="button" value="Concept opslaan" id="forumConcept" class="btn btn-secondary"
 								 onclick="window.forum.saveConceptForumBericht();"
 								 data-url="{{ url('csrdelft_forum_concept', {forum_id: deel.forum_id, draad_id: draad is none ? null : draad.draad_id}) }}"/>
-					<div class="float-right">
+					<div class="float-end">
 						<a href="{{ url('csrdelft_documenten_toevoegen') }}" target="_blank">Document opladen</a>
 						<a href="{{ url('csrdelft_fotoalbum_uploaden', {dir: huidige_jaargang() ~ '/Posters'}) }}" target="_blank">
 							Poster opladen

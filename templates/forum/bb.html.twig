@@ -24,7 +24,7 @@
 				{% if mag('P_LOGGED_IN') and draad.aantalOngelezenPosts > 0 %}
 					<span class="badge">{{ draad.aantalOngelezenPosts }}</span>
 				{% endif %}
-				<span class="text-muted float-right">{{ draad.laatst_gewijzigd | reldate }}</span>
+				<span class="text-muted float-end">{{ draad.laatst_gewijzigd | reldate }}</span>
 			</a>
 		</div>
 	{% endfor %}

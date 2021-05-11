@@ -101,7 +101,7 @@ class LoginForm implements FormulierTypeInterface {
 			$fields[] = new HtmlComment(
 				sprintf("<p class=\"error\">%s</p>", $this->formatError($options['lastError'], $options['lastUserName'] ?? "")));
 		} else {
-			$fields[] = new HtmlComment('<div class="float-left">');
+			$fields[] = new HtmlComment('<div class="float-start">');
 			$fields[] = new HtmlComment('</div>');
 
 			$fields['remember'] = new CheckboxField('_remember_me', false, null, $this->translator->trans('Blijf ingelogd'));
