@@ -4,10 +4,10 @@ import {ontstuiter} from '../lib/util';
 
 class DruifRomeinen {
 
-	private static laadAnimatie(profiel: Element) {
-		document.querySelectorAll('a[href^=\'/profiel/20\']').forEach(profiel => {
+	private static laadAnimatie() {
+		document.querySelectorAll('.forumpasfoto a[href^=\'/profiel/20\']').forEach(profiel => {
 			profiel.parentElement.classList.add('druif');
-			profiel.addEventListener('mouseover', e => profiel.parentElement.classList.add('start-druifeffect'));
+			profiel.addEventListener('mouseover', () => profiel.parentElement.classList.add('start-druifeffect'));
 		});
 	}
 
