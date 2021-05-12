@@ -11,7 +11,7 @@ final class Version20210512182751 extends AbstractMigration
 {
 	public function getDescription(): string
 	{
-		return '';
+		return 'Tabellen voor CiviMelder';
 	}
 
 	public function up(Schema $schema): void
