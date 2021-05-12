@@ -6,6 +6,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ZoekController extends AbstractController {
@@ -14,8 +15,8 @@ class ZoekController extends AbstractController {
 	 * @Route("/zoeken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function zoeken() {
-		$zoekterm = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
+	public function zoeken(Request $request) {
+		$zoekterm = $request->query->get('q');
 		$resultaat = [];
 
 		$instelling = lid_instelling('zoeken', 'leden');

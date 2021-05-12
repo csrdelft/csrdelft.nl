@@ -25,21 +25,6 @@ class RememberLoginRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param RememberLogin $remember
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 */
-	public function rememberLogin(RememberLogin $remember) {
-		$rand = crypto_rand_token(255);
-
-		$remember->token = hash('sha512', $rand);
-		$this->getEntityManager()->persist($remember);
-		$this->getEntityManager()->flush();
-
-		setRememberCookie($rand);
-	}
-
-	/**
 	 * @return RememberLogin
 	 */
 	public function nieuw() {

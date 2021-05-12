@@ -61,8 +61,8 @@
 			<tr>
 				<td>{{ maaltijd.datum | datetime_format_long }}</td>
 				<td>{{ maaltijd.titel }}</td>
-				<td>{{ kwantiteit[mid].toString | raw }}</td>
-				<td>{{ kwaliteit[mid].toString | raw }}</td>
+				<td>{{ kwantiteit[mid] | raw }}</td>
+				<td>{{ kwaliteit[mid] | raw }}</td>
 			</tr>
 		{% endfor %}
 		</tbody>

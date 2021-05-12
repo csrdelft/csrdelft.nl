@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\repository\groepen\OnderverenigingenRepository;
+use CsrDelft\entity\groepen\Ondervereniging;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * OnderverenigingenController.class.php
@@ -13,7 +13,7 @@ use CsrDelft\repository\groepen\OnderverenigingenRepository;
  * Controller voor onderverenigingen.
  */
 class OnderverenigingenController extends AbstractGroepenController {
-	public function __construct(ChangeLogRepository $changeLogRepository, OnderverenigingenRepository $onderverenigingenRepository) {
-		parent::__construct($changeLogRepository, $onderverenigingenRepository);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Ondervereniging::class);
 	}
 }

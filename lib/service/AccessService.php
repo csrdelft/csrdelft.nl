@@ -29,7 +29,7 @@ use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Cache\InvalidArgumentException;
+use InvalidArgumentException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 

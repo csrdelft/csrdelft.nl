@@ -24,7 +24,7 @@ class IsHetAlView implements View {
 	 * Aftellen voor deze typen IsHetAlContent
 	 * @var array
 	 */
-	public static $aftellen = array('jarig', 'dies');
+	public static $aftellen = array('jarig', 'dies', 'lustrum');
 	/**
 	 * Wist u dat'tjes
 	 * @var array
@@ -48,12 +48,27 @@ class IsHetAlView implements View {
 				$this->ja = null;
 				break;
 
-			case 'dies' :
-				$begin = strtotime('2021-02-09');
-				$einde = strtotime('2021-02-19');
+			case 'dies':
+				$begin = strtotime('2022-02-08');
+				$einde = strtotime('2022-02-18');
 				$nu = strtotime(date('Y-m-d'));
 				if ($nu > $einde) {
 					$begin = strtotime('+1 year', $begin);
+				}
+				$dagen = round(($begin - $nu) / 86400);
+				if ($dagen <= 0) {
+					$this->ja = true;
+				} else {
+					$this->ja = $dagen;
+				}
+				break;
+
+			case 'lustrum':
+				$begin = strtotime('2021-06-16');
+				$einde = strtotime('2022-06-16');
+				$nu = strtotime(date('Y-m-d'));
+				if ($nu > $einde) {
+					$begin = strtotime('+5 year', $begin);
 				}
 				$dagen = round(($begin - $nu) / 86400);
 				if ($dagen <= 0) {
@@ -117,59 +132,54 @@ class IsHetAlView implements View {
 		return $this->model;
 	}
 
-	public function view() {
-		echo '<div class="ishetal">';
+	public function __toString() {
+		$html = '';
+		$html .= '<div class="ishetal">';
 		switch ($this->model) {
 			case 'sponsorkliks':
-				echo '<iframe src="https://banner.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
+				$html .= '<iframe src="https://banner.sponsorkliks.com/skinfo.php?&background-color=F5F5F5&text-color=000000&header-background-color=F5F5F5&header-text-color=F5F5F5&odd-row=FFFFFF&even-row=09494a&odd-row-text=09494a&even-row-text=ffffff&type=financial&club_id=3605&width=193" frameborder="0" referrerpolicy="no-referrer" class="sponsorkliks-zijbalk"></iframe>';
 				break;
 
 			case 'jarig':
-				echo 'Ben ik al jarig?';
+				$html .= 'Ben ik al jarig?';
 				break;
 
 			case 'studeren':
-				echo 'Moet ik alweer studeren?';
+				$html .= 'Moet ik alweer studeren?';
 				break;
 
 			case 'kring':
-				echo 'Is er ' . $this->model . ' vanavond?';
+				$html .= 'Is er ' . $this->model . ' vanavond?';
 				break;
 
 			case 'lezing':
 			case 'borrel':
-				echo 'Is er een ' . $this->model . ' vanavond?';
-				break;
-
-			case 'foutmelding':
-				if (file_exists(VAR_PATH . 'foutmelding.last')) {
-					echo '<div class="ja">' . reldate(date('c', filemtime(VAR_PATH . 'foutmelding.last'))) . '</div><div>sinds de laatste foutmelding!</div>';
-				} else {
-					echo '<div class="nee">Geen foutmelding in het systeem.</div>';
-				}
+				$html .= 'Is er een ' . $this->model . ' vanavond?';
 				break;
 
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);
-				echo '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
+				$html .= '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
 				break;
 
 			default:
-				echo 'Is het al ' . $this->model . '?';
+				$html .= 'Is het al ' . $this->model . '?';
 				break;
 		}
 
 		if ($this->ja === true) {
-			echo '<div class="ja">JA!</div>';
+			$html .= '<div class="ja">JA!</div>';
 		} elseif ($this->ja === false) {
-			echo '<div class="nee">NEE.</div>';
+			$html .= '<div class="nee">NEE.</div>';
 		} elseif (in_array($this->model, self::$aftellen)) {
-			echo '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
+			$html .= '<div class="nee">OVER ' . $this->ja . ' ' . ($this->ja == 1 ? 'DAG' : 'DAGEN') . '!</div>';
 		} else {
 			// wist u dat
 		}
 
-		echo '</div>';
+		$html .= '</div>';
+
+		return $html;
 	}
 
 }

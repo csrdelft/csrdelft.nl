@@ -8,6 +8,7 @@ use CsrDelft\entity\corvee\CorveeTaak;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\MailService;
 use DateInterval;
 use Twig\Environment;
 
@@ -35,12 +36,23 @@ class CorveeHerinneringService {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
-	public function __construct(Environment $twig, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository, CorveeTakenRepository $corveeTakenRepository, ProfielRepository $profielRepository) {
+	public function __construct(
+		Environment $twig,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		CorveeTakenRepository $corveeTakenRepository,
+		ProfielRepository $profielRepository,
+		MailService $mailService
+	) {
 		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->profielRepository = $profielRepository;
 		$this->twig = $twig;
+		$this->mailService = $mailService;
 	}
 
 	public function stuurHerinnering(CorveeTaak $taak) {
@@ -64,7 +76,7 @@ class CorveeHerinneringService {
 		$bericht = str_replace(['LIDNAAM', 'DATUM', 'MEEETEN'], [$lidnaam, $datum, $eten], $taak->corveeFunctie->email_bericht);
 		$mail = new Mail($to, $onderwerp, $bericht);
 		$mail->setFrom($from);
-		if ($mail->send()) { // false if failed
+		if ($this->mailService->send($mail)) { // false if failed
 			if (!$mail->inDebugMode()) {
 				$this->corveeTakenRepository->updateGemaild($taak);
 			}

@@ -9,6 +9,7 @@ import {
 	ketzer,
 	maaltijd,
 	ondervereniging,
+	peiling,
 	verticale,
 	werkgroep,
 	woonoord
@@ -193,7 +194,7 @@ export const nodes = RecordWithType<NodeSpec>()({
 	woonoord,
 
 	// Overige blokken
-	boek, document, maaltijd,
+	boek, document, maaltijd, peiling,
 
 	// Embeds
 	twitter, youtube, video, audio, spotify,
@@ -209,22 +210,21 @@ export const marks = RecordWithType<MarkSpec>()({
 	link: {
 		attrs: {
 			href: {},
-			title: {default: null}
 		},
 		inclusive: false,
 		parseDOM: [{
 			tag: "a[href]",
 			getAttrs: dom => {
 				if (dom instanceof HTMLElement) {
-					return {href: dom.getAttribute("href"), title: dom.getAttribute("title")}
+					return {href: dom.getAttribute("href")}
 				} else {
 					throw new Error("Cannot process dom");
 				}
 			}
 		}],
 		toDOM: node => {
-			const {href, title} = node.attrs;
-			return ["a", {href, title}, 0]
+			const {href} = node.attrs;
+			return ["a", {href, title: href}, 0]
 		}
 	},
 

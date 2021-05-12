@@ -7,7 +7,7 @@ use CsrDelft\controller\AbstractController;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
-use CsrDelft\repository\groepen\leden\ActiviteitDeelnemersRepository;
+use CsrDelft\repository\GroepLidRepository;
 use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,13 +18,17 @@ class ApiActiviteitenController extends AbstractController {
 	/** @var ActiviteitenRepository  */
 	private $activiteitenRepository;
 	/**
-	 * @var ActiviteitDeelnemersRepository
+	 * @var GroepLidRepository
 	 */
-	private $activiteitDeelnemersRepository;
+	private $groepLidRepository;
 
-	public function __construct(ActiviteitenRepository  $activiteitenRepository, ActiviteitDeelnemersRepository $activiteitDeelnemersRepository, ChangeLogRepository  $changeLogRepository) {
+	public function __construct(
+		ActiviteitenRepository  $activiteitenRepository,
+		GroepLidRepository $groepLidRepository,
+		ChangeLogRepository  $changeLogRepository
+	) {
 		$this->activiteitenRepository = $activiteitenRepository;
-		$this->activiteitDeelnemersRepository = $activiteitDeelnemersRepository;
+		$this->groepLidRepository = $groepLidRepository;
 		$this->changeLogRepository = $changeLogRepository;
 	}
 
@@ -36,15 +40,15 @@ class ApiActiviteitenController extends AbstractController {
 	public function activiteitAanmelden($id) {
 		$activiteit = $this->activiteitenRepository->get($id);
 
-		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
+		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
 			throw new NotFoundHttpException('Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(AccessAction::Aanmelden)) {
+		if (!$activiteit->mag(AccessAction::Aanmelden())) {
 			throw $this->createAccessDeniedException('Aanmelden niet mogelijk');
 		}
 
-		$lid = $this->activiteitDeelnemersRepository->nieuw($activiteit, $_SESSION[LoginService::SESS_UID]);
+		$lid = $this->groepLidRepository->nieuw($activiteit, $this->getUid());
 
 		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
 		$this->getDoctrine()->getManager()->persist($lid);
@@ -60,15 +64,15 @@ class ApiActiviteitenController extends AbstractController {
 	public function activiteitAfmelden($id) {
 		$activiteit = $this->activiteitenRepository->get($id);
 
-		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
+		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
 			throw new NotFoundHttpException('Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(AccessAction::Afmelden)) {
+		if (!$activiteit->mag(AccessAction::Afmelden())) {
 			throw $this->createAccessDeniedException('Afmelden niet mogelijk');
 		}
 
-		$lid = $activiteit->getLid($_SESSION['_uid']);
+		$lid = $activiteit->getLid($this->getUid());
 		$this->changeLogRepository->log($activiteit, 'afmelden', $lid->uid, null);
 		$this->getDoctrine()->getManager()->remove($lid);
 		$this->getDoctrine()->getManager()->flush();

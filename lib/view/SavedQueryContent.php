@@ -139,14 +139,16 @@ class SavedQueryContent implements View {
 		return $return;
 	}
 
-	public function view() {
-		echo '<h1>' . $this->getTitel() . '</h1>';
-		echo $this->getQueryselector();
+	public function __toString() {
+		$html = '';
+		$html .= '<h1>' . $this->getTitel() . '</h1>';
+		$html .= $this->getQueryselector();
 
 		//render query if selected and allowed
 		if ($this->sq != null && $this->sq->query->magBekijken()) {
-			echo $this->render_queryResult();
+			$html .= $this->render_queryResult();
 		}
+		return $html;
 	}
 
 }

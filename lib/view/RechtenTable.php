@@ -45,10 +45,9 @@ class RechtenTable extends DataTable {
 		$this->addKnop($delete);
 	}
 
-	public function view() {
+	public function __toString() {
 		$view = new CmsPaginaView(ContainerFacade::getContainer()->get(CmsPaginaRepository::class)->find('UitlegACL'));
-		$view->view();
-		parent::view();
+		return $view->__toString() . parent::__toString();
 	}
 
 }

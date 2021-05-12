@@ -5,6 +5,7 @@ namespace CsrDelft\command;
 use CsrDelft\common\Mail;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\MailService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,18 +33,24 @@ class WelkomCommand extends Command {
 	 * @var UrlGeneratorInterface
 	 */
 	private $urlGenerator;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
 	public function __construct(
 		string $emailPubCie,
 		AccountRepository $accountRepository,
 		ProfielRepository $profielRepository,
-	UrlGeneratorInterface $urlGenerator
+		UrlGeneratorInterface $urlGenerator,
+		MailService $mailService
 	) {
 		parent::__construct();
 		$this->profielRepository = $profielRepository;
 		$this->accountRepository = $accountRepository;
 		$this->emailPubCie = $emailPubCie;
 		$this->urlGenerator = $urlGenerator;
+		$this->mailService = $mailService;
 	}
 
 	protected function configure() {
@@ -55,9 +62,9 @@ class WelkomCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$helper = $this->getHelper('question');
-		$jaar = $helper->ask($input, $output, new Question("Welke lichting moet een welkom mail krijgen (twee cijfers). "));
+		$jaar = $helper->ask($input, $output, new Question("Welke lichting moet een welkom mail krijgen (vier cijfers). "));
 
-		if ($jaar == null && strlen($jaar) != 2) {
+		if ($jaar == null && strlen($jaar) != 4 && !is_numeric($jaar)) {
 			$output->writeln("Geen geldig jaar");
 
 			return Command::FAILURE;
@@ -76,7 +83,7 @@ class WelkomCommand extends Command {
 		# 	Kun je niet op een maaltijd aanwezig zijn, meld je dan af op de webstek, voor omstreeks 15:00 op de dag van de maaltijd, want na dat tijdstip beginnen de koks met koken en wordt er op jou gerekend met boodschappen doen. Als je er na 15:00 achter komt dat je juist wel of juist niet aanwezig kunt zijn, bel dan even de koks of bel Confide. Met een goede reden kan je dan eventueel doorgestreept of toegevoegd worden op de maaltijdlijst.
 		# 	Waarom is dit belangrijk? Omdat een maaltijd €3,50 kost en als je jezelf vergeet af te melden en niet komt, dit bedrag toch van je CiviSaldo wordt afgeschreven. Het is goed om naar maaltijden te gaan, maar als je niet kunt, meld je dan af! Dat scheelt je pieken.
 
-		$novieten = $this->profielRepository->getNovieten($jaar);
+		$novieten = $this->profielRepository->getNovietenVanLaatsteLidjaar($jaar);
 		$numNovieten = count($novieten);
 
 		if (!$helper->ask($input, $output, new ConfirmationQuestion("Er zijn {$numNovieten} novieten gevonden, doorgaan met mails versturen? [Yn] "))) {
@@ -110,7 +117,7 @@ h.t. PubCie-Praeses der Civitas Studiosorum Reformatorum
 TEXT;
 			$mail = new Mail(array($profiel->email => $profiel->voornaam), 'Inloggegevens C.S.R.-webstek', $tekst);
 			$mail->addBcc(array($this->emailPubCie => 'PubCie C.S.R.'));
-			$mail->send();
+			$this->mailService->send($mail);
 
 			if (!$this->accountRepository->existsUid($profiel->uid)) {
 				// Maak een account aan voor deze noviet

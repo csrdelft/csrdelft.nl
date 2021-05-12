@@ -18,20 +18,17 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * Een woonoord is waar C.S.R.-ers bij elkaar wonen.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\WoonoordenRepository")
- * @ORM\Table("woonoorden", indexes={
- *   @ORM\Index(name="familie", columns={"familie"}),
- *   @ORM\Index(name="status", columns={"status"}),
- *   @ORM\Index(name="begin_moment", columns={"begin_moment"})
- * })
  */
-class Woonoord extends AbstractGroep implements HeeftSoort {
+class Woonoord extends Groep implements HeeftSoort {
+	use GroepMoment;
+
 	/**
 	 * Woonoord / Huis
 	 * @var HuisStatus
 	 * @ORM\Column(type="enumHuisStatus")
 	 * @Serializer\Groups("datatable")
 	 */
-	public $soort;
+	public $huisStatus;
 
 	/**
 	 * Doet mee met Eetplan
@@ -39,21 +36,6 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	 * @Serializer\Groups("datatable")
 	 */
 	public $eetplan;
-
-	/**
-	 * @var WoonoordBewoner[]
-	 * @ORM\OneToMany(targetEntity="WoonoordBewoner", mappedBy="groep")
-	 * @ORM\OrderBy({"lid_sinds"="ASC"})
-	 */
-	public $leden;
-
-	public function getLeden() {
-		return $this->leden;
-	}
-
-	public function getLidType() {
-		return WoonoordBewoner::class;
-	}
 
 	public function getUrl() {
 		return '/groepen/woonoorden/' . $this->id;
@@ -70,8 +52,8 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	public function mag($action, $soort = null) {
 		switch ($action) {
 
-			case AccessAction::Beheren:
-			case AccessAction::Wijzigen:
+			case AccessAction::Beheren():
+			case AccessAction::Wijzigen():
 				// Huidige bewoners mogen beheren
 				if (LoginService::mag('woonoord:' . $this->familie)) {
 					// HuisStatus wijzigen wordt geblokkeerd in GroepForm->validate()
@@ -83,10 +65,10 @@ class Woonoord extends AbstractGroep implements HeeftSoort {
 	}
 
 	public function getSoort() {
-		return $this->soort;
+		return $this->huisStatus;
 	}
 
 	public function setSoort($soort) {
-		$this->soort = $soort;
+		$this->huisStatus = $soort;
 	}
 }

@@ -1,5 +1,3 @@
-#RewriteEngine on
-#RewriteCond %{REQUEST_URI} !^/dies/20
-#RewriteRule ^(.*)$ 2021/$1 [L]
-Redirect 301 /dies/2021 /gateway-of-india
-Redirect 301 /dies /gateway-of-india
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/dies/20
+RewriteRule ^(.*)$ 2021/$1 [L]

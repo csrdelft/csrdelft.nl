@@ -77,7 +77,7 @@ class BbFotoalbum extends BbTag {
 	public function renderLight() {
 		$album = $this->album;
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
-		$cover = CSR_ROOT . $album->getCoverUrl();
+		$cover = getCsrRoot() . $album->getCoverUrl();
 		return BbHelper::lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
 	}
 
@@ -125,11 +125,11 @@ class BbFotoalbum extends BbTag {
 				$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
 			} else {
 				//vervang url met pad
-				$url = str_ireplace(CSR_ROOT, '', $url);
+				$url = str_ireplace(getCsrRoot(), '', $url);
 				//check fotoalbum in url
 				$url = str_ireplace('fotoalbum/', '', $url);
 				//check slash voor pad
-				if (startsWith($url, '/')) {
+				if (str_starts_with($url, '/')) {
 					$url = substr($url, 1);
 				}
 				$album = $this->fotoAlbumRepository->getFotoAlbum($url);

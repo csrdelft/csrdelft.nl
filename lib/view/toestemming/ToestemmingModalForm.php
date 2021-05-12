@@ -75,9 +75,10 @@ class ToestemmingModalForm extends ModalForm {
 	/**
 	 * @param string $module
 	 * @param string $id
-	 * @return string
+	 * @return ToestemmingRegel
 	 */
-	private function maakToestemmingLine($module, $id) {
+	private function maakToestemmingLine(string $module, string $id): ToestemmingRegel
+	{
 
 		$eerdereWaarde = filter_input(INPUT_POST, $module . '_' . $id, FILTER_SANITIZE_STRING) ?? 'ja';
 

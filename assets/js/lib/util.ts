@@ -146,13 +146,15 @@ export function html<T extends HTMLElement = HTMLElement>(strings: TemplateStrin
 	}
 	output += strings[values.length];
 
-	const element = (new DOMParser().parseFromString(output, 'text/html').body.firstChild) as T;
+	const element = document.createElement("div")
+
+	element.innerHTML = output
 
 	for (const [id, node] of nodes) {
 		element.querySelector(`#${id}`).replaceWith(node)
 	}
 
-	return element;
+	return element.firstElementChild as T;
 }
 
 export function htmlParse(htmlString: string): Node[] {

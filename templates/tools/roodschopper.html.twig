@@ -6,7 +6,7 @@
 	{% if verzenden %}
 		<h1>Emails verzonden naar {{ saldi | length }} leden.</h1>
 	{% else %}
-		{{ form.toString | raw }}
+		{{ form | raw }}
 
 		<h2>Doelgroep</h2>
 		<p>De volgende {{ saldi | length }} personen zouden een mail krijgen onder de huidige selectie.</p>

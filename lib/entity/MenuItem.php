@@ -104,7 +104,7 @@ class MenuItem implements DisplayEntity {
 
 	public function isOngelezen() {
 		$prefix = '/forum/onderwerp/';
-		if (startsWith($this->link, $prefix)) {
+		if (str_starts_with($this->link, $prefix)) {
 			$begin = strlen($prefix);
 			$end = strpos($this->link, '/', $begin);
 			if ($end) {

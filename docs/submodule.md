@@ -12,4 +12,4 @@ Er zijn een aantal onderdelen die vrij weinig met de werking van de stek te make
 * [`dies/2019`](https://github.com/csrdelft/dies2019): De stek van de 57e dies natalis van C.S.R. Delft
 * [`dies/2020`](https://github.com/csrdelft/dies2020): De stek van de 58e dies natalis van C.S.R. Delft
 * [`lustrum`](https://github.com/csrdelft/lustrum): De lustrum app gemaakt voor het 11e lustrum van C.S.R. Delft
-* [`wiki`](https://github.com/csrdelft/wiki): De [wiki](wiki.md)
+* [`wiki`](https://github.com/csrdelft/wiki): De [wiki](onderdelen/wiki.md)

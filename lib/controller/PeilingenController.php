@@ -36,7 +36,8 @@ class PeilingenController extends AbstractController {
 	 * @Route("/peilingen/beheer/{id}", methods={"GET"}, requirements={"id": "\d+"}, defaults={"id": null})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function table(Peiling $peiling = null) {
+	public function table(Peiling $peiling = null): Response
+	{
 		// Laat een modal zien als een specifieke peiling bewerkt wordt
 		if ($peiling) {
 			$table = new PeilingTable();
@@ -59,7 +60,8 @@ class PeilingenController extends AbstractController {
 	 * @Route("/peilingen/beheer", methods={"POST"})
 	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function lijst() {
+	public function lijst(): GenericDataTableResponse
+	{
 		return $this->tableData($this->peilingenRepository->getPeilingenVoorBeheer());
 	}
 
@@ -138,7 +140,8 @@ class PeilingenController extends AbstractController {
 	 * @Route("/peilingen/verwijderen", methods={"GET", "POST"})
 	 * @Auth(P_PEILING_MOD)
 	 */
-	public function verwijderen() {
+	public function verwijderen(): GenericDataTableResponse
+	{
 		$selection = $this->getDataTableSelection();
 		$peiling = $this->peilingenRepository->retrieveByUUID($selection[0]);
 		$removed = new RemoveDataTableEntry($peiling->id, Peiling::class);
@@ -155,7 +158,8 @@ class PeilingenController extends AbstractController {
 	 * @Route("/peilingen/stem/{id}", methods={"POST"}, requirements={"id": "\d+"})
 	 * @Auth(P_PEILING_VOTE)
 	 */
-	public function stem(Request $request, $id) {
+	public function stem(Request $request, int $id): JsonResponse
+	{
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);
 
 		if($this->peilingenService->stem($id, $ids, $this->getUid())) {

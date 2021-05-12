@@ -1,0 +1,7 @@
+services:
+  CsrDelft\events\CheckMigrationsListener:
+    arguments:
+      - '@doctrine.migrations.dependency_factory'
+      - '@logger'
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }

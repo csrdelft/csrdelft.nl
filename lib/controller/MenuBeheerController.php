@@ -10,6 +10,7 @@ use CsrDelft\view\MeldingResponse;
 use CsrDelft\view\menubeheer\MenuItemForm;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,27 +19,30 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MenuBeheerController extends AbstractController {
+class MenuBeheerController extends AbstractController
+{
 	/**
 	 * @var MenuItemRepository
 	 */
 	private $menuItemRepository;
 
-	public function __construct(MenuItemRepository $menuItemRepository) {
+	public function __construct(MenuItemRepository $menuItemRepository)
+	{
 		$this->menuItemRepository = $menuItemRepository;
 	}
 
 	/**
-	 * @param string $menu_name
+	 * @param string $menuName
 	 * @return Response
-	 * @Route("/menubeheer/beheer/{menu_name}", methods={"GET"})
+	 * @Route("/menubeheer/beheer/{menuName}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function beheer($menu_name = 'main') {
-		if ($menu_name != $this->getUid() && !LoginService::mag(P_ADMIN)) {
+	public function beheer($menuName = 'main'): Response
+	{
+		if ($menuName != $this->getUid() && !LoginService::mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
-		$root = $this->menuItemRepository->getMenu($menu_name);
+		$root = $this->menuItemRepository->getMenuBeheer($menuName);
 		if (!$root || !$root->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -49,18 +53,19 @@ class MenuBeheerController extends AbstractController {
 	}
 
 	/**
-	 * @param $parent_id
+	 * @param $parentId
 	 * @return MeldingResponse|MenuItemForm
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/menubeheer/toevoegen/{parent_id}", methods={"POST"})
+	 * @Route("/menubeheer/toevoegen/{parentId}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen($parent_id) {
-		if ($parent_id == 'favoriet') {
+	public function toevoegen($parentId)
+	{
+		if ($parentId == 'favoriet') {
 			$parent = $this->menuItemRepository->getMenuRoot($this->getUid());
 		} else {
-			$parent = $this->menuItemRepository->getMenuItem((int)$parent_id);
+			$parent = $this->menuItemRepository->getMenuItem((int)$parentId);
 		}
 		if (!$parent || !$parent->magBeheren()) {
 			throw $this->createAccessDeniedException();
@@ -69,7 +74,7 @@ class MenuBeheerController extends AbstractController {
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
-		$form = new MenuItemForm($item, 'toevoegen', $parent_id); // fetches POST values itself
+		$form = new MenuItemForm($item, 'toevoegen', $parentId); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
 			$this->menuItemRepository->persist($item);
 			setMelding('Toegevoegd: ' . $item->tekst, 1);
@@ -80,24 +85,23 @@ class MenuBeheerController extends AbstractController {
 	}
 
 	/**
-	 * @param $item_id
+	 * @param $itemId
 	 * @return JsonResponse|MenuItemForm
-	 * @throws ORMException
-	 * @throws OptimisticLockException
-	 * @Route("/menubeheer/bewerken/{item_id}", methods={"POST"}, requirements={"item_id": "\d+"})
+	 * @Route("/menubeheer/bewerken/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($item_id) {
-		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
+	public function bewerken($itemId)
+	{
+		$item = $this->menuItemRepository->getMenuItem((int)$itemId);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
 		$form = new MenuItemForm($item, 'bewerken', $item->item_id); // fetches POST values itself
 		if ($form->validate()) { // form checks if hidden fields are modified
-			$rowCount = $this->menuItemRepository->persist($item);
-			if ($rowCount > 0) {
+			try {
+				$this->menuItemRepository->persist($item);
 				setMelding($item->tekst . ' bijgewerkt', 1);
-			} else {
+			} catch (Exception $e) {
 				setMelding($item->tekst . ' ongewijzigd', 0);
 			}
 			return new JsonResponse(true);
@@ -107,13 +111,14 @@ class MenuBeheerController extends AbstractController {
 	}
 
 	/**
-	 * @param $item_id
+	 * @param $itemId
 	 * @return JsonResponse
-	 * @Route("/menubeheer/verwijderen/{item_id}", methods={"POST"}, requirements={"item_id": "\d+"})
+	 * @Route("/menubeheer/verwijderen/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verwijderen($item_id) {
-		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
+	public function verwijderen($itemId): JsonResponse
+	{
+		$item = $this->menuItemRepository->getMenuItem((int)$itemId);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -126,15 +131,16 @@ class MenuBeheerController extends AbstractController {
 	}
 
 	/**
-	 * @param $item_id
+	 * @param $itemId
 	 * @return JsonResponse
 	 * @throws ORMException
 	 * @throws OptimisticLockException
-	 * @Route("/menubeheer/zichtbaar/{item_id}", methods={"POST"}, requirements={"item_id": "\d+"})
+	 * @Route("/menubeheer/zichtbaar/{itemId}", methods={"POST"}, requirements={"itemId": "\d+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function zichtbaar($item_id) {
-		$item = $this->menuItemRepository->getMenuItem((int)$item_id);
+	public function zichtbaar($itemId): JsonResponse
+	{
+		$item = $this->menuItemRepository->getMenuItem((int)$itemId);
 		if (!$item || !$item->magBeheren()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -150,7 +156,8 @@ class MenuBeheerController extends AbstractController {
 	 * @param Request $request
 	 * @return GenericSuggestiesResponse
 	 */
-	public function suggesties(Request $request) {
+	public function suggesties(Request $request): GenericSuggestiesResponse
+	{
 		return new GenericSuggestiesResponse($this->menuItemRepository->getSuggesties($request->query->get('q')));
 	}
 }

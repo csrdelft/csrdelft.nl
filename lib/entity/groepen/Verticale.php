@@ -17,13 +17,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\groepen\VerticalenRepository")
- * @ORM\Table("verticalen", indexes={
- *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
- *   @ORM\Index(name="familie", columns={"familie"}),
- *   @ORM\Index(name="status", columns={"status"}),
- * })
  */
-class Verticale extends AbstractGroep {
+class Verticale extends Groep {
 	/**
 	 * Primary key
 	 * @var string
@@ -40,45 +35,34 @@ class Verticale extends AbstractGroep {
 	 */
 	public $naam;
 
-	/**
-	 * @var VerticaleLid[]
-	 * @ORM\OneToMany(targetEntity="VerticaleLid", mappedBy="groep")
-	 * @ORM\OrderBy({"uid"="ASC"})
-	 */
-	public $leden;
-
 	// Stiekem hebben we helemaal geen leden.
 	public function getLeden() {
 		$leden = [];
-		$profielRepository = ContainerFacade::getContainer()->get(ProfielRepository::class);
+		$container = ContainerFacade::getContainer();
+		$profielRepository = $container->get(ProfielRepository::class);
 		/** @var Profiel $profielen */
 		$profielen = $profielRepository->createQueryBuilder('p')
 			->where('p.verticale = :verticale and p.status in (:lidstatus)')
 			->setParameter('verticale', $this->letter)
 			->setParameter('lidstatus', LidStatus::getLidLike())
 			->getQuery()->getResult();
-		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
-		$model = $em->getRepository($this->getLidType());
+		$em = $container->get('doctrine.orm.entity_manager');
+		$model = $em->getRepository(GroepLid::class);
 		foreach ($profielen as $profiel) {
-			if ($profiel AND $profiel->verticale === $this->letter) {
-				/** @var VerticaleLid $lid */
+			if ($profiel && $profiel->verticale === $this->letter) {
 				$lid = $model->nieuw($this, $profiel->uid);
 				if ($profiel->verticaleleider) {
 					$lid->opmerking = 'Leider';
 				} elseif ($profiel->kringcoach) {
 					$lid->opmerking = 'Kringcoach';
 				}
-				$lid->door_uid = null;
-				$lid->door_profiel = null;
-				$lid->lid_sinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
+				$lid->doorUid = null;
+				$lid->doorProfiel = null;
+				$lid->lidSinds = date_create_immutable($profiel->lidjaar . '-09-01 00:00:00');
 				$leden[] = $lid;
 			}
 		}
 		return new ArrayCollection($leden);
-	}
-
-	public function getLidType() {
-		return VerticaleLid::class;
 	}
 
 	public function getUrl() {
@@ -87,16 +71,16 @@ class Verticale extends AbstractGroep {
 
 	/**
 	 * Limit functionality: leden generated
-	 * @param string $action
+	 * @param AccessAction $action
 	 * @param null $allowedAuthenticationMethods
 	 * @return bool
 	 */
-	public function mag($action, $allowedAuthenticationMethods = null) {
+	public function mag(AccessAction $action, $allowedAuthenticationMethods = null) {
 		switch ($action) {
 
-			case AccessAction::Bekijken:
-			case AccessAction::Aanmaken:
-			case AccessAction::Wijzigen:
+			case AccessAction::Bekijken():
+			case AccessAction::Aanmaken():
+			case AccessAction::Wijzigen():
 				return parent::mag($action, $allowedAuthenticationMethods);
 		}
 		return false;
@@ -104,16 +88,17 @@ class Verticale extends AbstractGroep {
 
 	/**
 	 * Limit functionality: leden generated
-	 * @param string $action
+	 * @param AccessAction $action
 	 * @param null $allowedAuthenticationMethods
+	 * @param null $soort
 	 * @return bool
 	 */
-	public static function magAlgemeen($action, $allowedAuthenticationMethods = null, $soort = null) {
+	public static function magAlgemeen(AccessAction $action, $allowedAuthenticationMethods = null, $soort = null) {
 		switch ($action) {
 
-			case AccessAction::Bekijken:
-			case AccessAction::Aanmaken:
-			case AccessAction::Wijzigen:
+			case AccessAction::Bekijken():
+			case AccessAction::Aanmaken():
+			case AccessAction::Wijzigen():
 				return parent::magAlgemeen($action, $allowedAuthenticationMethods, $soort);
 		}
 		return false;

@@ -14,6 +14,7 @@ use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,11 +38,16 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
-	public function __construct(ManagerRegistry $registry, Environment $twig, SuService $suService) {
+	public function __construct(ManagerRegistry $registry, Environment $twig, SuService $suService, MailService $mailService) {
 		parent::__construct($registry, ForumDraadMelding::class);
 		$this->suService = $suService;
 		$this->twig = $twig;
+		$this->mailService = $mailService;
 	}
 
 	public function setNiveauVoorLid(ForumDraad $draad, ForumDraadMeldingNiveau $niveau) {
@@ -143,7 +149,7 @@ class ForumDradenMeldingRepository extends AbstractRepository {
 			]);
 
 			$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuwe reactie op ' . $draad->titel, $bericht);
-			$mail->send();
+			$this->mailService->send($mail);
 		});
 	}
 

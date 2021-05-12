@@ -24,8 +24,8 @@ class CsrfField implements View, FormElement {
 		$this->name = $name;
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getTitel() {

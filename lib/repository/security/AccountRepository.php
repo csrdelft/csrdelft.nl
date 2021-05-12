@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * AccountRepository
@@ -130,6 +131,7 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 		}
 
 		$account = new Account();
+		$account->uuid = Uuid::v4();
 		$account->uid = $uid;
 		$account->profiel = $profiel;
 		$account->username = $uid;

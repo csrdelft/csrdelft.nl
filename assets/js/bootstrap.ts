@@ -24,6 +24,7 @@ import {forumBewerken, saveConceptForumBericht} from './lib/forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './lib/maalcie';
 import {docReady, isLoggedIn} from './lib/util';
 import hoverintent from 'hoverintent'
+import {Modal} from "bootstrap";
 
 moment.locale('nl');
 
@@ -144,10 +145,10 @@ Dropzone.autoDiscover = false;
 	docReady(() => {
 		initSluitMeldingen();
 		init(document.body);
-
-		const modal = $('#modal');
-		if (modal.html() !== '') {
-			modal.modal();
+		const modalEl = document.getElementById("modal")
+		if (modalEl.innerHTML !== '') {
+			const modal = new Modal(modalEl);
+			modal.show();
 		}
 	});
 })();

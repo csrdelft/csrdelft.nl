@@ -164,7 +164,7 @@ h.t. Fiscus.';
 			if ($this->bcc) {
 				$mail->addBcc([$this->bcc => $this->bcc]);
 			}
-			$mail->send();
+			ContainerFacade::getContainer()->get(MailService::class)->send($mail);
 		}
 		exit;
 	}

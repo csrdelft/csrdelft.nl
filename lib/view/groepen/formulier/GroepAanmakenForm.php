@@ -3,14 +3,14 @@
 namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
 class GroepAanmakenForm extends ModalForm {
 
 	public function __construct(
-		AbstractGroepenRepository $huidig,
+		GroepRepository $huidig,
 		$soort = null
 	) {
 		$groep = $huidig->nieuw($soort);
@@ -19,7 +19,7 @@ class GroepAanmakenForm extends ModalForm {
 
 		$default = get_class($huidig);
 		if ($groep instanceof HeeftSoort) {
-			$default .= '_' . $groep->getSoort();
+			$default .= '_' . $groep->getSoort()->getDescription();
 		}
 
 		$fields = [];

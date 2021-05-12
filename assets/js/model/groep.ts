@@ -14,14 +14,14 @@ export interface GroepInstance {
 	id: number;
 	naam: string;
 	familie: string;
-	begin_moment: Date;
-	eind_moment: Date;
-	aanmelden_tot?: Date;
+	beginMoment: Date;
+	eindMoment: Date;
+	aanmeldenTot?: Date;
 	status: string;
 	samenvatting: string;
 	omschrijving: string;
 	keuzelijst?: null;
-	maker_uid: string;
+	makerUid: string;
 	versie: string;
 	keuzelijst2: KeuzeOptie[];
 	leden: GroepLid[];

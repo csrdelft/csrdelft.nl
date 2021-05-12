@@ -4,31 +4,36 @@ namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\RechtenGroep;
-use CsrDelft\repository\AbstractGroepenRepository;
-use CsrDelft\repository\groepen\leden\CommissieLedenRepository;
+use CsrDelft\repository\GroepLidRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RechtenGroepenRepository extends AbstractGroepenRepository {
+class RechtenGroepenRepository extends GroepRepository {
 	/** @var BesturenRepository */
 	private $besturenRepository;
-	/** @var CommissieLedenRepository */
-	private $commissieLedenRepository;
+	/** @var GroepLidRepository */
+	private $groepLidRepository;
 	/** @var CommissiesRepository */
 	private $commissiesRepository;
 
-	public function __construct(BesturenRepository $besturenRepository, CommissiesRepository $commissiesRepository, CommissieLedenRepository $commissieLedenRepository, ManagerRegistry $registry) {
+	public function __construct(
+		BesturenRepository $besturenRepository,
+		CommissiesRepository $commissiesRepository,
+		GroepLidRepository $groepLidRepository,
+		ManagerRegistry $registry
+	) {
 		parent::__construct($registry, RechtenGroep::class);
 
 		$this->besturenRepository = $besturenRepository;
 		$this->commissiesRepository = $commissiesRepository;
-		$this->commissieLedenRepository = $commissieLedenRepository;
+		$this->groepLidRepository = $groepLidRepository;
 	}
 
 	public function nieuw($soort = null) {
 		/** @var RechtenGroep $groep */
 		$groep = parent::nieuw();
-		$groep->rechten_aanmelden = P_LEDEN_MOD;
+		$groep->rechtenAanmelden = P_LEDEN_MOD;
 		return $groep;
 	}
 
@@ -58,7 +63,7 @@ class RechtenGroepenRepository extends AbstractGroepenRepository {
 		if (($ft && $ft->getLid($uid)) || ($ht && $ht->getLid($uid)) || ($ot && $ot->getLid($uid))) {
 			$result[] = 'bestuur';
 		}
-		foreach ($this->commissieLedenRepository->findBy(['uid' => $uid]) as $commissielid) {
+		foreach ($this->groepLidRepository->findBy(['uid' => $uid]) as $commissielid) {
 			$commissie = $this->commissiesRepository->get($commissielid->groep_id);
 			if ($commissie->status === GroepStatus::HT() OR $commissie->status === GroepStatus::FT()) {
 				$result[] = $commissie->familie;

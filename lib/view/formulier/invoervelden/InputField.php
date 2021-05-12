@@ -40,7 +40,7 @@ use CsrDelft\view\Validator;
  * behalve FileField zelf die wel meerdere InputFields bevat.
  */
 abstract class InputField implements FormElement, Validator {
-	protected $wrapperClassName = 'form-group row';
+	protected $wrapperClassName = 'row mb-3';
 	protected $labelClassName = 'col-3 col-form-label';
 	protected $fieldClassName = 'col-9';
 
@@ -385,7 +385,7 @@ abstract class InputField implements FormElement, Validator {
 
 	public function getHelpDiv() {
 		if ($this->title) {
-			return '<small class="col-md-12 text-muted">' . $this->title . '</small>';
+			return '<div class="form-text">' . $this->title . '</div>';
 		}
 		return '';
 	}
@@ -393,18 +393,20 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * View die zou moeten werken voor veel velden.
 	 */
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo '<div class="' . $this->fieldClassName . '">';
-		echo $this->getHtml();
-		echo $this->getErrorDiv();
-		echo '</div>';
-		echo $this->getHelpDiv();
+	public function __toString() {
+		$html = '';
+		$html .= $this->getDiv();
+		$html .= $this->getLabel();
+		$html .= '<div class="' . $this->fieldClassName . '">';
+		$html .= $this->getHtml();
+		$html .= $this->getErrorDiv();
+		$html .= '</div>';
+		$html .= $this->getHelpDiv();
 		if ($this->preview) {
-			echo $this->getPreviewDiv();
+			$html .= $this->getPreviewDiv();
 		}
-		echo '</div>';
+		$html .= '</div>';
+		return $html;
 	}
 
 	/**

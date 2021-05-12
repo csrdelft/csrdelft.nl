@@ -395,7 +395,7 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 
 	public function maakCiviBestelling(MaaltijdAanmelding $aanmelding) {
 		$bestelling = new CiviBestelling();
-		$bestelling->cie = 'maalcie';
+		$bestelling->cie = $aanmelding->maaltijd->product->categorie->cie;
 		$bestelling->uid = $aanmelding->uid;
 		$bestelling->civiSaldo = $this->civiSaldoRepository->find($aanmelding->uid);
 		$bestelling->deleted = false;
@@ -405,12 +405,10 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 		$inhoud = new CiviBestellingInhoud();
 		$inhoud->aantal = 1 + $aanmelding->aantal_gasten;
 		$inhoud->product_id = $aanmelding->maaltijd->product_id;
-		/** @var CiviProduct $product */
-		$product = ContainerFacade::getContainer()->get(CiviProductRepository::class)->getProduct($inhoud->product_id);
-		$inhoud->product = $product;
+		$inhoud->product = $aanmelding->maaltijd->product;
 
 		$bestelling->inhoud[] = $inhoud;
-		$bestelling->totaal = $product->getPrijsInt() * (1 + $aanmelding->aantal_gasten);
+		$bestelling->totaal = $aanmelding->maaltijd->product->getPrijsInt() * (1 + $aanmelding->aantal_gasten);
 
 		return $bestelling;
 	}

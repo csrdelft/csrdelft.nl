@@ -45,7 +45,7 @@
 						{{ icon('date_go') }}
 					</a>
 
-					{% if item is abstractgroep and item.mag('u') %}
+					{% if item is abstractgroep and item.magWijzigen %}
 						<a href="{{ item.url }}/wijzigen" class="beheren btn" title="Wijzig {{ item.naam }}">
 							{{ icon('bewerken') }}
 						</a>

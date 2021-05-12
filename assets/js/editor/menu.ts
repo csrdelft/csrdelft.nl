@@ -4,7 +4,7 @@ import {redo, undo} from "prosemirror-history";
 import {
 	bbInsert,
 	blockTypeItemPrompt,
-	canInsert,
+	canInsert, groepPrompt,
 	insertCitaat,
 	insertImageItem,
 	insertPlaatjeItem,
@@ -12,12 +12,18 @@ import {
 	linkItem,
 	markItem,
 	priveItem,
-	wrapListItem
+	wrapListItem, youtubeItemPrompt
 } from "./menu-item";
 import {cut} from "../lib/util";
 import icon from "./icon";
 import {joinUp, lift, selectParentNode} from "prosemirror-commands";
 
+/**
+ * Het menu voor de prosemirror editor, op basis van de waarde van loggedIn worden specifieke
+ * velden die alleen interessant zijn voor ingelogde gebruikers weergegeven.
+ * @param schema
+ * @param loggedIn
+ */
 export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuItem | Dropdown)[][] {
 	return [
 		cut([
@@ -44,27 +50,28 @@ export function buildMenuItems(schema: EditorSchema, loggedIn: boolean): (MenuIt
 				!loggedIn && insertImageItem(schema.nodes.image),
 				loggedIn && insertCitaat(schema.nodes.citaat),
 				wrapItem(schema.nodes.blockquote, {title: "Maak een quote", label: "Quote"}),
+				loggedIn && groepPrompt(schema.nodes.activiteit, "Activiteitenketzer", "Activiteit invoegen", "activiteiten"),
+				loggedIn && groepPrompt(schema.nodes.ketzer, "Aanschafketzer", "Ketzer invoegen", "ketzers"),
 				loggedIn && new DropdownSubmenu([
 					blockTypeItemPrompt(schema.nodes.twitter, "Twitter", "Twitter invoegen"),
-					blockTypeItemPrompt(schema.nodes.youtube, "YouTube", "YouTube invoegen"),
+					youtubeItemPrompt(schema.nodes.youtube, "YouTube", "YouTube invoegen"),
 					blockTypeItemPrompt(schema.nodes.spotify, "Spotify", "Spotify invoegen"),
 					blockTypeItemPrompt(schema.nodes.video, "Video", "Video invoegen"),
 					blockTypeItemPrompt(schema.nodes.audio, "Geluid", "Geluid invoegen"),
 				], {label: "Embed"}),
 				loggedIn && new DropdownSubmenu([
-					blockTypeItemPrompt(schema.nodes.activiteit, "Activiteit", "Activiteit invoegen"),
-					blockTypeItemPrompt(schema.nodes.bestuur, "Bestuur", "Bestuur invoegen"),
-					blockTypeItemPrompt(schema.nodes.commissie, "Commissie", "Commissie invoegen"),
-					blockTypeItemPrompt(schema.nodes.groep, "Groep", "Groep invoegen"),
-					blockTypeItemPrompt(schema.nodes.ketzer, "Ketzer", "Ketzer invoegen"),
-					blockTypeItemPrompt(schema.nodes.ondervereniging, "Ondervereniging", "Ondervereniging invoegen"),
-					blockTypeItemPrompt(schema.nodes.verticale, "Verticale", "Verticale invoegen"),
-					blockTypeItemPrompt(schema.nodes.werkgroep, "Werkgroep", "Werkgroep invoegen"),
-					blockTypeItemPrompt(schema.nodes.woonoord, "Woonoord", "Woonoord invoegen"),
+					groepPrompt(schema.nodes.bestuur, "Bestuur", "Bestuur invoegen", "besturen"),
+					groepPrompt(schema.nodes.commissie, "Commissie", "Commissie invoegen", "commissies"),
+					groepPrompt(schema.nodes.groep, "Overig", "Overige groep invoegen", "overig"),
+					groepPrompt(schema.nodes.ondervereniging, "Ondervereniging", "Ondervereniging invoegen", "onderverenigingen"),
+					groepPrompt(schema.nodes.verticale, "Verticale", "Verticale invoegen", "verticalen"),
+					groepPrompt(schema.nodes.werkgroep, "Werkgroep", "Werkgroep invoegen", "werkgroepen"),
+					groepPrompt(schema.nodes.woonoord, "Woonoord", "Woonoord invoegen", "woonoorden"),
 				], {label: "Groep"}),
 				loggedIn && blockTypeItemPrompt(schema.nodes.boek, "Boek", "Boek invoegen"),
 				loggedIn && blockTypeItemPrompt(schema.nodes.document, "Document", "Document invoegen"),
 				loggedIn && blockTypeItemPrompt(schema.nodes.maaltijd, "Maaltijd", "Maaltijd invoegen"),
+				loggedIn && blockTypeItemPrompt(schema.nodes.peiling, "Peiling", "Peiling invoegen"),
 				new MenuItem({
 					title: "Horizontale lijn invoegen",
 					label: "Lijn",

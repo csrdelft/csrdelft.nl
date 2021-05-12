@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-	<div class="float-right">
+	<div class="float-end">
 		{% if album.subdir and album.magToevoegen %}
 			<a class="btn" href="{{ url('csrdelft_fotoalbum_uploaden', {dir: album.subdir}) }}">
 				{{ icon('picture_add') }} Toevoegen

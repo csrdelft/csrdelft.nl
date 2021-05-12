@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Symfony2PluginSettings">
+    <option name="directoryToWeb" value="htdocs" />
+    <option name="directoryToApp" value="lib" />
+    <option name="pluginEnabled" value="true" />
+    <option name="lastServiceGeneratorLanguage" value="yaml" />
+  </component>
+</project>
