@@ -137,7 +137,6 @@ module.exports = (env, argv) => ({
 			{
 				test: /\.scss$/,
 				use: [
-					'vue-style-loader',
 					{
 						loader: require('mini-css-extract-plugin').loader,
 						options: {

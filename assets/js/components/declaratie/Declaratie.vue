@@ -377,10 +377,6 @@ import axios from 'axios';
 import Vue from 'vue';
 import {Component, Prop} from 'vue-property-decorator';
 
-const VueInputMask = require('vue-inputmask').default;
-
-Vue.use(VueInputMask);
-
 interface Declaratie {
   categorie?: number;
   betaalwijze?: 'C.S.R.-pas' | 'voorgeschoten';
