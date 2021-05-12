@@ -17,6 +17,7 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\pin\PinTransactieMatchRepository;
 use CsrDelft\repository\pin\PinTransactieRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\MailService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\fiscaat\pin\PinBestellingAanmakenForm;
 use CsrDelft\view\fiscaat\pin\PinBestellingInfoForm;
@@ -48,6 +49,10 @@ class PinTransactieController extends AbstractController {
 	 * @var EntityManagerInterface
 	 */
 	private $em;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
 	public function __construct(
 		EntityManagerInterface $em,
@@ -55,7 +60,8 @@ class PinTransactieController extends AbstractController {
 		CiviSaldoRepository $civiSaldoRepository,
 		CiviProductRepository $civiProductRepository,
 		PinTransactieMatchRepository $pinTransactieMatchRepository,
-		PinTransactieRepository $pinTransactieRepository
+		PinTransactieRepository $pinTransactieRepository,
+		MailService $mailService
 	) {
 		$this->civiBestellingModel = $civiBestellingRepository;
 		$this->civiSaldoRepository = $civiSaldoRepository;
@@ -63,6 +69,7 @@ class PinTransactieController extends AbstractController {
 		$this->pinTransactieMatchRepository = $pinTransactieMatchRepository;
 		$this->pinTransactieRepository = $pinTransactieRepository;
 		$this->em = $em;
+		$this->mailService = $mailService;
 	}
 
 	/**
@@ -585,6 +592,6 @@ h.t. Fiscus";
 		$mail = new Mail($ontvanger->getEmailOntvanger(), $onderwerp, $bericht);
 		$mail->setFrom($_ENV['EMAIL_FISCUS'], 'Fiscus C.S.R. Delft');
 		$mail->addBcc($bcc->getEmailOntvanger());
-		$mail->send();
+		$this->mailService->send($mail);
 	}
 }

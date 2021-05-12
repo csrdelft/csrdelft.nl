@@ -256,7 +256,7 @@ class ForumPostsRepository extends AbstractRepository implements Paging {
 	 *
 	 * @param string $uid
 	 * @param int $aantal
-	 * @param int $draad_uniek
+	 * @param boolean $draad_uniek
 	 * @return ForumPost[]
 	 */
 	public function getRecenteForumPostsVanLid($uid, $aantal, $draad_uniek = false) {

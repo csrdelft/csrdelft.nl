@@ -21,12 +21,14 @@ abstract class LLWeergave {
 	//viewLid print één regel of vakje ofzo.
 	public abstract function viewLid(Profiel $profiel);
 
-	public function view() {
-		$this->viewHeader();
+	public function __toString() {
+		$html = '';
+		$html .= $this->viewHeader();
 		foreach ($this->leden as $lid) {
-			$this->viewLid($lid);
+			$html .= $this->viewLid($lid);
 		}
-		$this->viewFooter();
+		$html .= $this->viewFooter();
+		return $html;
 	}
 
 }

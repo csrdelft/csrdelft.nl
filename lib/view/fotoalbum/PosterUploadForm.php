@@ -31,11 +31,13 @@ class PosterUploadForm extends Formulier {
 		return '<ul class="breadcrumb">' . FotoAlbumBreadcrumbs::getBreadcrumbs($this->model, false, true) . '</ul>';
 	}
 
-	public function view() {
-		parent::view();
+	public function __toString() {
+		$html = '';
+		$html .= parent::__toString();
 		// Uitleg foto's toevoegen
 		$body = new CmsPaginaView(ContainerFacade::getContainer()->get(CmsPaginaRepository::class)->find('fotostoevoegen'));
-		$body->view();
+		$html .= $body->__toString();
+		return $html;
 	}
 
 }

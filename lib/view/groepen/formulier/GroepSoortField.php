@@ -4,10 +4,10 @@ namespace CsrDelft\view\groepen\formulier;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\Enum;
-use CsrDelft\entity\groepen\AbstractGroep;
 use CsrDelft\entity\groepen\Commissie;
 use CsrDelft\entity\groepen\enum\ActiviteitSoort;
 use CsrDelft\entity\groepen\enum\CommissieSoort;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\groepen\ActiviteitenRepository;
@@ -27,7 +27,7 @@ class GroepSoortField extends RadioField {
 	protected $activiteit;
 	protected $commissie;
 	/**
-	 * @var AbstractGroep
+	 * @var Groep
 	 */
 	private $groep;
 
@@ -35,12 +35,12 @@ class GroepSoortField extends RadioField {
 		$name,
 		$value,
 		$description,
-		AbstractGroep $groep
+		Groep $groep
 	) {
 		parent::__construct($name, $value, $description, array());
 
 		if ($groep instanceof HeeftSoort && $groep->getSoort() instanceof ActiviteitSoort) {
-			$default = $groep->getSoort() ? ActiviteitSoort::from($groep->getSoort()) : ActiviteitSoort::Vereniging();
+			$default = $groep->getSoort() ? $groep->getSoort() : ActiviteitSoort::Vereniging();
 		} else {
 			$default = ActiviteitSoort::Vereniging();
 		}
@@ -51,7 +51,7 @@ $('#{$this->getId()}Option_ActiviteitenRepository').click();
 JS;
 
 		if ($groep instanceof Commissie) {
-			$default = $groep->soort ?? CommissieSoort::Commissie();
+			$default = $groep->commissieSoort ?? CommissieSoort::Commissie();
 		} else {
 			$default = CommissieSoort::Commissie();
 		}
@@ -99,7 +99,7 @@ JS;
 		/**
 		 * @Warning: Duplicate function in GroepForm->validate()
 		 */
-		if (!$this->groep->magAlgemeen(AccessAction::Beheren, null, $soort)) {
+		if (!$this->groep->magAlgemeen(AccessAction::Beheren(), null, $soort)) {
 			if ($model instanceof ActiviteitenRepository) {
 				$naam = $soort->getDescription();
 			} elseif ($model instanceof CommissiesRepository) {

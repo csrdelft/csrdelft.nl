@@ -3,9 +3,9 @@
 namespace CsrDelft\controller\groepen;
 
 use CsrDelft\entity\groepen\Kring;
-use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\view\Icon;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,8 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
  * @property KringenRepository $repository
  */
 class KringenController extends AbstractGroepenController {
-	public function __construct(ChangeLogRepository $changeLogRepository, KringenRepository $kringenRepository) {
-		parent::__construct($changeLogRepository, $kringenRepository);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Kring::class);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {
@@ -47,7 +47,7 @@ class KringenController extends AbstractGroepenController {
 				'url' => $kring->getUrl() . '#' . $kring->id,
 				'label' => $kring->familie,
 				'icon' => Icon::getTag('Kring'),
-				'value' => 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer
+				'value' => 'Kring:' . $kring->verticale . '.' . $kring->kringNummer
 			);
 		}
 		return new JsonResponse($result);

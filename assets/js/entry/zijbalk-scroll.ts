@@ -39,7 +39,7 @@ docReady(() => {
 				$zijbalk.addClass('stickTop');
 			}
 			lastHeight = Math.max(headerHeight, screenTop);
-		} else if (screenBottom >= zijbalkBottom) {
+		} else if (screenBottom > zijbalkBottom) {
 			// Stick to bottom
 			if (!stickBottom) {
 				if (stickTop) {

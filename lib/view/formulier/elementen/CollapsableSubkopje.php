@@ -26,13 +26,13 @@ class CollapsableSubkopje extends Subkopje {
 		$content = parent::getHtml();
 
 		return <<<HTML
-<a data-toggle="collapse" href="#{$collapseId}" role="button" aria-expanded="{$expanded}" aria-controls="{$collapseId}">{$content}</a>
+<a data-bs-toggle="collapse" href="#{$collapseId}" role="button" aria-expanded="{$expanded}" aria-controls="{$collapseId}">{$content}</a>
 <div id="{$collapseId}" class="{$className}">
 HTML;
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 }

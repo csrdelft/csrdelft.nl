@@ -3,12 +3,12 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\entity\ChangeLogEntry;
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\datatable\DataTable;
 
 class GroepLogboekTable extends DataTable {
 
-	public function __construct(AbstractGroep $groep) {
+	public function __construct(Groep $groep) {
 		parent::__construct(ChangeLogEntry::class, $groep->getUrl() . '/logboek', false, 'moment');
 		$this->hideColumn('subject');
 		$this->searchColumn('property');

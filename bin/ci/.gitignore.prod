@@ -36,8 +36,7 @@ webpack.config.js
 .travis.yml
 .tidelift.yml
 .codacy.yml
-phpstan.autoload.php
-phpstan.neon
+psalm.xml
 CONTRIBUTING.md
 README.md
 .eslintrc.yaml

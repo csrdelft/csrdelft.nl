@@ -6,6 +6,7 @@ use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Account
@@ -27,6 +28,13 @@ class Account implements UserInterface {
 	 * @ORM\Id()
 	 */
 	public $uid;
+
+	/**
+	 * Unieke id voor externe applicaties
+	 * @var Uuid
+	 * @ORM\Column(type="uuid", unique=true)
+	 */
+	public $uuid;
 	/**
 	 * Gebruikersnaam
 	 * @var string
@@ -106,7 +114,7 @@ class Account implements UserInterface {
 	}
 
 	public function getICalLink() {
-		$url = CSR_ROOT . '/agenda/ical/';
+		$url = '/agenda/ical/';
 		if (empty($this->private_token)) {
 			return $url . 'csrdelft.ics';
 		} else {
@@ -115,7 +123,7 @@ class Account implements UserInterface {
 	}
 
 	public function getRssLink() {
-		$url = CSR_ROOT . '/forum/rss/';
+		$url = '/forum/rss/';
 		if (empty($this->private_token)) {
 			return $url . 'csrdelft.xml';
 		} else {

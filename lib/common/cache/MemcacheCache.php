@@ -23,6 +23,7 @@ class MemcacheCache extends CacheProvider
 	/**
 	 * Sets the memcache instance to use.
 	 *
+	 * @param Memcache $memcache
 	 * @return void
 	 */
 	public function setMemcache(Memcache $memcache)
@@ -102,7 +103,7 @@ class MemcacheCache extends CacheProvider
 		];
 	}
 
-	private function fixId($id) {
+	private function fixId(string $id) {
 		return urlencode($id);
 	}
 

@@ -16,9 +16,13 @@ class SuggestieLijst implements ToResponse, FormElement {
 	 * @var CorveePuntenOverzichtDTO[]
 	 */
 	private $suggesties;
+	/** @var CorveeTaak  */
 	private $taak;
+	/** @var bool  */
 	private $voorkeurbaar;
+	/** @var string  */
 	private $voorkeur;
+	/** @var string  */
 	private $recent;
 	/**
 	 * @var Environment
@@ -58,8 +62,8 @@ class SuggestieLijst implements ToResponse, FormElement {
 		]);
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getTitel() {

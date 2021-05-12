@@ -21,6 +21,7 @@ use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
 use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
@@ -61,6 +62,10 @@ class ProfielRepository extends AbstractRepository {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
 	public function __construct(
 		ManagerRegistry $registry,
@@ -68,7 +73,8 @@ class ProfielRepository extends AbstractRepository {
 		Environment $twig,
 		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
 		CorveeTakenRepository $corveeTakenRepository,
-		BoekExemplaarRepository $boekExemplaarModel
+		BoekExemplaarRepository $boekExemplaarModel,
+		MailService $mailService
 	) {
 		parent::__construct($registry, Profiel::class);
 
@@ -77,6 +83,7 @@ class ProfielRepository extends AbstractRepository {
 		$this->boekExemplaarModel = $boekExemplaarModel;
 		$this->security = $security;
 		$this->twig = $twig;
+		$this->mailService = $mailService;
 	}
 
 	public static function changelog(array $diff, $uid) {
@@ -332,7 +339,7 @@ class ProfielRepository extends AbstractRepository {
 			]);
 			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
 			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-			$mail->send();
+			$this->mailService->send($mail);
 		}
 		return $changes;
 	}
@@ -366,7 +373,7 @@ class ProfielRepository extends AbstractRepository {
 		$mail = new Mail($to, 'Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
 
-		return $mail->send();
+		return $this->mailService->send($mail);
 	}
 
 	/**
@@ -392,11 +399,11 @@ class ProfielRepository extends AbstractRepository {
 			if ($exemplaar->isBiebBoek()) {
 				$bkncsr['aantal']++;
 				$bkncsr['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
-				$bkncsr['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
+				$bkncsr['lijst'] .= " - " . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 			} else {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
-				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
+				$bknleden['lijst'] .= " - " . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 				$naam = $exemplaar->eigenaar->getNaam('volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
@@ -433,7 +440,7 @@ class ProfielRepository extends AbstractRepository {
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
 
-		return $mail->send();
+		return $this->mailService->send($mail);
 	}
 
 	/**
@@ -476,11 +483,24 @@ class ProfielRepository extends AbstractRepository {
 		return true;
 	}
 
-	public function getNovieten($lichting) {
+	/**
+	 * Geef een lidjaar mee om alleen novieten van een specifiek lidjaar op te halen.
+	 *
+	 * @param null $lidjaar
+	 * @return int|mixed|string
+	 */
+	public function getNovietenVanLaatsteLidjaar($lidjaar = null) {
+		if (empty($lidjaar)) {
+			return $this->createQueryBuilder('p')
+				->where('p.status = :status')
+				->setParameter('status', LidStatus::Noviet)
+				->getQuery()->getResult();
+		}
+
 		return $this->createQueryBuilder('p')
-			->where('p.uid like :uid and p.status = :status')
-			->setParameter('uid', $lichting . '%')
-			->setParameter('status', 'S_NOVIET')
+			->where('p.status = :status and p.lidjaar = :lidjaar')
+			->setParameter('lidjaar', $lidjaar)
+			->setParameter('status', LidStatus::Noviet)
 			->getQuery()->getResult();
 	}
 

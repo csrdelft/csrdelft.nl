@@ -79,7 +79,7 @@ HTML;
 	public function parse($arguments = [])
 	{
 		$this->url = $this->readMainArgument($arguments);
-		if (startsWith($this->url, '@')) {
+		if (str_starts_with($this->url, '@')) {
 			$this->url = 'https://twitter.com/' . $this->url;
 		}
 		if (!preg_match('^https?://(www.)?twitter.com/', $this->url)) {

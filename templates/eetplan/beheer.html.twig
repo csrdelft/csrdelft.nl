@@ -13,9 +13,9 @@
 {% block content %}
 	<h1>Eetplanbeheer</h1>
 
-	{{ huizentable.toString | raw }}
-	{{ bekendentable.toString | raw }}
-	{{ bekendehuizentable.toString | raw }}
+	{{ huizentable | raw }}
+	{{ bekendentable | raw }}
+	{{ bekendehuizentable | raw }}
 
 	<a href="{{ url('csrdelft_eetplan_nieuw') }}" class="btn btn-primary post popup">Nieuw Eetplan</a>
 	<a href="{{ url('csrdelft_eetplan_verwijderen') }}" class="btn btn-primary post popup">Eetplan verwijderen</a>

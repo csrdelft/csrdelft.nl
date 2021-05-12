@@ -157,7 +157,7 @@ class WachtwoordWijzigenField extends InputField {
 
 		if ($this->require_current) {
 			$html .= <<<HTML
-<div class="form-group row">
+<div class="mb-3 row">
 	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_current">Huidig wachtwoord<span class="required">*</span></label>
 	</div>
@@ -170,7 +170,7 @@ HTML;
 
 		$required = $this->required ? '<span class="required"> *</span>' : '';
 		$html .= <<<HTML
-<div class="form-group row">
+<div class="mb-3 row">
 	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_new">Nieuw wachtwoord{$required}</label>
 	</div>
@@ -178,7 +178,7 @@ HTML;
 		<input type="password" class="$inputCssClasses" autocomplete="off" id="{$this->getId()}_new" name="{$this->name}_new" />
 	</div>
 </div>
-<div class="form-group row">
+<div class="mb-3 row">
 	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_confirm">Herhaal nieuw wachtwoord{$required}</label>
 	</div>

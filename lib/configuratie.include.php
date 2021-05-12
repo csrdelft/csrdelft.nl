@@ -49,7 +49,7 @@ date_default_timezone_set('Europe/Amsterdam');
 if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
 	Request::setTrustedProxies(
 		explode(',', $trustedProxies),
-		Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST
+		Request::HEADER_X_FORWARDED_ALL
 	);
 }
 
@@ -98,13 +98,12 @@ if (!isCli()) {
 	ini_set('session.use_strict_mode', true);
 	ini_set('session.use_cookies', true);
 	ini_set('session.use_only_cookies', true);
-	ini_set('session.cookie_domain', CSR_DOMAIN);
 	ini_set('session.cookie_secure', FORCE_HTTPS);
 	ini_set('session.cookie_httponly', true);
 	ini_set('log_errors_max_len', 0);
 	ini_set('xdebug.max_nesting_level', 2000);
 	ini_set('intl.default_locale', 'nl');
-	session_set_cookie_params(0, '/', CSR_DOMAIN, FORCE_HTTPS, true);
+	session_set_cookie_params(0, '/', '', FORCE_HTTPS, true);
 
 	$container->get(LogRepository::class)->log();
 }

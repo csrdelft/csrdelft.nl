@@ -103,7 +103,7 @@ class BbImg extends BbTag
 	{
 		$this->url = filter_var($this->readMainArgument($arguments), FILTER_SANITIZE_URL);
 
-		if (!$this->url || (!url_like($this->url) && !startsWith($this->url, '/'))) {
+		if (!$this->url || (!url_like($this->url) && !str_starts_with($this->url, '/'))) {
 			throw new BbException("Wrong url " . $this->url);
 		}
 

@@ -16,6 +16,9 @@ RewriteRule ^owee/?$			/csrindeowee [L]
 RewriteRule ^facebook			https://www.facebook.com/delftcsr [R,L]
 RewriteRule ^feuten				https://github.com/csrdelft/csrdelft.nl [R,L]
 
+# Zorg dat Apache2 de http Authorization header doorstuurt naar PHP
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 # Symfony config
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
 RewriteRule ^(.*) - [E=BASE:%1]

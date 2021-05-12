@@ -43,7 +43,7 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten", methods={"GET"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function recenttonen()
+	public function recenttonen(): Response
 	{
 		return $this->render('documenten/documenten.html.twig', ['categorien' => $this->documentCategorieRepository->findAll()]);
 	}
@@ -122,7 +122,7 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten/categorie/{id}", methods={"GET"}, requirements={"id": "\d+"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function categorie(DocumentCategorie $categorie)
+	public function categorie(DocumentCategorie $categorie): Response
 	{
 		if (!$categorie->magBekijken()) {
 			throw $this->createAccessDeniedException('Mag deze categorie niet bekijken');
@@ -188,7 +188,8 @@ class DocumentenController extends AbstractController
 	 * @Auth(P_DOCS_MOD)
 	 * @return JsonResponse
 	 */
-	public function categorieVerwijderen(DocumentCategorie $categorie) {
+	public function categorieVerwijderen(DocumentCategorie $categorie): JsonResponse
+	{
 		$this->getDoctrine()->getManager()->remove($categorie);
 		$this->getDoctrine()->getManager()->flush();
 
@@ -202,7 +203,7 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten/bewerken/{id}", methods={"GET","POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(Request $request, Document $document)
+	public function bewerken(Request $request, Document $document): Response
 	{
 		if (!$document->magBewerken()) {
 			throw $this->createAccessDeniedException();
@@ -233,7 +234,7 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten/toevoegen", methods={"GET","POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function toevoegen(Request $request)
+	public function toevoegen(Request $request): Response
 	{
 		$document = new Document();
 
@@ -289,7 +290,7 @@ class DocumentenController extends AbstractController
 	 * @Route("/documenten/zoeken", methods={"GET","POST"})
 	 * @Auth(P_DOCS_READ)
 	 */
-	public function zoeken(Request $request, $zoekterm = null)
+	public function zoeken(Request $request, $zoekterm = null): JsonResponse
 	{
 		if (!$zoekterm && !$request->query->has('q')) {
 			throw $this->createAccessDeniedException();

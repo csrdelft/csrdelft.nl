@@ -3,11 +3,12 @@ import {bbPrompt} from "./bb-prompt";
 import {EditorState, NodeSelection} from "prosemirror-state";
 import {MarkType, NodeType} from "prosemirror-model";
 import {MenuItem, MenuItemSpec} from "prosemirror-menu";
-import {FileField, Label, LidField, openPrompt, TextField} from "./prompt";
+import {FileField, Label, LidField, openPrompt, TextField, YoutubeField} from "./prompt";
 import {toggleMark} from "prosemirror-commands";
 import {wrapInList} from "prosemirror-schema-list";
 import {startImageUpload} from "./forum-plaatje";
 import {html, ucfirst, uidLike} from "../lib/util";
+import Vue from "vue";
 
 export function canInsert(state: EditorState<EditorSchema>, nodeType: NodeType<EditorSchema>): boolean {
 	const $from = state.selection.$from
@@ -91,7 +92,10 @@ export function insertCitaat(nodeType: NodeType): MenuItem {
 	})
 }
 
-function cmdItem(cmd: (state: EditorState) => boolean, {enabled, ...options}: Partial<MenuItemSpec> & {enabled?: boolean}) {
+function cmdItem(cmd: (state: EditorState) => boolean, {
+	enabled,
+	...options
+}: Partial<MenuItemSpec> & { enabled?: boolean }) {
 	const passedOptions: MenuItemSpec = {
 		label: typeof options.title == "string" ? options.title : "",
 		run: cmd,
@@ -256,6 +260,74 @@ export const blockTypeItemPrompt = (nodeType: NodeType<EditorSchema>, label: str
 					required: spec.default === undefined,
 					value: attrs ? attrs[attr] : spec.default
 				})])),
+			callback(callbackAttrs) {
+				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs}, content)))
+				view.focus()
+			}
+		})
+	}
+});
+
+export const groepPrompt = (nodeType: NodeType<EditorSchema>, label: string, title: string, type: string): MenuItem => new MenuItem({
+	title,
+	label,
+	enable: state => canInsert(state, nodeType),
+	run: (state, dispatch, view) => {
+		let content = null
+
+		if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			content = state.selection.node.content
+		}
+
+		const el = document.body.appendChild(document.createElement("div"));
+
+		new Vue({
+			el,
+			template: `
+				<groepprompt :close="close" :selectgroep="selectGroep" :type="type"/>`,
+			data: {type},
+			methods: {
+				close() {
+					this.$el.remove()
+				},
+				selectGroep(naam, id) {
+					this.$el.remove()
+
+					view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({
+						type: nodeType.name,
+						naam,
+						id
+					}, content)))
+					view.focus()
+				}
+			}
+		})
+	}
+});
+
+export const youtubeItemPrompt = (nodeType: NodeType<EditorSchema>, label: string, title: string, description = ""): MenuItem => new MenuItem({
+	title,
+	label,
+	enable: state => canInsert(state, nodeType),
+	run: (state, dispatch, view) => {
+		let attrs = null
+		let content = null
+
+		if (state.selection instanceof NodeSelection && state.selection.node.type == nodeType) {
+			attrs = state.selection.node.attrs
+			content = state.selection.node.content
+		}
+
+		openPrompt({
+			description,
+			title: attrs ? "Update: " + nodeType.name : "Invoegen: " + nodeType.name,
+			fields: {
+				id: new YoutubeField({
+					label: "Id",
+					required: true,
+					value: attrs ? attrs.id : "",
+				})
+			},
 			callback(callbackAttrs) {
 				view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({type: nodeType.name, ...callbackAttrs}, content)))
 				view.focus()

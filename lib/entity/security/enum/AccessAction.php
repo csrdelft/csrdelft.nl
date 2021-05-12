@@ -10,6 +10,26 @@ use CsrDelft\common\Enum;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * CRUD + groepen-acties.
+ * @method static static Bekijken
+ * @method static static Aanmelden
+ * @method static static Bewerken
+ * @method static static Afmelden
+ * @method static static Opvolging
+ * @method static static Aanmaken
+ * @method static static Wijzigen
+ * @method static static Verwijderen
+ * @method static static Beheren
+ * @method static static Rechten
+ * @method static bool isBekijken(static $val)
+ * @method static bool isAanmelden(static $val)
+ * @method static bool isBewerken(static $val)
+ * @method static bool isAfmelden(static $val)
+ * @method static bool isOpvolging(static $val)
+ * @method static bool isAanmaken(static $val)
+ * @method static bool isWijzigen(static $val)
+ * @method static bool isVerwijderen(static $val)
+ * @method static bool isBeheren(static $val)
+ * @method static bool isRechten(static $val)
  */
 class AccessAction extends Enum {
 

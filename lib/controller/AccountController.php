@@ -11,7 +11,9 @@ use CsrDelft\service\AccessService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\login\AccountForm;
 use CsrDelft\view\login\UpdateLoginForm;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,11 +55,12 @@ class AccountController extends AbstractController {
 
 	/**
 	 * @param null $uid
-	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 * @return RedirectResponse
 	 * @Route("/account/{uid}/aanmaken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function aanmaken($uid = null) {
+	public function aanmaken($uid = null): RedirectResponse
+	{
 		if (!LoginService::mag(P_ADMIN)) {
 			throw $this->createAccessDeniedException();
 		}
@@ -82,13 +85,16 @@ class AccountController extends AbstractController {
 	}
 
 	/**
+	 * @param Request $request
+	 * @param Security $security
 	 * @param null $uid
 	 * @return Response
 	 * @Route("/account/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Route("/account/bewerken", methods={"GET", "POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken(Request $request, Security $security, $uid = null) {
+	public function bewerken(Request $request, Security $security, $uid = null): Response
+	{
 		$eigenAccount = $security->getUser();
 		if ($uid == null) {
 			$uid = $this->getUid();
@@ -143,7 +149,8 @@ class AccountController extends AbstractController {
 	 * @Route("/account/{uid}/aanvragen", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function aanvragen() {
+	public function aanvragen(): Response
+	{
 		return $this->render('default.html.twig', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
 	}
 
@@ -153,7 +160,8 @@ class AccountController extends AbstractController {
 	 * @Route("/account/{uid}/verwijderen", methods={"POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verwijderen($uid = null) {
+	public function verwijderen($uid = null): JsonResponse
+	{
 		if ($uid == null) {
 			$uid = $this->getUid();
 		}
@@ -167,7 +175,7 @@ class AccountController extends AbstractController {
 			try {
 				$this->accountRepository->delete($account);
 				setMelding('Account succesvol verwijderd', 1);
-			} catch (\Exception $exception) {
+			} catch (Exception $exception) {
 				setMelding('Account verwijderen mislukt', -1);
 			}
 		}

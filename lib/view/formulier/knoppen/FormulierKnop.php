@@ -63,14 +63,14 @@ class FormulierKnop implements FormElement {
 		}
 		$html .= '>';
 		if ($this->icon) {
-			$html .= Icon::getTag($this->icon, null, null, 'mr-1');
+			$html .= Icon::getTag($this->icon, null, null, 'me-1');
 		}
 		$html .= $this->label;
 		return $html . '</a> ';
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getJavascript() {

@@ -8,7 +8,7 @@
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
@@ -20,7 +20,7 @@ class GroepOmschrijvingView implements FormElement, ToResponse {
 	protected $groep;
 	protected $javascript;
 
-	public function __construct(AbstractGroep $groep) {
+	public function __construct(Groep $groep) {
 		$this->groep = $groep;
 		$this->javascript = '';
 	}
@@ -56,8 +56,8 @@ JS;
 			. '</div>';
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	protected function getScriptTag() {

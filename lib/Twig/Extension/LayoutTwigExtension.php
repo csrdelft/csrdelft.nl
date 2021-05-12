@@ -91,7 +91,7 @@ class LayoutTwigExtension extends AbstractExtension
 
 	public function instant_search_form()
 	{
-		return (new InstantSearchForm())->toString();
+		return (new InstantSearchForm())->__toString();
 	}
 
 	public function get_zijbalk()
@@ -101,7 +101,7 @@ class LayoutTwigExtension extends AbstractExtension
 
 	public function login_form()
 	{
-		return $this->formulierFactory->create(LoginForm::class, null, [])->createView()->toString();
+		return $this->formulierFactory->create(LoginForm::class, null, [])->createView()->__toString();
 	}
 
 	public function icon($key, $hover = null, $title = null, $class = null, $content = null)

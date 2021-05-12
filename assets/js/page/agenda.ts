@@ -8,11 +8,11 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import axios from 'axios';
 import $ from 'jquery';
 import moment from 'moment';
-import Popper from 'popper.js';
 import ctx from '../ctx';
 import {ajaxRequest} from '../lib/ajax';
 import {domUpdate} from '../lib/domUpdate';
 import {docReady, htmlParse} from '../lib/util';
+import {createPopper} from "@popperjs/core";
 
 docReady(() => {
 	const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -126,7 +126,7 @@ docReady(() => {
 				document.body.append(card);
 				ctx.init(card);
 
-				new Popper(info.el, card, {placement: 'bottom'});
+				createPopper(info.el, card, {placement: 'bottom'});
 
 				// Na deze klik een event listener
 				setTimeout(() => {
@@ -185,5 +185,5 @@ docReady(() => {
 	const calendar = new Calendar(calendarEl, options);
 	calendar.render();
 
-	$(document.body).on('modalClose', () => calendar.refetchEvents());
+	document.addEventListener('modalClose', () => calendar.refetchEvents());
 });

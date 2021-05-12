@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\entity\groepen\Activiteit;
+use Doctrine\Persistence\ManagerRegistry;
 
 
 /**
@@ -14,7 +14,7 @@ use CsrDelft\repository\groepen\ActiviteitenRepository;
  * Controller voor activiteiten.
  */
 class ActiviteitenController extends KetzersController {
-	public function __construct(ChangeLogRepository $changeLogRepository, ActiviteitenRepository $activiteitenRepository) {
-		parent::__construct($changeLogRepository, $activiteitenRepository);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Activiteit::class);
 	}
 }

@@ -17,6 +17,7 @@ class AssetsTwigExtension extends AbstractExtension
 			new TwigFunction('user_modules', [$this, 'getUserModules']),
 			new TwigFunction('css_asset', [$this, 'css_asset'], ['is_safe' => ['html']]),
 			new TwigFunction('js_asset', [$this, 'js_asset'], ['is_safe' => ['html']]),
+			new TwigFunction('asset_url', [$this, 'asset_url']),
 		];
 	}
 
@@ -62,9 +63,9 @@ class AssetsTwigExtension extends AbstractExtension
 
 		foreach ($this->module_asset($module, 'css') as $asset) {
 			if ($media) {
-				$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\" media=\"{$media}\"/>\n";
+				$assetString .= "<link rel=\"stylesheet\" href=\"{$asset[0]}\" integrity=\"{$asset[1]}\" type=\"text/css\" media=\"{$media}\"/>\n";
 			} else {
-				$assetString .= "<link rel=\"stylesheet\" href=\"{$asset}\" type=\"text/css\"/>\n";
+				$assetString .= "<link rel=\"stylesheet\" href=\"{$asset[0]}\" integrity=\"{$asset[1]}\" type=\"text/css\"/>\n";
 			}
 		}
 
@@ -76,7 +77,7 @@ class AssetsTwigExtension extends AbstractExtension
 		$assetString = '';
 
 		foreach ($this->module_asset($module, 'js') as $asset) {
-			$assetString .= "<script type=\"text/javascript\" src=\"{$asset}\"></script>\n";
+			$assetString .= "<script type=\"text/javascript\" src=\"{$asset[0]}\" integrity=\"{$asset[1]}\"></script>\n";
 		}
 
 		return $assetString;
@@ -84,20 +85,51 @@ class AssetsTwigExtension extends AbstractExtension
 
 	private function module_asset(string $module, string $extension)
 	{
-		if (!file_exists(HTDOCS_PATH . 'dist/manifest.json')) {
-			throw new CsrException('htdocs/dist/manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
-		}
-
-		$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/manifest.json'), true);
+		$manifest = $this->readManifest();
 
 		$relevantAssets = [];
 
-		foreach ($manifest as $asset => $resource) {
-			if (preg_match('/(^|~)(' . $module . ')([.~])/', $asset) && endsWith($asset, $extension)) {
-				$relevantAssets[] = $resource;
-			}
+		$entrypoints = $manifest['entrypoints'];
+
+		if (!isset($entrypoints[$module])) {
+			throw new CsrException("Entrypoint met naam {$module} bestaat niet.");
+		}
+
+		if (!isset($entrypoints[$module]['assets'][$extension])) {
+			throw new CsrException("Entrypoint met naam {$module} heeft geen extensie {$extension}");
+		}
+
+		$assets = $manifest['entrypoints'][$module]['assets'][$extension];
+
+		foreach ($assets as $asset) {
+			$relevantAssets[] = ['/dist/' . $asset['src'], $asset['integrity']];
 		}
 
 		return $relevantAssets;
+	}
+
+	public function asset_url($name) {
+		$manifest = $this->readManifest();
+
+		if (!isset($manifest[$name])) {
+			throw new CsrException("Asset met naam {$name} bestaat niet.");
+		}
+
+		$asset = $manifest[$name];
+
+		return '/dist/' . $asset['src'];
+	}
+
+	/**
+	 * @return mixed
+	 */
+	private function readManifest()
+	{
+		if (!file_exists(HTDOCS_PATH . 'dist/assets-manifest.json')) {
+			throw new CsrException('htdocs/dist/assets-manifest.json besaat niet, voer "yarn dev" uit om deze te genereren.');
+		}
+
+		$manifest = json_decode(file_get_contents(HTDOCS_PATH . 'dist/assets-manifest.json'), true);
+		return $manifest;
 	}
 }

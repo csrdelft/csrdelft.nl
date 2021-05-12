@@ -61,7 +61,8 @@ class ToestemmingController extends AbstractController {
 	 * @Route("/toestemming", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function GET_overzicht() {
+	public function GET_overzicht(): Response
+	{
 		return $this->render('default.html.twig', [
 			'content' => new CmsPaginaView($this->cmsPaginaRepository->find('thuis')),
 			'modal' => new ToestemmingModalForm($this->lidToestemmingRepository),
@@ -73,7 +74,8 @@ class ToestemmingController extends AbstractController {
 	 * @Route("/toestemming/annuleren", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function POST_annuleren() {
+	public function POST_annuleren(): CmsPaginaView
+	{
 		$_SESSION['stop_nag'] = time();
 
 		return new CmsPaginaView($this->cmsPaginaRepository->find('thuis'));
@@ -84,7 +86,8 @@ class ToestemmingController extends AbstractController {
 	 * @Route("/toestemming/annuleren", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function GET_annuleren() {
+	public function GET_annuleren(): RedirectResponse
+	{
 		$_SESSION['stop_nag'] = time();
 
 		return $this->redirectToRoute('default');
@@ -95,6 +98,7 @@ class ToestemmingController extends AbstractController {
 	 * @return ToestemmingLijstResponse|Response
 	 * @Route("/toestemming/lijst", methods={"GET","POST"})
 	 * @Auth({P_LEDEN_MOD,P_ALBUM_MOD,"commissie:promocie:ht"})
+	 * @throws Exception
 	 */
 	public function lijst(Request $request) {
 		if (LoginService::mag(P_LEDEN_MOD)) {

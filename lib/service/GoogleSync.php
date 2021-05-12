@@ -2,6 +2,7 @@
 
 namespace CsrDelft\service;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\profiel\Profiel;
@@ -638,7 +639,7 @@ class GoogleSync {
 		}
 
 		$profielPagina = $doc->createElement('gContact:website');
-		$profielPagina->setAttribute('href', CSR_ROOT . '/profiel/' . $profiel->uid);
+		$profielPagina->setAttribute('href', getCsrRoot() . '/profiel/' . $profiel->uid);
 		$profielPagina->setAttribute('label', 'C.S.R. webstek profiel');
 		$entry->appendChild($profielPagina);
 
@@ -689,7 +690,8 @@ class GoogleSync {
 	 * @throws CsrException
 	 */
 	public static function createGoogleCLient() {
-		$redirect_uri = CSR_ROOT . '/google/callback';
+		$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
+		$redirect_uri = $request->getSchemeAndHttpHost() . '/google/callback';
 		$client = new Google_Client();
 		$client->setApplicationName('Stek');
 		$client->setClientId($_ENV['GOOGLE_CLIENT_ID']);

@@ -16,6 +16,18 @@
 	}
 }
 
+.lustrum_button {
+	background-color: #6e1321;
+	color: #eeeeee;
+	font-weight: bold;
+	font-size: 1.0em;
+	align-items: center;
+	width: 100%;
+}
+.lustrum_button:hover {
+	color: #ebb803;
+}
+
 .zijbalk_verborgen {
 	margin-left: 0;
 
@@ -190,22 +202,8 @@ Initieel verbergen, weergeven als :target of .target op #zijbalk
 		transition: transform 0.1s;
 	}
 
-	.cd-main-content {
-		margin-left: 0;
-	}
-
-	.cd-page-top {
-		position: relative;
-		top: 0;
-		left: 0;
-	}
-
 	#zijbalk.target,
 	#zijbalk:target {
 		transform: translateX(0);
-
-		~ .cd-main-content {
-			transform: translateX(179px);
-		}
 	}
 }

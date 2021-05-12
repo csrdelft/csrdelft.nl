@@ -18,6 +18,7 @@ class CiviSaldoTable extends DataTable {
 	public function __construct() {
 		parent::__construct(CiviSaldo::class, '/fiscaat/saldo', 'Saldobeheer');
 
+		$this->addColumn('uid', 'saldo');
 		$this->addColumn('naam', 'saldo');
 		$this->addColumn('lichting', 'saldo');
 		$this->addColumn('hidden_saldo', null, null, null, null, null, 'saldo');

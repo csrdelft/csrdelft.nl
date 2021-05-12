@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\GoogleToken;
 use CsrDelft\repository\GoogleTokenRepository;
 use CsrDelft\service\GoogleSync;
@@ -34,6 +35,11 @@ class GoogleController extends AbstractController {
 	 */
 	public function callback(Request $request) {
 		$state = $request->query->get('state', null);
+
+		if (!str_starts_with($state, $request->getSchemeAndHttpHost())) {
+			throw new CsrGebruikerException("Redirect is niet binnen de stek!");
+		}
+
 		$code = $request->query->get('code', null);
 		$error = $request->query->get('error',null);
 		if ($code) {
@@ -54,14 +60,14 @@ class GoogleController extends AbstractController {
 
 			$manager->flush();
 
-			return $this->csrRedirect(urldecode($state));
+			return $this->redirect($state);
 		}
 
 		if ($error) {
 			setMelding('Verbinding met Google niet geaccepteerd', 2);
 			$state = substr(strstr($state, 'addToGoogleContacts', true), 0, -1);
 
-			return $this->csrRedirect($state);
+			return $this->redirect($state);
 		}
 
 		throw new CsrException('Geen error en geen code van Google gekregen.');

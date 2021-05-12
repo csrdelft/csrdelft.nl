@@ -2,8 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\repository\ChangeLogRepository;
-use CsrDelft\repository\groepen\WerkgroepenRepository;
+use CsrDelft\entity\groepen\Werkgroep;
+use Doctrine\Persistence\ManagerRegistry;
 
 
 /**
@@ -16,7 +16,7 @@ use CsrDelft\repository\groepen\WerkgroepenRepository;
  * N.B. Een Werkgroep extends Ketzer, maar de controller niet om de "nieuwe ketzer"-wizard te vermijden.
  */
 class WerkgroepenController extends AbstractGroepenController {
-	public function __construct(ChangeLogRepository $changeLogRepository, WerkgroepenRepository $werkgroepenRepository) {
-		parent::__construct($changeLogRepository, $werkgroepenRepository);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Werkgroep::class);
 	}
 }

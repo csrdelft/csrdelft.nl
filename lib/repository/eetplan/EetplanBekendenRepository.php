@@ -22,15 +22,15 @@ class EetplanBekendenRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param string $lichting
+	 * @param int $lidjaar
 	 *
 	 * @return EetplanBekenden[]
 	 */
-	public function getBekenden($lichting) {
+	public function getBekendenVoorLidjaar($lidjaar) {
 		return $this->createQueryBuilder('b')
 			->join('b.noviet1', 'n')
-			->where('n.uid like :lichting')
-			->setParameter('lichting', $lichting . '%')
+			->where('n.lidjaar = :lidjaar')
+			->setParameter('lidjaar', $lidjaar)
 			->getQuery()->getResult();
 	}
 

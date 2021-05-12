@@ -57,10 +57,10 @@ class BbIsHetAl extends BbTag {
 	}
 
 	public function render() {
-		ob_start();
-		echo '<div class="my-3 p-3 bg-white rounded shadow-sm">';
-		(new IsHetAlView($this->lidInstellingenRepository, $this->session, $this->agendaRepository, $this->value))->view();
-		echo '</div>';
-		return ob_get_clean();
+		$html = '';
+		$html .= '<div class="my-3 p-3 bg-white rounded shadow-sm">';
+		$html .= (new IsHetAlView($this->lidInstellingenRepository, $this->session, $this->agendaRepository, $this->value))->__toString();
+		$html .= '</div>';
+		return $html;
 	}
 }

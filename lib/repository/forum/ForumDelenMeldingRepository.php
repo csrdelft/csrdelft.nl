@@ -11,6 +11,7 @@ use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\Account;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\MailService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\security\SuService;
 use Doctrine\Persistence\ManagerRegistry;
@@ -34,11 +35,16 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
-	public function __construct(ManagerRegistry $registry, Environment $twig, SuService $suService) {
+	public function __construct(ManagerRegistry $registry, Environment $twig, SuService $suService, MailService $mailService) {
 		parent::__construct($registry, ForumDeelMelding::class);
 		$this->suService = $suService;
 		$this->twig = $twig;
+		$this->mailService = $mailService;
 	}
 
 	protected function maakForumDeelMelding(ForumDeel $deel, $uid) {
@@ -132,7 +138,7 @@ class ForumDelenMeldingRepository extends AbstractRepository {
 			]);
 			if ($draad->magMeldingKrijgen()) {
 				$mail = new Mail($ontvanger->profiel->getEmailOntvanger(), 'C.S.R. Forum: nieuw draadje in ' . $deel->titel . ': ' . $draad->titel, $bericht);
-				$mail->send();
+				$this->mailService->send($mail);
 			}
 		});
 	}

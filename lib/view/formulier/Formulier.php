@@ -247,30 +247,34 @@ HTML;
 	/**
 	 * Toont het formulier en javascript van alle fields.
 	 *
-	 * @return void
+	 * @return string
 	 */
-	public function view() {
+	public function __toString() {
+		$string = '';
+
 		if ($this->showMelding) {
-			echo getMelding();
+			$string .= getMelding();
 		}
-		echo $this->getFormTag();
+		$string .= $this->getFormTag();
 		$titel = $this->getTitel();
 		if (!empty($titel)) {
-			echo '<h1 class="Titel">' . $titel . '</h1>';
+			$string .= '<h1 class="Titel">' . $titel . '</h1>';
 		}
 		if (isset($this->error)) {
-			echo '<span class="error">' . $this->error . '</span>';
+			$string .= '<span class="error">' . $this->error . '</span>';
 		}
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
-			$field->view();
+			$string .= $field->__toString();
 		}
 		$csrfField = $this->getCsrfField();
 		if ($csrfField != null)
-			$csrfField->view();
-		echo $this->formKnoppen->getHtml();
-		echo $this->getScriptTag();
-		echo '</form>';
+			$string .= $csrfField->__toString();
+		$string .= $this->formKnoppen->getHtml();
+		$string .= $this->getScriptTag();
+		$string .= '</form>';
+
+		return $string;
 	}
 
 	public function getCsrfField() {

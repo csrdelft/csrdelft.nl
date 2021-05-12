@@ -5,7 +5,7 @@ namespace CsrDelft\view\formulier;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
-use CsrDelft\common\Doctrine\Type\EnumType;
+use CsrDelft\common\Doctrine\Type\Enum\EnumType;
 use CsrDelft\common\Doctrine\Type\LongTextType;
 use CsrDelft\common\Doctrine\Type\SafeJsonType;
 use CsrDelft\common\Doctrine\Type\StringKeyType;
@@ -122,7 +122,7 @@ class FormFieldFactory {
 	private static function getFieldByType(string $fieldName, $value, $type) {
 		$desc = ucfirst(str_replace('_', ' ', $fieldName));
 
-		if (startsWith($fieldName, 'rechten_')) {
+		if (str_starts_with($fieldName, 'rechten_')) {
 			return new RechtenField($fieldName, $value, $desc);
 		}
 

@@ -3,16 +3,16 @@
 namespace CsrDelft\repository\groepen;
 
 use CsrDelft\entity\groepen\Kring;
-use CsrDelft\repository\AbstractGroepenRepository;
+use CsrDelft\repository\GroepRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class KringenRepository extends AbstractGroepenRepository {
+class KringenRepository extends GroepRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Kring::class);
 	}
 
 	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
-		return parent::findBy($criteria, ['verticale' => 'ASC', 'kring_nummer' => 'ASC'] + ($orderBy ?? []), $limit, $offset);
+		return parent::findBy($criteria, ['verticale' => 'ASC', 'kringNummer' => 'ASC'] + ($orderBy ?? []), $limit, $offset);
 	}
 
 	public function get($id) {
@@ -20,7 +20,7 @@ class KringenRepository extends AbstractGroepenRepository {
 			return parent::get($id);
 		}
 		list($verticale, $kringNummer) = explode('.', $id);
-		return $this->findOneBy(['verticale' => $verticale, 'kring_nummer' => $kringNummer]);
+		return $this->findOneBy(['verticale' => $verticale, 'kringNummer' => $kringNummer]);
 	}
 
 	public function nieuw($letter = null) {

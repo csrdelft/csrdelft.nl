@@ -1,9 +1,9 @@
 {% set uniqid = 'slider_' | uniqid %}
 
-<div id="{{ uniqid }}" class="carousel slide bb-slider disable-swipe" data-ride="carousel">
+<div id="{{ uniqid }}" class="carousel slide bb-slider disable-swipe" data-bs-ride="carousel">
 	<ol class="carousel-indicators">
 		{% for foto in fotos %}
-			<li data-target="#{{ uniqid }}" data-slide-to="{{ loop.index-1 }}"
+			<li data-bs-target="#{{ uniqid }}" data-bs-slide-to="{{ loop.index-1 }}"
 					{% if loop.first %}class="active"{% endif %}></li>
 		{% endfor %}
 	</ol>
@@ -14,11 +14,11 @@
 		</div>
 		{% endfor %}
 	</div>
-	<a class="carousel-control-prev" href="#{{ uniqid }}" role="button" data-slide="prev">
+	<a class="carousel-control-prev" href="#{{ uniqid }}" role="button" data-bs-slide="prev">
 		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 		<span class="sr-only">Previous</span>
 	</a>
-	<a class="carousel-control-next" href="#{{ uniqid }}" role="button" data-slide="next">
+	<a class="carousel-control-next" href="#{{ uniqid }}" role="button" data-sb-slide="next">
 		<span class="carousel-control-next-icon" aria-hidden="true"></span>
 		<span class="sr-only">Next</span>
 	</a>

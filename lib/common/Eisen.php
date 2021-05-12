@@ -20,11 +20,13 @@ class Eisen {
 	 * @param string $veld
 	 * @return Criteria
 	 */
-	public static function voorIngelogdeGebruiker($veld = 'uid') {
+	public static function voorIngelogdeGebruiker($veld = 'uid'): Criteria
+	{
 		return self::voorGebruiker(LoginService::getUid(), $veld);
 	}
 
-	public static function voorGebruiker($uid, $veld = 'uid') {
+	public static function voorGebruiker($uid, $veld = 'uid'): Criteria
+	{
 		return Criteria::create()->where(Criteria::expr()->eq($veld, $uid))->setMaxResults(1);
 	}
 }

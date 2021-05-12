@@ -1,24 +1,11 @@
-#cd-main-overlay {
+.main-bg {
 	/* shadow layer visible when navigation is active */
 	position: fixed;
 	height: 100%;
 	width: 100%;
 	top: 0;
 	left: 0;
-	visibility: hidden;
-	opacity: 0;
 	backface-visibility: hidden;
 	transition: opacity .3s 0s, visibility 0s .3s;
 	z-index: $zindex-modal-backdrop;
-}
-
-#cd-main-overlay.is-visible,
-#menu.target ~ #cd-main-overlay,
-#menu:target ~ #cd-main-overlay,
-#search:target ~ #cd-main-overlay,
-#search.target ~ #cd-main-overlay {
-	/* Laat overlay zien als target is op menu of search */
-	opacity: 1;
-	visibility: visible;
-	transition: opacity .3s 0s, visibility 0s 0s;
 }

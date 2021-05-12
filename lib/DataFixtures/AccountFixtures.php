@@ -14,6 +14,7 @@ use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Uid\Uuid;
 
 class AccountFixtures extends Fixture {
 	/**
@@ -50,6 +51,7 @@ class AccountFixtures extends Fixture {
 		$manager->persist($externProfiel);
 
 		$externAccount = new Account();
+		$externAccount->uuid = Uuid::v4();
 		$externAccount->username = '';
 		$externAccount->email = '';
 		$externAccount->pass_hash = '';
