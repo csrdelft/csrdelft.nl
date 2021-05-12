@@ -352,11 +352,11 @@ __metadata:
   linkType: hard
 
 "@types/chart.js@npm:^2.7.42":
-  version: 2.9.22
-  resolution: "@types/chart.js@npm:2.9.22"
+  version: 2.9.32
+  resolution: "@types/chart.js@npm:2.9.32"
   dependencies:
     moment: ^2.10.2
-  checksum: 48a672221537ea4d35146467fe30564d178a800c9d753a9c843654877fea92bf0737819086384372ee161d97e4b2a9b1ac0a508aa0a67510c54275aadf79dfb4
+  checksum: c7606fc1b399425cd152186d6933cd588d41dd42eca145601cc7f7b238a7f65d6a1117e59c36b3a0783d5b85b29502c83801876f2b59b760a2dd5e17e4875865
   languageName: node
   linkType: hard
 
@@ -1670,12 +1670,12 @@ __metadata:
   linkType: hard
 
 "chart.js@npm:^2.7.3":
-  version: 2.9.3
-  resolution: "chart.js@npm:2.9.3"
+  version: 2.9.4
+  resolution: "chart.js@npm:2.9.4"
   dependencies:
     chartjs-color: ^2.1.0
     moment: ^2.10.2
-  checksum: 8e3f10e003941c1c77a5209cd08ed342a41c7c6a2ed93722b7ea1366c804bb2349d957e066f2abb7a3399d6ebebe83a298a15cbc960bc64846bc127e94f77f27
+  checksum: 4551932943bc5e42d25ae5632d91878fb89e22937095a2742e23c4d0d0bde405bed6be2cb8480694ba599d6dbb9882c8bce6bac1e4667c820eb24c38416380aa
   languageName: node
   linkType: hard
 
