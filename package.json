@@ -139,7 +139,7 @@
 		"prosemirror-view": "^1.17.2",
 		"raty-js": "^2.8.0",
 		"textcomplete": "^0.17.1",
-		"three": "^0.117.0",
+		"three": "^0.125.0",
 		"timeago": "^1.6.7",
 		"vue": "^2.6.12"
 	}
