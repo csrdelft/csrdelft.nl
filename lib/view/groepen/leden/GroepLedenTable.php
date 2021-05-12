@@ -21,6 +21,8 @@ class GroepLedenTable extends DataTable {
 
 	public function __construct(Groep $groep) {
 		parent::__construct(GroepLid::class, $groep->getUrl() . '/leden', 'Leden van ' . $groep->naam, 'status');
+
+		$this->addColumn('uid', 'opmerking');
 		$this->addColumn('lid', 'opmerking');
 		$this->searchColumn('lid');
 		$this->setColumnTitle('lid', 'Lidnaam');
