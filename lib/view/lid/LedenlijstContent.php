@@ -55,7 +55,7 @@ class LedenlijstContent implements View {
 
 	public function viewSelect($name, $options) {
 		$html = '';
-		$html .= '<select class="form-control" name="' . $name . '" id="f' . $name . '">';
+		$html .= '<select class="form-select" name="' . $name . '" id="f' . $name . '">';
 		foreach ($options as $key => $value) {
 			$html .= '<option value="' . htmlspecialchars($key) . '"';
 			if ($key == $this->lidzoeker->getRawQuery($name)) {
