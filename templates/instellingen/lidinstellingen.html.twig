@@ -34,7 +34,7 @@
 							{% if instelling.type == 'Enumeration' %}
 								{% if instelling.opties | length > 8 %}
 									<select name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}"
-													class="form-control change-opslaan"
+													class="form-select change-opslaan"
 													data-href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id}) }}">
 										{% for optieId, optie in instelling.opties %}
 											{% if optieId is numeric %}
