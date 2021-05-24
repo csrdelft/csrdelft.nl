@@ -21,6 +21,7 @@ module.exports = (env, argv) => ({
 		'fxonontdekt': './js/entry/fxonontdekt.ts',
 		'fxtrein': './js/entry/fxtrein.ts',
 		'fxraket': './js/entry/fxraket.ts',
+		'fxdruif': './js/entry/fxdruif.ts',
 		'fxminion': './js/entry/fxminion.ts',
 		'fxclippy': './js/entry/fxclippy.ts',
 		'fxspace': './js/entry/fxspace.ts',

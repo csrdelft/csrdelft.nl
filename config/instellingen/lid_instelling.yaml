@@ -101,7 +101,7 @@ instellingen:
     trein:
       titel: 'Trein'
       type: Enumeration
-      opties: ['nee', 'willekeurig']
+      opties: ['willekeurig', 'nee']
       default: 'nee'
       beschrijving: 'Tjoek tjoek!'
     raket:
@@ -110,6 +110,12 @@ instellingen:
       opties: ['2019', 'nee']
       default: 'nee'
       beschrijving: 'Laat lichting 2019 opstijgen als een raket.'
+    druif:
+      titel: 'Druif'
+      type: Enumeration
+      opties: ['2020', 'nee']
+      default: 'nee'
+      beschrijving: 'Die Romeinen van lichting 20 genieten van het leven.'
   forum:
     draden_per_pagina:
       titel: 'Draadjes per pagina'
