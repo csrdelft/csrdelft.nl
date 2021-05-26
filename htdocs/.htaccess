@@ -36,20 +36,4 @@ RewriteRule ^ %{ENV:BASE}/index.php [L]
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule ^                   index.php
 
-# lustrum
-<IfModule mod_rewrite.c>
-	RewriteEngine On
-	RewriteBase /lustrum12/lustrumweek
-	RewriteRule ^/lustrum12/lustrumweek\.html$ - [L]
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule . /lustrum12/lustrumweek.html [L]
-</IfModule>
-<IfModule mod_rewrite.c>
-	RewriteEngine On
-	RewriteBase /lustrum12/thema
-	RewriteRule ^/lustrum12/thema\.html$ - [L]
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule . /lustrum12/thema.html [L]
-</IfModule>
+
