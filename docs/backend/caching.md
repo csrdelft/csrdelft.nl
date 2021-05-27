@@ -83,3 +83,7 @@ Wel een cache ingesteld
 Bij het veranderen van database of bij het veranderen van branches die ver uit elkaar liggen kan het zijn dat wat in de cache staat niet meer klopt. Dan moet de cache geflushed worden. Dit gebeurt normaal bij iedere deploy (de data in de cache bestaat dus niet lang en kan zo verdwenen zijn).
 
 Om de cache te flushen kun je het `php bin/console stek:cache:flush` commando uitvoeren of de `Memcached` service vanuit taakbeheer opnieuw opstarten.
+
+## De cache inspecteren
+
+Een goede tool om de cache te inspecteren is [PHPMemcachedAdmin](https://github.com/elijaa/phpmemcachedadmin), hiermee kan je zien of de cache gebruikt wordt en in de cache zoeken.
