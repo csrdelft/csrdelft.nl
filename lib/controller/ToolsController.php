@@ -356,7 +356,7 @@ class ToolsController extends AbstractController
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
 			try {
-				$memcached = MemcachedAdapter::createConnection($_ENV['MEMCACHED_URL']);
+				$memcached = MemcachedAdapter::createConnection($this->getParameter('memcached_url'));
 
 				debugprint(current($memcached->getStats()));
 			} catch (ServiceNotFoundException $ex) {

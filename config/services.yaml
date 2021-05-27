@@ -6,6 +6,7 @@
 parameters:
   container.dumper.inline_class_loader: true
   app.supported_locales: 'nl|en'
+  memcached_url: '%env(MEMCACHED_URL)%'
 
 services:
   # default configuration for services in *this* file
