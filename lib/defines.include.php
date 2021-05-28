@@ -24,7 +24,6 @@ define('API_ORIGINS', 'http://localhost:8080,https://csrdelft.github.io,http://d
 define('BASE_PATH', $_ENV['BASE_PATH'] ? $_ENV['BASE_PATH'] : realpath(__DIR__ . '/../') . '/');
 define('ETC_PATH', BASE_PATH . 'etc/');
 define('DATA_PATH', BASE_PATH . 'data/');
-define('MEMCACHED_PATH', DATA_PATH);
 define('SESSION_PATH', BASE_PATH . 'sessie/');
 define('LIB_PATH', BASE_PATH . 'lib/');
 define('HTDOCS_PATH', BASE_PATH . 'htdocs/');

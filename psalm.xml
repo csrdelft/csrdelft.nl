@@ -17,7 +17,7 @@
 		<file name="lib/defines.include.php"/>
 	</stubs>
 	<mockClasses>
-		<class name="Memcache"/>
+		<class name="Memcached"/>
 	</mockClasses>
 	<plugins>
 		<pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
