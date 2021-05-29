@@ -8,8 +8,8 @@ use CsrDelft\entity\civimelder\Reeks;
 use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
-use CsrDelft\view\formulier\invoervelden\BBCodeField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
+use CsrDelft\view\formulier\invoervelden\ProsemirrorField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredJaNeeField;
@@ -36,7 +36,7 @@ class ReeksForm implements FormulierTypeInterface {
 
 		$fields[] = new Subkopje('Standaardgegevens activiteit');
 		$fields[] = new RequiredTextField('titel', $data->getRawTitel(), 'Titel');
-		$fields[] = new BBCodeField('beschrijving', $data->getRawBeschrijving(), 'Beschrijving');
+		$fields[] = new ProsemirrorField('beschrijving', $data->getRawBeschrijving(), 'Beschrijving');
 		$fields[] = new RequiredIntField('capaciteit', $data->getRawCapaciteit(), 'Capaciteit', 0);
 		$fields[] = new RequiredRechtenField('rechtenAanmelden', $data->getRawRechtenAanmelden(), 'Rechten aanmelden');
 		$fields[] = new RequiredRechtenField('rechtenLijstBekijken', $data->getRawRechtenLijstBekijken(), 'Rechten lijst bekijken');
