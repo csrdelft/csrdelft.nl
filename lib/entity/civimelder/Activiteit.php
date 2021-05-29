@@ -156,6 +156,10 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this->getRawMaxGasten() ?: $this->getReeks()->getRawMaxGasten();
 	}
 
+	public function getMaxAantal(): int {
+		return $this->getMaxGasten() + 1;
+	}
+
 	public function isAanmeldenMogelijk(): bool {
 		return $this->isRawAanmeldenMogelijk() ?: $this->getReeks()->isRawAanmeldenMogelijk();
 	}
@@ -223,6 +227,10 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this->getReeks()->magActiviteitenBeheren() || LoginService::mag($this->getRechtenLijstBeheren());
 	}
 
+	public function magGastenAanpassen(): bool {
+		return $this->magAanmelden(1) || $this->magAfmelden() && $this->aantalGasten() > 0;
+	}
+
 	public function magAanmelden(int $aantal, string &$reden = null): bool {
 		if ($this->magLijstBeheren()) {
 			return true;
@@ -231,11 +239,11 @@ class Activiteit extends ActiviteitEigenschappen {
 		$nu = date_create_immutable();
 		if ($this->isGesloten() || $nu < $this->getStartAanmelden() || $nu >= $this->getEindAanmelden()) {
 			$reden = 'activiteit is gesloten';
-		} elseif ($this->isAanmeldenMogelijk()) {
+		} elseif (!$this->isAanmeldenMogelijk()) {
 			$reden = 'aanmelden niet toegestaan voor deze activiteit';
-		} elseif (LoginService::mag($this->getRechtenAanmelden())) {
+		} elseif (!LoginService::mag($this->getRechtenAanmelden())) {
 			$reden = 'geen rechten om aan te melden';
-		} elseif ($this->getResterendeCapaciteit() >= $aantal) {
+		} elseif ($this->getResterendeCapaciteit() < $aantal) {
 			$reden = 'activiteit is vol';
 		} else {
 			return true;
@@ -252,7 +260,7 @@ class Activiteit extends ActiviteitEigenschappen {
 		$nu = date_create_immutable();
 		if ($this->isGesloten() || $nu < $this->getStartAanmelden() || $nu >= $this->getEindAfmelden()) {
 			$reden = 'activiteit is gesloten';
-		} elseif ($this->isAfmeldenMogelijk()) {
+		} elseif (!$this->isAfmeldenMogelijk()) {
 			$reden = 'afmelden niet toegestaan voor deze activiteit';
 		} else {
 			return true;
@@ -270,7 +278,7 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this->deelnemerRepository()->isAangemeld($this, LoginService::getProfiel());
 	}
 
-	public function aantalGasten(): bool {
+	public function aantalGasten(): int {
 		return $this->deelnemerRepository()->getAantalGasten($this, LoginService::getProfiel());
 	}
 

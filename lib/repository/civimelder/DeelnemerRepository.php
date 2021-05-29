@@ -44,6 +44,7 @@ class DeelnemerRepository extends ServiceEntityRepository {
 	}
 
 	public function getAantalGasten(Activiteit $activiteit, Profiel $profiel): int {
+		if (!$this->isAangemeld($activiteit, $profiel)) return 0;
 		return $this->getDeelnemer($activiteit, $profiel)->getAantal() - 1;
 	}
 
@@ -66,6 +67,8 @@ class DeelnemerRepository extends ServiceEntityRepository {
 			throw new CsrGebruikerException("Aanmelden mislukt: al aangemeld.");
 		} elseif ($aantal < 1) {
 			throw new CsrGebruikerException("Aanmelden mislukt: aantal moet minimaal 1 zijn.");
+		} elseif ($aantal > $activiteit->getMaxAantal() && !$activiteit->magLijstBeheren()) {
+			throw new CsrGebruikerException("Aanmelden mislukt: niet meer dan {$activiteit->getMaxGasten()} gasten.");
 		}
 
 		$deelnemer = new Deelnemer($activiteit, $lid, $aantal);
@@ -104,6 +107,8 @@ class DeelnemerRepository extends ServiceEntityRepository {
 			throw new CsrGebruikerException("Gasten aanpassen mislukt: niet aangemeld.");
 		} elseif ($aantal < 1) {
 			throw new CsrGebruikerException("Aanmelden mislukt: aantal moet minimaal 1 zijn.");
+		} elseif ($aantal > $activiteit->getMaxAantal() && !$activiteit->magLijstBeheren()) {
+			throw new CsrGebruikerException("Aanmelden mislukt: niet meer dan {$activiteit->getMaxGasten()} gasten.");
 		}
 
 		$deelnemer = $this->getDeelnemer($activiteit, $lid);

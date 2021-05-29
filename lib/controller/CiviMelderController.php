@@ -69,11 +69,13 @@ class CiviMelderController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function aanmelden(Request $request, Activiteit $activiteit) {
-		$lid = $this->getGegevenLid($request);
+		$lid = $this->getGegevenLid($activiteit, $request);
 		$aantal = $request->request->getInt('aantal', 1);
 		$deelnemer = $this->deelnemerRepository->aanmelden($activiteit, $lid, $aantal);
 
-		return $this->json(true);
+		return $this->render('civimelder/mijn_activiteiten_lijst.html.twig', [
+			'activiteit' => $activiteit,
+		]);
 	}
 
 	/**
@@ -85,10 +87,12 @@ class CiviMelderController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function afmelden(Request $request, Activiteit $activiteit) {
-		$lid = $this->getGegevenLid($request);
+		$lid = $this->getGegevenLid($activiteit, $request);
 		$this->deelnemerRepository->afmelden($activiteit, $lid);
 
-		return $this->json(true);
+		return $this->render('civimelder/mijn_activiteiten_lijst.html.twig', [
+			'activiteit' => $activiteit,
+		]);
 	}
 
 	/**
@@ -96,23 +100,25 @@ class CiviMelderController extends AbstractController {
 	 * @param Activiteit $activiteit
 	 * @return Response
 	 * @throws ORMException
-	 * @Route("/civimelder/aantal/{activiteit}", methods={"POST"})
+	 * @Route("/civimelder/gasten/{activiteit}", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function aantal(Request $request, Activiteit $activiteit) {
-		$lid = $this->getGegevenLid($request);
+	public function gasten(Request $request, Activiteit $activiteit) {
+		$lid = $this->getGegevenLid($activiteit, $request);
 		$aantal = $request->request->getInt('aantal', 1);
-		$this->deelnemerRepository->aantalAanpassen($activiteit, $lid, $aantal);
+		$this->deelnemerRepository->aantalAanpassen($activiteit, $lid, $aantal + 1);
 
-		return $this->json(true);
+		return $this->render('civimelder/mijn_activiteiten_lijst.html.twig', [
+			'activiteit' => $activiteit,
+		]);
 	}
 
 	/**
 	 * @param Request $request
 	 * @return Profiel|null
 	 */
-	private function getGegevenLid(Request $request) {
-		if ($request->request->has('lid')) {
+	private function getGegevenLid(Activiteit $activiteit, Request $request) {
+		if ($request->request->has('lid') && $activiteit->magLijstBeheren()) {
 			$lid = $this->profielRepository->find($request->request->getAlnum('lid'));
 			if (!$lid) {
 				throw new CsrGebruikerException("Lid niet gevonden.");
