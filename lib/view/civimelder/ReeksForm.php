@@ -23,8 +23,6 @@ class ReeksForm implements FormulierTypeInterface {
 	 * @param array $options
 	 */
 	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
-		//$url = $nieuw ? '/peilingen/nieuw' : '/peilingen/bewerken';
-
 		$builder->setTitel($options['nieuw'] ? 'Nieuwe reeks' : 'Reeks bewerken');
 		$builder->setDataTableId(true);
 

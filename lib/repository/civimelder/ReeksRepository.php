@@ -2,8 +2,10 @@
 
 namespace CsrDelft\repository\civimelder;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\entity\civimelder\Reeks;
 use CsrDelft\repository\AbstractRepository;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,5 +18,25 @@ use Doctrine\Persistence\ManagerRegistry;
 class ReeksRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Reeks::class);
+	}
+
+
+	public function delete(Reeks $reeks)
+	{
+		$em = $this->getEntityManager();
+
+		$em->beginTransaction();
+		try {
+			foreach ($reeks->getActiviteiten() as $activiteit) {
+				$em->remove($activiteit);
+			}
+
+			$em->remove($reeks);
+			$em->flush();
+			$em->commit();
+		} catch (ORMException $ex) {
+			$em->rollback();
+			throw new CsrException($ex->getMessage());
+		}
 	}
 }

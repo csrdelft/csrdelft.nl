@@ -2,10 +2,12 @@
 
 namespace CsrDelft\repository\civimelder;
 
+use CsrDelft\common\CsrException;
 use CsrDelft\entity\civimelder\Activiteit;
 use CsrDelft\entity\civimelder\Reeks;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -13,9 +15,12 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Activiteit|null findOneBy(array $criteria, array $orderBy = null)
  * @method Activiteit[]    findAll()
  * @method Activiteit[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Activiteit|null retrieveByUuid($UUID)
  */
-class ActiviteitRepository extends ServiceEntityRepository {
-	public function __construct(ManagerRegistry $registry) {
+class ActiviteitRepository extends AbstractRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Activiteit::class);
 	}
 
@@ -23,9 +28,25 @@ class ActiviteitRepository extends ServiceEntityRepository {
 	 * @param Reeks $reeks
 	 * @return Collection|Activiteit[]
 	 */
-	public function getKomendeActiviteiten(Reeks $reeks) {
-		return $reeks->getActiviteiten()->filter(function(Activiteit $activiteit){
+	public function getKomendeActiviteiten(Reeks $reeks)
+	{
+		return $reeks->getActiviteiten()->filter(function (Activiteit $activiteit) {
 			return $activiteit->magBekijken() && $activiteit->isInToekomst();
 		});
+	}
+
+	public function delete(Activiteit $activiteit)
+	{
+		$em = $this->getEntityManager();
+
+		$em->beginTransaction();
+		try {
+			$em->remove($activiteit);
+			$em->flush();
+			$em->commit();
+		} catch (ORMException $ex) {
+			$em->rollback();
+			throw new CsrException($ex->getMessage());
+		}
 	}
 }

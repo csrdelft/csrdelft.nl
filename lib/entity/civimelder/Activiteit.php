@@ -24,7 +24,7 @@ class Activiteit extends ActiviteitEigenschappen implements DataTableEntry {
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 */
-	private $id;
+	public $id;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Reeks::class, inversedBy="activiteiten")
