@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\civimelder;
 
 use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\repository\civimelder\ActiviteitRepository;
 use CsrDelft\repository\civimelder\DeelnemerRepository;
 use CsrDelft\service\security\LoginService;
@@ -11,12 +12,13 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=ActiviteitRepository::class)
  * @ORM\Table(name="civimelder_activiteit")
  */
-class Activiteit extends ActiviteitEigenschappen {
+class Activiteit extends ActiviteitEigenschappen implements DataTableEntry {
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -73,6 +75,14 @@ class Activiteit extends ActiviteitEigenschappen {
 		return $this->start;
 	}
 
+	/**
+	 * @Serializer\Groups({"datatable"})
+	 * @Serializer\SerializedName("start")
+	 */
+	public function getStartDataTable(): string {
+		return date_format_intl($this->getStart(), DATETIME_FORMAT);
+	}
+
 	public function setStart(DateTimeImmutable $start): self {
 		$this->start = $start;
 
@@ -81,6 +91,14 @@ class Activiteit extends ActiviteitEigenschappen {
 
 	public function getEinde(): ?DateTimeImmutable {
 		return $this->einde;
+	}
+
+	/**
+	 * @Serializer\Groups({"datatable"})
+	 * @Serializer\SerializedName("einde")
+	 */
+	public function getEindeDataTable(): string {
+		return date_format_intl($this->getEinde(), DATETIME_FORMAT);
 	}
 
 	public function setEinde(DateTimeImmutable $einde): self {
@@ -208,6 +226,14 @@ class Activiteit extends ActiviteitEigenschappen {
 		return max($this->getCapaciteit() - $this->getAantalAanmeldingen(), 0);
 	}
 
+	/**
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("bezetting")
+	 */
+	public function getBezettingDataTable(): string {
+		return $this->getAantalAanmeldingen() . ' / ' . $this->getCapaciteit();
+	}
+
 	// Rechten
 	public function magBekijken(): bool {
 		return $this->magLijstBekijken()
@@ -271,7 +297,7 @@ class Activiteit extends ActiviteitEigenschappen {
 
 	public function isInToekomst(): bool {
 		$nu = date_create_immutable();
-		return $nu < $this->getStart();
+		return $nu < $this->getEinde();
 	}
 
 	public function isAangemeld(): bool {

@@ -11,13 +11,12 @@ class ReeksTabel extends DataTable {
 	public function __construct() {
 		parent::__construct(Reeks::class, '/civimelder/beheer', 'CiviMelder beheer', null, false);
 
-		$this->addColumn('id');
 		$this->addColumn('naam');
 
-		$this->setOrder(['id' => 'asc']);
+		$this->setOrder(['naam' => 'asc']);
 		$this->searchColumn('naam');
 
-		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/civimelder/reeks/bewerken', 'Bewerken', 'Deze reeks bewerken', 'pencil'));
+		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/civimelder/beheer/reeks/bewerken', 'Bewerken', 'Deze reeks bewerken', 'pencil'));
 //		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), '/peilingen/nieuw', 'Nieuw', 'Nieuwe peiling aanmaken', 'add'));
 //		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/peilingen/verwijderen', 'Verwijderen', 'Peiling verwijderen', 'delete'));
 	}

@@ -3,8 +3,9 @@
 namespace CsrDelft\controller;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\civimelder\Activiteit;
 use CsrDelft\entity\civimelder\Reeks;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\view\civimelder\ActiviteitTabel;
 use CsrDelft\view\civimelder\ReeksForm;
 use CsrDelft\view\civimelder\ReeksTabel;
 use CsrDelft\view\datatable\GenericDataTableResponse;
@@ -12,70 +13,61 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use CsrDelft\common\Annotation\Auth;
-
-use CsrDelft\repository\civimelder\ActiviteitRepository;
-use CsrDelft\repository\civimelder\DeelnemerRepository;
 use CsrDelft\repository\civimelder\ReeksRepository;
 
-class CiviMelderBeheerController extends AbstractController {
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var DeelnemerRepository
-	 */
-	private $deelnemerRepository;
-	/**
-	 * @var ActiviteitRepository
-	 */
-	private $activiteitRepository;
+/**
+ * @Route("/civimelder/beheer");
+ */
+class CiviMelderBeheerController extends AbstractController
+{
 	/**
 	 * @var ReeksRepository
 	 */
 	private $reeksRepository;
 
-	public function __construct(ProfielRepository $profielRepository,
-															DeelnemerRepository $deelnemerRepository,
-															ActiviteitRepository $activiteitRepository,
-															ReeksRepository $reeksRepository) {
-		$this->profielRepository = $profielRepository;
-		$this->deelnemerRepository = $deelnemerRepository;
-		$this->activiteitRepository = $activiteitRepository;
+	public function __construct(ReeksRepository $reeksRepository)
+	{
 		$this->reeksRepository = $reeksRepository;
 	}
 
 	/**
-	 * @Route("/civimelder/beheer", methods={"GET"})
+	 * @Route("", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function beheerTabel() {
+	public function beheerTabel(): Response
+	{
 		return $this->render('default.html.twig', ['content' => new ReeksTabel()]);
 	}
 
 	/**
 	 * @return GenericDataTableResponse
-	 * @Route("/civimelder/beheer", methods={"POST"})
+	 * @Route("", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijst() {
-		// TODO: Filter based on rights
-		return $this->tableData($this->reeksRepository->findAll());
+	public function beheerTabelLijst(): GenericDataTableResponse
+	{
+		$reeksen = $this->reeksRepository->findAll();
+		return $this->tableData($reeksen);
 	}
 
 	/**
 	 * @param Request $request
 	 * @return GenericDataTableResponse|Response
-	 * @Route("/civimelder/reeks/bewerken", methods={"POST"})
+	 * @Route("/reeks/bewerken", methods={"POST"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function bewerken(Request $request) {
+	public function bewerken(Request $request): Response
+	{
 		$selection = $this->getDataTableSelection();
 
 		if ($selection) {
 			$reeks = $this->reeksRepository->retrieveByUUID($selection[0]);
 		} else {
 			throw new CsrGebruikerException('Geen reeks geselecteerd');
+		}
+
+		if (!$reeks->magActiviteitenBeheren()) {
+			throw new CsrGebruikerException('Mag reeks niet bewerken');
 		}
 
 		$form = $this->createFormulier(ReeksForm::class, $reeks, [
@@ -97,13 +89,34 @@ class CiviMelderBeheerController extends AbstractController {
 	}
 
 	/**
-	 * @Route("/civimelder/reeks/{id}", methods={"GET"})
+	 * @Route("/activiteiten/{reeks}", methods={"GET"})
 	 * @param Reeks $reeks
 	 * @return Response
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function reeksDetail(Reeks $reeks) {
-		// TODO: Check
-		return new Response('Hallo: ' . $reeks->getNaam());
+	public function reeksDetail(Reeks $reeks): Response
+	{
+		$activiteitTabel = new ActiviteitTabel($reeks);
+		return $activiteitTabel->toResponse();
+	}
+
+	/**
+	 * @Route("/activiteiten/{reeks}", methods={"POST"})
+	 * @param Reeks $reeks
+	 * @param Request $request
+	 * @return GenericDataTableResponse
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function reeksDetailLijst(Reeks $reeks, Request $request): GenericDataTableResponse
+	{
+		if ($request->query->get('filter') === 'alles') {
+			$activiteiten = $reeks->getActiviteiten();
+		} else {
+			$activiteiten = $reeks->getActiviteiten()->filter(function(Activiteit $activiteit) {
+				return $activiteit->isInToekomst();
+			})->getValues();
+		}
+
+		return $this->tableData($activiteiten);
 	}
 }

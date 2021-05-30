@@ -19,7 +19,6 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"datatable"})
 	 */
 	public $id;
 
@@ -97,10 +96,10 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 	}
 
 	public function magActiviteitenBeheren(): bool {
-		return $this->magAanmaken() || LoginService::mag($this->getRechtenAanmaken());
+		return self::magAanmaken() || LoginService::mag($this->getRechtenAanmaken());
 	}
 
-	public function magAanmaken(): bool {
+	public static function magAanmaken(): bool {
 		return LoginService::mag(P_ADMIN);
 	}
 
@@ -110,6 +109,6 @@ class Reeks extends ActiviteitEigenschappen implements DataTableEntry {
 	 * @Serializer\SerializedName("detailSource")
 	 */
 	public function getDetailSource() {
-		return '/civimelder/reeks/' . $this->id;
+		return '/civimelder/beheer/activiteiten/' . $this->id;
 	}
 }
