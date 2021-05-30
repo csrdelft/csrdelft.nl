@@ -17,7 +17,6 @@ class ReeksTabel extends DataTable {
 		$this->searchColumn('naam');
 
 		$this->addKnop(new DataTableKnop(Multiplicity::One(), '/civimelder/beheer/reeks/bewerken', 'Bewerken', 'Deze reeks bewerken', 'pencil'));
-//		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), '/peilingen/nieuw', 'Nieuw', 'Nieuwe peiling aanmaken', 'add'));
-//		$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/peilingen/verwijderen', 'Verwijderen', 'Peiling verwijderen', 'delete'));
+		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), '/civimelder/beheer/reeks/nieuw', 'Nieuw', 'Nieuwe reeks aanmaken', 'add'));
 	}
 }

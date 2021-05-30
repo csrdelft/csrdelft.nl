@@ -53,10 +53,41 @@ class CiviMelderBeheerController extends AbstractController
 	/**
 	 * @param Request $request
 	 * @return GenericDataTableResponse|Response
+	 * @Route("/reeks/nieuw", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function reeksNieuw(Request $request) {
+		if (!Reeks::magAanmaken()) {
+			throw new CsrGebruikerException('Mag geen reeks aanmaken');
+		}
+
+		$reeks = new Reeks();
+
+		$form = $this->createFormulier(ReeksForm::class, $reeks, [
+			'action' => $this->generateUrl('csrdelft_civimelderbeheer_reeksnieuw'),
+			'nieuw' => true,
+			'dataTableId' => true,
+		]);
+
+		$form->handleRequest($request);
+
+		if ($form->isPosted() && $form->validate()) {
+			$this->getDoctrine()->getManager()->persist($reeks);
+			$this->getDoctrine()->getManager()->flush();
+
+			return $this->tableData([$reeks]);
+		}
+
+		return new Response($form->createModalView());
+	}
+
+	/**
+	 * @param Request $request
+	 * @return GenericDataTableResponse|Response
 	 * @Route("/reeks/bewerken", methods={"POST"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function bewerken(Request $request): Response
+	public function reeksBewerken(Request $request): Response
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -71,7 +102,7 @@ class CiviMelderBeheerController extends AbstractController
 		}
 
 		$form = $this->createFormulier(ReeksForm::class, $reeks, [
-			'action' => $this->generateUrl('csrdelft_civimelderbeheer_bewerken'),
+			'action' => $this->generateUrl('csrdelft_civimelderbeheer_reeksbewerken'),
 			'nieuw' => false,
 			'dataTableId' => true,
 		]);

@@ -47,19 +47,6 @@ class ReeksForm implements FormulierTypeInterface {
 		$fields[] = new IntField('aanmeldenTot', $data->getRawAanmeldenTot(), 'Aanmelden tot (minuten van tevoren)');
 		$fields[] = new RequiredJaNeeField('afmeldenMogelijk', $data->isRawAfmeldenMogelijk(), 'Afmelden mogelijk');
 		$fields[] = new IntField('afmeldenTot', $data->getRawAfmeldenTot(), 'Afmelden tot (minuten van tevoren)');
-
-//		$fields[] = new HiddenObjectField('eigenaarProfiel', $data->eigenaarProfiel, Profiel::class);
-//		$fields[] = new RequiredTextField('titel', $data->titel, 'Titel');
-//		$fields[] = new RequiredBBCodeField('beschrijving', $data->beschrijving, 'Beschrijving');
-//		$fields[] = new JaNeeField('resultaat_zichtbaar', $data->resultaat_zichtbaar, 'Resultaat zichtbaar');
-//		$fields[] = new RequiredIntField('aantal_voorstellen', $data->aantal_voorstellen ?? 0, 'Aantal voorstellen', 0, 10);
-//		$fields[] = new RequiredIntField('aantal_stemmen', $data->aantal_stemmen ?? 1, 'Aantal stemmen', 0, 10);
-//		$fields[] = new DateTimeObjectField('sluitingsdatum', $data->sluitingsdatum, 'Sluitingsdatum');
-//		$fields[] = new RechtenField('rechten_stemmen', $data->rechten_stemmen, 'Rechten stemmen');
-//		$fields['rechten_mod'] = new RechtenField('rechten_mod', $data->rechten_mod, 'Rechten bewerken');
-//		$fields['rechten_mod']->title = 'Een peiling mag altijd bewerkt worden door jou, de BASFCie, de PubCie en het bestuur.';
-
-
 		$builder->addFields($fields);
 
 		$builder->setFormKnoppen(new FormDefaultKnoppen());
