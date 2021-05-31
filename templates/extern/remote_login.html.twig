@@ -17,9 +17,13 @@
 		<form method="post" action="{{ url('csrdelft_security_remotelogin_remoteloginfinal') }}" class="remote-login-code">
 			<input type="hidden" name="uuid" value="{{ uuid }}">
 			{{ csrfField() }}
-{#			<a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize') }}?uuid={{ uuid }}">#}
+			{% if app.debug %}
+				<a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize') }}?uuid={{ uuid }}">
+					<img src="{{ url('csrdelft_security_remotelogin_remoteloginqr') }}?uuid={{ uuid }}"/>
+				</a>
+			{% else %}
 				<img src="{{ url('csrdelft_security_remotelogin_remoteloginqr') }}?uuid={{ uuid }}"/>
-{#			</a>#}
+			{% endif %}
 		</form>
 	</div>
 {% endblock %}
