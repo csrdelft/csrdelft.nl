@@ -33,7 +33,8 @@
 									</li>
 								{% endif %}
 								<li>
-									<a class="dropdown-item post"
+									<a class="dropdown-item post confirm"
+										 title="{{ deelnemer.lid.naam(naamweergave) }} wordt afgemeld."
 										 href="{{ url('csrdelft_civimelderbeheer_lijstafmelden', { activiteit: activiteit.id, lid: deelnemer.lid.uid }) }}">
 										Afmelden
 									</a>
@@ -44,5 +45,21 @@
 				</div>
 			</div>
 		</div>
+		{% if activiteit.magLijstBeheren %}
+			<div class="list-group list-group-flush d-print-none">
+				{% if deelnemer.aanwezig %}
+					<a class="list-group-item text-center text-success btn fw-bold post confirm noanim"
+						 title="{{ deelnemer.lid.naam(naamweergave) }} wordt weer afwezig gemeld"
+						 href="{{ path('csrdelft_civimelderbeheer_lijstaanwezig', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aanwezig: 0 }) }}">
+						<i class="fas fa-check"></i> {{ deelnemer.aanwezigTijd }}
+					</a>
+				{% else %}
+					<a class="list-group-item text-center text-secondary btn bg-success fw-bold text-light post noanim"
+						 href="{{ path('csrdelft_civimelderbeheer_lijstaanwezig', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aanwezig: 1 }) }}">
+						Markeer aanwezig
+					</a>
+				{% endif %}
+			</div>
+		{% endif %}
 	</div>
 </div>

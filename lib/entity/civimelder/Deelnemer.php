@@ -42,6 +42,11 @@ class Deelnemer {
 	 */
 	private $aangemeld;
 
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	private $aanwezig = null;
+
 	public function __construct(Activiteit $activiteit, Profiel $lid, int $aantal) {
 		$this->activiteit = $activiteit;
 		$this->lid = $lid;
@@ -91,5 +96,21 @@ class Deelnemer {
 
 	public function getLid(): Profiel {
 		return $this->lid;
+	}
+
+	public function isAanwezig(): bool {
+		return $this->aanwezig !== null;
+	}
+
+	public function getAanwezigTijd(): string {
+		return $this->isAanwezig() ? date_format_intl($this->aanwezig, 'H:mm') : '';
+	}
+
+	public function setAanwezig() {
+		$this->aanwezig = date_create_immutable();
+	}
+
+	public function setNietAanwezig() {
+		$this->aanwezig = null;
 	}
 }

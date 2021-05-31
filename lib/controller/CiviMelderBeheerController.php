@@ -18,6 +18,7 @@ use CsrDelft\view\civimelder\ReeksTabel;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLidObjectField;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -396,6 +397,29 @@ class CiviMelderBeheerController extends AbstractController
 		}
 
 		$deelnemer = $this->deelnemerRepository->aantalAanpassen($activiteit, $lid, $aantal, true);
+		return $this->render('civimelder/onderdelen/deelnemer.html.twig', [
+			'activiteit' => $activiteit,
+			'deelnemer' => $deelnemer,
+			'naamweergave' => instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst'),
+		]);
+	}
+
+	/**
+	 * @param Activiteit $activiteit
+	 * @param Profiel $lid
+	 * @param bool $aanwezig
+	 * @return Response
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/lijst/{activiteit}/aanwezig/{lid}/{aanwezig}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lijstAanwezig(Activiteit $activiteit, Profiel $lid, bool $aanwezig): Response {
+		if (!$activiteit->magLijstBeheren()) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$deelnemer = $this->deelnemerRepository->setAanwezig($activiteit, $lid, $aanwezig);
 		return $this->render('civimelder/onderdelen/deelnemer.html.twig', [
 			'activiteit' => $activiteit,
 			'deelnemer' => $deelnemer,

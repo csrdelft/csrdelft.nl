@@ -19,12 +19,15 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Deelnemer[]    findAll()
  * @method Deelnemer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DeelnemerRepository extends ServiceEntityRepository {
-	public function __construct(ManagerRegistry $registry) {
+class DeelnemerRepository extends ServiceEntityRepository
+{
+	public function __construct(ManagerRegistry $registry)
+	{
 		parent::__construct($registry, Deelnemer::class);
 	}
 
-	public function getAantalAanmeldingen(Activiteit $activiteit): int {
+	public function getAantalAanmeldingen(Activiteit $activiteit): int
+	{
 		$q = $this->createQueryBuilder('a')
 			->select('SUM(a.aantal)')
 			->where('a.activiteit = :activiteit')
@@ -38,16 +41,19 @@ class DeelnemerRepository extends ServiceEntityRepository {
 		}
 	}
 
-	public function isAangemeld(Activiteit $activiteit, Profiel $profiel): bool {
+	public function isAangemeld(Activiteit $activiteit, Profiel $profiel): bool
+	{
 		return $this->getDeelnemer($activiteit, $profiel) !== null;
 	}
 
-	public function getAantalGasten(Activiteit $activiteit, Profiel $profiel): int {
+	public function getAantalGasten(Activiteit $activiteit, Profiel $profiel): int
+	{
 		if (!$this->isAangemeld($activiteit, $profiel)) return 0;
 		return $this->getDeelnemer($activiteit, $profiel)->getAantal() - 1;
 	}
 
-	public function getDeelnemer(Activiteit $activiteit, Profiel $profiel): ?Deelnemer {
+	public function getDeelnemer(Activiteit $activiteit, Profiel $profiel): ?Deelnemer
+	{
 		return $this->findOneBy(['activiteit' => $activiteit, 'lid' => $profiel]);
 	}
 
@@ -58,7 +64,8 @@ class DeelnemerRepository extends ServiceEntityRepository {
 	 * @return Deelnemer
 	 * @throws ORMException
 	 */
-	public function aanmelden(Activiteit $activiteit, Profiel $lid, int $aantal, bool $beheer = false): Deelnemer {
+	public function aanmelden(Activiteit $activiteit, Profiel $lid, int $aantal, bool $beheer = false): Deelnemer
+	{
 		$reden = '';
 		if (!$activiteit->magAanmelden($aantal, $reden) && !$beheer) {
 			throw new CsrGebruikerException("Aanmelden mislukt: {$reden}.");
@@ -82,7 +89,8 @@ class DeelnemerRepository extends ServiceEntityRepository {
 	 * @param Profiel $lid
 	 * @throws ORMException
 	 */
-	public function afmelden(Activiteit $activiteit, Profiel $lid, bool $beheer = false): void {
+	public function afmelden(Activiteit $activiteit, Profiel $lid, bool $beheer = false): void
+	{
 		$reden = '';
 		if (!$this->isAangemeld($activiteit, $lid)) {
 			throw new CsrGebruikerException("Afmelden mislukt: niet aangemeld.");
@@ -130,6 +138,26 @@ class DeelnemerRepository extends ServiceEntityRepository {
 		}
 
 		$deelnemer->setAantal($aantal);
+		$this->getEntityManager()->flush();
+		return $deelnemer;
+	}
+
+	/**
+	 * @throws OptimisticLockException
+	 * @throws ORMException
+	 */
+	public function setAanwezig(Activiteit $activiteit, Profiel $lid, $aanwezig = true): Deelnemer
+	{
+		if (!$this->isAangemeld($activiteit, $lid)) {
+			throw new CsrGebruikerException("Aanwezig melden mislukt: niet aangemeld.");
+		}
+
+		$deelnemer = $this->getDeelnemer($activiteit, $lid);
+		if ($aanwezig && !$deelnemer->isAanwezig()) {
+			$deelnemer->setAanwezig();
+		} elseif (!$aanwezig && $deelnemer->isAanwezig()) {
+			$deelnemer->setNietAanwezig();
+		}
 		$this->getEntityManager()->flush();
 		return $deelnemer;
 	}
