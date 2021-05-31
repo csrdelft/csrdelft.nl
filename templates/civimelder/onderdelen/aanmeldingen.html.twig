@@ -2,14 +2,9 @@
 	<h3>Aanmeldingen</h3>
 
 	{% if deelnemers|length > 0 %}
-		<div class="w-100" style="column-count: 3">
+		<div class="row">
 			{% for deelnemer in deelnemers %}
-				<div class="row no-gutters py-1" style="border-bottom: 1px solid #999;">
-					<div class="col">
-						{{ deelnemer.lid.link(naamweergave) | raw }}
-					</div>
-					<div class="col-auto">{{ deelnemer.aantal }}</div>
-				</div>
+				{% include 'civimelder/onderdelen/deelnemer.html.twig' %}
 			{% endfor %}
 		</div>
 	{% else %}

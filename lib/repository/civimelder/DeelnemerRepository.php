@@ -9,6 +9,7 @@ use CsrDelft\entity\profiel\Profiel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -32,9 +33,7 @@ class DeelnemerRepository extends ServiceEntityRepository {
 
 		try {
 			return $q->getSingleScalarResult() ?? 0;
-		} catch (NoResultException $e) {
-			return 0;
-		} catch (NonUniqueResultException $e) {
+		} catch (NoResultException | NonUniqueResultException $e) {
 			return 0;
 		}
 	}
@@ -59,7 +58,7 @@ class DeelnemerRepository extends ServiceEntityRepository {
 	 * @return Deelnemer
 	 * @throws ORMException
 	 */
-	public function aanmelden(Activiteit $activiteit, Profiel $lid, int $aantal, $beheer = false): Deelnemer {
+	public function aanmelden(Activiteit $activiteit, Profiel $lid, int $aantal, bool $beheer = false): Deelnemer {
 		$reden = '';
 		if (!$activiteit->magAanmelden($aantal, $reden) && !$beheer) {
 			throw new CsrGebruikerException("Aanmelden mislukt: {$reden}.");
@@ -83,7 +82,7 @@ class DeelnemerRepository extends ServiceEntityRepository {
 	 * @param Profiel $lid
 	 * @throws ORMException
 	 */
-	public function afmelden(Activiteit $activiteit, Profiel $lid, $beheer = false): void {
+	public function afmelden(Activiteit $activiteit, Profiel $lid, bool $beheer = false): void {
 		$reden = '';
 		if (!$this->isAangemeld($activiteit, $lid)) {
 			throw new CsrGebruikerException("Afmelden mislukt: niet aangemeld.");
@@ -100,9 +99,13 @@ class DeelnemerRepository extends ServiceEntityRepository {
 	 * @param Activiteit $activiteit
 	 * @param Profiel $lid
 	 * @param int $aantal
+	 * @param bool $beheer
+	 * @return Deelnemer
 	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
-	public function aantalAanpassen(Activiteit $activiteit, Profiel $lid, int $aantal, $beheer = false): void {
+	public function aantalAanpassen(Activiteit $activiteit, Profiel $lid, int $aantal, bool $beheer = false): Deelnemer
+	{
 		if (!$this->isAangemeld($activiteit, $lid)) {
 			throw new CsrGebruikerException("Gasten aanpassen mislukt: niet aangemeld.");
 		} elseif ($aantal < 1) {
@@ -123,10 +126,11 @@ class DeelnemerRepository extends ServiceEntityRepository {
 				throw new CsrGebruikerException("Gasten aanpassen mislukt: {$reden}.");
 			}
 		} else {
-			return;
+			return $deelnemer;
 		}
 
 		$deelnemer->setAantal($aantal);
 		$this->getEntityManager()->flush();
+		return $deelnemer;
 	}
 }

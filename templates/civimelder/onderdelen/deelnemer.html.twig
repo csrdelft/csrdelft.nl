@@ -1,0 +1,48 @@
+<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 mb-3" id="aanmelding-{{ deelnemer.lid.uid }}">
+	<div class="card">
+		<div class="row g-0">
+			<div class="col-auto d-print-none">
+				{{ deelnemer.lid.link('pasfoto') | raw }}
+			</div>
+			<div class="col">
+				<div class="card-body">
+					<h5 class="card-title">{{ deelnemer.lid.link(naamweergave) | raw }}</h5>
+					{% if deelnemer.aantal > 1 %}
+						<span class="badge rounded-pill bg-warning text-dark">{{ deelnemer.aantal }} personen</span>
+					{% endif %}
+					{% if activiteit.magLijstBeheren %}
+						<span class="dropdown d-print-none">
+							<span class="badge rounded-pill bg-info text-light" type="button"
+										id="dropdown-profiel-{{ deelnemer.lid.uid }}" data-bs-toggle="dropdown"
+										aria-expanded="false">
+								<i class="fas fa-ellipsis-h"></i>
+							</span>
+							<ul class="dropdown-menu" aria-labelledby="dropdown-profiel-{{ deelnemer.lid.uid }}">
+								<li>
+									<a class="dropdown-item post"
+										 href="{{ url('csrdelft_civimelderbeheer_lijstaantal', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aantal: deelnemer.aantal + 1 }) }}">
+										Gast toevoegen
+									</a>
+								</li>
+								{% if deelnemer.aantal > 1 %}
+									<li>
+										<a class="dropdown-item post"
+											 href="{{ url('csrdelft_civimelderbeheer_lijstaantal', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aantal: deelnemer.aantal - 1 }) }}">
+											Gast verwijderen
+										</a>
+									</li>
+								{% endif %}
+								<li>
+									<a class="dropdown-item post"
+										 href="{{ url('csrdelft_civimelderbeheer_lijstafmelden', { activiteit: activiteit.id, lid: deelnemer.lid.uid }) }}">
+										Afmelden
+									</a>
+								</li>
+							</ul>
+						</span>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

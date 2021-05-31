@@ -378,7 +378,7 @@ class CiviMelderBeheerController extends AbstractController
 		}
 
 		$this->deelnemerRepository->afmelden($activiteit, $lid, true);
-		return $this->redirectToRoute('csrdelft_civimelderbeheer_lijst', ['activiteit' => $activiteit->getId()]);
+		return new Response("<div id='aanmelding-{$lid->uid}' class='remove'></div>");
 	}
 
 	/**
@@ -395,7 +395,11 @@ class CiviMelderBeheerController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 
-		$this->deelnemerRepository->aantalAanpassen($activiteit, $lid, $aantal, true);
-		return $this->redirectToRoute('csrdelft_civimelderbeheer_lijst', ['activiteit' => $activiteit->getId()]);
+		$deelnemer = $this->deelnemerRepository->aantalAanpassen($activiteit, $lid, $aantal, true);
+		return $this->render('civimelder/onderdelen/deelnemer.html.twig', [
+			'activiteit' => $activiteit,
+			'deelnemer' => $deelnemer,
+			'naamweergave' => instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst'),
+		]);
 	}
 }
