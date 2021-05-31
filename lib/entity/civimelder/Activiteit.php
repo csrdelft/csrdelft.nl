@@ -23,6 +23,7 @@ class Activiteit extends ActiviteitEigenschappen implements DataTableEntry {
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Serializer\Groups({"datatable"})
 	 */
 	public $id;
 

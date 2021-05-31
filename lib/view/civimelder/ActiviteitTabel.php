@@ -8,6 +8,7 @@ use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\CollectionDataTableKnop;
 use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
+use CsrDelft\view\datatable\knoppen\PopupDataTableKnop;
 use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
@@ -16,6 +17,7 @@ class ActiviteitTabel extends DataTable {
 
 		parent::__construct(Activiteit::class, '/civimelder/beheer/activiteiten/' . $reeks->getId(), $reeks->getNaam() . ' activiteiten', null, false);
 
+		$this->addColumn('id');
 		$this->addColumn('start');
 		$this->addColumn('einde');
 		$this->addColumn('bezetting');
@@ -29,6 +31,7 @@ class ActiviteitTabel extends DataTable {
 		$weergave->addKnop(new SourceChangeDataTableKnop($this->dataUrl . '?filter=alles', 'Alles', 'Alles weergeven', 'time'));
 		$this->addKnop($weergave);
 
+		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/civimelder/beheer/lijst/:id', 'Lijst', 'Lijst weergeven', 'list'));
 		if ($reeks->magActiviteitenBeheren()) {
 			$this->addKnop(new DataTableKnop(Multiplicity::None(), '/civimelder/beheer/activiteiten/nieuw/' . $reeks->getId(), 'Nieuw', 'Nieuwe activiteit aanmaken', 'add'));
 			$this->addKnop(new DataTableKnop(Multiplicity::One(), '/civimelder/beheer/activiteiten/bewerken', 'Bewerken', 'Deze activiteit bewerken', 'pencil'));

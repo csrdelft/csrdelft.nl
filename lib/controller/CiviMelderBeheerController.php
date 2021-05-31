@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\civimelder\Activiteit;
+use CsrDelft\entity\civimelder\Deelnemer;
 use CsrDelft\entity\civimelder\Reeks;
 use CsrDelft\repository\civimelder\ActiviteitRepository;
 use CsrDelft\view\civimelder\ActiviteitForm;
@@ -270,5 +271,30 @@ class CiviMelderBeheerController extends AbstractController
 		}
 
 		return $this->tableData($activiteiten);
+	}
+
+	/**
+	 * @param Activiteit $activiteit
+	 * @return Response
+	 * @Route("/lijst/{activiteit}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lijst(Activiteit $activiteit): Response
+	{
+		if (!$activiteit->magLijstBekijken()) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$deelnemers = $activiteit->getDeelnemers()->getValues();
+		usort($deelnemers, function(Deelnemer $deelnemerA, Deelnemer $deelnemerB) {
+			return $deelnemerA->getLid()->achternaam <=> $deelnemerB->getLid()->achternaam
+				  ?: $deelnemerA->getLid()->voornaam <=> $deelnemerB->getLid()->voornaam;
+		});
+
+		return $this->render('civimelder/deelnemers_lijst.html.twig', [
+			'activiteit' => $activiteit,
+			'deelnemers' => $deelnemers,
+			'magBeheren' => $activiteit->magLijstBeheren(),
+		]);
 	}
 }

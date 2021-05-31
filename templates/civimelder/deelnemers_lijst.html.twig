@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}{{ activiteit.titel }} {{ activiteit.start | date_format_intl('d-M-YYYY H:mm') }}-{{ activiteit.einde | date_format_intl('H:mm') }}{% endblock %}
+
+{% set naamweergave = instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst') %}
+
+{% block body %}
+	<h1>{{ activiteit.titel }} {{ activiteit.start | date_format_intl('EEEE d-M-YYYY H:mm') }}-{{ activiteit.einde | date_format_intl('H:mm') }}</h1>
+	<div class="header">
+		{{ activiteit.beschrijving | bbcode }}
+	</div>
+
+	{% if deelnemers|length > 0 %}
+		<div class="w-100" style="column-count: 3">
+			{% for deelnemer in deelnemers %}
+				<div class="row no-gutters py-1" style="border-bottom: 1px solid #999;">
+					<div class="col">
+						{{ deelnemer.lid.link(naamweergave) | raw }}
+					</div>
+					<div class="col-auto">{{ deelnemer.aantal }}</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<p>Nog geen aanmeldingen voor deze activiteit.</p>
+	{% endif %}
+{% endblock %}
