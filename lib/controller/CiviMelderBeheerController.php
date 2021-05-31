@@ -7,12 +7,18 @@ use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\entity\civimelder\Activiteit;
 use CsrDelft\entity\civimelder\Deelnemer;
 use CsrDelft\entity\civimelder\Reeks;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\civimelder\ActiviteitRepository;
+use CsrDelft\repository\civimelder\DeelnemerRepository;
+use CsrDelft\view\civimelder\ActiviteitAanmeldForm;
 use CsrDelft\view\civimelder\ActiviteitForm;
 use CsrDelft\view\civimelder\ActiviteitTabel;
 use CsrDelft\view\civimelder\ReeksForm;
 use CsrDelft\view\civimelder\ReeksTabel;
 use CsrDelft\view\datatable\GenericDataTableResponse;
+use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredLidObjectField;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,12 +38,18 @@ class CiviMelderBeheerController extends AbstractController
 	 * @var ActiviteitRepository
 	 */
 	private $activiteitRepository;
+	/**
+	 * @var DeelnemerRepository
+	 */
+	private $deelnemerRepository;
 
 	public function __construct(ReeksRepository $reeksRepository,
-															ActiviteitRepository $activiteitRepository)
+															ActiviteitRepository $activiteitRepository,
+															DeelnemerRepository $deelnemerRepository)
 	{
 		$this->reeksRepository = $reeksRepository;
 		$this->activiteitRepository = $activiteitRepository;
+		$this->deelnemerRepository = $deelnemerRepository;
 	}
 
 	/**
@@ -291,10 +303,99 @@ class CiviMelderBeheerController extends AbstractController
 				  ?: $deelnemerA->getLid()->voornaam <=> $deelnemerB->getLid()->voornaam;
 		});
 
+		$form = $this->createFormulier(ActiviteitAanmeldForm::class, $activiteit, [
+			'action' => $this->generateUrl('csrdelft_civimelderbeheer_lijstaanmelden', ['activiteit' => $activiteit->getId()]),
+		]);
+
 		return $this->render('civimelder/deelnemers_lijst.html.twig', [
 			'activiteit' => $activiteit,
 			'deelnemers' => $deelnemers,
-			'magBeheren' => $activiteit->magLijstBeheren(),
+			'aanmeldForm' => $form->createView(),
 		]);
+	}
+
+	/**
+	 * @param Activiteit $activiteit
+	 * @param bool $sluit
+	 * @param ActiviteitRepository $activiteitRepository
+	 * @return Response
+	 * @Route("/lijst/{activiteit}/sluiten/{sluit}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function sluit(Activiteit $activiteit, bool $sluit, ActiviteitRepository $activiteitRepository): Response {
+		if (!$activiteit->magLijstBeheren()) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$activiteitRepository->sluit($activiteit, $sluit);
+		return $this->render('civimelder/onderdelen/status.html.twig', ['activiteit' => $activiteit]);
+	}
+
+	/**
+	 * @param Activiteit $activiteit
+	 * @param Request $request
+	 * @return Response
+	 * @throws ORMException
+	 * @Route("/lijst/{activiteit}/aanmelden", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lijstAanmelden(Activiteit $activiteit, Request $request): Response {
+		if (!$activiteit->magLijstBeheren()) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$form = $this->createFormulier(ActiviteitAanmeldForm::class, $activiteit, [
+			'action' => $this->generateUrl('csrdelft_civimelderbeheer_lijstaanmelden', ['activiteit' => $activiteit->getId()]),
+		]);
+		$form->handleRequest($request);
+
+		if ($form->isPosted() && $form->validate()) {
+			/** @var RequiredLidObjectField $lidVeld */
+			$lidVeld = $form->getField('lid');
+			$lid = $lidVeld->getFormattedValue();
+
+			/** @var RequiredIntField $aantalVeld */
+			$aantalVeld = $form->getField('aantal');
+			$aantal = $aantalVeld->getFormattedValue();
+
+			$this->deelnemerRepository->aanmelden($activiteit, $lid, $aantal, true);
+		}
+
+		return $this->redirectToRoute('csrdelft_civimelderbeheer_lijst', ['activiteit' => $activiteit->getId()]);
+	}
+
+	/**
+	 * @param Activiteit $activiteit
+	 * @param Profiel $lid
+	 * @return Response
+	 * @throws ORMException
+	 * @Route("/lijst/{activiteit}/afmelden/{lid}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lijstAfmelden(Activiteit $activiteit, Profiel $lid): Response {
+		if (!$activiteit->magLijstBeheren()) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$this->deelnemerRepository->afmelden($activiteit, $lid, true);
+		return $this->redirectToRoute('csrdelft_civimelderbeheer_lijst', ['activiteit' => $activiteit->getId()]);
+	}
+
+	/**
+	 * @param Activiteit $activiteit
+	 * @param Profiel $lid
+	 * @param int $aantal
+	 * @return Response
+	 * @throws ORMException
+	 * @Route("/lijst/{activiteit}/aantal/{lid}/{aantal}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lijstAantal(Activiteit $activiteit, Profiel $lid, int $aantal): Response {
+		if (!$activiteit->magLijstBeheren()) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$this->deelnemerRepository->aantalAanpassen($activiteit, $lid, $aantal, true);
+		return $this->redirectToRoute('csrdelft_civimelderbeheer_lijst', ['activiteit' => $activiteit->getId()]);
 	}
 }

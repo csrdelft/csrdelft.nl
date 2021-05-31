@@ -210,12 +210,24 @@ class Activiteit extends ActiviteitEigenschappen implements DataTableEntry {
 		return $this->getTijdVoor($this->getAanmeldenVanaf());
 	}
 
+	public function aanmeldenNogNietOpen(): bool {
+		return $this->getStartAanmelden() > date_create_immutable();
+	}
+
 	public function getEindAanmelden(): DateTimeImmutable {
 		return $this->getTijdVoor($this->getAanmeldenTot());
 	}
 
+	public function aanmeldenVoorbij(): bool {
+		return $this->getEindAanmelden() < date_create_immutable();
+	}
+
 	public function getEindAfmelden(): DateTimeImmutable {
 		return $this->getTijdVoor($this->getAfmeldenTot());
+	}
+
+	public function afmeldenVoorbij(): bool {
+		return $this->getEindAfmelden() < date_create_immutable();
 	}
 
 	// Aanmeldingen

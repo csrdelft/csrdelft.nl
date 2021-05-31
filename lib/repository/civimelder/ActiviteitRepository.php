@@ -9,6 +9,7 @@ use CsrDelft\repository\AbstractRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @method Activiteit|null find($id, $lockMode = null, $lockVersion = null)
@@ -49,4 +50,14 @@ class ActiviteitRepository extends AbstractRepository
 			throw new CsrException($ex->getMessage());
 		}
 	}
+
+	public function sluit(Activiteit $activiteit, bool $sluit = true)
+    {
+    	try {
+				$activiteit->setGesloten($sluit);
+				$this->getEntityManager()->flush();
+			} catch (Exception $e) {
+				throw new CsrException($e->getMessage());
+			}
+		}
 }
