@@ -1,10 +1,10 @@
 <?php
 
-namespace CsrDelft\view\civimelder;
+namespace CsrDelft\view\aanmelder;
 
 use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
-use CsrDelft\entity\civimelder\Activiteit;
+use CsrDelft\entity\aanmelder\AanmeldActiviteit;
 use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\getalvelden\IntField;
@@ -14,11 +14,11 @@ use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateTimeObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class ActiviteitForm implements FormulierTypeInterface {
+class AanmeldActiviteitForm implements FormulierTypeInterface {
 
 	/**
 	 * @param FormulierBuilder $builder
-	 * @param Activiteit $data
+	 * @param AanmeldActiviteit $data
 	 * @param array $options
 	 */
 	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {

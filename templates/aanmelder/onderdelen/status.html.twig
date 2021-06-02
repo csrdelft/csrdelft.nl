@@ -44,14 +44,14 @@
 		<div class="mt-4">
 			{% if activiteit.gesloten %}
 				<button id="lijst-sluiten"
-								href="{{ url('csrdelft_civimelderbeheer_sluit', { activiteit: activiteit.id, sluit: 0 }) }}"
+								href="{{ url('csrdelft_aanmelderbeheer_sluit', { activiteit: activiteit.id, sluit: 0 }) }}"
 								class="btn btn-primary post confirm"
 								title="Na het heropenen kunnen leden zich weer in de ingestelde tijden aan- of afmelden.">
 					Aanmeldingen heropenen
 				</button>
 			{% else %}
 				<button id="lijst-sluiten"
-								href="{{ url('csrdelft_civimelderbeheer_sluit', { activiteit: activiteit.id, sluit: 1 }) }}"
+								href="{{ url('csrdelft_aanmelderbeheer_sluit', { activiteit: activiteit.id, sluit: 1 }) }}"
 								class="btn btn-primary post confirm"
 								title="Na het sluiten kan niemand zich aan- of afmelden, onafhankelijk van de ingestelde tijden.">
 					Aanmeldingen sluiten

@@ -1,15 +1,15 @@
 <?php
 
-namespace CsrDelft\entity\civimelder;
+namespace CsrDelft\entity\aanmelder;
 
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\repository\civimelder\DeelnemerRepository;
+use CsrDelft\repository\aanmelder\DeelnemerRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=DeelnemerRepository::class)
- * @ORM\Table(name="civimelder_deelnemer")
+ * @ORM\Table(name="aanmelder_deelnemer")
  */
 class Deelnemer {
 	/**
@@ -20,7 +20,7 @@ class Deelnemer {
 	private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity=Activiteit::class, inversedBy="deelnemers")
+	 * @ORM\ManyToOne(targetEntity=AanmeldActiviteit::class, inversedBy="deelnemers")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $activiteit;
@@ -47,7 +47,7 @@ class Deelnemer {
 	 */
 	private $aanwezig = null;
 
-	public function __construct(Activiteit $activiteit, Profiel $lid, int $aantal) {
+	public function __construct(AanmeldActiviteit $activiteit, Profiel $lid, int $aantal) {
 		$this->activiteit = $activiteit;
 		$this->lid = $lid;
 		$this->aantal = $aantal;
@@ -58,11 +58,11 @@ class Deelnemer {
 		return $this->id;
 	}
 
-	public function getActiviteit(): ?Activiteit {
+	public function getActiviteit(): ?AanmeldActiviteit {
 		return $this->activiteit;
 	}
 
-	public function setActiviteit(?Activiteit $activiteit): self {
+	public function setActiviteit(?AanmeldActiviteit $activiteit): self {
 		$this->activiteit = $activiteit;
 
 		return $this;

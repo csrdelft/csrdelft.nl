@@ -1,19 +1,19 @@
 <?php
 
-namespace CsrDelft\view\civimelder;
+namespace CsrDelft\view\aanmelder;
 
 use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
-use CsrDelft\entity\civimelder\Activiteit;
+use CsrDelft\entity\aanmelder\AanmeldActiviteit;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLidObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
-class ActiviteitAanmeldForm implements FormulierTypeInterface {
+class AanmeldActiviteitAanmeldForm implements FormulierTypeInterface {
 
 	/**
 	 * @param FormulierBuilder $builder
-	 * @param Activiteit $data
+	 * @param AanmeldActiviteit $data
 	 * @param array $options
 	 */
 	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {

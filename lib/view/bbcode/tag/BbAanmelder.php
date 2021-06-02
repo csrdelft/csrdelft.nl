@@ -3,14 +3,13 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\entity\civimelder\Activiteit;
-use CsrDelft\entity\civimelder\Reeks;
-use CsrDelft\repository\civimelder\ActiviteitRepository;
-use CsrDelft\repository\civimelder\DeelnemerRepository;
-use CsrDelft\repository\civimelder\ReeksRepository;
+use CsrDelft\entity\aanmelder\AanmeldActiviteit;
+use CsrDelft\entity\aanmelder\Reeks;
+use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;
+use CsrDelft\repository\aanmelder\ReeksRepository;
 use Twig\Environment;
 
-class BbCiviMelder extends BbTag {
+class BbAanmelder extends BbTag {
 	private $reeks;
 	private $activiteit;
 	private $aantal;
@@ -20,35 +19,29 @@ class BbCiviMelder extends BbTag {
 	 */
 	private $reeksRepository;
 	/**
-	 * @var ActiviteitRepository
+	 * @var AanmeldActiviteitRepository
 	 */
 	private $activiteitRepository;
-	/**
-	 * @var DeelnemerRepository
-	 */
-	private $deelnemerRepository;
 	/**
 	 * @var Environment
 	 */
 	private $twig;
 
 	public function __construct(ReeksRepository $reeksRepository,
-															ActiviteitRepository $activiteitRepository,
-															DeelnemerRepository $deelnemerRepository,
+															AanmeldActiviteitRepository $activiteitRepository,
 															Environment $twig) {
 		$this->reeksRepository = $reeksRepository;
 		$this->activiteitRepository = $activiteitRepository;
-		$this->deelnemerRepository = $deelnemerRepository;
 		$this->twig = $twig;
 	}
 
 	public static function getTagName() {
-		return 'civimelder';
+		return 'aanmelder';
 	}
 
 	public function parse($arguments = []) {
-		if (isset($arguments['civimelder'])) {
-			$this->activiteit = intval($arguments['civimelder']);
+		if (isset($arguments['aanmelder'])) {
+			$this->activiteit = intval($arguments['aanmelder']);
 		} elseif (isset($arguments['reeks'])) {
 			$this->reeks = intval($arguments['reeks']);
 			$this->aantal = min(intval($arguments['aantal'] ?? 3), 1);
@@ -65,7 +58,7 @@ class BbCiviMelder extends BbTag {
 
 			$activiteiten = $this->activiteitRepository->getKomendeActiviteiten($reeks)->slice(0, $this->aantal);
 		} else {
-			/** @var Activiteit $activiteit */
+			/** @var AanmeldActiviteit $activiteit */
 			$activiteit = $this->activiteitRepository->find($this->activiteit);
 			if (!$activiteit) {
 				return "Activiteit met id {$this->activiteit} niet gevonden.";
@@ -75,7 +68,7 @@ class BbCiviMelder extends BbTag {
 		}
 
 		/** @noinspection PhpUnhandledExceptionInspection */
-		return $this->twig->render('civimelder/bb_lijst.html.twig', [
+		return $this->twig->render('aanmelder/bb_lijst.html.twig', [
 			'activiteiten' => $activiteiten,
 			'reeks' => $reeks,
 		]);

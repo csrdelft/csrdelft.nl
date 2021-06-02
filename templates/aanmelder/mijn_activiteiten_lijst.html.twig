@@ -1,4 +1,4 @@
-<tr id="civimelder-row-{{ activiteit.getId }}">
+<tr id="aanmelder-row-{{ activiteit.getId }}">
 	<td>
 		<div class="Activiteit">
 			{{ activiteit.getTitel() }}
@@ -22,7 +22,7 @@
 	{% if activiteit.aangemeld %}
 		<td class="maaltijd-aangemeld">
 			{% if activiteit.magAfmelden %}
-				<a href="{{ url('csrdelft_civimelder_afmelden', {activiteit: activiteit.id}) }}"
+				<a href="{{ url('csrdelft_aanmelder_afmelden', {activiteit: activiteit.id}) }}"
 				 class="btn post maaltijd-aangemeld">
 				<input type="checkbox" checked="checked"/> Ja
 				</a>
@@ -34,7 +34,7 @@
 	{% else %}
 		<td class="maaltijd-afgemeld">
 			{% if activiteit.magAanmelden(1) %}
-				<a href="{{ url('csrdelft_civimelder_aanmelden', {activiteit: activiteit.id}) }}"
+				<a href="{{ url('csrdelft_aanmelder_aanmelden', {activiteit: activiteit.id}) }}"
 					 class="btn post maaltijd-afgemeld">
 					<input type="checkbox"/> Nee
 				</a>
@@ -52,7 +52,7 @@
 		{% else %}
 			<div class="InlineForm">
 				<div class="InlineFormToggle maaltijd-gasten">{{ activiteit.aantalGasten }}</div>
-				<form action="{{ url('csrdelft_civimelder_gasten', {activiteit: activiteit.id}) }}"
+				<form action="{{ url('csrdelft_aanmelder_gasten', {activiteit: activiteit.id}) }}"
 							method="post"
 							class="Formulier InlineForm ToggleForm">
 					{{ csrfField() }}

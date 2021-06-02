@@ -1,9 +1,9 @@
 <?php
 
-namespace CsrDelft\repository\civimelder;
+namespace CsrDelft\repository\aanmelder;
 
 use CsrDelft\common\CsrException;
-use CsrDelft\entity\civimelder\Reeks;
+use CsrDelft\entity\aanmelder\Reeks;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;

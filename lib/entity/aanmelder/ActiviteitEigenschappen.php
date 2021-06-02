@@ -1,6 +1,6 @@
 <?php
 
-namespace CsrDelft\entity\civimelder;
+namespace CsrDelft\entity\aanmelder;
 
 use Doctrine\ORM\Mapping as ORM;
 

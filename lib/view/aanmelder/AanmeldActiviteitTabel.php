@@ -1,9 +1,9 @@
 <?php
 
-namespace CsrDelft\view\civimelder;
+namespace CsrDelft\view\aanmelder;
 
-use CsrDelft\entity\civimelder\Activiteit;
-use CsrDelft\entity\civimelder\Reeks;
+use CsrDelft\entity\aanmelder\AanmeldActiviteit;
+use CsrDelft\entity\aanmelder\Reeks;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\CollectionDataTableKnop;
 use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
@@ -12,10 +12,10 @@ use CsrDelft\view\datatable\knoppen\PopupDataTableKnop;
 use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;
 use CsrDelft\view\datatable\Multiplicity;
 
-class ActiviteitTabel extends DataTable {
+class AanmeldActiviteitTabel extends DataTable {
 	public function __construct(Reeks $reeks) {
 
-		parent::__construct(Activiteit::class, '/civimelder/beheer/activiteiten/' . $reeks->getId(), $reeks->getNaam() . ' activiteiten', null, false);
+		parent::__construct(AanmeldActiviteit::class, '/aanmelder/beheer/activiteiten/' . $reeks->getId(), $reeks->getNaam() . ' activiteiten', null, false);
 
 		$this->addColumn('id');
 		$this->addColumn('start');
@@ -31,11 +31,11 @@ class ActiviteitTabel extends DataTable {
 		$weergave->addKnop(new SourceChangeDataTableKnop($this->dataUrl . '?filter=alles', 'Alles', 'Alles weergeven', 'time'));
 		$this->addKnop($weergave);
 
-		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/civimelder/beheer/lijst/:id', 'Lijst', 'Lijst weergeven', 'list'));
+		$this->addKnop(new PopupDataTableKnop(Multiplicity::One(), '/aanmelder/beheer/lijst/:id', 'Lijst', 'Lijst weergeven', 'list'));
 		if ($reeks->magActiviteitenBeheren()) {
-			$this->addKnop(new DataTableKnop(Multiplicity::None(), '/civimelder/beheer/activiteiten/nieuw/' . $reeks->getId(), 'Nieuw', 'Nieuwe activiteit aanmaken', 'add'));
-			$this->addKnop(new DataTableKnop(Multiplicity::One(), '/civimelder/beheer/activiteiten/bewerken', 'Bewerken', 'Deze activiteit bewerken', 'pencil'));
-			$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/civimelder/beheer/activiteiten/verwijderen', 'Verwijderen', 'Activiteit verwijderen', 'cross'));
+			$this->addKnop(new DataTableKnop(Multiplicity::None(), '/aanmelder/beheer/activiteiten/nieuw/' . $reeks->getId(), 'Nieuw', 'Nieuwe activiteit aanmaken', 'add'));
+			$this->addKnop(new DataTableKnop(Multiplicity::One(), '/aanmelder/beheer/activiteiten/bewerken', 'Bewerken', 'Deze activiteit bewerken', 'pencil'));
+			$this->addKnop(new ConfirmDataTableKnop(Multiplicity::One(), '/aanmelder/beheer/activiteiten/verwijderen', 'Verwijderen', 'Activiteit verwijderen', 'cross'));
 		}
 	}
 }

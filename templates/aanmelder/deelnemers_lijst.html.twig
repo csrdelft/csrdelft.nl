@@ -14,11 +14,11 @@
 		{{ activiteit.beschrijving | bbcode }}
 	</div>
 
-	{% include 'civimelder/onderdelen/aanmeldingen.html.twig' %}
+	{% include 'aanmelder/onderdelen/aanmeldingen.html.twig' %}
 
 	<div class="row mt-5 d-print-none">
 		<div class="col">
-			{% include 'civimelder/onderdelen/status.html.twig' %}
+			{% include 'aanmelder/onderdelen/status.html.twig' %}
 		</div>
 		{% if activiteit.magLijstBeheren %}
 			<div class="col">

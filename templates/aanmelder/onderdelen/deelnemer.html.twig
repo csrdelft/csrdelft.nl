@@ -20,14 +20,14 @@
 							<ul class="dropdown-menu" aria-labelledby="dropdown-profiel-{{ deelnemer.lid.uid }}">
 								<li>
 									<a class="dropdown-item post"
-										 href="{{ url('csrdelft_civimelderbeheer_lijstaantal', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aantal: deelnemer.aantal + 1 }) }}">
+										 href="{{ url('csrdelft_aanmelderbeheer_lijstaantal', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aantal: deelnemer.aantal + 1 }) }}">
 										Gast toevoegen
 									</a>
 								</li>
 								{% if deelnemer.aantal > 1 %}
 									<li>
 										<a class="dropdown-item post"
-											 href="{{ url('csrdelft_civimelderbeheer_lijstaantal', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aantal: deelnemer.aantal - 1 }) }}">
+											 href="{{ url('csrdelft_aanmelderbeheer_lijstaantal', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aantal: deelnemer.aantal - 1 }) }}">
 											Gast verwijderen
 										</a>
 									</li>
@@ -35,7 +35,7 @@
 								<li>
 									<a class="dropdown-item post confirm"
 										 title="{{ deelnemer.lid.naam(naamweergave) }} wordt afgemeld."
-										 href="{{ url('csrdelft_civimelderbeheer_lijstafmelden', { activiteit: activiteit.id, lid: deelnemer.lid.uid }) }}">
+										 href="{{ url('csrdelft_aanmelderbeheer_lijstafmelden', { activiteit: activiteit.id, lid: deelnemer.lid.uid }) }}">
 										Afmelden
 									</a>
 								</li>
@@ -50,12 +50,12 @@
 				{% if deelnemer.aanwezig %}
 					<a class="list-group-item text-center text-success btn fw-bold post confirm noanim"
 						 title="{{ deelnemer.lid.naam(naamweergave) }} wordt weer afwezig gemeld"
-						 href="{{ path('csrdelft_civimelderbeheer_lijstaanwezig', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aanwezig: 0 }) }}">
+						 href="{{ path('csrdelft_aanmelderbeheer_lijstaanwezig', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aanwezig: 0 }) }}">
 						<i class="fas fa-check"></i> {{ deelnemer.aanwezigTijd }}
 					</a>
 				{% else %}
 					<a class="list-group-item text-center text-secondary btn bg-success fw-bold text-light post noanim"
-						 href="{{ path('csrdelft_civimelderbeheer_lijstaanwezig', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aanwezig: 1 }) }}">
+						 href="{{ path('csrdelft_aanmelderbeheer_lijstaanwezig', { activiteit: activiteit.id, lid: deelnemer.lid.uid, aanwezig: 1 }) }}">
 						Markeer aanwezig
 					</a>
 				{% endif %}

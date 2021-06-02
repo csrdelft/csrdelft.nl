@@ -1,10 +1,10 @@
 <?php
 
-namespace CsrDelft\view\civimelder;
+namespace CsrDelft\view\aanmelder;
 
 use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
-use CsrDelft\entity\civimelder\Reeks;
+use CsrDelft\entity\aanmelder\Reeks;
 use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;

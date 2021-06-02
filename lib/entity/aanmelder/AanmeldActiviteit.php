@@ -1,11 +1,11 @@
 <?php
 
-namespace CsrDelft\entity\civimelder;
+namespace CsrDelft\entity\aanmelder;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\datatable\DataTableEntry;
-use CsrDelft\repository\civimelder\ActiviteitRepository;
-use CsrDelft\repository\civimelder\DeelnemerRepository;
+use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;
+use CsrDelft\repository\aanmelder\DeelnemerRepository;
 use CsrDelft\service\security\LoginService;
 use DateInterval;
 use DateTimeImmutable;
@@ -15,10 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
- * @ORM\Entity(repositoryClass=ActiviteitRepository::class)
- * @ORM\Table(name="civimelder_activiteit")
+ * @ORM\Entity(repositoryClass=AanmeldActiviteitRepository::class)
+ * @ORM\Table(name="aanmelder_activiteit")
  */
-class Activiteit extends ActiviteitEigenschappen implements DataTableEntry {
+class AanmeldActiviteit extends ActiviteitEigenschappen implements DataTableEntry {
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue

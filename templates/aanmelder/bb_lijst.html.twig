@@ -5,7 +5,7 @@
 				<div class="row">
 					<div class="col">
 						<h6>
-							<a href="{{ url('csrdelft_civimelder_mijnactiviteiten', { reeks: activiteit.reeks.id }) }}">{{ activiteit.titel }}</a>
+							<a href="{{ url('csrdelft_aanmelder_mijnactiviteiten', { reeks: activiteit.reeks.id }) }}">{{ activiteit.titel }}</a>
 						</h6>
 						op {{ activiteit.start | datetime_format_long }} om {{ activiteit.start | time_format }}
 					</div>
@@ -13,7 +13,7 @@
 								{% if activiteit.aangemeld %}
 									{% if activiteit.magAfmelden %}
 										<a
-											onclick="window.ketzerAjax('{{ url('csrdelft_civimelder_afmelden', {activiteit: activiteit.id}) }}', '.maaltijdketzer-{{ activiteit.id }}');"
+											onclick="window.ketzerAjax('{{ url('csrdelft_aanmelder_afmelden', {activiteit: activiteit.id}) }}', '.maaltijdketzer-{{ activiteit.id }}');"
 											class="btn btn-success aanmeldbtn" tabindex="0">
 											<div class="form-check">
 												<input class="form-check-input" type="checkbox" checked="checked"/>
@@ -24,13 +24,13 @@
 										<div class="btn btn-success disabled">Aangemeld</div>
 									{% endif %}
 
-								{% elseif activiteit.resterendeCapaciteit < 1 %}
+								{% elseif not activiteit.magAanmelden(1) %}
 									<div class="btn btn-danger disabled">
-										{{ icon("stop", null, "Activiteit is vol") }}&nbsp; Niet aangemeld
+										{{ icon("stop", null, "Activiteit is gesloten") }}&nbsp; Niet aangemeld
 									</div>
 								{% else %}
 									<a
-										onclick="window.ketzerAjax('{{ url('csrdelft_civimelder_aanmelden', {activiteit: activiteit.id}) }}', '.maaltijdketzer-{{ activiteit.id }}');"
+										onclick="window.ketzerAjax('{{ url('csrdelft_aanmelder_aanmelden', {activiteit: activiteit.id}) }}', '.maaltijdketzer-{{ activiteit.id }}');"
 										class="btn btn-danger aanmeldbtn" tabindex="0">
 										<div class="form-check">
 											<input class="form-check-input" type="checkbox"/>
@@ -39,22 +39,9 @@
 									</a>
 								{% endif %}
 
-{#							{% else %}#}
-{#								{% if activiteit.aangemeld %}#}
-{#									<div class="btn btn-success disabled">Aangemeld</div>#}
-{#								{% else %}#}
-{#									<div class="btn btn-danger disabled">Niet aangemeld</div>#}
-{#								{% endif %}#}
-{#							{% endif %}#}
-
 							{% if activiteit.aangemeld and activiteit.aantalGasten > 0 %}
 								+{{ activiteit.aantalGasten }}
 							{% endif %}
-
-{#							{% if activiteit.gesloten and maaltijd.eindMoment > date().timestamp %}#}
-{#								{% set date = maaltijd.laatst_gesloten | time_format %}#}
-{#								{{ icon("lock", null, "Maaltijd is gesloten om " ~ date) }}#}
-{#							{% endif %}#}
 					</div>
 				</div>
 				{{ (activiteit.beschrijving ?? "") | bbcode }}
@@ -62,5 +49,5 @@
 		</div>
 	{% endfor %}
 
-	<div class="d-block mt-3 text-right"><a href="{{ url('csrdelft_civimelder_mijnactiviteiten', { reeks: reeks.id }) }}">Alle {{ reeks.naam }}</a></div>
+	<div class="d-block mt-3 text-right"><a href="{{ url('csrdelft_aanmelder_mijnactiviteiten', { reeks: reeks.id }) }}">Alle {{ reeks.naam }}</a></div>
 </div>
