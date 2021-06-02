@@ -5,6 +5,7 @@ namespace CsrDelft\controller;
 use CsrDelft\entity\aanmelder\AanmeldActiviteit;
 use CsrDelft\entity\aanmelder\Reeks;
 use CsrDelft\repository\aanmelder\ReeksRepository;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,6 +91,20 @@ class AanmelderController extends AbstractController {
 	}
 
 	/**
+	 * @throws OptimisticLockException
+	 * @throws ORMException
+	 * @Route("/aanmelder/aanmelden/{activiteit}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function aanmeldenBB(AanmeldActiviteit $activiteit): Response {
+		$this->deelnemerRepository->aanmelden($activiteit, $this->getProfiel(), 1);
+
+		return $this->render('aanmelder/bb_activiteit.html.twig', [
+			'activiteit' => $activiteit,
+		]);
+	}
+
+	/**
 	 * @param AanmeldActiviteit $activiteit
 	 * @return Response
 	 * @throws ORMException
@@ -102,6 +117,20 @@ class AanmelderController extends AbstractController {
 		$this->deelnemerRepository->afmelden($activiteit, $lid);
 
 		return $this->render('aanmelder/onderdelen/activiteit_regel.html.twig', [
+			'activiteit' => $activiteit,
+		]);
+	}
+
+	/**
+	 * @throws OptimisticLockException
+	 * @throws ORMException
+	 * @Route("/aanmelder/afmelden/{activiteit}", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function afmeldenBB(AanmeldActiviteit $activiteit): Response {
+		$this->deelnemerRepository->afmelden($activiteit, $this->getProfiel());
+
+		return $this->render('aanmelder/bb_activiteit.html.twig', [
 			'activiteit' => $activiteit,
 		]);
 	}

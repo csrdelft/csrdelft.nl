@@ -1,0 +1,47 @@
+<div id="maaltijdketzer-{{ activiteit.id }}" class="media pt-3 maaltijdketzer-{{ activiteit.id }}" data-maaltijdnaam="{{ activiteit.titel }}">
+	<div class="media-body pb-3 mb-0 lh-125 {% if border is defined and border %}border-bottom border-gray{% endif %}">
+		<div class="row">
+			<div class="col">
+				<h6>
+					<a href="{{ url('csrdelft_aanmelder_mijnactiviteiten', { reeks: activiteit.reeks.id }) }}">{{ activiteit.titel }}</a>
+				</h6>
+				op {{ activiteit.start | datetime_format_long }} om {{ activiteit.start | time_format }}
+			</div>
+			<div class="col-auto">
+				{% if activiteit.aangemeld %}
+					{% if activiteit.magAfmelden %}
+						<a
+							onclick="window.ketzerAjax('{{ url('csrdelft_aanmelder_afmeldenbb', {activiteit: activiteit.id}) }}', '.maaltijdketzer-{{ activiteit.id }}');"
+							class="btn btn-success aanmeldbtn" tabindex="0">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" checked="checked"/>
+								<label class="form-check-label">Aangemeld</label>
+							</div>
+						</a>
+					{% else %}
+						<div class="btn btn-success disabled">Aangemeld</div>
+					{% endif %}
+
+				{% elseif not activiteit.magAanmelden(1) %}
+					<div class="btn btn-danger disabled">
+						{{ icon("stop", null, "Activiteit is gesloten") }}&nbsp; Niet aangemeld
+					</div>
+				{% else %}
+					<a
+						onclick="window.ketzerAjax('{{ url('csrdelft_aanmelder_aanmeldenbb', {activiteit: activiteit.id}) }}', '.maaltijdketzer-{{ activiteit.id }}');"
+						class="btn btn-danger aanmeldbtn" tabindex="0">
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox"/>
+							<label class="form-check-label">Niet aangemeld</label>
+						</div>
+					</a>
+				{% endif %}
+
+				{% if activiteit.aangemeld and activiteit.aantalGasten > 0 %}
+					+{{ activiteit.aantalGasten }}
+				{% endif %}
+			</div>
+		</div>
+		{{ (activiteit.beschrijving ?? "") | bbcode }}
+	</div>
+</div>

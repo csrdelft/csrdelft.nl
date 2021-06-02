@@ -44,7 +44,7 @@ class BbAanmelder extends BbTag {
 			$this->activiteit = intval($arguments['aanmelder']);
 		} elseif (isset($arguments['reeks'])) {
 			$this->reeks = intval($arguments['reeks']);
-			$this->aantal = min(intval($arguments['aantal'] ?? 3), 1);
+			$this->aantal = max(intval($arguments['aantal'] ?? 100), 1);
 		}
 	}
 
@@ -56,7 +56,9 @@ class BbAanmelder extends BbTag {
 				return "Reeks met id {$this->reeks} niet gevonden.";
 			}
 
-			$activiteiten = $this->activiteitRepository->getKomendeActiviteiten($reeks)->slice(0, $this->aantal);
+			$activiteiten = $this->activiteitRepository->getKomendeActiviteiten($reeks);
+		  $toonMeer = count($activiteiten) > $this->aantal;
+			$activiteiten = $activiteiten->slice(0, $this->aantal);
 		} else {
 			/** @var AanmeldActiviteit $activiteit */
 			$activiteit = $this->activiteitRepository->find($this->activiteit);
@@ -64,6 +66,7 @@ class BbAanmelder extends BbTag {
 				return "Activiteit met id {$this->activiteit} niet gevonden.";
 			}
 			$activiteiten = [$activiteit];
+			$toonMeer = false;
 			$reeks = $activiteit->getReeks();
 		}
 
@@ -71,6 +74,7 @@ class BbAanmelder extends BbTag {
 		return $this->twig->render('aanmelder/bb_lijst.html.twig', [
 			'activiteiten' => $activiteiten,
 			'reeks' => $reeks,
+			'toonMeer' => $toonMeer,
 		]);
 	}
 }
