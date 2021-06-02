@@ -43,5 +43,14 @@
 			</div>
 		</div>
 		{{ (activiteit.getBeschrijving ?? "") | bbcode }}
+		<div class="small">
+			{% if activiteit.magLijstBekijken %}
+			<a href="{{ url('csrdelft_aanmelderbeheer_lijst', { activiteit: activiteit.id }) }}" title="Toon lijst">
+				{% endif %}
+				Aanmeldingen: <em>{{ activiteit.aantalAanmeldingen }}</em> van <em>{{ activiteit.getCapaciteit }}</em>
+				{% if activiteit.magLijstBekijken %}
+			</a>
+			{% endif %}
+		</div>
 	</div>
 </div>
