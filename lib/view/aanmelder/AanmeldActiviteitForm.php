@@ -45,11 +45,11 @@ class AanmeldActiviteitForm implements FormulierTypeInterface {
 		$fields['rechtenLijstBeheren']->placeholder = $data->getReeks()->getRawRechtenLijstBeheren();
 		$fields['maxGasten'] = new IntField('maxGasten', $data->getRawMaxGasten(), 'Max. gasten per persoon', 0);
 		$fields['maxGasten']->placeholder = $data->getReeks()->getRawMaxGasten();
-		$fields['aanmeldenVanaf'] = new IntField('aanmeldenVanaf', $data->getRawAanmeldenVanaf(), 'Aanmelden vanaf (minuten van tevoren)');
+		$fields['aanmeldenVanaf'] = new IntField('aanmeldenVanaf', $data->getRawAanmeldenVanaf(), 'Aanmelden vanaf (minuten voor einde)');
 		$fields['aanmeldenVanaf']->placeholder = $data->getReeks()->getRawAanmeldenVanaf();
-		$fields['aanmeldenTot'] = new IntField('aanmeldenTot', $data->getRawAanmeldenTot(), 'Aanmelden tot (minuten van tevoren)');
+		$fields['aanmeldenTot'] = new IntField('aanmeldenTot', $data->getRawAanmeldenTot(), 'Aanmelden tot (minuten voor einde)');
 		$fields['aanmeldenTot']->placeholder = $data->getReeks()->getRawAanmeldenTot();
-		$fields['afmeldenTot'] = new IntField('afmeldenTot', $data->getRawAfmeldenTot(), 'Afmelden tot (minuten van tevoren)');
+		$fields['afmeldenTot'] = new IntField('afmeldenTot', $data->getRawAfmeldenTot(), 'Afmelden tot (minuten voor einde)');
 		$fields['afmeldenTot']->placeholder = $data->getReeks()->getRawAfmeldenTot();
 		$fields[] = new HtmlComment('</div>');
 		$builder->addFields($fields);

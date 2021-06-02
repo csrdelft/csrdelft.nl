@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\entity\aanmelder\AanmeldActiviteit;
 use CsrDelft\entity\aanmelder\Reeks;
+use CsrDelft\repository\aanmelder\ReeksRepository;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,17 +32,41 @@ class AanmelderController extends AbstractController {
 	}
 
 	/**
+	 * @param ReeksRepository $reeksRepository
+	 * @return Response
+	 * @Route("/aanmelder", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function mijnActiviteiten(ReeksRepository $reeksRepository): Response
+	{
+		$reeksen = [];
+		foreach ($reeksRepository->findAll() as $reeks) {
+			$activiteiten = $this->activiteitRepository->getKomendeActiviteiten($reeks);
+			if ($activiteiten->count() > 0) {
+				$reeksen[] = [
+					'reeks' => $reeks,
+					'activiteiten' => $activiteiten,
+				];
+			}
+		}
+
+		return $this->render('aanmelder/mijn_activiteiten.html.twig', [
+			'reeksen' => $reeksen
+		]);
+	}
+
+	/**
 	 * @param Reeks $reeks
 	 * @return Response
 	 * @Route("/aanmelder/{reeks}", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function mijnActiviteiten(Reeks $reeks): Response
+	public function reeksActiviteiten(Reeks $reeks): Response
 	{
 		$alleActiviteiten = $this->activiteitRepository->getKomendeActiviteiten($reeks);
-		return $this->render('aanmelder/mijn_activiteiten.html.twig', [
-			'reeks' => $reeks
-			, 'activiteiten' => $alleActiviteiten
+		return $this->render('aanmelder/reeks_overzicht.html.twig', [
+			'reeks' => $reeks,
+			'activiteiten' => $alleActiviteiten,
 		]);
 	}
 
@@ -59,7 +84,7 @@ class AanmelderController extends AbstractController {
 		$aantal = $request->request->getInt('aantal', 1);
 		$this->deelnemerRepository->aanmelden($activiteit, $lid, $aantal);
 
-		return $this->render('aanmelder/mijn_activiteiten_lijst.html.twig', [
+		return $this->render('aanmelder/onderdelen/activiteit_regel.html.twig', [
 			'activiteit' => $activiteit,
 		]);
 	}
@@ -76,7 +101,7 @@ class AanmelderController extends AbstractController {
 		$lid = $this->getProfiel();
 		$this->deelnemerRepository->afmelden($activiteit, $lid);
 
-		return $this->render('aanmelder/mijn_activiteiten_lijst.html.twig', [
+		return $this->render('aanmelder/onderdelen/activiteit_regel.html.twig', [
 			'activiteit' => $activiteit,
 		]);
 	}
@@ -95,7 +120,7 @@ class AanmelderController extends AbstractController {
 		$aantal = $request->request->getInt('aantal', 1);
 		$this->deelnemerRepository->aantalAanpassen($activiteit, $lid, $aantal + 1);
 
-		return $this->render('aanmelder/mijn_activiteiten_lijst.html.twig', [
+		return $this->render('aanmelder/onderdelen/activiteit_regel.html.twig', [
 			'activiteit' => $activiteit,
 		]);
 	}

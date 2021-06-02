@@ -41,10 +41,10 @@ class ReeksForm implements FormulierTypeInterface {
 		$fields[] = new RequiredRechtenField('rechtenLijstBeheren', $data->getRawRechtenLijstBeheren(), 'Rechten lijst beheren');
 		$fields[] = new RequiredIntField('maxGasten', $data->getRawMaxGasten(), 'Max. gasten per persoon', 0);
 		$fields[] = new RequiredJaNeeField('aanmeldenMogelijk', $data->isRawAanmeldenMogelijk(), 'Aanmelden mogelijk');
-		$fields[] = new IntField('aanmeldenVanaf', $data->getRawAanmeldenVanaf(), 'Aanmelden vanaf (minuten van tevoren)');
-		$fields[] = new IntField('aanmeldenTot', $data->getRawAanmeldenTot(), 'Aanmelden tot (minuten van tevoren)');
+		$fields[] = new IntField('aanmeldenVanaf', $data->getRawAanmeldenVanaf(), 'Aanmelden vanaf (minuten voor einde)');
+		$fields[] = new IntField('aanmeldenTot', $data->getRawAanmeldenTot(), 'Aanmelden tot (minuten voor einde)');
 		$fields[] = new RequiredJaNeeField('afmeldenMogelijk', $data->isRawAfmeldenMogelijk(), 'Afmelden mogelijk');
-		$fields[] = new IntField('afmeldenTot', $data->getRawAfmeldenTot(), 'Afmelden tot (minuten van tevoren)');
+		$fields[] = new IntField('afmeldenTot', $data->getRawAfmeldenTot(), 'Afmelden tot (minuten voor einde)');
 		$builder->addFields($fields);
 
 		$builder->setFormKnoppen(new FormDefaultKnoppen());

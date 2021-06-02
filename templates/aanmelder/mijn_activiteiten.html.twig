@@ -1,33 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block titel %}Mijn activiteiten{% endblock %}
+{% block titel %}Aanmeld activiteiten{% endblock %}
 
 {% block content %}
-	<H3>
-		{{ reeks.rawTitel}}
-	</H3>
-	<p>
-		{{ reeks.rawBeschrijving | bbcode }}
-	</p>
-	<p>
-		Hieronder ziet u een overzicht van aankomende activiteiten waar u zich voor in heeft geketzt of in kan ketzen.
-	</p>
-	<table id="aanmelder-tabel" class="aanmelder-tabel">
-		<thead>
-		<tr>
-			<th>Activiteit</th>
-			<th>Begintijd</th>
-			<th>Eindtijd</th>
-			<th>Aanwezigen (Limiet)</th>
-			<th>Aangemeld</th>
-			<th>Gasten</th>
-		</tr>
-		</thead>
-		<tbody>
-		{% for activiteit in activiteiten %}
-			{{ include('aanmelder/mijn_activiteiten_lijst.html.twig', {activiteit: activiteit}) }}
+	{% if reeksen %}
+		{% for reeks in reeksen %}
+			{% include 'aanmelder/onderdelen/reeks_activiteiten.html.twig' with { reeks: reeks.reeks, activiteiten: reeks.activiteiten } %}
 		{% endfor %}
-		</tbody>
-	</table>
-
+	{% else %}
+		<p>Geen activiteiten om voor aan te melden</p>
+	{% endif %}
 {% endblock %}

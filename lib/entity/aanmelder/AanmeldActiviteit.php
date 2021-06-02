@@ -203,7 +203,7 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements DataTableEntr
 	private function getTijdVoor(int $minutes): DateTimeImmutable {
 		/** @noinspection PhpUnhandledExceptionInspection Minuten is altijd aantal minuten als integer */
 		$tijd = new DateInterval('PT' . $minutes . 'M');
-		return $this->getStart()->sub($tijd);
+		return $this->getEinde()->sub($tijd);
 	}
 
 	public function getStartAanmelden(): DateTimeImmutable {
@@ -271,10 +271,6 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements DataTableEntr
 	}
 
 	public function magAanmelden(int $aantal, string &$reden = null): bool {
-		if ($this->magLijstBeheren()) {
-			return true;
-		}
-
 		$nu = date_create_immutable();
 		if ($this->isGesloten() || $nu < $this->getStartAanmelden() || $nu >= $this->getEindAanmelden()) {
 			$reden = 'activiteit is gesloten';
@@ -292,10 +288,6 @@ class AanmeldActiviteit extends ActiviteitEigenschappen implements DataTableEntr
 	}
 
 	public function magAfmelden(string &$reden = null): bool {
-		if ($this->magLijstBeheren()) {
-			return true;
-		}
-
 		$nu = date_create_immutable();
 		if ($this->isGesloten() || $nu < $this->getStartAanmelden() || $nu >= $this->getEindAfmelden()) {
 			$reden = 'activiteit is gesloten';
