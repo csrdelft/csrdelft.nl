@@ -1,4 +1,4 @@
-<tr id="aanmelder-row-{{ activiteit.getId }}">
+<tr id="aanmelder-row-{{ activiteit.id }}">
 	<td>
 		<div class="Activiteit">
 			{{ activiteit.getTitel() }}
@@ -16,7 +16,7 @@
 	</td>
 	<td>
 		<div class="Aanwezigen (limiet)">
-			{{ activiteit.getAantalAanmeldingen() }}  ({{ activiteit.getCapaciteit() }})
+			{{ activiteit.aantalAanmeldingen }}  ({{ activiteit.getCapaciteit() }})
 		</div>
 	</td>
 	{% if activiteit.aangemeld %}

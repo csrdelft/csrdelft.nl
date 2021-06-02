@@ -4,7 +4,6 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\entity\aanmelder\AanmeldActiviteit;
-use CsrDelft\entity\aanmelder\Reeks;
 use CsrDelft\repository\aanmelder\AanmeldActiviteitRepository;
 use CsrDelft\repository\aanmelder\ReeksRepository;
 use Twig\Environment;
@@ -50,7 +49,6 @@ class BbAanmelder extends BbTag {
 
 	public function render() {
 		if (isset($this->reeks)) {
-			/** @var Reeks $reeks */
 			$reeks = $this->reeksRepository->find($this->reeks);
 			if (!$reeks) {
 				return "Reeks met id {$this->reeks} niet gevonden.";

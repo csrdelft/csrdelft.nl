@@ -11,6 +11,7 @@ use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -71,7 +72,7 @@ class DataTable implements View, FormElement, ToResponse {
 	private $columns = array();
 	private $groupByColumn;
 
-	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null, $includeAllColumns = true) {
+	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null, $loadColumns = true) {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
@@ -89,38 +90,8 @@ class DataTable implements View, FormElement, ToResponse {
 			'defaultContent' => ''
 		);
 
-		if ($includeAllColumns) {
-			if (is_a($orm, CustomDataTableEntry::class, true)) {
-				foreach ($orm::getFieldNames() as $attribute) {
-					$this->addColumn($attribute);
-				}
-
-				foreach ($orm::getIdentifierFieldNames() as $attribute) {
-					$this->hideColumn($attribute);
-				}
-			} else {
-				$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
-				/** @var ClassMetadata $metadata */
-				$metadata = $manager->getClassMetaData($orm);
-
-				// generate columns from entity attributes
-				foreach ($metadata->getFieldNames() as $attribute) {
-					$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
-					$columnName = $metadata->getColumnName($attribute);
-					if ($type instanceof DateTimeImmutableType) {
-						$this->addColumn($columnName, null, null, CellRender::DateTime());
-					} elseif ($type instanceof BooleanType) {
-						$this->addColumn($columnName, null, null, CellRender::Check());
-					} else {
-						$this->addColumn($columnName);
-					}
-				}
-
-				// hide primary key columns
-				foreach ($metadata->getIdentifierColumnNames() as $attribute) {
-					$this->hideColumn($attribute);
-				}
-			}
+		if ($loadColumns) {
+			$this->loadColumns($orm);
 		}
 	}
 
@@ -133,6 +104,45 @@ class DataTable implements View, FormElement, ToResponse {
 
 	public function setSearch($searchString) {
 		$this->settings['search'] = ['search' => $searchString];
+	}
+
+	/**
+	 * @param $orm
+	 * @throws Exception
+	 */
+	public function loadColumns($orm): void
+	{
+		if (is_a($orm, CustomDataTableEntry::class, true)) {
+			foreach ($orm::getFieldNames() as $attribute) {
+				$this->addColumn($attribute);
+			}
+
+			foreach ($orm::getIdentifierFieldNames() as $attribute) {
+				$this->hideColumn($attribute);
+			}
+		} else {
+			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
+			/** @var ClassMetadata $metadata */
+			$metadata = $manager->getClassMetaData($orm);
+
+			// generate columns from entity attributes
+			foreach ($metadata->getFieldNames() as $attribute) {
+				$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
+				$columnName = $metadata->getColumnName($attribute);
+				if ($type instanceof DateTimeImmutableType) {
+					$this->addColumn($columnName, null, null, CellRender::DateTime());
+				} elseif ($type instanceof BooleanType) {
+					$this->addColumn($columnName, null, null, CellRender::Check());
+				} else {
+					$this->addColumn($columnName);
+				}
+			}
+
+			// hide primary key columns
+			foreach ($metadata->getIdentifierColumnNames() as $attribute) {
+				$this->hideColumn($attribute);
+			}
+		}
 	}
 
 	/**

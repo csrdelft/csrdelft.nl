@@ -3,7 +3,7 @@
 	<b>
 		{% if activiteit.gesloten %}
 			Aanmeldingen gesloten
-		{% elseif not activiteit.aanmeldenMogelijk %}
+		{% elseif not activiteit.isAanmeldenMogelijk %}
 			Aanmelden niet mogelijk
 		{% elseif activiteit.aanmeldenNogNietOpen %}
 			Aanmeldingen nog niet open
@@ -16,7 +16,7 @@
 	{% if activiteit.gesloten %}
 		<br>
 		Handmatig gesloten
-	{% elseif activiteit.aanmeldenMogelijk %}
+	{% elseif activiteit.isAanmeldenMogelijk %}
 		<br>
 		Geopend {{ activiteit.startAanmelden|date_format_intl('EEEE d MMMM H:mm') }} tot {{ activiteit.eindAanmelden|date_format_intl('EEEE d MMMM H:mm') }}
 	{% endif %}
@@ -24,7 +24,7 @@
 	<b>
 		{% if activiteit.gesloten %}
 			Afmelden gesloten
-		{% elseif not activiteit.afmeldenMogelijk %}
+		{% elseif not activiteit.isAfmeldenMogelijk %}
 			Afmelden niet mogelijk
 		{% elseif activiteit.afmeldenVoorbij %}
 			Afmelden niet meer mogelijk
@@ -35,7 +35,7 @@
 	{% if activiteit.gesloten %}
 		<br>
 		Handmatig gesloten
-	{% elseif activiteit.afmeldenMogelijk %}
+	{% elseif activiteit.isAfmeldenMogelijk %}
 		<br>
 		Mogelijk tot {{ activiteit.eindAfmelden|date_format_intl('EEEE d MMMM H:mm') }}
 	{% endif %}

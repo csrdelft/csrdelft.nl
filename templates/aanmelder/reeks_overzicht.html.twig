@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block titel %}Aanmelden {{ reeks.naam }}{% endblock %}
+{% block titel %}Aanmelder {{ reeks.naam|lower }}{% endblock %}
 
 {% block content %}
 	{% include 'aanmelder/onderdelen/reeks_activiteiten.html.twig' %}
