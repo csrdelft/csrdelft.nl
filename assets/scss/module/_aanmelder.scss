@@ -1,0 +1,52 @@
+/**
+ * aanmelder.css
+ */
+.aanmelder-tabel .groep-tabs li span.fa {
+	color: #a9a9a9;
+}
+.aanmelder-tabel .groep-tabs li:hover span.fa {
+	color: #FFFFFF;
+}
+.rowColor0 {
+	background-color: $tabel-regel-donker;
+}
+.rowColor1 {
+	background-color: $tabel-regel-licht;
+}
+
+/* aanmelder-tabel */
+
+.aanmelder-tabel {
+	width: 100%;
+	border-spacing: 0;
+	margin-bottom: 1em;
+
+	th {
+		background-color: $tabel-header;
+		font-weight: bold;
+		padding: 1em;
+		border-bottom: 2px solid #FFFFFF;
+	}
+
+	tr {
+		background-color: $tabel-regel-donker;
+
+		&:nth-child(even) {
+			background-color: $tabel-regel-licht;
+		}
+
+		&:hover {
+			background-color: $tabel-hover;
+		}
+	}
+
+	td {
+		vertical-align: middle;
+		padding: 0 1em;
+		white-space: nowrap;
+	}
+
+	.col-del {
+		text-align: center;
+	}
+}

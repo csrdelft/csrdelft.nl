@@ -11,6 +11,7 @@ use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -71,7 +72,7 @@ class DataTable implements View, FormElement, ToResponse {
 	private $columns = array();
 	private $groupByColumn;
 
-	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
+	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null, $loadColumns = true) {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
@@ -89,6 +90,28 @@ class DataTable implements View, FormElement, ToResponse {
 			'defaultContent' => ''
 		);
 
+		if ($loadColumns) {
+			$this->loadColumns($orm);
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDataTableId() {
+		return $this->dataTableId;
+	}
+
+	public function setSearch($searchString) {
+		$this->settings['search'] = ['search' => $searchString];
+	}
+
+	/**
+	 * @param $orm
+	 * @throws Exception
+	 */
+	public function loadColumns($orm): void
+	{
 		if (is_a($orm, CustomDataTableEntry::class, true)) {
 			foreach ($orm::getFieldNames() as $attribute) {
 				$this->addColumn($attribute);
@@ -120,17 +143,6 @@ class DataTable implements View, FormElement, ToResponse {
 				$this->hideColumn($attribute);
 			}
 		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getDataTableId() {
-		return $this->dataTableId;
-	}
-
-	public function setSearch($searchString) {
-		$this->settings['search'] = ['search' => $searchString];
 	}
 
 	/**
