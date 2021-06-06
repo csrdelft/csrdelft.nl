@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}Aanmelder{% endblock %}
+
+{% block content %}
+	{% if reeksen %}
+		{% for reeks in reeksen %}
+			{% include 'aanmelder/onderdelen/reeks_activiteiten.html.twig' with { reeks: reeks.reeks, activiteiten: reeks.activiteiten } %}
+		{% endfor %}
+	{% else %}
+		<p>Geen activiteiten om voor aan te melden</p>
+	{% endif %}
+{% endblock %}

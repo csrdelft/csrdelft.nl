@@ -195,6 +195,10 @@ span.curpage {
 		}
 	}
 
+	a:not(:hover) {
+		text-decoration: none;
+	}
+
 	.paging,
 	.meldingen,
 	.forumdeel-omschrijving,

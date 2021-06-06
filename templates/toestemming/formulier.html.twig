@@ -13,7 +13,7 @@
 	<p>{{ include('toestemming/regel.html.twig', {regel: akkoordInternFoto}) }}</p>
 	<hr/>
 	<p>{{ instelling('privacy', 'beschrijving_vereniging') }}</p>
-	<div class="form-group">
+	<div class="mb-3">
 		<label>
 			<input type="radio" name="toestemming-intern"
 						 id="toestemming-ja" {% if akkoord == 'ja' %}checked="checked"{% endif %}/>

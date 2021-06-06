@@ -6,7 +6,7 @@
 		</button>
 	</div>
 	<div class="card-body">
-		<div class="form-group d-flex justify-content-between">
+		<div class="mb-3 d-flex justify-content-between">
 			<a href="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'plakkerig'}) }}"
 				 class="btn btn-light post ReloadPage"
 				 title="Verander plakkerigheid">
@@ -37,10 +37,10 @@
 		</div>
 		<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'forum_id'}) }}" method="post">
 			{{ csrfField() }}
-			<div class="form-group row">
+			<div class="mb-3 row">
 				<label for="verplaats-naar" class="col-md-3 col-form-label">Verplaats naar &nbsp;</label>
 				<div class="col-md-6">
-					<select id="verplaats-naar" class="form-control" name="forum_id">
+					<select id="verplaats-naar" class="form-select" name="forum_id">
 						{% for categorie in categorien %}
 							<optgroup label="{{ categorie.titel }}">
 								{% for newDeel in categorie.forum_delen %}
@@ -58,7 +58,7 @@
 		</form>
 		<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'titel'}) }}" method="post">
 			{{ csrfField() }}
-			<div class="form-group row">
+			<div class="mb-3 row">
 				<label for="titel" class="col-md-3 col-form-label">Titel aanpassen &nbsp;</label>
 				<div class="col-md-6">
 					<input id="titel" class="form-control" type="text" name="titel" value="{{ draad.titel }}"/>
@@ -72,10 +72,10 @@
 			<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'belangrijk'}) }}"
 						method="post">
 				{{ csrfField() }}
-				<div class="form-group row">
+				<div class="mb-3 row">
 					<label for="belangrijk" class="col-md-3 col-form-label">Belangrijk markeren &nbsp;</label>
 					<div class="col-md-6">
-						<select id="belangrijk" class="form-control" name="belangrijk">
+						<select id="belangrijk" class="form-select" name="belangrijk">
 							<option value="" {% if not draad.belangrijk %}selected="selected"{% endif %}>Niet belangrijk</option>
 							{% for group, list in getBelangrijkOpties() %}
 								<optgroup label="{{ group }}">
@@ -98,10 +98,10 @@
 			<form action="{{ url('csrdelft_forum_wijzigen', {draad_id: draad.draad_id, property: 'gedeeld_met'}) }}"
 						method="post">
 				{{ csrfField() }}
-				<div class="form-group row">
+				<div class="mb-3 row">
 					<label for="gedeeld_met" class="col-md-3 col-form-label">Delen met &nbsp;</label>
 					<div class="col-md-6">
-						<select id="gedeeld_met" class="form-control" name="gedeeld_met">
+						<select id="gedeeld_met" class="form-select" name="gedeeld_met">
 							<option value=""></option>
 							{% for gedeeld_deel in gedeeld_met_opties %}
 								<option value="{{ gedeeld_deel.forum_id }}"

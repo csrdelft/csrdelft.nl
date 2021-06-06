@@ -27,6 +27,21 @@ html {
 	z-index: 10000!important;
 }
 
+/**
+General overrides
+ */
+.footer a:not(:hover) {
+	text-decoration: none;
+}
+
+#zijbalk a:not(:hover):not(.onderstreept) {
+	text-decoration: none;
+}
+
+a.lidLink:not(:hover) {
+	text-decoration: none;
+}
+
 /* --------------------------------
 
 Bootstrap submenu
@@ -37,10 +52,13 @@ Bootstrap submenu
 }
 
 .dropdown-submenu a::after {
-	transform: rotate(-90deg);
 	position: absolute;
 	right: 6px;
-	top: .8em;
+	top: 1em;
+	border-top: 0.3em solid transparent;
+	border-right: 0;
+	border-bottom: 0.3em solid transparent;
+	border-left: 0.3em solid;
 }
 
 .dropdown-submenu .dropdown-menu {
@@ -127,7 +145,7 @@ table.inline {
   font-size: smaller;
 }
 
-.text-right {
+.text-end {
   text-align: right;
 }
 
@@ -252,83 +270,8 @@ time.timeago:hover {
   border-bottom: 1px dotted grey;
 }
 
-/* --------------------------------
-
-Group expand/collapse toggle
-
--------------------------------- */
-.toggle-group {
-  position: relative;
-  cursor: pointer;
-}
-
-.toggle-group::after {
-  content: '';
-  display: block;
-  height: 11px;
-  width: 8px;
-  position: absolute;
-  top: 50%;
-  bottom: auto;
-  -webkit-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  transform: translateY(-50%);
-  right: 1em;
-  background: url("../images/cd-arrow.svg") no-repeat center center;
-  background-size: 8px 11px;
-  -webkit-transition-property: -webkit-transform;
-  -moz-transition-property: -moz-transform;
-  transition-property: transform;
-  -webkit-transition-duration: 0.2s;
-  -moz-transition-duration: 0.2s;
-  transition-duration: 0.2s;
-}
-
-.toggle-group-expanded::after {
-  -webkit-transform: translateY(-50%) rotate(90deg);
-  -moz-transform: translateY(-50%) rotate(90deg);
-  -ms-transform: translateY(-50%) rotate(90deg);
-  -o-transform: translateY(-50%) rotate(90deg);
-  transform: translateY(-50%) rotate(90deg);
-}
-
-.expanded-submenu {
-  margin-bottom: 1em;
-}
-
-/* --------------------------------
-
-Dragable objects
-
--------------------------------- */
-.dragbject {
-  position: fixed;
-  z-index: 50;
-  -webkit-touch-callout: none;
-  user-select: none;
-}
-
-.dragobject:active {
-  cursor: move;
-}
-
-.dragvertical {
-  overflow-y: hidden;
-}
-
-.dragvertical:active {
-  cursor: ns-resize;
-}
-
-.draghorizontal {
-  overflow-x: hidden;
-}
-
-.draghorizontal:active {
-  cursor: ew-resize;
-}
+@import "lib/toggle-group";
+@import "lib/dragobject";
 
 /* --------------------------------
 

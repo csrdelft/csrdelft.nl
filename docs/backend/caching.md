@@ -38,14 +38,14 @@ Met [NSSM](https://nssm.cc) kun je een executable als Windows service installere
 
 ## Installeren van Memcache in PHP
 
-Er zijn twee PHP extensies voor Memcached, namelijk [Memcached](https://www.php.net/manual/en/book.memcached.php) en [Memcache](https://www.php.net/manual/en/book.memcache.php). Memcached is nieuwer, maar op Syrinx is alleen Memcache geinstalleerd. Hier voor is de [`MemcacheCache`](https://github.com/csrdelft/csrdelft.nl/blob/master/lib/common/cache/MemcacheCache.php) CacheProvider gemaakt, deze zorgt voor goede interactie.
+Er zijn twee PHP extensies voor Memcached, namelijk [Memcached](https://www.php.net/manual/en/book.memcached.php) en [Memcache](https://www.php.net/manual/en/book.memcache.php). Memcached is nieuwer, dus deze willen we hebben.
 
-Download de laatste `php_memcache.dll` van PECL: [pecl.php.net/package/memcache](https://pecl.php.net/package/memcache)
+Je kan `php_memcached.dll` en `libmemcached.dll` downloaden van https://github.com/lifenglsf/php_memcached_dll op linux kun je de extensie van pecl downloaden.
 
-Drop de dll in de `ext` map in je php installatie (`C:\xampp\php\ext`, `C:\wamp64\bin\php7.x.x\ext`) en voeg in php.ini (`C:\xampp\php\php.ini`, `C:\wamp64\bin\php7.x.x\php.ini`, ...) een regel toe:
+Drop de `php_memcached.dll` dll in de `ext` map in je php installatie (`C:\xampp\php\ext`, `C:\wamp64\bin\php7.x.x\ext`) en de `libmemcached.dll` aan de hoofdmap van php, waar ook `php.exe` staat. En voeg in php.ini (`C:\xampp\php\php.ini`, `C:\wamp64\bin\php7.x.x\php.ini`, ...) een regel toe:
 
 ```
-extension=memcache
+extension=memcached
 ```
 
 Start hierna Apache opnieuw op.
@@ -55,11 +55,18 @@ Start hierna Apache opnieuw op.
 Voeg de volgende regels toe aan `.env.local`:
 
 ```
-CACHE_HOST=localhost
-CACHE_PORT=11211
+MEMCACHED_URL=memcached://localhost
 ```
 
-Doordat `CACHE_HOST` een waarde heeft en de memcache extensie is geinstalleerd wordt de configuratie voor memcache geladen. Als het niet werkt controleer dan in phpinfo of het kopje memcache bestaat.
+Als je memcached op een unix socket draait (zoals op Syrinx gebeurt), voeg dan de volgende regels toe:
+
+```
+MEMCACHED_URL=memcached:///var/run/memcached.sock
+```
+
+Voor meer informatie over de mogelijke formaten van deze variabele, zie de [Memcached Adapter](https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html) documentatie.
+
+Doordat `MEMCACHED_URL` een waarde heeft en de memcache extensie is geinstalleerd wordt de configuratie voor memcache geladen. Als het niet werkt controleer dan in phpinfo of het kopje memcache bestaat.
 
 Als je in de profiler toolbar onder het doctrine icoontje cache hits / misses ziet staan weet je dat het werkt.
 
@@ -76,3 +83,7 @@ Wel een cache ingesteld
 Bij het veranderen van database of bij het veranderen van branches die ver uit elkaar liggen kan het zijn dat wat in de cache staat niet meer klopt. Dan moet de cache geflushed worden. Dit gebeurt normaal bij iedere deploy (de data in de cache bestaat dus niet lang en kan zo verdwenen zijn).
 
 Om de cache te flushen kun je het `php bin/console stek:cache:flush` commando uitvoeren of de `Memcached` service vanuit taakbeheer opnieuw opstarten.
+
+## De cache inspecteren
+
+Een goede tool om de cache te inspecteren is [PHPMemcachedAdmin](https://github.com/elijaa/phpmemcachedadmin), hiermee kan je zien of de cache gebruikt wordt en in de cache zoeken.

@@ -38,7 +38,7 @@ class BbSpotify extends BbTag {
 			case "hoog":
 				return "<iframe class=\"w-100\" height=\"380\" $commonAttributen></iframe>";
 			case "blok":
-				return "<iframe width=\"80\" height=\"80\" class=\"float-left\" $commonAttributen></iframe>";
+				return "<iframe width=\"80\" height=\"80\" class=\"float-start\" $commonAttributen></iframe>";
 			default:
 				return "<iframe class=\"w-100\" height=\"80\" $commonAttributen></iframe>";
 		}

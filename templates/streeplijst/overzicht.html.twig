@@ -164,7 +164,7 @@
 	<h5>Maak je eigen lijst</h5>
 	<p></p>
 	<form method="get" id="streeplijstform">
-		<div class="form-group">
+		<div class="mb-3">
 			<p></p>
 			<label for="naam_streeplijst">Naam van de streeplijst:</label>
 			<input placeholder="Naam van streeplijst" name="naam_streeplijst" id="naam_streeplijst" type="text"
@@ -172,14 +172,14 @@
 						 class="form-control" aria-describedby="naam_streeplijst">
 		</div>
 
-		<div class="form-group">
+		<div class="mb-3">
 			<label for="leden_streeplijst">Leden van streeplijst:</label>
 			<textarea class="form-control AutoSize"
 								placeholder="Voer hier je streepbare leden in. Scheid namen met een puntkomma. Bijv.: Pietje; Jantje; Puk"
 								id="leden_streeplijst" name="leden_streeplijst" rows="3"
 								cols="50">{{ huidigestreeplijst.leden_streeplijst }}</textarea>
 		</div>
-		<div class="form-group">
+		<div class="mb-3">
 			<label for="inhoud_streeplijst">Inhoud van streeplijst:</label>
 			<textarea class="form-control AutoSize"
 								placeholder="Voer hier je zelfgekozen streepbare goederen/dingen/eenheden in. Scheid dingen met een puntkomma. Bijv.: bier;wijn;wodka"

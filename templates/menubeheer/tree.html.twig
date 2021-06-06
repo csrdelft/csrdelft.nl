@@ -4,10 +4,10 @@
 
 {% block content %}
 	{% if menus %}
-		<div class="float-right form-inline">
+		<div class="float-end form-inline">
 			<label for="menu-select">Toon menu:</label>
 			<select name="toon" id="menu-select" onchange="location.href = '/menubeheer/beheer/' + this.value;"
-							class="form-control">
+							class="form-select">
 				<option selected="selected">kies</option>
 				{% for item in menus %}
 					<option value="{{ item.tekst }}">{{ item.tekst }}</option>

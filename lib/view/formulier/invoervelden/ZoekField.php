@@ -18,7 +18,7 @@ class ZoekField extends TextField
 	public function __construct($name)
 	{
 		parent::__construct($name, null, null);
-		$this->css_classes[] = 'form-control mr-sm-2';
+		$this->css_classes[] = 'form-control me-sm-2';
 		$this->css_classes[] = 'clicktogo';
 		$this->placeholder = 'Zoeken';
 		$this->autoselect = true;
@@ -86,22 +86,22 @@ JS;
 			$html .= '<a class="dropdown-item disabled" href="#">';
 			$instelling = lid_instelling('zoeken', $option);
 			if ($instelling !== 'nee') {
-				$html .= '<span class="fa fa-check fa-fw mr-2"></span> ';
+				$html .= '<span class="fa fa-check fa-fw me-2"></span> ';
 				if ($option === 'leden') {
 					$html .= ucfirst(strtolower($instelling)) . '</a>';
 					continue;
 				}
 			} else {
-				$html .= '<span class="fa fa-fw mr-2"></span> ';
+				$html .= '<span class="fa fa-fw me-2"></span> ';
 			}
 			$html .= ucfirst($option) . '</a>';
 		}
 		$parent = parent::getHtml();
 		return <<<HTML
-<div class="form-inline flex-nowrap">
+<div class="form-inline d-flex flex-nowrap">
 	{$parent}
 	<div class="dropdown">
-		<button id="cd-zoek-engines" class="btn btn-light dropdown-toggle ZoekFieldDropdown" data-toggle="dropdown" aria-expanded="false">
+		<button id="cd-zoek-engines" class="btn btn-light dropdown-toggle ZoekFieldDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 			<span class="fa fa-search"></span>
 			<span class="caret"></span>
 		</button>

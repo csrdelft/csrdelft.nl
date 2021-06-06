@@ -2,6 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
+use CsrDelft\entity\groepen\enum\HuisStatus;
 use CsrDelft\entity\groepen\Groep;
 use CsrDelft\entity\groepen\Activiteit;
 use CsrDelft\entity\groepen\Commissie;
@@ -134,8 +135,8 @@ class GroepForm extends ModalForm {
 			 */
 			elseif (AccessAction::isWijzigen($this->mode) && $groep instanceof Woonoord) {
 
-				$origvalue = $this->findByName('soort')->getOrigValue();
-				if ($origvalue !== $soort) {
+				$vorigeHuisStatus = HuisStatus::from($this->findByName('huisStatus')->getOrigValue());
+				if ($vorigeHuisStatus !== $soort) {
 					setMelding('U mag de huisstatus niet wijzigen', -1);
 					return false;
 				}

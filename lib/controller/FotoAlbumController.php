@@ -37,6 +37,9 @@ use Symfony\Component\Routing\Annotation\Route;
  * Controller van het fotoalbum.
  */
 class FotoAlbumController extends AbstractController {
+	/**
+	 * @var FotoAlbumRepository
+	 */
 	private $fotoAlbumRepository;
 	/**
 	 * @var FotoTagsRepository
@@ -71,10 +74,10 @@ class FotoAlbumController extends AbstractController {
 		}
 		if ($album->dirname === 'fotoalbum') {
 			setMelding('Niet het complete fotoalbum verwerken', -1);
-			return $this->csrRedirect($album->getUrl());
+		} else {
+			$this->fotoAlbumRepository->verwerkFotos($album);
 		}
-		$this->fotoAlbumRepository->verwerkFotos($album);
-		return $this->csrRedirect($album->getUrl());
+		return $this->redirectToRoute('csrdelft_fotoalbum_bekijken', ['dir' => $dir]);
 	}
 
 	/**
@@ -149,7 +152,10 @@ class FotoAlbumController extends AbstractController {
 					}
 
 					if ($poster) {
-						return $this->csrRedirect($album->getUrl() . '#' . $foto->getResizedUrl());
+						return $this->redirectToRoute(
+							'csrdelft_fotoalbum_bekijken',
+							['dir' => $dir, '_fragment' => $foto->getResizedUrl()]
+						);
 					} else {
 						return new JsonResponse(true);
 					}
@@ -351,7 +357,7 @@ class FotoAlbumController extends AbstractController {
 		foreach ($this->fotoAlbumRepository->zoeken($query, $limit) as $album) {
 			/** @var FotoAlbum $album */
 			$result[] = array(
-				'icon' => Icon::getTag('fotoalbum', null, 'Fotoalbum', 'mr-2'),
+				'icon' => Icon::getTag('fotoalbum', null, 'Fotoalbum', 'me-2'),
 				'url' => $album->getUrl(),
 				'label' => $album->getParentName(),
 				'value' => ucfirst($album->dirname)
@@ -461,8 +467,10 @@ class FotoAlbumController extends AbstractController {
 
 		if (!$image->magBekijken()) {
 			throw $this->createAccessDeniedException();
-		} else if (!$image->exists()) {
+		} elseif (!$image->exists()) {
 			throw $this->createNotFoundException();
+		} elseif (!is_file($image->getResizedPath()) || !is_readable($image->getResizedPath())) {
+			$image->createResized();
 		}
 
 		$response = new BinaryFileResponse($image->getResizedPath(), 200, [], true, null, true);
@@ -488,8 +496,10 @@ class FotoAlbumController extends AbstractController {
 
 		if (!$image->magBekijken()) {
 			throw $this->createAccessDeniedException();
-		} else if (!$image->exists()) {
+		} elseif (!$image->exists()) {
 			throw $this->createNotFoundException();
+		} elseif (!is_file($image->getThumbPath()) || !is_readable($image->getThumbPath())) {
+			$image->createThumb();
 		}
 
 		$response = new BinaryFileResponse($image->getThumbPath(), 200, [], true, null, true);

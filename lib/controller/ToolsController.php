@@ -20,6 +20,7 @@ use CsrDelft\view\Icon;
 use CsrDelft\view\PlainView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
+use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 11/04/2019
  */
-class ToolsController extends AbstractController {
+class ToolsController extends AbstractController
+{
 
 	/**
 	 * @param Request $request
@@ -103,7 +105,10 @@ class ToolsController extends AbstractController {
 		if ($roodschopperForm->isPosted() && $roodschopperForm->validate() && $roodschopper->verzenden) {
 			$roodschopper->sendMails();
 			// Voorkom dubbele submit
-			return $this->csrRedirect('/tools/roodschopper?verzenden=true&aantal=' . count($roodschopper->getSaldi()));
+			return $this->redirectToRoute(
+				'csrdelft_tools_roodschopper',
+				['verzenden' => true, 'aantal' => count($roodschopper->getSaldi())]
+			);
 		} else {
 			$roodschopper->generateMails();
 		}
@@ -326,7 +331,7 @@ class ToolsController extends AbstractController {
 			$profiel = $scoredProfiel['profiel'];
 
 			$result[] = array(
-				'icon' => Icon::getTag('profiel', null, 'Profiel', 'mr-2'),
+				'icon' => Icon::getTag('profiel', null, 'Profiel', 'me-2'),
 				'url' => '/profiel/' . $profiel->uid,
 				'label' => $profiel->uid,
 				'value' => $profiel->getNaam($vorm),
@@ -351,7 +356,9 @@ class ToolsController extends AbstractController {
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
 			try {
-				debugprint($this->get('stek.cache.memcache')->getStats());
+				$memcached = MemcachedAdapter::createConnection($this->getParameter('memcached_url'));
+
+				debugprint(current($memcached->getStats()));
 			} catch (ServiceNotFoundException $ex) {
 				echo 'Memcache is niet ingesteld.';
 			}

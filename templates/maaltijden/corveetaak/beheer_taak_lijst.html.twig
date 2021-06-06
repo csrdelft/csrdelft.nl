@@ -36,7 +36,7 @@
 		{% if taak.profiel %}
 			{{ aantal }}x
 		{% endif %}
-		<div class="float-right">
+		<div class="float-end">
 			{% if taak.profiel %}
 			<a href="{{ url('csrdelft_maalcie_beheertaken_email', {taak_id: taak.taak_id}) }}"
 				 title="Verstuur een (extra) herinnering voor deze taak"
@@ -107,7 +107,7 @@ taak-open
 			{{ taak.bonus_malus }}
 		{% endif %}
 		{% if wijzigbaar is defined and taak.profiel %}
-		<div class="float-right">
+		<div class="float-end">
 			{% if taak.wanneer_toegekend %}
 				<a href="{{ url('csrdelft_maalcie_beheertaken_puntenintrekken', {taak_id: taak.taak_id}) }}"
 					 title="Punten intrekken" class="btn post">

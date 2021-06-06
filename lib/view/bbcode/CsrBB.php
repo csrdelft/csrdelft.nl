@@ -34,6 +34,7 @@ use CsrDelft\view\bbcode\tag\BbAftel;
 use CsrDelft\view\bbcode\tag\BbBijbel;
 use CsrDelft\view\bbcode\tag\BbBoek;
 use CsrDelft\view\bbcode\tag\BbCitaat;
+use CsrDelft\view\bbcode\tag\BbAanmelder;
 use CsrDelft\view\bbcode\tag\BbCodeInline;
 use CsrDelft\view\bbcode\tag\BbDocument;
 use CsrDelft\view\bbcode\tag\BbForum;
@@ -156,6 +157,7 @@ class CsrBB extends Parser {
 		BbWoonoord::class,
 		BbYoutube::class,
 		BbNovietVanDeDag::class,
+		BbAanmelder::class,
 		BbAftel::class,
 	];
 	/**

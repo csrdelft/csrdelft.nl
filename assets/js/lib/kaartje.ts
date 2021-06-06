@@ -1,7 +1,7 @@
 import axios from 'axios';
-import Popper from 'popper.js';
 import hoverintent from "hoverintent";
 import {once} from "./util";
+import {createPopper} from "@popperjs/core";
 
 // Cache
 const kaartjes: Record<string, HTMLElement> = {};
@@ -24,7 +24,7 @@ export const initKaartjes = (el: HTMLElement): void => {
 	hoverintent(el,
 		() => {
 			el.append(kaartjes[uid]);
-			new Popper(el, kaartjes[uid], {placement: 'bottom-start'});
+			createPopper(el, kaartjes[uid], {placement: 'bottom-start'})
 		},
 		() => kaartjes[uid].remove()
 	);

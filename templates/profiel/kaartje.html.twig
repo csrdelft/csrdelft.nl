@@ -1,7 +1,7 @@
 <div class="card visitekaartje flex-row">
 	<div class="card-body {% if profiel.jarig %}jarig{% endif %}">
 		{% if profiel.account and profiel.account | may_su_to %}
-			<div class="float-right">
+			<div class="float-end">
 				<a href="?_switch_user={{ profiel.uid }}" title="Su naar dit lid">{{ profiel.uid }}</a>
 			</div>
 		{% endif %}

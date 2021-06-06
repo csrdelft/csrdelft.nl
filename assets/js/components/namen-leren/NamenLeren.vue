@@ -102,6 +102,9 @@
         <option value="combi">
           Voor- en achternaam
         </option>
+        <option value="civi">
+          Achternaam en achtervoegsel
+        </option>
       </select>
       <a
         href="#"
@@ -139,9 +142,15 @@
             <span :class="{'bold': antwoordMethode === 'voornaam' || antwoordMethode === 'combi'}">{{
               laatste.voornaam
             }}</span>
-            <span :class="{'bold': antwoordMethode === 'achternaam' || antwoordMethode === 'combi'}">{{
+            <span :class="{'bold': antwoordMethode === 'achternaam' || antwoordMethode === 'combi' || antwoordMethode === 'civi'}">{{
               laatste.tussenvoegsel
             }} {{ laatste.achternaam }}</span>
+            <span
+              v-if="laatste.postfix"
+              :class="{'bold': antwoordMethode === 'civi'}"
+            >{{
+              laatste.postfix
+            }}</span>
           </div>
           <div class="tekst">
             <span>{{ laatste.lichting }}</span>
@@ -179,6 +188,10 @@
         v-if="antwoordMethode === 'combi'"
         class="mb-1 block"
       >Voor- en achternaam:</strong>
+      <strong
+        v-if="antwoordMethode === 'civi'"
+        class="mb-1 block"
+      >Achternaam en achtervoegsel:</strong>
       <input
         type="text"
         class="form-control"
@@ -238,6 +251,7 @@ interface Lid {
   tussenvoegsel: string;
   achternaam: string;
   voornaam: string;
+  postfix: string;
 }
 
 @Component
@@ -349,17 +363,23 @@ export default class NamenLeren extends Vue {
     if (this.antwoordMethode === 'voornaam' || this.antwoordMethode === 'combi') {
       onderdelen.push(this.huidig.voornaam);
     }
-    if (this.antwoordMethode === 'achternaam' || this.antwoordMethode === 'combi') {
+    if (this.antwoordMethode === 'achternaam' || this.antwoordMethode === 'combi' || this.antwoordMethode === 'civi') {
       if (this.huidig.tussenvoegsel) {
         onderdelen.push(this.huidig.tussenvoegsel);
       }
       onderdelen.push(this.huidig.achternaam);
     }
+    if (this.antwoordMethode === 'civi') {
+      if (this.huidig.postfix) {
+        onderdelen.push(this.huidig.postfix);
+      }
+    }
     const antwoord = onderdelen.map((s) => s.trim()).join(' ');
 
     // Antwoord checken
     this.laatste = this.huidig;
-    this.laatsteGoed = antwoord.toLowerCase() === this.ingevuld.toLowerCase();
+    this.laatsteGoed = antwoord.toLowerCase().replace('.', '')
+                        === this.ingevuld.toLowerCase().replace('.', '');
 
     // Verwijderen uit oude lijst en toevoegen aan nieuwe lijst
     let index = this.todo.findIndex((lid) => lid.uid === this.huidig?.uid);

@@ -7,7 +7,7 @@
 		<li class="breadcrumb-item"><a href="{{ url('default') }}" title="Thuis"><span class="fa fa-home"></span></a></li>
 		<li class="breadcrumb-item"><a href="{{ url('csrdelft_forum_forum') }}">Forum</a></li>
 		<li class="breadcrumb-item active">
-			<select name="forum_id" class="form-control form-control-sm"
+			<select name="forum_id" class="form-select form-select-sm w-auto"
 							onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
 				<option value="{{ url('csrdelft_forum_belangrijk') }}"
 								{% if deel.titel == 'Belangrijk recent gewijzigd' %}selected="selected"{% endif %}>
@@ -47,7 +47,7 @@
 	{{ getMelding() }}
 	<div class="forum-header btn-toolbar">
 		{% if mag('P_ADMIN') and deel.forum_id is not empty %}
-			<div class="btn-group mr-2">
+			<div class="btn-group me-2">
 				<a href="/forum/beheren/{{ deel.forum_id }}" class="btn btn-light post popup"
 					 title="Deelforum beheren">{{ icon('wrench_orange') }} Beheren</a>
 			</div>

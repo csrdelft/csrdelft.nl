@@ -13,6 +13,7 @@
 @import "module/agenda";
 @import "module/bibliotheek";
 @import "module/commissievoorkeuren";
+@import "module/aanmelder";
 @import "module/datatable";
 @import "module/documenten";
 @import "module/fiscaat";
@@ -88,7 +89,7 @@ main {
     > .form-control,
     > .custom-select {
       &:not(:last-child) {
-        @include border-right-radius(0);
+        @include border-end-radius(0);
       }
     }
   }
@@ -102,8 +103,6 @@ main {
 
 /* Bijbelrooster */
 .bijbelrooster {
-  -webkit-columns: 250px auto;
-  -moz-columns: 250px auto;
   columns: 250px auto;
   line-height: 2em;
 }
@@ -172,12 +171,6 @@ ul.insidebullets li { list-style: disc inside }
 
 /**** OVERIG ******************************************************************/
 
-#mysql_debug_toggle {
-  cursor: pointer;
-}
-#mysql_debug {
-  display: none;
-}
 .pubcie_debug, .xdebug-error {
 	margin: 10px 10px 10px 200px;
 	overflow: auto;
@@ -192,60 +185,8 @@ div.sqCategorie {
   margin-right: 20px;
   margin-bottom: 10px;
 }
-table.query_table {
-  display: inline-block;
-  margin: 10px;
-  padding: 0;
-  border-collapse: collapse;
-  border: 1px solid black;
-}
-table.query_table thead {
-  display: block;
-}
-table.query_table tbody {
-  max-height: 300px;
-  overflow: auto;
-  display: block;
-}
-table.query_table tr {
-  height: 20px;
-  background-color: #FAFAFA;
-}
-table.query_table tr:nth-child(odd) {
-  background-color: #EBEBEB;
-}
-table.query_table thead th {
-  width: 170px !important;
-}
-table.query_table tbody tr td {
-  width: 175px;
-  padding: 5px 10px;
-  vertical-align: middle;
-}
-
-.oneThirth {
-  width: 253px;
-  float: left;
-}
 
 .waarschuwing { color: red; }
-
-/* csrmail */
-div#pubciemail_form { background-color: #f5f5f5; border: 1px solid lightgray; padding: 10px; }
-
-
-/* Streeplijstgenereertool */
-form#streeplijst fieldset { padding: 10px;  }
-form#streeplijst fieldset legend { font-weight: bold; }
-form#streeplijst input, form#streeplijst label { text-align: left; margin: 3px; padding: 0; }
-
-
-
-/* Peilingbeheer */
-#nieuwePeiling label { clear: left; float: left; width: 150px; }
-#nieuwePeiling input, #nieuwePeiling textarea { margin-bottom: 4px; }
-#nieuwePeiling textarea { width: 400px; }
-#peilingOpties input { width: 400px; }
 
 .instelling:target {
 	padding: 3em 0;
@@ -253,17 +194,8 @@ form#streeplijst input, form#streeplijst label { text-align: left; margin: 3px; 
 }
 
 @include media-breakpoint-down(md) {
-	.cd-main-content {
-		/* Compenseer voor navbar */
-		margin-top: 42px;
-	}
-
 	body {
 		margin-left: 0;
-	}
-
-	.mobiel-hidden {
-		display: none !important;
 	}
 
 	.ads img {

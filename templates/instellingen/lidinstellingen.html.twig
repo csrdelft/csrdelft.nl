@@ -2,7 +2,7 @@
 
 {% block titel %}Lid instellingen{% endblock %}
 
-{% block bodyArgs %}data-offset="5" data-spy="scroll" data-target="#instellingen"{% endblock %}
+{% block bodyArgs %}data-offset="5" data-spy="scroll" data-bs-target="#instellingen"{% endblock %}
 
 {% block content %}
 	<div class="row">
@@ -18,7 +18,7 @@
 				<div class="instellingen-bericht alert alert-warning d-none sticky-top">
 					Er zijn instellingen veranderd, klik hier of ververs de pagina om de veranderingen te
 					zien.
-					{{ icon('page_error', 'page_refresh', 'Pagina verversen', 'float-right') }}
+					{{ icon('page_error', 'page_refresh', 'Pagina verversen', 'float-end') }}
 				</div>
 			</a>
 
@@ -26,15 +26,15 @@
 				<h2 id="instelling-{{ module }}">{{ module | title }}</h2>
 
 				{% for id, instelling in moduleInstellingen %}
-					{% set keuze = instellingen[module][id] is defined ? instellingen[module][id] : default %}
-					<div class="form-group row instelling" id="instelling-{{ module }}-{{ id }}">
+					{% set keuze = instellingen[module][id] is defined ? instellingen[module][id] : defaultInstellingen[module][id].default %}
+					<div class="row instelling mb-3" id="instelling-{{ module }}-{{ id }}">
 						<label class="col-md-3 col-form-label" for="inst_{{ module }}_{{ id }}">{{ instelling.titel | raw }}</label>
 
 						<div class="col-md-9">
 							{% if instelling.type == 'Enumeration' %}
 								{% if instelling.opties | length > 8 %}
 									<select name="{{ module }}_{{ id }}" id="inst_{{ module }}_{{ id }}"
-													class="form-control change-opslaan"
+													class="form-select change-opslaan"
 													data-href="{{ url('csrdelft_lidinstellingen_update', {module: module, instelling: id}) }}">
 										{% for optieId, optie in instelling.opties %}
 											{% if optieId is numeric %}
@@ -78,10 +78,10 @@
 							{% else %}
 								<div class="bg-danger">Voor dit type bestaat geen optie.</div>
 							{% endif %}
-							<small class="form-text text-muted">
+							<div class="form-text">
 								{% set default = instelling.opties[instelling.default] is defined ? instelling.opties[instelling.default] : instelling.default %}
 								{{ instelling.beschrijving | raw }} Standaard waarde: "{{ default | title }}".
-							</small>
+							</div>
 						</div>
 					</div>
 				{% endfor %}

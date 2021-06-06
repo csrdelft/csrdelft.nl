@@ -188,6 +188,7 @@ class LedenMemoryController extends AbstractController {
 				'voornaam' => $profiel->voornaam,
 				'tussenvoegsel' => $profiel->tussenvoegsel,
 				'achternaam' => $profiel->achternaam,
+				'postfix' => $profiel->postfix,
 				'lichting' => $profiel->lidjaar,
 				'verticale' => $profiel->verticale ? $profiel->getVerticale()->naam : 'Geen',
 				'geslacht' => $profiel->geslacht->getValue(),

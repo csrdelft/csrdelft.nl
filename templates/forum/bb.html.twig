@@ -22,13 +22,13 @@
 				{% endif %}
 				<strong>{{ draad.titel }}</strong>
 				{% if mag('P_LOGGED_IN') and draad.aantalOngelezenPosts > 0 %}
-					<span class="badge">{{ draad.aantalOngelezenPosts }}</span>
+					<span class="badge bg-primary">{{ draad.aantalOngelezenPosts }}</span>
 				{% endif %}
-				<span class="text-muted float-right">{{ draad.laatst_gewijzigd | reldate }}</span>
+				<span class="text-muted float-end">{{ draad.laatst_gewijzigd | reldate }}</span>
 			</a>
 		</div>
 	{% endfor %}
-	<div class="d-block text-right mt-3">
+	<div class="d-block text-end mt-3">
 		{% if id == 'recent' %}
 			<a href="{{ url('csrdelft_forum_recent') }}">Meer lezen...</a>
 		{% elseif id == 'belangrijk' %}

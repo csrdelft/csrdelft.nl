@@ -159,7 +159,7 @@ import $ from 'jquery';
 
 			// Als er op deze pagina een modal gesloten wordt is dat misschien die van
 			// de optie toevoegen modal. Dit is de enige manier om dit te weten op dit moment
-			$(document.body).on('modalClose', () => this.reload());
+      document.addEventListener('modalClose', () => this.reload());
 		}
 
 		private get beheerUrl() {

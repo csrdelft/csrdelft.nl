@@ -4,16 +4,22 @@
 namespace CsrDelft\command;
 
 
-use Memcache;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class FlushMemcacheCommand extends Command {
 	/**
-	 * @var Memcache
+	 * @var CacheInterface
 	 */
 	private $cache;
+
+	public function __construct(CacheInterface $cache)
+	{
+		parent::__construct();
+		$this->cache = $cache;
+	}
 
 	public function configure() {
 		$this
@@ -21,16 +27,12 @@ class FlushMemcacheCommand extends Command {
 			->setDescription('Flush de memcache');
 	}
 
-	public function setMemcache($cache) {
-		$this->cache = $cache;
-	}
-
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		if ($this->cache == null) {
 			$output->writeln('Geen cache geinstalleerd');
 			return 1;
 		} else {
-			if ($this->cache->flush()) {
+			if ($this->cache->clear()) {
 				$output->writeln('Memcache succesvol geflushed');
 			} else {
 				$output->writeln('Memcache flushen mislukt');

@@ -90,8 +90,7 @@
 						studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
 						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
 						Ook C.S.R. doet mee aan deze gezellige week. Van 14 t/m 16 augustus zijn wij online te zien en van
-						17 t/m 22 augustus heb je de gelegenheid om fysiek de sfeer van C.S.R. en Delft te proeven!
-					Van 16 t/m 20 augustus heb je de gelegenheid om de sfeer van C.S.R. en Delft te proeven!</source>
+						17 t/m 22 augustus heb je de gelegenheid om fysiek de sfeer van C.S.R. en Delft te proeven!</source>
         <target>OWee is short for ‘OntvangstWeek’, which translates as ‘Opening Week’. During this week, you will get to know a great deal about the student city of Delft.
         You will find out about the various student associations, go on a tour of the city, visit special places on the campus,
         and there will surely be some unforgettable parties. The perfect start to your life as a student in Delft!
@@ -124,7 +123,7 @@
 						Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
 						opgenomen.
 						Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te
-						klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek</source>
+						klikken. Zorg ervoor dat je de week van 24 t/m 30 augustus vrij houdt voor de novitiaatsweek</source>
         <target><![CDATA[Do you want to become a member? Registration is open during the Owee (August 16 - 20). It is also possible
         to register in advance so that we can get in contact with you right when the OWee starts. Join us by clicking  <a href="{lidworden}">here</a>.
         Make sure to reserve the week of August 23-29 for the introduction week of C.S.R. ]]></target>
@@ -335,6 +334,60 @@
       <trans-unit id=".0lHlcl" resname="Verzenden">
         <source>Verzenden</source>
         <target>Send</target>
+      </trans-unit>
+      <trans-unit id="O3gMvQi" resname="Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,&#10;&#9;&#9;&#9;&#9;&#9;&#9;studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al&#10;&#9;&#9;&#9;&#9;&#9;&#9;deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Ook C.S.R. doet mee aan deze gezellige week. Van 16 t/m 20 augustus heb je de gelegenheid om de sfeer van C.S.R. en Delft te proeven!">
+        <source>Ter aanvang van elk studiejaar wordt er een OntvangstWeek georganiseerd, ofwel de OWee.
+						Tijdens deze week is er de uitgelezen kans om kennis te maken met de universiteit en hogescholen,
+						studieverenigingen, studentenverenigingen, sport- en cultuurcentrum, kerken en nog veel meer! Al
+						deze groepen zullen zichzelf tijdens deze week op verschillende momenten en manieren presenteren.
+						Ook C.S.R. doet mee aan deze gezellige week. Van 16 t/m 20 augustus heb je de gelegenheid om de sfeer van C.S.R. en Delft te proeven!</source>
+        <target>At the beginning of each study year an opening weeks, OWee, is organized.
+						This week is the best way to get to know the university, student associations, study associations, sports associations, churches and more!
+						All these mentioned groups have their own way of introducing themselves to the students and C.S.R. is also part of the fun.
+						During the week of 16-20 August, you have the chance to get to know C.S.R. better!</target>
+      </trans-unit>
+      <trans-unit id="mAH_Zp3" resname="Beste scholier of student, &lt;br&gt;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Wat onwijs leuk dat je een kijkje neemt op onze website! Hier kan je veel informatie en foto’s&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;vinden die een goede sfeerimpressie van C.S.R. en het studentenleven geven. Om&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;geïnteresseerden een nog beter beeld te geven van C.S.R., bieden wij meeloopdagen aan.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;dag zal volledig op jouw wensen en voorkeuren worden aangepast. Zo heb je bijvoorbeeld&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de keuze om een paar colleges mee te kijken, mee te eten en/of een drankje te doen op een&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;C.S.R. huis. Er is ook de mogelijkheid om samen met iemand te komen. Wij zullen je een zo&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;goed mogelijk beeld proberen te geven tijdens deze meeloopdag van het studentenleven bij&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;C.S.R. Daarnaast staan we klaar om al je vragen te beantwoorden.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Om deel te nemen aan een meeloopdag kun je het volgende formulier invullen:">
+        <source>Beste scholier of student, &lt;br&gt;
+							Wat onwijs leuk dat je een kijkje neemt op onze website! Hier kan je veel informatie en foto’s
+							vinden die een goede sfeerimpressie van C.S.R. en het studentenleven geven. Om
+							geïnteresseerden een nog beter beeld te geven van C.S.R., bieden wij meeloopdagen aan.
+							Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
+							dag zal volledig op jouw wensen en voorkeuren worden aangepast. Zo heb je bijvoorbeeld
+							de keuze om een paar colleges mee te kijken, mee te eten en/of een drankje te doen op een
+							C.S.R. huis. Er is ook de mogelijkheid om samen met iemand te komen. Wij zullen je een zo
+							goed mogelijk beeld proberen te geven tijdens deze meeloopdag van het studentenleven bij
+							C.S.R. Daarnaast staan we klaar om al je vragen te beantwoorden.
+							Om deel te nemen aan een meeloopdag kun je het volgende formulier invullen:</source>
+        <target>Dear student,
+							Thanks for visiting our website! Here you can find information en photos of what we do at C.S.R.
+							If you want a better view of how C.S.R. is, you're free to join a student here in Delft for a day.
+							You'll be able to see how a day as a student looks like and you'll be able to talk to members of C.S.R.
+							If you're interested, you can fill in the following form:
+							</target>
+      </trans-unit>
+      <trans-unit id="oEYpyxZ" resname="Aanmeldformulier Meeloopdag">
+        <source>Aanmeldformulier Meeloopdag</source>
+        <target>Form</target>
+      </trans-unit>
+      <trans-unit id="t4QCgtC" resname="Deelname is volledig gratis! (exclusief reiskosten).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Na aanmelding zullen wij je koppelen aan een student en een huis. Wij zullen daarna&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;contact met je opnemen en samen met jou een datum prikken.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Veel succes met je studie of studiekeuze en we zien je graag komende tijd terug in Delft!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Voor vragen, stuur een appje naar Christie 06 57547448">
+        <source>Deelname is volledig gratis! (exclusief reiskosten).
+							Na aanmelding zullen wij je koppelen aan een student en een huis. Wij zullen daarna
+							contact met je opnemen en samen met jou een datum prikken.
+							Veel succes met je studie of studiekeuze en we zien je graag komende tijd terug in Delft!
+							Voor vragen, stuur een appje naar Christie 06 57547448</source>
+        <target>It's free and after you've filled in the form you'll be matched with a student here.
+							You'll be set into contact with this student to pick a good date.
+							If you have questions, you can call or send a message to Christie, 06 57547448</target>
+      </trans-unit>
+      <trans-unit id="arLvxEb" resname="Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;{lidworden}&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek">
+        <source>Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).
+						Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
+						opgenomen.
+						Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te
+						klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek</source>
+        <target><![CDATA[Do you want to become of member? A pre-registration is possible via:
+						<a href="{lidworden}">hier</a>
+						Make sure to keep the week of 23 - 29 August free, because that week is dedicated to the introduction week of C.S.R.]]></target>
       </trans-unit>
     </body>
   </file>

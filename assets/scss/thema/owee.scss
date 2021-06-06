@@ -1,14 +1,14 @@
-/* OWee 2020 */
-$primair-achtergrond: #7A4593;
-$zijbalk-achtergrond: #1B447C;
-$secundaire-accenten-1: #FAE37E;
-$secundaire-accenten-2: #91C6EC;
+/* OWee 2021 */
+$primair-achtergrond: #b2d4f0;
+$zijbalk-achtergrond: #486b87;
+$secundaire-accenten-1: #002e54;
+$secundaire-accenten-2: #f6b585;
 
 $primary: $secundaire-accenten-1;
 $secondary: $secundaire-accenten-2;
 
 $body-bg: $primair-achtergrond;
-$body-color: white;
+$body-color: #002e54;
 $zijbalk-bg: $zijbalk-achtergrond;
 $zijbalk-kopje: $secundaire-accenten-2;
 
@@ -16,32 +16,47 @@ $donkerblauw: $zijbalk-achtergrond;
 $orange: $secundaire-accenten-2;
 $footer-background: $primair-achtergrond;
 
-@font-face {
-    font-family: 'adam.cg_proregular';
-    src: url('../../fonts/owee/adam.cg_pro-webfont.woff2') format('woff2'),
-         url('../../fonts/owee/adam.cg_pro-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
 
+@font-face {
+	font-family: 'Tw Cen MT';
+	font-style: normal;
+	font-weight: normal;
+	src: url('../../fonts/owee2021/TCM.woff') format('woff');
 }
 
-$headings-font-family: 'adam.cg_proregular', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+@font-face {
+	font-family: 'Segoe Print';
+	font-style: normal;
+	font-weight: normal;
+	src: url('../../fonts/owee2021/segoepr.woff') format('woff');
+}
 
-@import "./donker";
+$font-family-base: 'Tw Cen MT', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+$headings-font-family: 'Segoe Print', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+
+@import '../base';
+
+body {
+	background-image: url('../../images/background.png') !important;
+}
+
+main {
+	background-image: url('../../images/background.png') !important;
+}
 
 #zijbalk .blok .zijbalk-kopje {
 	font-family: $headings-font-family;
 }
 
 .bb-block {
-	box-shadow: none;
+	box-shadow: #f6b585;
 }
 
 #zijbalk:before {
 	content: '';
 	display: block;
 	height: 156px;
-	background: url('../../images/owee2020.svg') no-repeat center center;
+	background: url('../../images/owee2021.svg') no-repeat center center;
 	background-size: contain;
 	margin: 20px 0;
 	clear: left;

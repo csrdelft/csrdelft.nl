@@ -10,7 +10,7 @@
 				</h6>
 				op {{ maaltijd.datum | datetime_format_long }} om {{ maaltijd.tijd | time_format }}
 				{% if maaltijd.magBekijken(app.user.uid) %}
-					<div class="float-right">
+					<div class="float-end">
 						{{ icon("paintcan", null, maaltijd.maaltijdcorvee.corveeFunctie.naam) }}
 					</div>
 				{% endif %}

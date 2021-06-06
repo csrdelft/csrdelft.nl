@@ -2,7 +2,7 @@
 	{% if item.tekst != 'Personal' %}
 		{% if item.hasChildren %}
 			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="menu-{{ item.item_id }}" role="button" data-toggle="dropdown"
+				<a class="nav-link dropdown-toggle" href="#" id="menu-{{ item.item_id }}" role="button" data-bs-toggle="dropdown"
 					 aria-haspopup="true" aria-expanded="false">
 					{{ item.tekst | raw }}
 				</a>

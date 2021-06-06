@@ -1,0 +1,67 @@
+<tr id="aanmelder-row-{{ activiteit.id }}">
+	<td>
+		<div class="Activiteit">
+			{{ activiteit.getTitel() }}
+		</div>
+	</td>
+	<td>
+		<div class="Van">
+			{{ activiteit.getStart() | datetime_format_long }} {{ activiteit.getStart() | time_format }}
+		</div>
+	</td>
+	<td>
+		<div class="Tot">
+			{{ activiteit.getEinde() | datetime_format_long }} {{ activiteit.getEinde() | time_format }}
+		</div>
+	</td>
+	<td>
+		<div class="Aanwezigen (limiet)">
+			{{ activiteit.aantalAanmeldingen }}  ({{ activiteit.getCapaciteit() }})
+		</div>
+	</td>
+	{% if activiteit.aangemeld %}
+		<td class="maaltijd-aangemeld">
+			{% if activiteit.magAfmelden %}
+				<a href="{{ url('csrdelft_aanmelder_afmelden', {activiteit: activiteit.id}) }}"
+				 class="btn post maaltijd-aangemeld">
+				<input type="checkbox" checked="checked"/> Ja
+				</a>
+			{% else %}
+				Ja
+				<span class="float-end">{{ icon("lock") }}</span>
+			{% endif %}
+		</td>
+	{% else %}
+		<td class="maaltijd-afgemeld">
+			{% if activiteit.magAanmelden(1) %}
+				<a href="{{ url('csrdelft_aanmelder_aanmelden', {activiteit: activiteit.id}) }}"
+					 class="btn post maaltijd-afgemeld">
+					<input type="checkbox"/> Nee
+				</a>
+			{% else %}
+				Nee
+				<span class="float-end">{{ icon("lock") }}</span>
+			{% endif %}
+		</td>
+	{% endif %}
+	<td class="maaltijd-gasten">
+		{% if not activiteit.aangemeld %}
+			-
+		{% elseif not activiteit.magGastenAanpassen %}
+			{{ activiteit.aantalGasten == 0 ? '-' : activiteit.aantalGasten }}
+		{% else %}
+			<div class="InlineForm">
+				<div class="InlineFormToggle maaltijd-gasten">{{ activiteit.aantalGasten }}</div>
+				<form action="{{ url('csrdelft_aanmelder_gasten', {activiteit: activiteit.id}) }}"
+							method="post"
+							class="Formulier InlineForm ToggleForm">
+					{{ csrfField() }}
+					<input type="text" name="aantal" value="{{ activiteit.aantalGasten }}"
+								 origvalue="{{ activiteit.aantalGasten }}" class="FormElement" max="{{ activiteit.maxGasten }}" size="4"/>
+					<a class="btn submit" title="Wijzigingen opslaan">{{ icon("accept") }}</a>
+					<a class="btn reset cancel" title="Annuleren">{{ icon("delete") }}</a>
+				</form>
+			</div>
+		{% endif %}
+	</td>
+</tr>

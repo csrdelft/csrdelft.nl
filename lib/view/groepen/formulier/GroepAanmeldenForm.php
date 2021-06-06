@@ -15,7 +15,7 @@ class GroepAanmeldenForm extends GroepBewerkenForm {
 		parent::__construct($lid, $groep, false, new GroepAanmeldKnoppen($pasfoto));
 
 		$this->action = $groep->getUrl() . '/ketzer/aanmelden';
-		$this->css_classes[] = 'float-left';
+		$this->css_classes[] = 'float-start';
 
 		if ($pasfoto) {
 			$this->getField()->hidden = true;

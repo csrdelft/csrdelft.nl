@@ -59,11 +59,11 @@ class FormulierKnop implements FormElement {
 			$html .= ' data="' . $this->data . '"';
 		}
 		if (strpos($this->action, 'cancel') !== false) {
-			$html .= ' data-dismiss="modal"';
+			$html .= ' data-bs-dismiss="modal"';
 		}
 		$html .= '>';
 		if ($this->icon) {
-			$html .= Icon::getTag($this->icon, null, null, 'mr-1');
+			$html .= Icon::getTag($this->icon, null, null, 'me-1');
 		}
 		$html .= $this->label;
 		return $html . '</a> ';

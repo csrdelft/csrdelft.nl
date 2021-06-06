@@ -29,7 +29,7 @@ export function openPrompt<T = any>(options: PromptOptions<T>): void {
 
 	Object.entries(options.fields).forEach(([name, field]) => {
 		formBody.appendChild(html`
-			<div class="form-group row">
+			<div class="mb-3 row">
 				<label class="col-sm-2 col-form-label" for="${name}">${field.options.label}${field.options.required ? html`<span class="text-danger">*</span>` : ""}</label>
 				<div class="col-sm-10">${field.render(name)}</div>
 			</div>`)

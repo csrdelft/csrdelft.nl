@@ -42,7 +42,7 @@
 							{{ categorie.naam }}
 						</a>
 						{% if mag(categorie.schrijfrechten) %}
-							<a class="toevoegen float-right"
+							<a class="toevoegen float-end"
 								 href="{{ url('csrdelft_documenten_toevoegen') }}?catID={{ categorie.id }}"
 								 title="Document toevoegen in categorie: {{ categorie.naam }}">
 								{{ icon('toevoegen') }}

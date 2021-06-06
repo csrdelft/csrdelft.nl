@@ -11,15 +11,15 @@
 		{% endif %}
 
 		{% if document.magVerwijderen %}
-			<a class="verwijderen mr-2 post float-right"
+			<a class="verwijderen me-2 post float-end"
 				 href="{{ url('csrdelft_documenten_verwijderen', {id: document.id}) }}" title="Document verwijderen"
 				 onclick="return confirm('Weet u zeker dat u dit document wilt verwijderen')">{{ icon('verwijderen') }}</a>
 		{% endif %}
 		{% if document.magBewerken %}
-			<a class="bewerken mr-2 float-right" href="{{ url('csrdelft_documenten_bewerken', {id: document.id}) }}"
+			<a class="bewerken me-2 float-end" href="{{ url('csrdelft_documenten_bewerken', {id: document.id}) }}"
 				 title="Document bewerken">{{ icon('bewerken') }}</a>
 		{% endif %}
-		<span role="button" class="float-right mr-2" data-copy="[document={{ document.id }}]"
+		<span role="button" class="float-end me-2" data-copy="[document={{ document.id }}]"
 					title="Klik om bbcode te kopieren: [document={{ document.id }}]">{{ icon('page_copy') }}</span>
 	</td>
 	<td class="size">{{ document.filesize }}</td>

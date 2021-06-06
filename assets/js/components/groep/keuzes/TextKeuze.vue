@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group">
+  <div class="mb-3">
     <label :for="'customCheck' + keuze.naam">{{ keuze.description }}</label>
     <input
       :id="'customCheck' + keuze.naam"

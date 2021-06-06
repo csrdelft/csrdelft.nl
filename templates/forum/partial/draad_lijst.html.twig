@@ -25,7 +25,7 @@
 		 href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}"
 		 {% if app.user and draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}>{{ draad.titel | raw }}</a>
 	{% if app.user and draad.aantalOngelezenPosts > 0 %}
-		<span class="badge">{{ draad.aantalOngelezenPosts }}</span>
+		<span class="badge bg-primary">{{ draad.aantalOngelezenPosts }}</span>
 	{% endif %}
 	{% if deel.forum_id is not empty %}
 		<span class="lichtgrijs">

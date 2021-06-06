@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group">
+  <div class="mb-3">
     <div class="custom-control custom-checkbox">
       <input
         :id="`customCheck${keuze.naam}`"

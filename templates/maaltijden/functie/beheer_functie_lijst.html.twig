@@ -9,7 +9,7 @@
 	<td title="{{ functie.email_bericht }}">{% if functie.email_bericht | length %}{{ icon("email") }}{% endif %}</td>
 	<td>
 		{% if functie.kwalificatie_benodigd %}
-			<div class="float-left"><a
+			<div class="float-start"><a
 					href="{{ url('csrdelft_maalcie_beheerfuncties_kwalificeer', {functie_id: functie.functie_id}) }}"
 					title="Kwalificatie toewijzen" class="btn post popup">{{ icon("vcard_add") }} Kwalificeer</a></div>
 		{% endif %}

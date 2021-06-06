@@ -1,0 +1,13 @@
+<div id="activiteit_aanmeldingen" class="mt-5">
+	<h3>Aanmeldingen</h3>
+
+	{% if deelnemers|length > 0 %}
+		<div class="row">
+			{% for deelnemer in deelnemers %}
+				{% include 'aanmelder/onderdelen/deelnemer.html.twig' %}
+			{% endfor %}
+		</div>
+	{% else %}
+		<p>Nog geen aanmeldingen voor deze activiteit.</p>
+	{% endif %}
+</div>

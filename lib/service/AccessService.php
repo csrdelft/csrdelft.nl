@@ -660,7 +660,7 @@ class AccessService {
 				}
 
 				// wordt er een functie gevraagd?
-				if ($role && $role !== strtoupper($lid->opmerking)) {
+				if ($role && strtoupper($role) !== strtoupper($lid->opmerking)) {
 					return false;
 				}
 				return true;

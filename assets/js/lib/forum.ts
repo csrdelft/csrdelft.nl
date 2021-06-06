@@ -91,7 +91,7 @@ export async function forumBewerken(postId: string): Promise<false> {
 		<form id="forumEditForm" class="ForumFormulier" action="/forum/bewerken/${postId}" method="post">
 			${berichtInput}
 			<div id="editor" class="pm-editor" data-prosemirror-doc="forumBewerkenBericht"></div>
-			<div class="row form-group">
+			<div class="row mb-3">
 				<label class="col-sm-3">Reden van bewerking:</label>
 				<div class="col-sm-9"><input type="text" name="reden" id="forumBewerkReden" class="form-control"/></div>
 			</div>

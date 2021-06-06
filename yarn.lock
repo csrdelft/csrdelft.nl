@@ -140,6 +140,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@popperjs/core@npm:2.6.0":
+  version: 2.6.0
+  resolution: "@popperjs/core@npm:2.6.0"
+  checksum: b05148a11586c3d622973d4968355e694471ae86620eaf28d78360e4e48323123428c963dbc76182777a91837203de4060a0e76603a4b275df3ebcdaaf1e4ded
+  languageName: node
+  linkType: hard
+
+"@popperjs/core@npm:^2.6.0":
+  version: 2.8.3
+  resolution: "@popperjs/core@npm:2.8.3"
+  checksum: 775aa6393a1bf0a7e76c9366f6714de32e6db6e8f863d759a3106c3daaa2026f034e27217c186a44d159d201ab624e70cfecc56ae661772b4e2a29e27eef650a
+  languageName: node
+  linkType: hard
+
 "@remirror/core-constants@npm:^0.7.4":
   version: 0.7.4
   resolution: "@remirror/core-constants@npm:0.7.4"
@@ -327,22 +341,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bootstrap@npm:^4.2.0":
-  version: 4.5.0
-  resolution: "@types/bootstrap@npm:4.5.0"
+"@types/bootstrap@npm:^5.0.0":
+  version: 5.0.13
+  resolution: "@types/bootstrap@npm:5.0.13"
   dependencies:
+    "@popperjs/core": 2.6.0
     "@types/jquery": "*"
-    popper.js: ^1.14.1
-  checksum: 9cb3da3957539c10e8fbaff46814f42ddfbaa2f5377d8786cc16b7fc78f86180d2edc993cfd824622e815365758e5f352902a001f3aec5fff36edcd03ad1523b
+  checksum: d7c94da0651e6fa2b035c46c56f5c17c29b9a557bb6e9657ea2bfece1774db07e29a8d7ed5e23114ca95bb6889d13ed459a617937c24671788001b1fd2fe1914
   languageName: node
   linkType: hard
 
 "@types/chart.js@npm:^2.7.42":
-  version: 2.9.22
-  resolution: "@types/chart.js@npm:2.9.22"
+  version: 2.9.32
+  resolution: "@types/chart.js@npm:2.9.32"
   dependencies:
     moment: ^2.10.2
-  checksum: 48a672221537ea4d35146467fe30564d178a800c9d753a9c843654877fea92bf0737819086384372ee161d97e4b2a9b1ac0a508aa0a67510c54275aadf79dfb4
+  checksum: c7606fc1b399425cd152186d6933cd588d41dd42eca145601cc7f7b238a7f65d6a1117e59c36b3a0783d5b85b29502c83801876f2b59b760a2dd5e17e4875865
   languageName: node
   linkType: hard
 
@@ -1475,13 +1489,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap@npm:>=4.5.0 <5.0.0, bootstrap@npm:^4.3.1":
+"bootstrap@npm:>=4.5.0 <5.0.0":
   version: 4.5.0
   resolution: "bootstrap@npm:4.5.0"
   peerDependencies:
     jquery: 1.9.1 - 3
     popper.js: ^1.16.0
   checksum: 89284a8d1bfcf508588e2eedb652374af5790d2b47d3ca7b192ec67742db99c9652181979a6ab16b91230df1efea1a8ac5a4e6ffd44265a7b5f0583d275227d3
+  languageName: node
+  linkType: hard
+
+"bootstrap@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "bootstrap@npm:5.0.0"
+  peerDependencies:
+    "@popperjs/core": ^2.9.2
+  checksum: bcba4d099d2cbe2c923b6b48f8934f446af452f9a3e6e74fc10d51fb51987960e4335808ab7ca2a7c2a0a5aefbcb7603c4b48bb6d194433371bb6c251b97f57f
   languageName: node
   linkType: hard
 
@@ -1598,17 +1621,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001087, caniuse-lite@npm:^1.0.30001093":
-  version: 1.0.30001094
-  resolution: "caniuse-lite@npm:1.0.30001094"
-  checksum: 7b3ee77fda7b03fd613f39098452eecba004345c511779ed242393c06e45c9540dbb7deb9b21fc7a355ae6d8194e014395630d9a11172749f02f355a71665213
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.30001208":
-  version: 1.0.30001214
-  resolution: "caniuse-lite@npm:1.0.30001214"
-  checksum: 96c09af8989fe03e6aa0cc0130be3392c4a871093f0ae7190cb1185862a63b54de14483561578564d034cf993c315d4939727badee39ed76144e94ae4ab2a0f7
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001087, caniuse-lite@npm:^1.0.30001093, caniuse-lite@npm:^1.0.30001208":
+  version: 1.0.30001227
+  resolution: "caniuse-lite@npm:1.0.30001227"
+  checksum: e95f6f9dafb9ff2c268af1715a6290f81f9b8bb7820df35ef664d00cc065c0253ad2835b852a39a323d91753b475824efac34dd78368da7bb73da9906506513b
   languageName: node
   linkType: hard
 
@@ -1654,12 +1670,12 @@ __metadata:
   linkType: hard
 
 "chart.js@npm:^2.7.3":
-  version: 2.9.3
-  resolution: "chart.js@npm:2.9.3"
+  version: 2.9.4
+  resolution: "chart.js@npm:2.9.4"
   dependencies:
     chartjs-color: ^2.1.0
     moment: ^2.10.2
-  checksum: 8e3f10e003941c1c77a5209cd08ed342a41c7c6a2ed93722b7ea1366c804bb2349d957e066f2abb7a3399d6ebebe83a298a15cbc960bc64846bc127e94f77f27
+  checksum: 4551932943bc5e42d25ae5632d91878fb89e22937095a2742e23c4d0d0bde405bed6be2cb8480694ba599d6dbb9882c8bce6bac1e4667c820eb24c38416380aa
   languageName: node
   linkType: hard
 
@@ -4410,16 +4426,16 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "mini-css-extract-plugin@npm:1.5.0"
+"mini-css-extract-plugin@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "mini-css-extract-plugin@npm:1.6.0"
   dependencies:
     loader-utils: ^2.0.0
     schema-utils: ^3.0.0
     webpack-sources: ^1.1.0
   peerDependencies:
     webpack: ^4.4.0 || ^5.0.0
-  checksum: b666770b3bff39afd066e4b545ad95d53b8d82dd01863c4c22aa6b866d48e44c97f27aa8c5cdfd011f727dbaf60f2a21e69c4d55ab771fc4ac00575f36342060
+  checksum: c9c50bed4ffa0ce0099c26184ed6f5b8675be068252fb2a68b790d8afa58c896e0c36aae0e0601e5036fdc04ecad761e884ce4d27a75c8bd3fb69ff7b4c52f91
   languageName: node
   linkType: hard
 
@@ -5006,7 +5022,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"popper.js@npm:^1.14.1, popper.js@npm:^1.15, popper.js@npm:^1.16.1":
+"popper.js@npm:^1.15, popper.js@npm:^1.16.1":
   version: 1.16.1
   resolution: "popper.js@npm:1.16.1"
   checksum: eb53806fb7680e31c7d1db096f95438a40a7cb869f7ee0e27100c0860f11583a0d322606c6073618e7fe8865f834ec36482901b547256d9a0cf2b22434bca75d
@@ -6032,8 +6048,9 @@ resolve@^1.9.0:
     "@fullcalendar/interaction": ^4.3.0
     "@fullcalendar/list": ^4.3.0
     "@fullcalendar/timegrid": ^4.3.0
+    "@popperjs/core": ^2.6.0
     "@sentry/browser": ^5.21.1
-    "@types/bootstrap": ^4.2.0
+    "@types/bootstrap": ^5.0.0
     "@types/chart.js": ^2.7.42
     "@types/datatables.net": ^1.10.17
     "@types/datatables.net-buttons": ^1.4.2
@@ -6063,7 +6080,7 @@ resolve@^1.9.0:
     "@typescript-eslint/parser": ^4.22.0
     autoprefixer: ^9.1.1
     axios: ^0.21.1
-    bootstrap: ^4.3.1
+    bootstrap: ^5.0.0
     bootstrap-vue: ^2.0.0-rc.11
     chart.js: ^2.7.3
     clippyjs: ^0.0.3
@@ -6108,7 +6125,7 @@ resolve@^1.9.0:
     jqueryui: ^1.11.1
     jszip: ^3.1.5
     lightbox2: ^2.10.0
-    mini-css-extract-plugin: ^1.5.0
+    mini-css-extract-plugin: ^1.6.0
     moment: ^2.24.0
     moment-locales-webpack-plugin: ^1.2.0
     optimize-css-assets-webpack-plugin: ^5.0.1

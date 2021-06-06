@@ -1,4 +1,4 @@
-#cd-main-overlay video {
+.main-bg video {
   position: absolute;
   top: 0;
   left: 0;
@@ -7,14 +7,14 @@
 }
 
 @media (min-aspect-ratio: 4/3) {
-  #cd-main-overlay video {
+  .main-bg video {
     height: 300%;
     top: -100%;
   }
 }
 
 @media (max-aspect-ratio: 4/3) {
-  #cd-main-overlay video {
+  .main-bg video {
     width: 300%;
     left: -100%;
   }

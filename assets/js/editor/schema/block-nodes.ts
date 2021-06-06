@@ -35,7 +35,7 @@ const createGroepBlockSpec = (tagType: string, type: string, attr = 'id'): NodeS
 				el.appendChild(html`
 <div class="bb-groep">
 <div class="groep-samenvatting">
-<div class="float-right"><a class="btn" target="_blank" href="/groepen/${type}/${json.id}/wijzigen"
+<div class="float-end"><a class="btn" target="_blank" href="/groepen/${type}/${json.id}/wijzigen"
 title="Wijzig ${json.naam}"><span
 class="fa fa-edit"></span></a></div>
 <h3>${json.naam}</h3>

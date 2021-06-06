@@ -1,8 +1,8 @@
 <template>
-  <div class="form-group">
+  <div class="mb-3">
     <label class="w-100">{{ keuze.description }}
       <select
-        class="form-control"
+        class="form-select"
         :name="'DropDownKeuze-' + keuze.naam"
         @input="$emit('input', $event.target.value)"
       >

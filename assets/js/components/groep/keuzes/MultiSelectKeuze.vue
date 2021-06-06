@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group">
+  <div class="mb-3">
     <label class="w-100">{{ keuze.description }}</label>
     <div class="btn-group">
       <label

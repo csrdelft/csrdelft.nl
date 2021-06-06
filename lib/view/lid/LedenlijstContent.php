@@ -55,7 +55,7 @@ class LedenlijstContent implements View {
 
 	public function viewSelect($name, $options) {
 		$html = '';
-		$html .= '<select class="form-control" name="' . $name . '" id="f' . $name . '">';
+		$html .= '<select class="form-select" name="' . $name . '" id="f' . $name . '">';
 		foreach ($options as $key => $value) {
 			$html .= '<option value="' . htmlspecialchars($key) . '"';
 			if ($key == $this->lidzoeker->getRawQuery($name)) {
@@ -69,7 +69,7 @@ class LedenlijstContent implements View {
 
 	public function viewVeldselectie() {
 		$html = '';
-		$html .= '<div class="form-group">';
+		$html .= '<div class="mb-3">';
 		$html .= '<label for="veldselectie">Veldselectie: </label>';
 		$html .= '<div class="veldselectie">';
 		$velden = $this->lidzoeker->getSelectableVelden();
@@ -97,23 +97,23 @@ class LedenlijstContent implements View {
 			} else {
 				$url = $requestUri . '?addToGoogleContacts=true';
 			}
-			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-right" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
+			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-end" title="Huidige selectie exporteren naar Google Contacts" onclick="return confirm(\'Weet u zeker dat u deze ' . $this->lidzoeker->count() . ' leden wilt importeren in uw Google-contacts?\')"><img src="/images/google.ico" width="16" height="16" alt="toevoegen aan Google contacts" /></a>';
 			if (strstr($requestUri, '?') !== false) {
 				$url = $requestUri . '&exportVcf=true';
 			} else {
 				$url = $requestUri . '?exportVcf=true';
 			}
-			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-right" title="Huidige selectie exporteren als vcard">' . Icon::getTag('vcard_add') . '</a>';
+			$html .= '<a href="' . htmlspecialchars($url) . '" class="btn float-end" title="Huidige selectie exporteren als vcard">' . Icon::getTag('vcard_add') . '</a>';
 		}
 		$html .= getMelding();
 		$html .= '<h1>' . (LoginService::getProfiel()->isOudlid() ? 'Oud-leden en l' : 'L') . 'edenlijst </h1>';
 		$html .= '<form id="zoekform" method="get">';
 		$html .= '<div class="input-group">';
 		$html .= '<input type="text" class="form-control" name="q" value="' . htmlspecialchars($this->lidzoeker->getQuery()) . '" /> ';
-		$html .= '<div class="input-group-append"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
+		$html .= '<div class="input-group-text"><button class="btn submit">Zoeken</button></div></div><a class="btn" id="toggleAdvanced" href="#geavanceerd">Geavanceerd</a>';
 
 		$html .= '<div id="advanced" class="verborgen">';
-		$html .= '<div class="form-group">';
+		$html .= '<div class="mb-3">';
 		$html .= '<label for="status">Status:</label>';
 		$html .= $this->viewSelect('status', array(
 			'LEDEN' => 'Leden',
@@ -125,7 +125,7 @@ class LedenlijstContent implements View {
 			'ALL' => 'Alles'
 		));
 		$html .= '</div>';
-		$html .= '<div class="form-group">';
+		$html .= '<div class="mb-3">';
 		$html .= '<label for="weergave">Weergave:</label>';
 		$html .= $this->viewSelect('weergave', array(
 			'lijst' => 'Lijst (standaard)',
@@ -134,7 +134,7 @@ class LedenlijstContent implements View {
 		$html .= '</div>';
 
 		//sorteren op:
-		$html .= '<div class="form-group">';
+		$html .= '<div class="mb-3">';
 		$html .= '<label for="sort">Sorteer op:</label>';
 		$html .= $this->viewSelect('sort', $this->lidzoeker->getSortableVelden());
 		$html .= '</div>';

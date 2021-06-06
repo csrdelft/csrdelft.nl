@@ -14,10 +14,6 @@ body, h1, h2, h3, h4, h5 {
   font-family: "Old English Text MT", cursive;
 }
 
-/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
-.cd-primary-nav, .cd-primary-nav ul {
-  background: none;
-}
 
 #zijbalk,
 #forumtabel th,
@@ -36,9 +32,7 @@ body, h1, h2, h3, h4, h5 {
 
 h1,
 a,
-a:hover,
-.cd-primary-nav > li > a:hover,
-.cd-primary-nav > li > a.selected {
+a:hover {
   color: #000;
 }
 

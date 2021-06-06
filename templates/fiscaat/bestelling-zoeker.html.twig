@@ -9,7 +9,7 @@
 		<div class="row">
 			<div class="col-md-3">
 					<label for="commissie">Commissie:</label>
-					<select id="commissie" name="commissie" class="form-control">
+					<select id="commissie" name="commissie" class="form-select">
 						<option value="-1" {% if selectedCommissie == -1 %}selected{% endif %}>Alle</option>
 						{% for val,cie in commissies %}
 							<option value="{{ val }}" {% if val == selectedCommissie %}selected{% endif %}>{{ cie }}</option>
@@ -18,7 +18,7 @@
 			</div>
 			<div class="col-md-3">
 					<label for="categorie">Categorie:</label>
-					<select id="categorie" name="categorie" class="form-control">
+					<select id="categorie" name="categorie" class="form-select">
 						<option value="-1" {% if selectedCategorie == -1 %}selected{% endif %}>Alle</option>
 						{% for val,cat in categorieen %}
 							<option value="{{ val }}" {% if val == selectedCategorie %}selected{% endif %}>{{ cat }}</option>
@@ -27,7 +27,7 @@
 			</div>
 			<div class="col-md-3">
 					<label for="product">Product:</label>
-					<select id="product" name="product" class="form-control">
+					<select id="product" name="product" class="form-select">
 						<option value="-1" {% if selectedProduct == -1 %}selected{% endif %}>Alle</option>
 						{% for val,cat in producten %}
 							<optgroup label="{{ val }}">
@@ -40,30 +40,24 @@
 			</div>
 			<div class="col-md-3">
 					<label for="groeperen">Groeperen:</label>
-					<select id="groeperen" name="groeperen" class="form-control">
+					<select id="groeperen" name="groeperen" class="form-select">
 						<option value="-1" {% if not groeperen %}selected{% endif %}>Nee</option>
 						<option value="1" {% if groeperen %}selected{% endif %}>Op opmerking</option>
 					</select>
 			</div>
 		</div>
 		<div class="row mt-2">
-			<div class="col-md-5">
-				<div class="form-group">
-					<label for="van">Van:</label>
-					<input id="van" name="van" type="date" class="form-control" value="{{ van }}" />
-				</div>
+			<div class="col-md-5 mb-3">
+				<label for="van">Van:</label>
+				<input id="van" name="van" type="date" class="form-control" value="{{ van }}" />
 			</div>
-			<div class="col-md-5">
-				<div class="form-group">
-					<label for="tot">Tot:</label>
-					<input id="tot" name="tot" type="date" class="form-control" value="{{ tot }}" />
-				</div>
+			<div class="col-md-5 mb-3">
+				<label for="tot">Tot:</label>
+				<input id="tot" name="tot" type="date" class="form-control" value="{{ tot }}" />
 			</div>
-			<div class="col-md-2">
-				<div class="form-group">
-					<label>&emsp;</label>
-					<input class="btn btn-primary form-control" type="submit" value="Zoek">
-				</div>
+			<div class="col-md-2 mb-3">
+				<label>&emsp;</label>
+				<input class="btn btn-primary form-control" type="submit" value="Zoek">
 			</div>
 		</div>
 

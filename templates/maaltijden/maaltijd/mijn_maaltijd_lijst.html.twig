@@ -3,7 +3,7 @@
 	<td>
 		{{ maaltijd.datum | datetime_format_long }} {{ maaltijd.tijd | time_format }}
 		{% if maaltijd.magBekijken(app.user.uid) %}
-			<div class="float-right">
+			<div class="float-end">
 				{{ icon("paintcan", null, maaltijd.maaltijdcorvee.corveeFunctie.naam) }}
 			</div>
 		{% endif %}
@@ -12,7 +12,7 @@
 		<div class="titel">{{ maaltijd.titel }}
 			<span title="BB-code: [maaltijd={{ maaltijd.maaltijd_id }}]"
 						class="maaltijd-id"> (#{{ maaltijd.maaltijd_id }})</span>
-			<div class="float-right">
+			<div class="float-end">
 				{% set prijs = maaltijd.prijs | format_bedrag %}
 				{% if aanmelding is defined and aanmelding is not empty and aanmelding.saldoStatus < 0 %}
 					{{ icon("money_delete", null, "U hebt een negatief CiviSaldo!&#013;Maaltijdprijs: " ~ prijs) }}
@@ -30,7 +30,7 @@
 	<td class="text-center">
 		{{ maaltijd.aantalAanmeldingen }} ({{ maaltijd.aanmeld_limiet }})
 		{% if maaltijd.magSluiten(app.user.uid) %}
-			<div class="float-right">
+			<div class="float-end">
 				<a href="{{ url('csrdelft_maalcie_mijnmaaltijden_lijst', {maaltijd_id: maaltijd.maaltijd_id}) }}"
 					 title="Toon maaltijdlijst" class="btn">
 					{{ icon("table") }}
@@ -42,7 +42,7 @@
 		{% if maaltijd.gesloten %}
 			<td class="maaltijd-aangemeld">
 			Ja {% if aanmelding.abonnementRepetitie %}(abo){% endif %}
-			<div class="float-right">
+			<div class="float-end">
 				{{ icon("lock", null, "Maaltijd is gesloten om " ~ (maaltijd.laatst_gesloten | time_format) ~ "") }}
 			</div>
 		{% else %}
@@ -108,7 +108,7 @@
 				{% endif %}
 				Nee
 				{% if maaltijd.gesloten %}
-				<span class="float-right">
+				<span class="float-end">
 				{{ icon("lock", null, "Maaltijd is gesloten om " ~ (maaltijd.laatst_gesloten | time_format) ~ "") }}
 				</span>
 			{% endif %}

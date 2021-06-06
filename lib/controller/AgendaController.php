@@ -430,6 +430,10 @@ class AgendaController extends AbstractController {
 		}
 		$item = $this->getAgendaItemByUuid($uuid);
 
+		if (!$item) {
+			throw $this->createNotFoundException();
+		}
+
 		return $this->render('agenda/details.html.twig', [
 			'item' => $item,
 			'verborgen' => $this->agendaVerbergenRepository->isVerborgen($item),

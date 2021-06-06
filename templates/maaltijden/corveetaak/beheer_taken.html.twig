@@ -51,7 +51,7 @@
 	<a href="/corvee/beheer/herinneren" title="Verstuur herinneringen" class="btn">@icon("clock") Herinneringen
 	versturen</a>
 		#}
-		<div class="float-right">
+		<div class="float-end">
 			{% if maaltijd is none or not maaltijd.verwijderd %}
 				<a class="btn" onclick="$(this).hide(); window.maalcie.takenShowOld();">{{ icon("eye") }} Toon verleden</a>
 				<a href="{{ url('csrdelft_maalcie_beheertaken_prullenbak') }}" class="btn">{{ icon("bin_closed") }} Open

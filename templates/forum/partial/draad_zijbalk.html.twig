@@ -7,7 +7,7 @@
 		{% endif %}
 
 		{% if mag('P_FORUM_MOD') and aantalWacht > 0 %}
-			&nbsp;<a href="{{ url('csrdelft_forum_wacht') }}" class="badge"
+			&nbsp;<a href="{{ url('csrdelft_forum_wacht') }}" class="badge bg-primary text-white"
 							 title="{{ aantalWacht }} forumbericht{{ (aantalWacht == 1 ? '' : 'en') }} wacht{{ (aantalWacht == 1 ? '' : 'en') }} op goedkeuring">{{ aantalWacht }}</a>
 		{% endif %}
 	</div>

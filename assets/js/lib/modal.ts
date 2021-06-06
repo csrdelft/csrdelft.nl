@@ -1,10 +1,12 @@
 import $ from 'jquery';
+import {Modal} from "bootstrap";
 
 export function modalOpen(htmlString = ''): boolean {
-	const modal = $('#modal');
+	const modalEl = document.getElementById("modal");
+	const modal = Modal.getInstance(modalEl) ?? new Modal(modalEl);
 	const modalBackdrop = $('.modal-backdrop');
 
-	if (modal.html() === '' && htmlString === '') {
+	if (modalEl.innerHTML === '' && htmlString === '') {
 		return false;
 	}
 
@@ -13,17 +15,21 @@ export function modalOpen(htmlString = ''): boolean {
 	}
 
 	if (htmlString !== '') {
-		modal.replaceWith(htmlString);
-		modal.find('input:visible:first').trigger('focus');
+		modalEl.replaceWith(htmlString);
+		Array.from(modalEl.querySelectorAll('input'))
+			.find(el => window.getComputedStyle(el).display != 'none')?.dispatchEvent(new FocusEvent('focus'));
 	}
 
-	modal.modal('show');
-	$(document.body).trigger('modalOpen');
+	modal.show()
+	document.dispatchEvent(new Event('modalOpen'));
 
 	return true;
 }
 
 export function modalClose(): void {
-	$('#modal').modal('hide');
-	$(document.body).trigger('modalClose');
+	const modal = Modal.getInstance(document.getElementById("modal"));
+	if (modal) {
+		modal.hide();
+	}
+	document.dispatchEvent(new Event('modalClose'));
 }

@@ -1,40 +1,26 @@
 # Deze configuratie wordt niet automatisch ingeladen, maar door Kernel als aan de voorwaarden voor laden voldaan wordt.
-
 doctrine:
   orm:
     second_level_cache:
       region_cache_driver:
-        type: service
-        id: stek.second_level_cache.provider
+        type: pool
+        pool: doctrine.second_level_cache_pool
       enabled: true
       region_lifetime: 86400
 
 framework:
   cache:
-    app: cache.adapter.doctrine
-    default_doctrine_provider: stek.cache.provider
+    app: cache.adapter.memcached
+    default_memcached_provider: "%env(MEMCACHED_URL)%"
+    pools:
+      doctrine.second_level_cache_pool:
+        name: doctrine.second_level_cache_pool
+        public: true
+        adapter: cache.app
+        default_lifetime: 86400
 
 services:
-  Memcache:
-    alias: stek.cache.memcache
-
-  stek.cache.memcache:
-    public: true
-    class: Memcache
-    calls:
-      - [connect, ["%env(CACHE_HOST)%", "%env(CACHE_PORT)%"]]
-
-  stek.second_level_cache.provider:
-    class: CsrDelft\common\cache\MemcacheCache
-    calls:
-      - [setMemcache, ["@stek.cache.memcache"]]
-
-  stek.cache.provider:
-    class: CsrDelft\common\cache\MemcacheCache
-    calls:
-      - [setMemcache, ["@stek.cache.memcache"]]
-
   CsrDelft\command\FlushMemcacheCommand:
     tags: [ console.command ]
-    calls:
-      - [setMemcache, ["@stek.cache.memcache"]]
+    arguments:
+      - '@cache.app'
