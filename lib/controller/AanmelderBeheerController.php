@@ -110,7 +110,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @Route("/reeks/bewerken", methods={"POST"})
 	 * @Auth(P_ADMIN)
 	 */
-	public function reeksBewerken(Request $request): Response
+	public function reeksBewerken(Request $request)
 	{
 		$selection = $this->getDataTableSelection();
 
