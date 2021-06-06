@@ -108,7 +108,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @param Request $request
 	 * @return GenericDataTableResponse|Response
 	 * @Route("/reeks/bewerken", methods={"POST"})
-	 * @Auth(P_ADMIN)
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function reeksBewerken(Request $request)
 	{
@@ -178,7 +178,7 @@ class AanmelderBeheerController extends AbstractController
 	 * @param Request $request
 	 * @return GenericDataTableResponse|Response
 	 * @Route("/activiteiten/bewerken", methods={"POST"})
-	 * @Auth(P_ADMIN)
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function activiteitBewerken(Request $request)
 	{
