@@ -1,121 +1,81 @@
-$ongelezen-lijn: #c52d30;
+$lustrum-kleur-donker-rood: #3e0d1c;
+$lustrum-kleur-rood: #8b1437;
+$lustrum-kleur-licht-rood: #a61252;
+$lustrum-kleur-goud: #c09109;
+$lustrum-kleur-licht-goud: #f1c802;
 
-@import "../base";
-/* Lustrum 2016*/
-/** licht blauw: #d7e3e7 */
-/** normaal blauw: #20648f */
-/** donker blauw: #151b29 */
-/** rode letters: #c52d30 */
 
-/*Achtergrond kleur zijbalk, forum headers, navigatie menu*/
+/* OWee 2021 */
+$primair-achtergrond: #8b1437;
+$zijbalk-achtergrond: #3e0d1c;
+$secundaire-accenten-1: #3e0d1c;
+$secundaire-accenten-2: #c09109;
 
-#zijbalk,
-#forumtabel th,
-.cd-primary-nav ul {
-  background-color: #20648f !important;
+$primary: $secundaire-accenten-1;
+$secondary: $secundaire-accenten-2;
+
+//$body-bg: $primair-achtergrond;
+//$body-color: #3e0d1c;
+//$footer-background: $primair-achtergrond;
+
+
+@font-face {
+	font-family: 'Orpheus Pro';
+	font-style: normal;
+	font-weight: normal;
+	src: url('../../fonts/lustrum12/OrpheusPro-Bold.otf');
 }
 
-/* Lijntje tussen ongelezen en gelezen berichten */
+$font-family-base: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+$headings-font-family: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 
-#forumtabel tr.ongelezenvanaf td {
-  background-color: #c52d30 !important;
+@import '../base';
+
+//body {
+//	//background-image: url('../../images/background.png') !important;
+//}
+
+//main {
+//	//background-image: url('../../images/background.png') !important;
+//}
+
+#menu {
+	background: $lustrum-kleur-donker-rood;
+	border-bottom-color: $lustrum-kleur-goud;
+	a {
+		color: $lustrum-kleur-goud;
+	}
 }
-
-/*Koppen in rood*/
-
-h1,
-a,
-a:hover,
-.cd-primary-nav > li > a:hover,
-.cd-primary-nav > li > a.selected {
-  color: #c52d30;
-}
-
-/*NAVIGATIE MENU*/
-
-/*Zorg voor rode borders*/
-
-#zijbalk .blok .zijbalk-kopje {
-	border: 0 solid #c52d30;
-	border-bottom-width: 2px;
-	margin-right: 40px;
-  background-image: none;
-}
-
-/* letters moeten wit */
 
 #zijbalk .blok .zijbalk-kopje a {
-  color: #ffffff;
+		font-family: $headings-font-family;
+		color: $lustrum-kleur-licht-goud;
+		text-transform: uppercase;
 }
-
-/*Veel tekst van de zijbalk in het wit*/
-
-#zijbalk .ishetal .ja,
-#zijbalk .ishetal .nee,
-.staatrood,
-#zijbalk .blok .item a,
-#zijbalk .ishetal,
-#zijbalk .blok .item {
-  color: #ffffff;
-}
-
-/*Andere koppen ook in het wit*/
-
-.cd-primary-nav .cd-secondary-nav a,
-.cd-primary-nav .cd-secondary-nav > li > a:hover,
-.cd-primary-nav .cd-secondary-nav > li > a {
-  color: #ffffff;
-}
-
-/*Hovering over navigatiemenuknop zorgt voor onderstreeping*/
-
-.cd-primary-nav .cd-secondary-nav a:hover {
-  text-decoration: underline !important;
-  color: #ffffff;
-}
-
-/*Streepje onder naam*/
-
-.cd-primary-nav > li > a:hover,
-.cd-primary-nav > li > a.selected {
-  box-shadow: inset 0 -2px 0 #ffffff;
-}
-
-/*Zijbalk grens van het scherm in donkerblauw*/
 
 #zijbalk {
-  border-color: #151b29;
+	background-color: $lustrum-kleur-donker-rood;
+
+	.blok .item {
+		color: $lustrum-kleur-goud;
+
+		a {
+			font-family: $headings-font-family;
+			color: $lustrum-kleur-goud;
+		}
+	}
 }
 
-/*Logo*/
-
-#zijbalk .cd-beeldmerk {
-  background-image: url("../../images/onontdekt_beeldmerk.png");
+.bb-block {
+	box-shadow: $lustrum-kleur-goud;
 }
 
-/*KNOPPEN*/
-/*Knoppen in blauw gradient*/
-
-.btn,
-input[type=submit],
-input[type=button],
-.progress-bar-info,
-.btn:focus,
-input[type=submit]:focus,
-input[type=button]:focus {
-  background-image: linear-gradient(to bottom, #151b29, #2d7eb2);
-}
-
-/*Voor een mouse hover wordt de gradient omgedraaid*/
-
-.btn:hover,
-input[type=submit]:hover,
-input[type=button]:hover {
-  background-image: linear-gradient(to bottom, #2d7eb2, #151b29);
-}
-
-/*Actieve knoppen in rood gradient -> zo ontstaat verschil tussen hover en active*/
-
-.btn.active {
-  background-image: linear-gradient(to bottom, #c52d30, #f0262a);
+#zijbalk:before {
+	content: '';
+	display: block;
+	height: 156px;
+	background: url('../../images/owee2021.svg') no-repeat center center;
+	background-size: contain;
+	margin: 20px 0;
+	clear: left;
 }
