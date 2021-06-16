@@ -3,22 +3,7 @@ $lustrum-kleur-rood: #8b1437;
 $lustrum-kleur-licht-rood: #a61252;
 $lustrum-kleur-goud: #c09109;
 $lustrum-kleur-licht-goud: #f1c802;
-
 $lustrum-kleur-wit: #eeeeee;
-
-/* OWee 2021 */
-$primair-achtergrond: #8b1437;
-$zijbalk-achtergrond: #3e0d1c;
-$secundaire-accenten-1: #3e0d1c;
-$secundaire-accenten-2: #c09109;
-
-$primary: $secundaire-accenten-1;
-$secondary: $secundaire-accenten-2;
-
-//$body-bg: $primair-achtergrond;
-//$body-color: #3e0d1c;
-//$footer-background: $primair-achtergrond;
-
 
 @font-face {
 	font-family: 'Orpheus Pro';
@@ -30,6 +15,10 @@ $secondary: $secundaire-accenten-2;
 $headings-font-family: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 
 @import '../base';
+
+body {
+	background-color: $lustrum-kleur-rood;
+}
 
 #menu {
 	background: $lustrum-kleur-donker-rood;
@@ -75,7 +64,7 @@ $headings-font-family: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-
 		color: $lustrum-kleur-rood;
 	}
 	.ja {
-		color: $lustrum-kleur-wit;
+		color: $lustrum-kleur-goud;
 	}
 	color: $lustrum-kleur-goud;
 }
