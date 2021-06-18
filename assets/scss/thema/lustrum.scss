@@ -1,7 +1,7 @@
 $lustrum-kleur-donker-rood: #3e0d1c;
 $lustrum-kleur-rood: #8b1437;
 $lustrum-kleur-licht-rood: #a61252;
-$lustrum-kleur-goud: #c09109;
+$lustrum-kleur-goud: #deaf27; // #c09109;
 $lustrum-kleur-licht-goud: #f1c802;
 $lustrum-kleur-wit: #eeeeee;
 
@@ -23,8 +23,13 @@ body {
 #menu {
 	background: $lustrum-kleur-donker-rood;
 	border-bottom-color: $lustrum-kleur-goud;
-	a {
+	h2 {
 		color: $lustrum-kleur-goud;
+	}
+	#cd-primary-nav {
+		.nav-link {
+			color: $lustrum-kleur-goud;
+		}
 	}
 }
 
