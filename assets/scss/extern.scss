@@ -50,19 +50,12 @@ body {
 		}
 	}
 }
-@font-face {
-	font-family: 'Tw Cen MT';
-	font-style: normal;
-	font-weight: normal;
-	src: url('../fonts/owee2021/TCM.woff') format('woff');
-}
 
 /* Type */
 
 body, input, select, textarea {
 	color: #ffffff;
-	font-family: 'Tw Cen MT', 'Source Sans Pro', Helvetica, Arial, sans-serif;
-	//font-family: "Source Sans Pro", Helvetica, sans-serif;
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
 	font-size: 16.5pt;
 	font-weight: 300;
 	line-height: 1.65;
@@ -71,7 +64,6 @@ body, input, select, textarea {
 #wrapper {
 	overflow: hidden;
 }
-
 
 a {
 	transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
