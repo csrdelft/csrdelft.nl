@@ -192,7 +192,8 @@
               <input
                 :id="'bon' + bonIndex + '_datum'"
                 v-model="bon.datum"
-                v-mask="'dd-mm-yyyy'"
+                v-input-mask
+                data-inputmask="'alias': 'datetime', 'inputFormat': 'dd-mm-yyyy'"
                 type="text"
               >
             </div>
@@ -218,7 +219,8 @@
                 <div class="field">
                   <input
                     v-model="regel.bedrag"
-                    v-mask="{'alias': 'numeric', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false, 'placeholder': '0'}"
+                    v-input-mask
+                    data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false, 'placeholder': '0'"
                     type="text"
                   >
                 </div>
