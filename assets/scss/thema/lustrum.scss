@@ -53,16 +53,6 @@ body {
 	box-shadow: $lustrum-kleur-goud;
 }
 
-.ishetal:after {
-	content: '';
-	display: block;
-	height: 156px;
-	background: url('../../images/lustrum12/Lustrum12.png') no-repeat center center;
-	background-size: contain;
-	margin: 20px 0;
-	clear: left;
-}
-
 .ishetal {
 	.nee {
 		color: $lustrum-kleur-rood;
@@ -73,9 +63,10 @@ body {
 	color: $lustrum-kleur-goud;
 }
 
-.lustrum_button {
+.lustrum12_button {
 	color: $lustrum-kleur-goud;
 }
-.lustrum_button:hover {
+
+.lustrum12_button:hover {
 	color: $lustrum-kleur-wit;
 }

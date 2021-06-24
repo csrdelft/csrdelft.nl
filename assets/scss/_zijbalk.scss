@@ -16,7 +16,16 @@
 	}
 }
 
-.lustrum_button {
+.lustrum12:before {
+	content: '';
+	display: block;
+	height: 80px;
+	background: url('/images/lustrum12/zandloper.png') no-repeat center center;
+	background-size: contain;
+	clear: left;
+}
+
+.lustrum12_button {
 	background-color: #6e1321;
 	color: #eeeeee;
 	font-weight: bold;
@@ -24,7 +33,8 @@
 	align-items: center;
 	width: 100%;
 }
-.lustrum_button:hover {
+
+.lustrum12_button:hover {
 	color: #ebb803;
 }
 
