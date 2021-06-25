@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\LogicException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
@@ -48,8 +49,11 @@ class PrivateTokenAuthenticator extends AbstractAuthenticator implements Request
 			throw new AuthenticationException("Geen geldige private_token");
 		}
 
-		return new SelfValidatingPassport($user);
+		$badge = new UserBadge($user->getUsername(), function() use ($user) {
+			return $user;
+		});
 
+		return new SelfValidatingPassport($badge);
 	}
 
 	public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface {
