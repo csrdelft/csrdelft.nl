@@ -2,20 +2,19 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
-$primary: #7A4593;
-$secondary: #92C7ED;
-$tertiary: #713E89;
-$accent: #FBE47E;
+$primary: #b2d4f0;
+$secondary: #002e54;
+$tertiary: #486b87;
+$accent: #f6b585;
 $youtubeRed: #ff0000;
 $whatsappGreen: #25D366;
-$headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
+$headingFont: 'Tw Cen MT', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 
 @font-face {
-	font-family: 'adam.cg_proregular';
-	src: url('../fonts/owee/adam.cg_pro-webfont.woff2') format('woff2'),
-	url('../fonts/owee/adam.cg_pro-webfont.woff') format('woff');
-	font-weight: normal;
+	font-family: 'Tw Cen MT';
 	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/owee2021/TCM.woff') format('woff');
 }
 
 @mixin triangle($kleur, $top, $left) {
@@ -107,7 +106,7 @@ body {
 	}
 
 	h1, h2 {
-		color: $primary;
+		color: $secondary;
 		font-size: 1.5rem;
 		text-transform: uppercase;
 		font-family: $headingFont;
@@ -137,7 +136,7 @@ body {
 	.cta {
 		&.primary {
 			background: $primary;
-			color: white;
+			color: $secondary;
 
 			&:hover {
 				background: darken($primary, 10%);
@@ -173,7 +172,7 @@ body {
 	}
 
 	.hero {
-		background: url('../images/owee2020-achtergrond.jpg') no-repeat center bottom;
+		background: url('../images/owee2021bg.png') no-repeat center bottom;
 		background-size: cover;
 
 		img {
@@ -207,7 +206,6 @@ body {
 				align-items: center;
 				justify-content: center;
 
-				color: white;
 				font-size: 1.7rem;
 				text-transform: uppercase;
 				font-family: $headingFont;
@@ -340,7 +338,6 @@ body {
 			left: 2rem;
 			right: 2rem;
 			height: 240px;
-			//background: url('../images/owee2020-persoon.png') no-repeat bottom center;
 			background-size: contain;
 
 			@include media-breakpoint-down(md) {
@@ -411,7 +408,7 @@ body {
 
 		.interesseformulier {
 			padding: 2rem;
-			color: white;
+			color: $secondary;
 
 			@include media-breakpoint-down(xs) {
 				padding: 1.5rem 1rem;
@@ -419,10 +416,10 @@ body {
 
 			p {
 				font-size: 1.1rem;
-				color: white;
+				color: $tertiary;
 
 				a {
-					color: white;
+					color: $primary;
 				}
 			}
 
