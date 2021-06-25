@@ -2,7 +2,8 @@
 
 namespace CsrDelft\view\fotoalbum;
 
-use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\entity\fotoalbum\Foto;
+use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
  * @package CsrDelft\view\fotoalbum
  */
 class FotoBBView implements ToResponse, View {
-
 	private $groot;
 	private $responsive;
 	private $model;
@@ -27,8 +27,8 @@ class FotoBBView implements ToResponse, View {
 		$this->responsive = $responsive;
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getHtml() {
@@ -36,7 +36,7 @@ class FotoBBView implements ToResponse, View {
 		if ($this->groot) {
 			$html .= '?fullscreen';
 		}
-		$html .= '#' . $this->model->getResizedUrl() . '" class="';
+		$html .= '#' . $this->model->getFullUrl() . '" class="';
 		if ($this->responsive) {
 			$html .= 'responsive';
 		}

@@ -1,0 +1,19 @@
+{% if uid is empty %}
+	<td id="voorkeur-cell-{{ voorkeur.van_uid }}-{{ crv_repetitie_id }}" class="voorkeur-uitgeschakeld">
+		<a
+			href="{{ url('csrdelft_maalcie_beheervoorkeuren_inschakelen', {crv_repetitie_id: crv_repetitie_id, uid: voorkeur.van_uid}) }}"
+			class="btn post voorkeur-uitgeschakeld">
+			<input aria-label="Voorkeur inschakelen" type="checkbox" id="box-{{ voorkeur.van_uid }}-{{ crv_repetitie_id }}"
+						 name="vrk-{{ crv_repetitie_id }}"/>
+		</a>
+	</td>
+{% else %}
+	<td id="voorkeur-cell-{{ voorkeur.van_uid }}-{{ crv_repetitie_id }}" class="voorkeur-ingeschakeld">
+		<a
+			href="{{ url('csrdelft_maalcie_beheervoorkeuren_uitschakelen', {crv_repetitie_id: crv_repetitie_id, uid: voorkeur.van_uid}) }}"
+			class="btn post voorkeur-ingeschakeld">
+			<input aria-label="Voorkeur uitschakelen" type="checkbox" id="box-{{ voorkeur.van_uid }}-{{ crv_repetitie_id }}"
+						 name="vrk-{{ crv_repetitie_id }}" checked="checked"/>
+		</a>
+	</td>
+{% endif %}

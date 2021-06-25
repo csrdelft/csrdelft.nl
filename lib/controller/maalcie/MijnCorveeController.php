@@ -2,43 +2,57 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\model\maalcie\CorveePuntenModel;
-use CsrDelft\model\maalcie\CorveeTakenModel;
-use CsrDelft\model\maalcie\CorveeVrijstellingenModel;
-use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\repository\corvee\CorveeVrijstellingenRepository;
+use CsrDelft\service\corvee\CorveePuntenService;
+use CsrDelft\service\security\LoginService;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MijnCorveeController {
+class MijnCorveeController extends AbstractController {
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 	/**
-	 * @var FunctiesModel
+	 * @var CorveeFunctiesRepository
 	 */
-	private $functiesModel;
+	private $corveeFunctiesRepository;
 	/**
-	 * @var CorveeVrijstellingenModel
+	 * @var CorveeVrijstellingenRepository
 	 */
-	private $corveeVrijstellingenModel;
+	private $corveeVrijstellingenRepository;
+	/**
+	 * @var CorveePuntenService
+	 */
+	private $corveePuntenService;
 
-	public function __construct(CorveeTakenModel $corveeTakenModel, CorveeVrijstellingenModel $corveeVrijstellingenModel, FunctiesModel $functiesModel) {
-		$this->corveeVrijstellingenModel = $corveeVrijstellingenModel;
-		$this->functiesModel = $functiesModel;
-		$this->corveeTakenModel = $corveeTakenModel;
+	public function __construct(CorveeTakenRepository $corveeTakenRepository, CorveeVrijstellingenRepository $corveeVrijstellingenRepository, CorveeFunctiesRepository $corveeFunctiesRepository, CorveePuntenService $corveePuntenService) {
+		$this->corveeVrijstellingenRepository = $corveeVrijstellingenRepository;
+		$this->corveeFunctiesRepository = $corveeFunctiesRepository;
+		$this->corveeTakenRepository = $corveeTakenRepository;
+		$this->corveePuntenService = $corveePuntenService;
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/corvee", methods={"GET"})
+	 * @Auth(P_CORVEE_IK)
+	 */
 	public function mijn() {
-		$taken = $this->corveeTakenModel->getKomendeTakenVoorLid(LoginModel::getUid());
-		$rooster = $this->corveeTakenModel->getRoosterMatrix($taken->fetchAll());
-		$functies = $this->functiesModel->getAlleFuncties(); // grouped by functie_id
-		$punten = CorveePuntenModel::loadPuntenVoorLid(LoginModel::getProfiel(), $functies);
-		$vrijstelling = $this->corveeVrijstellingenModel->getVrijstelling(LoginModel::getUid());
-		return view('maaltijden.corveetaak.mijn', [
+		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($this->getProfiel());
+		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
+		$functies = $this->corveeFunctiesRepository->getAlleFuncties(); // grouped by functie_id
+		$punten = $this->corveePuntenService->loadPuntenVoorLid($this->getProfiel(), $functies);
+		$vrijstelling = $this->corveeVrijstellingenRepository->getVrijstelling($this->getUid());
+		return $this->render('maaltijden/corveetaak/mijn.html.twig', [
 			'rooster' => $rooster,
 			'functies' => $functies,
 			'punten' => $punten,
@@ -46,16 +60,26 @@ class MijnCorveeController {
 		]);
 	}
 
-	public function rooster($toonverleden = false) {
-		if ($toonverleden === 'verleden' && LoginModel::mag(P_CORVEE_MOD)) {
-			$taken = $this->corveeTakenModel->getVerledenTaken();
-			$toonverleden = false; // hide button
-		} else {
-			$taken = $this->corveeTakenModel->getKomendeTaken();
-			$toonverleden = LoginModel::mag(P_CORVEE_MOD);
-		}
-		$rooster = $this->corveeTakenModel->getRoosterMatrix($taken->fetchAll());
-		return view('maaltijden.corveetaak.corvee_rooster', ['rooster' => $rooster, 'toonverleden' => $toonverleden]);
+	/**
+	 * @return Response
+	 * @Route("/corvee/rooster", methods={"GET"})
+	 * @Auth(P_CORVEE_IK)
+	 */
+	public function rooster() {
+		$taken = $this->corveeTakenRepository->getKomendeTaken();
+		$toonverleden = LoginService::mag(P_CORVEE_MOD);
+		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
+		return $this->render('maaltijden/corveetaak/corvee_rooster.html.twig', ['rooster' => $rooster, 'toonverleden' => $toonverleden]);
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/corvee/rooster/verleden", methods={"GET"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
+	public function roosterVerleden() {
+		$taken = $this->corveeTakenRepository->getVerledenTaken();
+		$rooster = $this->corveeTakenRepository->getRoosterMatrix($taken);
+		return $this->render('maaltijden/corveetaak/corvee_rooster.html.twig', ['rooster' => $rooster, 'toonverleden' => false]);
+	}
 }

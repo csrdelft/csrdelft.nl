@@ -2,12 +2,10 @@
 
 namespace CsrDelft\entity\agenda;
 
-use CsrDelft\model\entity\agenda\Agendeerbaar;
-use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\LoginModel;
-use DateTime;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
+use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use function common\short_class;
 
 /**
  * AgendaItem.class.php
@@ -18,7 +16,10 @@ use function common\short_class;
  * AgendaItems worden door de agenda getoont samen met andere Agendeerbare dingen.
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\agenda\AgendaRepository")
- * @ORM\Table("agenda")
+ * @ORM\Table("agenda", indexes={
+ *   @ORM\Index(name="begin_moment", columns={"begin_moment"}),
+ *   @ORM\Index(name="eind_moment", columns={"eind_moment"})
+ * })
  */
 class AgendaItem implements Agendeerbaar {
 
@@ -45,13 +46,13 @@ class AgendaItem implements Agendeerbaar {
 	/**
 	 * DateTime begin
 	 * @ORM\Column(type="datetime")
-	 * @var DateTime
+	 * @var DateTimeImmutable
 	 */
 	public $begin_moment;
 	/**
 	 * DateTime eind
 	 * @ORM\Column(type="datetime")
-	 * @var DateTime
+	 * @var DateTimeImmutable
 	 */
 	public $eind_moment;
 	/**
@@ -107,17 +108,17 @@ class AgendaItem implements Agendeerbaar {
 	}
 
 	public function magBekijken($ical = false) {
-		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
-		return LoginModel::mag($this->rechten_bekijken, $auth);
+		$auth = ($ical ? AuthenticationMethod::getEnumValues() : null);
+		return LoginService::mag($this->rechten_bekijken, $auth);
 	}
 
 	public function magBeheren($ical = false) {
-		$auth = ($ical ? AuthenticationMethod::getTypeOptions() : null);
-		if (LoginModel::mag(P_AGENDA_MOD, $auth)) {
+		$auth = ($ical ? AuthenticationMethod::getEnumValues() : null);
+		if (LoginService::mag(P_AGENDA_MOD, $auth)) {
 			return true;
 		}
-		$verticale = 'verticale:' . LoginModel::getProfiel()->verticale;
-		if ($this->rechten_bekijken === $verticale AND LoginModel::getProfiel()->verticaleleider) {
+		$verticale = 'verticale:' . LoginService::getProfiel()->verticale;
+		if ($this->rechten_bekijken === $verticale AND LoginService::getProfiel()->verticaleleider) {
 			return true;
 		}
 		return false;

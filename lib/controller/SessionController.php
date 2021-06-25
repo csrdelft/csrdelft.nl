@@ -2,129 +2,183 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\security\RememberLogin;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\security\RememberLoginModel;
-use CsrDelft\view\datatable\RemoveRowsResponse;
-use CsrDelft\view\JsonResponse;
-use CsrDelft\view\login\LoginSessionsData;
-use CsrDelft\view\login\RememberLoginData;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\entity\security\RememberLogin;
+use CsrDelft\repository\security\RememberLoginRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\login\RememberLoginForm;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices;
+use Trikoder\Bundle\OAuth2Bundle\Model\AccessToken;
+use Trikoder\Bundle\OAuth2Bundle\Model\RefreshToken;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 28/07/2019
  */
-class SessionController {
+class SessionController extends AbstractController
+{
 	/**
-	 * @var LoginModel
+	 * @var RememberLoginRepository
 	 */
-	private $loginModel;
+	private $rememberLoginRepository;
+
+	public function __construct(RememberLoginRepository $rememberLoginRepository)
+	{
+		$this->rememberLoginRepository = $rememberLoginRepository;
+	}
+
 	/**
-	 * @var RememberLoginModel
+	 * @return GenericDataTableResponse
+	 * @Route("/session/rememberdata", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	private $rememberLoginModel;
-
-	public function __construct(LoginModel $loginModel, RememberLoginModel $rememberLoginModel) {
-		$this->loginModel = $loginModel;
-		$this->rememberLoginModel = $rememberLoginModel;
+	public function rememberdata()
+	{
+		return $this->tableData($this->rememberLoginRepository->findBy(['uid' => $this->getUid()]));
 	}
 
-	public function sessionsdata() {
-		return new LoginSessionsData($this->loginModel->find('uid = ?', array(LoginModel::getUid())));
-	}
+	/**
+	 * @param Request $request
+	 * @param PersistentTokenBasedRememberMeServices $rememberMeServices
+	 * @return RememberLoginForm|Response
+	 * @Route("/session/remember", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function remember(Request $request, PersistentTokenBasedRememberMeServices $rememberMeServices)
+	{
+		$selection = $this->getDataTableSelection();
 
-	public function endsession($session_hash = null) {
-		$session = false;
-		if ($session_hash) {
-			$session = $this->loginModel->find('session_hash = ? AND uid = ?', array($session_hash, LoginModel::getUid()), null, null, 1)->fetch();
-		}
-		if (!$session) {
-			throw new CsrToegangException();
-		}
-		$deleted = $this->loginModel->delete($session);
-		return new RemoveRowsResponse(array($session), $deleted === 1 ? 200 : 404);
-	}
+		if (empty($selection)) {
+			$response = new Response();
 
-	public function lockip() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (!$selection) {
-			throw new CsrToegangException();
-		}
-		$response = array();
-		foreach ($selection as $UUID) {
-			/** @var RememberLogin $remember */
-			$remember = $this->rememberLoginModel->retrieveByUUID($UUID);
-			if (!$remember || $remember->uid !== LoginModel::getUid()) {
-				throw new CsrToegangException();
-			}
-			$remember->lock_ip = !$remember->lock_ip;
-			$this->rememberLoginModel->update($remember);
-			$response[] = $remember;
-		}
-		return new RememberLoginData($response);
-	}
+			$request->request->set('_remember_me', true);
+			$rememberMeServices->loginSuccess($request, $response, $this->get('security.token_storage')->getToken());
 
-	public function rememberdata() {
-		return new RememberLoginData($this->rememberLoginModel->find('uid = ?', array(LoginModel::getUid())));
-	}
-
-	public function remember() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		if (isset($selection[0])) {
-			$remember = $this->rememberLoginModel->retrieveByUUID($selection[0]);
-		} else {
-			$remember = $this->rememberLoginModel->nieuw();
+			return $response;
 		}
-		if (!$remember || $remember->uid !== LoginModel::getUid()) {
-			throw new CsrToegangException();
+
+		$remember = $this->rememberLoginRepository->retrieveByUUID($selection[0]);
+
+		if (!$remember || $remember->uid !== $this->getUid()) {
+			throw $this->createAccessDeniedException();
 		}
 		$form = new RememberLoginForm($remember);
 		if ($form->validate()) {
-			if ($remember->id) {
-				$this->rememberLoginModel->update($remember);
-			} else {
-				$this->rememberLoginModel->rememberLogin($remember);
-			}
 			if (isset($_POST['DataTableId'])) {
-				return new RememberLoginData(array($remember));
+				$response = $this->tableData([$remember]);
 			} else if (!empty($_POST['redirect'])) {
-				return new JsonResponse($_POST['redirect']);
+				$response = new JsonResponse($_POST['redirect']);
+			} else {
+				$response = new JsonResponse($this->generateUrl('default'));
 			}
-			else {
-				return new JsonResponse(CSR_ROOT);
-			}
+
+			$this->getDoctrine()->getManager()->persist($remember);
+			$this->getDoctrine()->getManager()->flush();
+
+			return $response;
 		} else {
 			return $form;
 		}
 	}
 
-	public function forgetAll() {
-		$remembers = $this->rememberLoginModel->find('uid = ?', [LoginModel::getUid()])->fetchAll();
+	/**
+	 * @return GenericDataTableResponse
+	 * @Route("/session/forget-all", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function forgetAll()
+	{
+		$remembers = $this->rememberLoginRepository->findBy(['uid' => $this->getUid()]);
 
+		$response = [];
+		$manager = $this->getDoctrine()->getManager();
 		foreach ($remembers as $remember) {
-			$this->rememberLoginModel->delete($remember);
+			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);
+			$manager->remove($remember);
 		}
+		$manager->flush();
 
-		return new RemoveRowsResponse($remembers);
+		return $this->tableData($response);
 	}
 
-	public function forget() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+	/**
+	 * @return GenericDataTableResponse
+	 * @Route("/session/forget", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function forget()
+	{
+		$selection = $this->getDataTableSelection();
 		if (!$selection) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
-		$response = array();
+		$response = [];
+		$manager = $this->getDoctrine()->getManager();
 		foreach ($selection as $UUID) {
 			/** @var RememberLogin $remember */
-			$remember = $this->rememberLoginModel->retrieveByUUID($UUID);
-			if (!$remember || $remember->uid !== LoginModel::getUid()) {
-				throw new CsrToegangException();
+			$remember = $this->rememberLoginRepository->retrieveByUUID($UUID);
+			if (!$remember || $remember->uid !== $this->getUid()) {
+				throw $this->createAccessDeniedException();
 			}
-			$this->rememberLoginModel->delete($remember);
-			$response[] = $remember;
+			$response[] = new RemoveDataTableEntry($remember->id, RememberLogin::class);
+			$manager->remove($remember);
 		}
-		return new RemoveRowsResponse($response);
+		$manager->flush();
+		return $this->tableData($response);
+	}
+
+	/**
+	 * @return GenericDataTableResponse
+	 * @Route("/session/oauth2-refresh-token", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function oauth2Data()
+	{
+		$accessTokens = $this->getDoctrine()->getRepository(AccessToken::class)
+			->findBy(['userIdentifier' => $this->getUser()->uid]);
+
+		$refreshTokens = [];
+
+		foreach ($accessTokens as $accessToken) {
+			$refreshTokens[] = $this->getDoctrine()->getRepository(RefreshToken::class)
+				->findOneBy(['accessToken' => $accessToken->getIdentifier()]);
+		}
+
+		return $this->tableData(array_map(function (RefreshToken $token) {
+			return [
+				'UUID' => $token->getIdentifier() . '@RefreshToken.csrdelft.nl',
+				'identifier' => $token->getIdentifier(),
+				'client' => $token->getAccessToken()->getClient()->getIdentifier(),
+				'expiry' => $token->getExpiry(),
+				'revoked' => $token->isRevoked(),
+			];
+		}, $refreshTokens));
+	}
+
+	/**
+	 * @Route("/session/oauth2-refresh-token-revoke/{identifier}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 * @param RefreshToken $refreshToken
+	 * @return GenericDataTableResponse
+	 */
+	public function oauth2RefreshTokenRevoke(RefreshToken $refreshToken)
+	{
+		$refreshToken->revoke();
+		$refreshToken->getAccessToken()->revoke();
+
+		$this->getDoctrine()->getManager()->flush();
+
+		return $this->tableData([[
+			'UUID' => $refreshToken->getIdentifier() . '@RefreshToken.csrdelft.nl',
+			'identifier' => $refreshToken->getIdentifier(),
+			'client' => $refreshToken->getAccessToken()->getClient()->getIdentifier(),
+			'expiry' => $refreshToken->getExpiry(),
+			'revoked' => $refreshToken->isRevoked(),
+		]]);
 	}
 }

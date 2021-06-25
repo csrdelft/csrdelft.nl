@@ -2,8 +2,8 @@
 
 namespace CsrDelft\entity;
 
-use CsrDelft\model\security\LoginModel;
-use DateTime;
+use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,7 +20,7 @@ class CmsPagina {
 	/**
 	 * Primary key
 	 * @ORM\Id()
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 * @var string
 	 */
 	public $naam;
@@ -38,55 +38,55 @@ class CmsPagina {
 	public $inhoud;
 	/**
 	 * DateTime
-	 * @ORM\Column(type="datetime")
-	 * @var DateTime
+	 * @ORM\Column(type="datetime", name="laatst_gewijzigd")
+	 * @var DateTimeImmutable
 	 */
-	public $laatst_gewijzigd;
+	public $laatstGewijzigd;
 	/**
 	 * Permissie voor tonen
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", name="rechten_bekijken")
 	 * @var string
 	 */
-	public $rechten_bekijken;
+	public $rechtenBekijken;
 	/**
 	 * Link
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", name="rechten_bewerken")
 	 * @var string
 	 */
-	public $rechten_bewerken;
+	public $rechtenBewerken;
 	/**
 	 * Inline HTML
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="boolean", name="inline_html")
 	 * @var boolean
 	 */
-	public $inline_html;
+	public $inlineHtml;
 
 	/**
 	 * @return bool
 	 */
 	public function magBekijken() {
-		return LoginModel::mag($this->rechten_bekijken);
+		return LoginService::mag($this->rechtenBekijken);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function magBewerken() {
-		return LoginModel::mag($this->rechten_bewerken);
+		return LoginService::mag($this->rechtenBewerken);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function magRechtenWijzigen() {
-		return LoginModel::mag(P_ADMIN);
+		return LoginService::mag(P_ADMIN);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function magVerwijderen() {
-		return LoginModel::mag(P_ADMIN);
+		return LoginService::mag(P_ADMIN);
 	}
 
 }

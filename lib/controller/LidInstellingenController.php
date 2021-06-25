@@ -2,10 +2,15 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\model\instellingen\LidInstellingenModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\JsonResponse;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\view\login\OAuth2RefreshTokenTable;
+use CsrDelft\view\login\RememberLoginTable;
 use Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -14,27 +19,43 @@ use Exception;
  * @author P.W.G. Brussee <brussee@live.nl>
  */
 class LidInstellingenController extends AbstractController {
-	/** @var LidInstellingenModel  */
-	private $lidInstellingenModel;
+	/** @var LidInstellingenRepository  */
+	private $lidInstellingenRepository;
 
-	public function __construct(LidInstellingenModel $lidInstellingenModel) {
-		$this->lidInstellingenModel = $lidInstellingenModel;
+	public function __construct(LidInstellingenRepository $lidInstellingenRepository) {
+		$this->lidInstellingenRepository = $lidInstellingenRepository;
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/instellingen", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function beheer() {
-		return view('instellingen.lidinstellingen', [
-			'defaultInstellingen' => $this->lidInstellingenModel->getAll(),
-			'instellingen' => $this->lidInstellingenModel->getAllForLid(LoginModel::getUid())
+		return $this->render('instellingen/lidinstellingen.html.twig', [
+			'defaultInstellingen' => $this->lidInstellingenRepository->getAll(),
+			'instellingen' => $this->lidInstellingenRepository->getAllForLid($this->getUid()),
+			'rememberLoginTable' => new RememberLoginTable(),
+			'authorizationCodeTable' => new OAuth2RefreshTokenTable(),
 		]);
 	}
 
-	public function update($module, $instelling, $waarde = null) {
+	/**
+	 * @param Request $request
+	 * @param $module
+	 * @param $instelling
+	 * @param null $waarde
+	 * @return JsonResponse
+	 * @Route("/instellingen/update/{module}/{instelling}/{waarde}", methods={"POST"}, defaults={"waarde": null})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function update(Request $request, $module, $instelling, $waarde = null) {
 		if ($waarde === null) {
-			$waarde = filter_input(INPUT_POST, 'waarde', FILTER_SANITIZE_STRING);
+			$waarde = $request->request->get('waarde');
 		}
 
-		if ($this->lidInstellingenModel->isValidValue($module, $instelling, urldecode($waarde))) {
-			$this->lidInstellingenModel->wijzigInstelling($module, $instelling, urldecode($waarde));
+		if ($this->lidInstellingenRepository->isValidValue($module, $instelling, urldecode($waarde))) {
+			$this->lidInstellingenRepository->wijzigInstelling($module, $instelling, urldecode($waarde));
 			return new JsonResponse(['success' => true]);
 		} else {
 			return new JsonResponse(['success' => false], 400);
@@ -43,15 +64,24 @@ class LidInstellingenController extends AbstractController {
 
 	/**
 	 * @throws Exception
+	 * @Route("/instellingen/opslaan", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function opslaan() {
-		$this->lidInstellingenModel->save(); // fetches $_POST values itself
+		$this->lidInstellingenRepository->saveAll(); // fetches $_POST values itself
 		setMelding('Instellingen opgeslagen', 1);
-		return $this->redirectToRoute('lidinstellingen-beheer');
+		return $this->redirectToRoute('csrdelft_lidinstellingen_beheer');
 	}
 
+	/**
+	 * @param string $module
+	 * @param string $key
+	 * @return JsonResponse
+	 * @Route("/instellingen/reset/{module}/{key}", methods={"POST"})
+	 * @Auth(P_ADMIN)
+	 */
 	public function reset($module, $key) {
-		$this->lidInstellingenModel->resetForAll($module, $key);
+		$this->lidInstellingenRepository->resetForAll($module, $key);
 		setMelding('Voor iedereen de instelling ge-reset naar de standaard waarde', 1);
 		return new JsonResponse(true);
 	}

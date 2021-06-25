@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\entity\maalcie\MaaltijdBeoordeling;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\view\formulier\InlineForm;
 use CsrDelft\view\formulier\keuzevelden\SterrenField;
 

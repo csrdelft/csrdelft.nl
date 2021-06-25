@@ -1,30 +1,22 @@
-zoeken:
-  path: /zoeken
-  controller: CsrDelft\controller\ZoekController::zoeken
-  methods: [GET,POST]
-  defaults: { _mag: P_LOGGED_IN }
+app-controller:
+  resource: ../lib/controller/*.php
+  type: annotation
 
-logger:
-  path: /logger
-  controller: CsrDelft\controller\LoggerController::log
-  methods: POST
-  defaults: { _mag: P_LOGGED_IN } # Voorkom spam
+app-controller-sub:
+  resource: ../lib/controller/{fiscaat,maalcie,api}/*.php
+  type: annotation
 
-contact-interesse:
-  path: /contactformulier/interesse
-  controller: CsrDelft\controller\ContactFormulierController::interesse
-  methods: POST
-  defaults: { _mag: P_PUBLIC }
+api-controller:
+  resource: ../lib/controller/api/v3/*.php
+  type: annotation
 
+# Deze route is een catch-all als allerlaatste
 default:
-  path: /{naam}/{subnaam}
+  path: /{_locale<%app.supported_locales%>}/{naam}/{subnaam}
   controller: CsrDelft\controller\CmsPaginaController::bekijken
   defaults: { naam: thuis, subnaam: "", _mag: P_PUBLIC }
 
-remove_trailing_slash:
-  path: /{url}
-  defaults:
-    _controller: CsrDelft\controller\RedirectingController::removeTrailingSlashAction
-    _mag: P_PUBLIC
-  requirements:
-    url: .*/$
+defaultNoLocale:
+  path: /{naam}/{subnaam}
+  controller: CsrDelft\controller\CmsPaginaController::bekijken
+  defaults: { naam: thuis, subnaam: "", _mag: P_PUBLIC, _locale: nl}

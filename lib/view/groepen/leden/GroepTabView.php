@@ -3,16 +3,16 @@
  * GroepTabView.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\model\entity\groepen\GroepTab;
-use CsrDelft\model\entity\groepen\Verticale;
-use CsrDelft\model\entity\interfaces\HeeftAanmeldLimiet;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\groepen\enum\GroepTab;
+use CsrDelft\entity\groepen\interfaces\HeeftAanmeldLimiet;
+use CsrDelft\entity\groepen\Verticale;
+use CsrDelft\entity\security\enum\AccessAction;
+use CsrDelft\service\security\LoginService;
 
 abstract class GroepTabView extends GroepOmschrijvingView {
 
@@ -22,21 +22,21 @@ abstract class GroepTabView extends GroepOmschrijvingView {
 		$html = '<div id="groep-leden-' . $this->groep->id . '" class="groep-leden"><ul class="groep-tabs nobullets">';
 
 		if (!$this->groep instanceof Verticale) {
-			$html .= '<li class="geschiedenis float-left"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock"></span></a></li>';
+			$html .= '<li class="geschiedenis"><a class="btn" href="' . $this->groep->getUrl() . '" title="Bekijk geschiedenis"><span class="fa fa-clock"></span></a></li>';
 		}
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Pasfotos . '" title="' . GroepTab::getDescription(GroepTab::Pasfotos) . ' tonen"><span class="fa fa-user"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepPasfotosView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Pasfotos . '" title="' . GroepTab::Pasfotos()->getDescription() . ' tonen"><span class="fa fa-user"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Lijst . '" title="' . GroepTab::getDescription(GroepTab::Lijst) . ' tonen"><span class="fa fa-align-justify"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepLijstView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Lijst . '" title="' . GroepTab::Lijst()->getDescription() . ' tonen"><span class="fa fa-align-justify"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Statistiek . '" title="' . GroepTab::getDescription(GroepTab::Statistiek) . ' tonen"><span class="fa fa-chart-pie"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepStatistiekView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Statistiek . '" title="' . GroepTab::Statistiek()->getDescription() . ' tonen"><span class="fa fa-chart-pie"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Emails . '" title="' . GroepTab::getDescription(GroepTab::Emails) . ' tonen"><span class="fa fa-envelope"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEmailsView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Emails . '" title="' . GroepTab::Emails()->getDescription() . ' tonen"><span class="fa fa-envelope"></span></a></li>';
 
-		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEetwensView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Eetwens . '" title="' . GroepTab::getDescription(GroepTab::Eetwens) . ' tonen"><span class="fa fa-heartbeat"></span></a></li>';
+		$html .= '<li><a class="btn post noanim ' . ($this instanceof GroepEetwensView ? 'btn-primary' : '') . '" href="' . $this->groep->getUrl() . '/' . GroepTab::Eetwens . '" title="' . GroepTab::Eetwens()->getDescription() . ' tonen"><span class="fa fa-heartbeat"></span></a></li>';
 
 		$onclick = "$('#groep-" . $this->groep->id . "').toggleClass('leden-uitgeklapt');";
-		$html .= '<li class="float-right"><a class="btn vergroot" id="groep-vergroot-' . $this->groep->id . '" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen" onclick="' . $onclick . '"><span class="fa fa-expand"></span></a>';
+		$html .= '<li class="knop-vergroot"><a class="btn vergroot" id="groep-vergroot-' . $this->groep->id . '" data-vergroot="#groep-leden-content-' . $this->groep->id . '" title="Uitklappen" onclick="' . $onclick . '"><span class="fa fa-expand"></span></a>';
 
 		$html .= '</ul><div id="groep-leden-content-' . $this->groep->id . '" class="groep-tab-content ' . $this->getType() . '">';
 
@@ -59,7 +59,7 @@ else {
 	tabContent.height(availableHeight);
 }
 JS;
-		if ($this->groep->mag(AccessAction::Beheren)) {
+		if ($this->groep->mag(AccessAction::Beheren())) {
 
 			$this->javascript .= <<<JS
 
@@ -78,12 +78,14 @@ JS;
 
 		$html .= '</div>';
 
+		$nu = date_create_immutable();
+
 		if ($this->groep instanceof HeeftAanmeldLimiet AND $this->groep->getAanmeldLimiet() != null) {
 			// Progress bar
 			$aantal = $this->groep->aantalLeden();
 			$percent = round($aantal * 100 / $this->groep->getAanmeldLimiet());
 			// Aanmelden mogelijk?
-			if (time() > strtotime($this->groep->aanmelden_vanaf) AND time() < strtotime($this->groep->aanmelden_tot)) {
+			if ($nu > $this->groep->aanmeldenVanaf && $nu < $this->groep->aanmeldenTot) {
 				$verschil = $this->groep->getAanmeldLimiet() - $aantal;
 				if ($verschil === 0) {
 					$title = 'Inschrijvingen vol!';
@@ -93,7 +95,7 @@ JS;
 					$color = ' progress-bar-success';
 				}
 			} // Bewerken mogelijk?
-			elseif ($this->groep->getLid(LoginModel::getUid()) AND time() < strtotime($this->groep->bewerken_tot)) {
+			elseif ($this->groep->getLid(LoginService::getUid()) && date_create_immutable() < $this->groep->bewerkenTot) {
 				$title = 'Inschrijvingen gesloten! Inschrijving bewerken is nog wel toegestaan.';
 				$color = ' progress-bar-warning';
 			} else {

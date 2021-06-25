@@ -1,0 +1,28 @@
+@startuml
+title: Request verwerken
+index -> Kernel ++ : handle()
+Kernel -> Controller ++
+note over Controller
+Controller wordt op bais van de
+""REQUEST_URI"" gekozen. Zie de
+""config/routes"" map voor alle
+mogelijke routes.
+Alle controllers bevinden zich in
+de ""CsrDelft\controller\""
+namespace.
+end note
+Controller -> action ++
+note over action
+action is een functie in Controller
+en is gedefineerd in de route yaml.
+end note
+note over action
+In de action wordt alle logica uitgevoerd
+om een response te bouwen, denk aan
+dingen uit de database plukken, wijzigingen
+doorvoeren, etc.
+end note
+return
+return
+return ""Response""
+@enduml

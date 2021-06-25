@@ -1,0 +1,13 @@
+{% for voorkeur in voorkeuren %}
+	{# @var voorkeur \CsrDelft\entity\corvee\CorveeVoorkeur #}
+	{% if voorkeur %}
+		{% if loop.first %}
+			<tr id="voorkeur-row-{{ voorkeur.van_uid }}">
+			<td>{{ get_profiel(voorkeur.van_uid).link(instelling('corvee', 'weergave_ledennamen_beheer')) | raw }}</td>
+		{% endif %}
+		{{ include('maaltijden/voorkeur/beheer_voorkeur_veld.html.twig', {voorkeur: voorkeur, crv_repetitie_id: voorkeur.crv_repetitie_id, uid: voorkeur.uid}) }}
+		{% if loop.last %}
+			</tr>
+		{% endif %}
+	{% endif %}
+{% endfor %}

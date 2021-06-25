@@ -1,0 +1,15 @@
+<ul>
+	{% for profiel in profielen %}
+		<li>
+			<a href="{{ url('csrdelft_profiel_profiel', {uid: profiel.uid}) }}" title="{{ profiel.naam('volledig') }}">
+				<div class="d-flex flex-column align-items-center">
+					{{ profiel.pasfotoTag | raw }}
+					{{ profiel.naam('civitas') }}
+				</div>
+			</a>
+			{% if profiel.kinderen is not empty %}
+				{{ include('profiel/stamboom_node.html.twig', {profielen: profiel.kinderen}) }}
+			{% endif %}
+		</li>
+	{% endfor %}
+</ul>

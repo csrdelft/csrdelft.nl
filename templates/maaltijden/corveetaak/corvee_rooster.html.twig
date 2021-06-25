@@ -1,0 +1,80 @@
+{% extends 'maaltijden/base.html.twig' %}
+
+{% block titel %}Corveerooster{% endblock %}
+
+{% block content %}
+	{{ parent() }}
+	{% if toonverleden %}
+		<div class="float-end">
+			<a href="{{ url('csrdelft_maalcie_mijncorvee_roosterverleden') }}" title="Taken in het verleden tonen"
+				 class="btn">
+				{{ icon("time") }} Toon verleden
+			</a>
+		</div>
+	{% endif %}
+	<table id="maalcie-tabel" class="maalcie-tabel">
+		<thead>
+		<tr>
+			<th>Week</th>
+			<th>Datum</th>
+			<th>Functie</th>
+			<th colspan="2">Corveeër(s)</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% set firstOfWeek = false %}
+		{% set firstOfDatum = false %}
+		{% set weekColor = false %}
+		{% for week, datums in rooster %}
+			{% for datum, functies in datums %}
+				{% if loop.first %}
+					{% set firstOfWeek = not firstOfWeek %}
+				{% endif %}
+				{% for taken in functies %}
+					{% if loop.first %}
+						{% set firstOfDatum = not firstOfDatum %}
+					{% endif %}
+					<tr>
+						{% if firstOfWeek %}
+							{% set firstOfWeek = not firstOfWeek %}
+							{% set weekColor = not weekColor %}
+							{# {{cycle name="weekColor" assign="weekColor" values="rowColor0,rowColor1"}} #}
+							<td rowspan="{{ loop.length }}" class="{{ weekColor ? 'rowColor1': 'rowColor0' }}">
+								<nobr>{{ date(datum) | date_format_intl('w') }}</nobr>
+							</td>
+						{% elseif firstOfDatum %}
+							<td rowspan="{{ loop.length }}"
+									class="{{ weekColor ? 'rowColor1': 'rowColor0' }}"></td>
+						{% endif %}
+						{% if firstOfDatum %}
+							{% set firstOfDatum = not firstOfDatum %}
+							{# {{cycle name="datumColor" assign="datumColor" values="rowColor0,rowColor1"}} #}
+							<td rowspan="{{ loop.length }}" class="{{ cycle(['rowColor0', 'rowColor1'], loop.index) }}">
+								<nobr>{{ date(datum) | date_format_intl('eee dd MMM') }}</nobr>
+							</td>
+						{% endif %}
+						{% if taken[0] is defined %}
+							<td>
+								<nobr>{{ taken[0].corveeFunctie.naam }}</nobr>
+							</td>
+						{% endif %}
+						<td>
+							{% for taak in taken %}
+								{# @var taak \CsrDelft\entity\corvee\CorveeTaak #}
+								<div
+									class="taak {% if taak.profiel and taak.profiel.uid == app.user.uid %}taak-self{% elseif not taak.profiel %}taak-grijs{% endif %}">
+									{% if taak.profiel %}
+										{{ taak.profiel.link(instelling('corvee', 'weergave_ledennamen_corveerooster')) | raw }}
+									{% else %}
+										<span class="cursief">vacature</span>
+									{% endif %}
+								</div>
+							{% endfor %}
+						</td>
+					</tr>
+				{% endfor %}
+			{% endfor %}
+		{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

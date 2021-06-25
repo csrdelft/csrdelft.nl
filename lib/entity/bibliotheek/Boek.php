@@ -4,7 +4,7 @@
 namespace CsrDelft\entity\bibliotheek;
 
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,12 +38,12 @@ class Boek {
 	public $uitgavejaar;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $uitgeverij;
 	/**
-	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @var int|null
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $paginas;
 	/**
@@ -52,8 +52,8 @@ class Boek {
 	 */
 	public $taal = 'Nederlands';
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	public $isbn;
 	/**
@@ -63,9 +63,22 @@ class Boek {
 	public $code;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	public $categorie_id;
+
+	/**
+	 * @var integer
+	 * @ORM\Column(type="integer", options={"default"=0})
+	 */
+	public $auteur_id = 0;
+
+	/**
+	 * @var BiebAuteur
+	 * @ORM\ManyToOne(targetEntity="BiebAuteur")
+	 * @ORM\JoinColumn(name="auteur_id", referencedColumnName="id")
+	 */
+	public $auteur2;
 
 	/**
 	 * @var BoekRecensie[]
@@ -106,7 +119,7 @@ class Boek {
 	 * Iedereen met extra rechten en zij met BIEB_READ mogen
 	 */
 	public function magBekijken() {
-		return LoginModel::mag(P_BIEB_READ) || $this->magBewerken();
+		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
 
 	/**
@@ -116,7 +129,7 @@ class Boek {
 	 *    boek mag alleen door admins of door eigenaar v.e. exemplaar bewerkt worden
 	 */
 	public function magBewerken() {
-		return LoginModel::mag(P_BIEB_EDIT) || $this->isEigenaar() || $this->magVerwijderen();
+		return LoginService::mag(P_BIEB_EDIT) || $this->isEigenaar() || $this->magVerwijderen();
 	}
 
 	/**
@@ -159,7 +172,7 @@ class Boek {
 	 *    boek mag alleen door admins verwijdert worden
 	 */
 	public function magVerwijderen() {
-		return LoginModel::mag('commissie:BASFCie,' . P_BIEB_MOD . ',' . P_ADMIN);
+		return LoginService::mag('commissie:BASFCie,' . P_BIEB_MOD . ',' . P_ADMIN);
 	}
 
 	public function isBiebBoek() {

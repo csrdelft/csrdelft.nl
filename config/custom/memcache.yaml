@@ -1,0 +1,26 @@
+# Deze configuratie wordt niet automatisch ingeladen, maar door Kernel als aan de voorwaarden voor laden voldaan wordt.
+doctrine:
+  orm:
+    second_level_cache:
+      region_cache_driver:
+        type: pool
+        pool: doctrine.second_level_cache_pool
+      enabled: true
+      region_lifetime: 86400
+
+framework:
+  cache:
+    app: cache.adapter.memcached
+    default_memcached_provider: "%env(MEMCACHED_URL)%"
+    pools:
+      doctrine.second_level_cache_pool:
+        name: doctrine.second_level_cache_pool
+        public: true
+        adapter: cache.app
+        default_lifetime: 86400
+
+services:
+  CsrDelft\command\FlushMemcacheCommand:
+    tags: [ console.command ]
+    arguments:
+      - '@cache.app'

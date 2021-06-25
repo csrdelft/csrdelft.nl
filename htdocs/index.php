@@ -2,12 +2,11 @@
 
 use CsrDelft\Kernel;
 use Symfony\Component\HttpFoundation\Request;
-require_once dirname(__DIR__) . '/lib/defines.defaults.php';
 
 /**
  * Ga niet verder als de stek in onderhoudsmodus staat.
  */
-if (ONDERHOUD) {
+if (file_exists(__DIR__ . '/../.onderhoud')) {
 	http_response_code(503);
 	echo <<<'HTML'
 <!doctype html>
@@ -19,7 +18,7 @@ if (ONDERHOUD) {
 <body style="font-family: sans-serif; text-align: center;">
 <h1>Onderhoud</h1>
 <p>De website is momenteel in onderhoud. Dit duurt meestal niet lang.</p>
-<img alt="Beeldmerk van de Vereniging" src="/dist/images/beeldmerk.png">
+<img alt="Beeldmerk van de Vereniging" src="/plaetjes/layout-extern/Logo.svg" width="200">
 HTML;
 	exit;
 }

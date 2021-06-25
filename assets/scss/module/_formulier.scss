@@ -1,0 +1,172 @@
+@import "~raty-js/lib/jquery.raty.css";
+@import "../knoppen";
+@import "~prosemirror-view/style/prosemirror.css";
+@import "~prosemirror-menu/style/menu.css";
+@import "~prosemirror-example-setup/style/style.css";
+@import "../lib/prosemirror";
+
+
+input[type="file"] {
+  background-color: transparent;
+  border: none;
+}
+
+select optgroup {
+  font-weight: bold;
+}
+
+textarea.breed, input.breed, select.breed {
+  width: 100%;
+}
+
+h1.Titel {
+  margin: 10px 0 30px 0;
+}
+
+.modal-form .modal-body {
+  padding-bottom: 0;
+}
+
+/** FORMULIER **************************************************************/
+
+.ZoekField {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.ZoekFieldDropdown {
+	border-left: 0;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.Formulier, .ForumFormulier {
+  .field-required {
+    color: red;
+  }
+
+  .ui-tabs {
+
+    .ui-tabs-panel {
+      padding: 0;
+    }
+  }
+  .ui-tabs-vertical {
+    padding: 0;
+
+    .ui-tabs-nav {
+      float: left;
+      width: 20%;
+      padding: 2px 0 4px 3px;
+
+      li {
+        clear: left;
+        width: 100%;
+
+        a {
+          display: block;
+          width: 100%;
+        }
+      }
+      li.ui-tabs-active {
+
+      }
+    }
+    .ui-tabs-panel {
+      float: right;
+      width: 80%;
+      padding: 2em !important;
+    }
+  }
+  select {
+    padding: 0.4em 0.5em;
+  }
+  .readonly {
+    border: none;
+    cursor: default;
+  }
+  label .required {
+    color: red;
+  }
+  label .help {
+    position: absolute;
+    margin: 5px 0 0 -25px;
+  }
+  textarea {
+    width: 100%;
+    line-height: 1.25em;
+  }
+  .AutoSize {
+    resize: none;
+		min-height: 100px;
+  }
+  .CsrBB {
+    clear: left;
+  }
+  .GroepAanmeldKnoppen {
+    margin: 0;
+  }
+  .InputField, h3, .WachtwoordField {
+    clear: both;
+  }
+  .InputField {
+    border: 1px solid transparent;
+  }
+  .InputField:hover {
+    border: 1px solid #ddd;
+    background-color: #eee;
+  }
+  .CheckboxField {
+    margin: 4px 0 0 4px;
+  }
+  .CheckboxFieldLabel, .KeuzeRondjeLabel {
+    float: none;
+    width: auto;
+  }
+  input.UidField {
+    width: 4em;
+  }
+  input.IntField, input.FloatField, input.BedragField, input.RequiredIntField, input.RequiredFloatField, input.RequiredBedragField {
+    width: 5em;
+    text-align: right;
+  }
+  .InputField .waarschuwing {
+    float: right;
+    margin-right: 10px;
+  }
+  .password {
+    padding: 2px 1px;
+  }
+	// DateField en DateTimeField zijn altijd readonly
+	.form-control.DateField[readonly], .form-control.DateTimeField[readonly] {
+		background-color: $white;
+	}
+}
+
+/* Inline Formulier */
+.InlineForm {
+
+  input[type="text"] {
+    width: auto;
+  }
+
+  .InlineFormToggle {
+    border-bottom: 1px dotted grey;
+    width: 100%;
+    min-height: 1em;
+    cursor: url("../../images/edit.png"), text;
+  }
+  .InlineForm.ToggleForm {
+    display: none;
+  }
+}
+
+.twitter-typeahead > .form-control {
+	width: 100%;
+}
+
+.form-control.loading {
+	background-image: url(../../images/loading-fb.gif);
+	background-repeat: no-repeat;
+	background-position: right 40px center;
+}

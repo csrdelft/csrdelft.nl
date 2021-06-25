@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\fiscaat\bestellingen;
 
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\view\datatable\DataTable;
 
 /**
@@ -35,7 +35,7 @@ class CiviBestellingInhoudTable extends DataTable {
 	/**
 	 * Print niet de JS, dat wordt door formulier gedaan.
 	 */
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 }

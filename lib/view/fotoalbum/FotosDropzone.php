@@ -3,7 +3,7 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\Dropzone;
@@ -20,16 +20,18 @@ class FotosDropzone extends Dropzone {
 		return '<ul class="breadcrumb">' . FotoAlbumBreadcrumbs::getBreadcrumbs($this->model, false, true) . '</ul>';
 	}
 
-	public function view() {
-		echo '<div class="card"><div class="card-header">Fotos toevoegen aan: ' .ucfirst($this->model->dirname). '</div><div class="card-body">';
-		parent::view();
-		echo '</div><div class="card-footer">';
-		echo '<span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
-		echo '<div class="float-right"><a href="#" onclick="showExisting_' . $this->formId . '();$(this).remove();">' . Icon::getTag('photos') . ' Toon bestaande foto\'s in dit album</a></div>';
-		echo '</div></div>';
+	public function __toString() {
+		$html = '';
+		$html .= '<div class="card"><div class="card-header">Fotos toevoegen aan: ' .ucfirst($this->model->dirname). '</div><div class="card-body">';
+		$html .=parent::__toString();
+		$html .= '</div><div class="card-footer">';
+		$html .= '<span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>';
+		$html .= '</div></div>';
 		// Uitleg foto's toevoegen
 		$body = new CmsPaginaView(ContainerFacade::getContainer()->get(CmsPaginaRepository::class)->find('fotostoevoegen'));
-		$body->view();
+		$html .= $body->__toString();
+
+		return $html;
 	}
 
 }

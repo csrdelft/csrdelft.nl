@@ -2,23 +2,37 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\common\Ini;
+use CsrDelft\common\Mail;
 use CsrDelft\common\SimpleSpamFilter;
-use CsrDelft\model\entity\Mail;
+use CsrDelft\service\MailService;
 use CsrDelft\view\PlainView;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 19/12/2018
  */
-class ContactFormulierController {
+class ContactFormulierController extends AbstractController {
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
+
+	public function __construct(MailService $mailService) {
+		$this->mailService = $mailService;
+	}
+	/**
+	 * @return PlainView
+	 * @Route("/contactformulier/interesse", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 */
 	public function interesse() {
 		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
 
 		if (!$resp['success']) {
-			throw new CsrToegangException("Geen toegang");
+			throw $this->createAccessDeniedException("Geen toegang");
 		}
 
 		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
@@ -30,20 +44,19 @@ class ContactFormulierController {
 		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
 		$opmerking = filter_input(INPUT_POST, "opmerking", FILTER_SANITIZE_STRING);
 
-		$interesses = [];
-
-		$interesse1 = filter_input(INPUT_POST, "interesse1", FILTER_SANITIZE_STRING);
-		$interesse2 = filter_input(INPUT_POST, "interesse2", FILTER_SANITIZE_STRING);
-		$interesse3 = filter_input(INPUT_POST, "interesse3", FILTER_SANITIZE_STRING);
-		$interesse4 = filter_input(INPUT_POST, "interesse4", FILTER_SANITIZE_STRING);
-
-		if ($interesse1) array_push($interesses, $interesse1);
-		if ($interesse2) array_push($interesses, $interesse2);
-		if ($interesse3) array_push($interesses, $interesse3);
-		if ($interesse4) array_push($interesses, $interesse4);
+		$interesses = [
+			filter_input(INPUT_POST, "interesse1", FILTER_SANITIZE_STRING),
+			filter_input(INPUT_POST, "interesse2", FILTER_SANITIZE_STRING),
+			filter_input(INPUT_POST, "interesse3", FILTER_SANITIZE_STRING),
+			filter_input(INPUT_POST, "interesse4", FILTER_SANITIZE_STRING),
+		];
 
 		$interessestring = '';
-		foreach ($interesses as $interesse) $interessestring .= " * " . $interesse . "\n";
+		foreach ($interesses as $interesse) {
+			if ($interesse) {
+				$interessestring .= " * " . $interesse . "\n";
+			}
+		}
 
 		if ($achternaam || $this->bevatUrl($opmerking) || $this->isSpam($naam, $email, $adres, $postcode, $woonplaats, $telefoon, $opmerking, $interessestring)) {
 			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
@@ -71,9 +84,58 @@ Met vriendelijke groeten,
 De PubCie.
 ";
 
-		$mail = new Mail([Ini::lees(Ini::EMAILS, 'oweecie') => "OweeCie"], "Interesseformulier", $bericht);
+		$mail = new Mail([$_ENV['EMAIL_OWEECIE'] => "OweeCie"], "Interesseformulier", $bericht);
 		$mail->setFrom($email);
-		$mail->send();
+		$this->mailService->send($mail);
+
+		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
+	}
+
+	/**
+	 * @return PlainView
+	 * @Route("/contactformulier/owee", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function owee() {
+		$resp = $this->checkCaptcha(filter_input(INPUT_POST, 'g-recaptcha-response', FILTER_SANITIZE_STRING));
+
+		if (!$resp['success']) {
+			throw $this->createAccessDeniedException("Geen toegang");
+		}
+
+		$type = filter_input(INPUT_POST, "optie", FILTER_SANITIZE_STRING);
+		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
+		$email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_STRING);
+		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
+
+		if ($this->isSpam($naam, $email, $telefoon)) {
+			throw new CsrGebruikerException('Bericht bevat ongeldige tekst.');
+		}
+
+		$commissie = 'PromoCie';
+		$bestemming = [$_ENV['EMAIL_PROMOCIE'] => $commissie];
+
+		if ($type === 'lid-worden') {
+			$typeaanduiding = 'Ik wil lid worden';
+//			$commissie = "NovCie";
+//			$bestemming = [$_ENV['EMAIL_NOVCIE'] => $commissie];
+		} else {
+			$typeaanduiding = 'Eerst een lid spreken';
+//			$commissie = "OweeCie";
+//			$bestemming = [$_ENV['EMAIL_OWEECIE'] => $commissie];
+		}
+
+		$bericht = $this->renderView('mail/bericht/contactformulier.mail.twig', [
+			'telefoon' => $telefoon,
+			'typeaanduiding' => $typeaanduiding,
+			'naam' => $naam,
+			'email' => $email,
+			'commissie' => $commissie,
+		]);
+
+		$mail = new Mail($bestemming, "Lid worden formulier", $bericht);
+		$mail->setFrom($_ENV['EMAIL_PUBCIE']);
+		$this->mailService->send($mail);
 
 		return new PlainView('Bericht verzonden, je zult binnenkort meer horen.');
 	}
@@ -97,7 +159,7 @@ De PubCie.
 	 * @return mixed
 	 */
 	public function checkCaptcha($response) {
-		$secret = Ini::lees(Ini::GOOGLE, 'captcha_secret');
+		$secret = $_ENV['GOOGLE_CAPTCHA_SECRET'];
 
 		$ch = curl_init("https://www.google.com/recaptcha/api/siteverify");
 		curl_setopt($ch, CURLOPT_POST, 1);

@@ -1,0 +1,126 @@
+<tr id="maaltijd-row-{{ maaltijd.maaltijd_id }}"
+		{% if maaltijd.aanmeld_limiet == 0 or (maaltijd.gesloten and not aanmelding is defined) %}class="taak-grijs"{% endif %}>
+	<td>
+		{{ maaltijd.datum | datetime_format_long }} {{ maaltijd.tijd | time_format }}
+		{% if maaltijd.magBekijken(app.user.uid) %}
+			<div class="float-end">
+				{{ icon("paintcan", null, maaltijd.maaltijdcorvee.corveeFunctie.naam) }}
+			</div>
+		{% endif %}
+	</td>
+	<td>
+		<div class="titel">{{ maaltijd.titel }}
+			<span title="BB-code: [maaltijd={{ maaltijd.maaltijd_id }}]"
+						class="maaltijd-id"> (#{{ maaltijd.maaltijd_id }})</span>
+			<div class="float-end">
+				{% set prijs = maaltijd.prijs | format_bedrag %}
+				{% if aanmelding is defined and aanmelding is not empty and aanmelding.saldoStatus < 0 %}
+					{{ icon("money_delete", null, "U hebt een negatief CiviSaldo!&#013;Maaltijdprijs: " ~ prijs) }}
+				{% elseif aanmelding is defined and aanmelding is not empty and aanmelding.saldoStatus < 2 %}
+					{{ icon("money_delete", null, "Uw CiviSaldo is te laag!&#013;Maaltijdprijs: " ~ prijs) }}
+				{% elseif maaltijd.prijs != standaardprijs %}
+					{{ icon("money", null, "Afwijkende maaltijdprijs: " ~ prijs) }}
+				{% else %}
+					{{ icon("money_euro", null, "Maaltijdprijs: " ~ prijs) }}
+				{% endif %}
+			</div>
+		</div>
+		{{ maaltijd.omschrijving ?? "" | bbcode }}
+	</td>
+	<td class="text-center">
+		{{ maaltijd.aantalAanmeldingen }} ({{ maaltijd.aanmeld_limiet }})
+		{% if maaltijd.magSluiten(app.user.uid) %}
+			<div class="float-end">
+				<a href="{{ url('csrdelft_maalcie_mijnmaaltijden_lijst', {maaltijd_id: maaltijd.maaltijd_id}) }}"
+					 title="Toon maaltijdlijst" class="btn">
+					{{ icon("table") }}
+				</a>
+			</div>
+		{% endif %}
+	</td>
+	{% if aanmelding is defined and aanmelding is not empty %}
+		{% if maaltijd.gesloten %}
+			<td class="maaltijd-aangemeld">
+			Ja {% if aanmelding.abonnementRepetitie %}(abo){% endif %}
+			<div class="float-end">
+				{{ icon("lock", null, "Maaltijd is gesloten om " ~ (maaltijd.laatst_gesloten | time_format) ~ "") }}
+			</div>
+		{% else %}
+			<td class="maaltijd-aangemeld">
+			<a href="{{ url('csrdelft_maalcie_mijnmaaltijden_afmelden', {maaltijd_id: maaltijd.maaltijd_id}) }}"
+				 class="btn post maaltijd-aangemeld">
+				<input type="checkbox" checked="checked"/> Ja
+			</a>
+			{% if aanmelding.abonnementRepetitie %} (abo) {% endif %}
+		{% endif %}
+		</td>
+		<td class="maaltijd-gasten">
+			{% if maaltijd.gesloten %}
+				{{ aanmelding.aantal_gasten }}
+			{% else %}
+				<div class="InlineForm">
+					<div class="InlineFormToggle maaltijd-gasten">{{ aanmelding.aantal_gasten }}</div>
+					<form action="{{ url('csrdelft_maalcie_mijnmaaltijden_gasten_mijn', {maaltijd_id: maaltijd.maaltijd_id}) }}"
+								method="post"
+								class="Formulier InlineForm ToggleForm">
+						{{ csrfField() }}
+						<input type="text" name="aantal_gasten" value="{{ aanmelding.aantal_gasten }}"
+									 origvalue="{{ aanmelding.aantal_gasten }}" class="FormElement" maxlength="4" size="4"/>
+						<a class="btn submit" title="Wijzigingen opslaan">{{ icon("accept") }}</a>
+						<a class="btn reset cancel" title="Annuleren">{{ icon("delete") }}</a>
+					</form>
+				</div>
+			{% endif %}
+		</td>
+		<td>
+			{% if maaltijd.gesloten %}
+				{% if aanmelding.gasten_eetwens %}
+					{{ icon("comment", null, aanmelding.gasten_eetwens) }}
+				{% endif %}
+			{% else %}
+				{% if aanmelding.aantal_gasten > 0 %}
+					<div class="InlineForm">
+						<div class="InlineFormToggle" title="{{ aanmelding.gasten_eetwens }}">
+							{% if aanmelding.gasten_eetwens %}
+								<a class="btn">{{ icon("comment_edit", null, aanmelding.gasten_eetwens) }}</a>
+							{% else %}
+								<a class="btn">{{ icon("comment_add", null, "Gasten allergie/diëet") }}</a>
+							{% endif %}
+						</div>
+						<form action="{{ url('csrdelft_maalcie_mijnmaaltijden_opmerking_mijn', {maaltijd_id: maaltijd.maaltijd_id}) }}"
+									method="post"
+									class="Formulier InlineForm ToggleForm">
+							{{ csrfField("/maaltijden/ketzer/opmerking/" ~ maaltijd.maaltijd_id) }}
+							<input type="text" name="gasten_eetwens" value="{{ aanmelding.gasten_eetwens }}"
+										 origvalue="{{ aanmelding.gasten_eetwens }}" class="FormElement" maxlength="255" size="20"/>
+							<a class="btn submit" title="Wijzigingen opslaan">{{ icon("accept") }}</a>
+							<a class="btn reset cancel" title="Annuleren">{{ icon("delete") }}</a>
+						</form>
+					</div>
+				{% endif %}
+			{% endif %}
+		</td>
+	{% else %}
+		{% if maaltijd.gesloten or maaltijd.aantalAanmeldingen >= maaltijd.aanmeld_limiet %}
+			<td class="maaltijd-afgemeld">
+			{% if not maaltijd.gesloten and maaltijd.aantalAanmeldingen >= maaltijd.aanmeld_limiet %}
+				{{ icon("stop", null, "Maaltijd is vol") }}&nbsp;
+				{% endif %}
+				Nee
+				{% if maaltijd.gesloten %}
+				<span class="float-end">
+				{{ icon("lock", null, "Maaltijd is gesloten om " ~ (maaltijd.laatst_gesloten | time_format) ~ "") }}
+				</span>
+			{% endif %}
+		{% else %}
+			<td class="maaltijd-afgemeld">
+			<a href="{{ url('csrdelft_maalcie_mijnmaaltijden_aanmelden', {maaltijd_id: maaltijd.maaltijd_id}) }}"
+				 class="btn post maaltijd-afgemeld">
+				<input type="checkbox"/> Nee
+			</a>
+		{% endif %}
+		</td>
+		<td>-</td>
+		<td></td>
+	{% endif %}
+</tr>

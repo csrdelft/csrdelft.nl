@@ -2,22 +2,27 @@
 
 namespace CsrDelft\controller\groepen;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\AbstractGroepenModel;
-use CsrDelft\model\ChangeLogModel;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\AbstractGroepLid;
-use CsrDelft\model\entity\groepen\Activiteit;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\ChangeLogEntry;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
+use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\enum\GroepVersie;
+use CsrDelft\entity\groepen\GroepAanmeldMoment;
+use CsrDelft\entity\groepen\GroepAanmeldRechten;
+use CsrDelft\entity\groepen\GroepLid;
+use CsrDelft\entity\groepen\GroepMoment;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
-use CsrDelft\model\entity\groepen\GroepStatus;
-use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\repository\GroepLidRepository;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\view\datatable\DataTable;
-use CsrDelft\view\datatable\RemoveRowsResponse;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\groepen\formulier\GroepConverteerForm;
@@ -26,71 +31,82 @@ use CsrDelft\view\groepen\formulier\GroepLidBeheerForm;
 use CsrDelft\view\groepen\formulier\GroepLogboekForm;
 use CsrDelft\view\groepen\formulier\GroepOpvolgingForm;
 use CsrDelft\view\groepen\formulier\GroepPreviewForm;
-use CsrDelft\view\groepen\GroepenBeheerData;
 use CsrDelft\view\groepen\GroepenBeheerTable;
 use CsrDelft\view\groepen\GroepenDeelnameGrafiek;
 use CsrDelft\view\groepen\GroepenView;
-use CsrDelft\view\groepen\GroepLogboekData;
 use CsrDelft\view\groepen\GroepView;
 use CsrDelft\view\groepen\leden\GroepEetwensView;
 use CsrDelft\view\groepen\leden\GroepEmailsView;
-use CsrDelft\view\groepen\leden\GroepLedenData;
 use CsrDelft\view\groepen\leden\GroepLedenTable;
 use CsrDelft\view\groepen\leden\GroepLijstView;
 use CsrDelft\view\groepen\leden\GroepOmschrijvingView;
 use CsrDelft\view\groepen\leden\GroepPasfotosView;
 use CsrDelft\view\groepen\leden\GroepStatistiekView;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Routing\RouteLoaderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * AbstractGroepenController.php
+ * Algemene controller voor groepen.
  *
+ * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-abstract class AbstractGroepenController implements RouteLoaderInterface {
+abstract class AbstractGroepenController extends AbstractController implements RouteLoaderInterface
+{
 	/** @var DataTable */
 	protected $table;
-	/** @var AbstractGroepenModel */
-	protected $model;
-	/**
-	 * @var ChangeLogModel
-	 */
-	private $changeLogModel;
+	/** @var GroepRepository */
+	protected $repository;
+	/** @var ChangeLogRepository */
+	private $changeLogRepository;
+	/** @var GroepLidRepository */
+	private $groepLidRepository;
 
-	public function __construct($model = null) {
-		$this->model = $model;
-		$this->changeLogModel = ChangeLogModel::instance();
+	public function __construct(ManagerRegistry $registry, $groepType) {
+		$this->repository = $registry->getRepository($groepType);
+		$this->changeLogRepository = $registry->getRepository(ChangeLogEntry::class);
+		$this->groepLidRepository = $registry->getRepository(GroepLid::class);
 	}
 
 	/**
 	 * Alle routes die groepen controllers aan gaan @return RouteCollection
 	 * @see config/routes/groepen.yaml
 	 */
-	public function loadRoutes() {
+	public function loadRoutes()
+	{
 		$routes = new RouteCollection();
-		$prefix = 'groep-' . $this->model::getNaam();
+		$prefix = 'csrdelft_groep_' . $this->repository::getNaam();
 
 		$className = get_class($this);
 
 		$route = function ($path, $func, $methods, $defaults = [], $requirements = [], $overrideName = null) use ($routes, $prefix, $className) {
-			$routes->add(
-				$prefix . '-' . ($overrideName ?? $func),
-				(new Route($path))
-					->setDefaults($defaults + [
-							'_mag' => P_LOGGED_IN,
-							'_controller' => $className . '::' . $func,
-						])
-					->setRequirements($requirements)
-					->setMethods($methods)
-			);
+			$name = $prefix . '_' . ($overrideName ?? $func);
+			$controller = "$className::$func";
+			$routes->add($name, new Route(
+				$path,
+				$defaults + ['_mag' => P_LOGGED_IN, '_controller' => $controller],
+				$requirements,
+				[],
+				'',
+				[],
+				$methods
+			));
 		};
 
-		// Let op, als je meerdere routes naar dezelfde functie hebt, gebruik dan overrideName om de naam van de route goed te zetten.
+		// Let op, als je meerdere routes naar dezelfde functie hebt, gebruik
+		// dan overrideName om de naam van de route goed te zetten.
 		$route('', 'overzicht', ['GET'], [], [], 'main');
 		$route('beheren/{soort}', 'beheren', ['GET', 'POST'], ['soort' => null]);
 		$route('overzicht/{soort}', 'overzicht', ['GET'], ['soort' => null]);
@@ -100,7 +116,8 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 		$route('{id}/ketzer/afmelden', 'ketzer_afmelden', ['POST']);
 		$route('{id}/ketzer/aanmelden', 'ketzer_aanmelden', ['POST']);
 		$route('{id}/ketzer/bewerken', 'ketzer_bewerken', ['POST']);
-		$route('{id}/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null], [], 'nieuw-met-id');
+		$route('{id}/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null], [], 'nieuw_id');
+		$route('{id}/info', 'info', ['GET']);
 		$route('{id}/deelnamegrafiek', 'deelnamegrafiek', ['POST']);
 		$route('{id}/omschrijving', 'omschrijving', ['POST']);
 		$route('{id}/pasfotos', 'pasfotos', ['POST']);
@@ -117,342 +134,421 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 		$route('{id}/wijzigen', 'wijzigen', ['GET', 'POST'], ['id' => null]);
 		$route('{id}/logboek', 'logboek', ['GET', 'POST'], ['id' => null]);
 		$route('aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['id' => null, 'soort' => null]);
-		$route('{id}/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null], [], 'aanmaken-met-id');
+		$route('{id}/aanmaken/{soort}', 'aanmaken', ['GET', 'POST'], ['soort' => null], [], 'aanmaken_id');
 		$route('{id}/opvolging', 'opvolging', ['POST']);
 		$route('{id}/converteren', 'converteren', ['POST']);
 		$route('{id}/sluiten', 'sluiten', ['POST']);
 		$route('{id}/voorbeeld', 'voorbeeld', ['POST']);
 		$route('{id}', 'bekijken', ['GET']);
 
-		$routes->addPrefix('groepen/' . $this->model::getNaam());
+		$routes->addPrefix('groepen/' . $this->repository::getNaam());
 		return $routes;
 	}
 
-	public function overzicht($soort = null) {
-		if ($soort) {
-			$groepen = $this->model->find('status = ? AND soort = ?', [GroepStatus::HT, $soort]);
-		} else {
-			$groepen = $this->model->find('status = ?', [GroepStatus::HT]);
-		}
-		$body = new GroepenView($this->model, $groepen, $soort); // controleert rechten bekijken per groep
-		return view('default', ['content' => $body]);
+	public function overzicht($soort = null)
+	{
+		$groepen = $this->repository->overzicht($soort);
+		$soortEnum = $this->repository->parseSoort($soort);
+		// controleert rechten bekijken per groep
+		$body = new GroepenView($this->repository, $groepen, $soortEnum);
+		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
-	public function bekijken($id) {
-		$groep = $this->model->get($id);
-		$groepen = $this->model->find('familie = ?', [$groep->familie]);
-		if (property_exists($groep, 'soort')) {
-			$soort = $groep->soort;
+	public function bekijken($id)
+	{
+		$groep = $this->repository->get($id);
+
+		if (!$groep) {
+			throw $this->createNotFoundException();
+		}
+
+		$groepen = $this->repository->findBy(['familie' => $groep->familie]);
+		if ($groep instanceof HeeftSoort) {
+			$soort = $groep->getSoort();
 		} else {
 			$soort = null;
 		}
-		$body = new GroepenView($this->model, $groepen, $soort, $groep->id); // controleert rechten bekijken per groep
-		return view('default', ['content' => $body]);
+		// controleert rechten bekijken per groep
+		$body = new GroepenView($this->repository, $groepen, $soort, $groep->id);
+		return $this->render('default.html.twig', ['content' => $body]);
 	}
 
-	public function deelnamegrafiek($id) {
-		$groep = $this->model->get($id);
-		/** @var AbstractGroep[] $groepen */
-		$groepen = $this->model->find('familie = ?', [$groep->familie]);
-		return new GroepenDeelnameGrafiek($groepen); // controleert GEEN rechten bekijken
+	public function info($id)
+	{
+		$groep = $this->repository->get($id);
+
+		if ($groep == null) {
+			throw $this->createNotFoundException();
+		}
+
+		if (!$groep->mag(AccessAction::Bekijken())) {
+			throw $this->createAccessDeniedException();
+		}
+
+		return $this->json($groep, 200, [], ['groups' => 'vue']);
 	}
 
-	public function omschrijving($id) {
-		$groep = $this->model->get($id);
-		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+	public function deelnamegrafiek($id)
+	{
+		$groep = $this->repository->get($id);
+		$groepen = $this->repository->findBy(['familie' => $groep->familie]);
+		// controleert GEEN rechten bekijken
+		return new GroepenDeelnameGrafiek($groepen);
+	}
+
+	public function omschrijving($id)
+	{
+		$groep = $this->repository->get($id);
+		if (!$groep->mag(AccessAction::Bekijken())) {
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepOmschrijvingView($groep);
 	}
 
-	public function pasfotos($id) {
-		$groep = $this->model->get($id);
-		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+	public function pasfotos($id)
+	{
+		$groep = $this->repository->get($id);
+		if (!$groep->mag(AccessAction::Bekijken())) {
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepPasfotosView($groep);
 	}
 
-	public function lijst($id) {
-		$groep = $this->model->get($id);
-		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+	public function lijst($id)
+	{
+		$groep = $this->repository->get($id);
+		if (!$groep->mag(AccessAction::Bekijken())) {
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepLijstView($groep);
 	}
 
-	public function stats($id) {
-		$groep = $this->model->get($id);
-		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+	public function stats($id)
+	{
+		$groep = $this->repository->get($id);
+		if (!$groep->mag(AccessAction::Bekijken())) {
+			throw $this->createAccessDeniedException();
 		}
-		return new GroepStatistiekView($groep);
+
+		$statistieken = $this->repository->getStatistieken($groep);
+
+		return new GroepStatistiekView($groep, $statistieken);
 	}
 
-	public function emails($id) {
-		$groep = $this->model->get($id);
-		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+	public function emails($id)
+	{
+		$groep = $this->repository->get($id);
+		if (!$groep->mag(AccessAction::Bekijken())) {
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepEmailsView($groep);
 	}
 
-	public function eetwens($id) {
-		$groep = $this->model->get($id);
-		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+	public function eetwens($id)
+	{
+		$groep = $this->repository->get($id);
+		if (!$groep->mag(AccessAction::Bekijken())) {
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepEetwensView($groep);
 	}
 
-	public function zoeken(Request $request, $zoekterm = null) {
+	public function zoeken(Request $request, $zoekterm = null)
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');
 		}
-		$zoekterm = '%' . $zoekterm . '%';
 		$limit = 5;
 		if ($request->query->has('limit')) {
 			$limit = $request->query->getInt('limit');
 		}
+		$status = ['ft', 'ht'];
+		if ($request->query->has('status')) {
+			$status = explode(',', $request->query->get('status'));
+		}
 		$result = [];
-		foreach ($this->model->find('familie LIKE ? AND (status = ? OR status = ?)', [$zoekterm, GroepStatus::HT, GroepStatus::FT], null, null, $limit) as $groep) {
-			/** @var AbstractGroep $groep */
-			if (!isset($result[$groep->familie])) {
-				$type = classNameZonderNamespace(get_class($groep));
-				$result[$groep->familie] = [
-					'url' => $groep->getUrl() . '#' . $groep->id,
-					'label' => 'Groepen',
-					'value' => $type . ': ' . $groep->familie,
-					'icon' => Icon::getTag($type),
-				];
-			}
+
+		$groepen = $this->repository->zoeken($zoekterm, $limit, $status);
+
+		foreach ($groepen as $groep) {
+			$type = classNameZonderNamespace(get_class($groep));
+			$result[] = [
+				'url' => $groep->getUrl() . '#' . $groep->id,
+				'label' => 'Groepen',
+				'value' => $type . ': ' . $groep->naam,
+				'naam' => $groep->naam,
+				'icon' => Icon::getTag($type),
+				'id' => $groep->getId(),
+			];
 		}
 		return new JsonResponse($result);
 	}
 
-	public function nieuw(Request $request, $id = null, $soort = null) {
+	/**
+	 * @param Request $request
+	 * @param null $id
+	 * @param null $soort
+	 * @return GenericDataTableResponse|GroepForm|Response
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function nieuw(Request $request, $id = null, $soort = null)
+	{
 		return $this->aanmaken($request, $id, $soort);
 	}
 
-	public function aanmaken(Request $request, $id = null, $soort = null) {
-		if (empty($id)) {
-			$old = null;
-			$groep = $this->model->nieuw($soort);
-			/**
-			 * @var Profiel $profiel
-			 */
-			$profiel = LoginModel::getProfiel();
-			if ($groep instanceof Activiteit AND empty($groep->rechten_aanmelden)) {
-				switch ($groep->soort) {
+	/**
+	 * @param Request $request
+	 * @param null $id
+	 * @param null $soort
+	 * @return GenericDataTableResponse|GroepForm|Response
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function aanmaken(Request $request, $id = null, $soort = null)
+	{
+		if (!$id) {
+			$vorige = null;
+			$groep = $this->repository->nieuw($soort);
+			$profiel = $this->getProfiel();
+			if ($groep instanceof Activiteit && empty($groep->rechtenAanmelden)) {
+				switch ($groep->activiteitSoort) {
 
-					case ActiviteitSoort::Lichting:
-						$groep->rechten_aanmelden = 'Lichting:' . $profiel->lidjaar;
+					case ActiviteitSoort::Lichting():
+						$groep->rechtenAanmelden = 'Lichting:' . $profiel->lidjaar;
 						break;
 
-					case ActiviteitSoort::Verticale:
-						$groep->rechten_aanmelden = 'Verticale:' . $profiel->verticale;
+					case ActiviteitSoort::Verticale():
+						$groep->rechtenAanmelden = 'Verticale:' . $profiel->verticale;
 						break;
 
-					case ActiviteitSoort::Kring:
+					case ActiviteitSoort::Kring():
 						$kring = $profiel->getKring();
 						if ($kring) {
-							$groep->rechten_aanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer;
+							$groep->rechtenAanmelden = 'Kring:' . $kring->verticale . '.' . $kring->kringNummer;
 						}
+						break;
+					default:
+						$groep->rechtenAanmelden = P_LOGGED_IN;
 						break;
 				}
 			}
 		} // opvolger
 		else {
-			/** @var AbstractGroep $old */
-			$old = $this->model->retrieveByUUID($id);
-			if (!$old) {
-				throw new CsrToegangException();
+			$vorige = $this->repository->retrieveByUUID($id);
+			if (!$vorige) {
+				throw $this->createAccessDeniedException();
 			}
-			if (property_exists($old, 'soort')) {
-				$soort = $old->soort;
+			if ($vorige instanceof HeeftSoort) {
+				$soort = $vorige->getSoort();
 			}
-			$groep = $this->model->nieuw($soort);
-			$groep->naam = $old->naam;
-			$groep->familie = $old->familie;
-			$groep->samenvatting = $old->samenvatting;
-			$groep->omschrijving = $old->omschrijving;
-			if (property_exists($old, 'rechten_aanmelden')) {
-				$groep->rechten_aanmelden = $old->rechten_aanmelden;
+			$groep = $this->repository->nieuw($soort);
+			$groep->naam = $vorige->naam;
+			$groep->familie = $vorige->familie;
+			$groep->samenvatting = $vorige->samenvatting;
+			$groep->omschrijving = $vorige->omschrijving;
+			if (in_array(GroepAanmeldRechten::class, class_uses($groep)) && in_array(GroepAanmeldRechten::class, class_uses($vorige))) {
+				$groep->rechtenAanmelden = $vorige->rechtenAanmelden;
 			}
 		}
-		$form = new GroepForm($groep, $this->model->getUrl() . '/aanmaken', AccessAction::Aanmaken); // checks rechten aanmaken
+
+		// checks rechten aanmaken
+		$form = new GroepForm($groep, $this->repository->getUrl() . '/aanmaken', AccessAction::Aanmaken());
 		if ($request->getMethod() == 'GET') {
-			$this->beheren($request);
-			$form->setDataTableId($this->table->getDataTableId());
-			return view('default', ['content' => $this->table, 'modal' => $form]);
+			$table = new GroepenBeheerTable($this->repository);
+			$form->setDataTableId($table->getDataTableId());
+			return $this->render('default.html.twig', ['content' => $table, 'modal' => $form]);
 		} elseif ($form->validate()) {
-			$this->changeLogModel->log($groep, 'create', null, print_r($groep, true));
-			$this->model->create($groep);
+			$this->changeLogRepository->log($groep, 'create', null, $this->changeLogRepository->serialize($groep));
+			$this->repository->create($groep);
 			$response[] = $groep;
-			if ($old) {
-				$old->status = GroepStatus::OT;
-				$this->model->update($old);
-				$response[] = $old;
+			if ($vorige) {
+				$vorige->status = GroepStatus::OT();
+				$this->repository->update($vorige);
+				$response[] = $vorige;
 			}
-			$view = new GroepenBeheerData($response);
+			$view = $this->tableData($response);
 			setMelding(get_class($groep) . ' succesvol aangemaakt!', 1);
 			$form = new GroepPreviewForm($groep);
-			$view->modal = $form->getHtml();
+			$view->modal = $form->__toString();
 			return $view;
 		} else {
 			return $form;
 		}
 	}
 
-	public function beheren(Request $request, $soort = null) {
+	public function beheren(Request $request, $soort = null)
+	{
 		if ($request->getMethod() == 'POST') {
-			if ($soort) {
-				$groepen = $this->model->find('soort = ?', [$soort]);
+			$soortEnum = $this->repository->parseSoort($soort);
+			if ($soortEnum) {
+				$groepen = $this->repository->findBy(['soort' => $soortEnum]);
 			} else {
-				$groepen = $this->model->find();
+				$groepen = $this->repository->findAll();
 			}
-			return new GroepenBeheerData($groepen); // controleert GEEN rechten bekijken
+			return $this->tableData($groepen);
 		} else {
-			$table = new GroepenBeheerTable($this->model);
-			$this->table = $table;
-			return view('default', ['content' => $table]);
+			$this->table = new GroepenBeheerTable($this->repository);
+			return $this->render('default.html.twig', ['content' => $this->table]);
 		}
 	}
 
-	public function wijzigen(Request $request, $id = null) {
-		if ($id) {
-			$groep = $this->model->get($id);
-			if (!$groep->mag(AccessAction::Wijzigen)) {
-				throw new CsrToegangException();
-			}
-			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
-			if ($request->getMethod() == 'GET') {
-				$this->beheren($request);
-				$this->table->filter = $groep->naam;
-				$form->setDataTableId($this->table->getDataTableId());
-				return view('default', ['content' => $this->table, 'modal' => $form]);
-			} elseif ($form->validate()) {
-				$this->changeLogModel->logChanges($form->diff());
-				$this->model->update($groep);
-				return new GroepenBeheerData([$groep]);
-			} else {
-				return $form;
-			}
-		} // beheren
-		else {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			if (empty($selection)) {
-				throw new CsrToegangException();
-			}
-			/** @var AbstractGroep $groep */
-			$groep = $this->model->retrieveByUUID($selection[0]);
-			if (!$groep OR !$groep->mag(AccessAction::Wijzigen)) {
-				throw new CsrToegangException();
-			}
-			$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen); // checks rechten wijzigen
-			if ($form->validate()) {
-				$this->changeLogModel->logChanges($form->diff());
-				$this->model->update($groep);
-				return new GroepenBeheerData([$groep]);
-			} else {
-				return $form;
-			}
+	/**
+	 * @param Request $request
+	 * @param null $id
+	 * @return GenericDataTableResponse|GroepForm|Response
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function wijzigen(Request $request, $id)
+	{
+		$groep = $this->repository->get($id);
+
+		if (!$groep) {
+			throw $this->createNotFoundException();
+		}
+
+		if (!$groep->mag(AccessAction::Wijzigen())) {
+			throw $this->createAccessDeniedException();
+		}
+		// checks rechten wijzigen
+		$form = new GroepForm($groep, $groep->getUrl() . '/wijzigen', AccessAction::Wijzigen());
+		if ($request->getMethod() == 'GET') {
+			$this->beheren($request);
+			$this->table->filter = $groep->naam;
+			$form->setDataTableId($this->table->getDataTableId());
+			return $this->render('default.html.twig', ['content' => $this->table, 'modal' => $form]);
+		} elseif ($form->validate()) {
+			$this->changeLogRepository->logChanges($form->diff());
+			$this->repository->update($groep);
+			return $this->tableData([$groep]);
+		} else {
+			return $form;
 		}
 	}
 
-	public function verwijderen($id) {
+	/**
+	 * @param SerializerInterface $serializer
+	 * @param $id
+	 * @return GenericDataTableResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function verwijderen(SerializerInterface $serializer, $id)
+	{
 		$response = [];
-		/** @var AbstractGroep $groep */
-		$groep = $this->model->retrieveByUUID($id);
-		if ($groep && $groep->mag(AccessAction::Verwijderen) && count($groep->getLeden()) === 0) {
-			$this->changeLogModel->log($groep, 'delete', print_r($groep, true), null);
-			$this->model->delete($groep);
-			$response[] = $groep;
+		$groep = $this->repository->retrieveByUUID($id);
+		if ($groep && $groep->mag(AccessAction::Verwijderen()) && count($groep->getLeden()) === 0) {
+			$old = $serializer->serialize($groep, 'json', [
+				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($obj) {
+					return $obj->id ?? "";
+				},
+				AbstractNormalizer::IGNORED_ATTRIBUTES => ['familieSuggesties'],
+			]);
+			$this->changeLogRepository->log($groep, 'delete', $old, null);
+			$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));
+			$this->repository->delete($groep);
 		}
-		return new RemoveRowsResponse($response);
+		return $this->tableData($response);
 	}
 
-	public function opvolging($id) {
-		/** @var AbstractGroep $groep */
-		$groep = $this->model->retrieveByUUID($id);
-		$form = new GroepOpvolgingForm($groep, $this->model->getUrl() . '/opvolging');
+	/**
+	 * @param $id
+	 * @return GenericDataTableResponse|GroepOpvolgingForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function opvolging($id)
+	{
+		$groep = $this->repository->retrieveByUUID($id);
+		$form = new GroepOpvolgingForm($groep, $this->repository->getUrl() . '/opvolging');
 		if ($form->validate()) {
 			$values = $form->getValues();
 			$response = [];
-			/** @var AbstractGroep $groep */
-			$groep = $this->model->retrieveByUUID($id);
-			if ($groep and $groep->mag(AccessAction::Opvolging)) {
-				$this->changeLogModel->log($groep, 'familie', $groep->familie, $values['familie']);
-				$this->changeLogModel->log($groep, 'status', $groep->status, $values['status']);
+			$groep = $this->repository->retrieveByUUID($id);
+			if ($groep && $groep->mag(AccessAction::Opvolging())) {
+				$this->changeLogRepository->log($groep, 'familie', $groep->familie, $values['familie']);
+				$this->changeLogRepository->log($groep, 'status', $groep->status, $values['status']);
 				$groep->familie = $values['familie'];
 				$groep->status = $values['status'];
-				$this->model->update($groep);
+				$this->repository->update($groep);
 				$response[] = $groep;
 			}
-			return new GroepenBeheerData($response);
+			return $this->tableData($response);
 		} else {
 			return $form;
 		}
 	}
 
-	public function converteren($id) {
-		/** @var AbstractGroep $groep */
-		$groep = $this->model->retrieveByUUID($id);
-		$form = new GroepConverteerForm($groep, $this->model);
+	/**
+	 * @param $id
+	 * @return GenericDataTableResponse|GroepConverteerForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function converteren($id)
+	{
+		$groep = $this->repository->retrieveByUUID($id);
+		$form = new GroepConverteerForm($groep, $this->repository);
 		if ($form->validate()) {
 			$values = $form->getValues();
-			/** @var AbstractGroepenModel $model */
-			$model = $values['model']::instance();
-			$converteer = get_class($model) !== get_class($this->model);
+			/** @var GroepRepository $model */
+			$model = ContainerFacade::getContainer()->get($values['model']);
+			$converteer = get_class($model) !== get_class($this->repository);
 			$response = [];
-			$groep = $this->model->retrieveByUUID($id);
-			if ($groep and $groep->mag(AccessAction::Wijzigen)) {
+			$groep = $this->repository->retrieveByUUID($id);
+			if ($groep && $groep->mag(AccessAction::Wijzigen())) {
 				if ($converteer) {
-					$this->changeLogModel->log($groep, 'class', get_class($groep), $model::ORM);
-					$nieuw = $model->converteer($groep, $this->model, $values['soort']);
+					$this->changeLogRepository->log($groep, 'class', get_class($groep), $model->entityClass);
+					$nieuw = $model->converteer($groep, $this->repository, $values['soort']);
 					if ($nieuw) {
+						$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));
 						$response[] = $groep;
 					}
-				} elseif (property_exists($groep, 'soort')) {
-					$this->changeLogModel->log($groep, 'soort', $groep->soort, $values['soort']);
-					$groep->soort = $values['soort'];
-					$rowCount = $this->model->update($groep);
-					if ($rowCount > 0) {
-						$response[] = $groep;
-					}
+				} elseif ($groep instanceof HeeftSoort) {
+					$this->changeLogRepository->log($groep, 'soort', $groep->getSoort(), $values['soort']);
+					$groep->setSoort($values['soort']);
+					$this->repository->update($groep);
+					$response[] = $groep;
 				}
 			}
-			if ($converteer) {
-				return new RemoveRowsResponse($response);
-			} else {
-				return new GroepenBeheerData($response);
-			}
+			return $this->tableData($response);
 		} else {
 			return $form;
 		}
 	}
 
-	public function sluiten($id) {
+	/**
+	 * @param $id
+	 * @return GenericDataTableResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 */
+	public function sluiten($id)
+	{
 		$response = [];
-		/** @var AbstractGroep $groep */
-		$groep = $this->model->retrieveByUUID($id);
-		if ($groep and property_exists($groep, 'aanmelden_tot') and time() <= strtotime($groep->aanmelden_tot) and $groep->mag(AccessAction::Wijzigen)) {
-			$this->changeLogModel->log($groep, 'aanmelden_tot', $groep->aanmelden_tot, getDateTime());
-			$groep->aanmelden_tot = getDateTime();
-			$this->model->update($groep);
+		$groep = $this->repository->retrieveByUUID($id);
+		if ($groep
+			&& in_array(GroepAanmeldMoment::class, class_uses($groep))
+			&& date_create_immutable() <= $groep->aanmeldenTot
+			&& $groep->mag(AccessAction::Wijzigen())
+		) {
+			$this->changeLogRepository->log($groep, 'aanmelden_tot', $groep->aanmeldenTot, date_create_immutable());
+			$groep->aanmeldenTot = date_create_immutable();
+			$this->repository->update($groep);
 			$response[] = $groep;
 		}
-		return new GroepenBeheerData($response);
+		return $this->tableData($response);
 	}
 
-	public function voorbeeld($id) {
-		/** @var AbstractGroep $groep */
-		$groep = $this->model->retrieveByUUID($id);
-		if (!$groep OR !$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+	public function voorbeeld($id)
+	{
+		$groep = $this->repository->retrieveByUUID($id);
+		if (!$groep || !$groep->mag(AccessAction::Bekijken())) {
+			throw $this->createAccessDeniedException();
 		}
 		return new GroepPreviewForm($groep);
 	}
@@ -460,51 +556,57 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 	/**
 	 * @param Request $request
 	 * @param $id
-	 * @return GroepLogboekForm|GroepLogboekData
+	 * @return GenericDataTableResponse|GroepLogboekForm
 	 */
-	public function logboek(Request $request, $id) {
+	public function logboek(Request $request, $id)
+	{
 		// data request
 		if ($request->getMethod() == 'POST') {
-			$groep = $this->model->get($id);
-			if (!$groep->mag(AccessAction::Bekijken)) {
-				throw new CsrToegangException();
+			$groep = $this->repository->get($id);
+			if (!$groep->mag(AccessAction::Bekijken())) {
+				throw $this->createAccessDeniedException();
 			}
-			$data = $this->changeLogModel->find('subject = ?', [$groep->getUUID()]);
-			return new GroepLogboekData($data);
-		} // popup request
+			$data = $this->changeLogRepository->findBy(['subject' => $groep->getUUID()]);
+			return $this->tableData($data);
+		}
+		// popup request
 		else {
-			/** @var AbstractGroep $groep */
-			$groep = $this->model->retrieveByUUID($id);
-			if (!$groep || !$groep->mag(AccessAction::Bekijken)) {
-				throw new CsrToegangException('Kan logboek niet vinden');
+			$groep = $this->repository->retrieveByUUID($id);
+			if (!$groep || !$groep->mag(AccessAction::Bekijken())) {
+				throw $this->createAccessDeniedException('Kan logboek niet vinden');
 			}
 			return new GroepLogboekForm($groep);
 		}
 	}
 
-	public function leden(Request $request, $id) {
-		$groep = $this->model->get($id);
-		if (!$groep->mag(AccessAction::Bekijken)) {
-			throw new CsrToegangException();
+	public function leden(Request $request, $id)
+	{
+		$groep = $this->repository->get($id);
+		if (!$groep->mag(AccessAction::Bekijken())) {
+			throw $this->createAccessDeniedException();
 		}
 		if ($request->getMethod() == 'POST') {
-			return new GroepLedenData($groep::getLedenModel()->getLedenVoorGroep($groep));
+			return $this->tableData($groep->getLeden());
 		} else {
-			return new GroepLedenTable($groep::getLedenModel(), $groep);
+			return new GroepLedenTable($groep);
 		}
 	}
 
 	/*
 	 * Voor groepen V2
 	 */
-	public function aanmelden2(Request $request, $id, $uid) {
-		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+	public function aanmelden2(Request $request, EntityManagerInterface $em, $id, $uid)
+	{
+		$groep = $this->repository->get($id);
 
-		if (!$groep->mag(AccessAction::Aanmelden)) {
-			throw new CsrToegangException();
+		if ($groep->versie !== GroepVersie::V2()) {
+			throw new BadRequestHttpException("Groep is niet van versie 2.");
 		}
-		$lid = $model->nieuw($groep, $uid);
+
+		if (!$groep->mag(AccessAction::Aanmelden())) {
+			throw $this->createAccessDeniedException();
+		}
+		$lid = $this->groepLidRepository->nieuw($groep, $uid);
 
 		$opmerking = $request->request->get('opmerking2');
 
@@ -519,203 +621,194 @@ abstract class AbstractGroepenController implements RouteLoaderInterface {
 
 		$lid->opmerking2 = $keuzes;
 
-		$this->changeLogModel->log($groep, 'aanmelden', null, $lid->uid);
-		$model->create($lid);
+		$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
+		$this->groepLidRepository->save($lid);
 
 		return new JsonResponse(['success' => true]);
 	}
 
-	public function ketzer_aanmelden($id) {
-		$uid = LoginModel::getUid();
-		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+	public function ketzer_aanmelden(EntityManagerInterface $em, $id)
+	{
+		$uid = $this->getUid();
+		$groep = $this->repository->get($id);
 
-		if (!$groep->mag(AccessAction::Aanmelden)) {
-			throw new CsrToegangException();
+		if ($groep->versie !== GroepVersie::V1()) {
+			throw new BadRequestHttpException("Groep is niet van versie 1.");
 		}
 
-		$lid = $model->nieuw($groep, $uid);
+		if (!$groep->mag(AccessAction::Aanmelden())) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$lid = $this->groepLidRepository->nieuw($groep, $uid);
+
 		$form = new GroepAanmeldenForm($lid, $groep);
 
 		if ($form->validate()) {
-			$this->changeLogModel->log($groep, 'aanmelden', null, $lid->uid);
-			$model->create($lid);
+			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->uid);
+			$em->persist($lid);
+			$em->flush();
+			$groep->getLeden()->add($lid);
 			return new GroepPasfotosView($groep);
 		} else {
 			return $form;
 		}
 	}
 
-	public function aanmelden($id) {
-		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+	public function aanmelden(EntityManagerInterface $em, $id)
+	{
+		$groep = $this->repository->get($id);
 
-		if (!$groep->mag(AccessAction::Beheren)) {
-			throw new CsrToegangException();
+		if (!$groep->mag(AccessAction::Beheren())) {
+			throw $this->createAccessDeniedException();
 		}
 
-		$lid = $model->nieuw($groep, null);
+		$lid = $this->groepLidRepository->nieuw($groep, null);
+		$lid->groep = $groep;
+		$lid->groep_id = $groep->id;
 		$leden = group_by_distinct('uid', $groep->getLeden());
 		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
 
 		if ($form->validate()) {
-			$this->changeLogModel->log($groep, 'aanmelden', null, $lid->uid);
-			$model->create($lid);
-			return new GroepLedenData([$lid]);
+			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->profiel->uid);
+			$lid->groep_id = $lid->groep->id;
+			$lid->uid = $lid->profiel->uid;
+			$this->groepLidRepository->save($lid);
+			return $this->tableData([$lid]);
 		} else {
 			return $form;
 		}
 	}
 
-	public function ketzer_bewerken($id) {
-		$uid = LoginModel::getUid();
-		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+	public function ketzer_bewerken(EntityManagerInterface $em, $id)
+	{
+		$uid = $this->getUid();
+		$groep = $this->repository->get($id);
 
-		if (!$groep->mag(AccessAction::Bewerken)) {
-			throw new CsrToegangException();
+		if (!$groep->mag(AccessAction::Bewerken())) {
+			throw $this->createAccessDeniedException();
 		}
-		$lid = $model->get($groep, $uid);
+		$lid = $groep->getLid($uid);
 		$form = new GroepBewerkenForm($lid, $groep);
 
 		if ($form->validate()) {
-			$this->changeLogModel->logChanges($form->diff());
-			$model->update($lid);
+			$this->changeLogRepository->logChanges($form->diff());
+			$em->persist($lid);
+			$em->flush();
 		}
 
 		return $form;
 	}
 
-	public function bewerken($id, $uid = null) {
-		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+	public function bewerken(EntityManagerInterface $em, $id, $uid = null)
+	{
+		$groep = $this->repository->get($id);
 
 		if (!$uid) {
 			$uid = filter_input(INPUT_POST, 'uid', FILTER_SANITIZE_STRING);
 		}
 
-		/** @var AbstractGroepLid $lid */
-		$lid = $model->get($groep, $uid);
+		$lid = $groep->getLid($uid);
 
 		if (!$lid) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
-		if (!$groep->mag(AccessAction::Beheren)) {
-			throw new CsrToegangException();
+		if (!$groep->mag(AccessAction::Beheren())) {
+			throw $this->createAccessDeniedException();
 		}
 
-		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken');
+		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/bewerken/' . $lid->uid);
 
 		if ($form->validate()) {
-			$this->changeLogModel->logChanges($form->diff());
-			$model->update($lid);
-			return new GroepLedenData([$lid]);
+			$this->changeLogRepository->logChanges($form->diff());
+			$lid->groep_id = $lid->groep->id;
+			$lid->uid = $lid->profiel->uid;
+			$em->persist($lid);
+			$em->flush();
+			return $this->tableData([$lid]);
 		} else {
+			// Voorkom opslaan
+			$em->clear();
 			return $form;
 		}
 	}
 
-	public function ketzer_afmelden($id) {
-		$uid = LoginModel::getUid();
-		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+	public function ketzer_afmelden(EntityManagerInterface $em, $id)
+	{
+		$uid = $this->getUid();
+		$groep = $this->repository->get($id);
 
-		if (!$groep->mag(AccessAction::Afmelden) && !$groep->mag(AccessAction::Beheren)) { // A::Beheren voor afmelden via context-menu
-			throw new CsrToegangException();
+		// A::Beheren voor afmelden via context-menu
+		if (!$groep->mag(AccessAction::Afmelden()) && !$groep->mag(AccessAction::Beheren())) {
+			throw $this->createAccessDeniedException();
 		}
 
-		$lid = $model->get($groep, $uid);
+		$lid = $groep->getLid($uid);
 
 		if (!$lid) {
-			throw new CsrToegangException('Niet aangemeld');
+			throw $this->createAccessDeniedException('Niet aangemeld');
 		}
 
-		$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
-		$model->delete($lid);
+		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
+		$em->remove($lid);
+		$em->flush();
 
 		return new GroepView($groep);
 	}
 
-	public function afmelden($id, $uid) {
-		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+	public function afmelden(EntityManagerInterface $em, $id, $uid)
+	{
+		$groep = $this->repository->get($id);
 
-		if (!$groep->mag(AccessAction::Beheren)) {
-			throw new CsrToegangException();
+		if (!$groep->mag(AccessAction::Beheren())) {
+			throw $this->createAccessDeniedException();
 		}
 
-		$lid = $model->get($groep, $uid);
-		$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
-		$model->delete($lid);
-		return new RemoveRowsResponse([$lid]);
+		$lid = $groep->getLid($uid);
+		$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
+		$response = new RemoveDataTableEntry(['groepId' => $lid->groepId, 'uid' => $uid], get_class($lid));
+		$em->remove($lid);
+		$em->flush();
+
+		return $this->tableData([$response]);
 	}
 
-	public function naar_ot($id, $uid = null) {
-		$groep = $this->model->get($id);
-		$model = $groep::getLedenModel();
+	public function naar_ot(EntityManagerInterface $em, $id, $uid = null)
+	{
+		$groep = $this->repository->get($id);
+		$otGroep = $this->repository->findOt($groep);
 
-		// Vind de groep uit deze familie met het laatste eind_moment
-		$ot_groep_statement = $this->model->find("familie = ? and status = 'ot'", [$groep->familie], null, 'eind_moment DESC');
-
-		if ($ot_groep_statement->rowCount() === 0) {
+		if (!$otGroep) {
 			throw new CsrGebruikerException('Geen o.t. groep gevonden');
 		}
 
-		/** @var AbstractGroep $ot_groep */
-		$ot_groep = $ot_groep_statement->fetch();
 
-		if ($uid) {
-			if ($ot_groep->getLid($uid)) {
-				throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
-			}
-			if (!$groep->mag(AccessAction::Afmelden) AND !$groep->mag(AccessAction::Beheren) AND !$ot_groep->mag(AccessAction::Aanmelden)) { // A::Beheren voor afmelden via context-menu
-				throw new CsrGebruikerException();
-			}
-			Database::transaction(function () use ($groep, $ot_groep, $uid, $model) {
-				$lid = $model->get($groep, $uid);
-				$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
-				$this->changeLogModel->log($ot_groep, 'aanmelden', $lid->uid, null);
-				$model->delete($lid);
-				$lid->groep_id = $ot_groep->id;
-				$model->create($lid);
-				$lid->groep_id = $groep->id; // Terugspelen naar gebruiker dat dit lid is verwijderd
-			});
-			return new GroepView($groep);
-		} else {
-			$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-			if (empty($selection)) {
-				throw new CsrGebruikerException();
-			}
-
-			$response = Database::transaction(function () use ($selection, $groep, $ot_groep, $model) {
-				$response = [];
-				foreach ($selection as $UUID) {
-					if (!$groep->mag(AccessAction::Beheren)) {
-						throw new CsrGebruikerException();
-					}
-					/** @var AbstractGroepLid $lid */
-					$lid = $model->retrieveByUUID($UUID);
-					if ($ot_groep->getLid($lid->uid)) {
-						throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
-					}
-					$this->changeLogModel->log($groep, 'afmelden', $lid->uid, null);
-					$this->changeLogModel->log($ot_groep, 'aanmelden', $lid->uid, null);
-					$model->delete($lid);
-					$lid->groep_id = $ot_groep->id;
-					$lid->lid_sinds = getDateTime();
-					$lid->door_uid = LoginModel::getUid();
-					$model->create($lid);
-					$lid->groep_id = $groep->id;
-
-					$response[] = $lid;
-				}
-
-				return $response;
-			});
-			return new RemoveRowsResponse($response);
+		if ($otGroep->getLid($uid)) {
+			throw new CsrGebruikerException('Lid al onderdeel van o.t. groep');
 		}
 
-	}
+		// A::Beheren voor afmelden via context-menu
+		if (!$groep->mag(AccessAction::Afmelden())
+			&& !$groep->mag(AccessAction::Beheren())
+			&& !$otGroep->mag(AccessAction::Aanmelden())) {
+			throw new CsrGebruikerException();
+		}
 
+		$lid = $groep->getLid($uid);
+		$em->transactional(function () use ($groep, $otGroep, $lid, $em) {
+			$this->changeLogRepository->log($groep, 'afmelden', $lid->uid, null);
+			$this->changeLogRepository->log($otGroep, 'aanmelden', $lid->uid, null);
+			$em->remove($lid);
+			$em->flush();
+			$lid->groep = $otGroep;
+			$lid->doorProfiel = $this->getProfiel();
+			$lid->lidSinds = date_create_immutable();
+			$em->persist($lid);
+			$em->flush();
+			$em->clear();
+		});
+
+		return $this->tableData([new RemoveDataTableEntry(['groep_id' => $groep->id, 'uid' => $lid->uid], get_class($lid))]);
+	}
 }

@@ -56,6 +56,12 @@ instellingen:
       opties: ['normaal', 'lustrum', 'owee', 'dies', 'donker', 'sineregno', 'civitasia', 'roze', 'koevoet']
       default: 'normaal'
       beschrijving: 'Ik daag je uit roze te gebruiken. Of koevoet.'
+    automatischDonker:
+      titel: 'Automatisch donker thema'
+      type: Enumeration
+      opties: ['ja', 'nee']
+      default: 'ja'
+      beschrijving: 'Schakel automatisch donkere modus in als je computer op donkere modus staat.'
     assistent:
       titel: 'Assistent'
       type: Enumeration
@@ -73,7 +79,7 @@ instellingen:
       type: Enumeration
       opties: ['nee', 'civisaldo', 'onontdekt', 'sneeuw', 'space', 'wolken']
       default: 'nee'
-      beschrijving: 'Het effect wat wordt weergegeven tijdens zoeken en als het menu geopend is.'
+      beschrijving: 'Het effect wat wordt weergegeven op de achtergrond. Let op, voor sommige effecten heb je een goede computer nodig.'
     visitekaartjes:
       titel: 'Civikaartjes'
       type: Enumeration
@@ -95,7 +101,7 @@ instellingen:
     trein:
       titel: 'Trein'
       type: Enumeration
-      opties: ['nee', 'willekeurig']
+      opties: ['willekeurig', 'nee']
       default: 'nee'
       beschrijving: 'Tjoek tjoek!'
     raket:
@@ -104,6 +110,12 @@ instellingen:
       opties: ['2019', 'nee']
       default: 'nee'
       beschrijving: 'Laat lichting 2019 opstijgen als een raket.'
+    druif:
+      titel: 'Druif'
+      type: Enumeration
+      opties: ['2020', 'nee']
+      default: 'nee'
+      beschrijving: 'Die Romeinen van lichting 20 genieten van het leven.'
   forum:
     draden_per_pagina:
       titel: 'Draadjes per pagina'
@@ -167,12 +179,6 @@ instellingen:
       opties: ['nee', 'boven bericht', 'in bericht']
       default: 'boven bericht'
       beschrijving: 'Weergave van fotos op het forum.'
-    filter2008:
-      titel: 'Berichten van 2008 eerst verbergen'
-      type: Enumeration
-      opties: ['ja', 'nee']
-      default: 'nee'
-      beschrijving: 'Verberg berichten van leden uit 2008'
     meldingStandaard:
       titel: 'E-mail bij vermelding'
       type: Enumeration
@@ -209,10 +215,11 @@ instellingen:
         zijbalk_verborgen: Verborgen
       default: 'zijbalk_normaal'
       beschrijving: ''
+    meescrollen: {titel: "Zijbalk meescrollen", type: 'Enumeration', opties: ['ja', 'nee'], default: 'nee', beschrijving: ''}
     ishetal:
       titel: 'Is het al… weergeven'
       type: Enumeration
-      opties: ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lunch', 'studeren', 'foutmelding', 'sponsorkliks']
+      opties: ['niet weergeven', 'willekeurig', 'wist u dat', 'weekend', 'kring', 'lezing', 'borrel', 'jarig', 'dies', 'lustrum', 'lunch', 'studeren', 'sponsorkliks']
       default: 'willekeurig'
       beschrijving: ''
     favorieten: {titel: 'Favorieten menu weergeven', type: 'Enumeration', opties: ['ja', 'nee'], default: 'ja', beschrijving: ''}

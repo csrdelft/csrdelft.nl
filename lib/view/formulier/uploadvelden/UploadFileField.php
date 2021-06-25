@@ -11,7 +11,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  * Uploaden van bestand in de browser over http(s).
  */
 class UploadFileField extends InputField {
@@ -97,7 +97,7 @@ class UploadFileField extends InputField {
 		return parent::getJavascript() . <<<JS
 
 $('#{$this->getId()}').change(function() {
-	for (i = 0; i < this.files.length; i++) { 
+	for (i = 0; i < this.files.length; i++) {
 		if (this.files[i].size > {$max}) {
 			alert(this.files[i].name + ' is te groot: Maximaal {$format}\\n\\nSplits het bestand op of gebruik een andere upload-methode.');
 			if (this.files.length <= 1) {

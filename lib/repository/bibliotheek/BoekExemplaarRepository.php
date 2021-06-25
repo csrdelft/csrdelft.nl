@@ -4,8 +4,10 @@ namespace CsrDelft\repository\bibliotheek;
 
 use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\entity\bibliotheek\BoekExemplaar;
+use CsrDelft\entity\bibliotheek\BoekExemplaarStatus;
 use CsrDelft\entity\profiel\Profiel;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\ProfielRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BoekExemplaar[]    findAll()
  * @method BoekExemplaar[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoekExemplaarRepository extends ServiceEntityRepository {
+class BoekExemplaarRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, BoekExemplaar::class);
 	}
@@ -51,19 +53,22 @@ class BoekExemplaarRepository extends ServiceEntityRepository {
 		if (!$exemplaar->kanLenen($uid)) {
 			return false;
 		} else {
-			$exemplaar->status = 'uitgeleend';
+			$exemplaar->status = BoekExemplaarStatus::uitgeleend();
 			$exemplaar->uitgeleend_uid = $uid;
+			$exemplaar->uitgeleend = ProfielRepository::get($uid);
 			$this->getEntityManager()->persist($exemplaar);
 			$this->getEntityManager()->flush();
 			return true;
 		}
 	}
 
-	public function addExemplaar(Boek $boek, string $uid) {
+	public function addExemplaar(Boek $boek, Profiel $profiel) {
 		$exemplaar = new BoekExemplaar();
 		$exemplaar->boek = $boek;
-		$exemplaar->eigenaar_uid = $uid;
-		$exemplaar->toegevoegd = date_create();
+		$exemplaar->eigenaar = $profiel;
+		$exemplaar->eigenaar_uid = $profiel->uid;
+		$exemplaar->status = BoekExemplaarStatus::beschikbaar();
+		$exemplaar->toegevoegd = date_create_immutable();
 		$exemplaar->uitleendatum = null;
 		$exemplaar->opmerking = '';
 		$exemplaar->leningen = 0;
@@ -73,7 +78,7 @@ class BoekExemplaarRepository extends ServiceEntityRepository {
 
 	public function terugGegeven(BoekExemplaar $exemplaar) {
 		if ($exemplaar->isUitgeleend()) {
-			$exemplaar->status = 'teruggegeven';
+			$exemplaar->status = BoekExemplaarStatus::teruggegeven();
 			$this->getEntityManager()->persist($exemplaar);
 			$this->getEntityManager()->flush();
 			return true;
@@ -84,7 +89,7 @@ class BoekExemplaarRepository extends ServiceEntityRepository {
 
 	public function terugOntvangen(BoekExemplaar $exemplaar) {
 		if ($exemplaar->isUitgeleend() || $exemplaar->isTeruggegeven()) {
-			$exemplaar->status = 'beschikbaar';
+			$exemplaar->status = BoekExemplaarStatus::beschikbaar();
 			$this->getEntityManager()->persist($exemplaar);
 			$this->getEntityManager()->flush();
 			return true;
@@ -95,7 +100,7 @@ class BoekExemplaarRepository extends ServiceEntityRepository {
 
 	public function setVermist(BoekExemplaar $exemplaar) {
 		if ($exemplaar->isBeschikbaar()) {
-			$exemplaar->status = 'vermist';
+			$exemplaar->status = BoekExemplaarStatus::vermist();
 			$this->getEntityManager()->persist($exemplaar);
 			$this->getEntityManager()->flush();
 			return true;
@@ -106,7 +111,7 @@ class BoekExemplaarRepository extends ServiceEntityRepository {
 
 	public function setGevonden(BoekExemplaar $exemplaar) {
 		if ($exemplaar->isVermist()) {
-			$exemplaar->status = 'beschikbaar';
+			$exemplaar->status = BoekExemplaarStatus::beschikbaar();
 			$this->getEntityManager()->persist($exemplaar);
 			$this->getEntityManager()->flush();
 			return true;

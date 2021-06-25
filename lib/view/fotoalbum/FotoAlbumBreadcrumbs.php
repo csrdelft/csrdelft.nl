@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view\fotoalbum;
 
-use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\fotoalbum\FotoAlbumModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
+use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -50,7 +51,7 @@ class FotoAlbumBreadcrumbs {
 
 	private static function getDropDown($subdir, $albumnaam) {
 		try {
-			$parent = FotoAlbumModel::instance()->getFotoAlbum($subdir);
+			$parent = ContainerFacade::getContainer()->get(FotoAlbumRepository::class)->getFotoAlbum($subdir);
 			$albums = $parent->getSubAlbums();
 			$dropdown = '<select onchange="location.href=this.value;">';
 			foreach ($albums as $album) {
@@ -62,7 +63,7 @@ class FotoAlbumBreadcrumbs {
 			}
 			$dropdown .= '</select>';
 			return '<li class="breadcrumb-item">' . $dropdown . '</li>';
-		} catch (CsrNotFoundException $ex) {
+		} catch (NotFoundHttpException $ex) {
 			return '';
 		}
 	}

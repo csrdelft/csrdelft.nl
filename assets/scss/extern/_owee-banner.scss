@@ -1,0 +1,66 @@
+body.met-owee-banner {
+	#header {
+		position: sticky;
+	}
+
+	#banner {
+		margin-top: 2em;
+	}
+}
+
+.owee-banner {
+	position: relative;
+	min-height: 250px;
+	width: 100%;
+	background: url('../../images/owee2020-achtergrond.png') no-repeat center bottom;
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 2rem;
+	margin-bottom: 15px;
+
+	.logo {
+		width: 230px;
+		padding-right: 50px;
+
+		@media (max-width: 550px) {
+			display: none;
+		}
+	}
+
+	.tekst {
+		p {
+			font-size: 1.2rem;
+			line-height: 150%;
+			margin-bottom: 2rem;
+
+			@media (max-width: 550px) {
+				br {
+					display: none;
+				}
+			}
+		}
+
+		div {
+			font-size: 1rem;
+			font-weight: bold;
+			text-transform: uppercase;
+			display: inline-block;
+			background: white;
+			color: #713e89;
+			padding: 0.4rem 1.2rem;
+
+			@media (max-width: 550px) {
+				span {
+					display: none;
+				}
+			}
+
+			&:hover {
+				background: #5F377D;
+				color: white;
+			}
+		}
+	}
+}

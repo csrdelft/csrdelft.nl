@@ -19,14 +19,14 @@ class AgendaVerbergen {
 	 * Lidnummer
 	 * Shared primary key
 	 * @ORM\Id()
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="uid")
 	 * @var string
 	 */
 	public $uid;
 	/**
 	 * UUID of Agendeerbaar entity
 	 * Shared primary key
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="stringkey")
 	 * @ORM\Id()
 	 * @var string
 	 */

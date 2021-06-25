@@ -4,7 +4,7 @@ namespace CsrDelft\view\formulier\invoervelden;
 
 use CsrDelft\common\CsrException;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\uploadvelden\BestandBehouden;
 use CsrDelft\view\Validator;
@@ -18,13 +18,13 @@ use CsrDelft\view\Validator;
  *
  *    - TextField                        Simpele input
  *        * DateTimeField                Datum & tijdstip
- *        * RechtenField                Rechten, zie AccessModel
+ *        * RechtenField                Rechten, zie AccessRepository
  *        * LandField                    Landen
  *        * StudieField                Opleidingen
  *        * EmailField                Email adressen
  *        * UrlField                    Url's
  *        * TextareaField                Textarea die automagisch uitbreidt bij typen
- *            - BBCodeField        Textarea met bbcode voorbeeld
+ * 			  * ProsemirrorField 					Een Prosemirror editor met als uitvoer BB code
  *    * NickField                    Nicknames
  *    * DuckField                    Ducknames
  *        * LidField                    Leden selecteren
@@ -40,7 +40,7 @@ use CsrDelft\view\Validator;
  * behalve FileField zelf die wel meerdere InputFields bevat.
  */
 abstract class InputField implements FormElement, Validator {
-	protected $wrapperClassName = 'form-group row';
+	protected $wrapperClassName = 'row mb-3';
 	protected $labelClassName = 'col-3 col-form-label';
 	protected $fieldClassName = 'col-9';
 
@@ -64,7 +64,6 @@ abstract class InputField implements FormElement, Validator {
 	public $placeholder = null; // plaats een grijze placeholdertekst in leeg veld
 	public $error = ''; // foutmelding van dit veld
 	public $onchange = null; // callback on change of value
-	public $onchange_submit = false; // bij change of value form submitten
 	public $onclick = null; // callback on click
 	public $onkeydown = null; // prevent illegal character from being entered
 	public $onkeyup = null; // respond to keyboard strokes
@@ -156,11 +155,11 @@ abstract class InputField implements FormElement, Validator {
 	public function validate() {
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif ($this->readonly AND $this->value !== $this->origvalue) {
+		} elseif ($this->readonly AND $this->value != $this->origvalue) {
 			$this->error = 'Dit veld mag niet worden aangepast';
 		} elseif ($this->value == '' AND $this->required) {
 			// vallen over lege velden als dat aangezet is voor het veld
-			if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
+			if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
 				// tenzij gebruiker P_LEDEN_MOD heeft en deze optie aan staat voor dit veld
 			} else {
 				$this->error = 'Dit is een verplicht veld';
@@ -243,7 +242,7 @@ abstract class InputField implements FormElement, Validator {
 		if (!empty($this->description)) {
 			$required = '';
 			if ($this->required) {
-				if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
+				if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
 					// exception for leden mod
 				} else {
 					$required = '<span class="field-required">*</span>';
@@ -280,7 +279,7 @@ abstract class InputField implements FormElement, Validator {
 	 */
 	protected function getCssClasses() {
 		if ($this->required) {
-			if ($this->leden_mod AND LoginModel::mag(P_LEDEN_MOD)) {
+			if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
 				// exception for leden mod
 			} else {
 				$this->css_classes[] = 'required';
@@ -386,7 +385,7 @@ abstract class InputField implements FormElement, Validator {
 
 	public function getHelpDiv() {
 		if ($this->title) {
-			return '<small class="col-md-12 text-muted">' . $this->title . '</small>';
+			return '<div class="form-text">' . $this->title . '</div>';
 		}
 		return '';
 	}
@@ -394,18 +393,20 @@ abstract class InputField implements FormElement, Validator {
 	/**
 	 * View die zou moeten werken voor veel velden.
 	 */
-	public function view() {
-		echo $this->getDiv();
-		echo $this->getLabel();
-		echo '<div class="' . $this->fieldClassName . '">';
-		echo $this->getHtml();
-		echo $this->getErrorDiv();
-		echo '</div>';
-		echo $this->getHelpDiv();
+	public function __toString() {
+		$html = '';
+		$html .= $this->getDiv();
+		$html .= $this->getLabel();
+		$html .= '<div class="' . $this->fieldClassName . '">';
+		$html .= $this->getHtml();
+		$html .= $this->getErrorDiv();
+		$html .= '</div>';
+		$html .= $this->getHelpDiv();
 		if ($this->preview) {
-			echo $this->getPreviewDiv();
+			$html .= $this->getPreviewDiv();
 		}
-		echo '</div>';
+		$html .= '</div>';
+		return $html;
 	}
 
 	/**
@@ -428,12 +429,6 @@ abstract class InputField implements FormElement, Validator {
 JS;
 		if ($this->readonly) {
 			return $js;
-		}
-		if ($this->onchange_submit) {
-			$this->onchange .= <<<JS
-
-	window.formulier.formSubmit(event);
-JS;
 		}
 		if ($this->enter_submit) {
 			$this->onkeydown .= <<<JS
@@ -516,7 +511,7 @@ JS;
 			} else {
 				$js .= <<<JS
 
-	remote: { 
+	remote: {
     	url:"{$source}%QUERY",
 		wildcard: '%QUERY'
 	}

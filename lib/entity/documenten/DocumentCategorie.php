@@ -3,16 +3,16 @@
 namespace CsrDelft\entity\documenten;
 
 use CsrDelft\entity\ISelectEntity;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\view\formulier\DisplayEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @ORM\Table("DocumentCategorie")
  * @ORM\Entity(repositoryClass="CsrDelft\repository\documenten\DocumentCategorieRepository")
  */
-class DocumentCategorie implements ISelectEntity {
+class DocumentCategorie implements ISelectEntity, DisplayEntity {
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
@@ -29,12 +29,18 @@ class DocumentCategorie implements ISelectEntity {
 	 * @ORM\Column(type="boolean")
 	 * @var boolean
 	 */
-	public $zichtbaar;
+	public $zichtbaar = true;
 	/**
 	 * @ORM\Column(type="string")
 	 * @var string
 	 */
-	public $leesrechten;
+	public $leesrechten = P_LOGGED_IN;
+
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string
+	 */
+	public $schrijfrechten = P_DOCS_MOD;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\documenten\Document", mappedBy="categorie")
@@ -44,7 +50,7 @@ class DocumentCategorie implements ISelectEntity {
 	public $documenten;
 
 	public function magBekijken() {
-		return LoginModel::mag($this->leesrechten);
+		return LoginService::mag($this->leesrechten);
 	}
 
 	public function getValue() {
@@ -53,5 +59,9 @@ class DocumentCategorie implements ISelectEntity {
 
 	public function getId() {
 		return $this->id;
+	}
+
+	public function getWeergave(): string {
+		return $this->naam ?? '';
 	}
 }

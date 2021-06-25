@@ -2,29 +2,31 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\model\LidZoeker;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\security\LoginModel;
-use Jacwright\RestServer\RestException;
+use CsrDelft\service\LidZoekerService;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ApiLedenController {
-
 	/**
-	 * @return boolean
+	 * @var LidZoekerService
 	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag(P_OUDLEDEN_READ);
+	private $lidZoekerService;
+
+	public function __construct(LidZoekerService $lidZoekerService) {
+		$this->lidZoekerService = $lidZoekerService;
 	}
 
 	/**
-	 * @url GET /
+	 * @Route("/API/2.0/leden", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function getLeden() {
-
-		$zoeker = new LidZoeker();
 		$leden = [];
 
-		foreach ($zoeker->getLeden() as $profiel) {
+		foreach ($this->lidZoekerService->getLeden() as $profiel) {
 			$leden[] = array(
 				'id' => $profiel->uid,
 				'voornaam' => $profiel->voornaam,
@@ -33,17 +35,18 @@ class ApiLedenController {
 			);
 		}
 
-		return array('data' => $leden);
+		return new JsonResponse(array('data' => $leden));
 	}
 
 	/**
-	 * @url GET /$id
+	 * @Route("/API/2.0/leden/{id}", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
 	 */
 	public function getLid($id) {
 		$profiel = ProfielRepository::get($id);
 
 		if (!$profiel) {
-			throw new RestException(404);
+			throw new NotFoundHttpException(404);
 		}
 
 		$woonoord = $profiel->getWoonoord();
@@ -56,7 +59,7 @@ class ApiLedenController {
 				'formeel' => $profiel->getNaam('civitas')
 			),
 			'pasfoto' => $profiel->getPasfotoPath('vierkant'),
-			'geboortedatum' => $profiel->gebdatum->format(DATE_FORMAT),
+			'geboortedatum' => date_format_intl($profiel->gebdatum, DATE_FORMAT),
 			'email' => $profiel->email,
 			'mobiel' => $profiel->mobiel,
 			'huis' => array(
@@ -71,10 +74,10 @@ class ApiLedenController {
 				'sinds' => $profiel->studiejaar
 			),
 			'lichting' => $profiel->lidjaar,
-			'verticale' => $profiel->getVerticale() === false ? null : $profiel->getVerticale()->naam,
+			'verticale' => !$profiel->getVerticale() ? null : $profiel->getVerticale()->naam,
 		);
 
-		return array('data' => $lid);
+		return new JsonResponse(array('data' => $lid));
 	}
 
 }

@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}Inzendingen C.S.R.-courant{% endblock %}
+
+{% block breadcrumbs %}
+	{% if form.titel %}
+		{{ csr_breadcrumbs({
+			(url('default')): 'main',
+			(url('csrdelft_courant_toevoegen')): 'Courant',
+			'': form.titel,
+		}) }}
+	{% else %}
+		{{ csr_breadcrumbs({
+			(url('default')): 'main',
+			(url('csrdelft_courant_toevoegen')): 'Courant',
+		}) }}
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a href="{{ url('csrdelft_courant_toevoegen') }}" class="nav-link active">Courantinzendingen</a>
+		</li>
+		<li class="nav-item">
+			<a href="{{ url('csrdelft_courant_archief') }}" class="nav-link">Archief</a>
+		</li>
+	</ul>
+
+	<h1>C.S.R.-courant</h1>
+	<p>
+		De C.S.R.-courant wordt elke maandagavond verzonden naar alle leden van C.S.R..
+		Als u uw bericht voor 22:00 invoert, kunt u tamelijk zeker zijn van plaatsing in de courant.
+		De PubCie streeft ernaar de courant rond 23:00/24:00 bij u in uw postvak te krijgen.
+	</p>
+	{% if berichten is not empty %}
+		<div id="courantKnoppenContainer">
+			{% if magVerzenden %}
+				<a href="{{ url('csrdelft_courant_verzenden') }}" title="De C.S.R.-courant wilt versturen?"
+					 class="btn btn-primary post confirm">Verzenden</a>
+				<a href="{{ url('csrdelft_courant_voorbeeld') }}" class="btn btn-primary" target="_blank">Laat voorbeeld
+					zien</a>
+			{% endif %}
+		</div>
+		{# geen overzicht van berichten bij het bewerken... #}
+		<h3>Overzicht van berichten:</h3>
+		<dl>
+			{% for bericht in berichten %}
+				<dt>
+					<span
+						class="onderstreept">{{ bericht.cat ? bericht.cat.description : 'Geen categorie' }}</span>
+					{% if magBeheren %}
+						{{ bericht.schrijver.link('civitas') | raw }}
+					{% endif %}
+					<span class="dikgedrukt">{{ bericht.titel }}</span>
+					{% if bericht.magBeheren %}
+						<a class="btn btn-primary" href="{{ url('csrdelft_courant_bewerken', {id: bericht.id}) }}">bewerken</a>
+						<a class="btn btn-primary post confirm ReloadPage"
+							 href="{{ url('csrdelft_courant_verwijderen', {id: bericht.id}) }}"
+							 title="Bericht verwijderen">verwijderen</a>
+					{% endif %}
+				</dt>
+				<dd id="courantbericht{{ bericht.id }}"></dd>
+				{% if not bericht.magBeheren %}
+					<dd>{{ bericht.bericht | bbcode("mail") }}</dd>
+				{% endif %}
+			{% endfor %}
+		</dl>
+	{% endif %}
+
+	{{ form.view | raw }}
+{% endblock %}

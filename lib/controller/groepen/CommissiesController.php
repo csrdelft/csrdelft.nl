@@ -2,7 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\CommissiesModel;
+use CsrDelft\entity\groepen\Commissie;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * CommissiesController.class.php
@@ -12,7 +13,7 @@ use CsrDelft\model\groepen\CommissiesModel;
  * Controller voor commissies.
  */
 class CommissiesController extends AbstractGroepenController {
-	public function __construct(CommissiesModel $commissiesModel) {
-		parent::__construct($commissiesModel);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Commissie::class);
 	}
 }

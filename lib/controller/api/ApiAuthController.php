@@ -2,178 +2,24 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Ini;
-use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\AccountModel;
-use CsrDelft\model\security\RememberLoginModel;
-use Exception;
-use Firebase\JWT\JWT;
-use \Jacwright\RestServer\RestException;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\service\security\ApiAuthenticator;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ApiAuthController {
-	private $accountModel;
-	private $rememberLoginModel;
-
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-
-		$this->rememberLoginModel = $container->get(RememberLoginModel::class);
-		$this->accountModel = $container->get(AccountModel::class);
-	}
-
+class ApiAuthController extends AbstractController {
 	/**
-	 * @return boolean
-	 */
-	public static function isAuthorized() {
-		if (!isset($_SERVER['HTTP_X_CSR_AUTHORIZATION'])) {
-			throw new RestException(400);
-		}
-
-		$authHeader = $_SERVER['HTTP_X_CSR_AUTHORIZATION'];
-
-		$jwt = substr($authHeader, 7);
-
-		if (!$jwt) {
-			throw new RestException(400);
-		}
-
-		try {
-			$token = JWT::decode($jwt, Ini::lees(Ini::JWT, 'secret'), array('HS512'));
-		} catch (Exception $e) {
-			throw new RestException(401);
-		}
-
-		$_SESSION['_uid'] = $token->data->userId;
-		$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
-
-		return true;
-	}
-
-	/**
-	 * @noAuth
-	 * @url POST /authorize
+	 * @Route("/API/2.0/auth/authorize", methods={"POST"})
+	 * @see ApiAuthenticator
 	 */
 	public function postAuthorize() {
-		$credentialsAreValid = false;
-		$account = null;
-
-		// Check credentials
-		if (isset($_POST['user']) && isset($_POST['pass'])) {
-
-			// Filter posted data
-			$user = filter_var(strval($_POST['user']), FILTER_SANITIZE_STRING);
-			$pass = filter_var(strval($_POST['pass']), FILTER_SANITIZE_STRING);
-
-			// Check uid
-			if (AccountModel::isValidUid($user)) {
-				$account = AccountModel::get($user);
-			}
-
-			// Check account
-			if ($account) {
-
-				// Check timeout
-				$timeout = $this->accountModel->moetWachten($account);
-
-				if ($timeout === 0) {
-
-					// Check password
-					$validPassword = $this->accountModel->controleerWachtwoord($account, $pass);
-
-					if ($validPassword) {
-						$this->accountModel->successfulLoginAttempt($account);
-						$_SESSION['_authenticationMethod'] = AuthenticationMethod::cookie_token;
-						$credentialsAreValid = true;
-					} else {
-						$this->accountModel->failedLoginAttempt($account);
-					}
-
-				}
-			}
-
-		}
-
-		if (!$credentialsAreValid) {
-			throw new RestException(401);
-		}
-
-		// Generate JWT
-		$tokenId = base64_encode(openssl_random_pseudo_bytes(32));
-		$issuedAt = time();
-
-		$data = [
-			'iat' => $issuedAt,
-			'exp' => $issuedAt + Ini::lees(Ini::JWT, 'lifetime'),
-			'jti' => $tokenId,
-			'data' => [
-				'userId' => $account->uid
-			]
-		];
-
-		// Encode the JWT
-		$token = JWT::encode($data, Ini::lees(Ini::JWT, 'secret'), 'HS512');
-
-		// Register uid for this session
-		$_SESSION['_uid'] = $account->uid;
-
-		// Generate a refresh token
-		$rand = crypto_rand_token(255);
-
-		// Save the refresh token
-		$remember = $this->rememberLoginModel->nieuw();
-		$remember->lock_ip = false;
-		$remember->device_name = 'API 2.0: ' . filter_var(strval($_SERVER['HTTP_USER_AGENT']), FILTER_SANITIZE_STRING);
-		$remember->token = hash('sha512', $rand);
-		$this->rememberLoginModel->create($remember);
-
-		// Respond with both tokens
-		return [
-			'token' => $token,
-			'refreshToken' => $rand
-		];
+		throw new \LogicException("Deze request wordt opgevangen door ApiAuthenticator.");
 	}
 
 	/**
-	 * @url POST /token
+	 * @Route("/API/2.0/auth/token", methods={"POST"})
+	 * @see ApiAuthenticator
 	 */
 	public function postToken() {
-
-		// Check for token
-		if (!isset($_POST['refresh_token'])) {
-			throw new RestException(401);
-		}
-
-		// Filter posted data
-		$refresh_token = filter_var(strval($_POST['refresh_token']), FILTER_SANITIZE_STRING);
-
-		// Check refresh token
-		$remember = $this->rememberLoginModel->find('token = ?', array(hash('sha512', $refresh_token)), null, null, 1)->fetch();
-
-		if (!$remember) {
-			throw new RestException(401);
-		}
-
-		// Generate new JWT
-		$tokenId = base64_encode(openssl_random_pseudo_bytes(32));
-		$issuedAt = time();
-
-		$data = [
-			'iat' => $issuedAt,
-			'exp' => $issuedAt + Ini::lees(Ini::JWT, 'lifetime'),
-			'jti' => $tokenId,
-			'data' => [
-				'userId' => $remember->uid
-			]
-		];
-
-		// Encode the new JWT
-		$token = JWT::encode($data, Ini::lees(Ini::JWT, 'secret'), 'HS512');
-
-		// Respond
-		return [
-			'token' => $token
-		];
+		throw new \LogicException("Deze request wordt opgevangen door ApiAuthenticator.");
 	}
-
 }

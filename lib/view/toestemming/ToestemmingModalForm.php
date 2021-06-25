@@ -2,10 +2,10 @@
 
 namespace CsrDelft\view\toestemming;
 
-use CsrDelft\common\CsrException;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\LidToestemming;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -41,7 +41,7 @@ class ToestemmingModalForm extends ModalForm {
 
 		$akkoord = '';
 
-		$instellingen = $lidToestemmingRepository->getRelevantToestemmingCategories(LoginModel::getProfiel()->isLid());
+		$instellingen = $lidToestemmingRepository->getRelevantToestemmingCategories(LoginService::getProfiel()->isLid());
 
 		foreach ($instellingen as $module => $instelling) {
 			foreach ($instelling as $id) {
@@ -55,21 +55,17 @@ class ToestemmingModalForm extends ModalForm {
 			}
 		}
 
+		$twig = ContainerFacade::getContainer()->get('twig');
+
 		$this->addFields([
-			new HtmlComment(view('toestemming.formulier', [
-				'beleid' => instelling('privacy', 'beleid_kort'),
-				'beschrijvingBestuur' => instelling('privacy', 'beschrijving_bestuur'),
-				'beschrijvingBijzonder' => instelling('privacy', 'beschrijving_bijzonder'),
-				'beschrijvingVereniging' => instelling('privacy', 'beschrijving_vereniging'),
-				'beschrijvingExternFoto' => instelling('privacy', 'beschrijving_foto_extern'),
-				'beschrijvingInternFoto' => instelling('privacy', 'beschrijving_foto_intern'),
+			new HtmlComment($twig->render('toestemming/formulier.html.twig', [
 				'akkoordExternFoto' => $this->maakToestemmingLine('algemeen', 'foto_extern'),
 				'akkoordInternFoto' => $this->maakToestemmingLine('algemeen', 'foto_intern'),
 				'akkoordVereniging' => $this->maakToestemmingLine('algemeen', 'vereniging'),
 				'akkoordBijzonder' => $this->maakToestemmingLine('algemeen', 'bijzonder'),
 				'akkoord' => $akkoord,
 				'fields' => $fields,
-			])->getHtml())
+			]))
 		]);
 
 
@@ -79,10 +75,10 @@ class ToestemmingModalForm extends ModalForm {
 	/**
 	 * @param string $module
 	 * @param string $id
-	 * @return string
-	 * @throws CsrException
+	 * @return ToestemmingRegel
 	 */
-	private function maakToestemmingLine($module, $id) {
+	private function maakToestemmingLine(string $module, string $id): ToestemmingRegel
+	{
 
 		$eerdereWaarde = filter_input(INPUT_POST, $module . '_' . $id, FILTER_SANITIZE_STRING) ?? 'ja';
 

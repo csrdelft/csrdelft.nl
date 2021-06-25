@@ -3,10 +3,10 @@
 namespace CsrDelft\repository\instellingen;
 
 use CsrDelft\common\CsrException;
+use CsrDelft\common\instellingen\InstellingConfiguration;
 use CsrDelft\common\yaml\YamlInstellingen;
 use CsrDelft\entity\Instelling;
-use CsrDelft\model\instellingen\InstellingConfiguration;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
 use Symfony\Component\Config\Exception\LoaderLoadException;
@@ -21,10 +21,8 @@ use Symfony\Component\Config\Exception\LoaderLoadException;
  * @method Instelling|null find($id, $lockMode = null, $lockVersion = null)
  * @method Instelling[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class InstellingenRepository extends ServiceEntityRepository {
+class InstellingenRepository extends AbstractRepository {
 	use YamlInstellingen;
-
-	const ORM = Instelling::class;
 
 	/**
 	 * InstellingenModel constructor.
@@ -57,8 +55,8 @@ class InstellingenRepository extends ServiceEntityRepository {
 	 * @return Instelling
 	 * @throws CsrException indien de default waarde ontbreekt (de instelling bestaat niet)
 	 */
-	protected function getInstelling($module, $id) {
-		$entity = $this->find(['module' => $module, 'instelling_id' => $id]);
+	public function getInstelling($module, $id) {
+		$entity = $this->findOneBy(['module' => $module, 'instelling' => $id]);
 		if ($this->hasKey($module, $id) && $entity != null) {
 			return $entity;
 		} else if ($this->hasKey($module, $id)) {
@@ -82,7 +80,7 @@ class InstellingenRepository extends ServiceEntityRepository {
 	protected function newInstelling($module, $id) {
 		$instelling = new Instelling();
 		$instelling->module = $module;
-		$instelling->instelling_id = $id;
+		$instelling->instelling = $id;
 		$instelling->waarde = $this->getDefault($module, $id);
 		$entityManager = $this->getEntityManager();
 		$entityManager->persist($instelling);
@@ -119,12 +117,18 @@ class InstellingenRepository extends ServiceEntityRepository {
 	/**
 	 */
 	public function opschonen() {
-		$entityManager = $this->getEntityManager();
-		foreach ($this->findAll() as $instelling) {
-			if (!$this->hasKey($instelling->module, $instelling->instelling_id)) {
-				$entityManager->remove($instelling);
+		$instellingen = [];
+		foreach ($this->getModules() as $module) {
+			foreach ($this->getModuleKeys($module) as $instelling) {
+				$instellingen[] = $instelling;
 			}
 		}
-		$entityManager->flush();
+
+		$this->createQueryBuilder('i')
+			->delete()
+			->where('i.module not in (:modules) or i.instelling not in (:instellingen)')
+			->setParameter('modules', $this->getModules())
+			->setParameter('instellingen', $instellingen)
+			->getQuery()->execute();
 	}
 }

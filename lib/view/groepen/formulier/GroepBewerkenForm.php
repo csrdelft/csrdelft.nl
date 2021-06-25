@@ -2,20 +2,22 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\AbstractGroepLid;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\GroepLid;
 use CsrDelft\view\formulier\InlineForm;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\MultiSelectField;
 
-class GroepBewerkenForm extends InlineForm {
+class GroepBewerkenForm extends InlineForm
+{
 
 	public function __construct(
-		AbstractGroepLid $lid,
-		AbstractGroep $groep,
+		GroepLid $lid,
+		Groep $groep,
 		$toggle = true,
 		$buttons = true
-	) {
+	)
+	{
 
 		if ($groep->keuzelijst) {
 			$field = new MultiSelectField('opmerking', $lid->opmerking, null, $groep->keuzelijst);

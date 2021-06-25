@@ -1,0 +1,201 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build JavaScript
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: 🗃 Cache Yarn
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .yarn
+            .pnp.js
+            !.yarn/.cache
+          # De cache wordt alleen naderhand opgeslagen als yarn.lock veranderd is
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          # De cache wordt opgehaald als os hetzelfde is (altijd)
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: Install yarn dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
+      - name: 🗃 Cache cache-loader
+        uses: actions/cache@v2
+        with:
+          path: .yarn/.cache
+          # De cache wordt alleen naderhand opgeslagen als yarn.lock + alle assets zijn veranderd
+          key: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('assets/**') }}
+          # De cache wordt opgehaald als yarn.lock niet veranderd is
+          restore-keys: ${{ runner.os }}-cache-loader-${{ hashFiles('**/yarn.lock') }}-
+
+      - name: 🔧 Run yarn build
+        run: yarn run production
+
+      - name: 📤 Upload dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: js
+          path: htdocs/dist
+
+  test:
+    name: Voer tests uit
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: 💤 Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
+
+      - uses: getong/mariadb-action@v1.1
+        with:
+          mariadb version: "10.3"
+          mysql root password: ""
+
+      - uses: actions/checkout@v2
+
+      - name: 🗃 Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-dev-
+
+      - name: Install Composer packages
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install
+
+      - name: 📥 Download JS
+        uses: actions/download-artifact@v2
+        with:
+          name: js
+          path: htdocs/dist
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3
+          tools: composer:v2
+          extensions: pdo_mysql
+
+      - name: 💽 Setup database
+        run: |
+          php bin/console doctrine:database:create -n
+          php bin/console doctrine:migrations:migrate -n
+          php bin/console doctrine:fixtures:load -n
+
+      - name: Valideer schema
+        run: php bin/console doctrine:schema:validate
+
+      - name: Dump schema SQL fouten
+        if: ${{ failure() }}
+        run: php bin/console doctrine:schema:update --dump-sql
+
+      - name: 🧪 Run PhpUnit
+        env:
+          PANTHER_CHROME_ARGUMENTS: "--disable-dev-shm-usage"
+          PANTHER_CHROME_DRIVER_BINARY: "/usr/bin/chromedriver"
+          PANTHER_NO_SANDBOX: "1"
+        run: php bin/phpunit
+
+  deploy:
+    name: Push naar productie
+    runs-on: ubuntu-latest
+    needs: build
+    # Deze workflow gebruikt een geheime token: PRODUCTIE_TOKEN en kan niet van een fork gerund worden.
+    if: github.repository == 'csrdelft/csrdelft.nl'
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          path: main
+
+      - name: 🗃 Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: main/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer packages
+        working-directory: main
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: 📥 Pull productie
+        uses: actions/checkout@v2
+        with:
+          path: productie
+          repository: csrdelft/productie
+          token: ${{ secrets.PRODUCTIE_TOKEN }}
+
+      - name: Prepareer productie repo
+        working-directory: productie
+        run: |
+          rm -r *
+          rsync --archive --exclude-from=../main/bin/ci/rsync-exclude.txt ../main/ ./
+          mv bin/ci/.gitignore.prod .gitignore
+
+      - name: 📥 Download JS
+        uses: actions/download-artifact@v2
+        with:
+          name: js
+          path: productie/htdocs/dist
+
+      - name: 📩 Push naar productie
+        if: github.ref == 'refs/heads/master'
+        working-directory: productie
+        run: |
+          git config user.name "PubCie"
+          git config user.email "pubcie@csrdelft.nl"
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Stek deploy $GITHUB_RUN_NUMBER van csrdelft/csrdelft.nl@$GITHUB_SHA"
+          git push --force --quiet --set-upstream origin master
+
+  translation:
+    name: Controleer vertalingen
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: 🗃 Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-dev-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-dev-
+
+      - name: Install Composer packages
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3
+          tools: composer:v2
+          extensions: pdo_mysql
+
+      - name: Check translations
+        run: |
+          php bin/console translation:update en --force
+          git diff --exit-code || exit 1

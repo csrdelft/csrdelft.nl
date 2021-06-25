@@ -3,14 +3,18 @@
  * FotoAlbumBBView.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
+ * @since 06/05/2017
  */
 
 namespace CsrDelft\view\fotoalbum;
 
-use CsrDelft\model\entity\fotoalbum\Foto;
+use CsrDelft\entity\fotoalbum\Foto;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
+use CsrDelft\view\ToHtmlResponse;
+use CsrDelft\view\View;
 
-class FotoAlbumBBView extends FotoAlbumZijbalkView {
+class FotoAlbumBBView implements View {
+	use ToHtmlResponse;
 
 	private $compact = false; //compact or expanded tag.
 	private $rows = 2;  //number of rows
@@ -18,12 +22,30 @@ class FotoAlbumBBView extends FotoAlbumZijbalkView {
 	private $big = array(); //array with index of the ones to enlarge
 	private $picsize = 75;  //size of an image
 	private $rowmargin = 0.5; //margin between the images
+	protected $model;
 
-	public function view() {
-		if (count($this->model->getFotos()) < 1) {
-			return '<div class="bb-block">Fotoalbum bevat geen foto\'s: /' . $this->model->dirname . '</div>';
+	public function __construct(FotoAlbum $fotoalbum) {
+		// als het album alleen subalbums bevat kies een willkeurige daarvan om fotos van te tonen
+		if (count($fotoalbum->getFotos()) === 0) {
+			$subalbums = $fotoalbum->getSubAlbums();
+			$count = count($subalbums);
+			if ($count > 0) {
+				$idx = rand(0, $count - 1);
+				$fotoalbum = $subalbums[$idx];
+			}
 		}
-		echo $this->getHtml();
+
+		$this->model = $fotoalbum;
+	}
+
+	public function __toString() {
+		$html = '';
+		if (count($this->model->getFotos()) < 1) {
+			$html .= '<div class="bb-block">Fotoalbum bevat geen foto\'s: /' . $this->model->dirname . '</div>';
+			return $html;
+		}
+		$html .= $this->getHtml();
+		return $html;
 	}
 
 	public function makeCompact() {
@@ -175,5 +197,17 @@ class FotoAlbumBBView extends FotoAlbumZijbalkView {
 			$content = $this->getGridHtml();
 		}
 		return '<div class="bb-block bb-fotoalbum"><ol class="breadcrumb">' . FotoAlbumBreadcrumbs::getBreadcrumbs($this->model, false, true) . '</ol>' . $content . '</div>';
+	}
+
+	public function getTitel() {
+		// Niet boeiend
+	}
+
+	public function getBreadcrumbs() {
+		// Niet boeiend
+	}
+
+	public function getModel() {
+		return $this->model;
 	}
 }

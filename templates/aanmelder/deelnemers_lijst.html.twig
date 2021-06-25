@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block bodyClass %}
+	zijbalk_verborgen p-5
+{% endblock %}
+
+{% block titel %}{{ activiteit.getTitel }} {{ activiteit.start | date_format_intl('d-M-YYYY H:mm') }}-{{ activiteit.einde | date_format_intl('H:mm') }}{% endblock %}
+
+{% set naamweergave = instelling('maaltijden', 'weergave_ledennamen_maaltijdlijst') %}
+
+{% block body %}
+	<h1>{{ activiteit.getTitel }} {{ activiteit.start | date_format_intl('EEEE d-M-YYYY H:mm') }}
+		-{{ activiteit.einde | date_format_intl('H:mm') }}</h1>
+	<div class="header">
+		{{ activiteit.getBeschrijving | bbcode }}
+	</div>
+
+	{% include 'aanmelder/onderdelen/aanmeldingen.html.twig' %}
+
+	<div class="row mt-5 d-print-none">
+		<div class="col">
+			{% include 'aanmelder/onderdelen/status.html.twig' %}
+		</div>
+		{% if activiteit.magLijstBeheren %}
+			<div class="col">
+				<h3>Persoon aanmelden</h3>
+				{{ aanmeldForm|raw }}
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}

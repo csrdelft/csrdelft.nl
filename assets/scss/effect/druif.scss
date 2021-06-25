@@ -1,0 +1,42 @@
+@keyframes example {
+	0% {
+		opacity: 1;
+		visibility: visible;
+	}
+	70% {
+		transform: translateY(100vh);
+		opacity: 0.7;
+	}
+	100% {
+		transform: translateY(130vh);
+		opacity: 0;
+		visibility: hidden;
+	}
+}
+
+// Forum
+body .auteur .forumpasfoto.druif {
+	position: relative;
+	a[href^='/profiel/20']::after {
+		content: '';
+		position: absolute;
+		top: 53px;
+		right: -10px;
+		width: 28px;
+		height: 32px;
+		visibility: visible;
+		background: url('../../images/druif.png') no-repeat top center;
+		background-size: contain;
+		z-index: 1;
+	}
+}
+
+body .auteur .forumpasfoto.start-druifeffect {
+	position: relative;
+	a[href^='/profiel/20']::after {
+		position: absolute;
+		bottom: 0;
+		visibility: hidden;
+		animation: example 1s ease-in;
+	}
+}

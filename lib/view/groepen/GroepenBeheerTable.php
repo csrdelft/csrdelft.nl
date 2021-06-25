@@ -3,7 +3,8 @@
 namespace CsrDelft\view\groepen;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\AbstractGroepenModel;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\repository\GroepRepository;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\datatable\DataTable;
@@ -17,18 +18,19 @@ use CsrDelft\view\datatable\Multiplicity;
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  *
+ * @property-read Groep $model
  */
 class GroepenBeheerTable extends DataTable {
 
 	private $naam;
 	private $pagina;
 
-	public function __construct(AbstractGroepenModel $model) {
-		parent::__construct($model::ORM, $model->getUrl() . '/beheren', null);
+	public function __construct(GroepRepository $repository) {
+		parent::__construct($repository->entityClass, $repository->getUrl() . '/beheren', null);
 
 		$this->selectEnabled = false;
 
-		$this->naam = $model->getNaam();
+		$this->naam = $repository->getNaam();
 		$this->titel = 'Beheer ' . $this->naam;
 
 		$cmsPaginaRepository = ContainerFacade::getContainer()->get(CmsPaginaRepository::class);
@@ -38,39 +40,44 @@ class GroepenBeheerTable extends DataTable {
 		}
 
 		$this->hideColumn('id', false);
-		$this->hideColumn('samenvatting');
-		$this->hideColumn('omschrijving');
-		$this->hideColumn('maker_uid');
-		$this->hideColumn('keuzelijst');
-		$this->hideColumn('rechten_aanmelden');
-		$this->hideColumn('status_historie');
+		$this->deleteColumn('samenvatting');
+		$this->deleteColumn('omschrijving');
+		$this->deleteColumn('maker');
+		$this->deleteColumn('keuzelijst');
+		$this->deleteColumn('rechten_aanmelden');
+		$this->deleteColumn('status_historie');
 		$this->searchColumn('naam');
 		$this->searchColumn('status');
 		$this->searchColumn('soort');
+
+		$this->hideColumn('versie');
+		$this->hideColumn('afmelden_tot');
+		$this->hideColumn('bewerken_tot');
+		$this->hideColumn('eind_moment');
 
 		$this->deleteColumn('keuzelijst2');
 
 		$this->setOrder(['id' => 'desc']);
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/voorbeeld', 'Voorbeeldweergave van de ketzer', 'show'));
+		$this->addRowKnop(new DataTableRowKnop($repository->getUrl() . '/:id/voorbeeld', 'Voorbeeldweergave van de ketzer', 'show'));
 
-		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $model->getUrl() . '/nieuw', 'Nieuw', 'Nieuwe toevoegen', 'toevoegen'));
+		$this->addKnop(new DataTableKnop(Multiplicity::Zero(), $repository->getUrl() . '/nieuw', 'Nieuw', 'Nieuwe toevoegen', 'toevoegen'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/aanmaken', 'Nieuwe toevoegen die de huidige opvolgt', 'toevoegen'));
+		$this->addRowKnop(new DataTableRowKnop($repository->getUrl() . '/:id/aanmaken', 'Nieuwe toevoegen die de huidige opvolgt', 'toevoegen'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/wijzigen', 'Wijzig eigenschappen', 'bewerken'));
+		$this->addRowKnop(new DataTableRowKnop($repository->getUrl() . '/:id/wijzigen', 'Wijzig eigenschappen', 'bewerken'));
 
-		if (property_exists($model::ORM, 'aanmelden_vanaf')) {
-			$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/sluiten', 'Inschrijvingen nu sluiten', 'lock'));
+		if (property_exists($repository->entityClass, 'aanmelden_vanaf')) {
+			$this->addRowKnop(new DataTableRowKnop($repository->getUrl() . '/:id/sluiten', 'Inschrijvingen nu sluiten', 'lock'));
 		}
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/opvolging', 'Familienaam en groepstatus instellen', 'timeline_marker'));
+		$this->addRowKnop(new DataTableRowKnop($repository->getUrl() . '/:id/opvolging', 'Familienaam en groepstatus instellen', 'timeline_marker'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/converteren', 'Converteer naar ander soort groep', 'lightning'));
+		$this->addRowKnop(new DataTableRowKnop($repository->getUrl() . '/:id/converteren', 'Converteer naar ander soort groep', 'lightning'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/verwijderen', 'Definitief verwijderen (groep moet hier voor leeg zijn)', 'delete', 'confirm'));
+		$this->addRowKnop(new DataTableRowKnop($repository->getUrl() . '/:id/verwijderen', 'Definitief verwijderen (groep moet hier voor leeg zijn)', 'delete', 'confirm'));
 
-		$this->addRowKnop(new DataTableRowKnop($model->getUrl() . '/:id/logboek', 'Logboek bekijken', 'log', '', 'get'));
+		$this->addRowKnop(new DataTableRowKnop($repository->getUrl() . '/:id/logboek', 'Logboek bekijken', 'log', '', 'get'));
 	}
 
 	public function getBreadcrumbs() {
@@ -80,10 +87,9 @@ class GroepenBeheerTable extends DataTable {
 			. '<li class="breadcrumb-item active">Beheren</li></ul>';
 	}
 
-	public function view() {
+	public function __toString()
+	{
 		$view = new CmsPaginaView($this->pagina);
-		$view->view();
-		parent::view();
+		return $view->__toString() . parent::__toString();
 	}
-
 }

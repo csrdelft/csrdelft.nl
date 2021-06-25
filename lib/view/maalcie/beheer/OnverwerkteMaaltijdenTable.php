@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
-use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
@@ -14,7 +14,7 @@ use CsrDelft\view\datatable\Multiplicity;
 
 class OnverwerkteMaaltijdenTable extends DataTable {
 	public function __construct() {
-		parent::__construct(MaaltijdenModel::ORM, '/maaltijden/beheer?filter=onverwerkt');
+		parent::__construct(Maaltijd::class, '/maaltijden/beheer?filter=onverwerkt');
 
 		$this->hideColumn('verwerkt');
 		$this->hideColumn('gesloten');

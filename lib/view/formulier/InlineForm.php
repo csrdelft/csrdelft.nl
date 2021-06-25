@@ -8,7 +8,7 @@ use CsrDelft\view\formulier\knoppen\FormKnoppen;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
+ * @since 06/05/2017
  *
  * InlineForm with single InputField and FormDefaultKnoppen.
  */
@@ -60,8 +60,8 @@ abstract class InlineForm extends Formulier implements FormElement {
 		return $html . '</form></div>';
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getField() {

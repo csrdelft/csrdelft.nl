@@ -3,7 +3,6 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\GoogleToken;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method GoogleToken[]    findAll()
  * @method GoogleToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GoogleTokenRepository extends ServiceEntityRepository {
+class GoogleTokenRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, GoogleToken::class);
 	}

@@ -1,13 +1,13 @@
 <?php
 
-use CsrDelft\model\entity\Geslacht;
-use CsrDelft\model\entity\groepen\GroepKeuzeType;
+use CsrDelft\entity\Geslacht;
+use CsrDelft\entity\groepen\enum\GroepKeuzeType;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\security\AccessAction;
 
 require_once __DIR__ . '/../../lib/configuratie.include.php';
 
-const FILE_TEMPLATE = __DIR__ . '/../../resources/assets/js/enum/%s.ts';
+const FILE_TEMPLATE = __DIR__ . '/../../assets/js/enum/%s.ts';
 const ENUMS = [
 	AccessAction::class,
 	LidStatus::class,
@@ -25,8 +25,8 @@ function generateEnums() {
 }
 
 /**
- * @param \CsrDelft\Orm\Entity\PersistentEnum $enum
- * @throws Exception
+ * @param string|\CsrDelft\common\Enum $enum
+ * @throws ReflectionException
  */
 function generateTypescript($enum) {
 	$reflectionClass = new ReflectionClass($enum);
@@ -34,7 +34,7 @@ function generateTypescript($enum) {
 
 	$classConstants = $reflectionClass->getConstants();
 
-	$typeOptions = $enum::getTypeOptions();
+	$typeOptions = $enum::getEnumValues();
 
 	ob_start();
 	foreach ($classConstants as $name => $option) {
@@ -49,7 +49,7 @@ function generateTypescript($enum) {
 
 	foreach ($classConstants as $name => $option) {
 		if (in_array($option, $typeOptions)) {
-			$description = $enum::getDescription($option);
+			$description = $enum::from($option)->getDescription();
 			echo "		$option: '$description',\n";
 		}
 	}
@@ -66,7 +66,7 @@ function generateTypescript($enum) {
 export default {
 {$optionsString}};
 
-export function get{$className}Description(option: string) {
+export function get{$className}Description(option: string): string {
 	return {
 {$descriptionString}	}[option];
 }

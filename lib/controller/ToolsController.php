@@ -2,31 +2,31 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\LogModel;
-use CsrDelft\model\Roodschopper;
-use CsrDelft\model\SavedQueryModel;
-use CsrDelft\model\security\AccountModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Persistence\OrmMemcache;
+use CsrDelft\repository\groepen\VerticalenRepository;
+use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\SavedQueryRepository;
+use CsrDelft\repository\security\AccountRepository;
 use CsrDelft\service\ProfielService;
-use CsrDelft\view\bbcode\CsrBB;
+use CsrDelft\service\Roodschopper;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
 use CsrDelft\view\roodschopper\RoodschopperForm;
 use CsrDelft\view\SavedQueryContent;
-use CsrDelft\view\Streeplijstcontent;
-use CsrDelft\view\View;
+use Symfony\Component\Cache\Adapter\MemcachedAdapter;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Deze controller bevat een aantal beheertools die niet direct onder een andere controller geschaard kunnen worden.
@@ -34,76 +34,49 @@ use Symfony\Component\HttpFoundation\Request;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 11/04/2019
  */
-class ToolsController extends AbstractController {
-	/**
-	 * @var AccountModel
-	 */
-	private $accountModel;
-	/**
-	 * @var ProfielRepository
-	 */
-	private $profielRepository;
-	/**
-	 * @var LoginModel
-	 */
-	private $loginModel;
-	/**
-	 * @var LogModel
-	 */
-	private $logModel;
-	/**
-	 * @var SavedQueryModel
-	 */
-	private $savedQueryModel;
-	/**
-	 * @var ProfielService
-	 */
-	private $profielService;
+class ToolsController extends AbstractController
+{
 
-	public function __construct(AccountModel $accountModel, ProfielRepository $profielRepository, ProfielService $profielService, LoginModel $loginModel, LogModel $logModel, SavedQueryModel $savedQueryModel) {
-		$this->savedQueryModel = $savedQueryModel;
-		$this->accountModel = $accountModel;
-		$this->profielRepository = $profielRepository;
-		$this->loginModel = $loginModel;
-		$this->logModel = $logModel;
-		$this->profielService = $profielService;
-	}
-
-	public function streeplijst() {
-		$body = new Streeplijstcontent();
-
-		# yuck
-		if (isset($_GET['iframe'])) {
-			return new PlainView($body->getHtml());
-		} else {
-			return view('default', ['content' => $body]);
-		}
-	}
-
-	public function stats(Request $request) {
-		$criteria = null;
-		$params = [];
+	/**
+	 * @param Request $request
+	 * @param LogRepository $logRepository
+	 * @return Response
+	 * @Route("/tools/stats", methods={"GET"})
+	 * @Auth(P_ADMIN)
+	 */
+	public function stats(Request $request, LogRepository $logRepository): Response
+	{
 		if ($request->query->has('uid')) {
-			$criteria = "uid = ?";
-			$params[] = $request->query->get('uid');
+			$by = ['uid' => $request->query->get('uid')];
 		} elseif ($request->query->has('ip')) {
-			$criteria = "ip = ?";
-			$params[] = $request->query->get('ip');
+			$by = ['ip' => $request->query->get('ip')];
+		} else {
+			$by = [];
 		}
 
-		$log = $this->logModel->find($criteria, $params, null, 'ID DESC', 30)->fetchAll();
+		$log = $logRepository->findBy($by, ['ID' => 'desc'], 30);
 
-		return view('stats.stats', [
-			'log' => $log
-		]);
+		return $this->render('stats/stats.html.twig', ['log' => $log]);
 	}
 
-	public function verticalelijsten() {
-		return view('tools.verticalelijst', [
+	/**
+	 * @param VerticalenRepository $verticalenRepository
+	 * @param ProfielRepository $profielRepository
+	 * @return Response
+	 * @Route("/tools/verticalelijsten", methods={"GET"})
+	 * @Auth(P_ADMIN)
+	 */
+	public function verticalelijsten(VerticalenRepository $verticalenRepository, ProfielRepository $profielRepository): Response
+	{
+		return $this->render('tools/verticalelijst.html.twig', [
 			'verticalen' => array_reduce(
-				['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
-				function ($carry, $letter) {
-					$carry[$letter] = $this->profielRepository->ormFind('verticale = ? AND (status="S_LID" OR status="S_NOVIET" OR status="S_GASTLID" OR status="S_KRINGEL")', [$letter]);
+				$verticalenRepository->findAll(),
+				function ($carry, $verticale) use ($profielRepository) {
+					$carry[$verticale->naam] = $profielRepository->createQueryBuilder('p')
+						->where('p.verticale = :verticale and p.status in (:lidstatus)')
+						->setParameter('verticale', $verticale->letter)
+						->setParameter('lidstatus', LidStatus::getFiscaalLidLike())
+						->getQuery()->getResult();
 					return $carry;
 				},
 				[]
@@ -111,9 +84,16 @@ class ToolsController extends AbstractController {
 		]);
 	}
 
-	public function roodschopper(Request $request) {
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @Route("/tools/roodschopper", methods={"GET", "POST"})
+	 * @Auth(P_FISCAAT_MOD)
+	 */
+	public function roodschopper(Request $request): Response
+	{
 		if ($request->query->has('verzenden')) {
-			return view('roodschopper.roodschopper', [
+			return $this->render('tools/roodschopper.html.twig', [
 				'verzenden' => true,
 				'aantal' => $request->query->get('aantal'),
 			]);
@@ -125,23 +105,34 @@ class ToolsController extends AbstractController {
 		if ($roodschopperForm->isPosted() && $roodschopperForm->validate() && $roodschopper->verzenden) {
 			$roodschopper->sendMails();
 			// Voorkom dubbele submit
-			return $this->csrRedirect('/tools/roodschopper?verzenden=true&aantal=' . count($roodschopper->getSaldi()));
+			return $this->redirectToRoute(
+				'csrdelft_tools_roodschopper',
+				['verzenden' => true, 'aantal' => count($roodschopper->getSaldi())]
+			);
 		} else {
 			$roodschopper->generateMails();
 		}
 
-		return view('roodschopper.roodschopper', [
+		return $this->render('tools/roodschopper.html.twig', [
 			'verzenden' => false,
 			'form' => $roodschopperForm,
 			'saldi' => $roodschopper->getSaldi(),
 		]);
 	}
 
-	public function syncldap() {
-		if (DEBUG OR LoginModel::mag(P_ADMIN) OR $this->loginModel->isSued()) {
+	/**
+	 * @param ProfielRepository $profielRepository
+	 * @param SuService $suService
+	 * @return PlainView
+	 * @Route("/tools/syncldap", methods={"GET"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function syncldap(ProfielRepository $profielRepository, SuService $suService): PlainView
+	{
+		if (DEBUG || LoginService::mag(P_ADMIN) || $suService->isSued()) {
 			$ldap = new LDAP();
-			foreach ($this->profielRepository->findAll() as $profiel) {
-				$this->profielRepository->save_ldap($profiel, $ldap);
+			foreach ($profielRepository->findAll() as $profiel) {
+				$profielRepository->save_ldap($profiel, $ldap);
 			}
 
 			$ldap->disconnect();
@@ -149,70 +140,99 @@ class ToolsController extends AbstractController {
 			return new PlainView('done');
 		}
 
-		throw new CsrToegangException();
+		throw $this->createAccessDeniedException();
 	}
 
-	public function phpinfo() {
+	/**
+	 * @return PlainView
+	 * @Route("/tools/phpinfo", methods={"GET"})
+	 * @Auth(P_ADMIN)
+	 */
+	public function phpinfo(): PlainView
+	{
 		ob_start();
 		phpinfo();
 		return new PlainView(ob_get_clean());
 	}
 
-	public function admins() {
-		return view('tools.admins', [
-			'accounts' => $this->accountModel->find('perm_role NOT IN (?,?,?,?)', ['R_LID', 'R_NOBODY', 'R_ETER', 'R_OUDLID'], null, 'perm_role'),
+	/**
+	 * @param AccountRepository $accountRepository
+	 * @return Response
+	 * @Route("/tools/admins", methods={"GET"})
+	 * @Auth(P_LEDEN_READ)
+	 */
+	public function admins(AccountRepository $accountRepository): Response
+	{
+		return $this->render('tools/admins.html.twig', [
+			'accounts' => $accountRepository->findAdmins(),
 		]);
 	}
 
 	/**
 	 * Voor de NovCie, zorgt ervoor dat novieten bekeken kunnen worden als dat afgeschermd is op de rest van de stek.
 	 *
-	 * @return View
+	 * @param ProfielRepository $profielRepository
+	 * @return Response
+	 * @Route("/tools/novieten", methods={"GET"})
+	 * @Auth({P_ADMIN,"commissie:NovCie"})
 	 */
-	public function novieten() {
-		return view('tools.novieten', [
-			'novieten' => Database::instance()->sqlSelect(['*'], 'profielen', 'status = ? AND lidjaar = ?', ['S_NOVIET', date('Y')])
+	public function novieten(ProfielRepository $profielRepository): Response
+	{
+		return $this->render('tools/novieten.html.twig', [
+			'novieten' => $profielRepository->findBy(['status' => LidStatus::Noviet, 'lidjaar' => date('Y')])
 		]);
 	}
 
-	public function dragobject() {
-		$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
-		$coords = filter_input(INPUT_POST, 'coords', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
+	/**
+	 * @param Request $request
+	 * @return JsonResponse
+	 * @Route("/tools/dragobject", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function dragobject(Request $request): JsonResponse
+	{
+		$id = $request->request->get('id');
+		$coords = $request->request->get('coords');
 
-		$_SESSION['dragobject'][$id] = $coords;
+		$request->getSession()->set("dragobject_$id", $coords);
 
 		return new JsonResponse(null);
 	}
 
-	public function naamlink() {
-//is er een uid gegeven?
-		$given = 'uid';
-		if (isset($_GET['uid'])) {
-			$string = urldecode($_GET['uid']);
-		} elseif (isset($_POST['uid'])) {
-			$string = $_POST['uid'];
+	/**
+	 * @param Request $request
+	 * @param AccountRepository $accountRepository
+	 * @param ProfielService $profielService
+	 * @return PlainView
+	 * @Route("/tools/naamlink", methods={"GET", "POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
+	public function naamlink(Request $request, AccountRepository $accountRepository, ProfielService $profielService): PlainView
+	{
+		$uid = $request->get('uid');
+		$naam = $request->get('naam');
+		$zoekin = $request->query->get('zoekin');
 
-//is er een naam gegeven?
-		} elseif (isset($_GET['naam'])) {
-			$string = urldecode($_GET['naam']);
+		if ($uid) {
+			$string = $uid;
+			$given = 'uid';
+		} elseif ($naam) {
+			$string = $naam;
 			$given = 'naam';
-		} elseif (isset($_POST['naam'])) {
-			$string = $_POST['naam'];
-			$given = 'naam';
-		} else { //geen input
+		} else {
 			throw new CsrGebruikerException('Geen naam invoer in naamlink');
 		}
 
 //welke subset van leden?
-		$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$toegestanezoekfilters = ['leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies'];
-		if (isset($_GET['zoekin']) && in_array($_GET['zoekin'], $toegestanezoekfilters)) {
-			$zoekin = $_GET['zoekin'];
+		if (!$zoekin || !in_array($zoekin, $toegestanezoekfilters)) {
+			$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		}
 
-		function uid2naam($uid) {
-			$naam = ProfielRepository::getLink($uid, 'civitas');
-			if ($naam !== false) {
+		function uid2naam($uid): string
+		{
+			$naam = ProfielRepository::getLink($uid);
+			if ($naam) {
 				return $naam;
 			} else {
 				return 'Lid[' . htmlspecialchars($uid) . '] &notin; db.';
@@ -220,7 +240,7 @@ class ToolsController extends AbstractController {
 		}
 
 		if ($given == 'uid') {
-			if (AccountModel::isValidUid($string)) {
+			if ($accountRepository->isValidUid($string)) {
 				return new PlainView(uid2naam($string));
 			} else {
 				$uids = explode(',', $string);
@@ -229,10 +249,10 @@ class ToolsController extends AbstractController {
 				}
 			}
 		} elseif ($given == 'naam') {
-			$namen = $this->profielService->zoekLeden($string, 'naam', 'alle', 'achternaam', $zoekin);
+			$namen = $profielService->zoekLeden($string, 'naam', 'alle', 'achternaam', $zoekin);
 			if (!empty($namen)) {
 				if (count($namen) === 1) {
-					return new PlainView($namen[0]->getLink('civitas'));
+					return new PlainView($namen[0]->getLink());
 				} else {
 					return new PlainView('Meerdere leden mogelijk');
 				}
@@ -240,10 +260,19 @@ class ToolsController extends AbstractController {
 			return new PlainView('Geen lid gevonden');
 		}
 
-		throw new CsrNotFoundException();
+		throw new NotFoundHttpException();
 	}
 
-	public function naamsuggesties($zoekin = null, $status = null, $query = '') {
+	/**
+	 * @param ProfielService $profielService
+	 * @param null $zoekin
+	 * @param string $query
+	 * @return JsonResponse
+	 * @Route("/tools/naamsuggesties", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
+	public function naamsuggesties(ProfielService $profielService, $zoekin = null, $query = ''): JsonResponse
+	{
 		//welke subset van leden?
 		if (empty($zoekin)) {
 			$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
@@ -270,29 +299,31 @@ class ToolsController extends AbstractController {
 			$vorm = $_GET['vorm'];
 		}
 
-		$profielen = $this->profielService->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
+		$profielen = $profielService->zoekLeden($query, 'naam', 'alle', 'achternaam', $zoekin, $limiet);
 
 		$scoredProfielen = [];
- 		foreach ($profielen as $profiel) {
- 			$score = 0;
+		foreach ($profielen as $profiel) {
+			$score = 0;
 
- 			// Beste match start met de zoekterm
- 			if (startsWith(strtolower($profiel->getNaam('volledig')), strtolower($query))) {
- 				$score += 100;
+			// Beste match start met de zoekterm
+			if (str_starts_with(strtolower($profiel->getNaam()), strtolower($query))) {
+				$score += 100;
 			}
 
- 			// Zoek meest lijkende match
- 			$score -= levenshtein($query, $profiel->getNaam());
+			// Zoek meest lijkende match
+			$score -= levenshtein($query, $profiel->getNaam());
 
- 			$scoredProfielen[] = [
- 				'profiel' => $profiel,
+			$scoredProfielen[] = [
+				'profiel' => $profiel,
 				'score' => $score,
 			];
 		}
 
- 		usort($scoredProfielen, function ($a, $b) { return $b['score'] - $a['score']; });
+		usort($scoredProfielen, function ($a, $b) {
+			return $b['score'] - $a['score'];
+		});
 
- 		$scoredProfielen = array_slice($scoredProfielen, 0, 5);
+		$scoredProfielen = array_slice($scoredProfielen, 0, 5);
 
 		$result = array();
 		foreach ($scoredProfielen as $scoredProfiel) {
@@ -300,73 +331,62 @@ class ToolsController extends AbstractController {
 			$profiel = $scoredProfiel['profiel'];
 
 			$result[] = array(
-				'icon' => Icon::getTag('profiel', null, 'Profiel', 'mr-2'),
+				'icon' => Icon::getTag('profiel', null, 'Profiel', 'me-2'),
 				'url' => '/profiel/' . $profiel->uid,
 				'label' => $profiel->uid,
 				'value' => $profiel->getNaam($vorm),
+				'uid' => $profiel->uid,
 			);
 		}
 
 		return new JsonResponse($result);
 	}
 
-	public function memcachestats() {
-		if (DEBUG || LoginModel::mag(P_ADMIN) || $this->loginModel->isSued()) {
+	/**
+	 * @param SuService $suService
+	 * @return PlainView
+	 * @Route("/tools/memcachestats", methods={"GET"})
+	 * @Auth(P_ADMIN)
+	 */
+	public function memcachestats(SuService $suService): PlainView
+	{
+		if (DEBUG || LoginService::mag(P_ADMIN) || $suService->isSued()) {
 			ob_start();
 
 			echo getMelding();
 			echo '<h1>MemCache statistieken</h1>';
-			debugprint(OrmMemcache::instance()->getCache()->getStats());
+			try {
+				$memcached = MemcachedAdapter::createConnection($this->getParameter('memcached_url'));
+
+				debugprint(current($memcached->getStats()));
+			} catch (ServiceNotFoundException $ex) {
+				echo 'Memcache is niet ingesteld.';
+			}
 
 			return new PlainView(ob_get_clean());
 		}
 
-		throw new CsrToegangException();
+		throw $this->createAccessDeniedException();
 	}
 
-	public function query() {
-		if (isset($_GET['id']) && (int)$_GET['id'] == $_GET['id']) {
-			$id = (int)$_GET['id'];
-			$result = $this->savedQueryModel->loadQuery($id);
+	/**
+	 * @param Request $request
+	 * @param SavedQueryRepository $savedQueryRepository
+	 * @return Response
+	 * @Route("/tools/query", methods={"GET"})
+	 * @Auth(P_LEDEN_READ)
+	 */
+	public function query(Request $request, SavedQueryRepository $savedQueryRepository): Response
+	{
+		if ($request->query->has('id')) {
+			$id = $request->query->getInt('id');
+			$result = $savedQueryRepository->loadQuery($id);
 		} else {
 			$result = null;
 		}
 
-		return view('default', [
+		return $this->render('default.html.twig', [
 			'content' => new SavedQueryContent($result),
 		]);
-	}
-
-	public function bbcode() {
-		$inputJSON = file_get_contents('php://input');
-		$input = json_decode($inputJSON, TRUE);
-
-		if (isset($_POST['data'])) {
-			$string = urldecode($_POST['data']);
-		} elseif (isset($_GET['data'])) {
-			$string = $_GET['data'];
-		} elseif (isset($input['data'])) {
-			$string = urldecode($input['data']);
-		} else {
-			$string = 'b0rkb0rkb0rk: geen invoer in htdocs/tools/bbcode';
-		}
-
-		$string = trim($string);
-
-		if (isset($_POST['mail']) || isset($input['mail'])) {
-			return new PlainView(CsrBB::parseMail($string));
-		} else {
-			return new PlainView(CsrBB::parse($string));
-		}
-	}
-
-	/**
-	 * Voor patronaat 2019 kan september 2019 verwijderd worden.
-	 *
-	 * @param ActiviteitenModel $activiteitenModel
-	 * @return View
-	 */
-	public function patronaat(ActiviteitenModel $activiteitenModel) {
-		return view('patronaat', ['groep' => $activiteitenModel->get(1754)]);
 	}
 }

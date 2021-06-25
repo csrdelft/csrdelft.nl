@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}{{ titel }}{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<nav aria-label="breadcrumb">
+			{{ csr_breadcrumbs(get_breadcrumbs(app.request.uri)) }}
+		</nav>
+
+		{{ content | raw }}
+	</div>
+{% endblock %}

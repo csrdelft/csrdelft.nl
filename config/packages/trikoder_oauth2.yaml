@@ -1,0 +1,15 @@
+trikoder_oauth2:
+
+  authorization_server:
+    private_key: '%env(string:OAUTH2_PRIVATE_KEY_PATH)%'
+    private_key_passphrase: null                            # Passphrase of the private key, if any
+    encryption_key: '%env(string:OAUTH2_ENCRYPTION_KEY)%'
+
+  resource_server:
+    public_key: '%env(string:OAUTH2_PUBLIC_KEY_PATH)%'
+
+  scopes:
+    - PROFIEL:EMAIL
+
+  persistence:
+    doctrine: null

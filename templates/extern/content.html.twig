@@ -1,0 +1,11 @@
+{% extends 'extern/layout.html.twig' %}
+
+{% block titel %}{{ titel }}{% endblock %}
+
+{% block styles %}
+	{{ css_asset('extern') }}
+{% endblock %}
+
+{% block content %}
+	{{ body | raw }}
+{% endblock %}

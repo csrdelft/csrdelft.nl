@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\view\JsonLijstResponse;
 
 /**

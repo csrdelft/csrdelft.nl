@@ -2,12 +2,13 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\security\AccountModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\repository\security\AccountRepository;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  */
 class UsernameField extends TextField {
 
@@ -26,7 +27,7 @@ class UsernameField extends TextField {
 		}
 		// check met strtolower is toegevoegd omdat je anders niet van case kan veranderen
 		// doordat usernameExists case-insensitive zoekt
-		if (AccountModel::instance()->existsUsername($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
+		if (ContainerFacade::getContainer()->get(AccountRepository::class)->existsUsername($this->value) AND strtolower($this->value) !== strtolower($this->origvalue)) {
 			$this->error = 'Deze gebruikersnaam is al in gebruik';
 		}
 		return $this->error === '';

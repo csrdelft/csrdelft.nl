@@ -9,7 +9,7 @@ use CsrDelft\view\formulier\FormElement;
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * Commentaardingen voor formulieren
  */
@@ -33,10 +33,8 @@ class HtmlComment implements FormElement {
 		return $this->comment;
 	}
 
-	public function view() {
-		echo '<div>';
-		echo $this->getHtml();
-		echo '</div>';
+	public function __toString() {
+		return '<div>'. $this->getHtml(). '</div>';
 	}
 
 	public function getJavascript() {

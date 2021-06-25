@@ -1,0 +1,94 @@
+<div id="forumpost-row-{{ post.post_id }}" class="forum-post">
+	<div class="auteur">
+		<div class="postpijl">
+			<a class="postanchor" id="{{ post.post_id }}"></a>
+			<a class="postlink" href="{{ url('csrdelft_forum_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
+				 title="Link naar deze post">&rarr;</a>
+		</div>
+		<div class="naam">
+			{{ get_profiel(post.uid).link('user') | raw }}
+		</div>
+
+		<span class="moment">
+			{% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
+				{{ post.datum_tijd | reldate }}
+			{% else %}
+				{{ post.datum_tijd | datetime_format }}
+			{% endif %}
+		</span>
+
+		{% if statistiek is defined and statistiek is not empty %}
+			<span class="lichtgrijs small"
+						title="Gelezen door {{ post.aantalGelezen }} van de {{ draad.aantalLezers }} lezers">
+			{{ post.gelezenPercentage | format('%.0f') }}% gelezen
+		</span>
+		{% endif %}
+		<div class="forumpostKnoppen">
+			{% if post.wacht_goedkeuring %}
+			<a href="{{ url('csrdelft_forum_goedkeuren', {post_id: post.post_id}) }}" class="btn post confirm"
+				 title="Bericht goedkeuren">{{ icon('check') }}</a>
+			<a href="{{ url('csrdelft_tools_stats') }}?ip={{ post.auteur_ip }}" class="btn"
+				 title="IP-log">{{ icon('server_chart') }}</a>
+			<a href="/forum/verwijderen/{{ post.post_id }}" class="btn post confirm"
+				 title="Verwijder bericht of draad">{{ icon('cross') }}</a>
+			{% if post.magBewerken %}
+				<a href="#{{ post.post_id }}"
+					 class="{% if app.user and app.user.uid != post.uid and not post.wacht_goedkeuring %}forummodknop{% endif %}"
+					 onclick="window.forum.forumBewerken({{ post.post_id }});" title="Bewerk bericht">{{ icon('pencil') }}</a>
+			{% endif %}
+			{% else %}
+			{% if post.verwijderd %}
+				<div class="post-verwijderd">Deze reactie is verwijderd.</div>
+				<a href="/forum/verwijderen/{{ post.post_id }}" class="btn post"
+					 title="Bericht herstellen">{{ icon('arrow_undo') }}</a>
+			{% endif %}
+			{% if post.magCiteren %}
+				<a href="#reageren" class="btn citeren" data-citeren="{{ post.post_id }}"
+					 title="Citeer bericht">{{ icon('comments') }}</a>
+			{% endif %}
+			{% if post.magBewerken %}
+				<a href="#{{ post.post_id }}"
+					 class="{% if app.user and app.user.uid != post.uid and not post.wacht_goedkeuring %}forummodknop{% endif %}"
+					 onclick="window.forum.forumBewerken({{ post.post_id }});" title="Bewerk bericht">{{ icon('pencil') }}</a>
+			{% endif %}
+			{% if app.user %}
+				{% set timestamp = post.datum_tijd.timestamp %}
+				<a id="timestamp{{ timestamp }}" href="{{ url('csrdelft_forum_bladwijzer', {draad_id: post.draad_id}) }}"
+					 class="btn post forummodknop bladwijzer" data="timestamp={{ timestamp }}"
+					 title="Bladwijzer bij dit bericht leggen">{{ icon('tab') }}</a>
+			{% endif %}
+			{% if post.draad.magModereren %}
+			<a href="/forum/offtopic/{{ post.post_id }}"
+				 class="btn post confirm {% if not post.wacht_goedkeuring %}forummodknop{% endif %}"
+				 title="Offtopic markeren">{{ icon('thumb_down') }}</a>
+			{% if not post.verwijderd %}
+			<a href="/forum/verwijderen/{{ post.post_id }}"
+				 class="btn post confirm {% if not post.wacht_goedkeuring %}forummodknop{% endif %}"
+				 title="Verwijder bericht">{{ icon('cross') }}</a>
+			{% endif %}
+			<a href="/forum/verplaatsen/{{ post.post_id }}"
+				 class="btn post prompt {% if not post.wacht_goedkeuring %}forummodknop{% endif %}" title="Verplaats bericht"
+				 data="draad_id={{ post.draad_id }}">{{ icon('arrow_right') }}</a>
+			{% endif %}
+			{% endif %}
+		</div>
+
+		{% if app.user and post.uid != 'x999' %}
+			<div class="forumpasfoto">{{ get_profiel(post.uid).link('pasfoto') | raw }}</div>
+		{% endif %}
+	</div>
+	<div class="forum-bericht" id="post{{ post.post_id }}">
+		{% set account = get_profiel(post.uid).account %}
+		{% if account is not none and account.perm_role == 'R_PUBCIE' %}
+			{{ post.tekst | bbcode('html') }}
+		{% else %}
+			{{ post.tekst | bbcode }}
+		{% endif %}
+		{% if post.bewerkt_tekst %}
+			<div class="bewerkt clear">
+				<hr/>
+				{{ post.bewerkt_tekst | bbcode }}
+			</div>
+		{% endif %}
+	</div>
+</div>

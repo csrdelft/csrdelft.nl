@@ -3,10 +3,10 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\documenten\Document;
 use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\bbcode\BbHelper;
+use Twig\Environment;
 
 /**
  * Geeft een blokje met een documentnaam, link, bestandsgrootte en formaat.
@@ -21,12 +21,29 @@ class BbDocument extends BbTag {
 	 * @var Document
 	 */
 	private $document;
+	/**
+	 * @var DocumentRepository
+	 */
+	private $documentRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var string
+	 */
+	public $id;
+
+	public function __construct(DocumentRepository $documentRepository, Environment $twig) {
+		$this->documentRepository = $documentRepository;
+		$this->twig = $twig;
+	}
+
 	public static function getTagName() {
 		return 'document';
 	}
 
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return $this->document == false || $this->document->magBekijken();
 	}
 
@@ -35,25 +52,23 @@ class BbDocument extends BbTag {
 			$beschrijving = $this->document->getFriendlyMimetype() . ' (' . format_filesize((int)$this->document->filesize) . ')';
 			return BbHelper::lightLinkBlock('document', $this->document->getDownloadUrl(), $this->document->naam, $beschrijving);
 		} else {
-			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->content . ')</div>';
+			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->id . ')</div>';
 		}
 	}
 
 	public function render() {
 		if ($this->document) {
-			return view('documenten.document_bb', ['document' => $this->document])->getHtml();
+			return $this->twig->render('documenten/document_bb.html.twig', ['document' => $this->document]);
 		} else {
-			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->content . ')</div>';
+			return '<div class="bb-document">[document] Ongeldig document (id:' . $this->id . ')</div>';
 		}
 	}
 
 	/**
 	 * @param array $arguments
 	 */
-	public function parse($arguments = [])
-	{
-		$this->readMainArgument($arguments);
-		$documentRepository = ContainerFacade::getContainer()->get(DocumentRepository::class);
-		$this->document = $documentRepository->get($this->content);
+	public function parse($arguments = []) {
+		$this->id = $this->readMainArgument($arguments);
+		$this->document = $this->documentRepository->get($this->id);
 	}
 }

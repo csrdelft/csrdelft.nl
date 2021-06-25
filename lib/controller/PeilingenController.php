@@ -2,130 +2,167 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\peilingen\Peiling;
-use CsrDelft\model\peilingen\PeilingenLogic;
-use CsrDelft\model\peilingen\PeilingenModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\view\datatable\RemoveRowsResponse;
-use CsrDelft\view\JsonResponse;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\entity\peilingen\Peiling;
+use CsrDelft\repository\peilingen\PeilingenRepository;
+use CsrDelft\service\PeilingenService;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\peilingen\PeilingForm;
-use CsrDelft\view\peilingen\PeilingResponse;
 use CsrDelft\view\peilingen\PeilingTable;
-use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 class PeilingenController extends AbstractController {
-	/** @var PeilingenModel */
-	private $peilingenModel;
-	/** @var PeilingenLogic */
-	private $peilingenLogic;
+	/** @var PeilingenRepository */
+	private $peilingenRepository;
+	/** @var PeilingenService */
+	private $peilingenService;
 
-	public function __construct(PeilingenModel $peilingenModel, PeilingenLogic $peilingenLogic) {
-		$this->peilingenModel = $peilingenModel;
-		$this->peilingenLogic = $peilingenLogic;
+	public function __construct(PeilingenRepository $peilingenRepository, PeilingenService $peilingenService) {
+		$this->peilingenRepository = $peilingenRepository;
+		$this->peilingenService = $peilingenService;
 	}
 
 	/**
-	 * @param null $id
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @param Peiling|null $peiling
+	 * @return Response
+	 * @Route("/peilingen/beheer/{id}", methods={"GET"}, requirements={"id": "\d+"}, defaults={"id": null})
+	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function table($id = null) {
+	public function table(Peiling $peiling = null): Response
+	{
 		// Laat een modal zien als een specifieke peiling bewerkt wordt
-		if ($id) {
+		if ($peiling) {
 			$table = new PeilingTable();
-			$peiling = $this->peilingenModel->find('id = ?', [$id])->fetch();
 			$table->setSearch($peiling->titel);
-			$form = new PeilingForm($peiling, false);
-			$form->setDataTableId($table->getDataTableId());
 
-			return view('default', ['content' => $table, 'modal' => $form]);
+			$form = $this->createFormulier(PeilingForm::class, $peiling, [
+				'action' => $this->generateUrl('csrdelft_peilingen_bewerken'),
+				'nieuw' => false,
+				'dataTableId' => $table->getDataTableId(),
+			]);
+
+			return $this->render('default.html.twig', ['content' => $table, 'modal' => $form->createModalView()]);
 		} else {
-			return view('default', ['content' => new PeilingTable()]);
+			return $this->render('default.html.twig', ['content' => new PeilingTable()]);
 		}
 	}
 
 	/**
-	 * @return View
+	 * @return GenericDataTableResponse
+	 * @Route("/peilingen/beheer", methods={"POST"})
+	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function lijst() {
-		return new PeilingResponse($this->peilingenModel->getPeilingenVoorBeheer());
+	public function lijst(): GenericDataTableResponse
+	{
+		return $this->tableData($this->peilingenRepository->getPeilingenVoorBeheer());
 	}
 
 	/**
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @param Request $request
+	 * @return GenericDataTableResponse|Response
+	 * @Route("/peilingen/nieuw", methods={"POST"})
+	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function nieuw() {
+	public function nieuw(Request $request) {
 		$peiling = new Peiling();
-		$form = new PeilingForm($peiling, true);
+
+		$form = $this->createFormulier(PeilingForm::class, $peiling, [
+			'action' => $this->generateUrl('csrdelft_peilingen_nieuw'),
+			'nieuw' => true,
+			'dataTableId' => true,
+		]);
+
+		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			$peiling = $form->getModel();
-			$peiling->eigenaar = LoginModel::getUid();
+			$peiling->eigenaarProfiel = $this->getProfiel();
 			$peiling->mag_bewerken = false;
 
-			$peiling->id = $this->peilingenModel->create($form->getModel());
-			return new PeilingResponse([$peiling]);
+			$this->getDoctrine()->getManager()->persist($peiling);
+			$this->getDoctrine()->getManager()->flush();
+
+			return $this->tableData([$peiling]);
 		}
 
-		return $form;
+		return new Response($form->createModalView());
 	}
 
 	/**
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @param Request $request
+	 * @return GenericDataTableResponse|Response
+	 * @Route("/peilingen/bewerken", methods={"POST"})
+	 * @Auth(P_PEILING_EDIT)
 	 */
-	public function bewerken() {
+	public function bewerken(Request $request) {
 		$selection = $this->getDataTableSelection();
 
 		if ($selection) {
-			$peiling = $this->peilingenModel->retrieveByUUID($selection[0]);
+			$peiling = $this->peilingenRepository->retrieveByUUID($selection[0]);
 
-			if (!$this->peilingenModel->magBewerken($peiling)) {
+			if (!$this->peilingenRepository->magBewerken($peiling)) {
 				throw new CsrGebruikerException('Je mag deze peiling niet bewerken!');
 			}
 		} else {
 			// Hier is de id in post gezet
-			$peiling = new Peiling();
+//			$peiling = new Peiling();
+			$id = $request->request->get('id');
+			$peiling = $this->peilingenRepository->find($id);
 		}
 
-		$form = new PeilingForm($peiling, false);
+		$form = $this->createFormulier(PeilingForm::class, $peiling, [
+			'action' => $this->generateUrl('csrdelft_peilingen_bewerken'),
+			'nieuw' => false,
+			'dataTableId' => true,
+		]);
+
+		$form->handleRequest($request);
+
 		if ($form->isPosted() && $form->validate()) {
-			$peiling = $form->getModel();
+			$this->getDoctrine()->getManager()->persist($peiling);
+			$this->getDoctrine()->getManager()->flush();
 
-			$this->peilingenModel->update($peiling);
-			return new PeilingResponse([$peiling]);
+			return $this->tableData([$peiling]);
 		}
 
-		return $form;
+		return new Response($form->createModalView());
 	}
 
 	/**
-	 * @return View
+	 * @return GenericDataTableResponse
+	 * @Route("/peilingen/verwijderen", methods={"GET", "POST"})
+	 * @Auth(P_PEILING_MOD)
 	 */
-	public function verwijderen() {
+	public function verwijderen(): GenericDataTableResponse
+	{
 		$selection = $this->getDataTableSelection();
-		$peiling = $this->peilingenModel->retrieveByUUID($selection[0]);
+		$peiling = $this->peilingenRepository->retrieveByUUID($selection[0]);
+		$removed = new RemoveDataTableEntry($peiling->id, Peiling::class);
 
-		$this->peilingenModel->delete($peiling);
+		$this->peilingenRepository->delete($peiling);
 
-		return new RemoveRowsResponse([$peiling]);
+		return $this->tableData([$removed]);
 	}
 
 	/**
 	 * @param Request $request
 	 * @param int $id
-	 * @return View
+	 * @return JsonResponse
+	 * @Route("/peilingen/stem/{id}", methods={"POST"}, requirements={"id": "\d+"})
+	 * @Auth(P_PEILING_VOTE)
 	 */
-	public function stem(Request $request, $id) {
+	public function stem(Request $request, int $id): JsonResponse
+	{
 		$ids = $request->request->filter('opties', [], FILTER_VALIDATE_INT);
 
-		if($this->peilingenLogic->stem($id, $ids, LoginModel::getUid())) {
+		if($this->peilingenService->stem($id, $ids, $this->getUid())) {
 			return new JsonResponse(true);
 		} else {
 			return new JsonResponse(false, 400);

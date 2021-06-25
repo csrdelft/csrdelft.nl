@@ -1,0 +1,91 @@
+/* --------------------------------
+
+Externe links & Knoppen
+
+-------------------------------- */
+
+a[href^="http://"]:not([href*="csrdelft.nl"]):not(.not-external), a[href^="https://"]:not([href*="csrdelft.nl"]):not(.not-external) {
+  padding-right: 16px;
+  background: url("../images/external-link-blue.png") no-repeat center right;
+}
+
+.sf-toolbar {
+	a[href^="http://"], a[href^="https://"] {
+		padding-right: inherit;
+		background: none;
+	}
+}
+a[href^="mailto:"] {
+  padding-right: 16px;
+  background: url("../images/email-link-blue.png") no-repeat center right;
+}
+a.lichtgrijs {
+  padding: 0;
+  background: none;
+}
+/* Typeahead */
+a.suggestionUrl, a.suggestionUrl:hover {
+  text-decoration: none;
+  color: inherit;
+}
+a.suggestionUrl img.icon {
+  position: absolute;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+}
+
+.progress-bar-info {
+  cursor: default;
+}
+
+.icon {
+  vertical-align: text-bottom;
+}
+.module-icon {
+  color: black;
+  font-size: 1.7em;
+  opacity: 0.2;
+}
+.module-icon:hover {
+  opacity: 0.5;
+}
+input[type=submit]::-moz-focus-inner, input[type=button]::-moz-focus-inner {
+  padding: 0;
+  border: 0
+}
+
+.btn.disabled  {
+  color: #D3D3D3;
+  border: 1px solid #D3D3D3 !important;
+  cursor: default;
+}
+.disabled img {
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+
+.btn-loading {
+	background-image: url("../images/loading-fb.gif");
+	background-repeat: no-repeat;
+	background-position: center center;
+	color: transparent !important; // een specifieke knop geeft ook een color mee
+}
+
+.btn.loading {
+	@extend .btn-loading;
+}
+
+.btn img {
+	vertical-align: text-bottom;
+}
+
+.get:not(.loaded), .post:not(.loaded) {
+	pointer-events: none;
+	@extend .btn-loading;
+}
+
+.btn-outline-primary.active {
+	background-color: $primary;
+	color: $white;
+}

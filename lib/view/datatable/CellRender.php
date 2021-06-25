@@ -8,7 +8,7 @@ namespace CsrDelft\view\datatable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 08/03/2018
  *
- * @see resources/assets/js/datatable/render.js
+ * @see assets/js/datatable/render.js
  */
 class CellRender {
 	const DEFAULT = 'default';
@@ -19,6 +19,7 @@ class CellRender {
 	const TOTAAL_PRIJS = 'totaalPrijs';
 	const TIMEAGO = 'timeago';
 	const FILESIZE = 'filesize';
+	const DATETIME = 'datetime';
 
 	/** @var string */
 	protected $choice;
@@ -91,5 +92,9 @@ class CellRender {
 	 */
 	public static function Filesize() {
 		return new static(self::FILESIZE);
+	}
+
+	public static function DateTime() {
+		return new static(self::DATETIME);
 	}
 }

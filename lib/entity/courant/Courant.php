@@ -4,7 +4,8 @@
 namespace CsrDelft\entity\courant;
 
 
-use DateTime;
+use CsrDelft\entity\profiel\Profiel;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,7 +23,7 @@ class Courant {
 	 */
 	public $id;
 	/**
-	 * @var DateTime
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime", name="verzendMoment")
 	 */
 	public $verzendMoment;
@@ -33,9 +34,15 @@ class Courant {
 	public $inhoud;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 */
 	public $verzender;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="verzender", referencedColumnName="uid")
+	 */
+	public $verzender_profiel;
 
 	public function getJaar() {
 		return $this->verzendMoment->format('Y');

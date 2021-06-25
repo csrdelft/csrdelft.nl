@@ -4,8 +4,8 @@ namespace CsrDelft\service;
 
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -31,51 +31,67 @@ class ProfielService {
 	 * @return Profiel[]
 	 */
 	public function zoekLeden(string $zoekterm, string $zoekveld, string $verticale, string $sort, $zoekstatus = '', int $limiet = 0) {
+		$queryBuilder = $this->profielRepository->createQueryBuilder('p');
+		$expr = $queryBuilder->expr();
 		$containsZonderSpatiesZoekterm = sql_contains(str_replace(' ', '', $zoekterm));
-		$zoekfilterparams = [];
 		//Zoeken standaard in voornaam, achternaam, bijnaam en uid.
 		if ($zoekveld == 'naam' && !preg_match('/^\d{2}$/', $zoekterm)) {
 			if (preg_match('/ /', trim($zoekterm))) {
 				$zoekdelen = explode(' ', $zoekterm);
 				$iZoekdelen = count($zoekdelen);
 				if ($iZoekdelen == 2) {
-					$zoekfilterparams[':voornaam'] = sql_contains($zoekdelen[0]);
-					$zoekfilterparams[':achternaam'] = sql_contains($zoekdelen[1]);
-					$zoekfilter = "( voornaam LIKE :voornaam AND achternaam LIKE :achternaam ) OR";
-					$zoekfilter .= "( voornaam LIKE :zoekterm OR achternaam LIKE :containsZoekterm OR
-                                    nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm )";
-					$zoekfilterparams[':zoekterm'] = $zoekterm;
-					$zoekfilterparams[':containsZoekterm'] = sql_contains($zoekterm);
+					$queryBuilder
+						->where($expr->orX()
+							->add('p.voornaam LIKE :voornaam AND p.achternaam LIKE :achternaam')
+							->add('p.voornaam LIKE :containsZoekterm')
+							->add('p.achternaam LIKE :containsZoekterm')
+							->add('p.nickname LIKE :containsZoekterm')
+							->add('p.uid LIKE :containsZoekterm')
+						)
+						->setParameter('voornaam', sql_contains($zoekdelen[0]))
+						->setParameter('achternaam', sql_contains($zoekdelen[1]))
+						->setParameter('containsZoekterm', sql_contains($zoekterm));
 				} else {
-					$zoekfilterparams[':voornaam'] = sql_contains($zoekdelen[0]);
-					$zoekfilterparams[':achternaam'] = sql_contains($zoekdelen[$iZoekdelen - 1]);
-
-					$zoekfilter = "( voornaam LIKE :voornaam AND achternaam LIKE :achternaam )";
+					$queryBuilder
+						->where('p.voornaam LIKE :voornaam and p.achternaam LIKE :achternaam')
+						->setParameter('voornaam', sql_contains($zoekdelen[0]))
+						->setParameter('achternaam', sql_contains($zoekdelen[$iZoekdelen - 1]));
 				}
 			} else {
-				$zoekfilter = "
-					voornaam LIKE :containsZoekterm OR achternaam LIKE :containsZoekterm OR
-					nickname LIKE :containsZoekterm OR uid LIKE :containsZoekterm";
-				$zoekfilterparams[':containsZoekterm'] = sql_contains($zoekterm);
+				$queryBuilder
+					->where($expr->orX()
+						->add('p.voornaam LIKE :containsZoekterm')
+						->add('p.achternaam LIKE :containsZoekterm')
+						->add('p.nickname LIKE :containsZoekterm')
+						->add('p.uid LIKE :containsZoekterm')
+					)
+					->setParameter('containsZoekterm', sql_contains($zoekterm));
 			}
 
-			$zoekfilterparams[':naam'] = sql_contains($zoekterm);
-			$zoekfilter .= " OR ( CONCAT(voornaam, \" \", tussenvoegsel, \" \", achternaam) LIKE :naam ) OR";
-			$zoekfilter .= "( CONCAT(voornaam, \" \", achternaam) LIKE :naam )";
+			$queryBuilder
+				->orWhere('CONCAT_WS(\' \', p.voornaam, p.tussenvoegsel, p.achternaam) LIKE :naam')
+				->orWhere('CONCAT_WS(\' \', p.voornaam, p.achternaam) LIKE :naam')
+				->setParameter('naam', sql_contains($zoekterm));
 		} elseif ($zoekveld == 'adres') {
-			$zoekfilter = "adres LIKE :containsZoekterm OR woonplaats LIKE :containsZoekterm OR
-				postcode LIKE :containsZoekterm OR REPLACE(postcode, ' ', '') LIKE :containsZonderSpatiesZoekterm";
-			$zoekfilterparams[':containsZoekterm'] = $zoekterm;
-			$zoekfilterparams[':containsZonderSpatiesZoekterm'] = $containsZonderSpatiesZoekterm;
+			$queryBuilder
+				->where($expr->orX()
+					->add('p.adres LIKE :containsZoekterm')
+					->add('p.woonplaats LIKE :containsZoekterm')
+					->add('p.postcode LIKE :containsZoekterm')
+					->add('REPLACE(p.postcode, \' \', \'\') LIKE :containsZonderSpatiesZoekterm')
+				)
+				->setParameter('containsZoekterm', sql_contains($zoekterm))
+				->setParameter('containsZonderSpatiesZoekterm', $containsZonderSpatiesZoekterm);
 		} else {
 			if (preg_match('/^\d{2}$/', $zoekterm) AND ($zoekveld == 'uid' OR $zoekveld == 'naam')) {
 				//zoeken op lichtingen...
-				$zoekfilter = "SUBSTRING(uid, 1, 2)=:zoekterm";
-				$zoekfilterparams[':zoekterm'] = $zoekterm;
-
+				$queryBuilder
+					->where('p.uid LIKE :uid')
+					->setParameter('uid', $zoekterm . '__');
 			} else {
-				$zoekfilter = "{$zoekveld} LIKE :containsZoekterm";
-				$zoekfilterparams[':containsZoekterm'] = $zoekterm;
+				$queryBuilder
+					->where("p.{$zoekveld} LIKE :containsZoekterm")
+					->setParameter('containsZoekterm', sql_contains($zoekterm));
 			}
 		}
 
@@ -91,70 +107,67 @@ class ProfielService {
 		# én alleen voor OUDLEDENMOD:
 		#  - nobodies : 					alleen nobodies
 
-		$statusfilter = '';
 		if ($zoekstatus == 'alleleden') {
 			$zoekstatus = '';
 		}
 		if ($zoekstatus == 'allepersonen') {
-			$zoekstatus = LidStatus::getTypeOptions();
+			$zoekstatus = LidStatus::getEnumValues();
 		}
+
+		$statussen = [];
 		if (is_array($zoekstatus)) {
 			//we gaan nu gewoon simpelweg statussen aan elkaar plakken. LET OP: deze functie doet nu
 			//geen controle of een gebruiker dat mag, dat moet dus eerder gebeuren.
-			$statusfilter = "status='" . implode("' OR status='", $zoekstatus) . "'";
+			$statussen = $zoekstatus;
 		} else {
 			# we zoeken in leden als
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet oudleden alleen heeft gekozen
 			if (
-				(LoginModel::mag(P_LEDEN_READ) && !LoginModel::mag(P_OUDLEDEN_READ)) || (LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ) && $zoekstatus != 'oudleden')
+				(LoginService::mag(P_LEDEN_READ) && !LoginService::mag(P_OUDLEDEN_READ)) || (LoginService::mag(P_LEDEN_READ) && LoginService::mag(P_OUDLEDEN_READ) && $zoekstatus != 'oudleden')
 			) {
-				$statusfilter .= "status='S_LID' OR status='S_GASTLID' OR status='S_NOVIET' OR status='S_KRINGEL'";
+				$statussen[] = LidStatus::Lid;
+				$statussen[] = LidStatus::Gastlid;
+				$statussen[] = LidStatus::Noviet;
+				$statussen[] = LidStatus::Kringel;
 			}
 			# we zoeken in oudleden als
 			# 1. ingelogde persoon dat alleen maar mag of
 			# 2. ingelogde persoon leden en oudleden mag zoeken, maar niet leden alleen heeft gekozen
 			if (
-				(!LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ)) || (LoginModel::mag(P_LEDEN_READ) && LoginModel::mag(P_OUDLEDEN_READ) && $zoekstatus != 'leden')
+				(!LoginService::mag(P_LEDEN_READ) && LoginService::mag(P_OUDLEDEN_READ)) || (LoginService::mag(P_LEDEN_READ) && LoginService::mag(P_OUDLEDEN_READ) && $zoekstatus != 'leden')
 			) {
-				if ($statusfilter != '') {
-					$statusfilter .= " OR ";
-				}
-				$statusfilter .= "status='S_OUDLID' OR status='S_ERELID'";
+				$statussen[] = LidStatus::Oudlid;
+				$statussen[] = LidStatus::Erelid;
 			}
 			# we zoeken in nobodies als
 			# de ingelogde persoon dat mag EN daarom gevraagd heeft
-			if ($zoekstatus === 'nobodies' && LoginModel::mag(P_LEDEN_MOD)) {
+			if ($zoekstatus === 'nobodies' && LoginService::mag(P_LEDEN_MOD)) {
 				# alle voorgaande filters worden ongedaan gemaakt en er wordt alleen op nobodies gezocht
-				$statusfilter = "status='S_NOBODY' OR status='S_EXLID'";
+				$statussen = [LidStatus::Nobody, LidStatus::Exlid];
 			}
 
-			if (LoginModel::mag(P_LEDEN_READ) && $zoekstatus === 'novieten') {
-				$statusfilter = "status='S_NOVIET'";
+			if (LoginService::mag(P_LEDEN_READ) && $zoekstatus === 'novieten') {
+				$statussen = [LidStatus::Noviet];
 			}
 		}
+
+		$queryBuilder
+			->andWhere('p.status in (:zoekstatus)')
+			->setParameter('zoekstatus', $statussen);
 
 		# als er een specifieke moot is opgegeven, gaan we alleen in die moot zoeken
 		if ($verticale != 'alle') {
-			$mootfilter = 'AND verticale = :verticale ';
-			$zoekfilterparams[':verticale'] = $verticale;
-		} else {
-			$mootfilter = '';
+			$queryBuilder
+				->andWhere('p.verticale = :verticale')
+				->setParameter('verticale', $verticale);
 		}
 
 		# is er een maximum aantal resultaten gewenst
-		if ((int)$limiet > 0) {
-			$limit = (int)$limiet;
-		} else {
-			$limit = null;
-		}
+		$queryBuilder
+			->orderBy('p.' . $sort)
+			->setMaxResults((int)$limiet > 0 ? (int)$limiet : null);
 
-		# controleer of we ueberhaupt wel wat te zoeken hebben hier
-		if ($statusfilter != '') {
-			return $this->profielRepository
-				->ormFind("($zoekfilter) AND ($statusfilter) $mootfilter", $zoekfilterparams, null, $sort, $limit);
-		}
-
-		return [];
+		return $queryBuilder->getQuery()->getResult();
 	}
 }

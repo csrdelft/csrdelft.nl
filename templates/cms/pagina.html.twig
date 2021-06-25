@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}{{ body.titel }}{% endblock %}
+
+{% block content %}
+{{ body | raw }}
+{% endblock %}

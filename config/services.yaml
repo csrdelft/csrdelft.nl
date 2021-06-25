@@ -4,9 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-
-imports:
-  - { resource: 'fromIni.php' }
+  container.dumper.inline_class_loader: true
+  app.supported_locales: 'nl|en'
+  memcached_url: '%env(MEMCACHED_URL)%'
 
 services:
   # default configuration for services in *this* file
@@ -14,12 +14,12 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     public: false       # Allows optimizing the container by removing unused services; this also means
-      # fetching services directly from the container via $container->get() won't work.
+    # fetching services directly from the container via $container->get() won't work.
     # The best practice is to be explicit about your dependencies anyway.
 
   CsrDelft\:
     resource: '../lib'
-    exclude: '../lib/{view,config,common,Kernel.php}'
+    exclude: '../lib/{common,Kernel.php}'
 
   # controllers are imported separately to make sure services can be injected
   # as action arguments even if you don't extend any base controller class
@@ -32,6 +32,14 @@ services:
     exclude: '../lib/model/entity'
     public: true # Alle modellen zijn uit de container te trekken.
 
+  CsrDelft\view\:
+    resource: '../lib/view'
+
+  CsrDelft\view\bbcode\tag\:
+    resource: '../lib/view/bbcode/tag/'
+    shared: false # iedere instance is uniek
+    public: true
+
   CsrDelft\repository\:
     resource: '../lib/repository'
     public: true # Alle repositories zijn (voor nu) uit de container te trekken.
@@ -39,6 +47,11 @@ services:
   CsrDelft\service\:
     resource: '../lib/service'
     public: true
+
+  CsrDelft\common\Serializer\Normalizer\:
+    resource: '../lib/common/Serializer/Normalizer'
+    tags:
+      - { name: serializer.normalizer }
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
@@ -53,3 +66,99 @@ services:
   CsrDelft\events\JsonBodyEventListener:
     tags:
       - { name: kernel.event_listener, event: kernel.request }
+
+  CsrDelft\events\ApiTrustedHostsEventListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
+
+  CsrDelft\events\CacheControlEventListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.response }
+
+  CsrDelft\common\Security\PersistentTokenProvider: ~
+  Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login'
+  Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface: '@security.authenticator.manager'
+  Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices: '@security.authentication.rememberme.services.persistent'
+  CsrDelft\common\Logging\LogActivationStrategy: ~
+
+  # Voor Zijbalk in blade templates
+  CsrDelft\view\Zijbalk:
+    public: true
+
+  Psr\Container\ContainerInterface: '@service_container'
+
+  security:
+    class: Symfony\Component\Security\Core\Security
+    public: true
+
+  CsrDelft\view\bbcode\CsrBB:
+    public: true
+
+  csr.formulier.factory:
+    alias: CsrDelft\Component\Formulier\FormulierFactory
+
+  CsrDelft\Component\Formulier\FormulierBuilder:
+    shared: false # iedere instance is uniek
+
+  CsrDelft\Component\Formulier\FormulierFactory:
+    shared: false
+    public: true
+    arguments:
+      - !tagged_locator {tag: csr.formulier.type, index_by: key}
+      - '@request_stack'
+      - '@CsrDelft\Component\Formulier\FormulierBuilder'
+
+  CsrDelft\view\bbcode\BbToProsemirror:
+    public: true
+    arguments:
+      - !tagged_locator {tag: csr.editor.mark, default_index_method: getBbTagType}
+      - !tagged_locator {tag: csr.editor.node, default_index_method: getBbTagType}
+      - '@Psr\Container\ContainerInterface'
+
+  CsrDelft\view\bbcode\ProsemirrorToBb:
+    public: true
+    arguments:
+      - !tagged_locator {tag: csr.editor.mark, default_index_method: getMarkType}
+      - !tagged_locator {tag: csr.editor.node, default_index_method: getNodeType}
+
+  CsrDelft\Twig\Configurator:
+    decorates: 'twig.configurator.environment'
+
+  CsrDelft\command\SponsorAffiliateDownloadCommand:
+    arguments:
+      - '%env(SPONSOR_SL_HOST)%'
+      - '%env(SPONSOR_CLUBID)%'
+      - '%env(SPONSOR_USERAGENT)%'
+
+  CsrDelft\command\WelkomCommand:
+    arguments:
+      - '%env(EMAIL_PUBCIE)%'
+
+  CsrDelft\events\UserResolveListener:
+    tags:
+      - { name: kernel.event_listener, event: trikoder.oauth2.user_resolve, method: onUserResolve }
+
+  CsrDelft\events\OAuth2AuthorizeListener:
+    arguments:
+      - '@request_stack'
+      - '@twig'
+    tags:
+      - { name: kernel.event_listener, event: trikoder.oauth2.authorization_request_resolve, method: onAuthorizationRequest }
+
+  Trikoder\Bundle\OAuth2Bundle\Security\Guard\Authenticator\OAuth2Authenticator:
+
+  CsrDelft\events\LogEventListener:
+    arguments:
+      - '@logger'
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
+      - { name: monolog.logger, channel: access }
+
+  Monolog\Processor\GitProcessor:
+    tags:
+      - { name: monolog.processor, handler: access }
+
+  CsrDelft\common\Logging\LogProcessor:
+    arguments: ["@request_stack", "@security.helper"]
+    tags:
+      - { name: monolog.processor }

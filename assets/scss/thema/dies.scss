@@ -1,0 +1,79 @@
+$kleur-primair: #903921;
+$kleur-secundair: #C8611A;
+$kleur-textheader: #D08976;
+$kleur-text: #fffbfa;
+$kleur-hover: #E9600B;
+
+$kleur-groen: #ABD1B5;
+$kleur-rood: #B0413E;
+
+@font-face {
+	font-family: BossaNovaMVB;
+	src: url('../../fonts/dies-2021/BossaNovaMVB.otf');
+}
+
+$font: Calibri, sans-serif;
+$font-family-base: $font;
+$headings-font-family: ($font, uppercase);
+
+$theme-colors: (
+	"primary": $kleur-primair,
+	"danger": #E54B4B,
+	"white": $kleur-text,
+);
+
+$card-bg: $kleur-primair;
+$list-group-bg: $kleur-primair;
+
+$link-color: $kleur-text;
+$link-hover-color: $kleur-hover;
+$body-bg: $kleur-secundair;
+$body-color: $kleur-text;
+
+$zijbalk-bg: $kleur-primair;
+$zijbalk-kopje: $kleur-text;
+$zijbalk-border: $kleur-hover;
+$zijbalk-ishetal-ja: $kleur-groen;
+$zijbalk-ishetal-nee: $kleur-rood;
+
+$bb-block-bg: $kleur-primair;
+$bb-alt-bg: darken($body-bg, 4%);
+$bb-hover-bg: $kleur-hover;
+$menu-primary-hover: $kleur-textheader;
+$menu-bg: $body-bg;
+$menu-color: $body-color;
+$menu-small-bg: $body-bg;
+$menu-small-color: $body-color;
+
+$modal-content-bg: $kleur-secundair;
+
+$zoeken-active-bg: lighten($body-bg, 10%);
+
+$tabel-header: $kleur-secundair;
+$tabel-regel-licht: $kleur-secundair;
+$tabel-regel-donker: lighten($kleur-secundair, 5%);
+$tabel-hover: darken($kleur-secundair, 5%);
+
+$footer-background: darken($kleur-primair, 5%);
+$maaltijdketzer-bg: $kleur-primair;
+
+$list-group-action-color: $kleur-text;
+$list-group-hover-bg: $kleur-textheader;
+$text-muted: #fffbfa;
+
+/* importeer basis */
+@import "../base";
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: BossaNovaMVB, Calibri, sans-serif;
+}
+
+h5 {
+	color: $kleur-textheader;
+}
+
+.zijbalk {
+	.blok .zijbalk-kopje a {
+		color: $kleur-textheader;
+	}
+}

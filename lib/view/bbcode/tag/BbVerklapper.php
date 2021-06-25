@@ -15,7 +15,7 @@ class BbVerklapper extends BbTag {
 	}
 
 	public function renderLight() {
-		$content = str_replace('[br]', '<br />', $this->content);
+		$content = str_replace('[br]', '<br />', $this->getContent());
 		return '<a class="bb-tag-spoiler" href="#/verklapper/' . urlencode($content) . '">Toon verklapper</a>';
 	}
 
@@ -24,8 +24,8 @@ class BbVerklapper extends BbTag {
 
 		return <<<HTML
 <div class="card">
-	<a class="btn btn-secondary btn-sm" data-toggle="collapse" href="#$id">Verklapper</a>
-	<div id="$id" class="collapse"><div class="card-body">$this->content</div></div>
+	<a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#$id">Verklapper</a>
+	<div id="$id" class="collapse"><div class="card-body">{$this->getContent()}</div></div>
 </div>
 HTML;
 	}

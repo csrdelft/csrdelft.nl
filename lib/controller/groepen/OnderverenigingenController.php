@@ -2,7 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\OnderverenigingenModel;
+use CsrDelft\entity\groepen\Ondervereniging;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * OnderverenigingenController.class.php
@@ -12,7 +13,7 @@ use CsrDelft\model\groepen\OnderverenigingenModel;
  * Controller voor onderverenigingen.
  */
 class OnderverenigingenController extends AbstractGroepenController {
-	public function __construct(OnderverenigingenModel $onderverenigingenModel) {
-		parent::__construct($onderverenigingenModel);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Ondervereniging::class);
 	}
 }

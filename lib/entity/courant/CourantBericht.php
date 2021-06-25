@@ -4,8 +4,9 @@
 namespace CsrDelft\entity\courant;
 
 
-use CsrDelft\model\security\LoginModel;
-use DateTime;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,8 +29,8 @@ class CourantBericht {
 	 */
 	public $titel;
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var CourantCategorie
+	 * @ORM\Column(type="enumCourantCategorie")
 	 */
 	public $cat;
 	/**
@@ -44,26 +45,36 @@ class CourantBericht {
 	public $volgorde;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 */
 	public $uid;
 	/**
-	 * @var DateTime
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
+	 */
+	public $schrijver;
+	/**
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime", name="datumTijd")
 	 */
 	public $datumTijd;
 
 	public function setVolgorde() {
+		if ($this->cat == null) {
+			return;
+		}
+
 		$this->volgorde = [
 			'voorwoord' => 0,
 			'bestuur' => 1,
 			'csr' => 2,
 			'overig' => 3,
 			'sponsor' => 4,
-		][$this->cat];
+		][$this->cat->getValue()];
 	}
 
 	public function magBeheren() {
-		return LoginModel::mag(P_MAIL_COMPOSE) OR LoginModel::mag($this->uid);
+		return LoginService::mag(P_MAIL_COMPOSE) OR LoginService::mag($this->uid);
 	}
 }

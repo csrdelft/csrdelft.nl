@@ -1,0 +1,109 @@
+.tree {
+	ul {
+		display: flex;
+		padding-top: 20px;
+		position: relative;
+
+		transition: all 0.5s;
+		-webkit-transition: all 0.5s;
+		-moz-transition: all 0.5s;
+
+		// Voeg lijntje naar beneden toe vanaf ouders.
+		ul::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 50%;
+			border-left: 1px solid #ccc;
+			width: 0;
+			height: 20px;
+		}
+	}
+
+	li {
+		float: left;
+		text-align: center;
+		list-style-type: none;
+		position: relative;
+		padding: 20px 5px 0 5px;
+
+		transition: all 0.5s;
+		-webkit-transition: all 0.5s;
+		-moz-transition: all 0.5s;
+
+		// Lijnen tussen blokken worden met ::before en ::after getekend
+		&::before, &::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			right: 50%;
+			border-top: 1px solid #ccc;
+			width: 50%;
+			height: 20px;
+		}
+
+		&::after {
+			right: auto;
+			left: 50%;
+			border-left: 1px solid #ccc;
+		}
+
+		// Lijnen naar links en rechts moeten verwijderd worden als een kind geen brusjes heeft.
+		&:only-child::after, &:only-child::before {
+			display: none;
+		}
+
+		// Plaats enig kind dichter bij ouder
+		&:only-child {
+			padding-top: 0;
+		}
+
+		// Verwijder lijntje naar link van eerste kind en lijntje naar rechts van laatste kind.
+		&:first-child::before, &:last-child::after {
+			border: 0 none;
+		}
+
+		// Voeg het lijntje naar boven toe voor het laatste kind.
+		&:last-child::before {
+			border-right: 1px solid #ccc;
+			border-radius: 0 5px 0 0;
+		}
+
+		// Voeg het lijntje naar boven toe voor het eerste kind.
+		&:first-child::after {
+			border-radius: 5px 0 0 0;
+		}
+
+		a {
+			border: 1px solid #ccc;
+			padding: 5px 10px;
+			text-decoration: none;
+			color: #666;
+			font-size: 11px;
+			display: inline-block;
+
+			border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+
+			transition: all 0.5s;
+			-webkit-transition: all 0.5s;
+			-moz-transition: all 0.5s;
+
+
+			&:hover + ul li::after,
+			&:hover + ul li::before,
+			&:hover + ul::before,
+			&:hover + ul ul::before {
+				border-color: #94a0b4;
+			}
+
+			&:hover, &:hover + ul li a {
+				background: #c8e4f8;
+				color: #000;
+				border: 1px solid #94a0b4;
+			}
+		}
+	}
+
+}

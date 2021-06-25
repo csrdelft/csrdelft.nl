@@ -3,6 +3,7 @@
 namespace CsrDelft\view\bbcode;
 
 use CsrDelft\bb\BbEnv;
+use CsrDelft\common\ContainerFacade;
 
 /**
  * Een paar helper functies voor bb.
@@ -20,9 +21,9 @@ final class BbHelper {
 	 * @return string
 	 */
 	public static function lightLinkInline($env, $tag, $url, $content) {
-		if ($env->email_mode && isset($url[0]) && $url[0] === '/') {
+		if (isset($url[0]) && $url[0] === '/') {
 			// Zorg voor werkende link in e-mail
-			$url = CSR_ROOT . $url;
+			$url = getCsrRoot() . $url;
 		}
 
 		return <<<HTML

@@ -11,7 +11,7 @@ use CsrDelft\view\formulier\keuzevelden\RadioField;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  */
 class FileField extends RadioField {
 
@@ -87,20 +87,20 @@ class FileField extends RadioField {
 		$this->getUploader()->opslaan($directory, $filename, $overwrite);
 	}
 
-	public function getOptionHtml($methode, $description) {
+	public function getOptionHtml($value, $description) {
 		$html = '<div class="UploadOptie';
-		if ($methode === $this->value) {
+		if ($value === $this->value) {
 			$html .= ' verborgen';
 		}
 		$html .= '">';
-		$html .= parent::getOptionHtml($methode, $description);
+		$html .= parent::getOptionHtml($value, $description);
 		$html .= '</div><div class="UploadKeuze';
-		if ($methode !== $this->value) {
+		if ($value !== $this->value) {
 			$html .= ' verborgen';
 		}
 		$html .= '">';
-		$html .= $this->uploaders[$methode]->getHtml();
-		$html .= $this->uploaders[$methode]->getPreviewDiv();
+		$html .= $this->uploaders[$value]->getHtml();
+		$html .= $this->uploaders[$value]->getPreviewDiv();
 		return $html . '</div>';
 	}
 

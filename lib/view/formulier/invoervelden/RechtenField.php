@@ -2,18 +2,19 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\security\AccessModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\service\AccessService;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  */
 class RechtenField extends TextField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);
-		$this->suggestions[] = AccessModel::instance()->getPermissionSuggestions();
+		$this->suggestions[] = ContainerFacade::getContainer()->get(AccessService::class)->getPermissionSuggestions();
 
 		// TODO: bundelen om simultane verbindingen te sparen
 		foreach (array('verticalen', 'lichtingen', 'commissies', 'groepen', 'onderverenigingen', 'woonoorden') as $option) {
@@ -31,7 +32,7 @@ class RechtenField extends TextField {
 		if ($this->value == '') {
 			return true;
 		}
-		$errors = AccessModel::instance()->getPermissionStringErrors($this->value);
+		$errors = ContainerFacade::getContainer()->get(AccessService::class)->getPermissionStringErrors($this->value);
 		if (!empty($errors)) {
 			$this->error = 'Ongeldig: "' . implode('" & "', $errors) . '"';
 		}

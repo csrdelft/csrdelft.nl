@@ -2,11 +2,11 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\groepen\Kring;
-use CsrDelft\model\groepen\KringenModel;
+use CsrDelft\entity\groepen\Kring;
+use CsrDelft\repository\groepen\KringenRepository;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,16 +16,16 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor kringen.
  *
- * @property KringenModel $model
+ * @property KringenRepository $repository
  */
 class KringenController extends AbstractGroepenController {
-	public function __construct(KringenModel $kringenModel) {
-		parent::__construct($kringenModel);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Kring::class);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');
@@ -36,13 +36,18 @@ class KringenController extends AbstractGroepenController {
 			$limit = $request->query->getInt('limit');
 		}
 		$result = array();
-		foreach ($this->model->find('naam LIKE ?', array($zoekterm), null, null, $limit) as $kring) {
+		$kringen = $this->repository->createQueryBuilder('k')
+			->where('k.naam LIKE :zoekterm')
+			->setParameter('zoekterm', sql_contains($zoekterm))
+			->setMaxResults($limit)
+			->getQuery()->getResult();
+		foreach ($kringen as $kring) {
 			/** @var Kring $kring */
 			$result[] = array(
 				'url' => $kring->getUrl() . '#' . $kring->id,
 				'label' => $kring->familie,
 				'icon' => Icon::getTag('Kring'),
-				'value' => 'Kring:' . $kring->verticale . '.' . $kring->kring_nummer
+				'value' => 'Kring:' . $kring->verticale . '.' . $kring->kringNummer
 			);
 		}
 		return new JsonResponse($result);

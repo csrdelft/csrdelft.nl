@@ -2,13 +2,17 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\security\AccessControl;
-use CsrDelft\model\security\AccessModel;
-use CsrDelft\view\datatable\RemoveRowsResponse;
-use CsrDelft\view\RechtenData;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\entity\security\AccessControl;
+use CsrDelft\repository\security\AccessRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\RechtenForm;
 use CsrDelft\view\RechtenTable;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -18,69 +22,107 @@ use CsrDelft\view\RechtenTable;
  *
  * Controller van de ACL.
  */
-class RechtenController {
+class RechtenController extends AbstractController {
 	/**
-	 * @var AccessModel
+	 * @var AccessRepository
 	 */
-	private $accessModel;
+	private $accessRepository;
 
-	public function __construct(AccessModel $accessModel) {
-		$this->accessModel = $accessModel;
+	public function __construct(AccessRepository $accessRepository) {
+		$this->accessRepository = $accessRepository;
 	}
 
+	/**
+	 * @param null $environment
+	 * @param null $resource
+	 * @return Response
+	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"GET"}, defaults={"environment"=null,"resource"=null})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function bekijken($environment = null, $resource = null) {
-		return view('default', [
-			'content' => new RechtenTable($this->accessModel, $environment, $resource)
+		return $this->render('default.html.twig', [
+			'content' => new RechtenTable($this->accessRepository, $environment, $resource)
 		]);
 	}
 
+	/**
+	 * @param null $environment
+	 * @param null $resource
+	 * @return GenericDataTableResponse
+	 * @Route("/rechten/bekijken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function data($environment = null, $resource = null) {
-		return new RechtenData($this->accessModel->getTree($environment, $resource));
+		return $this->tableData($this->accessRepository->getTree($environment, $resource));
 	}
 
+	/**
+	 * @param null $environment
+	 * @param null $resource
+	 * @return GenericDataTableResponse|RechtenForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/rechten/aanmaken/{environment}/{resource}", methods={"POST"}, defaults={"environment"=null,"resource"=null})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function aanmaken($environment = null, $resource = null) {
-		$ac = $this->accessModel->nieuw($environment, $resource);
+		$ac = $this->accessRepository->nieuw($environment, $resource);
 		$form = new RechtenForm($ac, 'aanmaken');
 		if ($form->validate()) {
-			$this->accessModel->setAcl($ac->environment, $ac->resource, array(
-				$ac->action => $ac->subject
-			));
-			return new RechtenData(array($ac));
+			$this->accessRepository->setAcl($ac->environment, $ac->resource, [$ac->action => $ac->subject]);
+			return $this->tableData([$ac]);
 		} else {
 			return $form;
 		}
 	}
 
+	/**
+	 * @return GenericDataTableResponse|RechtenForm
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/rechten/wijzigen", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function wijzigen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
+
 		if (!isset($selection[0])) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
+
 		/** @var AccessControl $ac */
-		$ac = $this->accessModel->retrieveByUUID($selection[0]);
+		$ac = $this->accessRepository->retrieveByUUID($selection[0]);
 		$form = new RechtenForm($ac, 'wijzigen');
+
 		if ($form->validate()) {
-			$this->accessModel->setAcl($ac->environment, $ac->resource, array(
+			$this->accessRepository->setAcl($ac->environment, $ac->resource, array(
 				$ac->action => $ac->subject
 			));
-			return new RechtenData(array($ac));
+			return $this->tableData([$ac]);
 		} else {
 			return $form;
 		}
 	}
 
+	/**
+	 * @return GenericDataTableResponse
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/rechten/verwijderen", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function verwijderen() {
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
-		$response = array();
+		$selection = $this->getDataTableSelection();
+		$response = [];
+
 		foreach ($selection as $UUID) {
 			/** @var AccessControl $ac */
-			$ac = $this->accessModel->retrieveByUUID($UUID);
-			$this->accessModel->setAcl($ac->environment, $ac->resource, array(
-				$ac->action => null
-			));
-			$response[] = $ac;
+			$ac = $this->accessRepository->retrieveByUUID($UUID);
+			$response[] = new RemoveDataTableEntry(explode('@', $UUID)[0], AccessControl::class);
+			$this->accessRepository->setAcl($ac->environment, $ac->resource, [$ac->action => null]);
 		}
-		return new RemoveRowsResponse($response);
+
+		return $this->tableData($response);
 	}
 
 }

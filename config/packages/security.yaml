@@ -1,0 +1,73 @@
+security:
+  enable_authenticator_manager: true
+  # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+  providers:
+    accounts:
+      entity:
+        class: 'CsrDelft\entity\security\Account'
+
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    # Achter deze firewall zitten requests voor de api.
+    oauth_token:
+      pattern: ^/token$
+      security: false
+    oauth:
+      pattern: ^/api/v3/
+      security: true
+      stateless: true
+      guard:
+        authenticators:
+          - Trikoder\Bundle\OAuth2Bundle\Security\Guard\Authenticator\OAuth2Authenticator
+    api:
+      pattern: ^/API/2.0/
+      stateless: true
+      custom_authenticators: [ CsrDelft\service\security\ApiAuthenticator ]
+      provider: accounts
+      lazy: true
+    # Achter deze firewall zitten requests die met een private token worden opgehaald.
+    # Concreet zijn dit de forum rss en de agenda ics. Als een request een {private_auth_token}
+    # veld bevat wordt deze opgepikt door deze firewall. Zie ook PrivateTokenAuthenticator
+    private_token:
+      request_matcher: CsrDelft\service\security\PrivateTokenAuthenticator
+      provider: accounts
+      stateless: true
+      custom_authenticators: [ CsrDelft\service\security\PrivateTokenAuthenticator ]
+    # Dit is de standaard firewall en wordt gebruikt als geen van de andere firewalls gebruikt worden.
+    main:
+      form_login:
+        enable_csrf: true
+        check_path: app_login_check
+      custom_authenticators: [ CsrDelft\service\security\WachtwoordResetAuthenticator ]
+      #      lazy: true
+      provider: accounts
+      entry_point: form_login
+      logout:
+        path: app_logout
+        # where to redirect after logout
+        target: default
+      remember_me:
+        secret: '%kernel.secret%'
+        lifetime: 1209600 # 2 weken in seconden
+        path: /
+        token_provider: 'CsrDelft\common\Security\PersistentTokenProvider'
+      switch_user: true
+
+  encoders:
+    CsrDelft\entity\security\Account:
+      algorithm: auto
+
+  # Hang stek rollen `R_...` aan Symfony rollen
+  role_hierarchy:
+    R_PUBCIE: ROLE_ALLOWED_TO_SWITCH
+
+  # Easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
+  access_control:
+    # - { path: ^/admin, roles: ROLE_ADMIN }
+    # - { path: ^/profile, roles: ROLE_USER }
+    # Sta _ook_ toe als je geremembered bent, voeg een manier toe om je wachtwoord opnieuw in te vullen
+    # als dit niet gewenst is.
+    - { path: ^/authorize, roles: IS_AUTHENTICATED_REMEMBERED }

@@ -2,76 +2,80 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\ChangeLogModel;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\security\LoginModel;
-use \Jacwright\RestServer\RestException;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\security\enum\AccessAction;
+use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\GroepLidRepository;
+use CsrDelft\service\security\LoginService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ApiActiviteitenController {
-	/** @var ChangeLogModel  */
-	private $changeLogModel;
-	/** @var ActiviteitenModel  */
-	private $activiteitenModel;
-
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-
-		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
-		$this->changeLogModel = $container->get(ChangeLogModel::class);
-	}
-
+class ApiActiviteitenController extends AbstractController {
+	/** @var ChangeLogRepository  */
+	private $changeLogRepository;
+	/** @var ActiviteitenRepository  */
+	private $activiteitenRepository;
 	/**
-	 * @return boolean
+	 * @var GroepLidRepository
 	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag(P_LEDEN_READ);
+	private $groepLidRepository;
+
+	public function __construct(
+		ActiviteitenRepository  $activiteitenRepository,
+		GroepLidRepository $groepLidRepository,
+		ChangeLogRepository  $changeLogRepository
+	) {
+		$this->activiteitenRepository = $activiteitenRepository;
+		$this->groepLidRepository = $groepLidRepository;
+		$this->changeLogRepository = $changeLogRepository;
 	}
 
 	/**
-	 * @url POST /$id/aanmelden
+	 * url POST /$id/aanmelden
+	 * @Route("/API/2.0/activiteiten/{id}/aanmelden", methods={"POST"})
+	 * @Auth(P_LEDEN_READ)
 	 */
 	public function activiteitAanmelden($id) {
+		$activiteit = $this->activiteitenRepository->get($id);
 
-		$activiteit = $this->activiteitenModel->get($id);
-
-		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
-			throw new RestException(404, 'Activiteit bestaat niet');
+		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
+			throw new NotFoundHttpException('Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(AccessAction::Aanmelden)) {
-			throw new RestException(403, 'Aanmelden niet mogelijk');
+		if (!$activiteit->mag(AccessAction::Aanmelden())) {
+			throw $this->createAccessDeniedException('Aanmelden niet mogelijk');
 		}
 
-		$model = $activiteit::getLedenModel();
-		$lid = $model->nieuw($activiteit, $_SESSION['_uid']);
+		$lid = $this->groepLidRepository->nieuw($activiteit, $this->getUid());
 
-		$this->changeLogModel->log($activiteit, 'aanmelden', null, $lid->uid);
-		$model->create($lid);
+		$this->changeLogRepository->log($activiteit, 'aanmelden', null, $lid->uid);
+		$this->getDoctrine()->getManager()->persist($lid);
+		$this->getDoctrine()->getManager()->flush();
 
 		return array('data' => $activiteit);
 	}
 
 	/**
-	 * @url POST /$id/afmelden
+	 * @Route("/API/2.0/activiteiten/{id}/afmelden", methods={"POST"})
+	 * @Auth(P_LEDEN_READ)
 	 */
 	public function activiteitAfmelden($id) {
+		$activiteit = $this->activiteitenRepository->get($id);
 
-		$activiteit = $this->activiteitenModel->get($id);
-
-		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken)) {
-			throw new RestException(404, 'Activiteit bestaat niet');
+		if (!$activiteit || !$activiteit->mag(AccessAction::Bekijken())) {
+			throw new NotFoundHttpException('Activiteit bestaat niet');
 		}
 
-		if (!$activiteit->mag(AccessAction::Afmelden)) {
-			throw new RestException(403, 'Afmelden niet mogelijk');
+		if (!$activiteit->mag(AccessAction::Afmelden())) {
+			throw $this->createAccessDeniedException('Afmelden niet mogelijk');
 		}
 
-		$model = $activiteit::getLedenModel();
-		$lid = $model->get($activiteit, $_SESSION['_uid']);
-		$this->changeLogModel->log($activiteit, 'afmelden', $lid->uid, null);
-		$model->delete($lid);
+		$lid = $activiteit->getLid($this->getUid());
+		$this->changeLogRepository->log($activiteit, 'afmelden', $lid->uid, null);
+		$this->getDoctrine()->getManager()->remove($lid);
+		$this->getDoctrine()->getManager()->flush();
 
 		return array('data' => $activiteit);
 	}

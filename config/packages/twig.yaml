@@ -1,0 +1,12 @@
+twig:
+  form_themes:
+    - 'form/custom_types.html.twig'
+    - 'bootstrap_4_horizontal_layout.html.twig'
+  default_path: '%kernel.project_dir%/templates'
+  autoescape_service: CsrDelft\Twig\AutoEscapeService
+  autoescape_service_method: guess
+  globals:
+    sentry_dsn: '%env(SENTRY_DSN_JS)%'
+    email_abactis: '%env(EMAIL_ABACTIS)%'
+    csrmail_password: '%env(CSRMAIL_PASSWORD)%'
+    email_corvee: '%env(EMAIL_CC)%'

@@ -2,56 +2,49 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use Exception;
-use \Jacwright\RestServer\RestException;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ApiMaaltijdenController {
-	private $maaltijdenModel;
-	private $maaltijdAanmeldingenModel;
+class ApiMaaltijdenController extends AbstractController {
+	private $maaltijdenRepository;
+	private $maaltijdAanmeldingenRepository;
 
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-
-		$this->maaltijdAanmeldingenModel = $container->get(MaaltijdAanmeldingenModel::class);
-		$this->maaltijdenModel = $container->get(MaaltijdenModel::class);
+	public function __construct(MaaltijdenRepository $maaltijdenRepository, MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository) {
+		$this->maaltijdenRepository = $maaltijdenRepository;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
 	}
 
 	/**
-	 * @return boolean
-	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag(P_MAAL_IK);
-	}
-
-	/**
-	 * @url POST /$id/aanmelden
+	 * @Route("/API/2.0/maaltijden/{id}/aanmelden", methods={"POST"})
+	 * @Auth(P_MAAL_IK)
 	 */
 	public function maaltijdAanmelden($id) {
 
 		try {
-			$maaltijd = $this->maaltijdenModel->getMaaltijd($id);
-			$aanmelding = $this->maaltijdAanmeldingenModel->aanmeldenVoorMaaltijd($maaltijd, $_SESSION['_uid'], $_SESSION['_uid']);
+			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
+			$aanmelding = $this->maaltijdAanmeldingenRepository->aanmeldenVoorMaaltijd($maaltijd, $this->getProfiel(), $this->getProfiel());
 			return array('data' => $aanmelding->maaltijd);
 		} catch (Exception $e) {
-			throw new RestException(403, $e->getMessage());
+			throw $this->createAccessDeniedException($e->getMessage());
 		}
 	}
 
 	/**
-	 * @url POST /$id/afmelden
+	 * @Route("/API/2.0/maaltijden/{id}/afmelden", methods={"POST"})
+	 * @Auth(P_MAAL_IK)
 	 */
 	public function maaltijdAfmelden($id) {
 
 		try {
-			$maaltijd = $this->maaltijdenModel->getMaaltijd($id);
-			$this->maaltijdAanmeldingenModel->afmeldenDoorLid($maaltijd, $_SESSION['_uid']);
+			$maaltijd = $this->maaltijdenRepository->getMaaltijd($id);
+			$this->maaltijdAanmeldingenRepository->afmeldenDoorLid($maaltijd, $this->getProfiel());
 			return array('data' => $maaltijd);
 		} catch (Exception $e) {
-			throw new RestException(403, $e->getMessage());
+			throw $this->createAccessDeniedException($e->getMessage());
 		}
 	}
 

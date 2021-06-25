@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\peilingen;
 
-use CsrDelft\model\entity\peilingen\PeilingOptie;
-use CsrDelft\view\formulier\invoervelden\BBCodeField;
+use CsrDelft\entity\peilingen\PeilingOptie;
+use CsrDelft\view\formulier\invoervelden\ProsemirrorField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -26,7 +26,7 @@ class PeilingOptieForm extends ModalForm
 		$fields = [];
 		$fields[] = new HiddenField('peiling_id', $model->peiling_id);
 		$fields[] = new RequiredTextField('titel', $model->titel, 'Titel');
-		$fields[] = new BBCodeField('beschrijving', $model->beschrijving, 'Beschrijving');
+		$fields[] = new ProsemirrorField('beschrijving', $model->beschrijving, 'Beschrijving');
 
 		$this->addFields($fields);
 

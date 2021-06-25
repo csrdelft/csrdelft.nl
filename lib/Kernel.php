@@ -3,14 +3,14 @@
 
 namespace CsrDelft;
 
-use Exception;
+use CsrDelft\Component\Formulier\FormulierTypeInterface;
+use CsrDelft\view\bbcode\prosemirror\Mark;
+use CsrDelft\view\bbcode\prosemirror\Node;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
-use Symfony\Component\Config\Exception\LoaderLoadException;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
-use Symfony\Component\Routing\RouteCollectionBuilder;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 /**
  * Configureer waar configuratie bestanden te vinden zijn.
@@ -18,52 +18,34 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
 class Kernel extends BaseKernel {
 	use MicroKernelTrait;
 
-	const CONFIG_EXTS = '.{php,xml,yaml,yml}';
+	/**
+	 * @param ContainerConfigurator $container
+	 */
+	protected function configureContainer(ContainerConfigurator $container) {
+		$container->import('../config/{packages}/*.yaml');
+		$container->import('../config/{packages}/' . $this->environment . '/**/*.yaml');
+		$container->import('../config/{services}.yaml');
+		$container->import('../config/{services}_' . $this->environment . '.yaml');
 
-	public function registerBundles() {
-		$contents = require $this->getProjectDir() . '/config/bundles.php';
-		foreach ($contents as $class => $envs) {
-			if ($envs[$this->environment] ?? $envs['all'] ?? false) {
-				yield new $class();
-			}
+
+		// We willen dat alles ook werkt als Memcache niet bestaat
+		if (class_exists("Memcached") && $_ENV['MEMCACHED_URL'] != "") {
+			$container->import('../config/custom/memcache.yaml');
 		}
 	}
 
-	public function getProjectDir(): string {
-		return dirname(__DIR__);
-	}
-
-	public function getCacheDir() {
-		return $this->getProjectDir() . '/var/cache/' . $this->environment;
-	}
-
-	public function getLogDir() {
-		return $this->getProjectDir() . '/var/log';
-	}
-
 	/**
-	 * @param ContainerBuilder $container
-	 * @param LoaderInterface $loader
-	 * @throws Exception
+	 * @param RoutingConfigurator $routes
 	 */
-	protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader) {
-		$container->addResource(new FileResource($this->getProjectDir() . '/config/bundles.php'));
-		$container->setParameter('container.dumper.inline_class_loader', true);
-		$confDir = $this->getProjectDir() . '/config';
-		$loader->load($confDir . '/{packages}/*' . self::CONFIG_EXTS, 'glob');
-		$loader->load($confDir . '/{packages}/' . $this->environment . '/**/*' . self::CONFIG_EXTS, 'glob');
-		$loader->load($confDir . '/{services}' . self::CONFIG_EXTS, 'glob');
-		$loader->load($confDir . '/{services}_' . $this->environment . self::CONFIG_EXTS, 'glob');
+	protected function configureRoutes(RoutingConfigurator $routes) {
+		$routes->import('../config/{routes}/' . $this->environment . '/**/*.yaml');
+		$routes->import('../config/{routes}/*.yaml');
+		$routes->import('../config/{routes}.yaml');
 	}
 
-	/**
-	 * @param RouteCollectionBuilder $routes
-	 * @throws LoaderLoadException
-	 */
-	protected function configureRoutes(RouteCollectionBuilder $routes) {
-		$confDir = $this->getProjectDir() . '/config';
-		$routes->import($confDir . '/{routes}/' . $this->environment . '/**/*' . self::CONFIG_EXTS, '/', 'glob');
-		$routes->import($confDir . '/{routes}/*' . self::CONFIG_EXTS, '/', 'glob');
-		$routes->import($confDir . '/{routes}' . self::CONFIG_EXTS, '/', 'glob');
+	protected function build(ContainerBuilder $builder) {
+		$builder->registerForAutoconfiguration(FormulierTypeInterface::class)->addTag('csr.formulier.type');
+		$builder->registerForAutoconfiguration(Mark::class)->addTag('csr.editor.mark');
+		$builder->registerForAutoconfiguration(Node::class)->addTag('csr.editor.node');
 	}
 }

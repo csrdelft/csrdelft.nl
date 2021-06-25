@@ -1,0 +1,11 @@
+.main-bg {
+	/* shadow layer visible when navigation is active */
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	backface-visibility: hidden;
+	transition: opacity .3s 0s, visibility 0s .3s;
+	z-index: $zindex-modal-backdrop;
+}

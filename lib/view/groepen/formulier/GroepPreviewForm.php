@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\FormElement;
@@ -12,7 +12,7 @@ use CsrDelft\view\groepen\GroepView;
 
 class GroepPreviewForm extends ModalForm implements FormElement {
 
-	public function __construct(AbstractGroep $groep) {
+	public function __construct(Groep $groep) {
 		parent::__construct($groep, null, 'Voorbeeldweergave');
 
 		$fields = [];

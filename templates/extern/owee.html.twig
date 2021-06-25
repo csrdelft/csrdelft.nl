@@ -1,0 +1,254 @@
+{% extends 'extern/layout.html.twig' %}
+
+{% block titel %}Machtig mooi - OWee 2020{% endblock %}
+
+{% block styles %}
+	{{ css_asset('extern') }}
+	{{ css_asset('extern-owee') }}
+	{{ js_asset('extern-owee') }}
+{% endblock %}
+
+{% block body %}
+	<!-- Banner -->
+	<section id="banner">
+		<div class="inner">
+			<a href="/">
+				<img src="{{ absolute_url('/images/c.s.r.logo.svg') }}" alt="Beeldmerk van de vereniging">
+				<h1>C.S.R. Delft</h1>
+			</a>
+		</div>
+	</section>
+
+	<div class="owee-pagina">
+		<div class="bbl atl hero">
+			<div class="content">
+				<img src="{{ absolute_url('/images/owee/owee2020.svg') }}" alt="C.S.R. - Machtig Mooi">
+			</div>
+		</div>
+
+		<div class="content pt-5 pb-5">
+			<div class="row align-items-center">
+				<div class="col-md-6 mb-4 mb-md-0">
+					<h1>{% trans %}Word lid van C.S.R.{% endtrans %}</h1>
+					<p>{% trans %}C.S.R. Delft is de grootste christelijke vereniging van Delft. Lid zijn van onze studentenvereniging
+						betekent voor jou dat je nieuwe vriendschappen maakt voor het leven en samen geniet van de activiteiten die
+						de vereniging biedt. Het betekent dat je je geloof blijft voeden en je kan verdiepen met kringen,
+						bidgroepjes en zangavonden. Lid zijn zorgt voor prachtige momenten tijdens je studententijd die je je leven
+						lang niet gaat vergeten!{% endtrans %}</p>
+
+					<div class="mt-4">
+						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
+							{% trans %}Ik wil lid worden{% endtrans %}
+						</a>
+						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">
+							{% trans %}Eerst een lid spreken{% endtrans %}
+						</a>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="iframe-container">
+						<iframe src="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl"
+										allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="bbl atl buttons">
+			<div class="content">
+				<div class="row pt-4">
+					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'geloof'}) }}">
+						<img src="{{ absolute_url('/images/owee/geloof.png') }}" alt="{% trans %}Geloof{% endtrans %}">
+						<span class="overlay">{% trans %}Geloof{% endtrans %}</span>
+					</a>
+					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'vorming'}) }}">
+						<img src="{{ absolute_url('/images/owee/vorming.png') }}" alt="{% trans %}Vorming{% endtrans %}">
+						<span class="overlay">{% trans %}Vorming{% endtrans %}</span>
+					</a>
+					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'gezelligheid'}) }}">
+						<img src="{{ absolute_url('/images/owee/gezelligheid.png') }}" alt="{% trans %}Gezelligheid{% endtrans %}">
+						<span class="overlay">{% trans %}Gezelligheid{% endtrans %}</span>
+					</a>
+					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'sport'}) }}">
+						<img src="{{ absolute_url('/images/owee/sport.png') }}" alt="{% trans %}Sport{% endtrans %}">
+						<span class="overlay">{% trans %}Sport{% endtrans %}</span>
+					</a>
+					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'ontspanning'}) }}">
+						<img src="{{ absolute_url('/images/owee/ontspanning.png') }}" alt="{% trans %}Ontspanning{% endtrans %}">
+						<span class="overlay">{% trans %}Ontspanning{% endtrans %}</span>
+					</a>
+					<a class="col-6 col-md-4 mb-4" href="{{ url('default', {naam: 'vereniging', subnaam: 'societeit'}) }}">
+						<img src="{{ absolute_url('/images/owee/societeit.png') }}" alt="{% trans %}Societeit{% endtrans %}">
+						<span class="overlay">{% trans %}Soci&euml;teit{% endtrans %}</span>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="content videos">
+			<div class="row pt-4">
+				<div class="col-12 mb-4">
+					<h2>{% trans %}C.S.R. op YouTube{% endtrans %}</h2>
+				</div>
+				<div class="col-12 col-sm-6 col-md-4 mb-4">
+					<div class="iframe-container">
+						<iframe
+							src="https://www.youtube-nocookie.com/embed/videoseries?list=PLXBOhyG24-WnNgg2RloapxC5X73J1Zxvi&hl=nl"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</div>
+				</div>
+				<div class="col-12 col-sm-6 col-md-4 mb-4">
+					<div class="iframe-container">
+						<iframe src="https://www.youtube-nocookie.com/embed/01kzRDhdcYw?hl=nl"
+										allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen></iframe>
+					</div>
+				</div>
+				<a class="col-12 col-md-4 mb-4" href="https://www.youtube.com/user/CivitasFilms" target="_blank"
+					 rel="noopener noreferrer">
+					<div class="iframe-container youtube-container">
+						<div class="youtube">
+							<div>
+								<i class="fab fa-youtube"></i>
+								<div>{% trans %}Bekijk meer op YouTube{% endtrans %}</div>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+
+		<div class="bbl atl interest">
+			<div class="content">
+				<div class="pt-5 pt-md-4 pb-4 pb-sm-2">
+					<h2>{% trans %}Interesse in C.S.R.?{% endtrans %}</h2>
+					<p>{% trans %}Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met
+						nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan
+						je hieronder ook je gegevens achterlaten voor je voorinschrijving.{% endtrans %}</p>
+				</div>
+			</div>
+		</div>
+
+		<a id="contact"></a>
+		<div class="content pt-4 pb-4">
+			<div class="row">
+				{# <div class="col-md-5 col-lg-4 mb-4 mb-md-0">
+					<a class="whatsapp" href="https://wa.me/31612345678" target="_blank" rel="noopener noreferrer">
+						<i class="fab fa-whatsapp me-3 me-md-0"></i>
+						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Persoon!</div>
+						<div class="persoon"></div>
+						<div class="cta">0612345678</div>
+					</a>
+				</div> #}
+				<div class="{# col-md-7 col-lg-8 #}col-md-12">
+					<script type="text/javascript">
+						var captchaLoaded = false;
+
+						function checkVisible(elm) {
+							var rect = elm.getBoundingClientRect();
+							var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+							return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+						}
+
+						var onloadCallback = function () {
+							window.addEventListener('scroll', function () {
+
+								if (checkVisible(document.getElementById('captcha')) && !captchaLoaded) {
+									captchaLoaded = true;
+									grecaptcha.render('captcha', {
+										'sitekey': '6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX',
+										'hl': {{ app.request.locale }},
+									});
+								}
+							})
+						};
+					</script>
+					<form action="" class="formulieren" id="owee-form">
+						{{ csrfField() }}
+						<label for="lid-worden" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil </span>lid worden{% endtrans %}</label>
+						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden">
+						<label for="lid-spreken" class="owee">{% trans %}<span class="d-none d-sm-inline">Eerst een </span>lid spreken{% endtrans %}</label>
+						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken" checked>
+						<div class="interesseformulier">
+							<p class="lid-worden">{% trans %}De inschrijvingen voor het collegejaar 2020-2021 zijn helaas gesloten. Wil je volgend
+								collegejaar lid worden? Vul dan onderstaand formulier in en we nemen z.s.m. contact met je op.{% endtrans %}</p>
+							<p class="lid-spreken">{% trans %}Wil je meer weten over de vereniging? Een gesprek met een lid kan helpen, je kan al
+								je vragen kwijt en erachter komen of de vereniging bij jou past. Laat je gegevens hier achter, we zullen
+								dan zo snel mogelijk contact met je opnemen!{% endtrans %}</p>
+
+							<div id="melding"></div>
+							<div class="velden" id="formulierVelden">
+								<label for="naam" class="owee">{% trans %}Je naam{% endtrans %}</label>
+								<input type="text" id="naam" name="naam">
+
+								<label for="email" class="owee">{% trans %}Je e-mailadres{% endtrans %}</label>
+								<input type="text" id="email" name="email">
+
+								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>
+								<input type="tel" id="telefoon" name="telefoon">
+
+								<div class="field" id="captcha"></div>
+
+								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a
+										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
+										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>
+
+								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
+								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
+							</div>
+						</div>
+					</form>
+					<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async
+									defer></script>
+				</div>
+			</div>
+		</div>
+
+		<div class="bbl atl notes">
+			<div class="content">
+				<div class="row pt-5 pb-4">
+					<div class="col-md-6 mb-4 mb-md-0">
+						<h2>{% trans %}Novitaatsweek{% endtrans %}</h2>
+						<p>{% trans %}Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek
+							(ook wel de kennismakingstijd, afgekort KMT). Deze tijd zal plaatsvinden
+							na de OWee, in deze week zal je elkaar,
+							de vereniging en haar leden leren kennen. De activiteiten die tijdens
+							de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.{% endtrans %}</p>
+					</div>
+					<div class="col-md-6">
+						<h2>{% trans %}Documenten{% endtrans %}</h2>
+						<p>{% trans %}C.S.R. heeft samen met de andere grote studentenverenigingen (DSC, Virgiel,
+							Sint Jansbrug en DSB) en de TU Delft een gedragsovereenkomst opgesteld waarin
+							afspraken staan waar we elkaar aan zullen houden. Hierin staan afspraken hoe
+							we in het algemeen met elkaar omgaan binnen de vereniging en hoe we binnen een
+							KMT met nieuwe leden omgaan. In de onderstaande drie documenten kun je de
+							afspraken die wij als C.S.R. met de TU Delft hebben gemaakt lezen.{% endtrans %}</p>
+						<ul>
+							<li><a href="https://csrdelft.nl/download/Code%20of%20Ethics%202016-2017.pdf" target="_blank">Code Of
+									Ethics</a></li>
+							<li><a
+									href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/Communicatieconvenant%20TU%20Delft%20--getekende%20versie-website.pdf"
+									target="_blank" rel="noopener noreferrer">{% trans %}Communicatieconvenant{% endtrans %}</a></li>
+							<li><a
+									href="https://d1rkab7tlqy5f1.cloudfront.net/TUDelft/Onderwijs/Praktische_zaken/gedragsovereenkomst%20TU%20Delft%20en%20de%20vijf%20grote%20verenigingen%20getekende%20versie%20website.pdf"
+									target="_blank" rel="noopener noreferrer">{% trans %}Gedragsovereenkomst{% endtrans %}</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<div id="wrapper">
+		<section id="footer">
+			<div class="inner">
+				<ul class="copyright">
+					<li>&copy; {{ date().format('Y') }} - C.S.R. Delft - <a
+							href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf">Privacy</a></li>
+				</ul>
+			</div>
+		</section>
+	</div>
+{% endblock %}

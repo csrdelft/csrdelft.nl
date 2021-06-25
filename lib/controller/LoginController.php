@@ -2,15 +2,17 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\security\RememberLoginModel;
-use CsrDelft\repository\CmsPaginaRepository;
-use CsrDelft\view\cms\CmsPaginaView;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\repository\security\RememberLoginRepository;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use CsrDelft\view\login\LoginForm;
-use CsrDelft\view\login\RememberAfterLoginForm;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
  * LoginController.class.php
@@ -20,77 +22,75 @@ use Symfony\Component\HttpFoundation\Response;
  * Controller van de agenda.
  */
 class LoginController extends AbstractController {
-	/**
-	 * @var LoginModel
-	 */
-	private $loginModel;
-	/**
-	 * @var RememberLoginModel
-	 */
-	private $rememberLoginModel;
-	/**
-	 * @var CmsPaginaRepository
-	 */
-	private $cmsPaginaRepository;
+	use TargetPathTrait;
 
-	public function __construct(LoginModel $loginModel, RememberLoginModel $rememberLoginModel, CmsPaginaRepository $cmsPaginaRepository) {
-		$this->rememberLoginModel = $rememberLoginModel;
-		$this->loginModel = $loginModel;
-		$this->cmsPaginaRepository = $cmsPaginaRepository;
+	/**
+	 * @var LoginService
+	 */
+	private $loginService;
+	/**
+	 * @var RememberLoginRepository
+	 */
+	private $rememberLoginRepository;
+	/**
+	 * @var SuService
+	 */
+	private $suService;
+
+	public function __construct(LoginService $loginService, SuService $suService, RememberLoginRepository $rememberLoginRepository) {
+		$this->rememberLoginRepository = $rememberLoginRepository;
+		$this->loginService = $loginService;
+		$this->suService = $suService;
 	}
 
-	public function loginForm (Request $request) {
-		$response = new Response(view('layout-extern.login', ['loginForm' => new LoginForm()]));
+	/**
+	 * @param Request $request
+	 * @param AuthenticationUtils $authenticationUtils
+	 * @return Response
+	 * @Route("/login", methods={"GET"})
+	 * @Route("/{_locale<%app.supported_locales%>}/login", methods={"GET"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function loginForm(Request $request, AuthenticationUtils $authenticationUtils): Response
+	{
+		if ($this->getUser()) {
+			return $this->redirectToRoute('default');
+		}
+
+		$targetPath = $request->query->get('_target_path');
+		if ($targetPath) {
+			$this->saveTargetPath($request->getSession(), 'main', $targetPath);
+		}
+
+		$error = $authenticationUtils->getLastAuthenticationError();
+		$userName = $authenticationUtils->getLastUsername();
+
+		$loginForm = $this->createFormulier(LoginForm::class, null, ['lastUserName' => $userName, 'lastError' => $error]);
+
+		$response = $this->render('extern/login.html.twig', ['loginForm' => $loginForm->createView()]);
 
 		// Als er geredirect wordt, stuur dan een forbidden status
-		if ($request->query->has('redirect')) {
+		if ($targetPath) {
 			$response->setStatusCode(Response::HTTP_FORBIDDEN);
 		}
 
 		return $response;
 	}
 
-	public function login() {
-		$form = new LoginForm(); // fetches POST values itself
-		$values = $form->getValues();
-
-		if ($form->validate() && $this->loginModel->login($values['user'], $values['pass'])) {
-			if ($values['remember']) {
-				$remember = $this->rememberLoginModel->nieuw();
-				$this->rememberLoginModel->rememberLogin($remember);
-			}
-
-			if ($values['redirect']) {
-				return $this->csrRedirect(urldecode($values['redirect']));
-			}
-			return $this->redirectToRoute('default');
-		} else {
-			if ($values['redirect']) {
-				return $this->redirectToRoute('login-form', ['redirect' => $values['redirect']]);
-			}
-
-			return $this->redirectToRoute('login-form');
-		}
+	/**
+	 * @Route("/login_check", name="app_login_check", methods={"POST"})
+	 * @Route("/{_locale<%app.supported_locales%>}/login_check", name="app_login_check", methods={"POST"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function login_check() {
+		throw new LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.form_login.check_path in config/packages/security.yaml');
 	}
 
+	/**
+	 * @Route("/logout", name="app_logout")
+	 * @Auth(P_PUBLIC)
+	 */
 	public function logout() {
-		$this->loginModel->logout();
-		return $this->redirectToRoute('default');
-	}
-
-	public function su($uid = null) {
-		$this->loginModel->switchUser($uid);
-		setMelding('U bekijkt de webstek nu als ' . ProfielRepository::getNaam($uid, 'volledig') . '!', 1);
-		return $this->csrRedirect(HTTP_REFERER);
-	}
-
-	public function endsu() {
-		if (!$this->loginModel->isSued()) {
-			setMelding('Niet gesued!', -1);
-		} else {
-			$this->loginModel->endSwitchUser();
-			setMelding('Switch-useractie is beëindigd.', 1);
-		}
-		return $this->csrRedirect(HTTP_REFERER);
+		throw new LogicException('Deze route wordt opgevangen door de firewall, zie security.firewalls.main.logout.path config/packages/security.yaml');
 	}
 }

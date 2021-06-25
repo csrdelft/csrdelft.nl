@@ -3,8 +3,6 @@
 namespace CsrDelft\repository;
 
 use CsrDelft\entity\CmsPagina;
-use CsrDelft\model\OrmTrait;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -12,15 +10,12 @@ use Doctrine\Persistence\ManagerRegistry;
  * @author P.W.G. Brussee <brussee@live.nl>
  *
  * Bekijken of bewerken van CmsPaginas.
- * @method CmsPagina[]    ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
- * @method CmsPagina|null doctrineFind($id, $lockMode = null, $lockVersion = null)
  * @method CmsPagina|null find($id, $lockMode = null, $lockVersion = null)
  * @method CmsPagina|null findOneBy(array $criteria, array $orderBy = null)
  * @method CmsPagina[]    findAll()
  * @method CmsPagina[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CmsPaginaRepository extends ServiceEntityRepository {
-	use OrmTrait;
+class CmsPaginaRepository extends AbstractRepository {
 
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, CmsPagina::class);
@@ -51,9 +46,9 @@ class CmsPaginaRepository extends ServiceEntityRepository {
 		$pagina->naam = $naam;
 		$pagina->titel = $naam;
 		$pagina->inhoud = $naam;
-		$pagina->laatst_gewijzigd = date_create();
-		$pagina->rechten_bekijken = P_PUBLIC;
-		$pagina->rechten_bewerken = P_ADMIN;
+		$pagina->laatstGewijzigd = date_create_immutable();
+		$pagina->rechtenBekijken = P_PUBLIC;
+		$pagina->rechtenBewerken = P_ADMIN;
 		return $pagina;
 	}
 

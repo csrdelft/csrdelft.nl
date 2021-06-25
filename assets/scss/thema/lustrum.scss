@@ -1,0 +1,81 @@
+$lustrum-kleur-donker-rood: #3e0d1c;
+$lustrum-kleur-rood: #8b1437;
+$lustrum-kleur-licht-rood: #a61252;
+$lustrum-kleur-goud: #deaf27;
+$lustrum-kleur-licht-goud: #f1c802;
+$lustrum-kleur-wit: #eeeeee;
+
+@font-face {
+	font-family: 'Orpheus Pro';
+	font-style: normal;
+	font-weight: normal;
+	src: url('../../fonts/lustrum12/OrpheusPro-Bold.otf');
+}
+
+$headings-font-family: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+
+@import '../base';
+
+body {
+	background-color: $lustrum-kleur-rood;
+}
+
+#menu {
+	background: $lustrum-kleur-donker-rood;
+	border-bottom-color: $lustrum-kleur-goud;
+	h2 {
+		color: $lustrum-kleur-goud;
+	}
+	#cd-primary-nav {
+		.nav-link {
+			color: $lustrum-kleur-goud;
+		}
+	}
+}
+
+#zijbalk .blok .zijbalk-kopje a {
+		font-family: $headings-font-family;
+		color: $lustrum-kleur-licht-goud;
+		text-transform: uppercase;
+}
+
+#zijbalk {
+	background-color: $lustrum-kleur-donker-rood;
+	.blok .item {
+		color: $lustrum-kleur-goud;
+		a {
+			color: $lustrum-kleur-goud;
+		}
+	}
+}
+
+.bb-block {
+	box-shadow: $lustrum-kleur-goud;
+}
+
+.ishetal:after {
+	content: '';
+	display: block;
+	height: 156px;
+	background: url('../../images/lustrum12/Lustrum12.png') no-repeat center center;
+	background-size: contain;
+	margin: 20px 0;
+	clear: left;
+}
+
+.ishetal {
+	.nee {
+		color: $lustrum-kleur-rood;
+	}
+	.ja {
+		color: $lustrum-kleur-goud;
+	}
+	color: $lustrum-kleur-goud;
+}
+
+.lustrum_button {
+	color: $lustrum-kleur-goud;
+}
+.lustrum_button:hover {
+	color: $lustrum-kleur-wit;
+}

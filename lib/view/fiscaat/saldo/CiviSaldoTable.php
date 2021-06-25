@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\saldo;
 
-use CsrDelft\model\entity\fiscaat\CiviSaldo;
+use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
@@ -12,12 +12,13 @@ use CsrDelft\view\datatable\Multiplicity;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/04/2017
+ * @since 07/04/2017
  */
 class CiviSaldoTable extends DataTable {
 	public function __construct() {
 		parent::__construct(CiviSaldo::class, '/fiscaat/saldo', 'Saldobeheer');
 
+		$this->addColumn('uid', 'saldo');
 		$this->addColumn('naam', 'saldo');
 		$this->addColumn('lichting', 'saldo');
 		$this->addColumn('hidden_saldo', null, null, null, null, null, 'saldo');

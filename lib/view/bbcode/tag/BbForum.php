@@ -5,11 +5,12 @@ namespace CsrDelft\view\bbcode\tag;
 
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\forum\ForumDeel;
-use CsrDelft\model\forum\ForumDelenModel;
-use CsrDelft\model\forum\ForumDradenModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\forum\ForumDeel;
+use CsrDelft\repository\forum\ForumDelenRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
+use CsrDelft\service\security\LoginService;
 use Exception;
+use Twig\Environment;
 
 class BbForum extends BbTag {
 	public $num = 3;
@@ -17,14 +18,36 @@ class BbForum extends BbTag {
 	 * @var ForumDeel
 	 */
 	private $deel;
+	/**
+	 * @var ForumDradenRepository
+	 */
+	private $forumDradenRepository;
+	/**
+	 * @var ForumDelenRepository
+	 */
+	private $forumDelenRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var string
+	 */
+	private $id;
+
+	public function __construct(ForumDradenRepository $forumDradenRepository, ForumDelenRepository $forumDelenRepository, Environment $twig) {
+		$this->forumDradenRepository = $forumDradenRepository;
+		$this->forumDelenRepository = $forumDelenRepository;
+		$this->twig = $twig;
+	}
 
 	public static function getTagName() {
 		return 'forum';
 	}
 
 	public function isAllowed() {
-		if ($this->content == 'recent' || $this->content == 'belangrijk') {
-			return LoginModel::mag(P_LOGGED_IN);
+		if ($this->id == 'recent' || $this->id == 'belangrijk') {
+			return LoginService::mag(P_LOGGED_IN);
 		}
 
 		return $this->deel->magLezen();
@@ -35,35 +58,35 @@ class BbForum extends BbTag {
 	 * @throws Exception
 	 */
 	public function render() {
-		if (!LoginModel::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			return 'Geen toegang';
 		}
 
-		return view('forum.bb', [
+		return $this->twig->render('forum/bb.html.twig', [
 			'deel' => $this->deel,
-			'id' => $this->content,
-		])->getHtml();
+			'id' => $this->id,
+		]);
 	}
 
 	/**
 	 * @param array $arguments
 	 */
 	public function parse($arguments = []) {
-		$this->readMainArgument($arguments);
+		$this->id = $this->readMainArgument($arguments);
 		if (isset($arguments['num'])) {
 			$this->num = (int)$arguments['num'];
 		}
 
-		ForumDradenModel::instance()->setAantalPerPagina($this->num);
-		switch ($this->content) {
+		$this->forumDradenRepository->setAantalPerPagina($this->num);
+		switch ($this->id) {
 			case 'recent':
-				$this->deel = ForumDelenModel::instance()->getRecent();
+				$this->deel = $this->forumDelenRepository->getRecent();
 				break;
 			case 'belangrijk':
-				$this->deel = ForumDelenModel::instance()->getRecent(true);
+				$this->deel = $this->forumDelenRepository->getRecent(true);
 				break;
 			default:
-				$this->deel = ForumDelenModel::instance()->get($this->content);
+				$this->deel = $this->forumDelenRepository->get($this->id);
 				break;
 		}
 	}

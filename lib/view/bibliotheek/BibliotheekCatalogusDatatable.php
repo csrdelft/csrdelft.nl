@@ -3,7 +3,7 @@
 namespace CsrDelft\view\bibliotheek;
 
 use CsrDelft\entity\bibliotheek\Boek;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\SourceChangeDataTableKnop;
 
@@ -13,7 +13,7 @@ class BibliotheekCatalogusDatatable extends DataTable {
 		parent::__construct(Boek::class, '/bibliotheek/catalogusdata', 'Bibliotheekcatalogus');
 		$this->addKnop(new SourceChangeDataTableKnop('/bibliotheek/catalogusdata', 'Alle boeken', 'Toon alle boeken'));
 		$this->addKnop(new SourceChangeDataTableKnop('/bibliotheek/catalogusdata?eigenaar=x222', 'C.S.R.-bibliotheek', 'Toon C.S.R.-bibliotheek'));
-		$this->addKnop(new SourceChangeDataTableKnop('/bibliotheek/catalogusdata?eigenaar='. urlencode(LoginModel::getUid()), 'Eigen boeken', 'Eigen boeken'));
+		$this->addKnop(new SourceChangeDataTableKnop('/bibliotheek/catalogusdata?eigenaar='. urlencode(LoginService::getUid()), 'Eigen boeken', 'Eigen boeken'));
 		$this->settings['oLanguage'] = [
 			'sZeroRecords' => 'Geen boeken gevonden',
 			'sInfoEmtpy' => 'Geen boeken gevonden',

@@ -1,13 +1,17 @@
-FROM node:11-alpine
+FROM node:12-alpine
 
 RUN apk add --no-cache \
+	git \
 	autoconf \
 	automake \
 	g++ \
 	libpng-dev \
 	libtool \
 	make \
+	python \
 	nasm
+
+RUN npm install -g cross-env webpack-cli
 
 WORKDIR /app
 

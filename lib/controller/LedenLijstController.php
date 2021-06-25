@@ -4,32 +4,52 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\GoogleSync;
-use CsrDelft\model\LidZoeker;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\CmsPaginaRepository;
+use CsrDelft\service\GoogleSync;
+use CsrDelft\service\LidZoekerService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\lid\LedenlijstContent;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class LedenLijstController extends AbstractController {
-	public function lijst(CmsPaginaRepository $cmsPaginaRepository) {
-		if (!LoginModel::mag(P_OUDLEDEN_READ)) {
+	/**
+	 * @param Request $request
+	 * @param CmsPaginaRepository $cmsPaginaRepository
+	 * @param LidZoekerService $lidZoeker
+	 * @param GoogleSync $googleSync
+	 * @param Environment $twig
+	 * @return RedirectResponse|Response
+	 * @throws LoaderError
+	 * @throws RuntimeError
+	 * @throws SyntaxError
+	 * @Route("/ledenlijst", methods={"GET", "POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
+	public function lijst(Request $request, CmsPaginaRepository $cmsPaginaRepository, LidZoekerService $lidZoeker, GoogleSync $googleSync, Environment $twig) {
+		if (!LoginService::mag(P_OUDLEDEN_READ)) {
 			# geen rechten
 			$body = new CmsPaginaView($cmsPaginaRepository->find('403'));
-			return view('default', ['content' => $body]);
+			return $this->render('default.html.twig', ['content' => $body]);
 		}
 
 		$message = '';
 
-		$zoeker = new LidZoeker();
-
 		if (isset($_GET['q'])) {
 
 			$query = $_GET;
-			$zoeker->parseQuery($query);
+			$lidZoeker->parseQuery($query);
 
-			if ($zoeker->count() == 0) {
+			if ($lidZoeker->count() == 0) {
 				// als er geen resultaten zijn dan verbreden we het statusfilter
 				if (isset($query['status'])) {
 					if ($query['status'] == 'LEDEN') {
@@ -43,39 +63,46 @@ class LedenLijstController extends AbstractController {
 					$query['status'] = 'LEDEN|OUDLEDEN';
 					$message = 'Zoekterm gaf geen resultaten met gegeven statusfilter, gezocht in <em>leden &amp; oudleden</em>.';
 				}
-				$zoeker->parseQuery($query);
+				$lidZoeker->parseQuery($query);
 			}
 		}
 
-		$ledenlijstcontent = new LedenlijstContent($zoeker);
-
 		if (isset($_GET['addToGoogleContacts'])) {
 			try {
-				GoogleSync::doRequestToken(CSR_ROOT . REQUEST_URI);
-
-				$gSync = GoogleSync::instance();
+				$googleSync->doRequestToken($request->getUri());
 
 				$start = microtime(true);
-				$message = $gSync->syncLidBatch($zoeker->getLeden());
+				$message = $googleSync->syncLidBatch($lidZoeker->getLeden());
 				$elapsed = microtime(true) - $start;
 
 				setMelding(
 					'<h3>Google-sync-resultaat:</h3>' . $message . '<br />' .
 					'<a href="/ledenlijst?q=' . htmlspecialchars($_GET['q'] ?? '') . '">Terug naar de ledenlijst...</a>', 0);
 
-				if (LoginModel::mag(P_ADMIN)) {
+				if (LoginService::mag(P_ADMIN)) {
 					setMelding('Tijd nodig voor deze sync: ' . $elapsed . 's', 0);
 				}
 			} catch (CsrGebruikerException $e) {
 				setMelding($e->getMessage(), -1);
 			}
+		} elseif (isset($_GET['exportVcf'])) {
+			$responseBody = '';
+
+			foreach ($lidZoeker->getLeden() as $profiel) {
+				$responseBody .= $twig->render('profiel/vcard.ical.twig', ['profiel' => $profiel]);
+			}
+
+			$response = new Response(crlf_endings($responseBody), 200, ['Content-Type' => 'text/x-vcard', 'Content-Disposition' => 'attachment; filename="ledenlijst.vcf"']);
+			$response->setCharset('UTF-8');
+
+			return $response;
 		} else {
 
 			//redirect to profile if only one result.
-			if ($zoeker->count() == 1) {
-				$leden = $zoeker->getLeden();
+			if ($lidZoeker->count() == 1) {
+				$leden = $lidZoeker->getLeden();
 				$profiel = $leden[0];
-				return $this->redirectToRoute('profiel-profiel', ['uid' => $profiel->uid]);
+				return $this->redirectToRoute('csrdelft_profiel_profiel', ['uid' => $profiel->uid]);
 			}
 		}
 
@@ -83,6 +110,6 @@ class LedenLijstController extends AbstractController {
 			setMelding($message, 0);
 		}
 
-		return view('default', ['content' => $ledenlijstcontent]);
+		return $this->render('default.html.twig', ['content' => new LedenlijstContent($request, $lidZoeker)]);
 	}
 }

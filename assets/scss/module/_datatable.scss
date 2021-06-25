@@ -1,0 +1,127 @@
+@import "~@fortawesome/fontawesome-free/scss/variables";
+@import "~datatables.net-dt/css/jquery.dataTables.css";
+@import "~datatables.net-autofill-dt/css/autoFill.dataTables.css";
+@import "~datatables.net-buttons-dt/css/buttons.dataTables.css";
+@import "~datatables.net-colreorder-dt/css/colReorder.dataTables.css";
+@import "~datatables.net-fixedcolumns-dt/css/fixedColumns.dataTables.css";
+@import "~datatables.net-fixedheader-dt/css/fixedHeader.dataTables.css";
+@import "~datatables.net-keytable-dt/css/keyTable.dataTables.css";
+@import "~datatables.net-responsive-dt/css/responsive.dataTables.css";
+@import "~datatables.net-scroller-dt/css/scroller.dataTables.css";
+@import "~datatables.net-select-dt/css/select.dataTables.css";
+
+/**
+ * csrdelft.dataTables.less
+ *
+ * @author P.W.G. Brussee <brussee@live.nl>
+ */
+
+.dataTables_wrapper {
+	.dataTables_info {
+		clear: none;
+		margin-left: 10%;
+	}
+	.dataTables_length {
+		padding-top: 0.755em;
+	}
+	.dataTables_filter input {
+		border: 1px solid lightgray;
+		line-height: 1.5em;
+	}
+}
+
+h2.vliegende-knoppen + div > .dt-buttons {
+	position: sticky !important;
+	top: 58px;
+}
+
+button, a, div {
+	&.dt-button-warning {
+		background: #f2dede linear-gradient(to bottom, #f2dede 0%, #e7c3c3 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#f2dede', EndColorStr='#e7c3c3');
+
+		&:active:not(.disabled):hover:not(.disabled),
+		&.active:not(.disabled):hover:not(.disabled) {
+			box-shadow: inset 1px 1px 3px #999999;
+			background: #e0cece linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#e0cece', EndColorStr='#d1b2b2');
+		}
+		&:hover:not(.disabled) {
+			background: #e0cece linear-gradient(to bottom, #e0cece 0%, #d1b2b2 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#e0cece', EndColorStr='#d1b2b2');
+		}
+	}
+}
+
+.dataTable {
+	width: 100% !important;
+
+	.document {
+		color: #000;
+	}
+
+	tbody {
+		color: #000;
+
+		.innerDetails {
+			margin-left: 30px;
+		}
+
+		tr.group,
+		tr.group:hover {
+			background-color: white !important;
+			cursor: pointer;
+		}
+		tr.group td {
+			font-weight: bold;
+		}
+
+		tr {
+
+			td.editable {
+				cursor: url("../../images/edit.png"), cell;
+			}
+
+			td.toggle-childrow::before {
+				font-size: 1.1em;
+				font-weight: 400;
+				font-family: 'Font Awesome 5 Free';
+				content: fa-content($fa-var-plus-square);
+			}
+		}
+		tr:hover {
+			cursor: default;
+
+			td.toggle-childrow::before {
+				font-weight: 900;
+				content: fa-content($fa-var-plus-square);
+			}
+		}
+		tr.expanded {
+
+			td.toggle-childrow::before {
+				font-weight: 400;
+				content: fa-content($fa-var-minus-square);
+			}
+		}
+		tr.expanded:hover {
+
+			td.toggle-childrow::before {
+				font-weight: 900;
+				content: fa-content($fa-var-minus-square);
+			}
+		}
+		tr.loading {
+
+			td.toggle-childrow::before {
+				content: none;
+			}
+			td.toggle-childrow {
+				background: url("../../images/loading-fb.gif") no-repeat center center;
+			}
+		}
+		tr.childrow:hover {
+			background-color: white !important;
+		}
+	}
+}

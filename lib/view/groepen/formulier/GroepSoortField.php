@@ -2,86 +2,85 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\entity\groepen\CommissieSoort;
-use CsrDelft\model\entity\groepen\HuisStatus;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\groepen\BesturenModel;
-use CsrDelft\model\groepen\CommissiesModel;
-use CsrDelft\model\groepen\KetzersModel;
-use CsrDelft\model\groepen\OnderverenigingenModel;
-use CsrDelft\model\groepen\RechtenGroepenModel;
-use CsrDelft\model\groepen\WerkgroepenModel;
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\common\Enum;
+use CsrDelft\entity\groepen\Commissie;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
+use CsrDelft\entity\groepen\enum\CommissieSoort;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\interfaces\HeeftSoort;
+use CsrDelft\entity\security\enum\AccessAction;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\groepen\BesturenRepository;
+use CsrDelft\repository\groepen\CommissiesRepository;
+use CsrDelft\repository\groepen\KetzersRepository;
+use CsrDelft\repository\groepen\OnderverenigingenRepository;
+use CsrDelft\repository\groepen\RechtenGroepenRepository;
+use CsrDelft\repository\groepen\WerkgroepenRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
+use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\RadioField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
-use function common\short_class;
 
 class GroepSoortField extends RadioField {
 
 	public $columns = 1;
 	protected $activiteit;
 	protected $commissie;
+	/**
+	 * @var Groep
+	 */
+	private $groep;
 
 	public function __construct(
 		$name,
 		$value,
 		$description,
-		AbstractGroep $groep
+		Groep $groep
 	) {
 		parent::__construct($name, $value, $description, array());
 
-		$activiteiten = array();
-		foreach (ActiviteitSoort::getTypeOptions() as $soort) {
-			$activiteiten[$soort] = ActiviteitSoort::getDescription($soort);
-		}
-		if (property_exists($groep, 'soort') AND in_array($groep->soort, $activiteiten)) {
-			$default = $groep->soort;
+		if ($groep instanceof HeeftSoort && $groep->getSoort() instanceof ActiviteitSoort) {
+			$default = $groep->getSoort() ? $groep->getSoort() : ActiviteitSoort::Vereniging();
 		} else {
-			$default = ActiviteitSoort::Vereniging;
+			$default = ActiviteitSoort::Vereniging();
 		}
-		$this->activiteit = new SelectField('activiteit', $default, null, $activiteiten);
+		$this->activiteit = new EnumSelectField('activiteit', $default, null, ActiviteitSoort::class);
 		$this->activiteit->onclick = <<<JS
 
-$('#{$this->getId()}Option_ActiviteitenModel').click();
+$('#{$this->getId()}Option_ActiviteitenRepository').click();
 JS;
 
-		$commissies = array();
-		foreach (CommissieSoort::getTypeOptions() as $soort) {
-			$commissies[$soort] = CommissieSoort::getDescription($soort);
-		}
-		if (property_exists($groep, 'soort') AND in_array($groep->soort, $commissies)) {
-			$default = $groep->soort;
+		if ($groep instanceof Commissie) {
+			$default = $groep->commissieSoort ?? CommissieSoort::Commissie();
 		} else {
-			$default = CommissieSoort::Commissie;
+			$default = CommissieSoort::Commissie();
 		}
-		$this->commissie = new SelectField('commissie', $default, null, $commissies);
+		$this->commissie = new EnumSelectField('commissie', $default, null, CommissieSoort::class);
 		$this->commissie->onclick = <<<JS
 
-$('#{$this->getId()}Option_CommissiesModel').click();
+$('#{$this->getId()}Option_CommissiesRepository').click();
 JS;
 
 		$this->options = [
-			ActiviteitenModel::class => $this->activiteit,
-			KetzersModel::class => 'Aanschafketzer',
-			WerkgroepenModel::class => short_class(WerkgroepenModel::ORM),
-			RechtenGroepenModel::class => 'Groep (overig)',
-			OnderverenigingenModel::class => short_class(OnderverenigingenModel::ORM),
-			WoonoordenModel::class => short_class(WoonoordenModel::ORM),
-			BesturenModel::class => short_class(BesturenModel::ORM),
-			CommissiesModel::class => $this->commissie
+			ActiviteitenRepository::class => $this->activiteit,
+			KetzersRepository::class => 'Aanschafketzer',
+			WerkgroepenRepository::class => 'Werkgroep',
+			RechtenGroepenRepository::class => 'Groep (overig)',
+			OnderverenigingenRepository::class => 'Ondervereniging',
+			WoonoordenRepository::class => 'Woonoord',
+			BesturenRepository::class => 'Bestuur',
+			CommissiesRepository::class => $this->commissie
 		];
+		$this->groep = $groep;
 	}
 
 	public function getSoort() {
 		switch (parent::getValue()) {
 
-			case 'ActiviteitenModel':
+			case 'ActiviteitenRepository':
 				return $this->activiteit->getValue();
 
-			case 'CommissiesModel':
+			case 'CommissiesRepository':
 				return $this->commissie->getValue();
 
 			default:
@@ -94,19 +93,19 @@ JS;
 			return false;
 		}
 		$class = $this->value;
-		$model = $class::instance(); // require once
-		$orm = $model::ORM;
+		$model = ContainerFacade::getContainer()->get($class);
+		/** @var Enum $soort */
 		$soort = $this->getSoort();
 		/**
 		 * @Warning: Duplicate function in GroepForm->validate()
 		 */
-		if (!$orm::magAlgemeen(AccessAction::Beheren, null, $soort)) {
-			if ($model instanceof ActiviteitenModel) {
-				$naam = ActiviteitSoort::getDescription($soort);
-			} elseif ($model instanceof CommissiesModel) {
-				$naam = CommissieSoort::getDescription($soort);
-			} elseif ($model instanceof WoonoordenModel) {
-				$naam = HuisStatus::getDescription($soort);
+		if (!$this->groep->magAlgemeen(AccessAction::Beheren(), null, $soort)) {
+			if ($model instanceof ActiviteitenRepository) {
+				$naam = $soort->getDescription();
+			} elseif ($model instanceof CommissiesRepository) {
+				$naam = $soort->getDescription();
+			} elseif ($model instanceof WoonoordenRepository) {
+				$naam = $soort->getDescription();
 			} else {
 				$naam = $model->getNaam();
 			}

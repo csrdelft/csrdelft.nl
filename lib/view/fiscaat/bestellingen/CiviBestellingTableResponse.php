@@ -6,7 +6,7 @@ use CsrDelft\view\datatable\DataTableResponse;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 26/04/2017
+ * @since 26/04/2017
  */
 class CiviBestellingTableResponse extends DataTableResponse {
 	public function renderElement($element)

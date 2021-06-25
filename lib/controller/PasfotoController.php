@@ -4,33 +4,35 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\Afbeelding;
-use CsrDelft\repository\ProfielRepository;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class PasfotoController extends AbstractController {
+class PasfotoController extends AbstractController
+{
 	/**
-	 * @var ProfielRepository
+	 * @param Profiel $profiel
+	 * @param string $vorm
+	 * @return BinaryFileResponse|RedirectResponse
+	 * @Route("/profiel/pasfoto/{uid}.jpg", methods={"GET"}, requirements={"uid": ".{4}"}, defaults={"vorm": "civitas"})
+	 * @Route("/profiel/pasfoto/{uid}.{vorm}.jpg", methods={"GET"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_LEDEN_READ)
 	 */
-	private $profielRepository;
+	public function pasfoto(Request $request, Profiel $profiel, $vorm = 'civitas')
+	{
+		if (
+			$profiel
+			&& is_zichtbaar($profiel, 'profielfoto', 'intern')
+			&& ($path = $profiel->getPasfotoInternalPath(false, $vorm)) != null
+		) {
+			$image = new Afbeelding($path);
+			return new BinaryFileResponse($image->getFullPath(), 200, [], false);
+		}
 
-	public function __construct(ProfielRepository $profielRepository) {
-		$this->profielRepository = $profielRepository;
-	}
-
-	public function pasfoto($uid, $vorm = 'civitas') {
-		$profiel = $this->profielRepository::get($uid);
-		if (!$profiel) {
-			return $this->csrRedirect('/images/geen-foto.jpg');
-		}
-		if (!is_zichtbaar($profiel, 'profielfoto', 'intern')) {
-			return $this->csrRedirect('/images/geen-foto.jpg');
-		}
-		$path = $profiel->getPasfotoInternalPath(false, $vorm);
-		if ($path === null) {
-			return $this->csrRedirect('/images/geen-foto.jpg');
-		}
-		$image = new Afbeelding($path);
-		return new BinaryFileResponse($image->getFullPath(), 200, [], false);
+		return $this->redirect($request->getSchemeAndHttpHost() . '/images/geen-foto.jpg');
 	}
 }

@@ -3,7 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 
 /**
  * Tekst binnen de privé-tag wordt enkel weergegeven voor leden met
@@ -23,7 +23,7 @@ class BbPrive extends BbTag {
 
 	public function isAllowed()
 	{
-		return LoginModel::mag($this->permissie);
+		return LoginService::mag($this->permissie);
 	}
 
 	public static function getTagName() {
@@ -31,7 +31,7 @@ class BbPrive extends BbTag {
 	}
 
 	public function render() {
-		return '<span class="bb-prive bb-tag-prive">' . $this->content . '</span>';
+		return '<span class="bb-prive bb-tag-prive">' . $this->getContent() . '</span>';
 	}
 
 	/**
@@ -41,5 +41,9 @@ class BbPrive extends BbTag {
 	{
 		$this->readContent();
 		$this->permissie = $arguments['prive'] ?? 'P_LOGGED_IN';
+	}
+
+	public function getPermissie() {
+		return $this->permissie;
 	}
 }

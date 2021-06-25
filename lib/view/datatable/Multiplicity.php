@@ -6,7 +6,7 @@ namespace CsrDelft\view\datatable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 08/03/2018
  *
- * @see resources/assets/js/util.js
+ * @see assets/js/util.js
  */
 class Multiplicity {
 	const NONE = '';

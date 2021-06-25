@@ -29,43 +29,54 @@ use CsrDelft\bb\tag\BbTableCell;
 use CsrDelft\bb\tag\BbTableHeader;
 use CsrDelft\bb\tag\BbTableRow;
 use CsrDelft\bb\tag\BbUnderline;
-use CsrDelft\view\bbcode\tag\BbActiviteit;
-use CsrDelft\view\bbcode\tag\BbBestuur;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\view\bbcode\tag\BbAftel;
 use CsrDelft\view\bbcode\tag\BbBijbel;
 use CsrDelft\view\bbcode\tag\BbBoek;
 use CsrDelft\view\bbcode\tag\BbCitaat;
-use CsrDelft\view\bbcode\tag\BbCommissie;
+use CsrDelft\view\bbcode\tag\BbAanmelder;
+use CsrDelft\view\bbcode\tag\BbCodeInline;
 use CsrDelft\view\bbcode\tag\BbDocument;
-use CsrDelft\view\bbcode\tag\BbForumPlaatje;
 use CsrDelft\view\bbcode\tag\BbForum;
+use CsrDelft\view\bbcode\tag\BbForumPlaatje;
 use CsrDelft\view\bbcode\tag\BbFoto;
 use CsrDelft\view\bbcode\tag\BbFotoalbum;
-use CsrDelft\view\bbcode\tag\BbGroep;
 use CsrDelft\view\bbcode\tag\BbImg;
 use CsrDelft\view\bbcode\tag\BbInstelling;
 use CsrDelft\view\bbcode\tag\BbIsHetAl;
-use CsrDelft\view\bbcode\tag\BbKetzer;
 use CsrDelft\view\bbcode\tag\BbLedenmemoryscores;
 use CsrDelft\view\bbcode\tag\BbLid;
-use CsrDelft\view\bbcode\tag\BbLocatie;
 use CsrDelft\view\bbcode\tag\BbMaaltijd;
 use CsrDelft\view\bbcode\tag\BbNeuzen;
+use CsrDelft\view\bbcode\tag\BbNovietVanDeDag;
 use CsrDelft\view\bbcode\tag\BbOfftopic;
-use CsrDelft\view\bbcode\tag\BbOndervereniging;
+use CsrDelft\view\bbcode\tag\BbOrderedList;
+use CsrDelft\view\bbcode\tag\BbParagraph;
 use CsrDelft\view\bbcode\tag\BbPeiling;
 use CsrDelft\view\bbcode\tag\BbPrive;
 use CsrDelft\view\bbcode\tag\BbQuery;
+use CsrDelft\view\bbcode\tag\BbBb;
 use CsrDelft\view\bbcode\tag\BbReldate;
-use CsrDelft\view\bbcode\tag\BbSpotify;
-use CsrDelft\view\bbcode\tag\BbTwitter;
+use CsrDelft\view\bbcode\tag\BbTaal;
 use CsrDelft\view\bbcode\tag\BbUbboff;
 use CsrDelft\view\bbcode\tag\BbUrl;
 use CsrDelft\view\bbcode\tag\BbVerklapper;
-use CsrDelft\view\bbcode\tag\BbVerticale;
-use CsrDelft\view\bbcode\tag\BbVideo;
-use CsrDelft\view\bbcode\tag\BbWerkgroep;
-use CsrDelft\view\bbcode\tag\BbWoonoord;
-use CsrDelft\view\bbcode\tag\BbYoutube;
+use CsrDelft\view\bbcode\tag\embed\BbAudio;
+use CsrDelft\view\bbcode\tag\embed\BbLocatie;
+use CsrDelft\view\bbcode\tag\embed\BbSpotify;
+use CsrDelft\view\bbcode\tag\embed\BbTwitter;
+use CsrDelft\view\bbcode\tag\embed\BbVideo;
+use CsrDelft\view\bbcode\tag\embed\BbYoutube;
+use CsrDelft\view\bbcode\tag\groep\BbActiviteit;
+use CsrDelft\view\bbcode\tag\groep\BbBestuur;
+use CsrDelft\view\bbcode\tag\groep\BbCommissie;
+use CsrDelft\view\bbcode\tag\groep\BbGroep;
+use CsrDelft\view\bbcode\tag\groep\BbKetzer;
+use CsrDelft\view\bbcode\tag\groep\BbOndervereniging;
+use CsrDelft\view\bbcode\tag\groep\BbVerticale;
+use CsrDelft\view\bbcode\tag\groep\BbWerkgroep;
+use CsrDelft\view\bbcode\tag\groep\BbWoonoord;
+use Psr\Container\ContainerInterface;
 use function substr_count;
 
 /**
@@ -74,7 +85,6 @@ use function substr_count;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  */
 class CsrBB extends Parser {
-
 	protected $tags = [
 		// Standard
 		BbBold::class,
@@ -103,11 +113,14 @@ class CsrBB extends Parser {
 		BbTableRow::class,
 		BbUnderline::class,
 		// Custom
+		BbBb::class,
 		BbActiviteit::class,
+		BbAudio::class,
 		BbBestuur::class,
 		BbBijbel::class,
 		BbBoek::class,
 		BbCitaat::class,
+		BbCodeInline::class,
 		BbCommissie::class,
 		BbDocument::class,
 		BbForum::class,
@@ -126,11 +139,14 @@ class CsrBB extends Parser {
 		BbNeuzen::class,
 		BbOfftopic::class,
 		BbOndervereniging::class,
+		BbOrderedList::class,
+		BbParagraph::class,
 		BbPeiling::class,
 		BbPrive::class,
 		BbQuery::class,
 		BbReldate::class,
 		BbSpotify::class,
+		BbTaal::class,
 		BbTwitter::class,
 		BbUbboff::class,
 		BbUrl::class,
@@ -140,33 +156,52 @@ class CsrBB extends Parser {
 		BbWerkgroep::class,
 		BbWoonoord::class,
 		BbYoutube::class,
+		BbNovietVanDeDag::class,
+		BbAanmelder::class,
+		BbAftel::class,
 	];
+	/**
+	 * @var ContainerInterface
+	 */
+	private $container;
+
+	public function __construct(ContainerInterface $container, $env = null) {
+		parent::__construct($env);
+
+		$this->container = $container;
+	}
 
 
 	public static function parse($bbcode) {
-		$parser = new CsrBB();
+		$parser = new CsrBB(ContainerFacade::getContainer());
 		return $parser->getHtml($bbcode);
 	}
 
 	public static function parseHtml($bbcode, $inline = false) {
-		$parser = new CsrBB();
+		$parser = new CsrBB(ContainerFacade::getContainer());
 		$parser->allow_html = true;
 		$parser->standard_html = $inline;
 		return $parser->getHtml($bbcode);
 	}
 
-	public static function parseMail($bbcode, $light = false) {
+	public static function parseMail($bbcode) {
 		$env = new BbEnv();
-		$env->light_mode = $light;
-		$env->email_mode = true;
-		$parser = new CsrBB($env);
+		$env->mode = "light";
+		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
 		return $parser->getHtml($bbcode);
 	}
 
 	public static function parseLight($bbcode) {
 		$env = new BbEnv();
-		$env->light_mode = true;
-		$parser = new CsrBB($env);
+		$env->mode = "light";
+		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
+		return $parser->getHtml($bbcode);
+	}
+
+	public static function parsePlain($bbcode) {
+		$env = new BbEnv();
+		$env->mode = "plain";
+		$parser = new CsrBB(ContainerFacade::getContainer(), $env);
 		return $parser->getHtml($bbcode);
 	}
 
@@ -222,5 +257,17 @@ class CsrBB extends Parser {
 		// niets zou opleveren.
 		// de /s modifier zorgt ervoor dat een . ook alle newlines matched.
 		return preg_replace('/\[commentaar=?.*?\].*?\[\/commentaar\]/s', '', $bbcode);
+	}
+
+	protected function createTagInstance(string $tag, Parser $parser, $env) {
+		if ($this->container->has($tag)) {
+			$tag = $this->container->get($tag);
+		} else {
+			$tag = new $tag();
+		}
+		$tag->setParser($parser);
+		$tag->setEnv($env);
+
+		return $tag;
 	}
 }

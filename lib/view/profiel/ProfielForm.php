@@ -3,14 +3,14 @@
 namespace CsrDelft\view\profiel;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\common\Ini;
+use CsrDelft\entity\Geslacht;
+use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\OntvangtContactueel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\ProfielService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\CollapsableSubkopje;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
@@ -18,6 +18,7 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
+use CsrDelft\view\formulier\invoervelden\EmailField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\IBANField;
 use CsrDelft\view\formulier\invoervelden\LandField;
@@ -30,9 +31,10 @@ use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\UrlField;
 use CsrDelft\view\formulier\keuzevelden\DateObjectField;
+use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredGeslachtField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -49,15 +51,15 @@ class ProfielForm extends Formulier {
 			. '<li class="breadcrumb-item">'. $this->model->getLink('civitas') . '</li></ol>';
 	}
 
-	public function __construct(Profiel $profiel) {
+	public function __construct(Profiel $profiel, $inschrijven) {
 		if ($profiel->uid) {
 			parent::__construct($profiel, '/profiel/' . $profiel->uid . '/bewerken');
 		} else {
 			parent::__construct($profiel, '/profiel/' . $profiel->lidjaar . '/nieuw/' . strtolower(substr($profiel->status, 2)));
 		}
 
-		$admin = LoginModel::mag(P_LEDEN_MOD);
-		$inschrijven = !$profiel->getAccount();
+		$admin = LoginService::mag(P_LEDEN_MOD);
+		$novCie = LoginService::mag('commissie:NovCie');
 
 		$fields = [];
 		if ($inschrijven) {
@@ -72,7 +74,7 @@ class ProfielForm extends Formulier {
 				Hieronder kunt u uw eigen gegevens wijzigen. Voor enkele velden is het niet mogelijk zelf
 				wijzigingen door te voeren. Voor de meeste velden geldt daarnaast dat de ingevulde gegevens
 				een geldig formaat moeten hebben. Mochten er fouten in het gedeelte van uw profiel staan,
-				dat u niet zelf kunt wijzigen, meld het dan bij de <a href="mailto:' . Ini::lees(Ini::EMAILS, 'vab') . '">Vice-Abactis</a>.
+				dat u niet zelf kunt wijzigen, meld het dan bij de <a href="mailto:' . $_ENV['EMAIL_VAB'] . '">Vice-Abactis</a>.
 			</p>');
 		}
 		$fields[] = new HtmlComment('<p>
@@ -83,8 +85,8 @@ class ProfielForm extends Formulier {
 
 		if ($admin) {
 			$statussen = array();
-			foreach (LidStatus::getTypeOptions() as $optie) {
-				$statussen[$optie] = LidStatus::getDescription($optie);
+			foreach (LidStatus::getEnumValues() as $optie) {
+				$statussen[$optie] = LidStatus::from($optie)->getDescription();
 			}
 			$fields[] = new SelectField('status', $profiel->status, 'Lidstatus', $statussen);
 			$fields[] = new HtmlComment('<p>Bij het wijzigen van de lidstatus worden overbodige <span class="waarschuwing">gegevens verwijderd</span>, onomkeerbaar, opletten dus!</p>');
@@ -103,7 +105,7 @@ class ProfielForm extends Formulier {
 			}
 
 			$html = '<div class="novieten">';
-			if (count($gelijknamigenovieten) > 1 OR ($profiel->status !== LidStatus::Noviet AND !empty($gelijknamigenovieten))) {
+			if (count($gelijknamigenovieten) > 1 || ($profiel->status !== LidStatus::Noviet && !empty($gelijknamigenovieten))) {
 				$html .= 'Gelijknamige novieten:<ul class="nobullets">';
 				foreach ($gelijknamigenovieten as $noviet) {
 					$html .= '<li>' . $noviet->getLink('volledig') . '</li>';
@@ -113,7 +115,8 @@ class ProfielForm extends Formulier {
 				$html .= 'Geen novieten met overeenkomstige namen.';
 			}
 			$html .= '</div><div class="leden">';
-			if (count($gelijknamigeleden) > 1 OR (!($profiel->status == LidStatus::Lid OR $profiel->status == LidStatus::Gastlid) AND !empty($gelijknamigeleden))) {
+			if (count($gelijknamigeleden) > 1 || (!($profiel->status == LidStatus::Lid
+						|| $profiel->status == LidStatus::Gastlid) && !empty($gelijknamigeleden))) {
 				$html .= 'Gelijknamige (gast)leden:<ul class="nobullets">';
 				foreach ($gelijknamigeleden as $lid) {
 					$html .= '<li>' . $lid->getLink('volledig') . '</li>';
@@ -126,35 +129,34 @@ class ProfielForm extends Formulier {
 
 			$fields[] = new HtmlComment($html);
 		}
-
-		if ($admin OR $inschrijven OR $profiel->isOudlid()) {
-			$fields[] = new Subkopje('Identiteit');
+		$fields[] = new Subkopje('Identiteit');
+		if ($admin || $inschrijven || $profiel->isOudlid()) {
 			$fields[] = new RequiredTextField('voornaam', $profiel->voornaam, 'Voornaam', 50);
 			$fields[] = new RequiredTextField('voorletters', $profiel->voorletters, 'Voorletters', 10);
 			$fields[] = new TextField('tussenvoegsel', $profiel->tussenvoegsel, 'Tussenvoegsel', 15);
 			$fields[] = new RequiredTextField('achternaam', $profiel->achternaam, 'Achternaam', 50);
-			if ($admin OR $inschrijven) {
-				$fields[] = new RequiredGeslachtField('geslacht', $profiel->geslacht, 'Geslacht');
+		}
+		$fields["bijnaam"]= new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
+		$fields["bijnaam"]->title = "Bijnaam is zichtbaar op profiel, kan op worden gezocht in de zoekbalk en wordt
+		weergegeven op het forum bij gebruikers waarbij als profielinstelling de naamweergave 'bijnaam' is ingesteld.";
+		if ($admin || $inschrijven || $profiel->isOudlid()) {
+			if ($admin || $inschrijven) {
+				$fields[] = new RequiredEnumSelectField('geslacht', $profiel->geslacht, 'Geslacht', Geslacht::class);
 				$fields[] = new TextField('voornamen', $profiel->voornamen, 'Voornamen', 100);
 				if (!$inschrijven) {
 					$fields[] = new TextField('postfix', $profiel->postfix, 'Postfix', 7);
-					$fields[] = new TextField('nickname', $profiel->nickname, 'Bijnaam', 20);
 				}
 			}
 			$fields[] = new RequiredDateObjectField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15, 1900);
-			if ($admin AND $profiel->status === LidStatus::Overleden) {
+			if ($admin && $profiel->status === LidStatus::Overleden) {
 				$fields[] = new DateObjectField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
-			if (($admin OR $profiel->isOudlid() OR $profiel->status === LidStatus::Overleden) AND !$inschrijven) {
+			if (($admin || $profiel->isOudlid() || $profiel->status === LidStatus::Overleden) && !$inschrijven) {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
 				$fields[] = new Subkopje('Oudledenpost');
 				$fields[] = new TextField('adresseringechtpaar', $profiel->adresseringechtpaar, 'Tenaamstelling post echtpaar', 250);
 
-				$contactueel = array();
-				foreach (OntvangtContactueel::getTypeOptions() as $optie) {
-					$contactueel[$optie] = OntvangtContactueel::getDescription($optie);
-				}
-				$fields[] = new SelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?', $contactueel);
+				$fields[] = new EnumSelectField('ontvangtcontactueel', $profiel->ontvangtcontactueel, 'Ontvangt Contactueel?', OntvangtContactueel::class);
 			}
 		}
 
@@ -176,6 +178,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new Subkopje('Contact');
 		//TODO: email & multiple contacts
 		$fields['email'] = new RequiredEmailField('email', $profiel->email, 'E-mailadres');
+		$fields['sec_email'] = new EmailField('sec_email', $profiel->sec_email, 'Secundair e-mailadres');
 		if (!$inschrijven) {
 			$fields['email']->readonly = true;
 			$fields['email']->required = false;
@@ -203,13 +206,13 @@ class ProfielForm extends Formulier {
 		$fields['studiejaar'] = new IntField('studiejaar', (int)$profiel->studiejaar, 'Beginjaar studie', 1950, date('Y'));
 		$fields['studiejaar']->leden_mod = $admin;
 
-		if (!$inschrijven AND ($admin OR $profiel->isOudlid())) {
+		if (!$inschrijven && ($admin || $profiel->isOudlid())) {
 			$fields[] = new TextField('beroep', $profiel->beroep, 'Beroep/werk', 4096);
 			$fields[] = new IntField('lidjaar', (int)$profiel->lidjaar, 'Lid sinds', 1950, date('Y'));
 			$fields[] = new DateObjectField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
 		}
 
-		if ($admin AND !$inschrijven) {
+		if ($admin && !$inschrijven) {
 			$fields[] = new VerticaleField('verticale', $profiel->verticale, 'Verticale');
 			if ($profiel->isLid()) {
 				$fields[] = new JaNeeField('verticaleleider', $profiel->verticaleleider, 'Verticaleleider');
@@ -226,7 +229,7 @@ class ProfielForm extends Formulier {
 		$fields[] = new TextField('muziek', $profiel->muziek, 'Muziekinstrument', 50);
 		$fields[] = new SelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
-		if ($admin OR $inschrijven) {
+		if ($admin || $inschrijven || $novCie) {
 			$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
 			$fields['middelbareSchool'] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 			$fields['middelbareSchool']->required = $inschrijven;
@@ -241,13 +244,14 @@ class ProfielForm extends Formulier {
 		}
 
 		$fields[] = new Subkopje('<b>Einde vragenlijst</b><br /><br /><br /><br /><br />');
-		if (($admin OR LoginModel::mag('commissie:NovCie')) AND ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
-			$fields[] = new CollapsableSubkopje('novcieForm', 'In te vullen door NovCie', true);
+		if (($admin || $novCie) && ($profiel->propertyMogelijk('novitiaat') || $inschrijven)) {
+			$fields[] = new CollapsableSubkopje('In te vullen door NovCie', true);
 
 			if ($inschrijven) {
 				// Alleen als inschrijven, anders bovenin voor admin
 				$fields[] = new JaNeeField('machtiging', $profiel->machtiging, 'Machtiging getekend?');
 			}
+			$fields[] = new JaNeeField('toestemmingAfschrijven', $profiel->toestemmingAfschrijven, 'Toestemming afschrijven?');
 
 			$fields['novitiaat'] = new TextareaField('novitiaat', $profiel->novitiaat, 'Wat verwacht Noviet van novitiaat?');
 			$fields['novitiaat']->required = $inschrijven;
@@ -258,9 +262,15 @@ class ProfielForm extends Formulier {
 			$fields['startkamp'] = new SelectField('startkamp', $profiel->startkamp, 'Startkamp', array('ja', 'nee'));
 			$fields['startkamp']->required = $inschrijven;
 
-			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie, bijv. allergieen)');
 			$fields[] = new TextareaField('novitiaatBijz', $profiel->novitiaatBijz, 'Bijzonderheden novitiaat (op dag x ...)');
 			$fields[] = new TextareaField('kgb', $profiel->kgb, 'Overige NovCie-opmerking');
+
+			$fields[] = new Subkopje('Medisch');
+			$fields[] = new TextareaField('medisch', $profiel->medisch, 'medisch (NB alleen als relevant voor hele NovCie, bijv. allergieen)');
+			$fields[] = new TextField('huisarts', $profiel->huisarts, 'Naam huisarts');
+			$fields[] = new TelefoonField('huisartsTelefoon', $profiel->huisartsTelefoon, 'Telefoonnummer');
+			$fields[] = new TextField('huisartsPlaats', $profiel->huisartsPlaats, 'Plaats');
+
 			$fields[] = new HtmlComment('</div>');
 		}
 		$fields[] = new FormDefaultKnoppen('/profiel/' . $profiel->uid);

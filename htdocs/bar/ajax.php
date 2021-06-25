@@ -6,8 +6,8 @@
  * Time: 16:38
  * To change this template use File | Settings | File Templates.
  */
-require_once 'configuratie.include.php';
-require_once 'controller/Barsysteem.class.php';
+require_once __DIR__ . '/../../config/bootstrap.php';
+require_once __DIR__ . '/controller/Barsysteem.class.php';
 
 $barsysteem = new Barsysteem();
 

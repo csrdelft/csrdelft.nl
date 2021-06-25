@@ -2,15 +2,12 @@
 
 namespace CsrDelft\model\entity;
 
-use CsrDelft\Orm\Entity\PersistentEnum;
+use CsrDelft\common\Enum;
 
 /**
- * Kringleider.enum.php
- *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
  */
-abstract class Kringleider extends PersistentEnum {
+class Kringleider extends Enum {
 
 	/**
 	 * Kringleider opties.
@@ -22,27 +19,9 @@ abstract class Kringleider extends PersistentEnum {
 	/**
 	 * @var string[]
 	 */
-	protected static $supportedChoices = [
-		self::Ouderejaars => self::Ouderejaars,
-		self::Eerstejaars => self::Eerstejaars,
-		self::Nee => self::Nee,
-	];
-
-	/**
-	 * @var string[]
-	 */
 	protected static $mapChoiceToDescription = [
 		self::Ouderejaars => 'Ouderejaarskring',
 		self::Eerstejaars => 'Eerstejaarskring',
 		self::Nee => 'Nee',
-	];
-
-	/**
-	 * @var string[]
-	 */
-	protected static $mapChoiceToChar = [
-		self::Ouderejaars => 'O',
-		self::Eerstejaars => 'E',
-		self::Nee => '-',
 	];
 }

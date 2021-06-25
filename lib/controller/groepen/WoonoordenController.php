@@ -2,7 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\WoonoordenModel;
+use CsrDelft\entity\groepen\Woonoord;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * WoonoordenController.class.php
@@ -12,7 +13,7 @@ use CsrDelft\model\groepen\WoonoordenModel;
  * Controller voor woonoorden en huizen.
  */
 class WoonoordenController extends AbstractGroepenController {
-	public function __construct(WoonoordenModel $woonoordenModel) {
-		parent::__construct($woonoordenModel);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Woonoord::class);
 	}
 }

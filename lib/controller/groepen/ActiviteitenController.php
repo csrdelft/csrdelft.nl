@@ -2,7 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\ActiviteitenModel;
+use CsrDelft\entity\groepen\Activiteit;
+use Doctrine\Persistence\ManagerRegistry;
 
 
 /**
@@ -13,7 +14,7 @@ use CsrDelft\model\groepen\ActiviteitenModel;
  * Controller voor activiteiten.
  */
 class ActiviteitenController extends KetzersController {
-	public function __construct(ActiviteitenModel $activiteitenModel) {
-		parent::__construct($activiteitenModel);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Activiteit::class);
 	}
 }

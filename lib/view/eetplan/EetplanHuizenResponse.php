@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\eetplan;
 
-use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\view\datatable\DataTableResponse;
 
 /**
@@ -19,7 +19,7 @@ class EetplanHuizenResponse extends DataTableResponse {
 			'UUID' => $entity->getUUID(),
 			'id' => $entity->id,
 			'naam' => '<a href="' . $entity->getUrl() . '">' . $entity->naam . '</a>',
-			'soort' => $entity->soort,
+			'soort' => $entity->huisStatus->getDescription(),
 			'eetplan' => $entity->eetplan
 		);
 	}

@@ -2,6 +2,7 @@
 
 namespace CsrDelft\entity;
 
+use CsrDelft\entity\profiel\Profiel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,33 +10,44 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Een LidToestemming beschrijft een Instelling per Lid.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\instellingen\LidToestemmingRepository")
- * @ORM\Table("lidtoestemmingen")
+ * @ORM\Table(
+ *   "lidtoestemmingen",
+ *   uniqueConstraints={@ORM\UniqueConstraint(name="uid_module_instelling", columns={"uid", "module", "instelling"})}
+ * )
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class LidToestemming {
 	/**
-	 * Lidnummer
-	 * Foreign key
-	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @var integer
+	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
 	 */
-	public $uid;
+	public $id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
-	 * @ORM\Id()
+	 * @ORM\Column(type="string")
 	 */
 	public $module;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
-	 * @ORM\Id()
+	 * @ORM\Column(type="string")
 	 */
-	public $instelling_id;
+	public $instelling;
 	/**
 	 * Value
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="text")
 	 */
 	public $waarde;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel", inversedBy="toestemmingen")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid", nullable=false)
+	 */
+	public $profiel;
+
+	public function uid() {
+		return $this->profiel->uid;
+	}
 }

@@ -1,0 +1,91 @@
+{% extends 'forum/base.html.twig' %}
+
+{% block titel %}
+	{%- if query -%}
+		Resultaten voor {{ query }}
+	{%- else -%}
+		Wacht op goedkeuring
+	{%- endif -%}
+{% endblock %}
+
+{% block breadcrumbs %}
+	{{ csr_breadcrumbs({
+		'/': 'main',
+		'/forum': 'Forum',
+		'': 'Zoeken'
+	}) }}
+{% endblock %}
+
+{% block content %}
+	{{ getMelding() }}
+
+	<h1>{{ titel }}</h1>
+
+	<div class="forum-zoeken">
+		{{ form | raw }}
+	</div>
+
+	{% if resultaten is not empty %}
+		<div class="forum-zoeken">
+			{% for draad in resultaten %}
+				<div class="forum-zoeken-header">
+					<div>
+						<a id="{{ draad.draad_id }}"
+							 href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id}) }}"
+							 {% if draad.ongelezen %}class="{{ lid_instelling('forum', 'ongelezenWeergave') }}"{% endif %}>
+							{{ draad.titel | highlight_zoekterm(query) }}
+						</a>
+						{% if draad.belangrijk %}
+							{{ icon(draad.belangrijk, null, 'Dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
+						{% elseif draad.gesloten %}
+							{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
+						{% endif %}
+						<span>[<a href="/forum/deel/{{ draad.forum_id }}">{{ draad.deel.titel }}</a>]</span>
+					</div>
+					<div class="niet-dik">
+						{% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
+							{{ draad.datum_tijd | reldate }}
+						{% else %}
+							{{ draad.datum_tijd | datetime_format }}
+						{% endif %}
+					</div>
+				</div>
+				<div class="forum-zoeken-bericht">
+					{% for post in draad.forumPosts %}
+						<div id="forumpost-row-{{ post.post_id }}" class="forum-post">
+							<div class="auteur">
+								<div class="postpijl">
+									<a class="postanchor" id="{{ post.post_id }}"></a>
+									<a class="postlink"
+										 href="{{ url('csrdelft_forum_reactie', {post_id: post.post_id, _fragment: post.post_id}) }}"
+										 title="Link naar deze post">&rarr;</a>
+								</div>
+								<div class="naam">
+									{{ get_profiel(post.uid).link('user') | raw }}
+								</div>
+								<span class="moment">
+					{% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
+						{{ post.datum_tijd | reldate }}
+					{% else %}
+						{{ post.datum_tijd | datetime_format }}
+					{% endif %}
+								</span>
+								{% if app.user and post.uid != 'x999' %}
+									<div class="forumpasfoto">{{ get_profiel(post.uid).link('pasfoto') | raw }}</div>
+								{% endif %}
+							</div>
+							<div class="forum-bericht {{ cycle(['bericht0', 'bericht1'], loop.index) }}" id="post{{ post.post_id }}">
+								{{ post.tekst | split_on_keyword(query) | bbcode_light | highlight_zoekterm(query) }}
+							</div>
+						</div>
+						<div class="tussenschot"></div>
+					{% endfor %}
+				</div>
+			{% endfor %}
+		</div>
+		<h1>{{ titel }}</h1>
+		{{ block('breadcrumbs') }}
+	{% else %}
+		Geen resultaten.
+	{% endif %}
+{% endblock %}

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\login;
 
-use CsrDelft\model\entity\security\Account;
+use CsrDelft\entity\security\Account;
 use CsrDelft\view\formulier\elementen\HtmlBbComment;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
@@ -16,7 +16,7 @@ class WachtwoordWijzigenForm extends Formulier {
 		$action,
 		$require_current = true
 	) {
-		parent::__construct($account, '/wachtwoord/' . $action, 'Wachtwoord instellen');
+		parent::__construct($account, $action, 'Wachtwoord instellen');
 
 		$fields = [];
 		if ($account->email == '') {

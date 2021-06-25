@@ -1,0 +1,46 @@
+{% extends 'forum/base.html.twig' %}
+
+{% block titel %}Forum{% endblock %}
+
+{% block breadcrumbs %}
+	{{ csr_breadcrumbs({
+		'/': 'main',
+		'/forum': 'Forum',
+	}) }}
+{% endblock %}
+
+{% block content %}
+
+{{ getMelding() }}
+
+<div class="forum-header btn-toolbar">
+	{% if mag('P_ADMIN') %}
+		<div class="btn-group me-2">
+			<a href="{{ url('csrdelft_forum_aanmaken') }}" class="btn btn-light post popup"
+				 title="Deelforum aanmaken">{{ icon('add') }}</a>
+		</div>
+	{% endif %}
+
+	{{ include('forum/partial/head_buttons.html.twig') }}
+
+	{{ zoekform | raw }}
+</div>
+
+<h1>Forum</h1>
+
+{% for categorie in categorien %}
+	<div class="forumcategorie">
+		<h3><a name="{{ categorie.categorie_id }}">{{ categorie.titel }}</a></h3>
+		<div class="forumdelen">
+			{% for deel in categorie.forum_delen %}
+				<div class="forumdeel">
+					<h4><a href="{{ url('csrdelft_forum_deel', {forum_id: deel.forum_id}) }}">{{ deel.titel }}</a></h4>
+					<p class="forumdeel-omschrijving">{{ deel.omschrijving }}</p>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endfor %}
+
+{{ include('forum/partial/rss_link.html.twig') }}
+{% endblock %}

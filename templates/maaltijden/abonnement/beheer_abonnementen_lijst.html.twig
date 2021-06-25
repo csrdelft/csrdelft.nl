@@ -1,0 +1,6 @@
+<tr id="maalcie-melding">
+	<td id="maalcie-melding-veld">{{ getMelding() }}</td>
+</tr>
+{% for vanuid, abonnementen in matrix %}
+	{{ include('maaltijden/abonnement/beheer_abonnement_lijst.html.twig', {vanuid: vanuid, abonnementen: abonnementen}) }}
+{% endfor %}

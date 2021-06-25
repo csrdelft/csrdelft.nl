@@ -1,14 +1,20 @@
 framework:
   secret: '%env(APP_SECRET)%'
-  #csrf_protection: true
+  csrf_protection: ~
   #http_method_override: true
   ide: 'phpstorm'
 
   # Enables session support. Note that the session will ONLY be started if you read or write from it.
   # Remove or comment this section to explicitly disable session support.
   session:
-    storage_id: 'session.storage.php_bridge'
+    # enables the support of sessions in the app
+    enabled: true
+    # ID of the service used for session storage.
+    # NULL means that Symfony uses PHP default session mechanism
     handler_id: null
+    # improves the security of the cookies used for sessions
+    cookie_secure: 'auto'
+    cookie_samesite: 'lax'
 
   #esi: true
   #fragments: true

@@ -2,20 +2,20 @@
 
 namespace CsrDelft\view\groepen\formulier;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\AbstractGroepLid;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\GroepLid;
 
 class GroepAanmeldenForm extends GroepBewerkenForm {
 
 	public function __construct(
-		AbstractGroepLid $lid,
-		AbstractGroep $groep,
-		$pasfoto = true
+        GroepLid $lid,
+        Groep $groep,
+        $pasfoto = true
 	) {
 		parent::__construct($lid, $groep, false, new GroepAanmeldKnoppen($pasfoto));
 
 		$this->action = $groep->getUrl() . '/ketzer/aanmelden';
-		$this->css_classes[] = 'float-left';
+		$this->css_classes[] = 'float-start';
 
 		if ($pasfoto) {
 			$this->getField()->hidden = true;

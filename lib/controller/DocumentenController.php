@@ -2,174 +2,298 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrToegangException;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\documenten\Document;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\documenten\DocumentCategorie;
+use CsrDelft\model\entity\Bestand;
 use CsrDelft\repository\documenten\DocumentCategorieRepository;
 use CsrDelft\repository\documenten\DocumentRepository;
 use CsrDelft\view\documenten\DocumentBewerkenForm;
+use CsrDelft\view\documenten\DocumentCategorieForm;
 use CsrDelft\view\documenten\DocumentToevoegenForm;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\PlainView;
+use Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class DocumentenController extends AbstractController {
+class DocumentenController extends AbstractController
+{
 	/** @var DocumentRepository */
 	private $documentRepository;
 	/** @var DocumentCategorieRepository */
 	private $documentCategorieRepository;
 
-	public function __construct(DocumentRepository $documentRepository, DocumentCategorieRepository $documentCategorieRepository) {
+	public function __construct(DocumentRepository $documentRepository, DocumentCategorieRepository $documentCategorieRepository)
+	{
 		$this->documentRepository = $documentRepository;
 		$this->documentCategorieRepository = $documentCategorieRepository;
 	}
 
 	/**
 	 * Recente documenten uit alle categorieën tonen
+	 * @Route("/documenten", methods={"GET"})
+	 * @Auth(P_DOCS_READ)
 	 */
-	public function recenttonen() {
-		return view('documenten.documenten', ['categorieen' => $this->documentCategorieRepository->findAll()]);
+	public function recenttonen(): Response
+	{
+		return $this->render('documenten/documenten.html.twig', ['categorien' => $this->documentCategorieRepository->findAll()]);
 	}
 
-	public function verwijderen($id) {
-		$document = $this->documentRepository->get($id);
-
-		if (!$document) {
-			setMelding('Document bestaat niet!', -1);
-			return $this->redirectToRoute('documenten');
-		} elseif ($document->magVerwijderen()) {
-			$this->documentRepository->delete($document);
+	/**
+	 * @param Document $document
+	 * @return JsonResponse|PlainView
+	 * @Route("/documenten/verwijderen/{id}", methods={"POST"})
+	 * @Auth(P_DOCS_MOD)
+	 */
+	public function verwijderen(Document $document)
+	{
+		$id = $document->id;
+		if ($document->magVerwijderen()) {
+			$this->documentRepository->remove($document);
 		} else {
 			setMelding('Mag document niet verwijderen', -1);
 			return new JsonResponse(false);
 		}
 
-		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $document->id));
+		return new PlainView(sprintf('<tr class="remove" id="document-%s"></tr>', $id));
 	}
 
-	public function bekijken($id) {
-		$document = $this->documentRepository->get($id);
-
-		if (!$document) {
-			throw new NotFoundHttpException();
-		}
-
+	/**
+	 * @param Document $document
+	 * @return BinaryFileResponse|RedirectResponse
+	 * @Route("/documenten/bekijken/{id}/{bestandsnaam}", methods={"GET"})
+	 * @Auth(P_DOCS_READ)
+	 */
+	public function bekijken(Document $document)
+	{
 		if (!$document->magBekijken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 
 		//We do not allow serving html files because they can be used for XSS.
 		//We do not allow serving javascript files because they can increase the impact of XSS by registering a service worker.
 		if ($document->mimetype == "text/html" || $document->mimetype == "text/javascript" || !checkMimetype($document->filename, $document->mimetype)) {
 			setMelding('Dit type bestand kan niet worden getoond', -1);
-			return $this->redirectToRoute('documenten');
+			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
 
 		if ($document->hasFile()) {
 			return new BinaryFileResponse($document->getFullPath());
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
-			return $this->redirectToRoute('documenten');
+			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
 	}
 
-	public function download($id) {
-		$document = $this->documentRepository->get($id);
-
-		if (!$document) {
-			throw new NotFoundHttpException();
-		}
-
+	/**
+	 * @param Document $document
+	 * @return BinaryFileResponse|RedirectResponse
+	 * @Route("/documenten/download/{id}/{bestandsnaam}", methods={"GET"})
+	 * @Auth(P_DOCS_READ)
+	 */
+	public function download(Document $document)
+	{
 		if (!$document->magBekijken()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
+
 		if ($document->hasFile()) {
 			$response = new BinaryFileResponse($document->getFullPath());
 			$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $document->filename);
 			return $response;
 		} else {
 			setMelding('Document heeft geen bestand.', -1);
-			return $this->redirectToRoute('documenten');
+			return $this->redirectToRoute('csrdelft_documenten_recenttonen');
 		}
 	}
 
-	public function categorie($id) {
-		$categorie = $this->documentCategorieRepository->find($id);
-		if (!$categorie) {
-			setMelding('Categorie bestaat niet!', -1);
-			return $this->redirectToRoute('documenten');
-		} elseif (!$categorie->magBekijken()) {
-			throw new CsrToegangException('Mag deze categorie niet bekijken');
+	/**
+	 * @param DocumentCategorie $categorie
+	 * @return Response
+	 * @Route("/documenten/categorie/{id}", methods={"GET"}, requirements={"id": "\d+"})
+	 * @Auth(P_DOCS_READ)
+	 */
+	public function categorie(DocumentCategorie $categorie): Response
+	{
+		if (!$categorie->magBekijken()) {
+			throw $this->createAccessDeniedException('Mag deze categorie niet bekijken');
 		} else {
-			return view('documenten.categorie', ['categorie' => $categorie]);
+			return $this->render('documenten/categorie.html.twig', ['categorie' => $categorie]);
 		}
 	}
 
-	public function bewerken($id) {
-		$document = $this->documentRepository->get($id);
+	/**
+	 * @param Request $request
+	 * @param DocumentCategorie|null $categorie
+	 * @return JsonResponse|Response
+	 * @Route("/documenten/categorie/{id}/bewerken", methods={"GET", "POST"})
+	 * @Auth(P_DOCS_MOD)
+	 */
+	public function categorieBewerken(Request $request, DocumentCategorie $categorie)
+	{
+		$form = $this->createFormulier(DocumentCategorieForm::class, $categorie, [
+			'action' => $this->generateUrl('csrdelft_documenten_categoriebewerken', ['id' => $categorie->id])
+		]);
 
-		if (!$document) {
-			setMelding('Document niet gevonden', 2);
-			return $this->redirectToRoute('documenten');
-		}
+		$form->handleRequest($request);
 
-		$form = new DocumentBewerkenForm($document, $this->documentCategorieRepository->getCategorieNamen());
 		if ($form->isPosted() && $form->validate()) {
-			$this->documentRepository->update($document);
-
-			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie->id]);
+			$this->getDoctrine()->getManager()->flush();
+			return new JsonResponse(true);
 		} else {
-			return view('default', [
+			// Voorkom opslaan
+			$this->getDoctrine()->getManager()->clear();
+			return new Response($form->createModalView());
+		}
+	}
+
+	/**
+	 * @param Request $request
+	 * @Route("/documenten/categorie/nieuw", methods={"GET", "POST"})
+	 * @Auth(P_DOCS_MOD)
+	 * @return JsonResponse|Response
+	 */
+	public function categorieAanmaken(Request $request)
+	{
+		$categorie = new DocumentCategorie();
+		$form = $this->createFormulier(DocumentCategorieForm::class, $categorie, [
+			'action' => $this->generateUrl('csrdelft_documenten_categorieaanmaken')
+		]);
+
+		$form->handleRequest($request);
+
+		if ($form->isPosted() && $form->validate()) {
+			$this->getDoctrine()->getManager()->persist($categorie);
+			$this->getDoctrine()->getManager()->flush();
+			return new JsonResponse(true);
+		} else {
+			// Voorkom opslaan
+			$this->getDoctrine()->getManager()->clear();
+			return new Response($form->createModalView());
+		}
+	}
+
+	/**
+	 * @param DocumentCategorie $categorie
+	 * @Route("/documenten/categorie/{id}/verwijderen", methods={"POST"})
+	 * @Auth(P_DOCS_MOD)
+	 * @return JsonResponse
+	 */
+	public function categorieVerwijderen(DocumentCategorie $categorie): JsonResponse
+	{
+		$this->getDoctrine()->getManager()->remove($categorie);
+		$this->getDoctrine()->getManager()->flush();
+
+		return new JsonResponse($this->generateUrl('csrdelft_documenten_recenttonen'));
+	}
+
+	/**
+	 * @param Request $request
+	 * @param Document $document
+	 * @return Response
+	 * @Route("/documenten/bewerken/{id}", methods={"GET","POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function bewerken(Request $request, Document $document): Response
+	{
+		if (!$document->magBewerken()) {
+			throw $this->createAccessDeniedException();
+		}
+		$form = $this->createFormulier(DocumentBewerkenForm::class, $document, [
+			'action' => $this->generateUrl('csrdelft_documenten_bewerken', ['id' => $document->id])
+		]);
+
+		$form->handleRequest($request);
+
+		if ($form->isPosted() && $form->validate()) {
+			$this->documentRepository->save($document);
+
+			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
+		} else {
+			return $this->render('default.html.twig', [
 				'titel' => 'Document bewerken',
-				'content' => $form,
+				'content' => $form->createView(),
 			]);
 		}
 
 	}
 
-	public function toevoegen() {
-		$form = new DocumentToevoegenForm($this->documentCategorieRepository->getCategorieNamen());
+	/**
+	 * @param Request $request
+	 * @return Response
+	 * @throws Exception
+	 * @Route("/documenten/toevoegen", methods={"GET","POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function toevoegen(Request $request): Response
+	{
+		$document = new Document();
+
+		$catId = $request->query->getInt('catID');
+		if ($catId) {
+			$document->categorie = $this->getDoctrine()->getManager()->getReference(DocumentCategorie::class, $catId);
+		}
+
+		$form = $this->createFormulier(DocumentToevoegenForm::class, $document, [
+			'action' => $this->generateUrl('csrdelft_documenten_toevoegen'),
+		]);
+
+		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			/** @var Document $document */
-			$document = $form->getModel();
+			$document->eigenaar = $this->getUid();
+			$document->eigenaar_profiel = $this->getProfiel();
+			$document->toegevoegd = date_create_immutable();
 
-			$document->eigenaar = LoginModel::getUid();
-			$document->toegevoegd = date_create();
+			/** @var Bestand $bestand */
+			$bestand = $form->getField('uploader')->getModel();
 
-			$bestand = $form->getUploader()->getModel();
-
-			$document->filename = $bestand->filename;
+			$document->filename = filter_filename($bestand->filename);
 			$document->mimetype = $bestand->mimetype;
 			$document->filesize = $bestand->filesize;
 
-			$document->id = $this->documentRepository->create($document);
+			$this->documentRepository->save($document);
 
-			if ($document->hasFile()) {
-				$document->deleteFile();
+			try {
+				if ($document->hasFile()) {
+					$document->deleteFile();
+				}
+
+				$form->getField('uploader')->opslaan($document->getPath(), $document->getFullFileName());
+			} catch (Exception $exception) {
+				$this->documentRepository->remove($document);
+				throw $exception;
 			}
 
-			$form->getUploader()->opslaan($document->getPath(), $document->getFullFileName());
-
-			return $this->redirectToRoute('documenten-categorie', ['id' => $document->categorie->id]);
+			return $this->redirectToRoute('csrdelft_documenten_categorie', ['id' => $document->categorie->id]);
 		} else {
-			return view('default', [
+			return $this->render('default.html.twig', [
 				'titel' => 'Document toevoegen',
-				'content' => $form,
+				'content' => $form->createView(),
 			]);
 		}
 	}
 
-	public function zoeken(Request $request, $zoekterm = null) {
+	/**
+	 * @param Request $request
+	 * @param null $zoekterm
+	 * @return JsonResponse
+	 * @Route("/documenten/zoeken", methods={"GET","POST"})
+	 * @Auth(P_DOCS_READ)
+	 */
+	public function zoeken(Request $request, $zoekterm = null): JsonResponse
+	{
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');

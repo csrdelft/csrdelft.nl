@@ -9,12 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @ORM\Entity(repositoryClass="CsrDelft\repository\GoogleTokenRepository")
- * @ORM\Table("GoogleToken")
  */
 class GoogleToken {
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @ORM\Id()
 	 */
 	public $uid;

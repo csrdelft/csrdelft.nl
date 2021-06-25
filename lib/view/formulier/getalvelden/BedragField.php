@@ -6,7 +6,7 @@ namespace CsrDelft\view\formulier\getalvelden;
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * Invoeren van een bedrag in centen, dus precisie van 2 cijfers achter de komma.
  *
@@ -27,9 +27,9 @@ class BedragField extends IntField {
 		$parent = parent::getHtml();
 		return <<<HTML
 <div class="input-group">
-	<div class="input-group-prepend"><span class="input-group-text">{$this->valuta}</span></div>
+	<span class="input-group-text">{$this->valuta}</span>
 	{$parent}
-	<div class="input-group-append"><span class="input-group-text">in centen</span></div>
+	<span class="input-group-text">in centen</span>
 </div>
 HTML;
 	}

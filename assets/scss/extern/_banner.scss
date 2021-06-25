@@ -1,0 +1,44 @@
+@import "variables";
+
+/* Banner */
+
+#banner {
+	margin-top: 5em;
+	margin-bottom: -2em;
+
+	z-index: 10;
+	color: black;
+
+	white-space: nowrap;
+
+	a {
+		color: black; // override
+		&:hover {
+			color: black; // override
+		}
+	}
+
+	.inner {
+		margin: 0 auto;
+		text-align: center;
+		width: 7em;
+	}
+
+	img {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: $scherm-breed) {
+	#banner {
+		// Schuine lijn is nu minder hoog
+		margin-bottom: 0;
+	}
+}
+
+@media screen and (max-width: $scherm-middel) {
+	#banner {
+		// Menu is nu verdwenen
+		margin-top: 2em;
+	}
+}

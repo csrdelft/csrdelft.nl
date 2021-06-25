@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\corvee\functies;
 
-use CsrDelft\model\entity\maalcie\CorveeFunctie;
+use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
@@ -19,7 +19,7 @@ class FunctieForm extends ModalForm {
 		CorveeFunctie $functie,
 		$actie
 	) {
-		parent::__construct($functie, '/corvee/functies/' . $actie . '/' . $functie->functie_id);
+		parent::__construct($functie, '/corvee/functies/' . $actie . ($functie->functie_id ? '/' . $functie->functie_id : ''));
 		$this->titel = 'Corveefunctie ' . $actie;
 		if ($actie === 'bewerken') {
 			$this->css_classes[] = 'PreventUnchanged';

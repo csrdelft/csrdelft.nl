@@ -2,82 +2,75 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\forum\ForumDraad;
-use CsrDelft\model\entity\forum\ForumPost;
-use CsrDelft\model\forum\ForumDradenGelezenModel;
-use CsrDelft\model\forum\ForumDradenModel;
-use CsrDelft\model\forum\ForumPostsModel;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\repository\forum\ForumDradenGelezenRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
+use CsrDelft\repository\forum\ForumPostsRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\view\bbcode\CsrBB;
 use Exception;
-use Jacwright\RestServer\RestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ApiForumController {
-	private $forumDradenModel;
-	private $forumPostsModel;
-	private $forumDradenGelezenModel;
-
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-
-		$this->forumDradenGelezenModel = $container->get(ForumDradenGelezenModel::class);
-		$this->forumPostsModel = $container->get(ForumPostsModel::class);
-		$this->forumDradenModel = $container->get(ForumDradenModel::class);
-	}
-
+class ApiForumController extends AbstractController {
+	private $forumDradenRepository;
+	private $forumPostsRepository;
 	/**
-	 * @return boolean
+	 * @var ForumDradenGelezenRepository
 	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag(P_OUDLEDEN_READ);
+	private $forumDradenGelezenRepository;
+
+	public function __construct(ForumDradenGelezenRepository $forumDradenGelezenRepository, ForumPostsRepository $forumPostsRepository, ForumDradenRepository $forumDradenRepository) {
+		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
+		$this->forumPostsRepository = $forumPostsRepository;
+		$this->forumDradenRepository = $forumDradenRepository;
 	}
 
 	/**
-	 * @url GET /recent
-	 * @param int offset
-	 * @param int limit
-	 * @return ForumDraad[]
+	 * @Route("/API/2.0/forum/recent", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 * @return JsonResponse
 	 */
 	public function getRecent() {
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
-		$draden = $this->forumDradenModel->getRecenteForumDraden($limit, null, false, $offset, true);
+		$draden = $this->forumDradenRepository->getRecenteForumDraden($limit, null, false, $offset);
 
 		foreach ($draden as $draad) {
 			$draad->ongelezen = $draad->getAantalOngelezenPosts();
-			$draad->laatste_post = $this->forumPostsModel->get($draad->laatste_post_id);
+			$draad->laatste_post = $this->forumPostsRepository->get($draad->laatste_post_id);
 			$draad->laatste_wijziging_naam = ProfielRepository::getNaam($draad->laatste_wijziging_uid, 'civitas');
 		}
 
-		return array('data' => array_values($draden));
+		return new JsonResponse(array('data' => array_values($draden)));
 	}
 
 	/**
-	 * @url GET /onderwerp/$id
+	 * @Route("/API/2.0/forum/onderwerp/{id}", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
 	 * @param int offset
 	 * @param int limit
-	 * @return ForumPost[]
+	 * @return JsonResponse
 	 */
 	public function getOnderwerp($id) {
 		$offset = filter_input(INPUT_GET, 'offset', FILTER_VALIDATE_INT) ?: 0;
 		$limit = filter_input(INPUT_GET, 'limit', FILTER_VALIDATE_INT) ?: 10;
 
 		try {
-			$draad = $this->forumDradenModel->get((int)$id);
+			$draad = $this->forumDradenRepository->get((int)$id);
 		} catch (Exception $e) {
-			throw new RestException(404);
+			throw $this->createNotFoundException();
 		}
 
 		if (!$draad->magLezen()) {
-			throw new RestException(403);
+			throw $this->createAccessDeniedException();
 		}
 
-		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, time());
+		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, date_create_immutable());
 
-		$posts = $this->forumPostsModel->prefetch('draad_id = ? AND wacht_goedkeuring = FALSE AND verwijderd = FALSE', array($id), null, 'datum_tijd DESC', $limit, $offset);
+		$posts = $this->forumPostsRepository->findBy(['draad_id' => $id, 'wacht_goedkeuring' => false, 'verwijderd' => false], ['datum_tijd' => 'DESC'], $limit, $offset);
 
 		// Most recent first
 		$posts = array_reverse($posts);
@@ -87,7 +80,7 @@ class ApiForumController {
 			$post->tekst = CsrBB::parseLight($post->tekst);
 		}
 
-		return array('data' => $posts);
+		return new JsonResponse(array('data' => $posts));
 	}
 
 }

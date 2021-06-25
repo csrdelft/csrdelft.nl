@@ -3,7 +3,7 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\instellingen\LidInstellingenModel;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
 
 /**
@@ -14,6 +14,15 @@ class BbBijbel extends BbTag {
 
 	private $bijbel;
 	private $vertaling;
+	/**
+	 * @var LidInstellingenRepository
+	 */
+	private $lidInstellingenRepository;
+
+	public function __construct(LidInstellingenRepository $lidInstellingenRepository) {
+		$this->lidInstellingenRepository = $lidInstellingenRepository;
+	}
+
 	public static function getTagName() {
 		return 'bijbel';
 	}
@@ -33,7 +42,7 @@ class BbBijbel extends BbTag {
 	 * @return array
 	 */
 	private function getLink(): array {
-		$content = $this->content;
+		$content = $this->getContent();
 		if ($this->bijbel != null) { // [bijbel=
 			$stukje = str_replace('_', ' ', $this->bijbel);
 		} else { // [bijbel][/bijbel]
@@ -41,7 +50,7 @@ class BbBijbel extends BbTag {
 		}
 
 		$vertaling1 = $this->vertaling;
-		if (!LidInstellingenModel::instance()->isValidValue('algemeen', 'bijbel', $vertaling1)) {
+		if (!$this->lidInstellingenRepository->isValidValue('algemeen', 'bijbel', $vertaling1)) {
 			$vertaling1 = null;
 		}
 		if ($vertaling1 === null) {

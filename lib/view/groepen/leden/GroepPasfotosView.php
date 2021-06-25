@@ -3,22 +3,25 @@
  * GroepPasfotosView.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\groepen\GroepLid;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 
 class GroepPasfotosView extends GroepTabView {
 
 	protected function getTabContent() {
 		$html = '';
-		if ($this->groep->mag(AccessAction::Aanmelden)) {
-			$lid = $this->groep::getLedenModel()->nieuw($this->groep, LoginModel::getUid());
+		if ($this->groep->mag(AccessAction::Aanmelden())) {
+			$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+			$lid = $em->getRepository(GroepLid::class)->nieuw($this->groep, LoginService::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep);
 			$form->css_classes[] = 'pasfotos';
 			$html .= $form->getHtml();

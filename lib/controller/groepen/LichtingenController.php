@@ -2,9 +2,10 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\view\JsonResponse;
+use CsrDelft\entity\groepen\Lichting;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -14,16 +15,16 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor lichtingen.
  *
- * @property LichtingenModel $model
+ * @property LichtingenRepository $repository
  */
 class LichtingenController extends AbstractGroepenController {
-	public function __construct(LichtingenModel $lichtingenModel) {
-		parent::__construct($lichtingenModel);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Lichting::class);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');
@@ -31,7 +32,7 @@ class LichtingenController extends AbstractGroepenController {
 		$result = array();
 		if (is_numeric($zoekterm)) {
 
-			$data = range($this->model->getJongsteLidjaar(), $this->model->getOudsteLidjaar());
+			$data = range($this->repository->getJongsteLidjaar(), $this->repository->getOudsteLidjaar());
 			$found = preg_grep('/' . (int)$zoekterm . '/', $data);
 
 			foreach ($found as $lidjaar) {
@@ -43,6 +44,11 @@ class LichtingenController extends AbstractGroepenController {
 			}
 		}
 		return new JsonResponse($result);
+	}
+
+	public function beheren(Request $request, $soort = null)
+	{
+		throw $this->createNotFoundException("Kan geen lichtingen beheren");
 	}
 
 }

@@ -2,13 +2,14 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\entity\security\Account;
-use CsrDelft\model\security\AccountModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\security\Account;
+use CsrDelft\repository\security\AccountRepository;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * WachtwoordWijzigenField
  *
@@ -39,7 +40,7 @@ class WachtwoordWijzigenField extends InputField {
 		}
 
 		// blacklist gegevens van profiel
-		$profiel = $account->getProfiel();
+		$profiel = $account->profiel;
 		$this->blacklist[] = $profiel->uid;
 		$this->blacklist[] = $profiel->voornaam;
 		foreach (explode(' ', $profiel->achternaam) as $part) {
@@ -67,10 +68,10 @@ class WachtwoordWijzigenField extends InputField {
 	}
 
 	public function isPosted() {
-		if ($this->require_current AND !isset($_POST[$this->name . '_current'])) {
+		if ($this->require_current && !isset($_POST[$this->name . '_current'])) {
 			return false;
 		}
-		return isset($_POST[$this->name . '_new']) AND isset($_POST[$this->name . '_confirm']);
+		return isset($_POST[$this->name . '_new']) && isset($_POST[$this->name . '_confirm']);
 	}
 
 	public function getValue() {
@@ -79,7 +80,7 @@ class WachtwoordWijzigenField extends InputField {
 		} else {
 			$this->value = false;
 		}
-		if ($this->empty_null AND $this->value == '') {
+		if ($this->empty_null && $this->value == '') {
 			return null;
 		}
 		return $this->value;
@@ -96,6 +97,7 @@ class WachtwoordWijzigenField extends InputField {
 	}
 
 	public function validate() {
+		$accountRepository = ContainerFacade::getContainer()->get(AccountRepository::class);
 		if (!parent::validate()) {
 			return false;
 		}
@@ -110,7 +112,7 @@ class WachtwoordWijzigenField extends InputField {
 			$this->error = 'U moet uw huidige wachtwoord invoeren';
 		} elseif ($this->required AND empty($new)) {
 			$this->error = 'U moet een nieuw wachtwoord invoeren';
-		} elseif ($this->require_current AND !AccountModel::instance()->controleerWachtwoord($this->model, $current)) {
+		} elseif ($this->require_current AND !$accountRepository->controleerWachtwoord($this->model, $current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
 		} elseif (!empty($new)) {
 			if ($this->require_current AND $current == $new) {
@@ -133,7 +135,9 @@ class WachtwoordWijzigenField extends InputField {
 				} elseif (preg_match('/^[0-9a-zA-Z]*$/', $new)) {
 					$this->error = 'Het nieuwe wachtwoord moet ook speciale tekens bevatten<br />of langer zijn dan 23 tekens';
 				}
-			} elseif (preg_match('/(.)\1\1+/', $new) OR preg_match('/(.{3,})\1+/', $new) OR preg_match('/(.{4,}).*\1+/', $new)) {
+			}
+
+			if (preg_match('/(.)\1\1+/', $new) || preg_match('/(.{3,})\1+/', $new) || preg_match('/(.{4,}).*\1+/', $new)) {
 				$this->error = 'Het nieuwe wachtwoord bevat teveel herhaling';
 			} elseif (empty($confirm)) {
 				$this->error = 'Vul uw nieuwe wachtwoord twee keer in';
@@ -153,7 +157,7 @@ class WachtwoordWijzigenField extends InputField {
 
 		if ($this->require_current) {
 			$html .= <<<HTML
-<div class="form-group row">
+<div class="mb-3 row">
 	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_current">Huidig wachtwoord<span class="required">*</span></label>
 	</div>
@@ -166,7 +170,7 @@ HTML;
 
 		$required = $this->required ? '<span class="required"> *</span>' : '';
 		$html .= <<<HTML
-<div class="form-group row">
+<div class="mb-3 row">
 	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_new">Nieuw wachtwoord{$required}</label>
 	</div>
@@ -174,7 +178,7 @@ HTML;
 		<input type="password" class="$inputCssClasses" autocomplete="off" id="{$this->getId()}_new" name="{$this->name}_new" />
 	</div>
 </div>
-<div class="form-group row">
+<div class="mb-3 row">
 	<div class="{$this->labelClassName}">
 		<label for="{$this->getId()}_confirm">Herhaal nieuw wachtwoord{$required}</label>
 	</div>

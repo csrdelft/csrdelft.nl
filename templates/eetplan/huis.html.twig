@@ -1,0 +1,39 @@
+{% extends 'eetplan/template.html.twig' %}
+
+{% block breadcrumbs %}
+	{{ csr_breadcrumbs({
+		(url('default')): 'main',
+		(url('csrdelft_eetplan_view')): 'Eetplan',
+		'': '<a href="' ~ url('csrdelft_groep_woonoorden_bekijken', {id: woonoord.id}) ~ '">' ~ woonoord.naam ~ '</a>'
+	}) }}
+{% endblock %}
+
+{% block content %}
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th scope="col">Avond</th>
+			<th scope="col">&Uuml;bersjaarsch</th>
+			<th scope="col">Mobiel</th>
+			<th scope="col">E-mail</th>
+			<th scope="col">Allergie</th>
+		</tr>
+		</thead>
+		{% set oudeDatum = '' %}
+		{% set row = 0 %}
+
+		{% for avond in eetplan %}
+			{% for sessie in avond %}
+				<tr>
+					{% if loop.first %}
+						<th rowspan="{{ avond | length }}" class="table-light">{{ sessie.avond | date("d-m-Y") }}</th>
+					{% endif %}
+					<td>{{ sessie.noviet.link('civitas') | raw }}</td>
+					<td>{{ sessie.noviet.mobiel }}</td>
+					<td>{{ sessie.noviet.email }}</td>
+					<td>{{ sessie.noviet.eetwens }}</td>
+				</tr>
+			{% endfor %}
+		{% endfor %}
+	</table>
+{% endblock %}

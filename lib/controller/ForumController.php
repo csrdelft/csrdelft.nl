@@ -2,34 +2,40 @@
 
 namespace CsrDelft\controller;
 
-use CsrDelft\common\CsrException;
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
 use CsrDelft\common\SimpleSpamFilter;
-use CsrDelft\model\DebugLogModel;
-use CsrDelft\model\entity\forum\ForumDraad;
-use CsrDelft\model\entity\forum\ForumDraadMeldingNiveau;
-use CsrDelft\model\entity\forum\ForumZoeken;
-use CsrDelft\model\entity\security\Account;
-use CsrDelft\model\forum\ForumDelenMeldingModel;
-use CsrDelft\model\forum\ForumDelenModel;
-use CsrDelft\model\forum\ForumDradenGelezenModel;
-use CsrDelft\model\forum\ForumDradenMeldingModel;
-use CsrDelft\model\forum\ForumDradenModel;
-use CsrDelft\model\forum\ForumDradenReagerenModel;
-use CsrDelft\model\forum\ForumDradenVerbergenModel;
-use CsrDelft\model\forum\ForumModel;
-use CsrDelft\model\forum\ForumPostsModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\forum\ForumDeel;
+use CsrDelft\entity\forum\ForumDraad;
+use CsrDelft\entity\forum\ForumDraadMeldingNiveau;
+use CsrDelft\entity\forum\ForumPost;
+use CsrDelft\entity\forum\ForumZoeken;
+use CsrDelft\repository\DebugLogRepository;
+use CsrDelft\repository\forum\ForumCategorieRepository;
+use CsrDelft\repository\forum\ForumDelenMeldingRepository;
+use CsrDelft\repository\forum\ForumDelenRepository;
+use CsrDelft\repository\forum\ForumDradenGelezenRepository;
+use CsrDelft\repository\forum\ForumDradenMeldingRepository;
+use CsrDelft\repository\forum\ForumDradenReagerenRepository;
+use CsrDelft\repository\forum\ForumDradenRepository;
+use CsrDelft\repository\forum\ForumDradenVerbergenRepository;
+use CsrDelft\repository\forum\ForumPostsRepository;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\view\bbcode\BbToProsemirror;
+use CsrDelft\view\bbcode\ProsemirrorToBb;
 use CsrDelft\view\ChartTimeSeries;
 use CsrDelft\view\forum\ForumDeelForm;
 use CsrDelft\view\forum\ForumSnelZoekenForm;
 use CsrDelft\view\forum\ForumZoekenForm;
+use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\Icon;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\View;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -39,140 +45,164 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ForumController extends AbstractController {
 	/**
-	 * @var DebugLogModel
+	 * @var DebugLogRepository
 	 */
-	private $debugLogModel;
+	private $debugLogRepository;
 	/**
-	 * @var ForumDelenMeldingModel
+	 * @var ForumDelenMeldingRepository
 	 */
-	private $forumDelenMeldingModel;
+	private $forumDelenMeldingRepository;
 	/**
-	 * @var ForumDelenModel
+	 * @var ForumDelenRepository
 	 */
-	private $forumDelenModel;
+	private $forumDelenRepository;
 	/**
-	 * @var ForumDradenGelezenModel
+	 * @var ForumDradenGelezenRepository
 	 */
-	private $forumDradenGelezenModel;
+	private $forumDradenGelezenRepository;
 	/**
-	 * @var ForumDradenMeldingModel
+	 * @var ForumDradenMeldingRepository
 	 */
-	private $forumDradenMeldingModel;
+	private $forumDradenMeldingRepository;
 	/**
-	 * @var ForumDradenModel
+	 * @var ForumDradenRepository
 	 */
-	private $forumDradenModel;
+	private $forumDradenRepository;
 	/**
-	 * @var ForumDradenReagerenModel
+	 * @var ForumDradenReagerenRepository
 	 */
-	private $forumDradenReagerenModel;
+	private $forumDradenReagerenRepository;
 	/**
-	 * @var ForumDradenVerbergenModel
+	 * @var ForumDradenVerbergenRepository
 	 */
-	private $forumDradenVerbergenModel;
+	private $forumDradenVerbergenRepository;
 	/**
-	 * @var ForumModel
+	 * @var ForumCategorieRepository
 	 */
-	private $forumModel;
+	private $forumCategorieRepository;
 	/**
-	 * @var ForumPostsModel
+	 * @var ForumPostsRepository
 	 */
-	private $forumPostsModel;
+	private $forumPostsRepository;
+	/**
+	 * @var BbToProsemirror
+	 */
+	private $bbToProsemirror;
+	/**
+	 * @var ProsemirrorToBb
+	 */
+	private $prosemirrorToBb;
 
 	public function __construct(
-		ForumModel $forumModel,
-		DebugLogModel $debugLogModel,
-		ForumDradenMeldingModel $forumDradenMeldingModel,
-		ForumDelenMeldingModel $forumDelenMeldingModel,
-		ForumDelenModel $forumDelenModel,
-		ForumDradenGelezenModel $forumDradenGelezenModel,
-		ForumDradenModel $forumDradenModel,
-		ForumDradenReagerenModel $forumDradenReagerenModel,
-		ForumDradenVerbergenModel $forumDradenVerbergenModel,
-		ForumPostsModel $forumPostsModel
+		BbToProsemirror $bbToProsemirror,
+		ProsemirrorToBb $prosemirrorToBb,
+		ForumCategorieRepository $forumCategorieRepository,
+		DebugLogRepository $debugLogRepository,
+		ForumDradenMeldingRepository $forumDradenMeldingRepository,
+		ForumDelenMeldingRepository $forumDelenMeldingRepository,
+		ForumDelenRepository $forumDelenRepository,
+		ForumDradenGelezenRepository $forumDradenGelezenRepository,
+		ForumDradenRepository $forumDradenRepository,
+		ForumDradenReagerenRepository $forumDradenReagerenRepository,
+		ForumDradenVerbergenRepository $forumDradenVerbergenRepository,
+		ForumPostsRepository $forumPostsRepository
 	) {
-		$this->debugLogModel = $debugLogModel;
-		$this->forumDradenMeldingModel = $forumDradenMeldingModel;
-		$this->forumDelenModel = $forumDelenModel;
-		$this->forumDradenGelezenModel = $forumDradenGelezenModel;
-		$this->forumDradenModel = $forumDradenModel;
-		$this->forumDradenReagerenModel = $forumDradenReagerenModel;
-		$this->forumDradenVerbergenModel = $forumDradenVerbergenModel;
-		$this->forumModel = $forumModel;
-		$this->forumPostsModel = $forumPostsModel;
-		$this->forumDelenMeldingModel = $forumDelenMeldingModel;
+		$this->debugLogRepository = $debugLogRepository;
+		$this->forumDradenMeldingRepository = $forumDradenMeldingRepository;
+		$this->forumDelenRepository = $forumDelenRepository;
+		$this->forumDradenGelezenRepository = $forumDradenGelezenRepository;
+		$this->forumDradenRepository = $forumDradenRepository;
+		$this->forumDradenReagerenRepository = $forumDradenReagerenRepository;
+		$this->forumDradenVerbergenRepository = $forumDradenVerbergenRepository;
+		$this->forumCategorieRepository = $forumCategorieRepository;
+		$this->forumPostsRepository = $forumPostsRepository;
+		$this->forumDelenMeldingRepository = $forumDelenMeldingRepository;
+		$this->bbToProsemirror = $bbToProsemirror;
+		$this->prosemirrorToBb = $prosemirrorToBb;
 	}
 
 	/**
 	 * Overzicht met categorien en forumdelen laten zien.
+	 * @Route("/forum", methods={"GET"})
+	 * @Auth(P_PUBLIC)
 	 */
 	public function forum() {
-		return view('forum.overzicht', [
+		return $this->render('forum/overzicht.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumModel->getForumIndelingVoorLid()
+			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 		]);
 	}
 
+	/**
+	 * @param $type
+	 * @return ChartTimeSeries
+	 * @Route("/forum/grafiekdata/{type}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function grafiekdata($type) {
 		$datasets = [];
 		if ($type == 'details') {
-			foreach ($this->forumDelenModel->getForumDelenVoorLid() as $deel) {
-				$datasets[$deel->titel] = $this->forumPostsModel->getStatsVoorForumDeel($deel);
+			foreach ($this->forumDelenRepository->getForumDelenVoorLid() as $deel) {
+				$datasets[$deel->titel] = $this->forumPostsRepository->getStatsVoorForumDeel($deel);
 			}
 		} else {
-			$datasets['Totaal'] = $this->forumPostsModel->getStatsTotal();
+			$datasets['Totaal'] = $this->forumPostsRepository->getStatsTotal();
 		}
 		return new ChartTimeSeries($datasets);
 	}
 
 	/**
 	 * RSS feed van recente draadjes tonen.
+	 * @Route("/forum/rss/csrdelft.xml", methods={"GET"})
+	 * @Route("/forum/rss/{private_auth_token}/csrdelft.xml", methods={"GET"})
+	 * @Auth(P_PUBLIC)
 	 */
 	public function rss() {
-		header('Content-Type: application/rss+xml; charset=UTF-8');
-		/**
-		 * @var Account $account
-		 */
-		return view('forum.rss', [
-			'draden' => $this->forumDradenModel->getRecenteForumDraden(null, null, true),
-			'privatelink' => LoginModel::getAccount()->getRssLink()
-		]);
+		$response = new Response(null, 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
+		return $this->render('forum/rss.xml.twig', [
+			'draden' => $this->forumDradenRepository->getRecenteForumDraden(null, null, true),
+			'privatelink' => $this->getUser() ? $this->getUser()->getRssLink() : null,
+		], $response);
 	}
 
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
+	 * @Route("/forum/wacht", methods={"GET"})
+	 * @Auth(P_FORUM_MOD)
 	 */
 	public function wacht() {
-		return view('forum.wacht', [
-			'resultaten' => $this->forumDelenModel->getWachtOpGoedkeuring()
+		return $this->render('forum/wacht.html.twig', [
+			'resultaten' => $this->forumDelenRepository->getWachtOpGoedkeuring()
 		]);
 	}
 
 	/**
 	 * Tonen van alle posts die wachten op goedkeuring.
 	 *
-	 * @param string $query
+	 * @param string|null $query
 	 * @param int $pagina
-	 * @return View
+	 * @return Response
+	 * @Route("/forum/zoeken/{query}/{pagina<\d+>}", methods={"GET", "POST"}, defaults={"query"=null,"pagina"=1})
+	 * @Auth(P_PUBLIC)
 	 */
 	public function zoeken($query = null, int $pagina = 1) {
-		$this->forumPostsModel->setHuidigePagina($pagina, 0);
-		$this->forumDradenModel->setHuidigePagina($pagina, 0);
+		$this->forumPostsRepository->setHuidigePagina($pagina, 0);
+		$this->forumDradenRepository->setHuidigePagina($pagina, 0);
 		$forumZoeken = new ForumZoeken();
 		$forumZoeken->zoekterm = $query;
 		$zoekform = new ForumZoekenForm($forumZoeken);
 
-		if (!LoginModel::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) {
 			// Reset de waarden waarbinnen een externe gebruiker mag zoeken.
 			$override = new ForumZoeken();
 			$override->zoekterm = $forumZoeken->zoekterm;
 			$forumZoeken = $override;
 		}
 
-		return view('forum.resultaten', [
+		return $this->render('forum/resultaten.html.twig', [
 			'titel' => 'Zoeken',
 			'form' => $zoekform,
-			'resultaten' => $this->forumDelenModel->zoeken($forumZoeken),
+			'resultaten' => $this->forumDelenRepository->zoeken($forumZoeken),
 			'query' => $forumZoeken->zoekterm,
 		]);
 	}
@@ -182,7 +212,9 @@ class ForumController extends AbstractController {
 	 *
 	 * @param Request $request
 	 * @param null $zoekterm
-	 * @return View
+	 * @return JsonResponse
+	 * @Route("/forum/titelzoeken", methods={"GET"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function titelzoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
@@ -199,7 +231,7 @@ class ForumController extends AbstractController {
 
 		$forumZoeken = ForumZoeken::nieuw($query, $limit, ['titel']);
 
-		$draden = $this->forumDelenModel->zoeken($forumZoeken);
+		$draden = $this->forumDelenRepository->zoeken($forumZoeken);
 
 		foreach ($draden as $draad) {
 			$result[] = $this->draadAutocompleteArray($draad);
@@ -222,9 +254,11 @@ class ForumController extends AbstractController {
 	 * Shortcut to /recent/1/belangrijk.
 	 *
 	 * @param int $pagina
-	 * @return View
+	 * @return Response
+	 * @Route("/forum/belangrijk/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function belangrijk($pagina = 1) {
+	public function belangrijk(int $pagina = 1) {
 		return $this->recent($pagina, 'belangrijk');
 	}
 
@@ -233,128 +267,136 @@ class ForumController extends AbstractController {
 	 *
 	 * @param int|string $pagina
 	 * @param string|null $belangrijk
-	 * @return View
+	 * @return Response
+	 * @Route("/forum/recent/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
+	 * @Route("/forum/recent/{pagina<\d+>}/belangrijk", methods={"GET"}, defaults={"pagina"=1})
+	 * @Auth(P_PUBLIC)
 	 */
 	public function recent($pagina = 1, $belangrijk = null) {
-		$this->forumDradenModel->setHuidigePagina((int)$pagina, 0);
+		$this->forumDradenRepository->setHuidigePagina((int)$pagina, 0);
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
-		$deel = $this->forumDelenModel->getRecent($belangrijk);
+		$deel = $this->forumDelenRepository->getRecent($belangrijk);
 
-		return view('forum.deel', [
+		$aantalPaginas = $this->forumDradenRepository->getAantalPaginas($deel->forum_id);
+
+		if ($pagina > $aantalPaginas) {
+			throw $this->createNotFoundException();
+		}
+
+		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
+			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'deel' => $deel,
-			'paging' => $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
+			'paging' => $aantalPaginas > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
-			'post_form_titel' => $this->forumDradenReagerenModel->getConceptTitel($deel),
-			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($deel),
-			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDeel($deel)
+			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($deel)),
+			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel)
 		]);
 	}
 
 	/**
 	 * Deelforum laten zien met draadjes in tabel.
 	 *
-	 * @param int $forum_id
+	 * @param ForumDeel $deel
 	 * @param int|string $pagina or 'laatste' or 'prullenbak'
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @return Response
+	 * @Route("/forum/deel/{forum_id}/{pagina<\d+>}", methods={"GET","POST"}, defaults={"pagina"=1})
+	 * @Auth(P_PUBLIC)
 	 */
-	public function deel(int $forum_id, $pagina = 1) {
-		$deel = $this->forumDelenModel->get($forum_id);
+	public function deel(ForumDeel $deel, $pagina = 1) {
 		if (!$deel->magLezen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		$paging = true;
 		if ($pagina === 'laatste') {
-			$this->forumDradenModel->setLaatstePagina($deel->forum_id);
+			$this->forumDradenRepository->setLaatstePagina($deel->forum_id);
 		} elseif ($pagina === 'prullenbak' && $deel->magModereren()) {
-			$deel->setForumDraden($this->forumDradenModel->getPrullenbakVoorDeel($deel));
+			$deel->setForumDraden($this->forumDradenRepository->getPrullenbakVoorDeel($deel));
 			$paging = false;
 		} elseif ($pagina === 'belangrijk' && $deel->magLezen()) {
-			$deel->setForumDraden($this->forumDradenModel->getBelangrijkeForumDradenVoorDeel($deel));
+			$deel->setForumDraden($this->forumDradenRepository->getBelangrijkeForumDradenVoorDeel($deel));
 			$paging = false;
 		} else {
-			$this->forumDradenModel->setHuidigePagina((int)$pagina, $deel->forum_id);
+			$this->forumDradenRepository->setHuidigePagina((int)$pagina, $deel->forum_id);
 		}
-		return view('forum.deel', [
+
+		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
-			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
+			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'deel' => $deel,
-			'paging' => $paging && $this->forumDradenModel->getAantalPaginas($deel->forum_id) > 1,
+			'paging' => $paging && $this->forumDradenRepository->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
-			'post_form_titel' => $this->forumDradenReagerenModel->getConceptTitel($deel),
-			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($deel),
-			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDeel($deel),
-			'deelmelding' => $this->forumDelenMeldingModel->lidWilMeldingVoorDeel($deel)
+			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($deel)),
+			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel),
 		]);
 	}
 
 	/**
 	 * Opzoeken forumdraad van forumpost.
 	 *
-	 * @param int $post_id
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @param ForumPost $post
+	 * @return Response
+	 * @Route("/forum/reactie/{post_id}", methods={"GET"})
+	 * @Auth(P_PUBLIC)
 	 */
-	public function reactie(int $post_id) {
-		$post = $this->forumPostsModel->get($post_id);
+	public function reactie(ForumPost $post) {
 		if ($post->verwijderd) {
 			setMelding('Deze reactie is verwijderd', 0);
 		}
-		return $this->onderwerp($post->draad_id, $this->forumPostsModel->getPaginaVoorPost($post));
+		return $this->onderwerp($post->draad, $this->forumPostsRepository->getPaginaVoorPost($post));
 	}
 
 	/**
 	 * Forumdraadje laten zien met alle zichtbare/verwijderde posts.
 	 *
-	 * @param int $draad_id
-	 * @param int $pagina or 'laatste' or 'ongelezen'
+	 * @param ForumDraad $draad
+	 * @param int|null $pagina or 'laatste' or 'ongelezen'
 	 * @param string|null $statistiek
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @return Response
+	 * @Route("/forum/onderwerp/{draad_id}/{pagina}/{statistiek}", methods={"GET"}, defaults={"pagina"=null,"statistiek"=null})
+	 * @Auth(P_PUBLIC)
 	 */
-	public function onderwerp(int $draad_id, $pagina = null, $statistiek = null) {
-		$draad = $this->forumDradenModel->get($draad_id);
+	public function onderwerp(ForumDraad $draad, $pagina = null, $statistiek = null) {
 		if (!$draad->magLezen()) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
-		if (LoginModel::mag(P_LOGGED_IN)) {
+		if (LoginService::mag(P_LOGGED_IN)) {
 			$gelezen = $draad->getWanneerGelezen();
 		} else {
-			$gelezen = false;
+			$gelezen = null;
 		}
 		if ($pagina === null) {
 			$pagina = lid_instelling('forum', 'open_draad_op_pagina');
 		}
 		$paging = true;
 		if ($pagina === 'ongelezen' && $gelezen) {
-			$this->forumPostsModel->setPaginaVoorLaatstGelezen($gelezen);
+			$this->forumPostsRepository->setPaginaVoorLaatstGelezen($gelezen);
 		} elseif ($pagina === 'laatste') {
-			$this->forumPostsModel->setLaatstePagina($draad->draad_id);
+			$this->forumPostsRepository->setLaatstePagina($draad->draad_id);
 		} elseif ($pagina === 'prullenbak' && $draad->magModereren()) {
-			$draad->setForumPosts($this->forumPostsModel->getPrullenbakVoorDraad($draad));
+			$draad->setForumPosts($this->forumPostsRepository->getPrullenbakVoorDraad($draad));
 			$paging = false;
 		} else {
-			$this->forumPostsModel->setHuidigePagina((int)$pagina, $draad->draad_id);
+			$this->forumPostsRepository->setHuidigePagina((int)$pagina, $draad->draad_id);
 		}
 
-		$view = view('forum.draad', [
+		$view = $this->render('forum/draad.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
-			'paging' => $paging && $this->forumPostsModel->getAantalPaginas($draad->draad_id) > 1,
-			'post_form_tekst' => $this->forumDradenReagerenModel->getConcept($draad->getForumDeel(), $draad->draad_id),
-			'reageren' => $this->forumDradenReagerenModel->getReagerenVoorDraad($draad),
-			'categorien' => $this->forumModel->getForumIndelingVoorLid(),
-			'gedeeld_met_opties' => $this->forumDelenModel->getForumDelenOptiesOmTeDelen($draad->getForumDeel()),
+			'paging' => $paging && $this->forumPostsRepository->getAantalPaginas($draad->draad_id) > 1,
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id)),
+			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad),
+			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
+			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen($draad->deel),
 			'statistiek' => $statistiek === 'statistiek' && $draad->magStatistiekBekijken(),
 			'draad_ongelezen' => $gelezen ? $draad->isOngelezen() : true,
-			'gelezen_moment' => $gelezen ? strtotime($gelezen->datum_tijd) : false,
-			'meldingsniveau' => $draad->magMeldingKrijgen() ? $this->forumDradenMeldingModel->getVoorkeursNiveauVoorLid($draad) : '',
+			'gelezen_moment' => $gelezen ? $gelezen->datum_tijd : false,
 		]);
 
-		if (LoginModel::mag(P_LOGGED_IN)) {
-			$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad);
+		if (LoginService::mag(P_LOGGED_IN)) {
+			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad);
 		}
 
 		return $view;
@@ -362,57 +404,80 @@ class ForumController extends AbstractController {
 
 	/**
 	 * Forum deel aanmaken.
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @param Request $request
+	 * @return JsonResponse|Response
+	 * @Route("/forum/aanmaken", methods={"POST"})
+	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function aanmaken() {
-		$deel = $this->forumDelenModel->nieuwForumDeel();
-		$form = new ForumDeelForm($deel, true); // fetches POST values itself
-		if ($form->validate()) {
-			$this->forumDelenModel->create($deel);
+	public function aanmaken(Request $request) {
+		$deel = $this->forumDelenRepository->nieuwForumDeel();
+		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
+			'action' => $this->generateUrl('csrdelft_forum_aanmaken'),
+			'aanmaken' => true,
+		]);
+
+		$form->handleRequest($request);
+
+		if ($form->isPosted() && $form->validate()) {
+			$this->forumDelenRepository->create($deel);
 			return new JsonResponse(true);
 		} else {
-			return $form;
+			return new Response($form->createModalView());
 		}
 	}
 
 	/**
 	 * Forum deel bewerken.
 	 *
-	 * @param int $forum_id
-	 *
-	 * @return View
-	 * @throws CsrGebruikerException
+	 * @param Request $request
+	 * @param ForumDeel $deel
+	 * @return View|Response
+	 * @Route("/forum/beheren/{forum_id}", methods={"POST"})
+	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function beheren(int $forum_id) {
-		$deel = $this->forumDelenModel->get($forum_id);
-		$form = new ForumDeelForm($deel); // fetches POST values itself
-		if ($form->validate()) {
-			$rowCount = $this->forumDelenModel->update($deel);
-			if ($rowCount !== 1) {
-				throw new CsrGebruikerException('Forum beheren mislukt!');
-			}
+	public function beheren(Request $request, ForumDeel $deel) {
+		$form = $this->createFormulier(ForumDeelForm::class, $deel, [
+			'action' => $this->generateUrl('csrdelft_forum_beheren', ['forum_id' => $deel->forum_id]),
+			'aanmaken' => false,
+		]);
+
+		$form->handleRequest($request);
+		if ($form->isPosted() && $form->validate()) {
+			$this->forumDelenRepository->update($deel);
 			return new JsonResponse(true);
 		} else {
-			return $form;
+			return new Response($form->createModalView());
 		}
+	}
+
+	/**
+	 * @return GenericSuggestiesResponse
+	 * @Route("/forum/categorie/suggestie")
+	 * @Auth(P_FORUM_ADMIN)
+	 */
+	public function forumCategorieSuggestie(Request $request) {
+		$zoekterm = $request->query->get('q');
+		$forumCategories = $this->forumCategorieRepository->createQueryBuilder('c')
+			->where('c.titel LIKE :zoekterm')
+			->setParameter('zoekterm', sql_contains($zoekterm))
+			->getQuery()->getResult();
+		return new GenericSuggestiesResponse($forumCategories);
 	}
 
 	/**
 	 * Forum deel verwijderen.
 	 *
-	 * @param int $forum_id
-	 * @return View
-	 * @throws CsrGebruikerException
-	 * @throws CsrException
+	 * @param ForumDeel $deel
+	 * @return JsonResponse
+	 * @Route("/forum/opheffen/{forum_id}", methods={"POST"})
+	 * @Auth(P_FORUM_ADMIN)
 	 */
-	public function opheffen(int $forum_id) {
-		$deel = $this->forumDelenModel->get($forum_id);
-		$count = $this->forumDradenModel->count('forum_id = ?', array($deel->forum_id));
+	public function opheffen(ForumDeel $deel) {
+		$count = count($this->forumDradenRepository->findBy(['forum_id' => $deel->forum_id]));
 		if ($count > 0) {
 			setMelding('Verwijder eerst alle ' . $count . ' draadjes van dit deelforum uit de database!', -1);
 		} else {
-			$this->forumDelenModel->verwijderForumDeel($deel->forum_id);
+			$this->forumDelenRepository->verwijderForumDeel($deel->forum_id);
 			setMelding('Deelforum verwijderd', 1);
 		}
 		return new JsonResponse('/forum'); // redirect
@@ -421,48 +486,46 @@ class ForumController extends AbstractController {
 	/**
 	 * Forum draad verbergen in zijbalk.
 	 *
-	 * @param int $draad_id
-	 *
-	 * @return View
-	 * @throws CsrGebruikerException
-	 * @throws CsrException
+	 * @param ForumDraad $draad
+	 * @return JsonResponse
+	 * @Route("/forum/verbergen/{draad_id}", methods={"POST"}))
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verbergen(int $draad_id) {
-		$draad = $this->forumDradenModel->get($draad_id);
+	public function verbergen(ForumDraad $draad) {
 		if (!$draad->magVerbergen()) {
 			throw new CsrGebruikerException('Onderwerp mag niet verborgen worden');
 		}
 		if ($draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is al verborgen');
 		}
-		$this->forumDradenVerbergenModel->setVerbergenVoorLid($draad);
+		$this->forumDradenVerbergenRepository->setVerbergenVoorLid($draad);
 		return new JsonResponse(true);
 	}
 
 	/**
 	 * Forum draad tonen in zijbalk.
 	 *
-	 * @param int $draad_id
-	 *
-	 * @return View
-	 * @throws CsrGebruikerException
-	 * @throws CsrException
+	 * @param ForumDraad $draad
+	 * @return JsonResponse
+	 * @Route("/forum/tonen/{draad_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function tonen(int $draad_id) {
-		$draad = $this->forumDradenModel->get($draad_id);
+	public function tonen(ForumDraad $draad) {
 		if (!$draad->isVerborgen()) {
 			throw new CsrGebruikerException('Onderwerp is niet verborgen');
 		}
-		$this->forumDradenVerbergenModel->setVerbergenVoorLid($draad, false);
+		$this->forumDradenVerbergenRepository->setVerbergenVoorLid($draad, false);
 		return new JsonResponse(true);
 	}
 
 	/**
 	 * Forum draden die verborgen zijn door lid weer tonen.
+	 * @Route("/forum/toonalles", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
 	public function toonalles() {
-		$aantal = $this->forumDradenVerbergenModel->getAantalVerborgenVoorLid();
-		$this->forumDradenVerbergenModel->toonAllesVoorLid(LoginModel::getUid());
+		$aantal = $this->forumDradenVerbergenRepository->getAantalVerborgenVoorLid();
+		$this->forumDradenVerbergenRepository->toonAllesVoorLeden([$this->getUid()]);
 		setMelding($aantal . ' onderwerp' . ($aantal === 1 ? ' wordt' : 'en worden') . ' weer getoond in de zijbalk', 1);
 		return new JsonResponse(true);
 	}
@@ -470,57 +533,55 @@ class ForumController extends AbstractController {
 	/**
 	 * Niveau voor meldingen instellen.
 	 *
-	 * @param int $draad_id
+	 * @param ForumDraad $draad
 	 * @param string $niveau
 	 *
-	 * @return View
-	 * @throws CsrGebruikerException
-	 * @throws CsrException
+	 * @return JsonResponse
+	 * @Route("/forum/meldingsniveau/{draad_id}/{niveau}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function meldingsniveau(int $draad_id, $niveau) {
-		$draad = $this->forumDradenModel->get($draad_id);
+	public function meldingsniveau(ForumDraad $draad, $niveau) {
 		if (!$draad || !$draad->magLezen() || !$draad->magMeldingKrijgen()) {
-			throw new CsrToegangException('Onderwerp mag geen melding voor ontvangen worden');
+			throw $this->createAccessDeniedException('Onderwerp mag geen melding voor ontvangen worden');
 		}
-		if (!ForumDraadMeldingNiveau::isOptie($niveau)) {
-			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
+		if (!ForumDraadMeldingNiveau::isValidValue($niveau)) {
+			throw $this->createAccessDeniedException('Ongeldig meldingsniveau gespecificeerd');
 		}
-		$this->forumDradenMeldingModel->setNiveauVoorLid($draad, $niveau);
+		$this->forumDradenMeldingRepository->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::from($niveau));
 		return new JsonResponse(true);
 	}
 
 	/**
 	 * Niveau voor meldingen deelforum instellen
 	 *
-	 * @param int $forum_id
+	 * @param ForumDeel $deel
 	 * @param string $niveau
 	 *
-	 * @return View
-	 * @throws CsrGebruikerException
-	 * @throws CsrException
+	 * @return JsonResponse
+	 * @Route("/forum/deelmelding/{forum_id}/{niveau}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function deelmelding(int $forum_id, $niveau) {
-		$deel = $this->forumDelenModel->get($forum_id);
+	public function deelmelding(ForumDeel $deel, $niveau) {
 		if (!$deel || !$deel->magLezen() || !$deel->magMeldingKrijgen()) {
-			throw new CsrToegangException('Deel mag geen melding voor ontvangen worden');
+			throw $this->createAccessDeniedException('Deel mag geen melding voor ontvangen worden');
 		}
 		if ($niveau !== 'aan' && $niveau !== 'uit') {
-			throw new CsrToegangException('Ongeldig meldingsniveau gespecificeerd');
+			throw $this->createAccessDeniedException('Ongeldig meldingsniveau gespecificeerd');
 		}
-		$this->forumDelenMeldingModel->setMeldingVoorLid($deel, $niveau === 'aan');
+		$this->forumDelenMeldingRepository->setMeldingVoorLid($deel, $niveau === 'aan');
 		return new JsonResponse(true);
 	}
 
 	/**
 	 * Leg bladwijzer
 	 *
-	 * @param int $draad_id
-	 * @throws CsrGebruikerException
+	 * @param ForumDraad $draad
+	 * @Route("/forum/bladwijzer/{draad_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bladwijzer(int $draad_id) {
-		$draad = $this->forumDradenModel->get($draad_id);
+	public function bladwijzer(ForumDraad $draad) {
 		$timestamp = (int)filter_input(INPUT_POST, 'timestamp', FILTER_SANITIZE_NUMBER_INT);
-		if ($this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad, $timestamp - 1)) {
+		if ($this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, date_create_immutable('@' . ($timestamp - 1)))) {
 			echo '<img id="timestamp' . $timestamp . '" src="/plaetjes/famfamfam/tick.png" class="icon" title="Bladwijzer succesvol geplaatst">';
 		}
 		exit; //TODO: JsonResponse
@@ -529,30 +590,28 @@ class ForumController extends AbstractController {
 	/**
 	 * Wijzig een eigenschap van een draadje.
 	 *
-	 * @param int $draad_id
+	 * @param ForumDraad $draad
 	 * @param string $property
-	 * @return View|RedirectResponse|null
-	 * @throws CsrException
-	 * @throws CsrGebruikerException
-	 * @throws CsrToegangException
+	 * @return Response
+	 * @Route("/forum/wijzigen/{draad_id}/{property}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function wijzigen(int $draad_id, $property) {
-		$draad = $this->forumDradenModel->get($draad_id);
+	public function wijzigen(ForumDraad $draad, $property) {
 		// gedeelde moderators mogen dit niet
-		if (!$draad->getForumDeel()->magModereren()) {
-			throw new CsrToegangException();
+		if (!$draad->deel->magModereren()) {
+			throw $this->createAccessDeniedException();
 		}
 		if (in_array($property, array('verwijderd', 'gesloten', 'plakkerig', 'eerste_post_plakkerig', 'pagina_per_post'))) {
 			$value = !$draad->$property;
-			if ($property === 'belangrijk' && !LoginModel::mag(P_FORUM_BELANGRIJK)) {
-				throw new CsrToegangException();
+			if ($property === 'belangrijk' && !LoginService::mag(P_FORUM_BELANGRIJK)) {
+				throw $this->createAccessDeniedException();
 			}
 		} elseif ($property === 'forum_id' || $property === 'gedeeld_met') {
 			$value = (int)filter_input(INPUT_POST, $property, FILTER_SANITIZE_NUMBER_INT);
 			if ($property === 'forum_id') {
-				$deel = $this->forumDelenModel->get($value);
+				$deel = $this->forumDelenRepository->get($value);
 				if (!$deel->magModereren()) {
-					throw new CsrToegangException();
+					throw $this->createAccessDeniedException();
 				}
 			} elseif ($value === 0) {
 				$value = null;
@@ -563,9 +622,9 @@ class ForumController extends AbstractController {
 				$value = null;
 			}
 		} else {
-			throw new CsrToegangException("Kan draad niet wijzigen");
+			throw $this->createAccessDeniedException("Kan draad niet wijzigen");
 		}
-		$this->forumDradenModel->wijzigForumDraad($draad, $property, $value);
+		$this->forumDradenRepository->wijzigForumDraad($draad, $property, $value);
 		if (is_bool($value)) {
 			$wijziging = ($value ? 'wel ' : 'niet ') . $property;
 		} else {
@@ -573,7 +632,7 @@ class ForumController extends AbstractController {
 		}
 		setMelding('Wijziging geslaagd: ' . $wijziging, 1);
 		if ($property === 'belangrijk' || $property === 'forum_id' || $property === 'titel' || $property === 'gedeeld_met') {
-			return $this->redirectToRoute('forum-onderwerp', ['draad_id' => $draad_id]);
+			return $this->redirectToRoute('csrdelft_forum_onderwerp', ['draad_id' => $draad->draad_id]);
 		} else {
 			return new JsonResponse(true);
 		}
@@ -583,46 +642,32 @@ class ForumController extends AbstractController {
 	 * Forum post toevoegen en evt. nieuw draadje aanmaken.
 	 * @TODO refactor deze veel te ingewikkelde functie en splits in meerdere functies, bijvoorbeeld in het ForumPostsModel
 	 *
-	 * @param int $forum_id
-	 * @param int|null $draad_id
+	 * @param ForumDeel $deel
+	 * @param ForumDraad|null $draad
 	 * @return RedirectResponse
-	 * @throws CsrException
-	 * @throws CsrGebruikerException
-	 * @throws CsrToegangException
+	 * @Route("/forum/posten/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
+	 * @Auth(P_PUBLIC)
 	 */
-	public function posten(int $forum_id, $draad_id = null) {
-		$deel = $this->forumDelenModel->get($forum_id);
-		$draad = null;
+	public function posten(ForumDeel $deel, ForumDraad $draad = null) {
 		// post in bestaand draadje?
 		$titel = null;
-		if ($draad_id !== null) {
-			$draad = $this->forumDradenModel->get($draad_id);
-
+		if ($draad !== null) {
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
-				throw new CsrToegangException('Draad bestaat niet');
+				throw $this->createAccessDeniedException('Draad bestaat niet');
 			}
-			$redirect = $this->redirectToRoute('forum-onderwerp', ['draad_id' => $draad->draad_id]);
+			$redirect = $this->redirectToRoute('csrdelft_forum_onderwerp', ['draad_id' => $draad->draad_id]);
 			$nieuw = false;
 		} else {
 			if (!$deel->magPosten()) {
-				throw new CsrToegangException('Mag niet posten');
+				throw $this->createAccessDeniedException('Mag niet posten');
 			}
-			$redirect = $this->redirectToRoute('forum-deel', ['forum_id' => $deel->forum_id]);
+			$redirect = $this->redirectToRoute('csrdelft_forum_deel', ['forum_id' => $deel->forum_id]);
 			$nieuw = true;
 
 			$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
 		}
-		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
-
-		// spam controle
-		$filter = new SimpleSpamfilter();
-		$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
-		if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || (isset($titel) && $titel && $filter->isSpam($titel))) {
-			$this->debugLogModel->log(static::class, 'posten', [$forum_id, $draad_id], 'SPAM ' . $tekst);
-			setMelding('SPAM', -1);
-			throw new CsrToegangException("");
-		}
+		$tekst = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 
 		if (empty($tekst)) {
 			setMelding('Bericht mag niet leeg zijn', -1);
@@ -635,26 +680,37 @@ class ForumController extends AbstractController {
 
 			// concept wissen
 			if ($nieuw) {
-				$this->forumDradenReagerenModel->setConcept($deel);
+				$this->forumDradenReagerenRepository->setConcept($deel);
 			} else {
-				$this->forumDradenReagerenModel->setConcept($deel, $draad->draad_id);
+				$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id);
 			}
 
 			return $redirect;
 		}
 
-		// concept opslaan
-		if ($draad == null) {
-			$this->forumDradenReagerenModel->setConcept($deel, null, $tekst, $titel);
-		} else {
-			$this->forumDradenReagerenModel->setConcept($deel, $draad->draad_id, $tekst);
+		if (LoginService::mag(P_LOGGED_IN)) {
+			// concept opslaan
+			if ($draad == null) {
+				$this->forumDradenReagerenRepository->setConcept($deel, null, $tekst, $titel);
+			} else {
+				$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id, $tekst);
+			}
 		}
 
 
 		// externen checks
 		$mailadres = null;
 		$wacht_goedkeuring = false;
-		if (!LoginModel::mag(P_LOGGED_IN)) {
+		if (!LoginService::mag(P_LOGGED_IN)) {
+			$filter = new SimpleSpamfilter();
+			$spamtrap = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
+
+			if (!empty($spamtrap) || ($tekst && $filter->isSpam($tekst)) || (isset($titel) && $titel && $filter->isSpam($titel))) {
+				$this->debugLogRepository->log(static::class, 'posten', [$deel->forum_id, $draad->draad_id], 'SPAM ' . $tekst);
+				setMelding('SPAM', -1);
+				throw $this->createAccessDeniedException("");
+			}
+
 			$wacht_goedkeuring = true;
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
@@ -663,7 +719,7 @@ class ForumController extends AbstractController {
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging
 				setMelding('SPAM', -1);
-				throw new CsrToegangException('SPAM');
+				throw $this->createAccessDeniedException('SPAM');
 			}
 		}
 
@@ -674,43 +730,44 @@ class ForumController extends AbstractController {
 				return $redirect;
 			}
 			// maak draad
-			$draad = $this->forumDradenModel->maakForumDraad($deel->forum_id, $titel, $wacht_goedkeuring);
+			$draad = $this->forumDradenRepository->maakForumDraad($deel, $titel, $wacht_goedkeuring);
 		}
 
 		// maak post
-		$post = $this->forumPostsModel->maakForumPost($draad->draad_id, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $mailadres);
+		$post = $this->forumPostsRepository->maakForumPost($draad, $tekst, $_SERVER['REMOTE_ADDR'], $wacht_goedkeuring, $mailadres);
 
 		// bericht sturen naar pubcie@csrdelft dat er een bericht op goedkeuring wacht?
 		if ($wacht_goedkeuring) {
 			setMelding('Uw bericht is opgeslagen en zal als het goedgekeurd is geplaatst worden.', 1);
 
-			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', CSR_ROOT . "/forum/onderwerp/" . $draad->draad_id . "/wacht#" . $post->post_id . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT", "From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres);
+			$url = $this->generateUrl('csrdelft_forum_onderwerp', ['draad_id' => $draad->draad_id, '_fragment' => $post->post_id]);
+			mail('pubcie@csrdelft.nl', 'Nieuw bericht wacht op goedkeuring', $url . "\n\nDe inhoud van het bericht is als volgt: \n\n" . str_replace('\r\n', "\n", $tekst) . "\n\nEINDE BERICHT", "From: pubcie@csrdelft.nl\r\nReply-To: " . $mailadres);
 		} else {
 
 			// direct goedkeuren voor ingelogd
-			$this->forumPostsModel->goedkeurenForumPost($post);
-			$this->forumDradenMeldingModel->stuurMeldingen($post);
+			$this->forumPostsRepository->goedkeurenForumPost($post);
+			$this->forumDradenMeldingRepository->stuurMeldingen($post);
 			if ($nieuw) {
-				$this->forumDelenMeldingModel->stuurMeldingen($post);
+				$this->forumDelenMeldingRepository->stuurMeldingen($post);
 			}
 			setMelding(($nieuw ? 'Draad' : 'Post') . ' succesvol toegevoegd', 1);
 			if ($nieuw && lid_instelling('forum', 'meldingEigenDraad') === 'ja') {
-				$this->forumDradenMeldingModel->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD);
+				$this->forumDradenMeldingRepository->setNiveauVoorLid($draad, ForumDraadMeldingNiveau::ALTIJD());
 			}
 
-			$redirect = $this->redirectToRoute('forum-reactie', ['post_id' => $post->post_id, '_fragment' => $post->post_id]);
+			$redirect = $this->redirectToRoute('csrdelft_forum_reactie', ['post_id' => $post->post_id, '_fragment' => $post->post_id]);
 		}
 
 		// concept wissen
 		if ($nieuw) {
-			$this->forumDradenReagerenModel->setConcept($deel);
+			$this->forumDradenReagerenRepository->setConcept($deel);
 		} else {
-			$this->forumDradenReagerenModel->setConcept($deel, $draad->draad_id);
+			$this->forumDradenReagerenRepository->setConcept($deel, $draad->draad_id);
 		}
 
 		// markeer als gelezen
-		if (LoginModel::mag(P_LOGGED_IN)) {
-			$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($draad);
+		if (LoginService::mag(P_LOGGED_IN)) {
+			$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($draad, $post->laatst_gewijzigd);
 		}
 
 		// voorkom dubbelposts
@@ -721,161 +778,153 @@ class ForumController extends AbstractController {
 	}
 
 	/**
-	 * @param $post_id
-	 * @throws CsrGebruikerException
-	 * @throws CsrToegangException
+	 * @param ForumPost $post
+	 * @Route("/forum/citeren/{post_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function citeren($post_id) {
-		$post = $this->forumPostsModel->get((int)$post_id);
+	public function citeren(ForumPost $post) {
 		if (!$post->magCiteren()) {
-			throw new CsrToegangException("Mag niet citeren");
+			throw $this->createAccessDeniedException("Mag niet citeren");
 		}
-		echo $this->forumPostsModel->citeerForumPost($post);
-		exit; //TODO: JsonResponse
+		return new JsonResponse([
+			'van' => $post->uid,
+			'naam' => ProfielRepository::getNaam($post->uid, 'user'),
+			'content' => $this->bbToProsemirror->toProseMirrorFragment($this->forumPostsRepository->citeerForumPost($post)),
+		]);
 	}
 
 	/**
-	 * @param $post_id
-	 * @throws CsrGebruikerException
-	 * @throws CsrToegangException
+	 * @param ForumPost $post
+	 * @Route("/forum/tekst/{post_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function tekst($post_id) {
-		$post = $this->forumPostsModel->get((int)$post_id);
+	public function tekst(ForumPost $post) {
 		if (!$post->magBewerken()) {
-			throw new CsrToegangException("Mag niet berwerken");
+			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
-		echo $post->tekst;
-		exit; //TODO: JsonResponse
+
+		return new JsonResponse($this->bbToProsemirror->toProseMirror($post->tekst));
 	}
 
 	/**
-	 * @param $post_id
-	 * @return View
-	 * @throws CsrException
-	 * @throws CsrGebruikerException
+	 * @param ForumPost $post
+	 * @return Response
+	 * @Route("/forum/bewerken/{post_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function bewerken($post_id) {
-		$post = $this->forumPostsModel->get((int)$post_id);
+	public function bewerken(ForumPost $post) {
 		if (!$post->magBewerken()) {
-			throw new CsrToegangException("Mag niet bewerken");
+			throw $this->createAccessDeniedException("Mag niet bewerken");
 		}
-		$tekst = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
-		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_SANITIZE_STRING));
-		$this->forumPostsModel->bewerkForumPost($tekst, $reden, $post);
-		$this->forumDradenGelezenModel->setWanneerGelezenDoorLid($post->getForumDraad(), strtotime($post->laatst_gewijzigd));
-		return view('forum.partial.post_lijst', ['post' => $post]);
+		$tekst = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
+		$reden = trim(filter_input(INPUT_POST, 'reden', FILTER_UNSAFE_RAW));
+		$this->forumPostsRepository->bewerkForumPost($tekst, $reden, $post);
+		$this->forumDradenGelezenRepository->setWanneerGelezenDoorLid($post->draad, $post->laatst_gewijzigd);
+		return $this->render('forum/partial/post_lijst.html.twig', ['post' => $post]);
 	}
 
 	/**
-	 * @param $post_id
-	 * @return View
-	 * @throws CsrException
-	 * @throws CsrGebruikerException
+	 * @param ForumPost $post
+	 * @return Response
+	 * @Route("/forum/verplaatsen/{post_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verplaatsen($post_id) {
-		$post = $this->forumPostsModel->get((int)$post_id);
-		$oudDraad = $post->getForumDraad();
+	public function verplaatsen(ForumPost $post) {
+		$oudDraad = $post->draad;
 		if (!$oudDraad->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$nieuw = filter_input(INPUT_POST, 'Draad_id', FILTER_SANITIZE_NUMBER_INT);
-		$nieuwDraad = $this->forumDradenModel->get((int)$nieuw);
+		$nieuw = filter_input(INPUT_POST, 'draad_id', FILTER_SANITIZE_NUMBER_INT);
+		$nieuwDraad = $this->forumDradenRepository->get((int)$nieuw);
 		if (!$nieuwDraad->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$this->forumPostsModel->verplaatsForumPost($nieuwDraad, $post);
-		$this->forumPostsModel->goedkeurenForumPost($post);
-		return view('forum.partial.post_delete', ['post' => $post]);
+		$this->forumPostsRepository->verplaatsForumPost($nieuwDraad, $post);
+		$this->forumPostsRepository->goedkeurenForumPost($post);
+		return $this->render('forum/partial/post_delete.html.twig', ['post' => $post]);
 	}
 
 	/**
-	 * @param $post_id
-	 * @return View
-	 * @throws CsrException
-	 * @throws CsrGebruikerException
+	 * @param ForumPost $post
+	 * @return Response
+	 * @Route("/forum/verwijderen/{post_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function verwijderen($post_id) {
-		$post = $this->forumPostsModel->get((int)$post_id);
-		if (!$post->getForumDraad()->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+	public function verwijderen(ForumPost $post) {
+		if (!$post->draad->magModereren()) {
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$this->forumPostsModel->verwijderForumPost($post);
-		return view('forum.partial.post_delete', ['post' => $post]);
+		$this->forumPostsRepository->verwijderForumPost($post);
+		return $this->render('forum/partial/post_delete.html.twig', ['post' => $post]);
 	}
 
 	/**
-	 * @param $post_id
-	 * @return View
-	 * @throws CsrException
-	 * @throws CsrGebruikerException
+	 * @param ForumPost $post
+	 * @return Response
+	 * @Route("/forum/offtopic/{post_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function offtopic($post_id) {
-		$post = $this->forumPostsModel->get((int)$post_id);
-		if (!$post->getForumDraad()->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+	public function offtopic(ForumPost $post) {
+		if (!$post->draad->magModereren()) {
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$this->forumPostsModel->offtopicForumPost($post);
-		return view('forum.partial.post_lijst', ['post' => $post]);
+		$this->forumPostsRepository->offtopicForumPost($post);
+		return $this->render('forum/partial/post_lijst.html.twig', ['post' => $post]);
 	}
 
 	/**
-	 * @param $post_id
-	 * @return View
-	 * @throws CsrException
-	 * @throws CsrGebruikerException
+	 * @param ForumPost $post
+	 * @return Response
+	 * @Route("/forum/goedkeuren/{post_id}", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function goedkeuren($post_id) {
-		$post = $this->forumPostsModel->get((int)$post_id);
-		if (!$post->getForumDraad()->magModereren()) {
-			throw new CsrToegangException("Geen moderator");
+	public function goedkeuren(ForumPost $post) {
+		if (!$post->draad->magModereren()) {
+			throw $this->createAccessDeniedException("Geen moderator");
 		}
-		$this->forumPostsModel->goedkeurenForumPost($post);
-		return view('forum.partial.post_lijst', ['post' => $post]);
+		$this->forumPostsRepository->goedkeurenForumPost($post);
+		return $this->render('forum/partial/post_lijst.html.twig', ['post' => $post]);
 	}
 
 	/**
 	 * Concept bericht opslaan
-	 * @param $forum_id
-	 * @param null $draad_id
-	 * @return View
-	 * @throws CsrGebruikerException
-	 * @throws CsrToegangException
+	 * @param ForumDeel $deel
+	 * @param ForumDraad|null $draad
+	 * @return Response
+	 * @Route("/forum/concept/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
+	 * @Auth(P_LOGGED_IN)
 	 */
-	public function concept($forum_id, $draad_id = null) {
+	public function concept(ForumDeel $deel, ForumDraad $draad = null) {
 		$titel = trim(filter_input(INPUT_POST, 'titel', FILTER_SANITIZE_STRING));
-		$concept = trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW));
+		$concept = $this->prosemirrorToBb->convertToBb(json_decode(trim(filter_input(INPUT_POST, 'forumBericht', FILTER_UNSAFE_RAW))));
 		$ping = filter_input(INPUT_POST, 'ping', FILTER_SANITIZE_STRING);
 
-		$deel = $this->forumDelenModel->get((int)$forum_id);
 		// bestaand draadje?
-		if ($draad_id !== null) {
-			$draad = $this->forumDradenModel->get((int)$draad_id);
+		if ($draad !== null) {
 			$draad_id = $draad->draad_id;
 			// check draad in forum deel
 			if (!$draad || $draad->forum_id !== $deel->forum_id || !$draad->magPosten()) {
-				throw new CsrToegangException("Draad bevindt zich niet in deel");
+				throw $this->createAccessDeniedException("Draad bevindt zich niet in deel");
 			}
 			if (empty($ping)) {
-				$this->forumDradenReagerenModel->setConcept($deel, $draad_id, $concept);
+				$this->forumDradenReagerenRepository->setConcept($deel, $draad_id, $concept);
 			} elseif ($ping === 'true') {
-				$this->forumDradenReagerenModel->setWanneerReagerenDoorLid($deel, $draad_id);
+				$this->forumDradenReagerenRepository->setWanneerReagerenDoorLid($deel, $draad_id);
 			}
-			$reageren = $this->forumDradenReagerenModel->getReagerenVoorDraad($draad);
+			$reageren = $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad);
 		} else {
 			if (!$deel->magPosten()) {
-				throw new CsrToegangException("Mag niet posten");
+				throw $this->createAccessDeniedException("Mag niet posten");
 			}
 			if (empty($ping)) {
-				$this->forumDradenReagerenModel->setConcept($deel, null, $concept, $titel);
+				$this->forumDradenReagerenRepository->setConcept($deel, null, $concept, $titel);
 			} elseif ($ping === 'true') {
-				$this->forumDradenReagerenModel->setWanneerReagerenDoorLid($deel);
+				$this->forumDradenReagerenRepository->setWanneerReagerenDoorLid($deel);
 			}
-			$reageren = $this->forumDradenReagerenModel->getReagerenVoorDeel($deel);
+			$reageren = $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel);
 		}
 
-		return view('forum.partial.draad_reageren', [
-			'reageren' => $reageren
-		]);
+		return $this->render('forum/partial/draad_reageren.html.twig', ['reageren' => $reageren]);
 	}
 
 	/**
@@ -909,7 +958,7 @@ class ForumController extends AbstractController {
 			'url' => $url,
 			'icon' => $icon,
 			'title' => $title,
-			'label' => $draad->getForumDeel()->titel,
+			'label' => $draad->deel->titel,
 			'value' => $draad->titel
 		];
 	}

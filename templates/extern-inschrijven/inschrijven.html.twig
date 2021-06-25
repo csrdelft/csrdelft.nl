@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+@section('titel', $titel)
+
+{% block titel %}{{ titel }}{% endblock %}
+
+{% block styles %}
+	{{ css_asset('thema-normaal') }}
+	<meta name="robots" content="noindex">
+	<style>
+		body {
+			margin: 50px 10vw;
+			margin: 50px max(20px, 5vw);
+		}
+
+		img {
+			width: 100px;
+		}
+
+		.btn-primary {
+			color: white !important;
+			padding: 6px 10px;
+			margin: 25px auto;
+			display: block;
+		}
+
+		@media screen and (max-width: 550px) {
+			.col-form-label {
+				max-width: 100%;
+				flex: 100%;
+				line-height: 1;
+			}
+
+			.col-9 {
+				flex: 100%;
+				max-width: 100%;
+			}
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<section id="banner">
+			<img src="{{ absolute_url('/images/c.s.r.logo.svg') }}" alt="Beeldmerk van de vereniging">
+		</section>
+		{{ content | raw }}
+	</div>
+{% endblock %}

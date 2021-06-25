@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\producten;
 
-use CsrDelft\model\entity\fiscaat\CiviProduct;
+use CsrDelft\entity\fiscaat\CiviProduct;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
@@ -12,7 +12,7 @@ use CsrDelft\view\datatable\Multiplicity;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 04/04/2017
+ * @since 04/04/2017
  */
 class CiviProductTable extends DataTable {
 	public function __construct() {
@@ -20,6 +20,7 @@ class CiviProductTable extends DataTable {
 
 		$this->selectEnabled = false;
 
+		$this->addColumn('id');
 		$this->addColumn('prijs', null, null, CellRender::Bedrag(), null, CellType::FormattedNumber());
 		$this->addColumn('beheer', 'prijs', null, CellRender::Check());
 		$this->addColumn('categorie', 'prijs');

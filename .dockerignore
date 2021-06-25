@@ -1,8 +1,13 @@
 node_modules
 .git
+.cache-loader
 vendor
 data/assets
 data/less
+data/foto
+data/documenten
 lib
 htdocs
-resources
+assets
+var
+sessie

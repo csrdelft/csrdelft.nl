@@ -2,11 +2,11 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use DateTime;
+use DateTimeInterface;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * DateObjectField
  *
@@ -15,13 +15,13 @@ use DateTime;
  */
 class DateObjectField extends DateField {
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
-		if ($value instanceof DateTime) {
-			$value = $value->format(DATE_FORMAT);
+		if ($value instanceof DateTimeInterface) {
+			$value = date_format_intl($value, DATE_FORMAT);
 		}
-		parent::__construct($name, $value, $description);
+		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}
 
 	public function getFormattedValue() {
-		return date_create($this->getValue());
+		return date_create_immutable($this->getValue());
 	}
 }

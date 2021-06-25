@@ -3,12 +3,12 @@
  * GroepOmschrijvingView.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 
 namespace CsrDelft\view\groepen\leden;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
@@ -16,10 +16,11 @@ use CsrDelft\view\ToResponse;
 
 class GroepOmschrijvingView implements FormElement, ToResponse {
 	use ToHtmlResponse;
+
 	protected $groep;
 	protected $javascript;
 
-	public function __construct(AbstractGroep $groep) {
+	public function __construct(Groep $groep) {
 		$this->groep = $groep;
 		$this->javascript = '';
 	}
@@ -49,14 +50,14 @@ class GroepOmschrijvingView implements FormElement, ToResponse {
 
 $('#groep-omschrijving-{$this->groep->id}').hide().slideDown(600);
 JS;
-		echo '<div id="groep-omschrijving-' . $this->groep->id . '">';
-		echo CsrBB::parse($this->groep->omschrijving);
-		echo $this->getScriptTag();
-		echo '</div>';
+		return '<div id="groep-omschrijving-' . $this->groep->id . '">'
+			. CsrBB::parse($this->groep->omschrijving)
+			. $this->getScriptTag()
+			. '</div>';
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	protected function getScriptTag() {

@@ -2,10 +2,11 @@
 
 namespace CsrDelft\view\menubeheer;
 
-use CsrDelft\model\entity\MenuItem;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\MenuItem;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
+use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredUrlField;
@@ -27,9 +28,9 @@ class MenuItemForm extends ModalForm {
 		}
 
 		$fields = [];
-		$fields['pid'] = new RequiredIntField('parent_id', $item->parent_id, 'Parent ID', 0);
+		$fields['pid'] = new DoctrineEntityField('parent', $item->parent, 'Parent', MenuItem::class, '');
 		$fields['pid']->title = 'ID van het menu-item waar dit item onder valt';
-		if (!LoginModel::mag(P_ADMIN) OR $id == 'favoriet') {
+		if (!LoginService::mag(P_ADMIN) OR $id == 'favoriet') {
 			$fields['pid']->readonly = true;
 			$fields['pid']->hidden = true;
 		}
@@ -44,7 +45,7 @@ class MenuItemForm extends ModalForm {
 
 		$fields['r'] = new RechtenField('rechten_bekijken', $item->rechten_bekijken, 'Lees-rechten');
 		$fields['r']->title = 'Wie mag dit menu-item zien';
-		if (!LoginModel::mag(P_ADMIN) OR $id == 'favoriet') {
+		if (!LoginService::mag(P_ADMIN) OR $id == 'favoriet') {
 			$fields['r']->readonly = true;
 			$fields['r']->hidden = true;
 		}

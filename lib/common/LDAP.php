@@ -33,82 +33,83 @@ class LDAP {
 
 	# Openen van de LDAP connectie, die we regelmatig nodig hebben...
 
-	function connect($dobind) {
+	public function connect($dobind) {
 		# zijn we al ingelogd?
-		if ($this->_conn !== false)
+		if ($this->_conn !== false) {
 			$this->disconnect();
+		}
 
-		if (!Ini::bestaat(Ini::LDAP)) {
+		if (!$_ENV['LDAP_HOST']) {
 			throw new CsrException('LDAP not available');
 		}
-		$ldapini = Ini::lees(Ini::LDAP);
-		$conn = ldap_connect($ldapini['ldap_host'], $ldapini['ldap_port']);
+		$conn = ldap_connect($_ENV['LDAP_HOST'], (int) $_ENV['LDAP_PORT']);
 		ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
 		ldap_start_tls($conn);
 		if ($dobind === true) {
-			$bind = ldap_bind($conn, $ldapini['ldap_binddn'], $ldapini['ldap_passwd']);
-			if ($bind !== true)
+			$bind = ldap_bind($conn, $_ENV['LDAP_BINDDN'], $_ENV['LDAP_PASSWD']);
+			if ($bind !== true) {
 				return false;
+			}
 		}
 		# Onthouden van wat instellingen
 		$this->_conn = $conn;
-		$this->_base_leden = $ldapini['ldap_base_leden'];
-		$this->_base_groepen = $ldapini['ldap_base_groepen'];
+		$this->_base_leden = $_ENV['LDAP_BASE_LEDEN'];
+		$this->_base_groepen = $_ENV['LDAP_BASE_GROEPEN'];
 
 		return true;
 	}
 
 	# verbinding sluiten, maar alleen als er een geldige resource is
 
-	function disconnect() {
+	public function disconnect() {
 		@ldap_close($this->_conn);
 		$this->_conn = false;
 	}
 
 	# functie voor LDAPAuthMech (class.authmech.php) om gebruikersinlog te verifieren
 
-	function checkBindPass($mech, $user, $pass) {
+	public function checkBindPass($mech, $user, $pass) {
 		$validbase = array(
 			'people' => $this->_base_people,
 			'antiplesk' => $this->_base_antiplesk,
 			'mailbox' => $this->_base_mailbox
 		);
-		if (!array_key_exists($mech, $validbase))
+		if (!array_key_exists($mech, $validbase)) {
 			return false;
+		}
 
 		# sanitaire controle
-		if (!is_utf8($user))
+		if (!is_utf8($user) || !is_utf8($pass)) {
 			return false;
-		if (!is_utf8($pass))
-			return false;
+		}
 
 		# als er geen bindingsangst is gaan we proberen met de ldap te binden...
-		if (@ldap_bind($this->_conn, sprintf("uid=%s,%s", $this->ldap_escape_dn($user), $validbase[$mech]), $pass))
-			return true;
-		return false;
+		return @ldap_bind($this->_conn, sprintf("uid=%s,%s", $this->ldap_escape_dn($user), $validbase[$mech]), $pass);
 	}
 
 	#### Ledenlijst ####
 	# controleert of een gebruiker met de betreffende 'uid' voorkomt
 
-	function isLid($uid) {
+	public function isLid($uid) {
 		$base = $this->_base_leden;
 		$filter = sprintf("(uid=%s)", $this->ldap_escape_filter($uid));
 		$result = ldap_search($this->_conn, $base, $filter);
 		$num = ldap_count_entries($this->_conn, $result);
-		if ($num == 0 or $num === false)
+		if ($num == 0 || $num === false) {
 			return false;
+		}
 		return true;
 	}
 
 	# een, of alle records opvragen
 
-	function getLid($uid = '') {
+	public function getLid($uid = '') {
 		$base = $this->_base_leden;
-		if ($uid == '')
+		if ($uid == '') {
 			$filter = "(uid=*)";
-		else
+		} else {
 			$filter = sprintf("(uid=%s)", $this->ldap_escape_filter($uid));
+		}
 		$result = ldap_search($this->_conn, $base, $filter);
 		return ldap_get_entries($this->_conn, $result);
 	}
@@ -117,7 +118,7 @@ class LDAP {
 	# N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
 	# http://nl2.php.net/manual/en/function.ldap-add.php
 
-	function addLid($uid, $entry) {
+	public function addLid($uid, $entry) {
 		$base = $this->_base_leden;
 		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', ' . $base;
 
@@ -136,13 +137,13 @@ class LDAP {
 	# N.B. $entry is een array die al in het juiste formaat moet zijn opgemaakt
 	# http://nl2.php.net/manual/en/function.ldap-add.php
 
-	function modifyLid($uid, $entry) {
+	public function modifyLid($uid, $entry) {
 		$base = $this->_base_leden;
 		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', ' . $base;
 		return ldap_modify($this->_conn, $dn, $entry);
 	}
 
-	function removeLid($uid) {
+	public function removeLid($uid) {
 		$base = $this->_base_leden;
 		$dn = 'uid=' . $this->ldap_escape_dn($uid) . ', ' . $base;
 		return ldap_delete($this->_conn, $dn);
@@ -151,24 +152,26 @@ class LDAP {
 	#### Groepen ####
 	# controleert of een groep met de betreffende 'cn' voorkomt
 
-	function isGroep($cn) {
+	public function isGroep($cn) {
 		$base = $this->_base_groepen;
 		$filter = sprintf("(cn=%s)", $this->ldap_escape_filter($cn));
 		$result = ldap_search($this->_conn, $base, $filter);
 		$num = ldap_count_entries($this->_conn, $result);
-		if ($num == 0 or $num === false)
+		if ($num == 0 || $num === false) {
 			return false;
+		}
 		return true;
 	}
 
 	# een, of alle records opvragen
 
-	function getGroep($cn = '') {
+	public function getGroep($cn = '') {
 		$base = $this->_base_groepen;
-		if ($cn == '')
+		if ($cn == '') {
 			$filter = "(cn=*)";
-		else
+		} else {
 			$filter = sprintf("(cn=%s)", $this->ldap_escape_filter($cn));
+		}
 		$result = ldap_search($this->_conn, $base, $filter);
 		return ldap_get_entries($this->_conn, $result);
 	}
@@ -194,7 +197,7 @@ class LDAP {
 	 * )
 	 * )
 	 */
-	function addGroep($cn, $entry) {
+	public function addGroep($cn, $entry) {
 		$base = $this->_base_groepen;
 		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', ' . $base;
 
@@ -217,7 +220,7 @@ class LDAP {
 	 *
 	 * ldap_modify overschrijft de members-array in ldap met nieuwe array.
 	 */
-	function modifyGroep($cn, $entry) {
+	public function modifyGroep($cn, $entry) {
 		$base = $this->_base_groepen;
 		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', ' . $base;
 		return ldap_modify($this->_conn, $dn, $entry);
@@ -229,7 +232,7 @@ class LDAP {
 	 * @param string $cn kortegroepnaam
 	 * @return bool gelukt/mislukt
 	 */
-	function removeGroep($cn) {
+	public function removeGroep($cn) {
 		$base = $this->_base_groepen;
 		$dn = 'cn=' . $this->ldap_escape_dn($cn) . ', ' . $base;
 		return ldap_delete($this->_conn, $dn);
@@ -238,20 +241,18 @@ class LDAP {
 	#### Escapen van LDAP-invoer ####
 	# RFC2253
 
-	function ldap_escape_dn($text) {
+	private function ldap_escape_dn($text) {
 		# DN escaping rules
 		# A DN may contain special characters which require escaping. These characters are:
 		# , (comma), = (equals), + (plus), < (less than), > (greater than), ; (semicolon),
 		# \ (backslash), and "" (quotation marks).
-		$text = preg_replace('/([,=+<>;"\x5C])/', '\\\\$1', $text);
+		$text = preg_replace("/([,=+<>;\"\\\])/", '\\\\$1', $text);
 
 		# In addition, the # (number sign) requires
 		# escaping if it is the first character in an attribute value, and a space character
 		# requires escaping if it is the first or last character in an attribute value.
 		$text = preg_replace("/^#/", "\\#", $text);
-		$text = preg_replace("/^ /", "\\ ", $text);
-
-		return $text;
+		return preg_replace("/^ /", "\\ ", $text);
 	}
 
 	# RFC2254
@@ -270,7 +271,7 @@ class LDAP {
 	# value of the encoded character. The case of the two hexadecimal
 	# digits is not significant.
 
-	function ldap_escape_filter($text) {
+	private function ldap_escape_filter($text) {
 		# ascii control characters er uit gooien, die zijn niet nodig in deze applicatie
 		$text = preg_replace('/[\x00-\x1F\x7F]/', '', $text);
 		# zie opmerking hierboven, \ staat voorop!

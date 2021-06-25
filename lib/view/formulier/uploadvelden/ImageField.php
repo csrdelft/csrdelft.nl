@@ -9,7 +9,7 @@ use CsrDelft\model\entity\Map;
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  */
 class ImageField extends FileField {
 
@@ -20,7 +20,7 @@ class ImageField extends FileField {
 	protected $maxHeight;
 	private $filterMime;
 
-	public function __construct($name, $description, Afbeelding $behouden = null, Map $dir = null, array $filterMime = null, $vierkant = false, $minWidth = null, $minHeight = null, $maxWidth = null, $maxHeight = null) {
+	public function __construct($name, $description, Afbeelding $behouden = null, Map $dir = null, array $filterMime = null, $vierkant = false, $minWidth = null, $minHeight = null, $maxWidth = 10000, $maxHeight = 10000) {
 		$this->filterMime = $filterMime === null ? Afbeelding::$mimeTypes : array_intersect(Afbeelding::$mimeTypes, $filterMime);
 		parent::__construct($name, $description, $behouden, $dir, $this->filterMime);
 		$this->vierkant = $vierkant;
@@ -81,9 +81,9 @@ class ImageField extends FileField {
 				$filename = $this->getModel()->filename;
 				$resized = $directory . $percent . $filename;
 				if ($this->vierkant) {
-					$command = IMAGEMAGICK . ' ' . escapeshellarg($directory . $filename) . ' -thumbnail 150x150^ -gravity center -extent 150x150 -format jpg -quality 80 ' . escapeshellarg($resized);
+					$command = $_ENV['IMAGEMAGICK'] . ' ' . escapeshellarg($directory . $filename) . ' -thumbnail 150x150^ -gravity center -extent 150x150 -format jpg -quality 80 ' . escapeshellarg($resized);
 				} else {
-					$command = IMAGEMAGICK . ' ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
+					$command = $_ENV['IMAGEMAGICK'] . ' ' . escapeshellarg($directory . $filename) . ' -resize ' . $percent . '% -format jpg -quality 85 ' . escapeshellarg($resized);
 				}
 				if (defined('RESIZE_OUTPUT')) {
 					debugprint($command);

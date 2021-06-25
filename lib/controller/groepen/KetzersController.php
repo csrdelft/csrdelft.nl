@@ -2,9 +2,14 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\KetzersModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\Ketzer;
+use CsrDelft\repository\ChangeLogRepository;
+use CsrDelft\repository\groepen\KetzersRepository;
 use CsrDelft\view\groepen\formulier\GroepAanmakenForm;
-use CsrDelft\view\JsonResponse;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -14,20 +19,20 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Controller voor ketzers.
  *
- * @property KetzersModel $model
+ * @property KetzersRepository $repository
  */
 class KetzersController extends AbstractGroepenController {
-	public function __construct(KetzersModel $ketzersModel) {
-		parent::__construct($ketzersModel);
+	public function __construct(ManagerRegistry $registry, $groepType = Ketzer::class) {
+		parent::__construct($registry, $groepType);
 	}
 
 	public function nieuw(Request $request, $id = null, $soort = null) {
-		$form = new GroepAanmakenForm($this->model, $soort);
+		$form = new GroepAanmakenForm($this->repository, $soort);
 		if ($request->getMethod() == 'GET') {
 			return $this->beheren($request);
 		} elseif ($form->validate()) {
 			$values = $form->getValues();
-			$redirect = $values['model']::instance()->getUrl() . '/aanmaken/' . $values['soort'];
+			$redirect = ContainerFacade::getContainer()->get($values['model'])->getUrl() . '/aanmaken/' . $values['soort'];
 			return new JsonResponse($redirect);
 		} else {
 			return $form;

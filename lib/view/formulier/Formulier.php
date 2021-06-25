@@ -3,10 +3,10 @@
 namespace CsrDelft\view\formulier;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\ChangeLogModel;
+use CsrDelft\entity\ChangeLogEntry;
+use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
-use CsrDelft\model\entity\ChangeLogEntry;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
@@ -32,7 +32,7 @@ class Formulier implements View, Validator, ToResponse {
 	protected $action = null;
 	public $post = true;
 	protected $error;
-	private $enctype = 'multipart/form-data';
+	protected $enctype = 'multipart/form-data';
 	public $showMelding = true;
 	public $preventCsrf = true;
 	/**
@@ -47,7 +47,6 @@ class Formulier implements View, Validator, ToResponse {
 	public $css_classes = array();
 	protected $javascript = '';
 	public $titel;
-	public $stappen_submit = false;
 
 	public function __construct($model, $action, $titel = false, $dataTableId = false) {
 		$this->model = $model;
@@ -57,7 +56,9 @@ class Formulier implements View, Validator, ToResponse {
 		$this->css_classes[] = 'Formulier';
 		// Link with DataTable?
 		if ($dataTableId === true) {
-			$this->dataTableId = filter_input(INPUT_POST, 'DataTableId', FILTER_SANITIZE_STRING);
+			$this->dataTableId = ContainerFacade::getContainer()->get('request_stack')
+				->getCurrentRequest()
+				->request->filter('DataTableId', '', FILTER_SANITIZE_STRING);
 		} else {
 			$this->dataTableId = $dataTableId;
 		}
@@ -97,8 +98,12 @@ class Formulier implements View, Validator, ToResponse {
 
 	private function loadProperty(InputField $field) {
 		$fieldName = $field->getName();
-		if ($this->model && property_exists($this->model, $fieldName)) {
-			$this->model->$fieldName = $field->getFormattedValue();
+		if ($this->model) {
+			if (method_exists($this->model, 'set' . ucfirst($fieldName))) {
+				call_user_func([$this->model, 'set' . ucfirst($fieldName)], $field->getFormattedValue());
+			} elseif (property_exists($this->model, $fieldName)) {
+				$this->model->$fieldName = $field->getFormattedValue();
+			}
 		}
 	}
 
@@ -218,12 +223,6 @@ class Formulier implements View, Validator, ToResponse {
 		foreach ($this->fields as $field) {
 			$this->javascript .= $field->getJavascript();
 		}
-		if ($this->stappen_submit) {
-			$this->javascript .= <<<JS
-
-$(form).formSteps({submitButton: "{$this->stappen_submit}"});
-JS;
-		}
 		return $this->javascript;
 	}
 
@@ -248,31 +247,34 @@ HTML;
 	/**
 	 * Toont het formulier en javascript van alle fields.
 	 *
-	 * @param boolean $showMelding Toon meldingen bovenaan formulier (set through property)
-	 * @return void
+	 * @return string
 	 */
-	public function view() {
+	public function __toString() {
+		$string = '';
+
 		if ($this->showMelding) {
-			echo getMelding();
+			$string .= getMelding();
 		}
-		echo $this->getFormTag();
+		$string .= $this->getFormTag();
 		$titel = $this->getTitel();
 		if (!empty($titel)) {
-			echo '<h1 class="Titel">' . $titel . '</h1>';
+			$string .= '<h1 class="Titel">' . $titel . '</h1>';
 		}
 		if (isset($this->error)) {
-			echo '<span class="error">' . $this->error . '</span>';
+			$string .= '<span class="error">' . $this->error . '</span>';
 		}
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->fields as $field) {
-			$field->view();
+			$string .= $field->__toString();
 		}
 		$csrfField = $this->getCsrfField();
 		if ($csrfField != null)
-			$csrfField->view();
-		echo $this->formKnoppen->getHtml();
-		echo $this->getScriptTag();
-		echo '</form>';
+			$string .= $csrfField->__toString();
+		$string .= $this->formKnoppen->getHtml();
+		$string .= $this->getScriptTag();
+		$string .= '</form>';
+
+		return $string;
 	}
 
 	public function getCsrfField() {
@@ -290,6 +292,7 @@ HTML;
 	 * @returns ChangeLogEntry[]
 	 */
 	public function diff() {
+		$changeLogRepository = ContainerFacade::getContainer()->get(ChangeLogRepository::class);
 		$diff = array();
 		foreach ($this->getFields() as $field) {
 			if ($field instanceof InputField) {
@@ -297,7 +300,7 @@ HTML;
 				$new = $field->getValue();
 				if ($old !== $new) {
 					$prop = $field->getName();
-					$diff[$prop] = ChangeLogModel::instance()->nieuw($this->getModel(), $prop, $old, $new);
+					$diff[$prop] = $changeLogRepository->nieuw($this->getModel(), $prop, $old, $new);
 				}
 			}
 		}
@@ -313,7 +316,7 @@ HTML;
 	public function changelog(array $diff) {
 		$changelog = '';
 		if (!empty($diff)) {
-			$changelog .= '[div]Bewerking van [lid=' . LoginModel::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
+			$changelog .= '[div]Bewerking van [lid=' . LoginService::getUid() . '] op [reldate]' . getDatetime() . '[/reldate][br]';
 			foreach ($diff as $change) {
 				$changelog .= '(' . $change->property . ') ' . $change->old_value . ' => ' . $change->new_value . '[br]';
 			}

@@ -4,7 +4,7 @@ namespace CsrDelft\repository\bibliotheek;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\bibliotheek\Boek;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -13,7 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Boek[]    findAll()
  * @method Boek[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoekRepository extends ServiceEntityRepository {
+class BoekRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Boek::class);
 	}
@@ -25,7 +25,7 @@ class BoekRepository extends ServiceEntityRepository {
 	/**
 	 * @param string $zoekveld
 	 * @param string $zoekterm
-	 * @return Boek[]
+	 * @return string[][]
 	 * @throws CsrGebruikerException
 	 */
 	public function autocompleteProperty(string $zoekveld, string $zoekterm) {
@@ -33,9 +33,12 @@ class BoekRepository extends ServiceEntityRepository {
 		if (!in_array($zoekveld, $allowedFields)) {
 			throw new CsrGebruikerException("Autocomplete niet toegestaan voor dit veld");
 		}
-		$qb = $this->createQueryBuilder('b');
-		$qb->where($qb->expr()->like('b.' . $zoekveld, '%' . $zoekterm . '%'));
-		return $qb->getQuery()->getArrayResult();
+		return $this->createQueryBuilder('b')
+			->select("b.$zoekveld")
+			->distinct()
+			->where("b.$zoekveld LIKE :zoekterm")
+			->setParameter('zoekterm', sql_contains($zoekterm))
+			->getQuery()->getScalarResult();
 	}
 
 	/**

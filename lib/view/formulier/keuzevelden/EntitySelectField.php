@@ -19,7 +19,6 @@ class EntitySelectField extends InputField {
 	 * @var ISelectEntity[]
 	 */
 	protected $options;
-	private $groups;
 	private $entityType;
 	/**
 	 * @var ObjectRepository
@@ -31,11 +30,14 @@ class EntitySelectField extends InputField {
 	private $entityManager;
 
 	public function __construct($name, $value, $description, $entityType) {
+		$this->css_classes = ['FormElement', 'form-select'];
+
 		parent::__construct($name, $value ? $value->getId() : null, $description);
 
 		if (!in_array(ISelectEntity::class, class_implements($entityType))) {
 			throw new CsrException($entityType . " implementeerd niet ISelectEntity");
 		}
+
 
 		$this->entityType = $entityType;
 		$doctrine = ContainerFacade::getContainer()->get('doctrine');
@@ -54,8 +56,7 @@ class EntitySelectField extends InputField {
 			return false;
 		}
 
-		$options = $this->options;
-		if (($this->required || $this->getValue() !== null) && !array_key_exists($this->value, $options)) {
+		if (($this->required || $this->getValue() !== null) && !in_array($this->value, $this->getOptionIds())) {
 			$this->error = 'Onbekende optie gekozen';
 		}
 		return $this->error === '';
@@ -69,24 +70,6 @@ class EntitySelectField extends InputField {
 		}
 
 		return $this->entityManager->getReference($this->entityType, $value);
-	}
-
-	public function getPreviewDiv() {
-		if ($this->groups) {
-			return '<div id="selectPreview_' . $this->getId() . '" class="previewDiv"></div>';
-		}
-		return '';
-	}
-
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-
-var preview{$this->getId()} = function () {
-	var selected = $(':selected', '#{$this->getId()}');
-	$('#selectPreview_{$this->getId()}').html(selected.parent().attr('label'));
-};
-preview{$this->getId()}();
-JS;
 	}
 
 	public function getHtml($include_hidden = true) {
@@ -121,6 +104,18 @@ JS;
 			$html .= "<option hidden disabled selected value=''></option>";
 		}
 		return $html;
+	}
+
+	/**
+	 * @param ISelectEntity[] $options
+	 */
+	public function setOptions(array $options): void
+	{
+		$this->options = $options;
+	}
+
+	public function getOptionIds() {
+		return array_map(function ($option) { return $option->getId(); }, $this->options);
 	}
 
 }

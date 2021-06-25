@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\login;
 
-use CsrDelft\model\security\RememberLoginModel;
+use CsrDelft\entity\security\RememberLogin;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
@@ -11,12 +11,14 @@ use CsrDelft\view\datatable\Multiplicity;
 class RememberLoginTable extends DataTable {
 
 	public function __construct() {
-		parent::__construct(RememberLoginModel::ORM, '/session/rememberdata', 'Automatisch inloggen');
+		parent::__construct(RememberLogin::class, '/session/rememberdata', 'Automatisch inloggen');
 		$this->settings['tableTools']['aButtons'] = array();
-		$this->hideColumn('token');
+		$this->deleteColumn('token');
+		$this->deleteColumn('series');
 		$this->hideColumn('uid');
 		$this->searchColumn('remember_since');
 		$this->searchColumn('device_name');
+		$this->setOrder(['last_used' => 'desc']);
 
 		$this->selectEnabled = false;
 

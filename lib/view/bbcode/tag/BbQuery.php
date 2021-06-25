@@ -4,10 +4,11 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\SavedQueryResult;
-use CsrDelft\model\SavedQueryModel;
+use CsrDelft\entity\SavedQueryResult;
+use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\SavedQueryContent;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Deze methode kan resultaten van query's die in de database staan printen in een
@@ -24,29 +25,30 @@ class BbQuery extends BbTag {
 	 * @var SavedQueryResult
 	 */
 	private $query;
+	/**
+	 * @var SavedQueryRepository
+	 */
+	private $savedQueryRepository;
+	/**
+	 * @var string
+	 */
+	private $id;
+
+	public function __construct(SavedQueryRepository $savedQueryRepository) {
+		$this->savedQueryRepository = $savedQueryRepository;
+	}
 
 	public static function getTagName() {
 		return 'query';
 	}
 
-	public function isAllowed()
-	{
+	public function isAllowed() {
 		return $this->query->query->magBekijken();
 	}
 
 	public function renderLight() {
-		$url = '/tools/query?id=' . urlencode($this->content);
+		$url = '/tools/query?id=' . urlencode($this->id);
 		return BbHelper::lightLinkBlock('query', $url, $this->query->query->beschrijving, count($this->query->rows) . ' regels');
-	}
-
-	/**
-	 * @param int $queryID
-	 * @throws BbException
-	 */
-	private function assertId(int $queryID) {
-		if ($queryID == 0) {
-			throw new BbException('[query] Geen geldig query-id opgegeven');
-		}
 	}
 
 	public function render() {
@@ -58,11 +60,24 @@ class BbQuery extends BbTag {
 	 * @param array $arguments
 	 * @throws BbException
 	 */
-	public function parse($arguments = [])
-	{
-		$this->readMainArgument($arguments);
-		$this->content = (int)$this->content;
-		$this->assertId($this->content);
-		$this->query = SavedQueryModel::instance()->loadQuery($this->content);
+	public function parse($arguments = []) {
+		$this->id = $this->readMainArgument($arguments);
+		$this->id = (int)$this->id;
+		$this->assertId($this->id);
+		try {
+			$this->query = $this->savedQueryRepository->loadQuery($this->id);
+		} catch (AccessDeniedException $ex) {
+			throw new BbException('[query] Geen geldige query');
+		}
+	}
+
+	/**
+	 * @param int $queryID
+	 * @throws BbException
+	 */
+	private function assertId(int $queryID) {
+		if ($queryID == 0) {
+			throw new BbException('[query] Geen geldig query-id opgegeven');
+		}
 	}
 }

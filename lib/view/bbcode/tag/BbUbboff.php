@@ -19,7 +19,7 @@ class BbUbboff extends BbTag {
 	}
 
 	public function render() {
-		return $this->content;
+		return $this->getContent();
 	}
 
 	/**

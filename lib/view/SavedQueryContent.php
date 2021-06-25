@@ -2,11 +2,13 @@
 
 namespace CsrDelft\view;
 
-use CsrDelft\model\entity\SavedQueryResult;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\SavedQueryResult;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\SavedQueryModel;
+use CsrDelft\repository\SavedQueryRepository;
 
 class SavedQueryContent implements View {
+	use ToHtmlResponse;
 
 	/**
 	 * Saved query
@@ -111,7 +113,8 @@ class SavedQueryContent implements View {
 		}
 		$return .= '>';
 		$current = '';
-		foreach (SavedQueryModel::instance()->getQueries() as $query) {
+		$savedQueryRepository = ContainerFacade::getContainer()->get(SavedQueryRepository::class);
+		foreach ($savedQueryRepository->getQueries() as $query) {
 			if (!$query->magBekijken()) {
 				continue;
 			}
@@ -136,14 +139,16 @@ class SavedQueryContent implements View {
 		return $return;
 	}
 
-	public function view() {
-		echo '<h1>' . $this->getTitel() . '</h1>';
-		echo $this->getQueryselector();
+	public function __toString() {
+		$html = '';
+		$html .= '<h1>' . $this->getTitel() . '</h1>';
+		$html .= $this->getQueryselector();
 
 		//render query if selected and allowed
 		if ($this->sq != null && $this->sq->query->magBekijken()) {
-			echo $this->render_queryResult();
+			$html .= $this->render_queryResult();
 		}
+		return $html;
 	}
 
 }

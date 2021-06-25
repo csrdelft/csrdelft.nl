@@ -1,0 +1,11 @@
+{% extends 'fiscaat/base.html.twig' %}
+
+{% block titel %}Bulk afschrijven CiviSaldo - Controle{% endblock %}
+
+{% block civisaldocontent %}
+	<h2>Succesvol afgeschreven</h2>
+	<p>
+		Er zijn {{ aantalSucces }} bestellingen toegevoegd. Vergeet niet <b>{{ totaal | format_bedrag }}</b> uit
+		Tussenrekening CiviSaldi - Incidenteel te halen in Exact.
+	</p>
+{% endblock %}

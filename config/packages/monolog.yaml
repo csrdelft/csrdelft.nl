@@ -1,0 +1,9 @@
+monolog:
+  handlers:
+    access:
+      type: rotating_file
+      path: "%kernel.logs_dir%/%kernel.environment%.access.log"
+      action_level: debug
+      channels: [access]
+      # 2 maanden
+      max_files: 60

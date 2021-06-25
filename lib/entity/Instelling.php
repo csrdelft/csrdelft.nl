@@ -20,28 +20,34 @@ use Doctrine\ORM\Mapping as ORM;
  *  - Corveepunten per jaar
  *
  * @ORM\Entity(repositoryClass="CsrDelft\repository\instellingen\InstellingenRepository")
- * @ORM\Table("instellingen")
+ * @ORM\Table(
+ *   "instellingen",
+ *   uniqueConstraints={@ORM\UniqueConstraint(name="module_instelling", columns={"module", "instelling"})}
+ * )
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Instelling {
-
 	/**
-	 * Shared primary key
-	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @var integer
 	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 */
+	public $id;
+	/**
+	 * @var string
+	 * @ORM\Column(type="string")
 	 */
 	public $module;
 	/**
-	 * Shared primary key
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
-	 * @ORM\Id()
+	 * @ORM\Column(type="string")
 	 */
-	public $instelling_id;
+	public $instelling;
 	/**
 	 * Value
 	 * @var string
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="text")
 	 */
 	public $waarde;
 }

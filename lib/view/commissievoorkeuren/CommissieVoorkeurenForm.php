@@ -2,11 +2,13 @@
 
 namespace CsrDelft\view\commissievoorkeuren;
 
-use CsrDelft\model\commissievoorkeuren\CommissieVoorkeurModel;
-use CsrDelft\model\commissievoorkeuren\VoorkeurCommissieModel;
-use CsrDelft\model\commissievoorkeuren\VoorkeurOpmerkingModel;
-use CsrDelft\model\entity\commissievoorkeuren\VoorkeurCommissie;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\commissievoorkeuren\VoorkeurCommissie;
+use CsrDelft\entity\commissievoorkeuren\VoorkeurVoorkeur;
 use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
+use CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository;
+use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\formulier\Formulier;
@@ -28,7 +30,7 @@ class CommissieVoorkeurenForm extends Formulier {
 		parent::__construct(null, '/profiel/' . $profiel->uid . '/voorkeuren', 'Commissie-voorkeuren');
 		$this->profiel = $profiel;
 		$this->addFields([new HtmlComment('<p>Hier kunt u per commissie opgeven of u daar interesse in heeft!</p>')]);
-		$categorieCommissie = VoorkeurCommissieModel::instance()->getByCategorie();
+		$categorieCommissie = ContainerFacade::getContainer()->get(VoorkeurCommissieRepository::class)->getByCategorie();
 
 		foreach ($categorieCommissie as $cat) {
 			$categorie = $cat['categorie'];
@@ -40,7 +42,7 @@ class CommissieVoorkeurenForm extends Formulier {
 			}
 		}
 
-		$this->opmerking = VoorkeurOpmerkingModel::instance()->getOpmerkingVoorLid($profiel);
+		$this->opmerking = ContainerFacade::getContainer()->get(VoorkeurOpmerkingRepository::class)->getOpmerkingVoorLid($profiel);
 
 		$fields = [];
 		$fields[] = new Subkopje("Extra opmerkingen");
@@ -55,13 +57,16 @@ class CommissieVoorkeurenForm extends Formulier {
 
 	private function addVoorkeurVeld(VoorkeurCommissie $commissie) {
 		$opties = array(1 => 'nee', 2 => 'misschien', 3 => 'ja');
-		$voorkeur = CommissieVoorkeurModel::instance()->getVoorkeur($this->profiel, $commissie);
+		$voorkeur = ContainerFacade::getContainer()->get(CommissieVoorkeurRepository::class)->getVoorkeur($this->profiel, $commissie);
 		$this->voorkeuren[] = $voorkeur;
 		$field = new SelectField('comm' . $commissie->id, $voorkeur->voorkeur, $commissie->naam, $opties);
 		$this->addFields([$field]);
 		$voorkeur->voorkeur = $field->getValue();
 	}
 
+	/**
+	 * @return VoorkeurVoorkeur[]
+	 */
 	public function getVoorkeuren(): array {
 		return $this->voorkeuren;
 	}

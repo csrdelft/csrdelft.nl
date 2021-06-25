@@ -894,7 +894,7 @@ $(function () {
 
 				var html = [];
 
-				$.each(data, function() {
+				$.each(data, function(weeknummer) {
 
 					addhtml = '';
 
@@ -903,7 +903,7 @@ $(function () {
 
 					var total = 0;
 					$.each(this.content, function() {
-						var inTotaal = !nietInTotaal.includes(this.type);
+						var inTotaal = !nietInTotaal.includes(this.type) || weeknummer >= 202011;
 
 						if (inTotaal) {
 							total += parseFloat(this.total);
@@ -921,7 +921,7 @@ $(function () {
 				});
 
 				$("#productBeheer, #persoonBeheer, #tools").addClass("hidden");
-				$("#grootboekInvoer").html(html).removeClass("hidden");
+				$("#grootboekInvoer").html(html.reverse()).removeClass("hidden");
 
 			}
 		});

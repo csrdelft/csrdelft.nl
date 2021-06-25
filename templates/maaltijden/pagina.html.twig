@@ -1,0 +1,8 @@
+{% extends 'maaltijden/base.html.twig' %}
+
+{% block titel %}{{ titel }}{% endblock %}
+
+{% block content %}
+	{{ parent() }}
+	{{ content | raw }}
+{% endblock %}

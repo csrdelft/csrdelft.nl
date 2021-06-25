@@ -4,11 +4,11 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\peilingen\Peiling;
-use CsrDelft\model\peilingen\PeilingenLogic;
-use CsrDelft\model\peilingen\PeilingenModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\peilingen\Peiling;
+use CsrDelft\repository\peilingen\PeilingenRepository;
 use CsrDelft\view\bbcode\BbHelper;
+use Symfony\Component\Serializer\SerializerInterface;
+use Twig\Environment;
 
 /**
  * Peiling
@@ -24,6 +24,28 @@ class BbPeiling extends BbTag {
 	 * @var Peiling
 	 */
 	private $peiling;
+	/**
+	 * @var SerializerInterface
+	 */
+	private $serializer;
+	/**
+	 * @var PeilingenRepository
+	 */
+	private $peilingenRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var string
+	 */
+	private $id;
+
+	public function __construct(SerializerInterface $serializer, PeilingenRepository $peilingenRepository, Environment $twig) {
+		$this->serializer = $serializer;
+		$this->peilingenRepository = $peilingenRepository;
+		$this->twig = $twig;
+	}
 
 	public static function getTagName() {
 		return 'peiling';
@@ -34,15 +56,14 @@ class BbPeiling extends BbTag {
 	}
 
 	public function renderLight() {
-		$url = '#/peiling/' . urlencode($this->content);
+		$url = '#/peiling/' . urlencode($this->id);
 		return BbHelper::lightLinkBlock('peiling', $url, $this->peiling->titel, $this->peiling->beschrijving);
 	}
 
 	public function render() {
-		return view('peilingen.peiling', [
-			'peiling' => $this->peiling,
-			'opties' => PeilingenLogic::instance()->getOptionsAsJson($this->peiling->id, LoginModel::getUid()),
-		])->getHtml();
+		return $this->twig->render('peilingen/peiling.html.twig', [
+			'peiling' => $this->serializer->serialize($this->peiling, 'json', ['groups' => 'vue']),
+		]);
 	}
 
 	/**
@@ -51,8 +72,8 @@ class BbPeiling extends BbTag {
 	 * @throws BbException
 	 */
 	private function getPeiling($peiling_id): Peiling {
-		$peiling = PeilingenModel::instance()->getPeilingById($peiling_id);
-		if ($peiling === false) {
+		$peiling = $this->peilingenRepository->getPeilingById($peiling_id);
+		if (!$peiling) {
 			throw new BbException('[peiling] Er bestaat geen peiling met (id:' . (int)$peiling_id . ')');
 		}
 
@@ -61,12 +82,15 @@ class BbPeiling extends BbTag {
 
 	/**
 	 * @param array $arguments
-	 * @return mixed
 	 * @throws BbException
 	 */
 	public function parse($arguments = [])
 	{
-		$this->readMainArgument($arguments);
-		$this->peiling = $this->getPeiling($this->content);
+		$this->id = $this->readMainArgument($arguments);
+		$this->peiling = $this->getPeiling($this->id);
+	}
+
+	public function getId() {
+		return $this->id;
 	}
 }

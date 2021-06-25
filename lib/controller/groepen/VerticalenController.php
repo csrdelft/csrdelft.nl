@@ -2,10 +2,9 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\groepen\Verticale;
-use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\view\JsonResponse;
+use CsrDelft\entity\groepen\Verticale;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,13 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
  * Controller voor verticalen.
  */
 class VerticalenController extends AbstractGroepenController {
-	public function __construct(VerticalenModel $verticalenModel) {
-		parent::__construct($verticalenModel);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Verticale::class);
 	}
 
 	public function zoeken(Request $request, $zoekterm = null) {
 		if (!$zoekterm && !$request->query->has('q')) {
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
 		if (!$zoekterm) {
 			$zoekterm = $request->query->get('q');
@@ -33,12 +32,20 @@ class VerticalenController extends AbstractGroepenController {
 			$limit = $request->query->getInt('limit');
 		}
 		$result = [];
-		foreach ($this->model->find('naam LIKE ?', [$zoekterm], null, null, $limit) as $verticale) {
+		$verticales = $this->repository->createQueryBuilder('v')
+			->where('v.naam LIKE :zoekterm')
+			->setParameter('zoekterm', $zoekterm)
+			->setMaxResults($limit)
+			->getQuery()->getResult();
+
+		foreach ($verticales as $verticale) {
 			/** @var Verticale $verticale */
 			$result[] = [
 				'url' => $verticale->getUrl() . '#' . $verticale->id,
 				'label' => $verticale->naam,
-				'value' => 'Verticale:' . $verticale->letter
+				'value' => 'Verticale:' . $verticale->letter,
+				'naam' => $verticale->naam,
+				'id' => $verticale->getId(),
 			];
 		}
 		return new JsonResponse($result);

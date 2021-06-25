@@ -1,0 +1,78 @@
+{% extends 'maaltijden/base.html.twig' %}
+
+{% block titel %}
+	{%- if maaltijdrepetitie is none -%}
+		Beheer corveerepetities
+	{%- else -%}
+		Corveebeheer maaltijdrepetitie {{ maaltijdrepetitie.standaard_titel }}
+	{%- endif -%}
+{% endblock %}
+
+{% block content %}
+	{{ parent() }}
+	<p>
+		Op deze pagina kunt u corveerepetities aanmaken, wijzigen en verwijderen
+		{%- if maaltijdrepetitie is none -%}
+			.
+		{% else %}
+			behorend bij de maaltijdrepetitie:<br/>
+			<span class="dikgedrukt">{{ maaltijdrepetitie.standaard_titel }}</span>
+			<a
+				href="{{ url('csrdelft_maalcie_maaltijdrepetities_bewerk', {mlt_repetitie_id: maaltijdrepetitie.mlt_repetitie_id}) }}"
+				title="Wijzig gekoppelde maaltijd"
+				class="btn popup">{{ icon("calendar_edit") }}</a>
+		{% endif %}
+	</p>
+	<p>
+		Onderstaande tabel toont
+		{% if maaltijdrepetitie is none %}
+			alle repetities in het systeem
+		{% else %}
+			<span class="cursief">alleen</span> de corveerepetities voor deze maaltijdrepetitie
+		{% endif %}
+	</p>
+	<h3>Repetities verwijderen</h3>
+	<p>
+		Voordat een corveerepetitie verwijderd kan worden moeten eerst alle bijbehorende corveetaken definitief zijn
+		verwijderd.
+		Dit is dus inclusief maaltijdcorveetaken (die door een gekoppelde maaltijdrepetitie zijn aangemaakt).
+		Bij het verwijderen van een gekoppelde maaltijdrepetitie blijven de eventuele gekoppelde corveerepetities bestaan.
+	</p>
+	<p>
+		N.B. Als u kiest voor "Alles bijwerken" worden alle corveetaken die behoren tot de betreffende corveerepetitie
+		bijgewerkt, ongeacht of ze tot een maaltijd behoren. Er worden ook extra taken aangemaakt tot aan het standaard
+		aantal.
+	</p>
+	<div class="float-end">
+		{% if maaltijdrepetitie is none %}
+			<a href="{{ url('csrdelft_maalcie_corveerepetities_nieuw') }}" class="btn post popup">
+				{{ icon("add") }} Nieuwe repetitie
+			</a>
+		{% else %}
+			<a
+				href="{{ url('csrdelft_maalcie_corveerepetities_nieuw', {mlt_repetitie_id: maaltijdrepetitie.mlt_repetitie_id}) }}"
+				class="btn post popup">
+				{{ icon("add") }} Nieuwe repetitie
+			</a>
+		{% endif %}
+	</div>
+	<table id="maalcie-tabel" class="maalcie-tabel">
+		<thead>
+		<tr>
+			<th>Wijzig</th>
+			<th>Functie</th>
+			<th>Dag</th>
+			<th>Periode</th>
+			<th>{{ icon("tick", null, "Voorkeurbaar") }}</th>
+			<th>Standaard<br/>punten</th>
+			<th>Aantal<br/>corveeërs</th>
+			<th title="Definitief verwijderen" class="text-center">{{ icon("cross") }}</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for repetitie in repetities %}
+			{{ include('maaltijden/corveerepetitie/beheer_corvee_repetitie_lijst.html.twig', {repetitie: repetitie, maaltijdrepetitie: maaltijdrepetitie}) }}
+		{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

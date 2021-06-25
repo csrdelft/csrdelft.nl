@@ -2,56 +2,113 @@
 
 namespace CsrDelft\view\login;
 
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\Component\Formulier\FormulierBuilder;
+use CsrDelft\Component\Formulier\FormulierTypeInterface;
+use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\formulier\elementen\HtmlComment;
-use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
+use CsrDelft\view\formulier\knoppen\TemplateFormKnoppen;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
-class LoginForm extends Formulier {
+/**
+ * Class LoginForm
+ * @package CsrDelft\view\login
+ * @see FormLoginAuthenticator Voor de afhandeling van dit formulier
+ */
+class LoginForm implements FormulierTypeInterface {
+	/**
+	 * @var UrlGeneratorInterface
+	 */
+	private $urlGenerator;
+	/**
+	 * @var CsrfTokenManagerInterface
+	 */
+	private $csrfTokenManager;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var TranslatorInterface
+	 */
+	private $translator;
 
-	public function __construct($showMelding = false) {
-		parent::__construct(null, '/login');
-		$this->formId = 'loginform';
-		$this->showMelding = $showMelding;
+	public function __construct(
+		TranslatorInterface $translator,
+		UrlGeneratorInterface $urlGenerator,
+		CsrfTokenManagerInterface $csrfTokenManager,
+		Environment $twig
+	) {
+
+		$this->urlGenerator = $urlGenerator;
+		$this->csrfTokenManager = $csrfTokenManager;
+		$this->twig = $twig;
+		$this->translator = $translator;
+	}
+
+	/**
+	 * Bij gebrek aan standaard vertalingen.
+	 *
+	 * @param AuthenticationException $exception
+	 * @return string
+	 */
+	private function formatError(AuthenticationException $exception, $lastUsername) {
+		switch ($exception->getMessageKey()) {
+			case "Username could not be found.":
+				$errorString = $this->translator->trans("Gebruiker '%username%' niet gevonden.", ['%username%' => $lastUsername]);
+				break;
+			case "Invalid credentials.":
+				$errorString = $this->translator->trans("Onjuist wachtwoord.");
+				break;
+			default:
+				$errorString = $this->translator->trans("Er was een fout.");
+				break;
+		}
+
+		return strtr($errorString, $exception->getMessageData());
+	}
+
+	protected function getScriptTag() {
+		// er is geen javascript
+		return "";
+	}
+
+	public function createFormulier(FormulierBuilder $builder, $data, $options = [])
+	{
+		$builder->setAction($this->urlGenerator->generate('app_login_check'));
+
+		$builder->setFormId('loginform');
+		$builder->setShowMelding(false);
 
 		$fields = [];
 
-		$redirectUri = filter_input(INPUT_GET, 'redirect', FILTER_UNSAFE_RAW);
-		$fields['redirect'] = new HiddenField('redirect', $redirectUri);
+		$fields[] = new CsrfField($this->csrfTokenManager->getToken('authenticate'), '_csrf_token');
 
-		$fields['user'] = new TextField('user', null, null);
-		$fields['user']->placeholder = 'Lidnummer of emailadres';
+		$fields['user'] = new TextField('_username', $options['lastUserName'] ?? "", null);
+		$fields['user']->placeholder = $this->translator->trans('Lidnummer of emailadres');
 
-		$fields['pass'] = new WachtwoordField('pass', null, null);
-		$fields['pass']->placeholder = 'Wachtwoord';
+		$fields['pass'] = new WachtwoordField('_password', null, null);
+		$fields['pass']->placeholder = $this->translator->trans('Wachtwoord');
 
-		if (LoginModel::instance()->hasError()) {
-			$fields[] = new HtmlComment('<p class="error">' . LoginModel::instance()->getError() . '</p>');
+		if (isset($options['lastError'])) {
+			$fields[] = new HtmlComment(
+				sprintf("<p class=\"error\">%s</p>", $this->formatError($options['lastError'], $options['lastUserName'] ?? "")));
 		} else {
-			$fields[] = new HtmlComment('<div class="float-left">');
+			$fields[] = new HtmlComment('<div class="float-start">');
 			$fields[] = new HtmlComment('</div>');
 
-			$fields['remember'] = new CheckboxField('remember', false, null, 'Blijf ingelogd');
+			$fields['remember'] = new CheckboxField('_remember_me', false, null, $this->translator->trans('Blijf ingelogd'));
 		}
 
-		$this->addFields($fields);
-	}
+		$builder->addFields($fields);
 
-	public function view() {
-		parent::view();
-		?>
-		<ul class="login-buttons">
-			<li>
-				<a href="#" class="login-submit" onclick="document.getElementById('loginform').submit();">Inloggen</a>
-				&raquo;
-				&nbsp; <a href="/accountaanvragen">Account aanvragen</a> &raquo;
-			</li>
-			<li><a href="/wachtwoord/vergeten">Wachtwoord vergeten?</a></li>
-		</ul>
-		<?php
+		$builder->setFormKnoppen(new TemplateFormKnoppen($this->twig, 'formulier/login_knoppen.html.twig'));
 	}
-
 }

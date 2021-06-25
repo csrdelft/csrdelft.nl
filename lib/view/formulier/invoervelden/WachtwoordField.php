@@ -5,12 +5,11 @@ namespace CsrDelft\view\formulier\invoervelden;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  */
 class WachtwoordField extends TextField {
 
 	public $type = 'password';
-	public $enter_submit = true;
 
 	// Override TextField getValue as passwords do not need to be sanitised here
 	public function getValue() {

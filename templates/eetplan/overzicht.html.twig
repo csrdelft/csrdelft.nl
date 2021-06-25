@@ -1,0 +1,23 @@
+{% extends 'eetplan/template.html.twig' %}
+
+{% block breadcrumbs %}
+	{{ csr_breadcrumbs({
+		(url('default')): 'main',
+		(url('csrdelft_eetplan_view')): 'Eetplan',
+	}) }}
+{% endblock %}
+
+{% block content %}
+	{% if mag('P_ADMIN') or mag('commissie:NovCie') %}
+		<a href="{{ url('csrdelft_eetplan_beheer') }}" class="btn btn-primary float-end"><span class="ico wrench"></span>
+			Eetplanbeheer</a>
+	{% endif %}
+	<h1>Eetplan</h1>
+	<div class="alert alert-warning">
+		<h3>LET OP: </h3>
+		Van novieten die niet komen opdagen op het eetplan wordt verwacht dat zij minstens &eacute;&eacute;n keer komen
+		koken op het huis waarbij zij gefaeld hebben.
+	</div>
+
+	{{ include('eetplan/table.html.twig') }}
+{% endblock %}

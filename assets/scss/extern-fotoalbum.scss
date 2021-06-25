@@ -1,0 +1,78 @@
+@import "extern/variables";
+
+.subalbums {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 1em;
+  font-size: 12pt;
+
+  .subalbum {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 1px 1px 0;
+    float: left;
+    cursor: pointer;
+
+    a {
+      border: 0;
+      img {
+        margin: 0;
+      }
+    }
+
+    .subalbumname {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 5px 2px 5px 2px;
+      text-align: center;
+      font-weight: bold;
+      color: black;
+      background-color: white;
+      opacity: 0.8;
+    }
+  }
+  .subalbum:hover {
+    text-decoration: none;
+
+    .subalbumname {
+      opacity: 0.9;
+    }
+  }
+}
+
+.subalbums .subalbum, .jgallery-container-inner a {
+  transition: opacity .4s ease-out;
+}
+
+.subalbums:hover .subalbum, .jgallery-container-inner:hover a {
+  opacity: 0.8;
+}
+
+.subalbums:hover .subalbum:hover, .jgallery-container-inner:hover a:hover {
+  opacity: 1;
+}
+
+.j-gallery-icon {
+	display: inline-flex;
+	cursor: pointer;
+	width: 32px;
+	height: 24px;
+	vertical-align: middle;
+	align-items: center;
+	box-sizing: border-box;
+	justify-content: center;
+	position: relative;
+	margin: 0 0.25em;
+}
+
+.j-gallery-thumbnail img {
+	margin: 0;
+}
+
+.j-gallery-drop-down > div {
+	position: absolute !important;
+	inset: auto !important;
+}

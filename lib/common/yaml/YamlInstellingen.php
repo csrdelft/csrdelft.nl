@@ -2,6 +2,7 @@
 
 namespace CsrDelft\common\yaml;
 
+use CsrDelft\command\FlushMemcacheCommand;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
@@ -16,7 +17,7 @@ use Symfony\Component\Config\FileLocator;
  *
  * Cached de settings op schijf in productie mode.
  *
- * Cache invalidation met bin/flushcache.php
+ * @see FlushMemcacheCommand voor Cache invalidation
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 15/07/2019
@@ -62,6 +63,9 @@ trait YamlInstellingen {
 		return $this->defaults[$module][$key][$field];
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getAll() {
 		return $this->defaults;
 	}
@@ -75,8 +79,10 @@ trait YamlInstellingen {
 	}
 
 	private function writeConfig($config, $file) {
-		@mkdir(CONFIG_CACHE_PATH, 0777, true);
-		touch($file);
+		if (!file_exists($file)) {
+			@mkdir(CONFIG_CACHE_PATH, 0777, true);
+			touch($file);
+		}
 		/**
 		 * Deze config is direct van schijf gelezen en bevat geen informatie die beinvloedbaar is door gebruikers.
 		 */

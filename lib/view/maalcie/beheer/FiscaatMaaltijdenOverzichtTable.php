@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
-use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
@@ -11,7 +11,7 @@ use CsrDelft\view\datatable\Multiplicity;
 
 class FiscaatMaaltijdenOverzichtTable extends DataTable {
 	public function __construct() {
-		parent::__construct(MaaltijdenModel::ORM, '/maaltijden/fiscaat/overzicht');
+		parent::__construct(Maaltijd::class, '/maaltijden/fiscaat/overzicht');
 
 		$this->deleteColumn('mlt_repetitie_id');
 		$this->deleteColumn('product_id');

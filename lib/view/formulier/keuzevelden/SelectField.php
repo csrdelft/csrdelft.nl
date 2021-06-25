@@ -8,7 +8,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * SelectField
  * HTML select met opties.
@@ -18,18 +18,14 @@ class SelectField extends InputField {
 	public $size;
 	public $multiple;
 	protected $options;
-	private $groups;
 
-	public function __construct($name, $value, $description, array $options, $groups = false, $size = 1, $multiple = false) {
+	public function __construct($name, $value, $description, array $options, $size = 1, $multiple = false) {
 		parent::__construct($name, $value, $description);
 		$this->options = $options;
-		$this->groups = (boolean)$groups;
 		$this->size = (int)$size;
 		$this->multiple = $multiple;
-		if ($this->groups) {
-			$this->onchange .= 'preview' . $this->getId() . '();';
-			$this->onkeyup .= 'preview' . $this->getId() . '();';
-		}
+
+		$this->css_classes = ['form-select'];
 	}
 
 	public function getOptions() {
@@ -49,43 +45,16 @@ class SelectField extends InputField {
 			return false;
 		}
 
-		if ($this->groups) {
-			// flatten array
-			$options = array();
-			foreach ($this->options as $group) {
-				$options += $group;
-			}
-		} else {
-			$options = $this->options;
-		}
 		if ($this->multiple) {
-			if (($this->required || $this->getValue() !== null) && array_intersect($this->value, $options) !== $this->value) {
+			if (($this->required || $this->getValue() !== null) && array_intersect($this->value, $this->options) !== $this->value) {
 				$this->error = 'Onbekende optie gekozen';
 			}
 		} else {
-			if (($this->required || $this->getValue() !== null) && !array_key_exists($this->value, $options)) {
+			if (($this->required || $this->getValue() !== null) && !array_key_exists($this->value, $this->options)) {
 				$this->error = 'Onbekende optie gekozen';
 			}
 		}
 		return $this->error === '';
-	}
-
-	public function getPreviewDiv() {
-		if ($this->groups) {
-			return '<div id="selectPreview_' . $this->getId() . '" class="previewDiv"></div>';
-		}
-		return '';
-	}
-
-	public function getJavascript() {
-		return parent::getJavascript() . <<<JS
-
-var preview{$this->getId()} = function () {
-	var selected = $(':selected', '#{$this->getId()}');
-	$('#selectPreview_{$this->getId()}').html(selected.parent().attr('label'));
-};
-preview{$this->getId()}();
-JS;
 	}
 
 	public function getHtml($include_hidden = true) {
@@ -103,15 +72,7 @@ JS;
 			$html .= ' size="' . $this->size . '"';
 		}
 		$html .= $this->getInputAttribute(array('id', 'origvalue', 'class', 'disabled', 'readonly')) . '>';
-		if ($this->groups) {
-			foreach ($this->options as $group => $options) {
-				$html .= '<optgroup label="' . htmlspecialchars($group) . '">'
-					. $this->getOptionsHtml($options) .
-					'</optgroup>';
-			}
-		} else {
-			$html .= $this->getOptionsHtml($this->options);
-		}
+		$html .= $this->getOptionsHtml($this->options);
 		return $html . '</select>';
 	}
 

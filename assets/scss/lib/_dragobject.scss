@@ -1,0 +1,33 @@
+/* --------------------------------
+
+Dragable objects
+
+-------------------------------- */
+.dragbject {
+	position: fixed;
+	z-index: 50;
+	-webkit-touch-callout: none;
+	user-select: none;
+
+
+	&:active {
+		cursor: move;
+	}
+}
+
+.dragvertical {
+	overflow-y: hidden;
+
+
+	&:active {
+		cursor: ns-resize;
+	}
+}
+
+.draghorizontal {
+	overflow-x: hidden;
+
+	&:active {
+		cursor: ew-resize;
+	}
+}

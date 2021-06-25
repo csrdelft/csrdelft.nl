@@ -1,0 +1,403 @@
+@import "~lightbox2/dist/css/lightbox.css";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+
+@import "fonts";
+@import "extern/variables";
+
+// common
+@import "extern/reset";
+@import "bbcode";
+
+@import "extern/util";
+@import "extern/grid";
+@import "extern/menu";
+@import "extern/banner";
+@import "extern/header";
+@import "extern/table";
+@import "extern/form";
+@import "extern/image";
+@import "extern/list";
+@import "extern/footer";
+@import "extern/wrapper";
+@import "extern/animatie";
+@import "extern/owee-banner";
+
+/* Box Model */
+
+*, *:before, *:after {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/* Basic */
+
+@-ms-viewport {
+	width: device-width;
+}
+
+body {
+	background-color: $basiskleur;
+	-ms-overflow-style: scrollbar;
+
+	&.is-loading {
+		*, *:before, *:after {
+			animation: none !important;
+			transition: none !important;
+		}
+	}
+}
+
+/* Type */
+
+body, input, select, textarea {
+	color: #ffffff;
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
+	font-size: 16.5pt;
+	font-weight: 300;
+	line-height: 1.65;
+}
+
+#wrapper {
+	overflow: hidden;
+}
+
+a {
+	transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
+	border-bottom: dotted 1px rgba(255, 255, 255, 0.35);
+	color: #ffffff;
+	text-decoration: none;
+
+	&:hover {
+		border-bottom-color: transparent;
+		color: #ffffff;
+	}
+
+	&.special {
+
+		&:not(.button) {
+			text-decoration: none;
+			border-bottom: 0;
+			display: block;
+			font-size: 0.8em;
+			font-weight: 600;
+			letter-spacing: 0.1em;
+			margin: 0 0 2em 0;
+			text-transform: uppercase;
+
+			&:before {
+				-moz-osx-font-smoothing: grayscale;
+				-webkit-font-smoothing: antialiased;
+				font-family: 'Font Awesome 5 Free';
+				font-style: normal;
+				font-weight: 900;
+				text-transform: none !important;
+				transition: background-color 0.2s ease-in-out;
+				border-radius: 100%;
+				border: solid 2px rgba(255, 255, 255, 0.5);
+				content: fa-content($fa-var-angle-right);
+				display: inline-block;
+				font-size: 1.25em;
+				height: 2em;
+				line-height: 1.65em;
+				margin-right: 0.85em;
+				text-align: center;
+				text-indent: 0.15em;
+				vertical-align: middle;
+				width: 2em;
+			}
+
+			&:hover:before {
+				background-color: rgba(255, 255, 255, 0.025);
+			}
+
+			&:active:before {
+				background-color: rgba(255, 255, 255, 0.075);
+			}
+		}
+	}
+}
+
+strong, b {
+	font-weight: 600;
+}
+
+em, i {
+	font-style: italic;
+}
+
+p {
+	margin: 0 0 2em 0;
+
+	&.lidworden {
+		font-style: italic;
+	}
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	margin: 0 0 1em 0;
+	text-transform: uppercase;
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	span {
+		font-weight: 200;
+	}
+
+	&.major, &.inline { // .inline voor fotoalbum
+		padding-bottom: 1em;
+		border-bottom: solid 4px $geel;
+	}
+}
+
+h1 {
+	font-size: 1em;
+}
+
+h2 {
+	font-size: 1.2em;
+}
+
+h3 {
+	font-size: 0.9em;
+}
+
+h4 {
+	font-size: 0.7em;
+}
+
+h5 {
+	font-size: 0.7em;
+}
+
+h6 {
+	font-size: 0.7em;
+}
+
+sub {
+	font-size: 0.8em;
+	position: relative;
+	top: 0.5em;
+}
+
+sup {
+	font-size: 0.8em;
+	position: relative;
+	top: -0.5em;
+}
+
+blockquote {
+	border-left: solid 4px rgba(255, 255, 255, 0.125);
+	font-style: italic;
+	margin: 0 0 2em 0;
+	padding: 0.5em 0 0.5em 2em;
+}
+
+code {
+	background: rgba(255, 255, 255, 0.025);
+	border-radius: 5px;
+	border: solid 2px rgba(255, 255, 255, 0.125);
+	font-family: "Courier New", monospace;
+	font-size: 0.9em;
+	margin: 0 0.25em;
+	padding: 0.25em 0.65em;
+}
+
+pre {
+	-webkit-overflow-scrolling: touch;
+	font-family: "Courier New", monospace;
+	font-size: 0.9em;
+	code {
+		display: block;
+		line-height: 1.75em;
+		padding: 1em 1.5em;
+		overflow-x: auto;
+	}
+}
+
+hr {
+	border: 0;
+	border-bottom: solid 2px rgba(255, 255, 255, 0.125);
+	margin: 2.5em 0;
+
+	&.major {
+		margin: 4em 0;
+	}
+}
+
+.detail img {
+	margin: 1em;
+}
+
+.clear {
+	clear: both;
+}
+
+.bb-video {
+	position: relative;
+	display: block;
+	width: 100%;
+	padding: 0;
+	overflow: hidden;
+	max-width: 560px;
+
+	&::before {
+		display: block;
+		content: "";
+		padding-top: 56.25%;
+	}
+
+	iframe {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+}
+
+.ui-tooltip {
+	background: $kleur3;
+	border-radius: 5px;
+	white-space: nowrap;
+}
+
+.white-background {
+	background: white;
+}
+
+optgroup {
+	background-color: #414262;
+}
+
+.include-instagram {
+	background-image: url(../images/social/instagram.svg);
+}
+
+.een-minuut {
+	p {
+		margin-bottom: 1em;
+	}
+
+	.bb-video {
+		max-width: 100%;
+	}
+
+	#hero {
+		margin-bottom: 2em;
+
+		h1 {
+			font-size: 3em;
+			font-weight: bold;
+			text-align: center;
+			margin: 0;
+
+			&.major {
+				border-bottom: 0;
+				padding-bottom: 0;
+			}
+		}
+
+		.bb-video {
+			max-width: 70%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+
+	.sociaal {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 2em;
+		margin-bottom: 1em;
+
+		.instagram .insta-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			align-items: center;
+
+			#insta-tag {
+				font-size: 3em;
+				font-weight: bold;
+				color: $donkerblauw;
+				-webkit-text-stroke-width: 2px;
+				-webkit-text-stroke-color: $geel;
+			}
+		}
+	}
+}
+
+/*
+ MEDIA QUERIES
+*/
+@media screen and (max-width: $scherm-extrabreed) {
+
+	body, input, select, textarea {
+		font-size: 13pt;
+	}
+
+}
+
+@media screen and (max-width: $scherm-breed) {
+
+	.een-minuut .sociaal .instagram .insta-grid #insta-tag {
+		font-size: 2em;
+		-webkit-text-stroke-width: 1px;
+	}
+
+}
+
+@media screen and (max-width: $scherm-middel) {
+
+	h2 {
+		font-size: 1em;
+	}
+
+	h3 {
+		font-size: 0.8em;
+	}
+
+	.een-minuut #hero h1 {
+		font-size: 2em;
+	}
+
+}
+
+@media screen and (max-width: $scherm-middelsmal) {
+
+	html, body {
+		min-width: 320px;
+	}
+
+	.een-minuut .sociaal .instagram .insta-grid {
+		grid-template-columns: 1fr 0px;
+		justify-items: center;
+
+		img {
+			width: 100%;
+		}
+
+		#insta-tag {
+			display: none;
+		}
+	}
+
+}
+
+@media screen and (max-width: $scherm-smal) {
+
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+
+}

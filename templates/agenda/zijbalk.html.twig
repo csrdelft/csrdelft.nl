@@ -1,0 +1,22 @@
+<div id="zijbalk_agenda">
+	<div class="zijbalk-kopje">
+		<a href="{{ url('csrdelft_agenda_maand') }}" title="Agenda">Agenda</a>
+	</div>
+	{% for item in items %}
+		<div class="item">
+			{% if item.url %}
+			<a href="{{ item.url }}" title="{{ item.beschrijving }}">
+				<span class="zijbalk-moment">{{ date(item.beginMoment) | zijbalk_date_format }}</span>
+				&nbsp;{{ item.titel }}
+			</a>
+			{% else %}
+			<a title="{{ item.beschrijving }}"
+				 href="{{ url('csrdelft_agenda_maand', {jaar: date(item.beginMoment) | date('Y'), maand: date(item.beginMoment) | date('m'), _fragment: ('dag-' ~ date(item.beginMoment) | date('Y-m-d'))}) }}">
+				<span class="zijbalk-moment">{{ date(item.beginMoment) | zijbalk_date_format }}</span>
+				&nbsp;{{ item.titel }}
+			</a>
+				{% endif %}
+		</div>
+	{% endfor %}
+</div>
+

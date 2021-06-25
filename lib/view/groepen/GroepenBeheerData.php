@@ -2,20 +2,20 @@
 
 namespace CsrDelft\view\groepen;
 
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\view\datatable\DataTableResponse;
 use Exception;
 
 class GroepenBeheerData extends DataTableResponse {
 
 	/**
-	 * @param AbstractGroep $groep
+	 * @param Groep $groep
 	 * @return string
 	 * @throws Exception
 	 */
 	public function renderElement($groep) {
-		$array = $groep->jsonSerialize();
+		$array = (array)$groep;
 
 		$array['detailSource'] = $groep->getUrl() . '/leden';
 
@@ -27,15 +27,18 @@ class GroepenBeheerData extends DataTableResponse {
 			}
 		}
 		$array['naam'] = '<span title="' . $title . '">' . $groep->naam . '</span>';
-		$array['status'] = GroepStatus::getChar($groep->status);
+		if (in_array(GroepMoment::class, class_uses($groep))) {
+			$array['status'] = $groep->status->getDescription();
+		} else {
+			$array['status'] = null;
+		}
 		$array['samenvatting'] = null;
 		$array['omschrijving'] = null;
 		$array['website'] = null;
-		$array['maker_uid'] = null;
 		$array['leden'] = null;
 
-		if (property_exists($groep, 'in_agenda')) {
-			$array['in_agenda'] = $groep->in_agenda ? 'ja' : 'nee';
+		if (property_exists($groep, 'inAgenda')) {
+			$array['inAgenda'] = $groep->inAgenda ? 'ja' : 'nee';
 		}
 
 		return $array;

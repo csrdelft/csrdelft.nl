@@ -62,7 +62,7 @@ abstract class FormKnoppen implements FormElement {
 	public function getHtml() {
 		$html = '<div class="' . implode(' ', $this->css_classes) . '">';
 		if (!empty($this->knoppen_left)) {
-			$html .= '<div class="float-left">';
+			$html .= '<div class="float-start">';
 
 			foreach ($this->knoppen_left as $knop) {
 				$html .= $knop->getHtml();
@@ -70,7 +70,7 @@ abstract class FormKnoppen implements FormElement {
 			$html .= '</div>';
 		}
 		if (!empty($this->knoppen_right)) {
-			$html .= '<div class="float-right">';
+			$html .= '<div class="float-end">';
 			foreach ($this->knoppen_right as $knop) {
 				$html .= $knop->getHtml();
 			}
@@ -79,8 +79,8 @@ abstract class FormKnoppen implements FormElement {
 		return $html . '</div>';
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getJavascript() {

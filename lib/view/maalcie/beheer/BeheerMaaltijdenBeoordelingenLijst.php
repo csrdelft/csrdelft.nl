@@ -2,9 +2,10 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
-use CsrDelft\model\entity\maalcie\CorveeFunctie;
-use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\maalcie\MaaltijdBeoordelingenModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\corvee\CorveeFunctie;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\DataTableResponse;
 
@@ -18,7 +19,7 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 		$data = $maaltijd->jsonSerialize();
 
 		// Haal beoordelingsamenvatting op
-		$stat = MaaltijdBeoordelingenModel::instance()->getBeoordelingSamenvatting($maaltijd);
+		$stat = ContainerFacade::getContainer()->get(MaaltijdBeoordelingenRepository::class)->getBeoordelingSamenvatting($maaltijd);
 		$data['aantal_beoordelingen'] = $stat->kwantiteitAantal . ", " . $stat->kwaliteitAantal;
 		$data['kwantiteit'] = $this->getalWeergave($stat->kwantiteit, '-', 3);
 		$data['kwaliteit'] = $this->getalWeergave($stat->kwaliteit, '-', 3);
@@ -29,8 +30,12 @@ class BeheerMaaltijdenBeoordelingenLijst extends DataTableResponse {
 		$kokTaken = $maaltijd->getCorveeTaken(CorveeFunctie::KWALIKOK_FUNCTIE_ID);
 		$data['koks'] = "";
 		for ($i = 0; $i < count($kokTaken); $i++) {
-			$data['koks'] .= ProfielRepository::getLink($kokTaken[$i]->uid);
-			if ($i < count($kokTaken) - 1) $data['koks'] .= '<br>';
+			$kokTaak = $kokTaken[$i];
+
+			if ($kokTaak->profiel) {
+				$data['koks'] .= $kokTaken[$i]->profiel->getLink();
+				if ($i < count($kokTaken) - 1) $data['koks'] .= '<br>';
+			}
 		}
 
 		return $data;

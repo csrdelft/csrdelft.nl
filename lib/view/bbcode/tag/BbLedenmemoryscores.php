@@ -3,12 +3,11 @@
 namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\Lichting;
-use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\LedenMemoryScoresModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\Lichting;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\VerticalenRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 
@@ -19,18 +18,30 @@ use CsrDelft\view\ledenmemory\LedenMemoryScoreTable;
 class BbLedenmemoryscores extends BbTag {
 
 	/**
-	 * @var AbstractGroep|Lichting|false|null
+	 * @var Groep|Lichting|false|null
 	 */
 	private $groep;
 	private $titel;
+	/**
+	 * @var VerticalenRepository
+	 */
+	private $verticalenRepository;
+	/**
+	 * @var LichtingenRepository
+	 */
+	private $lichtingenRepository;
 
-	public function isAllowed()
-	{
-		LoginModel::mag(P_LOGGED_IN);
+	public function __construct(VerticalenRepository $verticalenRepository, LichtingenRepository $lichtingenRepository) {
+		$this->verticalenRepository = $verticalenRepository;
+		$this->lichtingenRepository = $lichtingenRepository;
 	}
 
 	public static function getTagName() {
 		return 'ledenmemoryscores';
+	}
+
+	public function isAllowed() {
+		return LoginService::mag(P_LOGGED_IN);
 	}
 
 	public function renderLight() {
@@ -40,16 +51,15 @@ class BbLedenmemoryscores extends BbTag {
 	/**
 	 * @param $arguments
 	 */
-	function parse($arguments = []) {
-		LedenMemoryScoresModel::instance();
+	public function parse($arguments = []) {
 		$groep = null;
 		$titel = null;
 		if (isset($arguments['verticale'])) {
 			$v = filter_var($arguments['verticale'], FILTER_SANITIZE_STRING);
 			if (strlen($v) > 1) {
-				$verticale = VerticalenModel::instance()->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
+				$verticale = $this->verticalenRepository->searchByNaam($v);
 			} else {
-				$verticale = VerticalenModel::instance()->get($v);
+				$verticale = $this->verticalenRepository->get($v);
 			}
 			if ($verticale) {
 				$titel = ' Verticale ' . $verticale->naam;
@@ -58,9 +68,9 @@ class BbLedenmemoryscores extends BbTag {
 		} elseif (isset($arguments['lichting'])) {
 			$l = (int)filter_var($arguments['lichting'], FILTER_SANITIZE_NUMBER_INT);
 			if ($l < 1950) {
-				$l = LichtingenModel::getJongsteLidjaar();
+				$l = LichtingenRepository::getJongsteLidjaar();
 			}
-			$lichting = LichtingenModel::instance()->get($l);
+			$lichting = $this->lichtingenRepository->get($l);
 			if ($lichting) {
 				$titel = ' Lichting ' . $lichting->lidjaar;
 				$groep = $lichting;

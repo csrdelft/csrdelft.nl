@@ -2,12 +2,13 @@
 
 namespace CsrDelft\repository\eetplan;
 
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\entity\eetplan\Eetplan;
-use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\OrmTrait;
+use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\repository\AbstractRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\EetplanFactory;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,15 +17,14 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * Verzorgt het opvragen van eetplangegevens
  *
- * @method Eetplan[]    ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
- * @method Eetplan|null doctrineFind($id, $lockMode = null, $lockVersion = null)
+ * @method Eetplan|null find($id, $lockMode = null, $lockVersion = null)
  * @method Eetplan|null findOneBy(array $criteria, array $orderBy = null)
  * @method Eetplan[]    findAll()
  * @method Eetplan[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Eetplan|null retrieveByUuid($UUID)
  */
-class EetplanRepository extends ServiceEntityRepository {
-	use OrmTrait;
-	const FMT_DATE = "d-m-Y";
+class EetplanRepository extends AbstractRepository {
+	const FMT_DATE = "dd-MM-Y";
 
 	/**
 	 * @var EetplanBekendenRepository
@@ -42,15 +42,24 @@ class EetplanRepository extends ServiceEntityRepository {
 		$this->profielRepository = $profielRepository;
 	}
 
+	public function avondHasEetplan($avond) {
+		return count($this->findBy(['avond' => $avond])) > 0;
+	}
+
 	/**
 	 * Haal alle avonden op die voor deze lichting gelden.
 	 *
-	 * @param $lichting
+	 * @param $lidjaar
 	 *
 	 * @return Eetplan[] Lijst met eetplan objecten met alleen een avond.
 	 */
-	public function getAvonden($lichting) {
-		return $this->ormFind('uid LIKE ? AND avond <> "0000-00-00"', [$lichting . "%"], 'avond');
+	public function getAvonden($lidjaar) {
+		return $this->createQueryBuilder('e')
+			->join('e.noviet', 'n')
+			->where('n.lidjaar = :lidjaar and e.avond is not null')
+			->setParameter('lidjaar', $lidjaar)
+			->groupBy('e.avond')
+			->getQuery()->getResult();
 	}
 
 	/**
@@ -58,34 +67,39 @@ class EetplanRepository extends ServiceEntityRepository {
 	 *
 	 * Uitvoer is een array met 'uid' => [Eetplan, Eetplan, ...]
 	 *
-	 * @param $lichting
+	 * @param $lidjaar
 	 *
 	 * @return array Het eetplan
 	 */
-	public function getEetplan($lichting) {
-		// Avond 0000-00-00 wordt gebruikt voor novieten die huizen kennen
+	public function getEetplan($lidjaar) {
+		// Avond null wordt gebruikt voor novieten die huizen kennen
 		// Orderen bij avond, zodat de avondvolgorde per noviet klopt
 		/** @var Eetplan[] $eetplan */
-		$eetplan = $this->ormFind('uid LIKE ? AND avond <> "0000-00-00"', [$lichting . "%"], null, 'avond');
+		$eetplan = $this->createQueryBuilder('e')
+			->join('e.noviet', ' n')
+			->where('n.lidjaar = :lidjaar and e.avond is not null')
+			->setParameter('lidjaar', $lidjaar)
+			->orderBy('e.avond', 'DESC')
+			->getQuery()->getResult();
 		$eetplanFeut = [];
 		$avonden = [];
 		foreach ($eetplan as $sessie) {
-			if (!isset($eetplanFeut[$sessie->uid])) {
-				$eetplanFeut[$sessie->uid] = [
+			if (!isset($eetplanFeut[$sessie->noviet->uid])) {
+				$eetplanFeut[$sessie->noviet->uid] = [
 					'avonden' => [],
-					'uid' => $sessie->uid,
+					'uid' => $sessie->noviet->uid,
 					'naam' => $sessie->noviet->getNaam()
 				];
 			}
 
-			$eetplanFeut[$sessie->uid]['avonden'][] = [
+			$eetplanFeut[$sessie->noviet->uid]['avonden'][] = [
 				'datum' => $sessie->avond,
-				'woonoord_id' => $sessie->woonoord_id,
-				'woonoord' => $sessie->getWoonoord()->naam
+				'woonoord_id' => $sessie->woonoord->id,
+				'woonoord' => $sessie->woonoord->naam
 			];
 
-			if (!isset($avonden[$sessie->avond->format(self::FMT_DATE)])) {
-				$avonden[$sessie->avond->format(self::FMT_DATE)] = $sessie->avond;
+			if (!isset($avonden[date_format_intl($sessie->avond, self::FMT_DATE)])) {
+				$avonden[date_format_intl($sessie->avond, self::FMT_DATE)] = $sessie->avond;
 			}
 		}
 
@@ -97,23 +111,23 @@ class EetplanRepository extends ServiceEntityRepository {
 
 	/**
 	 * @param string $avond
-	 * @param string $lichting
+	 * @param integer $lidjaar
 	 *
 	 * @return Eetplan[]
 	 */
-	public function maakEetplan($avond, $lichting) {
+	public function maakEetplan($avond, $lidjaar) {
 		$factory = new EetplanFactory();
 
-		$bekenden = $this->eetplanBekendenRepository->getBekenden($lichting);
+		$bekenden = $this->eetplanBekendenRepository->getBekendenVoorLidjaar($lidjaar);
 		$factory->setBekenden($bekenden);
 
-		$bezocht = $this->ormFind("uid like ?", [$lichting . "%"]);
+		$bezocht = $this->getBezocht($lidjaar);
 		$factory->setBezocht($bezocht);
 
-		$novieten = $this->profielRepository->ormFind("uid LIKE ? AND status = 'S_NOVIET'", [$lichting . "%"]);
+		$novieten = $this->profielRepository->getNovietenVanLaatsteLidjaar($lidjaar);
 		$factory->setNovieten($novieten);
 
-		$huizen = WoonoordenModel::instance()->find("eetplan = true AND status = 'ht'")->fetchAll();
+		$huizen = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->findBy(["eetplan" => true, "status" => GroepStatus::HT()]);
 		$factory->setHuizen($huizen);
 
 		return $factory->genereer($avond, true);
@@ -125,32 +139,49 @@ class EetplanRepository extends ServiceEntityRepository {
 	 * @return Eetplan[]|false lijst van eetplansessies voor deze feut, gesorteerd op datum (oplopend)
 	 */
 	public function getEetplanVoorNoviet($uid) {
-		return $this->ormFind('uid = ? AND avond <> "0000-00-00"', [$uid], null, 'avond');
+		return $this->createQueryBuilder('e')
+			->join('e.noviet', 'n')
+			->where('n.uid = :uid and e.avond is not null')
+			->setParameter('uid', $uid)
+			->orderBy('e.avond', 'ASC')
+			->getQuery()->getResult();
 	}
 
 	/**
 	 * @param int $woonoord_id Id van het huis
-	 * @param string $lichting
+	 * @param string $lidjaar
 	 *
 	 * @return Eetplan[] lijst van eetplansessies voor dit huis, gegroepeerd op avond (oplopend)
 	 */
-	public function getEetplanVoorHuis($id, $lichting) {
-		$sessies = $this->ormFind('uid LIKE ? AND woonoord_id = ? AND avond <> "0000-00-00"', [$lichting . "%", $id], null, 'avond');
+	public function getEetplanVoorHuis($woonoord_id, $lidjaar) {
+		/** @var Eetplan[] $sessies */
+		$sessies = $this->createQueryBuilder('e')
+			->join('e.noviet', 'n')
+			->join('e.woonoord', 'w')
+			->where('n.lidjaar = :lidjaar and w.id = :woonoord_id and e.avond is not null')
+			->setParameter('lidjaar', $lidjaar)
+			->setParameter('woonoord_id', $woonoord_id)
+			->orderBy('e.avond', 'ASC')
+			->getQuery()->getResult();
 
 		return array_reduce($sessies, function (array $accumulator, Eetplan $eetplan) {
-			$accumulator[$eetplan->avond->format(self::FMT_DATE)][] = $eetplan;
+			$accumulator[date_format_intl($eetplan->avond, self::FMT_DATE)][] = $eetplan;
 
 			return $accumulator;
 		}, []);
 	}
 
 	/**
-	 * @param string $lichting
+	 * @param string $lidjaar
 	 *
 	 * @return Eetplan[]
 	 */
-	public function getBekendeHuizen($lichting) {
-		return $this->ormFind('uid LIKE ? AND avond = "0000-00-00"', [$lichting . "%"]);
+	public function getBekendeHuizen($lidjaar) {
+		return $this->createQueryBuilder('e')
+			->join('e.noviet', 'n')
+			->where('n.lidjaar = :lidjaar and e.avond is null')
+			->setParameter('lidjaar', $lidjaar)
+			->getQuery()->getResult();
 	}
 
 	/**
@@ -161,16 +192,35 @@ class EetplanRepository extends ServiceEntityRepository {
 		$alleEetplan = $this->getEetplanVoorAvond($avond, $lichting);
 
 		foreach ($alleEetplan as $eetplan) {
-			$this->delete($eetplan);
+			$this->remove($eetplan);
 		}
 	}
 
 	/**
 	 * @param string $avond
 	 *
+	 * @param $lidjaar
 	 * @return Eetplan[]
 	 */
-	public function getEetplanVoorAvond($avond, $lichting) {
-		return $this->ormFind('avond = ? AND uid LIKE ?', [$avond, $lichting . "%"]);
+	public function getEetplanVoorAvond($avond, $lidjaar) {
+		return $this->createQueryBuilder('e')
+			->join('e.noviet', 'n')
+			->where('e.avond = :avond and n.lidjaar = :lidjaar')
+			->setParameter('avond', $avond)
+			->setParameter('lidjaar', $lidjaar)
+			->getQuery()->getResult();
+	}
+
+	/**
+	 * @param int $lidjaar
+	 * @return int|mixed|string
+	 */
+	public function getBezocht(int $lidjaar)
+	{
+		return $this->createQueryBuilder('e')
+			->join('e.noviet', 'n')
+			->where("n.lidjaar like :lidjaar")
+			->setParameter('lidjaar', $lidjaar)
+			->getQuery()->getResult();
 	}
 }

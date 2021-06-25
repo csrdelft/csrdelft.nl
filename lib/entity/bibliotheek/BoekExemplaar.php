@@ -4,8 +4,9 @@
 namespace CsrDelft\entity\bibliotheek;
 
 
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Entity\PersistentEntity;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\service\security\LoginService;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,8 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\bibliotheek\BoekExemplaarRepository")
  * @ORM\Table("biebexemplaar")
  */
-class BoekExemplaar extends PersistentEntity {
-
+class BoekExemplaar {
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer")
@@ -24,14 +24,20 @@ class BoekExemplaar extends PersistentEntity {
 	public $id;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=0})
 	 */
 	public $boek_id;
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191)
+	 * @ORM\Column(type="uid")
 	 */
 	public $eigenaar_uid;
+	/**
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="eigenaar_uid", referencedColumnName="uid")
+	 */
+	public $eigenaar;
 	/**
 	 * @var string
 	 * @ORM\Column(type="text")
@@ -40,37 +46,39 @@ class BoekExemplaar extends PersistentEntity {
 
 	/**
 	 * @var string
-	 * @ORM\Column(type="string", length=191, nullable=true)
+	 * @ORM\Column(type="uid", nullable=true)
 	 */
 	public $uitgeleend_uid;
-
 	/**
-	 * @var \DateTime
+	 * @var Profiel
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\JoinColumn(name="uitgeleend_uid", referencedColumnName="uid")
+	 */
+	public $uitgeleend;
+	/**
+	 * @var DateTimeImmutable
 	 * @ORM\Column(type="datetime")
 	 */
 	public $toegevoegd;
-
 	/**
-	 * @var string
-	 * @ORM\Column(type="string")
+	 * @var BoekExemplaarStatus
+	 * @ORM\Column(type="enumBoekExemplaarStatus")
 	 */
-	public $status = 'beschikbaar';
-
+	public $status;
 	/**
-	 * @var \DateTime
-	 * @ORM\Column(type="datetime")
+	 * @var DateTimeImmutable|null
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
 	public $uitleendatum;
 	/**
 	 * @var int
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="integer", options={"default"=0})
 	 */
 	public $leningen;
 
 	/**
 	 * @var Boek
 	 * @ORM\ManyToOne(targetEntity="Boek", inversedBy="exemplaren")
-	 * @ORM\JoinColumn(name="boek_id", referencedColumnName="id")
 	 */
 	public $boek;
 
@@ -79,9 +87,9 @@ class BoekExemplaar extends PersistentEntity {
 	}
 
 	public function isEigenaar() : bool {
-		if ($this->eigenaar_uid == LoginModel::getUid()) {
+		if ($this->eigenaar_uid == LoginService::getUid()) {
 			return true;
-		} elseif ($this->isBiebBoek() && LoginModel::mag(P_BIEB_MOD)) {
+		} elseif ($this->isBiebBoek() && LoginService::mag(P_BIEB_MOD)) {
 			return true;
 		}
 		return false;
@@ -90,23 +98,13 @@ class BoekExemplaar extends PersistentEntity {
 	public function magBewerken() : bool {
 		return $this->isEigenaar();
 	}
-	public function getStatus() {
-		return $this->status;
-	}
-
-	/**
-	 * @return Boek
-	 */
-	public function getBoek() {
-		return $this->boek;
-	}
 
 	public function magBekijken() {
-		return LoginModel::mag(P_BIEB_READ) || $this->magBewerken();
+		return LoginService::mag(P_BIEB_READ) || $this->magBewerken();
 	}
 
 	public function isBeschikbaar() {
-		return $this->getStatus() == 'beschikbaar';
+		return $this->status === BoekExemplaarStatus::beschikbaar();
 	}
 
 	public function kanLenen(string $uid) {
@@ -114,14 +112,14 @@ class BoekExemplaar extends PersistentEntity {
 	}
 
 	public function isUitgeleend() {
-		return $this->status == 'uitgeleend';
+		return $this->status === BoekExemplaarStatus::uitgeleend();
 	}
 
 	public function isTeruggegeven() {
-		return $this->status == 'teruggegeven';
+		return $this->status === BoekExemplaarStatus::teruggegeven();
 	}
 
 	public function isVermist() {
-		return $this->status == 'vermist';
+		return $this->status === BoekExemplaarStatus::vermist();
 	}
 }

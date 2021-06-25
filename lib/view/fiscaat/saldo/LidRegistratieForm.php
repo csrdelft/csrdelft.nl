@@ -2,8 +2,10 @@
 
 namespace CsrDelft\view\fiscaat\saldo;
 
-use CsrDelft\model\entity\fiscaat\CiviSaldo;
-use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\entity\fiscaat\CiviSaldo;
+use CsrDelft\view\formulier\elementen\HtmlComment;
+use CsrDelft\view\formulier\getalvelden\required\RequiredBedragField;
+use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\LidField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -11,7 +13,7 @@ use CsrDelft\view\formulier\ModalForm;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  *
  * Maak het mogelijk om een lid te registreren, wordt uiteindelijk samengetrokken met het aanmaken van een lid.
  */
@@ -25,12 +27,13 @@ class LidRegistratieForm extends ModalForm {
 	 * @param CiviSaldo $model
 	 */
 	public function __construct(CiviSaldo $model) {
-		parent::__construct($model, '/fiscaat/saldo/registreren/lid', false, true);
+		parent::__construct($model, '/fiscaat/saldo/registreren', false, true);
 
 		$fields = [];
+		$fields[] = new HtmlComment("<p>Geef een naam en/of een lid op. Als er geen lid wordt opgegeven wordt een nieuwe uid gegenereerd.</p>");
 		$fields['naam'] = $this->naamField =  new TextField('naam', $model->naam, 'Bijnaam');
 		$fields['uid'] = $this->uidField = new LidField('uid', $model->uid, 'Lid');
-		$fields[] = new IntField('saldo', $model->saldo, 'Initieel saldo');
+		$fields[] = new RequiredBedragField('saldo', $model->saldo ?? 0, 'Initieel saldo');
 
 		$this->addFields($fields);
 

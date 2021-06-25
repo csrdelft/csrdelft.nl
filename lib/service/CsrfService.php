@@ -3,6 +3,8 @@
 
 namespace CsrDelft\service;
 
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -11,13 +13,19 @@ class CsrfService {
 	 * @var CsrfTokenManagerInterface
 	 */
 	private $manager;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
 
 	/**
 	 * CsrfService constructor.
 	 * @param $manager CsrfTokenManagerInterface
+	 * @param LoggerInterface $logger
 	 */
-	public function __construct(CsrfTokenManagerInterface $manager) {
+	public function __construct(CsrfTokenManagerInterface $manager, LoggerInterface $logger) {
 		$this->manager = $manager;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -25,33 +33,37 @@ class CsrfService {
 	 * @param string $method
 	 * @return CsrfToken|null
 	 */
-	public function generateToken(string $path, string $method) {
-		if (session_status() == PHP_SESSION_NONE) {
-			return null;
-		}
+	public function generateToken($path, string $method) {
 		return $this->manager->getToken("global");
 	}
 
-	public function preventCsrf() {
-		$method = filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING);
-		if (strtolower($method) == 'get') {
-			return null;
+	/**
+	 * Controleert of de huidige request een geldige CSRF token heeft.
+	 *
+	 * @param Request $request
+	 * @return bool
+	 */
+	public function preventCsrf(Request $request) {
+		// Safe: GET, OPTIONS, HEAD, TRACE
+		if ($request->isMethodSafe()) {
+			return true;
 		}
-		$id = filter_input(INPUT_SERVER, 'HTTP_X_CSRF_ID', FILTER_SANITIZE_STRING);
-		$value = filter_input(INPUT_SERVER, 'HTTP_X_CSRF_VALUE', FILTER_SANITIZE_STRING);
+		$id = $request->server->get('HTTP_X_CSRF_ID');
+		$value = $request->server->get('HTTP_X_CSRF_VALUE');
+
 		if ($id == null || $value == null) {
-			$id = filter_input(INPUT_POST, 'X-CSRF-ID', FILTER_SANITIZE_STRING);
-			$value = filter_input(INPUT_POST, 'X-CSRF-VALUE', FILTER_SANITIZE_STRING);
+			$id = $request->request->get('X-CSRF-ID');
+			$value = $request->request->get('X-CSRF-VALUE');
 		}
+		$url = $request->getRequestUri();
 		if ($id != null && $value != null) {
 			$token = new CsrfToken($id, $value);
-			$url = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRING);
-			if ($this->isValid($token, $url, $method)) {
-				return null;
+			if ($this->isValid($token, $url, $request->getMethod())) {
+				return true;
 			}
 		}
-		// No valid token has been posted, so we redirect to prevent sensitive operations from taking place
-		redirect();
+
+		return false;
 	}
 
 	/**

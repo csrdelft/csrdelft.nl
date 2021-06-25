@@ -4,13 +4,14 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbException;
 use CsrDelft\bb\BbTag;
-use CsrDelft\common\CsrNotFoundException;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
-use CsrDelft\model\entity\fotoalbum\FotoTagAlbum;
-use CsrDelft\model\fotoalbum\FotoAlbumModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
+use CsrDelft\entity\fotoalbum\FotoTagAlbum;
+use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\BbHelper;
 use CsrDelft\view\fotoalbum\FotoAlbumBBView;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Environment;
 
 /**
  * Fotoalbum
@@ -47,19 +48,36 @@ class BbFotoalbum extends BbTag {
 	 * @var bool|FotoAlbum|FotoTagAlbum|null
 	 */
 	private $album;
+	/**
+	 * @var FotoAlbumRepository
+	 */
+	private $fotoAlbumRepository;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var string
+	 */
+	private $albumUrl;
+
+	public function __construct(FotoAlbumRepository $fotoAlbumRepository, Environment $twig) {
+		$this->fotoAlbumRepository = $fotoAlbumRepository;
+		$this->twig = $twig;
+	}
 
 	public static function getTagName() {
 		return 'fotoalbum';
 	}
 	public function isAllowed()
 	{
-		return ($this->album != null && $this->album->magBekijken()) || ($this->album == null && LoginModel::mag(P_LOGGED_IN));
+		return ($this->album != null && $this->album->magBekijken()) || ($this->album == null && LoginService::mag(P_LOGGED_IN));
 	}
 
 	public function renderLight() {
 		$album = $this->album;
 		$beschrijving = count($album->getFotos()) . ' foto\'s';
-		$cover = CSR_ROOT . $album->getCoverUrl();
+		$cover = getCsrRoot() . $album->getCoverUrl();
 		return BbHelper::lightLinkBlock('fotoalbum', $album->getUrl(), $album->dirname, $beschrijving, $cover);
 	}
 
@@ -67,7 +85,7 @@ class BbFotoalbum extends BbTag {
 		$album = $this->album;
 		$arguments = $this->arguments;
 		if (isset($arguments['slider'])) {
-			$view = view('fotoalbum.slider', [
+			return $this->twig->render('fotoalbum/slider.html.twig', [
 				'fotos' => array_shuffle($album->getFotos())
 			]);
 		} else {
@@ -104,20 +122,20 @@ class BbFotoalbum extends BbTag {
 	private function getAlbum(string $url) {
 		try {
 			if ($url === 'laatste') {
-				$album = FotoAlbumModel::instance()->getMostRecentFotoAlbum();
+				$album = $this->fotoAlbumRepository->getMostRecentFotoAlbum();
 			} else {
 				//vervang url met pad
-				$url = str_ireplace(CSR_ROOT, '', $url);
+				$url = str_ireplace(getCsrRoot(), '', $url);
 				//check fotoalbum in url
 				$url = str_ireplace('fotoalbum/', '', $url);
 				//check slash voor pad
-				if (startsWith($url, '/')) {
+				if (str_starts_with($url, '/')) {
 					$url = substr($url, 1);
 				}
-				$album = FotoAlbumModel::instance()->getFotoAlbum($url);
+				$album = $this->fotoAlbumRepository->getFotoAlbum($url);
 			}
 			return $album;
-		} catch (CsrNotFoundException $ex) {
+		} catch (NotFoundHttpException $ex) {
 			return null;
 		}
 	}
@@ -127,11 +145,11 @@ class BbFotoalbum extends BbTag {
 	 */
 	public function parse($arguments = [])
 	{
-		$this->readMainArgument($arguments);
+		$this->albumUrl = $this->readMainArgument($arguments);
 		$this->arguments = $arguments;
-		$this->album = $this->getAlbum($this->content);
+		$this->album = $this->getAlbum($this->albumUrl);
 		if ($this->album == null) {
-			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($this->content) . '</div>');
+			throw new BbException('<div class="bb-block">Fotoalbum niet gevonden: ' . htmlspecialchars($this->albumUrl) . '</div>');
 		}
 	}
 }

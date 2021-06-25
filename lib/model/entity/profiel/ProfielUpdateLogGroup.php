@@ -46,7 +46,7 @@ class ProfielUpdateLogGroup extends ProfielLogGroup {
 	/**
 	 * Censureer alle velden met gegeven naam
 	 * @param $naam
-	 * @returns boolean Of er data gecensureerd is
+	 * @return boolean Of er data gecensureerd is
 	 */
 	public function censureerVeld($naam) : bool {
 		$data_verwijderd = false;

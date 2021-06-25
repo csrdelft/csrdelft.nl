@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GithubSharedProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="master" />
+      </list>
+    </option>
+  </component>
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/bakeliet" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/bc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/beaufort" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/ccd" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/dies/2013" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/dies/2015" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/dies/2016" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/dies/2019" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/dies/2020" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/dies/2021" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/lustrum" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/lustrum12" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/htdocs/wiki" vcs="Git" />
+  </component>
+</project>

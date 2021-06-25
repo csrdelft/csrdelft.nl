@@ -2,12 +2,15 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrException;
-use CsrDelft\common\GoogleSync;
+use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\GoogleToken;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\GoogleTokenRepository;
+use CsrDelft\service\GoogleSync;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class GoogleController.
@@ -24,32 +27,47 @@ class GoogleController extends AbstractController {
 		$this->googleTokenModel = $googleTokenModel;
 	}
 
+	/**
+	 * @param Request $request
+	 * @return RedirectResponse
+	 * @Route("/google/callback", methods={"GET", "POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
 	public function callback(Request $request) {
 		$state = $request->query->get('state', null);
+
+		if (!str_starts_with($state, $request->getSchemeAndHttpHost())) {
+			throw new CsrGebruikerException("Redirect is niet binnen de stek!");
+		}
+
 		$code = $request->query->get('code', null);
 		$error = $request->query->get('error',null);
 		if ($code) {
 			$client = GoogleSync::createGoogleCLient();
 			$client->fetchAccessTokenWithAuthCode($code);
 
-			$googleToken = new GoogleToken();
-			$googleToken->uid = LoginModel::getUid();
-			$googleToken->token = $client->getRefreshToken();
+			$existingToken = $this->googleTokenModel->findOneBy(['uid' => $this->getUid()]);
+			$manager = $this->getDoctrine()->getManager();
 
-			if ($this->googleTokenModel->exists($googleToken)) {
-				$this->googleTokenModel->update($googleToken);
+			if (!$existingToken) {
+				$googleToken = new GoogleToken();
+				$googleToken->uid = $this->getUid();
+				$googleToken->token = $client->getRefreshToken();
+				$manager->persist($googleToken);
 			} else {
-				$this->googleTokenModel->create($googleToken);
+				$existingToken->token = $client->getRefreshToken();
 			}
 
-			return $this->csrRedirect(urldecode($state));
+			$manager->flush();
+
+			return $this->redirect($state);
 		}
 
 		if ($error) {
 			setMelding('Verbinding met Google niet geaccepteerd', 2);
 			$state = substr(strstr($state, 'addToGoogleContacts', true), 0, -1);
 
-			return $this->csrRedirect($state);
+			return $this->redirect($state);
 		}
 
 		throw new CsrException('Geen error en geen code van Google gekregen.');

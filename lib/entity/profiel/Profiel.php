@@ -4,22 +4,32 @@ namespace CsrDelft\entity\profiel;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\GoogleSync;
-use CsrDelft\model\entity\agenda\Agendeerbaar;
-use CsrDelft\model\entity\Geslacht;
-use CsrDelft\model\entity\groepen\GroepStatus;
+use CsrDelft\entity\agenda\Agendeerbaar;
+use CsrDelft\entity\Geslacht;
+use CsrDelft\entity\groepen\enum\GroepStatus;
+use CsrDelft\entity\groepen\Kring;
+use CsrDelft\entity\groepen\Verticale;
+use CsrDelft\entity\groepen\Woonoord;
+use CsrDelft\entity\LidToestemming;
+use CsrDelft\entity\OntvangtContactueel;
+use CsrDelft\entity\security\Account;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\model\entity\profiel\ProfielLogGroup;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\groepen\KringenModel;
-use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\groepen\WoonoordenModel;
-use CsrDelft\model\security\AccountModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
+use CsrDelft\repository\groepen\KringenRepository;
+use CsrDelft\repository\groepen\VerticalenRepository;
+use CsrDelft\repository\groepen\WoonoordenRepository;
+use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\GoogleSync;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\bbcode\CsrBB;
-use DateTime;
+use CsrDelft\view\datatable\DataTableColumn;
+use CsrDelft\view\formulier\DisplayEntity;
+use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Persistence\Proxy;
 use GuzzleHttp\Exception\RequestException;
 
 
@@ -31,12 +41,22 @@ use GuzzleHttp\Exception\RequestException;
  *
  * Profiel van een lid. Agendeerbaar vanwege verjaardag in agenda.
  * @ORM\Entity(repositoryClass="CsrDelft\repository\ProfielRepository")
- * @ORM\Table("profielen")
+ * @ORM\Table("profielen", indexes={
+ *   @ORM\Index(name="voornaam", columns={"voornaam"}),
+ *   @ORM\Index(name="achternaam", columns={"achternaam"}),
+ *   @ORM\Index(name="verticale", columns={"verticale"}),
+ *   @ORM\Index(name="nickname", columns={"nickname"}),
+ *   @ORM\Index(name="status", columns={"status"})
+ * })
  */
-class Profiel implements Agendeerbaar {
+class Profiel implements Agendeerbaar, DisplayEntity {
+	public function __construct() {
+		$this->kinderen = new ArrayCollection();
+	}
+
 	/**
 	 * @ORM\Id()
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid")
 	 * @var string
 	 */
 	public $uid;
@@ -47,8 +67,8 @@ class Profiel implements Agendeerbaar {
 	public $changelog;
 	// naam
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $voornamen;
 	/**
@@ -62,8 +82,8 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $voornaam;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $tussenvoegsel;
 	/**
@@ -72,34 +92,34 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $achternaam;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $postfix;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $nickname;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $duckname;
 	// fysiek
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="enumGeslacht")
+	 * @var Geslacht
 	 */
 	public $geslacht;
 	/**
 	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @var DateTimeImmutable
 	 */
 	public $gebdatum;
 	/**
-	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @ORM\Column(type="date", nullable=true)
+	 * @var DateTimeImmutable|null
 	 */
 	public $sterfdatum;
 	/**
@@ -109,8 +129,8 @@ class Profiel implements Agendeerbaar {
 	public $lengte;
 	// getrouwd
 	/**
-	 * @ORM\Column(type="string", length=4)
-	 * @var string
+	 * @ORM\Column(type="uid", nullable=true)
+	 * @var string|null
 	 */
 	public $echtgenoot;
 	/**
@@ -119,8 +139,8 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $adresseringechtpaar;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="enumOntvangtContactueel")
+	 * @var OntvangtContactueel
 	 */
 	public $ontvangtcontactueel;
 	// adres
@@ -145,33 +165,33 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $land;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $telefoon;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $o_adres;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $o_postcode;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $o_woonplaats;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $o_land;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $o_telefoon;
 	// contact
@@ -181,33 +201,38 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $email;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
+	 */
+	public $sec_email;
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $mobiel;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $linkedin;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $website;
 	// studie
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $studie;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $studiejaar;
 	/**
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
 	 */
 	public $beroep;
@@ -218,8 +243,8 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $lidjaar;
 	/**
-	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @ORM\Column(type="date", nullable=true)
+	 * @var DateTimeImmutable|null
 	 */
 	public $lidafdatum;
 	/**
@@ -229,96 +254,101 @@ class Profiel implements Agendeerbaar {
 	public $status;
 	// geld
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $bankrekening;
 	/**
-	 * @ORM\Column(type="boolean")
-	 * @var boolean
+	 * @ORM\Column(type="boolean", nullable=true)
+	 * @var boolean|null
 	 */
 	public $machtiging;
+	/**
+	 * @ORM\Column(type="boolean", nullable=true, name="toestemmingAfschrijven")
+	 * @var boolean|null
+	 */
+	public $toestemmingAfschrijven;
 	// verticale
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $moot;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $verticale;
 	/**
-	 * @ORM\Column(type="boolean")
-	 * @var boolean
+	 * @ORM\Column(type="boolean", nullable=true)
+	 * @var boolean|null
 	 */
 	public $verticaleleider;
 	/**
-	 * @ORM\Column(type="boolean")
-	 * @var boolean
+	 * @ORM\Column(type="boolean", nullable=true)
+	 * @var boolean|null
 	 */
 	public $kringcoach;
 	// civi-gegevens
 	/**
-	 * @ORM\Column(type="string", length=4)
+	 * @ORM\Column(type="uid", nullable=true)
 	 * @var string
 	 */
 	public $patroon;
 	/**
-	 * @ORM\Column(type="string")
-	 * @var string
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string|null
 	 */
 	public $eetwens;
 	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
+	 * @ORM\Column(type="integer", nullable=true)
+	 * @var integer|null
 	 */
 	public $corvee_punten;
 	/**
-	 * @ORM\Column(type="integer")
-	 * @var integer
+	 * @ORM\Column(type="integer", nullable=true)
+	 * @var integer|null
 	 */
 	public $corvee_punten_bonus;
 	// novitiaat
 	/**
 	 * @ORM\Column(type="text", nullable=true)
-	 * @var string
+	 * @var string|null
 	 */
 	public $novitiaat;
 	/**
 	 * @ORM\Column(type="text", nullable=true, name="novitiaatBijz")
-	 * @var string
+	 * @var string|null
 	 */
 	public $novitiaatBijz;
 	/**
 	 * @ORM\Column(type="text", nullable=true)
-	 * @var string
+	 * @var string|null
 	 */
 	public $medisch;
 	/**
 	 * @ORM\Column(type="string", nullable=true)
-	 * @var string
+	 * @var string|null
 	 */
 	public $startkamp;
 	/**
 	 * @ORM\Column(type="string", nullable=true, name="matrixPlek")
-	 * @var string
+	 * @var string|null
 	 */
 	public $matrixPlek;
 	/**
 	 * @ORM\Column(type="string", nullable=true, name="novietSoort")
-	 * @var string
+	 * @var string|null
 	 */
 	public $novietSoort;
 	/**
 	 * @ORM\Column(type="text", nullable=true)
-	 * @var string
+	 * @var string|null
 	 */
 	public $kgb;
 	/**
 	 * @ORM\Column(type="text", nullable=true)
-	 * @var string
+	 * @var string|null
 	 */
 	public $vrienden;
 	/**
@@ -327,26 +357,53 @@ class Profiel implements Agendeerbaar {
 	 */
 	public $middelbareSchool;
 	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @var string
+	 */
+	public $huisarts;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="huisartsPlaats")
+	 * @var string
+	 */
+	public $huisartsPlaats;
+	/**
+	 * @ORM\Column(type="string", nullable=true, name="huisartsTelefoon")
+	 * @var string|null
+	 */
+	public $huisartsTelefoon;
+	// overig
+	/**
 	 * @ORM\Column(type="string", nullable=true, name="profielOpties")
 	 * @var string
 	 */
 	public $profielOpties;
-	// overig
 	/**
 	 * @ORM\Column(type="string", nullable=true)
-	 * @var string
+	 * @var string|null
 	 */
 	public $kerk;
 	/**
 	 * @ORM\Column(type="string", nullable=true)
-	 * @var string
+	 * @var string|null
 	 */
 	public $muziek;
 	/**
 	 * @ORM\Column(type="string", nullable=true)
-	 * @var string
+	 * @var string|null
 	 */
 	public $zingen;
+
+	/**
+	 * @var Account|null
+	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\security\Account", mappedBy="profiel")
+	 */
+	public $account;
+
+	/**
+	 * @var LidToestemming[]
+	 * @ORM\OneToMany(targetEntity="CsrDelft\entity\LidToestemming", mappedBy="profiel")
+	 */
+	public $toestemmingen;
 
 	/**
 	 * In $properties_lidstatus kan per property worden aangegeven voor welke lidstatusen deze nodig. Bij wijziging van
@@ -367,7 +424,10 @@ class Profiel implements Agendeerbaar {
 		'startkamp' => [LidStatus::Noviet],
 		'matrixPlek' => [LidStatus::Noviet],
 		'novietSoort' => [LidStatus::Noviet],
-		'kgb' => [LidStatus::Noviet]
+		'kgb' => [LidStatus::Noviet],
+		'huisarts' => [LidStatus::Noviet],
+		'huisartsPlaats' => [LidStatus::Noviet],
+		'huisartsTelefoon' => [LidStatus::Noviet]
 	];
 
 	public function getUUID() {
@@ -375,30 +435,37 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function magBewerken() {
-		if (LoginModel::mag(P_LEDEN_MOD)) {
+		if (LoginService::mag(P_LEDEN_MOD)) {
 			return true;
 		}
-		if ($this->uid == LoginModel::UID_EXTERN) {
+		if ($this->uid == LoginService::UID_EXTERN) {
 			return false;
 		}
-		if ($this->uid === LoginModel::getUid()) {
+		if ($this->uid === LoginService::getUid()) {
 			return true;
 		}
-		if ($this->status === LidStatus::Noviet AND LoginModel::mag('commissie:NovCie')) {
+		if ($this->status === LidStatus::Noviet && LoginService::mag('commissie:NovCie')) {
 			return true;
 		}
 		return false;
 	}
 
 	public function getAccount() {
-		return AccountModel::get($this->uid);
+		return AccountRepository::get($this->uid);
 	}
 
 	public function getPrimaryEmail() {
-		if (AccountModel::existsUid($this->uid)) {
-			return $this->getAccount()->email;
+		if ($this->account != null) {
+			return $this->account->email;
 		}
 		return $this->email;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getEmailOntvanger() {
+		return [$this->getPrimaryEmail() => $this->getNaam()];
 	}
 
 	/**
@@ -431,7 +498,7 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function isJarig() {
-		return substr($this->gebdatum->format(DATE_FORMAT), 5, 5) === date('m-d');
+		return $this->gebdatum != null && substr(date_format_intl($this->gebdatum, DATE_FORMAT), 5, 5) === date('m-d');
 	}
 
 	/**
@@ -492,17 +559,17 @@ class Profiel implements Agendeerbaar {
 			$van = $GLOBALS['agenda_van'];
 			$tot = $GLOBALS['agenda_tot'];
 
-			$datum = date('Y', $van) . '-' . $dag . ' 00:00:00';
-
-			if (strtotime($datum) < strtotime($van) || strtotime($datum) > strtotime($tot)) {
-				$datum = date('Y', $tot) . '-' . $dag . ' 00:00:00';
-			}
+			$jaar = $van->format('Y');
+			do {
+				$datum = date_create_immutable($jaar . '-' . $dag . ' 00:00:00');
+				$jaar++;
+			} while ($datum < $van);
 		} else if (isset($GLOBALS['agenda_jaar'])) {
-			$datum = $GLOBALS['agenda_jaar'] . '-' . $dag . ' 00:00:00';
+			$datum = date_create_immutable($GLOBALS['agenda_jaar'] . '-' . $dag . ' 00:00:00');
 		} else {
-			$datum = date('Y') . '-' . $dag . ' 00:00:00'; // 1 b'vo
+			$datum = date_create_immutable(date('Y') . '-' . $dag . ' 00:00:00');
 		}
-		return strtotime($datum);
+		return $datum->getTimestamp();
 	}
 
 	public function getEindMoment() {
@@ -524,6 +591,10 @@ class Profiel implements Agendeerbaar {
 			return $this->getTitel() . ' wordt geboren';
 		}
 
+		if ($leeftijd < 0) {
+			return $this->getTitel() . ' wordt over ' . ($leeftijd * -1) . ' jaar geboren.';
+		}
+
 		return $this->getTitel() . ' wordt ' . $leeftijd . ' jaar';
 	}
 
@@ -536,8 +607,8 @@ class Profiel implements Agendeerbaar {
 	}
 
 	public function getLink($vorm = 'civitas') {
-		if (!LoginModel::mag(P_LEDEN_READ) OR in_array($this->uid, array(LoginModel::UID_EXTERN, 'x101', 'x027', 'x222', '4444'))) {
-			if ($vorm === 'pasfoto' AND LoginModel::mag(P_LEDEN_READ)) {
+		if (!LoginService::mag(P_LEDEN_READ) || in_array($this->uid, array(LoginService::UID_EXTERN, 'x101', 'x027', 'x222', '4444'))) {
+			if ($vorm === 'pasfoto' && LoginService::mag(P_LEDEN_READ)) {
 				return $this->getPasfotoTag();
 			}
 			return $this->getNaam();
@@ -548,16 +619,18 @@ class Profiel implements Agendeerbaar {
 		} elseif ($this->lidjaar === 2013) {
 			$naam = CsrBB::parse('[neuzen]' . $naam . '[/neuzen]');
 		}
-		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' && lid_instelling('layout', 'visitekaartjes') == 'ja') {
 			$title = '';
 		} else {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '"';
 		}
 		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
-		if ($vorm !== 'pasfoto' AND lid_instelling('layout', 'visitekaartjes') == 'ja') {
+		if ($vorm !== 'pasfoto' && lid_instelling('layout', 'visitekaartjes') == 'ja') {
 			return '<span data-visite="'.$this->uid.'"><a href="/profiel/' . $this->uid . '" class="lidLink ' . htmlspecialchars($this->status) . '">' . $naam . '</a></span>';
 		} else if ($vorm === 'leeg') {
-			return view('profiel.kaartje', ['profiel' => $this])->getHtml();
+			$twig = ContainerFacade::getContainer()->get('twig');
+
+			return $twig->render('profiel/kaartje.html.twig', ['profiel' => $this]);
 		}
 
 		return $l . $naam . '</a>';
@@ -580,7 +653,7 @@ class Profiel implements Agendeerbaar {
 		if ($vorm === 'user') {
 			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
-		if ($vorm != 'civitas' AND !$force AND !LoginModel::mag(P_LOGGED_IN)) {
+		if ($vorm != 'civitas' && !$force && !LoginService::mag(P_LOGGED_IN)) {
 			$vorm = 'civitas';
 		}
 		switch ($vorm) {
@@ -638,12 +711,12 @@ class Profiel implements Agendeerbaar {
 					if (!empty($this->postfix)) {
 						$naam .= ' ' . $this->postfix;
 					}
-				} elseif ($this->isLid() OR $this->isOudlid()) {
+				} elseif ($this->isLid() || $this->isOudlid()) {
 					// voor novieten is het Dhr./ Mevr.
-					if (LoginModel::getProfiel()->status === LidStatus::Noviet) {
-						$naam = ($this->geslacht === Geslacht::Vrouw) ? 'Mevr. ' : 'Dhr. ';
+					if (LoginService::getProfiel()->status === LidStatus::Noviet) {
+						$naam = (Geslacht::isVrouw($this->geslacht)) ? 'Mevr. ' : 'Dhr. ';
 					} else {
-						$naam = ($this->geslacht === Geslacht::Vrouw) ? 'Ama. ' : 'Am. ';
+						$naam = (Geslacht::isVrouw($this->geslacht)) ? 'Ama. ' : 'Am. ';
 					}
 					if (!empty($this->tussenvoegsel)) {
 						$naam .= ucfirst($this->tussenvoegsel) . ' ';
@@ -654,11 +727,11 @@ class Profiel implements Agendeerbaar {
 					}
 					// status char weergeven bij oudleden en ereleden
 					if ($this->isOudlid()) {
-						$naam .= ' ' . LidStatus::getChar($this->status);
+						$naam .= ' ' . LidStatus::from($this->status)->getChar();
 					}
 				} // geen lid
 				else {
-					if (LoginModel::mag(P_LEDEN_READ)) {
+					if (LoginService::mag(P_LEDEN_READ)) {
 						$naam = $this->voornaam . ' ';
 					} else {
 						$naam = $this->voorletters . ' ';
@@ -669,7 +742,7 @@ class Profiel implements Agendeerbaar {
 					$naam .= $this->achternaam;
 					// status char weergeven bij kringels
 					if ($this->status === LidStatus::Kringel) {
-						$naam .= ' ' . LidStatus::getChar($this->status);
+						$naam .= ' ' . LidStatus::from($this->status)->getChar();
 					}
 				}
 
@@ -697,6 +770,14 @@ class Profiel implements Agendeerbaar {
 			$vorm = lid_instelling('forum', 'naamWeergave');
 		}
 
+		if (!is_zichtbaar($this, 'profielfoto', 'intern')) {
+			return '/images/geen-foto.jpg';
+		}
+		$path = $this->getPasfotoInternalPath(false, $vorm);
+		if ($path === null) {
+			return '/images/geen-foto.jpg';
+		}
+
 		if (in_array($vorm, ['Duckstad', 'vierkant'])) {
 			return "/profiel/pasfoto/$this->uid.$vorm.jpg";
 		}
@@ -706,7 +787,7 @@ class Profiel implements Agendeerbaar {
 
 	public function getPasfotoInternalPath($vierkant = false, $vorm = 'user') {
 		$path = null;
-		if (LoginModel::mag(P_OUDLEDEN_READ)) {
+		if (LoginService::mag(P_OUDLEDEN_READ)) {
 			// in welke (sub)map moeten we zoeken?
 			if ($vorm == 'vierkant') {
 				$folders = [''];
@@ -747,27 +828,38 @@ class Profiel implements Agendeerbaar {
 		return '<img class="' . htmlspecialchars($cssClass) . '" src="' . $this->getPasfotoPath() . '" alt="Pasfoto van ' . $this->getNaam('volledig') . '" />';
 	}
 
-	private $kinderen;
-
 	/**
-	 * @return Profiel[]
+	 * @var Profiel|null
+	 * @ORM\ManyToOne(targetEntity="Profiel", inversedBy="kinderen")
+	 * @ORM\JoinColumn(name="patroon", referencedColumnName="uid", nullable=true)
 	 */
-	public function getKinderen() {
-		if ($this->kinderen == null) {
-			$container = ContainerFacade::getContainer();
-			$this->kinderen = $container->get(ProfielRepository::class)->ormFind('patroon = ?', array($this->uid));
-		}
+	private $patroonProfiel;
 
-		return $this->kinderen;
+	public function getPatroonProfiel() {
+		try {
+			$patroonProfiel = $this->patroonProfiel;
+			if ($patroonProfiel instanceof Proxy) {
+				$patroonProfiel->__load();
+			}
+			return $patroonProfiel;
+		} catch (EntityNotFoundException $ex) {
+			return null;
+		}
 	}
 
+	/**
+	 * @var Profiel[]|ArrayCollection
+	 * @ORM\OneToMany(targetEntity="Profiel", mappedBy="patroonProfiel")
+	 */
+	public $kinderen;
+
 	public function hasKinderen() {
-		return count($this->getKinderen()) !== 0;
+		return $this->kinderen->count() !== 0;
 	}
 
 	public function getNageslachtGrootte() {
 		$nageslacht = 0;
-		foreach ($this->getKinderen() as $kind) {
+		foreach ($this->kinderen as $kind) {
 			$nageslacht++;
 			$nageslacht += $kind->getNageslachtGrootte();
 		}
@@ -783,22 +875,32 @@ class Profiel implements Agendeerbaar {
 		return LidStatus::isOudlidLike($this->status);
 	}
 
+	/**
+	 * @return Woonoord|null
+	 */
 	public function getWoonoord() {
-		$woonoorden = WoonoordenModel::instance()->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		/** @var Woonoord[] $woonoorden */
+		$woonoorden = ContainerFacade::getContainer()->get(WoonoordenRepository::class)->getGroepenVoorLid($this, GroepStatus::HT);
 		if (empty($woonoorden)) {
-			return false;
+			return null;
 		}
 		return reset($woonoorden);
 	}
 
+	/**
+	 * @return Verticale|null
+	 */
 	public function getVerticale() {
-		return VerticalenModel::instance()->get($this->verticale);
+		return ContainerFacade::getContainer()->get(VerticalenRepository::class)->get($this->verticale);
 	}
 
+	/**
+	 * @return Kring|null
+	 */
 	public function getKring() {
-		$kringen = KringenModel::instance()->getGroepenVoorLid($this->uid, GroepStatus::HT);
+		$kringen = ContainerFacade::getContainer()->get(KringenRepository::class)->getGroepenVoorLid($this, GroepStatus::HT);
 		if (empty($kringen)) {
-			return false;
+			return null;
 		}
 		return reset($kringen);
 	}
@@ -809,7 +911,7 @@ class Profiel implements Agendeerbaar {
 	 * @return float
 	 */
 	public function getCiviSaldo() {
-		$saldo = CiviSaldoModel::instance()->getSaldo($this->uid);
+		$saldo = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->getSaldo($this->uid);
 		if ($saldo) {
 			return $saldo->saldo / (float) 100;
 		}
@@ -824,17 +926,18 @@ class Profiel implements Agendeerbaar {
 	 */
 	public function isInGoogleContacts() {
 		try {
-			if (!GoogleSync::isAuthenticated()) {
+			$googleSync = ContainerFacade::getContainer()->get(GoogleSync::class);
+			if (!$googleSync->isAuthenticated()) {
 				return false;
 			}
-			return !is_null(GoogleSync::instance()->existsInGoogleContacts($this));
+			$googleSync->init();
+			return !is_null($googleSync->existsInGoogleContacts($this));
 		} catch (CsrGebruikerException $e) {
 			setMelding($e->getMessage(), 0);
-			return false;
 		} catch (RequestException $e) {
 			setMelding($e->getMessage(), -1);
-			return false;
 		}
+		return false;
 	}
 
 	public function propertyMogelijk(string $name) {
@@ -842,5 +945,29 @@ class Profiel implements Agendeerbaar {
 			return true;
 		}
 		return in_array($this->status, Profiel::$properties_lidstatus[$name]);
+	}
+
+	public function getDataTableColumn() {
+		return new DataTableColumn($this->getLink('volledig'), $this->achternaam, $this->getNaam('volledig'));
+	}
+
+	public function getId() {
+		return $this->uid;
+	}
+
+	public function getWeergave(): string {
+		return $this->achternaam ? $this->getNaam('volledig') : '';
+	}
+
+	public function getChar() {
+		return LidStatus::from($this->status)->getChar();
+	}
+
+	public function getLidStatusDescription() {
+		return LidStatus::from($this->status)->getDescription();
+	}
+
+	public function getLeeftijd() {
+		return $this->gebdatum->diff(date_create_immutable())->y;
 	}
 }

@@ -3,13 +3,13 @@
  * MaaltijdKwantiteitBeoordelingForm.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
+ * @since 06/05/2017
  */
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\entity\maalcie\MaaltijdBeoordeling;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
 use CsrDelft\view\formulier\InlineForm;
 use CsrDelft\view\formulier\keuzevelden\SterrenField;
 

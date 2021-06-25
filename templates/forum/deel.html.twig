@@ -1,0 +1,134 @@
+{% extends 'forum/base.html.twig' %}
+
+{% block titel %}{{ deel.titel | raw }}{% endblock %}
+
+{% block breadcrumbs %}
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ url('default') }}" title="Thuis"><span class="fa fa-home"></span></a></li>
+		<li class="breadcrumb-item"><a href="{{ url('csrdelft_forum_forum') }}">Forum</a></li>
+		<li class="breadcrumb-item active">
+			<select name="forum_id" class="form-select form-select-sm w-auto"
+							onchange="if (this.value.substr(0,4) === 'http') { window.open(this.value); } else { window.location.href = this.value; }">
+				<option value="{{ url('csrdelft_forum_belangrijk') }}"
+								{% if deel.titel == 'Belangrijk recent gewijzigd' %}selected="selected"{% endif %}>
+					Belangrijk recent gewijzigd
+				</option>
+				<option value="{{ url('csrdelft_forum_recent') }}"
+								{% if deel.titel == 'Recent gewijzigd' %}selected="selected"{% endif %}>
+					Recent gewijzigd
+				</option>
+
+				{% for categorie in categorien %}
+					<optgroup label="{{ categorie.titel }}">;
+						{% for newDeel in categorie.forum_delen %}
+							{% if newDeel.magLezen %}
+								<option value="/forum/deel/{{ newDeel.forum_id }}"
+												{% if newDeel.forum_id == deel.forum_id %}selected="selected"{% endif %}>{{ newDeel.titel }}</option>
+							{% endif %}
+						{% endfor %}
+					</optgroup>
+				{% endfor %}
+				{% for remotecat in get_menu('remotefora').children %}
+					{% if remotecat.magBekijken %}
+						<optgroup label="{{ remotecat.tekst }}">
+							{% for remoteforum in remotecat.children %}
+								{% if remoteforum.magBekijken %}
+									<option value="{{ remoteforum.link }}">{{ remoteforum.tekst }}</option>
+								{% endif %}
+							{% endfor %}
+						</optgroup>
+					{% endif %}
+				{% endfor %}
+			</select></li>
+	</ol>
+{% endblock %}
+
+{% block content %}
+	{{ getMelding() }}
+	<div class="forum-header btn-toolbar">
+		{% if mag('P_ADMIN') and deel.forum_id is not empty %}
+			<div class="btn-group me-2">
+				<a href="/forum/beheren/{{ deel.forum_id }}" class="btn btn-light post popup"
+					 title="Deelforum beheren">{{ icon('wrench_orange') }} Beheren</a>
+			</div>
+		{% endif %}
+		{{ include('forum/partial/head_buttons.html.twig') }}
+		{{ zoekform | raw }}
+	</div>
+
+	<h1>{{ deel.titel }}</h1>
+
+	<div class="forum-deel">
+		<div class="header">Titel</div>
+		<div class="header">Laatste wijziging</div>
+		<div class="header"></div>
+
+		{% if not deel.forumDraden %}
+			<div>Dit forum is nog leeg.</div>
+		{% endif %}
+
+		{% for draad in deel.forumDraden %}
+			{{ include('forum/partial/draad_lijst.html.twig', {draad: draad}) }}
+		{% endfor %}
+
+		{% if paging is defined %}
+			<div class="paging">
+				{% if deel is none or deel.forum_id is none %}
+					{{ sliding_pager({
+						baseurl: url('csrdelft_forum_recent') ~ '/',
+						url_append: belangrijk,
+						pagecount: getAantalPaginas(),
+						curpage: getHuidigePagina(),
+						separator: ' &nbsp;'
+					}) }}
+					&nbsp;
+					<a href="/forum/recent/{{ getAantalPaginas() }}{{ belangrijk }}">verder terug</a>
+				{% else %}
+					{{ sliding_pager({
+						baseurl: url('csrdelft_forum_deel', {forum_id: deel.forum_id}) ~ '/',
+						pagecount: getAantalPaginas(deel.forum_id),
+						curpage: getHuidigePagina(),
+						separator: ' &nbsp;',
+						show_prev_next: true
+					}) }}
+				{% endif %}
+			</div>
+		{% endif %}
+
+
+		<div class="forumdeel-omschrijving">
+			<div class="breadcrumbs">{{ block('breadcrumbs') }}</div>
+			<h2>{{ deel.titel }}</h2>
+			{{ deel.omschrijving }}
+
+			{% if app.user and deel.forum_id is empty %}
+				<div>
+					Berichten per dag:
+					<div class="grafiek">
+						{# forum.ts pikt dit op en vult met een grafiekje. #}
+						<div id="stats_grafiek_overview" class="ctx-graph-line"
+								 data-url="{{ url('csrdelft_forum_grafiekdata', {type: 'overview'}) }}"
+								 style="height: 200px;"></div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+
+
+		{% if deel.magPosten %}
+			{{ include('forum/partial/draad_reageren.html.twig') }}
+			{% if app.user %}
+				<div class="meldingen">
+					<div id="draad-melding" class="alert alert-warning">
+						Hier kunt u een onderwerp toevoegen in deze categorie van het forum.
+						Kijkt u vooraf goed of het onderwerp waarover u post hier wel thuishoort.
+					</div>
+				</div>
+			{% endif %}
+			{{ include('forum/partial/post_form.html.twig', {draad: null}) }}
+		{% endif %}
+	</div>
+
+	{{ include('forum/partial/rss_link.html.twig') }}
+
+{% endblock %}

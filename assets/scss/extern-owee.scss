@@ -1,0 +1,520 @@
+@import "extern/variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+
+$primary: #7A4593;
+$secondary: #92C7ED;
+$tertiary: #713E89;
+$accent: #FBE47E;
+$youtubeRed: #ff0000;
+$whatsappGreen: #25D366;
+$headingFont: "adam.cg_proregular", "Source Sans Pro", Helvetica, sans-serif;
+
+@font-face {
+	font-family: 'adam.cg_proregular';
+	src: url('../fonts/owee/adam.cg_pro-webfont.woff2') format('woff2'),
+	url('../fonts/owee/adam.cg_pro-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@mixin triangle($kleur, $top, $left) {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	display: block;
+
+	@if $top and $left {
+		border-width: 7vw 0 0 100vw;
+		border-color: transparent transparent transparent $kleur;
+	} @else if $top and not $left {
+		border-width: 7vw 100vw 0 0;
+		border-color: $kleur transparent transparent transparent;
+	} @else if not $top and $left {
+		border-width: 0 0 7vw 100vw;
+		border-color: transparent transparent $kleur transparent;
+	} @else if not $top and not $left {
+		border-width: 0 100vw 7vw 0;
+		border-color: transparent $kleur transparent transparent;
+	}
+}
+
+@mixin triangle-before($kleur, $left, $top) {
+	&:before {
+		content: '';
+		@include triangle($kleur, $left, $top);
+	}
+	.content {
+		margin-top: -7vw;
+		padding-top: 7vw;
+	}
+}
+
+@mixin triangle-after($kleur, $left, $top) {
+	&:after {
+		content: '';
+		@include triangle($kleur, $left, $top);
+	}
+	.content {
+		margin-bottom: -7vw;
+		padding-bottom: 7vw;
+	}
+}
+
+body {
+	width: 100%;
+	overflow-x: hidden;
+}
+
+.owee-pagina {
+	font-size: 0;
+	@import "~bootstrap/scss/bootstrap";
+
+	.btl {
+		@include triangle-before($basiskleur, true, true);
+	}
+
+	.btr {
+		@include triangle-before($basiskleur, false, true);
+	}
+
+	.bbl {
+		@include triangle-before($basiskleur, true, false);
+	}
+
+	.bbr {
+		@include triangle-before($basiskleur, false, false);
+	}
+
+	.atl {
+		@include triangle-after($basiskleur, true, true);
+	}
+
+	.atr {
+		@include triangle-after($basiskleur, false, true);
+	}
+
+	.abl {
+		@include triangle-after($basiskleur, true, false);
+	}
+
+	.abr {
+		@include triangle-after($basiskleur, false, false);
+	}
+
+	.content {
+		@extend .container;
+	}
+
+	h1, h2 {
+		color: $primary;
+		font-size: 1.5rem;
+		text-transform: uppercase;
+		font-family: $headingFont;
+		margin-bottom: 1rem;
+	}
+
+	p {
+		font-weight: 300;
+		font-size: 1.2rem;
+		line-height: 140%;
+		color: black;
+	}
+
+	.iframe-container {
+		position: relative;
+		padding-top: 56.25%;
+
+		iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.cta {
+		&.primary {
+			background: $primary;
+			color: white;
+
+			&:hover {
+				background: darken($primary, 10%);
+			}
+		}
+
+		&.secondary {
+			background: $secondary;
+			color: white;
+
+			&:hover {
+				background: darken($secondary, 10%);
+			}
+		}
+
+		&:hover {
+			text-decoration: none;
+		}
+
+		transition: background-color 0.2s ease-in-out;
+		font-family: $headingFont;
+		font-size: 0.9rem;
+		line-height: 275%;
+		padding: 0 22px;
+		border: none;
+		display: inline-block;
+		margin-right: 8px;
+		margin-bottom: 8px;
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+
+	.hero {
+		background: url('../images/owee2020-achtergrond.jpg') no-repeat center bottom;
+		background-size: cover;
+
+		img {
+			max-height: 70vh;
+			margin: -8vh auto 3vh auto;
+			display: block;
+			max-width: 60vw;
+		}
+	}
+
+	.buttons {
+		background: $primary;
+
+		a {
+			position: relative;
+			display: block;
+			border: none;
+
+			img {
+				width: 100%;
+			}
+
+			.overlay {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				color: white;
+				font-size: 1.7rem;
+				text-transform: uppercase;
+				font-family: $headingFont;
+				transition: font-size 300ms ease-in-out;
+
+				@include media-breakpoint-down(sm) {
+					font-size: 1.2rem;
+				}
+
+				&:hover {
+					font-size: 2rem;
+
+					@include media-breakpoint-down(sm) {
+						font-size: 1.5rem;
+					}
+				}
+			}
+		}
+	}
+
+	.videos {
+		a {
+			position: relative;
+			display: block;
+
+			.youtube-container {
+				@include media-breakpoint-down(lg) {
+
+					.youtube div {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+
+						i {
+							font-size: 3rem;
+							margin-right: 1rem;
+						}
+					}
+				}
+
+				@include media-breakpoint-down(sm) {
+					padding-top: 0;
+					height: 100px;
+				}
+			}
+
+			.youtube {
+				background: $youtubeRed;
+				color: white;
+				text-align: center;
+
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				i {
+					display: block;
+					font-size: 5rem;
+				}
+
+				div > div {
+					font-size: 1.3rem;
+					font-weight: 600;
+				}
+			}
+		}
+	}
+
+	.interest {
+		background: $secondary;
+		text-align: center;
+
+		h2 {
+			color: white;
+		}
+
+		p {
+			color: white;
+		}
+	}
+
+	.whatsapp {
+		display: block;
+		background: $whatsappGreen;
+		min-height: 100%;
+		padding: 2rem;
+		position: relative;
+
+		@include media-breakpoint-down(sm) {
+			padding: 1rem 2rem;
+		}
+
+		i {
+			display: block;
+			color: white;
+			font-size: 5rem;
+
+			@include media-breakpoint-down(sm) {
+				display: inline-block;
+			}
+		}
+
+		.call {
+			font-size: 2.5rem;
+			font-weight: 600;
+			color: white;
+			line-height: 130%;
+			position: relative;
+			z-index: 1;
+
+			@include media-breakpoint-down(sm) {
+				font-size: 1.5rem;
+				display: inline-block;
+			}
+		}
+
+		&:hover {
+			text-decoration: none;
+		}
+
+		.persoon {
+			position: absolute;
+			bottom: calc(2rem + 44px);
+			left: 2rem;
+			right: 2rem;
+			height: 240px;
+			//background: url('../images/owee2020-persoon.png') no-repeat bottom center;
+			background-size: contain;
+
+			@include media-breakpoint-down(md) {
+				right: 2rem;
+				left: auto;
+				width: 130px;
+				bottom: calc(1rem + 44px);
+				height: calc(100% - 3rem);
+			}
+		}
+
+		.cta {
+			background: white;
+			color: $whatsappGreen;
+			text-align: center;
+			font-size: 1.1rem;
+			line-height: 44px;
+			position: absolute;
+			width: calc(100% - 4rem);
+			bottom: 2rem;
+			margin-bottom: 0;
+
+			@include media-breakpoint-down(sm) {
+				width: 100%;
+				position: relative;
+				bottom: 0;
+			}
+
+			&:hover {
+				background: rgba(white, 0.8);
+			}
+		}
+	}
+
+	.formulieren {
+		& > label {
+			font-family: $headingFont;
+			font-size: 1rem;
+			cursor: pointer;
+			margin-bottom: 0;
+			padding: 0.5rem 2rem;
+
+			@include media-breakpoint-down(xs) {
+				padding-left: 1rem;
+				padding-right: 1rem;
+			}
+
+			&[for="lid-worden"] {
+				background: $secondary;
+			}
+
+			&[for="lid-spreken"] {
+				background: $primary;
+			}
+		}
+
+		#melding {
+			font-size: 1rem;
+		}
+
+		input[type=radio] {
+			display: none;
+		}
+
+		#captcha {
+			margin-bottom: 1rem;
+		}
+
+		.interesseformulier {
+			padding: 2rem;
+			color: white;
+
+			@include media-breakpoint-down(xs) {
+				padding: 1.5rem 1rem;
+			}
+
+			p {
+				font-size: 1.1rem;
+				color: white;
+
+				a {
+					color: white;
+				}
+			}
+
+			label {
+				font-size: 1.1rem;
+				font-weight: 600;
+				margin-bottom: 0.2rem;
+			}
+
+			input {
+				background-color: rgba($tertiary, .20);
+				font-size: 1rem;
+				border: none;
+				border-radius: 0;
+				margin-bottom: 1rem;
+
+				&[type=submit] {
+					display: block;
+					width: 100%;
+					border: none;
+					outline: none;
+					box-shadow: none;
+					height: auto;
+					line-height: 44px;
+					font-family: $headingFont;
+					margin-bottom: 0;
+				}
+			}
+		}
+
+		#lid-worden:checked + label + input + .interesseformulier {
+			background: $secondary;
+
+			.lid-spreken {
+				display: none;
+			}
+
+			input {
+				background: rgba(#713E89, .20);
+
+				&[type=submit] {
+					background: $primary;
+
+					&:hover {
+						background: rgba($primary, 0.8);
+					}
+				}
+			}
+		}
+
+		#lid-spreken:checked + .interesseformulier {
+			background: $primary;
+
+			.lid-worden {
+				display: none;
+			}
+
+			input {
+				background: rgba(#FFFFFF, .12);
+
+				&[type=submit] {
+					background: $secondary;
+
+					&:hover {
+						background: rgba($secondary, 0.8);
+					}
+				}
+			}
+		}
+	}
+
+	.notes {
+		background: $tertiary;
+
+		h2 {
+			color: white;
+		}
+
+		p {
+			color: white;
+		}
+
+		ul {
+			font-size: 1.1rem;
+
+			a {
+				color: white;
+			}
+		}
+	}
+}
+
+#footer .inner {
+	padding-top: 0;
+}

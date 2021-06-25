@@ -3,10 +3,10 @@
 namespace CsrDelft\command;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\Orm\Persistence\Database;
+use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -16,14 +16,17 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 class MaaltijdVerwerkingTerugdraaienCommand extends Command {
-	/** @var MaaltijdenModel */
-	private $maaltijdenModel;
-	/** @var CiviBestellingModel */
-	private $civiBestellingModel;
+	/** @var MaaltijdenRepository */
+	private $maaltijdenRepository;
+	/** @var CiviBestellingRepository */
+	private $civiBestellingRepository;
+	/** @var EntityManagerInterface */
+	private $em;
 
-	public function __construct(MaaltijdenModel $maaltijdenModel, CiviBestellingModel $civiBestellingModel) {
-		$this->maaltijdenModel = $maaltijdenModel;
-		$this->civiBestellingModel = $civiBestellingModel;
+	public function __construct(MaaltijdenRepository $maaltijdenRepository, CiviBestellingRepository $civiBestellingRepository, EntityManagerInterface $em) {
+		$this->maaltijdenRepository = $maaltijdenRepository;
+		$this->civiBestellingRepository = $civiBestellingRepository;
+		$this->em = $em;
 
 		parent::__construct();
 	}
@@ -44,8 +47,8 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 			$mid = $helper->ask($input, $output, $question);
 			if (is_numeric($mid)) {
 				try {
-					$maaltijd = $this->maaltijdenModel->getMaaltijd($mid);
-						if (!$maaltijd->verwerkt) {
+					$maaltijd = $this->maaltijdenRepository->getMaaltijd($mid);
+					if (!$maaltijd->verwerkt) {
 						$output->writeln("Maaltijd is nog niet verwerkt");
 					} else {
 						$datum = $maaltijd->datum;
@@ -54,21 +57,21 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 					$output->writeln($exception->getMessage());
 				}
 			}
-		} while ($datum != null);
+		} while ($datum === null);
 
 		$output->writeln("");
 
 		// Haal maaltijden op deze datum op
-		$maaltijden = $this->maaltijdenModel->find('datum = ? AND verwerkt = 1', [$datum])->fetchAll();
+		$maaltijden = $this->maaltijdenRepository->findBy(['datum' => $datum, 'verwerkt' => '1']);
 		$maaltijdTekst = count($maaltijden) > 1 ? count($maaltijden) . ' maaltijden' : 'maaltijd';
 		$output->writeln("De verwerking van de volgende {$maaltijdTekst} wordt hiermee ongedaan gemaakt:");
 		foreach ($maaltijden as $maaltijd) {
-			$output->writeln("- " . $maaltijd->titel . " " . $maaltijd->datum);
+			$output->writeln("- " . $maaltijd->titel . " " . date_format_intl($maaltijd->datum, DATE_FORMAT));
 		}
 
 		// Haal bestellingen op
-		$comment = sprintf('Datum maaltijd: %s', date('Y-M-d', strtotime($datum)));
-		$bestellingen = $this->civiBestellingModel->find('cie = "maalcie" AND comment = ? AND deleted = 0', [$comment])->fetchAll();
+		$comment = sprintf('Datum maaltijd: %s', $datum->format('Y-M-d'));
+		$bestellingen = $this->civiBestellingRepository->findBy(['cie' => 'maalcie', 'comment' => $comment, 'deleted' => false]);
 		$leden = [];
 		$som = 0;
 		foreach ($bestellingen as $bestelling) {
@@ -89,7 +92,7 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 		$confirmed = $helper->ask($input, $output, $confirm);
 		if (!$confirmed) {
 			$output->writeln("Geannuleerd.");
-			return;
+			return 0;
 		}
 
 		$output->writeln("");
@@ -97,17 +100,17 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 		// Terugdraaien
 		$progress = new ProgressBar($output, count($bestellingen));
 		try {
-			Database::transaction(function () use ($bestellingen, $progress, $maaltijden) {
+			$this->em->transactional(function () use ($bestellingen, $progress, $maaltijden) {
 				reset($bestellingen);
 				foreach ($bestellingen as $bestelling) {
-					$this->civiBestellingModel->revert($bestelling);
+					$this->civiBestellingRepository->revert($bestelling);
 					$progress->advance();
 				}
 
 				reset($maaltijden);
 				foreach ($maaltijden as $maaltijd) {
 					$maaltijd->verwerkt = false;
-					$this->maaltijdenModel->update($maaltijd);
+					$this->maaltijdenRepository->update($maaltijd);
 				}
 			});
 		} catch (Exception $e) {
@@ -115,11 +118,13 @@ class MaaltijdVerwerkingTerugdraaienCommand extends Command {
 			$output->writeln("Terugdraaien mislukt:");
 			$output->writeln($e->getMessage());
 			$output->writeln($e->getTraceAsString());
-			return;
+			return 1;
 		}
 
 		$progress->finish();
 		$output->writeln("");
 		$output->writeln("Succesvol teruggedraaid!");
+
+		return 0;
 	}
 }

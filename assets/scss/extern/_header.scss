@@ -1,0 +1,252 @@
+@import "~@fortawesome/fontawesome-free/scss/variables";
+@import "variables";
+
+#header {
+	transition: background-color 0.5s ease-in-out;
+	left: 0;
+	padding: .25em 1.25em;
+	position: fixed;
+	width: 100%;
+	z-index: 10000;
+	top: 0;
+	background: $lichtblauw;
+
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+
+	h1 {
+		transition: opacity 0.5s ease-in-out;
+		border-bottom: 0;
+		font-size: 0.8em;
+		margin-bottom: 0;
+		opacity: 1;
+		visibility: visible;
+
+		a {
+			border: 0;
+		}
+	}
+
+	nav {
+		font-family: "Source Sans Pro", Helvetica, sans-serif;
+		font-size: 0.8em;
+		font-weight: 400;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		top: 0.7em;
+		display: flex;
+
+		align-items: flex-start;
+
+		& > .nav-link {
+			white-space: nowrap;
+		}
+
+		.login-knop, .menu-knop {
+			display: none;
+		}
+
+		.expand-dropdown {
+			display: none;
+		}
+
+		.dropdown-menu {
+			position: relative;
+			display: inline-flex;
+			flex-direction: column;
+
+			.dropdown {
+				display: none;
+				position: absolute;
+				z-index: 12;
+				background: $geel;
+				flex-direction: column;
+				padding: 15px 10px 10px;
+				border-bottom-left-radius: 15px;
+				border-bottom-right-radius: 15px;
+				margin: -15px .5em 0;
+				width: 10em;
+				top: 100%;
+
+				a {
+					text-align: center;
+					box-shadow: none;
+					border-radius: 0;
+					border-bottom: none;
+					padding: .8em;
+
+					&.is-active {
+						text-decoration: underline;
+					}
+				}
+			}
+
+			&:hover .dropdown {
+				display: flex;
+			}
+		}
+
+
+		.nav-link {
+			z-index: 13;
+
+			width: 10em;
+			text-align: center;
+
+			display: inline-block;
+			margin: 0 .5em;
+
+			border-bottom: none;
+
+			&:before {
+				float: right;
+				margin-left: 0.75em;
+			}
+
+			text-decoration: none;
+			border-radius: 15px;
+			padding: .8em 1.35em;
+			background: $button-bg;
+
+			&.is-active {
+				border: .2em solid $geel;
+				padding: .6em 1.15em;
+			}
+		}
+
+		.locale-switch {
+			.nav-link {
+				background: $button-bg;
+				padding: 0.8em;
+				width: auto;
+			}
+
+			img {
+				vertical-align: middle;
+			}
+
+			.dropdown {
+				width: auto;
+				padding: 1em 0 0;
+				margin-top: -1em;
+				.dropdown-item {
+					padding: 0.8em;
+				}
+			}
+		}
+	}
+
+	&.alt {
+		background-color: transparent;
+		z-index: 9998;
+
+		h1 {
+			opacity: 0;
+			visibility: hidden;
+		}
+	}
+}
+
+@media screen and (max-width: $scherm-middel) {
+
+	#header {
+		height: 2.75em;
+		line-height: 2.75em;
+
+		nav {
+			top: 0;
+			right: 0;
+			height: inherit;
+			line-height: inherit;
+
+			.nav-link {
+				height: inherit;
+				line-height: inherit;
+				box-shadow: none;
+				padding: 0 1em;
+			}
+		}
+	}
+
+}
+
+@media screen and (max-width: $scherm-middel) {
+	#header {
+		line-height: initial;
+		flex-direction: column-reverse;
+
+		height: auto;
+		padding: .25em 1.5em;
+
+		.nav-login {
+			display: flex;
+			justify-content: flex-end;
+			flex-direction: row;
+		}
+
+		nav {
+			.login-knop, .menu-knop {
+				display: block;
+				color: $geel;
+				padding: 0.5em;
+			}
+
+			a.inloggen {
+				display: none;
+			}
+		}
+
+		nav#menu {
+			display: none;
+			flex-direction: column;
+			height: auto;
+
+			.expand-dropdown {
+				display: block;
+				padding: 0 0.5em;
+			}
+
+			&.show {
+				display: flex;
+			}
+
+			.dropdown-menu {
+				width: 100%;
+
+				&:hover .dropdown {
+					display: none;
+
+					&.show {
+						display: flex;
+					}
+				}
+
+				.dropdown {
+					&.show {
+						display: flex;
+					}
+
+					a {
+						padding: 1em;
+						text-align: left;
+					}
+
+					position: relative;
+					width: 100%;
+					margin-left: 0;
+					margin-right: 0;
+				}
+			}
+
+			.nav-link {
+				padding: 1em;
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+
+				margin: 0.1em 0;
+			}
+		}
+	}
+}

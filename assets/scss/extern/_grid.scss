@@ -1,0 +1,33 @@
+@import "variables";
+
+// Afbeeldingen op de voorpagina
+
+.grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-auto-rows: 1fr;
+	grid-gap: .5em;
+
+	a {
+		border: 0;
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 5px;
+	}
+}
+
+@media screen and (max-width: $scherm-middel) {
+	.grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media screen and (max-width: $scherm-smal) {
+	.grid {
+		grid-template-columns: 1fr;
+	}
+}

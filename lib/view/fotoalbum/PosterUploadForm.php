@@ -3,7 +3,7 @@
 namespace CsrDelft\view\fotoalbum;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\fotoalbum\FotoAlbum;
+use CsrDelft\entity\fotoalbum\FotoAlbum;
 use CsrDelft\repository\CmsPaginaRepository;
 use CsrDelft\view\cms\CmsPaginaView;
 use CsrDelft\view\formulier\elementen\HtmlComment;
@@ -31,11 +31,13 @@ class PosterUploadForm extends Formulier {
 		return '<ul class="breadcrumb">' . FotoAlbumBreadcrumbs::getBreadcrumbs($this->model, false, true) . '</ul>';
 	}
 
-	public function view() {
-		parent::view();
+	public function __toString() {
+		$html = '';
+		$html .= parent::__toString();
 		// Uitleg foto's toevoegen
 		$body = new CmsPaginaView(ContainerFacade::getContainer()->get(CmsPaginaRepository::class)->find('fotostoevoegen'));
-		$body->view();
+		$html .= $body->__toString();
+		return $html;
 	}
 
 }

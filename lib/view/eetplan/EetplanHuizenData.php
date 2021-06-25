@@ -2,12 +2,14 @@
 
 namespace CsrDelft\view\eetplan;
 
-class EetplanHuizenData {
-	public function getPrimaryKey() {
-		return array('id');
+use CsrDelft\common\datatable\CustomDataTableEntry;
+
+class EetplanHuizenData implements CustomDataTableEntry {
+	public static function getIdentifierFieldNames() {
+		return ['id'];
 	}
 
-	public function getAttributes() {
-		return array('id', 'naam', 'soort', 'eetplan');
+	public static function getFieldNames() {
+		return ['id', 'naam', 'soort', 'eetplan'];
 	}
 }

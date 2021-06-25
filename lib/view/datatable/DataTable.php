@@ -3,15 +3,18 @@
 namespace CsrDelft\view\datatable;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\Orm\Entity\PersistentEntity;
-use CsrDelft\Orm\PersistenceModel;
+use CsrDelft\common\datatable\CustomDataTableEntry;
+use CsrDelft\common\Doctrine\Type\DateTimeImmutableType;
 use CsrDelft\view\datatable\knoppen\DataTableKnop;
 use CsrDelft\view\datatable\knoppen\DataTableRowKnop;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\ToHtmlResponse;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
-use Doctrine\Common\Persistence\Mapping\MappingException;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Types\BooleanType;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl
@@ -27,14 +30,12 @@ class DataTable implements View, FormElement, ToResponse {
 	use ToHtmlResponse;
 	const POST_SELECTION = 'DataTableSelection';
 
-	/** @var PersistenceModel */
-	public $model;
-
 	protected $dataUrl;
 	protected $titel;
 	protected $dataTableId;
 	protected $defaultLength = 10;
 	protected $selectEnabled = true;
+	protected $vliegendeKnoppen = false;
 	protected $settings = [
 		'dom' => 'Bfrtpli',
 		'buttons' => [
@@ -71,12 +72,11 @@ class DataTable implements View, FormElement, ToResponse {
 	private $columns = array();
 	private $groupByColumn;
 
-	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null) {
-		$this->model = new $orm();
+	public function __construct($orm, $dataUrl, $titel = false, $groupByColumn = null, $loadColumns = true) {
 		$this->titel = $titel;
 
 		$this->dataUrl = $dataUrl;
-		$this->dataTableId = uniqid_safe(classNameZonderNamespace(get_class($this->model)));
+		$this->dataTableId = uniqid_safe(classNameZonderNamespace($orm));
 		$this->groupByColumn = $groupByColumn;
 
 		// create group expand / collapse column
@@ -90,37 +90,8 @@ class DataTable implements View, FormElement, ToResponse {
 			'defaultContent' => ''
 		);
 
-		$metadata = null;
-		if (!is_subclass_of($orm, PersistentEntity::class)) { // Deze klasse is in doctrine.
-			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
-			try {
-				$metadata = $manager->getClassMetaData($orm);
-			} catch (MappingException $ex) {
-				// ignore deze klasse is niet in doctrine
-			}
-		}
-
-		if ($metadata) {
-			// generate columns from entity attributes
-			foreach ($metadata->getFieldNames() as $attribute) {
-				$this->addColumn($attribute);
-			}
-
-			// hide primary key columns
-			foreach ($metadata->getIdentifierFieldNames() as $attribute) {
-				$this->hideColumn($attribute);
-			}
-		} else {
-			// generate columns from entity attributes
-			foreach ($this->model->getAttributes() as $attribute) {
-				$this->addColumn($attribute);
-			}
-
-			// hide primary key columns
-			foreach ($this->model->getPrimaryKey() as $attribute) {
-				$this->hideColumn($attribute);
-			}
-
+		if ($loadColumns) {
+			$this->loadColumns($orm);
 		}
 	}
 
@@ -133,6 +104,45 @@ class DataTable implements View, FormElement, ToResponse {
 
 	public function setSearch($searchString) {
 		$this->settings['search'] = ['search' => $searchString];
+	}
+
+	/**
+	 * @param $orm
+	 * @throws Exception
+	 */
+	public function loadColumns($orm): void
+	{
+		if (is_a($orm, CustomDataTableEntry::class, true)) {
+			foreach ($orm::getFieldNames() as $attribute) {
+				$this->addColumn($attribute);
+			}
+
+			foreach ($orm::getIdentifierFieldNames() as $attribute) {
+				$this->hideColumn($attribute);
+			}
+		} else {
+			$manager = ContainerFacade::getContainer()->get('doctrine')->getManager();
+			/** @var ClassMetadata $metadata */
+			$metadata = $manager->getClassMetaData($orm);
+
+			// generate columns from entity attributes
+			foreach ($metadata->getFieldNames() as $attribute) {
+				$type = Type::getTypeRegistry()->get($metadata->getTypeOfField($attribute));
+				$columnName = $metadata->getColumnName($attribute);
+				if ($type instanceof DateTimeImmutableType) {
+					$this->addColumn($columnName, null, null, CellRender::DateTime());
+				} elseif ($type instanceof BooleanType) {
+					$this->addColumn($columnName, null, null, CellRender::Check());
+				} else {
+					$this->addColumn($columnName);
+				}
+			}
+
+			// hide primary key columns
+			foreach ($metadata->getIdentifierColumnNames() as $attribute) {
+				$this->hideColumn($attribute);
+			}
+		}
 	}
 
 	/**
@@ -251,21 +261,22 @@ class DataTable implements View, FormElement, ToResponse {
 	}
 
 	protected function getSettings() {
+		$settings = $this->settings;
 
 		// set view modus: paging or scrolling
 		if ($this->defaultLength > 0) {
-			$this->settings['paging'] = true;
-			$this->settings['pageLength'] = $this->defaultLength;
+			$settings['paging'] = true;
+			$settings['pageLength'] = $this->defaultLength;
 		} else {
-			$this->settings['paging'] = false;
-			$this->settings['dom'] = str_replace('i', '', $this->settings['dom']);
+			$settings['paging'] = false;
+			$settings['dom'] = str_replace('i', '', $this->settings['dom']);
 		}
 
-		$this->settings['select'] = $this->selectEnabled;
+		$settings['select'] = $this->selectEnabled;
 
 		// set ajax url
 		if ($this->dataUrl) {
-			$this->settings['ajax'] = array(
+			$settings['ajax'] = array(
 				'url' => $this->dataUrl,
 				'type' => 'POST',
 				'data' => array(
@@ -282,13 +293,13 @@ class DataTable implements View, FormElement, ToResponse {
 			$this->searchColumn($this->groupByColumn);
 
 			$groupByColumnPosition = $this->columnPosition($this->groupByColumn);
-			$this->settings['columnGroup'] = ['column' => $groupByColumnPosition];
-			$this->settings['orderFixed'] = [
+			$settings['columnGroup'] = ['column' => $groupByColumnPosition];
+			$settings['orderFixed'] = [
 				[$groupByColumnPosition, 'asc']
 			];
 		}
 
-		if (count($this->settings['rowButtons']) > 0) {
+		if (count($settings['rowButtons']) > 0) {
 			$this->columns['actionButtons'] = [
 				'name' => 'actionButtons',
 				'searchable' => false,
@@ -297,18 +308,18 @@ class DataTable implements View, FormElement, ToResponse {
 			];
 		} else {
 			// Client checkt of rowButtons bestaat
-			unset($this->settings['rowButtons']);
+			unset($settings['rowButtons']);
 		}
 
 		// create visible columns index array and default order
 		$index = 0;
 		$visibleIndex = 0;
 		foreach ($this->columns as $name => $def) {
-			if (!isset($def['visible']) OR $def['visible'] === true) {
+			if (!isset($def['visible']) || $def['visible'] === true) {
 
 				// default order by first visible orderable column
-				if (!isset($this->settings['order']) AND !(isset($def['orderable']) AND $def['orderable'] === false)) {
-					$this->settings['order'] = array(
+				if (!isset($settings['order']) && !(isset($def['orderable']) && $def['orderable'] === false)) {
+					$settings['order'] = array(
 						array($index, 'asc')
 					);
 				}
@@ -319,16 +330,16 @@ class DataTable implements View, FormElement, ToResponse {
 		}
 
 		// translate columns index
-		$this->settings['columns'] = array_values($this->columns);
+		$settings['columns'] = array_values($this->columns);
 
 		// Voeg nieuwe knoppen toe
-		$this->settings['buttons'] = array_merge($this->settings['userButtons'], $this->settings['buttons']);
+		$settings['buttons'] = array_merge($settings['userButtons'], $settings['buttons']);
 
-		return $this->settings;
+		return $settings;
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getTitel() {
@@ -343,7 +354,7 @@ class DataTable implements View, FormElement, ToResponse {
 	 * Hiermee wordt gepoogt af te dwingen dat een view een model heeft om te tonen
 	 */
 	public function getModel() {
-		return $this->model;
+		return null;
 	}
 
 	public function getType() {
@@ -354,9 +365,10 @@ class DataTable implements View, FormElement, ToResponse {
 		$id = str_replace(' ', '-', strtolower($this->getTitel()));
 
 		$settingsJson = htmlspecialchars(json_encode($this->getSettings(), DEBUG ? JSON_PRETTY_PRINT : 0));
+		$vliegendeKnoppenClass = $this->vliegendeKnoppen ? 'vliegende-knoppen' : '';
 
 		return <<<HTML
-<h2 id="table-{$id}" class="Titel">{$this->getTitel()}</h2>
+<h2 id="table-{$id}" class="Titel {$vliegendeKnoppenClass}">{$this->getTitel()}</h2>
 
 <table id="{$this->dataTableId}" class="ctx-datatable display" data-settings="{$settingsJson}"></table>
 HTML;

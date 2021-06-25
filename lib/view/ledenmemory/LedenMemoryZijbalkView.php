@@ -18,7 +18,7 @@ class LedenMemoryZijbalkView implements View {
 		$this->titel = $titel;
 	}
 
-	function getTitel() {
+	public function getTitel() {
 		return 'Topscores ' . $this->titel;
 	}
 
@@ -26,35 +26,37 @@ class LedenMemoryZijbalkView implements View {
 		return null;
 	}
 
-	function getModel() {
+	public function getModel() {
 		return $this->scores;
 	}
 
-	function view() {
-		echo '<div id="zijbalk_ledenmemory_topscores"><div class="zijbalk-kopje"><a href="/forum/onderwerp/8017">';
-		echo $this->getTitel();
-		echo '</a></div>';
+	public function __toString() {
+		$html = '';
+		$html .= '<div id="zijbalk_ledenmemory_topscores"><div class="zijbalk-kopje"><a href="/forum/onderwerp/8017">';
+		$html .= $this->getTitel();
+		$html .= '</a></div>';
 		$first = true;
 		foreach ($this->getModel() as $score) {
-			echo '<div class="item">';
-			echo sprintf('%02d', floor($score->tijd / 60 % 60)); //minuten
-			echo ':';
-			echo sprintf('%02d', floor($score->tijd % 60)); //seconden
-			echo ' ';
+			$html .= '<div class="item">';
+			$html .= sprintf('%02d', floor($score->tijd / 60 % 60)); //minuten
+			$html .= ':';
+			$html .= sprintf('%02d', floor($score->tijd % 60)); //seconden
+			$html .= ' ';
 			if ($first) {
-				echo '<span class="cursief">';
+				$html .= '<span class="cursief">';
 			}
-			echo ProfielRepository::getLink($score->door_uid, 'civitas');
-			echo ' (';
-			echo $score->beurten;
-			echo ')';
+			$html .= ProfielRepository::getLink($score->door_uid, 'civitas');
+			$html .= ' (';
+			$html .= $score->beurten;
+			$html .= ')';
 			if ($first) {
-				echo '</span>';
+				$html .= '</span>';
 			}
-			echo '</div>';
+			$html .= '</div>';
 			$first = false;
 		}
-		echo '</div>'; //einde wrapperdiv
+		$html .= '</div>'; //einde wrapperdiv
+		return $html;
 	}
 
 }

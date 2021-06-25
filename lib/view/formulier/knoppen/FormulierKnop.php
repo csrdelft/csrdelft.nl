@@ -8,7 +8,7 @@ use CsrDelft\view\Icon;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  */
 class FormulierKnop implements FormElement {
 
@@ -54,23 +54,23 @@ class FormulierKnop implements FormElement {
 
 	public function getHtml() {
 		$this->css_classes[] = $this->action;
-		$html = '<a id="' . $this->getId() . '"' . ($this->url ? ' href="' . $this->url . '"' : '') . ' class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '" tabindex="0"';
+		$html = '<a id="' . $this->getId() . '" href="'.($this->url ?: '#').'" class="' . implode(' ', $this->css_classes) . '" title="' . htmlspecialchars($this->title) . '" tabindex="0"';
 		if (isset($this->data)) {
 			$html .= ' data="' . $this->data . '"';
 		}
 		if (strpos($this->action, 'cancel') !== false) {
-			$html .= ' data-dismiss="modal"';
+			$html .= ' data-bs-dismiss="modal"';
 		}
 		$html .= '>';
 		if ($this->icon) {
-			$html .= Icon::getTag($this->icon, null, null, 'mr-1');
+			$html .= Icon::getTag($this->icon, null, null, 'me-1');
 		}
 		$html .= $this->label;
 		return $html . '</a> ';
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function getJavascript() {

@@ -2,15 +2,22 @@
 
 namespace CsrDelft\controller;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\common\CsrToegangException;
-use CsrDelft\model\entity\security\AuthenticationMethod;
-use CsrDelft\model\security\AccessModel;
-use CsrDelft\model\security\AccountModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\security\enum\AuthenticationMethod;
 use CsrDelft\repository\CmsPaginaRepository;
-use CsrDelft\view\JsonResponse;
+use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\AccessService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\login\AccountForm;
+use CsrDelft\view\login\UpdateLoginForm;
+use Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
@@ -22,94 +29,153 @@ class AccountController extends AbstractController {
 	 */
 	private $cmsPaginaRepository;
 	/**
-	 * @var AccountModel
+	 * @var AccountRepository
 	 */
-	private $accountModel;
+	private $accountRepository;
 	/**
-	 * @var LoginModel
+	 * @var LoginService
 	 */
-	private $loginModel;
+	private $loginService;
+	/**
+	 * @var AccessService
+	 */
+	private $accessService;
 
-	public function __construct(AccountModel $accountModel, LoginModel $loginModel, CmsPaginaRepository $cmsPaginaRepository) {
+	public function __construct(
+		AccessService $accessService,
+		AccountRepository $accountRepository,
+		CmsPaginaRepository $cmsPaginaRepository,
+		LoginService $loginService
+	) {
+		$this->accessService = $accessService;
+		$this->accountRepository = $accountRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
-		$this->accountModel = $accountModel;
-		$this->loginModel = $loginModel;
+		$this->loginService = $loginService;
 	}
 
-	public function aanvragen() {
-		return view('default', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
-	}
-
-	public function aanmaken($uid = null) {
-		if (!LoginModel::mag(P_ADMIN)) {
-			throw new CsrToegangException();
+	/**
+	 * @param null $uid
+	 * @return RedirectResponse
+	 * @Route("/account/{uid}/aanmaken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_ADMIN)
+	 */
+	public function aanmaken($uid = null): RedirectResponse
+	{
+		if (!LoginService::mag(P_ADMIN)) {
+			throw $this->createAccessDeniedException();
 		}
+
 		if ($uid == null) {
-			$uid = $this->loginModel->getUid();
+			$account = $this->getUser();
+		} else {
+			$account = $this->accountRepository->find($uid);
 		}
-		if (AccountModel::get($uid)) {
+
+		if ($account) {
 			setMelding('Account bestaat al', 0);
 		} else {
-			$account = $this->accountModel->maakAccount($uid);
+			$account = $this->accountRepository->maakAccount($uid);
 			if ($account) {
 				setMelding('Account succesvol aangemaakt', 1);
 			} else {
 				throw new CsrGebruikerException('Account aanmaken gefaald');
 			}
 		}
-		return $this->redirectToRoute('account-bewerken', ['uid' => $uid]);
+		return $this->redirectToRoute('csrdelft_account_bewerken', ['uid' => $uid]);
 	}
 
-	public function bewerken($uid = null) {
+	/**
+	 * @param Request $request
+	 * @param Security $security
+	 * @param null $uid
+	 * @return Response
+	 * @Route("/account/{uid}/bewerken", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Route("/account/bewerken", methods={"GET", "POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function bewerken(Request $request, Security $security, $uid = null): Response
+	{
+		$eigenAccount = $security->getUser();
 		if ($uid == null) {
-			$uid = $this->loginModel->getUid();
+			$uid = $this->getUid();
 		}
-		if ($uid === LoginModel::UID_EXTERN) {
-			return $this->aanvragen();
+		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
+			throw $this->createAccessDeniedException();
 		}
-		if ($uid !== $this->loginModel->getUid() && !LoginModel::mag(P_ADMIN)) {
-			throw new CsrToegangException();
-		}
-		if ($this->loginModel->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
-			setMelding('U mag geen account wijzigen want u bent niet recent met wachtwoord ingelogd', 2);
-			throw new CsrToegangException();
-		}
-		$account = AccountModel::get($uid);
+		$account = $this->accountRepository->get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
-			throw new CsrToegangException();
+			throw $this->createAccessDeniedException();
 		}
-		if (!AccessModel::mag($account, P_LOGGED_IN)) {
+		// Het is alleen toegestaan om een account te bewerken als er recent met een wachtwoord is ingelogd.
+		// En dus niet met een rememberme token, want dit geeft minder garantie dat de eigenaar van het account
+		// de actie uitvoert.
+		// Als dit niet het geval is moet de gebruiker zijn wachtwoord geven om de huidige sessie te converteren
+		// naar een 'recent_password_login' sessie. Deze sessie blijft gelden totdat de sessie verloopt en de
+		// rememberme token wordt gebruikt om een nieuwe sessie aan te vragen.
+		if ($this->loginService->getAuthenticationMethod() !== AuthenticationMethod::recent_password_login) {
+			$action = $this->generateUrl('csrdelft_account_bewerken', ['uid' => $uid]);
+			$form = new UpdateLoginForm($action);
+
+			// Reset loginmoment naar nu als de gebruiker zijn wachtwoord geeft.
+			if ($form->validate() && $this->accountRepository->controleerWachtwoord($eigenAccount, $form->getValues()['pass'])) {
+				$this->loginService->setRecentLoginToken();
+			} else {
+				setMelding('U bent niet recent ingelogd, vul daarom uw wachtwoord in om uw account te wijzigen.', 2);
+				return $this->render('default.html.twig', ['content' => new UpdateLoginForm($action)]);
+			}
+		}
+		if (!$this->accessService->mag($account, P_LOGGED_IN)) {
 			setMelding('Account mag niet inloggen', 2);
 		}
-		$form = new AccountForm($account);
+		$form = $this->createFormulier(AccountForm::class, $account, [
+			'action' => $this->generateUrl('csrdelft_account_bewerken', ['uid' => $account->uid])
+		]);
+		$form->handleRequest($request);
 		if ($form->validate()) {
-			if ($form->findByName('username')->getValue() == '') {
+			if ($account->username == '') {
 				$account->username = $account->uid;
 			}
 			// username, email & wachtwoord opslaan
-			$pass_plain = $form->findByName('wijzigww')->getValue();
-			$this->accountModel->wijzigWachtwoord($account, $pass_plain);
+			$this->accountRepository->wijzigWachtwoord($account, $account->pass_plain);
 			setMelding('Inloggegevens wijzigen geslaagd', 1);
 		}
-		return view('default', ['content' => $form]);
+		$account->eraseCredentials();
+		return $this->render('default.html.twig', ['content' => $form->createView()]);
 	}
 
-	public function verwijderen($uid = null) {
+	/**
+	 * @return Response
+	 * @Route("/account/{uid}/aanvragen", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_PUBLIC)
+	 */
+	public function aanvragen(): Response
+	{
+		return $this->render('default.html.twig', ['content' => $this->cmsPaginaRepository->find('accountaanvragen')]);
+	}
+
+	/**
+	 * @param null $uid
+	 * @return JsonResponse
+	 * @Route("/account/{uid}/verwijderen", methods={"POST"}, requirements={"uid": ".{4}"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function verwijderen($uid = null): JsonResponse
+	{
 		if ($uid == null) {
-			$uid = $this->loginModel->getUid();
+			$uid = $this->getUid();
 		}
-		if ($uid !== $this->loginModel->getUid() && !LoginModel::mag(P_ADMIN)) {
-			throw new CsrToegangException();
+		if ($uid !== $this->getUid() && !LoginService::mag(P_ADMIN)) {
+			throw $this->createAccessDeniedException();
 		}
-		$account = AccountModel::get($uid);
+		$account = $this->accountRepository->get($uid);
 		if (!$account) {
 			setMelding('Account bestaat niet', -1);
 		} else {
-			$result = $this->accountModel->delete($account);
-			if ($result === 1) {
+			try {
+				$this->accountRepository->delete($account);
 				setMelding('Account succesvol verwijderd', 1);
-			} else {
+			} catch (Exception $exception) {
 				setMelding('Account verwijderen mislukt', -1);
 			}
 		}

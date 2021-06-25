@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\maalcie\beheer;
 
-use CsrDelft\model\entity\maalcie\MaaltijdRepetitie;
-use CsrDelft\model\maalcie\MaaltijdenModel;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
 use CsrDelft\view\datatable\DataTable;
@@ -22,7 +22,7 @@ class BeheerMaaltijdenTable extends DataTable {
 	 * @param $repetities MaaltijdRepetitie[]
 	 */
 	public function __construct($repetities) {
-		parent::__construct(MaaltijdenModel::ORM, '/maaltijden/beheer');
+		parent::__construct(Maaltijd::class, '/maaltijden/beheer');
 
 		$this->hideColumn('verwijderd');
 		$this->hideColumn('aanmeld_limiet');

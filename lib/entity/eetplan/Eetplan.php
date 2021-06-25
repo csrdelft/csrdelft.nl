@@ -2,55 +2,82 @@
 
 namespace CsrDelft\entity\eetplan;
 
-use CsrDelft\model\entity\groepen\Woonoord;
+use CsrDelft\common\datatable\DataTableEntry;
+use CsrDelft\entity\groepen\Woonoord;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\groepen\WoonoordenModel;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="CsrDelft\repository\eetplan\EetplanRepository")
+ * @ORM\Table(
+ *   uniqueConstraints={@ORM\UniqueConstraint(name="noviet_woonoord", columns={"uid", "woonoord_id"})}
+ * )
  */
-class Eetplan {
+class Eetplan implements DataTableEntry {
 	/**
-	 * @ORM\Column(type="string", length=4)
-	 * @ORM\Id()
-	 * @var string
-	 */
-	public $uid;
-
-	/**
+	 * @var int
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
-	 * @var int
+	 * @Serializer\Groups("datatable")
+	 * @ORM\GeneratedValue()
 	 */
-	public $woonoord_id;
+	public $id;
+	/**
+	 * @var Woonoord
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\groepen\Woonoord")
+	 */
+	public $woonoord;
 
 	/**
-	 * @ORM\Column(type="date")
-	 * @var DateTime
+	 * @ORM\Column(type="date", nullable=true)
+	 * @var DateTimeImmutable
 	 */
 	public $avond;
-
 	/**
 	 * Specifiek bedoelt voor bekende huizen.
 	 *
 	 * @ORM\Column(type="string", nullable=true)
 	 * @var string
+	 * @Serializer\Groups("datatable")
 	 */
 	public $opmerking;
-
 	/**
 	 * @var Profiel
-	 * @ORM\OneToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
+	 * @ORM\ManyToOne(targetEntity="CsrDelft\entity\profiel\Profiel")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
 	public $noviet;
 
 	/**
-	 * @return Woonoord|false|mixed
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("woonoord")
 	 */
-	public function getWoonoord() {
-		return WoonoordenModel::instance()->get($this->woonoord_id);
+	public function getDataTableWoonoord() {
+		return $this->woonoord->naam;
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("naam")
+	 */
+	public function getDataTableNaam() {
+		return $this->noviet->getNaam();
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("avond")
+	 */
+	public function getDataTableAvond() {
+		if ($this->avond) {
+			return date_format_intl($this->avond, DATE_FORMAT);
+		} else {
+			return null;
+		}
 	}
 }

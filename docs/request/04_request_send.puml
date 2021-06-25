@@ -1,0 +1,25 @@
+@startuml
+title: Response naar de gebruiker sturen
+Actor Browser
+Browser -> index ++
+index -> index : Bouw Response
+index -> Response ++
+note over Response
+Response is een van de volgende
+ - ""Symfony\Component\HttpFoundation\Response""
+ - ""CsrDelft\view\ToResponse""
+Een ToResponse wordt voor het verzenden
+omgezet naar een Response.
+end note
+Response -> __toString ++
+note over __toString
+In de __toString wordt een response
+opgebouwd, bijvoorbeeld door een template
+te renderen, deze stap mag geen fouten
+geven. Als dit wel gebeurt is dit een
+harde (500) fout.
+end note
+return
+return
+return
+@enduml

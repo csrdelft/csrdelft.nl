@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumbs %}
+	{{ csr_breadcrumbs({
+		(url('default')): 'main',
+		(url('csrdelft_ledenlijst_lijst')): 'Ledenlijst',
+		(url('csrdelft_commissievoorkeuren_overzicht')): 'Commissievoorkeuren',
+		'': commissie.naam
+	}) }}
+{% endblock %}
+
+{% block content %}
+	<h1>{{ commissie.naam }}</h1>
+	<div class="col-md-6">
+		<table class="commissievoorkeuren">
+			<tr>
+				<th>Lid</th>
+				<th>Interesse</th>
+			</tr>
+			{% for voorkeur in voorkeuren %}
+				{% if voorkeur.profiel.lid and voorkeur.voorkeur >= 2 %}
+					<tr{% if voorkeur.heeftGedaan %} style="opacity: .50"{% endif %}>
+						<td><a href="{{ url('csrdelft_commissievoorkeuren_lidpagina', {uid: voorkeur.profiel.uid}) }}">{{ voorkeur.profiel.naam }}</a>
+						</td>
+						<td>{{ voorkeur.voorkeurTekst }}</td>
+					</tr>
+				{% endif %}
+			{% endfor %}
+		</table>
+	</div>
+	<div class="col-md-6">
+		{{ commissieFormulier | raw }}
+	</div>
+{% endblock %}

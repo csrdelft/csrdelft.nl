@@ -1,0 +1,252 @@
+#editor, .pm-editor {
+	background: white;
+	color: black;
+	background-clip: padding-box;
+	border-radius: 4px;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	padding: 5px 0;
+	margin-bottom: 23px;
+}
+
+.ProseMirror-menubar {
+	// Override de styles van prosemirror om te kunnen compenseren voor de menubalk
+	// Misschien is hier een betere fix voor.
+	position: sticky !important;
+	top: 80px !important;
+}
+
+.ProseMirror-menubar-wrapper {
+	// To contain .lid-hints
+	position: relative;
+}
+
+.ProseMirror-toggle-button {
+	position: absolute;
+	right: 15px;
+	z-index: 100;
+	padding: 8px;
+	cursor: pointer;
+	line-height: 0.8;
+}
+
+.bb-editor {
+	margin-top: 30px;
+}
+
+.ProseMirror p:first-child,
+.ProseMirror h1:first-child,
+.ProseMirror h2:first-child,
+.ProseMirror h3:first-child,
+.ProseMirror h4:first-child,
+.ProseMirror h5:first-child,
+.ProseMirror h6:first-child {
+	margin-top: 10px;
+}
+
+.ProseMirror p {
+	margin-bottom: 1em
+}
+
+.ProseMirror hr {
+	background: transparent;
+}
+
+.ProseMirror {
+	padding: 4px 8px 4px 14px;
+	line-height: 1.2;
+	outline: none;
+	min-height: 200px;
+}
+
+.ProseMirror .pm-block {
+	height: 100px;
+	background: #f5f5f5;
+	box-shadow: 0 0 10px #e8e8e8;
+	margin: 0.5em 0 1em;
+
+	text-transform: capitalize;
+	text-align: center;
+	padding: 2em;
+}
+
+.ProseMirror .pm-verklapper {
+	border: 1px solid rgba(0, 0, 0, .125);
+	border-radius: 0.25rem;
+	padding: 1.25rem;
+
+	&::before {
+		margin: -1.25rem -1.25rem 0 -1.25rem;
+		content: 'Verklapper';
+		display: block;
+		padding: .25rem .5rem;
+		font-size: .875rem;
+		line-height: 1.5;
+		border-radius: .2rem;
+		color: #fff;
+		background-color: #6c757d;
+		border-color: #6c757d;
+		text-align: center;
+		width: calc(100% + 2.5rem);
+	}
+}
+
+.ProseMirror .plaatje-placeholder {
+	&::before {
+		content: '\f03e';
+		display: block;
+		font-family: "Font Awesome 5 Free", sans-serif;
+		text-align: center;
+		vertical-align: middle;
+		padding: 2em;
+		font-size: 1.5em;
+	}
+
+	display: inline-block;
+	background: #f5f5f5;
+	box-shadow: 0 0 10px #e8e8e8;
+	margin: 0.5em 0 1em;
+	width: 100px;
+	height: 100px;
+}
+
+.ProseMirror [data-bb-video],
+.ProseMirror [data-bb-twitter],
+.ProseMirror [data-bb-audio],
+.ProseMirror [data-bb-spotify] {
+	height: 100px;
+	background: #f5f5f5;
+	box-shadow: 0 0 10px #e8e8e8;
+	margin: 0.5em 0 1em;
+}
+
+.ProseMirror [data-bb-youtube] {
+	width: 600px;
+}
+
+.ProseMirror [data-lid] {
+	color: $link-color;
+
+	&::before {
+		content: '\f007'; // fa-user
+		display: inline-block;
+		font-family: "Font Awesome 5 Free", sans-serif;
+		margin-right: 3px;
+		font-size: 10px;
+	}
+}
+
+.ProseMirror [data-bb-citaat] {
+
+	padding-left: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	position: relative;
+	margin-top: 20px;
+	margin-bottom: 1em;
+
+	&::before {
+		content: "Citaat van " attr(data-bb-citaat-naam) ":";
+		font-style: italic;
+		display: block;
+		position: absolute;
+		top: -16px;
+		left: 0;
+	}
+
+	&[data-bb-citaat-url]::before {
+		color: #0a3292;
+	}
+
+
+	&::after {
+		background: #d3d3d3;
+		top: 0;
+		width: 4px;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		border-radius: 4px;
+		content: '';
+	}
+}
+
+.ProseMirror img {
+	max-width: 100%;
+}
+
+.ProseMirror [data-plaatje] {
+	img {
+		max-width: 100%;
+	}
+}
+
+.ProseMirror [data-bb] {
+	border: 1px dotted lightgrey;
+}
+
+.ProseMirror-popup {
+	background: white;
+	padding: 5px 10px 5px 15px;
+	border: 1px solid silver;
+	position: fixed;
+	border-radius: 3px;
+	z-index: 11;
+	box-shadow: -.5px 2px 5px rgba(0, 0, 0, .2);
+}
+
+.ProseMirror-popup h5 {
+	margin: 0;
+	font-weight: normal;
+	font-size: 100%;
+	color: #444;
+}
+
+.ProseMirror-popup input[type="text"],
+.ProseMirror-popup textarea {
+	background: #eee;
+	border: none;
+	outline: none;
+}
+
+.ProseMirror-popup input[type="text"] {
+	padding: 0 4px;
+}
+
+.ProseMirror-popup-close {
+	position: absolute;
+	left: 2px;
+	top: 1px;
+	color: #666;
+	border: none;
+	background: transparent;
+	padding: 0;
+}
+
+.ProseMirror-popup-close:after {
+	content: "✕";
+	font-size: 12px;
+}
+
+.ProseMirror-invalid {
+	background: #ffc;
+	border: 1px solid #cc7;
+	border-radius: 4px;
+	padding: 5px 10px;
+	position: absolute;
+	min-width: 10em;
+}
+
+.ProseMirror-popup-buttons {
+	margin-top: 5px;
+}
+
+.ProseMirror-icon {
+	vertical-align: 0 !important;
+	line-height: inherit !important;
+
+	span {
+		vertical-align: baseline !important;
+		height: 1em;
+		display: inline-block;
+	}
+}

@@ -4,7 +4,7 @@ namespace CsrDelft\view\bbcode\tag;
 
 use CsrDelft\bb\BbTag;
 use CsrDelft\common\CsrException;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 
 /**
  * Toont content als instelling een bepaalde waarde heeft, standaard 'ja';
@@ -21,7 +21,7 @@ class BbInstelling extends BbTag {
 
 	public function isAllowed()
 	{
-		LoginModel::mag(P_LOGGED_IN);
+		LoginService::mag(P_LOGGED_IN);
 	}
 
 	public static function getTagName() {
@@ -34,7 +34,7 @@ class BbInstelling extends BbTag {
 		}
 		try {
 			if (lid_instelling($this->module, $this->instelling) == $this->testwaarde) {
-				return $this->content;
+				return $this->getContent();
 			}
 		} catch (CsrException $e) {
 			return '[instelling]: ' . $e->getMessage();

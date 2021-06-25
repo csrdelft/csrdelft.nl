@@ -16,7 +16,7 @@ use CsrDelft\view\bbcode\BbHelper;
  */
 class BbUrl extends BbTag {
 
-	private $url;
+	public $url;
 
 	public static function getTagName() {
 		return ['url', 'rul'];
@@ -26,19 +26,23 @@ class BbUrl extends BbTag {
 		$this->url = $this->getUrl($arguments);
 		if ($this->url == null) {
 			$this->readContent([], false);
-			$this->url = $this->content;
+			$this->url = $this->getContent();
 		}
 		else {
 			$this->readContent();
 		}
 	}
 
+	public function renderPlain() {
+		return $this->getContent() . " (" . $this->url . ")";
+	}
+
 	public function renderLight() {
-		return BbHelper::lightLinkInline($this->env, 'url', $this->url, $this->content);
+		return BbHelper::lightLinkInline($this->env, 'url', $this->url, $this->getContent());
 	}
 
 	public function render() {
-		return external_url($this->url, $this->content);
+		return external_url($this->url, $this->getContent());
 	}
 
 	/**

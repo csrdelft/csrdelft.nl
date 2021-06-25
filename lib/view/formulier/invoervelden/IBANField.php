@@ -4,7 +4,7 @@ namespace CsrDelft\view\formulier\invoervelden;
 
 /**
  * @author Jorai Rijsdijk <jorairijsdijk@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * Class IBANField checked of de ingevulde bankrekening een valide IBAN is.
  */

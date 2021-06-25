@@ -2,7 +2,8 @@
 
 namespace CsrDelft\controller\groepen;
 
-use CsrDelft\model\groepen\WerkgroepenModel;
+use CsrDelft\entity\groepen\Werkgroep;
+use Doctrine\Persistence\ManagerRegistry;
 
 
 /**
@@ -15,7 +16,7 @@ use CsrDelft\model\groepen\WerkgroepenModel;
  * N.B. Een Werkgroep extends Ketzer, maar de controller niet om de "nieuwe ketzer"-wizard te vermijden.
  */
 class WerkgroepenController extends AbstractGroepenController {
-	public function __construct(WerkgroepenModel $werkgroepenModel) {
-		parent::__construct($werkgroepenModel);
+	public function __construct(ManagerRegistry $registry) {
+		parent::__construct($registry, Werkgroep::class);
 	}
 }

@@ -5,10 +5,6 @@ namespace CsrDelft\view;
 use Symfony\Component\HttpFoundation\Response;
 
 class MeldingResponse implements ToResponse, View {
-	public function view() {
-		echo getMelding();
-	}
-
 	public function getTitel() {
 		return '';
 	}
@@ -26,5 +22,10 @@ class MeldingResponse implements ToResponse, View {
 
 	public function toResponse(): Response {
 		return new Response(getMelding());
+	}
+
+	public function __toString()
+	{
+		return getMelding();
 	}
 }

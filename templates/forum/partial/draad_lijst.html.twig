@@ -1,0 +1,46 @@
+<div class="alternate-row draad-titel">
+	{% if draad.wacht_goedkeuring %}
+		<small class="niet-dik">[ter goedkeuring...]</small>
+	{% endif %}
+
+	{% if draad.belangrijk %}
+		{{ icon(draad.belangrijk, null, 'dit onderwerp is door het bestuur aangemerkt als belangrijk') }}
+	{% elseif draad.plakkerig %}
+		{{ icon('note', null, 'Dit onderwerp is plakkerig, het blijft bovenaan') }}
+	{% elseif draad.gesloten %}
+		{{ icon('lock', null, 'Dit onderwerp is gesloten, u kunt niet meer reageren') }}
+	{% endif %}
+
+	{% if lid_instelling('forum', 'open_draad_op_pagina') == 'ongelezen' %}
+		{% set urlHash = 'ongelezen' %}
+	{% elseif lid_instelling('forum', 'open_draad_op_pagina') == 'laatste' %}
+		{% set urlHash = 'reageren' %}
+	{% else %}
+		{% set urlHash = '' %}
+	{% endif %}
+
+	{% set ongelezenWeergave = lid_instelling('forum', 'ongelezenWeergave') %}
+
+	<a id="{{ draad.draad_id }}"
+		 href="{{ url('csrdelft_forum_onderwerp', {draad_id: draad.draad_id, _fragment: urlHash}) }}"
+		 {% if app.user and draad.ongelezen %}class="{{ ongelezenWeergave }}"{% endif %}>{{ draad.titel | raw }}</a>
+	{% if app.user and draad.aantalOngelezenPosts > 0 %}
+		<span class="badge bg-primary">{{ draad.aantalOngelezenPosts }}</span>
+	{% endif %}
+	{% if deel.forum_id is not empty %}
+		<span class="lichtgrijs">
+			[<a href="{{ url('csrdelft_forum_deel', {forum_id: draad.deel.forum_id}) }}"
+					class="lichtgrijs">{{ draad.deel.titel }}</a>]
+		</span>
+	{% endif %}
+</div>
+<div class="alternate-row draad-laatst-gewijzigd">
+	{% if lid_instelling('forum', 'datumWeergave') == 'relatief' %}
+		{{ draad.laatst_gewijzigd | reldate }}
+	{% else %}
+		{{ draad.laatst_gewijzigd | date_format }}
+	{% endif %}
+</div>
+<div class="alternate-row draad-laatste-post">
+	{{ get_profiel(draad.laatste_wijziging_uid).link('user') | raw }}
+</div>

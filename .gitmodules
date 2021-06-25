@@ -33,3 +33,11 @@
 	path = htdocs/dies/2020
 	url = https://github.com/csrdelft/dies2020.git
 	branch = gh-pages
+[submodule "htdocs/dies/2021"]
+	path = htdocs/dies/2021
+	url = https://github.com/csrdelft/dies2021.git
+	branch = gh-pages
+[submodule "htdocs/lustrum12"]
+	path = htdocs/lustrum12
+	url = https://github.com/csrdelft/lustrum12.git
+	branch = gh-pages

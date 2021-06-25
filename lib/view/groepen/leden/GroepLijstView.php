@@ -3,16 +3,16 @@
  * GroepLijstView.php
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 07/05/2017
+ * @since 07/05/2017
  */
 
 namespace CsrDelft\view\groepen\leden;
 
 use CsrDelft\common\ContainerFacade;
-use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\security\AccessAction;
+use CsrDelft\entity\groepen\GroepLid;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\groepen\formulier\GroepAanmeldenForm;
 use CsrDelft\view\groepen\formulier\GroepBewerkenForm;
 use CsrDelft\view\Icon;
@@ -20,10 +20,12 @@ use CsrDelft\view\Icon;
 class GroepLijstView extends GroepTabView {
 
 	public function getTabContent() {
+		$em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
+
 		$html = '<table class="groep-lijst"><tbody>';
-		if ($this->groep->mag(AccessAction::Aanmelden)) {
+		if ($this->groep->mag(AccessAction::Aanmelden())) {
 			$html .= '<tr><td colspan="2">';
-			$lid = $this->groep::getLedenModel()->nieuw($this->groep, LoginModel::getUid());
+			$lid = $em->getRepository(GroepLid::class)->nieuw($this->groep, LoginService::getUid());
 			$form = new GroepAanmeldenForm($lid, $this->groep, false);
 			$html .= $form->getHtml();
 			$html .= '</td></tr>';
@@ -32,22 +34,18 @@ class GroepLijstView extends GroepTabView {
 		if (empty($leden)) {
 			return $html . '</tbody></table>';
 		}
-		// sorteren op achernaam
-		$uids = array_keys($leden);
-		/** @var Profiel[] $profielen */
-		$profielen = ContainerFacade::getContainer()->get(ProfielRepository::class)->ormFind('uid IN (' . implode(', ', array_fill(0, count($uids), '?')) . ')', $uids, null, 'achternaam ASC');
-		foreach ($profielen as $profiel) {
+		foreach ($this->groep->getLedenOpAchternaamGesorteerd() as $lid) {
 			$html .= '<tr><td>';
-			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::Afmelden)) {
-				$html .= '<a href="' . $this->groep->getUrl() . '/ketzer/afmelden" class="post confirm float-left" title="Afmelden">' . Icon::getTag('bullet_delete') . '</a>';
+			if ($lid->uid === LoginService::getUid() AND $this->groep->mag(AccessAction::Afmelden())) {
+				$html .= '<a href="' . $this->groep->getUrl() . '/ketzer/afmelden" class="post confirm float-start" title="Afmelden">' . Icon::getTag('bullet_delete') . '</a>';
 			}
-			$html .= $profiel->getLink('civitas');
+			$html .= ProfielRepository::getLink($lid->uid, 'civitas');
 			$html .= '</td><td>';
-			if ($profiel->uid === LoginModel::getUid() AND $this->groep->mag(AccessAction::Bewerken)) {
-				$form = new GroepBewerkenForm($leden[$profiel->uid], $this->groep);
+			if ($lid->uid === LoginService::getUid() AND $this->groep->mag(AccessAction::Bewerken())) {
+				$form = new GroepBewerkenForm($lid, $this->groep);
 				$html .= $form->getHtml();
 			} else {
-				$html .= $leden[$profiel->uid]->opmerking;
+				$html .= $lid->opmerking;
 			}
 			$html .= '</td></tr>';
 		}

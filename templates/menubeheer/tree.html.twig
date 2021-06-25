@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}Menubeheer{% endblock %}
+
+{% block content %}
+	{% if menus %}
+		<div class="float-end form-inline">
+			<label for="menu-select">Toon menu:</label>
+			<select name="toon" id="menu-select" onchange="location.href = '/menubeheer/beheer/' + this.value;"
+							class="form-select">
+				<option selected="selected">kies</option>
+				{% for item in menus %}
+					<option value="{{ item.tekst }}">{{ item.tekst }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	{% endif %}
+	<h1>Menubeheer</h1>
+	<ul class="menubeheer-tree">
+		{% if root %}
+			<li>
+				{{ include('menubeheer/root.html.twig', {root: root}) }}
+			</li>
+			{% if root.children %}
+				{% for child in root.children %}
+					{{ include('menubeheer/item.html.twig', {item: child}) }}
+				{% endfor %}
+			{% endif %}
+		{% endif %}
+	</ul>
+{% endblock %}

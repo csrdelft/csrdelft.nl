@@ -3,23 +3,30 @@
 namespace CsrDelft\controller\api;
 
 
+use CsrDelft\common\Annotation\Auth;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * @author J. Rijsdijk <jorairijsdijk@gmail.com>
- * @date 04/11/2017
+ * @since 04/11/2017
  */
 class ApiSponsorlinksController {
 	/**
-	 * @url GET /
+	 * @Route("/API/2.0/sponsorlinks", methods={"GET"})
+	 * @Auth(P_PUBLIC)
 	 */
 	public function getSponsorlinks() {
-		$json = file(DATA_PATH . 'sponsorlinks.json', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-		return json_decode($json[0], true);
+		$json = file_get_contents(DATA_PATH . 'sponsorlinks.json' );
+		return new Response($json, 200, ['Content-Type' => 'application/json']);
 	}
 
 	/**
-     * @url GET /timestamp
-     */
+	 * @Route("/API/2.0/sponsorlinks/timestamp", methods={"GET"})
+	 * @Auth(P_PUBLIC)
+	 */
 	public function getTimestamp() {
-		return filemtime(DATA_PATH . 'sponsorlinks.json');
-    }
+		return new JsonResponse(filemtime(DATA_PATH . 'sponsorlinks.json'));
+	}
 }

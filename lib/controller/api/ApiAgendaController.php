@@ -2,56 +2,57 @@
 
 namespace CsrDelft\controller\api;
 
-use CsrDelft\common\ContainerFacade;
-use CsrDelft\model\entity\groepen\Activiteit;
-use CsrDelft\model\entity\groepen\ActiviteitSoort;
-use CsrDelft\model\entity\security\AccessAction;
-use CsrDelft\model\groepen\ActiviteitenModel;
-use CsrDelft\model\groepen\leden\ActiviteitDeelnemersModel;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\agenda\AgendaItem;
+use CsrDelft\entity\groepen\Activiteit;
+use CsrDelft\entity\groepen\enum\ActiviteitSoort;
+use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\repository\agenda\AgendaRepository;
-use Jacwright\RestServer\RestException;
+use CsrDelft\repository\groepen\ActiviteitenRepository;
+use CsrDelft\repository\GroepLidRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ApiAgendaController {
-	/** @var ActiviteitenModel */
-	private $activiteitenModel;
+class ApiAgendaController extends AbstractController
+{
+	/** @var ActiviteitenRepository */
+	private $activiteitenRepository;
 	/** @var AgendaRepository */
 	private $agendaRepository;
-	/** @var ActiviteitDeelnemersModel */
-	private $activiteitDeelnemersModel;
-	/** @var MaaltijdenModel */
-	private $maaltijdenModel;
-	/** @var MaaltijdAanmeldingenModel */
-	private $maaltijdAanmeldingenModel;
+	/** @var GroepLidRepository */
+	private $groepLidRepository;
+	/** @var MaaltijdenRepository */
+	private $maaltijdenRepository;
+	/** @var MaaltijdAanmeldingenRepository */
+	private $maaltijdAanmeldingenRepository;
 
-	public function __construct() {
-		$container = ContainerFacade::getContainer();
-		$this->agendaRepository = $container->get(AgendaRepository::class);
-		$this->activiteitenModel = $container->get(ActiviteitenModel::class);
-		$this->maaltijdAanmeldingenModel = $container->get(MaaltijdAanmeldingenModel::class);
-		$this->maaltijdenModel = $container->get(MaaltijdenModel::class);
-		$this->activiteitDeelnemersModel = $container->get(ActiviteitDeelnemersModel::class);
+	public function __construct(
+		AgendaRepository $agendaRepository,
+		ActiviteitenRepository $activiteitenRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		MaaltijdenRepository $maaltijdenRepository,
+		GroepLidRepository $groepLidRepository
+	) {
+		$this->agendaRepository = $agendaRepository;
+		$this->activiteitenRepository = $activiteitenRepository;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->maaltijdenRepository = $maaltijdenRepository;
+		$this->groepLidRepository = $groepLidRepository;
 	}
 
 	/**
-	 * @return boolean
+	 * @Route("/API/2.0/agenda", methods={"GET"})
+	 * @Auth(P_AGENDA_READ)
+	 * @return JsonResponse
 	 */
-	public function authorize() {
-		return ApiAuthController::isAuthorized() && LoginModel::mag('P_AGENDA_READ');
-	}
-
-	/**
-	 * @url GET /
-	 * @param string from
-	 * @param string to
-	 * @return array
-	 * @throws RestException
-	 */
-	public function getAgenda() {
+	public function getAgenda()
+	{
 		if (!isset($_GET['from']) || !isset($_GET['to'])) {
-			throw new RestException(400);
+			throw new BadRequestHttpException();
 		}
 
 		$from = strtotime($_GET['from']);
@@ -60,13 +61,13 @@ class ApiAgendaController {
 
 		$result = array();
 
-		$fromDate = date('Y-m-d', $from);
-		$toDate = date('Y-m-d', $to);
-		$query = '(begin_moment >= ? AND begin_moment <= ?)';
-		$find = array($fromDate, $toDate);
-
 		// AgendaItems
-		$items = $this->agendaRepository->ormFind($query, $find);
+		/** @var AgendaItem[] $items */
+		$items = $this->agendaRepository->createQueryBuilder('a')
+			->where('a.begin_moment >= :van and a.begin_moment <= :tot')
+			->setParameter('van', date_create($_GET['from']))
+			->setParameter('tot', date_create($_GET['to']))
+			->getQuery()->getResult();
 		foreach ($items as $item) {
 			if ($item->magBekijken()) {
 				$result[] = $item;
@@ -75,10 +76,14 @@ class ApiAgendaController {
 
 		// Activiteiten
 		/** @var Activiteit[] $activiteiten */
-		$activiteiten = $this->activiteitenModel->find('in_agenda = TRUE AND (' . $query . ')', $find);
+		$activiteiten = $this->activiteitenRepository->createQueryBuilder('a')
+			->where('a.inAgenda = true and (a.beginMoment >= :begin and a.beginMoment <= :eind)')
+			->setParameter('begin', date_create_immutable("@$from"))
+			->setParameter('eind', date_create_immutable("@$to"))
+			->getQuery()->getResult();
 		$activiteitenFiltered = array();
 		foreach ($activiteiten as $activiteit) {
-			if (in_array($activiteit->soort, array(ActiviteitSoort::Extern, ActiviteitSoort::OWee, ActiviteitSoort::IFES)) OR $activiteit->mag(AccessAction::Bekijken)) {
+			if (in_array($activiteit->activiteitSoort, array(ActiviteitSoort::Extern(), ActiviteitSoort::OWee(), ActiviteitSoort::IFES())) or $activiteit->mag(AccessAction::Bekijken())) {
 				$activiteitenFiltered[] = $activiteit;
 			}
 		}
@@ -87,14 +92,14 @@ class ApiAgendaController {
 		// Activiteit aanmeldingen
 		$activiteitAanmeldingen = array();
 		foreach ($activiteitenFiltered as $activiteit) {
-			$deelnemer = $this->activiteitDeelnemersModel->get($activiteit, $_SESSION['_uid']);
+			$deelnemer = $this->groepLidRepository->get($activiteit, $this->getUid());
 			if ($deelnemer) {
 				$activiteitAanmeldingen[] = $deelnemer->groep_id;
 			}
 		}
 
 		// Maaltijden
-		$maaltijden = $this->maaltijdenModel->getMaaltijdenVoorAgenda($from, $to);
+		$maaltijden = $this->maaltijdenRepository->getMaaltijdenVoorAgenda($from, $to);
 
 
 		// Maaltijd aanmeldingen
@@ -107,7 +112,7 @@ class ApiAgendaController {
 			$result[] = $maaltijd;
 
 		}
-		$maaltijdAanmeldingen = array_keys($this->maaltijdAanmeldingenModel->getAanmeldingenVoorLid($mids, $_SESSION['_uid']));
+		$maaltijdAanmeldingen = array_keys($this->maaltijdAanmeldingenRepository->getAanmeldingenVoorLid($mids, $this->getUid()));
 
 		// Sorteren
 		usort($result, array(AgendaRepository::class, 'vergelijkAgendeerbaars'));
@@ -120,7 +125,7 @@ class ApiAgendaController {
 			)
 		);
 
-		return array('data' => $agenda);
+		return new JsonResponse(array('data' => $agenda));
 	}
 
 }

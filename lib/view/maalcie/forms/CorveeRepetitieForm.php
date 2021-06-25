@@ -2,10 +2,13 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\model\entity\maalcie\CorveeRepetitie;
-use CsrDelft\model\maalcie\FunctiesModel;
-use CsrDelft\model\maalcie\MaaltijdRepetitiesModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\corvee\CorveeFunctie;
+use CsrDelft\entity\corvee\CorveeRepetitie;
+use CsrDelft\repository\corvee\CorveeFunctiesRepository;
+use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
+use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
@@ -21,20 +24,21 @@ use CsrDelft\view\formulier\ModalForm;
  *
  * Formulier voor een nieuwe of te bewerken corvee-repetitie.
  *
+ * @method CorveeRepetitie getModel()
  */
 class CorveeRepetitieForm extends ModalForm {
 
 	public function __construct(CorveeRepetitie $repetitie) {
-		parent::__construct($repetitie, '/corvee/repetities/opslaan/' . $repetitie->crv_repetitie_id);
+		parent::__construct($repetitie, '/corvee/repetities/opslaan' . ($repetitie->crv_repetitie_id ? '/' . $repetitie->crv_repetitie_id : ''));
 
-		if ($repetitie->crv_repetitie_id === 0) {
-			$this->titel = 'Corveerepetitie aanmaken';
-		} else {
+		if ($repetitie->crv_repetitie_id) {
 			$this->titel = 'Corveerepetitie wijzigen';
 			$this->css_classes[] = 'PreventUnchanged';
+		} else {
+			$this->titel = 'Corveerepetitie aanmaken';
 		}
 
-		$functieNamen = FunctiesModel::instance()->getAlleFuncties(); // grouped by functie_id
+		$functieNamen = ContainerFacade::getContainer()->get(CorveeFunctiesRepository::class)->getAlleFuncties(); // grouped by functie_id
 		$functiePunten = 'var punten=[];';
 		foreach ($functieNamen as $functie) {
 			$functieNamen[$functie->functie_id] = $functie->naam;
@@ -44,15 +48,16 @@ class CorveeRepetitieForm extends ModalForm {
 			}
 		}
 
-		$mlt_repetities = MaaltijdRepetitiesModel::instance()->getAlleRepetities();
+		$mlt_repetities = ContainerFacade::getContainer()->get(MaaltijdRepetitiesRepository::class)->getAlleRepetities();
 		$repetitieNamen = array('' => '');
 		foreach ($mlt_repetities as $rep) {
 			$repetitieNamen[$rep->mlt_repetitie_id] = $rep->standaard_titel;
 		}
 
 		$fields = [];
-		$fields['fid'] = new SelectField('functie_id', $repetitie->functie_id, 'Functie', $functieNamen);
+		$fields['fid'] = new DoctrineEntityField('corveeFunctie', $repetitie->corveeFunctie, 'Functie', CorveeFunctie::class, '/corvee/functies/suggesties?q=');
 		$fields['fid']->onchange = $functiePunten . "$('#field_standaard_punten').val(punten[this.value]);";
+		$fields['fid']->required = true;
 		$fields[] = new WeekdagField('dag_vd_week', $repetitie->dag_vd_week, 'Dag v/d week');
 		$fields['dag'] = new IntField('periode_in_dagen', $repetitie->periode_in_dagen, 'Periode (in dagen)', 0, 183);
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodiek corvee';

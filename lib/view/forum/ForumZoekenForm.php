@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\forum;
 
-use CsrDelft\model\entity\forum\ForumZoeken;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\entity\forum\ForumZoeken;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\TextField;
@@ -28,7 +28,7 @@ class ForumZoekenForm extends Formulier {
 		$fields['z']->placeholder = 'Zoeken in forum';
 		$fields['z']->enter_submit = true;
 
-		if (LoginModel::mag(P_LOGGED_IN)) {
+		if (LoginService::mag(P_LOGGED_IN)) {
 			$fields[] = new SelectField('sorteer_volgorde', $model->sorteer_volgorde, 'Sorteervolgorde', [
 				'desc' => 'Van hoog naar laag',
 				'asc' => 'Van laag naar hoog'

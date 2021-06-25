@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\fiscaat\bestellingen;
 
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\CellType;
@@ -10,7 +10,7 @@ use CsrDelft\view\datatable\DataTable;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 26/04/2017
+ * @since 26/04/2017
  */
 class CiviBestellingTable extends DataTable {
 	public function __construct($uid = null) {

@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\groepen;
 
-use CsrDelft\model\entity\Geslacht;
-use CsrDelft\model\entity\groepen\AbstractGroep;
+use CsrDelft\entity\Geslacht;
+use CsrDelft\entity\groepen\Groep;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
@@ -16,7 +16,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 
 	/**
 	 * GroepenDeelnameGrafiek constructor.
-	 * @param AbstractGroep[] $groepen
+	 * @param Groep[] $groepen
 	 */
 	public function __construct($groepen) {
 		$aantalMannen = [];
@@ -29,7 +29,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 
 			foreach ($groep->getLeden() as $lid) {
 				$profiel = ProfielRepository::get($lid->uid);
-				if ($profiel->geslacht === Geslacht::Man) {
+				if ($profiel->geslacht->getValue() === Geslacht::Man) {
 					$mannen += 1;
 				} else {
 					$vrouwen += 1;
@@ -37,7 +37,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 			}
 
 			$this->series[] = [
-				"moment" => strtotime($groep->begin_moment) * 1000,
+				"moment" => $groep->beginMoment->getTimestamp() * 1000,
 				"aantalMannen" => $mannen,
 				"aantalVrouwen" => $vrouwen,
 				"naam" => $groep->naam,
@@ -46,7 +46,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 			$aantalMannen[] = $mannen;
 			$aantalVrouwen[] = $vrouwen;
 			$groepNamen[] = $groep->naam;
-			$groepJaren[] = strftime('%Y', strtotime($groep->begin_moment));
+			$groepJaren[] = $groep->beginMoment->format('Y');
 		}
 		$this->series = [
 			'labels'=> $groepNamen,
@@ -90,8 +90,8 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 HTML;
 	}
 
-	public function view() {
-		echo $this->getHtml();
+	public function __toString() {
+		return $this->getHtml();
 	}
 
 	public function toResponse(): Response {

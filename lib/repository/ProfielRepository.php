@@ -4,11 +4,12 @@ namespace CsrDelft\repository;
 
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\LDAP;
+use CsrDelft\common\Mail;
+use CsrDelft\entity\Geslacht;
+use CsrDelft\entity\OntvangtContactueel;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\entity\Geslacht;
+use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\model\entity\LidStatus;
-use CsrDelft\model\entity\Mail;
-use CsrDelft\model\entity\OntvangtContactueel;
 use CsrDelft\model\entity\profiel\AbstractProfielLogEntry;
 use CsrDelft\model\entity\profiel\ProfielCreateLogGroup;
 use CsrDelft\model\entity\profiel\ProfielLogCoveeTakenVerwijderChange;
@@ -16,60 +17,73 @@ use CsrDelft\model\entity\profiel\ProfielLogTextEntry;
 use CsrDelft\model\entity\profiel\ProfielLogValueChange;
 use CsrDelft\model\entity\profiel\ProfielLogVeldenVerwijderChange;
 use CsrDelft\model\entity\profiel\ProfielUpdateLogGroup;
-use CsrDelft\model\entity\security\AccessRole;
-use CsrDelft\model\maalcie\CorveeTakenModel;
-use CsrDelft\model\maalcie\MaaltijdAbonnementenModel;
-use CsrDelft\model\OrmTrait;
-use CsrDelft\model\security\AccountModel;
-use CsrDelft\model\security\LoginModel;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
+use CsrDelft\repository\corvee\CorveeTakenRepository;
+use CsrDelft\repository\maalcie\MaaltijdAbonnementenRepository;
+use CsrDelft\repository\security\AccountRepository;
+use CsrDelft\service\MailService;
+use CsrDelft\service\security\LoginService;
 use DateTime;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Symfony\Component\Security\Core\Security;
+use Twig\Environment;
 
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
  * @author P.W.G. Brussee <brussee@live.nl>
  *
- * @method Profiel[]    ormFind($criteria = null, $criteria_params = [], $group_by = null, $order_by = null, $limit = null, $start = 0)
- * @method Profiel|null doctrineFind($id, $lockMode = null, $lockVersion = null)
  * @method Profiel|null find($id, $lockMode = null, $lockVersion = null)
  * @method Profiel|null findOneBy(array $criteria, array $orderBy = null)
  * @method Profiel[]    findAll()
  * @method Profiel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProfielRepository extends ServiceEntityRepository {
-	use OrmTrait {
-		create as ormCreate;
-		update as ormUpdate;
-	}
+class ProfielRepository extends AbstractRepository {
 	/**
-	 * @var MaaltijdAbonnementenModel
+	 * @var MaaltijdAbonnementenRepository
 	 */
-	private $maaltijdAbonnementenModel;
+	private $maaltijdAbonnementenRepository;
 	/**
-	 * @var CorveeTakenModel
+	 * @var CorveeTakenRepository
 	 */
-	private $corveeTakenModel;
+	private $corveeTakenRepository;
 	/**
 	 * @var BoekExemplaarRepository
 	 */
 	private $boekExemplaarModel;
+	/**
+	 * @var Security
+	 */
+	private $security;
+	/**
+	 * @var Environment
+	 */
+	private $twig;
+	/**
+	 * @var MailService
+	 */
+	private $mailService;
 
 	public function __construct(
-        ManagerRegistry $registry,
-        MaaltijdAbonnementenModel $maaltijdAbonnementenModel,
-        CorveeTakenModel $corveeTakenModel,
-        BoekExemplaarRepository $boekExemplaarModel
+		ManagerRegistry $registry,
+		Security $security,
+		Environment $twig,
+		MaaltijdAbonnementenRepository $maaltijdAbonnementenRepository,
+		CorveeTakenRepository $corveeTakenRepository,
+		BoekExemplaarRepository $boekExemplaarModel,
+		MailService $mailService
 	) {
 		parent::__construct($registry, Profiel::class);
 
-		$this->maaltijdAbonnementenModel = $maaltijdAbonnementenModel;
-		$this->corveeTakenModel = $corveeTakenModel;
+		$this->maaltijdAbonnementenRepository = $maaltijdAbonnementenRepository;
+		$this->corveeTakenRepository = $corveeTakenRepository;
 		$this->boekExemplaarModel = $boekExemplaarModel;
+		$this->security = $security;
+		$this->twig = $twig;
+		$this->mailService = $mailService;
 	}
 
 	public static function changelog(array $diff, $uid) {
@@ -80,7 +94,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		foreach ($diff as $change) {
 			$changes[] = new ProfielLogValueChange($change->property, $change->old_value, $change->new_value);
 		}
-		return new ProfielUpdateLogGroup($uid, new DateTime(), $changes);
+		return new ProfielUpdateLogGroup($uid, date_create_immutable(), $changes);
 	}
 
 	/**
@@ -88,18 +102,16 @@ class ProfielRepository extends ServiceEntityRepository {
 	 * @return Profiel|false
 	 */
 	public static function get($uid) {
-		if ($uid == null) {
-			return false;
+		if ($uid == null || !ctype_alnum($uid) || strlen($uid) != 4) {
+			return null;
 		}
+
 		$model = ContainerFacade::getContainer()->get(ProfielRepository::class);
-		$profiel = $model->find($uid);
-		if (!$profiel) {
-			return false;
-		}
-		return $profiel;
+
+		return $model->find($uid);
 	}
 
-	public static function getNaam($uid, $vorm='civitas') {
+	public static function getNaam($uid, $vorm = 'civitas') {
 		$profiel = static::get($uid);
 		if (!$profiel) {
 			return null;
@@ -107,7 +119,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		return $profiel->getNaam($vorm);
 	}
 
-	public static function getLink($uid, $vorm='civitas') {
+	public static function getLink($uid, $vorm = 'civitas') {
 		$profiel = static::get($uid);
 		if (!$profiel) {
 			return null;
@@ -116,6 +128,9 @@ class ProfielRepository extends ServiceEntityRepository {
 	}
 
 	public static function existsUid($uid) {
+		if (!ctype_alnum($uid) || strlen($uid) != 4) {
+			return false;
+		}
 		$model = ContainerFacade::getContainer()->get(ProfielRepository::class);
 		return $model->find($uid) !== null;
 	}
@@ -125,17 +140,21 @@ class ProfielRepository extends ServiceEntityRepository {
 	}
 
 	public function nieuw($lidjaar, $lidstatus) {
+		$user = $this->security->getUser();
+
+		// Create kan door x999 gedaan worden
+		$logUsername = $user == null ? LoginService::UID_EXTERN : $user->getUsername();
 		$profiel = new Profiel();
 		$profiel->lidjaar = $lidjaar;
 		$profiel->status = $lidstatus;
-		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee;
-		$profiel->changelog = [new ProfielCreateLogGroup(LoginModel::getUid(), new DateTime())];
+		$profiel->ontvangtcontactueel = OntvangtContactueel::Nee();
+		$profiel->changelog = [new ProfielCreateLogGroup($logUsername, new DateTime())];
 		return $profiel;
 	}
 
 	/**
 	 * @param Profiel $profiel
-	 * @return string
+	 * @throws NonUniqueResultException
 	 */
 	public function create(Profiel $profiel) {
 		// Lichting zijn de laatste 2 cijfers van lidjaar
@@ -153,7 +172,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		}
 		$profiel->uid = $jj . sprintf('%02d', $volgnummer);
 
-		return $this->ormCreate($profiel);
+		$this->save($profiel);
 	}
 
 	/**
@@ -165,7 +184,7 @@ class ProfielRepository extends ServiceEntityRepository {
 		} catch (Exception $e) {
 			setMelding($e->getMessage(), -1); //TODO: logging
 		}
-		$this->ormUpdate($profiel);
+		$this->save($profiel);
 	}
 
 	/**
@@ -211,8 +230,8 @@ class ProfielRepository extends ServiceEntityRepository {
 			$entry['mozillahomecountryname'] = $profiel->land;
 			$entry['mozillahomeurl'] = $profiel->website;
 			$entry['description'] = 'Ledenlijst C.S.R. Delft';
-			if ($profiel->getAccount()) {
-				$entry['userPassword'] = $profiel->getAccount()->pass_hash;
+			if ($profiel->account) {
+				$entry['userPassword'] = $profiel->account->pass_hash;
 			}
 
 			$woonoord = $profiel->getWoonoord();
@@ -253,8 +272,8 @@ class ProfielRepository extends ServiceEntityRepository {
 		$geenAboEnCorveeVoor = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Commissie, LidStatus::Overleden);
 		if (in_array($profiel->status, $geenAboEnCorveeVoor)) {
 			//maaltijdabo's uitzetten (R_ETER is een S_NOBODY die toch een abo mag hebben)
-			$account = AccountModel::get($profiel->uid);
-			if (!$account OR $account->perm_role !== AccessRole::Eter) {
+			$account = AccountRepository::get($profiel->uid);
+			if (!$account || $account->perm_role !== AccessRole::Eter) {
 				$removedabos = $this->disableMaaltijdabos($profiel, $oudestatus);
 				$changes = array_merge($changes, $removedabos);
 			}
@@ -265,12 +284,11 @@ class ProfielRepository extends ServiceEntityRepository {
 		// Mailen naar fisci,bibliothecaris...
 		$wordtinactief = array(LidStatus::Oudlid, LidStatus::Erelid, LidStatus::Nobody, LidStatus::Exlid, LidStatus::Overleden);
 		$wasactief = array(LidStatus::Noviet, LidStatus::Gastlid, LidStatus::Lid, LidStatus::Kringel);
-		if (in_array($profiel->status, $wordtinactief) AND in_array($oudestatus, $wasactief)) {
+		if (in_array($profiel->status, $wordtinactief) && in_array($oudestatus, $wasactief)) {
 			$this->notifyFisci($profiel, $oudestatus);
 			$this->notifyBibliothecaris($profiel, $oudestatus);
 		}
-		$changes = array_merge($changes, $this->verwijderVelden($profiel));
-		return $changes;
+		return array_merge($changes, $this->verwijderVelden($profiel));
 	}
 
 	/**
@@ -281,7 +299,7 @@ class ProfielRepository extends ServiceEntityRepository {
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function disableMaaltijdabos(Profiel $profiel, $oudestatus) {
-		$aantal = $this->maaltijdAbonnementenModel->verwijderAbonnementenVoorLid($profiel->uid);
+		$aantal = $this->maaltijdAbonnementenRepository->verwijderAbonnementenVoorLid($profiel->uid);
 		if ($aantal > 0) {
 			return [new ProfielLogTextEntry('Afmelden abo\'s: ' . $aantal . ' uitgezet.')];
 		}
@@ -296,8 +314,8 @@ class ProfielRepository extends ServiceEntityRepository {
 	 * @return AbstractProfielLogEntry[] wijzigingen
 	 */
 	private function removeToekomstigeCorvee(Profiel $profiel, $oudestatus) {
-		$taken = $this->corveeTakenModel->getKomendeTakenVoorLid($profiel->uid);
-		$aantal = $this->corveeTakenModel->verwijderTakenVoorLid($profiel->uid);
+		$taken = $this->corveeTakenRepository->getKomendeTakenVoorLid($profiel);
+		$aantal = $this->corveeTakenRepository->verwijderTakenVoorLid($profiel->uid);
 		if (sizeof($taken) !== $aantal) {
 			setMelding('Niet alle toekomstige corveetaken zijn verwijderd!', -1);
 		}
@@ -305,24 +323,23 @@ class ProfielRepository extends ServiceEntityRepository {
 		if ($aantal > 0) {
 			$change = new ProfielLogCoveeTakenVerwijderChange([]);
 			foreach ($taken as $taak) {
-				$change->corveetaken[] = strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->getCorveeFunctie()->naam;
+				$change->corveetaken[] = strftime('%a %e-%m-%Y', $taak->getBeginMoment()) . ' ' . $taak->corveeFunctie->naam;
 			}
 			$changes[] = $change;
+
 			// Corveeceasar mailen over vrijvallende corveetaken.
-			$bericht = file_get_contents(TEMPLATE_DIR . 'mail/toekomstigcorveeverwijderd.mail');
-			$values = array(
-				'AANTAL' => $aantal,
-				'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
-				'UID' => $profiel->uid,
-				'OUD' => $oudestatus,
-				'NIEUW' => $profiel->status,
-				'CHANGE' => $change->toHtml(),
-				'ADMIN' => LoginModel::getProfiel()->getNaam()
-			);
+			$bericht = $this->twig->render('mail/bericht/toekomstigcorveeverwijderd.mail.twig', [
+				'aantal' => $aantal,
+				'naam' => $profiel->getNaam('volledig'),
+				'uid' => $profiel->uid,
+				'oud' => $oudestatus,
+				'nieuw' => $profiel->status,
+				'change' => $change->toHtml(),
+				'admin' => $this->security->getUser()->profiel->getNaam()
+			]);
 			$mail = new Mail(array('corvee@csrdelft.nl' => 'CorveeCaesar'), 'Lid-af: toekomstig corvee verwijderd', $bericht);
 			$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-			$mail->setPlaceholders($values);
-			$mail->send();
+			$this->mailService->send($mail);
 		}
 		return $changes;
 	}
@@ -339,15 +356,14 @@ class ProfielRepository extends ServiceEntityRepository {
 		$saldi = '';
 		$saldi .= 'CiviSaldo: ' . $profiel->getCiviSaldo() . "\n";
 
-		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafmeldingfisci.mail');
-		$values = array(
-			'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
-			'UID' => $profiel->uid,
-			'OUD' => $oudestatus,
-			'NIEUW' => $profiel->status,
-			'SALDI' => $saldi,
-			'ADMIN' => LoginModel::getProfiel()->getNaam()
-		);
+		$bericht = $this->twig->render('mail/bericht/lidafmeldingfisci.mail.twig', [
+			'naam' => $profiel->getNaam('volledig'),
+			'uid' => $profiel->uid,
+			'oud' => $oudestatus,
+			'nieuw' => $profiel->status,
+			'saldi' => $saldi,
+			'admin' => $this->security->getUser()->profiel->getNaam()
+		]);
 		$to = array(
 			'fiscus@csrdelft.nl' => 'Fiscus C.S.R.',
 			'maalcie-fiscus@csrdelft.nl' => 'MaalCie fiscus C.S.R.',
@@ -356,9 +372,8 @@ class ProfielRepository extends ServiceEntityRepository {
 
 		$mail = new Mail($to, 'Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-		$mail->setPlaceholders($values);
 
-		return $mail->send();
+		return $this->mailService->send($mail);
 	}
 
 	/**
@@ -380,27 +395,29 @@ class ProfielRepository extends ServiceEntityRepository {
 			'aantal' => 0
 		);
 		foreach ($geleend as $exemplaar) {
-			$boek = $exemplaar->getBoek();
+			$boek = $exemplaar->boek;
 			if ($exemplaar->isBiebBoek()) {
 				$bkncsr['aantal']++;
 				$bkncsr['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
-				$bkncsr['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
+				$bkncsr['lijst'] .= " - " . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
 			} else {
 				$bknleden['aantal']++;
 				$bknleden['lijst'] .= "{$boek->titel} door {$boek->auteur}\n";
-				$bknleden['lijst'] .= " - " . CSR_ROOT . "/bibliotheek/boek/{$boek->id}\n";
-				$naam = ProfielRepository::getNaam($exemplaar->eigenaar_uid, 'volledig');
+				$bknleden['lijst'] .= " - " . getCsrRoot() . "/bibliotheek/boek/{$boek->id}\n";
+				$naam = $exemplaar->eigenaar->getNaam('volledig');
 				$bknleden['lijst'] .= " - boek is geleend van: $naam\n";
 			}
 		}
 		// Kopjes
-		$mv = ($profiel->geslacht == Geslacht::Man ? 'hem' : 'haar');
+		$mv = ($profiel->geslacht->getValue() === Geslacht::Man ? 'hem' : 'haar');
 		$enkelvoud = "Het volgende boek is nog door {$mv} geleend";
 		$meervoud = "De volgende boeken zijn nog door {$mv} geleend";
-		if ($bkncsr['aantal'])
+		if ($bkncsr['aantal']) {
 			$bkncsr['kopje'] = ($bkncsr['aantal'] > 1 ? $meervoud : $enkelvoud) . " van de C.S.R.-bibliotheek:";
-		if ($bknleden['aantal'])
+		}
+		if ($bknleden['aantal']) {
 			$bknleden['kopje'] = ($bknleden['aantal'] > 1 ? $meervoud : $enkelvoud) . " van leden:";
+		}
 
 		// Alleen mailen als er C.S.R.boeken zijn
 		if ($bkncsr['aantal'] == 0) {
@@ -411,27 +428,25 @@ class ProfielRepository extends ServiceEntityRepository {
 			'bibliothecaris@csrdelft.nl' => 'Bibliothecaris C.S.R.',
 			$profiel->getPrimaryEmail() => $profiel->getNaam('civitas')
 		);
-		$bericht = file_get_contents(TEMPLATE_DIR . 'mail/lidafgeleendebiebboeken.mail');
-		$values = array(
-			'NAAM' => ProfielRepository::getNaam($profiel->uid, 'volledig'),
-			'UID' => $profiel->uid,
-			'OUD' => substr($oudestatus, 2),
-			'NIEUW' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
-			'CSRLIJST' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
-			'LEDENLIJST' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
-			'ADMIN' => LoginModel::getProfiel()->getNaam()
-		);
+		$bericht = $this->twig->render('mail/bericht/lidafgeleendebiebboeken.mail.twig', [
+			'naam' => $profiel->getNaam('volledig'),
+			'uid' => $profiel->uid,
+			'oud' => substr($oudestatus, 2),
+			'nieuw' => ($profiel->status === LidStatus::Nobody ? 'GEEN LID' : substr($profiel->status, 2)),
+			'csrlijst' => $bkncsr['kopje'] . "\n" . $bkncsr['lijst'],
+			'ledenlijst' => ($bkncsr['aantal'] > 0 ? "Verder ter informatie: " . $bknleden['kopje'] . "\n" . $bknleden['lijst'] : ''),
+			'admin' => $this->security->getUser()->profiel->getNaam()
+		]);
 		$mail = new Mail($to, 'Geleende boeken - Melding lid-af worden', $bericht);
 		$mail->addBcc(array('pubcie@csrdelft.nl' => 'PubCie C.S.R.'));
-		$mail->setPlaceholders($values);
 
-		return $mail->send();
+		return $this->mailService->send($mail);
 	}
 
 	/**
 	 * Verwijdert overbodige velden van het profiel.
 	 * @param Profiel $profiel
-	 * @return AbstractProfielLogEntry[]	Een logentry als er wijzigingen zijn.
+	 * @return AbstractProfielLogEntry[]  Een logentry als er wijzigingen zijn.
 	 */
 	private function verwijderVelden(Profiel $profiel) {
 		$velden_verwijderd = [];
@@ -447,10 +462,10 @@ class ProfielRepository extends ServiceEntityRepository {
 				}
 			}
 		}
-		if (sizeof($velden_verwijderd) != 0) {
-			return [new ProfielLogVeldenVerwijderChange($velden_verwijderd)];
-		} else {
+		if (empty($velden_verwijderd)) {
 			return [];
+		} else {
+			return [new ProfielLogVeldenVerwijderChange($velden_verwijderd)];
 		}
 	}
 
@@ -460,11 +475,52 @@ class ProfielRepository extends ServiceEntityRepository {
 	 */
 	public function verwijderVeldenUpdate(Profiel $profiel) {
 		$changes = $this->verwijderVelden($profiel);
-		if (sizeof($changes) == 0)
+		if (empty($changes)) {
 			return false;
-		$profiel->changelog[] = new ProfielUpdateLogGroup(LoginModel::getUid(), new DateTime(), $changes);
+		}
+		$profiel->changelog[] = new ProfielUpdateLogGroup($this->security->getUser()->getUsername(), new DateTime(), $changes);
 		$this->update($profiel);
 		return true;
+	}
+
+	/**
+	 * Geef een lidjaar mee om alleen novieten van een specifiek lidjaar op te halen.
+	 *
+	 * @param null $lidjaar
+	 * @return int|mixed|string
+	 */
+	public function getNovietenVanLaatsteLidjaar($lidjaar = null) {
+		if (empty($lidjaar)) {
+			return $this->createQueryBuilder('p')
+				->where('p.status = :status')
+				->setParameter('status', LidStatus::Noviet)
+				->getQuery()->getResult();
+		}
+
+		return $this->createQueryBuilder('p')
+			->where('p.status = :status and p.lidjaar = :lidjaar')
+			->setParameter('lidjaar', $lidjaar)
+			->setParameter('status', LidStatus::Noviet)
+			->getQuery()->getResult();
+	}
+
+	/**
+	 * @param $toegestaan
+	 * @return Profiel[]
+	 */
+	public function findByLidStatus($toegestaan) {
+		return $this->createQueryBuilder('p')
+			->where('p.status in (:toegestaan)')
+			->setParameter('toegestaan', $toegestaan)
+			->getQuery()->getResult();
+	}
+
+	public function setEetwens(Profiel $profiel, $eetwens) {
+		if ($profiel->eetwens === $eetwens) {
+			return;
+		}
+		$profiel->eetwens = $eetwens;
+		$this->update($profiel);
 	}
 
 }

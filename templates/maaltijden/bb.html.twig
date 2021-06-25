@@ -1,0 +1,95 @@
+<div id="maaltijdketzer-{{ maaltijd.maaltijd_id }}" class="media pt-3 maaltijdketzer-{{ maaltijd.maaltijd_id }}" data-maaltijdnaam="{{ maaltijd.titel }}">
+	<div class="media-body pb-3 mb-0 lh-125 {% if border is defined and border %}border-bottom border-gray{% endif %}">
+		<div class="row">
+			<div class="col">
+				<h6>
+					<a href="{{ url('csrdelft_maalcie_mijnmaaltijden_ketzer') }}">{{ maaltijd.titel }}</a>
+					{% if maaltijd.prijs != instelling('maaltijden', 'standaard_prijs') %}
+						&nbsp; ({{ maaltijd.prijs | format_bedrag }})
+					{% endif %}
+				</h6>
+				op {{ maaltijd.datum | datetime_format_long }} om {{ maaltijd.tijd | time_format }}
+				{% if maaltijd.magBekijken(app.user.uid) %}
+					<div class="float-end">
+						{{ icon("paintcan", null, maaltijd.maaltijdcorvee.corveeFunctie.naam) }}
+					</div>
+				{% endif %}
+				<div class="small">
+					{% if maaltijd.magSluiten(app.user.uid) %}
+					<a href="{{ url('csrdelft_maalcie_mijnmaaltijden_lijst', {maaltijd_id: maaltijd.maaltijd_id}) }}"
+						 title="Toon maaltijdlijst">
+						{% endif %}
+						Inschrijvingen: <em>{{ maaltijd.aantalAanmeldingen }}</em> van <em>{{ maaltijd.aanmeld_limiet }}</em>
+						{% if maaltijd.magSluiten(app.user.uid) %}
+					</a>
+					{% if maaltijd.eindMoment < date().timestamp %}
+						<br>
+						<a href="{{ url('csrdelft_maalcie_beheermaaltijden_get_beoordelingen') }}" title="Toon beoordelingen">
+							Bekijk beoordelingen
+						</a>
+					{% endif %}
+					{% endif %}
+				</div>
+			</div>
+			<div class="col-auto">
+				{% if mag('P_MAAL_IK') %}
+					{% if not maaltijd.gesloten %}
+						{% if aanmelding is defined and aanmelding is not none %}
+							<a
+								onclick="window.ketzerAjax('{{ url('csrdelft_maalcie_mijnmaaltijden_afmelden', {maaltijd_id: maaltijd.maaltijd_id}) }}', '.maaltijdketzer-{{ maaltijd.maaltijd_id }}');"
+								class="btn btn-success aanmeldbtn" tabindex="0">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" checked="checked"/>
+									<label class="form-check-label">Aangemeld</label>
+								</div>
+							</a>
+
+						{% elseif maaltijd.aantalAanmeldingen >= maaltijd.aanmeld_limiet %}
+							<div class="btn btn-danger disabled">
+								{{ icon("stop", null, "Maaltijd is vol") }}&nbsp; Niet aangemeld
+							</div>
+						{% else %}
+							<a
+								onclick="window.ketzerAjax('{{ url('csrdelft_maalcie_mijnmaaltijden_aanmelden', {maaltijd_id: maaltijd.maaltijd_id}) }}', '.maaltijdketzer-{{ maaltijd.maaltijd_id }}');"
+								class="btn btn-danger aanmeldbtn" tabindex="0">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox"/>
+									<label class="form-check-label">Niet aangemeld</label>
+								</div>
+							</a>
+						{% endif %}
+
+					{% else %}
+						{% if aanmelding is defined and aanmelding is not none %}
+							{% if maaltijd.eindMoment > date().timestamp %}
+								<div class="btn btn-success disabled">
+									Aangemeld {% if aanmelding.abonnementRepetitie %}(abo){% endif %}</div>
+							{% else %}
+								<span class="beoordeling-label bg-white">Kwaliteit:</span>
+								{{ kwaliteit | raw }}
+								<span class="beoordeling-label bg-white">Kwantiteit:</span>
+								{{ kwantiteit | raw }}
+							{% endif %}
+						{% else %}
+							<div class="btn btn-danger disabled">Niet aangemeld</div>
+						{% endif %}
+					{% endif %}
+
+					{% if aanmelding is defined and aanmelding is not none and aanmelding.aantal_gasten > 0 %}
+						+{{ aanmelding.aantal_gasten }}
+					{% endif %}
+
+					{% if aanmelding is defined and aanmelding is not none and aanmelding.gasten_eetwens %}
+						{{ icon("comment", null, aanmelding.gasten_eetwens) }}
+					{% endif %}
+
+					{% if maaltijd.gesloten and maaltijd.eindMoment > date().timestamp %}
+						{% set date = maaltijd.laatst_gesloten | time_format %}
+						{{ icon("lock", null, "Maaltijd is gesloten om " ~ date) }}
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
+		{{ maaltijd.omschrijving ?? "" | bbcode }}
+	</div>
+</div>

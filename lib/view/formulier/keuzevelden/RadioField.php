@@ -8,7 +8,7 @@ use CsrDelft\view\formulier\FormElement;
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * KeuzeRondjeField
  * Zelfde soort mogelijkheden als een SelectField, maar dan minder klikken
@@ -20,7 +20,7 @@ class RadioField extends SelectField {
 	public $type = 'radio';
 
 	public function __construct($name, $value, $description, array $options) {
-		parent::__construct($name, $value, $description, $options, array(), 1, false);
+		parent::__construct($name, $value, $description, $options, 1, false);
 
 		$this->css_classes = ['FormElement', 'form-check-input'];
 	}
@@ -39,7 +39,7 @@ class RadioField extends SelectField {
 
 	protected function getOptionHtml($value, $description) {
 		$id = $this->getId() . 'Option_' . $value;
-		$html = '<div class="form-check form-check-inline">';
+		$html = '<div class="form-check form-check-inline" id="' . $this->getId() . '">';
 		$html .= '<input id="' . $id . '" value="' . $value . '" ' . $this->getInputAttribute(array('type', 'name', 'class', 'origvalue', 'disabled', 'readonly', 'onclick'));
 		if ($value === $this->value) {
 			$html .= ' checked="checked"';

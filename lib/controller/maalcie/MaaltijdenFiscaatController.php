@@ -2,88 +2,107 @@
 
 namespace CsrDelft\controller\maalcie;
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\fiscaat\CiviBestelling;
-use CsrDelft\model\entity\maalcie\Maaltijd;
-use CsrDelft\model\fiscaat\CiviBestellingModel;
-use CsrDelft\model\fiscaat\CiviProductModel;
-use CsrDelft\model\fiscaat\CiviSaldoModel;
-use CsrDelft\model\maalcie\MaaltijdAanmeldingenModel;
-use CsrDelft\model\maalcie\MaaltijdenModel;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\view\datatable\RemoveRowsResponse;
+use CsrDelft\common\datatable\RemoveDataTableEntry;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
+use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdenRepository;
+use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * MaaltijdenFiscaatController.class.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class MaaltijdenFiscaatController {
+class MaaltijdenFiscaatController extends AbstractController {
 	/**
-	 * @var CiviProductModel
+	 * @var MaaltijdenRepository
 	 */
-	private $civiProductModel;
+	private $maaltijdenRepository;
 	/**
-	 * @var MaaltijdenModel
+	 * @var MaaltijdAanmeldingenRepository
 	 */
-	private $maaltijdenModel;
+	private $maaltijdAanmeldingenRepository;
 	/**
-	 * @var MaaltijdAanmeldingenModel
+	 * @var CiviBestellingRepository
 	 */
-	private $maaltijdAanmeldingenModel;
+	private $civiBestellingRepository;
 	/**
-	 * @var CiviBestellingModel
+	 * @var CiviSaldoRepository
 	 */
-	private $civiBestellingModel;
-	/**
-	 * @var CiviSaldoModel
-	 */
-	private $civiSaldoModel;
+	private $civiSaldoRepository;
 
 	public function __construct(
-		CiviProductModel $civiProductModel,
-		MaaltijdenModel $maaltijdenModel,
-		MaaltijdAanmeldingenModel $maaltijdAanmeldingenModel,
-		CiviBestellingModel $civiBestellingModel,
-		CiviSaldoModel $civiSaldoModel
+		MaaltijdenRepository $maaltijdenRepository,
+		MaaltijdAanmeldingenRepository $maaltijdAanmeldingenRepository,
+		CiviBestellingRepository $civiBestellingRepository,
+		CiviSaldoRepository $civiSaldoRepository
 	) {
-		$this->civiProductModel = $civiProductModel;
-		$this->maaltijdenModel = $maaltijdenModel;
-		$this->maaltijdAanmeldingenModel = $maaltijdAanmeldingenModel;
-		$this->civiBestellingModel = $civiBestellingModel;
-		$this->civiSaldoModel = $civiSaldoModel;
+		$this->maaltijdenRepository = $maaltijdenRepository;
+		$this->maaltijdAanmeldingenRepository = $maaltijdAanmeldingenRepository;
+		$this->civiBestellingRepository = $civiBestellingRepository;
+		$this->civiSaldoRepository = $civiSaldoRepository;
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/maaltijden/fiscaat", methods={"GET"})
+	 * @Auth(P_MAAL_MOD)
+	 */
 	public function GET_overzicht() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Overzicht verwerkte maaltijden',
 			'content' => new FiscaatMaaltijdenOverzichtTable(),
 		]);
 	}
 
+	/**
+	 * @return FiscaatMaaltijdenOverzichtResponse
+	 * @Route("/maaltijden/fiscaat", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
+	 */
 	public function POST_overzicht() {
-		$data = $this->maaltijdenModel->find('verwerkt = true');
+		$data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
 		return new FiscaatMaaltijdenOverzichtResponse($data);
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/maaltijden/fiscaat/onverwerkt", methods={"GET"})
+	 * @Auth(P_MAAL_MOD)
+	 */
 	public function GET_onverwerkt() {
-		return view('maaltijden.pagina', [
+		return $this->render('maaltijden/pagina.html.twig', [
 			'titel' => 'Onverwerkte Maaltijden',
 			'content' => new OnverwerkteMaaltijdenTable(),
 		]);
 	}
 
-	public function POST_verwerk() {
+	/**
+	 * @param EntityManagerInterface $em
+	 * @return GenericDataTableResponse
+	 * @Route("/maaltijden/fiscaat/verwerk", methods={"POST"})
+	 * @Auth(P_MAAL_MOD)
+	 */
+	public function POST_verwerk(EntityManagerInterface $em) {
 		# Haal maaltijd op
-		$selection = filter_input(INPUT_POST, 'DataTableSelection', FILTER_SANITIZE_STRING, FILTER_FORCE_ARRAY);
+		$selection = $this->getDataTableSelection();
 		/** @var Maaltijd $maaltijd */
-		$maaltijd = $this->maaltijdenModel->retrieveByUUID($selection[0]);
+		$maaltijd = $this->maaltijdenRepository->retrieveByUUID($selection[0]);
 
 		# Controleer of de maaltijd gesloten is en geweest is
-		if ($maaltijd->gesloten == false OR date_create(sprintf("%s %s", $maaltijd->datum, $maaltijd->tijd)) >= date_create("now")) {
+		if ($maaltijd->gesloten == false OR $maaltijd->getMoment() >= date_create_immutable("now")) {
 			throw new CsrGebruikerException("Maaltijd nog niet geweest");
 		}
 
@@ -92,32 +111,34 @@ class MaaltijdenFiscaatController {
 			throw new CsrGebruikerException("Maaltijd is al verwerkt");
 		}
 
-		$maaltijden = Database::transaction(function () use ($maaltijd) {
+		$maaltijden = $em->transactional(function () use ($maaltijd) {
 			# Ga alle personen in de maaltijd af
-			$aanmeldingen = $this->maaltijdAanmeldingenModel->find('maaltijd_id = ?', array($maaltijd->maaltijd_id));
+			$aanmeldingen = $this->maaltijdAanmeldingenRepository->findBy(['maaltijd_id' => $maaltijd->maaltijd_id]);
 
 			/** @var Civibestelling[] $bestellingen */
 			$bestellingen = array();
 			# Maak een bestelling voor deze persoon
 			foreach ($aanmeldingen as $aanmelding) {
-				$bestellingen[] = $this->maaltijdAanmeldingenModel->maakCiviBestelling($aanmelding);
+				$bestellingen[] = $this->maaltijdAanmeldingenRepository->maakCiviBestelling($aanmelding);
 			}
 
 			# Reken de bestelling af
 			foreach ($bestellingen as $bestelling) {
-				$this->civiBestellingModel->create($bestelling);
-				$this->civiSaldoModel->verlagen($bestelling->uid, $bestelling->totaal);
+				$this->civiBestellingRepository->create($bestelling);
+				$this->civiSaldoRepository->verlagen($bestelling->uid, $bestelling->totaal);
 			}
 
 			# Zet de maaltijd op verwerkt
 			$maaltijd->verwerkt = true;
 
-			$this->maaltijdenModel->update($maaltijd);
+			$this->maaltijdenRepository->update($maaltijd);
 
-			return array($maaltijd);
+			$verwijderd = new RemoveDataTableEntry($maaltijd->maaltijd_id, Maaltijd::class);
+
+			return [$verwijderd];
 		});
 
-		return new RemoveRowsResponse($maaltijden);
+		return $this->tableData($maaltijden);
 	}
 
 }

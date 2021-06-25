@@ -1,0 +1,204 @@
+@import "defaults";
+@import "fonts";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-vue/dist/bootstrap-vue.css"; // Moet na Bootstrap geladen worden.
+@import "_common";
+@import "main-menu";
+@import "bbcode";
+@import "zijbalk";
+@import "module/maalcie";
+@import "zoeken";
+@import "overlay";
+@import "search";
+@import "module/agenda";
+@import "module/bibliotheek";
+@import "module/commissievoorkeuren";
+@import "module/aanmelder";
+@import "module/datatable";
+@import "module/documenten";
+@import "module/fiscaat";
+@import "module/formulier";
+@import "module/forum";
+@import "module/fotoalbum";
+@import "module/ledenlijst";
+@import "module/menubeheer";
+@import "module/profiel";
+@import "module/stamboom";
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+@import '~@fullcalendar/list/main.css';
+@import '~flatpickr/dist/flatpickr.css';
+
+body {
+	height: auto;
+	position: relative;
+	margin-left: 200px;
+
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	background: $body-bg;
+}
+
+
+/* Standaard Kleuren */
+.overflow-x-hidden {
+	overflow-x: hidden;
+}
+
+.overflow-hidden {
+	overflow: hidden;
+}
+
+.form-group .twitter-typeahead {
+	width: 100%;
+}
+
+// Zie node_modules/bootstrap/scss/_input-group.scss
+// Mixt met twitter-typeahead
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap; // For form validation feedback
+  align-items: stretch;
+  width: 100%;
+
+  > .twitter-typeahead {
+    position: relative; // For focus state's z-index
+    flex: 1 1 auto;
+    // Add width 1% and flex-basis auto to ensure that button will not wrap out
+    // the column. Applies to IE Edge+ and Firefox. Chrome does not require this.
+    width: 1%;
+    margin-bottom: 0;
+
+    > .form-control,
+    > .custom-select,
+    > .custom-file {
+      width: 100%;
+
+      // Bring the "active" form control to the top of surrounding elements
+      &:focus {
+        z-index: 3;
+      }
+    }
+
+    > .form-control,
+    > .custom-select {
+      &:not(:last-child) {
+        @include border-end-radius(0);
+      }
+    }
+  }
+}
+
+/* Login Form */
+.login-form .InputField, .login-form .InputField:hover {
+  border: none;
+  width: 100px;
+}
+
+/* Bijbelrooster */
+.bijbelrooster {
+  columns: 250px auto;
+  line-height: 2em;
+}
+
+/* Pasfotos */
+img.pasfoto {
+  float: left;
+  width: 55px;
+  height: 73px;
+  margin: 1px 0 0 1px;
+}
+.lidLink img {
+  transition: all .4s ease-out;
+}
+.lidLink:hover img {
+  box-shadow: 0 0 5px #000;
+  transform: scale(1.33);
+}
+
+/* lidinstellingen */
+.Formulier label.instelling {
+  clear: left;
+  width: 50%;
+}
+
+div.vertical {
+  transform: rotate(-90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+th { text-align: left; }
+td { vertical-align: text-bottom; }
+
+hr {
+	padding: 2px 10px;
+	border: none;
+	margin: 1em 0;
+	&::after {
+		content: "";
+		display: block;
+		height: 1px;
+		background-color: silver;
+		line-height: 2px;
+	}
+}
+
+ul.horizontal li {
+  display: inline;
+  padding-right: 20px;
+}
+ul.horizontal li.active { font-weight:bold; }
+ul.nobullets li { list-style-type: none; }
+ul.insidebullets li { list-style: disc inside }
+
+.outer-shadow {
+  box-shadow: 0 0 20px #000;
+}
+
+.fade-content {
+  opacity: 0;
+  transition: opacity .3s .1s ease;
+}
+.fade-container:hover .fade-content {
+  opacity: 1;
+}
+
+/**** OVERIG ******************************************************************/
+
+.pubcie_debug, .xdebug-error {
+	margin: 10px 10px 10px 200px;
+	overflow: auto;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid darkred;
+}
+
+div.sqCategorie {
+  float: left;
+  width: 450px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+
+.waarschuwing { color: red; }
+
+.instelling:target {
+	padding: 3em 0;
+	border: 3px solid $success;
+}
+
+@include media-breakpoint-down(md) {
+	body {
+		margin-left: 0;
+	}
+
+	.ads img {
+		width: 100%;
+	}
+}

@@ -9,7 +9,7 @@
 namespace CsrDelft\view\commissievoorkeuren;
 
 
-use CsrDelft\model\entity\commissievoorkeuren\VoorkeurOpmerking;
+use CsrDelft\entity\commissievoorkeuren\VoorkeurOpmerking;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
@@ -18,6 +18,7 @@ class CommissieVoorkeurPraesesOpmerkingForm extends Formulier {
 
 	/**
 	 * CommissieVoorkeurOpmerkingForm constructor.
+	 * @param VoorkeurOpmerking $model
 	 */
 	public function __construct(VoorkeurOpmerking $model) {
 		parent::__construct($model, '/commissievoorkeuren/lidpagina/' . $model->uid);

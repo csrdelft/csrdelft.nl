@@ -2,11 +2,9 @@
 
 namespace CsrDelft\common;
 
-use CsrDelft\model\DebugLogModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\model\TimerModel;
-use Exception;
 use Maknz\Slack\Client as SlackClient;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Throwable;
 
 /**
@@ -15,19 +13,6 @@ use Throwable;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
 final class ShutdownHandler {
-	/**
-	 * Zet de http status code. Voorkomt dat stacktraces weergegeven worden.
-	 *
-	 * Runt in Productie mode.
-	 */
-	public static function errorPageHandler() {
-		$debug = self::getDebug();
-		if ($debug !== null && self::isError($debug)) {
-			http_response_code(500);
-			view('fout.500')->view();
-		}
-	}
-
 	/**
 	 * Stuur een mail naar de PubCie.
 	 *
@@ -40,49 +25,35 @@ final class ShutdownHandler {
 			$headers[] = 'Content-Type: text/plain; charset=UTF-8';
 			$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
 			$subject = 'Fatal error: ' . $debug['error']['message'];
-			mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
+
+			$dumper = new HtmlDumper();
+			$dumper->setTheme('light');
+			$cloner = new VarCloner();
+
+			mail('pubcie@csrdelft.nl', $subject, $dumper->dump($cloner->cloneVar($debug), true), implode("\r\n", $headers));
 		}
 	}
 
 	public static function emailException(Throwable $exception) {
-		$error['message'] = $exception->getMessage();
+		$debug['type'] = get_class($exception);
+		$debug['message'] = $exception->getMessage();
 		$debug['trace'] = $exception->getTrace();
 		$debug['POST'] = $_POST;
 		$debug['GET'] = $_GET;
-		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
+		$debug['SESSION'] = isset($_SESSION) ? $_SESSION : null;
 		$debug['SERVER'] = $_SERVER;
 		unset($debug['SERVER']['HTTP_COOKIE']); // Voorkom dat sessie en remember cookies gemaild worden
 		unset($debug['SERVER']['DATABASE_URL']);
 
 		$headers[] = 'From: Fatal error handler <pubcie@csrdelft.nl>';
-		$headers[] = 'Content-Type: text/plain; charset=UTF-8';
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = 'X-Mailer: nl.csrdelft.lib.Mail';
-		$subject = 'Fatal error: ' . $debug['error']['message'];
-		mail('pubcie@csrdelft.nl', $subject, print_r($debug, true), implode("\r\n", $headers));
-	}
+		$subject = 'Fatal error: ' . $debug['message'];
+		$dumper = new HtmlDumper();
+		$dumper->setTheme('light');
+		$cloner = new VarCloner();
 
-	/**
-	 * Schrijf naar de debug log in de database.
-	 *
-	 * Runt in Debug mode.
-	 */
-	public static function debugLogHandler() {
-		$debug = static::getDebug();
-		if ($debug !== null) {
-			DebugLogModel::instance()->log(__FILE__, 'fatal_handler', func_get_args(), print_r($debug, true));
-		}
-	}
-
-	/**
-	 * Raak het 'laaste foutmelding' bestand aan.
-	 *
-	 * Runt in Debug en Productie mode.
-	 */
-	public static function touchHandler() {
-		$debug = self::getDebug();
-		if ($debug !== null && self::isError($debug)) {
-			touch(VAR_PATH . 'foutmelding.last');
-		}
+		mail('pubcie@csrdelft.nl', $subject, $dumper->dump($cloner->cloneVar($debug), true), implode("\r\n", $headers));
 	}
 
 	public static function slackException(Throwable $exception) {
@@ -138,11 +109,12 @@ final class ShutdownHandler {
 
 
 		$debug = self::getDebug();
-		if ($debug !== null
-			&& Ini::bestaat(Ini::SLACK)
-		) {
-			$slackConfig = Ini::lees(Ini::SLACK);
-			$slackClient = new SlackClient($slackConfig['url'], $slackConfig);
+		if ($debug !== null && !empty($_ENV['SLACK_URL'])) {
+			$slackClient = new SlackClient($_ENV['SLACK_URL'], [
+				'username' => $_ENV['SLACK_USERNAME'],
+				'channel' => $_ENV['SLACK_CHANNEL'],
+				'icon' => $_ENV['SLACK_ICON'],
+			]);
 			$foutmelding = $slackClient->createMessage();
 
 			$errorName = errorName($errno);
@@ -170,33 +142,6 @@ MD
 	}
 
 	/**
-	 * Time de request als dat nodig is.
-	 *
-	 * Runt in Debug en Productie mode.
-	 */
-	public static function timerHandler() {
-		if (defined('TIME_MEASURE') && TIME_MEASURE) {
-			TimerModel::instance()->log();
-		}
-	}
-
-	/**
-	 * Print de stacktrace als dat mag.
-	 *
-	 * Runt in Debug en Productie mode.
-	 *
-	 * @param null $exception
-	 */
-	public static function stacktraceHandler($exception = null) {
-		if ($exception instanceof Exception) {
-			if ((defined('DEBUG') && DEBUG) || LoginModel::mag(P_LOGGED_IN)) {
-				echo str_replace('#', '<br />#', $exception); // stacktrace
-				printDebug();
-			}
-		}
-	}
-
-	/**
 	 * @return array|null
 	 */
 	private static function getDebug() {
@@ -208,7 +153,7 @@ MD
 			$debug['trace'] = debug_backtrace();
 			$debug['POST'] = $_POST;
 			$debug['GET'] = $_GET;
-			$debug['SESSION'] = isset($_SESSION) ? $_SESSION : MODE;
+			$debug['SESSION'] = isset($_SESSION) ? $_SESSION : null;
 			$debug['SERVER'] = $_SERVER;
 			unset($debug['SERVER']['HTTP_COOKIE']); // Voorkom dat sessie en remember cookies gemaild worden
 			return $debug;

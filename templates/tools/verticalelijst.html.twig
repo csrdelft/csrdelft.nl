@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}Verticale emaillijsten{% endblock %}
+
+{% block content %}
+<h1>Verticale emaillijsten</h1>
+<p>Gebruik deze lijstjes om de maillijsten opnieuw in te stellen.</p>
+
+<table class="table">
+	<tr>
+		{% for letter, verticale in verticalen %}
+		<th scope="col"><h3>Verticale {{ letter }} </h3></th>
+		{% endfor %}
+	</tr>
+	<tr>
+		{% for letter, verticale in verticalen %}
+		<td>
+<pre onclick="let range = document.createRange(); range.selectNode(this); window.getSelection().addRange(range)">
+	{%- for profiel in verticale -%}
+	{{-profiel.uid}}@csrdelft.nl{{ "\n" }}
+	{%- endfor -%}
+</pre>
+		</td>
+		{% endfor %}
+	</tr>
+</table>
+{% endblock %}

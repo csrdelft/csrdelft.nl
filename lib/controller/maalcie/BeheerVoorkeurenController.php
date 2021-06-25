@@ -2,55 +2,74 @@
 
 namespace CsrDelft\controller\maalcie;
 
-use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\maalcie\CorveeVoorkeur;
-use CsrDelft\model\maalcie\CorveeVoorkeurenModel;
-use CsrDelft\repository\ProfielRepository;
+use CsrDelft\common\Annotation\Auth;
+use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\corvee\CorveeRepetitie;
+use CsrDelft\entity\corvee\CorveeVoorkeur;
+use CsrDelft\entity\profiel\Profiel;
+use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  */
-class BeheerVoorkeurenController {
+class BeheerVoorkeurenController extends AbstractController {
 	/**
-	 * @var CorveeVoorkeurenModel
+	 * @var CorveeVoorkeurenRepository
 	 */
-	private $corveeVoorkeurenModel;
+	private $corveeVoorkeurenRepository;
 
-	public function __construct(CorveeVoorkeurenModel $corveeVoorkeurenModel) {
-		$this->corveeVoorkeurenModel = $corveeVoorkeurenModel;
+	public function __construct(CorveeVoorkeurenRepository $corveeVoorkeurenRepository) {
+		$this->corveeVoorkeurenRepository = $corveeVoorkeurenRepository;
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/corvee/voorkeuren/beheer", methods={"GET"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
 	public function beheer() {
-		list($matrix, $repetities) = $this->corveeVoorkeurenModel->getVoorkeurenMatrix();
-		return view('maaltijden.voorkeur.beheer_voorkeuren', ['matrix' => $matrix, 'repetities' => $repetities]);
+		list($matrix, $repetities) = $this->corveeVoorkeurenRepository->getVoorkeurenMatrix();
+		return $this->render('maaltijden/voorkeur/beheer_voorkeuren.html.twig', ['matrix' => $matrix, 'repetities' => $repetities]);
 	}
 
-	public function inschakelen($crid, $uid) {
-		if (!ProfielRepository::existsUid($uid)) {
-			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
-		}
+	/**
+	 * @param CorveeRepetitie $repetitie
+	 * @param Profiel $profiel
+	 * @return Response
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/corvee/voorkeuren/beheer/inschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
+	public function inschakelen(CorveeRepetitie $repetitie, Profiel $profiel) {
 		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->crv_repetitie_id = $crid;
-		$voorkeur->uid = $uid;
+		$voorkeur->setProfiel($profiel);
+		$voorkeur->setCorveeRepetitie($repetitie);
 
-		$voorkeur = $this->corveeVoorkeurenModel->inschakelenVoorkeur($voorkeur);
-		$voorkeur->setVanUid($voorkeur->getUid());
-		return view('maaltijden.voorkeur.beheer_voorkeur_veld', ['voorkeur' => $voorkeur, 'crid' => $crid, 'uid' => $uid]);
+		$voorkeur = $this->corveeVoorkeurenRepository->inschakelenVoorkeur($voorkeur);
+		$voorkeur->van_uid = $voorkeur->uid;
+		return $this->render('maaltijden/voorkeur/beheer_voorkeur_veld.html.twig', ['voorkeur' => $voorkeur, 'crv_repetitie_id' => $repetitie->crv_repetitie_id, 'uid' => $profiel->uid]);
 	}
 
-	public function uitschakelen($crid, $uid) {
-		if (!ProfielRepository::existsUid($uid)) {
-			throw new CsrGebruikerException(sprintf('Lid met uid "%s" bestaat niet.', $uid));
-		}
-		$voorkeur = new CorveeVoorkeur();
-		$voorkeur->crv_repetitie_id = (int)$crid;
-		$voorkeur->uid = $uid;
-		$voorkeur->setVanUid($uid);
+	/**
+	 * @param CorveeVoorkeur $voorkeur
+	 * @return Response
+	 * @throws ORMException
+	 * @throws OptimisticLockException
+	 * @Route("/corvee/voorkeuren/beheer/uitschakelen/{crv_repetitie_id}/{uid}", methods={"POST"})
+	 * @Auth(P_CORVEE_MOD)
+	 */
+	public function uitschakelen(CorveeVoorkeur $voorkeur) {
+		$voorkeur->van_uid = $voorkeur->uid;
 
-		$this->corveeVoorkeurenModel->uitschakelenVoorkeur($voorkeur);
+		$this->corveeVoorkeurenRepository->uitschakelenVoorkeur($voorkeur);
 
-		$voorkeur->uid = null;
-		return view('maaltijden.voorkeur.beheer_voorkeur_veld', ['voorkeur' => $voorkeur, 'crid' => $voorkeur->crv_repetitie_id, 'uid' => $voorkeur->uid]);
+		$voorkeur->setProfiel(null);
+		return $this->render('maaltijden/voorkeur/beheer_voorkeur_veld.html.twig', ['voorkeur' => $voorkeur, 'crv_repetitie_id' => $voorkeur->crv_repetitie_id, 'uid' => null]);
 	}
 
 }

@@ -6,7 +6,7 @@ namespace CsrDelft\view\formulier;
  * Form as modal content.
  *
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 06/05/2017
+ * @since 06/05/2017
  */
 class ModalForm extends Formulier {
 	/**
@@ -16,10 +16,11 @@ class ModalForm extends Formulier {
 	 */
 	protected $modalBreedte = '';
 
-	public function view() {
+	public function __toString() {
 		$this->css_classes[] = 'ModalForm';
+		$html = '';
 
-		echo <<<HTML
+		$html .= <<<HTML
 <div id="modal" class="modal">
 	{$this->getFormTag()}
 		<div class="modal-dialog modal-form modal-content {$this->modalBreedte}">
@@ -27,29 +28,27 @@ HTML;
 
 		$titel = $this->getTitel();
 		if (!empty($titel)) {
-			echo <<<HTML
+			$html .= <<<HTML
 			<div class="modal-header">
 				<h5 class="modal-title">{$titel}</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 HTML;
 		}
 		if ($this->showMelding) {
-			echo getMelding();
+			$html .= getMelding();
 		}
-		echo <<<HTML
+		$html .= <<<HTML
 			<div class="modal-body">
 HTML;
 		if (isset($this->error)) {
-			echo '<span class="error">' . $this->error . '</span>';
+			$html .= '<span class="error">' . $this->error . '</span>';
 		}
 		//debugprint($this->getError()); //DEBUG
 		foreach ($this->getFields() as $field) {
-			$field->view();
+			$html .= $field->__toString();
 		}
-		echo <<<HTML
+		$html .= <<<HTML
 			</div>
 			<div class="modal-footer clear">
 				{$this->getFormKnoppen()->getHtml()}
@@ -59,6 +58,7 @@ HTML;
 	{$this->getScriptTag()}
 </div>
 HTML;
+		return $html;
 	}
 
 }

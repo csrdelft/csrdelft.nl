@@ -1,4 +1,0 @@
-; Configuratie voor JSON Web Tokens
-[jwt]
-secret = ;
-lifetime = 3600

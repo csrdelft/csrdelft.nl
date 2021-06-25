@@ -2,8 +2,8 @@
 
 namespace CsrDelft\view\maalcie\corvee\functies;
 
-use CsrDelft\model\entity\maalcie\CorveeKwalificatie;
-use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\entity\corvee\CorveeKwalificatie;
+use CsrDelft\view\formulier\invoervelden\LidObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -13,12 +13,12 @@ use CsrDelft\view\formulier\ModalForm;
 class KwalificatieForm extends ModalForm {
 
 	public function __construct(CorveeKwalificatie $kwalificatie) {
-		parent::__construct($kwalificatie, '/corvee/functies/kwalificeer/' . $kwalificatie->functie_id);
+		parent::__construct($kwalificatie, '/corvee/functies/kwalificeer/' . $kwalificatie->corveeFunctie->functie_id);
 		$this->titel = 'Kwalificatie toewijzen';
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields = [];
-		$fields[] = new LidField('uid', $kwalificatie->uid, 'Naam of lidnummer', 'leden');
+		$fields[] = new LidObjectField('profiel', $kwalificatie->profiel, 'Naam of lidnummer', 'leden');
 
 		$this->addFields($fields);
 

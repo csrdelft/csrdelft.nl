@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\peilingen;
 
-use CsrDelft\model\peilingen\PeilingenModel;
+use CsrDelft\entity\peilingen\Peiling;
 use CsrDelft\view\datatable\CellRender;
 use CsrDelft\view\datatable\DataTable;
 use CsrDelft\view\datatable\knoppen\ConfirmDataTableKnop;
@@ -17,7 +17,7 @@ class PeilingTable extends DataTable
 {
 	public function __construct()
 	{
-		parent::__construct(PeilingenModel::ORM, '/peilingen/beheer', 'Peilingen beheer');
+		parent::__construct(Peiling::class, '/peilingen/beheer', 'Peilingen beheer');
 
 		$this->hideColumn('id', false);
 		$this->hideColumn('rechten_stemmen');

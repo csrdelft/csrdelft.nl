@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="msapplication-tap-highlight" content="no"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	<meta name="theme-color" content="#0a3292">
+	<meta name="robots" content="index, follow"/>
+	<meta name="author" content="PubCie C.S.R. Delft"/>
+	<meta name="description" content="{{ instelling('stek', 'beschrijving') }}">
+	<meta name="google-site-verification" content="zLTm1NVzZPHx7jiGHBpe4HeH1goQAlJej2Rdc0_qKzE"/>
+	<meta name="apple-itunes-app" content="app-id=1112148892, app-argument={{ app.request.uri }}">
+	<meta property="og:url" content="{{ app.request.uri }}"/>
+	<meta property="og:title" content="C.S.R. Delft | {{ block('titel') }}"/>
+	<meta property="og:locale" content="nl_nl"/>
+	<meta property="og:image" content="{{ absolute_url(asset_url('images/beeldmerk.png')) }}"/>
+	<meta property="og:description" content="{{ instelling('stek', 'beschrijving') }}"/>
+	{{ csrfMetaTag() }}
+	<meta property="X-CSR-LOGGEDIN" content="{{ mag('P_LOGGED_IN') ? 'true' : 'false' }}"/>
+	<title>C.S.R. Delft - {% block titel %}{% endblock %}</title>
+	<link rel="shortcut icon" href="{{ absolute_url('/images/favicon.ico') }}"/>
+	<link rel="manifest" href="{{ absolute_url('/manifest.json') }}">
+	<link rel="alternate" title="C.S.R. Delft RSS" type="application/rss+xml" href="{{ url('csrdelft_forum_rss') }}"/>
+	{{ css_asset('common') }}
+	{% for sheet in user_modules() %}
+		{{ css_asset(sheet) }}
+	{% endfor %}
+	{% if lid_instelling('layout', 'automatischDonker') == 'ja' %}
+		{{ css_asset('thema-donker', 'screen and (prefers-color-scheme: dark') }}
+	{% endif %}
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+	{% block styles %}{% endblock %}
+	{% block scripts %}{% endblock %}
+	{% block head %}{% endblock %}
+</head>
+<body
+	class="nav-is-fixed {{ lid_instelling('zijbalk', 'breedte') }} {% block bodyClass %}{% endblock %}" {% block bodyArgs %}{% endblock %}>
+{{ js_asset('app') }}
+{% block body %}
+	{{ include('menu/main.html.twig', {root: get_menu('main'), personal: get_menu('Personal'), favorieten: get_menu(app.user.uid)}) }}
+	<main class="container my-3 py-3 flex-shrink-0">
+		{% if lid_instelling('zijbalk', 'breedte') != 'zijbalk_verborgen' %}
+			<nav id="zijbalk">
+				{% for blok in get_zijbalk() %}
+					<div class="blok">{{ blok | raw }}</div>
+				{% endfor %}
+				{% if app.debug and mag('P_ADMIN') %}
+					<div class="commit-hash">
+						<a href="{{ commitLink() }}" target="_blank" class="not-external">{{ commitHash() }}</a>
+					</div>
+				{% endif %}
+			</nav>
+		{% endif %}
+		<nav aria-label="breadcrumb">
+			{% block breadcrumbs %}
+				{{ csr_breadcrumbs(get_breadcrumbs(app.request.uri)) }}
+			{% endblock %}
+		</nav>
+		<div class="cd-page-content">
+			{{ getMelding() }}
+			{% block content %}{% endblock %}
+		</div>
+	</main>
+	{% include 'menu/footer.html.twig' %}
+	<div id="modal-background" {% if block('modal') is defined %} style="display: block;" {% endif %}></div>
+	{% if block('modal') is defined %}
+		{{ block('modal') | raw }}
+	{% elseif not toestemming_gegeven() %}
+		{{ toestemming_form() | raw }}
+	{% else %}
+		<div id="modal" tabindex="-1"></div>
+	{% endif %}
+	{% include 'effect/effecten.html.twig' %}
+{% endblock %}
+</body>
+</html>

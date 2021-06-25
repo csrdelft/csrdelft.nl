@@ -2,9 +2,11 @@
 
 namespace CsrDelft\view\maalcie\forms;
 
-use CsrDelft\model\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\Maaltijd;
+use CsrDelft\entity\maalcie\MaaltijdAanmeldingDTO;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLidField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredProfielEntityField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -20,13 +22,11 @@ class AanmeldingForm extends ModalForm {
 
 	/**
 	 * AanmeldingForm constructor.
-	 * @param Maaltijd $maaltijd
+	 * @param MaaltijdAanmeldingDTO $aanmeldingDTO
 	 * @param boolean $nieuw
-	 * @param string $uid
-	 * @param int $gasten
 	 */
-	public function __construct(Maaltijd $maaltijd, $nieuw, $uid = null, $gasten = 0) {
-		parent::__construct(null, '/maaltijden/beheer/' . ($nieuw ? 'aanmelden' : 'afmelden'), true, true);
+	public function __construct(MaaltijdAanmeldingDTO $aanmeldingDTO, bool $nieuw) {
+		parent::__construct($aanmeldingDTO, '/maaltijden/beheer/' . ($nieuw ? 'aanmelden' : 'afmelden'), true, true);
 
 		if ($nieuw) {
 			$this->titel = 'Aanmelding toevoegen/aanpassen';
@@ -36,9 +36,9 @@ class AanmeldingForm extends ModalForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields = [];
-		$fields[] = new RequiredLidField('voor_lid', $uid, 'Naam of lidnummer', 'leden');
+		$fields[] = new RequiredProfielEntityField('voor_lid', $aanmeldingDTO->voor_lid, 'Naam of lidnummer', 'leden');
 		if ($nieuw) {
-			$fields[] = new RequiredIntField('aantal_gasten', $gasten, 'Aantal gasten', 0, 200);
+			$fields[] = new RequiredIntField('aantal_gasten', $aanmeldingDTO->aantal_gasten, 'Aantal gasten', 0, 200);
 		}
 
 		$this->addFields($fields);

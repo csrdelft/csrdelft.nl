@@ -1,16 +1,17 @@
-FROM php:7.0-apache
+FROM php:7.3-apache
 
 # update
 RUN apt-get update \
- && apt-get install -y --no-install-recommends sendmail libpng-dev libjpeg-dev libfreetype6-dev imagemagick \
+ && apt-get install -y --no-install-recommends sendmail libpng-dev libjpeg-dev libfreetype6-dev imagemagick memcached libmemcached-dev libicu-dev git \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 # install php extensions
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install mysqli pdo pdo_mysql hash exif gd \
+    && docker-php-ext-install mysqli pdo pdo_mysql hash exif gd opcache intl \
     && pecl install xdebug\
-    && docker-php-ext-enable xdebug
+    && pecl install memcached\
+    && docker-php-ext-enable xdebug memcache memcached
 
 # enable apache mods
 RUN a2enmod rewrite && a2enmod headers
@@ -18,5 +19,8 @@ RUN a2enmod rewrite && a2enmod headers
 # copy config
 COPY docker/dev/apache2.conf /etc/apache2/apache2.conf
 COPY docker/dev/php.ini  /usr/local/etc/php/php.ini
+COPY docker/dev/memcached.conf /etc/memcached.conf
 
-RUN mkdir /app && chown -R www-data "/app" && chmod -R u+rw "/app"
+RUN mkdir /app && mkdir /app/sessie && mkdir /app/var && chown -R www-data "/app" && chmod -R u+rwx "/app"
+
+CMD service memcached start && apache2-foreground

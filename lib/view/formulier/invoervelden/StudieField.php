@@ -5,7 +5,7 @@ namespace CsrDelft\view\formulier\invoervelden;
 /**
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * Suggereert een aantal studies, doet verder geen controle op invoer.
  */
@@ -18,7 +18,7 @@ class StudieField extends TextField {
 		$this->suggestions['TU Delft'] = array_map(function ($value) {
 			return "TU Delft - " . $value;
 		}, $tustudies);
-		$this->suggestions[] = array('INHolland', 'Haagse Hogeschool', 'EURotterdam', 'ULeiden');
+		$this->suggestions[] = array('INHolland - ', 'Haagse Hogeschool - ', 'EURotterdam - ', 'ULeiden - ');
 	}
 
 }

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block titel %}Stamboom voor het geslacht van {{ profiel.naam }}{% endblock %}
+
+{% block breadcrumbs %}
+	{{ csr_breadcrumbs({
+		(url('default')): 'main',
+		(url('csrdelft_ledenlijst_lijst')): 'Leden',
+		(url('csrdelft_profiel_profiel', {uid: profiel.uid})): profiel.naam,
+		'': 'Stamboom',
+	}) }}
+{% endblock %}
+
+{% block content %}
+	<h1>Nageslacht van {{ profiel.naam }} ({{ profiel.nageslachtGrootte }})</h1>
+
+	<div class="tree">
+		<ul>
+			<li>
+				{% set patroonNaam = profiel.patroonProfiel.naam %}
+				<a href="{{ url('csrdelft_profiel_stamboom', {uid: profiel.patroon}) }}"
+					 title="Bekijk het nageslacht van {{ patroonNaam }}">&uArr; {{ patroonNaam }}</a>
+				{{ include('profiel/stamboom_node.html.twig', {profielen: [profiel]}) }}
+			</li>
+		</ul>
+	</div>
+{% endblock %}

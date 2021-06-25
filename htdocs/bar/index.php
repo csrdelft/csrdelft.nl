@@ -1,6 +1,6 @@
 <?php
-require_once 'configuratie.include.php';
-require_once 'controller/Barsysteem.class.php';
+require_once __DIR__ . '/../../config/bootstrap.php';
+require_once __DIR__ . '/controller/Barsysteem.class.php';
 
 $barsysteem = new Barsysteem();
 
@@ -25,11 +25,11 @@ if ($barsysteem->isLoggedIn()) {
         <!-- Bootstrap core CSS -->
         <link href="css/bar.css" rel="stylesheet">
         <link href="css/bootstrap.min.css" rel="stylesheet">
-		
+
 		<script type="text/javascript">
 		var beheer = <?= $barsysteem->isBeheer() ? "1" : "0" ?>;
 		</script>
-		
+
     </head>
 
     <body id="body">
@@ -178,7 +178,7 @@ if ($barsysteem->isLoggedIn()) {
 						<div id="bestelKnoppenLijst">
 						</div>
 					</div>
-						
+
                 </div>
                 <div class="tab-pane <?= $barsysteem->isBeheer() ? "beheer" : "" ?>" id="bestelLijstBeheer">
 
@@ -235,11 +235,11 @@ if ($barsysteem->isLoggedIn()) {
                         <?php if ($barsysteem->isBeheer()): ?><button class="btn btn-default" id="laadGrootboekInvoer">Grootboekinvoer</button><?php endif; ?>
                         <?php if ($barsysteem->isBeheer()): ?><button class="btn btn-default" id="laadTools">Tools</button><?php endif; ?>
                     </div>
-	
+
 					<div id="beheerDisplay">
 
 					<?php if ($barsysteem->isBeheer()): ?>
-                        
+
 						<div id="productBeheer" class="hidden">
 
                             <h2>Product toevoegen</h2>
@@ -265,88 +265,88 @@ if ($barsysteem->isLoggedIn()) {
                                 </div>
 
                             </form>
-						
+
 							<h2>Wijzig een product</h2>
-							
+
 							<div class="row">
-							
+
 								<div class="col-xs-3">
-									
+
 									<div class="list-group" id="productBeheerLijst">
-									
+
 									</div>
-									
+
 								</div>
-								
+
 								<div class="col-xs-9" id="editProduct">
-								
+
 								</div>
-							
+
 							</div>
-						
+
 						</div>
-						
+
 					<?php endif; ?>
-						
+
 						<div id="persoonBeheer" class="hidden">
-						
+
 							<h2>Persoon wijzigen</h2>
-					
+
 							<form id="updatePerson" class="form-inline" action="ajax.php" method="post">
 								<?php barCsrf(); ?>
 								<div id="input-group">
-								
+
 									<input type="hidden" name="update_person" value="on" />
 									<select name="id" class="form-control personList"></select>
 									<input placeholder="Bijnaam" name="name" type="text" class="form-control" />
 									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-								
+
 								</div>
-							
+
 							</form>
-							
+
 							<?php if ($barsysteem->isBeheer()): ?>
-							
+
 							<h2>Persoon toevoegen</h2>
-					
+
 							<form id="addPerson" class="form-inline" action="ajax.php" method="post">
 								<?php barCsrf(); ?>
 								<div id="input-group">
-								
+
 									<input type="hidden" name="add_person" value="on" />
 									<input placeholder="Naam" name="name" type="text" class="form-control" />
 									<input placeholder="Saldo in centen" name="saldo" type="text" class="form-control" />
 									<input placeholder="Leeg of lidnummer" name="uid" type="text" class="form-control" />
 									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
-								
+
 								</div>
-							
+
 							</form>
-						
+
 							<h2>Persoon verwijderen</h2>
-					
+
 							<form id="removePerson" class="form-inline" action="ajax.php" method="post">
 								<?php barCsrf(); ?>
 								<div id="input-group">
-								
+
 									<input type="hidden" name="remove_person" value="on" />
 									<select name="id" class="form-control personList"></select>
 									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span></button>
-								
+
 								</div>
-							
+
 							</form>
-						
+
 							<?php endif; ?>
-						
+
 						</div>
-						
+
 						<div id="grootboekInvoer" class="hidden">
-							
+
 						</div>
-						
+
 						<div id="tools" class="hidden">
-						
+
 							<h2>Som van saldi</h2>
 							<table class="table table-striped">
 								<tr>
@@ -364,9 +364,9 @@ if ($barsysteem->isLoggedIn()) {
                             <h2>Oudleden die rood staan</h2>
                             <table class="table table-striped" id="red-old">
                             </table>
-							
+
 						</div>
-					
+
 					</div>
 
                 </div>

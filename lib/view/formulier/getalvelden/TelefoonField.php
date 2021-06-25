@@ -8,7 +8,7 @@ use CsrDelft\view\formulier\invoervelden\TextField;
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
  * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
  *
  * is valid als er een enigszins op een telefoonnummer lijkende string wordt
  * ingegeven.

@@ -3,30 +3,35 @@
 namespace CsrDelft\repository\eetplan;
 
 use CsrDelft\entity\eetplan\EetplanBekenden;
-use CsrDelft\model\OrmTrait;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @date 30/03/2017
+ * @since 30/03/2017
+ *
+ * @method EetplanBekenden|null find($id, $lockMode = null, $lockVersion = null)
+ * @method EetplanBekenden|null findOneBy(array $criteria, array $orderBy = null)
+ * @method EetplanBekenden[]    findAll()
+ * @method EetplanBekenden[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method EetplanBekenden|null retrieveByUuid($UUID)
  */
-class EetplanBekendenRepository extends ServiceEntityRepository {
-	use OrmTrait {
-		exists as ormExists;
-	}
-
+class EetplanBekendenRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, EetplanBekenden::class);
 	}
 
 	/**
-	 * @param string $lichting
+	 * @param int $lidjaar
 	 *
 	 * @return EetplanBekenden[]
 	 */
-	public function getBekenden($lichting) {
-		return $this->ormFind('uid1 LIKE ?', [$lichting . "%"]);
+	public function getBekendenVoorLidjaar($lidjaar) {
+		return $this->createQueryBuilder('b')
+			->join('b.noviet1', 'n')
+			->where('n.lidjaar = :lidjaar')
+			->setParameter('lidjaar', $lidjaar)
+			->getQuery()->getResult();
 	}
 
 	/**
@@ -35,14 +40,7 @@ class EetplanBekendenRepository extends ServiceEntityRepository {
 	 * @return bool
 	 */
 	public function exists($entity) {
-		if ($this->ormExists($entity)) {
-			return true;
-		}
-
-		$omgekeerd = new EetplanBekenden();
-		$omgekeerd->uid1 = $entity->uid2;
-		$omgekeerd->uid2 = $entity->uid1;
-
-		return $this->ormExists($omgekeerd);
+		return count($this->findBy(['noviet1' => $entity->noviet1, 'noviet2' => $entity->noviet2])) != 0
+			|| count($this->findBy(['noviet1' => $entity->noviet1, 'noviet2' => $entity->noviet1])) != 0;
 	}
 }

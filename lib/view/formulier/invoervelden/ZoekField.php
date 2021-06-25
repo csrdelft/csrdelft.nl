@@ -2,19 +2,23 @@
 
 namespace CsrDelft\view\formulier\invoervelden;
 
-use CsrDelft\model\instellingen\LidInstellingenModel;
-use CsrDelft\model\MenuModel;
-use CsrDelft\model\security\LoginModel;
+use CsrDelft\common\ContainerFacade;
+use CsrDelft\entity\MenuItem;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\repository\MenuItemRepository;
+use CsrDelft\service\security\LoginService;
 
 /**
  */
-class ZoekField extends TextField {
+class ZoekField extends TextField
+{
 
 	public $type = 'search';
 
-	public function __construct($name) {
+	public function __construct($name)
+	{
 		parent::__construct($name, null, null);
-		$this->css_classes[] = 'form-control mr-sm-2';
+		$this->css_classes[] = 'form-control me-sm-2';
 		$this->css_classes[] = 'clicktogo';
 		$this->placeholder = 'Zoeken';
 		$this->autoselect = true;
@@ -32,13 +36,15 @@ else {
 	window.formulier.formSubmit(event);
 }
 JS;
-		if (LoginModel::mag(P_LEDEN_READ)) {
+		if (LoginService::mag(P_LEDEN_READ)) {
+
+			$menuRepository = ContainerFacade::getContainer()->get(MenuItemRepository::class);
 
 			if (lid_instelling('zoeken', 'favorieten') === 'ja') {
-				$this->addSuggestions(MenuModel::instance()->getMenu(LoginModel::getUid())->getChildren());
+				$this->addSuggestions($menuRepository->getMenu(LoginService::getUid())->children);
 			}
 			if (lid_instelling('zoeken', 'menu') === 'ja') {
-				$this->addSuggestions(MenuModel::instance()->flattenMenu(MenuModel::instance()->getMenu('main')));
+				$this->addSuggestions($menuRepository->flattenMenu($menuRepository->getMenu('main')));
 			}
 
 			$this->suggestions[] = '/zoeken?q=';
@@ -49,79 +55,83 @@ JS;
 		}
 	}
 
-	private function addSuggestions(array $list) {
+	/**
+	 * @param MenuItem[] $list
+	 */
+	private function addSuggestions($list)
+	{
 		foreach ($list as $item) {
-			if ($item->magBekijken()) {
-				$parent = $item->getParent();
-				if ($parent AND $parent->tekst != 'main') {
-					if ($parent->tekst == LoginModel::getUid()) { // werkomheen
-						$parent->tekst = 'Favorieten';
-					}
-					$label = $parent->tekst;
-				} else {
-					$label = 'Menu';
+			$parent = $item->parent;
+			if ($parent && $parent->tekst != 'main') {
+				if ($parent->tekst == LoginService::getUid()) { // werkomheen
+					$parent->tekst = 'Favorieten';
 				}
-				$this->suggestions[''][] = array(
-					'url' => $item->link,
-					'label' => $label,
-					'value' => $item->tekst
-				);
+				$label = $parent->tekst;
+			} else {
+				$label = 'Menu';
 			}
+			$this->suggestions[''][] = array(
+				'url' => $item->link,
+				'label' => $label,
+				'value' => $item->tekst
+			);
 		}
 	}
 
-	public function view() {
+	public function __toString()
+	{
 		$html = '';
-		foreach (LidInstellingenModel::instance()->getModuleKeys('zoeken') as $option) {
+		$lidInstellingenRepository = ContainerFacade::getContainer()->get(LidInstellingenRepository::class);
+		foreach ($lidInstellingenRepository->getModuleKeys('zoeken') as $option) {
 			$html .= '<a class="dropdown-item disabled" href="#">';
 			$instelling = lid_instelling('zoeken', $option);
 			if ($instelling !== 'nee') {
-				$html .= '<span class="fa fa-check fa-fw mr-2"></span> ';
+				$html .= '<span class="fa fa-check fa-fw me-2"></span> ';
 				if ($option === 'leden') {
 					$html .= ucfirst(strtolower($instelling)) . '</a>';
 					continue;
 				}
 			} else {
-				$html .= '<span class="fa fa-fw mr-2"></span> ';
+				$html .= '<span class="fa fa-fw me-2"></span> ';
 			}
 			$html .= ucfirst($option) . '</a>';
 		}
-		?>
-		<div class="form-inline flex-nowrap">
-            <?= parent::getHtml() ?>
-            <div class="dropdown">
-                <button id="cd-zoek-engines" class="btn btn-light dropdown-toggle ZoekFieldDropdown" data-toggle="dropdown"
-                        aria-expanded="false">
-                    <span class="fa fa-search"></span>
-                    <span class="caret"></span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right" role="menu">
-                    <a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
-                        Oudleden
-                    </a>
-                    <a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
-                        Iedereen
-                    </a>
+		$parent = parent::getHtml();
+		return <<<HTML
+<div class="form-inline d-flex flex-nowrap">
+	{$parent}
+	<div class="dropdown">
+		<button id="cd-zoek-engines" class="btn btn-light dropdown-toggle ZoekFieldDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+			<span class="fa fa-search"></span>
+			<span class="caret"></span>
+		</button>
+		<div class="dropdown-menu dropdown-menu-right" role="menu">
+			<a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=OUDLEDEN&q=' + encodeURIComponent(document.querySelector('#{$this->getId()}').value);">
+				Oudleden
+			</a>
+			<a href="#" class="dropdown-item" onclick="window.location.href = '/ledenlijst?status=ALL&q=' + encodeURIComponent(document.querySelector('#{$this->getId()}').value);">
+				Iedereen
+			</a>
 
-                    <a href="#" class="dropdown-item" onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
-                        Forum reacties
-                    </a>
-                    <a href="#" class="dropdown-item" onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent($('#<?= $this->getId() ?>').val());">
-                        Wiki inhoud
-                    </a>
-                    <a class="divider"></a>
-                    <div class="dropdown-submenu dropleft">
-                        <a class="dropdown-item dropdown-toggle" href="#" id="menu-snelzoeken">Snelzoeken</a>
-                        <div class="dropdown-menu" aria-labelledby="menu-snelzoeken">
-                            <a class="dropdown-item" href="/instellingen#instelling-zoeken">Aanpassen...</a>
-                            <a class="divider"></a>
-							<?= $html; ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
+			<a href="#" class="dropdown-item" onclick="window.location.href = '/forum/zoeken/' + encodeURIComponent(document.querySelector('#{$this->getId()}').value);">
+				Forum reacties
+			</a>
+			<a href="#" class="dropdown-item" onclick="window.location.href = '/wiki/hoofdpagina?do=search&id=' + encodeURIComponent(document.querySelector('#{$this->getId()}').value);">
+				Wiki inhoud
+			</a>
+			<a class="divider"></a>
+			<div class="dropdown-submenu dropleft">
+				<a class="dropdown-item dropdown-toggle" href="#" id="menu-snelzoeken">Snelzoeken</a>
+				<div class="dropdown-menu" aria-labelledby="menu-snelzoeken">
+					<a class="dropdown-item" href="/instellingen#instelling-zoeken">Aanpassen...</a>
+					<a class="divider"></a>
+					{$html}
+				</div>
+			</div>
 		</div>
-		<?php
+	</div>
+</div>
+HTML;
 	}
 
 }

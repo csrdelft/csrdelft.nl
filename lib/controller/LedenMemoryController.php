@@ -4,23 +4,28 @@
 namespace CsrDelft\controller;
 
 
+use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\model\entity\groepen\AbstractGroep;
-use CsrDelft\model\entity\groepen\Lichting;
-use CsrDelft\model\entity\groepen\Verticale;
-use CsrDelft\model\entity\LidStatus;
+use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\Lichting;
+use CsrDelft\entity\groepen\Verticale;
 use CsrDelft\entity\profiel\Profiel;
-use CsrDelft\model\groepen\LichtingenModel;
-use CsrDelft\model\groepen\VerticalenModel;
-use CsrDelft\model\LedenMemoryScoresModel;
+use CsrDelft\model\entity\LidStatus;
+use CsrDelft\repository\groepen\LichtingenRepository;
+use CsrDelft\repository\groepen\VerticalenRepository;
+use CsrDelft\repository\LedenMemoryScoresRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\view\JsonResponse;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreForm;
 use CsrDelft\view\ledenmemory\LedenMemoryScoreResponse;
+use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-class LedenMemoryController {
+class LedenMemoryController extends AbstractController {
 	/**
-	 * @var LedenMemoryScoresModel
+	 * @var LedenMemoryScoresRepository
 	 */
 	private $ledenMemoryScoresModel;
 	/**
@@ -28,32 +33,49 @@ class LedenMemoryController {
 	 */
 	private $profielRepository;
 	/**
-	 * @var VerticalenModel
+	 * @var VerticalenRepository
 	 */
-	private $verticalenModel;
+	private $verticalenRepository;
+	/**
+	 * @var LichtingenRepository
+	 */
+	private $lichtingenRepository;
 
-	public function __construct(LedenMemoryScoresModel $ledenMemoryScoresModel, ProfielRepository $profielRepository, VerticalenModel $verticalenModel) {
+	public function __construct(
+		LedenMemoryScoresRepository $ledenMemoryScoresModel,
+		ProfielRepository $profielRepository,
+		VerticalenRepository $verticalenRepository,
+		LichtingenRepository $lichtingenRepository
+	) {
 		$this->ledenMemoryScoresModel = $ledenMemoryScoresModel;
 		$this->profielRepository = $profielRepository;
-		$this->verticalenModel = $verticalenModel;
+		$this->verticalenRepository = $verticalenRepository;
+		$this->lichtingenRepository = $lichtingenRepository;
 	}
 
-	public function memory() {
+	/**
+	 * @return Response
+	 * @throws NonUniqueResultException
+	 * @Route("/leden/memory", methods={"GET"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
+	public function memory(Request $request): Response
+	{
 		$lidstatus = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		$lidstatus[] = LidStatus::Overleden;
-		$leden = null;
-		$cheat = isset($_GET['rosebud']);
-		$learnmode = isset($_GET['oefenen']);
-		$groep = $this->getVerticale() ?? $this->getLichting();
+		/** @var Profiel[] $leden */
+		$leden = [];
+		$cheat = $request->query->has('rosebud');
+		$learnmode = $request->query->has('oefenen');
+		$groep = $this->getVerticale($request) ?? $this->getLichting($request);
 		if ($groep instanceof Verticale) {
 			$titel = $groep->naam . ' verticale ledenmemory' . ($learnmode ? ' (oefenen)' : '');
-		} else if ($groep instanceof Lichting) {
+		} elseif ($groep instanceof Lichting) {
 			$titel = $groep->lidjaar . ' lichting ledenmemory' . ($learnmode ? ' (oefenen)' : '');
-		}
-		else {
+		} else {
 			throw new CsrGebruikerException("Geen geldige groep");
 		}
-		if ($groep instanceof AbstractGroep) {
+		if ($groep instanceof Groep) {
 			foreach ($groep->getLeden() as $lid) {
 				$profiel = ProfielRepository::get($lid->uid);
 				if (in_array($profiel->status, $lidstatus)) {
@@ -62,9 +84,7 @@ class LedenMemoryController {
 			}
 		}
 
-
-
-		return view('ledenmemory', [
+		return $this->render('ledenmemory.html.twig', [
 			'titel' => $titel,
 			'groep' => $groep,
 			'cheat' => $cheat,
@@ -73,6 +93,52 @@ class LedenMemoryController {
 		]);
 	}
 
+	/**
+	 * @param Request $request
+	 * @return Verticale|null
+	 * @throws NonUniqueResultException
+	 */
+	private function getVerticale(Request $request): ?Verticale
+	{
+		$v = $request->query->get('verticale');
+		if (!$v) {
+			return null;
+		}
+		$verticale = false;
+		if (strlen($v) == 1) {
+			$verticale = $this->verticalenRepository->get($v);
+		}
+		if (!$verticale) {
+			$verticale = $this->verticalenRepository->createQueryBuilder('v')
+				->where('v.naam LIKE :naam')
+				->setParameter('naam', sql_contains($v))
+				->setMaxResults(1)
+				->getQuery()->getOneOrNullResult();
+		}
+		return $verticale ? $verticale : null;
+	}
+
+	/**
+	 * @param Request $request
+	 * @return Groep|null
+	 */
+	private function getLichting(Request $request) {
+		$l = $request->query->getInt('lichting');
+		$min = LichtingenRepository::getOudsteLidjaar();
+		$max = LichtingenRepository::getJongsteLidjaar();
+
+		if ($l < $min || $l > $max) {
+			$l = $max;
+		}
+
+		return $this->lichtingenRepository->get($l);
+	}
+
+	/**
+	 * @return JsonResponse
+	 * @Route("/leden/memoryscore", methods={"POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
 	public function memoryscore() {
 		$score = $this->ledenMemoryScoresModel->nieuw();
 		$form = new LedenMemoryScoreForm($score);
@@ -82,19 +148,22 @@ class LedenMemoryController {
 		return new JsonResponse($score);
 	}
 
-	public function memoryscores($groep = null) {
-		$parts = explode('@', $groep);
+	/**
+	 * @param string $groepUuid
+	 * @return LedenMemoryScoreResponse
+	 * @Route("/leden/memoryscores/{groep}", methods={"POST"})
+	 * @Auth(P_OUDLEDEN_READ)
+	 */
+	public function memoryscores($groepUuid = null) {
+		$parts = explode('@', $groepUuid);
 		if (isset($parts[0], $parts[1])) {
-			switch ($parts[1]) {
-				case 'verticale.csrdelft.nl':
-					$groep = $this->verticalenModel->retrieveByUUID($groep);
-					break;
-				case 'lichting.csrdelft.nl':
-					$groep = LichtingenModel::instance()->get($parts[0]);
-					break;
+			if ($parts[1] == 'verticale.csrdelft.nl') {
+				$groep = $this->verticalenRepository->retrieveByUUID($groepUuid);
+			} elseif ($parts[1] == 'lichting.csrdelft.nl') {
+				$groep = $this->lichtingenRepository->get($parts[0]);
 			}
 		}
-		if ($groep) {
+		if (isset($groep)) {
 			$data = $this->ledenMemoryScoresModel->getGroepTopScores($groep);
 		} else {
 			$data = $this->ledenMemoryScoresModel->getAllTopScores();
@@ -102,28 +171,30 @@ class LedenMemoryController {
 		return new LedenMemoryScoreResponse($data);
 	}
 
+	/**
+	 * @return Response
+	 * @Route("/leden/namen-leren", methods={"GET"})
+	 * @Auth(P_LEDEN_READ)
+	 */
 	public function namenleren() {
 		// Haal alle (adspirant-/gast-)leden op.
-		$toegestaan = implode(', ', array_map(function ($status) {
-			return "'{$status}'";
-		}, LidStatus::getLidLike()));
-		$profielen = $this->profielRepository->ormFind("status IN ({$toegestaan})");
+		$profielen = $this->profielRepository->findByLidStatus(LidStatus::getLidLike());
 
 		// Bouw infostructuur.
-		$leden = array_map(function($profiel) {
+		$leden = array_map(function ($profiel) {
 			/** @var $profiel Profiel */
 			return [
 				'uid' => $profiel->uid,
 				'voornaam' => $profiel->voornaam,
 				'tussenvoegsel' => $profiel->tussenvoegsel,
 				'achternaam' => $profiel->achternaam,
+				'postfix' => $profiel->postfix,
 				'lichting' => $profiel->lidjaar,
 				'verticale' => $profiel->verticale ? $profiel->getVerticale()->naam : 'Geen',
-				'geslacht' => $profiel->geslacht,
+				'geslacht' => $profiel->geslacht->getValue(),
 				'studie' => $profiel->studie,
 			];
-		}, array_filter($profielen, function($profiel) {
-			/** @var Profiel $profiel */
+		}, array_filter($profielen, function ($profiel) {
 			$path = $profiel->getPasfotoInternalPath();
 			return
 				is_zichtbaar($profiel, 'profielfoto', 'intern') &&
@@ -131,41 +202,6 @@ class LedenMemoryController {
 		}));
 
 		// Laad Vue app.
-		return view('namenleren', [
-			'leden' => json_encode($leden),
-		]);
-	}
-	/**
-	 * @return AbstractGroep|null
-	 */
-	private function getLichting()
-	{
-		$l = (int)filter_input(INPUT_GET, 'lichting', FILTER_SANITIZE_NUMBER_INT);
-		$min = LichtingenModel::getOudsteLidjaar();
-		$max = LichtingenModel::getJongsteLidjaar();
-		if ($l < $min OR $l > $max) {
-			$l = $max;
-		}
-		$lichting = LichtingenModel::instance()->get($l);
-		return $lichting ? $lichting : null;
-	}
-
-	/**
-	 * @return AbstractGroep|null
-	 */
-	private function getVerticale()
-	{
-		$v = filter_input(INPUT_GET, 'verticale', FILTER_SANITIZE_STRING);
-		if (!$v) {
-			return null;
-		}
-		$verticale = false;
-		if (strlen($v) == 1) {
-			$verticale = $this->verticalenModel->get($v);
-		}
-		if (!$verticale) {
-			$verticale = $this->verticalenModel->find('naam LIKE ?', array('%' . $v . '%'), null, null, 1)->fetch();
-		}
-		return $verticale ? $verticale : null;
+		return $this->render('namenleren.html.twig', ['leden' => json_encode($leden)]);
 	}
 }

@@ -1,0 +1,79 @@
+{% extends mag('P_LOGGED_IN') ? 'base.html.twig' : 'extern/layout.html.twig' %}
+
+{% block styles %}
+	{% if not mag('P_LOGGED_IN') %}
+		{{ css_asset('extern') }}
+		{{ css_asset('extern-fotoalbum') }}
+	{% endif %}
+{% endblock %}
+
+{% block titel %}{{ album.dirname | title }}{% endblock %}
+
+{% block breadcrumbs %}
+	<ol class="breadcrumb">
+		{{ breadcrumbs | raw }}
+	</ol>
+{% endblock %}
+
+{% block content %}
+	<div class="float-end">
+		{% if album.subdir and album.magToevoegen %}
+			<a class="btn" href="{{ url('csrdelft_fotoalbum_uploaden', {dir: album.subdir}) }}">
+				{{ icon('picture_add') }} Toevoegen
+			</a>
+			<a class="btn post popup" href="{{ url('csrdelft_fotoalbum_toevoegen', {dir: album.subdir}) }}">
+				{{ icon('folder_add') }} Nieuw album
+			</a>
+		{% endif %}
+		{% if album.subdir and album.magAanpassen %}
+			<a href="{{ url('csrdelft_fotoalbum_hernoemen', {dir: album.subdir}) }}" class="btn post prompt redirect"
+				 title="Fotoalbum hernoemen"
+				 data="naam={{ album.dirname | title }}">
+				{{ icon('pencil') }} Naam wijzigen
+			</a>
+			{% if album.empty %}
+				<a href="{{ url('csrdelft_fotoalbum_verwijderen', {dir: album.subdir}) }}" class="btn post confirm redirect"
+					 title="Fotoalbum verwijderen">{{ icon('cross') }} Verwijderen</a>
+			{% endif %}
+			<a class="btn popup confirm" href="{{ url('csrdelft_fotoalbum_verwerken', {dir: album.subdir}) }}"
+				 title="Fotoalbum verwerken (dit kan even duren). Verwijder magick-* files in /tmp handmatig bij timeout!">
+				{{ icon('application_view_gallery') }} Verwerken
+			</a>
+		{% endif %}
+		{% if mag('P_LOGGED_IN') %}
+			{% if album.fotos and album.subdir %}
+				<a class="btn" href="{{ url('csrdelft_fotoalbum_downloaden', {dir: album.subdir}) }}"
+					 title="Download als TAR-bestand">{{ icon('picture_save') }} Download album</a>
+			{% endif %}
+		{% endif %}
+	</div>
+	<h1 class="inline">{{ album.dirname | title }}</h1>
+	{% if album.fotos %}
+		<div class="fotoalbum disable-swipe"
+				 data-fotos="{{ album.albumArrayRecursive | json_encode | escape }}"
+				 data-is-logged-in="{{ mag('P_LOGGED_IN') | json_encode }}"
+				 data-mag-aanpassen="{{ album.magAanpassen | json_encode }}"
+				 data-root="{{ url('csrdelft_fotoalbum_bekijken') }}"
+				 data-slideshow-interval="{{ instelling('fotoalbum', 'slideshow_interval') }}">
+		</div>
+	{% else %}
+		<div class="subalbums">
+			{% for subAlbum in album.subalbums %}
+				<div class="subalbum">
+					<div class="subalbum-cover">
+						{% for index, cover in subAlbum.coverurls %}
+							<a class="img{{ index }}" href="{{ subAlbum.url }}#{{ cover | replace(['_thumbs/', '']) }}">
+								<img src="{{ cover }}" alt="{{ cover }}"/>
+							</a>
+						{% endfor %}
+					</div>
+					<a href="{{ subAlbum.url }}">
+						<div class="album-description">
+							<h4 class="subalbumname">{{ subAlbum.dirname | title }}</h4>
+						</div>
+					</a>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+{% endblock %}

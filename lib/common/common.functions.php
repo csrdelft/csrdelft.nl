@@ -1,46 +1,51 @@
 <?php
 
-# C.S.R. Delft | pubcie@csrdelft.nl
-# -------------------------------------------------------------------
-# common.functions.php
-# -------------------------------------------------------------------
+// C.S.R. Delft | pubcie@csrdelft.nl
+// -------------------------------------------------------------------
+// common.functions.php
+// -------------------------------------------------------------------
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\instellingen\InstellingenRepository;
-use CsrDelft\model\instellingen\LidInstellingenModel;
-use CsrDelft\model\security\LoginModel;
-use CsrDelft\Orm\Persistence\Database;
-use CsrDelft\Orm\Persistence\DatabaseAdmin;
+use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\instellingen\LidToestemmingRepository;
 use CsrDelft\service\CsrfService;
+use CsrDelft\service\security\LoginService;
+use CsrDelft\service\security\SuService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\Icon;
 
-define('DATE_FORMAT', 'Y-m-d');
-define('DATETIME_FORMAT', 'Y-m-d H:i:s');
+define('LONG_DATE_FORMAT', 'EE d MMM'); // Ma 3 Jan
+define('DATE_FORMAT', 'y-MM-dd');
+define('DATETIME_FORMAT', 'y-MM-dd HH:mm:ss');
+define('TIME_FORMAT', 'HH:mm');
 
-/**
- * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
- * @param string $haystack
- * @param string $needle
- *
- * @return boolean
- */
-function startsWith($haystack, $needle) {
-	return strval($needle) === "" || strpos($haystack, strval($needle)) === 0;
+if (!function_exists('str_starts_with')) {
+	/**
+	 * @param string $haystack
+	 * @param string $needle
+	 *
+	 * @return boolean
+	 */
+	function str_starts_with($haystack, $needle)
+	{
+		return (string)$needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0;
+	}
 }
 
-/**
- * @source http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions
- * @param string $haystack
- * @param string $needle
- *
- * @return boolean
- */
-function endsWith($haystack, $needle) {
-	return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+if (!function_exists('str_ends_with')) {
+	/**
+	 * @param string $haystack
+	 * @param string $needle
+	 *
+	 * @return boolean
+	 */
+	function str_ends_with($haystack, $needle)
+	{
+		return $needle === "" || substr($haystack, -strlen($needle)) === (string)$needle;
+	}
 }
 
 /**
@@ -83,7 +88,15 @@ function group_by($prop, $in, $del = true) {
 	$del &= is_array($in);
 	$out = array();
 	foreach ($in as $i => $obj) {
-		$out[$obj->$prop][] = $obj; // add to array
+		if (property_exists($obj, $prop)) {
+			$key = $obj->$prop;
+		} elseif (method_exists($obj, $prop)) {
+			$key = $obj->$prop();
+		} else {
+			throw new Exception("Veld bestaat niet");
+		}
+
+		$out[$key][] = $obj; // add to array
 		if ($del) {
 			unset($in[$i]);
 		}
@@ -113,58 +126,35 @@ function group_by_distinct($prop, $in, $del = true) {
 }
 
 /**
- * Set cookie with token to automatically login.
- *
- * @param string $token
- */
-function setRememberCookie($token) {
-	if ($token == null) {
-		unset($_COOKIE['remember']);
-		setcookie('remember', null, -1, '/', CSR_DOMAIN, FORCE_HTTPS, true);
-	} else {
-		setcookie('remember', $token, time() + (int)instelling('beveiliging', 'remember_login_seconds'), '/', CSR_DOMAIN, FORCE_HTTPS, true);
-	}
-}
-
-/**
- * @return int
- */
-function getSessionMaxLifeTime() {
-	$lifetime = (int)instelling('beveiliging', 'session_lifetime_seconds');
-	// Sync lifetime of FS based PHP session with DB based C.S.R. session
-	$gc = (int)ini_get('session.gc_maxlifetime');
-	if ($gc > 0 && $gc < $lifetime) {
-		$lifetime = $gc;
-	}
-	return $lifetime;
-}
-
-/**
  * Invokes a client page (re)load the url.
  *
  * @param string $url
- * @param boolean $refresh allow a refresh; redirect to CSR_ROOT otherwise
+ * @param boolean $refresh allow a refresh; redirect to / otherwise
+ * @deprecated Gebruik redirect in de controller
  */
 function redirect($url = null, $refresh = true) {
-	if (empty($url) || $url === null) {
-		$url = REQUEST_URI;
+	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
+	if (empty($url)) {
+		$url = $request->getRequestUri();
 	}
-	if (!$refresh && $url == REQUEST_URI) {
-		$url = CSR_ROOT;
+	if (!$refresh && $url == $request->getRequestUri()) {
+		$url = $request->getSchemeAndHttpHost();
 	}
-	if (!startsWith($url, CSR_ROOT)) {
+	if (!str_starts_with($url, $request->getSchemeAndHttpHost())) {
 		if (preg_match("/^[?#\/]/", $url) === 1) {
-			$url = CSR_ROOT . $url;
+			$url = $request->getSchemeAndHttpHost() . $url;
 		} else {
-			$url = CSR_ROOT;
+			$url = $request->getSchemeAndHttpHost();
 		}
 	}
 	header('location: ' . $url);
 	exit;
 }
 
-function redirect_via_login($url) {
-	redirect(CSR_ROOT . "/login?redirect=" . urlencode($url));
+function getCsrRoot() {
+	$request = ContainerFacade::getContainer()->get('request_stack')->getCurrentRequest();
+
+	return $request->getSchemeAndHttpHost();
 }
 
 /**
@@ -232,23 +222,25 @@ function crypto_rand_secure($min, $max) {
 }
 
 /**
- * @param $date
- * @param string $format
- *
- * @return bool
- */
-function valid_date($date, $format = 'Y-m-d H:i:s') {
-	$d = DateTime::createFromFormat($format, $date);
-	return $d && $d->format($format) == $date;
-}
-
-/**
  * @param $name string
  *
  * @return bool
  */
 function valid_filename($name) {
 	return preg_match('/^(?:[a-z0-9 \-_()éê]|\.(?!\.))+$/iD', $name);
+}
+
+/**
+ * Remove unsafe characters from filename
+ * @param $name string
+ *
+ * @return bool
+ */
+function filter_filename($name) {
+	//Remove dots in front of filename to prevent directory traversal
+	$name = ltrim($name, ".");
+
+	return preg_replace('/[^a-z0-9 \-_()éê\.]/i', ' ', $name);
 }
 
 /**
@@ -279,9 +271,9 @@ function url_like($url) {
 
 function external_url($url, $label) {
 	$url = filter_var($url, FILTER_SANITIZE_URL);
-	if ($url && (url_like($url) || url_like(CSR_ROOT . $url))) {
-		if (startsWith($url, 'http://') || startsWith($url, 'https://')) {
-			$extern = 'target="_blank"';
+	if ($url && (url_like($url) || url_like(getCsrRoot() . $url))) {
+		if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+			$extern = 'target="_blank" rel="noopener"';
 		} else {
 			$extern = '';
 		}
@@ -300,6 +292,14 @@ function isSyrinx() {
 	return 'syrinx' === php_uname('n');
 }
 
+function isCli() {
+	return php_sapi_name() == 'cli' && $_SERVER['APP_ENV'] != 'test';
+}
+
+function isCi() {
+	return getenv('CI');
+}
+
 /**
  * @param int $timestamp optional
  *
@@ -313,44 +313,14 @@ function getDateTime($timestamp = null) {
 }
 
 /**
- * @param int $timestamp
- *
- * @return string aangepast ISO-8601 weeknummer met zondag als eerste dag van de week
+ * @param string $date
+ * @param string $format
+ * @return true als huidige datum & tijd voorbij gegeven datum en tijd zijn
  */
-function getWeekNumber($timestamp) {
-	if (date('w', $timestamp) == 0) {
-		return date('W', strtotime('+1 day', $timestamp));
-	} else {
-		return date('W', $timestamp);
-	}
-}
-
-/**
- * @param string $datum moet beginnen met 'yyyy-mm-dd' (wat daarna komt maakt niet uit)
- *
- * @return boolean true als $datum geldig is volgens checkdate(); false otherwise
- */
-function isGeldigeDatum($datum) {
-	// De string opdelen en checken of er genoeg delen zijn.
-	$delen = explode('-', $datum);
-	if (count($delen) < 3) {
-		return false;
-	}
-	// Checken of we geldige strings hebben, voordat we ze casten naar ints.
-	$jaar = $delen[0];
-	if (!is_numeric($jaar) || strlen($jaar) != 4) {
-		return false;
-	}
-	$maand = $delen[1];
-	if (!is_numeric($maand) || strlen($maand) != 2) {
-		return false;
-	}
-	$dag = substr($delen[2], 0, 2); // Alleen de eerste twee karakters pakken.
-	if (!is_numeric($dag) || strlen($dag) != 2) {
-		return false;
-	}
-	// De strings casten naar ints en de datum laten checken.
-	return checkdate((int)$maand, (int)$dag, (int)$jaar);
+function isDatumVoorbij(string $date, $format = 'Y-m-d H:i:s') {
+	$date = date_create_immutable_from_format($format, $date);
+	$now = date_create_immutable();
+	return $now >= $date;
 }
 
 /**
@@ -360,26 +330,9 @@ function isGeldigeDatum($datum) {
  * @param string $cssID
  */
 function debugprint($sString, $cssID = 'pubcie_debug') {
-	if (DEBUG || LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued()) {
+	if (DEBUG || LoginService::mag(P_ADMIN) || ContainerFacade::getContainer()->get(SuService::class)->isSued()) {
 		echo '<pre class="' . $cssID . '">' . print_r($sString, true) . '</pre>';
 	}
-}
-
-function reldate($datum) {
-	if ($datum instanceof DateTime) {
-		$moment = $datum->getTimestamp();
-	} else {
-		$moment = strtotime($datum);
-	}
-
-	if (date('Y-m-d') == date('Y-m-d', $moment)) {
-		$return = 'vandaag om ' . strftime('%H:%M', $moment);
-	} elseif (date('Y-m-d', $moment) == date('Y-m-d', strtotime('1 day ago'))) {
-		$return = 'gisteren om ' . strftime('%H:%M', $moment);
-	} else {
-		$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
-	}
-	return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
 }
 
 /**
@@ -536,46 +489,6 @@ function convertPHPSizeToBytes($sSize) {
 
 function getMaximumFileUploadSize() {
 	return min(convertPHPSizeToBytes(ini_get('post_max_size')), convertPHPSizeToBytes(ini_get('upload_max_filesize')));
-}
-
-function printDebug() {
-	$enableDebug = filter_input(INPUT_GET, 'debug') !== null;
-	if ($enableDebug && (DEBUG || (LoginModel::mag(P_ADMIN) || LoginModel::instance()->isSued()))) {
-		echo '<a id="mysql_debug_toggle" onclick="$(this).replaceWith($(\'#mysql_debug\').toggle());">DEBUG</a>';
-		echo '<div id="mysql_debug" class="pre">' . getDebug() . '</div>';
-	}
-}
-
-function getDebug(
-	$get = true, $post = true, $files = true, $cookie = true, $session = true, $server = true, $sql = true,
-	$sqltrace = true
-) {
-	$debug = '';
-	if ($get) {
-		$debug .= '<hr />GET<hr />' . htmlspecialchars(print_r($_GET, true));
-	}
-	if ($post) {
-		$debug .= '<hr />POST<hr />' . htmlspecialchars(print_r($_POST, true));
-	}
-	if ($files) {
-		$debug .= '<hr />FILES<hr />' . htmlspecialchars(print_r($_FILES, true));
-	}
-	if ($cookie) {
-		$debug .= '<hr />COOKIE<hr />' . htmlspecialchars(print_r($_COOKIE, true));
-	}
-	if ($session) {
-		$debug .= '<hr />SESSION<hr />' . htmlspecialchars(print_r($_SESSION, true));
-	}
-	if ($server) {
-		$debug .= '<hr />SERVER<hr />' . htmlspecialchars(print_r($_SERVER, true));
-	}
-	if ($sql) {
-		$debug .= '<hr />SQL<hr />' . htmlspecialchars(print_r(array("Admin" => DatabaseAdmin::instance()->getQueries(), "PDO" => Database::instance()->getQueries()), true));
-	}
-	if ($sqltrace) {
-		$debug .= '<hr />SQL-backtrace<hr />' . htmlspecialchars(print_r(Database::instance()->getTrace(), true));
-	}
-	return $debug;
 }
 
 /**
@@ -809,7 +722,13 @@ function curl_request($url, $options = []) {
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt_array($curl, $options);
-	return curl_exec($curl);
+	$resp = curl_exec($curl);
+
+	if ($resp == false) {
+		throw new Exception(curl_error($curl));
+	}
+
+	return $resp;
 }
 
 /**
@@ -836,7 +755,7 @@ function curl_follow_location($url, $options = []) {
 			return $location;
 		}
 
-		if (!startsWith($refreshUrl, 'http')) {
+		if (!str_starts_with($refreshUrl, 'http')) {
 			$refreshUrl = http_build_url($location, $refreshUrl, HTTP_URL_REPLACE | HTTP_URL_JOIN_PATH);
 		}
 
@@ -869,85 +788,97 @@ function checkMimetype($filename, $mime) {
 	$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
 	$mimeToExtension = [
-		'application/x-7z-compressed' => '7z',
-		'audio/x-aac' => 'aac',
-		'application/postscript' => ['ai', 'eps', 'ps'],
-		'audio/x-aiff' => 'aif',
-		'text/plain' => ['asc', 'ini', 'log', 'txt'],
-		'video/x-ms-asf' => 'asf',
 		'application/atom+xml' => 'atom',
-		'video/x-msvideo' => 'avi',
-		'image/bmp' => 'bmp',
-		'application/x-bzip2' => 'bz2',
+		'application/cu-seeme' => 'cu',
+		'application/epub+zip' => 'epub',
+		'application/force-download' => 'mp3',
+		'application/gzip' => 'gz',
+		'application/java-archive' => 'jar',
+		'application/json' => 'json',
+		'application/msword' => 'doc',
+		'application/octet-stream' => 'rar', '.kdbx',
+		'application/ogg' => 'ogx',
+		'application/pdf' => 'pdf',
 		'application/pkix-cert' => 'cer',
 		'application/pkix-crl' => 'crl',
-		'application/x-x509-ca-cert' => 'crt',
-		'text/css' => 'css',
-		'text/csv' => 'csv',
-		'application/cu-seeme' => 'cu',
-		'application/x-debian-package' => 'deb',
-		'application/msword' => 'doc',
-		'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
-		'application/x-dvi' => 'dvi',
-		'application/vnd.ms-fontobject' => 'eot',
-		'application/epub+zip' => 'epub',
-		'text/x-setext' => 'etx',
-		'audio/flac' => 'flac',
-		'video/x-flv' => 'flv',
-		'image/gif' => 'gif',
-		'application/gzip' => 'gz',
-		'text/html' => ['htm', 'html'],
-		'image/x-icon' => 'ico',
-		'text/calendar' => 'ics',
-		'application/x-iso9660-image' => 'iso',
-		'application/java-archive' => 'jar',
-		'image/jpeg' => ['jpe', 'jpeg', 'jpg'],
-		'text/javascript' => 'js',
-		'application/json' => 'json',
-		'application/x-latex' => 'latex',
-		'audio/mp4' => 'm4a',
-		'video/mp4' => ['m4v', 'mp4', 'mp4a', 'mp4v', 'mpg4'],
-		'audio/midi' => ['mid', 'midi'],
-		'video/quicktime' => ['mov', 'qt'],
-		'audio/mpeg' => 'mp3',
-		'audio/mp3' => 'mp3',
-		'video/mpeg' => ['mpe', 'mpeg', 'mpg'],
-		'audio/ogg' => ['oga', 'ogg', 'ogv'],
-		'application/ogg' => 'ogx',
-		'image/x-portable-bitmap' => 'pbm',
-		'application/pdf' => 'pdf',
-		'image/x-portable-graymap' => 'pgm',
-		'image/png' => 'png',
-		'image/x-portable-anymap' => 'pnm',
-		'image/x-portable-pixmap' => 'ppm',
-		'application/vnd.ms-powerpoint' => 'ppt',
-		'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'pptx',
-		'application/x-rar-compressed' => 'rar',
-		'image/x-cmu-raster' => 'ras',
+		'application/postscript' => ['ai', 'eps', 'ps'],
+		'application/rar' => 'rar',
+		'application/rar-x' => 'rar',
 		'application/rss+xml' => 'rss',
 		'application/rtf' => 'rtf',
-		'text/sgml' => ['sgm', 'sgml'],
-		'image/svg+xml' => 'svg',
+		'application/vnd.ms-excel' => 'xls',
+		'application/vnd.ms-fontobject' => 'eot',
+		'application/vnd.ms-powerpoint' => 'ppt',
+		'application/vnd.openxmlformats-officedocument.pres' => 'pptx',
+		'application/vnd.openxmlformats-officedocument.presentationml.presentation' => 'pptx',
+		'application/vnd.openxmlformats-officedocument.spre' => 'xlsx',
+		'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+		'application/vnd.openxmlformats-officedocument.word' => 'docx',
+		'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+		'application/wsdl+xml' => 'wsdl',
+		'application/x-7z-compressed' => '7z',
+		'application/x-bittorrent' => 'torrent',
+		'application/x-bzip2' => 'bz2',
+		'application/x-debian-package' => 'deb',
+		'application/x-dvi' => 'dvi',
+		'application/x-font-ttf' => 'ttf',
+		'application/x-font-woff' => 'woff',
+		'application/x-iso9660-image' => 'iso',
+		'application/x-latex' => 'latex',
+		'application/x-pdf' => 'pdf',
+		'application/x-rar' => 'rar',
+		'application/x-rar-compressed' => 'rar',
 		'application/x-shockwave-flash' => 'swf',
 		'application/x-tar' => 'tar',
-		'image/tiff' => ['tif', 'tiff'],
-		'application/x-bittorrent' => 'torrent',
-		'application/x-font-ttf' => 'ttf',
-		'audio/x-wav' => 'wav',
-		'video/webm' => 'webm',
-		'audio/x-ms-wma' => 'wma',
-		'video/x-ms-wmv' => 'wmv',
-		'application/x-font-woff' => 'woff',
-		'application/wsdl+xml' => 'wsdl',
-		'image/x-xbitmap' => 'xbm',
-		'application/vnd.ms-excel' => 'xls',
-		'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+		'application/x-x509-ca-cert' => 'crt',
+		'application/x-zip-compressed' => 'zip',
 		'application/xml' => 'xml',
+		'application/zip' => 'zip',
+		'audio/flac' => 'flac',
+		'audio/midi' => ['mid', 'midi'],
+		'audio/mp3' => 'mp3',
+		'audio/mp4' => 'm4a',
+		'audio/mpeg' => 'mp3',
+		'audio/ogg' => ['oga', 'ogg', 'ogv'],
+		'audio/x-aac' => 'aac',
+		'audio/x-aiff' => 'aif',
+		'audio/x-ms-wma' => 'wma',
+		'audio/x-wav' => 'wav',
+		'image/bmp' => 'bmp',
+		'image/gif' => 'gif',
+		'image/jpeg' => ['jpe', 'jpeg', 'jpg'],
+		'image/png' => 'png',
+		'image/svg+xml' => 'svg',
+		'image/tiff' => ['tif', 'tiff'],
+		'image/x-cmu-raster' => 'ras',
+		'image/x-icon' => 'ico',
+		'image/x-portable-anymap' => 'pnm',
+		'image/x-portable-bitmap' => 'pbm',
+		'image/x-portable-graymap' => 'pgm',
+		'image/x-portable-pixmap' => 'ppm',
+		'image/x-wmf' => 'wmf',
+		'image/x-xbitmap' => 'xbm',
 		'image/x-xpixmap' => 'xpm',
 		'image/x-xwindowdump' => 'xwd',
+		'text/calendar' => 'ics',
+		'text/css' => 'css',
+		'text/csv' => 'csv',
+		'text/html' => ['htm', 'html'],
+		'text/javascript' => 'js',
+		'text/pdf' => 'pdf',
+		'text/plain' => ['asc', 'ini', 'log', 'txt'],
+		'text/rtf' => 'rtf',
+		'text/sgml' => ['sgm', 'sgml'],
+		'text/x-setext' => 'etx',
 		'text/yaml' => ['yaml', 'yml'],
-		'application/zip' => 'zip',
-		'application/x-zip-compressed' => 'zip',
+		'video/mp4' => ['m4v', 'mp4', 'mp4a', 'mp4v', 'mpg4'],
+		'video/mpeg' => ['mpe', 'mpeg', 'mpg'],
+		'video/quicktime' => ['mov', 'qt'],
+		'video/webm' => 'webm',
+		'video/x-flv' => 'flv',
+		'video/x-ms-asf' => 'asf',
+		'video/x-ms-wmv' => 'wmv',
+		'video/x-msvideo' => 'avi',
 	];
 
 	$expectedExtension = $mimeToExtension[$mime] ?? null;
@@ -966,24 +897,12 @@ function checkMimetype($filename, $mime) {
 /**
  * Mag de op dit moment ingelogde gebruiker $permissie?
  *
- * Korte methode voor gebruik in Blade templates.
- *
  * @param string $permission
  * @param array|null $allowedAuthenticationMethods
  * @return bool
  */
 function mag($permission, array $allowedAuthenticationMethods = null) {
-	return LoginModel::mag($permission, $allowedAuthenticationMethods);
-}
-
-/**
- * Is $uid de op dit moment ingelogde account?
- *
- * @param string $uid
- * @return bool
- */
-function is_ingelogd_account($uid) {
-	return LoginModel::getUid() == $uid;
+	return LoginService::mag($permission, $allowedAuthenticationMethods);
 }
 
 /**
@@ -1009,7 +928,7 @@ function is_zichtbaar($profiel, $key, $cat = 'profiel', $uitzondering = P_LEDEN_
 }
 
 function lid_instelling($module, $key) {
-	return LidInstellingenModel::instance()->getValue($module, $key);
+	return ContainerFacade::getContainer()->get(LidInstellingenRepository::class)->getValue($module, $key);
 }
 
 function instelling($module, $key) {
@@ -1032,11 +951,11 @@ function safe_combine_path($folder, $subpath) {
 		return null;
 	}
 	$combined = $folder;
-	if (!endsWith($combined, '/')) {
+	if (!str_ends_with($combined, '/')) {
 		$combined .= '/';
 	}
 	$combined .= $subpath;
-	if (!startsWith(realpath($combined), realpath($folder))) {
+	if (!str_starts_with(realpath($combined), realpath($folder))) {
 		return null;
 	}
 	return $combined;
@@ -1078,17 +997,6 @@ $configCache = [];
 
 function sql_contains($field) {
 	return "%$field%";
-}
-
-function printCsrfField($path = '', $method = 'post') {
-	$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
-	(new CsrfField($csrfService->generateToken($path, $method)))->view();
-}
-
-function csrfMetaTag() {
-	$csrfService = ContainerFacade::getContainer()->get(CsrfService::class);
-	$token = $csrfService->generateToken('', 'POST');
-	return '<meta property="X-CSRF-ID" content="'. htmlentities($token->getId()) .'" /><meta property="X-CSRF-VALUE" content="'. htmlentities($token->getValue()) .'" />';
 }
 
 if (!function_exists('array_key_first')) {
@@ -1157,7 +1065,7 @@ function join_paths(...$args) {
  * @return bool
  */
 function path_valid($prefix, $path) {
-	return startsWith(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
+	return str_starts_with(realpathunix(join_paths($prefix, $path)), realpathunix($prefix));
 }
 
 function triggerExceptionAsWarning(Exception $e) {
@@ -1175,4 +1083,51 @@ function as_array($value) {
 		return iterator_to_array($value);
 	}
 	throw new CsrException("Geen array of iterable");
+}
+
+/**
+ * Get the short name for a class
+ *
+ * @param object|string $class
+ *
+ * @return string
+ */
+function short_class($class) {
+	return (new \ReflectionClass($class))->getShortName();
+}
+
+// Base64url functies van https://www.php.net/manual/en/function.base64-encode.php#103849
+function base64url_encode($data) {
+  return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+  return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+}
+
+/**
+ * Maak een ReflectionMethod voor een callable.
+ *
+ * @param callable $fn
+ * @return ReflectionMethod
+ * @throws ReflectionException
+ */
+function createReflectionMethod(callable $fn) {
+	if (is_callable($fn)) {
+		if (is_array($fn)) {
+			if (is_object($fn[0])) {
+				return new ReflectionMethod(\get_class($fn[0]), $fn[1]);
+			} elseif (is_string($fn[0])) {
+				return new ReflectionMethod($fn[0], $fn[1]);
+			}
+		} elseif (is_string($fn)) {
+			if (strpos($fn, '::') !== false) {
+				return new ReflectionMethod($fn);
+			}
+		} elseif (is_object($fn)) {
+			return new ReflectionMethod(\get_class($fn), '__invoke');
+		}
+	}
+
+	throw new InvalidArgumentException('Niet een callable');
 }
