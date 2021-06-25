@@ -14,7 +14,6 @@
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\ShutdownHandler;
 use CsrDelft\Kernel;
-use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\AccountRepository;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,8 +103,6 @@ if (!isCli()) {
 	ini_set('xdebug.max_nesting_level', 2000);
 	ini_set('intl.default_locale', 'nl');
 	session_set_cookie_params(0, '/', '', FORCE_HTTPS, true);
-
-	$container->get(LogRepository::class)->log();
 }
 
 return $kernel;
