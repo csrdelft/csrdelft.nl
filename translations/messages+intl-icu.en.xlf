@@ -389,6 +389,25 @@
 						<a href="{lidworden}">hier</a>
 						Make sure to keep the week of 23 - 29 August free, because that week is dedicated to the introduction week of C.S.R.]]></target>
       </trans-unit>
+      <trans-unit id="JEFxwai" resname="Ik wil lid worden!">
+        <source>Ik wil lid worden!</source>
+        <target>__Ik wil lid worden!</target>
+      </trans-unit>
+      <trans-unit id="gBWSo7a" resname="Ik wil meedoen met een meeloopdag!">
+        <source>Ik wil meedoen met een meeloopdag!</source>
+        <target>__Ik wil meedoen met een meeloopdag!</target>
+      </trans-unit>
+      <trans-unit id="Ba0TIjG" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;(ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 23 t/m 29 augustus, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
+        <source>Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek
+							(ook wel de kennismakingstijd, afgekort KMT).
+								De novitiaatsweek vindt plaats van 23 t/m 29 augustus, dus zorg dat je die week vrijhoudt!
+								In deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens
+							de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</source>
+        <target>__When you want to become member of C.S.R. you'll be going through the "novitiaatsweek"
+							This week is from the 23rd of august to the 29th of august, so make you to save those dates!
+							In this week you'll be getting to know the association and its members.
+							The activities during this week will be in a respectful and safe way.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
