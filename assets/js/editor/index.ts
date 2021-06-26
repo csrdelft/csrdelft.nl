@@ -12,6 +12,8 @@ import {trackChangesPlugin} from "./plugin/track-changes";
 import {lidHintPlugin} from "./plugin/lid-hint";
 import {imageRemovePlugin, imageUploadPlugin} from "./plugin/image-upload";
 
+import "./citeer"
+
 declare global {
 	interface Window {
 		// Huidige editor, referentie voor citeren enzo
