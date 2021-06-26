@@ -18,7 +18,7 @@
 			<input type="hidden" name="uuid" value="{{ uuid }}">
 			{{ csrfField() }}
 			{% if app.debug %}
-				<a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize') }}?uuid={{ uuid }}">
+				<a href="{{ url('csrdelft_security_remotelogin_remoteloginauthorize', {uuid: uuid}) }}">
 					<img src="{{ url('csrdelft_security_remotelogin_remoteloginqr') }}?uuid={{ uuid }}"/>
 				</a>
 			{% else %}
