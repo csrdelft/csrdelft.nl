@@ -15,7 +15,7 @@ class BbOfftopic extends BbTag {
 	}
 
 	public function render() {
-		return '<span class="offtopic bb-tag-offtopic">' . $this->getContent() . '</span>';
+		return '<span data-offtopic class="offtopic bb-tag-offtopic">' . $this->getContent() . '</span>';
 	}
 
 	/**

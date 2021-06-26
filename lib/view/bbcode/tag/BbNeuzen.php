@@ -22,7 +22,7 @@ class BbNeuzen extends BbTag {
 			$content = str_replace('o', $neus, $content);
 		}
 
-		return $content;
+		return '<pan data-neuzen>' . $content . '</span>';
 	}
 
 	public function parse($arguments = []) {
