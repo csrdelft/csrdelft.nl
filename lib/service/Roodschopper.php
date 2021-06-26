@@ -166,6 +166,5 @@ h.t. Fiscus.';
 			}
 			ContainerFacade::getContainer()->get(MailService::class)->send($mail);
 		}
-		exit;
 	}
 }
