@@ -1,16 +1,18 @@
 import {EditorState} from "prosemirror-state"
 import {EditorView} from "prosemirror-view"
-import {Node} from "prosemirror-model"
+import {DOMParser, Node, NodeType} from "prosemirror-model"
 import {EditorSchema, schema} from "./schema"
 import {exampleSetup} from "prosemirror-example-setup"
 import {buildMenuItems} from "./menu";
-import {htmlDecode} from "../lib/util";
+import {docReady, html, htmlDecode} from "../lib/util";
 import {bbPrompt} from "./bb-prompt";
 import ctx from "../ctx";
 import {placeholderPlugin} from "./plugin/placeholder";
 import {trackChangesPlugin} from "./plugin/track-changes";
 import {lidHintPlugin} from "./plugin/lid-hint";
 import {imageRemovePlugin, imageUploadPlugin} from "./plugin/image-upload";
+
+import "./citeer"
 
 declare global {
 	interface Window {
