@@ -1,5 +1,6 @@
 import {docReady, html} from "../lib/util";
 import {NodeType, DOMParser} from "prosemirror-model";
+import {createPopper} from "@popperjs/core";
 
 const CITEER_DIV_ID = 'citeerDiv'
 
@@ -36,7 +37,7 @@ const getCiteerDiv = () => {
 	const citeerDiv = html`
 		<div
 			id="${CITEER_DIV_ID}"
-			class="card position-fixed translate-middle-x"
+			class="card position-absolute"
 			style="display: none"
 		>
 			<button type="button" class="btn" data-selectie="">
@@ -81,18 +82,13 @@ const getCiteerDiv = () => {
  */
 const citeerSelectionHandler = () => {
 	const citeerDiv = getCiteerDiv()
-
-	const selectionBoundingRect = getSelectionBoundingRect();
-
 	const selectionInForumPost = getForumPost(window.getSelection());
 
-	if (selectionInForumPost) {
+	if (selectionInForumPost && !window.getSelection().isCollapsed) {
 		citeerDiv.style.display = "block";
 
-		citeerDiv.style.left =
-			selectionBoundingRect.x + selectionBoundingRect.width / 2 + "px";
-		citeerDiv.style.top =
-			selectionBoundingRect.y + selectionBoundingRect.height + "px";
+		const popper = createPopper({ getBoundingClientRect: getSelectionBoundingRect }, citeerDiv, {placement: 'bottom'})
+		popper.update()
 	} else {
 		citeerDiv.style.display = "none";
 	}
