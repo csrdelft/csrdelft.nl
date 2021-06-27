@@ -217,12 +217,11 @@
                   >
                 </div>
                 <div class="field">
-                  <input
+                  <money
                     v-model="regel.bedrag"
-                    v-input-mask
-                    data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'digits': 2, 'digitsOptional': false, 'placeholder': '0'"
-                    type="text"
-                  >
+                    v-money="money"
+                    style="text-align: right;"
+                  />
                 </div>
                 <div class="field">
                   <select v-model="regel.btw">
@@ -404,7 +403,7 @@ interface Regel {
 
 const legeRegel: () => Regel = () => ({
   omschrijving: '',
-  bedrag: null,
+  bedrag: 0,
   btw: '',
 });
 
@@ -446,6 +445,7 @@ export default class DeclaratieVue extends Vue {
   private bonUploaden = true;
   private uploading = false;
   private geselecteerdeBon = 0;
+  private money = { precision: 2, decimal: ',', thousands: ' ', prefix: '€ ' };
 
   private get heeftBonnen() {
     return this.declaratie.bonnen && this.declaratie.bonnen.length > 0;
@@ -577,6 +577,7 @@ export default class DeclaratieVue extends Vue {
 
   input[type=text],
   input[type=date],
+  input[type=tel],
   select,
   textarea {
     border: 1px solid #868686;

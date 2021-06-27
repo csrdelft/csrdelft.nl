@@ -6159,6 +6159,7 @@ resolve@^1.9.0:
     ts-node: ^8.0.2
     tsconfig-paths: ^3.7.0
     typescript: ^4.1.3
+    v-money: ^0.8.1
     vue: ^2.6.12
     vue-class-component: ^6.3.2
     vue-eslint-parser: ^7.1.0
@@ -7086,6 +7087,13 @@ typescript@^4.1.3:
   bin:
     uuid: ./bin/uuid
   checksum: 1ce3f37e214d6d0dc94a6a9663a0365013ace66bc3fd5b203e6f5d2eeb978aaee1192367222386345d30b4c6a447928c501121aa84c637724bf105ef57284949
+  languageName: node
+  linkType: hard
+
+"v-money@npm:^0.8.1":
+  version: 0.8.1
+  resolution: "v-money@npm:0.8.1"
+  checksum: d8ac4fdca5983668d7fe0ca04482c37a5213ced1095c2d0bc8f72eac1f4e5a1dac8039ef01db8952941a414c51e0f10ec93fb7999e45f0df965b8f0f32677cad
   languageName: node
   linkType: hard
 
