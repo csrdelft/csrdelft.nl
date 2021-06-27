@@ -19,6 +19,7 @@ class CheckboxField extends InputField {
 	public $label;
 
 	public function __construct($name, $value, $description, $label = null, $model = null) {
+		$this->css_classes = ['FormElement'];
 		parent::__construct($name, $value, $description, $model);
 		$this->label = $label;
 	}

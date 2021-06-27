@@ -558,6 +558,9 @@
     "symfony/panther": {
         "version": "v0.8.0"
     },
+    "symfony/password-hasher": {
+        "version": "v5.3.2"
+    },
     "symfony/phpunit-bridge": {
         "version": "4.3",
         "recipe": {
@@ -599,6 +602,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.17.1"
+    },
+    "symfony/polyfill-php81": {
+        "version": "v1.23.0"
     },
     "symfony/polyfill-uuid": {
         "version": "v1.18.1"

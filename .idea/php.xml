@@ -188,6 +188,9 @@
       <path value="$PROJECT_DIR$/vendor/weirdan/doctrine-psalm-plugin" />
       <path value="$PROJECT_DIR$/vendor/psalm/plugin-symfony" />
       <path value="$PROJECT_DIR$/vendor/phpstan/phpstan" />
+      <path value="$PROJECT_DIR$/vendor/nelmio/cors-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php81" />
+      <path value="$PROJECT_DIR$/vendor/symfony/password-hasher" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3">

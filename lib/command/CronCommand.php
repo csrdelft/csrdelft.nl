@@ -6,7 +6,6 @@ use CsrDelft\repository\DebugLogRepository;
 use CsrDelft\repository\forum\ForumCategorieRepository;
 use CsrDelft\repository\instellingen\InstellingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
-use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\security\OneTimeTokensRepository;
 use CsrDelft\service\corvee\CorveeHerinneringService;
 use Exception;
@@ -23,10 +22,6 @@ class CronCommand extends Command {
 	 * @var DebugLogRepository
 	 */
 	private $debugLogRepository;
-	/**
-	 * @var LogRepository
-	 */
-	private $logRepository;
 	/**
 	 * @var OneTimeTokensRepository
 	 */
@@ -60,7 +55,6 @@ class CronCommand extends Command {
 	public function __construct(
 		PinTransactiesDownloadenCommand $pinTransactiesDownloadenCommand,
 		DebugLogRepository $debugLogRepository,
-		LogRepository $logRepository,
 		OneTimeTokensRepository $oneTimeTokensRepository,
 		InstellingenRepository $instellingenRepository,
 		LidInstellingenRepository $lidInstellingenRepository,
@@ -69,7 +63,6 @@ class CronCommand extends Command {
 	) {
 		parent::__construct(null);
 		$this->debugLogRepository = $debugLogRepository;
-		$this->logRepository = $logRepository;
 		$this->oneTimeTokensRepository = $oneTimeTokensRepository;
 		$this->instellingenRepository = $instellingenRepository;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
@@ -87,14 +80,6 @@ class CronCommand extends Command {
 		} catch (Exception $e) {
 			$output->writeln($e->getMessage());
 			$this->debugLogRepository->log('cron.php', 'debugLogRepository->opschonen', array(), $e);
-		}
-
-		$output->writeln("Log opschonen", OutputInterface::VERBOSITY_VERBOSE);
-		try {
-			$this->logRepository->opschonen();
-		} catch (Exception $e) {
-			$output->writeln($e->getMessage());
-			$this->debugLogRepository->log('cron.php', 'logRepository->opschonen', array(), $e);
 		}
 
 		$output->writeln("One time tokens opschonen", OutputInterface::VERBOSITY_VERBOSE);

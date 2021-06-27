@@ -8,7 +8,6 @@ use CsrDelft\common\LDAP;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\groepen\VerticalenRepository;
-use CsrDelft\repository\LogRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\repository\SavedQueryRepository;
 use CsrDelft\repository\security\AccountRepository;
@@ -36,29 +35,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ToolsController extends AbstractController
 {
-
-	/**
-	 * @param Request $request
-	 * @param LogRepository $logRepository
-	 * @return Response
-	 * @Route("/tools/stats", methods={"GET"})
-	 * @Auth(P_ADMIN)
-	 */
-	public function stats(Request $request, LogRepository $logRepository): Response
-	{
-		if ($request->query->has('uid')) {
-			$by = ['uid' => $request->query->get('uid')];
-		} elseif ($request->query->has('ip')) {
-			$by = ['ip' => $request->query->get('ip')];
-		} else {
-			$by = [];
-		}
-
-		$log = $logRepository->findBy($by, ['ID' => 'desc'], 30);
-
-		return $this->render('stats/stats.html.twig', ['log' => $log]);
-	}
-
 	/**
 	 * @param VerticalenRepository $verticalenRepository
 	 * @param ProfielRepository $profielRepository

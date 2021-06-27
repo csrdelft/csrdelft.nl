@@ -155,6 +155,11 @@ class Account implements UserInterface {
 		return $this->uid;
 	}
 
+	public function getUserIdentifier(): string
+	{
+		return $this->uid;
+	}
+
 	public $pass_plain;
 
 	public function eraseCredentials() {

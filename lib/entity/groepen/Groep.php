@@ -10,6 +10,7 @@ use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\entity\security\enum\AccessAction;
+use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
 use CsrDelft\repository\GroepRepository;
 use CsrDelft\service\security\LoginService;

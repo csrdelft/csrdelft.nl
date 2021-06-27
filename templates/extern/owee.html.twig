@@ -1,6 +1,6 @@
 {% extends 'extern/layout.html.twig' %}
 
-{% block titel %}Machtig mooi - OWee 2020{% endblock %}
+{% block titel %}Blik Vooruit - OWee 2021{% endblock %}
 
 {% block styles %}
 	{{ css_asset('extern') }}
@@ -18,11 +18,11 @@
 			</a>
 		</div>
 	</section>
-
+	<div style="color: #e8e8e8;">a</div>
 	<div class="owee-pagina">
 		<div class="bbl atl hero">
 			<div class="content">
-				<img src="{{ absolute_url('/images/owee/owee2020.svg') }}" alt="C.S.R. - Machtig Mooi">
+				<img src="{{ absolute_url('/images/owee/owee2021lg.svg') }}" alt="C.S.R. - Blik Vooruit">
 			</div>
 		</div>
 
@@ -38,10 +38,10 @@
 
 					<div class="mt-4">
 						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
-							{% trans %}Ik wil lid worden{% endtrans %}
+							{% trans %}Ik wil lid worden!{% endtrans %}
 						</a>
-						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">
-							{% trans %}Eerst een lid spreken{% endtrans %}
+						<a href="https://docs.google.com/forms/d/e/1FAIpQLSfzv3P2Fw-x4i10mAOcJbawXJw07mQ4XR4jCb9RLWCxGJN8ng/viewform?usp=send_form" class="cta primary">
+							{% trans %}Ik wil meedoen met een meeloopdag!{% endtrans %}
 						</a>
 					</div>
 				</div>
@@ -100,7 +100,7 @@
 				</div>
 				<div class="col-12 col-sm-6 col-md-4 mb-4">
 					<div class="iframe-container">
-						<iframe src="https://www.youtube-nocookie.com/embed/01kzRDhdcYw?hl=nl"
+						<iframe src="https://www.youtube.com/embed/mj8Zr3PFrPA"
 										allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 										allowfullscreen></iframe>
 					</div>
@@ -133,14 +133,14 @@
 		<a id="contact"></a>
 		<div class="content pt-4 pb-4">
 			<div class="row">
-				{# <div class="col-md-5 col-lg-4 mb-4 mb-md-0">
-					<a class="whatsapp" href="https://wa.me/31612345678" target="_blank" rel="noopener noreferrer">
-						<i class="fab fa-whatsapp me-3 me-md-0"></i>
-						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Persoon!</div>
-						<div class="persoon"></div>
-						<div class="cta">0612345678</div>
-					</a>
-				</div> #}
+{#				 <div class="col-md-5 col-lg-4 mb-4 mb-md-0">#}
+{#					<a class="whatsapp" href="https://wa.me/31612345678" target="_blank" rel="noopener noreferrer">#}
+{#						<i class="fab fa-whatsapp me-3 me-md-0"></i>#}
+{#						<div class="call mt-3 mb-3">Vragen?<br>App met <br class="d-none d-md-inline">Persoon!</div>#}
+{#						<div class="persoon"></div>#}
+{#						<div class="cta">0612345678</div>#}
+{#					</a>#}
+{#				</div>#}
 				<div class="{# col-md-7 col-lg-8 #}col-md-12">
 					<script type="text/javascript">
 						var captchaLoaded = false;
@@ -167,15 +167,9 @@
 					<form action="" class="formulieren" id="owee-form">
 						{{ csrfField() }}
 						<label for="lid-worden" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil </span>lid worden{% endtrans %}</label>
-						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden">
-						<label for="lid-spreken" class="owee">{% trans %}<span class="d-none d-sm-inline">Eerst een </span>lid spreken{% endtrans %}</label>
 						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken" checked>
 						<div class="interesseformulier">
-							<p class="lid-worden">{% trans %}De inschrijvingen voor het collegejaar 2020-2021 zijn helaas gesloten. Wil je volgend
-								collegejaar lid worden? Vul dan onderstaand formulier in en we nemen z.s.m. contact met je op.{% endtrans %}</p>
-							<p class="lid-spreken">{% trans %}Wil je meer weten over de vereniging? Een gesprek met een lid kan helpen, je kan al
-								je vragen kwijt en erachter komen of de vereniging bij jou past. Laat je gegevens hier achter, we zullen
-								dan zo snel mogelijk contact met je opnemen!{% endtrans %}</p>
+							<p class="lid-worden"></p>
 
 							<div id="melding"></div>
 							<div class="velden" id="formulierVelden">
@@ -190,10 +184,9 @@
 
 								<div class="field" id="captcha"></div>
 
-								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a
-										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
-										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>
-
+{#								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a#}
+{#										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"#}
+{#										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>#}
 								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
 								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
 							</div>
@@ -211,9 +204,9 @@
 					<div class="col-md-6 mb-4 mb-md-0">
 						<h2>{% trans %}Novitaatsweek{% endtrans %}</h2>
 						<p>{% trans %}Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek
-							(ook wel de kennismakingstijd, afgekort KMT). Deze tijd zal plaatsvinden
-							na de OWee, in deze week zal je elkaar,
-							de vereniging en haar leden leren kennen. De activiteiten die tijdens
+							(ook wel de kennismakingstijd, afgekort KMT).
+								De novitiaatsweek vindt plaats van 23 t/m 29 augustus, dus zorg dat je die week vrijhoudt!
+								In deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens
 							de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.{% endtrans %}</p>
 					</div>
 					<div class="col-md-6">
