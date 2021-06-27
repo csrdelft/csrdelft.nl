@@ -4426,16 +4426,16 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "mini-css-extract-plugin@npm:1.6.0"
+"mini-css-extract-plugin@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "mini-css-extract-plugin@npm:1.6.1"
   dependencies:
     loader-utils: ^2.0.0
     schema-utils: ^3.0.0
     webpack-sources: ^1.1.0
   peerDependencies:
     webpack: ^4.4.0 || ^5.0.0
-  checksum: c9c50bed4ffa0ce0099c26184ed6f5b8675be068252fb2a68b790d8afa58c896e0c36aae0e0601e5036fdc04ecad761e884ce4d27a75c8bd3fb69ff7b4c52f91
+  checksum: 34fe3c65953982b20e3fa87494e6d632f3730c1688664a474c3c1298da65910aa162c94a5ebe9351402afc20d2539052c5d93bfe88cbcf88c3b3172789689b0c
   languageName: node
   linkType: hard
 
@@ -6126,7 +6126,7 @@ resolve@^1.9.0:
     jqueryui: ^1.11.1
     jszip: ^3.1.5
     lightbox2: ^2.10.0
-    mini-css-extract-plugin: ^1.6.0
+    mini-css-extract-plugin: ^1.6.1
     moment: ^2.24.0
     moment-locales-webpack-plugin: ^1.2.0
     optimize-css-assets-webpack-plugin: ^5.0.1
