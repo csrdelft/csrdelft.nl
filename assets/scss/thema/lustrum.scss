@@ -5,6 +5,39 @@ $lustrum-kleur-goud: #deaf27;
 $lustrum-kleur-licht-goud: #f1c802;
 $lustrum-kleur-wit: #eeeeee;
 
+////////////////////////////////////////////////////
+// stek variables
+$zijbalk-bg: $lustrum-kleur-donker-rood;
+$zijbalk-border: $lustrum-kleur-goud;
+$zijbalk-kopje: $lustrum-kleur-licht-goud;
+
+$zijbalk-ishetal-nee: $lustrum-kleur-rood;
+$zijbalk-ishetal-ja: $lustrum-kleur-goud;
+
+
+
+//$primair-achtergrond: #b2d4f0;
+//$zijbalk-achtergrond: #486b87;
+//$secundaire-accenten-1: $lustrum-kleur-donker-rood;
+//$secundaire-accenten-2: #;
+//
+$primary: $lustrum-kleur-donker-rood;
+$secondary: $lustrum-kleur-rood;
+//
+//$body-bg: $primair-achtergrond;
+$body-color: #002e54;
+//
+//$footer-background: $primair-achtergrond;
+
+
+
+////////////////////////////////////////////////////
+// Eventueel aan te passen:
+//$forum-bericht0-bg: $body-bg !default;
+//$forum-bericht1-bg: darken($body-bg, 4%) !default;
+//$ongelezen-lijn: $yellow !default;
+//$navbar-dark-color: white;
+
 @font-face {
 	font-family: 'Orpheus Pro';
 	font-style: normal;
@@ -19,6 +52,26 @@ $headings-font-family: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-
 body {
 	background-color: $lustrum-kleur-rood;
 }
+
+//$footer-background: $lustrum-kleur-donker-rood;
+//.footer {
+//	color: $lustrum-kleur-goud;
+//
+//	h5{
+//		font-family: $headings-font-family;
+//		text-transform: uppercase;
+//		color: $lustrum-kleur-licht-goud;
+//	}
+//
+//	.link-secondary {
+//		color: $lustrum-kleur-goud;
+//	}
+//
+//
+//	img {
+//		filter: opacity(0.5) drop-shadow(0 0 0 blue);
+//	}
+//}
 
 #menu {
 	background: $lustrum-kleur-donker-rood;
@@ -35,12 +88,10 @@ body {
 
 #zijbalk .blok .zijbalk-kopje a {
 		font-family: $headings-font-family;
-		color: $lustrum-kleur-licht-goud;
 		text-transform: uppercase;
 }
 
 #zijbalk {
-	background-color: $lustrum-kleur-donker-rood;
 	.blok .item {
 		color: $lustrum-kleur-goud;
 		a {
@@ -54,12 +105,6 @@ body {
 }
 
 .ishetal {
-	.nee {
-		color: $lustrum-kleur-rood;
-	}
-	.ja {
-		color: $lustrum-kleur-goud;
-	}
 	color: $lustrum-kleur-goud;
 }
 
