@@ -1,3 +1,4 @@
+// Gebruikte lustrum Kleuren
 $lustrum-kleur-donker-rood: #3e0d1c;
 $lustrum-kleur-rood: #6e1321;
 $lustrum-kleur-licht-rood: #8b1437;
@@ -19,6 +20,8 @@ $kleur-text-hover:  $lustrum-kleur-wit;
 	font-weight: normal;
 	src: url('../../fonts/lustrum12/OrpheusPro-Bold.otf');
 }
+$headings-font: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+$headings-font-family: ($headings-font, uppercase);
 
 $theme-colors: (
 	"primary": $kleur-primair,
@@ -26,47 +29,31 @@ $theme-colors: (
 	"white": $kleur-text,
 );
 
-/* kleuren: turned white and black upside down */
+// Kleur overwrites
 $white: $kleur-primair;
-$gray-900: #f8f9fa !default;
-$gray-800: #e9ecef !default;
-$gray-700: #dee2e6 !default;
-$gray-600: #ced4da !default;
-$gray-500: #adb5bd !default;
-$gray-400: #6c757d !default;
-$gray-300: #495057 !default;
-$gray-200: #343a40 !default;
-$gray-100: #212529 !default;
+$gray-100: #212529;
+$gray-200: #343a40;
+$gray-300: #495057;
+$gray-400: #6c757d;
+$gray-500: #adb5bd;
+$gray-600: #ced4da;
+$gray-700: #dee2e6;
+$gray-800: #e9ecef;
+$gray-900: #f8f9fa;
 $black: #fff;
-
-$light: $gray-100 !default;
-$dark: $gray-800 !default;
-$yiq-text-dark: $white !default;
-$yiq-text-light: $gray-900 !default ;
-
-//$white: #000;
-//$gray-100: #212529;
-//$gray-200: #343a40;
-//$gray-300: #495057;
-//$gray-400: #6c757d;
-//$gray-500: #adb5bd;
-//$gray-600: #ced4da;
-//$gray-700: #dee2e6;
-//$gray-800: #e9ecef;
-//$gray-900: #f8f9fa;
-
-$body-bg: $kleur-secundair;
-$body-color: $kleur-text;
-$headings-color: $kleur-textheader;
-
-$headings-font: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
-$headings-font-family: ($headings-font, uppercase);
+$light: $gray-100;
+$dark: $gray-800;
+$yiq-text-dark: $white;
+$yiq-text-light: $gray-900 ;
 
 $donkerblauw: $kleur-primair;
 $blue: $kleur-primair;
 $lichtblauw: $kleur-text;
 
-//$beeldmerk: url(../images/beeldmerk.png) !default;
+// Kleur variable overwrites
+$body-bg: $kleur-secundair;
+$body-color: $kleur-text;
+$headings-color: $kleur-textheader;
 
 $zijbalk-bg: $kleur-primair;
 $zijbalk-border: $kleur-text-hover;
@@ -83,24 +70,13 @@ $list-group-bg: $kleur-primair;
 $link-color: $kleur-text;
 $link-hover-color: $kleur-text-hover;
 
-//$forum-bericht0-bg: $body-bg;
-//$forum-bericht1-bg: darken($body-bg, 4%);
-//$ongelezen-lijn: $yellow;
-
 $menu-primary-hover: $kleur-textheader;
 $menu-bg: $body-bg;
 $menu-color: $body-color;
 $menu-small-bg: $body-bg;
 $menu-small-color: $body-color;
 
-// $navbar-dark-color: white;
-
 $zoeken-active-bg: lighten($body-bg, 10%);
-
-///* maalcie-tabel */
-//$maalcie-tabel-header: #FAFAFA !default;
-//$maalcie-tabel-tr0: #EBEBEB !default;
-//$maalcie-tabel-tr1: #FAFAFA !default;
 
 $tabel-header: $kleur-primair;
 $tabel-hover: darken($kleur-secundair, 5%);
@@ -110,10 +86,7 @@ $tabel-regel-donker: lighten($kleur-secundair, 5%);
 $footer-background: $kleur-primair;
 $maaltijdketzer-bg: $kleur-primair;
 
-
-$breadcrumb-bg: $lustrum-kleur-wit;
-
-// other in dies theme
+// overige variabelen in dies theme
 $bb-alt-bg: darken($body-bg, 4%);
 $bb-hover-bg: $kleur-text-hover;
 
@@ -125,7 +98,7 @@ $text-muted: #fffbfa;
 /* importeer basis */
 @import "../base";
 
-// OTHER OVERWRITES
+// Puntjes op de i (maak het onleesbare leesbaar)
 
 // headers
 h1 {
@@ -162,4 +135,77 @@ h2, h3, h4, h5, h6 {
 // image in footer, make white
 footer img{
 	filter: invert(90%);
+}
+
+// name selection right top
+#menu-personal{
+	color: $kleur-text;
+}
+
+#instellingen .list-group-item:hover {
+	background-color: $kleur-primair;
+	color: $kleur-text;
+}
+
+// knopjes
+.btn-secondary {
+	background-color: darken($kleur-secundair, 4%);
+}
+.btn-secondary.active {
+	background-color: lighten($kleur-secundair, 4%);
+}
+
+// DataTables wrapper
+.dataTables_wrapper {
+	background-color: $lustrum-kleur-wit;
+	color: $kleur-primair;
+	a {
+		color: inherit;
+	}
+	// zou vast efficienter kunnen, maar kreeg het niet werkend.
+	.table {
+		color: inherit;
+		tbody {
+			color: inherit;
+			tr {
+				color: inherit;
+				td {
+					color: inherit;
+				}
+			}
+		}
+	}
+}
+
+// Forumdeel omschrijving
+.forumdeel-omschrijving {
+	color: $kleur-primair;
+	h2 {
+		color: inherit;
+	}
+	.breadcrumb a{
+		color: inherit;
+	}
+}
+
+// breadcrumbs
+.breadcrumb {
+	background-color: inherit;
+	a {
+		color: $kleur-text;
+	}
+}
+
+// Ketzer progressbar
+.progress-bar {
+	background-color: $kleur-primair;
+	color: $kleur-text;
+}
+
+// Radio input
+.form-check-input[type="radio"] {
+	background-color: $kleur-text;
+}
+.form-check-input[type="radio"]:checked {
+	background-color: darken($kleur-text, 5%);
 }
