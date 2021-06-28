@@ -13,10 +13,6 @@ $kleur-textheader: $lustrum-kleur-goud;
 $kleur-text:  $lustrum-kleur-goud;
 $kleur-text-hover:  $lustrum-kleur-wit;
 
-// other
-$kleur-groen: $lustrum-kleur-wit;
-$kleur-rood: $lustrum-kleur-licht-rood;
-
 @font-face {
 	font-family: 'Orpheus Pro';
 	font-style: normal;
@@ -30,6 +26,35 @@ $theme-colors: (
 	"white": $kleur-text,
 );
 
+/* kleuren: turned white and black upside down */
+$white: $kleur-primair;
+$gray-900: #f8f9fa !default;
+$gray-800: #e9ecef !default;
+$gray-700: #dee2e6 !default;
+$gray-600: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-400: #6c757d !default;
+$gray-300: #495057 !default;
+$gray-200: #343a40 !default;
+$gray-100: #212529 !default;
+$black: #fff;
+
+$light: $gray-100 !default;
+$dark: $gray-800 !default;
+$yiq-text-dark: $white !default;
+$yiq-text-light: $gray-900 !default ;
+
+//$white: #000;
+//$gray-100: #212529;
+//$gray-200: #343a40;
+//$gray-300: #495057;
+//$gray-400: #6c757d;
+//$gray-500: #adb5bd;
+//$gray-600: #ced4da;
+//$gray-700: #dee2e6;
+//$gray-800: #e9ecef;
+//$gray-900: #f8f9fa;
+
 $body-bg: $kleur-secundair;
 $body-color: $kleur-text;
 $headings-color: $kleur-textheader;
@@ -38,7 +63,8 @@ $headings-font: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 $headings-font-family: ($headings-font, uppercase);
 
 $donkerblauw: $kleur-primair;
-$lichtblauw: #4e698b;
+$blue: $kleur-primair;
+$lichtblauw: $kleur-text;
 
 //$beeldmerk: url(../images/beeldmerk.png) !default;
 
@@ -46,8 +72,8 @@ $zijbalk-bg: $kleur-primair;
 $zijbalk-border: $kleur-text-hover;
 $zijbalk-kopje: $kleur-textheader;
 
-$zijbalk-ishetal-ja: $kleur-groen; // todo
-$zijbalk-ishetal-nee: $kleur-rood; // todo
+$zijbalk-ishetal-ja: $lustrum-kleur-wit;
+$zijbalk-ishetal-nee: $lustrum-kleur-licht-rood;
 
 $bb-block-bg: $kleur-primair;
 
@@ -85,6 +111,8 @@ $footer-background: $kleur-primair;
 $maaltijdketzer-bg: $kleur-primair;
 
 
+$breadcrumb-bg: $lustrum-kleur-wit;
+
 // other in dies theme
 $bb-alt-bg: darken($body-bg, 4%);
 $bb-hover-bg: $kleur-text-hover;
@@ -96,6 +124,8 @@ $text-muted: #fffbfa;
 
 /* importeer basis */
 @import "../base";
+
+// OTHER OVERWRITES
 
 // headers
 h1 {
