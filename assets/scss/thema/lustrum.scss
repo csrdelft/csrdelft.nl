@@ -2,7 +2,7 @@ $lustrum-kleur-donker-rood: #3e0d1c;
 $lustrum-kleur-rood: #6e1321;
 $lustrum-kleur-licht-rood: #8b1437;
 $lustrum-kleur-goud: #f1c802;
-$lustrum-kleur-wit: #eeeeee;
+$lustrum-kleur-wit: #dedede;
 
 // backgrounds
 $kleur-primair: $lustrum-kleur-donker-rood;
@@ -14,8 +14,8 @@ $kleur-text:  $lustrum-kleur-goud;
 $kleur-text-hover:  $lustrum-kleur-wit;
 
 // other
-$kleur-groen: #ABD1B5;
-$kleur-rood: #B0413E;
+$kleur-groen: $lustrum-kleur-wit;
+$kleur-rood: $lustrum-kleur-licht-rood;
 
 @font-face {
 	font-family: 'Orpheus Pro';
@@ -23,7 +23,6 @@ $kleur-rood: #B0413E;
 	font-weight: normal;
 	src: url('../../fonts/lustrum12/OrpheusPro-Bold.otf');
 }
-
 
 $theme-colors: (
 	"primary": $kleur-primair,
@@ -39,6 +38,7 @@ $headings-font: 'Orpheus Pro', 'Source Sans Pro', Helvetica, Arial, sans-serif;
 $headings-font-family: ($headings-font, uppercase);
 
 $donkerblauw: $kleur-primair;
+$lichtblauw: #4e698b;
 
 //$beeldmerk: url(../images/beeldmerk.png) !default;
 
@@ -81,13 +81,11 @@ $tabel-hover: darken($kleur-secundair, 5%);
 $tabel-regel-licht: $kleur-secundair;
 $tabel-regel-donker: lighten($kleur-secundair, 5%);
 
-// geen breadcrumb bg, ziet er lelijk uit op cms pagina's
 $footer-background: $kleur-primair;
 $maaltijdketzer-bg: $kleur-primair;
 
-$lichtblauw: #4e698b;
 
-// other in
+// other in dies theme
 $bb-alt-bg: darken($body-bg, 4%);
 $bb-hover-bg: $kleur-text-hover;
 
@@ -99,6 +97,7 @@ $text-muted: #fffbfa;
 /* importeer basis */
 @import "../base";
 
+// headers
 h1 {
 	font-family: $headings-font-family;
 	color: $kleur-textheader;
@@ -110,111 +109,27 @@ h2, h3, h4, h5, h6 {
 	color: $kleur-textheader;
 }
 
+// zijbalk links
 #zijbalk .blok .zijbalk-kopje a {
 		font-family: $headings-font-family;
 		text-transform: uppercase;
 		color: $kleur-textheader;
 }
 
+// lustrum stek link
 .lustrum12_button {
 	color: $kleur-text;
 }
-
 .lustrum12_button:hover {
 	color: $kleur-text-hover;
 }
 
-#menu {
-	background-color: $lustrum-kleur-donker-rood;
-	border-bottom-color: $lustrum-kleur-goud;
-	#cd-primary-nav {
-		.nav-link {
-			color: $lustrum-kleur-goud;
-		}
-	}
+// overwrite header colors
+#menu #cd-primary-nav .nav-link{
+	color: $lustrum-kleur-goud;
 }
 
-//
-//////////////////////////////////////////////////////
-//// stek variables
-//$zijbalk-bg: $lustrum-kleur-donker-rood;
-//$zijbalk-border: $lustrum-kleur-goud;
-//$zijbalk-kopje: $lustrum-kleur-licht-goud;
-//
-//$zijbalk-ishetal-nee: $lustrum-kleur-rood;
-//$zijbalk-ishetal-ja: $lustrum-kleur-goud;
-//
-//
-//
-////$primair-achtergrond: #b2d4f0;
-////$zijbalk-achtergrond: #486b87;
-////$secundaire-accenten-1: $lustrum-kleur-donker-rood;
-////$secundaire-accenten-2: #;
-////
-//$primary: $lustrum-kleur-donker-rood;
-//$secondary: $lustrum-kleur-rood;
-////
-////$body-bg: $primair-achtergrond;
-//$body-color: #002e54;
-////
-////$footer-background: $primair-achtergrond;
-//
-//
-//
-//////////////////////////////////////////////////////
-//// Eventueel aan te passen:
-////$forum-bericht0-bg: $body-bg !default;
-////$forum-bericht1-bg: darken($body-bg, 4%) !default;
-////$ongelezen-lijn: $yellow !default;
-////$navbar-dark-color: white;
-//
-
-//
-//
-//@import '../base';
-//
-//body {
-//	background-color: $lustrum-kleur-rood;
-//}
-//
-////$footer-background: $lustrum-kleur-donker-rood;
-////.footer {
-////	color: $lustrum-kleur-goud;
-////
-////	h5{
-////		font-family: $headings-font-family;
-////		text-transform: uppercase;
-////		color: $lustrum-kleur-licht-goud;
-////	}
-////
-////	.link-secondary {
-////		color: $lustrum-kleur-goud;
-////	}
-////
-////
-////	img {
-////		filter: opacity(0.5) drop-shadow(0 0 0 blue);
-////	}
-////}
-//
-
-//
-
-//
-//#zijbalk {
-//	.blok .item {
-//		color: $lustrum-kleur-goud;
-//		a {
-//			color: $lustrum-kleur-goud;
-//		}
-//	}
-//}
-//
-//.bb-block {
-//	box-shadow: $lustrum-kleur-goud;
-//}
-//
-//.ishetal {
-//	color: $lustrum-kleur-goud;
-//}
-//
+// image in footer, make white
+footer img{
+	filter: invert(90%);
+}
