@@ -14,6 +14,7 @@ $kleur-textheader: $lustrum-kleur-goud;
 $kleur-text:  $lustrum-kleur-goud;
 $kleur-text-hover:  $lustrum-kleur-wit;
 
+
 @font-face {
 	font-family: 'Orpheus Pro';
 	font-style: normal;
@@ -25,7 +26,7 @@ $headings-font-family: ($headings-font, uppercase);
 
 $theme-colors: (
 	"primary": $kleur-primair,
-	"danger": #E54B4B,
+	"danger": $lustrum-kleur-licht-rood,
 	"white": $kleur-text,
 );
 
