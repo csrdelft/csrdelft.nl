@@ -129,8 +129,13 @@ h2, h3, h4, h5, h6 {
 }
 
 // overwrite header colors
-#menu #cd-primary-nav .nav-link{
-	color: $lustrum-kleur-goud;
+#menu {
+	.fa-bookmark {
+		color: $lustrum-kleur-wit;
+	}
+	#cd-primary-nav .nav-link {
+		color: $lustrum-kleur-goud;
+	}
 }
 
 // image in footer, make white
