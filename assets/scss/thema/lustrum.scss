@@ -53,7 +53,7 @@ $lichtblauw: $kleur-text;
 
 // Kleur variable overwrites
 $body-bg: $kleur-secundair;
-$body-color: $kleur-text;
+$body-color: $kleur-text-hover;
 $headings-color: $kleur-textheader;
 
 $zijbalk-bg: $kleur-primair;
@@ -114,10 +114,19 @@ h2, h3, h4, h5, h6 {
 }
 
 // zijbalk links
-#zijbalk .blok .zijbalk-kopje a {
+#zijbalk .blok {
+	.item a {
+		color: $kleur-textheader;
+	}
+	.zijbalk-kopje a {
+		color: $kleur-textheader;
 		font-family: $headings-font-family;
 		text-transform: uppercase;
-		color: $kleur-textheader;
+	}
+}
+// is-het-al tekst
+.ishetal {
+	color: $kleur-text;
 }
 
 // lustrum stek link
@@ -129,18 +138,31 @@ h2, h3, h4, h5, h6 {
 }
 
 // overwrite header colors
-#menu #cd-primary-nav .nav-link{
-	color: $lustrum-kleur-goud;
+#menu {
+	a:active {
+		color: $lustrum-kleur-goud;
+	}
+	.fa-bookmark {
+		color: $lustrum-kleur-wit;
+	}
+	#cd-primary-nav .nav-link {
+		color: $lustrum-kleur-goud;
+	}
 }
 
 // image in footer, make white
-footer img{
-	filter: invert(90%);
+footer {
+	a {
+		color: $body-color;
+	}
+	img {
+		filter: invert(90%);
+	}
 }
 
 // name selection right top
 #menu-personal{
-	color: $kleur-text;
+	color: $kleur-text-hover;
 }
 
 #instellingen .list-group-item:hover {
@@ -209,4 +231,19 @@ footer img{
 }
 .form-check-input[type="radio"]:checked {
 	background-color: darken($kleur-text, 5%);
+}
+
+// profiel list-group selector
+#profiel .list-group {
+	.list-group-item {
+		color: $kleur-text;
+	}
+	.list-group-item:hover {
+		color: $kleur-text-hover;
+	}
+}
+// bb-tags
+.bb-prive {
+	background-color: $kleur-primair;
+	color: $kleur-text-hover;
 }
