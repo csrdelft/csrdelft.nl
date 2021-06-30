@@ -76,9 +76,9 @@ services:
       - { name: kernel.event_listener, event: kernel.response }
 
   CsrDelft\common\Security\PersistentTokenProvider: ~
-  Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login'
-  Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface: '@security.authenticator.manager'
-  Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices: '@security.authentication.rememberme.services.persistent'
+  Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login.main'
+  Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface: '@security.authenticator.manager.main'
+  Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices: '@security.authentication.rememberme.services.persistent.main'
   CsrDelft\common\Logging\LogActivationStrategy: ~
 
   # Voor Zijbalk in blade templates
