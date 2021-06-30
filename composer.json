@@ -64,7 +64,7 @@
 		"parsecsv/php-parsecsv": "^1.2",
 		"symfony/mime": "^5.0",
 		"symfony/security-bundle": "^5.0",
-		"symfony/security-http": "5.3.3",
+		"symfony/security-http": "5.3.*",
 		"symfony/yaml": "^5.0",
 		"sentry/sentry-symfony": "^3.5",
 		"symfony/form": "^5.0",
