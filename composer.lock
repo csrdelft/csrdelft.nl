@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a96f7e6f7b22d4f3acd92a934bb3d98",
+    "content-hash": "1ce7180533bfa4b8c0ca528ae22f6c95",
     "packages": [
         {
             "name": "ajgarlag/psr-http-message-bundle",
@@ -11874,39 +11874,39 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "8.5.11",
+            "version": "8.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3123601e3b29339b20129acc3f989cfec3274566"
+                "reference": "c5153162ec8f31d632ad72eb99a7c3c1e69f87e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3123601e3b29339b20129acc3f989cfec3274566",
-                "reference": "3123601e3b29339b20129acc3f989cfec3274566",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c5153162ec8f31d632ad72eb99a7c3c1e69f87e9",
+                "reference": "c5153162ec8f31d632ad72eb99a7c3c1e69f87e9",
                 "shasum": ""
             },
             "require": {
-                "doctrine/instantiator": "^1.3.1",
+                "doctrine/instantiator": "^1.2.0",
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-libxml": "*",
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "myclabs/deep-copy": "^1.10.0",
+                "myclabs/deep-copy": "^1.9.1",
                 "phar-io/manifest": "^1.0.3",
                 "phar-io/version": "^2.0.1",
                 "php": "^7.2",
-                "phpspec/prophecy": "^1.10.3",
-                "phpunit/php-code-coverage": "^7.0.12",
+                "phpspec/prophecy": "^1.8.1",
+                "phpunit/php-code-coverage": "^7.0.7",
                 "phpunit/php-file-iterator": "^2.0.2",
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-timer": "^2.1.2",
                 "sebastian/comparator": "^3.0.2",
                 "sebastian/diff": "^3.0.2",
-                "sebastian/environment": "^4.2.3",
-                "sebastian/exporter": "^3.1.2",
+                "sebastian/environment": "^4.2.2",
+                "sebastian/exporter": "^3.1.0",
                 "sebastian/global-state": "^3.0.0",
                 "sebastian/object-enumerator": "^3.0.3",
                 "sebastian/resource-operations": "^2.0.1",
@@ -11927,7 +11927,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.5-dev"
+                    "dev-master": "8.3-dev"
                 }
             },
             "autoload": {
@@ -11955,19 +11955,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/8.5.11"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/8.3.0"
             },
-            "funding": [
-                {
-                    "url": "https://phpunit.de/donate.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
-            ],
-            "time": "2020-11-27T12:46:45+00:00"
+            "time": "2019-08-02T05:00:37+00:00"
         },
         {
             "name": "psalm/plugin-symfony",
