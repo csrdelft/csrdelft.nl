@@ -23,7 +23,11 @@ class DeclaratieController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function nieuw() {
-		return $this->render('declaratie/nieuw.html.twig');
+		$lid = $this->getProfiel();
+		return $this->render('declaratie/nieuw.html.twig', [
+			'iban' => $lid->bankrekening,
+			'tenaamstelling' => $lid->getNaam('voorletters')
+		]);
 	}
 
 	/**

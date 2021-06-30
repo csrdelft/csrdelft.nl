@@ -51,7 +51,7 @@
           type="radio"
           :value="true"
         >
-        <label for="eigenRekening">Naar eigen rekening</label>
+        <label for="eigenRekening">Naar eigen rekening: {{ iban }} t.n.v. {{ tenaamstelling }}</label>
       </div>
       <div>
         <input
@@ -288,7 +288,7 @@
                 </div>
               </div>
               <div
-                v-if="berekening(bon).btw[9] > 0"
+                v-if="berekening(bon).btw[9] !== 0"
                 class="regels-row totaal"
               >
                 <div class="onderdeel">
@@ -299,7 +299,7 @@
                 </div>
               </div>
               <div
-                v-if="berekening(bon).btw[21] > 0"
+                v-if="berekening(bon).btw[21] !== 0"
                 class="regels-row totaal"
               >
                 <div class="onderdeel">
@@ -441,6 +441,10 @@ export default class DeclaratieVue extends Vue {
   private categorieen: Record<number, string>;
   @Prop({default: legeDeclaratie})
   private declaratie: Declaratie;
+  @Prop()
+  private iban: string;
+  @Prop()
+  private tenaamstelling: string;
 
   private bonUploaden = true;
   private uploading = false;
@@ -557,6 +561,20 @@ export default class DeclaratieVue extends Vue {
       this.uploading = false;
       alert(err);
     });
+  }
+
+  public checkVoorVerzenden(): string[] {
+    const errors = [];
+
+    if (!this.declaratie.categorie) {
+      errors.push("Selecteer een categorie");
+    }
+    if (!this.declaratie.betaalwijze) {
+      errors.push("Geef aan hoe je betaald hebt");
+    }
+    if (this.declaratie.eigenRekening === undefined) {
+      errors.push('Geef aan hoe je het geld teruggestort wilt krijgen')
+    }
   }
 }
 </script>
