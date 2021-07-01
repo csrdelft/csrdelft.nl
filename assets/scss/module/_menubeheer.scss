@@ -7,15 +7,16 @@ ul.menubeheer-tree {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-}
-ul.menubeheer-tree li {
-	margin-left: 25px;
-	position: relative;
-}
 
-ul.menubeheer-tree .btn.caret {
-	position: absolute;
-	left: -30px;
+	li {
+		margin-left: 25px;
+		position: relative;
+	}
+
+	.btn.caret {
+		position: absolute;
+		left: -30px;
+	}
 }
 
 .menu-item-row:hover {

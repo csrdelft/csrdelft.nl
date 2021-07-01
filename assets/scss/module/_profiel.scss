@@ -73,14 +73,6 @@
     }
   }
 
-  #corveeTaken {
-    width: 550px;
-
-    tr.old {
-      opacity: .50;
-    }
-  }
-
   .donker {
     background-color: $tabel-regel-donker;
   }
@@ -112,28 +104,6 @@
 
 li.verborgen {
   display: none;
-}
-
-#wijzigstatus {
-
-  label {
-    width: 153px;
-    margin: 0;
-    float: left;
-  }
-
-  .lidgegevens {
-    margin: 10px 0 15px 13px;
-    padding: 2px;
-  }
-
-  .novieten, #wijzigstatus .leden {
-    margin: 0 0 5px 167px;
-  }
-}
-
-#statusForm input#field_postfix.FormElement {
-  width: 100px;
 }
 
 .jarig {
