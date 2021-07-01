@@ -55,14 +55,6 @@
 }
 
 .zijbalk_extra_breed {
-	margin-left: 250px;
-	@include media-breakpoint-down(sm) {
-		margin-left: 0;
-
-		#menu {
-			margin-left: 0;
-		}
-	}
 
 	#menu {
 		margin-left: -250px;
@@ -71,6 +63,15 @@
 	#zijbalk {
 		width: 250px;
 		transform: translateX(-250px);
+	}
+
+	margin-left: 250px;
+	@include media-breakpoint-down(sm) {
+		margin-left: 0;
+
+		#menu {
+			margin-left: 0;
+		}
 	}
 }
 
