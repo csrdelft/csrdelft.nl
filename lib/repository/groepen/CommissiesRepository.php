@@ -14,8 +14,11 @@ class CommissiesRepository extends GroepRepository {
 	}
 
 	public function nieuw($soort = null) {
-		if (!$soort || !in_array($soort, CommissieSoort::getEnumValues())) {
-			$soort = CommissieSoort::Commissie;
+		if (is_string($soort)) {
+			$soort = CommissieSoort::from($soort);
+		}
+		if (!$soort) {
+			$soort = CommissieSoort::Commissie();
 		}
 		/** @var Commissie $commissie */
 		$commissie = parent::nieuw();
