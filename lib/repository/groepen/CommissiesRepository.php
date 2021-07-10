@@ -14,12 +14,7 @@ class CommissiesRepository extends GroepRepository {
 	}
 
 	public function nieuw($soort = null) {
-		if (is_string($soort)) {
-			$soort = CommissieSoort::from($soort);
-		}
-		if (!$soort) {
-			$soort = CommissieSoort::Commissie();
-		}
+		$soort = $this->parseSoort($soort) ?? CommissieSoort::Commissie();
 		/** @var Commissie $commissie */
 		$commissie = parent::nieuw();
 		$commissie->commissieSoort = $soort;
