@@ -9,7 +9,6 @@ import {select, selectAll} from "../lib/dom";
 import hoverintent from "hoverintent"
 
 require('lightbox2');
-require('../lib/external/jquery.markitup');
 
 require('timeago');
 

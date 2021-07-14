@@ -245,10 +245,6 @@ export function formCancel(event: Event): boolean {
 	return true;
 }
 
-export function insertPlaatje(id: string): void {
-	$.markItUp({replaceWith: '[plaatje]' + id + '[/plaatje]'});
-}
-
 export function initSterrenField(el: HTMLElement): void {
 	$(el).raty({
 		...JSON.parse(el.dataset.config),

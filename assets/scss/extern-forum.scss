@@ -76,20 +76,6 @@
 
   #forumForm {
 		text-align: left;
-
-		.markItUpEditor {
-			color: black;
-			font-size: initial;
-		}
-
-		.markItUpHeader ul li.markItUpButton {
-			margin: 4px;
-			cursor: pointer;
-
-			&:hover {
-				border: 0;
-			}
-		}
   }
 
   #berichtPreview {
