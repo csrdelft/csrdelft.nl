@@ -15,7 +15,7 @@ use DateTimeInterface;
 class DateTimeObjectField extends DateTimeField {
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
 		if ($value instanceof DateTimeInterface) {
-			$value = date_format_intl($value, DATETIME_FORMAT);
+			$value = date_format_intl($value, 'y-MM-dd HH:mm');
 		}
 		parent::__construct($name, $value, $description, $maxyear, $minyear);
 	}
