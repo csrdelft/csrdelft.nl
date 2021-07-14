@@ -747,15 +747,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/timeago@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "@types/timeago@npm:1.6.0"
-  dependencies:
-    "@types/jquery": "*"
-  checksum: 52a01a4589591959501f73cd12f0d5709cb9c940bd428e6356145e4b5e30c5e3d34c02b151dd2f846764f152088dc6f7f5ef315cb6197ad1a809fd744187c1a8
-  languageName: node
-  linkType: hard
-
 "@types/uglify-js@npm:*":
   version: 3.9.2
   resolution: "@types/uglify-js@npm:3.9.2"
@@ -3959,7 +3950,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"jquery@npm:>=1.11, jquery@npm:>=1.5.0 <4.0, jquery@npm:>=1.7, jquery@npm:>=1.8, jquery@npm:^3.2.1, jquery@npm:^3.3.1, jquery@npm:^3.4":
+"jquery@npm:>=1.11, jquery@npm:>=1.7, jquery@npm:>=1.8, jquery@npm:^3.2.1, jquery@npm:^3.3.1, jquery@npm:^3.4":
   version: 3.5.1
   resolution: "jquery@npm:3.5.1"
   checksum: c50818c84837902a60938c85786feb612f346a9918f7285409d605449460790b3815ad8aaf5806f19e89f1a79b27d327802b421ab354fe213f3fd1801e3562e6
@@ -6065,7 +6056,6 @@ resolve@^1.9.0:
     "@types/prosemirror-state": ^1.2.6
     "@types/prosemirror-view": ^1.17.1
     "@types/terser-webpack-plugin": ^1.2.1
-    "@types/timeago": ^1.6.0
     "@types/uglifyjs-webpack-plugin": ^1.1.0
     "@types/webpack": ^4.4.24
     "@types/webpack-manifest-plugin": ^2.0.0
@@ -6146,7 +6136,7 @@ resolve@^1.9.0:
     terser-webpack-plugin: ^5.1.1
     textcomplete: ^0.17.1
     three: ^0.117.0
-    timeago: ^1.6.7
+    timeago.js: ^4.0.2
     ts-loader: ^9.0.1
     ts-node: ^8.0.2
     tsconfig-paths: ^3.7.0
@@ -6779,12 +6769,10 @@ resolve@^1.9.0:
   languageName: node
   linkType: hard
 
-"timeago@npm:^1.6.7":
-  version: 1.6.7
-  resolution: "timeago@npm:1.6.7"
-  dependencies:
-    jquery: ">=1.5.0 <4.0"
-  checksum: 484f4e758125d91d41643bbd2de7d4ce8eefa16089e47dcb2ca90cd8e3aa0954420ae0742a78ab42ff97b0d453eee8314b813bd41e50212144dab5513017bea5
+"timeago.js@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "timeago.js@npm:4.0.2"
+  checksum: 7c5bb9d45ff574981bf8bdb260876f3321e2350460986afc7c0950c7c3ebbf77e3ae229e3c995f4bddabddc065ddd543bfdecac98ec1c52097c48b28df8a27e9
   languageName: node
   linkType: hard
 

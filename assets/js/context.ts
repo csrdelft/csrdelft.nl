@@ -81,9 +81,13 @@ export const registerFormulierContext = async (): Promise<void> => {
 		{
 			initDropzone,
 		},
+		{
+			initTimeago,
+		},
 	] = await Promise.all([
 		import(/* webpackChunkName: "formulier" */'./lib/formulier'),
 		import(/* webpackChunkName: "dropzone" */'./lib/dropzone'),
+		import(/* webpackChunkName: "timeago" */'./lib/timeago'),
 	]);
 
 	ctx.addHandlers({
@@ -93,7 +97,7 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'.reset': (el) => el.addEventListener('click', formReset),
 		'.submit': (el) => el.addEventListener('click', formSubmit),
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
-		'time.timeago': (el) => $(el).timeago(),
+		'time.timeago': initTimeago,
 		'.SterrenField': initSterrenField,
 		'form.dropzone': initDropzone,
 	});

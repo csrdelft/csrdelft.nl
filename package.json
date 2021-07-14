@@ -34,7 +34,6 @@
 		"@types/prosemirror-state": "^1.2.6",
 		"@types/prosemirror-view": "^1.17.1",
 		"@types/terser-webpack-plugin": "^1.2.1",
-		"@types/timeago": "^1.6.0",
 		"@types/uglifyjs-webpack-plugin": "^1.1.0",
 		"@types/webpack": "^4.4.24",
 		"@types/webpack-manifest-plugin": "^2.0.0",
@@ -140,7 +139,7 @@
 		"raty-js": "^2.8.0",
 		"textcomplete": "^0.17.1",
 		"three": "^0.117.0",
-		"timeago": "^1.6.7",
+		"timeago.js": "^4.0.2",
 		"vue": "^2.6.12"
 	}
 }

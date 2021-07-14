@@ -23,7 +23,6 @@ import {formCancel, formInlineToggle, formSubmit} from './lib/formulier';
 import {forumBewerken, saveConceptForumBericht} from './lib/forum';
 import {takenColorSuggesties, takenShowOld, takenToggleDatum, takenToggleSuggestie} from './lib/maalcie';
 import {docReady, isLoggedIn} from './lib/util';
-import hoverintent from 'hoverintent'
 import {Modal} from "bootstrap";
 
 moment.locale('nl');
@@ -42,7 +41,6 @@ require('jquery-ui/ui/effects/effect-highlight');
 require('jquery-ui/ui/effects/effect-fade');
 require('jquery-ui/ui/widgets/slider');
 require('./lib/external/jquery.contextMenu');
-require('timeago');
 require('raty-js');
 require('jquery.maskedinput');
 require('lightbox2');
@@ -62,7 +60,6 @@ $.extend(window, {
 	Bloodhound,
 	Dropzone,
 	docReady,
-	hoverintent,
 	context: {
 		// See view/groepen/leden/GroepTabView.class.php
 		domUpdate,
@@ -106,27 +103,6 @@ $.extend(window, {
 });
 
 Dropzone.autoDiscover = false;
-
-($ as any).timeago.settings.strings = {
-	day: '1 dag',
-	days: '%d dagen',
-	hour: '1 uur',
-	hours: '%d uur',
-	minute: '1 minuut',
-	minutes: '%d minuten',
-	month: '1 maand',
-	months: '%d maanden',
-	numbers: [],
-	prefixAgo: '',
-	inPast: '',
-	prefixFromNow: 'sinds',
-	seconds: 'nog geen minuut',
-	suffixAgo: 'geleden',
-	suffixFromNow: '',
-	wordSeparator: ' ',
-	year: '1 jaar',
-	years: '%d jaar',
-};
 
 (async () => {
 	await Promise.all([
