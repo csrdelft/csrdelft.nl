@@ -12,4 +12,14 @@ class ProfielEntityField extends DoctrineEntityField {
 
 		$this->suggestieIdField = 'uid';
 	}
+
+	public function validate()
+	{
+		if (is_array($this->blacklist) && in_array_i($this->value, $this->blacklist)) {
+			$this->error = 'Dit profiel mag niet gekozen worden: ' . htmlspecialchars($this->getFormattedValue()->getNaam());
+			return false;
+		}
+
+		return parent::validate();
+	}
 }
