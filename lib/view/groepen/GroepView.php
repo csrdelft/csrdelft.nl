@@ -81,7 +81,7 @@ class GroepView implements FormElement, ToResponse {
 	}
 
 	public function getHtml() {
-		$html = '<a name="' . $this->groep->id . '"></a><div id="groep-' . $this->groep->id . '" class="bb-groep';
+		$html = '<a id="a-' . $this->groep->id . '" name="' . $this->groep->id . '"></a><div id="groep-' . $this->groep->id . '" class="bb-groep';
 		if ($this->geschiedenis) {
 			$html .= ' state-geschiedenis';
 		}
