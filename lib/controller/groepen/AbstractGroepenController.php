@@ -446,7 +446,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($obj) {
 					return $obj->id ?? "";
 				},
-				AbstractNormalizer::IGNORED_ATTRIBUTES => ['familieSuggesties'],
+				AbstractNormalizer::GROUPS => ['log'],
 			]);
 			$this->changeLogRepository->log($groep, 'delete', $old, null);
 			$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));
