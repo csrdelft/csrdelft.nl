@@ -39,7 +39,7 @@ export function isDataTableResponse(response: unknown): response is DatatableRes
 }
 
 export async function initDataTable(el: HTMLElement): Promise<void> {
-	await import(/*webpackChunkName: "bootstrap"*/'./bootstrap');
+	await import('./bootstrap');
 
 	const $el = $(el);
 
@@ -64,7 +64,7 @@ export async function initDataTable(el: HTMLElement): Promise<void> {
 }
 
 export async function initOfflineDataTable(el: HTMLElement): Promise<void> {
-	await import(/*webpackChunkName: "bootstrap"*/'./bootstrap');
+	await import('./bootstrap');
 
 	$(el).DataTable(parseData(el));
 }

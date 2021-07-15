@@ -36,29 +36,32 @@ Vue wordt ook geinitialiseerd met de context, zie hiervoor de [Vue](./vue.md) pa
 
 ## Javascript voor specifieke routes / Dynamic Import
 
-Het is mogelijk om javascript voor specifieke routes uit te voeren. De javascript voor deze routes wordt los opgehaald van de server. De code in de bestanden achter routes wordt in principe voor page-load uitgevoerd, dus het kan handig zijn om nog een `document.ready` er in te gooien.
-
-Als je deze dynamic imports gebruikt **moet** je een `webpackChunkName` opgeven anders breekt de javascript omdat de chunk dan geen naam heeft en niet terug kan worden gevonden. Dit is deels een bug in webpack.
+Het is mogelijk om javascript voor specifieke routes of onder specifieke omstandigheden uit te voeren. De javascript wordt dan los opgehaald van de server. De code in de bestanden achter routes wordt in principe voor page-load uitgevoerd, dus het kan handig zijn om nog een `document.ready` er in te gooien.
 
 Meer info is te vinden op de [Code Splitting](https://webpack.js.org/guides/code-splitting/#dynamic-imports) pagina in de webpack docs.
 
+Voorbeelden van het gebruik van dynamisch laden in de stek:
+
+* `router.ts`, om voor specifieke pagina's te laden.
+* `context.ts`, waar bij het laden van een specifieke context ook de dependencies geladen worden, hier wordt dat gedaan omdat sommige onderdelen in de interne én externe stek geladen worden en sommige alleen op de interne stek.
+* `fotoalbum/main.ts`, als de gebruiker is ingelogd wordt ook `with-tags.ts` geladen en als de gebruiker een beheerder is, wordt ook `with-admin-buttons.ts` geladen.
+
 ```javascript
-// assets/js/router.js
+// assets/js/router.ts
 
 import {route} from './util';
 
 // route(pathPrefix, cb);
-route('/instellingen', () => import(/* webpackChunkName: "instellingen" */'./instellingen'));
-route('/eetplan', () => import(/* webpackChunkName: "eetplan" */'./eetplan'));
+route('/instellingen', () => import('./instellingen'));
+route('/eetplan', () => import('./eetplan'));
 ```
-Ik weet nog niet zeker of dit de manier is waarop het blijft werken. Voor het lidinstellingen overzicht had ik nog geen zin om een generieke oplossing te verzinnen (die er misschien wel een keer moet komen, maar misschien niet nodig is), daarom had ik iets van gebasseerd op route laden nodig.
 
-Als je op een andere plek `import(/* webpackChunkName: "module" */module)` gebruikt wordt ook een los bestand gemaakt voor de te importeren code (zolang het niet al op een andere plek geimport wordt).  Hier is `import` een synoniem van `require`, maar de laatste is _eigenlijk_ commonJS terwijl de eerste Harmony is (wat we prefereren).
+Als je op een andere plek `import(module)` gebruikt wordt ook een los bestand gemaakt voor de te importeren code (zolang het niet al op een andere plek geimport wordt). Webpack probeert zo slim mogelijk de modules in stukjes te knippen.
 
-Voor nog meer geavanceerd gebruik kun je ook het volgende doen.
+Voor nog meer geavanceerd gebruik kun je ook het volgende doen. Om code uit te voeren nadat de module geladen is.
 ```javascript
 // main.js
-import(/* webpackChunkName: "eetplan" */'./eetplan').then((module) => {
+import('./eetplan').then((module) => {
   console.log('Module is geladen!');
   module.initialiseerEetplan();
 });
@@ -69,4 +72,4 @@ export function initialiseerEetplan() {
 }
 ```
 
-Want `import()` geeft een promise terug met de module die geïmporteerd wordt. Probeer dit alleen niet te pas en te onpas te gebruiken, want het kan zo uit de hand lopen.
+Want `import()` geeft een promise terug met de module die geïmporteerd wordt. In het veld `default` staat de default export van de module.

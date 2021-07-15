@@ -19,7 +19,7 @@ route('/forum', () => contexts.push(registerFormulierContext()));
 
 Promise.all(contexts).then(() => init(document.body));
 
-route('/fotoalbum', () => import(/* webpackChunkName: "fotoalbum" */'../page/fotoalbum'));
+route('/fotoalbum', () => import('../page/fotoalbum'));
 
 declare global {
 	// Deze functie heeft geen type...
