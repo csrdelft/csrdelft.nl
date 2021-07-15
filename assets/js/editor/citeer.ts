@@ -84,7 +84,7 @@ const citeerSelectionHandler = () => {
 	const citeerDiv = getCiteerDiv()
 	const selectionInForumPost = getForumPost(window.getSelection());
 
-	if (selectionInForumPost && !window.getSelection().isCollapsed) {
+	if (window.currentEditor && selectionInForumPost && !window.getSelection().isCollapsed) {
 		citeerDiv.style.display = "block";
 
 		const popper = createPopper({ getBoundingClientRect: getSelectionBoundingRect }, citeerDiv, {placement: 'bottom'})
@@ -95,6 +95,5 @@ const citeerSelectionHandler = () => {
 }
 
 docReady(() => {
-	document.addEventListener('keyup', citeerSelectionHandler);
-	document.addEventListener('mouseup', citeerSelectionHandler);
+	document.addEventListener('selectionchange', citeerSelectionHandler);
 })
