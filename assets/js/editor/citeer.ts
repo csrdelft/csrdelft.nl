@@ -19,10 +19,10 @@ const getForumPost = (sel: Selection): HTMLElement | null => {
 	return null;
 };
 
-const getSelectionBoundingRect = (): DOMRect | null => {
+const getSelectionBoundingRect = (): DOMRect => {
 	const sel = window.getSelection()
 	if (!sel.rangeCount) {
-		return null;
+		return new DOMRect();
 	}
 
 	const range = sel.getRangeAt(0);
