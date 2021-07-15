@@ -38,7 +38,7 @@ class BbLocatie extends BbTag {
 			$maps = '<iframe height="' . $this->height . '" frameborder="0" style="border:0;width:100%" src="https://www.google.com/maps/embed/v1/place?q=' . urlencode(htmlspecialchars($address)) . '&key=' . $_ENV['GOOGLE_EMBED_KEY'] . '"></iframe>';
 		}
 		$map = $maps;
-		return '<span class="hoverIntent"><a href="' . $url . '">' . $address . Icon::getTag('map', null, 'Kaart', 'text') . '</a><div class="hoverIntentContent">' . $map . '</div></span>';
+		return '<span class="hoverIntent"><a href="' . $url . '">' . $address . Icon::getTag('map', null, 'Kaart', 'text') . '</a><span class="hoverIntentContent">' . $map . '</span></span>';
 	}
 
 	public function parse($arguments = [])
