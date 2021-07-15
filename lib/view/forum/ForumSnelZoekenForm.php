@@ -4,7 +4,7 @@ namespace CsrDelft\view\forum;
 
 use CsrDelft\entity\forum\ForumZoeken;
 use CsrDelft\view\formulier\Formulier;
-use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\invoervelden\LegacyTextField;
 
 /**
  * Met een zoekterm op de zoekpagina terecht komen.
@@ -19,7 +19,7 @@ class ForumSnelZoekenForm extends Formulier {
 		$this->css_classes[] = 'flex-grow-1';
 
 		$fields = [];
-		$fields['z'] = new TextField('zoekterm', null, null);
+		$fields['z'] = new LegacyTextField('zoekterm', null, null);
 		$fields['z']->placeholder = 'Zoeken in forum';
 		$fields['z']->enter_submit = true;
 

@@ -10,7 +10,7 @@ use CsrDelft\repository\ProfielRepository;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class DuckField extends TextField {
+class DuckField extends LegacyTextField {
 
 	public function __construct($name, $value) {
 		parent::__construct($name, $value, 'Duckstad-naam');

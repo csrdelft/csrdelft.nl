@@ -8,6 +8,7 @@ use CsrDelft\repository\ChangeLogRepository;
 use CsrDelft\service\CsrfService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\uploadvelden\FileField;
 use CsrDelft\view\ToHtmlResponse;
@@ -118,11 +119,11 @@ class Formulier implements View, Validator, ToResponse {
 	 * Zoekt een InputField met exact de gegeven naam.
 	 *
 	 * @param string $fieldName
-	 * @return InputField|false if not found
+	 * @return InputField|TextField|false if not found
 	 */
 	public function findByName($fieldName) {
 		foreach ($this->fields as $field) {
-			if (($field instanceof InputField OR $field instanceof FileField) AND $field->getName() === $fieldName) {
+			if (($field instanceof InputField OR $field instanceof FileField || $field instanceof TextField) AND $field->getName() === $fieldName) {
 				return $field;
 			}
 		}
@@ -131,7 +132,7 @@ class Formulier implements View, Validator, ToResponse {
 
 	public function addFields(array $fields) {
 		foreach ($fields as $field) {
-			if ($field instanceof InputField) {
+			if ($field instanceof InputField || $field instanceof TextField) {
 				$this->loadProperty($field);
 			}
 		}
@@ -139,7 +140,7 @@ class Formulier implements View, Validator, ToResponse {
 	}
 
 	public function insertAtPos($pos, FormElement $field) {
-		if ($field instanceof InputField) {
+		if ($field instanceof InputField || $field instanceof TextField) {
 			$this->loadProperty($field);
 		}
 		array_splice($this->fields, $pos, 0, array($field));
@@ -159,7 +160,7 @@ class Formulier implements View, Validator, ToResponse {
 	 */
 	public function isPosted() {
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField AND !$field->isPosted()) {
+			if (($field instanceof InputField || $field instanceof TextField) AND !$field->isPosted()) {
 				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
@@ -193,7 +194,7 @@ class Formulier implements View, Validator, ToResponse {
 	public function getValues() {
 		$values = array();
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField) {
+			if ($field instanceof InputField || $field instanceof TextField) {
 				$values[$field->getName()] = $field->getValue();
 			}
 		}
@@ -295,7 +296,7 @@ HTML;
 		$changeLogRepository = ContainerFacade::getContainer()->get(ChangeLogRepository::class);
 		$diff = array();
 		foreach ($this->getFields() as $field) {
-			if ($field instanceof InputField) {
+			if ($field instanceof InputField || $field instanceof TextField) {
 				$old = $field->getOrigValue();
 				$new = $field->getValue();
 				if ($old !== $new) {

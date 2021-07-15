@@ -10,6 +10,7 @@ use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
+use CsrDelft\view\formulier\invoervelden\LegacyTextField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateTimeObjectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

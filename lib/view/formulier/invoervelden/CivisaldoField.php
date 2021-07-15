@@ -11,7 +11,7 @@ use CsrDelft\service\ProfielService;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class CivisaldoField extends TextField {
+class CivisaldoField extends LegacyTextField {
 
 	protected $fieldClassName = 'col-sm-5';
 

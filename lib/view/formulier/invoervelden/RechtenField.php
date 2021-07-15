@@ -10,7 +10,7 @@ use CsrDelft\service\AccessService;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class RechtenField extends TextField {
+class RechtenField extends LegacyTextField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description);

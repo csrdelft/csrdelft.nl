@@ -6,7 +6,7 @@ use CsrDelft\entity\forum\ForumZoeken;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
-use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\invoervelden\LegacyTextField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxesField;
 use CsrDelft\view\formulier\keuzevelden\DateField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
@@ -24,7 +24,7 @@ class ForumZoekenForm extends Formulier {
 		$this->css_classes[] = 'ForumZoekenForm';
 
 		$fields = [];
-		$fields['z'] = new TextField('zoekterm', $model->zoekterm, 'Zoekterm');
+		$fields['z'] = new LegacyTextField('zoekterm', $model->zoekterm, 'Zoekterm');
 		$fields['z']->placeholder = 'Zoeken in forum';
 		$fields['z']->enter_submit = true;
 

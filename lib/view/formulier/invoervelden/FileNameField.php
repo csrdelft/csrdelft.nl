@@ -7,7 +7,7 @@ namespace CsrDelft\view\formulier\invoervelden;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class FileNameField extends TextField {
+class FileNameField extends LegacyTextField {
 
 	/**
 	 * Trailing whitespace kan voor problemen zorgen bij het aanmaken van fotoalbums.

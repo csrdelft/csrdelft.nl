@@ -5,7 +5,7 @@ namespace CsrDelft\view\maalcie\corvee\functies;
 use CsrDelft\entity\corvee\CorveeFunctie;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
-use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\invoervelden\LegacyTextField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -26,9 +26,9 @@ class FunctieForm extends ModalForm {
 		}
 
 		$fields = [];
-		$fields[] = new TextField('naam', $functie->naam, 'Functienaam', 25);
+		$fields[] = new LegacyTextField('naam', $functie->naam, 'Functienaam', 25);
 
-		$fields['afk'] = new TextField('afkorting', $functie->afkorting, 'Afkorting', 3);
+		$fields['afk'] = new LegacyTextField('afkorting', $functie->afkorting, 'Afkorting', 3);
 		$fields['afk']->title = 'Afkorting van de functie';
 
 		$fields['eml'] = new TextareaField('email_bericht', $functie->email_bericht, 'E-mailbericht', 9);

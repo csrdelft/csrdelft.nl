@@ -16,11 +16,11 @@ use CsrDelft\view\formulier\getalvelden\TelefoonField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\IBANField;
 use CsrDelft\view\formulier\invoervelden\LandField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredLandField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\StudieField;
-use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
@@ -102,8 +102,7 @@ class ExternProfielForm extends Formulier {
 		$fields[] = new RequiredSelectField('zingen', $profiel->zingen, 'Zingen', array('' => 'Kies...', 'ja' => 'Ja, ik zing in een band/koor', 'nee' => 'Nee, ik houd niet van zingen', 'soms' => 'Alleen onder de douche', 'anders' => 'Anders'));
 
 		$fields[] = new TextField('vrienden', $profiel->vrienden, 'Vrienden binnnen C.S.R.', 300);
-		$fields['middelbareSchool'] = new TextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
-		$fields['middelbareSchool']->required = true;
+		$fields[] = new RequiredTextField('middelbareSchool', $profiel->middelbareSchool, 'Middelbare school', 200);
 
 		$fields[] = new Subkopje('Medisch');
 		$fields[] = new HtmlComment('<p>

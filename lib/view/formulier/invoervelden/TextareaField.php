@@ -9,7 +9,7 @@ namespace CsrDelft\view\formulier\invoervelden;
  *
  * Een Textarea die groter wordt als de inhoud niet meer in het veld past.
  */
-class TextareaField extends TextField {
+class TextareaField extends LegacyTextField {
 
 	protected $wrapperClassName = 'mb-3';
 	protected $labelClassName = '';

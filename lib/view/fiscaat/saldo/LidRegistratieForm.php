@@ -5,8 +5,8 @@ namespace CsrDelft\view\fiscaat\saldo;
 use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\getalvelden\required\RequiredBedragField;
-use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\LidField;
+use CsrDelft\view\formulier\invoervelden\LegacyTextField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
@@ -20,7 +20,7 @@ use CsrDelft\view\formulier\ModalForm;
 class LidRegistratieForm extends ModalForm {
 	/** @var TextField */
 	private $naamField;
-	/** @var TextField */
+	/** @var LegacyTextField */
 	private $uidField;
 
 	/**

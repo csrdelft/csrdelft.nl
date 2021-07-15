@@ -7,7 +7,7 @@ namespace CsrDelft\view\formulier\invoervelden;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class EmailField extends TextField {
+class EmailField extends LegacyTextField {
 
 	public function validate() {
 		if (!parent::validate()) {

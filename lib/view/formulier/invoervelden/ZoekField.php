@@ -10,7 +10,7 @@ use CsrDelft\service\security\LoginService;
 
 /**
  */
-class ZoekField extends TextField
+class ZoekField extends LegacyTextField
 {
 
 	public $type = 'search';

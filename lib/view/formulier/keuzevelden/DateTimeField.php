@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use CsrDelft\view\formulier\invoervelden\TextField;
+use CsrDelft\view\formulier\invoervelden\LegacyTextField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -12,7 +12,7 @@ use CsrDelft\view\formulier\invoervelden\TextField;
  *
  * Date time picker with range (optional).
  */
-class DateTimeField extends TextField {
+class DateTimeField extends LegacyTextField {
 
 	public $from_datetime;
 	public $to_datetime;

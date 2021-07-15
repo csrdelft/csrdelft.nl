@@ -12,6 +12,7 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\Validator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -184,7 +185,7 @@ HTML;
 	public function getValues() {
 		$values = array();
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField) {
+			if ($field instanceof InputField || $field instanceof TextField) {
 				$values[$field->getName()] = $field->getValue();
 			}
 		}
@@ -242,7 +243,7 @@ HTML;
 	 */
 	public function isPosted() {
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField && !$field->isPosted()) {
+			if (($field instanceof InputField || $field instanceof TextField) && !$field->isPosted()) {
 				//setMelding($field->getName() . ' is niet gepost', 2); //DEBUG
 				return false;
 			}
@@ -259,7 +260,7 @@ HTML;
 		$changeLogRepository = ContainerFacade::getContainer()->get(ChangeLogRepository::class);
 		$diff = array();
 		foreach ($this->fields as $field) {
-			if ($field instanceof InputField) {
+			if ($field instanceof InputField || $field instanceof TextField) {
 				$old = $field->getOrigValue();
 				$new = $field->getValue();
 				if ($old !== $new) {
@@ -292,7 +293,7 @@ HTML;
 	public function handleRequest(Request $request) {
 		if ($this->isPosted()) {
 			foreach ($this->fields as $field) {
-				if ($field instanceof InputField) {
+				if ($field instanceof InputField || $field instanceof TextField) {
 					$this->loadProperty($field);
 				}
 			}

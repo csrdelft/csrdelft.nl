@@ -5,6 +5,7 @@ namespace CsrDelft\view\formulier\getalvelden;
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -14,7 +15,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  *
  * Invoeren van een integer. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class IntField extends InputField {
+class IntField extends TextField {
 
 	public $type = 'number';
 	public $pattern = '[0-9]+';
@@ -24,10 +25,10 @@ class IntField extends InputField {
 
 	public function __construct($name, $value, $description, $min = null, $max = null) {
 		parent::__construct($name, $value, $description, 11);
-		if (!is_int($this->value) AND $this->value !== null) {
+		if (!is_int($this->value) && $this->value !== null) {
 			throw new CsrGebruikerException('value geen int');
 		}
-		if (!is_int($this->origvalue) AND $this->origvalue !== null) {
+		if (!is_int($this->origvalue) && $this->origvalue !== null) {
 			throw new CsrGebruikerException('origvalue geen int');
 		}
 		if (is_int($min)) {
@@ -45,7 +46,7 @@ class IntField extends InputField {
 				$this->value = (int)$this->value;
 			}
 		}
-		if ($this->empty_null AND $this->value == '' AND $this->value !== 0) {
+		if ($this->value == '' && $this->value !== 0) {
 			$this->value = null;
 		}
 		return $this->value;
@@ -63,11 +64,11 @@ class IntField extends InputField {
 			return true;
 		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->value)) {
 			$this->error = 'Alleen gehele getallen toegestaan';
-		} elseif (is_int($this->max) AND $this->value > $this->max) {
+		} elseif (is_int($this->max) && $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
+		} elseif (LoginService::mag(P_LEDEN_MOD)) {
 			// exception for leden mod
-		} elseif (is_int($this->min) AND $this->value < $this->min) {
+		} elseif (is_int($this->min) && $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
 		return $this->error === '';

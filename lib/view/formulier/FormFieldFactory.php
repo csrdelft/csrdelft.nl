@@ -116,8 +116,7 @@ class FormFieldFactory {
 	 * @param string $fieldName
 	 * @param mixed $value
 	 * @param Type $type
-	 * @return InputField
-	 * @throws Exception
+	 * @return FloatField|IntField|LidField|RechtenField|SafeJsonField|TextareaField|TextField|DateTimeObjectField|EnumSelectField|JaNeeField|TimeObjectField|VerticaleField
 	 */
 	private static function getFieldByType(string $fieldName, $value, $type) {
 		$desc = ucfirst(str_replace('_', ' ', $fieldName));
