@@ -5,6 +5,7 @@
       <select
         id="categorie"
         v-model="declaratie.categorie"
+        :disabled="veldenDisabled"
       >
         <option disabled />
         <option
@@ -25,6 +26,7 @@
           v-model="declaratie.betaalwijze"
           type="radio"
           value="C.S.R.-pas"
+          :disabled="veldenDisabled"
         >
         <label for="C.S.R.-pas">Betaald met C.S.R.-pas</label>
       </div>
@@ -34,6 +36,7 @@
           v-model="declaratie.betaalwijze"
           type="radio"
           value="voorgeschoten"
+          :disabled="veldenDisabled"
         >
         <label for="voorgeschoten">Voorgeschoten</label>
       </div>
@@ -50,6 +53,7 @@
           v-model="declaratie.eigenRekening"
           type="radio"
           :value="true"
+          :disabled="veldenDisabled"
         >
         <label for="eigenRekening">Naar eigen rekening: {{ iban }} t.n.v. {{ tenaamstelling }}</label>
       </div>
@@ -59,6 +63,7 @@
           v-model="declaratie.eigenRekening"
           type="radio"
           :value="false"
+          :disabled="veldenDisabled"
         >
         <label for="nietEigenRekening">Naar andere rekening</label>
       </div>
@@ -73,6 +78,7 @@
         id="rekening"
         v-model="declaratie.rekening"
         type="text"
+        :disabled="veldenDisabled"
       >
     </div>
 
@@ -92,6 +98,7 @@
         id="tnv"
         v-model="declaratie.tnv"
         type="text"
+        :disabled="veldenDisabled"
       >
     </div>
 
@@ -177,7 +184,7 @@
             class="bon-selected"
           >
             <div
-              v-if="declaratie.bonnen.length > 1"
+              v-if="declaratie.bonnen.length > 1 && !veldenDisabled"
               class="bonVerwijderen"
               @click="bonVerwijderen(bonIndex)"
             >
@@ -195,6 +202,7 @@
                 v-input-mask
                 data-inputmask="'alias': 'datetime', 'inputFormat': 'dd-mm-yyyy'"
                 type="text"
+                :disabled="veldenDisabled"
               >
             </div>
 
@@ -214,6 +222,7 @@
                   <input
                     v-model="regel.omschrijving"
                     type="text"
+                    :disabled="veldenDisabled"
                   >
                 </div>
                 <div class="field">
@@ -221,10 +230,14 @@
                     v-model="regel.bedrag"
                     v-money="money"
                     style="text-align: right;"
+                    :disabled="veldenDisabled"
                   />
                 </div>
                 <div class="field">
-                  <select v-model="regel.btw">
+                  <select
+                    v-model="regel.btw"
+                    :disabled="veldenDisabled"
+                  >
                     <option
                       value=""
                       disabled
@@ -247,7 +260,7 @@
                   </select>
                 </div>
                 <div
-                  v-if="bon.regels.length > 1"
+                  v-if="bon.regels.length > 1 && !veldenDisabled"
                   class="trash"
                   @click="regelVerwijderen(bon, index)"
                 >
@@ -255,6 +268,7 @@
                 </div>
               </div>
               <div
+                v-if="!veldenDisabled"
                 class="regels-row nieuw"
                 @click="nieuweRegel(bon)"
               >
@@ -321,6 +335,7 @@
           </div>
         </div>
         <div
+          v-if="!veldenDisabled"
           class="nieuwe-bon"
           @click="bonUploaden = true"
         >
@@ -359,14 +374,26 @@
       <textarea
         id="opmerkingen"
         v-model="declaratie.opmerkingen"
+        :disabled="veldenDisabled"
       />
     </div>
 
-    <div class="save-buttons">
-      <button class="concept">
+    <div
+      v-if="!veldenDisabled || submitting"
+      class="save-buttons"
+    >
+      <button
+        class="concept"
+        :disabled="submitting"
+        @click="declaratieOpslaan(false)"
+      >
         Concept opslaan en later afmaken
       </button>
-      <button class="confirm">
+      <button
+        class="confirm"
+        :disabled="submitting"
+        @click="declaratieOpslaan(false)"
+      >
         Declaratie indienen
       </button>
     </div>
@@ -450,18 +477,14 @@ export default class DeclaratieVue extends Vue {
   private uploading = false;
   private geselecteerdeBon = 0;
   private money = { precision: 2, decimal: ',', thousands: ' ', prefix: '€ ' };
+  private submitting = false;
+
+  private get veldenDisabled() {
+    return this.submitting;
+  }
 
   private get heeftBonnen() {
     return this.declaratie.bonnen && this.declaratie.bonnen.length > 0;
-  }
-
-  private get huidigeBon() {
-    if (!this.heeftBonnen) {
-      return null;
-    } else {
-      this.geselecteerdeBon = Math.min(this.declaratie.bonnen?.length - 1, this.geselecteerdeBon);
-      return this.declaratie.bonnen?.[this.geselecteerdeBon];
-    }
   }
 
   public nieuweBon(file: string, id: number): void {
@@ -563,18 +586,22 @@ export default class DeclaratieVue extends Vue {
     });
   }
 
-  public checkVoorVerzenden(): string[] {
-    const errors = [];
+  public declaratieOpslaan(indienen: boolean): void {
+    this.declaratie.status = indienen ? 'ingediend' : 'concept';
+    this.submitting = true;
 
-    if (!this.declaratie.categorie) {
-      errors.push("Selecteer een categorie");
-    }
-    if (!this.declaratie.betaalwijze) {
-      errors.push("Geef aan hoe je betaald hebt");
-    }
-    if (this.declaratie.eigenRekening === undefined) {
-      errors.push('Geef aan hoe je het geld teruggestort wilt krijgen')
-    }
+    axios({
+      method: 'post',
+      url: '/declaratie/opslaan',
+      data: {
+        declaratie: this.declaratie,
+      }
+    }).then(() => {
+      this.submitting = false;
+    }).catch((err) => {
+      this.submitting = false;
+      alert(err);
+    });
   }
 }
 </script>
@@ -948,7 +975,7 @@ export default class DeclaratieVue extends Vue {
 
     &.concept {
       border: 1px solid #D0D0D0;
-      color: #898989;
+      color: #6a6a6a;
       font-weight: 400;
 
       &:hover {
