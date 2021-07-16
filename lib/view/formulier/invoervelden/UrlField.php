@@ -9,7 +9,7 @@ namespace CsrDelft\view\formulier\invoervelden;
  *
  * UrlField checked of de invoer op een url lijkt.
  */
-class UrlField extends LegacyTextField {
+class UrlField extends TextField {
 
 	public function getValue() {
 		$this->value = parent::getValue();

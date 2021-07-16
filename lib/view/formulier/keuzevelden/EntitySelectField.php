@@ -5,14 +5,14 @@ namespace CsrDelft\view\formulier\keuzevelden;
 use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\ISelectEntity;
-use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class EntitySelectField extends InputField {
+class EntitySelectField extends TextField {
 
 	public $size;
 	/**
@@ -30,7 +30,7 @@ class EntitySelectField extends InputField {
 	private $entityManager;
 
 	public function __construct($name, $value, $description, $entityType) {
-		$this->css_classes = ['FormElement', 'form-select'];
+		$this->cssClasses = ['FormElement', 'form-select'];
 
 		parent::__construct($name, $value ? $value->getId() : null, $description);
 

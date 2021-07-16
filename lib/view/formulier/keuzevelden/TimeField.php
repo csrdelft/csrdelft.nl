@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class TimeField extends InputField {
+class TimeField extends TextField {
 
 	protected $minutensteps;
 
@@ -49,7 +49,7 @@ class TimeField extends InputField {
 		}
 		$uren = (int)substr($this->value, 0, 2);
 		$minuten = (int)substr($this->value, 3, 5);
-		if (!preg_match('/^(\d\d?):(\d\d?)$/', $this->value) OR $uren < 0 OR $uren > 23 OR $minuten < 0 OR $minuten > 59) {
+		if (!preg_match('/^(\d\d?):(\d\d?)$/', $this->value) || $uren < 0 || $uren > 23 || $minuten < 0 || $minuten > 59) {
 			$this->error = 'Ongeldig tijdstip';
 		}
 		return $this->error === '';

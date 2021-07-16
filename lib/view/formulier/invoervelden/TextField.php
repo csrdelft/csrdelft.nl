@@ -15,24 +15,11 @@ use CsrDelft\view\Validator;
  */
 class TextField implements FormElement, Validator
 {
-	private $id;
-	private $model;
-	protected $name;
-	protected $origvalue;
-	private $type = 'text';
-	protected $error = '';
-	protected $value;
-	private $description;
 	public $cssClasses = ['FormElement', 'form-control'];
-
 	public $title;
 	public $required = false;
 	public $readonly = false;
 	public $placeholder;
-
-	protected $wrapperClassName = 'row mb-3';
-	protected $labelClassName = 'col-3 col-form-label';
-	protected $fieldClassName = 'col-9';
 	public $max_len;
 	public $step;
 	public $pattern;
@@ -40,8 +27,20 @@ class TextField implements FormElement, Validator
 	public $max;
 	public $min_len;
 	public $autocomplete = true;
+	protected $name;
+	protected $origvalue;
+	protected $type = 'text';
+	protected $error = '';
+	protected $value;
+	protected $wrapperClassName = 'row mb-3';
+	protected $labelClassName = 'col-3 col-form-label';
+	protected $fieldClassName = 'col-9';
+	protected $description;
+	private $id;
+	private $model;
 
-	public function __construct($name, $value, $description, $max_len = 255, $min_len = 0, $model = null) {
+	public function __construct($name, $value, $description, $max_len = 255, $min_len = 0, $model = null)
+	{
 		$this->id = uniqid_safe('field_');
 		$this->model = $model;
 		$this->name = $name;
@@ -62,15 +61,41 @@ class TextField implements FormElement, Validator
 		$this->max_len = $max_len;
 		$this->min_len = $min_len;
 	}
-	public function getValue() {
+
+	public function isPosted()
+	{
+		return isset($_POST[$this->name]);
+	}
+
+	public function getValue()
+	{
 		if ($this->isPosted()) {
 			$this->value = filter_input(INPUT_POST, $this->name, FILTER_UNSAFE_RAW);
 		}
 		return $this->value;
 	}
-	public function getId() {
-		return $this->id;
+
+	/**
+	 * @return mixed
+	 */
+	public function getName()
+	{
+		return $this->name;
 	}
+
+	public function getOrigValue()
+	{
+		return $this->origvalue;
+	}
+
+	/**
+	 * Value returned from this field
+	 */
+	public function getFormattedValue()
+	{
+		return $this->getValue();
+	}
+
 	public function getModel()
 	{
 		return $this->model;
@@ -82,9 +107,27 @@ class TextField implements FormElement, Validator
 	}
 
 	/**
+	 * View die zou moeten werken voor veel velden.
+	 */
+	public function __toString()
+	{
+		$html = '';
+		$html .= $this->getDiv();
+		$html .= $this->getLabel();
+		$html .= '<div class="' . $this->fieldClassName . '">';
+		$html .= $this->getHtml();
+		$html .= $this->getErrorDiv();
+		$html .= '</div>';
+		$html .= $this->getHelpDiv();
+		$html .= '</div>';
+		return $html;
+	}
+
+	/**
 	 * Elk veld staat in een div, geef de html terug voor de openingstag van die div.
 	 */
-	public function getDiv() {
+	public function getDiv()
+	{
 		$cssclass = $this->wrapperClassName;
 		return '<div id="wrapper_' . $this->id . '" class="' . $cssclass . '">';
 	}
@@ -92,7 +135,8 @@ class TextField implements FormElement, Validator
 	/**
 	 * Elk veld heeft een label, geef de html voor het label
 	 */
-	public function getLabel() {
+	public function getLabel()
+	{
 		if (!empty($this->description)) {
 			$required = '';
 			if ($this->required) {
@@ -105,40 +149,14 @@ class TextField implements FormElement, Validator
 		return '';
 	}
 
-	/**
-	 * Geef de foutmelding voor dit veld terug.
-	 */
-	public function getError() {
-		return $this->error;
+	public function getId()
+	{
+		return $this->id;
 	}
 
-	/**
-	 * Geef een div met de foutmelding voor dit veld terug.
-	 */
-	public function getErrorDiv() {
-		if ($this->getError() != '') {
-			return '<div class="display-block invalid-feedback">' . $this->getError() . '</div>';
-		}
-		return '';
-	}
-
-	/**
-	 * Geef lijst van allerlei CSS-classes voor dit veld terug.
-	 */
-	protected function getCssClasses() {
-		$classes = $this->cssClasses;
-		if ($this->required && !LoginService::mag(P_LEDEN_MOD)) {
-			$classes[] = 'required';
-		}
-		if ($this->readonly) {
-			$classes[] = 'readonly';
-		}
-
-		if ($this->getError() != '') {
-			$classes[] = 'is-invalid';
-		}
-
-		return $classes;
+	public function getHtml()
+	{
+		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 	}
 
 	/**
@@ -148,7 +166,8 @@ class TextField implements FormElement, Validator
 	 * elke instantie dan bijvoorbeeld de prefix van het id-veld te
 	 * moeten aanpassen. Niet meer nodig dus.
 	 */
-	protected function getInputAttribute($attribute) {
+	protected function getInputAttribute($attribute)
+	{
 		if (is_array($attribute)) {
 			$return = '';
 			foreach ($attribute as $a) {
@@ -215,31 +234,51 @@ class TextField implements FormElement, Validator
 		return '';
 	}
 
-	public function getHtml() {
-		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'value', 'origvalue', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+	/**
+	 * Geef lijst van allerlei CSS-classes voor dit veld terug.
+	 */
+	protected function getCssClasses()
+	{
+		$classes = $this->cssClasses;
+		if ($this->required && !LoginService::mag(P_LEDEN_MOD)) {
+			$classes[] = 'required';
+		}
+		if ($this->readonly) {
+			$classes[] = 'readonly';
+		}
+
+		if ($this->getError() != '') {
+			$classes[] = 'is-invalid';
+		}
+
+		return $classes;
 	}
 
-	public function getHelpDiv() {
-		if ($this->title) {
-			return '<div class="form-text">' . $this->title . '</div>';
+	/**
+	 * Geef de foutmelding voor dit veld terug.
+	 */
+	public function getError()
+	{
+		return $this->error;
+	}
+
+	/**
+	 * Geef een div met de foutmelding voor dit veld terug.
+	 */
+	public function getErrorDiv()
+	{
+		if ($this->getError() != '') {
+			return '<div class="display-block invalid-feedback">' . $this->getError() . '</div>';
 		}
 		return '';
 	}
 
-	/**
-	 * View die zou moeten werken voor veel velden.
-	 */
-	public function __toString() {
-		$html = '';
-		$html .= $this->getDiv();
-		$html .= $this->getLabel();
-		$html .= '<div class="' . $this->fieldClassName . '">';
-		$html .= $this->getHtml();
-		$html .= $this->getErrorDiv();
-		$html .= '</div>';
-		$html .= $this->getHelpDiv();
-		$html .= '</div>';
-		return $html;
+	public function getHelpDiv()
+	{
+		if ($this->title) {
+			return '<div class="form-text">' . $this->title . '</div>';
+		}
+		return '';
 	}
 
 	public function getJavascript()
@@ -254,7 +293,8 @@ class TextField implements FormElement, Validator
 	 * Kindertjes van deze classe kunnen deze methode overloaden om specifiekere
 	 * testen mogelijk te maken.
 	 */
-	public function validate() {
+	public function validate()
+	{
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
 		} elseif ($this->readonly && $this->value != $this->origvalue) {
@@ -285,9 +325,5 @@ class TextField implements FormElement, Validator
 	public function getBreadcrumbs()
 	{
 		return '';
-	}
-
-	public function isPosted() {
-		return isset($_POST[$this->name]);
 	}
 }

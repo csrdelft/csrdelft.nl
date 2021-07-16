@@ -9,11 +9,15 @@ namespace CsrDelft\view\formulier\invoervelden;
  *
  * Een Textarea die groter wordt als de inhoud niet meer in het veld past.
  */
-class TextareaField extends LegacyTextField {
+class TextareaField extends TextField {
 
 	protected $wrapperClassName = 'mb-3';
 	protected $labelClassName = '';
 	protected $fieldClassName = '';
+	/**
+	 * @var int
+	 */
+	private $rows;
 
 
 	public function __construct($name, $value, $description, $rows = 2, $max_len = null, $min_len = null) {
@@ -21,11 +25,16 @@ class TextareaField extends LegacyTextField {
 		if (is_int($rows)) {
 			$this->rows = $rows;
 		}
-		$this->css_classes[] = 'AutoSize';
-		$this->css_classes[] = 'textarea-transition';
+		$this->cssClasses[] = 'AutoSize';
+		$this->cssClasses[] = 'textarea-transition';
 	}
 
 	public function getHtml() {
-		return '<textarea' . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'rows', 'autocomplete')) . '>' . $this->value . '</textarea>';
+		$rowsAttribute = '';
+		if ($this->rows != null) {
+			$rowsAttribute = 'rows="' . $this->rows . '" ';
+		}
+
+		return '<textarea ' . $rowsAttribute . $this->getInputAttribute(array('id', 'name', 'origvalue', 'class', 'disabled', 'readonly', 'placeholder', 'maxlength', 'autocomplete')) . '>' . $this->value . '</textarea>';
 	}
 }

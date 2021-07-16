@@ -7,7 +7,7 @@ use CsrDelft\repository\bibliotheek\BoekRepository;
 
 /**
  */
-class TitelField extends LegacyTextField {
+class TitelField extends TextField {
   public $required = true;
 	private $nieuw;
 

@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class MultiSelectField extends InputField {
+class MultiSelectField extends TextField {
 
 	private $selects = array();
 

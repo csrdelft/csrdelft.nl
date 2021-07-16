@@ -3,7 +3,7 @@
 namespace CsrDelft\view\formulier\getalvelden;
 
 use CsrDelft\common\CsrGebruikerException;
-use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -13,7 +13,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  *
  * Invoeren van een decimaal getal. Eventueel met minima/maxima. Leeg evt. toegestaan.
  */
-class FloatField extends InputField {
+class FloatField extends TextField {
 
 	public $precision;
 	public $min = null;
@@ -21,10 +21,10 @@ class FloatField extends InputField {
 
 	public function __construct($name, $value, $description, $precision, $min = null, $max = null, $step = null) {
 		parent::__construct($name, $value, $description, $min, $max);
-		if (!is_float($this->value) AND $this->value !== null) {
+		if (!is_float($this->value) && $this->value !== null) {
 			throw new CsrGebruikerException('value geen float');
 		}
-		if (!is_float($this->origvalue) AND $this->origvalue !== null) {
+		if (!is_float($this->origvalue) && $this->origvalue !== null) {
 			throw new CsrGebruikerException('origvalue geen float');
 		}
 		if (is_int($precision)) {
@@ -54,7 +54,7 @@ class FloatField extends InputField {
 				$this->value = (float)$this->value;
 			}
 		}
-		if ($this->empty_null AND $this->value == '' AND $this->value !== 0.) {
+		if ($this->value == '' && $this->value !== 0.) {
 			$this->value = null;
 		}
 		return $this->value;
@@ -72,9 +72,9 @@ class FloatField extends InputField {
 			return true;
 		} elseif (!preg_match('/^' . $this->pattern . '$/', $this->getValue())) {
 			$this->error = 'Voer maximaal ' . $this->precision . ' decimalen in';
-		} elseif ($this->max !== null AND $this->value > $this->max) {
+		} elseif ($this->max !== null && $this->value > $this->max) {
 			$this->error = 'Maximale waarde is ' . $this->max . ' ';
-		} elseif ($this->min !== null AND $this->value < $this->min) {
+		} elseif ($this->min !== null && $this->value < $this->min) {
 			$this->error = 'Minimale waarde is ' . $this->min . ' ';
 		}
 		return $this->error === '';

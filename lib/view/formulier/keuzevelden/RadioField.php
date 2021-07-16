@@ -22,14 +22,12 @@ class RadioField extends SelectField {
 	public function __construct($name, $value, $description, array $options) {
 		parent::__construct($name, $value, $description, $options, 1, false);
 
-		$this->css_classes = ['FormElement', 'form-check-input'];
+		$this->cssClasses = ['FormElement', 'form-check-input'];
 	}
 
-	public function getHtml($include_hidden = true) {
+	public function getHtml() {
 		$html = '';
-		if ($include_hidden) {
-			$html .= '<input type="hidden" name="' . $this->name . '" value="" />';
-		}
+		$html .= '<input type="hidden" name="' . $this->name . '" value="" />';
 		$html .= '<div class="KeuzeRondjeOptions'. ($this->description ? '' : ' breed') . '">';
 		foreach ($this->options as $value => $description) {
 			$html .= $this->getOptionHtml($value, $description);

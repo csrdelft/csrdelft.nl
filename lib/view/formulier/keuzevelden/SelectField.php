@@ -2,7 +2,7 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -13,7 +13,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * SelectField
  * HTML select met opties.
  */
-class SelectField extends InputField {
+class SelectField extends TextField {
 
 	public $size;
 	public $multiple;
@@ -25,7 +25,7 @@ class SelectField extends InputField {
 		$this->size = (int)$size;
 		$this->multiple = $multiple;
 
-		$this->css_classes = ['form-select'];
+		$this->cssClasses = ['form-select'];
 	}
 
 	public function getOptions() {
@@ -34,7 +34,7 @@ class SelectField extends InputField {
 
 	public function getValue() {
 		$this->value = parent::getValue();
-		if ($this->empty_null AND $this->value == '') {
+		if ($this->value == '') {
 			return null;
 		}
 		return $this->value;
@@ -57,11 +57,9 @@ class SelectField extends InputField {
 		return $this->error === '';
 	}
 
-	public function getHtml($include_hidden = true) {
+	public function getHtml() {
 		$html = '';
-		if ($include_hidden) {
-			$html .= '<input type="hidden" name="' . $this->name . '" value="" />';
-		}
+		$html .= '<input type="hidden" name="' . $this->name . '" value="" />';
 		$html .= '<select name="' . $this->name;
 		if ($this->multiple) {
 			$html .= '[]" multiple';

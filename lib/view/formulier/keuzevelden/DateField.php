@@ -3,6 +3,7 @@
 namespace CsrDelft\view\formulier\keuzevelden;
 
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -16,7 +17,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  *
  * Produceert drie velden.
  */
-class DateField extends InputField {
+class DateField extends TextField {
 	protected $max_jaar;
 	protected $min_jaar;
 
@@ -40,7 +41,7 @@ class DateField extends InputField {
 			$this->min_jaar = $jaar;
 		}
 
-		$this->css_classes[] = 'DateField';
+		$this->cssClasses[] = 'DateField';
 
 	}
 
@@ -51,15 +52,15 @@ class DateField extends InputField {
 
 		$date = \DateTimeImmutable::createFromFormat("!Y-m-d", $this->value);
 
-		if ($this->value == '0000-00-00' OR empty($this->value)) {
+		if ($this->value == '0000-00-00' || empty($this->value)) {
 			if ($this->required) {
 				$this->error = 'Dit is een verplicht veld';
 			}
 		} elseif ($date === false) {
 			$this->error = 'Ongeldige datum';
-		} elseif (is_int($this->max_jaar) AND intval($date->format('Y')) > $this->max_jaar) {
+		} elseif (is_int($this->max_jaar) && intval($date->format('Y')) > $this->max_jaar) {
 			$this->error = 'Kies een jaar voor ' . $this->max_jaar;
-		} elseif (is_int($this->min_jaar) AND intval($date->format('Y')) < $this->min_jaar) {
+		} elseif (is_int($this->min_jaar) && intval($date->format('Y')) < $this->min_jaar) {
 			$this->error = 'Kies een jaar na ' . $this->min_jaar;
 		}
 

@@ -300,7 +300,10 @@ HTML;
 		}
 	}
 
-	private function loadProperty(InputField $field) {
+	/**
+	 * @param InputField|TextField $field
+	 */
+	private function loadProperty( $field) {
 		$fieldName = $field->getName();
 		if ($this->model) {
 			if (method_exists($this->model, 'set' . ucfirst($fieldName))) {

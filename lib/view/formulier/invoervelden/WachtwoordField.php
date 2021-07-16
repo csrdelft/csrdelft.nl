@@ -7,7 +7,7 @@ namespace CsrDelft\view\formulier\invoervelden;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class WachtwoordField extends LegacyTextField {
+class WachtwoordField extends TextField {
 
 	public $type = 'password';
 
@@ -18,7 +18,7 @@ class WachtwoordField extends LegacyTextField {
 		} else {
 			$this->value = false;
 		}
-		if ($this->empty_null AND $this->value == '') {
+		if ($this->value == '') {
 			return null;
 		}
 		return $this->value;
