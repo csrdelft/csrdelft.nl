@@ -113,7 +113,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$route('{id}/verwijderen', 'verwijderen', ['POST']);
 		$route('zoeken/{zoekterm}', 'zoeken', ['GET'], ['zoekterm' => null]);
 		$route('nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null]);
-		$route('{id}/ketzer/afmelden', 'ketzer_afmelden', ['POST']);
+		$route('{id}/ketzer/afmelden/{uid}', 'ketzer_afmelden', ['POST'], ['uid' => null]);
 		$route('{id}/ketzer/aanmelden', 'ketzer_aanmelden', ['POST']);
 		$route('{id}/ketzer/bewerken', 'ketzer_bewerken', ['POST']);
 		$route('{id}/nieuw/{soort}', 'nieuw', ['GET', 'POST'], ['soort' => null], [], 'nieuw_id');
@@ -446,7 +446,7 @@ abstract class AbstractGroepenController extends AbstractController implements R
 				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($obj) {
 					return $obj->id ?? "";
 				},
-				AbstractNormalizer::IGNORED_ATTRIBUTES => ['familieSuggesties'],
+				AbstractNormalizer::GROUPS => ['log'],
 			]);
 			$this->changeLogRepository->log($groep, 'delete', $old, null);
 			$response[] = new RemoveDataTableEntry($groep->id, get_class($groep));
@@ -734,10 +734,17 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		}
 	}
 
-	public function ketzer_afmelden(EntityManagerInterface $em, $id)
+	public function ketzer_afmelden(EntityManagerInterface $em, $id, $uid = null)
 	{
-		$uid = $this->getUid();
 		$groep = $this->repository->get($id);
+
+		if ($uid && !$groep->mag(AccessAction::Beheren())) {
+			throw $this->createAccessDeniedException("Mag niet afmelden via context menu");
+		}
+
+		if (!$uid) {
+			$uid = $this->getUid();
+		}
 
 		// A::Beheren voor afmelden via context-menu
 		if (!$groep->mag(AccessAction::Afmelden()) && !$groep->mag(AccessAction::Beheren())) {

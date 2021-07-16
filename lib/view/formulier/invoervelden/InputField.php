@@ -265,7 +265,7 @@ abstract class InputField implements FormElement, Validator {
 	 */
 	public function getErrorDiv() {
 		if ($this->getError() != '') {
-			return '<div class="invalid-feedback">' . $this->getError() . '</div>';
+			return '<div class="display-block invalid-feedback">' . $this->getError() . '</div>';
 		}
 		return '';
 	}

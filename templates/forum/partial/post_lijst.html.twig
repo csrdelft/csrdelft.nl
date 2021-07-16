@@ -1,4 +1,4 @@
-<div id="forumpost-row-{{ post.post_id }}" class="forum-post">
+<div id="forumpost-row-{{ post.post_id }}" class="forum-post" data-post-id="{{ post.uid }}">
 	<div class="auteur">
 		<div class="postpijl">
 			<a class="postanchor" id="{{ post.post_id }}"></a>
@@ -75,7 +75,7 @@
 			<div class="forumpasfoto">{{ get_profiel(post.uid).link('pasfoto') | raw }}</div>
 		{% endif %}
 	</div>
-	<div class="forum-bericht" id="post{{ post.post_id }}">
+	<div class="forum-bericht" id="post{{ post.post_id }}" data-uid="{{ post.uid }}" data-naam="{{ get_profiel(post.uid).naam }}">
 		{% set account = get_profiel(post.uid).account %}
 		{% if account is not none and account.perm_role == 'R_PUBCIE' %}
 			{{ post.tekst | bbcode('html') }}

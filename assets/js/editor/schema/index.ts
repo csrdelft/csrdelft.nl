@@ -64,7 +64,7 @@ export const nodes = RecordWithType<NodeSpec>()({
 		group: "inline",
 		inline: true,
 		parseDOM: [{
-			tag: "span[data-lid]",
+			tag: "[data-lid]",
 			getAttrs: (dom: HTMLElement) => ({uid: dom.dataset.lid, naam: dom.dataset.lidNaam})
 		}],
 		toDOM: node => ["span", {"data-lid": node.attrs.uid, "data-lidNaam": node.attrs.naam}, node.attrs.naam],

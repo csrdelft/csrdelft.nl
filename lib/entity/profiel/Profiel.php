@@ -624,9 +624,9 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 		} else {
 			$title = ' title="' . htmlspecialchars($this->getNaam('volledig')) . '"';
 		}
-		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '">';
+		$l = '<a href="/profiel/' . $this->uid . '"' . $title . ' class="lidLink ' . htmlspecialchars($this->status) . '" data-lid="'.$this->uid.'" data-lid-naam="'.$this->getNaam($vorm).'">';
 		if ($vorm !== 'pasfoto' && lid_instelling('layout', 'visitekaartjes') == 'ja') {
-			return '<span data-visite="'.$this->uid.'"><a href="/profiel/' . $this->uid . '" class="lidLink ' . htmlspecialchars($this->status) . '">' . $naam . '</a></span>';
+			return '<span data-visite="'.$this->uid.'" data-lid="'.$this->uid. '" data-lid-naam="'.$this->getNaam($vorm).'"><a href="/profiel/' . $this->uid . '" class="lidLink ' . htmlspecialchars($this->status) . '">' . $naam . '</a></span>';
 		} else if ($vorm === 'leeg') {
 			$twig = ContainerFacade::getContainer()->get('twig');
 

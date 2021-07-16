@@ -215,5 +215,5 @@ function reldate($datum) {
 	} else {
 		$return = strftime('%A %e %B %Y om %H:%M', $moment); // php-bug: %e does not work on Windows
 	}
-	return '<time class="timeago" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
+	return '<time class="timeago" title="'.$return.'" datetime="' . date('Y-m-d\TG:i:sO', $moment) . '">' . $return . '</time>'; // ISO8601
 }

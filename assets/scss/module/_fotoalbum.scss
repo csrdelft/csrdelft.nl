@@ -49,7 +49,7 @@
 		margin: 1em;
 		width: 300px;
 		height: 300px;
-		border: 1px solid #ddd;
+		border: 1px solid $gray-500;
 		border-radius: 5px;
 	}
 
@@ -81,7 +81,7 @@
 	transition : border 200ms ease-out;
 }
 .fototag.showborder {
-	border: 2px solid #fff;
+	border: 2px solid $white;
 }
 .fototag.active, .fototag:hover {
 	border: 2px solid #e8cf2a;

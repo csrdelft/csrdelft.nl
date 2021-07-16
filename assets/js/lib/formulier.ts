@@ -12,23 +12,24 @@ require('../editor')
 
 export function formIsChanged(form: HTMLFormElement): boolean {
 	let changed = false;
-	$(form).find('.FormElement').not('.tt-hint').each(function () {
-		const elmnt = $(this);
-		if (elmnt.is('input:radio')) {
-			if (elmnt.is(':checked') && elmnt.attr('origvalue') !== elmnt.val()) {
-				changed = true;
-				return false; // break each
+	selectAll<HTMLInputElement>('.FormElement:not(.tt-hint)', form).forEach(el => {
+		const origValue = el.getAttribute('origvalue');
+
+		if (el.type == 'radio') {
+			if (el.checked && origValue !== el.value) {
+				changed = true
 			}
-		} else if (elmnt.is('input:checkbox')) {
-			if (elmnt.is(':checked') !== (elmnt.attr('origvalue') === '1')) {
-				changed = true;
-				return false; // break each
+		} else
+		if (el.type == 'checkbox') {
+			if (Boolean(origValue) !== el.checked) {
+				changed = true
 			}
-		} else if (elmnt.val() !== elmnt.attr('origvalue')) {
-			changed = true;
-			return false; // break each
+		} else
+		if (el.value !== origValue) {
+			changed = true
 		}
-	});
+	})
+
 	return changed;
 }
 
@@ -245,10 +246,6 @@ export function formCancel(event: Event): boolean {
 	return true;
 }
 
-export function insertPlaatje(id: string): void {
-	$.markItUp({replaceWith: '[plaatje]' + id + '[/plaatje]'});
-}
-
 export function initSterrenField(el: HTMLElement): void {
 	$(el).raty({
 		...JSON.parse(el.dataset.config),
@@ -257,7 +254,6 @@ export function initSterrenField(el: HTMLElement): void {
 		cancelPlace: 'right',
 		noRatedMsg: '',
 		click: function (score) {
-			console.log(score)
 			$(this).raty('score', score)
 			$(this).closest('form').submit()
 		}

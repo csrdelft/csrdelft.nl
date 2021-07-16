@@ -12,11 +12,14 @@
 {% block content %}
 	<h1>{{ commissie.naam }}</h1>
 	<div class="col-md-6">
-		<table class="commissievoorkeuren">
+		<table class="table table-striped">
+			<thead>
 			<tr>
 				<th>Lid</th>
 				<th>Interesse</th>
 			</tr>
+			</thead>
+			<tbody>
 			{% for voorkeur in voorkeuren %}
 				{% if voorkeur.profiel.lid and voorkeur.voorkeur >= 2 %}
 					<tr{% if voorkeur.heeftGedaan %} style="opacity: .50"{% endif %}>
@@ -26,6 +29,7 @@
 					</tr>
 				{% endif %}
 			{% endfor %}
+			</tbody>
 		</table>
 	</div>
 	<div class="col-md-6">

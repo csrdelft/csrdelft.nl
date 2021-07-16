@@ -196,8 +196,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/weirdan/doctrine-psalm-plugin" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psalm/plugin-symfony" />
       <excludeFolder url="file://$MODULE_DIR$/docs/_site" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php81" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/password-hasher" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

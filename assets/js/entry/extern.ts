@@ -20,11 +20,11 @@ window.docReady = docReady;
 // Versimpelde versie van formSubmit in formulier.js
 window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).form.submit()};
 
-import(/* webpackChunkName: "jquery" */'jquery').then(({default: $}) => window.$ = window.jQuery = $);
+import('jquery').then(({default: $}) => window.$ = window.jQuery = $);
 
 docReady(async () => {
 	setTimeout(() => document.body.classList.remove('is-loading'));
-	setTimeout(() => import(/* webpackChunkName: "extern-defer" */ './extern-defer'))
+	setTimeout(() => import('./extern-defer'))
 
 	const menu = select('#menu');
 	const menuKnop = select('.menu-knop');

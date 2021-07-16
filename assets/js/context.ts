@@ -5,7 +5,7 @@ import {autosizeTextarea} from "./lib/util";
 export const registerClipboardContext = async (): Promise<void> => {
 	const {
 		copyTextToClipboard
-	} = await import(/* webpackChunkName: "clipboard" */'./lib/clipboard');
+	} = await import('./lib/clipboard');
 
 	ctx.addHandler('[data-copy]', el => {
 		el.addEventListener('click', () => copyTextToClipboard(el.dataset.copy))
@@ -19,7 +19,7 @@ export const registerGrafiekContext = async (): Promise<void> => {
 		initLine,
 		initPie,
 		initSaldoGrafiek,
-	} = await import(/* webpackChunkName: "grafiek" */'./lib/grafiek');
+	} = await import('./lib/grafiek');
 
 	ctx.addHandlers({
 		'.ctx-deelnamegrafiek': initDeelnamegrafiek,
@@ -33,7 +33,7 @@ export const registerGrafiekContext = async (): Promise<void> => {
 export const registerBbContext = async (): Promise<void> => {
 	const {
 		loadBbImage,
-	} = await import(/* webpackChunkName: "bbcode" */'./lib/bbcode');
+	} = await import('./lib/bbcode');
 
 	ctx.addHandlers({
 		'div.bb-img-loading': loadBbImage,
@@ -44,7 +44,7 @@ export const registerDataTableContext = async (): Promise<void> => {
 	const {
 		initDataTable,
 		initOfflineDataTable,
-	} = await import(/* webpackChunkName: "datatable-api" */'./datatable/api');
+	} = await import('./datatable/api');
 
 	ctx.addHandlers({
 		'.ctx-datatable': initDataTable,
@@ -58,7 +58,7 @@ export const registerKnopContext = async (): Promise<void> => {
 		initKnopGet,
 		initKnopVergroot,
 		initRadioButtons,
-	} = await import(/* webpackChunkName: "knop" */'./lib/knop');
+	} = await import('./lib/knop');
 
 	ctx.addHandlers({
 		'.get': initKnopGet,
@@ -81,9 +81,13 @@ export const registerFormulierContext = async (): Promise<void> => {
 		{
 			initDropzone,
 		},
+		{
+			initTimeago,
+		},
 	] = await Promise.all([
-		import(/* webpackChunkName: "formulier" */'./lib/formulier'),
-		import(/* webpackChunkName: "dropzone" */'./lib/dropzone'),
+		import('./lib/formulier'),
+		import('./lib/dropzone'),
+		import('./lib/timeago'),
 	]);
 
 	ctx.addHandlers({
@@ -93,7 +97,7 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'.reset': (el) => el.addEventListener('click', formReset),
 		'.submit': (el) => el.addEventListener('click', formSubmit),
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
-		'time.timeago': (el) => $(el).timeago(),
+		'time.timeago': initTimeago,
 		'.SterrenField': initSterrenField,
 		'form.dropzone': initDropzone,
 	});
@@ -106,10 +110,10 @@ export const registerGlobalContext = async (): Promise<void> => {
 		{default: Vue},
 		{default: $},
 	] = await Promise.all([
-		import(/* webpackChunkName: "hoverintent" */'hoverintent'),
-		import(/* webpackChunkName: "kaartje" */'./lib/kaartje'),
-		import(/* webpackChunkName: "vue" */'vue'),
-		import(/* webpackChunkName: "jquery" */'jquery'),
+		import('hoverintent'),
+		import('./lib/kaartje'),
+		import('vue'),
+		import('jquery'),
 	]);
 
 	ctx.addHandlers({
@@ -127,7 +131,7 @@ export const registerFlatpickrContext = async (): Promise<void> => {
 	const {
 		initDateTimePicker,
 		initDatePicker,
-	} = await import(/* webpackChunkName: "datepicker" */'./lib/datepicker');
+	} = await import('./lib/datepicker');
 
 	ctx.addHandlers({
 		'.DateTimeField': initDateTimePicker,

@@ -1,3 +1,8 @@
+$stamboom-lijn: $gray-400;
+$stamboom-lijn-hover: $gray-500;
+$stamboom-bg: $white;
+$stamboom-bg-hover: $gray-100;
+
 .tree {
 	ul {
 		display: flex;
@@ -14,7 +19,7 @@
 			position: absolute;
 			top: 0;
 			left: 50%;
-			border-left: 1px solid #ccc;
+			border-left: 1px solid $stamboom-lijn;
 			width: 0;
 			height: 20px;
 		}
@@ -37,7 +42,7 @@
 			position: absolute;
 			top: 0;
 			right: 50%;
-			border-top: 1px solid #ccc;
+			border-top: 1px solid $stamboom-lijn;
 			width: 50%;
 			height: 20px;
 		}
@@ -45,7 +50,7 @@
 		&::after {
 			right: auto;
 			left: 50%;
-			border-left: 1px solid #ccc;
+			border-left: 1px solid $stamboom-lijn;
 		}
 
 		// Lijnen naar links en rechts moeten verwijderd worden als een kind geen brusjes heeft.
@@ -65,7 +70,7 @@
 
 		// Voeg het lijntje naar boven toe voor het laatste kind.
 		&:last-child::before {
-			border-right: 1px solid #ccc;
+			border-right: 1px solid $stamboom-lijn;
 			border-radius: 0 5px 0 0;
 		}
 
@@ -75,10 +80,10 @@
 		}
 
 		a {
-			border: 1px solid #ccc;
+			border: 1px solid $stamboom-lijn;
+			background: $stamboom-bg;
 			padding: 5px 10px;
 			text-decoration: none;
-			color: #666;
 			font-size: 11px;
 			display: inline-block;
 
@@ -95,13 +100,13 @@
 			&:hover + ul li::before,
 			&:hover + ul::before,
 			&:hover + ul ul::before {
-				border-color: #94a0b4;
+				border-color: $stamboom-lijn-hover;
 			}
 
 			&:hover, &:hover + ul li a {
-				background: #c8e4f8;
-				color: #000;
-				border: 1px solid #94a0b4;
+				background: $stamboom-bg-hover;
+				color: $black;
+				border: 1px solid $stamboom-lijn-hover;
 			}
 		}
 	}

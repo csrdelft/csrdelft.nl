@@ -5,13 +5,10 @@ import axios from 'axios';
 import {registerBbContext, registerFormulierContext} from '../context';
 import {init} from '../ctx';
 import {route} from '../lib/util';
-import {select, selectAll} from "../lib/dom";
-import hoverintent from "hoverintent"
+import {select} from "../lib/dom";
+import {lazyLoad} from "../lib/lazy-load";
 
 require('lightbox2');
-require('../lib/external/jquery.markitup');
-
-require('timeago');
 
 const contexts = [];
 
@@ -22,41 +19,17 @@ route('/forum', () => contexts.push(registerFormulierContext()));
 
 Promise.all(contexts).then(() => init(document.body));
 
-route('/fotoalbum', () => import(/* webpackChunkName: "fotoalbum" */'../page/fotoalbum'));
+route('/fotoalbum', () => import('../page/fotoalbum'));
 
 declare global {
 	// Deze functie heeft geen type...
-	// eslint-disable-next-line @typescript-eslint/no-namespace
-	namespace JQueryUI {
-		interface Widget {
-			bridge: (newName: string, widget: Widget) => void;
-		}
-	}
 
 	interface Window {
 		bbcode: unknown;
-		hoverintent: typeof hoverintent
 	}
 }
 
-window.hoverintent = hoverintent
-
-const textarea = document.createElement('textarea');
-
-for (const element of selectAll('.lazy-load')) {
-	// setTimeout om lazy-load blokken na elkaar te laden ipv allemaal tegelijk.
-	setTimeout(() => {
-		const innerHTML = element.innerHTML.trim();
-
-		// Sommige browsers encoden de inhoud van de noscript tag.
-		if (innerHTML.startsWith('&lt;')) {
-			textarea.innerHTML = innerHTML;
-			element.outerHTML = textarea.value;
-		} else {
-			element.outerHTML = innerHTML;
-		}
-	});
-}
+lazyLoad(".lazy-load")
 
 try {
 	const header = select('#header');

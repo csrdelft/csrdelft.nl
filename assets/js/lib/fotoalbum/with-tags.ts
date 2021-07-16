@@ -24,7 +24,11 @@ const withTags: GalleryDecorator = (constructor) =>
 	class extends constructor {
 
 		private get imageElement() {
-			return select<HTMLImageElement>('.j-gallery-preview-content', this.previewElement)
+			try {
+				return select<HTMLImageElement>('.j-gallery-preview-content', this.previewElement)
+			} catch (e) {
+				return null
+			}
 		}
 
 		private get left() {

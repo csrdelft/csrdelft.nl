@@ -30,12 +30,12 @@ export const loadFotoAlbum = async (): Promise<void> => {
 		const decorators = [withFullscreenButton, withDownloadButton, withHotkeys, withPreload, withFullSizePreview];
 
 		if (isLoggedIn === 'true') {
-			const withTags = await import(/*webpackChunkName: "fotoalbum-with-tags"*/'./with-tags');
+			const withTags = await import('./with-tags');
 			decorators.push(withTags.default);
 		}
 
 		if (magAanpassen === 'true') {
-			const withAdminButtons = await import(/*webpackChunkName: "fotoalbum-with-admin-buttons"*/'./with-admin-buttons');
+			const withAdminButtons = await import('./with-admin-buttons');
 			decorators.push(withAdminButtons.default);
 		}
 

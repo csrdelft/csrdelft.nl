@@ -1,6 +1,6 @@
 import Hammer from 'hammerjs';
-import $ from 'jquery';
 import {docReady} from './lib/util';
+import {select, selectAll} from "./lib/dom";
 
 declare global {
 	// Hammer kan een Document als element krijgen, dit zorgt ervoor dat horizontale scroll mogelijk is op mobiel.
@@ -9,84 +9,35 @@ declare global {
 	}
 }
 
-docReady(() => {
+const initSubmenus = () => {
+	// Probeer menu te selecteren
+	select('#menu')
 
-	if (!$('#menu').length) { return; }
+	const hideSubMenus = () => selectAll('.dropdown-submenu .show').forEach(subMenu => subMenu.classList.remove('show'))
 
-	let active: string | null = null;
+	selectAll('.dropdown-menu a.dropdown-toggle').forEach(el => {
+		el.addEventListener('click', e => {
+			e.stopPropagation()
 
-	/**
-	 * Zorg ervoor dat de body niet kan scrollen als de overlay zichtbaar is.
-	 */
-	function toggleScroll() {
-		if (active === '#zijbalk') {
-			$('body').addClass('overflow-x-hidden');
-		} else {
-			// Sta toe om te scrollen _nadat_ de animatie klaar is.
-			setTimeout(() => $('body').removeClass('overflow-x-hidden'), 300);
-		}
-	}
+			const subMenu = el.nextElementSibling
 
-	/**
-	 * Terug naar gewone view.
-	 */
-	function reset(event?: Event) {
-		if (event && active != null) {
-			event.preventDefault();
-		}
-
-		active = null;
-
-		$('.target').removeClass('target');
-
-		toggleScroll();
-	}
-
-	$('.dropdown-menu a.dropdown-toggle').on('click', function () {
-		if (!$(this).next().hasClass('show')) {
-			$(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
-		}
-		const $subMenu = $(this).next('.dropdown-menu');
-		$subMenu.toggleClass('show');
-
-		$(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', () => {
-			$('.dropdown-submenu .show').removeClass('show');
-		});
-
-		return false;
-	});
-
-	/**
-	 * Toggle view met id.
-	 * @param id
-	 */
-	function toggle(id: string) {
-		return (event?: Event) => {
-			if (event) {
-				event.preventDefault();
-				event.stopImmediatePropagation();
+			if (!subMenu.classList.contains('show')) {
+				hideSubMenus()
 			}
-			if (active === id) {
-				reset();
-			} else {
-				active = id;
 
-				$('.target').not(id).removeClass('target');
-				$(id).toggleClass('target');
+			subMenu.classList.toggle('show')
 
-				toggleScroll();
-			}
-		};
-	}
+			return false
+		})
 
-	$('.trigger[href="#zijbalk"]').on('click', toggle('#zijbalk'));
-	$('.cd-page-content,#menu,footer').on('click', reset);
+	})
 
-	const searchfield = document.querySelector<HTMLInputElement>('input[type=search].ZoekField');
+	document.addEventListener('hidden.bs.dropdown', hideSubMenus)
 
-	if (!searchfield) {
-		return;
-	}
+}
+
+const initInstantSearch = () => {
+	const searchfield = select<HTMLInputElement>('input[type=search].ZoekField');
 
 	document.addEventListener('keydown', (event: KeyboardEvent) => {
 		// Geen instantsearch met modifiers
@@ -120,34 +71,102 @@ docReady(() => {
 		}
 	});
 
-	$(document).on('keyup', (event) => {
-		if (event.key == "Escape") {
+}
+
+docReady(() => {
+	try {
+		initSubmenus()
+		initInstantSearch()
+
+		const ZIJBALK_SELECTOR = '#zijbalk'
+		let active: string | null = null;
+
+		/**
+		 * Zorg ervoor dat de body niet kan scrollen als de overlay zichtbaar is.
+		 */
+		const toggleScroll = () => {
+			if (active === '#zijbalk') {
+				document.body.classList.add('overflow-x-hidden')
+			} else {
+				// Sta toe om te scrollen _nadat_ de animatie klaar is.
+				setTimeout(() => document.body.classList.remove('overflow-x-hidden'), 300);
+			}
+		};
+
+		/**
+		 * Terug naar gewone view.
+		 */
+		const reset = (event?: Event) => {
+			if (event && active != null) {
+				event.preventDefault();
+			}
+
+			active = null;
+
+			selectAll('.target').forEach(el => el.classList.remove('target'))
+
+			toggleScroll();
+		};
+
+
+		/**
+		 * Toggle view met id.
+		 */
+		const toggle = (event?: Event) => {
+			if (event) {
+				event.preventDefault();
+				event.stopImmediatePropagation();
+			}
+			if (active === ZIJBALK_SELECTOR) {
+				reset();
+			} else {
+				active = ZIJBALK_SELECTOR;
+
+				selectAll('.target').forEach(el => {
+					if (el.id != 'zijbalk') {
+						el.classList.remove('target')
+					}
+				})
+
+				select(ZIJBALK_SELECTOR).classList.toggle('target')
+
+				toggleScroll();
+			}
+		};
+
+		selectAll('.trigger[href="#zijbalk"]').forEach(el => el.addEventListener('click', toggle))
+
+		selectAll('.cd-page-content, #menu, footer').forEach(el => el.addEventListener('click', reset))
+
+		document.addEventListener('keydown', e => {
+			if (e.key == "Escape") {
+				reset();
+			}
+		})
+
+		// Maak het mogelijk om nog tekst te kunnen selecteren.
+		delete Hammer.defaults.cssProps.userSelect;
+
+		const hammertime = new Hammer(document, {inputClass: Hammer.TouchInput});
+
+		const swipeDisabled = (e: HammerInput) => e.target.closest('.disable-swipe, table') != null
+
+		hammertime.on('swiperight', (e) => {
+			if (swipeDisabled(e)) {
+				return;
+			}
+
+			toggle();
+		});
+
+		hammertime.on('swipeleft', (e) => {
+			if (swipeDisabled(e)) {
+				return;
+			}
+
 			reset();
-		}
-	});
-
-	// Maak het mogelijk om nog tekst te kunnen selecteren.
-	delete Hammer.defaults.cssProps.userSelect;
-
-	const hammertime = new Hammer(document, {inputClass: Hammer.TouchInput});
-
-	function swipeDisabled(e: HammerInput) {
-		return $(e.target).closest('.disable-swipe, table').length > 0;
+		});
+	} catch (e) {
+		// Geen menu aanwezig
 	}
-
-	hammertime.on('swiperight', (e) => {
-		if (swipeDisabled(e)) {
-			return;
-		}
-
-		toggle('#zijbalk')();
-	});
-
-	hammertime.on('swipeleft', (e) => {
-		if (swipeDisabled(e)) {
-			return;
-		}
-
-		reset();
-	});
 });

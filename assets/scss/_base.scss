@@ -9,13 +9,10 @@
 @import "module/maalcie";
 @import "zoeken";
 @import "overlay";
-@import "search";
 @import "module/agenda";
 @import "module/bibliotheek";
-@import "module/commissievoorkeuren";
 @import "module/aanmelder";
 @import "module/datatable";
-@import "module/documenten";
 @import "module/fiscaat";
 @import "module/formulier";
 @import "module/forum";
@@ -48,10 +45,6 @@ main {
 /* Standaard Kleuren */
 .overflow-x-hidden {
 	overflow-x: hidden;
-}
-
-.overflow-hidden {
-	overflow: hidden;
 }
 
 .form-group .twitter-typeahead {

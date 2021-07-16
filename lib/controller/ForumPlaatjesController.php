@@ -27,21 +27,6 @@ class ForumPlaatjesController extends AbstractController {
 	}
 
 	/**
-	 * @return PlaatjesUploadModalForm|Response
-	 * @Route("/forum/plaatjes/upload", methods={"GET","POST"})
-	 * @Auth(P_LOGGED_IN)
-	 */
-	public function upload() {
-		$form = new PlaatjesUploadModalForm();
-		if ($form->isPosted()) {
-			$plaatje = $this->forumPlaatjeRepository->fromUploader($form->uploader, $this->getUid());
-			return $this->render('forum/partial/insert_plaatje.html.twig', ['plaatje' => $plaatje]);
-		} else {
-			return $form;
-		}
-	}
-
-	/**
 	 * @Route("/forum/plaatjes/upload_json", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 * @return JsonResponse

@@ -21,7 +21,7 @@ class NodeMaaltijd implements Node
 
 	public function getData(BbNode $node)
 	{
-		if (!$node instanceof BbMaaltijd) {
+		if (!($node instanceof BbMaaltijd)) {
 			throw new \InvalidArgumentException();
 		}
 

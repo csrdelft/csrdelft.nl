@@ -170,4 +170,8 @@ class BbMaaltijd extends BbTag {
 		}
 		return array($maaltijd, $maaltijd2);
 	}
+
+	public function getId() {
+		return $this->id;
+	}
 }
