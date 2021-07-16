@@ -187,7 +187,7 @@ class Declaratie {
 		return $this;
 	}
 
-	public function getIngediend(): bool {
+	public function isIngediend(): bool {
 		return $this->ingediend;
 	}
 

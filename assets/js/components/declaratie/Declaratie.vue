@@ -406,6 +406,7 @@ import Vue from 'vue';
 import {Component, Prop} from 'vue-property-decorator';
 
 interface Declaratie {
+  id?: number;
   categorie?: number;
   betaalwijze?: 'C.S.R.-pas' | 'voorgeschoten';
   eigenRekening?: boolean;
