@@ -13,7 +13,6 @@ use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredProsemirrorField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredLegacyTextField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;

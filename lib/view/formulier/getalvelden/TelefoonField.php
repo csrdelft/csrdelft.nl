@@ -3,7 +3,6 @@
 namespace CsrDelft\view\formulier\getalvelden;
 
 use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\invoervelden\LegacyTextField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>

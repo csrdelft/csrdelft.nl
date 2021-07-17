@@ -7,7 +7,6 @@ use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredLegacyTextField;
 use CsrDelft\view\formulier\invoervelden\SuggestieField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;

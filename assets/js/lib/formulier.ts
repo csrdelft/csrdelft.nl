@@ -19,11 +19,13 @@ export function formIsChanged(form: HTMLFormElement): boolean {
 			if (el.checked && origValue !== el.value) {
 				changed = true
 			}
-		} else if (el.type == 'checkbox') {
+		} else
+		if (el.type == 'checkbox') {
 			if (Boolean(origValue) !== el.checked) {
 				changed = true
 			}
-		} else if (el.value !== origValue) {
+		} else
+		if (el.value !== origValue) {
 			changed = true
 		}
 	})
