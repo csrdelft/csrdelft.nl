@@ -52,11 +52,12 @@ class TimeField extends TextField
 class TimeObjectField extends TimeField
 class VerticaleField extends SelectField
 class WeekdagField extends SelectField
-class BestandBehouden extends InputField
-class DownloadUrlField extends UrlField
+abstract class UploaderField extends TextField
+class BestandBehouden extends UploaderField
+class DownloadUrlField extends UploaderField
 class FileField extends RadioField
 class ImageField extends FileField
-class UploadFileField extends InputField
+class UploadFileField extends UploaderField
 class CsrfField implements FormElement
 
 @enduml
