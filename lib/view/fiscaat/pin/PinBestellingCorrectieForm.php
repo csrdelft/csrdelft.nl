@@ -5,7 +5,6 @@ namespace CsrDelft\view\fiscaat\pin;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
-use CsrDelft\view\formulier\invoervelden\LegacyTextField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
@@ -42,7 +41,7 @@ abstract class PinBestellingCorrectieForm extends ModalForm {
 		$fields['commentNieuw'] = new TextField('commentNieuw', $commentNieuw, 'Externe notitie ' . $this->bestellingType);
 		$fields['internNieuw'] = new TextareaField('internNieuw', '', 'Interne notitie ' . $this->bestellingType);
 		$fields['stuurMail'] = new JaNeeField('stuurMail', true, 'Stuur mail naar lid');
-		$fields['pinTransactieId'] = new LegacyTextField('pinTransactieId', $pinTransactieMatch ? $pinTransactieMatch->id : null, 'Id');
+		$fields['pinTransactieId'] = new TextField('pinTransactieId', $pinTransactieMatch ? $pinTransactieMatch->id : null, 'Id');
 		$fields['pinTransactieId']->hidden = true;
 
 		$this->addFields($fields);
