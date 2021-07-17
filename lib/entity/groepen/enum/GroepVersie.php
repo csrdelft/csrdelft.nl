@@ -10,6 +10,8 @@ use CsrDelft\common\Enum;
  *
  * @method static static V1
  * @method static static V2
+ * @method static boolean isV1(static $groepVersie)
+ * @method static boolean isV2(static $groepVersie)
  */
 class GroepVersie extends Enum {
 	const V1 = 'v1';

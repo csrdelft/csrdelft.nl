@@ -86,7 +86,7 @@ class FormFieldFactory {
 
 			$targetEntity = $associationMapping['targetEntity'];
 
-			$readableFieldName = ucfirst(str_replace('_', ' ', $fieldName));
+			$readableFieldName = humanizeVariable($fieldName);
 
 			if ($targetEntity == Profiel::class) {
 				$field = new ProfielEntityField($fieldName, $model->$fieldName, $readableFieldName, 'leden');
@@ -119,7 +119,7 @@ class FormFieldFactory {
 	 * @return FloatField|IntField|LidField|RechtenField|SafeJsonField|TextareaField|TextField|DateTimeObjectField|EnumSelectField|JaNeeField|TimeObjectField|VerticaleField
 	 */
 	private static function getFieldByType(string $fieldName, $value, $type) {
-		$desc = ucfirst(str_replace('_', ' ', $fieldName));
+		$desc = humanizeVariable($fieldName);
 
 		if (str_starts_with($fieldName, 'rechten_')) {
 			return new RechtenField($fieldName, $value, $desc);

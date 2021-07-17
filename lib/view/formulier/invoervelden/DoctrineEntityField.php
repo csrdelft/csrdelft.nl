@@ -77,6 +77,14 @@ class DoctrineEntityField extends TextField {
 		parent::__construct($name, $this->origvalue, $description);
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getUrl(): string
+	{
+		return $this->url;
+	}
+
 	public function getFormattedValue() {
 		$id = $this->getValue();
 		if ($id == null) {
@@ -107,7 +115,7 @@ class DoctrineEntityField extends TextField {
 		$config = [
 			'name' => $this->getName(),
 			'id' => $this->getId(),
-			'url' => $this->url,
+			'url' => $this->getUrl(),
 			'valueShow' => $this->showValue,
 			'valueId' => $this->value,
 			'idField' => $this->suggestieIdField,

@@ -35,9 +35,10 @@ class TextField implements FormElement, Validator
 	protected $wrapperClassName = 'row mb-3';
 	protected $labelClassName = 'col-3 col-form-label';
 	protected $fieldClassName = 'col-9';
-	protected $description;
+	public $description;
 	private $id;
 	private $model;
+	public $hidden;
 
 	public function __construct($name, $value, $description, $max_len = 255, $min_len = 0, $model = null)
 	{
@@ -129,6 +130,9 @@ class TextField implements FormElement, Validator
 	public function getDiv()
 	{
 		$cssclass = $this->wrapperClassName;
+		if ($this->hidden) {
+			$cssclass .= ' d-none';
+		}
 		return '<div id="wrapper_' . $this->id . '" class="' . $cssclass . '">';
 	}
 

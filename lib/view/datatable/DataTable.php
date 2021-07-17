@@ -186,7 +186,7 @@ class DataTable implements View, FormElement, ToResponse {
 		$newColumn = array(
 			'name' => $newName,
 			'data' => $data ?? $newName,
-			'title' => ucfirst(str_replace('_', ' ', $newName)),
+			'title' => humanizeVariable($newName),
 			'defaultContent' => $defaultContent,
 			'type' => $type,
 			'searchable' => false,

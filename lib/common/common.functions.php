@@ -1131,3 +1131,7 @@ function createReflectionMethod(callable $fn) {
 
 	throw new InvalidArgumentException('Niet een callable');
 }
+
+function humanizeVariable($varName) {
+	return ucfirst(str_replace('_', ' ', preg_replace('/([a-z])([A-Z])/', '$1 $2', $varName)));
+}

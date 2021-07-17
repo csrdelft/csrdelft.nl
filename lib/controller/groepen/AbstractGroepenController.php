@@ -14,7 +14,6 @@ use CsrDelft\entity\groepen\enum\GroepVersie;
 use CsrDelft\entity\groepen\GroepAanmeldMoment;
 use CsrDelft\entity\groepen\GroepAanmeldRechten;
 use CsrDelft\entity\groepen\GroepLid;
-use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\entity\groepen\interfaces\HeeftSoort;
 use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuzeSelectie;
@@ -666,10 +665,15 @@ abstract class AbstractGroepenController extends AbstractController implements R
 		$lid = $this->groepLidRepository->nieuw($groep, null);
 		$lid->groep = $groep;
 		$lid->groep_id = $groep->id;
-		$leden = group_by_distinct('uid', $groep->getLeden());
-		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden', array_keys($leden));
+		$form = new GroepLidBeheerForm($lid, $groep->getUrl() . '/aanmelden');
 
 		if ($form->validate()) {
+			if ($groep->getLid($lid->profiel->uid)) {
+				setMelding('Gebruiker is al aangemeld', -1);
+
+				return $form;
+			}
+
 			$this->changeLogRepository->log($groep, 'aanmelden', null, $lid->profiel->uid);
 			$lid->groep_id = $lid->groep->id;
 			$lid->uid = $lid->profiel->uid;

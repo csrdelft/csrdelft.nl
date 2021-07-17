@@ -3,6 +3,7 @@
 namespace CsrDelft\view\formulier;
 
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormKnoppen;
 
@@ -17,7 +18,16 @@ abstract class InlineForm extends Formulier implements FormElement {
 	private $field;
 	private $toggle;
 
-	public function __construct($model, $action, InputField $field, $toggle = true, $buttons = false, $dataTableId = false) {
+	/**
+	 * InlineForm constructor.
+	 * @param $model
+	 * @param $action
+	 * @param InputField|TextField $field
+	 * @param bool $toggle
+	 * @param false $buttons
+	 * @param false $dataTableId
+	 */
+	public function __construct($model, $action, $field, $toggle = true, $buttons = false, $dataTableId = false) {
 		parent::__construct($model, $action, null, $dataTableId);
 		if (isset($_POST['InlineFormId'])) {
 			$this->formId = filter_input(INPUT_POST, 'InlineFormId', FILTER_SANITIZE_STRING);
