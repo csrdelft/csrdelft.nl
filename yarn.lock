@@ -5,6 +5,55 @@ __metadata:
   version: 4
   cacheKey: 7
 
+"@algolia/autocomplete-core@npm:1.2.1":
+  version: 1.2.1
+  resolution: "@algolia/autocomplete-core@npm:1.2.1"
+  dependencies:
+    "@algolia/autocomplete-shared": 1.2.1
+  checksum: e6cbd814b7a6733214637f6113ebd1d845bfc4b32811da9a8f5cfb72c4aa84084b6ef6073dc1015b577d5a06300fdc4c91d1761fb9fd4419eabf56e0a93b5d5c
+  languageName: node
+  linkType: hard
+
+"@algolia/autocomplete-js@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@algolia/autocomplete-js@npm:1.2.1"
+  dependencies:
+    "@algolia/autocomplete-core": 1.2.1
+    "@algolia/autocomplete-preset-algolia": 1.2.1
+    "@algolia/autocomplete-shared": 1.2.1
+    preact: ^10.0.0
+  peerDependencies:
+    "@algolia/client-search": ^4.5.1
+  checksum: 4a88a0a0072d91733218bc35b8f105f3cdd32572efe91a7c198e359a0951c35645c3c131978f56bde3e6b12551a766aaced507abe2b934ee0148069f6a8edc8a
+  languageName: node
+  linkType: hard
+
+"@algolia/autocomplete-preset-algolia@npm:1.2.1":
+  version: 1.2.1
+  resolution: "@algolia/autocomplete-preset-algolia@npm:1.2.1"
+  dependencies:
+    "@algolia/autocomplete-shared": 1.2.1
+  peerDependencies:
+    "@algolia/client-search": ^4.9.1
+    algoliasearch: ^4.9.1
+  checksum: 9d03c13651704f67b3347ff18244fe48b10aadaf9c78ba334e065e91499b0a3c4adf67cd5315d8ac1e1685e4cde16db3ed102900170af4c0cbf357bb9f9f25c3
+  languageName: node
+  linkType: hard
+
+"@algolia/autocomplete-shared@npm:1.2.1":
+  version: 1.2.1
+  resolution: "@algolia/autocomplete-shared@npm:1.2.1"
+  checksum: dc875f9e59d5a83b87df055f56f91b0b73d86c60fe869924fc28b7347c104afce996ac9e5742779906af27d32d22f6005b2672836f58994160879b74dadab1e3
+  languageName: node
+  linkType: hard
+
+"@algolia/autocomplete-theme-classic@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@algolia/autocomplete-theme-classic@npm:1.2.1"
+  checksum: f2a3b305cd94f994761622270be47b2f1815752349db01ff43e96989e5040219d4fd578690a927123dcf7184dc119a8653643bdac8e9849b40e913506275acb2
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.0.0":
   version: 7.10.4
   resolution: "@babel/code-frame@npm:7.10.4"
@@ -5467,6 +5516,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"preact@npm:^10.0.0":
+  version: 10.5.14
+  resolution: "preact@npm:10.5.14"
+  checksum: 1cb6f0eecd0f1de15621efae40f86790dac5a5eb68ca2a02790685c234055fc6efe60def719a0a90b747ed35b1b5099fc7a3e33cf0d4972bf9b1e3895cf02efa
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -6026,6 +6082,8 @@ resolve@^1.9.0:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@algolia/autocomplete-js": ^1.2.1
+    "@algolia/autocomplete-theme-classic": ^1.2.1
     "@fortawesome/fontawesome-free": ^5.11.2
     "@fullcalendar/core": ^4.3.1
     "@fullcalendar/daygrid": ^4.3.0

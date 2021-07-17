@@ -82,11 +82,16 @@ export const registerFormulierContext = async (): Promise<void> => {
 			initDropzone,
 		},
 		{
+			initRemoteSuggestieField,
+			initEntityField,
+		},
+		{
 			initTimeago,
 		},
 	] = await Promise.all([
 		import('./lib/formulier'),
 		import('./lib/dropzone'),
+		import('./lib/autocomplete'),
 		import('./lib/timeago'),
 	]);
 
@@ -97,6 +102,8 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'.reset': (el) => el.addEventListener('click', formReset),
 		'.submit': (el) => el.addEventListener('click', formSubmit),
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
+		'[data-autocomplete]': initRemoteSuggestieField,
+		'[data-entity-field]': initEntityField,
 		'time.timeago': initTimeago,
 		'.SterrenField': initSterrenField,
 		'form.dropzone': initDropzone,

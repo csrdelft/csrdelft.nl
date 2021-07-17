@@ -8,6 +8,7 @@ use CsrDelft\entity\bibliotheek\Boek;
 use CsrDelft\repository\bibliotheek\BiebRubriekRepository;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
+use CsrDelft\view\formulier\invoervelden\RemoteSuggestieField;
 use CsrDelft\view\formulier\invoervelden\LegacyTextField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\TitelField;
@@ -49,8 +50,8 @@ class BoekFormulier implements FormulierTypeInterface {
 		$fields['auteur']->suggestions[] = '/bibliotheek/autocomplete/auteur?q=';
 		$fields['auteur']->placeholder = 'Achternaam, Voornaam V.L. van de';
 		$fields['paginas'] = new IntField('paginas', $data->paginas, "Pagina's", 0, 10000);
-		$fields['taal'] = new LegacyTextField('taal', $data->taal, 'Taal', 25);
-		$fields['taal']->suggestions[] = '/bibliotheek/autocomplete/taal?q=';
+		$fields['taal'] = new RemoteSuggestieField('taal', $data->taal, 'Taal', '/bibliotheek/autocomplete/taal?q=');
+		$fields['taal']->max_len = 25;
 		$fields['isbn'] = new TextField('isbn', $data->isbn, 'ISBN', 15);
 		$fields['isbn']->placeholder = 'Uniek nummer';
 		$fields['uitgeverij'] = new LegacyTextField('uitgeverij', $data->uitgeverij, 'Uitgeverij', 100);

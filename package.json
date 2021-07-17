@@ -73,6 +73,8 @@
 		"webpack-remove-empty-scripts": "^0.7.1"
 	},
 	"dependencies": {
+		"@algolia/autocomplete-js": "^1.2.1",
+		"@algolia/autocomplete-theme-classic": "^1.2.1",
 		"@fortawesome/fontawesome-free": "^5.11.2",
 		"@fullcalendar/core": "^4.3.1",
 		"@fullcalendar/daygrid": "^4.3.0",

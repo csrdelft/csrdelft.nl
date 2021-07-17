@@ -3,12 +3,13 @@
 namespace CsrDelft\view\formulier\keuzevelden;
 
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 14/03/2019
  */
-class CheckboxesField extends InputField {
+class CheckboxesField extends TextField {
 	/**
 	 * @var array
 	 */
@@ -17,7 +18,7 @@ class CheckboxesField extends InputField {
 	public function __construct($name, $value, $description, array $opties) {
 		$this->opties = $opties;
 
-		parent::__construct($name, $value, $description, null);
+		parent::__construct($name, $value, $description);
 	}
 
 

@@ -26,6 +26,24 @@
 @import '~@fullcalendar/timegrid/main.css';
 @import '~@fullcalendar/list/main.css';
 @import '~flatpickr/dist/flatpickr.css';
+@import '~@algolia/autocomplete-theme-classic';
+
+@function toRgb($color) {
+	@return '#{red($color)},#{green($color)},#{blue($color)}'
+}
+
+:root {
+	--aa-base-unit: 14;
+	--aa-search-input-height: 30px;
+	--aa-font-size: 1rem;
+	--aa-input-border-color-rgb: #{toRgb($input-border-color)};
+	--aa-primary-color-rgb: #{toRgb($primary)};
+	--aa-base-z-index: 1090;
+}
+
+.aa-Panel {
+	z-index: 1090;
+}
 
 body {
 	height: auto;

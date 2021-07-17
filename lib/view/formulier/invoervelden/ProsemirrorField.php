@@ -9,7 +9,7 @@ use CsrDelft\view\bbcode\ProsemirrorToBb;
 /**
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  */
-class ProsemirrorField extends InputField
+class ProsemirrorField extends TextField
 {
 	/**
 	 * De externe editor heeft geen knopjes voor groepen, forumplaetje, leden, etc.

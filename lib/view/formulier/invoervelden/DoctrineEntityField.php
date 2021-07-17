@@ -15,11 +15,12 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * NOTE: support alleen entities met een enkele primary key.
  */
-class DoctrineEntityField extends InputField {
+class DoctrineEntityField extends TextField {
+	protected $type = 'hidden';
 	/**
 	 * @var string
 	 */
-	private $show_value;
+	private $showValue;
 	/**
 	 * @var  DisplayEntity
 	 */
@@ -40,19 +41,24 @@ class DoctrineEntityField extends InputField {
 	 * @var string
 	 */
 	public $suggestieIdField = 'id';
+	/**
+	 * @var string
+	 */
+	private $url;
 
 	/**
 	 * EntityField constructor.
 	 * @param $name string Prefix van de input
 	 * @param DisplayEntity|null $value
 	 * @param $description string Beschrijvijng van de input
-	 * @param $type
+	 * @param $type string|DisplayEntity
 	 * @param $url string Url waar aanvullingen te vinden zijn
 	 */
 	public function __construct($name, $value, $description, $type, $url) {
 		if (!is_a($type, DisplayEntity::class, true)) {
 			throw new CsrException($type . ' moet DisplayEntity implementeren voor DoctrineEntityField');
 		}
+
 		$this->em = ContainerFacade::getContainer()->get('doctrine.orm.entity_manager');
 
 		$meta = $this->em->getClassMetadata($type);
@@ -63,23 +69,21 @@ class DoctrineEntityField extends InputField {
 
 		$this->idField = $meta->getIdentifier()[0];
 		$this->entityType = $type;
-		$this->entity = $value ?? new $type();
-		$this->suggestions[] = $url;
-		$this->show_value = $this->entity->getWeergave();
-		$this->origvalue = (string) $this->entity->getId();
+		$this->entity = $value;
+		$this->url = $url;
+		$this->showValue = $value ? $value->getWeergave() : '';
+		$this->origvalue = $value ? (string) $value->getId() : null;
 
-		parent::__construct($name, $value ? (string) $value->getId() : null, $description);
-
-		$this->autoselect = true;
+		parent::__construct($name, $this->origvalue, $description);
 	}
 
 	public function getFormattedValue() {
-		$value = $this->getValue();
-		if ($value == null) {
+		$id = $this->getValue();
+		if ($id == null) {
 			return null;
 		}
-		$this->entity = $this->em->getRepository($this->entityType)->find($value);
-		$this->show_value = $this->entity->getWeergave();
+		$this->entity = $this->em->getRepository($this->entityType)->find($id);
+		$this->showValue = $this->entity->getWeergave();
 		return $this->entity;
 	}
 
@@ -100,30 +104,18 @@ class DoctrineEntityField extends InputField {
 	}
 
 	public function getHtml() {
-		$html = '<input name="' . $this->name . '_show" value="' . $this->entity->getWeergave() . '" origvalue="' . $this->entity->getWeergave() . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
+		$config = [
+			'name' => $this->getName(),
+			'id' => $this->getId(),
+			'url' => $this->url,
+			'valueShow' => $this->showValue,
+			'valueId' => $this->value,
+			'idField' => $this->suggestieIdField,
+		];
 
-		$id = $this->getId() . '_' . $this->idField;
-		$this->typeahead_selected .= '$("#' . $id . '").val(suggestion["'.$this->suggestieIdField.'"]);';
-		$html .= '<input type="hidden" name="' . $this->name . '" id="' . $id . '" value="' . $this->entity->getId() . '" />';
+		$configString = vue_encode($config);
 
-		return $html;
+		return parent::getHtml()
+			. "<div data-entity-field=\"$configString\"></div>";
 	}
-
-	/**
-	 * Dit veld is gepost als show en de pk is gepost.
-	 *
-	 * @return bool Of alles gepost is
-	 */
-	public function isPosted() {
-		if (null === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
-			return false;
-		}
-
-		if (null === filter_input(INPUT_POST, $this->name, FILTER_DEFAULT)) {
-			return false;
-		}
-
-		return true;
-	}
-
 }

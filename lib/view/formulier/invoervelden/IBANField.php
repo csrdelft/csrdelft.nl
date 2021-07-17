@@ -8,7 +8,7 @@ namespace CsrDelft\view\formulier\invoervelden;
  *
  * Class IBANField checked of de ingevulde bankrekening een valide IBAN is.
  */
-class IBANField extends LegacyTextField {
+class IBANField extends TextField {
 
 	public function validate() {
 		if (!parent::validate()) {

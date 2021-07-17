@@ -4,6 +4,7 @@ namespace CsrDelft\view\formulier\keuzevelden;
 
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -13,13 +14,13 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  *
  * @Warning: NEVER use for persistence!
  */
-class CheckboxField extends InputField {
+class CheckboxField extends TextField {
 
 	public $type = 'checkbox';
 	public $label;
 
 	public function __construct($name, $value, $description, $label = null, $model = null) {
-		$this->css_classes = ['FormElement'];
+		$this->cssClasses = ['FormElement'];
 		parent::__construct($name, $value, $description, $model);
 		$this->label = $label;
 	}
@@ -54,10 +55,8 @@ class CheckboxField extends InputField {
 	}
 
 	public function validate() {
-		if (!$this->value AND $this->required) {
-			if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
-				// exception for leden mod
-			} else {
+		if (!$this->value && $this->required) {
+			if (!LoginService::mag(P_LEDEN_MOD)) {
 				$this->error = 'Dit is een verplicht veld';
 			}
 		}

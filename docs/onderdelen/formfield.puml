@@ -1,0 +1,62 @@
+
+@startuml
+class TextField implements FormElement, Validator
+class SelectField extends TextField
+class BedragField extends IntField
+class FloatField extends TextField
+class IntField extends TextField
+class TelefoonField extends TextField
+
+class CivisaldoField extends LegacyTextField
+class DoctrineEntityField extends TextField
+class DuckField extends TextField
+class EmailField extends TextField
+class FileNameField extends TextField
+class HiddenField extends TextField
+class HiddenObjectField extends HiddenField
+class IBANField extends TextField
+class InputField implements FormElement, Validator
+class LandField extends SuggestieField
+class LegacyTextField extends InputField
+class LidField extends LegacyTextField
+class LidObjectField extends LidField
+class ProfielEntityField extends DoctrineEntityField
+class ProsemirrorField extends TextField
+class RechtenField extends LegacyTextField
+class SafeJsonField extends TextareaField
+class StudieField extends SuggestieField
+class SuggestieField extends TextField
+class TextareaField extends TextField
+class TitelField extends TextField
+class UrlField extends TextField
+class UsernameField extends TextField
+class WachtwoordField extends TextField
+class WachtwoordWijzigenField extends InputField
+class ZoekField extends LegacyTextField
+
+class CheckboxesField extends TextField
+class CheckboxField extends TextField
+class DateField extends TextField
+class DateObjectField extends DateField
+class DateTimeField extends TextField
+class DateTimeObjectField extends DateTimeField
+class EntitySelectField extends TextField
+class EnumSelectField extends SelectField
+class JaNeeField extends RadioField
+class KerkField extends SelectField
+class MultiSelectField extends TextField
+class RadioField extends SelectField
+class SelectField extends TextField
+class SterrenField extends FloatField
+class TimeField extends TextField
+class TimeObjectField extends TimeField
+class VerticaleField extends SelectField
+class WeekdagField extends SelectField
+class BestandBehouden extends InputField
+class DownloadUrlField extends UrlField
+class FileField extends RadioField
+class ImageField extends FileField
+class UploadFileField extends InputField
+class CsrfField implements FormElement
+
+@enduml
