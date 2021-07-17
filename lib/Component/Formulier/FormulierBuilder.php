@@ -6,6 +6,7 @@ namespace CsrDelft\Component\Formulier;
 
 use CsrDelft\view\formulier\FormElement;
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\knoppen\EmptyFormKnoppen;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormKnoppen;
@@ -117,7 +118,7 @@ class FormulierBuilder {
 	 */
 	public function findByName($fieldName) {
 		foreach ($this->fields as $field) {
-			if (($field instanceof InputField || $field instanceof FileField) && $field->getName() === $fieldName) {
+			if (($field instanceof InputField || $field instanceof TextField) && $field->getName() === $fieldName) {
 				return $field;
 			}
 		}

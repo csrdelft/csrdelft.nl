@@ -37,7 +37,7 @@ class TextField implements FormElement, Validator
 	protected $fieldClassName = 'col-9';
 	public $description;
 	private $id;
-	private $model;
+	protected $model;
 	public $hidden;
 
 	public function __construct($name, $value, $description, $max_len = 255, $min_len = 0, $model = null)
@@ -310,11 +310,11 @@ class TextField implements FormElement, Validator
 			}
 		}
 		// als max_len is gezet dan checken of de lengte er niet boven zit
-		if (is_int($this->max_len) && strlen($this->value) > $this->max_len) {
+		if ($this->max_len !== null && strlen($this->value) > $this->max_len) {
 			$this->error = 'Dit veld mag maximaal ' . $this->max_len . ' tekens lang zijn';
 		}
 		// als min_len is gezet dan checken of de lengte er niet onder zit
-		if (is_int($this->min_len) && strlen($this->value) < $this->min_len) {
+		if ($this->min_len !== null && strlen($this->value) < $this->min_len) {
 			$this->error = 'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
 		}
 

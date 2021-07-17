@@ -46,7 +46,7 @@ abstract class InputField implements FormElement, Validator {
 
 	private $id; // unique id
 	protected $model; // model voor remote data source en validatie
-	protected $name; // naam van het veld in POST
+	public $name; // naam van het veld in POST
 	protected $value; // welke initiele waarde heeft het veld?
 	protected $origvalue; // welke originele waarde had het veld?
 	protected $empty_null = true; // lege waarden teruggeven als null (SET BEFORE getValue() call in constructor!)

@@ -19,14 +19,14 @@ use CsrDelft\view\formulier\UrlDownloader;
  * element niet weergegeven.
  *
  */
-class DownloadUrlField extends UrlField {
+class DownloadUrlField extends UploaderField {
 
 	public $filterMime;
 	private $downloader;
-	private $tmp_file;
+	private $tmpFile;
 
 	public function __construct($name, array $filterMime) {
-		parent::__construct($name, 'http://', 'Downloaden van URL');
+		parent::__construct($name, 'https://', 'Downloaden van URL');
 		$this->filterMime = $filterMime;
 		$this->downloader = new UrlDownloader();
 		if ($this->isPosted()) {
@@ -37,21 +37,21 @@ class DownloadUrlField extends UrlField {
 			if (empty($data)) {
 				return;
 			}
-			$url_name = substr(trim($this->value), strrpos($this->value, '/') + 1);
-			$clean_name = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $url_name);
-			$this->tmp_file = TMP_PATH . $clean_name;
+			$urlName = substr(trim($this->value), strrpos($this->value, '/') + 1);
+			$cleanName = preg_replace('/[^a-zA-Z0-9\s\.\-\_]/', '', $urlName);
+			$this->tmpFile = TMP_PATH . $cleanName;
 			if (!is_writable(TMP_PATH)) {
 				throw new CsrException('TMP_PATH is niet beschrijfbaar');
 			}
-			$filesize = file_put_contents($this->tmp_file, $data);
+			$filesize = file_put_contents($this->tmpFile, $data);
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
-			$mimetype = finfo_file($finfo, $this->tmp_file);
+			$mimetype = finfo_file($finfo, $this->tmpFile);
 			finfo_close($finfo);
 			if (in_array($mimetype, Afbeelding::$mimeTypes)) {
-				$this->model = new Afbeelding($this->tmp_file);
+				$this->model = new Afbeelding($this->tmpFile);
 			} else {
 				$this->model = new Bestand();
-				$this->model->filename = $clean_name;
+				$this->model->filename = $cleanName;
 				$this->model->filesize = $filesize;
 				$this->model->mimetype = $mimetype;
 				$this->model->directory = TMP_PATH;
@@ -73,10 +73,10 @@ class DownloadUrlField extends UrlField {
 			$this->error = 'PHP.ini configuratie: fsocked, cURL of allow_url_fopen moet aan staan.';
 		} elseif (!url_like($this->value)) {
 			$this->error = 'Ongeldige url';
-		} elseif (!$this->model instanceof Bestand OR !$this->model->exists() OR empty($this->model->filesize)) {
+		} elseif (!$this->model instanceof Bestand || !$this->model->exists() || empty($this->model->filesize)) {
 			$error = error_get_last();
 			$this->error = $error['message'];
-		} elseif (!empty($this->filterMime) AND !in_array($this->model->mimetype, $this->filterMime)) {
+		} elseif (!empty($this->filterMime) && !in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . $this->model->mimetype;
 		}
 		return $this->error === '';

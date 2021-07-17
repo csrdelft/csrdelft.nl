@@ -18,7 +18,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @property Bestand $model
  *
  */
-class BestandBehouden extends InputField {
+class BestandBehouden extends UploaderField {
 
 	public $filterMime;
 
@@ -32,14 +32,14 @@ class BestandBehouden extends InputField {
 	}
 
 	public function isAvailable() {
-		return $this->model instanceof Bestand AND $this->model->exists();
+		return $this->model instanceof Bestand && $this->model->exists();
 	}
 
 	public function validate() {
 		parent::validate();
-		if (!$this->isAvailable() OR empty($this->model->filesize)) {
+		if (!$this->isAvailable() || empty($this->model->filesize)) {
 			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->model->directory . $this->model->filename);
-		} elseif (!empty($this->filterMime) AND !in_array($this->model->mimetype, $this->filterMime)) {
+		} elseif (!empty($this->filterMime) && !in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		}
 		return $this->error === '';

@@ -77,6 +77,7 @@ export const registerFormulierContext = async (): Promise<void> => {
 			formSubmit,
 			formToggle,
 			initSterrenField,
+			initFileField,
 		},
 		{
 			initDropzone,
@@ -104,6 +105,7 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'form.Formulier': (el) => $(el).on('submit', formSubmit), // dit is sterker dan addEventListener
 		'[data-autocomplete]': initRemoteSuggestieField,
 		'[data-entity-field]': initEntityField,
+		'[data-max-size]': initFileField,
 		'time.timeago': initTimeago,
 		'.SterrenField': initSterrenField,
 		'form.dropzone': initDropzone,

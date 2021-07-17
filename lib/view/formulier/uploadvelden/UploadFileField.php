@@ -6,6 +6,7 @@ use CsrDelft\common\CsrException;
 use CsrDelft\model\entity\Afbeelding;
 use CsrDelft\model\entity\Bestand;
 use CsrDelft\view\formulier\invoervelden\InputField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 
 /**
  * @author C.S.R. Delft <pubcie@csrdelft.nl>
@@ -14,7 +15,7 @@ use CsrDelft\view\formulier\invoervelden\InputField;
  * @since 30/03/2017
  * Uploaden van bestand in de browser over http(s).
  */
-class UploadFileField extends InputField {
+class UploadFileField extends UploaderField {
 
 	public $filterMime;
 	public $type = 'file';
@@ -58,9 +59,9 @@ class UploadFileField extends InputField {
 			$this->error = 'Bestand is te groot: Maximaal ' . format_filesize(getMaximumFileUploadSize());
 		} elseif ($this->value['error'] != UPLOAD_ERR_OK) {
 			$this->error = 'Upload-error: code ' . $this->value['error'];
-		} elseif (!is_uploaded_file($this->value['tmp_name']) OR empty($this->model->filesize)) {
+		} elseif (!is_uploaded_file($this->value['tmp_name']) || empty($this->model->filesize)) {
 			$this->error = 'Bestand bestaat niet (meer): ' . htmlspecialchars($this->value['tmp_name']);
-		} elseif (!empty($this->filterMime) AND !in_array($this->model->mimetype, $this->filterMime)) {
+		} elseif (!empty($this->filterMime) && !in_array($this->model->mimetype, $this->filterMime)) {
 			$this->error = 'Bestandstype niet toegestaan: ' . htmlspecialchars($this->model->mimetype);
 		} elseif (!checkMimetype($this->model->filename, $this->model->mimetype)) {
 			$this->error = 'Bestandstype komt niet overeen met bestandsnaam: ' . $this->model->mimetype;
@@ -88,25 +89,9 @@ class UploadFileField extends InputField {
 		} else {
 			$accept = implode('|', $this->filterMime);
 		}
-		return '<input ' . $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly')) . ' accept="' . $accept . '" data-max-size="' . getMaximumFileUploadSize() . '" />';
+		$attribute = $this->getInputAttribute(array('type', 'id', 'name', 'class', 'disabled', 'readonly'));
+		$maxSize = getMaximumFileUploadSize();
+		$maxSizeReadable = format_filesize($maxSize);
+		return "<input {$attribute} accept=\"{$accept}\" data-max-size=\"{$maxSize}\" data-max-size-readable=\"{$maxSizeReadable}\" />";
 	}
-
-	public function getJavascript() {
-		$max = getMaximumFileUploadSize();
-		$format = format_filesize($max);
-		return parent::getJavascript() . <<<JS
-
-$('#{$this->getId()}').change(function() {
-	for (i = 0; i < this.files.length; i++) {
-		if (this.files[i].size > {$max}) {
-			alert(this.files[i].name + ' is te groot: Maximaal {$format}\\n\\nSplits het bestand op of gebruik een andere upload-methode.');
-			if (this.files.length <= 1) {
-				$(this).val('');
-			}
-		}
-	}
-});
-JS;
-	}
-
 }

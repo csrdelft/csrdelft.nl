@@ -21,7 +21,7 @@ class PosterUploadForm extends Formulier {
 		$fields = [];
 		$fields[] = new HtmlComment('Alleen jpeg afbeeldingen.<br/><br/>');
 		$fields[] = new RequiredFileNameField('posternaam', null, 'Posternaam', 50, 5);
-		$fields[] = new RequiredImageField('afbeelding', 'Poster', null, null, array('image/jpeg'));
+		$fields[] = new RequiredImageField('afbeelding', 'Poster', null, array('image/jpeg'));
 		$fields[] = new FormDefaultKnoppen('/fotoalbum', false);
 		$fields[] = new HtmlComment('<br /><span class="cursief">Maak nooit inbreuk op de auteursrechten of het recht op privacy van anderen.</span>');
 		$this->addFields($fields);

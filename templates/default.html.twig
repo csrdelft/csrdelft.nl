@@ -8,6 +8,8 @@
 
 {% block titel %}{{ content.titel }}{% endblock %}
 
+{% block breadcrumbs %}{{ content.breadcrumbs | raw }}{% endblock %}
+
 {% block content %}{{ content.__toString | raw }}{% endblock %}
 
 {% block modal %}

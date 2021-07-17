@@ -13,7 +13,7 @@ use CsrDelft\view\Icon;
 class FotosDropzone extends Dropzone {
 
 	public function __construct(FotoAlbum $album) {
-		parent::__construct($album, '/fotoalbum/uploaden/' . $album->subdir, new ImageField('afbeelding', 'Foto', null, null, array('image/jpeg')), '/fotoalbum');
+		parent::__construct($album, '/fotoalbum/uploaden/' . $album->subdir, new ImageField('afbeelding', 'Foto', null, array('image/jpeg')), '/fotoalbum');
 	}
 
 	public function getBreadcrumbs() {

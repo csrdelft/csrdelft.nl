@@ -259,3 +259,23 @@ export function initSterrenField(el: HTMLElement): void {
 		}
 	})
 }
+
+export function initFileField(el: HTMLInputElement): void {
+	const maxSize = Number(el.dataset.maxSize)
+	const maxSizeReadable = el.dataset.maxSizeReadable
+
+	el.addEventListener('change', () => {
+		if (!el.files) {
+			return
+		}
+
+		for (const file of Array.from(el.files)) {
+			if (file.size > maxSize) {
+
+				alert(file.name + ' is te groot: Maximaal ' + maxSizeReadable + '\n\nSplits het bestand op of gebruik een andere upload-methode.');
+
+				el.value = '';
+			}
+		}
+	})
+}

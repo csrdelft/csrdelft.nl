@@ -58,10 +58,6 @@ class DocumentToevoegenForm implements FormulierTypeInterface
 	{
 		$builder->setTitel('Document toevoegen');
 
-		$map = new Map();
-		$map->path = PUBLIC_FTP . 'documenten/';
-		$map->dirname = basename($map->path);
-
 		$fields[] = new HtmlBbComment(<<<TAG
 [p]Documenten die hier geüpload worden moeten relevant zijn voor de hele vereniging of een groot deel van de vereniging
 en staan hier om bewaard te worden. Documenten in de 'Categorieloos' categorie worden door een beheerder naar de goede
@@ -76,7 +72,7 @@ TAG
 		$fields['categorie'] = new EntitySelectField('categorie', $data->categorie, 'Categorie', DocumentCategorie::class);
 		$fields['categorie']->setOptions($this->documentCategorieRepository->findMetSchijfrechtenVoorLid());
 		$fields[] = new RequiredTextField('naam', $data->naam, 'Documentnaam');
-		$fields['uploader'] = $this->uploader = new RequiredFileField('document', 'Document', $data, $map);
+		$fields['uploader'] = $this->uploader = new RequiredFileField('document', 'Document', $data);
 		$fields['rechten'] = new RechtenField('leesrechten', $data->leesrechten, 'Leesrechten');
 		$fields['rechten']->readonly = true;
 
