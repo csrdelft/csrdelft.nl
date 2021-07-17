@@ -52,11 +52,19 @@
 	#zijbalk {
 		display: none;
 	}
+
+	.aa-Panel {
+		margin-left: 0;
+	}
 }
 
 .zijbalk_extra_breed {
 
 	#menu {
+		margin-left: -250px;
+	}
+
+	.aa-Panel {
 		margin-left: -250px;
 	}
 
@@ -198,6 +206,12 @@ Overrides voor bredere schermen
 		width: 200px;
 		padding-left: 10px;
 	}
+
+	.zijbalk_normaal {
+		.aa-Panel {
+			margin-left: -200px;
+		}
+	}
 }
 
 /* --------------------------------
@@ -216,5 +230,9 @@ Initieel verbergen, weergeven als :target of .target op #zijbalk
 	#zijbalk.target,
 	#zijbalk:target {
 		transform: translateX(0);
+	}
+
+	.aa-Panel {
+		margin-left: 0;
 	}
 }
