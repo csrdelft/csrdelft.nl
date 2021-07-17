@@ -8,6 +8,7 @@ use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\common\datatable\RemoveDataTableEntry;
 use CsrDelft\common\Mail;
 use CsrDelft\controller\AbstractController;
+use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\entity\pin\PinTransactieMatchStatusEnum;
@@ -170,8 +171,9 @@ class PinTransactieController extends AbstractController {
 				throw new CsrGebruikerException('Geen transactie gevonden om een bestelling voor aan te maken');
 			}
 
-			$account = $this->civiSaldoRepository->getSaldo($values['uid'], true);
-			if (!$account) {
+			/** @var CiviSaldo|null $account */
+			$account = $values['civisaldo'];
+			if (!$account || $account->deleted) {
 				throw new CsrGebruikerException("Er is geen CiviSaldo voor dit lid gevonden.");
 			}
 
@@ -181,7 +183,7 @@ class PinTransactieController extends AbstractController {
 
 				$bestelling = $pinTransactieMatch->bouwBestelling($this->civiProductRepository, $values['comment'] ?: null, $account->uid);
 				$bestelling->id = $this->civiBestellingModel->create($bestelling);
-				$this->civiSaldoRepository->ophogen($values['uid'], $pinTransactie->getBedragInCenten());
+				$this->civiSaldoRepository->ophogen($account->uid, $pinTransactie->getBedragInCenten());
 
 				$manager = $this->getDoctrine()->getManager();
 				$manager->remove($pinTransactieMatch);

@@ -198,7 +198,7 @@ class Formulier implements View, Validator, ToResponse {
 		$values = array();
 		foreach ($this->fields as $field) {
 			if ($field instanceof InputField || $field instanceof TextField) {
-				$values[$field->getName()] = $field->getValue();
+				$values[$field->getName()] = $field->getFormattedValue();
 			}
 		}
 		return $values;

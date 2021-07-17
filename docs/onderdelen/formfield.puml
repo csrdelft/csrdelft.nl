@@ -7,7 +7,6 @@ class FloatField extends TextField
 class IntField extends TextField
 class TelefoonField extends TextField
 
-class CivisaldoField extends LegacyTextField
 class DoctrineEntityField extends TextField
 class DuckField extends TextField
 class EmailField extends TextField

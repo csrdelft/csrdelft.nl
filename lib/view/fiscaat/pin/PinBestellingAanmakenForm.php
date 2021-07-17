@@ -3,10 +3,11 @@
 namespace CsrDelft\view\fiscaat\pin;
 
 use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\pin\PinTransactieMatch;
 use CsrDelft\view\formulier\elementen\HtmlComment;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
-use CsrDelft\view\formulier\invoervelden\CivisaldoField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredDoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
@@ -28,8 +29,7 @@ class PinBestellingAanmakenForm extends ModalForm {
 
 		$fields = [];
 		$fields[] = new HtmlComment('Er is geen bestelling gevonden voor deze transactie. Maak met onderstaand formulier een nieuwe bestelling aan met het aangegeven bedrag.');
-		$fields['civisaldo'] = new CivisaldoField('uid', null, 'Account');
-		$fields['civisaldo']->required = true;
+		$fields[] = new RequiredDoctrineEntityField('civisaldo', null, 'Account', CiviSaldo::class, '/fiscaat/saldo/zoek?q=');
 		$fields['comment'] = new TextField('comment', $comment, 'Externe notitie');
 		$fields['intern'] = new TextareaField('intern', $pinTransactieMatch ? $pinTransactieMatch->notitie : null, 'Interne notitie');
 		$fields['stuurMail'] = new JaNeeField('stuurMail', true, 'Stuur mail naar lid');
