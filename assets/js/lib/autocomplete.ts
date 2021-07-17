@@ -19,9 +19,13 @@ export function initEntityField(container: HTMLElement): void {
 
 	const idInput = select<HTMLInputElement>(`#${id}`)
 
+	const label = select<HTMLLabelElement>(`[for=${id}]`)
+	label.htmlFor = id + '-input'
+
 	autocomplete({
 		container,
 		defaultActiveItemId: 0,
+		id,
 		initialState: {
 			query: valueShow
 		},
