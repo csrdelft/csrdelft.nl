@@ -4,6 +4,7 @@ namespace CsrDelft\entity\declaratie;
 
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\declaratie\DeclaratieRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -77,14 +78,19 @@ class Declaratie
 	private $nummer;
 
 	/**
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
-	private $ingediend = false;
+	private $ingediend;
 
 	/**
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
-	private $beoordeeld = false;
+	private $beoordeeld;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	private $uitbetaald;
 
 	/**
 	 * @ORM\Column(type="boolean")
@@ -228,24 +234,50 @@ class Declaratie
 
 	public function isIngediend(): bool
 	{
+		return $this->ingediend !== null;
+	}
+
+	public function getIngediend(): ?DateTimeInterface {
 		return $this->ingediend;
 	}
 
-	public function setIngediend(bool $ingediend): self
+	public function setIngediend(?DateTimeInterface $ingediend): self
 	{
 		$this->ingediend = $ingediend;
 
 		return $this;
 	}
 
-	public function getBeoordeeld(): bool
+	public function isBeoordeeld(): bool
+	{
+		return $this->beoordeeld !== null;
+	}
+
+	public function getBeoordeeld(): ?DateTimeInterface
 	{
 		return $this->beoordeeld;
 	}
 
-	public function setBeoordeeld(bool $beoordeeld): self
+	public function setBeoordeeld(?DateTimeInterface $beoordeeld): self
 	{
 		$this->beoordeeld = $beoordeeld;
+
+		return $this;
+	}
+
+	public function isUitbetaald(): bool
+	{
+		return $this->uitbetaald !== null;
+	}
+
+	public function getUitbetaald(): ?DateTimeInterface
+	{
+		return $this->uitbetaald;
+	}
+
+	public function setUitbetaald(?DateTimeInterface $uitbetaald): self
+	{
+		$this->uitbetaald = $uitbetaald;
 
 		return $this;
 	}

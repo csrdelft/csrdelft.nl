@@ -219,7 +219,7 @@ class DeclaratieController extends AbstractController
 		if ($data->get('status') === 'ingediend') {
 			$messages = array_merge($messages, $declaratie->valideer());
 			if (empty($messages)) {
-				$declaratie->setIngediend(true);
+				$declaratie->setIngediend(date_create_immutable());
 			}
 		}
 
