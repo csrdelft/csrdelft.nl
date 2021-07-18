@@ -236,6 +236,7 @@
                     v-model="regel.omschrijving"
                     type="text"
                     :disabled="veldenDisabled"
+                    maxlength="255"
                   >
                 </div>
                 <div class="field">
@@ -615,13 +616,12 @@ export default class DeclaratieVue extends Vue {
     this.declaratie.status = indienen ? 'ingediend' : 'concept';
     this.submitting = true;
 
-    axios.request<DeclaratieOpslaanData>({
+    axios.request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
       method: 'post',
       url: '/declaratie/opslaan',
       data: {
         declaratie: this.declaratie,
       },
-      transformResponse: (r: DeclaratieOpslaanResponse) => r.data
     }).then((res) => {
       const { data } = res;
       if (data.id) {

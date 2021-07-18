@@ -8,11 +8,13 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * @ORM\Entity(repositoryClass=DeclaratieBonRepository::class)
  */
-class DeclaratieBon {
+class DeclaratieBon
+{
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -47,49 +49,59 @@ class DeclaratieBon {
 	 */
 	private $regels;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->regels = new ArrayCollection();
 	}
 
-	public function getId(): ?int {
+	public function getId(): ?int
+	{
 		return $this->id;
 	}
 
-	public function getBestand(): string {
+	public function getBestand(): string
+	{
 		return $this->bestand;
 	}
 
-	public function setBestand(string $bestand): self {
+	public function setBestand(string $bestand): self
+	{
 		$this->bestand = $bestand;
 
 		return $this;
 	}
 
-	public function getDeclaratie(): ?Declaratie {
+	public function getDeclaratie(): ?Declaratie
+	{
 		return $this->declaratie;
 	}
 
-	public function setDeclaratie(?Declaratie $declaratie): self {
+	public function setDeclaratie(?Declaratie $declaratie): self
+	{
 		$this->declaratie = $declaratie;
 
 		return $this;
 	}
 
-	public function getMaker(): Profiel {
+	public function getMaker(): Profiel
+	{
 		return $this->maker;
 	}
 
-	public function setMaker(Profiel $maker): self {
+	public function setMaker(Profiel $maker): self
+	{
 		$this->maker = $maker;
 
 		return $this;
 	}
 
-	public function getDatum(): ?DateTimeInterface {
+	public function getDatum(): ?DateTimeInterface
+	{
 		return $this->datum;
 	}
 
-	public function setDatum(?DateTimeInterface $datum): self {
+	public function setDatum(?DateTimeInterface $datum): self
+	{
 		$this->datum = $datum;
 
 		return $this;
@@ -98,11 +110,13 @@ class DeclaratieBon {
 	/**
 	 * @return Collection|DeclaratieRegel[]
 	 */
-	public function getRegels(): Collection {
+	public function getRegels(): Collection
+	{
 		return $this->regels;
 	}
 
-	public function addRegel(DeclaratieRegel $regel): self {
+	public function addRegel(DeclaratieRegel $regel): self
+	{
 		if (!$this->regels->contains($regel)) {
 			$this->regels[] = $regel;
 			$regel->setBon($this);
@@ -111,12 +125,26 @@ class DeclaratieBon {
 		return $this;
 	}
 
-	public function removeRegel(DeclaratieRegel $regel): self {
+	public function removeRegel(DeclaratieRegel $regel): self
+	{
 		if ($this->regels->contains($regel)) {
 			$this->regels->removeElement($regel);
 			// set the owning side to null (unless already changed)
 			if ($regel->getBon() === $this) {
 				$regel->setBon(null);
+			}
+		}
+
+		return $this;
+	}
+
+	public function fromParameters(ParameterBag $bonData): self
+	{
+		$this->setDatum(null);
+		if ($bonData->get('datum')) {
+			$datum = date_create_immutable($bonData->get('datum'));
+			if ($datum) {
+				$this->setDatum($datum);
 			}
 		}
 

@@ -4,6 +4,7 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\declaratie\Declaratie;
+use CsrDelft\entity\declaratie\DeclaratieRegel;
 use CsrDelft\repository\declaratie\DeclaratieBonRepository;
 use CsrDelft\repository\declaratie\DeclaratieCategorieRepository;
 use CsrDelft\repository\declaratie\DeclaratieRegelRepository;
@@ -24,16 +25,20 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DeclaratieController extends AbstractController {
+class DeclaratieController extends AbstractController
+{
 	/**
 	 * @return Response
 	 * @Route("/declaratie/nieuw", name="declaratie_nieuw", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function nieuw() {
+	public function nieuw(DeclaratieCategorieRepository $categorieRepository)
+	{
 		$lid = $this->getProfiel();
+		$categorieLijst = $categorieRepository->findTuples();
 		return $this->render('declaratie/nieuw.html.twig', [
 			'iban' => $lid->bankrekening,
+			'categorieLijst' => json_encode($categorieLijst),
 			'tenaamstelling' => $lid->getNaam('voorletters')
 		]);
 	}
@@ -45,7 +50,8 @@ class DeclaratieController extends AbstractController {
 	 * @Route("/declaratie/download/{filename}", name="declaratie_download", methods={"GET"}, requirements={"filename"="[a-f0-9]+.[a-z]+"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function download(string $filename, Filesystem $filesystem) {
+	public function download(string $filename, Filesystem $filesystem)
+	{
 		$filename = DECLARATIE_PATH . $filename;
 		if (!$filesystem->exists($filename)) {
 			throw new NotFoundHttpException();
@@ -65,7 +71,8 @@ class DeclaratieController extends AbstractController {
 	 * @Route("/declaratie/upload", name="declaratie_upload", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function upload(Request $request, DeclaratieBonRepository $bonRepository) {
+	public function upload(Request $request, DeclaratieBonRepository $bonRepository)
+	{
 		$key = bin2hex(random_bytes(16));
 
 		/** @var File $file */
@@ -104,7 +111,7 @@ class DeclaratieController extends AbstractController {
 	private function ajaxResponse(array $messages, int $id = null): JsonResponse
 	{
 		return $this->json([
-			'success' => !empty($messages),
+			'success' => empty($messages),
 			'id' => $id,
 			'messages' => $messages,
 		]);
@@ -126,7 +133,8 @@ class DeclaratieController extends AbstractController {
 													DeclaratieBonRepository $bonRepository,
 													DeclaratieRegelRepository $regelRepository,
 													DeclaratieCategorieRepository $categorieRepository,
-													EntityManagerInterface $entityManager) {
+													EntityManagerInterface $entityManager)
+	{
 		$data = $request->request->get('declaratie');
 		if (!empty($data)) {
 			$data = new ParameterBag($data);
@@ -134,14 +142,11 @@ class DeclaratieController extends AbstractController {
 		$messages = [];
 
 		// Laad declaratie of maak nieuwe
-		$declaratie = null;
-		if ($data->getInt('id', 0)) {
-			$declaratie = $declaratieRepository->find(intval($data->id));
-		}
-
-		if ($declaratie) {
-			if ($declaratie->getIndiener()->uid !== $this->getUid()
-			    || $declaratie->isIngediend()) {
+		if ($data->getInt('id')) {
+			$declaratie = $declaratieRepository->find($data->getInt('id'));
+			if (!$declaratie
+				|| $declaratie->getIndiener()->uid !== $this->getUid()
+				|| $declaratie->isIngediend()) {
 				return $this->ajaxResponse(['Je mag deze declaratie niet aanpassen']);
 			}
 		} else {
@@ -155,51 +160,60 @@ class DeclaratieController extends AbstractController {
 		if (!$categorie) {
 			return $this->ajaxResponse(['Selecteer een categorie voor deze declaratie']);
 		}
+		$declaratie->setCategorie($categorie);
 
-		if ($data->get('omschrijving')) {
-			$declaratie->setOmschrijving($data->get('omschrijving'));
-		}
-
-		if ($data->get('betaalwijze') === 'C.S.R.-pas') {
-			$declaratie->setCsrPas(true);
-			$declaratie->setNaam($data->get('tnv'));
-		} else {
-			$declaratie->setCsrPas(false);
-			if ($data->getBoolean('eigenRekening') === true) {
-				$declaratie->setRekening($declaratie->getIndiener()->bankrekening);
-				$declaratie->setNaam($declaratie->getIndiener()->getNaam('voorletters'));
-			} else {
-				$declaratie->setRekening($data->get('rekening'));
-				$declaratie->setNaam($data->get('tnv'));
-			}
-		}
-
-		$declaratie->setOpmerkingen($data->get('opmerkingen', ''));
+		$declaratie->fromParameters($data);
 		$declaratie->setTotaal(0);
 		$entityManager->flush();
 
 		// Voeg bonnen toe
+		foreach ($declaratie->getBonnen() as $bon) {
+			$declaratie->removeBon($bon);
+		}
+
 		if (is_array($data->get('bonnen'))) {
-			foreach ($data->get('bonnen') as $bon) {
-				$bonData = new ParameterBag($bon);
+			foreach ($data->get('bonnen') as $rawBon) {
+				$bonData = new ParameterBag($rawBon);
 				$bon = $bonRepository->find($bonData->getInt('id'));
 				if ($bon->getMaker()->uid !== $this->getUid()
-					|| ($bon->getDeclaratie()->getId() !== null && $bon->getDeclaratie()->getId() !== $declaratie->getId())) {
+					|| ($bon->getDeclaratie() !== null && $bon->getDeclaratie()->getId() !== $declaratie->getId())) {
 					$messages[] = 'Een van de bonnen kan niet gebruikt worden in deze declaratie';
 					continue;
 				}
 
+				if (!$bon->getDeclaratie()) {
+					$declaratie->addBon($bon);
+				}
+
+				$bon->fromParameters($bonData);
+
+				// Haal bestaande regels op
+				$regels = $bon->getRegels();
+
 				// Voeg regels toe
+				$index = 0;
+				if (is_array($bonData->get('regels'))) {
+					foreach ($bonData->get('regels') as $rawRegel) {
+						$regelData = new ParameterBag($rawRegel);
+						if (isset($regels[$index])) {
+							$regel = $regels[$index];
+						} else {
+							$regel = new DeclaratieRegel();
+							$bon->addRegel($regel);
+							$entityManager->persist($regel);
+						}
 
+						$regel->fromParameters($regelData);
+						$index++;
+					}
+				}
 
-
+				// Haal niet-gebruikte regels weg
+				for ($i = $index; $i < count($regels); $i++) {
+					$entityManager->remove($regels[$i]);
+				}
 			}
-		} else {
-			$messages[] = 'Voeg bonnen toe aan de declaratie';
 		}
-
-
-		// Verwijder ontkoppelde bonnen
 
 		// Sla declaratie op
 		if (empty($messages)) {
