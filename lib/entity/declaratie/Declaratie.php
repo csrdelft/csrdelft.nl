@@ -171,7 +171,7 @@ class Declaratie
 		return $this->naam;
 	}
 
-	public function setNaam(string $naam): self
+	public function setNaam(?string $naam): self
 	{
 		$this->naam = $naam;
 
@@ -345,5 +345,39 @@ class Declaratie
 			$som += $bon->getBedragIncl();
 		}
 		return round($som, 2);
+	}
+
+	public function valideer(): array
+	{
+		$fouten = [];
+
+		if (empty($this->omschrijving)) {
+			$fouten[] = 'Geef een duidelijke omschrijving van de declaratie';
+		}
+		if ($this->csrPas === null) {
+			$fouten[] = 'Selecteer de betaalwijze';
+		} elseif ($this->csrPas === true) {
+			if (empty($this->naam)) {
+				$fouten[] = 'Vul in bij welk bedrijf je betaald hebt';
+			}
+		} else {
+			if (!verify_iban($this->rekening)) {
+				$fouten[] = "{$this->rekening} is geen geldige IBAN";
+			}
+			if (empty($this->naam)) {
+				$fouten[] = 'Vul de tenaamstelling van de rekening in';
+			}
+		}
+
+		foreach ($this->getBonnen() as $index => $bon) {
+			$bonCheck = $bon->valideer($index);
+			$fouten = array_merge($fouten, $bonCheck);
+		}
+
+		if (empty($this->getBonnen())) {
+			$fouten[] = 'Voeg je bon(nen) toe';
+		}
+
+		return $fouten;
 	}
 }

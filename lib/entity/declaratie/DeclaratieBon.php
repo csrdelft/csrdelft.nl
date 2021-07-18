@@ -174,4 +174,24 @@ class DeclaratieBon
 		}
 		return round($som, 2);
 	}
+
+	public function valideer($bonIndex): array
+	{
+		$fouten = [];
+
+		if (empty($this->datum)) {
+			$fouten[] = "Bon $bonIndex: vul de datum van de bon in";
+		}
+
+		foreach ($this->getRegels() as $index => $regel) {
+			$regelCheck = $regel->valideer($bonIndex, $index + 1);
+			$fouten = array_merge($fouten, $regelCheck);
+		}
+
+		if (empty($this->getRegels())) {
+			$fouten[] = "Bon $bonIndex: voeg minimaal één regel toe";
+		}
+
+		return $fouten;
+	}
 }

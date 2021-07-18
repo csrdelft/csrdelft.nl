@@ -163,4 +163,28 @@ class DeclaratieRegel {
 			return 0;
 		}
 	}
+
+	public function valideer($bonIndex, $regelIndex): array
+	{
+		$fouten = [];
+
+		$toFill = [];
+		if (empty($this->omschrijving)) {
+			$toFill[] = 'de omschrijving';
+		}
+		if (empty($this->bedrag)) {
+			$toFill[] = 'het bedrag';
+		}
+		if ($this->inclBtw === null) {
+			$toFill[] = 'het btw-percentage';
+		}
+
+		if (!empty($toFill)) {
+			$combined = implode(', ', array_slice($toFill, 0, count($toFill) - 1))
+				. (count($toFill) > 1 ? ' en ' : '') . $toFill[count($toFill) - 1];
+			$fouten[] = "Bon $bonIndex, regel $regelIndex: vul $combined in";
+		}
+
+		return $fouten;
+	}
 }

@@ -7,7 +7,6 @@ use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieRegel;
 use CsrDelft\repository\declaratie\DeclaratieBonRepository;
 use CsrDelft\repository\declaratie\DeclaratieCategorieRepository;
-use CsrDelft\repository\declaratie\DeclaratieRegelRepository;
 use CsrDelft\repository\declaratie\DeclaratieRepository;
 use CsrDelft\view\formulier\uploadvelden\UploadFileField;
 use Doctrine\ORM\EntityManagerInterface;
@@ -105,7 +104,7 @@ class DeclaratieController extends AbstractController
 
 	/**
 	 * @param string[] $messages
-	 * @param int $id
+	 * @param int|null $id
 	 * @return JsonResponse
 	 */
 	private function ajaxResponse(array $messages, int $id = null): JsonResponse
@@ -121,7 +120,6 @@ class DeclaratieController extends AbstractController
 	 * @param Request $request
 	 * @param DeclaratieRepository $declaratieRepository
 	 * @param DeclaratieBonRepository $bonRepository
-	 * @param DeclaratieRegelRepository $regelRepository
 	 * @param DeclaratieCategorieRepository $categorieRepository
 	 * @param EntityManagerInterface $entityManager
 	 * @return Response
@@ -131,7 +129,6 @@ class DeclaratieController extends AbstractController
 	public function opslaan(Request $request,
 													DeclaratieRepository $declaratieRepository,
 													DeclaratieBonRepository $bonRepository,
-													DeclaratieRegelRepository $regelRepository,
 													DeclaratieCategorieRepository $categorieRepository,
 													EntityManagerInterface $entityManager)
 	{
@@ -217,8 +214,13 @@ class DeclaratieController extends AbstractController
 
 		// Sla declaratie op
 		$declaratie->setTotaal($declaratie->getBedragIncl());
-		if (empty($messages)) {
-			$declaratie->setIngediend($data->get('status') === 'ingediend');
+		$entityManager->flush();
+
+		if ($data->get('status') === 'ingediend') {
+			$messages = array_merge($messages, $declaratie->valideer());
+			if (empty($messages)) {
+				$declaratie->setIngediend(true);
+			}
 		}
 
 		$entityManager->flush();

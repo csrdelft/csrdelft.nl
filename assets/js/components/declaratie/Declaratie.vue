@@ -393,6 +393,15 @@
     </div>
 
     <div
+      v-for="(error, index) in errors"
+      :key="'error-' + index"
+      class="field alert alert-warning"
+      role="alert"
+    >
+      {{ error }}
+    </div>
+
+    <div
       v-if="!veldenDisabled || submitting"
       class="save-buttons"
     >
@@ -406,7 +415,7 @@
       <button
         class="confirm"
         :disabled="submitting"
-        @click="declaratieOpslaan(false)"
+        @click="declaratieOpslaan(true)"
       >
         Declaratie indienen
       </button>
@@ -454,7 +463,7 @@ const legeBon: (string, number) => Bon = (bon, id) => ({
   id: id,
   bestandsnaam: bon,
   datum: '',
-  regels: [ legeRegel() ],
+  regels: [legeRegel()],
 });
 
 const legeDeclaratie: () => Declaratie = () => ({
@@ -502,11 +511,13 @@ export default class DeclaratieVue extends Vue {
   private bonUploaden = true;
   private uploading = false;
   private geselecteerdeBon = 0;
-  private money = { precision: 2, decimal: ',', thousands: ' ', prefix: '€ ' };
+  private money = {precision: 2, decimal: ',', thousands: ' ', prefix: '€ '};
   private submitting = false;
+  private readOnly = false;
+  private errors = [];
 
   private get veldenDisabled() {
-    return this.submitting;
+    return this.submitting || this.readOnly;
   }
 
   private get heeftBonnen() {
@@ -615,6 +626,7 @@ export default class DeclaratieVue extends Vue {
   public declaratieOpslaan(indienen: boolean): void {
     this.declaratie.status = indienen ? 'ingediend' : 'concept';
     this.submitting = true;
+    this.errors = [];
 
     axios.request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
       method: 'post',
@@ -623,11 +635,13 @@ export default class DeclaratieVue extends Vue {
         declaratie: this.declaratie,
       },
     }).then((res) => {
-      const { data } = res;
+      const {data} = res;
       if (data.id) {
         this.declaratie.id = data.id;
       }
+      this.errors = data.messages;
       this.submitting = false;
+      this.readOnly = true;
     }).catch((err) => {
       this.submitting = false;
       alert(err);
