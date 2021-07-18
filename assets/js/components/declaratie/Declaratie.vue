@@ -19,6 +19,17 @@
     </div>
 
     <div class="field">
+      <label>Omschrijving declaratie</label>
+      <input
+        id="omschrijving"
+        v-model="declaratie.omschrijving"
+        type="text"
+        :disabled="veldenDisabled"
+        maxlength="255"
+      >
+    </div>
+
+    <div class="field">
       <label>Betaalwijze</label>
       <div>
         <input
@@ -79,6 +90,7 @@
         v-model="declaratie.rekening"
         type="text"
         :disabled="veldenDisabled"
+        maxlength="255"
       >
     </div>
 
@@ -99,6 +111,7 @@
         v-model="declaratie.tnv"
         type="text"
         :disabled="veldenDisabled"
+        maxlength="255"
       >
     </div>
 
@@ -408,6 +421,7 @@ import {Component, Prop} from 'vue-property-decorator';
 interface Declaratie {
   id?: number;
   categorie?: number;
+  omschrijving?: string;
   betaalwijze?: 'C.S.R.-pas' | 'voorgeschoten';
   eigenRekening?: boolean;
   rekening?: string;

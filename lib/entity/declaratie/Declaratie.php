@@ -33,6 +33,11 @@ class Declaratie {
 	private $categorie;
 
 	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private $omschrijving;
+
+	/**
 	 * @ORM\Column(type="boolean")
 	 */
 	private $csrPas;
@@ -113,6 +118,18 @@ class Declaratie {
 
 	public function setCategorie(?DeclaratieCategorie $categorie): self {
 		$this->categorie = $categorie;
+
+		return $this;
+	}
+
+	public function getOmschrijving(): ?string
+	{
+		return $this->omschrijving;
+	}
+
+	public function setOmschrijving(?string $omschrijving): self
+	{
+		$this->omschrijving = $omschrijving;
 
 		return $this;
 	}

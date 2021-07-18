@@ -156,6 +156,10 @@ class DeclaratieController extends AbstractController {
 			return $this->ajaxResponse(['Selecteer een categorie voor deze declaratie']);
 		}
 
+		if ($data->get('omschrijving')) {
+			$declaratie->setOmschrijving($data->get('omschrijving'));
+		}
+
 		if ($data->get('betaalwijze') === 'C.S.R.-pas') {
 			$declaratie->setCsrPas(true);
 			$declaratie->setNaam($data->get('tnv'));
