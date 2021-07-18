@@ -1,5 +1,45 @@
 <template>
   <div class="declaratie">
+    <div class="voortgang">
+      <div
+        class="fase concept"
+        :class="{'active': declaratie.status === 'concept', 'done': declaratie.status !== 'concept'}"
+      >
+        <span class="status">Concept</span>
+      </div>
+      <div
+        class="fase ingediend"
+        :class="{'active': declaratie.status === 'ingediend', 'done': declaratie.status === 'goedgekeurd' || declaratie.status === 'afgekeurd' || declaratie.status === 'uitbetaald'}"
+      >
+        <span class="status">Ingediend</span>
+        <span class="datum">{{ declaratie.statusDatums.ingediendOp }}</span>
+      </div>
+      <div
+        v-if="declaratie.status !== 'afgekeurd'"
+        class="fase goedgekeurd"
+        :class="{'active': declaratie.status === 'goedgekeurd', 'done': declaratie.status === 'uitbetaald'}"
+      >
+        <span class="status">Goedgekeurd</span>
+        <span class="datum">{{ declaratie.statusDatums.goedgekeurdOp }}</span>
+      </div>
+      <div
+        v-if="declaratie.status === 'afgekeurd'"
+        class="fase uitbetaald"
+        :class="{'active': declaratie.status === 'afgekeurd'}"
+      >
+        <span class="status">Afgekeurd</span>
+        <span class="datum">{{ declaratie.statusDatums.afgekeurdOp }}</span>
+      </div>
+      <div
+        v-if="declaratie.status !== 'afgekeurd' && declaratie.betaalwijze === 'voorgeschoten'"
+        class="fase concept"
+        :class="{'active': declaratie.status === 'uitbetaald'}"
+      >
+        <span class="status">Uitbetaald</span>
+        <span class="datum">{{ declaratie.statusDatums.uitbetaaldOp }}</span>
+      </div>
+    </div>
+
     <div class="field">
       <label for="categorie">Categorie</label>
       <select
@@ -428,6 +468,15 @@ import axios from 'axios';
 import Vue from 'vue';
 import {Component, Prop} from 'vue-property-decorator';
 
+type status = 'concept' | 'ingediend' | 'afgekeurd' | 'goedgekeurd' | 'uitbetaald';
+
+interface StatusDatums {
+  ingediendOp?: string;
+  goedgekeurdOp?: string;
+  afgekeurdOp?: string;
+  uitbetaaldOp?: string;
+}
+
 interface Declaratie {
   id?: number;
   categorie?: number;
@@ -438,7 +487,8 @@ interface Declaratie {
   tnv?: string;
   bonnen?: Bon[];
   opmerkingen: string;
-  status: 'concept' | 'ingediend' | 'afgekeurd' | 'goedgekeurd' | 'uitbetaald';
+  status: status;
+  statusDatums?: StatusDatums;
 }
 
 interface Bon {
@@ -470,6 +520,12 @@ const legeDeclaratie: () => Declaratie = () => ({
   opmerkingen: '',
   eigenRekening: true,
   status: 'concept',
+  statusDatums: {
+    uitbetaaldOp: '',
+    goedgekeurdOp: '',
+    afgekeurdOp: '',
+    ingediendOp: '',
+  },
   bonnen: [],
 });
 
@@ -481,6 +537,8 @@ interface DeclaratieOpslaanData {
   id?: number
   messages: string[]
   success: boolean
+  status: status
+  statusDatums: StatusDatums
 }
 
 @Component({
@@ -514,11 +572,10 @@ export default class DeclaratieVue extends Vue {
   private geselecteerdeBon = 0;
   private money = {precision: 2, decimal: ',', thousands: ' ', prefix: '€ '};
   private submitting = false;
-  private readOnly = false;
   private errors = [];
 
   private get veldenDisabled() {
-    return this.submitting || this.readOnly;
+    return this.submitting || this.declaratie.status !== 'concept';
   }
 
   private get heeftBonnen() {
@@ -639,11 +696,13 @@ export default class DeclaratieVue extends Vue {
       const {data} = res;
       if (data.id) {
         this.declaratie.id = data.id;
+        this.declaratie.status = data.status;
+        this.declaratie.statusDatums = data.statusDatums;
       }
       this.errors = data.messages;
       this.submitting = false;
       if (data.success) {
-        this.readOnly = true;
+        window.scrollTo(0, 0);
       }
     }).catch((err) => {
       this.submitting = false;
@@ -657,6 +716,70 @@ export default class DeclaratieVue extends Vue {
 .declaratie {
   font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
   font-size: 1rem;
+}
+
+.voortgang {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  overflow: hidden;
+  gap: 3px;
+  margin: 10px 0 30px;
+
+  @media screen and (max-width: 760px) {
+    flex-direction: column;
+  }
+
+  .fase {
+    color: #D0D0D0;
+    background: #F6F6F6;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 8px;
+
+    .status {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .datum {
+      font-size: 13px;
+      font-weight: 300;
+    }
+
+    &.done {
+      color: #393939;
+    }
+
+    &.active {
+      color: white;
+
+      &.concept {
+        background: #8e8e8e;
+      }
+
+      &.ingediend {
+        background: #E19600;
+      }
+
+      &.goedgekeurd {
+        background: #00DB49;
+      }
+
+      &.afgekeurd {
+        background: #E20000;
+      }
+
+      &.uitbetaald {
+        background: #2C3E50;
+      }
+    }
+  }
 }
 
 .field {

@@ -136,14 +136,16 @@ class DeclaratieController extends AbstractController
 
 	/**
 	 * @param string[] $messages
-	 * @param int|null $id
+	 * @param Declaratie|null $declaratie
 	 * @return JsonResponse
 	 */
-	private function ajaxResponse(array $messages, int $id = null): JsonResponse
+	private function ajaxResponse(array $messages, Declaratie $declaratie = null): JsonResponse
 	{
 		return $this->json([
 			'success' => empty($messages),
-			'id' => $id,
+			'id' => $declaratie ? $declaratie->getId() : null,
+			'status' => $declaratie ? $declaratie->getStatus() : 'concept',
+			'statusDatums' => $declaratie ? $declaratie->naarStatusDatums() : null,
 			'messages' => $messages,
 		]);
 	}
@@ -256,7 +258,7 @@ class DeclaratieController extends AbstractController
 		}
 
 		$entityManager->flush();
-		return $this->ajaxResponse($messages, $declaratie->getId());
+		return $this->ajaxResponse($messages, $declaratie);
 	}
 
 }

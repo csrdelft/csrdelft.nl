@@ -432,6 +432,15 @@ class Declaratie
 		return $fouten;
 	}
 
+	public function naarStatusDatums(): array {
+		return [
+			'ingediendOp' => $this->isIngediend() ? date_format_intl($this->ingediend, 'd-M-yyyy') : null,
+			'goedgekeurdOp' => $this->isBeoordeeld() && $this->isGoedgekeurd() ? date_format_intl($this->beoordeeld, 'd-M-yyyy') : null,
+			'afgekeurdOp' => $this->isBeoordeeld() && !$this->isGoedgekeurd() ? date_format_intl($this->beoordeeld, 'd-M-yyyy') : null,
+			'uitbetaaldOp' => $this->isUitbetaald() ? date_format_intl($this->uitbetaald, 'd-M-yyyy') : null,
+		];
+	}
+
 	public function naarObject(UrlGeneratorInterface $generator): array
 	{
 		$eigenRekening = $this->csrPas || $this->csrPas === null || $this->rekening === $this->indiener->bankrekening && $this->naam === $this->indiener->getNaam('voorletters');
@@ -446,6 +455,7 @@ class Declaratie
 			'bonnen' => array_map(function(DeclaratieBon $bon) use ($generator) { return $bon->naarObject($generator); }, $this->bonnen->toArray()),
 			'opmerkingen' => $this->opmerkingen,
 			'status' => $this->getStatus(),
+			'statusDatums' => $this->naarStatusDatums(),
 		];
 	}
 }
