@@ -150,4 +150,28 @@ class DeclaratieBon
 
 		return $this;
 	}
+
+	public function getBedragExcl(): float {
+		$som = 0;
+		foreach ($this->getRegels() as $regel) {
+			$som += $regel->getBedragExcl();
+		}
+		return round($som, 2);
+	}
+
+	public function getBtwBedrag(): float {
+		$som = 0;
+		foreach ($this->getRegels() as $regel) {
+			$som += $regel->getBtwBedrag();
+		}
+		return round($som, 2);
+	}
+
+	public function getBedragIncl(): float {
+		$som = 0;
+		foreach ($this->getRegels() as $regel) {
+			$som += $regel->getBedragIncl();
+		}
+		return round($som, 2);
+	}
 }

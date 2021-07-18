@@ -216,6 +216,7 @@ class DeclaratieController extends AbstractController
 		}
 
 		// Sla declaratie op
+		$declaratie->setTotaal($declaratie->getBedragIncl());
 		if (empty($messages)) {
 			$declaratie->setIngediend($data->get('status') === 'ingediend');
 		}
@@ -223,4 +224,5 @@ class DeclaratieController extends AbstractController
 		$entityManager->flush();
 		return $this->ajaxResponse($messages, $declaratie->getId());
 	}
+
 }

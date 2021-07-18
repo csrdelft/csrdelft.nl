@@ -319,4 +319,31 @@ class Declaratie
 
 		return $this;
 	}
+
+	public function getBedragExcl(): float
+	{
+		$som = 0;
+		foreach ($this->getBonnen() as $bon) {
+			$som += $bon->getBedragExcl();
+		}
+		return round($som, 2);
+	}
+
+	public function getBtwBedrag(): float
+	{
+		$som = 0;
+		foreach ($this->getBonnen() as $bon) {
+			$som += $bon->getBtwBedrag();
+		}
+		return round($som, 2);
+	}
+
+	public function getBedragIncl(): float
+	{
+		$som = 0;
+		foreach ($this->getBonnen() as $bon) {
+			$som += $bon->getBedragIncl();
+		}
+		return round($som, 2);
+	}
 }

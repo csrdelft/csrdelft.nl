@@ -135,4 +135,32 @@ class DeclaratieRegel {
 
 		return $this;
 	}
+
+	public function getBedragExcl(): float {
+		if ($this->inclBtw === true) {
+			return $this->bedrag / (1 + $this->btw / 100);
+		} elseif ($this->inclBtw === false) {
+			return $this->bedrag;
+		} else {
+			return 0;
+		}
+	}
+
+	public function getBtwBedrag(): float {
+		if ($this->btw) {
+			return $this->getBedragExcl() * $this->btw / 100;
+		} else {
+			return 0;
+		}
+	}
+
+	public function getBedragIncl(): float {
+		if ($this->inclBtw === false) {
+			return $this->bedrag * (1 + $this->btw / 100);
+		} elseif ($this->inclBtw === true) {
+			return $this->bedrag;
+		} else {
+			return 0;
+		}
+	}
 }
