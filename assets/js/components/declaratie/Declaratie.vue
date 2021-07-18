@@ -449,6 +449,16 @@ const legeDeclaratie: () => Declaratie = () => ({
   bonnen: [],
 });
 
+interface DeclaratieOpslaanResponse {
+  data: DeclaratieOpslaanData
+}
+
+interface DeclaratieOpslaanData {
+  id?: number
+  messages: string[]
+  success: boolean
+}
+
 @Component({
   filters: {
     bedrag(value: number) {
@@ -591,13 +601,18 @@ export default class DeclaratieVue extends Vue {
     this.declaratie.status = indienen ? 'ingediend' : 'concept';
     this.submitting = true;
 
-    axios({
+    axios.request<DeclaratieOpslaanData>({
       method: 'post',
       url: '/declaratie/opslaan',
       data: {
         declaratie: this.declaratie,
+      },
+      transformResponse: (r: DeclaratieOpslaanResponse) => r.data
+    }).then((res) => {
+      const { data } = res;
+      if (data.id) {
+        this.declaratie.id = data.id;
       }
-    }).then(() => {
       this.submitting = false;
     }).catch((err) => {
       this.submitting = false;

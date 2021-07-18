@@ -98,12 +98,14 @@ class DeclaratieController extends AbstractController {
 
 	/**
 	 * @param string[] $messages
+	 * @param int $id
 	 * @return JsonResponse
 	 */
-	private function ajaxResponse(array $messages): JsonResponse
+	private function ajaxResponse(array $messages, int $id = null): JsonResponse
 	{
 		return $this->json([
 			'success' => !empty($messages),
+			'id' => $id,
 			'messages' => $messages,
 		]);
 	}
@@ -114,6 +116,7 @@ class DeclaratieController extends AbstractController {
 	 * @param DeclaratieBonRepository $bonRepository
 	 * @param DeclaratieRegelRepository $regelRepository
 	 * @param DeclaratieCategorieRepository $categorieRepository
+	 * @param EntityManagerInterface $entityManager
 	 * @return Response
 	 * @Route("/declaratie/opslaan", name="declaratie_opslaan", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
@@ -137,19 +140,20 @@ class DeclaratieController extends AbstractController {
 		}
 
 		if ($declaratie) {
-			if ($declaratie->getIndiener()->uid !== $this->getProfiel()->uid
+			if ($declaratie->getIndiener()->uid !== $this->getUid()
 			    || $declaratie->isIngediend()) {
-				return $this->ajaxResponse(['Je mag deze declaratie niet aanpassen.']);
+				return $this->ajaxResponse(['Je mag deze declaratie niet aanpassen']);
 			}
 		} else {
 			$declaratie = new Declaratie();
 			$declaratie->setIndiener($this->getProfiel());
+			$entityManager->persist($declaratie);
 		}
 
 		// Declaratie-eigenschappen
 		$categorie = $categorieRepository->find($data->getInt('categorie'));
 		if (!$categorie) {
-			$messages[] = ['Selecteer een categorie voor de declaratie.'];
+			return $this->ajaxResponse(['Selecteer een categorie voor deze declaratie']);
 		}
 
 		if ($data->get('betaalwijze') === 'C.S.R.-pas') {
@@ -167,16 +171,38 @@ class DeclaratieController extends AbstractController {
 		}
 
 		$declaratie->setOpmerkingen($data->get('opmerkingen', ''));
-		$declaratie->setIngediend($data->get('status') === 'ingediend');
+		$declaratie->setTotaal(0);
+		$entityManager->flush();
 
 		// Voeg bonnen toe
+		if (is_array($data->get('bonnen'))) {
+			foreach ($data->get('bonnen') as $bon) {
+				$bonData = new ParameterBag($bon);
+				$bon = $bonRepository->find($bonData->getInt('id'));
+				if ($bon->getMaker()->uid !== $this->getUid()
+					|| ($bon->getDeclaratie()->getId() !== null && $bon->getDeclaratie()->getId() !== $declaratie->getId())) {
+					$messages[] = 'Een van de bonnen kan niet gebruikt worden in deze declaratie';
+					continue;
+				}
 
-		// Voeg regels toe
+				// Voeg regels toe
+
+
+
+			}
+		} else {
+			$messages[] = 'Voeg bonnen toe aan de declaratie';
+		}
+
 
 		// Verwijder ontkoppelde bonnen
 
 		// Sla declaratie op
+		if (empty($messages)) {
+			$declaratie->setIngediend($data->get('status') === 'ingediend');
+		}
 
-		return $this->ajaxResponse($messages);
+		$entityManager->flush();
+		return $this->ajaxResponse($messages, $declaratie->getId());
 	}
 }
