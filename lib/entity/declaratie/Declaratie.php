@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @ORM\Entity(repositoryClass=DeclaratieRepository::class)
@@ -237,7 +238,8 @@ class Declaratie
 		return $this->ingediend !== null;
 	}
 
-	public function getIngediend(): ?DateTimeInterface {
+	public function getIngediend(): ?DateTimeInterface
+	{
 		return $this->ingediend;
 	}
 
@@ -282,7 +284,7 @@ class Declaratie
 		return $this;
 	}
 
-	public function getGoedgekeurd(): bool
+	public function isGoedgekeurd(): bool
 	{
 		return $this->goedgekeurd;
 	}
@@ -323,6 +325,21 @@ class Declaratie
 		}
 
 		return $this;
+	}
+
+	public function getStatus(): string
+	{
+		if (!$this->isIngediend()) {
+			return 'concept';
+		} elseif (!$this->isBeoordeeld()) {
+			return 'ingediend';
+		} elseif ($this->isUitbetaald()) {
+			return 'uitbetaald';
+		} elseif ($this->isGoedgekeurd()) {
+			return 'goedgekeurd';
+		} else {
+			return 'afgekeurd';
+		}
 	}
 
 	public function fromParameters(ParameterBag $data): self
@@ -393,7 +410,9 @@ class Declaratie
 				$fouten[] = 'Vul in bij welk bedrijf je betaald hebt';
 			}
 		} else {
-			if (!verify_iban($this->rekening)) {
+			if (empty($this->rekening)) {
+				$fouten[] = 'Vul de IBAN in waar het bedrag naar teruggestort moet worden';
+			} elseif (!verify_iban($this->rekening)) {
 				$fouten[] = "{$this->rekening} is geen geldige IBAN";
 			}
 			if (empty($this->naam)) {
@@ -411,5 +430,22 @@ class Declaratie
 		}
 
 		return $fouten;
+	}
+
+	public function naarObject(UrlGeneratorInterface $generator): array
+	{
+		$eigenRekening = $this->csrPas || $this->csrPas === null || $this->rekening === $this->indiener->bankrekening && $this->naam === $this->indiener->getNaam('voorletters');
+		return [
+			'id' => $this->id,
+			'categorie' => $this->getCategorie()->getId(),
+			'omschrijving' => $this->omschrijving,
+			'betaalwijze' => $this->csrPas ? 'C.S.R.-pas' : ($this->csrPas === false ? 'voorgeschoten' : null),
+			'eigenRekening' => $eigenRekening,
+			'rekening' => $eigenRekening ? null : $this->rekening,
+			'tnv' => $this->csrPas || !$eigenRekening ? $this->naam : null,
+			'bonnen' => array_map(function(DeclaratieBon $bon) use ($generator) { return $bon->naarObject($generator); }, $this->bonnen->toArray()),
+			'opmerkingen' => $this->opmerkingen,
+			'status' => $this->getStatus(),
+		];
 	}
 }

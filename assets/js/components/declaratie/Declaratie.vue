@@ -438,7 +438,7 @@ interface Declaratie {
   tnv?: string;
   bonnen?: Bon[];
   opmerkingen: string;
-  status: 'concept' | 'ingediend' | 'afgekeurd' | 'goedgekeurd';
+  status: 'concept' | 'ingediend' | 'afgekeurd' | 'goedgekeurd' | 'uitbetaald';
 }
 
 interface Bon {
@@ -502,13 +502,14 @@ export default class DeclaratieVue extends Vue {
   @Prop()
   private categorieen: Record<number, string>;
   @Prop({default: legeDeclaratie})
-  private declaratie: Declaratie;
+  private declaratieinput: Declaratie;
   @Prop()
   private iban: string;
   @Prop()
   private tenaamstelling: string;
 
-  private bonUploaden = true;
+  private declaratie = this.declaratieinput;
+  private bonUploaden = this.declaratie.bonnen.length === 0;
   private uploading = false;
   private geselecteerdeBon = 0;
   private money = {precision: 2, decimal: ',', thousands: ' ', prefix: '€ '};
@@ -641,7 +642,9 @@ export default class DeclaratieVue extends Vue {
       }
       this.errors = data.messages;
       this.submitting = false;
-      this.readOnly = true;
+      if (data.success) {
+        this.readOnly = true;
+      }
     }).catch((err) => {
       this.submitting = false;
       alert(err);

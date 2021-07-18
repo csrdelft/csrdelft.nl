@@ -21,39 +21,71 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DeclaratieController extends AbstractController
 {
 	/**
+	 * @param DeclaratieCategorieRepository $categorieRepository
 	 * @return Response
 	 * @Route("/declaratie/nieuw", name="declaratie_nieuw", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function nieuw(DeclaratieCategorieRepository $categorieRepository)
+	public function nieuw(DeclaratieCategorieRepository $categorieRepository): Response
 	{
 		$lid = $this->getProfiel();
 		$categorieLijst = $categorieRepository->findTuples();
-		return $this->render('declaratie/nieuw.html.twig', [
+		return $this->render('declaratie/detail.html.twig', [
+			'categorieLijst' => $categorieLijst,
 			'iban' => $lid->bankrekening,
-			'categorieLijst' => json_encode($categorieLijst),
-			'tenaamstelling' => $lid->getNaam('voorletters')
+			'tenaamstelling' => $lid->getNaam('voorletters'),
+			'declaratie' => false,
 		]);
 	}
 
 	/**
-	 * @param string $filename
-	 * @param Filesystem $filesystem
+	 * @param Declaratie $declaratie
+	 * @param DeclaratieCategorieRepository $categorieRepository
+	 * @param UrlGeneratorInterface $generator
 	 * @return Response
-	 * @Route("/declaratie/download/{filename}", name="declaratie_download", methods={"GET"}, requirements={"filename"="[a-f0-9]+.[a-z]+"})
+	 * @Route("/declaratie/{declaratie}", name="declaratie_detail", methods={"GET"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function download(string $filename, Filesystem $filesystem)
+	public function detail(Declaratie $declaratie, DeclaratieCategorieRepository $categorieRepository, UrlGeneratorInterface $generator): Response
 	{
-		$filename = DECLARATIE_PATH . $filename;
+		if ($declaratie->getIndiener()->uid !== $this->getUid()) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$lid = $this->getProfiel();
+		$categorieLijst = $categorieRepository->findTuples();
+		return $this->render('declaratie/detail.html.twig', [
+			'categorieLijst' => $categorieLijst,
+			'iban' => $lid->bankrekening,
+			'tenaamstelling' => $lid->getNaam('voorletters'),
+			'declaratie' => $declaratie->naarObject($generator),
+		]);
+	}
+
+	/**
+	 * @param string $path
+	 * @param Filesystem $filesystem
+	 * @param DeclaratieBonRepository $bonRepository
+	 * @return Response
+	 * @Route("/declaratie/download/{path}", name="declaratie_download", methods={"GET"}, requirements={"filename"="[a-f0-9]+.[a-z]+"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function download(string $path, Filesystem $filesystem, DeclaratieBonRepository $bonRepository)
+	{
+		$filename = DECLARATIE_PATH . $path;
 		if (!$filesystem->exists($filename)) {
-			throw new NotFoundHttpException();
+			throw $this->createAccessDeniedException();
+		}
+
+		$bon = $bonRepository->findOneBy(['bestand' => $path]);
+		if (!$bon || $bon->getMaker()->uid !== $this->getUid()) {
+			throw $this->createAccessDeniedException();
 		}
 
 		$response = new BinaryFileResponse($filename);
@@ -97,7 +129,7 @@ class DeclaratieController extends AbstractController
 
 		$bon = $bonRepository->generate($filename, $this->getProfiel());
 		return $this->json([
-			'file' => $this->generateUrl('declaratie_download', ['filename' => $filename]),
+			'file' => $this->generateUrl('declaratie_download', ['path' => $filename]),
 			'id' => $bon->getId(),
 		]);
 	}

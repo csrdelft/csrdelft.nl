@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @ORM\Entity(repositoryClass=DeclaratieBonRepository::class)
@@ -193,5 +194,14 @@ class DeclaratieBon
 		}
 
 		return $fouten;
+	}
+
+	public function naarObject(UrlGeneratorInterface $generator): array {
+		return [
+			'bestandsnaam' => $generator->generate('declaratie_download', ['path' => $this->bestand]),
+			'datum' => $this->datum ? date_format($this->datum, 'd-m-Y') : null,
+			'id' => $this->id,
+			'regels' => array_map(function(DeclaratieRegel $a) { return $a->naarObject(); }, $this->regels->toArray()),
+		];
 	}
 }

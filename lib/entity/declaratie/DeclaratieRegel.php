@@ -187,4 +187,22 @@ class DeclaratieRegel {
 
 		return $fouten;
 	}
+
+	public function naarObject(): array {
+		if ($this->btw === 0) {
+			$btw = 'geen: 0%';
+		} elseif ($this->inclBtw === true) {
+			$btw = "incl. {$this->btw}%";
+		} elseif ($this->inclBtw === false) {
+			$btw = "excl. {$this->btw}%";
+		} else {
+			$btw = null;
+		}
+
+		return [
+			'bedrag' => $this->bedrag,
+			'btw' => $btw,
+			'omschrijving' => $this->omschrijving,
+		];
+	}
 }

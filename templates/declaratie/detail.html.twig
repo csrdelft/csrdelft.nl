@@ -1,18 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block titel %}Nieuwe declaratie{% endblock %}
+{% block titel %}Declaratie{% endblock %}
 
 {% block styles %}
 	{{ css_asset('app') }}
 {% endblock %}
 
 {% block content %}
-	<h2>Nieuwe declaratie</h2>
+	<h2>Declaratie</h2>
 	<Declaratie
 		class="vue-context"
 		type="nieuw"
 		iban="{{ iban }}"
 		tenaamstelling="{{ tenaamstelling }}"
-		:categorieen="{{ categorieLijst }}">
+		:categorieen='{{ categorieLijst|json_encode|e('html_attr') }}'
+		{% if declaratie %}:declaratieinput='{{ declaratie|json_encode|e('html_attr') }}'{% endif %}
+	>
 	</Declaratie>
 {% endblock %}
