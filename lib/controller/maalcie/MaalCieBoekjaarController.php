@@ -39,10 +39,10 @@ class MaalCieBoekjaarController extends AbstractController {
 	 * @Auth(P_MAAL_SALDI)
 	 */
 	public function sluitboekjaar() {
-		$form = new BoekjaarSluitenForm(date('Y-m-d', strtotime('-1 year')), date('Y-m-d')); // fetches POST values itself
+		$form = new BoekjaarSluitenForm(date_create_immutable('-1 year'), date_create_immutable());
 		if ($form->validate()) {
 			$values = $form->getValues();
-			$errors_aantal = $this->maaltijdenRepository->archiveerOudeMaaltijden(strtotime($values['begindatum']), strtotime($values['einddatum']));
+			$errors_aantal = $this->maaltijdenRepository->archiveerOudeMaaltijden($values['begindatum'], $values['einddatum']);
 			if (count($errors_aantal[0]) === 0) {
 				setMelding('Boekjaar succesvol gesloten: ' . $errors_aantal[1] . ' maaltijden naar het archief verplaatst.', 1);
 			}

@@ -11,7 +11,7 @@ use CsrDelft\repository\corvee\CorveeFunctiesRepository;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\ProfielEntityField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredDateField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -56,7 +56,7 @@ class TaakForm extends ModalForm {
 		$fields['fid']->required = true;
 		$fields['lid'] = new ProfielEntityField('profiel', $taak->profiel, 'Naam');
 		$fields['lid']->title = 'Bij het wijzigen van het toegewezen lid worden ook de corveepunten aan het nieuwe lid gegeven.';
-		$fields[] = new RequiredDateObjectField('datum', $taak->datum, 'Datum', date('Y') + 2, date('Y') - 2);
+		$fields[] = new RequiredDateField('datum', $taak->datum, 'Datum', date('Y') + 2, date('Y') - 2);
 		$fields['ptn'] = new RequiredIntField('punten', $taak->punten, 'Punten', 0, 10);
 		$fields['ptn']->css_classes[] = 'punten_field';
 		$fields[] = new RequiredIntField('bonus_malus', $taak->bonus_malus, 'Bonus/malus', -10, 10);

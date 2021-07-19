@@ -2,26 +2,26 @@
 
 namespace CsrDelft\view\formulier\keuzevelden;
 
-use CsrDelft\view\formulier\invoervelden\InputField;
 use CsrDelft\view\formulier\invoervelden\TextField;
+use DateTimeInterface;
 
 /**
- * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
- * @author P.W.G. Brussee <brussee@live.nl>
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  *
- * DateField
+ * DateObjectField
  *
- * Selecteer een datum, met een mogelijk maximum jaar.
+ * Een DateField die als input en output een DateTime object heeft.
  *
- * Produceert drie velden.
  */
 class DateField extends TextField {
 	protected $max_jaar;
 	protected $min_jaar;
 
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
+		if ($value instanceof DateTimeInterface) {
+			$value = date_format_intl($value, DATE_FORMAT);
+		}
 		parent::__construct($name, $value, $description);
 		if (is_int($maxyear)) {
 			$this->max_jaar = $maxyear;
@@ -90,4 +90,7 @@ class DateField extends TextField {
 HTML;
 	}
 
+	public function getFormattedValue() {
+		return date_create_immutable($this->getValue());
+	}
 }

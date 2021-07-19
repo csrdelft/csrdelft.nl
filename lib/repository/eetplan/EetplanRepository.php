@@ -110,7 +110,7 @@ class EetplanRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param string $avond
+	 * @param \DateTimeInterface $avond
 	 * @param integer $lidjaar
 	 *
 	 * @return Eetplan[]

@@ -355,7 +355,7 @@ class EetplanController extends AbstractController
 
 		if (!$form->validate()) {
 			return $form;
-		} elseif ($this->eetplanRepository->avondHasEetplan(date_create_immutable($form->getValues()['avond']))) {
+		} elseif ($this->eetplanRepository->avondHasEetplan($form->getValues()['avond'])) {
 			setMelding('Er bestaat al een eetplan met deze datum', -1);
 			return $form;
 		} else {

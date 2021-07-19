@@ -12,7 +12,7 @@ class NieuwEetplanForm extends ModalForm {
 		parent::__construct(null, '/eetplan/nieuw', 'Nieuw eetplan toevoegen');
 
 		$fields[] = new HtmlComment(getMelding());
-		$fields[] = new RequiredDateField('avond', date(DATE_ISO8601), 'Avond', (int)date('Y') + 1, (int)date('Y') - 1);
+		$fields[] = new RequiredDateField('avond', date_create_immutable(), 'Avond', (int)date('Y') + 1, (int)date('Y') - 1);
 
 		$this->addFields($fields);
 

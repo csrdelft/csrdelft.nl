@@ -22,7 +22,7 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredLandField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\StudieField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredDateField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredSelectField;
 use CsrDelft\view\formulier\knoppen\SubmitKnop;
@@ -53,7 +53,7 @@ class ExternProfielForm extends Formulier {
 		$fields[] = new RequiredEnumSelectField('geslacht', $profiel->geslacht, 'Geslacht', Geslacht::class);
 		$fields[] = new TextField('voornamen', $profiel->voornamen, 'Voornamen', 100);
 
-		$fields[] = new RequiredDateObjectField('gebdatum', date_create_immutable_from_format('Ymd', '20020101'), 'Geboortedatum', date('Y') - 15, 1900);
+		$fields[] = new RequiredDateField('gebdatum', date_create_immutable_from_format('Ymd', '20020101'), 'Geboortedatum', date('Y') - 15, 1900);
 
 
 		$fields[] = new Subkopje('Adres');

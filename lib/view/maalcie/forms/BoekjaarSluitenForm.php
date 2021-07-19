@@ -34,7 +34,7 @@ class BoekjaarSluitenForm extends ModalForm {
 	public function validate() {
 		$valid = parent::validate();
 		$fields = $this->getFields();
-		if (strtotime($fields['eind']->getValue()) < strtotime($fields['begin']->getValue())) {
+		if ($fields['eind']->getValue() < $fields['begin']->getValue()) {
 			$fields['eind']->error = 'Moet na begindatum liggen';
 			$valid = false;
 		}

@@ -398,16 +398,13 @@ class MaaltijdenRepository extends AbstractRepository {
 	// Archief-Maaltijden ############################################################
 
 	/**
-	 * @param int $van
-	 * @param int $tot
+	 * @param DateTimeInterface $van
+	 * @param DateTimeInterface $tot
 	 * @return array
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */
-	public function archiveerOudeMaaltijden($van, $tot) {
-		if (!is_int($van) || !is_int($tot)) {
-			throw new CsrException('Invalid timestamp: archiveerOudeMaaltijden()');
-		}
+	public function archiveerOudeMaaltijden(DateTimeInterface $van, DateTimeInterface $tot) {
 		$errors = [];
 		/** @var Maaltijd[] $maaltijden */
 		$maaltijden = $this->createQueryBuilder('m')

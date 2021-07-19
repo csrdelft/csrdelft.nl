@@ -5,7 +5,7 @@ namespace CsrDelft\view\maalcie\forms;
 use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\entity\maalcie\RepetitieMaaltijdMaken;
 use CsrDelft\view\formulier\elementen\HtmlComment;
-use CsrDelft\view\formulier\keuzevelden\DateObjectField;
+use CsrDelft\view\formulier\keuzevelden\DateField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -25,8 +25,8 @@ class RepetitieMaaltijdenForm extends ModalForm {
 
 		$fields = [];
 		$fields[] = new HtmlComment('<p>Aanmaken <span class="dikgedrukt">' . $repetitie->periode . '</span> op <span class="dikgedrukt">' . $repetitie->dag . '</span> in de periode:</p>');
-		$fields['begin'] = new DateObjectField('begin_moment', $repetitie->begin_moment, 'Vanaf', date('Y') + 1, date('Y'));
-		$fields['eind'] = new DateObjectField('eind_moment', $repetitie->eind_moment, 'Tot en met', date('Y') + 1, date('Y'));
+		$fields['begin'] = new DateField('begin_moment', $repetitie->begin_moment, 'Vanaf', date('Y') + 1, date('Y'));
+		$fields['eind'] = new DateField('eind_moment', $repetitie->eind_moment, 'Tot en met', date('Y') + 1, date('Y'));
 
 		$this->addFields($fields);
 

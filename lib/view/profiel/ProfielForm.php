@@ -32,10 +32,10 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\StudieField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\UrlField;
-use CsrDelft\view\formulier\keuzevelden\DateObjectField;
+use CsrDelft\view\formulier\keuzevelden\DateField;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredDateField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredEnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
@@ -149,9 +149,9 @@ class ProfielForm extends Formulier {
 					$fields[] = new TextField('postfix', $profiel->postfix, 'Postfix', 7);
 				}
 			}
-			$fields[] = new RequiredDateObjectField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15, 1900);
+			$fields[] = new RequiredDateField('gebdatum', $profiel->gebdatum, 'Geboortedatum', date('Y') - 15, 1900);
 			if ($admin && $profiel->status === LidStatus::Overleden) {
-				$fields[] = new DateObjectField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
+				$fields[] = new DateField('sterfdatum', $profiel->sterfdatum, 'Overleden op');
 			}
 			if (($admin || $profiel->isOudlid() || $profiel->status === LidStatus::Overleden) && !$inschrijven) {
 				$fields[] = new LidField('echtgenoot', $profiel->echtgenoot, 'Echtgenoot', 'allepersonen');
@@ -211,7 +211,7 @@ class ProfielForm extends Formulier {
 		if (!$inschrijven && ($admin || $profiel->isOudlid())) {
 			$fields[] = new TextField('beroep', $profiel->beroep, 'Beroep/werk', 4096);
 			$fields[] = new IntField('lidjaar', (int)$profiel->lidjaar, 'Lid sinds', 1950, date('Y'));
-			$fields[] = new DateObjectField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
+			$fields[] = new DateField('lidafdatum', $profiel->lidafdatum, 'Lid-af sinds');
 		}
 
 		if ($admin && !$inschrijven) {

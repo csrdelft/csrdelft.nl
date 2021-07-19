@@ -131,11 +131,12 @@ class EetplanFactory {
 	/**
 	 * Genereer een eetplansessie voor deze avond
 	 *
-	 * @param string $avond
+	 * @param \DateTimeInterface $avond
 	 * @param bool $random
 	 * @return Eetplan[]
 	 */
 	public function genereer($avond, $random = false) {
+		$avondStr = $avond->format(DATE_ISO8601);
 		assert(isset($this->novieten), 'Veld novieten is niet gezet');
 		assert(isset($this->huizen), 'Veld huizen is niet gezet');
 
@@ -150,18 +151,18 @@ class EetplanFactory {
 		// Interne id, niet oplopend van huis
 		$huisId = $this->huizen[$huisIndex]->id;
 
-		$this->bezocht_ah[$avond] = [];
+		$this->bezocht_ah[$avondStr] = [];
 
 		foreach ($this->novieten as $noviet) {
 			# wat foutmeldingen voorkomen
-			if (!isset($this->ahs[$avond][$huisId])) {
-				$this->ahs[$avond][$huisId] = [];
+			if (!isset($this->ahs[$avondStr][$huisId])) {
+				$this->ahs[$avondStr][$huisId] = [];
 			}
 			if (!isset($this->bekenden[$noviet->uid])) {
 				$this->bekenden[$noviet->uid] = [];
 			}
-			if (!isset($this->bezocht_ah[$avond][$huisId])) {
-				$this->bezocht_ah[$avond][$huisId] = [];
+			if (!isset($this->bezocht_ah[$avondStr][$huisId])) {
+				$this->bezocht_ah[$avondStr][$huisId] = [];
 			}
 			# we hebben nu een avond en een sjaars, nu nog een huis voor m vinden...
 			# zolang
@@ -175,24 +176,24 @@ class EetplanFactory {
 			$max = (int)floor($aantalSjaars / $aantalHuizen);
 			$aantalHuizenVol = 0; # aantal huizen dat aan de max zit.
 			while (isset($this->bezocht_sh[$noviet->uid][$huisId])
-				|| count(array_intersect($this->ahs[$avond][$huisId], $this->bekenden[$noviet->uid])) > 0
-				|| count($this->bezocht_ah[$avond][$huisId]) >= $max) {
+				|| count(array_intersect($this->ahs[$avondStr][$huisId], $this->bekenden[$noviet->uid])) > 0
+				|| count($this->bezocht_ah[$avondStr][$huisId]) >= $max) {
 				$huisIndex = $huisIndex % $aantalHuizen + 1;
 				$huisId = $this->huizen[$huisIndex]->id;
 
 				if ($huisIndex == $startih) {
 					$max++;
 				}
-				if (!isset($this->ahs[$avond][$huisId])) {
-					$this->ahs[$avond][$huisId] = [];
+				if (!isset($this->ahs[$avondStr][$huisId])) {
+					$this->ahs[$avondStr][$huisId] = [];
 				}
-				if (!isset($this->bezocht_ah[$avond][$huisId])) {
-					$this->bezocht_ah[$avond][$huisId] = [];
+				if (!isset($this->bezocht_ah[$avondStr][$huisId])) {
+					$this->bezocht_ah[$avondStr][$huisId] = [];
 				}
 
 				# nieuw: als alle huizen zijn langsgelopen en ze allemaal max sjaars hebben
 				# dan de max ophogen
-				if (count($this->bezocht_ah[$avond][$huisId]) == $max) {
+				if (count($this->bezocht_ah[$avondStr][$huisId]) == $max) {
 					$aantalHuizenVol++;
 				}
 				if ($aantalHuizenVol == $aantalHuizen) {
@@ -201,21 +202,21 @@ class EetplanFactory {
 			}
 
 			# deze sjaars heeft op deze avond een huis gevonden
-			$this->sah[$noviet->uid][$avond] = $huisId;
+			$this->sah[$noviet->uid][$avondStr] = $huisId;
 			# en gaat alle sjaars die op deze avond in dit huis zitten dat melden
-			foreach ($this->ahs[$avond][$huisId] as $sjaars) {
+			foreach ($this->ahs[$avondStr][$huisId] as $sjaars) {
 				$this->bekenden[$noviet->uid][] = $sjaars; # alle sjaars in mijn seen
 				$this->bekenden[$sjaars][] = $noviet->uid; # ik in alle sjaars' seen
 			}
-			$this->ahs[$avond][$huisId][] = $noviet->uid;
+			$this->ahs[$avondStr][$huisId][] = $noviet->uid;
 			# de sjaars heeft het huis bezocht
 			$this->bezocht[$huisId][] = $noviet->uid;
 			$this->bezocht_sh[$noviet->uid][$huisId] = true;
-			$this->bezocht_ah[$avond][$huisId][] = $noviet->uid;
+			$this->bezocht_ah[$avondStr][$huisId][] = $noviet->uid;
 
 			# Maak een entity voor deze sessie
 			$nieuweetplan = new Eetplan();
-			$nieuweetplan->avond = date_create_immutable($avond);
+			$nieuweetplan->avond = $avond;
 			$nieuweetplan->noviet = $noviet;
 			$nieuweetplan->woonoord = $this->huizen[$huisIndex];
 
