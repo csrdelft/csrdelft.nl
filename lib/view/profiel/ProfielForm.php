@@ -18,6 +18,7 @@ use CsrDelft\view\formulier\Formulier;
 use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
 use CsrDelft\view\formulier\getalvelden\TelefoonField;
+use CsrDelft\view\formulier\invoervelden\ProfielEntityField;
 use CsrDelft\view\formulier\invoervelden\RemoteSuggestieField;
 use CsrDelft\view\formulier\invoervelden\EmailField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
@@ -219,7 +220,7 @@ class ProfielForm extends Formulier {
 				$fields[] = new JaNeeField('verticaleleider', $profiel->verticaleleider, 'Verticaleleider');
 				$fields[] = new JaNeeField('kringcoach', $profiel->kringcoach, 'Kringcoach');
 			}
-			$fields[] = new RemoteSuggestieField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
+			$fields[] = new ProfielEntityField('patroon', $profiel->patroon, 'Patroon', 'allepersonen');
 			$fields[] = new TextField('profielOpties', $profiel->profielOpties, 'Profielopties');
 		}
 

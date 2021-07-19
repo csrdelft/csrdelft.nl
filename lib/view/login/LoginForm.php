@@ -6,7 +6,7 @@ use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\view\formulier\CsrfField;
 use CsrDelft\view\formulier\elementen\HtmlComment;
-use CsrDelft\view\formulier\invoervelden\LegacyTextField;
+use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\knoppen\TemplateFormKnoppen;
@@ -91,7 +91,7 @@ class LoginForm implements FormulierTypeInterface {
 
 		$fields[] = new CsrfField($this->csrfTokenManager->getToken('authenticate'), '_csrf_token');
 
-		$fields['user'] = new LegacyTextField('_username', $options['lastUserName'] ?? "", null);
+		$fields['user'] = new TextField('_username', $options['lastUserName'] ?? "", null);
 		$fields['user']->placeholder = $this->translator->trans('Lidnummer of emailadres');
 
 		$fields['pass'] = new WachtwoordField('_password', null, null);
