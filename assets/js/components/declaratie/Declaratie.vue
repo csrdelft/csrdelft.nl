@@ -12,7 +12,12 @@
         :class="{'active': declaratie.status === 'ingediend', 'done': declaratie.status === 'goedgekeurd' || declaratie.status === 'afgekeurd' || declaratie.status === 'uitbetaald'}"
       >
         <span class="status">Ingediend</span>
-        <span class="datum">{{ declaratie.statusDatums.ingediendOp }}</span>
+        <span
+          v-if="declaratie.status !== 'concept'"
+          class="datum"
+        >
+          {{ declaratie.statusData.ingediendDoor }}, {{ declaratie.statusData.ingediendOp }}
+        </span>
       </div>
       <div
         v-if="declaratie.status !== 'afgekeurd'"
@@ -20,7 +25,12 @@
         :class="{'active': declaratie.status === 'goedgekeurd', 'done': declaratie.status === 'uitbetaald'}"
       >
         <span class="status">Goedgekeurd</span>
-        <span class="datum">{{ declaratie.statusDatums.goedgekeurdOp }}</span>
+        <span
+          v-if="declaratie.statusData.beoordeeldDoor"
+          class="datum"
+        >
+          {{ declaratie.statusData.beoordeeldDoor }}, {{ declaratie.statusData.goedgekeurdOp }}
+        </span>
       </div>
       <div
         v-if="declaratie.status === 'afgekeurd'"
@@ -28,7 +38,18 @@
         :class="{'active': declaratie.status === 'afgekeurd'}"
       >
         <span class="status">Afgekeurd</span>
-        <span class="datum">{{ declaratie.statusDatums.afgekeurdOp }}</span>
+        <div
+          v-if="declaratie.statusData.beoordeeldDoor"
+          class="naam"
+        >
+          {{ declaratie.statusData.beoordeeldDoor }}
+        </div>
+        <span
+          v-if="declaratie.statusData.beoordeeldDoor"
+          class="datum"
+        >
+          {{ declaratie.statusData.beoordeeldDoor }}, {{ declaratie.statusData.afgekeurdOp }}
+        </span>
       </div>
       <div
         v-if="declaratie.status !== 'afgekeurd' && declaratie.betaalwijze === 'voorgeschoten'"
@@ -36,7 +57,7 @@
         :class="{'active': declaratie.status === 'uitbetaald'}"
       >
         <span class="status">Uitbetaald</span>
-        <span class="datum">{{ declaratie.statusDatums.uitbetaaldOp }}</span>
+        <span class="datum">{{ declaratie.statusData.uitbetaaldOp }}</span>
       </div>
     </div>
 
@@ -76,6 +97,7 @@
           id="C.S.R.-pas"
           v-model="declaratie.betaalwijze"
           type="radio"
+          name="betaalwijze"
           value="C.S.R.-pas"
           :disabled="veldenDisabled"
         >
@@ -86,6 +108,7 @@
           id="voorgeschoten"
           v-model="declaratie.betaalwijze"
           type="radio"
+          name="betaalwijze"
           value="voorgeschoten"
           :disabled="veldenDisabled"
         >
@@ -470,11 +493,13 @@ import {Component, Prop} from 'vue-property-decorator';
 
 type status = 'concept' | 'ingediend' | 'afgekeurd' | 'goedgekeurd' | 'uitbetaald';
 
-interface StatusDatums {
+interface StatusData {
   ingediendOp?: string;
   goedgekeurdOp?: string;
   afgekeurdOp?: string;
   uitbetaaldOp?: string;
+  ingediendDoor?: string;
+  beoordeeldDoor?: string;
 }
 
 interface Declaratie {
@@ -488,7 +513,7 @@ interface Declaratie {
   bonnen?: Bon[];
   opmerkingen: string;
   status: status;
-  statusDatums?: StatusDatums;
+  statusData?: StatusData;
 }
 
 interface Bon {
@@ -520,7 +545,7 @@ const legeDeclaratie: () => Declaratie = () => ({
   opmerkingen: '',
   eigenRekening: true,
   status: 'concept',
-  statusDatums: {
+  statusData: {
     uitbetaaldOp: '',
     goedgekeurdOp: '',
     afgekeurdOp: '',
@@ -538,7 +563,7 @@ interface DeclaratieOpslaanData {
   messages: string[]
   success: boolean
   status: status
-  statusDatums: StatusDatums
+  statusData: StatusData
 }
 
 @Component({
@@ -697,7 +722,10 @@ export default class DeclaratieVue extends Vue {
       if (data.id) {
         this.declaratie.id = data.id;
         this.declaratie.status = data.status;
-        this.declaratie.statusDatums = data.statusDatums;
+        this.declaratie.statusData = data.statusData;
+        if (window.location.pathname.endsWith('nieuw')) {
+          window.history.pushState("Declaratie " + data.id, "Declaratie", "/declaratie/" + data.id);
+        }
       }
       this.errors = data.messages;
       this.submitting = false;

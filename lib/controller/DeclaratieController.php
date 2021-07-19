@@ -145,7 +145,7 @@ class DeclaratieController extends AbstractController
 			'success' => empty($messages),
 			'id' => $declaratie ? $declaratie->getId() : null,
 			'status' => $declaratie ? $declaratie->getStatus() : 'concept',
-			'statusDatums' => $declaratie ? $declaratie->naarStatusDatums() : null,
+			'statusData' => $declaratie ? $declaratie->naarStatusData() : null,
 			'messages' => $messages,
 		]);
 	}
