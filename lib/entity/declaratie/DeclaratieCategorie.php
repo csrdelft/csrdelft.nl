@@ -89,4 +89,8 @@ class DeclaratieCategorie {
 
 		return $this;
 	}
+
+	public function magBeoordelen(): bool {
+		return $this->getWachtrij()->magBeoordelen();
+	}
 }

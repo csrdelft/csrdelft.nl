@@ -3,6 +3,7 @@
 namespace CsrDelft\entity\declaratie;
 
 use CsrDelft\repository\declaratie\DeclaratieWachtrijRepository;
+use CsrDelft\service\security\LoginService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -102,5 +103,9 @@ class DeclaratieWachtrij {
 		}
 
 		return $this;
+	}
+
+	public function magBeoordelen(): bool {
+		return LoginService::mag($this->rechten);
 	}
 }

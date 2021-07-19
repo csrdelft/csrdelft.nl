@@ -34,16 +34,10 @@
       </div>
       <div
         v-if="declaratie.status === 'afgekeurd'"
-        class="fase uitbetaald"
+        class="fase afgekeurd"
         :class="{'active': declaratie.status === 'afgekeurd'}"
       >
         <span class="status">Afgekeurd</span>
-        <div
-          v-if="declaratie.statusData.beoordeeldDoor"
-          class="naam"
-        >
-          {{ declaratie.statusData.beoordeeldDoor }}
-        </div>
         <span
           v-if="declaratie.statusData.beoordeeldDoor"
           class="datum"
@@ -53,7 +47,7 @@
       </div>
       <div
         v-if="declaratie.status !== 'afgekeurd' && declaratie.betaalwijze === 'voorgeschoten'"
-        class="fase concept"
+        class="fase uitbetaald"
         :class="{'active': declaratie.status === 'uitbetaald'}"
       >
         <span class="status">Uitbetaald</span>
@@ -465,10 +459,11 @@
     </div>
 
     <div
-      v-if="!veldenDisabled || submitting"
+      v-if="(!veldenDisabled || submitting) && !editing"
       class="save-buttons"
     >
       <button
+        v-if="declaratie.status === 'concept'"
         class="concept"
         :disabled="submitting"
         @click="declaratieOpslaan(false)"
@@ -481,6 +476,78 @@
         @click="declaratieOpslaan(true)"
       >
         Declaratie indienen
+      </button>
+    </div>
+
+    <div
+      v-if="editing"
+      class="save-buttons"
+    >
+      <button
+        class="concept"
+        :disabled="submitting"
+        @click="reload()"
+      >
+        Wijzigingen annuleren
+      </button>
+      <button
+        class="confirm"
+        :disabled="submitting"
+        @click="declaratieOpslaan(true)"
+      >
+        Opslaan
+      </button>
+    </div>
+
+    <div
+      v-if="declaratie.status !== 'concept' && declaratie.statusData.magBeoordelen && !editing && !submitting"
+      class="save-buttons"
+    >
+      <button
+        v-if="declaratie.status === 'goedgekeurd' || declaratie.status === 'afgekeurd'"
+        class="ingediend"
+        :disabled="submitting"
+        @click=""
+      >
+        Terug naar ingediend
+      </button>
+      <button
+        v-if="declaratie.status === 'ingediend'"
+        class="goedkeuren"
+        :disabled="submitting"
+        @click=""
+      >
+        Goedkeuren
+      </button>
+      <button
+        v-if="declaratie.status === 'ingediend'"
+        class="afkeuren"
+        :disabled="submitting"
+        @click=""
+      >
+        Afkeuren
+      </button>
+      <button
+        v-if="declaratie.statusData.magUitbetalen && declaratie.status === 'goedgekeurd'"
+        class="uitbetaald"
+        :disabled="submitting"
+        @click=""
+      >
+        Uitbetaald
+      </button>
+      <button
+        v-if="declaratie.statusData.magUitbetalen && declaratie.status === 'uitbetaald'"
+        class="goedkeuren"
+        :disabled="submitting"
+        @click=""
+      >
+        Uitbetaald ongedaan maken
+      </button>
+      <button
+        class="concept"
+        @click="declaratieBewerken()"
+      >
+        Bewerken
       </button>
     </div>
   </div>
@@ -500,6 +567,8 @@ interface StatusData {
   uitbetaaldOp?: string;
   ingediendDoor?: string;
   beoordeeldDoor?: string;
+  magBeoordelen: boolean;
+  magUitbetalen: boolean;
 }
 
 interface Declaratie {
@@ -550,6 +619,8 @@ const legeDeclaratie: () => Declaratie = () => ({
     goedgekeurdOp: '',
     afgekeurdOp: '',
     ingediendOp: '',
+    magBeoordelen: false,
+    magUitbetalen: false,
   },
   bonnen: [],
 });
@@ -597,10 +668,12 @@ export default class DeclaratieVue extends Vue {
   private geselecteerdeBon = 0;
   private money = {precision: 2, decimal: ',', thousands: ' ', prefix: '€ '};
   private submitting = false;
+  private editing = false;
   private errors = [];
 
   private get veldenDisabled() {
-    return this.submitting || this.declaratie.status !== 'concept';
+    return this.submitting
+      || (this.declaratie.status !== 'concept' && !this.editing);
   }
 
   private get heeftBonnen() {
@@ -736,6 +809,14 @@ export default class DeclaratieVue extends Vue {
       this.submitting = false;
       alert(err);
     });
+  }
+
+  public reload(): void {
+    window.location.reload();
+  }
+
+  public declaratieBewerken(): void {
+    this.editing = true;
   }
 }
 </script>
@@ -1188,6 +1269,26 @@ export default class DeclaratieVue extends Vue {
       &:hover {
         background: #48E088;
       }
+    }
+
+    &.ingediend {
+      color: white;
+      background: #E19600;
+    }
+
+    &.goedkeuren {
+      color: white;
+      background: #00DB49;
+    }
+
+    &.afkeuren {
+      color: white;
+      background: #E20000;
+    }
+
+    &.uitbetaald {
+      color: white;
+      background: #2C3E50;
     }
   }
 }

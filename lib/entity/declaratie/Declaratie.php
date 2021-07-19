@@ -4,6 +4,7 @@ namespace CsrDelft\entity\declaratie;
 
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\declaratie\DeclaratieRepository;
+use CsrDelft\service\security\LoginService;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -440,6 +441,8 @@ class Declaratie
 			'afgekeurdOp' => $this->isBeoordeeld() && !$this->isGoedgekeurd() ? date_format_intl($this->beoordeeld, 'd-M-yyyy') : null,
 			'beoordeeldDoor' => $this->beoordelaar ? $this->beoordelaar->getNaam() : null,
 			'uitbetaaldOp' => $this->isUitbetaald() ? date_format_intl($this->uitbetaald, 'd-M-yyyy') : null,
+			'magBeoordelen' => $this->magBeoordelen(),
+			'magUitbetalen' => $this->magUitbetalen(),
 		];
 	}
 
@@ -459,5 +462,13 @@ class Declaratie
 			'status' => $this->getStatus(),
 			'statusData' => $this->naarStatusData(),
 		];
+	}
+
+	public function magBeoordelen(): bool {
+		return $this->getCategorie()->magBeoordelen();
+	}
+
+	public function magUitbetalen(): bool {
+		return LoginService::mag('bestuur:ht:fiscus');
 	}
 }
