@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredDoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\CheckboxField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
-use CsrDelft\view\formulier\keuzevelden\TimeObjectField;
+use CsrDelft\view\formulier\keuzevelden\TimeField;
 use CsrDelft\view\formulier\keuzevelden\WeekdagField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormulierKnop;
@@ -43,7 +43,7 @@ class MaaltijdRepetitieForm extends ModalForm {
 
 		$fields = [];
 		$fields[] = new RequiredTextField('standaard_titel', $model->standaard_titel, 'Standaard titel', 255);
-		$fields[] = new TimeObjectField('standaard_tijd', $model->standaard_tijd, 'Standaard tijd', 15);
+		$fields[] = new TimeField('standaard_tijd', $model->standaard_tijd, 'Standaard tijd', 15);
 		$fields['dag'] = new WeekdagField('dag_vd_week', $model->dag_vd_week, 'Dag v/d week');
 		$fields['dag']->title = 'Als de periode ongelijk is aan 7 is dit de start-dag bij het aanmaken van periodieke maaltijden';
 		$fields[] = new IntField('periode_in_dagen', $model->periode_in_dagen, 'Periode (in dagen)', 0, 183);

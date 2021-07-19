@@ -24,7 +24,7 @@ use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\DateTimeField;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
-use CsrDelft\view\formulier\keuzevelden\TimeObjectField;
+use CsrDelft\view\formulier\keuzevelden\TimeField;
 use CsrDelft\view\formulier\keuzevelden\VerticaleField;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\FloatType;
@@ -116,7 +116,7 @@ class FormFieldFactory {
 	 * @param string $fieldName
 	 * @param mixed $value
 	 * @param Type $type
-	 * @return FloatField|IntField|LidField|RechtenField|SafeJsonField|TextareaField|TextField|DateTimeField|EnumSelectField|JaNeeField|TimeObjectField|VerticaleField
+	 * @return FloatField|IntField|LidField|RechtenField|SafeJsonField|TextareaField|TextField|DateTimeField|EnumSelectField|JaNeeField|TimeField|VerticaleField
 	 */
 	private static function getFieldByType(string $fieldName, $value, $type) {
 		$desc = humanizeVariable($fieldName);
@@ -166,7 +166,7 @@ class FormFieldFactory {
 		}
 
 		if ($type instanceof TimeImmutableType) {
-			return new TimeObjectField($fieldName, $value, $desc);
+			return new TimeField($fieldName, $value, $desc);
 		}
 
 		throw new CsrException("Kan geef formulier genereren voor veld $fieldName van type $type.");

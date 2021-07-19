@@ -1,20 +1,19 @@
 <?php
 
+
 namespace CsrDelft\view\formulier\keuzevelden;
 
+
 use CsrDelft\view\formulier\invoervelden\TextField;
+use DateTimeInterface;
 
-/**
- * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
- * @author P.W.G. Brussee <brussee@live.nl>
- * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
- * @since 30/03/2017
- */
 class TimeField extends TextField {
-
 	protected $minutensteps;
 
 	public function __construct($name, $value, $description, $minutensteps = null) {
+		if ($value instanceof DateTimeInterface) {
+			$value = date_format_intl($value, TIME_FORMAT);
+		}
 		parent::__construct($name, $value, $description);
 		if ($minutensteps === null) {
 			$this->minutensteps = 1;
@@ -84,4 +83,7 @@ class TimeField extends TextField {
 		return $html . '</select>';
 	}
 
+	public function getFormattedValue() {
+		return $this->value ? date_create_immutable($this->value) : null;
+	}
 }

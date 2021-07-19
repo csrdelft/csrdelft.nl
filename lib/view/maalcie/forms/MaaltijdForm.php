@@ -13,7 +13,7 @@ use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredDoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\keuzevelden\required\RequiredDateObjectField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredTimeObjectField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredTimeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormulierKnop;
 use CsrDelft\view\formulier\ModalForm;
@@ -54,7 +54,7 @@ class MaaltijdForm extends ModalForm {
 		$fields['mrid']->hidden = true;
 		$fields[] = new RequiredTextField('titel', $maaltijd->titel, 'Titel', 255, 5);
 		$fields[] = new RequiredDateObjectField('datum', $maaltijd->datum, 'Datum', date('Y') + 2, date('Y') - 2);
-		$fields[] = new RequiredTimeObjectField('tijd', $maaltijd->tijd, 'Tijd', 15);
+		$fields[] = new RequiredTimeField('tijd', $maaltijd->tijd, 'Tijd', 15);
 		$fields[] = new RequiredDoctrineEntityField('product', $maaltijd->product, 'Product', CiviProduct::class, '/fiscaat/producten/suggesties?q=');
 		$fields[] = new FormulierKnop('/fiscaat/producten', 'redirect', 'Nieuw product', 'Nieuw product aanmaken', '');
 		$fields[] = new RequiredIntField('aanmeld_limiet', $maaltijd->aanmeld_limiet, 'Aanmeldlimiet', 0, 200);
