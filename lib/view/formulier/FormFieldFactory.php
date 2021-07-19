@@ -21,7 +21,7 @@ use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\SafeJsonField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeField;
 use CsrDelft\view\formulier\keuzevelden\EnumSelectField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\keuzevelden\TimeObjectField;
@@ -116,7 +116,7 @@ class FormFieldFactory {
 	 * @param string $fieldName
 	 * @param mixed $value
 	 * @param Type $type
-	 * @return FloatField|IntField|LidField|RechtenField|SafeJsonField|TextareaField|TextField|DateTimeObjectField|EnumSelectField|JaNeeField|TimeObjectField|VerticaleField
+	 * @return FloatField|IntField|LidField|RechtenField|SafeJsonField|TextareaField|TextField|DateTimeField|EnumSelectField|JaNeeField|TimeObjectField|VerticaleField
 	 */
 	private static function getFieldByType(string $fieldName, $value, $type) {
 		$desc = humanizeVariable($fieldName);
@@ -142,7 +142,7 @@ class FormFieldFactory {
 		}
 
 		if ($type instanceof DateTimeImmutableType) {
-			return new DateTimeObjectField($fieldName, $value, $desc);
+			return new DateTimeField($fieldName, $value, $desc);
 		}
 
 		if ($type instanceof TextType || $type instanceof LongTextType) {

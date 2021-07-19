@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;
 use CsrDelft\view\formulier\invoervelden\SuggestieField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\knoppen\FormulierKnop;
 
@@ -32,9 +32,9 @@ class AgendaItemForm implements FormulierTypeInterface {
 		$fields['titel']->required = true;
 		$fields['titel']->suggesties = ['Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond'];
 
-		$fields['begin_moment'] = new DateTimeObjectField('begin_moment', $data->begin_moment, 'Begin moment');
+		$fields['begin_moment'] = new DateTimeField('begin_moment', $data->begin_moment, 'Begin moment');
 		$fields['begin_moment']->required = true;
-		$fields['eind_moment'] = new DateTimeObjectField('eind_moment', $data->eind_moment, 'Eind moment');
+		$fields['eind_moment'] = new DateTimeField('eind_moment', $data->eind_moment, 'Eind moment');
 		$fields['eind_moment']->required = true;
 
 		$fields['eind_moment']->from_datetime = $fields['begin_moment'];

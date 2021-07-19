@@ -7,7 +7,7 @@ use CsrDelft\entity\fiscaat\CiviBestelling;
 use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
 use CsrDelft\entity\fiscaat\enum\CiviProductTypeEnum;
 use CsrDelft\repository\AbstractRepository;
-use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -121,14 +121,14 @@ class CiviBestellingRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param DateTime $date
+	 * @param DateTimeInterface $date
 	 * @param bool $profielOnly
 	 *
 	 * @return integer
 	 * @throws NoResultException
 	 * @throws NonUniqueResultException
 	 */
-	public function getSomBestellingenVanaf(DateTime $date, $profielOnly = false) {
+	public function getSomBestellingenVanaf(DateTimeInterface $date, $profielOnly = false) {
 		$qb = $this->createQueryBuilder('cb')
 			->select('SUM(cb.totaal)')
 			->where('cb.deleted = false and cb.moment > :moment')

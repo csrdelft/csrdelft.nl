@@ -8,8 +8,8 @@ use CsrDelft\entity\fiscaat\CiviSaldo;
 use CsrDelft\entity\fiscaat\enum\CiviSaldoLogEnum;
 use CsrDelft\repository\AbstractRepository;
 use DateInterval;
-use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -90,12 +90,12 @@ class CiviSaldoRepository extends AbstractRepository {
 	}
 
 	/**
-	 * @param DateTime $date
+	 * @param DateTimeInterface $date
 	 * @param bool $profielOnly
 	 *
 	 * @return mixed
 	 */
-	public function getSomSaldiOp(DateTime $date, $profielOnly = false) {
+	public function getSomSaldiOp(DateTimeInterface $date, $profielOnly = false) {
 		$currentSum = $this->getSomSaldi($profielOnly);
 		return $currentSum + ContainerFacade::getContainer()->get(CiviBestellingRepository::class)->getSomBestellingenVanaf($date, $profielOnly);
 	}
@@ -151,8 +151,8 @@ class CiviSaldoRepository extends AbstractRepository {
 
 	/**
 	 * @param CiviSaldo $entity
-	 * @return int
-	 * @throws CsrGebruikerException
+	 * @throws ORMException
+	 * @throws OptimisticLockException
 	 */
 	public function delete(CiviSaldo $entity) {
 		if ($entity->saldo !== 0) {

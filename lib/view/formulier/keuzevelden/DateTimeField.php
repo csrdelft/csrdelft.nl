@@ -3,6 +3,7 @@
 namespace CsrDelft\view\formulier\keuzevelden;
 
 use CsrDelft\view\formulier\invoervelden\TextField;
+use DateTimeInterface;
 
 /**
  * @author Jan Pieter Waagmeester <jieter@jpwaag.com>
@@ -20,6 +21,9 @@ class DateTimeField extends TextField {
 	protected $min_jaar;
 
 	public function __construct($name, $value, $description, $maxyear = null, $minyear = null) {
+		if ($value instanceof DateTimeInterface) {
+			$value = date_format_intl($value, 'y-MM-dd HH:mm');
+		}
 		parent::__construct($name, $value, $description);
 		if (is_int($maxyear)) {
 			$this->max_jaar = $maxyear;
@@ -40,6 +44,10 @@ class DateTimeField extends TextField {
 		}
 
 		$this->cssClasses[] = 'DateTimeField';
+	}
+
+	public function getFormattedValue() {
+		return $this->value ? date_create_immutable($this->value) : null;
 	}
 
 	public function validate() {

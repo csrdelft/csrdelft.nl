@@ -181,17 +181,19 @@ class BeheerCiviSaldoController extends AbstractController {
 	 * @Auth(P_FISCAAT_MOD)
 	 */
 	public function som() {
-		$momentString = filter_input(INPUT_POST, 'moment', FILTER_SANITIZE_STRING);
-		$moment = DateTime::createFromFormat("Y-m-d H:i", $momentString);
-		if (!$moment) {
-			throw $this->createAccessDeniedException();
+		$saldoForm = new SaldiSomForm($this->civiSaldoRepository, new DateTime());
+
+		if ($saldoForm->validate()) {
+			$moment = $saldoForm->getField()->getFormattedValue();
+
+			return $this->render('fiscaat/saldisom.html.twig', [
+				'saldisomform' => $saldoForm,
+				'saldisom' => $this->civiSaldoRepository->getSomSaldiOp($moment),
+				'saldisomleden' => $this->civiSaldoRepository->getSomSaldiOp($moment, true),
+			]);
 		}
 
-		return $this->render('fiscaat/saldisom.html.twig', [
-			'saldisomform' => new SaldiSomForm($this->civiSaldoRepository, $moment),
-			'saldisom' => $this->civiSaldoRepository->getSomSaldiOp($moment),
-			'saldisomleden' => $this->civiSaldoRepository->getSomSaldiOp($moment, true),
-		]);
+		throw $this->createAccessDeniedException();
 	}
 
 	/**

@@ -11,7 +11,7 @@ use CsrDelft\view\formulier\getalvelden\IntField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\required\RequiredDateTimeObjectField;
+use CsrDelft\view\formulier\keuzevelden\required\RequiredDateTimeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
 class AanmeldActiviteitForm implements FormulierTypeInterface {
@@ -28,8 +28,8 @@ class AanmeldActiviteitForm implements FormulierTypeInterface {
 		$fields = [];
 
 		$fields[] = new HiddenField('id', $data->getId());
-		$fields[] = new RequiredDateTimeObjectField('start', $data->getStart(), 'Start');
-		$fields[] = new RequiredDateTimeObjectField('einde', $data->getEinde(), 'Einde');
+		$fields[] = new RequiredDateTimeField('start', $data->getStart(), 'Start');
+		$fields[] = new RequiredDateTimeField('einde', $data->getEinde(), 'Einde');
 
 		$fields[] = new CollapsableSubkopje('Gegevens activiteit', true);
 		$fields[] = new HtmlComment('Laat leeg voor standaard van reeks');

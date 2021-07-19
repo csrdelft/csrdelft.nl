@@ -30,7 +30,7 @@ class CiviSaldoLogRepository extends AbstractRepository {
 
 	/**
 	 * @param string $type
-	 * @param string $data
+	 * @param string|object $data
 	 * @throws ORMException
 	 * @throws OptimisticLockException
 	 */

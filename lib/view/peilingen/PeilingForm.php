@@ -12,7 +12,7 @@ use CsrDelft\view\formulier\invoervelden\HiddenObjectField;
 use CsrDelft\view\formulier\invoervelden\RechtenField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredProsemirrorField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
-use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeField;
 use CsrDelft\view\formulier\keuzevelden\JaNeeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
@@ -42,7 +42,7 @@ class PeilingForm implements FormulierTypeInterface {
 		$fields[] = new JaNeeField('resultaat_zichtbaar', $data->resultaat_zichtbaar, 'Resultaat zichtbaar');
 		$fields[] = new RequiredIntField('aantal_voorstellen', $data->aantal_voorstellen ?? 0, 'Aantal voorstellen', 0, 10);
 		$fields[] = new RequiredIntField('aantal_stemmen', $data->aantal_stemmen ?? 1, 'Aantal stemmen', 0, 10);
-		$fields[] = new DateTimeObjectField('sluitingsdatum', $data->sluitingsdatum, 'Sluitingsdatum');
+		$fields[] = new DateTimeField('sluitingsdatum', $data->sluitingsdatum, 'Sluitingsdatum');
 		$fields[] = new RechtenField('rechten_stemmen', $data->rechten_stemmen, 'Rechten stemmen');
 		$fields['rechten_mod'] = new RechtenField('rechten_mod', $data->rechten_mod, 'Rechten bewerken');
 		$fields['rechten_mod']->title = 'Een peiling mag altijd bewerkt worden door jou, de BASFCie, de PubCie en het bestuur.';

@@ -10,7 +10,7 @@ use CsrDelft\view\formulier\invoervelden\DoctrineEntityField;
 use CsrDelft\view\formulier\invoervelden\HiddenField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
-use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
+use CsrDelft\view\formulier\keuzevelden\DateTimeField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -28,14 +28,14 @@ class PinBestellingInfoForm extends ModalForm {
 		$fields = [];
 		$fields['id'] = new HiddenField('id', $pinTransactieMatch->id);
 		if ($pinTransactieMatch->transactie !== null) {
-			$fields['pinMoment'] = new DateTimeObjectField('pinMoment', $pinTransactieMatch->transactie->datetime, 'Transactie moment');
+			$fields['pinMoment'] = new DateTimeField('pinMoment', $pinTransactieMatch->transactie->datetime, 'Transactie moment');
 			$fields['pinMoment']->readonly = true;
 		}
 		if ($pinTransactieMatch->bestelling !== null) {
 			$civiSaldo = ContainerFacade::getContainer()->get(CiviSaldoRepository::class)->find($pinTransactieMatch->bestelling->uid);
 			$fields['lid'] = new DoctrineEntityField('uid', $civiSaldo, 'Account', CiviSaldo::class, '');
 			$fields['lid']->readonly = true;
-			$fields['moment'] = new DateTimeObjectField('moment', $pinTransactieMatch->bestelling->moment, 'Bestelling moment');
+			$fields['moment'] = new DateTimeField('moment', $pinTransactieMatch->bestelling->moment, 'Bestelling moment');
 			$fields['moment']->readonly = true;
 			$fields['comment'] = new TextField('comment', $pinTransactieMatch->bestelling->comment, 'Externe notitie');
 		}
