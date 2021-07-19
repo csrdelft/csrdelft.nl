@@ -18,14 +18,18 @@ use CsrDelft\repository\security\AccountRepository;
  *
  * Bij wachtwoord resetten produceert deze 2 velden.
  */
-class WachtwoordWijzigenField extends InputField {
+class WachtwoordWijzigenField extends TextField {
 	protected $fieldClassName = '';
 	protected $wrapperClassName = '';
 
-	private $require_current;
+	private $requireCurrent;
+	/**
+	 * @var string[]
+	 */
+	private $blacklist;
 
-	public function __construct($name, Account $account, $require_current = true) {
-		$this->require_current = $require_current;
+	public function __construct($name, Account $account, $requireCurrent = true) {
+		$this->requireCurrent = $requireCurrent;
 		parent::__construct($name, null, '', $account);
 		$this->title = 'Het nieuwe wachtwoord moet langer zijn dan 23 tekens of langer dan 10 en ook hoofdletters, kleine letters, cijfers en speciale tekens bevatten.';
 
@@ -68,7 +72,7 @@ class WachtwoordWijzigenField extends InputField {
 	}
 
 	public function isPosted() {
-		if ($this->require_current && !isset($_POST[$this->name . '_current'])) {
+		if ($this->requireCurrent && !isset($_POST[$this->name . '_current'])) {
 			return false;
 		}
 		return isset($_POST[$this->name . '_new']) && isset($_POST[$this->name . '_confirm']);
@@ -80,15 +84,15 @@ class WachtwoordWijzigenField extends InputField {
 		} else {
 			$this->value = false;
 		}
-		if ($this->empty_null && $this->value == '') {
+		if ($this->value == '') {
 			return null;
 		}
 		return $this->value;
 	}
 
-	public function checkZwarteLijst($pass_plain) {
+	public function checkZwarteLijst($passPlain) {
 		foreach ($this->blacklist as $disallowed) {
-			if (stripos($pass_plain, $disallowed) !== false) {
+			if (stripos($passPlain, $disallowed) !== false) {
 				$this->error = htmlspecialchars($disallowed);
 				return true;
 			}
@@ -101,21 +105,21 @@ class WachtwoordWijzigenField extends InputField {
 		if (!parent::validate()) {
 			return false;
 		}
-		if ($this->require_current) {
+		if ($this->requireCurrent) {
 			$current = $_POST[$this->name . '_current'];
 		}
 		// filter_input does not use current value in $_POST
 		$new = $_POST[$this->name . '_new'];
 		$confirm = $_POST[$this->name . '_confirm'];
 		$length = strlen(utf8_decode($new));
-		if ($this->require_current AND empty($current)) {
+		if ($this->requireCurrent && empty($current)) {
 			$this->error = 'U moet uw huidige wachtwoord invoeren';
-		} elseif ($this->required AND empty($new)) {
+		} elseif ($this->required && empty($new)) {
 			$this->error = 'U moet een nieuw wachtwoord invoeren';
-		} elseif ($this->require_current AND !$accountRepository->controleerWachtwoord($this->model, $current)) {
+		} elseif ($this->requireCurrent && !$accountRepository->controleerWachtwoord($this->model, $current)) {
 				$this->error = 'Uw huidige wachtwoord is niet juist';
 		} elseif (!empty($new)) {
-			if ($this->require_current AND $current == $new) {
+			if ($this->requireCurrent && $current == $new) {
 				$this->error = 'Het nieuwe wachtwoord is hetzelfde als het huidige wachtwoord';
 			} elseif ($length < 10) {
 				$this->error = 'Het nieuwe wachtwoord moet minimaal 10 tekens lang zijn';
@@ -151,11 +155,11 @@ class WachtwoordWijzigenField extends InputField {
 	public function getHtml() {
 		$html = '';
 		if ($this->error !== '') {
-			$this->css_classes[] = 'is-invalid';
+			$this->cssClasses[] = 'is-invalid';
 		}
-		$inputCssClasses = join(" ", $this->css_classes);
+		$inputCssClasses = join(" ", $this->cssClasses);
 
-		if ($this->require_current) {
+		if ($this->requireCurrent) {
 			$html .= <<<HTML
 <div class="mb-3 row">
 	<div class="{$this->labelClassName}">

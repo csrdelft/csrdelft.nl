@@ -6,7 +6,7 @@ use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\entity\aanmelder\AanmeldActiviteit;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredLidObjectField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredProfielEntityField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 
 class AanmeldActiviteitAanmeldForm implements FormulierTypeInterface {
@@ -18,7 +18,7 @@ class AanmeldActiviteitAanmeldForm implements FormulierTypeInterface {
 	 */
 	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
 		$fields = [];
-		$fields['lid'] = new RequiredLidObjectField('lid', null, 'Lid');
+		$fields['lid'] = new RequiredProfielEntityField('lid', null, 'Lid');
 		$fields['aantal'] = new RequiredIntField('aantal', 1, 'Aantal personen', 1);
 		$builder->addFields($fields);
 

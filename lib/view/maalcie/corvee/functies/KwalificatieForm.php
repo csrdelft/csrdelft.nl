@@ -3,7 +3,7 @@
 namespace CsrDelft\view\maalcie\corvee\functies;
 
 use CsrDelft\entity\corvee\CorveeKwalificatie;
-use CsrDelft\view\formulier\invoervelden\LidObjectField;
+use CsrDelft\view\formulier\invoervelden\ProfielEntityField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -18,7 +18,7 @@ class KwalificatieForm extends ModalForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields = [];
-		$fields[] = new LidObjectField('profiel', $kwalificatie->profiel, 'Naam of lidnummer', 'leden');
+		$fields[] = new ProfielEntityField('profiel', $kwalificatie->profiel, 'Naam of lidnummer', 'leden');
 
 		$this->addFields($fields);
 

@@ -4,8 +4,7 @@ namespace CsrDelft\view\maalcie\forms;
 
 use CsrDelft\common\CsrGebruikerException;
 use CsrDelft\entity\corvee\CorveeTaak;
-use CsrDelft\view\formulier\invoervelden\LidField;
-use CsrDelft\view\formulier\invoervelden\LidObjectField;
+use CsrDelft\view\formulier\invoervelden\ProfielEntityField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 use Twig\Environment;
@@ -30,7 +29,7 @@ class ToewijzenForm extends ModalForm {
 		$this->css_classes[] = 'PreventUnchanged';
 
 		$fields = [];
-		$fields[] = new LidObjectField('profiel', $taak->profiel, 'Naam', 'leden');
+		$fields[] = new ProfielEntityField('profiel', $taak->profiel, 'Naam', 'leden');
 		$fields[] = new SuggestieLijst($suggesties, $twig, $taak);
 
 		$this->addFields($fields);

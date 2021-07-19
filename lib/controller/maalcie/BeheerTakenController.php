@@ -13,7 +13,7 @@ use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\service\corvee\CorveeHerinneringService;
 use CsrDelft\service\corvee\CorveeToewijzenService;
-use CsrDelft\view\formulier\invoervelden\LidObjectField;
+use CsrDelft\view\formulier\invoervelden\ProfielEntityField;
 use CsrDelft\view\maalcie\forms\RepetitieCorveeForm;
 use CsrDelft\view\maalcie\forms\TaakForm;
 use CsrDelft\view\maalcie\forms\ToewijzenForm;
@@ -289,7 +289,7 @@ class BeheerTakenController extends AbstractController {
 			throw new CsrGebruikerException('Corveetaak is verwijderd');
 		}
 
-		$lidField = new LidObjectField('profiel', null, null, 'leden'); // fetches POST values itself
+		$lidField = new ProfielEntityField('profiel', null, null, 'leden'); // fetches POST values itself
 		if ($lidField->validate()) {
 			$this->corveeTakenRepository->taakToewijzenAanLid($taak, $taak->profiel, $lidField->getFormattedValue());
 			return $this->render('maaltijden/corveetaak/beheer_taak_lijst.html.twig', [

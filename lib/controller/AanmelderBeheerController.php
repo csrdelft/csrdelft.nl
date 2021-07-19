@@ -17,7 +17,7 @@ use CsrDelft\view\aanmelder\ReeksForm;
 use CsrDelft\view\aanmelder\ReeksTabel;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\formulier\getalvelden\required\RequiredIntField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredLidObjectField;
+use CsrDelft\view\formulier\invoervelden\required\RequiredProfielEntityField;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpFoundation\Request;
@@ -351,7 +351,7 @@ class AanmelderBeheerController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isPosted() && $form->validate()) {
-			/** @var RequiredLidObjectField $lidVeld */
+			/** @var RequiredProfielEntityField $lidVeld */
 			$lidVeld = $form->getField('lid');
 			$lid = $lidVeld->getFormattedValue();
 
