@@ -4,6 +4,7 @@ namespace CsrDelft\entity\declaratie;
 
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\declaratie\DeclaratieBonRepository;
+use CsrDelft\service\security\LoginService;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -152,7 +153,8 @@ class DeclaratieBon
 		return $this;
 	}
 
-	public function getBedragExcl(): float {
+	public function getBedragExcl(): float
+	{
 		$som = 0;
 		foreach ($this->getRegels() as $regel) {
 			$som += $regel->getBedragExcl();
@@ -160,7 +162,8 @@ class DeclaratieBon
 		return round($som, 2);
 	}
 
-	public function getBtwBedrag(): float {
+	public function getBtwBedrag(): float
+	{
 		$som = 0;
 		foreach ($this->getRegels() as $regel) {
 			$som += $regel->getBtwBedrag();
@@ -168,7 +171,8 @@ class DeclaratieBon
 		return round($som, 2);
 	}
 
-	public function getBedragIncl(): float {
+	public function getBedragIncl(): float
+	{
 		$som = 0;
 		foreach ($this->getRegels() as $regel) {
 			$som += $regel->getBedragIncl();
@@ -196,12 +200,21 @@ class DeclaratieBon
 		return $fouten;
 	}
 
-	public function naarObject(UrlGeneratorInterface $generator): array {
+	public function naarObject(UrlGeneratorInterface $generator): array
+	{
 		return [
 			'bestandsnaam' => $generator->generate('declaratie_download', ['path' => $this->bestand]),
 			'datum' => $this->datum ? date_format($this->datum, 'd-m-Y') : null,
 			'id' => $this->id,
-			'regels' => array_map(function(DeclaratieRegel $a) { return $a->naarObject(); }, $this->regels->toArray()),
+			'regels' => array_map(function (DeclaratieRegel $a) {
+				return $a->naarObject();
+			}, $this->regels->toArray()),
 		];
+	}
+
+	public function magBekijken(): bool
+	{
+		return $this->getMaker()->uid === LoginService::getUid()
+			|| $this->getDeclaratie() && $this->getDeclaratie()->magBekijken();
 	}
 }

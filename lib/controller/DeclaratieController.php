@@ -54,11 +54,11 @@ class DeclaratieController extends AbstractController
 	 */
 	public function detail(Declaratie $declaratie, DeclaratieCategorieRepository $categorieRepository, UrlGeneratorInterface $generator): Response
 	{
-		if ($declaratie->getIndiener()->uid !== $this->getUid()) {
+		if (!$declaratie->magBekijken()) {
 			throw $this->createAccessDeniedException();
 		}
 
-		$lid = $this->getProfiel();
+		$lid = $declaratie->getIndiener();
 		$categorieLijst = $categorieRepository->findTuples();
 		return $this->render('declaratie/detail.html.twig', [
 			'categorieLijst' => $categorieLijst,
@@ -84,7 +84,7 @@ class DeclaratieController extends AbstractController
 		}
 
 		$bon = $bonRepository->findOneBy(['bestand' => $path]);
-		if (!$bon || $bon->getMaker()->uid !== $this->getUid()) {
+		if (!$bon || !$bon->magBekijken()) {
 			throw $this->createAccessDeniedException();
 		}
 
@@ -135,7 +135,7 @@ class DeclaratieController extends AbstractController
 	}
 
 	/**
-	 * @param string[] $messages
+	 * @param array $messages
 	 * @param Declaratie|null $declaratie
 	 * @return JsonResponse
 	 */
@@ -175,9 +175,7 @@ class DeclaratieController extends AbstractController
 		// Laad declaratie of maak nieuwe
 		if ($data->getInt('id')) {
 			$declaratie = $declaratieRepository->find($data->getInt('id'));
-			if (!$declaratie
-				|| $declaratie->getIndiener()->uid !== $this->getUid()
-				|| $declaratie->isIngediend()) {
+			if (!$declaratie || !$declaratie->magBewerken()) {
 				return $this->ajaxResponse(['Je mag deze declaratie niet aanpassen']);
 			}
 		} else {
@@ -191,7 +189,6 @@ class DeclaratieController extends AbstractController
 		if (!$categorie) {
 			return $this->ajaxResponse(['Selecteer een categorie voor deze declaratie']);
 		}
-		$declaratie->setCategorie($categorie);
 
 		$declaratie->fromParameters($data);
 		$declaratie->setTotaal(0);
@@ -206,7 +203,7 @@ class DeclaratieController extends AbstractController
 			foreach ($data->get('bonnen') as $rawBon) {
 				$bonData = new ParameterBag($rawBon);
 				$bon = $bonRepository->find($bonData->getInt('id'));
-				if ($bon->getMaker()->uid !== $this->getUid()
+				if (!($bon->magBekijken() || $declaratie->magBeoordelen())
 					|| ($bon->getDeclaratie() !== null && $bon->getDeclaratie()->getId() !== $declaratie->getId())) {
 					$messages[] = 'Een van de bonnen kan niet gebruikt worden in deze declaratie';
 					continue;
@@ -248,11 +245,12 @@ class DeclaratieController extends AbstractController
 
 		// Sla declaratie op
 		$declaratie->setTotaal($declaratie->getBedragIncl());
+		$declaratie->setCategorie($categorie);
 		$entityManager->flush();
 
-		if ($data->get('status') === 'ingediend') {
+		if ($request->request->getBoolean('indienen')) {
 			$messages = array_merge($messages, $declaratie->valideer());
-			if (empty($messages)) {
+			if (empty($messages) && $declaratie->getIngediend() === null) {
 				$declaratie->setIngediend(date_create_immutable());
 			}
 		}
@@ -261,4 +259,54 @@ class DeclaratieController extends AbstractController
 		return $this->ajaxResponse($messages, $declaratie);
 	}
 
+	/**
+	 * @param Declaratie $declaratie
+	 * @param Request $request
+	 * @param EntityManagerInterface $entityManager
+	 * @return Response
+	 * @Route("/declaratie/status/{declaratie}", name="declaratie_status", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function setStatus(Declaratie $declaratie, Request $request, EntityManagerInterface $entityManager) {
+		$status = $request->request->getAlpha('status');
+		$vanNaar = $declaratie->getStatus() . '-' . $status;
+
+		if (($declaratie->getStatus() === 'uitbetaald' || $status === 'uitbetaald') && !$declaratie->magUitbetalen()) {
+			return $this->ajaxResponse(['Geen rechten om uitbetaling aan te passen'], $declaratie);
+		} elseif (!$declaratie->magBeoordelen()) {
+			return $this->ajaxResponse(['Geen rechten om declaratie te beoordelen'], $declaratie);
+		}
+
+		switch ($vanNaar) {
+			case 'ingediend-concept':
+				// Terug naar concept
+				$declaratie->setIngediend(null);
+				break;
+			case 'ingediend-goedgekeurd':
+			case 'ingediend-afgekeurd':
+				// Goedkeuren / afkeuren
+				$declaratie->setBeoordeeld(date_create_immutable());
+				$declaratie->setBeoordelaar($this->getProfiel());
+				$declaratie->setGoedgekeurd($status === 'goedgekeurd');
+				break;
+			case 'goedgekeurd-ingediend':
+			case 'afgekeurd-ingediend':
+				// Terug naar ingediend
+				$declaratie->setBeoordeeld(null);
+				$declaratie->setBeoordelaar(null);
+				$declaratie->setGoedgekeurd(false);
+				break;
+			case 'goedgekeurd-uitbetaald':
+				// Uitbetalen
+				$declaratie->setUitbetaald(date_create_immutable());
+				break;
+			case 'uitbetaald-goedgekeurd':
+				// Uitbetaald ongedaan maken
+				$declaratie->setUitbetaald(null);
+				break;
+		}
+
+		$entityManager->flush();
+		return $this->ajaxResponse([], $declaratie);
+	}
 }

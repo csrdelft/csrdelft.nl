@@ -433,7 +433,8 @@ class Declaratie
 		return $fouten;
 	}
 
-	public function naarStatusData(): array {
+	public function naarStatusData(): array
+	{
 		return [
 			'ingediendOp' => $this->isIngediend() ? date_format_intl($this->ingediend, 'd-M-yyyy') : null,
 			'ingediendDoor' => $this->indiener->getNaam(),
@@ -457,18 +458,35 @@ class Declaratie
 			'eigenRekening' => $eigenRekening,
 			'rekening' => $eigenRekening ? null : $this->rekening,
 			'tnv' => $this->csrPas || !$eigenRekening ? $this->naam : null,
-			'bonnen' => array_map(function(DeclaratieBon $bon) use ($generator) { return $bon->naarObject($generator); }, $this->bonnen->toArray()),
+			'bonnen' => array_map(function (DeclaratieBon $bon) use ($generator) {
+				return $bon->naarObject($generator);
+			}, $this->bonnen->toArray()),
 			'opmerkingen' => $this->opmerkingen,
 			'status' => $this->getStatus(),
 			'statusData' => $this->naarStatusData(),
 		];
 	}
 
-	public function magBeoordelen(): bool {
-		return $this->getCategorie()->magBeoordelen();
+	public function magBewerken(): bool
+	{
+		return $this->magUitbetalen()
+			|| ($this->getStatus() !== 'uitbetaald' && $this->magBeoordelen())
+			|| ($this->getStatus() === 'concept' && $this->getIndiener()->uid === LoginService::getUid());
 	}
 
-	public function magUitbetalen(): bool {
+	public function magBeoordelen(): bool
+	{
+		return $this->getCategorie()->magBeoordelen() || $this->magUitbetalen();
+	}
+
+	public function magUitbetalen(): bool
+	{
 		return LoginService::mag('bestuur:ht:fiscus');
+	}
+
+	public function magBekijken(): bool
+	{
+		return $this->getIndiener()->uid === LoginService::getUid()
+			|| $this->magBeoordelen();
 	}
 }

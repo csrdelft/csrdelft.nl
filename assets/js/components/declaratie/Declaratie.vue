@@ -459,7 +459,7 @@
     </div>
 
     <div
-      v-if="(!veldenDisabled || submitting) && !editing"
+      v-if="!veldenDisabled && !submitting && !editing"
       class="save-buttons"
     >
       <button
@@ -480,7 +480,7 @@
     </div>
 
     <div
-      v-if="editing"
+      v-if="editing && !submitting"
       class="save-buttons"
     >
       <button
@@ -504,10 +504,18 @@
       class="save-buttons"
     >
       <button
+        v-if="declaratie.status === 'ingediend'"
+        class="concept"
+        :disabled="submitting"
+        @click="setStatus('concept')"
+      >
+        Terug naar concept
+      </button>
+      <button
         v-if="declaratie.status === 'goedgekeurd' || declaratie.status === 'afgekeurd'"
         class="ingediend"
         :disabled="submitting"
-        @click=""
+        @click="setStatus('ingediend')"
       >
         Terug naar ingediend
       </button>
@@ -515,7 +523,7 @@
         v-if="declaratie.status === 'ingediend'"
         class="goedkeuren"
         :disabled="submitting"
-        @click=""
+        @click="setStatus('goedgekeurd')"
       >
         Goedkeuren
       </button>
@@ -523,7 +531,7 @@
         v-if="declaratie.status === 'ingediend'"
         class="afkeuren"
         :disabled="submitting"
-        @click=""
+        @click="setStatus('afgekeurd')"
       >
         Afkeuren
       </button>
@@ -531,7 +539,7 @@
         v-if="declaratie.statusData.magUitbetalen && declaratie.status === 'goedgekeurd'"
         class="uitbetaald"
         :disabled="submitting"
-        @click=""
+        @click="setStatus('uitbetaald')"
       >
         Uitbetaald
       </button>
@@ -539,7 +547,7 @@
         v-if="declaratie.statusData.magUitbetalen && declaratie.status === 'uitbetaald'"
         class="goedkeuren"
         :disabled="submitting"
-        @click=""
+        @click="setStatus('goedgekeurd')"
       >
         Uitbetaald ongedaan maken
       </button>
@@ -549,6 +557,13 @@
       >
         Bewerken
       </button>
+    </div>
+
+    <div
+      v-if="submitting"
+      class="opslaan"
+    >
+      <i class="fas fa-circle-notch fa-spin" />
     </div>
   </div>
 </template>
@@ -780,7 +795,6 @@ export default class DeclaratieVue extends Vue {
   }
 
   public declaratieOpslaan(indienen: boolean): void {
-    this.declaratie.status = indienen ? 'ingediend' : 'concept';
     this.submitting = true;
     this.errors = [];
 
@@ -789,26 +803,50 @@ export default class DeclaratieVue extends Vue {
       url: '/declaratie/opslaan',
       data: {
         declaratie: this.declaratie,
+        indienen: this.declaratie.status === 'concept' && indienen === true,
       },
-    }).then((res) => {
-      const {data} = res;
-      if (data.id) {
-        this.declaratie.id = data.id;
-        this.declaratie.status = data.status;
-        this.declaratie.statusData = data.statusData;
-        if (window.location.pathname.endsWith('nieuw')) {
-          window.history.pushState("Declaratie " + data.id, "Declaratie", "/declaratie/" + data.id);
-        }
+    })
+      .then(this.processAjaxResponse)
+      .catch((err) => {
+        this.submitting = false;
+        alert(err);
+      });
+  }
+
+  public setStatus(status: string): void {
+    this.submitting = true;
+    this.errors = [];
+
+    axios.request<DeclaratieOpslaanData, DeclaratieOpslaanResponse>({
+      method: 'post',
+      url: '/declaratie/status/' + this.declaratie.id,
+      data: {
+        status: status,
+      },
+    })
+      .then(this.processAjaxResponse)
+      .catch((err) => {
+        this.submitting = false;
+        alert(err);
+      });
+  }
+
+  private processAjaxResponse(res: DeclaratieOpslaanResponse): void {
+    const {data} = res;
+    if (data.id) {
+      this.declaratie.id = data.id;
+      this.declaratie.status = data.status;
+      this.declaratie.statusData = data.statusData;
+      if (window.location.pathname.endsWith('nieuw')) {
+        window.history.pushState("Declaratie " + data.id, "Declaratie", "/declaratie/" + data.id);
       }
-      this.errors = data.messages;
-      this.submitting = false;
-      if (data.success) {
-        window.scrollTo(0, 0);
-      }
-    }).catch((err) => {
-      this.submitting = false;
-      alert(err);
-    });
+    }
+    this.errors = data.messages;
+    this.submitting = false;
+    this.editing = false;
+    if (data.success) {
+      window.scrollTo(0, 0);
+    }
   }
 
   public reload(): void {
@@ -894,7 +932,6 @@ export default class DeclaratieVue extends Vue {
 .field {
   & > label {
     display: block;
-    color: #3C3C3C;
     font-weight: 600;
     margin-bottom: 4px;
   }
@@ -930,6 +967,7 @@ export default class DeclaratieVue extends Vue {
   border-radius: 6px;
   border: 1px solid #D0D0D0;
   margin: 30px 0;
+  color: black;
 
   &.bonnen-weergave {
     display: grid;
@@ -1220,7 +1258,6 @@ export default class DeclaratieVue extends Vue {
     .title {
       font-size: 27px;
       font-weight: 600;
-      color: black;
       margin-bottom: 0;
     }
 
@@ -1271,6 +1308,11 @@ export default class DeclaratieVue extends Vue {
       }
     }
 
+    &.concept {
+      color: white;
+      background: #8e8e8e;
+    }
+
     &.ingediend {
       color: white;
       background: #E19600;
@@ -1290,6 +1332,15 @@ export default class DeclaratieVue extends Vue {
       color: white;
       background: #2C3E50;
     }
+  }
+}
+
+.opslaan {
+  text-align: right;
+  margin-top: 30px;
+
+  i {
+    font-size: 18pt;
   }
 }
 </style>
