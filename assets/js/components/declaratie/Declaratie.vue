@@ -557,6 +557,14 @@
       >
         Bewerken
       </button>
+      <a
+        :href="'mailto:' + email"
+        class="no-mail"
+      >
+        <button class="concept">
+          Mail lid
+        </button>
+      </a>
     </div>
 
     <div
@@ -676,6 +684,8 @@ export default class DeclaratieVue extends Vue {
   private iban: string;
   @Prop()
   private tenaamstelling: string;
+  @Prop()
+  private email: string;
 
   private declaratie = this.declaratieinput;
   private bonUploaden = this.declaratie.bonnen.length === 0;
@@ -1290,9 +1300,7 @@ export default class DeclaratieVue extends Vue {
     }
 
     &.concept {
-      border: 1px solid #D0D0D0;
       color: #6a6a6a;
-      font-weight: 400;
 
       &:hover {
         color: #4e4e4e;
@@ -1342,5 +1350,10 @@ export default class DeclaratieVue extends Vue {
   i {
     font-size: 18pt;
   }
+}
+
+.no-mail {
+  padding-right: 0;
+  background: none;
 }
 </style>

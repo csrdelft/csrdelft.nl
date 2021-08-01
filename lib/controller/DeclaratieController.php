@@ -40,6 +40,7 @@ class DeclaratieController extends AbstractController
 			'categorieLijst' => $categorieLijst,
 			'iban' => $lid->bankrekening,
 			'tenaamstelling' => $lid->getNaam('voorletters'),
+			'email' => $lid->getPrimaryEmail(),
 			'declaratie' => false,
 		]);
 	}
@@ -64,6 +65,7 @@ class DeclaratieController extends AbstractController
 			'categorieLijst' => $categorieLijst,
 			'iban' => $lid->bankrekening,
 			'tenaamstelling' => $lid->getNaam('voorletters'),
+			'email' => $lid->getPrimaryEmail(),
 			'declaratie' => $declaratie->naarObject($generator),
 		]);
 	}
