@@ -56,6 +56,12 @@ class OAuth2Subscriber implements EventSubscriberInterface
 	{
 		$requestedScopes = $event->getScopes();
 
+		$request = $this->requestStack->getMasterRequest();
+
+		if ($request->query->has('scopeChoice')) {
+			$requestedScopes = array_map(function($scope) {return new Scope($scope); }, $request->query->get('scopeChoice'));
+		}
+
 		$scopes = [];
 		foreach ($requestedScopes as $scope) {
 			if ($this->loginService->_mag(OAuth2Scope::magScope($scope))) {
@@ -98,7 +104,11 @@ class OAuth2Subscriber implements EventSubscriberInterface
 		$scopeBeschrijving = [];
 		foreach ($requestedScopes as $scope) {
 			if ($this->loginService->_mag(OAuth2Scope::magScope($scope))) {
-				$scopeBeschrijving[] = OAuth2Scope::getBeschrijving($scope);
+				$scopeBeschrijving[] = [
+					'naam' => $scope->__toString(),
+					'beschrijving' => OAuth2Scope::getBeschrijving($scope),
+					'optioneel' => OAuth2Scope::isOptioneel($scope),
+				];
 			}
 		}
 

@@ -28,6 +28,12 @@ class OAuth2Scope
 		self::BAR_TRUST => P_FISCAAT_MOD,
 	];
 
+	// Optionele scopes
+	const OPTIONAL = [
+		self::BAR_BEHEER => true,
+		self::BAR_TRUST => true,
+	];
+
 	/**
 	 * @param Scope|string $scope
 	 * @return mixed
@@ -39,6 +45,14 @@ class OAuth2Scope
 		}
 
 		throw new CsrException("Scope $scope heeft geen rechten gedefinieerd");
+	}
+
+	public static function isOptioneel($scope) {
+		if (isset(self::OPTIONAL[(string)$scope])) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
