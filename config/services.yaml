@@ -76,9 +76,12 @@ services:
       - { name: kernel.event_listener, event: kernel.response }
 
   CsrDelft\common\Security\PersistentTokenProvider: ~
-  Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator: '@security.authenticator.form_login'
-  Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface: '@security.authenticator.manager'
-  Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices: '@security.authentication.rememberme.services.persistent'
+  Symfony\Component\Security\Http\RememberMe\PersistentRememberMeHandler: '@security.authenticator.remember_me_handler.main'
+
+  CsrDelft\controller\SessionController:
+    tags:
+      - { name: security.remember_me_aware}
+
   CsrDelft\common\Logging\LogActivationStrategy: ~
 
   # Voor Zijbalk in blade templates

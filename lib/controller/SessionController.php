@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\RememberMe\PersistentRememberMeHandler;
 use Symfony\Component\Security\Http\RememberMe\PersistentTokenBasedRememberMeServices;
 use Trikoder\Bundle\OAuth2Bundle\Model\AccessToken;
 use Trikoder\Bundle\OAuth2Bundle\Model\RefreshToken;
@@ -44,12 +45,12 @@ class SessionController extends AbstractController
 
 	/**
 	 * @param Request $request
-	 * @param PersistentTokenBasedRememberMeServices $rememberMeServices
+	 * @param PersistentRememberMeHandler $rememberMeHandler
 	 * @return RememberLoginForm|Response
 	 * @Route("/session/remember", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function remember(Request $request, PersistentTokenBasedRememberMeServices $rememberMeServices)
+	public function remember(Request $request, PersistentRememberMeHandler $rememberMeHandler)
 	{
 		$selection = $this->getDataTableSelection();
 
@@ -57,7 +58,7 @@ class SessionController extends AbstractController
 			$response = new Response();
 
 			$request->request->set('_remember_me', true);
-			$rememberMeServices->loginSuccess($request, $response, $this->get('security.token_storage')->getToken());
+			$rememberMeHandler->createRememberMeCookie($this->getUser());
 
 			return $response;
 		}
