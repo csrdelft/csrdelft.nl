@@ -457,9 +457,11 @@
       <input
         id="nummer"
         v-model="declaratie.nummer"
-        :placeholder="declaratie.statusData.prefix"
+        :placeholder="(declaratie.status !== 'ingediend' && !editing) || submitting ? '' : declaratie.statusData.nummerPrefix + '000'"
+        @focus="vulNummer(declaratie.statusData.nummerPrefix)"
+        @blur="removeNummer(declaratie.statusData.nummerPrefix)"
         type="text"
-        :disabled="declaratie.status !== 'ingediend' && !editing && !submitting"
+        :disabled="(declaratie.status !== 'ingediend' && !editing) || submitting"
         maxlength="7"
       >
     </div>
@@ -499,7 +501,7 @@
       class="save-buttons"
     >
       <button
-        class="concept"
+        class="afkeuren"
         :disabled="submitting"
         @click="reload()"
       >
@@ -577,7 +579,7 @@
         :href="'mailto:' + email"
         class="no-mail"
       >
-        <button class="concept">
+        <button class="mail">
           Mail lid
         </button>
       </a>
@@ -608,7 +610,7 @@ interface StatusData {
   beoordeeldDoor?: string;
   magBeoordelen: boolean;
   magUitbetalen: boolean;
-  prefix?: string;
+  nummerPrefix?: string;
 }
 
 interface Declaratie {
@@ -697,7 +699,7 @@ export default class DeclaratieVue extends Vue {
   @Prop()
   private categorieen: Record<number, string>;
   @Prop({default: legeDeclaratie})
-  private declaratieinput: Declaratie;
+  private declaratieinput!: Declaratie;
   @Prop()
   private iban: string;
   @Prop()
@@ -850,6 +852,7 @@ export default class DeclaratieVue extends Vue {
       url: '/declaratie/status/' + this.declaratie.id,
       data: {
         status: status,
+        nummer: this.declaratie.nummer,
       },
     })
       .then(this.processAjaxResponse)
@@ -883,6 +886,18 @@ export default class DeclaratieVue extends Vue {
 
   public declaratieBewerken(): void {
     this.editing = true;
+  }
+
+  public vulNummer(value: string): void {
+    if (!this.declaratie.nummer) {
+      this.declaratie.nummer = value;
+    }
+  }
+
+  public removeNummer(value: string): void {
+    if (this.declaratie.nummer === value) {
+      this.declaratie.nummer = null;
+    }
   }
 }
 </script>
@@ -1357,6 +1372,11 @@ export default class DeclaratieVue extends Vue {
     &.uitbetaald {
       color: white;
       background: #2C3E50;
+    }
+
+    &.mail {
+      color: white;
+      background: #3498db;
     }
   }
 

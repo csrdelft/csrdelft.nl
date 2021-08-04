@@ -257,6 +257,10 @@ class DeclaratieController extends AbstractController
 			}
 		}
 
+		if ($declaratie->magBeoordelen() && in_array($declaratie->getStatus(), ['ingediend', 'goedgekeurd', 'uitbetaald'])) {
+			$declaratie->setNummer($data->getAlnum('nummer'));
+		}
+
 		$entityManager->flush();
 		return $this->ajaxResponse($messages, $declaratie);
 	}
@@ -283,6 +287,7 @@ class DeclaratieController extends AbstractController
 			case 'ingediend-concept':
 				// Terug naar concept
 				$declaratie->setIngediend(null);
+				$declaratie->setNummer(null);
 				break;
 			case 'ingediend-goedgekeurd':
 			case 'ingediend-afgekeurd':
@@ -290,6 +295,11 @@ class DeclaratieController extends AbstractController
 				$declaratie->setBeoordeeld(date_create_immutable());
 				$declaratie->setBeoordelaar($this->getProfiel());
 				$declaratie->setGoedgekeurd($status === 'goedgekeurd');
+				if ($declaratie->isGoedgekeurd() && !empty($request->request->getAlnum('nummer'))) {
+					$declaratie->setNummer($request->request->getAlnum('nummer'));
+				} else {
+					$declaratie->setNummer(null);
+				}
 				break;
 			case 'goedgekeurd-ingediend':
 			case 'afgekeurd-ingediend':

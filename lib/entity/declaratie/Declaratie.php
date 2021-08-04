@@ -227,7 +227,7 @@ class Declaratie
 		return $this->nummer;
 	}
 
-	public function setNummer(string $nummer): self
+	public function setNummer(?string $nummer): self
 	{
 		$this->nummer = $nummer;
 
@@ -433,6 +433,14 @@ class Declaratie
 		return $fouten;
 	}
 
+	private function getNummerPrefix(): string
+	{
+		if ($this->isIngediend() && $this->getCategorie()) {
+			return $this->getCategorie()->getWachtrij()->getPrefix() . boekjaar($this->getIngediend(), true);
+		}
+		return '';
+	}
+
 	public function naarStatusData(): array
 	{
 		return [
@@ -444,7 +452,7 @@ class Declaratie
 			'uitbetaaldOp' => $this->isUitbetaald() ? date_format_intl($this->uitbetaald, 'd-M-yyyy') : null,
 			'magBeoordelen' => $this->magBeoordelen(),
 			'magUitbetalen' => $this->magUitbetalen(),
-			'prefix' => $this->getCategorie() ? $this->getCategorie()->getWachtrij()->getPrefix() : null,
+			'nummerPrefix' => $this->getNummerPrefix(),
 		];
 	}
 
@@ -463,6 +471,7 @@ class Declaratie
 				return $bon->naarObject($generator);
 			}, $this->bonnen->toArray()),
 			'opmerkingen' => $this->opmerkingen,
+			'nummer' => $this->nummer,
 			'status' => $this->getStatus(),
 			'statusData' => $this->naarStatusData(),
 		];

@@ -1132,7 +1132,12 @@ function createReflectionMethod(callable $fn) {
 	throw new InvalidArgumentException('Niet een callable');
 }
 
-function boekjaar(DateTimeImmutable $date = null): int {
+/**
+ * @param DateTimeInterface|null $date Datum om van te bepalen, bij null: vandaag
+ * @param bool $substr Of alleen de laatste twee cijfers gegeven moeten worden
+ * @return string Startjaar van boekjaar van gegeven datum
+ */
+function boekjaar(DateTimeInterface $date = null, bool $substr = false): string {
 	if ($date === null) {
 		$date = date_create_immutable();
 	}
@@ -1140,8 +1145,8 @@ function boekjaar(DateTimeImmutable $date = null): int {
 	$jaar = intval($date->format('Y'));
 	$wisseling = date_create_immutable('16-05-' . $jaar);
 	if ($date < $wisseling) {
-		return $jaar - 1;
-	} else {
-		return $jaar;
+		$jaar--;
 	}
+
+	return $substr ? substr($jaar, 2, 2) : $jaar;
 }
