@@ -56,16 +56,17 @@
 		</nav>
 		<nav style="margin-left: auto;">
 			{% set currentRoute = app.request.get('_route') %}
+			{% set routeParams = app.request.get('_route_params') ?: {} %}
 
 			{% if app.request.locale == 'nl' %}
 				<a class="" style="padding: 1em;"
-					 href="{{ path((currentRoute == 'defaultNoLocale') ? 'default' : currentRoute, app.request.get('_route_params')|merge({_locale: 'en'})) }}">
+					 href="{{ path((currentRoute == 'defaultNoLocale') ? 'default' : currentRoute, routeParams|merge({_locale: 'en'})) }}">
 					<img height="30" src="/images/locale_en.svg" alt="{{ "en"|locale_name("en") }}" style="height: 1em;"
 							 title="{{ "en"|locale_name("en") }}"/>
 				</a>
 			{% else %}
 				<a class="" style="padding: 1em;"
-					 href="{{ path((currentRoute == 'defaultNoLocale') ? 'default' : currentRoute, app.request.get('_route_params')|merge({_locale: 'nl'})) }}">
+					 href="{{ path((currentRoute == 'defaultNoLocale') ? 'default' : currentRoute, routeParams|merge({_locale: 'nl'})) }}">
 					<img height="30" src="/images/locale_nl.svg" alt="{{ "nl"|locale_name("nl") }}" style="height: 1em;"
 							 title="{{ "nl"|locale_name("nl") }}"/>
 				</a>
