@@ -37,13 +37,14 @@ class BarSysteemController extends AbstractController
 	/**
 	 * @Route("/trust", methods={"POST"})
 	 * @Auth(P_FISCAAT_MOD)
-	 * @IsGranted("ROLE_OAUTH2_BAR:NORMAAL")
+	 * @IsGranted("ROLE_OAUTH2_BAR:TRUST")
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
 	public function trust(Request $request, LoginService $loginService) {
 		// maak een nieuwe BarSysteemTrust object en sla op.
 
+		// Als het goed is kan de BAR:TRUST scope alleen aan mensen met FISCAAT_MOD rechten gegeven worden.
 		if (!$loginService->_mag(P_FISCAAT_MOD)) {
 			throw $this->createAccessDeniedException();
 		}

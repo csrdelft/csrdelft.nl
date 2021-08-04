@@ -23,9 +23,9 @@ class OAuth2Scope
 
 	const MAG = [
 		self::PROFIEL_EMAIL => P_LOGGED_IN,
-		self::BAR_NORMAAL => P_LOGGED_IN,
-		self::BAR_BEHEER => 'P_ADMIN,commissie:SocCie',
-		self::BAR_TRUST => P_FISCAAT_MOD,
+		self::BAR_NORMAAL => 'P_ADMIN',
+		self::BAR_BEHEER => 'P_ADMIN',
+		self::BAR_TRUST => 'P_ADMIN',
 	];
 
 	// Optionele scopes
