@@ -444,6 +444,7 @@ class Declaratie
 			'uitbetaaldOp' => $this->isUitbetaald() ? date_format_intl($this->uitbetaald, 'd-M-yyyy') : null,
 			'magBeoordelen' => $this->magBeoordelen(),
 			'magUitbetalen' => $this->magUitbetalen(),
+			'prefix' => $this->getCategorie() ? $this->getCategorie()->getWachtrij()->getPrefix() : null,
 		];
 	}
 

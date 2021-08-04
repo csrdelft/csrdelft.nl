@@ -1131,3 +1131,17 @@ function createReflectionMethod(callable $fn) {
 
 	throw new InvalidArgumentException('Niet een callable');
 }
+
+function boekjaar(DateTimeImmutable $date = null): int {
+	if ($date === null) {
+		$date = date_create_immutable();
+	}
+
+	$jaar = intval($date->format('Y'));
+	$wisseling = date_create_immutable('16-05-' . $jaar);
+	if ($date < $wisseling) {
+		return $jaar - 1;
+	} else {
+		return $jaar;
+	}
+}

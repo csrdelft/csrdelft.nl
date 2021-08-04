@@ -450,6 +450,21 @@
     </div>
 
     <div
+      v-if="declaratie.status !== 'concept' && declaratie.status !== 'afgekeurd' && declaratie.statusData.magBeoordelen"
+      class="field"
+    >
+      <label for="rekening">Nummer</label>
+      <input
+        id="nummer"
+        v-model="declaratie.nummer"
+        :placeholder="declaratie.statusData.prefix"
+        type="text"
+        :disabled="declaratie.status !== 'ingediend' && !editing && !submitting"
+        maxlength="7"
+      >
+    </div>
+
+    <div
       v-for="(error, index) in errors"
       :key="'error-' + index"
       class="field alert alert-warning"
@@ -551,6 +566,7 @@
       >
         Uitbetaald ongedaan maken
       </button>
+      <span class="divider" />
       <button
         class="concept"
         @click="declaratieBewerken()"
@@ -592,6 +608,7 @@ interface StatusData {
   beoordeeldDoor?: string;
   magBeoordelen: boolean;
   magUitbetalen: boolean;
+  prefix?: string;
 }
 
 interface Declaratie {
@@ -606,6 +623,7 @@ interface Declaratie {
   opmerkingen: string;
   status: status;
   statusData?: StatusData;
+  nummer?: string;
 }
 
 interface Bon {
@@ -1339,6 +1357,20 @@ export default class DeclaratieVue extends Vue {
     &.uitbetaald {
       color: white;
       background: #2C3E50;
+    }
+  }
+
+  .divider {
+    display: inline-block;
+    height: 18px;
+    width: 1px;
+    margin-left: 15px;
+    background: #ccc;
+    vertical-align: middle;
+    margin-right: 5px;
+
+    @media screen and (max-width: 760px) {
+      background: none;
     }
   }
 }

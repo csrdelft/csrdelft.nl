@@ -35,6 +35,16 @@ class DeclaratieWachtrij {
 	private $positie;
 
 	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private $email;
+
+	/**
+	 * @ORM\Column(type="string", length=2, nullable=true)
+	 */
+	private $prefix;
+
+	/**
 	 * @ORM\OneToMany(targetEntity=DeclaratieCategorie::class, mappedBy="wachtrij")
 	 */
 	private $categorieen;
@@ -74,6 +84,28 @@ class DeclaratieWachtrij {
 	public function setPositie(int $positie): self {
 		$this->positie = $positie;
 
+		return $this;
+	}
+
+	public function getEmail(): ?string
+	{
+		return $this->email;
+	}
+
+	public function setEmail(?string $email): self
+	{
+		$this->email = $email;
+		return $this;
+	}
+
+	public function getPrefix(): ?string
+	{
+		return $this->prefix;
+	}
+
+	public function setPrefix(?string $prefix): self
+	{
+		$this->prefix = $prefix;
 		return $this;
 	}
 
