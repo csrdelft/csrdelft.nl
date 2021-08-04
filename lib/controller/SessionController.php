@@ -145,8 +145,11 @@ class SessionController extends AbstractController
 		$refreshTokens = [];
 
 		foreach ($accessTokens as $accessToken) {
-			$refreshTokens[] = $this->getDoctrine()->getRepository(RefreshToken::class)
+			$refreshToken = $this->getDoctrine()->getRepository(RefreshToken::class)
 				->findOneBy(['accessToken' => $accessToken->getIdentifier()]);
+			if ($refreshToken) {
+				$refreshTokens[] = $refreshToken;
+			}
 		}
 
 		return $this->tableData(array_map(function (RefreshToken $token) {
