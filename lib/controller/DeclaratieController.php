@@ -194,6 +194,9 @@ class DeclaratieController extends AbstractController
 
 		$declaratie->fromParameters($data);
 		$declaratie->setTotaal(0);
+		if ($declaratie->getId() === null) {
+			$declaratie->setCategorie($categorie);
+		}
 		$entityManager->flush();
 
 		// Voeg bonnen toe
@@ -257,8 +260,17 @@ class DeclaratieController extends AbstractController
 			}
 		}
 
-		if ($declaratie->magBeoordelen() && in_array($declaratie->getStatus(), ['ingediend', 'goedgekeurd', 'uitbetaald'])) {
-			$declaratie->setNummer($data->getAlnum('nummer'));
+		if ($declaratie->magBeoordelen()) {
+			if (in_array($declaratie->getStatus(), ['ingediend', 'goedgekeurd', 'uitbetaald'])) {
+				$declaratie->setNummer($data->getAlnum('nummer'));
+			}
+
+			if ($declaratie->getStatus() !== 'concept' && $data->has('datum')) {
+				$datum = date_create_immutable($data->get('datum'));
+				if ($datum) {
+					$declaratie->setIngediend($datum);
+				}
+			}
 		}
 
 		$entityManager->flush();

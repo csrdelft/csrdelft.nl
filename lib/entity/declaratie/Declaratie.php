@@ -444,12 +444,12 @@ class Declaratie
 	public function naarStatusData(): array
 	{
 		return [
-			'ingediendOp' => $this->isIngediend() ? date_format_intl($this->ingediend, 'd-M-yyyy') : null,
+			'ingediendOp' => $this->isIngediend() ? date_format_intl($this->ingediend, 'dd-MM-yyyy') : null,
 			'ingediendDoor' => $this->indiener->getNaam(),
-			'goedgekeurdOp' => $this->isBeoordeeld() && $this->isGoedgekeurd() ? date_format_intl($this->beoordeeld, 'd-M-yyyy') : null,
-			'afgekeurdOp' => $this->isBeoordeeld() && !$this->isGoedgekeurd() ? date_format_intl($this->beoordeeld, 'd-M-yyyy') : null,
+			'goedgekeurdOp' => $this->isBeoordeeld() && $this->isGoedgekeurd() ? date_format_intl($this->beoordeeld, 'dd-MM-yyyy') : null,
+			'afgekeurdOp' => $this->isBeoordeeld() && !$this->isGoedgekeurd() ? date_format_intl($this->beoordeeld, 'dd-MM-yyyy') : null,
 			'beoordeeldDoor' => $this->beoordelaar ? $this->beoordelaar->getNaam() : null,
-			'uitbetaaldOp' => $this->isUitbetaald() ? date_format_intl($this->uitbetaald, 'd-M-yyyy') : null,
+			'uitbetaaldOp' => $this->isUitbetaald() ? date_format_intl($this->uitbetaald, 'dd-MM-yyyy') : null,
 			'magBeoordelen' => $this->magBeoordelen(),
 			'magUitbetalen' => $this->magUitbetalen(),
 			'nummerPrefix' => $this->getNummerPrefix(),
@@ -461,6 +461,7 @@ class Declaratie
 		$eigenRekening = $this->csrPas || $this->csrPas === null || $this->rekening === $this->indiener->bankrekening && $this->naam === $this->indiener->getNaam('voorletters');
 		return [
 			'id' => $this->id,
+			'datum' => $this->isIngediend() ? date_format_intl($this->getIngediend(), 'dd-MM-yyyy') : null,
 			'categorie' => $this->getCategorie()->getId(),
 			'omschrijving' => $this->omschrijving,
 			'betaalwijze' => $this->csrPas ? 'C.S.R.-pas' : ($this->csrPas === false ? 'voorgeschoten' : null),
@@ -491,7 +492,7 @@ class Declaratie
 
 	public function magUitbetalen(): bool
 	{
-		return LoginService::mag('bestuur:ht:fiscus');
+		return !$this->getCsrPas() && LoginService::mag('bestuur:ht:fiscus');
 	}
 
 	public function magBekijken(): bool

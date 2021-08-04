@@ -1,5 +1,6 @@
 <template>
   <div class="declaratie">
+	  <h2>Declaratie {{ declaratie.nummer }}</h2>
     <div class="voortgang">
       <div
         class="fase concept"
@@ -55,6 +56,20 @@
       </div>
     </div>
 
+    <div
+      v-if="declaratie.statusData.magBeoordelen && declaratie.status !== 'concept'"
+      class="field"
+    >
+      <label for="datumDeclaratie">Datum declaratie</label>
+      <input
+        id="datumDeclaratie"
+        v-model="declaratie.datum"
+        v-input-mask
+        data-inputmask="'alias': 'datetime', 'inputFormat': 'dd-mm-yyyy'"
+        type="text"
+        :disabled="veldenDisabled"
+      >
+    </div>
     <div class="field">
       <label for="categorie">Categorie</label>
       <select
@@ -462,7 +477,6 @@
         @blur="removeNummer(declaratie.statusData.nummerPrefix)"
         type="text"
         :disabled="(declaratie.status !== 'ingediend' && !editing) || submitting"
-        maxlength="7"
       >
     </div>
 
@@ -615,6 +629,7 @@ interface StatusData {
 
 interface Declaratie {
   id?: number;
+  datum?: string;
   categorie?: number;
   omschrijving?: string;
   betaalwijze?: 'C.S.R.-pas' | 'voorgeschoten';
@@ -868,6 +883,9 @@ export default class DeclaratieVue extends Vue {
       this.declaratie.id = data.id;
       this.declaratie.status = data.status;
       this.declaratie.statusData = data.statusData;
+      if (this.declaratie.statusData.ingediendOp) {
+        this.declaratie.datum = this.declaratie.statusData.ingediendOp;
+      }
       if (window.location.pathname.endsWith('nieuw')) {
         window.history.pushState("Declaratie " + data.id, "Declaratie", "/declaratie/" + data.id);
       }
