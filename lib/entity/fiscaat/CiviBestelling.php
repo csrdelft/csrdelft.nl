@@ -72,7 +72,7 @@ class CiviBestelling {
 
 	/**
 	 * @var CiviSaldo
-	 * @ORM\ManyToOne(targetEntity="CiviSaldo")
+	 * @ORM\ManyToOne(targetEntity="CiviSaldo", inversedBy="bestellingen")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
 	public $civiSaldo;
