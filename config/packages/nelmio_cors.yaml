@@ -12,6 +12,6 @@ nelmio_cors:
           origin_regex: true
           allow_origin: [ '^http://localhost:[0-9]+', '^https://bar.csrdelft.nl$' ]
           allow_headers: [ 'x-bar-token' ]
-          allow_methods: [ 'POST', 'PUT', 'GET', 'DELETE' ]
+          allow_methods: [ 'OPTIONS', 'POST', 'PUT', 'GET', 'DELETE' ]
           max_age: 3600
 #          hosts: [ '^api\.' ]
