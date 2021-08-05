@@ -13,6 +13,6 @@ nelmio_cors:
     '^/api/v3':
       origin_regex: true
       allow_origin: [ '%env(CORS_ALLOW_ORIGIN_API)%' ]
-      allow_headers: [ 'authorization', 'x-bar-token' ]
+      allow_headers: [ 'authorization', 'content-type', 'x-bar-token' ]
       allow_methods: [ 'OPTIONS', 'POST', 'PUT', 'GET', 'DELETE' ]
       max_age: 3600
