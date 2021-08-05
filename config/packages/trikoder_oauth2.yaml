@@ -9,7 +9,11 @@ trikoder_oauth2:
     public_key: '%env(string:OAUTH2_PUBLIC_KEY_PATH)%'
 
   scopes:
+    # Zorg dat dit in sync is met de OAuth2Scope class
     - PROFIEL:EMAIL
+    - BAR:NORMAAL
+    - BAR:BEHEER
+    - BAR:TRUST
 
   persistence:
     doctrine: null

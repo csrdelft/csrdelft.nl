@@ -7,51 +7,60 @@
 {% block modal %}
 	<div class="modal show" id="modal" data-backdrop="static">
 		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Autoriseer {{ client_id }}</h5>
-				</div>
-				<div class="modal-body">
-					<p>{{ client_id }} wil inloggen met je stekprofiel.</p>
+			<form>
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Autoriseer {{ client_id }}</h5>
+					</div>
+					<div class="modal-body">
+						<p>{{ client_id }} wil inloggen met je stekprofiel.</p>
 
-					{% if scopes is not empty %}
-						<p>Deze applicatie vraagt toegang tot de volgende onderdelen:</p>
-					{% endif %}
+						{% if scopes is not empty %}
+							<p>Deze applicatie vraagt toegang tot de volgende onderdelen:</p>
+						{% endif %}
 
-					{% for scope in scopes %}
-						<div class="card">
-							<div class="card-body">
-								{{ scope }}
-							</div>
-						</div>
-					{% endfor %}
+						<ul class="list-group list-group-flush">
+							{% for scope in scopes %}
+								<li class="list-group-item">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" value="{{ scope.naam }}" name="scopeChoice[]"
+													 id="{{ scope.naam }}" checked {% if not scope.optioneel %} disabled {% endif %}>
+										{% if not scope.optioneel %}
+											<input type="hidden" name="scopeChoice[]" value="{{ scope.naam }}"
+										{% endif %}
+										<label class="form-check-label" for="{{ scope.naam }}">
+											{{ scope.beschrijving }}
+										</label>
+									</div>
+								</li>
+							{% endfor %}
+						</ul>
 
-					<p class="mt-4">
-						Klik op Autoriseer als je <em>{{ client_id }}</em> aan je account wil koppelen. Na autoriseren
-						wordt je naam en bovenstaande onderdelen met de applicatie gedeeld.
-					</p>
+						<p class="mt-4">
+							Klik op Autoriseer als je <em>{{ client_id }}</em> aan je account wil koppelen. Na autoriseren
+							wordt je naam en bovenstaande onderdelen met de applicatie gedeeld.
+						</p>
 
-					<p>Na autoriseren wordt je naar <strong>{{ redirect_uri }}</strong> gestuurd</p>
-				</div>
-				<div class="modal-footer">
+						<p>Na autoriseren wordt je naar <strong>{{ redirect_uri }}</strong> gestuurd</p>
+					</div>
+					<div class="modal-footer">
 
-					<form>
 						<input type="hidden" name="client_id" value="{{ client_id }}">
 						<input type="hidden" name="redirect_uri" value="{{ redirect_uri }}">
 						<input type="hidden" name="response_type" value="{{ response_type }}">
 						<input type="hidden" name="token" value="{{ token }}">
 						<input type="hidden" name="scope" value="{{ scope }}">
 						{% if state %}
-						<input type="hidden" name="state" value="{{ state }}">
+							<input type="hidden" name="state" value="{{ state }}">
 						{% endif %}
 
 						<input type="submit" value="Terug" class="btn btn-secondary" name="cancel">
 						<input type="submit" value="Autoriseer" class="btn btn-primary me-2">
-					</form>
+
+					</div>
 
 				</div>
-
-			</div>
+			</form>
 		</div>
 	</div>
 {% endblock %}
