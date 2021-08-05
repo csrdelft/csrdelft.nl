@@ -485,7 +485,7 @@ class ProfielController extends AbstractController {
 			throw new NotFoundHttpException();
 		}
 		try {
-			$addToContactsUrl = $this->generateUrl('csrdelft_profiel_addtogooglecontacts', ['uid' => $profiel->uid]);
+			$addToContactsUrl = $this->generateUrl('csrdelft_profiel_addtogooglecontacts', ['uid' => $profiel->uid], UrlGeneratorInterface::ABSOLUTE_URL);
 			$this->googleSync->doRequestToken($addToContactsUrl);
 			$msg = $this->googleSync->syncLid($profiel);
 			setMelding('Opgeslagen in Google Contacts: ' . $msg, 1);
