@@ -4,9 +4,17 @@
 namespace CsrDelft\service;
 
 
-use CsrDelft\model\entity\LidStatus;
+use CsrDelft\common\CsrGebruikerException;
+use CsrDelft\entity\fiscaat\CiviBestelling;
+use CsrDelft\entity\fiscaat\CiviBestellingInhoud;
+use CsrDelft\entity\fiscaat\CiviProduct;
+use CsrDelft\entity\fiscaat\CiviSaldo;
+use CsrDelft\repository\fiscaat\CiviBestellingRepository;
+use CsrDelft\repository\fiscaat\CiviProductRepository;
+use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManagerInterface;
 use PDO;
 
 class BarSysteemService
@@ -15,44 +23,45 @@ class BarSysteemService
 	 * @var Connection|PDO
 	 */
 	private $db;
+	/**
+	 * @var CiviSaldoRepository
+	 */
+	private $civiSaldoRepository;
+	/**
+	 * @var CiviProductRepository
+	 */
+	private $civiProductRepository;
+	/**
+	 * @var CiviBestellingRepository
+	 */
+	private $civiBestellingRepository;
+	/**
+	 * @var EntityManagerInterface
+	 */
+	private $entityManager;
 
-	public function __construct()
-	{
+	public function __construct(
+		EntityManagerInterface $entityManager,
+		CiviSaldoRepository  $civiSaldoRepository,
+		CiviProductRepository $civiProductRepository,
+		CiviBestellingRepository $civiBestellingRepository
+	) {
 		$this->db = DriverManager::getConnection([
 			'url' => $_ENV['DATABASE_URL'],
 			'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"]
 		])->getWrappedConnection();
+		$this->civiSaldoRepository = $civiSaldoRepository;
+		$this->civiProductRepository = $civiProductRepository;
+		$this->civiBestellingRepository = $civiBestellingRepository;
+		$this->entityManager = $entityManager;
 	}
 
+	/**
+	 * @return CiviSaldo[]
+	 */
 	public function getPersonen()
 	{
-		$terug = $this->db->query(<<<SQL
-SELECT civi_saldo.uid, civi_saldo.naam, civi_saldo.saldo, civi_saldo.deleted, COUNT(civi_bestelling.totaal) AS recent
-FROM civi_saldo LEFT JOIN civi_bestelling
-ON (civi_saldo.uid = civi_bestelling.uid AND DATEDIFF(NOW(), civi_bestelling.moment) < 100 AND civi_bestelling.deleted = 0)
-GROUP BY civi_saldo.uid;
-SQL
-		);
-		$result = array();
-		foreach ($terug as $row) {
-			$persoon = array();
-			$persoon["naam"] = $row["naam"];
-			$persoon["status"] = LidStatus::Nobody;
-			if ($row["uid"]) {
-				$profiel = $this->getProfiel($row["uid"]);
-				if ($profiel) {
-					$persoon["naam"] = $this->getNaam($profiel);
-					$persoon["status"] = $profiel["status"];
-				}
-			}
-			$persoon["socCieId"] = $row["uid"];
-			$persoon["bijnaam"] = $row["naam"];
-			$persoon["saldo"] = $row["saldo"];
-			$persoon["recent"] = $row["recent"];
-			$persoon["deleted"] = $row["deleted"];
-			$result[$row["uid"]] = $persoon;
-		}
-		return $result;
+		return $this->civiSaldoRepository->findBy(['deleted' => false]);
 	}
 
 	public function getProfiel($uid)
@@ -94,63 +103,61 @@ SQL
 	}
 
 	/**
-	 * This function should only be here temporarily, if this is still here after the 2017 OWee,
-	 * burn this code like they would a heretic in the middle ages.
+	 * Maak een nieuwe bestelling aan.
+	 * @param string $uid
+	 * @param string $cie
+	 * @param $inhoud
+	 * @return bool|mixed
 	 */
-	public function verwerkBestelling($data)
+	public function verwerkBestelling($uid, $cie, $inhoud)
 	{
-		$producten = $this->getProducten();
-		$soccieBestelling = (object)['bestelLijst' => [], 'bestelTotaal' => 0, 'persoon' => $data->persoon];
-		$oweecieBestelling = (object)['bestelLijst' => [], 'bestelTotaal' => 0, 'persoon' => $data->persoon];
-		foreach ($data->bestelLijst as $productId => $aantal) {
-			switch ($producten[$productId]['cie']) {
-				case 'oweecie':
-					$oweecieBestelling->bestelLijst[$productId] = $aantal;
-					break;
-				case 'soccie':
-				default:
-					$soccieBestelling->bestelLijst[$productId] = $aantal;
-					break;
+		$em = $this->entityManager;
+		return $em->transactional(function () use ($em, $uid, $cie, $inhoud) {
+			$civiBestelling = new CiviBestelling();
+
+			$civiSaldo = $this->civiSaldoRepository->find($uid);
+
+			$civiBestelling->civiSaldo = $civiSaldo;
+			$civiBestelling->cie = $cie;
+			$civiBestelling->deleted = false;
+			$civiBestelling->moment = date_create_immutable();
+
+			$em->persist($civiBestelling);
+
+			$em->flush();
+
+			$totaal = 0;
+
+			foreach ($inhoud as $id => $aantal) {
+				$nieuwBestellingInhoud = new CiviBestellingInhoud();
+				$nieuwBestellingInhoud->aantal = $aantal;
+				$nieuwBestellingInhoud->setProduct($this->civiProductRepository->find($id));
+				$nieuwBestellingInhoud->setBestelling($civiBestelling);
+
+				$totaal += $aantal * $nieuwBestellingInhoud->product->getPrijsInt();
+
+				$civiBestelling->inhoud->add($nieuwBestellingInhoud);
+
+				$em->persist($nieuwBestellingInhoud);
 			}
-		}
-		$success = true;
-		if (!empty($soccieBestelling->bestelLijst)) {
-			$success = $success && $this->verwerkBestellingVoorCommissie($soccieBestelling, 'soccie');
-		}
-		if (!empty($oweecieBestelling->bestelLijst)) {
-			$success = $success && $this->verwerkBestellingVoorCommissie($oweecieBestelling, 'oweecie');
-		}
-		return $success;
+
+			$civiBestelling->totaal = $totaal;
+
+			$civiSaldo->saldo -= $totaal;
+			$civiSaldo->laatst_veranderd = date_create_immutable();
+
+			$em->flush();
+
+			return null;
+		});
 	}
 
+	/**
+	 * @return CiviProduct[]
+	 */
 	public function getProducten()
 	{
-		$q = $this->db->prepare(<<<SQL
-SELECT P.id, beheer, prijs, beschrijving, prioriteit, P.status, C.cie
-FROM civi_product AS P
-JOIN civi_prijs AS R
-ON (P.id=R.product_id AND CURRENT_TIMESTAMP > van AND tot IS NULL)
-JOIN civi_categorie AS C
-ON (C.id=P.categorie_id)
-WHERE C.cie = 'soccie' OR C.cie = 'oweecie'
-ORDER BY prioriteit DESC
-SQL
-		);
-		$q->execute();
-
-		$result = array();
-		foreach ($q->fetchAll(PDO::FETCH_ASSOC) as $row) {
-			$product = array();
-			$product["productId"] = $row["id"];
-			$product["prijs"] = $row["prijs"];
-			$product["beheer"] = $row["beheer"];
-			$product["beschrijving"] = $row["beschrijving"];
-			$product["prioriteit"] = $row["prioriteit"];
-			$product["status"] = $row["status"];
-			$product["cie"] = $row["cie"];
-			$result[$row["id"]] = $product;
-		}
-		return $result;
+		return $this->civiProductRepository->findByCie('soccie');
 	}
 
 	public function verwerkBestellingVoorCommissie($data, $cie = 'soccie')
@@ -196,49 +203,6 @@ SQL
 		return $q->fetchColumn();
 	}
 
-	public function getBestellingPersoon($socCieId)
-	{
-		$q = $this->db->prepare("SELECT *, B.deleted AS d, 0 AS oud FROM civi_bestelling AS B JOIN civi_bestelling_inhoud AS I ON B.id=I.bestelling_id WHERE uid=:socCieId AND B.cie = 'soccie' OR B.cie = 'oweecie'");
-		$q->bindValue(":socCieId", $socCieId, PDO::PARAM_STR);
-		$q->execute();
-		return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC));
-	}
-
-	private function verwerkBestellingResultaat($queryResult, $productIDs = array())
-	{
-		$result = array();
-		foreach ($queryResult as $row) {
-			if (!array_key_exists($row["bestelling_id"], $result)) {
-				$result[$row["bestelling_id"]] = array();
-				$result[$row["bestelling_id"]]["bestelLijst"] = array();
-				$result[$row["bestelling_id"]]["bestelTotaal"] = $row["totaal"];
-				$result[$row["bestelling_id"]]["persoon"] = $row["uid"];
-				$result[$row["bestelling_id"]]["tijd"] = $row["moment"];
-				$result[$row["bestelling_id"]]["bestelId"] = $row["bestelling_id"];
-				$result[$row["bestelling_id"]]["deleted"] = $row["d"];
-				$result[$row["bestelling_id"]]["oud"] = $row["oud"];
-			}
-			$result[$row["bestelling_id"]]["bestelLijst"][$row["product_id"]] = 1 * $row["aantal"];
-		}
-
-		if (!empty($productIDs)) {
-			foreach ($result as $key => $bestelling) {
-
-				$keep = false;
-				foreach ($productIDs as $id) {
-					if (in_array($id, array_keys($bestelling["bestelLijst"]))) {
-						$keep = true;
-					}
-				}
-
-				if (!$keep)
-					unset($result[$key]);
-			}
-		}
-
-		return $result;
-	}
-
 	public function getBestellingLaatste($persoon, \DateTimeImmutable $begin = null, \DateTimeImmutable $eind = null, $productIDs = [])
 	{
 
@@ -252,80 +216,68 @@ SQL
 		} else {
 			$eind = $eind->setTime(23, 59, 59);
 		}
-		$qa = "";
-		if ($persoon != "alles")
-			$qa = "B.uid=:socCieId AND";
-		$q = $this->db->prepare(<<<SQL
-SELECT *, B.deleted AS d, K.deleted AS oud
-FROM civi_bestelling AS B
-JOIN civi_bestelling_inhoud AS I
-ON B.id=I.bestelling_id
-JOIN civi_saldo AS K
-USING (uid)
-WHERE (B.cie = 'soccie' OR B.cie = 'oweecie') AND $qa (moment BETWEEN :begin AND :eind)
-SQL
-		);
-		if ($persoon != "alles")
-			$q->bindValue(":socCieId", $persoon, PDO::PARAM_STR);
-		$q->bindValue(":begin", $begin->format(DATE_ISO8601));
-		$q->bindValue(":eind", $eind->format(DATE_ISO8601));
-		$q->execute();
-		return $this->verwerkBestellingResultaat($q->fetchAll(PDO::FETCH_ASSOC), $productIDs);
+
+		if ($persoon == 'alles') {
+			return $this->civiBestellingRepository->findTussen($begin, $eind, ['soccie', 'oweecie']);
+		} else {
+			return $this->civiBestellingRepository->findTussen($begin, $eind, ['soccie', 'oweecie'], $persoon);
+			}
 	}
 
-	public function updateBestelling($data)
+	/**
+	 * @param string $uid
+	 * @param integer $bestelId
+	 * @param $inhoud
+	 */
+	public function updateBestelling($uid, $bestelId, $inhoud)
 	{
+		$em = $this->entityManager;
 
-		$this->db->beginTransaction();
+		$em->transactional(function () use ($em, $uid, $bestelId, $inhoud) {
+			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
+			$civiSaldo = $this->civiSaldoRepository->find($uid);
 
-		// Add old order to saldo
-		$q = $this->db->prepare("UPDATE civi_saldo SET saldo = saldo + :bestelTotaal WHERE uid=:socCieId;");
-		$q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
-		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_STR);
-		$q->execute();
+			// Voeg totaal van bestelling toe aan CiviSaldo
+			$civiSaldo->saldo += $civiBestelling->berekenTotaal();
 
-		// Remove old contents of the order
-		$q = $this->db->prepare("DELETE FROM civi_bestelling_inhoud WHERE bestelling_id = :bestelId");
-		$q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
-		$q->execute();
+			$em->flush();
 
-		// Add contents of the order
-		foreach ($data->bestelLijst as $productId => $aantal) {
-			$q = $this->db->prepare("INSERT INTO civi_bestelling_inhoud VALUES (:bestelId, :productId, :aantal);");
-			$q->bindValue(":productId", $productId, PDO::PARAM_INT);
-			$q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
-			$q->bindValue(":aantal", $aantal, PDO::PARAM_INT);
-			$q->execute();
-		}
+			// Verwijder de inhoud van de oude bestelling.
 
-		// Substract new order from saldo
-		$q = $this->db->prepare("UPDATE civi_saldo SET saldo = saldo - :bestelTotaal, laatst_veranderd = :laatstVeranderd WHERE uid=:socCieId;");
-		$q->bindValue(":bestelTotaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
-		$q->bindValue(":laatstVeranderd", getDateTime());
-		$q->bindValue(":socCieId", $data->persoon->socCieId, PDO::PARAM_STR);
-		$q->execute();
+			foreach ($civiBestelling->inhoud as $item) {
+				$item->setBestelling(null);
+				$em->remove($item);
+			}
 
-		// Update old order
-		$q = $this->db->prepare("UPDATE civi_bestelling SET totaal = :totaal WHERE id = :bestelId");
-		$q->bindValue(":totaal", $this->getBestellingTotaalTijd($data->oudeBestelling->bestelId, $data->oudeBestelling->tijd), PDO::PARAM_INT);
-		$q->bindValue(":bestelId", $data->oudeBestelling->bestelId, PDO::PARAM_INT);
-		$q->execute();
+			$civiBestelling->inhoud->clear();
+			$civiBestelling->totaal = 0;
 
-		// Roll back if error
-		if (!$this->db->commit()) {
-			$this->db->rollBack();
-			return false;
-		}
-		return true;
-	}
+			$em->flush();
 
-	private function getBestellingTotaalTijd($bestelId, $timestamp)
-	{
-		$q = $this->db->prepare("SELECT SUM(prijs * aantal) FROM civi_bestelling_inhoud AS I JOIN civi_prijs AS P USING (product_id) WHERE bestelling_id = :bestelId AND (:timeStamp > P.van AND (:timeStamp < P.tot OR P.tot IS NULL));");
-		$q->bindValue(":bestelId", $bestelId, PDO::PARAM_INT);
-		$q->bindValue(":timeStamp", $timestamp, PDO::PARAM_STMT);
-		$q->execute();
-		return $q->fetchColumn();
+			// Voeg de inhoud van de bestelling toe.
+
+			foreach ($inhoud as $id => $aantal) {
+				$bestellinInhoud = new CiviBestellingInhoud();
+				$bestellinInhoud->setProduct($this->civiProductRepository->find($id));
+				$bestellinInhoud->aantal = $aantal;
+				$bestellinInhoud->setBestelling($civiBestelling);
+
+				$em->persist($bestellinInhoud);
+
+				$civiBestelling->inhoud->add($bestellinInhoud);
+			}
+
+			$em->flush();
+
+			// Update het totaal van de CiviBestelling
+			$civiBestelling->totaal = $civiBestelling->berekenTotaal();
+
+			// Trek totaal van het saldo af.
+
+			$civiSaldo->saldo -= $civiBestelling->totaal;
+
+			$em->flush();
+		});
 	}
 
 	public function getSaldo($socCieId)
@@ -336,38 +288,46 @@ SQL
 		return $q->fetchColumn();
 	}
 
-	public function verwijderBestelling($data)
+	public function verwijderBestelling($bestelId)
 	{
-		$this->db->beginTransaction();
-		$q = $this->db->prepare("UPDATE civi_saldo SET saldo = saldo + :bestelTotaal WHERE uid=:socCieId;");
-		$q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
-		$q->bindValue(":socCieId", $data->persoon, PDO::PARAM_STR);
-		$q->execute();
-		$q = $this->db->prepare("UPDATE civi_bestelling SET deleted = 1 WHERE id = :bestelId AND deleted = 0");
-		$q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
-		$q->execute();
-		if (!$this->db->commit() || $q->rowCount() == 0) {
-			$this->db->rollBack();
-			return false;
-		}
-		return true;
+		$em = $this->entityManager;
+
+		$em->transactional(function () use ($em, $bestelId) {
+			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
+
+			if ($civiBestelling->deleted) {
+				throw new CsrGebruikerException('Bestelling is al verwijderd');
+			}
+
+			$civiSaldo = $civiBestelling->civiSaldo;
+
+			$civiSaldo->saldo += $civiBestelling->totaal;
+
+			$civiBestelling->deleted = true;
+
+			$em->flush();
+		});
 	}
 
-	public function undoVerwijderBestelling($data)
+	public function undoVerwijderBestelling($bestelId)
 	{
-		$this->db->beginTransaction();
-		$q = $this->db->prepare("UPDATE civi_saldo SET saldo = saldo - :bestelTotaal WHERE uid=:socCieId;");
-		$q->bindValue(":bestelTotaal", $data->bestelTotaal, PDO::PARAM_INT);
-		$q->bindValue(":socCieId", $data->persoon, PDO::PARAM_STR);
-		$q->execute();
-		$q = $this->db->prepare("UPDATE civi_bestelling SET deleted = 0 WHERE id = :bestelId AND deleted = 1");
-		$q->bindValue(":bestelId", $data->bestelId, PDO::PARAM_INT);
-		$q->execute();
-		if (!$this->db->commit() || $q->rowCount() == 0) {
-			$this->db->rollBack();
-			return false;
-		}
-		return true;
+		$em = $this->entityManager;
+
+		$em->transactional(function () use ($em, $bestelId) {
+			$civiBestelling = $this->civiBestellingRepository->find($bestelId);
+
+			if (!$civiBestelling->deleted) {
+				throw new CsrGebruikerException('Bestelling is niet verwijderd');
+			}
+
+			$civiSaldo = $civiBestelling->civiSaldo;
+
+			$civiSaldo->saldo -= $civiBestelling->totaal;
+
+			$civiBestelling->deleted = false;
+
+			$em->flush();
+		});
 	}
 
 	// Beheer
@@ -494,10 +454,10 @@ ORDER BY yearweek DESC
 
 	public function updatePerson($id, $name)
 	{
-		$q = $this->db->prepare("UPDATE civi_saldo SET naam = :naam WHERE uid = :id");
-		$q->bindValue(':id', $id, PDO::PARAM_STR);
-		$q->bindValue(':naam', $name, PDO::PARAM_STR);
-		return $q->execute();
+		$civiSaldo = $this->civiSaldoRepository->find($id);
+		$civiSaldo->naam = $name;
+
+		$this->civiSaldoRepository->update($civiSaldo);
 	}
 
 	public function removePerson($id)
