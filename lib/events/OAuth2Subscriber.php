@@ -112,11 +112,16 @@ class OAuth2Subscriber implements EventSubscriberInterface
 			}
 		}
 
+		$redirect_uri = parse_url($request->get('redirect_uri'));
+
+		$redirect_uri_formatted = $redirect_uri['host']  . (isset($redirect_uri['port']) ? ':' . $redirect_uri['port'] : '');
+
 		$response = new Response(200,
 			[],
 			$this->twig->render('oauth2/authorize.html.twig', [
 				'client_id' => $event->getClient()->getIdentifier(),
 				'redirect_uri' => $request->get('redirect_uri'),
+				'redirect_uri_formatted' => $redirect_uri_formatted,
 				'response_type' => $request->get('response_type'),
 				'token' => $request->getSession()->get('token'),
 				'state' => $request->get('state'),
