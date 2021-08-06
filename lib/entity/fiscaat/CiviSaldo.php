@@ -71,15 +71,13 @@ class CiviSaldo implements DataTableEntry, DisplayEntity {
 	 * @Serializer\Groups("bar")
 	 */
 	public function getRecent() {
+		$eb = Criteria::expr();
 		$criteria = Criteria::create()
-			->where(Criteria::expr()->eq('deleted', false))
-			->andWhere(Criteria::expr()->gt('moment', date_create_immutable()->add(\DateInterval::createFromDateString('-100 days'))))
+			->where($eb->eq('deleted', false))
+			->andWhere($eb->gt('moment', date_create_immutable()->add(\DateInterval::createFromDateString('-100 days'))))
 		;
 
-		$getTotaal = function (CiviBestelling $bestelling) { return $bestelling->totaal; };
-
-		$recenteBestellingen = $this->bestellingen->matching($criteria);
-		return array_sum($recenteBestellingen->map($getTotaal)->toArray());
+		return $this->bestellingen->matching($criteria)->count();
 	}
 
 	/**
