@@ -422,6 +422,10 @@
 									dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:</source>
         <target>To get a better view of C.S.R. you can join a member of C.S.R. for a day. More info can be found here: </target>
       </trans-unit>
+      <trans-unit id="jn2P4Kf" resname="Data die voor jou uitkomen (voorbeeldformaat: 2 Aug, 3 Aug, 5 Aug)">
+        <source>Data die voor jou uitkomen (voorbeeldformaat: 2 Aug, 3 Aug, 5 Aug)</source>
+        <target>A few dates on which you're available (example format: 2 August, 3 August, 5 August)</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -163,6 +163,7 @@
 								}
 							})
 						};
+
 					</script>
 					<form action="" class="formulieren" id="owee-form">
 						{{ csrfField() }}
@@ -187,6 +188,11 @@
 
 								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>
 								<input type="tel" id="telefoon" name="telefoon">
+
+								<div class="lid-spreken">
+									<label for="datums" class="owee">{% trans %}Data die voor jou uitkomen (voorbeeldformaat: 2 Aug, 3 Aug, 5 Aug){% endtrans %}</label>
+									<input type="text" id="datums" name="datums">
+								</div>
 
 								<div class="field" id="captcha"></div>
 

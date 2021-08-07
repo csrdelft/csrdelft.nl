@@ -104,6 +104,10 @@ De PubCie.
 		}
 
 		$type = filter_input(INPUT_POST, "optie", FILTER_SANITIZE_STRING);
+		$datums = "";
+		if ($type == 'lid-spreken') {
+			$datums = "Beschikbare data: " . filter_input(INPUT_POST, "datums", FILTER_SANITIZE_STRING);
+		}
 		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);
 		$email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_STRING);
 		$telefoon = filter_input(INPUT_POST, "telefoon", FILTER_SANITIZE_STRING);
@@ -131,6 +135,7 @@ De PubCie.
 			'naam' => $naam,
 			'email' => $email,
 			'commissie' => $commissie,
+			'datums' => $datums
 		]);
 
 		$mail = new Mail($bestemming, "Lid worden formulier", $bericht);
