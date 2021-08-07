@@ -408,6 +408,20 @@
 							In this week you'll be getting to know the association and its members.
 							The activities during this week will be in a respectful and safe way.</target>
       </trans-unit>
+      <trans-unit id="WCwN33y" resname="&lt;span class=&quot;d-none d-sm-inline&quot;&gt;Ik wil een dagje met een lid meelopen&lt;/span&gt;">
+        <source>&lt;span class="d-none d-sm-inline"&gt;Ik wil een dagje met een lid meelopen&lt;/span&gt;</source>
+        <target><![CDATA[__<span class="d-none d-sm-inline">Ik wil een dagje met een lid meelopen</span>]]></target>
+      </trans-unit>
+      <trans-unit id="Aj2wjkO" resname="Om je in te schrijven voor het collegejaar 2021-2022 kun je dit formulier invullen!">
+        <source>Om je in te schrijven voor het collegejaar 2021-2022 kun je dit formulier invullen!</source>
+        <target>__If you want to become member of C.S.R., you can fill in this form.</target>
+      </trans-unit>
+      <trans-unit id="fJ4xr6E" resname="Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:">
+        <source>Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
+									Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
+									dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:</source>
+        <target>__To get a better view of C.S.R. you can join a member of C.S.R. for a day. More info can be found here: </target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
