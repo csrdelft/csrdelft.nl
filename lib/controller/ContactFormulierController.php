@@ -105,7 +105,7 @@ De PubCie.
 
 		$type = filter_input(INPUT_POST, "optie", FILTER_SANITIZE_STRING);
 		$datums = "";
-		if ($type == 'lid-spreken') {
+		if ($type == 'lid-worden') {
 			$datums = "Beschikbare data: " . filter_input(INPUT_POST, "datums", FILTER_SANITIZE_STRING);
 		}
 		$naam = filter_input(INPUT_POST, "naam", FILTER_SANITIZE_STRING);

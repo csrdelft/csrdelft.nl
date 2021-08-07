@@ -426,6 +426,14 @@
         <source>Data die voor jou uitkomen (voorbeeldformaat: 2 Aug, 3 Aug, 5 Aug)</source>
         <target>A few dates on which you're available (example format: 2 August, 3 August, 5 August)</target>
       </trans-unit>
+      <trans-unit id="qKWFg8Y" resname="Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022, dan kun je dit formulier invullen voor een kennismakingsgesprek!">
+        <source>Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022, dan kun je dit formulier invullen voor een kennismakingsgesprek!</source>
+        <target>Are you planning on joining C.S.R.? You can fill in this form to have a talk with us!</target>
+      </trans-unit>
+      <trans-unit id="X4i8slZ" resname="Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek!">
+        <source>Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek!</source>
+        <target>__Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek!</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
