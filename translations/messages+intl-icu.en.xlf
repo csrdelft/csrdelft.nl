@@ -432,7 +432,24 @@
       </trans-unit>
       <trans-unit id="X4i8slZ" resname="Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek!">
         <source>Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek!</source>
-        <target>__Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek!</target>
+        <target>Are you planning to join C.S.R. in the study year 2021-2022? Fill in this form for a conversation with one of our members!</target>
+      </trans-unit>
+      <trans-unit id="XsX.h6x" resname="Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;om onze sociëteit Confide aan de Oude Delft 9 te bezoeken.">
+        <source>Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid
+							om onze sociëteit Confide aan de Oude Delft 9 te bezoeken.</source>
+        <target>Of course there's the possibility to speak with us during the OWee and there's also the possibility to visit us at Oude Delft 9.</target>
+      </trans-unit>
+      <trans-unit id="tzdUVnr" resname="Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;{lidworden}&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek">
+        <source>Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).
+							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
+							opgenomen.
+							Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te
+																													klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek</source>
+        <target><![CDATA[Do you want to become member of C.S.R.? You can register within the OWee (16 - 20 August). Make sure to keep the week of 23-29 August free, as that is the so called "novitiaatsweek".]]></target>
+      </trans-unit>
+      <trans-unit id="d3rII21" resname="Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug)">
+        <source>Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug)</source>
+        <target>A few dates on which you're available (example format: 16 August, 17 August, 19 August, 20 August)</target>
       </trans-unit>
     </body>
   </file>

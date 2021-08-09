@@ -131,43 +131,23 @@
 			</div>
 		</section>
 
-		<!-- Four -->
 		<section id="four" class="wrapper alt kleur4">
 			<div class="inner">
 				<noscript class="lazy-load">
-					<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/OweeCie.jpg"
-																	 alt="Owee Commissie"/></span>
+						<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/OweeCie.jpg"
+																						 alt="Owee Commissie"/></span>
 				</noscript>
 				<div class="content">
 					<h2 class="major">{% trans %}Interesse/vragen{% endtrans %}</h2>
-					<p>{% trans %}
-							Beste scholier of student, <br>
-							Wat onwijs leuk dat je een kijkje neemt op onze website! Hier kan je veel informatie en foto’s
-							vinden die een goede sfeerimpressie van C.S.R. en het studentenleven geven. Om
-							geïnteresseerden een nog beter beeld te geven van C.S.R., bieden wij meeloopdagen aan.
-							Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
-							dag zal volledig op jouw wensen en voorkeuren worden aangepast. Zo heb je bijvoorbeeld
-							de keuze om een paar colleges mee te kijken, mee te eten en/of een drankje te doen op een
-							C.S.R. huis. Er is ook de mogelijkheid om samen met iemand te komen. Wij zullen je een zo
-							goed mogelijk beeld proberen te geven tijdens deze meeloopdag van het studentenleven bij
-							C.S.R. Daarnaast staan we klaar om al je vragen te beantwoorden.
-							Om deel te nemen aan een meeloopdag kun je het volgende formulier invullen:
-						{% endtrans %}</p>
-							<a href="https://csrdelft.nl/nl/lidworden#owee-form" class="special">
-								{% trans %}Aanmeldformulier Meeloopdag{% endtrans %}
-							</a>
-					<p>{% trans %}
-							Deelname is volledig gratis! (exclusief reiskosten).
-							Na aanmelding zullen wij je koppelen aan een student en een huis. Wij zullen daarna
-							contact met je opnemen en samen met jou een datum prikken.
-							Veel succes met je studie of studiekeuze en we zien je graag komende tijd terug in Delft!
-							Voor vragen, stuur een appje naar Christie 06 57547448
-						{% endtrans %}</p>
+					<p>{% trans %}Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid
+							om onze sociëteit Confide aan de Oude Delft 9 te bezoeken.
+					{% endtrans %}
+
 					<p class="lidworden">{% trans with {'{lidworden}': url('default', {naam: 'lidworden', _fragment: 'owee-form'})} %}Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).
-						Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
-						opgenomen.
-						Doe dit door <a href="{lidworden}">hier</a> te
-						klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek{% endtrans %}</p>
+							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
+							opgenomen.
+							Doe dit door <a href="{lidworden}">hier</a> te
+																													klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek{% endtrans %}</p>
 					<a href="{{ url('default', {naam: 'lidworden'}) }}" class="special">{% trans %}Meer informatie over lid worden{% endtrans %}</a>
 				</div>
 			</div>
