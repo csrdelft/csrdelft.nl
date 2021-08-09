@@ -445,7 +445,7 @@
 							opgenomen.
 							Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te
 																													klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek</source>
-        <target><![CDATA[Do you want to become member of C.S.R.? You can register within the OWee (16 - 20 August). Make sure to keep the week of 23-29 August free, as that is the so called "novitiaatsweek".]]></target>
+        <target>Do you want to become member of C.S.R.? You can register within the OWee (16 - 20 August). Make sure to keep the week of 23-29 August free, as that is the so called "novitiaatsweek".</target>
       </trans-unit>
       <trans-unit id="d3rII21" resname="Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug)">
         <source>Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug)</source>
