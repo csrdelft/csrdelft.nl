@@ -45,7 +45,7 @@
       </trans-unit>
       <trans-unit id="k23IuHj" resname="C.S.R. IN 1 MINUUT">
         <source>C.S.R. IN 1 MINUUT</source>
-        <target>C.S.R. IN 1 MINUTE</target>
+        <target>This is C.S.R. Delft</target>
       </trans-unit>
       <trans-unit id="AiTuF4c" resname="Wil je zien hoe&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'">
         <source>Wil je zien hoe
@@ -450,6 +450,14 @@
       <trans-unit id="d3rII21" resname="Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug)">
         <source>Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug)</source>
         <target>A few dates on which you're available (example format: 16 August, 17 August, 19 August, 20 August)</target>
+      </trans-unit>
+      <trans-unit id="C5Kh6EC" resname="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl">
+        <source>https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl</source>
+        <target>https://www.youtube-nocookie.com/embed/KtXEiawDMqc?hl=en</target>
+      </trans-unit>
+      <trans-unit id="J419B7y" resname="C.S.R. Delft in 1 minuut">
+        <source>C.S.R. Delft in 1 minuut</source>
+        <target>This is C.S.R. Delft</target>
       </trans-unit>
     </body>
   </file>
