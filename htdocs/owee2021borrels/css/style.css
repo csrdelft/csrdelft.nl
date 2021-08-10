@@ -838,6 +838,10 @@ body.mobile-nav-active #mobile-nav-toggle {
   color: #fff;
 }
 
+#schedule .nav-tabs a:hover {
+	background: #b2d4f0;
+}
+
 #schedule .sub-heading {
   text-align: center;
   font-size: 18px;
@@ -1605,7 +1609,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 @media (max-width: 991px) {
   #header {
     background: rgba(6, 12, 34, 0.98);
-    height: 70px;
+    height: 125px;
     padding: 15px 0;
     transition: all 0.5s;
   }
