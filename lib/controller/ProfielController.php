@@ -339,7 +339,7 @@ class ProfielController extends AbstractController {
 	 */
 	public function externInschrijfformulier(string $pre, EntityManagerInterface $em): Response
 	{
-		if (isDatumVoorbij('2020-08-26 00:00:00')) {
+		if (isDatumVoorbij('2021-08-28 00:00:00')) {
 			return $this->render('extern-inschrijven/tekstpagina.html.twig', [
 				'titel' => 'C.S.R. Delft - Inschrijven',
 				'content' => '
