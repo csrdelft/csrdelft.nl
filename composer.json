@@ -8,7 +8,7 @@
 		}
 	],
 	"require": {
-		"csrdelft/bb": "1.3.4",
+		"csrdelft/bb": "1.3.5",
 		"easyrdf/easyrdf": "^0.9.1",
 		"ext-PDO": "*",
 		"ext-curl": "*",
