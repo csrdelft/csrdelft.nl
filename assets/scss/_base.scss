@@ -88,12 +88,6 @@ main {
   }
 }
 
-/* Login Form */
-.login-form .InputField, .login-form .InputField:hover {
-  border: none;
-  width: 100px;
-}
-
 /* Bijbelrooster */
 .bijbelrooster {
   columns: 250px auto;
@@ -129,30 +123,12 @@ div.vertical {
 th { text-align: left; }
 td { vertical-align: text-bottom; }
 
-hr {
-	padding: 2px 10px;
-	border: none;
-	margin: 1em 0;
-	&::after {
-		content: "";
-		display: block;
-		height: 1px;
-		background-color: silver;
-		line-height: 2px;
-	}
-}
-
 ul.horizontal li {
   display: inline;
   padding-right: 20px;
 }
 ul.horizontal li.active { font-weight:bold; }
 ul.nobullets li { list-style-type: none; }
-ul.insidebullets li { list-style: disc inside }
-
-.outer-shadow {
-  box-shadow: 0 0 20px #000;
-}
 
 .fade-content {
   opacity: 0;
@@ -163,23 +139,7 @@ ul.insidebullets li { list-style: disc inside }
 }
 
 /**** OVERIG ******************************************************************/
-
-.pubcie_debug, .xdebug-error {
-	margin: 10px 10px 10px 200px;
-	overflow: auto;
-  color: #000;
-  background-color: #fff;
-  border: 1px solid darkred;
-}
-
-div.sqCategorie {
-  float: left;
-  width: 450px;
-  margin-right: 20px;
-  margin-bottom: 10px;
-}
-
-.waarschuwing { color: red; }
+.waarschuwing { color: $danger; }
 
 .instelling:target {
 	padding: 3em 0;
