@@ -40,9 +40,9 @@
 						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
 							{% trans %}Ik wil lid worden!{% endtrans %}
 						</a>
-						<a href="https://docs.google.com/forms/d/e/1FAIpQLSfzv3P2Fw-x4i10mAOcJbawXJw07mQ4XR4jCb9RLWCxGJN8ng/viewform?usp=send_form" class="cta primary">
-							{% trans %}Ik wil meedoen met een meeloopdag!{% endtrans %}
-						</a>
+{#						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">#}
+{#							{% trans %}Ik wil meedoen met een meeloopdag!{% endtrans %}#}
+{#						</a>#}
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -158,18 +158,25 @@
 									captchaLoaded = true;
 									grecaptcha.render('captcha', {
 										'sitekey': '6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX',
-										'hl': {{ app.request.locale }},
+										'hl': '{{ app.request.locale }}',
 									});
 								}
 							})
 						};
+
 					</script>
 					<form action="" class="formulieren" id="owee-form">
 						{{ csrfField() }}
 						<label for="lid-worden" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil </span>lid worden{% endtrans %}</label>
-						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken" checked>
+						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>
+						<label hidden for="lid-spreken" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil een dagje met een lid meelopen</span>{% endtrans %}</label>
+						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
 						<div class="interesseformulier">
-							<p class="lid-worden"></p>
+							<h6 class="lid-worden">{% trans %}Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek! De inschrijvingen sluiten vrijdag 20 augustus 2021 om 21:00 uur.{% endtrans %}</h6>
+							<h6 class="lid-spreken">{% trans %}Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
+									Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
+									dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden: {% endtrans %}
+							<a href="https://csrdelft.nl/meeloopdag">Informatie meeloopdag</a></h6>
 
 							<div id="melding"></div>
 							<div class="velden" id="formulierVelden">
@@ -182,13 +189,20 @@
 								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>
 								<input type="tel" id="telefoon" name="telefoon">
 
+								<div class="lid-worden">
+									<label for="datums" class="owee">{% trans %}Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug){% endtrans %}</label>
+									<input type="text" id="datums" name="datums">
+								</div>
+
 								<div class="field" id="captcha"></div>
 
-{#								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a#}
-{#										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"#}
-{#										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>#}
+								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a
+										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
+										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>
+
 								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
 								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
+
 							</div>
 						</div>
 					</form>

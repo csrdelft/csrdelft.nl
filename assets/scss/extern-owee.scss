@@ -423,6 +423,10 @@ body {
 				}
 			}
 
+			h6 {
+				text-transform: none;
+			}
+
 			label {
 				font-size: 1.1rem;
 				font-weight: 600;
@@ -451,14 +455,14 @@ body {
 		}
 
 		#lid-worden:checked + label + input + .interesseformulier {
-			background: $secondary;
+			background: $tertiary;
 
 			.lid-spreken {
 				display: none;
 			}
 
 			input {
-				background: rgba(#713E89, .20);
+				background:  $primary;
 
 				&[type=submit] {
 					background: $primary;
@@ -472,6 +476,10 @@ body {
 
 		#lid-spreken:checked + .interesseformulier {
 			background: $primary;
+
+			a {
+				color: $secondary;
+			}
 
 			.lid-worden {
 				display: none;

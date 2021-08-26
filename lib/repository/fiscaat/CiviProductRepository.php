@@ -16,15 +16,21 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method CiviProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CiviProductRepository extends AbstractRepository {
-	/**
-	 * @var CiviPrijsRepository
-	 */
-	private $civiPrijsRepository;
-
-	public function __construct(ManagerRegistry $registry, CiviPrijsRepository $civiPrijsRepository) {
+	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, CiviProduct::class);
+	}
 
-		$this->civiPrijsRepository = $civiPrijsRepository;
+	/**
+	 * @param string ...$cie
+	 * @return CiviProduct[]
+	 */
+	public function findByCie(...$cie) {
+		return $this->createQueryBuilder('civi_product')
+			->join('civi_product.categorie', 'categorie')
+			->where('categorie.cie in (:cie)')
+			->setParameter('cie', $cie)
+			->orderBy('civi_product.prioriteit', 'desc')
+			->getQuery()->getResult();
 	}
 
 	/**

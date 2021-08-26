@@ -45,7 +45,7 @@
       </trans-unit>
       <trans-unit id="k23IuHj" resname="C.S.R. IN 1 MINUUT">
         <source>C.S.R. IN 1 MINUUT</source>
-        <target>C.S.R. IN 1 MINUTE</target>
+        <target>This is C.S.R. Delft</target>
       </trans-unit>
       <trans-unit id="AiTuF4c" resname="Wil je zien hoe&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de vereniging in elkaar zit? Bekijk de serie 'Delft studie is maar de helft!'">
         <source>Wil je zien hoe
@@ -391,11 +391,11 @@
       </trans-unit>
       <trans-unit id="JEFxwai" resname="Ik wil lid worden!">
         <source>Ik wil lid worden!</source>
-        <target>__Ik wil lid worden!</target>
+        <target>I want to become a member!</target>
       </trans-unit>
       <trans-unit id="gBWSo7a" resname="Ik wil meedoen met een meeloopdag!">
         <source>Ik wil meedoen met een meeloopdag!</source>
-        <target>__Ik wil meedoen met een meeloopdag!</target>
+        <target>Let a student show you around for a day!</target>
       </trans-unit>
       <trans-unit id="Ba0TIjG" resname="Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;(ook wel de kennismakingstijd, afgekort KMT).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;De novitiaatsweek vindt plaats van 23 t/m 29 augustus, dus zorg dat je die week vrijhoudt!&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;In deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.">
         <source>Wanneer je lid wilt worden bij C.S.R. doorloop je een novitiaatsweek
@@ -403,10 +403,61 @@
 								De novitiaatsweek vindt plaats van 23 t/m 29 augustus, dus zorg dat je die week vrijhoudt!
 								In deze week zal je elkaar, de vereniging en haar leden leren kennen. De activiteiten die tijdens
 							de KMT worden ondernomen zullen op een respectvolle en veilige manier verlopen.</source>
-        <target>__When you want to become member of C.S.R. you'll be going through the "novitiaatsweek"
+        <target>When you want to become member of C.S.R. you'll be going through the "novitiaatsweek"
 							This week is from the 23rd of august to the 29th of august, so make you to save those dates!
 							In this week you'll be getting to know the association and its members.
 							The activities during this week will be in a respectful and safe way.</target>
+      </trans-unit>
+      <trans-unit id="WCwN33y" resname="&lt;span class=&quot;d-none d-sm-inline&quot;&gt;Ik wil een dagje met een lid meelopen&lt;/span&gt;">
+        <source>&lt;span class="d-none d-sm-inline"&gt;Ik wil een dagje met een lid meelopen&lt;/span&gt;</source>
+        <target><![CDATA[<span class="d-none d-sm-inline">Let a student show you around for a day!</span>]]></target>
+      </trans-unit>
+      <trans-unit id="Aj2wjkO" resname="Om je in te schrijven voor het collegejaar 2021-2022 kun je dit formulier invullen!">
+        <source>Om je in te schrijven voor het collegejaar 2021-2022 kun je dit formulier invullen!</source>
+        <target>If you want to become member of C.S.R., you can fill in this form.</target>
+      </trans-unit>
+      <trans-unit id="fJ4xr6E" resname="Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:">
+        <source>Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
+									Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
+									dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden:</source>
+        <target>To get a better view of C.S.R. you can join a member of C.S.R. for a day. More info can be found here: </target>
+      </trans-unit>
+      <trans-unit id="jn2P4Kf" resname="Data die voor jou uitkomen (voorbeeldformaat: 2 Aug, 3 Aug, 5 Aug)">
+        <source>Data die voor jou uitkomen (voorbeeldformaat: 2 Aug, 3 Aug, 5 Aug)</source>
+        <target>A few dates on which you're available (example format: 2 August, 3 August, 5 August)</target>
+      </trans-unit>
+      <trans-unit id="qKWFg8Y" resname="Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022, dan kun je dit formulier invullen voor een kennismakingsgesprek!">
+        <source>Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022, dan kun je dit formulier invullen voor een kennismakingsgesprek!</source>
+        <target>Are you planning on joining C.S.R.? You can fill in this form to have a talk with us!</target>
+      </trans-unit>
+      <trans-unit id="E.oReSP" resname="Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek! De inschrijvingen sluiten vrijdag 20 augustus 2021 om 21:00 uur.">
+        <source>Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek! De inschrijvingen sluiten vrijdag 20 augustus 2021 om 21:00 uur.</source>
+        <target>Are you planning to join C.S.R. in the study year 2021-2022? Fill in this form for a conversation with one of our members!</target>
+      </trans-unit>
+      <trans-unit id="XsX.h6x" resname="Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;om onze sociëteit Confide aan de Oude Delft 9 te bezoeken.">
+        <source>Uiteraard is er de mogelijkheid om ons tijdens de OWee te spreken. Er is daarnaast ook gelegenheid
+							om onze sociëteit Confide aan de Oude Delft 9 te bezoeken.</source>
+        <target>Of course there's the possibility to speak with us during the OWee and there's also the possibility to visit us at Oude Delft 9.</target>
+      </trans-unit>
+      <trans-unit id="tzdUVnr" resname="Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;opgenomen.&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;Doe dit door &lt;a href=&quot;{lidworden}&quot;&gt;hier&lt;/a&gt; te&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek">
+        <source>Wil je lid worden? Inschrijven kan in de OWee (16 t/m 20 augustus).
+							Voorinschrijven is zelfs ook al mogelijk, zodat er tijdens de OWee meteen contact met je kan worden
+							opgenomen.
+							Doe dit door &lt;a href="{lidworden}"&gt;hier&lt;/a&gt; te
+																													klikken. Zorg ervoor dat je de week van 23 t/m 29 augustus vrij houdt voor de novitiaatsweek</source>
+        <target>Do you want to become member of C.S.R.? You can register within the OWee (16 - 20 August). Make sure to keep the week of 23-29 August free, as that is the so called "novitiaatsweek".</target>
+      </trans-unit>
+      <trans-unit id="d3rII21" resname="Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug)">
+        <source>Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug)</source>
+        <target>A few dates on which you're available (example format: 16 August, 17 August, 19 August, 20 August)</target>
+      </trans-unit>
+      <trans-unit id="C5Kh6EC" resname="https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl">
+        <source>https://www.youtube-nocookie.com/embed/AE8RE8e5qI4?hl=nl</source>
+        <target>https://www.youtube-nocookie.com/embed/KtXEiawDMqc?hl=en</target>
+      </trans-unit>
+      <trans-unit id="J419B7y" resname="C.S.R. Delft in 1 minuut">
+        <source>C.S.R. Delft in 1 minuut</source>
+        <target>This is C.S.R. Delft</target>
       </trans-unit>
     </body>
   </file>

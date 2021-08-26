@@ -30,18 +30,19 @@ class CiviBestellingInhoud {
 	 * @var integer
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "bar"})
 	 */
 	public $product_id;
 	/**
 	 * @var CiviProduct
 	 * @ORM\ManyToOne(targetEntity="CiviProduct")
+	 * @Serializer\Groups("bar")
 	 */
 	public $product;
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "bar"})
 	 */
 	public $aantal;
 
@@ -90,4 +91,5 @@ class CiviBestellingInhoud {
 	public function getDataTableProduct() {
 		return $this->product->beschrijving;
 	}
+
 }
