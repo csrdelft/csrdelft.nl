@@ -46,7 +46,7 @@ $(function () {
     /* End Clock
      /*************************************************************************************************/
 
-		var now = new Datetime();
+		var now = new Date();
 		var isStartkamp = new Date("2021-08-27") < now && new Date("2021-08-30") > now;
 
     /**
