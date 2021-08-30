@@ -37,11 +37,11 @@
 						lang niet gaat vergeten!{% endtrans %}</p>
 
 					<div class="mt-4">
-						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">
-							{% trans %}Ik wil lid worden!{% endtrans %}
-						</a>
+{#						<a href="#contact" class="cta secondary" onclick="document.getElementById('lid-worden').checked = true">#}
+{#							{% trans %}Ik wil lid worden!{% endtrans %}#}
+{#						</a>#}
 {#						<a href="#contact" class="cta primary" onclick="document.getElementById('lid-spreken').checked = true">#}
-{#							{% trans %}Ik wil meedoen met een meeloopdag!{% endtrans %}#}
+{#							{% trans %}Eerst een lid spreken{% endtrans %}#}
 {#						</a>#}
 					</div>
 				</div>
@@ -119,20 +119,20 @@
 			</div>
 		</div>
 
-		<div class="bbl atl interest">
-			<div class="content">
-				<div class="pt-5 pt-md-4 pb-4 pb-sm-2">
-					<h2>{% trans %}Interesse in C.S.R.?{% endtrans %}</h2>
-					<p>{% trans %}Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met
-						nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan
-						je hieronder ook je gegevens achterlaten voor je voorinschrijving.{% endtrans %}</p>
-				</div>
-			</div>
-		</div>
+{#		<div class="bbl atl interest">#}
+{#			<div class="content">#}
+{#				<div class="pt-5 pt-md-4 pb-4 pb-sm-2">#}
+{#					<h2>{% trans %}Interesse in C.S.R.?{% endtrans %}</h2>#}
+{#					<p>{% trans %}Hieronder kan je je interesse aangeven door je gegevens achter te laten, wij houden je dan op de hoogte met#}
+{#						nieuws over bijvoorbeeld open avonden of de OWee. Wanneer je al weet dat je lid wilt worden volgend jaar, kan#}
+{#						je hieronder ook je gegevens achterlaten voor je voorinschrijving.{% endtrans %}</p>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
 
-		<a id="contact"></a>
-		<div class="content pt-4 pb-4">
-			<div class="row">
+{#		<a id="contact"></a>#}
+{#		<div class="content pt-4 pb-4">#}
+{#			<div class="row">#}
 {#				 <div class="col-md-5 col-lg-4 mb-4 mb-md-0">#}
 {#					<a class="whatsapp" href="https://wa.me/31612345678" target="_blank" rel="noopener noreferrer">#}
 {#						<i class="fab fa-whatsapp me-3 me-md-0"></i>#}
@@ -141,76 +141,76 @@
 {#						<div class="cta">0612345678</div>#}
 {#					</a>#}
 {#				</div>#}
-				<div class="{# col-md-7 col-lg-8 #}col-md-12">
-					<script type="text/javascript">
-						var captchaLoaded = false;
+{#				<div class="#}{# col-md-7 col-lg-8 #}{#col-md-12">#}
+{#					<script type="text/javascript">#}
+{#						var captchaLoaded = false;#}
 
-						function checkVisible(elm) {
-							var rect = elm.getBoundingClientRect();
-							var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-							return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
-						}
+{#						function checkVisible(elm) {#}
+{#							var rect = elm.getBoundingClientRect();#}
+{#							var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);#}
+{#							return !(rect.bottom < 0 || rect.top - viewHeight >= 0);#}
+{#						}#}
 
-						var onloadCallback = function () {
-							window.addEventListener('scroll', function () {
+{#						var onloadCallback = function () {#}
+{#							window.addEventListener('scroll', function () {#}
 
-								if (checkVisible(document.getElementById('captcha')) && !captchaLoaded) {
-									captchaLoaded = true;
-									grecaptcha.render('captcha', {
-										'sitekey': '6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX',
-										'hl': '{{ app.request.locale }}',
-									});
-								}
-							})
-						};
+{#								if (checkVisible(document.getElementById('captcha')) && !captchaLoaded) {#}
+{#									captchaLoaded = true;#}
+{#									grecaptcha.render('captcha', {#}
+{#										'sitekey': '6Lc9TCITAAAAAGglcvgYvSwL-ci4A3Hkv8s1xRIX',#}
+{#										'hl': '{{ app.request.locale }}',#}
+{#									});#}
+{#								}#}
+{#							})#}
+{#						};#}
 
-					</script>
-					<form action="" class="formulieren" id="owee-form">
-						{{ csrfField() }}
-						<label for="lid-worden" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil </span>lid worden{% endtrans %}</label>
-						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>
-						<label hidden for="lid-spreken" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil een dagje met een lid meelopen</span>{% endtrans %}</label>
-						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">
-						<div class="interesseformulier">
-							<h6 class="lid-worden">{% trans %}Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek! De inschrijvingen sluiten vrijdag 20 augustus 2021 om 21:00 uur.{% endtrans %}</h6>
-							<h6 class="lid-spreken">{% trans %}Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.
-									Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze
-									dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden: {% endtrans %}
-							<a href="https://csrdelft.nl/meeloopdag">Informatie meeloopdag</a></h6>
+{#					</script>#}
+{#					<form action="" class="formulieren" id="owee-form">#}
+{#						{{ csrfField() }}#}
+{#						<label for="lid-worden" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil </span>lid worden{% endtrans %}</label>#}
+{#						<input id="lid-worden" class="owee" type="radio" name="optie" value="lid-worden" checked>#}
+{#						<label hidden for="lid-spreken" class="owee">{% trans %}<span class="d-none d-sm-inline">Ik wil een dagje met een lid meelopen</span>{% endtrans %}</label>#}
+{#						<input id="lid-spreken" class="owee" type="radio" name="optie" value="lid-spreken">#}
+{#						<div class="interesseformulier">#}
+{#							<h6 class="lid-worden">{% trans %}Ben je van plan om lid bij C.S.R. te worden in het collegejaar 2021-2022 of wil je simpelweg wat meer informatie? Dan kun je dit formulier invullen voor een kennismakingsgesprek! De inschrijvingen sluiten vrijdag 20 augustus 2021 om 21:00 uur.{% endtrans %}</h6>#}
+{#							<h6 class="lid-spreken">{% trans %}Om nog beter beeld te krijgen van C.S.R., kun je meedoen aan een meeloopdag.#}
+{#									Tijdens deze meeloopdag mag je een dagje meelopen met een student hier in Delft. Deze#}
+{#									dag zal volledig op jouw wensen en voorkeuren worden aangepast. Meer info is hier te vinden: {% endtrans %}#}
+{#							<a href="https://csrdelft.nl/meeloopdag">Informatie meeloopdag</a></h6>#}
 
-							<div id="melding"></div>
-							<div class="velden" id="formulierVelden">
-								<label for="naam" class="owee">{% trans %}Je naam{% endtrans %}</label>
-								<input type="text" id="naam" name="naam">
+{#							<div id="melding"></div>#}
+{#							<div class="velden" id="formulierVelden">#}
+{#								<label for="naam" class="owee">{% trans %}Je naam{% endtrans %}</label>#}
+{#								<input type="text" id="naam" name="naam">#}
 
-								<label for="email" class="owee">{% trans %}Je e-mailadres{% endtrans %}</label>
-								<input type="text" id="email" name="email">
+{#								<label for="email" class="owee">{% trans %}Je e-mailadres{% endtrans %}</label>#}
+{#								<input type="text" id="email" name="email">#}
 
-								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>
-								<input type="tel" id="telefoon" name="telefoon">
+{#								<label for="telefoon" class="owee">{% trans %}Je mobiele telefoonnummer{% endtrans %}</label>#}
+{#								<input type="tel" id="telefoon" name="telefoon">#}
 
-								<div class="lid-worden">
-									<label for="datums" class="owee">{% trans %}Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug){% endtrans %}</label>
-									<input type="text" id="datums" name="datums">
-								</div>
+{#								<div class="lid-worden">#}
+{#									<label for="datums" class="owee">{% trans %}Data die voor jou uitkomen (voorbeeldformaat: 16 Aug, 17 Aug, 19 Aug, 20 Aug){% endtrans %}</label>#}
+{#									<input type="text" id="datums" name="datums">#}
+{#								</div>#}
 
-								<div class="field" id="captcha"></div>
+{#								<div class="field" id="captcha"></div>#}
 
-								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a
-										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"
-										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>
+{#								<p>{% trans %}Met het verzenden van dit formulier ga je akkoord met de <a#}
+{#										href="/download/Privacyverklaring%20C.S.R.%20Delft%20-%20Extern%20-%2025-05-2018.pdf"#}
+{#										target="_blank">privacyverklaring van C.S.R. Delft</a>.{% endtrans %}</p>#}
 
-								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">
-								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">
+{#								<input class="lid-worden" type="submit" id="submitButton" value="{% trans %}Inschrijven{% endtrans %}">#}
+{#								<input class="lid-spreken" type="submit" id="submitButton" value="{% trans %}Verzenden{% endtrans %}">#}
 
-							</div>
-						</div>
-					</form>
-					<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async
-									defer></script>
-				</div>
-			</div>
-		</div>
+{#							</div>#}
+{#						</div>#}
+{#					</form>#}
+{#					<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async#}
+{#									defer></script>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
 
 		<div class="bbl atl notes">
 			<div class="content">
