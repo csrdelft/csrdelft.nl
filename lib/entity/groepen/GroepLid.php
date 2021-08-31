@@ -64,7 +64,7 @@ class GroepLid
 	/**
 	 * @var GroepKeuzeSelectie[]
 	 * @ORM\Column(type="groepkeuzeselectie", nullable=true)
-	 * @Serializer\Groups({"datatable", "vue"})
+	 * @Serializer\Groups("vue")
 	 */
 	public $opmerking2;
 	/**
@@ -124,5 +124,20 @@ class GroepLid
 	 */
 	public function getNaam() {
 		return $this->profiel->getNaam();
+	}
+
+	/**
+	 * @return string
+	 * @Serializer\Groups("datatable")
+	 * @Serializer\SerializedName("opmerking2")
+	 */
+	public function getOpmerking2String() {
+		if (is_array($this->opmerking2)) {
+			return implode(", ", array_map(function ($el) {
+				return $el->__toString();
+			}, $this->opmerking2));
+		} else {
+			return "";
+		}
 	}
 }

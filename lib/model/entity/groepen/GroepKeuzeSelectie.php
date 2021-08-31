@@ -8,7 +8,8 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/04/2019
  */
-class GroepKeuzeSelectie {
+class GroepKeuzeSelectie
+{
 	/**
 	 * @var string|null
 	 * @Serializer\Groups("vue")
@@ -20,8 +21,14 @@ class GroepKeuzeSelectie {
 	 */
 	public $selectie;
 
-	public function __construct($naam = null, $selectie = null) {
+	public function __construct($naam = null, $selectie = null)
+	{
 		$this->naam = $naam;
 		$this->selectie = $selectie;
+	}
+
+	public function __toString()
+	{
+		return "$this->naam: $this->selectie";
 	}
 }
