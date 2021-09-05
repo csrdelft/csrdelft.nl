@@ -107,11 +107,11 @@ class SavedQueryContent implements View {
 		$id = $this->sq instanceof SavedQueryResult ? $this->sq->query->ID : 0;
 
 		$return = '<a class="btn btn-primary" href="#" onclick="$(\'#sqSelector\').toggle();">Laat queryselector zien.</a>';
-		$return .= '<div id="sqSelector" ';
+		$return .= '<div id="sqSelector" class="row';
 		if ($id != 0) {
-			$return .= 'class="verborgen"';
+			$return .= ' verborgen';
 		}
-		$return .= '>';
+		$return .= '">';
 		$current = '';
 		$savedQueryRepository = ContainerFacade::getContainer()->get(SavedQueryRepository::class);
 		foreach ($savedQueryRepository->getQueries() as $query) {
@@ -122,7 +122,7 @@ class SavedQueryContent implements View {
 				if ($current != '') {
 					$return .= '</ul></div>';
 				}
-				$return .= '<div class="sqCategorie "><span class="dikgedrukt">' . $query->categorie . '</span><ul>';
+				$return .= '<div class="col-md-6"><span class="dikgedrukt">' . $query->categorie . '</span><ul>';
 				$current = $query->categorie;
 			}
 			$return .= '<li><a href="query?id=' . $query->ID . '">';

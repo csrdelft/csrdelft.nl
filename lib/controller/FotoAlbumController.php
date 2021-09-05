@@ -246,16 +246,14 @@ class FotoAlbumController extends AbstractController {
 			throw $this->createAccessDeniedException();
 		}
 		$naam = trim($request->request->get('naam'));
-		if ($album !== null) {
-			try {
-				$this->fotoAlbumRepository->hernoemAlbum($album, $naam);
-			} catch (CsrException $exception) {
-				return new JsonResponse($exception->getMessage(), 400);
-			}
-			return new JsonResponse($album->getUrl());
-		} else {
-			return new JsonResponse('Fotoalbum hernoemen mislukt', 500);
+		$naam = str_replace('..', '', $naam);
+
+		try {
+			$this->fotoAlbumRepository->hernoemAlbum($album, $naam);
+		} catch (CsrException $exception) {
+			return new JsonResponse($exception->getMessage(), 400);
 		}
+		return new JsonResponse($album->getUrl());
 	}
 
 	/**

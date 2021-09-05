@@ -91,8 +91,10 @@ class WelkomCommand extends Command {
 		}
 
 		foreach ($novieten as $profiel) {
-			$url = $this->urlGenerator->generate('wachtwoord_aanvragen');
+//			$url = $this->urlGenerator->generate('wachtwoord_aanvragen');
+			$url = "https://csrdelft.nl/wachtwoord/aanvragen";
 			$tekst = <<<TEXT
+
 Beste noviet {$profiel->voornaam},
 
 Bij je lidmaatschap van C.S.R. hoort ook de mogelijkheid om in te loggen op de C.S.R.-webstek.

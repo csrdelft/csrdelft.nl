@@ -34,7 +34,7 @@ class GoogleController extends AbstractController {
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function callback(Request $request) {
-		$state = $request->query->get('state', null);
+		$state = urldecode($request->query->get('state', null));
 
 		if (!str_starts_with($state, $request->getSchemeAndHttpHost())) {
 			throw new CsrGebruikerException("Redirect is niet binnen de stek!");

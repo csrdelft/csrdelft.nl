@@ -46,6 +46,9 @@ $(function () {
     /* End Clock
      /*************************************************************************************************/
 
+		var now = new Date();
+		var isStartkamp = new Date("2021-08-27") < now && new Date("2021-08-30") > now;
+
     /**
      * Deze persoon is geselecteerd, dit wordt oa. gebruikt bij de invoer van bestellingen, inleg en laden van de bestellingen van die persoon.
      */
@@ -366,6 +369,9 @@ $(function () {
 				toRed = selectedPerson.saldo - bestelTotaal() < 0;
 
 			if(bestelTotaal() <= 0 || selectedPerson.status == 'S_NOBODY' || beheer)
+				toRed = false;
+
+			if (!oudlid && isStartkamp)
 				toRed = false;
 
 			// Hack

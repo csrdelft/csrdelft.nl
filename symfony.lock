@@ -207,6 +207,18 @@
     "myclabs/deep-copy": {
         "version": "1.10.1"
     },
+    "nelmio/cors-bundle": {
+        "version": "1.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.5",
+            "ref": "6bea22e6c564fba3a1391615cada1437d0bde39c"
+        },
+        "files": [
+            "./config/packages/nelmio_cors.yaml"
+        ]
+    },
     "netresearch/jsonmapper": {
         "version": "v2.1.0"
     },
@@ -558,6 +570,9 @@
     "symfony/panther": {
         "version": "v0.8.0"
     },
+    "symfony/password-hasher": {
+        "version": "v5.3.4"
+    },
     "symfony/phpunit-bridge": {
         "version": "4.3",
         "recipe": {
@@ -599,6 +614,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.17.1"
+    },
+    "symfony/polyfill-php81": {
+        "version": "v1.23.0"
     },
     "symfony/polyfill-uuid": {
         "version": "v1.18.1"

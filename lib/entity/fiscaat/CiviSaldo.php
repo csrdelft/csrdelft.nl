@@ -5,8 +5,11 @@ namespace CsrDelft\entity\fiscaat;
 use CsrDelft\common\datatable\DataTableEntry;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\formulier\DisplayEntity;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
+use function Clue\StreamFilter\fun;
 
 /**
  * CiviSaldo.class.php
@@ -28,19 +31,19 @@ class CiviSaldo implements DataTableEntry, DisplayEntity {
 	 * @var string
 	 * @ORM\Column(type="uid", unique=true)
 	 * @ORM\Id()
-	 * @Serializer\Groups({"log", "datatable"})
+	 * @Serializer\Groups({"log", "datatable", "bar"})
 	 */
 	public $uid;
 	/**
 	 * @var string
 	 * @ORM\Column(type="text")
-	 * @Serializer\Groups({"log", "datatable"})
+	 * @Serializer\Groups({"log", "datatable", "bar"})
 	 */
 	public $naam;
 	/**
 	 * @var integer
 	 * @ORM\Column(type="integer")
-	 * @Serializer\Groups({"log", "datatable"})
+	 * @Serializer\Groups({"log", "datatable", "bar"})
 	 */
 	public $saldo;
 	/**
@@ -52,9 +55,30 @@ class CiviSaldo implements DataTableEntry, DisplayEntity {
 	/**
 	 * @var bool
 	 * @ORM\Column(type="boolean", options={"default"=false})
-	 * @Serializer\Groups({"log", "datatable"})
+	 * @Serializer\Groups({"log", "datatable", "bar"})
 	 */
 	public $deleted = false;
+
+
+	/**
+	 * @var CiviBestelling[]|ArrayCollection
+	 * @ORM\OneToMany(targetEntity="CiviBestelling", mappedBy="civiSaldo")
+	 */
+	public $bestellingen;
+
+	/**
+	 * @return integer
+	 * @Serializer\Groups("bar")
+	 */
+	public function getRecent() {
+		$eb = Criteria::expr();
+		$criteria = Criteria::create()
+			->where($eb->eq('deleted', false))
+			->andWhere($eb->gt('moment', date_create_immutable()->add(\DateInterval::createFromDateString('-100 days'))))
+		;
+
+		return $this->bestellingen->matching($criteria)->count();
+	}
 
 	/**
 	 * @return string
@@ -78,6 +102,10 @@ class CiviSaldo implements DataTableEntry, DisplayEntity {
 		return $this->uid;
 	}
 
+	/**
+	 * @return string
+	 * @Serializer\Groups("bar")
+	 */
 	public function getWeergave(): string {
 		return ProfielRepository::existsUid($this->uid) ? ProfielRepository::getNaam($this->uid, 'volledig') : $this->naam;
 	}

@@ -54,26 +54,24 @@
 				{% endif %}
 			{% endfor %}
 		</nav>
-		{# <nav style="margin-left: auto;">
-			<span class="locale-switch dropdown-menu">
-				<a class="nav-link" href="#">
-					<img height="30" src="/images/locale_{{ app.request.locale }}.svg"
-							 alt="{{ app.request.locale|locale_name(app.request.locale) }}" title="{{ app.request.locale|locale_name(app.request.locale) }}"/>
+		<nav style="margin-left: auto;">
+			{% set currentRoute = app.request.get('_route') %}
+			{% set routeParams = app.request.get('_route_params') ?: {} %}
+
+			{% if app.request.locale == 'nl' %}
+				<a class="" style="padding: 1em;"
+					 href="{{ path((currentRoute == 'defaultNoLocale' or currentRoute is null) ? 'default' : currentRoute, routeParams|merge({_locale: 'en'})) }}">
+					<img height="30" src="/images/locale_en.svg" alt="{{ "en"|locale_name("en") }}" style="height: 1em;"
+							 title="{{ "en"|locale_name("en") }}"/>
 				</a>
-				<span class="dropdown">
-					{% if app.request.locale != 'en' %}
-						<a class="dropdown-item" href="{{ path('default', {_locale: 'en'}) }}">
-						<img height="30" src="/images/locale_en.svg" alt="{{ "en"|locale_name("en") }}" title="{{ "en"|locale_name("en") }}"/>
-					</a>
-					{% endif %}
-					{% if app.request.locale != 'nl' %}
-						<a class="dropdown-item" href="{{ path('default', {_locale: 'nl'}) }}">
-						<img height="30" src="/images/locale_nl.svg" alt="{{ "nl"|locale_name("nl") }}" title="{{ "nl"|locale_name("nl") }}"/>
-					</a>
-					{% endif %}
-				</span>
-			</span>
-		</nav> #}
+			{% else %}
+				<a class="" style="padding: 1em;"
+					 href="{{ path((currentRoute == 'defaultNoLocale' or currentRoute is null) ? 'default' : currentRoute, routeParams|merge({_locale: 'nl'})) }}">
+					<img height="30" src="/images/locale_nl.svg" alt="{{ "nl"|locale_name("nl") }}" style="height: 1em;"
+							 title="{{ "nl"|locale_name("nl") }}"/>
+				</a>
+			{% endif %}
+		</nav>
 		<nav class="nav-login">
 			{% block loginbutton %}
 				<a class="login-knop" href="#login"><i class="fa fa-2x fa-fw fa-user"></i></a>
@@ -99,7 +97,7 @@
 		<!-- Banner -->
 		<section id="banner">
 			<div class="inner">
-				<a href="/">
+				<a href="{{ path('default') }}">
 					<img src="{{ absolute_url('/images/c.s.r.logo.svg') }}" alt="Beeldmerk van de vereniging">
 					<h1>C.S.R. Delft</h1>
 				</a>

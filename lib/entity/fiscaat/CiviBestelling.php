@@ -23,55 +23,56 @@ class CiviBestelling {
 	 * @ORM\Column(type="integer")
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "bar"})
 	 */
 	public $id;
 	/**
 	 * @var string
 	 * @ORM\Column(type="uid")
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "bar"})
 	 */
 	public $uid;
 	/**
 	 * @var int
 	 * @ORM\Column(type="integer", options={"default"=0})
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "bar"})
 	 */
 	public $totaal = 0;
 	/**
 	 * @var boolean
 	 * @ORM\Column(type="boolean", options={"default"=false})
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "bar"})
 	 */
 	public $deleted;
 	/**
 	 * @var \DateTimeImmutable
 	 * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "bar"})
 	 */
 	public $moment;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string", nullable=true)
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "bar"})
 	 */
 	public $comment;
 	/**
 	 * @var string
 	 * @ORM\Column(type="string")
 	 * TODO dit is een CiviSaldoCommissieEnum
-	 * @Serializer\Groups("datatable")
+	 * @Serializer\Groups({"datatable", "bar"})
 	 */
 	public $cie;
 	/**
 	 * @var CiviBestellingInhoud[]|ArrayCollection
 	 * @ORM\OneToMany(targetEntity="CiviBestellingInhoud", mappedBy="bestelling")
+	 * @Serializer\Groups("bar")
 	 */
 	public $inhoud;
 
 	/**
 	 * @var CiviSaldo
-	 * @ORM\ManyToOne(targetEntity="CiviSaldo")
+	 * @ORM\ManyToOne(targetEntity="CiviSaldo", inversedBy="bestellingen")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="uid")
 	 */
 	public $civiSaldo;
@@ -133,5 +134,20 @@ class CiviBestelling {
 		}
 
 		return $product->first();
+	}
+
+	/**
+	 * Bereken de prijs van deze bestelling opnieuw.
+	 *
+	 * @return int
+	 */
+	public function berekenTotaal() {
+		$totaal = 0;
+
+		foreach ($this->inhoud as $item) {
+			$totaal += $item->aantal * $item->product->getPrijsOpMoment($this->moment);
+		}
+
+		return $totaal;
 	}
 }

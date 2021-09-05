@@ -65,6 +65,32 @@ class CiviBestellingRepository extends AbstractRepository {
 	}
 
 	/**
+	 * @param \DateTimeInterface $van
+	 * @param \DateTimeInterface $tot
+	 * @param array $cie
+	 * @return CiviBestelling[]
+	 */
+	public function findTussen($van, $tot, $cie = [], $uid = null)
+	{
+		$qb = $this->createQueryBuilder('cb')
+			->where('cb.moment > :van and cb.moment < :tot')
+			->setParameter('van', $van)
+			->setParameter('tot', $tot);
+
+		if ($uid) {
+			$qb = $qb->andWhere('cb.uid = :uid')
+				->setParameter('uid', $uid);
+		}
+
+		if (!empty($cie)) {
+			$qb = $qb->andWhere('cb.cie in (:cie)')
+				->setParameter('cie', $cie);
+		}
+
+		return $qb->getQuery()->getResult();
+	}
+
+	/**
 	 * @param string $from
 	 * @param string $to
 	 * @return CiviBestelling[]
