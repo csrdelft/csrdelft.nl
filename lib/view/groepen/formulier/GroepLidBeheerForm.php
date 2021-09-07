@@ -31,7 +31,7 @@ class GroepLidBeheerForm extends ModalForm {
 		$fields['doorUid']->hidden = true;
 
 		$fields['profiel']->readonly = false;
-		$fields['profiel']->suggestions = ['/tools/naamsuggesties?zoekin=allepersonen&q='];
+		$fields['profiel']->suggestions = ['/tools/naamsuggesties?zoekin=alleleden&q='];
 
 		$this->addFields($fields);
 

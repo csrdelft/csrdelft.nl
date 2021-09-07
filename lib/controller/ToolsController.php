@@ -254,10 +254,10 @@ class ToolsController extends AbstractController
 			$zoekin = array_merge(LidStatus::getLidLike(), LidStatus::getOudlidLike());
 		}
 		$toegestanezoekfilters = array('leden', 'oudleden', 'novieten', 'alleleden', 'allepersonen', 'nobodies');
-		if (empty($zoekin) && isset($_GET['zoekin']) && in_array($_GET['zoekin'], $toegestanezoekfilters)) {
+		if (isset($_GET['zoekin']) && in_array($_GET['zoekin'], $toegestanezoekfilters)) {
 			$zoekin = $_GET['zoekin'];
 		}
-		if (empty($zoekin) && isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
+		if (isset($_GET['zoekin']) && $_GET['zoekin'] === 'voorkeur') {
 			$zoekin = lid_instelling('forum', 'lidSuggesties');
 		}
 
