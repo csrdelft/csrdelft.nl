@@ -33,7 +33,7 @@ ctx.addHandler('.pm-editor', (el: HTMLElement): void => {
 			doc: Node.fromJSON(schema, JSON.parse(text)),
 			plugins: [
 				lidHintPlugin,
-				(window.loggedIn ? imageUploadPlugin(schema) : imageRemovePlugin(schema)),
+				((window.loggedIn && !extern) ? imageUploadPlugin(schema) : imageRemovePlugin(schema)),
 				...exampleSetup({
 					schema,
 					menuContent
