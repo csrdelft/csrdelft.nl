@@ -12,8 +12,6 @@ class Lustrum12Controller extends AbstractController
 {
 
 	/**
-	 * Shadows dies stek 2021
-	 *
 	 * @return Response
 	 * @Route("/tijdloos")
 	 * @Auth(P_LOGGED_IN)
@@ -21,6 +19,34 @@ class Lustrum12Controller extends AbstractController
 	public function lustrum() {
 		return $this->render('lustrum12/index.html.twig');
 	}
+
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/thema")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function LustrumThema() {
+		return $this->render('lustrum12/thema.html.twig');
+	}
+
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/opening")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumOpening() {
+		return $this->render('lustrum12/opening.html.twig');
+	}
+
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/lustrumweek")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumWeek() {
+		return $this->render('lustrum12/lustrumweek.html.twig');
+	}
+
 
 //	/**
 //	 * Ketzers voor dies stek 2021

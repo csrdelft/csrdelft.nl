@@ -1,5 +1,9 @@
 @import 'vars';
 
+a{
+	text-decoration: none;
+}
+
 .anchor {
 	display: block;
 	position: relative;
@@ -19,7 +23,6 @@ body {
 	// linear-gradient : (160deg, #903921, #C8611A);
 	background-size: 600px, 1100px, 950px, 600px, 1300px, 700px, 100% 100%;
 	font-size: 1.5rem;
-
 	/* Body text */
 	color: $font-color-secondary;
 }
@@ -43,6 +46,7 @@ nav {
 		color: $font-color-primary;
 		font-family: $font-header;
 		text-transform: uppercase;
+		text-decoration: none;
 		font-size: 24px;
 		transition: ease-in-out color .15s;
 
@@ -75,11 +79,10 @@ nav {
 
 /* Kopjes */
 .titel{
-	font-weight: 100;
+	font-weight: bold;
 	text-align: center;
 	color: $font-color-primary;
 	text-transform: uppercase;
-	font-weight: bold;
 
 	// text-shadow:
 	//   0 0 2px $kleur-wit,
@@ -203,7 +206,7 @@ nav {
 // Temperary index variables
 @font-face {
 	font-family: Segoe Script;
-	src: './fonts/segoescb.ttf';
+	src: url("../../fonts/lustrum12/segoescb.ttf");
 }
 $lw-font-text-temp: Segoe Script, Arial, Helvetica, sans-serif;
 $lw-blauw-temp: #3B9596;

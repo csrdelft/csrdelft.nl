@@ -1,0 +1,185 @@
+@import 'style.scss';
+
+$lw-blauw: #3B9596;
+$lw-grijs: #275e5f;
+$lw-oranje: #EC673E;
+$lw-donkerrood:   #551D10;      //#67250D;
+$lw-header-donkerrood:  #431413;    //#310c16;
+
+$lw-beige: #F2C292;
+$lw-beige-background: #f2c292ec;
+
+$lw-primary: $lw-blauw;
+$lw-secondary: $lw-oranje;
+
+@font-face {
+	font-family: Segoe Script;
+	src: url('../../fonts/lustrum12/segoescb.ttf');	// was first without url()
+}
+
+@font-face {
+	font-family: 'Mrs Sheppards Regular';
+	font-style: italic;
+	font-weight: normal;
+	src: url('../../fonts/lustrum12/MrsSheppards-Regular.woff') format('woff');
+}
+
+$lw-font-header: Mrs Sheppards Regular, Arial, Helvetica, sans-serif;
+$lw-font-text: Segoe Script, Arial, Helvetica, sans-serif;
+
+body {
+	background-image: url('../../images/lustrum12/lw-achtergrond.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	background-color: $lw-primary;
+	font-family: $lw-font-text;
+}
+
+h2 {
+	text-align: center;
+}
+
+.lw-thema {
+	padding-top: 55px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	.lw-titel {
+		font-family: $lw-font-header;
+		text-transform: uppercase;
+		font-size: 5.0rem;
+
+		color: $lw-oranje;
+		text-shadow:
+			-2px 1px 0 $lw-beige-background,
+			1px 2px 0 $lw-beige-background,
+			2px -1px 0 $lw-beige-background,
+			-1px -2px 0 $lw-beige-background;
+	}
+	.lw-ondertitel {
+		font-family: $lw-font-text;
+		font-size: 3.0rem;
+		color: $lw-blauw;
+		text-shadow:
+			-2px 1px 0 $lw-beige-background,
+			1px 2px 0 $lw-beige-background,
+			2px -1px 0 $lw-beige-background,
+			-1px -2px 0 $lw-beige-background;
+	}
+}
+
+.divider {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+nav {
+	// background: $lw-donkerrood;
+	background: $lw-beige-background;
+	// .headerbuttons {
+	//     background: $lw-beige-background;
+	//     border-bottom-left-radius: 25px;
+	//     border-bottom-right-radius: 25px;
+	// }
+	a {
+		/* Header text */
+		color: $lw-oranje;
+		top: -5px;
+		padding: 15px;
+
+		font-family: $lw-font-header;
+
+		text-transform: uppercase;
+
+		font-size: 24px;
+		transition: ease-in-out color .15s;
+		&:hover {
+			color: $lw-blauw;
+			text-decoration: none;
+		}
+	}
+
+	.logo-titel {
+		left:-20px;
+		top: -20px;
+		padding-top: 30px;
+		padding-bottom: 10px;
+		padding-left: 25px;
+		padding-right: 20px;
+		border-radius: 25px;
+
+		border-color: $lw-beige;
+		border-style: solid;
+		border-width: 2px;
+		background-color: $lw-donkerrood;
+
+		@media screen and (max-width:1100px){
+			visibility: hidden;
+		}
+	}
+}
+
+/* Programma display */
+.lw-programma {
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+
+	display: flex;
+
+
+	.lw-dag{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		background-color: $lw-beige-background;
+		border-radius: 20px;
+		align-self: center;
+		width: 80%;
+
+		.lw-titel {
+			font-family: $lw-font-header;
+			//text-transform: uppercase;
+			font-size: 3.5rem;
+
+			color: $lw-donkerrood;
+		}
+		.lw-onderdeel {
+			.lw-titel {
+				font-family: $lw-font-text;
+				text-transform: uppercase;
+				font-size: 2.0rem;
+
+				color: $lw-oranje;
+				text-shadow: -2px 1px 0 $lw-beige,
+				1px 2px 0 $lw-beige,
+				2px -1px 0 $lw-beige,
+				-1px -2px 0 $lw-beige;
+
+			}
+			.lw-beschrijving {
+				color: $lw-blauw; //grijs;
+				font-weight: bold;
+				text-shadow: -2px 1px 0 $lw-beige-background,
+				1px 2px 0 $lw-beige-background,
+				2px -1px 0 $lw-beige-background,
+				-1px -2px 0 $lw-beige-background;
+			}
+		}
+	}
+}
+
+/* Lustrum week poster */
+.lw-poster {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.lw-poster-plaetje {
+		width: 560px;
+		height: 100%;
+		border-bottom: 5px;
+	}
+}

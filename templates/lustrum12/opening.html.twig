@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
+	<meta name="author" content="Job Kanis">
+
+	<title>Tijdloos - 12e lustrum</title>
+
+	{{ csrfMetaTag() }}
+
+	{{ js_asset('app') }}
+	{{ css_asset('thema-lustrum') }}
+	{{ css_asset('common') }}
+	{{ css_asset('lustrumopening') }}
+
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+
+	<link rel="icon" href="/lustrum12/favicon.ico">
+
+	<script type="text/javascript">
+		window.onscroll = function(){
+			var scrollMaxY = window.scrollMaxY || (document.documentElement.scrollHeight - document.documentElement.clientHeight)
+			var vertical_position = pageYOffset || document.documentElement.scrollTop;
+			var percentile = (vertical_position / scrollMaxY)
+
+			var zandloper = document.getElementById("zandloper");
+			var heel = document.getElementById("zandloper_heel");
+			var kapot = document.getElementById("zandloper_kapot");
+
+			zandloper.style.top = percentile * 100 + '%';
+			zandloper.style.marginTop = -50 - (20 * percentile) + "px";
+
+			if (percentile < 0.99) {
+				heel.style.display = "";
+				kapot.style.display = "none";
+			} else {
+				heel.style.display = "none";
+				kapot.style.display = "";
+			}
+		};
+	</script>
+</head>
+<body class="zijbalk_verborgen">
+
+	<div id="zandloper" class="zandloper">
+		<img id="zandloper_kapot" class="kapot" src="/images/lustrum12/ZandloperKapot.png"/>
+		<img id="zandloper_heel" class="heel" src="/images/lustrum12/ZandloperHeel.png"/>
+	</div>
+
+	<nav class="site-header">
+		<a class="logo-titel d-inline-block" href="./">
+			<img src="/images/lustrum12/themaheader.png"
+					 alt="Logo menu" />
+		</a>
+		<div class="container">
+			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">
+				<a class="d-none d-md-inline-block" href="./">Home</a>
+				<a class="d-none d-md-inline-block" href="#top">Top</a>
+				<a class="d-none d-md-inline-block" href="#poster">Poster</a>
+			</div>
+		</div>
+	</nav>
+	<a id="top"></a>
+	<a id="poster"></a>
+	<div class="poster">
+		<img src="/images/lustrum12/lo-poster.png"
+				 alt="Logo menu" />
+	</div>
+
+</body>
