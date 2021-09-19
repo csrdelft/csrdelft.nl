@@ -27,6 +27,10 @@ $lw-secondary: $lw-oranje;
 $lw-font-header: Mrs Sheppards Regular, Arial, Helvetica, sans-serif;
 $lw-font-text: Segoe Script, Arial, Helvetica, sans-serif;
 
+a{
+	text-decoration: none;
+}
+
 body {
 	background-image: url('../../images/lustrum12/lw-achtergrond.png');
 	background-repeat: no-repeat;
