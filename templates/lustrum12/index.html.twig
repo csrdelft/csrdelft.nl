@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
+	<meta name="author" content="Job Kanis">
+
+	<title>Tijdloos - 12e lustrum</title>
+
+	{{ csrfMetaTag() }}
+
+	{{ js_asset('app') }}
+	{{ css_asset('thema-lustrum') }}
+	{{ css_asset('common') }}
+	{{ css_asset('lustrum') }}
+
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+
+	<link rel="icon" href="/lustrum12/favicon.ico">
+
+	<script type="text/javascript">
+		window.onscroll = function(){
+			var scrollMaxY = window.scrollMaxY || (document.documentElement.scrollHeight - document.documentElement.clientHeight)
+			var vertical_position = pageYOffset || document.documentElement.scrollTop;
+			var percentile = (vertical_position / scrollMaxY)
+
+			var zandloper = document.getElementById("zandloper");
+			var heel = document.getElementById("zandloper_heel");
+			var kapot = document.getElementById("zandloper_kapot");
+
+			zandloper.style.top = percentile * 100 + '%';
+			zandloper.style.marginTop = -50 - (20 * percentile) + "px";
+
+			if (percentile < 0.99) {
+				heel.style.display = "";
+				kapot.style.display = "none";
+			} else {
+				heel.style.display = "none";
+				kapot.style.display = "";
+			}
+		};
+	</script>
+</head>
+<body class="zijbalk_verborgen">
+
+	<div id="zandloper" class="zandloper">
+		<img id="zandloper_kapot" class="kapot" src="/images/lustrum12/ZandloperKapot.png"/>
+		<img id="zandloper_heel" class="heel" src="/images/lustrum12/ZandloperHeel.png"/>
+	</div>
+
+
+	<nav class="site-header">
+		<a class="logo-titel d-inline-block" href="../">
+			<img src="/images/lustrum12/themaheader.png"
+					 alt="Logo menu" />
+		</a>
+		<div class="container">
+			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">
+				<a class="d-none d-md-inline-block" href="#top">Top</a>
+				<!-- <a class="d-none d-md-inline-block" href="opening">Lustrum Opening</a> -->
+				<a class="d-none d-md-inline-block" href="#activiteiten">Activiteiten</a>
+				<a class="d-none d-md-inline-block lw-font-text" href="lustrumweek">Lustrum Week</a>
+				<a class="d-none d-md-inline-block" href="#instagram">Instagram</a>
+			</div>
+		</div>
+	</nav>
+
+	<a class="anchor glow" id="top"></a>
+
+	<div class="thema thema-container">
+		<img class="thema-plaetje" src="/images/lustrum12/thematitel.png" alt="Lustrum Instagram" >
+	</div>
+
+	<div class="divider">
+		<img class="boven" src="/images/lustrum12/DividerBoven.png">
+	</div>
+
+	<div class="overzicht aankomend" >
+		<a class="anchor" id="activiteiten"></a>
+		<h2 class="titel">Aankomende Activiteiten</h2>
+		<div class="activiteit">
+			<a href="opening">
+				<img class="activiteit-plaetje" src="/images/lustrum12/home-Lustrumopening.png" alt="Lustrum Week">
+			</a>
+		</div>
+		<div class="activiteit">
+			<a href="lustrumweek">
+				<img class="activiteit-plaetje" src="/images/lustrum12/home-Lustrumweek.png" alt="Lustrum Week">
+			</a>
+		</div>
+	</div>
+
+	<div class="divider">
+		<img class="tussen" src="/images/lustrum12/DividerTussen.png">
+	</div>
+
+	<div class="overzicht geweest">
+		<h2 class="titel">Vorige Activiteiten</h2>
+		<div class="activiteit">
+			<a href="thema">
+				<img class="activiteit-plaetje" src="/images/lustrum12/home-Themapresentatie.png" alt="Thema Presentatie">
+			</a>
+		</div>
+	</div>
+
+	<div class="divider">
+		<img class="tussen" src="/images/lustrum12/DividerTussen.png">
+	</div>
+
+	<div class="instagram">
+		<a class="anchor" id="instagram"></a>
+		<!-- <div class="kopje"><img class="plaetje" src="${require('../src/assets/images/KopjeInstagram.png')}"/></div> -->
+		<h2 class="titel">Instagram</h2>
+		<div class="instagram-container">
+			<a href="https://www.instagram.com/lustrumcsr/">
+				<img class="instagram-embed" src="/images/lustrum12/InstagramNametag.png" alt="Lustrum Instagram" >
+			</a>
+			<a href="https://www.instagram.com/lustrumcsr/">lustrumcsr</a>
+		</div>
+	</div>
+
+	<div class="divider">
+		<img class="onder" src="/images/lustrum12/DividerOnder.png">
+	</div>
+
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+/* variables */
+
+// $kleur-rood: #7e1621;
+$kleur-rood: #6e1321;
+$kleur-donkerrood: #310c16;
+$kleur-goud0: #ebb803;
+$kleur-goud1: #fadd00;
+$kleur-goud2: #f5d500;
+$kleur-goud3: #8f5a14;
+$kleur-wit: #FFFFFF;
+$kleur-zwart: #000000;
+
+/* bootstrap override */
+@font-face {
+	font-family: Minion Variable Concept;
+//todo	src: './fonts/MinionVariableConcept-Roman.otf';
+}
+
+$font-header: Minion Variable Concept, Arial, Helvetica, sans-serif;
+$font-text: Minion Variable Concept, Arial, Helvetica, sans-serif;
+
+$primary: $kleur-donkerrood;
+$secondary: $kleur-rood;
+$font-color-primary: $kleur-goud0;
+$font-color-secondary: #FFFFFF;
+
+$theme-colors: (
+	"primary": $primary,
+	"secondary": $secondary,
+	"danger": #ff4136,
+	"white": #f6c8b1,
+);
+
+$font-family-sans-serif: $font-text;
+$headings-font-family: $font-header;
+$headings-font-weight: 700;
+$header-color: $font-color-primary;
+$body-bg: $secondary;
+
+$h1-font-size: 4.4rem;
+$h2-font-size: 3.2rem;
+$h3-font-size: 2.5rem;
+$h4-font-size: 2rem;
