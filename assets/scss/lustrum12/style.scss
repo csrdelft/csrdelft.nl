@@ -174,15 +174,15 @@ nav {
 	}
 
 	.helemaal-boven{
-		margin-top: 75px;
-		margin-bottom: 20px;
+		margin-top: 60px;
+		margin-bottom: 10px;
 	}
 	.boven {
-		margin-top: 20px;
+		margin-top: 10px;
 	}
 	.tussen {
-		margin-top: 20px;
-		margin-bottom: 20px;
+		margin-top: 10px;
+		margin-bottom: 10px;
 	}
 	.onder {
 		margin-top: 10px;
@@ -204,6 +204,13 @@ nav {
 			max-width: 100%;
 		}
 	}
+}
+
+.beschrijving {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
 }
 
 // Poster weergave
