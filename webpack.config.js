@@ -58,7 +58,6 @@ module.exports = (env, argv) => {
 			// lustrum-page related scss
 			'lustrum': './scss/lustrum12/style.scss',
 			'lustrumthema': './scss/lustrum12/thema.scss',
-			'lustrumopening': './scss/lustrum12/opening.scss',
 			'lustrumweek': './scss/lustrum12/lustrumweek.scss',
 		},
 		output: {

@@ -42,3 +42,14 @@ a{
 		margin-top: 10px;
 	}
 }
+
+.game .game-container {
+	display: flex;
+	justify-content: center;
+
+	.unity-container {
+		width: 960px;
+		height: 650px;
+		border: 0;
+	}
+}

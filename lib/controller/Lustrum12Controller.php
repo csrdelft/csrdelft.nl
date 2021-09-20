@@ -47,26 +47,12 @@ class Lustrum12Controller extends AbstractController
 		return $this->render('lustrum12/lustrumweek.html.twig');
 	}
 
-
-//	/**
-//	 * Ketzers voor dies stek 2021
-//	 *
-//	 * @return Response
-//	 * @Route("/gateway-of-india/ketzers")
-//	 * @Auth(P_LOGGED_IN)
-//	 */
-//	public function ketzers() {
-//		return $this->render('dies/ketzers.html.twig');
-//	}
-//
-//	/**
-//	 * Livestream voor dies stek 2021
-//	 *
-//	 * @return Response
-//	 * @Route("/gateway-of-india/livestream")
-//	 * @Auth(P_LOGGED_IN)
-//	 */
-//	public function livestream() {
-//		return $this->render('dies/livestream.html.twig');
-//	}
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/cantus")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumActiviteitCantus() {
+		return $this->render('lustrum12/cantus.html.twig');
+	}
 }
