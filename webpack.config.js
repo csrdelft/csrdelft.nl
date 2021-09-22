@@ -55,6 +55,10 @@ module.exports = (env, argv) => {
 			'thema-donker': './scss/thema/donker.scss',
 			...styleEntries,
 			'effect-civisaldo': './scss/effect/civisaldo.scss',
+			// lustrum-page related scss
+			'lustrum': './scss/lustrum12/style.scss',
+			'lustrumthema': './scss/lustrum12/thema.scss',
+			'lustrumweek': './scss/lustrum12/lustrumweek.scss',
 		},
 		output: {
 			// De map waarin alle bestanden geplaatst worden.

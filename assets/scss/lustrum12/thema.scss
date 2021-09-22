@@ -1,0 +1,50 @@
+@import 'style.scss';
+
+a{
+	text-decoration: none;
+}
+
+/* video */
+.video-container {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 30px;
+}
+
+/* game */
+.game .game-container {
+	display: flex;
+	justify-content: center;
+
+	.unity-container {
+		width: 960px;
+		height: 650px;
+		border: 0;
+	}
+}
+
+/* Commissie */
+.commissie .commissie-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: $font-color-secondary;
+
+	.commissiefoto {
+		width: 100%;
+		max-width: 720px;
+		margin-bottom: 10px;
+		margin-top: 10px;
+	}
+}
+
+.game .game-container {
+	display: flex;
+	justify-content: center;
+
+	.unity-container {
+		width: 960px;
+		height: 650px;
+		border: 0;
+	}
+}

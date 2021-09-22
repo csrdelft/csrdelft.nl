@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
+	<meta name="author" content="Job Kanis">
+
+	<title>Tijdloos - 12e lustrum</title>
+
+	{{ csrfMetaTag() }}
+
+	{{ js_asset('app') }}
+	{{ css_asset('thema-lustrum') }}
+	{{ css_asset('common') }}
+	{{ css_asset('lustrum') }}
+
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+
+	<link rel="icon" href="/lustrum12/favicon.ico">
+</head>
+
+<body class="zijbalk_verborgen">
+	{%  include 'lustrum12/zandloper.html.twig' %}
+
+	<nav class="site-header">
+		<a class="logo-titel d-inline-block" href="./">
+			<img src="/images/lustrum12/themaheader.png"
+					 alt="Logo menu" />
+		</a>
+		<div class="container">
+			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">
+				<a class="d-none d-md-inline-block" href="./">Home</a>
+				<a class="d-none d-md-inline-block" href="#top">Top</a>
+				<a class="d-none d-md-inline-block" href="#poster">Poster</a>
+			</div>
+		</div>
+	</nav>
+	<a id="top"></a>
+	<div class="divider"><img class="helemaal-boven" src="/images/lustrum12/DividerBoven.png"></div>
+
+	<a id="poster"></a>
+	<div class="poster">
+		<img src="/images/lustrum12/lo-poster.png"
+				 alt="Logo menu" />
+	</div>
+
+	<div class="divider"><img class="onder" src="/images/lustrum12/DividerOnder.png"></div>
+</body>

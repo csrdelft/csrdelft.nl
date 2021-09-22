@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
+	<meta name="author" content="Job Kanis">
+
+	<title>Tijdloos - 12e lustrum</title>
+
+	{{ csrfMetaTag() }}
+
+	{{ js_asset('app') }}
+	{{ css_asset('thema-lustrum') }}
+	{{ css_asset('common') }}
+	{{ css_asset('lustrumthema') }}
+
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+
+	<link rel="icon" href="/lustrum12/favicon.ico">
+
+	<script type="text/javascript">
+		window.addEventListener('load', function () {
+			document.getElementById("game-container").innerHTML =
+				`<iframe class="unity-container" src="https://jobkanis.github.io/lustrumgame/" allow="fullscreen" scrolling="no"></iframe>`
+		});
+
+		window.addEventListener('load', function () {
+			document.getElementById("player").innerHTML =
+				`<iframe src="https://www.youtube-nocookie.com/embed/9rXmPGNczdE?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+		});
+	</script>
+</head>
+
+<body class="zijbalk_verborgen">
+	{%  include 'lustrum12/zandloper.html.twig' %}
+
+	<nav class="site-header">
+		<a class="logo-titel d-inline-block" href="./">
+			<img src="/images/lustrum12/themaheader.png"
+					 alt="Logo menu" />
+		</a>
+		<div class="container">
+			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">
+				<a class="d-none d-md-inline-block" href="./">Home</a>
+				<a class="d-none d-md-inline-block" href="#top">Top</a>
+				<a class="d-none d-md-inline-block" href="#themafilm">Themafilm</a>
+				<a class="d-none d-md-inline-block" href="#game">Game</a>
+				<a class="d-none d-md-inline-block" href="#instagram">Instagram</a>
+				<a class="d-none d-md-inline-block" href="#commissie">Commissie</a>
+			</div>
+		</div>
+	</nav>
+
+	<a id="top"></a>
+	<div class="thema thema-container">
+		<img class="thema-plaetje" src="/images/lustrum12/thematitel.png" alt="Lustrum Instagram" >
+	</div>
+
+	<div class="divider">
+		<img class="boven" src="/images/lustrum12/DividerBoven.png">
+	</div>
+
+	<div class="video">
+		<a class="anchor glow" id="themafilm"></a>
+		<!-- <div class="kopje">
+				<img class="plaetje" src="${require('../../assets/images/KopjeThemafilm.png')}"/>
+		</div> -->
+		<h2 class="titel">Themafilm</h2>
+		<div class="container">
+			<div class="video-container">
+				<div class="youtube-container closed">
+					<div class="embed-responsive ratio ratio-16x9" id="player"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="divider">
+		<img class="tussen" src="/images/lustrum12/DividerTussen.png">
+	</div>
+
+	<div class="game">
+		<a class="anchor glow" id="game"> </a>
+		<!-- <div class="kopje"><img class="plaetje" src="/images/lustrum12/assets/images/KopjeGame.png"/></div> -->
+		<h2 class="titel">Game</h2>
+		<div class="game-container" id="game-container"></div>
+	</div>
+
+	<div class="divider">
+		<img class="tussen" src="/images/lustrum12/DividerTussen.png">
+	</div>
+
+	<div class="instagram">
+		<a class="anchor" id="instagram"></a>
+		<!-- <div class="kopje"><img class="plaetje" src="${require('../../assets/images/KopjeInstagram.png')}"/></div> -->
+		<h2 class="titel">Instagram</h2>
+		<div class="instagram-container">
+			<a href="https://www.instagram.com/lustrumcsr/">
+				<img class="instagram-embed" src="/images/lustrum12/InstagramNametag.png" alt="Lustrum Instagram" >
+			</a>
+			<a href="https://www.instagram.com/lustrumcsr/">lustrumcsr</a>
+		</div>
+	</div>
+
+	<div class="divider">
+		<img class="tussen" src="/images/lustrum12/DividerTussen.png">
+	</div>
+
+	<div class="commissie">
+		<a class="anchor" id="commissie"></a>
+		<!-- <div class="kopje"><img class="plaetje" src="/images/lustrum12/KopjeCommissie.png"/></div> -->
+		<h2 class="titel">Commissie</h2>
+		<div class="commissie-container">
+			<img class="commissiefoto" src="/images/lustrum12/CommissieFoto.png" alt="Lustrum Instagram" >
+			<h4> LustrumCie Van Stiphout </h4>
+			<a>Am. Van Stiphout (Praeses)</a>
+			<a>Am. De Wilde jr. (Fiscus)</a>
+			<a>Ama. Marting (Acquisitie)</a>
+			<a>Ama. Blokhuis</a>
+			<a>Am. Haasnoot jr.</a>
+			<a>Am. Kanis</a>
+			<a>Ama. Visscher</a>
+		</div>
+	</div>
+
+	<div class="divider">
+		<img class="onder" src="/images/lustrum12/DividerOnder.png">
+	</div>
+</body>
