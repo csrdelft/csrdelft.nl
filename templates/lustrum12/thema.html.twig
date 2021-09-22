@@ -26,18 +26,6 @@
 	{{ js_asset('sentry') }}
 
 	<link rel="icon" href="/lustrum12/favicon.ico">
-
-	<script type="text/javascript">
-		window.addEventListener('load', function () {
-			document.getElementById("game-container").innerHTML =
-				`<iframe class="unity-container" src="https://jobkanis.github.io/lustrumgame/" allow="fullscreen" scrolling="no"></iframe>`
-		});
-
-		window.addEventListener('load', function () {
-			document.getElementById("player").innerHTML =
-				`<iframe src="https://www.youtube-nocookie.com/embed/9rXmPGNczdE?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
-		});
-	</script>
 </head>
 
 <body class="zijbalk_verborgen">
@@ -71,14 +59,18 @@
 
 	<div class="video">
 		<a class="anchor glow" id="themafilm"></a>
-		<!-- <div class="kopje">
-				<img class="plaetje" src="${require('../../assets/images/KopjeThemafilm.png')}"/>
-		</div> -->
 		<h2 class="titel">Themafilm</h2>
 		<div class="container">
 			<div class="video-container">
 				<div class="youtube-container closed">
-					<div class="embed-responsive ratio ratio-16x9" id="player"></div>
+					<div class="embed-responsive ratio ratio-16x9" id="player">
+						<iframe src="https://www.youtube-nocookie.com/embed/9rXmPGNczdE?controls=0"
+										frameborder="0"
+										allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen>
+
+						</iframe>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -90,9 +82,10 @@
 
 	<div class="game">
 		<a class="anchor glow" id="game"> </a>
-		<!-- <div class="kopje"><img class="plaetje" src="/images/lustrum12/assets/images/KopjeGame.png"/></div> -->
 		<h2 class="titel">Game</h2>
-		<div class="game-container" id="game-container"></div>
+		<div class="game-container" id="game-container">
+			<iframe class="unity-container" src="https://jobkanis.github.io/lustrumgame/" allow="fullscreen" scrolling="no"></iframe>
+		</div>
 	</div>
 
 	<div class="divider">
@@ -101,7 +94,6 @@
 
 	<div class="instagram">
 		<a class="anchor" id="instagram"></a>
-		<!-- <div class="kopje"><img class="plaetje" src="${require('../../assets/images/KopjeInstagram.png')}"/></div> -->
 		<h2 class="titel">Instagram</h2>
 		<div class="instagram-container">
 			<a href="https://www.instagram.com/lustrumcsr/">
@@ -117,7 +109,6 @@
 
 	<div class="commissie">
 		<a class="anchor" id="commissie"></a>
-		<!-- <div class="kopje"><img class="plaetje" src="/images/lustrum12/KopjeCommissie.png"/></div> -->
 		<h2 class="titel">Commissie</h2>
 		<div class="commissie-container">
 			<img class="commissiefoto" src="/images/lustrum12/CommissieFoto.png" alt="Lustrum Instagram" >
