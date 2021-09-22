@@ -26,36 +26,10 @@
 	{{ js_asset('sentry') }}
 
 	<link rel="icon" href="/lustrum12/favicon.ico">
-
-	<script type="text/javascript">
-		window.onscroll = function(){
-			var scrollMaxY = window.scrollMaxY || (document.documentElement.scrollHeight - document.documentElement.clientHeight)
-			var vertical_position = pageYOffset || document.documentElement.scrollTop;
-			var percentile = (vertical_position / scrollMaxY)
-
-			var zandloper = document.getElementById("zandloper");
-			var heel = document.getElementById("zandloper_heel");
-			var kapot = document.getElementById("zandloper_kapot");
-
-			zandloper.style.top = percentile * 100 + '%';
-			zandloper.style.marginTop = -50 - (20 * percentile) + "px";
-
-			if (percentile < 0.99) {
-				heel.style.display = "";
-				kapot.style.display = "none";
-			} else {
-				heel.style.display = "none";
-				kapot.style.display = "";
-			}
-		};
-	</script>
 </head>
-<body class="zijbalk_verborgen">
 
-	<div id="zandloper" class="zandloper">
-		<img id="zandloper_kapot" class="kapot" src="/images/lustrum12/ZandloperKapot.png"/>
-		<img id="zandloper_heel" class="heel" src="/images/lustrum12/ZandloperHeel.png"/>
-	</div>
+<body class="zijbalk_verborgen">
+	{%  include 'lustrum12/zandloper.html.twig' %}
 
 	{{ cms('lustrum-activiteiten-cantus') }}
 	{#CODE GOES TO lustrum-activiteiten-cantus#}
