@@ -60,8 +60,12 @@ nav {
 		position: absolute;
 		left: 5px;
 		top: 5px;
-		@media screen and (max-width:1100px){
+		@media screen and (max-width:1100px) and (min-width:768px){
 			visibility: hidden;
+		}
+		@media screen and (max-width:768px){
+			left:50%;
+			transform: translate(-50%, 0%);
 		}
 
 		img {
