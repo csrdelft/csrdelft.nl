@@ -49,7 +49,7 @@ class Lustrum12Controller extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/tijdloos/cantus")
+	 * @Route("/tijdloos/zingmee")
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function lustrumActiviteitCantus() {
