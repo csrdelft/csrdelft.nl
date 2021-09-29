@@ -88,7 +88,7 @@
 		"chart.js": "^2.7.3",
 		"clippyjs": "^0.0.3",
 		"corejs-typeahead": "^1.2.1",
-		"datatables.net": "^1.10.19",
+		"datatables.net": "^1.11.3",
 		"datatables.net-autofill": "^2.3.5",
 		"datatables.net-autofill-dt": "^2.2.3",
 		"datatables.net-buttons": "^1.6.2",
