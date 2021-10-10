@@ -1,11 +1,9 @@
-{% extends 'default.html.twig' %}
+{% extends 'plain.html.twig' %}
 
 {% block titel %}Autoriseer {{ client_id }}{% endblock %}
 
-{% block content %}{{ cms('thuis') }}{% endblock %}
-
-{% block modal %}
-	<div class="modal show" id="modal" data-backdrop="static">
+{% block body %}
+	<div class="modal show" id="modal" data-bs-backdrop="static">
 		<div class="modal-dialog">
 			<form>
 				<div class="modal-content">

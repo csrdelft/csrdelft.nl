@@ -34,6 +34,7 @@ class ApiInfoController extends AbstractController
 		$json = [
 			'id' => $user->uuid->toRfc4122(),
 			'displayName' => $this->getUser()->profiel->getNaam(),
+			'slug' => $this->getUser()->profiel->getNaam('slug'),
 			'scopes' => $scopes,
 		];
 

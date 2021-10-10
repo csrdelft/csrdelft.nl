@@ -752,6 +752,10 @@ class Profiel implements Agendeerbaar, DisplayEntity {
 				$naam = aaidrom($this->voornaam, $this->tussenvoegsel, $this->achternaam);
 				break;
 
+			case 'slug':
+				$naam = str_replace(' ', '-', $this->getNaam('volledig')) . '-' . $this->uid;
+				break;
+
 			default:
 				$naam = 'Onbekend formaat $vorm: ' . htmlspecialchars($vorm);
 		}
