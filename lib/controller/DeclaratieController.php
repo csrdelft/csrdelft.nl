@@ -333,4 +333,27 @@ class DeclaratieController extends AbstractController
 		$entityManager->flush();
 		return $this->ajaxResponse([], $declaratie);
 	}
+
+	/**
+	 * @param Declaratie $declaratie
+	 * @param DeclaratieRepository $declaratieRepository
+	 * @return Response
+	 * @Route("/declaratie/verwijderen/{declaratie}", name="declaratie_verwijderen", methods={"POST"})
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function declaratieVerwijderen(Declaratie $declaratie, DeclaratieRepository $declaratieRepository) {
+
+		$redirect = $declaratie->getIndiener()->uid === $this->getProfiel()->uid ? '/declaraties/mijn' : '/declaraties/wachtrij';
+		$declaratieRepository->verwijderen($declaratie);
+
+		return $this->json([
+			'redirect' => $redirect
+		]);
+	}
+
+	public function lijst() {
+		// Mijn declaraties - alle
+		// Wachtrij - concept - boekjaar
+		// Wachtrij - ingediend
+	}
 }

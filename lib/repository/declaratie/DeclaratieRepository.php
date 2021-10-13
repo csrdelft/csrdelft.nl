@@ -16,4 +16,15 @@ class DeclaratieRepository extends AbstractRepository {
 	public function __construct(ManagerRegistry $registry) {
 		parent::__construct($registry, Declaratie::class);
 	}
+
+	public function verwijderen(Declaratie $declaratie) {
+		foreach ($declaratie->getBonnen() as $bon) {
+			foreach ($bon->getRegels() as $regel) {
+				$this->remove($regel);
+			}
+			$this->getEntityManager()->flush();
+			$this->remove($bon);
+		}
+		$this->getEntityManager()->flush();
+	}
 }

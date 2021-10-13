@@ -487,12 +487,16 @@ class Declaratie
 
 	public function magBeoordelen(): bool
 	{
-		return $this->getCategorie()->magBeoordelen() || $this->magUitbetalen();
+		return $this->getCategorie()->magBeoordelen() || $this->isFiscus();
 	}
 
 	public function magUitbetalen(): bool
 	{
-		return !$this->getCsrPas() && LoginService::mag('bestuur:ht:fiscus');
+		return !$this->getCsrPas() && $this->isFiscus();
+	}
+
+	private function isFiscus(): bool {
+		return LoginService::mag('bestuur:ht:fiscus');
 	}
 
 	public function magBekijken(): bool

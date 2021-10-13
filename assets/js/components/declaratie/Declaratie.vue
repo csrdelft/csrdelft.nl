@@ -494,6 +494,13 @@
       class="save-buttons"
     >
       <button
+        v-if="declaratie.status === 'concept' && declaratie.id"
+        class="afkeuren"
+        :disabled="submitting"
+        @click="conceptVerwijderen()">
+        Concept verwijderen
+      </button>
+      <button
         v-if="declaratie.status === 'concept'"
         class="concept"
         :disabled="submitting"
@@ -693,6 +700,14 @@ interface DeclaratieOpslaanData {
   success: boolean
   status: status
   statusData: StatusData
+}
+
+interface DeclaratieVerwijderenResponse {
+  data: DeclaratieVerwijderenData
+}
+
+interface DeclaratieVerwijderenData {
+  redirect: string
 }
 
 @Component({
@@ -915,6 +930,25 @@ export default class DeclaratieVue extends Vue {
   public removeNummer(value: string): void {
     if (this.declaratie.nummer === value) {
       this.declaratie.nummer = null;
+    }
+  }
+
+  public conceptVerwijderen(): void {
+    const confirm = window.confirm("Wil je deze declaratie verwijderen?");
+    if (confirm) {
+      this.submitting = true;
+
+      axios.request<DeclaratieVerwijderenResponse, DeclaratieVerwijderenData>({
+        method: 'post',
+        url: '/declaratie/verwijderen/' + this.declaratie.id,
+      })
+        .then((data) => {
+          window.location.replace(data.data.redirect);
+        })
+        .catch((err) => {
+          this.submitting = false;
+          alert(err);
+        });
     }
   }
 }
