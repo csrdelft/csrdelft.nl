@@ -53,6 +53,6 @@ class Lustrum12Controller extends AbstractController
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function lustrumActiviteitCantus() {
-		return $this->render('lustrum12/cantus.html.twig');
+		return $this->render('lustrum12/zingmee.html.twig');
 	}
 }
