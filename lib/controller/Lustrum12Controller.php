@@ -49,7 +49,7 @@ class Lustrum12Controller extends AbstractController
 
 	/**
 	 * @return Response
-	 * @Route("/tijdloos/terugindetoekomst")
+	 * @Route("/tijdloos/terugnaardetoekomst")
 	 * @Auth(P_LOGGED_IN)
 	 */
 	public function lustrumWeek2() {
