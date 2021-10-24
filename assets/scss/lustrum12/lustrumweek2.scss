@@ -1,0 +1,55 @@
+$lw2-blauw: #2a6272;
+$lw2-donkerblauw: darken($lw2-blauw, 20%);
+$lw2-oranje: #ef7d38;
+$lw2-goud: #F2BC04;
+
+$primary: $lw2-donkerblauw;
+$secondary: $lw2-oranje;
+$font-color-primary: $lw2-oranje;
+$font-color-secondary: $lw2-goud;
+
+@import 'style.scss';
+
+@font-face {
+	font-family: BTTF;
+	src: url('../../fonts/lustrum12/BTTF.ttf');
+}
+
+$lw-font-header: BTTF, Arial, Helvetica, sans-serif;
+
+body {
+	background-color: $lw2-blauw;
+}
+
+hr {
+	color: $lw2-blauw;
+	background-color: $lw2-blauw;
+}
+.titel {
+	font: $lw-font-header;
+}
+.activiteiten {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	.poster {
+		max-height: 75vh;
+		max-width: 75vw;
+	}
+	.activiteit {
+		width: 80%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		.titel {
+			text-shadow: none;
+		}
+		.wanneer{
+			font-style: italic;
+		}
+		.ketzer{
+			color:white;
+		}
+	}
+}

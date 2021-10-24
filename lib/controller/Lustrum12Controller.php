@@ -49,6 +49,15 @@ class Lustrum12Controller extends AbstractController
 
 	/**
 	 * @return Response
+	 * @Route("/tijdloos/terugindetoekomst")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumWeek2() {
+		return $this->render('lustrum12/lustrumweek2.html.twig');
+	}
+
+	/**
+	 * @return Response
 	 * @Route("/tijdloos/zingmee")
 	 * @Auth(P_LOGGED_IN)
 	 */

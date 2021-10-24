@@ -19,10 +19,10 @@ $kleur-zwart: #000000;
 $font-header: Minion Variable Concept, Arial, Helvetica, sans-serif;
 $font-text: Minion Variable Concept, Arial, Helvetica, sans-serif;
 
-$primary: $kleur-donkerrood;
-$secondary: $kleur-rood;
-$font-color-primary: $kleur-goud0;
-$font-color-secondary: #FFFFFF;
+$primary: $kleur-donkerrood !default;
+$secondary: $kleur-rood !default;
+$font-color-primary: $kleur-goud0 !default;
+$font-color-secondary: #FFFFFF !default;
 
 $theme-colors: (
 	"primary": $primary,

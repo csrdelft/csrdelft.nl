@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+				content="Website voor het 12e lustrum der Civitas Studiosorum Reformatorum onder het thema Tijdloos.">
+	<meta name="author" content="Job Kanis">
+
+	<title>Tijdloos - 12e lustrum</title>
+
+	{{ csrfMetaTag() }}
+
+	{{ js_asset('app') }}
+	{{ css_asset('thema-donker') }}
+	{{ css_asset('common') }}
+	{{ css_asset('lustrumweek2') }}
+
+	<script>
+		{# Configuratie voor Sentry, zie sentry.ts #}
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+	</script>
+	{{ js_asset('sentry') }}
+
+	<link rel="icon" href="/lustrum12/favicon.ico">
+</head>
+
+<body class="zijbalk_verborgen">
+	{%  include 'lustrum12/zandloper.html.twig' %}
+
+	<nav class="site-header">
+		<a class="logo-titel d-inline-block" href="./">
+			<img src="/images/lustrum12/themaheader.png"
+					 alt="Logo menu" />
+		</a>
+		<div class="container">
+			<div class="menu d-flex flex-column flex-md-row justify-content-between align-items-center">
+				<a class="d-none d-md-inline-block" href="./">Home</a>
+				<a class="d-none d-md-inline-block" href="#top">Top</a>
+				<a class="d-none d-md-inline-block" href="#poster">Poster</a>
+				<a class="d-none d-md-inline-block" href="#activiteiten">Activiteiten</a>
+				<a class="d-none d-md-inline-block" href="#lasergamen">Laser Gamen</a>
+			</div>
+		</div>
+	</nav>
+
+	<div id="top"> </div>
+
+	<h1 class="titel">Poster</h1>
+	<div id="poster" class="poster">
+		<img src="/images/lustrum12/lw2-poster.jpg" alt="Logo menu" />
+	</div>
+
+	<hr>
+
+	<div id="activiteiten" class="activiteiten">
+		<h1 class="titel">Activiteiten</h1>
+		<div class="activiteit">
+			<h2 class="titel">Pyjamafeestje!</h2>
+			<h3 class="wanneer">Maandag 8 november vanaf 20:00</h3>
+			<div class="beschrijving">
+				<p>Borrel in je pyjama!</p>
+			</div>
+			<div class="ketzer">
+				{{ '[activiteit=2200]'|bbcode }}
+			</div>
+		</div>
+
+		<div class="activiteit">
+			<h2 class="titel">Na-kring borrel</h2>
+			<h3 class="wanneer">Dinsdag 9 november vanaf 22:00</h3>
+			<div class="beschrijving">
+				<p>Kom met je kring nog even gezellig borrelen op Confide!</p>
+			</div>
+			<div class="ketzer">
+				{{ '[activiteit=2200]'|bbcode }}
+			</div>
+		</div>
+
+		<div class="activiteit">
+			<h2 class="titel">Theaterbezoek</h2>
+			<h3 class="wanneer">Woensdag 10 november om 20:00</h3>
+			<div class="beschrijving">
+				<p>George en Eran worden veganisten. Aansluitend is er een borrel (vanaf 22:00).</p>
+			</div>
+			<div class="ketzer">
+				{{ '[activiteit=2142]'|bbcode }}
+			</div>
+		</div>
+
+		<div class="activiteit">
+			<h2 class="titel">Later als ik groter ben!</h2>
+			<h3 class="wanneer">Donderdag 11 november vanaf 20:00</h3>
+			<div class="beschrijving">
+				<p>Intern feest met als thema: Later als ik groter ben.</p>
+			</div>
+			<div class="ketzer">
+				{{ '[activiteit=2142]'|bbcode }}
+			</div>
+		</div>
+
+		<div id="lasergamen" class="activiteit">
+			<h2 class="titel">Lasergamen!</h2>
+			<h3 class="wanneer">Maandag, dinsdag en woensdag van 12-14 uur</h3>
+			<div class="beschrijving">
+				<p>Kom lasergamen op Confide!</p>
+			</div>
+			<div class="ketzer">
+				{{ '[activiteit=2142]'|bbcode }}
+			</div>
+		</div>
+
+
+	</div>
+
+	<hr>
+
+</body>
