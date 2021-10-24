@@ -15,10 +15,17 @@ $font-color-secondary: $lw2-goud;
 	src: url('../../fonts/lustrum12/BTTF.ttf');
 }
 
-$lw-font-header: BTTF, Arial, Helvetica, sans-serif;
+$lw2-font-header: BTTF, Arial, Helvetica, sans-serif;
 
 body {
 	background-color: $lw2-blauw;
+}
+
+nav {
+	a {
+		font-family: $lw2-font-header;
+		text-transform: lowercase;
+	}
 }
 
 hr {
@@ -26,30 +33,27 @@ hr {
 	background-color: $lw2-blauw;
 }
 .titel {
-	font: $lw-font-header;
+	font-family: $lw2-font-header;
 }
-.activiteiten {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-	.poster {
-		max-height: 75vh;
-		max-width: 75vw;
+
+.poster-container {
+	padding-top: 50px;
+}
+
+.ketzers {
+	width: 80%;
+	align-self: center;
+	h3.titel {
+		text-transform: lowercase;
+		color: $lw2-goud;
 	}
-	.activiteit {
-		width: 80%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		.titel {
-			text-shadow: none;
-		}
-		.wanneer{
-			font-style: italic;
-		}
-		.ketzer{
-			color:white;
+	.ketzer{
+		color: white;
+		h3 {
+			color: $lw2-goud;
+			font-weight: bold;
+			text-transform: lowercase;
+			font-family: $lw2-font-header;
 		}
 	}
 }

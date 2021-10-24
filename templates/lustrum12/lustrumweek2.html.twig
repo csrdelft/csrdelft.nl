@@ -42,80 +42,54 @@
 				<a class="d-none d-md-inline-block" href="#top">Top</a>
 				<a class="d-none d-md-inline-block" href="#poster">Poster</a>
 				<a class="d-none d-md-inline-block" href="#activiteiten">Activiteiten</a>
-				<a class="d-none d-md-inline-block" href="#lasergamen">Laser Gamen</a>
+				<a class="d-none d-md-inline-block" href="#ketzers">Ketzers</a>
 			</div>
 		</div>
 	</nav>
 
 	<div id="top"> </div>
 
-	<h1 class="titel">Poster</h1>
-	<div id="poster" class="poster">
-		<img src="/images/lustrum12/lw2-poster.jpg" alt="Logo menu" />
+
+
+	<div id="poster" class="poster-container">
+		<div class="divider">
+			<img class="tussen" src="/images/lustrum12/lw2-divider.png">
+		</div>
+		<h1 class="titel">Poster</h1>
+		<div class="poster">
+			<img src="/images/lustrum12/lw2-poster.jpg" alt="Logo menu" />
+		</div>
 	</div>
 
-	<hr>
+	<div id="activiteiten" class="divider">
+		<img class="tussen" src="/images/lustrum12/lw2-divider.png">
+	</div>
 
-	<div id="activiteiten" class="activiteiten">
+	<div class="activiteiten">
 		<h1 class="titel">Activiteiten</h1>
-		<div class="activiteit">
-			<h2 class="titel">Pyjamafeestje!</h2>
-			<h3 class="wanneer">Maandag 8 november vanaf 20:00</h3>
-			<div class="beschrijving">
-				<p>Borrel in je pyjama!</p>
-			</div>
-			<div class="ketzer">
-				{{ '[activiteit=2200]'|bbcode }}
-			</div>
+		<div id="poster" class="poster">
+			<img src="/images/lustrum12/lw2-activiteiten.jpg" alt="Logo menu" />
 		</div>
-
-		<div class="activiteit">
-			<h2 class="titel">Na-kring borrel</h2>
-			<h3 class="wanneer">Dinsdag 9 november vanaf 22:00</h3>
-			<div class="beschrijving">
-				<p>Kom met je kring nog even gezellig borrelen op Confide!</p>
-			</div>
-			<div class="ketzer">
-				{{ '[activiteit=2200]'|bbcode }}
-			</div>
-		</div>
-
-		<div class="activiteit">
-			<h2 class="titel">Theaterbezoek</h2>
-			<h3 class="wanneer">Woensdag 10 november om 20:00</h3>
-			<div class="beschrijving">
-				<p>George en Eran worden veganisten. Aansluitend is er een borrel (vanaf 22:00).</p>
-			</div>
-			<div class="ketzer">
-				{{ '[activiteit=2142]'|bbcode }}
-			</div>
-		</div>
-
-		<div class="activiteit">
-			<h2 class="titel">Later als ik groter ben!</h2>
-			<h3 class="wanneer">Donderdag 11 november vanaf 20:00</h3>
-			<div class="beschrijving">
-				<p>Intern feest met als thema: Later als ik groter ben.</p>
-			</div>
-			<div class="ketzer">
-				{{ '[activiteit=2142]'|bbcode }}
-			</div>
-		</div>
-
-		<div id="lasergamen" class="activiteit">
-			<h2 class="titel">Lasergamen!</h2>
-			<h3 class="wanneer">Maandag, dinsdag en woensdag van 12-14 uur</h3>
-			<div class="beschrijving">
-				<p>Kom lasergamen op Confide!</p>
-			</div>
-			<div class="ketzer">
-				{{ '[activiteit=2142]'|bbcode }}
-			</div>
-		</div>
-
-
 	</div>
 
-	<hr>
+	<div class="divider">
+		<img id="ketzers" class="tussen" src="/images/lustrum12/lw2-divider.png">
+	</div>
+
+	<div class="ketzers">
+		<h1 class="titel">Ketzers</h1>
+
+		<h3 class="titel">Theater Bezoek</h3>
+		<div class="ketzer">{{ '[activiteit=2200]'|bbcode }}</div>
+
+		<h3 class="titel">Intern Feest</h3>
+		<div class="ketzer">{{ '[activiteit=2202]'|bbcode }}</div>
+
+		<h3 class="titel">Laser Gamen</h3>
+		<div class="ketzer">{{ '[activiteit=2203]'|bbcode }}</div>
+		<div class="ketzer">{{ '[activiteit=2204]'|bbcode }}</div>
+		<div class="ketzer">{{ '[activiteit=2205]'|bbcode }}</div>
+
+	</div>
 
 </body>
