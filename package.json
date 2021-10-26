@@ -116,7 +116,7 @@
 		"hoverintent": "^2.2.1",
 		"jgallery": "https://github.com/csrdelft/jgallery",
 		"jquery": "^3.4",
-		"jquery-ui": "^1.12.1",
+		"jquery-ui": "^1.13.0",
 		"jquery.maskedinput": "^1.4.1",
 		"jquery.scrollto": "^2.1.2",
 		"jqueryui": "^1.11.1",
