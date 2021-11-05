@@ -10,9 +10,20 @@
 
 	{{ csrfMetaTag() }}
 
+	<script>
+		APP_ENV = "{{ app.environment }}";
+		SENTRY_DSN_JS = "{{ sentry_dsn }}";
+		USER = "{{ app.user.uid }}";
+		setTimeout(function () {
+			document.getElementById('bottom').scrollIntoView();
+		}, 2000);
+	</script>
+	{{ js_asset('sentry') }}
 </head>
 
 <body class="zijbalk_verborgen">
-	<iframe src="https://www.bladnl.nl/bladen/w_NX29IuoLlYht7YLZkq601c1b59" frameborder="0" height="950px" width="100%" scrolling="no"></iframe>
+<iframe src="https://www.bladnl.nl/bladen/w_NX29IuoLlYht7YLZkq601c1b59" frameborder="0" height="850px"
+				width="100%"></iframe>
+<div id="bottom"></div>
 </body>
 </html>
