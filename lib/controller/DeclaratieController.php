@@ -8,6 +8,9 @@ use CsrDelft\entity\declaratie\DeclaratieRegel;
 use CsrDelft\repository\declaratie\DeclaratieBonRepository;
 use CsrDelft\repository\declaratie\DeclaratieCategorieRepository;
 use CsrDelft\repository\declaratie\DeclaratieRepository;
+use CsrDelft\repository\ProfielRepository;
+use CsrDelft\service\ProfielService;
+use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\uploadvelden\UploadFileField;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -26,6 +29,22 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DeclaratieController extends AbstractController
 {
+	/**
+	 * @Route("/declaratie/mijn/{uid}", name="declaraties_mijn")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lijstMijn(DeclaratieRepository $declaratieRepository, string $uid = null): Response {
+		$profiel = $uid ? ProfielRepository::get($uid) : LoginService::getProfiel();
+		if (!$profiel) {
+			throw $this->createNotFoundException();
+		}
+
+		return $this->render('declaratie/lijst.html.twig', [
+			'titel' => $uid ? 'Declaraties van ' . $profiel->getNaam() : 'Mijn declaraties',
+			'declaraties' => $declaratieRepository->mijnDeclaraties($profiel)
+		]);
+	}
+
 	/**
 	 * @param DeclaratieCategorieRepository $categorieRepository
 	 * @return Response
@@ -347,17 +366,11 @@ class DeclaratieController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 
-		$redirect = $declaratie->getIndiener()->uid === $this->getProfiel()->uid ? '/declaraties/mijn' : '/declaraties/wachtrij';
+		$redirect = $declaratie->getIndiener()->uid === $this->getProfiel()->uid ? '/declaratie/mijn' : '/declaratie/wachtrij';
 		$declaratieRepository->verwijderen($declaratie);
 
 		return $this->json([
 			'redirect' => $redirect
 		]);
-	}
-
-	public function lijst() {
-		// Mijn declaraties - alle
-		// Wachtrij - concept - boekjaar
-		// Wachtrij - ingediend
 	}
 }

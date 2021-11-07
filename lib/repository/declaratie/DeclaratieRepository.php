@@ -3,6 +3,7 @@
 namespace CsrDelft\repository\declaratie;
 
 use CsrDelft\entity\declaratie\Declaratie;
+use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -26,5 +27,13 @@ class DeclaratieRepository extends AbstractRepository {
 			$this->remove($bon);
 		}
 		$this->getEntityManager()->flush();
+	}
+
+	public function mijnDeclaraties(Profiel $profiel) {
+		return array_filter( $this->findBy([
+			'indiener' => $profiel
+		], ['id' => 'desc']), function($decl) {
+			return $decl->magBekijken();
+		});
 	}
 }
