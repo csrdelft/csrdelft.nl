@@ -5,9 +5,11 @@ namespace CsrDelft\controller;
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieRegel;
+use CsrDelft\entity\declaratie\DeclaratieWachtrij;
 use CsrDelft\repository\declaratie\DeclaratieBonRepository;
 use CsrDelft\repository\declaratie\DeclaratieCategorieRepository;
 use CsrDelft\repository\declaratie\DeclaratieRepository;
+use CsrDelft\repository\declaratie\DeclaratieWachtrijRepository;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\ProfielService;
 use CsrDelft\service\security\LoginService;
@@ -41,7 +43,41 @@ class DeclaratieController extends AbstractController
 
 		return $this->render('declaratie/lijst.html.twig', [
 			'titel' => $uid ? 'Declaraties van ' . $profiel->getNaam() : 'Mijn declaraties',
-			'declaraties' => $declaratieRepository->mijnDeclaraties($profiel)
+			'declaraties' => $declaratieRepository->mijnDeclaraties($profiel),
+			'personal' => true,
+		]);
+	}
+
+	/**
+	 * @Route("/declaratie/wachtrij", name="declaraties_wachtrijen")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function wachtrijen(DeclaratieWachtrijRepository $declaratieWachtrijRepository): Response {
+		$wachtrijen = $declaratieWachtrijRepository->mijnWachtrijen();
+		$wachtrijCounts = [];
+		foreach ($wachtrijen as $wachtrij) {
+			$wachtrijCounts[$wachtrij->getId()]['concept'] = count($declaratieWachtrijRepository->filterDeclaraties($wachtrij, ['concept']));
+			$wachtrijCounts[$wachtrij->getId()]['beoordelen'] = count($declaratieWachtrijRepository->filterDeclaraties($wachtrij, ['ingediend']));
+			$wachtrijCounts[$wachtrij->getId()]['uitbetalen'] = count($declaratieWachtrijRepository->filterDeclaraties($wachtrij, ['uitbetaald']));
+		}
+
+		return $this->render('declaratie/wachtrijen.html.twig', [
+			'wachtrijen' => $wachtrijen,
+			'counts' => $wachtrijCounts,
+		]);
+	}
+
+	/**
+	 * @Route("/declaratie/wachtrij/{wachtrij}", name="declaraties_wachtrij")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lijstWachtrij(DeclaratieWachtrij $wachtrij): Response {
+
+
+		return $this->render('declaratie/lijst.html.twig', [
+			'titel' => 'Wachtrij' . $wachtrij->getNaam(),
+			'declaraties' => $declaratieRepository->mijnDeclaraties($profiel),
+			'personal' => false,
 		]);
 	}
 

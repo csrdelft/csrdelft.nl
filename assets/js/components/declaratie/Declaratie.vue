@@ -21,8 +21,21 @@
         </span>
       </div>
       <div
-        v-if="declaratie.status !== 'afgekeurd'"
+        v-if="declaratie.status !== 'afgekeurd' && declaratie.betaalwijze === 'C.S.R.-pas'"
         class="fase goedgekeurd"
+        :class="{'active': declaratie.status === 'goedgekeurd', 'done': declaratie.status === 'uitbetaald'}"
+      >
+        <span class="status">Goedgekeurd</span>
+        <span
+          v-if="declaratie.statusData.beoordeeldDoor"
+          class="datum"
+        >
+          {{ declaratie.statusData.beoordeeldDoor }}, {{ declaratie.statusData.goedgekeurdOp }}
+        </span>
+      </div>
+      <div
+        v-if="declaratie.status !== 'afgekeurd' && declaratie.betaalwijze === 'voorgeschoten'"
+        class="fase uitbetaald"
         :class="{'active': declaratie.status === 'goedgekeurd', 'done': declaratie.status === 'uitbetaald'}"
       >
         <span class="status">Goedgekeurd</span>
@@ -48,7 +61,7 @@
       </div>
       <div
         v-if="declaratie.status !== 'afgekeurd' && declaratie.betaalwijze === 'voorgeschoten'"
-        class="fase uitbetaald"
+        class="fase goedgekeurd"
         :class="{'active': declaratie.status === 'uitbetaald'}"
       >
         <span class="status">Uitbetaald</span>

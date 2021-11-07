@@ -1,11 +1,12 @@
 .declaratie-table {
-	span.status {
+	.status {
 		border-radius: 20px;
 		font-weight: 600;
 		line-height: 18px;
 		padding: 2px 9px;
 		color: white;
 		display: inline-block;
+		text-decoration: none;
 
 		&.concept {
 			background: #8e8e8e;

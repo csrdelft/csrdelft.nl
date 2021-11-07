@@ -343,6 +343,18 @@ class Declaratie
 		}
 	}
 
+	public function getListStatus(): string
+	{
+		$status = $this->getStatus();
+		if ($status === 'uitbetaald' || $status === 'goedgekeurd' && $this->getCsrPas()) {
+			return 'goedgekeurd';
+		} elseif ($status === 'goedgekeurd') {
+			return 'uitbetaald';
+		} else {
+			return $status;
+		}
+	}
+
 	public function fromParameters(ParameterBag $data): self
 	{
 		if ($data->get('omschrijving')) {
@@ -487,15 +499,15 @@ class Declaratie
 
 	public function magBeoordelen(): bool
 	{
-		return $this->getCategorie()->magBeoordelen() || $this->isFiscus();
+		return $this->getCategorie()->magBeoordelen() || self::isFiscus();
 	}
 
 	public function magUitbetalen(): bool
 	{
-		return !$this->getCsrPas() && $this->isFiscus();
+		return !$this->getCsrPas() && self::isFiscus();
 	}
 
-	private function isFiscus(): bool {
+	public static function isFiscus(): bool {
 		return LoginService::mag('bestuur:ht:fiscus');
 	}
 

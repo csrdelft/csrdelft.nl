@@ -15,6 +15,9 @@
 			<thead>
 				<tr>
 					<th>Nummer</th>
+					{% if not personal %}
+
+					{% endif %}
 					<th>Datum</th>
 					<th>Categorie</th>
 					<th>Omschrijving</th>
@@ -25,7 +28,7 @@
 				{% for declaratie in declaraties %}
 					<tr onclick="window.location='{{ path('declaratie_detail', {'declaratie': declaratie.id}) }}';">
 						<td>
-							<span class="status {{ declaratie.status }}"
+							<span class="status {{ declaratie.listStatus }}"
 										title="Status: {{ declaratie.status }}">
 								{% if declaratie.nummer %}
 									{{ declaratie.nummer }}
