@@ -343,6 +343,10 @@ class DeclaratieController extends AbstractController
 	 */
 	public function declaratieVerwijderen(Declaratie $declaratie, DeclaratieRepository $declaratieRepository) {
 
+		if (!$declaratie->magBewerken()) {
+			throw $this->createAccessDeniedException();
+		}
+
 		$redirect = $declaratie->getIndiener()->uid === $this->getProfiel()->uid ? '/declaraties/mijn' : '/declaraties/wachtrij';
 		$declaratieRepository->verwijderen($declaratie);
 

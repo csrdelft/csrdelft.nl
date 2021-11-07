@@ -850,7 +850,7 @@ export default class DeclaratieVue extends Vue {
       this.nieuweBon(res.data.file, res.data.id);
     }).catch((err) => {
       this.uploading = false;
-      alert(err);
+      alert(err?.response?.data?.detail ?? err);
     });
   }
 
@@ -869,7 +869,7 @@ export default class DeclaratieVue extends Vue {
       .then(this.processAjaxResponse)
       .catch((err) => {
         this.submitting = false;
-        alert(err);
+        alert(err?.response?.data?.detail ?? err);
       });
   }
 
@@ -888,7 +888,7 @@ export default class DeclaratieVue extends Vue {
       .then(this.processAjaxResponse)
       .catch((err) => {
         this.submitting = false;
-        alert(err);
+        alert(err?.response?.data?.detail ?? err);
       });
   }
 
@@ -947,7 +947,7 @@ export default class DeclaratieVue extends Vue {
         })
         .catch((err) => {
           this.submitting = false;
-          alert(err);
+          alert(err?.response?.data?.detail ?? err);
         });
     }
   }
