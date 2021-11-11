@@ -71,8 +71,10 @@ class FotoTagsRepository extends AbstractRepository {
 		$keyword
 	) {
 		$tag = $this->find(['refuuid' => $refuuid, 'keyword' => $keyword]);
-		$this->getEntityManager()->remove($tag);
-		$this->getEntityManager()->flush();
+		if ($tag) {
+			$this->getEntityManager()->remove($tag);
+			$this->getEntityManager()->flush();
+		}
 	}
 
 	public function verwijderFotoTags(Foto $foto) {
