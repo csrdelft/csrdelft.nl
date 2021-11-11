@@ -64,4 +64,13 @@ class Lustrum12Controller extends AbstractController
 	public function lustrumActiviteitCantus() {
 		return $this->render('lustrum12/zingmee.html.twig');
 	}
+
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/dikkemerch")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumMerch() {
+		return $this->render('lustrum12/dikkemerch.html.twig');
+	}
 }
