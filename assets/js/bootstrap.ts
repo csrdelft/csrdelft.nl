@@ -120,7 +120,7 @@ Dropzone.autoDiscover = false;
 		initSluitMeldingen();
 		init(document.body);
 		const modalEl = document.getElementById("modal")
-		if (modalEl.innerHTML !== '') {
+		if (modalEl && modalEl.innerHTML !== '') {
 			const modal = new Modal(modalEl);
 			modal.show();
 		}
