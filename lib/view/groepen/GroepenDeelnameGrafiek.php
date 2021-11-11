@@ -4,6 +4,7 @@ namespace CsrDelft\view\groepen;
 
 use CsrDelft\entity\Geslacht;
 use CsrDelft\entity\groepen\Groep;
+use CsrDelft\entity\groepen\GroepMoment;
 use CsrDelft\repository\ProfielRepository;
 use CsrDelft\view\ToResponse;
 use CsrDelft\view\View;
@@ -23,6 +24,7 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 		$aantalVrouwen = [];
 		$groepNamen = [];
 		$groepJaren = [];
+		$index = 0;
 		foreach ($groepen as $groep) {
 			$mannen = 0;
 			$vrouwen = 0;
@@ -36,17 +38,16 @@ class GroepenDeelnameGrafiek implements View, ToResponse {
 				}
 			}
 
-			$this->series[] = [
-				"moment" => $groep->beginMoment->getTimestamp() * 1000,
-				"aantalMannen" => $mannen,
-				"aantalVrouwen" => $vrouwen,
-				"naam" => $groep->naam,
-			];
-
 			$aantalMannen[] = $mannen;
 			$aantalVrouwen[] = $vrouwen;
 			$groepNamen[] = $groep->naam;
-			$groepJaren[] = $groep->beginMoment->format('Y');
+
+			if (in_array(GroepMoment::class, class_uses($groep))) {
+				/** @var GroepMoment $groep */
+				$groepJaren[] = $groep->beginMoment->format('Y');
+			} else {
+				$groepJaren[] = "000" . $index++;
+			}
 		}
 		$this->series = [
 			'labels'=> $groepNamen,
