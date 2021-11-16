@@ -61,6 +61,7 @@ module.exports = (env, argv) => {
 			'lustrumweek': './scss/lustrum12/lustrumweek.scss',
 			'lustrumweek2': './scss/lustrum12/lustrumweek2.scss',
 			'lustrummerch': './scss/lustrum12/dikkemerch.scss',
+			'lustrumdiesthema': './scss/lustrum12/diesthema.scss',
 		},
 		output: {
 			// De map waarin alle bestanden geplaatst worden.
