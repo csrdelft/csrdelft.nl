@@ -73,4 +73,13 @@ class Lustrum12Controller extends AbstractController
 	public function lustrumMerch() {
 		return $this->render('lustrum12/dikkemerch.html.twig');
 	}
+
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/diesthema")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function diesThema() {
+		return $this->render('lustrum12/diesthema.html.twig');
+	}
 }
