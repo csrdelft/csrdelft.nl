@@ -36,16 +36,14 @@ class SavedQueryContent implements View {
 		switch ($name) {
 			case 'uid_naam':
 				return 'Naam';
-				break;
+			case 'uid_naam_civitas':
+				return 'Civitas naam';
 			case 'groep_naam':
 				return 'Groep';
-				break;
 			case 'onderwerp_link':
 				return 'Onderwerp';
-				break;
 			case 'med_link':
 				return 'Mededeling';
-				break;
 			default:
 				if (substr($name, 0, 10) == 'groep_naam') {
 					return substr($name, 11);
