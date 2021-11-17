@@ -60,6 +60,8 @@ class SavedQueryContent implements View {
 	) {
 		if ($name == 'uid_naam') {
 			return ProfielRepository::getLink($contents, 'volledig');
+		} elseif ($name == 'civi_naam') {
+			return ProfielRepository::getLink($contents, 'civitas');
 		} elseif ($name == 'onderwerp_link') { //link naar het forum.
 			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
 		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {
