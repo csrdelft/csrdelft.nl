@@ -188,7 +188,7 @@ class Declaratie
 
 	public function getOpmerkingen(): ?string
 	{
-		return $this->opmerkingen;
+		return trim($this->opmerkingen);
 	}
 
 	public function setOpmerkingen(?string $opmerkingen): self
@@ -515,5 +515,26 @@ class Declaratie
 	{
 		return $this->getIndiener()->uid === LoginService::getUid()
 			|| $this->magBeoordelen();
+	}
+
+	public function getRelatie(): string {
+		if ($this->getCsrPas()) {
+			return $this->getNaam();
+		} else {
+			return $this->getIndiener()->getNaam();
+		}
+	}
+
+	public function getDeclaratieDatum(): DateTimeInterface {
+		if ($this->getCsrPas()) {
+			return $this->getBonnen()[0]->getDatum();
+		} else {
+			return $this->getIngediend();
+		}
+	}
+
+	public function getTitel(): string
+	{
+		return "{$this->getNummer()} - {$this->getRelatie()} - {$this->getOmschrijving()} - {$this->getDeclaratieDatum()->format('d-m-Y')}";
 	}
 }

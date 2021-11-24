@@ -44,6 +44,16 @@ function format_bedrag($bedrag) {
 }
 
 /**
+ * @param int $bedrag Bedrag in euros
+ * @return string Geformat met euro, bij hele euro's met ",-"
+ */
+function format_euro($bedrag) {
+	$bedragtekst = sprintf('%.2f', $bedrag);
+	$leesbaar = str_replace(',00', ',-', $bedragtekst);
+	return '€ ' . $leesbaar;
+}
+
+/**
  * @param int $bedrag Bedrag in centen
  * @return string Geformat zonder euro
  */
