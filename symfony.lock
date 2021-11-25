@@ -11,6 +11,9 @@
     "beberlei/doctrineextensions": {
         "version": "v1.2.6"
     },
+    "clegginabox/pdf-merger": {
+        "version": "dev-master"
+    },
     "clue/stream-filter": {
         "version": "v1.4.1"
     },
@@ -421,6 +424,12 @@
         "files": [
             "./config/packages/sentry.yaml"
         ]
+    },
+    "setasign/fpdf": {
+        "version": "1.8.4"
+    },
+    "setasign/fpdi": {
+        "version": "v2.3.6"
     },
     "spatie/phpunit-snapshot-assertions": {
         "version": "3.0.0"
