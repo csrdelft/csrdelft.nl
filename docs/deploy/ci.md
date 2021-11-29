@@ -29,6 +29,8 @@ De build doet een aantal stappen,
 * De nieuwe versie naar [csrdelft/productie](https://github.com/csrdelft/productie) pushen
 * Tests draaien
 
+In `csrdelft/csrdelft.nl` is een secret gedefinieerd met een private key waarvan de public key in de `csrdelft/productie` repo is opgegeven als lees/schrijf deploy key. Dit zorgt ervoor dat CI _mag_ pushen naar `csrdelft/productie`. Deze key is gebonden aan de repository en zou dus moeten blijven bestaan ongeacht van leden van de organisatie.
+
 ### Create Sentry Releases
 
 Maakt een nieuwe release in Sentry, hierdoor kunnen commits aan foutmeldingen geknoopt worden

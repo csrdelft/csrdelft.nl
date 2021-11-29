@@ -11,6 +11,12 @@ Een nieuwe versie van de stek op Syrinx deployen is erg makkelijk. Het enige wat
 
 _Alle commando's worden vanuit de hoofdmap uitgevoerd_
 
+## Voorafgaand
+
+Voordat een deploy gedaan kan worden moet deze eerst klaargezet worden. De [`csrdelft/productie`](https://github.com/csrdelft/productie) repository wordt gebruikt om de laatste versie van alle code van de stek klaar te zetten. Deze kan dan op de server worden gedownload. De [CI](https://github.com/csrdelft/csrdelft.nl/actions/workflows/ci.yml) GitHub Action wordt hiervoor gebruikt, deze wordt uitgevoerd voor iedere nieuwe commit op master en zorgt ervoor dat de code naar `csrdelft/productie` wordt gepushed compleet op zichzelf staat en geen extra verwerking meer nodig heeft.
+
+Kijk op de [GitHub Actions](./deploy/ci.md) pagina voor meer informatie over deze actions.
+
 ## Normale deploy
 
 Zodra je bent ingelogd op Syrinx met SSH kun je het volgende commando uitvoeren om een nieuwe versie van de stek neer te zetten.
