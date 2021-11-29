@@ -31,7 +31,8 @@
 						</div>
 						<div class="col-md">
 							{% if 'banaan' in profiel.profielOpties %}
-								<img src="{{ absolute_url(asset_url('images/banaan.gif')) }}" alt="Dansende banaan" class="banaan clear">
+								<img src="{{ absolute_url(asset_url('images/banaan.gif')) }}" alt="Dansende banaan"
+										 class="banaan clear">
 							{% endif %}
 						</div>
 					</div>
@@ -315,14 +316,33 @@
 						</ul>
 					</dd>
 				{% endif %}
-				{% if commissies is not empty and profiel|is_zichtbaar('commissies', 'intern') %}
+				{% if (commissies_ft is not empty or commissies_ht is not empty or commissies_ot is not empty) and profiel|is_zichtbaar('commissies', 'intern') %}
 					<dt>Commissies</dt>
 					<dd>
-						<ul class="list-unstyled">
-							{% for commissie in commissies %}
-								<li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
-							{% endfor %}
-						</ul>
+						{% if commissies_ft is not empty %}
+							<abbr title="Future tempore (toekomstig)"><em>f.t.</em></abbr>
+							<ul class="list-unstyled">
+								{% for commissie in commissies_ft %}
+									<li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+						{% if commissies_ht is not empty %}
+							<abbr title="Hoc tempore (huidig)"><em>h.t.</em></abbr>
+							<ul class="list-unstyled">
+								{% for commissie in commissies_ht %}
+									<li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+						{% if commissies_ot is not empty %}
+							<abbr title="Olim tempore (voorheen)"><em>o.t.</em></abbr>
+							<ul class="list-unstyled">
+								{% for commissie in commissies_ot %}
+									<li><a href="{{ commissie.url }}">{{ commissie.naam | raw }}</a></li>
+								{% endfor %}
+							</ul>
+						{% endif %}
 					</dd>
 				{% endif %}
 				{% if onderverenigingen is not empty and profiel|is_zichtbaar('ondervereniging', 'intern') %}
@@ -405,8 +425,7 @@
 				{% endif %}
 			</dl>
 			{% if mag('P_FISCAAT_MOD') or app.user.uid == profiel.uid %}
-				<dl>
-					<a id="CiviSaldo"></a>
+				<dl id="CiviSaldo">
 					<dt>Saldohistorie</dt>
 					<dd>
 						<a class="btn btn-primary" href="#" onclick="$('#saldoTabel').show();$(this).hide();return false;">Toon
