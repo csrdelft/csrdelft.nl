@@ -11,6 +11,7 @@ use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
@@ -76,7 +77,11 @@ class Zijbalk {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
 		$this->verjaardagenService = $verjaardagenService;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
-		$this->session = $requestStack->getSession();
+		try {
+			$this->session = $requestStack->getSession();
+		} catch (SessionNotFoundException $ex) {
+			// ignore
+		}
 	}
 
 	/**
