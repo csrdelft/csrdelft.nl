@@ -16,6 +16,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\CsrfService;
 use CsrDelft\view\bbcode\CsrBB;
 use CsrDelft\view\formulier\CsrfField;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Extension\AbstractExtension;
@@ -49,7 +50,11 @@ class CsrTwigExtension extends AbstractExtension
 		ProfielRepository $profielRepository
 	)
 	{
-		$this->session = $requestStack->getSession();
+		try {
+			$this->session = $requestStack->getSession();
+		} catch (SessionNotFoundException $ex) {
+			// Ingore
+		}
 		$this->csrfService = $csrfService;
 		$this->profielRepository = $profielRepository;
 		$this->cmsPaginaRepository = $cmsPaginaRepository;
