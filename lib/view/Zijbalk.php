@@ -11,6 +11,7 @@ use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\MenuItemRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
@@ -57,7 +58,7 @@ class Zijbalk {
 	private $session;
 
 	public function __construct(
-		SessionInterface $session,
+		RequestStack $requestStack,
 		Environment $twig,
 		MenuItemRepository $menuItemRepository,
 		ForumDradenRepository $forumDradenRepository,
@@ -75,7 +76,7 @@ class Zijbalk {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
 		$this->verjaardagenService = $verjaardagenService;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
-		$this->session = $session;
+		$this->session = $requestStack->getSession();
 	}
 
 	/**

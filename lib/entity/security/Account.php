@@ -5,6 +5,7 @@ namespace CsrDelft\entity\security;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -18,7 +19,7 @@ use Symfony\Component\Uid\Uuid;
  * @ORM\Entity(repositoryClass="CsrDelft\repository\security\AccountRepository")
  * @ORM\Table("accounts")
  */
-class Account implements UserInterface {
+class Account implements UserInterface, PasswordAuthenticatedUserInterface {
 
 	/**
 	 * Lidnummer
@@ -143,7 +144,7 @@ class Account implements UserInterface {
 		return [$this->perm_role];
 	}
 
-	public function getPassword() {
+	public function getPassword(): ?string {
 		return $this->pass_hash;
 	}
 

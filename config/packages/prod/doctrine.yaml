@@ -10,15 +10,18 @@ doctrine:
         result_cache_driver:
             type: service
             id: doctrine.result_cache_provider
+    dbal:
+      url: '%env(resolve:DATABASE_URL)%'
+      override_url: true
 
 services:
     doctrine.result_cache_provider:
-        class: Symfony\Component\Cache\DoctrineProvider
+        class: Doctrine\Common\Cache\Psr6\DoctrineProvider
         public: false
         arguments:
             - '@doctrine.result_cache_pool'
     doctrine.system_cache_provider:
-        class: Symfony\Component\Cache\DoctrineProvider
+        class: Doctrine\Common\Cache\Psr6\DoctrineProvider
         public: false
         arguments:
             - '@doctrine.system_cache_pool'

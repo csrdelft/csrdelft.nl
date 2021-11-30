@@ -564,9 +564,6 @@
     "symfony/options-resolver": {
         "version": "v5.1.3"
     },
-    "symfony/orm-pack": {
-        "version": "v1.0.7"
-    },
     "symfony/panther": {
         "version": "v0.8.0"
     },
@@ -624,9 +621,6 @@
     "symfony/process": {
         "version": "v5.1.8"
     },
-    "symfony/profiler-pack": {
-        "version": "v1.0.4"
-    },
     "symfony/property-access": {
         "version": "v5.0.4"
     },
@@ -678,9 +672,6 @@
     },
     "symfony/serializer": {
         "version": "v5.0.4"
-    },
-    "symfony/serializer-pack": {
-        "version": "v1.0.2"
     },
     "symfony/service-contracts": {
         "version": "v2.0.1"

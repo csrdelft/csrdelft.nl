@@ -55,7 +55,7 @@ security:
         token_provider: 'CsrDelft\common\Security\PersistentTokenProvider'
       switch_user: true
 
-  encoders:
+  password_hashers:
     CsrDelft\entity\security\Account:
       algorithm: auto
 
