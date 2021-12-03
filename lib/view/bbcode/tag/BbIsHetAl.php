@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class BbIsHetAl extends BbTag {
 	/**
+	 * @var RequestStack
+	 */
+	private $requestStack;
+	/**
 	 * @var AgendaRepository
 	 */
 	private $agendaRepository;
@@ -28,10 +32,10 @@ class BbIsHetAl extends BbTag {
 	 */
 	private $value;
 
-	public function __construct(RequestStack $requestStack, AgendaRepository $agendaRepository, LidInstellingenRepository $lidInstellingenRepository) {
+	public function __construct(SessionInterface $session, AgendaRepository $agendaRepository, LidInstellingenRepository $lidInstellingenRepository) {
 		$this->agendaRepository = $agendaRepository;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
-		$this->session = $requestStack->getSession();
+		$this->session = $session;
 	}
 
 	public static function getTagName() {

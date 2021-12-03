@@ -101,6 +101,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/jwt" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/maknz/slack" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-factory" />
@@ -196,7 +197,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/psalm/plugin-symfony" />
       <excludeFolder url="file://$MODULE_DIR$/docs/_site" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nelmio/cors-bundle" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

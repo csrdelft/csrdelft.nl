@@ -67,7 +67,7 @@ class AccessControlEventListener
 	{
 		$request = $event->getRequest();
 
-		if (!$event->isMainRequest()) {
+		if (!$event->isMasterRequest()) {
 			return;
 		}
 

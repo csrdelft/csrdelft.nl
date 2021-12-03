@@ -13,7 +13,7 @@ use CsrDelft\repository\ProfielRepository;
 use CsrDelft\service\AccessService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
@@ -43,13 +43,13 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 	 */
 	private $menuItemRepository;
 	/**
-	 * @var PasswordHasherFactoryInterface
+	 * @var EncoderFactoryInterface
 	 */
-	private $passwordHasherFactory;
+	private $encoderFactory;
 
 	public function __construct(
 		ManagerRegistry $registry,
-		PasswordHasherFactoryInterface $encoderFactory,
+		EncoderFactoryInterface $encoderFactory,
 		AccessService $accessService,
 		CiviSaldoRepository $civiSaldoRepository,
 		MenuItemRepository $menuItemRepository
@@ -58,7 +58,7 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 		$this->accessService = $accessService;
 		$this->civiSaldoRepository = $civiSaldoRepository;
 		$this->menuItemRepository = $menuItemRepository;
-		$this->passwordHasherFactory = $encoderFactory;
+		$this->encoderFactory = $encoderFactory;
 	}
 
 	/**
@@ -154,8 +154,8 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 	 */
 	public function controleerWachtwoord(UserInterface $account, $passPlain) {
 		// Controleer of het wachtwoord klopt
-		return $this->passwordHasherFactory->getPasswordHasher($account)
-			->verify($account->getPassword(), $passPlain, $account->getSalt());
+		return $this->encoderFactory->getEncoder($account)
+			->isPasswordValid($account->getPassword(), $passPlain, $account->getSalt());
 	}
 
 	/**
@@ -197,7 +197,7 @@ class AccountRepository extends AbstractRepository implements PasswordUpgraderIn
 	 * @return string
 	 */
 	public function maakWachtwoord(Account $account, $passPlain) {
-		return $this->passwordHasherFactory->getPasswordHasher($account)->hash($passPlain, $account->getSalt());
+		return $this->encoderFactory->getEncoder($account)->encodePassword($passPlain, $account->getSalt());
 	}
 
 	/**
