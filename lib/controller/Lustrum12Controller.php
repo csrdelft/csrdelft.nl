@@ -91,4 +91,14 @@ class Lustrum12Controller extends AbstractController
 	public function dies() {
 		return $this->render('lustrum12/dies.html.twig');
 	}
+
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/lustrumreis")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function lustrumreis() {
+		return $this->render('lustrum12/lustrumreis.html.twig');
+	}
+
 }
