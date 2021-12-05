@@ -22,7 +22,7 @@ class DeclaratieCategorieRepository extends AbstractRepository
 	public function findTuples(): array
 	{
 		$categories = [];
-		foreach ($this->findAll() as $category) {
+		foreach ($this->findBy([], ['naam' => 'asc']) as $category) {
 			$categories[$category->getId()] = $category->getNaam();
 		}
 		return $categories;
