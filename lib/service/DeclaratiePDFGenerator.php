@@ -5,6 +5,7 @@ namespace CsrDelft\service;
 use Clegginabox\PDFMerger\PDFMerger;
 use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieBon;
+use Symfony\Component\Filesystem\Filesystem;
 use TCPDF;
 use Twig\Environment;
 //use ZipArchive;
@@ -15,9 +16,14 @@ class DeclaratiePDFGenerator
 	 * @var Environment
 	 */
 	private $twig;
+	/**
+	 * @var Filesystem
+	 */
+	private $filesystem;
 
-	public function __construct(Environment $twig) {
+	public function __construct(Environment $twig, Filesystem $filesystem) {
 		$this->twig = $twig;
+		$this->filesystem = $filesystem;
 	}
 
 	public function genereerDeclaratieInfo(Declaratie $declaratie): string
@@ -87,18 +93,14 @@ class DeclaratiePDFGenerator
 	}
 
 	public function genereerDeclaratie(Declaratie $declaratie) {
-		$info = tmpfile();
+		$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
 		$declaInfo = $this->genereerDeclaratieInfo($declaratie);
-		fwrite($info, $declaInfo);
-		$location = stream_get_meta_data($info)['uri'];
-
-		$bonnen = [];
+		$this->filesystem->dumpFile($location, $declaInfo);
 		$pdfs = [$location];
 
 		foreach ($declaratie->getBonnen() as $i => $declaratieBon) {
-			$bonnen[$i] = tmpfile();
-			fwrite($bonnen[$i], $this->genereerBon($declaratieBon));
-			$location = stream_get_meta_data($bonnen[$i])['uri'];
+			$location = $this->filesystem->tempnam(TMP_PATH, 'decla_');
+			$this->filesystem->dumpFile($location, $this->genereerBon($declaratieBon));
 			$pdfs[] = $location;
 		}
 
@@ -108,7 +110,13 @@ class DeclaratiePDFGenerator
 				$pdf->addPDF($location, 'all');
 			}
 
-			return ['pdf', $pdf->merge('string')];
+			$merged = $pdf->merge('string');
+
+			foreach ($pdfs as $location) {
+				$this->filesystem->remove($location);
+			}
+
+			return ['pdf', $merged];
 		} catch (\Exception $e) {
 //			$zipTmp = tempnam(sys_get_temp_dir(), "zip");
 //			$zip = new ZipArchive();
@@ -119,7 +127,7 @@ class DeclaratiePDFGenerator
 //			}
 //			$filename = $zip->filename;
 //			$zip->close();
-
+//
 //			$data = ['zip', file_get_contents($filename)];
 //			unlink($zipTmp);
 			$data = ['txt', 'Er ging iets fout bij het genereren van de PDF: ' . $e->getMessage()];
