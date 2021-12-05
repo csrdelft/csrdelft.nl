@@ -7,7 +7,12 @@
 {% endblock %}
 
 {% block content %}
-	<h2>{{ titel }}</h2>
+	<div class="clearfix">
+		{% if personal %}
+			<a href="{{ path('declaratie_nieuw') }}" class="btn btn-primary btn-lg float-end">Nieuwe declaratie</a>
+		{% endif %}
+		<h2>{{ titel }}</h2>
+	</div>
 
 	{% if not personal %}
 		<div class="row bg-light p-2 rounded mb-4">
@@ -42,7 +47,7 @@
 
 	{% if declaraties %}
 		<div class="table-responsive">
-			<table class="table table-hover declaratie-table">
+			<table class="table declaratie-table">
 			<thead>
 				<tr>
 					<th>Nummer</th>

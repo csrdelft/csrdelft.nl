@@ -5,7 +5,6 @@ namespace CsrDelft\repository\declaratie;
 use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieWachtrij;
 use CsrDelft\repository\AbstractRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,7 +22,7 @@ class DeclaratieWachtrijRepository extends AbstractRepository
 
 	public function mijnWachtrijen(): array
 	{
-		return array_filter($this->findBy([], ['naam' => 'asc']), function ($wachtrij) {
+		return array_filter($this->findBy([], ['positie' => 'asc', 'naam' => 'asc']), function ($wachtrij) {
 			return $wachtrij->magBeoordelen();
 		});
 	}

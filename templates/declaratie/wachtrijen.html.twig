@@ -26,19 +26,19 @@
 						<th>{{ wachtrij.naam }}</th>
 						<td>
 							<a class="status concept"
-								href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id}) }}">
+								href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id, 'status[]': 'concept'}) }}">
 								{{ counts[wachtrij.id].concept }}
 							</a>
 						</td>
 						<td>
 							<a class="status ingediend"
-								 href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id}) }}">
+								 href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id, 'status[]': 'ingediend'}) }}">
 								{{ counts[wachtrij.id].beoordelen }}
 							</a>
 						</td>
 						<td>
 							<a class="status goedgekeurd"
-								 href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id}) }}">
+								 href="{{ path('declaraties_wachtrij', {'wachtrij': wachtrij.id, 'status[]': 'uitbetaald'}) }}">
 								{{ counts[wachtrij.id].uitbetalen }}
 							</a>
 						</td>

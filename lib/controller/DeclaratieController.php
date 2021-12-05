@@ -11,7 +11,6 @@ use CsrDelft\repository\declaratie\DeclaratieCategorieRepository;
 use CsrDelft\repository\declaratie\DeclaratieRepository;
 use CsrDelft\repository\declaratie\DeclaratieWachtrijRepository;
 use CsrDelft\repository\ProfielRepository;
-use CsrDelft\service\ProfielService;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\uploadvelden\UploadFileField;
 use Doctrine\ORM\EntityManagerInterface;
