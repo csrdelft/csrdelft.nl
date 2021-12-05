@@ -7,7 +7,7 @@ use CsrDelft\entity\declaratie\Declaratie;
 use CsrDelft\entity\declaratie\DeclaratieBon;
 use TCPDF;
 use Twig\Environment;
-use ZipArchive;
+//use ZipArchive;
 
 class DeclaratiePDFGenerator
 {
@@ -110,18 +110,19 @@ class DeclaratiePDFGenerator
 
 			return ['pdf', $pdf->merge('string')];
 		} catch (\Exception $e) {
-			$zipTmp = tempnam(sys_get_temp_dir(), "zip");
-			$zip = new ZipArchive();
-			$zip->open($zipTmp, ZipArchive::OVERWRITE);
-			foreach ($pdfs as $index => $location) {
-				$nummer = $index + 1;
-				$zip->addFromString("{$declaratie->getTitel()} - {$nummer}.pdf", file_get_contents($location));
-			}
-			$filename = $zip->filename;
-			$zip->close();
+//			$zipTmp = tempnam(sys_get_temp_dir(), "zip");
+//			$zip = new ZipArchive();
+//			$zip->open($zipTmp, ZipArchive::OVERWRITE);
+//			foreach ($pdfs as $index => $location) {
+//				$nummer = $index + 1;
+//				$zip->addFromString("{$declaratie->getTitel()} - {$nummer}.pdf", file_get_contents($location));
+//			}
+//			$filename = $zip->filename;
+//			$zip->close();
 
-			$data = ['zip', file_get_contents($filename)];
-			unlink($zipTmp);
+//			$data = ['zip', file_get_contents($filename)];
+//			unlink($zipTmp);
+			$data = ['txt', 'Er ging iets fout bij het genereren van de PDF. Check de PDF bestanden in de declaratie.'];
 			return $data;
 		}
 	}
