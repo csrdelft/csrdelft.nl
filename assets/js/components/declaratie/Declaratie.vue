@@ -92,7 +92,7 @@
       >
         <option disabled />
         <option
-          v-for="(categorie,categorieID) in categorieen"
+          v-for="(categorieID,categorie) in categorieen"
           :key="'categorie-' + categorieID"
           :value="categorieID"
         >
@@ -750,7 +750,7 @@ export default class DeclaratieVue extends Vue {
   @Prop()
   private type: 'nieuw' | 'bewerken';
   @Prop()
-  private categorieen: Record<number, string>;
+  private categorieen: Record<string, number>;
   @Prop({default: legeDeclaratie})
   private declaratieinput!: Declaratie;
   @Prop()
