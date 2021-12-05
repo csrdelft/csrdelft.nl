@@ -234,7 +234,7 @@ class DeclaratieController extends AbstractController
 	{
 		$data = $request->request->get('declaratie');
 		if (!empty($data)) {
-			$data = new ParameterBag($data->all());
+			$data = new ParameterBag($data);
 		}
 		$messages = [];
 
@@ -321,6 +321,7 @@ class DeclaratieController extends AbstractController
 			$messages = array_merge($messages, $declaratie->valideer());
 			if (empty($messages) && $declaratie->getIngediend() === null) {
 				$declaratie->setIngediend(date_create_immutable());
+				$declaratieRepository->stuurMail($declaratie);
 			}
 		}
 
