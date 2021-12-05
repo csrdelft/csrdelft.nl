@@ -1,6 +1,6 @@
 <template>
   <div class="declaratie">
-	  <h2>Declaratie {{ declaratie.nummer }}</h2>
+    <h2>Declaratie {{ declaratie.nummer }}</h2>
     <div class="voortgang">
       <div
         class="fase concept"
@@ -486,10 +486,10 @@
         id="nummer"
         v-model="declaratie.nummer"
         :placeholder="(declaratie.status !== 'ingediend' && !editing) || submitting ? '' : declaratie.statusData.nummerPrefix + '000'"
-        @focus="vulNummer(declaratie.statusData.nummerPrefix)"
-        @blur="removeNummer(declaratie.statusData.nummerPrefix)"
         type="text"
         :disabled="(declaratie.status !== 'ingediend' && !editing) || submitting"
+        @focus="vulNummer(declaratie.statusData.nummerPrefix)"
+        @blur="removeNummer(declaratie.statusData.nummerPrefix)"
       >
     </div>
 
@@ -510,7 +510,8 @@
         v-if="declaratie.status === 'concept' && declaratie.id"
         class="afkeuren"
         :disabled="submitting"
-        @click="conceptVerwijderen()">
+        @click="conceptVerwijderen()"
+      >
         Concept verwijderen
       </button>
       <button
@@ -618,9 +619,9 @@
         </button>
       </a>
       <a
+        v-if="declaratie.status === 'goedgekeurd' || declaratie.status === 'uitbetaald'"
         :href="'/declaratie/print/' + declaratie.id"
         class="no-mail"
-        v-if="declaratie.status === 'goedgekeurd' || declaratie.status === 'uitbetaald'"
       >
         <button class="confirm">
           Download
