@@ -960,7 +960,7 @@ export default class DeclaratieVue extends Vue {
     if (confirm) {
       this.submitting = true;
 
-      axios.request<DeclaratieVerwijderenResponse, DeclaratieVerwijderenData>({
+      axios.request<DeclaratieVerwijderenData, DeclaratieVerwijderenResponse>({
         method: 'post',
         url: '/declaratie/verwijderen/' + this.declaratie.id,
       })
