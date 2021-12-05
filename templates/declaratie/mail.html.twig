@@ -1,0 +1,24 @@
+Er is een nieuwe declaratie ingediend in de categorie [b]{{ declaratie.categorie.naam }}[/b].
+
+[b]Indiener[/b]
+{{ declaratie.indiener.naam }}
+
+[b]Omschrijving[/b]
+{{ declaratie.omschrijving }}
+
+[b]Totaalbedrag[/b]
+{{ (declaratie.totaal * 100)|format_bedrag }} incl. btw
+
+[b]Betaalwijze[/b]
+{% if declaratie.csrPas %}
+	C.S.R. pas bij {{ declaratie.naam }}
+{% else %}
+	Voorgeschoten door {{ declaratie.naam }}
+{% endif %}
+
+{% if declaratie.opmerkingen %}
+[b]Opmerkingen[/b]
+{{ declaratie.opmerkingen }}
+{% endif %}
+
+[url=https://csrdelft.nl/declaratie/{{ declaratie.id }}]Bekijk declaratie #{{ declaratie.id }} op de stek[/url]

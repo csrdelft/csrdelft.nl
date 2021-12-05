@@ -117,6 +117,7 @@ class CsrTwigExtension extends AbstractExtension
 				return uniqid_safe($prefix);
 			}),
 			new TwigFilter('format_bedrag', 'format_bedrag'),
+			new TwigFilter('format_euro', 'format_euro'),
 			new TwigFilter('truncate', 'truncate'),
 			new TwigFilter('format_filesize', 'format_filesize'),
 			new TwigFilter('shuffle', 'array_shuffle'),

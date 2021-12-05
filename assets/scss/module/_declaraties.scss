@@ -1,0 +1,31 @@
+.declaratie-table {
+	.status {
+		border-radius: 20px;
+		font-weight: 600;
+		line-height: 18px;
+		padding: 2px 9px;
+		color: white;
+		display: inline-block;
+		text-decoration: none;
+
+		&.concept {
+			background: #8e8e8e;
+		}
+
+		&.ingediend {
+			background: #E19600;
+		}
+
+		&.goedgekeurd {
+			background: #00DB49;
+		}
+
+		&.afgekeurd {
+			background: #E20000;
+		}
+
+		&.uitbetaald {
+			background: #2C3E50;
+		}
+	}
+}

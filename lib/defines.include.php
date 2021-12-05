@@ -37,6 +37,7 @@ define('CONFIG_CACHE_PATH', VAR_PATH . 'config_cache/');
 define('PUBLIC_FTP', '/srv/ftp/incoming/csrdelft/');
 define('CONFIG_PATH', BASE_PATH . 'config');
 define('TEMPLATE_DIR', LIB_PATH . 'templates/');
+define('DECLARATIE_PATH', DATA_PATH . 'declaraties/');
 
 # Permissies
 define('P_PUBLIC', 'P_PUBLIC');

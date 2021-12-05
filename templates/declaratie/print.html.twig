@@ -1,0 +1,166 @@
+<style>
+	table .headers td {
+		font-weight: bold;
+		font-size: 8pt;
+		color: #11273A;
+	}
+
+	.regels td {
+		border: 0.5px solid #ccc;
+		border-spacing: 3px;
+	}
+
+	td.bon {
+		background-color: #ececec;
+		color: #808080;
+		font-weight: bold;
+		text-align: center;
+		font-size: 7px;
+	}
+
+	tr.totaal td {
+		font-weight: bold;
+	}
+
+	tr.sub td {
+		color: #808080;
+		font-weight: normal;
+	}
+
+	td.rechts {
+		text-align: right;
+	}
+</style>
+
+<table>
+	<tr class="headers">
+		<td>Declaratie</td>
+		<td>Datum</td>
+		<td>Ingediend</td>
+		<td>Goedgekeurd</td>
+	</tr>
+	<tr>
+		<td>{{ declaratie.nummer }}</td>
+		<td>{{ declaratie.declaratieDatum|date('d-m-Y') }}</td>
+		<td>
+			{{ declaratie.ingediend|date('d-m-Y') }} door<br />
+			{{ declaratie.indiener.naam }}
+		</td>
+		<td>
+			{{ declaratie.beoordeeld|date('d-m-Y') }} door<br />
+			{{ declaratie.beoordelaar.naam }}
+		</td>
+	</tr>
+</table>
+
+<br><br>
+
+<table>
+	<tr class="headers">
+		<td>Totaalbedrag</td>
+		<td>Betaalwijze</td>
+		{% if declaratie.csrPas %}
+			<td colspan="2">Bij bedrijf</td>
+		{% else %}
+			<td>Terugstorten naar</td>
+			<td>Ten name van</td>
+		{% endif %}
+	</tr>
+	<tr>
+		<td>{{ declaratie.totaal|format_euro }}</td>
+		{% if declaratie.csrPas %}
+			<td>C.S.R.-pas</td>
+			<td colspan="2">{{ declaratie.naam }}</td>
+		{% else %}
+			<td>Voorgeschoten</td>
+			<td>{{ declaratie.rekening }}</td>
+			<td>{{ declaratie.naam }}</td>
+		{% endif %}
+	</tr>
+</table>
+
+<br>
+<hr>
+&emsp;<br>
+
+<table>
+	<tr class="headers">
+		<td>Categorie</td>
+		<td colspan="3">Omschrijving</td>
+	</tr>
+	<tr>
+		<td>{{ declaratie.categorie.naam }}</td>
+		<td colspan="3">{{ declaratie.omschrijving }}</td>
+	</tr>
+</table>
+
+{% if declaratie.opmerkingen %}
+
+	<br><br>
+
+	<table>
+		<tr class="headers">
+			<td>Opmerkingen</td>
+		</tr>
+		<tr>
+			<td>{{ declaratie.opmerkingen|nl2br }}</td>
+		</tr>
+	</table>
+
+{% endif %}
+
+<br>
+<hr>
+
+&emsp;<br>
+
+<table class="regels" cellpadding="3">
+	<tr class="headers">
+		<td>Datum</td>
+		<td colspan="4">Omschrijving</td>
+		<td>Bedrag excl.</td>
+		<td>Btw %</td>
+		<td>Btw €</td>
+		<td>Bedrag incl.</td>
+	</tr>
+	{% for bon in declaratie.bonnen %}
+		{% if declaratie.bonnen.count > 1 %}
+			<tr>
+				<td class="bon" colspan="9">Bon {{ loop.index }}</td>
+			</tr>
+		{% endif %}
+		{% for regel in bon.regels %}
+			<tr>
+				<td>{{ bon.datum|date('d-m-Y') }}</td>
+				<td colspan="4">{{ regel.omschrijving }}</td>
+				<td class="rechts">{{ regel.bedragExcl|format_euro }}</td>
+				<td class="rechts">{{ regel.btw }}%</td>
+				<td class="rechts">{{ regel.btwBedrag|format_euro }}</td>
+				<td class="rechts">{{ regel.bedragIncl|format_euro }}</td>
+			</tr>
+		{% endfor %}
+		{% if declaratie.bonnen.count > 1 %}
+			<tr class="sub">
+				<td class="rechts" colspan="5">Subtotaal {% if declaratie.bonnen.count > 1 %}bon {{ loop.index }}{% endif %}</td>
+				<td class="rechts">{{ bon.bedragExcl|format_euro }}</td>
+				<td></td>
+				<td class="rechts">{{ bon.btwBedrag|format_euro }}</td>
+				<td class="rechts">{{ bon.bedragIncl|format_euro }}</td>
+			</tr>
+		{% endif %}
+	{% endfor %}
+
+	{% if declaratie.bonnen.count > 1 %}
+		<tr>
+			<td class="bon" colspan="9"></td>
+		</tr>
+	{% endif %}
+
+	<tr class="totaal">
+		<td class="rechts" colspan="5">Totaal</td>
+		<td class="rechts">{{ declaratie.bedragExcl|format_euro }}</td>
+		<td></td>
+		<td class="rechts">{{ declaratie.btwBedrag|format_euro }}</td>
+		<td class="rechts">{{ declaratie.bedragIncl|format_euro }}</td>
+	</tr>
+</table>

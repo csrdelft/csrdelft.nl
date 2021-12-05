@@ -3572,6 +3572,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"inputmask@npm:^5.0.6":
+  version: 5.0.6
+  resolution: "inputmask@npm:5.0.6"
+  checksum: 09dfdd52724a89041a52db381990f2e7d993dc77e5507e1f0fe9bd0a1b6979805b343e41c60b9244cd5698a4b889a935deb42c979d7e9717589277061c015419
+  languageName: node
+  linkType: hard
+
 "interpret@npm:^2.2.0":
   version: 2.2.0
   resolution: "interpret@npm:2.2.0"
@@ -4292,16 +4299,16 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "mini-css-extract-plugin@npm:1.6.0"
+"mini-css-extract-plugin@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "mini-css-extract-plugin@npm:1.6.1"
   dependencies:
     loader-utils: ^2.0.0
     schema-utils: ^3.0.0
     webpack-sources: ^1.1.0
   peerDependencies:
     webpack: ^4.4.0 || ^5.0.0
-  checksum: c9c50bed4ffa0ce0099c26184ed6f5b8675be068252fb2a68b790d8afa58c896e0c36aae0e0601e5036fdc04ecad761e884ce4d27a75c8bd3fb69ff7b4c52f91
+  checksum: 34fe3c65953982b20e3fa87494e6d632f3730c1688664a474c3c1298da65910aa162c94a5ebe9351402afc20d2539052c5d93bfe88cbcf88c3b3172789689b0c
   languageName: node
   linkType: hard
 
@@ -5947,6 +5954,7 @@ resolve@^1.9.0:
     google-palette: ^1.1.0
     hammerjs: ^2.0.8
     hoverintent: ^2.2.1
+    inputmask: ^5.0.6
     jgallery: "https://github.com/csrdelft/jgallery"
     jquery: ^3.4
     jquery-ui: ^1.13.0
@@ -5955,7 +5963,7 @@ resolve@^1.9.0:
     jqueryui: ^1.11.1
     jszip: ^3.1.5
     lightbox2: ^2.10.0
-    mini-css-extract-plugin: ^1.6.0
+    mini-css-extract-plugin: ^1.6.1
     moment: ^2.24.0
     moment-locales-webpack-plugin: ^1.2.0
     optimize-css-assets-webpack-plugin: ^5.0.1
@@ -5988,6 +5996,7 @@ resolve@^1.9.0:
     ts-node: ^8.0.2
     tsconfig-paths: ^3.7.0
     typescript: ^4.1.3
+    v-money: ^0.8.1
     vue: ^2.6.12
     vue-class-component: ^6.3.2
     vue-eslint-parser: ^7.1.0
@@ -6863,6 +6872,13 @@ typescript@^4.1.3:
   bin:
     uuid: ./bin/uuid
   checksum: 1ce3f37e214d6d0dc94a6a9663a0365013ace66bc3fd5b203e6f5d2eeb978aaee1192367222386345d30b4c6a447928c501121aa84c637724bf105ef57284949
+  languageName: node
+  linkType: hard
+
+"v-money@npm:^0.8.1":
+  version: 0.8.1
+  resolution: "v-money@npm:0.8.1"
+  checksum: d8ac4fdca5983668d7fe0ca04482c37a5213ced1095c2d0bc8f72eac1f4e5a1dac8039ef01db8952941a414c51e0f10ec93fb7999e45f0df965b8f0f32677cad
   languageName: node
   linkType: hard
 

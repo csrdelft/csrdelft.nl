@@ -46,7 +46,7 @@
 		"eslint-formatter-json-relative": "^0.1.0",
 		"eslint-loader": "^4.0.2",
 		"eslint-plugin-vue": "^7.9.0",
-		"mini-css-extract-plugin": "^1.6.0",
+		"mini-css-extract-plugin": "^1.6.1",
 		"moment-locales-webpack-plugin": "^1.2.0",
 		"optimize-css-assets-webpack-plugin": "^5.0.1",
 		"path": "^0.12.7",
@@ -114,6 +114,7 @@
 		"google-palette": "^1.1.0",
 		"hammerjs": "^2.0.8",
 		"hoverintent": "^2.2.1",
+		"inputmask": "^5.0.6",
 		"jgallery": "https://github.com/csrdelft/jgallery",
 		"jquery": "^3.4",
 		"jquery-ui": "^1.13.0",
@@ -140,6 +141,7 @@
 		"textcomplete": "^0.17.1",
 		"three": "^0.117.0",
 		"timeago.js": "^4.0.2",
+		"v-money": "^0.8.1",
 		"vue": "^2.6.12"
 	}
 }
