@@ -29,7 +29,7 @@ class DeclaratiePDFGenerator
 		$pdf->SetTitle($declaratie->getTitel());
 
 		// PDF styling
-		$pdf->setHeaderData( null, null, 'Declaratie C.S.R. Delft', $declaratie->getTitel(), [17, 39, 58]);
+		$pdf->setHeaderData( null, null, 'Declaratie C.S.R. Delft (#' . $declaratie->getId() . ')', $declaratie->getTitel(), [17, 39, 58]);
 		$pdf->SetMargins(PDF_MARGIN_LEFT, 20, PDF_MARGIN_RIGHT);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->setPrintFooter(false);

@@ -617,6 +617,15 @@
           Mail lid
         </button>
       </a>
+      <a
+        :href="'/declaratie/print/' + declaratie.id"
+        class="no-mail"
+        v-if="declaratie.status === 'goedgekeurd' || declaratie.status === 'uitbetaald'"
+      >
+        <button class="confirm">
+          Download
+        </button>
+      </a>
     </div>
 
     <div

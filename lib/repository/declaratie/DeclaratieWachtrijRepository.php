@@ -24,7 +24,7 @@ class DeclaratieWachtrijRepository extends AbstractRepository
 	public function mijnWachtrijen(): array
 	{
 		return array_filter($this->findBy([], ['naam' => 'asc']), function ($wachtrij) {
-			return $wachtrij->magBeoordelen() || Declaratie::isFiscus();
+			return $wachtrij->magBeoordelen();
 		});
 	}
 

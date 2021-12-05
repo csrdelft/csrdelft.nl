@@ -25,7 +25,7 @@ class DeclaratiePrintController extends AbstractController
 		$response = new Response($content);
 
 		$disposition = $response->headers->makeDisposition(
-			ResponseHeaderBag::DISPOSITION_INLINE,
+			ResponseHeaderBag::DISPOSITION_ATTACHMENT,
 			"{$declaratie->getTitel()}.{$type}"
 		);
 		$response->headers->set('Content-Disposition', $disposition);

@@ -35,7 +35,8 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/mijn/{uid}", name="declaraties_mijn")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstMijn(DeclaratieRepository $declaratieRepository, string $uid = null): Response {
+	public function lijstMijn(DeclaratieRepository $declaratieRepository, string $uid = null): Response
+	{
 		$profiel = $uid ? ProfielRepository::get($uid) : LoginService::getProfiel();
 		if (!$profiel) {
 			throw $this->createNotFoundException();
@@ -52,7 +53,8 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/wachtrij", name="declaraties_wachtrijen")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function wachtrijen(DeclaratieWachtrijRepository $declaratieWachtrijRepository): Response {
+	public function wachtrijen(DeclaratieWachtrijRepository $declaratieWachtrijRepository): Response
+	{
 		$wachtrijen = $declaratieWachtrijRepository->mijnWachtrijen();
 		$wachtrijCounts = [];
 		foreach ($wachtrijen as $wachtrij) {
@@ -71,13 +73,21 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/wachtrij/{wachtrij}", name="declaraties_wachtrij")
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function lijstWachtrij(DeclaratieWachtrij $wachtrij): Response {
+	public function lijstWachtrij(DeclaratieWachtrij $wachtrij, DeclaratieWachtrijRepository $wachtrijRepository, Request $request): Response
+	{
+		if (!$wachtrij->magBeoordelen()) {
+			throw $this->createAccessDeniedException();
+		}
 
+		$status = $request->query->get('status', ['ingediend']);
+		$status = !is_array($status) ? ['ingediend'] : $status;
+		$declaraties = $wachtrijRepository->filterDeclaraties($wachtrij, $status);
 
 		return $this->render('declaratie/lijst.html.twig', [
-			'titel' => 'Wachtrij' . $wachtrij->getNaam(),
-			'declaraties' => $declaratieRepository->mijnDeclaraties($profiel),
+			'titel' => 'Wachtrij ' . $wachtrij->getNaam(),
+			'declaraties' => $declaraties,
 			'personal' => false,
+			'status' => $status
 		]);
 	}
 
@@ -217,15 +227,15 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/opslaan", name="declaratie_opslaan", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function opslaan(Request $request,
-													DeclaratieRepository $declaratieRepository,
-													DeclaratieBonRepository $bonRepository,
+	public function opslaan(Request                       $request,
+													DeclaratieRepository          $declaratieRepository,
+													DeclaratieBonRepository       $bonRepository,
 													DeclaratieCategorieRepository $categorieRepository,
-													EntityManagerInterface $entityManager)
+													EntityManagerInterface        $entityManager)
 	{
 		$data = $request->request->get('declaratie');
 		if (!empty($data)) {
-			$data = new ParameterBag($data);
+			$data = new ParameterBag($data->all());
 		}
 		$messages = [];
 
@@ -340,7 +350,8 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/status/{declaratie}", name="declaratie_status", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function setStatus(Declaratie $declaratie, Request $request, EntityManagerInterface $entityManager) {
+	public function setStatus(Declaratie $declaratie, Request $request, EntityManagerInterface $entityManager)
+	{
 		$status = $request->request->getAlpha('status');
 		$vanNaar = $declaratie->getStatus() . '-' . $status;
 
@@ -396,13 +407,16 @@ class DeclaratieController extends AbstractController
 	 * @Route("/declaratie/verwijderen/{declaratie}", name="declaratie_verwijderen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function declaratieVerwijderen(Declaratie $declaratie, DeclaratieRepository $declaratieRepository) {
-
+	public function declaratieVerwijderen(Declaratie $declaratie, DeclaratieRepository $declaratieRepository): Response
+	{
 		if (!$declaratie->magBewerken()) {
 			throw $this->createAccessDeniedException();
 		}
 
-		$redirect = $declaratie->getIndiener()->uid === $this->getProfiel()->uid ? '/declaratie/mijn' : '/declaratie/wachtrij';
+		$wachtrij = $declaratie->getCategorie()->getWachtrij();
+		$redirect = $declaratie->getIndiener()->uid === $this->getProfiel()->uid
+			? $this->generateUrl('declaraties_mijn')
+			: $this->generateUrl('declaraties_wachtrij', ['wachtrij' => $wachtrij->getId()]);
 		$declaratieRepository->verwijderen($declaratie);
 
 		return $this->json([

@@ -138,6 +138,6 @@ class DeclaratieWachtrij {
 	}
 
 	public function magBeoordelen(): bool {
-		return LoginService::mag($this->rechten);
+		return LoginService::mag($this->rechten) || Declaratie::isFiscus();
 	}
 }
