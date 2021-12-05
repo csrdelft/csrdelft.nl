@@ -67,10 +67,13 @@ abstract class GroepRepository extends AbstractRepository
 	 */
 	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
 	{
-		if (is_a($this->entityClass, GroepMoment::class)) {
+		// Eerst sorteren op FT/HT/OT
+		$orderBy = ['status' => 'DESC'] + ($orderBy ?? []);
+		if (in_array(GroepMoment::class, class_uses($this->entityClass))) {
+			// Als er een moment is daarna daarop sorteren
 			$orderBy = ['beginMoment' => 'DESC'] + ($orderBy ?? []);
-
 		}
+
 		return parent::findBy($criteria, $orderBy, $limit, $offset);
 	}
 

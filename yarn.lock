@@ -377,22 +377,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/datatables.net-select@npm:^1.2.6":
-  version: 1.2.6
-  resolution: "@types/datatables.net-select@npm:1.2.6"
+"@types/datatables.net-select@npm:^1.2.7":
+  version: 1.2.7
+  resolution: "@types/datatables.net-select@npm:1.2.7"
   dependencies:
     "@types/datatables.net": "*"
     "@types/jquery": "*"
-  checksum: 0765084dcc1f407bba51fdf94ca2447fe157eb7cc1f69617307ddac1cd54c8c7d5d9990256732d62f62f2a94217a02bc03374bd00ba7cfc7a7375a206a15f622
+  checksum: fdad0f055a38c01d9f3e307369a3a27fe40f22dd2616c4513b5d05ebfdf3575499274429e7d95cddf2b5724691ba0a8fd1ac105e16ba675abd0adda165d880ce
   languageName: node
   linkType: hard
 
-"@types/datatables.net@npm:*, @types/datatables.net@npm:^1.10.17":
+"@types/datatables.net@npm:*":
   version: 1.10.19
   resolution: "@types/datatables.net@npm:1.10.19"
   dependencies:
     "@types/jquery": "*"
   checksum: d1b1dc1eaba0044aa4251dd32d77436093c874d487509c04805d998f2696992c1b1bda5df1875d220806ffae77668c989fafc742f597277757702e0a371a1f96
+  languageName: node
+  linkType: hard
+
+"@types/datatables.net@npm:^1.10.21":
+  version: 1.10.21
+  resolution: "@types/datatables.net@npm:1.10.21"
+  dependencies:
+    "@types/jquery": "*"
+  checksum: bfa020e5800716157dc24fc56cfa52220235f63ee5b67c4bba5f1761306c3ed6c47aa2395b8b48378470b5a664de1508fe6bc70c55cdde82e44e97ee9f46b90d
   languageName: node
   linkType: hard
 
@@ -2345,7 +2354,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"datatables.net-select@npm:1.3.1, datatables.net-select@npm:^1.3.1":
+"datatables.net-select@npm:1.3.1":
   version: 1.3.1
   resolution: "datatables.net-select@npm:1.3.1"
   dependencies:
@@ -2355,12 +2364,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"datatables.net@npm:1.10.23, datatables.net@npm:^1.10.15, datatables.net@npm:^1.10.19":
+"datatables.net-select@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "datatables.net-select@npm:1.3.3"
+  dependencies:
+    datatables.net: ^1.10.15
+    jquery: ">=1.7"
+  checksum: 0d8d5c3896194343631835ab0a1807446d363ac10bdc71cfc71ec964f9f8886cca4ba831df192f8036528c628541f864d84ea686834eddefbdf2363635d8a206
+  languageName: node
+  linkType: hard
+
+"datatables.net@npm:1.10.23, datatables.net@npm:^1.10.15":
   version: 1.10.23
   resolution: "datatables.net@npm:1.10.23"
   dependencies:
     jquery: ">=1.7"
   checksum: f47ba806948bb8c49de67912367d59c12d40a1b889c35f3ea520bd3f479b8baf2922bbc788e94dbd5dc9e74d9c10a55c41b932791afd4704bdbddb7229beb3d9
+  languageName: node
+  linkType: hard
+
+"datatables.net@npm:^1.11.3":
+  version: 1.11.3
+  resolution: "datatables.net@npm:1.11.3"
+  dependencies:
+    jquery: ">=1.7"
+  checksum: c996a092af4d5c69d63c6ca95b2be6136924f7779089e4f06163a3fff5a9e2c44766c0e5f19bf84251a5c486fddc7ab0494d9ab49a0ad02b2e0b16a375a6bf74
   languageName: node
   linkType: hard
 
@@ -3790,10 +3818,12 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"jquery-ui@npm:^1.12.1":
-  version: 1.12.1
-  resolution: "jquery-ui@npm:1.12.1"
-  checksum: bdb5a4d78693e0d093337ee7eb1db5062626fed6f6f34459e0f0328cecb462586b5c351acb7a71003118ff91369ccd23c449e314ec2cb84b206748bf89e4cac5
+"jquery-ui@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "jquery-ui@npm:1.13.0"
+  dependencies:
+    jquery: ">=1.8.0 <4.0.0"
+  checksum: dae9d6f06852b324bfb367e6d531ff89b03baecdd0aaefcde1106c14480ac6f0b0d39bf8a82abe86e0099bf5f8a04ab61603f6b8a9a74679159a6f414ea08fe1
   languageName: node
   linkType: hard
 
@@ -3817,6 +3847,13 @@ fsevents@~2.3.1:
   version: 3.5.1
   resolution: "jquery@npm:3.5.1"
   checksum: c50818c84837902a60938c85786feb612f346a9918f7285409d605449460790b3815ad8aaf5806f19e89f1a79b27d327802b421ab354fe213f3fd1801e3562e6
+  languageName: node
+  linkType: hard
+
+"jquery@npm:>=1.8.0 <4.0.0":
+  version: 3.6.0
+  resolution: "jquery@npm:3.6.0"
+  checksum: a0a819022a1bdff5efa79bbd9d4d7352de5bd32dabe42108e6ec0797238dba36c09c108e0eea2724f5d03acc1b30ee87d76bec80e15b9510106532292ebe6ba4
   languageName: node
   linkType: hard
 
@@ -5853,9 +5890,9 @@ resolve@^1.9.0:
     "@sentry/browser": ^5.21.1
     "@types/bootstrap": ^5.0.0
     "@types/chart.js": ^2.7.42
-    "@types/datatables.net": ^1.10.17
+    "@types/datatables.net": ^1.10.21
     "@types/datatables.net-buttons": ^1.4.2
-    "@types/datatables.net-select": ^1.2.6
+    "@types/datatables.net-select": ^1.2.7
     "@types/dropzone": ^5.0.4
     "@types/hammerjs": ^2.0.36
     "@types/jquery": ^3.3.2
@@ -5887,7 +5924,7 @@ resolve@^1.9.0:
     corejs-typeahead: ^1.2.1
     cross-env: ^5.1
     css-loader: ^1.0.0
-    datatables.net: ^1.10.19
+    datatables.net: ^1.11.3
     datatables.net-autofill: ^2.3.5
     datatables.net-autofill-dt: ^2.2.3
     datatables.net-buttons: ^1.6.2
@@ -5905,7 +5942,7 @@ resolve@^1.9.0:
     datatables.net-responsive-dt: ^2.2.3
     datatables.net-scroller: ^2.0.2
     datatables.net-scroller-dt: ^2.0.0
-    datatables.net-select: ^1.3.1
+    datatables.net-select: ^1.3.3
     datatables.net-select-dt: ^1.3.0
     dropzone: ^5.5.0
     eslint: ^7.7.0
@@ -5920,7 +5957,7 @@ resolve@^1.9.0:
     inputmask: ^5.0.6
     jgallery: "https://github.com/csrdelft/jgallery"
     jquery: ^3.4
-    jquery-ui: ^1.12.1
+    jquery-ui: ^1.13.0
     jquery.maskedinput: ^1.4.1
     jquery.scrollto: ^2.1.2
     jqueryui: ^1.11.1

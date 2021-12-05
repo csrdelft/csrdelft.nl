@@ -36,16 +36,14 @@ class SavedQueryContent implements View {
 		switch ($name) {
 			case 'uid_naam':
 				return 'Naam';
-				break;
+			case 'uid_naam_civitas':
+				return 'Civitas naam';
 			case 'groep_naam':
 				return 'Groep';
-				break;
 			case 'onderwerp_link':
 				return 'Onderwerp';
-				break;
 			case 'med_link':
 				return 'Mededeling';
-				break;
 			default:
 				if (substr($name, 0, 10) == 'groep_naam') {
 					return substr($name, 11);
@@ -60,6 +58,8 @@ class SavedQueryContent implements View {
 	) {
 		if ($name == 'uid_naam') {
 			return ProfielRepository::getLink($contents, 'volledig');
+		} elseif ($name == 'uid_naam_civitas') {
+			return ProfielRepository::getLink($contents, 'civitas');
 		} elseif ($name == 'onderwerp_link') { //link naar het forum.
 			return '<a href="/forum/onderwerp/' . $contents . '">' . $contents . '</a>';
 		} elseif (substr($name, 0, 10) == 'groep_naam' AND $contents != '') {

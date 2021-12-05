@@ -41,6 +41,7 @@ jobs:
         run: yarn run lint -f json-relative -o eslint-result.json
 
       - name: SonarCloud Scan
+        if: github.repository == 'csrdelft/csrdelft.nl'
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

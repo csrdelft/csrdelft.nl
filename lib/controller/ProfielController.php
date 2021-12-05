@@ -6,6 +6,7 @@ use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
 use CsrDelft\common\CsrException;
 use CsrDelft\entity\fotoalbum\Foto;
+use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
@@ -169,7 +170,9 @@ class ProfielController extends AbstractController {
 		return $this->render('profiel/profiel.html.twig', [
 			'profiel' => $profiel,
 			'besturen' => $besturenRepository->getGroepenVoorLid($profiel),
-			'commissies' => $commissiesRepository->getGroepenVoorLid($profiel),
+			'commissies_ft' => $commissiesRepository->getGroepenVoorLid($profiel, GroepStatus::FT),
+			'commissies_ht' => $commissiesRepository->getGroepenVoorLid($profiel, GroepStatus::HT),
+			'commissies_ot' => $commissiesRepository->getGroepenVoorLid($profiel, GroepStatus::OT),
 			'werkgroepen' => $werkgroepenRepository->getGroepenVoorLid($profiel),
 			'onderverenigingen' => $onderverenigingenRepository->getGroepenVoorLid($profiel),
 			'groepen' => $rechtenGroepenRepository->getGroepenVoorLid($profiel),

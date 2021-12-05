@@ -3,8 +3,6 @@ import $ from 'jquery';
 import {init} from '../ctx';
 import {parseData} from '../lib/util';
 import render from './render';
-import Settings = DataTables.Settings;
-import ColumnSettings = DataTables.ColumnSettings;
 
 export interface DatatableResponse {
 	modal?: string;
@@ -15,18 +13,6 @@ export interface DatatableResponse {
 
 export interface PersistentEntity {
 	UUID: string;
-}
-
-/**
- * In de backend wordt de 'export' ortogonale data gezet.
- */
-declare global {
-	// eslint-disable-next-line @typescript-eslint/no-namespace
-	namespace DataTables {
-		interface ObjectColumnData {
-			export?: string;
-		}
-	}
 }
 
 export function isDataTableResponse(response: unknown): response is DatatableResponse {
@@ -53,10 +39,10 @@ export async function initDataTable(el: HTMLElement): Promise<void> {
 	}
 
 	// Zet de render method op de columns
-	settingsJson.columns.forEach((col: ColumnSettings) => col.render = render[col.render as string]);
+	settingsJson.columns.forEach((col: DataTables.ColumnSettings) => col.render = render[col.render as string]);
 
 	// Init DataTable
-	const table = $el.DataTable(settingsJson);
+	const table = $el.DataTable(settingsJson) as any;
 	$el.dataTable().api().search(search);
 
 	table.on('page', () => table.rows({selected: true}).deselect());
@@ -111,7 +97,7 @@ export function fnGetSelection(tableId: string): string[] {
 
 // new Api(selector: Settings) is valide, maar wordt als type niet geaccepteerd, type lijkt niet uit te breiden.
 // https://datatables.net/reference/type/DataTables.Settings
-export function getApiFromSettings(settings: Settings): DataTables.Api {
+export function getApiFromSettings(settings: DataTables.Settings): DataTables.Api {
 	return new $.fn.dataTable.Api(settings as unknown as string);
 }
 

@@ -44,6 +44,7 @@ _Je kan deze progamma's allemaal tegelijk downloaden en installeren, behalve als
   - Doe dit door "Powershell" te starten in windows en `npm install -g yarn` uit te voeren in dit venster
 - [PhpStorm](https://www.jetbrains.com/phpstorm/)
   - Een goede IDE van Jetbrains. Pro versie is gratis voor studenten, je kan activeren met je studentenmail.
+  - Als PhpStorm geen php installatie kan vinden, verwijs PhpStorm dan naar de installatie in wampserver (`C:\wamp64\bin\php\php7.3.21\php.exe`).
   - [Visual Studio Code](https://code.visualstudio.com/) is een redelijk alternatief, maar gebruikt dit alleen als je je er echt thuis in voelt.
 - OPTIONEEL: [HeidiSQL](https://www.heidisql.com/download.php)
   - Een chille sql client
