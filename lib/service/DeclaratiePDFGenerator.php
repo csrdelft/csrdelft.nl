@@ -122,7 +122,7 @@ class DeclaratiePDFGenerator
 
 //			$data = ['zip', file_get_contents($filename)];
 //			unlink($zipTmp);
-			$data = ['txt', 'Er ging iets fout bij het genereren van de PDF. Check de PDF bestanden in de declaratie.'];
+			$data = ['txt', 'Er ging iets fout bij het genereren van de PDF: ' . $e->getMessage()];
 			return $data;
 		}
 	}
