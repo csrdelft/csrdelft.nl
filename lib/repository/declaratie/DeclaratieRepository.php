@@ -47,6 +47,8 @@ class DeclaratieRepository extends AbstractRepository {
 			$this->remove($bon);
 		}
 		$this->getEntityManager()->flush();
+		$this->remove($declaratie);
+		$this->getEntityManager()->flush();
 	}
 
 	public function mijnDeclaraties(Profiel $profiel) {
