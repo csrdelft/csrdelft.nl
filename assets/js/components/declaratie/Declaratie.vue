@@ -1408,7 +1408,8 @@ export default class DeclaratieVue extends Vue {
     }
 
     &.concept {
-      color: #6a6a6a;
+      color: white;
+      background: #8e8e8e;
 
       &:hover {
         color: #4e4e4e;
@@ -1425,8 +1426,7 @@ export default class DeclaratieVue extends Vue {
     }
 
     &.concept {
-      color: white;
-      background: #8e8e8e;
+
     }
 
     &.ingediend {

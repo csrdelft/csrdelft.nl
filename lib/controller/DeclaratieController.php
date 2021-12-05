@@ -154,7 +154,7 @@ class DeclaratieController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 
-		$response = new BinaryFileResponse($filename);
+		$response = new BinaryFileResponse(DECLARATIE_PATH . $bon->getBestand());
 		$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE);
 		return $response;
 	}
