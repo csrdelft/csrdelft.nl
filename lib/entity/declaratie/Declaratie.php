@@ -438,7 +438,7 @@ class Declaratie
 			$fouten = array_merge($fouten, $bonCheck);
 		}
 
-		if (empty($this->getBonnen())) {
+		if (count($this->getBonnen()) === 0) {
 			$fouten[] = 'Voeg je bon(nen) toe';
 		}
 
