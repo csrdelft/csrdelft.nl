@@ -150,7 +150,7 @@ class Declaratie
 		return $this;
 	}
 
-	public function getCsrPas(): bool
+	public function getCsrPas(): ?bool
 	{
 		return $this->csrPas;
 	}

@@ -282,7 +282,7 @@
             class="bon-selected"
           >
             <div
-              v-if="declaratie.bonnen.length > 1 && !veldenDisabled"
+              v-if="(declaratie.bonnen.length > 1 || declaratie.status === 'concept') && !veldenDisabled"
               class="bonVerwijderen"
               @click="bonVerwijderen(bonIndex)"
             >
