@@ -433,9 +433,11 @@ class Declaratie
 			}
 		}
 
-		foreach ($this->getBonnen() as $index => $bon) {
-			$bonCheck = $bon->valideer($index);
+		$bonnummer = 1;
+		foreach ($this->getBonnen() as $bon) {
+			$bonCheck = $bon->valideer($bonnummer);
 			$fouten = array_merge($fouten, $bonCheck);
+			$bonnummer++;
 		}
 
 		if (count($this->getBonnen()) === 0) {

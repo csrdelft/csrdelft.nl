@@ -802,7 +802,11 @@ export default class DeclaratieVue extends Vue {
     for (let bon of this.declaratie.bonnen) {
       totaal += this.berekening(bon).totaalIncl;
     }
-    return totaal;
+    return this.round(totaal);
+  }
+
+  public round(toRound: number) {
+    return Math.round((toRound + Number.EPSILON) * 100) / 100;
   }
 
   public berekening(bon: Bon): { totaalExcl: number, totaalIncl: number, btw: { 0: number, 9: number, 21: number } } {
@@ -835,17 +839,13 @@ export default class DeclaratieVue extends Vue {
       }
     }
 
-    function round(toRound: number) {
-      return Math.round((toRound + Number.EPSILON) * 100) / 100;
-    }
-
     return {
-      totaalExcl: round(ret.totaalExcl),
-      totaalIncl: round(ret.totaalIncl),
+      totaalExcl: this.round(ret.totaalExcl),
+      totaalIncl: this.round(ret.totaalIncl),
       btw: {
-        0: round(ret.btw[0]),
-        9: round(ret.btw[9]),
-        21: round(ret.btw[21]),
+        0: this.round(ret.btw[0]),
+        9: this.round(ret.btw[9]),
+        21: this.round(ret.btw[21]),
       },
     };
   }
