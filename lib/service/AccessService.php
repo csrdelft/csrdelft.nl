@@ -606,8 +606,8 @@ class AccessService {
 
 					case self::PREFIX_BESTUUR:
 						if (in_array(ucfirst($gevraagd), CommissieFunctie::getEnumValues())) {
-							$gevraagd = false;
 							$role = $gevraagd;
+							$gevraagd = false;
 						}
 						if ($gevraagd) {
 							$groep = $this->em->getRepository(Bestuur::class)->get($gevraagd);
