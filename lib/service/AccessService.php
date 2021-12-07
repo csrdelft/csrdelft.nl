@@ -605,7 +605,7 @@ class AccessService {
 				switch ($prefix) {
 
 					case self::PREFIX_BESTUUR:
-						if (in_array($gevraagd, CommissieFunctie::getEnumValues())) {
+						if (in_array(ucfirst($gevraagd), CommissieFunctie::getEnumValues())) {
 							$gevraagd = false;
 							$role = $gevraagd;
 						}
