@@ -442,12 +442,16 @@
         </div>
       </div>
       <div class="voorbeeld">
-        <iframe
+        <div
           v-for="(bon,bonIndex) in declaratie.bonnen"
           v-show="geselecteerdeBon === bonIndex"
           :key="'voorbeeld-' + bonIndex"
-          :src="bon.bestandsnaam"
-        />
+          >
+          <iframe :src="bon.bestandsnaam" v-if="bon.bestandsnaam.toLowerCase().endsWith('.pdf')" />
+          <div class="imageContainer" :class="{'zoomFit': isZoomFit}" v-else>
+            <img :src="bon.bestandsnaam" alt="Bon" @click="zoomFit()">
+          </div>
+        </div>
       </div>
     </div>
 
@@ -768,6 +772,11 @@ export default class DeclaratieVue extends Vue {
   private submitting = false;
   private editing = false;
   private errors = [];
+  private isZoomFit = true;
+
+  public zoomFit() {
+    this.isZoomFit = !this.isZoomFit;
+  }
 
   private get veldenDisabled() {
     return this.submitting
@@ -1268,10 +1277,38 @@ export default class DeclaratieVue extends Vue {
     .voorbeeld {
       background: #545454;
 
+      & > div {
+        height: 100%;
+      }
+
       iframe {
         width: 100%;
         height: 100%;
         border: none;
+        border-left: 1px solid #d0d0d0;
+      }
+
+      .imageContainer {
+        width: 100%;
+        height: 400px;
+        text-align: center;
+        overflow-y: auto;
+
+        img {
+          width: 100%;
+          cursor: zoom-out;
+        }
+
+        &.zoomFit {
+          overflow-y: hidden;
+
+          img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            cursor: zoom-in;
+          }
+        }
       }
     }
   }
