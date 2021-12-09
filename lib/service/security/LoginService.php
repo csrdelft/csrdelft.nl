@@ -128,6 +128,10 @@ class LoginService {
 		return null;
 	}
 
+	public static function isExtern() {
+		return !LoginService::mag(P_LOGGED_IN);
+	}
+
 	/**
 	 * Indien de huidige gebruiker is geauthenticeerd door middel van een token in de url
 	 * worden Permissies hierdoor beperkt voor de veiligheid.

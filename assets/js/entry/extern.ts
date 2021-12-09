@@ -20,8 +20,6 @@ window.docReady = docReady;
 // Versimpelde versie van formSubmit in formulier.js
 window.formulier = {formSubmit: (event) => (event.target as HTMLFormElement).form.submit()};
 
-import('jquery').then(({default: $}) => window.$ = window.jQuery = $);
-
 docReady(async () => {
 	setTimeout(() => document.body.classList.remove('is-loading'));
 	setTimeout(() => import('./extern-defer'))

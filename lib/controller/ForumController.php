@@ -34,6 +34,7 @@ use CsrDelft\view\View;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -272,7 +273,7 @@ class ForumController extends AbstractController {
 	 * @Route("/forum/recent/{pagina<\d+>}/belangrijk", methods={"GET"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function recent($pagina = 1, $belangrijk = null) {
+	public function recent(RequestStack $requestStack, $pagina = 1, $belangrijk = null) {
 		$this->forumDradenRepository->setHuidigePagina((int)$pagina, 0);
 		$belangrijk = $belangrijk === 'belangrijk' || $pagina === 'belangrijk';
 		$deel = $this->forumDelenRepository->getRecent($belangrijk);
@@ -283,6 +284,11 @@ class ForumController extends AbstractController {
 			throw $this->createNotFoundException();
 		}
 
+		if (LoginService::isExtern()) {
+			$concept = $requestStack->getSession()->remove('forum_bericht');
+		} else {
+			$concept = $this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id);
+		}
 		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
@@ -290,7 +296,7 @@ class ForumController extends AbstractController {
 			'paging' => $aantalPaginas > 1,
 			'belangrijk' => $belangrijk ? '/belangrijk' : '',
 			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
-			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($deel)),
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($concept),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel)
 		]);
 	}
@@ -304,7 +310,7 @@ class ForumController extends AbstractController {
 	 * @Route("/forum/deel/{forum_id}/{pagina<\d+>}", methods={"GET","POST"}, defaults={"pagina"=1})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function deel(ForumDeel $deel, $pagina = 1) {
+	public function deel(RequestStack $requestStack, ForumDeel $deel, $pagina = 1) {
 		if (!$deel->magLezen()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -321,6 +327,11 @@ class ForumController extends AbstractController {
 			$this->forumDradenRepository->setHuidigePagina((int)$pagina, $deel->forum_id);
 		}
 
+		if (LoginService::isExtern()) {
+			$concept = $requestStack->getSession()->remove('forum_bericht');
+		} else {
+			$concept = $this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id);
+		}
 		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
@@ -328,7 +339,7 @@ class ForumController extends AbstractController {
 			'paging' => $paging && $this->forumDradenRepository->getAantalPaginas($deel->forum_id) > 1,
 			'belangrijk' => '',
 			'post_form_titel' => $this->forumDradenReagerenRepository->getConceptTitel($deel),
-			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($deel)),
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($concept),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDeel($deel),
 		]);
 	}
@@ -358,7 +369,7 @@ class ForumController extends AbstractController {
 	 * @Route("/forum/onderwerp/{draad_id}/{pagina}/{statistiek}", methods={"GET"}, defaults={"pagina"=null,"statistiek"=null})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function onderwerp(ForumDraad $draad, $pagina = null, $statistiek = null) {
+	public function onderwerp(RequestStack $requestStack, ForumDraad $draad, $pagina = null, $statistiek = null) {
 		if (!$draad->magLezen()) {
 			throw $this->createAccessDeniedException();
 		}
@@ -382,11 +393,16 @@ class ForumController extends AbstractController {
 			$this->forumPostsRepository->setHuidigePagina((int)$pagina, $draad->draad_id);
 		}
 
+		if (LoginService::isExtern()) {
+			$concept = $requestStack->getSession()->remove('forum_bericht');
+		} else {
+			$concept = $this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id);
+		}
 		$view = $this->render('forum/draad.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
 			'draad' => $draad,
 			'paging' => $paging && $this->forumPostsRepository->getAantalPaginas($draad->draad_id) > 1,
-			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id)),
+			'post_form_tekst' => $this->bbToProsemirror->toProseMirror($concept),
 			'reageren' => $this->forumDradenReagerenRepository->getReagerenVoorDraad($draad),
 			'categorien' => $this->forumCategorieRepository->getForumIndelingVoorLid(),
 			'gedeeld_met_opties' => $this->forumDelenRepository->getForumDelenOptiesOmTeDelen($draad->deel),
@@ -648,7 +664,7 @@ class ForumController extends AbstractController {
 	 * @Route("/forum/posten/{forum_id}/{draad_id}", methods={"POST"}, defaults={"draad_id"=null})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function posten(ForumDeel $deel, ForumDraad $draad = null) {
+	public function posten(RequestStack $requestStack, ForumDeel $deel, ForumDraad $draad = null) {
 		// post in bestaand draadje?
 		$titel = null;
 		if ($draad !== null) {
@@ -715,6 +731,7 @@ class ForumController extends AbstractController {
 			$mailadres = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			if (!email_like($mailadres)) {
 				setMelding('U moet een geldig e-mailadres opgeven!', -1);
+				$requestStack->getSession()->set('forum_bericht', $tekst);
 				return $redirect;
 			}
 			if ($filter->isSpam($mailadres)) { //TODO: logging

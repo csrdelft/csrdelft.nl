@@ -84,10 +84,12 @@ export const registerFormulierContext = async (): Promise<void> => {
 		{
 			initTimeago,
 		},
+		{default: $},
 	] = await Promise.all([
 		import('./lib/formulier'),
 		import('./lib/dropzone'),
 		import('./lib/timeago'),
+		import('jquery'),
 	]);
 
 	ctx.addHandlers({
