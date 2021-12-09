@@ -1,0 +1,80 @@
+
+
+
+
+/*===========================
+       7.GALLERY css 
+===========================*/
+
+.gallery-area {}
+
+
+.single-gallery{
+    position: relative;
+    
+    & .gallery-image{
+        & img{
+            width: 100%;
+        }
+        
+        &::before{
+            position: absolute;
+            content: '';
+            top: 0;
+            left: 0;
+            background-color: rgba(24, 99, 255, 0.9);
+            width: 100%;
+            height: 100%;
+            @include transform(scale(0.9));
+            opacity: 0;
+            @include transition(0.3s);
+        }
+    }
+    & .gallery-content{
+        position: absolute;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include transform(translate(-50%, -50%));
+        opacity: 0;
+        @include transition(0.3s);
+        
+        & a{
+            color: $white;
+            font-size: 140px;
+        }
+    }
+    
+    &:hover{
+        & .gallery-image{
+            &::before{
+                opacity: 1;
+            }
+        }
+        
+        & .gallery-content{
+            opacity: 1;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

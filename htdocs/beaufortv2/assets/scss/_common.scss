@@ -1,0 +1,379 @@
+
+
+/*===========================
+    1. COMMON css 
+===========================*/
+
+
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800');
+
+ body {
+    font-family: $poppins;
+    font-weight: normal;
+    font-style: normal;
+    color: $body-color;
+    overflow-x: hidden;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    @include box-sizing (border-box);
+}
+
+img {
+	max-width: 100%;
+}
+
+a:focus,
+input:focus,
+textarea:focus,
+button:focus {
+	text-decoration: none;
+	outline: none;
+}
+
+a:focus,
+a:hover{
+	text-decoration: none;
+}
+
+i,
+span,
+a{
+    display: inline-block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: $poppins;
+	font-weight: 600;
+	color: $heading-color;
+	margin: 0px;
+}
+
+h1 {
+	font-size: 48px;
+}
+h2 {
+	font-size: 36px;
+}
+h3 {
+	font-size: 28px;
+}
+h4 {
+	font-size: 22px;
+}
+h5 {
+	font-size: 18px;
+}
+h6 {
+	font-size: 16px;
+}
+ul,ol {
+	margin: 0px;
+	padding: 0px;
+    list-style-type: none;
+}
+
+p {
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 24px;
+	color: $body-color;
+	margin: 0px;
+}
+
+.bg_cover{
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+// others common css here
+
+
+
+/*===== All Button Style =====*/
+
+.main-btn {
+	display: inline-block;
+	font-weight: 500;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	@include user-select(none);
+	padding: 0 40px;
+	font-size: 16px;
+	line-height: 48px;
+	border-radius: 50px;
+    color: $theme-color;
+    cursor: pointer;
+    z-index: 5;
+    @include transition(0.4s);
+    background-color: $white;
+    border: 0;
+    
+    &:hover{
+        background-color: $white;
+        color: $theme-color;
+        @include box-shadow ( 0px 5px 29px 0px rgba(0,0,0,0.25));
+    }
+    
+    &.main-btn-2{
+        background: -webkit-linear-gradient(left, rgba(16,43,175,1) 0%, rgba(22,100,255,1) 50%, rgba(16,43,175,1) 100%);
+        background: -o-linear-gradient(left, rgba(16,43,175,1) 0%, rgba(22,100,255,1) 50%, rgba(16,43,175,1) 100%);
+        background: linear-gradient(to right, rgba(16,43,175,1) 0%, rgba(22,100,255,1) 50%, rgba(16,43,175,1) 100%);
+        background-size: 200% auto;
+        color: $white;
+        background-position: left center;
+        @include box-shadow ( 0px 8px 16px 0px rgba(72,127,255,0.23));
+        
+        &:hover{
+            background-position: right center;
+            color: $white;
+        }
+    }
+}
+
+
+/*===== All Section Title Style =====*/
+
+.section-title{
+    & .title{
+        font-size: 50px;
+        
+        @media #{$xs} {
+            font-size: 30px;
+        }
+    }
+    
+    & .text{
+        margin-top: 20px;
+    }
+}
+
+
+
+
+/*===== All Preloader Style =====*/
+
+.preloader{
+    /* Body Overlay */
+    position: fixed;
+    top: 0;
+    left: 0;
+    display:  table;
+    height: 100%;
+    width:  100%;
+    /* Change Background Color */
+    background: $white;
+    z-index: 99999;
+    
+    & .loader{
+        display: table-cell;
+        vertical-align:  middle;
+        text-align: center;
+        
+        & .ytp-spinner {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 64px;
+            margin-left: -32px;
+            z-index: 18;
+            pointer-events: none;
+            
+            & .ytp-spinner-container {
+                pointer-events: none;
+                position: absolute;
+                width: 100%;
+                padding-bottom: 100%;
+                top: 50%;
+                left: 50%;
+                margin-top: -50%;
+                margin-left: -50%;
+                @include animation(ytp-spinner-linspin 1568.23529647ms linear infinite);
+                
+                & .ytp-spinner-rotator {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    @include animation(ytp-spinner-easespin 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+                    
+                    & .ytp-spinner-left {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        overflow: hidden;
+                        right: 50%;
+                    }
+                    
+                    & .ytp-spinner-right {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        overflow: hidden;
+                        left: 50%;
+                    }
+                }
+            }
+        }
+        
+        & .ytp-spinner-circle {
+            box-sizing: border-box;
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            border-style: solid;
+            /* Spinner Color */
+            border-color: $theme-color $theme-color $border-color;
+            border-radius: 50%;
+            border-width: 6px;
+        }
+        
+        & .ytp-spinner-left {
+            & .ytp-spinner-circle {
+                left: 0;
+                right: -100%;
+                border-right-color: $border-color;
+                @include animation( ytp-spinner-left-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+            }
+        }
+        
+        & .ytp-spinner-right {
+            & .ytp-spinner-circle {
+                left: -100%;
+                right: 0;
+                border-left-color: $border-color;
+                @include animation(ytp-right-spin 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+            }
+        }
+    }
+}
+
+/* Preloader Animations */
+
+@-webkit-keyframes ytp-spinner-linspin {
+    to {
+        @include transform(rotate(360deg));
+    }
+}
+
+@keyframes ytp-spinner-linspin {
+    to {
+        @include transform(rotate(360deg));
+    }
+}
+
+@-webkit-keyframes ytp-spinner-easespin {
+    12.5% {
+        @include transform(rotate(135deg));
+    }
+    25% {
+        @include transform(rotate(270deg));
+    }
+    37.5% {
+        @include transform(rotate(405deg));
+    }
+    50% {
+        @include transform(rotate(540deg));
+    }
+    62.5% {
+        @include transform(rotate(675deg));
+    }
+    75% {
+        @include transform(rotate(810deg));
+    }
+    87.5% {
+        @include transform(rotate(945deg));
+    }
+    to {
+        @include transform(rotate(1080deg));
+    }
+}
+
+@keyframes ytp-spinner-easespin {
+    12.5% {
+        @include transform(rotate(135deg));
+    }
+    25% {
+        @include transform(rotate(270deg));
+    }
+    37.5% {
+        @include transform(rotate(405deg));
+    }
+    50% {
+        @include transform(rotate(540deg));
+    }
+    62.5% {
+        @include transform(rotate(675deg));
+    }
+    75% {
+        @include transform(rotate(810deg));
+    }
+    87.5% {
+        @include transform(rotate(945deg));
+    }
+    to {
+        @include transform(rotate(1080deg));
+    }
+}
+
+@-webkit-keyframes ytp-spinner-left-spin {
+    0% {
+        @include transform(rotate(130deg));
+    }
+    50% {
+        @include transform(rotate(-5deg));
+    }
+    to {
+        @include transform(rotate(130deg));
+    }
+}
+
+@keyframes ytp-spinner-left-spin {
+    0% {
+        @include transform(rotate(130deg));
+    }
+    50% {
+        @include transform(rotate(-5deg));
+    }
+    to {
+        @include transform(rotate(130deg));
+    }
+}
+
+@-webkit-keyframes ytp-right-spin {
+    0% {
+        @include transform(rotate(-130deg));
+    }
+    50% {
+        @include transform(rotate(5deg));
+    }
+    to {
+        @include transform(rotate(-130deg));
+    }
+}
+
+@keyframes ytp-right-spin {
+    0% {
+        @include transform(rotate(-130deg));
+    }
+    50% {
+        @include transform(rotate(5deg));
+    }
+    to {
+        @include transform(rotate(-130deg));
+    }
+}
+
+

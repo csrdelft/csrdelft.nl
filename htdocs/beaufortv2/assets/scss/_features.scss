@@ -1,0 +1,116 @@
+
+
+
+
+/*===========================
+      6.FEATURES css 
+===========================*/
+
+.features-area {}
+
+
+.single-features{
+    @include box-shadow ( 0px 8px 16px 0px rgba(72,127,255,0.1));
+    background-color: $white;
+    padding: 45px 20px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    position: relative;
+    z-index: 5;
+    overflow: hidden;
+    
+    &::before {
+        position: absolute;
+        content: '';
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: -webkit-linear-gradient(left, rgba(16, 43, 175, 1) 0%, rgba(22, 100, 255, 1) 100%);
+        background: -o-linear-gradient(left, rgba(16, 43, 175, 1) 0%, rgba(22, 100, 255, 1) 100%);
+        background: linear-gradient(to right, rgba(16, 43, 175, 1) 0%, rgba(22, 100, 255, 1) 100%);
+        z-index: -1;
+        opacity: 0;
+        @include transition(0.3s);
+    }
+    
+    & .features-icon{
+        position: relative;
+        display: inline-block;
+        
+        & i{
+            font-size: 75px;
+            color: $theme-color;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 5;
+            @include transform(translate(-50%, -50%));
+            @include transition(0.3s);
+        }
+        & span{
+            font-size: 124px;
+            color: $heading-color;
+            line-height: 100px;
+            opacity: 0.08;
+            @include transition(0.3s);
+            font-weight: 600;
+        }
+    }
+    & .features-content{
+        padding-top: 5px;
+        position: relative;
+        z-index: 9;
+        
+        & .features-title{
+            & a{
+                font-size: 24px;
+                color: $heading-color;
+                @include transition(0.3s);
+            }
+        }
+        & .text{
+            margin-top: 25px;
+            @include transition(0.3s);
+        }
+    }
+    
+    &:hover{
+        &::before{
+            opacity: 1;
+        }
+        
+        & .features-icon{
+            & i,
+            & span{
+                color: $white;
+            }
+        }
+        
+        & .features-content{
+            & .features-title{
+                & a{
+                    color: $white;
+                }
+            }
+            & .text{
+                color: $white;
+            }
+        }
+    }    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,56 @@
+/*===========================
+       4.COUNTER css 
+===========================*/
+
+.counter-area{
+    background-image: url(../images/dots.jpg);
+    background-repeat: repeat
+}
+
+
+
+.single-counter{
+    background-color: $gray;
+    border: 2px solid $border-color;
+    padding: 0 15px 15px;
+    
+    & .counter-icon{
+        position: relative;
+        margin-top: -50px;
+        
+        & i{
+            font-size: 65px;
+            color: $theme-color;
+            background-color: $gray;
+            border: 2px solid $border-color;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            border-radius: 50%;
+        }
+    }
+    & .counter-content{
+        & .count{
+            font-size: 45px;
+            color: $theme-color;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        & .text{
+            font-weight: 500;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,50 @@
+/*===========================
+       3.ABOUT css 
+===========================*/
+
+.about-area{
+    
+}
+
+.about-image{
+    & img{
+        width: 100%;
+    }
+}
+
+.about-content{
+    & .text{}
+    
+    & .date{
+        font-size: 18px;
+        font-weight: 600;
+        color: $heading-color;
+        margin-top: 45px;
+        
+        & span{
+            font-size: 30px;
+            color: $theme-color;
+            position: relative;
+            padding-left: 15px;
+            
+            &::before{
+                position: absolute;
+                content: '';
+                width: 55px;
+                height: 55px;
+                border: 6px solid rgba(24, 99, 255, 0.18);
+                top: -18px;
+                left: 0;
+            }
+            
+            & sup{
+                
+            }
+        }
+    }
+}
+
+
+
+
+

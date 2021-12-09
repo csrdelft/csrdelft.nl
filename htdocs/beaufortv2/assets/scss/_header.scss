@@ -1,0 +1,332 @@
+/*===========================
+    2.HEADER css 
+===========================*/
+
+.header-area{
+    padding-left: 15px;
+    padding-right: 15px;
+    
+    @media #{$xs} {
+        padding: 0;
+    }
+}
+
+/*===== Navbar =====*/
+
+.navbar-area {
+    padding: 10px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    @include transition(0.3s);
+    
+    &::before{
+        position: absolute;
+        content: '';
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(16, 43, 175, 1) 0%, rgba(22, 100, 255, 1) 100%);
+        top: 0;
+        left: 0;
+        z-index: -1;
+        opacity: 0;
+        @include transition(0.3s);
+    }
+    
+    &.sticky{
+        position: fixed;
+        z-index: 999;
+        
+        &::before{
+            opacity: 1;
+        }        
+    }
+    
+    & .navbar {
+        position: relative;
+        padding: 0;
+
+        & .navbar-toggler {
+            & .toggler-icon {
+                width: 30px;
+                height: 2px;
+                background-color: $white;
+                margin: 5px 0;
+                display: block;
+                position: relative;
+                @include transition(0.3s);
+            }
+
+            &.active {
+                & .toggler-icon {
+                    &:nth-of-type(1) {
+                        @include transform(rotate(45deg));
+                        top: 7px;
+                    }
+
+                    &:nth-of-type(2) {
+                        opacity: 0;
+                    }
+
+                    &:nth-of-type(3) {
+                        @include transform(rotate(135deg));
+                        top: -7px;
+                    }
+                }
+            }
+        }
+
+        & .navbar-collapse {
+            @media #{$md} {
+                position: absolute;
+                top: 116%;
+                left: 0;
+                width: 100%;
+                background-color: $theme-color;
+                z-index: 8;
+            }
+
+            @media #{$xs} {
+                position: absolute;
+                top: 116%;
+                left: 0;
+                width: 100%;
+                background-color: $theme-color;
+                z-index: 8;
+            }
+        }
+
+        & .navbar-nav {
+            & .nav-item {
+                margin: 0 16px;
+                position: relative;
+
+                & a {
+                    font-size: 16px;
+                    line-height: 24px;
+                    font-weight: 500;
+                    padding: 26px 0;
+                    color: $white;
+                    position: relative;
+                    @include transition(0.3s);
+                    
+                    &::before{
+                        position: absolute;
+                        content: '';
+                        width: 0;
+                        height: 2px;
+                        background-color: $white;
+                        left: 0;
+                        bottom: 20px;
+                        @include transition(0.3s);
+                        
+                        @media #{$md} {
+                            display: none;
+                        }
+                        @media #{$xs} {
+                            display: none;
+                        }
+                    }
+
+                    @media #{$md} {
+                        padding: 10px 0;
+                        display: block;
+                    }
+
+                    @media #{$xs} {
+                        padding: 10px 0;
+                        display: block;
+                    }
+                }
+
+                &.active,
+                &:hover {
+                    & > a {
+                        
+                        &::before{
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        & .navbar-btn {
+
+            @media #{$md} {
+                position: absolute;
+                right: 70px;
+                top: 7px;
+            }
+
+            @media #{$xs} {
+                position: absolute;
+                right: 60px;
+                top: 7px;
+            }
+            
+            & .main-btn{
+                &:hover{
+                    
+                    background-color: $white;
+                    color: $theme-color;
+                }
+            }
+        }
+    }
+}
+
+
+/*===== Header =====*/
+
+.header-content-area {
+    height: 750px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    position: relative;
+    overflow: hidden;
+    
+    @media #{$desktop} {
+        height: 850px;
+    }
+    @media #{$xs} {
+        height: 650px;
+    }
+    @media #{$sm} {
+        height: 550px;
+    }
+    
+    &::before{
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: -webkit-linear-gradient(left, rgba(16,43,175,0.2) 0%, rgba(22,100,255,0.2) 100%);
+        background: -o-linear-gradient(left, rgba(16,43,175,0.2) 0%, rgba(22,100,255,0.2) 100%);
+        background: linear-gradient(to right, rgba(16,43,175,0.2) 0%, rgba(22,100,255,0.2) 100%);
+    }
+    
+}
+
+
+.header-countdown{
+    & .single-count-content{
+        padding: 0 45px;
+        text-align: center;
+        
+        @media #{$xs} {
+            padding: 0 10px;
+        }
+        @media #{$sm} {
+            padding: 0 15px;
+        }
+        
+        & .count{
+            font-size: 72px;
+            font-weight: 600;
+            line-height: 60px;
+            
+            @media #{$xs}{
+                font-size: 24px;
+                line-height: 30px;
+            }
+            @media #{$sm}{
+                font-size: 36px;
+                line-height: 40px;
+            }
+        }
+        & .text{
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 10px;
+            
+            @media #{$xs} {
+                font-size: 14px;
+                margin-top: 0;
+            }
+            @media #{$sm} {
+                font-size: 18px;
+                margin-top: 0;
+            }
+        }
+        
+        &.count-color-1{
+            & .count,
+            & .text{
+                color: #ee163a;
+            }
+        }
+        &.count-color-2{
+            & .count,
+            & .text{
+                color: #ffc107;
+            }
+        }
+        &.count-color-3{
+            & .count,
+            & .text{
+                color: #03a9f4;
+            }
+        }
+        &.count-color-4{
+            & .count,
+            & .text{
+                color: #8bc34a;
+            }
+        }
+    }
+}
+
+
+.header-content{
+    margin-top: 60px;
+    
+    & .header-title{
+        font-size: 75px;
+        color: $white;
+        text-transform: uppercase;
+        
+        @media #{$lg} {
+            font-size: 60px;
+        }
+        @media #{$md} {
+            font-size: 54px;
+        }
+        @media #{$xs} {
+            font-size: 30px;
+        }
+    }
+    
+    & .sub-title{
+        font-size: 30px;
+        font-weight: 500;
+        color: $white;
+        text-transform: uppercase;
+        margin-top: 22px;
+        
+        @media #{$xs} {
+            font-size: 20px;
+        }
+    }
+    
+    & .header-btn{
+        padding-top: 50px;
+        
+        & li{
+            display: inline-block;
+            margin: 10px 13px 0;
+        }
+    }
+}
+
+
+
+
+
+
+
+
