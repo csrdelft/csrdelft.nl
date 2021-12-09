@@ -31,7 +31,7 @@ export const lazyLoad = (selector: string): void => {
 		}
 	}
 
-	if (document.body.scrollTop == 0) {
+	if (window.scrollY === 0) {
 		const listener = () => {
 			load();
 			document.removeEventListener('scroll', listener);
