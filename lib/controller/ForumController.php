@@ -287,7 +287,7 @@ class ForumController extends AbstractController {
 		if (LoginService::isExtern()) {
 			$concept = $requestStack->getSession()->remove('forum_bericht');
 		} else {
-			$concept = $this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id);
+			$concept = $this->forumDradenReagerenRepository->getConcept($deel);
 		}
 		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
@@ -330,7 +330,7 @@ class ForumController extends AbstractController {
 		if (LoginService::isExtern()) {
 			$concept = $requestStack->getSession()->remove('forum_bericht');
 		} else {
-			$concept = $this->forumDradenReagerenRepository->getConcept($draad->deel, $draad->draad_id);
+			$concept = $this->forumDradenReagerenRepository->getConcept($deel);
 		}
 		return $this->render('forum/deel.html.twig', [
 			'zoekform' => new ForumSnelZoekenForm(),
@@ -352,11 +352,11 @@ class ForumController extends AbstractController {
 	 * @Route("/forum/reactie/{post_id}", methods={"GET"})
 	 * @Auth(P_PUBLIC)
 	 */
-	public function reactie(ForumPost $post) {
+	public function reactie(RequestStack $requestStack, ForumPost $post) {
 		if ($post->verwijderd) {
 			setMelding('Deze reactie is verwijderd', 0);
 		}
-		return $this->onderwerp($post->draad, $this->forumPostsRepository->getPaginaVoorPost($post));
+		return $this->onderwerp($requestStack, $post->draad, $this->forumPostsRepository->getPaginaVoorPost($post));
 	}
 
 	/**
