@@ -12,18 +12,30 @@ import {selectAll} from "./dom";
 export const lazyLoad = (selector: string): void => {
 	const textarea = document.createElement('textarea');
 
-	for (const element of selectAll(selector)) {
-		// setTimeout om lazy-load blokken na elkaar te laden ipv allemaal tegelijk.
-		setTimeout(() => {
-			const innerHTML = element.innerHTML.trim();
+	const load = () => {
+		for (const element of selectAll(selector)) {
+			// setTimeout om lazy-load blokken na elkaar te laden ipv allemaal tegelijk.
+			setTimeout(() => {
+				const innerHTML = element.innerHTML.trim();
 
-			// Sommige browsers encoden de inhoud van de noscript tag.
-			if (innerHTML.startsWith('&lt;')) {
-				textarea.innerHTML = innerHTML;
-				element.outerHTML = textarea.value;
-			} else {
-				element.outerHTML = innerHTML;
-			}
-		});
+				// Sommige browsers encoden de inhoud van de noscript tag.
+				if (innerHTML.startsWith('&lt;')) {
+					textarea.innerHTML = innerHTML;
+					element.outerHTML = textarea.value;
+				} else {
+					element.outerHTML = innerHTML;
+				}
+			});
+		}
+	}
+
+	if (document.body.scrollTop == 0) {
+		const listener = () => {
+			load();
+			document.removeEventListener('scroll', listener);
+		}
+		document.addEventListener('scroll', listener)
+	} else {
+		load();
 	}
 }
