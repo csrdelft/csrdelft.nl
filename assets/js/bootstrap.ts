@@ -117,6 +117,7 @@ Dropzone.autoDiscover = false;
 	]);
 
 	docReady(() => {
+		window.refreshFsLightbox();
 		initSluitMeldingen();
 		init(document.body);
 		const modalEl = document.getElementById("modal")

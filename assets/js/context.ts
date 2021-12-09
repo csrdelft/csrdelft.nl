@@ -36,7 +36,7 @@ export const registerBbContext = async (): Promise<void> => {
 	} = await import('./lib/bbcode');
 
 	ctx.addHandlers({
-		'div.bb-img-loading': loadBbImage,
+		'.bb-img-loading': loadBbImage,
 	});
 };
 

@@ -41,17 +41,17 @@ class FotoBBView implements ToResponse, View {
 			$html .= 'responsive';
 		}
 		if (!$this->groot AND lid_instelling('forum', 'fotoWeergave') == 'boven bericht') {
-			$html .= ' hoverIntent"><div class="hoverIntentContent"><div class="bb-img-loading" src="' . $this->model->getResizedUrl() . '"></div></div>';
+			$html .= ' hoverIntent"><div class="hoverIntentContent"><span class="bb-img-loading" data-src="' . $this->model->getResizedUrl() . '"></span></div>';
 		} else {
 			$html .= '">';
 		}
-		$html .= '<div class="bb-img-loading" src="';
+		$html .= '<div class="bb-img-loading" data-src="';
 		if (($this->groot AND lid_instelling('forum', 'fotoWeergave') != 'nee') OR lid_instelling('forum', 'fotoWeergave') == 'in bericht') {
 			$html .= $this->model->getResizedUrl();
 		} else {
 			$html .= $this->model->getThumbUrl();
 		}
-		$html .= '"></div></a>';
+		$html .= '"></span>';
 		return $html;
 	}
 

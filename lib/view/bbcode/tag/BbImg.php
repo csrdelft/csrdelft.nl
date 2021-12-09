@@ -77,10 +77,9 @@ class BbImg extends BbTag
 			]);
 		}
 
-		return vsprintf("<div class=\"bb-img-loading\" bb-href= \"%s\" src= \"%s\" title=\"%s\" style=\"%s\"></div>", [
+		return vsprintf("<a href=\"%s\" data-fslightbox><span class=\"bb-img-loading\" data-src=\"%s\" style=\"%s\"></span></a>", [
 			$this->getLinkUrl(),
 			$this->getSourceUrl(),
-			htmlspecialchars($this->getSourceUrl()),
 			$style
 		]);
 	}
