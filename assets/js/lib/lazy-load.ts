@@ -25,6 +25,8 @@ export const lazyLoad = (selector: string): void => {
 				} else {
 					element.outerHTML = innerHTML;
 				}
+
+				window.refreshFsLightbox();
 			});
 		}
 	}

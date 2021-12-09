@@ -3171,6 +3171,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"fslightbox@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "fslightbox@npm:3.3.1"
+  checksum: 831610efe3f84982106c9d266b4100e816b885478e5f86ff5e4b28b371a1ea809e0200ce08058dbd7fc0d2870433b401ddd616ab1c8b608f5508b26ef2eae9e3
+  languageName: node
+  linkType: hard
+
 "function-bind@npm:^1.1.1":
   version: 1.1.1
   resolution: "function-bind@npm:1.1.1"
@@ -4046,13 +4053,6 @@ fsevents@~2.3.1:
   dependencies:
     immediate: ~3.0.5
   checksum: 6c758fbea382ca251d8f6f32b4066b4c57b4c5d574babc7c6abf7bd20e522a54bcd364dd95d6695103b189a005fcaf9e55d7c58a6c243d4ebdd0cc803898c8bd
-  languageName: node
-  linkType: hard
-
-"lightbox2@npm:^2.10.0":
-  version: 2.11.1
-  resolution: "lightbox2@npm:2.11.1"
-  checksum: 1958af5704182d8218452edc31b36f2db10586b008c899fcaa2d5229727ff98f19c0c4ffa42e17369e25a29319d37d0d1e7f0551507dcec8310be2f06441c7d9
   languageName: node
   linkType: hard
 
@@ -5950,6 +5950,7 @@ resolve@^1.9.0:
     eslint-loader: ^4.0.2
     eslint-plugin-vue: ^7.9.0
     flatpickr: ^4.6.6
+    fslightbox: ^3.3.1
     get-video-id: ^3.2.0
     google-palette: ^1.1.0
     hammerjs: ^2.0.8
@@ -5962,7 +5963,6 @@ resolve@^1.9.0:
     jquery.scrollto: ^2.1.2
     jqueryui: ^1.11.1
     jszip: ^3.1.5
-    lightbox2: ^2.10.0
     mini-css-extract-plugin: ^1.6.1
     moment: ^2.24.0
     moment-locales-webpack-plugin: ^1.2.0

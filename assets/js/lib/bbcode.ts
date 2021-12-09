@@ -29,9 +29,10 @@ export const loadBbImage = async (el: HTMLElement): Promise<void> => {
 			parent.replaceChild(content, el);
 		} else {
 			const targetUrl = el.getAttribute('bb-href') == null ? el.getAttribute('src') : el.getAttribute('bb-href');
-			const link = html`<a class="lightbox-link" href="${targetUrl}" data-lightbox="page-lightbox"></a>`;
+			const link = html`<a class="lightbox-link" href="${targetUrl}" data-fslightbox="page-lightbox"></a>`;
 			link.appendChild(content);
 			parent.replaceChild(link, el);
+			window.refreshFsLightbox();
 		}
 	} catch {
 		el.replaceWith(html`<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-triangle"></i> Afbeelding kan niet geladen worden.</div>`)

@@ -43,7 +43,7 @@ require('jquery-ui/ui/widgets/slider');
 require('./lib/external/jquery.contextMenu');
 require('raty-js');
 require('jquery.maskedinput');
-require('lightbox2');
+require('fslightbox');
 require('corejs-typeahead/dist/typeahead.jquery.js');
 
 declare global {

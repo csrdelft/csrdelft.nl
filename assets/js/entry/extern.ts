@@ -8,6 +8,7 @@ declare global {
 		jQuery: JQueryStatic;
 		formulier: Formulier;
 		docReady: (fn: () => void) => void;
+		refreshFsLightbox: () => void;
 	}
 
 	interface Formulier {
