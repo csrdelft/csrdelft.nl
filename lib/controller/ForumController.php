@@ -259,8 +259,8 @@ class ForumController extends AbstractController {
 	 * @Route("/forum/belangrijk/{pagina<\d+>}", methods={"GET"}, defaults={"pagina"=1})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function belangrijk(int $pagina = 1) {
-		return $this->recent($pagina, 'belangrijk');
+	public function belangrijk(RequestStack $requestStack, int $pagina = 1) {
+		return $this->recent($requestStack, $pagina, 'belangrijk');
 	}
 
 	/**
