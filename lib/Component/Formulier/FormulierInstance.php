@@ -115,11 +115,15 @@ class FormulierInstance {
 	}
 
 	protected function getScriptTag() {
+		$js = $this->getJavascript();
+		if (trim($js) == "") {
+			return "";
+		}
 		return <<<HTML
 <script type="text/javascript">
 docReady(function() {
 	var form = document.getElementById('{$this->formId}');
-	{$this->getJavascript()}
+	{$js}
 });
 </script>
 HTML;

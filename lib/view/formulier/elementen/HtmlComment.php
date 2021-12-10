@@ -38,10 +38,7 @@ class HtmlComment implements FormElement {
 	}
 
 	public function getJavascript() {
-		return <<<JS
-
-/* {$this->getTitel()} */
-JS;
+		return "";
 	}
 
 	public function getTitel() {

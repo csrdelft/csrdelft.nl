@@ -423,10 +423,7 @@ abstract class InputField implements FormElement, Validator {
 	 * formatItem geneert html-items voor de suggestielijst, afstemmen op data-array
 	 */
 	public function getJavascript() {
-		$js = <<<JS
-
-/* {$this->name} */
-JS;
+		$js = "";
 		if ($this->readonly) {
 			return $js;
 		}
@@ -589,6 +586,10 @@ $('#{$this->getId()}').on('typeahead:select', function (event, suggestion, datas
 });
 JS;
 		}
+		if (trim($js) == "") {
+			return "";
+		}
+
 		return $js;
 	}
 
