@@ -38,8 +38,12 @@
 		<!-- One -->
 		<section id="one" class="wrapper first kleur1">
 			<div class="inner">
-				<span class="image"><img src="/fotoalbum/Publiek/Voorpagina/_resized/CSR_Delft.jpg"
-																 alt="Foto vereniging"/></span>
+				<span class="image">
+					<picture>
+						<source srcset="/images/CSR_Delft-2x.jpg" media="(min-width: 1280px)">
+						<img alt="Foto vereniging" src="/images/CSR_Delft.jpg" />
+					</picture>
+				</span>
 				<div class="content">
 					<h2 class="major">{% trans %}C.S.R. Delft{% endtrans %}</h2>
 					<p>{% trans with {"{leeftijd}": vereniging_leeftijd()} %}De Civitas Studiosorum Reformatorum is een bruisende, actieve, christelijke studentenvereniging in
