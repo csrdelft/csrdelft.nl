@@ -64,7 +64,7 @@ class RechtenGroepenRepository extends GroepRepository {
 			$result[] = 'bestuur';
 		}
 		foreach ($this->groepLidRepository->findBy(['uid' => $uid]) as $commissielid) {
-			$commissie = $this->commissiesRepository->get($commissielid->groep_id);
+			$commissie = $commissielid->groep;
 			if ($commissie->status === GroepStatus::HT() OR $commissie->status === GroepStatus::FT()) {
 				$result[] = $commissie->familie;
 			}
