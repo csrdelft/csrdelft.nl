@@ -122,7 +122,8 @@
 		],
 		"startup": [
 			"Composer\\Config::disableProcessTimeout",
-			"@composer install"
+			"@composer install",
+			"@migrate"
 		],
 		"update-dev": [
 			"@composer install",

@@ -68,14 +68,10 @@ abstract class InputField implements FormElement, Validator {
 	public $onkeydown = null; // prevent illegal character from being entered
 	public $onkeyup = null; // respond to keyboard strokes
 	public $typeahead_selected = null; // callback gekozen suggestie
-	public $max_len = null; // maximale lengte van de invoer
-	public $min_len = null; // minimale lengte van de invoer
-	public $rows = 0; // aantal rijen van textarea
 	public $css_classes = ['FormElement', 'form-control']; // array met classnames die later in de class-tag komen
 	public $suggestions = array(); // lijst van search providers
 	public $blacklist = null; // array met niet tegestane waarden
 	public $whitelist = null; // array met exclusief toegestane waarden
-	public $pattern = null; // html5 input validation pattern
 	public $autoselect = false; // selecteer autoaanvullen automatisch
 
 
@@ -155,30 +151,22 @@ abstract class InputField implements FormElement, Validator {
 	public function validate() {
 		if (!$this->isPosted()) {
 			$this->error = 'Veld is niet gepost';
-		} elseif ($this->readonly AND $this->value != $this->origvalue) {
+		} elseif ($this->readonly && $this->value != $this->origvalue) {
 			$this->error = 'Dit veld mag niet worden aangepast';
-		} elseif ($this->value == '' AND $this->required) {
+		} elseif ($this->value == '' && $this->required) {
 			// vallen over lege velden als dat aangezet is voor het veld
-			if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
+			if ($this->leden_mod && LoginService::mag(P_LEDEN_MOD)) {
 				// tenzij gebruiker P_LEDEN_MOD heeft en deze optie aan staat voor dit veld
 			} else {
 				$this->error = 'Dit is een verplicht veld';
 			}
 		}
-		// als max_len is gezet dan checken of de lengte er niet boven zit
-		if (is_int($this->max_len) AND strlen($this->value) > $this->max_len) {
-			$this->error = 'Dit veld mag maximaal ' . $this->max_len . ' tekens lang zijn';
-		}
-		// als min_len is gezet dan checken of de lengte er niet onder zit
-		if (is_int($this->min_len) AND strlen($this->value) < $this->min_len) {
-			$this->error = 'Dit veld moet minimaal ' . $this->min_len . ' tekens lang zijn';
-		}
 		// als blacklist is gezet dan controleren
-		if (is_array($this->blacklist) AND in_array_i($this->value, $this->blacklist)) {
+		if (is_array($this->blacklist) && in_array_i($this->value, $this->blacklist)) {
 			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
 		}
 		// als whitelist is gezet dan controleren
-		if (is_array($this->whitelist) AND !in_array_i($this->value, $this->whitelist)) {
+		if (is_array($this->whitelist) && !in_array_i($this->value, $this->whitelist)) {
 			$this->error = 'Deze waarde is niet toegestaan: ' . htmlspecialchars($this->value);
 		}
 		return $this->error === '';
@@ -242,7 +230,7 @@ abstract class InputField implements FormElement, Validator {
 		if (!empty($this->description)) {
 			$required = '';
 			if ($this->required) {
-				if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
+				if ($this->leden_mod && LoginService::mag(P_LEDEN_MOD)) {
 					// exception for leden mod
 				} else {
 					$required = '<span class="field-required">*</span>';
@@ -279,7 +267,7 @@ abstract class InputField implements FormElement, Validator {
 	 */
 	protected function getCssClasses() {
 		if ($this->required) {
-			if ($this->leden_mod AND LoginService::mag(P_LEDEN_MOD)) {
+			if ($this->leden_mod && LoginService::mag(P_LEDEN_MOD)) {
 				// exception for leden mod
 			} else {
 				$this->css_classes[] = 'required';
@@ -339,25 +327,9 @@ abstract class InputField implements FormElement, Validator {
 					return 'placeholder="' . $this->placeholder . '"';
 				}
 				break;
-			case 'maxlength':
-				if (is_int($this->max_len)) {
-					return 'maxlength="' . $this->max_len . '"';
-				}
-				break;
-			case 'rows':
-				if (is_int($this->rows)) {
-					return 'rows="' . $this->rows . '"';
-				}
-				break;
-
 			case 'autocomplete':
-				if (!$this->autocomplete OR !empty($this->suggestions)) {
+				if (!$this->autocomplete || !empty($this->suggestions)) {
 					return 'autocomplete="off"'; // browser autocompete
-				}
-				break;
-			case 'pattern':
-				if ($this->pattern) {
-					return 'pattern="' . $this->pattern . '"';
 				}
 				break;
 			case 'step':
@@ -485,13 +457,6 @@ JS;
 		foreach ($this->suggestions as $name => $source) {
 			$dataset[$name] = uniqid_safe($this->name);
 
-			$js .= <<<JS
-
-var {$dataset[$name]} = new Bloodhound({
-	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-	queryTokenizer: Bloodhound.tokenizers.whitespace,
-	limit: 5,
-JS;
 			if (is_array($source)) {
 				$suggestions = array_values($source);
 				foreach ($suggestions as $i => $suggestion) {
@@ -500,22 +465,29 @@ JS;
 					}
 				}
 				$json = json_encode($suggestions);
-				$js .= <<<JS
+				$sourceJs = <<<JS
 
 	local: {$json}
 
 JS;
 			} else {
-				$js .= <<<JS
+				$sourceJs = <<<JS
 
 	remote: {
-    	url:"{$source}%QUERY",
+    url:"{$source}%QUERY",
 		wildcard: '%QUERY'
 	}
 
 JS;
 			}
+
 			$js .= <<<JS
+
+var {$dataset[$name]} = new Bloodhound({
+	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+	queryTokenizer: Bloodhound.tokenizers.whitespace,
+	limit: 5,
+	$sourceJs
 });
 JS;
 		}
@@ -526,23 +498,20 @@ JS;
 				'autoselect' => $this->autoselect,
 			]);
 
-			$js .= <<<JS
+			$suggestionsJs = '';
 
-$('#{$this->getId()}').typeahead($typeaheadOptions
-JS;
-		}
-		foreach ($this->suggestions as $name => $source) {
-			if (is_int($name)) {
-				$header = '';
-			} else {
-				$header = 'header: "<h3 class=\"tt-header\">' . $name . '</h3>",';
-			}
-			if (array_search('clicktogo', $this->css_classes)) {
-				$clicktogo = '';
-			} else {
-				$clicktogo = ' onclick="event.preventDefault();return false;"';
-			}
-			$js .= <<<JS
+			foreach ($this->suggestions as $name => $source) {
+				if (is_int($name)) {
+					$header = '';
+				} else {
+					$header = 'header: "<h3 class=\"tt-header\">' . $name . '</h3>",';
+				}
+				if (array_search('clicktogo', $this->css_classes)) {
+					$clicktogo = '';
+				} else {
+					$clicktogo = ' onclick="event.preventDefault();return false;"';
+				}
+				$suggestionsJs .= <<<JS
 , {
 	name: "{$dataset[$name]}",
 	display: "value",
@@ -568,10 +537,11 @@ JS;
 	}
 }
 JS;
-		}
-		if (!empty($this->suggestions)) {
+			}
+
 			$js .= <<<JS
-);
+
+$('#{$this->getId()}').typeahead($typeaheadOptions$suggestionsJs);
 JS;
 			$this->typeahead_selected .= <<<JS
 
