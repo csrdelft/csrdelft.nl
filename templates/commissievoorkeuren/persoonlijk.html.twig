@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+	<h1>Commissievoorkeuren</h1>
+
+	<p>Hier kunt u per commissie opgeven of u daar interesse in heeft!</p>
+
+	{{ form_start(form) }}
+
+	{% set title = "" %}
+	{% for voorkeur in form.voorkeuren %}
+		{% if voorkeur.categorieNaam.vars.value != title %}
+		{% set title = voorkeur.categorieNaam.vars.value %}
+		<h2>{{ title }}</h2>
+		{% endif %}
+		<div class="mb-3">
+			{{ form_label(voorkeur.voorkeur, voorkeur.commissieNaam.vars.value) }}
+			{{ form_widget(voorkeur.voorkeur) }}
+			{{ form_widget(voorkeur.categorieNaam) }}
+			{{ form_widget(voorkeur.commissieNaam) }}
+		</div>
+	{% endfor %}
+
+	{{ form_row(form.opmerking) }}
+	{{ form_row(form.opslaan) }}
+	{{ form_end(form) }}
+{% endblock %}
+
+{% block breadcrumbs %}
+
+{% endblock %}
+

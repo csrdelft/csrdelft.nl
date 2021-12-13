@@ -62,6 +62,14 @@ class VoorkeurVoorkeur {
 	 */
 	public $commissie;
 
+	public function getCommissieNaam() {
+		return $this->commissie->naam;
+	}
+
+	public function getCategorieNaam() {
+		return $this->commissie->categorie->naam;
+	}
+
 	/**
 	 * cid is onderdeel van primary key en moet dus gezet zijn bij saven.
 	 *

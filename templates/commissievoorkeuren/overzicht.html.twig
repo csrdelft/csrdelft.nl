@@ -30,7 +30,10 @@
 	{% endfor %}
 </div>
 <div class="col-md-6">
-	{{ categorieFormulier | raw }}
-	{{ commissieFormulier | raw }}
+	<h2>Categorie toevoegen</h2>
+	{{ form(categorieFormulier) }}
+
+	<h2>Commissie toevoegen</h2>
+	{{ form(commissieFormulier) }}
 </div>
 {% endblock %}

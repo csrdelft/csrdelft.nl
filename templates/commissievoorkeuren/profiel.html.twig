@@ -29,7 +29,7 @@
 		{% endfor %}
 	</table>
 	<h3>Opmerkingen van lid</h3>
-	<p>{{ lidOpmerking }}</p>
+	<textarea readonly="" class="form-control">{{ lidOpmerking }}</textarea>
 	<h3>Opmerkingen van praeses</h3>
-	{{ opmerkingForm | raw }}
+	{{ form(opmerkingForm) }}
 {% endblock %}
