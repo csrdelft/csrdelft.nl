@@ -11,11 +11,15 @@ class AutocompleteField extends TextField
 	 */
 	public $suggestions = [];
 
-	public function __construct($name, $value, $description)
+	public function __construct($name, $value, $description, $clicktogo = false)
 	{
 		parent::__construct($name, $value, $description);
 
 		$this->css_classes[] = 'autocomplete-field';
+
+		if ($clicktogo) {
+			$this->css_classes[] = 'clicktogo';
+		}
 	}
 
 

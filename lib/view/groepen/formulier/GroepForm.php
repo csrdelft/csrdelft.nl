@@ -57,7 +57,7 @@ class GroepForm extends ModalForm {
 
 		$fields['oudId']->hidden = true;
 
-		$fields['familie'] = new AutocompleteField('familie', $this->model->familie, $fields['familie']->description);
+		$fields['familie'] = new AutocompleteField('familie', $this->model->familie, $fields['familie']->description, false);
 		$fields['familie']->title = 'Vul hier een \'achternaam\' in zodat de juiste ketzers elkaar opvolgen';
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
 		$fields['omschrijving']->description = 'Meer lezen';

@@ -326,7 +326,7 @@ export const initAutocompleteField = (el: HTMLElement): void => {
 				suggestion: function (suggestion) {
 					return `
 <p${suggestion.title ? ' title="' + suggestion.title + '"' : ""}>
-<a class="suggestionUrl" href="${suggestion.url}"${clicktogo ? '' : ' onclick="event.preventDefault();return false;"'}>
+<a class="suggestionUrl" ${clicktogo ? ` href="${suggestion.url}"` : ` onclick="event.preventDefault();return false;"`}>
 ${suggestion.icon ? suggestion.icon : ""}
 ${suggestion.value}
 ${suggestion.label ? `<span class="lichtgrijs"> - ${suggestion.label}</span>` : ""}
@@ -345,10 +345,12 @@ ${suggestion.label ? `<span class="lichtgrijs"> - ${suggestion.label}</span>` : 
 
 	$(el).on('typeahead:select', function (event, suggestion, dataset) {
 		$(this).trigger('change')
-		if (suggestion) {
-			window.location.href = suggestion.url;
-		} else {
-			formSubmit(event as unknown as Event);
+		if (clicktogo) {
+			if (suggestion) {
+				window.location.href = suggestion.url;
+			} else {
+				formSubmit(event as unknown as Event);
+			}
 		}
 	});
 }

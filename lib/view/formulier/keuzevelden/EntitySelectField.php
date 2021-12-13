@@ -32,12 +32,11 @@ class EntitySelectField extends InputField {
 	public function __construct($name, $value, $description, $entityType) {
 		$this->css_classes = ['FormElement', 'form-select'];
 
-		parent::__construct($name, $value ? $value->getId() : null, $description);
-
 		if (!in_array(ISelectEntity::class, class_implements($entityType))) {
 			throw new CsrException($entityType . " implementeerd niet ISelectEntity");
 		}
 
+		parent::__construct($name, $value ? $value->getId() : null, $description);
 
 		$this->entityType = $entityType;
 		$doctrine = ContainerFacade::getContainer()->get('doctrine');
