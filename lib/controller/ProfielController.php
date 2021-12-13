@@ -4,13 +4,19 @@ namespace CsrDelft\controller;
 
 use CsrDelft\common\Annotation\Auth;
 use CsrDelft\common\Annotation\CsrfUnsafe;
+use CsrDelft\common\ContainerFacade;
 use CsrDelft\common\CsrException;
+use CsrDelft\entity\commissievoorkeuren\CommissieVoorkeuren;
+use CsrDelft\entity\commissievoorkeuren\VoorkeurOpmerking;
 use CsrDelft\entity\fotoalbum\Foto;
 use CsrDelft\entity\groepen\enum\GroepStatus;
 use CsrDelft\entity\profiel\Profiel;
 use CsrDelft\model\entity\LidStatus;
 use CsrDelft\repository\bibliotheek\BoekExemplaarRepository;
 use CsrDelft\repository\bibliotheek\BoekRecensieRepository;
+use CsrDelft\repository\commissievoorkeuren\CommissieVoorkeurRepository;
+use CsrDelft\repository\commissievoorkeuren\VoorkeurCommissieRepository;
+use CsrDelft\repository\commissievoorkeuren\VoorkeurOpmerkingRepository;
 use CsrDelft\repository\corvee\CorveeKwalificatiesRepository;
 use CsrDelft\repository\corvee\CorveeTakenRepository;
 use CsrDelft\repository\corvee\CorveeVoorkeurenRepository;
@@ -36,6 +42,8 @@ use CsrDelft\service\GoogleSync;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenForm;
+use CsrDelft\view\commissievoorkeuren\CommissieVoorkeurenType;
+use CsrDelft\view\formulier\elementen\Subkopje;
 use CsrDelft\view\fotoalbum\FotoBBView;
 use CsrDelft\view\profiel\ExternProfielForm;
 use CsrDelft\view\profiel\InschrijfLinkForm;
@@ -47,6 +55,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -436,9 +445,12 @@ class ProfielController extends AbstractController {
 	 * @Route("/profiel/voorkeuren", methods={"GET"})
 	 * @Auth(P_PROFIEL_EDIT)
 	 */
-	public function voorkeurenNoUid(): Response
+	public function voorkeurenNoUid(Request $request,
+																	VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
+																	CommissieVoorkeurRepository $commissieVoorkeurRepository,
+																	VoorkeurCommissieRepository $voorkeurCommissieRepository): Response
 	{
-		return $this->voorkeuren($this->getUid());
+		return $this->voorkeuren($request, $voorkeurOpmerkingRepository, $commissieVoorkeurRepository, $voorkeurCommissieRepository, $this->getUid());
 	}
 
 	/**
@@ -446,8 +458,15 @@ class ProfielController extends AbstractController {
 	 * @return Response
 	 * @Route("/profiel/{uid}/voorkeuren", methods={"GET", "POST"}, requirements={"uid": ".{4}"})
 	 * @Auth(P_PROFIEL_EDIT)
+	 * @CsrfUnsafe
 	 */
-	public function voorkeuren($uid): Response
+	public function voorkeuren(
+		Request $request,
+		VoorkeurOpmerkingRepository $voorkeurOpmerkingRepository,
+		CommissieVoorkeurRepository $commissieVoorkeurRepository,
+		VoorkeurCommissieRepository $voorkeurCommissieRepository,
+		$uid
+	): Response
 	{
 		$profiel = $this->profielRepository->get($uid);
 
@@ -457,10 +476,27 @@ class ProfielController extends AbstractController {
 		if (!$profiel->magBewerken()) {
 			throw $this->createAccessDeniedException();
 		}
-		$form = new CommissieVoorkeurenForm($profiel);
-		if ($form->isPosted() && $form->validate()) {
-			$voorkeuren = $form->getVoorkeuren();
-			$opmerking = $form->getOpmerking();
+		$voorkeuren1 = new CommissieVoorkeuren();
+		$voorkeuren1->opmerking = $voorkeurOpmerkingRepository->getOpmerkingVoorLid($profiel)->lidOpmerking;
+		$categorieCommissie = $voorkeurCommissieRepository->getByCategorie();
+		foreach ($categorieCommissie as $cat) {
+			$categorie = $cat['categorie'];
+			foreach ($cat['commissies'] as $commissie) {
+				if ($commissie->zichtbaar) {
+					$voorkeuren1->voorkeuren->add($commissieVoorkeurRepository->getVoorkeur($profiel, $commissie));
+				}
+			}
+		}
+
+		$form = $this->createForm(CommissieVoorkeurenType::class, $voorkeuren1, [
+			'action' => $this->generateUrl('csrdelft_profiel_voorkeuren', ['uid' => $uid]),
+		]);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$voorkeuren = $voorkeuren1->getVoorkeuren();
+			$opmerking = $voorkeurOpmerkingRepository->getOpmerkingVoorLid($profiel);
+			$opmerking->lidOpmerking = $voorkeuren1->getOpmerking();
 			$manager = $this->getDoctrine()->getManager();
 			foreach ($voorkeuren as $voorkeur) {
 				$manager->persist($voorkeur);
@@ -471,7 +507,7 @@ class ProfielController extends AbstractController {
 			return $this->redirectToRoute('csrdelft_profiel_voorkeuren', ['uid' => $uid]);
 		}
 
-		return $this->render('default.html.twig', ['content' => $form]);
+		return $this->render('commissievoorkeuren/persoonlijk.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**
