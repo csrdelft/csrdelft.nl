@@ -53,11 +53,13 @@ class AccountForm implements FormulierTypeInterface {
 		$fields[] = new UsernameField('username', $data->username);
 		$fields[] = new RequiredEmailField('email', $data->email, 'E-mailadres');
 		$fields[] = new WachtwoordWijzigenField('pass_plain', $data, !LoginService::mag(P_LEDEN_MOD));
-		$fields['btn'] = new FormDefaultKnoppen($this->urlGenerator->generate('csrdelft_profiel_profiel', ['uid'=> $data->uid]), false, true, true, true);
-
-		$delete = new DeleteKnop($this->urlGenerator->generate('csrdelft_account_verwijderen', ['uid' => $data->uid]));
-		$fields['btn']->addKnop($delete, true);
 
 		$builder->addFields($fields);
+
+		$knoppen = new FormDefaultKnoppen($this->urlGenerator->generate('csrdelft_profiel_profiel', ['uid' => $data->uid]), false, true, true, true);
+		$delete = new DeleteKnop($this->urlGenerator->generate('csrdelft_account_verwijderen', ['uid' => $data->uid]));
+
+		$knoppen->addKnop($delete, true);
+		$builder->setFormKnoppen($knoppen);
 	}
 }
