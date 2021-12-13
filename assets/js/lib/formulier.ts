@@ -7,6 +7,7 @@ import {modalClose} from './modal';
 import {redirect, reload} from './reload';
 import {parents, select, selectAll} from "./dom";
 import {throwError} from "./util";
+import Bloodhound, {BloodhoundOptions, TypeaheadDataset} from "corejs-typeahead";
 
 require('../editor')
 
@@ -19,13 +20,11 @@ export function formIsChanged(form: HTMLFormElement): boolean {
 			if (el.checked && origValue !== el.value) {
 				changed = true
 			}
-		} else
-		if (el.type == 'checkbox') {
+		} else if (el.type == 'checkbox') {
 			if (Boolean(origValue) !== el.checked) {
 				changed = true
 			}
-		} else
-		if (el.value !== origValue) {
+		} else if (el.value !== origValue) {
 			changed = true
 		}
 	})
@@ -258,4 +257,98 @@ export function initSterrenField(el: HTMLElement): void {
 			$(this).closest('form').submit()
 		}
 	})
+}
+
+export const initDoctrineField = (el: HTMLElement): void => {
+	const url = el.dataset.url;
+
+	const bloodhound = new Bloodhound({
+		datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+		queryTokenizer: Bloodhound.tokenizers.whitespace,
+		remote: {
+			url: `${url}%QUERY`,
+			wildcard: '%QUERY',
+		}
+	});
+
+	$(el).typeahead({
+		hint: true,
+		highlight: true,
+		autoselect: true,
+	}, {
+		name: "Entity",
+		display: "value",
+		source: bloodhound.ttAdapter(),
+		limit: 20,
+		templates: {
+			suggestion: function (suggestion) {
+				return `
+<p${suggestion.title ? ' title="' + suggestion.title + '"' : ""}>
+<a class="suggestionUrl">
+${suggestion.icon ? suggestion.icon : ""}
+${suggestion.value}
+${suggestion.label ? `<span class="lichtgrijs"> - ${suggestion.label}</span>` : ""}
+</a>
+</p>`;
+			}
+		}
+	});
+
+	$(el).on('typeahead:select', function (event, suggestion, dataset) {
+		$(this).trigger('change')
+		$('#' + el.dataset.idField).val(suggestion[el.dataset.suggestieIdField]);
+	});
+
+}
+
+export const initAutocompleteField = (el: HTMLElement): void => {
+	const autoselect = el.dataset.autoselect == "true";
+	const clicktogo = el.dataset.clicktogo == "true";
+	const sources = JSON.parse(el.dataset.sources) as Omit<BloodhoundOptions, "datumTokenizer" | "queryTokenizer">[]
+
+	const datasets: TypeaheadDataset[] = [];
+
+	for (const [name, source] of Object.entries(sources)) {
+		const bloodhound = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			// limit: 5,
+			...source
+		});
+
+		datasets.push({
+			name,
+			display: "value",
+			source: bloodhound.ttAdapter(),
+			limit: 20,
+			templates: {
+				header: isNaN(Number(name)) ? `<h3 class="tt-header">${name}</h3>` : '',
+				suggestion: function (suggestion) {
+					return `
+<p${suggestion.title ? ' title="' + suggestion.title + '"' : ""}>
+<a class="suggestionUrl" href="${suggestion.url}"${clicktogo ? '' : ' onclick="event.preventDefault();return false;"'}>
+${suggestion.icon ? suggestion.icon : ""}
+${suggestion.value}
+${suggestion.label ? `<span class="lichtgrijs"> - ${suggestion.label}</span>` : ""}
+</a>
+</p>`;
+				}
+			}
+		})
+	}
+
+	$(el).typeahead({
+		hint: true,
+		highlight: true,
+		autoselect,
+	}, ...datasets);
+
+	$(el).on('typeahead:select', function (event, suggestion, dataset) {
+		$(this).trigger('change')
+		if (suggestion) {
+			window.location.href = suggestion.url;
+		} else {
+			formSubmit(event as unknown as Event);
+		}
+	});
 }

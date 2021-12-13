@@ -10,7 +10,7 @@ use CsrDelft\service\security\LoginService;
 
 /**
  */
-class ZoekField extends TextField
+class ZoekField extends AutocompleteField
 {
 
 	public $type = 'search';
@@ -25,15 +25,6 @@ class ZoekField extends TextField
 		$this->onkeydown = <<<JS
 if (event.keyCode === 191 || event.keyCode === 220) { // forward and backward slash
 	event.preventDefault();
-}
-JS;
-		$this->typeahead_selected = <<<JS
-
-if (suggestion) {
-	window.location.href = suggestion.url;
-}
-else {
-	window.formulier.formSubmit(event);
 }
 JS;
 		if (LoginService::mag(P_LEDEN_READ)) {

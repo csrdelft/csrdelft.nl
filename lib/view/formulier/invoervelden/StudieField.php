@@ -9,7 +9,7 @@ namespace CsrDelft\view\formulier\invoervelden;
  *
  * Suggereert een aantal studies, doet verder geen controle op invoer.
  */
-class StudieField extends TextField {
+class StudieField extends AutocompleteField {
 
 	public function __construct($name, $value, $description) {
 		parent::__construct($name, $value, $description, 100);

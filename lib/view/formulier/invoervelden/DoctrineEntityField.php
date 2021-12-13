@@ -14,8 +14,15 @@ use Doctrine\ORM\EntityManagerInterface;
  * Select an entity based on primary key values in hidden input fields, supplied by remote data source.
  *
  * NOTE: support alleen entities met een enkele primary key.
+ *
+ * @see /assets/js/lib/formulier.ts#initDoctrineField
  */
-class DoctrineEntityField extends InputField {
+class DoctrineEntityField extends TextField
+{
+	/**
+	 * @var string
+	 */
+	public $suggestieIdField = 'id';
 	/**
 	 * @var string
 	 */
@@ -39,17 +46,18 @@ class DoctrineEntityField extends InputField {
 	/**
 	 * @var string
 	 */
-	public $suggestieIdField = 'id';
+	private $url;
 
 	/**
 	 * EntityField constructor.
 	 * @param $name string Prefix van de input
 	 * @param DisplayEntity|null $value
 	 * @param $description string Beschrijvijng van de input
-	 * @param $type
+	 * @param $type DisplayEntity|string
 	 * @param $url string Url waar aanvullingen te vinden zijn
 	 */
-	public function __construct($name, $value, $description, $type, $url) {
+	public function __construct($name, $value, $description, $type, $url)
+	{
 		if (!is_a($type, DisplayEntity::class, true)) {
 			throw new CsrException($type . ' moet DisplayEntity implementeren voor DoctrineEntityField');
 		}
@@ -64,16 +72,18 @@ class DoctrineEntityField extends InputField {
 		$this->idField = $meta->getIdentifier()[0];
 		$this->entityType = $type;
 		$this->entity = $value ?? new $type();
-		$this->suggestions[] = $url;
 		$this->show_value = $this->entity->getWeergave();
-		$this->origvalue = (string) $this->entity->getId();
+		$this->origvalue = (string)$this->entity->getId();
 
-		parent::__construct($name, $value ? (string) $value->getId() : null, $description);
+		parent::__construct($name, $value ? (string)$value->getId() : null, $description);
 
-		$this->autoselect = true;
+		$this->css_classes[] = 'doctrine-field';
+
+		$this->url = $url;
 	}
 
-	public function getFormattedValue() {
+	public function getFormattedValue()
+	{
 		$value = $this->getValue();
 		if ($value == null) {
 			return null;
@@ -83,11 +93,13 @@ class DoctrineEntityField extends InputField {
 		return $this->entity;
 	}
 
-	public function getName() {
+	public function getName()
+	{
 		return $this->name;
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!parent::validate()) {
 			return false;
 		}
@@ -99,11 +111,11 @@ class DoctrineEntityField extends InputField {
 		return $this->error === '';
 	}
 
-	public function getHtml() {
-		$html = '<input name="' . $this->name . '_show" value="' . $this->entity->getWeergave() . '" origvalue="' . $this->entity->getWeergave() . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
-
+	public function getHtml()
+	{
 		$id = $this->getId() . '_' . $this->idField;
-		$this->typeahead_selected .= '$("#' . $id . '").val(suggestion["'.$this->suggestieIdField.'"]);';
+
+		$html = '<input data-url="' . $this->url . '" data-id-field="' . $id . '" data-suggestie-id-field="' . $this->suggestieIdField . '" name="' . $this->name . '_show" value="' . $this->entity->getWeergave() . '" origvalue="' . $this->entity->getWeergave() . '"' . $this->getInputAttribute(array('type', 'id', 'class', 'disabled', 'readonly', 'maxlength', 'placeholder', 'autocomplete')) . ' />';
 		$html .= '<input type="hidden" name="' . $this->name . '" id="' . $id . '" value="' . $this->entity->getId() . '" />';
 
 		return $html;
@@ -114,7 +126,8 @@ class DoctrineEntityField extends InputField {
 	 *
 	 * @return bool Of alles gepost is
 	 */
-	public function isPosted() {
+	public function isPosted()
+	{
 		if (null === filter_input(INPUT_POST, $this->name . '_show', FILTER_DEFAULT)) {
 			return false;
 		}

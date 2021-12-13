@@ -77,6 +77,8 @@ export const registerFormulierContext = async (): Promise<void> => {
 			formSubmit,
 			formToggle,
 			initSterrenField,
+			initDoctrineField,
+			initAutocompleteField,
 		},
 		{
 			initDropzone,
@@ -102,6 +104,8 @@ export const registerFormulierContext = async (): Promise<void> => {
 		'time.timeago': initTimeago,
 		'.SterrenField': initSterrenField,
 		'form.dropzone': initDropzone,
+		'.doctrine-field': initDoctrineField,
+		'.autocomplete-field': initAutocompleteField,
 	});
 };
 

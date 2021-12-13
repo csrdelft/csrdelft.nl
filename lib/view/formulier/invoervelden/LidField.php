@@ -12,7 +12,7 @@ use CsrDelft\service\ProfielService;
  * @author G.J.W. Oolbekkink <g.j.w.oolbekkink@gmail.com>
  * @since 30/03/2017
  */
-class LidField extends TextField {
+class LidField extends AutocompleteField {
 
 	protected $fieldClassName = 'col-sm-4';
 

@@ -20,7 +20,7 @@ declare module 'corejs-typeahead' {
 
 	type BloodhoundTokenizer = (query: string) => string[];
 
-	interface BloodhoundOptions {
+	export interface BloodhoundOptions {
 		datumTokenizer: BloodhoundTokenizer;
 		queryTokenizer: BloodhoundTokenizer;
 		matchAnyQueryToken?: boolean;
@@ -79,7 +79,7 @@ declare module 'corejs-typeahead' {
 		};
 	}
 
-	interface TypeaheadDataset {
+	export interface TypeaheadDataset {
 		source: (query: string, syncResults: any, asyncResults: any) => void;
 		async?: boolean;
 		name?: string;

@@ -19,6 +19,7 @@ use CsrDelft\entity\security\enum\AccessAction;
 use CsrDelft\model\entity\groepen\GroepKeuze;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\FormFieldFactory;
+use CsrDelft\view\formulier\invoervelden\AutocompleteField;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
 use CsrDelft\view\formulier\ModalForm;
 
@@ -26,7 +27,7 @@ use CsrDelft\view\formulier\ModalForm;
  * GroepForm.php
  *
  * @author P.W.G. Brussee <brussee@live.nl>
- *
+ * @property Groep $model
  */
 class GroepForm extends ModalForm {
 
@@ -56,6 +57,7 @@ class GroepForm extends ModalForm {
 
 		$fields['oudId']->hidden = true;
 
+		$fields['familie'] = new AutocompleteField('familie', $this->model->familie, $fields['familie']->description);
 		$fields['familie']->title = 'Vul hier een \'achternaam\' in zodat de juiste ketzers elkaar opvolgen';
 		$fields['familie']->suggestions[] = $groep->getFamilieSuggesties();
 		$fields['omschrijving']->description = 'Meer lezen';

@@ -67,9 +67,7 @@ abstract class InputField implements FormElement, Validator {
 	public $onclick = null; // callback on click
 	public $onkeydown = null; // prevent illegal character from being entered
 	public $onkeyup = null; // respond to keyboard strokes
-	public $typeahead_selected = null; // callback gekozen suggestie
 	public $css_classes = ['FormElement', 'form-control']; // array met classnames die later in de class-tag komen
-	public $suggestions = array(); // lijst van search providers
 	public $blacklist = null; // array met niet tegestane waarden
 	public $whitelist = null; // array met exclusief toegestane waarden
 	public $autoselect = false; // selecteer autoaanvullen automatisch
@@ -328,7 +326,7 @@ abstract class InputField implements FormElement, Validator {
 				}
 				break;
 			case 'autocomplete':
-				if (!$this->autocomplete || !empty($this->suggestions)) {
+				if (!$this->autocomplete) {
 					return 'autocomplete="off"'; // browser autocompete
 				}
 				break;
@@ -453,109 +451,7 @@ document.getElementById('{$this->getId()}').addEventListener('keyup', function(e
 });
 JS;
 		}
-		$dataset = array();
-		foreach ($this->suggestions as $name => $source) {
-			$dataset[$name] = uniqid_safe($this->name);
 
-			if (is_array($source)) {
-				$suggestions = array_values($source);
-				foreach ($suggestions as $i => $suggestion) {
-					if (!is_array($suggestion)) {
-						$suggestions[$i] = array('value' => $suggestion);
-					}
-				}
-				$json = json_encode($suggestions);
-				$sourceJs = <<<JS
-
-	local: {$json}
-
-JS;
-			} else {
-				$sourceJs = <<<JS
-
-	remote: {
-    url:"{$source}%QUERY",
-		wildcard: '%QUERY'
-	}
-
-JS;
-			}
-
-			$js .= <<<JS
-
-var {$dataset[$name]} = new Bloodhound({
-	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-	queryTokenizer: Bloodhound.tokenizers.whitespace,
-	limit: 5,
-	$sourceJs
-});
-JS;
-		}
-		if (!empty($this->suggestions)) {
-			$typeaheadOptions = json_encode([
-				'hint' => true,
-				'highlight' => true,
-				'autoselect' => $this->autoselect,
-			]);
-
-			$suggestionsJs = '';
-
-			foreach ($this->suggestions as $name => $source) {
-				if (is_int($name)) {
-					$header = '';
-				} else {
-					$header = 'header: "<h3 class=\"tt-header\">' . $name . '</h3>",';
-				}
-				if (array_search('clicktogo', $this->css_classes)) {
-					$clicktogo = '';
-				} else {
-					$clicktogo = ' onclick="event.preventDefault();return false;"';
-				}
-				$suggestionsJs .= <<<JS
-, {
-	name: "{$dataset[$name]}",
-	display: "value",
-	source: {$dataset[$name]}.ttAdapter(),
-	limit: 20,
-	templates: {
-		{$header}
-		suggestion: function (suggestion) {
-			var html = '<p';
-			if (suggestion.title) {
-				html += ' title="' + suggestion.title + '"';
-			}
-			html += '><a class="suggestionUrl" href="' + suggestion . url + '"{$clicktogo}>';
-			if (suggestion.icon) {
-				html += suggestion.icon;
-			}
-			html += suggestion.value;
-			if (suggestion.label) {
-				html += '<span class="lichtgrijs"> - ' + suggestion.label + '</span>';
-			}
-			return html + '</a></p>';
-		}
-	}
-}
-JS;
-			}
-
-			$js .= <<<JS
-
-$('#{$this->getId()}').typeahead($typeaheadOptions$suggestionsJs);
-JS;
-			$this->typeahead_selected .= <<<JS
-
-$(this).trigger('change');
-JS;
-		}
-		if ($this->typeahead_selected !== null) {
-			$js .= <<<JS
-
-$('#{$this->getId()}').on('typeahead:select', function (event, suggestion, dataset) {
-	{$this->typeahead_selected}
-});
-JS;
-		}
 		if (trim($js) == "") {
 			return "";
 		}

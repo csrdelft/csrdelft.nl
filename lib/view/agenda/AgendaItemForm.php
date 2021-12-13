@@ -6,8 +6,8 @@ use CsrDelft\Component\Formulier\FormulierBuilder;
 use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\service\security\LoginService;
+use CsrDelft\view\formulier\invoervelden\required\RequiredAutocompleteField;
 use CsrDelft\view\formulier\invoervelden\required\RequiredRechtenField;
-use CsrDelft\view\formulier\invoervelden\required\RequiredTextField;
 use CsrDelft\view\formulier\invoervelden\TextareaField;
 use CsrDelft\view\formulier\invoervelden\TextField;
 use CsrDelft\view\formulier\keuzevelden\DateTimeObjectField;
@@ -28,7 +28,7 @@ class AgendaItemForm implements FormulierTypeInterface {
 		}
 
 		$fields = [];
-		$fields['titel'] = new RequiredTextField('titel', $data->titel, 'Titel');
+		$fields['titel'] = new RequiredAutocompleteField('titel', $data->titel, 'Titel');
 		$fields['titel']->suggestions[] = array('Kring', 'Lezing', 'Werkgroep', 'Eetplan', 'Borrel', 'Alpha-avond');
 
 		$fields['begin_moment'] = new DateTimeObjectField('begin_moment', $data->begin_moment, 'Begin moment');
