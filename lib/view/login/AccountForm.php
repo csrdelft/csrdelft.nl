@@ -2,21 +2,26 @@
 
 namespace CsrDelft\view\login;
 
-use CsrDelft\Component\Formulier\FormulierBuilder;
-use CsrDelft\Component\Formulier\FormulierTypeInterface;
 use CsrDelft\entity\security\Account;
 use CsrDelft\entity\security\enum\AccessRole;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\formulier\invoervelden\required\RequiredEmailField;
 use CsrDelft\view\formulier\invoervelden\UsernameField;
 use CsrDelft\view\formulier\invoervelden\WachtwoordWijzigenField;
-use CsrDelft\view\formulier\keuzevelden\SelectField;
 use CsrDelft\view\formulier\knoppen\DeleteKnop;
 use CsrDelft\view\formulier\knoppen\FormDefaultKnoppen;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
 
-class AccountForm implements FormulierTypeInterface {
+class AccountForm extends AbstractType
+{
 	/**
 	 * @var Security
 	 */
@@ -26,29 +31,39 @@ class AccountForm implements FormulierTypeInterface {
 	 */
 	private $urlGenerator;
 
-	public function __construct(Security $security, UrlGeneratorInterface $urlGenerator) {
+	public function __construct(Security $security, UrlGeneratorInterface $urlGenerator)
+	{
 		$this->security = $security;
 		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**
-	 * @param FormulierBuilder $builder
-	 * @param Account $data
+	 * @param FormBuilderInterface $builder
 	 * @param array $options
 	 */
-	public function createFormulier(FormulierBuilder $builder, $data, $options = []) {
+	public function buildForm(FormBuilderInterface $builder, array $options)
+	{
+
+
 		$builder->setTitel('Inloggegevens aanpassen');
 		$fields = [];
 
 		$user = $this->security->getUser();
 
 		if (LoginService::mag(P_LEDEN_MOD)) {
+
 			$roles = array();
 			foreach (AccessRole::canChangeAccessRoleTo($user->perm_role) as $optie) {
-				$roles[$optie] = AccessRole::from($optie)->getDescription();
+				$roles[AccessRole::from($optie)->getDescription()] = $optie;
 			}
-			$fields[] = new SelectField('perm_role', $data->perm_role, 'Rechten', $roles);
+
+			$builder->add('perm_role', ChoiceType::class, ['choices' => $roles]);
 		}
+
+		$builder
+			->add('username', TextType::class)
+			->add('email', EmailType::class)
+			->add('pass_plain', PasswordType::class);
 
 		$fields[] = new UsernameField('username', $data->username);
 		$fields[] = new RequiredEmailField('email', $data->email, 'E-mailadres');
@@ -62,4 +77,11 @@ class AccountForm implements FormulierTypeInterface {
 		$knoppen->addKnop($delete, true);
 		$builder->setFormKnoppen($knoppen);
 	}
+
+	public function configureOptions(OptionsResolver $resolver)
+	{
+		$resolver->setDefaults(['data_class' => Account::class]);
+	}
+
+
 }

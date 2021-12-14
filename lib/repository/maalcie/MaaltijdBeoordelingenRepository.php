@@ -4,6 +4,7 @@ namespace CsrDelft\repository\maalcie;
 
 use CsrDelft\entity\maalcie\Maaltijd;
 use CsrDelft\entity\maalcie\MaaltijdBeoordeling;
+use CsrDelft\entity\maalcie\MaaltijdBeoordelingDTO;
 use CsrDelft\repository\AbstractRepository;
 use CsrDelft\service\security\LoginService;
 use Doctrine\ORM\OptimisticLockException;
@@ -76,16 +77,27 @@ class MaaltijdBeoordelingenRepository extends AbstractRepository {
 		}
 
 		// Geef resultaat terug in object, null als er geen beoordelingen zijn
-		$object = new stdClass();
-		$object->kwantiteit = $kwantiteitAantal === 0 ? null : $kwantiteit / $kwantiteitAantal;
-		$object->kwantiteitAfwijking = $kwantiteitAantal === 0 ? null : $kwantiteitAfwijking / $kwantiteitAantal;
-		$object->kwantiteitAantal = $kwantiteitAantal;
+		$beoordeling = new MaaltijdBeoordelingDTO();
+		$beoordeling->kwantiteit = $this->getalWeergave($kwantiteitAantal === 0 ? null : $kwantiteit / $kwantiteitAantal, '-', 3);
+		$beoordeling->kwantiteitAfwijking = $this->getalWeergave($kwantiteitAantal === 0 ? null : $kwantiteitAfwijking / $kwantiteitAantal, '-', 3, true);
+		$beoordeling->kwantiteitAantal = $kwantiteitAantal;
 
-		$object->kwaliteit = $kwaliteitAantal === 0 ? null : $kwaliteit / $kwaliteitAantal;
-		$object->kwaliteitAfwijking = $kwaliteitAantal === 0 ? null : $kwaliteitAfwijking / $kwaliteitAantal;
-		$object->kwaliteitAantal = $kwaliteitAantal;
+		$beoordeling->kwaliteit = $this->getalWeergave($kwaliteitAantal === 0 ? null : $kwaliteit / $kwaliteitAantal, '-', 3);
+		$beoordeling->kwaliteitAfwijking = $this->getalWeergave($kwaliteitAantal === 0 ? null : $kwaliteitAfwijking / $kwaliteitAantal, '-', 3, true);
+		$beoordeling->kwaliteitAantal = $kwaliteitAantal;
 
-		return $object;
+		$beoordeling->setMaaltijd($maaltijd);
+
+		return $beoordeling;
+	}
+
+	private function getalWeergave($number, $placeholder, $precision, $showPlus = false) {
+		if ($number === null) {
+			return $placeholder;
+		} else {
+			$plus = $showPlus && $number > 0 ? '+' : '';
+			return $plus . round($number, $precision);
+		}
 	}
 
 	/**

@@ -487,18 +487,4 @@ class MaaltijdAanmeldingenRepository extends AbstractRepository {
 
 		return false;
 	}
-
-	/**
-	 * @param Maaltijd $maaltijd
-	 * @return integer
-	 * @throws NoResultException
-	 * @throws NonUniqueResultException
-	 */
-	public function getAantalAanmeldingen(Maaltijd $maaltijd) {
-		return $this->createQueryBuilder('maaltijd_aanmelding')
-			->select('SUM(maaltijd_aanmelding.aantal_gasten) + COUNT(maaltijd_aanmelding.uid)')
-			->where('maaltijd_aanmelding.maaltijd_id = :maaltijd_id')
-			->setParameter('maaltijd_id', $maaltijd->maaltijd_id)
-			->getQuery()->getSingleScalarResult();
-	}
 }

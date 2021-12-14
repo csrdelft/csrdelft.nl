@@ -46,9 +46,9 @@ class AbstractController extends BaseController {
 		return $selection;
 	}
 
-	protected function tableData($data): GenericDataTableResponse
+	protected function tableData($data, $groups = null): GenericDataTableResponse
 	{
-		return new GenericDataTableResponse($this->get('serializer'), $data);
+		return new GenericDataTableResponse($this->get('serializer'), $data, null, null, $groups);
 	}
 
 	/**

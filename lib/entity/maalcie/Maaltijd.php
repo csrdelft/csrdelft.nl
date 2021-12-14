@@ -173,8 +173,13 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	 * @Serializer\Groups("datatable")
 	 * @Serializer\SerializedName("aantal_aanmeldingen")
 	 */
-	public function getAantalAanmeldingen() {
-		return ContainerFacade::getContainer()->get(MaaltijdAanmeldingenRepository::class)->getAantalAanmeldingen($this);
+	public function getAantalAanmeldingen(): int {
+		$aantalAanmeldingen = 0;
+		foreach ($this->aanmeldingen as $aanmelding) {
+			$aantalAanmeldingen += 1 + $aanmelding->aantal_gasten;
+		}
+
+		return $aantalAanmeldingen;
 	}
 
 	/**
@@ -291,23 +296,6 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 	}
 
 	/**
-	 * De API voor de app gebruikt json_encode
-	 *
-	 * @return array|mixed
-	 * @throws CsrGebruikerException
-	 */
-	public function jsonSerialize() {
-		$json = (array) $this;
-		$json['datum'] = date_format_intl($this->datum, DATE_FORMAT);
-		$json['tijd'] = date_format_intl($this->tijd, TIME_FORMAT);
-		$json['repetitie_naam'] = $this->repetitie ? $this->repetitie->standaard_titel : null;
-		$json['tijd'] = date('G:i', strtotime($json['tijd']));
-		$json['aantal_aanmeldingen'] = $this->getAantalAanmeldingen();
-		$json['prijs'] = strval($this->getPrijs());
-		return $json;
-	}
-
-	/**
 	 * @return string
 	 * @Serializer\SerializedName("repetitie_naam")
 	 * @Serializer\Groups("datatable")
@@ -336,6 +324,14 @@ class Maaltijd implements Agendeerbaar, HeeftAanmeldLimiet, DisplayEntity {
 
 	public function getAanmeldLimiet() {
 		return $this->aanmeld_limiet;
+	}
+
+	/**
+	 * @return int
+	 * @Serializer\Groups("datatable-fiscaat")
+	 */
+	public function getTotaal() {
+		return $this->getAantalAanmeldingen() + $this->getPrijs();
 	}
 
 	/**

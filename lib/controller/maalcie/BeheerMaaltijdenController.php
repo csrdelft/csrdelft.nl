@@ -12,13 +12,13 @@ use CsrDelft\entity\maalcie\MaaltijdRepetitie;
 use CsrDelft\entity\maalcie\RepetitieMaaltijdMaken;
 use CsrDelft\repository\maalcie\ArchiefMaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
+use CsrDelft\repository\maalcie\MaaltijdBeoordelingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\repository\maalcie\MaaltijdRepetitiesRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\datatable\GenericDataTableResponse;
 use CsrDelft\view\GenericSuggestiesResponse;
 use CsrDelft\view\maalcie\beheer\ArchiefMaaltijdenTable;
-use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenLijst;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenBeoordelingenTable;
 use CsrDelft\view\maalcie\beheer\BeheerMaaltijdenTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
@@ -361,11 +361,11 @@ class BeheerMaaltijdenController extends AbstractController {
 	}
 
 	/**
-	 * @return BeheerMaaltijdenBeoordelingenLijst
+	 * @return GenericDataTableResponse
 	 * @Route("/maaltijden/beheer/beoordelingen", methods={"POST"})
 	 * @Auth(P_LOGGED_IN)
 	 */
-	public function POST_beoordelingen() {
+	public function POST_beoordelingen(MaaltijdBeoordelingenRepository $maaltijdBeoordelingenRepository) {
 		$maaltijden = $this->maaltijdenRepository->getMaaltijdenHistorie();
 		if (!LoginService::mag(P_MAAL_MOD)) {
 			// Als bekijker geen MaalCie-rechten heeft, toon alleen maaltijden waarvoor persoon sluitrechten had (kok)
@@ -373,7 +373,13 @@ class BeheerMaaltijdenController extends AbstractController {
 				return $maaltijd->magSluiten($this->getUid());
 			});
 		}
-		return new BeheerMaaltijdenBeoordelingenLijst($maaltijden);
+
+		$beoordelingen = [];
+		foreach ($maaltijden as $maaltijd) {
+			$beoordelingen[] = $maaltijdBeoordelingenRepository->getBeoordelingSamenvatting($maaltijd);
+		}
+
+		return $this->tableData($beoordelingen);
 	}
 
 	// Repetitie-Maaltijden ############################################################

@@ -13,7 +13,6 @@ use CsrDelft\repository\fiscaat\CiviSaldoRepository;
 use CsrDelft\repository\maalcie\MaaltijdAanmeldingenRepository;
 use CsrDelft\repository\maalcie\MaaltijdenRepository;
 use CsrDelft\view\datatable\GenericDataTableResponse;
-use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtResponse;
 use CsrDelft\view\maalcie\beheer\FiscaatMaaltijdenOverzichtTable;
 use CsrDelft\view\maalcie\beheer\OnverwerkteMaaltijdenTable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -68,13 +67,14 @@ class MaaltijdenFiscaatController extends AbstractController {
 	}
 
 	/**
-	 * @return FiscaatMaaltijdenOverzichtResponse
+	 * @return GenericDataTableResponse
 	 * @Route("/maaltijden/fiscaat", methods={"POST"})
 	 * @Auth(P_MAAL_MOD)
 	 */
 	public function POST_overzicht() {
 		$data = $this->maaltijdenRepository->findBy(['verwerkt' => true]);
-		return new FiscaatMaaltijdenOverzichtResponse($data);
+
+		return $this->tableData($data, ['datatable', 'datatable-fiscaat']);
 	}
 
 	/**
