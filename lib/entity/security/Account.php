@@ -2,7 +2,6 @@
 
 namespace CsrDelft\entity\security;
 
-use CsrDelft\Component\Validator\Constraint\ValidUsername;
 use CsrDelft\entity\profiel\Profiel;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,7 +39,6 @@ class Account implements UserInterface {
 	 * Gebruikersnaam
 	 * @var string
 	 * @ORM\Column(type="stringkey", unique=true)
-	 * @ValidUsername()
 	 */
 	public $username;
 	/**
