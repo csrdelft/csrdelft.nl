@@ -5,6 +5,7 @@
  */
 
 use Doctrine\DBAL\DriverManager;
+use Maknz\Slack\Client as SlackClient;
 use Symfony\Component\Dotenv\Dotenv;
 
 require_once dirname(__FILE__) . '/../vendor/autoload.php';
@@ -33,4 +34,12 @@ $query->execute();
 
 if ($query->rowCount() > 10) {
 	mail($_ENV['EMAIL_PUBCIE'], "Stek kaput", var_export($query->fetchAll(), true));
+
+	$slackClient = new SlackClient($_ENV['SLACK_URL'], [
+		'username' => "Monitor",
+		'channel' => "#general",
+		'icon' => ":panik:",
+	]);
+
+	$slackClient->createMessage()->send(":panik: De stek ligt eruit!");
 }
