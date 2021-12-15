@@ -9,6 +9,7 @@ use CsrDelft\repository\fotoalbum\FotoAlbumRepository;
 use CsrDelft\repository\groepen\LichtingenRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
 use CsrDelft\repository\MenuItemRepository;
+use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\service\VerjaardagenService;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -48,6 +49,10 @@ class Zijbalk {
 	 */
 	private $verjaardagenService;
 	/**
+	 * @var WoordVanDeDagRepository
+	 */
+	private $woordVanDeDagRepository;
+	/**
 	 * @var LidInstellingenRepository
 	 */
 	private $lidInstellingenRepository;
@@ -65,7 +70,8 @@ class Zijbalk {
 		ForumPostsRepository $forumPostsRepository,
 		FotoAlbumRepository $fotoAlbumRepository,
 		VerjaardagenService $verjaardagenService,
-		LidInstellingenRepository $lidInstellingenRepository
+		LidInstellingenRepository $lidInstellingenRepository,
+		WoordVanDeDagRepository $woordVanDeDagRepository
 	) {
 		$this->twig = $twig;
 		$this->menuItemRepository = $menuItemRepository;
@@ -75,6 +81,7 @@ class Zijbalk {
 		$this->fotoAlbumRepository = $fotoAlbumRepository;
 		$this->verjaardagenService = $verjaardagenService;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
+		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
 		$this->session = $session;
 	}
 
@@ -103,7 +110,7 @@ class Zijbalk {
 	private function blockIsHetAl() {
 		// Is het al...
 		if (lid_instelling('zijbalk', 'ishetal') != 'niet weergeven') {
-			return (new IsHetAlView($this->lidInstellingenRepository, $this->session, $this->agendaRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
+			return (new IsHetAlView($this->lidInstellingenRepository, $this->session, $this->agendaRepository, $this->woordVanDeDagRepository, lid_instelling('zijbalk', 'ishetal')))->__toString();
 		}
 
 		return null;

@@ -5,19 +5,22 @@ namespace CsrDelft\view;
 use CsrDelft\entity\agenda\AgendaItem;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\security\LoginService;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class IsHetAlView implements View {
+class IsHetAlView implements View
+{
 	use ToHtmlResponse;
+
 	/**
 	 * Type of IsHetAlContent
 	 * @var string
 	 */
 	private $model;
 	/**
-	 * True OR aantal dagen
-	 * @var boolean|int
+	 * True OR aantal dagen OR woordvandedag
+	 * @var boolean|int|string
 	 */
 	private $ja;
 	/**
@@ -35,7 +38,16 @@ class IsHetAlView implements View {
 		'u het forum kan volgen met RSS?' => '/profiel#forum',
 	);
 
-	public function __construct(LidInstellingenRepository $lidInstellingenRepository, SessionInterface $session, AgendaRepository $agendaRepository, $ishetal) {
+	public function __construct(LidInstellingenRepository $lidInstellingenRepository, SessionInterface $session, AgendaRepository $agendaRepository, WoordVanDeDagRepository $woordVanDeDagRepository, $ishetal)
+	{
+		// Ongeveer de 1/4 van de tijd het lustrumwoord van de dag laten zien, alleen in de periode van 21-12-2021 tot 19-2-2022
+		$differenceDays = floor((strtotime(date("d-m-Y")) - strtotime("21-12-2021")) / 86400);
+		if ($differenceDays >= 1 && $differenceDays <= 60 && rand(0, 100) < 25) {
+			$this->model = "wvdd";
+			$this->ja = $woordVanDeDagRepository->find(intval($differenceDays))->getWoord();
+
+			return;
+		}
 		$this->model = $ishetal;
 		if ($this->model == 'willekeurig') {
 			$opties = array_slice($lidInstellingenRepository->getTypeOptions('zijbalk', 'ishetal'), 2);
@@ -160,6 +172,10 @@ class IsHetAlView implements View {
 			case 'wist u dat':
 				$wistudat = array_rand(self::$wistudat);
 				$html .= '<div class="ja">Wist u dat...</div><a href="' . self::$wistudat[$wistudat] . '" class="cursief">' . $wistudat . '</a>';
+				break;
+
+			case 'wvdd':
+				$html .= '<div class="ja">Het lustrumwoord van de dag is '. $this->ja .' </div>';
 				break;
 
 			default:

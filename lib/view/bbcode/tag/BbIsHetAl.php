@@ -5,6 +5,7 @@ namespace CsrDelft\view\bbcode\tag;
 use CsrDelft\bb\BbTag;
 use CsrDelft\repository\agenda\AgendaRepository;
 use CsrDelft\repository\instellingen\LidInstellingenRepository;
+use CsrDelft\repository\WoordVanDeDagRepository;
 use CsrDelft\service\security\LoginService;
 use CsrDelft\view\IsHetAlView;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -24,6 +25,10 @@ class BbIsHetAl extends BbTag {
 	 */
 	private $lidInstellingenRepository;
 	/**
+	 * @var WoordVanDeDagRepository
+	 */
+	private $woordVanDeDagRepository;
+	/**
 	 * @var SessionInterface
 	 */
 	private $session;
@@ -32,9 +37,10 @@ class BbIsHetAl extends BbTag {
 	 */
 	private $value;
 
-	public function __construct(SessionInterface $session, AgendaRepository $agendaRepository, LidInstellingenRepository $lidInstellingenRepository) {
+	public function __construct(SessionInterface $session, AgendaRepository $agendaRepository, LidInstellingenRepository $lidInstellingenRepository, WoordVanDeDagRepository $woordVanDeDagRepository) {
 		$this->agendaRepository = $agendaRepository;
 		$this->lidInstellingenRepository = $lidInstellingenRepository;
+		$this->woordVanDeDagRepository = $woordVanDeDagRepository;
 		$this->session = $session;
 	}
 
@@ -59,7 +65,7 @@ class BbIsHetAl extends BbTag {
 	public function render() {
 		$html = '';
 		$html .= '<div class="my-3 p-3 bg-white rounded shadow-sm">';
-		$html .= (new IsHetAlView($this->lidInstellingenRepository, $this->session, $this->agendaRepository, $this->value))->__toString();
+		$html .= (new IsHetAlView($this->lidInstellingenRepository, $this->session, $this->agendaRepository, $this->woordVanDeDagRepository, $this->value))->__toString();
 		$html .= '</div>';
 		return $html;
 	}
