@@ -68,13 +68,13 @@ class RemoteLoginController extends AbstractController
 			throw $this->createAccessDeniedException();
 		}
 
-		$originalRemoteLogin = $this->remoteLoginRepository->find($id);
+		$remoteLogin = $this->remoteLoginRepository->find($id);
 
-		if (!$originalRemoteLogin) {
+		if (!$remoteLogin) {
 			throw $this->createAccessDeniedException();
 		}
 
-		$remoteLogin = $this->remoteLoginRepository->nieuw();
+		$this->remoteLoginRepository->refresh($remoteLogin);
 
 		$this->remoteLoginRepository->save($remoteLogin);
 
