@@ -1,7 +1,86 @@
 @import 'style.scss';
+@import 'colls';
+
+@font-face {
+	font-family: uppereastsideregular;
+	src: url('../../fonts/lustrum12/UpperEastSide.ttf');
+}
+
+@font-face {
+	font-family: Arkadelphia Regular;
+	src: url('../../fonts/lustrum12/ArkadelphiaRegular.ttf');
+}
+
+$dies-uppereast-font: uppereastsideregular, Arial, Helvetica, sans-serif;
+$dies-arkadelphia-font: Arkadelphia Regular, Arial, Helvetica, sans-serif;
+
+$bordeaux-rood: #53110f;
+$Lila: #b8aee3;
+
+$rose: #d29ec4;
+$dark-rose:  #3F2F3A;
+$gray-transparant: #473d4594; // rgba(71, 61, 69, 0.6);
+$darkgray-transparant: #d29ec4; // rgba(71, 61, 69, 0.6);
+
+$oranje: #ffaf02;
+$bruin: #2a1c02;
+
+$kleur-rood: #6e1321;
+$kleur-donkerrood: #310c16;
+$kleur-goud0: #ebb803;
+$kleur-goud1: #fadd00;
+$kleur-goud2: #f5d500;
+$kleur-goud3: #8f5a14;
+$kleur-wit: #FFFFFF;
+$kleur-zwart: #000000;
+
+
+/* nav */
+nav{
+	//background: $dark-rose !important;
+	color: $bordeaux-rood;
+
+	a {
+		/* Header text */
+		color: $font-color-primary;
+		font-family: $font-header;
+		text-transform: uppercase;
+		text-decoration: none;
+		font-size: 24px;
+		transition: ease-in-out color .15s;
+
+		&:hover {
+			color: $kleur-wit;
+			text-decoration: none;
+		}
+	}
+}
+
+
+.titel {
+	color: $bordeaux-rood;
+	text-transform: uppercase;
+	//font-family: $dies-uppereast-font;
+	font-weight: bold;
+}
+
+body {
+	background-color: $rose;
+}
 
 a{
 	text-decoration: none;
+}
+
+.dies-poster {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	img {
+		//max-height: 100vh;
+		//max-width: 100vw;
+		max-width: 100%;
+	}
 }
 
 /* video */
@@ -28,3 +107,50 @@ a{
 		border: 0;
 	}
 }
+
+.column-overzicht {
+	margin-top: 60px;
+	margin-bottom: 10px;
+	.container {
+		background: $gray-transparant;
+		padding: 20px;
+		border-radius: 25px;
+		h4.titel {
+			text-align: left;
+		}
+		h3.titel {
+			text-align: left;
+			font-size: 2.0rem;
+		}
+	}
+}
+
+.etiquette {
+	p {
+		font-size: 1.0rem;
+	}
+}
+
+.ketzers{
+	align-items: center;
+
+	.ketzer{
+		max-width: 1320px;
+		color: white;
+		.bb-block {
+			background-color: $gray-transparant;
+			.table.groep-lijst tr:nth-child(2n){
+				background-color: $gray-transparant;
+			}
+		}
+		h3 {
+			color: $bordeaux-rood;
+			font-weight: bold;
+			text-transform: uppercase;
+			font-family: $dies-uppereast-font;
+			font-size: 2.4rem;
+		}
+	}
+}
+
+

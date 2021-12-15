@@ -94,6 +94,24 @@ class Lustrum12Controller extends AbstractController
 
 	/**
 	 * @return Response
+	 * @Route("/tijdloos/dies/gala")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function gala() {
+		return $this->render('lustrum12/gala.html.twig');
+	}
+
+	/**
+	 * @return Response
+	 * @Route("/tijdloos/dies/etiquette")
+	 * @Auth(P_LOGGED_IN)
+	 */
+	public function etiquette() {
+		return $this->render('lustrum12/etiquette.html.twig');
+	}
+
+	/**
+	 * @return Response
 	 * @Route("/tijdloos/lustrumreis")
 	 * @Auth(P_LOGGED_IN)
 	 */
