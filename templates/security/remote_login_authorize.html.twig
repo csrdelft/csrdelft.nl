@@ -1,10 +1,8 @@
-{% extends 'default.html.twig' %}
+{% extends 'plain.html.twig' %}
 
 {% block titel %}Externe Login{% endblock %}
 
-{% block content %}{{ cms('thuis') }}{% endblock %}
-
-{% block modal %}
+{% block body %}
 	<div class="modal show" id="modal" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">

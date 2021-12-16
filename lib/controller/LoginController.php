@@ -62,6 +62,10 @@ class LoginController extends AbstractController {
 			$this->saveTargetPath($request->getSession(), 'main', $targetPath);
 		}
 
+		if (str_contains($this->getTargetPath($request->getSession(), 'main'), "remote-login=true")) {
+			return $this->redirectToRoute("csrdelft_security_remotelogin_remotelogin");
+		}
+
 		$error = $authenticationUtils->getLastAuthenticationError();
 		$userName = $authenticationUtils->getLastUsername();
 

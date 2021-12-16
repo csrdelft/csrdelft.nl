@@ -98,12 +98,15 @@ try {
 		if (remoteLogin.status == 'rejected' || +expires - +new Date < 10_000) {
 			remoteLoginCode.classList.remove('active')
 			remoteLoginCode.classList.add('loading')
+
 			const refreshResponse = await fetch('/remote-login-refresh', {method: 'POST'})
 			const refresh = await refreshResponse.json() as RemoteLogin
 
 			const qrImage = remoteLoginCode.querySelector('img')
 			qrImage.onload = () => remoteLoginCode.classList.remove('loading')
 			qrImage.src = '/remote-login-qr?uuid=' + refresh.uuid
+
+			// Link bestaat alleen in dev
 			const link = remoteLoginCode.querySelector('a')
 			if (link) link.href = '/rla/' + refresh.uuid
 
